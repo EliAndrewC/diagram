@@ -41,7 +41,11 @@ def test_what_a_child_process_reads_is_known_or_the_file_always_runs() -> None:
     assert deps.opaque_child(("python3", ["python3", "x.py"], "/tmp", {"PATH": "/bin"}), site) == "python3", "recording dropped"
     assert deps.opaque_child(("git", ["git", "status"], ROOT, None), site) == "git", "git in the repository"
     assert deps.opaque_child(("git", ["git", "-C", "/tmp/fixture", "status"], ROOT, None), site) == "", "git -C a fixture"
-    assert deps.opaque_child(("git", ["git", "init", "-q", "/tmp/fixture"], ROOT, None), site) == "", "git on paths it names"
+    assert deps.opaque_child(("git", ["git", "init", "-q", "/tmp/fixture"], ROOT, None), site) == "", "git init names its dir"
+    assert deps.opaque_child(("git", ["git", "clone", "-q", "/tmp/a", "/tmp/b"], ROOT, None), site) == "", "a clone from outside"
+    assert deps.opaque_child(("git", ["git", "clone", ROOT, "/tmp/b"], "/tmp", None), site) == "git", "a clone of the repository"
+    assert deps.opaque_child(("git", ["git", "worktree", "add", "/tmp/base", "HEAD"], ROOT, None), site) == "git", \
+        "an outside path named does not make a command run in the repository known (the plan review)"
     assert deps.opaque_child(("git", ["git", "-C", ROOT, "log"], "/tmp", None), site) == "git", "git -C the repository"
     assert deps.opaque_child(("make", ["make", "quick"], ROOT, None), site) == "make"
 

@@ -60,11 +60,13 @@ if _LOG and os.environ.get("L7R_TEST_DEP_FILE"):
             words = [os.fsdecode(a) for a in (argv or []) if isinstance(a, (str, bytes))]
             where = next((words[i + 1] for i, w in enumerate(words[:-1]) if w == "-C"), None)
             paths = [w for w in words[1:] if os.path.isabs(w) and w != where]
-            if where is None and paths and not any(_under(w) for w in paths):
-                return  # it works on the paths it names, none of them the repository
-            where = where or cwd or os.getcwd()
-            if _under(where) or any(_under(w) for w in paths):
-                _note("opaque", name)
+            sub = next((w for w in words[1:] if not w.startswith("-") and w != where and "=" not in w), "")
+            if name == "git" and where is None and sub in ("init", "clone") and paths:
+                hit = any(_under(w) for w in paths)  # init and clone read nothing where they run: the paths they name
+            else:
+                hit = bool(_under(where or cwd or os.getcwd())) or any(_under(w) for w in paths)
+            if hit:
+                _note("opaque", name)  # the same rule as tests/tooling/_test_deps.py's against_repo
 
     try:
         _OUT = open(_LOG, "a", encoding="utf-8", buffering=1)  # noqa: SIM115 - written as each read is first seen

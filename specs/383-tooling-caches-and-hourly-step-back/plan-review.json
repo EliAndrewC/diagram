@@ -203,6 +203,98 @@
    "sha256": "b9fcec300b5556e9447990289e7e540ecc92da4fa7ce3604e73e8f9d2dc2078c",
    "verdict": "CLEAR",
    "reviewed": "2026-10-13"
+  },
+  "## Amendment 1 (FR-013, FR-014)": {
+   "sha256": "c710e91e0fe9dfb9a4c670660b628efba170290a9900d7417e1910070e86a2ca",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-13",
+   "declared": "spec-fidelity"
   }
- }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-13",
+   "blocks": [
+    "## Amendment 1 (FR-013, FR-014)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D15a",
+     "summary": "Reads recorded by a pytest plugin make test-file loads, L7R_TEST_DEPS=record by default; an audit hook notes files opened and directories listed under the repository",
+     "class": "within",
+     "why": "FR-013's 'records what it read - the files it opened and the directories it listed'. Premise, not checked here: the clone's ordinary tooling-test runs must load the plugin, or only hand-run make test-file passes are recorded and reuse reaches less than the GM's 'skip suites the clone already passed'."
+    },
+    {
+     "id": "D15b",
+     "summary": "A compiled module read (__pycache__/*.pyc) stands for its source",
+     "class": "within",
+     "why": "The .pyc is derived from the source; keying by the source is keying by what was read, by content."
+    },
+    {
+     "id": "D15c",
+     "summary": "Every Python child imports a recording sitecustomize on PYTHONPATH (system sitecustomize first), reads written as first seen",
+     "class": "within",
+     "why": "FR-013's 'in every Python process it started'; writing as first seen keeps a killed child's reads."
+    },
+    {
+     "id": "D15d",
+     "summary": "Opaque predicate: git or make started with cwd in the repository is deemed NOT on the repository when it names any path outside the repository",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-013: a file that started any other program against the repository is always run, since what that program read is not known. The clause 'and naming no path outside the repository' exempts git/make commands run from the repository that read it while naming an outside path - git worktree add /tmp/base HEAD (the project's own baseline recipe), git clone <repo> /tmp/x, git archive -o /tmp/x.tar HEAD - so a test whose outcome rests on what those read is skipped on changed inputs, the false skip the 'always run' rule exists to prevent. Not impossible, not implied by the request, and the literal rule does not defeat the purpose: git on a tmp fixture repo is already excluded by the cwd/-C test alone. Should read: opaque unless the program's cwd (and any -C) is outside the repository AND no argument names a path inside it; Python children isolated or with recording dropped stay opaque as written."
+    },
+    {
+     "id": "D15e",
+     "summary": "Kept only when every test of the file passed in a run not filtered by -k, a marker or a node id; a failure removes the entry",
+     "class": "within",
+     "why": "FR-013 'a tooling test file that passed' (the whole file) and 'a failure is never kept'."
+    },
+    {
+     "id": "D15f",
+     "summary": "Files keyed by git blob id (changed files hashed as git would), interpreter version stored beside; kept in the common dir's l7r-cache",
+     "class": "within",
+     "why": "FR-013 'each by its content'; the common dir is what lets a clone's pass serve its land-tooling worktree (SC-010); the interpreter match only makes reuse stricter."
+    },
+    {
+     "id": "D15g",
+     "summary": "Directory listings keyed by tracked and untracked entries, ignored entries left out",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The literal rule defeats the request's purpose concretely: the worktree land-tooling builds carries none of the clone's ignored artifacts (__pycache__, generated files), so a listing compared with ignored entries never matches clone to worktree and SC-010's own case is unreachable for any test that lists a directory. D16's 'nothing it read is a file git ignores' bounds the file case. Residual seam, recorded: nothing bounds a test whose outcome depends on an ignored entry it lists but never opens."
+    },
+    {
+     "id": "D15h",
+     "summary": "Reads of the content caches (.git/l7r-cache/) left out of the recorded inputs",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The literal rule defeats the purpose: those cache files are rewritten as entries are added on every run, so any test touching a cached tool would never be reused; each entry is keyed by what it holds, and the caches are held transparent (output identical with cache on and off). Residual seam, recorded: a test asserting on the live common-dir cache's state rather than a tmp cache would be skipped on changed inputs."
+    },
+    {
+     "id": "D16a",
+     "summary": "Reuse only under L7R_TEST_DEPS=reuse, set by land-tooling.sh alone",
+     "class": "within",
+     "why": "FR-013 'make land-tooling - the one caller, through a named switch its checks set'."
+    },
+    {
+     "id": "D16b",
+     "summary": "Deselected only where interpreter matches, nothing opaque, nothing read is git-ignored, every file and directory reads the same; run prints files and tests reused",
+     "class": "within",
+     "why": "FR-013 'finds every one of them unchanged, the file is not run again and the run says so'; the extra conditions only make reuse stricter."
+    },
+    {
+     "id": "D16c",
+     "summary": "Guard suites keep their own reuse (make hooks-test); measured as m:land-tooling-tests-reuse",
+     "class": "within",
+     "why": "FR-013 'The guard suites keep the reuse they have'; the measurement is SC-010's."
+    },
+    {
+     "id": "D17",
+     "summary": "quote-verbatim verdict(passage, page) in a ParseCache named by the module's code sha, keyed by passage and page-text sha256; report compared byte for byte with L7R_CACHE_OFF=1",
+     "class": "within",
+     "why": "FR-014: kept by passage and page text under the code version that judged it, report the same with and without the cache (SC-011); the comparison enforces the request."
+    }
+   ]
+  }
+ ]
 }

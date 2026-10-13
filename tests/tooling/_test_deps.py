@@ -5,14 +5,14 @@ whole tooling tree (1,784 tests, about 40 s) in a fresh worktree on every landin
 files minutes before. The guard suites already reuse a pass keyed by what they read (`make hooks-test`); this does the same
 for each tooling test FILE.
 
-RECORD (`L7R_TEST_DEPS=record`, which `make test-file` sets). While a tooling test file runs, everything it reads under the
+RECORD (`L7R_TEST_DEPS=record`, which `make test-file` and the gate's tooling run set). While a tooling test file runs, everything it reads under the
 repository is noted - each file it opens and each directory it lists, in its own process (an audit hook) and in every Python
 process it starts (`_deps_site/sitecustomize.py`, put on PYTHONPATH) - and each other program it starts against the
 repository. When every test of the file passed, its reads are kept by their content (git blob ids; a directory by its
 entries) in `<git common dir>/l7r-cache/tooling-test-passes.json`. A failure keeps nothing; a run filtered by `-k` or a node
 id keeps nothing.
 
-REUSE (`L7R_TEST_DEPS=reuse`, which `make land-tooling` sets). A test file whose kept reads are all unchanged - same content,
+REUSE (`L7R_TEST_DEPS=reuse`, which `make land-tooling` sets; it records what it runs as well). A test file whose kept reads are all unchanged - same content,
 same entries - and that started no other program against the repository is deselected, and the run says how many. What is
 not known is run: a file never recorded, one that started `git` or `make` in the repository, a Python child run isolated or
 with the recording dropped from its environment. `L7R_CACHE_OFF=1` reuses nothing.
@@ -99,12 +99,20 @@ def opaque_child(args: tuple, site: str) -> str:
     words = [os.fsdecode(a) for a in (argv or []) if isinstance(a, (str, bytes))]
     # where the program works: `git -C <dir>` and `make -C <dir>` name it, else its cwd (a test's git in its own tmp repo is not
     # the repository - 64 of the first recording's 74 unknown files were that)
+    return name if against_repo(name, words, cwd, _under) else ""
+
+
+def against_repo(name: str, words: list[str], cwd: object, under) -> bool:  # noqa: ANN001 - under: a path test
+    """Does a program work in or on the repository? Unless both its working directory (and any `-C`) are outside it and no
+    argument names a path inside it, yes - the plan review's rule (a `git worktree add /tmp/x HEAD` run in the repository
+    names an outside path and reads the repository). Two git forms read nothing where they run: `git init <dir>` and
+    `git clone <src> <dst>`, judged by the paths they name."""
     where = next((words[i + 1] for i, w in enumerate(words[:-1]) if w == "-C"), None)
     paths = [w for w in words[1:] if os.path.isabs(w) and w != where]
-    if where is None and paths and not any(_under(w) for w in paths):
-        return ""  # `git init <tmp>`, `git clone <tmp> <tmp>`: it works on the paths it names, none of them the repository
-    where = where or cwd or os.getcwd()
-    return name if _under(where) or any(_under(w) for w in paths) else ""
+    sub = next((w for w in words[1:] if not w.startswith("-") and w != where and "=" not in w), "")
+    if name == "git" and where is None and sub in ("init", "clone") and paths:
+        return any(under(w) for w in paths)
+    return bool(under(where or cwd or os.getcwd())) or any(under(w) for w in paths)
 
 
 def _ids() -> tuple[dict[str, str], dict[str, list[str]]]:
@@ -147,9 +155,7 @@ def _state(kind: str, rel: str, ids: dict[str, str], entries: dict[str, list[str
 def pytest_configure(config: pytest.Config) -> None:
     if MODE not in ("record", "reuse") or os.environ.get("L7R_CACHE_OFF", "") not in ("", "0"):
         return
-    config._l7r_deps = True  # type: ignore[attr-defined]
-    if MODE != "record":
-        return
+    config._l7r_deps = True  # type: ignore[attr-defined]  # reuse records too: a landing's run keeps what it ran for the next
     if not hasattr(config, "workerinput"):  # the controller (or a run with no workers): the shared log and the children's path
         d = tempfile.mkdtemp(prefix="l7r-test-deps-")
         os.environ["L7R_TEST_DEP_DIR"] = d
@@ -163,7 +169,7 @@ def pytest_configure(config: pytest.Config) -> None:
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_protocol(item: pytest.Item, nextitem: pytest.Item | None):  # noqa: ANN201, ARG001
     rel = _rel(item.nodeid)
-    tracked = MODE == "record" and getattr(item.config, "_l7r_deps", False) and rel.startswith(TREE)
+    tracked = getattr(item.config, "_l7r_deps", False) and rel.startswith(TREE)
     if tracked:
         _current[0] = rel
         os.environ["L7R_TEST_DEP_FILE"] = rel
@@ -181,7 +187,7 @@ def pytest_runtest_logreport(report: pytest.TestReport) -> None:
 
 def pytest_sessionfinish(session: pytest.Session, exitstatus: int) -> None:  # noqa: ARG001
     config = session.config
-    if MODE != "record" or not getattr(config, "_l7r_deps", False):
+    if not getattr(config, "_l7r_deps", False):
         return
     d = os.environ.get("L7R_TEST_DEP_DIR", "")
     worker = getattr(config, "workerinput", {}).get("workerid", "main")
@@ -191,7 +197,8 @@ def pytest_sessionfinish(session: pytest.Session, exitstatus: int) -> None:  # n
                        "ran": _ran}, fh)
     if hasattr(config, "workerinput") or not d:
         return
-    if config.option.keyword or config.option.markexpr or any("::" in a for a in config.args):
+    # the gate selects the tree by its marker, `-m tooling`, which every test under tests/tooling carries: still whole files
+    if config.option.keyword or config.option.markexpr not in ("", "tooling") or any("::" in a for a in config.args):
         return  # a filtered run: a file's other tests did not run, so its pass is not the file's
     _keep(pathlib.Path(d))
 

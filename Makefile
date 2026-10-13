@@ -1126,7 +1126,8 @@ QUICK_BUDGET = 60
 # around - the same gap `make durations` filled for "why is this slow".
 # (GUARD_EDIT_OK: a green test-file records green-local - feature 130, FR-012)
 tooling:        ## [tests] run every `tooling` test (make/ci/pipeline, exhaustive) and record them green so `make quick` skips them until the tooling changes
-	@$(GATE_EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) -q --no-cov -m tooling && python3 -m l7r.diagram.ci tooling-green
+	@: "GUARD_EDIT_OK: feature 383 amendment 1 - the gate's tooling run records each test file's reads on a pass, for make land-tooling to reuse"
+	@$(GATE_EXHAUSTIVE_ENV) L7R_TEST_DEPS=$${L7R_TEST_DEPS:-record} python3 -m pytest -p tests.tooling._test_deps -n $(XDIST_WORKERS) -q --no-cov -m tooling && python3 -m l7r.diagram.ci tooling-green
 
 # GUARD_EDIT_OK: feature 188 (GM 2026-09-05: "there's no actual reason to rerun all the tests for style sheet
 # changes"). THE PAGE CHECK is what an edit to interactive/assets/ owes instead of the gate: the interactive unit
