@@ -98,8 +98,10 @@ this one with `L7R_CACHE_OFF=1` and without, change one file, and assert a fresh
   - The stop branch's "a turn may not end on a green gate with reviews owed" is retired.
   - A review dispatch still asks (the guard refuses a dispatch nothing owes, and an early glyph-check).
   - `make verify` asks on request. `review-gate.sh` asks at the push. The checkpoint asks on the hour (D10).
-- **The snapshot.** The reviewer's snapshot the gate-start branch took is taken at dispatch, where the dispatch check
-  already names the maps (`review_snapshot.py`, unchanged).
+- **The snapshot.** The reviewer's snapshot and per-unit prompt files the gate-start branch wrote (by rewriting `make done`
+  into `make verify`, or by taking the snapshot itself) are written by `make verify`, unchanged, which the checkpoint's hold
+  (D13) and the push's refusal name: a review comes due at the hour or the landing, and `make verify` is the gate plus the
+  units it owes. A plain `make done` runs as typed.
 - **The suite.** `tests/hooks/test-pair-hooks.sh` asserts the lookup is not run at gate start or at a turn's end (the
   script's own trace marker), and that the push and the checkpoint still refuse what is owed.
 
