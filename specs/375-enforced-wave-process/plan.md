@@ -700,7 +700,7 @@ every file of `specs/<feature>` at that revision written into a temporary direct
 `closed` and `done - GM review pending` - which needs the GM-review rows and the plan files to be seen at all (the plan review:
 335 and 378 read `done - GM review pending` from their whole directories and `in progress` from the two files) - both count as
 closed, as D54's "no feature" does. The walk stops at the first such commit and at 200 commits: a reopening more than 200
-commits back is not less than an hour old (375's directory has 83 commits, 328's 293, counted 2026-10-12, so the bound can only
+commits back is not less than an hour old (375's directory has 137 commits, 328's 476, counted 2026-10-12, so the bound can only
 cut a reopening long past its hour). The answer is kept in `glyph-clock.json` under the feature, keyed by the newest commit of
 its directory, so the stop hook's every turn does not walk the history again. Tests (red on today's code), fixture repos: a
 status-line close and reopen ten minutes ago - a unit owed now is due an hour after the reopening, not at once; a tick close
@@ -711,6 +711,53 @@ the kept answer is reused while the directory's newest commit is unchanged.
 
 **D59 - Closed again (T60).** The texts: `docs/reviews.md`'s glyph paragraph and `docs/guards.md`'s row say the hour starts at the
 feature's start or its latest reopening. Tests, `make hooks-test`, the report, landed (no engine code: the DIRECT route).
+
+### Amendment 11 (FR-043 to FR-046)
+
+Measured on 374 before it (the GM's question, `request.md` Amendment 11): sixteen whole-plan reviews, 13.7 million input tokens;
+32 section reviews, 20.8 million; `plan-review.json` 386 KB (observed 2026-10-13; method: the input-token cells of 374's
+`spec-fidelity` rows in `dev/review-ledger.md`, summed, and `ls -la` of the record).
+
+**D60 - Blocks, and a verdict per block (FR-043).** `plan_gate.blocks(text)` splits the plan at every heading line (`#` to
+`####`): each block runs from its heading to the next heading of any level, and the text before the first heading is the
+block `preamble`. A block's key is its heading line (a repeat gets `#2`, `#3`); its digest is the sha256 of its text with the
+archive's generated lines (D62) taken out. `plan-review.json` keeps `blocks: {key: {sha256, verdict, reviewed}}`. `judge`:
+- the blocks of a task section with its own current verdict (FR-003(a)) are out, as today;
+- every other block is owed unless the record holds a CLEAR verdict at its digest, or a typo-scale change (FR-005(b)) from the
+  block's text at that digest, read from git (D63);
+- a record from before the amendment (a `plan_text` and one verdict) is read as that verdict on each block of its `plan_text`;
+- a block the record holds that `plan.md` no longer has is owed too, as `(removed) <key>` - unless `plan-done.md` holds it at
+  its digest (the archive moved it, D62): a decision deleted by hand is a change like any other (FR-005(b)), and its review
+  records `"removed"` as its digest, which takes it out of the record;
+- any owed block names the refusal - `plan-review-stale`, the owed keys, and `make plan-delta F=<n>`; a block whose verdict
+  is BLOCKED is `plan-review-blocked`, as today.
+
+**D61 - Reviewing changed blocks (FR-043).** `make plan-delta F=<n>` builds the bundle of the owed blocks (D64) and prints the
+dispatch: `spec-fidelity` MODE 4 on those blocks alone. `make plan-verdict F=<n> BLOCKS=1 FILE=<json> AS=spec-fidelity`
+records it: the JSON names each block reviewed with its digest (refused if one changed meanwhile), and the decisions found in
+them; the verdict derived from those decisions is each named block's. A whole-plan review (`make plan-verdict` as today)
+records every block. `decision_refusal` reads block verdicts where it read `plan_text`.
+
+**D62 - The archive (FR-044).** `make plan-archive F=<n>` moves each task section whose task ids are all ticked in `tasks.md`
+and whose blocks carry a CLEAR verdict (its own, or the blocks') out of `plan.md`, appending it byte for byte to
+`plan-done.md` under a dated line, and leaves in its place one generated line
+`<!-- plan-archive: T29 to T45 moved to plan-done.md, 2026-10-13 (feature 375 FR-044) -->` (consecutive sections share one).
+The generated line is taken out of every digest, so the block it lands in keeps its verdict; the removed blocks owe nothing.
+The reviewers' prompts name `plan.md` only. Nothing moves a section whose task is open.
+
+**D63 - No copy of the plan (FR-045).** `record` and `record_task` stop writing `plan_text` and `section_text`; a task entry
+keeps its section's digest. Where a typo-scale comparison needs a block's (or a section's) earlier text, `History`
+walks `git log` of `plan.md` newest first, reading 25 versions per `cat-file --batch` and stopping at the first version that
+holds a block of that key at that digest - the whole history if need be, with no cap (374's plan already had 61 versions);
+text git never saw is found nowhere, and that is no typo - the conservative side. `plan_gate.py slim <spec_dir>` converts a
+record (each block of its `plan_text` under its verdict; task entries without their text); every `specs/*/plan-review.json`
+is converted once, by the command, in this amendment.
+
+**D64 - The lean bundle (FR-046).** `scripts/gates/plan_bundle.py` writes `/tmp/l7r-check/plan-<feature>-<T or blocks>/`:
+`MANIFEST.md` (what to judge, how to record), `request.md` (the GM's words, copied whole), `spec-cited.md` (each FR, SC and
+D the blocks name, its paragraph in full), `spec-index.md` (the first line of every other FR and SC), `blocks.md` (the blocks
+under review, each with its key and digest) and `earlier.md` (each changed block's text at its last CLEAR verdict, from git).
+`make decide` and `make plan-delta` print the dispatch naming the MANIFEST.
 
 ## Batches
 

@@ -210,6 +210,14 @@ You are given: the GM's `request.md` VERBATIM, the accepted `spec.md`, and `plan
 You do not judge whether the plan is GOOD - design, cost and style are not fidelity findings. An empty
 decisions list with `CLEAR` is a legitimate result for a plan that decides nothing the spec left open.
 
+**On a bundle, by blocks** (feature 375 amendment 11, the GM 2026-10-13): a plan's verdict is kept per block, and only a block
+changed since its CLEAR verdict is owed. When the dispatch names a bundle (`make plan-delta`, `make decide`), read its
+`MANIFEST.md` and the files beside it - the GM's request whole, the requirements the blocks cite in full and an index of the
+rest, the blocks, their earlier text - and nothing in the repository; judge those blocks' decisions as above, and record as
+its MANIFEST says (`BLOCKS=1` with each block's digest, or `TASK=`). A block named `(removed) <key>` was deleted by hand: judge
+its removal from its earlier text and give `"removed"` as its digest. `plan-done.md` holds finished sections and is read by
+no review.
+
 ---
 
 ## FIGURES: re-run them, never adjudicate them by eye (feature 239, both modes)

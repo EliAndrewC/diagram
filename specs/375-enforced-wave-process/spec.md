@@ -2,9 +2,11 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: Done 2026-10-12 - amendment 10 landed: spec FAITHFUL (round 2), plan CLEAR (round 2); a reopened feature's glyph hour counts from its most recent reopening (SC-035 tested); amendments 1-9 Done
+**Status**: Done 2026-10-13 - amendment 11 landed: spec FAITHFUL (round 2), plan CLEAR (its section, then its 2 changed blocks - the first changed-blocks review); a plan reviewed by its changed blocks, finished sections archived, no plan copy in the verdict, lean bundles (R11). Before it: amendment 10 landed: spec FAITHFUL (round 2), plan CLEAR (round 2); a reopened feature's glyph hour counts from its most recent reopening (SC-035 tested); amendments 1-9 Done
 
 **Approved**: the GM, 2026-10-12, "Yes to reopening the feature with that amendment, but instead of implementing it yourself, please reopen it and the hand off the work to the "Diagram performance" session, since it's already doing some similar work."
+
+**Amendment 11 approved**: the GM, 2026-10-13, "Yes please do all 4 items now, thanks."
 
 **Amendment 10 approved**: the GM, 2026-10-12, "can we make it not fire for reopened features, or count from the point when they are most recently amended and re-opened?"
 
@@ -389,6 +391,29 @@ time at which they come due before landing.
   first opening.
 
 
+### Amendment 11 (`request.md`, Amendment 11)
+
+A long feature's plan grows a section per batch, and its reviews read it whole: the cost of each batch grew with every batch
+before it. Each block of the plan is judged once, and judged again only when it changes.
+
+- **FR-043 A plan is reviewed by its changed blocks.** The plan's verdict is kept per block - each `##` to `####` heading's
+  text up to the next heading of any level, and the text before the first heading. A block whose text is unchanged since a
+  CLEAR verdict keeps it; a block added or changed owes a review of that block alone (a typo-scale change, as FR-005(b), owes
+  none). A batch's edits outside its own task section therefore owe a review of the edited blocks, never of the whole plan. A
+  plan reviewed whole records every block's verdict; a review of changed blocks records theirs. A verdict recorded before this
+  amendment counts for the blocks of the plan text it reviewed. FR-005(b)'s voiding now reaches only the block the edit is in;
+  the plan's other blocks keep their verdicts.
+- **FR-044 Finished sections leave the plan.** One command moves the sections of tasks that are all ticked and carry a CLEAR
+  verdict out of `plan.md` into `plan-done.md`, leaving one generated line naming them and where they went. No review reads
+  `plan-done.md`; a removed section owes no review, and the generated line owes none.
+- **FR-045 No copy of the plan in its verdict.** `plan-review.json` keeps each block's digest and verdict and the decisions, not
+  the plan's or a section's text. Where a typo-scale comparison needs a block's earlier text, it is read from the plan's history
+  in git. The existing records are converted, their verdicts kept.
+- **FR-046 A section review reads a lean bundle.** A task section's review (`make decide`), and a changed-blocks review, is
+  dispatched on a bundle built outside the repository: the GM's request, the spec's requirements and success criteria the
+  blocks cite (in full) with a one-line index of the rest, the blocks under review, and each changed block's earlier text -
+  never the whole spec or the whole plan.
+
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002, FR-006) Replaying feature 372's recorded deltas for waves 106, 108 and 111 through the new owing logic: modal-depiction
@@ -521,10 +546,20 @@ time at which they come due before landing.
   minutes ago, a glyph unit owed now is not due until an hour after the reopening; likewise for one closed by every task ticked
   (its status line never closed) and reopened ten minutes ago by adding a task; with no reopening in its history the first
   event starts the hour, as before. The test fails on today's code.
+- **SC-036** (FR-043) In a fixture feature with a CLEAR plan, an edit to one block outside any task section owes a review of
+  that block alone - `make tick` names it and the dispatch reads only that block of the plan (with FR-046's bundle) - and once it is recorded CLEAR the tick passes; an
+  unchanged block keeps its verdict; a record from before the amendment covers the blocks it reviewed. On 374's plan as it
+  stands, the review owed after batch 18's edits is of the changed blocks only, measured against a whole-plan review's reads.
+- **SC-037** (FR-044) The archive command moves only all-ticked, CLEAR sections, leaves its generated line, owes no review, and
+  `plan-done.md` holds the sections byte for byte; measured on 374's plan, its plan.md shrinks to its open work.
+- **SC-038** (FR-045) `plan-review.json` holds no plan or section text; a typo-scale edit to a block is still found typo-only from
+  its git history; 374's record converted keeps every verdict, and its size is measured.
+- **SC-039** (FR-046) A section review's bundle carries the request, the cited requirements in full, the index, the section and
+  its earlier text, and is smaller than the spec plus the plan it replaces (measured on 374's T46).
 
 375 closes on SC-001, SC-002, SC-005 and SC-006; SC-003 and SC-004 are held open in 374 by FR-014, since 374 takes no task
 until 375 has landed. Amendment 3 closes on SC-011, SC-013 and SC-014; SC-012 needs pop-up rounds run under it, which 374's
-next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 closes on SC-016 to SC-020. Amendment 6 closes on SC-021. Amendment 7 closes on SC-022 to SC-027. Amendment 8 closes on SC-028 to SC-031. Amendment 9 closes on SC-032 to SC-034. Amendment 10 closes on SC-035.
+next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 closes on SC-016 to SC-020. Amendment 6 closes on SC-021. Amendment 7 closes on SC-022 to SC-027. Amendment 8 closes on SC-028 to SC-031. Amendment 9 closes on SC-032 to SC-034. Amendment 10 closes on SC-035. Amendment 11 closes on SC-036 to SC-039.
 
 ## What it does not cover
 

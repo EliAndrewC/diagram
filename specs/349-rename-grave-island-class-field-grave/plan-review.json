@@ -1,7 +1,6 @@
 {
  "feature": "349-rename-grave-island-class-field-grave",
  "plan_sha256": "f3eabc59414df574315378b891d8344d61b332924ba49698c6a163a8f8092326",
- "plan_text": "# Implementation Plan: Rename the `grave island` class to `field grave`\n\n**Branch**: none (main, in the session clone) | **Date**: 2026-10-10 | **Spec**: [spec.md](spec.md)\n\n## Summary\n\nA key rename across the class's users, carried by the snapshot's renaming table; the two hamlets that draw a field grave\nregenerated; no drawing changes.\n\n## Decisions\n\n- **D1 - the key and the class.** `water_and_ways.py`: `class FieldGrave(Kind): key = 'field grave'`; the engine's two\n  drawers (`_plot_grave_island`, `_plot_corner_grave` in `settlement/fields/features.py`) tag their ink `field grave`.\n- **D2 - the reader-facing data.** `place.json`'s collision key; `siblings.json`'s two pairs (the key, and \"the grave island\"\n  in their text reworded to \"the field grave\", standing \"on an island in a plot or in its corner\"); the modal file moves\n  to `assets/modals/hamlet/field-grave.md` (its stem is the key's slug) with `Name: field grave`, nothing else changed.\n- **D3 - the snapshot.** `SINCE_189[\"grave island\"] = (\"field grave\",)` in `tests/interactive/test_classes_docstrings.py`, as\n  bathhouse -> bath room; the frozen snapshot is not edited (FR-004).\n- **D4 - the maps.** Kashikawa and Mizuguchi regenerated (`make map`); Kashikawa's `ink_classes` and its notes' Features key\n  (`- **field grave**:`) follow. Mizuguchi's notes mention \"a grave island\" only in its dated history, which stays.\n- **D5 - the island form keeps its name** (FR-003): `grave_form=island`, its choice modal, `_plot_grave_island` and the\n  glossary's term \"grave island\" (a word the prose uses for the form) are unchanged.\n- **D6 - checks.** The claims the renamed units carry are re-checked by `impl-drift`; `modal-form` checks the renamed modal;\n  the research and depiction checks are not re-run (spec, Decisions Recorded); the glyph-check `review_owed` names on\n  Kashikawa is a class key new to the map over an unchanged glyph, answered with `PAIR_OK` / `REVIEW_GATE_OK` and its reason.\n\n## Project Structure\n\n```text\nl7r/diagram/interactive/classes/water_and_ways.py, settlement/fields/features.py     D1\nl7r/diagram/interactive/assets/{place,siblings}.json, modals/hamlet/field-grave.md   D2\ntests/interactive/test_classes_docstrings.py, test_classes.py, test_place.py          D3\npool/hamlets/kashikawa/kashikawa.{json,notes.md}                                      D4\n```\n",
  "reviewed": "2026-10-10",
  "declared": "spec-fidelity",
  "decisions": [
@@ -43,5 +42,27 @@
    "why": "Process for verifying a rename, not a change to what the GM asked; nothing the request asks for is withheld by it (glyph, About, Guesses and Depiction are unchanged per FR-002). Whether the escape is sound is the gate's question, not fidelity."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "CLEAR",
+ "blocks": {
+  "preamble": {
+   "sha256": "184316c2b3257a24820b4a3ccb6c6dd852191eedeb79199c7a0ddcdae274df33",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-10"
+  },
+  "## Summary": {
+   "sha256": "2476fe6768ae7266bbb2bc55f38353e628ade7c2707242aa5fbd2115b9071579",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-10"
+  },
+  "## Decisions": {
+   "sha256": "5bb16568324ad0a862d99ff87bf686e1e7741b9f975f84a1579d1bc888faaa99",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-10"
+  },
+  "## Project Structure": {
+   "sha256": "5f30e0a1350644a667b37111f0e3fbfa4776a851e642facba0c1d66b1f399f3d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-10"
+  }
+ }
 }

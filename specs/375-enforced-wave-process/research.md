@@ -100,3 +100,19 @@ others. Counted from the same rows (`m:375-a9-glyph-passes`): 158 glyph-check pa
 later. A glyph check is owed today on each occasion (feature 294) and dispatched once the gate is green, so a long feature
 checks its new elements after each wave and again after each fix; on the hour, an element changed several times in an hour
 is checked once, on what it is by then.
+
+## R11 - amendment 11 measured on 374's plan (SC-036 to SC-039)
+
+Observed 2026-10-13; method: `plan_gate.py` run read-only against the backlog clone's `specs/374-match-the-research-continued/`
+(the archive on a committed copy of it), `ls -la` for sizes.
+
+- **SC-036**: after batch 18's edits the plan owes 1 of its 69 blocks (`## Batch 18: where a clustered hamlet's wells stand`,
+  1,062 characters) where the rule before owed a review of the whole 93,744-character plan.
+- **SC-037**: `make plan-archive` moves 38 finished tasks' sections; `plan.md` 93,762 -> 30,706 bytes, `plan-done.md` 64,727; what
+  the plan owes is unchanged (the same one block).
+- **SC-038**: 374's record converted in memory: 376 KB -> 232 KB (the plan's copy and 43 section copies gone; what is left is the
+  decisions). The 105 other records converted in this clone judge exactly as before (105 same, 0 different).
+- **SC-039**: 374's T46 section bundle is 12,648 bytes against 117,065 for its spec, plan and request; 374's sections cite their
+  own wave items, not the spec's FRs, so its cited file is empty and the reviewer has the index's first lines.
+- On 375 itself, after this amendment's plan was written, `make plan-delta F=375` owed 2 blocks (amendment 10's corrected
+  counts and amendment 11's section) of its 72 KB plan.

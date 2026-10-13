@@ -4,6 +4,9 @@
     python3 scripts/gates/plan_gate.py owed <spec_dir>              the reason a feature may not tick, or nothing
     python3 scripts/gates/plan_gate.py push [<range>]               every touched feature with a tick and no CLEAR review
     python3 scripts/gates/plan_gate.py record <spec_dir> <json> --as <who>   write plan-review.json
+    python3 scripts/gates/plan_gate.py record-blocks <spec_dir> <json> --as <who>   record a review of changed blocks
+    python3 scripts/gates/plan_gate.py delta|archive|slim <spec_dir>          (amendment 11) owed blocks' bundle; finished
+                                                                              sections out; the record without the plan copy
 
 WHY. Constitution XVI puts an independent check in front of every exception, and `review-gate.sh` holds
 that for a SPEC. A plan is written after the spec's verdict and nothing read it, so a plan decision that
@@ -103,13 +106,17 @@ def task_sections(plan_text: str) -> dict[str, str]:
     return out
 
 
-def task_current(review: dict, plan_text: str, task: str) -> bool:
-    """Whether the task's section carries a CLEAR decision verdict that still matches it (a typo aside, as D6)."""
+def task_current(review: dict, plan_text: str, task: str, history: History | None = None) -> bool:
+    """Whether the task's section carries a CLEAR decision verdict that still matches it (a typo aside, as D6) - its earlier
+    text from the record where an old record kept it, else from the plan's history (amendment 11, D63)."""
     section = task_sections(plan_text).get(task)
     entry = (review.get("tasks") or {}).get(task) or {}
     if section is None or entry.get("verdict") != "CLEAR":
         return False
-    return entry.get("section_sha256") == digest(section.encode()) or typo_only(str(entry.get("section_text") or ""), section)
+    if entry.get("section_sha256") == digest(section.encode()):
+        return True
+    earlier = entry.get("section_text") or (history.section(task, str(entry.get("section_sha256"))) if history else None)
+    return earlier is not None and typo_only(str(earlier), section)
 
 
 def _without(plan_text: str, ids: set[str]) -> str:
@@ -118,6 +125,133 @@ def _without(plan_text: str, ids: set[str]) -> str:
         if t in ids:
             plan_text = plan_text.replace(sec, "")
     return plan_text
+
+
+# ---- feature 375 amendment 11 (the GM 2026-10-13): a plan reviewed by its changed blocks -------------------------------------
+#: "Is feature 374 growing too large in a way that eats tokens" - sixteen whole-plan reviews of 374 cost 13.7 million input
+#: tokens, each re-judging every earlier decision because one edit outside a task's section staled the whole plan's verdict.
+_ANY_HEAD = re.compile(r"^#{2,4}\s.*$", re.M)
+#: the line `make plan-archive` leaves where finished sections were (FR-044): taken out of every digest, so it owes no review
+ARCHIVE_LINE = re.compile(r"^<!-- plan-archive: [^\n]*? -->\n?", re.M)
+HISTORY_CHUNK = 25  # versions of plan.md read per `cat-file --batch` while a block's earlier text is sought (D63)
+
+
+def blocks(plan_text: str) -> list[tuple[str, str, int]]:
+    """(key, text, offset) of every block (D60, FR-043): each heading line (`##` to `####`) to the next such heading, and the
+    text before the first one (the title with it) as `preamble`. A repeated heading's key gets `#2`, `#3`."""
+    heads = list(_ANY_HEAD.finditer(plan_text))
+    out = [("preamble", plan_text[: heads[0].start()] if heads else plan_text, 0)]
+    seen: dict[str, int] = {}
+    for i, m in enumerate(heads):
+        end = heads[i + 1].start() if i + 1 < len(heads) else len(plan_text)
+        key = m.group(0).strip()
+        seen[key] = seen.get(key, 0) + 1
+        out.append((key if seen[key] == 1 else f"{key}#{seen[key]}", plan_text[m.start():end], m.start()))
+    return out
+
+
+def block_digest(text: str) -> str:
+    return digest(ARCHIVE_LINE.sub("", text).encode())
+
+
+class History:
+    """The texts of plan.md's earlier versions (D63), newest first, read in chunks of HISTORY_CHUNK by one `cat-file --batch`
+    each, only as far back as a question needs - the whole history when the text sought is not there (the plan review: a cap
+    of 60 would have dropped a typo's verdict on 374, whose plan already had 61 versions). Where nothing can be read (no git,
+    no history) it knows nothing, and a block's earlier text found nowhere is no typo - the conservative side."""
+
+    def __init__(self, plan_path: pathlib.Path | None, ref: str = "HEAD") -> None:
+        self.path, self.ref = plan_path, ref
+        self._revs: list[str] | None = None
+        self._texts: list[str] = []
+
+    def _git(self, *args: str, data: bytes | None = None) -> bytes:
+        return subprocess.run(["git", "-C", str(self.path.parent), *args], input=data, capture_output=True).stdout  # type: ignore[union-attr]
+
+    def texts(self):  # noqa: ANN201 - a generator of str
+        if self.path is None or not self.path.parent.is_dir():
+            return
+        if self._revs is None:
+            rel = self._git("ls-files", "--full-name", "--", self.path.name).decode().strip()
+            rel = rel or self._git("rev-parse", "--show-prefix").decode().strip() + self.path.name
+            self._rel = rel
+            self._revs = self._git("log", "--format=%H", self.ref, "--", self.path.name).decode().split()
+        yield from self._texts
+        while len(self._texts) < len(self._revs):
+            chunk = self._revs[len(self._texts): len(self._texts) + HISTORY_CHUNK]
+            got, i = self._git("cat-file", "--batch", data="".join(f"{r}:{self._rel}\n" for r in chunk).encode()), 0
+            for _ in chunk:
+                nl = got.find(b"\n", i)
+                head = got[i:nl].split()
+                if len(head) < 3 or head[1] == b"missing":
+                    self._texts.append("")
+                    i = nl + 1
+                    continue
+                size = int(head[2])
+                self._texts.append(got[nl + 1: nl + 1 + size].decode("utf-8", "replace"))
+                i = nl + 1 + size + 1
+            yield from self._texts[-len(chunk):]
+
+    def block(self, key: str, sha: str) -> str | None:
+        """The text a block had when its digest was `sha`, from the plan's history; None when no version held it."""
+        for text in self.texts():
+            for k, body, _at in blocks(text):
+                if k == key and block_digest(body) == sha:
+                    return body
+        return None
+
+    def section(self, task: str, sha: str) -> str | None:
+        for text in self.texts():
+            sec = task_sections(text).get(task)
+            if sec is not None and digest(sec.encode()) == sha:
+                return sec
+        return None
+
+
+def reviewed_blocks(review: dict) -> dict[str, dict]:
+    """`{key: {sha256, verdict}}` the record holds (D60): its `blocks`, or - a record from before amendment 11 - its one verdict on
+    each block of the `plan_text` it reviewed."""
+    if isinstance(review.get("blocks"), dict):
+        return review["blocks"]
+    text = review.get("plan_text")
+    if not isinstance(text, str):
+        return {}
+    return {k: {"sha256": block_digest(body), "verdict": review.get("verdict"), "text": body} for k, body, _at in blocks(text)}
+
+
+REMOVED = "(removed) "
+
+
+def block_status(review: dict, plan_text: str, ruled: set[str], history: History | None = None, done: str = "") -> tuple[list[str], list[str]]:
+    """(the blocks owed a review, the blocks BLOCKED): every block outside a task section with its own current verdict, judged
+    against the record's verdict at its digest, a typo-scale change (FR-005(b)) from its text at that digest aside. A recorded
+    block that plan.md no longer has is owed too, as `(removed) <key>`, unless `plan-done.md` (`done`) holds it - the archive
+    moved it (the plan review: a decision deleted by hand is a change like any other)."""
+    out_of = [(plan_text.find(sec), plan_text.find(sec) + len(sec)) for t, sec in task_sections(plan_text).items() if t in ruled]
+    have = reviewed_blocks(review)
+    owed, blocked = [], []
+    for key, body, at in blocks(plan_text):
+        if any(lo <= at < hi for lo, hi in out_of if lo >= 0):
+            continue
+        if not ARCHIVE_LINE.sub("", body).strip() and key == "preamble":
+            continue
+        entry = have.get(key) or {}
+        if entry.get("sha256") != block_digest(body):
+            earlier = entry.get("text") or (history.block(key, str(entry.get("sha256"))) if history and entry.get("sha256") else None)
+            if earlier is None or not typo_only(ARCHIVE_LINE.sub("", earlier), ARCHIVE_LINE.sub("", body)):
+                owed.append(key)
+                continue
+        if entry.get("verdict") == "BLOCKED":
+            blocked.append(key)
+        elif entry.get("verdict") != "CLEAR":
+            owed.append(key)
+    now = {k for k, _b, _a in blocks(plan_text)}
+    archived = {block_digest(b) for _k, b, _a in blocks(done)} if done else set()
+    for key, entry in have.items():
+        if key in now or key == "preamble" or not isinstance(entry, dict) or entry.get("sha256") in archived:
+            continue
+        owed.append(REMOVED + key)
+    return owed, blocked
 
 
 HOW = ("dispatch `spec-fidelity` in its PLAN REVIEW mode with request.md, spec.md and plan.md, then record "
@@ -132,8 +266,9 @@ def ticked(tasks_text: str) -> int:
     return len(_TICKED.findall(tasks_text))
 
 
-def judge(plan: bytes | None, review_text: str | None) -> tuple[str, str] | None:
-    """(rule, reason) when a feature owes a plan review, from the plan's bytes and the record's text."""
+def judge(plan: bytes | None, review_text: str | None, history: History | None = None, done: str = "") -> tuple[str, str] | None:
+    """(rule, reason) when a feature owes a plan review, from the plan's bytes and the record's text. Since amendment 11 (D60)
+    the record's verdict is kept per block, and only a block added or changed since its CLEAR verdict is owed."""
     if plan is None:
         return "plan-missing", f"no plan.md - the plan stage is owed before its review can be (spec D5); then {HOW}"
     if review_text is None:
@@ -143,14 +278,17 @@ def judge(plan: bytes | None, review_text: str | None) -> tuple[str, str] | None
     except ValueError:
         return "plan-review-missing", f"{RECORD} is not JSON - {HOW}"
     text = plan.decode("utf-8", "replace")
-    # every task section that carries its own current verdict (a decision preflight, plan D3) is out of the comparison, in the
-    # reviewed text and in today's: adding or changing it does not stale the plan-stage verdict
-    ruled = {t for t in task_sections(text) if task_current(review, text, t)}
-    if review.get("plan_sha256") != digest(plan) and not typo_only(_without(str(review.get("plan_text") or ""), ruled),
-                                                                   _without(text, ruled)):
-        return "plan-review-stale", (f"plan.md changed after its review by more than a typo (FR-004; feature 375 FR-005(b): "
-                                     f"a word added or removed, a number, a negation or a quantifier) - {HOW}")
-    if review.get("verdict") != "CLEAR":
+    if not isinstance(review.get("blocks"), dict) and not isinstance(review.get("plan_text"), str) and review.get("plan_sha256") == digest(plan):
+        # a whole-plan record that kept no text, of exactly this plan: its one verdict is every block's
+        review = {**review, "blocks": {k: {"sha256": block_digest(b), "verdict": review.get("verdict")} for k, b, _a in blocks(text)}}
+    # every task section that carries its own current verdict (a decision preflight, plan D3) is out of the comparison
+    ruled = {t for t in task_sections(text) if task_current(review, text, t, history)}
+    owed_keys, blocked = block_status(review, text, ruled, history, done)
+    if owed_keys:
+        shown = ", ".join(k[:60] for k in owed_keys[:5]) + (f" and {len(owed_keys) - 5} more" if len(owed_keys) > 5 else "")
+        return "plan-review-stale", (f"{len(owed_keys)} block(s) of plan.md changed since their review by more than a typo (feature 375 "
+                                     f"FR-043): {shown} - `make plan-delta F=<n>` builds the review of those blocks alone")
+    if blocked or (review.get("verdict") not in (None, "CLEAR") and not isinstance(review.get("blocks"), dict)):
         narrowing = [d.get("id", "?") for d in review.get("decisions", []) if d.get("ruling") == "NOT LEGITIMATE"]
         return "plan-review-blocked", (f"the plan review is BLOCKED ({', '.join(narrowing) or 'no ruling named'} ruled "
                                        f"NOT LEGITIMATE) - withdraw or overrule the decision in plan.md, then {HOW}")
@@ -160,7 +298,8 @@ def judge(plan: bytes | None, review_text: str | None) -> tuple[str, str] | None
 def owed(spec_dir: pathlib.Path) -> tuple[str, str] | None:
     plan, review = spec_dir / "plan.md", spec_dir / RECORD
     return judge(plan.read_bytes() if plan.is_file() else None,
-                 review.read_text(encoding="utf-8") if review.is_file() else None)
+                 review.read_text(encoding="utf-8") if review.is_file() else None, History(plan),
+                 (spec_dir / "plan-done.md").read_text(encoding="utf-8") if (spec_dir / "plan-done.md").is_file() else "")
 
 
 # ---- the escape and the record of it (FR-008) ----------------------------------------------------------
@@ -247,8 +386,9 @@ def record_task(spec_dir: pathlib.Path, task: str, review: dict, declared: str, 
         raise ValueError("decisions must be a list")
     verdict = derive_verdict(decisions)
     rec_path = spec_dir / RECORD
-    out = json.loads(rec_path.read_text(encoding="utf-8")) if rec_path.is_file() else {"feature": spec_dir.name}
-    out.setdefault("tasks", {})[task] = {"section_sha256": review["section_sha256"], "section_text": section,
+    # slimmed as it is rewritten (amendment 11, D63): a record converts at its next recording
+    out = slim_record(json.loads(rec_path.read_text(encoding="utf-8"))) if rec_path.is_file() else {"feature": spec_dir.name}
+    out.setdefault("tasks", {})[task] = {"section_sha256": review["section_sha256"],  # its text is in git (D63), not copied
                                          "reviewed": today or datetime.date.today().isoformat(), "declared": declared,
                                          "decisions": decisions, "verdict": verdict}
     rec_path.write_text(json.dumps(out, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -277,6 +417,13 @@ def active_task(root: pathlib.Path) -> tuple[pathlib.Path | None, str]:
     return d, (m.group(1) if m else "")
 
 
+def _section_clear(review: dict, section: str) -> bool:
+    """Every block of the section carries a CLEAR verdict at its digest (amendment 11: the plan reviewed whole, or its blocks)."""
+    have = reviewed_blocks(review)
+    return all((have.get(k) or {}).get("verdict") == "CLEAR" and (have.get(k) or {}).get("sha256") == block_digest(b)
+               for k, b, _a in blocks(section) if k != "preamble")
+
+
 def decision_refusal(root: pathlib.Path) -> str:
     """Why a check may not be dispatched yet (feature 375, FR-003(a)): the active task's decisions carry no current CLEAR
     verdict - its own section's (`make decide`), or, where the plan has no section for it, the plan-stage verdict."""
@@ -292,8 +439,7 @@ def decision_refusal(root: pathlib.Path) -> str:
     if task in task_sections(text):
         # a plan reviewed CLEAR as a whole, still current, covers its task sections too: the reviewer read them; only a section
         # added or changed since needs its own preflight (the advisor's note before batch 3 landed)
-        read = task_sections(str(review.get("plan_text") or "")).get(task)
-        if task_current(review, text, task) or (owed(d) is None and read is not None and typo_only(read, task_sections(text)[task])):
+        if task_current(review, text, task, History(plan)) or (owed(d) is None and _section_clear(review, task_sections(text)[task])):
             return ""
         return (f"{d.name} {task}: its plan section carries no current CLEAR decision verdict - decide first, then check "
                 f"(feature 375 FR-003a): `make decide F={d.name.split('-')[0]} T={task}` names the review to dispatch")
@@ -320,12 +466,123 @@ def record(spec_dir: pathlib.Path, review: dict, declared: str, today: str | Non
         raise ValueError(f"the input says {review['verdict']} but its rulings make it {verdict} (P2)")
     rec_path = spec_dir / RECORD
     kept = json.loads(rec_path.read_text(encoding="utf-8")).get("tasks", {}) if rec_path.is_file() else {}
+    kept = {k: {f: v for f, v in e.items() if f != "section_text"} for k, e in kept.items()}
+    when = today or datetime.date.today().isoformat()
+    # amendment 11 (D60, D63): a verdict per block, and no copy of the plan - a later typo is measured against git's history
     out = {"feature": spec_dir.name, "plan_sha256": review["plan_sha256"], **({"tasks": kept} if kept else {}),
-           "plan_text": plan.read_text(encoding="utf-8"),  # feature 375 FR-005(b): what a later typo is measured against
-           "reviewed": today or datetime.date.today().isoformat(), "declared": declared,
-           "decisions": decisions, "verdict": verdict}
+           "blocks": {k: {"sha256": block_digest(body), "verdict": verdict, "reviewed": when}
+                      for k, body, _at in blocks(plan.read_text(encoding="utf-8"))},
+           "reviewed": when, "declared": declared, "decisions": decisions, "verdict": verdict}
     (spec_dir / RECORD).write_text(json.dumps(out, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     return out
+
+
+def slim_record(review: dict) -> dict:
+    """A record from before amendment 11 converted (D63): each block of its `plan_text` under its verdict, task entries without
+    their text, no copy of the plan. The verdicts are kept exactly."""
+    out = {k: v for k, v in review.items() if k not in ("plan_text",)}
+    if "blocks" not in out and isinstance(review.get("plan_text"), str):
+        out["blocks"] = {k: {"sha256": e["sha256"], "verdict": e["verdict"], "reviewed": review.get("reviewed", "")}
+                         for k, e in reviewed_blocks(review).items()}
+    if isinstance(out.get("tasks"), dict):
+        out["tasks"] = {k: {f: v for f, v in e.items() if f != "section_text"} for k, e in out["tasks"].items()}
+    return out
+
+
+def record_blocks(spec_dir: pathlib.Path, review: dict, declared: str, today: str | None = None) -> dict:
+    """A review of changed blocks (D61): `review` names each block reviewed with its digest (`blocks: {key: sha256}`) and the
+    decisions found in them; the verdict they derive is each named block's."""
+    if declared != REVIEWER:
+        raise PermissionError(f"declined: only the `{REVIEWER}` subagent records a plan review (AS={REVIEWER})")
+    named = review.get("blocks")
+    if not isinstance(named, dict) or not named:
+        raise ValueError("blocks must name each block reviewed: {\"<heading line>\": \"<sha256>\"}")
+    plan = spec_dir / "plan.md"
+    now = {k: block_digest(body) for k, body, _at in blocks(plan.read_text(encoding="utf-8") if plan.is_file() else "")}
+    for key, sha in named.items():
+        if key.startswith(REMOVED) and sha == "removed":
+            continue  # a block deleted by hand, its removal judged (the plan review): it leaves the record below
+        if key not in now:
+            raise ValueError(f"plan.md has no block {key!r}")
+        if now[key] != sha:
+            raise ValueError(f"{key!r} changed while it was being reviewed - its digest is not {sha[:12]}")
+    decisions = review.get("decisions")
+    if not isinstance(decisions, list):
+        raise ValueError("decisions must be a list (empty when the blocks decide nothing)")
+    verdict = derive_verdict(decisions)
+    rec_path = spec_dir / RECORD
+    out = slim_record(json.loads(rec_path.read_text(encoding="utf-8"))) if rec_path.is_file() else {"feature": spec_dir.name}
+    when = today or datetime.date.today().isoformat()
+    for key, sha in named.items():
+        if key.startswith(REMOVED):
+            if verdict == "CLEAR":
+                out.setdefault("blocks", {}).pop(key[len(REMOVED):], None)
+            continue
+        out.setdefault("blocks", {})[key] = {"sha256": sha, "verdict": verdict, "reviewed": when, "declared": declared}
+    out.setdefault("block_reviews", []).append({"reviewed": when, "blocks": sorted(named), "verdict": verdict, "decisions": decisions})
+    rec_path.write_text(json.dumps(out, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+    return {"verdict": verdict, "blocks": sorted(named), "decisions": decisions}
+
+
+def archivable(spec_dir: pathlib.Path) -> list[str]:
+    """The task sections `make plan-archive` may move (D62): every task their heading names ticked in tasks.md, and their
+    verdict CLEAR - the section's own, or each of its blocks'. In plan order, none inside another."""
+    plan = spec_dir / "plan.md"
+    text = plan.read_text(encoding="utf-8") if plan.is_file() else ""
+    tasks = (spec_dir / "tasks.md").read_text(encoding="utf-8") if (spec_dir / "tasks.md").is_file() else ""
+    done = set(re.findall(r"^- \[[xX]\] (T\d+[a-z]?)\b", tasks, re.M))
+    try:
+        review = json.loads((spec_dir / RECORD).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        review = {}
+    have = reviewed_blocks(review)
+    out: list[str] = []
+    taken: list[tuple[int, int]] = []
+    for sec in dict.fromkeys(task_sections(text).values()):
+        at = text.find(sec)
+        heading = sec.splitlines()[0] if sec else ""
+        ids = _TASK_ID.findall(heading)
+        if not ids or any(i not in done for i in ids) or any(lo <= at < hi for lo, hi in taken):
+            continue
+        own = any(task_current(review, text, i) for i in ids)
+        clear = all((have.get(k) or {}).get("verdict") == "CLEAR" and (have.get(k) or {}).get("sha256") == block_digest(b)
+                    for k, b, _a in blocks(sec) if k != "preamble")
+        if own or clear:
+            out.append(sec)
+            taken.append((at, at + len(sec)))
+    return out
+
+
+def archive(spec_dir: pathlib.Path, today: str | None = None) -> list[str]:
+    """Move the archivable sections out of plan.md into plan-done.md (D62), byte for byte, leaving one generated line where each
+    run of them stood; the task ids moved."""
+    plan = spec_dir / "plan.md"
+    text = plan.read_text(encoding="utf-8")
+    secs = archivable(spec_dir)
+    if not secs:
+        return []
+    when = today or datetime.date.today().isoformat()
+    marker = "\x00archived\x00"
+    moved_ids: list[str] = []
+    for sec in secs:
+        text = text.replace(sec, marker, 1)
+        moved_ids += _TASK_ID.findall(sec.splitlines()[0])
+    runs = re.split(f"((?:{re.escape(marker)})+)", text)
+    pos, out = 0, []
+    for part in runs:
+        if part.startswith(marker):
+            n = part.count(marker)
+            ids = [i for s in secs[pos:pos + n] for i in _TASK_ID.findall(s.splitlines()[0])]  # this run's sections, in order
+            pos += n
+            out.append(f"<!-- plan-archive: {ids[0]} to {ids[-1]} moved to plan-done.md, {when} (feature 375 FR-044) -->\n")
+        else:
+            out.append(part)
+    plan.write_text("".join(out), encoding="utf-8")
+    done = spec_dir / "plan-done.md"
+    head = "" if done.is_file() else f"# {spec_dir.name} - the plan's finished sections (feature 375 FR-044; no review reads this file)\n\n"
+    with done.open("a", encoding="utf-8") as fh:
+        fh.write(head + f"<!-- plan-archive: archived {when} -->\n" + "".join(secs))  # an ARCHIVE_LINE: out of every digest
+    return moved_ids
 
 
 # ---- the push (FR-007) ---------------------------------------------------------------------------------
@@ -349,7 +606,8 @@ def push_owed(root: pathlib.Path, rng: str, ref: str = "HEAD") -> list[tuple[str
         if tasks is None or not ticked(tasks.decode("utf-8", "replace")):
             continue
         review = _show(root, ref, f"{feature}/{RECORD}")
-        verdict = judge(_show(root, ref, f"{feature}/plan.md"), review.decode("utf-8") if review is not None else None)
+        verdict = judge(_show(root, ref, f"{feature}/plan.md"), review.decode("utf-8") if review is not None else None,
+                        History(root / feature / "plan.md", ref), (_show(root, ref, f"{feature}/plan-done.md") or b"").decode("utf-8", "replace"))
         if verdict:
             out.append((feature, *verdict))
     return out
@@ -372,14 +630,12 @@ def resolve(feature: str, root: pathlib.Path | None = None) -> pathlib.Path | No
 
 def decide_prompt(spec_dir: pathlib.Path, task: str) -> str:
     """The dispatch `make decide` prints: a plan review of ONE task's section (plan D19 - a MODE 4 review, so the review-round
-    hook never reroutes it), recorded under `tasks.<id>`."""
-    rel = f"specs/{spec_dir.name}"
-    return (f"MODE 4: PLAN REVIEW of one task's section - feature {spec_dir.name}, task {task} (a decision preflight, feature 375 "
-            f"FR-003a). Read {rel}/request.md and {rel}/spec.md, then ONLY the section of {rel}/plan.md whose heading names {task}. "
-            f"Take the section's sha256 first (the bytes from its heading line to the next heading at its level or above; "
-            f"`make section-sha F={spec_dir.name.split('-')[0]} T={task}` prints it), find its decisions, rule on each narrowing, "
-            f"write the JSON with `section_sha256` in place of `plan_sha256`, and record it with "
-            f"`make plan-verdict F={spec_dir.name.split('-')[0]} TASK={task} FILE=<json> AS=spec-fidelity`.")
+    hook never reroutes it), recorded under `tasks.<id>`, on the lean bundle (amendment 11, D64): the request, the requirements
+    the section cites, the section and its earlier text - never the whole spec or the whole plan."""
+    sys.path.insert(0, str(HERE))
+    import plan_bundle  # noqa: PLC0415
+
+    return plan_bundle.task_prompt(spec_dir, task)
 
 
 def main(argv: list[str]) -> int:
@@ -419,6 +675,54 @@ def main(argv: list[str]) -> int:
             print(f"plan-verdict: refused - {e}", file=sys.stderr)
             return 1
         print(f"plan-verdict: {out['verdict']} recorded for {spec_dir.name} {argv[2]} ({len(out['decisions'])} decision(s))")
+        return 0
+    if argv[:1] == ["record-blocks"] and len(argv) == 5 and argv[3] == "--as":  # `make plan-verdict BLOCKS=1` (amendment 11, D61)
+        spec_dir = resolve(argv[1])
+        if spec_dir is None:
+            print(f"plan-verdict: no single specs/{argv[1]}* directory", file=sys.stderr)
+            return 2
+        try:
+            got = record_blocks(spec_dir, json.loads(pathlib.Path(argv[2]).read_text(encoding="utf-8")), argv[4])
+        except PermissionError as e:
+            print(f"plan-verdict: {e}", file=sys.stderr)
+            return 2
+        except (OSError, ValueError) as e:
+            print(f"plan-verdict: refused - {e}", file=sys.stderr)
+            return 1
+        print(f"plan-verdict: {got['verdict']} recorded for {len(got['blocks'])} block(s) of {spec_dir.name}'s plan ({len(got['decisions'])} decision(s))")
+        return 0
+    if argv[:1] in (["slim"], ["archive"], ["delta"]) and len(argv) == 2:  # amendment 11: D63, D62, D61
+        spec_dir = resolve(argv[1])
+        if spec_dir is None or not (spec_dir / "plan.md").is_file():
+            print(f"{argv[0]}: no single specs/{argv[1]}* directory with a plan.md", file=sys.stderr)
+            return 2
+        if argv[0] == "slim":
+            rec = spec_dir / RECORD
+            if not rec.is_file():
+                return 0
+            before = rec.stat().st_size
+            rec.write_text(json.dumps(slim_record(json.loads(rec.read_text(encoding="utf-8"))), indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+            print(f"slim: {spec_dir.name}/{RECORD} {before // 1024} KB -> {rec.stat().st_size // 1024} KB, its verdicts kept")
+            return 0
+        if argv[0] == "archive":
+            ids = archive(spec_dir)
+            print(f"plan-archive: {len(ids)} task section(s) moved to {spec_dir.name}/plan-done.md: {', '.join(ids) or 'none finished'}")
+            return 0
+        sys.path.insert(0, str(HERE))
+        import plan_bundle  # noqa: PLC0415
+
+        try:
+            review = json.loads((spec_dir / RECORD).read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            review = {}
+        text = (spec_dir / "plan.md").read_text(encoding="utf-8")
+        ruled = {t for t in task_sections(text) if task_current(review, text, t, History(spec_dir / "plan.md"))}
+        done = (spec_dir / "plan-done.md").read_text(encoding="utf-8") if (spec_dir / "plan-done.md").is_file() else ""
+        keys, _blocked = block_status(review, text, ruled, History(spec_dir / "plan.md"), done)
+        if not keys:
+            print(f"plan-delta: no block of {spec_dir.name}'s plan is owed a review")
+            return 0
+        print(plan_bundle.delta_prompt(spec_dir, keys))
         return 0
     if argv[:1] == ["owed"] and len(argv) == 2:
         verdict = owed(pathlib.Path(argv[1]))
