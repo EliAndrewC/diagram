@@ -259,6 +259,13 @@ def test_a_returned_agent_s_verdict_is_read_from_its_reply() -> None:
     assert el.verdict_of("modal-depiction: shrine.SumoRing - COVERAGE 0 findings; TRUTH 0; LINKS 0\n\nmore") == "clean"
     assert el.verdict_of("modal-depiction: x - COVERAGE 1 findings; TRUTH 0; LINKS 0") == "findings"
     assert el.verdict_of("No claims are touched.") == ""
+    # a summary line with a round's number, a question's and a block count reads by its finding counts (the round arbiter on
+    # round:quote-check|q:0049@3, feature 374 wave 151: "round 2, question 0049 - ... 2 changed blocks, ... no findings; 0
+    # unfootnoted assertions; 0 EDITs" was read "findings" for its 2 and 0049)
+    clean = "quote-check: round 2, question 0049 - 0 changed notes; 2 changed blocks, both checked, no findings; 0 unfootnoted assertions; 0 EDITs"
+    assert el.verdict_of(clean) == "clean"
+    assert el.verdict_of("quote-check: round 2, question 0049 - 2 changed blocks; 1 unfootnoted assertion, 0 EDITs") == "findings"
+    assert el.verdict_of("record-format: 20 of 20 words ruled on - 0 VOCABULARY, 0 SESSION NOTE, 0 HISTORY. Nothing to act on.") == "clean"
     stop = el.line({"hook_event_name": "SubagentStop", "agent_type": "spec-fidelity", "agent_id": "a", "last_assistant_message": "**FAITHFUL**"})
     assert stop["verdict"] == "FAITHFUL"
     rows = [

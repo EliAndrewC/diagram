@@ -91,6 +91,13 @@ def test_findings_are_marked_new_repeated_or_reversing() -> None:
     assert ab.mark_rounds([bold]) == [[("NEW", "D3: the breadth is told as a convention**")]], "the bold numbered heading is read"
 
 
+def test_a_clean_round_lists_no_findings() -> None:
+    """A reply whose summary counts are all nought lists none of its passes as findings (the round arbiter on
+    round:quote-check|q:0049@3: a clean round's "clean" and "What this round covered" bullets were marked NEW findings)."""
+    clean = "quote-check: round 2, question 0049 - 2 changed blocks, no findings; 0 unfootnoted assertions; 0 EDITs\n\n- **Size bullet**: clean, both problems fixed.\n- **What this round covered.** the two changed blocks of the drawing page\n"
+    assert ab.mark_rounds([clean]) == [[]]
+
+
 def test_the_bundle_carries_the_rounds_the_cascade_and_the_feature(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
     import subprocess
 
