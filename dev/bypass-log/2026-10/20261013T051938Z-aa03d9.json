@@ -1,0 +1,6 @@
+{
+  "utc": "20261013T051938Z",
+  "guard": "pair-hooks",
+  "what": "glyph check before its hour",
+  "reason": "GLYPH_DUE_OK: due at landing: batch 15 lands next, every owed glyph unit together"
+}
