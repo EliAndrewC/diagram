@@ -37,6 +37,11 @@ SINCE_189: dict[str, tuple[str, ...]] = {
     # and the corner, so it is named for the grave rather than the island; the prose and data carried over, the name renamed
     "grave island": ("field grave",),
 }
+#: Kinds whose `covers` WIDENED since the snapshot: the kind draws a second form, recorded elsewhere, and its covers keeps the
+#: snapshot's words whole and names the new records after them - never a rewrite of what it covered.
+WIDENED_SINCE_189: dict[str, str] = {
+    "pig sty": "feature 374 wave 151: the plain paddy farm's sty against its farmhouse (0049), a `farm_fixtures` record of kind `sty`",
+}
 #: Kinds the map draws that the snapshot's registry did not have at all.
 ADDED_SINCE_189: tuple[str, ...] = (
     "household grave",  # feature 374 wave 136: a farmstead's own grave, on the household-graves knob
@@ -71,7 +76,7 @@ def test_the_registry_s_data_fields_equal_the_snapshot() -> None:
         if key in SINCE_189:
             continue  # retired; its successors are new entries with their own data, judged by test_classes.py
         fc = CLASSES[key]
-        assert fc.name == was["name"] and fc.covers == was["covers"], key
+        assert fc.name == was["name"] and (fc.covers.startswith(was["covers"]) if key in WIDENED_SINCE_189 else fc.covers == was["covers"]), key
         kept = {k: t for k, t in was["siblings"].items() if k not in SINCE_189}
         assert {k: t for k, t in fc.siblings.items() if k in kept} == kept, key
         for retired in set(was["siblings"]) & set(SINCE_189):
