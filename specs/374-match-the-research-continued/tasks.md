@@ -238,8 +238,9 @@ in 328's ranking and this spec.
 
 ## Batch 15 - the pig sty against the house
 
-- [ ] T43 wave 151: a pig sty against the farmhouse or an outbuilding on about two households in three of a plain paddy hamlet (0049) (FR-001)
+- [x] T43 wave 151: a pig sty against the farmhouse or an outbuilding on about two households in three of a plain paddy hamlet (0049) (FR-001)
       research: rendering
+      verify: DONE. m:w151-sties - 334 of 334 sties over the 44 rolls, 47 of 47 on the pool, polder 4/5 refusing as at HEAD, cohort 16/16; in the bundle the web refused maps at every ground size tried (m:w151-sty-room), so the sty is seated once the ways stand; pop-up through form, research and depiction; 0049 drawing page checked; claims IN-STEP; glyph-check PASS on Inashiro (round 2) and Kuwabata; gate green
 
 ## Standing - the ranking's remaining rows
 
