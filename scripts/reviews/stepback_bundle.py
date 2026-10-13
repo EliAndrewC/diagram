@@ -102,7 +102,7 @@ def tool_time(records: list[dict], since: float, until: float) -> tuple[float, c
                     spent[key] += t - t0
                     count[key] += 1
                     if t - t0 > longest.get(key, (0.0, ""))[0]:
-                        longest[key] = (t - t0, cmd[:160])
+                        longest[key] = (t - t0, " ".join(cmd.split())[:160])
     return sum(spent.values()), spent, count, longest
 
 

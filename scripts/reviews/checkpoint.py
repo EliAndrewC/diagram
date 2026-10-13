@@ -82,6 +82,9 @@ def open_checkpoint(root: Path, now: float | None = None) -> str:
     clock.setdefault(st["feature"], {}).update({"checkpoint_open_at": int(now), "checkpoint_trigger": trigger,
                                                 "checkpoint_units": units, "units_since": int(now)})
     _write(path, clock)
+    import hm_arbiter  # noqa: PLC0415 - the trigger the round arbiter rules on, recorded as every trigger is
+
+    hm_arbiter.trip(root, trigger, "hour", "", f"the feature's hourly step-back, hour {st['hour']}", now)
     return trigger
 
 
