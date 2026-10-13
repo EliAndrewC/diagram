@@ -110,9 +110,26 @@ def against_repo(name: str, words: list[str], cwd: object, under) -> bool:  # no
     where = next((words[i + 1] for i, w in enumerate(words[:-1]) if w == "-C"), None)
     paths = [w for w in words[1:] if os.path.isabs(w) and w != where]
     sub = next((w for w in words[1:] if not w.startswith("-") and w != where and "=" not in w), "")
+    if name in READ_NOTHING:
+        return False
+    if name == "git" and sub == "rev-parse" and _location_only(words):
+        return False
     if name == "git" and where is None and sub in ("init", "clone") and paths:
         return any(under(w) for w in paths)
     return bool(under(where or cwd or os.getcwd())) or any(under(w) for w in paths)
+
+
+#: programs that read no file of the repository wherever they run
+READ_NOTHING = frozenset({"sleep", "true", "false", "echo"})
+#: `git rev-parse` asking only WHERE the repository is: its answer depends on the checkout's place, not on its content (the
+#: commonest unknown in the first recordings - `record_cache.common_dir`, `--show-toplevel`)
+LOCATION = frozenset({"--show-toplevel", "--git-dir", "--git-common-dir", "--absolute-git-dir", "--show-prefix", "--show-cdup",
+                      "--is-inside-work-tree", "--path-format=absolute", "--path-format=relative"})
+
+
+def _location_only(words: list[str]) -> bool:
+    rest = words[words.index("rev-parse") + 1:]
+    return bool(rest) and all(w in LOCATION for w in rest)
 
 
 def _ids() -> tuple[dict[str, str], dict[str, list[str]]]:

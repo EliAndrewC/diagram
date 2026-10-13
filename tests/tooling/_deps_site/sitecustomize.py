@@ -26,6 +26,8 @@ if _LOG and os.environ.get("L7R_TEST_DEP_FILE"):
     _ROOT = os.environ.get("L7R_TEST_DEP_ROOT", "")
     _FILE = os.environ.get("L7R_TEST_DEP_FILE", "")
     _SEEN: set[tuple[str, str]] = set()
+    _LOCATION = {"--show-toplevel", "--git-dir", "--git-common-dir", "--absolute-git-dir", "--show-prefix", "--show-cdup",
+                 "--is-inside-work-tree", "--path-format=absolute", "--path-format=relative"}  # _test_deps.LOCATION
 
     def _under(path: object) -> str:
         try:
@@ -61,7 +63,11 @@ if _LOG and os.environ.get("L7R_TEST_DEP_FILE"):
             where = next((words[i + 1] for i, w in enumerate(words[:-1]) if w == "-C"), None)
             paths = [w for w in words[1:] if os.path.isabs(w) and w != where]
             sub = next((w for w in words[1:] if not w.startswith("-") and w != where and "=" not in w), "")
-            if name == "git" and where is None and sub in ("init", "clone") and paths:
+            if name in ("sleep", "true", "false", "echo"):
+                hit = False  # reads no file of the repository
+            elif name == "git" and sub == "rev-parse" and words[words.index("rev-parse") + 1:] and all(w in _LOCATION for w in words[words.index("rev-parse") + 1:]):
+                hit = False  # asks only where the repository is
+            elif name == "git" and where is None and sub in ("init", "clone") and paths:
                 hit = any(_under(w) for w in paths)  # init and clone read nothing where they run: the paths they name
             else:
                 hit = bool(_under(where or cwd or os.getcwd())) or any(_under(w) for w in paths)

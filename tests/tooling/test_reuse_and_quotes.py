@@ -48,6 +48,9 @@ def test_what_a_child_process_reads_is_known_or_the_file_always_runs() -> None:
         "an outside path named does not make a command run in the repository known (the plan review)"
     assert deps.opaque_child(("git", ["git", "-C", ROOT, "log"], "/tmp", None), site) == "git", "git -C the repository"
     assert deps.opaque_child(("make", ["make", "quick"], ROOT, None), site) == "make"
+    assert deps.opaque_child(("git", ["git", "-C", ROOT, "rev-parse", "--git-common-dir"], ROOT, None), site) == "", "where, not what"
+    assert deps.opaque_child(("git", ["git", "rev-parse", "HEAD"], ROOT, None), site) == "git", "a revision is content"
+    assert deps.opaque_child(("sleep", ["sleep", "1"], ROOT, None), site) == ""
 
 
 def test_a_module_s_bytecode_stands_for_its_source() -> None:
