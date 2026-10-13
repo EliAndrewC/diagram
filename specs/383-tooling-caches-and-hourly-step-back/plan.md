@@ -282,3 +282,50 @@ without (1,796); 88 of 126 test files reusable.
 **D17 - quote-verbatim's verdicts (FR-014).** `verdict(passage, page)` is kept in a `ParseCache` named by the module's code
 sha (`quote-verdicts-<sha>.pickle`), keyed by the passage and the page text's sha256; `main` opens it and saves it. The
 report is compared byte for byte with `L7R_CACHE_OFF=1`.
+
+## Amendment 2 (FR-015 to FR-020)
+
+**D18 - A git question kept with its answer (FR-015).** The child rule moves to one standard-library module both recorders
+import, `tests/tooling/_deps_site/l7r_dep_rules.py` (`judge`), so the test's process and its Python children judge alike. A
+`git` started against the repository whose subcommand is read-only (`ls-files`, `ls-tree`, `show`, `diff`, `log`, `rev-parse`,
+`merge-base`, `cat-file`, `status`, `rev-list`, `diff-tree`, `diff-index`, `for-each-ref`, `show-ref`, `grep`, `blame`,
+`describe`, `name-rev`, `check-ignore`, `hash-object` without `-w`), that reads no standard input (`--stdin`, `--batch`) and
+writes no file (`--output`), and that no location variable steers (`GIT_DIR`, `GIT_WORK_TREE`, `GIT_INDEX_FILE`, the object
+and common directories, `GIT_NAMESPACE`) is a QUESTION: its working directory and arguments, the repository's path written
+`{ROOT}`. When a pass is kept, each question is asked once in the clone and the digest of its answer kept (exit status,
+output and errors, the path written `{ROOT}`); at reuse each is asked again in the worktree, once however many files asked it,
+and the file is reused only where every answer is the same. Every other git command against the repository is opaque, as
+before. The answer is taken at the end of the run, not as the test saw it: the tests do not write the repository (a write
+there is a git command, opaque, or a file opened for writing, which no test of this tree does to the repository).
+
+**D19 - A Python child adopted (FR-016).** `subprocess.Popen`'s audit event carries the environment the test passes, before
+the child starts; a Python child given its own environment has the recording's three variables and the shim's PYTHONPATH put
+into that environment in place (`l7r_dep_rules.adopt`), so it records itself. One started with `-I`, `-E` or `-S` ignores
+them and stays opaque (0 of 126 files, research R8). An `os.open` by a relative name (`shutil.rmtree` working under a
+directory handle) is not a read of the repository: it was what made four files look as if they read `.git`.
+
+**D20 - The ignored reads made known (FR-020).** Two reads under `.git` are content caches, keyed by what they hold, and join
+`CACHE_READS`: the gate stamp's `semantic-id-cache.json` and the translation pairs' `ParseCache`. The tooling tests run under
+one fixed `SPECIFY_FEATURE` (`tests/tooling/conftest.py`), so no test reads the clone's own `.specify/feature.json`.
+`test_makefile_recipe_comments` checks the tracked Makefiles (`git ls-files`) - it also read the stale agent worktrees'
+Makefiles under `.claude/worktrees/`, which are no part of the repository. Each remaining cause is then looked at in turn and
+either replayed as D18 does git (a program that only reads and prints) or recorded in research R9 with its test-seconds and
+why it cannot be.
+
+**D21 - Each step timed (FR-017).** `land-tooling.sh`'s `step <name>` writes `land-tooling: step <name> <s> s` to its log and,
+at the end, one JSON line per landing to `<git dir>/land-tooling-steps.jsonl` (outcome, load, steps): prepare (fetch, merge
+base, the patch), worktree, patch (applied and committed), checks, push. It lands first and alone, so the next landing is the
+before of SC-013.
+
+**D22 - A landing runs each test once, its two checks side by side (FR-018).** `make hooks-test` takes `HOOKS_PYTEST_SKIP=<path
+prefix>`: its scripts' pytest phase leaves out the files under it. `land-tooling.sh` passes `tests/tooling/`, because its
+tooling run covers that whole tree with reuse; so a tooling file runs at most once, in the run that can reuse it. The guard
+suites and the tooling tests run as two background jobs, each to its own log, joined before the push; both must pass, and
+both logs are kept in the landing's log with each job's seconds. They share no write: the pass store is written by the
+tooling run alone (the hooks-test pytest phase in a landing holds only the files outside `tests/tooling/`, which the plugin
+does not track), the guard suites' stamps by the guard suites. `make hooks-test`'s pytest phase loads the plugin too, so a
+clone's own `make hooks-test` records passes a landing can reuse.
+
+**D23 - What the after-measurement shows (FR-019).** After D18-D22, a landing is measured (SC-013) and each step over a few
+seconds is looked at; a cut that loosens no check is made in this amendment, the rest recorded in research R9 with its
+seconds.

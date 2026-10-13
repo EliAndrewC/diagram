@@ -76,3 +76,21 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [ ] GM review (make gm-reviewed F=383) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
+
+## Amendment 2 (the GM 2026-10-13: the savings measured, then the rest of a landing)
+
+- [ ] T19 Each step of a landing timed (plan D21); the suite's case; landed alone, then a landing measured as the before (SC-013)
+      research: rendering
+      verify: the land-tooling suite green; a real landing's step lines in its log and its JSON line
+- [ ] T20 Git questions kept and asked again; Python children adopted; relative os.open ignored (plan D18, D19); tests (SC-012)
+      research: rendering
+      verify: test_reuse_and_quotes green with a fixture repository; the always-run count before (38 of 126) and after
+- [ ] T21 The ignored reads made known and every other cause looked at (plan D20); research R9 (SC-014)
+      research: rendering
+      verify: no kept file blocked by an ignored read; each remaining cause reused or recorded with its seconds
+- [ ] T22 One run per test file and the checks side by side in a landing (plan D22); tests (SC-013)
+      research: rendering
+      verify: the land-tooling and hooks-test suites green; a landing's log shows each tooling file once and the two jobs overlapping
+- [ ] T23 Close: measured after (SC-012, SC-013), the remaining steps looked at (plan D23), the gate, the report, landed
+      research: rendering
+      verify: research R9 holds before and after; the gate green; the report written; landed
