@@ -270,11 +270,8 @@ in 328's ranking and this spec.
 
 ## Batch 19 - the household's well off its farmstead
 
-- [ ] T48 wave 156: the web carries a re-deal of the seats - the settle row (found-wave149, E4) that rows 777 and 787 wait on (ask:w155-cohort-seed10) (FR-001)
-      research: rendering
-
-- [ ] T47 wave 155: the pocket well off its farmstead - the clustered hamlet's wells all seated by the rolled siting, and the water reach held by the wells (0028, 0196); built, measured and reverted (ask:w155-cohort-seed10), re-landed from `w155-pocket-attempt.patch` once T48 lands (FR-001)
-      research: rendering
+T47 (wave 155: built, measured, reverted - ask:w155-cohort-seed10) and T48 (wave 156: the web carries a re-deal of the seats; its baseline
+measured, `m:w156-redeal-cohort`) moved to `specs/384-match-the-research-remainder` when 374 closed (the GM, 2026-10-13).
 
 ## Standing - the ranking's remaining rows
 
