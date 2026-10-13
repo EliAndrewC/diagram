@@ -209,6 +209,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-13",
    "declared": "spec-fidelity"
+  },
+  "## Amendment 2 (FR-015 to FR-020)": {
+   "sha256": "4077be37d81c499313e625aa9b768f1cdf198756c65449629aa5430fe2016523",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-13",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -390,6 +396,97 @@
      "summary": "quote-verbatim verdicts kept in a ParseCache named by the module's code sha, keyed by passage and page-text sha256; report compared byte for byte with the cache off.",
      "class": "within",
      "why": "Unchanged since CLEAR; is FR-014 and the GM's quote-verbatim ask."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-13",
+   "blocks": [
+    "## Amendment 2 (FR-015 to FR-020)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D18",
+     "summary": "read-only git subcommands with no stdin, no --output and no location variable are questions; answers digested at the end of the run and re-asked once in the worktree; every other git command opaque",
+     "class": "within",
+     "why": "Carries FR-015 as written: the exclusions (stdin, --output, GIT_DIR and the other location variables) are FR-015's 'may change the repository, or cannot be asked again', which still make the file run. Asides for the session, not rulings: git status opportunistically refreshes .git/index (no answer changes; GIT_OPTIONAL_LOCKS=0 would make it literally read-only); blame --contents - reads stdin and is not caught by the --stdin/--batch test; and 'the tests do not write the repository' is the stated, not measured, premise the end-of-run answer rests on."
+    },
+    {
+     "id": "D19",
+     "summary": "the recording's variables put into a Python child's own environment at the Popen audit event; -I/-E/-S children stay opaque; os.open by relative name not a repository read",
+     "class": "within",
+     "why": "FR-016 verbatim, including the -I/-E/-S opacity, which is the spec's own words; the relative os.open fix corrects a false .git read and serves FR-015/FR-020's reuse."
+    },
+    {
+     "id": "D20",
+     "summary": "two content-keyed .git caches join CACHE_READS; tooling tests under a fixed SPECIFY_FEATURE; test_makefile_recipe_comments checks tracked Makefiles only; every remaining cause replayed or recorded in R9",
+     "class": "within",
+     "why": "FR-020's 'made known or recorded'. The Makefile test's narrower reach is not a loosened check: the stale .claude/worktrees/ copies are not the repository, and the guard's subject is the repository's recipes. The remaining causes are covered by deferral to the each-cause pass, which FR-020 permits (recorded with test-seconds where not reusable)."
+    },
+    {
+     "id": "D21",
+     "summary": "land-tooling step timing: prepare, worktree, patch, checks, push; a JSON line per landing; lands first and alone as SC-013's before",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-017 names the guard suites and the tooling tests as separate steps; D21 collapses them into one 'checks' step. The GM's amendment-2 words are 'figure out where the rest of the 100 or so seconds goes', and the guard suites alone are ~80 s of it (R7, FR-018) - a log reading 'checks N s' cannot say where. The before landing is D21 alone, so SC-013's before would carry one lump, and SC-013's after-proof (the two overlap, their step times in the log) needs each as its own step. Nothing makes separate steps impossible. Fix: D21's step list carries the guard suites and the tooling tests as two 'step <name>' entries, before and after D22 runs them side by side."
+    },
+    {
+     "id": "D22",
+     "summary": "HOOKS_PYTEST_SKIP=tests/tooling/ in a landing; guard suites and tooling tests as two background jobs joined before the push; hooks-test pytest phase loads the reuse plugin",
+     "class": "within",
+     "why": "FR-018: each tooling file once, in the run that can reuse, and the two independent checks side by side. The skip is safe on the premise that the tooling run covers all of tests/tooling/; loading the plugin in a clone's own hooks-test is the means by which 'the run that can reuse the clone's pass' has a pass to reuse, so it enforces FR-018 rather than adding behavior."
+    },
+    {
+     "id": "D23",
+     "summary": "after D18-D22 a landing is measured; each step over a few seconds cut where no check loosens, the rest recorded in R9",
+     "class": "within",
+     "why": "FR-019 as written, and the GM's 'see what can be done there ... land whatever timing improvements you are able to figure out'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-13",
+   "blocks": [
+    "## Amendment 2 (FR-015 to FR-020)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D18",
+     "summary": "Read-only git questions replayed and digested; asked under GIT_OPTIONAL_LOCKS=0; blame --contents excluded (opaque); stdin/batch/output/location-variable commands opaque; no-write premise measured in R9 by git status --porcelain --ignored before/after",
+     "class": "within",
+     "why": "FR-015 verbatim: read-only questions recorded with answer digests, anything that may write or cannot be re-asked still runs; the round-2 changes only make more commands opaque or avoid an index refresh, which loosens no check and narrows nothing the GM asked."
+    },
+    {
+     "id": "D19",
+     "summary": "Python children adopt the recording via the Popen audit event; -I/-E/-S stay opaque; relative os.open not a repo read",
+     "class": "within",
+     "why": "Unchanged since CLEAR; FR-016."
+    },
+    {
+     "id": "D20",
+     "summary": "Two .git content caches join CACHE_READS; fixed SPECIFY_FEATURE; recipe-comment test reads tracked Makefiles; each remaining cause replayed or recorded in R9",
+     "class": "within",
+     "why": "Unchanged since CLEAR; FR-020."
+    },
+    {
+     "id": "D21",
+     "summary": "Each landing step timed to the log and a JSONL line: prepare, worktree, patch, guard-suites, tooling-tests, push - the two checks separate steps, before and after D22; lands first and alone as SC-013's before",
+     "class": "within",
+     "why": "Round 1's block is cured: FR-017 names the guard suites and the tooling tests as separate steps, and the GM asked to 'figure out where the rest of the 100 or so seconds goes'; two figures now show it."
+    },
+    {
+     "id": "D22",
+     "summary": "HOOKS_PYTEST_SKIP=tests/tooling/ in a landing so each tooling file runs once; guard suites and tooling tests as two joined background jobs, both must pass",
+     "class": "within",
+     "why": "Unchanged since CLEAR; FR-018."
+    },
+    {
+     "id": "D23",
+     "summary": "After D18-D22 a landing is measured and each step over a few seconds cut without loosening a check, or recorded in R9",
+     "class": "within",
+     "why": "Unchanged since CLEAR; FR-019, the GM's 'see what can be done there ... land whatever timing improvements'."
     }
    ]
   }
