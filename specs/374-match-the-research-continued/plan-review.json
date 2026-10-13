@@ -3187,6 +3187,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-13",
    "declared": "spec-fidelity"
+  },
+  "## Batch 19: the household's well off its farmstead (row 787)": {
+   "sha256": "5a868aad7c1a6c0ae50f82600971dd0b7c2239f243d5e9c7d6a475277d18ba68",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-13",
+   "declared": "spec-fidelity"
+  },
+  "### Wave 155 (T47) - the pocket well becomes a shared well of the rolled siting": {
+   "sha256": "87704e92f0e802e50be0a5b1ab847370867a3a7eee53e559fb809853134a1db3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-13",
+   "declared": "spec-fidelity"
+  },
+  "### Wave 156 (T48) - the web carries a re-deal of the seats (the settle row)": {
+   "sha256": "bc0c7c6dcf53d237073600d12fa78d574517ad9414248a4df7bd91e0281df214",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-13",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3214,6 +3232,71 @@
      "summary": "Row 787 (the well pocket inside its own homestead) is its own following wave as a seating change; this wave moves the lattice well alone.",
      "class": "within",
      "why": "Sequencing, not a carve-out: 787 stays on the work list and is named as the next wave; nothing in 786's text is excluded from this wave, since the pocket well is 787's subject."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-13",
+   "blocks": [
+    "## Batch 19: the household's well off its farmstead (row 787)",
+    "### Wave 155 (T47) - the pocket well becomes a shared well of the rolled siting",
+    "### Wave 156 (T48) - the web carries a re-deal of the seats (the settle row)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "B19-worklist",
+     "summary": "Batch 19 takes row 787 and the pocket's second claim (E3 row 218) next in ranking order; 771/774 stay behind their found rows, 782/783/785 follow",
+     "class": "within",
+     "why": "FR-001 work list in 328's ranking order; ordering behind found rows is the existing batch-13 deferral, not a drop"
+    },
+    {
+     "id": "W155-1",
+     "summary": "clustered hamlet seats no household well pocket; grove_water and row_water forms untouched",
+     "class": "within",
+     "why": "the drifted claims concern the clustered hamlet's pocket; dispersed and row-village water are other researched forms the rows do not touch, so leaving them is not a carve-out from the request"
+    },
+    {
+     "id": "W155-2",
+     "summary": "all owed wells seated by wave 154's rolled siting forms",
+     "class": "within",
+     "why": "brings the code to 0028/0196 (shared well off the farmstead), which is what matching the research asks"
+    },
+    {
+     "id": "W155-3",
+     "summary": "water-reach guarantee moves to the wells; extra shared well per dry household; fallback recorded as deviation; over-target counts recorded",
+     "class": "within",
+     "why": "preserves the researched reach rule; the fallback is a labeled deviation and the excess is measured and recorded, not hidden"
+    },
+    {
+     "id": "W155-5",
+     "summary": "first well seated at the middle of its share along the long axis (GUESS), 40 nearest seats ranked by pair_keeps_ten",
+     "class": "within",
+     "why": "a rendering choice the research is silent on, labeled GUESS as the record rules require; aims at 0196's five to ten a well"
+    },
+    {
+     "id": "W155-6",
+     "summary": "a further shared well while one serves over ten; reserved-ground route priced and not taken",
+     "class": "within",
+     "why": "the count stays inside the record's own range (one well to 2-20 households); this is not packing against an unresearched number, so room-before-packing is not departed from, and the alternative was priced and recorded"
+    },
+    {
+     "id": "W155-4",
+     "summary": "the bar: no new refusal on pool/cohort/44 rolls, no well in a homestead, reach, none over ten, measured; glyph occasions on three pool maps",
+     "class": "within",
+     "why": "verification that enforces the requested behavior and the no-regression rule"
+    },
+    {
+     "id": "W155-revert",
+     "summary": "round arbiter route b: wave 155 reverted, patch kept, re-lands on the settled web with no waiver; rows 787 and the second claim E4 behind the settle row",
+     "class": "within",
+     "why": "a regression found (cohort seed 10) is reverted rather than waived; the row is deferred behind its blocking found row, not dropped, and is carried to 384 with the GM's 2026-10-13 instruction"
+    },
+    {
+     "id": "W156",
+     "summary": "settle-row decisions deferred to make decide after its baseline measurement",
+     "class": "within",
+     "why": "decides nothing yet; measurement before decision"
     }
    ]
   }
