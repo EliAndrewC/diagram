@@ -272,14 +272,21 @@ class FarmFixturesMixin:
 
 
 def sty_parts(x0: float, y0: float, w: float, h: float, edge: str) -> list[str]:
-    """A pig sty's strokes, its box from (x0, y0) `w` by `h`: a ridged shed on 0.62 of its length and a railed pen - one
-    glyph for the dike's sty and the farmhouse's.
+    """A pig sty's strokes, its box from (x0, y0) `w` by `h`: a dark ridged shed on 0.55 of its length and a fenced pen of
+    trodden earth beside it, the rails drawn solid with one rail across - one glyph for the dike's sty and the farmhouse's.
+    The shed is darker than the privy's roof and the pen is filled, so a sty beside a privy of its size is not read as its twin,
+    and the pen holds at the fit zoom, where a dashed rail drew nothing (glyph-check of Inashiro, feature 374 wave 151).
 
-    Research: sty glyph - CONVENTION: a ridged shed on 0.62 of the length and a railed pen"""
+    Research:
+        a shed with a pen beside it - GUESS research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: a small ridged shed with a railed pen beside it
+        the shed's share - GUESS: the shed on 0.55 of the sty's length, the pen the rest; no page gives it
+        sty glyph - CONVENTION: the dark roof and its pale ridge, the pen's earth fill, its solid rails and the rail across"""
+    sw = w * 0.55
     return [
-        f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{w * 0.62:.1f}" height="{h:.1f}" rx="1" fill="#8F7548" stroke="{edge}" stroke-width="1.1"/>',  # the shed
-        f'<line x1="{x0 + 1:.1f}" y1="{y0 + h / 2:.1f}" x2="{x0 + w * 0.62 - 1:.1f}" y2="{y0 + h / 2:.1f}" stroke="#D8C08C" stroke-width="1"/>',  # its ridge
-        f'<rect x="{x0 + w * 0.62:.1f}" y="{y0:.1f}" width="{w * 0.38:.1f}" height="{h:.1f}" fill="none" stroke="{edge}" stroke-width="0.8" stroke-dasharray="1.2,1.2"/>',  # the railed pen
+        f'<rect x="{x0 + sw:.1f}" y="{y0:.1f}" width="{w - sw:.1f}" height="{h:.1f}" fill="#CDB58A" stroke="{edge}" stroke-width="0.9"/>',  # the pen
+        f'<line x1="{x0 + sw:.1f}" y1="{y0 + h / 2:.1f}" x2="{x0 + w:.1f}" y2="{y0 + h / 2:.1f}" stroke="{edge}" stroke-width="0.7"/>',  # a rail across it
+        f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{sw:.1f}" height="{h:.1f}" rx="0.8" fill="#6E5434" stroke="#4A3418" stroke-width="1.0"/>',  # the shed
+        f'<line x1="{x0 + 0.8:.1f}" y1="{y0 + h / 2:.1f}" x2="{x0 + sw - 0.8:.1f}" y2="{y0 + h / 2:.1f}" stroke="#C9A874" stroke-width="0.9"/>',  # its ridge
     ]
 
 
@@ -307,7 +314,8 @@ class PondStockMixin:
 
         Research:
             sty on the dike - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html: raked along the bank
-            sty glyph - CONVENTION: a ridged shed on 0.62 of the length and a railed pen
+            a shed with a pen beside it - GUESS research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: a small ridged shed with a railed pen beside it (`sty_parts`)
+            sty glyph - CONVENTION: the colors, the fill and the strokes (`sty_parts`)
         """
         w, h = self.px(STY_FT[0]), self.px(STY_FT[1])
         x0, y0 = -w / 2, -h / 2

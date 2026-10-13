@@ -2068,7 +2068,18 @@
         "sawada": "14 of 14"
       },
       "pool_maps": "clean",
-      "cohort": "16/16 passed"
+      "cohort": "16/16 passed",
+      "after the glyph check (the walk varied, the grove kept clear)": {
+        "source": "scratchpad run r15d",
+        "refused_44": [
+          "polder 4 (as at HEAD)",
+          "polder 5 (as at HEAD)"
+        ],
+        "sties_44": "334 of 334",
+        "pool": "47 of 47, maps clean",
+        "cohort": "16/16 passed",
+        "between": "the walk varied alone (run r15c) put a sty on its farm's grove band on 4 cohort rolls (fixtures_on_groves); the grove added to the parts kept clear mended all four"
+      }
     }
   }
 }

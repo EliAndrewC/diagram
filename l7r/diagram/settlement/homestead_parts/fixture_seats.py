@@ -443,16 +443,18 @@ def lay_fixtures(
     return laid
 
 
-def against_a_part(built: Sequence[Rect], w: float, d: float, g: float, taken: Sequence[Rect], step: float) -> Rect | None:
-    """The first place touching a wall of one of `built` - the house first, then each outbuilding as laid - clear of every
-    other part in `taken` by the wall gap `g`: a seat `w` along the wall and `d` out from it (`wall_places`), or None.
+def against_a_part(built: Sequence[Rect], w: float, d: float, g: float, taken: Sequence[Rect], step: float, start: float = 0.0) -> Rect | None:
+    """The first place touching a wall of one of `built` - the house's walls, then each outbuilding's as laid - clear of every
+    other part in `taken` by the wall gap `g`: a seat `w` along the wall and `d` out from it (`wall_places`), or None. `start`
+    (0 to 1) turns where the walk begins, so one household's first place is not every household's: from the house's own back
+    wall, every sty of a hamlet stood stamped at the middle of it (glyph-check of Inashiro, feature 374 wave 151).
 
     Research: against the farmhouse or one of its outbuildings - GUESS research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: the sty stands against the farmhouse or an outbuilding, a GUESS the page names"""
-    for part in built:
-        others = [t for t in taken if t is not part]
-        for q in wall_places([part], w, d, 0.0, step):
-            if clears(q, [part], -1e-6) and clears(q, others, g):
-                return q
+    offers = [(part, q) for part in built for q in wall_places([part], w, d, 0.0, step)]
+    k = int(start * len(offers)) % len(offers) if offers else 0
+    for part, q in offers[k:] + offers[:k]:
+        if clears(q, [part], -1e-6) and clears(q, [t for t in taken if t is not part], g):
+            return q
     return None
 
 

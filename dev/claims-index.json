@@ -14226,14 +14226,29 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/homesteads/sties.py::PART_KEYS#pig sty plumbing": {
-  "code": "cc51dcdda5d80a58",
-  "core": "385d4d9826bac5b4",
+ "l7r/diagram/hamletgen/homesteads/sties.py::PART_KEYS#kept clear of its plot's parts": {
+  "code": "8e78f305d43044ef",
+  "core": "bd9cbcc376db31b3",
   "date": "2026-10-13",
-  "note": "record list; the clearance rule lives in sty_seat",
+  "note": "GUESS is the right label: the page never mentions a sty, records the shed and bath-room setback from the windward stand as a GUESS, and keeps trees out of the yards and beds",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
+  },
+  "research": "45be621f47448e34",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:24c94c3020a1389e",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:3828f77fb045b041",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:e53d0cfe8f7f0386"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/sties.py::STY_SALT#each farm's own first place": {
+  "code": "28c45f97b6b2cdc0",
+  "core": "b253495ffa132670",
+  "date": "2026-10-13",
+  "note": "nothing in the cited material says where along a wall the sty stood, so UNRESEARCHED is right",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/sties.py::WALL_KEYS#the outbuildings": {
@@ -14253,16 +14268,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/sties.py::farmstead#the farmstead's parts": {
-  "code": "32332f2dacca9520",
-  "core": "24fe29b3a57ec078",
+  "code": "cd4288c7af9f47ee",
+  "core": "064414db4c94d1c5",
   "date": "2026-10-13",
-  "note": "the plot's parts",
+  "note": "the parts it reads back are what 0028 puts on the farmstead, the grove among them",
   "pages": {
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc"
   },
   "research": "b1abc6e90397da2b",
   "rests": [
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:0b02f5e3492a4ce2"
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:03bd5cc33e2068a4",
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:0b02f5e3492a4ce2",
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:57e17cedabbc7ead"
   ],
   "verdict": "IN-STEP"
  },
@@ -14304,10 +14321,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/sties.py::sty_seat#against the farmhouse or an outbuilding": {
-  "code": "8fc85980349ffcd8",
-  "core": "60ffc8ccfc79b4db",
+  "code": "53e42d5590a2e71b",
+  "core": "261864712c81c553",
   "date": "2026-10-13",
-  "note": "on the household's own plot",
+  "note": "the walk can now start at any household's position roll but still offers only the house's or an outbuilding's walls, on the plot, as the page's rule says",
   "pages": {
    "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html": "1d379bbb81ad22fb"
   },
@@ -14316,16 +14333,16 @@
    "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:b533db817cf2560b",
    "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:b9f3c80b07059d82"
   ],
-  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/sties.py::sty_seat#the gap, the step and the rake": {
-  "code": "9c1e47c73257a374",
-  "core": "60ffc8ccfc79b4db",
+  "code": "7bdae170edf0af70",
+  "core": "261864712c81c553",
   "date": "2026-10-13",
-  "note": "UNRESEARCHED; 0049 says \"against the farmhouse or an outbuilding\" and is silent on the gap, the step and the rake",
+  "note": "the page is silent on the gap, the spacing and the rake",
   "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/sties.py::to_frame#plumbing": {
@@ -46469,13 +46486,28 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/farm_fixtures.py::PondStockMixin.pig_sty#sty glyph": {
-  "code": "b3591cffc26d1cab",
+ "l7r/diagram/settlement/farm_fixtures.py::PondStockMixin.pig_sty#a shed with a pen beside it": {
+  "code": "907c0f70a8273db1",
   "core": "6e13bfbbfb64c1bb",
   "date": "2026-10-13",
-  "note": "drawing convention",
+  "note": "the form is recorded with the guessed sty on 0049's drawing page",
+  "pages": {
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html": "1d379bbb81ad22fb"
+  },
+  "research": "6346c9047e54840e",
+  "rests": [
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:f88b01275f152437"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/farm_fixtures.py::PondStockMixin.pig_sty#sty glyph": {
+  "code": "9bd6e02cc7d9b240",
+  "core": "6e13bfbbfb64c1bb",
+  "date": "2026-10-13",
+  "note": "the edge color is a drawing convention",
   "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::PondStockMixin.pig_sty#sty on the dike": {
@@ -46579,11 +46611,34 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/farm_fixtures.py::sty_parts#sty glyph": {
-  "code": "b6e78160dd20c565",
-  "core": "9eb35a3ffa823946",
+ "l7r/diagram/settlement/farm_fixtures.py::sty_parts#a shed with a pen beside it": {
+  "code": "ff51e3ff16af65b4",
+  "core": "0e7d8b48f72d27bf",
   "date": "2026-10-13",
-  "note": "drawing convention",
+  "note": "a ridged shed with a railed pen beside it, as recorded",
+  "pages": {
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html": "1d379bbb81ad22fb"
+  },
+  "research": "6346c9047e54840e",
+  "rests": [
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:f88b01275f152437"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/farm_fixtures.py::sty_parts#sty glyph": {
+  "code": "26b8235773cc3fe7",
+  "core": "0e7d8b48f72d27bf",
+  "date": "2026-10-13",
+  "note": "the fills, ridge and strokes are drawing conventions",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/farm_fixtures.py::sty_parts#the shed's share": {
+  "code": "54a1adce85534da2",
+  "core": "0e7d8b48f72d27bf",
+  "date": "2026-10-13",
+  "note": "the 0.55 split is on no page, so GUESS is right",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -50626,10 +50681,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::against_a_part#against the farmhouse or one of its outbuildings": {
-  "code": "cb1e2902aac2b02f",
-  "core": "82b623f0b0170bcf",
+  "code": "f604bf3dca89c4c0",
+  "core": "d19218f7309747d2",
   "date": "2026-10-13",
-  "note": "the page records it as a GUESS",
+  "note": "the page records this as a GUESS; `start` only rotates which of the same wall places is tried first",
   "pages": {
    "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html": "1d379bbb81ad22fb"
   },
@@ -50637,7 +50692,6 @@
   "rests": [
    "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:b533db817cf2560b"
   ],
-  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::against_a_wall#plumbing": {

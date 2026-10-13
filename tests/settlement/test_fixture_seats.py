@@ -329,3 +329,11 @@ def test_a_seat_against_a_part_touches_one_of_its_walls_clear_of_every_other_par
     shed = (0.0, -60.0, 24.0, 12.0)
     assert fs.against_a_part([shed], 8.0, 6.0, 3.5, [shed, (0.0, 0.0, 200.0, 200.0)], 4.0) is None, "every wall's ground taken"
     assert fs.against_a_part([shed], 8.0, 6.0, 3.5, [shed], 4.0) is not None, "an outbuilding's wall takes it"
+
+
+def test_where_the_walk_round_the_walls_begins_turns_with_the_households_roll() -> None:
+    """Feature 374 wave 151 (glyph-check of Inashiro): from the house's back wall every sty stood stamped at its middle; the
+    household's roll turns where the walk begins, so the first free places differ, and no wall at all gives none."""
+    seats = {fs.against_a_part([HOUSE, KURA], 8.0, 6.0, fs.WALL_GAP_FT, [HOUSE, KURA, YARD, GARDEN], 4.0, u) for u in (0.0, 0.3, 0.6, 0.9)}
+    assert len(seats) > 1 and None not in seats
+    assert fs.against_a_part([], 8.0, 6.0, 3.5, [], 4.0, 0.5) is None

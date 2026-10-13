@@ -86,3 +86,10 @@ def test_a_place_the_registry_refuses_moves_along_and_no_place_keeps_none(monkey
     monkeypatch.setattr(st, "fixture_shares", lambda seed, arch: {"sty": 1.0})
     st.stage_sties(s, _plan())
     assert s.M["meta"]["sty_short"] == 1 and not [r for r in s.M.get("farm_fixtures", []) if r["kind"] == "sty"]
+
+
+def test_a_sty_keeps_off_its_own_grove() -> None:
+    """Feature 374 wave 151: a sty on its farm's grove band failed four cohort rolls (`fixtures_on_groves`, 0036)."""
+    M = {"groves": [{"x": 200.0, "y": 170.0, "w": 60.0, "h": 20.0, "rot": 0, "of": [200.0, 200.0]}]}
+    _walls, parts = st.farmstead(M, HOUSE)
+    assert len(parts) == 2, "the house and its grove band"

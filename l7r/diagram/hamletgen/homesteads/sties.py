@@ -25,10 +25,16 @@ from l7r.diagram.settlement.rolling.lot import quota_carriers
 from ..plan import SitePlan
 from .fixtures import fixture_shares
 
-#: The records that name their house by `of` and stand on its plot, and those of them a sty may stand against.
-PART_KEYS = ("retirement_houses", "storehouses", "byres", "farm_sheds", "farm_fixtures", "threshing_yards", "gardens")
+#: The records that name their house by `of` and stand on its plot - every one a part its sty keeps clear of.
+PART_KEYS = ("retirement_houses", "storehouses", "byres", "farm_sheds", "farm_fixtures", "threshing_yards", "gardens", "groves")
+"""Research: kept clear of its plot's parts - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the windward stand set back so the wood shed and the bath room keep out of it; the sty keeps out of its farm's grove bands, its yard, its beds and its other buildings by the fixtures' wall gap (a sty on its grove failed four cohort rolls, wave 151)"""
+
+#: ...and those of them a sty may stand against.
 WALL_KEYS = ("retirement_houses", "storehouses", "byres", "farm_sheds")
 """Research: the outbuildings - research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: the farmhouse or one of its outbuildings - the retirement house, the storehouse, the byre, the shed, and the wood shed among the fixtures"""
+
+STY_SALT = 109.0
+"""Research: each farm's own first place - UNRESEARCHED: the walk round its walls begins at the household's position roll, so no two farms stand their sty alike"""
 
 ALIGN_TOL_DEG = 10.0
 """Research: a part square to its house - UNRESEARCHED: within 10 degrees of the house's rake, a wall the sty may stand against"""
@@ -98,7 +104,7 @@ def sty_seat(s: Settlement, house: Mapping[str, Any]) -> dict[str, Any] | None:
     w, d = s.px(STY_FT[0]), s.px(STY_FT[1])
     taken = list(parts)
     while True:
-        q = against_a_part(walls, w, d, s.px(WALL_GAP_FT), taken, s.px(WALL_SLIDE_FT))
+        q = against_a_part(walls, w, d, s.px(WALL_GAP_FT), taken, s.px(WALL_SLIDE_FT), s._hjit(float(house["x"]), float(house["y"]), STY_SALT))
         if q is None:
             return None
         x, y = to_world((q[0], q[1]), house)

@@ -11,6 +11,7 @@ in 328's ranking and this spec.
 - layout-revised: ubame-magistracy - wave 113: the kitchen at 24 x 18 ft joined to the house as an ell, the covered way gone
 - layout-revised: county-magistracy-example - wave 113: the draft's kitchen abuts the house as an ell, no corridor
 - glyph-redrawn: kitchen on ochiba-magistracy - wave 113: the kitchen at 24 x 18 ft
+- glyph-redrawn: pig sty on kuwabata - wave 151: one sty glyph for the dike's sty and the farmhouse's, a dark ridged shed and a filled pen (glyph-check of Inashiro F1, F2)
 - placement-changed: notice board on kuwabata - wave 120: the board's seat a rolled knob; a bridge end offered only where a way reaches a bridge, so Kuwabata's roll now takes the center
 - placement-changed: woodland commons on inashiro - wave 120: the fuel wood seated by 0077's two tiers, kept off low ground by the water below the houses
 - layout-revised: hoshigaoka-shrine - wave 123: the villagers' hall at the building's east end, the dwelling west of it; the approach, arches, basin and sanctuary 22 ft east with it
