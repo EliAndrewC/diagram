@@ -225,8 +225,9 @@ in 328's ranking and this spec.
 
 ## Batch 13 - the bamboo strip before the lanes
 
-- [ ] T41 wave 149: the farm's bamboo strip drawn (the bundle box no longer refuses it); its order, with the sheds and gardens before the lanes, deferred by the round arbiter to the web settle's row (0075) (FR-001)
+- [x] T41 wave 149: the farm's bamboo strip drawn (the bundle box no longer refuses it); its order, with the sheds and gardens before the lanes, deferred by the round arbiter to the web settle's row (0075) (FR-001)
       research: rendering
+      verify: DONE. DONE as ruled (ask:b13-w149-route-matrix): the farm's bamboo strip drawn - HEAD drew none, its own bundle box refusing every seat; tested part by part, stepped out along its side; 57 of 159 drawn over the 44 rolls, none over or beside a lane (m:w149-strips); pool clean, cohort 16/16; Inashiro's homestead-bamboo glyph-check PASS. Its order with the sheds and gardens deferred: five routes measured (m:w149-route-matrix), row 777 held for the GM behind the web settle's found row; a field-router crash fixed; claims IN-STEP but the deferred order; bookends +9% (flag)
 
 ## Standing - the ranking's remaining rows
 

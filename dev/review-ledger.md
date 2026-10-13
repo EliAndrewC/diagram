@@ -1615,3 +1615,4 @@ above this heading are classified once, as data, in `docs/review-ledger-r0.json`
 | 2026-10-12 | modal-depiction | 374 batch 13: choice bamboo--thicket | COVERAGE 0, TRUTH 0, LINKS 0 | none | nothing | yes | verified (nothing to act on) | 29 s | 75k in (39k cached) / 2.0k out |
 | 2026-10-12 | impl-drift | 374 batch 13 wave 149 round 3: 6 claims | 6 IN-STEP | none | nothing | yes | verified (nothing to act on) | 43 s | 54k in (34k cached) / 3.7k out |
 | 2026-10-12 | modal-depiction | 374 batch 13: homestead grove pop-up | COVERAGE 0, TRUTH 0, LINKS 0 | none | nothing | yes | verified (nothing to act on) | 61 s | 124k in (48k cached) / 5.1k out |
+| 2026-10-12 | spec-fidelity | 374 batch 13: the whole plan | CLEAR, 100 decisions | none | nothing | yes | verified (nothing to act on) | 91 s | 726k in (663k cached) / 7.8k out |
