@@ -82,26 +82,33 @@ msg=$(printf 'Tooling from %s, landed alone mid-feature (make land-tooling, feat
 git -C "$WT" commit -q -m "$msg" || die "nothing to commit in the worktree"
 step patch
 # every test it lands runs here: one needing work not yet landed fails in the worktree, never on main (FR-005)
-checks=${LAND_TOOLING_CHECKS:-make hooks-test && make test-file FILE=tests/tooling}
+# GUARD_EDIT_OK: feature 383 amendment 2, plan D21 - the guard suites and the tooling tests are two steps, each timed (the plan
+# review: one "checks" figure cannot show where the time goes). LAND_TOOLING_CHECKS, the suite's seam, stands for both.
+guards=${LAND_TOOLING_CHECKS:-make hooks-test}
+tooling_tests=${LAND_TOOLING_CHECKS:-make test-file FILE=tests/tooling}
 run_test=${LAND_TOOLING_TEST:-make test-file FILE=}
-for f in "$@"; do case "$f" in tests/tooling/*|tests/hooks/*) ;; tests/*test_*.py) [ -f "$WT/$f" ] && checks="$checks && $run_test\"$f\"" ;; esac; done
+for f in "$@"; do case "$f" in tests/tooling/*|tests/hooks/*) ;; tests/*test_*.py) [ -f "$WT/$f" ] && tooling_tests="$tooling_tests && $run_test\"$f\"" ;; esac; done
 # GUARD_EDIT_OK: feature 374 batch 4 - THE CHECKS RUN WITHOUT THE CALLER'S ESCAPES: a LEDGER_ROWS_OK meant for the push reached
 # the hook suites, where it waived the very refusals they test, and ten sync-with-main cases failed (twice, 2026-10-12). The
 # push below keeps them.
 unset_escapes=$(env | sed -n 's/^\([A-Z][A-Z_]*_OK\)=.*/-u \1/p' | tr '\n' ' ')
-# shellcheck disable=SC2086 # one word per `-u NAME`
 # GUARD_EDIT_OK: feature 383 amendment 1 (the GM 2026-10-13: "skip suites the clone already passed") - the tooling tests reuse
 # each test file's pass the clone recorded on identical inputs (tests/tooling/_test_deps.py); the guard suites already do
-if ! ( cd "$WT" && env $unset_escapes L7R_TEST_DEPS=reuse bash -c "$checks" ) >> "$log" 2>&1; then
-  step checks; steps_done checks-failed
-  tail -25 "$log" >&2
-  die "the checks failed in the worktree (full log: $log) - fix in the clone, commit, run this again"
-fi
+check() { # <step name> <command>: run in the worktree without the escapes; a failure ends the landing
+  # shellcheck disable=SC2086 # one word per `-u NAME`
+  if ! ( cd "$WT" && env $unset_escapes L7R_TEST_DEPS=reuse bash -c "$2" ) >> "$log" 2>&1; then
+    step "$1"; steps_done "$1-failed"
+    tail -25 "$log" >&2
+    die "the checks failed in the worktree (full log: $log) - fix in the clone, commit, run this again"
+  fi
+  step "$1"
+}
+check guard-suites "$guards"
+check tooling-tests "$tooling_tests"
 push=${LAND_TOOLING_PUSH:-scripts/sync-with-main.sh done}
 # SYNC_BACKUP=off: the worktree is not a clone - its work is the clone's own commits, backed up at the clone's own stop. Backed
 # up under the fixed name backup/<clone>-tooling, a refused landing left a tip no later landing contained, and every one
 # after it warned "HEAD is NOT backed up" (2026-10-11)
-step checks
 ( cd "$WT" && SYNC_BACKUP=off bash -c "$push" ) >> "$log" 2>&1
 rc=$?
 step push; steps_done "push-exit-$rc"

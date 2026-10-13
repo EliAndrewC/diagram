@@ -290,13 +290,15 @@ import, `tests/tooling/_deps_site/l7r_dep_rules.py` (`judge`), so the test's pro
 `git` started against the repository whose subcommand is read-only (`ls-files`, `ls-tree`, `show`, `diff`, `log`, `rev-parse`,
 `merge-base`, `cat-file`, `status`, `rev-list`, `diff-tree`, `diff-index`, `for-each-ref`, `show-ref`, `grep`, `blame`,
 `describe`, `name-rev`, `check-ignore`, `hash-object` without `-w`), that reads no standard input (`--stdin`, `--batch`) and
-writes no file (`--output`), and that no location variable steers (`GIT_DIR`, `GIT_WORK_TREE`, `GIT_INDEX_FILE`, the object
+writes no file (`--output`, `blame --contents`), and that no location variable steers (`GIT_DIR`, `GIT_WORK_TREE`, `GIT_INDEX_FILE`, the object
 and common directories, `GIT_NAMESPACE`) is a QUESTION: its working directory and arguments, the repository's path written
-`{ROOT}`. When a pass is kept, each question is asked once in the clone and the digest of its answer kept (exit status,
+`{ROOT}`. When a pass is kept, each question is asked once in the clone under `GIT_OPTIONAL_LOCKS=0` (so a `status` leaves the index alone) and the digest of its
+answer kept (exit status,
 output and errors, the path written `{ROOT}`); at reuse each is asked again in the worktree, once however many files asked it,
 and the file is reused only where every answer is the same. Every other git command against the repository is opaque, as
 before. The answer is taken at the end of the run, not as the test saw it: the tests do not write the repository (a write
-there is a git command, opaque, or a file opened for writing, which no test of this tree does to the repository).
+there is a git command, opaque, or a file opened for writing) - measured: `git status --porcelain --ignored` of the clone is the
+same before and after a whole tooling run (research R9).
 
 **D19 - A Python child adopted (FR-016).** `subprocess.Popen`'s audit event carries the environment the test passes, before
 the child starts; a Python child given its own environment has the recording's three variables and the shim's PYTHONPATH put
@@ -314,7 +316,9 @@ why it cannot be.
 
 **D21 - Each step timed (FR-017).** `land-tooling.sh`'s `step <name>` writes `land-tooling: step <name> <s> s` to its log and,
 at the end, one JSON line per landing to `<git dir>/land-tooling-steps.jsonl` (outcome, load, steps): prepare (fetch, merge
-base, the patch), worktree, patch (applied and committed), checks, push. It lands first and alone, so the next landing is the
+base, the patch), worktree, patch (applied and committed), guard-suites (`make hooks-test`), tooling-tests (the tooling run
+and any test file landed outside it), push - the two checks each their own step (the plan review: one figure cannot show
+where the time goes), before D22 and after it. It lands first and alone, so the next landing is the
 before of SC-013.
 
 **D22 - A landing runs each test once, its two checks side by side (FR-018).** `make hooks-test` takes `HOOKS_PYTEST_SKIP=<path
