@@ -26,6 +26,7 @@ import re
 import shutil
 import subprocess
 import sys
+from collections.abc import Sequence
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -433,9 +434,33 @@ def red_gate_runs(root: Path, keep: int = 4) -> list[str]:
     ]
 
 
-def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "") -> Path:
+def evidence_section(out: Path, files: Sequence[str]) -> list[str]:
+    """Copy each file a question cites (`files`: roll summaries, probe output, refusal logs) into `evidence/` beside the MANIFEST
+    and name each - copied, or missing - so the arbiter checks every figure without leaving the bundle (the round arbiter's
+    tooling fix, ask:b13-w149-strip-route: a question's figures pointed at a scratchpad outside the bundle)."""
+    if not files:
+        return []
+    ev = out / "evidence"
+    ev.mkdir(exist_ok=True)
+    rows = []
+    for f in files:
+        src = Path(f)
+        if src.is_file():
+            dst = ev / src.name
+            n = 2
+            while dst.exists():
+                dst, n = ev / f"{src.stem}-{n}{src.suffix}", n + 1
+            shutil.copyfile(src, dst)
+            rows.append(f"- `evidence/{dst.name}` (from `{f}`)")
+        else:
+            rows.append(f"- MISSING: `{f}` - cited, not found when the bundle was built")
+    return ["## The evidence the question cites\n\n" + "\n".join(rows) + "\n"]
+
+
+def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "", evidence: Sequence[str] = ()) -> Path:
     """The MANIFEST for `trigger`; raises `MissingRecord` where a round kept no reply or a reversal has no record, unless
-    `allow_missing` gives the reason to bundle anyway (it is printed in the MANIFEST for the arbiter to weigh)."""
+    `allow_missing` gives the reason to bundle anyway (it is printed in the MANIFEST for the arbiter to weigh). `evidence`: the
+    files the question cites, copied beside it (`evidence_section`)."""
     owed = ha.owed(root).get(trigger, {})
     d = ha.feature_dir(root)
     if out.exists():
@@ -460,6 +485,7 @@ def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "") -> Path
             "`continue`: go on as the question proposes; `accept`: it stands as it is (a waiver); `process-fault`: the "
             "process is wrong - name the fix as `tooling_fix`. Say in `what` exactly what the session does next.\n"
         )
+        parts += evidence_section(out, evidence)
     rounds: list[dict] = []
     missing: list[str] = []
     if subject and check != "spec-fidelity":
@@ -666,6 +692,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--root", default=".")
     ap.add_argument("--out", default="")
     ap.add_argument("--missing-ok", default="", help="the reason to bundle with a reply or a reversal's record missing")
+    ap.add_argument("--evidence", default="", help="an ask's cited files, space-separated, copied beside the MANIFEST")
     a = ap.parse_args(argv)
     root = Path(a.root).resolve()
     slug = re.sub(r"[^a-z0-9]+", "-", a.trigger.lower()).strip("-")[-60:]
@@ -682,7 +709,7 @@ def main(argv: list[str] | None = None) -> int:
             wrong = misnumbered(root, [a.trigger])
             if wrong:
                 raise ValueError("a named round is not its unit's next: " + "; ".join(wrong))
-            print(bundle(root, a.trigger, Path(a.out) if a.out else DEFAULT_OUT / f"arbiter-{slug}", a.missing_ok.strip()))
+            print(bundle(root, a.trigger, Path(a.out) if a.out else DEFAULT_OUT / f"arbiter-{slug}", a.missing_ok.strip(), a.evidence.split()))
     except ValueError as e:
         print(f"arbiter-bundle: {e}", file=sys.stderr)
         return 2

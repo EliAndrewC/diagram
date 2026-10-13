@@ -1202,10 +1202,10 @@ arbiter-fix-done:  ## [project] the round arbiter's tooling fix is MADE: what wa
 
 # GUARD_EDIT_OK: feature 379 amendment 2 (the GM 2026-10-10: "things should go to the arbiter at the point where they were
 # previously coming to me") - a process stop the session would have put to the GM goes to the round arbiter first.
-arbiter-ask:  ## [project] put a PROCESS question (a cap, a waiver, a stuck choice of route) to the round arbiter before the GM (feature 379)   SUBJECT=<short id> WHY="<the question>"
+arbiter-ask:  ## [project] put a PROCESS question (a cap, a waiver, a stuck choice of route) to the round arbiter before the GM (feature 379)   SUBJECT=<short id> WHY="<the question>" [FILES="<the measurements it cites>"]
 	@if [ -z "$(SUBJECT)" ] || [ -z "$(WHY)" ]; then printf 'make arbiter-ask: SUBJECT= and WHY= are required\n' >&2; exit 2; fi
 	@: "GUARD_EDIT_OK: feature 379 plan review - one command records the question AND builds its bundle (FR-009)"
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py ask "$(SUBJECT)" "$(WHY)" && python3 scripts/reviews/arbiter_bundle.py "ask:$(SUBJECT)" --root "$$(pwd)"
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py ask "$(SUBJECT)" "$(WHY)" && python3 scripts/reviews/arbiter_bundle.py "ask:$(SUBJECT)" --root "$$(pwd)" --evidence "$(FILES)"
 
 # GUARD_EDIT_OK: feature 379 amendment 1 (the GM 2026-10-10, "yes please") - tooling lands alone, mid-feature, as a new commit
 # on main built in a detached worktree; the open-task refusal is untouched.
