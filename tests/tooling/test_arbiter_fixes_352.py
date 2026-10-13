@@ -119,3 +119,20 @@ def test_a_read_note_reworded_in_english_stays_answered(tmp_path: pathlib.Path) 
     assert not (tmp_path / ro._file(tmp_path, "source-reader:0036#none").name).exists(), "no answer, no reading kept"
     assert ro.answered(tmp_path, slug, "fp-new", "rd"), "the same pages and passages"
     assert not ro.answered(tmp_path, slug, "fp-new", "other") and not ro.answered(tmp_path, slug, "fp-new")
+
+
+def test_an_asks_cited_files_are_copied_beside_its_manifest(tmp_path: pathlib.Path) -> None:
+    """The round arbiter's tooling fix (feature 374 wave 149, ask:b13-w149-strip-route): the files a question cites - roll
+    summaries, probe output, refusal logs - are copied into `evidence/` beside the MANIFEST and named, a missing one named as
+    missing, so every figure can be checked without leaving the bundle."""
+    out = tmp_path / "bundle"
+    out.mkdir()
+    a, b = tmp_path / "x" / "rolls.txt", tmp_path / "y" / "rolls.txt"
+    a.parent.mkdir()
+    b.parent.mkdir()
+    a.write_text("v-18 exit=2\n")
+    b.write_text("v-18 exit=0\n")
+    lines = ab.evidence_section(out, [str(a), str(b), str(tmp_path / "gone.txt")])
+    assert (out / "evidence" / "rolls.txt").read_text() == "v-18 exit=2\n" and (out / "evidence" / "rolls-2.txt").read_text() == "v-18 exit=0\n"
+    assert "`evidence/rolls.txt`" in lines[0] and "`evidence/rolls-2.txt`" in lines[0] and "MISSING: `" in lines[0]
+    assert ab.evidence_section(out, []) == [], "no files cited, no section"
