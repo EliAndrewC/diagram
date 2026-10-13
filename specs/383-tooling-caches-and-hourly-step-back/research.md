@@ -51,3 +51,24 @@ memo; the cross-file steps read the whole record and are left to the whole-check
 The record check after one question's edit, the memo warm: 4.85 s, against 5.46 s with nothing kept (observed 2026-10-12;
 method: `/usr/bin/time` on `make record CHECK=1`, `L7R_CACHE_OFF=1` for the second). The render, which reads the whole record's
 link index for every page, is the rest.
+
+## R5 - the step-back replayed on two past hours (SC-008)
+
+Observed 2026-10-13; method: `make step-back TRIGGER=... TRANSCRIPT=... SINCE= UNTIL=` on the backlog session's own transcript and
+event log (read only), each bundle handed to the `round-arbiter` agent with the instruction not to record (a replay).
+
+- **Batch 13's hour, 22:15 to 23:15 UTC 2026-10-12** (the bamboo strip): `change-route`. "The strongest signal is packing ...
+  it never asked whether the farmstead has room. The numbers it is fitting against are `PART_GAP_FT = 2.0`, the `(0.0, 1.0)`
+  offset ladder, the strip's reach (`within_reach_of`) and the bundle's seat margin ... none of them research-tagged". Route:
+  more room in the farmstead lot first, not a longer ladder, a smaller gap, a shorter strip or a lower prevalence. It also
+  gave a `tooling_fix` (`make test-file ARGS=` so a probe needs no temporary test file) and a `for_gm` (three shipped maps
+  declare homestead bamboo with none drawn). The hour the GM named as the worked example is named, with its numbers.
+- **A quiet hour, 21:15 to 22:15 UTC 2026-10-12**: `continue` - no oscillation, no packing ("the session kept their labels and
+  defended none of them"). It gave one `tooling_fix` (flag a map whose meta records an element drawn while its ink classes
+  have none), from a missed review the session found by hand that hour.
+
+## R6 - the push's checks after phases 1 and 2 (SC-001)
+
+`m:push-checks-runner-after`: the runner, one process, 1.92 s - against `m:push-checks-before`'s 19.87 s for the same checks
+(gate-stamp and the closing check added). Run as separate processes they now sum to 3.43 s (`m:push-checks-separate-after`):
+the content-keyed cache took 16.4 s off, and one process took 1.5 s more.

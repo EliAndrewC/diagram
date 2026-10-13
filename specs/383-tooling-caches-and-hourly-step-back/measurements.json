@@ -37,5 +37,54 @@
    "conflict": 1.25,
    "gate-stamp selftest": 0.12
   }
+ },
+ "push-checks-runner-after": {
+  "quantity": "the push's Python checks run by push_checks.py in one process, warm (the second of two runs) - the same checks as push-checks-before plus gate-stamp and the closing check",
+  "observed": "2026-10-13",
+  "source": "this clone after phases 1 and 2; load 4.5",
+  "command": "python3 scripts/measure/push_check_times.py",
+  "method": "the first row of the harness, second of two runs",
+  "unit": "s",
+  "varies": true,
+  "value": 1.92
+ },
+ "push-checks-separate-after": {
+  "quantity": "the same checks as push-checks-before, each its own process, warm, summed (the runner row left out)",
+  "observed": "2026-10-13",
+  "source": "this clone after phases 1 and 2; load 4.5",
+  "command": "python3 scripts/measure/push_check_times.py",
+  "method": "every row but the first, second of two runs each, summed",
+  "unit": "s",
+  "varies": true,
+  "value": 3.43,
+  "rows": {
+   "push checks (one process)": 1.92,
+   "duplicate-defs selftest": 0.07,
+   "duplicate-defs": 0.18,
+   "file-scale selftest": 0.06,
+   "stale-dirs selftest": 0.04,
+   "stale-dirs": 0.05,
+   "old-layout selftest": null,
+   "old-layout": null,
+   "file-scale": 0.23,
+   "function-cap selftest": 0.19,
+   "function-cap": 0.26,
+   "ledger-owed": 0.1,
+   "entry-headings selftest": 0.07,
+   "entry-headings": 0.07,
+   "research-pointers selftest": 0.06,
+   "research-pointers": 0.26,
+   "partial-citations": 0.33,
+   "downloads selftest": 0.09,
+   "downloads": 0.13,
+   "record CHECK=1": 0.16,
+   "glossary CHECK=1": 0.14,
+   "spec-lint selftest": 0.11,
+   "spec-lint": 0.13,
+   "speckit-todo check": 0.16,
+   "conflict selftest": 0.08,
+   "conflict": 0.37,
+   "gate-stamp selftest": 0.09
+  }
  }
 }
