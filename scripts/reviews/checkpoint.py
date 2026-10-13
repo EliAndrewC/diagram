@@ -23,6 +23,7 @@ checkpoint's ruling closed it), `checkpoints` (how many), `checkpoint_open_at` a
     checkpoint.py open [--root <clone>]       open the hour's checkpoint: print its trigger (make step-back)
     checkpoint.py hold [--root <clone>]       exit 1 printing the refusal while the checkpoint holds `make tick`
     checkpoint.py status [--root <clone>]     where the clock stands
+    checkpoint.py due --tool <T> [--agent <A>] [--root <clone>]   exit 1 printing the refusal a make done or a dispatch gets past the hour
 """
 
 from __future__ import annotations
@@ -151,10 +152,26 @@ def hold(root: Path, now: float | None = None) -> str:
     return ""
 
 
+def due(root: Path, tool: str, atype: str = "", now: float | None = None) -> str:
+    """The refusal a `make done` or an agent dispatch gets when the feature's hour is up and its step-back is not yet open,
+    or "". THE STEP-BACK FIRES ON THE HOUR, NOT ONLY AT THE TICK (the round arbiter's tooling fix on hour:374@2: the hour ran
+    216 minutes because batch 17 did not tick until its landing, so the step-back reviewed three hours as one). The round
+    arbiter's own dispatch passes - it is the step-back."""
+    if tool == "Agent" and atype == "round-arbiter":
+        return ""
+    st = state(root, now)
+    if not st.get("due") or st.get("open"):
+        return ""
+    return ("the feature's hour is up and its step-back is not open: run `make step-back` and dispatch `round-arbiter` on the "
+            "bundle it builds, then carry on (feature 383; the round arbiter's tooling fix on hour:374@2)")
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
-    ap.add_argument("verb", choices=("open", "hold", "status"))
+    ap.add_argument("verb", choices=("open", "hold", "status", "due"))
     ap.add_argument("--root", default=".")
+    ap.add_argument("--tool", default="")
+    ap.add_argument("--agent", default="")
     args = ap.parse_args(argv)
     root = Path(ro._git(Path(args.root), "rev-parse", "--show-toplevel") or args.root)  # noqa: SLF001
     if args.verb == "open":
@@ -162,6 +179,12 @@ def main(argv: list[str] | None = None) -> int:
             print(open_checkpoint(root))
         except ValueError as e:
             print(f"step-back: {e}", file=sys.stderr)
+            return 1
+        return 0
+    if args.verb == "due":
+        why = due(root, args.tool, args.agent)
+        if why:
+            print(why)
             return 1
         return 0
     if args.verb == "hold":

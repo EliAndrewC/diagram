@@ -259,6 +259,10 @@ def test_a_returned_agent_s_verdict_is_read_from_its_reply() -> None:
     assert el.verdict_of("modal-depiction: shrine.SumoRing - COVERAGE 0 findings; TRUTH 0; LINKS 0\n\nmore") == "clean"
     assert el.verdict_of("modal-depiction: x - COVERAGE 1 findings; TRUTH 0; LINKS 0") == "findings"
     assert el.verdict_of("No claims are touched.") == ""
+    # a glyph check: prose first, its block's lower-case VERDICT line and the review-verdict line past 600 characters
+    glyph = "The homestead bamboo on kashikawa needs work. " + "x " * 400 + "\n```\nVERDICT: needs-work\n```\n`recorded NEEDS-WORK for glyph-check--a--b (engine key k)`"
+    assert el.verdict_of(glyph) == "NEEDS-WORK"
+    assert el.verdict_of("```\nUNIT: u\nVERDICT: pass\n```") == "PASS"
     # a summary line with a round's number, a question's and a block count reads by its finding counts (the round arbiter on
     # round:quote-check|q:0049@3, feature 374 wave 151: "round 2, question 0049 - ... 2 changed blocks, ... no findings; 0
     # unfootnoted assertions; 0 EDITs" was read "findings" for its 2 and 0049)

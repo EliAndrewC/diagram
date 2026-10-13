@@ -313,6 +313,19 @@ print(str(pathlib.Path(tp).parent / sid / "subagents") if tp and sid else "")
 ' 2>/dev/null)"
   key="$(engine_key)"
 
+  # GUARD_EDIT_OK: the round arbiter's tooling fix on hour:374@2 (feature 383) - THE STEP-BACK FIRES ON THE HOUR: past it, a
+  # gate or an agent dispatch is refused until `make step-back` opens the hour (the round arbiter's own dispatch passes), so
+  # an hour is reviewed as an hour and not only when the feature next ticks (batch 17's ran 216 minutes).
+  if { [ "$tool" = "Bash" ] && is_gate_invocation "$cmd"; } || [ "$tool" = "Agent" ]; then
+    local due_why
+    due_why="$(python3 "$CLONE_ROOT/scripts/reviews/checkpoint.py" due --root "$CLONE_ROOT" --tool "$tool" --agent "$atype" 2>/dev/null)"
+    if [ -n "$due_why" ]; then
+      guard_log pair refused "$tool ${atype:-$cmd}" step-back-due
+      printf '\n\033[1mBLOCKED: %s\033[0m\n' "$due_why" >&2
+      exit 2
+    fi
+  fi
+
   if [ "$tool" = "Bash" ] && is_gate_invocation "$cmd"; then
     # GUARD_EDIT_OK: feature 383 FR-003 - the gate's PAIR_OK waiver is retired with the stop branch, its only reader: with
     # nothing owed at a gate's start there is nothing for it to waive (a review dispatch's own PAIR_OK, below, stays).

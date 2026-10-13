@@ -470,5 +470,21 @@ else
   rm -rf "$W"
 fi
 
+# GUARD_EDIT_OK: the round arbiter's tooling fix on hour:374@2 - past the feature's hour a dispatch or a gate is refused until
+# `make step-back` opens the hour; the round arbiter's own dispatch passes
+reset_prereq
+mkdir -p "$CLONE/specs/998-hour" "$CLONE/.specify" "$CLONE/.git/l7r-events"
+printf '# F\n\n**Status**: In progress\n' > "$CLONE/specs/998-hour/spec.md"
+printf '# Tasks\n\n- [ ] T01 a task\n' > "$CLONE/specs/998-hour/tasks.md"
+printf '{"feature_directory": "specs/998-hour"}' > "$CLONE/.specify/feature.json"
+printf '{"t": "2020-01-01T00:00:00Z", "ev": "", "sid": "s1"}\n' > "$CLONE/.git/l7r-events/998-hour.jsonl"
+out=$(run_pretool "$(stdin_for Agent '{"subagent_type":"glyph-check","description":"g","prompt":"x"}')")
+check "past the hour, a dispatch is refused until the step-back opens" '[[ "$out" == *"make step-back"* ]]'
+out=$(run_pretool "$(stdin_for Bash '{"command":"make done"}')")
+check "past the hour, a gate is refused until the step-back opens" '[[ "$out" == *"make step-back"* ]]'
+out=$(run_pretool "$(stdin_for Agent '{"subagent_type":"round-arbiter","description":"r","prompt":"x"}')")
+check "the round arbiter's own dispatch passes" '[[ "$out" != *"make step-back"* ]]'
+rm -rf "$CLONE/specs/998-hour" "$CLONE/.specify" "$CLONE/.git/l7r-events"
+
 printf '\ntest-pair-hooks: %d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]

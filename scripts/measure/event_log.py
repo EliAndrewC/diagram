@@ -72,11 +72,18 @@ _FINDING_COUNT = re.compile(r"\b[1-9]\d*\s+(?:findings?|unfootnoted|EDITs?|DOES-
 #: a reply that says it found nothing
 _CLEAN_SAID = re.compile(r"\b(?:nothing to act on|no findings)\b", re.I)
 _VERDICT = re.compile(r"\b(NOT-REVIEWABLE|NOT FAITHFUL|CHANGES REQUIRED|BLOCKED|FAITHFUL|CLEAR|NEEDS-WORK|PASS|FAIL)\b")
+#: a review check's own recorded verdict, anywhere in its reply: the line `make review-verdict` prints, or the report block's
+#: VERDICT line - a glyph check leads with prose and puts both past the first 600 characters, and wrote its block's word in
+#: lower case (the round arbiter's tooling fix on hour:374@2: the step-back read both glyph checks as "no verdict read")
+_RECORDED = re.compile(r"\brecorded (PASS|NEEDS-WORK|NOT-REVIEWABLE) for\b|^\s*VERDICT:\s*(pass|needs-work|not-reviewable)\b", re.M | re.I)
 
 
 def verdict_of(text: str) -> str:
     """The verdict a returned agent's reply leads with: a verdict word, else `clean` when every count in its first line is
     zero ("COVERAGE 0 findings; TRUTH 0; LINKS 0", "0/0/0"), else `findings` when one is not, else ''."""
+    rec = _RECORDED.search(text)
+    if rec:
+        return (rec.group(1) or rec.group(2)).upper()
     m = _VERDICT.search(text[:600])
     if m:
         return m.group(1)
