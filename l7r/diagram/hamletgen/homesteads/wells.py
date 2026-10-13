@@ -36,15 +36,8 @@ def drawn_r(s: Any) -> float:
 
 
 # THE AMONG-THE-DWELLINGS RULE lives with the wellhead (`settlement/shrines_wells/wells.py`: `WELL_AMONG_DWELLINGS_PX`,
-# `well_gap_to_dwellings`), moved there so the bundle's well pocket asks the same predicate (feature 287, homes H09)
-
-
-def _among_dwellings(houses: Sequence[Mapping[str, Any]], x: float, y: float) -> bool:
-    """Would a well at (x, y) stand among the dwellings - judged where the manifest will record it, to 0.1 px.
-
-    Research: among the dwellings - research/questions/0196-communal-wells-ido.drawing.html: a dwelling's wall within `WELL_AMONG_DWELLINGS_PX`
-    """
-    return well_gap_to_dwellings(houses, round(x, 1), round(y, 1)) <= WELL_AMONG_DWELLINGS_PX
+# `well_gap_to_dwellings`), moved there so the bundle's well pocket asks the same predicate (feature 287, homes H09);
+# `seat_wells` asks it at each seat, against its own `gap` (feature 374 wave 154: the 80 ft seat, the 95 ft check)
 
 
 def crop_extent_added(s: Any, c: Pt, xs: Sequence[float], ys: Sequence[float]) -> float:
