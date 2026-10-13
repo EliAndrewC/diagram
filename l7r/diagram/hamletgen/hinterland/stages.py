@@ -15,7 +15,8 @@ from l7r.diagram.settlement.homestead_parts.belt_law import wind_unit
 from l7r.diagram.settlement.homestead_parts.wood_goal import copse_goal
 
 from ..consts import COPSE_HOUSE_REACH_FT
-from ..homesteads import farmstead_fixtures, household_bamboo
+from ..homesteads import farmstead_fixtures
+from ..homesteads.bamboo import seat_strips
 from ..plan import SitePlan
 from .bamboo import bamboo_seats
 from .belt import belt_polygon
@@ -99,7 +100,7 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.settlement.Settlement.hinterland
         l7r.diagram.hamletgen.hinterland.parcels.open_ground_patches
         l7r.diagram.hamletgen.homesteads.fixtures.farmstead_fixtures
-        l7r.diagram.hamletgen.homesteads.bamboo.household_bamboo
+        l7r.diagram.hamletgen.homesteads.bamboo.seat_strips
         l7r.diagram.hamletgen.hinterland.bamboo.bamboo_seats
         l7r.diagram.hamletgen.hinterland.stages.plant_the_belt
         l7r.diagram.hamletgen.hinterland.frame.frame_for
@@ -135,7 +136,7 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
     # ...and the bamboo stands (T47), seated now for the same reason: a stand is a wood, and the
     # scrub keeps out of it. Drawn by `stage_bamboo`, after the belt.
     farmstead_fixtures(s, plan, s.M.get("houses", []))  # T53-T59: the privies, woodpiles, heaps, baths, coops, shrines, persimmons - before the bamboo, which keeps off them
-    plan.bamboo_polys += household_bamboo(s, plan, s.M.get("houses", []))  # T49: after the web and the board, before the scrub
+    s.M["meta"]["household_bamboo_strips"] = seat_strips(s, plan)  # T49: after the web and the board, before the scrub (feature 374 wave 149 kept the order)
     plan.bamboo_polys += bamboo_seats(s, plan)
     # THE BELT IS PLANTED, AND THEN THE VIEW IS DECIDED - ONCE (feature 287, M6). The belt's inner face is the last thing
     # that sets the frame (`crop_boxes`, GM 2026-08-26), and nothing after this line sets it, so the view the crop will
@@ -178,8 +179,9 @@ def stage_bamboo(s: Settlement, plan: SitePlan) -> None:
     this stage existed bamboo was 20% of the belt's crowns, one six-foot culm at a time, and invisible.
 
     The bamboo stands, drawn on the seats `stage_hinterland` scanned (T47). After the belt, so the
-    stand-level glyph lies over the scrub that already kept out of it; `meta.bamboo` records the roll
-    so the gate can hold "declared and drawn".
+    stand-level glyph lies over the scrub that already kept out of it; `meta.bamboo` records the roll, and
+    `meta.household_bamboo_wanted` / `_strips` / `_no_room` how many farms rolled a strip and how many found room (`seat_strips`;
+    no gate test holds every rolled strip drawn - a nucleated farm often has no room beside it, filed by feature 374 wave 149).
 
     Steps:
         l7r.diagram.settlement.Settlement.bamboo_stand

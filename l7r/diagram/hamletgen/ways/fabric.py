@@ -219,6 +219,9 @@ def _homestead_polys(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
     # ...AND, ONCE THE LAST HOUSE STANDS AND BEFORE ANY FARMSTEAD IS DRAWN, THE HOMESTEADS AS SEATED (feature 320,
     # `household_ways.seated_parts`): the track out is chosen then, and must keep off what will be drawn
     out += list(getattr(s, "_seated_parts", None) or ())
+    # ...AND THE FARMS' BAMBOO STRIPS with the ground between each and its house (feature 374 wave 149, `seat_strips`): seated
+    # after the web, so a way laid after them - a crossing's, the frame's - keeps off them; no lane through a farm's bamboo
+    out += list(getattr(s, "_household_strips", None) or ())
     # ...AND THE PARTS HELD UNTIL THEY ARE DRAWN (`homesteads.holds.hold_laid_parts`): a well pocket and a fixture's seat stand
     # in the registry from the seating's end, but on no manifest list until `stage_appurtenances` draws them, so a way threaded
     # by this fabric alone was laid over them and refused by the matrix (cohort seed 906: the track out from a gateway on a

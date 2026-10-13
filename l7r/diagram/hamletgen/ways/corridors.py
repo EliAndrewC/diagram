@@ -269,6 +269,13 @@ starts do not leave from the same dooryard.
 Research: field path from the network - UNRESEARCHED: 30 ft between starts, a search breadth"""
 
 
+def owner_point(owner: Any) -> bool:
+    """Is `owner` a house's point - two numbers - rather than an id the overlap registry gave a part (`registry.Extent`)?
+
+    Research: plumbing - NONE: what an owner is"""
+    return isinstance(owner, (tuple, list)) and len(owner) == 2 and all(isinstance(v, (int, float)) for v in owner)
+
+
 def routed_field_runs(
     segs: Sequence[tuple[Pt, Pt]],
     ground: WorkedGround,
@@ -368,7 +375,9 @@ def field_router(s: Any, brook: Poly) -> Callable[[Pt, Pt], Poly]:
         own = min((c for c in houses if math.dist(c, a) <= law.DOORSTEP_FT), key=lambda c: math.dist(c, a), default=None)
 
         def mine(owner: Any, kind: str, poly: Poly) -> bool:
-            if own is None or owner is None or math.dist((float(owner[0]), float(owner[1])), own) > 1.5:
+            # ...an owner the registry names by an id rather than a house's point is never the route's own (feature 374 wave 149:
+            # cohort seed 7's field way met an extent whose id was a string and the router crashed reading it as a point)
+            if own is None or not owner_point(owner) or math.dist((float(owner[0]), float(owner[1])), own) > 1.5:
                 return False
             return kind == "threshing_yards" or (kind == "houses" and (point_in_poly(a[0], a[1], poly) or edge_dist(a[0], a[1], poly) <= GABLE_MARGIN_FT + FIELD_ROUTE_GAP_FT))
 

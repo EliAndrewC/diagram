@@ -1858,5 +1858,99 @@
         -10.5
       ]
     }
+  },
+  "w149-strips": {
+    "quantity": "the farm bamboo strips drawn, HEAD against wave 149's landed route E (the strip seated after the web, as at HEAD, tested against each seated part rather than its whole bundle, offered stepped out along its side), over the 44 rolls (valley seeds 1-20, dike-pond and polder seeds 1-12, 16 households), the pool and the cohort",
+    "observed": "2026-10-12",
+    "source": "make hamlet ARGS=\"--name <n> --seed <s> --households 16 [--archetype <a>] --out <dir> --no-render\" in a detached HEAD worktree and in the clone; make maps SCOPE=all; make cohort",
+    "command": "the roll script and its summary (strips.py) in the session's scratchpad tools13; each manifest's bamboo_stands (role homestead), lanes and meta",
+    "method": "strips drawn, lanes over a strip, lanes between a house and its strip, meta.household_bamboo_wanted and _no_room summed; refusals, seat margin and households per roll against HEAD",
+    "value": {
+      "head_strips": 0,
+      "route_e": {
+        "strips": 57,
+        "lane_hits": 0,
+        "across": 0,
+        "wanted": 159,
+        "no_room": 102
+      },
+      "refused_head": [
+        "polder_grid seed 4",
+        "polder_grid seed 5"
+      ],
+      "refused_route_e": [
+        "polder_grid seed 4",
+        "polder_grid seed 5"
+      ],
+      "pool": "clean",
+      "cohort": "16/16",
+      "capacity": "seat margin and households unchanged"
+    }
+  },
+  "w149-seated-law-probe": {
+    "quantity": "households reached across a neighbor's yard with the seated yards and beds held in the seating law (a route measured and withdrawn)",
+    "observed": "2026-10-12",
+    "source": "a throwaway probe test rolling hg.generate on valley seeds 8, 13, 20 at 16 households",
+    "command": "meta.pinch_passages per roll",
+    "method": "with the seated parts in the seating law, without them, and at HEAD",
+    "value": {
+      "with": [
+        6,
+        8,
+        9
+      ],
+      "without": [
+        2,
+        1,
+        1
+      ],
+      "head": [
+        0,
+        1,
+        0
+      ]
+    }
+  },
+  "w149-route-matrix": {
+    "quantity": "the five routes for seating the farm's bamboo strip ahead of the ways, each on the pool, the 16-seed cohort and the 44 rolls",
+    "observed": "2026-10-12",
+    "source": "each route built in the clone and rolled as w149-strips; summaries routeA.txt to routeE.txt in the arbiter bundle of ask:b13-w149-route-matrix",
+    "command": "make maps SCOPE=all; make cohort; the 44-roll script",
+    "method": "new refusals against HEAD, strips drawn of those wanted, lanes between a house and its strip",
+    "value": {
+      "A in the bundle, copse seats kept off it, a way 7 ft off its own beds": {
+        "new_refusals": [
+          "pool Inashiro",
+          "valley seed 18"
+        ],
+        "strips": "126 of 136"
+      },
+      "B as A without the bed gap": {
+        "new_refusals": [
+          "cohort seed 7 (lane_knots)",
+          "valley seed 10"
+        ],
+        "strips": "132 of 142"
+      },
+      "C in the bundle alone": {
+        "new_refusals": [
+          "cohort seeds 2 and 10"
+        ],
+        "strips": "90 of 148, 3 laid",
+        "between": 2
+      },
+      "D at the seating's end, no bundle change": {
+        "new_refusals": [
+          "cohort seed 8"
+        ],
+        "strips": "77 of 159",
+        "between": 1
+      },
+      "E after the web (landed)": {
+        "new_refusals": [],
+        "strips": "57 of 159",
+        "between": 0
+      }
+    }
   }
 }

@@ -231,3 +231,14 @@ def test_fabric_hits_with_the_boxes_taken_once_counts_as_the_plain_count_does() 
     far = [(400.0, 400.0), (420.0, 400.0), (420.0, 420.0), (400.0, 420.0)]
     fabric = [near, far]
     assert fabric_hits_boxed(run, fabric, [poly_box(p) for p in fabric], 16.0) == _fabric_hits(run, fabric, 16.0) == 1
+
+
+def test_homestead_polys_carries_the_farms_bamboo_strips() -> None:
+    """Feature 374 wave 149 (0075): a farm's bamboo strip is seated with the sheds and gardens, before any way, and from then on
+    is fabric no lane crosses - its own farm's path included (owner None)."""
+    plan = a_plan()
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    strip = [(10.0, 10.0), (32.0, 10.0), (32.0, 26.0), (10.0, 26.0)]
+    s._household_strips = [(strip, None, "bamboo_stands")]  # type: ignore[attr-defined]
+    found = [(poly, owner) for poly, owner, kind in hg.ways._homestead_polys(s) if kind == "bamboo_stands"]
+    assert found == [(strip, None)]

@@ -123,6 +123,8 @@ correct work is fixed, not escaped (an escape only for a genuinely exempt case, 
 | The paddy's grass hill is about one plot's own area, seated just above a plot at the field's top, none where no such ground is free (wave 148) | guess (the size); the seat from the page's rule | 0078's drawing page: about the paddy's own size, on the slope above it; measured seated on every map that rolled it | research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html; `hamletgen/hinterland/paddy_grass.py` seat_paddy_grass |
 | The paddy's grass hill goes above the first of the field's top plots with room, as an unturned square (wave 148) | guess (which paddy; its shape) | 0078 says neither which paddy keeps one nor its shape; both labeled UNRESEARCHED at the code | research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html; `hamletgen/hinterland/paddy_grass.py` seat_paddy_grass |
 | The paddy's grass hill is drawn as a cut sward on a fresh-green ground (wave 148) | map drawing convention (the tint and the thinned tufts) | on the scrub's own tile it could not be told from the scrub (the glyph check of Inashiro); the real slope shows only its shorter grass | `settlement/land/tiles.py` cut_grass_tile, CUT_GRASS_TINT |
+| A farm's bamboo strip is seated after the web, as before; seating it with the sheds and gardens is deferred (wave 149) | deferred (a measured wait), not a ruled deviation - the order still owed, the claim left DRIFTED, row 777 on the held list for the GM | five routes ahead of the ways each moved a refusal into the pool or the cohort (`m:w149-route-matrix`); the round arbiter (ask:b13-w149-route-matrix) kept the order, the row waiting on the web settle | research/questions/0075-bamboo-groves-chikurin.drawing.html; `hamletgen/homesteads/bamboo.py` seat_strips |
+| A strip is tested against each seated part, not its own farm's whole bundle, and offered stepped out along its side, three strip depths at most (wave 149) | guess (the reach); a defect fixed (the bundle box refused every strip, the pool drawing none) | no page gives how far a farm's bamboo stood from its house; the farms with no room are filed for the bundle packer (`m:w149-strips`) | `hamletgen/homesteads/bamboo.py` STRIP_STEPS_OUT, seat_strips |
 
 (Each wave adds its rows, as 372's did.)
 
@@ -144,7 +146,10 @@ correct work is fixed, not escaped (an escape only for a genuinely exempt case, 
   sheets' 8-8.7 ft doors as a convention, against the GM's true-size rule); `fixture_quota`; and `one tub per wooden building`
   (waiting on `#senior retainers housed apart`).
 - **Every decision still owed to the GM**: 372's spec, "What it carries" (328's held section, the Mode A wells as markers,
-  wave 97's charcoal store) - put to the GM at this feature's end, through `escalation-check` (FR-004).
+  wave 97's charcoal store), and ranking row 777 (wave 149: the farm's bamboo strip seated after the web, its order with the
+  sheds and gardens deferred behind the web settle's found row by the round arbiter, ask:b13-w149-route-matrix - the GM's
+  question whether 0075's drawing page binds the order or only its result) - put to the GM at this feature's end, through
+  `escalation-check` (FR-004).
 - **Carried from 372's spec unchanged**: the claims-gate findings counted as introduced at 328's landing; Sawada's zigzag
   (waived for landing, an open E3 row); the 40-household seed 25 knot; Ochiba's garrison privy haul (a research item on 0101
   and 0090).
@@ -192,5 +197,11 @@ current figure before the first wave.
 - Amendment 2 (2026-10-12, at batch 3's close): the plan review of that date found FR-002 still quoting 372's band-3 sign-off,
   which 375's amendment 5 replaced - FR-002 now records the replacement with the GM's words, and SC-002 says a band is stated
   at landing after it.
+- Exception check (spec-fidelity MODE 1, 2026-10-12, wave 149): LEGITIMATE as a deferral, not as an exception - deferring
+  row 777's order behind the web settle's row rests on 328's accepted edge cases (a newly failing cohort seed is reverted; a
+  fix that changes many maps waits on a found row with its claim as found), measured (`m:w149-route-matrix`) and ruled by the
+  round arbiter (ask:b13-w149-route-matrix); not put to the GM now. Owed with it, done: the found rows in 328's ranking
+  (`audit/found-wave149.jsonl`), row 777 held behind the settle row (`audit/overrides.json`, E4), the row's class worded as a
+  wait, and row 777 among the decisions owed to the GM.
 
 **Implementation check** (feature 378): owed at its close - each question whose findings this feature changes is cited by a checked `Research:` claim of the code that decides it, or recorded in `implementation-check.md` as implemented nowhere; `make impl-check F=374` says what is owed. The code is fixed only where this spec asks.

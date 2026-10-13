@@ -245,3 +245,80 @@ def test_a_household_bamboo_strip_whose_every_seat_is_in_a_plots_sun_is_not_seat
         houses = [{"x": 200.0 + 120.0 * k, "y": 200.0, "w": 46.0, "h": 28.0, "rot": 0.0, "shed_side": "N"} for k in range(8)]
         assert bamboo.household_bamboo(s, plan, houses) == []
     assert asked, "non-vacuity: seats reached the sun's question"
+
+
+def test_a_strip_keeps_its_gap_off_every_seated_part() -> None:
+    """Feature 374 wave 149: the strip is seated before any farmstead is drawn, so it keeps `PART_GAP_FT` off each homestead's
+    seated box - its own house's included."""
+    from l7r.diagram.hamletgen.homesteads.bamboo import parts_hit
+
+    shed = [(100.0, 100.0), (120.0, 100.0), (120.0, 110.0), (100.0, 110.0)]
+    assert parts_hit(105.0, 105.0, 16.0, 22.0, [shed], 2.0), "on the shed"
+    assert parts_hit(91.0, 105.0, 16.0, 22.0, [shed], 2.0), "1 ft off its west face, inside the gap"
+    assert not parts_hit(85.0, 105.0, 16.0, 22.0, [shed], 2.0), "7 ft clear"
+    assert not parts_hit(105.0, 105.0, 16.0, 22.0, [], 2.0), "nothing seated"
+
+
+def test_seat_strips_seats_off_the_seated_parts_and_holds_them_as_fabric() -> None:
+    """Feature 374 wave 149 (0075): `seat_strips` seats each farm's strip clear of every homestead as seated - each house's
+    yard and every other farm's grove band stand where a strip would go - adds it to the plan's stands and holds it for the
+    ways' fabric. The even houses keep groves (their bamboo is in the grove), the odd ones strips."""
+    from l7r.diagram.hamletgen.homesteads import bamboo
+
+    got = 0
+    for seed in range(20):
+        s, plan = _toy_hamlet(10, seed=seed)
+        plan.bamboo = "homestead"
+        s.M["houses"] = [
+            {
+                "x": 200.0 + 120.0 * k,
+                "y": 300.0,
+                "w": 46.0,
+                "h": 28.0,
+                "rot": 0.0,
+                "shed_side": "N",
+                "geom": {"boxes": {"yard": (200.0 + 120.0 * k, 260.0, 40.0, 30.0)}, **({"groves": [(200.0 + 120.0 * k, 345.0, 60.0, 20.0)]} if k % 2 == 0 else {})},
+            }
+            for k in range(8)
+        ]
+        n = bamboo.seat_strips(s, plan)
+        held = s._household_strips  # type: ignore[attr-defined]
+        assert n == len(plan.bamboo_polys) and len(held) == 2 * n, "each strip, and the ground between it and its house"
+        assert s.M["meta"]["household_bamboo_wanted"] - s.M["meta"]["household_bamboo_no_room"] == n
+        parts = [bamboo.box_poly((200.0 + 120.0 * k, 260.0, 40.0, 30.0)) for k in range(8)]
+        parts += [bamboo.box_poly((200.0 + 120.0 * k, 345.0, 60.0, 20.0)) for k in range(0, 8, 2)]
+        for ring, owner, kind in held[:n]:
+            cx, cy = sum(p[0] for p in ring) / 4, sum(p[1] for p in ring) / 4
+            assert owner is None and kind == "bamboo_stands" and not bamboo.parts_hit(cx, cy, 22.0 * s.bscale, 16.0 * s.bscale, parts, 0.0)
+        got += n
+    assert got, "some strips seated over the seeds"
+
+
+def test_the_ground_between_a_house_and_its_strip_is_their_hull() -> None:
+    """Feature 374 wave 149: no lane runs between a house and its bamboo (`across_a_lane`, feature 302) - with the strip seated
+    first, the ways keep off the hull of the house's center and the strip's corners."""
+    from shapely.geometry import Point, Polygon
+
+    from l7r.diagram.hamletgen.homesteads.bamboo import between
+
+    hull = Polygon(between((0.0, 0.0), [(30.0, -8.0), (46.0, -8.0), (46.0, 8.0), (30.0, 8.0)]))
+    assert hull.contains(Point(20.0, 0.0)), "the gap between the house and its strip"
+    assert not hull.contains(Point(20.0, 15.0)) and hull.area == 16.0 * 16.0 + 0.5 * 30.0 * 16.0
+
+
+def test_a_stepped_strip_is_never_nearer_a_neighbors_house_than_its_own(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 374 wave 149 (the round-3 decide): stepped out up to 54 ft, a strip could stand at a neighbor's door - a seat
+    nearer another house's center than its own is passed over for the next."""
+    from l7r.diagram.hamletgen.homesteads import bamboo
+
+    s, plan = _toy_hamlet(10, seed=1)
+    plan.bamboo = "homestead"
+    monkeypatch.setattr(bamboo, "HOUSEHOLD_BAMBOO_PREVALENCE", 1.1)
+    monkeypatch.setattr(bamboo, "strip_refused", lambda *a, **k: False)
+    own, behind = (400.0, 400.0), (400.0, 360.0)  # its neighbor 40 ft behind it
+    # the first seat offered stands at the neighbor's door, the second beside its own house
+    monkeypatch.setattr(bamboo, "strip_candidates", lambda *a, **k: iter([(400.0, 365.0, 22.0, 16.0), (440.0, 400.0, 16.0, 22.0)]))
+    houses = [{"x": own[0], "y": own[1], "w": 46.0, "h": 28.0, "rot": 0.0, "shed_side": "W"}, {"x": behind[0], "y": behind[1], "w": 46.0, "h": 28.0, "rot": 0.0}]
+    rings = bamboo.household_bamboo(s, plan, houses[:1] + [{**houses[1], "geom": {"groves": [(0, 0, 1, 1)]}}])
+    cx, cy = sum(p[0] for p in rings[0]) / 4, sum(p[1] for p in rings[0]) / 4
+    assert (cx, cy) == (440.0, 400.0), "the seat at its neighbor's door passed over for its own"

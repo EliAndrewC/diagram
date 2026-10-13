@@ -223,6 +223,11 @@ in 328's ranking and this spec.
       research: rendering
       verify: DONE. DONE. a grass-hill map rolls the paddy's own grass hill one in three (GUESS), seated upslope of a top plot and 6 ft clear as seated, drawn as a cut sward (grass-cut tile, the tint a convention); 3 of 20 valley rolls draw one, every roll seated, Inashiro draws one; the pop-up through form, research and depiction; claims IN-STEP; Inashiro glyph-check NEEDS-WORK then PASS (F6 seam filed); rows 775 and 911 closed (wave 148); gate green; bookends +2.4% band 0
 
+## Batch 13 - the bamboo strip before the lanes
+
+- [ ] T41 wave 149: the farm's bamboo strip drawn (the bundle box no longer refuses it); its order, with the sheds and gardens before the lanes, deferred by the round arbiter to the web settle's row (0075) (FR-001)
+      research: rendering
+
 ## Standing - the ranking's remaining rows
 
 - [ ] T99 Batches 2 on: the ranking's remaining open rows, wave by wave in ranking order, each batch's tasks added here as it starts (plan, "Lands open") [lands-open]

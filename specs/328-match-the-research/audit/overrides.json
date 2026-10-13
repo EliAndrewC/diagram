@@ -3238,5 +3238,13 @@
     "tier": "E2",
     "held": "the round arbiter, 2026-10-12 (ask:b7-residence-route): held for the GM. The three hand sheets draw a ~145-tsubo residence (~5,150 sq ft) where 0091 records 49-67 tsubo houses (the county draft draws 49); canon gives the county magistrate Rank 5 with ~1,000 koku discretionary income (budgets.md), the 500-1,000-koku retainer's 67-tsubo house the nearer analog. Shrinking each house to 67 tsubo frees ~2,700 sq ft and drops coverage from 33-34% to ~27-28%, under 0116's 30-42% band. Routes: (A) redraw each compound smaller around the smaller house - a full repack of three hand sheets, every review section re-owed (one sheet per batch fits FR-002); (B) fill the freed ground with buildings the record does not give - rejected as unfaithful; or record the ~145-tsubo scale as a deviation. Which is the GM's question.",
     "flag": "deviation-tempting: shrinking the house several-fold repacks every compound"
+  },
+  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip seated after the lanes": {
+    "tier": "E4",
+    "after": [
+      "l7r/diagram/hamletgen/ways/settle.py::settle_the_web#a re-deal of the seats"
+    ],
+    "flag": "Held for the GM (feature 374 wave 149, ask:b13-w149-route-matrix): every route seating the farm's bamboo strip ahead of the ways moved a refusal into the pool or the cohort (m:w149-route-matrix); the order waits on the web settle's row, the claim DRIFTED. The GM's question: does 0075's drawing page bind the order (the strip seated with the sheds, before the lanes) or only its result (no way over a strip or between a house and its strip)?",
+    "moved": "wave 149: re-tiered E4 behind the settle row (328's fix-that-changes-many-maps case)"
   }
 }

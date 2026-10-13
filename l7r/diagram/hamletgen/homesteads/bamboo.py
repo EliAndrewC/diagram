@@ -6,13 +6,14 @@ Research: strip geometry - NONE: frames, indexes and ground lookups; the units t
 from __future__ import annotations
 
 import math
-from collections.abc import Mapping, Sequence
-from typing import Any
+from collections.abc import Iterator, Mapping, Sequence
+from typing import Any, NamedTuple
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, segments_cross
 from l7r.diagram.settlement._geom import PointGrid, boxed_grid, boxed_ring_hit, boxed_rings, boxed_segs
 from l7r.diagram.settlement._geom.water_index import crosses_a_stream
 from l7r.diagram.settlement.homestead_parts.bamboo_keepout import stand_spares_seats
+from l7r.diagram.settlement.homestead_parts.fixture_seats import weighted
 from l7r.diagram.settlement.homestead_parts.groves import HOUSEHOLD_BAMBOO_PREVALENCE as HOUSEHOLD_BAMBOO_PREVALENCE
 from l7r.diagram.settlement.homestead_parts.tree_shade import BAMBOO_SHADE_FT
 from l7r.diagram.settlement.land.wet import marsh_ground
@@ -20,6 +21,7 @@ from l7r.diagram.settlement.rolling.bearing import turned_box
 
 from ..consts import Poly, Pt
 from ..plan import SitePlan
+from .household_ways import box_poly, seated_parts
 
 # HOUSEHOLD BAMBOO (feature 133 T48, GM 2026-08-27; research/questions/0075-bamboo-groves-chikurin.html,
 # the T48 pass). READ: on the Tonami plain every farmstead stood in its own
@@ -67,13 +69,22 @@ def in_the_sun(cx: float, cy: float, w: float, h: float, sun: Sequence[tuple[flo
     return any(abs(cx - bx) < w / 2 + bw and abs(cy - by) < h / 2 + bh for bx, by, bw, bh in sun)
 
 
-def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any]]) -> list[Poly]:
+def household_bamboo(
+    s: Settlement,
+    plan: SitePlan,
+    houses: Sequence[Mapping[str, Any]],
+    parts: Sequence[Poly] = (),
+    belt: Sequence[Pt] | None = None,
+    skip: frozenset[tuple[float, float, float, float]] = frozenset(),
+) -> list[Poly]:
     """Seat a small bamboo strip beside each farmstead that keeps one, per the `bamboo` knob.
 
-    Seated in `stage_hinterland`, AFTER the web and before the scrub (T49): seated with the sheds it
-    was in the web's way, and the web threaded through it (two lanes on Inashiro) - and putting it in
-    the web's fabric instead re-threaded the whole web and broke it. Seated after, the strip keeps 6 ft
-    off every lane and clear of every placed footprint and the wells, and the scrub keeps
+    Seated by `seat_strips` in `stage_hinterland`, AFTER the web and before the scrub (T49): seated with the sheds it was in the
+    web's way. Feature 374 wave 149 seated it ahead of the ways five ways - laid in the bundle with the sheds and beds (with and
+    without the copse seats kept off it, and a way kept 7 ft off its own beds) and at the seating's end - and each re-dealt the
+    seats or the ways and moved a refusal into the pool or the cohort (`m:w149-route-matrix`); the round arbiter ruled the order
+    kept (ask:b13-w149-route-matrix), the row waiting on the web settle. Clear of every placed part by itself (`parts`, each kept
+    `PART_GAP_FT` off) and of the belt (`belt`), 6 ft off every lane, and held as fabric for what is laid after. The scrub keeps
     out of it (a soft keep-out, like every wood). Drawn by `stage_bamboo` with the stand glyph. Per house: presence by `HOUSEHOLD_BAMBOO_PREVALENCE`, side by the weighted roll
     above, both from the house's own position (positional randomness). A candidate that lands on a
     footprint, a lane, a paddy, the marsh or the pond is refused and the next side tried; a farmstead
@@ -84,7 +95,7 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
         strip size - research/questions/0075-bamboo-groves-chikurin.drawing.html: `HOUSEHOLD_BAMBOO_FT`, a strip 22 x 16 ft
         side rolled, then the others - research/questions/0075-bamboo-groves-chikurin.drawing.html: the weighted side first, the rest in listed order
         a grove farm's bamboo in its grove - research/questions/0075-bamboo-groves-chikurin.drawing.html: no strip, counted for the grove
-        strip clearances - UNRESEARCHED: 6 ft off the walls and every lane, a second seat one strip's depth further out
+        strip clearances - UNRESEARCHED: 6 ft off the walls and every lane, `PART_GAP_FT` off every seated part
         strip out of the sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: kept 50 ft (bamboo's reach) off every yard's and bed's sun
         strip off the copse seats - UNRESEARCHED: off every household's reserved copse seats by the bamboo keep-out
         strip on its house's bank - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: refused across a stream
@@ -96,18 +107,24 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
     if plan.bamboo not in ("homestead", "both") or not houses:
         return out
     px = s.px
-    sw, sh = px(HOUSEHOLD_BAMBOO_FT[0]), px(HOUSEHOLD_BAMBOO_FT[1])
-    wx, wy = plan.wind
     fields = [list(f) for f in s.field_polys]
     marsh = marsh_ground(s.M)
-    pond = s.M.get("pond")
-    lanes = [([(float(a), float(b)) for a, b in ln["pts"]], float(ln.get("w", 3)) / 2 + px(6.0)) for ln in s.M.get("lanes", []) if len(ln.get("pts") or []) >= 2]
-    footing = Footing(s, fields, marsh)  # the static ground, indexed once for every strip this pass tests (feature 218)
-    seats = [(float(p[0]), float(p[1])) for q in s.M.get("houses") or [] for p in (q.get("wood_share") or {}).get("seats") or ()]
-    # ...AND EVERY PLOT'S SUN GROUND at bamboo's reach (feature 315): gathered once - every plot stands by the hinterland stage
-    sun = s._sun_keepouts((-1e9, -1e9, 1e9, 1e9), BAMBOO_SHADE_FT)
+    ground = StripGround(
+        fields=fields,
+        marsh=marsh,
+        pond=s.M.get("pond"),
+        lanes=[([(float(a), float(b)) for a, b in ln["pts"]], float(ln.get("w", 3)) / 2 + px(6.0)) for ln in s.M.get("lanes", []) if len(ln.get("pts") or []) >= 2],
+        footing=Footing(s, fields, marsh),  # the static ground, indexed once for every strip this pass tests (feature 218)
+        seats=[(float(p[0]), float(p[1])) for q in s.M.get("houses") or [] for p in (q.get("wood_share") or {}).get("seats") or ()],
+        # ...AND EVERY PLOT'S SUN GROUND at bamboo's reach (feature 315): gathered once - every plot stands, as seated or drawn
+        sun=s._sun_keepouts((-1e9, -1e9, 1e9, 1e9), BAMBOO_SHADE_FT),
+        belt=plan.belt if belt is None else belt,
+        skip=skip,
+    )
+    centers = [(float(q["x"]), float(q["y"])) for q in houses]
+    meta = s.M["meta"]
     for h in houses:
-        hx, hy, hw, hh = float(h["x"]), float(h["y"]), float(h["w"]), float(h["h"])
+        hx, hy = float(h["x"]), float(h["y"])
         if s._hjit(hx, hy, 95.0) >= HOUSEHOLD_BAMBOO_PREVALENCE:
             continue
         # A FARM WITH ITS OWN GROVE KEEPS ITS BAMBOO IN THAT GROVE (feature 291; research/contents.json#vegetation
@@ -116,65 +133,181 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
         # and did not: once the dispersed and linear forms rolled again, every seat (back, shed, side, wind) lay in the
         # grove and Kashikawa's 12 expected strips silently became 0. Counted, so the knob's household half is on record.
         if (h.get("geom") or {}).get("groves"):
-            s.M["meta"]["household_bamboo_in_grove"] = int(s.M["meta"].get("household_bamboo_in_grove", 0)) + 1
-            s.M["meta"].setdefault("household_bamboo_in_grove_farms", []).append([round(hx, 1), round(hy, 1)])  # which, for `row_rules.bamboo_mismatch`
+            meta["household_bamboo_in_grove"] = int(meta.get("household_bamboo_in_grove", 0)) + 1
+            meta.setdefault("household_bamboo_in_grove_farms", []).append([round(hx, 1), round(hy, 1)])  # which, for `row_rules.bamboo_mismatch`
             continue
-        th = math.radians(float(h.get("rot", 0.0)))
-        ca, sa = math.cos(th), math.sin(th)
-        gap = px(6.0)
-        # candidate centers in the house's local frame: back (-y, behind the house), the shed side
-        # (local -x, with the kura), the windward side, the other flank
-        shed_side = h.get("shed_side", "W")
-        local = {
-            "back": (0.0, -(hh / 2 + gap + sh / 2), sw, sh),
-            "shed": ((-(hw / 2 + gap + sh / 2)) if shed_side != "N" else 0.0, 0.0 if shed_side != "N" else -(hh / 2 + gap + sh / 2), sh if shed_side != "N" else sw, sw if shed_side != "N" else sh),
-            "side": (hw / 2 + gap + sh / 2, 0.0, sh, sw),
-        }
-        local["wind"] = wind_seat(wx * ca + wy * sa, -wx * sa + wy * ca, hw, hh, gap, sw, sh)  # the wind in the house's frame
-        # the rolled side first, then the others in their listed order as fallbacks
-        roll = s._hjit(hx, hy, 96.0)
-        first = _HOUSEHOLD_BAMBOO_SIDES[-1][0]
-        acc = 0.0
-        for name, wgt in _HOUSEHOLD_BAMBOO_SIDES:
-            acc += wgt
-            if roll < acc:
-                first = name
-                break
-        order = [first] + [nm for nm, _ in _HOUSEHOLD_BAMBOO_SIDES if nm != first]
-        seated = False
-        for name in order:
-            if seated:
-                break
-            lx0, ly0, cw, ch = local[name]
-            # two offsets per side (T49): against the house, then a strip's depth further out - the
-            # lanes now stand where the near seat often is, and a strip 16 ft off the wall is still
-            # the household's own
-            for k in (0.0, 1.0):
-                d = math.hypot(lx0, ly0) or 1.0
-                lx, ly = lx0 + lx0 / d * k * sh, ly0 + ly0 / d * k * sh
-                cx, cy = hx + lx * ca - ly * sa, hy + lx * sa + ly * ca
-                if _strip_blocked(s, cx, cy, cw, ch, hx, hy, fields, marsh, pond, lanes, footing) or in_belt(plan.belt, cx, cy, cw, ch):
-                    continue
-                # ...and off every household's reserved copse seats by the copse's bamboo keep-out (feature 280's copse off
-                # the bamboo, feature 287 woods W25's seats planted where reserved - `stand_spares_seats`); the strip is
-                # drawn axis-aligned in (cw, ch) at (cx, cy), the rect the predicate reads
-                if not stand_spares_seats(cx, cy, cw, ch, seats, s.bscale):
-                    continue
-                if in_the_sun(cx, cy, cw, ch, sun):  # a stand throws a timber bamboo's shadow: none in a yard's or bed's sun (feature 315)
-                    continue
-                # the household's strip stands on its house's bank (feature 287, homes H01) ...and on its house's side of every lane
-                # (glyph check, feature 302: Sawada's strip across a lane)
-                if crosses_a_stream((hx, hy), (cx, cy), s.M.get("streams", [])) or across_a_lane((hx, hy), (cx, cy), lanes):
-                    continue
-                ring = [(cx - cw / 2, cy - ch / 2), (cx + cw / 2, cy - ch / 2), (cx + cw / 2, cy + ch / 2), (cx - cw / 2, cy + ch / 2)]
-                plan.bamboo_of[len(plan.bamboo_polys) + len(out)] = (hx, hy)  # its owner, for the stand's record (`of`)
-                out.append(ring)
-                plan.bamboo_roles.append("homestead")
-                s.placed.append((cx, cy, cw, ch))
-                s.block_polys.append(ring)
-                seated = True
-                break
+        for cx, cy, cw, ch in strip_candidates(h, plan.wind, px, s._hjit(hx, hy, 96.0)):
+            if strip_refused(s, cx, cy, cw, ch, (hx, hy), ground, parts):
+                continue
+            # A STEPPED-OUT SEAT STAYS ITS OWN FARMSTEAD'S: none nearer another house's center than its own (the round-3 decide
+            # of feature 374 wave 149 - 54 ft out, a strip could stand at a neighbor's door)
+            if min(centers, key=lambda c: math.dist(c, (cx, cy))) != (hx, hy):
+                continue
+            ring = [(cx - cw / 2, cy - ch / 2), (cx + cw / 2, cy - ch / 2), (cx + cw / 2, cy + ch / 2), (cx - cw / 2, cy + ch / 2)]
+            plan.bamboo_of[len(plan.bamboo_polys) + len(out)] = (hx, hy)  # its owner, for the stand's record (`of`)
+            out.append(ring)
+            plan.bamboo_roles.append("homestead")
+            s.placed.append((cx, cy, cw, ch))
+            s.block_polys.append(ring)
+            break
     return out
+
+
+class StripGround(NamedTuple):
+    """What a strip is tested against, gathered once per pass (`household_bamboo`): the paddy, the marsh and the pond, the
+    lanes standing (with their 6 ft), the footing index, the reserved copse seats, the plots' sun at bamboo's reach, the belt
+    and the bundle boxes to excuse.
+
+    Research: strip ground - NONE: the ground gathered once for the strip tests"""
+
+    fields: Sequence[Poly]
+    marsh: Sequence[Poly]
+    pond: Any
+    lanes: Sequence[tuple[Poly, float]]
+    footing: Footing
+    seats: Sequence[Pt]
+    sun: Sequence[tuple[float, float, float, float]]
+    belt: Sequence[Pt] | None
+    skip: frozenset[tuple[float, float, float, float]]
+
+
+def strip_candidates(h: Mapping[str, Any], wind: Pt, px: Any, roll: float) -> Iterator[tuple[float, float, float, float]]:
+    """A farm's strip seats, first choice first, each (cx, cy, w, h): the side `roll` picks first, then the others in listed
+    order, each against the house and stepped out (`STRIP_SEATS`).
+
+    Research:
+        side rolled, then the others - research/questions/0075-bamboo-groves-chikurin.drawing.html: the weighted side first, the rest in listed order
+        the shed side - UNRESEARCHED: local -x, the doma and stable end, or behind the house where the kura stands on the north wall"""
+    hx, hy, hw, hh = float(h["x"]), float(h["y"]), float(h["w"]), float(h["h"])
+    sw, sh = px(HOUSEHOLD_BAMBOO_FT[0]), px(HOUSEHOLD_BAMBOO_FT[1])
+    th = math.radians(float(h.get("rot", 0.0)))
+    ca, sa = math.cos(th), math.sin(th)
+    gap = px(6.0)
+    shed_side = h.get("shed_side", "W")
+    local = {
+        "back": (0.0, -(hh / 2 + gap + sh / 2), sw, sh),
+        "shed": ((-(hw / 2 + gap + sh / 2)) if shed_side != "N" else 0.0, 0.0 if shed_side != "N" else -(hh / 2 + gap + sh / 2), sh if shed_side != "N" else sw, sw if shed_side != "N" else sh),
+        "side": (hw / 2 + gap + sh / 2, 0.0, sh, sw),
+        "wind": wind_seat(wind[0] * ca + wind[1] * sa, -wind[0] * sa + wind[1] * ca, hw, hh, gap, sw, sh),  # the wind in the house's frame
+    }
+    first = weighted(_HOUSEHOLD_BAMBOO_SIDES, roll)
+    for name in [first] + [nm for nm, _ in _HOUSEHOLD_BAMBOO_SIDES if nm != first]:
+        lx0, ly0, cw, ch = local[name]
+        d = math.hypot(lx0, ly0) or 1.0
+        for k, j in STRIP_SEATS:
+            lx, ly = lx0 + lx0 / d * k * sh - ly0 / d * j * sw, ly0 + ly0 / d * k * sh + lx0 / d * j * sw
+            yield (hx + lx * ca - ly * sa, hy + lx * sa + ly * ca, cw, ch)
+
+
+def strip_refused(s: Settlement, cx: float, cy: float, cw: float, ch: float, house: Pt, ground: StripGround, parts: Sequence[Poly]) -> bool:
+    """Is the strip `cw` x `ch` at (cx, cy) refused - on a footprint, the paddy, the marsh, the pond, the water or a crown
+    (`_strip_blocked`), in the belt, on a seated part (`PART_GAP_FT`), on a reserved copse seat, in a plot's sun, across a
+    stream or a lane from its `house`?
+
+    Research:
+        strip clearances - UNRESEARCHED: 6 ft off the walls, `PART_GAP_FT` off every seated part
+        strip out of the sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: kept 50 ft (bamboo's reach) off every yard's and bed's sun
+        strip off the copse seats - UNRESEARCHED: off every household's reserved copse seats by the bamboo keep-out
+        strip on its house's bank - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: refused across a stream"""
+    hx, hy = house
+    g = ground
+    if _strip_blocked(s, cx, cy, cw, ch, hx, hy, g.fields, g.marsh, g.pond, g.lanes, g.footing, g.skip) or in_belt(g.belt, cx, cy, cw, ch):
+        return True
+    if parts_hit(cx, cy, cw, ch, parts, s.px(PART_GAP_FT)):  # a homestead as seated, its own included
+        return True
+    # ...and off every household's reserved copse seats by the copse's bamboo keep-out (feature 280's copse off the bamboo, feature
+    # 287 woods W25's seats planted where reserved - `stand_spares_seats`); the strip is drawn axis-aligned in (cw, ch) at (cx, cy)
+    if not stand_spares_seats(cx, cy, cw, ch, g.seats, s.bscale):
+        return True
+    if in_the_sun(cx, cy, cw, ch, g.sun):  # a stand throws a timber bamboo's shadow: none in a yard's or bed's sun (feature 315)
+        return True
+    # the household's strip stands on its house's bank (feature 287, homes H01) ...and on its house's side of every lane (glyph
+    # check, feature 302: Sawada's strip across a lane)
+    return crosses_a_stream((hx, hy), (cx, cy), s.M.get("streams", [])) or across_a_lane((hx, hy), (cx, cy), g.lanes)
+
+
+STRIP_STEPS_OUT = 3
+"""How many strip depths past its near seat a strip is offered, each also slid one strip's width along its side either way: out to
+6 + 3 x 16 = 54 ft off the wall. The farmstead's own parts stand where the near seat often is (feature 374 wave 149: with the
+bundle box no longer refusing every strip, the near seat and one step out seated 2 of the 69 strips the roll asked over 20 cohort
+seeds, a probe; out to three steps with the slides 29). The rest find no room: the strip as a part the bundle packer lays is
+filed with the five-route matrix (`m:w149-route-matrix`).
+
+Research: strip reach - UNRESEARCHED: out to 54 ft off the wall and one strip's width along its side; no page gives how far a farm's bamboo stood from the house"""
+
+STRIP_SEATS = tuple((float(k), float(j)) for k in range(STRIP_STEPS_OUT + 1) for j in (0, 1, -1))
+"""Research: strip seats - UNRESEARCHED: each step out, the side's own seat first, then slid one way and the other"""
+
+PART_GAP_FT = 2.0
+"""How far a strip keeps off a homestead's seated part - the gap `_strip_blocked` keeps off a placed box.
+
+Research: off the seated parts - UNRESEARCHED: 2 ft, the gap a strip keeps off any placed box"""
+
+
+def parts_hit(cx: float, cy: float, cw: float, ch: float, parts: Sequence[Poly], gap: float) -> bool:
+    """Does the `cw` x `ch` strip centered (`cx`, `cy`) come within `gap` of any part's box (its ring's bounding box)?
+
+    Research: off the seated parts - UNRESEARCHED: the strip and a part's box, `gap` apart"""
+    for ring in parts:
+        xs, ys = [p[0] for p in ring], [p[1] for p in ring]
+        if cx + cw / 2 + gap > min(xs) and cx - cw / 2 - gap < max(xs) and cy + ch / 2 + gap > min(ys) and cy - ch / 2 - gap < max(ys):
+            return True
+    return False
+
+
+def seat_strips(s: Settlement, plan: SitePlan) -> int:
+    """Seat the farms' bamboo strips (`stage_hinterland`, after the web): against every homestead's part by itself (`seated_parts`,
+    and each grove farm's bands) and the belt (`plan.belt`); added to the plan's stands and held as fabric for what is laid
+    after (`s._household_strips`, read by `fabric._homestead_polys`), and the farms that rolled one recorded with how many found
+    no room (`meta.household_bamboo_wanted` / `_no_room`, feature 374 wave 149). Returns the count seated.
+
+    Research: strip seated after the lanes - research/questions/0075-bamboo-groves-chikurin.drawing.html: seated after the web, the lanes laid before it"""
+    from ..hinterland.belt import belt_polygon  # local: the hinterland imports this package
+
+    parts = [p for p, _own, kind in seated_parts(s) if kind != "wood seats"]  # the wood seats: `stand_spares_seats`, as before
+    parts += [box_poly(b) for h in s.M.get("houses") or [] for b in (h.get("geom") or {}).get("groves") or () if len(b) == 4]
+    # ...EACH PART BY ITSELF, SO NOT THE BUNDLES THEY STAND IN (`skip`): a household's placed box is its whole bundle, which takes in
+    # the ground beside its house where its strip would go - so every strip on every map was refused by its own farm (cohort
+    # seeds 2, 3, 5 and 6: 53 seats refused, none by the sun or the parts; the pool drew none - feature 374 wave 149). The strips
+    # seated here stay walls to one another, being placed after the set is taken.
+    houses = s.M.get("houses") or []
+    bundles = frozenset((float(b[0]), float(b[1]), float(b[2]), float(b[3])) for h in houses if len(b := (h.get("geom") or {}).get("bbox") or ()) == 4)
+    n0 = len(plan.bamboo_polys)
+    strips = household_bamboo(s, plan, houses, parts=parts, belt=plan.belt or belt_polygon(s, plan), skip=bundles)
+    plan.bamboo_polys += strips
+    # ...THE STRIP AND THE GROUND BETWEEN IT AND ITS HOUSE (`between`): no lane runs between a house and its bamboo (feature 302's
+    # glyph check of Sawada, `across_a_lane`) - the lanes laid after the strip keep off that ground as the strip kept off theirs
+    held = [(ring, None, "bamboo_stands") for ring in strips]
+    held += [(between(plan.bamboo_of[n0 + k], ring), None, "bamboo_stands") for k, ring in enumerate(strips) if n0 + k in plan.bamboo_of]
+    s._household_strips = held  # type: ignore[attr-defined]
+    want = household_bamboo_wanted(s, plan, houses)
+    s.M["meta"]["household_bamboo_wanted"] = want
+    s.M["meta"]["household_bamboo_no_room"] = want - len(strips)
+    return len(strips)
+
+
+def household_bamboo_wanted(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any]]) -> int:
+    """How many farms roll a strip of their own: the `bamboo` knob keeps one, the farm rolls one (`HOUSEHOLD_BAMBOO_PREVALENCE`
+    by its position) and keeps no grove of its own (whose bamboo is in the grove).
+
+    Research: which farms keep bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: `HOUSEHOLD_BAMBOO_PREVALENCE` by each house's position hash"""
+    if plan.bamboo not in ("homestead", "both"):
+        return 0
+    return sum(1 for h in houses if s._hjit(float(h["x"]), float(h["y"]), 95.0) < HOUSEHOLD_BAMBOO_PREVALENCE and not (h.get("geom") or {}).get("groves"))
+
+
+def between(house: Pt, strip: Sequence[Pt]) -> Poly:
+    """The ground between a house's center and its strip: the convex hull of the center and the strip's corners.
+
+    Research: no lane between a house and its bamboo - research/questions/0075-bamboo-groves-chikurin.html: the household's own bamboo, no lane between"""
+    from shapely.geometry import (
+        MultiPoint,  # noqa: PLC0415
+        Polygon,  # noqa: PLC0415
+    )
+
+    hull = MultiPoint([(float(house[0]), float(house[1])), *((float(p[0]), float(p[1])) for p in strip)]).convex_hull
+    ring = hull.exterior.coords if isinstance(hull, Polygon) else hull.coords  # a strip in line with its house: no area, its line
+    return [(float(x), float(y)) for x, y in list(ring)[: -1 if isinstance(hull, Polygon) else None]]
 
 
 def across_a_lane(house: Pt, strip: Pt, lanes: Sequence[tuple[Poly, float]]) -> bool:

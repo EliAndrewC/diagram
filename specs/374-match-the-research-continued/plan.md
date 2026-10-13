@@ -733,6 +733,40 @@ bookends.
   without the brush dot, half of them kept, no clump overlay, over a fresh-green ground - a cut sward (0078's grass cut for one
   paddy), its tint and density a map drawing convention told on the pop-up's Depiction tab with its real counterpart.
 
+## Batch 13: the farm's bamboo strip (row 777)
+
+**The work list**: row 777 (`homesteads/bamboo.py::household_bamboo#strip seated after the lanes`, DRIFTED): 0075's drawing page
+says "The strip is seated with the sheds and gardens, so the lanes and wells keep off it"; the code seats it in `stage_hinterland`,
+after the web, keeping 6 ft off the lanes laid before it. The row's fix: seat the strip with the sheds and gardens, before the
+lanes and wells, so the web keeps off it. Rows 0, 771 and 774 stay as already ruled; 700 and 708 are in deferred units (SC-003's
+scope is the kept and Mode A rows). The engine changes, so the batch takes its timing bookends.
+
+### Wave 149 (T41) - the farm's bamboo strip drawn; its order deferred
+- **W149-1** (within; a defect fixed, measured 2026-10-12): no farm strip is drawn at HEAD on any roll or pool map - the three
+  pool maps that roll farm bamboo (Inashiro, Kuwabata, Sawada) draw none. A household's placed box is its whole bundle, which
+  takes in the ground beside its own house, so every candidate was refused by its own farm (cohort seeds 2, 3, 5, 6, probe: 53
+  of 53). Fixed: the strip is tested against each part of every homestead by itself (`parts_hit`, `PART_GAP_FT`), the bundle
+  boxes excused (`skip`, from each house's `geom.bbox`).
+- **W149-2** (within): the farm's own parts then refuse the near seats, so a strip is offered out to three strip depths (54 ft off
+  the wall) and slid one strip's width along its side (`STRIP_STEPS_OUT`, UNRESEARCHED, recorded with its why), none nearer
+  another house's center than its own. The strip and the ground between it and its house are held as fabric for what is laid
+  after it. `meta.household_bamboo_wanted`, `_strips` and `_no_room` record per map how many farms rolled one and found room.
+- **W149-3** (the round arbiter's ruling, ask:b13-w149-route-matrix, 2026-10-12, continue): the ORDER is kept - the strip seated
+  after the web, as at HEAD - and row 777 waits on a found row against the web settle, its claim left DRIFTED and on SC-003's
+  held list (328's fix-that-changes-many-maps case). Five routes ahead of the ways were built and measured on the pool, the
+  cohort and the 44 rolls (`m:w149-route-matrix`): laid in the bundle (with the copse's seats kept off it, and a way kept 7 ft
+  off its own beds; without the bed gap; alone), and at the seating's end; each re-dealt the seats or the ways and moved a
+  refusal into the pool (Inashiro) or the cohort; only this route (E) has none. The round arbiter's earlier accept of route A
+  (ask:b13-w149-strip-route) is superseded: it was taken without the pool, which then refused Inashiro under it. Found rows: the
+  settle's island, the strip as a bundle part, and the HEAD mismatch of a way's own-bed clearance (2 ft at seating, 7 ft in the
+  drawn law). Whether 0075's page binds the order or only its result (no way over a strip or between a house and its strip) is
+  the GM's, asked only if the page must change.
+- **W149-4** (within; found on the way, a crash at HEAD): the field router read an overlap-registry owner that is an id as a
+  house's point and crashed (cohort seed 7 under route C); an owner that is not a point is never the route's own (`owner_point`).
+- **W149-5** (within): the record - `m:w149-strips` (HEAD against E: strips drawn, none over or beside a lane; refusals, pool,
+  cohort and capacity unchanged) and `m:w149-route-matrix`; occasions: `homestead bamboo` new to the pool maps that now draw it,
+  a glyph unit owed by detection.
+
 ## Landing by batch (375's D18)
 
 374 is the remainder of 328's ranking, too long for one clone, so it lands batch by batch and stays open between them:

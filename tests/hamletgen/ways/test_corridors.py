@@ -106,3 +106,12 @@ def test_a_routed_field_way_is_tried_from_several_starts_apart_and_a_ford_with_n
     assert len(runs) == 3 and len(starts) == 3
     assert all(math.dist(p, q) > co.ROUTED_START_GAP_FT for i, p in enumerate(starts) for q in starts[:i]), "starts stand apart"
     assert co.routed_field_runs(segs, ground, 1.0, lambda a, b: [], brook, [(100.0, 0.0)], starts=3) == [], "no far leg: the ford is passed"
+
+
+def test_an_owner_named_by_an_id_is_never_the_routes_own() -> None:
+    """Feature 374 wave 149 (cohort seed 7): the overlap registry may name an extent's owner by an id, not a house's point - the
+    field router's own-dooryard test reads only a point as an owner, where it crashed reading the id as one."""
+    from l7r.diagram.hamletgen.ways.corridors import owner_point
+
+    assert owner_point((10.0, 20.0)) and owner_point([10, 20])
+    assert not owner_point("a1") and not owner_point(None) and not owner_point((1.0, 2.0, 3.0)) and not owner_point(("a", "b"))

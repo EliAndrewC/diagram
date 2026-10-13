@@ -11971,21 +11971,6 @@
   "scope": "kept"
  },
  {
-  "key": "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip seated after the lanes",
-  "tier": "E3",
-  "fix": "seat the bamboo strip with the sheds and gardens, before lanes and wells, so the web keeps off it",
-  "files": [
-   "l7r/diagram/hamletgen/homesteads/bamboo.py",
-   "l7r/diagram/hamletgen/homesteads/stages.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E3",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": "l7r/diagram/hamletgen/homesteads/farm_water.py::farm_channels#washing places",
   "tier": "E3",
   "fix": "new element: washing places where a stream or ditch passes the houses, shared-or-one-per-house rolled as a knob",
@@ -15480,6 +15465,40 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/ways/settle.py::settle_the_web#a re-deal of the seats",
+  "verdict": "DRIFTED",
+  "tier": "E4",
+  "fix": "make the web carry a re-deal of the seats: the first settle cannot join a 4-farmhouse island (Inashiro and valley seed 18 when the farm's bamboo strip is laid in the bundle), and re-dealt seats move a refusal into the cohort (seeds 7, 2, 10, 8 under routes B-D) - measure the settle on a re-dealt cohort before any wave that re-deals the seats",
+  "files": [
+   "l7r/diagram/hamletgen/ways/settle.py",
+   "l7r/diagram/settlement/rolling/gap_ways.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 wave 149's route matrix (2026-10-12, ask:b13-w149-route-matrix, m:w149-route-matrix)",
+  "tier_as_ranked": "E4",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip seated after the lanes",
+  "tier": "E4",
+  "fix": "seat the bamboo strip with the sheds and gardens, before lanes and wells, so the web keeps off it",
+  "files": [
+   "l7r/diagram/hamletgen/homesteads/bamboo.py",
+   "l7r/diagram/hamletgen/homesteads/stages.py"
+  ],
+  "after": [
+   "l7r/diagram/hamletgen/ways/settle.py::settle_the_web#a re-deal of the seats"
+  ],
+  "flag": "Held for the GM (feature 374 wave 149, ask:b13-w149-route-matrix): every route seating the farm's bamboo strip ahead of the ways moved a refusal into the pool or the cohort (m:w149-route-matrix); the order waits on the web settle's row, the claim DRIFTED. The GM's question: does 0075's drawing page bind the order (the strip seated with the sheds, before the lanes) or only its result (no way over a strip or between a house and its strip)?",
+  "tier_as_ranked": "E3",
+  "moved": "wave 149: re-tiered E4 behind the settle row (328's fix-that-changes-many-maps case)",
+  "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#link width",
   "tier": "E4",
   "fix": "record silent on a link's width (inherit vs rank 3/5/6 ft)",
@@ -15852,6 +15871,23 @@
   "tier_as_ranked": "E1",
   "moved": "wave 9: waits on water_lines' question",
   "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/rolling/access.py::parts_clear#a way off its own beds",
+  "verdict": "DRIFTED",
+  "tier": "E4",
+  "fix": "hold a household's way off its own beds at seating by the drawn law's 7 ft (WEB_FABRIC_GAP), not the tread's 2 ft - built as access.BED_GAP_FT in wave 149 and measured: it moved a refusal (Inashiro, valley 18) while the seats were re-dealt, so it waits on the settle row",
+  "files": [
+   "l7r/diagram/settlement/rolling/access.py"
+  ],
+  "after": [
+   "l7r/diagram/hamletgen/ways/settle.py::settle_the_web#a re-deal of the seats"
+  ],
+  "flag": "",
+  "found": "feature 374 wave 149 (2026-10-12, ask:b13-w149-route-matrix): a HEAD mismatch, valley seed 10's four ways 3-4 ft off their own beds under route B",
+  "tier_as_ranked": "E3",
   "wave": "",
   "scope": "kept"
  },
