@@ -134,7 +134,7 @@ def household_bamboo(
         # the windbreak mix, which carries the bamboo; a separate strip would stand exactly where the grove already does -
         # and did not: once the dispersed and linear forms rolled again, every seat (back, shed, side, wind) lay in the
         # grove and Kashikawa's 12 expected strips silently became 0. Counted, so the knob's household half is on record.
-        if (h.get("geom") or {}).get("groves"):
+        if (h.get("geom") or {}).get("groves") and not h.get("sheltered"):  # a sheltered row farm's bamboo is its south band (374 wave 153)
             meta["household_bamboo_in_grove"] = int(meta.get("household_bamboo_in_grove", 0)) + 1
             meta.setdefault("household_bamboo_in_grove_farms", []).append([round(hx, 1), round(hy, 1)])  # which, for `row_rules.bamboo_mismatch`
             continue

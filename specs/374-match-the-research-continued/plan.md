@@ -870,12 +870,14 @@ and closed there.
   street runs across the wind: a farm is sheltered only where its street lies within 67.5 degrees of its windward
   bearing (a GUESS), so a street running with the wind shelters no one and falls to the first form, as a one-sided row does.
 - **W153-2** (within): in the second form, a farm on the street's leeward side - the street, and the grove farms beyond it,
-  on its windward side - keeps no grove of its own (its bundle laid with none: this project's reading of 0033's account,
-  where the row across already broke the wind; labeled so at the code) and keeps its bamboo along its south side (0033;
-  0075's findings, "a madake grove all along its south side"); its row seat, lot and holding are as before. Every sheltered
-  farm keeps it, whatever the hamlet's bamboo knob or a farm's own roll. TRUE SOUTH governs, as the record says, whatever
-  the map's wind. The farms on the windward row keep their groves as the first form draws them. Recorded per farm
-  (`sheltered`) and counted in `meta`.
+  on its windward side - keeps its grove on its windward sides, drawn one tree deep (0033's account: the Ogawa farm, its
+  road on the north, "the grove north of the house ... rather thin"; one tree deep, the thin band's depth, a GUESS), and
+  keeps its bamboo along its south side (0033; 0075's findings, "a madake grove all along its south side"), its grove
+  drawing none; its row seat, lot and holding are as before. Every sheltered farm keeps the band, whatever the hamlet's
+  bamboo knob or a farm's own roll. TRUE SOUTH governs, as the record says, whatever the map's wind. The farms on the
+  windward row keep their full groves. Recorded per farm (`sheltered`) and counted in `meta`. (Round 2 had the sheltered
+  farm keep no grove, as this project's reading; quote-check found the account's farm kept its thin north grove, so the
+  thin grove is drawn.)
 - **W153-3** (within): the south bamboo is a band along the farm's whole south side - as wide as the farmstead (its house,
   yard and beds across), as deep as a farm's bamboo strip (16 ft, the strip's GUESS) - standing just past its yard's and
   beds' sun ground (0038: no canopy, bamboo included, in a plot's sun; the GM's ruling that no canopy tree is exempt). The

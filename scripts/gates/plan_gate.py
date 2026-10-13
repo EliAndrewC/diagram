@@ -237,6 +237,9 @@ def record_task(spec_dir: pathlib.Path, task: str, review: dict, declared: str, 
     section = task_sections(plan.read_text(encoding="utf-8") if plan.is_file() else "").get(task)
     if section is None:
         raise ValueError(f"plan.md has no section naming {task} - a task's decisions go under a heading that names it")
+    # the section's digest under `section_sha256`, or under `plan_sha256` as the reviewer's MODE 4 JSON shape names it (feature
+    # 374 wave 153: two task reviews refused for the plan-stage key, then renamed by hand)
+    review = {**review, "section_sha256": review.get("section_sha256") or review.get("plan_sha256")}
     if review.get("section_sha256") != digest(section.encode()):
         raise ValueError(f"section_sha256 does not match {task}'s section - it changed while it was being reviewed")
     decisions = review.get("decisions")

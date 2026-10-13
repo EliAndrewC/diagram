@@ -239,7 +239,6 @@ class BundleGeomMixin:
             getattr(self, "_household_byre", None),
             bool(getattr(self, "_household_well", False)),
             tuple(getattr(self, "_household_fixtures", None) or ()),
-            bool(getattr(self, "_farm_sheltered", False)),
         )
         cache = self.__dict__.setdefault("_bundle_templates", {})
         tpl = cache.get(key)
@@ -389,7 +388,7 @@ class BundleGeomMixin:
             gap,
             (gw, gh),
             (yw, yh),
-            sides=0 if getattr(self, "_farm_sheltered", False) else self._grove_sides(),  # a row farm the row across shelters keeps none (374 wave 153)
+            sides=self._grove_sides(),
             turn=bundle_turn(self._windward(), self._grove_flank()),
             thin=self.px(THIN_BAND_FT),
             sun_east=self.px(EAST_REACH_FT),  # the garden's morning sun: no band within 50 ft east of a bed (0038)

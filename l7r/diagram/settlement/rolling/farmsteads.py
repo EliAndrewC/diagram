@@ -6,12 +6,14 @@ Research: draw-order and footprint plumbing - NONE: the order things are drawn i
 """
 
 import math
+from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any, cast
 
 from .._geom import Indexed
 from ..farm_fixtures import PERSIMMON_CROWN_FT
 from ..homestead_parts.groves import GROVE_BAMBOO_PATCH_FT, GROVE_CLUMP_CROWNS, HOUSEHOLD_BAMBOO_PREVALENCE, bamboo_patch, band_clumps, grove_crown_px2
 from ..homestead_parts.tree_shade import BAMBOO_SHADE_FT, CANOPY_SHADE_FT, crown_shades
+from .dispersed import THIN_BAND_FT
 from .fit import part_box
 from .lot import kura_rect
 
@@ -28,6 +30,20 @@ def beds_sun_clear(beds: Any, crowns: Any, trees: Any, marks: Any, reach: float,
     Research: bed sun ground clear of crowns and promised trees at reach, bamboo at bamboo_reach - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no crown, promised tree or bamboo within 50 ft east, west or south of a bed"""
     discs = [(float(crowns[i]), float(crowns[i + 1]), float(crowns[i + 2])) for i in range(0, len(crowns) - 2, 3)] + [tuple(t) for t in trees]
     return not any(crown_shades(x, y, r, b, reach) for b in beds for x, y, r in discs) and not any(crown_shades(float(m[0]), float(m[1]), float(m[2]), b, bamboo_reach) for b in beds for m in marks)
+
+
+def thinned(cx: float, cy: float, w: float, h: float, face: Sequence[int], depth: float) -> tuple[float, float, float, float]:
+    """A grove band cut to `depth` across its face, keeping its inner edge - the side toward its house - where it stood: a row
+    farm the grove row across its street shelters draws its windward grove one tree deep on the ground its full band was
+    seated with (feature 374 wave 153; seated and laid as every farm, so the seating and the ways are the full form's).
+
+    Research: a thin windward grove - research/questions/0033-row-villages-resson.drawing.html: Ogawa's farm, its road on the north, kept its north grove "rather thin"; one tree deep, the thin band's depth (`THIN_BAND_FT`), a GUESS"""
+    fx, fy = float(face[0]), float(face[1])
+    if abs(fy) >= abs(fx):  # a north or south band: cut across its height, its edge toward the house kept
+        d = min(depth, h)
+        return (cx, cy - fy * (h - d) / 2, w, d)
+    d = min(depth, w)
+    return (cx - fx * (w - d) / 2, cy, d, h)
 
 
 class FarmsteadFlushMixin:
@@ -78,8 +94,12 @@ class FarmsteadFlushMixin:
                 continue
             # EVERY BAND OF THE FARM'S OWN GROVE, on every side its settlement rolled (feature 291); a nucleated bundle
             # carries none. `depth` says which is the windward stand and which a thin band of lesser trees.
-            _bamboo = self._farm_rolls_bamboo(rec["x"], rec["y"])
+            # ...BUT A ROW FARM THE GROVE ROW ACROSS ITS STREET SHELTERS keeps its bamboo along its south side, not in its thin
+            # windward grove (feature 374 wave 153, 0033: Ogawa's farm, its north grove thin, its bamboo all along its south)
+            _bamboo = not rec.get("sheltered") and self._farm_rolls_bamboo(rec["x"], rec["y"])
             for (cx, cy, w, h), (face, depth) in zip(geom.get("groves") or (), geom.get("grove_faces") or (), strict=True):
+                if rec.get("sheltered") and depth == "deep":
+                    cx, cy, w, h = thinned(cx, cy, w, h, face, self.px(THIN_BAND_FT))
                 arms.append((cx, cy, w, h, face, depth, _bamboo))
                 self.M["groves"].append(
                     {"x": round(cx, 1), "y": round(cy, 1), "w": w, "h": h, "rot": 0, "of": [rec["x"], rec["y"]], "face": list(face), "depth": depth, "bamboo": _bamboo and depth == "deep"}

@@ -2192,7 +2192,21 @@
         "steps 6": "3 short",
         "steps 12": "3 short - the paddy and the neighbors' footprints, not distance"
       },
-      "its_own_path": "8 of valley 3's band refusals were its own door path between house and band; a public lane still refuses"
+      "its_own_path": "8 of valley 3's band refusals were its own door path between house and band; a public lane still refuses",
+      "final (seated as a full-grove farm, its windward bands drawn one tree deep)": {
+        "source": "scratchpad run r17e and a probe of Kashikawa's spec at BAND_STEPS_OUT 6 and 12 (deleted)",
+        "refused_44": [
+          "polder 4 (as at HEAD)",
+          "polder 5 (as at HEAD)"
+        ],
+        "sheltered_44": "19, 2 with no room (valley 3)",
+        "pool": {
+          "kashikawa": "10 sheltered, 4 with no room - the same 4 at 12 steps: the paddy and seated parts, not distance"
+        },
+        "pool_maps": "clean",
+        "cohort": "16/16 passed",
+        "between": "a farm laid with a thin grove (its frame narrower) moved the road's course at seating and left dike-pond 3's streets off the network (all 16 farms unreached); seated as the full form, only its drawing thin, every roll passes"
+      }
     }
   }
 }

@@ -11,7 +11,6 @@ import pytest
 from l7r.diagram.hamletgen.homesteads import bamboo as bm
 from l7r.diagram.hamletgen.homesteads.rows import ACROSS_THE_WIND_COS, sheltered_by_the_row_across
 from l7r.diagram.hamletgen.plan import HamletSpec
-from l7r.diagram.settlement.rolling.dispersed import canonical_farmstead
 
 
 def test_a_farm_is_sheltered_only_with_its_street_across_the_wind_on_its_windward_side() -> None:
@@ -22,9 +21,13 @@ def test_a_farm_is_sheltered_only_with_its_street_across_the_wind_on_its_windwar
     assert 0.38 < ACROSS_THE_WIND_COS < 0.39 and sheltered_by_the_row_across(-1, (0.0, -1.0), "XX"), "an unknown wind reads as the default NW"
 
 
-def test_no_sides_lays_no_grove() -> None:
-    can = canonical_farmstead(50.0, 28.0, 3.0, (22.0, 24.0), (40.0, 30.0), sides=0, garden_by_yard=False, thin=17.0, sun_east=22.0, way_in=12.0)
-    assert can["groves"] == [] and can["yard"] is not None
+def test_a_sheltered_farm_s_windward_band_is_drawn_one_tree_deep_against_its_house() -> None:
+    from l7r.diagram.settlement.rolling.farmsteads import thinned
+
+    # a north band (face (0, -1)) 40 deep, its inner edge at y = 20: cut to 17, the inner edge kept
+    assert thinned(0.0, 0.0, 100.0, 40.0, (0, -1), 17.0) == (0.0, 11.5, 100.0, 17.0)
+    assert thinned(0.0, 0.0, 40.0, 100.0, (-1, 0), 17.0) == (11.5, 0.0, 17.0, 100.0), "a west band, its east edge kept"
+    assert thinned(0.0, 0.0, 100.0, 10.0, (0, 1), 17.0) == (0.0, 0.0, 100.0, 10.0), "already thinner: as it stood"
 
 
 def test_the_south_band_runs_the_whole_farmstead_across_past_its_plots_sun() -> None:
