@@ -68,6 +68,20 @@ def test_a_check_is_not_re_dispatched_into_a_round_that_is_still_running() -> No
     assert hc.dispatch(st, "t3", "quote-check", "/m", MANIFEST, 2) == "", "all returned: the next round may start"
 
 
+def test_a_split_bundles_batches_go_out_together_in_one_round() -> None:
+    """`make check-bundle` splits a long question's bundle into `batch-N/` directories; the second batch's dispatch is the same
+    round as the first's, never refused as a re-dispatch nor counted as a round of its own (feature 374 wave 151: 0049's
+    quote-check batch-2 was refused while batch-1 ran)."""
+    st: dict = {}
+    assert hc.dispatch(st, "t1", "quote-check", "/tmp/l7r-check/q-0105-quote-check/batch-1/MANIFEST.md", MANIFEST, 0) == ""
+    hc.launched(st, "t1", "ag1", True)
+    assert hc.dispatch(st, "t2", "quote-check", "/tmp/l7r-check/q-0105-quote-check/batch-2/MANIFEST.md", MANIFEST, 1) == ""
+    assert st["rounds"]["quote-check|q:0105"] == 1, "one round for the two batches"
+    assert hc.batch_root("/tmp/l7r-check/q-0105-quote-check/batch-2/MANIFEST.md") == "/tmp/l7r-check/q-0105-quote-check"
+    assert hc.batch_root("/tmp/l7r-check/q-0105-quote-check/MANIFEST.md") == ""
+    assert "already in q:0105's round" in hc.dispatch(st, "t3", "quote-check", "/tmp/l7r-check/q-0105-quote-check/MANIFEST.md", MANIFEST, 2), "an unbatched re-dispatch"
+
+
 def _clone(tmp: pathlib.Path) -> pathlib.Path:
     (tmp / ".git").mkdir()
     (tmp / ".specify").mkdir()

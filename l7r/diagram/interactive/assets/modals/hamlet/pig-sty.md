@@ -1,25 +1,25 @@
 About: A pig sty was a household's pig pen.
 
-[field_archetype=valley_paddy|polder_grid] On a plain paddy hamlet most farms kept pigs, as the Shen family farm manual of the
-seventeenth century has a rice farm do, and each household's small sty stood on its own plot. In the 1920s, in the
-rice-growing provinces of east-central China, hogs were kept on nearly two farms in three, the only count found; no count
-from before 1912 was found.
+[field_archetype=valley_paddy|polder_grid] On a plain paddy hamlet most farms kept pigs,
+and each household's small sty stood on its own plot. In the 1920s, in the
+rice-growing provinces of east-central China, hogs were kept on nearly two farms in three; how many kept them before 1912
+is not recorded.
 
 [field_archetype=mulberry_dike_fishpond] On a dike-pond hamlet the sty stood on the bank of a fish pond. The pig was the
 dike-pond country's animal: in the Pearl River delta in the Qing, feed raised on the pond's surface went to the pigs, and
-their dung, with the pond mud, went to manure the mulberry on the banks. A late-Ming farming compendium has a pen on a
-fish-pond bank, its dung swept into the water each morning to feed the fish, though that pen held sheep. The delta's ducks
-were herded in the rice fields; no early duck pen at a pond is known. A pig penned at a fish pond was a Chinese way; Japan,
+their dung, with the pond mud, went to manure the mulberry on the banks. In the late Ming a sheep pen could stand on a
+fish-pond bank, its dung swept into the water each morning to feed the fish.
+A pig penned at a fish pond was a Chinese way; Japan,
 outside Okinawa, seems to have let its pigs feed loose.
 
-What a sty was built of is not recorded. A sixth-century Chinese farm manual wanted a pig pen small, since a small pen
+What a sty was built of is not recorded. In sixth-century China a pig pen was best kept small, since a small pen
 fattened the pigs fast, and not too clean, since mud and muck let them escape the heat. Across rural China a privy was
-commonly built over the sty, a custom as old as the Han dynasty. Sheds built over the water, or built so that their waste
-ran straight into the pond, are known only from modern times.
+commonly built over the sty, a custom as old as the Han dynasty.
 
 How many pigs a sty held and how big it was are not recorded.
 
-[field_archetype=mulberry_dike_fishpond] How many households of a dike-pond village kept a sty is not recorded either.
+[field_archetype=mulberry_dike_fishpond] How many households of a dike-pond village kept a sty is not recorded either. Sheds
+built over the water, or built so that their waste ran straight into the pond, are known only from modern times.
 
 Guesses:
 - [field_archetype=valley_paddy|polder_grid] That about two households in three keep a sty, the share differing by hamlet
