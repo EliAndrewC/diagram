@@ -102,7 +102,9 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002, FR-005, FR-006, FR-007) The push's checks, measured warm in one clone back to back with the
-  same commands as the 2026-10-13 measurement: from about 24 s to under 6 s. Each phase's own measurement is recorded.
+  same commands as the 2026-10-13 measurement: from about 24 s to under 6 s (the 24 s observed 2026-10-13; method: each of
+  the push's checks timed alone in this clone, load about 6). Each phase's own measurement is recorded in
+  `measurements.json`.
 - **SC-002** (FR-001) For every check the cache serves: its output over the repository is identical with the cache on and
   off. A file changed after a cached run, and a changed extractor, each produce a fresh extraction (tests).
 - **SC-003** (FR-002) The ledger check over the clone's pass log answers as before, and its run with every pass already
