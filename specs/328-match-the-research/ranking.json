@@ -15168,7 +15168,7 @@
  {
   "key": "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip seated after the lanes",
   "tier": "E4",
-  "fix": "the order is free (the GM's ruling); give more households room for their strip (57 of 159 wanting one drew one at m:w149-strips), each beside its own house with no way over it or between it and the house, by whichever order works",
+  "fix": "the order is free (the GM's ruling); give more households room for their strip (57 of 159 wanting one drew one at m:w149-strips), each beside its own house with no way over it or between it and the house - FIRST by more room per homestead (the GM, 2026-10-12: room before packing), then by whichever order works",
   "files": [
    "l7r/diagram/hamletgen/homesteads/bamboo.py",
    "l7r/diagram/hamletgen/homesteads/stages.py"

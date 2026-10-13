@@ -65,6 +65,11 @@ auto-loads when a session edits the record; the archive and the download list ar
 - Where the research supports more than one form, it becomes a knob with per-settlement variance
   rolled from the map's seed, never a choice. A degree along a continuum is calibrated liberty; a
   choice between distinct forms is a knob.
+- **Room before packing** (GM 2026-10-12): when features will not fit, the FIRST route is more room - a larger homestead,
+  wider spacing - while the map stays within the research, never hours of packing (*"the far easier thing is to make the
+  homesteads slightly bigger. Things were pretty spread out in premodern times!"*). A number set only to implement against
+  (an UNRESEARCHED or convenience size, reach or band) is a knob to move, never a target to defend; the round arbiter asks this
+  of every ruling.
 - A `research record` feature closes only with its findings checked against the code (feature 378, GM 2026-10-10): each
   question whose findings it changed is cited (its findings page, not only its drawing page) by a `Research:` claim of
   the code that decides it, checked by

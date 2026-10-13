@@ -67,6 +67,23 @@ previously coming to me"*), so two more kinds of trigger reach you:
   (the band-2 standard, held to its strictest); `continue` means keep optimizing; `process-fault` means the measurement or the
   process is wrong, its `tooling_fix` named. Your accept is bound to these exact numbers: new numbers need a new ruling.
 
+## Ask of every ruling: is this packing?
+
+The GM, 2026-10-12: *"you spend many hours tweaking algorithms to try to cram as many map features into as small a space as
+possible when the far easier thing is to make the homesteads slightly bigger. Things were pretty spread out in premodern
+times!"* and *"some integer number getting set in our code without any particular research, just to be able to implement
+against something ... and then all of our efforts get channeled into maintaining that number even though it is not grounded
+in research"*. Besides looping and oscillation, look in every bundle for PACKING: rounds, routes or a question spent fitting
+features into ground a number fixes - a homestead's size, a spacing, a reach, a band, a margin - where that number is
+UNRESEARCHED, a GUESS, a CONVENTION or a convenience (the claims and the session's own words say which).
+
+- If adding room - a larger homestead, wider spacing, a looser band - would settle it while the map stays within the research,
+  your `what` names that as the FIRST route, with the number to move; rule `continue` on an `ask:` whose routes are all packing
+  routes. More room is not free license: a size or spacing the research does fix stays where the research puts it.
+- If the bundle shows the session defending such a number as though it were a requirement (refusing maps, filing rows, adding
+  rounds to hold it), say so in `why`.
+- A pattern a tool could catch earlier is your `tooling_fix`.
+
 ## A batch: one ruling for units that reached the cap together
 
 A BATCH bundle (`make arbiter-bundle BATCH=1`, feature 375 amendment 2; the GM 2026-10-11: "a whole batch of pop-ups reaching
