@@ -2356,5 +2356,20 @@
    },
    "history": "first roll (r155): four rolls over ten (12, 13, 12, 12) with the first well at the cluster's middle; the first well at its share's middle (r155b) and one step ahead (r155c) left three, their share's seats refused by the homesteads (valley 17: 40 threshing yards, 33 gardens, 25 houses, 45 the fit)"
   }
+ },
+ "w156-redeal-cohort": {
+  "observed": "2026-10-13",
+  "subject": "T48 baseline: the 48-seed cohort (54 with the pinned rows) at HEAD and with the wave 155 pocket patch applied, the re-deal of the seats",
+  "answers": "",
+  "source": ".git/cohort48-head.log and .git/cohort48-patched.log in diagram-backlog; dev/cohort-log records",
+  "quantity": "seeds failing the whole gate",
+  "command": "make cohort N=48, then git apply w155-pocket-attempt.patch and make cohort N=48, then the patch reversed",
+  "method": "each seed's verdict",
+  "value": {
+   "head": "50/54: 17 and 21 WebRefused (nucleated), 40 row_rules farm_not_on_its_street (linear), 45 fixtures_on_groves sty on its own grove bands (dispersed)",
+   "patched": "49/54: 21, 40, 45 as at HEAD; 17 now passes; 10 and 24 newly fail (nucleated)",
+   "re_deal_net": "+2 new failures (10, 24), 1 mended (17)",
+   "pre_existing_to_fix": "17, 21, 40, 45 fail at HEAD (constitution XIV)"
+  }
  }
 }
