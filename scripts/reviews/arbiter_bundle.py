@@ -457,6 +457,23 @@ def evidence_section(out: Path, files: Sequence[str]) -> list[str]:
     return ["## The evidence the question cites\n\n" + "\n".join(rows) + "\n"]
 
 
+_ROUTES = re.compile(r"\broutes?\b|\bregress", re.I)
+
+
+def pool_unstated(why: str, files: Sequence[str]) -> list[str]:
+    """What a route or regression question leaves unstated about the POOL (the round arbiter's tooling fix, ask:b13-w149-route-
+    matrix: an accept was taken on the cohort and the 44 rolls alone, and the pool then refused the reference map under it): a
+    question that names a route or a regression and states no pool result in its words or its evidence, and each cited route
+    file (a name starting `route`) that states none. Empty where nothing is owed."""
+    if not _ROUTES.search(why):
+        return []
+    texts = {f: Path(f).read_text(encoding="utf-8", errors="replace") for f in files if Path(f).is_file()}
+    gaps = [f"{f}: a route's evidence states no pool result" for f, txt in texts.items() if Path(f).name.lower().startswith("route") and "pool" not in txt.lower()]
+    if "pool" not in why.lower() and not any("pool" in txt.lower() for txt in texts.values()):
+        gaps.insert(0, "the question names a route or a regression and states no pool result")
+    return gaps
+
+
 def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "", evidence: Sequence[str] = ()) -> Path:
     """The MANIFEST for `trigger`; raises `MissingRecord` where a round kept no reply or a reversal has no record, unless
     `allow_missing` gives the reason to bundle anyway (it is printed in the MANIFEST for the arbiter to weigh). `evidence`: the
@@ -693,7 +710,18 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--out", default="")
     ap.add_argument("--missing-ok", default="", help="the reason to bundle with a reply or a reversal's record missing")
     ap.add_argument("--evidence", default="", help="an ask's cited files, space-separated, copied beside the MANIFEST")
+    ap.add_argument("--check-ask", default="", help="the question's words: refuse a route or regression question that states no pool result")
     a = ap.parse_args(argv)
+    if a.check_ask:
+        gaps = pool_unstated(a.check_ask, a.evidence.split())
+        if gaps:
+            print(
+                "arbiter-ask: " + "; ".join(gaps) + ". Roll the pool under every route the question offers (`make maps SCOPE=all`) "
+                'and cite it - in WHY or a FILES= summary - before asking: `make arbiter-ask SUBJECT=... WHY="..." FILES="<the summaries>"`',
+                file=sys.stderr,
+            )
+            return 2
+        return 0
     root = Path(a.root).resolve()
     slug = re.sub(r"[^a-z0-9]+", "-", a.trigger.lower()).strip("-")[-60:]
     if a.missing_ok.strip() and len(a.missing_ok.split()) < 2:  # every escape states a reason of two words or more
