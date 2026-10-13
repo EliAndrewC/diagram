@@ -31,18 +31,20 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T07 The old-layout check retired (plan D7)
       research: rendering
       verify: DONE. DONE. check-old-layout.py removed with its calls in static and sync-with-main and its mentions; split-path comments marked as history; sync-with-main suite 124 passed
-- [ ] T08 Phase 1 measured (`push_check_times.py` into `measurements.json`), the tooling tests and `make hooks-test` green, landed with `make land-tooling`
+- [x] T08 Phase 1 measured (`push_check_times.py` into `measurements.json`), the tooling tests and `make hooks-test` green, landed with `make land-tooling`
       research: rendering
 
 ### Phase 2 - the push checks in one process
+      verify: DONE. DONE. phase 1 measured (R6: the same checks as separate processes 19.87 -> 3.43 s), tooling tree 1776 passed, hooks-test green; landed with make land-tooling (0906d798a, with phase 2 and 3's tooling)
 
 - [x] T09 The runner (plan D8) and the self-test stamp (plan D9): `scripts/gates/push_checks.py`, `sync-with-main.sh` calling it once; tests (SC-006: alone and in the runner, passing and seeded to fail; a changed imported module re-runs a kept self-test)
       research: rendering
       verify: DONE. DONE. scripts/gates/push_checks.py runs every Python push check in one process (gate-stamp and the closing check rows, escapes pass --skip), self-tests stamped by code sha incl. imports; sync-with-main calls it once; tests/tooling/test_push_checks.py 16 passed (alone vs in-process on this tree and seeded to fail, first refusal stops, a changed import re-runs a kept self-test); test-sync-with-main 124 passed
-- [ ] T10 Phase 2 measured, `test-sync-with-main.sh` and `make hooks-test` green, landed with `make land-tooling`
+- [x] T10 Phase 2 measured, `test-sync-with-main.sh` and `make hooks-test` green, landed with `make land-tooling`
       research: rendering
 
 ### Phase 3 - the hourly step-back
+      verify: DONE. DONE. phase 2 measured (R6: the runner 1.92 s against 19.87 s), test-sync-with-main 124 and hooks-test green; landed in 0906d798a
 
 - [x] T11 The checkpoint (plan D10) and the hold (plan D13): `review_owed.checkpoint`, `owed(checkpoint=True)`, `tick-task.py`'s refusal, no escape; tests (SC-007)
       research: rendering
