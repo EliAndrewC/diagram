@@ -1,2212 +1,2273 @@
 {
-  "wave112-verandas": {
-    "quantity": "wave 112 (2026-10-10): the residence verandas at 0102's 3-6 ft, their faces a rolled knob",
-    "observed": "2026-10-10",
-    "source": "pool/magistracies/{hayakawa,ochiba,ubame}-magistracy/*.svg before (main) and after; make pack-audit on each",
-    "command": "make pack-audit ARGS=pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-    "method": "each data-kind=\"engawa\" rect read before and after; veranda_depths red on all three before, OK after",
-    "value": {
-      "before_px": 8,
-      "before_ft": 2.7,
-      "garden_face_px": 12,
-      "garden_face_ft": 4,
-      "turned_face_px": 9,
-      "turned_face_ft": 3,
-      "band_ft": [
-        3,
-        6
-      ],
-      "rolls": {
-        "hayakawa": "two or three faces",
-        "ochiba": "garden face alone",
-        "ubame": "garden face alone"
-      },
-      "moved": "Hayakawa: the west block's door and tub, the shoe stone and its tub 4 px south; Ochiba and Ubame: the shoe stone 4 px south"
-    }
-  },
-  "wave113-kitchens": {
-    "quantity": "wave 113 (2026-10-10): the kitchens at 0091's measured wing, ells with no corridor",
-    "observed": "2026-10-10",
-    "source": "the three hand sheets and the county draft before (main) and after; make pack-audit on each",
-    "command": "make pack-audit ARGS=pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
-    "method": "each kitchen rect read before and after; the draft's placer output (compound.place) for the gap",
-    "value": {
-      "before_px": [
-        120,
-        100
-      ],
-      "before_ft": [
-        40,
-        33
-      ],
-      "after_px": [
-        72,
-        54
-      ],
-      "after_ft": [
-        24,
-        18
-      ],
-      "band_ft": {
-        "w": [
-          18,
-          24
-        ],
-        "h": [
-          14,
-          18
-        ]
-      },
-      "measured_wing_sq_ft": 440,
-      "draft_kitchen_ft": [
-        20,
-        18
-      ],
-      "draft_gap_before_ft": 7,
-      "draft_gap_after_ft": 0,
-      "draft_house_shift_ft": 7,
-      "corridor_px": {
-        "hayakawa": [
-          12,
-          22
-        ],
-        "ubame": "an L across the 9 ft alley"
-      },
-      "residence_corridor_drawn_ft": {
-        "width": 11,
-        "length": 3
-      }
-    }
-  },
-  "wave114-rooms": {
-    "quantity": "wave 114 (2026-10-10): the residence's labeled zones stand for a house of about six rooms",
-    "observed": "2026-10-10",
-    "source": "docs/buildings.md (the bullet and its claim) and pool/magistracies/*/*.notes.md before (main) and after",
-    "command": "grep -rn '18-25' docs pool/magistracies",
-    "method": "every statement of the residence's room count searched in the procedure, the notes and the sheets",
-    "value": {
-      "before": "~18-25 tatami rooms (the procedure, its claim, Hayakawa's notes)",
-      "after": "about six rooms (0091: the Kuchiba house, 41-74 tsubo)",
-      "sheets_redrawn": 0,
-      "places_changed": 3
-    }
-  },
-  "b1-county-e1": {
-    "quantity": "the county draft's garden zone starts at the kitchen ell's east face; the kitchen well outside it",
-    "observed": "2026-10-10",
-    "verifies": "E1",
-    "subject": "building-review--county-magistracy-example",
-    "answers": "026828713522",
-    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg; l7r/diagram/compound.py the garden CourtZone",
-    "command": "make pack-audit ARGS=pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
-    "method": "the zone's x read against the kitchen's x2 (both 102 ft) after make map; the audit clean",
-    "value": {
-      "garden_x_ft": 102,
-      "kitchen_x2_ft": 102,
-      "well_in_garden": false
-    }
-  },
-  "b1-county-n1": {
-    "quantity": "the notes' band figure",
-    "observed": "2026-10-10",
-    "verifies": "N1",
-    "subject": "building-review--county-magistracy-example",
-    "answers": "026828713522",
-    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
-    "command": "grep -n '76 x 36' pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
-    "method": "read after the edit",
-    "value": {
-      "band": "~76 x 36 ft"
-    }
-  },
-  "b1-county-n2": {
-    "quantity": "the notes' garden figure",
-    "observed": "2026-10-10",
-    "verifies": "N2",
-    "subject": "building-review--county-magistracy-example",
-    "answers": "026828713522",
-    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
-    "command": "grep -n '124 x 46' pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
-    "method": "read after the edit",
-    "value": {
-      "garden": "124 x 46 ft"
-    }
-  },
-  "b1-hayakawa-e1": {
-    "quantity": "the ground the old kitchen left named the kitchen yard",
-    "observed": "2026-10-10",
-    "verifies": "E1",
-    "subject": "building-review--hayakawa-magistracy",
-    "answers": "026828713522",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-    "command": "grep -n 'kitchen yard' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-    "method": "the named yard polygon read; make pack-audit clean",
-    "value": {
-      "yard_px": [
-        146,
-        306,
-        320,
-        450
-      ]
-    }
-  },
-  "b1-hayakawa-e2": {
-    "quantity": "knob 9's line describes the kitchen as drawn",
-    "observed": "2026-10-10",
-    "verifies": "E2",
-    "subject": "building-review--hayakawa-magistracy",
-    "answers": "026828713522",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
-    "command": "grep -n 'an ell projecting south from the west block' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
-    "method": "read after the edit",
-    "value": {
-      "knob9": "an ell, no corridor, door on the south face"
-    }
-  },
-  "b1-hayakawa-e3": {
-    "quantity": "the residence corridor's map note no longer names a kitchen corridor",
-    "observed": "2026-10-10",
-    "verifies": "E3",
-    "subject": "building-review--hayakawa-magistracy",
-    "answers": "026828713522",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
-    "command": "grep -n 'residence corridor' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
-    "method": "read after the edit; the page rebuilt by make map",
-    "value": {
-      "note": "the corridor joins the two halls; the kitchen stands against the west block with no corridor"
-    }
-  },
-  "b1-hayakawa-n2": {
-    "quantity": "the inner entrance's comment and the wave-113 log line",
-    "observed": "2026-10-10",
-    "verifies": "N2",
-    "subject": "building-review--hayakawa-magistracy",
-    "answers": "026828713522",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg; pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
-    "command": "grep -n 'kitchen yard west of the kitchen ell\\|the GUESS 0091' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
-    "method": "read after the edit",
-    "value": {
-      "fixed": 2
-    }
-  },
-  "b1-ubame-e1": {
-    "quantity": "the notes describe the kitchen as drawn",
-    "observed": "2026-10-10",
-    "verifies": "E1",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "026828713522",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
-    "command": "grep -n 'under the family quarters' pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
-    "method": "read after the edit; the page rebuilt by make map",
-    "value": {
-      "places": 2
-    }
-  },
-  "b1-ubame-e2": {
-    "quantity": "the kitchen ell under the family quarters, the lived rooms",
-    "observed": "2026-10-10",
-    "verifies": "E2",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "026828713522",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-    "command": "make pack-audit ARGS=pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-    "method": "the kitchen rect read (x 342-414 under the family quarters' x 342-432); the audit clean",
-    "value": {
-      "kitchen_px": [
-        342,
-        294,
-        72,
-        54
-      ]
-    }
-  },
-  "b1-ubame-e3": {
-    "quantity": "the ground the old kitchen left named the kitchen yard",
-    "observed": "2026-10-10",
-    "verifies": "E3",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "026828713522",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-    "command": "grep -n 'kitchen yard' pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-    "method": "the named yard polygon read",
-    "value": {
-      "yard_px": [
-        205,
-        310,
-        334,
-        445
-      ]
-    }
-  },
-  "b1-ubame-q1": {
-    "quantity": "the kitchen well on the doma",
-    "observed": "2026-10-10",
-    "verifies": "Q1",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "026828713522",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-    "command": "grep -n 'well-1' pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-    "method": "the well's rect read inside the doma's",
-    "value": {
-      "well_px": [
-        345,
-        302,
-        22,
-        22
-      ],
-      "doma_px": [
-        343,
-        295,
-        26,
-        52
-      ]
-    }
-  },
-  "b1-ubame-n1": {
-    "quantity": "the bath's comment current",
-    "observed": "2026-10-10",
-    "verifies": "N1",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "026828713522",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-    "command": "grep -n 'Bath: a small addition' pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-    "method": "read after the edit",
-    "value": {
-      "bath": "10 x 8 ft on the kitchen's south wall"
-    }
-  },
-  "b2-ubame-e1": {
-    "quantity": "the karo's house 12 px east, a 4 ft alley between it and the bath",
-    "observed": "2026-10-10",
-    "verifies": "E1",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "09b4e0ec93b5",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-    "command": "make pack-audit ARGS=pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-    "method": "the bath's x2 (372) and the karo's house's x (388) read: 16 px, a 4 ft alley plus the outlines; the audit clean",
-    "value": {
-      "bath_x2_px": 372,
-      "karo_x_px": 388,
-      "alley_ft": 4
-    }
-  },
-  "b2-ubame-n1": {
-    "quantity": "the postern's and the residence group's comments current",
-    "observed": "2026-10-10",
-    "verifies": "N1",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "09b4e0ec93b5",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-    "command": "grep -n 'kitchen yard west of the kitchen ell\\|with no corridor (feature 374' pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-    "method": "read after the edit",
-    "value": {
-      "fixed": 3
-    }
-  },
-  "b2-hayakawa-e1": {
-    "quantity": "the notes state the house's drawn size and no longer claim six rooms for it",
-    "observed": "2026-10-10",
-    "verifies": "E1",
-    "subject": "building-review--hayakawa-magistracy",
-    "answers": "09b4e0ec93b5",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
-    "command": "grep -n '145 tsubo' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
-    "method": "read after the edit",
-    "value": {
-      "house_tsubo": 145,
-      "house_sq_ft": 5150
-    }
-  },
-  "b2-hayakawa-n1": {
-    "quantity": "the postern's, the karo's door's, its tub's and the west block's comments current",
-    "observed": "2026-10-10",
-    "verifies": "N1",
-    "subject": "building-review--hayakawa-magistracy",
-    "answers": "09b4e0ec93b5",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-    "command": "grep -n 'kitchen yard' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-    "method": "read after the edit",
-    "value": {
-      "fixed": 4
-    }
-  },
-  "b2-hayakawa-n2": {
-    "quantity": "knob 9: the kitchen door opens onto the lane into the kitchen yard",
-    "observed": "2026-10-10",
-    "verifies": "N2",
-    "subject": "building-review--hayakawa-magistracy",
-    "answers": "09b4e0ec93b5",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
-    "command": "grep -n 'the lane that runs west into the kitchen yard' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
-    "method": "read after the edit",
-    "value": {
-      "wording": "the lane that runs west into the kitchen yard"
-    }
-  },
-  "sc003-375-first-three-tasks": {
-    "quantity": "375's SC-003 over 374's T01-T03 (waves 112-114): red gates from a cause the preflight checks, pages re-checked while a check on them was outstanding, plan-review BLOCKs on a decision a decision preflight had ruled",
-    "observed": "2026-10-10",
-    "source": "make feature-report F=374 (the event log, the run log), the review ledger, plan-review.json",
-    "command": "make feature-report F=374",
-    "method": "the report's gates and tripwires read; each red gate's log read for its cause (done1.log: the tree moved during the run; done3.log: tests/tooling/test_ledger_lint.py on the ledger's cost cells) - neither is a preflight step (derived files, the record, its pointers, make quick, the changed engine lines); the freeze's state (.git/checks-open.json) refused one re-dispatch into a running round and no edit to a frozen page; plan-review.json holds no BLOCKED verdict",
-    "value": {
-      "red_gates": 2,
-      "red_from_a_preflight_cause": 0,
-      "pages_rechecked_while_a_check_ran": 0,
-      "plan_review_blocks_on_a_ruled_decision": 0,
-      "met": true
-    }
-  },
-  "sc004-375-dispatches-per-row": {
-    "quantity": "375's SC-004: agent dispatches per closed row of 374's T01-T03, beside 372's ~10 (375's 'Why', an estimate)",
-    "observed": "2026-10-10",
-    "source": "this session's dispatches, counted by check from the event log (refused dispatches not counted)",
-    "command": "make feature-report F=374",
-    "method": "launched agents counted per check; rows closed by T01-T03: engawa, kitchen, kitchen corridor (renamed 'kitchen abuts the house, no corridor'), residence rooms = 4",
-    "value": {
-      "rows_closed": 4,
-      "dispatches": {
-        "spec-fidelity (spec, plan, decision preflights)": 9,
-        "impl-drift": 5,
-        "claims and modal triages": 6,
-        "quote-check": 3,
-        "record-format": 3,
-        "modal-form": 2,
-        "modal-research": 3,
-        "modal-depiction": 7,
-        "glyph-check": 5,
-        "building-review": 8,
-        "round-arbiter": 5,
-        "escalation-check": 4
-      },
-      "total": 60,
-      "per_row": 15.0,
-      "checks_only_per_row": 10.5,
-      "beside_372": 10,
-      "reading": "higher than 372's ~10: three applied EDIT blocks each re-owed the check that proposed them (a second round per pop-up, three to the arbiter), one sentence on 0091's drawing page owed 16 pop-ups their triage twice, the building reviews ran three rounds on two sheets, and first use of 375 met four tooling gaps (each fixed with its test)"
-    }
-  },
-  "kuwabata-board-r1-F1-seat": {
-    "subject": "glyph-check--notice-board--kuwabata",
-    "answers": "a5561194a0bd",
-    "observed": "2026-10-11",
-    "source": "pool/hamlets/kuwabata/kuwabata.json, read with bridges_on_a_way and kosatsuba_affordances from l7r/diagram/settlement/structures/fixtures/_helpers.py",
-    "method": "the bridgehead seat is offered only where a lane or road comes within KOSATSUBA_ANCHOR_BAND_FT of a bridge; Kuwabata rerolled with make map; tests/settlement/structures/test_fixtures.py holds the rule",
-    "verifies": "F1",
-    "quantity": "Kuwabata's rolled board seat after the fix (a bridge-end seat was 884 ft from its bridge in round 1)",
-    "value": "center",
-    "unit": "seat"
-  },
-  "kuwabata-board-r1-F2-reached": {
-    "subject": "glyph-check--notice-board--kuwabata",
-    "answers": "a5561194a0bd",
-    "observed": "2026-10-11",
-    "source": "pool/hamlets/kuwabata/kuwabata.json, read with bridges_on_a_way and kosatsuba_affordances from l7r/diagram/settlement/structures/fixtures/_helpers.py",
-    "method": "the bridgehead seat is offered only where a lane or road comes within KOSATSUBA_ANCHOR_BAND_FT of a bridge; Kuwabata rerolled with make map; tests/settlement/structures/test_fixtures.py holds the rule",
-    "verifies": "F2",
-    "quantity": "bridges a lane or road reaches on Kuwabata, which gate the bridge-end seat",
-    "value": 0,
-    "unit": "bridges of 6"
-  },
-  "batch3-cpu-interleaved": {
-    "quantity": "user CPU seconds of the reference hamlet, base (merge base ab378e08) against head, interleaved, 3 repeats: seeds 4 and 25 at 10 households, 39 and 47 at 20",
-    "value": {
-      "base_total": 186.6,
-      "head_total": 169.3,
-      "change": "-9%"
-    },
-    "unit": "s",
-    "observed": "2026-10-11",
-    "source": "scratchpad cpu-pair.txt / cpu-pair20.txt: make hamlet --no-render in a detached worktree at the merge base and in the clone, alternating, timed with bash `times` (children's user CPU)",
-    "method": "three wall-clock bookend pairs of the same code read 24.1 s, 24.0 s and 42.5 s for the identical end leg at a host load of 5-8 on 22 cores; CPU time interleaved removes the drift. Single runs scatter about 30%; the head is faster or level on every seed's mean except 47 at 20 households (+11%)"
-  },
-  "batch3-open-rows": {
-    "quantity": "open rows of 328's ranking at batch 3's close (no wave, not deferred), and how many of them are E3 DRIFTED",
-    "value": "183 open, 132 E3 DRIFTED",
-    "unit": "rows",
-    "observed": "2026-10-12",
-    "source": "specs/328-match-the-research/ranking.json rebuilt by audit/merge.py after waves 119-121's three E0 rows were marked in audit/waves.json",
-    "command": "python3 -c \"import json; r=json.load(open('specs/328-match-the-research/ranking.json')); o=[x for x in r if not x.get('wave') and x.get('scope')!='deferred']; print(len(o), 'open,', sum(1 for x in o if x.get('tier')=='E3' and x.get('verdict')=='DRIFTED'), 'E3 DRIFTED')\"",
-    "method": "the count the plan review of 2026-10-11 used, re-run on the rebuilt ranking"
-  },
-  "batch3-perf-audit-legs": {
-    "quantity": "perf-audit's seven alternated make-perf legs, base (merge base ab378e08) against head (e9491c2a8), in fresh detached worktrees: the reference totals, and (hinterland+woodland) and web as shares of the rest",
-    "value": {
-      "base_reference_s": [
-        37.6,
-        17.3,
-        18.6
-      ],
-      "head_reference_s": [
-        19.7,
-        21.5,
-        18.0,
-        25.6
-      ],
-      "hinterland_woodland_over_rest_base": "0.223-0.236",
-      "hinterland_woodland_over_rest_head": "0.241-0.252",
-      "web_over_rest_mean": {
-        "base": 0.231,
-        "head": 0.231
-      },
-      "wood_rule_cost": "about +8% of hinterland+woodland, about +1.2% of the total"
-    },
-    "unit": "s",
-    "varies": "timing; host load 5-8 on 22 shared cores at the time",
-    "observed": "2026-10-11",
-    "source": "specs/374-match-the-research-continued/perf-audit-legs/*aud374*.json (3 base legs, 4 head legs); perf-audit's record dev/perf-log/20261011T105045Z-review-374-confirmation-local-diagram-backlog.json",
-    "command": "ls specs/374-match-the-research-continued/perf-audit-legs/ | grep -c aud374.*json",
-    "method": "perf-audit ran make perf alternately in two detached worktrees; the stage shares are each leg's stage seconds over the leg's untouched stages, which move with the load. The command re-counts the legs (7); the timings are not re-runnable as recorded"
-  },
-  "batch4-open-rows": {
-    "quantity": "open rows of 328's ranking at batch 4's close (no wave, not deferred), and how many of them are E3 DRIFTED",
-    "value": "179 open, 122 E3 DRIFTED",
-    "unit": "rows",
-    "observed": "2026-10-12",
-    "source": "specs/328-match-the-research/ranking.json rebuilt by audit/merge.py after waves 122-126's rows were marked in audit/waves.json; the eight rows batch 4's checks filed (found-wave126) entered at the top",
-    "command": "python3 -c \"import json; r=json.load(open('specs/328-match-the-research/ranking.json')); o=[x for x in r if not x.get('wave') and x.get('scope')!='deferred']; print(len(o), 'open,', sum(1 for x in o if x.get('tier')=='E3' and x.get('verdict')=='DRIFTED'), 'E3 DRIFTED')\"",
-    "method": "the count the plan review of 2026-10-11 used, re-run on the rebuilt ranking"
-  },
-  "b4-hay-e1": {
-    "quantity": "the torii's beam before the shrine's west door",
-    "observed": "2026-10-12",
-    "verifies": "E1",
-    "subject": "building-review--hayakawa-magistracy",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "beam x 749 against the door face x 773.5, after make map",
-    "value": {
-      "gap_ft": 8.2,
-      "band_ft": [
-        5,
-        12
-      ]
-    }
-  },
-  "b4-hay-e2": {
-    "quantity": "a maids' room under the main roof at the kitchen end",
-    "observed": "2026-10-12",
-    "verifies": "E2",
-    "subject": "building-review--hayakawa-magistracy",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the room rect maids-room-1 (36 x 36 px) in the west block over the kitchen ell, tagged servants' quarters",
-    "value": {
-      "maids_room": true,
-      "size_ft": [
-        12,
-        12
-      ]
-    }
-  },
-  "b4-hay-e3": {
-    "quantity": "the notes, map notes and comments brought to the drawing",
-    "observed": "2026-10-12",
-    "verifies": "E3",
-    "subject": "building-review--hayakawa-magistracy",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md; pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "each line the review named rewritten: knob 5, knob 9 woodshed, the torii line, the privy line, the review log, the map notes, the north-wall comment",
-    "value": {
-      "lines_rewritten": 8
-    }
-  },
-  "b4-hay-n1": {
-    "quantity": "the rear-yard privy's users labeled a GUESS",
-    "observed": "2026-10-12",
-    "verifies": "N1",
-    "subject": "building-review--hayakawa-magistracy",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the comment reads 'who uses it a GUESS'",
-    "value": {
-      "labeled": true
-    }
-  },
-  "b4-hay-n2": {
-    "quantity": "the servants' range's 54 ft length labeled a GUESS",
-    "observed": "2026-10-12",
-    "verifies": "N2",
-    "subject": "building-review--hayakawa-magistracy",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the range comment labels its length a GUESS",
-    "value": {
-      "labeled": true
-    }
-  },
-  "b4-cty-e1": {
-    "quantity": "the service gate's approach",
-    "observed": "2026-10-12",
-    "verifies": "E1",
-    "subject": "building-review--county-magistracy-example",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "pack_audit postern_approach (written red on the old draft) OK; the gate at 221 ft opens off the cart yard",
-    "value": {
-      "postern_approach": "OK",
-      "gate_ft": 221
-    }
-  },
-  "b4-cty-e2": {
-    "quantity": "the barracks divided into dwellings",
-    "observed": "2026-10-12",
-    "verifies": "E2",
-    "subject": "building-review--county-magistracy-example",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "four door marks part-of barracks, three bay walls",
-    "value": {
-      "doors": 4,
-      "bay_walls": 3
-    }
-  },
-  "b4-cty-e3": {
-    "quantity": "no lodgers' privy by the main gate",
-    "observed": "2026-10-12",
-    "verifies": "E3",
-    "subject": "building-review--county-magistracy-example",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "every lodgers' latrine more than 30 ft along the wall from the main gate's opening (tests/test_compound_service.py)",
-    "value": {
-      "gate_privy_ft": 30,
-      "stable_privy": "in the gap west of the stables"
-    }
-  },
-  "b4-cty-e4": {
-    "quantity": "the storehouses' doors",
-    "observed": "2026-10-12",
-    "verifies": "E4",
-    "subject": "building-review--county-magistracy-example",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "two door marks part-of storehouse (DOOR_KINDS)",
-    "value": {
-      "doors": 2
-    }
-  },
-  "b4-cty-e5": {
-    "quantity": "the notes and code comments brought to the drawing",
-    "observed": "2026-10-12",
-    "verifies": "E5",
-    "subject": "building-review--county-magistracy-example",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md; l7r/diagram/compound_example.py",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the house-size list, the carter's route, R07, staff housing, the vegetable garden, the middle gate and the lesser gates rewritten; the kitchen comments",
-    "value": {
-      "lines_rewritten": 9
-    }
-  },
-  "b4-cty-e6": {
-    "quantity": "the servants' route to the kitchen",
-    "observed": "2026-10-12",
-    "verifies": "E6",
-    "subject": "building-review--county-magistracy-example",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the maids' room (servants' quarters, captioned maids' room) at the residence's kitchen end; the street row the menservants'",
-    "value": {
-      "maids_room": true
-    }
-  },
-  "b4-cty-q1": {
-    "quantity": "the servants' row's entry form",
-    "observed": "2026-10-12",
-    "verifies": "Q1",
-    "subject": "building-review--county-magistracy-example",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg; l7r/diagram/compound_example.py",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "five dwellings a door each, the form rolled per compound (SERVANTS_FORM); CORRECTED by building-review round 4: the sheet drew four, the west dwelling's door unseated - see b4-cty-r4-e1",
-    "value": {
-      "doors": 5,
-      "form": "a door to each dwelling"
-    }
-  },
-  "b4-cty-q2": {
-    "quantity": "where the grooms sleep",
-    "observed": "2026-10-12",
-    "verifies": "Q2",
-    "subject": "building-review--county-magistracy-example",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the grooms in the stable's grooms' room (research 0108), not the row",
-    "value": {
-      "grooms": "stable"
-    }
-  },
-  "b4-cty-n1": {
-    "quantity": "the long-house's bay walls",
-    "observed": "2026-10-12",
-    "verifies": "N1",
-    "subject": "building-review--county-magistracy-example",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "four solid bay walls in the retainers' quarters group",
-    "value": {
-      "bay_walls": 4
-    }
-  },
-  "b4-ub-e1": {
-    "quantity": "the band behind the west block",
-    "observed": "2026-10-12",
-    "verifies": "E1",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the block, kitchen, bath and tubs 36 px north; pack-audit's band 140 x 11 ft from the wall's centerline, ~9 ft from its inner face",
-    "value": {
-      "band_ft": [
-        140,
-        11
-      ]
-    }
-  },
-  "b4-ub-e2": {
-    "quantity": "the notes brought to the drawing",
-    "observed": "2026-10-12",
-    "verifies": "E2",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the stable log, the servants' and barracks lines, the abutting rowhouse, the barracks' court, the coverage figures rewritten",
-    "value": {
-      "lines_rewritten": 7
-    }
-  },
-  "b4-ub-e3": {
-    "quantity": "the stable door clear of the kennel",
-    "observed": "2026-10-12",
-    "verifies": "E3",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the door y 694-706 against the kennel's top at 706",
-    "value": {
-      "door_y": [
-        694,
-        706
-      ],
-      "kennel_y": 706
-    }
-  },
-  "b4-ub-q1": {
-    "quantity": "the servants' way to the kitchen",
-    "observed": "2026-10-12",
-    "verifies": "Q1",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "a maids' room at the kitchen end of the family quarters, the gate range's room the menservants'",
-    "value": {
-      "maids_room": true
-    }
-  },
-  "b4-ub-q2": {
-    "quantity": "where the maids sleep",
-    "observed": "2026-10-12",
-    "verifies": "Q2",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the maids' room under the main roof (research 0115's Aizu house; a GUESS)",
-    "value": {
-      "maids_room": true
-    }
-  },
-  "b4-hoshi-e1": {
-    "quantity": "the sacred tree's clearance",
-    "observed": "2026-10-12",
-    "verifies": "E1",
-    "subject": "building-review--hoshigaoka-shrine",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the tree at (586,800) r45: 13.9 ft from the nearest crown of the wood, 4.1 ft off the arch beams' east ends",
-    "value": {
-      "wood_gap_ft": 13.9,
-      "beam_gap_ft": 4.1
-    }
-  },
-  "b4-hoshi-e2": {
-    "quantity": "the dwelling's door in the notes",
-    "observed": "2026-10-12",
-    "verifies": "E2",
-    "subject": "building-review--hoshigaoka-shrine",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.notes.md",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the genkan and tub map notes name the south door",
-    "value": {
-      "door": "south"
-    }
-  },
-  "b4-hoshi-e3": {
-    "quantity": "the clearing pocket behind the dwelling",
-    "observed": "2026-10-12",
-    "verifies": "E3",
-    "subject": "building-review--hoshigaoka-shrine",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the clearing's back line at the eaves (y ~431-433) west of the sanctuary's lobe",
-    "value": {
-      "back_line_y": [
-        431,
-        433
-      ]
-    }
-  },
-  "b4-hoshi-n1": {
-    "quantity": "the notes' figures after the move",
-    "observed": "2026-10-12",
-    "verifies": "N1",
-    "subject": "building-review--hoshigaoka-shrine",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.notes.md",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the privy ~50 ft from the sanctuary, the service way 18 ft from the basin, the well behind the kitchen and the monk's rooms",
-    "value": {
-      "lines_rewritten": 4
-    }
-  },
-  "b4-och-e1": {
-    "quantity": "the servants' route to the kitchen",
-    "observed": "2026-10-12",
-    "verifies": "E1",
-    "subject": "building-review--ochiba-magistracy",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "a maids' room at the kitchen end of the family row; the street range the menservants', the grooms in the stable's room",
-    "value": {
-      "maids_room": true
-    }
-  },
-  "b4-och-e2": {
-    "quantity": "the notes brought to the drawing",
-    "observed": "2026-10-12",
-    "verifies": "E2",
-    "subject": "building-review--ochiba-magistracy",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "knob 5, knob 9's privies and night-soil route, the rear yard map note rewritten",
-    "value": {
-      "lines_rewritten": 4
-    }
-  },
-  "b4-och-q1": {
-    "quantity": "where the maids sleep",
-    "observed": "2026-10-12",
-    "verifies": "Q1",
-    "subject": "building-review--ochiba-magistracy",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the maids' room under the main roof (a GUESS on the Aizu house)",
-    "value": {
-      "maids_room": true
-    }
-  },
-  "b4-och-q2": {
-    "quantity": "the service passage through the range labeled",
-    "observed": "2026-10-12",
-    "verifies": "Q2",
-    "subject": "building-review--ochiba-magistracy",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the range comment labels the service-gate cut a GUESS by analogy",
-    "value": {
-      "labeled": true
-    }
-  },
-  "b4-och-n1": {
-    "quantity": "the range's length one way",
-    "observed": "2026-10-12",
-    "verifies": "N1",
-    "subject": "building-review--ochiba-magistracy",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg; pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "64 ft of building, 70.7 ft over all, in both",
-    "value": {
-      "building_ft": 64,
-      "over_all_ft": 70.7
-    }
-  },
-  "b4-och-n3": {
-    "quantity": "the stable's log line",
-    "observed": "2026-10-12",
-    "verifies": "N3",
-    "subject": "building-review--ochiba-magistracy",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "18 x 24 ft, the grooms' room across the passage",
-    "value": {
-      "size_ft": [
-        18,
-        24
-      ]
-    }
-  },
-  "b4-gstore-f1": {
-    "quantity": "the storehouses' doors",
-    "observed": "2026-10-12",
-    "verifies": "F1",
-    "subject": "glyph-check--storehouse--county-magistracy-example",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "two door blocks part-of storehouse",
-    "value": {
-      "doors": 2
-    }
-  },
-  "b4-gstab-f4": {
-    "quantity": "the notes' grooms' room",
-    "observed": "2026-10-12",
-    "verifies": "F4",
-    "subject": "glyph-check--stables--hayakawa-magistracy",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the log says across the passage",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b4-gstab-f5": {
-    "quantity": "the tub comment's door wording",
-    "observed": "2026-10-12",
-    "verifies": "F5",
-    "subject": "glyph-check--stables--hayakawa-magistracy",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the comment reads 'onto the outer court by the stable well'",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b4-gstab-f6": {
-    "quantity": "the stale 28 x 16 ft comment",
-    "observed": "2026-10-12",
-    "verifies": "F6",
-    "subject": "glyph-check--stables--hayakawa-magistracy",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the comment reads 18 x 24 ft since wave 126",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b4-sry-q1": {
-    "quantity": "the rear yard's size labeled a GUESS",
-    "observed": "2026-10-12",
-    "verifies": "Q1",
-    "subject": "size-audit--rear-yard",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the notes record the 18-45 by 10-30 ft band as a GUESS",
-    "value": {
-      "band_ft": {
-        "w": [
-          18,
-          45
-        ],
-        "h": [
-          10,
-          30
-        ]
-      }
-    }
-  },
-  "b4-sry-b1": {
-    "quantity": "the band recorded",
-    "observed": "2026-10-12",
-    "verifies": "B1",
-    "subject": "size-audit--rear-yard",
-    "answers": "cf1bcdd03a7d",
-    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the band in the rear-yard knob of the notes",
-    "value": {
-      "band_ft": {
-        "w": [
-          18,
-          45
-        ],
-        "h": [
-          10,
-          30
-        ]
-      }
-    }
-  },
-  "b4-sst-b1": {
-    "quantity": "the storehouse band recorded",
-    "observed": "2026-10-12",
-    "verifies": "B1",
-    "subject": "size-audit--storehouse",
-    "answers": "cf1bcdd03a7d",
-    "source": "l7r/diagram/buildings/types.json",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the storehouse item's band_ft w 12-20, h 9-16; size_bands OK on every sheet",
-    "value": {
-      "band_ft": {
-        "w": [
-          12,
-          20
-        ],
-        "h": [
-          9,
-          16
-        ]
-      }
-    }
-  },
-  "b4-hoshi-e1-frame": {
-    "quantity": "the sacred tree's crown inside the frame",
-    "observed": "2026-10-12",
-    "verifies": "E1",
-    "subject": "building-review--hoshigaoka-shrine",
-    "answers": "fb17f9739a98",
-    "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg",
-    "command": "make pack-audit ARGS=pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg",
-    "method": "the crown's foot (cy 800 + r 45 = y 845) against the viewBox's foot (110 + 738 = 848)",
-    "value": {
-      "crown_foot_y": 845,
-      "frame_foot_y": 848
-    }
-  },
-  "b4-hoshi-n1-comments": {
-    "quantity": "the SVG comments on the footpath and the well",
-    "observed": "2026-10-12",
-    "verifies": "N1",
-    "subject": "building-review--hoshigaoka-shrine",
-    "answers": "fb17f9739a98",
-    "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg",
-    "command": "grep",
-    "method": "the footpath runs 'behind the kitchen and the monk's rooms'; the well '108 ft behind the building'",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b4-och-r2-e1": {
-    "quantity": "Ochiba's notes and comments against the drawing (round 2)",
-    "observed": "2026-10-12",
-    "verifies": "E1",
-    "subject": "building-review--ochiba-magistracy",
-    "answers": "fb17f9739a98",
-    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md; pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
-    "command": "grep",
-    "method": "knob 9's rear yard runs west of the storehouses; the residence 'the family's and its maids''; the residence comment; the rear-strip comment no longer puts servants on the north wall",
-    "value": {
-      "lines_rewritten": 4
-    }
-  },
-  "b4-och-r2-n2": {
-    "quantity": "the maids' room's grounds",
-    "observed": "2026-10-12",
-    "verifies": "N2",
-    "subject": "building-review--ochiba-magistracy",
-    "answers": "fb17f9739a98",
-    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
-    "command": "grep",
-    "method": "the comment cites 0091's Takayama 'rooms for the yonin and maids'; size and seat GUESSES",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b4-och-r2-n3": {
-    "quantity": "the residence map note names the maids' room",
-    "observed": "2026-10-12",
-    "verifies": "N3",
-    "subject": "building-review--ochiba-magistracy",
-    "answers": "fb17f9739a98",
-    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md",
-    "command": "grep",
-    "method": "the residence map note names the maids' room at the kitchen end of the back row",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b4-cty-r4-e1": {
-    "quantity": "a door to every dwelling of the servants' row",
-    "observed": "2026-10-12",
-    "verifies": "E1",
-    "subject": "building-review--county-magistracy-example",
-    "answers": "fb17f9739a98",
-    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg; l7r/diagram/compound_example.py servants_row",
-    "command": "make test-file FILE=tests/test_compound_service.py",
-    "method": "the west dwelling's door at frac 0.15 (its approach clear of the servants' privy); five door marks part-of servants' quarters, counted on the regenerated sheet and held by the test",
-    "value": {
-      "doors": 5
-    }
-  },
-  "b4-cty-r4-n1": {
-    "quantity": "the notes' cart yard size",
-    "observed": "2026-10-12",
-    "verifies": "N1",
-    "subject": "building-review--county-magistracy-example",
-    "answers": "fb17f9739a98",
-    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
-    "command": "grep",
-    "method": "the guess list says 37 x 20 ft, as the program and the sheet",
-    "value": {
-      "size_ft": [
-        37,
-        20
-      ]
-    }
-  },
-  "b5-hay-n1": {
-    "quantity": "the maids' room clear of the residence corridor's west mouth",
-    "observed": "2026-10-12",
-    "verifies": "N1",
-    "subject": "building-review--hayakawa-magistracy",
-    "answers": "fb17f9739a98",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the room's rect x 376-412 against the corridor's mouth at x 448, y 244-278",
-    "value": {
-      "room_x2_px": 412,
-      "corridor_x_px": 448,
-      "clear_ft": 12.0
-    }
-  },
-  "b5-hay-n2": {
-    "quantity": "the servants' quarters map note's clause order",
-    "observed": "2026-10-12",
-    "verifies": "N2",
-    "subject": "building-review--hayakawa-magistracy",
-    "answers": "fb17f9739a98",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the notes line reads 'the menservants lodge in the range on the street front, west of the gate range, its doors on the outer court by the stable; the grooms keep the stable's own room'",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b5-ub-n1": {
-    "quantity": "the rear-yard comment's stale clause",
-    "observed": "2026-10-12",
-    "verifies": "N1",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "fb17f9739a98",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "grep 'reaches west' in the sheet finds nothing; the rear-yard comment describes the yard as drawn",
-    "value": {
-      "stale_lines": 0
-    }
-  },
-  "b5-cty-e1": {
-    "quantity": "the way west past the stable well",
-    "observed": "2026-10-12",
-    "verifies": "E1",
-    "subject": "building-review--county-magistracy-example",
-    "answers": "bed717b195bb",
-    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the hearing court 26 ft deep, the stable well 6 ft out: the gap between them measured on the draft; tests/test_compound_service.py holds 6 ft or more",
-    "value": {
-      "way_ft": 8.3
-    }
-  },
-  "b5-cty-e2": {
-    "quantity": "the stables' privy against the south wall",
-    "observed": "2026-10-12",
-    "verifies": "E2",
-    "subject": "building-review--county-magistracy-example",
-    "answers": "bed717b195bb",
-    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the privy at x 64-69, y 192-197 ft, west of the stable, its hatch drawn; tests/test_compound_service.py holds it",
-    "value": {
-      "flush": true,
-      "hatch": true
-    }
-  },
-  "b5-cty-e3": {
-    "quantity": "the inner entrance in one room",
-    "observed": "2026-10-12",
-    "verifies": "E3",
-    "subject": "building-review--county-magistracy-example",
-    "answers": "bed717b195bb",
-    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the door at x 115.7-121.7 ft, inside the inner rooms (x 112-138)",
-    "value": {
-      "one_room": true
-    }
-  },
-  "b5-hay-r6-e1": {
-    "quantity": "the grove's bare ground",
-    "observed": "2026-10-12",
-    "verifies": "E1",
-    "subject": "building-review--hayakawa-magistracy",
-    "answers": "bed717b195bb",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the pond garden runs east to x 875 and north before the reception's east veranda; pack-audit's largest vacancies are the named kitchen yard, forecourt strip and rear yard",
-    "value": {
-      "largest_vacancy_sqft": 3802
-    }
-  },
-  "b5-hay-r6-e2": {
-    "quantity": "the notes against the drawing",
-    "observed": "2026-10-12",
-    "verifies": "E2",
-    "subject": "building-review--hayakawa-magistracy",
-    "answers": "bed717b195bb",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "knob 9's arch, the torii line, the torii map note and a review-log entry rewritten to the corner shrine, its south door and its tree",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b5-hay-r6-n1": {
-    "quantity": "the shrine's tub outside the arch's span",
-    "observed": "2026-10-12",
-    "verifies": "N1",
-    "subject": "building-review--hayakawa-magistracy",
-    "answers": "bed717b195bb",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the tub at (877,186) east of the arch's east post (871.9-875.5)",
-    "value": {
-      "outside": true
-    }
-  },
-  "b5-hoshi-e1": {
-    "quantity": "the sanctuary inside its clearing",
-    "observed": "2026-10-12",
-    "verifies": "E1",
-    "subject": "building-review--hoshigaoka-shrine",
-    "answers": "bed717b195bb",
-    "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the clearing's lobe at x 470-537.5 against the sanctuary's plinth at x 475-537",
-    "value": {
-      "inside": true
-    }
-  },
-  "b5-hoshi-q1": {
-    "quantity": "the three-bay sanctuary's depth labeled",
-    "observed": "2026-10-12",
-    "verifies": "Q1",
-    "subject": "building-review--hoshigaoka-shrine",
-    "answers": "bed717b195bb",
-    "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.notes.md",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "notes item 9 labels the 6 ft depth a GUESS; the research pass filed as a row",
-    "value": {
-      "labeled": true
-    }
-  },
-  "b5-hoshi-n1": {
-    "quantity": "the privy's distance in the notes",
-    "observed": "2026-10-12",
-    "verifies": "N1",
-    "subject": "building-review--hoshigaoka-shrine",
-    "answers": "bed717b195bb",
-    "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.notes.md",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "notes line 18 reads about 44 ft",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b5-och-e1": {
-    "quantity": "the notes against the drawing",
-    "observed": "2026-10-12",
-    "verifies": "E1",
-    "subject": "building-review--ochiba-magistracy",
-    "answers": "bed717b195bb",
-    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "knob 7's workshop, the vegetable garden, rear yard and threshold-stone map notes, the inner-garden comment and a review-log entry rewritten",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b5-och-e2": {
-    "quantity": "the second kami's roll recorded",
-    "observed": "2026-10-12",
-    "verifies": "E2",
-    "subject": "building-review--ochiba-magistracy",
-    "answers": "bed717b195bb",
-    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "knob 9 records the roll ochiba-magistracy:second kami: myobu = one hall",
-    "value": {
-      "recorded": true
-    }
-  },
-  "b5-och-n1": {
-    "quantity": "the rear yard to the hall",
-    "observed": "2026-10-12",
-    "verifies": "N1",
-    "subject": "building-review--ochiba-magistracy",
-    "answers": "bed717b195bb",
-    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the rear-yard polygon carried to x 890 and its notes",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b5-ub-e1": {
-    "quantity": "the grove's bare ground",
-    "observed": "2026-10-12",
-    "verifies": "E1",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "bed717b195bb",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the inner garden runs to the border wall (x 1060); the largest vacancy left is the named kitchen yard, then the shrine's own ground 77 x 37 ft with its way",
-    "value": {
-      "largest_vacancy_sqft": 3345
-    }
-  },
-  "b5-ub-e2": {
-    "quantity": "the roll's key",
-    "observed": "2026-10-12",
-    "verifies": "E2",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "bed717b195bb",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the comment keys on ubame-magistracy, which rolls one hall as drawn; the notes record it",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b5-ub-e3": {
-    "quantity": "the notes against the drawing",
-    "observed": "2026-10-12",
-    "verifies": "E3",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "bed717b195bb",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the altar, grove, way, vacancy, named-ground and map-note lines and a review-log entry rewritten",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b5-ub-q1": {
-    "quantity": "a way to the shrine",
-    "observed": "2026-10-12",
-    "verifies": "Q1",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "bed717b195bb",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "a trodden way from the open ground east of the reception along the garden's north edge and under the arch",
-    "value": {
-      "drawn": true
-    }
-  },
-  "b5r2-hay-e1": {
-    "quantity": "the shrine's tub off the wall",
-    "observed": "2026-10-12",
-    "verifies": "E1",
-    "subject": "building-review--hayakawa-magistracy",
-    "answers": "27996c2d35fc",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the tub at (868,185), 2 ft below the hall's eaves at its south-east corner, clear of the wall's ink (to x 875.5) and the torii beam (y 200); fire_water_adrift and fire_water_distribution OK",
-    "value": {
-      "clear": true
-    }
-  },
-  "b5r2-hay-n1": {
-    "quantity": "the notes' north-east corner",
-    "observed": "2026-10-12",
-    "verifies": "N1",
-    "subject": "building-review--hayakawa-magistracy",
-    "answers": "27996c2d35fc",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "line 38 now reads 'the east end of the strip they free'",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b5r2-hay-n2": {
-    "quantity": "the tub's comment",
-    "observed": "2026-10-12",
-    "verifies": "N2",
-    "subject": "building-review--hayakawa-magistracy",
-    "answers": "27996c2d35fc",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the comment reads 'at its south-east corner, inside the arch, beside its south door'",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b5r2-ub-e1": {
-    "quantity": "the band east of the reception",
-    "observed": "2026-10-12",
-    "verifies": "E1",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "27996c2d35fc",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the garden's north edge raised to y 263 for x 860-1060, 8 ft below the arch; pack-audit's largest vacancies are the named kitchen yard, the rear-yard band and the west alley",
-    "value": {
-      "largest_vacancy_sqft": 3345
-    }
-  },
-  "b5r2-ub-e2": {
-    "quantity": "notes line 33",
-    "observed": "2026-10-12",
-    "verifies": "E2",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "27996c2d35fc",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "it reads 'a modest standalone hall in a corner beside its tree, the wood's kami at a second altar inside it'",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b5r2-ub-n1": {
-    "quantity": "notes line 14's grove",
-    "observed": "2026-10-12",
-    "verifies": "N1",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "27996c2d35fc",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "'a mature grove' now 'a wide inner garden'",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b5r2-ub-n2": {
-    "quantity": "the way painted over its caption",
-    "observed": "2026-10-12",
-    "verifies": "N2",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "27996c2d35fc",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the way drawn before the shrine group, so the caption paints over it; the render reads INARI SHRINE whole",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b5r2-cty-n1": {
-    "quantity": "the notes' hearing court size",
-    "observed": "2026-10-12",
-    "verifies": "N1",
-    "subject": "building-review--county-magistracy-example",
-    "answers": "27996c2d35fc",
-    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the guess list reads 80 x 26 ft with the 6 ft cut recorded",
-    "value": {
-      "fixed": true
-    }
-  },
-  "batch5-open-rows": {
-    "quantity": "open rows of 328's ranking at batch 5's close (no wave, not deferred), and how many of them are E3 DRIFTED",
-    "value": "165 open, 117 E3 DRIFTED",
-    "unit": "rows",
-    "observed": "2026-10-12",
-    "source": "specs/328-match-the-research/ranking.json",
-    "command": "python3 audit/merge.py audit . (from specs/328-match-the-research), then counted",
-    "method": "rows 0-12 and 18 of batch 4's open list marked waves 127-131 in waves.json, the ranking rebuilt"
-  },
-  "b6-ub-n3": {
-    "quantity": "the shrine way start",
-    "observed": "2026-10-12",
-    "verifies": "N3",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "27996c2d35fc",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the way path now starts at x 855, east of the reception privy (x 838-853), not inside it",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b6-ub-n4": {
-    "quantity": "notes corridor line",
-    "observed": "2026-10-12",
-    "verifies": "N4",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "27996c2d35fc",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
-    "command": "grep -n \"covered corridor joins\" <the notes>",
-    "method": "the stale sentence (a corridor joining the kitchen across the service alley) is gone from the notes",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b6r2-cme-e1": {
-    "quantity": "the stables latrine hatch",
-    "observed": "2026-10-12",
-    "verifies": "E1",
-    "subject": "building-review--county-magistracy-example",
-    "answers": "dca6ffdfd7c0",
-    "source": "l7r/diagram/compound_parts.py",
-    "command": "make test-file FILE=tests/test_compound_service.py",
-    "method": "the hatch reach 3 ft from the wall face; the stables latrine draws its hatch; red at the old 2.5 ft reach",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b6r2-cme-n1": {
-    "quantity": "hearing court comment",
-    "observed": "2026-10-12",
-    "verifies": "N1",
-    "subject": "building-review--county-magistracy-example",
-    "answers": "dca6ffdfd7c0",
-    "source": "l7r/diagram/compound_example.py",
-    "command": "grep -n \"6.4 ft past the stable well\"",
-    "method": "the comment says about 6.4 ft",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b6r2-hay-e1": {
-    "quantity": "the indoor kitchen well gear",
-    "observed": "2026-10-12",
-    "verifies": "E1",
-    "subject": "building-review--hayakawa-magistracy",
-    "answers": "dca6ffdfd7c0",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the kitchen well draws a beam pulley, no sweep (W135-2); well_gear fails an indoor sweep",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b6r2-och-e1": {
-    "quantity": "south wall comment",
-    "observed": "2026-10-12",
-    "verifies": "E1",
-    "subject": "building-review--ochiba-magistracy",
-    "answers": "dca6ffdfd7c0",
-    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
-    "command": "grep -n \"588..610.5\"",
-    "method": "the wall comment says the main gate 588..610.5 (7.5 ft)",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b6r2-ub-q1": {
-    "quantity": "kitchen yard label",
-    "observed": "2026-10-12",
-    "verifies": "Q1",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "dca6ffdfd7c0",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-    "command": "grep -n \"kitchen yard\"",
-    "method": "the yard comment labels its existence and extent a GUESS",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b6r2-ub-n1": {
-    "quantity": "notes coverage figure",
-    "observed": "2026-10-12",
-    "verifies": "N1",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "dca6ffdfd7c0",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "notes line 76 says 34% (measured 2026-10-12)",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b6r3-cme-n1": {
-    "quantity": "gate posts clause",
-    "observed": "2026-10-12",
-    "verifies": "N1",
-    "subject": "building-review--county-magistracy-example",
-    "answers": "e2a5fc085f1b",
-    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
-    "command": "grep -n OUTSIDE that passage",
-    "method": "the R26 line says the 2 ft posts are a convention drawn outside the passage, their centers ~9 ft apart",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b6r3-cme-n2": {
-    "quantity": "privies off the face",
-    "observed": "2026-10-12",
-    "verifies": "N2",
-    "subject": "building-review--county-magistracy-example",
-    "answers": "e2a5fc085f1b",
-    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
-    "command": "grep -n 2.5 ft off it",
-    "method": "the privies line says the stables and garrison privies stand 2.5 ft off the face, the hatch reaching 3 ft",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b6r3-hay-e1": {
-    "quantity": "kitchen well floor wording",
-    "observed": "2026-10-12",
-    "verifies": "E1",
-    "subject": "building-review--hayakawa-magistracy",
-    "answers": "e2a5fc085f1b",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
-    "command": "grep -n this kitchen has no doma",
-    "method": "the wells line says inside the kitchen, on its board-floored ell, no doma",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b6r3-hay-q1": {
-    "quantity": "kitchen yard label",
-    "observed": "2026-10-12",
-    "verifies": "Q1",
-    "subject": "building-review--hayakawa-magistracy",
-    "answers": "e2a5fc085f1b",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-    "command": "grep -n no source names a kitchen yard",
-    "method": "the yard comment and the notes label the yard a GUESS",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b6r3-hay-n1": {
-    "quantity": "roof roll said",
-    "observed": "2026-10-12",
-    "verifies": "N1",
-    "subject": "building-review--hayakawa-magistracy",
-    "answers": "e2a5fc085f1b",
-    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
-    "command": "grep -n roof roll does not apply",
-    "method": "the wells line says the indoor well roof roll does not apply",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b6r3-ub-e1": {
-    "quantity": "garden site reason",
-    "observed": "2026-10-12",
-    "verifies": "E1",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "e2a5fc085f1b",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
-    "command": "grep -n vegetable garden site",
-    "method": "the site is the knob rolled among the open sites (south, beside the formal garden), the false only-sun reason gone from the notes, the map note and the svg comment",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b6r3-ub-q1": {
-    "quantity": "garden site choice recorded",
-    "observed": "2026-10-12",
-    "verifies": "Q1",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "e2a5fc085f1b",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
-    "command": "grep -n vegetable garden site",
-    "method": "the roll records why the garden takes its site over the western one",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b6r3-ub-n1": {
-    "quantity": "kitchen yard label in the notes",
-    "observed": "2026-10-12",
-    "verifies": "N1",
-    "subject": "building-review--ubame-magistracy",
-    "answers": "e2a5fc085f1b",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
-    "command": "grep -n kitchen yard",
-    "method": "notes line 77 and the named-ground list label the kitchen yard a GUESS",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b6g-cme-f1": {
-    "quantity": "the roof glyph",
-    "observed": "2026-10-12",
-    "verifies": "F1",
-    "subject": "glyph-check--well--county-magistracy-example",
-    "answers": "dca6ffdfd7c0",
-    "source": "l7r/diagram/well_gear.py",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the roof drawn over the curb as an unfilled dashed outline on four corner posts; well_gear fails a filled square (proven red on the unfixed sheets)",
-    "value": {
-      "fixed": true
-    }
-  },
-  "b6g-ub-f1": {
-    "quantity": "the indoor well posts",
-    "observed": "2026-10-12",
-    "verifies": "F1",
-    "subject": "glyph-check--well--ubame-magistracy",
-    "answers": "dca6ffdfd7c0",
-    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-    "command": "make pack-audit ARGS=<the sheet>",
-    "method": "the indoor kitchen well draws a beam pulley within the curb, no posts on the wall line (W135-2)",
-    "value": {
-      "fixed": true
-    }
-  },
-  "batch6-open-rows": {
-    "quantity": "open rows of 328s ranking at batch 6s close (no wave, not deferred, scope kept or mode-a), and how many of them are E3 DRIFTED",
-    "value": "161 open, 113 E3 DRIFTED",
-    "unit": "rows",
-    "observed": "2026-10-12",
-    "source": "specs/328-match-the-research/ranking.json",
-    "command": "python3 audit/merge.py audit . (from specs/328-match-the-research), then counted",
-    "method": "the four rows batch 6 took (main gate passage width, main gate posts, structures abut walls, well glyph) marked waves 132-135 in waves.json, the ranking rebuilt"
-  },
-  "w139-chessboard-rolls": {
-    "quantity": "16-household dike-pond hamlets rolled with the chessboard of ponds (pond_layout grid), seeds 3, 7, 11, 21, 30",
-    "value": "4 of 5 green; seed 3 refused (StyRefused: no near-half bank seat for the sty) - and refused the same under the mosaic, so the failure predates the chessboard",
-    "unit": "hamlets",
-    "observed": "2026-10-12",
-    "source": "make hamlet ARGS=\"--archetype mulberry_dike_fishpond --pond-layout grid|mosaic --households 16 --seed <s>\"",
-    "command": "make hamlet ARGS=\"--name DP<s> --seed <s> --households 16 --archetype mulberry_dike_fishpond --pond-layout grid --out <dir> --no-render\"",
-    "method": "exit status per roll; seed 3 re-rolled with the mosaic to place the failure"
-  },
-  "batch7-open-rows": {
-    "quantity": "open rows of 328s ranking at batch 7s close (no wave, scope kept or mode-a), and how many are E3 DRIFTED",
-    "value": "157 open (1 held at E2, the residence row), 108 E3 DRIFTED",
-    "unit": "rows",
-    "observed": "2026-10-12",
-    "source": "specs/328-match-the-research/ranking.json",
-    "command": "python3 audit/merge.py audit . (from specs/328-match-the-research), then counted",
-    "method": "the four rows batch 7 took marked waves 136-139 in waves.json, row 0 held E2 in overrides.json, the ranking rebuilt"
-  },
-  "row0-coverage-at-49-tsubo": {
-    "quantity": "building coverage of the three hand magistracy sheets if each ~145-tsubo house (~5,150 sq ft) were drawn at 0091's 49-tsubo Yokota house (~1,743 sq ft), nothing else moved",
-    "value": "Hayakawa 33% -> ~26%, Ochiba 33% -> ~27%, Ubame 34% -> ~28%; all under 0116's ~30-42% band",
-    "unit": "percent of the compound's area",
-    "observed": "2026-10-12",
-    "source": "make pack-audit on each sheet (33/33/34%); the compound sizes in each notes file (247x200, 267x200, 290x200 ft); 1 tsubo = 35.58 sq ft",
-    "command": "make pack-audit ARGS=pool/magistracies/<m>-magistracy/<m>-magistracy.svg",
-    "method": "built area = coverage x compound area; minus the ~3,407 sq ft a 49-tsubo house frees; divided by the compound area again. The escalation-check on batch 7's report found the earlier 67-tsubo target is one 0091's drawing page declines (a later restoration's size)"
-  },
-  "w141-archetype-rolls": {
-    "quantity": "the attested field forms rolled 12 seeds each at 16 households, before and after waves 140-141's fixes",
-    "value": "before: dike-pond 6/12, polder 10/12; after: dike-pond 11/12, polder 10/12 - open: dike-pond seed 4 (a row village: one farm's front door has no route to any way, walled by its grove and the ground), polder seed 12 (a row village: the door path's first leg runs within 7 ft of a neighbor's yard and no route at the law's 7 ft gap exists), polder seed 5 (SiteRefused, 14 of 16 seated on ladder margin 1); at the batch's final code (wave 143 with the 3 ft crop gap and the crop-step check, re-measured 2026-10-12 after the plan review caught a stale count): dike-pond 11/12, polder 10/12 - open: dike-pond seed 4 and polder seed 12 (row villages, a farm with no lawful door path), polder seed 5 (SiteRefused 14/16); at the 1.5 ft gap dike-pond seed 4 had passed. Four of the five pool hamlets pin no field form, so a changed roll would also re-deal their fields: a point for the batch that takes 771 up again",
-    "unit": "rolls",
-    "observed": "2026-10-12",
-    "source": "make hamlet ARGS=\"--archetype mulberry_dike_fishpond|polder_grid --households 16 --seed <s>\"",
-    "command": "make hamlet ARGS=\"--name A<s> --seed <s> --households 16 --archetype <a> --out <dir> --no-render\"",
-    "method": "exit status per roll; the open failures probed at refuse_unreached / door_path (fouled_segment = 0 via theirs on seed 12); the round arbiter (ask:b8-w141-archetype-failures) ruled route B: land the proven fixes, keep row 771 open"
-  },
-  "w143-cohort": {
-    "quantity": "make cohort (10 seeds plus the six pinned rows) across batch 8's waves",
-    "value": "waves 140-141: 15/16, wave 142: 15/16, wave 143: 16/16 - Audit-10 (14 households, nucleated; at HEAD too: 'the field is reached by no way') reached once a web lane may run on the bund",
-    "unit": "rolls",
-    "observed": "2026-10-12",
-    "source": "dev/cohort-log/20261012T171805Z, 20261012T171956Z, 20261012T172351Z",
-    "command": "make cohort",
-    "method": "the cohort's own verdict per seed, run after each wave's engine edit"
-  },
-  "batch8-open-rows": {
-    "quantity": "open rows of 328s ranking at batch 8s close (no wave, scope kept or mode-a), and how many are E3 DRIFTED",
-    "value": "155 open (1 held at E2, the residence row; row 771 open by the arbiter's route B), 106 E3 DRIFTED",
-    "unit": "rows",
-    "observed": "2026-10-12",
-    "source": "specs/328-match-the-research/ranking.json",
-    "command": "python3 audit/merge.py audit . (from specs/328-match-the-research), then counted",
-    "method": "rows 772-773 marked waves 142-143 in waves.json, the ranking rebuilt"
-  },
-  "batch8-bookends": {
-    "quantity": "make perf 374-start vs 374-end over batch 8",
-    "value": "16.6 s -> 16.4 s, band 0",
-    "unit": "s",
-    "observed": "2026-10-12",
-    "source": "dev/perf-log/20261012T170422Z-374-start, 20261012T175448Z-374-end",
-    "command": "make perf LABEL=374-start|374-end; make perf-review",
-    "method": "the two bookends' totals"
-  },
-  "w140-sty-reach": {
-    "quantity": "the nearest farmhouse to a refused dike-pond hamlet's reserved sty seat, before wave 140",
-    "value": "seed 3: 452 ft, seed 4: 862 ft (reach 320 ft); the fry ponds are the smallest ponds up to FRY_VILLAGE_SHARE = 0.7 of the block's pond area (settlement/fields/landuse.py)",
-    "unit": "ft",
-    "observed": "2026-10-12",
-    "source": "the StyRefused diagnostic (pondstock.seat_faults) on 16-household dike-pond rolls",
-    "command": "make hamlet ARGS=\"--name A<s> --seed <s> --households 16 --archetype mulberry_dike_fishpond --out <dir> --no-render\"",
-    "method": "the refusal names the reserved seat's failed rules and its nearest farmhouse's distance"
-  },
-  "b9-before": {
-    "quantity": "20 valley hamlets at 16 households (seeds 1-20): how many stand on both banks of their brook, and how many roll a wood and draw none on the sheet",
-    "value": "astride 2/20 (both dispersed; nucleated 0/8, linear 0/4); wood off the sheet 7/20; at the brook tiebreak (0.05, a trial reverted): 10-household seed 4 seats astride its brook and leaves one farmhouse unreached at (687, 2403) - a row-village farm with no route from its door",
-    "unit": "hamlets",
-    "observed": "2026-10-12",
-    "source": "make hamlet ARGS=\"--name V<s> --seed <s> --households 16 --out <dir> --no-render\"",
-    "command": "the houses' side of the first stream polyline (cross product), and meta.woodland_offsheet",
-    "method": "a hamlet is astride when houses stand on both sides of its brook"
-  },
-  "w145-offsheet-why": {
-    "quantity": "on each valley roll that records its wood off the sheet (16 households, seeds 2, 6, 7, 13, 15, 16, 17), the scan's open seats inside the frame and those beyond the fields from the houses",
-    "value": "seed 2: 126-177 open, 0 beyond; 6: 98-127, 0; 7: 122-172, 0; 13: 31-81, 0; 15: 47-71, 0; 16: 6-26, 0; 17: 135-194, 0 (per rung and set-back pass) - every open seat in the frame stands on the houses' side of the fields, so 0077's far side of the fields lies past the frame's edge on all seven (feature 287 D11); seed 1, which draws its wood, has 3-7 beyond",
-    "unit": "seats",
-    "observed": "2026-10-12",
-    "source": "a throwaway probe test wrapping hinterland/parcels.py _beyond_the_fields (removed after the measurement)",
-    "command": "make test-file FILE=<the probe>",
-    "method": "the scored seats handed to _beyond_the_fields and the seats it returns, per call"
-  },
-  "batch9-bookends": {
-    "quantity": "make perf 374-start vs 374-end over batch 9",
-    "value": "16.8 s -> 16.6 s, band 0 (the batch's only engine edit is a claim docstring)",
-    "unit": "s",
-    "observed": "2026-10-12",
-    "source": "dev/perf-log/20261012T181723Z-374-start, 20261012T184556Z-374-end",
-    "command": "make perf LABEL=374-start|374-end; make perf-review",
-    "method": "the two bookends' totals"
-  },
-  "w146-rolls": {
-    "quantity": "wave 146 at its final code: the cohort, the 24 archetype rolls (16 households, seeds 1-12), the 20 valley rolls (16 households, seeds 1-20) and the 10-household valley seed 4",
-    "value": "cohort 16/16; dike-pond 12/12 (seeds 3 and 4 newly green; 11/12 at HEAD); polder 10/12 - seed 12 newly green, seed 5 SiteRefused as at HEAD, seed 4 NEWLY RED (needle_loops between its two streets and the road: street 0's straight join ends on the road beside the junction street 1 passes through; at HEAD the join carried a vertex on street 1, and the road's start sat 5 px away, the fixtures having moved its gateway); valley 20/20; valley 4@10 still refused, now off_ford on a row street where at HEAD a farm stood unreached",
-    "unit": "rolls",
-    "observed": "2026-10-12",
-    "source": "make cohort; make hamlet ARGS=\"--name <n> --seed <s> --households <h> [--archetype <a>] --out <dir> --no-render\"",
-    "command": "the same per roll",
-    "method": "exit status per roll; HEAD compared in a detached worktree (lanes 0-3 of polder seed 4 dumped at both)"
-  },
-  "batch10-bookends": {
-    "quantity": "make perf 374-start vs 374-end over batch 10",
-    "value": "16.7 s -> 16.6 s, band 0",
-    "unit": "s",
-    "observed": "2026-10-12",
-    "source": "dev/perf-log/20261012T191432Z-374-start, 20261012T195632Z-374-end",
-    "command": "make perf LABEL=374-start|374-end; make perf-review",
-    "method": "the two bookends' totals"
-  },
-  "batch11-bookends": {
-    "quantity": "make perf 374-start vs 374-end over batch 11",
-    "value": "16.8 s -> 17.0 s, band 0",
-    "unit": "s",
-    "observed": "2026-10-12",
-    "source": "dev/perf-log/20261012T200202Z-374-start, 20261012T202954Z-374-end",
-    "command": "make perf LABEL=374-start|374-end; make perf-review",
-    "method": "the two bookends' totals"
-  },
-  "w148-paddy-grass": {
-    "quantity": "the paddy's grass hill over 20 valley rolls (16 households, seeds 1-20) and the pool at wave 148's final code (the seat held clear of its plot and upslope of it as seated)",
-    "value": "rolled on 3 of 20 (seeds 4, 7, 17), seated on all 3, none rolled and unseated; in the pool Inashiro draws one, the other four none",
-    "unit": "hamlets",
-    "observed": "2026-10-12",
-    "source": "make hamlet ARGS=\"--name V<s> --seed <s> --households 16 --out <dir> --no-render\"; make maps SCOPE=all",
-    "command": "meta.paddy_grass_hill per manifest",
-    "method": "none / drawn / no seat counted"
-  },
-  "b12-glyph-f1": {
-    "quantity": "the paddy's grass hill on Inashiro told from the scrub around it: the mean color inside its square against same-sized squares of the scrub beside it",
-    "observed": "2026-10-12",
-    "verifies": "F1",
-    "subject": "glyph-check--paddy-s-grass-hill--inashiro",
-    "answers": "a7bccc68e831",
-    "source": "pool/hamlets/inashiro/inashiro.png after make map at engine key 9906d82f0e55; the square from the manifest's commons record, role paddy_grass",
-    "command": "the PNG read with PIL, each square's pixels inset 3 px, mean RGB",
-    "method": "the hill against the squares 120 ft left, right and up, 120 ft up-right and 200 ft right (one more square, up-left, holds a scrub pine)",
-    "value": {
-      "hill_rgb": [
-        212.6,
-        212.5,
-        160.0
-      ],
-      "scrub_rgb_range": [
-        [
-          231.0,
-          220.5,
-          183.8
-        ],
-        [
-          232.6,
-          221.9,
-          185.9
-        ]
-      ],
-      "hill_green_over_red": -0.1,
-      "scrub_green_over_red": [
-        -10.7,
-        -10.5
-      ]
-    }
-  },
-  "w149-strips": {
-    "quantity": "the farm bamboo strips drawn, HEAD against wave 149's landed route E (the strip seated after the web, as at HEAD, tested against each seated part rather than its whole bundle, offered stepped out along its side), over the 44 rolls (valley seeds 1-20, dike-pond and polder seeds 1-12, 16 households), the pool and the cohort",
-    "observed": "2026-10-12",
-    "source": "make hamlet ARGS=\"--name <n> --seed <s> --households 16 [--archetype <a>] --out <dir> --no-render\" in a detached HEAD worktree and in the clone; make maps SCOPE=all; make cohort",
-    "command": "the roll script and its summary (strips.py) in the session's scratchpad tools13; each manifest's bamboo_stands (role homestead), lanes and meta",
-    "method": "strips drawn, lanes over a strip, lanes between a house and its strip, meta.household_bamboo_wanted and _no_room summed; refusals, seat margin and households per roll against HEAD",
-    "value": {
-      "head_strips": 0,
-      "route_e": {
-        "strips": 57,
-        "lane_hits": 0,
-        "across": 0,
-        "wanted": 159,
-        "no_room": 102
-      },
-      "refused_head": [
-        "polder_grid seed 4",
-        "polder_grid seed 5"
-      ],
-      "refused_route_e": [
-        "polder_grid seed 4",
-        "polder_grid seed 5"
-      ],
-      "pool": "clean",
-      "cohort": "16/16",
-      "capacity": "seat margin and households unchanged"
-    }
-  },
-  "w149-seated-law-probe": {
-    "quantity": "households reached across a neighbor's yard with the seated yards and beds held in the seating law (a route measured and withdrawn)",
-    "observed": "2026-10-12",
-    "source": "a throwaway probe test rolling hg.generate on valley seeds 8, 13, 20 at 16 households",
-    "command": "meta.pinch_passages per roll",
-    "method": "with the seated parts in the seating law, without them, and at HEAD",
-    "value": {
-      "with": [
-        6,
-        8,
-        9
-      ],
-      "without": [
-        2,
-        1,
-        1
-      ],
-      "head": [
-        0,
-        1,
-        0
-      ]
-    }
-  },
-  "w149-route-matrix": {
-    "quantity": "the five routes for seating the farm's bamboo strip ahead of the ways, each on the pool, the 16-seed cohort and the 44 rolls",
-    "observed": "2026-10-12",
-    "source": "each route built in the clone and rolled as w149-strips; summaries routeA.txt to routeE.txt in the arbiter bundle of ask:b13-w149-route-matrix",
-    "command": "make maps SCOPE=all; make cohort; the 44-roll script",
-    "method": "new refusals against HEAD, strips drawn of those wanted, lanes between a house and its strip",
-    "value": {
-      "A in the bundle, copse seats kept off it, a way 7 ft off its own beds": {
-        "new_refusals": [
-          "pool Inashiro",
-          "valley seed 18"
-        ],
-        "strips": "126 of 136"
-      },
-      "B as A without the bed gap": {
-        "new_refusals": [
-          "cohort seed 7 (lane_knots)",
-          "valley seed 10"
-        ],
-        "strips": "132 of 142"
-      },
-      "C in the bundle alone": {
-        "new_refusals": [
-          "cohort seeds 2 and 10"
-        ],
-        "strips": "90 of 148, 3 laid",
-        "between": 2
-      },
-      "D at the seating's end, no bundle change": {
-        "new_refusals": [
-          "cohort seed 8"
-        ],
-        "strips": "77 of 159",
-        "between": 1
-      },
-      "E after the web (landed)": {
-        "new_refusals": [],
-        "strips": "57 of 159",
-        "between": 0
-      }
-    }
-  },
-  "w150-ditch-reach": {
-    "quantity": "how near the field ditches and the brook run to the houses, and which rolls draw farm channels, over the 44 rolls at HEAD (valley seeds 1-20, dike-pond and polder seeds 1-12, 16 households)",
-    "observed": "2026-10-12",
-    "source": "a one-shot observation, 2026-10-12: the 44 HEAD manifests rolled for m:w149-strips, kept in the session's scratchpad and not in the repository",
-    "command": "make hamlet ARGS=\"--name <n> --seed <s> --households 16 [--archetype <a>] --out <dir> --no-render\" over the 44 seeds, then the distance from each house center to each field ditch and stream (shapely)",
-    "method": "the least over each map's houses, per role",
-    "value": {
-      "nearest_field_ditch_ft": 61,
-      "typical_nearest_ft": "98-600",
-      "farm_channel_rolls": [
-        "valley 15 (16 channels)",
-        "valley 16 (16)",
-        "valley 19 (14)"
-      ],
-      "pool_farm_channels": 0
-    }
-  },
-  "w150-washing": {
-    "quantity": "washing places drawn by the wave-150 code (grouped per bank, a household at its nearest passing water, the head race among the waters): the form rolled, the places seated, the groups left with no seat; and whether the pool and the cohort still pass",
-    "observed": "2026-10-12",
-    "source": "the 44 rolls (valley seeds 1-20, dike-pond and polder seeds 1-12, 16 households) at the clone's working tree, the pool regenerated by make maps SCOPE=all, and the cohort record dev/cohort-log/20261013T023412Z-diagram-backlog-1975106.json",
-    "command": "make hamlet ARGS=\"--name <n> --seed <s> --households 16 [--archetype <a>] --out <dir> --no-render\" over the 44 seeds; make maps SCOPE=all; make cohort",
-    "method": "per manifest: meta.washing_form, len(washing_places), meta.washing_no_seat",
-    "value": {
-      "rolls_built": 42,
-      "refused": [
-        "polder 4 (WebRefused, as at HEAD)",
-        "polder 5 (SiteRefused, as at HEAD)"
-      ],
-      "places": 63,
-      "no_seat": 0,
-      "forms": {
-        "shared": 41,
-        "each_house": 1
-      },
-      "pool": {
-        "inashiro": 1,
-        "kashikawa": 0,
-        "kuwabata": 1,
-        "mizuguchi": 2,
-        "sawada": 1
-      },
-      "pool_maps": "clean",
-      "cohort": "16/16 passed"
-    }
-  },
-  "w151-sty-room": {
-    "quantity": "the pig sty laid in the homestead bundle (against a wall of the house or an outbuilding): the sties drawn against the share's count, and the rolls that refuse, at the homestead ground HEAD sizes the band on (HOMESTEAD_GROUND_FT 104) and with more ground per homestead (110, 116; SEATING_GROUND_FT 172 on the four failing rolls)",
-    "observed": "2026-10-12",
-    "source": "the session's scratchpad runs r15a, room15 and full15 (each the 44 rolls - valley seeds 1-20, dike-pond and polder seeds 1-12 at 16 households - make maps SCOPE=all and make cohort), at the clone's working tree with the sty in the bundle",
-    "command": "make hamlet ARGS=\"--name <n> --seed <s> --households 16 [--archetype <a>] --out <dir> --no-render\" over the 44 seeds; make maps SCOPE=all; make cohort; the constant edited between variants and restored",
-    "method": "per roll: the refusal and its reason; per manifest: the sties drawn against meta.farm_fixtures_target['sty']",
-    "value": {
-      "HEAD (no sty)": {
-        "refused_44": [
-          "polder 4",
-          "polder 5"
-        ],
-        "cohort": "16/16"
-      },
-      "bundle, ground 104": {
-        "sties": "322 of 322",
-        "refused_44": [
-          "valley 13",
-          "polder 4",
-          "polder 5"
-        ],
-        "cohort": "13/16 (Audit-10 lane knot, Audit-903 a lane through a grove, Audit-904 two farmhouses off the network)",
-        "pool": "clean, every sty drawn"
-      },
-      "bundle, ground 110": {
-        "refused_44": [
-          "dike-pond 5",
-          "polder 3",
-          "polder 4"
-        ],
-        "cohort": "12/16"
-      },
-      "bundle, ground 116": {
-        "refused_44": [
-          "valley 2",
-          "valley 13",
-          "dike-pond 4",
-          "dike-pond 12",
-          "polder 11"
-        ],
-        "cohort": "15/16"
-      },
-      "bundle, seating ground 172 (4 failing rolls only)": {
-        "valley 13": "refused",
-        "cohort subset": "the same three fail"
-      },
-      "reading": "every sty found its wall at every size; the refusals are the web's, moved about by any change to the bundle's layout, so room does not mend them"
-    }
-  },
-  "w151-sties": {
-    "quantity": "the pig sty seated after the ways (`stage_sties`): sties drawn against the share's count, the rolls that refuse, and whether the pool and the cohort pass",
-    "observed": "2026-10-12",
-    "source": "the session's scratchpad run r15b: the 44 rolls (valley seeds 1-20, dike-pond and polder seeds 1-12, 16 households), make maps SCOPE=all and make cohort at the clone's working tree",
-    "command": "make hamlet ARGS=\"--name <n> --seed <s> --households 16 [--archetype <a>] --out <dir> --no-render\" over the 44 seeds; make maps SCOPE=all; make cohort",
-    "method": "per manifest: meta.sty_target, meta.sty_short and the farm_fixtures of kind sty",
-    "value": {
-      "refused_44": [
-        "polder 4 (as at HEAD)",
-        "polder 5 (as at HEAD)"
-      ],
-      "sties_44": "334 of 334, none short",
-      "pool": {
-        "inashiro": "9 of 9",
-        "kashikawa": "15 of 15",
-        "kuwabata": "0 (dike-pond)",
-        "mizuguchi": "9 of 9",
-        "sawada": "14 of 14"
-      },
-      "pool_maps": "clean",
-      "cohort": "16/16 passed",
-      "after the glyph check (the walk varied, the grove kept clear)": {
-        "source": "scratchpad run r15d",
-        "refused_44": [
-          "polder 4 (as at HEAD)",
-          "polder 5 (as at HEAD)"
-        ],
-        "sties_44": "334 of 334",
-        "pool": "47 of 47, maps clean",
-        "cohort": "16/16 passed",
-        "between": "the walk varied alone (run r15c) put a sty on its farm's grove band on 4 cohort rolls (fixtures_on_groves); the grove added to the parts kept clear mended all four"
-      }
-    }
-  },
-  "b15-glyph-f3": {
-    "observed": "2026-10-13",
-    "subject": "glyph-check--pig-sty--inashiro",
-    "answers": "cdb083734f9b",
-    "source": "pool/hamlets/inashiro/inashiro.json and .svg after make map at engine key cf7320ac18ef",
-    "quantity": "where each of Inashiro's sties stands on its farmstead: the wall it is against, in its house's frame, and its spot along that wall",
-    "verifies": "F3",
-    "command": "each farm_fixtures record of kind sty turned into its house's frame (the house's rot undone)",
-    "method": "the side from the offset past the house's half-depth or half-width; the spot along the wall as a fraction of the half-wall, -1 to 1",
-    "value": {
-      "sides": {
-        "west": 3,
-        "back": 2,
-        "east": 1,
-        "front": 3
-      },
-      "offsets_along_wall": [
-        -0.54,
-        -0.87,
-        0.0,
-        0.56,
-        -0.85,
-        -0.6,
-        1.12,
-        1.11,
-        -1.01
-      ],
-      "before": "all 9 on the back wall, 5 dead center (the glyph check's own count)"
-    }
-  },
-  "b15-glyph-f1": {
-    "observed": "2026-10-13",
-    "subject": "glyph-check--pig-sty--inashiro",
-    "answers": "cdb083734f9b",
-    "source": "pool/hamlets/inashiro/inashiro.json and .svg after make map at engine key cf7320ac18ef",
-    "quantity": "the sty's fills against the privy's on Inashiro's sheet",
-    "verifies": "F1",
-    "command": "the fill colors counted in inashiro.svg",
-    "method": "the sty's shed and pen fills against the privy's roof fill",
-    "value": {
-      "sty_shed_fill": "#6E5434",
-      "sty_shed_count": 9,
-      "sty_pen_fill": "#CDB58A",
-      "sty_pen_count": 9,
-      "privy_fill": "#8F7548",
-      "privy_count": 13,
-      "before": "the sty's shed drew in the privy's own #8F7548 with its edge and ridge"
-    }
-  },
-  "b15-glyph-f2": {
-    "observed": "2026-10-13",
-    "subject": "glyph-check--pig-sty--inashiro",
-    "answers": "cdb083734f9b",
-    "source": "pool/hamlets/inashiro/inashiro.json and .svg after make map at engine key cf7320ac18ef",
-    "quantity": "the sty's pen as drawn on Inashiro's sheet",
-    "verifies": "F2",
-    "command": "the pen's rect read from inashiro.svg",
-    "method": "its fill and its rail's stroke",
-    "value": {
-      "pen": "a filled rect (#CDB58A) with a solid 0.9 px rail and a 0.7 px rail across, where the dashed 0.8 px outline drew nothing at fit zoom",
-      "pens_drawn": 9
-    }
-  },
-  "w152-reseat": {
-    "quantity": "the persimmon reseat with its own grove open to it (wave 152): rolled persimmons against drawn, the crowns given way, the rolls that refuse, the pool and the cohort",
-    "observed": "2026-10-13",
-    "source": "the session's scratchpad run r16a: the 44 rolls (valley seeds 1-20, dike-pond and polder seeds 1-12, 16 households), make maps SCOPE=all and make cohort at the clone's working tree",
-    "command": "make hamlet ARGS=\"--name <n> --seed <s> --households 16 [--archetype <a>] --out <dir> --no-render\" over the 44 seeds; make maps SCOPE=all; make cohort",
-    "method": "per manifest: meta.farm_fixtures_target['persimmon'] against len(persimmons), meta.persimmon_grove_gave_way",
-    "value": {
-      "persimmons_44": "578 of 578",
-      "persimmons_pool": "69 of 69",
-      "crowns_given_way": 0,
-      "refused_44": [
-        "polder 4 (as at HEAD)",
-        "polder 5 (as at HEAD)"
-      ],
-      "pool": "clean, no manifest changed",
-      "cohort": "16/16 passed",
-      "reading": "no roll here reseats a tree into its own grove: the code now follows 0046 where one does, and no map moves"
-    }
-  },
-  "w153-sheltered": {
-    "quantity": "the row village's leeward farms sheltered by the grove row across the street (wave 153): the farms sheltered, their south bands seated and short, the rolls that refuse, the pool and the cohort; and whether more room for the band seats more",
-    "observed": "2026-10-13",
-    "source": "the session's scratchpad runs r17a-r17c (the 44 rolls - valley seeds 1-20, dike-pond and polder seeds 1-12 at 16 households - make maps SCOPE=all and make cohort) and two throwaway probes of valley seed 3 (since deleted)",
-    "command": "make hamlet ARGS=\"--name <n> --seed <s> --households 16 [--archetype <a>] --out <dir> --no-render\" over the 44 seeds; make maps SCOPE=all; make cohort; the probes built HamletSpec(seed=3, households=16) through driver.build with bamboo.strip_refused wrapped",
-    "method": "per manifest: houses with sheltered, meta.household_bamboo_wanted and _no_room; the probes counted each band's refusing test and the band count at BAND_STEPS_OUT 3, 6 and 12",
-    "value": {
-      "refused_44": [
-        "polder 4 (as at HEAD)",
-        "polder 5 (as at HEAD)"
-      ],
-      "sheltered_44": {
-        "valley 3": "8, 3 with no room",
-        "dike-pond 3": "6, all seated",
-        "polder 3": "6, 1 with no room"
-      },
-      "pool": {
-        "kashikawa": "10 sheltered, every band seated",
-        "others": "none (not a two-sided row that rolled it)"
-      },
-      "pool_maps": "clean",
-      "cohort": "16/16 passed",
-      "first_runs": "a sheltered farm with no grove had no front door (serve.front_door) and 7 of valley 3's were unreached; the row rule judged it by its own grove-less frame; both mended",
-      "room_spent": {
-        "steps 3": "5 of 8 short on valley 3",
-        "steps 6": "3 short",
-        "steps 12": "3 short - the paddy and the neighbors' footprints, not distance"
-      },
-      "its_own_path": "8 of valley 3's band refusals were its own door path between house and band; a public lane still refuses",
-      "final (seated as a full-grove farm, its windward bands drawn one tree deep)": {
-        "source": "scratchpad run r17e and a probe of Kashikawa's spec at BAND_STEPS_OUT 6 and 12 (deleted)",
-        "refused_44": [
-          "polder 4 (as at HEAD)",
-          "polder 5 (as at HEAD)"
-        ],
-        "sheltered_44": "19, 2 with no room (valley 3)",
-        "pool": {
-          "kashikawa": "10 sheltered, 4 with no room - the same 4 at 12 steps: the paddy and seated parts, not distance"
-        },
-        "pool_maps": "clean",
-        "cohort": "16/16 passed",
-        "between": "a farm laid with a thin grove (its frame narrower) moved the road's course at seating and left dike-pond 3's streets off the network (all 16 farms unreached); seated as the full form, only its drawing thin, every roll passes"
-      }
-    }
+ "wave112-verandas": {
+  "quantity": "wave 112 (2026-10-10): the residence verandas at 0102's 3-6 ft, their faces a rolled knob",
+  "observed": "2026-10-10",
+  "source": "pool/magistracies/{hayakawa,ochiba,ubame}-magistracy/*.svg before (main) and after; make pack-audit on each",
+  "command": "make pack-audit ARGS=pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "method": "each data-kind=\"engawa\" rect read before and after; veranda_depths red on all three before, OK after",
+  "value": {
+   "before_px": 8,
+   "before_ft": 2.7,
+   "garden_face_px": 12,
+   "garden_face_ft": 4,
+   "turned_face_px": 9,
+   "turned_face_ft": 3,
+   "band_ft": [
+    3,
+    6
+   ],
+   "rolls": {
+    "hayakawa": "two or three faces",
+    "ochiba": "garden face alone",
+    "ubame": "garden face alone"
+   },
+   "moved": "Hayakawa: the west block's door and tub, the shoe stone and its tub 4 px south; Ochiba and Ubame: the shoe stone 4 px south"
   }
+ },
+ "wave113-kitchens": {
+  "quantity": "wave 113 (2026-10-10): the kitchens at 0091's measured wing, ells with no corridor",
+  "observed": "2026-10-10",
+  "source": "the three hand sheets and the county draft before (main) and after; make pack-audit on each",
+  "command": "make pack-audit ARGS=pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+  "method": "each kitchen rect read before and after; the draft's placer output (compound.place) for the gap",
+  "value": {
+   "before_px": [
+    120,
+    100
+   ],
+   "before_ft": [
+    40,
+    33
+   ],
+   "after_px": [
+    72,
+    54
+   ],
+   "after_ft": [
+    24,
+    18
+   ],
+   "band_ft": {
+    "w": [
+     18,
+     24
+    ],
+    "h": [
+     14,
+     18
+    ]
+   },
+   "measured_wing_sq_ft": 440,
+   "draft_kitchen_ft": [
+    20,
+    18
+   ],
+   "draft_gap_before_ft": 7,
+   "draft_gap_after_ft": 0,
+   "draft_house_shift_ft": 7,
+   "corridor_px": {
+    "hayakawa": [
+     12,
+     22
+    ],
+    "ubame": "an L across the 9 ft alley"
+   },
+   "residence_corridor_drawn_ft": {
+    "width": 11,
+    "length": 3
+   }
+  }
+ },
+ "wave114-rooms": {
+  "quantity": "wave 114 (2026-10-10): the residence's labeled zones stand for a house of about six rooms",
+  "observed": "2026-10-10",
+  "source": "docs/buildings.md (the bullet and its claim) and pool/magistracies/*/*.notes.md before (main) and after",
+  "command": "grep -rn '18-25' docs pool/magistracies",
+  "method": "every statement of the residence's room count searched in the procedure, the notes and the sheets",
+  "value": {
+   "before": "~18-25 tatami rooms (the procedure, its claim, Hayakawa's notes)",
+   "after": "about six rooms (0091: the Kuchiba house, 41-74 tsubo)",
+   "sheets_redrawn": 0,
+   "places_changed": 3
+  }
+ },
+ "b1-county-e1": {
+  "quantity": "the county draft's garden zone starts at the kitchen ell's east face; the kitchen well outside it",
+  "observed": "2026-10-10",
+  "verifies": "E1",
+  "subject": "building-review--county-magistracy-example",
+  "answers": "026828713522",
+  "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg; l7r/diagram/compound.py the garden CourtZone",
+  "command": "make pack-audit ARGS=pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+  "method": "the zone's x read against the kitchen's x2 (both 102 ft) after make map; the audit clean",
+  "value": {
+   "garden_x_ft": 102,
+   "kitchen_x2_ft": 102,
+   "well_in_garden": false
+  }
+ },
+ "b1-county-n1": {
+  "quantity": "the notes' band figure",
+  "observed": "2026-10-10",
+  "verifies": "N1",
+  "subject": "building-review--county-magistracy-example",
+  "answers": "026828713522",
+  "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+  "command": "grep -n '76 x 36' pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+  "method": "read after the edit",
+  "value": {
+   "band": "~76 x 36 ft"
+  }
+ },
+ "b1-county-n2": {
+  "quantity": "the notes' garden figure",
+  "observed": "2026-10-10",
+  "verifies": "N2",
+  "subject": "building-review--county-magistracy-example",
+  "answers": "026828713522",
+  "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+  "command": "grep -n '124 x 46' pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+  "method": "read after the edit",
+  "value": {
+   "garden": "124 x 46 ft"
+  }
+ },
+ "b1-hayakawa-e1": {
+  "quantity": "the ground the old kitchen left named the kitchen yard",
+  "observed": "2026-10-10",
+  "verifies": "E1",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "026828713522",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "command": "grep -n 'kitchen yard' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "method": "the named yard polygon read; make pack-audit clean",
+  "value": {
+   "yard_px": [
+    146,
+    306,
+    320,
+    450
+   ]
+  }
+ },
+ "b1-hayakawa-e2": {
+  "quantity": "knob 9's line describes the kitchen as drawn",
+  "observed": "2026-10-10",
+  "verifies": "E2",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "026828713522",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+  "command": "grep -n 'an ell projecting south from the west block' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+  "method": "read after the edit",
+  "value": {
+   "knob9": "an ell, no corridor, door on the south face"
+  }
+ },
+ "b1-hayakawa-e3": {
+  "quantity": "the residence corridor's map note no longer names a kitchen corridor",
+  "observed": "2026-10-10",
+  "verifies": "E3",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "026828713522",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+  "command": "grep -n 'residence corridor' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+  "method": "read after the edit; the page rebuilt by make map",
+  "value": {
+   "note": "the corridor joins the two halls; the kitchen stands against the west block with no corridor"
+  }
+ },
+ "b1-hayakawa-n2": {
+  "quantity": "the inner entrance's comment and the wave-113 log line",
+  "observed": "2026-10-10",
+  "verifies": "N2",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "026828713522",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg; pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+  "command": "grep -n 'kitchen yard west of the kitchen ell\\|the GUESS 0091' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+  "method": "read after the edit",
+  "value": {
+   "fixed": 2
+  }
+ },
+ "b1-ubame-e1": {
+  "quantity": "the notes describe the kitchen as drawn",
+  "observed": "2026-10-10",
+  "verifies": "E1",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "026828713522",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+  "command": "grep -n 'under the family quarters' pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+  "method": "read after the edit; the page rebuilt by make map",
+  "value": {
+   "places": 2
+  }
+ },
+ "b1-ubame-e2": {
+  "quantity": "the kitchen ell under the family quarters, the lived rooms",
+  "observed": "2026-10-10",
+  "verifies": "E2",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "026828713522",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+  "command": "make pack-audit ARGS=pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+  "method": "the kitchen rect read (x 342-414 under the family quarters' x 342-432); the audit clean",
+  "value": {
+   "kitchen_px": [
+    342,
+    294,
+    72,
+    54
+   ]
+  }
+ },
+ "b1-ubame-e3": {
+  "quantity": "the ground the old kitchen left named the kitchen yard",
+  "observed": "2026-10-10",
+  "verifies": "E3",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "026828713522",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+  "command": "grep -n 'kitchen yard' pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+  "method": "the named yard polygon read",
+  "value": {
+   "yard_px": [
+    205,
+    310,
+    334,
+    445
+   ]
+  }
+ },
+ "b1-ubame-q1": {
+  "quantity": "the kitchen well on the doma",
+  "observed": "2026-10-10",
+  "verifies": "Q1",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "026828713522",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+  "command": "grep -n 'well-1' pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+  "method": "the well's rect read inside the doma's",
+  "value": {
+   "well_px": [
+    345,
+    302,
+    22,
+    22
+   ],
+   "doma_px": [
+    343,
+    295,
+    26,
+    52
+   ]
+  }
+ },
+ "b1-ubame-n1": {
+  "quantity": "the bath's comment current",
+  "observed": "2026-10-10",
+  "verifies": "N1",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "026828713522",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+  "command": "grep -n 'Bath: a small addition' pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+  "method": "read after the edit",
+  "value": {
+   "bath": "10 x 8 ft on the kitchen's south wall"
+  }
+ },
+ "b2-ubame-e1": {
+  "quantity": "the karo's house 12 px east, a 4 ft alley between it and the bath",
+  "observed": "2026-10-10",
+  "verifies": "E1",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "09b4e0ec93b5",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+  "command": "make pack-audit ARGS=pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+  "method": "the bath's x2 (372) and the karo's house's x (388) read: 16 px, a 4 ft alley plus the outlines; the audit clean",
+  "value": {
+   "bath_x2_px": 372,
+   "karo_x_px": 388,
+   "alley_ft": 4
+  }
+ },
+ "b2-ubame-n1": {
+  "quantity": "the postern's and the residence group's comments current",
+  "observed": "2026-10-10",
+  "verifies": "N1",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "09b4e0ec93b5",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+  "command": "grep -n 'kitchen yard west of the kitchen ell\\|with no corridor (feature 374' pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+  "method": "read after the edit",
+  "value": {
+   "fixed": 3
+  }
+ },
+ "b2-hayakawa-e1": {
+  "quantity": "the notes state the house's drawn size and no longer claim six rooms for it",
+  "observed": "2026-10-10",
+  "verifies": "E1",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "09b4e0ec93b5",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+  "command": "grep -n '145 tsubo' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+  "method": "read after the edit",
+  "value": {
+   "house_tsubo": 145,
+   "house_sq_ft": 5150
+  }
+ },
+ "b2-hayakawa-n1": {
+  "quantity": "the postern's, the karo's door's, its tub's and the west block's comments current",
+  "observed": "2026-10-10",
+  "verifies": "N1",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "09b4e0ec93b5",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "command": "grep -n 'kitchen yard' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "method": "read after the edit",
+  "value": {
+   "fixed": 4
+  }
+ },
+ "b2-hayakawa-n2": {
+  "quantity": "knob 9: the kitchen door opens onto the lane into the kitchen yard",
+  "observed": "2026-10-10",
+  "verifies": "N2",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "09b4e0ec93b5",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+  "command": "grep -n 'the lane that runs west into the kitchen yard' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+  "method": "read after the edit",
+  "value": {
+   "wording": "the lane that runs west into the kitchen yard"
+  }
+ },
+ "sc003-375-first-three-tasks": {
+  "quantity": "375's SC-003 over 374's T01-T03 (waves 112-114): red gates from a cause the preflight checks, pages re-checked while a check on them was outstanding, plan-review BLOCKs on a decision a decision preflight had ruled",
+  "observed": "2026-10-10",
+  "source": "make feature-report F=374 (the event log, the run log), the review ledger, plan-review.json",
+  "command": "make feature-report F=374",
+  "method": "the report's gates and tripwires read; each red gate's log read for its cause (done1.log: the tree moved during the run; done3.log: tests/tooling/test_ledger_lint.py on the ledger's cost cells) - neither is a preflight step (derived files, the record, its pointers, make quick, the changed engine lines); the freeze's state (.git/checks-open.json) refused one re-dispatch into a running round and no edit to a frozen page; plan-review.json holds no BLOCKED verdict",
+  "value": {
+   "red_gates": 2,
+   "red_from_a_preflight_cause": 0,
+   "pages_rechecked_while_a_check_ran": 0,
+   "plan_review_blocks_on_a_ruled_decision": 0,
+   "met": true
+  }
+ },
+ "sc004-375-dispatches-per-row": {
+  "quantity": "375's SC-004: agent dispatches per closed row of 374's T01-T03, beside 372's ~10 (375's 'Why', an estimate)",
+  "observed": "2026-10-10",
+  "source": "this session's dispatches, counted by check from the event log (refused dispatches not counted)",
+  "command": "make feature-report F=374",
+  "method": "launched agents counted per check; rows closed by T01-T03: engawa, kitchen, kitchen corridor (renamed 'kitchen abuts the house, no corridor'), residence rooms = 4",
+  "value": {
+   "rows_closed": 4,
+   "dispatches": {
+    "spec-fidelity (spec, plan, decision preflights)": 9,
+    "impl-drift": 5,
+    "claims and modal triages": 6,
+    "quote-check": 3,
+    "record-format": 3,
+    "modal-form": 2,
+    "modal-research": 3,
+    "modal-depiction": 7,
+    "glyph-check": 5,
+    "building-review": 8,
+    "round-arbiter": 5,
+    "escalation-check": 4
+   },
+   "total": 60,
+   "per_row": 15.0,
+   "checks_only_per_row": 10.5,
+   "beside_372": 10,
+   "reading": "higher than 372's ~10: three applied EDIT blocks each re-owed the check that proposed them (a second round per pop-up, three to the arbiter), one sentence on 0091's drawing page owed 16 pop-ups their triage twice, the building reviews ran three rounds on two sheets, and first use of 375 met four tooling gaps (each fixed with its test)"
+  }
+ },
+ "kuwabata-board-r1-F1-seat": {
+  "subject": "glyph-check--notice-board--kuwabata",
+  "answers": "a5561194a0bd",
+  "observed": "2026-10-11",
+  "source": "pool/hamlets/kuwabata/kuwabata.json, read with bridges_on_a_way and kosatsuba_affordances from l7r/diagram/settlement/structures/fixtures/_helpers.py",
+  "method": "the bridgehead seat is offered only where a lane or road comes within KOSATSUBA_ANCHOR_BAND_FT of a bridge; Kuwabata rerolled with make map; tests/settlement/structures/test_fixtures.py holds the rule",
+  "verifies": "F1",
+  "quantity": "Kuwabata's rolled board seat after the fix (a bridge-end seat was 884 ft from its bridge in round 1)",
+  "value": "center",
+  "unit": "seat"
+ },
+ "kuwabata-board-r1-F2-reached": {
+  "subject": "glyph-check--notice-board--kuwabata",
+  "answers": "a5561194a0bd",
+  "observed": "2026-10-11",
+  "source": "pool/hamlets/kuwabata/kuwabata.json, read with bridges_on_a_way and kosatsuba_affordances from l7r/diagram/settlement/structures/fixtures/_helpers.py",
+  "method": "the bridgehead seat is offered only where a lane or road comes within KOSATSUBA_ANCHOR_BAND_FT of a bridge; Kuwabata rerolled with make map; tests/settlement/structures/test_fixtures.py holds the rule",
+  "verifies": "F2",
+  "quantity": "bridges a lane or road reaches on Kuwabata, which gate the bridge-end seat",
+  "value": 0,
+  "unit": "bridges of 6"
+ },
+ "batch3-cpu-interleaved": {
+  "quantity": "user CPU seconds of the reference hamlet, base (merge base ab378e08) against head, interleaved, 3 repeats: seeds 4 and 25 at 10 households, 39 and 47 at 20",
+  "value": {
+   "base_total": 186.6,
+   "head_total": 169.3,
+   "change": "-9%"
+  },
+  "unit": "s",
+  "observed": "2026-10-11",
+  "source": "scratchpad cpu-pair.txt / cpu-pair20.txt: make hamlet --no-render in a detached worktree at the merge base and in the clone, alternating, timed with bash `times` (children's user CPU)",
+  "method": "three wall-clock bookend pairs of the same code read 24.1 s, 24.0 s and 42.5 s for the identical end leg at a host load of 5-8 on 22 cores; CPU time interleaved removes the drift. Single runs scatter about 30%; the head is faster or level on every seed's mean except 47 at 20 households (+11%)"
+ },
+ "batch3-open-rows": {
+  "quantity": "open rows of 328's ranking at batch 3's close (no wave, not deferred), and how many of them are E3 DRIFTED",
+  "value": "183 open, 132 E3 DRIFTED",
+  "unit": "rows",
+  "observed": "2026-10-12",
+  "source": "specs/328-match-the-research/ranking.json rebuilt by audit/merge.py after waves 119-121's three E0 rows were marked in audit/waves.json",
+  "command": "python3 -c \"import json; r=json.load(open('specs/328-match-the-research/ranking.json')); o=[x for x in r if not x.get('wave') and x.get('scope')!='deferred']; print(len(o), 'open,', sum(1 for x in o if x.get('tier')=='E3' and x.get('verdict')=='DRIFTED'), 'E3 DRIFTED')\"",
+  "method": "the count the plan review of 2026-10-11 used, re-run on the rebuilt ranking"
+ },
+ "batch3-perf-audit-legs": {
+  "quantity": "perf-audit's seven alternated make-perf legs, base (merge base ab378e08) against head (e9491c2a8), in fresh detached worktrees: the reference totals, and (hinterland+woodland) and web as shares of the rest",
+  "value": {
+   "base_reference_s": [
+    37.6,
+    17.3,
+    18.6
+   ],
+   "head_reference_s": [
+    19.7,
+    21.5,
+    18.0,
+    25.6
+   ],
+   "hinterland_woodland_over_rest_base": "0.223-0.236",
+   "hinterland_woodland_over_rest_head": "0.241-0.252",
+   "web_over_rest_mean": {
+    "base": 0.231,
+    "head": 0.231
+   },
+   "wood_rule_cost": "about +8% of hinterland+woodland, about +1.2% of the total"
+  },
+  "unit": "s",
+  "varies": "timing; host load 5-8 on 22 shared cores at the time",
+  "observed": "2026-10-11",
+  "source": "specs/374-match-the-research-continued/perf-audit-legs/*aud374*.json (3 base legs, 4 head legs); perf-audit's record dev/perf-log/20261011T105045Z-review-374-confirmation-local-diagram-backlog.json",
+  "command": "ls specs/374-match-the-research-continued/perf-audit-legs/ | grep -c aud374.*json",
+  "method": "perf-audit ran make perf alternately in two detached worktrees; the stage shares are each leg's stage seconds over the leg's untouched stages, which move with the load. The command re-counts the legs (7); the timings are not re-runnable as recorded"
+ },
+ "batch4-open-rows": {
+  "quantity": "open rows of 328's ranking at batch 4's close (no wave, not deferred), and how many of them are E3 DRIFTED",
+  "value": "179 open, 122 E3 DRIFTED",
+  "unit": "rows",
+  "observed": "2026-10-12",
+  "source": "specs/328-match-the-research/ranking.json rebuilt by audit/merge.py after waves 122-126's rows were marked in audit/waves.json; the eight rows batch 4's checks filed (found-wave126) entered at the top",
+  "command": "python3 -c \"import json; r=json.load(open('specs/328-match-the-research/ranking.json')); o=[x for x in r if not x.get('wave') and x.get('scope')!='deferred']; print(len(o), 'open,', sum(1 for x in o if x.get('tier')=='E3' and x.get('verdict')=='DRIFTED'), 'E3 DRIFTED')\"",
+  "method": "the count the plan review of 2026-10-11 used, re-run on the rebuilt ranking"
+ },
+ "b4-hay-e1": {
+  "quantity": "the torii's beam before the shrine's west door",
+  "observed": "2026-10-12",
+  "verifies": "E1",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "beam x 749 against the door face x 773.5, after make map",
+  "value": {
+   "gap_ft": 8.2,
+   "band_ft": [
+    5,
+    12
+   ]
+  }
+ },
+ "b4-hay-e2": {
+  "quantity": "a maids' room under the main roof at the kitchen end",
+  "observed": "2026-10-12",
+  "verifies": "E2",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the room rect maids-room-1 (36 x 36 px) in the west block over the kitchen ell, tagged servants' quarters",
+  "value": {
+   "maids_room": true,
+   "size_ft": [
+    12,
+    12
+   ]
+  }
+ },
+ "b4-hay-e3": {
+  "quantity": "the notes, map notes and comments brought to the drawing",
+  "observed": "2026-10-12",
+  "verifies": "E3",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md; pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "each line the review named rewritten: knob 5, knob 9 woodshed, the torii line, the privy line, the review log, the map notes, the north-wall comment",
+  "value": {
+   "lines_rewritten": 8
+  }
+ },
+ "b4-hay-n1": {
+  "quantity": "the rear-yard privy's users labeled a GUESS",
+  "observed": "2026-10-12",
+  "verifies": "N1",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the comment reads 'who uses it a GUESS'",
+  "value": {
+   "labeled": true
+  }
+ },
+ "b4-hay-n2": {
+  "quantity": "the servants' range's 54 ft length labeled a GUESS",
+  "observed": "2026-10-12",
+  "verifies": "N2",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the range comment labels its length a GUESS",
+  "value": {
+   "labeled": true
+  }
+ },
+ "b4-cty-e1": {
+  "quantity": "the service gate's approach",
+  "observed": "2026-10-12",
+  "verifies": "E1",
+  "subject": "building-review--county-magistracy-example",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "pack_audit postern_approach (written red on the old draft) OK; the gate at 221 ft opens off the cart yard",
+  "value": {
+   "postern_approach": "OK",
+   "gate_ft": 221
+  }
+ },
+ "b4-cty-e2": {
+  "quantity": "the barracks divided into dwellings",
+  "observed": "2026-10-12",
+  "verifies": "E2",
+  "subject": "building-review--county-magistracy-example",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "four door marks part-of barracks, three bay walls",
+  "value": {
+   "doors": 4,
+   "bay_walls": 3
+  }
+ },
+ "b4-cty-e3": {
+  "quantity": "no lodgers' privy by the main gate",
+  "observed": "2026-10-12",
+  "verifies": "E3",
+  "subject": "building-review--county-magistracy-example",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "every lodgers' latrine more than 30 ft along the wall from the main gate's opening (tests/test_compound_service.py)",
+  "value": {
+   "gate_privy_ft": 30,
+   "stable_privy": "in the gap west of the stables"
+  }
+ },
+ "b4-cty-e4": {
+  "quantity": "the storehouses' doors",
+  "observed": "2026-10-12",
+  "verifies": "E4",
+  "subject": "building-review--county-magistracy-example",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "two door marks part-of storehouse (DOOR_KINDS)",
+  "value": {
+   "doors": 2
+  }
+ },
+ "b4-cty-e5": {
+  "quantity": "the notes and code comments brought to the drawing",
+  "observed": "2026-10-12",
+  "verifies": "E5",
+  "subject": "building-review--county-magistracy-example",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md; l7r/diagram/compound_example.py",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the house-size list, the carter's route, R07, staff housing, the vegetable garden, the middle gate and the lesser gates rewritten; the kitchen comments",
+  "value": {
+   "lines_rewritten": 9
+  }
+ },
+ "b4-cty-e6": {
+  "quantity": "the servants' route to the kitchen",
+  "observed": "2026-10-12",
+  "verifies": "E6",
+  "subject": "building-review--county-magistracy-example",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the maids' room (servants' quarters, captioned maids' room) at the residence's kitchen end; the street row the menservants'",
+  "value": {
+   "maids_room": true
+  }
+ },
+ "b4-cty-q1": {
+  "quantity": "the servants' row's entry form",
+  "observed": "2026-10-12",
+  "verifies": "Q1",
+  "subject": "building-review--county-magistracy-example",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg; l7r/diagram/compound_example.py",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "five dwellings a door each, the form rolled per compound (SERVANTS_FORM); CORRECTED by building-review round 4: the sheet drew four, the west dwelling's door unseated - see b4-cty-r4-e1",
+  "value": {
+   "doors": 5,
+   "form": "a door to each dwelling"
+  }
+ },
+ "b4-cty-q2": {
+  "quantity": "where the grooms sleep",
+  "observed": "2026-10-12",
+  "verifies": "Q2",
+  "subject": "building-review--county-magistracy-example",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the grooms in the stable's grooms' room (research 0108), not the row",
+  "value": {
+   "grooms": "stable"
+  }
+ },
+ "b4-cty-n1": {
+  "quantity": "the long-house's bay walls",
+  "observed": "2026-10-12",
+  "verifies": "N1",
+  "subject": "building-review--county-magistracy-example",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "four solid bay walls in the retainers' quarters group",
+  "value": {
+   "bay_walls": 4
+  }
+ },
+ "b4-ub-e1": {
+  "quantity": "the band behind the west block",
+  "observed": "2026-10-12",
+  "verifies": "E1",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the block, kitchen, bath and tubs 36 px north; pack-audit's band 140 x 11 ft from the wall's centerline, ~9 ft from its inner face",
+  "value": {
+   "band_ft": [
+    140,
+    11
+   ]
+  }
+ },
+ "b4-ub-e2": {
+  "quantity": "the notes brought to the drawing",
+  "observed": "2026-10-12",
+  "verifies": "E2",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the stable log, the servants' and barracks lines, the abutting rowhouse, the barracks' court, the coverage figures rewritten",
+  "value": {
+   "lines_rewritten": 7
+  }
+ },
+ "b4-ub-e3": {
+  "quantity": "the stable door clear of the kennel",
+  "observed": "2026-10-12",
+  "verifies": "E3",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the door y 694-706 against the kennel's top at 706",
+  "value": {
+   "door_y": [
+    694,
+    706
+   ],
+   "kennel_y": 706
+  }
+ },
+ "b4-ub-q1": {
+  "quantity": "the servants' way to the kitchen",
+  "observed": "2026-10-12",
+  "verifies": "Q1",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "a maids' room at the kitchen end of the family quarters, the gate range's room the menservants'",
+  "value": {
+   "maids_room": true
+  }
+ },
+ "b4-ub-q2": {
+  "quantity": "where the maids sleep",
+  "observed": "2026-10-12",
+  "verifies": "Q2",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the maids' room under the main roof (research 0115's Aizu house; a GUESS)",
+  "value": {
+   "maids_room": true
+  }
+ },
+ "b4-hoshi-e1": {
+  "quantity": "the sacred tree's clearance",
+  "observed": "2026-10-12",
+  "verifies": "E1",
+  "subject": "building-review--hoshigaoka-shrine",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the tree at (586,800) r45: 13.9 ft from the nearest crown of the wood, 4.1 ft off the arch beams' east ends",
+  "value": {
+   "wood_gap_ft": 13.9,
+   "beam_gap_ft": 4.1
+  }
+ },
+ "b4-hoshi-e2": {
+  "quantity": "the dwelling's door in the notes",
+  "observed": "2026-10-12",
+  "verifies": "E2",
+  "subject": "building-review--hoshigaoka-shrine",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.notes.md",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the genkan and tub map notes name the south door",
+  "value": {
+   "door": "south"
+  }
+ },
+ "b4-hoshi-e3": {
+  "quantity": "the clearing pocket behind the dwelling",
+  "observed": "2026-10-12",
+  "verifies": "E3",
+  "subject": "building-review--hoshigaoka-shrine",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the clearing's back line at the eaves (y ~431-433) west of the sanctuary's lobe",
+  "value": {
+   "back_line_y": [
+    431,
+    433
+   ]
+  }
+ },
+ "b4-hoshi-n1": {
+  "quantity": "the notes' figures after the move",
+  "observed": "2026-10-12",
+  "verifies": "N1",
+  "subject": "building-review--hoshigaoka-shrine",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.notes.md",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the privy ~50 ft from the sanctuary, the service way 18 ft from the basin, the well behind the kitchen and the monk's rooms",
+  "value": {
+   "lines_rewritten": 4
+  }
+ },
+ "b4-och-e1": {
+  "quantity": "the servants' route to the kitchen",
+  "observed": "2026-10-12",
+  "verifies": "E1",
+  "subject": "building-review--ochiba-magistracy",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "a maids' room at the kitchen end of the family row; the street range the menservants', the grooms in the stable's room",
+  "value": {
+   "maids_room": true
+  }
+ },
+ "b4-och-e2": {
+  "quantity": "the notes brought to the drawing",
+  "observed": "2026-10-12",
+  "verifies": "E2",
+  "subject": "building-review--ochiba-magistracy",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "knob 5, knob 9's privies and night-soil route, the rear yard map note rewritten",
+  "value": {
+   "lines_rewritten": 4
+  }
+ },
+ "b4-och-q1": {
+  "quantity": "where the maids sleep",
+  "observed": "2026-10-12",
+  "verifies": "Q1",
+  "subject": "building-review--ochiba-magistracy",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the maids' room under the main roof (a GUESS on the Aizu house)",
+  "value": {
+   "maids_room": true
+  }
+ },
+ "b4-och-q2": {
+  "quantity": "the service passage through the range labeled",
+  "observed": "2026-10-12",
+  "verifies": "Q2",
+  "subject": "building-review--ochiba-magistracy",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the range comment labels the service-gate cut a GUESS by analogy",
+  "value": {
+   "labeled": true
+  }
+ },
+ "b4-och-n1": {
+  "quantity": "the range's length one way",
+  "observed": "2026-10-12",
+  "verifies": "N1",
+  "subject": "building-review--ochiba-magistracy",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg; pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "64 ft of building, 70.7 ft over all, in both",
+  "value": {
+   "building_ft": 64,
+   "over_all_ft": 70.7
+  }
+ },
+ "b4-och-n3": {
+  "quantity": "the stable's log line",
+  "observed": "2026-10-12",
+  "verifies": "N3",
+  "subject": "building-review--ochiba-magistracy",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "18 x 24 ft, the grooms' room across the passage",
+  "value": {
+   "size_ft": [
+    18,
+    24
+   ]
+  }
+ },
+ "b4-gstore-f1": {
+  "quantity": "the storehouses' doors",
+  "observed": "2026-10-12",
+  "verifies": "F1",
+  "subject": "glyph-check--storehouse--county-magistracy-example",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "two door blocks part-of storehouse",
+  "value": {
+   "doors": 2
+  }
+ },
+ "b4-gstab-f4": {
+  "quantity": "the notes' grooms' room",
+  "observed": "2026-10-12",
+  "verifies": "F4",
+  "subject": "glyph-check--stables--hayakawa-magistracy",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the log says across the passage",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b4-gstab-f5": {
+  "quantity": "the tub comment's door wording",
+  "observed": "2026-10-12",
+  "verifies": "F5",
+  "subject": "glyph-check--stables--hayakawa-magistracy",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the comment reads 'onto the outer court by the stable well'",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b4-gstab-f6": {
+  "quantity": "the stale 28 x 16 ft comment",
+  "observed": "2026-10-12",
+  "verifies": "F6",
+  "subject": "glyph-check--stables--hayakawa-magistracy",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the comment reads 18 x 24 ft since wave 126",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b4-sry-q1": {
+  "quantity": "the rear yard's size labeled a GUESS",
+  "observed": "2026-10-12",
+  "verifies": "Q1",
+  "subject": "size-audit--rear-yard",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the notes record the 18-45 by 10-30 ft band as a GUESS",
+  "value": {
+   "band_ft": {
+    "w": [
+     18,
+     45
+    ],
+    "h": [
+     10,
+     30
+    ]
+   }
+  }
+ },
+ "b4-sry-b1": {
+  "quantity": "the band recorded",
+  "observed": "2026-10-12",
+  "verifies": "B1",
+  "subject": "size-audit--rear-yard",
+  "answers": "cf1bcdd03a7d",
+  "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the band in the rear-yard knob of the notes",
+  "value": {
+   "band_ft": {
+    "w": [
+     18,
+     45
+    ],
+    "h": [
+     10,
+     30
+    ]
+   }
+  }
+ },
+ "b4-sst-b1": {
+  "quantity": "the storehouse band recorded",
+  "observed": "2026-10-12",
+  "verifies": "B1",
+  "subject": "size-audit--storehouse",
+  "answers": "cf1bcdd03a7d",
+  "source": "l7r/diagram/buildings/types.json",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the storehouse item's band_ft w 12-20, h 9-16; size_bands OK on every sheet",
+  "value": {
+   "band_ft": {
+    "w": [
+     12,
+     20
+    ],
+    "h": [
+     9,
+     16
+    ]
+   }
+  }
+ },
+ "b4-hoshi-e1-frame": {
+  "quantity": "the sacred tree's crown inside the frame",
+  "observed": "2026-10-12",
+  "verifies": "E1",
+  "subject": "building-review--hoshigaoka-shrine",
+  "answers": "fb17f9739a98",
+  "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg",
+  "command": "make pack-audit ARGS=pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg",
+  "method": "the crown's foot (cy 800 + r 45 = y 845) against the viewBox's foot (110 + 738 = 848)",
+  "value": {
+   "crown_foot_y": 845,
+   "frame_foot_y": 848
+  }
+ },
+ "b4-hoshi-n1-comments": {
+  "quantity": "the SVG comments on the footpath and the well",
+  "observed": "2026-10-12",
+  "verifies": "N1",
+  "subject": "building-review--hoshigaoka-shrine",
+  "answers": "fb17f9739a98",
+  "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg",
+  "command": "grep",
+  "method": "the footpath runs 'behind the kitchen and the monk's rooms'; the well '108 ft behind the building'",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b4-och-r2-e1": {
+  "quantity": "Ochiba's notes and comments against the drawing (round 2)",
+  "observed": "2026-10-12",
+  "verifies": "E1",
+  "subject": "building-review--ochiba-magistracy",
+  "answers": "fb17f9739a98",
+  "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md; pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+  "command": "grep",
+  "method": "knob 9's rear yard runs west of the storehouses; the residence 'the family's and its maids''; the residence comment; the rear-strip comment no longer puts servants on the north wall",
+  "value": {
+   "lines_rewritten": 4
+  }
+ },
+ "b4-och-r2-n2": {
+  "quantity": "the maids' room's grounds",
+  "observed": "2026-10-12",
+  "verifies": "N2",
+  "subject": "building-review--ochiba-magistracy",
+  "answers": "fb17f9739a98",
+  "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+  "command": "grep",
+  "method": "the comment cites 0091's Takayama 'rooms for the yonin and maids'; size and seat GUESSES",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b4-och-r2-n3": {
+  "quantity": "the residence map note names the maids' room",
+  "observed": "2026-10-12",
+  "verifies": "N3",
+  "subject": "building-review--ochiba-magistracy",
+  "answers": "fb17f9739a98",
+  "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md",
+  "command": "grep",
+  "method": "the residence map note names the maids' room at the kitchen end of the back row",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b4-cty-r4-e1": {
+  "quantity": "a door to every dwelling of the servants' row",
+  "observed": "2026-10-12",
+  "verifies": "E1",
+  "subject": "building-review--county-magistracy-example",
+  "answers": "fb17f9739a98",
+  "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg; l7r/diagram/compound_example.py servants_row",
+  "command": "make test-file FILE=tests/test_compound_service.py",
+  "method": "the west dwelling's door at frac 0.15 (its approach clear of the servants' privy); five door marks part-of servants' quarters, counted on the regenerated sheet and held by the test",
+  "value": {
+   "doors": 5
+  }
+ },
+ "b4-cty-r4-n1": {
+  "quantity": "the notes' cart yard size",
+  "observed": "2026-10-12",
+  "verifies": "N1",
+  "subject": "building-review--county-magistracy-example",
+  "answers": "fb17f9739a98",
+  "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+  "command": "grep",
+  "method": "the guess list says 37 x 20 ft, as the program and the sheet",
+  "value": {
+   "size_ft": [
+    37,
+    20
+   ]
+  }
+ },
+ "b5-hay-n1": {
+  "quantity": "the maids' room clear of the residence corridor's west mouth",
+  "observed": "2026-10-12",
+  "verifies": "N1",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "fb17f9739a98",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the room's rect x 376-412 against the corridor's mouth at x 448, y 244-278",
+  "value": {
+   "room_x2_px": 412,
+   "corridor_x_px": 448,
+   "clear_ft": 12.0
+  }
+ },
+ "b5-hay-n2": {
+  "quantity": "the servants' quarters map note's clause order",
+  "observed": "2026-10-12",
+  "verifies": "N2",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "fb17f9739a98",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the notes line reads 'the menservants lodge in the range on the street front, west of the gate range, its doors on the outer court by the stable; the grooms keep the stable's own room'",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b5-ub-n1": {
+  "quantity": "the rear-yard comment's stale clause",
+  "observed": "2026-10-12",
+  "verifies": "N1",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "fb17f9739a98",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "grep 'reaches west' in the sheet finds nothing; the rear-yard comment describes the yard as drawn",
+  "value": {
+   "stale_lines": 0
+  }
+ },
+ "b5-cty-e1": {
+  "quantity": "the way west past the stable well",
+  "observed": "2026-10-12",
+  "verifies": "E1",
+  "subject": "building-review--county-magistracy-example",
+  "answers": "bed717b195bb",
+  "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the hearing court 26 ft deep, the stable well 6 ft out: the gap between them measured on the draft; tests/test_compound_service.py holds 6 ft or more",
+  "value": {
+   "way_ft": 8.3
+  }
+ },
+ "b5-cty-e2": {
+  "quantity": "the stables' privy against the south wall",
+  "observed": "2026-10-12",
+  "verifies": "E2",
+  "subject": "building-review--county-magistracy-example",
+  "answers": "bed717b195bb",
+  "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the privy at x 64-69, y 192-197 ft, west of the stable, its hatch drawn; tests/test_compound_service.py holds it",
+  "value": {
+   "flush": true,
+   "hatch": true
+  }
+ },
+ "b5-cty-e3": {
+  "quantity": "the inner entrance in one room",
+  "observed": "2026-10-12",
+  "verifies": "E3",
+  "subject": "building-review--county-magistracy-example",
+  "answers": "bed717b195bb",
+  "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the door at x 115.7-121.7 ft, inside the inner rooms (x 112-138)",
+  "value": {
+   "one_room": true
+  }
+ },
+ "b5-hay-r6-e1": {
+  "quantity": "the grove's bare ground",
+  "observed": "2026-10-12",
+  "verifies": "E1",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "bed717b195bb",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the pond garden runs east to x 875 and north before the reception's east veranda; pack-audit's largest vacancies are the named kitchen yard, forecourt strip and rear yard",
+  "value": {
+   "largest_vacancy_sqft": 3802
+  }
+ },
+ "b5-hay-r6-e2": {
+  "quantity": "the notes against the drawing",
+  "observed": "2026-10-12",
+  "verifies": "E2",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "bed717b195bb",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "knob 9's arch, the torii line, the torii map note and a review-log entry rewritten to the corner shrine, its south door and its tree",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b5-hay-r6-n1": {
+  "quantity": "the shrine's tub outside the arch's span",
+  "observed": "2026-10-12",
+  "verifies": "N1",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "bed717b195bb",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the tub at (877,186) east of the arch's east post (871.9-875.5)",
+  "value": {
+   "outside": true
+  }
+ },
+ "b5-hoshi-e1": {
+  "quantity": "the sanctuary inside its clearing",
+  "observed": "2026-10-12",
+  "verifies": "E1",
+  "subject": "building-review--hoshigaoka-shrine",
+  "answers": "bed717b195bb",
+  "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the clearing's lobe at x 470-537.5 against the sanctuary's plinth at x 475-537",
+  "value": {
+   "inside": true
+  }
+ },
+ "b5-hoshi-q1": {
+  "quantity": "the three-bay sanctuary's depth labeled",
+  "observed": "2026-10-12",
+  "verifies": "Q1",
+  "subject": "building-review--hoshigaoka-shrine",
+  "answers": "bed717b195bb",
+  "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.notes.md",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "notes item 9 labels the 6 ft depth a GUESS; the research pass filed as a row",
+  "value": {
+   "labeled": true
+  }
+ },
+ "b5-hoshi-n1": {
+  "quantity": "the privy's distance in the notes",
+  "observed": "2026-10-12",
+  "verifies": "N1",
+  "subject": "building-review--hoshigaoka-shrine",
+  "answers": "bed717b195bb",
+  "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.notes.md",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "notes line 18 reads about 44 ft",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b5-och-e1": {
+  "quantity": "the notes against the drawing",
+  "observed": "2026-10-12",
+  "verifies": "E1",
+  "subject": "building-review--ochiba-magistracy",
+  "answers": "bed717b195bb",
+  "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "knob 7's workshop, the vegetable garden, rear yard and threshold-stone map notes, the inner-garden comment and a review-log entry rewritten",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b5-och-e2": {
+  "quantity": "the second kami's roll recorded",
+  "observed": "2026-10-12",
+  "verifies": "E2",
+  "subject": "building-review--ochiba-magistracy",
+  "answers": "bed717b195bb",
+  "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "knob 9 records the roll ochiba-magistracy:second kami: myobu = one hall",
+  "value": {
+   "recorded": true
+  }
+ },
+ "b5-och-n1": {
+  "quantity": "the rear yard to the hall",
+  "observed": "2026-10-12",
+  "verifies": "N1",
+  "subject": "building-review--ochiba-magistracy",
+  "answers": "bed717b195bb",
+  "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the rear-yard polygon carried to x 890 and its notes",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b5-ub-e1": {
+  "quantity": "the grove's bare ground",
+  "observed": "2026-10-12",
+  "verifies": "E1",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "bed717b195bb",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the inner garden runs to the border wall (x 1060); the largest vacancy left is the named kitchen yard, then the shrine's own ground 77 x 37 ft with its way",
+  "value": {
+   "largest_vacancy_sqft": 3345
+  }
+ },
+ "b5-ub-e2": {
+  "quantity": "the roll's key",
+  "observed": "2026-10-12",
+  "verifies": "E2",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "bed717b195bb",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the comment keys on ubame-magistracy, which rolls one hall as drawn; the notes record it",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b5-ub-e3": {
+  "quantity": "the notes against the drawing",
+  "observed": "2026-10-12",
+  "verifies": "E3",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "bed717b195bb",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the altar, grove, way, vacancy, named-ground and map-note lines and a review-log entry rewritten",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b5-ub-q1": {
+  "quantity": "a way to the shrine",
+  "observed": "2026-10-12",
+  "verifies": "Q1",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "bed717b195bb",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "a trodden way from the open ground east of the reception along the garden's north edge and under the arch",
+  "value": {
+   "drawn": true
+  }
+ },
+ "b5r2-hay-e1": {
+  "quantity": "the shrine's tub off the wall",
+  "observed": "2026-10-12",
+  "verifies": "E1",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "27996c2d35fc",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the tub at (868,185), 2 ft below the hall's eaves at its south-east corner, clear of the wall's ink (to x 875.5) and the torii beam (y 200); fire_water_adrift and fire_water_distribution OK",
+  "value": {
+   "clear": true
+  }
+ },
+ "b5r2-hay-n1": {
+  "quantity": "the notes' north-east corner",
+  "observed": "2026-10-12",
+  "verifies": "N1",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "27996c2d35fc",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "line 38 now reads 'the east end of the strip they free'",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b5r2-hay-n2": {
+  "quantity": "the tub's comment",
+  "observed": "2026-10-12",
+  "verifies": "N2",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "27996c2d35fc",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the comment reads 'at its south-east corner, inside the arch, beside its south door'",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b5r2-ub-e1": {
+  "quantity": "the band east of the reception",
+  "observed": "2026-10-12",
+  "verifies": "E1",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "27996c2d35fc",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the garden's north edge raised to y 263 for x 860-1060, 8 ft below the arch; pack-audit's largest vacancies are the named kitchen yard, the rear-yard band and the west alley",
+  "value": {
+   "largest_vacancy_sqft": 3345
+  }
+ },
+ "b5r2-ub-e2": {
+  "quantity": "notes line 33",
+  "observed": "2026-10-12",
+  "verifies": "E2",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "27996c2d35fc",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "it reads 'a modest standalone hall in a corner beside its tree, the wood's kami at a second altar inside it'",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b5r2-ub-n1": {
+  "quantity": "notes line 14's grove",
+  "observed": "2026-10-12",
+  "verifies": "N1",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "27996c2d35fc",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "'a mature grove' now 'a wide inner garden'",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b5r2-ub-n2": {
+  "quantity": "the way painted over its caption",
+  "observed": "2026-10-12",
+  "verifies": "N2",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "27996c2d35fc",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the way drawn before the shrine group, so the caption paints over it; the render reads INARI SHRINE whole",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b5r2-cty-n1": {
+  "quantity": "the notes' hearing court size",
+  "observed": "2026-10-12",
+  "verifies": "N1",
+  "subject": "building-review--county-magistracy-example",
+  "answers": "27996c2d35fc",
+  "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the guess list reads 80 x 26 ft with the 6 ft cut recorded",
+  "value": {
+   "fixed": true
+  }
+ },
+ "batch5-open-rows": {
+  "quantity": "open rows of 328's ranking at batch 5's close (no wave, not deferred), and how many of them are E3 DRIFTED",
+  "value": "165 open, 117 E3 DRIFTED",
+  "unit": "rows",
+  "observed": "2026-10-12",
+  "source": "specs/328-match-the-research/ranking.json",
+  "command": "python3 audit/merge.py audit . (from specs/328-match-the-research), then counted",
+  "method": "rows 0-12 and 18 of batch 4's open list marked waves 127-131 in waves.json, the ranking rebuilt"
+ },
+ "b6-ub-n3": {
+  "quantity": "the shrine way start",
+  "observed": "2026-10-12",
+  "verifies": "N3",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "27996c2d35fc",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the way path now starts at x 855, east of the reception privy (x 838-853), not inside it",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b6-ub-n4": {
+  "quantity": "notes corridor line",
+  "observed": "2026-10-12",
+  "verifies": "N4",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "27996c2d35fc",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+  "command": "grep -n \"covered corridor joins\" <the notes>",
+  "method": "the stale sentence (a corridor joining the kitchen across the service alley) is gone from the notes",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b6r2-cme-e1": {
+  "quantity": "the stables latrine hatch",
+  "observed": "2026-10-12",
+  "verifies": "E1",
+  "subject": "building-review--county-magistracy-example",
+  "answers": "dca6ffdfd7c0",
+  "source": "l7r/diagram/compound_parts.py",
+  "command": "make test-file FILE=tests/test_compound_service.py",
+  "method": "the hatch reach 3 ft from the wall face; the stables latrine draws its hatch; red at the old 2.5 ft reach",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b6r2-cme-n1": {
+  "quantity": "hearing court comment",
+  "observed": "2026-10-12",
+  "verifies": "N1",
+  "subject": "building-review--county-magistracy-example",
+  "answers": "dca6ffdfd7c0",
+  "source": "l7r/diagram/compound_example.py",
+  "command": "grep -n \"6.4 ft past the stable well\"",
+  "method": "the comment says about 6.4 ft",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b6r2-hay-e1": {
+  "quantity": "the indoor kitchen well gear",
+  "observed": "2026-10-12",
+  "verifies": "E1",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "dca6ffdfd7c0",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the kitchen well draws a beam pulley, no sweep (W135-2); well_gear fails an indoor sweep",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b6r2-och-e1": {
+  "quantity": "south wall comment",
+  "observed": "2026-10-12",
+  "verifies": "E1",
+  "subject": "building-review--ochiba-magistracy",
+  "answers": "dca6ffdfd7c0",
+  "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+  "command": "grep -n \"588..610.5\"",
+  "method": "the wall comment says the main gate 588..610.5 (7.5 ft)",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b6r2-ub-q1": {
+  "quantity": "kitchen yard label",
+  "observed": "2026-10-12",
+  "verifies": "Q1",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "dca6ffdfd7c0",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+  "command": "grep -n \"kitchen yard\"",
+  "method": "the yard comment labels its existence and extent a GUESS",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b6r2-ub-n1": {
+  "quantity": "notes coverage figure",
+  "observed": "2026-10-12",
+  "verifies": "N1",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "dca6ffdfd7c0",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "notes line 76 says 34% (measured 2026-10-12)",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b6r3-cme-n1": {
+  "quantity": "gate posts clause",
+  "observed": "2026-10-12",
+  "verifies": "N1",
+  "subject": "building-review--county-magistracy-example",
+  "answers": "e2a5fc085f1b",
+  "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+  "command": "grep -n OUTSIDE that passage",
+  "method": "the R26 line says the 2 ft posts are a convention drawn outside the passage, their centers ~9 ft apart",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b6r3-cme-n2": {
+  "quantity": "privies off the face",
+  "observed": "2026-10-12",
+  "verifies": "N2",
+  "subject": "building-review--county-magistracy-example",
+  "answers": "e2a5fc085f1b",
+  "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+  "command": "grep -n 2.5 ft off it",
+  "method": "the privies line says the stables and garrison privies stand 2.5 ft off the face, the hatch reaching 3 ft",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b6r3-hay-e1": {
+  "quantity": "kitchen well floor wording",
+  "observed": "2026-10-12",
+  "verifies": "E1",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "e2a5fc085f1b",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+  "command": "grep -n this kitchen has no doma",
+  "method": "the wells line says inside the kitchen, on its board-floored ell, no doma",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b6r3-hay-q1": {
+  "quantity": "kitchen yard label",
+  "observed": "2026-10-12",
+  "verifies": "Q1",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "e2a5fc085f1b",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "command": "grep -n no source names a kitchen yard",
+  "method": "the yard comment and the notes label the yard a GUESS",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b6r3-hay-n1": {
+  "quantity": "roof roll said",
+  "observed": "2026-10-12",
+  "verifies": "N1",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "e2a5fc085f1b",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+  "command": "grep -n roof roll does not apply",
+  "method": "the wells line says the indoor well roof roll does not apply",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b6r3-ub-e1": {
+  "quantity": "garden site reason",
+  "observed": "2026-10-12",
+  "verifies": "E1",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "e2a5fc085f1b",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+  "command": "grep -n vegetable garden site",
+  "method": "the site is the knob rolled among the open sites (south, beside the formal garden), the false only-sun reason gone from the notes, the map note and the svg comment",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b6r3-ub-q1": {
+  "quantity": "garden site choice recorded",
+  "observed": "2026-10-12",
+  "verifies": "Q1",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "e2a5fc085f1b",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+  "command": "grep -n vegetable garden site",
+  "method": "the roll records why the garden takes its site over the western one",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b6r3-ub-n1": {
+  "quantity": "kitchen yard label in the notes",
+  "observed": "2026-10-12",
+  "verifies": "N1",
+  "subject": "building-review--ubame-magistracy",
+  "answers": "e2a5fc085f1b",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+  "command": "grep -n kitchen yard",
+  "method": "notes line 77 and the named-ground list label the kitchen yard a GUESS",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b6g-cme-f1": {
+  "quantity": "the roof glyph",
+  "observed": "2026-10-12",
+  "verifies": "F1",
+  "subject": "glyph-check--well--county-magistracy-example",
+  "answers": "dca6ffdfd7c0",
+  "source": "l7r/diagram/well_gear.py",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the roof drawn over the curb as an unfilled dashed outline on four corner posts; well_gear fails a filled square (proven red on the unfixed sheets)",
+  "value": {
+   "fixed": true
+  }
+ },
+ "b6g-ub-f1": {
+  "quantity": "the indoor well posts",
+  "observed": "2026-10-12",
+  "verifies": "F1",
+  "subject": "glyph-check--well--ubame-magistracy",
+  "answers": "dca6ffdfd7c0",
+  "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+  "command": "make pack-audit ARGS=<the sheet>",
+  "method": "the indoor kitchen well draws a beam pulley within the curb, no posts on the wall line (W135-2)",
+  "value": {
+   "fixed": true
+  }
+ },
+ "batch6-open-rows": {
+  "quantity": "open rows of 328s ranking at batch 6s close (no wave, not deferred, scope kept or mode-a), and how many of them are E3 DRIFTED",
+  "value": "161 open, 113 E3 DRIFTED",
+  "unit": "rows",
+  "observed": "2026-10-12",
+  "source": "specs/328-match-the-research/ranking.json",
+  "command": "python3 audit/merge.py audit . (from specs/328-match-the-research), then counted",
+  "method": "the four rows batch 6 took (main gate passage width, main gate posts, structures abut walls, well glyph) marked waves 132-135 in waves.json, the ranking rebuilt"
+ },
+ "w139-chessboard-rolls": {
+  "quantity": "16-household dike-pond hamlets rolled with the chessboard of ponds (pond_layout grid), seeds 3, 7, 11, 21, 30",
+  "value": "4 of 5 green; seed 3 refused (StyRefused: no near-half bank seat for the sty) - and refused the same under the mosaic, so the failure predates the chessboard",
+  "unit": "hamlets",
+  "observed": "2026-10-12",
+  "source": "make hamlet ARGS=\"--archetype mulberry_dike_fishpond --pond-layout grid|mosaic --households 16 --seed <s>\"",
+  "command": "make hamlet ARGS=\"--name DP<s> --seed <s> --households 16 --archetype mulberry_dike_fishpond --pond-layout grid --out <dir> --no-render\"",
+  "method": "exit status per roll; seed 3 re-rolled with the mosaic to place the failure"
+ },
+ "batch7-open-rows": {
+  "quantity": "open rows of 328s ranking at batch 7s close (no wave, scope kept or mode-a), and how many are E3 DRIFTED",
+  "value": "157 open (1 held at E2, the residence row), 108 E3 DRIFTED",
+  "unit": "rows",
+  "observed": "2026-10-12",
+  "source": "specs/328-match-the-research/ranking.json",
+  "command": "python3 audit/merge.py audit . (from specs/328-match-the-research), then counted",
+  "method": "the four rows batch 7 took marked waves 136-139 in waves.json, row 0 held E2 in overrides.json, the ranking rebuilt"
+ },
+ "row0-coverage-at-49-tsubo": {
+  "quantity": "building coverage of the three hand magistracy sheets if each ~145-tsubo house (~5,150 sq ft) were drawn at 0091's 49-tsubo Yokota house (~1,743 sq ft), nothing else moved",
+  "value": "Hayakawa 33% -> ~26%, Ochiba 33% -> ~27%, Ubame 34% -> ~28%; all under 0116's ~30-42% band",
+  "unit": "percent of the compound's area",
+  "observed": "2026-10-12",
+  "source": "make pack-audit on each sheet (33/33/34%); the compound sizes in each notes file (247x200, 267x200, 290x200 ft); 1 tsubo = 35.58 sq ft",
+  "command": "make pack-audit ARGS=pool/magistracies/<m>-magistracy/<m>-magistracy.svg",
+  "method": "built area = coverage x compound area; minus the ~3,407 sq ft a 49-tsubo house frees; divided by the compound area again. The escalation-check on batch 7's report found the earlier 67-tsubo target is one 0091's drawing page declines (a later restoration's size)"
+ },
+ "w141-archetype-rolls": {
+  "quantity": "the attested field forms rolled 12 seeds each at 16 households, before and after waves 140-141's fixes",
+  "value": "before: dike-pond 6/12, polder 10/12; after: dike-pond 11/12, polder 10/12 - open: dike-pond seed 4 (a row village: one farm's front door has no route to any way, walled by its grove and the ground), polder seed 12 (a row village: the door path's first leg runs within 7 ft of a neighbor's yard and no route at the law's 7 ft gap exists), polder seed 5 (SiteRefused, 14 of 16 seated on ladder margin 1); at the batch's final code (wave 143 with the 3 ft crop gap and the crop-step check, re-measured 2026-10-12 after the plan review caught a stale count): dike-pond 11/12, polder 10/12 - open: dike-pond seed 4 and polder seed 12 (row villages, a farm with no lawful door path), polder seed 5 (SiteRefused 14/16); at the 1.5 ft gap dike-pond seed 4 had passed. Four of the five pool hamlets pin no field form, so a changed roll would also re-deal their fields: a point for the batch that takes 771 up again",
+  "unit": "rolls",
+  "observed": "2026-10-12",
+  "source": "make hamlet ARGS=\"--archetype mulberry_dike_fishpond|polder_grid --households 16 --seed <s>\"",
+  "command": "make hamlet ARGS=\"--name A<s> --seed <s> --households 16 --archetype <a> --out <dir> --no-render\"",
+  "method": "exit status per roll; the open failures probed at refuse_unreached / door_path (fouled_segment = 0 via theirs on seed 12); the round arbiter (ask:b8-w141-archetype-failures) ruled route B: land the proven fixes, keep row 771 open"
+ },
+ "w143-cohort": {
+  "quantity": "make cohort (10 seeds plus the six pinned rows) across batch 8's waves",
+  "value": "waves 140-141: 15/16, wave 142: 15/16, wave 143: 16/16 - Audit-10 (14 households, nucleated; at HEAD too: 'the field is reached by no way') reached once a web lane may run on the bund",
+  "unit": "rolls",
+  "observed": "2026-10-12",
+  "source": "dev/cohort-log/20261012T171805Z, 20261012T171956Z, 20261012T172351Z",
+  "command": "make cohort",
+  "method": "the cohort's own verdict per seed, run after each wave's engine edit"
+ },
+ "batch8-open-rows": {
+  "quantity": "open rows of 328s ranking at batch 8s close (no wave, scope kept or mode-a), and how many are E3 DRIFTED",
+  "value": "155 open (1 held at E2, the residence row; row 771 open by the arbiter's route B), 106 E3 DRIFTED",
+  "unit": "rows",
+  "observed": "2026-10-12",
+  "source": "specs/328-match-the-research/ranking.json",
+  "command": "python3 audit/merge.py audit . (from specs/328-match-the-research), then counted",
+  "method": "rows 772-773 marked waves 142-143 in waves.json, the ranking rebuilt"
+ },
+ "batch8-bookends": {
+  "quantity": "make perf 374-start vs 374-end over batch 8",
+  "value": "16.6 s -> 16.4 s, band 0",
+  "unit": "s",
+  "observed": "2026-10-12",
+  "source": "dev/perf-log/20261012T170422Z-374-start, 20261012T175448Z-374-end",
+  "command": "make perf LABEL=374-start|374-end; make perf-review",
+  "method": "the two bookends' totals"
+ },
+ "w140-sty-reach": {
+  "quantity": "the nearest farmhouse to a refused dike-pond hamlet's reserved sty seat, before wave 140",
+  "value": "seed 3: 452 ft, seed 4: 862 ft (reach 320 ft); the fry ponds are the smallest ponds up to FRY_VILLAGE_SHARE = 0.7 of the block's pond area (settlement/fields/landuse.py)",
+  "unit": "ft",
+  "observed": "2026-10-12",
+  "source": "the StyRefused diagnostic (pondstock.seat_faults) on 16-household dike-pond rolls",
+  "command": "make hamlet ARGS=\"--name A<s> --seed <s> --households 16 --archetype mulberry_dike_fishpond --out <dir> --no-render\"",
+  "method": "the refusal names the reserved seat's failed rules and its nearest farmhouse's distance"
+ },
+ "b9-before": {
+  "quantity": "20 valley hamlets at 16 households (seeds 1-20): how many stand on both banks of their brook, and how many roll a wood and draw none on the sheet",
+  "value": "astride 2/20 (both dispersed; nucleated 0/8, linear 0/4); wood off the sheet 7/20; at the brook tiebreak (0.05, a trial reverted): 10-household seed 4 seats astride its brook and leaves one farmhouse unreached at (687, 2403) - a row-village farm with no route from its door",
+  "unit": "hamlets",
+  "observed": "2026-10-12",
+  "source": "make hamlet ARGS=\"--name V<s> --seed <s> --households 16 --out <dir> --no-render\"",
+  "command": "the houses' side of the first stream polyline (cross product), and meta.woodland_offsheet",
+  "method": "a hamlet is astride when houses stand on both sides of its brook"
+ },
+ "w145-offsheet-why": {
+  "quantity": "on each valley roll that records its wood off the sheet (16 households, seeds 2, 6, 7, 13, 15, 16, 17), the scan's open seats inside the frame and those beyond the fields from the houses",
+  "value": "seed 2: 126-177 open, 0 beyond; 6: 98-127, 0; 7: 122-172, 0; 13: 31-81, 0; 15: 47-71, 0; 16: 6-26, 0; 17: 135-194, 0 (per rung and set-back pass) - every open seat in the frame stands on the houses' side of the fields, so 0077's far side of the fields lies past the frame's edge on all seven (feature 287 D11); seed 1, which draws its wood, has 3-7 beyond",
+  "unit": "seats",
+  "observed": "2026-10-12",
+  "source": "a throwaway probe test wrapping hinterland/parcels.py _beyond_the_fields (removed after the measurement)",
+  "command": "make test-file FILE=<the probe>",
+  "method": "the scored seats handed to _beyond_the_fields and the seats it returns, per call"
+ },
+ "batch9-bookends": {
+  "quantity": "make perf 374-start vs 374-end over batch 9",
+  "value": "16.8 s -> 16.6 s, band 0 (the batch's only engine edit is a claim docstring)",
+  "unit": "s",
+  "observed": "2026-10-12",
+  "source": "dev/perf-log/20261012T181723Z-374-start, 20261012T184556Z-374-end",
+  "command": "make perf LABEL=374-start|374-end; make perf-review",
+  "method": "the two bookends' totals"
+ },
+ "w146-rolls": {
+  "quantity": "wave 146 at its final code: the cohort, the 24 archetype rolls (16 households, seeds 1-12), the 20 valley rolls (16 households, seeds 1-20) and the 10-household valley seed 4",
+  "value": "cohort 16/16; dike-pond 12/12 (seeds 3 and 4 newly green; 11/12 at HEAD); polder 10/12 - seed 12 newly green, seed 5 SiteRefused as at HEAD, seed 4 NEWLY RED (needle_loops between its two streets and the road: street 0's straight join ends on the road beside the junction street 1 passes through; at HEAD the join carried a vertex on street 1, and the road's start sat 5 px away, the fixtures having moved its gateway); valley 20/20; valley 4@10 still refused, now off_ford on a row street where at HEAD a farm stood unreached",
+  "unit": "rolls",
+  "observed": "2026-10-12",
+  "source": "make cohort; make hamlet ARGS=\"--name <n> --seed <s> --households <h> [--archetype <a>] --out <dir> --no-render\"",
+  "command": "the same per roll",
+  "method": "exit status per roll; HEAD compared in a detached worktree (lanes 0-3 of polder seed 4 dumped at both)"
+ },
+ "batch10-bookends": {
+  "quantity": "make perf 374-start vs 374-end over batch 10",
+  "value": "16.7 s -> 16.6 s, band 0",
+  "unit": "s",
+  "observed": "2026-10-12",
+  "source": "dev/perf-log/20261012T191432Z-374-start, 20261012T195632Z-374-end",
+  "command": "make perf LABEL=374-start|374-end; make perf-review",
+  "method": "the two bookends' totals"
+ },
+ "batch11-bookends": {
+  "quantity": "make perf 374-start vs 374-end over batch 11",
+  "value": "16.8 s -> 17.0 s, band 0",
+  "unit": "s",
+  "observed": "2026-10-12",
+  "source": "dev/perf-log/20261012T200202Z-374-start, 20261012T202954Z-374-end",
+  "command": "make perf LABEL=374-start|374-end; make perf-review",
+  "method": "the two bookends' totals"
+ },
+ "w148-paddy-grass": {
+  "quantity": "the paddy's grass hill over 20 valley rolls (16 households, seeds 1-20) and the pool at wave 148's final code (the seat held clear of its plot and upslope of it as seated)",
+  "value": "rolled on 3 of 20 (seeds 4, 7, 17), seated on all 3, none rolled and unseated; in the pool Inashiro draws one, the other four none",
+  "unit": "hamlets",
+  "observed": "2026-10-12",
+  "source": "make hamlet ARGS=\"--name V<s> --seed <s> --households 16 --out <dir> --no-render\"; make maps SCOPE=all",
+  "command": "meta.paddy_grass_hill per manifest",
+  "method": "none / drawn / no seat counted"
+ },
+ "b12-glyph-f1": {
+  "quantity": "the paddy's grass hill on Inashiro told from the scrub around it: the mean color inside its square against same-sized squares of the scrub beside it",
+  "observed": "2026-10-12",
+  "verifies": "F1",
+  "subject": "glyph-check--paddy-s-grass-hill--inashiro",
+  "answers": "a7bccc68e831",
+  "source": "pool/hamlets/inashiro/inashiro.png after make map at engine key 9906d82f0e55; the square from the manifest's commons record, role paddy_grass",
+  "command": "the PNG read with PIL, each square's pixels inset 3 px, mean RGB",
+  "method": "the hill against the squares 120 ft left, right and up, 120 ft up-right and 200 ft right (one more square, up-left, holds a scrub pine)",
+  "value": {
+   "hill_rgb": [
+    212.6,
+    212.5,
+    160.0
+   ],
+   "scrub_rgb_range": [
+    [
+     231.0,
+     220.5,
+     183.8
+    ],
+    [
+     232.6,
+     221.9,
+     185.9
+    ]
+   ],
+   "hill_green_over_red": -0.1,
+   "scrub_green_over_red": [
+    -10.7,
+    -10.5
+   ]
+  }
+ },
+ "w149-strips": {
+  "quantity": "the farm bamboo strips drawn, HEAD against wave 149's landed route E (the strip seated after the web, as at HEAD, tested against each seated part rather than its whole bundle, offered stepped out along its side), over the 44 rolls (valley seeds 1-20, dike-pond and polder seeds 1-12, 16 households), the pool and the cohort",
+  "observed": "2026-10-12",
+  "source": "make hamlet ARGS=\"--name <n> --seed <s> --households 16 [--archetype <a>] --out <dir> --no-render\" in a detached HEAD worktree and in the clone; make maps SCOPE=all; make cohort",
+  "command": "the roll script and its summary (strips.py) in the session's scratchpad tools13; each manifest's bamboo_stands (role homestead), lanes and meta",
+  "method": "strips drawn, lanes over a strip, lanes between a house and its strip, meta.household_bamboo_wanted and _no_room summed; refusals, seat margin and households per roll against HEAD",
+  "value": {
+   "head_strips": 0,
+   "route_e": {
+    "strips": 57,
+    "lane_hits": 0,
+    "across": 0,
+    "wanted": 159,
+    "no_room": 102
+   },
+   "refused_head": [
+    "polder_grid seed 4",
+    "polder_grid seed 5"
+   ],
+   "refused_route_e": [
+    "polder_grid seed 4",
+    "polder_grid seed 5"
+   ],
+   "pool": "clean",
+   "cohort": "16/16",
+   "capacity": "seat margin and households unchanged"
+  }
+ },
+ "w149-seated-law-probe": {
+  "quantity": "households reached across a neighbor's yard with the seated yards and beds held in the seating law (a route measured and withdrawn)",
+  "observed": "2026-10-12",
+  "source": "a throwaway probe test rolling hg.generate on valley seeds 8, 13, 20 at 16 households",
+  "command": "meta.pinch_passages per roll",
+  "method": "with the seated parts in the seating law, without them, and at HEAD",
+  "value": {
+   "with": [
+    6,
+    8,
+    9
+   ],
+   "without": [
+    2,
+    1,
+    1
+   ],
+   "head": [
+    0,
+    1,
+    0
+   ]
+  }
+ },
+ "w149-route-matrix": {
+  "quantity": "the five routes for seating the farm's bamboo strip ahead of the ways, each on the pool, the 16-seed cohort and the 44 rolls",
+  "observed": "2026-10-12",
+  "source": "each route built in the clone and rolled as w149-strips; summaries routeA.txt to routeE.txt in the arbiter bundle of ask:b13-w149-route-matrix",
+  "command": "make maps SCOPE=all; make cohort; the 44-roll script",
+  "method": "new refusals against HEAD, strips drawn of those wanted, lanes between a house and its strip",
+  "value": {
+   "A in the bundle, copse seats kept off it, a way 7 ft off its own beds": {
+    "new_refusals": [
+     "pool Inashiro",
+     "valley seed 18"
+    ],
+    "strips": "126 of 136"
+   },
+   "B as A without the bed gap": {
+    "new_refusals": [
+     "cohort seed 7 (lane_knots)",
+     "valley seed 10"
+    ],
+    "strips": "132 of 142"
+   },
+   "C in the bundle alone": {
+    "new_refusals": [
+     "cohort seeds 2 and 10"
+    ],
+    "strips": "90 of 148, 3 laid",
+    "between": 2
+   },
+   "D at the seating's end, no bundle change": {
+    "new_refusals": [
+     "cohort seed 8"
+    ],
+    "strips": "77 of 159",
+    "between": 1
+   },
+   "E after the web (landed)": {
+    "new_refusals": [],
+    "strips": "57 of 159",
+    "between": 0
+   }
+  }
+ },
+ "w150-ditch-reach": {
+  "quantity": "how near the field ditches and the brook run to the houses, and which rolls draw farm channels, over the 44 rolls at HEAD (valley seeds 1-20, dike-pond and polder seeds 1-12, 16 households)",
+  "observed": "2026-10-12",
+  "source": "a one-shot observation, 2026-10-12: the 44 HEAD manifests rolled for m:w149-strips, kept in the session's scratchpad and not in the repository",
+  "command": "make hamlet ARGS=\"--name <n> --seed <s> --households 16 [--archetype <a>] --out <dir> --no-render\" over the 44 seeds, then the distance from each house center to each field ditch and stream (shapely)",
+  "method": "the least over each map's houses, per role",
+  "value": {
+   "nearest_field_ditch_ft": 61,
+   "typical_nearest_ft": "98-600",
+   "farm_channel_rolls": [
+    "valley 15 (16 channels)",
+    "valley 16 (16)",
+    "valley 19 (14)"
+   ],
+   "pool_farm_channels": 0
+  }
+ },
+ "w150-washing": {
+  "quantity": "washing places drawn by the wave-150 code (grouped per bank, a household at its nearest passing water, the head race among the waters): the form rolled, the places seated, the groups left with no seat; and whether the pool and the cohort still pass",
+  "observed": "2026-10-12",
+  "source": "the 44 rolls (valley seeds 1-20, dike-pond and polder seeds 1-12, 16 households) at the clone's working tree, the pool regenerated by make maps SCOPE=all, and the cohort record dev/cohort-log/20261013T023412Z-diagram-backlog-1975106.json",
+  "command": "make hamlet ARGS=\"--name <n> --seed <s> --households 16 [--archetype <a>] --out <dir> --no-render\" over the 44 seeds; make maps SCOPE=all; make cohort",
+  "method": "per manifest: meta.washing_form, len(washing_places), meta.washing_no_seat",
+  "value": {
+   "rolls_built": 42,
+   "refused": [
+    "polder 4 (WebRefused, as at HEAD)",
+    "polder 5 (SiteRefused, as at HEAD)"
+   ],
+   "places": 63,
+   "no_seat": 0,
+   "forms": {
+    "shared": 41,
+    "each_house": 1
+   },
+   "pool": {
+    "inashiro": 1,
+    "kashikawa": 0,
+    "kuwabata": 1,
+    "mizuguchi": 2,
+    "sawada": 1
+   },
+   "pool_maps": "clean",
+   "cohort": "16/16 passed"
+  }
+ },
+ "w151-sty-room": {
+  "quantity": "the pig sty laid in the homestead bundle (against a wall of the house or an outbuilding): the sties drawn against the share's count, and the rolls that refuse, at the homestead ground HEAD sizes the band on (HOMESTEAD_GROUND_FT 104) and with more ground per homestead (110, 116; SEATING_GROUND_FT 172 on the four failing rolls)",
+  "observed": "2026-10-12",
+  "source": "the session's scratchpad runs r15a, room15 and full15 (each the 44 rolls - valley seeds 1-20, dike-pond and polder seeds 1-12 at 16 households - make maps SCOPE=all and make cohort), at the clone's working tree with the sty in the bundle",
+  "command": "make hamlet ARGS=\"--name <n> --seed <s> --households 16 [--archetype <a>] --out <dir> --no-render\" over the 44 seeds; make maps SCOPE=all; make cohort; the constant edited between variants and restored",
+  "method": "per roll: the refusal and its reason; per manifest: the sties drawn against meta.farm_fixtures_target['sty']",
+  "value": {
+   "HEAD (no sty)": {
+    "refused_44": [
+     "polder 4",
+     "polder 5"
+    ],
+    "cohort": "16/16"
+   },
+   "bundle, ground 104": {
+    "sties": "322 of 322",
+    "refused_44": [
+     "valley 13",
+     "polder 4",
+     "polder 5"
+    ],
+    "cohort": "13/16 (Audit-10 lane knot, Audit-903 a lane through a grove, Audit-904 two farmhouses off the network)",
+    "pool": "clean, every sty drawn"
+   },
+   "bundle, ground 110": {
+    "refused_44": [
+     "dike-pond 5",
+     "polder 3",
+     "polder 4"
+    ],
+    "cohort": "12/16"
+   },
+   "bundle, ground 116": {
+    "refused_44": [
+     "valley 2",
+     "valley 13",
+     "dike-pond 4",
+     "dike-pond 12",
+     "polder 11"
+    ],
+    "cohort": "15/16"
+   },
+   "bundle, seating ground 172 (4 failing rolls only)": {
+    "valley 13": "refused",
+    "cohort subset": "the same three fail"
+   },
+   "reading": "every sty found its wall at every size; the refusals are the web's, moved about by any change to the bundle's layout, so room does not mend them"
+  }
+ },
+ "w151-sties": {
+  "quantity": "the pig sty seated after the ways (`stage_sties`): sties drawn against the share's count, the rolls that refuse, and whether the pool and the cohort pass",
+  "observed": "2026-10-12",
+  "source": "the session's scratchpad run r15b: the 44 rolls (valley seeds 1-20, dike-pond and polder seeds 1-12, 16 households), make maps SCOPE=all and make cohort at the clone's working tree",
+  "command": "make hamlet ARGS=\"--name <n> --seed <s> --households 16 [--archetype <a>] --out <dir> --no-render\" over the 44 seeds; make maps SCOPE=all; make cohort",
+  "method": "per manifest: meta.sty_target, meta.sty_short and the farm_fixtures of kind sty",
+  "value": {
+   "refused_44": [
+    "polder 4 (as at HEAD)",
+    "polder 5 (as at HEAD)"
+   ],
+   "sties_44": "334 of 334, none short",
+   "pool": {
+    "inashiro": "9 of 9",
+    "kashikawa": "15 of 15",
+    "kuwabata": "0 (dike-pond)",
+    "mizuguchi": "9 of 9",
+    "sawada": "14 of 14"
+   },
+   "pool_maps": "clean",
+   "cohort": "16/16 passed",
+   "after the glyph check (the walk varied, the grove kept clear)": {
+    "source": "scratchpad run r15d",
+    "refused_44": [
+     "polder 4 (as at HEAD)",
+     "polder 5 (as at HEAD)"
+    ],
+    "sties_44": "334 of 334",
+    "pool": "47 of 47, maps clean",
+    "cohort": "16/16 passed",
+    "between": "the walk varied alone (run r15c) put a sty on its farm's grove band on 4 cohort rolls (fixtures_on_groves); the grove added to the parts kept clear mended all four"
+   }
+  }
+ },
+ "b15-glyph-f3": {
+  "observed": "2026-10-13",
+  "subject": "glyph-check--pig-sty--inashiro",
+  "answers": "cdb083734f9b",
+  "source": "pool/hamlets/inashiro/inashiro.json and .svg after make map at engine key cf7320ac18ef",
+  "quantity": "where each of Inashiro's sties stands on its farmstead: the wall it is against, in its house's frame, and its spot along that wall",
+  "verifies": "F3",
+  "command": "each farm_fixtures record of kind sty turned into its house's frame (the house's rot undone)",
+  "method": "the side from the offset past the house's half-depth or half-width; the spot along the wall as a fraction of the half-wall, -1 to 1",
+  "value": {
+   "sides": {
+    "west": 3,
+    "back": 2,
+    "east": 1,
+    "front": 3
+   },
+   "offsets_along_wall": [
+    -0.54,
+    -0.87,
+    0.0,
+    0.56,
+    -0.85,
+    -0.6,
+    1.12,
+    1.11,
+    -1.01
+   ],
+   "before": "all 9 on the back wall, 5 dead center (the glyph check's own count)"
+  }
+ },
+ "b15-glyph-f1": {
+  "observed": "2026-10-13",
+  "subject": "glyph-check--pig-sty--inashiro",
+  "answers": "cdb083734f9b",
+  "source": "pool/hamlets/inashiro/inashiro.json and .svg after make map at engine key cf7320ac18ef",
+  "quantity": "the sty's fills against the privy's on Inashiro's sheet",
+  "verifies": "F1",
+  "command": "the fill colors counted in inashiro.svg",
+  "method": "the sty's shed and pen fills against the privy's roof fill",
+  "value": {
+   "sty_shed_fill": "#6E5434",
+   "sty_shed_count": 9,
+   "sty_pen_fill": "#CDB58A",
+   "sty_pen_count": 9,
+   "privy_fill": "#8F7548",
+   "privy_count": 13,
+   "before": "the sty's shed drew in the privy's own #8F7548 with its edge and ridge"
+  }
+ },
+ "b15-glyph-f2": {
+  "observed": "2026-10-13",
+  "subject": "glyph-check--pig-sty--inashiro",
+  "answers": "cdb083734f9b",
+  "source": "pool/hamlets/inashiro/inashiro.json and .svg after make map at engine key cf7320ac18ef",
+  "quantity": "the sty's pen as drawn on Inashiro's sheet",
+  "verifies": "F2",
+  "command": "the pen's rect read from inashiro.svg",
+  "method": "its fill and its rail's stroke",
+  "value": {
+   "pen": "a filled rect (#CDB58A) with a solid 0.9 px rail and a 0.7 px rail across, where the dashed 0.8 px outline drew nothing at fit zoom",
+   "pens_drawn": 9
+  }
+ },
+ "w152-reseat": {
+  "quantity": "the persimmon reseat with its own grove open to it (wave 152): rolled persimmons against drawn, the crowns given way, the rolls that refuse, the pool and the cohort",
+  "observed": "2026-10-13",
+  "source": "the session's scratchpad run r16a: the 44 rolls (valley seeds 1-20, dike-pond and polder seeds 1-12, 16 households), make maps SCOPE=all and make cohort at the clone's working tree",
+  "command": "make hamlet ARGS=\"--name <n> --seed <s> --households 16 [--archetype <a>] --out <dir> --no-render\" over the 44 seeds; make maps SCOPE=all; make cohort",
+  "method": "per manifest: meta.farm_fixtures_target['persimmon'] against len(persimmons), meta.persimmon_grove_gave_way",
+  "value": {
+   "persimmons_44": "578 of 578",
+   "persimmons_pool": "69 of 69",
+   "crowns_given_way": 0,
+   "refused_44": [
+    "polder 4 (as at HEAD)",
+    "polder 5 (as at HEAD)"
+   ],
+   "pool": "clean, no manifest changed",
+   "cohort": "16/16 passed",
+   "reading": "no roll here reseats a tree into its own grove: the code now follows 0046 where one does, and no map moves"
+  }
+ },
+ "w153-sheltered": {
+  "quantity": "the row village's leeward farms sheltered by the grove row across the street (wave 153): the farms sheltered, their south bands seated and short, the rolls that refuse, the pool and the cohort; and whether more room for the band seats more",
+  "observed": "2026-10-13",
+  "source": "the session's scratchpad runs r17a-r17c (the 44 rolls - valley seeds 1-20, dike-pond and polder seeds 1-12 at 16 households - make maps SCOPE=all and make cohort) and two throwaway probes of valley seed 3 (since deleted)",
+  "command": "make hamlet ARGS=\"--name <n> --seed <s> --households 16 [--archetype <a>] --out <dir> --no-render\" over the 44 seeds; make maps SCOPE=all; make cohort; the probes built HamletSpec(seed=3, households=16) through driver.build with bamboo.strip_refused wrapped",
+  "method": "per manifest: houses with sheltered, meta.household_bamboo_wanted and _no_room; the probes counted each band's refusing test and the band count at BAND_STEPS_OUT 3, 6 and 12",
+  "value": {
+   "refused_44": [
+    "polder 4 (as at HEAD)",
+    "polder 5 (as at HEAD)"
+   ],
+   "sheltered_44": {
+    "valley 3": "8, 3 with no room",
+    "dike-pond 3": "6, all seated",
+    "polder 3": "6, 1 with no room"
+   },
+   "pool": {
+    "kashikawa": "10 sheltered, every band seated",
+    "others": "none (not a two-sided row that rolled it)"
+   },
+   "pool_maps": "clean",
+   "cohort": "16/16 passed",
+   "first_runs": "a sheltered farm with no grove had no front door (serve.front_door) and 7 of valley 3's were unreached; the row rule judged it by its own grove-less frame; both mended",
+   "room_spent": {
+    "steps 3": "5 of 8 short on valley 3",
+    "steps 6": "3 short",
+    "steps 12": "3 short - the paddy and the neighbors' footprints, not distance"
+   },
+   "its_own_path": "8 of valley 3's band refusals were its own door path between house and band; a public lane still refuses",
+   "final (seated as a full-grove farm, its windward bands drawn one tree deep)": {
+    "source": "scratchpad run r17e and a probe of Kashikawa's spec at BAND_STEPS_OUT 6 and 12 (deleted)",
+    "refused_44": [
+     "polder 4 (as at HEAD)",
+     "polder 5 (as at HEAD)"
+    ],
+    "sheltered_44": "19, 2 with no room (valley 3)",
+    "pool": {
+     "kashikawa": "10 sheltered, 4 with no room - the same 4 at 12 steps: the paddy and seated parts, not distance"
+    },
+    "pool_maps": "clean",
+    "cohort": "16/16 passed",
+    "between": "a farm laid with a thin grove (its frame narrower) moved the road's course at seating and left dike-pond 3's streets off the network (all 16 farms unreached); seated as the full form, only its drawing thin, every roll passes"
+   }
+  }
+ },
+ "b17-glyph-bamboo-f1": {
+  "observed": "2026-10-13",
+  "subject": "glyph-check--homestead-bamboo--kashikawa",
+  "answers": "dff53d44ae62",
+  "source": "pool/hamlets/kashikawa/kashikawa.json after make map at engine key 540af66dd8e7",
+  "quantity": "each sheltered farm's south bamboo band's width against its frame's",
+  "verifies": "F1",
+  "command": "the homestead bamboo_stands' polys and their farms' geom bbox read from the manifest",
+  "method": "band width = the poly's x extent; frame = bbox w",
+  "value": {
+   "bands": [
+    {
+     "band_ft": 279,
+     "frame_ft": 279
+    },
+    {
+     "band_ft": 266,
+     "frame_ft": 266
+    },
+    {
+     "band_ft": 275,
+     "frame_ft": 275
+    },
+    {
+     "band_ft": 218,
+     "frame_ft": 283
+    },
+    {
+     "band_ft": 256,
+     "frame_ft": 256
+    },
+    {
+     "band_ft": 254,
+     "frame_ft": 254
+    },
+    {
+     "band_ft": 281,
+     "frame_ft": 281
+    },
+    {
+     "band_ft": 255,
+     "frame_ft": 255
+    }
+   ],
+   "sheltered_farms": 10,
+   "bands_drawn": 8
+  }
+ },
+ "b17-glyph-bamboo-f2": {
+  "observed": "2026-10-13",
+  "subject": "glyph-check--homestead-bamboo--kashikawa",
+  "answers": "dff53d44ae62",
+  "source": "the same manifest",
+  "quantity": "whether a band still floats as a short bar between two farms",
+  "verifies": "F2",
+  "command": "as b17-glyph-bamboo-f1",
+  "method": "a band spanning its own frame closes the farm's south side",
+  "value": {
+   "note": "every drawn band spans its farm's frame (b17-glyph-bamboo-f1), so none reads as a bar midway between two farms"
+  }
+ }
 }

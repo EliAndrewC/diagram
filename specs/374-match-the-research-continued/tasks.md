@@ -252,8 +252,9 @@ in 328's ranking and this spec.
 
 ## Batch 17 - the sheltered row farm, and a citation
 
-- [ ] T45 wave 153: a row village's leeward farms sheltered by the grove row across the street - a thin windward grove, their bamboo to the south where the farmsteads keep bamboo - rolled per settlement (0033); fall_backs_the_wind cites 0031 (FR-001)
+- [x] T45 wave 153: a row village's leeward farms sheltered by the grove row across the street - a thin windward grove, their bamboo to the south where the farmsteads keep bamboo - rolled per settlement (0033); fall_backs_the_wind cites 0031 (FR-001)
       research: rendering
+      verify: DONE. the sheltered leeward row drawn on Kashikawa (10 farms, a thin windward grove, 8 south bamboo bands spanning their frames under the bamboo knob); 44 rolls as HEAD; gate green; glyph checks PASS round 2; claims IN-STEP; the record and pop-ups checked; the fall citation on 0031
 
 ## Standing - the ranking's remaining rows
 
