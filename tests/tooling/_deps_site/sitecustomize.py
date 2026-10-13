@@ -6,6 +6,7 @@ Put on PYTHONPATH by the tooling tree's plugin while it records: every Python pr
 system's own sitecustomize, which this one shadows, is run first.
 """
 
+import contextlib
 import os
 import sys
 
@@ -26,13 +27,22 @@ if _LOG and os.environ.get("L7R_TEST_DEP_FILE"):
     _ROOT = os.environ.get("L7R_TEST_DEP_ROOT", "")
     _FILE = os.environ.get("L7R_TEST_DEP_FILE", "")
     _SEEN: set[tuple[str, str]] = set()
-    _LOCATION = {"--show-toplevel", "--git-dir", "--git-common-dir", "--absolute-git-dir", "--show-prefix", "--show-cdup",
-                 "--is-inside-work-tree", "--path-format=absolute", "--path-format=relative"}  # _test_deps.LOCATION
+    _LOCATION = {
+        "--show-toplevel",
+        "--git-dir",
+        "--git-common-dir",
+        "--absolute-git-dir",
+        "--show-prefix",
+        "--show-cdup",
+        "--is-inside-work-tree",
+        "--path-format=absolute",
+        "--path-format=relative",
+    }  # _test_deps.LOCATION
 
     def _under(path: object) -> str:
         try:
             p = os.path.abspath(os.fsdecode(path))  # type: ignore[arg-type]
-        except (TypeError, ValueError):
+        except TypeError, ValueError:
             return ""
         return p if _ROOT and (p == _ROOT or p.startswith(_ROOT + os.sep)) else ""
 
@@ -65,7 +75,7 @@ if _LOG and os.environ.get("L7R_TEST_DEP_FILE"):
             sub = next((w for w in words[1:] if not w.startswith("-") and w != where and "=" not in w), "")
             if name in ("sleep", "true", "false", "echo"):
                 hit = False  # reads no file of the repository
-            elif name == "git" and sub == "rev-parse" and words[words.index("rev-parse") + 1:] and all(w in _LOCATION for w in words[words.index("rev-parse") + 1:]):
+            elif name == "git" and sub == "rev-parse" and words[words.index("rev-parse") + 1 :] and all(w in _LOCATION for w in words[words.index("rev-parse") + 1 :]):
                 hit = False  # asks only where the repository is
             elif name == "git" and where is None and sub in ("init", "clone") and paths:
                 hit = any(_under(w) for w in paths)  # init and clone read nothing where they run: the paths they name
@@ -84,9 +94,7 @@ if _LOG and os.environ.get("L7R_TEST_DEP_FILE"):
         # its reads unrecorded, and a test file reused on a record missing them would be reused unsafely
         if (kind, path) not in _SEEN and _OUT is not None:
             _SEEN.add((kind, path))
-            try:
+            with contextlib.suppress(OSError, ValueError):
                 _OUT.write(f"{_FILE}\t{kind}\t{path}\n")
-            except (OSError, ValueError):
-                pass
 
     sys.addaudithook(_hook)

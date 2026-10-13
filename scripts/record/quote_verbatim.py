@@ -325,7 +325,7 @@ def verdict(passage: str, page: str) -> dict:
     """`_verdict`, kept by the passage and the page's text (record_cache.ParseCache, under this module's code sha)."""
     if _VERDICTS is None:
         return _verdict(passage, page)
-    key = hashlib.sha256(f"{passage}\x1f{hashlib.sha256(page.encode('utf-8')).hexdigest()}".encode("utf-8")).hexdigest()
+    key = hashlib.sha256(f"{passage}\x1f{hashlib.sha256(page.encode()).hexdigest()}".encode()).hexdigest()
     return dict(_VERDICTS.get(key, lambda: _verdict(passage, page)))
 
 

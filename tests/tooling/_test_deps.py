@@ -60,7 +60,7 @@ def _store() -> pathlib.Path | None:
 def _under(path: object) -> str:
     try:
         p = os.path.abspath(os.fsdecode(path))  # type: ignore[arg-type]
-    except (TypeError, ValueError):
+    except TypeError, ValueError:
         return ""
     root = str(ROOT)
     return p if p == root or p.startswith(root + os.sep) else ""
@@ -96,7 +96,7 @@ def opaque_child(args: tuple, site: str) -> str:
     env = args[3] if len(args) > 3 else None
     try:
         name = os.path.basename(os.fsdecode(exe if exe else (argv[0] if argv else "")))
-    except (TypeError, IndexError):
+    except TypeError, IndexError:
         name = ""
     if name.startswith("python"):
         flags = {os.fsdecode(a) for a in list(argv or [])[1:3] if isinstance(a, (str, bytes))}
@@ -129,12 +129,13 @@ def against_repo(name: str, words: list[str], cwd: object, under) -> bool:  # no
 READ_NOTHING = frozenset({"sleep", "true", "false", "echo"})
 #: `git rev-parse` asking only WHERE the repository is: its answer depends on the checkout's place, not on its content (the
 #: commonest unknown in the first recordings - `record_cache.common_dir`, `--show-toplevel`)
-LOCATION = frozenset({"--show-toplevel", "--git-dir", "--git-common-dir", "--absolute-git-dir", "--show-prefix", "--show-cdup",
-                      "--is-inside-work-tree", "--path-format=absolute", "--path-format=relative"})
+LOCATION = frozenset(
+    {"--show-toplevel", "--git-dir", "--git-common-dir", "--absolute-git-dir", "--show-prefix", "--show-cdup", "--is-inside-work-tree", "--path-format=absolute", "--path-format=relative"}
+)
 
 
 def _location_only(words: list[str]) -> bool:
-    rest = words[words.index("rev-parse") + 1:]
+    rest = words[words.index("rev-parse") + 1 :]
     return bool(rest) and all(w in LOCATION for w in rest)
 
 
@@ -216,8 +217,7 @@ def pytest_sessionfinish(session: pytest.Session, exitstatus: int) -> None:  # n
     worker = getattr(config, "workerinput", {}).get("workerid", "main")
     if d:
         with open(os.path.join(d, f"worker-{worker}.json"), "w", encoding="utf-8") as fh:
-            json.dump({"reads": {f: {k: sorted(v) for k, v in r.items()} for f, r in _reads.items()}, "failed": sorted(_failed),
-                       "ran": _ran, "deselected": sorted(_deselected)}, fh)
+            json.dump({"reads": {f: {k: sorted(v) for k, v in r.items()} for f, r in _reads.items()}, "failed": sorted(_failed), "ran": _ran, "deselected": sorted(_deselected)}, fh)
     if hasattr(config, "workerinput") or not d:
         return
     if any("::" in a for a in config.args):
@@ -251,7 +251,7 @@ def _keep(d: pathlib.Path) -> None:
     ids, entries = _ids()
     try:
         kept = json.loads(store.read_text(encoding="utf-8")) if store.is_file() else {}
-    except (OSError, ValueError):
+    except OSError, ValueError:
         kept = {}
     for f in ran:
         if f in failed:
@@ -264,9 +264,12 @@ def _keep(d: pathlib.Path) -> None:
         dirs = {_rel_path(p) for p in r.get("dir", set())} | {p for p in opened if (ROOT / p).is_dir() and not p.startswith(".git")}
         if any(p == ".git" or p.startswith(".git/") for p in opened if (ROOT / p).is_dir()):
             files.add(".git")  # the repository's own git state was read: not known by content, so never reused
-        kept[f] = {"py": sys.version, "opaque": sorted(r.get("opaque", set())),
-                   "files": {p: _state("file", p, ids, entries) for p in sorted(files)},
-                   "dirs": {p: _state("dir", p, ids, entries) for p in sorted(dirs)}}
+        kept[f] = {
+            "py": sys.version,
+            "opaque": sorted(r.get("opaque", set())),
+            "files": {p: _state("file", p, ids, entries) for p in sorted(files)},
+            "dirs": {p: _state("dir", p, ids, entries) for p in sorted(dirs)},
+        }
     store.parent.mkdir(parents=True, exist_ok=True)
     tmp = store.with_suffix(f".{os.getpid()}.tmp")
     tmp.write_text(json.dumps(kept), encoding="utf-8")
@@ -281,8 +284,7 @@ def reusable(kept: dict, ids: dict[str, str], entries: dict[str, list[str]]) -> 
     files, dirs = kept.get("files", {}), kept.get("dirs", {})
     if "ignored" in files.values():
         return False
-    return all(_state("file", p, ids, entries) == was for p, was in files.items()) and \
-        all(_state("dir", p, ids, entries) == was for p, was in dirs.items())
+    return all(_state("file", p, ids, entries) == was for p, was in files.items()) and all(_state("dir", p, ids, entries) == was for p, was in dirs.items())
 
 
 def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item]) -> None:
@@ -291,7 +293,7 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item
     store = _store()
     try:
         kept = json.loads(store.read_text(encoding="utf-8")) if store and store.is_file() else {}
-    except (OSError, ValueError):
+    except OSError, ValueError:
         kept = {}
     files = {_rel(i.nodeid) for i in items if _rel(i.nodeid).startswith(TREE)}
     if not kept or not files:
