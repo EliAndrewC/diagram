@@ -177,7 +177,7 @@ def outside_paths(prompt: str) -> list[str]:
     return sorted({p.rstrip(".,):;`'\"") for p in found})
 
 
-def prepare(transcript: pathlib.Path, out: pathlib.Path, model: str = SONNET, at_head: bool = False, omit: bool | None = None, as_subagent: bool = False) -> int:
+def prepare(transcript: pathlib.Path, out: pathlib.Path, model: str = SONNET, at_head: bool = False, omit: bool | None = None, as_subagent: bool = False, at_commit: str = "") -> int:
     run = read(transcript)
     out.mkdir(parents=True, exist_ok=True)
     rev = ["rev-parse", "HEAD"]
@@ -199,6 +199,8 @@ def prepare(transcript: pathlib.Path, out: pathlib.Path, model: str = SONNET, at
         if at:
             subprocess.run(["git", "-C", str(CLONE), "fetch", "-q", str(other), at], capture_output=True, check=False)
             commit = at
+    if at_commit:  # named by hand: the recording clone's reflog no longer reaches the run (a month on, a clone since deleted)
+        commit = subprocess.run(["git", "-C", str(CLONE), "rev-parse", at_commit], capture_output=True, text=True, check=True).stdout.strip()
     tree = out / "tree"
     if not tree.is_dir():
         # A CLONE OF ITS OWN, not a worktree: a check's last act writes review state (`make review-verdict`, `make
@@ -438,6 +440,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--head", action="store_true")
     p.add_argument("--omit-claude-md", choices=("yes", "no"), help="write `omitClaudeMd: true` into the tested agent's copy, or remove it")
     p.add_argument("--as-subagent", action="store_true", help="each run dispatches the check as a subagent (the field only acts there)")
+    p.add_argument("--at", default="", help="the commit the case reads, when the recording clone's reflog no longer reaches the run")
     r = sub.add_parser("run")
     r.add_argument("out")
     r.add_argument("--runs", type=int, default=3)
@@ -453,7 +456,7 @@ def main(argv: list[str] | None = None) -> int:
         catalog(a.agent, a.since, a.replayable)
     elif a.cmd == "prepare":
         omit = None if a.omit_claude_md is None else a.omit_claude_md == "yes"
-        return prepare(pathlib.Path(a.transcript), pathlib.Path(a.out), a.model, a.head, omit, a.as_subagent)
+        return prepare(pathlib.Path(a.transcript), pathlib.Path(a.out), a.model, a.head, omit, a.as_subagent, a.at)
     elif a.cmd == "collect":
         return collect(pathlib.Path(a.out))
     elif a.cmd == "run-all":
