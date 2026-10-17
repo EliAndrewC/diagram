@@ -2,11 +2,13 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-12
-**Status**: Done 2026-10-13 - amendment 2 landed: spec FAITHFUL (round 4), plan block CLEAR (round 2); a landing 113.98 -> 37.05 s (m:land-tooling-landing-before, m:land-tooling-landing-after), tooling reuse 27.58 -> 19.35 s with 18 of 127 files always run (m:land-tooling-tests-reuse-a2), the claims gate 8.53 -> 1.65 s (m:claims-gate-push). Before it: Done 2026-10-13 - amendment 1 landed: spec FAITHFUL (round 3), plan block CLEAR; land-tooling's tooling tests 36.21 -> 27.58 s (606 of 1,796 tests ran with reuse, m:land-tooling-tests-reuse), quote-verbatim's verdicts cached. Before it: Done 2026-10-13 - spec FAITHFUL (round 3), plan CLEAR (round 3), every task ticked; push checks 19.87 s -> 1.92 s (research R6); tooling landed 0906d798a; the GM's review open (the first step-back's note)
+**Status**: In progress 2026-10-17 - amendment 3 (FR-021..FR-024). Before it: Done 2026-10-13 - amendment 2 landed: spec FAITHFUL (round 4), plan block CLEAR (round 2); a landing 113.98 -> 37.05 s (m:land-tooling-landing-before, m:land-tooling-landing-after), tooling reuse 27.58 -> 19.35 s with 18 of 127 files always run (m:land-tooling-tests-reuse-a2), the claims gate 8.53 -> 1.65 s (m:claims-gate-push). Before it: Done 2026-10-13 - amendment 1 landed: spec FAITHFUL (round 3), plan block CLEAR; land-tooling's tooling tests 36.21 -> 27.58 s (606 of 1,796 tests ran with reuse, m:land-tooling-tests-reuse), quote-verbatim's verdicts cached. Before it: Done 2026-10-13 - spec FAITHFUL (round 3), plan CLEAR (round 3), every task ticked; push checks 19.87 s -> 1.92 s (research R6); tooling landed 0906d798a; the GM's review open (the first step-back's note)
 
 **Affects**: tooling, review process
 
 **Amendment 1 approved**: the GM, 2026-10-13, "Yes please we should definitely skip suites the clone already passed." and "And also, while I realize we don't run it very often, I feel like `quote-verbatim` would benefit from the same caching layer we implemented elsewhere, right?"
+
+**Amendment 3 approved**: the GM, 2026-10-17, "Thus, I accept your proposal. Of three things, but I would also like you to add a fourth thing, which is doing those measurements on cheaper models."
 
 **Amendment 2 approved**: the GM, 2026-10-13, "Yes, please. So go ahead and do the savings that you've already measured, no matter what." and "And then go ahead and land whatever timing improvements you are able to figure out."
 
@@ -140,6 +142,26 @@ long-running feature does for itself, on the clock glyph-check already keeps.
   ruff, node, resvg, bash, make, pdftotext, grep, `claude`, a read of a file git ignores - is either made known (the file reused on
   identical inputs) or recorded in the research with its test-seconds and why it cannot be.
 
+### Amendment 3 - the always-run files, tests not imported, the guard suites, and cheaper models (`request.md`, Amendment 3)
+
+- **FR-021 The tooling test files that always run are made known.** Each of the 18 files research R9 left always running
+  (about 5 s of a landing's wall time; observed 2026-10-13, method: research R9's test-seconds over the workers) is reused on identical inputs where what its programs read can be recorded or asked
+  again; one that cannot is recorded in the research with its seconds and the reason.
+- **FR-022 A test file a run will not run is not imported.** Where a run has decided before collection which test files it
+  will skip - the tooling tests a landing reuses, the tests `make quick` deselects as unaffected by the change, a targeted run -
+  those files are not collected (imported) at all, in every worker. The tests that run, and their results, are the same as
+  before. Measured before and after: `make quick`, a targeted `make test-file`, and a landing's tooling run.
+- **FR-023 A guard suite runs only where what it reads changed.** Which guard suites ran in the recorded landings, and why
+  (the landing's own files, or main moving), is measured; a suite re-run though nothing its cases read changed has its inputs
+  narrowed, or the suite is split so each part has its own; the slow suites (sync-with-main, review-gate, entry-gate) are
+  looked at first. Nothing a suite checks is dropped.
+- **FR-024 The checks never tried on a cheaper model are tried on Sonnet 5.5.** spec-fidelity, glyph-check, impl-drift,
+  building-review, modal-form, modal-research and modal-depiction are each run on Sonnet 5.5 against recorded Opus runs with
+  known findings, three runs a leg (the doctrine of feature 251 and `tests/test_agent_models.py`), and their cost compared. A
+  check whose Sonnet runs find every known finding moves to Sonnet in its file and the tier table; one that misses stays on
+  Opus. Every result, either way, is recorded where the next session looks: the tier table, `docs/spec-kit-and-reviews.md`, and
+  a pointer from `CLAUDE.md`, so the record of which checks were tried is not lost again.
+
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002, FR-005, FR-006, FR-007) The push's checks: from about 24 s, the measurement the GM saw
@@ -187,6 +209,16 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 - **SC-013** (FR-017, FR-018, FR-019) `make land-tooling` measured step by step from FR-017's log, with the load: before, on a
   real landing made with the timing and none of the cuts; after, on a real landing with them; each tooling test file runs at most once in the landing (its log); the guard suites and the tooling
   tests overlap in time (their step times in the log).
+
+- **SC-015** (FR-021) The count of tooling test files that always run, before (18 of 127, research R9) and after, printed by
+  `scripts/measure/tooling_reuse_time.py`; each one left with its test-seconds and reason in the research.
+- **SC-016** (FR-022) The same tests pass with and without the collection skip (counts compared); `make quick`, a targeted
+  `make test-file` and a landing's tooling run timed before and after on the same tree, back to back, with the load.
+- **SC-017** (FR-023) The guard suites each recorded landing ran, with why; for each suite narrowed or split, a test that
+  an edit outside its new inputs leaves it skipped and one inside runs it; a landing measured before and after.
+- **SC-018** (FR-024) Per check: the recorded cases, each finding found or missed by each of the three Sonnet runs, turns and
+  cost against the Opus run; the tier each check ends on; `tests/test_agent_models.py` green with the table matching the
+  files.
 
 ## Review history
 

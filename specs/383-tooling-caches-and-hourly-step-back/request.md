@@ -66,3 +66,23 @@ The session proposed replaying each read-only git question and keeping the Pytho
 of a landing first. The GM:
 
 > Yes, please. So go ahead and do the savings that you've already measured, no matter what. And then, like you said, figure out where the rest of the 100 or so seconds goes. And then see what can be done there. And then go ahead and land whatever timing improvements you are able to figure out. Thanks.
+
+## Amendment 3 (2026-10-17, same session)
+
+The session listed what was still pending: the tooling test files that always run (about 5 s of wall time per landing), the
+test runner's startup (about 4.5 s, mostly every worker collecting every test, including the files the reuse then skips),
+the guard suites a landing reaches (narrower inputs, or the slow suites split), and the review agents' models (spec-fidelity,
+glyph-check, impl-drift, building-review and the three modal checks never tried on Sonnet). The GM:
+
+> I do think that the tooling tests that always run, which make up five seconds of wall time per landing, do seem worth addressing.
+
+> I don't understand what you're telling me about guard suites. like what the potential improvement is. Is it that we would be able to optimize away running some of those when they haven't been modified? Because that in general seems worth doing.
+
+The session proposed three items (the always-run files, not importing the test files a run will not run, measuring and
+narrowing the guard suites; the fork server left out). The GM:
+
+> I don't think that the fork server is worth it for the amount of gains in this case. If we were spending like 5 or 10 seconds loading all of the code that is in our dependencies, then that would be one thing, but that's a lot of plumbing to add just for one second of gains. Realistically, we'd probably spend a lot more time than we would save uh, debugging the various problems that would result from it and such. I also agree that the hot reload server is not worth it, though I am glad to know that there's an option there if we ever change our minds. However, I do really like the thing that you said about not importing tests that we are not planning on running. So I guess the quick tests, for instance, really could probably save a good percentage of their current runtime because we run a lot fewer tests there, right? And just in general, when we're doing targeted runs on things that have changed, then that does seem worth doing.
+
+> If we have never tried spec fidelity or glyph check or implementation drift or building review. Or the three modal checks on Sonnet, then that is definitely 100% worth testing, and we should do that pretty much right away. I have checked and I cannot find any record of us having tried those, so I believe that you are correct, and my memory that we had tried other models everywhere was faulty. So thank you for looking that up and clarifying it.
+
+> Thus, I accept your proposal. Of three things, but I would also like you to add a fourth thing, which is doing those measurements on cheaper models. In fact, I believe that Sonnet 5.5 is now available, which sounds perfect for this. If you don't have access to that one, then I can have you reopen the feature and then upgrade Claude Code and then launch a new session, which will have that model available.
