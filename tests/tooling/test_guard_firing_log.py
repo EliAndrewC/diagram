@@ -329,6 +329,11 @@ _ESCAPES = {
         "content",
         "feature 173: the justification header INSIDE an oversize file, read by scripts/gates/check-file-scale.py from the file's first 40 lines - never matched in a command, so a mention in one escapes nothing. It carries its own reason floor (40 characters) rather than hookmatch.py's eight",
     ),
+    "WAVE_OK": (
+        "content",
+        "matched in an Agent dispatch's PROMPT by hm_agent_prefix.WAVE_ESCAPE, with a reason of two words or more; a hand-launched wave of 4+ of one type that must stay so (feature 383 amendment 7)",
+    ),
+    "GP_OK": ("content", "matched in a Workflow script by hm_workflow, with a reason of two words or more: a deliberate general-purpose stage (feature 383 amendment 7)"),
     "AGENT_PREFIX_OK": (
         "content",
         "matched in an Agent dispatch's PROMPT by hm_agent_prefix.ESCAPE, with a reason of two words or more; the decider reports it and the hook logs it, no substring test (feature 383 amendment 6)",

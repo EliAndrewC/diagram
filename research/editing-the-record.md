@@ -25,7 +25,8 @@ is hand-edited.
 **Checking** (feature 250). `make check-bundle Q=<NNNN>` (a question's number - both its pages - or one page's file
 name; `KEY=<k>` for a registry entry; `KIND=<class>` for `entry-drift`; `NOTES=<key,key>` to re-check only those)
 copies what ONE check reads out of the repository into one `MANIFEST.md`; dispatch the check naming that MANIFEST and
-nothing under `/diagram`. `make notes Q= KEYS=` prints a few notes and the paragraphs carrying them; `IN=<section or
+nothing under `/diagram`; four or more of one check go as one `check-wave` workflow, a unit per MANIFEST
+([`docs/reviews.md`](../docs/reviews.md)). `make notes Q= KEYS=` prints a few notes and the paragraphs carrying them; `IN=<section or
 tag>` runs a prepass over a whole section. A report's findings are applied in ONE turn - every turn re-reads the whole
 context. Which checks a change owes: [`record-checks.md`](record-checks.md).
 

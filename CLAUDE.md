@@ -107,8 +107,9 @@ Spec-driven under `.specify/memory/constitution.md`. One line each here; the ful
   prove it fires on the unfixed artifact, then fix the artifact. Each runs on the tier its file pins; an ad-hoc
   agent names its `model`. A defined agent launches without the CLAUDE.md files (`omitClaudeMd: true`); **what every
   dispatch of a check shares lives in its agent file** - only that is reused across launches (feature 383 research R16) -
-  and a fan-out sends its first alone (`agent-prefix-hooks.sh`). The review agents are pre-authorized through
-  `scripts/container/append-system-prompt.md`.
+  and a wave of 4 or more of one type runs as ONE `Workflow` call, `check-wave`, which wakes the session once and puts each unit
+  through the Agent guards (feature 383 amendment 7; `agent-prefix-hooks.sh`, `workflow-hooks.sh`). The review agents, and
+  Workflow for those waves, are pre-authorized through `scripts/container/append-system-prompt.md`.
 
 ## Verification and iteration
 

@@ -15,8 +15,21 @@ constitution's Principle I, not optional extras: the author of a diagram, a page
 is not a reliable reviewer of their own work, which is the entire reason those agents exist.
 
 This authorization is deliberately **narrow**. It does not extend to broad multi-agent fan-out, the
-Workflow tool, or deep research - those still need an explicit request from the GM in the
+Workflow tool beyond the wave jobs below, or deep research - those still need an explicit request from the GM in the
 conversation.
+
+## Workflow, for waves of typed checks only
+
+**Workflow is pre-authorized for recurring waves of typed agents** (the GM, 2026-10-17, feature 383 amendment 7). When a
+documented job launches 4 or more agents of one of these definitions - WAVE JOBS: `source-applicability`, `quote-check`,
+`settlement-review`, `entry-drift`, `modal-depiction`, `record-format`, `impl-drift`, `modal-research`, `building-review`,
+`source-reader`, `glyph-check`, `modal-form`, `round-arbiter`, `claims-triage`, `modal-triage` - run them through the saved
+`check-wave` workflow, without asking first:
+`Workflow({name: "check-wave", args: {agentType: "<job>", units: [{label, prompt, then?: [{agentType, prompt}]}]}})`.
+It sets `agentType` on every `agent()` call, staggers the launches by itself and wakes the main session once for the whole
+wave instead of once per agent; each unit's prompt stays as short as a hand launch's. Two or three of a type stay plain Agent
+calls in one message. This does not extend to new kinds of fan-out, general-purpose fleets or deep research, which still need
+the GM's explicit request. `scripts/hooks/workflow-hooks.sh` holds every unit to the guards a hand launch meets.
 
 ## Why this file exists
 

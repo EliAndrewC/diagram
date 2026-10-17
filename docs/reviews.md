@@ -45,8 +45,8 @@ time a map changes ... every feature which takes longer than 1 hour to implement
 the address findings all at once"*). Its units are found as above but are DUE only when an hour of the feature's time has passed
 - from the feature's first event in the clone or its most recent reopening, whichever is later (375 amendment 10: the
 GM did not want a reopened feature's first check due at once), and from each batch it opens - and then every owed glyph unit is due together and
-stays due until dispatched (one per agent: the FIRST alone, the rest in the next message, which reads its cached prefix -
-383 amendment 6, plan D42; `agent-prefix-hooks.sh` holds it); fix their findings together, and what a fix re-owes waits for the
+stays due until dispatched (one per agent; 4 or more go as one `check-wave` workflow, which wakes the session once - 383 amendment 7;
+`agent-prefix-hooks.sh` refuses a 4th hand launch within ten seconds); fix their findings together, and what a fix re-owes waits for the
 next hour. A change with no live feature (none named, or the named one closed) owes its glyph units at landing: the push
 (`review-gate.sh`) asks every owed unit, and its refusal marks the work landing so the dispatch it asks for is due. `make verify`
 names the glyph units waiting and when they come due; the pair guard refuses an early glyph dispatch (`GLYPH_DUE_OK="<why>"`).
@@ -79,6 +79,12 @@ be more productive than having a built in independent reviewer, which runs multi
   CodeBuild run), never alongside `make quick` (launching a multi-minute review "in parallel" with it just serializes). A
   finding becomes a follow-up task; it never holds the result.
 - **Never busy-wait on one.** Same rule as the gate: act on the completion notification.
+- **Four or more of one type go as ONE workflow** (feature 383 amendment 7): each hand-launched agent wakes the session when it
+  finishes, and each wake re-reads the whole context; `check-wave` wakes it once, staggers the launches itself, and is guarded
+  unit by unit as hand launches are. A verify step that runs on a unit's reply is declared with the unit:
+  `Workflow({name: "check-wave", args: {agentType: "quote-check", units: [{label: "0105", prompt: "Read <bundle>/MANIFEST.md
+  ..."}, ...]}})` - each unit comes back as `{label, verdict, text}`; record it from `text` as from a hand launch's reply.
+  Two or three stay plain Agent calls in one message.
 - **Every FINDING is a row in [`dev/review-ledger.md`](../dev/review-ledger.md), written by the SESSION, never by the reviewer**
   (the GM: you may disagree with the reviewer, and the log must say both what was found and whether it was acted on - fixed /
   recorded-only / declined with why / MISSED-BY-REVIEWER), in the same commit that acts on the review.
