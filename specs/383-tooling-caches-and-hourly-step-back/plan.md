@@ -621,10 +621,14 @@ four or more of one type go through `check-wave`. The window is a design number 
 **D47 - `check-wave`, the saved workflow (FR-043).** `.claude/workflows/check-wave.js`: `meta` named `check-wave`, `whenToUse`
 "a wave of 4 or more checks of one defined type"; `pipeline(args.units, u => agent(u.prompt, {agentType: args.agentType,
 label: u.label, phase: 'Checks', schema: REPLY}))` with `REPLY = {label, verdict, text}` (`verdict` the check's verdict word,
-`text` its whole reply, which `make record-checked ... REPLY=` and `make apply-edits` read), and a second stage, the
-follow-up: a unit whose first stage returned null is re-launched once with the same prompt (already guarded at the run's
-PreToolUse; its SubagentStop pairs by the prompt's hash to the same dispatch, D48); it returns the objects, `NO REPLY` for a unit
-twice silent, and logs how many came back. `docs/reviews.md` and `research/editing-the-record.md` show the call; a test reads the file and holds its
+`text` its whole reply, which `make record-checked ... REPLY=` and `make apply-edits` read), and the follow-up stages: a
+unit whose first stage returned null is re-launched once with the same prompt (already guarded at the run's PreToolUse; its
+SubagentStop pairs by the prompt to the same dispatch, D48); then each declared verify step of the unit (`then: [{agentType,
+prompt}]`) runs in order, its prompt the declared one followed by "The reply of the <type> check before you:" and that reply.
+It returns per unit `{label, verdict, text, then: [...]}`, `NO REPLY` for a unit twice silent (its verify steps are skipped),
+and logs how many came back. Why declared and not built from the reply: the guards run on the Workflow's PreToolUse, the one
+point a run can be refused; SubagentStart, the one hook that fires inside a run (R20), is not documented as able to refuse a
+launch, so a prompt the session builds from a reply mid-run would go unguarded. `docs/reviews.md` and `research/editing-the-record.md` show the call; a test reads the file and holds its
 `agentType`, `schema` and argument names.
 
 **D48 - The Workflow guard (FR-045, SC-031, SC-033).** `scripts/hooks/workflow-hooks.sh` on PreToolUse `Workflow`, its decider
@@ -635,11 +639,13 @@ twice silent, and logs how many came back. `docs/reviews.md` and `research/editi
   agents) is refused with the `check-wave` call - those go through it;
 - `check-wave` (`name`): its `agentType` must be one of the named jobs (FR-044; not `spec-fidelity`, whose round hook rewrites
   its prompt); each unit is turned into the Agent PreToolUse payload a hand launch would send (`tool_use_id`
-  `wave:<run>:<n>`) and run through every PreToolUse `Agent` hook of `.claude/settings.json`, in order, with `L7R_WAVE_UNIT=1`;
-  the first refusal refuses the whole run with that hook's message and the unit's label;
+  `wave:<run>:<n>`, a declared verify step `wave:<run>:<n>.<k>`) and run through every PreToolUse `Agent` hook of
+  `.claude/settings.json`, in order, with `L7R_WAVE_UNIT=1`; the first refusal refuses the whole run with that hook's message
+  and the unit's label, and the run's dispatches already recorded are dropped (`hm_checks.drop_run`), so none freezes a page;
 - the check tracking (`hm_checks`): a dispatch from a wave is marked `wave` with its prompt's hash; at `SubagentStop` an agent no
-  dispatch has an id for is matched to the wave dispatch whose prompt its transcript opens with, and recorded launched and
-  returned there - so the freeze holds from dispatch to return, and the pass log (already keyed on `SubagentStop`) logs it.
+  dispatch has an id for is matched to the wave dispatch whose prompt its task text begins with (whitespace collapsed: the
+  harness indents it), and recorded launched and returned there; a wave dispatch stays pending for WAVE_PENDING_S (a design
+  number, 30 minutes: a long wave queues behind the concurrency cap) rather than PENDING_S - so the freeze holds from dispatch to return, and the pass log (already keyed on `SubagentStop`) logs it.
 Suite `tests/hooks/test-workflow-hooks.sh`; `hm_checks`' wave pairing tested on recorded payloads.
 
 **D49 - The authorization (FR-044, SC-032).** `scripts/container/append-system-prompt.md` gains the document's draft, its list
