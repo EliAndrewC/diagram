@@ -28,7 +28,7 @@
    "reviewed": "2026-10-17"
   },
   "### T01 Decisions": {
-   "sha256": "a617512e41bb2a53340bddb0e08c5892c974b654e21316bb40a0685eacd0aa4c",
+   "sha256": "b7bf572991d1caaedeea87a32b45dee5a28e72983e22f53a6c622bbd837699cc",
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
@@ -301,6 +301,77 @@
      "summary": "0081 and 0246 drawing pages record what the maps now draw",
      "class": "within",
      "why": "Unchanged; it records the requested rendering decision."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "### T01 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "A rule table of every LAW entry and lanes_breaking rule, with class and verdict",
+     "class": "within",
+     "why": "The checklist question the GM asked for (research, ruling, or ours) applied rule by rule to the lane law."
+    },
+    {
+     "id": "order",
+     "summary": "D3 first, baseline with D3 shown equal to HEAD, D2/D4 shaped on seed 21 and the pool; seed 17 to T03; stop if seed 21's rules are not angle/doubling",
+     "class": "within",
+     "why": "Sequencing and routing within the feature's own tasks; narrows nothing asked."
+    },
+    {
+     "id": "D2",
+     "summary": "Forced turn or meeting (ground between, the settle's own lawful-ground test) is not a violation; open-ground turns judged as today",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's own words: in the absence of an obstruction footpaths do not meet at 19 degrees, but they might where obstructions force it. Open ground is judged unchanged, so the rule's purpose is kept."
+    },
+    {
+     "id": "D3",
+     "summary": "lanes_breaking returns rule names per lane; refusal message names them",
+     "class": "within",
+     "why": "A defect fix found while measuring (constitution XIV); callers unchanged; changes no verdict (checked by D6)."
+    },
+    {
+     "id": "D4",
+     "summary": "Unforced needles and shallow crossings merged into one path (household way re-aimed, other ways never cut), never refused; no-reach case to an exception check",
+     "class": "within",
+     "why": "The GM's added rule verbatim: nearly parallel, close footpaths become a single footpath; 384 User Story 0 'merged into one path, never refused'."
+    },
+    {
+     "id": "D4b",
+     "summary": "Knot rule counts two ends within _KNOT_FT as a knot only where the straight join between them stands on lawful ground; no manifest reads as today",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Legitimacy never rested on seed 24 (that was evidence the case arises, a cost question). On principle: two ends parted by a house or garden, gathered literally, give a join across the fabric or a refusal - a shape no walker made, the GM's rock applied to the knot rule; the GM framed the question generally ('should this rule actually apply when there are obstructions', 'keep a rule and add an exception'). Ends on lawful ground are still a knot exactly as now, so 0081's rule is not gutted. The block now states honestly that no cohort seed shows it and that it stands on a unit test."
+    },
+    {
+     "id": "D4b-seed24",
+     "summary": "Seed 24 (a staggered junction, ends 24.8 ft apart on one lane with clear ground between) sent to T04 (T48, the re-deal)",
+     "class": "within",
+     "why": "Seed 24 is not one of the four HEAD-failing seeds (17, 21, 40, 45) nor D6's seed 10; it is a re-deal case, and T48 is a task the GM's approved scope already carries."
+    },
+    {
+     "id": "D5",
+     "summary": "No threshold, homestead, fixture or seat moves; only angle, doubling and knot rules change",
+     "class": "within",
+     "why": "Houses never move for a path, the GM's ruling; limits scope rather than narrowing the request."
+    },
+    {
+     "id": "D6",
+     "summary": "48-seed cohort, seed 10 under the w155 patch and the pool's violations, before and after, two workers",
+     "class": "within",
+     "why": "Measurement of the requested change; the GM asked each task measured."
+    },
+    {
+     "id": "D7",
+     "summary": "0081 and 0246 drawing pages say what the maps now draw; record checks as owed",
+     "class": "within",
+     "why": "Records the change where the project's rules require it."
     }
    ]
   }
