@@ -16,6 +16,12 @@ REUSE (`L7R_TEST_DEPS=reuse`, which `make land-tooling` sets; it records what it
 same entries - and that started no other program against the repository is deselected, and the run says how many. What is
 not known is run: a file never recorded, one that started `git` or `make` in the repository, a Python child run isolated or
 with the recording dropped from its environment. `L7R_CACHE_OFF=1` reuses nothing.
+
+GATE (`L7R_TEST_DEPS=gate`, which the gate's coverage run sets unless forced full; amendment 5, plan D31). On a FULL plan only,
+a tooling test is reused against the reads that produced the BASELINE's coverage of it (`<baseline>/tooling-reads.json`, not
+the clone's store, which a later run may have re-recorded on other content), and only if the baseline holds it; the reused
+node ids go to `tooling-reused.json`, whose coverage `incremental carry` copies in before the floors. What the run records
+goes to `tooling-reads.json.next`, promoted with the baseline it produced.
 """
 
 from __future__ import annotations
@@ -37,6 +43,12 @@ import l7r_dep_rules as rules  # noqa: E402 - beside the children's shim, which 
 
 TREE = "tests/tooling/"
 MODE = os.environ.get("L7R_TEST_DEPS", "")
+#: GATE (plan D31): the gate's coverage run, on a FULL plan, reuses a tooling test only against the reads that produced the
+#: baseline's coverage of it - kept beside the baseline (`tooling-reads.json`, promoted by `incremental save-baseline`) - and
+#: names what it reused (`tooling-reused.json`) so `incremental carry` copies that coverage into this run's data
+GATE = os.environ.get("L7R_GATE_SELECT", "") if MODE == "gate" else ""
+REUSING = MODE in ("reuse", "gate")
+GATE_READS, GATE_REUSED = "tooling-reads.json", "tooling-reused.json"
 STORE_NAME = "tooling-test-passes.json"
 #: what a kept pass holds: 2 added the git questions' answers (amendment 2); 3 keeps a pass PER TEST, beside what each test's file and
 #: the session read (amendment 5). A pass kept in another form is never reused - an older reader would misread it
@@ -48,6 +60,7 @@ _reads: dict[str, dict[str, set[str]]] = {}
 _failed: set[str] = set()
 _ran: set[str] = set()
 _collected: dict[str, list[str]] = {}
+_reused_ids: set[str] = set()
 
 
 def _rel(nodeid: str) -> str:
@@ -55,6 +68,8 @@ def _rel(nodeid: str) -> str:
 
 
 def _store() -> pathlib.Path | None:
+    if GATE:
+        return pathlib.Path(GATE) / GATE_READS
     p = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "--path-format=absolute", "--git-common-dir"], capture_output=True, text=True)
     return pathlib.Path(p.stdout.strip()) / "l7r-cache" / STORE_NAME if p.returncode == 0 and p.stdout.strip() else None
 
@@ -156,8 +171,10 @@ def _git_file_state(rest: str) -> str:
 
 
 def pytest_configure(config: pytest.Config) -> None:
-    if MODE not in ("record", "reuse") or os.environ.get("L7R_CACHE_OFF", "") not in ("", "0"):
+    if MODE not in ("record", "reuse", "gate") or os.environ.get("L7R_CACHE_OFF", "") not in ("", "0"):
         return
+    if MODE == "gate" and not gate_full(GATE):
+        return  # an incremental plan selects by coverage; only a full plan's tooling tests are this plugin's (plan D31)
     config._l7r_deps = True  # type: ignore[attr-defined]  # reuse records too: a landing's run keeps what it ran for the next
     if not hasattr(config, "workerinput"):  # the controller (or a run with no workers): the shared log and the children's path
         d = tempfile.mkdtemp(prefix="l7r-test-deps-")
@@ -177,6 +194,25 @@ def pytest_configure(config: pytest.Config) -> None:
 
 
 SHIM_SRC = SITE / "l7r_file_log.c"
+
+
+def gate_full(bdir: str) -> bool:
+    """Is the gate's plan in `bdir` a FULL one - the run whose tooling tests reuse (plan D31)?"""
+    try:
+        return bool(bdir) and json.loads((pathlib.Path(bdir) / "plan.json").read_text(encoding="utf-8")).get("mode") == "full"
+    except OSError, ValueError:
+        return False
+
+
+def gate_baseline_tests(bdir: str) -> set[str] | None:
+    """The node ids the gate's baseline holds coverage for (`tests.json`); None outside the gate. A test it does not hold has
+    no coverage to carry, so it always runs (plan D31)."""
+    if not bdir:
+        return None
+    try:
+        return set(json.loads((pathlib.Path(bdir) / "tests.json").read_text(encoding="utf-8")))
+    except OSError, ValueError:
+        return set()
 
 
 def build_shim() -> str:
@@ -262,6 +298,8 @@ def fixture_key(baseid: str, scope: str, nodeid: str) -> str:
     home = baseid.split("::", 1)[0]
     if home.endswith(".py") and home.startswith(TREE):
         return home
+    if home not in ("", "tests") and not (home + "/").startswith(TREE):
+        return ""  # defined where no tooling test can use it (`tests/gate/conftest.py`): the gate's run sets those up too
     f = _rel(nodeid)
     return f if scope in ("module", "class") and f.startswith(TREE) else SESSION
 
@@ -304,7 +342,7 @@ def pytest_sessionfinish(session: pytest.Session, exitstatus: int) -> None:  # n
         with open(os.path.join(d, f"worker-{worker}.json"), "w", encoding="utf-8") as fh:
             reused = list(getattr(config, "_l7r_reused", (0, 0)))
             json.dump({"reads": {k: {kk: sorted(v) for kk, v in r.items()} for k, r in _reads.items()}, "failed": sorted(_failed),
-                       "ran": sorted(_ran), "collected": _collected, "reused": reused}, fh)  # fmt: skip
+                       "ran": sorted(_ran), "collected": _collected, "reused": reused, "reused_ids": sorted(_reused_ids)}, fh)  # fmt: skip
     if hasattr(config, "workerinput") or not d:
         return
     # UNDER XDIST THE WORKERS DESELECT, the controller does not (383 amendment 2): the controller reports one worker's count
@@ -364,6 +402,7 @@ def _keep(d: pathlib.Path) -> None:
     failed: set[str] = set()
     ran: set[str] = set()
     collected: dict[str, list[str]] = {}
+    reused_ids: set[str] = set()
     for w in d.glob("worker-*.json"):
         data = json.loads(w.read_text(encoding="utf-8"))
         for k, r in data["reads"].items():
@@ -371,6 +410,7 @@ def _keep(d: pathlib.Path) -> None:
                 reads.setdefault(k, {}).setdefault(kk, set()).update(v)
         failed.update(data["failed"])
         ran.update(data["ran"])
+        reused_ids.update(data.get("reused_ids", []))
         for f, ns in data.get("collected", {}).items():
             collected[f] = sorted(set(collected.get(f, [])) | set(ns))
     for log in d.glob("children-*.log"):
@@ -391,6 +431,9 @@ def _keep(d: pathlib.Path) -> None:
     store = _store()
     if store is None:
         return
+    if GATE:  # what this run reused, for `incremental carry`; the reads go to `.next`, promoted only with a green baseline
+        (pathlib.Path(GATE) / GATE_REUSED).write_text(json.dumps(sorted(reused_ids)), encoding="utf-8")
+    out = store.with_name(store.name + ".next") if GATE else store
     ids, entries = _ids()
     answers: dict[str, str] = {}
     try:
@@ -433,10 +476,10 @@ def _keep(d: pathlib.Path) -> None:
     states.update(now)
     named = set().union(_named(kept["session"]), *(_named(e) for e in kept["tests"].values()), *(_named(v["entry"]) for v in kept["files"].values()))
     kept["states"] = {k: v for k, v in states.items() if k in named}
-    store.parent.mkdir(parents=True, exist_ok=True)
-    tmp = store.with_suffix(f".{os.getpid()}.tmp")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    tmp = out.with_suffix(f".{os.getpid()}.tmp")
     tmp.write_text(json.dumps(kept), encoding="utf-8")
-    tmp.replace(store)
+    tmp.replace(out)
 
 
 def shim_gaps(reads: dict[str, dict[str, set[str]]]) -> dict[str, set[str]]:
@@ -471,14 +514,14 @@ def entry_ok(e: dict, states: dict[str, str], ids: dict[str, str], entries: dict
     return all(answer(q, answers if answers is not None else {}) == was for q, was in e.get("git", {}).items())
 
 
-def reusable_tests(kept: dict, ids: dict[str, str], entries: dict[str, list[str]], answers: dict[str, str]) -> tuple[set[str], dict[str, int]]:
+def reusable_tests(kept: dict, ids: dict[str, str], entries: dict[str, list[str]], answers: dict[str, str], allowed: set[str] | None = None) -> tuple[set[str], dict[str, int]]:
     """(the node ids whose own reads, their file's and the session's are all unchanged; {file: its test count} for each file
     every recorded test of which is among them - such a file is not collected at all)."""
     states, memo = kept.get("states", {}), {}
     if "states" not in kept or kept.get("v") != STORE_VERSION or kept.get("py") != sys.version or not entry_ok(kept.get("session", {}), states, ids, entries, answers, memo):
         return set(), {}
     file_ok = {f: entry_ok(e["entry"], states, ids, entries, answers, memo) for f, e in kept.get("files", {}).items() if f.startswith(TREE)}
-    tests = {n for n, e in kept.get("tests", {}).items() if file_ok.get(_rel(n)) and entry_ok(e, states, ids, entries, answers, memo)}
+    tests = {n for n, e in kept.get("tests", {}).items() if file_ok.get(_rel(n)) and (allowed is None or n in allowed) and entry_ok(e, states, ids, entries, answers, memo)}
     whole = {f: len(e["nodeids"]) for f, e in kept.get("files", {}).items() if file_ok.get(f) and e["nodeids"] and set(e["nodeids"]) <= tests}
     return tests, whole
 
@@ -496,7 +539,7 @@ def reuse_set(config: pytest.Config) -> tuple[set[str], dict[str, int]]:
     if cached is not None:
         return cached
     out: tuple[set[str], dict[str, int]] = (set(), {})
-    if MODE == "reuse" and getattr(config, "_l7r_deps", False):
+    if REUSING and getattr(config, "_l7r_deps", False):
         store = _store()
         try:
             kept = json.loads(store.read_text(encoding="utf-8")) if store and store.is_file() else {}
@@ -504,14 +547,14 @@ def reuse_set(config: pytest.Config) -> tuple[set[str], dict[str, int]]:
             kept = {}
         if kept:
             ids, entries = _ids()
-            out = reusable_tests(kept, ids, entries, {})
+            out = reusable_tests(kept, ids, entries, {}, gate_baseline_tests(GATE))
     config._l7r_reuse_set = out  # type: ignore[attr-defined]
     return out
 
 
 def pytest_ignore_collect(collection_path: pathlib.Path, config: pytest.Config) -> bool | None:
     """A test file every test of which is reused is not collected: its module is never imported (FR-022)."""
-    if MODE != "reuse" or not getattr(config, "_l7r_deps", False) or collection_path.suffix != ".py":
+    if not REUSING or not getattr(config, "_l7r_deps", False) or collection_path.suffix != ".py":
         return None
     rel = _rel_path(str(collection_path))
     _tests, whole = reuse_set(config)
@@ -530,7 +573,7 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item
     for i in items:
         if _rel(i.nodeid).startswith(TREE):
             _collected.setdefault(_rel(i.nodeid), []).append(i.nodeid)
-    if MODE != "reuse":
+    if not REUSING:
         return
     tests, _whole = reuse_set(config)
     gone = [i for i in items if i.nodeid in tests]
@@ -538,6 +581,8 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item
         items[:] = [i for i in items if i.nodeid not in tests]
         config.hook.pytest_deselected(items=gone)
     skipped = config.__dict__.get("_l7r_skipped", {})
+    _reused_ids.update(i.nodeid for i in gone)
+    _reused_ids.update(n for n in tests if _rel(n) in skipped)
     config._l7r_reused = (len(skipped), sum(skipped.values()) + len(gone))  # type: ignore[attr-defined]
 
 

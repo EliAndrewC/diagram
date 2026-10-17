@@ -231,3 +231,41 @@ def test_a_wide_fixture_defined_in_a_test_module_is_that_file_s_read() -> None:
     assert deps.fixture_key("tests/tooling", "session", t + "::x") == deps.SESSION, "a conftest's session fixture"
     assert deps.fixture_key("tests/tooling", "module", t + "::x") == t, "a conftest's module fixture: the requesting file"
     assert deps.fixture_key("", "package", t + "::x") == deps.SESSION
+    assert deps.fixture_key("tests/gate", "session", "tests/gate/test_g.py::x") == "", "one no tooling test can use is not kept"
+
+
+def test_the_gate_reuses_only_on_a_full_plan_and_only_a_test_its_baseline_holds(tmp_path) -> None:  # noqa: ANN001
+    """Plan D31: an incremental plan selects by coverage and leaves the plugin inert; on a full one a test the baseline holds no
+    coverage for always runs, and a file is skipped whole only when the baseline holds every test of it."""
+    import json as _json  # noqa: PLC0415
+
+    assert not deps.gate_full("") and not deps.gate_full(str(tmp_path)), "no plan: not the gate's full run"
+    (tmp_path / "plan.json").write_text(_json.dumps({"mode": "incremental"}), encoding="utf-8")
+    assert not deps.gate_full(str(tmp_path))
+    (tmp_path / "plan.json").write_text(_json.dumps({"mode": "full"}), encoding="utf-8")
+    assert deps.gate_full(str(tmp_path))
+    assert deps.gate_baseline_tests("") is None and deps.gate_baseline_tests(str(tmp_path)) == set(), "no baseline: nothing held"
+    (tmp_path / "tests.json").write_text(_json.dumps({"tests/tooling/test_a.py::t1": []}), encoding="utf-8")
+    held = deps.gate_baseline_tests(str(tmp_path))
+    ids = {"tests/tooling/test_a.py": "a"}
+    kept = {"v": deps.STORE_VERSION, "py": sys.version, "states": {"f:tests/tooling/test_a.py": "a"}, "session": {}}
+    entry = {"opaque": [], "files": ["tests/tooling/test_a.py"], "dirs": [], "git": {}}
+    kept["files"] = {"tests/tooling/test_a.py": {"nodeids": ["tests/tooling/test_a.py::t1", "tests/tooling/test_a.py::t2"], "entry": entry}}
+    kept["tests"] = {"tests/tooling/test_a.py::t1": entry, "tests/tooling/test_a.py::t2": entry}
+    assert deps.reusable_tests(kept, ids, {}, {})[1] == {"tests/tooling/test_a.py": 2}, "outside the gate: the whole file"
+    assert deps.reusable_tests(kept, ids, {}, {}, held) == ({"tests/tooling/test_a.py::t1"}, {}), "t2 has no baseline coverage: it runs"
+
+
+def test_the_gate_keeps_its_reads_beside_the_baseline_and_names_what_it_reused(tmp_path, monkeypatch) -> None:  # noqa: ANN001
+    """Plan D31: the gate's reads go to `.next` (promoted only with a green baseline), and the reused node ids to the file
+    `incremental carry` reads."""
+    import json as _json  # noqa: PLC0415
+
+    monkeypatch.setattr(deps, "GATE", str(tmp_path))
+    monkeypatch.setattr(deps, "_ids", lambda: ({}, {}))
+    d = tmp_path / "run"
+    d.mkdir()
+    (d / "worker-gw0.json").write_text(_json.dumps({"reads": {}, "failed": [], "ran": ["tests/tooling/test_a.py::t2"], "collected": {}, "reused_ids": ["tests/tooling/test_a.py::t1"]}))
+    deps._keep(d)
+    assert _json.loads((tmp_path / deps.GATE_REUSED).read_text(encoding="utf-8")) == ["tests/tooling/test_a.py::t1"]
+    assert (tmp_path / (deps.GATE_READS + ".next")).is_file() and not (tmp_path / deps.GATE_READS).exists()

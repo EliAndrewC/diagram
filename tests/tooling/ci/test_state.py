@@ -66,6 +66,22 @@ def test_a_green_done_records_the_tooling_hash_and_a_build_file_edit_moves_it(re
     assert state.write(repo, state.GREEN, "done").tooling == state.tooling_hash(repo), "a real gate re-vouches"
 
 
+def test_an_edit_under_a_subdirectory_of_scripts_moves_the_tooling_hash(repo: Path) -> None:
+    """Feature 383 amendment 5 (FR-028): the hash read only `scripts/`'s top level, so an edit to a guard, a gate or a record
+    tool - each in `scripts/<dir>/` since 2026-10-08 - left the gate skipping the tooling tests that test it."""
+    tool = repo / "scripts" / "record" / "tool.py"
+    tool.parent.mkdir(parents=True, exist_ok=True)
+    tool.write_text("x = 1\n", encoding="utf-8")
+    before = state.tooling_hash(repo)
+    tool.write_text("x = 2\n", encoding="utf-8")
+    assert state.tooling_hash(repo) != before
+    cache = repo / "scripts" / "record" / "__pycache__" / "tool.cpython-314.pyc"
+    cache.parent.mkdir(exist_ok=True)
+    after = state.tooling_hash(repo)
+    cache.write_bytes(b"compiled")
+    assert state.tooling_hash(repo) == after, "bytecode is not the tooling"
+
+
 def test_record_tooling_vouches_for_the_tooling_without_touching_the_gate_verdict(repo: Path) -> None:
     """`make tooling` (T24) writes only the tooling hash: a standing green `done` keeps its verdict, and
     with no record at all a `tooling` record is created that `already_verified` still refuses."""

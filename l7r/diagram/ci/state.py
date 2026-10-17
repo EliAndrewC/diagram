@@ -175,7 +175,9 @@ TOOLING_PATHS = ("Makefile", "pyproject.toml", "l7r/diagram/ci", "l7r/diagram/pi
 def tooling_hash(root: Path) -> str:
     """A content hash over the tooling the `tooling` tests run: the skill's Makefile/pyproject, the ci
     and pipeline packages, the switches and the invocation guard, the suite's conftest - plus the
-    repo's scripts/. Raw bytes, deliberately: a Makefile comment IS a Makefile change worth one run."""
+    repo's scripts/, every subdirectory of it (feature 383 amendment 5: the guards, the gates and the record's tools live in
+    `scripts/<dir>/` since 2026-10-08, and an edit there moved nothing). Raw bytes, deliberately: a Makefile comment IS a
+    Makefile change worth one run."""
     import hashlib
 
     skill = root
@@ -184,7 +186,7 @@ def tooling_hash(root: Path) -> str:
     for rel in TOOLING_PATHS:
         p = skill / rel
         files += sorted(p.rglob("*")) if p.is_dir() else [p]
-    files += sorted((root / "scripts").glob("*"))
+    files += sorted((root / "scripts").rglob("*"))
     for f in files:
         if f.is_file() and "__pycache__" not in f.parts:
             h.update(str(f.relative_to(root)).encode())
