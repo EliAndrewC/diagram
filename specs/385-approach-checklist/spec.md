@@ -108,7 +108,7 @@ ranking's rows chosen to be of different kinds, so the checklist is tried on mor
   names made, before the next `make task-start`.
 - **FR-007 (the moved work)**: 384's FR-000 and User Story 0 (the lane law), its four cohort seeds failing at HEAD, T48 and T47
   move here; 384 is amended to say so. The ranking rows taken here are chosen at the start of their task and recorded in 328's
-  `audit/waves.json` with their wave. 384's FR-002 (374's rules as amended by 375 and 383) and FR-004 (the usage cap at 90%)
+  `audit/waves.json` with their wave. 384's FR-002 (374's rules as amended by 375 and 383) and FR-004 (the usage cap it sets)
   apply to them.
 
 ## Success Criteria *(mandatory)*
