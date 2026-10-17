@@ -115,3 +115,18 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T29 Close: a landing measured before and after, the gate, the report, landed
       research: rendering
       verify: DONE. DONE. a landing 37.05 -> 30.04 s (m:land-tooling-landing-a3; 113.98 s before amendment 2), 121 of 128 tooling files reused, guard suites 2.76 s; the gate green; the report written; landed by the push carrying this tick
+
+## Amendment 4 (the GM 2026-10-17: the serial guard suites, and the tooling tests a landing still runs)
+
+- [ ] T30 The slow guard suites in parts or without idle waits (plan D28); timed whole before and after (SC-019)
+      research: rendering
+      verify: each suite's check count unchanged; its time before and after; make hooks-test HOOKS_ALL=1 before and after
+- [ ] T31 The whole-repository tooling tests (plan D29) (SC-020)
+      research: rendering
+      verify: the same answers compared over the whole repository; the two tests' times before and after
+- [ ] T32 The tooling run's start-up (plan D30) (SC-020)
+      research: rendering
+      verify: the parts measured; the same tests run with the same results; a fresh worktree's run before and after
+- [ ] T33 Close: a landing measured before and after, the gate, the report, landed
+      research: rendering
+      verify: research R11; the gate green; the report written; landed

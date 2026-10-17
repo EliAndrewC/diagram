@@ -410,3 +410,30 @@ sync-with-main case timed alone):
 - what `make hooks-test` pays before any suite runs is cut where it is a lookup: every suite's key from one `hookdeps.py --keys`
   process (the recipe's own sha, so every stamp kept stays valid; 5.9 s as one process per suite), and the user-level
   missing-program hook's self-test kept by its two files like any suite (7.5 s, run every time before).
+## Amendment 4 (FR-025 to FR-027)
+
+**D28 - The slow guard suites, in parts or without their idle waits (FR-025).** sync-with-main's parallel runner (its cases as
+functions, dealt longest-first onto the lightest of N parts, each part a subshell with its own temporary directory, HOME and
+guard log; a part that ends before a case reports fails the suite and names the case) moves to `tests/hooks/parts.sh`, which
+each split suite sources. main-tree (57.7 s) and no-poll (48.4 s) are mostly work, so their checks are grouped into cases -
+each case building its own fixture, none reading a variable another sets - and run in parts. finished-run (39.1 s, 4.9 s of
+CPU) is mostly fixed settle sleeps after starting a background process; each becomes a readiness poll - the condition the
+next check needs (the process visible to the hook, the file present), polled every 0.05 s up to the old sleep - so the guard's
+own intervals and ceilings are untouched. pair (23.5 s) and review-gate (21.8 s) are measured case by case and split where one
+case or one serial run sets the time. Each suite keeps its check count, timed whole before and after (SC-019).
+
+**D29 - The whole-repository tooling tests (FR-026).** test_content_cache's whole-repository test becomes one test per check
+(the pointer check, the conflict check), which xdist runs side by side; within each, the cache-off run and the first
+cache-on run start together (they share nothing: the off run reads no cache), and the warm run follows the cold one - the same
+three answers compared, over the same whole repository. test_open_questions' real-tree test is profiled first: its
+calibration loops and the tool's own run; a cut in the tool (`scripts/record/open_questions.py`) keeps its output identical
+and the test's CPU bound unchanged.
+
+**D30 - A landing's tooling run starts faster (FR-027).** Measured in a fresh worktree at the clone's HEAD, part by part:
+pytest's start and the workers' start, collection of what is not reused, the reuse decision (each worker reads the content ids
+and asks the git questions itself), the first imports. The cuts that change neither which tests run nor their results:
+- the reuse decision once, in the controller, before any worker starts, and its answer handed to the workers in a file
+  beside the run's log;
+- as many workers as there are test files left to run (`-n` lowered in the controller's `pytest_configure`, before xdist
+  starts them), never more than the run asked for;
+- a part found to cost nothing measurable is left alone, and recorded.
