@@ -229,7 +229,9 @@ def test_the_bundle_carries_the_modal_the_rules_and_its_owed_units(tmp_path: pat
     out = tmp_path / "b"
     assert mb.bundle(root, "Farmhouse", "modal-research", str(out)) == 0
     manifest = (out / "MANIFEST.md").read_text(encoding="utf-8")
-    assert "## `modal.md`" in manifest and "## `guidelines.md` - origin `dev/modals.md`" in manifest
+    assert "## `modal.md`" in manifest and "## `guidelines.txt` - origin `dev/modals.md`" in manifest
+    # the rules live in the agent file (feature 383 amendment 6, plan D35): the bundle names the set, it does not copy it
+    assert "standard form" in (out / "guidelines.txt").read_text(encoding="utf-8") and (root / "dev/modals.md").read_text(encoding="utf-8").strip().splitlines()[0] not in manifest
     assert "entry/0029-farmhouses-minka.html" in manifest and "Farmhouses (minka)" in manifest
     assert "owed-checks: modal-research" in manifest and "unit: modal-gaps:hamlet/farmhouse " in manifest and "unit: modal-form:" not in manifest
     assert (out / "record" / "0004-households.html").is_file() and (out / "cand" / "0004-households.html").is_file()

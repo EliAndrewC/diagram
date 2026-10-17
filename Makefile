@@ -1367,6 +1367,10 @@ feature-report: ## [project] where a feature's time and dispatches went, as a ta
 
 # GUARD_EDIT_OK: feature 251 - four new operations (the token census and the three script pre-passes that
 # take the mechanical part of a subagent check out of a model); no existing target or guard changes.
+agent-sync:     ## [project] write into each agent file the text every dispatch of that check shares (the modal guidelines), from its source (feature 383 amendment 6)
+	@: "GUARD_EDIT_OK: feature 383 amendment 6, plan D35 - adding an operation: the agent files' generated sections, held by tests/test_agent_sync.py"
+	@python3 scripts/reviews/agent_sync.py
+
 agent-census:   ## [project] what each subagent check has cost, from the session transcripts   [SINCE=YYYY-MM-DD] [OUT=<json>]
 ##  SINCE=<date>   only the runs that started on or after it
 ##  OUT=<json>     also write the rows to this file
