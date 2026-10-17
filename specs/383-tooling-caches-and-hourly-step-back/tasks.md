@@ -142,6 +142,6 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T36 Tests of code moved off the real repository, case by case (plan D33) (SC-022)
       research: rendering
       verify: DONE. R12 table. 12 tests of code are on copies of the pages they name, or on records of their own; data reads went from 475-4,656 files to 155 or fewer, assertions unchanged. The tests whose subject is the record's data are kept, with reasons.
-- [ ] T37 Close: the gate, the report, landed
+- [x] T37 Close: the gate, the report, landed
       research: rendering
-      verify: research R12; the gate green; the report written; landed
+      verify: DONE. Two gates, the second green (221 s). Feature report written. The arbiter's step-back ruling was continue; its tooling fix is settled and landed. Tooling landed mid-feature three times: the reads fix, the new-file guard, the make-only refusal.
