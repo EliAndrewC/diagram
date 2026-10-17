@@ -1830,3 +1830,4 @@ above this heading are classified once, as data, in `docs/review-ledger-r0.json`
 | 2026-10-17 | spec-fidelity | 383 amendment 5 spec, round 1 | FAITHFUL | - | nothing | - | verified: spec accepted | 65 s | 494k in (444k cached) / 5.0k out |
 | 2026-10-17 | spec-fidelity | 383 amendment 5 plan, D31-D33 | BLOCKED | D33 looked only at research-page edits; FR-030's before-and-after listing dropped | paperwork | yes | fixed: any repository data; the listing restored | 169 s | 273k in (230k cached) / 5.8k out |
 | 2026-10-17 | spec-fidelity | 383 plan, amendment 5 block (round 2) | CLEAR | D31-D33 + D32a clear; D32a figures unlabeled | paperwork | yes | fixed | 57 s | 172k in (130k cached) / 4.5k out |
+| 2026-10-17 | spec-fidelity | 383 plan, amendment 5 block (round 3, labels) | CLEAR | the round-2 note's labels confirmed | nothing | - | verified | 25 s | 160k in (126k cached) / 2.0k out |

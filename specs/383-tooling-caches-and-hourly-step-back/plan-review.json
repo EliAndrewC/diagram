@@ -229,7 +229,7 @@
    "declared": "spec-fidelity"
   },
   "## Amendment 5 (FR-028 to FR-030)": {
-   "sha256": "97fe3033c28661ee13489072027f4cbfe1fb7ef2f9645d386bce9e9708a06eca",
+   "sha256": "dc14d89397e3093cfb9309a4a52e359447e809c869b37f163bd0fdd17f5bf455",
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
@@ -901,6 +901,39 @@
      "summary": "Each read's content stored once in one table; when a run records a path whose content moved, entries naming that path that this run did not re-record are dropped",
      "class": "within",
      "why": "A storage and eviction design FR-029 leaves open. It never reuses a test whose reads changed: a dropped entry only re-runs the test, which is the conservative direction. The one reuse it gives up is content that moved and then moved back. A per-node-id store keeping one entry per test would already lose that, so it does not narrow per-test reuse as the GM asked for it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Amendment 5 (FR-028 to FR-030)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D31",
+     "summary": "gate's tooling phase runs with L7R_TEST_DEPS=reuse; FULL=1 runs all; tooling hash reads scripts/ recursively",
+     "class": "within",
+     "why": "FR-028 verbatim: reuse on identical inputs as land-tooling does, hash covers every file under scripts/ with subdirectories; FULL=1 is an opt-in full run that narrows nothing"
+    },
+    {
+     "id": "D32",
+     "summary": "store v3 keeps reads per test plus file- and session-level reads; whole files skipped from collection when every test reusable",
+     "class": "within",
+     "why": "FR-029: per-test reads, file imported only when a test will run, file/conftest/config/plugin code part of each test's reads"
+    },
+    {
+     "id": "D32a",
+     "summary": "each read's content stored once in one table; entries naming a path whose content moved and not re-recorded are dropped",
+     "class": "within",
+     "why": "storage representation of FR-029's per-test reads; dropping stale entries only forces re-runs, never reuses a pass against unseen content. Figures now carry one-shot labels (observed 2026-10-17, method stated)"
+    },
+    {
+     "id": "D33",
+     "summary": "tests of code still re-running on data edits found from kept reads, given fixtures with assertions unchanged, listed before/after; data-subject tests keep the real tree",
+     "class": "within",
+     "why": "FR-030 as written: case by case, listed with reads before and after, data-subject tests keep reading the repository"
     }
    ]
   }
