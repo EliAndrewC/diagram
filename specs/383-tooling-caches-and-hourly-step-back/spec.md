@@ -168,13 +168,15 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 
 ### Amendment 4 - the serial guard suites, and the tooling tests a landing still runs (`request.md`, Amendment 4)
 
-- **FR-025 A slow guard suite runs in parallel parts.** The guard suites that run as one long serial run - main-tree, no-poll
-  and finished-run first, then any other whose run `make hooks-test` now reports as long - are dealt into parts that run at
-  the same time, as sync-with-main's are; every check still runs and is counted.
+- **FR-025 A slow guard suite runs in parallel parts.** Every guard suite over 20 s run alone - main-tree 57.7 s, no-poll 48.4 s,
+  finished-run 39.1 s, pair 23.5 s and review-gate 21.8 s (observed 2026-10-17, method: each suite run alone under `time`,
+  load about 4) - is dealt into parts that run at the same time, as sync-with-main's are, or, where its time is waiting
+  rather than work, has the wait cut; every check still runs and is counted.
 - **FR-026 The tooling tests that read the whole repository take less time.** The tests a landing cannot reuse because they read
   the whole repository - the longest, test_content_cache's whole-repository comparison (9.4 s) and test_open_questions on the
   real tree (4.8 s; observed 2026-10-17, method: a fresh worktree's tooling run with per-test times) - are split into parts
-  that run in parallel, or check the same property on less, without dropping what they check.
+  that run in parallel, or made faster in their own work, and each still checks its property over the whole repository
+  (test_content_cache's is SC-002's whole-repository proof).
 - **FR-027 A landing's tooling run starts faster.** What a fresh checkout's tooling run spends before and around its tests - the
   workers' start, collection, the reuse decision in every worker, the first imports - is measured part by part, and each part
   that can be cut without changing which tests run or their results is cut.
