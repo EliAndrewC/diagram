@@ -221,6 +221,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
+  },
+  "## Amendment 4 (FR-025 to FR-027)": {
+   "sha256": "235a98caf8d3a3f982e7ba58d1292154d7f1ba37ca058726fa120474b963a9fe",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -794,6 +800,33 @@
      "summary": "hooks-test fixed costs cut: every suite's key from one hookdeps.py --keys process (same recipe sha, stamps stay valid); the user-level missing-program hook's self-test kept by its two files like any suite",
      "class": "within",
      "why": "The self-test is a guard suite run every time though its two files did not change - exactly FR-023's 'runs only where what it reads changed'; the one-process key lookup is a measured timing cut inside the same step, covered by amendment 2's 'land whatever timing improvements you are able to figure out' (FR-019). Neither drops a check."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Amendment 4 (FR-025 to FR-027)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D28",
+     "summary": "Shared parallel-parts runner moved to tests/hooks/parts.sh; main-tree and no-poll grouped into independent cases run in parts; finished-run's fixed settle sleeps become readiness polls capped at the old sleep; pair and review-gate measured case by case and split at what sets their time; check counts kept, suites timed before and after.",
+     "class": "within",
+     "why": "FR-025 names these five suites and allows either parallel parts or, where the time is waiting, cutting the wait in the tests without changing the guard; the poll leaves the guard's own intervals untouched and every check still runs and is counted. Serves the GM's 'splitting those up'. Read as binding: pair and review-gate ARE split (where = the split point); leaving either unsplit would be an unruled narrowing of FR-025."
+    },
+    {
+     "id": "D29",
+     "summary": "test_content_cache's whole-repository test becomes one test per check run side by side by xdist, cache-off and cold cache-on runs concurrent, warm after cold, same three answers over the whole repository; test_open_questions profiled and the tool cut with identical output and the test's CPU bound unchanged.",
+     "class": "within",
+     "why": "FR-026 allows parts in parallel or faster own work, provided each still checks its property over the whole repository (SC-002 kept); the GM asked to fold these two tests into the round. No assertion is loosened."
+    },
+    {
+     "id": "D30",
+     "summary": "Fresh-worktree start-up measured part by part; reuse decision made once in the controller and handed to workers; -n lowered to the number of files left to run, never above what was asked; a part costing nothing measurable left alone and recorded.",
+     "class": "within",
+     "why": "FR-027: measure each part, cut each part that can be cut without changing which tests run or their results. Both cuts change neither. Leaving a part that costs nothing measurable is not an exception (there is nothing to cut). The two listed cuts do not discharge FR-027 for collection or first imports if they measure non-zero; FR-027 still binds there."
     }
    ]
   }
