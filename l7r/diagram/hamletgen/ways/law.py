@@ -301,7 +301,9 @@ def husks(M: Mapping[str, Any]) -> list[int]:
 def folded_joint_pairs(lanes: Lanes, blocked: Blocked | None = None) -> list[tuple[int, int, int, int]]:
     """The joints (`joints`: `(i, end_i, j, end_j)`) where two lanes meeting end to end - one way to the walker - turn
     `DOUBLE_BACK_DEG` or more.
-    Research: lanes met end to end are one - research/questions/0081-village-lanes.drawing.html: no hairpin at the joint"""
+    Research:
+        lanes met end to end are one - research/questions/0081-village-lanes.drawing.html: no hairpin at the joint
+        a forced turn is lawful - DEVIATION research/questions/0081-village-lanes.drawing.html: "A turn the ground forces is drawn as walked" - a fold whose chord the ground blocks is excused"""
     out = []
     for i, ei, j, ej in joints(lanes):
         x, y = oriented(lanes, i, ei, j, ej)
@@ -322,7 +324,9 @@ def folded_joints(lanes: Lanes, blocked: Blocked | None = None) -> list[tuple[in
 def connector_hairpin_ends(lanes: Lanes, blocked: Blocked | None = None) -> list[tuple[int, int, int]]:
     """(connector index, lane index, end) wherever a lane's short last leg meets the connector's start and the two double
     back (`hairpin_over_a_short_leg`); the end is -1 (the lane's last point) or 0 (its first).
-    Research: no hairpin at the track - research/questions/0081-village-lanes.drawing.html: over a returning leg under 40 ft"""
+    Research:
+        no hairpin at the track - research/questions/0081-village-lanes.drawing.html: over a returning leg under 40 ft
+        a forced turn is lawful - DEVIATION research/questions/0081-village-lanes.drawing.html: "A turn the ground forces is drawn as walked" - a hairpin at the track whose chord the ground blocks is excused"""
     out = []
     for ci, co in enumerate(lanes):
         cp = lane_pts(co)
@@ -361,7 +365,10 @@ def needle_ends(lanes: Lanes, blocked: Blocked | None = None) -> list[tuple[int,
     """(lane index, end, tread lane index, u, v) wherever a lane's end leg, longer than `NEEDLE_FT`, meets another way's tread `u`-`v`
     (within `JOIN_TOL`) and runs back along it at under `NEEDLE_DEG` - a needle rather than a T. A leg carrying straight on
     from a way's END is not a needle: the tread it meets does not run back beside it. The end is -1 (last) or 0 (first).
-    Research: a lane meets another as a T - research/questions/0081-village-lanes.drawing.html: never a needle"""
+    Research:
+        a lane meets another as a T - research/questions/0081-village-lanes.drawing.html: never a needle
+        a forced turn is lawful - DEVIATION research/questions/0081-village-lanes.drawing.html: "A turn the ground forces is drawn as walked" - a needle whose sliver the ground blocks is excused
+        needle leg - CONVENTION: only an end leg over NEEDLE_FT, 20 ft, can be a needle; shorter is the approach to the junction"""
     ways = [lane_pts(ln) for ln in lanes]
     out = []
     for i, ln in enumerate(lanes):

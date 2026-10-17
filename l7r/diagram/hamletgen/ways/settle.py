@@ -373,6 +373,8 @@ def settle_ends(s: Any) -> int:
         lanes met end to end read as one - research/questions/0081-village-lanes.drawing.html: a needle, fold or hairpin re-laid as a T
         no doubled tail - UNRESEARCHED: the end cut back to where it came alongside the way
         two paths side by side become one - research/questions/0081-village-lanes.drawing.html: a lane crossing another at under 20 degrees cut at the crossing (`cut_at_shallow_crossing`)
+        a household's way moved at its foot - research/questions/0081-village-lanes.drawing.html: "cut at its far end, never at its door"
+        a foot re-aimed only onto lawful ground - GUESS: a re-aim through another household's yard draws no path anyone walks
         which of a folded pair is re-aimed - UNRESEARCHED: the shorter record as the T; two bare legs lose the shorter
         no fan of stubs at a door - UNRESEARCHED: past two ends at one house, the farther cut back past the doorstep
         a lane ends at the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end within 60 ft of the house or
