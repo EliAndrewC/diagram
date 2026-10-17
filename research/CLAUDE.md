@@ -4,7 +4,7 @@ This file auto-loads into every session that reads a research file, on every tur
 index. Why each is the rule - the GM's words, the incidents, the measurements - is in
 [`docs/research-record-rules.md`](../docs/research-record-rules.md), under the same headings; read it before arguing with
 a rule. The root `CLAUDE.md` "Research" section (archive first, bundles, the write cap, `make lines`/`append`, the
-download list) applies here and is not repeated.
+download list) applies here and is not repeated; its full text is `docs/research-doctrine.md`.
 
 | when you | load |
 |---|---|
@@ -165,7 +165,8 @@ per note VERBATIM / SUPPORTS, per section the assertions with no footnote - afte
 the units `make record-owed` names, its verdicts recorded with `make record-checked` and in the task (`quote-check
 confirmed`).
 
-**A check round** (feature 375): triage first (the `claims-triage` / `modal-triage` agents), the page frozen while its check runs, a third round to the `round-arbiter` - in full in [`editing-the-record.md`](editing-the-record.md).
+**A check round** (feature 375): a pop-up or a claim owed only because a page it names moved is triaged first (the
+`claims-triage` / `modal-triage` agents), the page frozen while its check runs, a third round to the `round-arbiter` - in full in [`editing-the-record.md`](editing-the-record.md).
 
 ## Written for the reader (GM 2026-09-07, feature 209)
 

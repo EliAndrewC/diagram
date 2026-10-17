@@ -40,6 +40,7 @@ CARRIED = {
         "A citation quotes the passage verbatim": "quoting the passage verbatim",
         "The record is HTML fragments": "Never edit a built page",
         "Reading and checking go to agents": "run the mechanical pre-pass",  # the BUNDLE rule joined this bullet (slim: "Checks read BUNDLES")
+        "A research page is worked in two fresh sessions": "at most four questions",
         "A `research record` feature closes only": "NOT: feature 378's implementation check is owed by the session that closes the feature, never by a page session",
         "**Room before packing**": "NOT: a rule for the engine's placement work (the GM, 2026-10-12), which a page session never does",
     },

@@ -71,6 +71,9 @@ Constitution XII. One line each here; the full text of every rule, with its feat
 - The record is HTML fragments under `research/questions/` and `research/sources/`, BUILT by `make record`; a pointer names
   the fragment FILE, never a built page.
 - Reading and checking go to agents, in the background, on a BUNDLE (`make check-bundle`), the mechanical script first.
+- A research page is worked in two fresh sessions, write then check-and-apply (`make page-session`), at most four questions
+  and ten new registry keys a write (`make reserve`'s eleventh key sends the rest to a continuation brief); coordination files
+  are read with `make lines` and written with `make append`; a page session loads `scripts/container/page-session-rules.md`.
 - A `research record` feature closes only with its findings checked against the code (`make impl-check F=<n>`).
 
 ## Development workflow
@@ -78,10 +81,15 @@ Constitution XII. One line each here; the full text of every rule, with its feat
 Spec-driven under `.specify/memory/constitution.md`. One line each here; the full text, with the GM's rulings, is
 `docs/spec-kit-and-reviews.md` ("The development workflow of the root CLAUDE.md, in full").
 
-- Feature work is a spec-kit feature (`/speckit-specify` -> plan -> tasks -> implement); a tweak is done directly.
-- A number comes from `make claim SLUG=<slug>`; export both lines it prints; no branches - commit on `main` in the clone.
+- Feature work is a spec-kit feature (`/speckit-specify` -> plan -> tasks -> implement); a tweak is done directly. Ask before
+  chain-firing on an ambiguous case.
+- A number comes from `make claim SLUG=<slug>`; export both lines it prints; commit and push the spec directory as soon as
+  `spec.md` exists; no branches - commit on `main` in the clone.
 - **A feature is filed only with the GM's approval** (GM 2026-10-10), proposed in the turn's FINAL message; its `spec.md`
-  carries `**Approved**: the GM, YYYY-MM-DD, "<their words, verbatim>"`. `make speckit-todo` lists what is open.
+  carries `**Approved**: the GM, YYYY-MM-DD, "<their words, verbatim>"`. `make speckit-todo` lists what is open. Each spec carries an `**Affects**:` line; its stage is derived from it
+  (`make speckit-todo BY=affects`, `CHECK=1` at the push). An item owed at a tier goes into that tier's placeholder (380 village,
+  381 town, 382 provincial city), never filed alone. A feature closes when every task is ticked, or when its status line opens
+  `Done`, `Superseded by NNN` or `Withdrawn` with the evidence beside it.
 - Every task is `research: rendering` or `research: physical` (the physical one carries its five boxes).
 - A feature ends with `make feature-report F=NNN WRITE=1`; a row the GM agreed in the session is
   `make gm-reviewed F=NNN WORDS="<his words>"`.
@@ -89,11 +97,14 @@ Spec-driven under `.specify/memory/constitution.md`. One line each here; the ful
   a check's third round on one subject, a block an earlier version had and a later dropped coming back,
   a second red gate in a row, check dispatches past 1.0 a changed line - each owe the `round-arbiter`'s ruling
   (`make arbiter-bundle`) before the next check or gate. `make gm-review` lists what waits for the GM.
-- Run the chain end to end, unattended; a PROCESS stop goes to the round arbiter (`make arbiter-ask`), what to build to the GM.
+- Run the chain end to end, unattended: stop only when a wrong guess would cost an hour-plus to unwind; when stuck, the next
+  step is a measurement. A PROCESS stop goes to the round arbiter (`make arbiter-ask`), what to build to the GM.
 - Do the literal thing (constitution XVI); an exception goes to `spec-fidelity` with the GM's words.
 - A spec and a plan's changed blocks are reviewed by `spec-fidelity` (`make plan-delta F=<n>`) before implementation and ticks.
 - No known regressions (XIII), measured in a detached worktree; fix defects where you find them (XIV).
-- Review checks run ON THEIR OCCASION (`docs/reviews.md`), one unit per agent, on the tier their file pins; an ad-hoc
+- Review checks run ON THEIR OCCASION (`docs/reviews.md`), one unit per agent; every pass is a ledger row with its cost
+  (`make review-cost`); findings for the GM go through `escalation-check` first; to improve a check, add the general rule,
+  prove it fires on the unfixed artifact, then fix the artifact. Each runs on the tier its file pins; an ad-hoc
   agent names its `model`. A defined agent launches without the CLAUDE.md files (`omitClaudeMd: true`); **what every
   dispatch of a check shares lives in its agent file** - only that is reused across launches (feature 383 research R16) -
   and a fan-out sends its first alone (`agent-prefix-hooks.sh`). The review agents are pre-authorized through
@@ -108,6 +119,10 @@ full").
 - `make done` reports every failure together: fix them all, re-run once.
 - Python: ruff, ruff format, pyrefly, 100% coverage held as a floor; a Python file past 1,000 raw lines fails the gate.
 - Edit with `Edit`; a large file through its make target; batch the lookups you already know you need.
+- An overlap check builds an index once (`settlement/_geom/indexes.py`) and asks it per candidate; a plan that adds one says
+  how it is indexed.
+- Foreground-regenerate only the motivating map; read derived data from the recorded manifest, never by re-running the
+  generator.
 
 ## Session clones
 

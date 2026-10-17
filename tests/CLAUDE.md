@@ -23,7 +23,12 @@ the Makefile collects TREES, and where you put a test is the whole decision.
 
 ## WHICH TARGET RUNS WHICH TREE - the table above read the other way round
 
-`make quick` runs `tests/` alone; a plain `make done` is INCREMENTAL over every tree; `make test-full` deselects nothing - the full table, and what `done FULL=1` adds: [`test-bed-detail.md`](test-bed-detail.md).
+`make quick` runs `tests/` alone; a plain `make done` is INCREMENTAL over what it collects (not `tier_*/`; `tooling/` only on a
+stale stamp, reused per test); `make test-full` deselects nothing. A marker (`rolls_map`, `tooling`, `tiers`) filters within a
+tree, the tree is the collection scope; a test with a quick and a full form stays in one tree and reads `EXHAUSTIVE`
+(`tests/_scope.py`), a sweep-only test goes to `tests/full/`. **The layout mirrors the source**: a test for `X/y.py` is in
+`tests/X/test_y.py`. The per-directory indexes (`settlement/`, `hamletgen/ways/`, `full/interactive/page_browser/`, `soak/`) and
+the root-level suites (`test_villages.py`, `gate/test_*.py`, `test_compound.py`, `test_citybudget.py`) are listed in [`test-bed-detail.md`](test-bed-detail.md), with the full target table and what `done FULL=1` adds.
 
 ## Running it
 
@@ -44,7 +49,8 @@ repository, every `.clones/` checkout included - pytest does not read `.gitignor
 
 ## Conventions
 
-`_builders.py` per package; `test_surface.py` guards a package surface; **a closure you cannot reach is LIFTED OUT, never dropped**; a found defect becomes a unit test of the placer first - in full, with the worked examples: [`test-bed-detail.md`](test-bed-detail.md).
+`_builders.py` per package; `test_surface.py` guards a package surface; **a closure you cannot reach is LIFTED OUT, never dropped**; a found defect becomes a unit test of the placer first; before retiring a check, read the placer and grep the
+record of what it has caught; never restore the hand-era corpus (a converted tier gets scripted negative fixtures) - in full, with the worked examples: [`test-bed-detail.md`](test-bed-detail.md).
 
 ## `tests/` is invisible to the generation cache, on purpose
 
