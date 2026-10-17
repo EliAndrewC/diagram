@@ -169,6 +169,7 @@ def test_an_entry_kept_against_content_that_moved_is_dropped(tmp_path, monkeypat
 
     store = tmp_path / "store.json"
     monkeypatch.setattr(deps, "_store", lambda: store)
+    monkeypatch.setattr(deps, "GATE", "")  # the clone's store, even when the gate's run is the one running this test
     ids = {"data/p.html": "old"}
     monkeypatch.setattr(deps, "_ids", lambda: (ids, {}))
 

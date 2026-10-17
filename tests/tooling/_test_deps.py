@@ -70,6 +70,11 @@ def _rel(nodeid: str) -> str:
 def _store() -> pathlib.Path | None:
     if GATE:
         return pathlib.Path(GATE) / GATE_READS
+    return _clone_store()
+
+
+def _clone_store() -> pathlib.Path | None:
+    """The clone's store, in its git common directory's cache - where the C recorder is built too, in either mode."""
     p = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "--path-format=absolute", "--git-common-dir"], capture_output=True, text=True)
     return pathlib.Path(p.stdout.strip()) / "l7r-cache" / STORE_NAME if p.returncode == 0 and p.stdout.strip() else None
 
@@ -218,7 +223,7 @@ def gate_baseline_tests(bdir: str) -> set[str] | None:
 def build_shim() -> str:
     """The preloaded C-library recorder (plan D26), built once per version of its source into the git common directory's
     cache with gcc; "" where it cannot be built (no compiler) - every non-Python child then stays unknown, as before."""
-    store = _store()
+    store = _clone_store()
     if store is None or not SHIM_SRC.is_file():
         return ""
     import hashlib  # noqa: PLC0415
