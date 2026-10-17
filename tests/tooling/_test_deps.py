@@ -132,9 +132,31 @@ CACHE_READS = (".git/l7r-cache/", ".git/semantic-id-cache.json", ".git/record-ch
 def _state(kind: str, rel: str, ids: dict[str, str], entries: dict[str, list[str]]) -> str:
     """What a read found, as content: a file's id (`absent` where there is none), a directory's entries. A file git ignores
     has no id here - `ignored`, which no kept pass accepts (what it held is not known)."""
+    if kind == "file" and rel.startswith(".git/"):
+        return _git_file_state(rel[5:])
     if kind == "file":
         return ids.get(rel) or ("absent" if not (ROOT / rel).exists() else "ignored")
     return json.dumps(entries.get(rel, []))
+
+
+_COMMON: list[pathlib.Path | None] = []
+
+
+def _git_file_state(rest: str) -> str:
+    """A file under `.git/` by its content in the git COMMON directory, which a worktree shares with its clone (amendment 3:
+    ruff reads `.git/info/exclude`, and in a worktree `.git` is a file, so the path read as `absent` there). A file kept per
+    checkout (HEAD, the index) differs between them, and so the file runs, as it should."""
+    if not _COMMON:
+        store = _store()
+        _COMMON.append(store.parents[1] if store else None)
+    common = _COMMON[0]
+    path = common / rest if common else None
+    if path is None or not path.is_file():
+        return "absent"
+    import hashlib  # noqa: PLC0415
+
+    data = path.read_bytes()
+    return hashlib.sha1(b"blob %d\0" % len(data) + data).hexdigest()  # noqa: S324 - an identity, as git computes it
 
 
 def pytest_configure(config: pytest.Config) -> None:
@@ -269,7 +291,7 @@ def _keep(d: pathlib.Path) -> None:
             continue
         r = reads.get(f, {})
         opened = {_rel_path(p) for p in r.get("file", set())}
-        opened = {p for p in opened if not p.startswith(CACHE_READS) and p != ".git"}  # `.git` itself: where, not what (a worktree's is a file)
+        opened = {p for p in opened if not (p + "/").startswith(CACHE_READS) and p != ".git"}  # the cache directory itself too  # `.git` itself: where, not what (a worktree's is a file)
         files = {p for p in opened if not (ROOT / p).is_dir()}
         dirs = {_rel_path(p) for p in r.get("dir", set())} | {p for p in opened if (ROOT / p).is_dir() and not p.startswith(".git")}
         if any(p == ".git" or p.startswith(".git/") for p in opened if (ROOT / p).is_dir()):
