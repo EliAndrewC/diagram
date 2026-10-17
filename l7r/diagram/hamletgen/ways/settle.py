@@ -68,7 +68,15 @@ from .keeper import NOT_THE_SETTLES, unsettled  # noqa: F401 - re-exported: `set
 from .knots import settle_knots
 from .reach import _draw_tree_lane, settle_field, settle_targets  # noqa: F401 - re-exported: callers and tests name these as `settle.<name>`
 from .serve import shadowed_by
-from .squaring import SQUARE_MARGIN_FT, SQUARE_PASSES, _pts, cut_at_shallow_crossing, square_every_crossing, square_run, square_waters  # noqa: F401 - re-exported: callers and tests name these as `settle.<name>`
+from .squaring import (  # noqa: F401 - re-exported: callers and tests name these as `settle.<name>`
+    SQUARE_MARGIN_FT,
+    SQUARE_PASSES,
+    _pts,
+    cut_at_shallow_crossing,
+    square_every_crossing,
+    square_run,
+    square_waters,
+)
 from .sweeps import _DOUBLED_DEG, along_tail, cut_at_tail
 from .tree import left_to_the_tree, prune_the_tree, set_corridor, settle_defer, settle_tree, tree_faults
 from .weld import weld_corner

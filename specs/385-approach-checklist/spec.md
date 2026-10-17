@@ -121,7 +121,8 @@ ranking's rows chosen to be of different kinds, so the checklist is tried on mor
 - **SC-001** (FR-005, FR-006): every closed task has its retro row and its per-task split, and across the tasks each task's total
   time, its share before its last decision point and its count of re-decides fall, or the final report says why not (tasks of
   different kinds are compared within their kind where the report can).
-- **SC-002** (FR-001): the last two retro rows change nothing in the checklist (it has settled), or the report says why not.
+- **SC-002** (FR-001, FR-002): the checklist v1 drafted from the audit, and the last two retro rows change nothing in it (it has
+  settled), or the report says why not.
 - **SC-003** (FR-007): the lane law's success criteria as 384 states them (User Story 0's Independent Test), and 384's SC-004 for
   T48.
 - **SC-004** (FR-003, FR-004): the refusals of FR-003 and FR-004 each have a test that is red without them.

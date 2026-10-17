@@ -377,7 +377,9 @@ def needle_ends(lanes: Lanes, blocked: Blocked | None = None) -> list[tuple[int,
                 for u, v in zip(o, o[1:], strict=False):
                     if seg_dist(q[0], q[1], u, v) > JOIN_TOL:
                         continue
-                    if any(math.degrees(math.acos(max(-1.0, min(1.0, back[0] * d[0] + back[1] * d[1])))) < NEEDLE_DEG for d in _tread_bearings(q, u, v)) and not forced_meeting(blocked, q, b, u, v, float(ln.get("w") or 3.0)):
+                    if any(math.degrees(math.acos(max(-1.0, min(1.0, back[0] * d[0] + back[1] * d[1])))) < NEEDLE_DEG for d in _tread_bearings(q, u, v)) and not forced_meeting(
+                        blocked, q, b, u, v, float(ln.get("w") or 3.0)
+                    ):
                         out.append((i, end, k, u, v))
     return out
 
