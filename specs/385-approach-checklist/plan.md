@@ -395,6 +395,10 @@ keeps it as the page states it. Whether the walk across the yard should be DRAWN
 this task. This is the session's difference from the blind block, marked as FR-012 asks: the blind block names this fallback
 but chooses the gap or room first, and the session puts the record's own fallback first because the record states it for
 exactly this case. The dump decides whether the case applies.
+(1b) **Measured 21:22: seed 21's five ways come near only their own household's garden and yard.** So the O gap applies,
+and the decision is that a household's own way is exempt from the 7 ft fence gap beside its own garden, kept off its beds by the
+overlap matrix (`fabric.owned_gardens`). It is recorded as a DEVIATION on 0246's drawing page. More room would not help: the
+distance is between a household and its own beds, not between homesteads.
 (2) Else the 7 ft gap (O, a convention) is weighed against more room (the GM's 2026-10-12 ruling: room first), and a room
 change is T04's.
 Before choosing, it is asked whether a reader of the research would call the drawn place wrong. That is the question the
@@ -414,7 +418,7 @@ D17's own shape: its root household's way ran 18 ft beside the skeleton and ende
 the three ways hanging from it. It is fixed by D17's merge and held by D22's cohort like the four.
 
 **D22 - done.**
-- The baseline: `.git/cohort48-t01b.log`, 50/54, failing 17, 21, 40 and 45.
+- The baseline: `.git/cohort48-t01b.log`, 50/54, failing 17, 21, 40 and 45; and seed 49, failing at HEAD in a detached worktree (D24).
 - Each seed passes `make cohort N=1 SEED=n`, or carries its recorded exit to T04 (a re-seat or room change, T04's own task);
   an exit no task of this feature owns is not done.
 - The whole cohort regresses no seed.

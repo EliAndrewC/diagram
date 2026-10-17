@@ -93,13 +93,25 @@
    "declared": "spec-fidelity"
   },
   "### T03 Decisions": {
-   "sha256": "72e9eab8e95e7515bdd96c2f77e6d8228ba99c5664b9da783e19179d40c221f6",
+   "sha256": "75a2b1bfeab4ebd1c2f45a5e51cbfda6af90f2c709592cbe4e5efca8d521e5de",
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
   },
   "## T04 to T10 - T48, T47's patch, five ranking rows": {
    "sha256": "693c119c0066cfd0ea02c004425dac6e877b3a5bf9fb147b650d1f28fe4110a8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T03 part B (2026-10-17T22:12Z)": {
+   "sha256": "8338866b05c505e5425a416661fd4d7cd8c5d9e2d4e39556df1639a92e9a94c0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (re-answered 2026-10-17T22:12Z)": {
+   "sha256": "f98ff0ef731b5e11e4fab598ac17507d7908b9c1f3a7fbd38b935ef64656bff5",
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
@@ -975,6 +987,78 @@
      "summary": "Budget about 4 h, the blind block's. Twice that (8 h) triggers part B, as does every D9 trigger.",
      "class": "within",
      "why": "The GM's 'no two-hour threshold on record' rejected a threshold for judging whether the experiment fails. D23 instead fires the step-back checklist, the 'checklist ... that comes up when a session is taking a while' the GM asked for (FR-004). It adds a fourth trigger beyond D9's three, and it says so on record. It does not judge the process."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "### T03 Approach (re-answered 2026-10-17T22:12Z)",
+    "### T03 Decisions",
+    "### T03 part B (2026-10-17T22:12Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D17(1) step",
+     "summary": "The side-by-side merge becomes its own settle step (settle_side_by_side), run after the reach and before the network rule, that never refuses; REACH 20 ft for the merge only.",
+     "class": "within",
+     "why": "The GM's request names merging near-parallel close paths as 'adding a rule ... where the new rule did in fact solve the problem'; the approved proposal: 'Add a rule that removes the case, like merging two near-parallel paths'. A step that only adds merges is that rule. Moving REACH out of the refusal (part B 3, 5) stops tuning one number, which is the thrashing the request exists to end."
+    },
+    {
+     "id": "D17(1) lawful-only cut",
+     "summary": "A merge cut is written only where the cut way keeps the law (Lawful); otherwise the pair is left unmerged.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "An 'only where' on the requested merge, so ruled as an exception, each residue case separately. (a) An unmendable pair within 14 ft is refused by the doubled-tail rule, exactly as before T03. (b) An unmendable pair at 14-20 ft is drawn as two ways, exactly as before T03. Neither case is worse than HEAD; the condition only declines to add a merge that would break the lane law. It is implied by the GM's own words: 'I don't want future sessions to just throw away rules when they are inconvenient', and the approved guardrail that loosening a rule needs its reason recorded - an unlawful cut would drop the law with no record. The bundle cannot show what Lawful contains: a merge T meets its partner within _DOUBLED_DEG of parallel, and if Lawful's meeting-angle rule vetoes such a T the step would be hollow and the exception purpose-fatal. The ruling therefore rests on D22's backstops, which fail if that happens: the merge test red first on Inashiro lanes 8 and 14 and seed 49's root way, and the Inashiro glyph-check re-run with F1-F3 gone. If either is met by narrowing them rather than by merges, this ruling does not hold."
+    },
+    {
+     "id": "D17(2) 14 ft kept",
+     "summary": "The lane law's doubled-tail rule keeps _ALONG_FT 14 ft as a refusal; the law is not widened.",
+     "class": "within",
+     "why": "Classified on this review's reading, not the plan's label. The refusal reaches only pairs the merge could not mend, so it narrows nothing the merge does; the number is O (part B 2), a knob left where T01 put it. The GM did not ask that refusal removed, and widening it to 20 ft is what refused household ways and a farmhouse (part B 1)."
+    },
+    {
+     "id": "D17 detectors kept",
+     "summary": "T01's three detectors are kept as they are (earlier: each retired where the general test covers its cases).",
+     "class": "within",
+     "why": "Retirement was cleanup, not a requested behavior; keeping refusal detectors behind a merge that runs first narrows nothing asked. Design, not fidelity."
+    },
+    {
+     "id": "D17 red-first set",
+     "summary": "The red-first merge test is now Inashiro lanes 8 and 14 and seed 49's root way; F2's pairs are no longer in it (earlier text named them).",
+     "class": "within",
+     "why": "F2 is still owed twice: D17 still measures F2's 18-25 ft pairs against REACH and moves REACH rather than keep F2, and D22 still requires the Inashiro glyph-check re-run with F1-F3 gone. With both standing, dropping F2 from the red-first list changes which test proves the merge, not what is asked."
+    },
+    {
+     "id": "D24",
+     "summary": "Seed 49, found failing at HEAD in the 60-seed cohort, is fixed (own-garden change plus D17's merge) and held by D22's cohort with the four.",
+     "class": "within",
+     "why": "The request names four seeds, so a fifth would be scope if it carried new work; it does not. Both its causes are covered by work already in scope (the own-garden change made for seed 21, and the requested merge, since its root way ran 18 ft beside the skeleton), so it serves as a test case of the requested behavior. Note: D22's baseline line still lists only 17, 21, 40 and 45."
+    },
+    {
+     "id": "own-garden fence-gap exemption",
+     "summary": "The 7 ft fence gap does not apply along a household's own garden (Approach 3: O, a DEVIATION on 0246's drawing page; D24 relies on it).",
+     "class": "within",
+     "why": "Found in prose: it is relied on in the Approach and D24 but decided in none of the changed blocks; D20 is unchanged and its listed exits do not name it. It loosens our own convention (the 7 ft gap is labeled O), through D20(2)'s weighing of that gap, with the reason recorded as a DEVIATION - the exit ('add a principled exception') and the guardrail the GM's approved proposal names. It narrows nothing the GM asked. The caller should confirm an unchanged block (or D20, amended) records the decision itself; a plan relying on a decision no Decisions entry carries is the gap MODE 4 exists for, even where the decision is sound."
+    },
+    {
+     "id": "Approach 5 order",
+     "summary": "The merge runs after the reach and before the network rule; nothing placed earlier moves.",
+     "class": "within",
+     "why": "The GM's homesteads-before-lanes rule: 'Nobody in real life moves their house so that a footpath will join with another footpath'."
+    },
+    {
+     "id": "part B 5-7 / Approach 6",
+     "summary": "Stop tuning REACH's reach after three refusals; take exit (c), a merge that dissolves the pair.",
+     "class": "within",
+     "why": "The checklist doing what the GM asked: stepping back from tuning to ask what the rule is for, and choosing the 'add a rule that removes the case' exit."
+    },
+    {
+     "id": "Approach 8 budget",
+     "summary": "About 1 h 25 min of 4 h used; about 1 h more for the merge and tests, then the gate.",
+     "class": "within",
+     "why": "Carries D23's budget; no threshold of the kind the GM declined to put on record is added."
     }
    ]
   }
