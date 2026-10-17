@@ -26,6 +26,7 @@ The default directory is under `/tmp/l7r-check/`, which no `CLAUDE.md` sits abov
 from __future__ import annotations
 
 import argparse
+from collections.abc import Sequence
 import datetime
 import html
 import json
@@ -626,23 +627,28 @@ def main(argv: list[str] | None = None) -> int:
     bare = args.for_ == "quote-check" and bo.unfootnoted_owed(units)
     if len(batches) > 1:
         print(f"check-bundle: the notes are over {NOTES_BUDGET:,} bytes - {len(batches)} quote-check bundles, one agent each:")
+        # ...EACH BATCH ONLY WHERE IT OWES SOMETHING (feature 385 T02, plan D12): the page-wide unfootnoted unit and its blocks
+        # ride batch 1 alone, and a batch left with no owed unit is not written - 0081's four batches were four agents for one unit
+        owed_in = [(i, b, bo.batch_units(units, frozenset(b), first=i == 1)) for i, b in enumerate(batches, start=1)]
+        owed_in = [(i, b, us) for i, b, us in owed_in if us] or owed_in  # ...nothing owed at all: a deliberate check reads every batch
         codes = [entry_bundle(root, q, out / f"batch-{i}", args.extra, not args.no_quotes, args.kind, frozenset(b), args.for_,
-                              bo.manifest_lines(bo.batch_units(units, frozenset(b)), checks, args.not_owed_ok), bare)
-                 for i, b in enumerate(batches, start=1)]
-        print(batched_manifests(out, len(batches)))
-        return max(codes)
+                              bo.manifest_lines(us, checks, args.not_owed_ok), bare and i == 1)
+                 for i, b, us in owed_in]
+        print(batched_manifests(out, [i for i, _b, _us in owed_in]))
+        return max(codes, default=0)
     # bare here too: NOTES=unfootnoted re-checked no block at all without it (feature 319 H9, 2026-10-05)
     return entry_bundle(root, q, out, args.extra, not args.no_quotes, args.kind, wanted, args.for_, owed, bare)
 
 
-def batched_manifests(out: pathlib.Path, n: int) -> str:
+def batched_manifests(out: pathlib.Path, n: int | Sequence[int]) -> str:
     """A split bundle's closing word: each batch's MANIFEST to dispatch, one agent each, and NO top-level one - an earlier
     unsplit run's MANIFEST.md left in `out` is removed, because a session handed it to quote-check as if it were current
     (feature 374, round arbiter hour 4: the stale manifest cost a dispatch, a stop and a freeze escape)."""
     stale = out / MANIFEST
     stale.unlink(missing_ok=True)
-    lines = [f"check-bundle: {n} batches - dispatch each MANIFEST below, one agent each (there is no top-level one):"]
-    return "\n".join(lines + [f"  {out / f'batch-{i}' / MANIFEST}" for i in range(1, n + 1)])
+    nums = list(range(1, n + 1)) if isinstance(n, int) else list(n)  # ...only the batches that owe something (feature 385, D12)
+    lines = [f"check-bundle: {len(nums)} batches - dispatch each MANIFEST below, one agent each (there is no top-level one):"]
+    return "\n".join(lines + [f"  {out / f'batch-{i}' / MANIFEST}" for i in nums])
 
 
 def fragments_for_q(root: pathlib.Path, q: str) -> list[str]:

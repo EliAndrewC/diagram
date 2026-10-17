@@ -387,3 +387,15 @@ def test_a_split_bundle_names_every_batch_and_leaves_no_stale_top_manifest(tmp_p
     assert not (tmp_path / "MANIFEST.md").exists()
     assert all(str(tmp_path / f"batch-{i}" / "MANIFEST.md") in said for i in (1, 2, 3)) and "no top-level" in said
     assert "3 batches" in cb.batched_manifests(tmp_path, 3), "no stale file is fine too"
+
+
+def test_the_unfootnoted_unit_rides_the_first_batch_alone(tmp_path: pathlib.Path) -> None:
+    """Feature 385 T02 (plan D12): T01 found 0081's page-wide unfootnoted unit in all four quote-check batches - four agents for
+    one unit; it now rides batch 1, a later batch carries only its own notes, and a batch owing nothing is not listed."""
+    un = cb.bo.ru.Unit("quote-check:0081.drawing#unfootnoted", "", "f3")
+    aze = cb.bo.ru.Unit("quote-check:0081#aze", "", "f2")
+    assert [u.slug for u in cb.bo.batch_units([aze, un], frozenset({"lilong"}), first=True)] == [un.slug]
+    assert cb.bo.batch_units([aze, un], frozenset({"lilong"}), first=False) == [], "a later batch owing nothing"
+    assert [u.slug for u in cb.bo.batch_units([aze, un], frozenset({"aze"}), first=False)] == [aze.slug]
+    text = cb.batched_manifests(tmp_path, [1, 3])
+    assert text.startswith("check-bundle: 2 batches") and "batch-1" in text and "batch-3" in text and "batch-2" not in text
