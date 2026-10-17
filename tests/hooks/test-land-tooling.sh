@@ -42,6 +42,10 @@ ok "an engine path is refused, named" '[ "$rc" -ne 0 ] && grep -q "l7r/e.py is n
 printf 'dirty\n' >> "$C/scripts/a.sh"; land scripts/a.sh; rc=$?
 ok "uncommitted changes in FILES are refused" '[ "$rc" -ne 0 ] && grep -q "uncommitted" "$T/out"'
 git -C "$C" checkout -q -- scripts/a.sh
+# GUARD_EDIT_OK: feature 383 amendment 7 - a saved workflow (.claude/workflows/) is tooling, as an agent file is
+mkdir -p "$C/.claude/workflows"; printf 'export const meta = {}\n' > "$C/.claude/workflows/w.js"; git -C "$C" add -A; git -C "$C" commit -qm "a saved workflow"
+land; ok "a saved workflow is offered as tooling" 'grep -q ".claude/workflows/w.js" "$T/out"'
+setup  # section 2 counts the clone's commits from a fresh setup
 
 echo "2. the tooling lands alone, on top of main, and the clone merges main cleanly (SC-003)"
 land scripts/a.sh; rc=$?
