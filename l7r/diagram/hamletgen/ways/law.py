@@ -48,7 +48,7 @@ from ..consts import WEB_FABRIC_GAP, Poly, Pt
 from .checks import served_network, unreached_houses
 from .clearance import _HAIRPIN_DEG, _ZIGZAG_DEG, _ZIGZAG_RUN_FT, kink_spans
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _crosses_fabric, house_hit
-from .geom import _TOUCH_GAP, WorkedGround, _components, _turn_deg, end_serves, polyline_len, steading_footprints, worked_ground
+from .geom import _TOUCH_GAP, WorkedGround, _components, _seg_cross, _turn_deg, end_serves, polyline_len, steading_footprints, worked_ground
 from .joints import _HOOK_DEG, _HOOK_FT, at_rank, hairpin_over_a_short_leg, joints, oriented
 from .law_water import (  # noqa: F401 - re-exported: the law's callers reach the water rules and the lane helpers here
     DECK_NEAR_FT as DECK_NEAR_FT,
@@ -358,6 +358,36 @@ def needle_ends(lanes: Lanes) -> list[tuple[int, int, int, Pt, Pt]]:
                     if any(math.degrees(math.acos(max(-1.0, min(1.0, back[0] * d[0] + back[1] * d[1])))) < NEEDLE_DEG for d in _tread_bearings(q, u, v)):
                         out.append((i, end, k, u, v))
     return out
+
+
+def shallow_crossing_at(lanes: Lanes) -> list[tuple[int, int, int, Pt]]:
+    """(lane, its segment, other way, the crossing point) wherever two ways cross each other at under `NEEDLE_DEG` - two
+    paths side by side, the one wandering over the other, which a walker would wear into one (feature 385 T01, plan D4:
+    cohort seed 10 under the wave 155 re-deal, a household's way crossing the field way at about 19 degrees and running on
+    beside it to the field way's start). Each crossing is named once, at the lower-numbered lane of the two. A crossing on an
+    end is a meeting, not a crossing (`needle_ends` reads it).
+    Research: two paths side by side become one - the GM, 2026-10-17: "if there are two different footpaths that are nearly parallel to each other and very close together, then that is the kind of situation in which a single footpath would emerge"; NEEDLE_DEG a CONVENTION"""
+    ways = [lane_pts(ln) for ln in lanes]
+    out = []
+    for i, p in enumerate(ways):
+        for k in range(i + 1, len(ways)):
+            o = ways[k]
+            if not boxes_meet(p, o, 0.0):  # ...two ways whose boxes do not meet cannot cross
+                continue
+            for n, (a, b) in enumerate(zip(p, p[1:], strict=False)):
+                for c, d in zip(o, o[1:], strict=False):
+                    if (x := _seg_cross(a, b, c, d)) is None or _seg_cross(c, d, a, b) is None:
+                        continue
+                    u, v = (b[0] - a[0], b[1] - a[1]), (d[0] - c[0], d[1] - c[1])
+                    cos = abs(u[0] * v[0] + u[1] * v[1]) / ((math.hypot(*u) * math.hypot(*v)) or 1.0)
+                    if math.degrees(math.acos(min(1.0, cos))) < NEEDLE_DEG:
+                        out.append((i, n, k, x))
+    return out
+
+
+def shallow_crossings(M: Mapping[str, Any]) -> list[tuple[int, int]]:
+    """Where two ways cross at under `NEEDLE_DEG` (`shallow_crossing_at`)."""
+    return [(round(x[0]), round(x[1])) for _i, _n, _k, x in shallow_crossing_at(M.get("lanes") or [])]
 
 
 def needle_joins(lanes: Lanes) -> list[tuple[int, int]]:
@@ -858,6 +888,7 @@ LAW: dict[str, Callable[[Mapping[str, Any]], Any]] = {
     "folded_joints": lambda M: folded_joints(M.get("lanes") or []),
     "connector_hairpins": lambda M: connector_hairpins(M.get("lanes") or []),
     "needle_joins": lambda M: needle_joins(M.get("lanes") or []),
+    "shallow_crossings": shallow_crossings,
     "doubled_tails": doubled_tails,
     "networks": lambda M: max(0, lane_networks(M) - 1),
     "joins_short": near_misses,

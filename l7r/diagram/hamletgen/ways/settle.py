@@ -52,6 +52,7 @@ from .arcs import arc_at, cut_around, sub_run  # noqa: F401 - re-exported: `sett
 from .checks import square_crossings, unreached_houses
 from .clearance import kink_spans
 from .corridors import (
+    ACCESS_ROLE,
     ACCESS_WIDTH,
     GroundIndex,
     _poly_box,
@@ -67,9 +68,9 @@ from .keeper import NOT_THE_SETTLES, unsettled  # noqa: F401 - re-exported: `set
 from .knots import settle_knots
 from .reach import _draw_tree_lane, settle_field, settle_targets  # noqa: F401 - re-exported: callers and tests name these as `settle.<name>`
 from .serve import shadowed_by
-from .squaring import SQUARE_MARGIN_FT, SQUARE_PASSES, _pts, square_every_crossing, square_run, square_waters  # noqa: F401 - re-exported: callers and tests name these as `settle.<name>`
+from .squaring import SQUARE_MARGIN_FT, SQUARE_PASSES, _pts, cut_at_shallow_crossing, square_every_crossing, square_run, square_waters  # noqa: F401 - re-exported: callers and tests name these as `settle.<name>`
 from .sweeps import _DOUBLED_DEG, along_tail, cut_at_tail
-from .tree import left_to_the_tree, prune_the_tree, settle_defer, settle_tree, tree_faults
+from .tree import left_to_the_tree, prune_the_tree, set_corridor, settle_defer, settle_tree, tree_faults
 from .weld import weld_corner
 
 SETTLE_ROUNDS = 8
@@ -370,15 +371,33 @@ def settle_ends(s: Any) -> int:
     edits: dict[int, list[Poly]] = {}
     touched: set[int] = set()
 
-    def claim(involved: set[int], i: int, pieces: list[Poly]) -> None:
-        if not involved & touched and not is_tree(lanes[i]):
+    feet: list[dict[str, Any]] = []
+
+    def claim(involved: set[int], i: int, pieces: list[Poly], end: int | None = None) -> None:
+        # ...A HOUSEHOLD'S WAY AT ITS FOOT too (feature 385 T01, plan D4): side by side becomes one whichever lane it is, and
+        # a household's way's foot may move as the knot gather moves it - never its door end - its corridor rewritten with it
+        foot = end == -1 and lanes[i].get("role") == ACCESS_ROLE
+        # ...and only into a lane: a re-aim that leaves a household's way under two points or 1 ft would drop it, its household
+        # with it - that way stays as it is
+        foot = foot and bool(pieces) and len(pieces[0]) >= 2 and polyline_len(pieces[0]) >= 1.0
+        if not involved & touched and (not is_tree(lanes[i]) or foot):
             edits[i] = pieces
             touched.update(involved)
+            if is_tree(lanes[i]):
+                feet.append(lanes[i])
 
+    centers = [(float(h["x"]), float(h["y"])) for h in M.get("houses") or []]
+    for i, _n, k, _x in law.shallow_crossing_at(lanes):
+        # ...TWO WAYS CROSSING AT A NEEDLE'S ANGLE are one path wandering over the other (plan D4): the lane that may be cut
+        # is cut at the crossing, and its end left on the other way is re-aimed as a needle next round
+        for m, o in ((i, k), (k, i)):
+            if (cut := cut_at_shallow_crossing(lanes, m, o, centers)) is not None:
+                claim({m, o}, m, [cut[0]], cut[1])
+                break
     for ci, i, end in law.connector_hairpin_ends(lanes):
         claim({ci, i}, i, [_back(reaimed(_as_end(_pts(lanes[i]), end), _pts(lanes[ci]), connector=True), end)])
     for i, end, k, _u, _v in law.needle_ends(lanes):
-        claim({i, k}, i, [_back(reaimed(_as_end(_pts(lanes[i]), end), _pts(lanes[k]), bool(lanes[k].get("connector"))), end)])
+        claim({i, k}, i, [_back(reaimed(_as_end(_pts(lanes[i]), end), _pts(lanes[k]), bool(lanes[k].get("connector"))), end)], end)
     for i, ei, j, ej in law.folded_joint_pairs(lanes):
         # the SHORTER record of the two that has a vertex to fall back to is re-aimed as a T on the other; two bare legs
         # folded on each other lose the shorter
@@ -418,7 +437,11 @@ def settle_ends(s: Any) -> int:
     # counts an end within 60 ft of the house or 12 ft of its built ground as reaching it on any side, and no page puts the
     # back wall out of reach.)
     if edits:
-        return apply_pieces(s, edits)
+        changed = apply_pieces(s, edits)
+        for ln in feet:
+            if any(ln is x for x in lanes):
+                set_corridor(M, ln)  # ...a household's way re-laid at its foot keeps its reserved corridor in step (`tree.settle_tree` redraws from it)
+        return changed
     return settle_dangling(s)
 
 
