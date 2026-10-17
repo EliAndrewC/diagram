@@ -357,3 +357,51 @@ def test_a_wait_a_notification_ends_is_not_the_gms() -> None:
     assert fr._waiting({"ev": "UserPromptSubmit", "gm": True}) == "waiting: the GM"
     assert fr._waiting({"ev": "UserPromptSubmit"}) == "waiting: the GM", "an event logged before the mark: as before"
     assert fr._waiting({"ev": "UserPromptSubmit", "gm": False}) == "waiting: a background run"
+
+
+def test_each_task_is_split_at_its_decision_points() -> None:
+    """Feature 385 T02, plan D10: a task's time from start to tick, cut at each plan or arbiter ruling returned in it."""
+    evs = [
+        {"t": "2026-10-17T10:00:00Z", "ev": "UserPromptSubmit"},
+        {"t": "2026-10-17T10:20:00Z", "ev": "SubagentStop", "agent": "spec-fidelity", "aid": "a1"},
+        {"t": "2026-10-17T10:30:00Z", "ev": "SubagentStop", "agent": "glyph-check", "aid": "a2"},
+        {"t": "2026-10-17T11:00:00Z", "ev": "SubagentStop", "agent": "round-arbiter", "aid": "a3"},
+        {"t": "2026-10-17T12:00:00Z", "ev": "Stop"},
+    ]
+    starts = {"T01": fr.parse_t("2026-10-17T10:00:00Z"), "T02": fr.parse_t("2026-10-17T11:30:00Z")}
+    rows = fr.task_rows(evs, starts, {"T01": fr.parse_t("2026-10-17T11:30:00Z")})
+    assert rows[0] == "| T01 | 1 h 30 min | 1 h 00 min | 30 min | 2 | 20, 40, 30 |", "the glyph-check is not a decision point"
+    assert rows[1] == "| T02 | 30 min (open) | 0 min | 30 min | 0 | 30 |", "an open task runs to the last event"
+
+
+def test_each_check_s_cost_is_per_changed_line() -> None:
+    """Feature 385 T02, plan D10 (FR-011): only the feature's own passes, matched to its event log by agent id."""
+    evs = [{"t": "2026-10-17T10:00:00Z", "ev": "SubagentStart", "aid": "a1"}, {"t": "2026-10-17T10:00:00Z", "ev": "SubagentStop", "aid": "a2"}]
+    passes = [
+        {"agent": "a1", "check": "quote-check", "wall": "120 s", "tokens": "300k in (200k cached) / 2.0k out"},
+        {"agent": "a2", "check": "quote-check", "wall": "60 s", "tokens": "1.2M in / 500 out"},
+        {"agent": "zz", "check": "glyph-check", "wall": "60 s", "tokens": "9k in / 1k out"},
+        {"agent": "a2", "check": "", "wall": "?", "tokens": "?"},
+    ]
+    rows = fr.check_rows(evs, passes, 100)
+    assert rows[0] == "| quote-check | 2 | 3 min | 1500k | 2.5k | 0.020 | 15.0k |"
+    assert rows[1] == "| ? | 1 | 0 min | 0k | 0.0k | 0.010 | 0.0k |"
+    assert len(rows) == 2, "another feature's pass is not counted"
+    assert fr._tokens("garbage") == (0.0, 0.0)
+
+
+def test_task_starts_and_ticks_are_read_from_the_record(tmp_path: Path) -> None:
+    repo = tmp_path / "repo"
+    d = repo / "specs" / "385-x"
+    d.mkdir(parents=True)
+    _git(repo, "init", "-q")
+    (d / "tasks.md").write_text("- [ ] T01 a\n- [ ] T02 b\n")
+    _git(repo, "add", "-A")
+    _git(repo, "commit", "-q", "-m", "385: tasks")
+    (d / "tasks.md").write_text("- [x] T01 a\n- [ ] T02 b\n")
+    _git(repo, "commit", "-q", "-am", "385 T01 ticked")
+    assert set(fr.task_ticks(repo, "385-x")) == {"T01"}
+    rows = ['{"feature": "385-x", "task": "T01", "utc": "2026-10-17T10:00:00Z"}', "not json",
+            '{"feature": "385-x", "task": "T01", "utc": "2026-10-17T11:00:00Z"}', '{"feature": "384-y", "task": "T01", "utc": "2026-10-17T10:00:00Z"}']
+    (repo / ".git" / "task-starts.jsonl").write_text("\n".join(rows) + "\n")
+    assert fr.task_starts(repo, "385-x") == {"T01": fr.parse_t("2026-10-17T10:00:00Z")}, "the first start counts"

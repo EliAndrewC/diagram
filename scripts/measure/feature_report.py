@@ -324,6 +324,94 @@ def _hm(s: float) -> str:
     return f"{m // 60} h {m % 60:02d} min" if m >= 60 else f"{m} min"
 
 
+# ---- feature 385 T02 (plan D10): each task's time split at its decision points, and what each check cost per changed line ----
+
+#: the returns that are a task's decision points: a ruling on its plan, or the round arbiter's on its process
+DECISION_AGENTS = ("spec-fidelity", "spec-fidelity-verify", "round-arbiter")
+_TOKENS = re.compile(r"([\d.]+)([kM]?) in .*?/ ([\d.]+)([kM]?) out")
+
+
+def task_starts(root: Path, name: str) -> dict[str, float]:
+    """Each task's first `make task-start` (`<git common dir>/task-starts.jsonl`, plan D10), as epoch seconds."""
+    common = _git(root, "rev-parse", "--path-format=absolute", "--git-common-dir").strip()
+    out: dict[str, float] = {}
+    path = Path(common) / "task-starts.jsonl" if common else None
+    for raw in (path.read_text(encoding="utf-8").splitlines() if path is not None and path.is_file() else []):
+        try:
+            row = json.loads(raw)
+        except ValueError:
+            continue
+        if row.get("feature") == name and row.get("task"):
+            out.setdefault(str(row["task"]), parse_t(str(row["utc"])))
+    return out
+
+
+def task_ticks(root: Path, name: str) -> dict[str, float]:
+    """When each task was ticked: the first commit adding its `- [x] Txx` line to the feature's tasks.md."""
+    text = _git(root, "log", "--reverse", "--format=@@%ct", "-p", "--", f"specs/{name}/tasks.md")
+    out: dict[str, float] = {}
+    when = 0.0
+    for line in text.splitlines():
+        if line.startswith("@@") and line[2:].isdigit():
+            when = float(line[2:])
+        elif m := re.match(r"\+- \[[xX]\] (T\d+[a-z]?)\b", line):
+            out.setdefault(m.group(1), when)
+    return out
+
+
+def task_rows(events: Sequence[Mapping[str, Any]], starts: Mapping[str, float], ticks: Mapping[str, float]) -> list[str]:
+    """One row per started task: its time from start to tick (or to the last event, while open), its decision points (each
+    plan ruling or arbiter ruling returned in it), the time up to the last and after it, and each segment between two."""
+    last_t = parse_t(str(events[-1]["t"])) if events else 0.0
+    rows = []
+    for task, start in sorted(starts.items(), key=lambda kv: kv[1]):
+        end = ticks.get(task) or last_t
+        points = sorted(t for e in events if e.get("ev") == "SubagentStop" and e.get("agent") in DECISION_AGENTS
+                        for t in [parse_t(str(e["t"]))] if start <= t <= end)
+        cuts = [start, *points, end]
+        segs = ", ".join(f"{(b - a) / 60:.0f}" for a, b in zip(cuts, cuts[1:], strict=False))
+        to_last = (points[-1] if points else start) - start
+        rows.append(f"| {task} | {_hm(end - start)}{'' if task in ticks else ' (open)'} | {_hm(to_last)} | {_hm(end - start - to_last)} | "
+                    f"{len(points)} | {segs} |")
+    return rows
+
+
+def _tokens(cell: str) -> tuple[float, float]:
+    m = _TOKENS.search(cell or "")
+    if not m:
+        return 0.0, 0.0
+    scale = {"": 1.0, "k": 1e3, "M": 1e6}
+    return float(m.group(1)) * scale[m.group(2)], float(m.group(3)) * scale[m.group(4)]
+
+
+def check_rows(events: Sequence[Mapping[str, Any]], passes: Sequence[Mapping[str, str]], lines: int) -> list[str]:
+    """One row per check kind: the feature's own passes (matched to its event log by agent id), their wall time and tokens, and
+    each per changed line (FR-011) - the measure the next task is compared on."""
+    aids = {str(e.get("aid")) for e in events if e.get("aid")}
+    agg: dict[str, list[float]] = {}
+    for p in passes:
+        if str(p.get("agent", "")) not in aids:
+            continue
+        a = agg.setdefault(str(p.get("check") or "?"), [0, 0.0, 0.0, 0.0])
+        wall = re.match(r"([\d.]+)\s*s", str(p.get("wall", "")))
+        tin, tout = _tokens(str(p.get("tokens", "")))
+        a[0] += 1
+        a[1] += float(wall.group(1)) if wall else 0.0
+        a[2] += tin
+        a[3] += tout
+    per = max(lines, 1)
+    return [f"| {k} | {int(v[0])} | {_hm(v[1])} | {v[2] / 1e3:.0f}k | {v[3] / 1e3:.1f}k | {v[0] / per:.3f} | {v[2] / per / 1e3:.1f}k |"
+            for k, v in sorted(agg.items(), key=lambda kv: -kv[1][2])]
+
+
+def _passes() -> list[dict[str, str]]:
+    """Every logged check pass, costed from its transcript as `make ledger-owed` costs it."""
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "reviews"))
+    import ledger_owed as lo  # noqa: PLC0415
+
+    return lo.settled(lo.distinct(lo.load_passes(lo.default_log())), kept_file=lo._kept_file())  # noqa: SLF001
+
+
 def report(root: Path, feature: str, transcripts: Sequence[Path] = (), since: str = "", until: str = "",
            clones: Path = CLONES) -> str:
     t0 = time.monotonic()
@@ -372,6 +460,19 @@ def report(root: Path, feature: str, transcripts: Sequence[Path] = (), since: st
             f"- tasks ticked: {done} of {total}", "",
             "## Tripwires (FR-010) - what fired, or would have", ""]
     out += [f"- {t[11:16]} {w}" for t, w in wires] or ["- none"]
+    starts = task_starts(root, name)
+    if starts:  # feature 385 T02, plan D10 (FR-005)
+        out += ["", "## Each task, split at its decision points", "",
+                "| task | start to tick | to its last decision | after it | decisions | segments (min) |", "|---|---|---|---|---|---|"]
+        out += task_rows(events, starts, task_ticks(root, name))
+    try:
+        costs = check_rows(events, _passes(), lines)
+    except (OSError, ImportError, ValueError):
+        costs = []
+    if costs:  # feature 385 T02, plan D10 (FR-011)
+        out += ["", f"## What each check cost, per changed line ({lines} lines)", "",
+                "| check | passes | wall | tokens in | tokens out | passes per line | tokens in per line |", "|---|---|---|---|---|---|---|"]
+        out += costs
     out += [""]
     out += [f"This report took {time.monotonic() - t0:.1f} s to build; its own runs are the `make feature-report` rows of the "
             "event log (category `other tool`).", ""]

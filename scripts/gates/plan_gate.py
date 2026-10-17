@@ -659,6 +659,10 @@ def main(argv: list[str]) -> int:
             return 2
         common = subprocess.run(["git", "rev-parse", "--path-format=absolute", "--git-common-dir"], capture_output=True, text=True).stdout.strip()
         pathlib.Path(common, "active-task").write_text(json.dumps({"feature": d.name, "task": argv[2]}) + "\n", encoding="utf-8")
+        # ...AND WHEN, for the report's per-task split (feature 385 T02, plan D10): `make feature-report` divides each task's time
+        # at its decision points from here to its tick
+        with pathlib.Path(common, "task-starts.jsonl").open("a", encoding="utf-8") as fh:
+            fh.write(json.dumps({"feature": d.name, "task": argv[2], "utc": datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%dT%H:%M:%SZ")}) + "\n")
         print(f"task-start: {d.name} {argv[2]} is the active task - its checks need its decisions ruled first (make decide)")
         return 0
     if argv[:1] == ["record-task"] and len(argv) == 6 and argv[4] == "--as":
