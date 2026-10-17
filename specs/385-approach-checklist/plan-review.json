@@ -3,8 +3,8 @@
  "plan_sha256": "03b0781c7141967697b3c5c60be011943ef0fd498f818833a45fa4696d582703",
  "blocks": {
   "preamble": {
-   "sha256": "af8009812f40d56f49f5fdf78d4a0c449ea7ae55f99e6e103607a848e6d2a464",
-   "verdict": "CLEAR",
+   "sha256": "432906df1b4fca84f37932b2423164e9a248862c872db21582c2aa64dbf69f60",
+   "verdict": "BLOCKED",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
   },
@@ -65,6 +65,24 @@
   "## Landing": {
    "sha256": "593cfa6de28d20bacb4dcf1c9ae7d148a69c9c248f6cdbc1d650d6f3aa53046a",
    "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)": {
+   "sha256": "a0b57acda8087bcfe98d579f7bee7d25fb120b2c234736a8ae05192014d61e4f",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "297d44b179087cc3a287593fcdb7041954024d823b5e4ee0d530d51abbfb09e9",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Decisions": {
+   "sha256": "df074510223974dcaa8b392cefeb2829cd535d374b4f323f8046776a1828d9d6",
+   "verdict": "BLOCKED",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
   }
@@ -503,6 +521,93 @@
      "summary": "Lands open: T02-T11 stay open while earlier tasks land",
      "class": "within",
      "why": "Follows from Landing-1: tasks are done one by one, so the later ones are open when an earlier one lands. No task leaves the scope. The list only names which boxes remain open, and does not change what any task delivers."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)",
+    "### T02 Approach (checklist part A)",
+    "### T02 Decisions",
+    "(removed) ## T02 - the tooling: the Approach block required, the triggers, the split (FR-003 to FR-005)",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "preamble-optin",
+     "summary": "Plan header line '**Approach checklist**: <path>' opts a plan in; 385's plan carries it; FR-001's close extends it to every feature",
+     "class": "within",
+     "why": "FR-003 binds this feature's tasks, which the line covers; FR-001 already defers the extension to every feature until close. The removed placeholder section is superseded by the full T02 section."
+    },
+    {
+     "id": "A-order-budget",
+     "summary": "Approach: measure first, land each item alone by make land-tooling in value order, budget ~4 h labeled a guess",
+     "class": "within",
+     "why": "Sequencing and a labeled estimate; nothing asked is dropped."
+    },
+    {
+     "id": "D8",
+     "summary": "make tick refuses a task whose ### Txx Approach block is missing or answers fewer than every numbered part-A item, naming the missing numbers",
+     "class": "within",
+     "why": "FR-003 as written, with its test (SC-004)."
+    },
+    {
+     "id": "D9-seed-floor",
+     "summary": "The seed/cohort trigger fires only on a FULL cohort at default size whose failing seeds are not a subset of the baseline's; a diagnostic N=1 roll never fires",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-004 adds 'a refused seed or cohort' and the approved proposal names 'the first seed the change refuses'. The not-a-subset-of-baseline floor already removes T01's by-design failures (seeds failing at HEAD), so the further N=1 exclusion removes only the case where the change newly refuses a single seed - the earliest resistance signal the request is for. Fix: fire on any seed or cohort run, any N, whose failing seeds include one not failing at baseline."
+    },
+    {
+     "id": "D9-redecide-partB",
+     "summary": "A re-review of a Decisions block after an earlier CLEAR verdict (a changed decision, not a first review or a figure label) owes a stamped part B block",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The floor (a changed decision only) is within. But FR-003 says a re-decided plan section 'carries the block answered afresh' - the Approach block - and D9 substitutes a part B answer. Unless part B by its own text re-answers every part-A item (not shown in the plan), a changed approach escapes the approach questions, which is FR-003's purpose. Fix: on a re-decide, require the Approach block re-answered (stamped after the trigger), or state that part B contains every part-A item and have make tick check them."
+    },
+    {
+     "id": "D9-arbiter-triggers",
+     "summary": "A round-arbiter ruling on an hour: or red-gate@ trigger writes approach-owed.json and names part B",
+     "class": "within",
+     "why": "FR-004 extends the existing red-gate and hourly triggers."
+    },
+    {
+     "id": "D10",
+     "summary": "task-start log + per-task table (start to tick, decision points = plan verdicts and part B stamps, time to last and after, re-decides, re-answers) + per-check-kind cost per changed line from the feature event log; T01 replayed as baseline",
+     "class": "within",
+     "why": "FR-005 and FR-011. The table must also print each segment between decision points, which FR-005 names; listing the timed decision points serves that if segments are printed."
+    },
+    {
+     "id": "D11",
+     "summary": "A triage answer keeps the page blobs it read; the triage bundle groups units by baseline and lists each group's changed blocks; claims triage gets the same grouping",
+     "class": "within",
+     "why": "FR-008, built on a measurement of the pop-up store. A triage answer judges the page as it stands, so keeping that as the next baseline is 'the version its last check read'."
+    },
+    {
+     "id": "D12",
+     "summary": "record-owed marks answered vs owed by default; #unfootnoted goes alone in the first quote-check batch; modal-bundle writes one bundle for several KINDs for one check",
+     "class": "within",
+     "why": "FR-009 both halves, plus the listing fix for the measured cause."
+    },
+    {
+     "id": "D13",
+     "summary": "gate-write guard refuses Edit/Write into the clone and commit/record commands while this tree's make done runs, naming make verify-wait; escape GATE_WRITE_OK",
+     "class": "within",
+     "why": "FR-010. The guard's reach to git add/commit and the *-checked targets is in scope only insofar as each voids the gate (measured); any that does not is unrequested reach."
+    },
+    {
+     "id": "D14",
+     "summary": "Hourly clock subtracts Stop-to-GM-prompt gaps; report's waiting: the GM reads the same field",
+     "class": "within",
+     "why": "The round arbiter's binding tooling fix (feature 379 process); narrows nothing the GM asked."
+    },
+    {
+     "id": "D15",
+     "summary": "Tooling only, no engine or map changes, no review check owed",
+     "class": "within",
+     "why": "T02 is the tooling task by the spec and amendment 1."
     }
    ]
   }

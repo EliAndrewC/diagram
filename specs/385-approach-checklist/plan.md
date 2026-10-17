@@ -169,7 +169,7 @@ measurements are taken on it.
    command; tooling lands alone by `make land-tooling`; the five rules FR-003, FR-004, FR-005, FR-008 to FR-011, and the round
    arbiter's tooling fix on hour:385-approach-checklist@4 (the hourly clock stops counting the GM's waits).
 3. **Where each comes from.** The requirements are the GM's (G, spec and amendment 1). Every number below is ours (O): which
-   checklist items count as answered, the twenty failed-test ids kept, the per-line cost table's columns.
+   checklist items count as answered, the per-line cost table's columns.
 4. **Do they describe the world here?** Yes - each is measured on T01's own record (`retro.md`): the cascade from one page, the
    gates voided by writes, the hour that counted the GM's wait.
 5. **The order.** Measure first (FR-008: confirm why the triage diffed against an old baseline before changing it), then the
@@ -192,17 +192,18 @@ item of that checklist's part A; `make tick` refuses a task whose block is missi
 numbers (`scripts/gates/plan_gate.py`, beside the plan-review check `make tick` already asks).
 
 **D9 - FR-004, a fresh answer after a trigger.** A trigger writes `<git dir>/approach-owed.json` (the task, the trigger, its
-time), and its message names checklist part B; `make tick` refuses that task until its plan section holds a `### Txx part B
-(<UTC>)` block stamped after the trigger. The triggers, each with a floor so it never fires on correct work:
-- a round-arbiter ruling on an `hour:` or `red-gate@` trigger;
-- a FULL cohort (`make cohort` at its default size, not a diagnostic `N=1`) whose failing seeds are not a subset of the
-  baseline's - a seed newly failing (T01 rolled single seeds a dozen times as diagnosis, each failing by design);
-- a re-review of a task's Decisions block after an earlier CLEAR verdict on it - a changed decision, not a first review or a
-  figure label (T01 would otherwise have owed a part B for each of its plan rounds).
+time, and which part it owes), and its message names that part of the checklist; `make tick` refuses the task until its plan
+section holds the owed block stamped after the trigger. The triggers, each with a floor so it never fires on correct work:
+- a round-arbiter ruling on an `hour:` or `red-gate@` trigger - owes `### Txx part B (<UTC>)`;
+- a `make cohort` run of any size whose failing seeds include one that does not fail at the baseline - a seed the change newly
+  refuses; a seed already failing at HEAD, rolled as diagnosis, is in the baseline and fires nothing - owes part B;
+- a re-review of a task's Decisions block after an earlier CLEAR verdict on it - a changed approach, not a first review or a
+  figure label - owes the `### Txx Approach` block answered again and stamped after the trigger (FR-003: "a re-decided plan
+  section carries the block answered afresh").
 
 **D10 - FR-005 and FR-011, the report per task.** `make task-start` appends its task and time to `<git dir>/task-starts.jsonl`;
 `make feature-report` adds a table per task - start to tick, the decision points (plan verdicts and part B stamps), the time to
-the last one and after it, re-decides and re-answers - and a table per check kind - dispatches, tokens and wall time, each per
+the last one and after it, each segment between two decision points, re-decides and re-answers - and a table per check kind - dispatches, tokens and wall time, each per
 changed line. Its source is the feature's own event log (its dispatches, each timed and feature-scoped), each dispatch costed
 from its transcript by the function `make ledger-owed` uses - not the review ledger, whose rows carry a date and no feature.
 Replayed for T01 as the baseline.
@@ -223,10 +224,12 @@ listing marks each unit answered or owed (`UNANSWERED=1` stays the short form); 
 page-wide unit (`#unfootnoted`) in the first batch alone; and `make modal-bundle` takes several `KIND=`s for one check and writes
 one bundle holding each pop-up, answered unit by unit.
 
-**D13 - FR-010, no write while the session's own gate runs.** A PreToolUse guard (`scripts/hooks/gate-write-hooks.sh`) refuses an
-Edit or Write into the clone, and a Bash command that commits or records (`git commit`, `git add`, `make append`, the
-`*-checked` and `*-triaged` targets, `make tick`, `make accept`), while a `make done` of this tree runs (`own-make.sh`), naming
-`make verify-wait`. Escape `GATE_WRITE_OK`.
+**D13 - FR-010, no write while the session's own gate runs.** A PreToolUse guard (`scripts/hooks/gate-write-hooks.sh`) refuses,
+while a `make done` of this tree runs (`own-make.sh`), what moves what the gate's end checks (`preflight.py --tree-check`: HEAD
+and the tracked tree): an Edit or Write into the clone, and a Bash command that commits (`git commit`) or writes a tracked record
+(`make append` - the ledger; `make claims-checked` and `make claims-triaged` - the claims index; `make tick` - tasks.md; `make
+accept` - gm-review.jsonl), naming `make verify-wait`. Not refused: `git add` and the record targets that write only under
+`.git/` (`make record-checked`, `make modal-triaged`), which move nothing the gate checks. Escape `GATE_WRITE_OK`.
 
 **D14 - the hourly clock counts the session's time, not the GM's.** The event-log hook records whether a prompt is the GM's or
 a background notification (`"gm": true`); `checkpoint.py` subtracts every Stop-to-GM-prompt gap from the hour; the feature

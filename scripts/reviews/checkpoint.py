@@ -53,6 +53,35 @@ def _write(path: Path | None, clock: dict) -> None:
         path.write_text(json.dumps(clock, indent=1) + "\n", encoding="utf-8")
 
 
+def gm_waits(root: Path, feature: str, since: float, now: float) -> float:
+    """Seconds between `since` and `now` the session spent waiting on the GM: each gap from a Stop to the GM's next prompt (an
+    event marked `"gm": true` - a notification is not the GM's), clipped to the window. The round arbiter's tooling fix on
+    hour:385-approach-checklist@4 (feature 385): an hour 34 of whose 63 minutes were waits, mostly on the GM, opened a step-back
+    of an hour the session had not spent. An event with no `gm` mark (logged before the mark existed) counts as the session's."""
+    from datetime import datetime  # noqa: PLC0415
+
+    g = ro._gitdir(root)  # noqa: SLF001 - the glyph clock's own reader
+    path = g / "l7r-events" / f"{feature}.jsonl" if g is not None else None
+    if path is None or not path.is_file():
+        return 0.0
+    waited, stop = 0.0, None
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        try:
+            e = json.loads(raw)
+            t = datetime.fromisoformat(str(e["t"]).replace("Z", "+00:00")).timestamp()
+        except (ValueError, KeyError, TypeError):
+            continue
+        if e.get("ev") == "Stop":
+            stop = t if stop is None else stop
+        elif e.get("ev") == "UserPromptSubmit" and stop is not None:
+            if e.get("gm") is True:
+                waited += max(0.0, min(t, now) - max(stop, since))
+            stop = None
+        elif e.get("ev") in ("PreToolUse", "SubagentStop"):
+            stop = None
+    return waited
+
+
 def state(root: Path, now: float | None = None) -> dict:
     """{feature, due, since, hour, open: trigger or "", units, units_since}; `due` False with no feature or no event log."""
     now = time.time() if now is None else now
@@ -62,7 +91,7 @@ def state(root: Path, now: float | None = None) -> dict:
         return {"feature": feature, "due": False}
     mine = _clock(root)[1].get(feature) or {}
     since = max(start, float(mine.get("checkpoint_at") or 0))
-    return {"feature": feature, "due": now - since >= CHECKPOINT_S, "since": since, "hour": int(mine.get("checkpoints") or 0) + 1,
+    return {"feature": feature, "due": now - since - gm_waits(root, feature, since, now) >= CHECKPOINT_S, "since": since, "hour": int(mine.get("checkpoints") or 0) + 1,
             "open": str(mine.get("checkpoint_trigger") or ""), "units": list(mine.get("checkpoint_units") or []),
             "units_since": float(mine.get("units_since") or 0)}
 

@@ -240,3 +240,19 @@ def test_past_the_hour_a_gate_or_a_dispatch_is_refused_until_the_step_back_opens
     cp.open_checkpoint(clone, T0 + 3601)
     assert cp.due(clone, "Agent", "glyph-check", now=T0 + 3700) == "", "open: the hour's work goes on"
     assert cp.main(["due", "--root", str(clone), "--tool", "Bash"]) in (0, 1)
+
+
+def test_an_hour_spent_waiting_on_the_gm_opens_no_step_back(clone: Path) -> None:
+    """The round arbiter's tooling fix on hour:385-approach-checklist@4 (feature 385): the clock counts the session's time - a
+    63-minute window holding a 30-minute wait on the GM (a Stop, then the GM's typed prompt) is not due; the same wait ended by a
+    background notification is the session's time, and is."""
+    ev = clone / ".git" / "l7r-events" / "999-test.jsonl"
+    rows = [{"t": _iso(T0), "ev": "", "sid": "s1"}, {"t": _iso(T0 + 600), "ev": "Stop", "sid": "s1"},
+            {"t": _iso(T0 + 600 + 1800), "ev": "UserPromptSubmit", "sid": "s1", "gm": True}]
+    ev.write_text("".join(json.dumps(r) + "\n" for r in rows))
+    assert cp.gm_waits(clone, "999-test", T0, T0 + 63 * 60) == 1800.0
+    assert not cp.state(clone, T0 + 63 * 60)["due"], "33 minutes of the session's own time"
+    assert cp.state(clone, T0 + 91 * 60)["due"], "an hour of its own time once the wait is taken off"
+    rows[-1]["gm"] = False  # a notification, not the GM
+    ev.write_text("".join(json.dumps(r) + "\n" for r in rows))
+    assert cp.gm_waits(clone, "999-test", T0, T0 + 63 * 60) == 0.0 and cp.state(clone, T0 + 63 * 60)["due"]

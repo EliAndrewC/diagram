@@ -128,7 +128,7 @@ def _tool_cat(e: Mapping[str, Any]) -> str:
 def _waiting(nxt: Mapping[str, Any]) -> str:
     if nxt["ev"] == "SubagentStop":
         return f"waiting: {nxt.get('agent') or 'subagent'}"
-    if nxt["ev"] == "UserPromptSubmit":
+    if nxt["ev"] == "UserPromptSubmit" and nxt.get("gm", True):  # ...a notification is no wait on the GM (feature 385)
         return "waiting: the GM"
     return "waiting: a background run"
 
