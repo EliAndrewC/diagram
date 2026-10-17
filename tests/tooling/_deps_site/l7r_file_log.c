@@ -57,6 +57,8 @@ static void note(int dirfd, const char *path, const char *kind) {
     if (busy || !path || !*path) return;
     const char *log = getenv("L7R_TEST_DEP_LOG"), *root = getenv("L7R_TEST_DEP_ROOT"), *file = getenv("L7R_TEST_DEP_FILE");
     if (!log || !root || !file || !*file) return;
+    /* git's own reads of the repository are its answer, which the git question replays (plan D18) - not file reads */
+    if (strcmp(program_invocation_short_name, "git") == 0 || strncmp(program_invocation_short_name, "git-", 4) == 0) return;
     const char *self = getenv("L7R_TEST_DEP_SELF");  /* the test's own process records itself, in Python */
     if (self && atol(self) == (long)getpid()) return;
     busy = 1;

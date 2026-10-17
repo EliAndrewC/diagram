@@ -269,7 +269,7 @@ def _keep(d: pathlib.Path) -> None:
             continue
         r = reads.get(f, {})
         opened = {_rel_path(p) for p in r.get("file", set())}
-        opened = {p for p in opened if not p.startswith(CACHE_READS)}
+        opened = {p for p in opened if not p.startswith(CACHE_READS) and p != ".git"}  # `.git` itself: where, not what (a worktree's is a file)
         files = {p for p in opened if not (ROOT / p).is_dir()}
         dirs = {_rel_path(p) for p in r.get("dir", set())} | {p for p in opened if (ROOT / p).is_dir() and not p.startswith(".git")}
         if any(p == ".git" or p.startswith(".git/") for p in opened if (ROOT / p).is_dir()):
