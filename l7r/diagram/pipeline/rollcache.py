@@ -489,6 +489,22 @@ def _roll_payload(spec: HamletSpec) -> tuple[SitePlan, dict[str, Any], Report]:
 # otherwise. The dependency record the cache keys on is taken IN the child, where the functions ran. What it
 # saves: the roll's whole working set - the 121 MB a roll ends at, the memo, the retained arenas, the pymalloc
 # fragmentation - never enters the worker (specs/210 research.md R1, R3). The roll-out list is the spec's FR-004.
+FAILURE_DIR = Path(tempfile.gettempdir()) / "l7r-roll-failures"
+"""Where a roll child's whole output is kept when it fails (`child_failure_log`)."""
+
+
+def child_failure_log(target: str, arg: Any, code: int, out: str, err: str) -> str:
+    """Write a failed roll child's WHOLE stdout and stderr to a file of its own and return the path, which the failure's
+    message names first (the round arbiter's tooling fix on hour:385-approach-checklist@2): `make cohort` cuts a refusal to
+    300 characters, so a child's traceback never reached the log - three cohort runs and a direct roll went to finding one
+    AttributeError (feature 385 T01, 2026-10-17)."""
+    FAILURE_DIR.mkdir(parents=True, exist_ok=True)
+    name = "".join(c if c.isalnum() else "-" for c in f"{getattr(arg, 'name', '') or target}-{time.time_ns()}")[:120]
+    path = FAILURE_DIR / f"{name}.log"
+    path.write_text(f"{target} {arg!r} (exit {code})\n--- stdout\n{out}\n--- stderr\n{err}\n", encoding="utf-8")
+    return str(path)
+
+
 _CHILD_DRIVER = (
     "{prelude}"
     "import importlib, pickle, sys\n"
@@ -553,7 +569,8 @@ def _in_child(target: str, arg: Any) -> tuple[Any, dict[str, Any]]:
             # captured here and discarded on success - the instrument printed nothing and nothing warned.
             sys.stderr.write(proc.stderr)
         if proc.returncode or not os.path.isfile(out_path):
-            raise RuntimeError(f"the roll child failed for {target} {arg!r} (exit {proc.returncode}):\n{proc.stdout[-1500:]}\n{proc.stderr[-1500:]}")
+            log = child_failure_log(target, arg, proc.returncode, proc.stdout, proc.stderr)
+            raise RuntimeError(f"the roll child failed (full output: {log}) for {target} {arg!r} (exit {proc.returncode}):\n{proc.stdout[-1500:]}\n{proc.stderr[-1500:]}")
         with open(out_path, "rb") as fh:
             payload, deps = pickle.load(fh)  # noqa: S301 - our own child's bytes, written above
         for i, covfile in enumerate(sorted(glob.glob(covbase + ".*"))):

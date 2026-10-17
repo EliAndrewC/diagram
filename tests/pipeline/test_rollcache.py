@@ -658,3 +658,17 @@ def test_a_linked_worktree_keeps_its_rolls_in_the_main_worktrees_store(tmp_path,
         assert rc.roll_store_dir() == str(outside / ".gencache" / "rolls"), "outside a repository: its own"
     finally:
         rc._main_worktree.cache_clear()
+
+
+def test_a_failed_roll_childs_whole_output_is_kept_and_named(tmp_path, monkeypatch) -> None:
+    """The round arbiter's tooling fix on hour:385-approach-checklist@2: `make cohort` cuts a refusal to 300 characters, so a
+    child's traceback is written whole to a file whose path leads the failure's message."""
+    from types import SimpleNamespace
+
+    from l7r.diagram.pipeline import rollcache as rc
+
+    monkeypatch.setattr(rc, "FAILURE_DIR", tmp_path / "fails")
+    path = rc.child_failure_log("mod:fn", SimpleNamespace(name="Audit-24"), 1, "out" * 1000, "Traceback ...\nAttributeError: px")
+    text = open(path, encoding="utf-8").read()
+    assert path.startswith(str(tmp_path / "fails" / "Audit-24-")) and "AttributeError: px" in text and "out" * 1000 in text
+    assert rc.child_failure_log("mod:fn", 7, 2, "", "").endswith(".log"), "an arg with no name is named by its target"

@@ -31,3 +31,6 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T11 The close: the checklist to `docs/`, the refusals extended to every feature (FR-001), the final report (SC-001, SC-002)
       research: rendering
+- [ ] GM review (make gm-reviewed F=385) [lands-open]
+      research: rendering
+      verify: the GM reviewed every row (make gm-review lists them)
