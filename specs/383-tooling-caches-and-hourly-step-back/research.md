@@ -299,3 +299,12 @@ design note, round 5), and a trace taken by an older recorder counts as stale.
 A defect made and caught on the way, recorded: an edit replacing the per-suite key lost one of its two halves to a refused
 edit, so for one run every suite's key was the hash of nothing; the next run re-ran each suite whose traced reads had moved
 and rewrote the stamps, and the recipe now treats a missing key as never fresh.
+
+**A landing, after amendment 3** (SC-016, SC-017; FR-017's log, observed 2026-10-17 13:54, load 4.06; m:land-tooling-landing-a3):
+prepare 0.22, worktree 1.39, patch 0.40, guard-suites 2.76 and tooling-tests 18.58 side by side (checks 18.62), push 9.41 -
+30.04 s, against 37.05 s after amendment 2 and 113.98 s before it. 121 of the 128 tooling files reused (1,692 tests); what
+ran is the two files that read machine state a worktree lacks (`.gencache`, `.coverage`), and those the change itself reached.
+Two last reads were made known on the way: the cache directory itself opened (`.git/l7r-cache`, which marked test_content_cache
+as reading git's state), and a file under `.git/` (ruff's `.git/info/exclude`) now keyed by its content in the git common
+directory a worktree shares with its clone. The tooling step is now the landing's long pole; of its 18.6 s, the tests that
+ran are a few seconds and the rest is the workers' start and a fresh checkout's first imports.

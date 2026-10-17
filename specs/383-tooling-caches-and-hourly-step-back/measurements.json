@@ -162,5 +162,64 @@
   "varies": true,
   "value": 1.65,
   "before": 8.53
+ },
+ "land-tooling-landing-a3": {
+  "quantity": "a real make land-tooling, every step, with amendment 3's cuts",
+  "observed": "2026-10-17T13:54Z",
+  "source": "this clone's land-tooling-steps.jsonl; load 4.06",
+  "command": "make land-tooling FILES=...",
+  "method": "FR-017's step log",
+  "unit": "s",
+  "varies": true,
+  "value": 30.04,
+  "steps": {
+   "prepare": 0.22,
+   "worktree": 1.39,
+   "patch": 0.4,
+   "guard-suites": 2.76,
+   "tooling-tests": 18.58,
+   "checks": 18.62,
+   "push": 9.41
+  },
+  "reused_files": 121,
+  "of_files": 128
+ },
+ "tooling-reuse-a3": {
+  "quantity": "make test-file FILE=tests/tooling in a fresh worktree at the clone's HEAD with reuse, after amendment 3's recorder",
+  "observed": "2026-10-17",
+  "source": "this clone; load 8.1",
+  "command": "python3 scripts/measure/tooling_reuse_time.py",
+  "method": "the script",
+  "unit": "s",
+  "varies": true,
+  "value": 18.39,
+  "without": 37.37,
+  "ran": 61,
+  "of": 1806,
+  "files": 128,
+  "always_run": 0
+ },
+ "hooks-test-idle": {
+  "quantity": "make hooks-test with nothing to run",
+  "observed": "2026-10-17",
+  "source": "this clone; load about 5",
+  "command": "make hooks-test",
+  "method": "wall time, the run after a green one",
+  "unit": "s",
+  "varies": true,
+  "value": 2.6,
+  "before": 16.06
+ },
+ "sync-with-main-suite": {
+  "quantity": "tests/hooks/test-sync-with-main.sh, whole",
+  "observed": "2026-10-17",
+  "source": "this clone; load 8.8",
+  "command": "bash tests/hooks/test-sync-with-main.sh",
+  "method": "wall time",
+  "unit": "s",
+  "varies": true,
+  "value": 17.88,
+  "before": 36.23,
+  "checks": 124
  }
 }
