@@ -138,10 +138,38 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
       verify: DONE. SC-021 met (research R12; m:gate-tooling-makefile-a5). After a Makefile-only edit, the gate's full run reused 1,739 of 1,824 tooling tests with their coverage carried; the 85 that ran are the tests that read the Makefile; all floors at 100%; 132 s against 167 s. Two gates green; hash test red on the old glob.
 - [x] T35 A pass kept per test (plan D32) (SC-022)
       research: rendering
-      verify: DONE. SC-022 met (R12; m:source-page-edit-a5, m:tooling-reuse-a5). One source-page edit re-runs 15 tests, against 219 per file. An unchanged tree reuses 1,825 of 1,827 in 6.5 s. Store 10.8 MB. D32b fixed a soundness defect: a delta.py edit now re-runs 178 tests, not 36.
+      verify: DONE. SC-022 met (R12; m:tooling-reuse-a5). One source-page edit re-runs 15 tests, against 219 per file. An unchanged tree reuses 1,825 of 1,827 in 6.5 s. Store 10.8 MB. D32b fixed a soundness defect: a delta.py edit now re-runs 178 tests, not 36.
 - [x] T36 Tests of code moved off the real repository, case by case (plan D33) (SC-022)
       research: rendering
       verify: DONE. R12 table. 12 tests of code are on copies of the pages they name, or on records of their own; data reads went from 475-4,656 files to 155 or fewer, assertions unchanged. The tests whose subject is the record's data are kept, with reasons.
 - [x] T37 Close: the gate, the report, landed
       research: rendering
       verify: DONE. Two gates, the second green (221 s). Feature report written. The arbiter's step-back ruling was continue; its tooling fix is settled and landed. Tooling landed mid-feature three times: the reads fix, the new-file guard, the make-only refusal.
+
+## Amendment 6 (the GM 2026-10-17: what subagents share is cached)
+
+- [x] T38 `make subagent-cache` and the before numbers (plan D39) (SC-025)
+      research: rendering
+      verify: DONE. make subagent-cache (renamed: cache-audit is the maps' check) prints each type's runs, back-to-back first-call read and write, repeated manifest text and the spend; 6 tests on a fake transcript directory; before numbers in research R13 (observed 2026-10-17).
+- [x] T39 The dispatch guard for a shared block after a unique start (plan D37) (SC-025)
+      research: rendering
+      verify: DONE. agent-prefix-hooks.sh refuses a 2,000+ character block shared with an earlier same-type, same-model dispatch after a differing part. Every run is judged; a block that starts the prompt passes. 13 suite cases, the GM's shape among them; red with the refusal removed and on the longest-run-only decider.
+- [x] T40 The modal guidelines in the modal agents' files, `make agent-sync` (plan D35) (SC-024)
+      research: rendering
+      verify: DONE. Both guideline sets now sit at the end of the three modal agent files, written by make agent-sync and held in step by tests/test_agent_sync.py; the bundle carries a one-line guidelines.txt. The shared-text test is red on the old builder (17.6-18.6k) and green now.
+- [x] T41 The claims and modal triage as defined agents (plan D36) (SC-023)
+      research: rendering
+      verify: DONE. claims-triage and modal-triage are agent files: opus/medium, no CLAUDE.md, rows in TIERS, pre-authorized. Their manifests name the agent; the commands print it; the triage tests pass. SC-023's first-call write is measured in a session started after landing.
+- [x] T42 The bundle test for shared text (plan D38) (SC-024)
+      research: rendering
+      verify: DONE. tests/tooling/test_bundle_shared_text.py: two real bundles each of record-format, quote-check and the three modal checks share under 2,000 characters outside their unit inputs; a seeded 3,000-character block fails it; triage headers pinned under 400 (old 607 and 824).
+- [x] T43 spec-fidelity without the instruction files: the seeded runs, three a leg, then the field (plan D34) (SC-023)
+      research: rendering
+      verify: DONE. SC-023 quality clause met (R14). Feature 251 round 1, three runs a leg as a subagent, scored blind: the field found 3 of 3 recorded items in 3 of 3 runs, as the control did. omitClaudeMd set; KEEPS_CLAUDE_MD empty; tier test green.
+- [x] T44 The rule in CLAUDE.md and the docs; close: the gate, the report, landed (plan D39)
+      research: rendering
+      verify: DONE. The rule is in CLAUDE.md with the guard row; the docs are written (guards.md, spec-kit-and-reviews.md); the triage agents are pre-authorized. hooks-test green; quick green warm (a cold 28 s right after the merge was testmon reselecting); tooling landed (e175ec954); the report written.
+- [x] T45 One copy of the root CLAUDE.md: the exclusion in the project settings, its test, measured after landing (plan D40) (SC-026)
+      research: rendering
+      verify: DONE. SC-026 met (R15). After landing, a session started in /diagram that reads a clone file loads the root CLAUDE.md once, not twice, and the nested file still loads. Its subagents skip the clone's copy too; spec-fidelity, with omitClaudeMd, loads neither root. tests/test_one_root_claude_md.py holds the exclusion.
+

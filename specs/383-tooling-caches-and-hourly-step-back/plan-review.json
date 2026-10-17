@@ -233,6 +233,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
+  },
+  "## Amendment 6 (FR-031 to FR-036)": {
+   "sha256": "f645103164f874263b0651751b54879a0c57578cacd6408fd8af281d851c6cfd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -997,6 +1003,266 @@
      "summary": "Each read's content kept once in one table; entries naming a path whose content moved and not re-recorded are dropped.",
      "class": "within",
      "why": "Unchanged since round 3's CLEAR; storage form serving FR-029, never judging an entry against unseen content."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Amendment 6 (FR-031 to FR-036)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D34",
+     "summary": "spec-fidelity trial without the instruction files: 3 runs a leg, scoring rule fixed in advance (2-of-3 = FOUND; control-1/3 and field-1/3-vs-control-2/3 = variance), dispatched as a subagent; a loss writes the missing rule into the agent file and re-runs the field leg; a second loss keeps the exception and sends both legs to the GM; a pass sets omitClaudeMd and empties KEEPS_CLAUDE_MD",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The only narrowing is the second-loss contingency (exception kept). It is the removal condition the GM's own 2026-09-20 approval of the exception recorded, carried as SC-023's quality clause in the accepted spec; the first remedy is the requested mechanism (the rule moved into the agent file); and the contingency does not settle the matter for the session but returns it to the GM with the evidence. The scoring rule and the subagent dispatch settle what SC-023 left to the plan and are within."
+    },
+    {
+     "id": "D35",
+     "summary": "modal guidelines (both forms) generated into the three modal agents' files between markers by make agent-sync, a drift test, the bundle stops copying guidelines.md",
+     "class": "within",
+     "why": "FR-032 as written; the drift test enforces it."
+    },
+    {
+     "id": "D36",
+     "summary": "claims-triage and modal-triage as defined agents, opus/medium, omitClaudeMd, manifests keep only unit text, make targets name the agent",
+     "class": "within",
+     "why": "FR-033 as written; tier follows the project's judgment-on-Opus rule."
+    },
+    {
+     "id": "D37",
+     "summary": "PreToolUse Agent guard: a shared block of 2,000+ chars refused only when it starts after the new prompt's first 200 characters",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-034 refuses a large shared block after ANY part that differs. The 200-character lead allowance exempts exactly the GM's own example - 'a unique sentence for its prompt, and then 10 kilobytes of context after that' - whenever the sentence is under 200 characters, which most are; any differing prefix makes everything after it uncacheable, so the allowance has no caching basis and guts the guard's purpose. Fix: a qualifying block passes only when it starts at offset 0 (or everything before it is identical in both prompts); drop the 200-character clause, and make the suite's GM-shape case a sentence shorter than 200 characters."
+    },
+    {
+     "id": "D38",
+     "summary": "cache_audit.shared_text and a test building two bundles of each kind, failing over 2,000 shared characters, with a seeded case",
+     "class": "within",
+     "why": "FR-035 as written; enforcement of the request."
+    },
+    {
+     "id": "D39",
+     "summary": "make cache-audit over subagent transcripts with stated rates; the rule, guard and target in CLAUDE.md; the spec-fidelity exception sentence removed; docs section",
+     "class": "within",
+     "why": "FR-036 as written. Note: removing the spec-fidelity sentence should follow D34's pass, since a second loss keeps the exception."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Amendment 6 (FR-031 to FR-036)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D34",
+     "summary": "spec-fidelity without the instruction files, proven by 3+3 runs on 251's round 1 scored by an independent reader; on a second loss the exception stays and goes to the GM",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Unchanged since round 1. The fallback is the removal condition SC-023 and the tier test's row already record, not a carve-out the session invented; on a pass FR-031 is met in full."
+    },
+    {
+     "id": "D35",
+     "summary": "modal guidelines generated into the three modal agent files by make agent-sync, held by a test; bundle stops copying guidelines.md",
+     "class": "within",
+     "why": "Unchanged; FR-032 as written."
+    },
+    {
+     "id": "D36",
+     "summary": "claims-triage and modal-triage as defined agents, opus/medium, omitClaudeMd, manifests reduced to the unit",
+     "class": "within",
+     "why": "Unchanged; FR-033 as written."
+    },
+    {
+     "id": "D37",
+     "summary": "dispatch guard refuses a shared block of 2,000+ characters unless everything before it is identical in both prompts; suite uses the GM's shape with a sub-200-character sentence",
+     "class": "within",
+     "why": "Round 1's 200-character allowance is gone: any differing text before the shared block, however short, is now refused, which is the GM's mechanism (a unique sentence makes everything after it uncacheable) and FR-034's 'after a part that differs'. The threshold is labeled a convenience number to move. Suite cases match SC-025."
+    },
+    {
+     "id": "D38",
+     "summary": "shared_text test over two bundles of each kind, 2,000-character limit, seeded 3,000-character failure",
+     "class": "within",
+     "why": "Unchanged; FR-035 and SC-024."
+    },
+    {
+     "id": "D39",
+     "summary": "make cache-audit; CLAUDE.md rule and guard; the spec-fidelity-keeps-the-files sentence removed only once D34 passes",
+     "class": "within",
+     "why": "FR-036 as written; the sentence's removal now tracks D34's outcome, so CLAUDE.md stays true on either branch, as round 1 asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Amendment 6 (FR-031 to FR-036)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D34",
+     "summary": "spec-fidelity without instruction files, proven first by a 3x3 seeded trial; loss route and second-loss route to the GM",
+     "class": "within",
+     "why": "Unchanged since round 2 CLEAR; carries FR-031/SC-023 and the GM-approved proposal (spec-fidelity without CLAUDE.md, its rules in its file)."
+    },
+    {
+     "id": "D35",
+     "summary": "modal guidelines generated into the three modal agent files; bundle stops copying them",
+     "class": "within",
+     "why": "Unchanged; FR-032, the GM-approved 'modal guidelines into the modal agents' files'."
+    },
+    {
+     "id": "D36",
+     "summary": "claims and modal triage as defined agents, opus/medium, omitClaudeMd",
+     "class": "within",
+     "why": "Unchanged; FR-033, the GM-approved 'recurring ad-hoc dispatches as defined agents'."
+    },
+    {
+     "id": "D37a",
+     "summary": "guard compares a new prompt only with earlier prompts of the same agent type and model",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-034 says 'an earlier dispatch of the session' with no type limit. A prefix cache is per model and begins with the system prompt, so a block shared across types or models can never be cached whatever its placement: refusing it is physically unfixable and serves none of the GM's purpose. Every case the GM described (same check, unique sentence then shared 10 KB) is a same-type, same-model pair and stays caught; ad-hoc general-purpose dispatches are one type and stay caught."
+    },
+    {
+     "id": "D37b",
+     "summary": "a shared block that starts the new prompt passes, even against an earlier prompt of the old shape",
+     "class": "within",
+     "why": "FR-034 refuses a shared block 'after a part that differs'; a block at the start of the new prompt has nothing before it. It is the GM's own fix ('at the very beginning of the prompt'), and the round-2 suite already required 'the same block first passes'; the earlier wording would have refused it."
+    },
+    {
+     "id": "D37c",
+     "summary": "prompts kept with type and model; longest identical line run after the common prefix; 2,000-char threshold, escape, logging, suite",
+     "class": "within",
+     "why": "Mechanism of FR-034 / SC-025; threshold declared a convenience number; suite unchanged and covers the GM's 10 KB shape."
+    },
+    {
+     "id": "D38a",
+     "summary": "contract_shared leaves out sections built from each unit's own inputs (pages, entries, claims and candidates derived from them)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-035 literally compares all identical text. Text two units happen to share (two kinds citing the same drawing pages: 59,885 chars observed 2026-10-17) is not context every dispatch of the check shares: it cannot go in the agent file and no single prompt prefix can hold every pairwise coincidence, so a literal test would fail on the choice of units, not on the check's form. The purpose (FR-032: static text a check repeats moves to its agent file) is kept: the contract part is still compared, and the test is red on the pre-D35 builder (the guidelines) and green after - it still catches the motivating leak."
+    },
+    {
+     "id": "D38b",
+     "summary": "triage bundles: the header before the first unit section pinned under 400 chars instead of building two bundles",
+     "class": "within",
+     "why": "A triage bundle carries one unit list, so what every triage bundle repeats is exactly its header; pinning that under 400 enforces FR-035's 'fails when identical text passes a small limit' more strictly than the 2,000 limit would. Enforcement of the request, not a narrowing."
+    },
+    {
+     "id": "D38c",
+     "summary": "real-record bundles for record-format, quote-check and the three modal checks; 2,000-char limit; seeded 3,000-char case",
+     "class": "within",
+     "why": "FR-035/SC-024 as approved."
+    },
+    {
+     "id": "D39",
+     "summary": "the audit renamed make subagent-cache (scripts/measure/subagent_cache.py); CLAUDE.md rule and guard; doc section",
+     "class": "within",
+     "why": "Rename avoids collision with the existing cache-audit; FR-036 already names make subagent-cache. Contents unchanged from round 2."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Amendment 6 (FR-031 to FR-036)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D34",
+     "summary": "spec-fidelity without the instruction files, proven first by 3+3 seeded runs as a subagent; scoring rule fixed; a second loss keeps the exception and goes to the GM",
+     "class": "within",
+     "why": "Unchanged since round 3 CLEAR. Implements FR-031 under the removal condition SC-023 itself states (still finds what it found with them); the second-loss branch is that accepted condition, not a new carve-out."
+    },
+    {
+     "id": "D35",
+     "summary": "modal guidelines generated into the three modal agents' files by make agent-sync, held by a test; bundle stops copying guidelines.md",
+     "class": "within",
+     "why": "Unchanged. FR-032 names exactly this first case; the sync test enforces it."
+    },
+    {
+     "id": "D36",
+     "summary": "claims-triage and modal-triage become defined agents (opus/medium, omitClaudeMd), manifests keep only the unit",
+     "class": "within",
+     "why": "Unchanged. FR-033 verbatim; tier follows the project's judgment-on-Opus rule."
+    },
+    {
+     "id": "D37",
+     "summary": "dispatch guard per type+model over the last 30 prompts; EVERY run of identical lines after the common prefix (cut back to a line start) is judged, not only the longest; a run of 2,000+ chars after any differing text is refused; a block starting the new prompt passes; AGENT_PREFIX_OK escape",
+     "class": "within",
+     "why": "The round-4 change widens the check to every shared run, closing the 'shared B, unique, shared C' hole where a refusable block passed because a longer cacheable one existed. That is enforcement of FR-034 and the GM's request (shared context at the start or in the system prompt), not new behavior beyond it: the refusal still fires only on a shared block after differing text, same types, same escape. Cutting the prefix back to a line start is mechanism. The ~2.5k figure now carries a one-shot label (observed 2026-10-17, R13 table); 10 KB/64 KB/2,000/200 are design constants and test sizes, not measurements."
+    },
+    {
+     "id": "D38",
+     "summary": "shared_text/contract_shared and a bundle test failing at 2,000 shared chars, unit-derived sections excluded; triage headers pinned under 400",
+     "class": "within",
+     "why": "Unchanged. FR-035; excluding unit-derived inputs measures repetition of the check, which is what FR-032/035 target."
+    },
+    {
+     "id": "D39",
+     "summary": "make subagent-cache audit, CLAUDE.md rule + guard, spec-fidelity sentence removed once D34 passes, docs section",
+     "class": "within",
+     "why": "Unchanged. FR-036 and the GM's 'project guidelines that enforce this'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Amendment 6 (FR-031 to FR-036)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D34",
+     "summary": "spec-fidelity without the instruction files, proven by 3+3 seeded runs first; a second loss keeps the exception and goes to the GM",
+     "class": "within",
+     "why": "Unchanged since round 4 CLEAR. Implements FR-031/SC-023 under the condition the tier test recorded; the fallback refers the outcome to the GM rather than deciding it."
+    },
+    {
+     "id": "D35",
+     "summary": "modal guidelines generated into the three modal agent files; bundle stops copying them",
+     "class": "within",
+     "why": "Unchanged; FR-032 as worded, and the GM's 'put shared context in the system prompt'."
+    },
+    {
+     "id": "D36",
+     "summary": "claims-triage and modal-triage become defined agents, opus/medium, omitClaudeMd",
+     "class": "within",
+     "why": "Unchanged; FR-033 as worded."
+    },
+    {
+     "id": "D37",
+     "summary": "agent-prefix dispatch guard, 2,000-char threshold, escape AGENT_PREFIX_OK",
+     "class": "within",
+     "why": "Unchanged; FR-034, the enforcement the GM asked for. Threshold is below the GM's 10 KB case, so it reaches the case named."
+    },
+    {
+     "id": "D38",
+     "summary": "bundle shared-text test excluding unit-derived sections; triage headers under 400 chars",
+     "class": "within",
+     "why": "Unchanged; FR-035, enforcement of the request."
+    },
+    {
+     "id": "D39",
+     "summary": "make subagent-cache audit and the CLAUDE.md rule",
+     "class": "within",
+     "why": "Unchanged; FR-036 as worded."
+    },
+    {
+     "id": "D40",
+     "summary": "claudeMdExcludes ['/diagram/.clones/*/CLAUDE.md'] in project settings; a test holds it and refuses a pattern that would match a nested CLAUDE.md; SC-026 measured after landing; gm-assistant's line reported to the GM, not edited",
+     "class": "within",
+     "why": "The GM: clones load CLAUDE.md twice, 'a token efficiency improvement that we need to make or measure or address'. FR-037/SC-026 carry exactly that: one root copy, nested files still load, before/after measured. The test only fails when the requested exclusion is absent or overreaches - enforcement, not scope. Reporting gm-assistant rather than editing it narrows nothing: this project's request and FR-037 concern this repository, and the GM's mention of gm-assistant was where he saw the problem; the report gives him the line for it. The mirror-copy lag is a stated consequence, not a carve-out."
     }
    ]
   }

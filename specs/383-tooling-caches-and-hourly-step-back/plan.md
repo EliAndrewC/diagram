@@ -486,3 +486,78 @@ MB (observed 2026-10-17; the store file's size after one whole-tree record), eve
 ~22,000 files (observed 2026-10-17; test_content_cache's read count). So each read's content is kept once, in one table, and an entry
 names the paths it read; when a run records a path whose content moved, every entry naming it that this run did not record
 again is dropped (it was kept against the old content), so no entry is ever judged against a content it did not see.
+
+## Amendment 6 (FR-031 to FR-036)
+
+**D34 - spec-fidelity without the instruction files, proven first (FR-031, SC-023).** The exception's own condition decides it
+(specs/256 research R6; the `KEEPS_CLAUDE_MD` row): feature 251's spec, round 1 - three recorded required changes - is
+reviewed three times with the instruction files (the control) and three times without (`omitClaudeMd: true`, the field), and
+each reply is scored finding by finding by an independent Opus reader that did not write this change. The runs dispatch
+spec-fidelity as a SUBAGENT of a headless session in the case's worktree (256's `dispatch_seeded.sh` form): `omitClaudeMd` is
+ignored for a session's main agent, which is how `scripts/measure/model_trial.py` runs a check, so `model_trial.py` gains
+`prepare --omit-claude-md` (the field written into the tested agent's copy, as `--model` is) and `run --as-subagent`.
+- The scoring rule, fixed now: a recorded item counts as FOUND by a leg when two of its three runs raise it. The field passes
+  when it finds every item its control finds; an item the control raised in only one of three, or the field in one where the
+  control did in two, is reported as the agent's own variance, not a loss.
+- A loss: the rule the files carried that accounts for the miss is written into `.claude/agents/spec-fidelity.md` as a general
+  rule (256's FR-004 route) and the field leg runs three times again. A second loss: the exception stays, the field unset, and
+  the result goes to the GM with both legs' replies, as the test row's terms say.
+- A pass: the frontmatter carries `omitClaudeMd: true`, `KEEPS_CLAUDE_MD` is empty and the test names no exception. A defined
+  agent's file is read when a session starts, so the first-call write of SC-023 is measured in a session started after it lands.
+
+**D35 - The modal guidelines in the modal agents' files (FR-032).** The three modal checks' files (`modal-depiction`,
+`modal-form`, `modal-research`) carry both forms of the guidelines, `dev/modals.md` and `dev/modals-particular.md`, between
+generated markers (`<!-- generated: dev/modals.md -->` ... `<!-- /generated -->`). `make agent-sync`
+(`scripts/reviews/agent_sync.py`) writes them; a test fails when a file's section differs from its source, naming the command.
+The modal bundle stops copying `guidelines.md`; its MANIFEST names the modal's form ("the standard guidelines" or "the
+particular guidelines", in your contract) in one line. The prepass keeps reading the guidelines from `dev/`.
+
+**D36 - The claims triage and the modal triage as defined agents (FR-033).** `.claude/agents/claims-triage.md` and
+`modal-triage.md`: the standing instructions the two manifests write today (what a TOUCHES line is, what bears on a claim or a
+pop-up, the reply form `make claims-triaged` / `modal-triaged` read) move into the agent files; each MANIFEST keeps only its
+units, its pages' changed blocks and one line naming the agent. Tier opus / medium, as `impl-drift`, whose question they
+pre-sort (a judgment); `omitClaudeMd: true`; rows in `TIERS`. `make claims-triage` / `modal-triage` print the dispatch naming
+the agent. A new agent file is seen by a session started after it lands.
+
+**D37 - The dispatch guard (FR-034).** `scripts/hooks/agent-prefix-hooks.sh` on PreToolUse Agent, with its decider in
+`scripts/hooks/lib/hm_agent_prefix.py`: the session's Agent prompts that passed are kept in `<git dir>/l7r-agent-prompts/` (the
+last 30), each with its agent type and model; a new prompt is compared only with earlier prompts of its own type and model -
+another type's system prompt differs, so nothing is shared across types - by every run of identical lines both hold after
+their common prefix (cut back to a line's start), the prompts capped at 64 KB; each run is judged, not the longest alone (plan
+review round 3: "shared B, unique text, shared C" passed on B). A block of 2,000 characters or more is refused unless everything before it is identical in both
+prompts - a cached prefix breaks at the first character that differs, so any differing part before it, however short, makes it
+uncacheable - with the fix: put the shared text at the start of the prompt, or in the agent's file. A block that starts the new
+prompt passes: that is the fixed form, which the next dispatch reads from the cache (refused against an earlier prompt of the
+old shape, the fix itself would be refused). The threshold is a convenience number to move (the GM's case was 10 KB; 2,000 is about
+500 tokens, where a cached prefix starts to matter against the ~2.5k a dispatch writes regardless - observed 2026-10-17, research R13's
+back-to-back table). Escape `AGENT_PREFIX_OK`
+with a reason; every firing logged. The suite `tests/hooks/test-agent-prefix-hooks.sh`: the GM's shape (a unique sentence of
+under 200 characters, then a shared 10 KB) refused; the same block first passes, followed by differing text; two unrelated
+prompts pass; the escape passes.
+
+**D38 - The bundle test (FR-035).** `scripts/measure/subagent_cache.py` carries `shared_text(a, b)` - the identical lines of 40
+characters or more two texts both hold, summed - and `contract_shared(a, b)`, the same over the manifests without the sections
+built from each unit's own inputs (its research pages and entries, the claims and candidates derived from them): two crops cite
+the same drawing pages and a research bundle copies the record as candidates, which is the units coinciding, not the check
+repeating itself (observed 2026-10-17; two modal-depiction bundles, Alder and Barley, shared 59,885 characters, all of it their
+pages and claims). `tests/tooling/test_bundle_shared_text.py` builds two bundles from the real record for record-format and
+quote-check (two questions) and the three modal checks (two kinds), and fails when two manifests of a check share 2,000
+characters or more; a seeded case (a 3,000-character block in both) fails it. The two triage bundles carry one list each, so
+their tests pin what every one repeats - the text before the first unit section - under 400 characters (observed 2026-10-17:
+the old headers were 607 and 824).
+
+**D39 - The audit and the rule (FR-036).** `make subagent-cache [SINCE=YYYY-MM-DD]` runs `scripts/measure/subagent_cache.py` over the
+subagent transcripts (research R13's method): per type, its runs, the back-to-back first-call read and write, the manifests'
+repeated characters, and the whole spend in base-input units at the 5-minute tier (write 1.25, read 0.1, output 5), each rate
+stated in its output. Tested on a fake transcript directory. CLAUDE.md's review paragraph: the rule (what dispatches of a check
+share lives in its agent file; a prompt carries only the unit, last), the guard, `make subagent-cache`; the sentence naming
+spec-fidelity as keeping the files goes once D34 passes (a second loss keeps the exception, and the sentence with it). `docs/spec-kit-and-reviews.md` gets the section with R13's numbers.
+
+**D40 - One copy of the root CLAUDE.md (FR-037, SC-026).** The project's `.claude/settings.json` (which a session started in
+`/diagram` reads from the mirror once it lands) carries `"claudeMdExcludes": ["/diagram/.clones/*/CLAUDE.md"]`: the clone's
+root copy is skipped, its nested files still load where they are needed, and a session started inside a clone keeps
+`/diagram/CLAUDE.md` as its ancestor. The mirror's copy is main's, a landing behind a clone's own edit of it at most; a session
+that edits CLAUDE.md reads its own copy as it edits. A test reads the settings and fails if the exclusion is gone or would also
+match a nested CLAUDE.md. SC-026's after is measured as R15 was, in a session started after it lands. gm-assistant has the same
+shape; its settings are its own, so the session reports the line for it rather than editing that repository.
+

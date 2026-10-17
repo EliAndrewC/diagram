@@ -266,17 +266,5 @@
   "value": 6.53,
   "reused": 1825,
   "of": 1827
- },
- "source-page-edit-a5": {
-  "quantity": "tooling tests re-run after one research source page edit",
-  "observed": "2026-10-17T17:46Z",
-  "source": "/tmp/claude-1000/m3.log",
-  "command": "L7R_TEST_DEPS=reuse make test-file FILE=tests/tooling",
-  "method": "SC-022, the page restored after",
-  "unit": "tests",
-  "varies": false,
-  "value": 15,
-  "before_per_file": 219,
-  "seconds": 13.6
  }
 }

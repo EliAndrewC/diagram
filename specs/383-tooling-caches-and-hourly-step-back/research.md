@@ -427,3 +427,113 @@ real entry (rarity is measured against the whole record), the access tags' unrea
 equivalence tests (the content cache, the push checks in one process), which compare two code paths over every tracked file on
 purpose. `test_lint_scope`'s root run re-runs only when a file is added or removed (it lists directories), and
 `test_sources` now re-runs one test, not 43, on a page edit.
+
+## R13 Amendment 6 - what subagents write fresh, and why
+
+(observed 2026-10-17; method: every subagent transcript since 2026-10-10 under `~/.claude/projects/-diagram/*/subagents/`,
+1,312 runs, typed by their `.meta.json`; per call, the usage's `cache_read_input_tokens` and `cache_creation_input_tokens`;
+"back to back" = a dispatch of the same type from the same session under 5 minutes after the one before, the cache's lifetime
+for subagents - their writes are all `ephemeral_5m`; spend in base-input units at the 5-minute tier's rates, a write 1.25,
+a read 0.1, output 5; the scripts become `make subagent-cache`)
+
+| (observed 2026-10-17; the method above) | back-to-back pairs | first call read from cache | first call written fresh |
+|---|---|---|---|
+| modal-depiction | 169 | 4,138 | 2,676 |
+| impl-drift | 83 | 5,959 | 2,317 |
+| spec-fidelity (keeps CLAUDE.md) | 72 | 8,181 | 25,829 |
+| general-purpose (ad hoc) | 42 | 20,492 | 29,191 |
+| record-format | 17 | 8,312 | 3,132 |
+
+- A defined agent's file is its system prompt and is read from cache by the next dispatch of its type; what it writes fresh,
+  ~2.5-3.5k tokens, is the prompt and the harness's environment block.
+- spec-fidelity and the ad-hoc agents carry the instruction files (CLAUDE.md, the nested ones, the memory index), and that
+  ~22-25k is written fresh even back to back: it is not in the cached prefix.
+- (observed 2026-10-17; the method above) Of all subagent spend since 2026-10-10 (~131M base-input units: 68.7M written, 398M read, 1.04M output), spec-fidelity's
+  instruction files are about 12% (written fresh at 309 dispatches and carried through ~10 calls each), the ad-hoc agents'
+  about 3.5% (120 runs; 98 of them the claims and modal triage).
+- The modal checks' manifests (223, 61 and 55 read) repeat 15-17k characters in at least 80% of them - `dev/modals.md`, the
+  guidelines, copied into every bundle after the unique prompt: about 1.3%. No other check's manifests repeat more than a few
+  lines; impl-drift's runs re-read the same drawing pages, but those follow the unit, not the check.
+
+## R14 Amendment 6 - spec-fidelity without the instruction files, three runs a leg
+
+(observed 2026-10-17; method: `scripts/measure/model_trial.py prepare <transcript> <out> --model opus --omit-claude-md no|yes
+--as-subagent --at aa4b0889a` on feature 251's round-1 spec review (`agent-a9ad3907d23035d6f`, 2026-09-19 16:19, the spec at
+the commit 12 s before it), `run-all --runs 3 --parallel 2`, `collect`; each run a headless Sonnet session dispatching
+spec-fidelity once as a SUBAGENT, where the field acts; the six replies scored blind (shuffled A-F) by an Opus agent that did
+not write this change, against the recorded verdict's three required changes)
+
+| (observed 2026-10-17; the method above) | R1: FR-010's guard unrequested | R2: FR-011 contradicts US4 | R3: FR-011's exemption on an unset default | verdict |
+|---|---|---|---|---|
+| control (instruction files), runs 1-3 | 3 of 3 | 3 of 3 | 3 of 3 | CHANGES REQUIRED x3 |
+| field (`omitClaudeMd: true`), runs 1-3 | 3 of 3 | 3 of 3 (one weaker: names the contradiction, not Sonnet staying on Sonnet) | 3 of 3 | CHANGES REQUIRED x3 |
+
+- By D34's rule (an item FOUND when two of a leg's three runs raise it) the field finds every item its control finds: the field
+  stands. 256's R6 single field run found one of the three; the rule it then moved into the contract (question 6: does each
+  requirement do what it says) is in today's contract, and three runs a leg do not show the loss.
+- Both legs added required changes of their own, different per run (the `fork` exemption, the intermediate tiers' re-runs,
+  R1's count of past runs, the trial running as it will really run); none was only in one leg's runs as a class.
+- The subagents' first calls (the field confirmed): control 22,256 tokens in its first call, field 12,409 - the instruction
+  files of that commit's tree, ~9.8k tokens, absent.
+- **A prompt's identical start IS read from the cache across dispatches**: field run 3, dispatched after runs 1 and 2 with the
+  same prompt, read its whole first call (12,410 tokens) from the cache and wrote none. **The instruction files are not**:
+  control run 3, the same prompt and the same files as run 1, read only the agent file (8,665) and wrote 13,689 fresh - the
+  block the harness adds them in differs from one dispatch to the next.
+
+**SC-023, after** (observed 2026-10-17 19:23; method: a headless session started in this clone after the change - agent files
+load at a session's start - dispatched each agent twice in a row with a probe prompt ("read nothing and reply READY"), each
+subagent's first-call usage read from its transcript):
+
+| (observed 2026-10-17; the probe above) | first dispatch: read / fresh | second, seconds later: read / fresh | before (R13: back-to-back fresh) |
+|---|---|---|---|
+| spec-fidelity | 8,665 / 2,441 | 11,106 / 0 | 25,829 |
+| claims-triage | 0 / 5,614 | 5,614 / 0 | general-purpose 29,191 |
+| modal-triage | 2,327 / 3,353 | 5,680 / 0 | general-purpose 29,191 |
+
+## R15 Amendment 6, extended - the clone's copy of the root CLAUDE.md
+
+(observed 2026-10-17; method: two headless Sonnet sessions started in `/diagram`, each told to read the first lines of one file
+in this clone, `scripts/measure/subagent_cache.py`, and reply DONE; the session transcripts searched for each CLAUDE.md's
+path; the run's usage summed)
+
+| (observed 2026-10-17; the method above) | the clone's root CLAUDE.md | its `scripts/CLAUDE.md` | input tokens, the session |
+|---|---|---|---|
+| settings as they are | loaded | loaded | 119,497 |
+| `claudeMdExcludes: ["/diagram/.clones/*/CLAUDE.md"]` | not loaded | loaded | 105,261 |
+
+- Claude Code loads the launch directory's CLAUDE.md and its ancestors' at launch, and a subdirectory's when the session first
+  touches a file there (https://code.claude.com/docs/en/memory.md, "How CLAUDE.md files load"); the clones live under the
+  launch directory, so a clone's root CLAUDE.md - the root's own text, 36.7k characters - arrives a second time.
+- `claudeMdExcludes` (absolute-path globs, any settings layer; same page, "Exclude specific CLAUDE.md files") skips it, the
+  on-demand load included - the docs do not say that; the run above shows it. A session started INSIDE a clone still loads
+  `/diagram/CLAUDE.md` as an ancestor, so it too carries one copy.
+- Subagents: a defined agent with `omitClaudeMd` skips the launch files but still loads a subdirectory's CLAUDE.md when it works
+  with files there (https://code.claude.com/docs/en/sub-agents.md) - one more reason a check reads a bundle under `/tmp/`.
+
+**Subagents too** (observed 2026-10-17; method: two headless sessions started in `/diagram`, with and without the exclusion, each
+dispatching a `spec-fidelity` and a `general-purpose` subagent told to read the first lines of the same clone file; each
+subagent's transcript searched):
+
+| (observed 2026-10-17; the method above) | the clone's root CLAUDE.md | its `scripts/CLAUDE.md` |
+|---|---|---|
+| general-purpose, settings as they are | loaded | loaded |
+| general-purpose, with the exclusion | not loaded | loaded |
+| spec-fidelity, settings as they are | loaded | loaded |
+| spec-fidelity, with the exclusion | not loaded | loaded |
+
+- The answer to the GM's question: a subagent that works with files in the clone loads the clone's copy of the root CLAUDE.md
+  as a subdirectory file, and the exclusion stops it there as at the top level.
+- The `spec-fidelity` here ran from the MIRROR's agent files (a session started in `/diagram` reads `/diagram/.claude/agents/`),
+  which do not yet carry its `omitClaudeMd` - so it loaded the launch files as well; the `omitClaudeMd` case is measured after
+  this lands, the same way.
+
+**SC-026, after** (observed 2026-10-17; method: the same probe, from a session started in `/diagram` AFTER the settings and agent
+files landed (e175ec954), no settings passed in - the session reads the landed ones; it reads the clone file itself, then
+dispatches `spec-fidelity` and a `general-purpose` subagent that each read it):
+
+| (observed 2026-10-17; the method above) | the clone's root CLAUDE.md | `/diagram/CLAUDE.md` | the clone's `scripts/CLAUDE.md` |
+|---|---|---|---|
+| the session | not loaded | loaded, once | loaded |
+| spec-fidelity (`omitClaudeMd`) | not loaded | not loaded | loaded |
+| general-purpose | not loaded | loaded, once | loaded |
+
