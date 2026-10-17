@@ -42,6 +42,16 @@ check() { # label repo expected
   else echo "  FAIL    $1 (expected $3, rc=$rc)"; FAIL=$((FAIL+1)); fi
 }
 
+ruling() { printf '{"trigger": "round:spec-fidelity|900-x#1@6", "kind": "round", "ruling": "%s", "why": "w", "utc": "t", "spec_sha": "%s"}\n' "$1" "${2:-$SHA}" > specs/900-x/arbiter.jsonl; }
+prerepo() {  # a repo whose main already holds specs/900-x/spec.md with the given body
+  rm -rf "$T/$1"; mkdir -p "$T/$1/specs/900-x"; cd "$T/$1" || return 1
+  git init -q .; git config user.email t@t; git config user.name t
+  echo base > seed.txt; printf '%s' "$2" > specs/900-x/spec.md
+  git add -A; git commit -qm base; git branch -q -M main; git checkout -q -b work
+}
+
+NEW='{"v":2,"ink_classes":{"farmhouse":1,"well":1}}'  # a constant the cases share, defined before them (383 amendment 4)
+case_1() {
 echo "1. IT FIRES on work that skipped a mandated review"
 # GUARD_EDIT_OK: feature 165 - these three fixtures now ship the spec ALONGSIDE another file, which is
 # what shipping a spec means. Before the GM ruling they committed the spec ALONE, and that shape is
@@ -52,7 +62,6 @@ mkrepo a; echo "# spec" > specs/900-x/spec.md; echo work >> seed.txt; git add -A
 check "a spec with no fidelity verdict" a blocked
 
 # GUARD_EDIT_OK: feature 294 - the occasion is an element new to the map, not a moved manifest
-NEW='{"v":2,"ink_classes":{"farmhouse":1,"well":1}}'
 mkrepo b withmap; echo "$NEW" > "$POOL/m.json"; git add -A; git commit -qm reroll
 check "a map gaining an element with no review recorded" b blocked
 # GUARD_EDIT_OK: feature 375 amendment 9, D55 - the push asks every owed unit (--landing), the glyph units' hour aside, and a glyph
@@ -81,7 +90,6 @@ check "a spec that merely MENTIONS the word in prose" b3 blocked
 # GUARD_EDIT_OK: feature 379 amendment 2 - the round arbiter's accept on the spec's review stands in for FAITHFUL
 # the ruling carries the spec's hash (hm_arbiter.spec_body_sha): it stands only while the spec reads as it was ruled on
 SHA=$(printf '# spec' | sha256sum | cut -d' ' -f1)   # the title and the sections; the header block is not hashed
-ruling() { printf '{"trigger": "round:spec-fidelity|900-x#1@6", "kind": "round", "ruling": "%s", "why": "w", "utc": "t", "spec_sha": "%s"}\n' "$1" "${2:-$SHA}" > specs/900-x/arbiter.jsonl; }
 mkrepo b4; printf '# spec\n\n**Status**: In progress\n\n## Review history\n- round 5: CHANGES REQUIRED\n' > specs/900-x/spec.md; ruling accept
 echo work >> seed.txt; git add -A; git commit -qm s
 check "a spec the round arbiter accepted past the cap ships" b4 ok
@@ -115,6 +123,9 @@ printf -- '- [ ] T01 build it\n' > specs/900-x/tasks.md; echo work >> seed.txt; 
 check "...a superseded spec that HAD tasks: the verdict is owed" f4 blocked
 
 echo
+}
+
+case_1b() {
 echo "1b. THE NUMBER CLAIM passes, and only the number claim (feature 165, the GM ruling)"
 # CLAUDE.md requires the number to be claimed by pushing the new specs/NNN-slug/ the moment spec.md
 # exists, because several sessions allocate numbers at once - and this gate refused exactly that push
@@ -138,12 +149,6 @@ check "...two new spec directories at once: refused" n3 blocked
 # before the spec is written, so a spec added on `work` is an ADDITION over main..HEAD, which IS the
 # claim shape. The first draft of these two fixtures made exactly that mistake and passed for the
 # wrong reason. Built by hand instead, with the spec in the BASE commit.
-prerepo() {  # a repo whose main already holds specs/900-x/spec.md with the given body
-  rm -rf "$T/$1"; mkdir -p "$T/$1/specs/900-x"; cd "$T/$1" || return 1
-  git init -q .; git config user.email t@t; git config user.name t
-  echo base > seed.txt; printf '%s' "$2" > specs/900-x/spec.md
-  git add -A; git commit -qm base; git branch -q -M main; git checkout -q -b work
-}
 prerepo n4 '# spec
 
 ## Review history
@@ -158,6 +163,9 @@ printf 'tasks\n' > specs/900-x/tasks.md; git add -A; git commit -qm implement
 check "...and a LATER push into that directory still owes the verdict" n5 blocked
 
 echo
+}
+
+case_2() {
 echo "2. IT STAYS QUIET on work that did the reviews"
 mkrepo c; printf '# spec\n\n## Review history\nRound 1 - FAITHFUL\n' > specs/900-x/spec.md
 git add -A; git commit -qm s
@@ -207,6 +215,9 @@ check "...and the same map once a review returned PASS" nr ok
 # STALE key refuses whether or not the notes are touched (D5); a NOT-REVIEWABLE record refuses (above); no record and
 # no notes touch refuses (case b above).
 echo
+}
+
+case_3() {
 echo "3. A MAP SHIPS ON ITS REVIEWER'S RECORD (feature 248)"
 V=.git/review-verdicts/glyph-check--well--m.json
 mkrepo r1 withmap; echo "$NEW" > "$POOL/m.json"; git add -A; git commit -qm reroll; mkdir -p .git/review-verdicts
@@ -260,6 +271,15 @@ git checkout -q main; echo '{"v":2}' > "$POOL/m.json"; git commit -qam "another 
 if ( cd "$T/mv" && "$GATE" >/dev/null 2>&1 ); then
   echo "  ok      main moved on a map after this clone synced: the default range does not charge it here"; PASS=$((PASS+1))
 else echo "  FAIL    another session's map change was charged to this clone"; FAIL=$((FAIL+1)); fi
+
+}
+
+# GUARD_EDIT_OK: feature 383 amendment 4 (plan D28) - the sections as cases, run in parallel parts (tests/hooks/parts.sh)
+CASES=(case_1 case_1b case_2 case_3)
+declare -A WEIGHT=()
+# shellcheck source=/dev/null
+source "$HERE/parts.sh"
+run_parts ${REVIEWGATE_PARTS:-4}
 
 echo
 echo "passed $PASS, failed $FAIL"

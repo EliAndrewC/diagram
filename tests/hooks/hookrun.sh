@@ -19,6 +19,9 @@ WORK=${1:?work dir}; GITDIR=${2:?gitdir}; GUARD=${3:?guard}; SUITE=${4:?suite}; 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 t0=${EPOCHREALTIME/,/.}
+# GUARD_EDIT_OK: feature 383 amendment 4 - beside other suites a split suite runs in at most PARTS_MAX parts (make hooks-test sets it from the cores and the suites running; two when run without it): eight
+# suites of eight parts each hit the containers' shared 10 GB memory cap (2026-10-17). A suite run alone keeps its own count.
+export PARTS_MAX=${PARTS_MAX:-2}
 # GUARD_EDIT_OK: feature 383 amendment 3 (plan D27), adding an operation - under the C-library recorder when make hooks-test built
 # it, so a green suite's reads are kept (tests/hooks/hooktrace.py): a fixture's copy of scripts/ counts as the file it copies,
 # the fixture's cp does not
