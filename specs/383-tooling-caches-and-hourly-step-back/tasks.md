@@ -185,8 +185,9 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T48 No 1-hour subagent cache: the test (plan D43) (SC-028)
       research: rendering
       verify: DONE. SC-028 TTL half met: the test finds no 1-hour setting in settings, agent files or container setup, and catches a seeded one.
-- [ ] T49 CLAUDE.md as a core plus an index; the quotes test; the enumeration; measured (plan D44) (SC-029)
+- [x] T49 CLAUDE.md as a core plus an index; the quotes test; the enumeration; measured (plan D44) (SC-029)
       research: rendering
+      verify: DONE. SC-029 sizes and verdicts met (R19). Root 37,985 -> 13,730 characters, research 25,402 -> 20,772, tests 18,157 -> 6,340, moved verbatim. Enumeration: nothing dropped; 25 findings fixed and confirmed in round 2. The quotes test passes (3 stale quotes re-aimed). The first-request after is measured at landing.
 - [x] T50 The general-purpose families swept (plan D45) (SC-030)
       research: rendering
       verify: DONE. SC-030 met (R17). Since 10-10, ~122 of 137 general-purpose launches were the triage jobs, now defined agents; the rest were one-offs except the research pass, now the research-pass agent. make subagent-cache --families is tested.
