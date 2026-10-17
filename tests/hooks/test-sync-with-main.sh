@@ -520,35 +520,13 @@ OUT=$( cd "$D/main/.clones/c-tooling" && CI_ROUTE=DIRECT CI_MERGE="false" CLONE_
 # before a case reports fails the suite and names the case. SYNC_PARTS=1 runs them one after another, as before.
 CASES=(case_01 case_02 case_03 case_04 case_05 case_06 case_07 case_08 case_09 case_10 case_11 case_11b case_11c case_12 case_13 case_14 case_15 case_16 case_17 case_18 case_19 case_20 case_21 case_22 case_23 case_24 case_25 case_26)
 declare -A WEIGHT=([case_01]=1 [case_02]=1 [case_03]=1 [case_04]=1 [case_05]=3 [case_06]=5 [case_07]=4 [case_08]=5 [case_09]=6 [case_10]=4 [case_11]=15 [case_11b]=7 [case_11c]=7 [case_12]=1 [case_13]=2 [case_14]=1 [case_15]=7 [case_16]=3 [case_17]=12 [case_18]=3 [case_19]=6 [case_20]=3 [case_21]=7 [case_22]=6 [case_23]=2 [case_24]=4 [case_25]=5 [case_26]=3)  # seconds, each case alone, measured 2026-10-17 (feature 383 amendment 3)
-# feature 383 amendment 3 (plan D27): SYNC_CASES="case_11 case_17" runs only those cases - to time one case where it lives
-[ -n "${SYNC_CASES:-}" ] && read -r -a CASES <<< "$SYNC_CASES"
+# SYNC_CASES="case_11 case_17" runs only those cases - to time one case where it lives (feature 383 amendment 3, plan D27); the
+# runner itself is tests/hooks/parts.sh since amendment 4 (plan D28), shared by every split suite
+[ -n "${SYNC_CASES:-}" ] && PARTS_CASES=$SYNC_CASES
 SYNC_PARTS=${SYNC_PARTS:-8}  # 8, not 4: with the measured weights and case_11 split, 36.2 -> 17.9 s (6 parts: 24.3 s), 2026-10-17 at load 8
-if [ "$SYNC_PARTS" -le 1 ]; then
-  for c in "${CASES[@]}"; do "$c"; done
-else
-  W=$(mktemp -d); trap 'rm -rf "$T" "$W"' EXIT
-  declare -a LOAD PART
-  for ((k = 0; k < SYNC_PARTS; k++)); do LOAD[k]=0; PART[k]=""; done
-  while read -r w c; do
-    best=0; for ((k = 1; k < SYNC_PARTS; k++)); do [ "${LOAD[k]}" -lt "${LOAD[best]}" ] && best=$k; done
-    LOAD[best]=$((LOAD[best] + w)); PART[best]="${PART[best]} $c"
-  done < <(for c in "${CASES[@]}"; do echo "${WEIGHT[$c]:-10} $c"; done | sort -rn)
-  for ((k = 0; k < SYNC_PARTS; k++)); do
-    [ -n "${PART[k]}" ] || continue
-    ( T=$(mktemp -d); export GUARD_LOG_DIR="$T/guard-log" HOME=$T; PASS=0; FAIL=0
-      for c in ${PART[k]}; do "$c"; echo "@@reported $c"; done
-      echo "$PASS $FAIL" > "$W/$k.counts"; rm -rf "$T" ) > "$W/$k.log" 2>&1 &
-  done
-  wait
-  for ((k = 0; k < SYNC_PARTS; k++)); do
-    [ -n "${PART[k]}" ] || continue
-    grep -v '^@@reported ' "$W/$k.log"
-    if [ -f "$W/$k.counts" ]; then read -r p f < "$W/$k.counts"; PASS=$((PASS + p)); FAIL=$((FAIL + f))
-    else
-      for c in ${PART[k]}; do grep -qx "@@reported $c" "$W/$k.log" || { echo "FAIL  $c never reported - its part ended before it finished"; FAIL=$((FAIL + 1)); }; done
-    fi
-  done
-fi
+# shellcheck source=/dev/null
+source "$HERE/parts.sh"
+run_parts "$SYNC_PARTS"
 
 echo "-----"
 if [ "$FAIL" -eq 0 ]; then echo "all sync-with-main tests passed ($PASS checks)"; exit 0; else echo "SOME TESTS FAILED ($FAIL)"; exit 1; fi

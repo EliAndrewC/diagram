@@ -118,6 +118,9 @@ SPECREV=$(stdin_for Agent '{"subagent_type":"spec-fidelity","prompt":"the refere
 READER=$(stdin_for Agent '{"subagent_type":"source-reader","prompt":"read what a settlement-review cited"}')
 check "a spec-fidelity dispatch that MENTIONS a settlement-review passes" '[ "$(rc_pretool "$SPECREV")" -eq 0 ]'
 check "a source-reader that mentions one passes" '[ "$(rc_pretool "$READER")" -eq 0 ]'
+# GUARD_EDIT_OK: feature 383 amendment 4 - its own precondition, no green gate: case_04 leaves one, and once the parts were dealt
+# by measured weights case_04 ran before this in the same part and the check failed (found at 2 and 3 parts)
+rm -f "$CLONE/.git/stub-gate-green" "$CLONE/.git/verification-state.json"
 check "...while a real settlement-review is still refused" '[ "$(rc_pretool "$REVIEW")" -eq 2 ]'
 }
 
@@ -231,6 +234,12 @@ check "...or once the finding is ACCEPTED with a reason" '[ "$(rc_pretool "$REVI
 rm -f "$CLONE/.git/stub-gate-green"
 refused_for "a review of fixes with the gate not green is refused" "$REVIEW" "FR-004"
 
+reset_prereq  # the close case_11 had before its split (feature 383 amendment 4)
+}
+
+case_11b() {  # split from case_11 at its own reset (feature 383 amendment 4, plan D28): it was the suite's long pole
+moved; reset_prereq
+printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"; green
 # FR-005: the map on disk must be what the engine draws now, and whole
 reset_prereq; green; touch "$MAPDIR_F/testmap.gen.py.stale"
 refused_for "a review of a map whose generation key moved is refused" "$REVIEW" "FR-005"
@@ -254,6 +263,12 @@ rm -f "$CLONE/.git/review-snapshot/settlement-review--testmap/clone/testmap.html
 refused_for "...and refused when the snapshot it names is not whole" "$SNAPREV" "make verify"
 : > "$MAPDIR_F/testmap.png"
 
+reset_prereq  # the close case_11 had before its split
+}
+
+case_11c() {  # split from case_11 (plan D28); FR-005 above left the map current and whole, as this prelude does
+moved; reset_prereq
+printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"; green
 # FR-006: a quoted figure needs a record
 FIGREV=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"the caption now clears the canopy by 14 ft"}')
 refused_for "a dispatch quoting a figure with no record is refused" "$FIGREV" "FR-006"
@@ -339,6 +354,15 @@ refused_for "a THIRD round of the same unit is refused" "$GLYPH" "the cap is two
 check "...recorded under its own rule" 'grep -rl "review-round-cap" "$GUARD_LOG_ROOT" >/dev/null'
 # GUARD_EDIT_OK: feature 375 FR-011 - past the cap the round arbiter rules: the refusal names it, and its `continue` runs the round
 refused_for "...and the refusal hands it to the round arbiter" "$GLYPH" "make arbiter-bundle"
+rm -f "$CLONE/.git/review-rounds.json" "$CLONE/.git/pairing-state.json"; reset_prereq  # the close case_14 had before its split
+}
+
+case_14b() {  # split from case_14 (feature 383 amendment 4, plan D28): with case_11 the suite's long pole
+moved; reset_prereq; rm -f "$CLONE/.git/review-rounds.json"
+printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"
+GLYPH=$(stdin_for Agent '{"subagent_type":"glyph-check","prompt":"UNIT: settlement-review--testmap\njudge it"}')
+printf '{"gate_key":"%s"}' "$KEY" > "$CLONE/.git/pairing-state.json"
+green
 mkdir -p "$CLONE/.specify" "$CLONE/specs/900-x"; printf '{"feature_directory": "specs/900-x"}' > "$CLONE/.specify/feature.json"
 printf '{"specs/900-x":{"settlement-review--testmap":["k1","k2"]}}' > "$CLONE/.git/review-rounds.json"
 printf '{"trigger": "round:glyph-check|settlement-review--testmap@3", "ruling": "continue", "why": "a new finding"}\n' > "$CLONE/specs/900-x/arbiter.jsonl"
@@ -357,6 +381,15 @@ printf '{"specs/900-x":{"settlement-review--testmap":["k1","k2"]}}' > "$CLONE/.g
 check "two bare-key rounds before the batch landed leave the next batch its first round" '[ "$(rc_pretool "$GLYPH")" -eq 0 ]'
 ( cd "$CLONE" && git rm -rq --cached specs/900-x/tasks.md >/dev/null 2>&1; git -c user.email=t@t -c user.name=t commit -qm unland >/dev/null 2>&1; git update-ref refs/remotes/origin/main HEAD )
 rm -rf "$CLONE/.specify" "$CLONE/specs/900-x" "$CLONE/.git/arbiter-owed.json"
+rm -f "$CLONE/.git/review-rounds.json" "$CLONE/.git/pairing-state.json"; reset_prereq  # the close case_14 had before its split
+}
+
+case_14c() {  # split from case_14 (plan D28)
+moved; reset_prereq; rm -f "$CLONE/.git/review-rounds.json"
+printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"
+GLYPH=$(stdin_for Agent '{"subagent_type":"glyph-check","prompt":"UNIT: settlement-review--testmap\njudge it"}')
+printf '{"gate_key":"%s"}' "$KEY" > "$CLONE/.git/pairing-state.json"
+green
 printf '{"none":{"settlement-review--testmap":["k1","k2"]}}' > "$CLONE/.git/review-rounds.json"
 # GUARD_EDIT_OK: feature 379 FR-010 (the GM 2026-10-10) - the GM's-words waiver is retired: past the cap only the arbiter rules
 GLYPH_WAIVED=$(stdin_for Agent '{"subagent_type":"glyph-check","prompt":"UNIT: settlement-review--testmap\nREVIEW_ROUNDS_OK=\"the GM said: one more round is fine\""}')
@@ -429,8 +462,8 @@ reset_prereq
 # its own process - its own fixture, temporary files and guard log - and then only its cases (CASES), dealt longest first by
 # the measured seconds beside each case (10 s for a new one). Every check still runs and is counted; a part that ends before
 # a case reports fails the suite and names it. SUITE_PARTS=1 runs the cases one after another in this process, as before.
-ALL_CASES=(case_01 case_02 case_03 case_04 case_05 case_06 case_07 case_08 case_09 case_10 case_11 case_12 case_13 case_14 case_15 case_16)
-declare -A WEIGHT=([case_01]=9 [case_02]=3 [case_03]=1 [case_04]=1 [case_05]=1 [case_06]=3 [case_07]=2 [case_08]=5 [case_09]=1 [case_10]=1 [case_11]=16 [case_12]=4 [case_13]=10 [case_14]=9 [case_15]=5 [case_16]=10)
+ALL_CASES=(case_01 case_02 case_03 case_04 case_05 case_06 case_07 case_08 case_09 case_10 case_11 case_11b case_11c case_12 case_13 case_14 case_14b case_14c case_15 case_16)
+declare -A WEIGHT=([case_01]=9 [case_02]=3 [case_03]=1 [case_04]=1 [case_05]=1 [case_06]=1 [case_07]=1 [case_08]=3 [case_09]=1 [case_10]=1 [case_11]=5 [case_11b]=5 [case_11c]=5 [case_12]=6 [case_13]=3 [case_14]=6 [case_14b]=6 [case_14c]=4 [case_15]=3 [case_16]=6)  # seconds, each alone, measured 2026-10-17 (383 amendment 4)
 if [ -n "${CASES:-}" ]; then
   for c in $CASES; do "$c"; echo "@@reported $c"; done
   echo "@@counts $pass $fail"; exit 0
@@ -444,7 +477,9 @@ units() {  # "<weight> <case>[,<case>...]" per unit
   for c in "${CHAINS[@]}"; do w=0; for x in $c; do w=$((w + ${WEIGHT[$x]:-10})); done; echo "$w ${c// /,}"; done
   for c in "${ALL_CASES[@]}"; do [[ "$chained" == *" $c "* ]] || echo "${WEIGHT[$c]:-10} $c"; done
 }
-SUITE_PARTS=${SUITE_PARTS:-4}
+SUITE_PARTS=${SUITE_PARTS:-8}  # 8, not 4 (feature 383 amendment 4): with case_11 and case_14 split, see the measurement in 383 research R11
+# GUARD_EDIT_OK: feature 383 amendment 4 - PARTS_MAX (set by hooks-test's runner) caps the parts, as tests/hooks/parts.sh does: suites x parts hit the shared memory cap
+[ -n "${PARTS_MAX:-}" ] && [ "$SUITE_PARTS" -gt "$PARTS_MAX" ] && SUITE_PARTS=$PARTS_MAX
 if [ "$SUITE_PARTS" -le 1 ]; then
   for c in "${ALL_CASES[@]}"; do "$c"; done
 else

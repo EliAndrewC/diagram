@@ -164,12 +164,20 @@ want = data["expected"]
 # merely CONTAIN it (the first cut substituted those too and turned three reads into named writes).
 sub = lambda s: re.sub(r"(?<![\w./-])/diagram(?=/|[\s\"';&|):]|$)", main, s)
 got = collections.Counter(); wrong = []
-for i, row in enumerate(data["rows"]):
+# GUARD_EDIT_OK: feature 383 amendment 4 (plan D28) - THE ROWS ARE JUDGED SIDE BY SIDE: each is one call of the hook on its own
+# payload, sharing nothing but the fixture the hook only reads; one after another they were 42 of the suite's 56 s. Every row is
+# still judged and counted, and a wrong one is still reported in row order.
+import concurrent.futures
+for row in data["rows"]:
+    os.makedirs(sub(row["cwd"]), exist_ok=True)  # the recorded cwd must EXIST: the resolver derives the mirror from it through git
+def judge(row):
     cwd, cmd = sub(row["cwd"]), sub(row["command"])
-    os.makedirs(cwd, exist_ok=True)  # the recorded cwd must EXIST: the resolver derives the mirror from it through git
     payload = json.dumps({"session_id": "t", "cwd": cwd, "tool_name": "Bash", "transcript_path": t + "/none.jsonl", "tool_input": {"command": cmd}})
     p = subprocess.run([hook, "pretool"], input=payload, capture_output=True, text=True, cwd=main)
-    v = "refused" if p.returncode == 2 else ("rewrote" if "updatedInput" in p.stdout else "allowed") if p.returncode == 0 else f"rc{p.returncode}"
+    return cmd, "refused" if p.returncode == 2 else ("rewrote" if "updatedInput" in p.stdout else "allowed") if p.returncode == 0 else f"rc{p.returncode}"
+with concurrent.futures.ThreadPoolExecutor(8) as pool:
+    verdicts = list(pool.map(judge, data["rows"]))
+for i, (row, (cmd, v)) in enumerate(zip(data["rows"], verdicts)):
     got[v] += 1
     if v != row["verdict"]:
         wrong.append(f"row {i} ({row['ts']}): expected {row['verdict']}, got {v}: {cmd[:100]!r}")
