@@ -13,6 +13,7 @@ import sys
 import pytest
 
 from tests._scripts import script
+from tests.tooling._record_subset import subset
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
 
@@ -29,6 +30,13 @@ def _load(name: str):  # noqa: ANN202
 bo = _load("_bundle_owed")
 cb = _load("_check_bundle")
 U = bo.ru.Unit
+
+
+@pytest.fixture(scope="module")
+def rec(tmp_path_factory: pytest.TempPathFactory) -> pathlib.Path:
+    """The pages these tests name, copied (feature 383 amendment 5, plan D33): over the whole record they read 1,400 files
+    and re-ran on an edit to any of them."""
+    return subset(tmp_path_factory.mktemp("rec"), ("0028", "0083", "0094"), ("edo-enwiki", "kyakhta-trade-enwiki"))
 
 
 @pytest.fixture
@@ -66,10 +74,10 @@ def test_a_one_page_bundle_carries_only_that_pages_units(owing) -> None:  # noqa
     assert [u.slug for u in units] == ["quote-check:0094.drawing#b", "quote-check:0094.drawing#unfootnoted"]
 
 
-def test_a_reason_builds_it_anyway_and_a_bare_token_does_not(owing) -> None:  # noqa: ANN001
+def test_a_reason_builds_it_anyway_and_a_bare_token_does_not(owing, rec: pathlib.Path) -> None:  # noqa: ANN001
     owing()
-    assert "needs a REASON" in bo.owed_for_question(REPO, "0094", "intro-check", "x")[2]
-    units, checks, refusal = bo.owed_for_question(REPO, "0094", "intro-check", "feature 311 backfill")
+    assert "needs a REASON" in bo.owed_for_question(rec, "0094", "intro-check", "x")[2]
+    units, checks, refusal = bo.owed_for_question(rec, "0094", "intro-check", "feature 311 backfill")
     assert refusal == "" and checks == "intro-check" and [u.slug for u in units] == ["intro-check:0094"]
     assert bo.manifest_lines(units, checks, "feature 311 backfill").count("not-owed: feature 311 backfill") == 1
 
@@ -85,29 +93,29 @@ def test_quote_check_is_cut_to_the_owed_notes_and_whole_only_when_the_unfootnote
     assert bo.owed_notes([U("quote-check:0094#unfootnoted", "")]) == frozenset()
 
 
-def test_a_key_bundle_is_owed_by_its_write_up_or_a_note_citing_it_or_a_declared_new_claim(owing, monkeypatch) -> None:  # noqa: ANN001
+def test_a_key_bundle_is_owed_by_its_write_up_or_a_note_citing_it_or_a_declared_new_claim(owing, monkeypatch, rec: pathlib.Path) -> None:  # noqa: ANN001
     owing("source-applicability:edo-enwiki")
-    assert bo.owed_for_key(REPO, "edo-enwiki", False, "", "")[1] == "source-applicability"
-    assert "no source-applicability is owed on `kyakhta-trade-enwiki`" in bo.owed_for_key(REPO, "kyakhta-trade-enwiki", False, "", "")[2]
-    assert "NEW=" in bo.owed_for_key(REPO, "kyakhta-trade-enwiki", True, "", "")[2]
-    assert bo.owed_for_key(REPO, "kyakhta-trade-enwiki", True, "", "a claim about the post")[2] == ""
-    assert "needs a REASON" in bo.owed_for_key(REPO, "kyakhta-trade-enwiki", True, "", "x")[2]
+    assert bo.owed_for_key(rec, "edo-enwiki", False, "", "")[1] == "source-applicability"
+    assert "no source-applicability is owed on `kyakhta-trade-enwiki`" in bo.owed_for_key(rec, "kyakhta-trade-enwiki", False, "", "")[2]
+    assert "NEW=" in bo.owed_for_key(rec, "kyakhta-trade-enwiki", True, "", "")[2]
+    assert bo.owed_for_key(rec, "kyakhta-trade-enwiki", True, "", "a claim about the post")[2] == ""
+    assert "needs a REASON" in bo.owed_for_key(rec, "kyakhta-trade-enwiki", True, "", "x")[2]
     owing("source-reader:0094#kyakhta-trade-enwiki")
-    units, checks, refusal = bo.owed_for_key(REPO, "kyakhta-trade-enwiki", True, "", "")
+    units, checks, refusal = bo.owed_for_key(rec, "kyakhta-trade-enwiki", True, "", "")
     assert refusal == "" and checks == "source-reader" and [u.slug for u in units] == ["source-reader:0094#kyakhta-trade-enwiki"]
 
 
-def test_the_intro_bundle_holds_the_body_the_drawing_page_and_the_map_elements(owing, tmp_path: pathlib.Path) -> None:  # noqa: ANN001
-    text = bo.intro_bundle_text(REPO, "0094")
+def test_the_intro_bundle_holds_the_body_the_drawing_page_and_the_map_elements(owing, tmp_path: pathlib.Path, rec: pathlib.Path) -> None:  # noqa: ANN001
+    text = bo.intro_bundle_text(rec, "0094")
     assert "--- the research page" in text and "Kyakhta" in text and "<!--" not in text
     assert "--- how our maps draw it" in text and "- parley room\n" in text + "\n" and "(label:" not in text
-    assert bo.intro_bundle_text(REPO, "9999") == ""
+    assert bo.intro_bundle_text(rec, "9999") == ""
     owing()
-    assert cb.main(["--for", "intro-check", "--qs", "0094 0083", "--out", str(tmp_path / "b"), "--root", str(REPO)]) == 3
-    assert cb.main(["--for", "intro-check", "--qs", "0094 0083", "--not-owed-ok", "a seeded run", "--out", str(tmp_path / "b"), "--root", str(REPO)]) == 0
+    assert cb.main(["--for", "intro-check", "--qs", "0094 0083", "--out", str(tmp_path / "b"), "--root", str(rec)]) == 3
+    assert cb.main(["--for", "intro-check", "--qs", "0094 0083", "--not-owed-ok", "a seeded run", "--out", str(tmp_path / "b"), "--root", str(rec)]) == 0
     manifest = (tmp_path / "b" / "MANIFEST.md").read_text(encoding="utf-8")
     assert "2 questions, for intro-check" in manifest and "unit: intro-check:0083 " in manifest and "owed-checks: intro-check" in manifest
-    assert cb.main(["--for", "intro-check", "--qs", "9999", "--not-owed-ok", "a seeded run", "--out", str(tmp_path / "c"), "--root", str(REPO)]) == 2
+    assert cb.main(["--for", "intro-check", "--qs", "9999", "--not-owed-ok", "a seeded run", "--out", str(tmp_path / "c"), "--root", str(rec)]) == 2
 
 
 def test_a_kind_bundle_carries_only_that_modals_entry_drift_unit(owing, tmp_path: pathlib.Path) -> None:  # noqa: ANN001

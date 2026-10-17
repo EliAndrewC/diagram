@@ -184,7 +184,9 @@ def test_an_entry_kept_against_content_that_moved_is_dropped(tmp_path, monkeypat
     p = str(deps.ROOT / "data/p.html")
     s = str(deps.ROOT / "data/s.json")  # a session fixture's read, kept as a union across runs that never ran it
     ids["data/s.json"] = "s"
-    kept = run("one", ["tests/tooling/test_a.py::t1", "tests/tooling/test_a.py::t2"], {"tests/tooling/test_a.py::t1": {"file": [p]}, "tests/tooling/test_a.py::t2": {"file": [p]}, deps.SESSION: {"file": [s]}})
+    kept = run(
+        "one", ["tests/tooling/test_a.py::t1", "tests/tooling/test_a.py::t2"], {"tests/tooling/test_a.py::t1": {"file": [p]}, "tests/tooling/test_a.py::t2": {"file": [p]}, deps.SESSION: {"file": [s]}}
+    )
     assert kept["states"]["f:data/p.html"] == "old" and len(kept["tests"]) == 2
     ids["data/p.html"] = "new"  # the page edited; only t1 runs again
     kept = run("two", ["tests/tooling/test_a.py::t1"], {"tests/tooling/test_a.py::t1": {"file": [p]}})
