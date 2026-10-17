@@ -8,6 +8,8 @@
 
 **Approved**: the GM, 2026-10-17, "the shape that you have proposed looks right. So please file it, draft checklist version 1, and start the cheap audit."
 
+**Amendment 1 approved**: the GM, 2026-10-17, "Yes, please append the spec to include those four items."
+
 **Affects**: tooling, review process, hamlet, research record
 
 **Input**: `request.md` - the GM, 2026-10-17, verbatim.
@@ -114,6 +116,24 @@ ranking's rows chosen to be of different kinds, so the checklist is tried on mor
   `audit/waves.json` with their wave. 384's FR-002 (374's rules as amended by 375 and 383) and FR-004 (the usage cap it sets)
   apply to them.
 
+### Amendment 1 - T02 takes the check costs T01 measured (the GM, 2026-10-17)
+
+T01 took about 3 h 22 min (`retro.md`), about 50 min of it - the session's estimate, as given to the GM - the checks two bullets on one
+research page owed. T02 adds four
+items to FR-003 to FR-005, each measured on T01's own record (observed 2026-10-17, method: `retro.md`'s T01 row, timed by hand from its
+decision points, and the record checks' own counts in `dev/review-ledger.md`):
+
+- **FR-008 (a re-check reads against what the last check read)**: a pop-up or claim re-owed by a page change is triaged against
+  the page version its last check READ, not an older baseline - T01's one-word vocabulary fix re-owed ten pop-ups and 229 claims
+  (`make claims-owed` after the fix: "229 claim(s) owe only a TRIAGE of the blocks that changed on their pages")
+  already checked against the page with that word in it.
+- **FR-009 (one check where several are spent today)**: a page-wide record unit (quote-check's `#unfootnoted`) is answered by one
+  batch, and the pop-ups a changed page re-owes for one check kind are judged by one agent, not one agent each.
+- **FR-010 (a guard, not a reminder)**: a write to the working tree while the session's own gate runs is refused, naming the
+  verdict wait (`make verify-wait`) - checklist C6 made a guard; T01 voided two gates this way.
+- **FR-011 (the cost measured)**: T02 records what each check cost per changed line (dispatches, tokens, wall time), so the next
+  task shows whether FR-008 to FR-010 paid.
+
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
@@ -126,6 +146,8 @@ ranking's rows chosen to be of different kinds, so the checklist is tried on mor
 - **SC-003** (FR-007): the lane law's success criteria as 384 states them (User Story 0's Independent Test), and 384's SC-004 for
   T48.
 - **SC-004** (FR-003, FR-004): the refusals of FR-003 and FR-004 each have a test that is red without them.
+- **SC-005** (FR-008, FR-009, FR-010, FR-011): on the next task, the checks owed per changed line - dispatches, tokens and wall time - are below
+  T01's, measured by FR-011's record; or the report says why not.
 
 ## Decisions Recorded
 

@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-17T18:55:35Z",
+  "target": "claims-gate",
+  "commit": "ce03950ab",
+  "why": "CLAIMS_OK: the round arbiter's binding ruling ask:t01-claim-labels sends the findings on code this change did not write (the doubled-tail labels, _ease_corner, CARRY_FT, tree_faults, spur_cut_at_the_fold, settle_shapes, _smooth_web) to claims-report rows, not this landing"
+}
