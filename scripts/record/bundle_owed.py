@@ -121,10 +121,12 @@ def manifest_lines(units: list[ru.Unit], owed_checks: str, escape: str = "") -> 
     return "\n".join(lines) + "\n"
 
 
-def batch_units(units: list[ru.Unit], batch: frozenset[str]) -> list[ru.Unit]:
+def batch_units(units: list[ru.Unit], batch: frozenset[str], first: bool = True) -> list[ru.Unit]:
     """The owed units ONE quote-check batch can answer: its own notes', and the unfootnoted reading every batch carries.
-    Feature 317: each batch carried every owed unit, so the batch holding none of the changed notes answered them all."""
-    return [u for u in units if u.subject.partition("#")[2] in batch or u.subject.partition("#")[2] == "unfootnoted"]
+    Feature 317: each batch carried every owed unit, so the batch holding none of the changed notes answered them all. The
+    unfootnoted unit rides the FIRST batch alone (feature 385 T02, plan D12): T01 found it in all four of 0081's batches, four
+    agents for one unit."""
+    return [u for u in units if u.subject.partition("#")[2] in batch or (first and u.subject.partition("#")[2] == "unfootnoted")]
 
 
 def kind_units(units: list[ru.Unit], key: str) -> list[ru.Unit]:

@@ -623,6 +623,38 @@ def bundle(root: pathlib.Path, kind: str, for_: str, out_arg: str, reason: str =
     return 0
 
 
+def bundles(root: pathlib.Path, kinds: Sequence[str], for_: str, out_arg: str, reason: str = "") -> int:
+    """ONE AGENT FOR SEVERAL POP-UPS OF ONE CHECK (feature 385 T02, plan D12): T01 sent ten agents, one per pop-up, to judge one
+    changed page's bullets, each reading the same drawing pages. Each pop-up keeps its own bundle (`bundle`, under `out/<n>-<kind>`),
+    answered unit by unit by `make record-checked BUNDLE=<its bundle>` as before; the top MANIFEST hands all of them to one agent
+    and carries their `unit:` lines, so the dispatch guard sees what is owed."""
+    out = pathlib.Path(out_arg) if out_arg else pathlib.Path("/tmp/l7r-check") / f"modal-batch-{for_}"
+    if out.exists():
+        shutil.rmtree(out)
+    out.mkdir(parents=True)
+    subs: list[pathlib.Path] = []
+    for n, kind in enumerate(kinds, start=1):
+        sub = out / f"{n:02d}-{re.sub(r'[^A-Za-z0-9]+', '-', kind).strip('-')}"
+        code = bundle(root, kind, for_, str(sub), reason)
+        if code:
+            return code
+        subs.append(sub)
+    units = [ln for s in subs for ln in (s / "MANIFEST.md").read_text(encoding="utf-8").splitlines() if ln.startswith("unit: ")]
+    parts = [
+        f"# {len(subs)} pop-ups for {for_}, one agent (feature 385, plan D12)\n",
+        f"owed-checks: {for_}\n",
+        "Judge EACH pop-up below from its own bundle, as your contract says, and reply with one section per pop-up, headed by "
+        "its `unit:` line. The drawing pages repeat from bundle to bundle: read each page once.\n",
+        *[f"- `{s / 'MANIFEST.md'}`" for s in subs],
+        "",
+        *units,
+    ]
+    (out / "MANIFEST.md").write_text("\n".join(parts) + "\n", encoding="utf-8")
+    print(f"modal-bundle: {len(subs)} pop-ups in one bundle - dispatch ONE {for_} agent on {out / 'MANIFEST.md'}; record each with "
+          f"make record-checked CHECK={for_} BUNDLE=<its own bundle>")
+    return 0
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("kind")
@@ -640,6 +672,9 @@ def main(argv: Sequence[str] | None = None) -> int:
             return 2
         sys.stdout.write(prepass(root, m))
         return 0
+    kinds = args.kind.split()
+    if len(kinds) > 1:  # ...several KIND=s for one check: one agent (feature 385, plan D12)
+        return bundles(root, kinds, args.for_, args.out, args.reason)
     return bundle(root, args.kind, args.for_, args.out, args.reason)
 
 

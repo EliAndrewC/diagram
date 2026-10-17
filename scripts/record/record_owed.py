@@ -36,7 +36,7 @@ import subprocess
 import sys
 import time
 import urllib.parse
-from collections.abc import Sequence
+from collections.abc import Collection, Sequence
 from typing import Any
 
 HERE = pathlib.Path(__file__).resolve().parent
@@ -386,12 +386,20 @@ def modal_classes(key: str, base: pathlib.Path = _KINDS) -> list[str]:
     return [f"{mod}.{cls}" if len(hits) > 1 else cls for mod, cls in hits]
 
 
-def report(rows: Sequence[ru.Unit], now: ru.Record | None = None) -> str:
+def report(rows: Sequence[ru.Unit], now: ru.Record | None = None, answered_slugs: Collection[str] = ()) -> str:
+    """The listing. With `answered_slugs` (the default listing), each unit already answered is marked so and the header says
+    how many are still unanswered: T01 of feature 385 read the full listing as owed and went looking for three more quote-check
+    batches after one had answered (plan D12)."""
     if not rows:
         return "record-owed: no record check is owed\n"
-    lines = [f"record-owed: {len(rows)} unit(s) owed"]
+    left = [u for u in rows if u.slug not in answered_slugs]
+    head = f"record-owed: {len(rows)} unit(s) owed" + (f" by the delta, {len(left)} still unanswered" if answered_slugs else "")
+    lines = [head]
     for u in rows:
-        lines.append(f"  {u.slug}  - {u.occasion}\n      {command(u, now)}")
+        if u.slug in answered_slugs:
+            lines.append(f"  [answered] {u.slug}  - {u.occasion}")
+        else:
+            lines.append(f"  {u.slug}  - {u.occasion}\n      {command(u, now)}")
     lines.append("Answer each with `make record-checked CHECK=<check> BUNDLE=<its bundle> RESULT=\"<counts>\"` when its check returns.")
     return "\n".join(lines) + "\n"
 
@@ -545,7 +553,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.slugs:
         print("".join(u.slug + "\n" for u in rows), end="")
     else:
-        print(report(rows, read_at(root, args.between[1] if args.between else None)), end="")
+        done = set() if args.unanswered or args.between else {u.slug for u in rows} - {u.slug for u in unanswered(root)}
+        print(report(rows, read_at(root, args.between[1] if args.between else None), done), end="")
     return 0
 
 
