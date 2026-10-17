@@ -382,6 +382,23 @@ Owed by the hour-6 step-back (`hour:385-approach-checklist@6`, ruled `change-rou
 8. **The budget.** About 1 h 50 min used of 4 h. The gate, the checks and the retro remain.
 9. **Done, measured.** D25: the four pass, nothing newly fails against HEAD, every exit owned by T12.
 
+### T03 part B (2026-10-17T23:08Z)
+
+Owed by the hour-7 step-back (`hour:385-approach-checklist@7`, ruled `continue`).
+
+1. **What is refusing?** Nothing in the map: the gate is green, and every claims and record check is answered. The tick was held
+   only by this hour's step-back and its tooling fix (now landed).
+2. **A3 again.** Unchanged since the 22:20 block: the merge's reach is O and T12's; the two known gaps (`FIELD_REACH_FT`'s
+   reach, the doubled tail's 15 degrees) are DRIFTED against 0014 and 0081 and carried to T12.
+3. **A4 again.** n/a - no rule refused anything this hour.
+4. **Moving earlier for later?** No.
+5. **Tuning or changing?** Neither: three claims rounds and two pop-up rounds, each answering the last, the third pop-up round
+   accepted by the arbiter.
+6. **The one-sentence test.** "T03 lands its four seeds and carries the merge" - the rulings say so.
+7. **The next step is a measurement**: the tick, then the per-task table compared with T01's.
+8. **Routes measured?** Nothing is being asked.
+9. **After a ruling.** `continue`: tick and land.
+
 ### T03 Decisions
 
 Written by the session from the blind block (FR-012). Where the block and the session's sealed notes differ (seeds 17 and 21),
