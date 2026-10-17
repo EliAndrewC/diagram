@@ -327,11 +327,13 @@ echo "12. the prompt hook's path: render-sync detached, one runner at a time, a 
 D=$(topology bg)
 mkdir -p "$D/main"
 MARK="$D/rendered"
-printf 'render-sync:\n\t@sleep 2; git -C %s rev-parse --short HEAD >> %s\n' "$D/main" "$MARK" > "$D/main/Makefile"
+printf 'render-sync:\n\t@sleep 6; git -C %s rev-parse --short HEAD >> %s\n' "$D/main" "$MARK" > "$D/main/Makefile"
 ( cd "$D/seed" && echo more > g && git add -A && git commit -qm upstream && git push -q "$D/github.git" HEAD:main )
 start=$(date +%s)
 OUT=$(syncmain "$D" sync-in --background-render); check "sync-in --background-render" 0 $?
-[ $(( $(date +%s) - start )) -lt 2 ] && [ ! -f "$MARK" ] && PASS=$((PASS+1)) || { echo "FAIL  sync-in waited for the render"; FAIL=$((FAIL+1)); }
+# The fake render sleeps 6 s and the bound is 5 s: a 2 s bound against a 2 s render failed under memory pressure (the gate of
+# 2026-10-17, containers at their cap) though sync-in did not wait - the margin is what tells waiting from slow.
+[ $(( $(date +%s) - start )) -lt 5 ] && [ ! -f "$MARK" ] && PASS=$((PASS+1)) || { echo "FAIL  sync-in waited for the render"; FAIL=$((FAIL+1)); }
 expect_out "render-sync started in the background"
 [ "$(git -C "$D/main/.clones/c" rev-parse HEAD)" = "$(git -C "$D/github.git" rev-parse main)" ] && PASS=$((PASS+1)) || { echo "FAIL  clone did not merge"; FAIL=$((FAIL+1)); }
 # a second start while the first runs exits at once and does not render twice
