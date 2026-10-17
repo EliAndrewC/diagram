@@ -235,7 +235,7 @@ long-running feature does for itself, on the clock glyph-check already keeps.
   editing it.
 - **FR-038 No 1-hour subagent cache.** A test fails when a project setting, an agent file or the container's setup turns on a
   1-hour subagent prompt cache (`experimental.cacheTtl`, `CLAUDE_CODE_SUBAGENT_PROMPT_CACHE_TTL`).
-- **FR-039 A fan-out launches one first.** When several dispatches of one agent type go out together, the first goes alone and
+- **FR-039 A fan-out launches one first.** (Withdrawn by FR-042, amendment 7: research R20.) When several dispatches of one agent type go out together, the first goes alone and
   the rest follow once it has started, so they read its cached prefix; the dispatch rules say so and a guard holds it.
 - **FR-040 CLAUDE.md is an always-on core plus an index.** The root CLAUDE.md (and each nested one) keeps the rules a session
   needs before it knows to open a doc, one line each, and an index; the rest moves VERBATIM into topic docs that open with
@@ -250,18 +250,22 @@ long-running feature does for itself, on the clock glyph-check already keeps.
   extra main-session turn it forces re-reads the whole context, which costs more than the prefix it saves (research R20).
 - **FR-043 A wave of 4 or more agents of one type runs as a Workflow, each agent typed.** Every `agent()` call passes
   `agentType`, so its definition (`omitClaudeMd`, its few tools) applies rather than the workflow's default subagent; the main
-  session gets one notification for the wave; per-item follow-up is a `pipeline()` stage. A saved workflow, `check-wave`,
-  carries a wave of typed checks: its arguments are the agent type and the units (each a label and its prompt), and it returns
-  each unit's reply. Two or three agents of one type stay plain Agent calls in one message.
+  session gets one notification for the wave; per-item follow-up is a `pipeline()` stage; each agent returns a `schema` object,
+  not prose. A saved workflow, `check-wave`, carries a wave of typed checks: its arguments are the agent type and the units
+  (each a label and its prompt), and it returns one object per unit - its label, its verdict word and its reply text (which the
+  answer-recording commands read whole). Two or three agents of one type stay plain Agent calls in one message.
 - **FR-044 The appended system prompt authorizes it, narrowly.** `scripts/container/append-system-prompt.md` pre-authorizes
-  `Workflow` for a wave of 4 or more agents of one defined type that exists in `.claude/agents/`, with `agentType` on every call,
-  and nothing broader (no general-purpose fleets, new kinds of fan-out or deep research without the GM's request); a test holds
-  that the text exists and names only defined agents.
+  `Workflow` for a wave of 4 or more agents of one of the NAMED recurring wave jobs - source-applicability, quote-check,
+  settlement-review, entry-drift, modal-depiction, record-format, impl-drift, modal-research, building-review, source-reader,
+  glyph-check, modal-form, round-arbiter, and the claims-triage and modal-triage agents that replaced general-purpose waves -
+  with `agentType` on every call, and nothing broader (no general-purpose fleets, new kinds of fan-out or deep research without the GM's request); a test holds
+  that the text exists and names only those jobs, each with a file in `.claude/agents/`.
 - **FR-045 Hooks hold it, and a wave keeps every guard a check has.** An Agent launch that is the 4th of one type within about
   ten seconds is refused with the Workflow form in the message (`WAVE_OK` with a reason passes); a `Workflow` whose script calls
   `agent(` without `agentType` is refused (`GP_OK` passes); and every unit of a `check-wave` run is held by the same per-dispatch
   guards an Agent call of its type is (model, repeated block, bundle and owed check, decide-first, freeze, round caps, review
-  occasions, escalation), its launch and return recorded as an Agent call's are - a guard the hooks of the Agent tool apply is
+  occasions, escalation), its launch and return recorded as an Agent call's are; a `Workflow` whose script calls a typed
+  `agent(` of a type those guards cover other than through `check-wave` is refused, - a guard the hooks of the Agent tool apply is
   never skipped because the check ran in a workflow (research R20: no PreToolUse or PostToolUse Agent hook fires for an agent a
   workflow spawns). Each hook has its suite cases.
 - **FR-046 The first real wave is measured.** A wave of 4 or more real checks run through `check-wave`: each agent's
@@ -356,16 +360,19 @@ long-running feature does for itself, on the clock glyph-check already keeps.
   CLAUDE.md's rule and guard row, `docs/guards.md` and `docs/spec-kit-and-reviews.md` name only the agent-file fix, none saying to
   put shared text first.
 - **SC-028** (FR-038, FR-039) The TTL test fails on a seeded 1-hour setting; a staggered fan-out's later launches read the
-  first's prefix from the cache, measured against a fan-out sent together (first-request read and write per launch).
-- **SC-029** (FR-040) The root CLAUDE.md's size before (37,662 characters, observed 2026-10-17; `wc -c`) and after, and a fresh
+  first's prefix from the cache, measured against a fan-out sent together (first-request read and write per launch) - kept as
+  R18's measurement; FR-039 is withdrawn and nothing enforces it.
+- **SC-029** (FR-040) The root CLAUDE.md's size before (37,662 characters when filed, 37,985 at the trim after main added a
+  line; observed 2026-10-17; `wc -c`) and after, and a fresh
   session's first request before and after; the enumeration's verdicts with none left dropped or unreachable.
 - **SC-030** (FR-041) The families' table: launches per family since 2026-09-19, the last date each recurred, and what each
   became.
 - **SC-031** (FR-042, FR-045) The guard no longer refuses a second launch within seconds of a cold first; it refuses the 4th
   same-type launch within the guard's window (a design number, ten seconds) and passes the 3rd, a different type, and `WAVE_OK`; a `Workflow` script with an untyped
-  `agent(` is refused and `GP_OK` passes (suite cases); and a `check-wave` unit a guard of its type would refuse is refused,
+  `agent(` is refused and `GP_OK` passes, and one calling a guarded type outside `check-wave` is refused (suite cases); and a `check-wave` unit a guard of its type would refuse is refused,
   with the guard's own message.
-- **SC-032** (FR-044) The test fails when the authorization is missing or names an agent with no file.
+- **SC-032** (FR-044) The test fails when the authorization is missing, names an agent with no file, or names a job outside the
+  list.
 - **SC-033** (FR-045) A `check-wave` run's units are recorded launched and returned as Agent calls' are (the freeze holds while
   one runs) - a test on recorded hook payloads, and the event log of the measured wave.
 - **SC-034** (FR-043, FR-046) The measured wave, run through `check-wave` with every agent typed: per-agent first-request read and write, and the main session's wakes, against the last
