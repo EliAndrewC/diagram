@@ -171,7 +171,8 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 - **FR-025 A slow guard suite runs in parallel parts.** Every guard suite over 20 s run alone - main-tree 57.7 s, no-poll 48.4 s,
   finished-run 39.1 s, pair 23.5 s and review-gate 21.8 s (observed 2026-10-17, method: each suite run alone under `time`,
   load about 4) - is dealt into parts that run at the same time, as sync-with-main's are, or, where its time is waiting
-  rather than work, has the wait cut; every check still runs and is counted.
+  rather than work, has the wait in its tests cut, without changing what the guard does or which checks run; every check
+  still runs and is counted.
 - **FR-026 The tooling tests that read the whole repository take less time.** The tests a landing cannot reuse because they read
   the whole repository - the longest, test_content_cache's whole-repository comparison (9.4 s) and test_open_questions on the
   real tree (4.8 s; observed 2026-10-17, method: a fresh worktree's tooling run with per-test times) - are split into parts
@@ -239,7 +240,7 @@ long-running feature does for itself, on the clock glyph-check already keeps.
   cost against the Opus run; the tier each check ends on; `tests/test_agent_models.py` green with the table matching the
   files.
 
-- **SC-019** (FR-025) Each split suite timed whole before and after, its check count the same; `make hooks-test` with every suite
+- **SC-019** (FR-025) Each split or wait-cut suite timed whole before and after, its check count the same; `make hooks-test` with every suite
   (`HOOKS_ALL=1`) timed before and after.
 - **SC-020** (FR-026, FR-027) The tooling run in a fresh worktree at the clone's HEAD timed before and after, with the tests that
   ran and the longest single test; the start-up parts measured; a real landing measured before (m:land-tooling-landing-a3) and
