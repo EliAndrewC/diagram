@@ -153,7 +153,7 @@ def triage_bundle(
         shutil.rmtree(out)
     out.mkdir(parents=True)
     memo: dict[str, Any] = {}
-    by_page: dict[str, list[str]] = {}
+    by_page: dict[tuple[str, str], list[str]] = {}  # (page, the version its claims were checked at) - feature 385 plan D11
     changed: dict[str, list[str]] = {}
     gone: dict[str, list[str]] = {}
     lost: dict[tuple[str, str], bool] = {}
@@ -187,9 +187,10 @@ def triage_bundle(
             if lost[(name, old)]:
                 forced.add(key)
             if fresh or gone[f"{name}|{old}"]:
-                changed[name] = fresh
-                gone[name] = sorted(set(gone.get(name, [])) | set(gone[f"{name}|{old}"]))
-                by_page.setdefault(name, []).append(key)
+                # ...GROUPED BY THE VERSION EACH CLAIM WAS CHECKED AT (feature 385 T02, plan D11): one page's blocks were one
+                # union for every claim citing it, so claims checked at different versions each saw the others' changes
+                changed[f"{name}|{old}"] = fresh
+                by_page.setdefault((name, old), []).append(key)
     parts = [
         "# Triage of claim re-checks (feature 318)\n",
         "owed-checks: claims-triage\n",
@@ -207,12 +208,12 @@ def triage_bundle(
         for k in sorted(ks):
             parts.append(f"- KEY `{k}`: `{cur[k].claim.line}` - last verdict {index[k].get('verdict')}: {index[k].get('note', '')}")
         parts.append("")
-    for name, ks in sorted(by_page.items()):
-        parts.append(f"## {QUESTIONS}/{name}\n\nNew or changed blocks:\n")
-        parts += [f"> {w}\n" for w in changed[name]] or ["(none)\n"]
-        if gone.get(name):
+    for (name, old), ks in sorted(by_page.items()):
+        parts.append(f"## {QUESTIONS}/{name}\n\n(against the version these claims were last checked at, {old[:12]})\n\nNew or changed blocks:\n")
+        parts += [f"> {w}\n" for w in changed[f"{name}|{old}"]] or ["(none)\n"]
+        if gone.get(f"{name}|{old}"):
             parts.append("Removed blocks (no longer on the page):\n")
-            parts += [f"> {w}\n" for w in gone[name]]
+            parts += [f"> {w}\n" for w in gone[f"{name}|{old}"]]
         parts.append("Claims citing it:\n")
         for k in sorted(ks):
             parts.append(f"- KEY `{k}`: `{cur[k].claim.line}` - last verdict {index[k].get('verdict')}: {index[k].get('note', '')}")

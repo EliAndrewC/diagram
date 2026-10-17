@@ -178,6 +178,16 @@
         ]
       },
       {
+        "matcher": "Bash|Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/gate-write-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/gate-write-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 385 - a NEW guard (amendment 1 FR-010): no write to the tree while its own gate runs",
+            "timeout": 10
+          }
+        ]
+      },
+      {
         "matcher": "Bash",
         "hooks": [
           {

@@ -313,6 +313,11 @@ _ESCAPES = {
     ),
     "LEDGER_LINT_OK": ("command", "feature 294: ledger-hooks.sh reaches it through escape_or_refuse, so hookmatch.py escape anchors it"),
     "GUARD_EDIT_OK": ("command", "classify() routes through escape_used; also a marker in edit CONTENT"),
+    "GATE_WRITE_OK": (
+        "command",
+        "feature 385 (plan D13): gate-write-hooks.sh reaches it through escape_or_refuse, so hookmatch.py escape "
+        "anchors it as an invocation in the command - a deliberate write while this tree's own gate runs",
+    ),
     "CONFLICT_MARKERS_OK": (
         "command",
         "feature 241: conflict-marker-hooks.sh reaches it through escape_or_refuse, so hookmatch.py "

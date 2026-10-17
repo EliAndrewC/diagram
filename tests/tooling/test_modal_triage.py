@@ -218,3 +218,22 @@ def test_modal_form_holds_m13s_about_side_and_depiction_reports_nothing_from_abo
     assert "does NOT belong in About: it goes on the Depiction tab" in " ".join(form.split())
     depiction = " ".join((root / ".claude/agents/modal-depiction.md").read_text(encoding="utf-8").split())
     assert "report nothing from About" in depiction and "sits in About instead belongs here" not in depiction
+
+
+def test_a_triage_answer_keeps_a_baseline_and_the_next_change_shows_alone(drawn: pathlib.Path) -> None:
+    """Feature 385 T02 (plan D11): the triage's own "untouched" answer keeps the page it showed, so the next triage diffs
+    against that - T01's one-word fix re-showed both of its new bullets to every pop-up, because the untouched answers had
+    erased the blobs and every unit fell back to the merge base."""
+    store = ro.store(drawn)
+    _edit(drawn, "Wells stand by the door.", "Wells stand by the kitchen.")
+    manifest, _n = mt.bundle(drawn, drawn.parent / "t")
+    data = json.loads((manifest.parent / "triage.json").read_text())
+    assert "(against the merge base (no check has read it yet))" in manifest.read_text(encoding="utf-8")
+    assert mt.record(store, data["units"], "nothing touched\n", data["pages"], data["blobs"]) == []
+    assert "research/questions/0029-farmhouses-minka.drawing.html" in ro._read(store, DEP)["pages"], "the shown page kept"
+    _edit(drawn, "the kitchen", "the hearth")
+    manifest, _n = mt.bundle(drawn, drawn.parent / "t2")
+    text = manifest.read_text(encoding="utf-8")
+    assert "> Wells stand by the hearth." in text and "Wells stand by the kitchen." in text.split("Removed blocks")[1]
+    assert "Wells stand by the door." not in text, "the change already triaged is not shown again"
+    assert "(against the version these pop-ups' last check read)" in text
