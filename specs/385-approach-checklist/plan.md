@@ -80,7 +80,8 @@ rules, the session stops at part B before writing D2 or D4.
 its two obstacle families (`clearance.py`, the clear-stretch scan): `obstacles` - crop, marsh, the wet toe - and `tight` - the
 houses, yards, gardens and groves - with the fixtures (`fixture_quads`) and solid boxes (`solid_boxes`) the fabric rules read. A
 kind the settle routes round and this ground left out would be a shape the settle made and the law refused, so the two are one
-set; `lane-law-table.md` says at its row why any kind is out. The ground is indexed once per manifest
+set; `lane-law-table.md` says at its row why any kind is out. The test asked is the settle's own, `Lawful.on_lawful_ground` on the
+chord (built from the manifest alone: its fabric and worked ground read only `M`), so the law and the settle cannot differ on it; the ground is indexed once per manifest
 (`settlement/_geom/indexes.py`, the overlap-check rule) and asked two ways:
 - **a TURN** (a kink, a hairpin, a hook, a folded joint, a connector hairpin): forced when the chord past the turn - from the
   vertex before it to the vertex after, swept at the lane's width - crosses that ground;
@@ -100,19 +101,34 @@ XIV): seed 21's refusal named lanes and no rule (`.git/cohort48-head.log` in dia
 `m:w156-redeal-cohort`).
 
 **D4 - Side by side becomes one, never refused.** Every needle D2 does not call forced is merged: the two treads become one path
-from where they come alongside. The settle's existing cut does the common case - the needle is the doubled tail seen from the
-other side, so `tails.along_tail` walks in from the lane's end to where it came alongside the way and `cut_at_tail` ends it there on
-the tread, asked for a needle end at `NEEDLE_DEG` where it is asked today at `_DOUBLED_DEG` (`settle.py` 380-403). Where that cut
-would strand something - a house, a join, a tree lane's reach hanging on the cut stretch - the merge is chosen so that nothing is
-lost: the OTHER lane is cut back instead, or what hangs on the cut stretch is carried onto the shared tread, so the two run as one
-until they part. Which lane is cut, or re-rooted, is chosen to keep every reach (a tree lane's reach is never lost); a needle that
-is not forced is never left as a violation and never reaches `last_resort` or `refuse_unmended`. If measurement finds a needle
-where no merge keeps every reach, it goes to an exception check (constitution XVI) with that case before anything else is done
-with it. The GM's ruling (G, 2026-10-17): *"if there are two different footpaths that are nearly parallel to each other and very
-close together, then that is the kind of situation in which a single footpath would emerge"*; 384's User Story 0: *"merged into one
-path, never refused"*.
+from where they come alongside. The settle's needle repair already is that merge for an ordinary lane: `settle.reaimed` lays the
+end from the last vertex before it whose leg to its foot on the tread meets cleanly, dropping the stretch that ran beside the
+tread (and `tails.along_tail` / `cut_at_tail` do it for a doubled tail). Measured (part B, 16:00, `retro.md`), what is NOT merged
+today, and is made so:
+- **a household's way** (a tree lane, `ACCESS_ROLE`): its foot - never its door end - is re-aimed by the same `reaimed`, its
+  reserved corridor rewritten with it (`tree.set_corridor`, as the knot gather already does for a foot), so it ends on the way it
+  ran beside and its household stays reached through that way. A tree lane other than a household's way (the connector, a street,
+  the field way, a target's spur) is never cut; where such a lane is one of the two, the OTHER lane is the one re-aimed;
+- **a shallow crossing**: a lane crossing another way at under `NEEDLE_DEG` is two paths side by side (seed 10 under the wave 155
+  patch: a household's way crossing the field way at about 19 degrees and running on beside it to the field way's start). It is
+  cut at the crossing on its foot's side - the run past the crossing beside the way is the same path doubled - and the end left on
+  the way is then a needle, merged as above.
+A needle or shallow crossing that is not forced is never left as a violation and never reaches `last_resort` or `refuse_unmended`.
+Which lane is re-aimed is chosen to keep every reach: if re-aiming the one would strand a house or a join, the other is re-aimed;
+if measurement finds a case where no re-aim keeps every reach, it goes to an exception check (constitution XVI) with that case
+before anything else is done with it. The GM's ruling (G, 2026-10-17): *"if there are two different footpaths that are nearly
+parallel to each other and very close together, then that is the kind of situation in which a single footpath would emerge"*;
+384's User Story 0: *"merged into one path, never refused"*.
 
-**D5 - Nothing else moves.** No threshold changes value, no rule outside the angle and doubling rules changes, and no homestead,
+**D4b - The knot rule reads the ground (measured, part B 16:00).** The knot rule (`knots.knots`, the settle's gather, and
+`knots.lane_knots`, the cohort's and the pool test's verdict) counts two ends within `_KNOT_FT` as a knot only where the straight
+join between them stands on lawful ground (`Lawful.on_lawful_ground`, the D2 ground): two ends with a garden, a yard or a house
+between them are two paths either side of a fence, not *"three lanes ... a few feet apart in a knot"* (0081). Seed 24 under the
+wave 155 patch: its gather was refused six times for the fabric between the two ends. The callers hand the manifest in
+(`lane_knots(lanes, M)`); with no manifest the rule reads as today. Class: deliberate reading of 0081's knot rule, the drawing page
+says so.
+
+**D5 - Nothing else moves.** No threshold changes value, no rule outside the angle and doubling rules and the knot rule (D4b) changes, and no homestead,
 fixture or seat moves. A rule the table finds describing no walker's behavior is retired only with its reason at the predicate
 and on the drawing page; none is expected.
 

@@ -35,6 +35,7 @@ over open ground become one path (plan D4).
 | `doubled_tails` | `doubled_tails` (`tails.tail_doubled`) | a way drawn twice: an end running on beside another way | O (UNRESEARCHED: "no page we read covers a way drawn twice"); the merge is G 2026-10-17 | within 15 deg | kept, and is the merge's own cut (plan D4) |
 | `needle_loops` | `needle_loops` | two ways laid round a sliver of ground too narrow to be anything | O; the merge is G 2026-10-17 | a face under `NEEDLE_LOOP_FT` mean width | kept (the settle opens or welds it); a sliver this narrow holds no house, so nothing forces it |
 | `joins_short` | `near_misses` | ends that nearly meet are joined at one point | R 0081 ("Lane ends that nearly meet are joined"); numbers O | within 25 ft | kept |
+| (the gate's `lane_knots`) | `knots.knots`, `knots.lane_knots` | three lanes do not arrive a few feet apart: ends that nearly meet are one junction | R 0081; numbers O | within 25 ft | obstruction-aware (plan D4b): two ends with fabric between them are two paths either side of a fence, not a knot |
 | `width_steps` | `width_steps` | one way keeps one width | R 0081 | none | kept |
 | `networks` | `lane_networks` | the lanes are one network | R 0246 | joined at 4 ft | kept |
 | `fragments` | `short_fragments` | a scrap of lane that serves nothing | O (UNRESEARCHED: debris) | under 30 ft | kept (no walker wears a path to nothing) |
@@ -70,8 +71,8 @@ over open ground become one path (plan D4).
 
 ## What changes
 
-Five rules become obstruction-aware (`bends`, `hooks`, `folded_joints`, `connector_hairpins`, `needle_joins`), and the needle over
-open grass is merged by the doubled tail's cut. Every other rule describes how people walk or a fact of the map, everywhere it
+Six rules become obstruction-aware (`bends`, `hooks`, `folded_joints`, `connector_hairpins`, `needle_joins`, and the knot rule), and the needle over
+open grass is merged by the settle's re-aim (`reaimed`), extended to a household's way's foot and to a shallow crossing (plan D4). Every other rule describes how people walk or a fact of the map, everywhere it
 applies, and is kept. No rule is retired. No number changes value (plan D5).
 
 ## The ground that forces a turn (plan D2)
