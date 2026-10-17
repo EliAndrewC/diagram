@@ -48,19 +48,19 @@ TIERS: dict[str, tuple[str, str]] = {
     "record-style": ("opus", "high"),
     "translation-check": ("opus", "medium"),  # feature 292: judgment of meaning; no seeded downgrade run yet
     "intro-check": ("opus", "medium"),  # feature 311: judgment about a reader; seeded runs on Opus only (plan D4)
-    "impl-drift": ("opus", "medium"),  # feature 316: entry-drift's comparison, code against research; seeded runs on Opus only (plan D11)
-    "modal-form": ("opus", "medium"),  # feature 319: a modal's form against dev/modals.md; proved on the old farmhouse and garden (plan D7)
-    "modal-research": ("opus", "medium"),  # feature 319: accuracy, references and gaps against the research; entry-drift's question and more (plan D4)
-    "modal-depiction": ("opus", "medium"),  # feature 319 D13: the Depiction tab against the glyph, the drawing pages and the claims
+    "impl-drift": ("opus", "medium"),  # feature 316; Sonnet 5.5 tried 2026-10-17 and missed (383 research R10)
+    "modal-form": ("opus", "medium"),  # feature 319; Sonnet 5.5 tried 2026-10-17 and missed (383 research R10)
+    "modal-research": ("opus", "medium"),  # feature 319; Sonnet 5.5 tried 2026-10-17 and missed (383 research R10)
+    "modal-depiction": ("opus", "medium"),  # feature 319 D13; Sonnet 5.5 tried 2026-10-17 and missed (383 research R10)
     "escalation-check": ("opus", "medium"),
     "round-arbiter": ("opus", "high"),  # feature 375 FR-011: judges a process in the GM's place at a round cap; binding
     "spec-fidelity-verify": ("opus", "high"),  # medium tried and missed: research R5
-    "spec-fidelity": ("opus", "high"),
+    "spec-fidelity": ("opus", "high"),  # Sonnet 5.5 tried 2026-10-17 and missed (383 research R10)
     "source-applicability": ("opus", "high"),
     "size-audit": ("opus", "high"),
-    "building-review": ("opus", "high"),
+    "building-review": ("opus", "high"),  # Sonnet 5.5 tried 2026-10-17 and missed (383 research R10)
     "settlement-review": ("sonnet", "high"),  # feature 294 T34: Opus + 3/3 Sonnet found the seeded re-skin
-    "glyph-check": ("opus", "high"),  # feature 294: the element-in-place check, owed on its occasion
+    "glyph-check": ("opus", "high"),  # feature 294; Sonnet 5.5 tried 2026-10-17 and missed (383 research R10)
     "fix-check": ("sonnet", "high"),  # feature 294: the GM-complaint fix check; T34: Opus + 3/3 Sonnet found the unfired fix
     "perf-audit": ("opus", "high"),
     "source-filter": ("opus", "medium"),  # feature 312: judges a source with no question in hand; calibrated three runs a leg (R2)

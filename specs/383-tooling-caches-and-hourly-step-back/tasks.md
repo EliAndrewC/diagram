@@ -97,9 +97,9 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 
 ## Amendment 3 (the GM 2026-10-17: the always-run files, tests not imported, the guard suites, Sonnet 5.5 trials first)
 
-- [ ] T24 The trial tool and the cases (plan D24): `scripts/measure/model_trial.py`; two cases per check chosen and prepared
+- [x] T24 The trial tool and the cases (plan D24): `scripts/measure/model_trial.py`; two cases per check chosen and prepared
       research: rendering
-      verify: catalog and prepare work on a recorded run of each of the seven checks; the 14 cases listed in research R10
+      verify: DONE. DONE. scripts/measure/model_trial.py (catalog --replayable, prepare as a separate clone at the recording clone's HEAD, bundles frozen, snapshots rebuilt, run-all queued, usage); tests/tooling/test_model_trial.py 4 passed; the 14 cases in research R10, one with fixed findings and one clean per check
 - [ ] T25 The 42 Sonnet 5.5 runs, scored; tiers, tier table, docs and the CLAUDE.md pointer (plan D24; SC-018)
       research: rendering
       verify: research R10's table; tests/test_agent_models.py green; docs/spec-kit-and-reviews.md "Models tried"

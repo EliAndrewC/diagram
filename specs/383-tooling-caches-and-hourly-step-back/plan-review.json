@@ -217,8 +217,8 @@
    "declared": "spec-fidelity"
   },
   "## Amendment 3 (FR-021 to FR-024)": {
-   "sha256": "3178b5671d178ea83bd113119b99950a47d1930ae86aa0fd6f6476507b9e1509",
-   "verdict": "CLEAR",
+   "sha256": "bdc427857d7d14d284abf84b990eee9cf9b4b21cd21684605cb58222521e11cf",
+   "verdict": "BLOCKED",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
   }
@@ -601,6 +601,46 @@
      "summary": "A suite re-run on a dependency its cases do not reach has its set narrowed (by function where a helper is a library, never looser than what is executed, checked under a trace) or is split; nothing dropped; a skip test and a run test per narrowed suite",
      "class": "within",
      "why": "FR-023: inputs narrowed or the suite split, nothing a suite checks dropped; answers the GM's 'optimize away running some of those when they haven't been modified'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Amendment 3 (FR-021 to FR-024)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D24",
+     "summary": "Sonnet 5.5 trials first: model_trial.py tool, two cases per check, three runs a case, all-hit/no-false-alarm rule, result recorded in tier table, agent file, docs and CLAUDE.md pointer",
+     "class": "within",
+     "why": "Unchanged since round 1 (CLEAR). Carries FR-024 and the GM's 'pretty much right away'."
+    },
+    {
+     "id": "D25",
+     "summary": "pytest_ignore_collect for reused files; make quick's collection cost measured first and the cut follows the measurement; results compared off/on",
+     "class": "within",
+     "why": "Unchanged since round 1 (CLEAR). Carries FR-022/SC-016 and the GM's 'not importing tests that we are not planning on running'."
+    },
+    {
+     "id": "D26a",
+     "summary": "A bash guard/gate script under scripts/ that a tooling test starts is recorded as reading what hookdeps.py --deps derives for it, plus its argument list; a file whose every unknown child is such a script is reused",
+     "class": "within",
+     "why": "FR-021: reused where what its programs read can be recorded or asked again. hookdeps' derived set is the repository's existing record of those reads (make hooks-test already keys on it); this makes always-run files known."
+    },
+    {
+     "id": "D26b",
+     "summary": "Every other program a test starts (make, node, resvg, ruff, pdftotext, grep, a stand-in claude) stays always-run, recorded in R10 with seconds and reason",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-021's exit is for a file whose programs' reads CANNOT be recorded or asked again. The only measured fact is that one instrument (strace) is refused; that is not a measurement that these seven unlike programs' reads cannot be recorded or asked again - and the plan itself records an argument list to make a script child known without saying why the same fails for a program whose reads are its arguments (grep over named files, pdftotext on one file, resvg on one svg). The scope is decided by an unmeasured premise, one argument stretched over seven cases. Purpose: the GM said the always-run files 'seem worth addressing' and earlier 'maybe it's just not feasible, that's fine, but it just seems worth looking at'; amendment 2's breakdown put other programs (22 test-seconds) above the bash guard (16), so the categorical carve-out leaves the larger share unaddressed. Owed: per program (or per file), a measured reason it cannot be recorded or asked again, or it is made known; only a measured cannot stays always-run."
+    },
+    {
+     "id": "D27",
+     "summary": "Guard suites replayed over recorded landings; a suite re-run on a dependency its cases do not reach is narrowed (never looser than executed) or split; slow suites first; nothing dropped; tests for skip/run",
+     "class": "within",
+     "why": "Unchanged since round 1 (CLEAR). Carries FR-023 and the GM's 'optimize away running some of those when they haven't been modified'."
     }
    ]
   }

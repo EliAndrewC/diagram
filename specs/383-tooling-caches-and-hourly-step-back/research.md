@@ -211,3 +211,40 @@ names `claude-sonnet-5-5`; every hook is off. Three runs a case.
 | modal-depiction | findings | 2026-10-13T02:15 | 828f5b626 | COVERAGE 1, TRUTH 1, LINKS 0 - the drawing convention untold; "elsewhere shared" read as a mix within one settlement |
 | modal-depiction | clean | 2026-10-13T11:24 | 6cf8300c5 | COVERAGE 0, TRUTH 0, LINKS 0 - clean; the 0196 page does not name the reserved ways, drawn as lanes on the finished map |
 | building-review | findings | 2026-10-10T10:25 | 72ba8035a | NEEDS-WORK - E1 the outer court's yard painted over the moved court (fixed, a zone-overlap test); E2 notes stale (fixed); E3 the long-house squat (a found row); E4 the barra |
+
+**The results** (observed 2026-10-17; method: each run's reply read against the recorded Opus reply, finding by finding; a new
+finding checked against the page or sheet before it is called real). "Hit" counts the three Sonnet runs that found a known
+finding.
+
+| check | findings case: the known findings and how many of 3 runs found each | clean case: a new finding raised | moves? |
+|---|---|---|---|
+| spec-fidelity | the GM's "right away" not carried: 0 of 3 (two runs FAITHFUL, one CHANGES REQUIRED on two other points) | none (3 CLEAR) | no |
+| glyph-check | the bamboo band a third of the farm's width, not its whole south side: 0 of 3 (one PASS; two NEEDS-WORK on bands standing apart in the scrub) | none (3 PASS) | no |
+| impl-drift | the three MISLABELED claims: 3 of 3; the UNCLAIMED well-pocket decision in `canonical_farmstead`: 0 of 3 | one run named two UNCLAIMED sun-band decisions, unchecked | no |
+| building-review | E1 the outer court painted over the hearing court: 3 of 3; E2 stale notes: 3 of 3; E3/E4 the squat long-house and barracks (older than the change, filed as a row): 0 of 3 | none (3 PASS) | no |
+| modal-form | the source kind named on Depiction: 3 of 3; the off-subject clause in the opening: 0 of 3 | none | no |
+| modal-research | each house overstated, and "unrecorded" where Suzhou records the build (ACCURACY 2): 2 of 3 runs found one, 1 of 3 found neither | **real, which Opus missed**: "another farm's grove" where the page says "one farm" (3 of 3) | no |
+| modal-depiction | the drawing convention untold (COVERAGE): 3 of 3; "elsewhere shared" read as a mix within one settlement (TRUTH): 0 of 3 | **real, which Opus missed**: the tab gives every shallow well a sweep where the page says about three in four (3 of 3, one run a second item) | no |
+
+**What it cost** (observed 2026-10-17; method: `model_trial.py usage`, the recorded run's tokens from its own transcript, the
+Sonnet runs' from their own result, dollars as the CLI reports them):
+
+| case | Opus recorded, input tokens | Sonnet, each run's input tokens | Sonnet seconds | Sonnet $, three runs |
+|---|---|---|---|---|
+| spec-fidelity findings / clean | 164k / 234k | 127k, 122k, 123k / 133k, 95k, 133k | 19-24 | 0.25 / 0.26 |
+| glyph-check findings / clean | 1,159k / 713k | 238k, 256k, 195k / 156k, 258k, 186k | 25-44 | 0.35 / 0.32 |
+| impl-drift findings / clean | 78k / 109k | 218k, 134k, 134k / 229k, 221k, 169k | 30-54 | 1.04 / 0.87 |
+| building-review findings / clean | 1,490k / 1,136k | 252k, 257k, 253k / 110k, 108k, 113k | 14-45 | 0.49 / 0.16 |
+| modal-form findings / clean | 26k / 24k | 59k each / 56k each | 10-30 | 0.41 / 0.32 |
+| modal-research findings / clean | 180k / 274k | 212k, 313k, 427k / 458k, 680k, 496k | 47-88 | 0.71 / 0.98 |
+| modal-depiction findings / clean | 74k / 125k | 70k each / 280k, 168k, 213k | 19-42 | 0.26 / 0.86 |
+
+**Reading it.** By the rule (every known finding in all three runs, no false alarm), no check moves: each missed at least one
+finding Opus had caught, in all three runs or in most. Two things beside the rule: Sonnet found two real modal errors Opus
+had missed, three runs of three each - so the Opus record is not a perfect oracle either, and the misses run both ways; and on
+the glyph and building checks Sonnet read a fifth of what Opus read (it skipped the SVG and the pack audit the contract asks
+for), which is where both its saving and its misses come from. On the record checks it often read MORE than Opus.
+
+A setup fault, recorded so the next trial avoids it: the first glyph and building runs all returned NOT-REVIEWABLE because a
+case's clone had no gate record and the contract stops on a red `make review-paired-gate`; `model_trial.py snapshot` now writes
+the gate stamp in the case's clone (the dispatch of the recorded run says the gate was green), and those four cases ran again.
