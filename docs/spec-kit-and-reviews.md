@@ -79,9 +79,9 @@ the GM's review, and never a feature filed.
 
 **Every subagent check runs on the TIER its file pins - a model and an effort - whatever the session runs on** (GM 2026-09-07: *"our subagent checks should all specifically use the Opus model, regardless of what the main claude code session uses"*; GM 2026-09-19, feature 251: tiered by model and effort, judgment on Opus, the mechanical parts moved into scripts). `tests/test_agent_models.py` holds the table and fails the gate on a file that omits either key, inherits, or disagrees with it. A downgrade stands only after SEEDED-FAULT runs - the new tier re-run on recorded checks with known findings (`specs/251-tiered-subagent-checks/measure/seeded.py`), **three runs a leg** (GM 2026-09-21). The count is the correction feature 260 left behind rather than made: 260 replaced the bar for whether a check may READ LESS, because "it reports the same findings" asks two open-ended reports to agree and no pair of runs ever does. The seeded-fault rule is not broken that way - its target is fixed in advance, which is the same structural fix - but it was written "a run", singular, while feature 256 measured that ONE run of a judging agent is not a stable oracle (both legs of most pairs caught what the other missed, and `spec-fidelity` was left unsettled pending *"a three-samples-a-leg run"*). A single run invites a downgrade on variance, in either direction, and nothing catches a review agent that has quietly started under-calling. Three is 256's own number, inherited rather than measured; measuring where the verdicts stop moving would mean re-running 251's cases three a leg across several agents, and is a feature rather than this line. On 2026-09-19, before the count was written down, Sonnet for `record-format` and `source-reader` and medium effort for later `spec-fidelity` rounds each missed a recorded finding and went back up, while `quote-check`, `entry-drift` and `escalation-check` held at medium; the follow-up runs then put `record-format` on Opus at medium (every finding hit at about two thirds of the cost) and confirmed the rest (`research.md` R7). Later `spec-fidelity` rounds are routed by `review-round-hooks.sh` to `spec-fidelity-verify`, the same review on a shorter contract, and are refused first when the feature directory still carries the old value of something the change replaced (`make stale-terms F=<n>`, feature 253 - a cheap net with a narrow, measured reach: it sees a value left behind, not a sentence made false). An ad-hoc agent is dispatched with an explicit `model` - `sonnet` to read, fetch, translate or extract, `opus` for anything that judges, `haiku` only for a plain description of a page (it misread a table's columns where sonnet did not) - and never with none: the census (`make agent-census`) found 72 ad-hoc runs with no model, 62 of them on Fable.
 
-**What every dispatch of a check shares lives in its agent file (GM 2026-10-17, feature 383 amendment 6).** A prompt is cached
-as a PREFIX: the system prompt (a defined agent's file), then the prompt, then what the agent reads - everything after the first
-character that differs from an earlier request is written to the cache fresh (1.25x the input rate at the 5-minute tier
+**What every dispatch of a check shares lives in its agent file (GM 2026-10-17, feature 383 amendment 6).** Only a subagent's system prompt - a defined agent's file - is reused across launches: its first message, which holds the
+instruction files and the launch prompt, has no cache breakpoint, so anything in it that is not identical as a whole is written
+to the cache fresh (383 research R16) (1.25x the input rate at the 5-minute tier
 subagents get; a read is 0.1x). Measured over 1,395 runs of 2026-10-10..17 (`make subagent-cache`, research R13 of 383): a
 defined agent dispatched minutes after another of its type writes ~2.5-3.5k tokens fresh on its first call - its prompt and the
 harness's environment block - and reads its agent file from the cache; `spec-fidelity`, keeping the instruction files, wrote
@@ -89,7 +89,7 @@ harness's environment block - and reads its agent file from the cache; `spec-fid
 15-17k characters. So: a check dispatched again and again is a DEFINED agent (the claims and modal triage became two); text its
 bundles would repeat is in its agent file (`make agent-sync` writes the modal guidelines there, `tests/test_agent_sync.py`
 keeps them in step); a bundle carries only its unit (`tests/tooling/test_bundle_shared_text.py`: two bundles of a check share
-under 2,000 characters); a prompt puts anything shared FIRST (`agent-prefix-hooks.sh`). A defined agent's file is read when a
+under 2,000 characters); a prompt repeats nothing of another of its type, wherever it would sit - only the agent file is reused across launches, text placed first in a prompt is not (383 research R16, a proxy capture) - and a fan-out sends its first alone, the rest in the next message (`agent-prefix-hooks.sh`). A defined agent's file is read when a
 session starts: a change to one reaches a session's dispatches after it restarts.
 
 **Review subagents are pre-authorized (GM 2026-07-27).** Claude Code's default system prompt tells a session not to call the Agent tool unless the user asked - a sensible default that nonetheless sits ABOVE CLAUDE.md in the instruction hierarchy, so it silently outranked the mandate to run `settlement-review` before shipping a Mode B map, and maps went out unreviewed with nothing warning. The fix is [`scripts/container/append-system-prompt.md`](../scripts/container/append-system-prompt.md), loaded via `--append-system-prompt` by the `claude()` wrapper that `setup-dev-env.sh` installs into `~/.bashrc`: it lands AFTER that line with the same authority and grants standing authorization for the review agents only. **If a review agent ever gets skipped again, check `type claude` first** - the wrapper is per-container and dies with a rebuild. Broad fan-out, `Workflow`, and deep research still need an explicit request.
@@ -111,3 +111,97 @@ finding and raises no false alarm. The tier each check runs on is `tests/test_ag
 | settlement-review, fix-check | Sonnet (the alias at the time), high | 2026-10 (feature 294 T34) | found the seeded fault 3 of 3; ON SONNET | `specs/294-settlement-review-rethink/` |
 | spec-fidelity, glyph-check, impl-drift, building-review, modal-form, modal-research, modal-depiction | Sonnet 5.5 | 2026-10-17 | each missed a known finding in all or most runs; stay Opus. Sonnet found two real modal errors Opus had missed | `specs/383-tooling-caches-and-hourly-step-back/research.md` R10 |
 | translation-check, intro-check, record-style, source-applicability, size-audit, round-arbiter, perf-audit, source-filter | - | never | on Opus untried | - |
+
+## The development workflow of the root CLAUDE.md, in full
+
+(moved VERBATIM from the root CLAUDE.md on 2026-10-17, feature 383 amendment 6, plan D44: the root keeps one line per rule and an index)
+
+Spec-driven development under `.specify/memory/constitution.md`; this file operationalizes it. The
+full doctrine with the GM's rulings and the incidents behind them: `docs/spec-kit-and-reviews.md`.
+
+- Feature work (a new generator, tier, tool or guard) is a spec-kit feature: `/speckit-specify` ->
+  plan -> tasks -> implement. A tweak (a wording fix, one bug, one regenerated map) is done directly.
+  Ask before chain-firing on an ambiguous case.
+- A spec number comes from `make claim SLUG=<slug>` (one lock over every clone; `PEEK=1` looks
+  without claiming). It prints the `SPECIFY_FEATURE` and `SPECIFY_FEATURE_DIRECTORY` exports; export
+  BOTH. Commit and push the spec directory as soon as `spec.md` exists. No feature branches: commit on
+  `main` inside the clone.
+- Open work lives in `specs/` only (feature 330: the old backlog directory became features). **A feature is filed only
+  with the GM's approval** (feature 377, GM 2026-10-10: *"spec kit features should not be filed without my explicit
+  approval"*): propose it in the turn's FINAL message, never only mid-stream, and prefer extending and reopening the
+  feature the work came from over a new one. A session may reopen a feature to do work itself and close it again
+  without asking; a reopen that LANDS open needs the approval too (amendment 1: the count of features with open work
+  never grows without the GM). Once the GM says yes, the `spec.md` carries
+  `**Approved**: the GM, YYYY-MM-DD, "<their words, verbatim>"`; from 377 on, a commit staging a new feature without
+  it, or with words the GM did not write in the session, is refused (`feature-approval-hooks.sh`). Ask `make
+  speckit-todo` what is open: filed, planned, in progress. Each spec names what it touches in an `**Affects**:` line (tags from
+  `.specify/affects.json`: the diagram kinds, tooling, research, ...), and its stage - `now`, `village`, `town`, `provincial city`,
+  `capital` - is derived as the earliest among its tags (`BY=affects` groups by tag, `AFFECTS=<tag>` lists only that tag's; `CHECK=1`, run at the push, holds it). Everything owed when a tier is scripted is ONE feature, that tier's placeholder
+  (`placeholders` in `.specify/affects.json`: 380 village, 381 town, 382 provincial city; GM 2026-10-10): a new item owed at
+  a tier is added to its placeholder, never filed on its own (`CHECK=1` refuses one). A feature closes when every task is ticked, or when its status line opens
+  `Done`, `Superseded by NNN` or `Withdrawn` with the evidence beside it.
+- Every task is `research: rendering` or `research: physical`; a physical task carries the boxes
+  `research pass`, `source-reader confirmed`, `recorded and cited`, `quote-check confirmed` and
+  `source-applicability confirmed`, ticked before the task is (`tests/test_task_research_boxes.py`).
+- Every feature ends with `make feature-report F=NNN WRITE=1` - where its time and dispatches went, from the hooks' event
+  log; its last `make tick`, a closing status line and `make gm-reviewed` refuse without it, and without any measurement
+  another spec carried to it (`Carried: SC-nnn -> NNN <key>`). A feature lands with the GM's review open when it has a row
+  for him (an arbiter ruling, `make accept`); `make gm-review` lists them. (Feature 375.) A row the GM discussed in the session and
+  agreed needs no more action IS his review: run `make gm-reviewed F=NNN WORDS="<his words, verbatim>"` in that turn (GM 2026-10-10).
+- Decide first, then check (feature 375): a task's decisions carry a verdict before its checks run - the plan-stage review,
+  or `make decide F= T=` on a plan section naming the task (`make task-start` names the task). A tripwire is not the session's
+  to judge: its refusal names `make arbiter-bundle`, and an advisor asked about a loop is handed that MANIFEST too.
+- Run the chain end to end, unattended. The GM starts work and leaves: answer each stage's own
+  questions, record each decision in the artifact where it arose, and stop only when a wrong guess
+  would cost an hour-plus to unwind or the thing genuinely cannot be done. Persistence means
+  PROGRESS, not changes: when stuck, the next step is a measurement. A PROCESS stop - a cap, a waiver,
+  a stuck choice of route - goes to the round arbiter first (`make arbiter-ask`), never straight to
+  the GM (feature 379, GM 2026-10-10: *"things should go to the arbiter at the point where they were
+  previously coming to me"*); what to build stays the GM's question.
+- Do the literal thing (constitution XVI). Asked for X, build X, never "X except where Y". An
+  exception that still looks necessary is put to an independent `spec-fidelity` subagent with the
+  GM's request verbatim; if it agrees, carry on and raise it with the GM once the implementation
+  works.
+- A spec is reviewed against the GM's own words by `spec-fidelity` before implementation
+  (`scripts/gates/review-gate.sh` refuses the push otherwise): up to five rounds on the initial acceptance,
+  then the round arbiter rules (a sixth round waits for it; feature 379); an amendment after acceptance resets the counter. A plan's decisions are
+  reviewed by the same agent before a task is ticked (`make tick`, `scripts/gates/plan-gate.sh`) - block by block since 375
+  amendment 11: a changed block owes `make plan-delta F=<n>` (a review of that block alone, on a lean bundle), never the whole
+  plan again, and `make plan-archive F=<n>` moves finished sections to `plan-done.md`, which no review reads. A later
+  round is handed the previous verdict and the diff by `scripts/hooks/review-round-hooks.sh`.
+- No known regressions (constitution XIII). A regression is measured, never remembered: the baseline
+  is taken in a detached worktree (`git worktree add --detach /tmp/base HEAD`, never a stash) and
+  each failure is checked against the clone, because a worktree carries no gitignored artifacts.
+  A pre-existing failure does not block a push, but one you find is fixed in the work at hand
+  (XIV; GM 2026-10-01: "We should definitely fix the pre-existing failure"). Three exits: fix it,
+  revert it with a written impossibility investigation, or the round arbiter's waiver (`make arbiter-ask`; the GM
+  reviews it after landing); fixing is the expected one. A regressed state stays in the clone, unpushed.
+- Fix defects where you find them (constitution XIV), in the same work with the same verification.
+  The only deferrable fix is a complete overhaul, and deferring one delivers the measurement, the
+  mechanism and a sketch. Record a fix that FAILED at the point of change.
+- Review checks (`glyph-check`, `settlement-review`, `fix-check`, `building-review`, `size-audit`) run ON
+  THEIR OCCASION (feature 294): an element new to a map, a glyph redrawn or re-placed, a map or sheet new to the
+  pool, or an occasion the feature declares in its `tasks.md` `## Occasions` - never because a manifest moved
+  (`review_owed.py`; `docs/reviews.md` has the table). One unit per agent, on a green gate,
+  two rounds at most; every pass is a row of the ledger's measured table with its cost (`make review-cost`). To improve one, add
+  the general rule, prove it fires on the unfixed artifact, then fix the artifact. Findings for the
+  GM go through `escalation-check` first. Every check runs on the TIER its file pins - a model and an
+  effort, never inherited (`tests/test_agent_models.py` holds the table; judgment is on Opus, and a
+  downgrade stands only after seeded-fault runs on known findings - THREE a leg, because one run of a
+  judging agent is not a stable oracle; which checks were tried on which model, and how they did: `docs/spec-kit-and-reviews.md`
+  "Models tried"). An ad-hoc agent is dispatched with
+  an explicit `model` - `sonnet` to read, fetch, translate or extract, `opus` for anything that judges -
+  and never with none: with none it runs on the session's model, and `agent-model-hooks.sh` refuses it
+  (`haiku` only for a plain description of a page - it misread a table's columns where sonnet did not). A DEFINED agent launches without this file, the nested `CLAUDE.md` files and the memory index
+  (`omitClaudeMd: true`, feature 256, GM 2026-09-19: *"If there's something that a subagent should know, it should be in
+  the subagent specification"*) - a rule a check needs is written in its contract, and a new agent file carries the field;
+  an ad-hoc agent keeps all three (the tier test enforces the field on every agent file; `spec-fidelity`'s exception ended
+  2026-10-17 when three runs a leg found every recorded item without the files - feature 383 research R14). **What every dispatch of a check shares lives in its
+  agent file** (feature 383 amendment 6, the GM 2026-10-17: *"any context that subagents share in common is put either into
+  their system prompt, ideally, or ... at the very beginning of the prompt"*): only a subagent's system prompt - its agent
+  file - is reused across launches; text placed first in a launch prompt is not (feature 383 research R16, a proxy capture),
+  so a bundle or a prompt carries only its unit; `agent-prefix-hooks.sh` refuses a large block a prompt repeats from an
+  earlier dispatch of its type wherever it sits, and a fan-out's second dispatch before the next message (the first goes
+  alone), `tests/tooling/test_bundle_shared_text.py` holds the bundles to it, `make agent-sync` writes a shared source
+  into its agents' files, and `make subagent-cache` measures what each type writes fresh. The review agents are pre-authorized through
+  `scripts/container/append-system-prompt.md`; if one is skipped, check `type claude` first.

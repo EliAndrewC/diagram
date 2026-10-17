@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-12
-**Status**: Done 2026-10-17 - amendment 6 landed: spec FAITHFUL, plan CLEAR (round 5); a back-to-back spec-fidelity or triage dispatch writes nothing fresh on its first call, from ~26-29k (research R13, R14); spec-fidelity without the instruction files found every recorded item, three runs a leg (R14); the modal guidelines in the agent files, bundles held under 2,000 shared characters; the dispatch guard; one copy of the root CLAUDE.md per session and subagent (R15). Before it: Done 2026-10-17 - amendment 5 landed: plan CLEAR (round 4, D31 rewritten for where the gate really runs tooling tests); after a Makefile-only change the gate's full run reuses 1,739 of 1,824 tooling tests with their coverage carried, 167 -> 132 s (m:gate-tooling-makefile-a5); reuse per test, a source-page edit re-runs 15 tests not 219 (observed 2026-10-17; research R12); a soundness defect in reuse fixed (D32b, research R12); 12 tests of code moved off the real record. Before it: Done 2026-10-17 - amendment 4 landed: spec FAITHFUL (round 3), plan CLEAR; five guard suites 2-4x faster with their checks unchanged (research R11); a landing 30.04 -> 27.28 s (m:land-tooling-landing-a4); make parts-sweep (the arbiter's fix). Before it: Done 2026-10-17 - amendment 3 landed: spec FAITHFUL (round 2), plan CLEAR (round 5); no review check moves to Sonnet 5.5 (research R10); always-run tooling files 18 -> 0 of 128; a landing 37.05 -> 30.04 s (m:land-tooling-landing-a3); hooks-test idle 16.06 -> 2.6 s (m:hooks-test-idle); sync-with-main suite 36.23 -> 17.88 s (m:sync-with-main-suite). Before it: Done 2026-10-13 - amendment 2 landed: spec FAITHFUL (round 4), plan block CLEAR (round 2); a landing 113.98 -> 37.05 s (m:land-tooling-landing-before, m:land-tooling-landing-after), tooling reuse 27.58 -> 19.35 s with 18 of 127 files always run (m:land-tooling-tests-reuse-a2), the claims gate 8.53 -> 1.65 s (m:claims-gate-push). Before it: Done 2026-10-13 - amendment 1 landed: spec FAITHFUL (round 3), plan block CLEAR; land-tooling's tooling tests 36.21 -> 27.58 s (606 of 1,796 tests ran with reuse, m:land-tooling-tests-reuse), quote-verbatim's verdicts cached. Before it: Done 2026-10-13 - spec FAITHFUL (round 3), plan CLEAR (round 3), every task ticked; push checks 19.87 s -> 1.92 s (research R6); tooling landed 0906d798a; the GM's review open (the first step-back's note)
+**Status**: Done 2026-10-17 - amendment 6 reopened and landed: spec FAITHFUL (round 2), plan CLEAR; the guard refuses a repeated block wherever it sits, only the agent file being reused across launches (research R16); a fan-out launches its first alone, its later launches then writing 2,274 tokens fresh against 5,721 (R18); no 1-hour subagent cache (a test); the root CLAUDE.md 37,985 -> 13,730 characters, research 25,402 -> 20,772, tests 18,157 -> 6,340, every rule kept or reachable (R19); the research-pass agent (R17). Before it: Done 2026-10-17 - amendment 6 landed: spec FAITHFUL, plan CLEAR (round 5); a back-to-back dispatch of an identical prompt writes nothing fresh on its first call, and one with a different prompt only its prompt and environment block, from ~26-29k (observed 2026-10-17; research R13, R14, R16); spec-fidelity without the instruction files found every recorded item, three runs a leg (R14); the modal guidelines in the agent files, bundles held under 2,000 shared characters; the dispatch guard; one copy of the root CLAUDE.md per session and subagent (R15). Before it: Done 2026-10-17 - amendment 5 landed: plan CLEAR (round 4, D31 rewritten for where the gate really runs tooling tests); after a Makefile-only change the gate's full run reuses 1,739 of 1,824 tooling tests with their coverage carried, 167 -> 132 s (m:gate-tooling-makefile-a5); reuse per test, a source-page edit re-runs 15 tests not 219 (observed 2026-10-17; research R12); a soundness defect in reuse fixed (D32b, research R12); 12 tests of code moved off the real record. Before it: Done 2026-10-17 - amendment 4 landed: spec FAITHFUL (round 3), plan CLEAR; five guard suites 2-4x faster with their checks unchanged (research R11); a landing 30.04 -> 27.28 s (m:land-tooling-landing-a4); make parts-sweep (the arbiter's fix). Before it: Done 2026-10-17 - amendment 3 landed: spec FAITHFUL (round 2), plan CLEAR (round 5); no review check moves to Sonnet 5.5 (research R10); always-run tooling files 18 -> 0 of 128; a landing 37.05 -> 30.04 s (m:land-tooling-landing-a3); hooks-test idle 16.06 -> 2.6 s (m:hooks-test-idle); sync-with-main suite 36.23 -> 17.88 s (m:sync-with-main-suite). Before it: Done 2026-10-13 - amendment 2 landed: spec FAITHFUL (round 4), plan block CLEAR (round 2); a landing 113.98 -> 37.05 s (m:land-tooling-landing-before, m:land-tooling-landing-after), tooling reuse 27.58 -> 19.35 s with 18 of 127 files always run (m:land-tooling-tests-reuse-a2), the claims gate 8.53 -> 1.65 s (m:claims-gate-push). Before it: Done 2026-10-13 - amendment 1 landed: spec FAITHFUL (round 3), plan block CLEAR; land-tooling's tooling tests 36.21 -> 27.58 s (606 of 1,796 tests ran with reuse, m:land-tooling-tests-reuse), quote-verbatim's verdicts cached. Before it: Done 2026-10-13 - spec FAITHFUL (round 3), plan CLEAR (round 3), every task ticked; push checks 19.87 s -> 1.92 s (research R6); tooling landed 0906d798a; the GM's review open (the first step-back's note)
 
 **Affects**: tooling, review process
 
@@ -13,6 +13,8 @@
 **Amendment 6 approved**: the GM, 2026-10-17, "Yes. Please file that and then implement it. Thank you."
 
 **Amendment 6 extended**: the GM, 2026-10-17, "that also seems like a token efficiency improvement that we need to make or measure or address or whatever."
+
+**Amendment 6 reopened**: the GM, 2026-10-17, "Yes, go ahead and reopen amendment 6 for all five. Thank you."
 
 **Amendment 4 approved**: the GM, 2026-10-17, "I think I do want a next round uh, for the guard suites running serially, so uh, splitting those up does seem good." and "So yes, please fold those two into the same round as the sweet splitting. and then go ahead and work that."
 
@@ -212,21 +214,34 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 - **FR-033 A recurring ad-hoc dispatch becomes a defined agent.** The claims triage and the modal triage, dispatched as
   general-purpose agents carrying the whole instruction context, get agent files of their own (their manifests' standing
   instructions, a pinned tier, no CLAUDE.md), and the commands that prompt their dispatch name them.
-- **FR-034 A shared block after a unique start is refused at dispatch.** An Agent dispatch whose prompt shares a large
-  identical block with an earlier dispatch of the session, after a part that differs, is refused with the fix: put the shared
-  text first, or in an agent file.
+- **FR-034 A block repeated across dispatches is refused, wherever it sits.** An Agent dispatch whose prompt repeats a large
+  identical block of an earlier dispatch of the session is refused, wherever the block sits in the prompt - a subagent's first
+  message has no cache breakpoint, so only its system prompt is reused across launches (research R16) - with the fix: move the
+  shared text into the agent's file, its system prompt. A prompt identical to an earlier one as a whole is not refused.
+  (Corrected by the reopening: it read "after a part that differs ... put the shared text first, or in an agent file".)
 - **FR-035 Bundles are tested for shared text.** A test builds two bundles of each check kind and fails when their identical
   text passes a small limit.
 - **FR-036 The cache is measured and the rule written.** `make subagent-cache` reports, per agent type, from the subagent
   transcripts: the tokens a dispatch writes fresh on its first call, against a dispatch of the same type minutes before, and the
-  manifests' repeated text. CLAUDE.md states the rule - shared context in the agent file, the unique part last - and names
-  the guard.
+  manifests' repeated text. CLAUDE.md states the rule - shared context in the agent file; text placed first in a launch prompt is not reused
+  across launches (research R16) - and names the guard.
 
 - **FR-037 A session loads the project's instructions once.** A session started in the repository's checkout that works in its
   clone does not load the clone's copy of the root CLAUDE.md beside the checkout's, nor do the subagents it dispatches load it
   when they work with files in the clone; the clone's nested CLAUDE.md files still load where they are needed. gm-assistant has
   the same layout; its settings are that repository's, so this feature reports the exclusion line for it to the GM rather than
   editing it.
+- **FR-038 No 1-hour subagent cache.** A test fails when a project setting, an agent file or the container's setup turns on a
+  1-hour subagent prompt cache (`experimental.cacheTtl`, `CLAUDE_CODE_SUBAGENT_PROMPT_CACHE_TTL`).
+- **FR-039 A fan-out launches one first.** When several dispatches of one agent type go out together, the first goes alone and
+  the rest follow once it has started, so they read its cached prefix; the dispatch rules say so and a guard holds it.
+- **FR-040 CLAUDE.md is an always-on core plus an index.** The root CLAUDE.md (and each nested one) keeps the rules a session
+  needs before it knows to open a doc, one line each, and an index; the rest moves VERBATIM into topic docs that open with
+  "Load this file when:". An independent agent enumerates every rule of the old files with a verdict (kept, moved and
+  reachable, moved but unreachable, dropped, changed), every one not kept-or-reachable is fixed, and a test holds that every
+  hook message quoting CLAUDE.md still resolves.
+- **FR-041 The month's general-purpose job families are swept.** Each family of general-purpose launches in the transcripts is
+  classed - recurring, so given a defined agent or pointed at the existing one; or one-off - and the list is recorded.
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002, FR-005, FR-006, FR-007) The push's checks: from about 24 s, the measurement the GM saw
@@ -304,14 +319,23 @@ long-running feature does for itself, on the clock glyph-check already keeps.
   condition `tests/test_agent_models.py` recorded for removing the exception, specs/256 research R6).
 - **SC-024** (FR-032, FR-035) The modal checks' manifests repeat at most the test's limit - before 15-17k characters repeated in most
   manifests (research R13) - and the bundle test fails on a seeded repeated block.
-- **SC-025** (FR-034, FR-036) The guard refuses a unique sentence followed by a shared 10 KB and passes the same block placed
-  first (suite cases); `make subagent-cache` prints every agent type's numbers, and its total subagent spend before and after; CLAUDE.md states
+- **SC-025** (FR-034, FR-036) The guard refuses a unique sentence followed by a shared 10 KB (suite cases; the reopening's SC-027 replaces what it said of a block placed first); `make subagent-cache` prints every agent type's numbers, and its total subagent spend before and after; CLAUDE.md states
   the rule and names the guard, and no longer names spec-fidelity as keeping the instruction files.
 
 - **SC-026** (FR-037) A session started in `/diagram` that reads a file in its clone carries one copy of the root CLAUDE.md, not
   two - before both (research R15), after one, measured the same way - and a nested one still loads; and a subagent it
   dispatches that reads a file in the clone, one with `omitClaudeMd` and one without, is measured the same way before and after
   (if subagents never load the clone's copy, that is recorded as the answer to the GM's question).
+- **SC-027** (FR-034, FR-036) The guard refuses a shared block placed first as well as one after a unique sentence, passes a
+  wholly identical prompt, and names only the agent-file fix (suite cases, red on the guard landed before the reopening); and
+  CLAUDE.md's rule and guard row, `docs/guards.md` and `docs/spec-kit-and-reviews.md` name only the agent-file fix, none saying to
+  put shared text first.
+- **SC-028** (FR-038, FR-039) The TTL test fails on a seeded 1-hour setting; a staggered fan-out's later launches read the
+  first's prefix from the cache, measured against a fan-out sent together (first-request read and write per launch).
+- **SC-029** (FR-040) The root CLAUDE.md's size before (37,662 characters, observed 2026-10-17; `wc -c`) and after, and a fresh
+  session's first request before and after; the enumeration's verdicts with none left dropped or unreachable.
+- **SC-030** (FR-041) The families' table: launches per family since 2026-09-19, the last date each recurred, and what each
+  became.
 ## Review history
 
 - spec-fidelity, Mode 2, round 1 (2026-10-12): CHANGES REQUIRED, one item, applied: FR-007's "its code" is the check and every

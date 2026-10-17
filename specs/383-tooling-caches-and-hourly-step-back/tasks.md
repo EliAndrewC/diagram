@@ -173,3 +173,24 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
       research: rendering
       verify: DONE. SC-026 met (R15). After landing, a session started in /diagram that reads a clone file loads the root CLAUDE.md once, not twice, and the nested file still loads. Its subagents skip the clone's copy too; spec-fidelity, with omitClaudeMd, loads neither root. tests/test_one_root_claude_md.py holds the exclusion.
 
+
+## Amendment 6, reopened (the GM 2026-10-17: "Yes, go ahead and reopen amendment 6 for all five")
+
+- [x] T46 The guard refuses a repeated block wherever it sits; the rule and docs corrected (plan D41) (SC-027)
+      research: rendering
+      verify: DONE. SC-027 met. The guard refuses a repeated block wherever it sits and passes a wholly identical prompt; its message names only the agent-file fix. 20 suite cases, 6 of them red on the guard landed earlier. CLAUDE.md, guards.md, spec-kit-and-reviews.md and reviews.md no longer say to put shared text first.
+- [x] T47 A fan-out launches one first: the guard and the review doctrine; measured (plan D42) (SC-028)
+      research: rendering
+      verify: DONE. SC-028 fan-out half met (R18): staggered, the later launches wrote 2,274 fresh against 5,721 sent together. The guard refuses a second dispatch of a type within 5 s of a cold first; the review doctrine says the first alone.
+- [x] T48 No 1-hour subagent cache: the test (plan D43) (SC-028)
+      research: rendering
+      verify: DONE. SC-028 TTL half met: the test finds no 1-hour setting in settings, agent files or container setup, and catches a seeded one.
+- [x] T49 CLAUDE.md as a core plus an index; the quotes test; the enumeration; measured (plan D44) (SC-029)
+      research: rendering
+      verify: DONE. SC-029 sizes and verdicts met (R19). Root 37,985 -> 13,730 characters, research 25,402 -> 20,772, tests 18,157 -> 6,340, moved verbatim. Enumeration: nothing dropped; 25 findings fixed and confirmed in round 2. The quotes test passes (3 stale quotes re-aimed). The first-request after is measured at landing.
+- [x] T50 The general-purpose families swept (plan D45) (SC-030)
+      research: rendering
+      verify: DONE. SC-030 met (R17). Since 10-10, ~122 of 137 general-purpose launches were the triage jobs, now defined agents; the rest were one-offs except the research pass, now the research-pass agent. make subagent-cache --families is tested.
+- [x] T51 Close: the checks, the report, landed
+      research: rendering
+      verify: DONE. All five items built and verified: spec FAITHFUL, plan CLEAR, hooks-test and quick green, every test that reads a CLAUDE.md green (5,619), the report written. SC-029's fresh-session first request is measured after landing, the same way, into R19.

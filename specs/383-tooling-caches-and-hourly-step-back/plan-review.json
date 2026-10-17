@@ -235,7 +235,13 @@
    "declared": "spec-fidelity"
   },
   "## Amendment 6 (FR-031 to FR-036)": {
-   "sha256": "f645103164f874263b0651751b54879a0c57578cacd6408fd8af281d851c6cfd",
+   "sha256": "5db96804ae5bd4eb0ffecc77e77257de4867e875cad42ada64b5b1e733efe702",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "## Amendment 6, reopened (FR-034 corrected, FR-038 to FR-041)": {
+   "sha256": "c7259ffe359587fe23f0e94f3664a853829b7c1876a7782b0c4b9aba33affc73",
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
@@ -1263,6 +1269,53 @@
      "summary": "claudeMdExcludes ['/diagram/.clones/*/CLAUDE.md'] in project settings; a test holds it and refuses a pattern that would match a nested CLAUDE.md; SC-026 measured after landing; gm-assistant's line reported to the GM, not edited",
      "class": "within",
      "why": "The GM: clones load CLAUDE.md twice, 'a token efficiency improvement that we need to make or measure or address'. FR-037/SC-026 carry exactly that: one root copy, nested files still load, before/after measured. The test only fails when the requested exclusion is absent or overreaches - enforcement, not scope. Reporting gm-assistant rather than editing it narrows nothing: this project's request and FR-037 concern this repository, and the GM's mention of gm-assistant was where he saw the problem; the report gives him the line for it. The mirror-copy lag is a stated consequence, not a carve-out."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Amendment 6 (FR-031 to FR-036)",
+    "## Amendment 6, reopened (FR-034 corrected, FR-038 to FR-041)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D37",
+     "summary": "Marked superseded by D41 where it passes or advises a shared block placed first; otherwise unchanged from its CLEAR text (diffed).",
+     "class": "within",
+     "why": "Brings the plan in line with FR-034 as corrected by the GM-approved reopening (item 1); the rest of D37 (store, per type and model comparison, 2,000-character threshold, escape) stands as already cleared."
+    },
+    {
+     "id": "D41",
+     "summary": "Guard refuses any 2,000+ character run shared with an earlier dispatch of the same type and model, at any position; passes only a wholly identical prompt; single fix: the agent file; suite case 'block first' becomes refused; CLAUDE.md, docs/guards.md, docs/spec-kit-and-reviews.md drop 'put it first'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Everything except the scope matches FR-034 corrected and SC-027 word for word. The narrowing: FR-034 says 'an earlier dispatch of the session' and D41 compares only within the same type and model. Across types or models the system prompt and the cache differ, so no placement and no agent-file move lets one read the other's cache. Refusing there would force a move that saves nothing (physically impossible). The scope is unchanged from D37, which was cleared."
+    },
+    {
+     "id": "D42",
+     "summary": "Fan-out stagger: per session and agent type, a dispatch is COLD when none of its type went out in the prior 5 minutes; a same-type dispatch within FANOUT_S=5 s after a cold one is refused (send the rest next message); docs/reviews.md and CLAUDE.md say 'the first alone, the rest in the next message'; SC-028 measured.",
+     "class": "within",
+     "why": "FR-039: the first goes alone, the rest follow once it has started, the dispatch rules say so and a guard holds it. The timing window is how a hook that cannot see its siblings holds it (measured 2026-10-17 with a probe hook). A warm type (dispatched within 5 minutes) is not staggered because its prefix is already cached, which is the purpose."
+    },
+    {
+     "id": "D43",
+     "summary": "Test in tests/test_agent_models.py: no cacheTtl or CLAUDE_CODE_SUBAGENT_PROMPT_CACHE_TTL naming an hour in .claude/settings.json, any agent file, or scripts/container/; seeded string.",
+     "class": "within",
+     "why": "FR-038 and SC-028 exactly: project setting, agent file, container setup, a seeded failure."
+    },
+    {
+     "id": "D44",
+     "summary": "Root and nested CLAUDE.md (research/, tests/, l7r/diagram/) become core plus index; long passages move verbatim into docs opening 'Load this file when:'; phrases quoted by hooks/scripts stay; tests/test_claude_md_quotes.py; independent Opus enumeration with verdicts, all non-kept/unreachable fixed, table recorded; SC-029 before/after.",
+     "class": "within",
+     "why": "FR-040 and SC-029 clause by clause. Keeping a quoted phrase in the CLAUDE.md that the hook names is how 'every hook message quoting CLAUDE.md still resolves'. The test is enforcement of what was asked."
+    },
+    {
+     "id": "D45",
+     "summary": "subagent_cache.py --families groups the month's general-purpose launches with count and last date; each family recurring since 2026-10-10 gets a defined agent or is pointed at one, the rest recorded one-off in R17; 'research pass' becomes a defined research-pass agent (opus/medium, omitClaudeMd, research ladder's operative rules restated).",
+     "class": "within",
+     "why": "FR-041 and SC-030: classify each family, give a recurring one a defined agent, record the list. The 10-10 recency line reads the GM's 'any that still recur'. The table carries each family's last date, so the GM sees where it falls. Defining the agent is what FR-041 prescribes for a recurring family."
     }
    ]
   }

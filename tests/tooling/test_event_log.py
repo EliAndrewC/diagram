@@ -331,8 +331,9 @@ def test_a_heading_put_back_over_another_body_trips_no_reversal(tmp_path) -> Non
 
 def test_a_prompt_is_marked_the_gms_or_a_notifications() -> None:
     """Feature 385: a typed prompt is the GM's (`"gm": true`), a task notification is not - the hourly clock and the report read it."""
-    from tests._scripts import script as _script
     import importlib.util as _u
+
+    from tests._scripts import script as _script
 
     spec = _u.spec_from_file_location("_event_log_gm", _script("event_log"))
     assert spec and spec.loader
@@ -345,8 +346,9 @@ def test_a_prompt_is_marked_the_gms_or_a_notifications() -> None:
 
 def test_a_wait_a_notification_ends_is_not_the_gms() -> None:
     """Feature 385: the report's "waiting: the GM" is a Stop to the GM's prompt; one a notification ends is a background run."""
-    from tests._scripts import script as _script
     import importlib.util as _u
+
+    from tests._scripts import script as _script
 
     spec = _u.spec_from_file_location("_feature_report_gm", _script("feature_report"))
     assert spec and spec.loader

@@ -188,7 +188,7 @@ What IS allowed, and is not blocked:
 If a read-only command was misread as a write, put HOST_GIT_OK in it with a note - and say what it
 false-positived on, because that is a bug in this hook.
 
-(scripts/hooks/repo-safety-hooks.sh; CLAUDE.md "Canonical Source")
+(scripts/hooks/repo-safety-hooks.sh; CLAUDE.md "Session clones")
 TAIL
     exit 2 ;;
 esac

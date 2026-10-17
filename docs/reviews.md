@@ -45,7 +45,8 @@ time a map changes ... every feature which takes longer than 1 hour to implement
 the address findings all at once"*). Its units are found as above but are DUE only when an hour of the feature's time has passed
 - from the feature's first event in the clone or its most recent reopening, whichever is later (375 amendment 10: the
 GM did not want a reopened feature's first check due at once), and from each batch it opens - and then every owed glyph unit is due together and
-stays due until dispatched (one per agent, in one message); fix their findings together, and what a fix re-owes waits for the
+stays due until dispatched (one per agent: the FIRST alone, the rest in the next message, which reads its cached prefix -
+383 amendment 6, plan D42; `agent-prefix-hooks.sh` holds it); fix their findings together, and what a fix re-owes waits for the
 next hour. A change with no live feature (none named, or the named one closed) owes its glyph units at landing: the push
 (`review-gate.sh`) asks every owed unit, and its refusal marks the work landing so the dispatch it asks for is due. `make verify`
 names the glyph units waiting and when they come due; the pair guard refuses an early glyph dispatch (`GLYPH_DUE_OK="<why>"`).
