@@ -148,6 +148,14 @@ two paths side by side are drawn as one. Their record checks run as `make record
 Written in `retro.md` when T01 closes: where the time went (from the event log, `make feature-report F=385`, split by hand at
 the decision points until T02 builds the split), which checklist items fired, which should have, and the change made.
 
+## Landing
+
+Each task lands when it closes, with its retro row, while the tasks after it stay open: the feature is worked one task at a time by
+design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
+measurements are taken on it.
+
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11
+
 ## T02 - the tooling: the Approach block required, the triggers, the split (FR-003 to FR-005)
 
 Decided at its start, after T01's retro: its Approach block and decisions are written here then, and reviewed by `make decide`.

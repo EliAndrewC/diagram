@@ -11,25 +11,25 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 
 - [ ] T01 The lane law describes how people walk (plan T01, D1-D7): the rule table; `forced_turn` asked by the angle rules; a refusal names its rules; side by side merged; measured on the cohort, seed 10 patched and the pool; the drawing pages; its retro row
       research: rendering
-- [ ] T02 The tooling (plan T02; FR-003, FR-004, FR-005): the Approach block required by `make tick`, the triggers' fresh answer, the per-task split; its retro row
+- [ ] T02 The tooling (plan T02; FR-003, FR-004, FR-005): the Approach block required by `make tick`, the triggers' fresh answer, the per-task split; its retro row [lands-open]
       research: rendering
-- [ ] T03 The four cohort seeds failing at HEAD (17, 21, 40, 45), as T01 leaves them; its retro row
+- [ ] T03 The four cohort seeds failing at HEAD (17, 21, 40, 45), as T01 leaves them; its retro row [lands-open]
       research: rendering
-- [ ] T04 T48: the web carries a re-deal of the seats (384's User Story 2, SC-004); its retro row
+- [ ] T04 T48: the web carries a re-deal of the seats (384's User Story 2, SC-004); its retro row [lands-open]
       research: rendering
-- [ ] T05 T47: the wave 155 pocket-well patch re-landed, no waiver; its retro row
+- [ ] T05 T47: the wave 155 pocket-well patch re-landed, no waiver; its retro row [lands-open]
       research: rendering
-- [ ] T06 A ranking row (chosen at its start, a kind not yet tried); its retro row
+- [ ] T06 A ranking row (chosen at its start, a kind not yet tried); its retro row [lands-open]
       research: rendering
-- [ ] T07 A ranking row; its retro row
+- [ ] T07 A ranking row; its retro row [lands-open]
       research: rendering
-- [ ] T08 A ranking row; its retro row
+- [ ] T08 A ranking row; its retro row [lands-open]
       research: rendering
-- [ ] T09 A ranking row; its retro row
+- [ ] T09 A ranking row; its retro row [lands-open]
       research: rendering
-- [ ] T10 A ranking row; its retro row
+- [ ] T10 A ranking row; its retro row [lands-open]
       research: rendering
-- [ ] T11 The close: the checklist to `docs/`, the refusals extended to every feature (FR-001), the final report (SC-001, SC-002)
+- [ ] T11 The close: the checklist to `docs/`, the refusals extended to every feature (FR-001), the final report (SC-001, SC-002) [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
