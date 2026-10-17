@@ -240,6 +240,21 @@ step-back.
 **D15 - nothing in the engine.** Every item is tooling under `scripts/`, `tests/` and the Makefile, landed by `make land-tooling`;
 no map changes, so no review check is owed.
 
+### T02 part B (2026-10-17T20:46Z)
+
+Owed by the hour-5 step-back (`hour:385-approach-checklist@5`, ruled `continue`) - D9's first firing on real work.
+
+1. **What is refusing?** Nothing: every item landed on main with its test; the only refusal was `make tick` itself, holding the
+   tick for this hour's step-back.
+2. **A3 again.** The rules T02 is judged by are the GM's (FR-003 to FR-005, FR-008 to FR-011) and the guard doctrine's; none is O.
+3. **A4 again.** n/a - no map, no place on the ground.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither; no item was tuned twice.
+6. **The one-sentence test.** "Each tooling item landed alone, with a test red without it" - nothing for the GM to question.
+7. **The next step is a measurement.** T03 is measured by the per-task table T02 built, against T01's row.
+8. **Routes measured before asking?** Nothing is being asked.
+9. **After a ruling.** The ruling is `continue`; the step it names is the tick, then T03.
+
 ## T03 to T10 - the four seeds failing at HEAD, T48, T47's patch, five ranking rows
 
 Each decided at its start, in this order (spec FR-007), its section added here and reviewed by `make decide`.

@@ -79,6 +79,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
+  },
+  "### T02 part B (2026-10-17T20:46Z)": {
+   "sha256": "4b1d1678ecd836337318897c82ee7b8a32b398e88240e5620d3025bf4870938c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
   }
  },
  "reviewed": "2026-10-17",
@@ -762,6 +768,33 @@
      "summary": "Nothing in the engine; tooling only, landed by make land-tooling",
      "class": "within",
      "why": "T02 is the tooling task by amendment 1; no map change asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "### T02 part B (2026-10-17T20:46Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T02B-1",
+     "summary": "The rules T02 is judged by are classed as the GM's (FR-003 to FR-005, FR-008 to FR-011) and the guard doctrine's, none an implementation detail of ours",
+     "class": "within",
+     "why": "A classification answer to the checklist's provenance question; it relaxes or excludes nothing the request or the spec asks of T02."
+    },
+    {
+     "id": "T02B-2",
+     "summary": "T03 is measured by the per-task table T02 built (FR-005), against T01's row",
+     "class": "within",
+     "why": "FR-005 and FR-011 ask for exactly this: the per-task split, and the next task showing whether FR-008 to FR-010 paid. Comparing against T01 is how the GM's amendment 1 framed the test ('do another claim fix ... and see how long that one takes'). No threshold is set, in keeping with amendment 2's refusal of the two-hour figure."
+    },
+    {
+     "id": "T02B-3",
+     "summary": "Following the step-back's 'continue' ruling, the next step is the tick of T02, then T03",
+     "class": "within",
+     "why": "Tasks run one at a time (FR-006) in the order the spec sets; the block skips no step the request or the D9 trigger owes - it is itself the part B answer D9 requires after an hour: ruling."
     }
    ]
   }
