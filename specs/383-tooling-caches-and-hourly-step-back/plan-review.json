@@ -217,7 +217,7 @@
    "declared": "spec-fidelity"
   },
   "## Amendment 3 (FR-021 to FR-024)": {
-   "sha256": "b709e5ae5c03b9f7e3625a977918faa076c94a4813b46c185b8dddd17ecfb5ee",
+   "sha256": "8cf26ac29ec9ce2150deef8a3980cee9a0ee91784a87815846479e490243b9f2",
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
@@ -674,6 +674,63 @@
      "summary": "Replay recorded landings; narrow a suite's dependency set to what its cases call, or split it; slow suites first; nothing dropped",
      "class": "within",
      "why": "Unchanged since its CLEAR verdict; carries FR-023."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Amendment 3 (FR-021 to FR-024)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D24",
+     "summary": "Sonnet 5.5 trials first: model_trial.py tool, 7 checks x 2 cases x 3 runs, all-hit/no-false-alarm rule, result recorded in tier table, agent file, docs and CLAUDE.md pointer",
+     "class": "within",
+     "why": "Unchanged since round 3 CLEAR; carries FR-024 and the GM's 'pretty much right away'."
+    },
+    {
+     "id": "D25",
+     "summary": "pytest_ignore_collect for reused files; make quick collection cost measured first, cut follows the measurement; results compared off/on",
+     "class": "within",
+     "why": "Unchanged since round 3 CLEAR; carries FR-022 and SC-016."
+    },
+    {
+     "id": "D26",
+     "summary": "LD_PRELOAD C-library recorder for non-Python children, validated against Python's audit hook; unknown files still run and are recorded",
+     "class": "within",
+     "why": "Unchanged since round 3 CLEAR; carries FR-021 (unrecordable files recorded with seconds and reason)."
+    },
+    {
+     "id": "D27-measure",
+     "summary": "Which suites re-run and why measured from hookdeps --deps per suite plus git log of every input since 2026-10-03, each suite and sync-with-main case timed",
+     "class": "within",
+     "why": "FR-023's measurement clause: commits on main are the landings, so an input's commit history is which suites re-ran and on which input. hooks-test now also logs which suites ran per landing."
+    },
+    {
+     "id": "D27-shared-inputs",
+     "summary": "Shared helpers (guardlog.sh, hm_escape.py, hm_shape.py, writer-alive.sh; inputs of 42 suites) left whole",
+     "class": "within",
+     "why": "FR-023 narrows only a suite re-run though nothing its CASES READ changed; by hookdeps these helpers are read by those suites, so a re-run on their change is a re-run on what the suite reads. Not an exception to FR-023. The plan's stated reason ('saves little') is a cost reason and would not justify an exception; it does not need to, because none is taken."
+    },
+    {
+     "id": "D27-split-case_11",
+     "summary": "sync-with-main suite re-runs on its own script (27 commits); its long case_11 split into three cases on own fixtures, weights measured, parts 4 -> 8, all 124 checks kept and counted",
+     "class": "within",
+     "why": "Its re-runs are on what it reads, so FR-023 owes no narrowing; the split is a timing improvement the GM asked for in amendment 2 ('land whatever timing improvements'), drops no check (FR-023's last sentence), and looks at the slow suite first."
+    },
+    {
+     "id": "D27-review-entry-gate",
+     "summary": "review-gate and entry-gate looked at, recorded, not split",
+     "class": "within",
+     "why": "FR-023 asks the slow suites be looked at first; they re-run only when their gates move (what they read), so no narrowing is owed."
+    },
+    {
+     "id": "D27-hooks-test-report",
+     "summary": "make hooks-test prints suites run and seconds, longest first",
+     "class": "within",
+     "why": "Keeps FR-023's measurement of which suites ran running at every landing; enforcement/measurement of the request."
     }
    ]
   }

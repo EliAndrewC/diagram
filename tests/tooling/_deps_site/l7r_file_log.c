@@ -53,12 +53,22 @@ static void normalize(char *p) {  /* "/a/./b/../c" -> "/a/c", in place */
     strcpy(p, out);
 }
 
-static void note(int dirfd, const char *path, const char *kind) {
+static void note(int dirfd, const char *path, const char *kind) {  /* kind may be replaced below */
     if (busy || !path || !*path) return;
     const char *log = getenv("L7R_TEST_DEP_LOG"), *root = getenv("L7R_TEST_DEP_ROOT"), *file = getenv("L7R_TEST_DEP_FILE");
     if (!log || !root || !file || !*file) return;
-    /* git's own reads of the repository are its answer, which the git question replays (plan D18) - not file reads */
-    if (strcmp(program_invocation_short_name, "git") == 0 || strncmp(program_invocation_short_name, "git-", 4) == 0) return;
+    /* git's own reads of the repository are its answer, which the git question replays (plan D18) - not file reads; but a git
+     * that reads the repository's own git directory is noted once as `c-git`: a guard suite that clones the real repository
+     * reads its content through git, and is never traced (D27). Programs in L7R_TEST_DEP_SKIP (a suite's `cp` building its
+     * fixture) are not recorded either: copying is not running. */
+    const char *prog = program_invocation_short_name;
+    int is_git = strcmp(prog, "git") == 0 || strncmp(prog, "git-", 4) == 0;
+    const char *skip = getenv("L7R_TEST_DEP_SKIP");
+    if (!is_git && skip) {
+        size_t pl = strlen(prog);
+        for (const char *q = skip; (q = strstr(q, prog)) != NULL; q += pl)
+            if ((q == skip || q[-1] == ' ') && (q[pl] == 0 || q[pl] == ' ')) return;
+    }
     const char *self = getenv("L7R_TEST_DEP_SELF");  /* the test's own process records itself, in Python */
     if (self && atol(self) == (long)getpid()) return;
     busy = 1;
@@ -79,7 +89,27 @@ static void note(int dirfd, const char *path, const char *kind) {
         snprintf(abs, sizeof abs, "%s/%s", base, path);
     }
     normalize(abs);
+    /* L7R_TEST_DEP_MAP=scripts: a guard suite's fixture holds a COPY of scripts/ under /tmp; a file the suite runs there is the
+     * repository's own file of that name (D27) */
+    const char *map = getenv("L7R_TEST_DEP_MAP");
+    if (map && *map && strncmp(abs, "/tmp/", 5) == 0) {
+        char key[PATH_MAX];
+        snprintf(key, sizeof key, "/%s/", map);
+        char *at = NULL;
+        for (char *q = strstr(abs, key); q; q = strstr(q + 1, key)) at = q;
+        if (at) {
+            char mapped[PATH_MAX];
+            snprintf(mapped, sizeof mapped, "%s%s", root, at);
+            snprintf(abs, sizeof abs, "%s", mapped);
+        }
+    }
     size_t r = strlen(root);
+    if (is_git) {
+        char gitdir[PATH_MAX];
+        snprintf(gitdir, sizeof gitdir, "%s/.git", root);
+        if (strncmp(abs, gitdir, strlen(gitdir)) == 0) kind = "git";
+        else { errno = saved; busy = 0; return; }
+    }
     if (strncmp(abs, root, r) == 0 && (abs[r] == 0 || abs[r] == '/')) {
         char line[PATH_MAX + 512];
         int n = snprintf(line, sizeof line, "%s\tc-%s\t%s\n", file, kind, abs);  /* c-: this recorder's, kept apart to check it */
