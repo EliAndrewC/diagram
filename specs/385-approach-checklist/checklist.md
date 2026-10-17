@@ -75,5 +75,5 @@ step-back; the task past twice its budget; an approach about to change. Answer b
 3. **A drawing page, plate or doc draws what the code does,** checked against one real run (audit #11).
 4. **New work or a changed reading of the GM's words goes in the turn's final message**, never only mid-stream (audit #9).
 5. **A tripwire is read before it is obeyed.** When a round cap fires, check first that the owing diff changed visible words of
-   this unit and that the rounds counted are this feature's: of 106 round-cap accepts, 27 were owed only by a sibling check's
+   this unit and that the rounds counted are this feature's: of 106 round-cap accepts, 27 were owed only by a later
    edit and 13 by a counting or bundle error (audit #13). A tripwire that fired on tooling error is a tooling fix, made then.
