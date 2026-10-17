@@ -669,6 +669,6 @@ def test_a_failed_roll_childs_whole_output_is_kept_and_named(tmp_path, monkeypat
 
     monkeypatch.setattr(rc, "FAILURE_DIR", tmp_path / "fails")
     path = rc.child_failure_log("mod:fn", SimpleNamespace(name="Audit-24"), 1, "out" * 1000, "Traceback ...\nAttributeError: px")
-    text = open(path, encoding="utf-8").read()
+    text = Path(path).read_text(encoding="utf-8")
     assert path.startswith(str(tmp_path / "fails" / "Audit-24-")) and "AttributeError: px" in text and "out" * 1000 in text
     assert rc.child_failure_log("mod:fn", 7, 2, "", "").endswith(".log"), "an arg with no name is named by its target"
