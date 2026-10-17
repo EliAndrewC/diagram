@@ -84,3 +84,37 @@ The GM's "the shape that you have proposed" refers to this reply, quoted whole:
 > - **How is it scoped?** About 10 items from the front of 384, each followed by a retro. 384 is amended to move them out.
 >
 > Project rules require your explicit approval before I file the new feature or move items out of 384. If this shape looks right, say so in your own words and I'll file it, draft checklist v1 and start the cheap audit.
+
+## Amendment 1 (2026-10-17, after T01)
+
+The GM, after T01 landed, verbatim:
+
+> Yikes, okay, so it does sound like we need some tooling fixes because 3 hours and 22 minutes is exactly the kind of time that we are trying to have not happen here. Um, I guess I do understand that a lot of that was actual, like tooling evaluation and even tooling fixes. Although it sounds like we have even more tooling fixes, which it sounds like is T02. Though, if I understand correctly, you're saying that we still have failures? Like, were, are those failures unrelated to what we're doing here? And that's why you're saying that we're done, even though the same stuff is failing as before? Sorry, I'm just kind of confused about what you mean by saying that we're done and also there are failures, unless those failures are just like totally unrelated to our work, in which case that makes sense.
+>
+> I'm curious uh, if we made the tooling fixes, do you think that that would have caused us to take a reasonable amount of time in order to implement this, or what? Because, again, nearly three and a half hours to make what is not a fundamentally complicated fix is, like, pretty crazy. But, again, if we made, like, five different tooling fixes and we're trying out this new system for the first time ever, and, you know, we still are just seeing how it works, then that makes sense. And I understand that this is not going to be, like, the representative version, and that we will, you know, kind of make our additional rounds of tooling fixes next, and then we'll do, like, another claim fix off of the backlog, and then see how long that one takes, etc. But I'm just curious whether you think that after we make the T02 tooling fix that we will be well set up to do that test, or if we can kind of already tell that this isn't working. Because I'm just not sure. I could see that being a good next step, or I could see us saying that, oh, actually things are pretty bad and we need to address the badness with more than just T02. So what do you think?
+
+The session proposed widening T02 (its reply, verbatim, the part the GM approved):
+
+> So I'd widen T02 to cover what T01 measured:
+>
+> 1. **Re-checks against the version last read.** Compare against the version the last check actually read. This alone would have saved most of the 50 minutes.
+> 2. **One check where several are now spent.** One quote-check batch should answer a page-wide check, and one agent should judge all the pop-ups that cite a changed page, not one agent per pop-up.
+> 3. **Guards instead of reminders.** Refuse writes to the tree while your own gate runs, rather than relying on the checklist's C6.
+> 4. **Its own measurement.** T02 records what each check cost per line changed, so T03 shows whether the fixes worked.
+>
+> Then T03, the four seeds plus the general side-by-side merge, is the real test. If T03 still takes more than about two hours, the problem is bigger than tooling: we'd be paying for verification that's out of proportion to the work, and we should rethink how much checking a change owes.
+>
+> Changing T02's scope amends the spec, so it needs your approval. Shall I amend T02 to include these four items?
+> Noted: memory is near the cap, but none of my jobs are running right now. I'll keep any next work small until usage drops.
+>
+> I'm still waiting on your answer: shall I amend T02 to include the four check-cost fixes?
+> Two things first: amending the spec, and checking the research behind those two rules. Both questions are fair, and as you say, they're exactly what part A of the checklist should catch. Looking up what the record actually says:
+> Appending your two messages and my proposal to `request.md` verbatim, then the amendment itself:
+
+The GM, verbatim:
+
+> Yes, please append the spec to include those four items. Thank you.
+>
+> Also, when it comes to fixing those four seeds, Are we sure that household paths don't cut through neighbors' yards? I thought that our research findings were that they did.
+>
+> Similarly, I didn't think that there was a rule about village lanes needing to reach the fields. Is that actually based on our research? I mean, like, I'm almost reluctant to ask this question, or ask these questions, because these are exactly the kinds of questions that our checklist-based approach is supposed to uncover. So to some extent, it might be that the thing to do when we reach this spec is to, like, remove that from the spec and then have a, like, new session try to implement that as a test, or, uh, I mean, I don't even mean, like, me starting a new session. I mean, if you're able to create a sub-session that doesn't have access to the fact that we have already evaluated this as, like, not being necessary or something, then we would be able to see whether the actual fix is to say that there isn't a problem, because the thing that we're doing is actually fine, because it's exactly the kind of thing that our checklists Uh, like the new checklists are supposed to help us determine rather than just wasting a lot of time. What do you think about that?
