@@ -17,6 +17,7 @@ import pathlib
 import pytest
 
 from tests._scripts import script_dirs
+from tests.tooling._record_subset import subset
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
 
@@ -38,6 +39,13 @@ def _owed_everywhere(monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureReq
     (feature 311) is `test_bundle_owed.py`'s, so here every bundle is owed."""
     monkeypatch.setattr(cb.bo, "owed_for_question", lambda root, q, for_, ok: ([], for_, ""))
     monkeypatch.setattr(cb.bo, "owed_for_key", lambda root, key, whole, ok, new: ([], "source-reader" if whole else "source-applicability", ""))
+
+
+@pytest.fixture(scope="module")
+def rec(tmp_path_factory: pytest.TempPathFactory) -> pathlib.Path:
+    """The pages these tests name, copied (feature 383 amendment 5, plan D33): over the whole record they read 4,600 files
+    and re-ran on an edit to any of them."""
+    return subset(tmp_path_factory.mktemp("rec"), ("0036", "0081", "0086", "0087", "0165"), ("edo-enwiki", "fires-in-edo-enwiki"))
 
 
 def test_the_keys_a_question_cites_are_read_off_its_links() -> None:
@@ -65,9 +73,9 @@ def test_a_registry_pointer_keeps_its_own_parenthesis_and_drops_the_wrapping_one
     assert cb.url_of(entry) == want
 
 
-def test_a_key_finds_its_own_entry_and_not_a_longer_key_ending_in_it() -> None:
-    assert cb.registry_entry(REPO, "edo-enwiki").name == "4220-edo-enwiki.html", "not 5780-fires-in-edo-enwiki.html"
-    assert cb.registry_entry(REPO, "no-such-key") is None
+def test_a_key_finds_its_own_entry_and_not_a_longer_key_ending_in_it(rec: pathlib.Path) -> None:
+    assert cb.registry_entry(rec, "edo-enwiki").name == "4220-edo-enwiki.html", "not 5780-fires-in-edo-enwiki.html"
+    assert cb.registry_entry(rec, "no-such-key") is None
 
 
 def test_a_directory_that_is_not_a_bundle_is_never_cleared(tmp_path: pathlib.Path) -> None:
@@ -80,9 +88,9 @@ def test_a_directory_that_is_not_a_bundle_is_never_cleared(tmp_path: pathlib.Pat
     assert list(tmp_path.iterdir()) == [], "a bundle is cleared before it is rewritten"
 
 
-def test_a_question_bundle_on_the_real_record(tmp_path: pathlib.Path) -> None:
+def test_a_question_bundle_on_the_real_record(tmp_path: pathlib.Path, rec: pathlib.Path) -> None:
     out = tmp_path / "bundle"
-    assert cb.main(["0087", "--out", str(out), "--no-quotes", "--root", str(REPO)]) == 0
+    assert cb.main(["0087", "--out", str(out), "--no-quotes", "--root", str(rec)]) == 0
     names = {p.relative_to(out).as_posix() for p in out.rglob("*") if p.is_file()}
     assert {"0087-road-bridges-over-rivers-and-canals-hashi.html", "0087-road-bridges-over-rivers-and-canals-hashi.notes.html"} <= names
     assert {"prepass.txt", "glossary-variants.txt", "MANIFEST.md"} <= names
@@ -107,28 +115,28 @@ def test_an_unmatched_question_writes_nothing(tmp_path: pathlib.Path) -> None:
     assert not out.exists()
 
 
-def test_a_source_bundle_holds_the_entry(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_source_bundle_holds_the_entry(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch, rec: pathlib.Path) -> None:
     fetched: list[list[str]] = []
     monkeypatch.setattr(cb, "run_script", lambda name, args, root: fetched.append([name, *args]) or (0, ""))
     out = tmp_path / "key"
-    assert cb.main(["--key", "edo-enwiki", "--out", str(out), "--root", str(REPO)]) == 0
+    assert cb.main(["--key", "edo-enwiki", "--out", str(out), "--root", str(rec)]) == 0
     assert (out / "sources" / "edo-enwiki.html").is_file()
     # D19: the bundle hands source-pages the passages the record quotes from the key, so a long page is excerpted
     assert fetched == [["source_pages.py", str(out / "pages"), "https://en.wikipedia.org/wiki/Edo", "--quotes", str(out / "quotes.json"), "--no-ledger"]]
     assert isinstance(json.loads((out / "quotes.json").read_text(encoding="utf-8")), list)
     fetched.clear()
     whole = tmp_path / "whole"
-    assert cb.main(["--key", "edo-enwiki", "--whole", "--out", str(whole), "--root", str(REPO)]) == 0
+    assert cb.main(["--key", "edo-enwiki", "--whole", "--out", str(whole), "--root", str(rec)]) == 0
     sought = ["--sought", "source-reader: the passage behind a new claim on edo-enwiki"]
     assert fetched == [["source_pages.py", str(whole / "pages"), "https://en.wikipedia.org/wiki/Edo", "--question", "none", *sought]], "source-reader's form: the whole page, no excerpt"
     assert not (whole / "quotes.json").exists()
     fetched.clear()
-    assert cb.main(["--key", "edo-enwiki", "--whole", "--question", "ways/010", "--out", str(whole), "--root", str(REPO)]) == 0
+    assert cb.main(["--key", "edo-enwiki", "--whole", "--question", "ways/010", "--out", str(whole), "--root", str(rec)]) == 0
     assert fetched == [["source_pages.py", str(whole / "pages"), "https://en.wikipedia.org/wiki/Edo", "--question", "ways/010", *sought]], "a WHOLE read carries its question to the ledger"
-    assert cb.main(["--key", "no-such-key", "--out", str(tmp_path / "none"), "--root", str(REPO)]) == 2
+    assert cb.main(["--key", "no-such-key", "--out", str(tmp_path / "none"), "--root", str(rec)]) == 2
 
 
-def test_a_whole_bundle_carries_the_owed_notes_and_their_sentences(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_whole_bundle_carries_the_owed_notes_and_their_sentences(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch, rec: pathlib.Path) -> None:
     """Feature 319: a WHOLE bundle held only the write-up and the page, so source-reader checked the write-up and the
     owed notes' sentences went unread. The bundle now carries each owed note and the blocks marking it, on its own page."""
     import sys  # noqa: PLC0415
@@ -140,7 +148,7 @@ def test_a_whole_bundle_carries_the_owed_notes_and_their_sentences(tmp_path: pat
     monkeypatch.setattr(cb.bo, "owed_for_key", lambda root, key, whole, ok, new: (units, "source-reader", ""))
     monkeypatch.setattr(cb, "run_script", lambda name, args, root: (0, ""))
     out = tmp_path / "whole"
-    assert cb.main(["--key", "edo-enwiki", "--whole", "--out", str(out), "--root", str(REPO)]) == 0
+    assert cb.main(["--key", "edo-enwiki", "--whole", "--out", str(out), "--root", str(rec)]) == 0
     text = (out / "MANIFEST.md").read_text(encoding="utf-8")
     assert "## The claims to read" in text
     assert '<li data-note="edo-enwiki">' in text, "the owed note itself"
@@ -148,9 +156,9 @@ def test_a_whole_bundle_carries_the_owed_notes_and_their_sentences(tmp_path: pat
     assert ".drawing." not in text.split("## The claims to read", 1)[1], "a research-page note never pulls the drawing page"
 
 
-def test_the_manifest_holds_every_copy_so_a_check_reads_one_file(tmp_path: pathlib.Path) -> None:
+def test_the_manifest_holds_every_copy_so_a_check_reads_one_file(tmp_path: pathlib.Path, rec: pathlib.Path) -> None:
     out = tmp_path / "bundle"
-    assert cb.main(["0087", "--out", str(out), "--no-quotes", "--root", str(REPO)]) == 0
+    assert cb.main(["0087", "--out", str(out), "--no-quotes", "--root", str(rec)]) == 0
     manifest = (out / "MANIFEST.md").read_text(encoding="utf-8")
     fragment = (out / "0087-road-bridges-over-rivers-and-canals-hashi.html").read_text(encoding="utf-8").rstrip()
     assert fragment in manifest and "WORDS TO RULE ON" in manifest, "the fragment and the prepass are inline"
@@ -226,32 +234,32 @@ def test_make_notes_prints_the_named_notes_and_refuses_without_keys(capsys: pyte
     assert cb.main(["0087", "--print-notes", "--root", str(REPO)]) == 2
 
 
-def test_each_check_gets_only_its_own_parts(tmp_path: pathlib.Path) -> None:
+def test_each_check_gets_only_its_own_parts(tmp_path: pathlib.Path, rec: pathlib.Path) -> None:
     """D14: a quote-check bundle holds no word list, variant index or registry entries; a record-format bundle holds no
     quote report or registry entries - the question and its notes are in both."""
     rf = tmp_path / "rf"
-    assert cb.main(["0087", "--out", str(rf), "--no-quotes", "--for", "record-format", "--root", str(REPO)]) == 0
+    assert cb.main(["0087", "--out", str(rf), "--no-quotes", "--for", "record-format", "--root", str(rec)]) == 0
     names = {p.relative_to(rf).as_posix() for p in rf.rglob("*") if p.is_file()}
     assert {"prepass.txt", "glossary-variants.txt"} <= names and not any(n.startswith("sources/") for n in names)
     qc = tmp_path / "qc"
-    assert cb.main(["0086-ferries-and-fords-watashi.html", "--out", str(qc), "--no-quotes", "--for", "quote-check", "--root", str(REPO)]) == 0
+    assert cb.main(["0086-ferries-and-fords-watashi.html", "--out", str(qc), "--no-quotes", "--for", "quote-check", "--root", str(rec)]) == 0
     names = {p.relative_to(qc).as_posix() for p in qc.rglob("*") if p.is_file()}
     assert "prepass.txt" not in names and "glossary-variants.txt" not in names and not any(n.startswith("sources/") for n in names)
     assert "0086-ferries-and-fords-watashi.notes.html" in names
     rs = tmp_path / "rs"
-    assert cb.main(["0087", "--out", str(rs), "--no-quotes", "--for", "record-style", "--root", str(REPO)]) == 0
+    assert cb.main(["0087", "--out", str(rs), "--no-quotes", "--for", "record-style", "--root", str(rec)]) == 0
     names = {p.relative_to(rs).as_posix() for p in rs.rglob("*") if p.is_file()}
     assert {"STYLE.md", "style-prepass.txt", "glossary-variants.txt"} <= names and "prepass.txt" not in names, "feature 292: record-style reads the guide itself, and its own prepass"
     assert not any(n.endswith(".notes.html") for n in names), "feature 292: record-style judges prose - no notes unless it audits a merge"
     rsx = tmp_path / "rsx"
-    old = REPO / "research/questions" / next(n for n in names if n.endswith(".html") and n[:4].isdigit())
-    assert cb.main(["0087", "--out", str(rsx), "--no-quotes", "--for", "record-style", "--extra", str(old), "--root", str(REPO)]) == 0
+    old = rec / "research/questions" / next(n for n in names if n.endswith(".html") and n[:4].isdigit())
+    assert cb.main(["0087", "--out", str(rsx), "--no-quotes", "--for", "record-style", "--extra", str(old), "--root", str(rec)]) == 0
     assert any(p.name.endswith(".notes.html") for p in rsx.iterdir()), "a merge audit accounts for the notes, so it is handed them"
     ed = tmp_path / "ed"
-    assert cb.main(["0087", "--out", str(ed), "--no-quotes", "--for", "entry-drift", "--root", str(REPO)]) == 0
+    assert cb.main(["0087", "--out", str(ed), "--no-quotes", "--for", "entry-drift", "--root", str(rec)]) == 0
     assert not any(p.name.endswith(".notes.html") for p in ed.iterdir()), "entry-drift compares a modal with the prose"
     tc = tmp_path / "tc"
-    assert cb.main(["0036", "--out", str(tc), "--no-quotes", "--for", "translation-check", "--root", str(REPO)]) == 0
+    assert cb.main(["0036", "--out", str(tc), "--no-quotes", "--for", "translation-check", "--root", str(rec)]) == 0
     assert (tc / "translations.txt").read_text(encoding="utf-8").startswith("translation-owed: "), "the owed pairs, nothing else"
     assert not any(p.name.endswith(".notes.html") for p in tc.iterdir())
 
@@ -296,21 +304,21 @@ def test_a_shared_modal_name_is_qualified_by_its_module() -> None:
 # ---- feature 288: a WHOLE read is a research read and is ledgered; an excerpt is a re-check and is not ----
 
 
-def test_the_whole_bundle_prints_and_ledgers_and_the_excerpt_does_not(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
+def test_the_whole_bundle_prints_and_ledgers_and_the_excerpt_does_not(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str], rec: pathlib.Path) -> None:
     """SC-001, end to end with no network: the key's page is in the page cache, so the real `source_pages.py` run
     reads it from there. The WHOLE bundle prints the page's earlier read and appends `pending` with its question; the
     excerpt bundle of the same key appends nothing."""
     src = _load_sources()
     where = pathlib.Path(os.environ["L7R_SOURCES_HOME"])
-    url = cb.url_of(cb.registry_entry(REPO, "edo-enwiki").read_text(encoding="utf-8"))
+    url = cb.url_of(cb.registry_entry(rec, "edo-enwiki").read_text(encoding="utf-8"))
     src.put(where, url, "Edo was the seat of the shogunate. It grew large.")
     src.append(where, [src.line({"feature": "250", "clone": "x", "session": "s"}, url, "nothing-found", ["ways/010"])])
-    assert cb.main(["--key", "edo-enwiki", "--whole", "--question", "0081", "--out", str(tmp_path / "w"), "--root", str(REPO)]) == 0
+    assert cb.main(["--key", "edo-enwiki", "--whole", "--question", "0081", "--out", str(tmp_path / "w"), "--root", str(rec)]) == 0
     out = capsys.readouterr().out
     assert "read 1 time(s) before:" in out and "nothing-found  q: ways/010" in out
     assert "from the page cache" in (tmp_path / "w" / "pages" / "MANIFEST.txt").read_text(encoding="utf-8")
     assert [(r["outcome"], r["questions"]) for r in src.read(where)][1:] == [("pending", ["0081"])]
-    assert cb.main(["--key", "edo-enwiki", "--out", str(tmp_path / "e"), "--root", str(REPO)]) == 0
+    assert cb.main(["--key", "edo-enwiki", "--out", str(tmp_path / "e"), "--root", str(rec)]) == 0
     assert "sources-consulted:" not in capsys.readouterr().out
     assert len(src.read(where)) == 2, "the excerpt bundle wrote no ledger line"
     assert cb.ledger_part("pointer | file | state\nx\n") == ""

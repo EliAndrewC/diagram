@@ -20,17 +20,37 @@ from tests.tooling import _test_deps as deps
 ROOT = str(deps.ROOT)
 
 
-def test_a_kept_pass_is_reused_only_while_everything_it_read_is_unchanged() -> None:
+def test_a_kept_read_set_holds_only_while_everything_it_read_is_unchanged() -> None:
     ids = {"scripts/a.py": "1", "tests/tooling/test_a.py": "2"}
     entries = {"scripts": ["a.py"], "": ["scripts", "tests"]}
-    kept = {"v": deps.STORE_VERSION, "py": sys.version, "opaque": [], "files": {"scripts/a.py": "1"}, "dirs": {"scripts": '["a.py"]'}}
-    assert deps.reusable(kept, ids, entries)
-    assert not deps.reusable(kept, {**ids, "scripts/a.py": "9"}, entries), "a file it read changed"
-    assert not deps.reusable(kept, ids, {**entries, "scripts": ["a.py", "b.py"]}), "a directory it listed gained an entry"
-    assert not deps.reusable({**kept, "opaque": ["git"]}, ids, entries), "it ran git in the repository"
-    assert not deps.reusable({**kept, "py": "2.7"}, ids, entries), "another interpreter"
-    assert not deps.reusable({**kept, "v": 1}, ids, entries), "a pass kept in an older form"
-    assert not deps.reusable({**kept, "files": {"x/.gencache/k": "ignored"}}, ids, entries), "it read a file git ignores"
+    states = {"f:scripts/a.py": "1", "d:scripts": '["a.py"]'}
+    kept = {"opaque": [], "files": ["scripts/a.py"], "dirs": ["scripts"]}
+    assert deps.entry_ok(kept, states, ids, entries)
+    assert not deps.entry_ok(kept, states, {**ids, "scripts/a.py": "9"}, entries), "a file it read changed"
+    assert not deps.entry_ok(kept, states, ids, {**entries, "scripts": ["a.py", "b.py"]}), "a directory it listed gained an entry"
+    assert not deps.entry_ok({**kept, "opaque": ["git"]}, states, ids, entries), "it ran git in the repository"
+    assert not deps.entry_ok({**kept, "files": ["x/.gencache/k"]}, {**states, "f:x/.gencache/k": "ignored"}, ids, entries), "a file git ignores"
+    assert not deps.entry_ok({**kept, "files": ["scripts/b.py"]}, states, ids, entries), "a path the table does not hold"
+
+
+def test_a_pass_is_reused_per_test_on_its_own_its_file_s_and_the_session_s_reads() -> None:
+    """Amendment 5 (plan D32): a test stands on its own reads, its file's and the session's; a file is not collected only when
+    every recorded test of it is reused."""
+    ids = {"tests/tooling/test_a.py": "f1", "research/sources/p.html": "s1", "scripts/x.py": "x1", "scripts/y.py": "y1"}
+    one = lambda p: {"opaque": [], "files": [p], "dirs": []}  # noqa: E731
+    kept = {"v": deps.STORE_VERSION, "py": sys.version, "states": {"f:" + k: v for k, v in ids.items()}, "session": one("scripts/y.py"),
+            "files": {"tests/tooling/test_a.py": {"nodeids": ["tests/tooling/test_a.py::t1", "tests/tooling/test_a.py::t2"], "entry": one("tests/tooling/test_a.py")}},
+            "tests": {"tests/tooling/test_a.py::t1": one("research/sources/p.html"), "tests/tooling/test_a.py::t2": one("scripts/x.py")}}  # fmt: skip
+    tests, whole = deps.reusable_tests(kept, ids, {}, {})
+    assert tests == {"tests/tooling/test_a.py::t1", "tests/tooling/test_a.py::t2"} and whole == {"tests/tooling/test_a.py": 2}
+    tests, whole = deps.reusable_tests(kept, {**ids, "research/sources/p.html": "s2"}, {}, {})
+    assert tests == {"tests/tooling/test_a.py::t2"} and whole == {}, "a source page edited: only the test that read it runs"
+    assert deps.reusable_tests(kept, {**ids, "tests/tooling/test_a.py": "f2"}, {}, {}) == (set(), {}), "the file edited: all of it"
+    assert deps.reusable_tests(kept, {**ids, "scripts/y.py": "y2"}, {}, {}) == (set(), {}), "a session fixture's read: everything"
+    assert deps.reusable_tests({**kept, "v": 2}, ids, {}, {}) == (set(), {}), "a pass kept in an older form"
+    assert deps.reusable_tests({**kept, "py": "2.7"}, ids, {}, {}) == (set(), {}), "another interpreter"
+    assert {"tests/tooling/conftest.py", "tests/conftest.py", "pyproject.toml", "tests/tooling/_test_deps.py"} <= deps.file_inputs("tests/tooling/test_a.py")
+    assert "tests/tooling/ci/conftest.py" in deps.file_inputs("tests/tooling/ci/test_b.py"), "every conftest above the file"
 
 
 def test_what_a_child_process_reads_is_known_or_the_file_always_runs(monkeypatch) -> None:  # noqa: ANN001
@@ -128,9 +148,9 @@ def test_a_git_question_is_asked_again_and_its_answer_compared(tmp_path) -> None
     assert rules.ask(q, str(a)) != rules.ask(q, str(b)), "a changed file changes the answer: the test file runs"
     assert rules.git_question(["git", "commit", "-m", "x"], str(a), None, str(a)) == "", "a command that writes is no question"
     assert rules.ask('["{ROOT}/nowhere", "status"]', str(a)) == "error", "one that cannot be asked"
-    kept = {"v": deps.STORE_VERSION, "py": sys.version, "opaque": [], "files": {}, "dirs": {}, "git": {q: rules.ask(q, str(a))}}
-    assert deps.reusable(kept, {}, {}, {q: rules.ask(q, str(a))})
-    assert not deps.reusable(kept, {}, {}, {q: rules.ask(q, str(b))}), "the answer here differs"
+    kept = {"opaque": [], "files": [], "dirs": [], "git": {q: rules.ask(q, str(a))}}
+    assert deps.entry_ok(kept, {}, {}, {}, {q: rules.ask(q, str(a))})
+    assert not deps.entry_ok(kept, {}, {}, {}, {q: rules.ask(q, str(b))}), "the answer here differs"
 
 
 def test_the_c_recorder_is_checked_against_python_s() -> None:
@@ -140,3 +160,74 @@ def test_the_c_recorder_is_checked_against_python_s() -> None:
     gap = {"t.py": {"py-file": {f"{ROOT}/a.py", f"{ROOT}/.git/l7r-cache/x.tmp"}, "c-file": {f"{ROOT}/b.sh"}, "c": {"bash"}}}
     assert deps.shim_gaps(gap) == {"t.py": {f"{ROOT}/a.py"}}, "the cache read is not a gap; the missed module is"
     assert deps.shim_gaps({"t.py": {"py-file": {f"{ROOT}/a.py"}}}) == {}, "no C child: nothing to check"
+
+
+def test_an_entry_kept_against_content_that_moved_is_dropped(tmp_path, monkeypatch) -> None:  # noqa: ANN001
+    """Plan D32a: each read's content is kept once; when a run records a path whose content moved, an entry naming it that the
+    run did not record again was kept against the old content - it is dropped, never judged against the new."""
+    import json as _json  # noqa: PLC0415
+
+    store = tmp_path / "store.json"
+    monkeypatch.setattr(deps, "_store", lambda: store)
+    ids = {"data/p.html": "old"}
+    monkeypatch.setattr(deps, "_ids", lambda: (ids, {}))
+
+    def run(name: str, ran: list[str], reads: dict) -> dict:
+        d = tmp_path / name
+        d.mkdir()
+        (d / "worker-gw0.json").write_text(
+            _json.dumps({"reads": reads, "failed": [], "ran": ran, "collected": {"tests/tooling/test_a.py": ["tests/tooling/test_a.py::t1", "tests/tooling/test_a.py::t2"]}})
+        )
+        deps._keep(d)
+        return _json.loads(store.read_text())
+
+    p = str(deps.ROOT / "data/p.html")
+    s = str(deps.ROOT / "data/s.json")  # a session fixture's read, kept as a union across runs that never ran it
+    ids["data/s.json"] = "s"
+    kept = run(
+        "one", ["tests/tooling/test_a.py::t1", "tests/tooling/test_a.py::t2"], {"tests/tooling/test_a.py::t1": {"file": [p]}, "tests/tooling/test_a.py::t2": {"file": [p]}, deps.SESSION: {"file": [s]}}
+    )
+    assert kept["states"]["f:data/p.html"] == "old" and len(kept["tests"]) == 2
+    ids["data/p.html"] = "new"  # the page edited; only t1 runs again
+    kept = run("two", ["tests/tooling/test_a.py::t1"], {"tests/tooling/test_a.py::t1": {"file": [p]}})
+    assert kept["states"]["f:data/p.html"] == "new"
+    assert set(kept["tests"]) == {"tests/tooling/test_a.py::t1"}, "t2 saw the old page: dropped, not kept against the new"
+    assert kept["session"]["files"] == ["data/s.json"], "the earlier run's session read carried, as the relative path it was kept as"
+
+
+def test_a_test_that_only_calls_a_module_another_imported_still_depends_on_it() -> None:
+    """Plan D32b (found 2026-10-17): a module is opened once per worker, so a test that only CALLED code another test had
+    imported was kept without it, and reused after it changed. The code a key runs is its read."""
+    import sys as _sys  # noqa: PLC0415
+
+    ns: dict = {}
+    exec(compile("def f():\n    return 1\n", str(deps.ROOT / "scripts" / "probe_module.py"), "exec"), ns)  # noqa: S102
+    started = not deps._MONITORING[0]
+    if started:
+        deps._monitor()
+    saved, prev = {k: dict(v) for k, v in deps._reads.items()}, deps._current[0]
+    try:
+        for key in ("t:first", "t:second"):  # the second key calls f after the first already ran it
+            deps._enter(key)
+            ns["f"]()
+            deps._enter("")
+        probe = str(deps.ROOT / "scripts" / "probe_module.py")  # reads are kept absolute until `_keep` makes them relative
+        assert all(probe in deps._reads[k]["file"] for k in ("t:first", "t:second"))
+    finally:
+        deps._reads.clear()
+        deps._reads.update(saved)
+        deps._enter(prev)
+        if started:
+            _sys.monitoring.set_events(deps.MONITOR_ID, 0)
+            _sys.monitoring.free_tool_id(deps.MONITOR_ID)
+            deps._MONITORING[0] = False
+
+
+def test_a_wide_fixture_defined_in_a_test_module_is_that_file_s_read() -> None:
+    """Plan D32b: a session-scoped fixture defined in a test module serves only its own tests, so what it runs is that
+    file's read - kept under the session, every test in the tree depended on it."""
+    t = "tests/tooling/test_a.py"
+    assert deps.fixture_key(t, "session", t + "::x") == t, "defined in a test module: that file, whatever its scope"
+    assert deps.fixture_key("tests/tooling", "session", t + "::x") == deps.SESSION, "a conftest's session fixture"
+    assert deps.fixture_key("tests/tooling", "module", t + "::x") == t, "a conftest's module fixture: the requesting file"
+    assert deps.fixture_key("", "package", t + "::x") == deps.SESSION
