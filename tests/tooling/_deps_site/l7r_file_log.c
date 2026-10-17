@@ -97,6 +97,8 @@ static void note(int dirfd, const char *path, const char *kind) {  /* kind may b
         snprintf(key, sizeof key, "/%s/", map);
         char *at = NULL;
         for (char *q = strstr(abs, key); q; q = strstr(q + 1, key)) at = q;
+        size_t al = strlen(abs), kl = strlen(key) - 1;  /* the copy's own top directory, listed: "/tmp/.../scripts" */
+        if (!at && al >= kl && strncmp(abs + al - kl, key, kl) == 0) at = abs + al - kl;
         if (at) {
             char mapped[PATH_MAX];
             snprintf(mapped, sizeof mapped, "%s%s", root, at);

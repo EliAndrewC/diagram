@@ -60,12 +60,13 @@ def test_git_and_a_skipped_program_are_not_recorded_and_a_fixture_copy_maps_home
     subprocess.run(["git", "init", "-q", str(root)], check=True)
     fixture = pathlib.Path(subprocess.run(["mktemp", "-d"], capture_output=True, text=True, check=True).stdout.strip())
     try:
-        got = _run(shim, root, tmp_path / "y.log", f"git status >/dev/null; cp -r scripts {fixture}/; cat {fixture}/scripts/s.sh >/dev/null", L7R_TEST_DEP_SKIP="cp", L7R_TEST_DEP_MAP="scripts")
+        got = _run(shim, root, tmp_path / "y.log", f"git status >/dev/null; cp -r scripts {fixture}/; cat {fixture}/scripts/s.sh >/dev/null; ls {fixture}/scripts >/dev/null", L7R_TEST_DEP_SKIP="cp", L7R_TEST_DEP_MAP="scripts")
     finally:
         shutil.rmtree(fixture, ignore_errors=True)
     assert ("c-git", "ROOT/.git") in {(k, p if not p.startswith("ROOT/.git") else "ROOT/.git") for k, p in got}, "git on the repository is noted, not followed"
     assert ("c-file", "ROOT/scripts/s.sh") in got, "the fixture's copy is read as the repository's file"
     assert sum(1 for k, p in got if p == "ROOT/scripts/s.sh") == 1, "cp's own read of the source is not counted"
+    assert ("c-dir", "ROOT/scripts") in got, "the copy's top directory listed: a file added to scripts/ re-runs the suite (plan review round 5)"
 
 
 def test_a_suite_s_reads_are_kept_and_judged_by_content(tmp_path: pathlib.Path) -> None:

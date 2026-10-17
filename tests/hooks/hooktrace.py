@@ -52,6 +52,10 @@ def shim(gitdir: pathlib.Path) -> str:
     return str(so)
 
 
+def recorder_version() -> str:
+    return hashlib.sha256(SRC.read_bytes()).hexdigest()[:12] if SRC.is_file() else ""
+
+
 def _rel(path: str, root: pathlib.Path) -> str:
     rel = os.path.relpath(path, root).replace(os.sep, "/")
     if "/__pycache__/" in f"/{rel}" and rel.endswith(".pyc"):
@@ -108,7 +112,7 @@ def stamp(gitdir: pathlib.Path, guard: str, log: pathlib.Path, root: pathlib.Pat
         return 0  # it read a file git ignores: not known by content
     dirs = {rel: _state("dir", rel, root, ids, entries) for rel in sorted(r["dir"])}
     target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(json.dumps({"py": sys.version, "files": files, "dirs": dirs}), encoding="utf-8")
+    target.write_text(json.dumps({"py": sys.version, "recorder": recorder_version(), "files": files, "dirs": dirs}), encoding="utf-8")
     return 0
 
 
@@ -121,6 +125,7 @@ def fresh(gitdir: pathlib.Path, root: pathlib.Path, guards: list[str]) -> list[s
         g
         for g, k in kept.items()
         if k.get("py") == sys.version
+        and k.get("recorder") == recorder_version()  # a trace by an older recorder may lack what this one sees
         and all(_state("file", rel, root, ids, entries) == was for rel, was in k["files"].items())
         and all(_state("dir", rel, root, ids, entries) == was for rel, was in k["dirs"].items())
     ]

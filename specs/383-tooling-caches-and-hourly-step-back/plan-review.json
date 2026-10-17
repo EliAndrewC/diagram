@@ -217,7 +217,7 @@
    "declared": "spec-fidelity"
   },
   "## Amendment 3 (FR-021 to FR-024)": {
-   "sha256": "8cf26ac29ec9ce2150deef8a3980cee9a0ee91784a87815846479e490243b9f2",
+   "sha256": "0846e91b45ad06782d0d83907d8f20160f7780dd54ecab93d01732d41fecb7d4",
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
@@ -731,6 +731,69 @@
      "summary": "make hooks-test prints suites run and seconds, longest first",
      "class": "within",
      "why": "Keeps FR-023's measurement of which suites ran running at every landing; enforcement/measurement of the request."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Amendment 3 (FR-021 to FR-024)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D24",
+     "summary": "Sonnet 5.5 trials first: model_trial.py, 7 checks x 2 cases x 3 runs, all-hit/no-false-alarm rule, results in tier table, agent file, docs and CLAUDE.md pointer",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict; carries FR-024 and the GM's 'do that pretty much right away'."
+    },
+    {
+     "id": "D25",
+     "summary": "pytest_ignore_collect for reused files; make quick's collection cost measured first, cut follows; results compared on and off",
+     "class": "within",
+     "why": "Unchanged; carries FR-022 / SC-016."
+    },
+    {
+     "id": "D26",
+     "summary": "LD_PRELOAD C-library recorder for non-Python children, validated against the Python audit hook before any reuse",
+     "class": "within",
+     "why": "Unchanged; carries FR-021, unknowns recorded with seconds and reason as FR-021 requires."
+    },
+    {
+     "id": "D27-a",
+     "summary": "A guard suite's inputs become what it read when it last went green (traced by D26's recorder), fixture copies of scripts/ mapped to the repository's files, the fixture's cp not counted; skipped while every read is unchanged",
+     "class": "within",
+     "why": "This is FR-023's 'inputs narrowed' to what the cases read, now aimed at the measured cause (sync-with-main and gate-stamp re-run on 42 of 44 landings because the whole scripts tree was their key). The bulk cp is fixture setup, not a case reading; what a case then reads in the copy is still counted, mapped to its source, so nothing a suite checks is dropped. Corrects the premise round 4 accepted, and moves toward the GM's 'optimize away running some of those when they haven't been modified'."
+    },
+    {
+     "id": "D27-b",
+     "summary": "A suite that reads the repository through git (clones it) or reads a git-ignored file is not traced and keeps hookdeps.py's key",
+     "class": "within",
+     "why": "Not a carve-out from FR-023. A clone reads the whole repository through the object store, so for it every commit IS a change to what it read and FR-023's condition ('re-run though nothing its cases read changed') never arises; a git-ignored file is absent from the landing's worktree, so a trace naming it could never match and would make the suite always run. Keeping today's key keeps these suites skipping where they skip now (the state round 4 ruled CLEAR), and the needless re-runs measured were the copying suites, which D27-a traces. If SC-017's measurement shows sync-with-main or gate-stamp falling into this class, the purpose of D27 is lost and this needs a fresh ruling."
+    },
+    {
+     "id": "D27-c",
+     "summary": "case_11 split into three cases on their own fixtures, weights re-measured, parts 4 -> 8; all 124 checks still run",
+     "class": "within",
+     "why": "Unchanged; FR-023's 'or the suite is split', slow suites first, nothing dropped."
+    },
+    {
+     "id": "D27-d",
+     "summary": "review-gate and entry-gate recorded, not split",
+     "class": "within",
+     "why": "Unchanged; they are now also narrowed by D27-a's trace, so FR-023's 'narrowed, or ... split' is met by narrowing; looked at first as asked."
+    },
+    {
+     "id": "D27-e",
+     "summary": "make hooks-test prints which suites ran and each one's seconds",
+     "class": "within",
+     "why": "Unchanged; serves FR-023 / SC-017's 'which guard suites ran ... and why'."
+    },
+    {
+     "id": "D27-f",
+     "summary": "hooks-test fixed costs cut: every suite's key from one hookdeps.py --keys process (same recipe sha, stamps stay valid); the user-level missing-program hook's self-test kept by its two files like any suite",
+     "class": "within",
+     "why": "The self-test is a guard suite run every time though its two files did not change - exactly FR-023's 'runs only where what it reads changed'; the one-process key lookup is a measured timing cut inside the same step, covered by amendment 2's 'land whatever timing improvements you are able to figure out' (FR-019). Neither drops a check."
     }
    ]
   }

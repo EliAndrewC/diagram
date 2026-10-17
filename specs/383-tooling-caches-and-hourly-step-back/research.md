@@ -289,6 +289,13 @@ of the fresh worktree's time is its cold byte-code: every module compiled again.
 | `make hooks-test` with nothing to run | 16.1 s (the user-level hook's self-test 7.5 s every time; one `--deps` process per suite 5.9 s) | 2.6 s |
 | every suite at once (`HOOKS_ALL=1`, traced) | - | 129 s |
 
+Next, by the per-suite seconds `make hooks-test` now prints (observed 2026-10-17, method: a re-trace of every suite, load
+about 6): main-tree 57.8 s, no-poll 52.0 s, finished-run 40.1 s, pair 27.3 s - each runs only when what it read changes, but
+each is one long serial run where sync-with-main's parts show the way.
+
+A file added to `scripts/`: the fixture's own `scripts` directory listed is read as the repository's (the plan review's
+design note, round 5), and a trace taken by an older recorder counts as stale.
+
 A defect made and caught on the way, recorded: an edit replacing the per-suite key lost one of its two halves to a refused
 edit, so for one run every suite's key was the hash of nothing; the next run re-ran each suite whose traced reads had moved
 and rewrote the stamps, and the recipe now treats a missing key as never fresh.
