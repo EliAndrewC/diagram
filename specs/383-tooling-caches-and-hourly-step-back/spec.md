@@ -291,12 +291,15 @@ long-running feature does for itself, on the clock glyph-check already keeps.
   measured before (m:land-tooling-landing-a4) and after.
 
 - **SC-023** (FR-031, FR-033) A spec-fidelity dispatch made minutes after another writes on its first call what a defined
-  agent's does - before ~25.8k tokens (observed 2026-10-17; `make cache-audit`'s method over 72 back-to-back pairs), after
-  measured the same way; the claims and modal triage the same against general-purpose's ~29.2k.
-- **SC-024** (FR-032, FR-035) The modal checks' manifests repeat at most the test's limit - before 15-17k characters in 80% of
-  manifests (observed 2026-10-17; the same method) - and the bundle test fails on a seeded repeated block.
+  agent's does - before ~25.8k tokens (observed 2026-10-17; research R13), after measured the same way; the claims and modal
+  triage the same against general-purpose's ~29.2k (research R13). And spec-fidelity without the files still finds what it
+  found with them: feature 251's spec, round 1, three runs a leg with and without, scored by an independent reader (the
+  condition `tests/test_agent_models.py` recorded for removing the exception, specs/256 research R6).
+- **SC-024** (FR-032, FR-035) The modal checks' manifests repeat at most the test's limit - before 15-17k characters repeated in most
+  manifests (research R13) - and the bundle test fails on a seeded repeated block.
 - **SC-025** (FR-034, FR-036) The guard refuses a unique sentence followed by a shared 10 KB and passes the same block placed
-  first (suite cases); `make cache-audit` prints every agent type's numbers, and its total subagent spend before and after.
+  first (suite cases); `make cache-audit` prints every agent type's numbers, and its total subagent spend before and after; CLAUDE.md states
+  the rule and names the guard, and no longer names spec-fidelity as keeping the instruction files.
 
 ## Review history
 

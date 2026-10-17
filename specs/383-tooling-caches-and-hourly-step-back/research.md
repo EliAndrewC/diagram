@@ -427,3 +427,31 @@ real entry (rarity is measured against the whole record), the access tags' unrea
 equivalence tests (the content cache, the push checks in one process), which compare two code paths over every tracked file on
 purpose. `test_lint_scope`'s root run re-runs only when a file is added or removed (it lists directories), and
 `test_sources` now re-runs one test, not 43, on a page edit.
+
+## R13 Amendment 6 - what subagents write fresh, and why
+
+(observed 2026-10-17; method: every subagent transcript since 2026-10-10 under `~/.claude/projects/-diagram/*/subagents/`,
+1,312 runs, typed by their `.meta.json`; per call, the usage's `cache_read_input_tokens` and `cache_creation_input_tokens`;
+"back to back" = a dispatch of the same type from the same session under 5 minutes after the one before, the cache's lifetime
+for subagents - their writes are all `ephemeral_5m`; spend in base-input units at the 5-minute tier's rates, a write 1.25,
+a read 0.1, output 5; the scripts become `make cache-audit`)
+
+| (observed 2026-10-17; the method above) | back-to-back pairs | first call read from cache | first call written fresh |
+|---|---|---|---|
+| modal-depiction | 169 | 4,138 | 2,676 |
+| impl-drift | 83 | 5,959 | 2,317 |
+| spec-fidelity (keeps CLAUDE.md) | 72 | 8,181 | 25,829 |
+| general-purpose (ad hoc) | 42 | 20,492 | 29,191 |
+| record-format | 17 | 8,312 | 3,132 |
+
+- A defined agent's file is its system prompt and is read from cache by the next dispatch of its type; what it writes fresh,
+  ~2.5-3.5k tokens, is the prompt and the harness's environment block.
+- spec-fidelity and the ad-hoc agents carry the instruction files (CLAUDE.md, the nested ones, the memory index), and that
+  ~22-25k is written fresh even back to back: it is not in the cached prefix.
+- (observed 2026-10-17; the method above) Of all subagent spend since 2026-10-10 (~131M base-input units: 68.7M written, 398M read, 1.04M output), spec-fidelity's
+  instruction files are about 12% (written fresh at 309 dispatches and carried through ~10 calls each), the ad-hoc agents'
+  about 3.5% (120 runs; 98 of them the claims and modal triage).
+- The modal checks' manifests (223, 61 and 55 read) repeat 15-17k characters in at least 80% of them - `dev/modals.md`, the
+  guidelines, copied into every bundle after the unique prompt: about 1.3%. No other check's manifests repeat more than a few
+  lines; impl-drift's runs re-read the same drawing pages, but those follow the unit, not the check.
+
