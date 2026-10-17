@@ -161,6 +161,8 @@ long-running feature does for itself, on the clock glyph-check already keeps.
   check whose Sonnet runs find every known finding moves to Sonnet in its file and the tier table; one that misses stays on
   Opus. Every result, either way, is recorded where the next session looks: the tier table, `docs/spec-kit-and-reviews.md`, and
   a pointer from `CLAUDE.md`, so the record of which checks were tried is not lost again.
+  These trials come FIRST (the GM: "we should do that pretty much right away"): they start before FR-021 to FR-023 and
+  are not held behind them.
 
 ## Success criteria
 
