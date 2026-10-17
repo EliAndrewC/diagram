@@ -621,8 +621,10 @@ four or more of one type go through `check-wave`. The window is a design number 
 **D47 - `check-wave`, the saved workflow (FR-043).** `.claude/workflows/check-wave.js`: `meta` named `check-wave`, `whenToUse`
 "a wave of 4 or more checks of one defined type"; `pipeline(args.units, u => agent(u.prompt, {agentType: args.agentType,
 label: u.label, phase: 'Checks', schema: REPLY}))` with `REPLY = {label, verdict, text}` (`verdict` the check's verdict word,
-`text` its whole reply, which `make record-checked ... REPLY=` and `make apply-edits` read); it returns the objects and logs
-how many came back. `docs/reviews.md` and `research/editing-the-record.md` show the call; a test reads the file and holds its
+`text` its whole reply, which `make record-checked ... REPLY=` and `make apply-edits` read), and a second stage, the
+follow-up: a unit whose first stage returned null is re-launched once with the same prompt (already guarded at the run's
+PreToolUse; its SubagentStop pairs by the prompt's hash to the same dispatch, D48); it returns the objects, `NO REPLY` for a unit
+twice silent, and logs how many came back. `docs/reviews.md` and `research/editing-the-record.md` show the call; a test reads the file and holds its
 `agentType`, `schema` and argument names.
 
 **D48 - The Workflow guard (FR-045, SC-031, SC-033).** `scripts/hooks/workflow-hooks.sh` on PreToolUse `Workflow`, its decider

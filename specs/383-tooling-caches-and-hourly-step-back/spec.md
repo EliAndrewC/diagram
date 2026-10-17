@@ -253,7 +253,11 @@ long-running feature does for itself, on the clock glyph-check already keeps.
   session gets one notification for the wave; per-item follow-up is a `pipeline()` stage; each agent returns a `schema` object,
   not prose. A saved workflow, `check-wave`, carries a wave of typed checks: its arguments are the agent type and the units
   (each a label and its prompt), and it returns one object per unit - its label, its verdict word and its reply text (which the
-  answer-recording commands read whole). Two or three agents of one type stay plain Agent calls in one message.
+  answer-recording commands read whole). Its per-item follow-up is a `pipeline()` stage of its own: a unit that returned
+  nothing (its agent died, or it was skipped) is re-launched once with the same prompt, which the guards have already passed and
+  which is recorded as that unit's dispatch. A verify step whose prompt is built from a unit's reply cannot be guarded before the
+  run starts, so it is the session's next wave, still one wake for each wave. Two or three agents of one type stay plain Agent
+  calls in one message.
 - **FR-044 The appended system prompt authorizes it, narrowly.** `scripts/container/append-system-prompt.md` pre-authorizes
   `Workflow` for a wave of 4 or more agents of one of the NAMED recurring wave jobs - source-applicability, quote-check,
   settlement-review, entry-drift, modal-depiction, record-format, impl-drift, modal-research, building-review, source-reader,
@@ -265,7 +269,7 @@ long-running feature does for itself, on the clock glyph-check already keeps.
   `agent(` without `agentType` is refused (`GP_OK` passes); and every unit of a `check-wave` run is held by the same per-dispatch
   guards an Agent call of its type is (model, repeated block, bundle and owed check, decide-first, freeze, round caps, review
   occasions, escalation), its launch and return recorded as an Agent call's are; a `Workflow` whose script calls a typed
-  `agent(` of a type those guards cover other than through `check-wave` is refused, - a guard the hooks of the Agent tool apply is
+  `agent(` of a type those guards cover other than through `check-wave` is refused: a guard the hooks of the Agent tool apply is
   never skipped because the check ran in a workflow (research R20: no PreToolUse or PostToolUse Agent hook fires for an agent a
   workflow spawns). Each hook has its suite cases.
 - **FR-046 The first real wave is measured.** A wave of 4 or more real checks run through `check-wave`: each agent's
@@ -370,11 +374,13 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 - **SC-031** (FR-042, FR-045) The guard no longer refuses a second launch within seconds of a cold first; it refuses the 4th
   same-type launch within the guard's window (a design number, ten seconds) and passes the 3rd, a different type, and `WAVE_OK`; a `Workflow` script with an untyped
   `agent(` is refused and `GP_OK` passes, and one calling a guarded type outside `check-wave` is refused (suite cases); and a `check-wave` unit a guard of its type would refuse is refused,
-  with the guard's own message.
+  with the guard's own message; a unit that returned nothing is re-launched once by `check-wave` and no more (a test of the
+  workflow file).
 - **SC-032** (FR-044) The test fails when the authorization is missing, names an agent with no file, or names a job outside the
   list.
 - **SC-033** (FR-045) A `check-wave` run's units are recorded launched and returned as Agent calls' are (the freeze holds while
-  one runs) - a test on recorded hook payloads, and the event log of the measured wave.
+  one runs), a re-launched unit included (it pairs to the same dispatch) - a test on recorded hook payloads, and the event log
+  of the measured wave.
 - **SC-034** (FR-043, FR-046) The measured wave, run through `check-wave` with every agent typed: per-agent first-request read and write, and the main session's wakes, against the last
   hand-launched wave of its check (research).
 ## Review history
