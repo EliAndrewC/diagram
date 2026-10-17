@@ -17,7 +17,7 @@ Guesses:
 Depiction: The map lays the alleys after the houses are seated, once every household's own way is laid, each branching off the main lane along the middle of the
 gap between two house plots to reach the row behind, and pulled as straight as the plots allow; the households' own ways join them. A few
 households may be reached across a neighbor's yard with no alley of their own. Alleys are drawn at the narrow width of a footpath, about 3 ft,
-narrower than the measured Manchu alleys, since no lane in a wet-rice village was measured.
+narrower than the measured Manchu alleys, since how wide a lane ran in a wet-rice village is not recorded.
 
 Name: Side alleys
 Covers: `meta.lane_web = alleys`

@@ -19,7 +19,7 @@ Guesses:
 Depiction: The map lays the back lane after the houses are seated, behind the house plots and parallel to the field's edge,
 following the curve of that edge. As few back lanes are laid as bring every farmhouse near one, each running only along the houses it serves, and cross lanes through the gaps between houses every few hundred feet tie them to the rest of the lanes, so they make one framework rather than parallel lanes that never meet; how many there are and how often they are tied is the map's own choice. A few households may be reached across a
 neighbor's yard with no way of their own. The back lane is drawn as a narrow track of bare earth, a few feet wide, pulled as
-straight as the plots allow; its width is chosen, since no lane in a wet-rice village was measured.
+straight as the plots allow; its width is chosen, since how wide a lane ran in a wet-rice village is not recorded.
 
 Name: A back lane
 Covers: `meta.lane_web = back_lane`
