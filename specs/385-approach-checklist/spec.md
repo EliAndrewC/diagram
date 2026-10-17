@@ -50,7 +50,7 @@ checklist question unanswered; the refusal names the questions missing.
 
 ### User Story 2 - The checklist comes back when the work resists (Priority: P1)
 
-When the work resists - a seed or a cohort the change refuses, a second red gate, the hourly step-back - the session answers
+When the work resists - a seed or a cohort the change refuses, a second red gate, the hourly step-back, a change of approach (the task's plan section re-decided) - the session answers
 the checklist again for what is resisting, before its next attempt, and the answer is recorded beside the task.
 
 **Independent Test**: on each trigger the session is told to answer the checklist (the trigger's own message carries it); the
@@ -90,20 +90,23 @@ ranking's rows chosen to be of different kinds, so the checklist is tried on mor
 
 - **FR-001 (checklist v1)**: `checklist.md` in this feature's directory: the questions, each with the incident it comes from.
   v1 is drafted from the project's own doctrine (CLAUDE.md, the constitution, the written lessons) and refined by the audit
-  (FR-002) before the first task starts. Once this feature closes, the settled checklist moves to `docs/` and is loaded by
-  every feature's task start.
+  (FR-002) before the first task starts. Once this feature closes, the settled checklist moves to `docs/`, and the refusals of
+  FR-003 and FR-004 extend from this feature's tasks to every feature's, 384's first among them.
 - **FR-002 (the cheap audit)**: the evidence for the checklist is gathered without re-reading transcripts: the GM's own typed
-  messages over the last 14 days (216 messages, about 26,000 words, against 2.5 GB of transcripts - observed 2026-10-17, method: `du -ch` over the `.jsonl` transcripts under `~/.claude/projects/-diagram` modified in the last 14 days, and `jq` over the 23 top-level ones for user messages that are typed text, not meta, compaction summaries or tool notices, counted by `wc -l -w`), the round arbiter's
-  rulings other than routine round-cap accepts, the `make feature-report` output of features 374, 375 and 383, 374's GM-review
-  rows, and the written lessons. Read by one Sonnet extractor (reading is Sonnet's tier); the result, `audit.md`, lists each
-  pitfall with its evidence, its cost and the question that would have caught it.
-- **FR-003 (asked at task start)**: each task's plan section carries an Approach block answering the checklist; `make tick`
-  refuses this feature's tasks without it (tooling built under this feature, with its test).
+  messages over the last 14 days (216 messages, about 26,000 words, against 2.5 GB of transcripts - observed 2026-10-17, method: `du -ch` over the `.jsonl` transcripts under `~/.claude/projects/-diagram` modified in the last 14 days, and `jq` over the 23 top-level ones for user messages that are typed text, not meta, compaction summaries or tool notices, counted by `wc -l -w`), every
+  ruling of the round arbiter (`specs/*/arbiter.jsonl`, the round-cap accepts included), the `make feature-report` output of
+  features 374, 375 and 383, 374's GM-review rows, and the written lessons. Read by Sonnet extractors (reading is Sonnet's
+  tier); the result, `audit.md`, lists each pitfall with its evidence, its cost and the question that would have caught it, and
+  says in a line where a source added none.
+- **FR-003 (asked at task start)**: each task's plan section carries an Approach block answering the checklist; a plan section
+  re-decided (a changed approach) carries the block answered afresh. `make tick` refuses this feature's tasks without it (tooling
+  built under this feature, with its test).
 - **FR-004 (asked when the work resists)**: the triggers of User Story 2 name the checklist in their messages and require a
   fresh answer before the next tick. The existing ones (the red-gate tripwire, the hourly step-back) are extended; a refused
-  seed or cohort is added as a trigger.
-- **FR-005 (the split, measured)**: `make feature-report` gains a per-task table: time from `make task-start` to the task's
-  approach settling (its `make decide` verdict), time after, and the count of re-decides and checklist re-answers.
+  seed or cohort, and a re-decide of the task's plan section, are added as triggers.
+- **FR-005 (the split, measured)**: `make feature-report` gains a per-task table. Every `make decide` verdict and every checklist
+  re-answer is a decision point; the table gives each task's total time, the time up to its last decision point and the time
+  after it, each segment between decision points, and the counts of re-decides and checklist re-answers.
 - **FR-006 (one task, then the retro)**: tasks run one at a time; each closes with its retro row in `retro.md` and any change it
   names made, before the next `make task-start`.
 - **FR-007 (the moved work)**: 384's FR-000 and User Story 0 (the lane law), its four cohort seeds failing at HEAD, T48 and T47
@@ -115,8 +118,9 @@ ranking's rows chosen to be of different kinds, so the checklist is tried on mor
 
 ### Measurable Outcomes
 
-- **SC-001** (FR-005, FR-006): every closed task has its retro row and its per-task split; the share of each task's time spent
-  before its approach settled, and its count of re-decides, are compared across the tasks in the final report.
+- **SC-001** (FR-005, FR-006): every closed task has its retro row and its per-task split, and across the tasks each task's total
+  time, its share before its last decision point and its count of re-decides fall, or the final report says why not (tasks of
+  different kinds are compared within their kind where the report can).
 - **SC-002** (FR-001): the last two retro rows change nothing in the checklist (it has settled), or the report says why not.
 - **SC-003** (FR-007): the lane law's success criteria as 384 states them (User Story 0's Independent Test), and 384's SC-004 for
   T48.
