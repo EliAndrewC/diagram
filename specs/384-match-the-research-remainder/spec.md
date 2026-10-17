@@ -4,8 +4,8 @@
 
 **Created**: 2026-10-13
 
-**Status**: Filed - the open work of feature 374 (itself 372's and 328's remainder), moved here at the GM's word; its first task the lane law (FR-000, the GM 2026-10-17); not resumed
-until the GM says to resume ("How it starts")
+**Status**: Filed - the open work of feature 374 (itself 372's and 328's remainder), moved here at the GM's word; its front (the lane law, the four failing seeds, T48, T47) moved to feature 385 on 2026-10-17; not resumed
+until 385 closes ("How it starts")
 
 **Approved**: the GM, 2026-10-13, "move all of the remaining work to a new feature and then close out this feature and land it on main"
 
@@ -121,3 +121,8 @@ decisions (`make decide`), the rule table, then the rewrite, measured on the re-
 pre-existing cohort failures, then T48 (whose question - does the web carry a re-deal of the seats - the rewrite may already
 answer), then T47's patch re-landed, then the ranking's rows. FR-003's question (how the rest should go faster) stays open
 for anything the lane law does not settle.
+
+**Moved to feature 385 (the GM, 2026-10-17)**: FR-000 and User Story 0 (the lane law), the four cohort seeds failing at HEAD,
+T48 and T47, and about five ranking rows chosen there, are feature 385's (`specs/385-approach-checklist/`), worked one task
+at a time with the approach checklist and a retro after each. That feature is FR-003's answer; this one resumes, under the
+process 385 settles, once 385 closes.
