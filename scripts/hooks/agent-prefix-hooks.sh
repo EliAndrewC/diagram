@@ -1,13 +1,13 @@
 #!/bin/bash
 # agent-prefix-hooks.sh - an Agent prompt that repeats a large block of an earlier dispatch of its type is refused, wherever the
-# block sits: only the agent file is reused across launches (feature 383 amendment 6, FR-034, research R16); and a fan-out of one
-# type launches its first alone (FR-039).
+# block sits: only the agent file is reused across launches (feature 383 amendment 6, FR-034, research R16); and a 4th launch of one
+# type within seconds goes through the check-wave workflow instead (amendment 7, FR-045).
 # GUARD_EDIT_OK: feature 383 amendment 6 - a NEW guard, the GM 2026-10-17: "I want to both make sure that we are doing the
 # correct thing here and that there are some kind of project guidelines that enforce this".
 #
 # The decision and its why are `lib/hm_agent_prefix.py`. The fix is always available: move the shared text into the agent's own
-# file, its system prompt; for a fan-out, send the first and the rest in the next message.
-# Escape: `AGENT_PREFIX_OK: <reason>` in the prompt (two words or more), recorded.
+# file, its system prompt; for a wave of 4 or more, the check-wave workflow.
+# Escapes: `AGENT_PREFIX_OK: <reason>` (a repeated block), `WAVE_OK: <reason>` (a hand-launched wave), in the prompt, recorded.
 #
 # Modes:
 #   pretool (PreToolUse, Agent)   refuse / pass, recorded
@@ -33,14 +33,21 @@ except Exception: pass' 2>/dev/null)"
     exit 0
   fi
   case "$got" in
-    FANOUT*)
-      guard_log agent-prefix blocked "${got#FANOUT }" fan-out
+    WAVE*)
+      kind="${got#WAVE }"
+      guard_log agent-prefix blocked "a 4th $kind launch within seconds" wave
       {
-        printf '\n\033[1mBLOCKED: %s.\033[0m\n' "${got#FANOUT }"
-        printf 'A cache entry is readable only once the request that writes it has started, so dispatches of one type sent\n'
-        printf 'together each write the shared prefix (the agent file) fresh. Send the FIRST alone - it went out - and the rest in\n'
-        printf 'your next message, where they read it from the cache (feature 383 amendment 6, plan D42).\n'
-        printf 'If this fan-out is right here: AGENT_PREFIX_OK: <reason> in the prompt.\n'
+        printf '\n\033[1mBLOCKED: a 4th `%s` launch within seconds - a wave goes through the check-wave workflow.\033[0m\n' "$kind"
+        printf 'Every agent launched by hand wakes the main session when it finishes, and each wake re-reads its whole context\n'
+        printf '(5,544 wakes a month, a median 405k tokens each - feature 383 research R20). A workflow staggers the launches by itself\n'
+        printf 'and wakes the session once, and its guard holds each unit to every check this one would have:\n'
+        if python3 -c 'import sys; sys.path.insert(0, sys.argv[1]); import hm_workflow; sys.exit(sys.argv[2] not in hm_workflow.WAVE_JOBS)' "$AP_HERE/lib" "$kind" 2>/dev/null; then
+          printf '  Workflow({name: "check-wave", args: {agentType: "%s", units: [{label: "<unit>", prompt: "<its prompt>"}, ...]}})\n' "$kind"
+          printf 'Two or three of a type stay plain Agent calls. If this batch must stay hand-launched: WAVE_OK: <reason> in the prompt.\n'
+        else
+          printf '`%s` is not one of check-wave'"'"'s authorized jobs, so that route is closed to it: send at most three now and the\n' "$kind"
+          printf 'rest in the next message, or, if this batch must go together: WAVE_OK: <reason> in the prompt.\n'
+        fi
       } >&2 ;;
     *)
       guard_log agent-prefix blocked "$got" repeated-block

@@ -491,3 +491,58 @@ def test_a_later_batch_counts_its_rounds_afresh_and_a_batch_s_own_edits_do_not(t
     assert "passes its cap of 4" in hc.dispatch(st, "n2", "quote-check", "/m", MANIFEST, 5, root), "and are capped like any other"
     assert not hc.new_cause({}, "u", "b") and not hc.new_cause({"round_batch": {"u": "a"}}, "u", ""), "no counted round, no batch: no new cause"
     assert hc.new_cause({"round_batch": {"u": "a"}}, "u", "b") and not hc.new_cause({"round_batch": {"u": "a"}}, "u", "a")
+
+
+def _wave_transcript(tmp_path: pathlib.Path, name: str, task: str) -> str:
+    """A workflow agent's transcript as the harness writes it (feature 383's probe, research R20): a framed relay of the user's
+    request, then the computed task text, every line indented."""
+    framed = "[Workflow harness - computed task] ... The computed task text follows:\n" + "\n".join("  " + ln for ln in task.splitlines())
+    rows = [{"type": "user", "message": {"role": "user", "content": "[Workflow harness - user request] the GM's words"}}, {"type": "user", "message": {"role": "user", "content": framed}}]
+    p = tmp_path / f"{name}.jsonl"
+    p.write_text("\n".join(json.dumps(r) for r in rows) + "\n", encoding="utf-8")
+    return str(p)
+
+
+def test_a_check_wave_unit_pairs_at_its_return_by_its_prompt(tmp_path: pathlib.Path) -> None:
+    """Feature 383 amendment 7 (SC-033): no PostToolUse gives a workflow agent's id, so its SubagentStop pairs it - by the prompt
+    its task text begins with - and the freeze holds from dispatch to return; a re-launch of a unit that came back with nothing,
+    and a declared verify step (its prompt then the reply before it), pair the same way."""
+    st: dict = {}
+    prompt = "Read /tmp/b/MANIFEST.md\nand rule on it."
+    assert hc.dispatch(st, "wave:r1:0", "quote-check", "/m", MANIFEST, 0) == ""
+    st["dispatches"]["wave:r1:0"].update(wave=hc._wave_key(prompt), wave_len=len(hc._collapsed(prompt)))
+    assert "frozen" in hc.edit_refusal(st, PAGE, "a", "b", 600), "a wave unit waits in the queue past PENDING_S, still frozen"
+    assert hc.edit_refusal(st, PAGE, "a", "b", hc.WAVE_PENDING_S + 1) == "", "...but not for ever"
+    hc.pair_wave(st, "agX", _wave_transcript(tmp_path, "other", "Read /tmp/zzz/MANIFEST.md"))
+    assert st["dispatches"]["wave:r1:0"].get("aid") is None, "another unit's agent does not pair"
+    hc.pair_wave(st, "ag1", _wave_transcript(tmp_path, "a1", prompt))
+    assert st["dispatches"]["wave:r1:0"]["aid"] == "ag1" and st["dispatches"]["wave:r1:0"]["state"] == "running"
+    hc.returned(st, "ag1", "")
+    hc.pair_wave(st, "ag2", _wave_transcript(tmp_path, "a2", prompt))
+    assert st["dispatches"]["wave:r1:0"]["aid"] == "ag2", "the re-launch of a unit that came back with nothing pairs to it"
+    hc.returned(st, "ag2", REPLY)
+    assert st["edits"]["q:0105"], "...and its reply's EDIT blocks are kept as a hand launch's are"
+    step = "Verify /tmp/b/MANIFEST.md"
+    assert hc.dispatch(st, "wave:r1:0.0", "source-reader", "/m2", MANIFEST, 10, freeze_ok=True) == ""
+    st["dispatches"]["wave:r1:0.0"].update(wave=hc._wave_key(step), wave_len=len(hc._collapsed(step)))
+    hc.pair_wave(st, "ag3", _wave_transcript(tmp_path, "a3", step + "\n\nThe reply of the quote-check check before you:\n" + REPLY))
+    assert st["dispatches"]["wave:r1:0.0"]["aid"] == "ag3", "a verify step pairs by its declared prompt, the reply after it"
+    for tid, text in (("wave:r2:0", "Judge page 1"), ("wave:r2:1", "Judge page 12")):
+        hc.dispatch(st, tid, "source-reader", f"/m-{tid}", "", 20)
+        st["dispatches"][tid].update(wave=hc._wave_key(text), wave_len=len(text))
+    hc.pair_wave(st, "ag12", _wave_transcript(tmp_path, "a12", "Judge page 12"))
+    assert st["dispatches"]["wave:r2:1"]["aid"] == "ag12" and "aid" not in st["dispatches"]["wave:r2:0"], "the longest match wins"
+
+
+def test_a_refused_wave_run_drops_its_dispatches(tmp_path: pathlib.Path) -> None:
+    """A check-wave run a guard refused launches nothing, so its units already recorded must not freeze a page (plan D48)."""
+    clone = tmp_path / "c"
+    (clone / ".git").mkdir(parents=True)
+    path = clone / ".git" / hc.STATE
+    st: dict = {}
+    hc.dispatch(st, "wave:r9:0", "quote-check", "/m", MANIFEST, 0)
+    hc.dispatch(st, "toolu_hand", "quote-check", "/m", MODAL, 0)
+    hc.save(path, st)
+    hc.drop_run(str(clone), "wave:r9:")
+    assert list(hc.load(path)["dispatches"]) == ["toolu_hand"]
+    hc.drop_run(str(tmp_path / "nowhere"), "wave:")  # no clone: nothing to drop, and no error

@@ -28,12 +28,16 @@ import time
 SHARED = 2000
 CAP = 65536
 KEEP = 30
-#: a dispatch is COLD when none of its type went out in the cache's lifetime before it; same-type dispatches this soon after a
-#: cold one are one FAN-OUT, and wait for the next message, by when the first's request has written the shared prefix (plan D42:
-#: a message's parallel Agent calls reach the hook ~0.5 s apart, measured 2026-10-17). Convenience numbers to move.
-LIFETIME_S = 300
-FANOUT_S = 5
+#: a WAVE: this many launches of one agent type inside WAVE_S seconds is the most that goes by hand - the next is refused and
+#: sent to the `check-wave` workflow, which staggers by itself and wakes the main session once (feature 383 amendment 7, plan
+#: D46; research R20: 5,544 wakes a month re-reading a median 405k tokens). Design numbers to move. The fan-out rule this replaced
+#: ("the first alone, the rest in the next message", D42) is gone: the extra main-session turn re-read ~92k tokens of context to
+#: save ~3.4k a launch (R20).
+WAVE_N = 3
+WAVE_S = 10
 #: the escape, in the prompt, with a reason of two words or more
+#: the wave rule's escape: a batch that must stay hand-launched says why
+WAVE_ESCAPE = re.compile(r"WAVE_OK\s*[=:]\s*[\"']?\S+\s+\S+")
 ESCAPE = re.compile(r"AGENT_PREFIX_OK\s*[=:]\s*[\"']?\S+\s+\S+")
 
 
@@ -91,10 +95,9 @@ def earlier(git_dir: str, session: str, key: str) -> list[str]:
     return [r["prompt"] for r in _rows(git_dir, session, key)]
 
 
-def fanned_out(rows: list[dict], now: float) -> bool:
-    """Is a dispatch at `now` the second of a fan-out: within FANOUT_S of the last dispatch of its type, which was cold?"""
-    last = rows[-1] if rows else None
-    return bool(last and last.get("cold") and 0 <= now - float(last.get("t", 0)) < FANOUT_S)
+def waved(rows: list[dict], kind: str, now: float) -> bool:
+    """Would a launch of `kind` at `now` be past the hand-launched wave: WAVE_N of its type passed in the WAVE_S before it?"""
+    return sum(1 for r in rows if str(r.get("key", "")).split("|")[0] == kind and 0 <= now - float(r.get("t", 0)) < WAVE_S) >= WAVE_N
 
 
 def remember(git_dir: str, session: str, key: str, prompt: str, now: float | None = None) -> None:
@@ -105,13 +108,18 @@ def remember(git_dir: str, session: str, key: str, prompt: str, now: float | Non
     except OSError:
         rows = []
     now = time.time() if now is None else now
-    mine = [r for r in (json.loads(x) for x in rows) if r.get("key") == key]
-    cold = not mine or now - float(mine[-1].get("t", 0)) >= LIFETIME_S
-    rows.append(json.dumps({"key": key, "prompt": prompt[:CAP], "t": now, "cold": cold}))
+    rows.append(json.dumps({"key": key, "prompt": prompt[:CAP], "t": now}))
     path.write_text("\n".join(rows[-KEEP:]) + "\n", encoding="utf-8")
 
 
-def verdict(payload: dict, git_dir: str, now: float | None = None) -> str:
+def _all_rows(git_dir: str, session: str) -> list[dict]:
+    try:
+        return [json.loads(line) for line in _store(git_dir, session).read_text(encoding="utf-8").splitlines() if line.strip()]
+    except OSError, ValueError:
+        return []
+
+
+def verdict(payload: dict, git_dir: str, now: float | None = None, wave_unit: bool = False) -> str:
     """ "" to pass (and remember the prompt), "ESCAPED" (passed with a reason), "FANOUT ..." or the refusal's first line."""
     ti = payload.get("tool_input") or {}
     if payload.get("tool_name") != "Agent" or not git_dir:
@@ -121,8 +129,9 @@ def verdict(payload: dict, git_dir: str, now: float | None = None) -> str:
     now = time.time() if now is None else now
     rows = _rows(git_dir, session, key)
     escaped = bool(ESCAPE.search(prompt))
-    if fanned_out(rows, now) and not escaped:
-        return f"FANOUT a fan-out of `{key.split('|')[0]}`: its first dispatch went out under {FANOUT_S} s ago with nothing of its type cached"
+    kind = key.split("|")[0]
+    if not wave_unit and not WAVE_ESCAPE.search(prompt) and waved(_all_rows(git_dir, session), kind, now):
+        return f"WAVE {kind}"
     for old in reversed([r["prompt"] for r in rows]):
         size, start = finding(prompt, old)
         if size and escaped:
@@ -145,7 +154,7 @@ def main() -> int:
     import os
 
     clock = os.environ.get("L7R_AGENT_NOW", "")  # a test's clock: the suite's dispatches say when they happen
-    got = verdict(payload if isinstance(payload, dict) else {}, sys.argv[1] if len(sys.argv) > 1 else "", float(clock) if clock else None)
+    got = verdict(payload if isinstance(payload, dict) else {}, sys.argv[1] if len(sys.argv) > 1 else "", float(clock) if clock else None, os.environ.get("L7R_WAVE_UNIT") == "1")
     if got:
         print(got)
     return 0

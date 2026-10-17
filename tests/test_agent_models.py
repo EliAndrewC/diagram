@@ -168,3 +168,80 @@ def test_no_setting_puts_subagents_on_the_hour_long_cache(tmp_path: pathlib.Path
     seeded = tmp_path / "settings.json"
     seeded.write_text('{"env": {"CLAUDE_CODE_SUBAGENT_PROMPT_CACHE_TTL": "1h"}, "experimental": {"cacheTtl": "1h"}}', encoding="utf-8")
     assert hour_ttl([seeded]) == [str(seeded)], "the check finds a seeded 1-hour setting"
+
+
+# Feature 383 amendment 7 (FR-044, SC-032; plan D49): the appended system prompt authorizes Workflow for the named wave jobs
+# only. Claude Code's default prompt says to call Workflow only on the user's explicit request, and outranks CLAUDE.md - without
+# this text a session keeps hand-launching waves, each agent waking the main session once (research R20).
+#: the GM's draft list (diagram-fanout-workflows.md, recommendation 2); the authorization may add only agents that replaced
+#: general-purpose waves (the two triage agents, amendment 6)
+DRAFT_JOBS = {
+    "source-applicability",
+    "quote-check",
+    "settlement-review",
+    "entry-drift",
+    "modal-depiction",
+    "record-format",
+    "impl-drift",
+    "modal-research",
+    "building-review",
+    "source-reader",
+    "glyph-check",
+    "modal-form",
+    "round-arbiter",
+}
+REPLACED_GP = {"claims-triage", "modal-triage"}
+ROOT = AGENTS.parents[1]
+
+
+def wave_jobs(text: str) -> list[str] | None:
+    """The jobs the authorization names (its WAVE JOBS list), or None when the authorization is missing."""
+    if "Workflow is pre-authorized for recurring waves of typed agents" not in text or "check-wave" not in text:
+        return None
+    m = re.search(r"WAVE JOBS:(.*?) - run them", text, re.S)
+    return re.findall(r"`([\w-]+)`", m.group(1)) if m else None
+
+
+def wave_problems(text: str, defined: set[str], decider: tuple[str, ...]) -> list[str]:
+    jobs = wave_jobs(text)
+    if jobs is None:
+        return ["the Workflow authorization is missing from scripts/container/append-system-prompt.md"]
+    out = [f"{j}: no .claude/agents/{j}.md" for j in jobs if j not in defined]
+    out += [f"{j}: not a wave job (the GM's draft list, or an agent that replaced a general-purpose wave)" for j in jobs if j not in DRAFT_JOBS | REPLACED_GP]
+    if set(jobs) != set(decider):
+        out.append(f"the authorization and hm_workflow.WAVE_JOBS disagree: {sorted(set(jobs) ^ set(decider))}")
+    return out
+
+
+def _wave_decider() -> tuple[str, ...]:
+    import importlib.util  # noqa: PLC0415
+
+    spec = importlib.util.spec_from_file_location("hm_workflow", ROOT / "scripts" / "hooks" / "lib" / "hm_workflow.py")
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod.WAVE_JOBS
+
+
+def test_the_workflow_authorization_names_only_defined_wave_jobs() -> None:
+    text = (ROOT / "scripts" / "container" / "append-system-prompt.md").read_text(encoding="utf-8")
+    defined, decider = set(_pinned()), _wave_decider()
+    assert wave_problems(text, defined, decider) == []
+    assert set(wave_jobs(text) or []) >= DRAFT_JOBS, "every job of the GM's draft is authorized"
+    assert wave_problems("no such text", defined, decider) == ["the Workflow authorization is missing from scripts/container/append-system-prompt.md"]
+    seeded = text.replace("`modal-triage`", "`modal-triage`, `no-such-agent`, `escalation-check`")
+    found = wave_problems(seeded, defined, decider)
+    assert any("no-such-agent: no .claude/agents" in f for f in found), "an agent with no file is caught"
+    assert any("escalation-check: not a wave job" in f for f in found), "a job outside the list is caught"
+
+
+def test_check_wave_types_every_agent_and_carries_its_follow_up() -> None:
+    """Plan D47 (FR-043): the saved workflow types every agent() call from its args, returns a schema object, re-launches a
+    unit that came back null once, and runs each declared verify step after its unit with the reply appended."""
+    js = (ROOT / ".claude" / "workflows" / "check-wave.js").read_text(encoding="utf-8")
+    assert "name: 'check-wave'" in js and "args.units" in js and "args.agentType" in js
+    assert re.search(r"agent\(prompt, \{ agentType: type, label, phase, schema: REPLY \}\)", js), "every agent() typed, with the schema"
+    assert len(re.findall(r"(?<![\w.])agent\(", js)) == 1, "one agent() call, the typed one"
+    assert "required: ['label', 'verdict', 'text']" in js
+    assert "(got, u) => got || run(args.agentType, u.prompt, u.label, 'Checks')" in js, "a null unit re-launched once"
+    assert "u.then" in js and "check before you:" in js, "declared verify steps, the reply appended"

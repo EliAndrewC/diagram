@@ -69,18 +69,23 @@ dispatch s3 record-format "Judge question 0087 alone.
 $C"
 [ "$(rc)" -eq 2 ] && grep -q "Block C line 0" "$T/err" && ok "a shorter repeated block is refused on its own" || no "it was allowed" "(rc=$(rc)) $(head -3 "$T/err")"
 
-echo "4. a fan-out launches its first alone"
-dispatch s4 quote-check "Read /tmp/l7r-check/a/MANIFEST.md and rule on it." 400
-[ "$(rc)" -eq 0 ] && ok "the first of a fan-out, nothing of its type in the cache's lifetime, goes" || no "the first was refused" "(rc=$(rc))"
-dispatch s4 quote-check "Read /tmp/l7r-check/b/MANIFEST.md and rule on it." 1
-[ "$(rc)" -eq 2 ] && grep -q "next message" "$T/err" && ok "a second of its type a second later is refused: send it in the next message" || no "the fan-out's second went" "(rc=$(rc)) $(head -3 "$T/err")"
-logged fan-out && ok "...recorded" || no "the fan-out refusal is not recorded"
-dispatch s4 quote-check "Read /tmp/l7r-check/b/MANIFEST.md and rule on it." 20
-[ "$(rc)" -eq 0 ] && ok "...and goes in the next message, the first's prefix now written" || no "the next message's dispatch was refused" "(rc=$(rc))"
-dispatch s4 quote-check "Read /tmp/l7r-check/c/MANIFEST.md and rule on it." 1
-[ "$(rc)" -eq 0 ] && ok "dispatches after a warm one are not a cold fan-out" || no "a warm burst was refused" "(rc=$(rc))"
-dispatch s4 glyph-check "Judge the byre's glyph." 1
-[ "$(rc)" -eq 0 ] && ok "another type's first dispatch is its own" || no "another type was refused" "(rc=$(rc))"
+echo "4. a 4th launch of one type within seconds goes through the check-wave workflow (amendment 7)"
+for n in 1 2 3; do dispatch s4 quote-check "Read /tmp/l7r-check/q$n/MANIFEST.md and rule on it." 1; done
+[ "$(rc)" -eq 0 ] && ok "three quote-checks a second apart go by hand (the stagger is gone: the 2nd and 3rd pass)" || no "the 3rd was refused" "(rc=$(rc)) $(head -3 "$T/err")"
+dispatch s4 quote-check "Read /tmp/l7r-check/q4/MANIFEST.md and rule on it." 1
+[ "$(rc)" -eq 2 ] && grep -q 'name: "check-wave"' "$T/err" && grep -q 'agentType: "quote-check"' "$T/err" && ok "the 4th is refused, naming the check-wave call for its type" || no "the 4th went" "(rc=$(rc)) $(head -3 "$T/err")"
+logged wave && ok "...recorded" || no "the wave refusal is not recorded"
+for n in 1 2 3 4; do dispatch s5 spec-fidelity "Review round $n of feature 9$n." 1; done
+[ "$(rc)" -eq 2 ] && grep -q "not one of check-wave's authorized jobs" "$T/err" && ! grep -q 'name: "check-wave"' "$T/err" && ok "a type check-wave will not take is told WAVE_OK is its way, not check-wave" || no "the refusal offered a closed route" "(rc=$(rc)) $(head -4 "$T/err")"
+dispatch s4 record-format "Read /tmp/l7r-check/r1/MANIFEST.md and rule on it." 1
+[ "$(rc)" -eq 0 ] && ok "another type is its own count" || no "another type was refused" "(rc=$(rc))"
+dispatch s4 quote-check "Read /tmp/l7r-check/q5/MANIFEST.md and rule on it. WAVE_OK: a seeded measurement batch" 1
+[ "$(rc)" -eq 0 ] && ok "WAVE_OK with a reason passes" || no "the escape was refused" "(rc=$(rc))"
+NOW=$((NOW + 1)); python3 -c 'import json,sys; print(json.dumps({"session_id":"s4","cwd":sys.argv[1],"tool_name":"Agent","tool_input":{"subagent_type":"quote-check","prompt":"Read /tmp/l7r-check/q6/MANIFEST.md and rule on it.","description":"x"}}))' "$FIX" \
+  | ( cd "$FIX" && L7R_AGENT_NOW="$NOW" L7R_WAVE_UNIT=1 "$HOOK" pretool 2>"$T/err" ); echo $? > "$T/rc"
+[ "$(rc)" -eq 0 ] && ok "a check-wave unit the Workflow guard feeds through is not counted as a hand launch" || no "a wave unit was refused as a wave" "(rc=$(rc))"
+dispatch s4 quote-check "Read /tmp/l7r-check/q7/MANIFEST.md and rule on it." 30
+[ "$(rc)" -eq 0 ] && ok "past the window, a launch goes by hand again" || no "refused past the window" "(rc=$(rc))"
 
 echo "-----"
 if [ "$FAIL" -eq 0 ]; then echo "all agent-prefix-hook tests passed ($PASS)"; exit 0; fi

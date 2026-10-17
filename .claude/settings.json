@@ -339,6 +339,15 @@
         ]
       },
       {
+        "matcher": "Workflow",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/workflow-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/workflow-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 383 amendment 7 - a NEW guard (the GM 2026-10-17): no Agent hook fires inside a workflow, so an untyped agent() is refused and every check-wave unit is put through the Agent hooks"
+          }
+        ]
+      },
+      {
         "matcher": "Agent",
         "hooks": [
           {

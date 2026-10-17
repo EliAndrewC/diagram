@@ -53,6 +53,9 @@ ROUND_CAP = 2
 STALE_S = 90 * 60
 #: a dispatch recorded at PreToolUse and never launched (another guard refused the call) stops counting after this
 PENDING_S = 120
+#: a `check-wave` unit's dispatch, recorded when the Workflow starts, waits longer for its agent: a long wave queues behind the
+#: workflow's concurrency cap (feature 383 amendment 7, plan D48; a design number to move). A refused run's are dropped at once.
+WAVE_PENDING_S = 30 * 60
 _UNIT = re.compile(r"^unit: (\S+?):(\S.*?) \S+$", re.M)
 _UNIT_FP = re.compile(r"^unit: (\S+?:\S.*?) (\S+)$", re.M)
 _Q = re.compile(r"\b(\d{4})(?:[.#-]|$)")
@@ -151,7 +154,66 @@ def save(path: Path, state: Mapping[str, Any]) -> None:
 def _live(d: Mapping[str, Any], now: float) -> bool:
     """A dispatch that counts: launched, or recorded so recently that its launch may still come. One recorded at PreToolUse
     and refused by another guard never launches, and must not freeze its page."""
-    return d.get("state") != "pending" or now - float(d.get("t", 0)) < PENDING_S
+    return d.get("state") != "pending" or now - float(d.get("t", 0)) < (WAVE_PENDING_S if d.get("wave") else PENDING_S)
+
+
+def _collapsed(text: str) -> str:
+    return " ".join(text.split())
+
+
+def _wave_key(text: str) -> str:
+    return hashlib.sha256(_collapsed(text).encode()).hexdigest()[:16]
+
+
+def _task_texts(transcript: str) -> list[str]:
+    """A workflow agent's task text, whitespace collapsed: its first user messages, each after the harness's frame line (the
+    harness indents the computed text and frames it - measured on feature 383's probe, research R20)."""
+    out: list[str] = []
+    try:
+        lines = Path(transcript).read_text(encoding="utf-8", errors="replace").splitlines()
+    except OSError:
+        return out
+    for raw in lines:
+        try:
+            msg = (json.loads(raw).get("message") or {})
+        except (ValueError, AttributeError):
+            continue
+        if not isinstance(msg, dict) or msg.get("role") != "user":
+            continue
+        c = msg.get("content")
+        text = c if isinstance(c, str) else " ".join(str(b.get("text", "")) for b in c or [] if isinstance(b, dict))
+        out.append(_collapsed(text.split("The computed task text follows:", 1)[-1]))
+        if len(out) >= 3:
+            break
+    return out
+
+
+def pair_wave(state: dict[str, Any], agent_id: str, transcript: str) -> None:
+    """A workflow agent no PostToolUse gave an id to: matched to the wave dispatch its task text begins with (a declared verify
+    step's text goes on with the reply before it), and launched there - waiting first, then a re-launched one whose first agent
+    came back with nothing (feature 383 amendment 7, plan D48)."""
+    ds = state.get("dispatches", {})
+    if not agent_id or any(d.get("aid") == agent_id for d in ds.values()):
+        return
+    texts = _task_texts(transcript)
+    hits = [(tid, d) for tid, d in ds.items() if d.get("wave") and any(hashlib.sha256(t[: int(d.get("wave_len", 0))].encode()).hexdigest()[:16] == d["wave"] for t in texts)]
+    # the LONGEST matching prompt first: one declared prompt can begin another ("... page 1", "... page 12" - spec round 4)
+    hits.sort(key=lambda h: (-int(h[1].get("wave_len", 0)), h[1].get("state") != "pending", float(h[1].get("t", 0))))
+    for tid, d in hits:
+        if d.get("state") == "pending" or (d.get("state") == "returned" and not d.get("reply")):
+            d["aid"], d["state"] = agent_id, "running"
+            return
+
+
+def drop_run(cwd: str, prefix: str) -> None:
+    """A refused `check-wave` run's dispatches go: it launches nothing, so none of them may freeze a page."""
+    path = state_path(cwd)
+    if path is None or not path.is_file():
+        return
+    with locked(path):
+        state = load(path)
+        state["dispatches"] = {t: d for t, d in state.get("dispatches", {}).items() if not t.startswith(prefix)}
+        save(path, state)
 
 
 def running(state: Mapping[str, Any], subject: str, now: float | None = None) -> list[dict]:
@@ -676,7 +738,10 @@ def _handle(mode: str, payload: Mapping[str, Any], path: Path, now: float) -> st
                     back = oscillation(vs)
                     if back:
                         hm_arbiter.trip(root, f"reversal:{s}@{len(vs)}", "reversal", s, f"{s}: a block dropped earlier is back - \"{back}...\"", now)
-        out = dispatch(state, str(payload.get("tool_use_id") or now), check, manifest, text, now, root, freeze_ok, arbiter_ok)
+        tid = str(payload.get("tool_use_id") or now)
+        out = dispatch(state, tid, check, manifest, text, now, root, freeze_ok, arbiter_ok)
+        if not out and tid.startswith("wave:"):  # a check-wave unit: paired at its return by its prompt (plan D48)
+            state["dispatches"][tid].update(wave=_wave_key(prompt), wave_len=len(_collapsed(prompt)))
         if not out and root is not None:
             since = window_start(root)
             n, lines = dispatches_since(state, since), changed_lines(root)
@@ -687,6 +752,7 @@ def _handle(mode: str, payload: Mapping[str, Any], path: Path, now: float) -> st
         resp = payload.get("tool_response") if isinstance(payload.get("tool_response"), Mapping) else {}
         launched(state, str(payload.get("tool_use_id") or ""), str(resp.get("agentId") or ""), resp.get("status") == "async_launched", response_text(resp), path.parent / "check-replies")
     elif mode == "returned":
+        pair_wave(state, str(payload.get("agent_id") or ""), str(payload.get("agent_transcript_path") or ""))
         returned(state, str(payload.get("agent_id") or ""), _reply_of(str(payload.get("agent_transcript_path") or ""), str(payload.get("last_assistant_message") or "")), path.parent / "check-replies")
     elif mode == "edit" and payload.get("tool_name") == "Bash":
         command = str(ti.get("command") or "")
