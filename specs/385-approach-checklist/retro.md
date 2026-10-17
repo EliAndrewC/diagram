@@ -51,10 +51,11 @@ the bisection and one dump answered it. Measure first is now three for three in 
 | 17:05 | three red gates, each a different small cause (claim backing form; a lint the session would have caught with `make quick` first; one uncovered line); the red-gate tripwire's ruling `continue`, with a tooling fix | the gates |
 | 17:30 | the pop-up and claim checks the two drawing-page bullets owed: 10 depictions (one EDIT applied, one finding filed), quote and format (one word fixed), 154 claims (13 labels this change introduced, fixed) - then the one-word fix re-owed every one of them, cleared by two triages | the green gate |
 
-## T01 - the retro row (DRAFT until T01 lands)
+## T01 - the retro row
 
 **The split (by hand; T02 builds it).** Task start 15:31. Decision points: 15:40, 15:46, 15:52, 16:00 (part B), 16:08, 16:24 (a
-correction), 16:50 (the seed 38 fix). Up to the last decision point: about 79 min. After it, to the checks answered (about 18:10):
+correction), 16:50 (the seed 38 fix), 18:47 (the glyph-check's F1, carried to T03). Up to the seed 38 fix: about 79 min.
+After it, to the checks answered (about 18:10):
 about 80 min, almost all of it gates and checks. Re-decides: five plan reviews (round 1 BLOCKED, then CHANGES on a corrected
 fact, then three block rounds), one part B.
 
@@ -84,3 +85,24 @@ the task from the angle rules to what was actually refusing - the checklist's be
 **Process changes for T02 (tooling, the GM's to approve in T02's plan).** (a) A triage diffs against the page version the last
 check READ, not an older baseline - the largest single saving here. (b) One quote-check batch answers a page-wide
 `#unfootnoted` unit. (c) The claim-backing form is checked by `make quick`, not only by the full gate.
+
+**After the draft (18:10-18:53).** The village-lane glyph-check on Inashiro returned NEEDS-WORK: Inashiro did not change at all
+(none of T01's merges fired there), yet it shows a fourth side-by-side shape - a door stub and a lane running 12-25 ft apart over
+open ground, joined by a 90-degree rung - that escapes the doubled-tail cut only by `_ALONG_MIN_FT`, an UNRESEARCHED 30 ft.
+Accepted (`make accept`, the GM's review) and carried to T03 as its first item. **This is the task's most important finding:**
+"two paths side by side become one" wants the PRINCIPLE implemented - parallel runs within reach over open ground become one
+path, whatever joins them - not one detector per shape; T01 built three detectors and the review found the fourth on an
+unchanged map. T03 decides whether the merge is one general test.
+
+Also after the draft: two more tooling fixes the round arbiter owed (a crashed roll's traceback kept; `make verify` and
+`make verify-wait`, each gate its own log), one bug in the second of those found on its first use (the wait matched the
+preflight's own quick line) and fixed, and a deadlock in the arbiter-fix rule fixed (an engine fix can only land with its
+feature, so it is now done with its test committed - `ENGINE=1`). The session edited files during a running gate twice, the
+second time an hour after the arbiter warned of it: C3 below.
+
+**One more checklist change.** C6 (new): "Nothing is written to the tree while a gate runs - not a record, not a ledger row, not
+a fix to the wait itself; queue it and write it after the verdict."
+
+**The numbers for SC-001's comparison (T01, by hand).** Wall time 15:31-18:53, about 3 h 22 min, against a six-hour budget; time to
+the last design decision about 79 min; re-decides 5 plan rounds and 1 part B; agent dispatches about 45 (the event log's count for
+the feature: `make feature-report F=385`); red gates 3; regressions found by the cohort 1, fixed.
