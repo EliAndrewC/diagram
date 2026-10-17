@@ -187,7 +187,11 @@ def main(argv: list[str]) -> int:
         print(message, file=sys.stderr if not permitted else sys.stdout)
     if not permitted:
         return 2
-    refusal = waits_or_marks(root, d) or _arbiter().fix_hold(d) or checkpoint_hold(root)  # 379: an open tooling fix; 383: the hour
+    import approach_gate  # noqa: PLC0415 - feature 385 D8/D9: the task's Approach answered, and again after a trigger
+
+    refusal = (waits_or_marks(root, d) or _arbiter().fix_hold(d) or checkpoint_hold(root)  # 379: an open tooling fix; 383: the hour
+               or approach_gate.refusal(d, root, task))
+
     if refusal:
         print(f"tick: refused - {refusal}", file=sys.stderr)
         return 2

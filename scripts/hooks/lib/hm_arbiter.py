@@ -569,8 +569,19 @@ def env_ok(name: str, text: str) -> bool:
     return bool(re.search(rf'{name}="[^"]{{8,}}"', text)) or len(os.environ.get(name, "").split()) >= 2
 
 
+def _approach():  # noqa: ANN202 - the module, loaded by path (feature 385 D9)
+    import importlib.util  # noqa: PLC0415
+
+    path = Path(__file__).resolve().parents[2] / "gates" / "approach_gate.py"
+    spec = importlib.util.spec_from_file_location("approach_gate", path)
+    mod = importlib.util.module_from_spec(spec)  # type: ignore[arg-type]
+    spec.loader.exec_module(mod)  # type: ignore[union-attr]
+    return mod
+
+
 def main(argv: list[str]) -> int:
     """`hm_arbiter.py ruled <trigger> <json file> --as <who>` - what `make arbiter-ruled` runs."""
+
     import sys  # noqa: PLC0415
 
     if argv[:1] == ["ruled"] and len(argv) == 5 and argv[3] == "--as":
@@ -584,7 +595,12 @@ def main(argv: list[str]) -> int:
             print(f"arbiter-ruled: refused - {e}", file=sys.stderr)
             return 1
         print(f"arbiter-ruled: {row['trigger']} - {row['ruling']} (binding; recorded in arbiter.jsonl and for the GM's review)")
+        # GUARD_EDIT_OK: feature 385 T02, plan D9 - an hour or red-gate ruling owes the task's part B answered (nothing loosened)
+        owed = _approach().ruled(root, row["trigger"])
+        if owed:
+            print(owed)
         return 0
+
     if argv[:1] == ["ruled-batch"] and len(argv) == 4 and argv[2] == "--as":  # `make arbiter-ruled BATCH=1` (375 FR-017)
         root = Path(".").resolve()
         try:
@@ -597,6 +613,9 @@ def main(argv: list[str]) -> int:
             return 1
         for row in rows:
             print(f"arbiter-ruled: {row['trigger']} - {row['ruling']}")
+            owed = _approach().ruled(root, row["trigger"])  # GUARD_EDIT_OK: feature 385 D9, as for a single ruling
+            if owed:
+                print(owed)
         print(f"arbiter-ruled: the batch's {len(rows)} triggers recorded (binding; each in arbiter.jsonl and for the GM's review)")
         return 0
     if argv[:1] == ["spec-ruled"] and len(argv) == 2:  # review-gate.sh: does a ruling stand for this spec's verdict?

@@ -65,7 +65,14 @@ def main(argv: list[str] | None = None) -> int:
     record = newest(root)
     for line in known(root, record) if record else []:
         print(line)
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "gates"))
+    import approach_gate  # noqa: PLC0415 - feature 385 D9: a seed newly failing owes the task's part B
+
+    owed = approach_gate.cohort(root)
+    if owed:
+        print(owed)
     return 0
+
 
 
 if __name__ == "__main__":
