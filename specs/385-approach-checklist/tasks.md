@@ -31,6 +31,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T10 A ranking row; its retro row [lands-open]
       research: rendering
+- [ ] T12 Carried from T03 by the round arbiter (hour:385-approach-checklist@6, ask:t03-d17-route, ask:t03-seed57-residue): D17's side-by-side merge (saved; F1-F3 merged and seed 49 fixed, six seeds regressed - 7, 24, 37, 51, 52, 57 - because the later settle passes are blind to the junctions it makes), seed 49, seed 55 (lane_knots 1, as at HEAD), seed 57 (lanes 1/13, ends 21.6 ft apart, settle_knots' gather refused by needle_loops; 2 knots against HEAD's 1) and Inashiro F1-F3's glyph-check NEEDS-WORK; done when seed 57 PASSES. Its Approach first asks whether the merge needs a fixed reach at all (REACH 20 then 25 ft is ours), whether the refusals behind seed 49 (a field and farmhouses unreached) rest on research, and whether needle_loops' and needle_joins' rules are research or ours; only then the design that makes the later passes aware of the merge's junctions; its retro row [lands-open]
+      research: rendering
 - [ ] T11 The close: the checklist to `docs/`, the refusals extended to every feature (FR-001), the final report (SC-001, SC-002) [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]

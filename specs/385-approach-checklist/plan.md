@@ -156,7 +156,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12
 
 ## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)
 
@@ -369,6 +369,19 @@ Owed by the hour-6 step-back (`hour:385-approach-checklist@6`, ruled `change-rou
 9. **After a ruling.** The steps it names are the bisection, then land the four with the rest carried. Its condition (57 no
    worse than HEAD) is put back to the arbiter with the measurement (`ask:t03-seed57-residue`).
 
+### T03 Approach (re-answered 2026-10-17T22:23Z)
+
+1. **The goal.** The four seeds' maps produced as the research describes. Two paths side by side made one is carried to T12.
+2. **The constraints.** As the blind block, less D17's REACH, which T12 takes.
+3. **Where each comes from.** The own-garden exemption is O, a DEVIATION on 0246. The join order is no number. The band predicate
+   is the check's own.
+4. **Does each hold here?** Yes for the four. The merge's later passes do not yet (T12).
+5. **The order.** Nothing placed earlier moves. The settle's own rounds keep HEAD's order.
+6. **The exits.** (e) for 45, (a) for the fence gap, (c) for the join order. The merge goes to T12 by ruling.
+7. **The search smell.** None left in T03: the merge loop was stopped at its third tuning.
+8. **The budget.** About 1 h 50 min used of 4 h. The gate, the checks and the retro remain.
+9. **Done, measured.** D25: the four pass, nothing newly fails against HEAD, every exit owned by T12.
+
 ### T03 Decisions
 
 Written by the session from the blind block (FR-012). Where the block and the session's sealed notes differ (seeds 17 and 21),
@@ -448,6 +461,21 @@ the three ways hanging from it. It is fixed by D17's merge and held by D22's coh
 - The task lands with its retro row.
 
 **D23 - budget.** About 4 h, the blind block's. Twice that (8 h) triggers part B. So does every trigger D9 names.
+
+**D25 - what T03 lands, and what it carries (the rulings of 2026-10-17: hour:385-approach-checklist@6, ask:t03-d17-route,
+ask:t03-seed57-residue).** T03 lands the four seeds' fixes in their narrowed form:
+- the own-garden exemption (`fabric.owned_gardens`, D20);
+- the join steps after the reach in the last resort's passes only (the settle's own rounds as at HEAD: joining there added
+  lane knots to seed 57);
+- the shared band predicate (D18);
+- D16's refusals;
+- `FIELD_REACH_FT` relabeled (D21).
+Against HEAD: 17, 21, 40 and 45 fixed, nothing newly failing, the pool clean with Kashikawa's lane 9 straightened. D17's merge
+(saved; it merged F1-F3 and fixed seed 49 but regressed six seeds, because the later settle passes are blind to the junctions it
+makes) and D24's seed 49 are NOT done in T03. With seed 55 (one lane knot, as at HEAD) and seed 57's residue they are carried
+to T12, as the arbiter ruled: seed 57's residue is lanes 1/13, ends 21.6 ft apart, `settle_knots`' gather of lane 13 refused by
+`needle_loops`, brought in by the own-garden fix; 57 stands at 2 knots against HEAD's 1, waived by ask:t03-seed57-residue.
+D22's done is read accordingly: the four seeds pass, no seed newly fails against HEAD, and every exit is owned by T12.
 
 ## T04 to T10 - T48, T47's patch, five ranking rows
 
