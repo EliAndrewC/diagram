@@ -148,16 +148,21 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 
 ## Amendment 6 (the GM 2026-10-17: what subagents share is cached)
 
-- [ ] T38 `make subagent-cache` and the before numbers (plan D39) (SC-025)
+- [x] T38 `make subagent-cache` and the before numbers (plan D39) (SC-025)
       research: rendering
-- [ ] T39 The dispatch guard for a shared block after a unique start (plan D37) (SC-025)
+      verify: DONE. make subagent-cache (renamed: cache-audit is the maps' check) prints each type's runs, back-to-back first-call read and write, repeated manifest text and the spend; 6 tests on a fake transcript directory; before numbers in m:subagent-cache-before.
+- [x] T39 The dispatch guard for a shared block after a unique start (plan D37) (SC-025)
       research: rendering
-- [ ] T40 The modal guidelines in the modal agents' files, `make agent-sync` (plan D35) (SC-024)
+      verify: DONE. agent-prefix-hooks.sh refuses a 2,000+ character block shared with an earlier same-type, same-model dispatch after a differing part. Every run is judged; a block that starts the prompt passes. 13 suite cases, the GM's shape among them; red with the refusal removed and on the longest-run-only decider.
+- [x] T40 The modal guidelines in the modal agents' files, `make agent-sync` (plan D35) (SC-024)
       research: rendering
-- [ ] T41 The claims and modal triage as defined agents (plan D36) (SC-023)
+      verify: DONE. Both guideline sets now sit at the end of the three modal agent files, written by make agent-sync and held in step by tests/test_agent_sync.py; the bundle carries a one-line guidelines.txt. The shared-text test is red on the old builder (17.6-18.6k) and green now.
+- [x] T41 The claims and modal triage as defined agents (plan D36) (SC-023)
       research: rendering
-- [ ] T42 The bundle test for shared text (plan D38) (SC-024)
+      verify: DONE. claims-triage and modal-triage are agent files: opus/medium, no CLAUDE.md, rows in TIERS, pre-authorized. Their manifests name the agent; the commands print it; the triage tests pass. SC-023's first-call write is measured in a session started after landing.
+- [x] T42 The bundle test for shared text (plan D38) (SC-024)
       research: rendering
+      verify: DONE. tests/tooling/test_bundle_shared_text.py: two real bundles each of record-format, quote-check and the three modal checks share under 2,000 characters outside their unit inputs; a seeded 3,000-character block fails it; triage headers pinned under 400 (old 607 and 824).
 - [ ] T43 spec-fidelity without the instruction files: the seeded runs, three a leg, then the field (plan D34) (SC-023)
       research: rendering
 - [ ] T44 The rule in CLAUDE.md and the docs; close: the gate, the report, landed (plan D39)
