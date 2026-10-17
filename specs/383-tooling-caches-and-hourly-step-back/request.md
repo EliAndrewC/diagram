@@ -86,3 +86,16 @@ narrowing the guard suites; the fork server left out). The GM:
 > If we have never tried spec fidelity or glyph check or implementation drift or building review. Or the three modal checks on Sonnet, then that is definitely 100% worth testing, and we should do that pretty much right away. I have checked and I cannot find any record of us having tried those, so I believe that you are correct, and my memory that we had tried other models everywhere was faulty. So thank you for looking that up and clarifying it.
 
 > Thus, I accept your proposal. Of three things, but I would also like you to add a fourth thing, which is doing those measurements on cheaper models. In fact, I believe that Sonnet 5.5 is now available, which sounds perfect for this. If you don't have access to that one, then I can have you reopen the feature and then upgrade Claude Code and then launch a new session, which will have that model available.
+
+## Amendment 4 (2026-10-17, same session)
+
+The session listed the guard suites still run as one long serial run each (main-tree 58 s, no-poll 52 s, finished-run 40 s).
+The GM:
+
+> I think I do want a next round uh, for the guard suites running serially, so uh, splitting those up does seem good.
+
+The session broke a landing's 30 s down: the tooling tests 18.6 s (the longest step; a whole-repository test alone 9.4 s,
+another 4.8 s, and about 5 s of a fresh checkout's start-up), the push 9.4 s, the guard suites 2.8 s beside the tooling tests.
+It asked whether to fold the two tooling-test items into the round. The GM (dictated; "sweet" is "suite"):
+
+> Yes, I think that would be good, thanks. Because really, it sounds like what you're saying is that the tooling tests are where the bulk of that time went. So that does seem like we should try to optimize that specifically. So yes, please fold those two into the same round as the sweet splitting. and then go ahead and work that. Thanks.

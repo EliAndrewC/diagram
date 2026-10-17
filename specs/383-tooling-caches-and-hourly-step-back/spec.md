@@ -2,11 +2,13 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-12
-**Status**: Done 2026-10-17 - amendment 3 landed: spec FAITHFUL (round 2), plan CLEAR (round 5); no review check moves to Sonnet 5.5 (research R10); always-run tooling files 18 -> 0 of 128; a landing 37.05 -> 30.04 s (m:land-tooling-landing-a3); hooks-test idle 16.06 -> 2.6 s (m:hooks-test-idle); sync-with-main suite 36.23 -> 17.88 s (m:sync-with-main-suite). Before it: Done 2026-10-13 - amendment 2 landed: spec FAITHFUL (round 4), plan block CLEAR (round 2); a landing 113.98 -> 37.05 s (m:land-tooling-landing-before, m:land-tooling-landing-after), tooling reuse 27.58 -> 19.35 s with 18 of 127 files always run (m:land-tooling-tests-reuse-a2), the claims gate 8.53 -> 1.65 s (m:claims-gate-push). Before it: Done 2026-10-13 - amendment 1 landed: spec FAITHFUL (round 3), plan block CLEAR; land-tooling's tooling tests 36.21 -> 27.58 s (606 of 1,796 tests ran with reuse, m:land-tooling-tests-reuse), quote-verbatim's verdicts cached. Before it: Done 2026-10-13 - spec FAITHFUL (round 3), plan CLEAR (round 3), every task ticked; push checks 19.87 s -> 1.92 s (research R6); tooling landed 0906d798a; the GM's review open (the first step-back's note)
+**Status**: In progress 2026-10-17 - amendment 4 (FR-025..FR-027). Before it: Done 2026-10-17 - amendment 3 landed: spec FAITHFUL (round 2), plan CLEAR (round 5); no review check moves to Sonnet 5.5 (research R10); always-run tooling files 18 -> 0 of 128; a landing 37.05 -> 30.04 s (m:land-tooling-landing-a3); hooks-test idle 16.06 -> 2.6 s (m:hooks-test-idle); sync-with-main suite 36.23 -> 17.88 s (m:sync-with-main-suite). Before it: Done 2026-10-13 - amendment 2 landed: spec FAITHFUL (round 4), plan block CLEAR (round 2); a landing 113.98 -> 37.05 s (m:land-tooling-landing-before, m:land-tooling-landing-after), tooling reuse 27.58 -> 19.35 s with 18 of 127 files always run (m:land-tooling-tests-reuse-a2), the claims gate 8.53 -> 1.65 s (m:claims-gate-push). Before it: Done 2026-10-13 - amendment 1 landed: spec FAITHFUL (round 3), plan block CLEAR; land-tooling's tooling tests 36.21 -> 27.58 s (606 of 1,796 tests ran with reuse, m:land-tooling-tests-reuse), quote-verbatim's verdicts cached. Before it: Done 2026-10-13 - spec FAITHFUL (round 3), plan CLEAR (round 3), every task ticked; push checks 19.87 s -> 1.92 s (research R6); tooling landed 0906d798a; the GM's review open (the first step-back's note)
 
 **Affects**: tooling, review process
 
 **Amendment 1 approved**: the GM, 2026-10-13, "Yes please we should definitely skip suites the clone already passed." and "And also, while I realize we don't run it very often, I feel like `quote-verbatim` would benefit from the same caching layer we implemented elsewhere, right?"
+
+**Amendment 4 approved**: the GM, 2026-10-17, "I think I do want a next round uh, for the guard suites running serially, so uh, splitting those up does seem good." and "So yes, please fold those two into the same round as the sweet splitting. and then go ahead and work that."
 
 **Amendment 3 approved**: the GM, 2026-10-17, "Thus, I accept your proposal. Of three things, but I would also like you to add a fourth thing, which is doing those measurements on cheaper models."
 
@@ -164,6 +166,19 @@ long-running feature does for itself, on the clock glyph-check already keeps.
   These trials come FIRST (the GM: "we should do that pretty much right away"): they start before FR-021 to FR-023 and
   are not held behind them.
 
+### Amendment 4 - the serial guard suites, and the tooling tests a landing still runs (`request.md`, Amendment 4)
+
+- **FR-025 A slow guard suite runs in parallel parts.** The guard suites that run as one long serial run - main-tree, no-poll
+  and finished-run first, then any other whose run `make hooks-test` now reports as long - are dealt into parts that run at
+  the same time, as sync-with-main's are; every check still runs and is counted.
+- **FR-026 The tooling tests that read the whole repository take less time.** The tests a landing cannot reuse because they read
+  the whole repository - the longest, test_content_cache's whole-repository comparison (9.4 s) and test_open_questions on the
+  real tree (4.8 s; observed 2026-10-17, method: a fresh worktree's tooling run with per-test times) - are split into parts
+  that run in parallel, or check the same property on less, without dropping what they check.
+- **FR-027 A landing's tooling run starts faster.** What a fresh checkout's tooling run spends before and around its tests - the
+  workers' start, collection, the reuse decision in every worker, the first imports - is measured part by part, and each part
+  that can be cut without changing which tests run or their results is cut.
+
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002, FR-005, FR-006, FR-007) The push's checks: from about 24 s, the measurement the GM saw
@@ -221,6 +236,12 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 - **SC-018** (FR-024) Per check: the recorded cases, each finding found or missed by each of the three Sonnet runs, turns and
   cost against the Opus run; the tier each check ends on; `tests/test_agent_models.py` green with the table matching the
   files.
+
+- **SC-019** (FR-025) Each split suite timed whole before and after, its check count the same; `make hooks-test` with every suite
+  (`HOOKS_ALL=1`) timed before and after.
+- **SC-020** (FR-026, FR-027) The tooling run in a fresh worktree at the clone's HEAD timed before and after, with the tests that
+  ran and the longest single test; the start-up parts measured; a real landing measured before (m:land-tooling-landing-a3) and
+  after, step by step.
 
 ## Review history
 
