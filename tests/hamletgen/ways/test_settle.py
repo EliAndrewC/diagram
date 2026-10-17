@@ -569,12 +569,16 @@ def test_lawful_refuses_each_rule_a_new_tree_lane_would_break() -> None:
 
 
 def test_the_tree_is_left_alone_at_a_fold_and_behind_a_house_and_a_target_is_drawn_to_once() -> None:
-    """The tree lanes (`corridors.is_tree`) are never the lane a repair edits: two folded on each other are left, a tree
-    lane ending behind a house is left as it is, and a target whose spur is drawn is not drawn to again."""
+    """The tree lanes (`corridors.is_tree`) are not the lanes a repair edits - but for a household's way at its FOOT, where
+    two ways run side by side (feature 385 T01, plan D4): two household ways folded back on each other 80 ft side by side
+    become one path, the one's foot re-aimed onto the other, both still drawn and joined. A tree lane ending behind a house
+    is left as it is, and a target whose spur is drawn is not drawn to again."""
     folded = _S([CONN, [(-100.0, 0.0), (-100.0, 100.0)], [(-100.0, 100.0), (-95.0, 20.0)]])
     for ln in folded.M["lanes"][1:]:
         ln["role"] = "access"
-    assert law.folded_joint_pairs(folded.M["lanes"]) and settle.settle_ends(folded) == 0
+    assert law.folded_joint_pairs(folded.M["lanes"]) and law.needle_ends(folded.M["lanes"]), "side by side, folded at the joint"
+    assert settle.settle_ends(folded) == 1 and len(folded.M["lanes"]) == 3, "one foot re-aimed, no lane dropped"
+    assert law.lane_networks(folded.M) == 1 and not law.needle_ends(folded.M["lanes"]), "one path, still one web"
     behind = _S([CONN, [(-100.0, 0.0), (-100.0, 100.0), (-100.0, 160.0)]], houses=[(-100.0, 200.0)])
     behind.M["lanes"][1]["role"] = "access"
     assert settle.settle_ends(behind) == 0
@@ -722,7 +726,7 @@ def test_a_strip_squared_and_rejoined_bends_rather_than_kinks() -> None:
 
 def _reference_lawful_ground(ok: settle.Lawful, run, width) -> bool:
     """`Lawful.on_lawful_ground` as it read before the ground was indexed: every registry walked whole."""
-    if len(run) < 2 or law.hooked(run) or settle.kink_spans(run):
+    if len(run) < 2 or law.hook_faults(run, width, ok.blocked) or law.kink_faults(run, width, ok.blocked):
         return False
     if settle._crossing_fault({**ok.M, "lanes": [{"pts": settle._rounded(run), "w": width}]}, 0, run, ok.wet) is not None:
         return False
@@ -835,3 +839,38 @@ def test_a_dangling_lane_its_trim_cannot_mend_goes_whole(monkeypatch: pytest.Mon
     monkeypatch.setattr(settle.law, "dangling_lane_ends", lambda M, ground=None: [(1, -1)])
     assert settle.settle_dangling(s) == 1
     assert len(s.M["lanes"]) == 1 and s.M["lanes"][0].get("connector")
+
+
+def test_a_household_way_wandering_over_a_way_at_a_needles_angle_is_cut_at_the_crossing() -> None:
+    """Feature 385 T01 (plan D4): cohort seed 10 under the wave 155 re-deal - a household's way crossing the field way at
+    about 19 degrees and running on beside it. The two are one path: the household's way is cut at the crossing, its
+    door's side kept, and the end left on the way is a needle the next round re-aims as a T."""
+    way = [(0.0, 0.0), (400.0, 0.0)]
+    wander = [(300.0, 40.0), (100.0, -25.0)]  # ~18 degrees off the way, over it at x ~ 177
+    s = _S([CONN, way, wander])
+    s.M["lanes"][1]["role"], s.M["lanes"][2]["role"] = "field way", "access"
+    assert [(i, n, k) for i, n, k, _x in law.shallow_crossing_at(s.M["lanes"])] == [(1, 0, 2)]
+    assert law.shallow_crossings(s.M) and "shallow_crossings" in law.LAW
+    piece, end = settle.cut_at_shallow_crossing(s.M["lanes"], 2, 1, [])
+    assert end == -1 and piece[0] == (300.0, 40.0) and abs(piece[-1][1]) < 1e-6, "the door's side kept, ending on the way"
+    assert settle.cut_at_shallow_crossing(s.M["lanes"], 1, 2, []) is None, "never a tree lane but a household's way"
+    assert settle.settle_ends(s) == 1 and not law.shallow_crossings(s.M), "the crossing gone"
+    ordinary = _S([CONN, way, [(300.0, 40.0), (100.0, -25.0)]])
+    assert settle.cut_at_shallow_crossing(ordinary.M["lanes"], 1, 2, []) is None, "the way kept whole: its longer side would leave the connector (keeps_the_web)"
+    square = _S([CONN, way, [(200.0, 100.0), (200.0, -100.0)]])
+    assert not law.shallow_crossing_at(square.M["lanes"]), "a square crossing is a crossing"
+
+
+def test_a_household_way_is_cut_only_onto_a_way_that_stays() -> None:
+    """Feature 385 T01 (cohort seed 38, the change's first cohort): a household's way wandering over an ORDINARY lane is not
+    cut onto it - a repair may cut or drop that lane and leave the household on nothing - and the ordinary lane is cut
+    instead where that keeps the web."""
+    way = [(0.0, 0.0), (400.0, 0.0)]
+    s = _S([CONN, way, [(300.0, 40.0), (100.0, -25.0)]])
+    s.M["lanes"][2]["role"] = "access"
+    assert settle.cut_at_shallow_crossing(s.M["lanes"], 2, 1, []) is None, "lane 1 is ordinary: the household is not hung on it"
+    s.M["lanes"][1]["role"] = "access"
+    assert settle.cut_at_shallow_crossing(s.M["lanes"], 2, 1, []) is not None, "onto another household's way it is cut"
+    assert settle.cut_at_shallow_crossing(s.M["lanes"], 0, 1, []) is None, "lane 0 (the connector) crosses nothing here, and is never cut"
+    s.M["lanes"][0]["pts"] = [[300.0, 45.0], [100.0, -20.0]]
+    assert settle.cut_at_shallow_crossing(s.M["lanes"], 0, 1, []) is None, "the connector crossing shallow is still never cut"

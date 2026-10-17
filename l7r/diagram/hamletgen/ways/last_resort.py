@@ -21,8 +21,8 @@ from l7r.diagram.settlement.city.bridges import flooded_ground
 
 from . import law
 from .checks import unreached_houses
-from .clearance import kink_spans
 from .corridors import is_tree
+from .forced import lazy_ground
 from .geom import memo_ground, worked_ground
 from .settle import (
     _crossing_fault,
@@ -54,37 +54,63 @@ class WebRefused(ValueError):
     or a failure recorded on the map (FR-005)."""
 
 
-def lanes_breaking(s: Any) -> set[int]:
-    """Every lane but the connector - the tree's included - that some per-lane rule of the law names: a hook, a kink, a
-    crossing fault, a foul of the fabric, and every joint rule that names a lane (a hairpin at the connector, a needle, a
-    fold, a doubled tail, a dangling end, a crowded doorstep, a sliver of grass); the ordinary lanes
+def lane_breaches(s: Any, every: bool = False) -> dict[int, list[str]]:
+    """Every lane but the connector - the tree's included - that some per-lane rule of the law names, with the rules that
+    name it: a hook, a kink, a crossing fault, a foul of the fabric, and every joint rule that names a lane (a hairpin at the
+    connector, a needle, a fold, a doubled tail, a dangling end, a crowded doorstep, a sliver of grass); the ordinary lanes
     crossing a brook some household's way out crosses twice; and the ordinary lanes that break a rule against the tree
-    (`tree.tree_faults`), which defer. The connector is held by its own placer (`track.connector_through`)."""
+    (`tree.tree_faults`), which defer. The connector is held by its own placer (`track.connector_through`).
+
+    THE RULES BY NAME (feature 385 T01, plan D3): a refusal that named five lanes and no rule (cohort seed 21, 2026-10-13) left
+    the session to find which rule by hand; each lane now carries the names of the rules that hold it - every one of its own
+    rules with `every` (a refusal), the first that holds it otherwise."""
     M = s.M
     lanes = M.get("lanes") or []
     yards, houses = _fabric(s)
     solid = law.solid_boxes(M)
     fixtures = law.fixture_quads(M)
     wet = flooded_ground(M)
-    bad: set[int] = set()
+    blocked = lazy_ground(M, s)  # ...a turn or meeting the ground forces breaks no angle rule (`forced`, feature 385 plan D2)
+    bad: dict[int, list[str]] = {}
+
+    def add(rule: str, idxs: Iterable[int]) -> None:
+        for i in idxs:
+            if rule not in bad.setdefault(i, []):
+                bad[i].append(rule)
+
     for i, ln in enumerate(lanes):
         if ln.get("connector") or len(ln.get("pts") or []) < 2:
             continue
         p = _pts(ln)
-        if law.hooked(p) or kink_spans(p) or _crossing_fault(M, i, p, wet) is not None or fouled_segment(p, float(ln.get("w") or 3.0), houses, yards, solid, fixtures, M) is not None:
-            bad.add(i)
+        w = float(ln.get("w") or 3.0)
+        own = (
+            ("hooks", lambda p=p, w=w: bool(law.hook_faults(p, w, blocked))),
+            ("bends", lambda p=p, w=w: bool(law.kink_faults(p, w, blocked))),
+            ("crossing", lambda p=p, i=i: _crossing_fault(M, i, p, wet) is not None),
+            ("fabric", lambda p=p, w=w: fouled_segment(p, w, houses, yards, solid, fixtures, M) is not None),
+        )
+        for rule, broken in own:
+            # ...each asked only until one holds the lane, unless the rules are wanted by name (a refusal): the fabric probe
+            # is the costly one, and the last resort's rounds need only to know the lane is held
+            if (every or i not in bad) and broken():
+                add(rule, [i])
     ground = memo_ground(s, "worked", worked_ground)
-    bad |= {i for _c, i, _e in law.connector_hairpin_ends(lanes)}
-    bad |= {i for i, _e, _k, _u, _v in law.needle_ends(lanes)}
-    bad |= {i for i, _ei, _j, _ej in law.folded_joint_pairs(lanes)}
-    bad |= set(law.doubled_tails(M))
-    bad |= {i for i, _e in law.dangling_lane_ends(M, ground)}
-    bad |= {i for ends in law.fronting_ends(M).values() if len(ends) > law.DOORSTEP_MAX for i, _e in ends}
-    bad |= {i for _face, bounding in law.needle_loops(M) for i in bounding}
+    add("connector_hairpins", (i for _c, i, _e in law.connector_hairpin_ends(lanes, blocked)))
+    add("needle_joins", (i for i, _e, _k, _u, _v in law.needle_ends(lanes, blocked)))
+    add("folded_joints", (i for i, _ei, _j, _ej in law.folded_joint_pairs(lanes, blocked)))
+    add("doubled_tails", law.doubled_tails(M))
+    add("dangling_ends", (i for i, _e in law.dangling_lane_ends(M, ground)))
+    add("doorstep_ends", (i for ends in law.fronting_ends(M).values() if len(ends) > law.DOORSTEP_MAX for i, _e in ends))
+    add("needle_loops", (i for _face, bounding in law.needle_loops(M) for i in bounding))
     if law.way_outs_crossing(M):
-        bad |= {i for brook in law._brooks(M) for i in _ordinary(M) if law.crossing_points(_pts(lanes[i]), brook)}
-    bad |= {i for i, _q in tree_faults(M)}
-    return {i for i in bad if not lanes[i].get("connector")}
+        add("way_outs", (i for brook in law._brooks(M) for i in _ordinary(M) if law.crossing_points(_pts(lanes[i]), brook)))
+    add("tree_faults", (i for i, _q in tree_faults(M)))
+    return {i: rules for i, rules in bad.items() if not lanes[i].get("connector")}
+
+
+def lanes_breaking(s: Any) -> set[int]:
+    """The lanes `lane_breaches` names, without the rules."""
+    return set(lane_breaches(s))
 
 
 def lane_violators(s: Any) -> list[int]:
@@ -127,8 +153,10 @@ def last_resort(s: Any) -> int:
     return dropped
 
 
-def _named(lanes: Sequence[Mapping[str, Any]], idxs: Iterable[int]) -> str:
-    return ", ".join(f"{i} ({lanes[i].get('role') or 'ordinary'})" for i in sorted(idxs))
+def _named(lanes: Sequence[Mapping[str, Any]], idxs: Iterable[int] | Mapping[int, Sequence[str]]) -> str:
+    """`3 (access)` per lane - and, given the rules each breaks (`lane_breaches`), `3 (access: needle_joins, bends)`."""
+    rules = idxs if isinstance(idxs, Mapping) else {}
+    return ", ".join(f"{i} ({lanes[i].get('role') or 'ordinary'}{': ' + ', '.join(rules[i]) if rules.get(i) else ''})" for i in sorted(idxs))
 
 
 def _first(v: Any) -> str:
@@ -147,7 +175,7 @@ def refuse_unmended(s: Any) -> None:
     M = s.M
     lanes = M.get("lanes") or []
     why = []
-    if left := lanes_breaking(s):
+    if left := lane_breaches(s, every=True):
         why.append(f"lanes {_named(lanes, left)} still break a rule of the lane law")
     if carriers := {i for i, _k, _y in law.way_out_carriers(M)}:
         why.append(f"a household's way out crosses the brook and back on lanes {_named(lanes, carriers)}")

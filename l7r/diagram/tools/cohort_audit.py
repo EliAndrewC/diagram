@@ -159,7 +159,7 @@ def roll_how(spec: tuple[int, int] | tuple[int, int, dict[str, str]]) -> tuple[t
     _M = getattr(report, "manifest", None) or {}
     # ...AND THE KNOT RULE THE POOL HOLDS (feature 328 wave 93, `ways.knots.lane_knots`): only the pool's seed test asked it, so
     # a change that left lane ends knotted on three pool maps read 54/54 here
-    _knots = lane_knots(_M.get("lanes") or [])
+    _knots = lane_knots(_M.get("lanes") or [], _M)
     if _knots:
         report.fail_lines.append(f"FAIL lane_knots -> {len(_knots)} knot(s), e.g. {_knots[:2]}")
         report.failures.append("lane_knots")

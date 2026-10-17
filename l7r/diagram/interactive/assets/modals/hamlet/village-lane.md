@@ -37,7 +37,7 @@ Depiction: The map draws every lane as a narrow single track of bare earth with 
 A footpath is drawn about 3 ft wide, a settlement's main lane and its spur to the fields about 5 ft, and the track out to the
 wider world, or a row village's street, about 6 ft - widths kept below the one measured village alley, since that village
 lay in northeast China, far from wet-rice country. Each lane is pulled
-taut, with as few turns as the plots allow, none sharp, never doubling back. A lane keeps to dry ground and the bunds,
+taut, with as few turns as the plots allow, none sharp and none doubling back in open ground; where a house, a yard, a grove, a field or water stands across the straighter way, the lane goes round it and turns as it would be walked. Two lanes that would run close side by side are drawn as one, the one cut where it comes alongside and meeting the other, as walkers would have worn them into a single path. A lane keeps to dry ground and the bunds,
 crosses no crop or marsh, and the path to the fields runs on to the paddy's outer bund, stopping at the edge of the dry fields where a staircase of them blocks the way; the track out runs off the edge of
 the map.
 

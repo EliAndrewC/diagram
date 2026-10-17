@@ -238,3 +238,24 @@ def test_a_knot_neither_node_can_move_onto_is_teed_onto_the_other_lane() -> None
     lanes = [_ln((0.0, 0.0), (100.0, 0.0), connector=True), _ln((40.0, 60.0), (10.0, 10.0))]
     tee = {1: [(40.0, 60.0), (40.0, 0.0)]}
     assert kn.next_gather(lanes, lambda e: e == tee) == tee
+
+
+def test_two_ends_a_house_parts_are_no_knot() -> None:
+    """Feature 385 T01 (plan D4b): ends within the knot reach with a building between them are two paths either side of it,
+    not a knot - on the manifest's ground; with no manifest the rule reads as before (cohort seed 24 under the wave 155
+    re-deal suggested it, but proved a staggered junction with clear ground between its ends)."""
+    lanes = [_ln((0.0, -100.0), (0.0, 0.0)), _ln((0.0, 24.0), (0.0, 124.0))]
+    open_M = {"lanes": lanes, "houses": [], "meta": {"ftpx": 1.0}}
+    parted_M = {**open_M, "houses": [{"x": 0.0, "y": 12.0, "w": 40.0, "h": 8.0, "rot": 0.0}]}
+    assert kn.lane_knots(lanes) and kn.lane_knots(lanes, open_M), "on open ground the two ends are a knot"
+    assert kn.lane_knots(lanes, parted_M) == [], "a house between them parts them"
+    apart = kn.ground_apart(parted_M)
+    assert apart((0.0, 0.0), (0.0, 24.0)) and not kn.ground_apart(open_M)((0.0, 0.0), (0.0, 24.0))
+    assert kn.knots(lanes) and kn.knots(lanes, apart) == []
+
+
+def test_a_manifests_view_reads_its_own_scale() -> None:
+    """`ground_apart` on a manifest alone reads a well's verge at the map's scale (`_View.px`, from `meta.ftpx`)."""
+    from l7r.diagram.hamletgen.ways import forced
+
+    assert forced._View({"meta": {"ftpx": 2.0}}).px(10.0) == 5.0 and forced._View({}).px(10.0) == 10.0

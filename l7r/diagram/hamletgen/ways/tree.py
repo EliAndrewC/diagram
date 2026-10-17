@@ -42,6 +42,7 @@ from . import law
 from .bund import BRANCH_WIDTH
 from .checks import unreached_houses
 from .corridors import ACCESS_ROLE, ACCESS_WIDTH, ON_TREE_PX, is_tree
+from .forced import lazy_ground
 from .geom import memo_ground, polyline_len, worked_ground
 
 CARRY_FT = 20.0
@@ -457,7 +458,7 @@ def tree_faults(M: Mapping[str, Any]) -> list[tuple[int, Pt]]:
     Research: ordinary lane defers - NONE: which of two lanes a repair cuts"""
     lanes = M.get("lanes") or []
     out: list[tuple[int, Pt]] = []
-    for i, end, k, u, v in law.needle_ends(lanes):
+    for i, end, k, u, v in law.needle_ends(lanes, lazy_ground(M)):  # ...a needle the ground forces is no fault (feature 385 plan D2)
         if is_tree(lanes[i]) and not is_tree(lanes[k]):
             q = law.lane_pts(lanes[i])[end]
             out.append((k, seg_closest(q[0], q[1], u, v)))
@@ -652,7 +653,7 @@ def end_faults(M: Mapping[str, Any], ground: Any) -> tuple[int, ...]:
     return (
         len(law.dangling_lane_ends(M, ground)),
         len(law.doorstep_ends(M)),
-        len(law.folded_joint_pairs(M.get("lanes") or [])),
+        len(law.folded_joint_pairs(M.get("lanes") or [], lazy_ground(M))),
         len(law.near_misses(M)),
     )
 

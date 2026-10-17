@@ -11,13 +11,14 @@ Research: squaring plumbing - NONE: each rule is claimed at its function or cons
 from __future__ import annotations
 
 import math
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from typing import Any
 
-from ..consts import Poly
+from ..consts import Poly, Pt
 from . import law
 from .checks import square_crossings
 from .clearance import _ZIGZAG_RUN_FT, kink_spans
+from .geom import polyline_len
 
 
 def _pts(ln: Mapping[str, Any]) -> Poly:
@@ -127,3 +128,37 @@ def square_run(M: Mapping[str, Any], run: Poly) -> Poly:
             continue
         q = squared_against(q, course, half)
     return q
+
+
+def cut_at_shallow_crossing(lanes: Sequence[Mapping[str, Any]], m: int, o: int, houses: Sequence[Pt]) -> tuple[Poly, int] | None:
+    """SIDE BY SIDE BECOMES ONE (feature 385 T01, plan D4): lane `m`, crossing way `o` at under `law.NEEDLE_DEG`, cut at the
+    crossing - the run past it beside `o` is the same path doubled, and the end left on `o` meets it as a needle the settle
+    then re-aims (`settle.reaimed`). Returns the piece kept and the end cut (-1 its last, 0 its first), or None where `m` may
+    not be cut there: a tree lane but a household's way (`corridors.is_tree`), a household's way on its door's side (only its
+    foot is ever moved), or a cut that would leave the web otherwise than it was (`joints.keeps_the_web`: a lane end left on
+    nothing, the web in more pieces, a farmhouse no longer served). An ordinary lane keeps its longer side.
+
+    Research:
+        two paths side by side become one - research/questions/0081-village-lanes.drawing.html: the lane cut where it comes alongside, meeting the other as a T
+        a household's way keeps its door - research/questions/0081-village-lanes.drawing.html: "cut at its far end, never at its door"
+        which side an ordinary lane keeps - UNRESEARCHED: its longer side; a household's way is cut only onto the connector or a tree lane"""
+    from .corridors import ACCESS_ROLE, is_tree  # bound here: `corridors` sits beside this module's callers
+    from .joints import keeps_the_web
+
+    ln, p = lanes[m], _pts(lanes[m])
+    hit = next(((n, x) for _i, n, _k, x in law.shallow_crossing_at([ln, lanes[o]])), None)  # ...lane `m` first, so `n` is its segment
+    if hit is None or ln.get("connector"):
+        return None
+    n, x = hit
+    door, far = [*p[: n + 1], x], [x, *p[n + 1 :]]
+    household = ln.get("role") == ACCESS_ROLE
+    if is_tree(ln) and not household:
+        return None
+    # ...A HOUSEHOLD'S WAY ONLY ONTO A WAY THAT STAYS - the connector or another tree lane: an ordinary lane is a repair's to cut
+    # or drop, and a household hung on one is left on nothing when it goes (cohort seed 38, this change's first cohort: a
+    # household's way cut onto a lane laid to join orphans, and three households' ways then fouled the fabric). The
+    # ordinary lane is the one cut instead.
+    if household and not (lanes[o].get("connector") or is_tree(lanes[o])):
+        return None
+    piece, end = (door, -1) if household or polyline_len(door) >= polyline_len(far) else (far, 0)
+    return (piece, end) if keeps_the_web(lanes, {m}, p, piece, houses) else None

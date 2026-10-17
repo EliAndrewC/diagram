@@ -51,7 +51,9 @@ Answer each in writing in the task's plan section. One line each is enough where
 Triggers: a seed or cohort the change refuses; the same validator failing on a second attempt; a second red gate; the hourly
 step-back; the task past twice its budget; an approach about to change. Answer before the next attempt, dated, beside the task.
 
-1. **What exactly is refusing?** The rule, the seed, the place on the map. Is it the same rule as last time?
+1. **What exactly is refusing?** The rule, the seed, the place on the map. Is it the same rule as last time? **Look at the
+   geometry before naming a cause** - dump the lanes and what stands near them, or bisect by commit: a refusal names the TEST,
+   not the ground (T01: three causes guessed from refusal text were wrong; each dump or bisection answered in one run).
 2. **A3 again, for that rule, freshly checked.** R, G or O? Asked now, not carried over from task start.
 3. **A4 again.** Does the rule describe the world at the place it is refusing? Look at the map there.
 4. **Is the next fix moving something placed earlier to suit something placed later?** If yes, stop: back to A6.
@@ -69,11 +71,16 @@ step-back; the task past twice its budget; an approach about to change. Answer b
 ## C. Habits the audit found (execution, not approach)
 
 1. **A checked page is edited once per round.** Gather every suggestion, apply them together, check once (audit #5: the
-   privy page took about eight rounds for a few sentences; 374 spent 679 check dispatches).
+   privy page took about eight rounds for a few sentences; 374 spent 679 check dispatches). A fix ONE check asks for on a page
+   others are keyed on is applied only after every check of that page has returned, so they re-run once together (T01: a
+   one-word vocabulary fix re-owed ten pop-ups, two record checks and 229 claims).
 2. **The fast test that catches it now.** Run per change the quick tests that would fail at the gate, so a failure surfaces
-   in the wave that made it, not at the batch's close (audit #6: one test stale since wave 57).
+   in the wave that made it, not at the batch's close (audit #6: one test stale since wave 57) - and `make quick` before every
+   `make done` (T01: a lint red gate the quick suite would have caught).
 3. **A drawing page, plate or doc draws what the code does,** checked against one real run (audit #11).
 4. **New work or a changed reading of the GM's words goes in the turn's final message**, never only mid-stream (audit #9).
+6. **Nothing is written to the tree while a gate runs** - not a record, not a ledger row, not a fix to the wait itself; queue it
+   and write it after the verdict (T01: two gates voided by a write during the run).
 5. **A tripwire is read before it is obeyed.** When a round cap fires, check first that the owing diff changed visible words of
    this unit and that the rounds counted are this feature's: of 106 round-cap accepts, 27 were owed only by a later
    edit and 13 by a counting or bundle error (audit #13). A tripwire that fired on tooling error is a tooling fix, made then.

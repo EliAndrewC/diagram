@@ -349,3 +349,23 @@ def test_several_fixes_one_change_made_settle_together(root: pathlib.Path, monke
     assert len(ha.open_fixes(d)) == 2, "an unknown ID writes nothing"
     assert ha.main(["fix", "done", f"{a} {b}", "the bundle now carries every round", "tests/tooling/test_gate_lock.py"]) == 0
     assert ha.open_fixes(d) == []
+
+
+def test_an_engine_fix_is_done_with_its_test_committed_and_lands_with_the_feature(root: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 385: a fix in engine code cannot land first (`land-tooling` refuses engine files) and the tick it holds is the one
+    that lets the feature land - a deadlock. With ENGINE=1 (`ARBITER_FIX_ENGINE`) it is done once its test is committed in the
+    clone, and its row says it lands with the feature; uncommitted, or without the flag, it is still refused."""
+    d = root / "specs" / "900-z"
+    ha.record_ruling(root, TRIGGER, RULING_378, "round-arbiter")
+    monkeypatch.setenv("ARBITER_FIX_ENGINE", "1")
+    with pytest.raises(ValueError, match="ENGINE=1"):
+        ha.settle_fix(root, TRIGGER, "done", "rollcache keeps a crashed child's traceback", "tests/tooling/test_gate_lock.py")
+    git = ["git", "-C", str(root), "-c", "user.name=t", "-c", "user.email=t@t"]
+    subprocess.run([*git, "add", "tests"], check=True)
+    subprocess.run([*git, "commit", "-qm", "the fix's test"], check=True)
+    monkeypatch.delenv("ARBITER_FIX_ENGINE")
+    with pytest.raises(ValueError, match="not on main"):
+        ha.settle_fix(root, TRIGGER, "done", "rollcache keeps a crashed child's traceback", "tests/tooling/test_gate_lock.py")
+    monkeypatch.setenv("ARBITER_FIX_ENGINE", "1")
+    row = ha.settle_fix(root, TRIGGER, "done", "rollcache keeps a crashed child's traceback", "tests/tooling/test_gate_lock.py")
+    assert "lands with the feature" in row["note"] and ha.open_fixes(d) == []

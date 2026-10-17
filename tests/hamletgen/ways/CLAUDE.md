@@ -15,6 +15,7 @@ the ones for its own subject. It runs in the quick tier (the top-level tree deci
 | `test_dry_exit.py` | the flood fill that finds a track out of the frame over standable ground (`ways/dry_exit.py`) |
 | `test_dry_exit_raster.py` | `dry_exit._blocked_cells` rasterized, held to the cell-by-ring scan kept as its oracle |
 | `test_fabric.py` | the settlement fabric a way must respect - `_crosses_fabric`, `_fabric_hits`, `_homestead_polys`, `_margin_frame`, `_draw_web` |
+| `test_forced.py` | a turn or meeting the ground forces breaks no angle rule (`ways/forced.py`): each rule with a house across the straighter way and without |
 | `test_geom.py` | point and segment math on a bare polyline - `polyline_len`, `_turn_deg`, `_components`, the two pushes, `_trim_to_service` |
 | `test_indexed_scans_281.py` | the indexed clearance and route scans, each held to a copy of the old scan kept as its oracle |
 | `test_joints.py` | two lanes meeting end to end - the fold that becomes a T, the jog pulled straight across a chain of joints, the hook taken off a lane end, and the guards (`keeps_the_web`) that refuse a rewrite losing a junction, splitting the web or stranding a farmhouse |

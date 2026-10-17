@@ -1,0 +1,510 @@
+{
+ "feature": "385-approach-checklist",
+ "plan_sha256": "03b0781c7141967697b3c5c60be011943ef0fd498f818833a45fa4696d582703",
+ "blocks": {
+  "preamble": {
+   "sha256": "af8009812f40d56f49f5fdf78d4a0c449ea7ae55f99e6e103607a848e6d2a464",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "ccf0cb526ab87287fbf5a765de76dde26683dd7e863b85334c15d5fa661edc4a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "db452069bcf566079b65b2020ea5ba32259342e4f9454eb9e93562399845c715",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "## T01 - the lane law describes how people walk (384 FR-000, User Story 0)": {
+   "sha256": "980a04587c5e9adde4469cab3adc1cc90c1f10b129bdf127feabff64aabe4243",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "cd3bcc02e0183f64c4eaf050dc09786084a5d6b757b0a7ccc1505952f045ba96",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Decisions": {
+   "sha256": "b7bf572991d1caaedeea87a32b45dee5a28e72983e22f53a6c622bbd837699cc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T01 retro": {
+   "sha256": "8c1565389795b59948fc4ff10903012d765699f67bd623d1cf7d8a8f4fb2f4e2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "## T02 - the tooling: the Approach block required, the triggers, the split (FR-003 to FR-005)": {
+   "sha256": "bb5300d45691e5eccb674df5ba067a3e53aa91ba19bce47353be33a98168c43e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "## T03 to T10 - the four seeds failing at HEAD, T48, T47's patch, five ranking rows": {
+   "sha256": "40a38493918a5054be62afaead2731439ff9d72c5010c94fe350d27d698ea075",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "## T11 - the close": {
+   "sha256": "11667c2799f8548585b169027f16f856ad5dc89c5777a68916a54765ee68e50c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "## Landing": {
+   "sha256": "593cfa6de28d20bacb4dcf1c9ae7d148a69c9c248f6cdbc1d650d6f3aa53046a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  }
+ },
+ "reviewed": "2026-10-17",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "Summary: T02 tooling after T01",
+   "summary": "The FR-003..005 tooling is T02, built after T01; T01's Approach block, any part-B re-answer and its retro are kept by hand; T02's split is proven by replaying T01's events.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Narrows FR-003 ('make tick refuses this feature's tasks') and the approved proposal ('begins with checklist v1 plus the report's per-task time split, then the lane law as task 1') for T01. Implied by the GM's newest words: 'make the plan, then do the lane law as task one, work that under the checklist with a retro afterwards' - the lane law is task one, so the tooling is not. The substance is kept (T01 has its Approach block; the event log records T01 regardless and the split is replayed from it), so FR-005 is whole."
+  },
+  {
+   "id": "Summary: stop after T01",
+   "summary": "The session stops after T01 and reports to the GM before T02.",
+   "class": "within",
+   "why": "The GM's own 'and then let's see how it goes'."
+  },
+  {
+   "id": "D1",
+   "summary": "The rule table first: one row per LAW entry and per lanes_breaking rule, class R/G/O, verdict kept / made obstruction-aware / merged / retired.",
+   "class": "within",
+   "why": "384 US0's Independent Test verbatim. LAW's 28 entries re-counted at law.py:854."
+  },
+  {
+   "id": "Order (B1 applied)",
+   "summary": "D3 is the first edit; the baseline (D6) is taken with D3 in place.",
+   "class": "within",
+   "why": "A measurement-order choice. 'D3 changes no lane' is a premise, so D6 must show it: the HEAD+D3 cohort's pass/fail set compared seed by seed with m:w156-redeal-cohort's (or HEAD's in a detached worktree), not called 'HEAD' on assumption."
+  },
+  {
+   "id": "Order: seed 17 to T03",
+   "summary": "Seed 17's refusal (field reached by no way) is T03's unless D2-D4 mend it.",
+   "class": "within",
+   "why": "384 US0's test admits a refusal 'named by a rule the table keeps'; field_unreached is not an angle rule and T03 is the spec's own task for the four seeds."
+  },
+  {
+   "id": "Order: part-B stop on seed 21",
+   "summary": "If seed 21's named rules are not angle or doubling rules, stop at part B before writing D2/D4.",
+   "class": "within",
+   "why": "A pause to re-approach, not a drop: D2 and D4 stay owed by FR-000 whatever seed 21 shows."
+  },
+  {
+   "id": "D2 ground set",
+   "summary": "'Forced' reads the ground a lane may not cross: steading built ground, fixtures, solid boxes, crop and water, indexed once.",
+   "class": "within",
+   "why": "The principle (the ground a lane may not cross) is the GM's 'an obstruction on the map'. Groves and the commons are out because the law lets a lane cross them (steading_footprints' claim) - D1's table should say so at the row."
+  },
+  {
+   "id": "D2 predicates",
+   "summary": "A turn is forced when the chord past it, swept at lane width, crosses that ground; a meeting is forced when the sliver between the arriving leg and the tread, back NEEDLE_FT, holds it.",
+   "class": "within",
+   "why": "A broader meeting is reached by turning toward the tread earlier, through that sliver; ground there is what blocks the wider approach (US0's test). Open ground is judged as today."
+  },
+  {
+   "id": "D2 placement",
+   "summary": "The filter is applied at the manifest-judging functions and lanes_breaking, not in the pure detectors; repair passes read and filtered where they would still cut a forced shape.",
+   "class": "within",
+   "why": "Implementation placement; makes the angle rules obstruction-aware as FR-000 asks."
+  },
+  {
+   "id": "D3",
+   "summary": "lanes_breaking returns {lane: [rule names]}; refuse_unmended names the rules.",
+   "class": "within",
+   "why": "Serves US0's test ('named by a rule the table keeps'); a XIV fix."
+  },
+  {
+   "id": "D4 merge",
+   "summary": "A needle over open ground is merged by the existing tails.along_tail / cut_at_tail cut, asked at NEEDLE_DEG.",
+   "class": "within",
+   "why": "The GM's ruling that two paths side by side become one; reusing a mechanism is a design choice."
+  },
+  {
+   "id": "D4 residual",
+   "summary": "'A needle the cut cannot mend (it would strand a house or a tree lane's reach) stays a violation, named by D3.'",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "384 US0: 'two lanes that run nearly side by side are merged into one path, never refused'; FR-000: 'merged into one path rather than refused'. D4 itself calls an unforced needle the side-by-side case, and a violation in lanes_breaking feeds the last resort and refuse_unmended, so this is 'merged, except where cut_at_tail cannot do it'. The stated reason is the mechanism ('reuse, not a new pass'), which is implementation cost; merging is not physically impossible where the cut would strand something - cut the other lane, or re-root what hangs on the cut stretch onto the shared tread, so the two run as one tread to where they part. No case is measured where no merge exists. US0's 'named by a rule the table keeps' does not cover it: the needle's verdict is obstruction-aware/merged, not kept. Purpose-fatal: a seed is refused for a path shape the ground explains."
+  },
+  {
+   "id": "D5",
+   "summary": "No threshold changes value, no rule outside the angle and doubling rules changes, no homestead/fixture/seat moves; a rule describing no walker's behavior is retired only with its reason.",
+   "class": "within",
+   "why": "FR-000's treatments (obstruction-aware, merged, retired with reason) are all admitted; refining a number is an exit the request offers, weighed and declined in A6(a) with a reason; nothing placed earlier moves (GM 2026-10-02, 2026-10-17)."
+  },
+  {
+   "id": "D6",
+   "summary": "Measured before and after: the 48-seed cohort, seed 10 under the wave 155 patch, the pool's lane violations; two workers near the memory cap.",
+   "class": "within",
+   "why": "384 US0 test and FR-000's 'measured against the re-deal baseline and the pool'."
+  },
+  {
+   "id": "D7",
+   "summary": "0081's and 0246's drawing pages say what the maps now draw.",
+   "class": "within",
+   "why": "FR-000 verbatim."
+  },
+  {
+   "id": "T02-T11",
+   "summary": "T02..T10 decided at their own start by make decide; T11 moves the checklist to docs/ and extends the refusals.",
+   "class": "within",
+   "why": "FR-007 ('chosen at the start of their task') and FR-001."
+  },
+  {
+   "id": "tasks.md",
+   "summary": "T01 research: rendering; occasion placement-changed: village lane.",
+   "class": "within",
+   "why": "Its decisions are a GM ruling and a reading of 0081; the occasion enforces review of the lane change."
+  }
+ ],
+ "verdict": "BLOCKED",
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "### T01 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Rule table first: one row per LAW entry and lanes_breaking rule with predicate, class (R/G/O), thresholds, verdict.",
+     "class": "within",
+     "why": "The request's checklist question applied to the rules task 1 fights: where does each rule come from, research, a ruling, or us."
+    },
+    {
+     "id": "Order",
+     "summary": "D3 first; baseline taken with D3 in place and shown equal to HEAD seed by seed; D2/D4 shaped against seed 21's named rules and the pool's violations; stop at part B if seed 21's rules are not angle/doubling rules; seed 17 is T03's.",
+     "class": "within",
+     "why": "Sequencing and a stop condition inside the approved task order (lane law as task 1, seeds 17/21/40/45 next); seed 17 a reach failure belongs to the seeds task, not dropped. Round 1's unlabeled 'five lanes' is gone."
+    },
+    {
+     "id": "D2",
+     "summary": "'Forced' = the turn's chord or the needle's sliver crosses the settle's own two obstacle families (obstacles: crop, marsh, wet toe; tight: houses, yards, gardens, groves) plus fixtures and solid boxes, indexed once; applied where a manifest is judged, not in the pure detectors; repair passes read against it.",
+     "class": "within",
+     "why": "Implements the GM's 'in the absence of an obstruction ... but they might ... if there were obstructions'. Round 1's item met: the ground is the settle's routed-round set, groves included, so no shape the settle makes round an obstruction is refused by the law. A kind outside the set needs its reason at its table row."
+    },
+    {
+     "id": "D3",
+     "summary": "lanes_breaking returns {lane: [rules]}; refuse_unmended names the rules. Labeled to the 2026-10-13 log behind m:w156-redeal-cohort.",
+     "class": "within",
+     "why": "A defect fix found measuring T01 (XIV) that makes the lane law's cases visible; changes no lane."
+    },
+    {
+     "id": "D4",
+     "summary": "Every unforced needle is merged into one path: the existing tail cut at NEEDLE_DEG, or the other lane cut / what hangs on the stretch carried onto the shared tread so no reach is lost; never left a violation, never refused; a case no merge can serve goes to a constitution XVI exception check first.",
+     "class": "within",
+     "why": "Round 1's block is cleared: the earlier 'stays a violation' carve-out is removed, matching the GM's 'a single footpath would emerge' and 384 User Story 0 'merged into one path, never refused'. The exception-check route is the constitution's process for a case not yet found, not a carve-out written into the plan; only lanes move, no house."
+    },
+    {
+     "id": "D5",
+     "summary": "No threshold changes value, no non-angle/doubling rule changes, no homestead, fixture or seat moves; a retirement carries its reason.",
+     "class": "within",
+     "why": "Holds task 1 to the two exits the GM approved for it (obstruction-aware, merge) and to 'nobody moves their house for a footpath'; the retirement guardrail is the GM's 'not permission to throw out inconvenient rules'."
+    },
+    {
+     "id": "D6",
+     "summary": "48-seed cohort with D3 in place, compared seed by seed against m:w156-redeal-cohort's HEAD run before being called HEAD's, plus seed 10 under the wave 155 patch and the pool's hamlet lane violations; same three after; two workers.",
+     "class": "within",
+     "why": "Measuring the task is what the GM asked for each task; round 1's item met (the comparison is made before the baseline is named HEAD's)."
+    },
+    {
+     "id": "D7",
+     "summary": "0081 and 0246 drawing pages say forced turns are drawn as walked and side-by-side paths as one; record checks as record-owed names them.",
+     "class": "within",
+     "why": "Records the rendering decision the lane law makes, per the project's recording rule."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "### T01 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Rule table first, one row per LAW entry and lanes_breaking rule with class and verdict",
+     "class": "within",
+     "why": "Unchanged since round 2; it is the request's own question (which rules come from research, which are implementation details) asked of the lane rules."
+    },
+    {
+     "id": "Order",
+     "summary": "D3 first, baseline after it, D2/D4 shaped by the named refusals; stop at part B if seed 21's rules are not angle or doubling",
+     "class": "within",
+     "why": "Unchanged. The stop fired and its outcome is this revision brought back to review before D2/D4 are written, which is what a stop is for."
+    },
+    {
+     "id": "D2",
+     "summary": "Forced = the settle's own ground; now names the test: Lawful.on_lawful_ground on the chord, built from the manifest",
+     "class": "within",
+     "why": "The obstruction exception the GM described in his own words ('they might come together at such an angle if there were obstructions'); naming the settle's own predicate makes law and settle agree and narrows nothing."
+    },
+    {
+     "id": "D3",
+     "summary": "A refusal names its rules",
+     "class": "within",
+     "why": "Unchanged; a defect fix found while measuring (XIV) that serves the lane-law work."
+    },
+    {
+     "id": "D4a",
+     "summary": "Unforced needles merged via the existing settle.reaimed, extended to a household way's foot (never its door end), corridor rewritten",
+     "class": "within",
+     "why": "The GM's new rule: near-parallel close paths become one footpath, never refused. Re-aiming the household way's foot onto the way it ran beside is that merge; the household stays reached."
+    },
+    {
+     "id": "D4b-protected",
+     "summary": "A tree lane other than a household way (connector, street, field way, spur) is never cut; the OTHER lane is re-aimed",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Taken case by case. One protected lane: the other is re-aimed, so the two still become one path and nothing in the request is lost; this is a choice of which lane merges. Both lanes protected: the block leaves no lane to re-aim, and the only reading consistent with 'never left as a violation' is that this case goes to D4's own exception-check clause (constitution XVI) before anything else is done with it. It is LEGITIMATE on that reading only. A protected pair settled any other way (left as a violation, or one lane cut without a check) is outside this ruling."
+    },
+    {
+     "id": "D4c",
+     "summary": "A shallow crossing (under NEEDLE_DEG) is cut at the crossing on its foot's side, and the end left becomes a needle and is merged",
+     "class": "within",
+     "why": "Running on beside a way after crossing it at about 19 degrees is the doubled path the GM described; cutting the doubled run makes the two paths one. A forced case is still judged by D2's meeting test once it becomes a needle."
+    },
+    {
+     "id": "D4d",
+     "summary": "The lane re-aimed is chosen so that every reach is kept; a case where no re-aim keeps every reach goes to an exception check",
+     "class": "within",
+     "why": "Keeps houses and joins reached, so no homestead moves for a path, and it routes the residual case to an XVI check instead of a carve-out."
+    },
+    {
+     "id": "D4b-knot",
+     "summary": "The knot rule counts two ends within _KNOT_FT only where the straight join between them stands on lawful ground; with no manifest the rule reads as today",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "An exception to a rule, so it is presumed wrong. It passes because the GM's own words already imply it: a rule kept but given a principled obstruction exception ('should this rule actually apply when there are obstructions?'), and the checklist exit 'add a principled exception, like unless an obstruction forces it'. Purpose test: the knot rule is there because lane ends a few feet apart on open ground would be walked into one path (0081), and ends with a garden, yard or house between them cannot merge, so the exception leaves the rule's purpose intact. It is measured (seed 24 refused six times for fabric between the ends) and serves a scope item (T47's wave 155 patch re-landed). The rule is not dropped: it still counts on open ground, its reason is recorded on the drawing page, and the class is labeled."
+    },
+    {
+     "id": "D5",
+     "summary": "Nothing else moves; widened to admit the knot rule (D4b)",
+     "class": "within",
+     "why": "It follows from D4b. Thresholds, homesteads, fixtures and seats still do not move, which keeps the GM's houses-never-move-for-a-path rule."
+    },
+    {
+     "id": "D6",
+     "summary": "Measured cohort before and after, compared seed by seed against HEAD",
+     "class": "within",
+     "why": "Unchanged; it measures the requested work."
+    },
+    {
+     "id": "D7",
+     "summary": "0081 and 0246 drawing pages record what the maps now draw",
+     "class": "within",
+     "why": "Unchanged; it records the requested rendering decision."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "### T01 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "A rule table of every LAW entry and lanes_breaking rule, with class and verdict",
+     "class": "within",
+     "why": "The checklist question the GM asked for (research, ruling, or ours) applied rule by rule to the lane law."
+    },
+    {
+     "id": "order",
+     "summary": "D3 first, baseline with D3 shown equal to HEAD, D2/D4 shaped on seed 21 and the pool; seed 17 to T03; stop if seed 21's rules are not angle/doubling",
+     "class": "within",
+     "why": "Sequencing and routing within the feature's own tasks; narrows nothing asked."
+    },
+    {
+     "id": "D2",
+     "summary": "Forced turn or meeting (ground between, the settle's own lawful-ground test) is not a violation; open-ground turns judged as today",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's own words: in the absence of an obstruction footpaths do not meet at 19 degrees, but they might where obstructions force it. Open ground is judged unchanged, so the rule's purpose is kept."
+    },
+    {
+     "id": "D3",
+     "summary": "lanes_breaking returns rule names per lane; refusal message names them",
+     "class": "within",
+     "why": "A defect fix found while measuring (constitution XIV); callers unchanged; changes no verdict (checked by D6)."
+    },
+    {
+     "id": "D4",
+     "summary": "Unforced needles and shallow crossings merged into one path (household way re-aimed, other ways never cut), never refused; no-reach case to an exception check",
+     "class": "within",
+     "why": "The GM's added rule verbatim: nearly parallel, close footpaths become a single footpath; 384 User Story 0 'merged into one path, never refused'."
+    },
+    {
+     "id": "D4b",
+     "summary": "Knot rule counts two ends within _KNOT_FT as a knot only where the straight join between them stands on lawful ground; no manifest reads as today",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Legitimacy never rested on seed 24 (that was evidence the case arises, a cost question). On principle: two ends parted by a house or garden, gathered literally, give a join across the fabric or a refusal - a shape no walker made, the GM's rock applied to the knot rule; the GM framed the question generally ('should this rule actually apply when there are obstructions', 'keep a rule and add an exception'). Ends on lawful ground are still a knot exactly as now, so 0081's rule is not gutted. The block now states honestly that no cohort seed shows it and that it stands on a unit test."
+    },
+    {
+     "id": "D4b-seed24",
+     "summary": "Seed 24 (a staggered junction, ends 24.8 ft apart on one lane with clear ground between) sent to T04 (T48, the re-deal)",
+     "class": "within",
+     "why": "Seed 24 is not one of the four HEAD-failing seeds (17, 21, 40, 45) nor D6's seed 10; it is a re-deal case, and T48 is a task the GM's approved scope already carries."
+    },
+    {
+     "id": "D5",
+     "summary": "No threshold, homestead, fixture or seat moves; only angle, doubling and knot rules change",
+     "class": "within",
+     "why": "Houses never move for a path, the GM's ruling; limits scope rather than narrowing the request."
+    },
+    {
+     "id": "D6",
+     "summary": "48-seed cohort, seed 10 under the w155 patch and the pool's violations, before and after, two workers",
+     "class": "within",
+     "why": "Measurement of the requested change; the GM asked each task measured."
+    },
+    {
+     "id": "D7",
+     "summary": "0081 and 0246 drawing pages say what the maps now draw; record checks as owed",
+     "class": "within",
+     "why": "Records the change where the project's rules require it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Constitution Check",
+    "## Summary",
+    "## T01 - the lane law describes how people walk (384 FR-000, User Story 0)",
+    "## T02 - the tooling: the Approach block required, the triggers, the split (FR-003 to FR-005)",
+    "## T03 to T10 - the four seeds failing at HEAD, T48, T47's patch, five ranking rows",
+    "## T11 - the close",
+    "### T01 Approach (checklist part A)",
+    "### T01 retro",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "S1",
+     "summary": "Tasks one at a time in the GM's order; lane law is T01, the enforcing tooling (FR-003..FR-005) is T02, built after T01's retro; T01's Approach block and retro kept by hand",
+     "class": "within",
+     "why": "The GM 2026-10-17: 'make the plan, then do the lane law as task one, work that under the checklist with a retro afterwards'. Putting the lane law first is his order; T01 is still worked under the checklist and retro, by hand, and FR-003..FR-005 are still built (T02), so no requirement is dropped."
+    },
+    {
+     "id": "S2",
+     "summary": "T02's per-task split proven by replaying T01's events",
+     "class": "within",
+     "why": "Keeps FR-005/SC-001's per-task split owed for T01 too; enforcement of what was asked."
+    },
+    {
+     "id": "S3",
+     "summary": "Session stops and reports to the GM after T01, before T02",
+     "class": "within",
+     "why": "The GM's 'and then let's see how it goes'."
+    },
+    {
+     "id": "C1",
+     "summary": "Constitution check: no SOURCE block or hand map touched; pool hamlets re-rolled; regression = a seed passing at HEAD and failing after, on the 48-seed cohort; D3 refusal fix under XIV; only the angle rules and side-by-side lanes change, no other rule loosened",
+     "class": "within",
+     "why": "Matches the GM's guardrail ('I don't want future sessions to just throw away rules when they are inconvenient') and the exception/merge he described; the D3 fix is constitution XIV, already in the spec."
+    },
+    {
+     "id": "A1",
+     "summary": "T01 goal: sharp meetings or bends only where mapped ground forces them; near-parallel paths become one; no seed refused for a shape the ground explains",
+     "class": "within",
+     "why": "The GM's rock example (a path going around a rock meets at other angles) and his 'a single footpath would emerge' ruling; the angle-rule exception and merge are D2/D4, ruled CLEAR in the T01 Decisions block."
+    },
+    {
+     "id": "A2",
+     "summary": "Exits weighed: (a) number change not chosen alone, (b) principled exception chosen for the angle rules, (c) merge chosen for the needle and doubled band, (d) more room not used - homesteads stay, (e) conform for every rule not about angles or doubling",
+     "class": "within",
+     "why": "These are the two solutions the GM named ('relaxing a restriction by placing a principled exception' and 'adding a new rule ... collapsed into a single footpath'); refusing to move homesteads is his explicit ruling; conforming elsewhere is his guardrail."
+    },
+    {
+     "id": "A3",
+     "summary": "Change wholly inside the web's law and settle, after every house stands",
+     "class": "within",
+     "why": "The GM: 'Nobody in real life moves their house so that a footpath will join with another footpath at a more intuitive angle.'"
+    },
+    {
+     "id": "A4",
+     "summary": "Budget about six hours (labeled a guess); twice that triggers checklist part B",
+     "class": "within",
+     "why": "Implements 'a checklist ... that comes up when a session is taking a while' (FR-004)."
+    },
+    {
+     "id": "A5",
+     "summary": "Done: rule table, red-on-HEAD unit tests, 48-seed cohort with no seed newly failing, seeds 17 and 21 passing or refused by a kept rule that the refusal names, pool hamlets and seed 10 under the w155 patch re-rolled",
+     "class": "within",
+     "why": "Verification of the requested law change; letting 17/21 stand refused only by a KEPT rule (named) does not narrow the lane law, since the remaining failing seeds are their own later task (T03-T10, FR-007, the approved scope)."
+    },
+    {
+     "id": "R1",
+     "summary": "T01 retro in retro.md: time from the event log split by hand at decision points, which checklist items fired or should have, the change made",
+     "class": "within",
+     "why": "The GM's 'with a retro afterwards' and 'we measure how long we spent kind of doing each part of the task'."
+    },
+    {
+     "id": "T02",
+     "summary": "T02's approach decided at its start after T01's retro, reviewed by make decide",
+     "class": "within",
+     "why": "Defers decisions, settles none; consistent with 'let's see how it goes'."
+    },
+    {
+     "id": "T03",
+     "summary": "T03-T10 each decided at its start, in FR-007's order",
+     "class": "within",
+     "why": "The approved scope and order (the four seeds, T48, T47's patch, about five ranking rows)."
+    },
+    {
+     "id": "T11",
+     "summary": "Close: checklist to docs/, refusals extended to every feature's tasks (FR-001), final report",
+     "class": "within",
+     "why": "Restates accepted FR-001/SC-001/SC-002; the approved proposal has 384 resume 'under the finished process'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Landing"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing-1",
+     "summary": "Each task lands on main when it closes, with its retro row, before the next task starts, so the next task is measured on it",
+     "class": "within",
+     "why": "Carries the request's sequence (one task, measure, improve the process, then the next task) and FR-006 (one task at a time, its retro row and changes made before the next task-start). The GM's 2026-10-17 words 'do the lane law as task one ... with a retro afterwards, and then let's see how it goes' ask for T01 finished and assessed before anything else, which landing it supports. Nothing asked is dropped or narrowed."
+    },
+    {
+     "id": "Landing-2",
+     "summary": "Lands open: T02-T11 stay open while earlier tasks land",
+     "class": "within",
+     "why": "Follows from Landing-1: tasks are done one by one, so the later ones are open when an earlier one lands. No task leaves the scope. The list only names which boxes remain open, and does not change what any task delivers."
+    }
+   ]
+  }
+ ]
+}

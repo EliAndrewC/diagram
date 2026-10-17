@@ -50,8 +50,8 @@ from ..consts import WEB_CLEARANCE, WEB_FABRIC_GAP, Poly, Pt
 from . import law
 from .arcs import arc_at, cut_around, sub_run  # noqa: F401 - re-exported: `settle.sub_run` and the rest are what tree.py and the tests name
 from .checks import square_crossings, unreached_houses
-from .clearance import kink_spans
 from .corridors import (
+    ACCESS_ROLE,
     ACCESS_WIDTH,
     GroundIndex,
     _poly_box,
@@ -61,15 +61,24 @@ from .corridors import (
     through_a_building,
 )
 from .fabric import _crosses_fabric, _homestead_polys, house_hit
+from .forced import lazy_ground
 from .geom import _TOUCH_GAP, _components, _trim_to_service, memo_ground, polyline_len, steading_footprints, worked_ground
 from .joints import joints, rank_width
 from .keeper import NOT_THE_SETTLES, unsettled  # noqa: F401 - re-exported: `settle.unsettled` is the exit question callers name
 from .knots import settle_knots
 from .reach import _draw_tree_lane, settle_field, settle_targets  # noqa: F401 - re-exported: callers and tests name these as `settle.<name>`
 from .serve import shadowed_by
-from .squaring import SQUARE_MARGIN_FT, SQUARE_PASSES, _pts, square_every_crossing, square_run, square_waters  # noqa: F401 - re-exported: callers and tests name these as `settle.<name>`
+from .squaring import (  # noqa: F401 - re-exported: callers and tests name these as `settle.<name>`
+    SQUARE_MARGIN_FT,
+    SQUARE_PASSES,
+    _pts,
+    cut_at_shallow_crossing,
+    square_every_crossing,
+    square_run,
+    square_waters,
+)
 from .sweeps import _DOUBLED_DEG, along_tail, cut_at_tail
-from .tree import left_to_the_tree, prune_the_tree, settle_defer, settle_tree, tree_faults
+from .tree import left_to_the_tree, prune_the_tree, set_corridor, settle_defer, settle_tree, tree_faults
 from .weld import weld_corner
 
 SETTLE_ROUNDS = 8
@@ -250,11 +259,12 @@ def settle_shapes(s: Any) -> int:
     fixtures = law.fixture_quads(M)
     wet = flooded_ground(M)
     edits: dict[int, list[Poly]] = {}
+    blocked = lazy_ground(M, s)  # ...a hook or kink the ground forces is walked round what stands there, not repaired (feature 385 plan D2)
     for i, ln in enumerate(lanes):
         p = _pts(ln)
         if len(p) < 2 or (is_tree(ln) and not ln.get("connector")):
             continue
-        ends = law.hooked(p)
+        ends = law.hook_faults(p, float(ln.get("w") or 3.0), blocked)
         if ends:
             # A HOOK is a lane overshooting the way it joins and bending back onto it: re-laid as a T on that way where it
             # joins one (so the web stays one network), else its hook leg is taken off
@@ -264,7 +274,7 @@ def settle_shapes(s: Any) -> int:
             continue
         if ln.get("connector"):
             continue
-        spans = kink_spans(p)
+        spans = law.kink_faults(p, float(ln.get("w") or 3.0), blocked)
         if spans:
             edits[i] = _unkinked(p, spans[0])
             continue
@@ -362,6 +372,10 @@ def settle_ends(s: Any) -> int:
     Research:
         lanes met end to end read as one - research/questions/0081-village-lanes.drawing.html: a needle, fold or hairpin re-laid as a T
         no doubled tail - UNRESEARCHED: the end cut back to where it came alongside the way
+        two paths side by side become one - research/questions/0081-village-lanes.drawing.html: a lane crossing another at under 20 degrees cut at the crossing (`cut_at_shallow_crossing`)
+        a household's way moved at its foot - research/questions/0081-village-lanes.drawing.html: "cut at its far end, never at its door"
+        a foot re-aimed only onto lawful ground - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the walker goes round a garden or yard, a way runs along the middle of the gaps
+        which of a folded pair is re-aimed - UNRESEARCHED: the shorter record as the T; two bare legs lose the shorter
         no fan of stubs at a door - UNRESEARCHED: past two ends at one house, the farther cut back past the doorstep
         a lane ends at the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end within 60 ft of the house or
             12 ft of its built ground reaches it on any side; one that reaches nothing is trimmed to service (`settle_dangling`)"""
@@ -370,16 +384,41 @@ def settle_ends(s: Any) -> int:
     edits: dict[int, list[Poly]] = {}
     touched: set[int] = set()
 
-    def claim(involved: set[int], i: int, pieces: list[Poly]) -> None:
-        if not involved & touched and not is_tree(lanes[i]):
+    feet: list[dict[str, Any]] = []
+    judge: list[Lawful] = []  # built at the first household way re-laid at its foot
+
+    def claim(involved: set[int], i: int, pieces: list[Poly], end: int | None = None) -> None:
+        # ...A HOUSEHOLD'S WAY AT ITS FOOT too (feature 385 T01, plan D4): side by side becomes one whichever lane it is, and
+        # a household's way's foot may move as the knot gather moves it - never its door end - its corridor rewritten with it
+        foot = end == -1 and lanes[i].get("role") == ACCESS_ROLE
+        # ...and only into a lane: a re-aim leaving a household's way under two points or 1 ft would drop it, and its household
+        foot = foot and bool(pieces) and len(pieces[0]) >= 2 and polyline_len(pieces[0]) >= 1.0
+        # ...and only onto lawful ground: a re-aimed leg through another household's yard is a foul no later step may cut
+        # from a tree lane, so the web would be refused for it (cohort seed 38, the first cohort of this change)
+        if foot and is_tree(lanes[i]):
+            if not judge:
+                judge.append(Lawful(s))
+            foot = judge[0].on_lawful_ground(pieces[0], float(lanes[i].get("w") or 3.0))
+        if not involved & touched and (not is_tree(lanes[i]) or foot):
             edits[i] = pieces
             touched.update(involved)
+            if is_tree(lanes[i]):
+                feet.append(lanes[i])
 
-    for ci, i, end in law.connector_hairpin_ends(lanes):
+    centers = [(float(h["x"]), float(h["y"])) for h in M.get("houses") or []]
+    for i, _n, k, _x in law.shallow_crossing_at(lanes):
+        # ...TWO WAYS CROSSING AT A NEEDLE'S ANGLE are one path wandering over the other (plan D4): the lane that may be cut
+        # is cut at the crossing, and its end left on the other way is re-aimed as a needle next round
+        for m, o in ((i, k), (k, i)):
+            if (cut := cut_at_shallow_crossing(lanes, m, o, centers)) is not None:
+                claim({m, o}, m, [cut[0]], cut[1])
+                break
+    forced = lazy_ground(M, s)  # ...a meeting the ground forces is no needle, fold or hairpin to repair (feature 385 plan D2)
+    for ci, i, end in law.connector_hairpin_ends(lanes, forced):
         claim({ci, i}, i, [_back(reaimed(_as_end(_pts(lanes[i]), end), _pts(lanes[ci]), connector=True), end)])
-    for i, end, k, _u, _v in law.needle_ends(lanes):
-        claim({i, k}, i, [_back(reaimed(_as_end(_pts(lanes[i]), end), _pts(lanes[k]), bool(lanes[k].get("connector"))), end)])
-    for i, ei, j, ej in law.folded_joint_pairs(lanes):
+    for i, end, k, _u, _v in law.needle_ends(lanes, forced):
+        claim({i, k}, i, [_back(reaimed(_as_end(_pts(lanes[i]), end), _pts(lanes[k]), bool(lanes[k].get("connector"))), end)], end)
+    for i, ei, j, ej in law.folded_joint_pairs(lanes, forced):
         # the SHORTER record of the two that has a vertex to fall back to is re-aimed as a T on the other; two bare legs
         # folded on each other lose the shorter
         x, y = _as_end(_pts(lanes[i]), ei), _as_end(_pts(lanes[j]), ej)
@@ -418,7 +457,11 @@ def settle_ends(s: Any) -> int:
     # counts an end within 60 ft of the house or 12 ft of its built ground as reaching it on any side, and no page puts the
     # back wall out of reach.)
     if edits:
-        return apply_pieces(s, edits)
+        changed = apply_pieces(s, edits)
+        for ln in feet:
+            if any(ln is x for x in lanes):
+                set_corridor(M, ln)  # ...a household's way re-laid at its foot keeps its reserved corridor in step (`tree.settle_tree` redraws from it)
+        return changed
     return settle_dangling(s)
 
 
@@ -790,6 +833,14 @@ class Lawful:
             self._square_pad = max((h for _c, h in square_waters(M)), default=0.0) + 1.0
         return self._index
 
+    def blocked(self, a: Pt, b: Pt, width: float) -> bool:
+        """Is the straight way `a`-`b` not lawful ground - `forced`'s question (feature 385 plan D2), asked of this map's
+        own ground, so a run's turns and meetings are judged forced or not exactly as the law judges them? A two-point
+        chord has no turn of its own, so this never asks itself again.
+
+        Research: a forced turn is lawful - research/questions/0081-village-lanes.drawing.html: "A turn the ground forces is drawn as walked" - the straighter way blocked where it is not lawful ground"""
+        return math.dist(a, b) > 1e-6 and not self.on_lawful_ground([a, b], width)
+
     def squared(self, run: Poly) -> Poly:
         """`square_run(self.M, run)`, skipped where no water the squaring reads comes within its reach of the run - there it
         changes nothing (no crossing to square, no vertex within a water's half-width to drop)."""
@@ -807,7 +858,7 @@ class Lawful:
             crossings - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: `_crossing_fault`
             nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no foul of house, yard, building, fixture
             off crop and marsh - research/questions/0081-village-lanes.drawing.html: no field, dry plot or marsh underfoot"""
-        if len(run) < 2 or law.hooked(run) or kink_spans(run):
+        if len(run) < 2 or law.hook_faults(run, width, self.blocked) or law.kink_faults(run, width, self.blocked):
             return False
         # every test below reads only what stands near the run (`index`, `GroundIndex`): a crossing fault needs a crossing,
         # and each foul a part within its own reach of the run - so the parts beyond it are left out, not the verdict
@@ -836,9 +887,9 @@ class Lawful:
         x0, y0, x1, y1 = _box(run, MEET_REACH_FT)
         near = [ln for ln in lanes if len(ln.get("pts") or []) >= 2 and not ((b := _box(_pts(ln), 0.0))[2] < x0 or b[0] > x1 or b[3] < y0 or b[1] > y1)]
         tl, k = [*near, {"pts": run, "w": width}], len(near)
-        if any(k in (n, m) for n, _e, m, _u, _v in law.needle_ends(tl)) or any(k in (a, b) for a, _ea, b, _eb in law.folded_joint_pairs(tl)):
+        if any(k in (n, m) for n, _e, m, _u, _v in law.needle_ends(tl, self.blocked)) or any(k in (a, b) for a, _ea, b, _eb in law.folded_joint_pairs(tl, self.blocked)):
             return False
-        if any(n == k for _c, n, _e in law.connector_hairpin_ends(tl)):
+        if any(n == k for _c, n, _e in law.connector_hairpin_ends(tl, self.blocked)):
             return False
         # ...AND EACH END SERVES SOMETHING (the lane law's `dangling_lane_ends`): a tree lane is never trimmed afterwards, so an
         # end it would leave in open ground is refused here

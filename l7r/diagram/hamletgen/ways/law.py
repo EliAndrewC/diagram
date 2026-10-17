@@ -48,7 +48,8 @@ from ..consts import WEB_FABRIC_GAP, Poly, Pt
 from .checks import served_network, unreached_houses
 from .clearance import _HAIRPIN_DEG, _ZIGZAG_DEG, _ZIGZAG_RUN_FT, kink_spans
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _crosses_fabric, house_hit
-from .geom import _TOUCH_GAP, WorkedGround, _components, _turn_deg, end_serves, polyline_len, steading_footprints, worked_ground
+from .forced import Blocked, forced_meeting, forced_turn, lazy_ground
+from .geom import _TOUCH_GAP, WorkedGround, _components, _seg_cross, _turn_deg, end_serves, polyline_len, steading_footprints, worked_ground
 from .joints import _HOOK_DEG, _HOOK_FT, at_rank, hairpin_over_a_short_leg, joints, oriented
 from .law_water import (  # noqa: F401 - re-exported: the law's callers reach the water rules and the lane helpers here
     DECK_NEAR_FT as DECK_NEAR_FT,
@@ -204,7 +205,7 @@ figure, so the hairpin the fold repairs and the hairpin this law refuses are one
 NEEDLE_DEG = 20.0
 """Research: a needle, not a T - CONVENTION: under 20 degrees two treads read as one smudged wedge"""
 NEEDLE_FT = 20.0
-"""Research: needle leg - CONVENTION: a leg over 20 ft, shorter is the approach to the junction"""
+"""Research: needle leg - UNRESEARCHED: a leg over 20 ft, shorter is the approach to the junction"""
 
 JOIN_REACH_FT = _LANE_JOIN_FT
 """A free lane end this near another way, making for it, is a join that stops short (`near_misses`) - the web's own join
@@ -243,7 +244,25 @@ def lanes_that_kink(M: Mapping[str, Any]) -> list[tuple[str, int, int]]:
     """`kinks` over every lane, the track out included (`lanes_bend_like_paths`; feature 328 wave 46 - the connector was
     exempt, and 0081 exempts no lane: "Every lane is pulled taut like a string").
     Research: bends like a path - research/questions/0081-village-lanes.drawing.html: every lane, the track out with them"""
-    return [k for ln in (M.get("lanes") or []) for k in kinks(lane_pts(ln))]
+    blocked = lazy_ground(M)
+    return [(kind, round(p[ka][0]), round(p[ka][1])) for ln in (M.get("lanes") or []) for p in [lane_pts(ln)] for kind, ka, _kb in kink_faults(p, float(ln.get("w") or 3.0), blocked)]
+
+
+def kink_faults(p: Sequence[Pt], width: float, blocked: Blocked | None = None) -> list[tuple[str, int, int]]:
+    """`clearance.kink_spans` of a run but the turns the ground forces (`forced.forced_turn`, plan D2 of feature 385): a
+    zigzag or a hairpin whose chord - the vertex before its first turn to the vertex after its last - is not lawful ground is
+    a path round what stands there. With no ground (`blocked` None) every span is a fault, as before.
+    Research: a forced turn is lawful - research/questions/0081-village-lanes.drawing.html: "A turn the ground forces is drawn as walked" - the chord the vertex before the first turn to the vertex after the last"""
+    p = list(p)
+    return [k for k in kink_spans(p) if not (k[1] >= 1 and k[2] + 1 < len(p) and forced_turn(blocked, p[k[1] - 1], p[k[2] + 1], width))]
+
+
+def hook_faults(p: Sequence[Pt], width: float, blocked: Blocked | None = None) -> list[int]:
+    """`hooked` ends of a run but those the ground forces: a hook whose chord - the vertex before the turn to the end - is not
+    lawful ground is the walk round a corner (`forced.forced_turn`, plan D2 of feature 385).
+    Research: a forced turn is lawful - research/questions/0081-village-lanes.drawing.html: "A turn the ground forces is drawn as walked" - the chord the vertex before the hook's turn to the end"""
+    p = list(p)
+    return [e for e in hooked(p) if not forced_turn(blocked, *((p[-3], p[-1]) if e == -1 else (p[2], p[0])), width)]
 
 
 def hooked(pts: Sequence[Pt]) -> list[int]:
@@ -262,8 +281,13 @@ def hooks(pts: Sequence[Pt]) -> list[tuple[int, int]]:
 
 
 def hooked_ends(M: Mapping[str, Any]) -> list[tuple[int, int]]:
-    """`hooks` over EVERY lane, the connector included."""
-    return [h for ln in (M.get("lanes") or []) for h in hooks(lane_pts(ln))]
+    """`hooks` over EVERY lane, the connector included - but a hook the ground forces (`hook_faults`)."""
+    blocked = lazy_ground(M)
+    out = []
+    for ln in M.get("lanes") or []:
+        p = lane_pts(ln)
+        out += [(round(p[-2 if e == -1 else 1][0]), round(p[-2 if e == -1 else 1][1])) for e in hook_faults(p, float(ln.get("w") or 3.0), blocked)]
+    return out
 
 
 def husks(M: Mapping[str, Any]) -> list[int]:
@@ -274,31 +298,35 @@ def husks(M: Mapping[str, Any]) -> list[int]:
 # ---- where lanes meet ----------------------------------------------------------------------------------------------
 
 
-def folded_joint_pairs(lanes: Lanes) -> list[tuple[int, int, int, int]]:
+def folded_joint_pairs(lanes: Lanes, blocked: Blocked | None = None) -> list[tuple[int, int, int, int]]:
     """The joints (`joints`: `(i, end_i, j, end_j)`) where two lanes meeting end to end - one way to the walker - turn
     `DOUBLE_BACK_DEG` or more.
-    Research: lanes met end to end are one - research/questions/0081-village-lanes.drawing.html: no hairpin at the joint"""
+    Research:
+        lanes met end to end are one - research/questions/0081-village-lanes.drawing.html: no hairpin at the joint
+        a forced turn is lawful - research/questions/0081-village-lanes.drawing.html: "A turn the ground forces is drawn as walked" - a fold whose chord the ground blocks is excused"""
     out = []
     for i, ei, j, ej in joints(lanes):
         x, y = oriented(lanes, i, ei, j, ej)
-        if _turn_deg(x[-2], x[-1], y[1]) >= DOUBLE_BACK_DEG:
+        if _turn_deg(x[-2], x[-1], y[1]) >= DOUBLE_BACK_DEG and not forced_turn(blocked, x[-2], y[1], float(lanes[i].get("w") or 3.0)):
             out.append((i, ei, j, ej))
     return out
 
 
-def folded_joints(lanes: Lanes) -> list[tuple[int, int]]:
+def folded_joints(lanes: Lanes, blocked: Blocked | None = None) -> list[tuple[int, int]]:
     """Where two lanes meeting end to end turn `DOUBLE_BACK_DEG` or more at the joint (`folded_joint_pairs`)."""
     out = []
-    for i, ei, j, ej in folded_joint_pairs(lanes):
+    for i, ei, j, ej in folded_joint_pairs(lanes, blocked):
         x, _y = oriented(lanes, i, ei, j, ej)
         out.append((round(x[-1][0]), round(x[-1][1])))
     return out
 
 
-def connector_hairpin_ends(lanes: Lanes) -> list[tuple[int, int, int]]:
+def connector_hairpin_ends(lanes: Lanes, blocked: Blocked | None = None) -> list[tuple[int, int, int]]:
     """(connector index, lane index, end) wherever a lane's short last leg meets the connector's start and the two double
     back (`hairpin_over_a_short_leg`); the end is -1 (the lane's last point) or 0 (its first).
-    Research: no hairpin at the track - research/questions/0081-village-lanes.drawing.html: over a returning leg under 40 ft"""
+    Research:
+        no hairpin at the track - research/questions/0081-village-lanes.drawing.html: over a returning leg under 40 ft
+        a forced turn is lawful - research/questions/0081-village-lanes.drawing.html: "A turn the ground forces is drawn as walked" - a hairpin at the track whose chord the ground blocks is excused"""
     out = []
     for ci, co in enumerate(lanes):
         cp = lane_pts(co)
@@ -310,14 +338,14 @@ def connector_hairpin_ends(lanes: Lanes) -> list[tuple[int, int, int]]:
                 continue
             for end, seq in ((-1, p), (0, p[::-1])):
                 a, b, j = seq[-3], seq[-2], seq[-1]
-                if math.dist(j, cp[0]) <= CONNECTOR_START_FT and hairpin_over_a_short_leg(a, b, j, cp[1]):
+                if math.dist(j, cp[0]) <= CONNECTOR_START_FT and hairpin_over_a_short_leg(a, b, j, cp[1]) and not forced_turn(blocked, b, cp[1], float(ln.get("w") or 3.0)):
                     out.append((ci, i, end))
     return out
 
 
-def connector_hairpins(lanes: Lanes) -> list[tuple[int, int]]:
+def connector_hairpins(lanes: Lanes, blocked: Blocked | None = None) -> list[tuple[int, int]]:
     """Where a lane's short last leg meets the connector's start and the two double back (`connector_hairpin_ends`)."""
-    return [(round(lane_pts(lanes[i])[end][0]), round(lane_pts(lanes[i])[end][1])) for _ci, i, end in connector_hairpin_ends(lanes)]
+    return [(round(lane_pts(lanes[i])[end][0]), round(lane_pts(lanes[i])[end][1])) for _ci, i, end in connector_hairpin_ends(lanes, blocked)]
 
 
 def _tread_bearings(q: Pt, u: Pt, v: Pt) -> list[Pt]:
@@ -333,11 +361,14 @@ def _tread_bearings(q: Pt, u: Pt, v: Pt) -> list[Pt]:
     return out
 
 
-def needle_ends(lanes: Lanes) -> list[tuple[int, int, int, Pt, Pt]]:
+def needle_ends(lanes: Lanes, blocked: Blocked | None = None) -> list[tuple[int, int, int, Pt, Pt]]:
     """(lane index, end, tread lane index, u, v) wherever a lane's end leg, longer than `NEEDLE_FT`, meets another way's tread `u`-`v`
     (within `JOIN_TOL`) and runs back along it at under `NEEDLE_DEG` - a needle rather than a T. A leg carrying straight on
     from a way's END is not a needle: the tread it meets does not run back beside it. The end is -1 (last) or 0 (first).
-    Research: a lane meets another as a T - research/questions/0081-village-lanes.drawing.html: never a needle"""
+    Research:
+        a lane meets another as a T - research/questions/0081-village-lanes.drawing.html: never a needle
+        a forced turn is lawful - research/questions/0081-village-lanes.drawing.html: "A turn the ground forces is drawn as walked" - a needle whose sliver the ground blocks is excused
+        needle leg - UNRESEARCHED: only an end leg over NEEDLE_FT, 20 ft, can be a needle; shorter is the approach to the junction"""
     ways = [lane_pts(ln) for ln in lanes]
     out = []
     for i, ln in enumerate(lanes):
@@ -355,14 +386,46 @@ def needle_ends(lanes: Lanes) -> list[tuple[int, int, int, Pt, Pt]]:
                 for u, v in zip(o, o[1:], strict=False):
                     if seg_dist(q[0], q[1], u, v) > JOIN_TOL:
                         continue
-                    if any(math.degrees(math.acos(max(-1.0, min(1.0, back[0] * d[0] + back[1] * d[1])))) < NEEDLE_DEG for d in _tread_bearings(q, u, v)):
+                    if any(math.degrees(math.acos(max(-1.0, min(1.0, back[0] * d[0] + back[1] * d[1])))) < NEEDLE_DEG for d in _tread_bearings(q, u, v)) and not forced_meeting(
+                        blocked, q, b, u, v, float(ln.get("w") or 3.0)
+                    ):
                         out.append((i, end, k, u, v))
     return out
 
 
-def needle_joins(lanes: Lanes) -> list[tuple[int, int]]:
+def shallow_crossing_at(lanes: Lanes) -> list[tuple[int, int, int, Pt]]:
+    """(lane, its segment, other way, the crossing point) wherever two ways cross each other at under `NEEDLE_DEG` - two
+    paths side by side, the one wandering over the other, which a walker would wear into one (feature 385 T01, plan D4:
+    cohort seed 10 under the wave 155 re-deal, a household's way crossing the field way at about 19 degrees and running on
+    beside it to the field way's start). Each crossing is named once, at the lower-numbered lane of the two. A crossing on an
+    end is a meeting, not a crossing (`needle_ends` reads it).
+    Research: two paths side by side become one - research/questions/0081-village-lanes.drawing.html: "Two paths running side by side are drawn as one" - a lane wandering over another way at under NEEDLE_DEG"""
+    ways = [lane_pts(ln) for ln in lanes]
+    out = []
+    for i, p in enumerate(ways):
+        for k in range(i + 1, len(ways)):
+            o = ways[k]
+            if not boxes_meet(p, o, 0.0):  # ...two ways whose boxes do not meet cannot cross
+                continue
+            for n, (a, b) in enumerate(zip(p, p[1:], strict=False)):
+                for c, d in zip(o, o[1:], strict=False):
+                    if (x := _seg_cross(a, b, c, d)) is None or _seg_cross(c, d, a, b) is None:
+                        continue
+                    u, v = (b[0] - a[0], b[1] - a[1]), (d[0] - c[0], d[1] - c[1])
+                    cos = abs(u[0] * v[0] + u[1] * v[1]) / ((math.hypot(*u) * math.hypot(*v)) or 1.0)
+                    if math.degrees(math.acos(min(1.0, cos))) < NEEDLE_DEG:
+                        out.append((i, n, k, x))
+    return out
+
+
+def shallow_crossings(M: Mapping[str, Any]) -> list[tuple[int, int]]:
+    """Where two ways cross at under `NEEDLE_DEG` (`shallow_crossing_at`)."""
+    return [(round(x[0]), round(x[1])) for _i, _n, _k, x in shallow_crossing_at(M.get("lanes") or [])]
+
+
+def needle_joins(lanes: Lanes, blocked: Blocked | None = None) -> list[tuple[int, int]]:
     """Where a lane's end leg meets another way's tread as a needle rather than a T (`needle_ends`)."""
-    return sorted({(round(lane_pts(lanes[i])[end][0]), round(lane_pts(lanes[i])[end][1])) for i, end, _k, _u, _v in needle_ends(lanes)})
+    return sorted({(round(lane_pts(lanes[i])[end][0]), round(lane_pts(lanes[i])[end][1])) for i, end, _k, _u, _v in needle_ends(lanes, blocked)})
 
 
 def doubled_tails(M: Mapping[str, Any]) -> list[int]:
@@ -855,9 +918,10 @@ LAW: dict[str, Callable[[Mapping[str, Any]], Any]] = {
     "bends": lanes_that_kink,
     "hooks": hooked_ends,
     "husks": husks,
-    "folded_joints": lambda M: folded_joints(M.get("lanes") or []),
-    "connector_hairpins": lambda M: connector_hairpins(M.get("lanes") or []),
-    "needle_joins": lambda M: needle_joins(M.get("lanes") or []),
+    "folded_joints": lambda M: folded_joints(M.get("lanes") or [], lazy_ground(M)),
+    "connector_hairpins": lambda M: connector_hairpins(M.get("lanes") or [], lazy_ground(M)),
+    "needle_joins": lambda M: needle_joins(M.get("lanes") or [], lazy_ground(M)),
+    "shallow_crossings": shallow_crossings,
     "doubled_tails": doubled_tails,
     "networks": lambda M: max(0, lane_networks(M) - 1),
     "joins_short": near_misses,
