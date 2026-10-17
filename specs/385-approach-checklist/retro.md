@@ -33,9 +33,9 @@ divides at, FR-005; T01's are kept by hand until T02 builds the split).
 
 | UTC | what was decided | what prompted it |
 |---|---|---|
-| 16:10 | plan amended: D4 made concrete (household way's foot, shallow crossing), D4b the knot rule reads the ground | part B; plan review round 3 CLEAR; the hourly step-back ruled `continue` |
-| 16:20 | D4b built and tested | the plan |
-| 16:35 | **D4b's evidence was wrong**: seed 24's two ends have clear ground between them - a household way's T-foot on lane 6 and the field way's start 24.8 ft along the same lane, a staggered junction; the gather failed for the fabric beside its own moved leg. Seed 24 goes to T04 (the re-deal); D4b kept on the GM's principle and its own test, its record corrected | seed 24 re-rolled with D4b (still knotted), then the geometry dumped |
+| 16:08 | plan amended: D4 made concrete (household way's foot, shallow crossing), D4b the knot rule reads the ground | part B; plan review round 3 CLEAR; the hourly step-back ruled `continue` |
+| 16:15 | D4b built and tested | the plan |
+| 16:24 | **D4b's evidence was wrong**: seed 24's two ends have clear ground between them - a household way's T-foot on lane 6 and the field way's start 24.8 ft along the same lane, a staggered junction; the gather failed for the fabric beside its own moved leg. Seed 24 goes to T04 (the re-deal); D4b kept on the GM's principle and its own test, its record corrected | seed 24 re-rolled with D4b (still knotted), then the geometry dumped |
 
 **Lesson for the retro row (an audit-grade pitfall):** twice in one task the cause was read from which TEST refused, not from
 the ground - the gather's refusal named `fabric`, and "a fence between the ends" was inferred and built. The geometry dump
