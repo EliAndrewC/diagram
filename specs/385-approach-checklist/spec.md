@@ -141,10 +141,10 @@ decision points, and the record checks' own counts in `dev/review-ledger.md`):
 - **FR-012 (the blind Approach)**: T03's first step, before the session writes anything of T03's own, is its Approach block
   (checklist part A) written by a FRESH agent that has not seen this session's conversation: it is given T03's task text, the
   checklist, and the code and the record to read, and nothing of what the session concluded about T03's rules - nor the GM's
-  own questions on them: it is told not to read `request.md`'s amendment 1 and amendment 2 sections (where the GM asks whether
-  household paths cut through neighbors' yards and whether lanes must reach the fields), and its prompt names neither question.
-  T01's record (`lane-law-table.md`, `retro.md`) stays readable: checking the rules it kept against the research is the very
-  question the checklist exists to ask. The session's
+  own questions on them. Inside this feature's directory it reads only `checklist.md` and T01's record (`lane-law-table.md`,
+  `retro.md`) - checking the rules T01 kept against the research is the very question the checklist exists to ask - and T03's
+  task text is copied into its prompt; every other file there (`request.md`, `spec.md`, `plan.md`, `tasks.md`, `arbiter.jsonl`,
+  `gm-review.jsonl`, `audit.md`) is closed to it, and its prompt names no question the GM or the session raised. The session's
   own conclusions were sealed before amendment 2, outside the repository, where that agent cannot read them; once the blind
   block is written they are compared, rule by rule, in T03's retro row: which questions the checklist raised without hindsight,
   which it missed, and the checklist change a miss calls for. The session then writes T03's plan section from the blind block
