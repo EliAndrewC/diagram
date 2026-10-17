@@ -173,6 +173,7 @@ def pytest_configure(config: pytest.Config) -> None:
     os.environ["L7R_TEST_DEP_LOG"] = os.path.join(os.environ.get("L7R_TEST_DEP_DIR", tempfile.gettempdir()), f"children-{worker}.log")
     os.environ["L7R_TEST_DEP_SELF"] = str(os.getpid())
     sys.addaudithook(_hook)
+    _monitor()
 
 
 SHIM_SRC = SITE / "l7r_file_log.c"
@@ -206,7 +207,40 @@ def _enter(key: str) -> str:
     prev = _current[0]
     _current[0] = key
     os.environ["L7R_TEST_DEP_FILE"] = key
+    if _MONITORING[0]:
+        sys.monitoring.restart_events()  # each code object's first run is seen again, under the new key
     return prev
+
+
+#: the sys.monitoring tool id this records under: coverage takes 1, a profiler 2, the optimizer 5
+MONITOR_ID = 3
+_MONITORING = [False]
+
+
+def _ran_code(code, offset: int):  # noqa: ANN001, ANN202, ARG001
+    """A code object of the repository started running: its file is a read of the current key. WHY (found 2026-10-17, plan
+    D32b): a module is opened once per worker, so a test that only CALLS a module another test imported first never opened
+    it, and its pass was reused after that module changed (`ci/delta.py` edited: 36 tests ran, and `test_delta.py`'s
+    others were reused). The run of its code is what a test depends on; each code object reports once per key and is then
+    disabled until `_enter` restarts the events."""
+    f = _current[0]
+    if f:
+        p = _under(code.co_filename)
+        if p:
+            _reads.setdefault(f, {}).setdefault("file", set()).add(p)
+    return sys.monitoring.DISABLE
+
+
+def _monitor() -> None:
+    """Record the code each key runs (`_ran_code`); a no-op where the id is taken (a coverage run uses its own)."""
+    mon = sys.monitoring
+    try:
+        mon.use_tool_id(MONITOR_ID, "l7r-test-deps")
+    except ValueError:
+        return
+    mon.register_callback(MONITOR_ID, mon.events.PY_START, _ran_code)
+    mon.set_events(MONITOR_ID, mon.events.PY_START)
+    _MONITORING[0] = True
 
 
 @pytest.hookimpl(hookwrapper=True)
@@ -220,14 +254,25 @@ def pytest_make_collect_report(collector: pytest.Collector):  # noqa: ANN201
         _enter(prev)
 
 
+def fixture_key(baseid: str, scope: str, nodeid: str) -> str:
+    """The key a fixture wider than one test records under: the test module that DEFINES it, at any scope, since only that
+    module's tests can use it (plan D32b - a session fixture of `test_incremental_gate.py` made every test depend on
+    `ci/delta.py`); else, for one from a conftest, the requesting file for a module- or class-scoped one, the session for a
+    session- or package-scoped one."""
+    home = baseid.split("::", 1)[0]
+    if home.endswith(".py") and home.startswith(TREE):
+        return home
+    f = _rel(nodeid)
+    return f if scope in ("module", "class") and f.startswith(TREE) else SESSION
+
+
 @pytest.hookimpl(hookwrapper=True)
 def pytest_fixture_setup(fixturedef, request):  # noqa: ANN001, ANN201
     """A fixture wider than one test is read for every test that may use it: a module- or class-scoped one for its file, a
     session- or package-scoped one for the session (amendment 5, plan D32)."""
     key = ""
     if getattr(request.config, "_l7r_deps", False) and fixturedef.scope != "function":
-        f = _rel(request.node.nodeid)
-        key = f if fixturedef.scope in ("module", "class") and f.startswith(TREE) else SESSION
+        key = fixture_key(fixturedef.baseid, fixturedef.scope, request.node.nodeid)
     prev = _enter(key) if key else ""
     yield
     if key:

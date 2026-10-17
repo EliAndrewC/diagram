@@ -193,3 +193,41 @@ def test_an_entry_kept_against_content_that_moved_is_dropped(tmp_path, monkeypat
     assert kept["states"]["f:data/p.html"] == "new"
     assert set(kept["tests"]) == {"tests/tooling/test_a.py::t1"}, "t2 saw the old page: dropped, not kept against the new"
     assert kept["session"]["files"] == ["data/s.json"], "the earlier run's session read carried, as the relative path it was kept as"
+
+
+def test_a_test_that_only_calls_a_module_another_imported_still_depends_on_it() -> None:
+    """Plan D32b (found 2026-10-17): a module is opened once per worker, so a test that only CALLED code another test had
+    imported was kept without it, and reused after it changed. The code a key runs is its read."""
+    import sys as _sys  # noqa: PLC0415
+
+    ns: dict = {}
+    exec(compile("def f():\n    return 1\n", str(deps.ROOT / "scripts" / "probe_module.py"), "exec"), ns)  # noqa: S102
+    started = not deps._MONITORING[0]
+    if started:
+        deps._monitor()
+    saved, prev = {k: dict(v) for k, v in deps._reads.items()}, deps._current[0]
+    try:
+        for key in ("t:first", "t:second"):  # the second key calls f after the first already ran it
+            deps._enter(key)
+            ns["f"]()
+            deps._enter("")
+        probe = str(deps.ROOT / "scripts" / "probe_module.py")  # reads are kept absolute until `_keep` makes them relative
+        assert all(probe in deps._reads[k]["file"] for k in ("t:first", "t:second"))
+    finally:
+        deps._reads.clear()
+        deps._reads.update(saved)
+        deps._enter(prev)
+        if started:
+            _sys.monitoring.set_events(deps.MONITOR_ID, 0)
+            _sys.monitoring.free_tool_id(deps.MONITOR_ID)
+            deps._MONITORING[0] = False
+
+
+def test_a_wide_fixture_defined_in_a_test_module_is_that_file_s_read() -> None:
+    """Plan D32b: a session-scoped fixture defined in a test module serves only its own tests, so what it runs is that
+    file's read - kept under the session, every test in the tree depended on it."""
+    t = "tests/tooling/test_a.py"
+    assert deps.fixture_key(t, "session", t + "::x") == t, "defined in a test module: that file, whatever its scope"
+    assert deps.fixture_key("tests/tooling", "session", t + "::x") == deps.SESSION, "a conftest's session fixture"
+    assert deps.fixture_key("tests/tooling", "module", t + "::x") == t, "a conftest's module fixture: the requesting file"
+    assert deps.fixture_key("", "package", t + "::x") == deps.SESSION
