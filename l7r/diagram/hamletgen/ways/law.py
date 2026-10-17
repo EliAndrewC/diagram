@@ -390,7 +390,7 @@ def shallow_crossing_at(lanes: Lanes) -> list[tuple[int, int, int, Pt]]:
     cohort seed 10 under the wave 155 re-deal, a household's way crossing the field way at about 19 degrees and running on
     beside it to the field way's start). Each crossing is named once, at the lower-numbered lane of the two. A crossing on an
     end is a meeting, not a crossing (`needle_ends` reads it).
-    Research: two paths side by side become one - the GM, 2026-10-17: "if there are two different footpaths that are nearly parallel to each other and very close together, then that is the kind of situation in which a single footpath would emerge"; NEEDLE_DEG a CONVENTION"""
+    Research: two paths side by side become one - research/questions/0081-village-lanes.drawing.html: "Two paths running side by side are drawn as one" - a lane wandering over another way at under NEEDLE_DEG"""
     ways = [lane_pts(ln) for ln in lanes]
     out = []
     for i, p in enumerate(ways):

@@ -139,7 +139,7 @@ def cut_at_shallow_crossing(lanes: Sequence[Mapping[str, Any]], m: int, o: int, 
     nothing, the web in more pieces, a farmhouse no longer served). An ordinary lane keeps its longer side.
 
     Research:
-        two paths side by side become one - the GM, 2026-10-17: "a single footpath would emerge"
+        two paths side by side become one - research/questions/0081-village-lanes.drawing.html: the lane cut where it comes alongside, meeting the other as a T
         which side is kept - UNRESEARCHED: a household's way keeps its door's side; an ordinary lane its longer side"""
     from .corridors import ACCESS_ROLE, is_tree  # bound here: `corridors` sits beside this module's callers
     from .joints import keeps_the_web
