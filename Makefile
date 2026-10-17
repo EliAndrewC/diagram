@@ -1746,6 +1746,10 @@ cov-file:       ## [tests] which lines of MOD does ONE test file reach?   FILE=t
 # that they exist - "make durations FULL MARK" did not tell them what FULL=1 changes, or what MARK
 # even takes. So a `##  NAME=<what>  description` line under a target documents one argument, and
 # `make-docs.py` renders them. Make treats these as ordinary comments; the recipe is unaffected.
+parts-sweep:     ## [tests] run each split guard suite at 1, 2, 3 and 8 parts and report any count whose result differs - after a suite's cases change; never in the gate   [SUITES="test-pair-hooks.sh ..."]
+	@: "GUARD_EDIT_OK: feature 383 amendment 4 - the round arbiter's tooling fix on hour:383@3: the case-order sweep as a command (tests/hooks/parts_sweep.sh)"
+	@bash tests/hooks/parts_sweep.sh $(SUITES)
+
 collect-cost:    ## [tests] where a run's time goes before any test runs: as make runs it, no workers, collection alone (feature 383 amendment 3)   TREE=quick|tooling
 	@: "GUARD_EDIT_OK: feature 383 amendment 3, plan D25 - adding an operation: the collection measurement, run under make because the engine refuses pytest started outside it"
 	@python3 scripts/measure/collect_cost.py --tree $(or $(TREE),quick) $(if $(JSON),--json $(JSON),)
