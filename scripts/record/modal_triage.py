@@ -59,11 +59,7 @@ def pending(root: pathlib.Path, base: str, store: pathlib.Path, owed: Sequence[t
     """(slug, why, fingerprint) of every unit owed only a triage: unanswered at its fingerprint and not named by a triage.
     `owed` is the pop-ups' owed rows when the caller has them already (`modal_bundle`, feature 375 amendment 3 plan D27)."""
     named = touched(store)
-    return [
-        (slug, why, fp)
-        for slug, why, fp in (owed if owed is not None else mo.owed(root, base))
-        if triage_only(why) and not ro.answered(store, slug, fp) and named.get(slug) != fp
-    ]
+    return [(slug, why, fp) for slug, why, fp in (owed if owed is not None else mo.owed(root, base)) if triage_only(why) and not ro.answered(store, slug, fp) and named.get(slug) != fp]
 
 
 def keep(root: pathlib.Path, path: str) -> str:
@@ -130,13 +126,9 @@ def bundle(root: pathlib.Path, out: pathlib.Path, base: str = "") -> tuple[pathl
     parts = [
         "# Triage of pop-up checks (feature 375, FR-001)\n",
         "owed-checks: modal-triage\n",
-        "Each page below changed since the pop-ups under it were last checked; it lists ONLY its new, changed and REMOVED "
-        "blocks. For each pop-up, decide whether any of those blocks could change what its checks would find - a figure, form, "
-        "rule, guess or convention its About or Depiction states, or one it should now state. Reply one "
-        "`TOUCHES <uid> @ <page file name> - <which block, a few words>` line per (pop-up, page) whose blocks bear on it, and "
-        "nothing for the rest: a pop-up you do not name is cleared without its checks. The page decides which checks are owed - "
-        "a question page its research checks, a `.drawing.html` page its depiction check - so name the page the block stands "
-        "on, and a block standing on two pages on both. When unsure, name it.\n",
+        # what to decide and how to reply is the `modal-triage` agent's contract, its system prompt, read from the prompt cache
+        # by every dispatch; here it followed the unique prompt and was written fresh each time (feature 383 amendment 6, D36)
+        "For the `modal-triage` agent: rule on each pop-up below as your contract says, and reply in its form.\n",
     ]
     for path in sorted(by_page):
         fresh, gone = blocks[path]
@@ -148,12 +140,13 @@ def bundle(root: pathlib.Path, out: pathlib.Path, base: str = "") -> tuple[pathl
         parts.append("Pop-ups naming it:\n")
         for uid in sorted(by_page[path]):
             m = modals[uid]
-            parts.append(f"- UID `{uid}` ({', '.join(sorted(by_page[path][uid]))}): About - {m.tags.get('About', '')[:400]}"
-                         + (f" | Depiction - {m.tags.get('Depiction', '')[:400]}" if m.tags.get("Depiction") else ""))
+            parts.append(
+                f"- UID `{uid}` ({', '.join(sorted(by_page[path][uid]))}): About - {m.tags.get('About', '')[:400]}"
+                + (f" | Depiction - {m.tags.get('Depiction', '')[:400]}" if m.tags.get("Depiction") else "")
+            )
         parts.append("")
     (out / "MANIFEST.md").write_text("\n".join(parts) + "\n", encoding="utf-8")
-    (out / "triage.json").write_text(json.dumps({"units": {s: fp for s, _w, fp in units}, "pages": reads}, indent=1, sort_keys=True)
-                                     + "\n", encoding="utf-8")
+    (out / "triage.json").write_text(json.dumps({"units": {s: fp for s, _w, fp in units}, "pages": reads}, indent=1, sort_keys=True) + "\n", encoding="utf-8")
     return out / "MANIFEST.md", len(units)
 
 
@@ -180,8 +173,7 @@ def record(store: pathlib.Path, units: Mapping[str, str], reply: str, pages: Map
         lines = named.get(uid, [])
         known = [p for ps in (pages or {}).values() for p in ps]
         # a page the bundle never showed (misnamed, bare, unchanged) is read as no page: it owes all, never clears (plan review)
-        hit = [why for page, why in lines
-               if not page or pages is None or slug not in pages or not _reads(page, known) or _reads(page, pages[slug])]
+        hit = [why for page, why in lines if not page or pages is None or slug not in pages or not _reads(page, known) or _reads(page, pages[slug])]
         if hit:
             mark[slug] = fp
             msgs.append(f"touched: {slug} - {hit[0]}")
@@ -198,8 +190,11 @@ def refusal(root: pathlib.Path, m: mo.Modal, check: str, owed: Sequence[tuple[st
     store = ro.store(root)
     slugs = {f"{c}:{m.uid}" for c in ((check,) if check != mo.RESEARCH_AGENT else mo.RESEARCH_CHECKS)}
     waiting = [s for s, _w, _fp in pending(root, base, store, owed) if s in slugs]
-    return (f"{', '.join(sorted(waiting))} owe(s) only a TRIAGE (a page it names moved, its own words did not) - "
-            "`make modal-triage` first; it sends on only the pop-ups a change bears on") if waiting else ""
+    return (
+        (f"{', '.join(sorted(waiting))} owe(s) only a TRIAGE (a page it names moved, its own words did not) - `make modal-triage` first; it sends on only the pop-ups a change bears on")
+        if waiting
+        else ""
+    )
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -219,8 +214,10 @@ def main(argv: Sequence[str] | None = None) -> int:
             print("modal-triage: no pop-up is owed a triage")
             return 0
         print(manifest)
-        print(f"modal-triage: {n} unit(s); dispatch one ad-hoc agent (model opus) on the MANIFEST, save its reply, then "
-              "`make modal-triaged BUNDLE=<dir> REPLY=<file>`")
+        print(
+            f"modal-triage: {n} unit(s); dispatch the `modal-triage` agent on the MANIFEST (a session started before 2026-10-17's amendment 6 landed: restart to load it), save its reply, then "
+            "`make modal-triaged BUNDLE=<dir> REPLY=<file>`"
+        )
         return 0
     data = json.loads((pathlib.Path(a.bundle) / "triage.json").read_text(encoding="utf-8"))
     msgs = record(ro.store(root), data["units"], pathlib.Path(a.reply).read_text(encoding="utf-8"), data.get("pages"))

@@ -1368,6 +1368,10 @@ feature-report: ## [project] where a feature's time and dispatches went, as a ta
 
 # GUARD_EDIT_OK: feature 251 - four new operations (the token census and the three script pre-passes that
 # take the mechanical part of a subagent check out of a model); no existing target or guard changes.
+agent-sync:     ## [project] write into each agent file the text every dispatch of that check shares (the modal guidelines), from its source (feature 383 amendment 6)
+	@: "GUARD_EDIT_OK: feature 383 amendment 6, plan D35 - adding an operation: the agent files' generated sections, held by tests/test_agent_sync.py"
+	@python3 scripts/reviews/agent_sync.py
+
 agent-census:   ## [project] what each subagent check has cost, from the session transcripts   [SINCE=YYYY-MM-DD] [OUT=<json>]
 ##  SINCE=<date>   only the runs that started on or after it
 ##  OUT=<json>     also write the rows to this file
@@ -1524,7 +1528,7 @@ modal-bundle: ## [project] the files a modal check reads (modal-form, modal-rese
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/record/modal_bundle.py "$(KIND)" --for "$(or $(FOR),modal-form)" $(if $(OUT),--out "$(OUT)",) $(if $(REASON),--reason "$(REASON)",)
 
 # GUARD_EDIT_OK: feature 375 FR-001 adds two operations - the pop-up triage's bundle and the recording of its reply.
-modal-triage: ## [project] the triage bundle for every pop-up owed only because a page it names moved: the changed blocks beside the kinds naming them, for one ad-hoc agent (feature 375)   [OUT=<dir>]
+modal-triage: ## [project] the triage bundle for every pop-up owed only because a page it names moved: the changed blocks beside the kinds naming them, for the modal-triage agent (feature 375; its own agent since 383 amendment 6)   [OUT=<dir>]
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/record/modal_triage.py --root . bundle $(if $(OUT),--out "$(OUT)",)
 
 modal-triaged: ## [project] record a pop-up triage reply: a kind it names (TOUCHES) is sent on to its checks, every other unit of the bundle answered `triage: untouched`   BUNDLE=<dir> REPLY=<file>
@@ -1758,6 +1762,10 @@ cov-file:       ## [tests] which lines of MOD does ONE test file reach?   FILE=t
 parts-sweep:     ## [tests] run each split guard suite at 1, 2, 3 and 8 parts and report any count whose result differs - after a suite's cases change; never in the gate   [SUITES="test-pair-hooks.sh ..."]
 	@: "GUARD_EDIT_OK: feature 383 amendment 4 - the round arbiter's tooling fix on hour:383@3: the case-order sweep as a command (tests/hooks/parts_sweep.sh)"
 	@bash tests/hooks/parts_sweep.sh $(SUITES)
+
+subagent-cache:  ## [project] what subagents write to the prompt cache fresh, per agent type, and the repeated text in their bundles (feature 383 amendment 6)   [SINCE=YYYY-MM-DD]
+	@: "GUARD_EDIT_OK: feature 383 amendment 6, plan D39 - adding an operation: the subagent cache measurement over the transcripts"
+	@python3 scripts/measure/subagent_cache.py $(if $(SINCE),--since $(SINCE),)
 
 collect-cost:    ## [tests] where a run's time goes before any test runs: as make runs it, no workers, collection alone (feature 383 amendment 3)   TREE=quick|tooling
 	@: "GUARD_EDIT_OK: feature 383 amendment 3, plan D25 - adding an operation: the collection measurement, run under make because the engine refuses pytest started outside it"

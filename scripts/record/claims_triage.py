@@ -17,9 +17,12 @@ import shutil
 import subprocess
 from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import record_units as ru
+
+if TYPE_CHECKING:  # the row type `claims.py` defines; it imports this module, so only the type checker imports it back
+    from claims import Row
 
 QUESTIONS = "research/questions"
 
@@ -104,9 +107,7 @@ def removed_words(qdir: Path, name: str, digests: set[str], depth: int = 60, sna
     (`keep_texts`) and then the page's own git history (newest first, at most `depth` versions): the snapshots keep digests
     only, and the triage must SHOW a removed block. A block nothing yields is absent from the answer."""
     found: dict[str, str] = {}
-    texts = ([kept_text(qdir, snapshot)] if snapshot else []) + [
-        _git(qdir, "show", f"{sha}:./{name}") or "" for sha in (_git(qdir, "log", "--format=%H", f"-{depth}", "--", name) or "").split()
-    ]
+    texts = ([kept_text(qdir, snapshot)] if snapshot else []) + [_git(qdir, "show", f"{sha}:./{name}") or "" for sha in (_git(qdir, "log", "--format=%H", f"-{depth}", "--", name) or "").split()]
     for text in texts:
         for b in ru.read_page(text).blocks:
             d = ru.digest([b.words])
@@ -192,10 +193,9 @@ def triage_bundle(
     parts = [
         "# Triage of claim re-checks (feature 318)\n",
         "owed-checks: claims-triage\n",
-        "Each page below changed since the claims under it were last judged; it lists ONLY its new, changed and REMOVED blocks. "
-        "For each claim, decide whether any of those blocks - a block added or reworded, or one taken away - could change its verdict - a figure, rule, form, order, exception or recorded "
-        "deviation that bears on what the claim says the code does. Reply one `TOUCHES <key> - <which block, a few words>` line per "
-        "such claim, and nothing for the rest: a claim you do not name is cleared without a re-check. When unsure, name it.\n",
+        # what to decide and how to reply is the `claims-triage` agent's contract, its system prompt, read from the prompt cache
+        # by every dispatch; here it followed the unique prompt and was written fresh each time (feature 383 amendment 6, D36)
+        "For the `claims-triage` agent: rule on each claim below as your contract says, and reply in its form.\n",
     ]
     for where, (fresh, lost, ks) in sorted(sections.items()):  # `lost`, never `gone`: the pages' loop below reads `gone` (374)
         parts.append(f"## {where} (a procedure section; the claims' own lines did not change)\n\nNew or changed blocks:\n")

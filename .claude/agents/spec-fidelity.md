@@ -4,6 +4,7 @@ description: Adjudicates whether a spec, a plan's decisions or a proposed except
 model: opus
 effort: high
 tools: Read, Grep, Bash
+omitClaudeMd: true
 ---
 
 ## When to dispatch this agent

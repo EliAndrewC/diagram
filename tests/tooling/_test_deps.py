@@ -84,6 +84,8 @@ def _under(path: object) -> str:
 
 
 def _hook(event: str, args: tuple) -> None:
+    if _current is None:  # interpreter shutdown: module globals are gone, and an audit event can still fire
+        return
     f = _current[0]
     if not f:
         return

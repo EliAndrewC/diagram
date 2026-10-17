@@ -2,6 +2,9 @@
   "enabledPlugins": {
     "frontend-design@claude-plugins-official": true
   },
+  "claudeMdExcludes": [
+    "/diagram/.clones/*/CLAUDE.md"
+  ],
   "hooks": {
     "SessionStart": [
       {
@@ -331,6 +334,10 @@
           {
             "type": "command",
             "command": "h=/diagram/scripts/hooks/agent-model-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/agent-model-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 252 - a NEW guard (the GM 2026-09-19): an ad-hoc agent dispatch names its model or is refused; first in the list so a refused dispatch is refused before the other Agent guards act on it"
+          },
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/agent-prefix-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/agent-prefix-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 383 amendment 6 - a NEW guard (the GM 2026-10-17): a prompt sharing a large block with an earlier dispatch of its type, after a part that differs, is refused - the block would be written to the cache fresh every time"
           },
           {
             "type": "command",

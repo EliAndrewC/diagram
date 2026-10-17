@@ -6,7 +6,7 @@ repository as every record check's bundle is (feature 250: an agent that reads a
     modal_bundle.py KIND [--for modal-form|modal-research] [--out DIR]    the bundle; KIND is a class name or key
     modal_bundle.py KIND --prepass                                         the prepass alone, printed
 
-THE BUNDLE. `modal.md` - the modal as its reader meets it, tab by tab, with its origin; the guidelines its form names
+THE BUNDLE. `modal.md` - the modal as its reader meets it, tab by tab, with its origin; `guidelines.txt`, naming which guidelines its form takes (the rules themselves are in the agent files, feature 383 amendment 6)
 (`dev/modals.md` or `dev/modals-particular.md`); the prepass. For `modal-research` also: each page the `Entry:` names with its
 notes; `candidates.md`; the ten best candidates whole; and `record/`, every question page, for grep (never read whole).
 
@@ -45,8 +45,16 @@ GUIDELINES = {"standard": pathlib.Path("dev/modals.md"), "particular": pathlib.P
 BAND = {"standard": (120, 500), "particular": (80, 400)}  # raised from 250 / 200 by the GM, 2026-10-09
 #: record talk and the old feature-level label, barred from the About tab (`dev/modals.md` M11, M16)
 BARRED = (
-    r"\bthis project\b", r"\bthe record\b", r"\bpages? (we )?read\b", r"\bno page\b", r"\bGUESS\b", r"\bThis is a guess\b",
-    r"\bthis is a deliberate deviation\b", r"\bhistorically accurate\b", r"\ba survey (of|found)\b", r"\bsource(s)? (say|says|states)\b",
+    r"\bthis project\b",
+    r"\bthe record\b",
+    r"\bpages? (we )?read\b",
+    r"\bno page\b",
+    r"\bGUESS\b",
+    r"\bThis is a guess\b",
+    r"\bthis is a deliberate deviation\b",
+    r"\bhistorically accurate\b",
+    r"\ba survey (of|found)\b",
+    r"\bsource(s)? (say|says|states)\b",
 )
 TOP = 10
 DEFAULT_ROOT = pathlib.Path("/tmp/l7r-check")
@@ -159,7 +167,7 @@ def prepass(root: pathlib.Path, m: mo.Modal) -> str:
     out = [f"prepass - {m.cls} ({m.form})", f"- About words: {n} (band {lo}-{hi}){'' if lo <= n <= hi else '  <- OUTSIDE THE BAND'}"]
     for pat in BARRED:
         for hit in re.finditer(pat, about, re.I):
-            out.append(f"- barred phrase in About (M11/M16): {hit.group(0)!r} - ...{about[max(0, hit.start() - 50):hit.end() + 50]}...")
+            out.append(f"- barred phrase in About (M11/M16): {hit.group(0)!r} - ...{about[max(0, hit.start() - 50) : hit.end() + 50]}...")
     for g in (g[2:] for g in m.tags.get("Guesses", "").splitlines() if g.strip()):
         if len(re.findall(r"[.!?](\s|$)", g)) > 2:
             out.append(f"- a guess past two sentences (M3): {g[:90]}...")
@@ -281,8 +289,7 @@ def drawn_geometry(page: pathlib.Path, key: str) -> str:
     keep = re.compile(r'(?<![\w-])(x|y|width|height|points|d|cx|cy|r|rx|ry|x1|y1|x2|y2|transform)="([^"]{0,200})"')  # not stroke-width
     lines = [f"- <{tag}> " + " ".join(f'{a}="{v}"' for a, v in keep.findall(attrs)) for tag, attrs in shapes]
     box = re.search(r'viewBox="([^"]*)"', text)
-    return (f"\nThe first glyph's drawn parts on `{page.name}` (the page's units; viewBox {box.group(1) if box else '?'}; its scale bar names "
-            "the feet):\n" + "\n".join(lines) + "\n") if lines else ""
+    return (f"\nThe first glyph's drawn parts on `{page.name}` (the page's units; viewBox {box.group(1) if box else '?'}; its scale bar names the feet):\n" + "\n".join(lines) + "\n") if lines else ""
 
 
 def click_target(root: pathlib.Path, key: str, m: mo.Modal) -> str:
@@ -353,9 +360,12 @@ def knobs_note(doc: str) -> str:
         parts.append(f"## {name}\n\nforms: {', '.join(forms.get(name, ())) or '(not registered)'}" + (f"; default {k.default}" if k else "") + "\n")
         if k is not None and getattr(k, "typing_rule", None) is not None:
             parts.append("The typing rule (which settlements may take each form):\n\n```python\n" + inspect.getsource(k.typing_rule) + "```\n")
-        hits = [f"{f.relative_to(ENGINE.parents[1])}:{i}: {line.strip()}" for f in sorted(ENGINE.rglob("*.py"))
-                for i, line in enumerate(f.read_text(encoding="utf-8").splitlines(), 1)
-                if f'"{name}"' in line and " - " not in line][:15]
+        hits = [
+            f"{f.relative_to(ENGINE.parents[1])}:{i}: {line.strip()}"
+            for f in sorted(ENGINE.rglob("*.py"))
+            for i, line in enumerate(f.read_text(encoding="utf-8").splitlines(), 1)
+            if f'"{name}"' in line and " - " not in line
+        ][:15]
         parts.append("Where the engine sets or reads it:\n\n" + ("\n".join(f"- `{h}`" for h in hits) or "- (no line names it)") + "\n")
     return "\n".join(parts)
 
@@ -380,12 +390,26 @@ def depiction_parts(root: pathlib.Path, m: mo.Modal, put, out: pathlib.Path, gre
     candidates = drawing_candidates(root, m)
     for f in candidates:
         p = root / f
-        put(f"drawing/{p.name}", p.read_text(encoding="utf-8"), f, "CANDIDATE - NOT on the modal's Drawing: list, but its kind's (beside an Entry question, or listed before this change): is it owed a link?")
+        put(
+            f"drawing/{p.name}",
+            p.read_text(encoding="utf-8"),
+            f,
+            "CANDIDATE - NOT on the modal's Drawing: list, but its kind's (beside an Entry question, or listed before this change): is it owed a link?",
+        )
     if note := knobs_note(m.doc):
-        put("knobs.md", note, "l7r/diagram/settlement/_knobs.py", "which maps draw what the modal's conditions name: each knob's forms, typing rule and engine lines - read it before ruling on a conditional link")
+        put(
+            "knobs.md",
+            note,
+            "l7r/diagram/settlement/_knobs.py",
+            "which maps draw what the modal's conditions name: each knob's forms, typing rule and engine lines - read it before ruling on a conditional link",
+        )
     rows = claims_citing(root, [*m.drawing_files(), *candidates])
-    put("claims.md", "# The engine's research claims citing these drawing pages (verdict | unit | note)\n\n" + ("\n".join(rows) if rows else "(none)") + "\n",
-        str(CLAIMS_INDEX), "the code's own account of how it draws the kind - a DRIFTED row is a variety the record names and the code does not draw")
+    put(
+        "claims.md",
+        "# The engine's research claims citing these drawing pages (verdict | unit | note)\n\n" + ("\n".join(rows) if rows else "(none)") + "\n",
+        str(CLAIMS_INDEX),
+        "the code's own account of how it draws the kind - a DRIFTED row is a variety the record names and the code does not draw",
+    )
     page = pool_page_with(root, m.key, sheet=m.uid.startswith("sheet/"))
     if page is not None and (why := stale_page(page, root)):
         raise SystemExit(f"modal-bundle: {why}")
@@ -397,14 +421,22 @@ def depiction_parts(root: pathlib.Path, m: mo.Modal, put, out: pathlib.Path, gre
         kinds = [k for k in kinds_file.read_text(encoding="utf-8").splitlines() if k] if kinds_file.is_file() else []
         kinds_file.unlink(missing_ok=True)
         clicks = "".join(f"\n- `{k}` opens {click_target(root, k, m)}" for k in kinds)
-        put("glyph.txt", f"glyph.png beside this MANIFEST: the kind `{m.key}` as drawn on `{page.relative_to(root)}`, zoomed until its first glyph is about 200 px across; Read it as an image.\n"
-            + (f"\nThe kinds with a part in the crop - a click on each opens its own pop-up:{clicks}\n" if clicks else "") + shape,
-            str(page.relative_to(root)), "where the crop came from - Read glyph.png")
+        put(
+            "glyph.txt",
+            f"glyph.png beside this MANIFEST: the kind `{m.key}` as drawn on `{page.relative_to(root)}`, zoomed until its first glyph is about 200 px across; Read it as an image.\n"
+            + (f"\nThe kinds with a part in the crop - a click on each opens its own pop-up:{clicks}\n" if clicks else "")
+            + shape,
+            str(page.relative_to(root)),
+            "where the crop came from - Read glyph.png",
+        )
     else:
-        why = (f"the browser could not crop it from `{page.relative_to(root)}` (the kind IS drawn there)" if page is not None
-               else f"the kind `{m.key}` is drawn on no pool page")
-        put("glyph.txt", f"no crop: {why} - judge from the drawing pages, the claims and the geometry below, and say so.\n" + shape,
-            "scripts/record/modal_bundle.py", "why there is no crop, and the drawn geometry")
+        why = f"the browser could not crop it from `{page.relative_to(root)}` (the kind IS drawn there)" if page is not None else f"the kind `{m.key}` is drawn on no pool page"
+        put(
+            "glyph.txt",
+            f"no crop: {why} - judge from the drawing pages, the claims and the geometry below, and say so.\n" + shape,
+            "scripts/record/modal_bundle.py",
+            "why there is no crop, and the drawn geometry",
+        )
 
 
 def research_held(root: pathlib.Path, uid: str, text: str) -> list[str]:
@@ -442,9 +474,11 @@ def order_hold(root: pathlib.Path, m: mo.Modal, for_: str, units: Sequence[Any])
         for c in mo.AGENT_UNITS[agent]:
             u = by_slug.get(f"{c}:{m.uid}")
             if u is not None and not record_owed.answered(store, u.slug, u.fingerprint, u.reading):
-                return (f"{u.slug} is owed and unanswered - a pop-up's checks run in order, form, then research, then depiction "
-                        f"(feature 375 amendment 3: run together, each one's edits re-owed the others). First: make modal-bundle "
-                        f'KIND="{m.uid}" FOR={agent}')
+                return (
+                    f"{u.slug} is owed and unanswered - a pop-up's checks run in order, form, then research, then depiction "
+                    f"(feature 375 amendment 3: run together, each one's edits re-owed the others). First: make modal-bundle "
+                    f'KIND="{m.uid}" FOR={agent}'
+                )
     return ""
 
 
@@ -466,8 +500,13 @@ def owed_lines(root: pathlib.Path, m: mo.Modal, for_: str, owed: Sequence[Any] |
     import record_owed  # noqa: PLC0415 - what made each unit due, read back per round by the arbiter's bundle (374)
 
     why = {u.slug: u.occasion for u in (owed if owed is not None else record_owed.units(root))}
-    return ("## Owed (feature 311)\n\n" + f"owed-checks: {for_}\n" + "".join(f"unit: {s} {fp}\n" for s, fp in units)
-            + "".join(f"page: {f} {b}\n" for f, b in pages) + "".join(f"owed: {s} - {why[s]}\n" for s, _fp in units if why.get(s)))
+    return (
+        "## Owed (feature 311)\n\n"
+        + f"owed-checks: {for_}\n"
+        + "".join(f"unit: {s} {fp}\n" for s, fp in units)
+        + "".join(f"page: {f} {b}\n" for f, b in pages)
+        + "".join(f"owed: {s} - {why[s]}\n" for s, _fp in units if why.get(s))
+    )
 
 
 def bundle(root: pathlib.Path, kind: str, for_: str, out_arg: str, reason: str = "") -> int:
@@ -509,14 +548,26 @@ def bundle(root: pathlib.Path, kind: str, for_: str, out_arg: str, reason: str =
     put("modal.md", render(root, m), m.origin, "the modal as its reader meets it - the thing you judge")
     put("text.md", m.doc.rstrip() + "\n", m.origin, "the modal's file line for line - an EDIT block's old text is one of these lines (or part of one), exactly, and its target is this origin")
     guide = GUIDELINES.get(m.form, GUIDELINES["standard"])
-    put("guidelines.md", (root / guide).read_text(encoding="utf-8"), str(guide), "the rules - your contract; name a rule (M#/P#) in every finding")
+    # the rules themselves are in the agent's file, its system prompt, which every dispatch of the check reads from the prompt
+    # cache; a copy here followed the unique prompt and was written fresh by every dispatch (feature 383 amendment 6, plan D35)
+    put(
+        "guidelines.txt",
+        f"This modal is of the {'particular' if guide == GUIDELINES['particular'] else 'standard'} form: rule on it by "
+        f"the guidelines from `{guide}` at the end of your agent file (`make agent-sync` writes them from that source).\n",
+        str(guide),
+        "which guidelines govern this modal - the rules are in your contract; name a rule (M#/P#) in every finding",
+    )
     put("prepass.txt", prepass(root, m), "scripts/record/modal_bundle.py", "the mechanical findings - rule on each")
     grep_targets: list[str] = []
     if for_ == mo.DEPICTION_CHECK:
         depiction_parts(root, m, put, out, grep_targets)
     if for_ == mo.FORM_CHECK and (held := research_held(root, m.uid, m.doc)):
-        put("research-held.md", "# Wording the research rounds fixed - keep it\n\n" + "\n".join(f"- {h!r}" for h in held) + "\n",
-            "scripts/record/modal_bundle.py", "what modal-research rounds wrote and the record backs: a form EDIT never drops or widens these words")
+        put(
+            "research-held.md",
+            "# Wording the research rounds fixed - keep it\n\n" + "\n".join(f"- {h!r}" for h in held) + "\n",
+            "scripts/record/modal_bundle.py",
+            "what modal-research rounds wrote and the record backs: a form EDIT never drops or widens these words",
+        )
     if for_ == "modal-research":
         for f in m.entry_files():
             p = root / f
@@ -530,7 +581,12 @@ def bundle(root: pathlib.Path, kind: str, for_: str, out_arg: str, reason: str =
             listing.append(f"{i + 1}. `{rel}` - {head}  [tags {','.join(tags) or '-'}; term hits {hits}; score {score}]")
             if i < 30:
                 listing.append(f"   {first}")
-        put("candidates.md", "\n".join(listing) + "\n", "scripts/record/modal_bundle.py", "every question that may answer what the modal leaves open (gaps) - the top ten are files under cand/, every page under record/")
+        put(
+            "candidates.md",
+            "\n".join(listing) + "\n",
+            "scripts/record/modal_bundle.py",
+            "every question that may answer what the modal leaves open (gaps) - the top ten are files under cand/, every page under record/",
+        )
         (out / "cand").mkdir()
         for _score, rel, *_ in cands[:TOP]:
             shutil.copyfile(root / rel, out / "cand" / pathlib.Path(rel).name)
@@ -546,8 +602,12 @@ def bundle(root: pathlib.Path, kind: str, for_: str, out_arg: str, reason: str =
         "the repository (feature 250). A finding names the ORIGIN column - the file the session will edit.",
         "",
         "**Everything you need is in THIS file**, each copy under its origin below; read it once."
-        + (" Beside it, NOT inlined: `cand/` (the top ten candidates, each a file to Read when its line in `candidates.md` looks"
-           " like an answer) and `record/` (every question page - a GREP target; never read it whole)." if grep_targets else ""),
+        + (
+            " Beside it, NOT inlined: `cand/` (the top ten candidates, each a file to Read when its line in `candidates.md` looks"
+            " like an answer) and `record/` (every question page - a GREP target; never read it whole)."
+            if grep_targets
+            else ""
+        ),
         "",
         "| file | origin | what it is for |",
         "|---|---|---|",

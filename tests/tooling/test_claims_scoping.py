@@ -80,6 +80,9 @@ def test_the_triage_shows_only_the_changed_blocks_and_clears_the_claims_it_does_
     _tree(tmp_path, MOD, PAGE.replace("5 ft", "6 ft").replace("</p>\n<p>Each", "</p>\n<p>A new rule.</p>\n<p>Each"))
     cur = cx.current(skill)
     manifest = cx.triage_bundle(cur, index, store, [SHARE], skill / QDIR, tmp_path / "t").read_text()
+    # what every triage bundle repeats - before its first page - is a line naming the agent; the rules are its contract,
+    # its system prompt (feature 383 amendment 6, plan D38)
+    assert len(manifest.split("\n## ", 1)[0]) < 400
     assert "> Each lane is 6 ft." in manifest and "> A new rule." in manifest and "Farms face" not in manifest
     assert f"- KEY `{SHARE}`" in manifest and "last verdict IN-STEP: ok" in manifest
     data = json.loads((tmp_path / "t" / "triage.json").read_text())
