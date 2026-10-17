@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-17
 
-**Status**: Filed, spec FAITHFUL (round 2) - checklist v1 drafted (`checklist.md`) and refined by the audit (`audit.md`, 13 pitfalls); no task started
+**Status**: In progress - T01 landed 2026-10-17 (its retro in `retro.md`); amendments 1 and 2 FAITHFUL; T02 next. Spec FAITHFUL (round 2); checklist v1 drafted (`checklist.md`) and refined by the audit (`audit.md`, 13 pitfalls) and by T01
 
 **Approved**: the GM, 2026-10-17, "the shape that you have proposed looks right. So please file it, draft checklist version 1, and start the cheap audit."
 

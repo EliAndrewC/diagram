@@ -1,5 +1,7 @@
 # Implementation Plan: the approach checklist - the front of 384, one task at a time (feature 385)
 
+**Approach checklist**: specs/385-approach-checklist/checklist.md
+
 **Spec**: `spec.md` | **Request**: `request.md` | **Checklist**: `checklist.md` | **Audit**: `audit.md` | **Builds on**: the lane
 law (`l7r/diagram/hamletgen/ways/law.py`, `law_water.py`), its settle (`settle.py`, `last_resort.py`), 384's FR-000 and User
 Story 0, and the event log behind `make feature-report` (feature 375).
@@ -176,7 +178,9 @@ measurements are taken on it.
    (keep what a check read, so a re-check diffs against it) and FR-009 (a page-wide unit rides one batch); (d) more room - n/a;
    (e) conform - for the guard rules (tests red without them).
 7. **The search smell.** None: each item is a record kept or a refusal added.
-8. **The budget.** About three hours (a guess) for the nine items with their tests; twice that is part B.
+8. **The budget.** About four hours (a guess: nine items at 20-30 min each with their tests); twice that is part B. Each item lands
+   alone by `make land-tooling` as it goes green, in value order - the hourly clock (owed before the tick), the gate-write guard,
+   D11, D12, D10, D8, D9 - so a stop part-way leaves landed work, not a half-built batch.
 9. **Done, measured.** Each item's test red without it; `make hooks-test` and the tooling tests green; FR-011's table printed for
    T01 from its own record (the baseline T03 is compared with).
 
@@ -187,26 +191,37 @@ it; FR-001's close makes it every feature's) - has each task section hold a `###
 item of that checklist's part A; `make tick` refuses a task whose block is missing or answers fewer items, naming the missing
 numbers (`scripts/gates/plan_gate.py`, beside the plan-review check `make tick` already asks).
 
-**D9 - FR-004, a fresh answer after a trigger.** A trigger - a round-arbiter ruling on an `hour:` or `red-gate@` trigger, a
-`make cohort` that fails, and a re-review of a task's plan section - writes `<git dir>/approach-owed.json` (the task, the
-trigger, its time), and its message names checklist part B. `make tick` refuses that task until its plan section holds a
-`### Txx part B (<UTC>)` block stamped after the trigger.
+**D9 - FR-004, a fresh answer after a trigger.** A trigger writes `<git dir>/approach-owed.json` (the task, the trigger, its
+time), and its message names checklist part B; `make tick` refuses that task until its plan section holds a `### Txx part B
+(<UTC>)` block stamped after the trigger. The triggers, each with a floor so it never fires on correct work:
+- a round-arbiter ruling on an `hour:` or `red-gate@` trigger;
+- a FULL cohort (`make cohort` at its default size, not a diagnostic `N=1`) whose failing seeds are not a subset of the
+  baseline's - a seed newly failing (T01 rolled single seeds a dozen times as diagnosis, each failing by design);
+- a re-review of a task's Decisions block after an earlier CLEAR verdict on it - a changed decision, not a first review or a
+  figure label (T01 would otherwise have owed a part B for each of its plan rounds).
 
 **D10 - FR-005 and FR-011, the report per task.** `make task-start` appends its task and time to `<git dir>/task-starts.jsonl`;
 `make feature-report` adds a table per task - start to tick, the decision points (plan verdicts and part B stamps), the time to
 the last one and after it, re-decides and re-answers - and a table per check kind - dispatches, tokens and wall time, each per
-changed line - read from the review ledger's measured rows in the feature's window and its commits' changed lines. Replayed for
-T01 as the baseline.
+changed line. Its source is the feature's own event log (its dispatches, each timed and feature-scoped), each dispatch costed
+from its transcript by the function `make ledger-owed` uses - not the review ledger, whose rows carry a date and no feature.
+Replayed for T01 as the baseline.
 
-**D11 - FR-008, a re-check against what the last check read.** Measured first: the pop-up triage already diffs against "the
-page as the unit's last answer read it (its kept blob)" (`modal_triage.before`) and falls back to the merge base - so the fault
-is where an answer is recorded without the blobs its bundle read. `make record-checked` keeps, for each page a bundle names, the
-blob it copied; the claims triage takes the same baseline from the claims row's own pages. Tests: a one-word change after an
-answer shows only that block.
+**D11 - FR-008, a re-check against what the last check read.** Measured first (2026-10-17, the record store under
+`.git/record-checks/`): the pop-up triage already diffs against "the page as the unit's last answer read it (its kept blob)"
+(`modal_triage.before`), but (1) a triage's own answer (`make modal-triaged`, "triage: untouched") is written with NO pages, so it
+erases the blob the check before it kept - after T01's first triage, eight of the nine depiction-answered pop-ups held none -
+and (2) the triage bundle lists a page's changed blocks once for every unit naming it, so one unit diffed against the merge base
+(`sheet/road`, never agent-checked) showed every unit both new bullets. So: a triage answer keeps the pages it read (their
+blobs as they stand); the triage bundle groups its units by baseline and lists each group's own changed blocks; the claims triage
+gets the same grouping. Tests: an answer then a one-word change shows that block alone; a triage answer leaves a baseline in
+place.
 
-**D12 - FR-009, one check where several are spent.** `make check-bundle ... FOR=quote-check` puts a page-wide unit
-(`#unfootnoted`) in the first batch alone, so one agent answers it; `make modal-bundle` takes several `KIND=`s for one check
-and writes one bundle holding each pop-up, answered unit by unit by `make record-checked`.
+**D12 - FR-009, one check where several are spent.** The cause first: `make record-owed` lists every unit the delta owes,
+answered or not, and that listing sent T01 looking for three more quote-check batches after one had answered. So the default
+listing marks each unit answered or owed (`UNANSWERED=1` stays the short form); `make check-bundle ... FOR=quote-check` puts a
+page-wide unit (`#unfootnoted`) in the first batch alone; and `make modal-bundle` takes several `KIND=`s for one check and writes
+one bundle holding each pop-up, answered unit by unit.
 
 **D13 - FR-010, no write while the session's own gate runs.** A PreToolUse guard (`scripts/hooks/gate-write-hooks.sh`) refuses an
 Edit or Write into the clone, and a Bash command that commits or records (`git commit`, `git add`, `make append`, the
