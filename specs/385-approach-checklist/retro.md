@@ -131,3 +131,24 @@ event log put it at 19:41Z - `make task-start` now records it, so T03 on is meas
 **For T03.** T03 is the first task the whole kit measures: `make task-start F=385 T=T03` first, its Approach block (D8) after the
 blind agent's (FR-012), any part B a trigger owes (D9), and its row in the per-task table compared with T01's 3 h 24 min and
 11 decision points.
+
+## T03 - the blind Approach compared with the sealed conclusions (SC-006)
+
+The blind block (FR-012) was written by a fresh Opus agent between 20:47Z and 20:59Z from the task text, `checklist.md`, this
+file, `lane-law-table.md`, the code and the record; it is copied into plan.md as `### T03 Approach`. The session's own
+conclusions were sealed before amendment 2, outside the repository. Rule by rule:
+
+| subject | sealed (the session, before) | blind (the checklist, without hindsight) | verdict |
+|---|---|---|---|
+| seed 21 (`fabric` on five access lanes) | our rules in conflict: research (0081, 0246) lets a household be reached across a neighbor's land, so the exit is to reclassify, not repair | names 0246's fallback "reached across a neighbor" and the 7 ft gap as O (a convention), but chooses: dump first, then the O gap weighed against more room | **partly raised.** A3 found the O number; A4 asked "does it hold here?" but could not look (no manifest), so the exit that dissolves the case was listed, not chosen |
+| seed 17 (field reached by no way) | the refusal is ours; question whether refusing the map is right at all, vs a field path or bund counting as reach | finds the 60 ft `FIELD_REACH_FT` is O and **mislabeled** R (neither 0014 page says 60 ft); exit: 0014's own fallback (the nearest lane runs on to the bund), after measuring why each run was refused | **raised, and further than sealed** on the number (the mislabel was not in the sealed notes); did **not** ask whether the refusal itself should exist |
+| seed 40 (`farm_not_on_its_street`) | not looked at | the street's join excluded from "own street" is O (seed 904's judgment); one predicate for placer and check | new |
+| seed 45 (`fixtures_on_groves`) | not looked at | placer and check read different boxes (the 10-degree `in_frame` skew, UNRESEARCHED) - conform by one predicate | new |
+| the side-by-side shape | one general merge test, not a fourth detector | the same; `_ALONG_FT` 14 and `_ALONG_MIN_FT` 30 are O, the merge principle G, the reach the one open number | **match** |
+
+**What the checklist missed, and the change it calls for.** Both misses are one gap: the checklist asks what a rule describes
+(A4) and lists the exits (A6), but never asks **whether the refusal itself should exist** - whether a map that breaks the rule
+is actually wrong, or the rule is a tidiness we impose. Proposed A4 addition, for the T03 retro to confirm: *"If the map broke
+this rule, would a reader of the research call the place wrong? If not, the rule is a preference: a tie-break, not a refusal."*
+A second, smaller one: A4 could not be answered for seeds 17 and 21 because a refused roll keeps no manifest - the blind agent
+found the same tooling gap T01's retro named.
