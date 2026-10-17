@@ -588,6 +588,6 @@ reads the other's cache; each subagent's first-request usage read from its trans
 | the first alone, then two (claims-triage) | 2,327 / 3,328 | 3,381 / 2,274 |
 
 - Sent together, each launch wrote the whole prefix: none could read the first's, still being written. Staggered, the later
-  launches read the agent file's prefix (3,381) and wrote only their own first message - about 60% less each.
+  launches read the agent file's prefix (3,381) and wrote only their own first message - about 60% less each (observed 2026-10-17; the table above).
 - The parallel calls reached the hook ~0.4-0.5 s apart (the together leg's start times), as the probe of D42 had measured.
 
