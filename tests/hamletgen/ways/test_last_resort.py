@@ -43,6 +43,18 @@ def test_every_per_lane_rule_names_its_violator() -> None:
     assert 2 in lr.lane_violators(out)
 
 
+def test_lane_breaches_names_each_lanes_rules() -> None:
+    """Feature 385 T01 (plan D3): a lane carries the rules that hold it - its first own rule on the last resort's rounds, every
+    one of them for a refusal - and the set `lanes_breaking` returns is its keys."""
+    s = _S([CONN, DOUBLED_BACK, [(0.0, 0.0), (160.0, 0.0)]])
+    first, every = lr.lane_breaches(s), lr.lane_breaches(s, every=True)
+    assert first[1] == ["bends", "dangling_ends"], "the hairpin, none of its own rules asked after it, then the joint rules"
+    assert every[1][0] == "bends" and set(every[1]) <= set(law.LAW) | {"crossing", "fabric", "tree_faults"}
+    assert set(first) == set(every) == lr.lanes_breaking(s) and 0 not in first, "the connector is its placer's"
+    assert lr._named(s.M["lanes"], {1: ["bends", "hooks"]}) == "1 (ordinary: bends, hooks)"
+    assert lr._named(s.M["lanes"], [1]) == "1 (ordinary)"
+
+
 def test_the_last_resort_names_an_ordinary_lane_the_tree_faults(monkeypatch: pytest.MonkeyPatch) -> None:
     s = _S([CONN, [(-100.0, 0.0), (-100.0, 170.0)]])
     s.M["lanes"].append({"pts": [[-50.0, 0.0], [-50.0, 100.0]], "w": 3, "role": co.ACCESS_ROLE})
@@ -76,7 +88,7 @@ def test_an_ordinary_lane_goes_and_a_tree_lane_still_breaking_a_rule_is_refused(
     s = _S([CONN, DOUBLED_BACK, ([(300.0, 2.0), (300.0, 200.0), (305.0, 150.0)], {})])
     s.M["lanes"][2]["role"] = co.ACCESS_ROLE
     _no_steps(monkeypatch)
-    with pytest.raises(lr.WebRefused, match="lanes 1 \\(access\\) still break a rule"):
+    with pytest.raises(lr.WebRefused, match="lanes 1 \\(access: bends, dangling_ends\\) still break a rule"):
         lr.last_resort(s)
     assert [ln.get("role") for ln in s.M["lanes"]] == [None, co.ACCESS_ROLE], "the ordinary lane dropped, the tree lane kept"
 
@@ -155,7 +167,7 @@ def _strip_doubled_on_the_connector() -> _S:
 def test_a_web_gone_still_with_a_rule_only_the_tree_breaks_is_refused_by_name_never_shipped(monkeypatch: pytest.MonkeyPatch) -> None:
     s = _strip_doubled_on_the_connector()
     assert {"doubled_tails", "needle_joins"} <= set(settle.unsettled(s.M)), "the violating case, the whole law asked"
-    with pytest.raises(lr.WebRefused, match="lanes 1 \\(way target\\) still break a rule.*the web still breaks .*doubled_tails \\(\\[1\\]\\), needle_joins"):
+    with pytest.raises(lr.WebRefused, match="lanes 1 \\(way target: needle_joins, doubled_tails\\) still break a rule.*the web still breaks .*doubled_tails \\(\\[1\\]\\), needle_joins"):
         settle.settle_the_web(s)
     assert [ln.get("role") for ln in s.M["lanes"]] == [None, co.TARGET_ROLE], "no tree lane dropped"
     # ...and without the exit's question the still round shipped it: the hole this closes

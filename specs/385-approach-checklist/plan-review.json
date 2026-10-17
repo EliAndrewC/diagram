@@ -28,9 +28,10 @@
    "reviewed": "2026-10-17"
   },
   "### T01 Decisions": {
-   "sha256": "7c824d5fbeb2ef315df73bf6ea7168a83302f56fda87b9d489c7c7c9fa0fd1e9",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-10-17"
+   "sha256": "5c61c44b06ce29d2b76341fdc5500b5ed543f07970316664f6e743b1394afdb8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
   },
   "### T01 retro": {
    "sha256": "8c1565389795b59948fc4ff10903012d765699f67bd623d1cf7d8a8f4fb2f4e2",
@@ -161,5 +162,64 @@
    "why": "Its decisions are a GM ruling and a reading of 0081; the occasion enforces review of the lane change."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "BLOCKED",
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "### T01 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Rule table first: one row per LAW entry and lanes_breaking rule with predicate, class (R/G/O), thresholds, verdict.",
+     "class": "within",
+     "why": "The request's checklist question applied to the rules task 1 fights: where does each rule come from, research, a ruling, or us."
+    },
+    {
+     "id": "Order",
+     "summary": "D3 first; baseline taken with D3 in place and shown equal to HEAD seed by seed; D2/D4 shaped against seed 21's named rules and the pool's violations; stop at part B if seed 21's rules are not angle/doubling rules; seed 17 is T03's.",
+     "class": "within",
+     "why": "Sequencing and a stop condition inside the approved task order (lane law as task 1, seeds 17/21/40/45 next); seed 17 a reach failure belongs to the seeds task, not dropped. Round 1's unlabeled 'five lanes' is gone."
+    },
+    {
+     "id": "D2",
+     "summary": "'Forced' = the turn's chord or the needle's sliver crosses the settle's own two obstacle families (obstacles: crop, marsh, wet toe; tight: houses, yards, gardens, groves) plus fixtures and solid boxes, indexed once; applied where a manifest is judged, not in the pure detectors; repair passes read against it.",
+     "class": "within",
+     "why": "Implements the GM's 'in the absence of an obstruction ... but they might ... if there were obstructions'. Round 1's item met: the ground is the settle's routed-round set, groves included, so no shape the settle makes round an obstruction is refused by the law. A kind outside the set needs its reason at its table row."
+    },
+    {
+     "id": "D3",
+     "summary": "lanes_breaking returns {lane: [rules]}; refuse_unmended names the rules. Labeled to the 2026-10-13 log behind m:w156-redeal-cohort.",
+     "class": "within",
+     "why": "A defect fix found measuring T01 (XIV) that makes the lane law's cases visible; changes no lane."
+    },
+    {
+     "id": "D4",
+     "summary": "Every unforced needle is merged into one path: the existing tail cut at NEEDLE_DEG, or the other lane cut / what hangs on the stretch carried onto the shared tread so no reach is lost; never left a violation, never refused; a case no merge can serve goes to a constitution XVI exception check first.",
+     "class": "within",
+     "why": "Round 1's block is cleared: the earlier 'stays a violation' carve-out is removed, matching the GM's 'a single footpath would emerge' and 384 User Story 0 'merged into one path, never refused'. The exception-check route is the constitution's process for a case not yet found, not a carve-out written into the plan; only lanes move, no house."
+    },
+    {
+     "id": "D5",
+     "summary": "No threshold changes value, no non-angle/doubling rule changes, no homestead, fixture or seat moves; a retirement carries its reason.",
+     "class": "within",
+     "why": "Holds task 1 to the two exits the GM approved for it (obstruction-aware, merge) and to 'nobody moves their house for a footpath'; the retirement guardrail is the GM's 'not permission to throw out inconvenient rules'."
+    },
+    {
+     "id": "D6",
+     "summary": "48-seed cohort with D3 in place, compared seed by seed against m:w156-redeal-cohort's HEAD run before being called HEAD's, plus seed 10 under the wave 155 patch and the pool's hamlet lane violations; same three after; two workers.",
+     "class": "within",
+     "why": "Measuring the task is what the GM asked for each task; round 1's item met (the comparison is made before the baseline is named HEAD's)."
+    },
+    {
+     "id": "D7",
+     "summary": "0081 and 0246 drawing pages say forced turns are drawn as walked and side-by-side paths as one; record checks as record-owed names them.",
+     "class": "within",
+     "why": "Records the rendering decision the lane law makes, per the project's recording rule."
+    }
+   ]
+  }
+ ]
 }
