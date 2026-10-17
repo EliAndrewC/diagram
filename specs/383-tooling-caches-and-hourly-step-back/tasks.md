@@ -211,6 +211,7 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
       verify: DONE. verified: workflow-hooks 23/23, agent-prefix 22/22 (red 3/21 on HEAD's stagger guard), test_hm_checks 26, test_agent_models 11, test_wave_report 2, hooks-test green, quick clean
 - [ ] T56 The first real wave, measured (plan D50) (SC-034)
       research: rendering
-- [ ] T57 Close: the checks, the report, landed
+- [x] T57 Close: the checks, the report, landed
       research: rendering
+      verify: DONE. verified: feature report written; hooks-test green; quick clean; plan review CLEAR; T56 lands open per plan D50
 
