@@ -150,7 +150,7 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 
 - [x] T38 `make subagent-cache` and the before numbers (plan D39) (SC-025)
       research: rendering
-      verify: DONE. make subagent-cache (renamed: cache-audit is the maps' check) prints each type's runs, back-to-back first-call read and write, repeated manifest text and the spend; 6 tests on a fake transcript directory; before numbers in m:subagent-cache-before.
+      verify: DONE. make subagent-cache (renamed: cache-audit is the maps' check) prints each type's runs, back-to-back first-call read and write, repeated manifest text and the spend; 6 tests on a fake transcript directory; before numbers in research R13 (observed 2026-10-17).
 - [x] T39 The dispatch guard for a shared block after a unique start (plan D37) (SC-025)
       research: rendering
       verify: DONE. agent-prefix-hooks.sh refuses a 2,000+ character block shared with an earlier same-type, same-model dispatch after a differing part. Every run is judged; a block that starts the prompt passes. 13 suite cases, the GM's shape among them; red with the refusal removed and on the longest-run-only decider.
@@ -163,7 +163,8 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T42 The bundle test for shared text (plan D38) (SC-024)
       research: rendering
       verify: DONE. tests/tooling/test_bundle_shared_text.py: two real bundles each of record-format, quote-check and the three modal checks share under 2,000 characters outside their unit inputs; a seeded 3,000-character block fails it; triage headers pinned under 400 (old 607 and 824).
-- [ ] T43 spec-fidelity without the instruction files: the seeded runs, three a leg, then the field (plan D34) (SC-023)
+- [x] T43 spec-fidelity without the instruction files: the seeded runs, three a leg, then the field (plan D34) (SC-023)
       research: rendering
+      verify: DONE. SC-023 quality clause met (R14). Feature 251 round 1, three runs a leg as a subagent, scored blind: the field found 3 of 3 recorded items in 3 of 3 runs, as the control did. omitClaudeMd set; KEEPS_CLAUDE_MD empty; tier test green.
 - [ ] T44 The rule in CLAUDE.md and the docs; close: the gate, the report, landed (plan D39)
       research: rendering
