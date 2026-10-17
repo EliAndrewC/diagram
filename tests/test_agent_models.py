@@ -138,3 +138,32 @@ def test_frontmatter_reads_both_keys_and_refuses_a_file_without_any() -> None:
     except AssertionError:
         return
     raise AssertionError("a file with no frontmatter must fail")  # pragma: no cover
+
+
+#: the settings that would put subagents on the 1-hour prompt cache (feature 383 amendment 6, FR-038): it doubles the price of
+#: every write a subagent makes in its whole run to keep a few-thousand-token prefix warm; the default 5 minutes covers a fan-out
+_HOUR_TTL = re.compile(r"""(?:cacheTtl|CLAUDE_CODE_SUBAGENT_PROMPT_CACHE_TTL)["']?\s*[:=]\s*["']?(?:1h|60m|3600)""", re.I)
+
+
+def _ttl_sources(root: pathlib.Path) -> list[pathlib.Path]:
+    return [
+        p
+        for p in [
+            root / ".claude" / "settings.json",
+            root / ".claude" / "settings.local.json",
+            *sorted((root / ".claude" / "agents").glob("*.md")),
+            *sorted((root / "scripts" / "container").glob("*")),
+        ]
+        if p.is_file()
+    ]
+
+
+def hour_ttl(paths: list[pathlib.Path]) -> list[str]:
+    return [str(p) for p in paths if _HOUR_TTL.search(p.read_text(encoding="utf-8", errors="replace"))]
+
+
+def test_no_setting_puts_subagents_on_the_hour_long_cache(tmp_path: pathlib.Path) -> None:
+    assert hour_ttl(_ttl_sources(AGENTS.parents[1])) == [], "a 1-hour subagent cache doubles every write a subagent makes - remove it (feature 383 FR-038)"
+    seeded = tmp_path / "settings.json"
+    seeded.write_text('{"env": {"CLAUDE_CODE_SUBAGENT_PROMPT_CACHE_TTL": "1h"}, "experimental": {"cacheTtl": "1h"}}', encoding="utf-8")
+    assert hour_ttl([seeded]) == [str(seeded)], "the check finds a seeded 1-hour setting"
