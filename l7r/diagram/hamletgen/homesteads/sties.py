@@ -20,6 +20,7 @@ from typing import Any
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.farm_fixtures import STY_FT
 from l7r.diagram.settlement.homestead_parts.fixture_seats import WALL_GAP_FT, WALL_SLIDE_FT, Rect, against_a_part
+from l7r.diagram.settlement.homestead_parts.grove_rules import fixture_on_band, grove_bands
 from l7r.diagram.settlement.rolling.lot import quota_carriers
 
 from ..plan import SitePlan
@@ -99,7 +100,9 @@ def sty_seat(s: Settlement, house: Mapping[str, Any]) -> dict[str, Any] | None:
 
     Research:
         against the farmhouse or an outbuilding - research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: on the household's own plot
-        the gap, the step and the rake - UNRESEARCHED: the fixtures' 3.5 ft wall gap off the plot's other parts (`WALL_GAP_FT`), places 4 ft apart along each wall (`WALL_SLIDE_FT`), the sty raked with its house"""
+        the gap, the step and the rake - UNRESEARCHED: the fixtures' 3.5 ft wall gap off the plot's other parts (`WALL_GAP_FT`), places 4 ft apart along each wall (`WALL_SLIDE_FT`), the sty raked with its house
+        no sty in a grove band - UNRESEARCHED: no page keeps a sty off a farm's grove band; the placer asks the check's own predicate (`grove_rules.fixture_on_band`), every band as recorded (feature 385 T03, cohort seed 45)
+        the sty's size - GUESS research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: drawn 8 by 6 ft (`STY_FT`)"""
     walls, parts = farmstead(s.M, house)
     w, d = s.px(STY_FT[0]), s.px(STY_FT[1])
     taken = list(parts)
@@ -117,7 +120,7 @@ def sty_seat(s: Settlement, house: Mapping[str, Any]) -> dict[str, Any] | None:
             "rot": round(float(house.get("rot") or 0.0), 1),
             "of": [round(float(house["x"]), 1), round(float(house["y"]), 1)],
         }
-        if s.admits("farm_fixtures", rec):
+        if s.admits("farm_fixtures", rec) and not any(fixture_on_band(rec, g) for g in grove_bands(s.M)):  # ...the check's own test (385 D18)
             return rec
         taken.append((q[0], q[1], q[2], q[3]))  # refused by what stands: the next place along
 

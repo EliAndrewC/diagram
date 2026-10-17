@@ -48,6 +48,7 @@ import re
 import shutil
 import subprocess
 import sys
+import textwrap
 import tarfile
 import tempfile
 from collections import Counter
@@ -359,6 +360,30 @@ def context_source(root: Path, ref: str) -> str:
     return ast.get_source_segment(text, node) or ""
 
 
+#: the most callees a unit carries into its bundle as context (`callees`)
+CALLEES_MAX = 6
+
+
+def callees(root: Path, unit: Any, source: str) -> list[str]:
+    """`path::name` of each module-level function of the unit's own module that its code calls, in order of first call, at most
+    `CALLEES_MAX` (the round arbiter's tooling fix on ask:t03-claims-at-landing: `_clear_link` was judged CANNOT-TELL because its
+    bundle lacked `link_survives`, the function its answer turns on). Names the module does not define are left out."""
+    try:
+        tree = ast.parse(textwrap.dedent(source))
+        module = ast.parse((root / unit.path).read_text(encoding="utf-8"))
+    except (OSError, SyntaxError, ValueError):
+        return []
+    defined = {n.name for n in module.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))}
+    own = unit.qualname.split(".")[-1]
+    out: list[str] = []
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id in defined and node.func.id != own:
+            ref = f"{unit.path}::{node.func.id}"
+            if ref not in out:
+                out.append(ref)
+    return out[:CALLEES_MAX]
+
+
 def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path, context: Sequence[str] = (), pages: Sequence[str] = ()) -> Path:
     """Write the bundle for `keys` (rows of `cur`) under `out`: MANIFEST.md with every source and question inline, and
     units.json with the fingerprints the check reads - what `record` writes into the index (spec FR-007)."""
@@ -389,7 +414,10 @@ def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path, cont
             parts.append(f"- KEY `{r.key}`: `{r.claim.line}`" + (" (inherited from the module docstring)" if unit.inherited else ""))
         if unit.names:
             parts.append("- constants it reads: " + "; ".join(f"`{n}`" for n in unit.names))
-        parts.append(f"\n```{lang}\n{_source(root, unit)}\n```\n")
+        src = _source(root, unit)
+        parts.append(f"\n```{lang}\n{src}\n```\n")
+        if unit.kind != "section":  # ...and the module's own functions it calls, as context (`callees`)
+            context = [*context, *(c for c in callees(root, unit, src) if c not in context)]
         # every page ANY claim of the unit cites, owed or not: an UNRESEARCHED or GUESS claim cites nothing, and its check
         # can only see a page that answers it if the unit's other claims bring it (the torii re-check, 2026-10-03)
         for c in unit.claims:

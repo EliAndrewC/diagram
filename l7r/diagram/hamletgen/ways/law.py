@@ -189,7 +189,9 @@ Research: no tread through a building - research/questions/0246-how-our-maps-lay
 FIELD_REACH_FT = 60.0
 """On a brook map one of the hamlet's own ways (not the track out) comes this near the field - its paddy or its dry hem -
 the reach `lanes_reach_something` asks of the field (feature 261, FR-012).
-Research: a way reaches the field - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: within 60 ft"""
+Research:
+    a way reaches the field - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a way runs from the hamlet to the field's outer bund
+    the reach - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the path joins the bund and never ends short of it; this law accepts a way within 60 ft of the field - a known gap (no 0014 page states 60 ft, searched 2026-10-17), carried to feature 385 T12 with the field refusals it bears on"""
 
 
 CONNECTOR_START_FT = 1.5
@@ -461,7 +463,11 @@ def span_walkable(M: Mapping[str, Any], p: Pt, q: Pt, skip: Sequence[int] = ()) 
     """May a short span of tread be laid from `p` to `q`: across no water (`bridge_crossed_waters`), no crop or marsh, no
     farmhouse (`house_hit`), no household's yard or garden, and not along another way (its middle within `JOIN_TOL` of a
     way other than the lanes `skip` - a span that doubles a tread rather than meeting it)?
-    Research: a walkable span - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: off water, crop, marsh and houses, its line 7 ft (`WEB_FABRIC_GAP`) off yards and gardens"""
+    Research:
+        a walkable span - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: off water, crop, marsh and houses, its line 7 ft (`WEB_FABRIC_GAP`) off yards and gardens
+        a defense marsh left out - UNRESEARCHED: a town's moat-side wet ground, crossed at its bridge and judged by the crossing rules
+        no span along another way - research/questions/0081-village-lanes.drawing.html: "Two paths running side by side are drawn as one" - a span whose middle runs within `JOIN_TOL` (4 ft) along another way would draw one tread twice
+        a span off a farmhouse - UNRESEARCHED: kept 3 ft off a house (`house_hit` at 3 ft), a tread's width"""
     for wpts, _w in bridge_crossed_waters(M):
         wp = [(float(a[0]), float(a[1])) for a in wpts]
         if any(segments_cross(p, q, u, v) for u, v in zip(wp, wp[1:], strict=False)):

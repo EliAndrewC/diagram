@@ -60,6 +60,11 @@ shows. A finding that is a rewording ends with an EDIT block:
     the text that should replace it
     >>>
 
+**An EDIT that says something is not recorded quotes the cited page's own absence wording verbatim** (its "no page we read
+measures ...", "is not recorded", "searched for and not found") - never a paraphrase of it: "no lane in a wet-rice village was
+measured" claimed more than the page's "no page we read measures a lane in a wet-rice village", and cost a second round on four
+pop-ups (feature 385 T03, the round arbiter's ruling on ask:t03-popups-round3).
+
 A finding that needs a decision or new research ends `EDIT: none - <why>`. **An ask the record cannot answer is a research row,
 not a finding**: if the drawing pages, or an earlier round's reply in your bundle, say that no page holds what you would ask the
 tab to tell (a real color, a size no source gives), list it under a heading `OUTSIDE THE CHANGE`, one line each

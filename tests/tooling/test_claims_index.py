@@ -352,3 +352,17 @@ def test_the_base_tree_s_units_are_kept_by_module(tmp_path: pathlib.Path, monkey
 
     monkeypatch.setattr(cl, "module_units", parsed_again)
     assert cx.base_cores(tree, keep=root) == first, "the second read comes from the memo"
+
+
+def test_a_bundle_carries_the_module_functions_a_unit_calls() -> None:
+    """The round arbiter's tooling fix on ask:t03-claims-at-landing: `_clear_link` was judged CANNOT-TELL because its bundle
+    lacked `link_survives`, the function its answer turns on."""
+    import types
+
+    root = pathlib.Path(__file__).resolve().parents[2]
+    unit = types.SimpleNamespace(path="l7r/diagram/hamletgen/ways/clearance.py", qualname="_clear_link")
+    src = cx.context_source(root, "l7r/diagram/hamletgen/ways/clearance.py::_clear_link")
+    got = cx.callees(root, unit, src)
+    assert "l7r/diagram/hamletgen/ways/clearance.py::link_survives" in got and len(got) <= cx.CALLEES_MAX
+    assert all(not r.endswith("::_clear_link") for r in got), "never itself"
+    assert cx.callees(root, types.SimpleNamespace(path="no/such.py", qualname="f"), "def f():\n    g()\n") == []

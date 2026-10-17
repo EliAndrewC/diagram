@@ -14,10 +14,10 @@ Guesses:
 - That alleys ran narrow and irregular because the households beside them took them over as space of their own: the one case found is a city's, Shanghai's lane housing, where every house faced a lane and the lanes became space all its residents used.
 - That a settlement's lanes take side alleys or a back lane at even odds: no source counts villages of either form.
 
-Depiction: The map lays the alleys after the houses are seated, each leaving a dooryard and running along the middle of the
-gap between two plots to the main lane or an earlier way, joined at a T, and pulled as straight as the plots allow. A few
-households may be reached across a neighbor's yard with no alley of their own. Alleys are drawn at the narrow width of a field
-path, narrower than the measured Manchu alleys, since no lane in a wet-rice village was measured.
+Depiction: The map lays the alleys after the houses are seated, once every household's own way is laid, each branching off the main lane along the middle of the
+gap between two house plots to reach the row behind, and pulled as straight as the plots allow; the households' own ways join them. A few
+households may be reached across a neighbor's yard with no alley of their own. Alleys are drawn at the narrow width of a footpath, about 3 ft,
+narrower than the measured Manchu alleys, since how wide a lane ran in a wet-rice village is not recorded.
 
 Name: Side alleys
 Covers: `meta.lane_web = alleys`

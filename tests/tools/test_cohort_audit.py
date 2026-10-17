@@ -292,12 +292,17 @@ def test_a_served_roll_says_so_and_the_audit_writes_its_per_seed_record(monkeypa
     monkeypatch.setattr(ca, "_report_of", lambda spec: (stored, "HIT"))
     (header, failures, _l), how = ca.roll_how((3, 12, {"row_line": "street"}))
     assert how == "served" and failures == ["refused:ValueError"] and header.endswith("REFUSED"), "a stored refusal, served, by name"
-    rolled = [(("--- a form=linear", [], []), "served"), (("--- b", ["wells_are_shared[1]"], ["x"]), "rolled"), (("--- c REFUSED", ["refused:ValueError"], ["y"]), "served")]
+    rolled = [
+        (("--- a form=linear", [], []), "served"),
+        (("--- b", ["wells_are_shared[1]"], ["    FAIL lane_knots -> 4 knot(s), e.g. []".strip(), "x"]), "rolled"),
+        (("--- c REFUSED", ["refused:ValueError"], ["y"]), "served"),
+    ]
     path = ca.write_record([(1, 12), (2, 12), (3, 12, {"row_line": "street"})], rolled, 1, None)
     rec = json.loads(Path(path).read_text(encoding="utf-8"))
     assert path.startswith(str(tmp_path)) and rec["count"] == 3 and rec["served"] == 2 and rec["first_seed"] == 1
     assert [(s["seed"], s["how"], s["verdict"]) for s in rec["seeds"]] == [(1, "served", "pass"), (2, "rolled", "fail"), (3, "served", "refused")]
     assert rec["seeds"][0]["form"] == "linear" and rec["seeds"][1]["failures"] == ["wells_are_shared[1]"] and rec["seeds"][2]["pins"] == {"row_line": "street"}
+    assert rec["seeds"][1]["counts"] == {"lane_knots": 4} and rec["seeds"][0]["counts"] == {}, "each failing rule's count (feature 385 T03)"
 
 
 def test_the_audit_writes_one_record_a_run(monkeypatch: pytest.MonkeyPatch, tmp_path: Any) -> None:

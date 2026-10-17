@@ -376,3 +376,26 @@ def test_generate_builds_once_and_reports_what_it_built(monkeypatch, tmp_path) -
         assert built == [1] and finished == [1], f"one build, finished once ({out})"
         assert rep.failures == [] and rep.ok and (rep.manifest or {})["meta"]["roll_placed"] == 12
         assert "roll_failures" not in (rep.manifest or {})["meta"] and "roll_attempt" not in (rep.manifest or {})["meta"]
+
+
+def test_a_refused_roll_keeps_its_manifest_and_names_it(monkeypatch, tmp_path) -> None:  # type: ignore[no-untyped-def]
+    """Feature 385 T03, plan D16: a refused roll produced no file, so a refusal could be read only as its text. The manifest as it
+    stood is written and the refusal names it; a roll that is not refused writes nothing."""
+    import json
+    from pathlib import Path
+
+    from l7r.diagram.hamletgen import driver
+    from l7r.diagram.hamletgen.ways.last_resort import WebRefused
+
+    monkeypatch.setattr(driver, "REFUSED_DIR", tmp_path / "refused")
+
+    def refuse(s: Any, plan: Any) -> None:
+        s.M["lanes"] = [{"pts": [[1.0, 2.0], [3.0, 4.0]]}]
+        raise WebRefused("the field is reached by no way")
+
+    monkeypatch.setattr(driver, "_run_stages", refuse)
+    with pytest.raises(WebRefused, match=r"the field is reached by no way \(the manifest at the refusal: .*refused/Test-\d+\.json\)") as got:
+        driver.build(a_plan())
+    path = str(got.value).rsplit(": ", 1)[1].rstrip(")")
+    assert json.loads(Path(path).read_text(encoding="utf-8"))["lanes"] == [{"pts": [[1.0, 2.0], [3.0, 4.0]]}]
+    assert "/Odd-name-" in driver.keep_refused({"a": 1}, "Odd name") and "/hamlet-" in driver.keep_refused({}, "")

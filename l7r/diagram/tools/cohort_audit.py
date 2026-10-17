@@ -310,6 +310,9 @@ def write_record(specs: Sequence[Any], rolled: Sequence[tuple[tuple[str, list[st
                 "how": how,
                 "verdict": verdict,
                 "failures": list(failures),
+                # ...WITH EACH RULE'S COUNT (feature 385 T03, the round arbiter's tooling fix on hour:385-approach-checklist@6): a
+                # seed failing at HEAD and after a change read as "pre-existing" though its lane knots went from 1 to 4 (seed 57)
+                "counts": {m.group(1): int(m.group(2)) for line in _lines if (m := re.match(r"FAIL (\S+) -> (\d+)", line))},
                 "form": header.split(" form=")[1].split()[0] if " form=" in header else "",
             }
         )

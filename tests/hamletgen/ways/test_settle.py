@@ -505,6 +505,7 @@ def test_a_target_no_lawful_run_reaches_is_left_unreached_not_drawn_least_bad(mo
     meta = {**_GEN, "way_targets": [{"kind": "burial ground", "at": [-300.0, 80.0]}]}
     s = _S([CONN], meta=meta)
     monkeypatch.setattr(settle.Lawful, "__call__", lambda self, run, width, skip=None: False)
+    monkeypatch.setattr(settle.Lawful, "fault", lambda self, run, width, skip=None: "refused")
     got = settle.settle_the_web(s)
     assert got["targets_unreached"] == 1
     assert not any(ln.get("role") == "way target" for ln in s.M["lanes"])
@@ -630,6 +631,7 @@ def test_a_field_no_lawful_run_reaches_draws_nothing_and_the_web_is_refused(monk
     s = _field_across_the_brook()
     assert settle.settle_field(s, lambda run, width, skip=None: False) == 0 and not any(ln.get("role") == co.FIELD_ROLE for ln in s.M["lanes"])
     monkeypatch.setattr(settle.Lawful, "__call__", lambda self, run, width, skip=None: False)
+    monkeypatch.setattr(settle.Lawful, "fault", lambda self, run, width, skip=None: "refused")
     with pytest.raises(WebRefused, match="the field is reached by no way"):
         settle.settle_the_web(_field_across_the_brook())
     bare = _S([CONN], meta=dict(_GEN), streams=[BROOK])
@@ -874,3 +876,68 @@ def test_a_household_way_is_cut_only_onto_a_way_that_stays() -> None:
     assert settle.cut_at_shallow_crossing(s.M["lanes"], 0, 1, []) is None, "lane 0 (the connector) crosses nothing here, and is never cut"
     s.M["lanes"][0]["pts"] = [[300.0, 45.0], [100.0, -20.0]]
     assert settle.cut_at_shallow_crossing(s.M["lanes"], 0, 1, []) is None, "the connector crossing shallow is still never cut"
+
+
+def test_lawful_names_the_first_rule_a_run_breaks() -> None:
+    """Feature 385 T03, plan D16: `fault` and `ground_fault` name the rule that turned a run down - seed 17's refusal said only
+    "the field is reached by no way", so where the ground refused could not be looked at."""
+    s = _S(
+        [CONN, [(-500.0, 0.0), (-500.0, 300.0)]], houses=[(-300.0, 300.0), (-460.0, 300.0)], streams=[BROOK], fields=[{"outline": [[-800.0, 400.0], [-700.0, 400.0], [-700.0, 500.0], [-800.0, 500.0]]}]
+    )
+    s.M["threshing_yards"] = [{"poly": [[-320.0, 100.0], [-280.0, 100.0], [-280.0, 120.0], [-320.0, 120.0]], "of": [-300.0, 300.0]}]
+    s.M["houses"].append({"x": -150.0, "y": 600.0, "w": 40.0, "h": 28.0, "rot": 0.0})
+    s.M["retirement_houses"] = [{"x": -150.0, "y": 900.0, "w": 40.0, "h": 28.0}]
+    ok = settle.Lawful(s)
+    assert ok.fault([(-240.0, 0.0), (-250.0, 290.0)], 3.0) is None
+    assert ok.fault([(-100.0, 0.0)], 3.0) == "too short"
+    assert ok.fault([(-100.0, 0.0), (-100.0, 150.0), (-90.0, 20.0)], 3.0) == "bends"
+    assert ok.fault([(-300.0, 0.0), (-300.0, 160.0)], 3.0) == "fabric"
+    assert ok.fault([(-750.0, 0.0), (-750.0, 450.0)], 3.0) == "off open ground"
+    assert ok.fault([(-150.0, 850.0), (-150.0, 950.0)], 3.0) == "through a building"
+    assert ok.fault([(0.0, 50.0), (200.0, 50.0)], 3.0) == "crossing"
+    assert ok.fault([(-100.0, 0.0), (-100.0, 150.0)], 3.0) == "dangling_lane_ends"
+    assert ok.fault([(-490.0, 0.0), (-490.0, 290.0)], 3.0) in ("doubled_tails", "needle_joins")
+    bare = settle.Lawful(_S([CONN]))
+    assert bare.fault([(-200.0, 30.0), (-100.0, 0.5)], 3.0) == "needle_joins"
+    assert bare.fault([(-60.0, 10.0), (-5.0, 10.0), (0.0, 0.0)], 3.0) in ("connector_hairpins", "bends")
+
+
+def test_a_field_way_refused_is_counted_by_rule_and_a_later_one_clears_the_count() -> None:
+    s = _field_across_the_brook()
+
+    class Turned:
+        def __init__(self, why: str | None) -> None:
+            self.why = why
+
+        def fault(self, run, width):  # noqa: ANN001, ANN201
+            return self.why
+
+        def __call__(self, run, width, skip=None):  # noqa: ANN001, ANN201
+            return self.why is None
+
+    assert settle.settle_field(s, Turned("fabric")) == 0
+    assert set(s.M["meta"]["field_refusals"]) == {"fabric"} and s.M["meta"]["field_refusals"]["fabric"] >= 1
+    assert settle.settle_field(s, Turned(None)) == 1 and "field_refusals" not in s.M["meta"], "a later round that reaches the field leaves no tally"
+    plain = _field_across_the_brook()
+    assert settle.settle_field(plain, lambda run, width, skip=None: False) == 0 and plain.M["meta"]["field_refusals"]["refused"] >= 1, "a bare judge: refused, unnamed"
+
+
+def test_a_bare_point_is_no_field_run_and_a_fold_is_named(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 385 T03: a one-point candidate is passed over, never judged; and a fold at a joint is named as one."""
+    from l7r.diagram.hamletgen.ways import reach
+
+    s = _field_across_the_brook()
+    judged: list = []
+
+    class Takes:
+        def fault(self, run, width):  # noqa: ANN001, ANN201
+            judged.append(run)
+
+        def __call__(self, run, width, skip=None):  # noqa: ANN001, ANN201
+            return True
+
+    monkeypatch.setattr(reach, "field_runs", lambda *a: iter([[(0.0, 0.0)], [(0.0, 50.0), (300.0, 50.0)]]))
+    assert settle.settle_field(s, Takes()) == 1 and judged == [[(0.0, 50.0), (300.0, 50.0)]], "the bare point never reached the judge"
+    monkeypatch.setattr(settle.law, "needle_ends", lambda tl, blocked: [])
+    monkeypatch.setattr(settle.law, "folded_joint_pairs", lambda tl, blocked: [(len(tl) - 1, 0, 0, 0)])
+    assert settle.Lawful(_S([CONN])).fault([(-240.0, 0.0), (-250.0, 290.0)], 3.0) == "folded_joints"

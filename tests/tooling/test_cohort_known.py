@@ -54,13 +54,28 @@ def test_each_failing_seed_is_read_against_its_baseline_on_mains_engine() -> Non
     """Feature 385 T03 (the round arbiter's tooling fix on hour:385-approach-checklist@6): a count like 59/60 hid two failing
     seeds, and seed 57's lane knots went from 1 to 4 while it read "pre-existing"."""
     ck = _load()
-    base = {"utc": "20261017T1000Z", "commit": "main1", "households": None, "seeds": [
-        _seed(17, "fail", {"lane_knots": 1}), _seed(21), _seed(55, "fail", {"lane_knots": 1}), _seed(57, "fail", {"lane_knots": 1}),
-        _seed(58, "fail", failures=["refused:WebRefused"])]}
+    base = {
+        "utc": "20261017T1000Z",
+        "commit": "main1",
+        "households": None,
+        "seeds": [_seed(17, "fail", {"lane_knots": 1}), _seed(21), _seed(55, "fail", {"lane_knots": 1}), _seed(57, "fail", {"lane_knots": 1}), _seed(58, "fail", failures=["refused:WebRefused"])],
+    }
     other = {"utc": "20261017T1100Z", "commit": "clone9", "households": None, "seeds": [_seed(60)]}
-    now = {"utc": "20261017T2000Z", "commit": "x", "households": None, "seeds": [
-        _seed(17), _seed(21, "fail", {"fabric": 2}), _seed(55, "fail", {"lane_knots": 1}), _seed(57, "fail", {"lane_knots": 4}),
-        _seed(58, "refused", failures=["refused:WebRefused", "lane_knots"]), _seed(59, "fail", {"bends": 1}), _seed(60, "fail", {"bends": 1}), _seed(61)]}
+    now = {
+        "utc": "20261017T2000Z",
+        "commit": "x",
+        "households": None,
+        "seeds": [
+            _seed(17),
+            _seed(21, "fail", {"fabric": 2}),
+            _seed(55, "fail", {"lane_knots": 1}),
+            _seed(57, "fail", {"lane_knots": 4}),
+            _seed(58, "refused", failures=["refused:WebRefused", "lane_knots"]),
+            _seed(59, "fail", {"bends": 1}),
+            _seed(60, "fail", {"bends": 1}),
+            _seed(61),
+        ],
+    }
     got = ck.standing(now, ck.baselines(now, [base, other], lambda c: c.startswith("main")))
     assert got[0] == "cohort: seed 17 FIXED (was: lane_knots 1)"
     assert got[1] == "cohort: seed 21 NEWLY FAILING (fabric 2)"

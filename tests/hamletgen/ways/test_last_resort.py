@@ -16,7 +16,7 @@ DOUBLED_BACK = [(0.0, 2.0), (0.0, 200.0), (5.0, 150.0)]
 
 def _no_steps(monkeypatch: pytest.MonkeyPatch) -> None:
     """The last resort's re-asked steps as no-ops, so a case isolates its drops and its refusal."""
-    for name in ("settle_joins", "settle_reach", "settle_defer", "settle_network", "settle_fragments", "prune_the_tree", "settle_widths", "settle_husks"):
+    for name in ("settle_joins", "settle_reach", "settle_knots", "settle_defer", "settle_network", "settle_fragments", "prune_the_tree", "settle_widths", "settle_husks"):
         monkeypatch.setattr(lr, name, lambda s: 0)
 
 
@@ -194,3 +194,67 @@ def test_a_refusal_names_what_breaks_each_rule() -> None:
     out, a tree lane): the first three things breaking a rule, or a count as it is."""
     assert lr._first([1, 2, 3, 4]) == "[1, 2, 3]"
     assert lr._first(2) == "2"
+
+
+# ---- feature 385 T03, plan D16: a refusal says where to look --------------------------------------------------------
+
+
+class _Standing:
+    def __init__(self, hits: list) -> None:
+        self.hits = hits
+
+    def conflicts(self, key: str, o: dict) -> list:
+        return self.hits
+
+
+class _WithStanding(dict):
+    standing: _Standing
+
+
+def test_a_fabric_refusal_names_the_part_it_fouls() -> None:
+    """Seed 21's five lanes were refused for `fabric` while nothing in the manifest stood within 2.9 ft of any: each part of
+    `fouled_segment` is named, so the refusal says where to look."""
+    house = {"x": 50.0, "y": 0.0, "w": 40.0, "h": 28.0, "rot": 0.0}
+    run = [(0.0, 0.0), (100.0, 0.0)]
+    assert lr.foul_part(run, 3.0, [house], [], [], [], None) == "on a farmhouse"
+    assert lr.foul_part([(0.0, 0.0), (200.0, 0.0)], 3.0, [], [], [(90.0, -10.0, 110.0, 10.0)], [], None) == "through a building"
+    bed = ([(10.0, 3.0), (90.0, 3.0), (90.0, 30.0), (10.0, 30.0)], None)
+    assert lr.foul_part(run, 3.0, [], [bed], [], [], None) == "within the fence gap of another household's yard or bed"
+    privy = [(40.0, -2.0), (46.0, -2.0), (46.0, 4.0), (40.0, 4.0)]
+    assert lr.foul_part(run, 3.0, [], [], [], [privy], None) == "over a fixture"
+    M = _WithStanding()
+    M.standing = _Standing([("lanes", "wells", 1.0, 2.0), ("lanes", "gardens", 3.0, 4.0)])
+    assert lr.foul_part(run, 3.0, [], [], [], [], M) == "the overlap matrix forbids it on gardens, wells"
+    M.standing = _Standing([])
+    assert lr.foul_part(run, 3.0, [], [], [], [], M) == "the overlap matrix"
+    assert lr.foul_part(run, 3.0, [], [], [], [], None) == "the overlap matrix", "no registry: the matrix is all that is left"
+
+
+def test_a_refusals_fabric_rule_carries_its_part() -> None:
+    s = _S([CONN, [(0.0, 100.0), (60.0, 100.0), (120.0, 100.0)]], houses=[(60.0, 100.0)])
+    every = lr.lane_breaches(s, every=True)
+    assert "fabric: on a farmhouse" in every[1]
+    assert "fabric" in lr.lane_breaches(s)[1], "the rounds need only know the lane is held"
+
+
+def test_a_field_refusal_counts_its_runs_by_the_rule_that_turned_them_down() -> None:
+    field = [[200.0, -300.0], [500.0, -300.0], [500.0, 300.0], [200.0, 300.0]]
+    M = {
+        "lanes": [{"pts": [[0.0, 300.0], [0.0, 1000.0]], "connector": True}],
+        "houses": [],
+        "streams": [BROOK],
+        "fields": [{"outline": field}],
+        "meta": {**_GEN, "field_refusals": {"fabric": 3, "doubled_tails": 2}},
+    }
+    with pytest.raises(lr.WebRefused, match=r"the field is reached by no way \(its runs turned down by doubled_tails x2, fabric x3\)"):
+        lr.refuse_unreached(M)
+
+
+def test_the_last_resort_joins_a_way_the_reach_drew_before_the_network_rule() -> None:
+    """Seed 21: a household's way the reach drew ended 8.6 ft off a lane's end and was dropped by the network rule, in the last
+    resort's passes, before any join could reach it."""
+    import inspect
+
+    assert "settle_reach, settle_joins, settle_knots, settle_defer, settle_network" in " ".join(inspect.getsource(lr.last_resort).split())
+    steps = list(settle.STEPS)
+    assert steps.index(settle.settle_joins) < steps.index(settle.settle_reach), "the settle's own rounds keep their order: joining after the reach there added lane knots (cohort seed 57, 1 -> 4)"

@@ -93,3 +93,23 @@ def test_a_sty_keeps_off_its_own_grove() -> None:
     M = {"groves": [{"x": 200.0, "y": 170.0, "w": 60.0, "h": 20.0, "rot": 0, "of": [200.0, 200.0]}]}
     _walls, parts = st.farmstead(M, HOUSE)
     assert len(parts) == 2, "the house and its grove band"
+
+
+def test_the_sty_placer_asks_the_checks_own_band_predicate(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 385 T03, plan D18: the placer read a grove band in the house's frame, snapped square under 10 degrees of turn, and
+    cohort seed 45's two sties stood 0.5 and 2.7 ft into bands the check reads as recorded. The placer now asks
+    `grove_rules.fixture_on_band`, the check's own predicate, and takes the next place where it is on a band."""
+    from l7r.diagram.settlement.homestead_parts import grove_rules as gr
+
+    s = _s()
+    house = {**HOUSE, "rot": 0.0}
+    s.M["houses"] = [house]
+    first = st.sty_seat(s, house)
+    assert first is not None
+    band = {"x": first["x"], "y": first["y"], "w": 4.0, "h": 4.0, "of": [house["x"], house["y"]]}
+    s.M["groves"] = [band]
+    assert gr.fixture_on_band(first, band) and gr.fixtures_on_groves({"groves": [band], "farm_fixtures": [first]}) == [("sty", band)]
+    second = st.sty_seat(s, house)
+    assert second is not None and (second["x"], second["y"]) != (first["x"], first["y"]) and not gr.fixture_on_band(second, band)
+    assert not gr.fixture_on_band({"x": 0.0, "y": 0.0}, band), "a fixture with no box has no footprint"
+    assert gr.grove_bands({"groves": [band, {"x": 1.0}]}) == [band]

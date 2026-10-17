@@ -156,7 +156,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12
 
 ## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)
 
@@ -255,7 +255,246 @@ Owed by the hour-5 step-back (`hour:385-approach-checklist@5`, ruled `continue`)
 8. **Routes measured before asking?** Nothing is being asked.
 9. **After a ruling.** The ruling is `continue`; the step it names is the tick, then T03.
 
-## T03 to T10 - the four seeds failing at HEAD, T48, T47's patch, five ranking rows
+## T03 - the four seeds failing at HEAD and the side-by-side shape (FR-012 first)
+
+### T03 Approach (checklist part A)
+
+Written blind (FR-012) by a fresh Opus agent, 2026-10-17 20:47Z-20:59Z, from the task text, `checklist.md`, `retro.md`,
+`lane-law-table.md`, the code and the record; copied here verbatim. The comparison with the session's sealed conclusions is in
+`retro.md` (SC-006).
+
+1. **The goal, in the world.** Paths look the way people actually wear them. Two households walking side by side over open grass wear one path, so the reader sees one, not two treads joined by a rung. Each of the four seeds draws what the research describes: a row farm reaches its street, a sty stands clear of its farm's grove, a way reaches the field, and each household's way stays off its neighbors' yards.
+
+2. **The constraints.** None of the four seeds is refused by an angle rule. They fall to four different rule families: `row_rules` farm_not_on_its_street (seed 40), `grove_rules.fixtures_on_groves` (seed 45), `last_resort.refuse_unreached` / `law.field_unreached` (seed 17), and the `fabric` probe `settle.fouled_segment` on five access lanes (seed 21). Only the side-by-side shape belongs to the lane law, through `tails.along_tail`: `_ALONG_FT` 14, `_ALONG_MIN_FT` 30, `_DOUBLED_DEG` 15. The other numbers involved are `NEEDLE_DEG`/`NEEDLE_FT` 20, `FIELD_REACH_FT` 60, `WEB_FABRIC_GAP` 7, `DOOR_REACH_FT` 60 and `ALIGN_TOL_DEG` 10. The cohort is 54 seeds.
+
+3. **Where each comes from.** Each is classed in the per-seed list below. The GM's merge ruling (2026-10-17) can only be quoted as lane-law-table.md renders it: *"two paths running side by side become one"*. The exact words are in files this experiment forbids me. One claim is mislabeled. `FIELD_REACH_FT` cites 0014's drawing page "within 60 ft", but neither 0014 page contains "60 ft". The figure is O (it matches 0246's lane-end reach GUESS).
+
+4. **Does each rule hold here?** Each is judged on the geometry in the per-seed list. Two cases differ from the rest. The side-by-side pair is open grass, where 0081's rule holds. Seed 45 is a mismatch between the placer and the check, not a sty standing in the trees.
+
+5. **Order of operations.** Homesteads come before lanes, so nothing T03 does moves a homestead. Any exit that re-seats a house or re-deals seats (exit d, re-deal) goes to T04, as T01's retro did with seed 24. T03 works in the web, the door paths, the sty seat and the checks. Merging the later of two ways onto the earlier one keeps that order.
+
+6. **The exits**, weighed per seed below. For the shape, (c) is the clear choice, and the GM named it.
+
+7. **The search smell.** It is the risk for seeds 17 and 21: retrying field runs and re-routing ways against a 7 ft gap. The direct constructions are 0014's own fallback (*"Where no path is left to draw, the hamlet's nearest lane runs on to the bund"*) and 0246's ways laid "along the middle of the gaps". For seed 45 the construction is one predicate shared by placer and check. Nothing here reserves ground in advance.
+
+8. **The budget.** About 4 h. The first hour is measurement: two of the five subjects (seeds 17 and 21) are refused rolls with no manifest, so nothing can be seen without a dump. The merge test is about 1.5 h, and seeds 40 and 45 are about 0.5 h each.
+
+9. **Done, measured.**
+   - **Baseline:** `.git/cohort48-t01b.log`, 50/54 passed, failing exactly 17, 21, 40 and 45.
+   - **Merge test:** written first and red now on Inashiro lanes 8 and 14 (and F2's pairs).
+   - **Seeds:** each of the four passes `make cohort N=1 SEED=n`, or carries a recorded exit. `make hamlet` prints OK for 40 and 45 because the grove and row rules belong to `cohort_audit`, not the generator, so it is not the oracle.
+   - **Whole cohort:** no seed regresses from the baseline.
+   - **Glyph-check:** the Inashiro village-lane check is re-run, with F1-F3 gone.
+
+**Per seed**
+
+- **Seed 40, `farm_not_on_its_street` at (2403, 1968)** (`homesteads/row_rules.py`).
+  - **Class:** R 0033 for the principle (*"A farm whose grove stands between it and the street reaches the street by a path round the grove"*, where the path is a GUESS). The 60 ft door reach is a GUESS from 0246. Leaving the join out of "own street" (`street_index None`, `street.py`) is O: its stated reason is seed 904's "behind another" judgment, not research.
+  - **Geometry:** this is the end farm of street 1. Its north band and its west band (x≈2307, y 1928-2021) stand between it and lane 3, which is 143-217 ft away. The join, lane 4, is a 6 ft street-rank way leaving the street's end at (2201, 2030), and it passes about 75 ft south of the farm's south door. No lane `serves` this farm, though every other farm has a door path. To a reader, lane 4 is the street turning east past the farm.
+  - **Holds here?** Yes in principle; the farm needs a path to its street. The O definition is what refuses it.
+  - **Exit:** (b)/(c). A row farm may take its street's own join as its street, in both `lay_door_paths` (`streets`) and `row_rules` (`drawn_st`), as one predicate.
+  - **Unsettled:** which `door_path` candidate failed, and on what rule. That dump is the first measurement. The two found rows the cohort named for seed 40 are a different rule (wave 96, `refuse_unreached`); I am noting them, not chasing them.
+
+- **Seed 45, `fixtures_on_groves`, two sties** (`settlement/homestead_parts/grove_rules.py`; the placer is `homesteads/sties.py`).
+  - **Class:** R 0036 for the principle (a GUESS there). `ALIGN_TOL_DEG` 10 is UNRESEARCHED, and the `in_frame` docstring calls itself plumbing.
+  - **Geometry:** the sty at (1879.3, 1766.5) overlaps its north band by about 0.5 ft, and the one at (1616.8, 1291.7) by about 2.7 ft. Both should clear by the 3.5 ft wall gap. The houses are turned 7-8°. `in_frame` treats a band under 10° of skew as square to the house and uses its unturned box; across a 185 ft band that is about 12 ft off at the ends. The check reads the band's axis-aligned box against the sty's turned box.
+  - **Holds here?** Yes. The fault is that placer and check read different boxes, against the rule that placement and its test import the same predicate.
+  - **Exit:** (e), conform by fixing the placer to test the band as drawn. No room and no new number are needed.
+
+- **Seed 17, the field reached by no way** (`last_resort.refuse_unreached`, after `reach.settle_field` found nothing).
+  - **Class:** R 0014 for the principle (*"the field path runs from the hamlet to the paddy's outer bund and joins it"*). The 60 ft is O, mislabeled as R.
+  - **Holds here?** Yes; a hamlet beside its field walks to it. The real refusal is hidden: every candidate run was turned down by `Lawful`, and the refusal does not say for which rule.
+  - **Unsettled:** I found no facility that keeps a refused roll's manifest; my grep for one found nothing. This is the same tooling gap T01's retro named for `settle_knots`.
+  - **Exit:** measure first, by recording why each candidate was refused. Then (b), 0014's own fallback of the nearest lane running on to the bund. If a candidate was refused for running beside a lane, the general merge may dissolve it, but that is only a hypothesis.
+
+- **Seed 21, `fabric` on access lanes 3, 4, 5, 7 and 9, lane skeleton Y.**
+  - **Class:** R 0246 for the principle (*"Its way leaves its dooryard round its own garden beds and fixtures"*; *"Nothing is built on a lane"*). The 7 ft gap is O; 0246 calls it *"a map drawing convention, not a measured figure"*. An open E3 found row already names that gap.
+  - **Holds here?** Unseen: there is no manifest. My hypothesis, unverified, is that the ways chosen against stand-ins for the farmsteads (`household_ways.seated_parts`) are judged later against the farmsteads as drawn.
+  - **Exit:** the dump first. Then (a), the O gap, weighed against (d), more room, with room first under the GM's 2026-10-12 ruling. 0246's own fallback is reaching the house across a neighbor's yard. Room is a seating change, so it goes to T04.
+
+- **The side-by-side shape (Inashiro F1-F3).**
+  - **Geometry:** lane 8 is a door stub of house (2388, 2151); its samples sit 14.4, 12.3 and 11.1 ft from lane 14. Lane 14 was laid after lane 8 (z 1045 against 1039). It runs west and then turns 90° to end in a T on lane 8 at (2332, 2201); that turn is the rung. Between the two lanes is open grass, with the household's own garden and threshing yard on lane 8's other side.
+  - **Why it escapes:** `along_tail` breaks at its first sample, because 14.4 ft is past `_ALONG_FT` 14 by 0.4 ft, before `_ALONG_MIN_FT` 30 is even asked. Both numbers are O; the merge principle is G, and 0081 ("Two paths running side by side are drawn as one") is a convention.
+  - **Holds here?** Yes: open ground, which is exactly where 0081 applies.
+  - **Exit:** (c), as one general test rather than a fourth detector. Two treads within a reach of each other, near parallel, over ground that the settle's obstacle families leave empty, for longer than a junction's approach, become one path. The later way is cut to a T where it comes alongside, and a household's way is cut at its far end, never at its door. On F1, lane 14 would end on lane 8's start, and lane 8's stub would carry both households.
+  - **Open:** the reach. 0246's lane room (18-20 ft) is the only researched figure in that range, and F2's pairs at 18-25 ft fall partly outside it. This is the shape's one unsettled number.
+
+### T03 part B (2026-10-17T21:40Z)
+
+Owed by the checklist, not by D9: the same refusal family a third time on one attempt (REACH 20 ft, then the door guard, then
+`Lawful` at 14 ft), and seed 49 found failing.
+
+1. **What is refusing?** With REACH in `along_tail`, the reference map: a farmhouse (2573, 1981) unreached, then a household's
+   way (lane 11) breaking `doubled_tails` that the settle may not cut.
+2. **A3 again.** REACH: O (anchored on 0246). The doubled-tail rule's 14 ft: O. "Two paths side by side become one": the GM's.
+3. **A4 again.** The rule describes the world: two ways 18 ft apart over open grass are one path. But a REFUSAL at 20 ft
+   describes nothing - the world has no refused maps; it merges them.
+4. **Moving earlier for later?** No.
+5. **Tuning or changing?** Three tunings of one number's reach in a row: stop. Back to A6.
+6. **The one-sentence test.** "Widening the tail test refuses more ways" - the GM would ask why a merge refuses anything.
+7. **The next step is a measurement**: the merge as its own step that never refuses (D17 re-decided), tested red first.
+8. **Routes measured?** The cohort's 59/60 is the matrix; seed 49 measured at HEAD (failing there too).
+9. **After a ruling.** None asked.
+
+### T03 Approach (re-answered 2026-10-17T21:40Z)
+
+1. **The goal.** Unchanged, plus seed 49 (D24).
+2. **The constraints.** As the blind block, with REACH 20 ft for the merge and the law's 14 ft kept.
+3. **Where each comes from.** REACH: O, anchored on 0246's lane room. The fence gap's own-garden exemption: O, a DEVIATION on 0246's
+   drawing page.
+4. **Does each hold here?** A merge holds on open ground. A refusal at 20 ft does not (part B, 3).
+5. **The order.** The merge runs after the reach and before the network rule. Nothing placed earlier moves.
+6. **The exits.** (c), a merge that dissolves the pair. The law is not widened.
+7. **The search smell.** None. One step, one predicate, and a cut written only where lawful.
+8. **The budget.** About 1 h used of 4 h. About 1 h more for the merge and its tests, then the gate.
+9. **Done, measured.** D22, and seed 49.
+
+### T03 part B (2026-10-17T22:20Z)
+
+Owed by the hour-6 step-back (`hour:385-approach-checklist@6`, ruled `change-route`), D9's second firing on real work.
+
+1. **What is refusing?** D17's merge, tried as its own step: 58/66, with six seeds regressed. Without it: 63/66, with seeds 49, 55
+   and 57 refused, all three at HEAD too. Seed 57 got worse under T03's fixes (1 knot to 4).
+2. **A3 again.** REACH (20 ft, then 25 ft fitted to F1-F3): O, a convenience number. `_ALONG_MIN_FT` 30: UNRESEARCHED. The merge
+   principle is the GM's. The lane-knot rule is the lane law's (R 0081). The own-garden exemption is O, a DEVIATION recorded
+   on 0246.
+3. **A4 again.** The merge describes the world. The way it was built does not yet: the later passes act on the junctions it
+   makes and strand households.
+4. **Moving earlier for later?** No.
+5. **Tuning or changing?** REACH was moved twice. A third move is not taken. The merge leaves T03 (the rulings: route (a)).
+6. **The one-sentence test.** "The merge is right but the passes after it break the web" - the GM would ask why those passes
+   are not fixed. That is the carried task's first item.
+7. **The next step is a measurement**: seed 57 bisected (done). The join order in the last resort alone takes it to 2 knots.
+8. **Routes measured?** Yes: the cohort with and without the merge, and seed 57's bisection (`t03-d17-evidence.md`).
+9. **After a ruling.** The steps it names are the bisection, then land the four with the rest carried. Its condition (57 no
+   worse than HEAD) is put back to the arbiter with the measurement (`ask:t03-seed57-residue`).
+
+### T03 Approach (re-answered 2026-10-17T22:23Z)
+
+1. **The goal.** The four seeds' maps produced as the research describes. Two paths side by side made one is carried to T12.
+2. **The constraints.** As the blind block, less D17's REACH, which T12 takes.
+3. **Where each comes from.** The own-garden exemption is O, a DEVIATION on 0246. The join order is no number. The band predicate
+   is the check's own.
+4. **Does each hold here?** Yes for the four. The merge's later passes do not yet (T12).
+5. **The order.** Nothing placed earlier moves. The settle's own rounds keep HEAD's order.
+6. **The exits.** (e) for 45, (a) for the fence gap, (c) for the join order. The merge goes to T12 by ruling.
+7. **The search smell.** None left in T03: the merge loop was stopped at its third tuning.
+8. **The budget.** About 1 h 50 min used of 4 h. The gate, the checks and the retro remain.
+9. **Done, measured.** D25: the four pass, nothing newly fails against HEAD, every exit owned by T12.
+
+### T03 part B (2026-10-17T23:08Z)
+
+Owed by the hour-7 step-back (`hour:385-approach-checklist@7`, ruled `continue`).
+
+1. **What is refusing?** Nothing in the map: the gate is green, and every claims and record check is answered. The tick was held
+   only by this hour's step-back and its tooling fix (now landed).
+2. **A3 again.** Unchanged since the 22:20 block: the merge's reach is O and T12's; the two known gaps (`FIELD_REACH_FT`'s
+   reach, the doubled tail's 15 degrees) are DRIFTED against 0014 and 0081 and carried to T12.
+3. **A4 again.** n/a - no rule refused anything this hour.
+4. **Moving earlier for later?** No.
+5. **Tuning or changing?** Neither: three claims rounds and two pop-up rounds, each answering the last, the third pop-up round
+   accepted by the arbiter.
+6. **The one-sentence test.** "T03 lands its four seeds and carries the merge" - the rulings say so.
+7. **The next step is a measurement**: the tick, then the per-task table compared with T01's.
+8. **Routes measured?** Nothing is being asked.
+9. **After a ruling.** `continue`: tick and land.
+
+### T03 Decisions
+
+Written by the session from the blind block (FR-012). Where the block and the session's sealed notes differ (seeds 17 and 21),
+the decision names the measurement that settles it, not a side.
+
+**D16 - measure before any fix (B1, A7).** Seeds 17 and 21 are refused rolls with no manifest, so the first step is to see the
+ground. A refused roll's refusal names, for every candidate it turned down, the rule that turned it down and where (as T01's
+`lane_breaches` did for the knots), and the session dumps the refusing geometry (the ways, the yards and beds near them, the
+field's outer bund) in a detached worktree before naming a cause. The per-candidate refusal is engine code and lands with the
+task. No fix to 17 or 21 is written before its dump is read.
+
+**D17 - the side-by-side merge is one settle step; the law's refusal is left as it is.** Re-decided 2026-10-17 after the part B
+below. Measured: REACH put into `along_tail` itself (the plan's first D17) reached all five of its callers. At 20 ft the lane law's
+doubled-tail rule and `Lawful` refused household ways the settle may not cut, and the reference map refused a farmhouse.
+So the merge and the refusal are two questions.
+(1) **The merge**, a settle step run after the reach is drawn and before the network rule (`settle_side_by_side`). Where a
+way's end runs beside an earlier way within REACH, within `_DOUBLED_DEG` of parallel, past the junction's own approach, over
+ground the settle's two obstacle families leave empty, that way is cut to a T where it first comes alongside. The cut way is
+the later of the two, and its far end is cut. A household's way is never cut at its door. A cut is written only where the cut
+way keeps the law (`Lawful`, the way left out of what it meets), so the step never refuses and never strands a house. REACH is
+20 ft, anchored on 0246's lane room (18-20 ft) and labeled a convention anchored there. F2's 18-25 ft pairs are measured against
+it, and REACH is moved (an O number) rather than F2 kept.
+(2) **The law's doubled-tail rule keeps its 14 ft** (`_ALONG_FT`, O), the refusal it was. That is not a narrowing of "two
+paths running side by side become one": the merge makes them one, and the rule only refuses a pair the merge could not mend.
+The test, written first: Inashiro's lanes 8 and 14 and seed 49's root way, each red before the step. T01's three detectors are
+kept as they are; the step merges only what they leave.
+
+**D18 - seed 45: one predicate for placer and check.** The sty placer (`homesteads/sties.py`) tests the grove band as drawn,
+the same turned box `grove_rules.fixtures_on_groves` reads, through one shared predicate. The 10-degree `in_frame` skew stays
+for what else uses it. No new number, no room.
+
+**D19 - seed 40: the street's join is the row farm's street.** The dump first: which `door_path` candidate failed, and on
+what rule. Then a row farm may take its own street's join as its street, in `lay_door_paths` and `row_rules` alike, through one
+predicate. Nothing re-seats a homestead (A5). If the dump shows the farm cannot be reached without a re-seat, that is T04's.
+
+**D20 - seed 21: the exit follows the dump.** The dump (D16) is read first. It measures, for each fouled access lane, whether
+the lane is a household's only route to the network and whether that route runs through a neighbor's yard. The exits, in order:
+(1) **Where it does, the household is reached across its neighbor.** 0246's drawing page, as it stands, says where the gaps
+leave no lawful way the household *"is reached across the yard of its nearest neighbor with a way, the walk not drawn: a
+household cut through a neighbor's yard in a pinch"*. That rests on the GM's ruling of 2026-10-03 (feature 318 amendment 2): *"it's
+okay for people to cut through neighbors' yards in a pinch"*. Its research is 0081's finding that a household with no way of
+its own crossed a neighbor's land by custom. "The walk not drawn" is that page's drawing convention, not a finding, and T03
+keeps it as the page states it. Whether the walk across the yard should be DRAWN is a drawing question the page decides, not
+this task. This is the session's difference from the blind block, marked as FR-012 asks: the blind block names this fallback
+but chooses the gap or room first, and the session puts the record's own fallback first because the record states it for
+exactly this case. The dump decides whether the case applies.
+(1b) **Measured 21:22: seed 21's five ways come near only their own household's garden and yard.** So the O gap applies,
+and the decision is that a household's own way is exempt from the 7 ft fence gap beside its own garden, kept off its beds by the
+overlap matrix (`fabric.owned_gardens`). It is recorded as a DEVIATION on 0246's drawing page. More room would not help: the
+distance is between a household and its own beds, not between homesteads.
+(2) Else the 7 ft gap (O, a convention) is weighed against more room (the GM's 2026-10-12 ruling: room first), and a room
+change is T04's.
+Before choosing, it is asked whether a reader of the research would call the drawn place wrong. That is the question the
+blind block did not reach (`retro.md`, SC-006).
+
+**D21 - seed 17: measure, then the record's own fallback.** The per-candidate refusal (D16) says why each field run was turned
+down. The exits, in order:
+(1) Where a run was refused for coming alongside a lane, D17's merge dissolves it.
+(2) Else 0014's fallback, the hamlet's nearest lane run on to the bund (R).
+(3) Else, if the field's own bunds already reach the hamlet's edge, it is asked whether the refusal should exist at all.
+`FIELD_REACH_FT`'s claim is corrected in T03: 60 ft is O (no 0014 page says it), relabeled with what was searched
+(constitution XIV).
+
+**D24 - seed 49, found failing at HEAD (constitution XIV).** The 60-seed cohort (21:32) refused seed 49, and a detached worktree at
+HEAD refuses it too (the fence gap on its own garden, like 21). The own-garden change clears that cause. Its second cause is
+D17's own shape: its root household's way ran 18 ft beside the skeleton and ended unjoined, so the network rule dropped it with
+the three ways hanging from it. It is fixed by D17's merge and held by D22's cohort like the four.
+
+**D22 - done.**
+- The baseline: `.git/cohort48-t01b.log`, 50/54, failing 17, 21, 40 and 45; and seed 49, failing at HEAD in a detached worktree (D24).
+- Each seed passes `make cohort N=1 SEED=n`, or carries its recorded exit to T04 (a re-seat or room change, T04's own task);
+  an exit no task of this feature owns is not done.
+- The whole cohort regresses no seed.
+- The merge test is red without its change.
+- The Inashiro village-lane glyph-check is re-run with F1-F3 gone.
+- `make done` is green, and the claims, records and checks it owes are answered.
+- The task lands with its retro row.
+
+**D23 - budget.** About 4 h, the blind block's. Twice that (8 h) triggers part B. So does every trigger D9 names.
+
+**D25 - what T03 lands, and what it carries (the rulings of 2026-10-17: hour:385-approach-checklist@6, ask:t03-d17-route,
+ask:t03-seed57-residue).** T03 lands the four seeds' fixes in their narrowed form:
+- the own-garden exemption (`fabric.owned_gardens`, D20);
+- the join steps after the reach in the last resort's passes only (the settle's own rounds as at HEAD: joining there added
+  lane knots to seed 57);
+- the shared band predicate (D18);
+- D16's refusals;
+- `FIELD_REACH_FT` relabeled (D21).
+Against HEAD: 17, 21, 40 and 45 fixed, nothing newly failing, the pool clean with Kashikawa's lane 9 straightened. D17's merge
+(saved; it merged F1-F3 and fixed seed 49 but regressed six seeds, because the later settle passes are blind to the junctions it
+makes) and D24's seed 49 are NOT done in T03. With seed 55 (one lane knot, as at HEAD) and seed 57's residue they are carried
+to T12, as the arbiter ruled: seed 57's residue is lanes 1/13, ends 21.6 ft apart, `settle_knots`' gather of lane 13 refused by
+`needle_loops`, brought in by the own-garden fix; 57 stands at 2 knots against HEAD's 1, waived by ask:t03-seed57-residue.
+D22's done is read accordingly: the four seeds pass, no seed newly fails against HEAD, and every exit is owned by T12.
+
+## T04 to T10 - T48, T47's patch, five ranking rows
 
 Each decided at its start, in this order (spec FR-007), its section added here and reviewed by `make decide`.
 

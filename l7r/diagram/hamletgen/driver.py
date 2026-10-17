@@ -10,11 +10,14 @@ from __future__ import annotations
 import argparse
 import concurrent.futures
 import contextlib
+import json
 import os
 import sys
+import tempfile
 import time
-from collections.abc import Callable, Iterator, Sequence
+from collections.abc import Callable, Iterator, Mapping, Sequence
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any
 
 # IMPORTED AT MODULE LEVEL, not inside generate(). A local import would run the guard's own
@@ -38,6 +41,7 @@ from .sink import stage_sink
 from .washing import stage_washing
 from .water import stage_field, stage_water_frame, stage_waterward
 from .ways import stage_seat, stage_track, stage_web
+from .ways.last_resort import WebRefused
 
 # THE PIPELINE. Read top to bottom: this is the generator.
 #
@@ -264,8 +268,25 @@ def build(plan: SitePlan) -> Settlement:
     # 269 E4, whose knobs (`paddy_rest`, `fan_middle`) have no field of their own on the spec.
     for knob, value in plan.spec.pins.items():
         s.pin_knob(knob, value)
-    _run_stages(s, plan)
+    try:
+        _run_stages(s, plan)
+    except WebRefused as e:
+        raise WebRefused(f"{e} (the manifest at the refusal: {keep_refused(s.M, plan.spec.name)})") from e
     return s
+
+
+REFUSED_DIR = Path(tempfile.gettempdir()) / "l7r-refused"
+"""Where a refused roll's manifest is kept (`keep_refused`)."""
+
+
+def keep_refused(M: Mapping[str, Any], name: str) -> str:
+    """Write the manifest as it stood when the web refused it, and return the path the refusal names (feature 385 T03, plan
+    D16): a refused roll produced no file, so seeds 17 and 21's refusals could be read only as their text - and T01's retro
+    found a cause guessed from refusal text wrong three times, where a look at the ground answered in one."""
+    REFUSED_DIR.mkdir(parents=True, exist_ok=True)
+    path = REFUSED_DIR / f"{''.join(c if c.isalnum() else '-' for c in name or 'hamlet')}-{time.time_ns()}.json"
+    path.write_text(json.dumps(M, default=str), encoding="utf-8")
+    return str(path)
 
 
 def _run_stages(s: Settlement, plan: SitePlan) -> None:

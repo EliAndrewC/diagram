@@ -28,6 +28,9 @@ Answer each in writing in the task's plan section. One line each is enough where
 4. **What each R or G rule describes, and whether it holds here.** Research usually describes the typical case. Does the
    rule still describe the world in the situation the task meets - an obstruction, a slope, a map edge, a crowded site?
    (*Lanes meet at broad angles where nothing is in the way; a rock in the way makes a sharp meeting natural.*)
+   **And is the refusal itself right?** If the map broke this rule here, would a reader of the research call the place wrong?
+   If not, the rule is a preference - a tie-break, not a refusal. (T03: seed 21 was refused for a farmer's path 3-6 ft off his
+   OWN garden fence; nobody would call that wrong. The blind Approach listed the fallback but never asked this - SC-006.)
 5. **The order of operations.** Does the plan respect the order things arose in the world? Nothing placed earlier moves to
    suit something placed later (homesteads before lanes - GM 2026-10-02 and 2026-10-17; paved roads excepted).
 6. **The exits, each weighed.** Before choosing to conform, name what each of these would be for this task, and pick with a
@@ -81,6 +84,11 @@ step-back; the task past twice its budget; an approach about to change. Answer b
 4. **New work or a changed reading of the GM's words goes in the turn's final message**, never only mid-stream (audit #9).
 6. **Nothing is written to the tree while a gate runs** - not a record, not a ledger row, not a fix to the wait itself; queue it
    and write it after the verdict (T01: two gates voided by a write during the run).
+7. **A cohort's count is not its seed set.** Compare failing seeds, rule by rule with their counts, against the same seeds at
+   HEAD (`make cohort` prints it since T03); a pass count hid two failing seeds and a changed denominator (T03: "59/60" was
+   `N=54`).
+8. **Times in a log are read from the event log, never written from memory** (T03: a decision log an hour off, caught by the
+   hourly step-back).
 5. **A tripwire is read before it is obeyed.** When a round cap fires, check first that the owing diff changed visible words of
    this unit and that the rounds counted are this feature's: of 106 round-cap accepts, 27 were owed only by a later
    edit and 13 by a counting or bundle error (audit #13). A tripwire that fired on tooling error is a tooling fix, made then.

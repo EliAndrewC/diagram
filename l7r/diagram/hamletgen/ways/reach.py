@@ -92,8 +92,22 @@ def settle_field(s: Any, lawful: Judge) -> int:
     # ...EACH SQUARED AT ITS WATER CROSSINGS before it is judged and drawn (`Lawful.squared`, as the seating judged the field's
     # corridor until feature 320): a run over the brook at a ford is judged as the web draws it
     square = getattr(lawful, "squared", lambda r: r)
-    run = next((q for r in candidates() if len(r) >= 2 and lawful(q := square(r), BRANCH_WIDTH)), None)
+    # ...AND EACH RUN TURNED DOWN IS COUNTED BY THE RULE THAT TURNED IT DOWN (feature 385 T03, plan D16): seed 17's refusal said
+    # only "the field is reached by no way", so where the ground refused could not be looked at
+    fault = getattr(lawful, "fault", lambda r, w: None if lawful(r, w) else "refused")
+    turned: dict[str, int] = {}
+    run = None
+    for r in candidates():
+        if len(r) < 2:
+            continue
+        why = fault(q := square(r), BRANCH_WIDTH)
+        if why is None:
+            run = q
+            break
+        turned[why] = turned.get(why, 0) + 1
     if run is None:
+        M.setdefault("meta", {})["field_refusals"] = turned
         return 0
+    M.get("meta", {}).pop("field_refusals", None)  # a later round that reaches the field leaves no tally of an earlier one
     _draw_tree_lane(s, run, BRANCH_WIDTH, FIELD_ROLE)
     return 1
