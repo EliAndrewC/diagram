@@ -522,12 +522,13 @@ the agent. A new agent file is seen by a session started after it lands.
 **D37 - The dispatch guard (FR-034).** `scripts/hooks/agent-prefix-hooks.sh` on PreToolUse Agent, with its decider in
 `scripts/hooks/lib/hm_agent_prefix.py`: the session's Agent prompts are kept in `<git dir>/l7r-agent-prompts/<session>.jsonl`
 (the last 30); a new prompt is compared with each by its longest identical block (`difflib.SequenceMatcher.find_longest_match`,
-the prompts capped at 64 KB). A block of 2,000 characters or more that starts after the new prompt's first 200 characters - a
-part that differs comes before it - is refused, with the fix: put the shared text at the start of the prompt, or in the agent's
-file; a block at the start passes. The threshold is a convenience number to move (the GM's case was 10 KB; 2,000 is about
+the prompts capped at 64 KB). A block of 2,000 characters or more is refused unless everything before it is identical in both
+prompts - a cached prefix breaks at the first character that differs, so any differing part before it, however short, makes it
+uncacheable - with the fix: put the shared text at the start of the prompt, or in the agent's file. The threshold is a convenience number to move (the GM's case was 10 KB; 2,000 is about
 500 tokens, where a cached prefix starts to matter against the ~2.5k a dispatch writes regardless). Escape `AGENT_PREFIX_OK`
-with a reason; every firing logged. The suite `tests/hooks/test-agent-prefix-hooks.sh`: the GM's shape (a unique sentence, then
-a shared 10 KB) refused; the same block first passes; two unrelated prompts pass; the escape passes.
+with a reason; every firing logged. The suite `tests/hooks/test-agent-prefix-hooks.sh`: the GM's shape (a unique sentence of
+under 200 characters, then a shared 10 KB) refused; the same block first passes, followed by differing text; two unrelated
+prompts pass; the escape passes.
 
 **D38 - The bundle test (FR-035).** `scripts/measure/cache_audit.py` carries `shared_text(a, b)` - the identical lines of 40
 characters or more two texts both hold, summed. `tests/tooling/test_bundle_shared_text.py` builds two bundles of each kind
@@ -540,4 +541,4 @@ subagent transcripts (research R13's method): per type, its runs, the back-to-ba
 repeated characters, and the whole spend in base-input units at the 5-minute tier (write 1.25, read 0.1, output 5), each rate
 stated in its output. Tested on a fake transcript directory. CLAUDE.md's review paragraph: the rule (what dispatches of a check
 share lives in its agent file; a prompt carries only the unit, last), the guard, `make cache-audit`; the sentence naming
-spec-fidelity as keeping the files goes. `docs/spec-kit-and-reviews.md` gets the section with R13's numbers.
+spec-fidelity as keeping the files goes once D34 passes (a second loss keeps the exception, and the sentence with it). `docs/spec-kit-and-reviews.md` gets the section with R13's numbers.
