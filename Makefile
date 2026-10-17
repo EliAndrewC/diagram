@@ -1758,6 +1758,10 @@ parts-sweep:     ## [tests] run each split guard suite at 1, 2, 3 and 8 parts an
 	@: "GUARD_EDIT_OK: feature 383 amendment 4 - the round arbiter's tooling fix on hour:383@3: the case-order sweep as a command (tests/hooks/parts_sweep.sh)"
 	@bash tests/hooks/parts_sweep.sh $(SUITES)
 
+subagent-cache:  ## [project] what subagents write to the prompt cache fresh, per agent type, and the repeated text in their bundles (feature 383 amendment 6)   [SINCE=YYYY-MM-DD]
+	@: "GUARD_EDIT_OK: feature 383 amendment 6, plan D39 - adding an operation: the subagent cache measurement over the transcripts"
+	@python3 scripts/measure/subagent_cache.py $(if $(SINCE),--since $(SINCE),)
+
 collect-cost:    ## [tests] where a run's time goes before any test runs: as make runs it, no workers, collection alone (feature 383 amendment 3)   TREE=quick|tooling
 	@: "GUARD_EDIT_OK: feature 383 amendment 3, plan D25 - adding an operation: the collection measurement, run under make because the engine refuses pytest started outside it"
 	@python3 scripts/measure/collect_cost.py --tree $(or $(TREE),quick) $(if $(JSON),--json $(JSON),)

@@ -530,15 +530,15 @@ with a reason; every firing logged. The suite `tests/hooks/test-agent-prefix-hoo
 under 200 characters, then a shared 10 KB) refused; the same block first passes, followed by differing text; two unrelated
 prompts pass; the escape passes.
 
-**D38 - The bundle test (FR-035).** `scripts/measure/cache_audit.py` carries `shared_text(a, b)` - the identical lines of 40
+**D38 - The bundle test (FR-035).** `scripts/measure/subagent_cache.py` carries `shared_text(a, b)` - the identical lines of 40
 characters or more two texts both hold, summed. `tests/tooling/test_bundle_shared_text.py` builds two bundles of each kind
 the checks read - `make check-bundle` on two questions, `make modal-bundle` for two kinds and each of its three checks,
 `make claims-triage` and `make modal-triage` on fixture units - into tmp, and fails when two manifests of a kind share more
 than 2,000 characters, naming the lines; a seeded case (a 3,000-character block added to both) proves it fails.
 
-**D39 - The audit and the rule (FR-036).** `make cache-audit [SINCE=YYYY-MM-DD]` runs `scripts/measure/cache_audit.py` over the
+**D39 - The audit and the rule (FR-036).** `make subagent-cache [SINCE=YYYY-MM-DD]` runs `scripts/measure/subagent_cache.py` over the
 subagent transcripts (research R13's method): per type, its runs, the back-to-back first-call read and write, the manifests'
 repeated characters, and the whole spend in base-input units at the 5-minute tier (write 1.25, read 0.1, output 5), each rate
 stated in its output. Tested on a fake transcript directory. CLAUDE.md's review paragraph: the rule (what dispatches of a check
-share lives in its agent file; a prompt carries only the unit, last), the guard, `make cache-audit`; the sentence naming
+share lives in its agent file; a prompt carries only the unit, last), the guard, `make subagent-cache`; the sentence naming
 spec-fidelity as keeping the files goes once D34 passes (a second loss keeps the exception, and the sentence with it). `docs/spec-kit-and-reviews.md` gets the section with R13's numbers.

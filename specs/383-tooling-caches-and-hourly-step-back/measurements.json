@@ -266,5 +266,24 @@
   "value": 6.53,
   "reused": 1825,
   "of": 1827
+ },
+ "subagent-cache-before": {
+  "quantity": "subagent prompt-cache use per agent type, before amendment 6",
+  "observed": "2026-10-17T18:40Z",
+  "source": "~/.claude/projects/-diagram/*/subagents, 1,395 runs",
+  "command": "make subagent-cache SINCE=2026-10-10",
+  "method": "FR-036's audit; back to back = same type and session under 5 minutes",
+  "unit": "tokens",
+  "varies": true,
+  "value": 25829,
+  "spec_fidelity_b2b_first_write": 25829,
+  "general_purpose_b2b_first_write": 29191,
+  "modal_depiction_b2b_first_write": 2676,
+  "repeated_chars": {
+   "modal-depiction": 15541,
+   "modal-form": 17445,
+   "modal-research": 17148
+  },
+  "all_units": 131378576
  }
 }

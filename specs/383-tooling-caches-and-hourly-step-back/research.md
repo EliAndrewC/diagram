@@ -434,7 +434,7 @@ purpose. `test_lint_scope`'s root run re-runs only when a file is added or remov
 1,312 runs, typed by their `.meta.json`; per call, the usage's `cache_read_input_tokens` and `cache_creation_input_tokens`;
 "back to back" = a dispatch of the same type from the same session under 5 minutes after the one before, the cache's lifetime
 for subagents - their writes are all `ephemeral_5m`; spend in base-input units at the 5-minute tier's rates, a write 1.25,
-a read 0.1, output 5; the scripts become `make cache-audit`)
+a read 0.1, output 5; the scripts become `make subagent-cache`)
 
 | (observed 2026-10-17; the method above) | back-to-back pairs | first call read from cache | first call written fresh |
 |---|---|---|---|

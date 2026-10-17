@@ -148,7 +148,7 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 
 ## Amendment 6 (the GM 2026-10-17: what subagents share is cached)
 
-- [ ] T38 `make cache-audit` and the before numbers (plan D39) (SC-025)
+- [ ] T38 `make subagent-cache` and the before numbers (plan D39) (SC-025)
       research: rendering
 - [ ] T39 The dispatch guard for a shared block after a unique start (plan D37) (SC-025)
       research: rendering

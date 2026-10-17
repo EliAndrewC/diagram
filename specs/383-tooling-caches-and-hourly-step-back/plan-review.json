@@ -235,8 +235,8 @@
    "declared": "spec-fidelity"
   },
   "## Amendment 6 (FR-031 to FR-036)": {
-   "sha256": "95fd59aa66b72eb3379ff8c314f20264002e85f10ddc4f0162cdcc899199c909",
-   "verdict": "BLOCKED",
+   "sha256": "d75442e8bc44b9e845063d9c4c5d29788a605f7a6d0dfdf8761f059feae407e3",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
   }
@@ -1050,6 +1050,52 @@
      "summary": "make cache-audit over subagent transcripts with stated rates; the rule, guard and target in CLAUDE.md; the spec-fidelity exception sentence removed; docs section",
      "class": "within",
      "why": "FR-036 as written. Note: removing the spec-fidelity sentence should follow D34's pass, since a second loss keeps the exception."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Amendment 6 (FR-031 to FR-036)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D34",
+     "summary": "spec-fidelity without the instruction files, proven by 3+3 runs on 251's round 1 scored by an independent reader; on a second loss the exception stays and goes to the GM",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Unchanged since round 1. The fallback is the removal condition SC-023 and the tier test's row already record, not a carve-out the session invented; on a pass FR-031 is met in full."
+    },
+    {
+     "id": "D35",
+     "summary": "modal guidelines generated into the three modal agent files by make agent-sync, held by a test; bundle stops copying guidelines.md",
+     "class": "within",
+     "why": "Unchanged; FR-032 as written."
+    },
+    {
+     "id": "D36",
+     "summary": "claims-triage and modal-triage as defined agents, opus/medium, omitClaudeMd, manifests reduced to the unit",
+     "class": "within",
+     "why": "Unchanged; FR-033 as written."
+    },
+    {
+     "id": "D37",
+     "summary": "dispatch guard refuses a shared block of 2,000+ characters unless everything before it is identical in both prompts; suite uses the GM's shape with a sub-200-character sentence",
+     "class": "within",
+     "why": "Round 1's 200-character allowance is gone: any differing text before the shared block, however short, is now refused, which is the GM's mechanism (a unique sentence makes everything after it uncacheable) and FR-034's 'after a part that differs'. The threshold is labeled a convenience number to move. Suite cases match SC-025."
+    },
+    {
+     "id": "D38",
+     "summary": "shared_text test over two bundles of each kind, 2,000-character limit, seeded 3,000-character failure",
+     "class": "within",
+     "why": "Unchanged; FR-035 and SC-024."
+    },
+    {
+     "id": "D39",
+     "summary": "make cache-audit; CLAUDE.md rule and guard; the spec-fidelity-keeps-the-files sentence removed only once D34 passes",
+     "class": "within",
+     "why": "FR-036 as written; the sentence's removal now tracks D34's outcome, so CLAUDE.md stays true on either branch, as round 1 asked."
     }
    ]
   }

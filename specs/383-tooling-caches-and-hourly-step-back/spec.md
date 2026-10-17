@@ -215,7 +215,7 @@ long-running feature does for itself, on the clock glyph-check already keeps.
   text first, or in an agent file.
 - **FR-035 Bundles are tested for shared text.** A test builds two bundles of each check kind and fails when their identical
   text passes a small limit.
-- **FR-036 The cache is measured and the rule written.** `make cache-audit` reports, per agent type, from the subagent
+- **FR-036 The cache is measured and the rule written.** `make subagent-cache` reports, per agent type, from the subagent
   transcripts: the tokens a dispatch writes fresh on its first call, against a dispatch of the same type minutes before, and the
   manifests' repeated text. CLAUDE.md states the rule - shared context in the agent file, the unique part last - and names
   the guard.
@@ -298,7 +298,7 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 - **SC-024** (FR-032, FR-035) The modal checks' manifests repeat at most the test's limit - before 15-17k characters repeated in most
   manifests (research R13) - and the bundle test fails on a seeded repeated block.
 - **SC-025** (FR-034, FR-036) The guard refuses a unique sentence followed by a shared 10 KB and passes the same block placed
-  first (suite cases); `make cache-audit` prints every agent type's numbers, and its total subagent spend before and after; CLAUDE.md states
+  first (suite cases); `make subagent-cache` prints every agent type's numbers, and its total subagent spend before and after; CLAUDE.md states
   the rule and names the guard, and no longer names spec-fidelity as keeping the instruction files.
 
 ## Review history
