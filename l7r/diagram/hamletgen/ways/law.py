@@ -189,7 +189,9 @@ Research: no tread through a building - research/questions/0246-how-our-maps-lay
 FIELD_REACH_FT = 60.0
 """On a brook map one of the hamlet's own ways (not the track out) comes this near the field - its paddy or its dry hem -
 the reach `lanes_reach_something` asks of the field (feature 261, FR-012).
-Research: a way reaches the field - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: within 60 ft"""
+Research:
+    a way reaches the field - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a way runs from the hamlet to the field's outer bund
+    the reach - UNRESEARCHED: 60 ft, the same figure as 0246's lane-end reach GUESS; no 0014 page states it (searched 2026-10-17, feature 385 T03 D21: every 0014 file for "60 ft" - none; the claim had cited it there)"""
 
 
 CONNECTOR_START_FT = 1.5

@@ -155,24 +155,26 @@ found the same tooling gap T01's retro named.
 
 ## T03 - the decision log
 
+Times are the event log's (`<git dir>/l7r-events/385-approach-checklist.jsonl`, each agent's start and stop); a step between two
+of them is placed by its order, not given a time of its own. (A first draft of this table carried times written from memory, up
+to an hour late; the hour-6 step-back caught it, 2026-10-17.)
+
 | UTC | point | what decided it |
 |---|---|---|
 | 20:44 | started (`make task-start`) | - |
-| 20:59 | blind Approach returned (FR-012) | a fresh Opus agent, 12 min |
-| 21:08 | plan round 1 BLOCKED: D20(1) took a side on code alone | spec-fidelity |
-| 21:12 | plan round 2 CLEAR | spec-fidelity |
-| 21:14 | D16 built: a refused roll keeps its manifest (`driver.keep_refused`), the field way's refusal counts each run turned down by its rule (`Lawful.fault`) | - |
-| 21:15 | seed 17's runs: fabric x122, doubled_tails x88, needle_joins x30; seed 21's five lanes: fabric | the dumps |
-| 21:20 | seed 21's lanes come within 7 ft of NOTHING but their own household's garden and yard (3.1-6.8 ft) - neither the sealed guess (a neighbor's yard) nor the blind block's (stand-ins) | four geometry probes on the dump, three of them answering a question nobody had asked; then the refusal made to name the part (`foul_part`): "the fence gap" |
-| 21:22 | the cause: a garden is recorded with no owner, so a household's way is held 7 ft off its OWN garden fence; 0246's 7 ft is the room between neighbors | `_homestead_polys`; 0246's drawing page |
-| 21:23 | fixed (D20(2), the O gap): `owned_gardens` - the owner's way is kept off its beds by the overlap matrix but not the fence gap | seed 21's fabric refusal gone |
-| 21:24-21:31 | seed 21's second refusal (a farmhouse unreached): **part B fired** (the same validator, three attempts) | see below |
-| 21:31 | the cause: `settle_joins` runs before `settle_reach`, and `settle_network` after it, in both the settle's steps and the last resort's, so a way the reach draws is dropped before any join reaches it; its end stood 8.6 ft off a lane's end | a temporary drop probe (never committed): who dropped it, three times |
-| 21:32 | seeds 17, 21, 40 pass `make cohort`; seed 45 fails only `fixtures_on_groves` | - |
-| 21:34 | seed 45 fixed (D18): the sty's placer asks the check's own predicate (`grove_rules.fixture_on_band`) | seed 45 passes |
-| 21:36 | bisected: the own-garden change alone fixes 17, 21 (its first refusal) and 40; the join order fixes 21's second | toggled, three rolls |
+| 20:45-20:56 | the blind Approach (FR-012) | a fresh Opus agent, 11 min |
+| 21:05 | plan round 1 BLOCKED: D20(1) took a side on code alone | spec-fidelity |
+| 21:08 | plan round 2 CLEAR | spec-fidelity |
+| 21:08-21:41 | D16 built (a refused roll keeps its manifest; refusals name their rule); seed 17's field runs turned down by fabric x122, doubled_tails x88, needle_joins x30; seed 21's five lanes come within 7 ft of nothing but their OWN garden and yard (3.1-6.8 ft) - neither the sealed guess (a neighbor's yard) nor the blind block's (stand-ins); four geometry probes on the dump answered questions nobody had asked, then the refusal made to name the part (`foul_part`) said it at once | the dumps |
+| (same) | the cause: a garden is recorded with no owner, so a household's way was held 7 ft off its OWN garden fence; fixed as D20's O gap (`owned_gardens`); seed 21's second refusal (a farmhouse unreached) - **part B** after three attempts; its cause: a way drawn by the reach dropped by the network rule before any join reached it, in the last resort's passes; seed 45 fixed by one band predicate; bisected: the own-garden change fixes 17, 21 and 40 | a temporary drop probe; toggles |
+| (same) | the 60-seed cohort read 59/60 (only 49) - but it was `N=54` and never rolled 55-60; seed 49 refused at HEAD too (a detached worktree) | the cohort, the worktree |
+| (same) | D17 as first decided (REACH inside `along_tail`): the reference map refused a farmhouse, then a tree lane `doubled_tails` the settle may not cut - **part B**, D17 re-decided | three rolls |
+| 21:45 | the re-decide CLEAR | spec-fidelity |
+| 21:45-22:02 | the merge as its own step: never fired on Inashiro F1 (its rung corner 21.8 ft off) - REACH 25 ft, the rung as the approach; cuts undone by the reach each round - `set_corridor`; F1's cut stranded lane 15 - carried (`reseat_on_way`); F1-F3 merged, seed 49 passed; **the 60-seed cohort: 58/66, six seeds regressed** - the merge reverted, saved; the confirming cohort 63/66 (49, 55, 57 refused, all three at HEAD too) | rolls, a cut log, cohorts |
+| 22:05-22:06 | the hour-6 step-back (route (a) once seed 57 is bisected) and the ask's ruling (route (a)) | round-arbiter, twice |
+| 22:06-22:20 | seed 57 bisected: 4 knots with T03's changes, HEAD 1; the join order kept in the last resort alone brings it to 2 (the four seeds still pass); the last +1 comes with the own-garden fix and is refused by `needle_loops` (the carried task's family) - put to the arbiter | toggles, a gather-refusal log |
 
-### Part B, answered at 21:28 (seed 21's farmhouse, the third attempt)
+### Part B, answered between 21:08 and 21:45 (seed 21's farmhouse, the third attempt)
 
 1. **What is refusing?** `unreached_houses`: the household's way is drawn and then dropped by the network rule; its far end stood
    8.6 ft off lane 14's end and 18.8 ft off lane 9.

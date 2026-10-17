@@ -242,3 +242,23 @@ def test_homestead_polys_carries_the_farms_bamboo_strips() -> None:
     s._household_strips = [(strip, None, "bamboo_stands")]  # type: ignore[attr-defined]
     found = [(poly, owner) for poly, owner, kind in hg.ways._homestead_polys(s) if kind == "bamboo_stands"]
     assert found == [(strip, None)]
+
+
+def test_a_garden_belongs_to_its_house_for_the_lane_fouls_alone() -> None:
+    """Feature 385 T03, plan D20: the fence gap is the room between neighbors, so a household's own way may run beside its own
+    garden fence (kept off the beds by the overlap matrix). `_homestead_polys` still reads a garden as owned by no one: a garden
+    is an obstacle to its own farm's path as to any other (feature 328)."""
+    from l7r.diagram.hamletgen.ways import fabric
+
+    plan = a_plan()
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    s.M["houses"] = [{"x": 100.0, "y": 100.0, "w": 40.0, "h": 28.0, "rot": 0.0}]
+    s.M["threshing_yards"] = [{"poly": [[80.0, 120.0], [120.0, 120.0], [120.0, 140.0], [80.0, 140.0]], "of": [100.0, 100.0]}]
+    s.M["gardens"] = [
+        {"x": 150.0, "y": 100.0, "w": 20.0, "h": 30.0, "rot": 0.0, "poly": [[140.0, 85.0], [160.0, 85.0], [160.0, 115.0], [140.0, 115.0]], "of": [100.0, 100.0]},
+        {"x": 300.0, "y": 100.0, "w": 20.0, "h": 30.0},
+    ]
+    yards, houses = fabric.lane_fabric(s)
+    assert [owner for _poly, owner in yards] == [(100.0, 100.0), (100.0, 100.0), (100.0, 100.0), None], "the yard, the bed and its rect, an ownerless rect"
+    assert houses == s.M["houses"]
+    assert all(owner is None for _poly, owner, kind in hg.ways._homestead_polys(s) if kind == "gardens"), "the router's fabric is unchanged"

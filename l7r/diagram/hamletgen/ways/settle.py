@@ -50,17 +50,21 @@ from ..consts import WEB_CLEARANCE, WEB_FABRIC_GAP, Poly, Pt
 from . import law
 from .arcs import arc_at, cut_around, sub_run  # noqa: F401 - re-exported: `settle.sub_run` and the rest are what tree.py and the tests name
 from .checks import square_crossings, unreached_houses
-from .corridors import (
+from .corridors import (  # noqa: F401 - `open_ground_rings` re-exported: callers and tests name it as `settle.<name>`
     ACCESS_ROLE,
     ACCESS_WIDTH,
+    MEET_REACH_FT,
     GroundIndex,
+    _box,
     _poly_box,
     building_quads,
     is_tree,
+    open_ground_rings,
     strands_only_ordinary,
     through_a_building,
 )
-from .fabric import _crosses_fabric, _homestead_polys, house_hit
+from .fabric import _crosses_fabric, house_hit
+from .fabric import lane_fabric as _fabric
 from .forced import lazy_ground
 from .geom import _TOUCH_GAP, _components, _trim_to_service, memo_ground, polyline_len, steading_footprints, worked_ground
 from .joints import joints, rank_width
@@ -132,11 +136,6 @@ def _ordinary(M: Mapping[str, Any]) -> list[int]:
 
 
 Yards = list[tuple[Poly, Pt | None]]
-
-
-def _fabric(s: Any) -> tuple[Yards, list[Mapping[str, Any]]]:
-    yards = [(poly, owner) for poly, owner, kind in _homestead_polys(s) if kind in ("threshing_yards", "gardens")]
-    return yards, list(s.M.get("houses") or [])
 
 
 def theirs(p: Poly, yards: Yards, houses: Sequence[Mapping[str, Any]]) -> list[Poly]:
@@ -766,27 +765,6 @@ def settle_network(s: Any) -> int:
 # ---- step 4b: the reach the web owes - a corridor, a way target, the field ----------------------------------------------
 
 
-def open_ground_rings(M: Mapping[str, Any]) -> list[Poly]:
-    """The outlines a lawful run may not cross (`GroundIndex.open_ground`): every field outline, dry plot and marsh - the
-    ground `law.span_walkable` refuses a span, less the water, which a crossing fault judges (a decked or forded crossing is
-    a lawful one).
-
-    Research: off crop and marsh - research/questions/0081-village-lanes.drawing.html: field outlines, dry plots, marsh"""
-    rings = [[(float(a), float(b)) for a, b in f["outline"]] for f in M.get("fields") or [] if f.get("outline")]
-    rings += [[(float(a), float(b)) for a, b in d["poly"]] for d in M.get("dry_plots") or [] if d.get("poly")]
-    rings += [[(float(a), float(b)) for a, b in m["poly"]] for m in M.get("marshes") or [] if len(m.get("poly") or ()) >= 3 and m.get("role") != "defense"]
-    return rings
-
-
-MEET_REACH_FT = 60.0
-"""The lanes a new run is asked to meet cleanly are those whose box comes within this of its box: past every reach a joint
-rule measures (a needle's 20 ft leg, a doubled tread's 14 ft, a join's 40 ft) - so the lanes left out cannot meet it."""
-
-
-def _box(p: Poly, pad: float) -> tuple[float, float, float, float]:
-    return (min(q[0] for q in p) - pad, min(q[1] for q in p) - pad, max(q[0] for q in p) + pad, max(q[1] for q in p) + pad)
-
-
 class Lawful:
     """Would a run, drawn as a new lane of a given width, keep every per-lane rule of the law - no kink or hook, no crossing
     fault, no foul of the fabric, no field, dry plot or marsh underfoot (`open_ground_rings`) - and meet the ways it comes near
@@ -847,7 +825,12 @@ class Lawful:
         return square_run(self.M, run) if self.index.water_near(run, self._square_pad) else list(run)
 
     def on_lawful_ground(self, run: Poly, width: float) -> bool:
-        """THE GROUND HALF - what a run keeps whatever lanes the web draws beside it: no kink or hook, no crossing fault (a
+        """`ground_fault` found none: the run is on lawful ground."""
+        return self.ground_fault(run, width) is None
+
+    def ground_fault(self, run: Poly, width: float) -> str | None:
+        """The first rule of the ground half a run breaks, by name, or None (feature 385 T03, plan D16: a refusal says which
+        rule turned each run down, so the ground is looked at where it refused). THE GROUND HALF - what a run keeps whatever lanes the web draws beside it: no kink or hook, no crossing fault (a
         brook crossed off a ford or twice, a crossing off square, one no deck seats), no foul of a farmhouse, another
         household's yard or garden, a building or a farmstead fixture, no field, dry plot or marsh underfoot. The seating asks
         this of a corridor before it admits a house (`corridor_on_lawful_ground`), so the web can always draw what it
@@ -858,22 +841,33 @@ class Lawful:
             crossings - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: `_crossing_fault`
             nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no foul of house, yard, building, fixture
             off crop and marsh - research/questions/0081-village-lanes.drawing.html: no field, dry plot or marsh underfoot"""
-        if len(run) < 2 or law.hook_faults(run, width, self.blocked) or law.kink_faults(run, width, self.blocked):
-            return False
+        if len(run) < 2:
+            return "too short"
+        if law.hook_faults(run, width, self.blocked) or law.kink_faults(run, width, self.blocked):
+            return "bends"
         # every test below reads only what stands near the run (`index`, `GroundIndex`): a crossing fault needs a crossing,
         # and each foul a part within its own reach of the run - so the parts beyond it are left out, not the verdict
         ix = self.index
         houses = ix.near("houses", run, max(width / 2.0 + 2.0, law.DOORSTEP_FT) + 1.0)  # ...the doorstep's reach: `theirs` reads it
         fouled = fouled_segment(run, width, houses, ix.near("yards", run, WEB_FABRIC_GAP + 1.0), ix.near("solid", run, 1.0), ix.near("fixtures", run, width / 2.0 + law.FIXTURE_PAD_FT + 1.0), self.M)
-        if fouled is not None or not ix.open_ground(run) or through_a_building(run, ix.near("buildings", run, 1.0)):
-            return False
+        if fouled is not None:
+            return "fabric"
+        if not ix.open_ground(run):
+            return "off open ground"
+        if through_a_building(run, ix.near("buildings", run, 1.0)):
+            return "through a building"
         # ...AND THE CROSSING LAST, the one test that solves a deck (feature 328, the perf-audit of wave 10: the field way's
         # search judged 242 candidates on 20 households seed 4, each solving its crossing first; every test here is pure, so
         # the order changes no verdict - 8.8 s -> 7.9 s, the output identical)
-        return not (ix.water_near(run, 1.0) and _crossing_fault({**self.M, "lanes": [{"pts": _rounded(run), "w": width}]}, 0, run, self.wet) is not None)
+        crossing = ix.water_near(run, 1.0) and _crossing_fault({**self.M, "lanes": [{"pts": _rounded(run), "w": width}]}, 0, run, self.wet) is not None
+        return "crossing" if crossing else None
 
     def __call__(self, run: Poly, width: float, skip: int | None = None) -> bool:
-        """`skip`: the lane `run` would replace, left out of what it is asked to meet.
+        """`fault` found none. `skip`: the lane `run` would replace, left out of what it is asked to meet."""
+        return self.fault(run, width, skip) is None
+
+    def fault(self, run: Poly, width: float, skip: int | None = None) -> str | None:
+        """The first rule a run breaks as a new lane, by name, or None (feature 385 T03, plan D16).
 
         Research:
             lanes meet as a T - research/questions/0081-village-lanes.drawing.html: no needle, fold or hairpin at either end
@@ -881,26 +875,28 @@ class Lawful:
             no doubled tail - UNRESEARCHED: either way round
             no way out over and back - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: tree lanes"""
         M = self.M
-        if not self.on_lawful_ground(run, width):
-            return False
+        if why := self.ground_fault(run, width):
+            return why
         lanes = [ln for k, ln in enumerate(M.get("lanes") or []) if k != skip]
         x0, y0, x1, y1 = _box(run, MEET_REACH_FT)
         near = [ln for ln in lanes if len(ln.get("pts") or []) >= 2 and not ((b := _box(_pts(ln), 0.0))[2] < x0 or b[0] > x1 or b[3] < y0 or b[1] > y1)]
         tl, k = [*near, {"pts": run, "w": width}], len(near)
-        if any(k in (n, m) for n, _e, m, _u, _v in law.needle_ends(tl, self.blocked)) or any(k in (a, b) for a, _ea, b, _eb in law.folded_joint_pairs(tl, self.blocked)):
-            return False
+        if any(k in (n, m) for n, _e, m, _u, _v in law.needle_ends(tl, self.blocked)):
+            return "needle_joins"
+        if any(k in (a, b) for a, _ea, b, _eb in law.folded_joint_pairs(tl, self.blocked)):
+            return "folded_joints"
         if any(n == k for _c, n, _e in law.connector_hairpin_ends(tl, self.blocked)):
-            return False
+            return "connector_hairpins"
         # ...AND EACH END SERVES SOMETHING (the lane law's `dangling_lane_ends`): a tree lane is never trimmed afterwards, so an
         # end it would leave in open ground is refused here
         trial = {**M, "lanes": tl}
         if any(n == k for n, _e in law.dangling_lane_ends(trial, self.ground)):
-            return False
+            return "dangling_lane_ends"
         if any(along_tail(p, q, deg=_DOUBLED_DEG) is not None for o in (_pts(ln) for ln in near) for p, q in ((run, o), (run[::-1], o), (o, run), (o[::-1], run))):
-            return False
+            return "doubled_tails"
         # ...AND IT HANDS NO HOUSEHOLD A WAY OUT OVER THE BROOK AND BACK (ways W08): a way out is a route through the whole
         # web, so it is asked last, of the lanes the run would join - a tree lane is never cut for it afterwards
-        return not (self.tree and law.adds_a_way_out_crossing(M, run, width, lanes))
+        return "way_out_over_and_back" if self.tree and law.adds_a_way_out_crossing(M, run, width, lanes) else None
 
 
 def corridor_on_lawful_ground(M: Mapping[str, Any], run: Poly, width: float = ACCESS_WIDTH, lawful: Lawful | None = None) -> bool:

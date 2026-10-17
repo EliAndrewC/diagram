@@ -139,6 +139,29 @@ class _margin_frame:  # noqa: N801 - used as a callable coordinate map, not as a
         return (px + nx * standoff, py + ny * standoff)
 
 
+def owned_gardens(M: Mapping[str, Any]) -> list[tuple[Poly, Pt | None]]:
+    """Every garden's two extents (its bed outline and its rect, as `_homestead_polys` reads them), each with the house it
+    belongs to (`of`) - for the lane fouls alone (`settle._fabric`): the fence gap is a gap between neighbors, so a household's
+    own way is held off its own beds (the overlap matrix: no tread on them) but not the 7 ft fence gap beside them.
+
+    Research: a way beside its own garden - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: "A lane's middle keeps at least 7 ft clear of a garden fence" is a convention for the room between neighbors ("7 ft at each garden fence and a 4 ft tread between"); a household's way "leaves its dooryard round its own garden beds", so it may run beside its own fence (feature 385 T03, plan D20: cohort seed 21's five ways, 3.1-6.8 ft from their own gardens and from nothing else)"""
+    out: list[tuple[Poly, Pt | None]] = []
+    for rec in M.get("gardens") or []:
+        own = rec.get("of")
+        owner = (float(own[0]), float(own[1])) if own else None
+        if rec.get("poly"):
+            out.append(([(float(a), float(b)) for a, b in rec["poly"]], owner))
+        if rec.get("w"):
+            out.append((rot_rect(float(rec["x"]), float(rec["y"]), float(rec["w"]), float(rec["h"]), float(rec.get("rot", 0.0))), owner))
+    return out
+
+
+def lane_fabric(s: Settlement) -> tuple[list[tuple[Poly, Pt | None]], list[Mapping[str, Any]]]:
+    """The yards and beds a lane's fouls read (each with its owner: a dooryard's and, feature 385 T03, a garden's), and the houses."""
+    yards = [(poly, owner) for poly, owner, kind in _homestead_polys(s) if kind == "threshing_yards"] + owned_gardens(s.M)
+    return yards, list(s.M.get("houses") or [])
+
+
 def _homestead_polys(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
     """Every drawn thing a homestead puts on the ground, as (polygon, the house it belongs to).
 

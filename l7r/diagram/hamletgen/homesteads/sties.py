@@ -20,6 +20,7 @@ from typing import Any
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.farm_fixtures import STY_FT
 from l7r.diagram.settlement.homestead_parts.fixture_seats import WALL_GAP_FT, WALL_SLIDE_FT, Rect, against_a_part
+from l7r.diagram.settlement.homestead_parts.grove_rules import fixture_on_band, grove_bands
 from l7r.diagram.settlement.rolling.lot import quota_carriers
 
 from ..plan import SitePlan
@@ -117,7 +118,7 @@ def sty_seat(s: Settlement, house: Mapping[str, Any]) -> dict[str, Any] | None:
             "rot": round(float(house.get("rot") or 0.0), 1),
             "of": [round(float(house["x"]), 1), round(float(house["y"]), 1)],
         }
-        if s.admits("farm_fixtures", rec):
+        if s.admits("farm_fixtures", rec) and not any(fixture_on_band(rec, g) for g in grove_bands(s.M)):  # ...the check's own test (385 D18)
             return rec
         taken.append((q[0], q[1], q[2], q[3]))  # refused by what stands: the next place along
 

@@ -55,8 +55,9 @@ TESTS = pathlib.Path(__file__).resolve().parent
 # milliseconds. Matching the call alone put them in the gate tree carrying `rolls_map`. So the walk first reads the
 # stubs: with `generate` stubbed nothing below it can roll; with `cohort` stubbed, `main`/`cohort` calls roll nothing
 # (`build`, `generate`, `roll_village`, `gate_obtain` still do). Both directions are pinned by the unit test below.
-_STUBBABLE = frozenset({"cohort", "generate"})
+_STUBBABLE = frozenset({"cohort", "generate", "_run_stages"})
 _VIA_COHORT = frozenset({"main", "cohort"})
+_VIA_STAGES = frozenset({"build", "generate"})  # with the stages stubbed, a build runs none of them (feature 385 T03)
 
 
 def _stubbed(node: ast.AST) -> set[str]:
@@ -80,7 +81,7 @@ def _rolls_a_map(node: ast.AST) -> bool:
             continue
         fn = sub.func
         if isinstance(fn, ast.Attribute) and fn.attr in ROLLING_ATTRS:
-            if isinstance(fn.value, ast.Name) and fn.value.id in ROLLING_RECEIVERS and not ("cohort" in stubs and fn.attr in _VIA_COHORT):
+            if isinstance(fn.value, ast.Name) and fn.value.id in ROLLING_RECEIVERS and not ("cohort" in stubs and fn.attr in _VIA_COHORT) and not ("_run_stages" in stubs and fn.attr in _VIA_STAGES):
                 return True
         elif isinstance(fn, ast.Name) and fn.id in ROLLING_BARE and not ("cohort" in stubs and fn.id == "cohort"):
             return True
@@ -96,6 +97,8 @@ def test_a_stubbed_generator_is_not_a_roll_and_a_real_one_is() -> None:
     assert _rolls_a_map(fn("def test_x():\n    hg.main(['--batch', '1'])\n"))
     assert _rolls_a_map(fn("def test_x():\n    hg.cohort(4, first_seed=41, jobs=1)\n"))
     assert not _rolls_a_map(fn("def test_x(monkeypatch):\n    monkeypatch.setattr(hg.driver, 'cohort', lambda n, first_seed=1, jobs=None: [])\n    hg.main(['--batch', '1'])\n"))
+    assert not _rolls_a_map(fn("def test_x(monkeypatch):\n    monkeypatch.setattr(driver, '_run_stages', lambda s, p: None)\n    driver.build(plan)\n"))
+    assert _rolls_a_map(fn("def test_x(monkeypatch):\n    monkeypatch.setattr(driver, '_run_stages', lambda s, p: None)\n    driver.main([])\n")), "stubbed stages excuse a build, not the CLI's cohort"
     assert not _rolls_a_map(fn("def test_x(monkeypatch):\n    monkeypatch.setattr(hg.driver, 'generate', fake)\n    hg.cohort(3, first_seed=5, jobs=1)\n"))
     # a stubbed cohort does not excuse a direct build
     assert _rolls_a_map(fn("def test_x(monkeypatch):\n    monkeypatch.setattr(hg.driver, 'cohort', lambda n: [])\n    hg.build(plan)\n"))

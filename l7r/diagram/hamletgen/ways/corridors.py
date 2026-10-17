@@ -150,7 +150,7 @@ class GroundIndex:
     17, 1,686 runs - and each walked every water course, every field and dry-plot outline and every farmstead part.
 
     It only PRUNES: `water_near` says whether any water segment comes within a pad of a run (no crossing fault and no
-    squaring without one), `open_ground` asks whether the run crosses an outline edge near it (`settle.open_ground_rings`), and `near` hands back
+    squaring without one), `open_ground` asks whether the run crosses an outline edge near it (`open_ground_rings`), and `near` hands back
     the parts of a registry whose boxes come within a pad of the run, in registry order - the exact tests then decide on
     those, and a part left out stands beyond every distance they measure."""
 
@@ -395,3 +395,24 @@ one; at the footpath's own 4 ft the router drew a 5 ft path 4.3 ft off a house c
 refused it.
 
 Research: field way off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft from the way's middle to a garden fence"""
+
+
+def open_ground_rings(M: Mapping[str, Any]) -> list[Poly]:
+    """The outlines a lawful run may not cross (`GroundIndex.open_ground`): every field outline, dry plot and marsh - the
+    ground `law.span_walkable` refuses a span, less the water, which a crossing fault judges (a decked or forded crossing is
+    a lawful one).
+
+    Research: off crop and marsh - research/questions/0081-village-lanes.drawing.html: field outlines, dry plots, marsh"""
+    rings = [[(float(a), float(b)) for a, b in f["outline"]] for f in M.get("fields") or [] if f.get("outline")]
+    rings += [[(float(a), float(b)) for a, b in d["poly"]] for d in M.get("dry_plots") or [] if d.get("poly")]
+    rings += [[(float(a), float(b)) for a, b in m["poly"]] for m in M.get("marshes") or [] if len(m.get("poly") or ()) >= 3 and m.get("role") != "defense"]
+    return rings
+
+
+MEET_REACH_FT = 60.0
+"""The lanes a new run is asked to meet cleanly are those whose box comes within this of its box: past every reach a joint
+rule measures (a needle's 20 ft leg, a doubled tread's 14 ft, a join's 40 ft) - so the lanes left out cannot meet it."""
+
+
+def _box(p: Poly, pad: float) -> tuple[float, float, float, float]:
+    return (min(q[0] for q in p) - pad, min(q[1] for q in p) - pad, max(q[0] for q in p) + pad, max(q[1] for q in p) + pad)

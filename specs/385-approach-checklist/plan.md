@@ -319,7 +319,7 @@ Written blind (FR-012) by a fresh Opus agent, 2026-10-17 20:47Z-20:59Z, from the
   - **Exit:** (c), as one general test rather than a fourth detector. Two treads within a reach of each other, near parallel, over ground that the settle's obstacle families leave empty, for longer than a junction's approach, become one path. The later way is cut to a T where it comes alongside, and a household's way is cut at its far end, never at its door. On F1, lane 14 would end on lane 8's start, and lane 8's stub would carry both households.
   - **Open:** the reach. 0246's lane room (18-20 ft) is the only researched figure in that range, and F2's pairs at 18-25 ft fall partly outside it. This is the shape's one unsettled number.
 
-### T03 part B (2026-10-17T22:12Z)
+### T03 part B (2026-10-17T21:40Z)
 
 Owed by the checklist, not by D9: the same refusal family a third time on one attempt (REACH 20 ft, then the door guard, then
 `Lawful` at 14 ft), and seed 49 found failing.
@@ -336,7 +336,7 @@ Owed by the checklist, not by D9: the same refusal family a third time on one at
 8. **Routes measured?** The cohort's 59/60 is the matrix; seed 49 measured at HEAD (failing there too).
 9. **After a ruling.** None asked.
 
-### T03 Approach (re-answered 2026-10-17T22:12Z)
+### T03 Approach (re-answered 2026-10-17T21:40Z)
 
 1. **The goal.** Unchanged, plus seed 49 (D24).
 2. **The constraints.** As the blind block, with REACH 20 ft for the merge and the law's 14 ft kept.
@@ -346,8 +346,28 @@ Owed by the checklist, not by D9: the same refusal family a third time on one at
 5. **The order.** The merge runs after the reach and before the network rule. Nothing placed earlier moves.
 6. **The exits.** (c), a merge that dissolves the pair. The law is not widened.
 7. **The search smell.** None. One step, one predicate, and a cut written only where lawful.
-8. **The budget.** About 1 h 25 min used of 4 h. About 1 h more for the merge and its tests, then the gate.
+8. **The budget.** About 1 h used of 4 h. About 1 h more for the merge and its tests, then the gate.
 9. **Done, measured.** D22, and seed 49.
+
+### T03 part B (2026-10-17T22:20Z)
+
+Owed by the hour-6 step-back (`hour:385-approach-checklist@6`, ruled `change-route`), D9's second firing on real work.
+
+1. **What is refusing?** D17's merge, tried as its own step: 58/66, with six seeds regressed. Without it: 63/66, with seeds 49, 55
+   and 57 refused, all three at HEAD too. Seed 57 got worse under T03's fixes (1 knot to 4).
+2. **A3 again.** REACH (20 ft, then 25 ft fitted to F1-F3): O, a convenience number. `_ALONG_MIN_FT` 30: UNRESEARCHED. The merge
+   principle is the GM's. The lane-knot rule is the lane law's (R 0081). The own-garden exemption is O, a DEVIATION recorded
+   on 0246.
+3. **A4 again.** The merge describes the world. The way it was built does not yet: the later passes act on the junctions it
+   makes and strand households.
+4. **Moving earlier for later?** No.
+5. **Tuning or changing?** REACH was moved twice. A third move is not taken. The merge leaves T03 (the rulings: route (a)).
+6. **The one-sentence test.** "The merge is right but the passes after it break the web" - the GM would ask why those passes
+   are not fixed. That is the carried task's first item.
+7. **The next step is a measurement**: seed 57 bisected (done). The join order in the last resort alone takes it to 2 knots.
+8. **Routes measured?** Yes: the cohort with and without the merge, and seed 57's bisection (`t03-d17-evidence.md`).
+9. **After a ruling.** The steps it names are the bisection, then land the four with the rest carried. Its condition (57 no
+   worse than HEAD) is put back to the arbiter with the measurement (`ask:t03-seed57-residue`).
 
 ### T03 Decisions
 

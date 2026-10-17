@@ -157,15 +157,25 @@ def fixtures_on_groves(M: Mapping[str, Any]) -> list[tuple[str, Mapping[str, Any
     recorded centered).
 
     Research: no fixture in a grove band - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: GUESS there - the windward stand is set back to leave a service strip for the wood shed and bath room; its drawn box, turned by its `rot`"""
-    bands = [g for g in M.get("groves") or () if all(k in g for k in ("x", "y", "w", "h"))]
-    out = []
-    for f in M.get("farm_fixtures") or ():
-        if not all(k in f for k in ("x", "y", "w", "h")):  # a fixture with no box (a tree) has no footprint to test
-            continue
-        th = math.radians(float(f.get("rot", 0.0)))
-        fw = abs(f["w"] * math.cos(th)) + abs(f["h"] * math.sin(th))
-        fh = abs(f["w"] * math.sin(th)) + abs(f["h"] * math.cos(th))
-        for g in bands:
-            if abs(f["x"] - g["x"]) < (fw + g["w"]) / 2 and abs(f["y"] - g["y"]) < (fh + g["h"]) / 2:
-                out.append((str(f.get("kind")), g))
-    return out
+    bands = grove_bands(M)
+    return [(str(f.get("kind")), g) for f in M.get("farm_fixtures") or () for g in bands if fixture_on_band(f, g)]
+
+
+def grove_bands(M: Mapping[str, Any]) -> list[Mapping[str, Any]]:
+    """The grove bands that record a box - what `fixture_on_band` reads."""
+    return [g for g in M.get("groves") or () if all(k in g for k in ("x", "y", "w", "h"))]
+
+
+def fixture_on_band(f: Mapping[str, Any], g: Mapping[str, Any]) -> bool:
+    """Does fixture `f`'s drawn box (its size turned by its `rot`) overlap band `g`'s box? THE ONE PREDICATE the check above and
+    the sty's placer (`hamletgen.homesteads.sties.sty_seat`) both ask (feature 385 T03, plan D18: the placer read the band in
+    the house's frame, snapped square under 10 degrees of turn, and cohort seed 45's two sties stood 0.5 and 2.7 ft into
+    bands the check reads as recorded). A fixture with no box (a tree) has no footprint to test.
+
+    Research: no fixture in a grove band - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: claimed at `fixtures_on_groves`"""
+    if not all(k in f for k in ("x", "y", "w", "h")):
+        return False
+    th = math.radians(float(f.get("rot", 0.0)))
+    fw = abs(f["w"] * math.cos(th)) + abs(f["h"] * math.sin(th))
+    fh = abs(f["w"] * math.sin(th)) + abs(f["h"] * math.cos(th))
+    return bool(abs(f["x"] - g["x"]) < (fw + g["w"]) / 2 and abs(f["y"] - g["y"]) < (fh + g["h"]) / 2)

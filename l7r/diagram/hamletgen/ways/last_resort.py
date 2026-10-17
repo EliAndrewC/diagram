@@ -22,8 +22,10 @@ from l7r.diagram.settlement.city.bridges import flooded_ground
 from . import law
 from .checks import unreached_houses
 from .corridors import is_tree
+from .fabric import house_hit
 from .forced import lazy_ground
 from .geom import memo_ground, worked_ground
+from .knots import settle_knots
 from .settle import (
     _crossing_fault,
     _fabric,
@@ -93,7 +95,7 @@ def lane_breaches(s: Any, every: bool = False) -> dict[int, list[str]]:
             # ...each asked only until one holds the lane, unless the rules are wanted by name (a refusal): the fabric probe
             # is the costly one, and the last resort's rounds need only to know the lane is held
             if (every or i not in bad) and broken():
-                add(rule, [i])
+                add(f"fabric: {foul_part(p, w, houses, yards, solid, fixtures, M)}" if every and rule == "fabric" else rule, [i])
     ground = memo_ground(s, "worked", worked_ground)
     add("connector_hairpins", (i for _c, i, _e in law.connector_hairpin_ends(lanes, blocked)))
     add("needle_joins", (i for i, _e, _k, _u, _v in law.needle_ends(lanes, blocked)))
@@ -106,6 +108,23 @@ def lane_breaches(s: Any, every: bool = False) -> dict[int, list[str]]:
         add("way_outs", (i for brook in law._brooks(M) for i in _ordinary(M) if law.crossing_points(_pts(lanes[i]), brook)))
     add("tree_faults", (i for i, _q in tree_faults(M)))
     return {i: rules for i, rules in bad.items() if not lanes[i].get("connector")}
+
+
+def foul_part(p: Any, w: float, houses: Any, yards: Any, solid: Any, fixtures: Any, M: Any) -> str:
+    """Which part of `fouled_segment` a fouling lane breaks, for a refusal (feature 385 T03, plan D16): seed 21's five lanes
+    were refused for `fabric` while none came within 2.9 ft of anything in the manifest - the fence gap, a farmhouse, a
+    building, a fixture or the overlap matrix (with the standing keys it names) each says where to look."""
+    if fouled_segment(p, w, houses, yards, solid) is not None:
+        if any(house_hit([a, b], w, houses) for a, b in zip(p, p[1:], strict=False)):
+            return "on a farmhouse"
+        if any(law.breaks_through([a, b], solid) for a, b in zip(p, p[1:], strict=False)):
+            return "through a building"
+        return "within the fence gap of another household's yard or bed"
+    if fixtures and law.over_a_fixture(p, w, fixtures) is not None:
+        return "over a fixture"
+    st = getattr(M, "standing", None)
+    hits = sorted({c[1] for k in range(len(p) - 1) for c in st.conflicts("lanes", {"pts": [list(p[k]), list(p[k + 1])], "w": w + 0.4})}) if st is not None else []
+    return f"the overlap matrix forbids it on {', '.join(hits)}" if hits else "the overlap matrix"
 
 
 def lanes_breaking(s: Any) -> set[int]:
@@ -140,7 +159,19 @@ def last_resort(s: Any) -> int:
             dropped += len(bad)
             settle_network(s)
             settle_husks(s)
-        for step in (settle_street_ends, settle_joins, settle_reach, settle_defer, settle_network, settle_fragments, prune_the_tree, settle_widths, settle_husks):
+        for step in (
+            settle_street_ends,
+            settle_joins,
+            settle_reach,
+            settle_joins,
+            settle_knots,
+            settle_defer,
+            settle_network,
+            settle_fragments,
+            prune_the_tree,
+            settle_widths,
+            settle_husks,
+        ):  # a way the reach draws is joined before the network rule (feature 385 T03, cohort seed 21; not in `settle.STEPS`: seed 57)
             step(s)
         carriers = ordinary_carriers(s.M)
         if not carriers and not lane_violators(s) and not unsettled(s.M, memo_ground(s, "worked", worked_ground)):
@@ -201,6 +232,7 @@ def refuse_unreached(M: Mapping[str, Any]) -> None:
     if far := unreached_houses(M):
         why.append(f"{len(far)} farmhouse(s) stand off the connected way network, at {[(x, y) for x, y, _d in far[:4]]}")
     if law.field_unreached(M):  # ...on a brook map, whatever was reserved: none is, since feature 320 (FR-004)
-        why.append("the field is reached by no way")
+        turned = (M.get("meta") or {}).get("field_refusals") or {}
+        why.append("the field is reached by no way" + (f" (its runs turned down by {', '.join(f'{k} x{n}' for k, n in sorted(turned.items()))})" if turned else ""))
     if why:
         raise WebRefused("the settled web leaves unreached what the seating reserved a way for: " + "; ".join(why))
