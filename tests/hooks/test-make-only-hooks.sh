@@ -90,6 +90,11 @@ check "sed -i on a hook script"               blocked "sed -i 's/foo/bar/' scrip
 check "redirect over settings.json"           blocked "cat > .claude/settings.json"
 check "append to a hook script"               blocked "echo x >> scripts/hooks/no-poll-hooks.sh"
 check "the escape, with a reason"             ok      "sed -i 's/a/b/' scripts/hooks/gate-hooks.sh  # GUARD_EDIT_OK: it fired on correct work"
+# GUARD_EDIT_OK: the round arbiter's tooling fix on hour:383@4 - the marker in the written text counts, as on the Edit route
+check "an append marked as a trailing comment"  ok      "printf 'x' >> Makefile  # GUARD_EDIT_OK: a measurement probe line"
+check "an append marked in the text it writes"  ok      "printf '# GUARD_EDIT_OK: a measurement probe line' >> Makefile"
+check "...a bare marker with no reason in it"   blocked "printf '# GUARD_EDIT_OK' >> Makefile"
+check "...and the bare append"                  blocked "printf 'x' >> Makefile"
 check "READING a guard file is not writing"   ok      "grep -n done Makefile"
 # GUARD_EDIT_OK: feature 375 - a hook's SUITE is not a guard (guard-file-hooks.sh exempts it on the Edit route)
 check "a suite written by python is not a guard" ok   "python3 - <<PY
