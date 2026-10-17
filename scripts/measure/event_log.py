@@ -188,6 +188,10 @@ def line(payload: Mapping[str, Any], t: str | None = None) -> dict[str, Any]:
                 out["aid"] = resp["agentId"]
         if isinstance(payload.get("duration_ms"), (int, float)):
             out["ms"] = payload["duration_ms"]
+    elif ev == "UserPromptSubmit" and "prompt" in payload:
+        # ...THE GM'S, OR A NOTIFICATION (feature 385, the round arbiter's fix on hour:385-approach-checklist@4): a background
+        # task's notification arrives as a prompt too, so the hourly clock and the report could not tell the GM's waits apart
+        out["gm"] = _typed_prompt(payload.get("prompt"))
     elif ev in ("SubagentStart", "SubagentStop"):
         out.update(agent=payload.get("agent_type") or "", aid=payload.get("agent_id") or "")
         out["cat"] = agent_category(str(out["agent"]))
@@ -314,7 +318,7 @@ def from_transcript(rows: Iterator[Mapping[str, Any]] | list[Mapping[str, Any]])
                                 out.append(line({"hook_event_name": "SubagentStart", "session_id": sid,
                                                  "agent_type": atype, "agent_id": resp["agentId"]}, t))
             if _typed_prompt(content):
-                out.append(line({"hook_event_name": "UserPromptSubmit", "session_id": sid}, t))
+                out.append({**line({"hook_event_name": "UserPromptSubmit", "session_id": sid}, t), "gm": True})
         elif kind == "queue-operation" and d.get("operation") == "enqueue":
             content = str(d.get("content") or "")
             m = _NOTIFICATION.search(content)
