@@ -10,6 +10,8 @@
 
 **Amendment 1 approved**: the GM, 2026-10-17, "Yes, please append the spec to include those four items."
 
+**Amendment 2 approved**: the GM, 2026-10-17, "yes please make the blind approach T03's first step."
+
 **Affects**: tooling, review process, hamlet, research record
 
 **Input**: `request.md` - the GM, 2026-10-17, verbatim.
@@ -134,6 +136,16 @@ decision points, and the record checks' own counts in `dev/review-ledger.md`):
 - **FR-011 (the cost measured)**: T02 records what each check cost per changed line (dispatches, tokens, wall time), so the next
   task shows whether FR-008 to FR-010 paid.
 
+### Amendment 2 - T03 opens with a blind Approach (the GM, 2026-10-17)
+
+- **FR-012 (the blind Approach)**: T03's first step, before the session writes anything of T03's own, is its Approach block
+  (checklist part A) written by a FRESH agent that has not seen this session's conversation: it is given T03's task text, the
+  checklist, and the code and the record to read, and nothing of what the session concluded about T03's rules. The session's
+  own conclusions were sealed before amendment 2, outside the repository, where that agent cannot read them; once the blind
+  block is written they are compared, rule by rule, in T03's retro row: which questions the checklist raised without hindsight,
+  which it missed, and the checklist change a miss calls for. The session then writes T03's plan section from the blind block
+  and its own, saying where they differ.
+
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
@@ -148,6 +160,8 @@ decision points, and the record checks' own counts in `dev/review-ledger.md`):
 - **SC-004** (FR-003, FR-004): the refusals of FR-003 and FR-004 each have a test that is red without them.
 - **SC-005** (FR-008, FR-009, FR-010, FR-011): on the next task, the checks owed per changed line - dispatches, tokens and wall time - are below
   T01's, measured by FR-011's record; or the report says why not.
+- **SC-006** (FR-012): T03's retro row compares the blind Approach with the sealed conclusions rule by rule, and names the checklist
+  change each miss calls for, or that there was none.
 
 ## Decisions Recorded
 

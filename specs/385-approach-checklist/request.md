@@ -118,3 +118,16 @@ The GM, verbatim:
 > Also, when it comes to fixing those four seeds, Are we sure that household paths don't cut through neighbors' yards? I thought that our research findings were that they did.
 >
 > Similarly, I didn't think that there was a rule about village lanes needing to reach the fields. Is that actually based on our research? I mean, like, I'm almost reluctant to ask this question, or ask these questions, because these are exactly the kinds of questions that our checklist-based approach is supposed to uncover. So to some extent, it might be that the thing to do when we reach this spec is to, like, remove that from the spec and then have a, like, new session try to implement that as a test, or, uh, I mean, I don't even mean, like, me starting a new session. I mean, if you're able to create a sub-session that doesn't have access to the fact that we have already evaluated this as, like, not being necessary or something, then we would be able to see whether the actual fix is to say that there isn't a problem, because the thing that we're doing is actually fine, because it's exactly the kind of thing that our checklists Uh, like the new checklists are supposed to help us determine rather than just wasting a lot of time. What do you think about that?
+
+## Amendment 2 (2026-10-17): the blind Approach
+
+The GM, in amendment 1's message (above), on T03's rules: *"if you're able to create a sub-session that doesn't have access to the fact
+that we have already evaluated this ... then we would be able to see whether the actual fix is to say that there isn't a problem"*.
+The session proposed, verbatim:
+
+> T03 starts with an agent that sees only the task, the checklist, and the code and record, and writes T03's Approach block. My answers are sealed in a scratch file outside the repository, which it can't read. If it questions these two rules on its own, the checklist works without hindsight; if not, we learn which question to sharpen. The cost is one agent and no implementation.
+>
+
+The GM, verbatim:
+
+> yes please make the blind approach T03's first step. And no, I don't think I want the two-hour threshold, like, on record. Because, to be honest, I haven't even looked at what we would be doing. So I don't know for sure that a two-hour threshold is bad for it, although my instinct is that for the things that we are doing, it is bad. But I don't think that that's a matter of a specific threshold. I think that's more about just, you know, doing a review after the fact and seeing how it goes, and then, you know, doing measurements until we figure out how long stuff takes in practice when we don't seem to be going in circles.
