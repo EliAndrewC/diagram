@@ -349,3 +349,83 @@ with its tool in the same change.
 | 60 | House style stops at a quotation: a quoted passage keeps its source's own dashes and spellings (and the GM's own writing). | ROOT (House style); PS:10-12; RC (A reference QUOTES) | `scripts/hooks/house-style-hooks.sh` + `scripts/hooks/lib/hm_house.py` (exempts 「」, quotes, GM blocks), `scripts/gates/check-house-style-delta.py`. | yes |
 | 61 | A research page is worked in two fresh sessions (write, then check-and-apply from briefs via `make page-session`); a report's findings are applied in one turn. | ROOT; RC (Checking) | out of FR-005's scope - a session-procedure rule | no |
 | 62 | Never push or commit against `/host-l7r-repo`; research session work stays in its clone. | ROOT (intro) ; PS:58-61 | `scripts/hooks/repo-safety-hooks.sh` (git writes to `/host-l7r-repo` refused; escape `HOST_GIT_OK`). | yes |
+
+## The research rules of the root CLAUDE.md, in full
+
+(moved VERBATIM from the root CLAUDE.md on 2026-10-17, feature 383 amendment 6, plan D44: the root keeps one line per rule and an index)
+
+Constitution XII. The full record with the GM's rulings is `docs/research-doctrine.md`; the
+operative form of the citation rules (the footnote shape, the notes and the works cited) is `research/CLAUDE.md`, which
+auto-loads when a session edits the record; the archive and the download list are `research/downloads.md`.
+
+- A question about how a place was built, farmed, planted or lived in is a RESEARCH question. Run
+  the search pass (the `research-pass` agent runs one) before deciding, before asking the GM, and before writing "guess". The GM is asked
+  only when the record is silent or contradictory, and the ask says what was searched and found.
+- The search pass looks in the ARCHIVE before the web (feature 309): `make archive-inbox` first (the GM's downloads in
+  `academic-sources/` archived, then removed - what is left there is unprocessed), then `make archive-find` for each
+  source. Every cited page is archived in the PRIVATE repository `EliAndrewC/diagram-research`; never
+  link or copy it anywhere public.
+- Geography resolves China first, Japan as tiebreaker, and the GM's canon overrides both (`docs/research-doctrine.md`).
+- Where the research supports more than one form, it becomes a knob with per-settlement variance
+  rolled from the map's seed, never a choice. A degree along a continuum is calibrated liberty; a
+  choice between distinct forms is a knob.
+- **Room before packing** (GM 2026-10-12): when features will not fit, the FIRST route is more room - a larger homestead,
+  wider spacing - while the map stays within the research, never hours of packing (*"the far easier thing is to make the
+  homesteads slightly bigger. Things were pretty spread out in premodern times!"*). A number set only to implement against
+  (an UNRESEARCHED or convenience size, reach or band) is a knob to move, never a target to defend; the round arbiter asks this
+  of every ruling.
+- A `research record` feature closes only with its findings checked against the code (feature 378, GM 2026-10-10): each
+  question whose findings it changed is cited (its findings page, not only its drawing page) by a `Research:` claim of
+  the code that decides it, checked by
+  `impl-drift`, or, where no code decides it, recorded as implemented nowhere with what was searched (`implementation-check.md`). A DRIFTED claim is a result shown by `make
+  claims-report`; the code is fixed only if the feature's spec asks. `make impl-check F=<n>` says what is owed, and the
+  closing check refuses until it reports nothing.
+- Every rendering decision is recorded in one of four classes - historically accurate, deliberate
+  deviation, map drawing convention, guess - in `research/` (the finding), the operative doc (the
+  rule), the point of change (the pointer) and the feature's spec under "Decisions Recorded". An
+  unlabeled guess is the one failure.
+- Record the why of every research-driven rule and magic number beside the rule. Record a decision to
+  ACCEPT a limitation with what it costs, the alternatives that were priced, and who chose.
+- A citation is a footnote at the assertion quoting the passage verbatim from a public page the
+  reader can open, in English translation marked as one. A source that cannot be read is not cited;
+  the claim may stand with an absence note saying what was searched. The GM's own campaign notes are
+  canon, not evidence, and need no citation. A source only the GM can fetch is appended to the canonical
+  download list `research/to-download.md` with `make download-add FILE=<draft>` (feature 313); the GM's
+  `academic-sources/TO-DOWNLOAD.md` is their marked copy, written only by `make downloads-sync`.
+- The record is HTML under `research/`, each heading the question a reader would ask from the map,
+  each entry written for a casual reader: glossary tooltips for terms, session notes in HTML
+  comments, nothing about what the entry used to say. A modal's explanation is written from a research
+  section its `Entry:` names. It is written PER ENTRY and BUILT into the site a reader opens
+  (features 258, 301, 303): a question is one stem in one flat directory, `research/questions/NNNN-<heading id>.html`
+  with how our maps draw it beside it as `.drawing.html`, each page's footnotes in the `.notes.html` beside it; a
+  source is `research/sources/NNNN-<key>.html`, tagged (period of its evidence, region, kind) from `research/source-tags.json`
+  and grouped by `research/source-sections.json` (feature 305). Each question carries TAGS (subjects - the first primary - settings,
+  one level) from `research/tags.json`, and `research/contents.json` declares the sections, their order and the tag
+  rule each takes: a question lives in the first section that takes it, ordered by level then number, so regrouping
+  is an edit to `contents.json` alone. `make record` builds `research/site/` - a page per question with its notes
+  numbered from 1 at its foot, a page per section of each half and per tag, and the whole record on one page
+  (`all.html`) - never committed, built on main by render-sync. A POINTER to the research - a code comment, a doc, a
+  spec, an `Entry:` - names the FILE (`research/questions/NNNN-<heading id>.html`, or
+  `research/contents.json#<section>` for a whole section), never a built page; `scripts/gates/check-research-pointers.py`
+  holds it at the gate and the push, and `make fragment-move FROM= TO=` renames a question with every pointer to it.
+  Find a question with a glob on its heading id or a grep over `research/questions/` - there is no index - and never
+  edit a built page; footnote numbers are allocated at build and are typed nowhere.
+- Reading and checking are dispatched to agents, in the background: `source-reader` (read what you
+  cite), `quote-check`, `record-format`, `source-applicability` (judged BEFORE a source's numbers
+  reach a map or a rule), `entry-drift`. What is mechanical runs FIRST, as a script, and its output goes
+  in the agent's prompt: `make source-pages OUT=<dir> URL=<u>` before `source-reader` (the page itself, saved
+  to grep, where a fetch gives an extract), `make quote-verbatim Q=<NNNN> [NOTES=<ids>]` before `quote-check` (is the
+  passage on the page, character for character), `make record-prepass Q=<NNNN>` (or `IN=<section>`) before
+  `record-format`, `make size-table PLAN=<svg>` before `size-audit`. `make source-pages` also prints each page's
+  earlier reads from the sources-consulted ledger and saves it once in the host's page cache; record every page's
+  outcome with `make source-outcome` (feature 288).
+- A record check reads a BUNDLE: `make check-bundle Q=<NNNN>` (or `KEY=<k>`) copies what it
+  needs, prepass output included, OUT of the repository, and the dispatch names its `MANIFEST.md` - an
+  agent reading a file here is handed every `CLAUDE.md` above it, ~28,000 tokens (feature 250). The agent's
+  reply is compact: counts first, then only what to act on. A research page is worked in two fresh sessions, write then
+  check-and-apply, from briefs (`make page-session BRIEF="<1> <2>"`); `make notes` prints only the notes you name.
+  A write session takes at most four questions and ten new registry keys (feature 274: its cost grows with the square
+  of its length); the runner refuses a larger brief unless it declares `<!-- page-load: kind=check|assertions|split|handover -->`,
+  and `make reserve`'s eleventh key sends the rest to a continuation brief. Coordination files are read by line
+  (`make lines`) and written without reading (`make append`); a page session loads `scripts/container/page-session-rules.md`
+  in place of this file.

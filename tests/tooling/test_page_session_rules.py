@@ -18,6 +18,7 @@ REPO = pathlib.Path(__file__).resolve().parents[2]
 SLIM = script("page-session-rules.md")
 
 # opening words of the CLAUDE.md bullet -> the phrase in the slim file that carries it (or NOT: <why not>)
+# the research bullets were cut to one line each on 2026-10-17 (feature 383 amendment 6, plan D44); the keys follow them
 CARRIED = {
     "House style": {
         "Hyphens only": "Hyphens only",
@@ -31,15 +32,14 @@ CARRIED = {
     },
     "Research": {
         "A question about how a place was built": "Search before deciding",
-        "The search pass looks in the ARCHIVE before the web": "make archive-find URL=<u>",
+        "The ARCHIVE before the web": "make archive-find URL=<u>",
         "Geography resolves China first": "Geography resolves China first",
-        "Where the research supports more than one form": "KNOB rolled per settlement",
-        "Every rendering decision is recorded": "four classes",
+        "Several attested forms are a KNOB": "KNOB rolled per settlement",
+        "Every rendering decision is labeled": "four classes",
         "Record the why of every research-driven rule": "Record the why of every research-driven rule",
-        "A citation is a footnote at the assertion": "quoting the passage verbatim",
-        "The record is HTML under": "Never edit a built page",
-        "Reading and checking are dispatched to agents": "run the mechanical pre-pass",
-        "A record check reads a BUNDLE": "Checks read BUNDLES",
+        "A citation quotes the passage verbatim": "quoting the passage verbatim",
+        "The record is HTML fragments": "Never edit a built page",
+        "Reading and checking go to agents": "run the mechanical pre-pass",  # the BUNDLE rule joined this bullet (slim: "Checks read BUNDLES")
         "A `research record` feature closes only": "NOT: feature 378's implementation check is owed by the session that closes the feature, never by a page session",
         "**Room before packing**": "NOT: a rule for the engine's placement work (the GM, 2026-10-12), which a page session never does",
     },

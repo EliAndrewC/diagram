@@ -101,6 +101,6 @@ either), and the files that must quote the rule to state it.
 If this fired on a legitimate quotation of the GM, that is a bug in this hook worth fixing rather
 than working around.
 
-(scripts/hooks/house-style-hooks.sh; CLAUDE.md "Generation Behavior")
+(scripts/hooks/house-style-hooks.sh; CLAUDE.md "House style")
 TAIL
 exit 2
