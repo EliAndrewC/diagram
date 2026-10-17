@@ -209,7 +209,12 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
   the subagent specification"*) - a rule a check needs is written in its contract, and a new agent file carries the field;
   an ad-hoc agent keeps all three, and so does `spec-fidelity` alone, which the GM approved on the session's
   measured recommendation, 2026-09-20 (the tier test
-  names the exception and enforces the field on every other agent file). The review agents are pre-authorized through
+  names the exception and enforces the field on every other agent file). **What every dispatch of a check shares lives in its
+  agent file** (feature 383 amendment 6, the GM 2026-10-17: *"any context that subagents share in common is put either into
+  their system prompt, ideally, or ... at the very beginning of the prompt"*): a prompt is cached as a PREFIX, so a bundle or
+  a prompt carries only its unit, after anything shared; `agent-prefix-hooks.sh` refuses a large block shared after a part
+  that differs, `tests/tooling/test_bundle_shared_text.py` holds the bundles to it, `make agent-sync` writes a shared source
+  into its agents' files, and `make subagent-cache` measures what each type writes fresh. The review agents are pre-authorized through
   `scripts/container/append-system-prompt.md`; if one is skipped, check `type claude` first.
 
 ## Verification and iteration
@@ -296,6 +301,7 @@ doctrine for writing a guard: `docs/guards.md`.
 | `wakeup-hooks.sh` | a `ScheduleWakeup` outside a live `/loop` is refused (background work wakes a session by itself; a reminder the GM asks for is `CronCreate`); a turn cannot end with a stale wakeup pending, and the block names the `CronDelete` | none - cancel the wakeup |
 | `review-round-hooks.sh` | a later `spec-fidelity` round is handed the diff and routed to `spec-fidelity-verify`; refused first when the feature still carries the OLD value of something the change moved (`make stale-terms`) | `REVIEW_ROUND_OK`, `STALE_TERMS_OK` |
 | `agent-model-hooks.sh` | an ad-hoc agent dispatch (no file under `.claude/agents/`) that names no `model` is refused, with the rule for choosing one | none - name the model |
+| `agent-prefix-hooks.sh` | an Agent prompt sharing 2,000+ characters with an earlier dispatch of its type and model, after a part that differs, is refused: that block is written to the prompt cache fresh every time - put it first, or in the agent file (feature 383 amendment 6) | `AGENT_PREFIX_OK` |
 | `check-bundle-hooks.sh` | a record check (`quote-check`, `record-format`, `source-applicability`, `source-reader`, `entry-drift`, `intro-check`, ...) dispatched into the repository instead of at a bundle is refused, with the `make check-bundle` command; and one its bundle's MANIFEST does not owe (feature 311: a check runs only where the words it reads changed, `make record-owed`) ; feature 375: none before the active task's decisions carry a verdict (`make decide`), none re-sent into a round still running, a record check's third round on a subject to the round arbiter | `CHECK_BUNDLE_OK`, `CHECK_NOT_OWED_OK`, `DECIDE_OK`, `FREEZE_OK`, `ARBITER_OK` |
 | `canon-read-hooks.sh` | a direct read of the GM's setting canon (grep, sed, cat, Read, Grep on `setting/`) is refused with `make canon TERMS="a\|b\|c"`, which answers every term at once; a second `make canon` within three tool calls is refused unless it folds the earlier terms | `CANON_OK` |
 | `new-file-hooks.sh` | a new glossary file or registry entry written without a reserved prefix is refused with `make reserve KIND=glossary\|registry KEY=<k>`, which allocates under a host-wide lock so parallel queues never collide | `RESERVE_OK` |

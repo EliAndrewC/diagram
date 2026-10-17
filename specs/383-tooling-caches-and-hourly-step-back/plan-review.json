@@ -235,7 +235,7 @@
    "declared": "spec-fidelity"
   },
   "## Amendment 6 (FR-031 to FR-036)": {
-   "sha256": "49a95257772963f8722508b37025df4aa8cbcacde752cc72d73f6066b85fed5a",
+   "sha256": "530116a30c91060669137dfa1497ffb8592ae8739b81f8ab8c81aa72c0ada7c8",
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
@@ -1167,6 +1167,51 @@
      "summary": "the audit renamed make subagent-cache (scripts/measure/subagent_cache.py); CLAUDE.md rule and guard; doc section",
      "class": "within",
      "why": "Rename avoids collision with the existing cache-audit; FR-036 already names make subagent-cache. Contents unchanged from round 2."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Amendment 6 (FR-031 to FR-036)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D34",
+     "summary": "spec-fidelity without the instruction files, proven first by 3+3 seeded runs as a subagent; scoring rule fixed; a second loss keeps the exception and goes to the GM",
+     "class": "within",
+     "why": "Unchanged since round 3 CLEAR. Implements FR-031 under the removal condition SC-023 itself states (still finds what it found with them); the second-loss branch is that accepted condition, not a new carve-out."
+    },
+    {
+     "id": "D35",
+     "summary": "modal guidelines generated into the three modal agents' files by make agent-sync, held by a test; bundle stops copying guidelines.md",
+     "class": "within",
+     "why": "Unchanged. FR-032 names exactly this first case; the sync test enforces it."
+    },
+    {
+     "id": "D36",
+     "summary": "claims-triage and modal-triage become defined agents (opus/medium, omitClaudeMd), manifests keep only the unit",
+     "class": "within",
+     "why": "Unchanged. FR-033 verbatim; tier follows the project's judgment-on-Opus rule."
+    },
+    {
+     "id": "D37",
+     "summary": "dispatch guard per type+model over the last 30 prompts; EVERY run of identical lines after the common prefix (cut back to a line start) is judged, not only the longest; a run of 2,000+ chars after any differing text is refused; a block starting the new prompt passes; AGENT_PREFIX_OK escape",
+     "class": "within",
+     "why": "The round-4 change widens the check to every shared run, closing the 'shared B, unique, shared C' hole where a refusable block passed because a longer cacheable one existed. That is enforcement of FR-034 and the GM's request (shared context at the start or in the system prompt), not new behavior beyond it: the refusal still fires only on a shared block after differing text, same types, same escape. Cutting the prefix back to a line start is mechanism. The ~2.5k figure now carries a one-shot label (observed 2026-10-17, R13 table); 10 KB/64 KB/2,000/200 are design constants and test sizes, not measurements."
+    },
+    {
+     "id": "D38",
+     "summary": "shared_text/contract_shared and a bundle test failing at 2,000 shared chars, unit-derived sections excluded; triage headers pinned under 400",
+     "class": "within",
+     "why": "Unchanged. FR-035; excluding unit-derived inputs measures repetition of the check, which is what FR-032/035 target."
+    },
+    {
+     "id": "D39",
+     "summary": "make subagent-cache audit, CLAUDE.md rule + guard, spec-fidelity sentence removed once D34 passes, docs section",
+     "class": "within",
+     "why": "Unchanged. FR-036 and the GM's 'project guidelines that enforce this'."
     }
    ]
   }

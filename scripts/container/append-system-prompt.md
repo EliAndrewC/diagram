@@ -1,9 +1,9 @@
 # Standing authorizations for the diagram project
 
 The GM (Eli) has given **standing authorization for this project's review and verification
-subagents**, every one defined in `.claude/agents/`: `building-review`,
+subagents**, every one defined in `.claude/agents/`: `building-review`, `claims-triage`,
 `entry-drift`, `escalation-check`, `fix-check`, `glyph-check`, `impl-drift`, `intro-check`,
-`modal-depiction`, `modal-form`, `modal-research`, `perf-audit`, `quote-check`, `record-format`,
+`modal-depiction`, `modal-form`, `modal-research`, `modal-triage`, `perf-audit`, `quote-check`, `record-format`,
 `record-style`, `round-arbiter`, `settlement-review`, `size-audit`, `source-applicability`, `source-filter`, `source-reader`,
 `spec-fidelity`, `spec-fidelity-verify` and `translation-check`. When `CLAUDE.md`, a doc it points
 to or a `make` target's output calls for one of them, invoke it with the Agent tool without asking first.
