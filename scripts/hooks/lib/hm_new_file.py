@@ -85,8 +85,8 @@ def verdict(payload: dict) -> str:
 
 
 # GUARD_EDIT_OK: feature 383 amendment 5 - a variable the command itself assigns is resolved before the path is judged: a
-# fixture record built in a temporary directory (`D=$(mktemp -d); ... > "$D/research/questions/0041-a.html"`) was refused
-# as a new question of this repository, twice in one session (2026-10-17)
+# fixture record built in a temporary directory (`D=$(mktemp -d)`, then a question page written under `$D`) was refused as
+# a new question of this repository, twice in one session (2026-10-17)
 ASSIGN = re.compile(r"""(?:^|[\s;&|(])([A-Za-z_]\w*)=(?:"([^"$]*)"|'([^']*)'|(\$\(mktemp\b[^)]*\))|([^\s;&|"'$()]+))""")
 
 
