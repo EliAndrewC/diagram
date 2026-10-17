@@ -355,3 +355,17 @@ back, load 3-5):
   reuse decision 1.2 s more; the rest is the tests that read the whole repository, which re-run whenever main or the clone
   moved since the clone's last recording (right after a recording, a fresh worktree at the same commit reuses all but the two
   files that read machine state).
+
+**A landing, after amendment 4** (SC-020; FR-017's log; m:land-tooling-landing-a4, observed 2026-10-17 15:59, load 4.26): prepare
+0.19, worktree 1.48, patch 0.65, guard-suites 3.09 beside tooling-tests 14.94 (checks 14.98), push 9.98 - 27.28 s, against
+30.04 s after amendment 3 (load 4.06; m:land-tooling-landing-a3). An earlier landing the same hour, at load 6.3, was 27.97 s
+(tooling-tests 15.41). The tooling step went 18.6 -> 15 s: the whole-repository test that set its floor now runs as two.
+
+What the suites' splits do not change: when many suites run together the machine is the limit. In the clone's own `make
+hooks-test` before that landing, 13 suites re-ran at once and sync-with-main took 71.6 s at 2 parts (observed 2026-10-17, method:
+the run's per-suite line, load about 6), where it is 18 s alone - the parts cap shares the cores, it cannot add them.
+
+**The arbiter's tooling fix on the hour's step-back** (hour:383@3): `make parts-sweep` runs each split suite at 1, 2, 3 and 8
+parts and reports any count whose summary differs (`tests/hooks/parts_sweep.sh`, its test `tests/tooling/test_parts_sweep.py`,
+which plants a case-order dependency and sees it found). Run on the five split suites (observed 2026-10-17, method: `make
+parts-sweep`): every one the same at every count, 773 s in all - a command to run when a suite's cases change, never the gate.
