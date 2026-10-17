@@ -368,15 +368,16 @@ observed 2026-10-17, method: `make quick` on an unchanged tree, load 3) is measu
 the cut follows what it finds - the worker start, a conftest's imports, or testmon's own database read. The tests that run and
 their results are compared with the cut off and on (SC-016).
 
-**D26 - The always-run files traced (FR-021).** A Python audit hook cannot see what bash, make, node or resvg read, but `strace
--f -e trace=%file,process` can (installed in the container). A tooling test file whose kept pass is opaque is TRACED: the
-plugin's `trace` mode runs those files alone under strace, marks each test file's start in the trace (an open of a marker
-path), attributes every process to the file running when it was forked, and keeps every path under the repository the file
-opened, stat-ed or listed - by content, as any read - and every program it ran. A traced file is then reused like any other.
-A trace is taken again only when the file's traced inputs changed, by `make test-file` in record mode after its run, so a
-landing reuses it. strace's overhead is measured on the 18 files; a file whose program writes what it later reads, or whose
-reads include a path the trace cannot key (a socket, a device), stays always-run and is recorded in research R10 with its
-seconds.
+**D26 - The always-run files made known where the repository already knows their programs' reads (FR-021).** A system
+trace cannot be taken here: `strace` is refused in the container (no ptrace capability, with or without sudo; observed
+2026-10-17, method: `strace -f -e trace=openat true`). So a program a test starts is made known by the rule the repository
+already trusts for it: a guard or gate script under `scripts/` (bash) reads what `tests/hooks/hookdeps.py --deps` derives for it
+- the very set `make hooks-test` keys that script's suite by, transitively through what it sources and calls. A child that is
+such a script (run directly, or as `bash <script>`) is recorded as reading that set, each file by content, and a file whose
+every unknown child is such a script is reused like any other. Every other program - `make` (recipes in the repository),
+`node`, `resvg`, `ruff`, `pdftotext`, `grep`, a stand-in `claude` - stays always-run, recorded in research R10 with its seconds
+and the reason. Recording the script's argument list keeps a guard run against an outside fixture (`cwd` a temporary
+repository) known the same way.
 
 **D27 - The guard suites by what their cases read (FR-023).** `scripts/measure/hooks_landing_runs.py` replays the recorded
 landings: for each, from the landing commit and the clone's last green `hooks-test` stamps, which suites ran and which

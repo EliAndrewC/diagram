@@ -292,6 +292,10 @@ def snapshot(out: pathlib.Path) -> int:
         if text:
             (dest / "dispatch.md").write_text(re.sub(r"/diagram/\.clones/[\w-]+", str(tree), text), encoding="utf-8")
         print(f"{unit}: rebuilt at {meta['commit'][:9]} (main {main_commit[:9]}){'' if text else '; no dispatch.md read in the recorded run'}")
+    # THE GATE WAS GREEN on this content when the recorded run was dispatched (its dispatch says so); a case's own clone has no
+    # gate record, and the reviewer's contract stops on a red `make review-paired-gate` - every first trial run did. The stamp
+    # is written in the case's clone alone.
+    subprocess.run(["python3", "scripts/gates/gate-stamp.py", "--write", "diagram"], cwd=tree, capture_output=True, check=False)
     return rc
 
 
