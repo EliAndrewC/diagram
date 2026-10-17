@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-17
 
-**Status**: Filed - checklist v1 drafted (`checklist.md`), the audit of the last two weeks running; no task started
+**Status**: Filed - checklist v1 drafted (`checklist.md`) and refined by the audit (`audit.md`, 12 pitfalls); no task started
 
 **Approved**: the GM, 2026-10-17, "the shape that you have proposed looks right. So please file it, draft checklist version 1, and start the cheap audit."
 
