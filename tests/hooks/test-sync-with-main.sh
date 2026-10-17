@@ -159,7 +159,7 @@ expect_out "could not decide the route"
 [ "$(git -C "$D/github.git" rev-parse main)" != "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  the seam bypassed the gated route"; FAIL=$((FAIL+1)); }
 }
 
-case_11() {  # 66 s measured 2026-10-11
+case_11() {  # 11 s measured 2026-10-17 (66 s on 2026-10-11 before the split)
 echo "7d. A FEATURE IN PROGRESS LANDS NOTHING (feature 133): open tasks refuse both routes; the spec directory alone is the one exception"
 D=$(topology fp)
 ( cd "$D/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [ ] T01 open\n' > specs/140-x/tasks.md && printf -- '**Status**: APPROVED by `spec-fidelity` - round 1 verdict FAITHFUL\n' > specs/140-x/spec.md && echo docs > note.md && git add -A && git commit -qm "feature plus docs" )
@@ -187,6 +187,9 @@ OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: 
 ( cd "$D/main/.clones/c" && echo 'def a(): return 9' > pool/x/a.py && printf -- '- [x] T01 done\n- [ ] T02 the GM accepts\n' > specs/140-x/tasks.md && printf '# report\n' > specs/140-x/report.md && git add -A && git commit -qm engine ); stamp_hooks "$D"
 OUT=$(CI_ROUTE=GATED CI_MERGE="echo SKIP-VERIFIED > $D/main/.clones/c/.git/ci-verdict" syncmain "$D" push); check "IT FIRES on the GATED route too, before ci-merge is even consulted" 1 $?
 expect_out "IN PROGRESS"
+}
+
+case_11b() {  # split from case_11 (feature 383 amendment 3, plan D27): its 17 pushes in a row were the suite's long pole
 # feature 330 (FR-002): ONE state rule with `make speckit-todo` - a feature its status line closes is not in progress,
 # though a box is unticked; the same open box under a status that does not close it is still refused
 D=$(topology fr)
@@ -205,8 +208,12 @@ expect_out "IN PROGRESS"
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: indented open tasks -> refused" 1 $?
 ( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n      - [ ] research pass\n' > specs/140-x/tasks.md && printf '# report\n' > specs/140-x/report.md && echo m4 > note.md && git add -A && git commit -qm research-box )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: a ticked task with an open indented research box -> refused" 1 $?
+}
+
+case_11c() {  # split from case_11 (plan D27); its first commit writes every file the checks read, so a fresh topology serves
+D=$(topology ft)
 # feature 375 plan D18: a `[lands-open]` box does not hold the landing; an ordinary open box beside it still does
-( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n- [ ] T99 later batches [lands-open]\n' > specs/140-x/tasks.md && printf '# report\n' > specs/140-x/report.md \
+( cd "$D/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [x] T01 done\n- [ ] T99 later batches [lands-open]\n' > specs/140-x/tasks.md && printf '# report\n' > specs/140-x/report.md \
   && printf -- '# Feature Specification: x\n\n**Status**: In progress - batch 2 next\n\n**Owed at**: now\n\n## Review history\n- spec-fidelity round 1: FAITHFUL\n' > specs/140-x/spec.md \
   && printf '# plan\n\n**Lands open**: T99\n' > specs/140-x/plan.md \
   && printf '{"plan_sha256": "%s", "decisions": [], "verdict": "CLEAR"}\n' "$(sha256sum specs/140-x/plan.md | cut -d' ' -f1)" > specs/140-x/plan-review.json \
@@ -511,9 +518,11 @@ OUT=$( cd "$D/main/.clones/c-tooling" && CI_ROUTE=DIRECT CI_MERGE="false" CLONE_
 # longest first onto the lightest part (the times are the measured ones beside each case; a new case without one counts
 # 10 s), each part a subshell with its own $T, HOME and guard log. Every check still runs and is counted; a part that ends
 # before a case reports fails the suite and names the case. SYNC_PARTS=1 runs them one after another, as before.
-CASES=(case_01 case_02 case_03 case_04 case_05 case_06 case_07 case_08 case_09 case_10 case_11 case_12 case_13 case_14 case_15 case_16 case_17 case_18 case_19 case_20 case_21 case_22 case_23 case_24 case_25 case_26)
-declare -A WEIGHT=([case_01]=1 [case_02]=1 [case_03]=1 [case_04]=1 [case_05]=4 [case_06]=7 [case_07]=7 [case_08]=6 [case_09]=11 [case_10]=8 [case_11]=66 [case_12]=1 [case_13]=1 [case_14]=1 [case_15]=9 [case_16]=2 [case_17]=12 [case_18]=4 [case_19]=10 [case_20]=4 [case_21]=10 [case_22]=11 [case_23]=2 [case_24]=9 [case_25]=8 [case_26]=4)
-SYNC_PARTS=${SYNC_PARTS:-4}
+CASES=(case_01 case_02 case_03 case_04 case_05 case_06 case_07 case_08 case_09 case_10 case_11 case_11b case_11c case_12 case_13 case_14 case_15 case_16 case_17 case_18 case_19 case_20 case_21 case_22 case_23 case_24 case_25 case_26)
+declare -A WEIGHT=([case_01]=1 [case_02]=1 [case_03]=1 [case_04]=1 [case_05]=3 [case_06]=5 [case_07]=4 [case_08]=5 [case_09]=6 [case_10]=4 [case_11]=15 [case_11b]=7 [case_11c]=7 [case_12]=1 [case_13]=2 [case_14]=1 [case_15]=7 [case_16]=3 [case_17]=12 [case_18]=3 [case_19]=6 [case_20]=3 [case_21]=7 [case_22]=6 [case_23]=2 [case_24]=4 [case_25]=5 [case_26]=3)  # seconds, each case alone, measured 2026-10-17 (feature 383 amendment 3)
+# feature 383 amendment 3 (plan D27): SYNC_CASES="case_11 case_17" runs only those cases - to time one case where it lives
+[ -n "${SYNC_CASES:-}" ] && read -r -a CASES <<< "$SYNC_CASES"
+SYNC_PARTS=${SYNC_PARTS:-8}  # 8, not 4: with the measured weights and case_11 split, 36.2 -> 17.9 s (6 parts: 24.3 s), 2026-10-17 at load 8
 if [ "$SYNC_PARTS" -le 1 ]; then
   for c in "${CASES[@]}"; do "$c"; done
 else

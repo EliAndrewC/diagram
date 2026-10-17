@@ -388,11 +388,17 @@ dynamically to the C library (observed 2026-10-17, method: `ldd` on each), so a 
   on any gap, and the gap is the bug). A file whose reads are still unknown after this is recorded in research R10 with its
   seconds and the measured reason.
 
-**D27 - The guard suites by what their cases read (FR-023).** `scripts/measure/hooks_landing_runs.py` replays the recorded
-landings: for each, from the landing commit and the clone's last green `hooks-test` stamps, which suites ran and which
-dependency moved for each (the landing's files or main's). For each suite that ran on a dependency its cases do not reach
-(a shared helper like `hookmatch.py` or `guardlog.sh` whose changed function the suite never calls), the dependency set
-narrows to what the suite's cases call (`hookdeps.py`, by function where a helper is a library, never looser than what is
-executed - checked by running the suite under a trace of the helper calls), or the suite splits into parts each with its own
-set. sync-with-main, review-gate and entry-gate are measured case by case first. Nothing a suite checks is dropped; each
-narrowed suite has a test that an edit outside its set leaves it skipped and one inside runs it.
+**D27 - The guard suites by what their cases read, and the slow one by its long case (FR-023).** Measured first (2026-10-17;
+method: `hookdeps.py --deps` for each of the 44 suites, `git log` of each input since 2026-10-03, each suite and each
+sync-with-main case timed alone):
+- the inputs most suites share - `guardlog.sh`, `hm_escape.py`, `hm_shape.py`, `writer-alive.sh`, each an input of 42 suites -
+  changed once or twice each in two weeks, so narrowing them saves little; they are left whole, and nothing a suite checks is
+  dropped. The suite that re-runs is the one whose own script moved: `sync-with-main.sh` changed in 27 commits, and its suite
+  is the slowest (36.2 s at 4 parts);
+- its long pole is ONE case, `case_11` (27.9 s alone, 17 pushes in a row across three fixtures): it is split into three cases,
+  each on its own fixture, the case weights are set to today's measured seconds, and the parts go 4 -> 8. Every check still
+  runs and is counted (124);
+- `review-gate` (21.8 s) and `entry-gate` (19.8 s) run their gate a dozen times in sequence against one clone each; parallel
+  parts would need a clone each (2 s) and run only when those gates move - recorded, not split;
+- `make hooks-test` prints which suites ran and each one's seconds, longest first, so a landing's log says where its guard
+  time went (`tests/hooks/hookrun.sh` times each suite).

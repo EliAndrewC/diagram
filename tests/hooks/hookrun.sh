@@ -18,7 +18,11 @@ set -uo pipefail
 WORK=${1:?work dir}; GITDIR=${2:?gitdir}; GUARD=${3:?guard}; SUITE=${4:?suite}; SHA=${5:?sha}
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-if "$HERE/$SUITE" > "$WORK/$GUARD.log" 2>&1; then
+t0=${EPOCHREALTIME/,/.}
+"$HERE/$SUITE" > "$WORK/$GUARD.log" 2>&1; rc=$?
+# feature 383 amendment 3 (plan D27): each suite's seconds beside it, so hooks-test can say which suites ran and what each cost
+awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" 'BEGIN { printf "%.1f", b - a }' > "$WORK/$GUARD.s"
+if [ "$rc" -eq 0 ]; then
   mkdir -p "$GITDIR/hooks-test" && printf '%s' "$SHA" > "$GITDIR/hooks-test/$GUARD"
   printf 'ok' > "$WORK/$GUARD.rc"
 else

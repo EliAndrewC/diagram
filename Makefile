@@ -766,7 +766,10 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	fi; \
 	if [ -n "$$fail" ]; then printf '\n\033[1mhooks-test FAILED:%s\033[0m\n\n' "$$fail"; exit 1; fi; \
 	python3 "$$root/scripts/gates/gate-stamp.py" --write hooks; \
-	printf 'hooks-test: %s guard suites green, %s unchanged since they last went green (hooks area stamped)\n' "$$n" "$$skipped"
+	printf 'hooks-test: %s guard suites green, %s unchanged since they last went green (hooks area stamped)\n' "$$n" "$$skipped"; \
+	: "(GUARD_EDIT_OK: feature 383 amendment 3, plan D27 - adding an operation: which suites ran and each one's seconds, longest first, so a landing's log says where its guard-suite time went)"; \
+	ran=$$(for s in "$$work"/*.s; do [ -f "$$s" ] && printf '%s %s\n' "$$(cat "$$s")" "$$(basename "$$s" .s)"; done | sort -rn | awk '{printf "%s%s %ss", (NR>1?", ":""), $$2, $$1}'); \
+	[ -z "$$ran" ] || printf 'hooks-test: ran %s\n' "$$ran"
 # PER-SUITE FRESHNESS (feature 135, third pass; GUARD_EDIT_OK: the roster and the failure path are unchanged - a suite
 # is SKIPPED only when its guard, its test and the shared helpers (`hookmatch.py`, `test_hooks_cases.py`; for the
 # three suites that drive other scripts, all of scripts/) hash to what they hashed when the suite last went GREEN in
