@@ -614,5 +614,6 @@ the old files; a second round rechecked its findings)
 - The quotes test (`tests/test_claude_md_quotes.py`): the tooling's 12 quotes of a CLAUDE.md all resolve; three were stale
   before this work (two copied from gm-assistant's hooks) and were re-aimed.
 - A fresh session's first request, started in `/diagram` (observed 2026-10-17; a headless Sonnet session replying READY,
-  its first request's usage): 52,651 input tokens before; after is measured once this lands, the same way.
+  its first request's usage): 52,651 input tokens before; 43,725 after, once it landed (8,926 fewer, 17% (observed 2026-10-17; the method above), in every
+  session's every request).
 
