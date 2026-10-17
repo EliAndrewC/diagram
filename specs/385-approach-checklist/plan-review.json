@@ -127,6 +127,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
+  },
+  "### T03 part B (2026-10-17T23:08Z)": {
+   "sha256": "b26013d617b63e8d89da999d97a03b230cdd9e1d3d33bff4d36b96488ec3e782",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
   }
  },
  "reviewed": "2026-10-17",
@@ -1137,6 +1143,33 @@
      "summary": "The 22:12-stamped part B and Approach blocks are removed and re-entered stamped 21:40, the true time, with identical part B text and an Approach whose only change is the budget line (about 1 h 25 min used becomes about 1 h used); their decisions (REACH 20 ft for the merge, exit (c)) are superseded by the 22:20/22:23 blocks and D25.",
      "class": "within",
      "why": "The record is corrected to the time the blocks were actually written, and the budget figure is consistent with the earlier stamp. Nothing asked for changes. Whether a 21:40 stamp still satisfies D9 for its trigger is the tick tooling's check, not a fidelity question."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "### T03 part B (2026-10-17T23:08Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T03B-1 gaps carried to T12",
+     "summary": "The two known gaps (FIELD_REACH_FT's reach, the doubled tail's 15 degrees) stay recorded DRIFTED against claims 0014 and 0081 and are carried to T12; restated unchanged from the 22:20 block.",
+     "class": "within",
+     "why": "Moves the work to a later task of this same feature and keeps it recorded as DRIFTED against the research, so nothing the GM asked for is dropped. FR-006 runs tasks one at a time and leaves the order to the session. The block reopens neither of the GM's amendment-1 questions."
+    },
+    {
+     "id": "T03B-2 continue: tick and land",
+     "summary": "With the gate green and every claims and record check answered, the hour-7 step-back's ruling is continue: T03 ticks and lands as 'its four seeds and carries the merge', with the merge's reach O and T12's.",
+     "class": "within",
+     "why": "This is the scope T03 was approved with: the four seeds plus the general side-by-side merge (FR-007, the amendment-1 proposal). The block narrows nothing beyond the reach already stated in the 22:20 block."
+    },
+    {
+     "id": "T03B-3 next step is the measurement",
+     "summary": "After the tick, the per-task table is compared with T01's.",
+     "class": "within",
+     "why": "This is the per-task measurement and retro comparison the GM asked for (FR-005, FR-006, SC-001). It does not remove the FR-012/SC-006 blind-Approach comparison owed in T03's retro row."
     }
    ]
   }

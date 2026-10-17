@@ -15,8 +15,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T02 The tooling (plan T02; FR-003 to FR-005, and amendment 1, FR-008 to FR-011): the Approach block required by `make tick`, the triggers' fresh answer, the per-task split; re-checks against what the last check read, one check where several are spent, no write while a gate runs, the check cost measured; its retro row [lands-open]
       research: rendering
       verify: DONE. all seven items landed on main (D8-D14), each with a test red without it; hooks-test and the tooling tests green; per-task and per-check tables printed by make feature-report F=385; part B after hour 5 CLEAR; retro row in retro.md
-- [ ] T03 FIRST the blind Approach (amendment 2, FR-012): a fresh agent writes T03's part A from the task, the checklist, the code and the record alone; then the four cohort seeds failing at HEAD (17, 21, 40, 45), as T01 leaves them, and the side-by-side shape T01 leaves (the glyph-check of 2026-10-17, F1-F3 on Inashiro: a stub and a lane run side by side, joined by a rung) - the merge decided as one general test, not a fourth detector; its retro row [lands-open]
+- [x] T03 FIRST the blind Approach (amendment 2, FR-012): a fresh agent writes T03's part A from the task, the checklist, the code and the record alone; then the four cohort seeds failing at HEAD (17, 21, 40, 45), as T01 leaves them, and the side-by-side shape T01 leaves (the glyph-check of 2026-10-17, F1-F3 on Inashiro: a stub and a lane run side by side, joined by a rung) - the merge decided as one general test, not a fourth detector; its retro row [lands-open]
       research: rendering
+      verify: DONE. seeds 17, 21, 40, 45 pass; nothing newly fails against HEAD; pool clean (Kashikawa lane 9 straightened); D17's merge, seeds 49, 55 and 57's residue carried to T12 by the round arbiter; claims and record checks answered; gate green; retro row in retro.md
 - [ ] T04 T48: the web carries a re-deal of the seats (384's User Story 2, SC-004); its retro row [lands-open]
       research: rendering
 - [ ] T05 T47: the wave 155 pocket-well patch re-landed, no waiver; its retro row [lands-open]
