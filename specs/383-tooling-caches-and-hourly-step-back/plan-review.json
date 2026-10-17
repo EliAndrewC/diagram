@@ -217,8 +217,8 @@
    "declared": "spec-fidelity"
   },
   "## Amendment 3 (FR-021 to FR-024)": {
-   "sha256": "bdc427857d7d14d284abf84b990eee9cf9b4b21cd21684605cb58222521e11cf",
-   "verdict": "BLOCKED",
+   "sha256": "b709e5ae5c03b9f7e3625a977918faa076c94a4813b46c185b8dddd17ecfb5ee",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
   }
@@ -641,6 +641,39 @@
      "summary": "Guard suites replayed over recorded landings; a suite re-run on a dependency its cases do not reach is narrowed (never looser than executed) or split; slow suites first; nothing dropped; tests for skip/run",
      "class": "within",
      "why": "Unchanged since round 1 (CLEAR). Carries FR-023 and the GM's 'optimize away running some of those when they haven't been modified'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Amendment 3 (FR-021 to FR-024)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D24",
+     "summary": "Sonnet 5.5 trials first: model_trial.py, two cases per check, three runs a case, move only on all hits and no false alarm, result recorded in tier table, docs and CLAUDE.md pointer",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict; carries FR-024 and the GM's 'pretty much right away' ordering."
+    },
+    {
+     "id": "D25",
+     "summary": "pytest_ignore_collect for reused files; measure make quick's collection cost first, cut follows the measurement; results compared (SC-016)",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict; carries FR-022 for the landing, make quick and targeted runs."
+    },
+    {
+     "id": "D26",
+     "summary": "LD_PRELOAD recorder of the C library's path calls put into every child's environment (bash, make, node, resvg, pdftotext, grep, ruff), validated against Python's audit-hook recorder before reuse; a child dropping LD_PRELOAD, a static binary or an unbuilt recorder stays unknown, its file runs and is recorded in R10 with seconds and the measured reason",
+     "class": "within",
+     "why": "The round 2 narrowing (every non-bash program kept always-run on strace's refusal alone) is gone: every program the 18 files start is now recorded, and only what genuinely cannot be recorded stays always-run - which is FR-021's own second clause ('one that cannot is recorded in the research with its seconds and the reason'), now with a measured reason. Git questions keep D18's rule, as FR-021's 'asked again' provides."
+    },
+    {
+     "id": "D27",
+     "summary": "Replay recorded landings; narrow a suite's dependency set to what its cases call, or split it; slow suites first; nothing dropped",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict; carries FR-023."
     }
    ]
   }
