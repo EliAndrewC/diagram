@@ -871,3 +871,6 @@ def test_a_household_way_is_cut_only_onto_a_way_that_stays() -> None:
     assert settle.cut_at_shallow_crossing(s.M["lanes"], 2, 1, []) is None, "lane 1 is ordinary: the household is not hung on it"
     s.M["lanes"][1]["role"] = "access"
     assert settle.cut_at_shallow_crossing(s.M["lanes"], 2, 1, []) is not None, "onto another household's way it is cut"
+    assert settle.cut_at_shallow_crossing(s.M["lanes"], 0, 1, []) is None, "lane 0 (the connector) crosses nothing here, and is never cut"
+    s.M["lanes"][0]["pts"] = [[300.0, 45.0], [100.0, -20.0]]
+    assert settle.cut_at_shallow_crossing(s.M["lanes"], 0, 1, []) is None, "the connector crossing shallow is still never cut"
