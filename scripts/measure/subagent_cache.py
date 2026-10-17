@@ -138,6 +138,11 @@ def spend(rs: Iterable[dict]) -> dict[str, float]:
     return {**{k: float(v) for k, v in tot.items()}, "units": sum(tot[k] * RATES[k] for k in RATES)}
 
 
+def first_call(rs: list[dict], key: str) -> int:
+    """The mean of one usage field over the runs' FIRST calls (0 for none)."""
+    return sum(int(r["calls"][0].get(key) or 0) for r in rs) // len(rs) if rs else 0
+
+
 def report(rs: list[dict]) -> str:
     pairs = back_to_back(rs)
     by: dict[str, list[dict]] = collections.defaultdict(list)
@@ -146,9 +151,10 @@ def report(rs: list[dict]) -> str:
     rows = [f"{'type':24} {'runs':>5} {'b2b':>4} {'1st read':>9} {'1st write':>9} {'repeated':>9} {'units/run':>10}"]
     for kind, krs in sorted(by.items(), key=lambda kv: -spend(kv[1])["units"]):
         p = pairs.get(kind, [])
-        first = lambda key: sum(int(r["calls"][0].get(key) or 0) for r in p) // len(p) if p else 0  # noqa: E731
         rep = repeated([r["manifest"] for r in krs if r["manifest"]])
-        rows.append(f"{kind[:24]:24} {len(krs):>5} {len(p):>4} {first('cache_read_input_tokens'):>9} {first('cache_creation_input_tokens'):>9} {rep:>9} {spend(krs)['units'] / len(krs):>10.0f}")
+        rows.append(
+            f"{kind[:24]:24} {len(krs):>5} {len(p):>4} {first_call(p, 'cache_read_input_tokens'):>9} {first_call(p, 'cache_creation_input_tokens'):>9} {rep:>9} {spend(krs)['units'] / len(krs):>10.0f}"
+        )
     s = spend(rs)
     rows.append(
         f"\nall: {len(rs)} runs; written {s.get('write', 0):,.0f}, read {s.get('read', 0):,.0f}, output {s.get('output', 0):,.0f} tokens"
