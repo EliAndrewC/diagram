@@ -116,6 +116,30 @@ def shared_text(a: str, b: str) -> int:
     return sum(len(line) for line in _lines(a) & _lines(b))
 
 
+#: a bundle section built from the UNIT's own inputs - its research pages and entries, the claims and candidates derived from
+#: them - may coincide between two units that read the same pages; it is not text the check repeats (plan D38)
+UNIT_ORIGINS = ("research/questions/", "research/sources/", "dev/claims-index.json")
+UNIT_SECTIONS = ("claims.md", "candidates.md", "entry/", "drawing/", "record/", "cand/", "sources/")
+
+
+def contract_part(manifest: str) -> str:
+    """A MANIFEST without its sections copied from the unit's own inputs: what the builder writes and the files it copies
+    from outside the record - where a check's standing text would be."""
+    keep, out = True, []
+    for line in manifest.splitlines():
+        if line.startswith("## "):
+            head = line[3:]
+            keep = not (any(f"origin `{o}" in head for o in UNIT_ORIGINS) or any(head.startswith(f"`{s}") for s in UNIT_SECTIONS))
+        if keep:
+            out.append(line)
+    return "\n".join(out)
+
+
+def contract_shared(a: str, b: str) -> int:
+    """`shared_text` over two manifests' `contract_part`s."""
+    return shared_text(contract_part(a), contract_part(b))
+
+
 def repeated(manifests: list[str], share: float = 0.8) -> int:
     """Characters of the lines at least `share` of the manifests hold."""
     if len(manifests) < 2:

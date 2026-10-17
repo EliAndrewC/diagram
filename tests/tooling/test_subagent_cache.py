@@ -79,3 +79,12 @@ def test_the_report_names_each_types_fresh_write_its_repetition_and_the_spend(ro
 def test_spend_weighs_writes_reads_and_output_at_the_five_minute_tier() -> None:
     s = ca.spend([{"calls": [{"cache_creation_input_tokens": 100, "cache_read_input_tokens": 1000, "input_tokens": 10, "output_tokens": 20}]}])
     assert s["units"] == 100 * 1.25 + 1000 * 0.1 + 10 + 20 * 5
+
+
+def test_the_contract_part_drops_the_sections_built_from_the_units_own_inputs() -> None:
+    page = "## `entry/0038-x.html` - origin `research/questions/0038-x.html`\n" + "a page both units cite, line by line, long enough\n"
+    rules = "## `guidelines.txt` - origin `dev/modals.md`\n" + "a rule every bundle of this check carries, long enough\n"
+    claims = "## `claims.md` - origin `dev/claims-index.json`\n" + "a claim both units' pages carry, long enough to count\n"
+    a, b = "# head\n" + page + rules + claims, "# head\n" + page + rules + claims
+    assert ca.contract_shared(a, b) == len("a rule every bundle of this check carries, long enough")
+    assert "a page both units cite" not in ca.contract_part(a) and "## `guidelines.txt`" in ca.contract_part(a)
