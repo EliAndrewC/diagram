@@ -13,7 +13,7 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T02 The tooling (plan T02; FR-003, FR-004, FR-005): the Approach block required by `make tick`, the triggers' fresh answer, the per-task split; its retro row [lands-open]
       research: rendering
-- [ ] T03 The four cohort seeds failing at HEAD (17, 21, 40, 45), as T01 leaves them; its retro row [lands-open]
+- [ ] T03 The four cohort seeds failing at HEAD (17, 21, 40, 45), as T01 leaves them, and FIRST the side-by-side shape T01 leaves (the glyph-check of 2026-10-17, F1-F3 on Inashiro: a stub and a lane run side by side, joined by a rung) - the merge decided as one general test, not a fourth detector; its retro row [lands-open]
       research: rendering
 - [ ] T04 T48: the web carries a re-deal of the seats (384's User Story 2, SC-004); its retro row [lands-open]
       research: rendering
