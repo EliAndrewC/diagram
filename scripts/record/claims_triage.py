@@ -191,6 +191,10 @@ def triage_bundle(
                 # union for every claim citing it, so claims checked at different versions each saw the others' changes
                 changed[f"{name}|{old}"] = fresh
                 by_page.setdefault((name, old), []).append(key)
+    # ...AND A CLAIM THE TRIAGE HAS NOTHING TO SHOW IS OWED IN FULL (feature 385 T03): a claim relabeled to cite a page its
+    # last check never read had no changed block to show, so the bundle listed nothing and the agent could clear nothing
+    shown = {k for ks in by_page.values() for k in ks} | {k for _f, _l, ks in sections.values() for k in ks}
+    forced |= {k for k in keys if k not in shown}
     parts = [
         "# Triage of claim re-checks (feature 318)\n",
         "owed-checks: claims-triage\n",
