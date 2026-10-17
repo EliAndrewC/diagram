@@ -5,8 +5,7 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 
 ## Occasions
 
-- T01: the lane web's placement rules change on every scripted hamlet - a settlement-review of one pool hamlet whose lanes moved
-  (the placement of an element substantially changed, `docs/reviews.md`)
+- placement-changed: village lane - T01: a turn or meeting the ground forces is lawful, and a lane end running nearly along another way over open ground is merged onto it (plan D2, D4)
 
 ## Tasks
 

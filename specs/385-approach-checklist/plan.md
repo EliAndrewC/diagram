@@ -70,31 +70,44 @@ After T01 the session stops and reports to the GM before T02 (his "let's see how
 words), its thresholds, and its verdict: kept / made obstruction-aware / merged / retired. Built from the predicates' `Research:`
 claims (they already carry the class) and 0081's and 0246's drawing pages; the rows not about angles or doubling are expected kept.
 
-**D2 - "Forced" is one predicate, asked by every angle rule.** `law.forced_turn(a, b, c, M)`: the turn at `b` is forced when the
-straighter way past it - the chord `a`-`c` swept at the lane's width, and for a meeting the wider approach to the tread - crosses
-mapped ground a lane may not cross: a house or its steading's built ground (`steading_footprints`), a fixture (`fixture_quads`),
-the solid boxes (`solid_boxes`), crop or water (the worked ground the settle already reads). The rules that read it: `kinks` (a
-zigzag or a hairpin round something), `hooked` (an end's hook round a corner), `folded_joint_pairs`, `connector_hairpin_ends`
-and `needle_ends`. A turn with open ground on its chord is judged exactly as today. The ground is indexed once per manifest
-(`settlement/_geom/indexes.py`, the overlap-check rule) and handed to the predicate, not rebuilt per turn. Class: deliberate
-reading of 0081's research ("the shortest or easiest way") - the drawing page says so.
+**The order (checklist B1 applied to this plan).** D3 is the first edit and the measurement follows it: the baseline (D6) is
+taken with D3 in place, since D3 changes no lane, only what a refusal says. D2's and D4's exact shape is then fixed against the
+cases the named refusals show (seed 21's five lanes, the pool's violations); seed 17's refusal is a reach (the field reached by no
+way), not an angle, and is T03's unless D2-D4 mend it. If the named rules on seed 21 are not angle or doubling rules, the session
+stops at part B before writing D2 or D4.
+
+**D2 - "Forced" is one predicate, asked by every angle rule - two shapes.** The ground a lane may not cross - a house or its
+steading's built ground (`steading_footprints`), a fixture (`fixture_quads`), the solid boxes (`solid_boxes`), crop or water (the
+worked ground the settle already reads) - is indexed once per manifest (`settlement/_geom/indexes.py`, the overlap-check rule) and
+asked two ways:
+- **a TURN** (a kink, a hairpin, a hook, a folded joint, a connector hairpin): forced when the chord past the turn - from the
+  vertex before it to the vertex after, swept at the lane's width - crosses that ground;
+- **a MEETING** (a needle): forced when the sliver of ground between the arriving end leg and the tread it meets, back to
+  `NEEDLE_FT` along the leg, holds that ground - a fence or a corner standing between two paths that meet at its end.
+The filter is applied where a manifest is judged - `law.lanes_that_kink`, `law.hooked_ends`, `law.folded_joint_pairs`,
+`law.connector_hairpin_ends`, `law.needle_ends`, and `last_resort.lanes_breaking` - never by widening the pure detectors
+(`clearance.kink_spans`, `law.kinks`, `law.hooked`), which `keeper`, `clearance` and their tests call on bare points. A turn or a
+meeting with open ground is judged exactly as today. The repair passes with their own hairpin or hook tests (`joints.py` 172, 222,
+319, 640; `smooth.py` 232; `track.py` 71; `sweeps.py` 374; `geom.door_unhooked`) are read against the change: each straightens only
+where its own clearance allows, so a forced shape stands; any that would still cut one is given the same filter, with a test.
+Class: deliberate reading of 0081's research ("the shortest or easiest way") - the drawing page says so.
 
 **D3 - A refusal names its rules.** `last_resort.lanes_breaking` returns `{lane: [rule names]}` (its set is the keys, so every
 caller is unchanged), and `refuse_unmended` writes `lane 3 (access): needle_joins, kinks`. Found while measuring T01 (constitution
 XIV): seed 21's refusal named five lanes and no rule.
 
-**D4 - Side by side becomes one.** Where a lane's end leg runs within `NEEDLE_DEG` of another way's tread over open ground (no
-forced turn by D2), the settle merges it: the arriving lane is cut back to the first point where it comes within `JOIN_TOL` of the
-tread's centerline band, and ends there on the tread - the two one path from that point, as the doubled-tail cut already does for
-a tail (`tails.py`). A needle the settle cannot merge (the cut would strand a house or a tree lane's reach) stays a violation, named
-by D3. The GM's ruling (G, 2026-10-17): *"if there are two different footpaths that are nearly parallel to each other and very
-close together, then that is the kind of situation in which a single footpath would emerge"*.
+**D4 - Side by side becomes one, by the cut that exists.** A needle over open ground (not forced by D2) is the doubled tail seen
+from the other side, so the merge is the settle's existing cut: `tails.along_tail` walks in from the lane's end to where it came
+alongside the way and `cut_at_tail` ends it there on the tread, asked for a needle end at `NEEDLE_DEG` where it is asked today at
+`_DOUBLED_DEG` (`settle.py` 380-403) - reuse, not a new pass. A needle the cut cannot mend (it would strand a house or a tree lane's
+reach) stays a violation, named by D3. The GM's ruling (G, 2026-10-17): *"if there are two different footpaths that are nearly
+parallel to each other and very close together, then that is the kind of situation in which a single footpath would emerge"*.
 
 **D5 - Nothing else moves.** No threshold changes value, no rule outside the angle and doubling rules changes, and no homestead,
 fixture or seat moves. A rule the table finds describing no walker's behavior is retired only with its reason at the predicate
 and on the drawing page; none is expected.
 
-**D6 - Measured.** Before any engine edit: the 48-seed cohort at HEAD (`make cohort N=48`, logged), seed 10 under the wave 155 patch,
+**D6 - Measured.** With D3 in place and before any other engine edit: the 48-seed cohort at HEAD (`make cohort N=48`, logged), seed 10 under the wave 155 patch,
 and the pool's hamlets' lane violations. After: the same three. Two workers while the containers sit near their memory cap
 (2026-10-17's memguard notices).
 
