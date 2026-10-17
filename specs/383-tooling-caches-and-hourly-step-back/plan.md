@@ -520,21 +520,29 @@ pre-sort (a judgment); `omitClaudeMd: true`; rows in `TIERS`. `make claims-triag
 the agent. A new agent file is seen by a session started after it lands.
 
 **D37 - The dispatch guard (FR-034).** `scripts/hooks/agent-prefix-hooks.sh` on PreToolUse Agent, with its decider in
-`scripts/hooks/lib/hm_agent_prefix.py`: the session's Agent prompts are kept in `<git dir>/l7r-agent-prompts/<session>.jsonl`
-(the last 30); a new prompt is compared with each by its longest identical block (`difflib.SequenceMatcher.find_longest_match`,
-the prompts capped at 64 KB). A block of 2,000 characters or more is refused unless everything before it is identical in both
+`scripts/hooks/lib/hm_agent_prefix.py`: the session's Agent prompts that passed are kept in `<git dir>/l7r-agent-prompts/` (the
+last 30), each with its agent type and model; a new prompt is compared only with earlier prompts of its own type and model -
+another type's system prompt differs, so nothing is shared across types - by the longest run of identical lines both hold after
+their common prefix, the prompts capped at 64 KB. A block of 2,000 characters or more is refused unless everything before it is identical in both
 prompts - a cached prefix breaks at the first character that differs, so any differing part before it, however short, makes it
-uncacheable - with the fix: put the shared text at the start of the prompt, or in the agent's file. The threshold is a convenience number to move (the GM's case was 10 KB; 2,000 is about
+uncacheable - with the fix: put the shared text at the start of the prompt, or in the agent's file. A block that starts the new
+prompt passes: that is the fixed form, which the next dispatch reads from the cache (refused against an earlier prompt of the
+old shape, the fix itself would be refused). The threshold is a convenience number to move (the GM's case was 10 KB; 2,000 is about
 500 tokens, where a cached prefix starts to matter against the ~2.5k a dispatch writes regardless). Escape `AGENT_PREFIX_OK`
 with a reason; every firing logged. The suite `tests/hooks/test-agent-prefix-hooks.sh`: the GM's shape (a unique sentence of
 under 200 characters, then a shared 10 KB) refused; the same block first passes, followed by differing text; two unrelated
 prompts pass; the escape passes.
 
 **D38 - The bundle test (FR-035).** `scripts/measure/subagent_cache.py` carries `shared_text(a, b)` - the identical lines of 40
-characters or more two texts both hold, summed. `tests/tooling/test_bundle_shared_text.py` builds two bundles of each kind
-the checks read - `make check-bundle` on two questions, `make modal-bundle` for two kinds and each of its three checks,
-`make claims-triage` and `make modal-triage` on fixture units - into tmp, and fails when two manifests of a kind share more
-than 2,000 characters, naming the lines; a seeded case (a 3,000-character block added to both) proves it fails.
+characters or more two texts both hold, summed - and `contract_shared(a, b)`, the same over the manifests without the sections
+built from each unit's own inputs (its research pages and entries, the claims and candidates derived from them): two crops cite
+the same drawing pages and a research bundle copies the record as candidates, which is the units coinciding, not the check
+repeating itself (observed 2026-10-17; two modal-depiction bundles, Alder and Barley, shared 59,885 characters, all of it their
+pages and claims). `tests/tooling/test_bundle_shared_text.py` builds two bundles from the real record for record-format and
+quote-check (two questions) and the three modal checks (two kinds), and fails when two manifests of a check share 2,000
+characters or more; a seeded case (a 3,000-character block in both) fails it. The two triage bundles carry one list each, so
+their tests pin what every one repeats - the text before the first unit section - under 400 characters (observed 2026-10-17:
+the old headers were 607 and 824).
 
 **D39 - The audit and the rule (FR-036).** `make subagent-cache [SINCE=YYYY-MM-DD]` runs `scripts/measure/subagent_cache.py` over the
 subagent transcripts (research R13's method): per type, its runs, the back-to-back first-call read and write, the manifests'
