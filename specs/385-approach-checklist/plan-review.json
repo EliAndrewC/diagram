@@ -4,28 +4,33 @@
  "blocks": {
   "preamble": {
    "sha256": "af8009812f40d56f49f5fdf78d4a0c449ea7ae55f99e6e103607a848e6d2a464",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-10-17"
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
   },
   "## Summary": {
    "sha256": "ccf0cb526ab87287fbf5a765de76dde26683dd7e863b85334c15d5fa661edc4a",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-10-17"
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
   },
   "## Constitution Check": {
    "sha256": "db452069bcf566079b65b2020ea5ba32259342e4f9454eb9e93562399845c715",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-10-17"
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
   },
   "## T01 - the lane law describes how people walk (384 FR-000, User Story 0)": {
    "sha256": "980a04587c5e9adde4469cab3adc1cc90c1f10b129bdf127feabff64aabe4243",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-10-17"
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
   },
   "### T01 Approach (checklist part A)": {
    "sha256": "cd3bcc02e0183f64c4eaf050dc09786084a5d6b757b0a7ccc1505952f045ba96",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-10-17"
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
   },
   "### T01 Decisions": {
    "sha256": "b7bf572991d1caaedeea87a32b45dee5a28e72983e22f53a6c622bbd837699cc",
@@ -35,23 +40,27 @@
   },
   "### T01 retro": {
    "sha256": "8c1565389795b59948fc4ff10903012d765699f67bd623d1cf7d8a8f4fb2f4e2",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-10-17"
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
   },
   "## T02 - the tooling: the Approach block required, the triggers, the split (FR-003 to FR-005)": {
    "sha256": "bb5300d45691e5eccb674df5ba067a3e53aa91ba19bce47353be33a98168c43e",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-10-17"
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
   },
   "## T03 to T10 - the four seeds failing at HEAD, T48, T47's patch, five ranking rows": {
    "sha256": "40a38493918a5054be62afaead2731439ff9d72c5010c94fe350d27d698ea075",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-10-17"
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
   },
   "## T11 - the close": {
    "sha256": "11667c2799f8548585b169027f16f856ad5dc89c5777a68916a54765ee68e50c",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-10-17"
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
   }
  },
  "reviewed": "2026-10-17",
@@ -372,6 +381,101 @@
      "summary": "0081 and 0246 drawing pages say what the maps now draw; record checks as owed",
      "class": "within",
      "why": "Records the change where the project's rules require it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Constitution Check",
+    "## Summary",
+    "## T01 - the lane law describes how people walk (384 FR-000, User Story 0)",
+    "## T02 - the tooling: the Approach block required, the triggers, the split (FR-003 to FR-005)",
+    "## T03 to T10 - the four seeds failing at HEAD, T48, T47's patch, five ranking rows",
+    "## T11 - the close",
+    "### T01 Approach (checklist part A)",
+    "### T01 retro",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "S1",
+     "summary": "Tasks one at a time in the GM's order; lane law is T01, the enforcing tooling (FR-003..FR-005) is T02, built after T01's retro; T01's Approach block and retro kept by hand",
+     "class": "within",
+     "why": "The GM 2026-10-17: 'make the plan, then do the lane law as task one, work that under the checklist with a retro afterwards'. Putting the lane law first is his order; T01 is still worked under the checklist and retro, by hand, and FR-003..FR-005 are still built (T02), so no requirement is dropped."
+    },
+    {
+     "id": "S2",
+     "summary": "T02's per-task split proven by replaying T01's events",
+     "class": "within",
+     "why": "Keeps FR-005/SC-001's per-task split owed for T01 too; enforcement of what was asked."
+    },
+    {
+     "id": "S3",
+     "summary": "Session stops and reports to the GM after T01, before T02",
+     "class": "within",
+     "why": "The GM's 'and then let's see how it goes'."
+    },
+    {
+     "id": "C1",
+     "summary": "Constitution check: no SOURCE block or hand map touched; pool hamlets re-rolled; regression = a seed passing at HEAD and failing after, on the 48-seed cohort; D3 refusal fix under XIV; only the angle rules and side-by-side lanes change, no other rule loosened",
+     "class": "within",
+     "why": "Matches the GM's guardrail ('I don't want future sessions to just throw away rules when they are inconvenient') and the exception/merge he described; the D3 fix is constitution XIV, already in the spec."
+    },
+    {
+     "id": "A1",
+     "summary": "T01 goal: sharp meetings or bends only where mapped ground forces them; near-parallel paths become one; no seed refused for a shape the ground explains",
+     "class": "within",
+     "why": "The GM's rock example (a path going around a rock meets at other angles) and his 'a single footpath would emerge' ruling; the angle-rule exception and merge are D2/D4, ruled CLEAR in the T01 Decisions block."
+    },
+    {
+     "id": "A2",
+     "summary": "Exits weighed: (a) number change not chosen alone, (b) principled exception chosen for the angle rules, (c) merge chosen for the needle and doubled band, (d) more room not used - homesteads stay, (e) conform for every rule not about angles or doubling",
+     "class": "within",
+     "why": "These are the two solutions the GM named ('relaxing a restriction by placing a principled exception' and 'adding a new rule ... collapsed into a single footpath'); refusing to move homesteads is his explicit ruling; conforming elsewhere is his guardrail."
+    },
+    {
+     "id": "A3",
+     "summary": "Change wholly inside the web's law and settle, after every house stands",
+     "class": "within",
+     "why": "The GM: 'Nobody in real life moves their house so that a footpath will join with another footpath at a more intuitive angle.'"
+    },
+    {
+     "id": "A4",
+     "summary": "Budget about six hours (labeled a guess); twice that triggers checklist part B",
+     "class": "within",
+     "why": "Implements 'a checklist ... that comes up when a session is taking a while' (FR-004)."
+    },
+    {
+     "id": "A5",
+     "summary": "Done: rule table, red-on-HEAD unit tests, 48-seed cohort with no seed newly failing, seeds 17 and 21 passing or refused by a kept rule that the refusal names, pool hamlets and seed 10 under the w155 patch re-rolled",
+     "class": "within",
+     "why": "Verification of the requested law change; letting 17/21 stand refused only by a KEPT rule (named) does not narrow the lane law, since the remaining failing seeds are their own later task (T03-T10, FR-007, the approved scope)."
+    },
+    {
+     "id": "R1",
+     "summary": "T01 retro in retro.md: time from the event log split by hand at decision points, which checklist items fired or should have, the change made",
+     "class": "within",
+     "why": "The GM's 'with a retro afterwards' and 'we measure how long we spent kind of doing each part of the task'."
+    },
+    {
+     "id": "T02",
+     "summary": "T02's approach decided at its start after T01's retro, reviewed by make decide",
+     "class": "within",
+     "why": "Defers decisions, settles none; consistent with 'let's see how it goes'."
+    },
+    {
+     "id": "T03",
+     "summary": "T03-T10 each decided at its start, in FR-007's order",
+     "class": "within",
+     "why": "The approved scope and order (the four seeds, T48, T47's patch, about five ranking rows)."
+    },
+    {
+     "id": "T11",
+     "summary": "Close: checklist to docs/, refusals extended to every feature's tasks (FR-001), final report",
+     "class": "within",
+     "why": "Restates accepted FR-001/SC-001/SC-002; the approved proposal has 384 resume 'under the finished process'."
     }
    ]
   }
