@@ -519,7 +519,7 @@ units, its pages' changed blocks and one line naming the agent. Tier opus / medi
 pre-sort (a judgment); `omitClaudeMd: true`; rows in `TIERS`. `make claims-triage` / `modal-triage` print the dispatch naming
 the agent. A new agent file is seen by a session started after it lands.
 
-**D37 - The dispatch guard (FR-034).** `scripts/hooks/agent-prefix-hooks.sh` on PreToolUse Agent, with its decider in
+**D37 - The dispatch guard (FR-034).** (Superseded by D41 where it passes or advises a shared block placed first: research R16.) `scripts/hooks/agent-prefix-hooks.sh` on PreToolUse Agent, with its decider in
 `scripts/hooks/lib/hm_agent_prefix.py`: the session's Agent prompts that passed are kept in `<git dir>/l7r-agent-prompts/` (the
 last 30), each with its agent type and model; a new prompt is compared only with earlier prompts of its own type and model -
 another type's system prompt differs, so nothing is shared across types - by every run of identical lines both hold after
