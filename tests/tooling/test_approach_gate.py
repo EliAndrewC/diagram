@@ -217,3 +217,23 @@ def test_the_command_line(tmp_path: pathlib.Path, monkeypatch, capsys) -> None: 
     assert ag.main(["ruled", "hour:999-x@9"]) == 0 and "approach owed" in capsys.readouterr().out
     assert ag.main(["cohort"]) == 0
     assert ag.main(["bogus"]) == 2
+
+
+def test_a_re_decide_reviewed_with_its_re_answered_approach_owes_nothing_more(tmp_path: pathlib.Path) -> None:
+    """Feature 385 T03: the re-answered block reviewed in the same round as the re-decide is the fresh answer D9 asks for."""
+    root, d = feature(tmp_path, git=True)
+    _git(root, "add", "-A")
+    _git(root, "commit", "-qm", "plan")
+
+    def review(keys: list[str]) -> dict:
+        text = (d / "plan.md").read_text()
+        digests = {k: pg.block_digest(b) for k, b, _at in pg.blocks(text)}
+        return pg.record_blocks(d, {"blocks": {k: digests[k] for k in keys}, "decisions": []}, "spec-fidelity", today="2026-10-17")
+
+    review(["### T01 Decisions"])
+    new = PLAN.replace("It is laid after the houses.", "It is laid first, then the houses beside it.")
+    new = new.replace("## T02 - the second", "### T01 Approach (re-answered 2026-10-17T22:10Z)\n\n1. a\n2. b\n3. c\n\n## T02 - the second")
+    (d / "plan.md").write_text(new)
+    _git(root, "commit", "-qam", "re-decided with its answer")
+    got = review(["### T01 Decisions", "### T01 Approach (re-answered 2026-10-17T22:10Z)"])
+    assert "approach_owed" not in got

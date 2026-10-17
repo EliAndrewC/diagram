@@ -539,8 +539,13 @@ def redecided_tasks(plan: pathlib.Path, before: dict, named: dict) -> list[tuple
     history = History(plan)
     text = plan.read_text(encoding="utf-8") if plan.is_file() else ""
     bodies = {k: body for k, body, _at in blocks(text)}
+    # ...A TASK WHOSE APPROACH IS RE-ANSWERED IN THE SAME REVIEW OWES NOTHING MORE (feature 385 T03: the block re-answered with
+    # the re-decide could not count, stamped before the verdict, and owed a second review of the same answer)
+    answered = {m.group(1) for k in named if (m := re.match(r"^#{2,4}\s+(T\d+[a-z]?)\s+Approach\b.*re-answered", k))}
     for key, sha in named.items():
         m = _DECISIONS_HEAD.match(key)
+        if m and m.group(1) in answered:
+            continue
         prior = before.get(key) or {}
         if not m or prior.get("verdict") != "CLEAR" or prior.get("sha256") in (None, sha):
             continue
