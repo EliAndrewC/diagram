@@ -601,3 +601,9 @@ measures the root's characters and a fresh session's first request before and af
 **D45 - The general-purpose families (FR-041, SC-030).** `scripts/measure/subagent_cache.py --families` groups the month's
 general-purpose launches by their description's leading words, with each family's count and last date; each family recurring
 since 2026-10-10 is given a defined agent or pointed at the existing one, and the rest recorded as one-off, in research R17.
+Measured 2026-10-17: of 137 general-purpose launches since 10-10, ~122 were the claims and modal triage under several names
+(defined agents now, D36) and the rest one-offs, but for "research pass" (10 launches, 7 since 10-10): a search pass for the
+record, each prompt its own question and leads with the same standing rules (the archive first, the cutoff dates, the sources
+ledger, the report). It becomes a defined `research-pass` agent (opus / medium: it judges what a source attests; WebSearch,
+WebFetch, Read, Grep, Bash; `omitClaudeMd: true`), its contract the research ladder's operative rules from `research/CLAUDE.md`
+and `docs/research-doctrine.md` that a pass needs, restated, pre-authorized with the other agents.
