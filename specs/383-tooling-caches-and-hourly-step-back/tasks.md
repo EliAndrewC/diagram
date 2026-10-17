@@ -191,5 +191,6 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T50 The general-purpose families swept (plan D45) (SC-030)
       research: rendering
       verify: DONE. SC-030 met (R17). Since 10-10, ~122 of 137 general-purpose launches were the triage jobs, now defined agents; the rest were one-offs except the research pass, now the research-pass agent. make subagent-cache --families is tested.
-- [ ] T51 Close: the checks, the report, landed
+- [x] T51 Close: the checks, the report, landed
       research: rendering
+      verify: DONE. All five items built and verified: spec FAITHFUL, plan CLEAR, hooks-test and quick green, every test that reads a CLAUDE.md green (5,619), the report written. SC-029's fresh-session first request is measured after landing, the same way, into R19.
