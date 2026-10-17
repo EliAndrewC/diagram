@@ -175,6 +175,7 @@ def test_the_bundle_records_the_pages_each_unit_reads(drawn: pathlib.Path) -> No
     assert data["pages"] == {DEP: ["research/questions/0029-farmhouses-minka.drawing.html"]}
     # the reply form is the agent's contract, its system prompt (feature 383 amendment 6, plan D36); the MANIFEST names it
     assert "For the `modal-triage` agent" in manifest.read_text(encoding="utf-8")
+    assert len(manifest.read_text(encoding="utf-8").split("\n## ", 1)[0]) < 400, "what every triage bundle repeats is one line"
     assert "TOUCHES <uid> @ <page file name>" in (REPO / ".claude" / "agents" / "modal-triage.md").read_text(encoding="utf-8")
 
 
