@@ -82,6 +82,11 @@ def before(root: pathlib.Path, store: pathlib.Path, slug: str, path: str, base: 
     return (_blob(root, blob) if blob else "") or (mo._read_at(root, base)(path) or "" if base else "")
 
 
+def baseline(store: pathlib.Path, slug: str, path: str) -> str:
+    """Which version of `path` a unit's triage diffs against: the blob its last answer kept, or "" for the merge base."""
+    return str(dict(ro._read(store, slug).get("pages") or {}).get(path, ""))
+
+
 def changed_blocks(old: str, new: str) -> tuple[list[str], list[str]]:
     """(blocks new or changed, blocks removed) between two versions of a page, by their words."""
     was = [b.words for b in ru.read_page(old).blocks]
@@ -102,9 +107,13 @@ def bundle(root: pathlib.Path, out: pathlib.Path, base: str = "") -> tuple[pathl
     if not units:
         return None, 0
     modals = {m.uid: m for m in mo.modals_now(root, about_only=False)}
-    by_page: dict[str, dict[str, set[str]]] = {}
-    blocks: dict[str, tuple[list[str], list[str]]] = {}
+    # ...GROUPED BY BASELINE (feature 385 T02, plan D11): a page's changed blocks are listed once for every unit diffing against
+    # the SAME version of it - the blob its last check read, or the merge base - never one union for all; one unit on the merge
+    # base made every unit of T01's triage show two new bullets the others had already been checked against
+    by_page: dict[tuple[str, str], dict[str, set[str]]] = {}
+    blocks: dict[tuple[str, str], tuple[list[str], list[str]]] = {}
     reads: dict[str, list[str]] = {}  # slug -> the moved pages its check reads (FR-015: a reply line owes only the units reading its page)
+    blobs: dict[str, dict[str, str]] = {}  # slug -> {page: the blob this triage showed it} - kept with its answer (D11)
     for slug, why, _fp in units:
         check, uid = slug.split(":", 1)
         m = modals.get(uid)
@@ -114,11 +123,12 @@ def bundle(root: pathlib.Path, out: pathlib.Path, base: str = "") -> tuple[pathl
             if pathlib.Path(path).name not in why:
                 continue
             now = (root / path).read_text(encoding="utf-8") if (root / path).is_file() else ""
-            fresh, gone = changed_blocks(before(root, store, slug, path, base), now)
-            prev = blocks.get(path, ([], []))
-            blocks[path] = (sorted(set(prev[0]) | set(fresh)), sorted(set(prev[1]) | set(gone)))
-            by_page.setdefault(path, {}).setdefault(uid, set()).add(check)
+            key = (path, baseline(store, slug, path))
+            if key not in blocks:
+                blocks[key] = changed_blocks(before(root, store, slug, path, base), now)
+            by_page.setdefault(key, {}).setdefault(uid, set()).add(check)
             reads.setdefault(slug, []).append(path)
+            blobs.setdefault(slug, {})[path] = keep(root, path)
     if out.exists():
         for f in out.iterdir():
             f.unlink()
@@ -130,23 +140,25 @@ def bundle(root: pathlib.Path, out: pathlib.Path, base: str = "") -> tuple[pathl
         # by every dispatch; here it followed the unique prompt and was written fresh each time (feature 383 amendment 6, D36)
         "For the `modal-triage` agent: rule on each pop-up below as your contract says, and reply in its form.\n",
     ]
-    for path in sorted(by_page):
-        fresh, gone = blocks[path]
-        parts.append(f"## {path}\n\nNew or changed blocks:\n")
+    for key in sorted(by_page):
+        path, base_blob = key
+        fresh, gone = blocks[key]
+        against = "against the version these pop-ups' last check read" if base_blob else "against the merge base (no check has read it yet)"
+        parts.append(f"## {path}\n\n({against})\n\nNew or changed blocks:\n")
         parts += [f"> {w}\n" for w in fresh] or ["(none)\n"]
         if gone:
             parts.append("Removed blocks (no longer on the page):\n")
             parts += [f"> {w}\n" for w in gone]
         parts.append("Pop-ups naming it:\n")
-        for uid in sorted(by_page[path]):
+        for uid in sorted(by_page[key]):
             m = modals[uid]
             parts.append(
-                f"- UID `{uid}` ({', '.join(sorted(by_page[path][uid]))}): About - {m.tags.get('About', '')[:400]}"
+                f"- UID `{uid}` ({', '.join(sorted(by_page[key][uid]))}): About - {m.tags.get('About', '')[:400]}"
                 + (f" | Depiction - {m.tags.get('Depiction', '')[:400]}" if m.tags.get("Depiction") else "")
             )
         parts.append("")
     (out / "MANIFEST.md").write_text("\n".join(parts) + "\n", encoding="utf-8")
-    (out / "triage.json").write_text(json.dumps({"units": {s: fp for s, _w, fp in units}, "pages": reads}, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+    (out / "triage.json").write_text(json.dumps({"units": {s: fp for s, _w, fp in units}, "pages": reads, "blobs": blobs}, indent=1, sort_keys=True) + "\n", encoding="utf-8")
     return out / "MANIFEST.md", len(units)
 
 
@@ -156,7 +168,9 @@ def _reads(page: str, unit_pages: Sequence[str]) -> bool:
     return any(pathlib.Path(p).name in (name, name + ".html") for p in unit_pages)
 
 
-def record(store: pathlib.Path, units: Mapping[str, str], reply: str, pages: Mapping[str, Sequence[str]] | None = None) -> list[str]:
+def record(
+    store: pathlib.Path, units: Mapping[str, str], reply: str, pages: Mapping[str, Sequence[str]] | None = None, blobs: Mapping[str, Mapping[str, str]] | None = None
+) -> list[str]:
     """Apply a triage reply: a unit is marked touched (owed its full check at this fingerprint) when a line names its pop-up AT
     one of the pages the unit's check reads (`pages`, from triage.json - FR-015), or names its pop-up with no page (owing all of
     its units, failing toward checking); every other unit is answered at its fingerprint, `triage: untouched`. Only lines that
@@ -178,7 +192,10 @@ def record(store: pathlib.Path, units: Mapping[str, str], reply: str, pages: Map
             mark[slug] = fp
             msgs.append(f"touched: {slug} - {hit[0]}")
         else:
-            ro.write_answer(store, slug, fp, "triage: untouched")
+            # ...KEEPING THE PAGES THE TRIAGE SHOWED IT (feature 385 T02, plan D11): an untouched answer written with none erased the
+            # blob the check before it kept, and every later triage of the unit fell back to the merge base
+            kept = {**dict(ro._read(store, slug).get("pages") or {}), **dict((blobs or {}).get(slug) or {})}
+            ro.write_answer(store, slug, fp, "triage: untouched", kept or None)
     store.mkdir(parents=True, exist_ok=True)
     (store / TOUCHED).write_text(json.dumps(mark, indent=1, sort_keys=True) + "\n", encoding="utf-8")
     return msgs
@@ -220,7 +237,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
         return 0
     data = json.loads((pathlib.Path(a.bundle) / "triage.json").read_text(encoding="utf-8"))
-    msgs = record(ro.store(root), data["units"], pathlib.Path(a.reply).read_text(encoding="utf-8"), data.get("pages"))
+    msgs = record(ro.store(root), data["units"], pathlib.Path(a.reply).read_text(encoding="utf-8"), data.get("pages"), data.get("blobs"))
     for msg in msgs:
         print(f"modal-triaged: {msg}")
     n = sum(1 for msg in msgs if msg.startswith("touched"))

@@ -4,7 +4,7 @@
  "blocks": {
   "preamble": {
    "sha256": "432906df1b4fca84f37932b2423164e9a248862c872db21582c2aa64dbf69f60",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
   },
@@ -44,12 +44,6 @@
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
   },
-  "## T02 - the tooling: the Approach block required, the triggers, the split (FR-003 to FR-005)": {
-   "sha256": "bb5300d45691e5eccb674df5ba067a3e53aa91ba19bce47353be33a98168c43e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-17",
-   "declared": "spec-fidelity"
-  },
   "## T03 to T10 - the four seeds failing at HEAD, T48, T47's patch, five ranking rows": {
    "sha256": "40a38493918a5054be62afaead2731439ff9d72c5010c94fe350d27d698ea075",
    "verdict": "CLEAR",
@@ -70,19 +64,19 @@
   },
   "## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)": {
    "sha256": "a0b57acda8087bcfe98d579f7bee7d25fb120b2c234736a8ae05192014d61e4f",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
   },
   "### T02 Approach (checklist part A)": {
    "sha256": "e42709b723e9a9ea2f10b9189df9c1d41efa500dded626d26dc9aff9372af376",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
   },
   "### T02 Decisions": {
-   "sha256": "a5d674a340b15f9ea433505d8ed9c9851901f6faa7c33e5865564253f121fa57",
-   "verdict": "BLOCKED",
+   "sha256": "13874297c36bd6209ccd3e6ff6b1dd3d7d0d6f67aa622d430001e467b8893278",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
   }
@@ -695,6 +689,79 @@
      "summary": "tooling only, landed by make land-tooling, no review checks owed",
      "class": "within",
      "why": "the items are tooling; nothing asked of the engine here."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)",
+    "### T02 Approach (checklist part A)",
+    "### T02 Decisions",
+    "(removed) ## T02 - the tooling: the Approach block required, the triggers, the split (FR-003 to FR-005)",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "removed-header",
+     "summary": "The placeholder T02 header (FR-003 to FR-005, 'decided at its start') removed, replaced by the full T02 section covering FR-003 to FR-005 and FR-008 to FR-011",
+     "class": "within",
+     "why": "The placeholder said T02 would be decided at its start; the new section is that decision, widened by amendment 1 which the GM approved. Nothing asked is dropped."
+    },
+    {
+     "id": "T02-Approach",
+     "summary": "Part A answers: goal, constraints, sources, order (measure first), exits, budget, value-ordered landing by make land-tooling",
+     "class": "within",
+     "why": "Serves FR-003 (the block itself) and FR-008 (measure the cause first); landing order and budget settle no scope."
+    },
+    {
+     "id": "D8",
+     "summary": "FR-003: opt-in plan line; make tick refuses a task whose Approach block is missing or answers fewer items",
+     "class": "within",
+     "why": "Request: 'make tick refuses until it's answered'; FR-003/FR-001 carry the opt-in and its later extension."
+    },
+    {
+     "id": "D9",
+     "summary": "FR-004 triggers: arbiter hour/red-gate ruling, a cohort seed newly refused (seeds failing at HEAD fire nothing), a re-review of Decisions after CLEAR",
+     "class": "within",
+     "why": "Request names 'the first seed the change refuses, a second red gate, or the hourly step-back'; a seed already failing at HEAD is not refused by the change, so the floor is the clause's own scope, not a carve-out. Re-decide trigger is FR-004 verbatim."
+    },
+    {
+     "id": "D10",
+     "summary": "FR-005/FR-011: task-starts log; per-task split table and per-check-kind cost per changed line from the feature event log; T01 replayed as baseline",
+     "class": "within",
+     "why": "Amendment 1 item 4 and FR-005/FR-011 as written; the source choice is implementation."
+    },
+    {
+     "id": "D11",
+     "summary": "FR-008: triage answers keep the blobs they read; triage bundle groups units by baseline; claims triage the same",
+     "class": "within",
+     "why": "FR-008 covers pop-ups and claims re-owed by a page change, triaged against what the last check read; measured cause recorded."
+    },
+    {
+     "id": "D12",
+     "summary": "FR-009: record-owed marks answered/owed; #unfootnoted in one batch; modal-bundle takes several KINDs in one bundle",
+     "class": "within",
+     "why": "Amendment 1 item 2: one quote-check batch for a page-wide check, one agent for the pop-ups a changed page re-owes; the listing fix removes the measured cause of the extra batches."
+    },
+    {
+     "id": "D13",
+     "summary": "FR-010: guard refuses, while this tree's make done runs, Edit/Write into the clone, git commit, git add, and the tracked-record targets (append, claims-checked, claims-triaged, record-checked, tick, accept), naming make verify-wait; only make modal-triaged (writes under .git/ only) passes; both round-2 refusals in the test",
+     "class": "within",
+     "why": "Request: 'Refuse writes to the tree while your own gate runs'. git add and record-checked REPLY= both move what the gate's tree() compares, so refusing them is the asked enforcement, not unrequested reach. modal-triaged writes nothing the tree check sees, so passing it is outside the rule rather than an exception to it. Round 2's finding is resolved."
+    },
+    {
+     "id": "D14",
+     "summary": "The hourly clock subtracts GM waits (gm field on prompts); report's 'waiting: the GM' reads it",
+     "class": "within",
+     "why": "The round arbiter's tooling fix on hour:385@4, binding by feature 379; it makes the existing hourly trigger FR-004 extends measure the session's time."
+    },
+    {
+     "id": "D15",
+     "summary": "Nothing in the engine; tooling only, landed by make land-tooling",
+     "class": "within",
+     "why": "T02 is the tooling task by amendment 1; no map change asked."
     }
    ]
   }
