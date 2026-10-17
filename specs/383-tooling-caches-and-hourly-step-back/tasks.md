@@ -73,7 +73,7 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
       research: rendering
       verify: DONE. DONE. tooling tests 1796 passed, make hooks-test green, make done green, the report written; landed by the push carrying this tick
 
-- [ ] GM review (make gm-reviewed F=383) [lands-open]
+- [x] GM review (make gm-reviewed F=383) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
 
