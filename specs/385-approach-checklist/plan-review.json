@@ -85,6 +85,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
+  },
+  "## T03 - the four seeds failing at HEAD and the side-by-side shape (FR-012 first)": {
+   "sha256": "58409cd5dec98d32274ab0ed68e63e7f6cef494372461accedd3508f52313f39",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "a8038af90706adc8ada734cb7e887962c444b6fcec32c07f3e93627b221dcf3c",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Decisions": {
+   "sha256": "3ea5602006a29eaa6d3a5fea80fee4804fda00f4db7c5ef5f6cc4e242e5200c7",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "## T04 to T10 - T48, T47's patch, five ranking rows": {
+   "sha256": "693c119c0066cfd0ea02c004425dac6e877b3a5bf9fb147b650d1f28fe4110a8",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
   }
  },
  "reviewed": "2026-10-17",
@@ -795,6 +819,87 @@
      "summary": "Following the step-back's 'continue' ruling, the next step is the tick of T02, then T03",
      "class": "within",
      "why": "Tasks run one at a time (FR-006) in the order the spec sets; the block skips no step the request or the D9 trigger owes - it is itself the part B answer D9 requires after an hour: ruling."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## T03 - the four seeds failing at HEAD and the side-by-side shape (FR-012 first)",
+    "## T04 to T10 - T48, T47's patch, five ranking rows",
+    "### T03 Approach (checklist part A)",
+    "### T03 Decisions",
+    "(removed) ## T03 to T10 - the four seeds failing at HEAD, T48, T47's patch, five ranking rows"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "split-headers",
+     "summary": "The combined 'T03 to T10' header is removed and split into a T03 section and a 'T04 to T10' header, with the same order and the same decide-at-start prose.",
+     "class": "within",
+     "why": "This only restructures the plan. FR-007's order (the seeds, T48, T47, the ranking rows) is unchanged, and T03 now holds its own section as FR-012 asks."
+    },
+    {
+     "id": "D16",
+     "summary": "Measure before any fix for seeds 17 and 21: a per-candidate refusal reason (engine code that lands with the task) and a dump of the refusing geometry before a cause is named.",
+     "class": "within",
+     "why": "Asking the question before conforming is the point of the request ('take the 10,000 foot view'). The per-candidate refusal is a measurement instrument. It refuses or rewrites no work, so it is not new behavior."
+    },
+    {
+     "id": "D17",
+     "summary": "The side-by-side merge is one general test. REACH is 20 ft, labeled as a convention anchored on 0246's 18-20 ft. The later way is cut to a T, a household's way is cut at its far end, the test is red first, and it replaces along_tail's pair where it covers the same cases. T01's detectors are retired only where a test shows the general test catches their cases.",
+     "class": "within",
+     "why": "This is the GM's own example ('two different footpaths that are nearly parallel ... a single footpath would emerge'), carried by FR-007's lane law. The open-ground condition is the GM's obstruction-aware framing. Retiring a detector only on evidence is the GM's 'not throw away rules when they are inconvenient'. Aside, not a ruling: the blind block puts F2's pairs at 18-25 ft, partly outside a 20 ft REACH, and D22 requires F1-F3 gone. Those cannot all hold, and if F2 is later kept, that is a narrowing owed its own record."
+    },
+    {
+     "id": "D18",
+     "summary": "Seed 45: the sty placer tests the grove band as drawn, through one predicate shared with grove_rules.fixtures_on_groves. No new number, no room.",
+     "class": "within",
+     "why": "This is exit (e) from the blind block. It conforms the placer to its own check, and nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "D19",
+     "summary": "Seed 40: dump first, then a row farm may take its own street's join as its street, in lay_door_paths and row_rules through one predicate. A re-seat, if one is needed, goes to T04.",
+     "class": "within",
+     "why": "This refines an O definition, which is the 'refine the number/rule' exit the GM's checklist names. Leaving homesteads unmoved is the GM's 'homesteads before lanes' (A5). The T04 route is ruled under D22-exit."
+    },
+    {
+     "id": "D20-1",
+     "summary": "Seed 21, exit (1): where a fouled way is a household's only route and it crosses a neighbor's yard, the household is reached across its neighbor (0246's fallback, R), but 'the way is not drawn through the yard, and the house counts as reached, as unreached_houses already allows.'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "In amendment 1 the GM asked: 'Are we sure that household paths don't cut through neighbors' yards? I thought that our research findings were that they did.' The R label the plan carries attaches only to 'reached across a neighbor's yard'. The clause 'the way is not drawn through the yard' has no research basis in the plan. Its only stated ground is existing code (unreached_houses), and preserving existing behavior the GM did not ask to preserve does not make an exception legitimate. Here that behavior is the one the GM's question challenged: no path through a neighbor's yard. The blind block does not carry the clause ('0246's own fallback is reaching the house across a neighbor's yard'). The Decisions preface says that where block and session differ on seeds 17 and 21 'the decision names the measurement that settles it, not a side'. D20(1) takes a side and names no measurement, and FR-012 requires the plan to say where it differs from the blind block. It should say one of two things instead. (a) The household's way is drawn across the neighbor's yard, as an exception to fouled_segment for that case. Or (b) the decision quotes the 0246 line showing that such a crossing leaves no drawn path, labels 'not drawn' R on that line, and marks it as the session's difference from the blind block."
+    },
+    {
+     "id": "D20-2",
+     "summary": "Seed 21, exit (2): otherwise the 7 ft O gap is weighed against more room, room first under the GM's 2026-10-12 ruling, and a room change goes to T04. Before choosing, the session asks whether a reader of the research would call the drawn place wrong.",
+     "class": "within",
+     "why": "Room first is the GM's ruling and 'give it more room' is a checklist exit. The reader question is the GM's 'say that there isn't a problem' from amendment 1. The T04 route is ruled under D22-exit."
+    },
+    {
+     "id": "D21",
+     "summary": "Seed 17: per-candidate refusal first, then D17's merge, then 0014's nearest lane run on to the bund, then whether the refusal should exist at all. FIELD_REACH_FT's 60 ft is relabeled O.",
+     "class": "within",
+     "why": "Exit (3) keeps the GM's own question open ('I didn't think that there was a rule about village lanes needing to reach the fields'). Relabeling the mislabeled figure is constitution XIV. Every exit resolves inside T03."
+    },
+    {
+     "id": "D22-exit",
+     "summary": "Done: 'each seed passes make cohort N=1 SEED=n, or carries its recorded exit'. With D19 and D20(2), a seed whose exit is a re-seat or a room change leaves T03 for T04.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-007 moves the four seeds here as a unit, and this lets one leave T03 still failing. The GM's own words imply the exception: 'Nobody in real life moves their house so that a footpath will join'. Homesteads come before lanes, so a lane task may not re-seat houses. The approved scope order puts T48 (the web carries a re-deal of the seats) directly after the seeds. Every deferral the decisions name goes to T04, a task in this feature. This is legitimate ONLY as that T04 deferral. A seed left with a 'recorded exit' that no task in this feature owns, or an exit other than a re-seat or room change, is not covered by this ruling."
+    },
+    {
+     "id": "D22-rest",
+     "summary": "Done also includes: the 50/54 baseline log, no regression across the cohort, the merge test red without its change, the Inashiro glyph-check re-run with F1-F3 gone, make done green, and a retro row.",
+     "class": "within",
+     "why": "Each item enforces what was asked (FR-007's seeds and lane law, FR-006's retro). It is enforcement, not unrequested scope."
+    },
+    {
+     "id": "D23",
+     "summary": "Budget about 4 h, the blind block's. Twice that (8 h) triggers part B, as does every D9 trigger.",
+     "class": "within",
+     "why": "The GM's 'no two-hour threshold on record' rejected a threshold for judging whether the experiment fails. D23 instead fires the step-back checklist, the 'checklist ... that comes up when a session is taking a while' the GM asked for (FR-004). It adds a fourth trigger beyond D9's three, and it says so on record. It does not judge the process."
     }
    ]
   }

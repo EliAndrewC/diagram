@@ -335,7 +335,9 @@ earlier, within `_DOUBLED_DEG` of parallel, for longer than a junction's approac
 families leave empty. The later way is cut to a T where it first comes alongside. A household's way is cut at its far end
 only, never at its door, so the stub at the door carries both households. The test is written first, red on Inashiro lanes 8
 and 14 and on F2's pairs. REACH is the one open number: 20 ft, anchored on 0246's lane room (18-20 ft), the only researched
-figure in that range, labeled as a convention anchored there. The test replaces `along_tail`'s fixed `_ALONG_FT` / `_ALONG_MIN_FT`
+figure in that range, labeled as a convention anchored there. F2's pairs at 18-25 ft are measured against it: a pair past 20 ft
+that a reader still sees as two treads side by side is evidence that REACH should be larger, and REACH is moved (an O number,
+exit a), never F2 kept as a narrowing. The test replaces `along_tail`'s fixed `_ALONG_FT` / `_ALONG_MIN_FT`
 pair where it covers the same cases. Each of T01's three detectors is retired only where a test shows the general test
 catches its cases, and one it does not catch is kept and named.
 
@@ -347,10 +349,17 @@ for what else uses it. No new number, no room.
 what rule. Then a row farm may take its own street's join as its street, in `lay_door_paths` and `row_rules` alike, through one
 predicate. Nothing re-seats a homestead (A5). If the dump shows the farm cannot be reached without a re-seat, that is T04's.
 
-**D20 - seed 21: the exit follows the dump.** In order:
-(1) Where a fouled way is a household's only route to its lane and that route crosses a neighbor's yard, the household is
-reached across its neighbor (0246's own fallback, R): the way is not drawn through the yard, and the house counts as reached,
-as `unreached_houses` already allows.
+**D20 - seed 21: the exit follows the dump.** The dump (D16) is read first. It measures, for each fouled access lane, whether
+the lane is a household's only route to the network and whether that route runs through a neighbor's yard. The exits, in order:
+(1) **Where it does, the household is reached across its neighbor.** 0246's drawing page, as it stands, says where the gaps
+leave no lawful way the household *"is reached across the yard of its nearest neighbor with a way, the walk not drawn: a
+household cut through a neighbor's yard in a pinch"*. That rests on the GM's ruling of 2026-10-03 (feature 318 amendment 2): *"it's
+okay for people to cut through neighbors' yards in a pinch"*. Its research is 0081's finding that a household with no way of
+its own crossed a neighbor's land by custom. "The walk not drawn" is that page's drawing convention, not a finding, and T03
+keeps it as the page states it. Whether the walk across the yard should be DRAWN is a drawing question the page decides, not
+this task. This is the session's difference from the blind block, marked as FR-012 asks: the blind block names this fallback
+but chooses the gap or room first, and the session puts the record's own fallback first because the record states it for
+exactly this case. The dump decides whether the case applies.
 (2) Else the 7 ft gap (O, a convention) is weighed against more room (the GM's 2026-10-12 ruling: room first), and a room
 change is T04's.
 Before choosing, it is asked whether a reader of the research would call the drawn place wrong. That is the question the
@@ -366,7 +375,8 @@ down. The exits, in order:
 
 **D22 - done.**
 - The baseline: `.git/cohort48-t01b.log`, 50/54, failing 17, 21, 40 and 45.
-- Each seed passes `make cohort N=1 SEED=n`, or carries its recorded exit.
+- Each seed passes `make cohort N=1 SEED=n`, or carries its recorded exit to T04 (a re-seat or room change, T04's own task);
+  an exit no task of this feature owns is not done.
 - The whole cohort regresses no seed.
 - The merge test is red without its change.
 - The Inashiro village-lane glyph-check is re-run with F1-F3 gone.
