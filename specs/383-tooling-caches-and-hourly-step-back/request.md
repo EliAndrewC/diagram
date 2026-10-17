@@ -109,3 +109,18 @@ re-run on any research edit. It proposed (1) the gate's tooling run reusing as a
 reuse per test, with (3) code-only tests moved to fixtures case by case. The GM:
 
 > Yes, please file it that way, and then do that work. Thanks.
+
+## Amendment 6 (2026-10-17, same session)
+
+The GM, on subagents and prompt caching:
+
+> Um, one problem I've run into in other projects that I want to make sure does not happen here is that uh, when we run a lot of subagents, then it's very, very important that any context that subagents share in common is put either into their system prompt, ideally, or um, at the very least at the beginning of the prompt, such that it is much more likely to be cached. Um, because, you know, like, the way that this generally works is that if I run a subagent and then I am, you know, giving it, like, a unique sentence for its prompt, and then I put 10 kilobytes of context after that, then none of that gets cached because the initial prompt makes everything that comes after it uncacheable, even if that same 10 kilobytes was shared with every other subagent. Whereas if that 10 kilobytes goes into the system prompt, or if it goes at the very beginning of the prompt that we give it, then I believe that that generally does get cached. And then basically we don't get charged the same amount for that. It doesn't count against our token usage to the same degree. Uh, I mean, I know that there's like different rates and ways that this gets computed. But I want to make sure that we're doing this the smart way. I ran into a situation at work this week where we were not, and that basically was just like destroying our token usage, and then just like the tiniest change was enough to cause us to, you know, see like an order of magnitude efficiency in token spend. So I want to both make sure that we are doing the correct thing here and that there are some kind of project guidelines that enforce this or otherwise make sure that we don't fall into the mistake of doing it the bad way in the future.
+
+The session measured every subagent transcript since 2026-10-10 (1,312 runs): defined agents cache their agent file
+across dispatches; three leaks, about 16% of subagent spend - spec-fidelity's CLAUDE.md context (~22k tokens written fresh
+per dispatch, ~12%), ad-hoc general-purpose dispatches (~3.5%), the modal checks' static manifest text (~1.3%). It proposed:
+spec-fidelity without CLAUDE.md, its rules in its agent file; the modal guidelines into the modal agents' files; recurring
+ad-hoc dispatches (the claims and modal triage) as defined agents; a dispatch guard for a shared block after a unique start, a
+bundle test, `make cache-audit`, a rule in CLAUDE.md. The GM:
+
+> Yes. Please file that and then implement it. Thank you.

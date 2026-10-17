@@ -2,13 +2,15 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-12
-**Status**: Done 2026-10-17 - amendment 5 landed: plan CLEAR (round 4, D31 rewritten for where the gate really runs tooling tests); after a Makefile-only change the gate's full run reuses 1,739 of 1,824 tooling tests with their coverage carried, 167 -> 132 s (m:gate-tooling-makefile-a5); reuse per test, a source-page edit re-runs 15 tests not 219 (m:source-page-edit-a5); a soundness defect in reuse fixed (D32b, research R12); 12 tests of code moved off the real record. Before it: Done 2026-10-17 - amendment 4 landed: spec FAITHFUL (round 3), plan CLEAR; five guard suites 2-4x faster with their checks unchanged (research R11); a landing 30.04 -> 27.28 s (m:land-tooling-landing-a4); make parts-sweep (the arbiter's fix). Before it: Done 2026-10-17 - amendment 3 landed: spec FAITHFUL (round 2), plan CLEAR (round 5); no review check moves to Sonnet 5.5 (research R10); always-run tooling files 18 -> 0 of 128; a landing 37.05 -> 30.04 s (m:land-tooling-landing-a3); hooks-test idle 16.06 -> 2.6 s (m:hooks-test-idle); sync-with-main suite 36.23 -> 17.88 s (m:sync-with-main-suite). Before it: Done 2026-10-13 - amendment 2 landed: spec FAITHFUL (round 4), plan block CLEAR (round 2); a landing 113.98 -> 37.05 s (m:land-tooling-landing-before, m:land-tooling-landing-after), tooling reuse 27.58 -> 19.35 s with 18 of 127 files always run (m:land-tooling-tests-reuse-a2), the claims gate 8.53 -> 1.65 s (m:claims-gate-push). Before it: Done 2026-10-13 - amendment 1 landed: spec FAITHFUL (round 3), plan block CLEAR; land-tooling's tooling tests 36.21 -> 27.58 s (606 of 1,796 tests ran with reuse, m:land-tooling-tests-reuse), quote-verbatim's verdicts cached. Before it: Done 2026-10-13 - spec FAITHFUL (round 3), plan CLEAR (round 3), every task ticked; push checks 19.87 s -> 1.92 s (research R6); tooling landed 0906d798a; the GM's review open (the first step-back's note)
+**Status**: In progress 2026-10-17 - amendment 6 (FR-031..FR-036). Before it: Done 2026-10-17 - amendment 5 landed: plan CLEAR (round 4, D31 rewritten for where the gate really runs tooling tests); after a Makefile-only change the gate's full run reuses 1,739 of 1,824 tooling tests with their coverage carried, 167 -> 132 s (m:gate-tooling-makefile-a5); reuse per test, a source-page edit re-runs 15 tests not 219 (m:source-page-edit-a5); a soundness defect in reuse fixed (D32b, research R12); 12 tests of code moved off the real record. Before it: Done 2026-10-17 - amendment 4 landed: spec FAITHFUL (round 3), plan CLEAR; five guard suites 2-4x faster with their checks unchanged (research R11); a landing 30.04 -> 27.28 s (m:land-tooling-landing-a4); make parts-sweep (the arbiter's fix). Before it: Done 2026-10-17 - amendment 3 landed: spec FAITHFUL (round 2), plan CLEAR (round 5); no review check moves to Sonnet 5.5 (research R10); always-run tooling files 18 -> 0 of 128; a landing 37.05 -> 30.04 s (m:land-tooling-landing-a3); hooks-test idle 16.06 -> 2.6 s (m:hooks-test-idle); sync-with-main suite 36.23 -> 17.88 s (m:sync-with-main-suite). Before it: Done 2026-10-13 - amendment 2 landed: spec FAITHFUL (round 4), plan block CLEAR (round 2); a landing 113.98 -> 37.05 s (m:land-tooling-landing-before, m:land-tooling-landing-after), tooling reuse 27.58 -> 19.35 s with 18 of 127 files always run (m:land-tooling-tests-reuse-a2), the claims gate 8.53 -> 1.65 s (m:claims-gate-push). Before it: Done 2026-10-13 - amendment 1 landed: spec FAITHFUL (round 3), plan block CLEAR; land-tooling's tooling tests 36.21 -> 27.58 s (606 of 1,796 tests ran with reuse, m:land-tooling-tests-reuse), quote-verbatim's verdicts cached. Before it: Done 2026-10-13 - spec FAITHFUL (round 3), plan CLEAR (round 3), every task ticked; push checks 19.87 s -> 1.92 s (research R6); tooling landed 0906d798a; the GM's review open (the first step-back's note)
 
 **Affects**: tooling, review process
 
 **Amendment 1 approved**: the GM, 2026-10-13, "Yes please we should definitely skip suites the clone already passed." and "And also, while I realize we don't run it very often, I feel like `quote-verbatim` would benefit from the same caching layer we implemented elsewhere, right?"
 
 **Amendment 5 approved**: the GM, 2026-10-17, "Yes, please file it that way, and then do that work. Thanks."
+
+**Amendment 6 approved**: the GM, 2026-10-17, "Yes. Please file that and then implement it. Thank you."
 
 **Amendment 4 approved**: the GM, 2026-10-17, "I think I do want a next round uh, for the guard suites running serially, so uh, splitting those up does seem good." and "So yes, please fold those two into the same round as the sweet splitting. and then go ahead and work that."
 
@@ -197,6 +199,27 @@ long-running feature does for itself, on the clock glyph-check already keeps.
   subject is code still re-runs on edits to the repository's data, it reads a fixture instead; a test whose subject is the
   repository's data keeps reading it. Each moved test is listed with what it read before and after.
 
+### Amendment 6 - what subagents share is cached (`request.md`, Amendment 6)
+
+- **FR-031 spec-fidelity runs without the project's instruction files.** It launches without CLAUDE.md, the nested
+  CLAUDE.md files and the memory index, as every other defined agent does; what it needs from them is written in its agent
+  file, which is its system prompt. The agent-tier test names no exception.
+- **FR-032 Text every bundle of a check repeats lives in that check's agent file.** A bundle carries only what is particular
+  to its unit; the static text each bundle of a check repeats - first, the modal guidelines the three modal checks' manifests
+  carry - moves into the agent file.
+- **FR-033 A recurring ad-hoc dispatch becomes a defined agent.** The claims triage and the modal triage, dispatched as
+  general-purpose agents carrying the whole instruction context, get agent files of their own (their manifests' standing
+  instructions, a pinned tier, no CLAUDE.md), and the commands that prompt their dispatch name them.
+- **FR-034 A shared block after a unique start is refused at dispatch.** An Agent dispatch whose prompt shares a large
+  identical block with an earlier dispatch of the session, after a part that differs, is refused with the fix: put the shared
+  text first, or in an agent file.
+- **FR-035 Bundles are tested for shared text.** A test builds two bundles of each check kind and fails when their identical
+  text passes a small limit.
+- **FR-036 The cache is measured and the rule written.** `make cache-audit` reports, per agent type, from the subagent
+  transcripts: the tokens a dispatch writes fresh on its first call, against a dispatch of the same type minutes before, and the
+  manifests' repeated text. CLAUDE.md states the rule - shared context in the agent file, the unique part last - and names
+  the guard.
+
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002, FR-005, FR-006, FR-007) The push's checks: from about 24 s, the measurement the GM saw
@@ -266,6 +289,14 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 - **SC-022** (FR-029, FR-030) An edit to one research source page re-runs only the tests that read it - test_sources' count before
   (43, the whole file) and after; an edit to a `conftest.py` re-runs every test below it (a test); a landing's tooling step
   measured before (m:land-tooling-landing-a4) and after.
+
+- **SC-023** (FR-031, FR-033) A spec-fidelity dispatch made minutes after another writes on its first call what a defined
+  agent's does - before ~25.8k tokens (observed 2026-10-17; `make cache-audit`'s method over 72 back-to-back pairs), after
+  measured the same way; the claims and modal triage the same against general-purpose's ~29.2k.
+- **SC-024** (FR-032, FR-035) The modal checks' manifests repeat at most the test's limit - before 15-17k characters in 80% of
+  manifests (observed 2026-10-17; the same method) - and the bundle test fails on a seeded repeated block.
+- **SC-025** (FR-034, FR-036) The guard refuses a unique sentence followed by a shared 10 KB and passes the same block placed
+  first (suite cases); `make cache-audit` prints every agent type's numbers, and its total subagent spend before and after.
 
 ## Review history
 
