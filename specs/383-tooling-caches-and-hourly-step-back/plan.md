@@ -522,8 +522,9 @@ the agent. A new agent file is seen by a session started after it lands.
 **D37 - The dispatch guard (FR-034).** `scripts/hooks/agent-prefix-hooks.sh` on PreToolUse Agent, with its decider in
 `scripts/hooks/lib/hm_agent_prefix.py`: the session's Agent prompts that passed are kept in `<git dir>/l7r-agent-prompts/` (the
 last 30), each with its agent type and model; a new prompt is compared only with earlier prompts of its own type and model -
-another type's system prompt differs, so nothing is shared across types - by the longest run of identical lines both hold after
-their common prefix, the prompts capped at 64 KB. A block of 2,000 characters or more is refused unless everything before it is identical in both
+another type's system prompt differs, so nothing is shared across types - by every run of identical lines both hold after
+their common prefix (cut back to a line's start), the prompts capped at 64 KB; each run is judged, not the longest alone (plan
+review round 3: "shared B, unique text, shared C" passed on B). A block of 2,000 characters or more is refused unless everything before it is identical in both
 prompts - a cached prefix breaks at the first character that differs, so any differing part before it, however short, makes it
 uncacheable - with the fix: put the shared text at the start of the prompt, or in the agent's file. A block that starts the new
 prompt passes: that is the fixed form, which the next dispatch reads from the cache (refused against an earlier prompt of the
