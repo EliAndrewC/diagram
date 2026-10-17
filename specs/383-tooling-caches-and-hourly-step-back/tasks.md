@@ -173,3 +173,18 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
       research: rendering
       verify: DONE. SC-026 met (R15). After landing, a session started in /diagram that reads a clone file loads the root CLAUDE.md once, not twice, and the nested file still loads. Its subagents skip the clone's copy too; spec-fidelity, with omitClaudeMd, loads neither root. tests/test_one_root_claude_md.py holds the exclusion.
 
+
+## Amendment 6, reopened (the GM 2026-10-17: "Yes, go ahead and reopen amendment 6 for all five")
+
+- [ ] T46 The guard refuses a repeated block wherever it sits; the rule and docs corrected (plan D41) (SC-027)
+      research: rendering
+- [ ] T47 A fan-out launches one first: the guard and the review doctrine; measured (plan D42) (SC-028)
+      research: rendering
+- [ ] T48 No 1-hour subagent cache: the test (plan D43) (SC-028)
+      research: rendering
+- [ ] T49 CLAUDE.md as a core plus an index; the quotes test; the enumeration; measured (plan D44) (SC-029)
+      research: rendering
+- [ ] T50 The general-purpose families swept (plan D45) (SC-030)
+      research: rendering
+- [ ] T51 Close: the checks, the report, landed
+      research: rendering

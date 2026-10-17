@@ -561,3 +561,43 @@ that edits CLAUDE.md reads its own copy as it edits. A test reads the settings a
 match a nested CLAUDE.md. SC-026's after is measured as R15 was, in a session started after it lands. gm-assistant has the same
 shape; its settings are its own, so the session reports the line for it rather than editing that repository.
 
+
+## Amendment 6, reopened (FR-034 corrected, FR-038 to FR-041)
+
+**D41 - The guard refuses a repeated block wherever it sits (FR-034 corrected, SC-027).** `hm_agent_prefix.finding` judges every
+run of 2,000+ identical characters a new prompt shares with an earlier dispatch of its type and model, at any position - a
+subagent's first message has no cache breakpoint, so placement does not help (research R16) - and passes only a prompt
+identical to an earlier one as a whole (which the cache does reuse, R14). The comparison stays within a type and model: the
+fix is that type's agent file. The refusal names one fix: move the shared text into `.claude/agents/<name>.md`. The suite's
+"block first passes" case becomes "block first is refused"; a wholly identical prompt passes. CLAUDE.md's rule, `docs/guards.md`
+and `docs/spec-kit-and-reviews.md` drop "put it first".
+
+**D42 - A fan-out launches one first (FR-039, SC-028).** Measured 2026-10-17 (a probe hook in a throwaway headless session): a
+message's parallel Agent calls reach PreToolUse one after another about half a second apart, and the transcript does not yet
+hold the message, so a hook cannot see its siblings - but it can see their timing. In `agent-prefix-hooks.sh`, per session and
+agent type: a dispatch is COLD when no dispatch of its type went out in the 5 minutes before it (the cache's lifetime); a
+dispatch of the same type within FANOUT_S = 5 seconds after a cold one is refused - "the first of a fan-out goes alone; send the
+rest in your next message, which reads its prefix from the cache" - and one after the window passes. The window is a
+convenience number to move. The review doctrine (`docs/reviews.md`, CLAUDE.md's "dispatch every owed unit together") says
+"the first alone, the rest in the next message". SC-028's measurement: a 3-launch fan-out of one typed agent sent together
+against one staggered, each launch's first-request read and write.
+
+**D43 - No 1-hour subagent cache (FR-038, SC-028).** `tests/test_agent_models.py` gains a test: no `cacheTtl` or
+`CLAUDE_CODE_SUBAGENT_PROMPT_CACHE_TTL` naming an hour in `.claude/settings.json`, any agent file, or the container's setup
+(`scripts/container/`); proven by a seeded string.
+
+**D44 - CLAUDE.md as a core plus an index (FR-040, SC-029).** The root CLAUDE.md keeps, one line each, the rules a session needs
+before it knows to open a doc (house style, the research ladder's first steps, spec-kit's must-dos, session clones, the
+make-only ladder), and an index; the long passages move VERBATIM into `docs/*.md` files each opening "Load this file when:" -
+the guard table to `docs/guards.md`, the research paragraphs to `docs/research-doctrine.md`, the workflow detail to
+`docs/spec-kit-and-reviews.md`, the verification detail to `docs/efficiency-tooling.md`. The nested CLAUDE.md files
+(`research/`, `tests/`, `l7r/diagram/`) the same way, into their own folders' docs. A phrase a hook or a script quotes from a
+CLAUDE.md stays in that CLAUDE.md: `tests/test_claude_md_quotes.py` extracts every `CLAUDE.md` + quoted phrase or section
+name from `scripts/`, `.claude/` and the Makefile and fails if the named file no longer holds it. An independent Opus agent reads
+the old and new files from a bundle and lists every rule of the old with a verdict (kept / moved and reachable / moved but
+unreachable / dropped / changed); every one not kept-or-reachable is fixed before landing, and its table is recorded. SC-029
+measures the root's characters and a fresh session's first request before and after.
+
+**D45 - The general-purpose families (FR-041, SC-030).** `scripts/measure/subagent_cache.py --families` groups the month's
+general-purpose launches by their description's leading words, with each family's count and last date; each family recurring
+since 2026-10-10 is given a defined agent or pointed at the existing one, and the rest recorded as one-off, in research R17.
