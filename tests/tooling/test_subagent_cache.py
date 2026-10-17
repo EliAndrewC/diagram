@@ -86,5 +86,6 @@ def test_the_contract_part_drops_the_sections_built_from_the_units_own_inputs() 
     rules = "## `guidelines.txt` - origin `dev/modals.md`\n" + "a rule every bundle of this check carries, long enough\n"
     claims = "## `claims.md` - origin `dev/claims-index.json`\n" + "a claim both units' pages carry, long enough to count\n"
     a, b = "# head\n" + page + rules + claims, "# head\n" + page + rules + claims
-    assert ca.contract_shared(a, b) == len("a rule every bundle of this check carries, long enough")
+    kept = ("## `guidelines.txt` - origin `dev/modals.md`", "a rule every bundle of this check carries, long enough")
+    assert ca.contract_shared(a, b) == sum(len(x) for x in kept), "the rule and its heading line; nothing from the unit's inputs"
     assert "a page both units cite" not in ca.contract_part(a) and "## `guidelines.txt`" in ca.contract_part(a)
