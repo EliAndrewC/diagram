@@ -17,7 +17,7 @@ def _repo(tmp: pathlib.Path) -> pathlib.Path:
 
 
 def _wait(tmp: pathlib.Path) -> subprocess.CompletedProcess[str]:
-    env = {**os.environ, "VERIFY_WAIT_STEP_S": "0", "VERIFY_WAIT_S": "5"}
+    env = {**os.environ, "VERIFY_WAIT_STEP_S": "0.2", "VERIFY_WAIT_S": "20"}
     return subprocess.run(["bash", str(script("verify_wait"))], cwd=tmp, env=env, capture_output=True, text=True, timeout=60)
 
 
@@ -29,8 +29,23 @@ def test_the_wait_reads_the_newest_runs_own_log(tmp_path: pathlib.Path) -> None:
     new.write_text("preflight: ...\n")  # the newest run: no verdict yet, and no writer holds it open
     (g / "verify-gate.log").symlink_to(new)
     died = _wait(tmp_path)
-    assert died.returncode == 5 and "gone with no verdict" in died.stdout, "the old run's verdict is never read for the new one"
+    assert died.returncode == 5 and "ended with no verdict" in died.stdout, "the old run's verdict is never read for the new one"
     new.write_text("preflight: ...\ngate green\nverification-state: green-local (done) recorded\n")
     assert _wait(tmp_path).returncode == 0
     new.write_text("GATE FAILED: test-full\nverification-state: failed-gate (done) recorded\n")
     assert _wait(tmp_path).returncode == 1
+
+
+def test_the_preflights_own_quick_verdict_is_not_the_gates(tmp_path: pathlib.Path) -> None:
+    """The first run of this wait ended mid-gate on the preflight's `make quick` line; the gate's end is its writer's."""
+    g = _repo(tmp_path)
+    new = g / "verify-gate-3.log"
+    new.write_text("preflight: ...\nverification-state: green-local (quick) recorded\n")
+    (g / "verify-gate.log").symlink_to(new)
+    assert _wait(tmp_path).returncode == 5, "the quick line alone is no gate verdict"
+    writer = subprocess.Popen(["bash", "-c", f"exec 3>>'{new}'; sleep 2; echo 'gate green' >&3"])
+    try:
+        done = _wait(tmp_path)
+    finally:
+        writer.wait(timeout=30)
+    assert done.returncode == 0 and "gate green" in done.stdout, "waited while the writer held the log, then read its verdict"

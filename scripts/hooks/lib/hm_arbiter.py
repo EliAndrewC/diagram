@@ -523,8 +523,15 @@ def settle_fix(root: Path, trigger: str, status: str, note: str, test: str = "",
         t = (root / test).resolve() if test else None
         if t is None or not t.is_file() or (root / "tests").resolve() not in t.parents:
             raise ValueError(f"TEST={test or '<none>'} is not a file under tests/ - a fix is done with the test that proves it")
+        # GUARD_EDIT_OK: feature 385 - an ENGINE fix lands with its feature: `land-tooling` refuses engine files, and the tick this
+        # fix holds is the one that lets the feature land, so "on main first" could never be met (T01: a crashed roll's traceback
+        # kept, in l7r/diagram/pipeline/rollcache.py). With ENGINE=1 the fix is done once its test is committed in the clone, and
+        # the row says it lands with the feature; a tooling fix still lands first.
         if not on_main(root, test):  # amendment 1, FR-006: made in one clone is not done for the sessions on the mirror's hooks
-            raise ValueError(f"{test} is not on main as it is here - land the fix first: make land-tooling FILES=\"{test} <the fix's files>\"")
+            if not (os.environ.get("ARBITER_FIX_ENGINE") and committed_here(root, test)):
+                raise ValueError(f"{test} is not on main as it is here - land the fix first: make land-tooling FILES=\"{test} <the fix's files>\""
+                                 " (an ENGINE fix, which land-tooling refuses, lands with its feature: commit it and its test, then the same command with ENGINE=1)")
+            note += " (an engine fix: it lands with the feature)"
     elif status != "declined":
         raise ValueError("status is done or declined")
     when = now or time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
@@ -534,6 +541,15 @@ def settle_fix(root: Path, trigger: str, status: str, note: str, test: str = "",
     _gm_row(d, {"kind": f"arbiter-fix-{status}", "trigger": trigger, "tooling_fix": fix, "note": note,
                 **({"test": test} if status == "done" else {}), "utc": when})
     return row
+
+
+def committed_here(root: Path, path: str) -> bool:
+    """Is `path` committed at the clone's HEAD exactly as it stands in the tree (no uncommitted change to it)?"""
+    import subprocess  # noqa: PLC0415
+
+    head = subprocess.run(["git", "-C", str(root), "rev-parse", "-q", "--verify", f"HEAD:{path}"], capture_output=True, text=True)
+    dirty = subprocess.run(["git", "-C", str(root), "status", "--porcelain", "--", path], capture_output=True, text=True)
+    return head.returncode == 0 and not dirty.stdout.strip()
 
 
 def on_main(root: Path, path: str) -> bool:

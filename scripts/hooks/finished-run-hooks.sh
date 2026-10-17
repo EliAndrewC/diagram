@@ -411,7 +411,12 @@ except Exception: pass' 2>/dev/null)
           while read -r pid target status detail; do
             [ -n "$pid" ] || continue
             printf '  pid %s `make %s`, output in %s\n' "$pid" "$target" "$detail" >&2
-            printf '  wait on it in the background: until grep -qE "verification-state|GATE FAILED" %s; do sleep 20; done\n' "$detail" >&2
+            # GUARD_EDIT_OK: feature 385 - the suggested loop matched the preflight's own `make quick` verdict line and ended
+            # mid-gate; `make verify-wait` waits for the run's writer to end and then reads its whole log
+            case "$detail" in
+              */verify-gate*) printf '  wait on it: `make verify-wait`, run_in_background - it ends when the gate does\n' >&2 ;;
+              *) printf '  wait on it in the background: until grep -qE "gate green|GATE NOT GREEN|GATE FAILED" %s; do sleep 20; done\n' "$detail" >&2 ;;
+            esac
           done <<< "$UNWATCHED"
           printf 'Then REPORT WHAT IT SAID. (A run started with run_in_background needs NO loop.) Ending the turn on purpose: end it again.\n' >&2
           guard_log finished-run blocked "$LIVE" run-still-going

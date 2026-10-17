@@ -1247,7 +1247,8 @@ arbiter-nit:  ## [project] answer an accepted unit again after the wording fix i
 arbiter-fix-done:  ## [project] the round arbiter's tooling fix is MADE: what was built and its test (feature 379)   ID="<trigger> [<trigger> ...]" NOTE="<what was built>" TEST=tests/...
 	@: "GUARD_EDIT_OK: 2026-10-11 hourly check - several fixes one change made settle in one command (343 carried 36 open)"
 	@if [ -z "$(ID)" ] || [ -z "$(NOTE)" ] || [ -z "$(TEST)" ]; then printf 'make arbiter-fix-done: ID=, NOTE= and TEST= are required\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py fix done "$(ID)" "$(NOTE)" "$(TEST)"
+	@: "GUARD_EDIT_OK: feature 385 - ENGINE=1: an engine fix lands with its feature (land-tooling refuses engine files)"
+	@cd "$$(git rev-parse --show-toplevel)" && ARBITER_FIX_ENGINE="$(ENGINE)" python3 scripts/hooks/lib/hm_arbiter.py fix done "$(ID)" "$(NOTE)" "$(TEST)"
 
 # GUARD_EDIT_OK: feature 383 FR-009 - a new operation: the feature's hourly checkpoint opened and its step-back bundle built in one
 # command (the GM 2026-10-12: "converting the check that we are doing now into something that every session does for itself").
