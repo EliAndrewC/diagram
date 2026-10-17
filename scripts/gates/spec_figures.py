@@ -45,7 +45,7 @@ TIMING_UNITS = {"ms", "s", "min", "h", "%", "x"}
 # `_FIGURE` from spec-lint - cannot drift apart. The first version of this module COPIED the roster under a
 # comment claiming one definition, which is the stale-literal shape this repository has paid for before.
 UNITS = ("ft", "m", "km", "ha", "mu", "sq ft", "%", "ms", "s", "min", "minute", "minutes",
-         "h", "MB", "MiB", "GiB", "px")
+         "h", "MB", "MiB", "GB", "GiB", "px")
 _UNIT_ALT = "|".join(sorted((re.escape(u) for u in UNITS), key=len, reverse=True))
 _FIGURE = re.compile(rf"(?<![\w.])\d[\d,]*(?:\.\d+)?\s*(?:{_UNIT_ALT})(?![\w-])")
 _KEY = re.compile(r"\bm:([a-z0-9][a-z0-9-]*)")
