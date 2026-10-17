@@ -30,6 +30,38 @@ from .smooth import _KNOT_FT
 Node = tuple[Pt, list[tuple[int, int]]]
 """A junction point and the (lane, end) pairs standing on it - `end` 0 or -1."""
 
+Apart = Callable[[Pt, Pt], bool]
+"""Do two points stand either side of something a lane may not cross (`ground_apart`)?"""
+
+
+class _View:
+    """A finished manifest seen as the settlement `settle.Lawful` reads: its `M` (`_homestead_polys`, `memo_ground`) and its
+    scale (`px`, a well's verge), from the manifest's own `meta.ftpx` - for a reader that has only the manifest (the
+    cohort's and the pool test's `lane_knots`)."""
+
+    def __init__(self, M: Mapping[str, Any]) -> None:
+        self.M = M
+        self.ftpx = float((M.get("meta") or {}).get("ftpx") or 1.0)
+
+    def px(self, ft: float) -> float:
+        return ft / self.ftpx
+
+
+def ground_apart(M: Mapping[str, Any], s: Any = None) -> Apart:
+    """THE KNOT RULE READS THE GROUND (feature 385 T01, plan D4b): two ends are apart where the straight join between them is
+    not lawful ground for a footpath (`settle.Lawful.on_lawful_ground`, the settle's own test: a house, another household's
+    yard or garden, a grove, a fixture, a building, a field, a dry plot, marsh, or water crossed off its ford). Two lane ends
+    with a garden between them are two paths either side of its fence, not three lanes arriving a few feet apart (the GM,
+    2026-10-17: a rule about how paths meet holds where nothing stands in the way). No cohort seed shows it yet: cohort seed
+    24 under the wave 155 re-deal, which first suggested it, proved a staggered junction with clear ground between the ends. `s`, where the caller has the settlement, is read in place of
+    the manifest's view.
+
+    Research: a knot is ends that could meet - DEVIATION research/questions/0081-village-lanes.drawing.html: "Ends within 25 ft of one another are joined at a single point, so three lanes never arrive a few feet apart in a knot" read as open ground; ends a fence parts are not a knot"""
+    from .settle import Lawful  # bound here: `settle` imports this module
+
+    lawful = Lawful(s if s is not None else _View(M))
+    return lambda p, q: not lawful.on_lawful_ground([p, q], 3.0)
+
 
 def _pts(ln: Mapping[str, Any]) -> Poly:
     return [(float(x), float(y)) for x, y in ln.get("pts") or []]
@@ -106,7 +138,7 @@ def _teed_pair(lanes: Sequence[Mapping[str, Any]], na: Node, nb: Node) -> bool:
     return any(len(n[1]) == 1 and door_end_teed(lanes, n[1][0][0], n[1][0][1], True, m[0]) for n, m in ((na, nb), (nb, na)))
 
 
-def knots(lanes: Sequence[Mapping[str, Any]]) -> list[tuple[int, int, float]]:
+def knots(lanes: Sequence[Mapping[str, Any]], apart: Apart | None = None) -> list[tuple[int, int, float]]:
     """The knots of the web: pairs of `end_nodes` indices that no one lane runs between standing within `_KNOT_FT` of one
     another, `KNOT_MARGIN` (1.0) leaving that the page's own reach - nearest first, with their distance. (A 1.5 margin once caught a foot slid just past the
     reach; the slide is gone, and the margin went past the page - feature 328 wave 4.)
@@ -119,7 +151,7 @@ def knots(lanes: Sequence[Mapping[str, Any]]) -> list[tuple[int, int, float]]:
     for a in range(len(nodes)):
         for b in range(a + 1, len(nodes)):
             d = math.dist(nodes[a][0], nodes[b][0])
-            if d <= _KNOT_FT * KNOT_MARGIN and frozenset((a, b)) not in spans and not _teed_pair(lanes, nodes[a], nodes[b]):
+            if d <= _KNOT_FT * KNOT_MARGIN and frozenset((a, b)) not in spans and not _teed_pair(lanes, nodes[a], nodes[b]) and not (apart and apart(nodes[a][0], nodes[b][0])):
                 out.append((a, b, d))
     return sorted(out, key=lambda k: k[2])
 
@@ -204,7 +236,9 @@ def carried(lanes: Sequence[Mapping[str, Any]], old: Poly, new: Poly, skip: Cont
     return out
 
 
-def next_gather(lanes: Sequence[Mapping[str, Any]], judge: Callable[[dict[int, Poly]], bool], fixed: Callable[[Mapping[str, Any], int], bool] = _fixed) -> dict[int, Poly] | None:
+def next_gather(
+    lanes: Sequence[Mapping[str, Any]], judge: Callable[[dict[int, Poly]], bool], fixed: Callable[[Mapping[str, Any], int], bool] = _fixed, apart: Apart | None = None
+) -> dict[int, Poly] | None:
     """The first gather `judge` admits, nearest knot first: every end on one node of the knot moved onto the other node
     (`moved_onto`, both forms tried, then each with the knot's corner taken out of the lane joining the two - `contracted`) -
     the node with fewer ends moves, and the other way round where that is refused; where both are
@@ -217,7 +251,7 @@ def next_gather(lanes: Sequence[Mapping[str, Any]], judge: Callable[[dict[int, P
         which node a knot gathers at - UNRESEARCHED: the node with fewer ends moves onto the other, the other way round where refused
         a lone end teed onto the other lane - research/questions/0081-village-lanes.drawing.html: where neither node can move, the arriving lane meets the other's side as a T (`teed_onto`)"""
     nodes = end_nodes(lanes, fixed)
-    for a, b, _d in knots(lanes):
+    for a, b, _d in knots(lanes, apart):
         order = sorted(((b, a), (a, b)), key=lambda mt: len(nodes[mt[0]][1]))
         for mover, target in order:
             ends = nodes[mover][1]
@@ -403,6 +437,7 @@ def settle_knots(s: Any) -> int:
 
     lanes = s.M.get("lanes") or []
     lawful = Lawful(s)
+    apart = ground_apart(s.M, s)
     memo = WebMemo()
     moved = 0
     refused: list[dict[int, Poly]] = []
@@ -441,7 +476,7 @@ def settle_knots(s: Any) -> int:
 
     for _ in range(4 * len(lanes)):
         had.clear()
-        edits = next_gather(lanes, judge)
+        edits = next_gather(lanes, judge, apart=apart)
         if edits is None:
             break
         before = {i: lanes[i]["pts"] for i in edits}
@@ -466,7 +501,7 @@ knot, so the junction clause of `lane_knots` adds nothing to its 25 ft clause (f
 Research: a knot's reach - research/questions/0081-village-lanes.drawing.html: the page's own 25 ft, no margin past it"""
 
 
-def lane_knots(lanes: Sequence[Mapping[str, Any]]) -> list[tuple[int, tuple[float, float], int, tuple[float, float], float]]:
+def lane_knots(lanes: Sequence[Mapping[str, Any]], M: Mapping[str, Any] | None = None) -> list[tuple[int, tuple[float, float], int, tuple[float, float], float]]:
     """The knots of a finished web, (lane, end, lane, end, ft): two lane ends within the knot reach (`_KNOT_FT`) of one another
     not standing at one point. Ends within `_JOINT_FT` are one point; a pair one lane runs between (its own two ends) is that
     lane, its join; a household way's lone door end teed on its own lane is no knot (`door_end_teed`). The pool's seed test (`tests/hamletgen/test_pool_261.py`) and
@@ -475,6 +510,7 @@ def lane_knots(lanes: Sequence[Mapping[str, Any]]) -> list[tuple[int, tuple[floa
 
     Research: lane ends gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined at a single point, so three lanes never arrive a few feet apart in a knot"""
 
+    apart = ground_apart(M) if M is not None else None
     pts = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
     ends = [(i, p[e]) for i, p in enumerate(pts) if len(p) >= 2 for e in (0, -1)]
     node = list(range(len(ends)))
@@ -494,7 +530,7 @@ def lane_knots(lanes: Sequence[Mapping[str, Any]]) -> list[tuple[int, tuple[floa
     for a in range(len(ends)):
         for b in range(a + 1, len(ends)):
             d = math.dist(ends[a][1], ends[b][1])
-            if root(a) == root(b) or frozenset((root(a), root(b))) in spans or d > _KNOT_MARGIN * _KNOT_FT:
+            if root(a) == root(b) or frozenset((root(a), root(b))) in spans or d > _KNOT_MARGIN * _KNOT_FT or (apart and apart(ends[a][1], ends[b][1])):
                 continue
             # ...A DOOR END TEED ON ITS OWN LANE is no knot (`door_end_teed`, the predicate the gather search asks too)
             if any(door_end_teed(lanes, ends[x][0], 0 if x % 2 == 0 else -1, sum(root(z) == root(x) for z in range(len(ends))) == 1, ends[y][1]) for x, y in ((a, b), (b, a))):

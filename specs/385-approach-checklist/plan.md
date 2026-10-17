@@ -120,11 +120,14 @@ before anything else is done with it. The GM's ruling (G, 2026-10-17): *"if ther
 parallel to each other and very close together, then that is the kind of situation in which a single footpath would emerge"*;
 384's User Story 0: *"merged into one path, never refused"*.
 
-**D4b - The knot rule reads the ground (measured, part B 16:00).** The knot rule (`knots.knots`, the settle's gather, and
+**D4b - The knot rule reads the ground.** The knot rule (`knots.knots`, the settle's gather, and
 `knots.lane_knots`, the cohort's and the pool test's verdict) counts two ends within `_KNOT_FT` as a knot only where the straight
 join between them stands on lawful ground (`Lawful.on_lawful_ground`, the D2 ground): two ends with a garden, a yard or a house
-between them are two paths either side of a fence, not *"three lanes ... a few feet apart in a knot"* (0081). Seed 24 under the
-wave 155 patch: its gather was refused six times for the fabric between the two ends. The callers hand the manifest in
+between them are two paths either side of a fence, not *"three lanes ... a few feet apart in a knot"* (0081). CORRECTED 16:50: seed
+24 is NOT this case - its two ends (a household way's T-foot on lane 6 and the field way's start 24.8 ft along the same lane)
+have lawful ground between them; the gather was refused for the fabric beside its own moved leg, and the straight join is clear
+(measured in the scratch worktree; `retro.md`). Seed 24 is a staggered junction under the re-deal, so it is T04's (T48). D4b stands
+on the GM's principle and its own unit test (two ends a house parts), with no cohort seed yet showing it. The callers hand the manifest in
 (`lane_knots(lanes, M)`); with no manifest the rule reads as today. Class: deliberate reading of 0081's knot rule, the drawing page
 says so.
 

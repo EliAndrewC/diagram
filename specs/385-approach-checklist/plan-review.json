@@ -28,7 +28,7 @@
    "reviewed": "2026-10-17"
   },
   "### T01 Decisions": {
-   "sha256": "5c61c44b06ce29d2b76341fdc5500b5ed543f07970316664f6e743b1394afdb8",
+   "sha256": "a617512e41bb2a53340bddb0e08c5892c974b654e21316bb40a0685eacd0aa4c",
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
@@ -218,6 +218,89 @@
      "summary": "0081 and 0246 drawing pages say forced turns are drawn as walked and side-by-side paths as one; record checks as record-owed names them.",
      "class": "within",
      "why": "Records the rendering decision the lane law makes, per the project's recording rule."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "### T01 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Rule table first, one row per LAW entry and lanes_breaking rule with class and verdict",
+     "class": "within",
+     "why": "Unchanged since round 2; it is the request's own question (which rules come from research, which are implementation details) asked of the lane rules."
+    },
+    {
+     "id": "Order",
+     "summary": "D3 first, baseline after it, D2/D4 shaped by the named refusals; stop at part B if seed 21's rules are not angle or doubling",
+     "class": "within",
+     "why": "Unchanged. The stop fired and its outcome is this revision brought back to review before D2/D4 are written, which is what a stop is for."
+    },
+    {
+     "id": "D2",
+     "summary": "Forced = the settle's own ground; now names the test: Lawful.on_lawful_ground on the chord, built from the manifest",
+     "class": "within",
+     "why": "The obstruction exception the GM described in his own words ('they might come together at such an angle if there were obstructions'); naming the settle's own predicate makes law and settle agree and narrows nothing."
+    },
+    {
+     "id": "D3",
+     "summary": "A refusal names its rules",
+     "class": "within",
+     "why": "Unchanged; a defect fix found while measuring (XIV) that serves the lane-law work."
+    },
+    {
+     "id": "D4a",
+     "summary": "Unforced needles merged via the existing settle.reaimed, extended to a household way's foot (never its door end), corridor rewritten",
+     "class": "within",
+     "why": "The GM's new rule: near-parallel close paths become one footpath, never refused. Re-aiming the household way's foot onto the way it ran beside is that merge; the household stays reached."
+    },
+    {
+     "id": "D4b-protected",
+     "summary": "A tree lane other than a household way (connector, street, field way, spur) is never cut; the OTHER lane is re-aimed",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Taken case by case. One protected lane: the other is re-aimed, so the two still become one path and nothing in the request is lost; this is a choice of which lane merges. Both lanes protected: the block leaves no lane to re-aim, and the only reading consistent with 'never left as a violation' is that this case goes to D4's own exception-check clause (constitution XVI) before anything else is done with it. It is LEGITIMATE on that reading only. A protected pair settled any other way (left as a violation, or one lane cut without a check) is outside this ruling."
+    },
+    {
+     "id": "D4c",
+     "summary": "A shallow crossing (under NEEDLE_DEG) is cut at the crossing on its foot's side, and the end left becomes a needle and is merged",
+     "class": "within",
+     "why": "Running on beside a way after crossing it at about 19 degrees is the doubled path the GM described; cutting the doubled run makes the two paths one. A forced case is still judged by D2's meeting test once it becomes a needle."
+    },
+    {
+     "id": "D4d",
+     "summary": "The lane re-aimed is chosen so that every reach is kept; a case where no re-aim keeps every reach goes to an exception check",
+     "class": "within",
+     "why": "Keeps houses and joins reached, so no homestead moves for a path, and it routes the residual case to an XVI check instead of a carve-out."
+    },
+    {
+     "id": "D4b-knot",
+     "summary": "The knot rule counts two ends within _KNOT_FT only where the straight join between them stands on lawful ground; with no manifest the rule reads as today",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "An exception to a rule, so it is presumed wrong. It passes because the GM's own words already imply it: a rule kept but given a principled obstruction exception ('should this rule actually apply when there are obstructions?'), and the checklist exit 'add a principled exception, like unless an obstruction forces it'. Purpose test: the knot rule is there because lane ends a few feet apart on open ground would be walked into one path (0081), and ends with a garden, yard or house between them cannot merge, so the exception leaves the rule's purpose intact. It is measured (seed 24 refused six times for fabric between the ends) and serves a scope item (T47's wave 155 patch re-landed). The rule is not dropped: it still counts on open ground, its reason is recorded on the drawing page, and the class is labeled."
+    },
+    {
+     "id": "D5",
+     "summary": "Nothing else moves; widened to admit the knot rule (D4b)",
+     "class": "within",
+     "why": "It follows from D4b. Thresholds, homesteads, fixtures and seats still do not move, which keeps the GM's houses-never-move-for-a-path rule."
+    },
+    {
+     "id": "D6",
+     "summary": "Measured cohort before and after, compared seed by seed against HEAD",
+     "class": "within",
+     "why": "Unchanged; it measures the requested work."
+    },
+    {
+     "id": "D7",
+     "summary": "0081 and 0246 drawing pages record what the maps now draw",
+     "class": "within",
+     "why": "Unchanged; it records the requested rendering decision."
     }
    ]
   }

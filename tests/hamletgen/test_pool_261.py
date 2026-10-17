@@ -247,9 +247,10 @@ def test_no_lane_ends_knot_short_of_a_join(gen: str) -> None:
     not read as gathered (`lane_knots`)."""
     from l7r.diagram.hamletgen.ways.smooth import _KNOT_FT
 
-    lanes = _manifest(gen)["lanes"]
+    M = _manifest(gen)
+    lanes = M["lanes"]
     assert any(len(ln.get("pts") or []) >= 2 for ln in lanes), "non-vacuity: the map has lanes"
-    knots = lane_knots(lanes)
+    knots = lane_knots(lanes, M)  # ...two ends a fence parts are no knot (feature 385 T01, plan D4b)
     assert not knots, f"lane ends within {_KNOT_FT:g} ft of one another (or junctions on one lane within {_KNOT_MARGIN * _KNOT_FT:g} ft) and not joined (lane, end, lane, end, ft): {knots}"
 
 
