@@ -61,6 +61,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
+  },
+  "## Landing": {
+   "sha256": "593cfa6de28d20bacb4dcf1c9ae7d148a69c9c248f6cdbc1d650d6f3aa53046a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
   }
  },
  "reviewed": "2026-10-17",
@@ -476,6 +482,27 @@
      "summary": "Close: checklist to docs/, refusals extended to every feature's tasks (FR-001), final report",
      "class": "within",
      "why": "Restates accepted FR-001/SC-001/SC-002; the approved proposal has 384 resume 'under the finished process'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Landing"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing-1",
+     "summary": "Each task lands on main when it closes, with its retro row, before the next task starts, so the next task is measured on it",
+     "class": "within",
+     "why": "Carries the request's sequence (one task, measure, improve the process, then the next task) and FR-006 (one task at a time, its retro row and changes made before the next task-start). The GM's 2026-10-17 words 'do the lane law as task one ... with a retro afterwards, and then let's see how it goes' ask for T01 finished and assessed before anything else, which landing it supports. Nothing asked is dropped or narrowed."
+    },
+    {
+     "id": "Landing-2",
+     "summary": "Lands open: T02-T11 stay open while earlier tasks land",
+     "class": "within",
+     "why": "Follows from Landing-1: tasks are done one by one, so the later ones are open when an earlier one lands. No task leaves the scope. The list only names which boxes remain open, and does not change what any task delivers."
     }
    ]
   }
