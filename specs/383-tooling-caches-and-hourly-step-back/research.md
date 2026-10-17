@@ -576,3 +576,18 @@ general-purpose subagent transcript of the month, grouped by its description's f
 - Of 137 general-purpose launches since 10-10, ~122 were the two triage jobs - defined agents now - and the rest one-offs, but
   for the research pass, the one family still recurring with standing rules; it becomes `research-pass`.
 
+## R18 Amendment 6, reopened - a fan-out sent together against one staggered (SC-028)
+
+(observed 2026-10-17 20:11; method: two headless sessions in this clone, hooks off; one sent three `modal-triage` probe launches
+in one message, the other one `claims-triage` launch alone and then two in its next message - different types, so neither leg
+reads the other's cache; each subagent's first-request usage read from its transcript)
+
+| (observed 2026-10-17; the method above) | launch 1: read / fresh | launches 2 and 3, each: read / fresh |
+|---|---|---|
+| all three in one message (modal-triage) | 0 / 5,721 | 0 / 5,721 |
+| the first alone, then two (claims-triage) | 2,327 / 3,328 | 3,381 / 2,274 |
+
+- Sent together, each launch wrote the whole prefix: none could read the first's, still being written. Staggered, the later
+  launches read the agent file's prefix (3,381) and wrote only their own first message - about 60% less each.
+- The parallel calls reached the hook ~0.4-0.5 s apart (the together leg's start times), as the probe of D42 had measured.
+
