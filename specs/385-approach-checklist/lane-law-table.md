@@ -73,3 +73,10 @@ over open ground become one path (plan D4).
 Five rules become obstruction-aware (`bends`, `hooks`, `folded_joints`, `connector_hairpins`, `needle_joins`), and the needle over
 open grass is merged by the doubled tail's cut. Every other rule describes how people walk or a fact of the map, everywhere it
 applies, and is kept. No rule is retired. No number changes value (plan D5).
+
+## The ground that forces a turn (plan D2)
+
+The settle's two obstacle families (`clearance.py`, the clear-stretch scan) and the fabric rules' ground, as one set: crop, marsh
+and the wet toe (`obstacles`); houses, yards, gardens and groves (`tight`); fixtures (`fixture_quads`) and solid boxes
+(`solid_boxes`). No kind the settle routes round is left out, so no shape the settle bends round something is refused for its
+angle.

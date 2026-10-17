@@ -71,15 +71,17 @@ words), its thresholds, and its verdict: kept / made obstruction-aware / merged 
 claims (they already carry the class) and 0081's and 0246's drawing pages; the rows not about angles or doubling are expected kept.
 
 **The order (checklist B1 applied to this plan).** D3 is the first edit and the measurement follows it: the baseline (D6) is
-taken with D3 in place, since D3 changes no lane, only what a refusal says. D2's and D4's exact shape is then fixed against the
-cases the named refusals show (seed 21's five lanes, the pool's violations); seed 17's refusal is a reach (the field reached by no
-way), not an angle, and is T03's unless D2-D4 mend it. If the named rules on seed 21 are not angle or doubling rules, the session
-stops at part B before writing D2 or D4.
+taken with D3 in place, and is shown to equal HEAD's seed by seed before it is called HEAD's (D6). D2's and D4's exact shape is
+then fixed against the cases the named refusals show (seed 21's lanes, and the pool's violations); seed 17's refusal is a reach (the
+field reached by no way), not an angle, and is T03's unless D2-D4 mend it. If the named rules on seed 21 are not angle or doubling
+rules, the session stops at part B before writing D2 or D4.
 
-**D2 - "Forced" is one predicate, asked by every angle rule - two shapes.** The ground a lane may not cross - a house or its
-steading's built ground (`steading_footprints`), a fixture (`fixture_quads`), the solid boxes (`solid_boxes`), crop or water (the
-worked ground the settle already reads) - is indexed once per manifest (`settlement/_geom/indexes.py`, the overlap-check rule) and
-asked two ways:
+**D2 - "Forced" is one predicate, asked by every angle rule - two shapes.** The ground is what the settle itself routes round,
+its two obstacle families (`clearance.py`, the clear-stretch scan): `obstacles` - crop, marsh, the wet toe - and `tight` - the
+houses, yards, gardens and groves - with the fixtures (`fixture_quads`) and solid boxes (`solid_boxes`) the fabric rules read. A
+kind the settle routes round and this ground left out would be a shape the settle made and the law refused, so the two are one
+set; `lane-law-table.md` says at its row why any kind is out. The ground is indexed once per manifest
+(`settlement/_geom/indexes.py`, the overlap-check rule) and asked two ways:
 - **a TURN** (a kink, a hairpin, a hook, a folded joint, a connector hairpin): forced when the chord past the turn - from the
   vertex before it to the vertex after, swept at the lane's width - crosses that ground;
 - **a MEETING** (a needle): forced when the sliver of ground between the arriving end leg and the tread it meets, back to
@@ -94,22 +96,30 @@ Class: deliberate reading of 0081's research ("the shortest or easiest way") - t
 
 **D3 - A refusal names its rules.** `last_resort.lanes_breaking` returns `{lane: [rule names]}` (its set is the keys, so every
 caller is unchanged), and `refuse_unmended` writes `lane 3 (access): needle_joins, kinks`. Found while measuring T01 (constitution
-XIV): seed 21's refusal named five lanes and no rule.
+XIV): seed 21's refusal named lanes and no rule (`.git/cohort48-head.log` in diagram-backlog, the 2026-10-13 run behind
+`m:w156-redeal-cohort`).
 
-**D4 - Side by side becomes one, by the cut that exists.** A needle over open ground (not forced by D2) is the doubled tail seen
-from the other side, so the merge is the settle's existing cut: `tails.along_tail` walks in from the lane's end to where it came
-alongside the way and `cut_at_tail` ends it there on the tread, asked for a needle end at `NEEDLE_DEG` where it is asked today at
-`_DOUBLED_DEG` (`settle.py` 380-403) - reuse, not a new pass. A needle the cut cannot mend (it would strand a house or a tree lane's
-reach) stays a violation, named by D3. The GM's ruling (G, 2026-10-17): *"if there are two different footpaths that are nearly
-parallel to each other and very close together, then that is the kind of situation in which a single footpath would emerge"*.
+**D4 - Side by side becomes one, never refused.** Every needle D2 does not call forced is merged: the two treads become one path
+from where they come alongside. The settle's existing cut does the common case - the needle is the doubled tail seen from the
+other side, so `tails.along_tail` walks in from the lane's end to where it came alongside the way and `cut_at_tail` ends it there on
+the tread, asked for a needle end at `NEEDLE_DEG` where it is asked today at `_DOUBLED_DEG` (`settle.py` 380-403). Where that cut
+would strand something - a house, a join, a tree lane's reach hanging on the cut stretch - the merge is chosen so that nothing is
+lost: the OTHER lane is cut back instead, or what hangs on the cut stretch is carried onto the shared tread, so the two run as one
+until they part. Which lane is cut, or re-rooted, is chosen to keep every reach (a tree lane's reach is never lost); a needle that
+is not forced is never left as a violation and never reaches `last_resort` or `refuse_unmended`. If measurement finds a needle
+where no merge keeps every reach, it goes to an exception check (constitution XVI) with that case before anything else is done
+with it. The GM's ruling (G, 2026-10-17): *"if there are two different footpaths that are nearly parallel to each other and very
+close together, then that is the kind of situation in which a single footpath would emerge"*; 384's User Story 0: *"merged into one
+path, never refused"*.
 
 **D5 - Nothing else moves.** No threshold changes value, no rule outside the angle and doubling rules changes, and no homestead,
 fixture or seat moves. A rule the table finds describing no walker's behavior is retired only with its reason at the predicate
 and on the drawing page; none is expected.
 
-**D6 - Measured.** With D3 in place and before any other engine edit: the 48-seed cohort at HEAD (`make cohort N=48`, logged), seed 10 under the wave 155 patch,
-and the pool's hamlets' lane violations. After: the same three. Two workers while the containers sit near their memory cap
-(2026-10-17's memguard notices).
+**D6 - Measured.** With D3 in place and before any other engine edit: the 48-seed cohort (`make cohort N=48`, logged), compared
+seed by seed, pass or fail, against `m:w156-redeal-cohort`'s HEAD run - called HEAD's baseline only once that comparison shows D3
+changed no verdict - with seed 10 under the wave 155 patch, and the pool's hamlets' lane violations. After: the same three. Two
+workers while the containers sit near their memory cap (2026-10-17's memguard notices).
 
 **D7 - The record.** 0081's and 0246's drawing pages say what the maps now draw: a turn the ground forces is drawn as walked, and
 two paths side by side are drawn as one. Their record checks run as `make record-owed` names them.
