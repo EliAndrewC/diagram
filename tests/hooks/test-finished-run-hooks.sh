@@ -272,6 +272,15 @@ rows=[json.load(open(f)) for f in glob.glob(os.path.join('$GUARD_LOG_DIR','*.jso
 print(dict(collections.Counter((r['event'], r.get('rule')) for r in rows)))" 2>/dev/null)
 check "the report records with its own rule" yes "$(has "$RULES2" "waiter-on-a-dead-producer")"
 
+echo "--- 9. a verify gate's refusal names make verify-wait (feature 385: the loop matched the preflight's quick line) ---"
+# GUARD_EDIT_OK: feature 385 - a new case for the verify-gate branch of the refusal; nothing existing loosened
+rm -f "$LV/.git/live-run.told"
+( setsid nohup bash -c "cd $LV && exec make sleeper" </dev/null > "$T/verify-gate-1.log" 2>&1 & )
+settle '"$HOOK" judge "$LV" | grep -q "unwatched $T/verify-gate-1.log"'
+lstop; check "a detached verify gate: refused" 2 "$?"
+check "...and the refusal names make verify-wait, not a loop" yes "$(has "$(cat "$T/fr.err")" 'make verify-wait')"
+for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; settle '[ -z "$("$HOOK" live "$LV")" ]'
+
 echo "-----"
 printf 'test-finished-run-hooks: passed %s, failed %s\n' "$PASS" "$FAIL"
 [ "$FAIL" = 0 ] || exit 1

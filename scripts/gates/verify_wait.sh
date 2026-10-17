@@ -16,20 +16,19 @@ if [ -z "$log" ] || [ ! -f "$log" ]; then
   echo "verify-wait: no gate log at $link - start one with make verify"
   exit 3
 fi
-verdict='verification-state|GATE FAILED|GATE NOT GREEN|gate green'
+# THE RUN ENDS WHEN ITS WRITER DOES, not at the first verdict-shaped line: the gate's preflight prints its own `make quick`
+# verdict ("verification-state: green-local (quick)") long before the gate's, and a wait on that line ended mid-gate
+# (feature 385, the first run of this script). So wait until nothing holds the log open, then read the whole log.
 deadline=$(( $(date +%s) + ${VERIFY_WAIT_S:-5400} ))
-while ! grep -qE "$verdict" "$log"; do
+while [ -n "$(fuser "$log" 2>/dev/null)" ]; do
   if [ "$(date +%s)" -ge "$deadline" ]; then
     echo "verify-wait: WAIT TIMED OUT on $log"
     exit 4
   fi
-  if [ -z "$(fuser "$log" 2>/dev/null)" ] && [ -n "${VERIFY_WAIT_STRICT:-1}" ] && ! grep -qE "$verdict" "$log"; then
-    # ...the gate's writer is gone and no verdict line came: the run died (an OOM kill), the log is truncated, not finished
-    sleep 2
-    grep -qE "$verdict" "$log" || { echo "verify-wait: the gate writing $log is gone with no verdict - it died; read the log's tail"; tail -5 "$log"; exit 5; }
-  fi
   sleep "${VERIFY_WAIT_STEP_S:-15}"
 done
 tail -4 "$log"
-grep -qE 'GATE FAILED|GATE NOT GREEN' "$log" && exit 1
-exit 0
+if grep -qE 'GATE FAILED|GATE NOT GREEN' "$log"; then exit 1; fi
+if grep -qE 'gate green' "$log"; then exit 0; fi
+echo "verify-wait: the gate writing $log ended with no verdict - it died (an OOM kill?); read the log's tail"
+exit 5
