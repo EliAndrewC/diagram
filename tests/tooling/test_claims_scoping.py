@@ -334,3 +334,12 @@ def test_claims_checked_at_different_versions_each_see_their_own_changes(tmp_pat
     share = next(s for s in sections if SHARE in s)
     assert "> Farms face the lane." in far and "6 ft" not in far.split("Claims citing it")[0], "far_row was checked at 6 ft"
     assert "> Farms face the lane." in share and "> Each lane is 6 ft." in share, "SHARE was checked before both changes"
+
+
+def test_a_claim_the_triage_has_nothing_to_show_is_owed_in_full(tmp_path: pathlib.Path) -> None:
+    """Feature 385 T03: two claims relabeled to cite pages their last check never read were owed a triage, but no page of theirs
+    had moved, so the bundle showed nothing and the agent could clear nothing - they go on to impl-drift in full."""
+    skill, index, store = _checked(tmp_path)
+    cur = cx.current(skill)
+    cx.triage_bundle(cur, index, store, [SHARE], skill / QDIR, tmp_path / "t")
+    assert json.loads((tmp_path / "t" / "triage.json").read_text())["forced"] == [SHARE]
