@@ -133,15 +133,15 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 
 ## Amendment 5 (the GM 2026-10-17: the gate's tooling run reuses, and reuse per test)
 
-- [ ] T34 The gate's tooling run reuses; the tooling hash reads scripts/ whole (plan D31) (SC-021)
+- [x] T34 The gate's tooling run reuses; the tooling hash reads scripts/ whole (plan D31) (SC-021)
       research: rendering
-      verify: a Makefile-only change re-runs only the tests that read the Makefile; a scripts/<dir>/ change moves the hash (a test)
-- [ ] T35 A pass kept per test (plan D32) (SC-022)
+      verify: DONE. SC-021 met (research R12; m:gate-tooling-makefile-a5). After a Makefile-only edit, the gate's full run reused 1,739 of 1,824 tooling tests with their coverage carried; the 85 that ran are the tests that read the Makefile; all floors at 100%; 132 s against 167 s. Two gates green; hash test red on the old glob.
+- [x] T35 A pass kept per test (plan D32) (SC-022)
       research: rendering
-      verify: an edit to one research source page re-runs only the tests that read it; a conftest.py edit re-runs every test below it
-- [ ] T36 Tests of code moved off the real repository, case by case (plan D33) (SC-022)
+      verify: DONE. SC-022 met (R12; m:source-page-edit-a5, m:tooling-reuse-a5). One source-page edit re-runs 15 tests, against 219 per file. An unchanged tree reuses 1,825 of 1,827 in 6.5 s. Store 10.8 MB. D32b fixed a soundness defect: a delta.py edit now re-runs 178 tests, not 36.
+- [x] T36 Tests of code moved off the real repository, case by case (plan D33) (SC-022)
       research: rendering
-      verify: each moved test listed with its reads before and after; a landing measured before and after
+      verify: DONE. R12 table. 12 tests of code are on copies of the pages they name, or on records of their own; data reads went from 475-4,656 files to 155 or fewer, assertions unchanged. The tests whose subject is the record's data are kept, with reasons.
 - [ ] T37 Close: the gate, the report, landed
       research: rendering
       verify: research R12; the gate green; the report written; landed
