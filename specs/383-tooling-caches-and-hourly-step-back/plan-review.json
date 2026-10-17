@@ -235,7 +235,7 @@
    "declared": "spec-fidelity"
   },
   "## Amendment 6 (FR-031 to FR-036)": {
-   "sha256": "530116a30c91060669137dfa1497ffb8592ae8739b81f8ab8c81aa72c0ada7c8",
+   "sha256": "f645103164f874263b0651751b54879a0c57578cacd6408fd8af281d851c6cfd",
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
@@ -1212,6 +1212,57 @@
      "summary": "make subagent-cache audit, CLAUDE.md rule + guard, spec-fidelity sentence removed once D34 passes, docs section",
      "class": "within",
      "why": "Unchanged. FR-036 and the GM's 'project guidelines that enforce this'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Amendment 6 (FR-031 to FR-036)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D34",
+     "summary": "spec-fidelity without the instruction files, proven by 3+3 seeded runs first; a second loss keeps the exception and goes to the GM",
+     "class": "within",
+     "why": "Unchanged since round 4 CLEAR. Implements FR-031/SC-023 under the condition the tier test recorded; the fallback refers the outcome to the GM rather than deciding it."
+    },
+    {
+     "id": "D35",
+     "summary": "modal guidelines generated into the three modal agent files; bundle stops copying them",
+     "class": "within",
+     "why": "Unchanged; FR-032 as worded, and the GM's 'put shared context in the system prompt'."
+    },
+    {
+     "id": "D36",
+     "summary": "claims-triage and modal-triage become defined agents, opus/medium, omitClaudeMd",
+     "class": "within",
+     "why": "Unchanged; FR-033 as worded."
+    },
+    {
+     "id": "D37",
+     "summary": "agent-prefix dispatch guard, 2,000-char threshold, escape AGENT_PREFIX_OK",
+     "class": "within",
+     "why": "Unchanged; FR-034, the enforcement the GM asked for. Threshold is below the GM's 10 KB case, so it reaches the case named."
+    },
+    {
+     "id": "D38",
+     "summary": "bundle shared-text test excluding unit-derived sections; triage headers under 400 chars",
+     "class": "within",
+     "why": "Unchanged; FR-035, enforcement of the request."
+    },
+    {
+     "id": "D39",
+     "summary": "make subagent-cache audit and the CLAUDE.md rule",
+     "class": "within",
+     "why": "Unchanged; FR-036 as worded."
+    },
+    {
+     "id": "D40",
+     "summary": "claudeMdExcludes ['/diagram/.clones/*/CLAUDE.md'] in project settings; a test holds it and refuses a pattern that would match a nested CLAUDE.md; SC-026 measured after landing; gm-assistant's line reported to the GM, not edited",
+     "class": "within",
+     "why": "The GM: clones load CLAUDE.md twice, 'a token efficiency improvement that we need to make or measure or address'. FR-037/SC-026 carry exactly that: one root copy, nested files still load, before/after measured. The test only fails when the requested exclusion is absent or overreaches - enforcement, not scope. Reporting gm-assistant rather than editing it narrows nothing: this project's request and FR-037 concern this repository, and the GM's mention of gm-assistant was where he saw the problem; the report gives him the line for it. The mirror-copy lag is a stated consequence, not a carve-out."
     }
    ]
   }

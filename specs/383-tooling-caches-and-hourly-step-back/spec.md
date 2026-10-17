@@ -223,8 +223,10 @@ long-running feature does for itself, on the clock glyph-check already keeps.
   the guard.
 
 - **FR-037 A session loads the project's instructions once.** A session started in the repository's checkout that works in its
-  clone does not load the clone's copy of the root CLAUDE.md beside the checkout's; the clone's nested CLAUDE.md files still
-  load where they are needed.
+  clone does not load the clone's copy of the root CLAUDE.md beside the checkout's, nor do the subagents it dispatches load it
+  when they work with files in the clone; the clone's nested CLAUDE.md files still load where they are needed. gm-assistant has
+  the same layout; its settings are that repository's, so this feature reports the exclusion line for it to the GM rather than
+  editing it.
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002, FR-005, FR-006, FR-007) The push's checks: from about 24 s, the measurement the GM saw
@@ -307,7 +309,9 @@ long-running feature does for itself, on the clock glyph-check already keeps.
   the rule and names the guard, and no longer names spec-fidelity as keeping the instruction files.
 
 - **SC-026** (FR-037) A session started in `/diagram` that reads a file in its clone carries one copy of the root CLAUDE.md, not
-  two - before both (research R15), after one, measured the same way - and a nested one still loads.
+  two - before both (research R15), after one, measured the same way - and a nested one still loads; and a subagent it
+  dispatches that reads a file in the clone, one with `omitClaudeMd` and one without, is measured the same way before and after
+  (if subagents never load the clone's copy, that is recorded as the answer to the GM's question).
 ## Review history
 
 - spec-fidelity, Mode 2, round 1 (2026-10-12): CHANGES REQUIRED, one item, applied: FR-007's "its code" is the check and every

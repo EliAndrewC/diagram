@@ -510,3 +510,20 @@ path; the run's usage summed)
 - Subagents: a defined agent with `omitClaudeMd` skips the launch files but still loads a subdirectory's CLAUDE.md when it works
   with files there (https://code.claude.com/docs/en/sub-agents.md) - one more reason a check reads a bundle under `/tmp/`.
 
+**Subagents too** (observed 2026-10-17; method: two headless sessions started in `/diagram`, with and without the exclusion, each
+dispatching a `spec-fidelity` and a `general-purpose` subagent told to read the first lines of the same clone file; each
+subagent's transcript searched):
+
+| (observed 2026-10-17; the method above) | the clone's root CLAUDE.md | its `scripts/CLAUDE.md` |
+|---|---|---|
+| general-purpose, settings as they are | loaded | loaded |
+| general-purpose, with the exclusion | not loaded | loaded |
+| spec-fidelity, settings as they are | loaded | loaded |
+| spec-fidelity, with the exclusion | not loaded | loaded |
+
+- The answer to the GM's question: a subagent that works with files in the clone loads the clone's copy of the root CLAUDE.md
+  as a subdirectory file, and the exclusion stops it there as at the top level.
+- The `spec-fidelity` here ran from the MIRROR's agent files (a session started in `/diagram` reads `/diagram/.claude/agents/`),
+  which do not yet carry its `omitClaudeMd` - so it loaded the launch files as well; the `omitClaudeMd` case is measured after
+  this lands, the same way.
+
