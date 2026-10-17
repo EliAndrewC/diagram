@@ -197,14 +197,18 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 
 ## Amendment 7 (the GM 2026-10-17: "implement its recommendations")
 
-- [ ] T52 The stagger out, the wave guard in; the docs (plan D46) (SC-031)
+- [x] T52 The stagger out, the wave guard in; the docs (plan D46) (SC-031)
       research: rendering
-- [ ] T53 check-wave, the saved workflow (plan D47) (SC-034)
+      verify: DONE. verified: workflow-hooks 23/23, agent-prefix 22/22 (red 3/21 on HEAD's stagger guard), test_hm_checks 26, test_agent_models 11, test_wave_report 2, hooks-test green, quick clean
+- [x] T53 check-wave, the saved workflow (plan D47) (SC-034)
       research: rendering
-- [ ] T54 The Workflow guard and the wave check tracking (plan D48) (SC-031, SC-033)
+      verify: DONE. verified: workflow-hooks 23/23, agent-prefix 22/22 (red 3/21 on HEAD's stagger guard), test_hm_checks 26, test_agent_models 11, test_wave_report 2, hooks-test green, quick clean
+- [x] T54 The Workflow guard and the wave check tracking (plan D48) (SC-031, SC-033)
       research: rendering
-- [ ] T55 The authorization and its test (plan D49) (SC-032)
+      verify: DONE. verified: workflow-hooks 23/23, agent-prefix 22/22 (red 3/21 on HEAD's stagger guard), test_hm_checks 26, test_agent_models 11, test_wave_report 2, hooks-test green, quick clean
+- [x] T55 The authorization and its test (plan D49) (SC-032)
       research: rendering
+      verify: DONE. verified: workflow-hooks 23/23, agent-prefix 22/22 (red 3/21 on HEAD's stagger guard), test_hm_checks 26, test_agent_models 11, test_wave_report 2, hooks-test green, quick clean
 - [ ] T56 The first real wave, measured (plan D50) (SC-034)
       research: rendering
 - [ ] T57 Close: the checks, the report, landed
