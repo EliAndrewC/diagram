@@ -731,6 +731,10 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	: " hides a real race behind a green result.)"; \
 	if [ -s "$$work/todo" ]; then \
 	  mkdir -p "$$gitdir/hooks-test"; \
+	  : "(GUARD_EDIT_OK: feature 383 amendment 4, plan D28 - a split suite's parts are the cores shared by the suites running: one"; \
+	  : " suite alone takes up to 8 parts, eight together 2 each - eight suites of eight parts hit the shared 10 GB memory cap)"; \
+	  ns=$$(wc -l < "$$work/todo"); [ "$$ns" -gt $(HOOKS_JOBS) ] && ns=$(HOOKS_JOBS); pm=$$(( $(CPU_COUNT) / (ns > 0 ? ns : 1) )); \
+	  [ "$$pm" -gt 8 ] && pm=8; [ "$$pm" -lt 1 ] && pm=1; export PARTS_MAX=$$pm; \
 	  xargs -P $(HOOKS_JOBS) -L1 -a "$$work/todo" "$$root/tests/hooks/hookrun.sh" "$$work" "$$gitdir" || true; \
 	  for rc in "$$work"/*.rc; do \
 	    [ -f "$$rc" ] || continue; \

@@ -10,6 +10,7 @@ no transcript once every pass is costed, and answers as before. A revision's rec
 
 from __future__ import annotations
 
+import concurrent.futures
 import importlib.util
 import json
 import os
@@ -159,8 +160,12 @@ def _run(argv: list[str], cwd: pathlib.Path, off: bool) -> tuple[int, str]:
 
 
 def _same_on_and_off(argv: list[str], cwd: pathlib.Path) -> tuple[int, str]:
-    off = _run(argv, cwd, True)
-    first, second = _run(argv, cwd, False), _run(argv, cwd, False)
+    # the cache-off run and the first cache-on run share nothing (the off run reads and writes no cache), so they run side by
+    # side; the second cache-on run follows the first, as a warm run must (feature 383 amendment 4, plan D29)
+    with concurrent.futures.ThreadPoolExecutor(2) as pool:
+        off_f, first_f = pool.submit(_run, argv, cwd, True), pool.submit(_run, argv, cwd, False)
+        off, first = off_f.result(), first_f.result()
+    second = _run(argv, cwd, False)
     assert first == off and second == off, f"the cache changed the answer:\n{off}\n{first}\n{second}"
     return off
 
@@ -219,10 +224,11 @@ def test_the_pointer_check_answers_the_same_and_resolves_a_new_question_each_run
     assert code == 1 and "it is now 0001" in out
 
 
-def test_the_whole_repository_s_pointers_and_conflicts_are_the_same_with_the_cache(tmp_path: pathlib.Path) -> None:
-    """SC-002 over this repository itself, for the two checks that read every tracked file."""
-    for argv in (["scripts/gates/check-research-pointers.py", "."], ["scripts/hooks/lib/hm_conflict.py", "--tracked", "."]):
-        _same_on_and_off(argv, ROOT)
+@pytest.mark.parametrize("argv", [["scripts/gates/check-research-pointers.py", "."], ["scripts/hooks/lib/hm_conflict.py", "--tracked", "."]], ids=["pointers", "conflicts"])
+def test_the_whole_repository_s_pointers_and_conflicts_are_the_same_with_the_cache(argv: list[str]) -> None:
+    """SC-002 over this repository itself, for the two checks that read every tracked file - one test each, so they run side by
+    side (feature 383 amendment 4, plan D29): it was 9.4 s, the longest test a landing ran."""
+    _same_on_and_off(argv, ROOT)
 
 
 # ---- the ledger check (SC-003) ---------------------------------------------------------------------------------------------

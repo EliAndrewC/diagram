@@ -30,14 +30,6 @@ check() { # label, expected(ok|blocked), command
   fi
 }
 
-echo "1. the exact 2026-07-25 bug and its relatives are blocked"
-check "the real one: pgrep-self-match poll loop" blocked \
-  'for i in $(seq 1 80); do if ! pgrep -f "make done" >/dev/null 2>&1; then break; fi; command sleep 5; done; tail -18 /tmp/out'
-# GUARD_EDIT_OK: feature 164 - a STANDALONE self-matching pattern is now CORRECTED rather than
-# refused (GM 2026-08-30), so these two vectors move from "blocked" to "rewritten, with the bracket".
-# The loop above KEEPS its block, and that ordering is the point: the correction runs last, after the
-# busy-wait refusals, because when it ran first it rewrote the original 2026-07-25 command and let
-# the 10.9-minute busy-wait through. This suite caught that.
 rewritten() { # label, command, the text the corrected command must contain
   out=$(run "$2" 2>/dev/null)
   got=$(printf '%s' "$out" | python3 -c 'import json,sys
@@ -48,6 +40,87 @@ except Exception: pass' 2>/dev/null)
     *) echo "  FAIL    $1 was not corrected (got '${got:-<nothing>}', wanted '$3')"; FAIL=$((FAIL+1)) ;;
   esac
 }
+bgrun() {  # feed a Bash command with run_in_background set, return the exit code
+  python3 -c 'import json,sys; print(json.dumps({"session_id":"t1","tool_name":"Bash","tool_input":{"command":sys.argv[1],"run_in_background":sys.argv[2]=="1"}}))' "$1" "$2" \
+    | "$HOOK" pretool 2>"$HOOK_ERR"
+}
+bgcheck() { # label, expected, command, background(1|0)
+  bgrun "$3" "$4" >/dev/null; local rc=$?
+  if { [ "$2" = ok ] && [ "$rc" -eq 0 ]; } || { [ "$2" = blocked ] && [ "$rc" -ne 0 ]; }; then
+    echo "  ok      $1"; PASS=$((PASS+1))
+  else
+    echo "  FAIL    $1 (expected $2, rc=$rc)"; FAIL=$((FAIL+1))
+  fi
+}
+backgrounded() { # label, command
+  local out; out=$(bgrun "$2" 0 2>/dev/null); local rc=$?
+  local flag; flag=$(printf '%s' "$out" | python3 -c 'import json,sys
+try: print(json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]["run_in_background"])
+except Exception: print("")' 2>/dev/null)
+  if [ "$rc" -eq 0 ] && [ "$flag" = "True" ] && printf '%s' "$out" | grep -q "BACKGROUNDED"; then
+    echo "  ok      $1"; PASS=$((PASS+1))
+  else
+    echo "  FAIL    $1 (rc=$rc, run_in_background='${flag:-<unset>}')"; FAIL=$((FAIL+1))
+  fi
+}
+bgrewritten() { # label, command, background(1|0), the text the corrected command must contain
+  local out; out=$(bgrun "$2" "$3" 2>/dev/null)
+  local got; got=$(printf '%s' "$out" | python3 -c 'import json,sys
+try: print(json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]["command"])
+except Exception: pass' 2>/dev/null)
+  case "$got" in
+    *"$4"*) echo "  ok      $1"; PASS=$((PASS+1)) ;;
+    *) echo "  FAIL    $1 (got '${got:-<nothing>}', wanted '$4')"; FAIL=$((FAIL+1)) ;;
+  esac
+}
+untouched() { # label, command, background(1|0) - permitted with NO rewrite at all
+  local out; out=$(bgrun "$2" "$3" 2>/dev/null); local rc=$?
+  if [ "$rc" -eq 0 ] && ! printf '%s' "$out" | grep -q updatedInput; then
+    echo "  ok      $1"; PASS=$((PASS+1))
+  else
+    echo "  FAIL    $1 (rc=$rc, out='${out:-<nothing>}')"; FAIL=$((FAIL+1))
+  fi
+}
+ceiled_only() { # label, command, background(1|0)
+  local out; out=$(bgrun "$2" "$3" 2>/dev/null)
+  local got; got=$(printf '%s' "$out" | python3 -c 'import json,re,sys
+try: c = json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]["command"]
+except Exception: c = ""
+print(re.sub(r" (\|\||&&) \{ \[ \"\$SECONDS\" -(ge|lt) \d+ \] (&&|\|\|) \{ echo \"WAIT TIMED OUT[^\"]*\"; exit 4; \}; \}", "", c))' 2>/dev/null)
+  if [ "$got" = "$2" ] && printf '%s' "$out" | grep -q "WAIT TIMED OUT"; then echo "  ok      $1"; PASS=$((PASS+1));
+  else echo "  FAIL    $1 (got '${got:-<nothing>}')"; FAIL=$((FAIL+1)); fi
+}
+alive() { # label, expected(alive|dead), args...
+  local lbl="$1" want="$2"; shift 2
+  "$HERE/../../scripts/hooks/lib/writer-alive.sh" "$@" >/dev/null 2>&1; local rc=$?
+  if { [ "$want" = alive ] && [ "$rc" -eq 0 ]; } || { [ "$want" = dead ] && [ "$rc" -ne 0 ]; }; then
+    echo "  ok      $lbl"; PASS=$((PASS+1))
+  else
+    echo "  FAIL    $lbl (expected $want, rc=$rc)"; FAIL=$((FAIL+1))
+  fi
+}
+run_bg() {  # a backgrounded command through the hook; stdout is the rewrite, stderr in $HOOK_ERR
+  python3 -c 'import json,sys; print(json.dumps({"session_id":"t1","tool_name":"Bash","cwd":"/","tool_input":{"command":sys.argv[1],"run_in_background":True}}))' "$1" \
+    | "$HOOK" pretool 2>"$HOOK_ERR"
+}
+bg_case() {  # label, expected (cron|pass), command
+  run_bg "$3" >/dev/null; local rc=$?
+  if { [ "$2" = cron ] && [ "$rc" -eq 2 ] && grep -q 'CronCreate(cron="' "$HOOK_ERR"; } || { [ "$2" = pass ] && [ "$rc" -eq 0 ]; }; then
+    echo "  ok      $1"; PASS=$((PASS+1))
+  else
+    echo "  FAIL    $1 (expected $2, rc=$rc)"; sed 's/^/          /' "$HOOK_ERR"; FAIL=$((FAIL+1))
+  fi
+}
+
+case_1() {
+echo "1. the exact 2026-07-25 bug and its relatives are blocked"
+check "the real one: pgrep-self-match poll loop" blocked \
+  'for i in $(seq 1 80); do if ! pgrep -f "make done" >/dev/null 2>&1; then break; fi; command sleep 5; done; tail -18 /tmp/out'
+# GUARD_EDIT_OK: feature 164 - a STANDALONE self-matching pattern is now CORRECTED rather than
+# refused (GM 2026-08-30), so these two vectors move from "blocked" to "rewritten, with the bracket".
+# The loop above KEEPS its block, and that ordering is the point: the correction runs last, after the
+# busy-wait refusals, because when it ran first it rewrote the original 2026-07-25 command and let
+# the 10.9-minute busy-wait through. This suite caught that.
 rewritten "bare literal pattern is bracketed" 'pgrep -f "resvg --width"' '[r]esvg --width'
 # GUARD_EDIT_OK: 2026-09-28 (GM: "Yes please") - a MAKE-RUN wait is scoped to the asking tree, not bracketed: a
 # bracketed "[m]ake done" still matched other clones' gates and held a waiter six hours past its own failed gate
@@ -65,6 +138,9 @@ check "/bin/sleep bypass" blocked '/bin/sleep 20'
 check "env sleep bypass" blocked 'env sleep 15'
 check "backslash-escaped sleep bypass" blocked '\sleep 12'
 
+}
+
+case_2() {
 echo "2. the block explains the fault and the alternative"
 # GUARD_EDIT_OK: feature 164 - the self-match is CORRECTED now, so its explanation travels as the
 # rewrite's own context rather than as a refusal. The busy-wait block below still owes its message.
@@ -81,6 +157,9 @@ grep -q "POLL_OK" "$HOOK_ERR" && { echo "  ok      documents the escape hatch"; 
 # own specification, a plan quoting the shapes, a set of test vectors, and the script that moved this
 # very branch. `hookmatch.py sanitize` blanks heredoc bodies and quoted strings before the patterns
 # run, so text that TALKS about a busy-wait passes and one that RUNS it does not.
+}
+
+case_2b() {
 echo "2b. a MENTION is not an invocation (feature 164)"
 check "a heredoc writing prose about a busy-wait" ok 'python3 - <<PY
 print("a loop containing sleep 5 is a busy-wait; do not write one")
@@ -102,19 +181,10 @@ while :; do sleep 5; done'
 # CLOSED and narrower than the ruling words, because the GM was offered "permit whenever
 # backgrounded" and declined it as usable for a general bypass - so these vectors carry the
 # discriminating cases `spec-fidelity` demanded, not just the happy one.
+}
+
+case_5() {
 echo "5. the detached-run wait, and nothing wider (feature 165)"
-bgrun() {  # feed a Bash command with run_in_background set, return the exit code
-  python3 -c 'import json,sys; print(json.dumps({"session_id":"t1","tool_name":"Bash","tool_input":{"command":sys.argv[1],"run_in_background":sys.argv[2]=="1"}}))' "$1" "$2" \
-    | "$HOOK" pretool 2>"$HOOK_ERR"
-}
-bgcheck() { # label, expected, command, background(1|0)
-  bgrun "$3" "$4" >/dev/null; local rc=$?
-  if { [ "$2" = ok ] && [ "$rc" -eq 0 ]; } || { [ "$2" = blocked ] && [ "$rc" -ne 0 ]; }; then
-    echo "  ok      $1"; PASS=$((PASS+1))
-  else
-    echo "  FAIL    $1 (expected $2, rc=$rc)"; FAIL=$((FAIL+1))
-  fi
-}
 bgcheck "a backgrounded watch on a log file" ok "until grep -q 'gate green' /tmp/gate.log; do sleep 10; done" 1
 bgcheck "a backgrounded file test" ok "until [ -s /tmp/gate.log ]; do sleep 5; done" 1
 # GUARD_EDIT_OK: feature 212 - the qualifier reads the permitted shape the way the record writes it
@@ -132,17 +202,6 @@ bgcheck "a file test AND a network call (every part must qualify)" blocked 'unti
 bgcheck "a backtick in the condition" blocked 'until grep -q x `cat f`; do sleep 5; done' 1
 # GUARD_EDIT_OK: feature 212 - THE FOREGROUND FORM IS BACKGROUNDED, NOT REFUSED (GM 2026-09-07): the
 # permitted shape is this command with run_in_background set, so the hook sets it and says so.
-backgrounded() { # label, command
-  local out; out=$(bgrun "$2" 0 2>/dev/null); local rc=$?
-  local flag; flag=$(printf '%s' "$out" | python3 -c 'import json,sys
-try: print(json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]["run_in_background"])
-except Exception: print("")' 2>/dev/null)
-  if [ "$rc" -eq 0 ] && [ "$flag" = "True" ] && printf '%s' "$out" | grep -q "BACKGROUNDED"; then
-    echo "  ok      $1"; PASS=$((PASS+1))
-  else
-    echo "  FAIL    $1 (rc=$rc, run_in_background='${flag:-<unset>}')"; FAIL=$((FAIL+1))
-  fi
-}
 backgrounded "the SAME watch in the foreground is backgrounded and told" "until grep -q 'gate green' /tmp/gate.log; do sleep 10; done"
 backgrounded "...with what follows the loop kept" "until grep -q x /tmp/a.log; do sleep 5; done; tail /tmp/a.log"
 backgrounded "the file-test form, foreground" 'while [ ! -f /tmp/done ]; do sleep 2; done'
@@ -155,6 +214,9 @@ bgcheck "a command substitution in the condition" blocked "until [ -n \"\$(pgrep
 bgcheck "an output redirect on an otherwise real file watch" blocked "until grep -q x /tmp/a.log >/dev/null; do sleep 5; done" 1
 bgcheck "a disguised bare sleep, backgrounded" blocked "command sleep 30" 1
 
+}
+
+case_3() {
 echo "3. legitimate commands are NOT blocked (no false positives)"
 check "the gate itself" ok 'make done'
 check "pytest" ok 'python3 -m pytest test_settlement.py -n auto'
@@ -169,6 +231,9 @@ check "git" ok 'git log --oneline -1'
 check "a word merely containing sleep" ok 'grep -rn "sleepy" .'
 check "the word sleep inside a string, not invoked" ok 'echo "do not sleep 5 here"'
 
+}
+
+case_4() {
 echo "4. the escape hatch works for genuine external waits"
 check "POLL_OK allows a real port wait" ok '# POLL_OK: waiting for the dev server port to open
 until curl -s localhost:8080 >/dev/null; do sleep 2; done'
@@ -190,6 +255,9 @@ printf '%s' "$U_PAYLOAD" \
 # exit condition ALSO asked `! pgrep -f "make page-check"` - which matched the waiter's own shell, so
 # the loop ran for hours on a gate that had finished in 7 s. The escape used to exit before the
 # correction ran. Now the wait is permitted AND the pattern is bracketed, and both are recorded.
+}
+
+case_4b() {
 echo "4b. an escaped wait still gets the self-match correction"
 ESCAPED_SELF='true POLL_OK waits on the detached page-check gate writing its log; L=/tmp/pc.log; until grep -qE "passed|failed" $L 2>/dev/null && ! pgrep -f "make page-check" >/dev/null; do sleep 5; done; tail -6 $L'
 rewritten "the 2026-09-08 waiter: escaped AND corrected (scoped since 2026-09-28)" "$ESCAPED_SELF" 'own-make.sh page-check'
@@ -209,6 +277,9 @@ SCOPED=$(run 'pgrep -f "make done"' 2>/dev/null)
 printf '%s' "$SCOPED" | grep -q "scoped to this working tree" && { echo "  ok      the scoping says why"; PASS=$((PASS+1)); } || { echo "  FAIL    the scoping is not explained"; FAIL=$((FAIL+1)); }
 grep -rlq 'self-match-scoped' "$GUARD_LOG_ROOT" && { echo "  ok      the scoping is recorded under its own rule slug"; PASS=$((PASS+1)); } || { echo "  FAIL    no self-match-scoped entry"; FAIL=$((FAIL+1)); }
 
+}
+
+case_4c() {
 echo "4c. own-make.sh counts only this tree's runs"
 OWN="$HERE/../../scripts/hooks/lib/own-make.sh"
 PROBE_A=$(mktemp -d); PROBE_B=$(mktemp -d); git -C "$PROBE_B" init -q
@@ -226,25 +297,10 @@ rm -rf "$PROBE_A" "$PROBE_B"
 # the waiter sat on a pattern that was never going to be printed. The GM: *"the hook should add the second
 # proof of life check to what is being waited for"*, because *"simply telling you to set a watch properly next
 # time is bad engineering practice."*
+}
+
+case_6() {
 echo "6. the proof of life (feature 227)"
-bgrewritten() { # label, command, background(1|0), the text the corrected command must contain
-  local out; out=$(bgrun "$2" "$3" 2>/dev/null)
-  local got; got=$(printf '%s' "$out" | python3 -c 'import json,sys
-try: print(json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]["command"])
-except Exception: pass' 2>/dev/null)
-  case "$got" in
-    *"$4"*) echo "  ok      $1"; PASS=$((PASS+1)) ;;
-    *) echo "  FAIL    $1 (got '${got:-<nothing>}', wanted '$4')"; FAIL=$((FAIL+1)) ;;
-  esac
-}
-untouched() { # label, command, background(1|0) - permitted with NO rewrite at all
-  local out; out=$(bgrun "$2" "$3" 2>/dev/null); local rc=$?
-  if [ "$rc" -eq 0 ] && ! printf '%s' "$out" | grep -q updatedInput; then
-    echo "  ok      $1"; PASS=$((PASS+1))
-  else
-    echo "  FAIL    $1 (rc=$rc, out='${out:-<nothing>}')"; FAIL=$((FAIL+1))
-  fi
-}
 bgrewritten "a backgrounded log watch gains the liveness clause" \
   'until grep -qE "^wrote |Error|Traceback" /tmp/stages.log; do sleep 15; done; tail -5 /tmp/stages.log' 1 'writer-alive.sh "/tmp/stages.log"'
 bgrewritten "...an UNTIL loop gets it ORed as a false that exits 3, so the wait ends when the writer is gone" \
@@ -272,15 +328,6 @@ bgrewritten "a foreground one is backgrounded AND proofed in one rewrite" \
 # a condition had to be one of the three file forms. A liveness clause can only end the loop sooner.
 # GUARD_EDIT_OK: 2026-09-30 (GM: "Yes, please go ahead") - these three were permitted UNCHANGED; since every wait gets its
 # ceiling they are permitted with the ceiling ONLY - nothing else of the command is touched (the proof is not re-added).
-ceiled_only() { # label, command, background(1|0)
-  local out; out=$(bgrun "$2" "$3" 2>/dev/null)
-  local got; got=$(printf '%s' "$out" | python3 -c 'import json,re,sys
-try: c = json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]["command"]
-except Exception: c = ""
-print(re.sub(r" (\|\||&&) \{ \[ \"\$SECONDS\" -(ge|lt) \d+ \] (&&|\|\|) \{ echo \"WAIT TIMED OUT[^\"]*\"; exit 4; \}; \}", "", c))' 2>/dev/null)
-  if [ "$got" = "$2" ] && printf '%s' "$out" | grep -q "WAIT TIMED OUT"; then echo "  ok      $1"; PASS=$((PASS+1));
-  else echo "  FAIL    $1 (got '${got:-<nothing>}')"; FAIL=$((FAIL+1)); fi
-}
 ceiled_only "a wait that already asks whether its producer is alive gains the ceiling and nothing else" \
   'until grep -q "^EXIT=" $S/maps.log || ! pgrep -f "ma[p]s227b" > /dev/null; do sleep 15; done; tail -6 $S/maps.log' 1
 ceiled_only "...the same, through the helper itself (idempotent: the hook does not re-proof its own rewrite)" \
@@ -299,6 +346,9 @@ bgcheck "a liveness test beside a NETWORK call is still refused" blocked \
   'until curl -sf https://h/x || ! pgrep -f "[m]ake done"; do sleep 5; done' 1
 
 # GUARD_EDIT_OK: 2026-09-30 (GM: "Yes, please go ahead") - THE FOUR HOURS OF 2026-09-30, each shape that caused them.
+}
+
+case_7() {
 echo "7. a wait that finds itself is refused, a make wait with a path is scoped, and every wait ends"
 check "a launch-and-wait whose pattern matches the launch is refused (bracketed or not)" blocked \
   'nohup resvg --width 10 a.svg > /tmp/r.log 2>&1 & until ! pgrep -f "[r]esvg --width" >/dev/null; do sleep 5; done  # POLL_OK: a detached render'
@@ -323,16 +373,10 @@ sleep 0.5
 ( cd "$PROBE_C" && "$HERE/../../scripts/hooks/lib/own-make.sh" own-make-shell-probe ) && { echo "  FAIL    a shell that only names the make run was counted as the run"; FAIL=$((FAIL+1)); } || { echo "  ok      a shell that only names the make run is not the run"; PASS=$((PASS+1)); }
 kill "$NP_SHELL" 2>/dev/null; wait "$NP_SHELL" 2>/dev/null; rm -rf "$PROBE_C"
 
-echo "6b. writer-alive.sh answers from the file, not from a pattern"
-alive() { # label, expected(alive|dead), args...
-  local lbl="$1" want="$2"; shift 2
-  "$HERE/../../scripts/hooks/lib/writer-alive.sh" "$@" >/dev/null 2>&1; local rc=$?
-  if { [ "$want" = alive ] && [ "$rc" -eq 0 ]; } || { [ "$want" = dead ] && [ "$rc" -ne 0 ]; }; then
-    echo "  ok      $lbl"; PASS=$((PASS+1))
-  else
-    echo "  FAIL    $lbl (expected $want, rc=$rc)"; FAIL=$((FAIL+1))
-  fi
 }
+
+case_6b() {
+echo "6b. writer-alive.sh answers from the file, not from a pattern"
 WA_DIR=$(mktemp -d)
 alive "nothing named: no claim either way" alive
 alive "a file that does not exist yet: the producer is starting" alive "$WA_DIR/not-yet.log"
@@ -351,18 +395,6 @@ rm -rf "$WA_DIR"
 echo "--- feature 295: a periodic report is steered to CronCreate; an event-driven wait is not ---"
 P_DIR=$(mktemp -d)
 printf 'N=${1:-3600}\nuntil [ "$SECONDS" -ge "$N" ]; do sleep 60; done\necho report\n' > "$P_DIR/watch4.sh"
-run_bg() {  # a backgrounded command through the hook; stdout is the rewrite, stderr in $HOOK_ERR
-  python3 -c 'import json,sys; print(json.dumps({"session_id":"t1","tool_name":"Bash","cwd":"/","tool_input":{"command":sys.argv[1],"run_in_background":True}}))' "$1" \
-    | "$HOOK" pretool 2>"$HOOK_ERR"
-}
-bg_case() {  # label, expected (cron|pass), command
-  run_bg "$3" >/dev/null; local rc=$?
-  if { [ "$2" = cron ] && [ "$rc" -eq 2 ] && grep -q 'CronCreate(cron="' "$HOOK_ERR"; } || { [ "$2" = pass ] && [ "$rc" -eq 0 ]; }; then
-    echo "  ok      $1"; PASS=$((PASS+1))
-  else
-    echo "  FAIL    $1 (expected $2, rc=$rc)"; sed 's/^/          /' "$HOOK_ERR"; FAIL=$((FAIL+1))
-  fi
-}
 bg_case "the 292 watcher, replayed: POLL_OK names an hourly report" cron \
   "POLL_OK='hourly progress report on three detached page-session queues' bash $P_DIR/watch4.sh 3600"
 grep -qE 'CronCreate\(cron="[0-9]+ \* \* \* \*", recurring=true, prompt="hourly progress report' "$HOOK_ERR" \
@@ -404,6 +436,16 @@ check "the R7 command: a sleep before a for loop, none inside it" ok \
   'pkill -f X ; sleep 1; cd /tmp; for p in $(pgrep -f Y); do echo "$p"; done'
 check "a sleep inside the loop's body still is one" blocked 'for p in 1 2; do echo "$p"; sleep 1; done'
 check "...and inside a nested loop, after a done that only echoes" blocked 'while x; do echo done; sleep 1; done'
+
+}
+
+# GUARD_EDIT_OK: feature 383 amendment 4 (plan D28) - the sections as cases, run in parallel parts (tests/hooks/parts.sh)
+part_env() { HOOK_ERR=$(mktemp); GUARD_LOG_ROOT=$GUARD_LOG_DIR; mkdir -p "$GUARD_LOG_ROOT"; }  # each part its own captured stderr and guard log
+CASES=(case_1 case_2 case_2b case_5 case_3 case_4 case_4b case_4c case_6 case_7 case_6b)
+declare -A WEIGHT=()
+# shellcheck source=/dev/null
+source "$HERE/parts.sh"
+run_parts ${NOPOLL_PARTS:-6}
 
 echo
 echo "no-poll-hooks: $PASS passed, $FAIL failed"
