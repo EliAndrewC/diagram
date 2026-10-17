@@ -1815,3 +1815,4 @@ above this heading are classified once, as data, in `docs/review-ledger-r0.json`
 | 2026-10-17 | spec-fidelity | 383 amendment 3 spec, round 1 | CHANGES REQUIRED | 1: the GM's right away not carried | paperwork | yes | fixed: FR-024 says the trials come first | 44 s | 164k in (118k cached) / 3.7k out |
 | 2026-10-17 | spec-fidelity-verify | 383 amendment 3 spec, round 2 | FAITHFUL | - | nothing | - | verified: spec accepted | 15 s | 24k in (12k cached) / 1.2k out |
 | 2026-10-17 | spec-fidelity-verify | 383 amendment 3 spec, round 2 (logged pass) | FAITHFUL | - | nothing | - | verified: spec accepted | 15 s | 24k in (12k cached) / 1.2k out |
+| 2026-10-17 | spec-fidelity | 383 amendment 3 plan, D24-D27 | CLEAR | - | nothing | - | verified: plan accepted; the quick-collection premise is measured first (D25b), per worker | 210 s | 234k in (185k cached) / 11.0k out |

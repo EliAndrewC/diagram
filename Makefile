@@ -1725,6 +1725,10 @@ cov-file:       ## [tests] which lines of MOD does ONE test file reach?   FILE=t
 # that they exist - "make durations FULL MARK" did not tell them what FULL=1 changes, or what MARK
 # even takes. So a `##  NAME=<what>  description` line under a target documents one argument, and
 # `make-docs.py` renders them. Make treats these as ordinary comments; the recipe is unaffected.
+collect-cost:    ## [tests] where a run's time goes before any test runs: as make runs it, no workers, collection alone (feature 383 amendment 3)   TREE=quick|tooling
+	@: "GUARD_EDIT_OK: feature 383 amendment 3, plan D25 - adding an operation: the collection measurement, run under make because the engine refuses pytest started outside it"
+	@python3 scripts/measure/collect_cost.py --tree $(or $(TREE),quick) $(if $(JSON),--json $(JSON),)
+
 durations:       ## [tests] where the suite's time goes - run when a target feels slow
 ##  FULL=1        also profile `tests/full/` (default: it is ignored, so this is the quick tree only)
 ##  MARK=<expr>   a pytest `-m` marker expression, e.g. `tooling` (default: `not rolls_map`)

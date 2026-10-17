@@ -185,3 +185,29 @@ command as the append passed unjudged - the row is now linted before it is appen
 **Remaining, recorded** (FR-019; observed 2026-10-13, method: the measurements above): the tooling tests' 18 always-run files (41.4 test-seconds, about 5 s of wall, the table
 above); startup and collection 4.5 s; the guard suites a landing's files reach (each runs whole, 4 to 33 s, beside the tooling
 tests now); the push's network and lock time.
+
+## R10 Amendment 3 - review checks on Sonnet 5.5
+
+**The cases** (observed 2026-10-17; method: `scripts/measure/model_trial.py`, each recorded Opus run joined to its ledger row by
+its cost cells, the newest replayable run with findings the session then fixed and the newest clean one). Each case is a
+separate clone at the commit the recorded run read (the recording clone's reflog), with its bundle frozen from the run's own
+inputs (a bundle unchanged since the run) or its review snapshot rebuilt there (the map drawn at that commit and at main's tip
+of the time, from the mirror's reflog; the dispatch read back from the recorded transcript). Only the tested agent's copy
+names `claude-sonnet-5-5`; every hook is off. Three runs a case.
+
+| check | case | recorded run (start, UTC) | commit read | the recorded Opus verdict and findings (its ledger row) |
+|---|---|---|---|---|
+| spec-fidelity | findings | 2026-10-17T12:23 | 053c01c58 | CHANGES REQUIRED - 1: the GM's right away not carried |
+| spec-fidelity | clean | 2026-10-17T12:26 | e7555d74e | CLEAR - - |
+| glyph-check | findings | 2026-10-13T08:27 | 03cef6f31 | NEEDS-WORK - bands a third of the farm wide (58-79 ft of 222-249); floating between farms; tile cut at the band edge |
+| glyph-check | clean | 2026-10-12T15:07 | 8d6545c01 | PASS - none |
+| impl-drift | findings | 2026-10-11T09:54 | 1faad0c08 | IN-STEP 6, MISLABELED 3 - LANE_ROOM_FT, WAY_IN_FT and dispersed_layout's 32 ft and 36 ft claimed as research where 0036's drawing page records GUESS; well pocket UNCLAIMED |
+| impl-drift | clean | 2026-10-11T09:57 | 1faad0c08 | IN-STEP 10 - nothing |
+| building-review | clean | 2026-10-10T13:36 | 7817f4a30 | PASS - E1, E2 verified; N1, N2 nitpicks |
+| modal-form | findings | 2026-10-13T04:10 | ca9c595f8 | 0 FIX, 2 NOTE - a source kind named in Depiction; an off-subject clause in the opening |
+| modal-form | clean | 2026-10-12T20:19 | 2cf5a3ee0 | 0 findings - none |
+| modal-research | findings | 2026-10-13T02:04 | 828f5b626 | ACCURACY 2, REFERENCES 1, GAPS 2 - each house overstated; the build said unrecorded where Suzhou records it; the kabata's other uses |
+| modal-research | clean | 2026-10-13T07:59 | ef549b6f5 | ACCURACY 0, REFERENCES 0, GAPS 0 - none |
+| modal-depiction | findings | 2026-10-13T02:15 | 828f5b626 | COVERAGE 1, TRUTH 1, LINKS 0 - the drawing convention untold; "elsewhere shared" read as a mix within one settlement |
+| modal-depiction | clean | 2026-10-13T11:24 | 6cf8300c5 | COVERAGE 0, TRUTH 0, LINKS 0 - clean; the 0196 page does not name the reserved ways, drawn as lanes on the finished map |
+| building-review | findings | 2026-10-10T10:25 | 72ba8035a | NEEDS-WORK - E1 the outer court's yard painted over the moved court (fixed, a zone-overlap test); E2 notes stale (fixed); E3 the long-house squat (a found row); E4 the barra |

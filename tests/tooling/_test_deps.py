@@ -232,6 +232,7 @@ def _keep(d: pathlib.Path) -> None:
             files.add(".git")  # the repository's own git state was read: not known by content, so never reused
         kept[f] = {
             "v": STORE_VERSION,
+            "tests": ran[f],
             "py": sys.version,
             "opaque": sorted(r.get("opaque", set())),
             "files": {p: _state("file", p, ids, entries) for p in sorted(files)},
@@ -263,26 +264,39 @@ def answer(question: str, answers: dict[str, str]) -> str:
     return answers[question]
 
 
-def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item]) -> None:
-    if MODE != "reuse" or not getattr(config, "_l7r_deps", False):
-        return
-    store = _store()
-    try:
-        kept = json.loads(store.read_text(encoding="utf-8")) if store and store.is_file() else {}
-    except OSError, ValueError:
-        kept = {}
-    files = {_rel(i.nodeid) for i in items if _rel(i.nodeid).startswith(TREE)}
-    if not kept or not files:
-        return
-    ids, entries = _ids()
-    answers: dict[str, str] = {}
-    skip = {f for f in files if f in kept and reusable(kept[f], ids, entries, answers)}
-    if not skip:
-        return
-    gone = [i for i in items if _rel(i.nodeid) in skip]
-    items[:] = [i for i in items if _rel(i.nodeid) not in skip]
-    config.hook.pytest_deselected(items=gone)
-    config._l7r_reused = (len(skip), len(gone))  # type: ignore[attr-defined]
+def reuse_set(config: pytest.Config) -> dict[str, int]:
+    """{tooling test file: its kept test count} for every kept pass still good here, decided once per process (feature 383
+    amendment 3, plan D25): the reuse is known before collection, so a reused file is never imported, in any worker."""
+    cached = getattr(config, "_l7r_reuse_set", None)
+    if cached is not None:
+        return cached
+    out: dict[str, int] = {}
+    if MODE == "reuse" and getattr(config, "_l7r_deps", False):
+        store = _store()
+        try:
+            kept = json.loads(store.read_text(encoding="utf-8")) if store and store.is_file() else {}
+        except OSError, ValueError:
+            kept = {}
+        if kept:
+            ids, entries = _ids()
+            answers: dict[str, str] = {}
+            out = {f: int(e.get("tests", 0)) for f, e in kept.items() if f.startswith(TREE) and reusable(e, ids, entries, answers)}
+    config._l7r_reuse_set = out  # type: ignore[attr-defined]
+    return out
+
+
+def pytest_ignore_collect(collection_path: pathlib.Path, config: pytest.Config) -> bool | None:
+    """A reused tooling test file is not collected: its module is never imported (FR-022)."""
+    if MODE != "reuse" or not getattr(config, "_l7r_deps", False) or collection_path.suffix != ".py":
+        return None
+    rel = _rel_path(str(collection_path))
+    skip = reuse_set(config)
+    if rel not in skip:
+        return None
+    seen = config.__dict__.setdefault("_l7r_skipped", set())
+    seen.add(rel)
+    config._l7r_reused = (len(seen), sum(skip[f] for f in seen))  # type: ignore[attr-defined]
+    return True
 
 
 def pytest_terminal_summary(terminalreporter, config: pytest.Config) -> None:  # noqa: ANN001

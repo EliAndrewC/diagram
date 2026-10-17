@@ -215,6 +215,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-13",
    "declared": "spec-fidelity"
+  },
+  "## Amendment 3 (FR-021 to FR-024)": {
+   "sha256": "3178b5671d178ea83bd113119b99950a47d1930ae86aa0fd6f6476507b9e1509",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -487,6 +493,114 @@
      "summary": "After D18-D22 a landing is measured and each step over a few seconds cut without loosening a check, or recorded in R9",
      "class": "within",
      "why": "Unchanged since CLEAR; FR-019, the GM's 'see what can be done there ... land whatever timing improvements'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Amendment 3 (FR-021 to FR-024)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D24a",
+     "summary": "model_trial.py: a detached worktree at the commit before the recorded run, the current agent files copied in with model: claude-sonnet-5-5 in the copy only, headless runs with hooks off, usage folded",
+     "class": "within",
+     "why": "The instrument for FR-024's trial; it changes no check's tier outside the worktree."
+    },
+    {
+     "id": "D24b",
+     "summary": "A recorded run whose /tmp bundle is gone and cannot be rebuilt at that commit is not chosen as a case",
+     "class": "within",
+     "why": "Selects among cases, never drops a check: FR-024 requires each of the seven checks be tried, so a check with no preparable recorded case still owes a case."
+    },
+    {
+     "id": "D24c",
+     "summary": "Two cases per check (a findings run its ledger row says was fixed, and a clean run), three Sonnet runs a case, 42 runs",
+     "class": "within",
+     "why": "FR-024: recorded Opus runs with known findings, three runs a leg (plural legs); the arithmetic 7 x 2 x 3 = 42 holds."
+    },
+    {
+     "id": "D24d",
+     "summary": "Move rule: a check moves to Sonnet only if all three findings-case runs hit every known finding AND no clean-case run raises a false alarm",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Stricter than FR-024's literal 'finds every known finding moves'. Legitimate on the request's purpose: the GM asked for the measurement so cheaper models carry checks they can do; a clean run's known findings are the empty set, and the only thing a clean leg measures is false alarms. Applied literally, a Sonnet spec-fidelity that finds every real finding but returns false CHANGES REQUIRED would move, consume the five-round cap and Opus arbiter dispatches, and cost more than the downgrade saves - defeating the purpose concretely. Either result is still recorded."
+    },
+    {
+     "id": "D24e",
+     "summary": "Scoring by the session, case by case, HIT/MISSED/FALSE ALARM plus turns, tokens and wall time, to research R10",
+     "class": "within",
+     "why": "FR-024 and SC-018: findings found or missed per run and the cost compared."
+    },
+    {
+     "id": "D24f",
+     "summary": "The result recorded in the tier table, the agent file, a 'Models tried' section of docs/spec-kit-and-reviews.md and a pointer from CLAUDE.md, either way",
+     "class": "within",
+     "why": "Exactly FR-024's three places plus the agent file the move requires."
+    },
+    {
+     "id": "D24g",
+     "summary": "T24/T25 first, runs in the background, T26 onward beside them",
+     "class": "within",
+     "why": "FR-024: the trials start first and are not held behind FR-021..023 (the GM: 'pretty much right away')."
+    },
+    {
+     "id": "D25a",
+     "summary": "The tooling plugin answers pytest_ignore_collect for every file its reuse skips, decided once per process in pytest_configure",
+     "class": "within",
+     "why": "FR-022's landing clause: a reused file is never imported, in any worker."
+    },
+    {
+     "id": "D25b",
+     "summary": "make quick: testmon is taken to already ignore deselected files; why quick still spends 14.3 s collecting is measured first with collect_cost.py and the cut follows the measurement",
+     "class": "within",
+     "why": "Within on the measure-first commitment. The premise that testmon already ignores deselected files is unlabeled and decides whether FR-022's quick clause (the GM's own example) gets a mechanism; the listed causes omit a fourth possible finding. collect_cost.py must report per worker whether deselected files are imported, because SC-016's count-and-time comparison does not prove the import skip FR-022 requires in every worker; if they are imported, the skip is owed."
+    },
+    {
+     "id": "D25c",
+     "summary": "Tests run and their results compared with the cut off and on",
+     "class": "within",
+     "why": "SC-016."
+    },
+    {
+     "id": "D26a",
+     "summary": "Opaque always-run tooling files traced under strace (file and process calls, per-file attribution by fork), every repo path read/stat-ed/listed and every program run kept as inputs, then reused like any other; overhead measured on the 18 files",
+     "class": "within",
+     "why": "FR-021: reuse where what its programs read can be recorded."
+    },
+    {
+     "id": "D26b",
+     "summary": "A trace retaken only when its traced inputs changed, by make test-file in record mode, so a landing reuses it",
+     "class": "within",
+     "why": "Serves FR-021's reuse on identical inputs."
+    },
+    {
+     "id": "D26c",
+     "summary": "A file whose program writes what it later reads stays always-run, recorded in R10 with its seconds",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The plan decides which files fall into FR-021's own accepted fallback ('one that cannot is recorded with its seconds and the reason'). A read of the run's own output has no pre-run content the trace observes, so what it depends on cannot be recorded as an input by this instrument; the GM accepted infeasibility in amendment 2 ('maybe it's just not feasible, that's fine'). Recorded with seconds in R10, so the fallback is instantiated, not widened."
+    },
+    {
+     "id": "D26d",
+     "summary": "A file whose reads include a path the trace cannot key (a socket, a device) stays always-run, recorded in R10 with its seconds",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically unkeyable: a socket or device has no content to hash, so FR-021's 'cannot' applies literally, with the seconds and reason recorded."
+    },
+    {
+     "id": "D27a",
+     "summary": "hooks_landing_runs.py replays recorded landings: which suites ran and which dependency moved (the landing's files or main's); sync-with-main, review-gate, entry-gate measured case by case first",
+     "class": "within",
+     "why": "FR-023 and SC-017 as written."
+    },
+    {
+     "id": "D27b",
+     "summary": "A suite re-run on a dependency its cases do not reach has its set narrowed (by function where a helper is a library, never looser than what is executed, checked under a trace) or is split; nothing dropped; a skip test and a run test per narrowed suite",
+     "class": "within",
+     "why": "FR-023: inputs narrowed or the suite split, nothing a suite checks dropped; answers the GM's 'optimize away running some of those when they haven't been modified'."
     }
    ]
   }
