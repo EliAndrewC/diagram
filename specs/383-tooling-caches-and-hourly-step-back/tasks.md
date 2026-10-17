@@ -127,6 +127,6 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T32 The tooling run's start-up (plan D30) (SC-020)
       research: rendering
       verify: DONE. DONE. the start measured part by part (workers, a controller-side decision, byte-code first): none gained, each reverted and recorded (research R11)
-- [ ] T33 Close: a landing measured before and after, the gate, the report, landed
+- [x] T33 Close: a landing measured before and after, the gate, the report, landed
       research: rendering
-      verify: research R11; the gate green; the report written; landed
+      verify: DONE. DONE. a landing 30.04 -> 27.28 s (m:land-tooling-landing-a4); research R11; the gate green; the report written; landed by the push carrying this tick
