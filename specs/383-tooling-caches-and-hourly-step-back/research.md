@@ -197,6 +197,7 @@ names `claude-sonnet-5-5`; every hook is off. Three runs a case.
 
 | check | case | recorded run (start, UTC) | commit read | the recorded Opus verdict and findings (its ledger row) |
 |---|---|---|---|---|
+| (observed 2026-10-17; method: each recorded run read from its transcript, its ledger row joined by its cost cells) | | | | |
 | spec-fidelity | findings | 2026-10-17T12:23 | 053c01c58 | CHANGES REQUIRED - 1: the GM's right away not carried |
 | spec-fidelity | clean | 2026-10-17T12:26 | e7555d74e | CLEAR - - |
 | glyph-check | findings | 2026-10-13T08:27 | 03cef6f31 | NEEDS-WORK - bands a third of the farm wide (58-79 ft of 222-249); floating between farms; tile cut at the band edge |
@@ -254,6 +255,7 @@ counting the test modules it imported, load 1.4-2.0):
 
 | run | time | test modules imported per process | tests |
 |---|---|---|---|
+| (observed 2026-10-17; method: `make collect-cost TREE=quick`, a probe plugin per process) | | | |
 | quick as make runs it (testmon selecting, 6 workers), nothing changed | 3.87-4.15 s | 5 in each of 6 workers | none ran |
 | the same, no workers | 1.62 s | 5 | none ran |
 | collection only, no testmon | 5.44 s | 283 | 9,433 |
@@ -283,6 +285,7 @@ of the fresh worktree's time is its cold byte-code: every module compiled again.
 
 | what | before | after |
 |---|---|---|
+| (observed 2026-10-17; method: each suite timed alone, the landings replayed against `hookdeps.py --deps`) | | |
 | sync-with-main suite (the slowest) | 36.2 s at 4 parts; `case_11` alone 27.9 s | 17.9 s at 8 parts, `case_11` split in three, weights measured (124 checks either way) |
 | sync-with-main and gate-stamp re-run by a tooling landing | 42 of 44 landings (inputs: the whole `scripts/` tree) | only when a file they read changed - traced: after a change to `clone-sync-hooks.sh`, gate-stamp no longer ran |
 | suites traced | - | 38 of 44 (the six left read the repository through git or a file git ignores, and keep `hookdeps.py`'s key) |
