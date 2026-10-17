@@ -1,4 +1,4 @@
-"""One `<epoch> test` mark per failed test, for the run log's first and last failure times.
+"""One `<epoch> test <node id>` mark per failed test, for the run log's first and last failure times and its failed tests by name.
 
 `make done` exports `L7R_GATE_FAILURES` (the clone's `gate-failures` file, read back by
 `scripts/measure/runstats.py end`); unset, as under `make quick`, this does nothing. A failure appends one
@@ -24,7 +24,7 @@ def mark(report, path: str | None) -> bool:  # type: ignore[no-untyped-def]
     if not (report.failed and path) or os.environ.get("PYTEST_XDIST_WORKER"):
         return False
     with open(path, "a") as f:
-        f.write(f"{time.time():.3f} test\n")
+        f.write(f"{time.time():.3f} test {getattr(report, 'nodeid', '')}".rstrip() + "\n")  # ...with its id: the run record names what this gate failed (feature 385, the round arbiter's fix on red-gate@2026-10-17T17:21:08Z)
     return True
 
 

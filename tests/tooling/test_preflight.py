@@ -83,3 +83,14 @@ def test_the_moved_tree_check_runs_before_the_gate_vouches_for_anything() -> Non
     assert check < recipe.index(" green \"$$(cat"), "and before the green run-log entry"
     refusal = recipe[check : recipe.index("exit 1; }", check)]
     assert '"failed: tree moved"' in refusal and "failed-gate" in refusal, "a refusal is logged as a failure"
+
+
+def test_a_probe_test_left_in_the_tree_stops_the_gate(tmp_path: Path, capsys) -> None:  # type: ignore[no-untyped-def]
+    """Feature 385 (the round arbiter's fix on red-gate@2026-10-17T17:21:08Z): a `tests/**/test_zz_probe*.py` a diagnosis left
+    behind would run in the full suite; the preflight refuses to start while one stands, naming it."""
+    (tmp_path / "tests" / "tooling").mkdir(parents=True)
+    assert pf.stray_probes(tmp_path) == []
+    (tmp_path / "tests" / "tooling" / "test_zz_probe_a05.py").write_text("def test_x(): pass\n", encoding="utf-8")
+    (tmp_path / "tests" / "tooling" / "test_zz_probe_old.cpython-314.pyc").write_text("", encoding="utf-8")
+    assert pf.stray_probes(tmp_path) == ["tests/tooling/test_zz_probe_a05.py"], "a stale .pyc is no probe"
+    assert pf.main(["--root", str(tmp_path)]) == 1 and "test_zz_probe_a05.py" in capsys.readouterr().out
