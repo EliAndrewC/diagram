@@ -168,3 +168,6 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
       verify: DONE. SC-023 quality clause met (R14). Feature 251 round 1, three runs a leg as a subagent, scored blind: the field found 3 of 3 recorded items in 3 of 3 runs, as the control did. omitClaudeMd set; KEEPS_CLAUDE_MD empty; tier test green.
 - [ ] T44 The rule in CLAUDE.md and the docs; close: the gate, the report, landed (plan D39)
       research: rendering
+- [ ] T45 One copy of the root CLAUDE.md: the exclusion in the project settings, its test, measured after landing (plan D40) (SC-026)
+      research: rendering
+

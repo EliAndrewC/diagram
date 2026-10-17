@@ -124,3 +124,13 @@ ad-hoc dispatches (the claims and modal triage) as defined agents; a dispatch gu
 bundle test, `make cache-audit`, a rule in CLAUDE.md. The GM:
 
 > Yes. Please file that and then implement it. Thank you.
+
+### Amendment 6, extended (2026-10-17, same session)
+
+While amendment 6 was being worked, the GM:
+
+> Oh, also, a different repository like the original GM Assistant custom clones is .md twice. Because it reads it in the main checkout, like, you know, where we launch the Claude Code it works in the clone. So that feels like something that from a token usage perspective we need to address. I don't know if that's something that we actually need to address for our subagents, because our subagents I think will probably end up being launched uh, like, you know, not in this current working directory or whatever, but that also seems like a token efficiency improvement that we need to make or measure or address or whatever.
+
+(Dictated: "custom clones is .md twice" reads "the clones load CLAUDE.md twice".) The session measured it here: a session
+started in `/diagram` loads `/diagram/CLAUDE.md` at launch and the clone's own copy, ~9k tokens, when it first touches a file in
+the clone; `claudeMdExcludes: ["/diagram/.clones/*/CLAUDE.md"]` skips exactly that copy (research R15).

@@ -490,3 +490,23 @@ subagent's first-call usage read from its transcript):
 | claims-triage | 0 / 5,614 | 5,614 / 0 | general-purpose 29,191 |
 | modal-triage | 2,327 / 3,353 | 5,680 / 0 | general-purpose 29,191 |
 
+## R15 Amendment 6, extended - the clone's copy of the root CLAUDE.md
+
+(observed 2026-10-17; method: two headless Sonnet sessions started in `/diagram`, each told to read the first lines of one file
+in this clone, `scripts/measure/subagent_cache.py`, and reply DONE; the session transcripts searched for each CLAUDE.md's
+path; the run's usage summed)
+
+| (observed 2026-10-17; the method above) | the clone's root CLAUDE.md | its `scripts/CLAUDE.md` | input tokens, the session |
+|---|---|---|---|
+| settings as they are | loaded | loaded | 119,497 |
+| `claudeMdExcludes: ["/diagram/.clones/*/CLAUDE.md"]` | not loaded | loaded | 105,261 |
+
+- Claude Code loads the launch directory's CLAUDE.md and its ancestors' at launch, and a subdirectory's when the session first
+  touches a file there (https://code.claude.com/docs/en/memory.md, "How CLAUDE.md files load"); the clones live under the
+  launch directory, so a clone's root CLAUDE.md - the root's own text, 36.7k characters - arrives a second time.
+- `claudeMdExcludes` (absolute-path globs, any settings layer; same page, "Exclude specific CLAUDE.md files") skips it, the
+  on-demand load included - the docs do not say that; the run above shows it. A session started INSIDE a clone still loads
+  `/diagram/CLAUDE.md` as an ancestor, so it too carries one copy.
+- Subagents: a defined agent with `omitClaudeMd` skips the launch files but still loads a subdirectory's CLAUDE.md when it works
+  with files there (https://code.claude.com/docs/en/sub-agents.md) - one more reason a check reads a bundle under `/tmp/`.
+

@@ -552,3 +552,12 @@ repeated characters, and the whole spend in base-input units at the 5-minute tie
 stated in its output. Tested on a fake transcript directory. CLAUDE.md's review paragraph: the rule (what dispatches of a check
 share lives in its agent file; a prompt carries only the unit, last), the guard, `make subagent-cache`; the sentence naming
 spec-fidelity as keeping the files goes once D34 passes (a second loss keeps the exception, and the sentence with it). `docs/spec-kit-and-reviews.md` gets the section with R13's numbers.
+
+**D40 - One copy of the root CLAUDE.md (FR-037, SC-026).** The project's `.claude/settings.json` (which a session started in
+`/diagram` reads from the mirror once it lands) carries `"claudeMdExcludes": ["/diagram/.clones/*/CLAUDE.md"]`: the clone's
+root copy is skipped, its nested files still load where they are needed, and a session started inside a clone keeps
+`/diagram/CLAUDE.md` as its ancestor. The mirror's copy is main's, a landing behind a clone's own edit of it at most; a session
+that edits CLAUDE.md reads its own copy as it edits. A test reads the settings and fails if the exclusion is gone or would also
+match a nested CLAUDE.md. SC-026's after is measured as R15 was, in a session started after it lands. gm-assistant has the same
+shape; its settings are its own, so the session reports the line for it rather than editing that repository.
+
