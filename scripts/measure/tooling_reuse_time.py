@@ -35,17 +35,22 @@ def _passed(out: str) -> int:
 
 
 def always_run(store: Path) -> dict[str, object]:
-    """From the kept passes: how many tooling test files are kept, and how many always run (a program started against the
-    repository whose reads are not known), by that program."""
+    """From the kept passes (per test since 383 amendment 5): how many tests and test files are kept, and how many tests always run
+    (a program started against the repository whose reads are not known - by the test, its file or the session), by program."""
     try:
         kept = json.loads(store.read_text(encoding="utf-8"))
     except OSError, ValueError:
-        return {"files": 0, "always_run": 0, "by_cause": {}}
+        return {"files": 0, "tests": 0, "always_run": 0, "by_cause": {}}
+    files, tests, session = kept.get("files", {}), kept.get("tests", {}), kept.get("session", {})
     causes: dict[str, int] = {}
-    for e in kept.values():
-        for c in e.get("opaque") or []:
-            causes[c] = causes.get(c, 0) + 1
-    return {"files": len(kept), "always_run": sum(1 for e in kept.values() if e.get("opaque")), "by_cause": dict(sorted(causes.items()))}
+    always = 0
+    for n, e in tests.items():
+        why = set(e.get("opaque") or []) | set(files.get(n.split("::", 1)[0], {}).get("entry", {}).get("opaque") or []) | set(session.get("opaque") or [])
+        if why:
+            always += 1
+            for c in why:
+                causes[c] = causes.get(c, 0) + 1
+    return {"files": len(files), "tests": len(tests), "always_run": always, "by_cause": dict(sorted(causes.items()))}
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -82,7 +87,7 @@ def main(argv: list[str] | None = None) -> int:
         **kept,
     }
     print(f"with reuse {row['reuse_s']} s ({row['reuse_ran']} tests ran), without {row['full_s']} s ({row['full_ran']}), load {row['load']}")
-    print(f"tooling test files kept {kept['files']}, always run {kept['always_run']} (by program: {kept['by_cause']})")
+    print(f"tooling tests kept {kept['tests']} in {kept['files']} files, always run {kept['always_run']} (by program: {kept['by_cause']})")
     if args.json:
         Path(args.json).write_text(json.dumps(row, indent=1) + "\n", encoding="utf-8")
     return 0 if row["ok"] else 1

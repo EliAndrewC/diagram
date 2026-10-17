@@ -412,7 +412,11 @@ def test_the_lookup_command(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPa
     assert "1 filled registry entry marked cited" in capsys.readouterr().out
 
 
-def test_the_import_command(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
+def test_the_import_command(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str], monkeypatch: pytest.MonkeyPatch) -> None:
+    # a registry of its own (feature 383 amendment 5, plan D33): the command's seed reads the repository's registry for the
+    # URLs it cites, and the real one made this test re-run on any edit to any of 2,000 source pages
+    _registry(tmp_path / "repo", {"other": '<h3 id="other"><code>other</code></h3>\n<p>A work (https://example.org/other)</p>\n'})
+    monkeypatch.setattr(src, "repo_root", lambda start=None: tmp_path / "repo")
     per_url = tmp_path / "per_url.json"
     per_url.write_text(json.dumps({"example.org/x": [{"ts": "2026-09-27T10:00:00Z", "session": "s", "feature": "1"}]}), encoding="utf-8")
     scratch = tmp_path / "scratch"

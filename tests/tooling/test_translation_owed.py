@@ -94,8 +94,22 @@ def test_a_new_term_gloss_in_our_own_words_is_owed_too(tmp_path: pathlib.Path) -
     assert [(r[1], r[4]) for r in to.owed(d)] == [("a term's gloss", "垣根")]
 
 
-def test_the_command_scopes_to_one_question(capsys) -> None:  # noqa: ANN001
-    assert to.main(["--root", str(REPO), "--q", "0041"]) == 0
+def test_the_command_scopes_to_one_question(capsys, tmp_path: pathlib.Path) -> None:  # noqa: ANN001
+    # a record of its own (feature 383 amendment 5, plan D33): the real one made this test re-run on any edit to any of its
+    # 1,400 question files, and the command reads only what its root holds
+    d = tmp_path
+    _git(d, "init", "-q", "-b", "main")
+    _git(d, "config", "user.email", "t@t")
+    _git(d, "config", "user.name", "t")
+    _note(d, "questions/0041-a.notes.html", "")
+    _git(d, "add", "-A")
+    _git(d, "commit", "-qm", "base")
+    _git(d, "update-ref", "refs/remotes/origin/main", "HEAD")
+    _note(d, "questions/0041-a.notes.html", '<li data-note="k">「An oak」 (translated from the Japanese by this project; original: 「樫」)</li>\n')
+    _note(d, "questions/0042-b.notes.html", '<li data-note="j">「A pine」 (translated from the Japanese by this project; original: 「松」)</li>\n')
+    for page in ("0041-a.html", "0042-b.html"):  # a question is found by its page; the notes ride beside it
+        (d / R / "questions" / page).write_text('<h2 id="x">X</h2>\n', encoding="utf-8")
+    assert to.main(["--root", str(d), "--q", "0041"]) == 0
     out = capsys.readouterr().out
     assert out.startswith("translation-owed: ") and all(line.startswith(("translation-owed", "==", "  ")) for line in out.splitlines())
 
