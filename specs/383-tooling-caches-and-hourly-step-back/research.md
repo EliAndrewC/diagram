@@ -527,3 +527,13 @@ subagent's transcript searched):
   which do not yet carry its `omitClaudeMd` - so it loaded the launch files as well; the `omitClaudeMd` case is measured after
   this lands, the same way.
 
+**SC-026, after** (observed 2026-10-17; method: the same probe, from a session started in `/diagram` AFTER the settings and agent
+files landed (e175ec954), no settings passed in - the session reads the landed ones; it reads the clone file itself, then
+dispatches `spec-fidelity` and a `general-purpose` subagent that each read it):
+
+| (observed 2026-10-17; the method above) | the clone's root CLAUDE.md | `/diagram/CLAUDE.md` | the clone's `scripts/CLAUDE.md` |
+|---|---|---|---|
+| the session | not loaded | loaded, once | loaded |
+| spec-fidelity (`omitClaudeMd`) | not loaded | not loaded | loaded |
+| general-purpose | not loaded | loaded, once | loaded |
+
