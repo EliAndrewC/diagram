@@ -260,18 +260,20 @@ MONITOR_ID = 3
 _MONITORING = [False]
 
 
-def _ran_code(code, offset: int):  # noqa: ANN001, ANN202, ARG001
+def _ran_code(code, offset: int, _disable=sys.monitoring.DISABLE):  # noqa: ANN001, ANN202, ARG001
     """A code object of the repository started running: its file is a read of the current key. WHY (found 2026-10-17, plan
     D32b): a module is opened once per worker, so a test that only CALLS a module another test imported first never opened
     it, and its pass was reused after that module changed (`ci/delta.py` edited: 36 tests ran, and `test_delta.py`'s
     others were reused). The run of its code is what a test depends on; each code object reports once per key and is then
     disabled until `_enter` restarts the events."""
+    if _current is None:  # interpreter shutdown: module globals are gone, and a PY_START can still fire (as in _hook)
+        return _disable
     f = _current[0]
     if f:
         p = _under(code.co_filename)
         if p:
             _reads.setdefault(f, {}).setdefault("file", set()).add(p)
-    return sys.monitoring.DISABLE
+    return _disable
 
 
 def _monitor() -> None:

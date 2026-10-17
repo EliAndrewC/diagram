@@ -324,6 +324,7 @@ def test_the_decide_commands(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyP
     assert sha == hashlib.sha256(gate.task_sections(PLAN_TASKS.decode())["T05"].encode()).hexdigest()
     assert gate.main(["decide", "375", "T99"]) == 2
     assert gate.main(["task-start", "375", "T06"]) == 0 and json.loads((root / ".git" / "active-task").read_text())["task"] == "T06"
+    assert json.loads((root / ".git" / "task-starts.jsonl").read_text().splitlines()[-1])["task"] == "T06", "feature 385 D10: each start logged"
     assert gate.main(["task-start", "999", "T06"]) == 2
     src = tmp_path / "v.json"
     src.write_text(json.dumps({"section_sha256": sha, "decisions": []}))
