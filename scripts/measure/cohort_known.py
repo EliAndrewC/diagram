@@ -14,6 +14,7 @@ import argparse
 import json
 import pathlib
 import re
+import subprocess
 import sys
 
 AUDIT = pathlib.Path("specs/328-match-the-research/audit")
@@ -52,6 +53,53 @@ def known(root: pathlib.Path, record: dict) -> list[str]:
     return out
 
 
+# ---- against HEAD's engine (feature 385 T03, the round arbiter's tooling fix on hour:385-approach-checklist@6 and ask:t03-d17-route):
+# a count like 59/60 hid two failing seeds (55, 57) and a changed denominator (60 vs 66), and seed 57's lane knots went from 1
+# to 4 while it read "pre-existing"
+
+
+def same_engine(root: pathlib.Path, commit: str) -> bool:
+    """Was `commit` rolled on main's engine - the generator and the pool's generators as they are on main? A record rolled in a
+    detached worktree at the clone's HEAD counts whenever the clone's own commits change no engine file."""
+    ref = "origin/main" if subprocess.run(["git", "-C", str(root), "rev-parse", "-q", "--verify", "origin/main"], capture_output=True).returncode == 0 else "main"
+    return subprocess.run(["git", "-C", str(root), "diff", "--quiet", commit, ref, "--", "l7r", "pool"], capture_output=True).returncode == 0
+
+
+def baselines(record: dict, earlier: list[dict], ok) -> dict[int, dict]:  # noqa: ANN001 - a predicate on a commit
+    """Each seed's baseline: its entry in the newest earlier record, rolled at the same household count on main's engine."""
+    out: dict[int, dict] = {}
+    for r in sorted(earlier, key=lambda r: str(r.get("utc")), reverse=True):
+        if str(r.get("utc")) >= str(record.get("utc")) or r.get("households") != record.get("households") or not r.get("commit") or not ok(str(r["commit"])):
+            continue
+        for b in r.get("seeds") or []:
+            out.setdefault(int(b["seed"]), b)
+    return out
+
+
+def standing(record: dict, base: dict[int, dict]) -> list[str]:
+    """One line per seed that fails now or failed at its baseline: FIXED, NEWLY FAILING, WORSENED (a rule's count up, or a rule
+    new to it), PRE-EXISTING - or, with no baseline on main's engine, the command that rolls one."""
+    out = []
+    for x in record.get("seeds") or []:
+        n, b, now_bad = int(x["seed"]), base.get(int(x["seed"])), x.get("verdict") != "pass"
+        rules = ", ".join(f"{k} {v}" for k, v in sorted((x.get("counts") or {}).items())) or ", ".join(x.get("failures") or [])
+        if b is None:
+            if now_bad:
+                out.append(f"cohort: seed {n} fails ({rules}) with NO BASELINE on main's engine - roll one: git worktree add --detach /tmp/base origin/main && make -C /tmp/base cohort N=1 SEED={n}")
+            continue
+        was_bad = b.get("verdict") != "pass"
+        was = ", ".join(f"{k} {v}" for k, v in sorted((b.get("counts") or {}).items())) or ", ".join(b.get("failures") or [])
+        if not now_bad and was_bad:
+            out.append(f"cohort: seed {n} FIXED (was: {was})")
+        elif now_bad and not was_bad:
+            out.append(f"cohort: seed {n} NEWLY FAILING ({rules})")
+        elif now_bad:
+            worse = [k for k, v in (x.get("counts") or {}).items() if v > (b.get("counts") or {}).get(k, 0)] if b.get("counts") is not None else []
+            worse += [f for f in x.get("failures") or [] if f not in (b.get("failures") or [])]
+            out.append(f"cohort: seed {n} {'WORSENED' if worse else 'PRE-EXISTING'} ({rules}; was: {was})")
+    return out
+
+
 def newest(root: pathlib.Path) -> dict | None:
     logs = sorted((root / "dev/cohort-log").glob("[0-9]*.json"))  # the records, not the feature index beside them
     return json.loads(logs[-1].read_text()) if logs else None
@@ -65,6 +113,10 @@ def main(argv: list[str] | None = None) -> int:
     record = newest(root)
     for line in known(root, record) if record else []:
         print(line)
+    if record:
+        earlier = [json.loads(f.read_text()) for f in sorted((root / "dev/cohort-log").glob("[0-9]*.json"))[:-1]]
+        for line in standing(record, baselines(record, earlier, lambda c: same_engine(root, c))):
+            print(line)
     sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "gates"))
     import approach_gate  # noqa: PLC0415 - feature 385 D9: a seed newly failing owes the task's part B
 
