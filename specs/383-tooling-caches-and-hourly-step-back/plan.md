@@ -455,7 +455,14 @@ every recorded test is reusable, and whose test list is the one recorded, is not
 reusable tests deselected. A test that passes is kept whatever else ran beside it - a run filtered by `-k` or a node id keeps
 the tests it ran; a failure keeps nothing for that test.
 
-**D33 - Tests of code moved off the real repository (FR-030).** After D32, the tests that still re-run on an edit to a research
-page whose subject is code (test_lint_scope's, test_sources', and any the measurement finds) are listed with what they read;
-each one that reads the real tree only to have something to read is given a fixture, its assertion unchanged; one whose
-subject is the repository's data (every registry key has a state, the real tree parses) keeps reading it.
+**D33 - Tests of code moved off the real repository (FR-030).** After D32, the tests whose subject is code that still re-run on
+an edit to the repository's DATA - research pages, specs, dev records, registries, anything not code or test configuration -
+are found from the kept reads (each test's reads that are not under `l7r/`, `scripts/`, `tests/` or the configuration), and
+listed with what they read before and after; each one that reads the real tree only to have something to read is given a
+fixture, its assertion unchanged; one whose subject is the repository's data (every registry key has a state, the real tree
+parses) keeps reading it.
+
+**D32a - The store keeps each read's content once.** Kept per test, the store's read sets repeat: the first recording was 21.7
+MB, every whole-repository test carrying its own 22,000 files. So each read's content is kept once, in one table, and an entry
+names the paths it read; when a run records a path whose content moved, every entry naming it that this run did not record
+again is dropped (it was kept against the old content), so no entry is ever judged against a content it did not see.
