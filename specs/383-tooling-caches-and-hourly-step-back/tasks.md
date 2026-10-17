@@ -94,3 +94,24 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T23 Close: measured after (SC-012, SC-013), the remaining steps looked at (plan D23), the gate, the report, landed
       research: rendering
       verify: DONE. DONE. measured after: tooling reuse 27.58 -> 19.35 s (m:land-tooling-tests-reuse-a2), a landing 113.98 -> 37.05 s at load 3.4-3.5 (m:land-tooling-landing-before/-after), the claims gate 8.53 -> 1.65 s (m:claims-gate-push); research R9; the gate green; the report written; landed by the push carrying this tick
+
+## Amendment 3 (the GM 2026-10-17: the always-run files, tests not imported, the guard suites, Sonnet 5.5 trials first)
+
+- [ ] T24 The trial tool and the cases (plan D24): `scripts/measure/model_trial.py`; two cases per check chosen and prepared
+      research: rendering
+      verify: catalog and prepare work on a recorded run of each of the seven checks; the 14 cases listed in research R10
+- [ ] T25 The 42 Sonnet 5.5 runs, scored; tiers, tier table, docs and the CLAUDE.md pointer (plan D24; SC-018)
+      research: rendering
+      verify: research R10's table; tests/test_agent_models.py green; docs/spec-kit-and-reviews.md "Models tried"
+- [ ] T26 Not importing what will not run (plan D25): the plugin's ignore_collect, quick's collection measured and cut (SC-016)
+      research: rendering
+      verify: the same tests pass with the cut on and off; quick, a targeted test-file and a landing's tooling run timed before and after
+- [ ] T27 The always-run files traced (plan D26); strace's overhead measured (SC-015)
+      research: rendering
+      verify: the always-run count before (18) and after; each one left recorded with its seconds
+- [ ] T28 The guard suites by what their cases read (plan D27) (SC-017)
+      research: rendering
+      verify: the replay of recorded landings; each narrowed suite's inside/outside test
+- [ ] T29 Close: a landing measured before and after, the gate, the report, landed
+      research: rendering
+      verify: research R10; the gate green; the report written; landed

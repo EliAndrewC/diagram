@@ -333,3 +333,56 @@ clone's own `make hooks-test` records passes a landing can reuse.
 **D23 - What the after-measurement shows (FR-019).** After D18-D22, a landing is measured (SC-013) and each step over a few
 seconds is looked at; a cut that loosens no check is made in this amendment, the rest recorded in research R9 with its
 seconds.
+
+## Amendment 3 (FR-021 to FR-024)
+
+**D24 - The Sonnet 5.5 trials, first (FR-024).** Feature 251's seeded-run method (`specs/251-tiered-subagent-checks/
+measure/seeded.py`, research R5) becomes a maintained tool, `scripts/measure/model_trial.py`: `catalog <agent>` lists the
+recorded runs of a check from the session transcripts, joined to their ledger rows; `prepare <transcript> <out>` builds a
+detached worktree at the last commit before the recorded run, copies the current agent files in with the tested model
+written into that copy's frontmatter (`model: claude-sonnet-5-5`, the worktree's copy only), and rewrites the prompt's paths;
+`run <out> [--runs 3]` starts each headless session in the worktree (`claude -p --agent <name>`, hooks off: research R4) in
+the background; `usage` folds each run's turns and tokens. A recorded run whose prompt names a bundle outside the repository
+(`/tmp/l7r-check/...`) is prepared only if the bundle still exists or the tool that built it can build it again at that
+commit; otherwise the case is not chosen.
+- **Cases**, per check: one recorded Opus run with findings the session then acted on (its ledger row says `fixed`, so the
+  findings were real), and one recorded clean run (no finding, not overturned later). Seven checks, two cases, three Sonnet
+  runs a case: 42 runs.
+- **Scoring**, by the session against the recorded reply, case by case, written to research R10: each known finding HIT or
+  MISSED per run; on the clean case, each new finding a FALSE ALARM unless checked and found real; turns, input and output
+  tokens and wall time against the recorded run's.
+- **The rule** (the doctrine of feature 251): a check moves to Sonnet only when all three runs of its findings case hit every
+  known finding and no run of its clean case raises a false alarm; else it stays on Opus. The tier table
+  (`tests/test_agent_models.py`), the agent file, `docs/spec-kit-and-reviews.md` (a section "Models tried", one row per check:
+  what was tried, when, the result, where recorded) and a pointer from `CLAUDE.md`'s review paragraph to that section carry the
+  result, either way.
+- **Order**: T24 (the tool and the cases) and T25 (the runs and the scoring) are the amendment's first tasks; the runs go to
+  the background and T26 onward proceed beside them.
+
+**D25 - Not importing what will not run (FR-022).** Each runner decides before collection where it can: the tooling plugin
+answers `pytest_ignore_collect` for every file its reuse skips (the decision moves from `pytest_collection_modifyitems` to
+`pytest_configure`, made once per process from the same store), so a reused file is never imported, in any worker. testmon
+already ignores the files it deselects; why `make quick` still spends its time collecting (14.3 s with no test to run,
+observed 2026-10-17, method: `make quick` on an unchanged tree, load 3) is measured first with
+`scripts/measure/collect_cost.py` (pytest's own collection time, per worker, with and without xdist, with `-X importtime`), and
+the cut follows what it finds - the worker start, a conftest's imports, or testmon's own database read. The tests that run and
+their results are compared with the cut off and on (SC-016).
+
+**D26 - The always-run files traced (FR-021).** A Python audit hook cannot see what bash, make, node or resvg read, but `strace
+-f -e trace=%file,process` can (installed in the container). A tooling test file whose kept pass is opaque is TRACED: the
+plugin's `trace` mode runs those files alone under strace, marks each test file's start in the trace (an open of a marker
+path), attributes every process to the file running when it was forked, and keeps every path under the repository the file
+opened, stat-ed or listed - by content, as any read - and every program it ran. A traced file is then reused like any other.
+A trace is taken again only when the file's traced inputs changed, by `make test-file` in record mode after its run, so a
+landing reuses it. strace's overhead is measured on the 18 files; a file whose program writes what it later reads, or whose
+reads include a path the trace cannot key (a socket, a device), stays always-run and is recorded in research R10 with its
+seconds.
+
+**D27 - The guard suites by what their cases read (FR-023).** `scripts/measure/hooks_landing_runs.py` replays the recorded
+landings: for each, from the landing commit and the clone's last green `hooks-test` stamps, which suites ran and which
+dependency moved for each (the landing's files or main's). For each suite that ran on a dependency its cases do not reach
+(a shared helper like `hookmatch.py` or `guardlog.sh` whose changed function the suite never calls), the dependency set
+narrows to what the suite's cases call (`hookdeps.py`, by function where a helper is a library, never looser than what is
+executed - checked by running the suite under a trace of the helper calls), or the suite splits into parts each with its own
+set. sync-with-main, review-gate and entry-gate are measured case by case first. Nothing a suite checks is dropped; each
+narrowed suite has a test that an edit outside its set leaves it skipped and one inside runs it.

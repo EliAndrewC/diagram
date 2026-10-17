@@ -1814,3 +1814,4 @@ above this heading are classified once, as data, in `docs/review-ledger-r0.json`
 | 2026-10-13 | spec-fidelity | 383 amendment 2 plan, D18-D23, round 2 | CLEAR | - | nothing | - | verified: plan accepted; asides noted (R9 to hold the no-write measurement) | 34 s | 170k in (130k cached) / 2.8k out |
 | 2026-10-17 | spec-fidelity | 383 amendment 3 spec, round 1 | CHANGES REQUIRED | 1: the GM's right away not carried | paperwork | yes | fixed: FR-024 says the trials come first | 44 s | 164k in (118k cached) / 3.7k out |
 | 2026-10-17 | spec-fidelity-verify | 383 amendment 3 spec, round 2 | FAITHFUL | - | nothing | - | verified: spec accepted | 15 s | 24k in (12k cached) / 1.2k out |
+| 2026-10-17 | spec-fidelity-verify | 383 amendment 3 spec, round 2 (logged pass) | FAITHFUL | - | nothing | - | verified: spec accepted | 15 s | 24k in (12k cached) / 1.2k out |
