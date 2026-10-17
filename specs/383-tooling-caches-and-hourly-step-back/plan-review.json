@@ -241,7 +241,13 @@
    "declared": "spec-fidelity"
   },
   "## Amendment 6, reopened (FR-034 corrected, FR-038 to FR-041)": {
-   "sha256": "c7259ffe359587fe23f0e94f3664a853829b7c1876a7782b0c4b9aba33affc73",
+   "sha256": "2e7d048167834ec464561b62f714e573daa095d6c80b76a816e1d7a7a566ab12",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "## Amendment 7 (FR-042 to FR-046)": {
+   "sha256": "a0e0cf89017ead925972c8597238ad814a223194b2bbf5ad6a72a99ac62e4b44",
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
@@ -1316,6 +1322,104 @@
      "summary": "subagent_cache.py --families groups the month's general-purpose launches with count and last date; each family recurring since 2026-10-10 gets a defined agent or is pointed at one, the rest recorded one-off in R17; 'research pass' becomes a defined research-pass agent (opus/medium, omitClaudeMd, research ladder's operative rules restated).",
      "class": "within",
      "why": "FR-041 and SC-030: classify each family, give a recurring one a defined agent, record the list. The 10-10 recency line reads the GM's 'any that still recur'. The table carries each family's last date, so the GM sees where it falls. Defining the agent is what FR-041 prescribes for a recurring family."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Amendment 6, reopened (FR-034 corrected, FR-038 to FR-041)",
+    "## Amendment 7 (FR-042 to FR-046)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D41",
+     "summary": "Guard refuses a 2,000+ char block repeated from an earlier dispatch of the same type and model at any position; a wholly identical prompt passes; the only fix it names is the agent file; docs drop 'put it first'.",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict. It carries FR-034 as corrected and SC-027, which is reopening item (1)."
+    },
+    {
+     "id": "D42",
+     "summary": "The one-first fan-out stagger, now marked superseded by D46 (amendment 7, research R20).",
+     "class": "within",
+     "why": "The only change to this block is the supersession note. FR-042 withdraws FR-039 and amendment 7's request says the hand-stagger costs more than it saves, so marking it superseded follows the request and the spec."
+    },
+    {
+     "id": "D43",
+     "summary": "Test that no setting, agent file or container setup turns on a 1-hour subagent cache, proven by a seeded string.",
+     "class": "within",
+     "why": "Unchanged. It is FR-038 and SC-028, reopening item (2)."
+    },
+    {
+     "id": "D44",
+     "summary": "Root and nested CLAUDE.md cut to a core plus an index, with long passages moved verbatim to docs/*.md; a quote-resolution test; an independent Opus rule-by-rule enumeration.",
+     "class": "within",
+     "why": "Unchanged. It is FR-040 and SC-029, reopening item (4)."
+    },
+    {
+     "id": "D45",
+     "summary": "--families sweep of general-purpose launches; recurring families get a defined agent, with 'research pass' becoming a research-pass agent; one-offs recorded in R17.",
+     "class": "within",
+     "why": "Unchanged. It is FR-041 and SC-030, reopening item (5)."
+    },
+    {
+     "id": "D46",
+     "summary": "Fan-out stagger rule removed. A WAVE rule refuses the 4th launch of one agent type (any model) within WAVE_S=10 s, names the check-wave call, passes WAVE_OK, and does not count units fed through by the Workflow guard. Docs say 4+ of one type go through check-wave.",
+     "class": "within",
+     "why": "It is FR-042 (stagger removed from guard and docs) and FR-045 / SC-031 (4th of one type within about ten seconds refused, WAVE_OK passes). Counting any model is no narrower than 'of one type'."
+    },
+    {
+     "id": "D47",
+     "summary": "Saved workflow .claude/workflows/check-wave.js: a pipeline of typed agent() calls with schema {label, verdict, text}; a null unit re-launched once with the same prompt; declared verify steps (then:[{agentType,prompt}]) run with the earlier reply appended; returns one object per unit, NO REPLY when a unit is twice silent; a test holds the file.",
+     "class": "within",
+     "why": "It is FR-043 and SC-031's workflow-file test. Verify steps are declared rather than built from a reply because FR-043 already requires every prompt to be known when the run starts. Skipping the verify steps of a unit that never replied follows from 'runs after it with the earlier reply appended': there is no reply to append."
+    },
+    {
+     "id": "D48",
+     "summary": "Workflow PreToolUse guard. Untyped agent( refused unless GP_OK. A typed agent( of a guarded type outside check-wave is refused. check-wave's type must be a named FR-044 job (spec-fidelity excluded). Each unit and verify step is replayed through every PreToolUse Agent hook with L7R_WAVE_UNIT=1, and the first refusal refuses the run and drops its recorded dispatches. Wave dispatches pair at SubagentStop by prompt prefix and stay pending WAVE_PENDING_S=30 min.",
+     "class": "within",
+     "why": "It is FR-045, SC-031 and SC-033. Excluding spec-fidelity is not a carve-out: FR-044's named list never included it, and FR-045 requires guarded types outside check-wave to be refused. The 30-minute pending window is a design number that keeps the freeze from dispatch to return, as FR-045 requires."
+    },
+    {
+     "id": "D48-run-refusal",
+     "summary": "A check-wave run is refused whole, with the refusing hook's message and the unit's label, when any one unit or verify step would be refused, rather than that unit alone.",
+     "class": "within",
+     "why": "The Workflow's PreToolUse is the only point at which a run can be refused (R20: no Agent hook fires inside a run), so refusing a single unit means refusing the run. SC-031's 'a check-wave unit a guard of its type would refuse is refused, with the guard's own message' is still met."
+    },
+    {
+     "id": "D49",
+     "summary": "append-system-prompt.md gains the document's authorization, its list the document's named jobs plus claims-triage and modal-triage. test_agent_models fails when the text is missing, when a type has no agent file, or when a type is outside the list.",
+     "class": "within",
+     "why": "It is FR-044 and SC-032, word for word."
+    },
+    {
+     "id": "D50",
+     "summary": "The next real wave of 4+ checks runs through check-wave. Per-agent first-request read/write and the main-session wakes are recorded in research beside the last hand-launched wave of the same check.",
+     "class": "within",
+     "why": "It is FR-046 and SC-034."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Amendment 7 (FR-042 to FR-046)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D50-wave-report",
+     "summary": "The first real wave's measurement is taken by `make wave-report` (scripts/measure/wave_report.py), and the Workflow guard names that target to the session at every check-wave run's start.",
+     "class": "within",
+     "why": "Enforcement of FR-046/SC-034 and the GM's 'the first real wave measured' (Amendment 7): the tool produces exactly the measurement FR-046 names (first-request read and write, main-session wakes, against the last hand-launched wave), and the guard's message only points at it - it refuses, blocks or rewrites nothing. Delete FR-046 and neither has anything left to do."
+    },
+    {
+     "id": "D50-T56-lands-open",
+     "summary": "No real check was owed anywhere on 2026-10-17 (research R21), so T56 (the measured first real wave) lands open until the first real wave runs; R21 carries the probe's and the month's hand-launched waves' numbers meanwhile.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows when FR-046 is met, not what it requires: the feature lands with the measurement still owed. FR-046 and the GM's request (Amendment 7: 'the first real wave measured') require a REAL wave; measuring one at landing is impossible when no real check is owed, and manufacturing a wave to measure would itself break the 'real' the request names. The requirement is not dropped or weakened - T56 stays open, the comparison baseline is recorded in R21, and the guard names wave-report at every check-wave run so the first real wave is measured when it comes. The rule's purpose (learn what a real wave costs against the hand-launched one) is deferred, not gutted. The premise that no check was owed is stated as measured (R21, dated 2026-10-17)."
     }
    ]
   }
