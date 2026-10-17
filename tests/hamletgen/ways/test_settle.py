@@ -848,14 +848,26 @@ def test_a_household_way_wandering_over_a_way_at_a_needles_angle_is_cut_at_the_c
     way = [(0.0, 0.0), (400.0, 0.0)]
     wander = [(300.0, 40.0), (100.0, -25.0)]  # ~18 degrees off the way, over it at x ~ 177
     s = _S([CONN, way, wander])
-    s.M["lanes"][2]["role"] = "access"
-    assert law.shallow_crossing_at(s.M["lanes"]) == [(1, 0, 2, law.shallow_crossing_at(s.M["lanes"])[0][3])]
+    s.M["lanes"][1]["role"], s.M["lanes"][2]["role"] = "field way", "access"
+    assert [(i, n, k) for i, n, k, _x in law.shallow_crossing_at(s.M["lanes"])] == [(1, 0, 2)]
     assert law.shallow_crossings(s.M) and "shallow_crossings" in law.LAW
     piece, end = settle.cut_at_shallow_crossing(s.M["lanes"], 2, 1, [])
     assert end == -1 and piece[0] == (300.0, 40.0) and abs(piece[-1][1]) < 1e-6, "the door's side kept, ending on the way"
-    assert settle.cut_at_shallow_crossing(s.M["lanes"], 1, 2, []) is None, "the way kept whole: its longer side would leave the connector (keeps_the_web)"
-    s.M["lanes"][1]["role"] = "field way"
     assert settle.cut_at_shallow_crossing(s.M["lanes"], 1, 2, []) is None, "never a tree lane but a household's way"
     assert settle.settle_ends(s) == 1 and not law.shallow_crossings(s.M), "the crossing gone"
+    ordinary = _S([CONN, way, [(300.0, 40.0), (100.0, -25.0)]])
+    assert settle.cut_at_shallow_crossing(ordinary.M["lanes"], 1, 2, []) is None, "the way kept whole: its longer side would leave the connector (keeps_the_web)"
     square = _S([CONN, way, [(200.0, 100.0), (200.0, -100.0)]])
     assert not law.shallow_crossing_at(square.M["lanes"]), "a square crossing is a crossing"
+
+
+def test_a_household_way_is_cut_only_onto_a_way_that_stays() -> None:
+    """Feature 385 T01 (cohort seed 38, the change's first cohort): a household's way wandering over an ORDINARY lane is not
+    cut onto it - a repair may cut or drop that lane and leave the household on nothing - and the ordinary lane is cut
+    instead where that keeps the web."""
+    way = [(0.0, 0.0), (400.0, 0.0)]
+    s = _S([CONN, way, [(300.0, 40.0), (100.0, -25.0)]])
+    s.M["lanes"][2]["role"] = "access"
+    assert settle.cut_at_shallow_crossing(s.M["lanes"], 2, 1, []) is None, "lane 1 is ordinary: the household is not hung on it"
+    s.M["lanes"][1]["role"] = "access"
+    assert settle.cut_at_shallow_crossing(s.M["lanes"], 2, 1, []) is not None, "onto another household's way it is cut"

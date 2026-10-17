@@ -153,5 +153,11 @@ def cut_at_shallow_crossing(lanes: Sequence[Mapping[str, Any]], m: int, o: int, 
     household = ln.get("role") == ACCESS_ROLE
     if is_tree(ln) and not household:
         return None
+    # ...A HOUSEHOLD'S WAY ONLY ONTO A WAY THAT STAYS - the connector or another tree lane: an ordinary lane is a repair's to cut
+    # or drop, and a household hung on one is left on nothing when it goes (cohort seed 38, this change's first cohort: a
+    # household's way cut onto a lane laid to join orphans, and three households' ways then fouled the fabric). The
+    # ordinary lane is the one cut instead.
+    if household and not (lanes[o].get("connector") or is_tree(lanes[o])):
+        return None
     piece, end = (door, -1) if household or polyline_len(door) >= polyline_len(far) else (far, 0)
     return (piece, end) if keeps_the_web(lanes, {m}, p, piece, houses) else None

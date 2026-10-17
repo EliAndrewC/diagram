@@ -381,6 +381,7 @@ def settle_ends(s: Any) -> int:
     touched: set[int] = set()
 
     feet: list[dict[str, Any]] = []
+    judge: list[Lawful] = []  # built at the first household way re-laid at its foot
 
     def claim(involved: set[int], i: int, pieces: list[Poly], end: int | None = None) -> None:
         # ...A HOUSEHOLD'S WAY AT ITS FOOT too (feature 385 T01, plan D4): side by side becomes one whichever lane it is, and
@@ -389,6 +390,12 @@ def settle_ends(s: Any) -> int:
         # ...and only into a lane: a re-aim that leaves a household's way under two points or 1 ft would drop it, its household
         # with it - that way stays as it is
         foot = foot and bool(pieces) and len(pieces[0]) >= 2 and polyline_len(pieces[0]) >= 1.0
+        # ...and only onto lawful ground: a re-aimed leg through another household's yard is a foul no later step may cut
+        # from a tree lane, so the web would be refused for it (cohort seed 38, the first cohort of this change)
+        if foot and is_tree(lanes[i]):
+            if not judge:
+                judge.append(Lawful(s))
+            foot = judge[0].on_lawful_ground(pieces[0], float(lanes[i].get("w") or 3.0))
         if not involved & touched and (not is_tree(lanes[i]) or foot):
             edits[i] = pieces
             touched.update(involved)
