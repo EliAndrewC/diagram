@@ -4,8 +4,8 @@
 
 **Created**: 2026-10-13
 
-**Status**: Filed - the open work of feature 374 (itself 372's and 328's remainder), moved here at the GM's word; not resumed
-until the GM has decided how the work should go faster ("How it starts")
+**Status**: Filed - the open work of feature 374 (itself 372's and 328's remainder), moved here at the GM's word; its first task the lane law (FR-000, the GM 2026-10-17); not resumed
+until the GM says to resume ("How it starts")
 
 **Approved**: the GM, 2026-10-13, "move all of the remaining work to a new feature and then close out this feature and land it on main"
 
@@ -16,6 +16,27 @@ and then close out this feature and land it on main. because I think that we pro
 faster"*; 328's, 372's and 374's requests carry over unchanged.
 
 ## User Scenarios & Testing *(mandatory)*
+
+### User Story 0 - The lane law describes how people walk, first (Priority: P0, the first task)
+
+The GM, 2026-10-17, on why a change that moves the homesteads knots the web: *"if the thing that we are doing is making it
+so that lanes cannot wind around obstructions, without it violating our rules, then it is our rules which are bad"*, and
+*"In real life, people do not rearrange their houses in order to make their footpaths align at any particular angle. Rather,
+their footpaths reflect the natural routes that people will take when walking around the things that are in their
+environment. This is the entire reason why we put down the lanes after the homesteads."* Asked to make it the first work:
+*"Yes, please update 384 so that its spec makes this the very first task."*
+
+The GM finds the lane law (`hamletgen/ways/law.py`'s `LAW` and the per-lane rules `Lawful` asks) re-read rule by rule: each
+rule either describes how people walk - a path takes the natural route round what stands in its way, does not double back
+for nothing, and two paths running side by side become one - or it is a tidiness of our own, and the rules are rewritten to
+the first kind. A sharp meeting or a bend that an obstruction on the map forces is lawful; two lanes that run nearly side by
+side are merged into one path, never refused. The web settles what the homesteads leave it, and a change that moves the
+homesteads no longer knots or refuses a seed for the shape of a path the ground explains.
+
+**Independent Test**: every rule of the lane law is classed in a table (rule, what it describes, its research or ruling, kept
+/ made obstruction-aware / merged / retired); the needle and fold rules admit a meeting whose wider approach is blocked by a
+mapped feature (tests built on such a case, red on the old law); cohort seed 10 under the wave 155 patch and seeds 17 and 21 at
+HEAD are re-rolled and the web's refusals on them are either gone or named by a rule the table keeps.
 
 ### User Story 1 - The fixes go on where 374 stopped, faster (Priority: P1)
 
@@ -43,6 +64,13 @@ fixed, not escaped).
 
 ### Functional Requirements
 
+- **FR-000 (the lane law first)**: before any other work here, the lane law is audited and rewritten as User Story 0 says:
+  each rule classed (how people walk, or a tidiness of our own), its research or ruling named; the angle rules (the needle,
+  the folded joint, the hook and the like) made obstruction-aware, so a sharp meeting or bend that a mapped feature forces is
+  lawful; two lanes running nearly side by side merged into one path rather than refused; a rule that describes no walker's
+  behavior retired with the reason recorded at the point of change. The research record's lane pages (0081's and 0246's
+  drawing pages) say what the maps now draw. Measured against the re-deal baseline (`m:w156-redeal-cohort`) and the pool.
+  This is the GM's first answer to FR-003's question (2026-10-17).
 - **FR-001 (the starting point)**: the work list is everything under "What it carries" below - 328's ranking's open rows at
   374's close (`specs/328-match-the-research/ranking.json`, rows with no wave: 325, E0 8, E1 36, E2 64, E3 158, E4 59), 374's
   open tasks and its carried items. 328's tiers and order stand; a row fixed here is marked with its wave in 328's ranking
@@ -88,5 +116,8 @@ fixed, not escaped).
 
 ## How it starts
 
-When the GM has decided how the work should go faster (FR-003): `make task-start`, the first batch's plan section with its
-decisions (`make decide`), the four pre-existing cohort failures first, then T48.
+The first task is the lane law (FR-000, User Story 0; the GM, 2026-10-17): `make task-start`, its plan section with its
+decisions (`make decide`), the rule table, then the rewrite, measured on the re-deal cohort and the pool. After it: the four
+pre-existing cohort failures, then T48 (whose question - does the web carry a re-deal of the seats - the rewrite may already
+answer), then T47's patch re-landed, then the ranking's rows. FR-003's question (how the rest should go faster) stays open
+for anything the lane law does not settle.
