@@ -146,7 +146,7 @@ decision points, and the record checks' own counts in `dev/review-ledger.md`):
 - **SC-003** (FR-007): the lane law's success criteria as 384 states them (User Story 0's Independent Test), and 384's SC-004 for
   T48.
 - **SC-004** (FR-003, FR-004): the refusals of FR-003 and FR-004 each have a test that is red without them.
-- **SC-005** (FR-008 to FR-011): on the next task, the checks owed per changed line - dispatches, tokens and wall time - are below
+- **SC-005** (FR-008, FR-009, FR-010, FR-011): on the next task, the checks owed per changed line - dispatches, tokens and wall time - are below
   T01's, measured by FR-011's record; or the report says why not.
 
 ## Decisions Recorded
