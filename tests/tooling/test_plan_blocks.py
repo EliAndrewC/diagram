@@ -177,3 +177,27 @@ def test_a_typo_s_earlier_text_is_found_however_far_back(tmp_path: pathlib.Path)
     (d / "plan-review.json").write_text(json.dumps(review))
     (d / "plan.md").write_text((d / "plan.md").read_text().replace("checked once", "cheked once"))
     assert gate.owed(d) is None, "the typo is measured against text 30 versions back"
+
+
+def test_the_blocks_a_whole_plan_blocked_left_are_owed_once_the_blocking_block_is_cleared(tmp_path: pathlib.Path) -> None:
+    """Feature 385: a whole-plan BLOCKED review is recorded on every block. The blocking decision fixed in its own block and that
+    block re-reviewed CLEAR, the blocks beside it - unchanged - still read BLOCKED; `plan-delta` called nothing owed and `make
+    decide` refused the task for ever. Now a BLOCKED block is owed a review like a changed one."""
+    import os
+
+    d = feature(tmp_path)
+    bad = {"id": "D2", "summary": "s", "class": "narrowing", "ruling": "NOT LEGITIMATE", "why": "w"}
+    gate.record(d, {"plan_sha256": hashlib.sha256(PLAN.encode()).hexdigest(), "decisions": [bad]}, "spec-fidelity")
+    fixed = PLAN.replace("The sty stands by the house (FR-001).", "The sty stands against the house (FR-001).")
+    (d / "plan.md").write_text(fixed)
+    body = dict((k, b) for k, b, _a in gate.blocks(fixed))["### Wave 1 (T01)"]
+    gate.record_blocks(d, {"blocks": {"### Wave 1 (T01)": gate.block_digest(body)}, "decisions": [WITHIN]}, "spec-fidelity")
+    keys, blocked = gate.block_status(json.loads((d / "plan-review.json").read_text()), fixed, set())
+    assert not keys and blocked, "the fixed block CLEAR, its neighbors still BLOCKED and unchanged"
+    here = os.getcwd()
+    try:
+        os.chdir(d.parent.parent)
+        out = subprocess.run([sys.executable, str(script("plan_gate")), "delta", str(d)], capture_output=True, text=True, check=True).stdout
+    finally:
+        os.chdir(here)
+    assert "no block of" not in out and "MODE 4" in out, "the BLOCKED blocks are owed their review"
