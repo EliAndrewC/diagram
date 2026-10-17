@@ -78,6 +78,10 @@ GRAPH = "fixtures.json"  # fixture id -> its dependents; kept BESIDE the baselin
 NO_TESTS = "tests/__init__.py"
 PLAN = "plan.json"  # written by `plan`, read by selection.py
 RESULT = "result.json"  # written by selection.py after collection, read by `merge` / `save-baseline` / the Makefile
+#: the tooling tests' reads that produced the baseline's coverage of them, and the ones a full run reused - written by the
+#: reuse plugin (`tests/tooling/_test_deps.py`, mode `gate`), read by `carry` (feature 383 amendment 5, plan D31)
+TOOLING_READS = "tooling-reads.json"
+TOOLING_REUSED = "tooling-reused.json"
 TEST_MODULE = "test_"
 
 
@@ -421,11 +425,51 @@ def save_baseline(root: Path, fresh: Path) -> Path:
     bdir.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(fresh, bdir / COVERAGE_DB)
     (bdir / MANIFEST).write_text(json.dumps(manifest(root), indent=1), encoding="utf-8")
-    for name in (TESTS, GRAPH):
+    for name in (TESTS, GRAPH, TOOLING_READS):
         nxt = bdir / (name + ".next")
         if nxt.is_file():
             os.replace(nxt, bdir / name)
     return bdir
+
+
+def carry(root: Path, fresh: Path) -> int:
+    """A FULL run's reused tooling tests, carried from the baseline (feature 383 amendment 5, plan D31): each one's contexts,
+    the contexts of fixtures in its closure that this run did not set up, its closure into `tests.json.next` and its fixture
+    edges into the graph's. Sound for the reason the merge is: the plugin reused it only when every read of the run that
+    produced its baseline coverage - the repository code it ran among them - is unchanged, and the suite is deterministic.
+    Returns how many tests were carried."""
+    import coverage
+
+    bdir = baseline_dir(root)
+    reused_file = bdir / TOOLING_REUSED
+    reused = set(json.loads(reused_file.read_text(encoding="utf-8"))) if reused_file.is_file() else set()
+    if not reused:
+        return 0
+    closures = json.loads((bdir / TESTS).read_text(encoding="utf-8"))
+    have = set(all_contexts(fresh))
+    wanted = {f"fixture:{f}" for n in reused for f in closures.get(n, [])} - have
+    tmp = fresh.with_suffix(".carrying")
+    shutil.copyfile(bdir / COVERAGE_DB, tmp)
+    prune(tmp, root, (), {c for c in all_contexts(tmp) if c.rsplit("|", 1)[0] not in reused and c not in wanted})
+    data = coverage.CoverageData(str(fresh))
+    data.read()
+    kept = coverage.CoverageData(str(tmp))
+    kept.read()
+    data.update(kept)
+    data.write()
+    tmp.unlink()
+    nxt = bdir / (TESTS + ".next")
+    if nxt.is_file():
+        now = json.loads(nxt.read_text(encoding="utf-8"))
+        nxt.write_text(json.dumps({**{n: closures[n] for n in reused if n in closures}, **now}, indent=0), encoding="utf-8")
+    gnext, gold = bdir / (GRAPH + ".next"), bdir / GRAPH
+    if gnext.is_file() and gold.is_file():
+        from l7r.diagram.ci.selection import merge_graphs
+
+        old = {k: [n for n in v if n in reused] for k, v in json.loads(gold.read_text(encoding="utf-8")).items()}
+        gnext.write_text(json.dumps(merge_graphs(json.loads(gnext.read_text(encoding="utf-8")), {k: v for k, v in old.items() if v}), indent=0), encoding="utf-8")
+    reused_file.unlink()
+    return len(reused)
 
 
 # ---- the command --------------------------------------------------------------------------------------
@@ -441,6 +485,7 @@ def main(argv: list[str], root: Path, skill: Path) -> int:
         bdir.mkdir(parents=True, exist_ok=True)
         (bdir / PLAN).write_text(json.dumps(pl.dump(), indent=1), encoding="utf-8")
         (bdir / RESULT).unlink(missing_ok=True)
+        (bdir / TOOLING_REUSED).unlink(missing_ok=True)  # only this run's reuse is carried
         print(
             f"gate: {pl.mode.upper()} - {pl.reason}"
             + (f"; {len(pl.affected_tests)} test(s) and {len(pl.affected_fixtures)} fixture(s) touched the change" if pl.mode == "incremental" and pl.changed_engine else "")
@@ -473,6 +518,11 @@ def main(argv: list[str], root: Path, skill: Path) -> int:
         info = merge(root, skill / ".coverage", skill / ".coverage")
         print(f"gate: merged this run over the baseline ({info['dropped_contexts']} context(s) and {info['dropped_files']} changed file(s) re-measured)")
         return 0
+    if cmd == "carry":  # a full run's reused tooling tests' coverage, before the floors (plan D31)
+        n = carry(root, skill / ".coverage")
+        if n:
+            print(f"gate: {n} tooling test(s) reused on the reads that made their baseline coverage - that coverage carried")
+        return 0
     if cmd == "save-baseline":
         res = bdir / RESULT
         if res.is_file() and json.loads(res.read_text(encoding="utf-8"))["mode"] == "incremental":
@@ -481,5 +531,5 @@ def main(argv: list[str], root: Path, skill: Path) -> int:
         where = save_baseline(root, skill / ".coverage")
         print(f"gate: baseline saved under {where}")
         return 0
-    print("usage: incremental plan [full REASON] | paths | where | mode | selected | merge | save-baseline", file=sys.stderr)
+    print("usage: incremental plan [full REASON] | paths | where | mode | selected | merge | carry | save-baseline", file=sys.stderr)
     return 2

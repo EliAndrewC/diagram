@@ -437,3 +437,52 @@ and asks the git questions itself), the first imports. The cuts that change neit
 - as many workers as there are test files left to run (`-n` lowered in the controller's `pytest_configure`, before xdist
   starts them), never more than the run asked for;
 - a part found to cost nothing measurable is left alone, and recorded.
+
+## Amendment 5 (FR-028 to FR-030)
+
+**D31 - The gate's tooling run reuses (FR-028).** The gate runs the tooling tests inside its one coverage run (`make test`;
+`tests/conftest.py` collects them when the tooling hash moved, never through `make tooling`), and a moved tooling hash makes
+that run a FULL plan, whose coverage becomes the next baseline by itself (feature 207 D1). Every tooling test carries engine
+coverage contexts there (1,815 of the baseline's 1,796 tooling node ids have one; observed 2026-10-17, read from
+`<git dir>/gate-baseline/coverage.db`), so a test simply not run would take its coverage out of the floors and the baseline. So:
+- the gate's run loads the reuse plugin (`L7R_TEST_DEPS=reuse`), which tracks tooling items only; a tooling test whose kept
+  reads are unchanged, and which the baseline holds (its node id in `tests.json`), is deselected, and a file all of whose
+  tests are is not collected; one the baseline does not hold always runs;
+- the plugin writes the node ids it reused, and before the floors are judged `incremental carry` copies from the baseline into
+  this run's data each reused test's contexts, the contexts of the fixtures in its closure that did not run now, and its closure
+  and fixture edges into `tests.json` and the graph a full run saves. Sound for the reason 207's merge is: its reads - the
+  repository code it ran among them (D32b) - are unchanged and the suite is deterministic, so its coverage is the one kept;
+- `make tooling` reuses too, and `make tooling FULL=1` (`L7R_TEST_DEPS=record`) runs every test; a gate `FULL=1` reuses nothing;
+- the tooling hash (`l7r/diagram/ci/state.py`) reads `scripts/` recursively, its subdirectories included, `__pycache__` aside.
+A `scripts/` edit then moves the hash and makes the gate's plan full, as a top-level script's edit does today; a plan that
+stays incremental when only `scripts/` moved is the priced alternative, not built (its cost is a second hash and a planner rule).
+
+**D32b - A test's reads include the code it ran.** Found 2026-10-17: a module is opened once per worker, so a test that only
+called code another test had imported was kept without it, and was reused after that code changed (`l7r/diagram/ci/delta.py`
+edited: 36 tests ran, most of `test_delta.py`'s 55 reused; the per-file store before amendment 5 reused that file whole). Each
+code object of the repository that a test, its file's collection or a wide fixture starts is recorded as that key's read
+(`sys.monitoring`, PY_START, tool id 3, re-armed at every key), and a fixture wider than one test that is defined in a test
+module is that file's read rather than the session's. The same edit then re-runs 178 tests (observed 2026-10-17; a reuse run
+after a one-line edit to `delta.py`).
+
+**D32 - A pass kept per test (FR-029).** The store (version 3) keeps, per test node id, what that test read while it ran - its
+own setup and call, the processes it started - and, separately, what its FILE read (the module imported and collected, its
+module- and class-scoped fixtures) and what the SESSION read (session- and package-scoped fixtures). A test is reused when its
+own reads, its file's and the session's are all unchanged, and every test also depends on: its file, the `conftest.py` files
+from its directory up to `tests/`, `pyproject.toml`, and the plugin's own code (`_test_deps.py`, `_deps_site/`). A file whose
+every recorded test is reusable, and whose test list is the one recorded, is not collected; otherwise it is collected and its
+reusable tests deselected. A test that passes is kept whatever else ran beside it - a run filtered by `-k` or a node id keeps
+the tests it ran; a failure keeps nothing for that test.
+
+**D33 - Tests of code moved off the real repository (FR-030).** After D32, the tests whose subject is code that still re-run on
+an edit to the repository's DATA - research pages, specs, dev records, registries, anything not code or test configuration -
+are found from the kept reads (each test's reads that are not under `l7r/`, `scripts/`, `tests/` or the configuration), and
+listed with what they read before and after; each one that reads the real tree only to have something to read is given a
+fixture, its assertion unchanged; one whose subject is the repository's data (every registry key has a state, the real tree
+parses) keeps reading it.
+
+**D32a - The store keeps each read's content once.** Kept per test, the store's read sets repeat: the first recording was 21.7
+MB (observed 2026-10-17; the store file's size after one whole-tree record), every whole-repository test carrying its own
+~22,000 files (observed 2026-10-17; test_content_cache's read count). So each read's content is kept once, in one table, and an entry
+names the paths it read; when a run records a path whose content moved, every entry naming it that this run did not record
+again is dropped (it was kept against the old content), so no entry is ever judged against a content it did not see.

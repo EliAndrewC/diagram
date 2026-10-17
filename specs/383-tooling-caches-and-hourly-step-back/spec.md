@@ -2,11 +2,13 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-12
-**Status**: Done 2026-10-17 - amendment 4 landed: spec FAITHFUL (round 3), plan CLEAR; five guard suites 2-4x faster with their checks unchanged (research R11); a landing 30.04 -> 27.28 s (m:land-tooling-landing-a4); make parts-sweep (the arbiter's fix). Before it: Done 2026-10-17 - amendment 3 landed: spec FAITHFUL (round 2), plan CLEAR (round 5); no review check moves to Sonnet 5.5 (research R10); always-run tooling files 18 -> 0 of 128; a landing 37.05 -> 30.04 s (m:land-tooling-landing-a3); hooks-test idle 16.06 -> 2.6 s (m:hooks-test-idle); sync-with-main suite 36.23 -> 17.88 s (m:sync-with-main-suite). Before it: Done 2026-10-13 - amendment 2 landed: spec FAITHFUL (round 4), plan block CLEAR (round 2); a landing 113.98 -> 37.05 s (m:land-tooling-landing-before, m:land-tooling-landing-after), tooling reuse 27.58 -> 19.35 s with 18 of 127 files always run (m:land-tooling-tests-reuse-a2), the claims gate 8.53 -> 1.65 s (m:claims-gate-push). Before it: Done 2026-10-13 - amendment 1 landed: spec FAITHFUL (round 3), plan block CLEAR; land-tooling's tooling tests 36.21 -> 27.58 s (606 of 1,796 tests ran with reuse, m:land-tooling-tests-reuse), quote-verbatim's verdicts cached. Before it: Done 2026-10-13 - spec FAITHFUL (round 3), plan CLEAR (round 3), every task ticked; push checks 19.87 s -> 1.92 s (research R6); tooling landed 0906d798a; the GM's review open (the first step-back's note)
+**Status**: Done 2026-10-17 - amendment 5 landed: plan CLEAR (round 4, D31 rewritten for where the gate really runs tooling tests); after a Makefile-only change the gate's full run reuses 1,739 of 1,824 tooling tests with their coverage carried, 167 -> 132 s (m:gate-tooling-makefile-a5); reuse per test, a source-page edit re-runs 15 tests not 219 (m:source-page-edit-a5); a soundness defect in reuse fixed (D32b, research R12); 12 tests of code moved off the real record. Before it: Done 2026-10-17 - amendment 4 landed: spec FAITHFUL (round 3), plan CLEAR; five guard suites 2-4x faster with their checks unchanged (research R11); a landing 30.04 -> 27.28 s (m:land-tooling-landing-a4); make parts-sweep (the arbiter's fix). Before it: Done 2026-10-17 - amendment 3 landed: spec FAITHFUL (round 2), plan CLEAR (round 5); no review check moves to Sonnet 5.5 (research R10); always-run tooling files 18 -> 0 of 128; a landing 37.05 -> 30.04 s (m:land-tooling-landing-a3); hooks-test idle 16.06 -> 2.6 s (m:hooks-test-idle); sync-with-main suite 36.23 -> 17.88 s (m:sync-with-main-suite). Before it: Done 2026-10-13 - amendment 2 landed: spec FAITHFUL (round 4), plan block CLEAR (round 2); a landing 113.98 -> 37.05 s (m:land-tooling-landing-before, m:land-tooling-landing-after), tooling reuse 27.58 -> 19.35 s with 18 of 127 files always run (m:land-tooling-tests-reuse-a2), the claims gate 8.53 -> 1.65 s (m:claims-gate-push). Before it: Done 2026-10-13 - amendment 1 landed: spec FAITHFUL (round 3), plan block CLEAR; land-tooling's tooling tests 36.21 -> 27.58 s (606 of 1,796 tests ran with reuse, m:land-tooling-tests-reuse), quote-verbatim's verdicts cached. Before it: Done 2026-10-13 - spec FAITHFUL (round 3), plan CLEAR (round 3), every task ticked; push checks 19.87 s -> 1.92 s (research R6); tooling landed 0906d798a; the GM's review open (the first step-back's note)
 
 **Affects**: tooling, review process
 
 **Amendment 1 approved**: the GM, 2026-10-13, "Yes please we should definitely skip suites the clone already passed." and "And also, while I realize we don't run it very often, I feel like `quote-verbatim` would benefit from the same caching layer we implemented elsewhere, right?"
+
+**Amendment 5 approved**: the GM, 2026-10-17, "Yes, please file it that way, and then do that work. Thanks."
 
 **Amendment 4 approved**: the GM, 2026-10-17, "I think I do want a next round uh, for the guard suites running serially, so uh, splitting those up does seem good." and "So yes, please fold those two into the same round as the sweet splitting. and then go ahead and work that."
 
@@ -182,6 +184,19 @@ long-running feature does for itself, on the clock glyph-check already keeps.
   workers' start, collection, the reuse decision in every worker, the first imports - is measured part by part, and each part
   that can be cut without changing which tests run or their results is cut.
 
+### Amendment 5 - the gate's tooling run reuses, and reuse per test (`request.md`, Amendment 5)
+
+- **FR-028 The gate's tooling run reuses what passed.** When the gate's tooling hash changes, its run of the tooling tests
+  reuses each test's pass on identical inputs, as `make land-tooling` does, so a Makefile edit re-runs only the tests that read
+  what changed. The hash covers every file under `scripts/`, its subdirectories included.
+- **FR-029 A pass is reused per test.** Each tooling test's reads are kept on its own, and a test is reused when its own reads
+  are unchanged; a test file is imported only when one of its tests will run. What every test of a file depends on - the file
+  itself, the `conftest.py` files above it, the test configuration and the reuse plugin's own code - is part of each test's
+  reads.
+- **FR-030 Tests of code that read the real repository are moved to fixtures, case by case.** Where, after FR-029, a test whose
+  subject is code still re-runs on edits to the repository's data, it reads a fixture instead; a test whose subject is the
+  repository's data keeps reading it. Each moved test is listed with what it read before and after.
+
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002, FR-005, FR-006, FR-007) The push's checks: from about 24 s, the measurement the GM saw
@@ -245,6 +260,12 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 - **SC-020** (FR-026, FR-027) The tooling run in a fresh worktree at the clone's HEAD timed before and after, with the tests that
   ran and the longest single test; the start-up parts measured; a real landing measured before (m:land-tooling-landing-a3) and
   after, step by step.
+
+- **SC-021** (FR-028) After a Makefile-only change, the gate's tooling phase runs only the tests that read the Makefile (count
+  and time before and after); a change under `scripts/<dir>/` changes the tooling hash (a test).
+- **SC-022** (FR-029, FR-030) An edit to one research source page re-runs only the tests that read it - test_sources' count before
+  (43, the whole file) and after; an edit to a `conftest.py` re-runs every test below it (a test); a landing's tooling step
+  measured before (m:land-tooling-landing-a4) and after.
 
 ## Review history
 

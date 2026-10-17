@@ -240,5 +240,43 @@
    "checks": 14.98,
    "push": 9.98
   }
+ },
+ "gate-tooling-makefile-a5": {
+  "quantity": "the gate's test phase after a Makefile-only change, the tooling tests reused per test with their coverage carried",
+  "observed": "2026-10-17T17:35Z",
+  "source": "/tmp/claude-1000/sc021c.log; load 4-6, the containers near their memory cap",
+  "command": "make test-full FROM_DONE=1 (a Makefile comment appended, then restored)",
+  "method": "SC-021",
+  "unit": "s",
+  "varies": true,
+  "value": 132,
+  "before": 167,
+  "reused": 1739,
+  "of": 1824,
+  "ran": 85
+ },
+ "tooling-reuse-a5": {
+  "quantity": "the whole tooling tree on reuse, nothing changed, per-test store",
+  "observed": "2026-10-17T17:45Z",
+  "source": "/tmp/claude-1000/m2.log",
+  "command": "L7R_TEST_DEPS=reuse make test-file FILE=tests/tooling",
+  "method": "timed after a record",
+  "unit": "s",
+  "varies": true,
+  "value": 6.53,
+  "reused": 1825,
+  "of": 1827
+ },
+ "source-page-edit-a5": {
+  "quantity": "tooling tests re-run after one research source page edit",
+  "observed": "2026-10-17T17:46Z",
+  "source": "/tmp/claude-1000/m3.log",
+  "command": "L7R_TEST_DEPS=reuse make test-file FILE=tests/tooling",
+  "method": "SC-022, the page restored after",
+  "unit": "tests",
+  "varies": false,
+  "value": 15,
+  "before_per_file": 219,
+  "seconds": 13.6
  }
 }

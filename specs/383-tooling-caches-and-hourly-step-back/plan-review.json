@@ -227,6 +227,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
+  },
+  "## Amendment 5 (FR-028 to FR-030)": {
+   "sha256": "5dde3b38c4b148fadc171453f35878654cecc8105193c75a852e3b1bfe755c63",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -827,6 +833,170 @@
      "summary": "Fresh-worktree start-up measured part by part; reuse decision made once in the controller and handed to workers; -n lowered to the number of files left to run, never above what was asked; a part costing nothing measurable left alone and recorded.",
      "class": "within",
      "why": "FR-027: measure each part, cut each part that can be cut without changing which tests run or their results. Both cuts change neither. Leaving a part that costs nothing measurable is not an exception (there is nothing to cut). The two listed cuts do not discharge FR-027 for collection or first imports if they measure non-zero; FR-027 still binds there."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Amendment 5 (FR-028 to FR-030)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D31",
+     "summary": "The gate's tooling phase runs with L7R_TEST_DEPS=reuse as a landing does; tooling-green stamps once every test passed now or was reused; make tooling FULL=1 (or L7R_TEST_DEPS=record by hand) runs every test; the hash reads scripts/ recursively.",
+     "class": "within",
+     "why": "FR-028 and the GM's item (1) verbatim: the gate reuses per test as a landing does and the subdirectory gap is fixed. FULL=1 is an opt-in full run beside the requested default, not a narrowing of it."
+    },
+    {
+     "id": "D31-pycache",
+     "summary": "The recursive tooling hash leaves __pycache__ out.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-028 says every file under scripts/. __pycache__ holds bytecode Python writes as a side effect of importing the scripts, derived from the .py files the hash already reads; hashing it would move the hash on runs with no tooling change and re-run the whole tree, defeating the request's own purpose (re-run only what changed). It adds no source the hash misses."
+    },
+    {
+     "id": "D32",
+     "summary": "Store v3 keeps reads per test node id, plus per-file (import, collection, module/class fixtures) and per-session (session/package fixtures) reads; a test is reused when its own, its file's and the session's reads are unchanged, plus its file, conftest.py chain, pyproject.toml and the plugin's code; a file whose every test is reusable and whose test list matches is not collected, otherwise collected with reusable tests deselected; a passing test is kept whatever else ran (-k, node ids); a failure keeps nothing.",
+     "class": "within",
+     "why": "FR-029 and the GM's item (2): per-test reads, a file imported only when one of its tests runs, and the shared dependencies FR-029 names. Charging module/session fixture reads to every test of that scope is the conservative way to record what a test actually depended on, not a return to per-file reuse of a test's own reads; SC-022 measures the outcome. The residue - a module/class fixture or import that reads the real record still re-runs its whole file on a research edit - is what D33's fixture move remedies, and a stale reuse would be worse than an extra run."
+    },
+    {
+     "id": "D33",
+     "summary": "After D32, the code-subject tests that still re-run 'on an edit to a research page' are listed with what they read; one reading the real tree only to have input gets a fixture, assertion unchanged; one whose subject is the repository's data keeps reading it.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-030 (accepted) covers a code-subject test that re-runs 'on edits to the repository's data'; D33 restricts the candidates to those that re-run on an edit to a RESEARCH PAGE, so a code-subject test still re-running on a spec, dev-ledger, registry or other data edit falls outside the measurement and is never moved. The GM approved item (3) 'code-only tests moved to fixtures case by case' with no research-only limit; the research edit was the motivating instance, and confining the rule to it completes the GM's thought. Fix: say the tests that still re-run on an edit to the repository's data (research pages, specs, dev records, registries, ...) whose subject is code, and keep FR-030's listing of each moved test with what it read before AND after."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Amendment 5 (FR-028 to FR-030)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D31",
+     "summary": "Gate tooling phase runs with L7R_TEST_DEPS=reuse; FULL=1 runs all; tooling hash reads scripts/ recursively",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict; carries GM item (1) and FR-028 word for word, hash gap included."
+    },
+    {
+     "id": "D32",
+     "summary": "Store v3 keeps reads per test node id plus file- and session-level reads; a fully reusable file is not collected",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict; carries GM item (2) and FR-029 (per-test reads, shared deps, no import when nothing runs)."
+    },
+    {
+     "id": "D33",
+     "summary": "Code-subject tests that still re-run on edits to any repository data (anything not under l7r/, scripts/, tests/ or configuration) found from kept reads, listed with reads before and after, given fixtures; data-subject tests keep the real tree",
+     "class": "within",
+     "why": "Round 1's finding is fixed: the scope is now the repository's data as FR-030 says, not research pages alone, and the before-and-after listing FR-030 requires is restored. Detection by exclusion is at least as broad as the requirement. The code/data split is FR-030's own, and it is the case-by-case judgment in GM item (3)."
+    },
+    {
+     "id": "D32a",
+     "summary": "Each read's content stored once in one table; when a run records a path whose content moved, entries naming that path that this run did not re-record are dropped",
+     "class": "within",
+     "why": "A storage and eviction design FR-029 leaves open. It never reuses a test whose reads changed: a dropped entry only re-runs the test, which is the conservative direction. The one reuse it gives up is content that moved and then moved back. A per-node-id store keeping one entry per test would already lose that, so it does not narrow per-test reuse as the GM asked for it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Amendment 5 (FR-028 to FR-030)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D31",
+     "summary": "gate's tooling phase runs with L7R_TEST_DEPS=reuse; FULL=1 runs all; tooling hash reads scripts/ recursively",
+     "class": "within",
+     "why": "FR-028 verbatim: reuse on identical inputs as land-tooling does, hash covers every file under scripts/ with subdirectories; FULL=1 is an opt-in full run that narrows nothing"
+    },
+    {
+     "id": "D32",
+     "summary": "store v3 keeps reads per test plus file- and session-level reads; whole files skipped from collection when every test reusable",
+     "class": "within",
+     "why": "FR-029: per-test reads, file imported only when a test will run, file/conftest/config/plugin code part of each test's reads"
+    },
+    {
+     "id": "D32a",
+     "summary": "each read's content stored once in one table; entries naming a path whose content moved and not re-recorded are dropped",
+     "class": "within",
+     "why": "storage representation of FR-029's per-test reads; dropping stale entries only forces re-runs, never reuses a pass against unseen content. Figures now carry one-shot labels (observed 2026-10-17, method stated)"
+    },
+    {
+     "id": "D33",
+     "summary": "tests of code still re-running on data edits found from kept reads, given fixtures with assertions unchanged, listed before/after; data-subject tests keep the real tree",
+     "class": "within",
+     "why": "FR-030 as written: case by case, listed with reads before and after, data-subject tests keep reading the repository"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Amendment 5 (FR-028 to FR-030)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D31-reuse",
+     "summary": "The gate's one coverage run loads the reuse plugin for tooling items: a tooling test with unchanged reads that the baseline holds is deselected (a file of only such tests not collected); one the baseline lacks always runs.",
+     "class": "within",
+     "why": "FR-028 literally: the gate's tooling run reuses each test's pass on identical inputs. Running a test the baseline lacks is required for its coverage to exist, not a carve-out from reuse."
+    },
+    {
+     "id": "D31-carry",
+     "summary": "incremental carry copies each reused test's coverage contexts, its closure's unrun fixture contexts, and its closure/fixture edges from the baseline into this run's data before the floors are judged.",
+     "class": "within",
+     "why": "Mechanism that makes FR-028's reuse possible inside a coverage-traced full plan without dropping the reused tests' coverage from the floors and the next baseline; adds no behavior beyond the requested reuse."
+    },
+    {
+     "id": "D31-full",
+     "summary": "make tooling reuses; make tooling FULL=1 runs every test; a gate FULL=1 reuses nothing.",
+     "class": "within",
+     "why": "The default gate and make tooling reuse as FR-028 asks; FULL=1 is an explicit opt-in full run (the make tooling form was cleared in round 3), not a case the default rule excludes, and it is the periodic fresh measurement the baseline carry relies on. The GM's question was about every ordinary make done."
+    },
+    {
+     "id": "D31-hash",
+     "summary": "The tooling hash in l7r/diagram/ci/state.py reads scripts/ recursively, __pycache__ aside.",
+     "class": "within",
+     "why": "FR-028's last sentence and the GM-approved part (1): the hash gap fixed."
+    },
+    {
+     "id": "D31-cost",
+     "summary": "A scripts/ edit now moves the hash and makes the gate's plan full, as a top-level script's edit does today; keeping the plan incremental when only scripts/ moved was priced (second hash, planner rule) and not built.",
+     "class": "within",
+     "why": "The direct consequence of the requested hash fix under the existing planner rule (207 D1), stated with its cost; it removes nothing the GM asked for and preserves no behavior he asked to change (his question was the tooling tests' re-runs, which reuse within the full plan)."
+    },
+    {
+     "id": "D32b",
+     "summary": "A test's reads include the repository code it ran (sys.monitoring PY_START per key); a wider-than-test fixture defined in a test module is that file's read, not the session's.",
+     "class": "within",
+     "why": "Soundness of FR-029's 'reused when its own reads are unchanged': without it a test was reused after code it ran changed, which is not reuse on identical inputs. Costs re-runs (178 vs 36), narrows nothing."
+    },
+    {
+     "id": "D32",
+     "summary": "Store v3 keeps reads per test, per file and per session; reuse when all unchanged plus file, conftests, pyproject, plugin code; filtered runs keep what they ran.",
+     "class": "within",
+     "why": "Unchanged since round 3's CLEAR; FR-029 as written."
+    },
+    {
+     "id": "D33",
+     "summary": "Code-subject tests still re-running on data edits found from kept reads, listed before/after, given fixtures case by case; data-subject tests keep reading the tree.",
+     "class": "within",
+     "why": "Unchanged since round 3's CLEAR; FR-030 and the GM's part (3) as written."
+    },
+    {
+     "id": "D32a",
+     "summary": "Each read's content kept once in one table; entries naming a path whose content moved and not re-recorded are dropped.",
+     "class": "within",
+     "why": "Unchanged since round 3's CLEAR; storage form serving FR-029, never judging an entry against unseen content."
     }
    ]
   }

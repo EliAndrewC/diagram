@@ -130,3 +130,18 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T33 Close: a landing measured before and after, the gate, the report, landed
       research: rendering
       verify: DONE. DONE. a landing 30.04 -> 27.28 s (m:land-tooling-landing-a4); research R11; the gate green; the report written; landed by the push carrying this tick
+
+## Amendment 5 (the GM 2026-10-17: the gate's tooling run reuses, and reuse per test)
+
+- [x] T34 The gate's tooling run reuses; the tooling hash reads scripts/ whole (plan D31) (SC-021)
+      research: rendering
+      verify: DONE. SC-021 met (research R12; m:gate-tooling-makefile-a5). After a Makefile-only edit, the gate's full run reused 1,739 of 1,824 tooling tests with their coverage carried; the 85 that ran are the tests that read the Makefile; all floors at 100%; 132 s against 167 s. Two gates green; hash test red on the old glob.
+- [x] T35 A pass kept per test (plan D32) (SC-022)
+      research: rendering
+      verify: DONE. SC-022 met (R12; m:source-page-edit-a5, m:tooling-reuse-a5). One source-page edit re-runs 15 tests, against 219 per file. An unchanged tree reuses 1,825 of 1,827 in 6.5 s. Store 10.8 MB. D32b fixed a soundness defect: a delta.py edit now re-runs 178 tests, not 36.
+- [x] T36 Tests of code moved off the real repository, case by case (plan D33) (SC-022)
+      research: rendering
+      verify: DONE. R12 table. 12 tests of code are on copies of the pages they name, or on records of their own; data reads went from 475-4,656 files to 155 or fewer, assertions unchanged. The tests whose subject is the record's data are kept, with reasons.
+- [x] T37 Close: the gate, the report, landed
+      research: rendering
+      verify: DONE. Two gates, the second green (221 s). Feature report written. The arbiter's step-back ruling was continue; its tooling fix is settled and landed. Tooling landed mid-feature three times: the reads fix, the new-file guard, the make-only refusal.

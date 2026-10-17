@@ -1161,7 +1161,8 @@ QUICK_BUDGET = 60
 # (GUARD_EDIT_OK: a green test-file records green-local - feature 130, FR-012)
 tooling:        ## [tests] run every `tooling` test (make/ci/pipeline, exhaustive) and record them green so `make quick` skips them until the tooling changes
 	@: "GUARD_EDIT_OK: feature 383 amendment 1 - the gate's tooling run records each test file's reads on a pass, for make land-tooling to reuse"
-	@$(GATE_EXHAUSTIVE_ENV) L7R_TEST_DEPS=$${L7R_TEST_DEPS:-record} python3 -m pytest -p tests.tooling._test_deps -n $(XDIST_WORKERS) -q --no-cov -m tooling && python3 -m l7r.diagram.ci tooling-green
+	@: "GUARD_EDIT_OK: feature 383 amendment 5 (plan D31) - make tooling reuses each test's pass on identical inputs; FULL=1 runs every test"
+	@$(GATE_EXHAUSTIVE_ENV) L7R_TEST_DEPS=$${L7R_TEST_DEPS:-$(if $(FULL),record,reuse)} python3 -m pytest -p tests.tooling._test_deps -n $(XDIST_WORKERS) -q --no-cov -m tooling && python3 -m l7r.diagram.ci tooling-green
 
 # GUARD_EDIT_OK: feature 188 (GM 2026-09-05: "there's no actual reason to rerun all the tests for style sheet
 # changes"). THE PAGE CHECK is what an edit to interactive/assets/ owes instead of the gate: the interactive unit
@@ -2355,6 +2356,8 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 	fi; \
 	python3 -m coverage combine --append >/dev/null 2>&1 || true; \
 	python3 -m l7r.diagram.ci incremental merge || exit 1; \
+	: "GUARD_EDIT_OK: feature 383 amendment 5 (plan D31) - a full run's reused tooling tests' coverage, from the baseline"; \
+	python3 -m l7r.diagram.ci incremental carry || exit 1; \
 	: "GUARD_EDIT_OK: feature 213 - THE ROLL CENSUS VERDICT, before the floors: one roll per rostered hamlet, no render outside" ; \
 	: " the tests of rendering, no roll in a worker outside the excepted modules. A stale roster row counts only on a full run." ; \
 	cov_ec=0; \
@@ -2386,8 +2389,14 @@ INCR_FORCE = $(if $(FULL),FULL=1 requested,$(if $(filter 0,$(INCREMENTAL)),INCRE
 # tests/rolls.py; the verdict fails the phase on a second roll, an unrostered roll, a stale row on a full run, a render
 # from an unmarked test, or an in-process roll from an unexcepted module.
 ROLL_CENSUS = $(shell git rev-parse --absolute-git-dir 2>/dev/null)/roll-census.jsonl
-INCR_ARGS = $(if $(COV_FLOORS),--cov-context=test -p l7r.diagram.ci.gate_plugin -p l7r.diagram.ci.rollcensus,)
-INCR_ENV = $(if $(COV_FLOORS),L7R_GATE_SELECT="$(shell python3 -m l7r.diagram.ci incremental where 2>/dev/null)" L7R_ROLL_CENSUS="$(ROLL_CENSUS)",)
+# GUARD_EDIT_OK: feature 383 amendment 5 (plan D31) - THE GATE'S TOOLING TESTS REUSE: on a full plan the reuse plugin, in its
+# `gate` mode, deselects a tooling test whose reads are those that produced the baseline's coverage of it, and `incremental
+# carry` (below, before the floors) copies that coverage in. A forced full run (FULL=1, INCREMENTAL=0: a test-full of its
+# own, the idle run) reuses nothing - it measures the baseline afresh; an incremental plan leaves the plugin inert.
+# (GUARD_EDIT_OK: feature 383 a5 - keyed on INCR_FORCE, since a test-full of its own passes INCREMENTAL=0 and must deselect nothing)
+TOOLING_GATE_ARGS = $(if $(COV_FLOORS),$(if $(INCR_FORCE),,-p tests.tooling._test_deps),)
+INCR_ARGS = $(if $(COV_FLOORS),--cov-context=test -p l7r.diagram.ci.gate_plugin -p l7r.diagram.ci.rollcensus $(TOOLING_GATE_ARGS),)
+INCR_ENV = $(if $(COV_FLOORS),L7R_GATE_SELECT="$(shell python3 -m l7r.diagram.ci incremental where 2>/dev/null)" L7R_ROLL_CENSUS="$(ROLL_CENSUS)" $(if $(TOOLING_GATE_ARGS),L7R_TEST_DEPS=gate,),)
 # ALL THREE FLOORS REPORT TOGETHER (GUARD_EDIT_OK: feature 145) - the same rule as the test phase: a first floor that
 # `exit 1`s hides every floor after it, and on 2026-08-28 that made the hamlet floor UNREACHABLE while the global one was
 # red on pre-existing tooling misses. Each records its own failure; the phase exits non-zero once, at the end.

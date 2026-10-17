@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sqlite3
 import subprocess
 import types
@@ -564,3 +565,77 @@ def test_plan_returns_a_full_run_when_the_projection_is_over_the_fraction(tmp_pa
     (bdir / incremental.TESTS).write_text(json.dumps({f"t/test_{k}.py::x": [] for k in "abcdefghij"}), encoding="utf-8")
     pl = incremental.plan(tmp_path)
     assert pl.mode == "incremental" and pl.paths == ["t/test_a.py"], f"narrowed to the changed module, got {pl.paths}"
+
+
+def _cov(path: Path, rows: dict[str, dict[str, list[int]]]) -> Path:
+    """A real coverage data file: {context: {abs file path: [lines]}}."""
+    import coverage
+
+    data = coverage.CoverageData(str(path))
+    for ctx, files in rows.items():
+        data.set_context(ctx)
+        data.add_lines(files)
+    data.write()
+    return path
+
+
+def _lines(path: Path) -> dict[str, set[int]]:
+    import coverage
+
+    data = coverage.CoverageData(str(path))
+    data.read()
+    out: dict[str, set[int]] = {}
+    for ctx in data.measured_contexts():
+        data.set_query_contexts(["^" + re.escape(ctx) + "$"])  # patterns, not names: `|` would be an alternation
+        for f in data.measured_files():
+            out.setdefault(ctx, set()).update(data.lines(f) or [])
+    return {k: v for k, v in out.items() if v}
+
+
+def test_carry_copies_a_reused_tooling_tests_coverage_closure_and_edges_from_the_baseline(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 383 amendment 5 (plan D31): a full run that reused a tooling test judges the floors, and saves the baseline,
+    with that test's baseline coverage, the coverage of a fixture only it set up, its closure and its fixture edges - and
+    with nothing of a test it did not reuse."""
+    bdir = tmp_path / "gb"
+    bdir.mkdir()
+    monkeypatch.setattr(incremental, "baseline_dir", lambda root: bdir)
+    a, b = str(tmp_path / "e/a.py"), str(tmp_path / "e/b.py")
+    reused = "tests/tooling/test_t.py::a"
+    _cov(bdir / incremental.COVERAGE_DB, {f"{reused}|run": {a: [3]}, "fixture:f": {b: [1]}, "fixture:g": {b: [5]}, "t::z|run": {a: [9]}})
+    fresh = _cov(tmp_path / ".coverage", {"t::y|run": {b: [2]}, "fixture:g": {b: [6]}})
+    (bdir / incremental.TESTS).write_text(json.dumps({reused: ["f", "g"], "t::z": [], "t::y": ["g"]}), encoding="utf-8")
+    (bdir / (incremental.TESTS + ".next")).write_text(json.dumps({"t::y": ["g"]}), encoding="utf-8")
+    (bdir / incremental.GRAPH).write_text(json.dumps({"f": [reused, "t::z"]}), encoding="utf-8")
+    (bdir / (incremental.GRAPH + ".next")).write_text(json.dumps({"g": ["t::y"]}), encoding="utf-8")
+    assert incremental.carry(tmp_path, fresh) == 0, "nothing reused, nothing carried"
+    (bdir / incremental.TOOLING_REUSED).write_text(json.dumps([reused]), encoding="utf-8")
+    assert incremental.carry(tmp_path, fresh) == 1
+    got = _lines(fresh)
+    assert got[f"{reused}|run"] == {3} and got["fixture:f"] == {1}, "the reused test's coverage, and its fixture's that did not run now"
+    assert got["fixture:g"] == {6}, "a fixture that ran now keeps this run's coverage"
+    assert "t::z|run" not in got, "a test not reused carries nothing"
+    assert json.loads((bdir / (incremental.TESTS + ".next")).read_text(encoding="utf-8")) == {reused: ["f", "g"], "t::y": ["g"]}
+    assert json.loads((bdir / (incremental.GRAPH + ".next")).read_text(encoding="utf-8")) == {"f": [reused], "g": ["t::y"]}
+    assert not (bdir / incremental.TOOLING_REUSED).exists(), "carried once"
+
+
+def test_main_carry_says_what_it_carried(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    monkeypatch.setattr(incremental, "carry", lambda root, fresh: 2)
+    assert incremental.main(["carry"], tmp_path, tmp_path) == 0 and "2 tooling test(s) reused" in capsys.readouterr().out
+    monkeypatch.setattr(incremental, "carry", lambda root, fresh: 0)
+    assert incremental.main(["carry"], tmp_path, tmp_path) == 0 and capsys.readouterr().out == ""
+
+
+def test_save_baseline_promotes_the_tooling_reads_and_a_plan_clears_the_last_runs_reuse(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    bdir = tmp_path / "gb"
+    bdir.mkdir()
+    monkeypatch.setattr(incremental, "baseline_dir", lambda root: bdir)
+    monkeypatch.setattr(incremental, "manifest", lambda root: {"engine": {}})
+    (tmp_path / ".coverage").write_text("db", encoding="utf-8")
+    (bdir / (incremental.TOOLING_READS + ".next")).write_text("{}", encoding="utf-8")
+    incremental.save_baseline(tmp_path, tmp_path / ".coverage")
+    assert (bdir / incremental.TOOLING_READS).read_text(encoding="utf-8") == "{}" and not (bdir / (incremental.TOOLING_READS + ".next")).exists()
+    (bdir / incremental.TOOLING_REUSED).write_text("[]", encoding="utf-8")
+    monkeypatch.setattr(incremental, "plan", lambda root, force=None: incremental.Plan("full", "why"))
+    assert incremental.main(["plan"], tmp_path, tmp_path) == 0
+    assert not (bdir / incremental.TOOLING_REUSED).exists(), "a run carries only what it reused itself"

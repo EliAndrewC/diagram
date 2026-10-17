@@ -99,3 +99,13 @@ another 4.8 s, and about 5 s of a fresh checkout's start-up), the push 9.4 s, th
 It asked whether to fold the two tooling-test items into the round. The GM (dictated; "sweet" is "suite"):
 
 > Yes, I think that would be good, thanks. Because really, it sounds like what you're saying is that the tooling tests are where the bulk of that time went. So that does seem like we should try to optimize that specifically. So yes, please fold those two into the same round as the sweet splitting. and then go ahead and work that. Thanks.
+
+## Amendment 5 (2026-10-17, same session)
+
+The GM asked why test_lint_scope and test_sources re-run on every `make done`. The session found: the gate runs the whole
+tooling tree whenever its tooling hash changes (any Makefile edit) with no per-test reuse, and that hash misses `scripts/`
+subdirectories; in a landing, reuse is judged per FILE, so one test reading the real record makes every test in its file
+re-run on any research edit. It proposed (1) the gate's tooling run reusing as a landing does, with the hash gap fixed, and (2)
+reuse per test, with (3) code-only tests moved to fixtures case by case. The GM:
+
+> Yes, please file it that way, and then do that work. Thanks.

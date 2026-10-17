@@ -370,3 +370,60 @@ the run's per-suite line, load about 6), where it is 18 s alone - the parts cap 
 parts and reports any count whose summary differs (`tests/hooks/parts_sweep.sh`, its test `tests/tooling/test_parts_sweep.py`,
 which plants a case-order dependency and sees it found). Run on the five split suites (observed 2026-10-17, method: `make
 parts-sweep`): every one the same at every count, 773 s in all - a command to run when a suite's cases change, never the gate.
+
+## R12 Amendment 5 - the gate's tooling tests, a pass per test, and the tests that read the record
+
+**Where the gate runs the tooling tests (FR-028)** (observed 2026-10-17; method: the Makefile's `test` recipe, `tests/conftest.py`,
+`l7r/diagram/ci/incremental.py` read; the baseline's `coverage.db` against its `tests.json`):
+- not through `make tooling`, as plan D31 first said: inside the gate's one coverage run, collected whenever the run is floored
+  (`L7R_TESTS_FULL`), and run only on a FULL plan - a moved tooling hash forces one, and a full plan's coverage becomes the next
+  baseline by itself (feature 207 D1);
+- all 1,796 of the baseline's tooling node ids carry engine coverage contexts, so a test simply left out would take its
+  coverage out of the floors that run and out of the next baseline; the gate therefore carries a reused test's coverage from
+  the baseline (`incremental carry`), and judges reuse against the reads that PRODUCED that coverage, kept beside the baseline,
+  not against the clone's store, which a later run may have re-recorded on different content.
+
+**A defect in reuse, found by measuring (D32b)** (observed 2026-10-17; method: a one-line edit to `l7r/diagram/ci/delta.py`, a
+reuse run of the whole tree, the edit reverted):
+- before: 36 tests ran and most of `test_delta.py`'s 55 were reused against the changed module - a module is opened once per
+  worker, and a test that only called code another had imported never recorded it (the per-file store of amendments 1-4
+  reused `test_delta.py` whole, the same hole wider; 30 module-level imports of `l7r` modules were missing from their test
+  file's reads);
+- after: each code object a key runs is that key's read (`sys.monitoring` PY_START, re-armed per key), and a wide fixture
+  defined in a test module is that file's read; the same edit re-runs 178 tests. Landed as tooling at once (every landing's
+  reuse rests on it).
+
+**A pass kept per test (FR-029, SC-022)** (observed 2026-10-17; method: `make test-file FILE=tests/tooling` to record, then
+`L7R_TEST_DEPS=reuse` runs of the whole tree, timed):
+- the store: 21.7 MB with each test's read set kept whole, 10.7-10.8 MB with each content kept once (D32a);
+- an unchanged tree: 1,825 of 1,827 reused, 6.5 s, against a 55.7 s record (two tests read files git ignores and always run);
+- one research source page edited: 15 tests ran in 13.6 s; per file it would have been 219 tests in 12 files (before the
+  moves below, 16 per test).
+
+**The gate after a Makefile-only change (SC-021)** (observed 2026-10-17; method: a comment line appended to the Makefile, the
+gate's test phase run as `make done` runs it, `make test-full FROM_DONE=1`, the Makefile restored; the run before it was the
+same phase with nothing reusable):
+- the plan went full ("the tooling changed"); 1,739 of 1,824 tooling tests were reused, 102 files not collected, and their
+  coverage carried - the 85 that ran are the tests whose kept reads hold the Makefile (87 in the baseline after) and one that
+  reads a file git ignores; every floor at 100%, the baseline saved;
+- the phase took 132 s, against 167 s for the same phase with no tooling test reusable.
+- a first probe reused nothing: a merge from main between the two gates changed files under `tests/tooling/`, and against the
+  baseline it saved 1,739 were reusable - the measurement above is the probe repeated with nothing else moved.
+
+**The tests of code that read the record (FR-030)** (observed 2026-10-17; method: each test's kept reads outside `l7r/`, `scripts/`,
+`tests/` and the configuration, before the move from the per-test store, after from a fresh record):
+
+| test | data files read before | after | how |
+|---|---|---|---|
+| (observed 2026-10-17; the kept reads) | | | |
+| test_check_bundle: 7 tests on the bundler | 475-4,656 | 155 | `tests/tooling/_record_subset.py`: the questions they name, the entries those cite, the record's own files |
+| test_bundle_owed: 3 tests on the owed list | 1,414 each | 80 | the same, three questions |
+| test_sources::test_the_import_command | 2,143 | 9 (none of the record) | a registry of its own |
+| test_translation_owed::test_the_command_scopes_to_one_question | 1,411 | 10 (none of the record) | a record of its own, in a fresh repository |
+
+Kept on the real tree, their subject being its data: every registry key has a state, the real match table parses, every
+pointer resolves, every link in a live document resolves, the open-questions list of the real tree, the candidate list over the
+real entry (rarity is measured against the whole record), the access tags' unreadable set, and the two whole-repository
+equivalence tests (the content cache, the push checks in one process), which compare two code paths over every tracked file on
+purpose. `test_lint_scope`'s root run re-runs only when a file is added or removed (it lists directories), and
+`test_sources` now re-runs one test, not 43, on a page edit.
