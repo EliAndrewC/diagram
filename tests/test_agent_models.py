@@ -63,6 +63,8 @@ TIERS: dict[str, tuple[str, str]] = {
     "glyph-check": ("opus", "high"),  # feature 294; Sonnet 5.5 tried 2026-10-17 and missed (383 research R10)
     "fix-check": ("sonnet", "high"),  # feature 294: the GM-complaint fix check; T34: Opus + 3/3 Sonnet found the unfired fix
     "perf-audit": ("opus", "high"),
+    "claims-triage": ("opus", "medium"),  # 383 amendment 6: impl-drift's question pre-sorted, a judgment; was ad hoc on opus
+    "modal-triage": ("opus", "medium"),  # 383 amendment 6: the pop-up checks' question pre-sorted, a judgment; was ad hoc on opus
     "source-filter": ("opus", "medium"),  # feature 312: judges a source with no question in hand; calibrated three runs a leg (R2)
 }
 

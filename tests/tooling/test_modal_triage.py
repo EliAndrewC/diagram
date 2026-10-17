@@ -14,6 +14,8 @@ import pytest
 
 from tests.tooling.test_modal_checks import FARMHOUSE, _commit, _load, _tree
 
+REPO = pathlib.Path(__file__).resolve().parents[2]
+
 mo = _load("_modal_owed")
 mb = _load("_modal_bundle")
 mt = _load("modal_triage")
@@ -94,7 +96,7 @@ def test_the_command_line(drawn: pathlib.Path, capsys: pytest.CaptureFixture[str
     assert "no pop-up is owed a triage" in capsys.readouterr().out
     _edit(drawn, "Wells stand by the door.", "Wells stand by the kitchen.")
     assert mt.main(["--root", str(drawn), "bundle", "--out", str(drawn.parent / "t")]) == 0
-    assert "1 unit(s); dispatch one ad-hoc agent" in capsys.readouterr().out
+    assert "1 unit(s); dispatch the `modal-triage` agent" in capsys.readouterr().out
     (drawn.parent / "r.txt").write_text("TOUCHES `hamlet/farmhouse` - the well\n")
     assert mt.main(["--root", str(drawn), "record", "--bundle", str(drawn.parent / "t"), "--reply", str(drawn.parent / "r.txt")]) == 0
     assert "1 of 1 unit(s) sent on to their checks" in capsys.readouterr().out
@@ -171,7 +173,9 @@ def test_the_bundle_records_the_pages_each_unit_reads(drawn: pathlib.Path) -> No
     manifest, _n = mt.bundle(drawn, drawn.parent / "t")
     data = json.loads((manifest.parent / "triage.json").read_text())
     assert data["pages"] == {DEP: ["research/questions/0029-farmhouses-minka.drawing.html"]}
-    assert "TOUCHES <uid> @ <page file name>" in manifest.read_text(encoding="utf-8")
+    # the reply form is the agent's contract, its system prompt (feature 383 amendment 6, plan D36); the MANIFEST names it
+    assert "For the `modal-triage` agent" in manifest.read_text(encoding="utf-8")
+    assert "TOUCHES <uid> @ <page file name>" in (REPO / ".claude" / "agents" / "modal-triage.md").read_text(encoding="utf-8")
 
 
 def test_a_page_the_bundle_never_showed_owes_everything(tmp_path: pathlib.Path) -> None:

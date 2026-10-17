@@ -856,7 +856,9 @@ def main(argv: Sequence[str] | None = None) -> int:
                 Path(args.out) if args.out else DEFAULT_OUT / "claims-triage",
             )
         )
-        print(f"claims-triage: {len(keys)} claim(s); dispatch one ad-hoc agent (model opus) on the MANIFEST, save its reply, then `make claims-triaged BUNDLE=<dir> REPLY=<file>`")
+        print(
+            f"claims-triage: {len(keys)} claim(s); dispatch the `claims-triage` agent on the MANIFEST (a session started before 2026-10-17's amendment 6 landed: restart to load it), save its reply, then `make claims-triaged BUNDLE=<dir> REPLY=<file>`"
+        )
         return 0
     if args.cmd == "triaged":
         data = json.loads((Path(args.bundle) / "triage.json").read_text(encoding="utf-8"))
