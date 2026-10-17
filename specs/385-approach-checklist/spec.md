@@ -33,7 +33,7 @@ The gap is WHEN the question is asked, and that it is asked of no one in particu
 mechanically, but the moment it is asked can be, and so can the requirement that it is answered in writing.
 
 Feature 374's report (`make feature-report F=374`) shows the cost is invisible today: "thinking" was 25 h 30 min (51%) and
-Bash 8 h 12 min, with no way to tell time spent choosing an approach, and changing it, from time spent carrying one out.
+Bash 8 h 12 min, with no way to tell time spent choosing an approach, and changing it, from time spent carrying one out (observed 2026-10-17, method: `specs/374-match-the-research-continued/report.md`, "Where the time went", written by `make feature-report F=374 WRITE=1`).
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -93,7 +93,7 @@ ranking's rows chosen to be of different kinds, so the checklist is tried on mor
   (FR-002) before the first task starts. Once this feature closes, the settled checklist moves to `docs/` and is loaded by
   every feature's task start.
 - **FR-002 (the cheap audit)**: the evidence for the checklist is gathered without re-reading transcripts: the GM's own typed
-  messages over the last 14 days (216 messages, about 26,000 words, against 2.5 GB of transcripts), the round arbiter's
+  messages over the last 14 days (216 messages, about 26,000 words, against 2.5 GB of transcripts - observed 2026-10-17, method: `du -ch` over the `.jsonl` transcripts under `~/.claude/projects/-diagram` modified in the last 14 days, and `jq` over the 23 top-level ones for user messages that are typed text, not meta, compaction summaries or tool notices, counted by `wc -l -w`), the round arbiter's
   rulings other than routine round-cap accepts, the `make feature-report` output of features 374, 375 and 383, 374's GM-review
   rows, and the written lessons. Read by one Sonnet extractor (reading is Sonnet's tier); the result, `audit.md`, lists each
   pitfall with its evidence, its cost and the question that would have caught it.

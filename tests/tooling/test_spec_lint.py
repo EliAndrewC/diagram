@@ -109,6 +109,11 @@ def test_check_1_leaves_a_count_with_no_unit_alone(tmp_path: pathlib.Path) -> No
     assert _lint14(d) == []
 
 
+def test_a_size_in_gigabytes_is_a_figure() -> None:
+    """Feature 385: "2.5 GB" passed unseen until a reviewer bounced it - the roster had MB, MiB and GiB but no GB."""
+    assert _f5mod._FIGURE.search("transcripts total 2.5 GB")
+
+
 def test_check_1_exempts_the_sections_that_narrate(tmp_path: pathlib.Path) -> None:
     """Review history exists to say what a round found, figures and all."""
     d = _feature(tmp_path, GOOD.replace("Round 1 said 6.7 m and the measurement withdrew it.", "Round 1 said 6.7 m, 22 ft and 91 min, all withdrawn."))
