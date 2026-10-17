@@ -920,3 +920,24 @@ def test_a_field_way_refused_is_counted_by_rule_and_a_later_one_clears_the_count
     assert settle.settle_field(s, Turned(None)) == 1 and "field_refusals" not in s.M["meta"], "a later round that reaches the field leaves no tally"
     plain = _field_across_the_brook()
     assert settle.settle_field(plain, lambda run, width, skip=None: False) == 0 and plain.M["meta"]["field_refusals"]["refused"] >= 1, "a bare judge: refused, unnamed"
+
+
+def test_a_bare_point_is_no_field_run_and_a_fold_is_named(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 385 T03: a one-point candidate is passed over, never judged; and a fold at a joint is named as one."""
+    from l7r.diagram.hamletgen.ways import reach
+
+    s = _field_across_the_brook()
+    judged: list = []
+
+    class Takes:
+        def fault(self, run, width):  # noqa: ANN001, ANN201
+            judged.append(run)
+
+        def __call__(self, run, width, skip=None):  # noqa: ANN001, ANN201
+            return True
+
+    monkeypatch.setattr(reach, "field_runs", lambda *a: iter([[(0.0, 0.0)], [(0.0, 50.0), (300.0, 50.0)]]))
+    assert settle.settle_field(s, Takes()) == 1 and judged == [[(0.0, 50.0), (300.0, 50.0)]], "the bare point never reached the judge"
+    monkeypatch.setattr(settle.law, "needle_ends", lambda tl, blocked: [])
+    monkeypatch.setattr(settle.law, "folded_joint_pairs", lambda tl, blocked: [(len(tl) - 1, 0, 0, 0)])
+    assert settle.Lawful(_S([CONN])).fault([(-240.0, 0.0), (-250.0, 290.0)], 3.0) == "folded_joints"
