@@ -572,7 +572,7 @@ fix is that type's agent file. The refusal names one fix: move the shared text i
 "block first passes" case becomes "block first is refused"; a wholly identical prompt passes. CLAUDE.md's rule, `docs/guards.md`
 and `docs/spec-kit-and-reviews.md` drop "put it first".
 
-**D42 - A fan-out launches one first (FR-039, SC-028).** Measured 2026-10-17 (a probe hook in a throwaway headless session): a
+**D42 - A fan-out launches one first (FR-039, SC-028).** (Superseded by D46, amendment 7: the extra main-session turn costs more than it saves, research R20.) Measured 2026-10-17 (a probe hook in a throwaway headless session): a
 message's parallel Agent calls reach PreToolUse one after another about half a second apart, and the transcript does not yet
 hold the message, so a hook cannot see its siblings - but it can see their timing. In `agent-prefix-hooks.sh`, per session and
 agent type: a dispatch is COLD when no dispatch of its type went out in the 5 minutes before it (the cache's lifetime); a
@@ -607,3 +607,45 @@ record, each prompt its own question and leads with the same standing rules (the
 ledger, the report). It becomes a defined `research-pass` agent (opus / medium: it judges what a source attests; WebSearch,
 WebFetch, Read, Grep, Bash; `omitClaudeMd: true`), its contract the research ladder's operative rules from `research/CLAUDE.md`
 and `docs/research-doctrine.md` that a pass needs, restated, pre-authorized with the other agents.
+
+## Amendment 7 (FR-042 to FR-046)
+
+**D46 - The stagger out, the wave guard in (FR-042, FR-045, SC-031).** `hm_agent_prefix`: the fan-out rule (`fanned_out`,
+LIFETIME_S, FANOUT_S) is removed; a WAVE rule takes its place - a launch is refused when three launches of its agent type
+(any model) passed in the WAVE_S = 10 seconds before it, the message naming the `check-wave` call for that type
+(`Workflow({name: "check-wave", args: {agentType: "<type>", units: [{label, prompt}, ...]}})`); `WAVE_OK: <reason>` in the prompt
+passes; a unit fed through by the Workflow guard (D48) carries `L7R_WAVE_UNIT=1` and is not counted. The repeated-block rule
+stays. CLAUDE.md, `docs/reviews.md`, `docs/guards.md` and `docs/spec-kit-and-reviews.md` drop "the first alone" and say:
+four or more of one type go through `check-wave`. The window is a design number to move.
+
+**D47 - `check-wave`, the saved workflow (FR-043).** `.claude/workflows/check-wave.js`: `meta` named `check-wave`, `whenToUse`
+"a wave of 4 or more checks of one defined type"; `pipeline(args.units, u => agent(u.prompt, {agentType: args.agentType,
+label: u.label, phase: 'Checks', schema: REPLY}))` with `REPLY = {label, verdict, text}` (`verdict` the check's verdict word,
+`text` its whole reply, which `make record-checked ... REPLY=` and `make apply-edits` read); it returns the objects and logs
+how many came back. `docs/reviews.md` and `research/editing-the-record.md` show the call; a test reads the file and holds its
+`agentType`, `schema` and argument names.
+
+**D48 - The Workflow guard (FR-045, SC-031, SC-033).** `scripts/hooks/workflow-hooks.sh` on PreToolUse `Workflow`, its decider
+`scripts/hooks/lib/hm_workflow.py`:
+- an inline script (or `scriptPath`) whose `agent(` calls lack `agentType` is refused unless it carries `GP_OK: <reason>`; one
+  that calls `agent(` with an `agentType` the per-dispatch guards cover (the record checks of `check-bundle-hooks.sh`, the
+  review checks of `pair-hooks.sh`, `round-arbiter`, `spec-fidelity`, `spec-fidelity-verify`, `escalation-check`, the triage
+  agents) is refused with the `check-wave` call - those go through it;
+- `check-wave` (`name`): its `agentType` must be one of the named jobs (FR-044; not `spec-fidelity`, whose round hook rewrites
+  its prompt); each unit is turned into the Agent PreToolUse payload a hand launch would send (`tool_use_id`
+  `wave:<run>:<n>`) and run through every PreToolUse `Agent` hook of `.claude/settings.json`, in order, with `L7R_WAVE_UNIT=1`;
+  the first refusal refuses the whole run with that hook's message and the unit's label;
+- the check tracking (`hm_checks`): a dispatch from a wave is marked `wave` with its prompt's hash; at `SubagentStop` an agent no
+  dispatch has an id for is matched to the wave dispatch whose prompt its transcript opens with, and recorded launched and
+  returned there - so the freeze holds from dispatch to return, and the pass log (already keyed on `SubagentStop`) logs it.
+Suite `tests/hooks/test-workflow-hooks.sh`; `hm_checks`' wave pairing tested on recorded payloads.
+
+**D49 - The authorization (FR-044, SC-032).** `scripts/container/append-system-prompt.md` gains the document's draft, its list
+the named jobs (the document's, plus `claims-triage` and `modal-triage`), pointing at `check-wave`; `tests/test_agent_models.py`
+reads it and fails when it is missing, names a type with no agent file, or names one outside the list.
+
+**D50 - The first real wave, measured (FR-046, SC-034).** The next wave of 4 or more real checks this work or the backlog owes
+runs through `check-wave`; its agents' first-request read and write (the run's `subagents/workflows/` transcripts) and the
+main session's wakes during it (the document's wake script, the window of the run) go in research, beside the last
+hand-launched wave of the same check.
+
