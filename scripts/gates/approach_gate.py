@@ -170,9 +170,12 @@ def ruled(root: pathlib.Path, trigger: str, now: str | None = None) -> str | Non
 
 
 def _on_main(root: pathlib.Path, commit: str) -> bool:
-    ref = "origin/main" if subprocess.run(["git", "-C", str(root), "rev-parse", "-q", "--verify", "origin/main"],
-                                           capture_output=True).returncode == 0 else "main"
-    return subprocess.run(["git", "-C", str(root), "merge-base", "--is-ancestor", commit, ref], capture_output=True).returncode == 0
+    """Rolled on main's engine (`cohort_known.same_engine`): a baseline rolled in a detached worktree at the clone's HEAD counts
+    (feature 385 T03: seed 49's HEAD roll sat on a clone commit, so D9 had no floor for it)."""
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "measure"))
+    import cohort_known  # noqa: PLC0415
+
+    return cohort_known.same_engine(root, commit)
 
 
 def newly_failing(record: dict, earlier: list[dict], on_main) -> list[int]:  # noqa: ANN001 - a predicate on a commit
