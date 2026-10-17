@@ -56,12 +56,18 @@ def verdict(payload: dict) -> str:
             targets.append((kind, Path(fp), m.group(2), int(m.group(1))))
     elif tool == "Bash":
         cmd = str(ti.get("command") or "")
+        names = assigned(cmd)
         for m in TARGET.finditer(cmd):
             raw, prefix, key, ext = m.group(1), int(m.group(2)), m.group(3), m.group(4)
+            raw = resolved(raw, names)
+            if raw is None:
+                continue  # GUARD_EDIT_OK: feature 383 a5 - written under a directory the command made with mktemp: not the record
             known = "$" not in raw
             kind = kind_of_path("/" + (raw if raw.startswith("/") else str(cwd / raw)))
             if not kind and known:
                 continue  # a known path outside the two directories (plan review, round 2)
+            if known and _top(cwd / raw) != _top(cwd):
+                continue  # GUARD_EDIT_OK: feature 383 a5 - a known path in ANOTHER repository (a fixture's `git init` in /tmp)
             kind = kind or ("glossary" if ext == "json" else "registry")
             targets.append((kind, (cwd / raw) if known and not raw.startswith("/") else (Path(raw) if known else None), key, prefix))
     for kind, path, key, prefix in targets:
@@ -76,6 +82,29 @@ def verdict(payload: dict) -> str:
         if not rp.reserved(kind, prefix, rp.mirror_of(_top(root)), plain):
             return f"{kind}\t{plain}"
     return ""
+
+
+# GUARD_EDIT_OK: feature 383 amendment 5 - a variable the command itself assigns is resolved before the path is judged: a
+# fixture record built in a temporary directory (`D=$(mktemp -d); ... > "$D/research/questions/0041-a.html"`) was refused
+# as a new question of this repository, twice in one session (2026-10-17)
+ASSIGN = re.compile(r"""(?:^|[\s;&|(])([A-Za-z_]\w*)=(?:"([^"$]*)"|'([^']*)'|(\$\(mktemp\b[^)]*\))|([^\s;&|"'$()]+))""")
+
+
+def assigned(cmd: str) -> dict[str, str | None]:
+    """Each variable the command assigns a literal (its value) or a `$(mktemp ...)` (None: a temporary directory)."""
+    out: dict[str, str | None] = {}
+    for m in ASSIGN.finditer(cmd):
+        out[m.group(1)] = None if m.group(4) else next(g for g in (m.group(2), m.group(3), m.group(5)) if g is not None)
+    return out
+
+
+def resolved(raw: str, names: dict[str, str | None]) -> str | None:
+    """`raw` with a leading `$NAME` / `${NAME}` the command assigned replaced by its value; None under a mktemp directory."""
+    m = re.match(r"\$\{?([A-Za-z_]\w*)\}?(/.*)$", raw)
+    if not m or m.group(1) not in names:
+        return raw
+    value = names[m.group(1)]
+    return None if value is None else value + m.group(2)
 
 
 def _top(p: Path) -> Path:
