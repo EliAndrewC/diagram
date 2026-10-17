@@ -260,3 +260,11 @@ def test_several_pop_ups_of_one_check_are_bundled_for_one_agent(drawn: pathlib.P
     subs = sorted(p for p in out.iterdir() if p.is_dir())
     assert len(subs) == 2 and all((s / "MANIFEST.md").is_file() for s in subs)
     assert ro.answer(drawn, "modal-depiction", "COVERAGE 0", str(subs[0])) == [DEP], "answered from its own bundle"
+
+
+def test_a_depiction_edit_states_an_absence_in_the_pages_own_words() -> None:
+    """Feature 385 T03, the round arbiter's tooling fix on ask:t03-popups-round3: a checker's own fix paraphrased a page's
+    absence into a stronger claim and cost a second round on four pop-ups."""
+    root = pathlib.Path(__file__).resolve().parents[2]
+    depiction = " ".join((root / ".claude/agents/modal-depiction.md").read_text(encoding="utf-8").split())
+    assert "quotes the cited page's own absence wording verbatim" in depiction and "never a paraphrase of it" in depiction
