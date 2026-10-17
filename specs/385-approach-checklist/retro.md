@@ -189,8 +189,8 @@ to an hour late; the hour-6 step-back caught it, 2026-10-17.)
 
 ## T03 - the retro row
 
-**The numbers (`make feature-report F=385`, the per-task table).** Started 20:44, the gate green at 22:38: about 2 h at the
-tick, against a 4 h budget, with eight decision points (three plan rounds, the re-decide, three arbiter rulings, the landing
+**The numbers (`make feature-report F=385`, the per-task table).** Started 20:44, ticked at 23:09 (the table: 2 h 25 min, 11 decision points, the
+last at the tick), against a 4 h budget. Up to the first green gate (22:38): eight decision points (three plan rounds, the re-decide, three arbiter rulings, the landing
 form), the last about 15 min before the gate. **The hour on D17's merge (about 21:08-22:02) is T03's own** (the plan review's
 condition): it was tried, measured and carried, not avoided. Red gates 1 (two branches the split left uncovered). Check
 dispatches: the blind Approach, 5 plan rounds, 3 rulings, 2 triages, quote-check, record-format, impl-drift, modal-depiction.
