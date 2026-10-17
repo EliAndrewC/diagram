@@ -50,199 +50,79 @@ Enforced by `scripts/hooks/house-style-hooks.sh`, which corrects the text rather
 
 ### Research
 
-Constitution XII. The full record with the GM's rulings is `docs/research-doctrine.md`; the
-operative form of the citation rules (the footnote shape, the notes and the works cited) is `research/CLAUDE.md`, which
-auto-loads when a session edits the record; the archive and the download list are `research/downloads.md`.
+Constitution XII. One line each here; the full text of every rule, with its feature and the GM's words, is
+`docs/research-doctrine.md` ("The research rules of the root CLAUDE.md, in full"); the citation rules' operative form is
+`research/CLAUDE.md`, which auto-loads under `research/`.
 
-- A question about how a place was built, farmed, planted or lived in is a RESEARCH question. Run
-  the search pass before deciding, before asking the GM, and before writing "guess". The GM is asked
-  only when the record is silent or contradictory, and the ask says what was searched and found.
-- The search pass looks in the ARCHIVE before the web (feature 309): `make archive-inbox` first (the GM's downloads in
-  `academic-sources/` archived, then removed - what is left there is unprocessed), then `make archive-find` for each
-  source. Every cited page is archived in the PRIVATE repository `EliAndrewC/diagram-research`; never
-  link or copy it anywhere public.
-- Geography resolves China first, Japan as tiebreaker, and the GM's canon overrides both (`docs/research-doctrine.md`).
-- Where the research supports more than one form, it becomes a knob with per-settlement variance
-  rolled from the map's seed, never a choice. A degree along a continuum is calibrated liberty; a
-  choice between distinct forms is a knob.
-- **Room before packing** (GM 2026-10-12): when features will not fit, the FIRST route is more room - a larger homestead,
-  wider spacing - while the map stays within the research, never hours of packing (*"the far easier thing is to make the
-  homesteads slightly bigger. Things were pretty spread out in premodern times!"*). A number set only to implement against
-  (an UNRESEARCHED or convenience size, reach or band) is a knob to move, never a target to defend; the round arbiter asks this
-  of every ruling.
-- A `research record` feature closes only with its findings checked against the code (feature 378, GM 2026-10-10): each
-  question whose findings it changed is cited (its findings page, not only its drawing page) by a `Research:` claim of
-  the code that decides it, checked by
-  `impl-drift`, or, where no code decides it, recorded as implemented nowhere with what was searched (`implementation-check.md`). A DRIFTED claim is a result shown by `make
-  claims-report`; the code is fixed only if the feature's spec asks. `make impl-check F=<n>` says what is owed, and the
-  closing check refuses until it reports nothing.
-- Every rendering decision is recorded in one of four classes - historically accurate, deliberate
-  deviation, map drawing convention, guess - in `research/` (the finding), the operative doc (the
-  rule), the point of change (the pointer) and the feature's spec under "Decisions Recorded". An
-  unlabeled guess is the one failure.
-- Record the why of every research-driven rule and magic number beside the rule. Record a decision to
-  ACCEPT a limitation with what it costs, the alternatives that were priced, and who chose.
-- A citation is a footnote at the assertion quoting the passage verbatim from a public page the
-  reader can open, in English translation marked as one. A source that cannot be read is not cited;
-  the claim may stand with an absence note saying what was searched. The GM's own campaign notes are
-  canon, not evidence, and need no citation. A source only the GM can fetch is appended to the canonical
-  download list `research/to-download.md` with `make download-add FILE=<draft>` (feature 313); the GM's
-  `academic-sources/TO-DOWNLOAD.md` is their marked copy, written only by `make downloads-sync`.
-- The record is HTML under `research/`, each heading the question a reader would ask from the map,
-  each entry written for a casual reader: glossary tooltips for terms, session notes in HTML
-  comments, nothing about what the entry used to say. A modal's explanation is written from a research
-  section its `Entry:` names. It is written PER ENTRY and BUILT into the site a reader opens
-  (features 258, 301, 303): a question is one stem in one flat directory, `research/questions/NNNN-<heading id>.html`
-  with how our maps draw it beside it as `.drawing.html`, each page's footnotes in the `.notes.html` beside it; a
-  source is `research/sources/NNNN-<key>.html`, tagged (period of its evidence, region, kind) from `research/source-tags.json`
-  and grouped by `research/source-sections.json` (feature 305). Each question carries TAGS (subjects - the first primary - settings,
-  one level) from `research/tags.json`, and `research/contents.json` declares the sections, their order and the tag
-  rule each takes: a question lives in the first section that takes it, ordered by level then number, so regrouping
-  is an edit to `contents.json` alone. `make record` builds `research/site/` - a page per question with its notes
-  numbered from 1 at its foot, a page per section of each half and per tag, and the whole record on one page
-  (`all.html`) - never committed, built on main by render-sync. A POINTER to the research - a code comment, a doc, a
-  spec, an `Entry:` - names the FILE (`research/questions/NNNN-<heading id>.html`, or
-  `research/contents.json#<section>` for a whole section), never a built page; `scripts/gates/check-research-pointers.py`
-  holds it at the gate and the push, and `make fragment-move FROM= TO=` renames a question with every pointer to it.
-  Find a question with a glob on its heading id or a grep over `research/questions/` - there is no index - and never
-  edit a built page; footnote numbers are allocated at build and are typed nowhere.
-- Reading and checking are dispatched to agents, in the background: `source-reader` (read what you
-  cite), `quote-check`, `record-format`, `source-applicability` (judged BEFORE a source's numbers
-  reach a map or a rule), `entry-drift`. What is mechanical runs FIRST, as a script, and its output goes
-  in the agent's prompt: `make source-pages OUT=<dir> URL=<u>` before `source-reader` (the page itself, saved
-  to grep, where a fetch gives an extract), `make quote-verbatim Q=<NNNN> [NOTES=<ids>]` before `quote-check` (is the
-  passage on the page, character for character), `make record-prepass Q=<NNNN>` (or `IN=<section>`) before
-  `record-format`, `make size-table PLAN=<svg>` before `size-audit`. `make source-pages` also prints each page's
-  earlier reads from the sources-consulted ledger and saves it once in the host's page cache; record every page's
-  outcome with `make source-outcome` (feature 288).
-- A record check reads a BUNDLE: `make check-bundle Q=<NNNN>` (or `KEY=<k>`) copies what it
-  needs, prepass output included, OUT of the repository, and the dispatch names its `MANIFEST.md` - an
-  agent reading a file here is handed every `CLAUDE.md` above it, ~28,000 tokens (feature 250). The agent's
-  reply is compact: counts first, then only what to act on. A research page is worked in two fresh sessions, write then
-  check-and-apply, from briefs (`make page-session BRIEF="<1> <2>"`); `make notes` prints only the notes you name.
-  A write session takes at most four questions and ten new registry keys (feature 274: its cost grows with the square
-  of its length); the runner refuses a larger brief unless it declares `<!-- page-load: kind=check|assertions|split|handover -->`,
-  and `make reserve`'s eleventh key sends the rest to a continuation brief. Coordination files are read by line
-  (`make lines`) and written without reading (`make append`); a page session loads `scripts/container/page-session-rules.md`
-  in place of this file.
+- A question about how a place was built, farmed, planted or lived in is a RESEARCH question: run the search pass (the
+  `research-pass` agent runs one) before deciding, before asking the GM, and before writing "guess".
+- The ARCHIVE before the web: `make archive-inbox`, then `make archive-find`. Every cited page is archived in the PRIVATE
+  `EliAndrewC/diagram-research`; never link or copy it anywhere public.
+- Geography resolves China first, Japan as tiebreaker; the GM's canon overrides both.
+- Several attested forms are a KNOB rolled from the map's seed, never a choice.
+- **Room before packing** (GM 2026-10-12): when features will not fit, more room first; an unresearched number is a knob to
+  move, never a target to defend.
+- Every rendering decision is labeled - historically accurate, deliberate deviation, map drawing convention, guess - in
+  `research/`, the operative doc, the point of change and the spec. An unlabeled guess is the one failure.
+- Record the why of every research-driven rule and magic number beside the rule. Record a decision to ACCEPT a limitation
+  with what it costs, the alternatives that were priced, and who chose.
+- A citation quotes the passage verbatim from a public page, English translation marked as one; an unreadable source is not
+  cited. A source only the GM can fetch goes on `research/to-download.md` with `make download-add`.
+- The record is HTML fragments under `research/questions/` and `research/sources/`, BUILT by `make record`; a pointer names
+  the fragment FILE, never a built page.
+- Reading and checking go to agents, in the background, on a BUNDLE (`make check-bundle`), the mechanical script first.
+- A research page is worked in two fresh sessions, write then check-and-apply (`make page-session`), at most four questions
+  and ten new registry keys a write (`make reserve`'s eleventh key sends the rest to a continuation brief); coordination files
+  are read with `make lines` and written with `make append`; a page session loads `scripts/container/page-session-rules.md`.
+- A `research record` feature closes only with its findings checked against the code (`make impl-check F=<n>`).
 
 ## Development workflow
 
-Spec-driven development under `.specify/memory/constitution.md`; this file operationalizes it. The
-full doctrine with the GM's rulings and the incidents behind them: `docs/spec-kit-and-reviews.md`.
+Spec-driven under `.specify/memory/constitution.md`. One line each here; the full text, with the GM's rulings, is
+`docs/spec-kit-and-reviews.md` ("The development workflow of the root CLAUDE.md, in full").
 
-- Feature work (a new generator, tier, tool or guard) is a spec-kit feature: `/speckit-specify` ->
-  plan -> tasks -> implement. A tweak (a wording fix, one bug, one regenerated map) is done directly.
-  Ask before chain-firing on an ambiguous case.
-- A spec number comes from `make claim SLUG=<slug>` (one lock over every clone; `PEEK=1` looks
-  without claiming). It prints the `SPECIFY_FEATURE` and `SPECIFY_FEATURE_DIRECTORY` exports; export
-  BOTH. Commit and push the spec directory as soon as `spec.md` exists. No feature branches: commit on
-  `main` inside the clone.
-- Open work lives in `specs/` only (feature 330: the old backlog directory became features). **A feature is filed only
-  with the GM's approval** (feature 377, GM 2026-10-10: *"spec kit features should not be filed without my explicit
-  approval"*): propose it in the turn's FINAL message, never only mid-stream, and prefer extending and reopening the
-  feature the work came from over a new one. A session may reopen a feature to do work itself and close it again
-  without asking; a reopen that LANDS open needs the approval too (amendment 1: the count of features with open work
-  never grows without the GM). Once the GM says yes, the `spec.md` carries
-  `**Approved**: the GM, YYYY-MM-DD, "<their words, verbatim>"`; from 377 on, a commit staging a new feature without
-  it, or with words the GM did not write in the session, is refused (`feature-approval-hooks.sh`). Ask `make
-  speckit-todo` what is open: filed, planned, in progress. Each spec names what it touches in an `**Affects**:` line (tags from
-  `.specify/affects.json`: the diagram kinds, tooling, research, ...), and its stage - `now`, `village`, `town`, `provincial city`,
-  `capital` - is derived as the earliest among its tags (`BY=affects` groups by tag, `AFFECTS=<tag>` lists only that tag's; `CHECK=1`, run at the push, holds it). Everything owed when a tier is scripted is ONE feature, that tier's placeholder
-  (`placeholders` in `.specify/affects.json`: 380 village, 381 town, 382 provincial city; GM 2026-10-10): a new item owed at
-  a tier is added to its placeholder, never filed on its own (`CHECK=1` refuses one). A feature closes when every task is ticked, or when its status line opens
+- Feature work is a spec-kit feature (`/speckit-specify` -> plan -> tasks -> implement); a tweak is done directly. Ask before
+  chain-firing on an ambiguous case.
+- A number comes from `make claim SLUG=<slug>`; export both lines it prints; commit and push the spec directory as soon as
+  `spec.md` exists; no branches - commit on `main` in the clone.
+- **A feature is filed only with the GM's approval** (GM 2026-10-10), proposed in the turn's FINAL message; its `spec.md`
+  carries `**Approved**: the GM, YYYY-MM-DD, "<their words, verbatim>"`. `make speckit-todo` lists what is open. Each spec carries an `**Affects**:` line; its stage is derived from it
+  (`make speckit-todo BY=affects`, `CHECK=1` at the push). An item owed at a tier goes into that tier's placeholder (380 village,
+  381 town, 382 provincial city), never filed alone. A feature closes when every task is ticked, or when its status line opens
   `Done`, `Superseded by NNN` or `Withdrawn` with the evidence beside it.
-- Every task is `research: rendering` or `research: physical`; a physical task carries the boxes
-  `research pass`, `source-reader confirmed`, `recorded and cited`, `quote-check confirmed` and
-  `source-applicability confirmed`, ticked before the task is (`tests/test_task_research_boxes.py`).
-- Every feature ends with `make feature-report F=NNN WRITE=1` - where its time and dispatches went, from the hooks' event
-  log; its last `make tick`, a closing status line and `make gm-reviewed` refuse without it, and without any measurement
-  another spec carried to it (`Carried: SC-nnn -> NNN <key>`). A feature lands with the GM's review open when it has a row
-  for him (an arbiter ruling, `make accept`); `make gm-review` lists them. (Feature 375.) A row the GM discussed in the session and
-  agreed needs no more action IS his review: run `make gm-reviewed F=NNN WORDS="<his words, verbatim>"` in that turn (GM 2026-10-10).
-- Decide first, then check (feature 375): a task's decisions carry a verdict before its checks run - the plan-stage review,
-  or `make decide F= T=` on a plan section naming the task (`make task-start` names the task). A tripwire is not the session's
-  to judge: its refusal names `make arbiter-bundle`, and an advisor asked about a loop is handed that MANIFEST too.
-- Run the chain end to end, unattended. The GM starts work and leaves: answer each stage's own
-  questions, record each decision in the artifact where it arose, and stop only when a wrong guess
-  would cost an hour-plus to unwind or the thing genuinely cannot be done. Persistence means
-  PROGRESS, not changes: when stuck, the next step is a measurement. A PROCESS stop - a cap, a waiver,
-  a stuck choice of route - goes to the round arbiter first (`make arbiter-ask`), never straight to
-  the GM (feature 379, GM 2026-10-10: *"things should go to the arbiter at the point where they were
-  previously coming to me"*); what to build stays the GM's question.
-- Do the literal thing (constitution XVI). Asked for X, build X, never "X except where Y". An
-  exception that still looks necessary is put to an independent `spec-fidelity` subagent with the
-  GM's request verbatim; if it agrees, carry on and raise it with the GM once the implementation
-  works.
-- A spec is reviewed against the GM's own words by `spec-fidelity` before implementation
-  (`scripts/gates/review-gate.sh` refuses the push otherwise): up to five rounds on the initial acceptance,
-  then the round arbiter rules (a sixth round waits for it; feature 379); an amendment after acceptance resets the counter. A plan's decisions are
-  reviewed by the same agent before a task is ticked (`make tick`, `scripts/gates/plan-gate.sh`) - block by block since 375
-  amendment 11: a changed block owes `make plan-delta F=<n>` (a review of that block alone, on a lean bundle), never the whole
-  plan again, and `make plan-archive F=<n>` moves finished sections to `plan-done.md`, which no review reads. A later
-  round is handed the previous verdict and the diff by `scripts/hooks/review-round-hooks.sh`.
-- No known regressions (constitution XIII). A regression is measured, never remembered: the baseline
-  is taken in a detached worktree (`git worktree add --detach /tmp/base HEAD`, never a stash) and
-  each failure is checked against the clone, because a worktree carries no gitignored artifacts.
-  A pre-existing failure does not block a push, but one you find is fixed in the work at hand
-  (XIV; GM 2026-10-01: "We should definitely fix the pre-existing failure"). Three exits: fix it,
-  revert it with a written impossibility investigation, or the round arbiter's waiver (`make arbiter-ask`; the GM
-  reviews it after landing); fixing is the expected one. A regressed state stays in the clone, unpushed.
-- Fix defects where you find them (constitution XIV), in the same work with the same verification.
-  The only deferrable fix is a complete overhaul, and deferring one delivers the measurement, the
-  mechanism and a sketch. Record a fix that FAILED at the point of change.
-- Review checks (`glyph-check`, `settlement-review`, `fix-check`, `building-review`, `size-audit`) run ON
-  THEIR OCCASION (feature 294): an element new to a map, a glyph redrawn or re-placed, a map or sheet new to the
-  pool, or an occasion the feature declares in its `tasks.md` `## Occasions` - never because a manifest moved
-  (`review_owed.py`; `docs/reviews.md` has the table). One unit per agent, on a green gate,
-  two rounds at most; every pass is a row of the ledger's measured table with its cost (`make review-cost`). To improve one, add
-  the general rule, prove it fires on the unfixed artifact, then fix the artifact. Findings for the
-  GM go through `escalation-check` first. Every check runs on the TIER its file pins - a model and an
-  effort, never inherited (`tests/test_agent_models.py` holds the table; judgment is on Opus, and a
-  downgrade stands only after seeded-fault runs on known findings - THREE a leg, because one run of a
-  judging agent is not a stable oracle; which checks were tried on which model, and how they did: `docs/spec-kit-and-reviews.md`
-  "Models tried"). An ad-hoc agent is dispatched with
-  an explicit `model` - `sonnet` to read, fetch, translate or extract, `opus` for anything that judges -
-  and never with none: with none it runs on the session's model, and `agent-model-hooks.sh` refuses it
-  (`haiku` only for a plain description of a page - it misread a table's columns where sonnet did not). A DEFINED agent launches without this file, the nested `CLAUDE.md` files and the memory index
-  (`omitClaudeMd: true`, feature 256, GM 2026-09-19: *"If there's something that a subagent should know, it should be in
-  the subagent specification"*) - a rule a check needs is written in its contract, and a new agent file carries the field;
-  an ad-hoc agent keeps all three (the tier test enforces the field on every agent file; `spec-fidelity`'s exception ended
-  2026-10-17 when three runs a leg found every recorded item without the files - feature 383 research R14). **What every dispatch of a check shares lives in its
-  agent file** (feature 383 amendment 6, the GM 2026-10-17: *"any context that subagents share in common is put either into
-  their system prompt, ideally, or ... at the very beginning of the prompt"*): a prompt is cached as a PREFIX, so a bundle or
-  a prompt carries only its unit, after anything shared; `agent-prefix-hooks.sh` refuses a large block shared after a part
-  that differs, `tests/tooling/test_bundle_shared_text.py` holds the bundles to it, `make agent-sync` writes a shared source
-  into its agents' files, and `make subagent-cache` measures what each type writes fresh. The review agents are pre-authorized through
-  `scripts/container/append-system-prompt.md`; if one is skipped, check `type claude` first.
+- Every task is `research: rendering` or `research: physical` (the physical one carries its five boxes).
+- A feature ends with `make feature-report F=NNN WRITE=1`; a row the GM agreed in the session is
+  `make gm-reviewed F=NNN WORDS="<his words>"`.
+- Decide first, then check: a task's decisions carry a verdict before its checks run (`make decide`). The TRIPWIRES -
+  a check's third round on one subject, a block an earlier version had and a later dropped coming back,
+  a second red gate in a row, check dispatches past 1.0 a changed line - each owe the `round-arbiter`'s ruling
+  (`make arbiter-bundle`) before the next check or gate. `make gm-review` lists what waits for the GM.
+- Run the chain end to end, unattended: stop only when a wrong guess would cost an hour-plus to unwind or the thing genuinely cannot be done; when stuck, the next
+  step is a measurement. A PROCESS stop goes to the round arbiter (`make arbiter-ask`), what to build to the GM.
+- Do the literal thing (constitution XVI); an exception goes to `spec-fidelity` with the GM's words.
+- A spec and a plan's changed blocks are reviewed by `spec-fidelity` (`make plan-delta F=<n>`) before implementation and ticks.
+- No known regressions (XIII), measured in a detached worktree; fix defects where you find them (XIV).
+- Review checks run ON THEIR OCCASION (`docs/reviews.md`), one unit per agent; every pass is a ledger row with its cost
+  (`make review-cost`); findings for the GM go through `escalation-check` first; to improve a check, add the general rule,
+  prove it fires on the unfixed artifact, then fix the artifact. Each runs on the tier its file pins; an ad-hoc
+  agent names its `model`. A defined agent launches without the CLAUDE.md files (`omitClaudeMd: true`); **what every
+  dispatch of a check shares lives in its agent file** - only that is reused across launches (feature 383 research R16) -
+  and a fan-out sends its first alone (`agent-prefix-hooks.sh`). The review agents are pre-authorized through
+  `scripts/container/append-system-prompt.md`.
 
 ## Verification and iteration
 
-The machinery in one picture, with the GM's rulings and the measurements: `docs/efficiency-tooling.md`.
+One line each here; the full text is `docs/efficiency-tooling.md` ("Verification and iteration, from the root CLAUDE.md, in
+full").
 
-- Everything runs through `make`; the hooks refuse or rewrite anything else. The ladder in the skill:
-  `make quick` while iterating (testmon selects by change; `ALL=1` runs every quick test), `make done`
-  once at the end (the whole gate: lint, the static checks, the pool roll, 100% coverage over the
-  whole engine), `make done FULL=1` (prompts; adds the perf bookends). What each costs is asked of
-  the record (`make audit`, `scripts/measure/gatecost.py <target>`), never written here.
-- `make done` reports every failure together: fix them all, re-run once. Background the final gate
-  and act on its notification; never poll.
-- Python: ruff, ruff format, pyrefly, and 100% coverage owed by everything the day it lands, held as a
-  floor on the gate (never `fail_under` in `pyproject.toml`). An inner function that is hard to test
-  is lifted to module level and tested with plain inputs; dropping the test is not an option. A
-  Python file past 1,000 raw lines fails the gate.
-- An overlap check against the features already on the map builds an index once
-  (`settlement/_geom/indexes.py`) and asks it per candidate; a plan that adds one says how it is
-  indexed.
-- Edit with `Edit`, not heredoc'd Python; a mechanical sweep uses `scripts/patch.py`.
-- A potentially large file is edited through tooling, never opened and edited by hand (feature 376, GM 2026-10-10: *"any
-  time we have a process that requires editing a potentially large file, then we should use tooling to edit the file"*),
-  as `make tick` edits `tasks.md`: the research claims sheet through `make research-claim` / `research-claims`. A new
-  process that needs one gets its make target with it.
-  Foreground-regenerate only the motivating map. Read derived data from the recorded manifest, not by
-  re-running the generator.
-- Batch: send the lookups you already know you need in one message; the batching hook blocks a run
-  of single-call recon turns.
+- Everything runs through `make`: `make quick` while iterating, `make done` once at the end, backgrounded, never polled.
+- `make done` reports every failure together: fix them all, re-run once.
+- Python: ruff, ruff format, pyrefly, 100% coverage held as a floor; a Python file past 1,000 raw lines fails the gate.
+- Edit with `Edit`; a large file through its make target; batch the lookups you already know you need.
+- An overlap check builds an index once (`settlement/_geom/indexes.py`) and asks it per candidate; a plan that adds one says
+  how it is indexed.
+- Foreground-regenerate only the motivating map; read derived data from the recorded manifest, never by re-running the
+  generator.
 
 ## Session clones
 
@@ -269,52 +149,9 @@ The full spec and every failure mode: `docs/session-clones.md`.
 
 ## What is enforced
 
-Every guard has a test companion that `make hooks-test` runs, and its message names the compliant
-command. The full record - rule, mechanism, the measurement and the ruling behind each - and the
-doctrine for writing a guard: `docs/guards.md`.
-
-| guard | what it does | escape |
-|---|---|---|
-| `repo-safety-hooks.sh` | no force push, no history rewrite; no git writes to `/host-l7r-repo` | none; `HOST_GIT_OK` |
-| `source-block-hooks.sh`, `readme-hooks.sh` | the GM's SOURCE blocks and READMEs are theirs to write | - |
-| `download-copy-hooks.sh` | a write to the GM's copy of the download list (`academic-sources/TO-DOWNLOAD.md`) is refused with `make download-add` / `make downloads-sync` (feature 313) | `DOWNLOAD_COPY_OK` |
-| `house-style-hooks.sh` + `check-house-style-delta.py` | corrects dashes and spellings in Edit, Write and Bash payloads; `make quick` fails on one in the delta | - |
-| `make-only-hooks.sh` | refuses a bare interpreter or pytest; rewrites a targeted pytest to `make test-file` | - |
-| `guard-file-hooks.sh` | a guard-file edit carries `GUARD_EDIT_OK` and a reason; a Makefile recipe comment must not run | - |
-| `clone-sync-hooks.sh` | forbidden names, name-routing, a live claim, a stale clean HEAD (synced in), a stray mirror commit | - |
-| `main-tree-hooks.sh` | a write that would land in the mirror is moved to the clone; one naming it is refused | `MAIN_TREE_OK` |
-| `discard-hooks.sh` | a checkout or restore that would discard uncommitted work | `DISCARD_OK` |
-| `conflict-marker-hooks.sh` | a `git add` or commit that would stage conflict markers | `CONFLICT_MARKERS_OK` |
-| `archive-first-hooks.sh` | an actor's FIRST `WebFetch` of a page the source archive holds, naming the archived text; the same actor's second fetch passes (feature 376) | the second fetch |
-| `claims-file-hooks.sh` | a Read, Edit, Write or shell command acting on the research claims sheet; `make research-claim` / `research-claims` is the way in (feature 376) | none - the tool does everything |
-| `feature-approval-hooks.sh` + spec-lint check 6 | a `git add` or commit staging a NEW feature (377 on) whose `spec.md` lacks the GM's `**Approved**:` line, or quotes words the GM did not write in this session (feature 377); a `sync-with-main.sh done/push` landing a closed feature OPEN without one added (any number); the push re-checks the line's form | none - the GM's approval |
-| `ledger-hooks.sh` | a commit staging the review ledger with a measured row short of its check, class or cost; every check's pass logged with its cost cells, the commit told which have no row, the push refusing until each has one (feature 371, `make ledger-owed`) | `LEDGER_LINT_OK`, `LEDGER_ROWS_OK` |
-| `shell-check-hooks.sh` | a command that does not parse, an executing backtick, a `-m` with a quote or newline, a foreign co-author | `SHELL_CHECK_OK` |
-| `no-branch-hooks.sh` | no local branches. The remote-only `backup/<clone-name>` branches on GitHub are not local branches: `sync-with-main.sh` pushes the clone's HEAD there (fast-forward, never forced) at every `done`/`push`, landed or refused, and deletes each once `main` contains it - its own at landing, any other by the sweep at the same step (feature 321) | `NO_BRANCH_OK` |
-| `no-poll-hooks.sh` | no busy-wait; corrects a self-matching `pgrep`, and scopes a wait on a make run to this tree (`own-make.sh`); refuses a pattern that matches its own command (launch-and-wait); a file-watching loop is backgrounded and given a proof of life; every wait loop gets a 90-minute ceiling (WAIT TIMED OUT, exit 4); a backgrounded periodic report is refused with its exact `CronCreate` call | `POLL_OK`, `CRON_OK` |
-| `batching-hooks.sh` | blocks a run of single-call recon turns, warning on every loaded turn before it | - |
-| `measure-hooks.sh` | a second expensive run with nothing changed between; a full gate within 3 h of a GREEN one, once, edits and commits notwithstanding (batch the gate; quick tests between); a `make perf` outside a pair's legs is reminded of `make cohort HOUSEHOLDS=` (untimed) | `MEASURE_OK` |
-| `gate-hooks.sh` | no `-k` subset as the only run before the gate | `GATE_OK` |
-| `pair-hooks.sh` + `review_owed.py` | the review checks a delta owes (its occasions) dispatched on a green gate, one unit per agent, two rounds per unit - past them the round arbiter rules (feature 375); none before the active task's decisions carry a verdict (decide first); a `glyph-check` only when DUE - on the feature's hour, every owed glyph unit together, or at landing (375 amendment 9, the GM 2026-10-12); never asked at a gate's start or a turn's end - the feature's HOURLY CHECKPOINT holds `make tick` until `make step-back`'s round-arbiter ruling is recorded and every owed unit dispatched, no escape (feature 383) | `PAIR_OK`, `DECIDE_OK`, `ARBITER_OK`, `GLYPH_DUE_OK` |
-| `escalation-hooks.sh` | a review dispatch arms, an `escalation-check` dispatch disarms, before the turn ends - or the review's own ledger rows show every finding disposed (feature 375) | `ESCALATION_OK` |
-| `wakeup-hooks.sh` | a `ScheduleWakeup` outside a live `/loop` is refused (background work wakes a session by itself; a reminder the GM asks for is `CronCreate`); a turn cannot end with a stale wakeup pending, and the block names the `CronDelete` | none - cancel the wakeup |
-| `review-round-hooks.sh` | a later `spec-fidelity` round is handed the diff and routed to `spec-fidelity-verify`; refused first when the feature still carries the OLD value of something the change moved (`make stale-terms`) | `REVIEW_ROUND_OK`, `STALE_TERMS_OK` |
-| `agent-model-hooks.sh` | an ad-hoc agent dispatch (no file under `.claude/agents/`) that names no `model` is refused, with the rule for choosing one | none - name the model |
-| `agent-prefix-hooks.sh` | an Agent prompt sharing 2,000+ characters with an earlier dispatch of its type and model, after a part that differs, is refused: that block is written to the prompt cache fresh every time - put it first, or in the agent file (feature 383 amendment 6) | `AGENT_PREFIX_OK` |
-| `check-bundle-hooks.sh` | a record check (`quote-check`, `record-format`, `source-applicability`, `source-reader`, `entry-drift`, `intro-check`, ...) dispatched into the repository instead of at a bundle is refused, with the `make check-bundle` command; and one its bundle's MANIFEST does not owe (feature 311: a check runs only where the words it reads changed, `make record-owed`) ; feature 375: none before the active task's decisions carry a verdict (`make decide`), none re-sent into a round still running, a record check's third round on a subject to the round arbiter | `CHECK_BUNDLE_OK`, `CHECK_NOT_OWED_OK`, `DECIDE_OK`, `FREEZE_OK`, `ARBITER_OK` |
-| `canon-read-hooks.sh` | a direct read of the GM's setting canon (grep, sed, cat, Read, Grep on `setting/`) is refused with `make canon TERMS="a\|b\|c"`, which answers every term at once; a second `make canon` within three tool calls is refused unless it folds the earlier terms | `CANON_OK` |
-| `new-file-hooks.sh` | a new glossary file or registry entry written without a reserved prefix is refused with `make reserve KIND=glossary\|registry KEY=<k>`, which allocates under a host-wide lock so parallel queues never collide | `RESERVE_OK` |
-| `claims-gate.sh` (push) + `test_claims_coverage.py` (gate) | every unit of the hamlet's code and the Mode A procedures carries a `Research:` claim; a claim owed an `impl-drift` check, or a finding the delta introduced, is refused at the push; a pre-existing finding warns (feature 316: `make claims-owed`, `claims-bundle`, `claims-checked`, `claims-report`; a page edit re-owes only the claims resting on the blocks it changed, the rest go through one `make claims-triage` - feature 318) | `CLAIMS_OK` |
-| `record-edit-hooks.sh` | an Edit aimed at a built record page (the site's, or an old assembled page) is re-aimed at the one fragment holding its text; refused where none or several hold it, and a Write always ; feature 375: a page or pop-up is FROZEN while a check on it runs, and once its round returns takes only the round's own EDIT blocks (`make apply-edits`), until the checks are answered; a silent check closes with `make check-closed` | `FREEZE_OK` |
-| `~/.claude/hooks/missing-program-hook.sh` (USER-LEVEL, every project) | in a container, a Bash command that finds a program missing - `command not found`, an empty `which` / `command -v` / `type` / `hash` / `whereis`, a `dpkg` / `apt` / `pip` miss, a missing module - adds a note that the container has passwordless sudo to install it; silent on the host. Self-test beside it, run by `make hooks-test` | - |
-| `finished-run-hooks.sh` | a finished run is reported; a live `make` is not abandoned; a waiter on a dead producer is reported - each only for the session's own working tree | - |
-| `agent-stall-hooks.sh` | a stalled background agent is reported | - |
-| `stall-watchdog-hooks.sh` | one loop outside every session: a session silent an hour with unfinished work, not waiting on the GM, gets its tab marked and the bell, and a nudge typed when its own input line is empty (once per stall); a paneless one is marked on its host's tab, never nudged | - |
-| `idle-tests-hooks.sh` | an idle session runs `make idle-tests` | - |
-| `event-log-hooks.sh` | every hook event is a line of the feature's event log (`<git dir>/l7r-events/`); `make feature-report F=NNN` turns it into where the time and dispatches went (feature 375) | none - it never refuses |
-| `checks-hooks.sh` + `hm_checks.py`, `hm_arbiter.py` | each check's launch and return (the freeze's state); the TRIPWIRES - a check's third round on one subject, a block an earlier version had and a later dropped coming back, a second red gate in a row, check dispatches past 1.0 a changed line - each owing the `round-arbiter`'s one binding ruling (`make arbiter-bundle`, then the agent records it) before the next check or gate; the feature goes on elsewhere (feature 375); a ruling's `tooling_fix` holds every `make tick` and the closing check until `make arbiter-fix-done` or `arbiter-fix-declined` (feature 379) | `ARBITER_OK` |
-| at push, in `sync-with-main.sh` | the Python checks in ONE process, each self-test once per version of its code (`push_checks.py`, feature 383): `gate-stamp.py` (a green gate saw it), `review-gate.sh`, `plan-gate.sh`, `entry-gate.sh` (the record gate: every record check a delta owes answered, feature 311), `claims-gate.sh` (feature 316), `check-file-scale.py`, `spec-lint.py` (a spec directory that existed before the push is judged on what the push adds), `check-research-pointers.py`, `downloads.py check` (the download list append-only), `make record CHECK=1` (the record builds cleanly), `hm_conflict.py --tracked`, `perf_review.py --check` (prints a performance FLAG to mention at landing, never refuses - feature 375 amendment 5), `close_check.py` (a touched feature that reads closed has its report and its carried keys, feature 375; `CLOSE_OK`), the open-task refusal (a `[lands-open]` box only where the tooling or a reviewed plan's `**Lands open**:` put it, feature 375); at push and sync-in, a clone whose history shares no commit with main's | per script, each with a reason |
-| the gate | the PREFLIGHT first (`make preflight`: the derived files, the record, its pointers, `make quick`, the changed engine lines a quick test runs; feature 375), the 100% floor, the 1,000-line bar, the 100-statement function cap (`check-function-cap.py`, first in `static` and `quick` and at the push - feature 370), `ratchet.py` (a target that gets slower fails), `test_agent_models.py` (the pinned tiers, and `omitClaudeMd` on every agent file but the one the test names) | `FILE_SIZE_OK` in the file, `PREFLIGHT_OK`; no green when the tree moved during the run |
+Every guard has a test companion that `make hooks-test` runs, and its message names the compliant command. The table of
+every guard - what it does, its escape - is `docs/guards.md` ("The guard table of the root CLAUDE.md, in full"), with the
+rule, the measurement and the ruling behind each.
 
 Every escape states a reason of two words or more, and every firing is recorded (`make audit`,
 `make guard-log GUARD=<name>`). A guard that can produce the compliant command produces it; a refusal

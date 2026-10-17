@@ -254,3 +254,33 @@ makes the assembled file byte-identical, which is what makes the split checkable
 resolved (the term whose own name is the variant keeps it), so the order stopped being load-bearing
 anywhere a reader can see; two tooltips changed, each of which had been showing another term's
 definition.
+
+## Verification and iteration, from the root CLAUDE.md, in full
+
+(moved VERBATIM from the root CLAUDE.md on 2026-10-17, feature 383 amendment 6, plan D44: the root keeps one line per rule and an index)
+
+The machinery in one picture, with the GM's rulings and the measurements: `docs/efficiency-tooling.md`.
+
+- Everything runs through `make`; the hooks refuse or rewrite anything else. The ladder in the skill:
+  `make quick` while iterating (testmon selects by change; `ALL=1` runs every quick test), `make done`
+  once at the end (the whole gate: lint, the static checks, the pool roll, 100% coverage over the
+  whole engine), `make done FULL=1` (prompts; adds the perf bookends). What each costs is asked of
+  the record (`make audit`, `scripts/measure/gatecost.py <target>`), never written here.
+- `make done` reports every failure together: fix them all, re-run once. Background the final gate
+  and act on its notification; never poll.
+- Python: ruff, ruff format, pyrefly, and 100% coverage owed by everything the day it lands, held as a
+  floor on the gate (never `fail_under` in `pyproject.toml`). An inner function that is hard to test
+  is lifted to module level and tested with plain inputs; dropping the test is not an option. A
+  Python file past 1,000 raw lines fails the gate.
+- An overlap check against the features already on the map builds an index once
+  (`settlement/_geom/indexes.py`) and asks it per candidate; a plan that adds one says how it is
+  indexed.
+- Edit with `Edit`, not heredoc'd Python; a mechanical sweep uses `scripts/patch.py`.
+- A potentially large file is edited through tooling, never opened and edited by hand (feature 376, GM 2026-10-10: *"any
+  time we have a process that requires editing a potentially large file, then we should use tooling to edit the file"*),
+  as `make tick` edits `tasks.md`: the research claims sheet through `make research-claim` / `research-claims`. A new
+  process that needs one gets its make target with it.
+  Foreground-regenerate only the motivating map. Read derived data from the recorded manifest, not by
+  re-running the generator.
+- Batch: send the lookups you already know you need in one message; the batching hook blocks a run
+  of single-call recon turns.

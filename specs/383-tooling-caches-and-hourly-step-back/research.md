@@ -537,3 +537,82 @@ dispatches `spec-fidelity` and a `general-purpose` subagent that each read it):
 | spec-fidelity (`omitClaudeMd`) | not loaded | not loaded | loaded |
 | general-purpose | not loaded | loaded, once | loaded |
 
+## R16 Amendment 6, reopened - where a subagent request is cached, and the practices document
+
+(observed 2026-10-17; source: `/host-l7r-repo/subagent-token-practices.md`, written that day by gm-assistant's "GM tokens"
+session from the transcripts and from raw `/v1/messages` bodies captured through a logging proxy, Claude Code 2.1.302)
+
+- A subagent's request: the tools, then `system` = the agent file's body, with a cache breakpoint there (a 5-minute lifetime, observed 2026-10-17 in the document's proxy capture);
+  then the first user message, holding every CLAUDE.md and MEMORY.md, user context, attribution and the launch prompt, with no
+  breakpoint inside it; then the environment block. Only tools + the agent file are reused across launches. Its measurement:
+  nine general-purpose launches with a shared 5.4k-character rubric FIRST in the prompt each read only the 17,178-token
+  tools+system prefix and wrote ~41.7k fresh.
+- A launch whose whole first message is byte-identical to an earlier one's, within the cache's lifetime, reuses everything - which is what
+  R14's field run 3 showed (the same prompt three times: 12,410 read, 0 written). This session took that special case for a
+  rule about a prompt's start, and wrote it into FR-034, the guard's message and CLAUDE.md; the reopening corrects them.
+- Its checklist against this repository (observed 2026-10-17; `.claude/agents/`, settings, the transcripts since 2026-10-15):
+  `omitClaudeMd` on every agent, held by a test from the directory - yes; recurring jobs typed - mostly (10 general-purpose
+  launches since 10-15, probes and one-offs); no "adopt a definition" launches - none; the clone exclude - yes; CLAUDE.md a core
+  plus an index - no (root 37,662 characters, research 25,402, tests 18,157, l7r/diagram 13,156); no 1-hour subagent cache -
+  none set, no test; fan-outs launch one first - no (the review rules send owed units together); enforced - partly.
+
+## R17 Amendment 6, reopened - the general-purpose job families
+
+(observed 2026-10-17; method: `python3 scripts/measure/subagent_cache.py --since 2026-09-19 --families 2026-10-10` - every
+general-purpose subagent transcript of the month, grouped by its description's first two words with numbers dropped)
+
+| (observed 2026-10-17; the method above) | launches since 09-19 | since 10-10 | last | what it became |
+|---|---|---|---|---|
+| claims triage (and "triage claims", "triage owed", "triage docs") | 121 | 71 | 10-17 | the `claims-triage` agent (D36) |
+| modal triage (and "triage pop-ups", "pop-up triage", "replay the") | 38 | 38 | 10-17 | the `modal-triage` agent (D36) |
+| research pass | 10 | 7 | 10-12 | the `research-pass` agent (D45) |
+| draft write-ups | 143 | 0 | 10-03 | one-off: feature 319's write-up wave, closed |
+| source-filter | 142 | 0 | 10-02 | the typed `source-filter` exists; the wave ran before it was used |
+| impl-drift batch / r / chunk / merge / seeded | ~83 | 0 | 10-05 | the typed `impl-drift` exists; the waves predate its use |
+| sheet round / check / pass / writer, check and round choices, round group, choice writer | ~158 | 0 | 10-05 | one-off: the magistracy-sheet and choice waves, closed |
+| classify batch, tier wave, claims writer, fix g, filter calibration, rank batch, census families | ~118 | 0 | 10-08 | one-off waves of closed features |
+| probes, a scorer, an audit, a builder (1-3 each) | 8 | 8 | 10-17 | one-off |
+
+- Of 137 general-purpose launches since 10-10, ~122 were the two triage jobs - defined agents now - and the rest one-offs, but
+  for the research pass, the one family still recurring with standing rules; it becomes `research-pass`.
+
+## R18 Amendment 6, reopened - a fan-out sent together against one staggered (SC-028)
+
+(observed 2026-10-17 20:11; method: two headless sessions in this clone, hooks off; one sent three `modal-triage` probe launches
+in one message, the other one `claims-triage` launch alone and then two in its next message - different types, so neither leg
+reads the other's cache; each subagent's first-request usage read from its transcript)
+
+| (observed 2026-10-17; the method above) | launch 1: read / fresh | launches 2 and 3, each: read / fresh |
+|---|---|---|
+| all three in one message (modal-triage) | 0 / 5,721 | 0 / 5,721 |
+| the first alone, then two (claims-triage) | 2,327 / 3,328 | 3,381 / 2,274 |
+
+- Sent together, each launch wrote the whole prefix: none could read the first's, still being written. Staggered, the later
+  launches read the agent file's prefix (3,381) and wrote only their own first message - about 60% less each (observed 2026-10-17; the method above).
+- The parallel calls reached the hook ~0.4-0.5 s apart (the together leg's start times), as the probe of D42 had measured.
+
+## R19 Amendment 6, reopened - CLAUDE.md as a core plus an index (SC-029)
+
+(observed 2026-10-17; method: `wc -c` before and after; the independent rule enumeration: an Opus agent read the old and new
+files and every file the text moved to from a bundle under `/tmp/l7r-check/claude-md-enumeration/`, and judged every rule of
+the old files; a second round rechecked its findings)
+
+| (observed 2026-10-17; the method above) | before | after |
+|---|---|---|
+| root CLAUDE.md | 37,985 characters | 13730 characters |
+| research/CLAUDE.md | 25,402 | 20,772 |
+| tests/CLAUDE.md | 18,157 | 6,340 |
+| l7r/diagram/CLAUDE.md | 13,156 | unchanged - already its module map, its doc index and the always-on rules |
+
+- Moved VERBATIM, each section marked: the root's research rules to `docs/research-doctrine.md`, its workflow to
+  `docs/spec-kit-and-reviews.md`, its verification text to `docs/efficiency-tooling.md`, its guard table to `docs/guards.md`;
+  research's how-to to `research/editing-the-record.md`; tests' target table, roll roster and conventions to
+  `tests/test-bed-detail.md`.
+- The enumeration, round 1 (~426 rules): nothing dropped, every move verbatim; 22 rules MOVED-UNREACHABLE (15 root, 7 tests)
+  and 3 CHANGED (two research wordings, one tests line "INCREMENTAL over every tree"). Each got its one line. Round 2: all 23
+  resolved; one line had lost a reason to stop ("or the thing genuinely cannot be done"), restored.
+- The quotes test (`tests/test_claude_md_quotes.py`): the tooling's 12 quotes of a CLAUDE.md all resolve; three were stale
+  before this work (two copied from gm-assistant's hooks) and were re-aimed.
+- A fresh session's first request, started in `/diagram` (observed 2026-10-17; a headless Sonnet session replying READY,
+  its first request's usage): 52,651 input tokens before; after is measured once this lands, the same way.
+

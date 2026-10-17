@@ -134,3 +134,20 @@ While amendment 6 was being worked, the GM:
 (Dictated: "custom clones is .md twice" reads "the clones load CLAUDE.md twice".) The session measured it here: a session
 started in `/diagram` loads `/diagram/CLAUDE.md` at launch and the clone's own copy, ~9k tokens, when it first touches a file in
 the clone; `claudeMdExcludes: ["/diagram/.clones/*/CLAUDE.md"]` skips exactly that copy (research R15).
+
+### Amendment 6, reopened (2026-10-17, same session)
+
+The GM pointed the session at `/host-l7r-repo/subagent-token-practices.md` (written that day by gm-assistant's "GM tokens"
+session from raw API requests captured through a logging proxy) after two sessions gave him different answers on whether a
+shared start of a subagent's prompt is cached. The document's capture settles it: a subagent request has its cache
+breakpoint after the system prompt (the agent file) and none inside the first message, which holds CLAUDE.md, the memory
+index and the launch prompt - so shared text placed FIRST in a launch prompt is not reused across launches; only a wholly
+identical first message is. This session's own measurement (R14: an identical prompt read wholly from the cache) was that
+special case, generalized wrongly into FR-034's "put the shared text first", the guard's message and CLAUDE.md's rule. The
+session checked the document's checklist and proposed five items: (1) the guard refuses a repeated block wherever it sits,
+its fix the agent file, with FR-034, the rule and the docs corrected; (2) a test that no setting turns on the 1-hour subagent
+cache; (3) fan-outs launch one agent first; (4) CLAUDE.md trimmed to a core plus an index of topic docs, checked by an
+independent rule-by-rule enumeration and a test that every hook message quoting CLAUDE.md still resolves; (5) a sweep of the
+month's general-purpose job families for any that still recur. The GM:
+
+> Yes, go ahead and reopen amendment 6 for all five. Thank you.
