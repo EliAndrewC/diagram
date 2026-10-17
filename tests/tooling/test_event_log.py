@@ -409,3 +409,16 @@ def test_task_starts_and_ticks_are_read_from_the_record(tmp_path: Path) -> None:
     ]
     (repo / ".git" / "task-starts.jsonl").write_text("\n".join(rows) + "\n")
     assert fr.task_starts(repo, "385-x") == {"T01": fr.parse_t("2026-10-17T10:00:00Z")}, "the first start counts"
+
+
+def test_a_batch_reply_is_read_by_its_units_and_an_empty_bundle_is_named() -> None:
+    """The round arbiter's tooling fix on hour:385-approach-checklist@7: a multi-KIND depiction reply opened with prose, and an
+    empty claims-triage bundle, both read "no verdict read"."""
+    batch = ("All four pop-ups are clean on COVERAGE and LINKS.\n\n---\n\nunit: x\n\n"
+             "modal-depiction: choice.lane_skeleton--T - COVERAGE 0 findings; TRUTH 1; LINKS 0\n\n"
+             "modal-depiction: choice.lane_skeleton--Y - COVERAGE 0 findings; TRUTH 0; LINKS 0\n")
+    assert el.verdict_of(batch) == "findings"
+    assert el.verdict_of(batch.replace("TRUTH 1", "TRUTH 0")) == "clean"
+    empty = "The manifest at /tmp/x/MANIFEST.md lists no changed pages and no claims, only its header, so I have no TOUCHES lines."
+    assert el.verdict_of(empty) == "empty bundle"
+    assert el.verdict_of("Some prose with nothing to count.") == ""

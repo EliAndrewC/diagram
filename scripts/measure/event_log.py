@@ -71,6 +71,10 @@ _RESULT = re.compile(r"<result>(.*?)(?:</result>|$)", re.S)
 _FINDING_COUNT = re.compile(r"\b[1-9]\d*\s+(?:findings?|unfootnoted|EDITs?|DOES-NOT-SUPPORT|DRIFTED|MISLABELED|FIX|VOCABULARY|SESSION NOTE|HISTORY)\b")
 #: a reply that says it found nothing
 _CLEAN_SAID = re.compile(r"\b(?:nothing to act on|no findings)\b", re.I)
+#: one unit's summary line inside a batch reply: `modal-depiction: <unit> - COVERAGE 0 findings; TRUTH 1; LINKS 0`
+_UNIT_SUMMARY = re.compile(r"^[a-z-]+: \S+ - [A-Z]+ \d+ findings?;.*$", re.M)
+#: a reply that says its bundle held nothing to judge
+_EMPTY_SAID = re.compile(r"\blists no (?:changed pages|claims|units)\b|\bbundle (?:was|is) (?:built )?empty\b", re.I)
 _VERDICT = re.compile(r"\b(NOT-REVIEWABLE|NOT FAITHFUL|CHANGES REQUIRED|BLOCKED|FAITHFUL|CLEAR|NEEDS-WORK|PASS|FAIL)\b")
 #: a review check's own recorded verdict, anywhere in its reply: the line `make review-verdict` prints, or the report block's
 #: VERDICT line - a glyph check leads with prose and puts both past the first 600 characters, and wrote its block's word in
@@ -97,6 +101,13 @@ def verdict_of(text: str) -> str:
     nums = re.findall(r"\b\d+\b", first)
     if nums:
         return "clean" if all(n == "0" for n in nums) else "findings"
+    # ...A BATCH'S PER-UNIT SUMMARIES, wherever they stand (the round arbiter's tooling fix on hour:385-approach-checklist@7: a
+    # multi-KIND modal-depiction reply opened with prose and read "no verdict read" though each pop-up's line counted findings)
+    units = _UNIT_SUMMARY.findall(text)
+    if units:
+        return "findings" if any(n != "0" for u in units for n in re.findall(r"\b\d+\b", u.split(" - ", 1)[1])) else "clean"
+    if _EMPTY_SAID.search(text[:600]):
+        return "empty bundle"
     return ""
 EVENTS_DIR = "l7r-events"
 
