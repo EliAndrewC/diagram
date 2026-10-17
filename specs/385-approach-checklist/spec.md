@@ -118,12 +118,14 @@ ranking's rows chosen to be of different kinds, so the checklist is tried on mor
 
 ### Amendment 1 - T02 takes the check costs T01 measured (the GM, 2026-10-17)
 
-T01 took about 3 h 22 min (`retro.md`), about 50 min of it the checks two bullets on one research page owed. T02 adds four
+T01 took about 3 h 22 min (`retro.md`), about 50 min of it - the session's estimate, as given to the GM - the checks two bullets on one
+research page owed. T02 adds four
 items to FR-003 to FR-005, each measured on T01's own record (observed 2026-10-17, method: `retro.md`'s T01 row, timed by hand from its
 decision points, and the record checks' own counts in `dev/review-ledger.md`):
 
 - **FR-008 (a re-check reads against what the last check read)**: a pop-up or claim re-owed by a page change is triaged against
   the page version its last check READ, not an older baseline - T01's one-word vocabulary fix re-owed ten pop-ups and 229 claims
+  (`make claims-owed` after the fix: "229 claim(s) owe only a TRIAGE of the blocks that changed on their pages")
   already checked against the page with that word in it.
 - **FR-009 (one check where several are spent today)**: a page-wide record unit (quote-check's `#unfootnoted`) is answered by one
   batch, and the pop-ups a changed page re-owes for one check kind are judged by one agent, not one agent each.
