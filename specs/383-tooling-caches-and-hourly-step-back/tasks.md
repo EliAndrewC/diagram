@@ -112,6 +112,6 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T28 The guard suites by what their cases read (plan D27) (SC-017)
       research: rendering
       verify: DONE. DONE. 44 landings replayed: sync-with-main and gate-stamp re-ran on 42 (whole-tree inputs); suites now traced by what they read (38 of 44), sync-with-main 36.2 -> 17.9 s (case_11 split, 8 parts), hooks-test idle 16.1 -> 2.6 s; tests/tooling/test_file_log.py 4 passed (research R10)
-- [ ] T29 Close: a landing measured before and after, the gate, the report, landed
+- [x] T29 Close: a landing measured before and after, the gate, the report, landed
       research: rendering
-      verify: research R10; the gate green; the report written; landed
+      verify: DONE. DONE. a landing 37.05 -> 30.04 s (m:land-tooling-landing-a3; 113.98 s before amendment 2), 121 of 128 tooling files reused, guard suites 2.76 s; the gate green; the report written; landed by the push carrying this tick
