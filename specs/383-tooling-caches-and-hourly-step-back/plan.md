@@ -368,16 +368,25 @@ observed 2026-10-17, method: `make quick` on an unchanged tree, load 3) is measu
 the cut follows what it finds - the worker start, a conftest's imports, or testmon's own database read. The tests that run and
 their results are compared with the cut off and on (SC-016).
 
-**D26 - The always-run files made known where the repository already knows their programs' reads (FR-021).** A system
-trace cannot be taken here: `strace` is refused in the container (no ptrace capability, with or without sudo; observed
-2026-10-17, method: `strace -f -e trace=openat true`). So a program a test starts is made known by the rule the repository
-already trusts for it: a guard or gate script under `scripts/` (bash) reads what `tests/hooks/hookdeps.py --deps` derives for it
-- the very set `make hooks-test` keys that script's suite by, transitively through what it sources and calls. A child that is
-such a script (run directly, or as `bash <script>`) is recorded as reading that set, each file by content, and a file whose
-every unknown child is such a script is reused like any other. Every other program - `make` (recipes in the repository),
-`node`, `resvg`, `ruff`, `pdftotext`, `grep`, a stand-in `claude` - stays always-run, recorded in research R10 with its seconds
-and the reason. Recording the script's argument list keeps a guard run against an outside fixture (`cwd` a temporary
-repository) known the same way.
+**D26 - What every other program reads, recorded by the C library (FR-021).** A system trace cannot be taken here: `strace`
+is refused in the container (no ptrace capability, with or without sudo; observed 2026-10-17, method: `strace -f -e
+trace=openat true`). But every program the 18 files start - bash, make, node, resvg, pdftotext, grep, ruff - is linked
+dynamically to the C library (observed 2026-10-17, method: `ldd` on each), so a recorder PRELOADED into it sees what it opens:
+- `tests/tooling/_deps_site/l7r_file_log.c`, built by the plugin with `gcc -shared` into the git common directory's cache when
+  absent or older than its source, wraps the C library's ways in to a path - `open`, `open64`, `openat`, `openat64`,
+  `__open_2`, `__open64_2`, `__openat_2`, `__openat64_2`, `fopen`, `fopen64`, `stat`, `lstat`, `fstatat`, `statx`, `access`,
+  `faccessat`, `opendir`, `readlink`, `readlinkat`, `execve`, and `syscall` for `openat`/`statx` called by number (libuv's way
+  for node) - and writes each path under the repository, as Python's recorder does, to the same per-test log
+  (`<test file>\t<kind>\t<path>`): opened for reading as `file`, a directory opened or listed as `dir`, a stat or access as
+  `file` (its content, or `absent`). A path opened by a directory handle is resolved through `/proc/self/fd`.
+- Every child a test starts gets `LD_PRELOAD` (and the log's variables) in its environment - the inherited one, or the one the
+  test gives it, put there in place as D19 adopts a Python child - so a program and everything it starts is recorded. A child
+  that is a git question stays a question (D18); a child whose environment drops `LD_PRELOAD` before it runs, a statically
+  linked program, or one run where the recorder could not be built stays unknown, and its file runs.
+- The recorder is VALIDATED before any file is reused on it: on the whole tooling run, every Python child carries both
+  recorders, and for each, every file Python's audit hook saw opened must be in what the preloaded recorder saw (a test fails
+  on any gap, and the gap is the bug). A file whose reads are still unknown after this is recorded in research R10 with its
+  seconds and the measured reason.
 
 **D27 - The guard suites by what their cases read (FR-023).** `scripts/measure/hooks_landing_runs.py` replays the recorded
 landings: for each, from the landing commit and the clone's last green `hooks-test` stamps, which suites ran and which
