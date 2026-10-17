@@ -45,7 +45,7 @@ def ground_apart(M: Mapping[str, Any], s: Any = None) -> Apart:
     the manifest's view.
 
     Research:
-        a knot is ends that could meet - DEVIATION research/questions/0081-village-lanes.drawing.html: "Ends within 25 ft of one another are joined at a single point, so three lanes never arrive a few feet apart in a knot" read as open ground; ends a fence parts are not a knot
+        a knot is ends that could meet - research/questions/0081-village-lanes.drawing.html: "Ends within 25 ft of one another are joined at a single point, so three lanes never arrive a few feet apart in a knot" read as open ground; ends a fence parts are not a knot
         the join judged as a footpath - research/questions/0081-village-lanes.drawing.html: the join between two ends tested at the footpath's 3 ft"""
     blocked = ground(M, s)  # the settle's own lawful-ground test, read once per manifest (`forced.ground`)
     return lambda p, q: blocked(p, q, 3.0)

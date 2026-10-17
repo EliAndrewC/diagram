@@ -48,3 +48,39 @@ diagnosis needed hand instrumentation in a scratch worktree, three times.
 
 The same lesson as 16:24, a third time: a guess from the refusal's text (16:50's foot-through-a-yard) cost a build and a roll;
 the bisection and one dump answered it. Measure first is now three for three in this task.
+| 17:05 | three red gates, each a different small cause (claim backing form; a lint the session would have caught with `make quick` first; one uncovered line); the red-gate tripwire's ruling `continue`, with a tooling fix | the gates |
+| 17:30 | the pop-up and claim checks the two drawing-page bullets owed: 10 depictions (one EDIT applied, one finding filed), quote and format (one word fixed), 154 claims (13 labels this change introduced, fixed) - then the one-word fix re-owed every one of them, cleared by two triages | the green gate |
+
+## T01 - the retro row (DRAFT until T01 lands)
+
+**The split (by hand; T02 builds it).** Task start 15:31. Decision points: 15:40, 15:46, 15:52, 16:00 (part B), 16:08, 16:24 (a
+correction), 16:50 (the seed 38 fix). Up to the last decision point: about 79 min. After it, to the checks answered (about 18:10):
+about 80 min, almost all of it gates and checks. Re-decides: five plan reviews (round 1 BLOCKED, then CHANGES on a corrected
+fact, then three block rounds), one part B.
+
+**Where the time went, largest first.**
+1. **The check cascade from two bullets on one research page** - about 25 agent dispatches and roughly 6 M input tokens: 10 pop-up
+   depictions, two claims triages, three `impl-drift` rounds (154, 27, 7 claims), quote and format checks twice. Most came back
+   clean. Then a one-word vocabulary fix the format check asked for re-owed every unit keyed on the page, because each answer is
+   keyed to the page as bundled while a triage diffs against an older baseline.
+2. **Guessing a cause from a refusal's text, three times** (seed 24's "fence", seed 38's "foot through a yard", and the plan's own
+   premise that the angle rules were refusing seeds). Each guess cost a build and a roll; the geometry dump or a bisection answered
+   each in one run.
+3. **Three red gates** for small mechanical causes, one of which `make quick` would have caught first.
+4. **Two guard defects found and fixed** (plan-delta never re-owing a block left BLOCKED; the red-gate bundle reading pytest's
+   cumulative cache), and one tooling fix owed by the round arbiter (a crashed roll's traceback kept).
+
+**Which checklist items fired.** A3 (where each number comes from) settled the classification at once - 0081 itself says every
+limit is a convention. A6 (the exits) chose the exception and the merge, exactly the GM's two. Part B fired at 16:00 and turned
+the task from the angle rules to what was actually refusing - the checklist's best moment.
+
+**Which should have fired, and the changes made to the checklist.**
+- B1 was answered from the refusal's TEXT twice. Amended: "look at the geometry - dump the lanes and what stands near them - before
+  naming a cause; the refusal names the test, not the ground."
+- C2 should have stopped the lint red gate. Amended: "`make quick` before every `make done`, not only while iterating."
+- C1 did not cover a fix one check asks for re-owing every other check of the page. Amended: "a check's own fix to a shared page
+  is applied only after every check keyed on that page has returned, so they re-run once together."
+
+**Process changes for T02 (tooling, the GM's to approve in T02's plan).** (a) A triage diffs against the page version the last
+check READ, not an older baseline - the largest single saving here. (b) One quote-check batch answers a page-wide
+`#unfootnoted` unit. (c) The claim-backing form is checked by `make quick`, not only by the full gate.

@@ -205,7 +205,7 @@ figure, so the hairpin the fold repairs and the hairpin this law refuses are one
 NEEDLE_DEG = 20.0
 """Research: a needle, not a T - CONVENTION: under 20 degrees two treads read as one smudged wedge"""
 NEEDLE_FT = 20.0
-"""Research: needle leg - CONVENTION: a leg over 20 ft, shorter is the approach to the junction"""
+"""Research: needle leg - UNRESEARCHED: a leg over 20 ft, shorter is the approach to the junction"""
 
 JOIN_REACH_FT = _LANE_JOIN_FT
 """A free lane end this near another way, making for it, is a join that stops short (`near_misses`) - the web's own join
@@ -252,7 +252,7 @@ def kink_faults(p: Sequence[Pt], width: float, blocked: Blocked | None = None) -
     """`clearance.kink_spans` of a run but the turns the ground forces (`forced.forced_turn`, plan D2 of feature 385): a
     zigzag or a hairpin whose chord - the vertex before its first turn to the vertex after its last - is not lawful ground is
     a path round what stands there. With no ground (`blocked` None) every span is a fault, as before.
-    Research: a forced turn is lawful - DEVIATION research/questions/0081-village-lanes.drawing.html: "A turn the ground forces is drawn as walked" - the chord the vertex before the first turn to the vertex after the last"""
+    Research: a forced turn is lawful - research/questions/0081-village-lanes.drawing.html: "A turn the ground forces is drawn as walked" - the chord the vertex before the first turn to the vertex after the last"""
     p = list(p)
     return [k for k in kink_spans(p) if not (k[1] >= 1 and k[2] + 1 < len(p) and forced_turn(blocked, p[k[1] - 1], p[k[2] + 1], width))]
 
@@ -260,7 +260,7 @@ def kink_faults(p: Sequence[Pt], width: float, blocked: Blocked | None = None) -
 def hook_faults(p: Sequence[Pt], width: float, blocked: Blocked | None = None) -> list[int]:
     """`hooked` ends of a run but those the ground forces: a hook whose chord - the vertex before the turn to the end - is not
     lawful ground is the walk round a corner (`forced.forced_turn`, plan D2 of feature 385).
-    Research: a forced turn is lawful - DEVIATION research/questions/0081-village-lanes.drawing.html: "A turn the ground forces is drawn as walked" - the chord the vertex before the hook's turn to the end"""
+    Research: a forced turn is lawful - research/questions/0081-village-lanes.drawing.html: "A turn the ground forces is drawn as walked" - the chord the vertex before the hook's turn to the end"""
     p = list(p)
     return [e for e in hooked(p) if not forced_turn(blocked, *((p[-3], p[-1]) if e == -1 else (p[2], p[0])), width)]
 
@@ -303,7 +303,7 @@ def folded_joint_pairs(lanes: Lanes, blocked: Blocked | None = None) -> list[tup
     `DOUBLE_BACK_DEG` or more.
     Research:
         lanes met end to end are one - research/questions/0081-village-lanes.drawing.html: no hairpin at the joint
-        a forced turn is lawful - DEVIATION research/questions/0081-village-lanes.drawing.html: "A turn the ground forces is drawn as walked" - a fold whose chord the ground blocks is excused"""
+        a forced turn is lawful - research/questions/0081-village-lanes.drawing.html: "A turn the ground forces is drawn as walked" - a fold whose chord the ground blocks is excused"""
     out = []
     for i, ei, j, ej in joints(lanes):
         x, y = oriented(lanes, i, ei, j, ej)
@@ -326,7 +326,7 @@ def connector_hairpin_ends(lanes: Lanes, blocked: Blocked | None = None) -> list
     back (`hairpin_over_a_short_leg`); the end is -1 (the lane's last point) or 0 (its first).
     Research:
         no hairpin at the track - research/questions/0081-village-lanes.drawing.html: over a returning leg under 40 ft
-        a forced turn is lawful - DEVIATION research/questions/0081-village-lanes.drawing.html: "A turn the ground forces is drawn as walked" - a hairpin at the track whose chord the ground blocks is excused"""
+        a forced turn is lawful - research/questions/0081-village-lanes.drawing.html: "A turn the ground forces is drawn as walked" - a hairpin at the track whose chord the ground blocks is excused"""
     out = []
     for ci, co in enumerate(lanes):
         cp = lane_pts(co)
@@ -367,8 +367,8 @@ def needle_ends(lanes: Lanes, blocked: Blocked | None = None) -> list[tuple[int,
     from a way's END is not a needle: the tread it meets does not run back beside it. The end is -1 (last) or 0 (first).
     Research:
         a lane meets another as a T - research/questions/0081-village-lanes.drawing.html: never a needle
-        a forced turn is lawful - DEVIATION research/questions/0081-village-lanes.drawing.html: "A turn the ground forces is drawn as walked" - a needle whose sliver the ground blocks is excused
-        needle leg - CONVENTION: only an end leg over NEEDLE_FT, 20 ft, can be a needle; shorter is the approach to the junction"""
+        a forced turn is lawful - research/questions/0081-village-lanes.drawing.html: "A turn the ground forces is drawn as walked" - a needle whose sliver the ground blocks is excused
+        needle leg - UNRESEARCHED: only an end leg over NEEDLE_FT, 20 ft, can be a needle; shorter is the approach to the junction"""
     ways = [lane_pts(ln) for ln in lanes]
     out = []
     for i, ln in enumerate(lanes):

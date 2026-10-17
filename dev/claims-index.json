@@ -22931,13 +22931,21 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/knots.py::ground_apart#the join between ends is tested for lawful ground at a footpath's 3 ft width": {
-  "code": "195e81c9c805eab9",
+ "l7r/diagram/hamletgen/ways/knots.py::ground_apart#the join judged as a footpath": {
+  "code": "5c81d5829c220715",
   "core": "195e81c9c805eab9",
   "date": "2026-10-17",
-  "note": "the join between ends is tested for lawful ground at a footpath's 3 ft width",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "testing the join at 3 ft is the footpath width the page draws, and the ground test is §25's \"two paths either side of it\"",
+  "pages": {
+   "0081-village-lanes.drawing.html": "a6423940921ce579"
+  },
+  "research": "af9a8a86b5d8c81f",
+  "rests": [
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
+   "0081-village-lanes.drawing.html:91a5765af6230403",
+   "0081-village-lanes.drawing.html:9b3232646d7ce694"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::knots#lane ends gathered": {
   "code": "f2581d21930aac81",
@@ -23534,13 +23542,21 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/law.py::connector_hairpin_ends#a hairpin at the track that the ground forces is excused (forced turn, DEVIATION 0081)": {
-  "code": "9d746ffd26b00a6d",
+ "l7r/diagram/hamletgen/ways/law.py::connector_hairpin_ends#a forced turn is lawful": {
+  "code": "199385c36bfeec4a",
   "core": "9d746ffd26b00a6d",
   "date": "2026-10-17",
-  "note": "a hairpin at the track that the ground forces is excused (forced turn, DEVIATION 0081)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the code does not depart from the page. §25 is the page's own rule (\"drawn as it is walked\"), and §19's limits apply only to \"open ground\", so excusing a hairpin whose chord the ground blocks does what the page says. Drop the DEVIATION label and cite research/questions/0081-village-lanes.drawing.html directly",
+  "pages": {
+   "0081-village-lanes.drawing.html": "a6423940921ce579"
+  },
+  "research": "af9a8a86b5d8c81f",
+  "rests": [
+   "0081-village-lanes.drawing.html:3b9a5312c92335d3",
+   "0081-village-lanes.drawing.html:65ad16eace199d92",
+   "0081-village-lanes.drawing.html:9b3232646d7ce694"
+  ],
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/law.py::connector_hairpin_ends#no hairpin at the track": {
   "code": "fe8d085918201431",
@@ -23651,13 +23667,21 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/law.py::folded_joint_pairs#a fold at a joint that the ground forces is excused (forced turn, DEVIATION 0081)": {
-  "code": "c19222789b77e13f",
+ "l7r/diagram/hamletgen/ways/law.py::folded_joint_pairs#a forced turn is lawful": {
+  "code": "c7ac63c5ffdfc191",
   "core": "c19222789b77e13f",
   "date": "2026-10-17",
-  "note": "a fold at a joint that the ground forces is excused (forced turn, DEVIATION 0081)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the code does not depart from the page. §25 limits §23's \"turn back\" rule to open ground, so excusing a fold whose chord the ground blocks does what the page says. Drop the DEVIATION label and cite 0081 drawing directly",
+  "pages": {
+   "0081-village-lanes.drawing.html": "a6423940921ce579"
+  },
+  "research": "af9a8a86b5d8c81f",
+  "rests": [
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
+   "0081-village-lanes.drawing.html:65ad16eace199d92",
+   "0081-village-lanes.drawing.html:9b3232646d7ce694"
+  ],
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/law.py::folded_joint_pairs#lanes met end to end are one": {
   "code": "37e103873daaad14",
@@ -23950,6 +23974,22 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/law.py::needle_ends#a forced turn is lawful": {
+  "code": "aeb5939e07e986d0",
+  "core": "d97824fb982f0c2e",
+  "date": "2026-10-17",
+  "note": "the code does not depart from the page. §25 covers \"the sharper turn or meeting\" the ground forces, so excusing a needle whose sliver the ground blocks does what the page says. Drop the DEVIATION label and cite 0081 drawing directly",
+  "pages": {
+   "0081-village-lanes.drawing.html": "a6423940921ce579"
+  },
+  "research": "af9a8a86b5d8c81f",
+  "rests": [
+   "0081-village-lanes.drawing.html:65ad16eace199d92",
+   "0081-village-lanes.drawing.html:9b3232646d7ce694",
+   "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
+  ],
+  "verdict": "MISLABELED"
+ },
  "l7r/diagram/hamletgen/ways/law.py::needle_ends#a lane meets another as a T": {
   "code": "f0ba5903d6eafc42",
   "core": "d97824fb982f0c2e",
@@ -23964,21 +24004,14 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/law.py::needle_ends#a needle meeting that the ground forces is excused (forced turn, DEVIATION 0081)": {
-  "code": "d97824fb982f0c2e",
+ "l7r/diagram/hamletgen/ways/law.py::needle_ends#needle leg": {
+  "code": "c509ad5e16e4783a",
   "core": "d97824fb982f0c2e",
   "date": "2026-10-17",
-  "note": "a needle meeting that the ground forces is excused (forced turn, DEVIATION 0081)",
+  "note": "this is a physical rule, not how something is shown. `if leg <= NEEDLE_FT: continue` leaves an end running back alongside another way at under 20 degrees uncut for up to 20 ft, but §24 cuts \"a lane whose end runs back along another way at less than 20 degrees\" with no minimum leg. The page is silent on the 20 ft figure, so the label should be UNRESEARCHED or GUESS, not CONVENTION",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/hamletgen/ways/law.py::needle_ends#only an end leg longer than 20 ft (`NEEDLE_FT`) can be a needle": {
-  "code": "d97824fb982f0c2e",
-  "core": "d97824fb982f0c2e",
-  "date": "2026-10-17",
-  "note": "only an end leg longer than 20 ft (`NEEDLE_FT`) can be a needle",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/law.py::needle_joins#plumbing and wrappers": {
   "code": "2a4405451b605dc5",
@@ -26006,13 +26039,28 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/settle.py::settle_ends#a household's way is moved only at its foot, and only onto lawful ground": {
-  "code": "487e3ca0dde28a4b",
+ "l7r/diagram/hamletgen/ways/settle.py::settle_ends#a foot re-aimed only onto lawful ground": {
+  "code": "a2e84b89840839a5",
   "core": "487e3ca0dde28a4b",
   "date": "2026-10-17",
-  "note": "a household's way is moved only at its foot, and only onto lawful ground",
+  "note": "the bundle answers this, so it is not a GUESS. 0081 §25 has the walker go round \"a garden or yard\". 0246 lays each household's way \"along the middle of the gaps\" with its middle 7 ft off a garden fence, and leaves the walk across a neighbor's yard undrawn. The claim should cite 0081 drawing and 0246 drawing",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "MISLABELED"
+ },
+ "l7r/diagram/hamletgen/ways/settle.py::settle_ends#a household's way moved at its foot": {
+  "code": "2eb1bcaec12fe906",
+  "core": "487e3ca0dde28a4b",
+  "date": "2026-10-17",
+  "note": "only end -1 of an access-role way is edited, never its door end, and it is re-aimed to meet the other way as a T",
+  "pages": {
+   "0081-village-lanes.drawing.html": "a6423940921ce579"
+  },
+  "research": "af9a8a86b5d8c81f",
+  "rests": [
+   "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::settle_ends#a lane ends at the dooryard": {
   "code": "70e142f1d72af300",

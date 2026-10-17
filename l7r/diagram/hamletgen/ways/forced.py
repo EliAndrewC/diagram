@@ -16,7 +16,7 @@ angle rule asks, where it would refuse a shape, whether the straighter way was o
 marsh underfoot, no crossing fault), so the law cannot refuse a shape the settle bent round something, nor admit one it
 would not draw. The ground is read once per manifest while its registries stand (`ground`).
 
-Research: a forced turn is lawful - DEVIATION research/questions/0081-village-lanes.drawing.html: the angle limits read as describing open ground; a turn or meeting whose straighter way the mapped ground blocks is drawn as walked (the GM, 2026-10-17)
+Research: a forced turn is lawful - research/questions/0081-village-lanes.drawing.html: the angle limits read as describing open ground; a turn or meeting whose straighter way the mapped ground blocks is drawn as walked (the GM, 2026-10-17)
 """
 
 from __future__ import annotations
