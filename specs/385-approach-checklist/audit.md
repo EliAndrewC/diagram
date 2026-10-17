@@ -124,3 +124,51 @@ Ordered by cost x frequency, largest first.
 1. **Thinking**: 374 = 25 h 30 min (51% of active time); 375 = 18 h 47 min (63%); 383 = 3 h 19 min (46%). It dominates every report.
 2. **Tool time in `Bash` and make targets**: 374 = "other tool" 14 h 36 min (29%), of which Bash 8 h 12 min, `make land-tooling` 1 h 03 min, `make hooks-test` 30 min, `make ledger-owed` 25 min, `make map` 24 min; 375 = other tool 4 h 31 min (Bash 2 h 30); 383 = 2 h 36 min (Bash 1 h 17, hooks-test 15 min).
 3. **Review/check cascades**: 374 = 679 check dispatches over 12,922 changed lines; impl-drift 116 dispatches (`claims-owed` 82 rounds), general-purpose triage 87 (claims 40, modals 27), modal-depiction 158, spec-fidelity 107; waiting on subagents 3 h 10 min; 12 red gates; 35 plan reviews BLOCKED. Elsewhere: 383's plan-blocks spec-fidelity took 11 rounds; 375 had 50 spec-fidelity dispatches with 15 plan reviews BLOCKED; waiting on the GM was 4 h 28 min (374) and 4 h 09 min (375).
+
+---
+
+## Addendum: the 106 round-cap accepts (spec round 1, FR-002)
+
+A second Sonnet extractor read every round-cap accept in `specs/*/arbiter.jsonl` (106 rulings), against pitfalls 1-12 above.
+
+
+
+Counts are by my reading of each `why` (one primary cause per ruling; keyword checks: 45 say converged/no oscillation/nothing reversing, 58 mention an edit "since round 2"). Triggers: modal-depiction 40, modal-form 23, modal-research 22, quote-check 8, record-format 7, source-reader 3, building-review 2, translation-check 1. By feature: 343 = 44, 374 = 30, 352 = 27, 368 = 3, 335 = 2.
+
+### Cause tally
+| # | cause | n |
+|---|---|---|
+| A | Real finding each round, each smaller than the last, all applied, nothing reversing (the cap fired on a converging loop) | 39 |
+| B | Round 2 clean; round 3 owed only by a LATER edit (a sibling check's wording fix, another check's answer, an unrelated wave) to text already passed | 27 |
+| C | One fan-out round (modal-research/depiction/form on copse, grove, windbreak, homestead-grove) ruled once and copied to 21 triggers; "@3" overstated forms that ran once | 21 |
+| D | Bundle or counter lacked the data: no Rounds section / edits.diff / kept reply ("Fired: (not in arbiter-owed.json)"), arbiter ruled from diffs and the session's account | 7 |
+| E | Counter charged another feature's rounds (368's cascades on 0047 charged to 352) | 6 |
+| F | Finding with "EDIT: none, the session must decide", or re-flagged as NEW though REPEATED; another round cannot settle it | 4 |
+| G | building-review round cap (paperwork round, a lobe fix 1 ft past a guide) | 2 |
+
+Examples and quotes:
+- A: 0104 record-format (feature 343), "Every finding was glossary-level wording, every one was applied, and none reversed an earlier fix." Buckwheat depiction (row 73): "four rounds ... only NEW findings ... each was smaller than the one before". Several findings were on long-standing text, not on the last fix (field-dike, fish-trap, perimeter modals: "already in the tab before this feature").
+- B: q:0190 quote-check: "This is not a loop ... The cap fired because two later edits, made to answer other checks, left the drawing page with text these checks had not read yet." q:0091: "round 3 is owed only by wave 124's two-bullet impl-drift edit". Garden-pond: "round 3 fired only because modal-form's round-2 commit touched the file afterwards" (clerks- modal-research).
+- C: "Round 2 ... found at most one small item per pop-up ... Everything edited since round 2 is modal-form's period-for-document rewording" (rows 52-72 identical).
+- D: nakamon/residence/garden/side-gate modal-form: "This bundle holds no rounds and no edits and says the trigger is not in arbiter-owed.json".
+- E: "the counter charged 368's rounds to 352 and there is nothing of 352's on 0047 to re-check."
+- F: side-gate depiction: "What stands is REPEATED and EDIT-none ... the bundle tags them NEW."
+- Also (B/D): q:0219 "The owe of translation-check ... has no change behind it: in owes-round.diff that note is a context line only." Row 101: "The bundle missed both because it looks for the unit's path in the changed lines, and a modal's own lines never contain that path."
+
+Almost every ruling (about 100 of 106) ends the same way: the next round would re-read text already passed; none found a genuinely reversing or oscillating loop.
+
+### Existing pitfalls these add to
+- #5 (check-round cascades, fixes one at a time): about 100 of 106 (A, B, C, plus the cap/owe mechanics of D-F). Example: rows 52-72, 21 triggers closed by one ruling after "modal-form's period-for-document rewording" re-owed research and depiction. Also feature 343 (44 rulings) and 352 (27) as further independent batches beyond privy 0047 and wave 61; modal 3-round pattern (A) confirms the GM's 10-11 question.
+- #6 (gate/test cost at batch end): 0 here.
+- #7-#10, #12: 0. Nothing in the file bears on packing, GM rulings or research asks.
+
+## 13. (new) the round-cap tripwire fires on tooling error, not on a loop
+- **evidence**: 13 rulings (E 6, D 7) plus part of B: counter charged to the wrong feature (rows 46-51); bundle lacks rounds/edits so the arbiter "rules on the session's account" (rows 2, 34, 35, 38, 40, 45); bundle's "owed" cause missing the real change (row 101, row 96/99 "no changed line names 0091", "context line only"). Several rulings carry `tooling_fix` text (row 0: do not owe another round when the only change is the check's own EDIT applied word for word).
+- **cost**: one arbiter dispatch plus re-reading per trigger (106 dispatches; the asks are unpriced in the file, minutes each).
+- **what would have caught it**: before dispatching an arbiter, check the owing diff names a visible-word change on the unit, and that the round count is this feature's own; a check's own EDIT applied verbatim should not re-owe the check.
+- **how often**: 13 of 106 directly; B-type (edit by sibling check re-owing a passed check) 27 more.
+
+### Top recurring subjects (trigger units, round suffix stripped)
+1. q:0104 (343 and 335 pages; record-format, quote-check, source-reader) - 5
+2. modal:sheet/nakamon, modal:sheet/residence, q:0047, modal:choice/kosatsuba_seat--bridgehead - 4 each
+By feature: 343 = 44, 374 = 30, 352 = 27. Next most (3): modal:sheet/magistrate-s-dais, kneeling-positions, guest-quarters.
