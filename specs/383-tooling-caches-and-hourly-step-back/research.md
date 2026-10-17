@@ -319,6 +319,7 @@ from its own summary line, before = the committed suite, after = the changed one
 
 | suite | before | after | checks (same both) | what changed |
 |---|---|---|---|---|
+| (observed 2026-10-17; method: each suite alone under `time`, its own summary line) | | | | |
 | main-tree | 57.7 s | 18.9 s | 83 | its 173-command corpus (42 of the 56 s) judged eight rows at a time |
 | no-poll | 48.4 s | 12.2 s | 113 | sections as cases in parallel parts (`tests/hooks/parts.sh`), helpers hoisted, a stderr file and guard log per part |
 | finished-run | 39.1 s (4.9 s of CPU) | 11.3 s | 65 | each fixed settle sleep a readiness poll, at most the old sleep; stable over five runs |
@@ -330,7 +331,7 @@ Every split suite also passes at 1, 2 and 3 parts. Doing so found a dependency o
 assumed no green gate and case_04 leaves one, so with the measured weights dealing case_04 first into the same part, case_02
 failed; case_02 now clears the gate record before its check.
 
-A defect made and caught: the first `make hooks-test HOOKS_ALL=1` after the splits ran eight suites of up to eight parts each and
+A defect made and caught (observed 2026-10-17; method: the laptop's memory watch and the run's own failure): the first `make hooks-test HOOKS_ALL=1` after the splits ran eight suites of up to eight parts each and
 hit the containers' shared 10 GB memory cap (memguard killed a process of another session's container; a timed sync-with-main
 check failed under the load). `make hooks-test` now sets `PARTS_MAX` to the cores shared by the suites running (one suite up to
 8 parts, eight suites 2 each), which `parts.sh` and pair's runner honor. Every suite at once (`HOOKS_ALL=1`, observed 2026-10-17,
