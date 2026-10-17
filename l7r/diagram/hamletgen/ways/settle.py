@@ -872,7 +872,7 @@ class Lawful:
         Research:
             lanes meet as a T - research/questions/0081-village-lanes.drawing.html: no needle, fold or hairpin at either end
             an end reaches something seen - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no dangling end
-            no doubled tail - UNRESEARCHED: either way round
+            no doubled tail - research/questions/0081-village-lanes.drawing.html: an end running back along another way under 20 degrees, either way round; asked here at 15 (`_DOUBLED_DEG`) - a known gap, carried to feature 385 T12 (the side-by-side family)
             no way out over and back - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: tree lanes"""
         M = self.M
         if why := self.ground_fault(run, width):

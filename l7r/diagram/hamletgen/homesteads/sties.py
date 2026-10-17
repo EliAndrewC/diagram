@@ -100,7 +100,9 @@ def sty_seat(s: Settlement, house: Mapping[str, Any]) -> dict[str, Any] | None:
 
     Research:
         against the farmhouse or an outbuilding - research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: on the household's own plot
-        the gap, the step and the rake - UNRESEARCHED: the fixtures' 3.5 ft wall gap off the plot's other parts (`WALL_GAP_FT`), places 4 ft apart along each wall (`WALL_SLIDE_FT`), the sty raked with its house"""
+        the gap, the step and the rake - UNRESEARCHED: the fixtures' 3.5 ft wall gap off the plot's other parts (`WALL_GAP_FT`), places 4 ft apart along each wall (`WALL_SLIDE_FT`), the sty raked with its house
+        no sty in a grove band - UNRESEARCHED: no page keeps a sty off a farm's grove band; the placer asks the check's own predicate (`grove_rules.fixture_on_band`), every band as recorded (feature 385 T03, cohort seed 45)
+        the sty's size - GUESS research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: drawn 8 by 6 ft (`STY_FT`)"""
     walls, parts = farmstead(s.M, house)
     w, d = s.px(STY_FT[0]), s.px(STY_FT[1])
     taken = list(parts)

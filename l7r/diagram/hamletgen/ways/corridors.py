@@ -402,7 +402,9 @@ def open_ground_rings(M: Mapping[str, Any]) -> list[Poly]:
     ground `law.span_walkable` refuses a span, less the water, which a crossing fault judges (a decked or forded crossing is
     a lawful one).
 
-    Research: off crop and marsh - research/questions/0081-village-lanes.drawing.html: field outlines, dry plots, marsh"""
+    Research:
+        off crop and marsh - research/questions/0081-village-lanes.drawing.html: field outlines, dry plots, marsh
+        a defense marsh left out - UNRESEARCHED: a town's moat-side wet ground, which a way crosses at its bridge, so the crossing rules judge it (`_crossing_fault`), not this outline"""
     rings = [[(float(a), float(b)) for a, b in f["outline"]] for f in M.get("fields") or [] if f.get("outline")]
     rings += [[(float(a), float(b)) for a, b in d["poly"]] for d in M.get("dry_plots") or [] if d.get("poly")]
     rings += [[(float(a), float(b)) for a, b in m["poly"]] for m in M.get("marshes") or [] if len(m.get("poly") or ()) >= 3 and m.get("role") != "defense"]
