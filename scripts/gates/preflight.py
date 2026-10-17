@@ -150,6 +150,13 @@ def tree_moved(before: dict[str, str], after: dict[str, str]) -> list[str]:
     return sorted(k for k in set(before) | set(after) if before.get(k) != after.get(k))
 
 
+def stray_probes(root: Path) -> list[str]:
+    """Probe test files a diagnosis left in the tree (`tests/**/test_zz_probe*.py`): each runs in the full suite and can turn it
+    red on its own, and the round arbiter found four in pytest's failure list on red-gate@2026-10-17T17:21:08Z (feature 385,
+    its tooling fix) - so the gate refuses to start while any stands."""
+    return sorted(str(p.relative_to(root)) for p in (root / "tests").rglob("test_zz_probe*.py"))
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--root", default=".")
@@ -173,6 +180,9 @@ def main(argv: list[str] | None = None) -> int:
                   + "\n  ".join("HEAD (a commit or a checkout)" if m == "HEAD" else m for m in moved))
             return 1
         return 0
+    if probes := stray_probes(root):
+        print("preflight: probe test files are left in the tree - delete them; the gate stops here (feature 385):\n  " + "\n  ".join(probes))
+        return 1
     t0 = time.monotonic()
     marks: list[tuple[str, float]] = []
 

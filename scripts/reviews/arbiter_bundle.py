@@ -413,8 +413,10 @@ def round_counter(root: Path, unit: str) -> list[str]:
 def red_gate_runs(root: Path, keep: int = 4) -> list[str]:
     """A red-gate trigger's evidence (the round arbiter's tooling fix on red-gate@2026-10-12T13:55:48Z, feature 374 batch 10: its
     bundle carried only the edit and dispatch cascade and hid what each gate failed on): the last `keep` red `make done` runs of
-    this tree's run log - when, at which commit, which phases failed and how many tests - and the tests pytest last saw fail
-    (`.pytest_cache/v/cache/lastfailed`, the latest run's names)."""
+    this tree's run log - when, at which commit, which phases failed, how many tests - and each run's OWN failed tests by name
+    (`failed_names`, its run record's). Not pytest's `.pytest_cache` lastfailed (the round arbiter's tooling fix on
+    red-gate@2026-10-17T17:21:08Z, feature 385): that list is cumulative across every run of the tree, and carried stale probe
+    files and other units' tests that none of the gates counted failed on."""
     runs = []
     for f in sorted((root / "dev" / "run-log").glob("*/*.json")):
         try:
@@ -423,15 +425,11 @@ def red_gate_runs(root: Path, keep: int = 4) -> list[str]:
             continue
         if r.get("target") == "done" and str(r.get("result", "")).startswith("failed"):
             runs.append(r)
-    lines = [f"- {r.get('utc', '?')} at {r.get('commit', '?')}: {r.get('result')}, {r.get('failed_tests', '?')} test(s) failed" for r in runs[-keep:]]
-    try:
-        last = sorted(json.loads((root / ".pytest_cache" / "v" / "cache" / "lastfailed").read_text(encoding="utf-8")))
-    except (OSError, ValueError):
-        last = []
-    return [
-        "## The red gates counted\n\n" + ("\n".join(lines) or "- (no red make done in the run log)") + "\n",
-        "## The tests pytest last saw fail\n\n" + ("\n".join(f"- {n}" for n in last[:20]) or "- (none recorded)") + "\n",
-    ]
+    lines = []
+    for r in runs[-keep:]:
+        lines.append(f"- {r.get('utc', '?')} at {r.get('commit', '?')}: {r.get('result')}, {r.get('failed_tests', '?')} test(s) failed")
+        lines += [f"  - {n}" for n in r.get("failed_names") or []]
+    return ["## The red gates counted, each with its own failed tests\n\n" + ("\n".join(lines) or "- (no red make done in the run log)") + "\n"]
 
 
 def evidence_section(out: Path, files: Sequence[str]) -> list[str]:

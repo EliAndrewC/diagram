@@ -31,6 +31,7 @@ import time
 
 START = "gate-stats-start.json"
 FAILURES = "gate-failures"
+FAILED_NAMES_KEPT = 20  # a run record keeps the first 20 failed test ids - enough to read a gate by, small in the log
 PROC = "/proc"
 SYS = "/sys"
 
@@ -121,23 +122,27 @@ def fail(gitdir: str, phase: str) -> None:
         f.write(f"{time.time():.3f} phase:{phase}\n")
 
 
-def _failure_marks(gitdir: str) -> tuple[list[float], int]:
-    """Every failure moment, and how many tests failed. A test phase's own end mark is dropped when its
-    tests left marks: it would make `last_failure_s` the phase's end. With no test marks (a coverage
-    floor, the roll census) the phase end is the only moment there is, and it stands."""
-    tests, phases = [], []
+def _failure_marks(gitdir: str) -> tuple[list[float], int, list[str]]:
+    """Every failure moment, how many tests failed, and their ids (a mark's third field, written since feature 385; an older
+    bare `<stamp> test` mark names none). A test phase's own end mark is dropped when its tests left marks: it would make
+    `last_failure_s` the phase's end. With no test marks (a coverage floor, the roll census) the phase end is the only
+    moment there is, and it stands."""
+    tests, phases, names = [], [], []
     for line in (_read(os.path.join(gitdir, FAILURES)) or "").splitlines():
         stamp, _, kind = line.partition(" ")
         try:
             moment = float(stamp)
         except ValueError:
             continue
+        kind, _, nodeid = kind.partition(" ")
         if kind == "test":
             tests.append(moment)
+            if nodeid:
+                names.append(nodeid)
         else:
             phases.append((moment, kind))
     kept = [m for m, kind in phases if not (tests and kind in ("phase:test-full", "phase:test"))]
-    return tests + kept, len(tests)
+    return tests + kept, len(tests), names
 
 
 def _delta(before: dict, after: dict, scale: float = 1.0) -> dict:
@@ -150,12 +155,14 @@ def end(gitdir: str, proc: str = PROC, sys_root: str = SYS) -> dict:
         return {}
     s, e = json.loads(raw), snapshot(proc, sys_root)
     out: dict = {}
-    moments, failed_tests = _failure_marks(gitdir)
+    moments, failed_tests, failed_names = _failure_marks(gitdir)
     if moments:
         out["first_failure_s"] = round(min(moments) - s["t"], 1)
         out["last_failure_s"] = round(max(moments) - s["t"], 1)
     if failed_tests:
         out["failed_tests"] = failed_tests
+    if failed_names:
+        out["failed_names"] = failed_names[:FAILED_NAMES_KEPT]  # ...by name: what THIS gate failed (the round arbiter's bundle reads it)
     host: dict = {}
     for key in ("load", "mem_avail_mb", "cpu_temp_c"):
         if s[key] is not None and e[key] is not None:

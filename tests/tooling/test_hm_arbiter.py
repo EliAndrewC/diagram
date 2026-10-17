@@ -631,19 +631,19 @@ def test_an_accept_on_a_review_unit_stands_while_its_sheet_reads_as_ruled(tmp_pa
 
 
 def test_a_red_gate_bundle_names_what_each_red_gate_failed_on(tmp_path: pathlib.Path) -> None:
-    """The round arbiter's tooling fix on red-gate@2026-10-12T13:55:48Z (feature 374 batch 10): a red-gate trigger's bundle
-    carries the red `make done` runs of the run log - their phases and failure counts - and pytest's last failing tests, so a
-    ruling can tell a repeated failure from a new mechanical one."""
+    """The round arbiter's tooling fixes on red-gate@2026-10-12T13:55:48Z (feature 374 batch 10) and red-gate@2026-10-17T17:21:08Z
+    (feature 385): a red-gate trigger's bundle carries the red `make done` runs of the run log - their phases and failure counts -
+    and each run's OWN failed tests by name, never pytest's cumulative lastfailed (stale probe files and other units' tests)."""
     log = tmp_path / "dev" / "run-log" / "2026-10"
     log.mkdir(parents=True)
-    (log / "a.json").write_text(json.dumps({"utc": "t1", "target": "done", "result": "failed: test-full", "commit": "abc", "failed_tests": 1}), encoding="utf-8")
+    (log / "a.json").write_text(json.dumps({"utc": "t1", "target": "done", "result": "failed: test-full", "commit": "abc", "failed_tests": 1, "failed_names": ["tests/test_y.py::test_y"]}), encoding="utf-8")
     (log / "b.json").write_text(json.dumps({"utc": "t2", "target": "done", "result": "green"}), encoding="utf-8")
     (log / "c.json").write_text("not json", encoding="utf-8")
     cache = tmp_path / ".pytest_cache" / "v" / "cache"
     cache.mkdir(parents=True)
-    (cache / "lastfailed").write_text(json.dumps({"tests/test_markers.py::test_x": True}), encoding="utf-8")
-    runs, last = ab.red_gate_runs(tmp_path)
-    assert "t1 at abc: failed: test-full, 1 test(s) failed" in runs and "t2" not in runs
-    assert "tests/test_markers.py::test_x" in last
-    empty = ab.red_gate_runs(tmp_path / "nowhere")
-    assert "(no red make done in the run log)" in empty[0] and "(none recorded)" in empty[1]
+    (cache / "lastfailed").write_text(json.dumps({"tests/test_zz_probe_a05.py::test_x": True}), encoding="utf-8")
+    (runs,) = ab.red_gate_runs(tmp_path)
+    assert "t1 at abc: failed: test-full, 1 test(s) failed" in runs and "  - tests/test_y.py::test_y" in runs and "t2" not in runs
+    assert "zz_probe" not in runs, "the cumulative cache is not read"
+    (empty,) = ab.red_gate_runs(tmp_path / "nowhere")
+    assert "(no red make done in the run log)" in empty

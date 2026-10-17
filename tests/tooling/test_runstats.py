@@ -189,3 +189,20 @@ def test_the_gate_wires_the_stats_into_every_entry_it_writes() -> None:
     assert recipe.count('$(RUNSTATS) fail "$$G"') == 3
     # Each LOGRUN that follows a run (two failure paths, the reference failure, the moved tree, green) carries the stats.
     assert recipe.count('RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" ') == 5
+
+
+def test_a_marks_test_id_is_kept_by_name(tmp_path: pathlib.Path) -> None:
+    """Feature 385 (the round arbiter's fix on red-gate@2026-10-17T17:21:08Z): a mark written with its test id names it in the
+    run record, the first `FAILED_NAMES_KEPT` kept; an old bare mark still counts and names nothing."""
+    ids = [f"tests/test_a.py::test_{n}" for n in range(runstats.FAILED_NAMES_KEPT + 3)]
+    _marks(tmp_path, 1000.0, [f"{1001.0 + n} test {i}" for n, i in enumerate(ids)] + ["1100.0 test"])
+    out = runstats.end(str(tmp_path), str(tmp_path / "noproc"), str(tmp_path / "nosys"))
+    assert out["failed_tests"] == len(ids) + 1 and out["failed_names"] == ids[: runstats.FAILED_NAMES_KEPT]
+
+
+def test_a_mark_carries_its_tests_id(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 385: the mark names the failed test (`report.nodeid`), so the run record can."""
+    monkeypatch.delenv("PYTEST_XDIST_WORKER", raising=False)
+    path = tmp_path / "gate-failures"
+    assert _gate_failures.mark(types.SimpleNamespace(failed=True, nodeid="tests/test_a.py::test_b"), str(path))
+    assert path.read_text().endswith(" test tests/test_a.py::test_b\n")
