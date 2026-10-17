@@ -7,7 +7,7 @@
 set -uo pipefail
 own="$(dirname "${BASH_SOURCE[0]}")/../hooks/lib/own-make.sh"
 if "$own" --no-print-directory done || "$own" done; then
-  printf '\n\033[1mA GATE IS ALREADY RUNNING IN THIS TREE\033[0m - not starting another. Wait on its log: until grep -qE "verification-state|GATE FAILED" .git/verify-gate.log; do sleep 20; done\n'
+  printf '\n\033[1mA GATE IS ALREADY RUNNING IN THIS TREE\033[0m - not starting another. Wait on its log (.git/verify-gate.log links to it): `make verify-wait`, run_in_background\n'
   exit 1
 fi
 exit 0

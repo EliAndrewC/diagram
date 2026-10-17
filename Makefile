@@ -435,8 +435,15 @@ verify:         ## [tests] THE PAIRED RUN: start the gate and dispatch the settl
 	  fi
 	@: "GUARD_EDIT_OK: feature 328 batch 7 - ONE GATE PER TREE (scripts/gates/one-gate.sh says why)."; \
 	  bash "$$(git rev-parse --show-toplevel)/scripts/gates/one-gate.sh"
-	@printf '\nstarting the gate in the background - its verdict arrives as a task notification.\n\n'
-	@root=$$(git rev-parse --show-toplevel); PAIR_OK="started by make verify - the review is dispatched in the same turn" nohup $(MAKE) --no-print-directory done > "$$root/.git/verify-gate.log" 2>&1 &
+	@printf '\nstarting the gate in the background, in a log of its own (.git/verify-gate.log links to it): WAIT WITH `make verify-wait`, run_in_background - its exit is the notification.\n\n'
+	@: "GUARD_EDIT_OK: feature 385 - each verify gate writes its OWN log and verify-gate.log links to the newest (the round arbiter's fix on hour:385-approach-checklist@3: a wait matched an earlier run's verdict)"; \
+	  root=$$(git rev-parse --show-toplevel); log="$$root/.git/verify-gate-$$(date +%s).log"; ln -sfn "$$log" "$$root/.git/verify-gate.log"; \
+	  PAIR_OK="started by make verify - the review is dispatched in the same turn" nohup $(MAKE) --no-print-directory done > "$$log" 2>&1 &
+
+# GUARD_EDIT_OK: feature 385 - the wait on the gate make verify started, on that run's own log (the round arbiter's fix on
+# hour:385-approach-checklist@3), so a session waits on a run the harness tracks rather than writing its own loop.
+verify-wait:    ## [tests] wait for the gate `make verify` started, on ITS OWN log, and print its verdict - run it with run_in_background (exit 0 green, 1 red, 3 no log, 4 timed out, 5 the gate died)
+	@bash "$$(git rev-parse --show-toplevel)/scripts/gates/verify_wait.sh"
 
 map: export L7R_STAGE_PROFILE = $(if $(PROFILE),1,)
 map:            ## [maps] regenerate ONE gen and gate it   GEN=pool/hamlets/inashiro/inashiro.gen.py [PROFILE=1: where the roll spent its time]

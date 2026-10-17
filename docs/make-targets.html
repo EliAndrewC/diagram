@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 157 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 158 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -50,6 +50,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make test-full</td><td class=a>&ndash;</td><td>the gate&#x27;s whole test phase + all three coverage floors (everything except tests/soak/, which only `make soak` runs)</td></tr>
 <tr><td class=n>make tooling</td><td class=a>&ndash;</td><td>run every `tooling` test (make/ci/pipeline, exhaustive) and record them green so `make quick` skips them until the tooling changes</td></tr>
 <tr><td class=n>make verify</td><td class=a>&ndash;</td><td>THE PAIRED RUN: start the gate and dispatch the settlement-review together (feature 151)</td></tr>
+<tr><td class=n>make verify-wait</td><td class=a>&ndash;</td><td>wait for the gate `make verify` started, on ITS OWN log, and print its verdict - run it with run_in_background (exit 0 green, 1 red, 3 no log, 4 timed out, 5 the gate died)</td></tr>
 </table></div>
 <h2>Maps</h2>
 <p class=sec>Generating and checking the pool. `maps` picks its own scope - the reference hamlet alone after a failure, the whole tier after a clean run.</p>
