@@ -311,3 +311,47 @@ Two last reads were made known on the way: the cache directory itself opened (`.
 as reading git's state), and a file under `.git/` (ruff's `.git/info/exclude`) now keyed by its content in the git common
 directory a worktree shares with its clone. The tooling step is now the landing's long pole; of its 18.6 s, the tests that
 ran are a few seconds and the rest is the workers' start and a fresh checkout's first imports.
+
+## R11 Amendment 4 - the serial guard suites, and the tooling tests a landing still runs
+
+**The guard suites (FR-025, SC-019)** (observed 2026-10-17; method: each suite run alone under `time`, load 3-5, its check count
+from its own summary line, before = the committed suite, after = the changed one):
+
+| suite | before | after | checks (same both) | what changed |
+|---|---|---|---|---|
+| main-tree | 57.7 s | 18.9 s | 83 | its 173-command corpus (42 of the 56 s) judged eight rows at a time |
+| no-poll | 48.4 s | 12.2 s | 113 | sections as cases in parallel parts (`tests/hooks/parts.sh`), helpers hoisted, a stderr file and guard log per part |
+| finished-run | 39.1 s (4.9 s of CPU) | 11.3 s | 65 | each fixed settle sleep a readiness poll, at most the old sleep; stable over five runs |
+| pair | 23.5 s | 12.8-17.4 s | 88 | its two 15 s cases split at their own resets, weights measured, 4 -> 8 parts |
+| review-gate | 21.8 s | 8.9 s | 43 | sections as cases in parts, a shared constant moved before them |
+| sync-with-main | 17.9 s | 18.1 s | 124 | its runner moved to `tests/hooks/parts.sh`, shared |
+
+Every split suite also passes at 1, 2 and 3 parts. Doing so found a dependency older than this amendment: pair's case_02
+assumed no green gate and case_04 leaves one, so with the measured weights dealing case_04 first into the same part, case_02
+failed; case_02 now clears the gate record before its check.
+
+A defect made and caught: the first `make hooks-test HOOKS_ALL=1` after the splits ran eight suites of up to eight parts each and
+hit the containers' shared 10 GB memory cap (memguard killed a process of another session's container; a timed sync-with-main
+check failed under the load). `make hooks-test` now sets `PARTS_MAX` to the cores shared by the suites running (one suite up to
+8 parts, eight suites 2 each), which `parts.sh` and pair's runner honor. Every suite at once (`HOOKS_ALL=1`, observed 2026-10-17,
+peak 8.6 GB used): 162 s, all 46 green, against 129 s this morning - with every suite running the machine is saturated and
+parts only share it; the splits pay where a few suites run, which is every ordinary `make hooks-test` and every landing.
+
+**The whole-repository tooling tests (FR-026)** (observed 2026-10-17; method: `--durations` in this clone and a fresh worktree):
+- test_content_cache's whole-repository test, 9.4 s, is one test per check run side by side - the pointer check 6.0 s, the
+  conflict check 3.6 s - each still comparing the cache-off, cold and warm answers over the whole repository, the off and cold
+  runs together. The pointer check's own uncached run is 5.1 s, the floor: three rewrites of its line filter measured slower
+  than it over all 22,439 tracked files (3.77, 4.93 and 4.83 s against 3.34 s, the same lines found) and were reverted.
+- test_open_questions' real-tree test, 4.8 s: the tool is 3.4 s of it; a rewrite of its labeled-line scan measured 3.40 ->
+  3.30 s and was reverted; the two calibration loops (1 s) are what its CPU bound is judged by and stay.
+
+**A landing's tooling run, its start (FR-027)** (observed 2026-10-17; method: a fresh worktree at the clone's HEAD, runs back to
+back, load 3-5):
+- workers: a run with everything reusable but 20 tests took 7.4 s at 10 workers, 5.5 s at 6 (the default here), 5.1 s at 2,
+  6.0 s at 1 - the count is not where the time is;
+- the reuse decision once in the controller, handed to the workers: 13.86-13.99 s against 13.90 s without - no gain, reverted;
+- byte-code compiled first: 18.9 s against 17.6-17.8 s without - no gain;
+- what is left: pytest and xdist import in 0.18 s; a run of one small file is 2.0 s (make, pytest, the workers' start) and the
+  reuse decision 1.2 s more; the rest is the tests that read the whole repository, which re-run whenever main or the clone
+  moved since the clone's last recording (right after a recording, a fresh worktree at the same commit reuses all but the two
+  files that read machine state).
