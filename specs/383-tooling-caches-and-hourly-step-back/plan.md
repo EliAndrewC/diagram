@@ -463,6 +463,7 @@ fixture, its assertion unchanged; one whose subject is the repository's data (ev
 parses) keeps reading it.
 
 **D32a - The store keeps each read's content once.** Kept per test, the store's read sets repeat: the first recording was 21.7
-MB, every whole-repository test carrying its own 22,000 files. So each read's content is kept once, in one table, and an entry
+MB (observed 2026-10-17; the store file's size after one whole-tree record), every whole-repository test carrying its own
+~22,000 files (observed 2026-10-17; test_content_cache's read count). So each read's content is kept once, in one table, and an entry
 names the paths it read; when a run records a path whose content moved, every entry naming it that this run did not record
 again is dropped (it was kept against the old content), so no entry is ever judged against a content it did not see.

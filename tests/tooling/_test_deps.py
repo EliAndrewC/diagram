@@ -38,20 +38,16 @@ import l7r_dep_rules as rules  # noqa: E402 - beside the children's shim, which 
 TREE = "tests/tooling/"
 MODE = os.environ.get("L7R_TEST_DEPS", "")
 STORE_NAME = "tooling-test-passes.json"
-#: what a kept pass holds: 2 adds the git questions' answers (amendment 2). A pass kept in another form is never reused - an
-#: older reader would skip the answers it does not know to ask
-STORE_VERSION = 2
+#: what a kept pass holds: 2 added the git questions' answers (amendment 2); 3 keeps a pass PER TEST, beside what each test's file and
+#: the session read (amendment 5). A pass kept in another form is never reused - an older reader would misread it
+STORE_VERSION = 3
+SESSION = "<session>"  # the key session- and package-scoped fixtures record under: every test depends on it
 
 _current: list[str] = [""]
 _reads: dict[str, dict[str, set[str]]] = {}
 _failed: set[str] = set()
-_ran: dict[str, int] = {}
-_deselected: set[str] = set()
-
-
-def pytest_deselected(items: list[pytest.Item]) -> None:
-    """A file any of whose tests was deselected - by `-k`, a marker, or a reuse - did not run whole: its pass is not kept."""
-    _deselected.update(_rel(i.nodeid) for i in items)
+_ran: set[str] = set()
+_collected: dict[str, list[str]] = {}
 
 
 def _rel(nodeid: str) -> str:
@@ -206,23 +202,51 @@ def build_shim() -> str:
     return str(so)
 
 
+def _enter(key: str) -> str:
+    prev = _current[0]
+    _current[0] = key
+    os.environ["L7R_TEST_DEP_FILE"] = key
+    return prev
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_make_collect_report(collector: pytest.Collector):  # noqa: ANN201
+    """What a test file reads while it is imported and collected is its FILE's read: every test of it depends on it."""
+    rel = _rel_path(str(collector.path)) if isinstance(collector, pytest.Module) else ""
+    track = rel.startswith(TREE) and getattr(collector.config, "_l7r_deps", False)
+    prev = _enter(rel) if track else ""
+    yield
+    if track:
+        _enter(prev)
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_fixture_setup(fixturedef, request):  # noqa: ANN001, ANN201
+    """A fixture wider than one test is read for every test that may use it: a module- or class-scoped one for its file, a
+    session- or package-scoped one for the session (amendment 5, plan D32)."""
+    key = ""
+    if getattr(request.config, "_l7r_deps", False) and fixturedef.scope != "function":
+        f = _rel(request.node.nodeid)
+        key = f if fixturedef.scope in ("module", "class") and f.startswith(TREE) else SESSION
+    prev = _enter(key) if key else ""
+    yield
+    if key:
+        _enter(prev)
+
+
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_protocol(item: pytest.Item, nextitem: pytest.Item | None):  # noqa: ANN201, ARG001
-    rel = _rel(item.nodeid)
-    tracked = getattr(item.config, "_l7r_deps", False) and rel.startswith(TREE)
-    if tracked:
-        _current[0] = rel
-        os.environ["L7R_TEST_DEP_FILE"] = rel
+    tracked = getattr(item.config, "_l7r_deps", False) and _rel(item.nodeid).startswith(TREE)
+    prev = _enter(item.nodeid) if tracked else ""
     yield
     if tracked:
-        _current[0] = ""
-        os.environ["L7R_TEST_DEP_FILE"] = ""
-        _ran[rel] = _ran.get(rel, 0) + 1
+        _enter(prev)
+        _ran.add(item.nodeid)
 
 
 def pytest_runtest_logreport(report: pytest.TestReport) -> None:
     if report.failed:
-        _failed.add(_rel(report.nodeid))
+        _failed.add(report.nodeid)
 
 
 def pytest_sessionfinish(session: pytest.Session, exitstatus: int) -> None:  # noqa: ARG001
@@ -234,39 +258,82 @@ def pytest_sessionfinish(session: pytest.Session, exitstatus: int) -> None:  # n
     if d:
         with open(os.path.join(d, f"worker-{worker}.json"), "w", encoding="utf-8") as fh:
             reused = list(getattr(config, "_l7r_reused", (0, 0)))
-            json.dump({"reads": {f: {k: sorted(v) for k, v in r.items()} for f, r in _reads.items()}, "failed": sorted(_failed), "ran": _ran, "deselected": sorted(_deselected), "reused": reused}, fh)
+            json.dump({"reads": {k: {kk: sorted(v) for kk, v in r.items()} for k, r in _reads.items()}, "failed": sorted(_failed),
+                       "ran": sorted(_ran), "collected": _collected, "reused": reused}, fh)  # fmt: skip
     if hasattr(config, "workerinput") or not d:
         return
-    # UNDER XDIST THE WORKERS DESELECT, the controller does not (383 amendment 2: the summary line never printed in a landing):
-    # each worker reuses the same files, so the controller reports one worker's count
+    # UNDER XDIST THE WORKERS DESELECT, the controller does not (383 amendment 2): the controller reports one worker's count
     counts = [json.loads(w.read_text(encoding="utf-8")).get("reused", [0, 0]) for w in pathlib.Path(d).glob("worker-*.json")]
-    if not getattr(config, "_l7r_reused", None) and any(c[0] for c in counts):
+    if not getattr(config, "_l7r_reused", None) and any(c[0] or c[1] for c in counts):
         config._l7r_reused = tuple(max(counts))  # type: ignore[attr-defined]
-    if any("::" in a for a in config.args):
-        return  # a run of named tests: a file's other tests did not run, so its pass is not the file's
     _keep(pathlib.Path(d))
 
 
+#: what every test of a file depends on besides what it read: the plugin's own code and the test configuration (amendment 5)
+PLUGIN = ("tests/tooling/_test_deps.py", "tests/tooling/_deps_site/l7r_dep_rules.py", "tests/tooling/_deps_site/sitecustomize.py",
+          "tests/tooling/_deps_site/l7r_file_log.c", "pyproject.toml")  # fmt: skip
+
+
+def file_inputs(rel: str) -> set[str]:
+    """The test file itself, the `conftest.py` files from its directory up to `tests/`, and `PLUGIN` - read by every test of it,
+    whether or not the run saw them read (a conftest is imported before any test file is)."""
+    out = {rel, *PLUGIN}
+    parts = rel.split("/")[:-1]
+    while parts and parts[0] == "tests":
+        out.add("/".join([*parts, "conftest.py"]))
+        parts = parts[:-1]
+    return out
+
+
+def _paths(r: dict[str, set[str]], extra: set[str] = frozenset()) -> tuple[set[str], set[str]]:  # noqa: B006
+    """(the files, the directories) one read set names, relative to the repository."""
+    opened = {_rel_path(p) for p in r.get("file", set())} | set(extra)
+    opened = {p for p in opened if p and not (p + "/").startswith(CACHE_READS) and p != ".git"}  # `.git` itself: where, not what
+    files = {p for p in opened if not (ROOT / p).is_dir()}
+    dirs = {_rel_path(p) for p in r.get("dir", set())} | {p for p in opened if (ROOT / p).is_dir() and not p.startswith(".git")}
+    if any(p == ".git" or p.startswith(".git/") for p in opened if (ROOT / p).is_dir()):
+        files.add(".git")  # the repository's own git state was read: not known by content, so never reused
+    return files, dirs
+
+
+def _entry(r: dict[str, set[str]], answers: dict[str, str], extra: set[str] = frozenset()) -> dict:  # noqa: B006
+    """One kept read set: the paths it read (their contents in the store's one table, `states`), its git questions' answers and
+    the programs not known."""
+    files, dirs = _paths(r, extra)
+    return {"opaque": sorted(r.get("opaque", set())), "files": sorted(files), "dirs": sorted(dirs),
+            "git": {q: answer(q, answers) for q in sorted(r.get("git", set()))}}  # fmt: skip
+
+
+def _named(e: dict) -> set[str]:
+    return {"f:" + p for p in e.get("files", [])} | {"d:" + p for p in e.get("dirs", [])}
+
+
+def _now(key: str, ids: dict[str, str], entries: dict[str, list[str]]) -> str:
+    """A table key's content here: `f:<path>` a file's, `d:<path>` a directory's entries."""
+    return _state("file" if key[0] == "f" else "dir", key[2:], ids, entries)
+
+
 def _keep(d: pathlib.Path) -> None:
-    """Merge the workers' and the children's reads and keep each passed file's, by content."""
+    """Merge the workers' and the children's reads, and keep each passed TEST's, its file's and the session's (amendment 5)."""
     reads: dict[str, dict[str, set[str]]] = {}
     failed: set[str] = set()
-    ran: dict[str, int] = {}
+    ran: set[str] = set()
+    collected: dict[str, list[str]] = {}
     for w in d.glob("worker-*.json"):
         data = json.loads(w.read_text(encoding="utf-8"))
-        for f, r in data["reads"].items():
-            for k, v in r.items():
-                reads.setdefault(f, {}).setdefault(k, set()).update(v)
+        for k, r in data["reads"].items():
+            for kk, v in r.items():
+                reads.setdefault(k, {}).setdefault(kk, set()).update(v)
         failed.update(data["failed"])
-        failed.update(data.get("deselected", []))  # not run whole (the plan review: checked, never trusted to a marker)
-        for f, n in data["ran"].items():
-            ran[f] = ran.get(f, 0) + n
+        ran.update(data["ran"])
+        for f, ns in data.get("collected", {}).items():
+            collected[f] = sorted(set(collected.get(f, [])) | set(ns))
     for log in d.glob("children-*.log"):
         for line in log.read_text(encoding="utf-8", errors="replace").splitlines():
-            f, _, rest = line.partition("\t")
+            k, _, rest = line.partition("\t")
             kind, _, path = rest.partition("\t")
-            if f and kind:
-                reads.setdefault(f, {}).setdefault(kind, set()).add(path)
+            if k and kind:
+                reads.setdefault(k, {}).setdefault(kind, set()).add(path)
     gaps = shim_gaps(reads)
     for r in reads.values():  # the C recorder's reads join Python's; its children are known only where it saw all Python saw
         r.setdefault("file", set()).update(r.pop("c-file", set()), r.pop("py-file", set()))
@@ -285,26 +352,42 @@ def _keep(d: pathlib.Path) -> None:
         kept = json.loads(store.read_text(encoding="utf-8")) if store.is_file() else {}
     except OSError, ValueError:
         kept = {}
-    for f in ran:
-        if f in failed:
-            kept.pop(f, None)
-            continue
-        r = reads.get(f, {})
-        opened = {_rel_path(p) for p in r.get("file", set())}
-        opened = {p for p in opened if not (p + "/").startswith(CACHE_READS) and p != ".git"}  # the cache directory itself too  # `.git` itself: where, not what (a worktree's is a file)
-        files = {p for p in opened if not (ROOT / p).is_dir()}
-        dirs = {_rel_path(p) for p in r.get("dir", set())} | {p for p in opened if (ROOT / p).is_dir() and not p.startswith(".git")}
-        if any(p == ".git" or p.startswith(".git/") for p in opened if (ROOT / p).is_dir()):
-            files.add(".git")  # the repository's own git state was read: not known by content, so never reused
-        kept[f] = {
-            "v": STORE_VERSION,
-            "tests": ran[f],
-            "py": sys.version,
-            "opaque": sorted(r.get("opaque", set())),
-            "files": {p: _state("file", p, ids, entries) for p in sorted(files)},
-            "dirs": {p: _state("dir", p, ids, entries) for p in sorted(dirs)},
-            "git": {q: answer(q, answers) for q in sorted(r.get("git", set()))},
-        }
+    if kept.get("v") != STORE_VERSION or kept.get("py") != sys.version or "states" not in kept:
+        kept = {"v": STORE_VERSION, "py": sys.version, "states": {}, "session": {}, "files": {}, "tests": {}}
+    states: dict[str, str] = kept["states"]
+    new_tests: dict[str, dict] = {}
+    for n in ran - failed:
+        new_tests[n] = _entry(reads.get(n, {}), answers)
+    new_files = {f: {"nodeids": ns, "entry": _entry(reads.get(f, {}), answers, file_inputs(f))} for f, ns in collected.items()}
+    # THE SESSION'S READS ARE KEPT AS A UNION: a run that reused every test needing a session fixture never ran it
+    old = kept.get("session", {})
+    session = {k: set(v) for k, v in reads.get(SESSION, {}).items()}
+    session.setdefault("git", set()).update(old.get("git", {}))
+    session.setdefault("opaque", set()).update(old.get("opaque", []))
+    new_session = _entry(session, answers)  # the old entry's paths are already relative: merged after, never re-resolved
+    new_session["files"] = sorted(set(new_session["files"]) | set(old.get("files", [])))
+    new_session["dirs"] = sorted(set(new_session["dirs"]) | set(old.get("dirs", [])))
+    # EACH READ'S CONTENT IS KEPT ONCE (plan D32a), taken now; an entry kept earlier against a content that moved is dropped, so
+    # no entry is ever judged against a content it did not see
+    recorded = set().union(*(_named(e) for e in [*new_tests.values(), *(v["entry"] for v in new_files.values()), new_session]))
+    now = {k: _now(k, ids, entries) for k in recorded}
+    moved = {k for k, v in now.items() if k in states and states[k] != v}
+    # a test kept earlier stood on its file's and the session's reads as they were then: where those moved, it is dropped too
+    session_moved = bool((_named(old) | _named(new_session)) & moved)
+    files_moved = {f for f, v in new_files.items() if _named(v["entry"]) & moved}
+    for n, e in list(kept["tests"].items()):
+        stale = n not in new_tests and (bool(_named(e) & moved) or session_moved or _rel(n) in files_moved)
+        if n in failed or stale:
+            del kept["tests"][n]
+    for f, v in list(kept["files"].items()):
+        if f not in new_files and (_named(v["entry"]) & moved or session_moved):
+            del kept["files"][f]
+    kept["tests"].update(new_tests)
+    kept["files"].update(new_files)
+    kept["session"] = new_session
+    states.update(now)
+    named = set().union(_named(kept["session"]), *(_named(e) for e in kept["tests"].values()), *(_named(v["entry"]) for v in kept["files"].values()))
+    kept["states"] = {k: v for k, v in states.items() if k in named}
     store.parent.mkdir(parents=True, exist_ok=True)
     tmp = store.with_suffix(f".{os.getpid()}.tmp")
     tmp.write_text(json.dumps(kept), encoding="utf-8")
@@ -325,16 +408,34 @@ def shim_gaps(reads: dict[str, dict[str, set[str]]]) -> dict[str, set[str]]:
     return out
 
 
-def reusable(kept: dict, ids: dict[str, str], entries: dict[str, list[str]], answers: dict[str, str] | None = None) -> bool:
-    """Is a kept pass still good: the same interpreter, no other program run against the repository, no read of a file git
-    ignores, every read unchanged, and every git question it asked answered the same here (amendment 2, FR-015)? Reads are kept relative to the repository, so a worktree compares with its clone."""
-    if kept.get("v") != STORE_VERSION or kept.get("py") != sys.version or kept.get("opaque"):
+def entry_ok(e: dict, states: dict[str, str], ids: dict[str, str], entries: dict[str, list[str]], answers: dict[str, str] | None = None, memo: dict[str, str] | None = None) -> bool:
+    """Is one kept read set still what it was: no program not known, no read of a file git ignores, every path it names as the
+    store's table holds it, every git answer the same? Reads are kept relative to the repository, so a worktree compares with
+    its clone."""
+    if e.get("opaque") or "error" in e.get("git", {}).values():
         return False
-    files, dirs = kept.get("files", {}), kept.get("dirs", {})
-    if "ignored" in files.values() or "error" in kept.get("git", {}).values():
-        return False
-    same = all(_state("file", p, ids, entries) == was for p, was in files.items()) and all(_state("dir", p, ids, entries) == was for p, was in dirs.items())
-    return same and all(answer(q, answers if answers is not None else {}) == was for q, was in kept.get("git", {}).items())
+    memo = {} if memo is None else memo
+    for k in _named(e):
+        was = states.get(k)
+        if was is None or was == "ignored":
+            return False
+        if k not in memo:
+            memo[k] = _now(k, ids, entries)
+        if memo[k] != was:
+            return False
+    return all(answer(q, answers if answers is not None else {}) == was for q, was in e.get("git", {}).items())
+
+
+def reusable_tests(kept: dict, ids: dict[str, str], entries: dict[str, list[str]], answers: dict[str, str]) -> tuple[set[str], dict[str, int]]:
+    """(the node ids whose own reads, their file's and the session's are all unchanged; {file: its test count} for each file
+    every recorded test of which is among them - such a file is not collected at all)."""
+    states, memo = kept.get("states", {}), {}
+    if "states" not in kept or kept.get("v") != STORE_VERSION or kept.get("py") != sys.version or not entry_ok(kept.get("session", {}), states, ids, entries, answers, memo):
+        return set(), {}
+    file_ok = {f: entry_ok(e["entry"], states, ids, entries, answers, memo) for f, e in kept.get("files", {}).items() if f.startswith(TREE)}
+    tests = {n for n, e in kept.get("tests", {}).items() if file_ok.get(_rel(n)) and entry_ok(e, states, ids, entries, answers, memo)}
+    whole = {f: len(e["nodeids"]) for f, e in kept.get("files", {}).items() if file_ok.get(f) and e["nodeids"] and set(e["nodeids"]) <= tests}
+    return tests, whole
 
 
 def answer(question: str, answers: dict[str, str]) -> str:
@@ -344,13 +445,12 @@ def answer(question: str, answers: dict[str, str]) -> str:
     return answers[question]
 
 
-def reuse_set(config: pytest.Config) -> dict[str, int]:
-    """{tooling test file: its kept test count} for every kept pass still good here, decided once per process (feature 383
-    amendment 3, plan D25): the reuse is known before collection, so a reused file is never imported, in any worker."""
+def reuse_set(config: pytest.Config) -> tuple[set[str], dict[str, int]]:
+    """What this run reuses, decided once per process before collection (amendment 3 plan D25; per test since amendment 5)."""
     cached = getattr(config, "_l7r_reuse_set", None)
     if cached is not None:
         return cached
-    out: dict[str, int] = {}
+    out: tuple[set[str], dict[str, int]] = (set(), {})
     if MODE == "reuse" and getattr(config, "_l7r_deps", False):
         store = _store()
         try:
@@ -359,27 +459,46 @@ def reuse_set(config: pytest.Config) -> dict[str, int]:
             kept = {}
         if kept:
             ids, entries = _ids()
-            answers: dict[str, str] = {}
-            out = {f: int(e.get("tests", 0)) for f, e in kept.items() if f.startswith(TREE) and reusable(e, ids, entries, answers)}
+            out = reusable_tests(kept, ids, entries, {})
     config._l7r_reuse_set = out  # type: ignore[attr-defined]
     return out
 
 
 def pytest_ignore_collect(collection_path: pathlib.Path, config: pytest.Config) -> bool | None:
-    """A reused tooling test file is not collected: its module is never imported (FR-022)."""
+    """A test file every test of which is reused is not collected: its module is never imported (FR-022)."""
     if MODE != "reuse" or not getattr(config, "_l7r_deps", False) or collection_path.suffix != ".py":
         return None
     rel = _rel_path(str(collection_path))
-    skip = reuse_set(config)
-    if rel not in skip:
+    _tests, whole = reuse_set(config)
+    if rel not in whole:
         return None
-    seen = config.__dict__.setdefault("_l7r_skipped", set())
-    seen.add(rel)
-    config._l7r_reused = (len(seen), sum(skip[f] for f in seen))  # type: ignore[attr-defined]
+    config.__dict__.setdefault("_l7r_skipped", {})[rel] = whole[rel]
     return True
+
+
+@pytest.hookimpl(tryfirst=True)
+def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item]) -> None:
+    """Every collected test of the tree is noted by its file (before any deselection), and in a reuse run each reused test is
+    deselected."""
+    if not getattr(config, "_l7r_deps", False):
+        return
+    for i in items:
+        if _rel(i.nodeid).startswith(TREE):
+            _collected.setdefault(_rel(i.nodeid), []).append(i.nodeid)
+    if MODE != "reuse":
+        return
+    tests, _whole = reuse_set(config)
+    gone = [i for i in items if i.nodeid in tests]
+    if gone:
+        items[:] = [i for i in items if i.nodeid not in tests]
+        config.hook.pytest_deselected(items=gone)
+    skipped = config.__dict__.get("_l7r_skipped", {})
+    config._l7r_reused = (len(skipped), sum(skipped.values()) + len(gone))  # type: ignore[attr-defined]
 
 
 def pytest_terminal_summary(terminalreporter, config: pytest.Config) -> None:  # noqa: ANN001
     reused = getattr(config, "_l7r_reused", None)
-    if reused:
-        terminalreporter.write_line(f"reused the clone's passes: {reused[0]} tooling test file(s), {reused[1]} test(s), on identical inputs (feature 383 FR-013)")
+    if reused and (reused[0] or reused[1]):
+        terminalreporter.write_line(
+            f"reused the clone's passes: {reused[1]} tooling test(s), {reused[0]} file(s) of them not even collected, on identical inputs (feature 383 FR-013, per test since amendment 5)"
+        )

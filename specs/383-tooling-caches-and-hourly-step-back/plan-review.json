@@ -229,8 +229,8 @@
    "declared": "spec-fidelity"
   },
   "## Amendment 5 (FR-028 to FR-030)": {
-   "sha256": "4c45ed4c26bf4372e7c7444b5fbbaa25983ee13621523d38f0e916df2352b29b",
-   "verdict": "BLOCKED",
+   "sha256": "97fe3033c28661ee13489072027f4cbfe1fb7ef2f9645d386bce9e9708a06eca",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
   }
@@ -868,6 +868,39 @@
      "class": "narrowing",
      "ruling": "NOT LEGITIMATE",
      "why": "FR-030 (accepted) covers a code-subject test that re-runs 'on edits to the repository's data'; D33 restricts the candidates to those that re-run on an edit to a RESEARCH PAGE, so a code-subject test still re-running on a spec, dev-ledger, registry or other data edit falls outside the measurement and is never moved. The GM approved item (3) 'code-only tests moved to fixtures case by case' with no research-only limit; the research edit was the motivating instance, and confining the rule to it completes the GM's thought. Fix: say the tests that still re-run on an edit to the repository's data (research pages, specs, dev records, registries, ...) whose subject is code, and keep FR-030's listing of each moved test with what it read before AND after."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Amendment 5 (FR-028 to FR-030)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D31",
+     "summary": "Gate tooling phase runs with L7R_TEST_DEPS=reuse; FULL=1 runs all; tooling hash reads scripts/ recursively",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict; carries GM item (1) and FR-028 word for word, hash gap included."
+    },
+    {
+     "id": "D32",
+     "summary": "Store v3 keeps reads per test node id plus file- and session-level reads; a fully reusable file is not collected",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict; carries GM item (2) and FR-029 (per-test reads, shared deps, no import when nothing runs)."
+    },
+    {
+     "id": "D33",
+     "summary": "Code-subject tests that still re-run on edits to any repository data (anything not under l7r/, scripts/, tests/ or configuration) found from kept reads, listed with reads before and after, given fixtures; data-subject tests keep the real tree",
+     "class": "within",
+     "why": "Round 1's finding is fixed: the scope is now the repository's data as FR-030 says, not research pages alone, and the before-and-after listing FR-030 requires is restored. Detection by exclusion is at least as broad as the requirement. The code/data split is FR-030's own, and it is the case-by-case judgment in GM item (3)."
+    },
+    {
+     "id": "D32a",
+     "summary": "Each read's content stored once in one table; when a run records a path whose content moved, entries naming that path that this run did not re-record are dropped",
+     "class": "within",
+     "why": "A storage and eviction design FR-029 leaves open. It never reuses a test whose reads changed: a dropped entry only re-runs the test, which is the conservative direction. The one reuse it gives up is content that moved and then moved back. A per-node-id store keeping one entry per test would already lose that, so it does not narrow per-test reuse as the GM asked for it."
     }
    ]
   }
