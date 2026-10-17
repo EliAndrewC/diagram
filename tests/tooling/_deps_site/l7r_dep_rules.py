@@ -57,6 +57,9 @@ READ_ONLY_GIT = frozenset(
 NOT_REPLAYABLE = ("--stdin", "--batch", "--output", "--contents", "-w", "--write", "--ext-diff", "--textconv")
 ISOLATED = frozenset({"-I", "-S", "-E", "-IS", "-ISE"})
 RECORDING = ("L7R_TEST_DEP_LOG", "L7R_TEST_DEP_FILE", "L7R_TEST_DEP_ROOT")
+#: what a non-Python child needs to be recorded by the C library (amendment 3, plan D26): the preloaded recorder, and libuv's
+#: io_uring off, whose file calls would pass the library by
+SHIM_ENV = "L7R_TEST_DEP_SHIM"
 ROOT_MARK = "{ROOT}"
 #: git variables that steer which repository, index or objects a command reads: a question asked under one names a place the
 #: replay would not see. The configuration variables (`GIT_CONFIG_COUNT`, set for every session here) are kept: the replay runs
@@ -168,9 +171,29 @@ def adopt(name: str, argv: list[str], env: object, values: dict[str, str], site:
     return bool(env.get("L7R_TEST_DEP_LOG"))
 
 
+def preload(env: object, shim: str, values: dict[str, str]) -> bool:
+    """Is a non-Python child recorded by the preloaded C-library recorder? A child inheriting this process's environment is
+    when the recorder is in it; one given its own environment has the recorder, io_uring's switch and the recording's variables
+    put into it in place (plan D26)."""
+    if not shim:
+        return False
+    if env is None:
+        return shim in os.environ.get("LD_PRELOAD", "")
+    if not isinstance(env, dict):
+        return bool(getattr(env, "get", None) and shim in str(env.get("LD_PRELOAD", "")))  # type: ignore[union-attr]
+    for k in RECORDING:
+        if values.get(k):
+            env.setdefault(k, values[k])
+    if shim not in str(env.get("LD_PRELOAD", "")):
+        env["LD_PRELOAD"] = " ".join([shim, *([env["LD_PRELOAD"]] if env.get("LD_PRELOAD") else [])])
+    env.setdefault("UV_USE_IO_URING", "0")
+    return bool(env.get("L7R_TEST_DEP_LOG"))
+
+
 def judge(args: tuple, root: str, site: str) -> tuple[str, str]:
-    """Judge one `subprocess.Popen` audit event (executable, argv, cwd, env): ("", "") known, ("git", question) or
-    ("opaque", the program's name)."""
+    """Judge one `subprocess.Popen` audit event (executable, argv, cwd, env): ("", "") known, ("git", question), ("c", the
+    program's name) - known by the preloaded recorder, trusted only where the run's check of it holds - or ("opaque", the
+    program's name)."""
     exe, argv = args[0], args[1]
     cwd = args[2] if len(args) > 2 else None
     env = args[3] if len(args) > 3 else None
@@ -188,4 +211,6 @@ def judge(args: tuple, root: str, site: str) -> tuple[str, str]:
         q = git_question(words, cwd, env, root)
         if q:
             return ("git", q)
-    return ("opaque", name)
+        return ("opaque", name)
+    values = {k: os.environ.get(k, "") for k in RECORDING}
+    return ("c", name) if preload(env, os.environ.get(SHIM_ENV, ""), values) else ("opaque", name)
