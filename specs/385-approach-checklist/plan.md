@@ -225,11 +225,12 @@ page-wide unit (`#unfootnoted`) in the first batch alone; and `make modal-bundle
 one bundle holding each pop-up, answered unit by unit.
 
 **D13 - FR-010, no write while the session's own gate runs.** A PreToolUse guard (`scripts/hooks/gate-write-hooks.sh`) refuses,
-while a `make done` of this tree runs (`own-make.sh`), what moves what the gate's end checks (`preflight.py --tree-check`: HEAD
-and the tracked tree): an Edit or Write into the clone, and a Bash command that commits (`git commit`) or writes a tracked record
-(`make append` - the ledger; `make claims-checked` and `make claims-triaged` - the claims index; `make tick` - tasks.md; `make
-accept` - gm-review.jsonl), naming `make verify-wait`. Not refused: `git add` and the record targets that write only under
-`.git/` (`make record-checked`, `make modal-triaged`), which move nothing the gate checks. Escape `GATE_WRITE_OK`.
+while a `make done` of this tree runs (`own-make.sh`), what moves what the gate's end checks (`preflight.py`'s `tree()`: HEAD and
+`git diff --name-only HEAD`): an Edit or Write into the clone, and a Bash command that commits or stages (`git commit`, `git add` -
+a staged new file enters that list) or writes a tracked record (`make append` - the ledger; `make claims-checked` and `make
+claims-triaged` - the claims index; `make record-checked` - with `REPLY=` it files rows in a tracked `found.jsonl`; `make tick` -
+tasks.md; `make accept` - gm-review.jsonl), naming `make verify-wait`. Not refused: `make modal-triaged`, which writes only under
+`.git/`. Both refusals the round-2 review measured are in its test. Escape `GATE_WRITE_OK`.
 
 **D14 - the hourly clock counts the session's time, not the GM's.** The event-log hook records whether a prompt is the GM's or
 a background notification (`"gm": true`); `checkpoint.py` subtracts every Stop-to-GM-prompt gap from the hour; the feature

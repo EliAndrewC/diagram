@@ -75,13 +75,13 @@
    "declared": "spec-fidelity"
   },
   "### T02 Approach (checklist part A)": {
-   "sha256": "297d44b179087cc3a287593fcdb7041954024d823b5e4ee0d530d51abbfb09e9",
+   "sha256": "e42709b723e9a9ea2f10b9189df9c1d41efa500dded626d26dc9aff9372af376",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
   },
   "### T02 Decisions": {
-   "sha256": "df074510223974dcaa8b392cefeb2829cd535d374b4f323f8046776a1828d9d6",
+   "sha256": "a5d674a340b15f9ea433505d8ed9c9851901f6faa7c33e5865564253f121fa57",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
@@ -608,6 +608,93 @@
      "summary": "Tooling only, no engine or map changes, no review check owed",
      "class": "within",
      "why": "T02 is the tooling task by the spec and amendment 1."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)",
+    "### T02 Approach (checklist part A)",
+    "### T02 Decisions",
+    "(removed) ## T02 - the tooling: the Approach block required, the triggers, the split (FR-003 to FR-005)",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Approach",
+     "summary": "T02's part A answered; item 3 drops the unused 'twenty failed-test ids' number",
+     "class": "within",
+     "why": "FR-003's block for T02 itself; dropping a number nothing uses narrows nothing asked."
+    },
+    {
+     "id": "removed-placeholder",
+     "summary": "the old T02 placeholder section ('decided at its start') removed, replaced by the decided section",
+     "class": "within",
+     "why": "the placeholder said T02 would be decided at its start; the new section is that decision under the widened title amendment 1 approved."
+    },
+    {
+     "id": "D8",
+     "summary": "make tick refuses a task in an opted-in plan without a ### Txx Approach block answering every part A item",
+     "class": "within",
+     "why": "FR-003 verbatim; the proposal the GM approved: 'make tick refuses until it's answered'."
+    },
+    {
+     "id": "D9",
+     "summary": "triggers write approach-owed.json: arbiter ruling on hour/red-gate owes part B; any-size make cohort with a seed failing that does not fail at the baseline owes part B; a re-review after CLEAR of a changed approach owes the Approach block afresh",
+     "class": "within",
+     "why": "Round 1's two items are carried: no N floor, so a single newly refused seed fires (FR-004 'a refused seed or cohort'; the approved proposal 'the first seed the change refuses' - a seed already failing at HEAD is not one the change refuses); and the re-decide now owes the Approach block, as FR-003 asks ('a re-decided plan section carries the block answered afresh'). The figure-label floor matches FR-003's '(a changed approach)'."
+    },
+    {
+     "id": "D10",
+     "summary": "feature-report per-task table now includes each segment between decision points, plus per-check-kind cost per changed line, from the event log",
+     "class": "within",
+     "why": "FR-005 asks for each segment between decision points; FR-011 the per-line cost."
+    },
+    {
+     "id": "D11",
+     "summary": "triage answers keep the blobs they read; triage bundles grouped by baseline; claims triage the same",
+     "class": "within",
+     "why": "FR-008, measured before changing it."
+    },
+    {
+     "id": "D12",
+     "summary": "record-owed marks answered/owed; #unfootnoted alone in the first batch; modal-bundle takes several KIND=s",
+     "class": "within",
+     "why": "FR-009 both halves."
+    },
+    {
+     "id": "D13-refused",
+     "summary": "while this tree's make done runs, refuse Edit/Write into the clone, git commit, make append, claims-checked, claims-triaged, tick, accept",
+     "class": "within",
+     "why": "FR-010 and amendment 1 ('Refuse writes to the tree while your own gate runs'); each refused write moves HEAD or a tracked file that preflight.py --tree-check hashes, so each voids the gate - enforcement of what was asked."
+    },
+    {
+     "id": "D13-git-add",
+     "summary": "git add is let through while the gate runs, on the premise that it moves nothing the gate checks",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The premise is false, measured 2026-10-17 by this reviewer: preflight.py tree() keys on `git diff --name-only HEAD`, and in a scratch repo `git add` of an untracked file made it appear in that list (before: empty; after: 'new'), so tree_moved() reports it and the gate goes NOT GREEN. Staging a new file is the ordinary step before a commit, so the carve-out passes exactly the gate-voiding write FR-010 exists to stop (purpose-fatal). The earlier CLEAR text refused git add. Fix: refuse a git add that stages any path not already in `git diff --name-only HEAD` (a new file), or refuse git add whole; a git add of an already-modified tracked file may pass."
+    },
+    {
+     "id": "D13-git-only-records",
+     "summary": "make record-checked and make modal-triaged are let through as writing only under .git/",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Adjudicated per target. modal-triaged: within - modal_triage.py record writes the store and its TOUCHED mark only, under .git/. record-checked: the premise is false for one of its forms - with REPLY= it runs record_owed.file_outside(), which appends to the active feature's specs/<NNN>/found.jsonl, a TRACKED file (git ls-files lists specs/335-.../found.jsonl and others), so it moves the tracked tree and voids the gate. (REASON= writes a new untracked file under dev/bypass-log/, which tree() does not see.) Fix: refuse make record-checked when REPLY= is given (or move found.jsonl writes to wait), and state the premise per form rather than for the target."
+    },
+    {
+     "id": "D14",
+     "summary": "the hourly clock subtracts GM waits, recorded by a gm field on prompts",
+     "class": "within",
+     "why": "the round arbiter's tooling fix named in Approach item 2; built and landed."
+    },
+    {
+     "id": "D15",
+     "summary": "tooling only, landed by make land-tooling, no review checks owed",
+     "class": "within",
+     "why": "the items are tooling; nothing asked of the engine here."
     }
    ]
   }
