@@ -41,3 +41,10 @@ divides at, FR-005; T01's are kept by hand until T02 builds the split).
 the ground - the gather's refusal named `fabric`, and "a fence between the ends" was inferred and built. The geometry dump
 answered it in one run. `settle_knots` should record why each gather was refused, as D3 now names a refusal's rules: the
 diagnosis needed hand instrumentation in a scratch worktree, three times.
+| 16:32 | D4 built: shallow crossings cut, a household way's foot re-aimed; seed 10 under the patch passes | seed 10's geometry dump (16:05) |
+| 16:40 | D2 built: `ways/forced.py`, the law, the last resort, the settle's repairs and `Lawful` read one ground | the plan |
+| 16:44 | D7: 0081's drawing page | the plan |
+| 16:50 | **regression found**: cohort seed 38 newly refused (49/54). First guess (a foot re-aim through a yard) was built and did not fix it; bisected by commit (D4), then by half (the shallow cut of a household's way), then the cut dumped: a household's way had been hung on an ordinary lane a repair later cut. Fixed: a household's way is cut only onto the connector or a tree lane | the after-cohort (`.git/cohort48-t01.log`) |
+
+The same lesson as 16:24, a third time: a guess from the refusal's text (16:50's foot-through-a-yard) cost a build and a roll;
+the bisection and one dump answered it. Measure first is now three for three in this task.
