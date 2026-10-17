@@ -186,3 +186,35 @@ to an hour late; the hour-6 step-back caught it, 2026-10-17.)
 6. **The one-sentence test.** "The path stops 9 ft short of the lane beside it and the map is refused" - the GM would ask why it
    is not joined; that was the question to answer.
 7. **The next step is a measurement**: the drop probe.
+
+## T03 - the retro row
+
+**The numbers (`make feature-report F=385`, the per-task table).** Started 20:44, the gate green at 22:38: about 2 h at the
+tick, against a 4 h budget, with eight decision points (three plan rounds, the re-decide, three arbiter rulings, the landing
+form), the last about 15 min before the gate. **The hour on D17's merge (about 21:08-22:02) is T03's own** (the plan review's
+condition): it was tried, measured and carried, not avoided. Red gates 1 (two branches the split left uncovered). Check
+dispatches: the blind Approach, 5 plan rounds, 3 rulings, 2 triages, quote-check, record-format, impl-drift, modal-depiction.
+
+**What landed.** Seeds 17, 21, 40 and 45 pass. Against HEAD nothing newly fails. The pool is clean, and Kashikawa's lane 9 now
+runs straight past its own garden fence instead of bending round it - a result of the fix, not a side effect to undo.
+Seed 57 stands at 2 lane knots against HEAD's 1, waived by `ask:t03-seed57-residue`. Its grounds: the refused set is unchanged,
+the extra knot comes with the own-garden fix that clears three seeds, and chasing it inside T03 is the side-by-side family
+that broke six seeds. The merge, seeds 49 and 55, and 57's residue are T12's (D25).
+
+**The blind Approach (SC-006)** - compared above, rule by rule. It was the better half of the session's own reading. It found
+the mislabeled `FIELD_REACH_FT` and the two concrete causes the session had not looked for (40, 45), and matched on the merge.
+It missed the question that decided seed 21 - is the refusal itself right? - and so did the sealed notes: both guessed a
+neighbor's yard or a stand-in, and the dump said "their own garden". The checklist now asks it (A4).
+
+**Which checklist items fired.** B1 (look at the ground before naming a cause) decided seed 21, 49 and 57 - every guess made
+before a dump was wrong. B5 (the third tuning is a step back) stopped the REACH loop at its third move. A3 found the
+mislabeled reach. Part B was written three times; each named the measurement that came next.
+
+**Which should have fired, and the changes made to the checklist.**
+- A4's new question (above), which would have pointed at the own garden before any probe.
+- C7 (new): a cohort's count is not its seed set. "59/60" was `N=54`, and two failing seeds stood outside it.
+- C8 (new): times in a log are read from the event log. This retro's first decision log was written from memory, up to an hour
+  off; the hourly step-back caught it.
+
+**What the tooling did.** D9's approach gate fired twice on real work (hours 5 and 6), each time a short honest part B. The
+arbiter fixed the cohort to compare seed by seed against HEAD with counts. The same-review re-answer fix saved a round.
