@@ -26,8 +26,9 @@ except Exception: pass' 2>/dev/null)"
   gitdir="$(git -C "${cwd:-.}" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)" || exit 0
   [ -n "$gitdir" ] || exit 0
   got="$(printf '%s' "$INPUT" | python3 "$AP_HERE/lib/hm_agent_prefix.py" "$gitdir" 2>/dev/null)" || exit 0
-  if [ -z "$got" ]; then
-    case "$INPUT" in *AGENT_PREFIX_OK*) guard_log agent-prefix escaped "a shared block after a differing part, with a reason" escape ;; esac
+  [ -z "$got" ] && exit 0
+  if [ "$got" = "ESCAPED" ]; then  # the decider read the escape from the prompt; no substring test here
+    guard_log agent-prefix escaped "a shared block after a differing part, with a reason" escape
     exit 0
   fi
   guard_log agent-prefix blocked "$got" shared-after-difference

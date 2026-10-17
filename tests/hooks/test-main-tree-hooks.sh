@@ -63,6 +63,9 @@ run "$WORKER" "cd $MAIN && make done";               check "cd into the mirror, 
 rewritten "  ...to make in the clone" "cd $WORKER && make done"
 run "$WORKER" "( cd $MAIN && echo x > f )";          check "the subshell form into the mirror -> rewritten" 0 "$RC"
 rewritten "  ...inside the subshell" "( cd $WORKER && echo x > f )"
+# GUARD_EDIT_OK: 2026-10-17 - a write target a variable builds, standing in the mirror: refused with its segment, never a traceback
+run "$WORKER" "cd $MAIN && for n in a; do echo x > /tmp/mt-\$n.json; done"
+case "$OUT" in *Traceback*) printf 'FAIL  %s\n      out: %s\n' "an unresolvable target in the mirror crashed the refusal" "$OUT"; FAIL=$((FAIL+1));; *) printf 'ok    %s\n' "an unresolvable target in the mirror is answered without a traceback"; PASS=$((PASS+1));; esac
 run "$WORKER" "cd $MAIN/specs && echo x > f";        check "cd DEEPER into the mirror -> rewritten" 0 "$RC"
 rewritten "  ...to the same subdirectory of the clone" "cd $WORKER/specs && echo x > f"
 

@@ -101,7 +101,8 @@ def verdict(payload: dict, git_dir: str) -> str:
     for old in reversed(earlier(git_dir, session, key)):
         size, start = finding(prompt, old)
         if size and ESCAPE.search(prompt):
-            break  # escaped with a reason: the caller says why this shape is right; recorded by the hook
+            remember(git_dir, session, key, prompt)
+            return "ESCAPED"  # with a reason: the caller says why this shape is right; the hook records it
         if size:
             first = prompt[start : start + 70].splitlines()[0] if prompt[start:].strip() else ""
             return f"{size} characters shared with an earlier `{key.split('|')[0]}` dispatch start at character {start} of this prompt, after text that differs: `{first}`"

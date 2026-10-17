@@ -384,7 +384,8 @@ def explain(verdict: dict, main: str) -> str:
     lines.append("render-sync, and that names the tree with `git -C` from sync-with-main.sh rather than cd-ing.")
     lines.append("")
     if reason == "named-main":
-        named = ", ".join(t["path"] for t in ctx["targets"] if t["class"] == "main" and t["how"] == "named")
+        # GUARD_EDIT_OK: 2026-10-17 - a target a variable builds (`> "/tmp/x-$v.json"`) has no path; the refusal crashed on it
+        named = ", ".join(t["path"] or f"a target this cannot resolve, in `{t['segment']}`" for t in ctx["targets"] if t["class"] == "main" and t["how"] == "named")
         lines.append(f"Named: {named}")
         lines.append("A write that merely LANDS in main because of where the shell stands is moved to your clone")
         lines.append("(feature 204); one that names main by its path says what it means, and a guard never guesses at")
