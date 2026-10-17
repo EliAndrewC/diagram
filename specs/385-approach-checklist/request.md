@@ -21,3 +21,66 @@ The session proposed the shape (spec.md, "Why"); the GM, 2026-10-17, verbatim:
 
 Carried from 384 (`specs/384-match-the-research-remainder/request.md`): its requests and the usage cap at 90% of the weekly
 window, for the tasks moved here.
+
+## The proposal the GM approved (the session's words, 2026-10-17, verbatim)
+
+The GM's "the shape that you have proposed" refers to this reply, quoted whole:
+
+> I agree with the diagnosis. I'd change one part of the plan: you don't need the split to write the first checklist. There's enough evidence to draft one now, and the split feature is where we test it, one task at a time.
+>
+> ## What I think
+>
+> **The rule exists, but it's asked too late.** CLAUDE.md already says "a number set only to implement against is a knob to move, never a target to defend." But only the round arbiter asks that, and the arbiter only runs after a cap or tripwire fires, which is after the hours are gone. In both your examples (the 19° meeting and the 700 ft distance), one question asked at the start would have ended the problem: "where does this rule or number come from: research, your ruling, or us?" So the fix isn't a new principle. It's asking the existing questions at two earlier moments:
+>
+> 1. **Before the first edit of a task.** This hooks into the existing `make task-start` / `make decide` step.
+> 2. **When the work starts to resist.** For example, the first seed the change refuses, a second red gate, or the hourly step-back from feature 383.
+>
+> At either moment, the checklist would be the required content: `make tick` refuses until it's answered, the way the decide-first rule already works. That keeps it in tooling rather than memory.
+>
+> **The checklist content (v1).** For each rule or number the work is fighting:
+> - **Where does it come from?** A `Research:` claim, one of your rulings, or an implementation detail of ours? If it's ours, it's a knob.
+> - **Does it describe how the thing actually came about, or is it tidiness of ours?** Footpaths are walked after the houses stand, so houses never move for a path.
+> - **Name at least three exits besides "conform", and judge each:**
+>   - Refine the number.
+>   - Add a principled exception, like "unless an obstruction forces it."
+>   - Add a rule that removes the case, like merging two near-parallel paths.
+>   - Give it more room.
+> - **Is the plan secretly a packing search against an unresearched constraint?**
+> - **Guardrail:** dropping or loosening a rule needs its reason recorded where the code changes. This is not permission to throw out inconvenient rules.
+>
+> **The audit is cheap if it reads the right things.** Two weeks of transcripts come to 2.5 GB, so reading them is out. But I measured the high-signal parts:
+> - **Your typed prompts:** 216 messages, about 26,000 words. Your corrections ("why 700 ft?") are the rakes we stepped on, already pointed out.
+> - **236 round-arbiter rulings:** 115 accept, 35 continue. Each one is a moment a session got stuck, already labeled.
+> - **The `make feature-report` breakdowns.**
+> - **The ~10 lesson memories already written:** room before packing, homesteads before lanes, derive don't pin, and others.
+>
+> One Sonnet reader can turn all of that into a list of pitfalls, each tagged with what it cost and which checklist item would have caught it. That's roughly a few hundred thousand tokens, not two weeks' worth.
+>
+> **The retros need a measure we don't have yet.** Feature 374's report shows "thinking" was 51% of its time (25.5 h) and Bash another 8 h. It can't say how much of that was churning between approaches and how much was doing the work, and that split is exactly what you want to see per task. So the new feature should also make the report divide each task's time at its decision points, roughly "before the approach settled" and "after."
+>
+> ## Proposed first steps
+>
+> 1. **Draft checklist v1 now,** from CLAUDE.md, the lesson memories and the cheap audit above.
+> 2. **File the new feature,** once you approve it. Its first task is the lane law (384's FR-000), which is the worked example: the needle angle rule made obstruction-aware, and near-parallel lanes merged. 384's own FR-003 already says no work starts until you decide how to go faster, so this feature is FR-003's answer.
+> 3. **Run each task with the checklist,** then do a short retro: where the time went, which checklist item fired or should have, and what to change. Amend the checklist in the same step, then take the next task.
+>
+> ## Scope
+>
+> About 10 items, taken in the order 384's "How it starts" already sets:
+> - the lane law
+> - the four cohort seeds failing at HEAD (17, 21, 40, 45)
+> - T48 (the web carries a re-deal of the seats)
+> - T47's patch re-landed
+> - about five ranking rows of different kinds, so the checklist is tested on more than lanes
+>
+> The feature succeeds when the time per task falls and the checklist stops changing between tasks. 384 keeps everything else and resumes under the finished process.
+>
+> ## Answers
+>
+> - **What do I think?** You're right. The missing piece is timing, not a principle: the "where does this number come from?" question exists but is only asked after the thrashing. A checklist at task start and when the work resists, enforced by the existing decide/tick tooling, fixes that.
+> - **Split first or checklists first?** Both, in that order of thinking: draft v1 now from what we already have, and use the split feature to refine it task by task.
+> - **Can the audit be cheap?** Yes. Skip the transcripts and read your prompts, the arbiter rulings, the feature reports and the lesson memories.
+> - **What does the feature begin with?** Checklist v1 plus the report's per-task time split, then the lane law as task 1.
+> - **How is it scoped?** About 10 items from the front of 384, each followed by a retro. 384 is amended to move them out.
+>
+> Project rules require your explicit approval before I file the new feature or move items out of 384. If this shape looks right, say so in your own words and I'll file it, draft checklist v1 and start the cheap audit.
