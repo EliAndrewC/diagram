@@ -100,18 +100,18 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T24 The trial tool and the cases (plan D24): `scripts/measure/model_trial.py`; two cases per check chosen and prepared
       research: rendering
       verify: DONE. DONE. scripts/measure/model_trial.py (catalog --replayable, prepare as a separate clone at the recording clone's HEAD, bundles frozen, snapshots rebuilt, run-all queued, usage); tests/tooling/test_model_trial.py 4 passed; the 14 cases in research R10, one with fixed findings and one clean per check
-- [ ] T25 The 42 Sonnet 5.5 runs, scored; tiers, tier table, docs and the CLAUDE.md pointer (plan D24; SC-018)
+- [x] T25 The 42 Sonnet 5.5 runs, scored; tiers, tier table, docs and the CLAUDE.md pointer (plan D24; SC-018)
       research: rendering
-      verify: research R10's table; tests/test_agent_models.py green; docs/spec-kit-and-reviews.md "Models tried"
-- [ ] T26 Not importing what will not run (plan D25): the plugin's ignore_collect, quick's collection measured and cut (SC-016)
+      verify: DONE. DONE. 42 Sonnet 5.5 runs scored (research R10): every check missed a known finding in all or most runs, none moves; Sonnet found two real modal errors Opus missed; tier table notes, docs/spec-kit-and-reviews.md Models tried, CLAUDE.md pointer; test_agent_models 8 passed
+- [x] T26 Not importing what will not run (plan D25): the plugin's ignore_collect, quick's collection measured and cut (SC-016)
       research: rendering
-      verify: the same tests pass with the cut on and off; quick, a targeted test-file and a landing's tooling run timed before and after
-- [ ] T27 The always-run files traced (plan D26); strace's overhead measured (SC-015)
+      verify: DONE. DONE. the tooling plugin ignores reused files at collection (12.9 -> 10.7 s in the clone, 296 tests); quick measured with make collect-cost: testmon already imports 5 of 283 test modules per worker, the 2.5 s worker start not cut (research R10); targeted runs collect only what they name; the gate's full collection recorded
+- [x] T27 The always-run files traced (plan D26); strace's overhead measured (SC-015)
       research: rendering
-      verify: the always-run count before (18) and after; each one left recorded with its seconds
-- [ ] T28 The guard suites by what their cases read (plan D27) (SC-017)
+      verify: DONE. DONE. the preloaded C-library recorder (D26), checked each run against Python's (one gap found, Python's, fixed); always run 18 of 127 -> 0 of 128; a fresh worktree reuse run 18.39 s / 61 tests at load 8.1 (research R10)
+- [x] T28 The guard suites by what their cases read (plan D27) (SC-017)
       research: rendering
-      verify: the replay of recorded landings; each narrowed suite's inside/outside test
+      verify: DONE. DONE. 44 landings replayed: sync-with-main and gate-stamp re-ran on 42 (whole-tree inputs); suites now traced by what they read (38 of 44), sync-with-main 36.2 -> 17.9 s (case_11 split, 8 parts), hooks-test idle 16.1 -> 2.6 s; tests/tooling/test_file_log.py 4 passed (research R10)
 - [ ] T29 Close: a landing measured before and after, the gate, the report, landed
       research: rendering
       verify: research R10; the gate green; the report written; landed
