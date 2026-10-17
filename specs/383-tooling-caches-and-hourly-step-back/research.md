@@ -480,3 +480,13 @@ not write this change, against the recorded verdict's three required changes)
   control run 3, the same prompt and the same files as run 1, read only the agent file (8,665) and wrote 13,689 fresh - the
   block the harness adds them in differs from one dispatch to the next.
 
+**SC-023, after** (observed 2026-10-17 19:23; method: a headless session started in this clone after the change - agent files
+load at a session's start - dispatched each agent twice in a row with a probe prompt ("read nothing and reply READY"), each
+subagent's first-call usage read from its transcript):
+
+| (observed 2026-10-17; the probe above) | first dispatch: read / fresh | second, seconds later: read / fresh | before (R13: back-to-back fresh) |
+|---|---|---|---|
+| spec-fidelity | 8,665 / 2,441 | 11,106 / 0 | 25,829 |
+| claims-triage | 0 / 5,614 | 5,614 / 0 | general-purpose 29,191 |
+| modal-triage | 2,327 / 3,353 | 5,680 / 0 | general-purpose 29,191 |
+
