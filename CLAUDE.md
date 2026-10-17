@@ -97,7 +97,7 @@ Spec-driven under `.specify/memory/constitution.md`. One line each here; the ful
   a check's third round on one subject, a block an earlier version had and a later dropped coming back,
   a second red gate in a row, check dispatches past 1.0 a changed line - each owe the `round-arbiter`'s ruling
   (`make arbiter-bundle`) before the next check or gate. `make gm-review` lists what waits for the GM.
-- Run the chain end to end, unattended: stop only when a wrong guess would cost an hour-plus to unwind; when stuck, the next
+- Run the chain end to end, unattended: stop only when a wrong guess would cost an hour-plus to unwind or the thing genuinely cannot be done; when stuck, the next
   step is a measurement. A PROCESS stop goes to the round arbiter (`make arbiter-ask`), what to build to the GM.
 - Do the literal thing (constitution XVI); an exception goes to `spec-fidelity` with the GM's words.
 - A spec and a plan's changed blocks are reviewed by `spec-fidelity` (`make plan-delta F=<n>`) before implementation and ticks.

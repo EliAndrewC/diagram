@@ -591,3 +591,28 @@ reads the other's cache; each subagent's first-request usage read from its trans
   launches read the agent file's prefix (3,381) and wrote only their own first message - about 60% less each (observed 2026-10-17; the method above).
 - The parallel calls reached the hook ~0.4-0.5 s apart (the together leg's start times), as the probe of D42 had measured.
 
+## R19 Amendment 6, reopened - CLAUDE.md as a core plus an index (SC-029)
+
+(observed 2026-10-17; method: `wc -c` before and after; the independent rule enumeration: an Opus agent read the old and new
+files and every file the text moved to from a bundle under `/tmp/l7r-check/claude-md-enumeration/`, and judged every rule of
+the old files; a second round rechecked its findings)
+
+| (observed 2026-10-17; the method above) | before | after |
+|---|---|---|
+| root CLAUDE.md | 37,985 characters | 13730 characters |
+| research/CLAUDE.md | 25,402 | 20,772 |
+| tests/CLAUDE.md | 18,157 | 6,340 |
+| l7r/diagram/CLAUDE.md | 13,156 | unchanged - already its module map, its doc index and the always-on rules |
+
+- Moved VERBATIM, each section marked: the root's research rules to `docs/research-doctrine.md`, its workflow to
+  `docs/spec-kit-and-reviews.md`, its verification text to `docs/efficiency-tooling.md`, its guard table to `docs/guards.md`;
+  research's how-to to `research/editing-the-record.md`; tests' target table, roll roster and conventions to
+  `tests/test-bed-detail.md`.
+- The enumeration, round 1 (~426 rules): nothing dropped, every move verbatim; 22 rules MOVED-UNREACHABLE (15 root, 7 tests)
+  and 3 CHANGED (two research wordings, one tests line "INCREMENTAL over every tree"). Each got its one line. Round 2: all 23
+  resolved; one line had lost a reason to stop ("or the thing genuinely cannot be done"), restored.
+- The quotes test (`tests/test_claude_md_quotes.py`): the tooling's 12 quotes of a CLAUDE.md all resolve; three were stale
+  before this work (two copied from gm-assistant's hooks) and were re-aimed.
+- A fresh session's first request, started in `/diagram` (observed 2026-10-17; a headless Sonnet session replying READY,
+  its first request's usage): 52,651 input tokens before; after is measured once this lands, the same way.
+
