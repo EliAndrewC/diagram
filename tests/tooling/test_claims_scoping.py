@@ -314,3 +314,23 @@ def test_a_relabel_a_mislabeled_verdict_prescribed_owes_no_new_round(tmp_path: p
     assert FAR not in dict(cx.owed(cx.current(skill), index, qdir, store)), "the relabel its MISLABELED verdict prescribed owes nothing"
     mod.write_text(relabeled.replace("return x * SHARE", "return x * SHARE * 2"))
     assert dict(cx.owed(cx.current(skill), index, qdir, store)).get(FAR) == "code changed", "a change to the body owes a round"
+
+
+def test_claims_checked_at_different_versions_each_see_their_own_changes(tmp_path: pathlib.Path) -> None:
+    """Feature 385 T02 (plan D11): the triage listed one page's changed blocks once for every claim citing it, so a claim
+    checked at a later version was shown changes it had already been checked against. Each version is now its own section."""
+    skill, index, store = _checked(tmp_path)
+    qdir = skill / QDIR
+    page = qdir / "0033-row-villages-resson.html"
+    page.write_text(page.read_text().replace("Each lane is 5 ft.", "Each lane is 6 ft."))
+    mid, blocks = cx.page_blocks(page.name, qdir, {})
+    store = {**store, mid: [d for d, _w in blocks]}
+    index[FAR]["pages"] = {page.name: mid}  # far_row re-checked at the 6 ft version
+    page.write_text(page.read_text().replace("Farms face the street.", "Farms face the lane."))
+    manifest = cx.triage_bundle(cx.current(skill), index, store, [SHARE, FAR], qdir, tmp_path / "t").read_text()
+    sections = [s for s in manifest.split("## ")[1:] if s.startswith("research/questions/0033")]
+    assert len(sections) == 2, "one section per version checked at"
+    far = next(s for s in sections if FAR in s)
+    share = next(s for s in sections if SHARE in s)
+    assert "> Farms face the lane." in far and "6 ft" not in far.split("Claims citing it")[0], "far_row was checked at 6 ft"
+    assert "> Farms face the lane." in share and "> Each lane is 6 ft." in share, "SHARE was checked before both changes"

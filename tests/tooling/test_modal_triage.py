@@ -218,3 +218,45 @@ def test_modal_form_holds_m13s_about_side_and_depiction_reports_nothing_from_abo
     assert "does NOT belong in About: it goes on the Depiction tab" in " ".join(form.split())
     depiction = " ".join((root / ".claude/agents/modal-depiction.md").read_text(encoding="utf-8").split())
     assert "report nothing from About" in depiction and "sits in About instead belongs here" not in depiction
+
+
+def test_a_triage_answer_keeps_a_baseline_and_the_next_change_shows_alone(drawn: pathlib.Path) -> None:
+    """Feature 385 T02 (plan D11): the triage's own "untouched" answer keeps the page it showed, so the next triage diffs
+    against that - T01's one-word fix re-showed both of its new bullets to every pop-up, because the untouched answers had
+    erased the blobs and every unit fell back to the merge base."""
+    store = ro.store(drawn)
+    _edit(drawn, "Wells stand by the door.", "Wells stand by the kitchen.")
+    manifest, _n = mt.bundle(drawn, drawn.parent / "t")
+    data = json.loads((manifest.parent / "triage.json").read_text())
+    assert "(against the merge base (no check has read it yet))" in manifest.read_text(encoding="utf-8")
+    assert mt.record(store, data["units"], "nothing touched\n", data["pages"], data["blobs"]) == []
+    assert "research/questions/0029-farmhouses-minka.drawing.html" in ro._read(store, DEP)["pages"], "the shown page kept"
+    _edit(drawn, "the kitchen", "the hearth")
+    manifest, _n = mt.bundle(drawn, drawn.parent / "t2")
+    text = manifest.read_text(encoding="utf-8")
+    assert "> Wells stand by the hearth." in text and "Wells stand by the kitchen." in text.split("Removed blocks")[1]
+    assert "Wells stand by the door." not in text, "the change already triaged is not shown again"
+    assert "(against the version these pop-ups' last check read)" in text
+
+
+def test_the_default_listing_marks_what_is_already_answered() -> None:
+    """Feature 385 T02 (plan D12): the full listing read as owed after one quote-check batch had answered its unit; each answered
+    unit is now marked, and the header says how many are still unanswered."""
+    a, b = ro.ru.Unit("quote-check:0081.drawing#unfootnoted", "a block changed", "f1"), ro.ru.Unit("record-format:0081", "words", "f2")
+    text = ro.report([a, b], None, {a.slug})
+    assert text.startswith("record-owed: 2 unit(s) owed by the delta, 1 still unanswered")
+    assert f"  [answered] {a.slug}" in text and f"  {b.slug}  - words" in text
+    assert "still unanswered" not in ro.report([a, b], None), "the --unanswered form as before"
+
+
+def test_several_pop_ups_of_one_check_are_bundled_for_one_agent(drawn: pathlib.Path) -> None:
+    """Feature 385 T02 (plan D12): T01 sent one agent per pop-up to read one changed page; several KIND=s for one check now
+    write one top MANIFEST over each pop-up's own bundle, carrying their unit lines, each answered from its own bundle."""
+    _edit(drawn, "Wells stand by the door.", "Wells stand by the kitchen.")
+    out = drawn.parent / "batch"
+    assert mb.bundles(drawn, ["Farmhouse", "Farmhouse"], "modal-depiction", str(out), reason="checked in full") == 0
+    top = (out / "MANIFEST.md").read_text(encoding="utf-8")
+    assert "owed-checks: modal-depiction" in top and top.count("MANIFEST.md`") == 2 and f"unit: {DEP} " in top
+    subs = sorted(p for p in out.iterdir() if p.is_dir())
+    assert len(subs) == 2 and all((s / "MANIFEST.md").is_file() for s in subs)
+    assert ro.answer(drawn, "modal-depiction", "COVERAGE 0", str(subs[0])) == [DEP], "answered from its own bundle"
