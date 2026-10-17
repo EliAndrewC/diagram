@@ -106,3 +106,28 @@ a fix to the wait itself; queue it and write it after the verdict."
 **The numbers for SC-001's comparison (T01, by hand).** Wall time 15:31-18:53, about 3 h 22 min, against a six-hour budget; time to
 the last design decision about 79 min; re-decides 5 plan rounds and 1 part B; agent dispatches about 45 (the event log's count for
 the feature: `make feature-report F=385`); red gates 3; regressions found by the cohort 1, fixed.
+
+## T02 - the retro row
+
+**The numbers (from `make feature-report F=385`, the per-task table T02 itself built).** Start 19:41Z (backfilled by hand from the
+event log: the first edit of T02's plan, written with amendment 2), all seven items landed on main by 20:41Z: about 1 h 05 min
+against a four-hour budget. Decision points: the three plan rounds (BLOCKED, BLOCKED, CLEAR by 20:07Z), the time after the last
+about 35 min. Red gates 0; check dispatches 3 (the plan rounds); regressions 0.
+
+**Where the time went.** The plan rounds (about 25 min: D13's first form let `git add` and `make record-checked` through, D9 had no
+floors) and then straight construction, each item landed alone in value order as the Approach block said (A8) - so the stop
+risk the block named never cost anything.
+
+**Which checklist items fired.** A5 (measure first) on D11: the triage already diffed against a kept blob, and the measurement
+found the two real causes (a triage answer erasing it; one listing shared by every unit) - the fix was two records kept, not a
+new diff. A6(c) chose "keep what a check read" over a smarter diff. B did not fire: nothing resisted.
+
+**What changed from the plan.** D8's refusal lives in a new `scripts/gates/approach_gate.py`, called from `make tick` beside the
+plan check, rather than inside `plan_gate.py`: the three triggers share its `owe()` and its block parser, and `plan_gate.py` stays
+a plan-review module. Found and fixed on the way: the test-deps monitoring callback raised at interpreter shutdown in every
+tooling run (pre-existing; the guard its sibling `_hook` already had). The T02 start was first seeded as 20:05Z, a guess; the
+event log put it at 19:41Z - `make task-start` now records it, so T03 on is measured, not reconstructed.
+
+**For T03.** T03 is the first task the whole kit measures: `make task-start F=385 T=T03` first, its Approach block (D8) after the
+blind agent's (FR-012), any part B a trigger owes (D9), and its row in the per-task table compared with T01's 3 h 24 min and
+11 decision points.
