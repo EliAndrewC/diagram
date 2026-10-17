@@ -248,3 +248,47 @@ for), which is where both its saving and its misses come from. On the record che
 A setup fault, recorded so the next trial avoids it: the first glyph and building runs all returned NOT-REVIEWABLE because a
 case's clone had no gate record and the contract stops on a red `make review-paired-gate`; `model_trial.py snapshot` now writes
 the gate stamp in the case's clone (the dispatch of the recorded run says the gate was green), and those four cases ran again.
+
+**Tests not imported (FR-022)** (observed 2026-10-17; method: `make collect-cost TREE=quick`, a probe plugin in every process
+counting the test modules it imported, load 1.4-2.0):
+
+| run | time | test modules imported per process | tests |
+|---|---|---|---|
+| quick as make runs it (testmon selecting, 6 workers), nothing changed | 3.87-4.15 s | 5 in each of 6 workers | none ran |
+| the same, no workers | 1.62 s | 5 | none ran |
+| collection only, no testmon | 5.44 s | 283 | 9,433 |
+
+So `make quick` already does not import what testmon rules out, in every worker: the first `make quick` of the day's 14.3 s
+with no test run (observed 2026-10-17, method: `make quick` on an unchanged tree at load 3, the clone idle four days) was a
+cold start, and the next was 7.0 s whole (pytest 2.3 s of it). What is left is the six workers' start when testmon selects
+little (about 2.5 s); testmon decides after xdist has fixed the worker count, and a pre-pass to decide costs 1.6 s on every
+run that does select tests - not cut. A targeted `make test-file` collects only the files named. The incremental gate
+collects everything on purpose (its merge needs every collected node id, `ci/selection.remember_all`); a cut there is a
+change to its bookkeeping - not made here. The tooling plugin decided after collection: it now answers
+`pytest_ignore_collect` for each reused file, and a reuse run in the clone went 12.9 -> 10.7 s (296 tests ran, observed
+2026-10-17, method: `L7R_TEST_DEPS=reuse make test-file FILE=tests/tooling`, back to back).
+
+**The always-run files (FR-021)** (observed 2026-10-17; method: `scripts/measure/tooling_reuse_time.py`): every child is now
+recorded - a git question replayed, a Python child adopted, any other program by the preloaded C recorder (`strace` is
+refused in the container: no ptrace). Each run checks the C recorder against Python's on every Python child; the one gap
+found (a Python child's `os.open` for writing, recorded as a read by Python's own recorder) was Python's, and fixed. Always
+run: 18 of 127 -> 0 of 128. Of the 128, five still do not reuse in a fresh worktree because they read machine state a worktree
+lacks - `.gencache` (test_gencache), `.git/info/exclude` through ruff's gitignore (test_lint_scope, test_push_checks),
+`.coverage` and `.git/verification-state.json` through make (test_soak_suite), the `.git` directory listed
+(test_content_cache). In a fresh worktree at HEAD: with reuse 18.39 s, 61 tests ran; without 37.37 s, 1,806 (load 8.1; the
+same measurement before this amendment: 19.35 s, 297 ran, load 5.5). In the clone, a reuse run is 7.0 s (26 tests). The rest
+of the fresh worktree's time is its cold byte-code: every module compiled again.
+
+**The guard suites (FR-023)** (observed 2026-10-17; methods as plan D27 says):
+
+| what | before | after |
+|---|---|---|
+| sync-with-main suite (the slowest) | 36.2 s at 4 parts; `case_11` alone 27.9 s | 17.9 s at 8 parts, `case_11` split in three, weights measured (124 checks either way) |
+| sync-with-main and gate-stamp re-run by a tooling landing | 42 of 44 landings (inputs: the whole `scripts/` tree) | only when a file they read changed - traced: after a change to `clone-sync-hooks.sh`, gate-stamp no longer ran |
+| suites traced | - | 38 of 44 (the six left read the repository through git or a file git ignores, and keep `hookdeps.py`'s key) |
+| `make hooks-test` with nothing to run | 16.1 s (the user-level hook's self-test 7.5 s every time; one `--deps` process per suite 5.9 s) | 2.6 s |
+| every suite at once (`HOOKS_ALL=1`, traced) | - | 129 s |
+
+A defect made and caught on the way, recorded: an edit replacing the per-suite key lost one of its two halves to a refused
+edit, so for one run every suite's key was the hash of nothing; the next run re-ran each suite whose traced reads had moved
+and rewrote the stamps, and the recipe now treats a missing key as never fresh.
