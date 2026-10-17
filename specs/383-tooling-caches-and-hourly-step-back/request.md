@@ -151,3 +151,13 @@ independent rule-by-rule enumeration and a test that every hook message quoting 
 month's general-purpose job families for any that still recur. The GM:
 
 > Yes, go ahead and reopen amendment 6 for all five. Thank you.
+
+## Amendment 7 (2026-10-17, same session)
+
+The GM pointed the session at `/host-l7r-repo/diagram-fanout-workflows.md` (written that day from this repository's
+transcripts): the hand-stagger of amendment 6 costs more than it saves (the extra main-session turn re-reads the whole
+context); the larger cost is one main-session wake per finished background agent; waves of 4 or more same-type agents should
+run as a `Workflow` with `agentType` on every `agent()` call, authorized in the appended system prompt, enforced by hooks, and
+the first real wave measured. The GM:
+
+> Thanks. I came up with a new set of recommendations around subagents, which have now been saved to diagram-fanout-workflows.md in the main L7R checkout on the host. So please take a look at that and then implement its recommendations, because there's some pretty good analysis in there that I think will really help us out.

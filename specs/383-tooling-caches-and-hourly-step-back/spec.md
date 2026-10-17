@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-12
-**Status**: Done 2026-10-17 - amendment 6 reopened and landed: spec FAITHFUL (round 2), plan CLEAR; the guard refuses a repeated block wherever it sits, only the agent file being reused across launches (research R16); a fan-out launches its first alone, its later launches then writing 2,274 tokens fresh against 5,721 (R18); no 1-hour subagent cache (a test); the root CLAUDE.md 37,985 -> 13,730 characters, research 25,402 -> 20,772, tests 18,157 -> 6,340, every rule kept or reachable (R19); the research-pass agent (R17). Before it: Done 2026-10-17 - amendment 6 landed: spec FAITHFUL, plan CLEAR (round 5); a back-to-back dispatch of an identical prompt writes nothing fresh on its first call, and one with a different prompt only its prompt and environment block, from ~26-29k (observed 2026-10-17; research R13, R14, R16); spec-fidelity without the instruction files found every recorded item, three runs a leg (R14); the modal guidelines in the agent files, bundles held under 2,000 shared characters; the dispatch guard; one copy of the root CLAUDE.md per session and subagent (R15). Before it: Done 2026-10-17 - amendment 5 landed: plan CLEAR (round 4, D31 rewritten for where the gate really runs tooling tests); after a Makefile-only change the gate's full run reuses 1,739 of 1,824 tooling tests with their coverage carried, 167 -> 132 s (m:gate-tooling-makefile-a5); reuse per test, a source-page edit re-runs 15 tests not 219 (observed 2026-10-17; research R12); a soundness defect in reuse fixed (D32b, research R12); 12 tests of code moved off the real record. Before it: Done 2026-10-17 - amendment 4 landed: spec FAITHFUL (round 3), plan CLEAR; five guard suites 2-4x faster with their checks unchanged (research R11); a landing 30.04 -> 27.28 s (m:land-tooling-landing-a4); make parts-sweep (the arbiter's fix). Before it: Done 2026-10-17 - amendment 3 landed: spec FAITHFUL (round 2), plan CLEAR (round 5); no review check moves to Sonnet 5.5 (research R10); always-run tooling files 18 -> 0 of 128; a landing 37.05 -> 30.04 s (m:land-tooling-landing-a3); hooks-test idle 16.06 -> 2.6 s (m:hooks-test-idle); sync-with-main suite 36.23 -> 17.88 s (m:sync-with-main-suite). Before it: Done 2026-10-13 - amendment 2 landed: spec FAITHFUL (round 4), plan block CLEAR (round 2); a landing 113.98 -> 37.05 s (m:land-tooling-landing-before, m:land-tooling-landing-after), tooling reuse 27.58 -> 19.35 s with 18 of 127 files always run (m:land-tooling-tests-reuse-a2), the claims gate 8.53 -> 1.65 s (m:claims-gate-push). Before it: Done 2026-10-13 - amendment 1 landed: spec FAITHFUL (round 3), plan block CLEAR; land-tooling's tooling tests 36.21 -> 27.58 s (606 of 1,796 tests ran with reuse, m:land-tooling-tests-reuse), quote-verbatim's verdicts cached. Before it: Done 2026-10-13 - spec FAITHFUL (round 3), plan CLEAR (round 3), every task ticked; push checks 19.87 s -> 1.92 s (research R6); tooling landed 0906d798a; the GM's review open (the first step-back's note)
+**Status**: In progress 2026-10-17 - amendment 7 (FR-042..FR-046). Before it: Done 2026-10-17 - amendment 6 reopened and landed: spec FAITHFUL (round 2), plan CLEAR; the guard refuses a repeated block wherever it sits, only the agent file being reused across launches (research R16); a fan-out launches its first alone, its later launches then writing 2,274 tokens fresh against 5,721 (R18); no 1-hour subagent cache (a test); the root CLAUDE.md 37,985 -> 13,730 characters, research 25,402 -> 20,772, tests 18,157 -> 6,340, every rule kept or reachable (R19); the research-pass agent (R17). Before it: Done 2026-10-17 - amendment 6 landed: spec FAITHFUL, plan CLEAR (round 5); a back-to-back dispatch of an identical prompt writes nothing fresh on its first call, and one with a different prompt only its prompt and environment block, from ~26-29k (observed 2026-10-17; research R13, R14, R16); spec-fidelity without the instruction files found every recorded item, three runs a leg (R14); the modal guidelines in the agent files, bundles held under 2,000 shared characters; the dispatch guard; one copy of the root CLAUDE.md per session and subagent (R15). Before it: Done 2026-10-17 - amendment 5 landed: plan CLEAR (round 4, D31 rewritten for where the gate really runs tooling tests); after a Makefile-only change the gate's full run reuses 1,739 of 1,824 tooling tests with their coverage carried, 167 -> 132 s (m:gate-tooling-makefile-a5); reuse per test, a source-page edit re-runs 15 tests not 219 (observed 2026-10-17; research R12); a soundness defect in reuse fixed (D32b, research R12); 12 tests of code moved off the real record. Before it: Done 2026-10-17 - amendment 4 landed: spec FAITHFUL (round 3), plan CLEAR; five guard suites 2-4x faster with their checks unchanged (research R11); a landing 30.04 -> 27.28 s (m:land-tooling-landing-a4); make parts-sweep (the arbiter's fix). Before it: Done 2026-10-17 - amendment 3 landed: spec FAITHFUL (round 2), plan CLEAR (round 5); no review check moves to Sonnet 5.5 (research R10); always-run tooling files 18 -> 0 of 128; a landing 37.05 -> 30.04 s (m:land-tooling-landing-a3); hooks-test idle 16.06 -> 2.6 s (m:hooks-test-idle); sync-with-main suite 36.23 -> 17.88 s (m:sync-with-main-suite). Before it: Done 2026-10-13 - amendment 2 landed: spec FAITHFUL (round 4), plan block CLEAR (round 2); a landing 113.98 -> 37.05 s (m:land-tooling-landing-before, m:land-tooling-landing-after), tooling reuse 27.58 -> 19.35 s with 18 of 127 files always run (m:land-tooling-tests-reuse-a2), the claims gate 8.53 -> 1.65 s (m:claims-gate-push). Before it: Done 2026-10-13 - amendment 1 landed: spec FAITHFUL (round 3), plan block CLEAR; land-tooling's tooling tests 36.21 -> 27.58 s (606 of 1,796 tests ran with reuse, m:land-tooling-tests-reuse), quote-verbatim's verdicts cached. Before it: Done 2026-10-13 - spec FAITHFUL (round 3), plan CLEAR (round 3), every task ticked; push checks 19.87 s -> 1.92 s (research R6); tooling landed 0906d798a; the GM's review open (the first step-back's note)
 
 **Affects**: tooling, review process
 
@@ -15,6 +15,8 @@
 **Amendment 6 extended**: the GM, 2026-10-17, "that also seems like a token efficiency improvement that we need to make or measure or address or whatever."
 
 **Amendment 6 reopened**: the GM, 2026-10-17, "Yes, go ahead and reopen amendment 6 for all five. Thank you."
+
+**Amendment 7 approved**: the GM, 2026-10-17, "So please take a look at that and then implement its recommendations, because there's some pretty good analysis in there that I think will really help us out."
 
 **Amendment 4 approved**: the GM, 2026-10-17, "I think I do want a next round uh, for the guard suites running serially, so uh, splitting those up does seem good." and "So yes, please fold those two into the same round as the sweet splitting. and then go ahead and work that."
 
@@ -242,6 +244,29 @@ long-running feature does for itself, on the clock glyph-check already keeps.
   hook message quoting CLAUDE.md still resolves.
 - **FR-041 The month's general-purpose job families are swept.** Each family of general-purpose launches in the transcripts is
   classed - recurring, so given a defined agent or pointed at the existing one; or one-off - and the list is recorded.
+### Amendment 7 - waves through Workflow (`request.md`, Amendment 7)
+
+- **FR-042 The hand-stagger is removed.** "Launch one first" (FR-039) leaves CLAUDE.md, the docs and the dispatch guard: the
+  extra main-session turn it forces re-reads the whole context, which costs more than the prefix it saves (research R20).
+- **FR-043 A wave of 4 or more agents of one type runs as a Workflow, each agent typed.** Every `agent()` call passes
+  `agentType`, so its definition (`omitClaudeMd`, its few tools) applies rather than the workflow's default subagent; the main
+  session gets one notification for the wave; per-item follow-up is a `pipeline()` stage. A saved workflow, `check-wave`,
+  carries a wave of typed checks: its arguments are the agent type and the units (each a label and its prompt), and it returns
+  each unit's reply. Two or three agents of one type stay plain Agent calls in one message.
+- **FR-044 The appended system prompt authorizes it, narrowly.** `scripts/container/append-system-prompt.md` pre-authorizes
+  `Workflow` for a wave of 4 or more agents of one defined type that exists in `.claude/agents/`, with `agentType` on every call,
+  and nothing broader (no general-purpose fleets, new kinds of fan-out or deep research without the GM's request); a test holds
+  that the text exists and names only defined agents.
+- **FR-045 Hooks hold it, and a wave keeps every guard a check has.** An Agent launch that is the 4th of one type within about
+  ten seconds is refused with the Workflow form in the message (`WAVE_OK` with a reason passes); a `Workflow` whose script calls
+  `agent(` without `agentType` is refused (`GP_OK` passes); and every unit of a `check-wave` run is held by the same per-dispatch
+  guards an Agent call of its type is (model, repeated block, bundle and owed check, decide-first, freeze, round caps, review
+  occasions, escalation), its launch and return recorded as an Agent call's are - a guard the hooks of the Agent tool apply is
+  never skipped because the check ran in a workflow (research R20: no PreToolUse or PostToolUse Agent hook fires for an agent a
+  workflow spawns). Each hook has its suite cases.
+- **FR-046 The first real wave is measured.** A wave of 4 or more real checks run through `check-wave`: each agent's
+  first-request read and write (the 2nd and later read the definition's prefix and write no ~35k), the main session's wakes
+  during the wave (one), against the last hand-launched wave of the same check.
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002, FR-005, FR-006, FR-007) The push's checks: from about 24 s, the measurement the GM saw
@@ -336,6 +361,15 @@ long-running feature does for itself, on the clock glyph-check already keeps.
   session's first request before and after; the enumeration's verdicts with none left dropped or unreachable.
 - **SC-030** (FR-041) The families' table: launches per family since 2026-09-19, the last date each recurred, and what each
   became.
+- **SC-031** (FR-042, FR-045) The guard no longer refuses a second launch within seconds of a cold first; it refuses the 4th
+  same-type launch within the guard's window (a design number, ten seconds) and passes the 3rd, a different type, and `WAVE_OK`; a `Workflow` script with an untyped
+  `agent(` is refused and `GP_OK` passes (suite cases); and a `check-wave` unit a guard of its type would refuse is refused,
+  with the guard's own message.
+- **SC-032** (FR-044) The test fails when the authorization is missing or names an agent with no file.
+- **SC-033** (FR-045) A `check-wave` run's units are recorded launched and returned as Agent calls' are (the freeze holds while
+  one runs) - a test on recorded hook payloads, and the event log of the measured wave.
+- **SC-034** (FR-043, FR-046) The measured wave, run through `check-wave` with every agent typed: per-agent first-request read and write, and the main session's wakes, against the last
+  hand-launched wave of its check (research).
 ## Review history
 
 - spec-fidelity, Mode 2, round 1 (2026-10-12): CHANGES REQUIRED, one item, applied: FR-007's "its code" is the check and every

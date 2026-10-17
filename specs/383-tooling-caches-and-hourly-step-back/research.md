@@ -617,3 +617,22 @@ the old files; a second round rechecked its findings)
   its first request's usage): 52,651 input tokens before; 43,725 after, once it landed (8,926 fewer, 17% (observed 2026-10-17; the method above), in every
   session's every request).
 
+## R20 Amendment 7 - the fan-out document, checked, and a workflow probe
+
+(observed 2026-10-17; method: the document's own wake script over `~/.claude/projects/-diagram*` from 2026-09-17; this session's
+latest request usage; a probe `Workflow` of four `claims-triage` agents (`agentType` set, prompt "reply READY n") at 22:34, each
+agent's first-request usage from its transcript under the run's `subagents/workflows/` directory, and this clone's hook event
+log and guard log over the same minutes)
+
+- The document's figures reproduce: 5,544 main-session turns woken by a task notification, 996 of them with no tool call, the
+  median context they re-read 405k tokens. This session's context was 917k tokens at the time: an extra main turn re-reads ~92k
+  token-equivalents at 0.1x, against the ~3.4k per later launch the hand-stagger saved (R18) - so FR-039 is withdrawn (FR-042).
+- The probe workflow's agents, first request (read / written fresh): 0 / 6,178, then 3,462 / 2,716 three times, the later three
+  starting 1.4 s after the first (observed 2026-10-17; the method above) - the workflow staggers by itself with no main-session turn, and `agentType` loads the
+  definition (no ~35k default subagent). One notification reached the main session for the four.
+- **No PreToolUse or PostToolUse hook of the Agent tool fired for the workflow's agents** (the guard log has no `agent-model`
+  firing for them; the event log has their `SubagentStart` and nothing else of their launch): the model, repeated-block,
+  bundle, decide-first, freeze, review-occasion, escalation and round guards, and the check tracking that pairs a launch at
+  PostToolUse(Agent), would all be skipped by a check run in a workflow. `SubagentStart` (agent id, type) and `SubagentStop`
+  do fire. Hence FR-045's last clause.
+
