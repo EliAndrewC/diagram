@@ -21526,45 +21526,45 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/forced.py::forced_meeting#a forced turn is lawful": {
-  "code": "4a078652d471d505",
+  "body": "5245fa321e25136e",
+  "claim": "a forced turn is lawful - village-lanes.drawing: the angle limits read as describing open ground; a turn or meeting whose straighter way the mapped ground blocks is drawn as walked (the GM, 2026-10-17)",
+  "code": "ac05b21b7847397d",
   "core": "2122a16c98654bb5",
   "date": "2026-10-17",
-  "note": "a meeting is forced where the ground blocks the straighter way; the drawing page records this as the project's own reading",
+  "note": "accepted without a fourth round by the round arbiter (ask:t01-claim-labels): relabeled as round 3 prescribed, no behavior change",
   "pages": {
    "0081-village-lanes.drawing.html": "a6423940921ce579"
   },
   "research": "af9a8a86b5d8c81f",
-  "rests": [
-   "0081-village-lanes.drawing.html:9b3232646d7ce694"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/forced.py::forced_turn#a forced turn is lawful": {
-  "code": "5c7b20132d4265fd",
+  "body": "0dd2a1020366c5ce",
+  "claim": "a forced turn is lawful - village-lanes.drawing: the angle limits read as describing open ground; a turn or meeting whose straighter way the mapped ground blocks is drawn as walked (the GM, 2026-10-17)",
+  "code": "a8992453a006e2de",
   "core": "59fdd5bb05911937",
   "date": "2026-10-17",
-  "note": "a turn is forced where its chord is not lawful ground; recorded as the project's reading",
+  "note": "accepted without a fourth round by the round arbiter (ask:t01-claim-labels): relabeled as round 3 prescribed, no behavior change",
   "pages": {
    "0081-village-lanes.drawing.html": "a6423940921ce579"
   },
   "research": "af9a8a86b5d8c81f",
-  "rests": [
-   "0081-village-lanes.drawing.html:9b3232646d7ce694"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/forced.py::ground#a forced turn is lawful": {
-  "code": "8d60b4ef5cb6cf6a",
+  "body": "f6a4f257f31d0456",
+  "claim": "a forced turn is lawful - village-lanes.drawing: the angle limits read as describing open ground; a turn or meeting whose straighter way the mapped ground blocks is drawn as walked (the GM, 2026-10-17)",
+  "code": "d97f2255e9aeac0a",
   "core": "ec636f7ad1d6bd28",
   "date": "2026-10-17",
-  "note": "\"blocked\" means not lawful ground (house, yard, garden, grove, fixture, field, water), which matches the list of things that block the way",
+  "note": "accepted without a fourth round by the round arbiter (ask:t01-claim-labels): relabeled as round 3 prescribed, no behavior change",
   "pages": {
    "0081-village-lanes.drawing.html": "a6423940921ce579"
   },
   "research": "af9a8a86b5d8c81f",
-  "rests": [
-   "0081-village-lanes.drawing.html:9b3232646d7ce694"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/forced.py::lazy_ground#plumbing": {
@@ -22917,18 +22917,17 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::ground_apart#a knot is ends that could meet": {
-  "code": "0519e3dbee285367",
+  "body": "025b2e05bd0c6662",
+  "claim": "a knot is ends that could meet - village-lanes.drawing: \"Ends within 25 ft of one another are joined at a single point, so three lanes never arrive a few feet apart in a knot\" read as open ground; ends a fence parts are not a knot",
+  "code": "dc639190116f2e36",
   "core": "195e81c9c805eab9",
   "date": "2026-10-17",
-  "note": "ends parted by blocked ground are not a knot, as the drawing page records",
+  "note": "accepted without a fourth round by the round arbiter (ask:t01-claim-labels): relabeled as round 3 prescribed, no behavior change",
   "pages": {
    "0081-village-lanes.drawing.html": "a6423940921ce579"
   },
   "research": "af9a8a86b5d8c81f",
-  "rests": [
-   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
-   "0081-village-lanes.drawing.html:9b3232646d7ce694"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::ground_apart#the join judged as a footpath": {
@@ -23393,11 +23392,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::NEEDLE_FT#needle leg": {
-  "code": "c20274118beb429a",
+  "body": "b4e5e70e0b2d7a35",
+  "claim": "needle leg - UNRESEARCHED: a leg over 20 ft, shorter is the approach to the junction",
+  "code": "e3ccedd936aba0d7",
   "core": "212f34fd481113bf",
-  "date": "2026-10-03",
-  "note": "a drawing limit",
+  "date": "2026-10-17",
+  "note": "accepted without a fourth round by the round arbiter (ask:t01-claim-labels): relabeled as round 3 prescribed, no behavior change",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::NEEDLE_LOOP_FT#needle of grass": {
@@ -23543,20 +23546,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::connector_hairpin_ends#a forced turn is lawful": {
-  "code": "199385c36bfeec4a",
+  "body": "b4d8246037e5272c",
+  "claim": "a forced turn is lawful - village-lanes.drawing: \"A turn the ground forces is drawn as walked\" - a hairpin at the track whose chord the ground blocks is excused",
+  "code": "46b20ba547d4dbda",
   "core": "9d746ffd26b00a6d",
   "date": "2026-10-17",
-  "note": "the code does not depart from the page. §25 is the page's own rule (\"drawn as it is walked\"), and §19's limits apply only to \"open ground\", so excusing a hairpin whose chord the ground blocks does what the page says. Drop the DEVIATION label and cite research/questions/0081-village-lanes.drawing.html directly",
+  "note": "accepted without a fourth round by the round arbiter (ask:t01-claim-labels): relabeled as round 3 prescribed, no behavior change",
   "pages": {
    "0081-village-lanes.drawing.html": "a6423940921ce579"
   },
   "research": "af9a8a86b5d8c81f",
-  "rests": [
-   "0081-village-lanes.drawing.html:3b9a5312c92335d3",
-   "0081-village-lanes.drawing.html:65ad16eace199d92",
-   "0081-village-lanes.drawing.html:9b3232646d7ce694"
-  ],
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::connector_hairpin_ends#no hairpin at the track": {
   "code": "fe8d085918201431",
@@ -23668,20 +23669,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::folded_joint_pairs#a forced turn is lawful": {
-  "code": "c7ac63c5ffdfc191",
+  "body": "de791d913f8aa230",
+  "claim": "a forced turn is lawful - village-lanes.drawing: \"A turn the ground forces is drawn as walked\" - a fold whose chord the ground blocks is excused",
+  "code": "8cf2acdfcb4e1031",
   "core": "c19222789b77e13f",
   "date": "2026-10-17",
-  "note": "the code does not depart from the page. §25 limits §23's \"turn back\" rule to open ground, so excusing a fold whose chord the ground blocks does what the page says. Drop the DEVIATION label and cite 0081 drawing directly",
+  "note": "accepted without a fourth round by the round arbiter (ask:t01-claim-labels): relabeled as round 3 prescribed, no behavior change",
   "pages": {
    "0081-village-lanes.drawing.html": "a6423940921ce579"
   },
   "research": "af9a8a86b5d8c81f",
-  "rests": [
-   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
-   "0081-village-lanes.drawing.html:65ad16eace199d92",
-   "0081-village-lanes.drawing.html:9b3232646d7ce694"
-  ],
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::folded_joint_pairs#lanes met end to end are one": {
   "code": "37e103873daaad14",
@@ -23780,18 +23779,17 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::hook_faults#a forced turn is lawful": {
-  "code": "0aa710bb036a26c0",
+  "body": "4cb4571ec5e45682",
+  "claim": "a forced turn is lawful - village-lanes.drawing: \"A turn the ground forces is drawn as walked\" - the chord the vertex before the hook's turn to the end",
+  "code": "a5550e697c712fe0",
   "core": "9a19ea64a4e5ac2c",
   "date": "2026-10-17",
-  "note": "a hook whose chord the ground blocks is excused; recorded as the project's reading",
+  "note": "accepted without a fourth round by the round arbiter (ask:t01-claim-labels): relabeled as round 3 prescribed, no behavior change",
   "pages": {
    "0081-village-lanes.drawing.html": "a6423940921ce579"
   },
   "research": "af9a8a86b5d8c81f",
-  "rests": [
-   "0081-village-lanes.drawing.html:9b3232646d7ce694",
-   "0081-village-lanes.drawing.html:a857325132f8d4ee"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::hooked#a lane's end loses its hook": {
@@ -23836,19 +23834,17 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::kink_faults#a forced turn is lawful": {
-  "code": "7d337a38d541ba77",
+  "body": "8413b11c443b9b7c",
+  "claim": "a forced turn is lawful - village-lanes.drawing: \"A turn the ground forces is drawn as walked\" - the chord the vertex before the first turn to the vertex after the last",
+  "code": "faf2a6314386fe57",
   "core": "730d270db964b790",
   "date": "2026-10-17",
-  "note": "a zigzag or hairpin whose span chord the ground blocks is excused; recorded as the project's reading",
+  "note": "accepted without a fourth round by the round arbiter (ask:t01-claim-labels): relabeled as round 3 prescribed, no behavior change",
   "pages": {
    "0081-village-lanes.drawing.html": "a6423940921ce579"
   },
   "research": "af9a8a86b5d8c81f",
-  "rests": [
-   "0081-village-lanes.drawing.html:3b9a5312c92335d3",
-   "0081-village-lanes.drawing.html:9b3232646d7ce694",
-   "0081-village-lanes.drawing.html:d30e15716180fbf5"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::kinks#bends like a path": {
@@ -23975,20 +23971,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::needle_ends#a forced turn is lawful": {
-  "code": "aeb5939e07e986d0",
+  "body": "586f3ca76d0a9f7a",
+  "claim": "a forced turn is lawful - village-lanes.drawing: \"A turn the ground forces is drawn as walked\" - a needle whose sliver the ground blocks is excused",
+  "code": "2892f438a7aee2e3",
   "core": "d97824fb982f0c2e",
   "date": "2026-10-17",
-  "note": "the code does not depart from the page. §25 covers \"the sharper turn or meeting\" the ground forces, so excusing a needle whose sliver the ground blocks does what the page says. Drop the DEVIATION label and cite 0081 drawing directly",
+  "note": "accepted without a fourth round by the round arbiter (ask:t01-claim-labels): relabeled as round 3 prescribed, no behavior change",
   "pages": {
    "0081-village-lanes.drawing.html": "a6423940921ce579"
   },
   "research": "af9a8a86b5d8c81f",
-  "rests": [
-   "0081-village-lanes.drawing.html:65ad16eace199d92",
-   "0081-village-lanes.drawing.html:9b3232646d7ce694",
-   "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
-  ],
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::needle_ends#a lane meets another as a T": {
   "code": "f0ba5903d6eafc42",
@@ -24005,13 +23999,16 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::needle_ends#needle leg": {
-  "code": "c509ad5e16e4783a",
+  "body": "586f3ca76d0a9f7a",
+  "claim": "needle leg - UNRESEARCHED: only an end leg over NEEDLE_FT, 20 ft, can be a needle; shorter is the approach to the junction",
+  "code": "4cdbf7ce5cf2fa21",
   "core": "d97824fb982f0c2e",
   "date": "2026-10-17",
-  "note": "this is a physical rule, not how something is shown. `if leg <= NEEDLE_FT: continue` leaves an end running back alongside another way at under 20 degrees uncut for up to 20 ft, but §24 cuts \"a lane whose end runs back along another way at less than 20 degrees\" with no minimum leg. The page is silent on the 20 ft figure, so the label should be UNRESEARCHED or GUESS, not CONVENTION",
+  "note": "accepted without a fourth round by the round arbiter (ask:t01-claim-labels): relabeled as round 3 prescribed, no behavior change",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::needle_joins#plumbing and wrappers": {
   "code": "2a4405451b605dc5",
@@ -25531,17 +25528,17 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::Lawful.blocked#a forced turn is lawful": {
-  "code": "f45b119f4ec423e8",
+  "body": "f051997e3e9ad9d8",
+  "claim": "a forced turn is lawful - village-lanes.drawing: \"A turn the ground forces is drawn as walked\" - the straighter way blocked where it is not lawful ground",
+  "code": "279ff98d9b9a5576",
   "core": "8f1bb38fe4ddcae3",
   "date": "2026-10-17",
-  "note": "the straighter way counts as blocked where it is not lawful ground; recorded as the project's reading",
+  "note": "accepted without a fourth round by the round arbiter (ask:t01-claim-labels): relabeled as round 3 prescribed, no behavior change",
   "pages": {
    "0081-village-lanes.drawing.html": "a6423940921ce579"
   },
   "research": "af9a8a86b5d8c81f",
-  "rests": [
-   "0081-village-lanes.drawing.html:9b3232646d7ce694"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::Lawful.index#settle plumbing": {
@@ -26040,13 +26037,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::settle_ends#a foot re-aimed only onto lawful ground": {
-  "code": "a2e84b89840839a5",
+  "body": "00a72f66858db34f",
+  "claim": "a foot re-aimed only onto lawful ground - village-lanes.drawing, how-our-maps-lay-a-clustered-settlements-lanes.drawing: the walker goes round a garden or yard, a way runs along the middle of the gaps",
+  "code": "0d46ac6443caf49e",
   "core": "487e3ca0dde28a4b",
   "date": "2026-10-17",
-  "note": "the bundle answers this, so it is not a GUESS. 0081 §25 has the walker go round \"a garden or yard\". 0246 lays each household's way \"along the middle of the gaps\" with its middle 7 ft off a garden fence, and leaves the walk across a neighbor's yard undrawn. The claim should cite 0081 drawing and 0246 drawing",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "accepted without a fourth round by the round arbiter (ask:t01-claim-labels): relabeled as round 3 prescribed, no behavior change",
+  "pages": {
+   "0081-village-lanes.drawing.html": "a6423940921ce579",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "f98b72c4810becad",
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::settle_ends#a household's way moved at its foot": {
   "code": "2eb1bcaec12fe906",
