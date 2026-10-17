@@ -440,11 +440,30 @@ and asks the git questions itself), the first imports. The cuts that change neit
 
 ## Amendment 5 (FR-028 to FR-030)
 
-**D31 - The gate's tooling run reuses (FR-028).** The gate's tooling phase (`make tooling`, run when the tooling hash moved)
-runs with `L7R_TEST_DEPS=reuse`: a kept pass whose reads are unchanged is not run again, as in a landing; the run still records
-what it runs, and `tooling-green` still stamps the hash once every test either passed now or was reused on identical inputs.
-`make tooling FULL=1` (and `HOOKS_ALL`'s equivalent, `L7R_TEST_DEPS=record` given by hand) runs every test. The tooling hash
-(`l7r/diagram/ci/state.py`) reads `scripts/` recursively, its subdirectories included, `__pycache__` aside.
+**D31 - The gate's tooling run reuses (FR-028).** The gate runs the tooling tests inside its one coverage run (`make test`;
+`tests/conftest.py` collects them when the tooling hash moved, never through `make tooling`), and a moved tooling hash makes
+that run a FULL plan, whose coverage becomes the next baseline by itself (feature 207 D1). Every tooling test carries engine
+coverage contexts there (1,815 of the baseline's 1,796 tooling node ids have one; observed 2026-10-17, read from
+`<git dir>/gate-baseline/coverage.db`), so a test simply not run would take its coverage out of the floors and the baseline. So:
+- the gate's run loads the reuse plugin (`L7R_TEST_DEPS=reuse`), which tracks tooling items only; a tooling test whose kept
+  reads are unchanged, and which the baseline holds (its node id in `tests.json`), is deselected, and a file all of whose
+  tests are is not collected; one the baseline does not hold always runs;
+- the plugin writes the node ids it reused, and before the floors are judged `incremental carry` copies from the baseline into
+  this run's data each reused test's contexts, the contexts of the fixtures in its closure that did not run now, and its closure
+  and fixture edges into `tests.json` and the graph a full run saves. Sound for the reason 207's merge is: its reads - the
+  repository code it ran among them (D32b) - are unchanged and the suite is deterministic, so its coverage is the one kept;
+- `make tooling` reuses too, and `make tooling FULL=1` (`L7R_TEST_DEPS=record`) runs every test; a gate `FULL=1` reuses nothing;
+- the tooling hash (`l7r/diagram/ci/state.py`) reads `scripts/` recursively, its subdirectories included, `__pycache__` aside.
+A `scripts/` edit then moves the hash and makes the gate's plan full, as a top-level script's edit does today; a plan that
+stays incremental when only `scripts/` moved is the priced alternative, not built (its cost is a second hash and a planner rule).
+
+**D32b - A test's reads include the code it ran.** Found 2026-10-17: a module is opened once per worker, so a test that only
+called code another test had imported was kept without it, and was reused after that code changed (`l7r/diagram/ci/delta.py`
+edited: 36 tests ran, most of `test_delta.py`'s 55 reused; the per-file store before amendment 5 reused that file whole). Each
+code object of the repository that a test, its file's collection or a wide fixture starts is recorded as that key's read
+(`sys.monitoring`, PY_START, tool id 3, re-armed at every key), and a fixture wider than one test that is defined in a test
+module is that file's read rather than the session's. The same edit then re-runs 178 tests (observed 2026-10-17; a reuse run
+after a one-line edit to `delta.py`).
 
 **D32 - A pass kept per test (FR-029).** The store (version 3) keeps, per test node id, what that test read while it ran - its
 own setup and call, the processes it started - and, separately, what its FILE read (the module imported and collected, its
