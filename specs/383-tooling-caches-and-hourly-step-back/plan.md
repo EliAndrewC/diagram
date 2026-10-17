@@ -528,7 +528,8 @@ prompts - a cached prefix breaks at the first character that differs, so any dif
 uncacheable - with the fix: put the shared text at the start of the prompt, or in the agent's file. A block that starts the new
 prompt passes: that is the fixed form, which the next dispatch reads from the cache (refused against an earlier prompt of the
 old shape, the fix itself would be refused). The threshold is a convenience number to move (the GM's case was 10 KB; 2,000 is about
-500 tokens, where a cached prefix starts to matter against the ~2.5k a dispatch writes regardless). Escape `AGENT_PREFIX_OK`
+500 tokens, where a cached prefix starts to matter against the ~2.5k a dispatch writes regardless - observed 2026-10-17, research R13's
+back-to-back table). Escape `AGENT_PREFIX_OK`
 with a reason; every firing logged. The suite `tests/hooks/test-agent-prefix-hooks.sh`: the GM's shape (a unique sentence of
 under 200 characters, then a shared 10 KB) refused; the same block first passes, followed by differing text; two unrelated
 prompts pass; the escape passes.

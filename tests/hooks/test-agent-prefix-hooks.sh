@@ -55,6 +55,17 @@ dispatch s1 modal-form "Judge the byre again. AGENT_PREFIX_OK
 $SHARED"
 [ "$(rc)" -eq 2 ] && ok "a bare escape with no reason does not" || no "a bare escape passed" "(rc=$(rc))"
 
+# GUARD_EDIT_OK: feature 383 amendment 6, plan review round 3 - every shared run is judged, not the longest alone
+echo "3. a second shared block after a unique part, behind a longer one that starts the prompt"
+B=$(python3 -c 'print("\n".join(f"Block B line {i}: the standing rules every dispatch of this check carries along." for i in range(60)))')
+C=$(python3 -c 'print("\n".join(f"Block C line {i}: a second shared context, after the unit this time." for i in range(35)))')
+dispatch s3 record-format "$C
+$B"
+dispatch s3 record-format "$B
+Judge question 0087 alone.
+$C"
+[ "$(rc)" -eq 2 ] && grep -q "Block C line 0" "$T/err" && ok "the block after the unique part is refused, though a longer one starts the prompt" || no "it was allowed" "(rc=$(rc)) $(head -3 "$T/err")"
+
 echo "-----"
 if [ "$FAIL" -eq 0 ]; then echo "all agent-prefix-hook tests passed ($PASS)"; exit 0; fi
 echo "SOME TESTS FAILED ($FAIL of $((PASS+FAIL)))"; exit 1

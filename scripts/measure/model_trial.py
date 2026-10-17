@@ -115,6 +115,44 @@ def set_model(agent_file: pathlib.Path, model: str) -> None:
     agent_file.write_text(head + sep + body, encoding="utf-8")
 
 
+def set_field(agent_file: pathlib.Path, omit: bool) -> None:
+    """`omitClaudeMd: true` in the agent file's frontmatter, or none (the worktree's copy) - feature 383 amendment 6, plan D34."""
+    text = agent_file.read_text(encoding="utf-8")
+    head, sep, body = text.partition("\n---\n")
+    head = re.sub(r"(?m)^omitClaudeMd:.*\n?", "", head).rstrip("\n")
+    agent_file.write_text(head + ("\nomitClaudeMd: true" if omit else "") + sep + body, encoding="utf-8")
+
+
+#: a run as a SUBAGENT (plan D34): `omitClaudeMd` is ignored for a session's main agent, which `claude -p --agent` makes the
+#: check - so a cheap headless session dispatches it once with the recorded prompt, as feature 256's `dispatch_seeded.sh` did
+DISPATCH = (
+    "Read the file {prompt}. Then use the Agent tool EXACTLY ONCE: subagent_type \"{agent}\", description \"seeded run\", and as "
+    "its prompt the COMPLETE contents of that file, character for character - add nothing, remove nothing, summarize nothing. Do "
+    "not run it in the background. When it returns, reply with the single word DONE. Do nothing else."
+)
+
+
+def run_command(out: pathlib.Path, meta: dict) -> list[str]:
+    """The headless session a run is: the check itself, or (`as_subagent`) a Sonnet session that dispatches it once."""
+    hooks_off = ["--output-format", "json", "--permission-mode", "bypassPermissions", "--settings", json.dumps({"disableAllHooks": True})]
+    if meta.get("as_subagent"):
+        return ["claude", "-p", "--model", "sonnet", *hooks_off, DISPATCH.format(prompt=out / "prompt.txt", agent=meta["agent"])]
+    return ["claude", "-p", "--agent", meta["agent"], *hooks_off, (out / "prompt.txt").read_text(encoding="utf-8")]
+
+
+def subagent_reply(run_json: pathlib.Path) -> tuple[str, dict]:
+    """(the reply, its usage totals) of the one subagent an `as_subagent` run dispatched, from its own transcript."""
+    try:
+        sid = json.loads(run_json.read_text(encoding="utf-8")).get("session_id", "")
+    except OSError, ValueError:
+        return "", {}
+    subs = sorted(PROJECTS.glob(f"*/{sid}/subagents/agent-*.jsonl")) if sid else []
+    if not subs:
+        return "", {}
+    run = read(subs[0])
+    return run["reply"], {"turns": run.get("turns", 0)}
+
+
 def _epoch(stamp: str) -> float:
     from datetime import datetime  # noqa: PLC0415
 
@@ -139,7 +177,7 @@ def outside_paths(prompt: str) -> list[str]:
     return sorted({p.rstrip(".,):;`'\"") for p in found})
 
 
-def prepare(transcript: pathlib.Path, out: pathlib.Path, model: str = SONNET, at_head: bool = False) -> int:
+def prepare(transcript: pathlib.Path, out: pathlib.Path, model: str = SONNET, at_head: bool = False, omit: bool | None = None, as_subagent: bool = False) -> int:
     run = read(transcript)
     out.mkdir(parents=True, exist_ok=True)
     rev = ["rev-parse", "HEAD"]
@@ -169,6 +207,8 @@ def prepare(transcript: pathlib.Path, out: pathlib.Path, model: str = SONNET, at
         subprocess.run(["git", "-C", str(tree), "checkout", "-q", "--detach", commit], capture_output=True, text=True, check=True)
     shutil.copytree(CLONE / ".claude" / "agents", tree / ".claude" / "agents", dirs_exist_ok=True)
     set_model(tree / ".claude" / "agents" / f"{run['agent']}.md", model)
+    if omit is not None:
+        set_field(tree / ".claude" / "agents" / f"{run['agent']}.md", omit)
     prompt = run["prompt"]
     missing, stale = [], []
     started = _epoch(run["started"])
@@ -197,7 +237,21 @@ def prepare(transcript: pathlib.Path, out: pathlib.Path, model: str = SONNET, at
     (out / "prompt.txt").write_text(prompt, encoding="utf-8")
     (out / "recorded-reply.md").write_text(run["reply"], encoding="utf-8")
     (out / "meta.json").write_text(
-        json.dumps({"agent": run["agent"], "recorded": str(transcript), "started": run["started"], "commit": commit, "model": model, "missing": missing, "stale": stale, "rebuild": rebuild}, indent=1),
+        json.dumps(
+            {
+                "agent": run["agent"],
+                "recorded": str(transcript),
+                "started": run["started"],
+                "commit": commit,
+                "model": model,
+                "missing": missing,
+                "stale": stale,
+                "rebuild": rebuild,
+                "omitClaudeMd": omit,
+                "as_subagent": as_subagent,
+            },
+            indent=1,
+        ),
         encoding="utf-8",
     )
     print(
@@ -302,13 +356,9 @@ def snapshot(out: pathlib.Path) -> int:
 def run_case(out: pathlib.Path, runs: int = 3) -> None:
     """Start each run as a headless session in the case's worktree, in the background; each writes run-<i>.json."""
     meta = json.loads((out / "meta.json").read_text())
-    prompt = (out / "prompt.txt").read_text(encoding="utf-8")
     for i in range(1, runs + 1):
         log = out / f"run-{i}.json"
-        cmd = [
-            "claude", "-p", "--agent", meta["agent"], "--output-format", "json", "--permission-mode", "bypassPermissions",
-            "--settings", json.dumps({"disableAllHooks": True}), prompt,
-        ]  # fmt: skip
+        cmd = run_command(out, meta)
         with open(log, "w", encoding="utf-8") as fh:
             p = subprocess.Popen(cmd, cwd=out / "tree", stdout=fh, stderr=subprocess.STDOUT, start_new_session=True)
         (out / f"run-{i}.pid").write_text(f"{p.pid} {time.time():.0f}\n")
@@ -331,14 +381,25 @@ def run_all(root: pathlib.Path, runs: int = 3, parallel: int = 6) -> None:
             live = [p for p in live if p.poll() is None]
             time.sleep(5)
         meta = json.loads((out / "meta.json").read_text())
-        cmd = ["claude", "-p", "--agent", meta["agent"], "--output-format", "json", "--permission-mode", "bypassPermissions",
-               "--settings", json.dumps({"disableAllHooks": True}), (out / "prompt.txt").read_text(encoding="utf-8")]  # fmt: skip
+        cmd = run_command(out, meta)
         fh = open(out / f"run-{i}.json", "w", encoding="utf-8")  # noqa: SIM115 - closed when the process ends
         live.append(subprocess.Popen(cmd, cwd=out / "tree", stdout=fh, stderr=subprocess.STDOUT))
         print(f"{time.strftime('%H:%M:%S')} started {out.name} run {i}", flush=True)
     for p in live:
         p.wait()
     print(f"{time.strftime('%H:%M:%S')} all {len(queue)} run(s) finished", flush=True)
+
+
+def collect(out: pathlib.Path) -> int:
+    """Each `as_subagent` run's reply, from the subagent's own transcript, to `reply-<i>.md` - what the scorer reads."""
+    n = 0
+    for run_json in sorted(out.glob("run-*.json")):
+        reply, _u = subagent_reply(run_json)
+        if reply:
+            (out / run_json.name.replace("run-", "reply-").replace(".json", ".md")).write_text(reply, encoding="utf-8")
+            n += 1
+    print(f"collect: {n} repl(ies) in {out}")
+    return 0 if n else 1
 
 
 def usage(out: pathlib.Path) -> None:
@@ -375,6 +436,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("out")
     p.add_argument("--model", default=SONNET)
     p.add_argument("--head", action="store_true")
+    p.add_argument("--omit-claude-md", choices=("yes", "no"), help="write `omitClaudeMd: true` into the tested agent's copy, or remove it")
+    p.add_argument("--as-subagent", action="store_true", help="each run dispatches the check as a subagent (the field only acts there)")
     r = sub.add_parser("run")
     r.add_argument("out")
     r.add_argument("--runs", type=int, default=3)
@@ -384,11 +447,15 @@ def main(argv: list[str] | None = None) -> int:
     ra.add_argument("--runs", type=int, default=3)
     ra.add_argument("--parallel", type=int, default=6)
     sub.add_parser("snapshot").add_argument("out")
+    sub.add_parser("collect").add_argument("out")
     a = ap.parse_args(argv)
     if a.cmd == "catalog":
         catalog(a.agent, a.since, a.replayable)
     elif a.cmd == "prepare":
-        return prepare(pathlib.Path(a.transcript), pathlib.Path(a.out), a.model, a.head)
+        omit = None if a.omit_claude_md is None else a.omit_claude_md == "yes"
+        return prepare(pathlib.Path(a.transcript), pathlib.Path(a.out), a.model, a.head, omit, a.as_subagent)
+    elif a.cmd == "collect":
+        return collect(pathlib.Path(a.out))
     elif a.cmd == "run-all":
         run_all(pathlib.Path(a.root), a.runs, a.parallel)
     elif a.cmd == "snapshot":

@@ -31,38 +31,40 @@ KEEP = 30
 ESCAPE = re.compile(r"AGENT_PREFIX_OK\s*[=:]\s*[\"']?\S+\s+\S+")
 
 
-def longest_shared_run(new: str, old: str) -> tuple[int, int]:
-    """(characters, start offset in `new`) of the longest run of consecutive identical lines both texts hold."""
+def shared_runs(new: str, old: str, least: int = SHARED) -> list[tuple[int, int]]:
+    """(characters, start offset in `new`) of each maximal run of consecutive identical lines both texts hold that reaches
+    `least` characters, in the order they start in `new`."""
     nl, ol = new.splitlines(keepends=True), old.splitlines(keepends=True)
     where: dict[str, list[int]] = {}
     for j, line in enumerate(ol):
         where.setdefault(line, []).append(j)
-    best, best_start = 0, 0
-    run: dict[int, tuple[int, int]] = {}  # old index ending a run -> (characters, start line in new)
     offsets, pos = [], 0
     for line in nl:
         offsets.append(pos)
         pos += len(line)
+    best: dict[int, int] = {}  # start line in new -> the longest run starting there
+    run: dict[int, tuple[int, int]] = {}  # old index ending a run -> (characters, start line in new)
     for i, line in enumerate(nl):
         nxt: dict[int, tuple[int, int]] = {}
         for j in where.get(line, ()):
             size, start = run.get(j - 1, (0, i))
             nxt[j] = (size + len(line), start)
-            if nxt[j][0] > best:
-                best, best_start = nxt[j][0], offsets[start]
+            best[start] = max(best.get(start, 0), nxt[j][0])
         run = nxt
-    return best, best_start
+    return [(size, offsets[start]) for start, size in sorted(best.items()) if size >= least]
 
 
 def finding(new: str, old: str) -> tuple[int, int]:
-    """(characters, offset in `new`) of a shared block that is NOT cacheable as placed - (0, 0) when there is none."""
+    """(characters, offset in `new`) of the first shared block that is NOT cacheable as placed - (0, 0) when there is none. A
+    block that starts the new prompt is the fixed form; every other run is judged too (plan review round 3: "shared B, unique
+    text, shared C" passed on B and left C unseen)."""
     new, old = new[:CAP], old[:CAP]
-    prefix = len(os.path.commonprefix([new, old]))
-    size, start = longest_shared_run(new[prefix:], old[prefix:])
-    start += prefix
-    if size < SHARED or start == 0:
-        return 0, 0
-    return size, start
+    common = os.path.commonprefix([new, old])
+    prefix = common.rfind("\n") + 1  # back to a line's start: lines are compared whole, and "Block " is no prefix of a block
+    for size, start in shared_runs(new[prefix:], old[prefix:]):
+        if start + prefix != 0:
+            return size, start + prefix
+    return 0, 0
 
 
 def _store(git_dir: str, session: str) -> pathlib.Path:
