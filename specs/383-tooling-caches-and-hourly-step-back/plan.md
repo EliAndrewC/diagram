@@ -392,9 +392,14 @@ dynamically to the C library (observed 2026-10-17, method: `ldd` on each), so a 
 method: `hookdeps.py --deps` for each of the 44 suites, `git log` of each input since 2026-10-03, each suite and each
 sync-with-main case timed alone):
 - the inputs most suites share - `guardlog.sh`, `hm_escape.py`, `hm_shape.py`, `writer-alive.sh`, each an input of 42 suites -
-  changed once or twice each in two weeks, so narrowing them saves little; they are left whole, and nothing a suite checks is
-  dropped. The suite that re-runs is the one whose own script moved: `sync-with-main.sh` changed in 27 commits, and its suite
-  is the slowest (36.2 s at 4 parts);
+  changed once or twice each in two weeks;
+- but the 44 tooling landings since 2026-10-03, replayed against each suite's inputs (`hookdeps.py --deps`, the files each
+  landing changed), reached a median of 5 suites and sync-with-main and gate-stamp on 42 of 44: those two are held to the
+  whole `scripts/` tree, because their fixtures copy it and run the push in it. So a suite's inputs become WHAT IT READ the
+  last time it went green: `make hooks-test` runs each suite under the C-library recorder (D26), a fixture's copy of
+  `scripts/` read as the repository's file of that name and the fixture's `cp` not counted (`tests/hooks/hooktrace.py`), and
+  skips a traced suite while every read is unchanged. A suite that read the repository through git (one that clones it) or
+  read a file git ignores is not traced and keeps `hookdeps.py`'s key. Nothing a suite checks is dropped;
 - its long pole is ONE case, `case_11` (27.9 s alone, 17 pushes in a row across three fixtures): it is split into three cases,
   each on its own fixture, the case weights are set to today's measured seconds, and the parts go 4 -> 8. Every check still
   runs and is counted (124);
@@ -402,3 +407,6 @@ sync-with-main case timed alone):
   parts would need a clone each (2 s) and run only when those gates move - recorded, not split;
 - `make hooks-test` prints which suites ran and each one's seconds, longest first, so a landing's log says where its guard
   time went (`tests/hooks/hookrun.sh` times each suite).
+- what `make hooks-test` pays before any suite runs is cut where it is a lookup: every suite's key from one `hookdeps.py --keys`
+  process (the recipe's own sha, so every stamp kept stays valid; 5.9 s as one process per suite), and the user-level
+  missing-program hook's self-test kept by its two files like any suite (7.5 s, run every time before).
