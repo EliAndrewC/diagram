@@ -9,8 +9,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 
 ## Tasks
 
-- [ ] T01 The lane law describes how people walk (plan T01, D1-D7): the rule table; `forced_turn` asked by the angle rules; a refusal names its rules; side by side merged; measured on the cohort, seed 10 patched and the pool; the drawing pages; its retro row
+- [x] T01 The lane law describes how people walk (plan T01, D1-D7): the rule table; `forced_turn` asked by the angle rules; a refusal names its rules; side by side merged; measured on the cohort, seed 10 patched and the pool; the drawing pages; its retro row
       research: rendering
+      verify: DONE. lane law: rule table (lane-law-table.md); forced turns and meetings lawful (ways/forced.py, test_forced.py red on the old law); refusals name their rules (D3); side by side merged at needles and shallow crossings, a household's foot re-aimed (D4); the knot rule reads the ground (D4b); cohort 50/54 as HEAD, seed 10 under the w155 patch passes; 0081 drawing page; every record, pop-up and claim check answered; glyph-check NEEDS-WORK accepted, F1-F3 carried to T03; retro row in retro.md
 - [ ] T02 The tooling (plan T02; FR-003, FR-004, FR-005): the Approach block required by `make tick`, the triggers' fresh answer, the per-task split; its retro row [lands-open]
       research: rendering
 - [ ] T03 The four cohort seeds failing at HEAD (17, 21, 40, 45), as T01 leaves them, and FIRST the side-by-side shape T01 leaves (the glyph-check of 2026-10-17, F1-F3 on Inashiro: a stub and a lane run side by side, joined by a rung) - the merge decided as one general test, not a fourth detector; its retro row [lands-open]
