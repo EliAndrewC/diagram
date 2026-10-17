@@ -285,5 +285,17 @@
    "modal-research": 17148
   },
   "all_units": 131378576
+ },
+ "spec-fidelity-field-seeded": {
+  "quantity": "spec-fidelity's recorded findings on feature 251 round 1, three runs a leg, with and without the instruction files",
+  "observed": "2026-10-17T19:20Z",
+  "source": "scratchpad seeded/, scored blind",
+  "command": "scripts/measure/model_trial.py prepare ... --omit-claude-md no|yes --as-subagent --at aa4b0889a; run-all --runs 3 --parallel 2; collect",
+  "method": "D34's two-of-three rule",
+  "unit": "items found",
+  "varies": true,
+  "value": 3,
+  "control": 3,
+  "of": 3
  }
 }

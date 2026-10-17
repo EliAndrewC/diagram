@@ -207,9 +207,8 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
   (`haiku` only for a plain description of a page - it misread a table's columns where sonnet did not). A DEFINED agent launches without this file, the nested `CLAUDE.md` files and the memory index
   (`omitClaudeMd: true`, feature 256, GM 2026-09-19: *"If there's something that a subagent should know, it should be in
   the subagent specification"*) - a rule a check needs is written in its contract, and a new agent file carries the field;
-  an ad-hoc agent keeps all three, and so does `spec-fidelity` alone, which the GM approved on the session's
-  measured recommendation, 2026-09-20 (the tier test
-  names the exception and enforces the field on every other agent file). **What every dispatch of a check shares lives in its
+  an ad-hoc agent keeps all three (the tier test enforces the field on every agent file; `spec-fidelity`'s exception ended
+  2026-10-17 when three runs a leg found every recorded item without the files - feature 383 research R14). **What every dispatch of a check shares lives in its
   agent file** (feature 383 amendment 6, the GM 2026-10-17: *"any context that subagents share in common is put either into
   their system prompt, ideally, or ... at the very beginning of the prompt"*): a prompt is cached as a PREFIX, so a bundle or
   a prompt carries only its unit, after anything shared; `agent-prefix-hooks.sh` refuses a large block shared after a part

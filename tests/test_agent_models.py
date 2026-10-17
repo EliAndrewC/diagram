@@ -108,16 +108,11 @@ def test_every_agent_file_agrees_with_the_tier_table() -> None:
 #: agent -> why it KEEPS the CLAUDE.md files. An entry here is a MEASURED case the GM approved, never a session's
 #: convenience: the session shows what the field cost that check on recorded findings and recommends, the GM answers,
 #: and the row quotes both. Nothing goes in here on a session's own authority.
-KEEPS_CLAUDE_MD: dict[str, str] = {
-    "spec-fidelity": (
-        "Approved by the GM on the session's recommendation, 2026-09-20 (they answered \"go with your recommendations\" "
-        "to a measurement and a proposal; they did not raise the question): with the field it raised one of three "
-        "recorded required changes where its control raised all "
-        "three, and a moved rule did not settle it (specs/256 research R6); it gates every spec and the field saves it "
-        "little, so the session recommended taking it off until a three-samples-a-leg run tells the field from the "
-        "agent's own variance; that run puts it back."
-    ),
-}
+KEEPS_CLAUDE_MD: dict[str, str] = {}
+# EMPTY since feature 383 amendment 6 (the GM 2026-10-17: what subagents share belongs in their system prompt): `spec-fidelity`
+# kept the files from 2026-09-20 until the run its row asked for - feature 251's round-1 spec, three runs a leg with and
+# without, scored blind by an independent reader - found every recorded item without them (specs/383 research R14). The files
+# cost it ~22k tokens written fresh at every dispatch (research R13).
 
 
 def test_every_agent_launches_without_the_claude_md_files() -> None:

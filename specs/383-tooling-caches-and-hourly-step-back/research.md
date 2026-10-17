@@ -455,3 +455,28 @@ a read 0.1, output 5; the scripts become `make subagent-cache`)
   guidelines, copied into every bundle after the unique prompt: about 1.3%. No other check's manifests repeat more than a few
   lines; impl-drift's runs re-read the same drawing pages, but those follow the unit, not the check.
 
+## R14 Amendment 6 - spec-fidelity without the instruction files, three runs a leg
+
+(observed 2026-10-17; method: `scripts/measure/model_trial.py prepare <transcript> <out> --model opus --omit-claude-md no|yes
+--as-subagent --at aa4b0889a` on feature 251's round-1 spec review (`agent-a9ad3907d23035d6f`, 2026-09-19 16:19, the spec at
+the commit 12 s before it), `run-all --runs 3 --parallel 2`, `collect`; each run a headless Sonnet session dispatching
+spec-fidelity once as a SUBAGENT, where the field acts; the six replies scored blind (shuffled A-F) by an Opus agent that did
+not write this change, against the recorded verdict's three required changes)
+
+| (observed 2026-10-17; the method above) | R1: FR-010's guard unrequested | R2: FR-011 contradicts US4 | R3: FR-011's exemption on an unset default | verdict |
+|---|---|---|---|---|
+| control (instruction files), runs 1-3 | 3 of 3 | 3 of 3 | 3 of 3 | CHANGES REQUIRED x3 |
+| field (`omitClaudeMd: true`), runs 1-3 | 3 of 3 | 3 of 3 (one weaker: names the contradiction, not Sonnet staying on Sonnet) | 3 of 3 | CHANGES REQUIRED x3 |
+
+- By D34's rule (an item FOUND when two of a leg's three runs raise it) the field finds every item its control finds: the field
+  stands. 256's R6 single field run found one of the three; the rule it then moved into the contract (question 6: does each
+  requirement do what it says) is in today's contract, and three runs a leg do not show the loss.
+- Both legs added required changes of their own, different per run (the `fork` exemption, the intermediate tiers' re-runs,
+  R1's count of past runs, the trial running as it will really run); none was only in one leg's runs as a class.
+- The subagents' first calls (the field confirmed): control 22,256 tokens in its first call, field 12,409 - the instruction
+  files of that commit's tree, ~9.8k tokens, absent.
+- **A prompt's identical start IS read from the cache across dispatches**: field run 3, dispatched after runs 1 and 2 with the
+  same prompt, read its whole first call (12,410 tokens) from the cache and wrote none. **The instruction files are not**:
+  control run 3, the same prompt and the same files as run 1, read only the agent file (8,665) and wrote 13,689 fresh - the
+  block the harness adds them in differs from one dispatch to the next.
+
