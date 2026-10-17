@@ -537,3 +537,22 @@ dispatches `spec-fidelity` and a `general-purpose` subagent that each read it):
 | spec-fidelity (`omitClaudeMd`) | not loaded | not loaded | loaded |
 | general-purpose | not loaded | loaded, once | loaded |
 
+## R16 Amendment 6, reopened - where a subagent request is cached, and the practices document
+
+(observed 2026-10-17; source: `/host-l7r-repo/subagent-token-practices.md`, written that day by gm-assistant's "GM tokens"
+session from the transcripts and from raw `/v1/messages` bodies captured through a logging proxy, Claude Code 2.1.302)
+
+- A subagent's request: the tools, then `system` = the agent file's body, with a cache breakpoint there (a 5-minute lifetime, observed 2026-10-17 in the document's proxy capture);
+  then the first user message, holding every CLAUDE.md and MEMORY.md, user context, attribution and the launch prompt, with no
+  breakpoint inside it; then the environment block. Only tools + the agent file are reused across launches. Its measurement:
+  nine general-purpose launches with a shared 5.4k-character rubric FIRST in the prompt each read only the 17,178-token
+  tools+system prefix and wrote ~41.7k fresh.
+- A launch whose whole first message is byte-identical to an earlier one's, within the cache's lifetime, reuses everything - which is what
+  R14's field run 3 showed (the same prompt three times: 12,410 read, 0 written). This session took that special case for a
+  rule about a prompt's start, and wrote it into FR-034, the guard's message and CLAUDE.md; the reopening corrects them.
+- Its checklist against this repository (observed 2026-10-17; `.claude/agents/`, settings, the transcripts since 2026-10-15):
+  `omitClaudeMd` on every agent, held by a test from the directory - yes; recurring jobs typed - mostly (10 general-purpose
+  launches since 10-15, probes and one-offs); no "adopt a definition" launches - none; the clone exclude - yes; CLAUDE.md a core
+  plus an index - no (root 37,662 characters, research 25,402, tests 18,157, l7r/diagram 13,156); no 1-hour subagent cache -
+  none set, no test; fan-outs launch one first - no (the review rules send owed units together); enforced - partly.
+
