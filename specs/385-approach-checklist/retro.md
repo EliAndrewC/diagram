@@ -152,3 +152,35 @@ is actually wrong, or the rule is a tidiness we impose. Proposed A4 addition, fo
 this rule, would a reader of the research call the place wrong? If not, the rule is a preference: a tie-break, not a refusal."*
 A second, smaller one: A4 could not be answered for seeds 17 and 21 because a refused roll keeps no manifest - the blind agent
 found the same tooling gap T01's retro named.
+
+## T03 - the decision log
+
+| UTC | point | what decided it |
+|---|---|---|
+| 20:44 | started (`make task-start`) | - |
+| 20:59 | blind Approach returned (FR-012) | a fresh Opus agent, 12 min |
+| 21:08 | plan round 1 BLOCKED: D20(1) took a side on code alone | spec-fidelity |
+| 21:12 | plan round 2 CLEAR | spec-fidelity |
+| 21:14 | D16 built: a refused roll keeps its manifest (`driver.keep_refused`), the field way's refusal counts each run turned down by its rule (`Lawful.fault`) | - |
+| 21:15 | seed 17's runs: fabric x122, doubled_tails x88, needle_joins x30; seed 21's five lanes: fabric | the dumps |
+| 21:20 | seed 21's lanes come within 7 ft of NOTHING but their own household's garden and yard (3.1-6.8 ft) - neither the sealed guess (a neighbor's yard) nor the blind block's (stand-ins) | four geometry probes on the dump, three of them answering a question nobody had asked; then the refusal made to name the part (`foul_part`): "the fence gap" |
+| 21:22 | the cause: a garden is recorded with no owner, so a household's way is held 7 ft off its OWN garden fence; 0246's 7 ft is the room between neighbors | `_homestead_polys`; 0246's drawing page |
+| 21:23 | fixed (D20(2), the O gap): `owned_gardens` - the owner's way is kept off its beds by the overlap matrix but not the fence gap | seed 21's fabric refusal gone |
+| 21:24-21:31 | seed 21's second refusal (a farmhouse unreached): **part B fired** (the same validator, three attempts) | see below |
+| 21:31 | the cause: `settle_joins` runs before `settle_reach`, and `settle_network` after it, in both the settle's steps and the last resort's, so a way the reach draws is dropped before any join reaches it; its end stood 8.6 ft off a lane's end | a temporary drop probe (never committed): who dropped it, three times |
+| 21:32 | seeds 17, 21, 40 pass `make cohort`; seed 45 fails only `fixtures_on_groves` | - |
+| 21:34 | seed 45 fixed (D18): the sty's placer asks the check's own predicate (`grove_rules.fixture_on_band`) | seed 45 passes |
+| 21:36 | bisected: the own-garden change alone fixes 17, 21 (its first refusal) and 40; the join order fixes 21's second | toggled, three rolls |
+
+### Part B, answered at 21:28 (seed 21's farmhouse, the third attempt)
+
+1. **What is refusing?** `unreached_houses`: the household's way is drawn and then dropped by the network rule; its far end stood
+   8.6 ft off lane 14's end and 18.8 ft off lane 9.
+2. **A3 again.** One network: R (0246). The join reach, 25 ft: R (0081). `AIM_DEG` 60: O.
+3. **A4 again.** Yes - on open ground anyone walks the 9 ft; the web failed to join it.
+4. **Moving earlier for later?** No.
+5. **Tuning or changing?** Two reorders made; a third would be tuning. So the next step was a measurement (who drops it, and in
+   which pass) - it found the last resort's own pass list, the third place with the same order.
+6. **The one-sentence test.** "The path stops 9 ft short of the lane beside it and the map is refused" - the GM would ask why it
+   is not joined; that was the question to answer.
+7. **The next step is a measurement**: the drop probe.
