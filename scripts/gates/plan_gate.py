@@ -718,7 +718,11 @@ def main(argv: list[str]) -> int:
         text = (spec_dir / "plan.md").read_text(encoding="utf-8")
         ruled = {t for t in task_sections(text) if task_current(review, text, t, History(spec_dir / "plan.md"))}
         done = (spec_dir / "plan-done.md").read_text(encoding="utf-8") if (spec_dir / "plan-done.md").is_file() else ""
-        keys, _blocked = block_status(review, text, ruled, History(spec_dir / "plan.md"), done)
+        keys, blocked = block_status(review, text, ruled, History(spec_dir / "plan.md"), done)
+        # ...AND EVERY BLOCK STILL BLOCKED is owed its review again (feature 385): a whole-plan BLOCKED verdict is recorded on every
+        # block, and once the blocking decision was fixed in its own block, the blocks beside it - unchanged - kept BLOCKED with no
+        # route to CLEAR, so `make decide` refused a task whose every decision a later round had cleared
+        keys += [k for k in blocked if k not in keys]
         if not keys:
             print(f"plan-delta: no block of {spec_dir.name}'s plan is owed a review")
             return 0
