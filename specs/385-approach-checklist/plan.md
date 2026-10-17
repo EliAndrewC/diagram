@@ -156,9 +156,70 @@ measurements are taken on it.
 
 **Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11
 
-## T02 - the tooling: the Approach block required, the triggers, the split (FR-003 to FR-005)
+## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)
 
-Decided at its start, after T01's retro: its Approach block and decisions are written here then, and reviewed by `make decide`.
+### T02 Approach (checklist part A)
+
+1. **The goal, in the world.** The next task (T03) costs what its change needs, not what the tooling multiplies it into: a
+   session answers the checklist when a task starts and when the work resists, the report shows where each task's time went, and
+   one small change to a widely cited page no longer re-owes everything that cites it.
+2. **The constraints.** Every guard has a test that is red without it (`docs/guards.md`); every refusal names the compliant
+   command; tooling lands alone by `make land-tooling`; the five rules FR-003, FR-004, FR-005, FR-008 to FR-011, and the round
+   arbiter's tooling fix on hour:385-approach-checklist@4 (the hourly clock stops counting the GM's waits).
+3. **Where each comes from.** The requirements are the GM's (G, spec and amendment 1). Every number below is ours (O): which
+   checklist items count as answered, the twenty failed-test ids kept, the per-line cost table's columns.
+4. **Do they describe the world here?** Yes - each is measured on T01's own record (`retro.md`): the cascade from one page, the
+   gates voided by writes, the hour that counted the GM's wait.
+5. **The order.** Measure first (FR-008: confirm why the triage diffed against an old baseline before changing it), then the
+   cheapest fix that removes the measured cost; no item builds a new subsystem where a field on an existing record serves.
+6. **The exits.** (a) refine an O number - n/a; (b) an exception - n/a; (c) a rule that dissolves the case - **chosen** for FR-008
+   (keep what a check read, so a re-check diffs against it) and FR-009 (a page-wide unit rides one batch); (d) more room - n/a;
+   (e) conform - for the guard rules (tests red without them).
+7. **The search smell.** None: each item is a record kept or a refusal added.
+8. **The budget.** About three hours (a guess) for the nine items with their tests; twice that is part B.
+9. **Done, measured.** Each item's test red without it; `make hooks-test` and the tooling tests green; FR-011's table printed for
+   T01 from its own record (the baseline T03 is compared with).
+
+### T02 Decisions
+
+**D8 - FR-003, the Approach block required.** A plan that opts in - the line `**Approach checklist**: <path>` (385's plan carries
+it; FR-001's close makes it every feature's) - has each task section hold a `### Txx Approach` block answering every numbered
+item of that checklist's part A; `make tick` refuses a task whose block is missing or answers fewer items, naming the missing
+numbers (`scripts/gates/plan_gate.py`, beside the plan-review check `make tick` already asks).
+
+**D9 - FR-004, a fresh answer after a trigger.** A trigger - a round-arbiter ruling on an `hour:` or `red-gate@` trigger, a
+`make cohort` that fails, and a re-review of a task's plan section - writes `<git dir>/approach-owed.json` (the task, the
+trigger, its time), and its message names checklist part B. `make tick` refuses that task until its plan section holds a
+`### Txx part B (<UTC>)` block stamped after the trigger.
+
+**D10 - FR-005 and FR-011, the report per task.** `make task-start` appends its task and time to `<git dir>/task-starts.jsonl`;
+`make feature-report` adds a table per task - start to tick, the decision points (plan verdicts and part B stamps), the time to
+the last one and after it, re-decides and re-answers - and a table per check kind - dispatches, tokens and wall time, each per
+changed line - read from the review ledger's measured rows in the feature's window and its commits' changed lines. Replayed for
+T01 as the baseline.
+
+**D11 - FR-008, a re-check against what the last check read.** Measured first: the pop-up triage already diffs against "the
+page as the unit's last answer read it (its kept blob)" (`modal_triage.before`) and falls back to the merge base - so the fault
+is where an answer is recorded without the blobs its bundle read. `make record-checked` keeps, for each page a bundle names, the
+blob it copied; the claims triage takes the same baseline from the claims row's own pages. Tests: a one-word change after an
+answer shows only that block.
+
+**D12 - FR-009, one check where several are spent.** `make check-bundle ... FOR=quote-check` puts a page-wide unit
+(`#unfootnoted`) in the first batch alone, so one agent answers it; `make modal-bundle` takes several `KIND=`s for one check
+and writes one bundle holding each pop-up, answered unit by unit by `make record-checked`.
+
+**D13 - FR-010, no write while the session's own gate runs.** A PreToolUse guard (`scripts/hooks/gate-write-hooks.sh`) refuses an
+Edit or Write into the clone, and a Bash command that commits or records (`git commit`, `git add`, `make append`, the
+`*-checked` and `*-triaged` targets, `make tick`, `make accept`), while a `make done` of this tree runs (`own-make.sh`), naming
+`make verify-wait`. Escape `GATE_WRITE_OK`.
+
+**D14 - the hourly clock counts the session's time, not the GM's.** The event-log hook records whether a prompt is the GM's or
+a background notification (`"gm": true`); `checkpoint.py` subtracts every Stop-to-GM-prompt gap from the hour; the feature
+report's "waiting: the GM" reads the same field. The arbiter's test: a 63-minute window holding a 30-minute GM wait opens no
+step-back.
+
+**D15 - nothing in the engine.** Every item is tooling under `scripts/`, `tests/` and the Makefile, landed by `make land-tooling`;
+no map changes, so no review check is owed.
 
 ## T03 to T10 - the four seeds failing at HEAD, T48, T47's patch, five ranking rows
 
