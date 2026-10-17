@@ -75,6 +75,8 @@ for n in 1 2 3; do dispatch s4 quote-check "Read /tmp/l7r-check/q$n/MANIFEST.md 
 dispatch s4 quote-check "Read /tmp/l7r-check/q4/MANIFEST.md and rule on it." 1
 [ "$(rc)" -eq 2 ] && grep -q 'name: "check-wave"' "$T/err" && grep -q 'agentType: "quote-check"' "$T/err" && ok "the 4th is refused, naming the check-wave call for its type" || no "the 4th went" "(rc=$(rc)) $(head -3 "$T/err")"
 logged wave && ok "...recorded" || no "the wave refusal is not recorded"
+for n in 1 2 3 4; do dispatch s5 spec-fidelity "Review round $n of feature 9$n." 1; done
+[ "$(rc)" -eq 2 ] && grep -q "not one of check-wave's authorized jobs" "$T/err" && ! grep -q 'name: "check-wave"' "$T/err" && ok "a type check-wave will not take is told WAVE_OK is its way, not check-wave" || no "the refusal offered a closed route" "(rc=$(rc)) $(head -4 "$T/err")"
 dispatch s4 record-format "Read /tmp/l7r-check/r1/MANIFEST.md and rule on it." 1
 [ "$(rc)" -eq 0 ] && ok "another type is its own count" || no "another type was refused" "(rc=$(rc))"
 dispatch s4 quote-check "Read /tmp/l7r-check/q5/MANIFEST.md and rule on it. WAVE_OK: a seeded measurement batch" 1

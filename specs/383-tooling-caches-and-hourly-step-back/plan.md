@@ -655,5 +655,10 @@ reads it and fails when it is missing, names a type with no agent file, or names
 **D50 - The first real wave, measured (FR-046, SC-034).** The next wave of 4 or more real checks this work or the backlog owes
 runs through `check-wave`; its agents' first-request read and write (the run's `subagents/workflows/` transcripts) and the
 main session's wakes during it (the document's wake script, the window of the run) go in research, beside the last
-hand-launched wave of the same check.
+hand-launched wave of the same check. The tooling is `make wave-report` (`scripts/measure/wave_report.py`), and the Workflow
+guard names it to the session at every `check-wave` run's start, so the measurement is never remembered. On 2026-10-17 no
+check was owed anywhere (research R21), so T56 lands open until the first real wave runs; R21 holds the probe's and the
+month's hand-launched waves' numbers meanwhile.
+
+**Lands open**: T56
 

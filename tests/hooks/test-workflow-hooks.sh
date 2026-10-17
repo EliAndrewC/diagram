@@ -34,7 +34,7 @@ ok() { echo "  ok      $1"; PASS=$((PASS+1)); }
 no() { echo "  FAIL    $1 ${2:-}"; FAIL=$((FAIL+1)); }
 wf() { # wf <json tool_input> -> rc in $T/rc, stderr in $T/err
   python3 -c 'import json,sys; print(json.dumps({"session_id":"t-wf","cwd":sys.argv[2],"tool_name":"Workflow","tool_use_id":"toolu_wf1","tool_input":json.loads(sys.argv[1])}))' "$1" "$FIX" \
-    | ( cd "$FIX" && "$HOOK" pretool 2>"$T/err" ); echo $? > "$T/rc"
+    | ( cd "$FIX" && "$HOOK" pretool 2>"$T/err" >"$T/out" ); echo $? > "$T/rc"
 }
 script() { python3 -c 'import json,sys; print(json.dumps({"script":sys.argv[1]}))' "$1"; }
 rc() { cat "$T/rc"; }
@@ -71,6 +71,7 @@ echo "2. check-wave: every unit through the Agent hooks"
 : > "$SEEN"
 wf '{"name":"check-wave","args":{"agentType":"quote-check","units":[{"label":"0105","prompt":"Read /tmp/a/MANIFEST.md"},{"label":"0106","prompt":"Read /tmp/b/MANIFEST.md","then":[{"agentType":"source-reader","prompt":"Verify /tmp/b/MANIFEST.md"}]}]}}'
 [ "$(rc)" -eq 0 ] && ok "a wave of clean units passes" || no "a clean wave was refused" "(rc=$(rc)) $(head -5 "$T/err")"
+grep -q 'make wave-report' "$T/out" && ok "...and the session is told the command that measures it (FR-046)" || no "the measurement is not named" "$(cat "$T/out")"
 n=$(wc -l < "$SEEN")
 [ "$n" -eq 3 ] && ok "each unit AND its declared verify step met the Agent hooks (3 payloads)" || no "the hooks saw $n payloads, not 3"
 python3 - "$SEEN" <<'PY' && ok "...as the Agent payload a hand launch sends: its type, prompt, a wave:<run>:<n> id" || no "the payloads are not Agent payloads"

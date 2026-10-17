@@ -28,6 +28,10 @@ except Exception: pass' 2>/dev/null)"
   [ -f "$settings" ] || exit 0
   got="$(printf '%s' "$INPUT" | python3 "$WF_HERE/lib/hm_workflow.py" "$root" "$settings" 2>/dev/null)" || exit 0
   [ -z "$got" ] && exit 0
+  if [ "$got" = "WAVE-PASSED" ]; then  # the measurement is named when the wave starts, never remembered (FR-046, plan D50)
+    printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","additionalContext":"check-wave: every unit passed the Agent guards. When this run finishes, `make wave-report` measures it - each agent'"'"'s first-request cache read and write, and the main session'"'"'s wakes - against the last hand-launched wave (feature 383 FR-046)."}}\n'
+    exit 0
+  fi
   if [ "$got" = "ESCAPED" ]; then
     guard_log workflow escaped "an untyped agent() stage, with a reason" escape
     exit 0

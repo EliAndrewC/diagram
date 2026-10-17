@@ -41,8 +41,13 @@ except Exception: pass' 2>/dev/null)"
         printf 'Every agent launched by hand wakes the main session when it finishes, and each wake re-reads its whole context\n'
         printf '(5,544 wakes a month, a median 405k tokens each - feature 383 research R20). A workflow staggers the launches by itself\n'
         printf 'and wakes the session once, and its guard holds each unit to every check this one would have:\n'
-        printf '  Workflow({name: "check-wave", args: {agentType: "%s", units: [{label: "<unit>", prompt: "<its prompt>"}, ...]}})\n' "$kind"
-        printf 'Two or three of a type stay plain Agent calls. If this batch must stay hand-launched: WAVE_OK: <reason> in the prompt.\n'
+        if python3 -c 'import sys; sys.path.insert(0, sys.argv[1]); import hm_workflow; sys.exit(sys.argv[2] not in hm_workflow.WAVE_JOBS)' "$AP_HERE/lib" "$kind" 2>/dev/null; then
+          printf '  Workflow({name: "check-wave", args: {agentType: "%s", units: [{label: "<unit>", prompt: "<its prompt>"}, ...]}})\n' "$kind"
+          printf 'Two or three of a type stay plain Agent calls. If this batch must stay hand-launched: WAVE_OK: <reason> in the prompt.\n'
+        else
+          printf '`%s` is not one of check-wave'"'"'s authorized jobs, so that route is closed to it: send at most three now and the\n' "$kind"
+          printf 'rest in the next message, or, if this batch must go together: WAVE_OK: <reason> in the prompt.\n'
+        fi
       } >&2 ;;
     *)
       guard_log agent-prefix blocked "$got" repeated-block

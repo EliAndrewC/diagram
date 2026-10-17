@@ -162,7 +162,7 @@ def verdict(payload: dict, root: pathlib.Path, settings: pathlib.Path) -> str:
     name, path = str(ti.get("name") or ""), str(ti.get("scriptPath") or "")
     wave_file = (root / ".claude" / "workflows" / f"{WAVE}.js").resolve()
     if name == WAVE or (path and pathlib.Path(path).resolve() == wave_file):
-        return wave_verdict(payload, settings)
+        return wave_verdict(payload, settings) or "WAVE-PASSED"
     if path:
         try:
             script = pathlib.Path(path).read_text(encoding="utf-8")

@@ -1767,6 +1767,10 @@ subagent-cache:  ## [project] what subagents write to the prompt cache fresh, pe
 	@: "GUARD_EDIT_OK: feature 383 amendment 6, plan D39 - adding an operation: the subagent cache measurement over the transcripts"
 	@python3 scripts/measure/subagent_cache.py $(if $(SINCE),--since $(SINCE),)
 
+wave-report:     ## [project] a workflow wave's cost - each agent's first-request cache read and write, the main session's wakes - against the last hand-launched wave (feature 383 amendment 7)   [WF=<.../workflows/wf_*>]
+	@: "GUARD_EDIT_OK: feature 383 amendment 7, plan D50 - adding an operation: the wave measurement over the transcripts"
+	@python3 scripts/measure/wave_report.py $(if $(WF),--run $(WF),)
+
 collect-cost:    ## [tests] where a run's time goes before any test runs: as make runs it, no workers, collection alone (feature 383 amendment 3)   TREE=quick|tooling
 	@: "GUARD_EDIT_OK: feature 383 amendment 3, plan D25 - adding an operation: the collection measurement, run under make because the engine refuses pytest started outside it"
 	@python3 scripts/measure/collect_cost.py --tree $(or $(TREE),quick) $(if $(JSON),--json $(JSON),)

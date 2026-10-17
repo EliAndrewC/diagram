@@ -636,3 +636,26 @@ log and guard log over the same minutes)
   PostToolUse(Agent), would all be skipped by a check run in a workflow. `SubagentStart` (agent id, type) and `SubagentStop`
   do fire. Hence FR-045's last clause.
 
+## R21 Amendment 7 - what a hand-launched wave actually costs in wakes, and the probe through `make wave-report`
+
+Measured 2026-10-17 over every main-session transcript under `~/.claude/projects/-diagram*` since 2026-09-17 (observed
+2026-10-17; the method: one message's Agent calls grouped by its message id - each tool call is its own record - then the
+turns a `<task-notification>` naming one of the wave's tool-use ids STARTED, as the GM's document counts a wake):
+
+- **671 hand-launched waves** of 4 or more agents of one type in one message, **4,590 agents**, caused **803 wakes**: 1.2 per
+  wave on average, a median of 0, 0.17 per agent; the median context those wakes re-read was 139k (480k for the waves launched
+  with `run_in_background`, which caused 461 of them). A notification that arrives while the session is busy is folded into
+  the turn already running and starts none.
+- So the document's 5,544 wakes are every task notification - background `make` runs and single agents included - not the
+  waves'. A workflow wakes the session once per wave; against 1.2, it saves about 0.2 wakes a wave, ~130 a month at this rate
+  (~6M token-equivalents at the 480k median and the 0.1x read price). Smaller than the document's estimate, though not zero.
+  The typed `agentType` saving inside a workflow (~35k written at the first request against ~6k, R20) applies only to work
+  that would have run in a workflow anyway.
+- The probe through `make wave-report` (`scripts/measure/wave_report.py`): 4 `claims-triage` agents, the first reading 0 and
+  writing 6,178, the next three reading 3,462 and writing 2,716 each, one wake (930k re-read); the last hand-launched wave
+  before it (9 `modal-depiction`, session d2dc8c63, 17:50) read 2,336 / wrote 4,620 first and 4,443 / ~2,514 each after, and
+  caused 2 wakes (605k median). Per agent, the two write about the same: the defined agent's prefix is reused either way.
+
+The first REAL wave (FR-046) has not run: on 2026-10-17 nothing owed one (`make record-owed`, `claims-owed`, `modal-triage`
+each reported nothing). The Workflow guard names `make wave-report` to the session whenever a `check-wave` run starts, so
+the measurement is taken where the wave runs.
