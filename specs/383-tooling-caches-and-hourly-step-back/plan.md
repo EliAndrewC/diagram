@@ -437,3 +437,25 @@ and asks the git questions itself), the first imports. The cuts that change neit
 - as many workers as there are test files left to run (`-n` lowered in the controller's `pytest_configure`, before xdist
   starts them), never more than the run asked for;
 - a part found to cost nothing measurable is left alone, and recorded.
+
+## Amendment 5 (FR-028 to FR-030)
+
+**D31 - The gate's tooling run reuses (FR-028).** The gate's tooling phase (`make tooling`, run when the tooling hash moved)
+runs with `L7R_TEST_DEPS=reuse`: a kept pass whose reads are unchanged is not run again, as in a landing; the run still records
+what it runs, and `tooling-green` still stamps the hash once every test either passed now or was reused on identical inputs.
+`make tooling FULL=1` (and `HOOKS_ALL`'s equivalent, `L7R_TEST_DEPS=record` given by hand) runs every test. The tooling hash
+(`l7r/diagram/ci/state.py`) reads `scripts/` recursively, its subdirectories included, `__pycache__` aside.
+
+**D32 - A pass kept per test (FR-029).** The store (version 3) keeps, per test node id, what that test read while it ran - its
+own setup and call, the processes it started - and, separately, what its FILE read (the module imported and collected, its
+module- and class-scoped fixtures) and what the SESSION read (session- and package-scoped fixtures). A test is reused when its
+own reads, its file's and the session's are all unchanged, and every test also depends on: its file, the `conftest.py` files
+from its directory up to `tests/`, `pyproject.toml`, and the plugin's own code (`_test_deps.py`, `_deps_site/`). A file whose
+every recorded test is reusable, and whose test list is the one recorded, is not collected; otherwise it is collected and its
+reusable tests deselected. A test that passes is kept whatever else ran beside it - a run filtered by `-k` or a node id keeps
+the tests it ran; a failure keeps nothing for that test.
+
+**D33 - Tests of code moved off the real repository (FR-030).** After D32, the tests that still re-run on an edit to a research
+page whose subject is code (test_lint_scope's, test_sources', and any the measurement finds) are listed with what they read;
+each one that reads the real tree only to have something to read is given a fixture, its assertion unchanged; one whose
+subject is the repository's data (every registry key has a state, the real tree parses) keeps reading it.
