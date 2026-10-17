@@ -56,3 +56,13 @@ HEAD: 1 lane knot (lanes 3/6, refused by `needle_joins`). With T03's three chang
   would close a sliver between two ways - the side-by-side family the carried task (D17's merge) owns. It comes with the
   own-garden change, which fixes seeds 17, 21 and 40.
 Pool (`make maps SCOPE=all`, the narrowed code): maps clean; Kashikawa lane 9 straightened, as before.
+
+## The claims gate at landing (23:15 UTC): three findings read as introduced
+All three are on code T03 did not change in behavior; the 0246 drawing-page edit (the own-garden DEVIATION) re-owed their checks:
+- `settle.py::theirs` DRIFTED: `own` takes every house within 80 ft of either end, so a neighbor's garden at a lane's junction
+  end loses the 7 ft fence gap 0246 keeps from another household's garden. A real pre-existing defect; fixing it moves maps
+  (a cohort-measured change, the lane law's own territory).
+- `settle.py::Lawful.fault#no doubled tail` DRIFTED: 0081's 20 degrees against the code's 15 - the known gap already carried to
+  T12 (the side-by-side family).
+- `clearance.py::_clear_link` CANNOT-TELL: the bundle lacked `link_survives`, which its answer depends on.
+The pool rolls clean on this code (maps clean, Kashikawa lane 9 straightened) and the cohort is as measured above.
