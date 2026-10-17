@@ -685,6 +685,14 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	: "(GUARD_EDIT_OK: feature 172 - one work directory for the fan-out's logs and exit codes)"; \
 	work=$$(mktemp -d); trap 'rm -rf "$$work"' EXIT; \
 	: "GUARD_EDIT_OK: feature 379 amendment 1 - scripts/land-tooling.sh lands on main, so its suite runs with the guards'"; \
+	: "(GUARD_EDIT_OK: feature 383 amendment 3, plan D27 - adding an operation: a suite traced green is skipped while every file it READ is"; \
+	: " unchanged (tests/hooks/hooktrace.py); sync-with-main and gate-stamp, held by hookdeps to the whole scripts tree, re-ran on 42"; \
+	: " of 44 tooling landings. A suite never traced, or one that read the repository through git, keeps hookdeps' key below.)"; \
+	roster=$$(for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/gate-stamp.py $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh; do basename $$h; done); \
+	traced=" $$(if [ -z "$(HOOKS_ALL)" ]; then python3 "$$root/tests/hooks/hooktrace.py" fresh "$$gitdir" "$$root" $$roster 2>/dev/null; fi | tr '\n' ' ') "; \
+	export HOOKS_SHIM="$$(python3 "$$root/tests/hooks/hooktrace.py" shim "$$gitdir" 2>/dev/null)" HOOKS_ROOT="$$root"; \
+	: "(GUARD_EDIT_OK: feature 383 amendment 3, plan D27 - every suite's key in one process, the recipe's own sha: one --deps process per suite was 5.9 s of each run)"; \
+	keys=$$(python3 "$$root/tests/hooks/hookdeps.py" --keys $$roster); \
 	for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/gate-stamp.py $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh; do \
 	  : "(GUARD_EDIT_OK: sync-with-main.sh joins the roster - its route decision is a guard, feature 130 T031)"; \
 	  : "(GUARD_EDIT_OK: feature 311 - entry-gate.sh and plan-gate.sh join it: both refuse at the push, both had companions that nothing ran, and entry-gate's had rotted)"; \
@@ -697,6 +705,7 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	    printf 'fires - or whether it fires on correct work, which is the more expensive failure.\n\n'; \
 	    fail="$$fail $$b"; continue; \
 	  fi; \
+	  case "$$traced" in *" $$b "*) skipped=$$((skipped+1)); continue ;; esac; \
 	  : "(GUARD_EDIT_OK: feature 172 - THE DEPENDENCY SET IS DERIVED, TRANSITIVELY. It was a fixed list"; \
 	  : " naming all four shared helpers for every suite, so a one-line gatecost.py fix re-ran 21 suites"; \
 	  : " when two reference it. tests/hooks/hookdeps.py follows the real reference graph, and follows it"; \
@@ -705,9 +714,11 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	  : " broken, which is worse than the over-running it replaces. Measured in specs/172/research.md:"; \
 	  : " gatecost.py 21 -> 2, test_hooks_cases.py 21 -> 3, and hookmatch.py/_guardlog.sh still 20/19,"; \
 	  : " which is why this feature also runs the suites in parallel.)"; \
-	  deps=$$(python3 "$$root/tests/hooks/hookdeps.py" --deps "$$b" | sed "s|[^ ]*|$$root/&|g"); \
+	  : "(GUARD_EDIT_OK: feature 383 amendment 3 - the key read from the one --keys call above, the same sha the line below computed per suite)"; \
 	  : "(GUARD_EDIT_OK: fixing a guard that FIRES ON CORRECT WORK - the per-suite freshness cache resolved its own path as \$$root/.git/hooks-test, and in a LINKED WORKTREE .git is a FILE, so every one of the 19 suites failed with 'Directory nonexistent'. A detached worktree is exactly where constitution XIII requires the regression baseline to be taken, so the mandated procedure could not produce a green hooks-test on ANY commit. Asking git for the path fixes it in both layouts; the roster, the failure path and the stamp are unchanged. Feature 157.)"; \
-	  sha=$$(cat $$deps 2>/dev/null | sha256sum | cut -c1-16); mkdir -p "$$gitdir/hooks-test"; \
+	  sha=$$(printf '%s\n' "$$keys" | awk -v b="$$b" '$$1 == b { print $$2 }'); mkdir -p "$$gitdir/hooks-test"; \
+	  : "(GUARD_EDIT_OK: feature 383 amendment 3 - a guard with no key is never fresh: an empty key once matched every stamp)"; \
+	  [ -n "$$sha" ] || sha=unkeyed-$$RANDOM; \
 	  if [ -z "$(HOOKS_ALL)" ] && [ "$$(cat "$$gitdir/hooks-test/$$b" 2>/dev/null)" = "$$sha" ]; then skipped=$$((skipped+1)); continue; fi; \
 	  n=$$((n+1)); printf '%s %s %s\n' "$$b" "$$t" "$$sha" >> "$$work/todo"; \
 	done; \
@@ -733,8 +744,11 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	: " repository, so its self-test is run here when it is present: a session in a container is reminded of its sudo,"; \
 	: " a host session is not, and nothing else prints a note. Absent (another machine), there is nothing to run.)"; \
 	uh="$$HOME/.claude/hooks/test-missing-program-hook.sh"; \
-	if [ -f "$$uh" ]; then \
-	  if bash "$$uh" > "$$work/missing-program-hook.log" 2>&1; then n=$$((n+1)); \
+	: "(GUARD_EDIT_OK: feature 383 amendment 3 - kept by its two files, as every suite is: it ran on every hooks-test, 7.5 s of an idle run)"; \
+	uk=$$(cat "$$uh" "$$HOME/.claude/hooks/missing-program-hook.sh" 2>/dev/null | sha256sum | cut -c1-16); \
+	if [ -f "$$uh" ] && [ -z "$(HOOKS_ALL)" ] && [ "$$(cat "$$gitdir/hooks-test/missing-program-hook" 2>/dev/null)" = "$$uk" ]; then skipped=$$((skipped+1)); \
+	elif [ -f "$$uh" ]; then \
+	  if bash "$$uh" > "$$work/missing-program-hook.log" 2>&1; then n=$$((n+1)); printf '%s' "$$uk" > "$$gitdir/hooks-test/missing-program-hook"; \
 	  else printf '\n\033[1mHOOK TESTS FAILED: missing-program-hook (user-level, %s)\033[0m\n' "$$uh"; sed 's/^/  /' "$$work/missing-program-hook.log"; fail="$$fail missing-program-hook"; fi; \
 	fi; \
 	: "(GUARD_EDIT_OK: 2026-10-02 - THE PYTEST FILES THAT TEST scripts/ RUN HERE TOO, so the hooks stamp the DIRECT route"; \
@@ -766,7 +780,10 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	fi; \
 	if [ -n "$$fail" ]; then printf '\n\033[1mhooks-test FAILED:%s\033[0m\n\n' "$$fail"; exit 1; fi; \
 	python3 "$$root/scripts/gates/gate-stamp.py" --write hooks; \
-	printf 'hooks-test: %s guard suites green, %s unchanged since they last went green (hooks area stamped)\n' "$$n" "$$skipped"
+	printf 'hooks-test: %s guard suites green, %s unchanged since they last went green (hooks area stamped)\n' "$$n" "$$skipped"; \
+	: "(GUARD_EDIT_OK: feature 383 amendment 3, plan D27 - adding an operation: which suites ran and each one's seconds, longest first, so a landing's log says where its guard-suite time went)"; \
+	ran=$$(for s in "$$work"/*.s; do [ -f "$$s" ] && printf '%s %s\n' "$$(cat "$$s")" "$$(basename "$$s" .s)"; done | sort -rn | awk '{printf "%s%s %ss", (NR>1?", ":""), $$2, $$1}'); \
+	[ -z "$$ran" ] || printf 'hooks-test: ran %s\n' "$$ran"
 # PER-SUITE FRESHNESS (feature 135, third pass; GUARD_EDIT_OK: the roster and the failure path are unchanged - a suite
 # is SKIPPED only when its guard, its test and the shared helpers (`hookmatch.py`, `test_hooks_cases.py`; for the
 # three suites that drive other scripts, all of scripts/) hash to what they hashed when the suite last went GREEN in
@@ -1725,6 +1742,10 @@ cov-file:       ## [tests] which lines of MOD does ONE test file reach?   FILE=t
 # that they exist - "make durations FULL MARK" did not tell them what FULL=1 changes, or what MARK
 # even takes. So a `##  NAME=<what>  description` line under a target documents one argument, and
 # `make-docs.py` renders them. Make treats these as ordinary comments; the recipe is unaffected.
+collect-cost:    ## [tests] where a run's time goes before any test runs: as make runs it, no workers, collection alone (feature 383 amendment 3)   TREE=quick|tooling
+	@: "GUARD_EDIT_OK: feature 383 amendment 3, plan D25 - adding an operation: the collection measurement, run under make because the engine refuses pytest started outside it"
+	@python3 scripts/measure/collect_cost.py --tree $(or $(TREE),quick) $(if $(JSON),--json $(JSON),)
+
 durations:       ## [tests] where the suite's time goes - run when a target feels slow
 ##  FULL=1        also profile `tests/full/` (default: it is ignored, so this is the quick tree only)
 ##  MARK=<expr>   a pytest `-m` marker expression, e.g. `tooling` (default: `not rolls_map`)

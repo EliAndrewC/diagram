@@ -18,8 +18,22 @@ set -uo pipefail
 WORK=${1:?work dir}; GITDIR=${2:?gitdir}; GUARD=${3:?guard}; SUITE=${4:?suite}; SHA=${5:?sha}
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-if "$HERE/$SUITE" > "$WORK/$GUARD.log" 2>&1; then
+t0=${EPOCHREALTIME/,/.}
+# GUARD_EDIT_OK: feature 383 amendment 3 (plan D27), adding an operation - under the C-library recorder when make hooks-test built
+# it, so a green suite's reads are kept (tests/hooks/hooktrace.py): a fixture's copy of scripts/ counts as the file it copies,
+# the fixture's cp does not
+if [ -n "${HOOKS_SHIM:-}" ] && [ -n "${HOOKS_ROOT:-}" ]; then
+  rm -f "$WORK/$GUARD.reads"
+  env LD_PRELOAD="$HOOKS_SHIM${LD_PRELOAD:+ $LD_PRELOAD}" UV_USE_IO_URING=0 L7R_TEST_DEP_LOG="$WORK/$GUARD.reads" L7R_TEST_DEP_ROOT="$HOOKS_ROOT" \
+    L7R_TEST_DEP_FILE="$GUARD" L7R_TEST_DEP_SKIP="cp" L7R_TEST_DEP_MAP=scripts "$HERE/$SUITE" > "$WORK/$GUARD.log" 2>&1; rc=$?
+else
+  "$HERE/$SUITE" > "$WORK/$GUARD.log" 2>&1; rc=$?
+fi
+# feature 383 amendment 3 (plan D27): each suite's seconds beside it, so hooks-test can say which suites ran and what each cost
+awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" 'BEGIN { printf "%.1f", b - a }' > "$WORK/$GUARD.s"
+if [ "$rc" -eq 0 ]; then
   mkdir -p "$GITDIR/hooks-test" && printf '%s' "$SHA" > "$GITDIR/hooks-test/$GUARD"
+  [ -n "${HOOKS_SHIM:-}" ] && python3 "$HERE/hooktrace.py" stamp "$GITDIR" "$GUARD" "$WORK/$GUARD.reads" "$HOOKS_ROOT" >/dev/null 2>&1
   printf 'ok' > "$WORK/$GUARD.rc"
 else
   printf 'FAIL' > "$WORK/$GUARD.rc"

@@ -200,7 +200,8 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
   GM go through `escalation-check` first. Every check runs on the TIER its file pins - a model and an
   effort, never inherited (`tests/test_agent_models.py` holds the table; judgment is on Opus, and a
   downgrade stands only after seeded-fault runs on known findings - THREE a leg, because one run of a
-  judging agent is not a stable oracle). An ad-hoc agent is dispatched with
+  judging agent is not a stable oracle; which checks were tried on which model, and how they did: `docs/spec-kit-and-reviews.md`
+  "Models tried"). An ad-hoc agent is dispatched with
   an explicit `model` - `sonnet` to read, fetch, translate or extract, `opus` for anything that judges -
   and never with none: with none it runs on the session's model, and `agent-model-hooks.sh` refuses it
   (`haiku` only for a plain description of a page - it misread a table's columns where sonnet did not). A DEFINED agent launches without this file, the nested `CLAUDE.md` files and the memory index

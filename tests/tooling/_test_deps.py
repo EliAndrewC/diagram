@@ -75,6 +75,8 @@ def _hook(event: str, args: tuple) -> None:
         mode = args[1] if len(args) > 1 else "r"
         if isinstance(mode, str) and any(c in mode for c in "wax+"):
             return
+        if mode is None and len(args) > 2 and isinstance(args[2], int) and args[2] & os.O_ACCMODE != os.O_RDONLY:
+            return  # an os.open for writing (its flags, not a mode string, say so): not a read
         if mode is None and not os.path.isabs(os.fsdecode(args[0])):
             return  # an os.open by name under a directory handle (shutil.rmtree of a temporary tree): not a path here
         p = _under(args[0])
@@ -144,9 +146,42 @@ def pytest_configure(config: pytest.Config) -> None:
         os.environ["L7R_TEST_DEP_DIR"] = d
         os.environ["L7R_TEST_DEP_ROOT"] = str(ROOT)
         os.environ["PYTHONPATH"] = os.pathsep.join([str(SITE), *([os.environ["PYTHONPATH"]] if os.environ.get("PYTHONPATH") else [])])
+        shim = build_shim()
+        if shim:  # every process started from here on loads it; the workers too, which skip themselves (L7R_TEST_DEP_SELF)
+            os.environ[rules.SHIM_ENV] = shim
+            os.environ["LD_PRELOAD"] = " ".join([shim, *([os.environ["LD_PRELOAD"]] if os.environ.get("LD_PRELOAD") else [])])
+            os.environ["UV_USE_IO_URING"] = "0"
     worker = getattr(config, "workerinput", {}).get("workerid", "main")
     os.environ["L7R_TEST_DEP_LOG"] = os.path.join(os.environ.get("L7R_TEST_DEP_DIR", tempfile.gettempdir()), f"children-{worker}.log")
+    os.environ["L7R_TEST_DEP_SELF"] = str(os.getpid())
     sys.addaudithook(_hook)
+
+
+SHIM_SRC = SITE / "l7r_file_log.c"
+
+
+def build_shim() -> str:
+    """The preloaded C-library recorder (plan D26), built once per version of its source into the git common directory's
+    cache with gcc; "" where it cannot be built (no compiler) - every non-Python child then stays unknown, as before."""
+    store = _store()
+    if store is None or not SHIM_SRC.is_file():
+        return ""
+    import hashlib  # noqa: PLC0415
+
+    so = store.parent / f"l7r_file_log-{hashlib.sha256(SHIM_SRC.read_bytes()).hexdigest()[:12]}.so"
+    if so.is_file():
+        return str(so)
+    so.parent.mkdir(parents=True, exist_ok=True)
+    tmp = so.with_suffix(f".{os.getpid()}.tmp")
+    try:
+        ok = subprocess.run(["gcc", "-shared", "-fPIC", "-O2", "-o", str(tmp), str(SHIM_SRC), "-ldl"], capture_output=True, check=False).returncode == 0
+    except OSError:
+        ok = False
+    if not ok:
+        tmp.unlink(missing_ok=True)
+        return ""
+    tmp.replace(so)
+    return str(so)
 
 
 @pytest.hookimpl(hookwrapper=True)
@@ -210,6 +245,15 @@ def _keep(d: pathlib.Path) -> None:
             kind, _, path = rest.partition("\t")
             if f and kind:
                 reads.setdefault(f, {}).setdefault(kind, set()).add(path)
+    gaps = shim_gaps(reads)
+    for r in reads.values():  # the C recorder's reads join Python's; its children are known only where it saw all Python saw
+        r.setdefault("file", set()).update(r.pop("c-file", set()), r.pop("py-file", set()))
+        r.setdefault("dir", set()).update(r.pop("c-dir", set()))
+        known = r.pop("c", set())
+        if gaps:
+            r.setdefault("opaque", set()).update(known)
+    if gaps:
+        (d / "shim-gaps.json").write_text(json.dumps({f: sorted(g)[:20] for f, g in gaps.items()}), encoding="utf-8")
     store = _store()
     if store is None:
         return
@@ -225,13 +269,14 @@ def _keep(d: pathlib.Path) -> None:
             continue
         r = reads.get(f, {})
         opened = {_rel_path(p) for p in r.get("file", set())}
-        opened = {p for p in opened if not p.startswith(CACHE_READS)}
+        opened = {p for p in opened if not p.startswith(CACHE_READS) and p != ".git"}  # `.git` itself: where, not what (a worktree's is a file)
         files = {p for p in opened if not (ROOT / p).is_dir()}
         dirs = {_rel_path(p) for p in r.get("dir", set())} | {p for p in opened if (ROOT / p).is_dir() and not p.startswith(".git")}
         if any(p == ".git" or p.startswith(".git/") for p in opened if (ROOT / p).is_dir()):
             files.add(".git")  # the repository's own git state was read: not known by content, so never reused
         kept[f] = {
             "v": STORE_VERSION,
+            "tests": ran[f],
             "py": sys.version,
             "opaque": sorted(r.get("opaque", set())),
             "files": {p: _state("file", p, ids, entries) for p in sorted(files)},
@@ -242,6 +287,20 @@ def _keep(d: pathlib.Path) -> None:
     tmp = store.with_suffix(f".{os.getpid()}.tmp")
     tmp.write_text(json.dumps(kept), encoding="utf-8")
     tmp.replace(store)
+
+
+def shim_gaps(reads: dict[str, dict[str, set[str]]]) -> dict[str, set[str]]:
+    """Per test file, the files a Python child opened (Python's own recorder) that the preloaded C recorder did not see - the
+    run's check of the C recorder (plan D26): every Python child carries both. Any gap and nothing is reused on the C recorder."""
+    out: dict[str, set[str]] = {}
+    for f, r in reads.items():
+        c_saw = r.get("c-file", set()) | r.get("c-dir", set())
+        if not c_saw and not r.get("c"):
+            continue  # no child this run was the C recorder's to check
+        missed = {p for p in r.get("py-file", set()) if p not in c_saw and not _rel_path(p).startswith(CACHE_READS)}
+        if missed:
+            out[f] = missed
+    return out
 
 
 def reusable(kept: dict, ids: dict[str, str], entries: dict[str, list[str]], answers: dict[str, str] | None = None) -> bool:
@@ -263,26 +322,39 @@ def answer(question: str, answers: dict[str, str]) -> str:
     return answers[question]
 
 
-def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item]) -> None:
-    if MODE != "reuse" or not getattr(config, "_l7r_deps", False):
-        return
-    store = _store()
-    try:
-        kept = json.loads(store.read_text(encoding="utf-8")) if store and store.is_file() else {}
-    except OSError, ValueError:
-        kept = {}
-    files = {_rel(i.nodeid) for i in items if _rel(i.nodeid).startswith(TREE)}
-    if not kept or not files:
-        return
-    ids, entries = _ids()
-    answers: dict[str, str] = {}
-    skip = {f for f in files if f in kept and reusable(kept[f], ids, entries, answers)}
-    if not skip:
-        return
-    gone = [i for i in items if _rel(i.nodeid) in skip]
-    items[:] = [i for i in items if _rel(i.nodeid) not in skip]
-    config.hook.pytest_deselected(items=gone)
-    config._l7r_reused = (len(skip), len(gone))  # type: ignore[attr-defined]
+def reuse_set(config: pytest.Config) -> dict[str, int]:
+    """{tooling test file: its kept test count} for every kept pass still good here, decided once per process (feature 383
+    amendment 3, plan D25): the reuse is known before collection, so a reused file is never imported, in any worker."""
+    cached = getattr(config, "_l7r_reuse_set", None)
+    if cached is not None:
+        return cached
+    out: dict[str, int] = {}
+    if MODE == "reuse" and getattr(config, "_l7r_deps", False):
+        store = _store()
+        try:
+            kept = json.loads(store.read_text(encoding="utf-8")) if store and store.is_file() else {}
+        except OSError, ValueError:
+            kept = {}
+        if kept:
+            ids, entries = _ids()
+            answers: dict[str, str] = {}
+            out = {f: int(e.get("tests", 0)) for f, e in kept.items() if f.startswith(TREE) and reusable(e, ids, entries, answers)}
+    config._l7r_reuse_set = out  # type: ignore[attr-defined]
+    return out
+
+
+def pytest_ignore_collect(collection_path: pathlib.Path, config: pytest.Config) -> bool | None:
+    """A reused tooling test file is not collected: its module is never imported (FR-022)."""
+    if MODE != "reuse" or not getattr(config, "_l7r_deps", False) or collection_path.suffix != ".py":
+        return None
+    rel = _rel_path(str(collection_path))
+    skip = reuse_set(config)
+    if rel not in skip:
+        return None
+    seen = config.__dict__.setdefault("_l7r_skipped", set())
+    seen.add(rel)
+    config._l7r_reused = (len(seen), sum(skip[f] for f in seen))  # type: ignore[attr-defined]
+    return True
 
 
 def pytest_terminal_summary(terminalreporter, config: pytest.Config) -> None:  # noqa: ANN001

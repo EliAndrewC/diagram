@@ -33,8 +33,9 @@ def test_a_kept_pass_is_reused_only_while_everything_it_read_is_unchanged() -> N
     assert not deps.reusable({**kept, "files": {"x/.gencache/k": "ignored"}}, ids, entries), "it read a file git ignores"
 
 
-def test_what_a_child_process_reads_is_known_or_the_file_always_runs() -> None:
+def test_what_a_child_process_reads_is_known_or_the_file_always_runs(monkeypatch) -> None:  # noqa: ANN001
     site = str(deps.SITE)
+    monkeypatch.delenv(deps.rules.SHIM_ENV, raising=False)  # no C recorder: a non-Python program is unknown
     rec = {"L7R_TEST_DEP_LOG": "/tmp/x.log", "PYTHONPATH": site}
     assert deps.opaque_child(("python3", ["python3", "x.py"], "/tmp", None), site) == "", "a Python child inheriting the recording"
     assert deps.opaque_child(("python3", ["python3", "x.py"], "/tmp", rec), site) == ""
@@ -58,7 +59,15 @@ def test_what_a_child_process_reads_is_known_or_the_file_always_runs() -> None:
         "an outside path named does not make a command run in the repository known (the plan review)"
     )
     assert deps.opaque_child(("git", ["git", "-C", ROOT, "worktree", "list"], "/tmp", None), site) == "git", "git -C the repository"
-    assert deps.opaque_child(("make", ["make", "quick"], ROOT, None), site) == "make"
+    assert deps.opaque_child(("make", ["make", "quick"], ROOT, None), site) == "make", "no C recorder: unknown"
+    monkeypatch.setenv(deps.rules.SHIM_ENV, "/x/l7r_file_log.so")
+    monkeypatch.setenv("LD_PRELOAD", "/x/l7r_file_log.so")
+    assert deps.rules.judge(("make", ["make", "quick"], ROOT, None), ROOT, site) == ("c", "make"), "the C recorder in it (D26)"
+    given = {"PATH": "/bin"}
+    monkeypatch.setenv("L7R_TEST_DEP_LOG", "/tmp/x.log")
+    assert deps.rules.judge(("node", ["node", f"{ROOT}/x.js"], "/tmp", given), ROOT, site) == ("c", "node")
+    assert given["LD_PRELOAD"].startswith("/x/l7r_file_log.so") and given["UV_USE_IO_URING"] == "0", "put into its own environment"
+    assert deps.rules.judge(("git", ["git", "commit", "-m", "x"], ROOT, None), ROOT, site) == ("opaque", "git"), "git is never the C recorder's"
     assert deps.opaque_child(("git", ["git", "-C", ROOT, "rev-parse", "--git-common-dir"], ROOT, None), site) == "", "where, not what"
     assert deps.opaque_child(("git", ["git", "rev-parse", "HEAD"], ROOT, None), site) == "", "a revision is content, asked again"
     assert deps.opaque_child(("sleep", ["sleep", "1"], ROOT, None), site) == ""
@@ -122,3 +131,12 @@ def test_a_git_question_is_asked_again_and_its_answer_compared(tmp_path) -> None
     kept = {"v": deps.STORE_VERSION, "py": sys.version, "opaque": [], "files": {}, "dirs": {}, "git": {q: rules.ask(q, str(a))}}
     assert deps.reusable(kept, {}, {}, {q: rules.ask(q, str(a))})
     assert not deps.reusable(kept, {}, {}, {q: rules.ask(q, str(b))}), "the answer here differs"
+
+
+def test_the_c_recorder_is_checked_against_python_s() -> None:
+    """Plan D26: a file a Python child opened that the C recorder did not see is a gap; a cache read is not."""
+    ok = {"t.py": {"py-file": {f"{ROOT}/a.py"}, "c-file": {f"{ROOT}/a.py", f"{ROOT}/b.sh"}, "c": {"bash"}}}
+    assert deps.shim_gaps(ok) == {}
+    gap = {"t.py": {"py-file": {f"{ROOT}/a.py", f"{ROOT}/.git/l7r-cache/x.tmp"}, "c-file": {f"{ROOT}/b.sh"}, "c": {"bash"}}}
+    assert deps.shim_gaps(gap) == {"t.py": {f"{ROOT}/a.py"}}, "the cache read is not a gap; the missed module is"
+    assert deps.shim_gaps({"t.py": {"py-file": {f"{ROOT}/a.py"}}}) == {}, "no C child: nothing to check"

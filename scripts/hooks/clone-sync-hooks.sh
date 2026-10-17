@@ -115,7 +115,7 @@ forbidden_clone() { case "$(basename "$1")" in gm-assistant|"$(basename "$MAIN")
 # derivation is the reason this is safe to keep as a literal.
 # GUARD_EDIT_OK: feature 204 - page-check (feature 188) and soak had joined the Makefile without joining this
 # cache; the companion suite's derivation caught the drift on 2026-09-07, which is what it is for.
-BEHIND_TEST_TARGETS='quick|test|test-file|test-full|done|verify|reference|maps|hooks-test|idle-tests|cohort|tripwire|regressions|perf|perf-gate|cov-file|durations|tooling|page-check|soak'
+BEHIND_TEST_TARGETS='quick|test|test-file|test-full|done|verify|reference|maps|hooks-test|idle-tests|cohort|tripwire|regressions|perf|perf-gate|cov-file|durations|collect-cost|tooling|page-check|soak'  # GUARD_EDIT_OK: feature 383 amendment 3 - collect-cost, a new [tests] target, joins the list its suite derives from the Makefile
 # GUARD_EDIT_OK: the fetch-throttle knob went with the fetch - a dead test seam is a seam that will
 # be wired to something else later by someone who assumes it still means what it says.
 

@@ -366,6 +366,16 @@ if __name__ == "__main__":
             print("\n".join(py_stale(pathlib.Path(sys.argv[2]), sys.argv[3:])))
         else:
             py_stamp(pathlib.Path(sys.argv[2]), sys.argv[3:])
+    elif len(sys.argv) > 2 and sys.argv[1] == "--keys":
+        # `<guard> <sha>` for each guard named, in ONE process (feature 383 amendment 3, plan D27): one `--deps` process per suite
+        # was 5.9 s of every `make hooks-test`. The sha is the recipe's own - the raw bytes of each dependency, in `--deps`
+        # order, a missing one skipped, sha256's first 16 hex digits - so every stamp already kept still matches.
+        for g in sys.argv[2:]:
+            h = hashlib.sha256()
+            for n in deps_for(g):
+                if n in _INDEX and _INDEX[n].is_file():
+                    h.update(_INDEX[n].read_bytes())
+            print(g, h.hexdigest()[:16])
     elif len(sys.argv) > 2 and sys.argv[1] == "--deps":
         print(" ".join(str(_INDEX[n].relative_to(ROOT)) for n in deps_for(sys.argv[2]) if n in _INDEX))
     elif len(sys.argv) > 1:

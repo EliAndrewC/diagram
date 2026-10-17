@@ -36,11 +36,13 @@ if _LOG and os.environ.get("L7R_TEST_DEP_FILE"):
             mode = args[1] if len(args) > 1 else "r"
             if isinstance(mode, str) and any(c in mode for c in "wax+"):
                 return
+            if mode is None and len(args) > 2 and isinstance(args[2], int) and args[2] & os.O_ACCMODE != os.O_RDONLY:
+                return  # an os.open for writing (its flags, not a mode string, say so): not a read
             if mode is None and not os.path.isabs(os.fsdecode(args[0])):
                 return  # an os.open by name under a directory handle (shutil.rmtree of a temporary tree): not a path here
             p = l7r_dep_rules.under(args[0], _ROOT)
             if p:
-                _note("file", p)
+                _note("py-file", p)  # py-: a Python child's own record, which checks the C recorder (plan D26)
         elif event in ("os.listdir", "os.scandir") and args:
             p = l7r_dep_rules.under(args[0] if args[0] is not None else ".", _ROOT)
             if p:
