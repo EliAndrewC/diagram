@@ -261,7 +261,7 @@ def owed(
         was = index.get(key)
         if was is None:
             out.append((key, "new"))
-        elif was.get("code") != row.code:
+        elif was.get("code") != row.code and not (qdir is not None and relabeled_only(was, row, qdir.parent.parent)):
             out.append((key, "code changed"))
         elif was.get("triage") == "touched":
             out.append((key, "triage touched"))
@@ -289,6 +289,31 @@ def live_rows(cur: dict[str, Row], index: dict[str, dict[str, str]]) -> dict[str
 
 
 # ---- the bundle --------------------------------------------------------------------------------------------------
+
+
+_RESEARCH_BLOCK = re.compile(r"(?ms)^[ \t]*(?:\"\"\"|''')?Research:.*?(?=\"\"\"|'''|^[ \t]*$)")
+"""A docstring's `Research:` section, from its `Research:` line to the docstring's close or a blank line."""
+
+
+def body_of(root: Path, unit: Any) -> str:  # noqa: ANN401
+    """A unit's source with its `Research:` section taken out, fingerprinted: what stays the same when only a claim's label
+    or citation is rewritten (the round arbiter's tooling fix on ask:t01-claim-labels, feature 385 - three impl-drift rounds
+    on T01's claims were about labels alone, each relabel re-owing every claim of its unit)."""
+    try:
+        text = _source(root, unit)
+    except OSError:
+        return ""
+    return hashlib.sha256(_RESEARCH_BLOCK.sub("", text).encode("utf-8")).hexdigest()[:16]
+
+
+def relabeled_only(was: Mapping[str, Any], row: Row, root: Path) -> bool:
+    """Is a claim whose code fingerprint moved changed in its `Research:` lines alone - the unit's body as last judged - and
+    either its own claim text unchanged (another claim of the unit was rewritten) or rewritten after a MISLABELED verdict (the
+    relabel that verdict prescribed)? Then it owes no new round. A row recorded before bodies were kept owes one, as before."""
+    if not was.get("body") or body_of(root, row.unit) != was["body"]:
+        return False
+    text = row.claim.normalized() if row.claim is not None else ""
+    return was.get("claim") == text or was.get("verdict") == "MISLABELED"
 
 
 def _source(root: Path, unit: Any) -> str:  # noqa: ANN401
@@ -411,6 +436,8 @@ def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path, cont
         k: {
             "code": cur[k].code,
             "core": cur[k].unit.core,
+            "body": body_of(root, cur[k].unit),
+            "claim": cur[k].claim.normalized() if cur[k].claim is not None else "",
             "research": cur[k].research,
             "uid": cur[k].uid,
             "pages": {ptr.rsplit("/", 1)[1]: page_blocks(ptr.rsplit("/", 1)[1], qdir, memo)[0] for ptr in cur[k].claim.pointers},
@@ -511,6 +538,7 @@ def record(
             "verdict": verdict,
             "code": fp["code"],
             "core": fp["core"],
+            **{f: fp[f] for f in ("body", "claim") if f in fp},
             "research": fp["research"],
             "date": today,
             "note": note,

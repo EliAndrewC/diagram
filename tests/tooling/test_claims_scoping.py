@@ -294,3 +294,20 @@ def test_a_triage_of_a_section_and_a_page_together_shows_both(tmp_path: pathlib.
     assert owed[WALLS] == cx.SECTION_TRIAGE and SHARE in owed
     manifest = cx.triage_bundle(cur, index, store, [WALLS, SHARE], skill / QDIR, tmp_path / "t").read_text()
     assert "## docs/buildings.md::Walls (a procedure section" in manifest and "> Each lane is 6 ft." in manifest
+
+
+def test_a_relabel_a_mislabeled_verdict_prescribed_owes_no_new_round(tmp_path: pathlib.Path) -> None:
+    """The round arbiter's tooling fix on ask:t01-claim-labels (feature 385): a claim whose unit changed only in its
+    `Research:` lines owes nothing when its own text is unchanged, or when its last verdict was MISLABELED - the relabel that
+    verdict prescribed. A label rewritten after an IN-STEP verdict, or any change to the unit's body, still owes a round."""
+    skill, index, store = _checked(tmp_path)
+    qdir = skill / QDIR
+    assert index[FAR].get("body") and index[FAR].get("claim"), "a recorded row keeps the body and the claim"
+    mod = next(skill.rglob("rows.py"))
+    relabeled = mod.read_text().replace("0033-row-villages-resson.html\n    \"\"\"", "0033-row-villages-resson.html: the far row\n    \"\"\"")
+    mod.write_text(relabeled)
+    assert dict(cx.owed(cx.current(skill), index, qdir, store)).get(FAR) == "code changed", "an IN-STEP label rewritten still owes"
+    index[FAR]["verdict"] = "MISLABELED"
+    assert FAR not in dict(cx.owed(cx.current(skill), index, qdir, store)), "the relabel its MISLABELED verdict prescribed owes nothing"
+    mod.write_text(relabeled.replace("return x * SHARE", "return x * SHARE * 2"))
+    assert dict(cx.owed(cx.current(skill), index, qdir, store)).get(FAR) == "code changed", "a change to the body owes a round"
