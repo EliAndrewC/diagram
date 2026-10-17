@@ -23,6 +23,7 @@ import collections
 import datetime
 import json
 import pathlib
+import re
 import sys
 from collections.abc import Iterable, Iterator
 
@@ -53,11 +54,34 @@ def _text(body: object) -> str:
     return ""
 
 
+def family(description: str) -> str:
+    """A general-purpose launch's family: its description's first two words, numbers dropped ("claims triage 12 round 2" ->
+    "claims triage") - feature 383 amendment 6, plan D45."""
+    words = re.findall(r"[a-z][a-z-]*", re.sub(r"[0-9]+", " ", description.lower()))
+    return " ".join(words[:2]) or "?"
+
+
+def families(rs: Iterable[dict], recent: str) -> list[tuple[str, int, int, str, str]]:
+    """(family, launches, launches since `recent`, last date, an example description) of the general-purpose runs, most since
+    `recent` first."""
+    out: dict[str, list] = {}
+    for r in rs:
+        if r["kind"] not in ("general-purpose", "?"):
+            continue
+        e = out.setdefault(family(r.get("description", "")), [0, 0, "", r.get("description", "")])
+        e[0] += 1
+        if r["start"] >= recent:
+            e[1] += 1
+        e[2] = max(e[2], r["start"][:10])
+    return sorted(((k, *v) for k, v in out.items()), key=lambda x: (-x[2], -x[1]))
+
+
 def run_of(path: pathlib.Path) -> dict | None:
     """One subagent run: its type, session, start, each call's usage (once per request) and the first MANIFEST.md it read."""
     meta = path.with_name(path.name[: -len(".jsonl")] + ".meta.json")
     try:
-        kind = json.loads(meta.read_text(encoding="utf-8")).get("agentType") or "?"
+        info = json.loads(meta.read_text(encoding="utf-8"))
+        kind, description = info.get("agentType") or "?", info.get("description") or ""
     except OSError, ValueError:
         return None
     start, calls, seen, manifest, pending = "", [], set(), "", set()
@@ -77,7 +101,7 @@ def run_of(path: pathlib.Path) -> dict | None:
                 manifest = _text(b.get("content"))
     if not calls or not start:
         return None
-    return {"kind": kind, "session": path.parent.parent.name, "start": start, "calls": calls, "manifest": manifest}
+    return {"kind": kind, "session": path.parent.parent.name, "start": start, "calls": calls, "manifest": manifest, "description": description}
 
 
 def runs(root: pathlib.Path, since: str) -> list[dict]:
@@ -196,10 +220,16 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--since", default=(datetime.date.today() - datetime.timedelta(days=7)).isoformat())
     ap.add_argument("--root", default=str(ROOT))
+    ap.add_argument("--families", default="", metavar="RECENT", help="the general-purpose launches by family, those since RECENT first")
     a = ap.parse_args(argv)
     rs = runs(pathlib.Path(a.root), a.since)
     if not rs:
         print(f"subagent-cache: no subagent runs under {a.root} since {a.since}")
+        return 0
+    if a.families:
+        print(f"subagent-cache: general-purpose launches since {a.since} by family (launches | since {a.families} | last | e.g.)\n")
+        for name, n, recent, last, example in families(rs, a.families):
+            print(f"{n:5} {recent:5} {last}  {name:28} {example[:60]}")
         return 0
     print(f"subagent-cache: subagent runs since {a.since}\n")
     print(report(rs))

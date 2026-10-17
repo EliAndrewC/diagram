@@ -89,3 +89,15 @@ def test_the_contract_part_drops_the_sections_built_from_the_units_own_inputs() 
     kept = ("## `guidelines.txt` - origin `dev/modals.md`", "a rule every bundle of this check carries, long enough")
     assert ca.contract_shared(a, b) == sum(len(x) for x in kept), "the rule and its heading line; nothing from the unit's inputs"
     assert "a page both units cite" not in ca.contract_part(a) and "## `guidelines.txt`" in ca.contract_part(a)
+
+
+def test_families_group_general_purpose_launches_by_their_first_two_words() -> None:
+    assert ca.family("Claims triage 12 round 2") == "claims triage" and ca.family("Research pass: well on a roji") == "research pass"
+    rs = [
+        {"kind": "general-purpose", "description": "claims triage 1", "start": "2026-10-12T00:00:00Z"},
+        {"kind": "general-purpose", "description": "Claims triage 2", "start": "2026-10-01T00:00:00Z"},
+        {"kind": "general-purpose", "description": "draft write-ups 4", "start": "2026-10-03T00:00:00Z"},
+        {"kind": "quote-check", "description": "a typed run", "start": "2026-10-12T00:00:00Z"},
+    ]
+    got = ca.families(rs, "2026-10-10")
+    assert [(f, n, recent, last) for f, n, recent, last, _ in got] == [("claims triage", 2, 1, "2026-10-12"), ("draft write-ups", 1, 0, "2026-10-03")]

@@ -55,7 +55,7 @@ operative form of the citation rules (the footnote shape, the notes and the work
 auto-loads when a session edits the record; the archive and the download list are `research/downloads.md`.
 
 - A question about how a place was built, farmed, planted or lived in is a RESEARCH question. Run
-  the search pass before deciding, before asking the GM, and before writing "guess". The GM is asked
+  the search pass (the `research-pass` agent runs one) before deciding, before asking the GM, and before writing "guess". The GM is asked
   only when the record is silent or contradictory, and the ask says what was searched and found.
 - The search pass looks in the ARCHIVE before the web (feature 309): `make archive-inbox` first (the GM's downloads in
   `academic-sources/` archived, then removed - what is left there is unprocessed), then `make archive-find` for each

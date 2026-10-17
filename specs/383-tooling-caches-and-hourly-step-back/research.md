@@ -556,3 +556,23 @@ session from the transcripts and from raw `/v1/messages` bodies captured through
   plus an index - no (root 37,662 characters, research 25,402, tests 18,157, l7r/diagram 13,156); no 1-hour subagent cache -
   none set, no test; fan-outs launch one first - no (the review rules send owed units together); enforced - partly.
 
+## R17 Amendment 6, reopened - the general-purpose job families
+
+(observed 2026-10-17; method: `python3 scripts/measure/subagent_cache.py --since 2026-09-19 --families 2026-10-10` - every
+general-purpose subagent transcript of the month, grouped by its description's first two words with numbers dropped)
+
+| (observed 2026-10-17; the method above) | launches since 09-19 | since 10-10 | last | what it became |
+|---|---|---|---|---|
+| claims triage (and "triage claims", "triage owed", "triage docs") | 121 | 71 | 10-17 | the `claims-triage` agent (D36) |
+| modal triage (and "triage pop-ups", "pop-up triage", "replay the") | 38 | 38 | 10-17 | the `modal-triage` agent (D36) |
+| research pass | 10 | 7 | 10-12 | the `research-pass` agent (D45) |
+| draft write-ups | 143 | 0 | 10-03 | one-off: feature 319's write-up wave, closed |
+| source-filter | 142 | 0 | 10-02 | the typed `source-filter` exists; the wave ran before it was used |
+| impl-drift batch / r / chunk / merge / seeded | ~83 | 0 | 10-05 | the typed `impl-drift` exists; the waves predate its use |
+| sheet round / check / pass / writer, check and round choices, round group, choice writer | ~158 | 0 | 10-05 | one-off: the magistracy-sheet and choice waves, closed |
+| classify batch, tier wave, claims writer, fix g, filter calibration, rank batch, census families | ~118 | 0 | 10-08 | one-off waves of closed features |
+| probes, a scorer, an audit, a builder (1-3 each) | 8 | 8 | 10-17 | one-off |
+
+- Of 137 general-purpose launches since 10-10, ~122 were the two triage jobs - defined agents now - and the rest one-offs, but
+  for the research pass, the one family still recurring with standing rules; it becomes `research-pass`.
+

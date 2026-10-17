@@ -65,6 +65,7 @@ TIERS: dict[str, tuple[str, str]] = {
     "perf-audit": ("opus", "high"),
     "claims-triage": ("opus", "medium"),  # 383 amendment 6: impl-drift's question pre-sorted, a judgment; was ad hoc on opus
     "modal-triage": ("opus", "medium"),  # 383 amendment 6: the pop-up checks' question pre-sorted, a judgment; was ad hoc on opus
+    "research-pass": ("opus", "medium"),  # 383 amendment 6: a search pass judges what a source attests; was ad hoc
     "source-filter": ("opus", "medium"),  # feature 312: judges a source with no question in hand; calibrated three runs a leg (R2)
 }
 
