@@ -66,6 +66,16 @@ call Write "{\"file_path\":\"$Q/0243-the-last.notes.html\",\"content\":\"x\"}"
 [ "$(rc)" -eq 0 ] && ok "a notes file of a question that exists passes" || no "a stem's notes were refused" "(rc=$(rc)) $(cat "$T/err")"
 call Write "{\"file_path\":\"$Q/0243-the-last.drawing.html\",\"content\":\"x\"}"
 [ "$(rc)" -eq 0 ] && ok "a drawing page of a question that exists passes" || no "a stem's drawing page was refused" "(rc=$(rc))"
+# GUARD_EDIT_OK: feature 383 amendment 5 - a fixture record built outside the repository is not this repository's record
+call Bash '{"command":"D=$(mktemp -d); mkdir -p $D/research/questions; echo x > $D/research/questions/0041-a.html"}'
+[ "$(rc)" -eq 0 ] && ok "a question file under a directory the command made with mktemp" || no "refused" "(rc=$(rc)) $(cat "$T/err")"
+O="$T/other"; mkdir -p "$O/research/questions"; git -C "$O" init -q 2>/dev/null
+call Bash "{\"command\":\"D=$O; echo x > \$D/research/questions/0042-b.html\"}"
+[ "$(rc)" -eq 0 ] && ok "a question file in ANOTHER repository, through a variable the command assigns" || no "refused" "(rc=$(rc)) $(cat "$T/err")"
+call Bash "{\"command\":\"echo x > $O/research/questions/0043-c.html\"}"
+[ "$(rc)" -eq 0 ] && ok "a question file in another repository, by its path" || no "refused" "(rc=$(rc)) $(cat "$T/err")"
+call Bash '{"command":"Q=research/questions; echo x > $Q/0245-unreserved.html"}'
+[ "$(rc)" -eq 2 ] && ok "...while one in THIS repository through an assigned variable is still refused" || no "allowed" "(rc=$(rc))"
 echo "3. the escape, and the record"
 call Bash '{"command":"cat > \"$G/0500-x.json\" <<EOF\n{}\nEOF\n# RESERVE_OK: restoring a file deleted in a merge"}'
 [ "$(rc)" -eq 0 ] && ok "RESERVE_OK with a reason passes" || no "the escape was refused" "(rc=$(rc))"
