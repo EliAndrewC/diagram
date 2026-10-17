@@ -401,7 +401,11 @@ def test_task_starts_and_ticks_are_read_from_the_record(tmp_path: Path) -> None:
     (d / "tasks.md").write_text("- [x] T01 a\n- [ ] T02 b\n")
     _git(repo, "commit", "-q", "-am", "385 T01 ticked")
     assert set(fr.task_ticks(repo, "385-x")) == {"T01"}
-    rows = ['{"feature": "385-x", "task": "T01", "utc": "2026-10-17T10:00:00Z"}', "not json",
-            '{"feature": "385-x", "task": "T01", "utc": "2026-10-17T11:00:00Z"}', '{"feature": "384-y", "task": "T01", "utc": "2026-10-17T10:00:00Z"}']
+    rows = [
+        '{"feature": "385-x", "task": "T01", "utc": "2026-10-17T10:00:00Z"}',
+        "not json",
+        '{"feature": "385-x", "task": "T01", "utc": "2026-10-17T11:00:00Z"}',
+        '{"feature": "384-y", "task": "T01", "utc": "2026-10-17T10:00:00Z"}',
+    ]
     (repo / ".git" / "task-starts.jsonl").write_text("\n".join(rows) + "\n")
     assert fr.task_starts(repo, "385-x") == {"T01": fr.parse_t("2026-10-17T10:00:00Z")}, "the first start counts"

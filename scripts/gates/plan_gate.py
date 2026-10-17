@@ -513,6 +513,7 @@ def record_blocks(spec_dir: pathlib.Path, review: dict, declared: str, today: st
     rec_path = spec_dir / RECORD
     out = slim_record(json.loads(rec_path.read_text(encoding="utf-8"))) if rec_path.is_file() else {"feature": spec_dir.name}
     when = today or datetime.date.today().isoformat()
+    redecided = redecided_tasks(plan, out.get("blocks") or {}, named)
     for key, sha in named.items():
         if key.startswith(REMOVED):
             if verdict == "CLEAR":
@@ -521,7 +522,39 @@ def record_blocks(spec_dir: pathlib.Path, review: dict, declared: str, today: st
         out.setdefault("blocks", {})[key] = {"sha256": sha, "verdict": verdict, "reviewed": when, "declared": declared}
     out.setdefault("block_reviews", []).append({"reviewed": when, "blocks": sorted(named), "verdict": verdict, "decisions": decisions})
     rec_path.write_text(json.dumps(out, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
-    return {"verdict": verdict, "blocks": sorted(named), "decisions": decisions}
+    approach = _approach_gate()
+    root = spec_dir.parent.parent
+    owed = [approach.owe(root, spec_dir.name, t, f"re-decided:{key}", "A") for t, key in redecided
+            if approach.checklist(root, plan.read_text(encoding="utf-8")) is not None]
+    return {"verdict": verdict, "blocks": sorted(named), "decisions": decisions, **({"approach_owed": owed} if owed else {})}
+
+
+_DECISIONS_HEAD = re.compile(r"^#{2,4}\s+(T\d+[a-z]?)\s+Decisions\b")
+
+
+def redecided_tasks(plan: pathlib.Path, before: dict, named: dict) -> list[tuple[str, str]]:
+    """(task, block key) for each task's Decisions block re-reviewed after an earlier CLEAR on it, changed by more than a typo
+    (feature 385 D9: a changed approach owes the Approach block answered afresh; a first review or a re-wording does not)."""
+    out = []
+    history = History(plan)
+    text = plan.read_text(encoding="utf-8") if plan.is_file() else ""
+    bodies = {k: body for k, body, _at in blocks(text)}
+    for key, sha in named.items():
+        m = _DECISIONS_HEAD.match(key)
+        prior = before.get(key) or {}
+        if not m or prior.get("verdict") != "CLEAR" or prior.get("sha256") in (None, sha):
+            continue
+        old = history.block(key, str(prior["sha256"]))
+        if old is None or not typo_only(old, bodies.get(key, "")):
+            out.append((m.group(1), key))
+    return out
+
+
+def _approach_gate():  # noqa: ANN202 - the module beside this one
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+    import approach_gate  # noqa: PLC0415
+
+    return approach_gate
 
 
 def archivable(spec_dir: pathlib.Path) -> list[str]:
@@ -694,6 +727,8 @@ def main(argv: list[str]) -> int:
             print(f"plan-verdict: refused - {e}", file=sys.stderr)
             return 1
         print(f"plan-verdict: {got['verdict']} recorded for {len(got['blocks'])} block(s) of {spec_dir.name}'s plan ({len(got['decisions'])} decision(s))")
+        for line in got.get("approach_owed", []):  # feature 385 D9
+            print(line)
         return 0
     if argv[:1] in (["slim"], ["archive"], ["delta"]) and len(argv) == 2:  # amendment 11: D63, D62, D61
         spec_dir = resolve(argv[1])
