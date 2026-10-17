@@ -1,17 +1,17 @@
 # Feature report - 383-tooling-caches-and-hourly-step-back
 
-Written by `make feature-report F=383` from 2324 events (2026-10-13T03:21 to 2026-10-17T13:56 UTC), 62 commits, the run log and the spec.
+Written by `make feature-report F=383` from 2649 events (2026-10-13T03:21 to 2026-10-17T16:01 UTC), 74 commits, the run log and the spec.
 
 ## Where the time went
 
 | category | time | share |
 |---|---|---|
 | idle (over an hour) | 99 h 24 min | - |
-| thinking | 3 h 19 min | 46% |
-| other tool | 2 h 36 min | 36% |
-| waiting: the GM | 41 min | 10% |
-| test file | 21 min | 5% |
-| waiting: subagent | 9 min | 2% |
+| thinking | 4 h 10 min | 45% |
+| other tool | 3 h 33 min | 38% |
+| waiting: the GM | 44 min | 8% |
+| test file | 30 min | 5% |
+| waiting: subagent | 12 min | 2% |
 | edit | 3 min | 1% |
 | writing the spec | 1 min | 0% |
 | dispatching: spec review | 1 min | 0% |
@@ -26,38 +26,38 @@ Written by `make feature-report F=383` from 2324 events (2026-10-13T03:21 to 202
 
 | tool or make target | time |
 |---|---|
-| Bash | 1 h 17 min |
-| make hooks-test | 15 min |
+| Bash | 2 h 06 min |
+| make hooks-test | 26 min |
+| make parts-sweep | 10 min |
+| make collect-cost | 8 min |
 | make docs | 3 min |
-| make land-tooling | 3 min |
-| make ledger-owed | 0 min |
 
 ## Dispatches
 
 | agent | dispatches | returned, by verdict |
 |---|---|---|
-| spec-fidelity | 33 | BLOCKED 5, CHANGES REQUIRED 3, CLEAR 10, FAITHFUL 1, NOT-REVIEWABLE 1 |
-| round-arbiter | 3 | CHANGES REQUIRED 1, CLEAR 1, findings 1 |
+| spec-fidelity | 37 | BLOCKED 5, CHANGES REQUIRED 4, CLEAR 11, FAITHFUL 1, NOT-REVIEWABLE 1 |
+| round-arbiter | 4 | CHANGES REQUIRED 1, CLEAR 1, findings 2 |
 | impl-drift | 2 | findings 1 |
 
 ## Rounds per checked thing (two or more)
 
 | check | subject | rounds |
 |---|---|---|
-| spec-fidelity | plan-383-tooling-caches-and-hourly-step-back-blocks | 11 |
+| spec-fidelity | plan-383-tooling-caches-and-hourly-step-back-blocks | 12 |
 | impl-drift | claims-owed | 2 |
 
 ## Process signals
 
-- gates: already-verified 4, green 2, red 1
+- gates: already-verified 5, green 2, red 1
 - spec rounds: none recorded
-- plan reviews BLOCKED: 11 recorded in commits, 5 returned
+- plan reviews BLOCKED: 12 recorded in commits, 5 returned
 - reversals (A -> B -> A): 0
-- check dispatches 2 over 5682 changed lines: cascade ratio 0.00
-- tasks ticked: 29 of 30
+- check dispatches 2 over 6227 changed lines: cascade ratio 0.00
+- tasks ticked: 33 of 34
 
 ## Tripwires (FR-010) - what fired, or would have
 
 - none
 
-This report took 1.4 s to build; its own runs are the `make feature-report` rows of the event log (category `other tool`).
+This report took 1.3 s to build; its own runs are the `make feature-report` rows of the event log (category `other tool`).

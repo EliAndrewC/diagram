@@ -221,5 +221,24 @@
   "value": 17.88,
   "before": 36.23,
   "checks": 124
+ },
+ "land-tooling-landing-a4": {
+  "quantity": "a real make land-tooling, every step, with amendment 4's cuts",
+  "observed": "2026-10-17T15:59Z",
+  "source": "this clone's land-tooling-steps.jsonl; load 4.26",
+  "command": "make land-tooling FILES=...",
+  "method": "FR-017's step log",
+  "unit": "s",
+  "varies": true,
+  "value": 27.28,
+  "steps": {
+   "prepare": 0.19,
+   "worktree": 1.48,
+   "patch": 0.65,
+   "guard-suites": 3.09,
+   "tooling-tests": 14.94,
+   "checks": 14.98,
+   "push": 9.98
+  }
  }
 }

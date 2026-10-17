@@ -115,3 +115,18 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T29 Close: a landing measured before and after, the gate, the report, landed
       research: rendering
       verify: DONE. DONE. a landing 37.05 -> 30.04 s (m:land-tooling-landing-a3; 113.98 s before amendment 2), 121 of 128 tooling files reused, guard suites 2.76 s; the gate green; the report written; landed by the push carrying this tick
+
+## Amendment 4 (the GM 2026-10-17: the serial guard suites, and the tooling tests a landing still runs)
+
+- [x] T30 The slow guard suites in parts or without idle waits (plan D28); timed whole before and after (SC-019)
+      research: rendering
+      verify: DONE. DONE. main-tree 57.7 -> 18.9 s, no-poll 48.4 -> 12.2, finished-run 39.1 -> 11.3, pair 23.5 -> 12.8-17.4, review-gate 21.8 -> 8.9, check counts unchanged; parts capped by the cores per running suite; make parts-sweep the same at 1/2/3/8 parts (research R11)
+- [x] T31 The whole-repository tooling tests (plan D29) (SC-020)
+      research: rendering
+      verify: DONE. DONE. test_content_cache's whole-repository test one per check, side by side (9.4 -> 6.0 and 3.6 s); the pointer check's 5.1 s uncached run is the floor, three faster filters measured slower and reverted; open_questions measured and kept (research R11)
+- [x] T32 The tooling run's start-up (plan D30) (SC-020)
+      research: rendering
+      verify: DONE. DONE. the start measured part by part (workers, a controller-side decision, byte-code first): none gained, each reverted and recorded (research R11)
+- [x] T33 Close: a landing measured before and after, the gate, the report, landed
+      research: rendering
+      verify: DONE. DONE. a landing 30.04 -> 27.28 s (m:land-tooling-landing-a4); research R11; the gate green; the report written; landed by the push carrying this tick
