@@ -51,7 +51,7 @@
    "declared": "spec-fidelity"
   },
   "## Landing": {
-   "sha256": "593cfa6de28d20bacb4dcf1c9ae7d148a69c9c248f6cdbc1d650d6f3aa53046a",
+   "sha256": "b05c4156f0b232054da0329e5b6876710abeb645b54a64f19fe85d676094f855",
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
@@ -93,7 +93,7 @@
    "declared": "spec-fidelity"
   },
   "### T03 Decisions": {
-   "sha256": "75a2b1bfeab4ebd1c2f45a5e51cbfda6af90f2c709592cbe4e5efca8d521e5de",
+   "sha256": "85f58cc013bc34d1e74ea8f6cda29d4b9b4175315f316d92092530c965d74df6",
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
@@ -104,14 +104,26 @@
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
   },
-  "### T03 part B (2026-10-17T22:12Z)": {
-   "sha256": "8338866b05c505e5425a416661fd4d7cd8c5d9e2d4e39556df1639a92e9a94c0",
+  "### T03 part B (2026-10-17T21:40Z)": {
+   "sha256": "6f116c38b41378eb4924c206609e30c4d72107025ca4f7b2e9037727cece9b1d",
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
   },
-  "### T03 Approach (re-answered 2026-10-17T22:12Z)": {
-   "sha256": "f98ff0ef731b5e11e4fab598ac17507d7908b9c1f3a7fbd38b935ef64656bff5",
+  "### T03 Approach (re-answered 2026-10-17T21:40Z)": {
+   "sha256": "5acdbcb076580b3c89d864f7013c147b10ef492397482509949fd6c90cb7c9f7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T03 part B (2026-10-17T22:20Z)": {
+   "sha256": "30bc567e45fe8d5b212a13e5b7c42bd5b4e901d918cc44f50d781248ec6ebef8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (re-answered 2026-10-17T22:23Z)": {
+   "sha256": "9acaa0f22cb4fba1a951e88b449e071b25ae1d88257c86ca556400a6b788f4cc",
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
@@ -1059,6 +1071,72 @@
      "summary": "About 1 h 25 min of 4 h used; about 1 h more for the merge and tests, then the gate.",
      "class": "within",
      "why": "Carries D23's budget; no threshold of the kind the GM declined to put on record is added."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Landing",
+    "### T03 Approach (re-answered 2026-10-17T21:40Z)",
+    "### T03 Approach (re-answered 2026-10-17T22:23Z)",
+    "### T03 Decisions",
+    "### T03 part B (2026-10-17T21:40Z)",
+    "### T03 part B (2026-10-17T22:20Z)",
+    "(removed) ### T03 Approach (re-answered 2026-10-17T22:12Z)",
+    "(removed) ### T03 part B (2026-10-17T22:12Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "carry-merge-to-T12",
+     "summary": "D17's side-by-side merge (with seed 49 / D24 and seed 55) leaves T03 and is carried to T12 (part B 22:20 item 5, Approach 22:23 items 1, 2 and 6, D25); D22's merge-test, F1-F3 glyph-check and exit-to-T04 lines are read per D25 as owned by T12.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The merge is the GM's own principle (\"a single footpath would emerge\") and the approved proposal placed it in the lane-law task; it was already moved to T03 under earlier CLEAR verdicts, and the amendment-1 text described T03 as 'the four seeds plus the general side-by-side merge', so taking it out of T03 narrows T03. It is deferred, not removed: it stays inside this feature, owned by T12 (whose existence I can see only in the Landing block), with the cause of its failure diagnosed (the later settle passes do not see the junctions it makes). Two grounds make it legitimate. First, the request's stated purpose is to stop hyper-focusing on one thing and step back to ask whether there is a better approach, and a third tuning of REACH is the exact thrash the GM described. Second, the round arbiter, which stands where the GM was asked (feature 379), ruled change-route and then route (a) at hour 6. I took that ruling from the dispatch because the bundle forbids reading arbiter.jsonl. Condition: T03's retro row must count the hours spent on the merge attempt as T03's own, because per-task timing is what the feature exists to measure and carrying the work out makes T03 look shorter than it was."
+    },
+    {
+     "id": "seed57-residue-waived",
+     "summary": "Seed 57 stands at 2 lane knots against HEAD's 1, a residue brought in by T03's own-garden fix, waived and carried to T12 (D25, part B 22:20 items 1, 7 and 9).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the plan's own D22 line 'the whole cohort regresses no seed' in substance, though not literally: part B 22:20 item 1 says seed 57 is refused at HEAD too, so it is not newly failing, but T03's change makes it worse and D25 says so plainly. The GM's request never names seed 57, so no clause of the request is lost. The residue is diagnosed (lanes 1/13, settle_knots' gather of lane 13 refused by needle_loops), was cut from 4 knots to 2 by bisection, is owned by T12, and was put back to the arbiter with the measurement and waived (ask:t03-seed57-residue, taken from the dispatch; I did not read the ruling). Because the arbiter stands in the GM's place, this is a decided exception and not one a session carved out for itself."
+    },
+    {
+     "id": "D20-1b-own-garden-exemption",
+     "summary": "New D20 (1b): a household's own way is exempt from the 7 ft fence gap beside its own garden, kept off its beds by the overlap matrix (fabric.owned_gardens), and recorded as a DEVIATION on 0246's drawing page.",
+     "class": "within",
+     "why": "The 7 ft gap is labeled O, a convention of the project's own. The GM's approved checklist names 'add a principled exception' as a sanctioned exit for such a number, with the guardrail that loosening a rule records its reason, and the plan records it as a DEVIATION on 0246. It follows a measurement (21:22: seed 21's ways come near only their own household's garden and yard), and it rejects 'more room' on a stated ground (the distance is to the household's own beds, not between homesteads), which honors the GM's room-first ruling. Whether the code site also carries the reason is for implementation review. D25 attributes seed 57's residue to this fix, and that link is ruled on in seed57-residue-waived."
+    },
+    {
+     "id": "landing-T12",
+     "summary": "T12 added to the Landing block's lands-open list.",
+     "class": "within",
+     "why": "It carries work already in scope (the merge, seeds 49, 55 and 57) and adds no new requested item. Each task still lands when it closes (FR-006)."
+    },
+    {
+     "id": "joins-last-resort-only",
+     "summary": "The join steps after the reach run only in the last resort's passes, and the settle's own rounds keep HEAD's order (D25, Approach 22:23 item 5).",
+     "class": "within",
+     "why": "This is an implementation choice inside the four seeds' fixes, made on a measurement (joining in the settle's rounds added lane knots to seed 57), and nothing the request or spec asks for is reduced. 'The pool clean with Kashikawa's lane 9 straightened' reads as an observed result of the landed fixes, not a separate decision."
+    },
+    {
+     "id": "D22-baseline-seed49",
+     "summary": "D22's baseline gains seed 49, failing at HEAD in a detached worktree.",
+     "class": "within",
+     "why": "It records a measured pre-existing failure in the baseline (constitution XIV), which matches D9's own floor that a seed already failing at HEAD fires nothing."
+    },
+    {
+     "id": "reach-not-moved-third-time",
+     "summary": "REACH is not moved a third time, and the merge loop is stopped at its third tuning (part B 22:20 item 5, Approach 22:23 item 7).",
+     "class": "within",
+     "why": "This is the checklist's own 'tuning or changing?' stop, which serves the request's purpose directly."
+    },
+    {
+     "id": "stamp-correction",
+     "summary": "The 22:12-stamped part B and Approach blocks are removed and re-entered stamped 21:40, the true time, with identical part B text and an Approach whose only change is the budget line (about 1 h 25 min used becomes about 1 h used); their decisions (REACH 20 ft for the merge, exit (c)) are superseded by the 22:20/22:23 blocks and D25.",
+     "class": "within",
+     "why": "The record is corrected to the time the blocks were actually written, and the budget figure is consistent with the earlier stamp. Nothing asked for changes. Whether a 21:40 stamp still satisfies D9 for its trigger is the tick tooling's check, not a fidelity question."
     }
    ]
   }
