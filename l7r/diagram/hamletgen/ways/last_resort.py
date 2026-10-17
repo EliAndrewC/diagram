@@ -21,8 +21,8 @@ from l7r.diagram.settlement.city.bridges import flooded_ground
 
 from . import law
 from .checks import unreached_houses
-from .clearance import kink_spans
 from .corridors import is_tree
+from .forced import lazy_ground
 from .geom import memo_ground, worked_ground
 from .settle import (
     _crossing_fault,
@@ -70,6 +70,7 @@ def lane_breaches(s: Any, every: bool = False) -> dict[int, list[str]]:
     solid = law.solid_boxes(M)
     fixtures = law.fixture_quads(M)
     wet = flooded_ground(M)
+    blocked = lazy_ground(M, s)  # ...a turn or meeting the ground forces breaks no angle rule (`forced`, feature 385 plan D2)
     bad: dict[int, list[str]] = {}
 
     def add(rule: str, idxs: Iterable[int]) -> None:
@@ -83,8 +84,8 @@ def lane_breaches(s: Any, every: bool = False) -> dict[int, list[str]]:
         p = _pts(ln)
         w = float(ln.get("w") or 3.0)
         own = (
-            ("hooks", lambda p=p: bool(law.hooked(p))),
-            ("bends", lambda p=p: bool(kink_spans(p))),
+            ("hooks", lambda p=p, w=w: bool(law.hook_faults(p, w, blocked))),
+            ("bends", lambda p=p, w=w: bool(law.kink_faults(p, w, blocked))),
             ("crossing", lambda p=p, i=i: _crossing_fault(M, i, p, wet) is not None),
             ("fabric", lambda p=p, w=w: fouled_segment(p, w, houses, yards, solid, fixtures, M) is not None),
         )
@@ -94,9 +95,9 @@ def lane_breaches(s: Any, every: bool = False) -> dict[int, list[str]]:
             if (every or i not in bad) and broken():
                 add(rule, [i])
     ground = memo_ground(s, "worked", worked_ground)
-    add("connector_hairpins", (i for _c, i, _e in law.connector_hairpin_ends(lanes)))
-    add("needle_joins", (i for i, _e, _k, _u, _v in law.needle_ends(lanes)))
-    add("folded_joints", (i for i, _ei, _j, _ej in law.folded_joint_pairs(lanes)))
+    add("connector_hairpins", (i for _c, i, _e in law.connector_hairpin_ends(lanes, blocked)))
+    add("needle_joins", (i for i, _e, _k, _u, _v in law.needle_ends(lanes, blocked)))
+    add("folded_joints", (i for i, _ei, _j, _ej in law.folded_joint_pairs(lanes, blocked)))
     add("doubled_tails", law.doubled_tails(M))
     add("dangling_ends", (i for i, _e in law.dangling_lane_ends(M, ground)))
     add("doorstep_ends", (i for ends in law.fronting_ends(M).values() if len(ends) > law.DOORSTEP_MAX for i, _e in ends))

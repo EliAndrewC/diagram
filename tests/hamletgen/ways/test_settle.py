@@ -726,7 +726,7 @@ def test_a_strip_squared_and_rejoined_bends_rather_than_kinks() -> None:
 
 def _reference_lawful_ground(ok: settle.Lawful, run, width) -> bool:
     """`Lawful.on_lawful_ground` as it read before the ground was indexed: every registry walked whole."""
-    if len(run) < 2 or law.hooked(run) or settle.kink_spans(run):
+    if len(run) < 2 or law.hook_faults(run, width, ok.blocked) or law.kink_faults(run, width, ok.blocked):
         return False
     if settle._crossing_fault({**ok.M, "lanes": [{"pts": settle._rounded(run), "w": width}]}, 0, run, ok.wet) is not None:
         return False

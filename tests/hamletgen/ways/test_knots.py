@@ -256,4 +256,6 @@ def test_two_ends_a_house_parts_are_no_knot() -> None:
 
 def test_a_manifests_view_reads_its_own_scale() -> None:
     """`ground_apart` on a manifest alone reads a well's verge at the map's scale (`_View.px`, from `meta.ftpx`)."""
-    assert kn._View({"meta": {"ftpx": 2.0}}).px(10.0) == 5.0 and kn._View({}).px(10.0) == 10.0
+    from l7r.diagram.hamletgen.ways import forced
+
+    assert forced._View({"meta": {"ftpx": 2.0}}).px(10.0) == 5.0 and forced._View({}).px(10.0) == 10.0

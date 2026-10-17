@@ -50,7 +50,6 @@ from ..consts import WEB_CLEARANCE, WEB_FABRIC_GAP, Poly, Pt
 from . import law
 from .arcs import arc_at, cut_around, sub_run  # noqa: F401 - re-exported: `settle.sub_run` and the rest are what tree.py and the tests name
 from .checks import square_crossings, unreached_houses
-from .clearance import kink_spans
 from .corridors import (
     ACCESS_ROLE,
     ACCESS_WIDTH,
@@ -62,6 +61,7 @@ from .corridors import (
     through_a_building,
 )
 from .fabric import _crosses_fabric, _homestead_polys, house_hit
+from .forced import lazy_ground
 from .geom import _TOUCH_GAP, _components, _trim_to_service, memo_ground, polyline_len, steading_footprints, worked_ground
 from .joints import joints, rank_width
 from .keeper import NOT_THE_SETTLES, unsettled  # noqa: F401 - re-exported: `settle.unsettled` is the exit question callers name
@@ -251,11 +251,12 @@ def settle_shapes(s: Any) -> int:
     fixtures = law.fixture_quads(M)
     wet = flooded_ground(M)
     edits: dict[int, list[Poly]] = {}
+    blocked = lazy_ground(M, s)  # ...a hook or kink the ground forces is walked round what stands there, not repaired (feature 385 plan D2)
     for i, ln in enumerate(lanes):
         p = _pts(ln)
         if len(p) < 2 or (is_tree(ln) and not ln.get("connector")):
             continue
-        ends = law.hooked(p)
+        ends = law.hook_faults(p, float(ln.get("w") or 3.0), blocked)
         if ends:
             # A HOOK is a lane overshooting the way it joins and bending back onto it: re-laid as a T on that way where it
             # joins one (so the web stays one network), else its hook leg is taken off
@@ -265,7 +266,7 @@ def settle_shapes(s: Any) -> int:
             continue
         if ln.get("connector"):
             continue
-        spans = kink_spans(p)
+        spans = law.kink_faults(p, float(ln.get("w") or 3.0), blocked)
         if spans:
             edits[i] = _unkinked(p, spans[0])
             continue
@@ -394,11 +395,12 @@ def settle_ends(s: Any) -> int:
             if (cut := cut_at_shallow_crossing(lanes, m, o, centers)) is not None:
                 claim({m, o}, m, [cut[0]], cut[1])
                 break
-    for ci, i, end in law.connector_hairpin_ends(lanes):
+    forced = lazy_ground(M, s)  # ...a meeting the ground forces is no needle, fold or hairpin to repair (feature 385 plan D2)
+    for ci, i, end in law.connector_hairpin_ends(lanes, forced):
         claim({ci, i}, i, [_back(reaimed(_as_end(_pts(lanes[i]), end), _pts(lanes[ci]), connector=True), end)])
-    for i, end, k, _u, _v in law.needle_ends(lanes):
+    for i, end, k, _u, _v in law.needle_ends(lanes, forced):
         claim({i, k}, i, [_back(reaimed(_as_end(_pts(lanes[i]), end), _pts(lanes[k]), bool(lanes[k].get("connector"))), end)], end)
-    for i, ei, j, ej in law.folded_joint_pairs(lanes):
+    for i, ei, j, ej in law.folded_joint_pairs(lanes, forced):
         # the SHORTER record of the two that has a vertex to fall back to is re-aimed as a T on the other; two bare legs
         # folded on each other lose the shorter
         x, y = _as_end(_pts(lanes[i]), ei), _as_end(_pts(lanes[j]), ej)
@@ -813,6 +815,12 @@ class Lawful:
             self._square_pad = max((h for _c, h in square_waters(M)), default=0.0) + 1.0
         return self._index
 
+    def blocked(self, a: Pt, b: Pt, width: float) -> bool:
+        """Is the straight way `a`-`b` not lawful ground - `forced`'s question (feature 385 plan D2), asked of this map's
+        own ground, so a run's turns and meetings are judged forced or not exactly as the law judges them? A two-point
+        chord has no turn of its own, so this never asks itself again."""
+        return math.dist(a, b) > 1e-6 and not self.on_lawful_ground([a, b], width)
+
     def squared(self, run: Poly) -> Poly:
         """`square_run(self.M, run)`, skipped where no water the squaring reads comes within its reach of the run - there it
         changes nothing (no crossing to square, no vertex within a water's half-width to drop)."""
@@ -830,7 +838,7 @@ class Lawful:
             crossings - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: `_crossing_fault`
             nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no foul of house, yard, building, fixture
             off crop and marsh - research/questions/0081-village-lanes.drawing.html: no field, dry plot or marsh underfoot"""
-        if len(run) < 2 or law.hooked(run) or kink_spans(run):
+        if len(run) < 2 or law.hook_faults(run, width, self.blocked) or law.kink_faults(run, width, self.blocked):
             return False
         # every test below reads only what stands near the run (`index`, `GroundIndex`): a crossing fault needs a crossing,
         # and each foul a part within its own reach of the run - so the parts beyond it are left out, not the verdict
@@ -859,9 +867,9 @@ class Lawful:
         x0, y0, x1, y1 = _box(run, MEET_REACH_FT)
         near = [ln for ln in lanes if len(ln.get("pts") or []) >= 2 and not ((b := _box(_pts(ln), 0.0))[2] < x0 or b[0] > x1 or b[3] < y0 or b[1] > y1)]
         tl, k = [*near, {"pts": run, "w": width}], len(near)
-        if any(k in (n, m) for n, _e, m, _u, _v in law.needle_ends(tl)) or any(k in (a, b) for a, _ea, b, _eb in law.folded_joint_pairs(tl)):
+        if any(k in (n, m) for n, _e, m, _u, _v in law.needle_ends(tl, self.blocked)) or any(k in (a, b) for a, _ea, b, _eb in law.folded_joint_pairs(tl, self.blocked)):
             return False
-        if any(n == k for _c, n, _e in law.connector_hairpin_ends(tl)):
+        if any(n == k for _c, n, _e in law.connector_hairpin_ends(tl, self.blocked)):
             return False
         # ...AND EACH END SERVES SOMETHING (the lane law's `dangling_lane_ends`): a tree lane is never trimmed afterwards, so an
         # end it would leave in open ground is refused here

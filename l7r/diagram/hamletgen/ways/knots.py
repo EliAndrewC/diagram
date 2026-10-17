@@ -24,6 +24,7 @@ from l7r.diagram.settlement.rolling.gap_ways import KNOT_MARGIN
 
 from ..consts import Poly, Pt
 from .corridors import ACCESS_ROLE, FIELD_ROLE, TARGET_ROLE
+from .forced import ground
 from .joints import _JOINT_FT
 from .smooth import _KNOT_FT
 
@@ -32,19 +33,6 @@ Node = tuple[Pt, list[tuple[int, int]]]
 
 Apart = Callable[[Pt, Pt], bool]
 """Do two points stand either side of something a lane may not cross (`ground_apart`)?"""
-
-
-class _View:
-    """A finished manifest seen as the settlement `settle.Lawful` reads: its `M` (`_homestead_polys`, `memo_ground`) and its
-    scale (`px`, a well's verge), from the manifest's own `meta.ftpx` - for a reader that has only the manifest (the
-    cohort's and the pool test's `lane_knots`)."""
-
-    def __init__(self, M: Mapping[str, Any]) -> None:
-        self.M = M
-        self.ftpx = float((M.get("meta") or {}).get("ftpx") or 1.0)
-
-    def px(self, ft: float) -> float:
-        return ft / self.ftpx
 
 
 def ground_apart(M: Mapping[str, Any], s: Any = None) -> Apart:
@@ -57,10 +45,8 @@ def ground_apart(M: Mapping[str, Any], s: Any = None) -> Apart:
     the manifest's view.
 
     Research: a knot is ends that could meet - DEVIATION research/questions/0081-village-lanes.drawing.html: "Ends within 25 ft of one another are joined at a single point, so three lanes never arrive a few feet apart in a knot" read as open ground; ends a fence parts are not a knot"""
-    from .settle import Lawful  # bound here: `settle` imports this module
-
-    lawful = Lawful(s if s is not None else _View(M))
-    return lambda p, q: not lawful.on_lawful_ground([p, q], 3.0)
+    blocked = ground(M, s)  # the settle's own lawful-ground test, read once per manifest (`forced.ground`)
+    return lambda p, q: blocked(p, q, 3.0)
 
 
 def _pts(ln: Mapping[str, Any]) -> Poly:
