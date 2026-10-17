@@ -229,7 +229,7 @@
    "declared": "spec-fidelity"
   },
   "## Amendment 5 (FR-028 to FR-030)": {
-   "sha256": "dc14d89397e3093cfb9309a4a52e359447e809c869b37f163bd0fdd17f5bf455",
+   "sha256": "5dde3b38c4b148fadc171453f35878654cecc8105193c75a852e3b1bfe755c63",
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
@@ -934,6 +934,69 @@
      "summary": "tests of code still re-running on data edits found from kept reads, given fixtures with assertions unchanged, listed before/after; data-subject tests keep the real tree",
      "class": "within",
      "why": "FR-030 as written: case by case, listed with reads before and after, data-subject tests keep reading the repository"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Amendment 5 (FR-028 to FR-030)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D31-reuse",
+     "summary": "The gate's one coverage run loads the reuse plugin for tooling items: a tooling test with unchanged reads that the baseline holds is deselected (a file of only such tests not collected); one the baseline lacks always runs.",
+     "class": "within",
+     "why": "FR-028 literally: the gate's tooling run reuses each test's pass on identical inputs. Running a test the baseline lacks is required for its coverage to exist, not a carve-out from reuse."
+    },
+    {
+     "id": "D31-carry",
+     "summary": "incremental carry copies each reused test's coverage contexts, its closure's unrun fixture contexts, and its closure/fixture edges from the baseline into this run's data before the floors are judged.",
+     "class": "within",
+     "why": "Mechanism that makes FR-028's reuse possible inside a coverage-traced full plan without dropping the reused tests' coverage from the floors and the next baseline; adds no behavior beyond the requested reuse."
+    },
+    {
+     "id": "D31-full",
+     "summary": "make tooling reuses; make tooling FULL=1 runs every test; a gate FULL=1 reuses nothing.",
+     "class": "within",
+     "why": "The default gate and make tooling reuse as FR-028 asks; FULL=1 is an explicit opt-in full run (the make tooling form was cleared in round 3), not a case the default rule excludes, and it is the periodic fresh measurement the baseline carry relies on. The GM's question was about every ordinary make done."
+    },
+    {
+     "id": "D31-hash",
+     "summary": "The tooling hash in l7r/diagram/ci/state.py reads scripts/ recursively, __pycache__ aside.",
+     "class": "within",
+     "why": "FR-028's last sentence and the GM-approved part (1): the hash gap fixed."
+    },
+    {
+     "id": "D31-cost",
+     "summary": "A scripts/ edit now moves the hash and makes the gate's plan full, as a top-level script's edit does today; keeping the plan incremental when only scripts/ moved was priced (second hash, planner rule) and not built.",
+     "class": "within",
+     "why": "The direct consequence of the requested hash fix under the existing planner rule (207 D1), stated with its cost; it removes nothing the GM asked for and preserves no behavior he asked to change (his question was the tooling tests' re-runs, which reuse within the full plan)."
+    },
+    {
+     "id": "D32b",
+     "summary": "A test's reads include the repository code it ran (sys.monitoring PY_START per key); a wider-than-test fixture defined in a test module is that file's read, not the session's.",
+     "class": "within",
+     "why": "Soundness of FR-029's 'reused when its own reads are unchanged': without it a test was reused after code it ran changed, which is not reuse on identical inputs. Costs re-runs (178 vs 36), narrows nothing."
+    },
+    {
+     "id": "D32",
+     "summary": "Store v3 keeps reads per test, per file and per session; reuse when all unchanged plus file, conftests, pyproject, plugin code; filtered runs keep what they ran.",
+     "class": "within",
+     "why": "Unchanged since round 3's CLEAR; FR-029 as written."
+    },
+    {
+     "id": "D33",
+     "summary": "Code-subject tests still re-running on data edits found from kept reads, listed before/after, given fixtures case by case; data-subject tests keep reading the tree.",
+     "class": "within",
+     "why": "Unchanged since round 3's CLEAR; FR-030 and the GM's part (3) as written."
+    },
+    {
+     "id": "D32a",
+     "summary": "Each read's content kept once in one table; entries naming a path whose content moved and not re-recorded are dropped.",
+     "class": "within",
+     "why": "Unchanged since round 3's CLEAR; storage form serving FR-029, never judging an entry against unseen content."
     }
    ]
   }
