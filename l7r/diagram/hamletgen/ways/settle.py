@@ -391,8 +391,7 @@ def settle_ends(s: Any) -> int:
         # ...A HOUSEHOLD'S WAY AT ITS FOOT too (feature 385 T01, plan D4): side by side becomes one whichever lane it is, and
         # a household's way's foot may move as the knot gather moves it - never its door end - its corridor rewritten with it
         foot = end == -1 and lanes[i].get("role") == ACCESS_ROLE
-        # ...and only into a lane: a re-aim that leaves a household's way under two points or 1 ft would drop it, its household
-        # with it - that way stays as it is
+        # ...and only into a lane: a re-aim leaving a household's way under two points or 1 ft would drop it, and its household
         foot = foot and bool(pieces) and len(pieces[0]) >= 2 and polyline_len(pieces[0]) >= 1.0
         # ...and only onto lawful ground: a re-aimed leg through another household's yard is a foul no later step may cut
         # from a tree lane, so the web would be refused for it (cohort seed 38, the first cohort of this change)
