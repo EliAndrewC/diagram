@@ -36,28 +36,37 @@ RUNG_SHARES = (1.0 / 3.0, 2.0 / 3.0, 1.0)
 """Where along a needle's end leg, from its end, a rung is laid across the sliver to the tread: a third, two thirds and the
 leg's far vertex - enough that a fence or a corner standing in the wedge lies across one.
 
-Research: rungs across a needle - CONVENTION: three rungs, a third of the leg apart"""
+Research: rungs across a needle - NONE: probe points for the ground test, nothing drawn"""
 
 
 class _View:
     """A manifest seen as the settlement `settle.Lawful` reads: its `M` (`_homestead_polys`, `memo_ground`) and its scale
-    (`px`, a well's verge), from the manifest's own `meta.ftpx` - for a reader that has only the manifest."""
+    (`px`, a well's verge), from the manifest's own `meta.ftpx` - for a reader that has only the manifest.
+
+    Research: plumbing - NONE: a view of the manifest"""
 
     def __init__(self, M: Mapping[str, Any]) -> None:
+        """Research: plumbing - NONE: stores the manifest and its scale"""
         self.M = M
         self.ftpx = float((M.get("meta") or {}).get("ftpx") or 1.0)
 
     def px(self, ft: float) -> float:
+        """Research: plumbing - NONE: feet to pixels at the map's scale"""
         return ft / self.ftpx
 
 
 _GROUND: list[tuple[Any, tuple[int, ...], Blocked]] = []
-"""The ground test per manifest, newest last, at most `_GROUND_MAX`: kept while the registries it reads stand unchanged."""
+"""The ground test per manifest, newest last, at most `_GROUND_MAX`: kept while the registries it reads stand unchanged.
+
+Research: plumbing - NONE: a cache"""
 _GROUND_MAX = 4
+"""Research: plumbing - NONE: the cache's size"""
 
 
 def _registries(M: Mapping[str, Any]) -> tuple[int, ...]:
-    """What the ground reads, by count: every list registry but the lanes (the ground stands whatever lanes are drawn)."""
+    """What the ground reads, by count: every list registry but the lanes (the ground stands whatever lanes are drawn).
+
+    Research: plumbing - NONE: a cache signature"""
     return tuple(len(v) for k, v in sorted(M.items()) if k != "lanes" and isinstance(v, list))
 
 
@@ -100,7 +109,9 @@ def forced_meeting(blocked: Blocked | None, end: Pt, back: Pt, u: Pt, v: Pt, wid
 
 def lazy_ground(M: Mapping[str, Any], s: Any = None) -> Blocked:
     """`ground(M, s)`, built only when first asked - an angle rule asks it only of a shape it would refuse, so a web with
-    none builds nothing."""
+    none builds nothing.
+
+    Research: plumbing - NONE: a lazy build of `ground`"""
     made: list[Blocked] = []
 
     def blocked(a: Pt, b: Pt, width: float) -> bool:

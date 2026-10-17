@@ -636,7 +636,9 @@ def test_a_red_gate_bundle_names_what_each_red_gate_failed_on(tmp_path: pathlib.
     and each run's OWN failed tests by name, never pytest's cumulative lastfailed (stale probe files and other units' tests)."""
     log = tmp_path / "dev" / "run-log" / "2026-10"
     log.mkdir(parents=True)
-    (log / "a.json").write_text(json.dumps({"utc": "t1", "target": "done", "result": "failed: test-full", "commit": "abc", "failed_tests": 1, "failed_names": ["tests/test_y.py::test_y"]}), encoding="utf-8")
+    (log / "a.json").write_text(
+        json.dumps({"utc": "t1", "target": "done", "result": "failed: test-full", "commit": "abc", "failed_tests": 1, "failed_names": ["tests/test_y.py::test_y"]}), encoding="utf-8"
+    )
     (log / "b.json").write_text(json.dumps({"utc": "t2", "target": "done", "result": "green"}), encoding="utf-8")
     (log / "c.json").write_text("not json", encoding="utf-8")
     cache = tmp_path / ".pytest_cache" / "v" / "cache"

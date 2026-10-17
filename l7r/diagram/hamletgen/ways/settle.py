@@ -372,6 +372,8 @@ def settle_ends(s: Any) -> int:
     Research:
         lanes met end to end read as one - research/questions/0081-village-lanes.drawing.html: a needle, fold or hairpin re-laid as a T
         no doubled tail - UNRESEARCHED: the end cut back to where it came alongside the way
+        two paths side by side become one - research/questions/0081-village-lanes.drawing.html: a lane crossing another at under 20 degrees cut at the crossing (`cut_at_shallow_crossing`)
+        which of a folded pair is re-aimed - UNRESEARCHED: the shorter record as the T; two bare legs lose the shorter
         no fan of stubs at a door - UNRESEARCHED: past two ends at one house, the farther cut back past the doorstep
         a lane ends at the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end within 60 ft of the house or
             12 ft of its built ground reaches it on any side; one that reaches nothing is trimmed to service (`settle_dangling`)"""
@@ -833,7 +835,9 @@ class Lawful:
     def blocked(self, a: Pt, b: Pt, width: float) -> bool:
         """Is the straight way `a`-`b` not lawful ground - `forced`'s question (feature 385 plan D2), asked of this map's
         own ground, so a run's turns and meetings are judged forced or not exactly as the law judges them? A two-point
-        chord has no turn of its own, so this never asks itself again."""
+        chord has no turn of its own, so this never asks itself again.
+
+        Research: a forced turn is lawful - DEVIATION research/questions/0081-village-lanes.drawing.html: "A turn the ground forces is drawn as walked" - the straighter way blocked where it is not lawful ground"""
         return math.dist(a, b) > 1e-6 and not self.on_lawful_ground([a, b], width)
 
     def squared(self, run: Poly) -> Poly:

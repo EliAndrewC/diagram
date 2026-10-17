@@ -251,14 +251,16 @@ def lanes_that_kink(M: Mapping[str, Any]) -> list[tuple[str, int, int]]:
 def kink_faults(p: Sequence[Pt], width: float, blocked: Blocked | None = None) -> list[tuple[str, int, int]]:
     """`clearance.kink_spans` of a run but the turns the ground forces (`forced.forced_turn`, plan D2 of feature 385): a
     zigzag or a hairpin whose chord - the vertex before its first turn to the vertex after its last - is not lawful ground is
-    a path round what stands there. With no ground (`blocked` None) every span is a fault, as before."""
+    a path round what stands there. With no ground (`blocked` None) every span is a fault, as before.
+    Research: a forced turn is lawful - DEVIATION research/questions/0081-village-lanes.drawing.html: "A turn the ground forces is drawn as walked" - the chord the vertex before the first turn to the vertex after the last"""
     p = list(p)
     return [k for k in kink_spans(p) if not (k[1] >= 1 and k[2] + 1 < len(p) and forced_turn(blocked, p[k[1] - 1], p[k[2] + 1], width))]
 
 
 def hook_faults(p: Sequence[Pt], width: float, blocked: Blocked | None = None) -> list[int]:
     """`hooked` ends of a run but those the ground forces: a hook whose chord - the vertex before the turn to the end - is not
-    lawful ground is the walk round a corner (`forced.forced_turn`, plan D2 of feature 385)."""
+    lawful ground is the walk round a corner (`forced.forced_turn`, plan D2 of feature 385).
+    Research: a forced turn is lawful - DEVIATION research/questions/0081-village-lanes.drawing.html: "A turn the ground forces is drawn as walked" - the chord the vertex before the hook's turn to the end"""
     p = list(p)
     return [e for e in hooked(p) if not forced_turn(blocked, *((p[-3], p[-1]) if e == -1 else (p[2], p[0])), width)]
 

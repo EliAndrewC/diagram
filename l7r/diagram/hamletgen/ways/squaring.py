@@ -140,7 +140,8 @@ def cut_at_shallow_crossing(lanes: Sequence[Mapping[str, Any]], m: int, o: int, 
 
     Research:
         two paths side by side become one - research/questions/0081-village-lanes.drawing.html: the lane cut where it comes alongside, meeting the other as a T
-        which side is kept - UNRESEARCHED: a household's way keeps its door's side; an ordinary lane its longer side"""
+        a household's way keeps its door - research/questions/0081-village-lanes.drawing.html: "cut at its far end, never at its door"
+        which side an ordinary lane keeps - UNRESEARCHED: its longer side; a household's way is cut only onto the connector or a tree lane"""
     from .corridors import ACCESS_ROLE, is_tree  # bound here: `corridors` sits beside this module's callers
     from .joints import keeps_the_web
 
