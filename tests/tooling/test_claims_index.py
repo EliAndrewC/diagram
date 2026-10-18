@@ -443,3 +443,34 @@ def test_a_bundle_carries_the_module_functions_a_unit_calls() -> None:
     assert "l7r/diagram/hamletgen/ways/clearance.py::link_survives" in got and len(got) <= cx.CALLEES_MAX
     assert all(not r.endswith("::_clear_link") for r in got), "never itself"
     assert cx.callees(root, types.SimpleNamespace(path="no/such.py", qualname="f"), "def f():\n    g()\n") == []
+
+
+def test_a_bundle_carries_the_constants_a_unit_reads_and_what_a_cannot_tell_names() -> None:
+    """Feature 385 T25 (plan D47; the round arbiter's fix on ask:t05-old-drifts-at-landing): the standoff claim on
+    `_seat_households` was CANNOT-TELL three rounds running, each for the next layer its note named - imported callees, theirs,
+    then module constants. A first bundle carries the constants the unit reads; a re-bundle chases what the note names."""
+    import sys
+    import types
+
+    root = pathlib.Path(__file__).resolve().parents[2]
+    sys.path.insert(0, str(root / "scripts" / "record"))
+    import claims_context as cc
+
+    path = "l7r/diagram/hamletgen/homesteads/stages.py"
+    unit = types.SimpleNamespace(path=path, qualname="_seat_households")
+    got = cx.callees(root, unit, cx.context_source(root, f"{path}::_seat_households"))
+    assert any(r.endswith("::BUNDLE_PITCH") for r in got), f"an imported constant the unit reads: {got}"
+    assert sum(not r.rsplit("::", 1)[1].isupper() for r in got) <= cx.CALLEES_MAX and all(r.startswith("l7r/") for r in got)
+    deep = cc.chase(root, path, ["front_row", "turn_the_seat", "no_such_name"], cx.context_source)
+    names = {r.rsplit("::", 1)[1] for r in deep}
+    assert {"front_row", "turn_the_seat", "_front_row_from_chains", "STANDOFF_SLACK_PX", "HOUSE_PADDY_GAP_FT"} <= names, deep
+    assert cc.chase(root, path, ["front_row"], cx.context_source, budget=10) == [], "the budget holds"
+    assert cc.chase(root, path, ["HOUSE_PADDY_GAP_FT"], cx.context_source) == ["l7r/diagram/settlement/houses.py::HOUSE_PADDY_GAP_FT"], "a name the module never imports"
+    # a label naming a distance, gap or standoff carries every direct callee and the constants they read, uncapped (the words)
+    assert cc.DISTANCE.search("front-row standoff from the field") and not cc.DISTANCE.search("the declared cluster shape")
+    far = cc.direct(root, unit, cx.context_source(root, f"{path}::_seat_households"), cx.context_source)
+    assert any(r.endswith("::front_row") for r in far) and any(r.endswith("::BUNDLE_PITCH") for r in far), far
+    assert len(far) > cx.CALLEES_MAX, "uncapped"
+    reach = {r.rsplit("::", 1)[1] for r in far}
+    assert {"_front_row_from_chains", "HOUSE_PADDY_GAP_FT", "STANDOFF_SLACK_PX"} <= reach, "two calls down, and what they read"
+    assert len(far) == len(set(far)), "each once"
