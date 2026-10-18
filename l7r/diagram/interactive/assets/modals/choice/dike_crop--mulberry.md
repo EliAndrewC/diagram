@@ -16,7 +16,7 @@ Guesses:
 - A bush about 4 to 7 ft across: no source gives the width of a mulberry bush's crown.
 
 Depiction: The map plants every pond's bank in the hamlet with mulberry alone, as rows of round bushes at the late-Qing spacing of
-about one to 24 sq ft; the delta's far denser root-cut planting, known only as today's practice, is not drawn. One crop to a hamlet is the
+about one to 24 sq ft; the delta's far denser root-cut planting, which nothing places before modern times, is not drawn. One crop to a hamlet is the
 map's choice, so each hamlet reads as one kind of dike-pond village: in the 17th century fruit trees, tea and mulberry stood
 on the same villages' dikes. No berries are drawn, and a bush always stands on the bank, its crown free to lean over the water.
 

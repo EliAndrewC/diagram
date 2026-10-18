@@ -26,7 +26,7 @@ stretches with earth showing between, where the far denser root-cut planting wou
 berries are drawn: a mulberry's fruit would be smaller than the map can show, and whether a bush stripped for its leaves
 bore fruit is not recorded. A bush always stands on the bank, though its crown may lean over the canal at the bank's foot.
 Each settlement's ponds are drawn at one of five splits of water to bank: six parts to four either way, seven of water to three of bank, one to one, or
-three of water to seven of bank. The bank is drawn as a ring round the water, so pointing at a dike lights the bank and not the pond inside it. Every dike
+three of water to seven of bank; the title card says which split this one takes. The bank is drawn as a ring round the water, so pointing at a dike lights the bank and not the pond inside it. Every dike
 of a hamlet carries the same crop, so each hamlet reads as one kind of dike-pond village; the title card says which.
 
 Name: mulberry dike

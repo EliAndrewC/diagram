@@ -21,9 +21,11 @@ Guesses:
   split written as a number is modern, the sources give it both ways round, and none gives a share between them.
 - How often a settlement grows this crop rather than lotus, tea or none: no source counts them, so the choices come up evenly
   where the ground allows them.
+- That the ponds lie in the two lowest rows of the valley floor: how wide a valley's wet bottom ran is not recorded, so the
+  two rows are taken so that the ponds show.
 
 Depiction: The map converts some of the plots in the two lowest rows of the valley floor to ponds, in patches, and leaves the
-rest in rice; how wide a valley's wet bottom ran is not recorded, so the two rows are taken so that the ponds show. Each
+rest in rice. Each
 converted plot is drawn as a pond inside a bank of its own, planted with rows of low mulberry bushes drawn at their true
 size. A village whose ponds took nearly all its land is drawn as a dike-pond field throughout, the title card's field form.
 

@@ -24,7 +24,7 @@ Each pond is set in from the
 edge of its plot, its planted bank filling the ring between.
 The gates drawn are the polder's own, in its outer dike; no pond has a sluice through its own bank, that being known only from
 modern times. Where a hamlet raises fry, its nursery ponds are drawn in muddier water, as fry water was turbid
-and grown-fish water clear; the title card says whether this one does.
+and grown-fish water clear. The title card says which layout this hamlet takes and whether it raises fry.
 
 [land_use_overlay=mulberry_fishpond] Where a rice village keeps dike-ponds as a cash crop, they take some of its low, wet
 plots, in patches, and leave the rest in rice, as ponds stood among the rice rather than replacing it.
