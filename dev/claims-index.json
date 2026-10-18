@@ -6910,21 +6910,15 @@
  },
  "l7r/diagram/hamletgen/consts.py::POND_BANK_FT#a tail pond's bank beyond its reeds": {
   "body": "b6495f11c3ce8533",
-  "claim": "a tail pond's bank beyond its reeds - GUESS reservoir-ponds-tameike.drawing: the embankment kept dry beyond the reed fringe; 18 ft of it, room for a crown and a little play (no crest width recorded)",
-  "code": "10bd505b06878d88",
+  "claim": "a tail pond's bank beyond its reeds - GUESS: 18 ft, room for a crown and a little play (no crest width recorded)",
+  "code": "98e3091af8ab13e9",
   "core": "14aaee2fbe7c7694",
   "date": "2026-10-18",
-  "note": "18 ft is a fair guess (the page gives no bank width), but the drawing page it names never records this figure as a guess; it should be a bare GUESS like keep_the_bank_dry's \"how wide\", or the page should record the 18 ft",
-  "pages": {
-   "0061-reservoir-ponds-tameike.drawing.html": "c22de534b95132ef"
-  },
-  "research": "5b102e334372ecb3",
-  "rests": [
-   "0061-reservoir-ponds-tameike.drawing.html:9ba649087fb63da1",
-   "0061-reservoir-ponds-tameike.drawing.html:a70a5b42abaea94f",
-   "0061-reservoir-ponds-tameike.drawing.html:b4e3ac5d9de888f6"
-  ],
-  "verdict": "MISLABELED"
+  "note": "a physical figure (the bank's width) correctly labeled GUESS; the bundle cites no question, so nothing answers it",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::POND_BANK_PITCH_FT#one tree about every 30 ft of bank": {
   "body": "347cd16150ed2bf6",
