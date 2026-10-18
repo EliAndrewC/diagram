@@ -474,3 +474,23 @@ def test_a_bundle_carries_the_constants_a_unit_reads_and_what_a_cannot_tell_name
     reach = {r.rsplit("::", 1)[1] for r in far}
     assert {"_front_row_from_chains", "HOUSE_PADDY_GAP_FT", "STANDOFF_SLACK_PX"} <= reach, "two calls down, and what they read"
     assert len(far) == len(set(far)), "each once"
+
+
+def test_findings_a_round_arbiter_ruling_carried_are_filed_with_the_ruling(tmp_path: pathlib.Path) -> None:
+    """Feature 385 T45 (D59): KEYS= with RULING= files findings the gate counts as introduced, which an arbiter ruling carried -
+    the box and its record row together, the row naming the ruling; a ruling the feature's record does not hold is refused, and
+    KEYS= without RULING= too."""
+    root = _repo(tmp_path)
+    d = _active(root)
+    k = "l7r/diagram/hamletgen/rows.py::far_row#dry share"
+    args = ["--root", str(root), "carry", "--feature", "900", "--keys", f"{k}; ", "--ruling", "ask:t07-x"]
+    assert cx.main(args) == 2, "no arbiter.jsonl: the ruling is not recorded"
+    (d / "arbiter.jsonl").write_text('{"trigger": "ask:t07-y", "ruling": "continue"}\nnot json\n{"trigger": "ask:t07-x", "ruling": "continue"}\n')
+    assert cx.main(["--root", str(root), "carry", "--feature", "900", "--keys", k]) == 2, "KEYS= alone is refused"
+    assert cx.main(args) == 0
+    assert f"- [ ] T02 Carried by the round arbiter's ruling ask:t07-x: findings it carried - fix the code or the claim and re-check each: {k} [lands-open]" in (d / "tasks.md").read_text()
+    row = json.loads((d / "claims-carried.jsonl").read_text().splitlines()[-1])
+    assert row["task"] == "T02" and row["keys"] == [k] and row["ruling"] == "ask:t07-x"
+    assert cx.main(args[:5] + ["--task", "T01"] + args[5:]) == 0
+    assert f"- [ ] T01 the work; carried by the round arbiter's ruling ask:t07-x: {k} [lands-open]" in (d / "tasks.md").read_text()
+

@@ -99,3 +99,14 @@ def test_a_box_the_claims_gate_filed_a_carry_into_lands_open(tmp_path: pathlib.P
     assert "honored only" in todo.holding(d)[0] and "carry record" in todo.holding(d)[0]
     (d / "claims-carried.jsonl").write_text('{"task": "T14", "keys": ["k"], "utc": "2026-10-17T00:00:00Z"}\n\n')
     assert todo.holding(d) == [] and todo.carried_ids(d) == {"T14"}
+
+
+def test_a_hand_typed_box_citing_a_recorded_ruling_still_holds(tmp_path: pathlib.Path) -> None:
+    """Feature 385 T45 (D59, round 1's finding): only the carry record's row honors a box - a box that merely names a trigger
+    the arbiter's record holds is still a hand-typed mark."""
+    d = _feature(tmp_path, "385-x", "- [x] T01 a\n- [ ] T43 Carried by the round arbiter (ask:t07-x) [lands-open]\n")
+    (d / "arbiter.jsonl").write_text('{"trigger": "ask:t07-x", "ruling": "continue"}\n')
+    assert "honored only" in todo.holding(d)[0]
+    (d / "claims-carried.jsonl").write_text('{"task": "T43", "keys": ["k"], "ruling": "ask:t07-x", "utc": "2026-10-18T00:00:00Z"}\n')
+    assert todo.holding(d) == []
+

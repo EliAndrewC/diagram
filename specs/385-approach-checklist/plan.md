@@ -1437,6 +1437,36 @@ newest over the cap (the existing shrink, then the cut, whose notice stays), and
 transcript it did not find ("left out"). `refusals.md` takes every session's refusals. `time.md` sums over the sessions read and
 says so, since parallel sessions can sum past the hour. With `--transcript` (a replay) the one transcript is read as before.
 
+## T45 - a box the round arbiter filed lands open (found by T07's landing)
+
+### T45 Approach (checklist part A)
+
+1. **The goal, in the world.** A task holding findings a round-arbiter ruling carried holds no landing, as a box the claims gate
+   filed holds none, without the session editing a reviewed plan line to say so.
+2. **The constraints.** FR-013 and D28 (a box the tooling filed is not a hand-typed mark); a hand-typed `[lands-open]` still
+   holds; tooling only; a test red without it.
+3. **Where each comes from.** FR-013 is the GM's (G, amendment 3, option 3); honoring the arbiter's filings is ours (O).
+4. **Do they describe the world here?** Yes - measured at T07's landing (2026-10-18): T43 (filed by ask:t07-two-findings-at-landing)
+   and T44 (filed by hour:385-approach-checklist@16) were refused as hand-typed marks, and naming them on the plan's Lands open line
+   cost a plan review round of its own.
+5. **The order.** The rule, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: a box filed by `make claims-carry KEYS= RULING=` holds nothing; a RULING the record does not
+   hold is refused; a hand-typed box citing a recorded trigger still holds; `tests/tooling/test_lands_open.py` red without it.
+
+### T45 Decisions
+
+**D59 - the filing command writes the box and its record together** (round 1 BLOCKED the first form: a box naming a trigger
+let a hand-typed mark through, and a tooling fix needs no open box - it lands and is ticked in one command, `make
+arbiter-fix-done LAND=`). `make claims-carry F=<n> KEYS="<key>;<key>" RULING=<trigger> [T=<open task>]` files findings the gate
+counts as introduced, which a round-arbiter ruling carried, as `claims-carry` files the gate's own carried ones: into the named open
+task or a new box, and a `claims-carried.jsonl` row naming the task, its keys and the ruling. It refuses a RULING that is not a
+`trigger` in the feature's `arbiter.jsonl`. `holding` honors the box by its id from that row (D28's rule, unchanged), so a
+hand-typed box citing any trigger still holds the landing. The push's claims gate is unchanged: an introduced finding still needs
+CLAIMS_OK citing the ruling. T43 is filed this way (`T=T43`), and its id comes off the Lands open line at T45's next plan edit.
+
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).

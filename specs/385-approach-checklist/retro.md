@@ -474,3 +474,11 @@ what a caller never does, read the caller's skip condition line by line - "door 
 About 25 min. The hour-16 step-back's words held a page session's words and none of the working session's, because the bundle
 read the busiest session of the hour; it reads every one now, labeled, and names one it could not find or a cut. **The habit it
 changes:** a bundle that picks "the" session of an hour picks wrong whenever page sessions run - read them all and label them.
+
+## T45 - the retro row
+
+About 35 min (two plan rounds). T43, filed by two arbiter rulings, was refused at T07's landing as a hand-typed mark, and naming it
+on the plan's Lands open line cost a review round. My first rule honored a box that NAMED a ruling, and round 1 blocked it: any
+hand-typed box could paste a trigger. Built instead: `make claims-carry KEYS= RULING=` writes the box and its record row together,
+the ruling checked against `arbiter.jsonl`. **The habit it changes:** a "this box is the tooling's" rule reads a record the tooling
+wrote, never words in the box.

@@ -1,0 +1,2 @@
+{"task": "T43", "keys": ["l7r/diagram/settlement/houses.py::HousesMixin._on_a_tread#a building's corners held to it", "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_cluster#lane width and clearance"], "utc": "2026-10-18T15:30:04Z", "ruling": "ask:t07-two-findings-at-landing"}
+{"task": "T43", "keys": ["l7r/diagram/hamletgen/ways/law.py::span_walkable#a walkable span"], "utc": "2026-10-18T15:30:04Z", "ruling": "ask:t07-span-walkable-cannot-tell"}

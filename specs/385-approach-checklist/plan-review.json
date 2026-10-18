@@ -4065,6 +4065,50 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T45": {
+   "section_sha256": "eb145c58c1f4acec9e8bd10c548db26cc1c9f28f2ea80252ebe10459270ea9d1",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D59",
+     "summary": "New `make claims-carry F= KEYS= RULING= [T=]` form files findings the gate counts as introduced, which a round-arbiter ruling carried, into a named open task or a new box, and writes a claims-carried.jsonl row; `holding` honors the box by its id from that row (D28 unchanged).",
+     "class": "within",
+     "why": "Broadens rather than narrows: it applies FR-013/D28's filed-box rule (amendment 3 option 3, 'the gate files the finding as an open task... automates what the arbiter did by hand') to boxes an arbiter ruling carried, and is a tooling improvement amendment 6 authorizes ('implement any obvious performance / tooling / process improvements along the way'). The filed box is still an open task, so the feature cannot close until the finding is fixed - the property option 3 keeps. Labeled honestly as ours (O)."
+    },
+    {
+     "id": "D59-refuse-unrecorded-ruling",
+     "summary": "A RULING that is not a `trigger` in the feature's arbiter.jsonl is refused.",
+     "class": "within",
+     "why": "Tightens the new command to recorded arbiter rulings only; narrows nothing the GM asked for."
+    },
+    {
+     "id": "D59-hand-typed-still-holds",
+     "summary": "A hand-typed [lands-open] box, even one citing a recorded trigger, still holds the landing; only the box the command writes with its record is honored.",
+     "class": "within",
+     "why": "Keeps D28's rule ('the tooling put it there, as the open-task rule requires') intact; the earlier form that let a trigger-naming hand mark through was the one round 1 blocked."
+    },
+    {
+     "id": "D59-claims-gate-unchanged",
+     "summary": "The push's claims gate is unchanged: an introduced finding still needs CLAIMS_OK citing the ruling.",
+     "class": "within",
+     "why": "Matches FR-013's 'a finding on changed code or a changed claim is still introduced and still refuses, as before'; the plan touches only the open-task hold, not the introduced-finding refusal."
+    },
+    {
+     "id": "D59-T43",
+     "summary": "T43 is filed through the new command (T=T43) and its id comes off the plan's Lands open line at T45's next plan edit.",
+     "class": "within",
+     "why": "Applies the decision to the case that motivated it; drops a hand-typed workaround, not a requirement."
+    },
+    {
+     "id": "T45-test",
+     "summary": "tests/tooling/test_lands_open.py made red without the change.",
+     "class": "within",
+     "why": "A test that only fails when the decided behavior is absent; enforcement, not added scope."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
