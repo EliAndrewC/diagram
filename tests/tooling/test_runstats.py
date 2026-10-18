@@ -220,3 +220,15 @@ def test_a_coverage_floor_s_modules_and_lines_are_named_in_the_run_record(tmp_pa
     (tmp_path / "gate-failures").write_text("10.000 uncovered l7r/a.py:12, 15-16\n11.000 phase:test-full\n")
     moments, failed, names = runstats._failure_marks(str(tmp_path))
     assert names == ["uncovered l7r/a.py:12, 15-16"] and failed == 0 and 10.0 in moments
+
+
+def test_a_coverage_report_that_errors_is_named_in_the_run_record() -> None:
+    """The round arbiter's tooling fix on red-gate@2026-10-18T21:00:44Z (feature 388): `coverage report` stopped at "No source
+    for code" on a deleted module, listed no row, and the red gate's record named nothing. The error is a mark of its own."""
+    _um = importlib.util.spec_from_file_location("uncovered_marks", REPO / "scripts/measure/uncovered_marks.py")
+    assert _um is not None and _um.loader is not None
+    um = importlib.util.module_from_spec(_um)
+    _um.loader.exec_module(um)
+    out = "Name  Stmts\nNo source for code: '/x/l7r/gone.py'; see https://coverage.readthedocs.io/x\n"
+    assert um.errors(out) == ["coverage-error No source for code: '/x/l7r/gone.py'; see https://coverage.readthedocs.io/x"]
+    assert um.errors("Name   Stmts   Miss\nTOTAL  1  0\n") == []
