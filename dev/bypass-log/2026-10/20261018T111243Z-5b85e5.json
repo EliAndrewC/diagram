@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-18T11:12:43Z",
+  "target": "claims-gate",
+  "commit": "b5e89203a",
+  "why": "CLAIMS_OK: ask:t05-old-drifts-at-landing carries the front row and the standoff into T06, the task that works that unit next"
+}

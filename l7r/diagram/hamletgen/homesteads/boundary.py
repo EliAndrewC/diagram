@@ -522,7 +522,9 @@ def install_site_boundary(s: Settlement, plan: SitePlan, ringed: bool = False) -
     """Compute the boundary for this roll's seat and set it on the settlement for the fit test (`_site_chains`,
     `_site_corridors`), recording it in the manifest for the gate and the measurement - no page element (FR-001).
 
-    Research: no house on the toe marsh - research/questions/0058-ground-too-wet-to-build-on.drawing.html: the reed toe hard ground before it is drawn
+    Research:
+        no house on the toe marsh - research/questions/0058-ground-too-wet-to-build-on.drawing.html: the reed toe hard ground before it is drawn
+        a scattered hamlet's line round its own fields - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the paddy and its dry plots unioned as one cultivated outline, a scattered farm's own fields
     """
     seat = (float(plan.seat["cx"]), float(plan.seat["cy"]))
     # THE REED-MARSH TOE IS HARD GROUND FROM HERE ON, ASKED BEFORE IT IS DRAWN (settlement-review of this feature,
