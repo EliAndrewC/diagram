@@ -33,6 +33,9 @@ import plan_gate as pg  # noqa: E402
 
 OUT = pathlib.Path("/tmp/l7r-check")
 _IDS = re.compile(r"\b((?:FR|SC)-\d{3}[a-z]?|D\d+[a-z]?)\b")
+#: ANOTHER FEATURE'S REQUIREMENT, NAMED AS ITS OWN (feature 385 T66, plan D85): "375 FR-044", "feature 375 FR-044", "feature 375's
+#: FR-044", "feature 375, FR-044". T65's review was handed 385's own FR-005 for a block citing 375's - a different requirement.
+_QUALIFIED = re.compile(r"\b(?:[Ff]eature\s+)?(\d{3})(?:'s|,)?\s+((?:FR|SC)-\d{3}[a-z]?)\b")
 _ITEM = re.compile(r"^- \*\*((?:FR|SC)-\d{3}[a-z]?)\b", re.M)
 _DECISION = re.compile(r"^\*\*(D\d+[a-z]?) - ", re.M)
 #: the older specs' form, a requirement as its own heading (`### FR-001 - ...`, 12 specs among them 170): to the next heading
@@ -108,6 +111,18 @@ def trimmed_request(text: str, n: int | None) -> tuple[str, str]:
     return head + "".join(kept), index
 
 
+def foreign(spec_dir: pathlib.Path, others: list[tuple[str, str]]) -> list[str]:
+    """Each (feature, id) another feature's requirement, from that feature's one `specs/NNN-*/spec.md`, under a line naming it; a
+    feature with no such directory, or several, or no such id, is left out as an unknown id is."""
+    out: list[str] = []
+    for no, rid in others:
+        hits = [d for d in spec_dir.parent.glob(f"{no}-*") if (d / "spec.md").is_file()]
+        text = requirements((hits[0] / "spec.md").read_text(encoding="utf-8")).get(rid) if len(hits) == 1 else None
+        if text:
+            out.append(f"<!-- feature {no} -->\n{text}")
+    return out
+
+
 def build(spec_dir: pathlib.Path, name: str, under: list[tuple[str, str]], earlier: dict[str, str], how: str) -> pathlib.Path:
     """Write the bundle for the blocks `under` ([(key, text)]) and return its MANIFEST."""
     out = OUT / f"plan-{spec_dir.name}-{name}"
@@ -117,11 +132,14 @@ def build(spec_dir: pathlib.Path, name: str, under: list[tuple[str, str]], earli
     spec = (spec_dir / "spec.md").read_text(encoding="utf-8") if (spec_dir / "spec.md").is_file() else ""
     plans = "".join((spec_dir / f).read_text(encoding="utf-8") for f in ("plan.md", "plan-done.md") if (spec_dir / f).is_file())
     items, decisions = requirements(spec), _paragraphs(plans, _DECISION)
-    cited = list(dict.fromkeys(m.group(1) for _k, body in under for m in _IDS.finditer(body)))
+    own_no = spec_dir.name[:3]
+    others = list(dict.fromkeys((m.group(1), m.group(2)) for _k, body in under for m in _QUALIFIED.finditer(body) if m.group(1) != own_no))
+    # an id named as another feature's is not this feature's: matched with the qualified spans taken out
+    cited = list(dict.fromkeys(m.group(1) for _k, body in under for m in _IDS.finditer(_QUALIFIED.sub(lambda q: "" if q.group(1) != own_no else q.group(2), body))))
     # a decision's own paragraph is in blocks.md already; the requirements it answers to, and the decisions it leans on, are cited
     own = {m.group(1) for _k, body in under for m in _DECISION.finditer(body)}
     (out / "spec-cited.md").write_text("# The requirements and decisions the blocks name, in full\n\n" + "\n".join(
-        (items.get(i) or decisions.get(i) or "") for i in cited if i not in own and (i in items or i in decisions)), encoding="utf-8")
+        [(items.get(i) or decisions.get(i) or "") for i in cited if i not in own and (i in items or i in decisions)] + foreign(spec_dir, others)), encoding="utf-8")
     (out / "spec-index.md").write_text("# Every other requirement, its first line\n\n" + "".join(
         p.splitlines()[0] + "\n" for i, p in items.items() if i not in cited), encoding="utf-8")
     if (spec_dir / "request.md").is_file():
