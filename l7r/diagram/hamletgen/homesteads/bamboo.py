@@ -279,7 +279,7 @@ def strip_refused(s: Settlement, cx: float, cy: float, cw: float, ch: float, hou
     stream or a lane from its `house`?
 
     Research:
-        strip clearances - UNRESEARCHED: 6 ft off the walls, `PART_GAP_FT` off every seated part
+        strip clearances - UNRESEARCHED: `PART_GAP_FT` (2 ft) off every seated part, and through `_strip_blocked` 2 ft off other houses (the 6 ft off the walls is `strip_candidates`')
         strip out of the sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: kept 50 ft (bamboo's reach) off every yard's and bed's sun
         strip off the copse seats - UNRESEARCHED: off every household's reserved copse seats by the bamboo keep-out
         strip on its house's bank - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: refused across a stream
@@ -461,6 +461,9 @@ class StripNear:
     __slots__ = ("_filed", "crowns", "houses", "kinds", "lanes", "s", "segs")
 
     def __init__(self, s: Settlement, lanes: Sequence[tuple[Poly, float]]) -> None:
+        """Every item of what stands, filed by its box.
+
+        Research: a fixture with no recorded size - UNRESEARCHED: taken as 16 ft across (`r` 8), as `_strip_blocked` always took it"""
         self.s, self.lanes = s, lanes
         houses = []
         for o in s.M.get("houses", []):

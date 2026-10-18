@@ -10228,21 +10228,13 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/homesteads/bamboo.py::StripNear.__init__#a well, notice board, byre, shed or retirement house with no recorded size is taken as 16 ft across (r defaults to 8) for the strip's 6 ft clearance": {
-  "code": "747436459b64cf97",
+ "l7r/diagram/hamletgen/homesteads/bamboo.py::StripNear.__init__#a fixture with no recorded size": {
+  "body": "d9781d038d359271",
+  "claim": "a fixture with no recorded size - UNRESEARCHED: taken as 16 ft across (`r` 8), as `_strip_blocked` always took it",
+  "code": "b11dad00e14982b6",
   "core": "747436459b64cf97",
   "date": "2026-10-18",
-  "note": "a well, notice board, byre, shed or retirement house with no recorded size is taken as 16 ft across (r defaults to 8) for the strip's 6 ft clearance",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/hamletgen/homesteads/bamboo.py::StripNear.__init__#strip geometry": {
-  "body": "02d671738951e5f7",
-  "claim": "strip geometry - NONE: frames, indexes and ground lookups; the units that decide carry their own claims",
-  "code": "fe66e7697ed3c8cc",
-  "core": "747436459b64cf97",
-  "date": "2026-10-18",
-  "note": "files items into grids (the 16 ft default size is listed below as UNCLAIMED)",
+  "note": "the 16 ft default (r 8) for a fixture with no recorded size; no cited question addresses it",
   "pages": {},
   "research": "",
   "rests": [],
@@ -10805,15 +10797,15 @@
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::strip_refused#strip clearances": {
   "body": "7ac324e18ead7789",
-  "claim": "strip clearances - UNRESEARCHED: 6 ft off the walls, `PART_GAP_FT` off every seated part",
-  "code": "990f54f686bc0a48",
+  "claim": "strip clearances - UNRESEARCHED: `PART_GAP_FT` (2 ft) off every seated part, and through `_strip_blocked` 2 ft off other houses (the 6 ft off the walls is `strip_candidates`')",
+  "code": "24e9dd679299166e",
   "core": "f68b9581ea7f211b",
   "date": "2026-10-18",
-  "note": "the class is right but the account is wrong: this unit sets no 6 ft wall clearance (the 6 ft is strip_candidates' `gap`). It keeps PART_GAP_FT = 2 ft off parts and, through _strip_blocked, 2 ft off other houses. The claim should read \"PART_GAP_FT off every seated part, 2 ft off other houses\"",
+  "note": "parts_hit at PART_GAP_FT (2 ft), and 2 ft off other houses through _strip_blocked; the cited questions say nothing on these gaps",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::strip_refused#strip off the copse seats": {
   "body": "7ac324e18ead7789",
@@ -30376,25 +30368,38 @@
  },
  "l7r/diagram/hamletgen/ways/tree.py::admits#no doubled band": {
   "body": "c618eab596f6ed1a",
-  "claim": "no doubled band - UNRESEARCHED: an access lane may not run beside another past a pitch",
-  "code": "4771aaee3b3434ff",
+  "claim": "no doubled band - village-lanes.drawing: two paths running side by side are drawn as one, and two lanes met end to end are read as one (`walked_shadows`) - an access lane may not run beside another past a pitch",
+  "code": "b734318ab5850a37",
   "core": "001d990fc5d115a3",
   "date": "2026-10-18",
-  "note": "0081 drawing answers this: \"Two paths running side by side are drawn as one\" (under 20 degrees), and \"Two lanes that meet end to end are read as one\" covers walked_shadows; the claim should cite research/questions/0081-village-lanes.drawing.html as a convention, not UNRESEARCHED",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "tree_shadows/walked_shadows refuse a lane alongside another or met end to end, so no doubled band is drawn",
+  "pages": {
+   "0081-village-lanes.drawing.html": "a6423940921ce579"
+  },
+  "research": "af9a8a86b5d8c81f",
+  "rests": [
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
+   "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::admits#no sliver between the tree's lanes": {
   "body": "c618eab596f6ed1a",
-  "claim": "no sliver between the tree's lanes - UNRESEARCHED: no needle (`needle_loops`), asked of the tree with its ends joined as the settle joins them (`as_joined`), and no doubled tail",
-  "code": "d626e3b92d49ae8e",
+  "claim": "no sliver between the tree's lanes - village-lanes.drawing: ends within 25 ft are joined (`as_joined`), two paths side by side are drawn as one (no needle, `needle_loops`), no stub run on past a crossing (no doubled tail)",
+  "code": "90dffb6000db9f36",
   "core": "001d990fc5d115a3",
   "date": "2026-10-18",
-  "note": "0081 drawing answers this: \"Ends within 25 ft of one another are joined\" is the as_joined judging, the side-by-side rule is the needle, and \"A lane does not run on past a crossing as a stub\" is the doubled tail; the claim should cite research/questions/0081-village-lanes.drawing.html, not UNRESEARCHED",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "needles_with is judged both as laid and after as_joined, which joins the near ends; the stub-tail rule is the law's own call",
+  "pages": {
+   "0081-village-lanes.drawing.html": "a6423940921ce579"
+  },
+  "research": "af9a8a86b5d8c81f",
+  "rests": [
+   "0081-village-lanes.drawing.html:2ca0b4939aee735d",
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
+   "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::admits#track out's width as judged": {
   "body": "c618eab596f6ed1a",
@@ -30402,7 +30407,7 @@
   "code": "bdce04c3c06f6c53",
   "core": "001d990fc5d115a3",
   "date": "2026-10-18",
-  "note": "the page sets \"the track out to the wider world 6 ft\", but the stub's width is set in tree_base.base_for (tb.stub), which the bundle does not include; need that code",
+  "note": "the stub comes from tb.stub, built at w 6.0, the page's 6 ft for the track out",
   "pages": {
    "0081-village-lanes.drawing.html": "a6423940921ce579"
   },
@@ -30410,7 +30415,7 @@
   "rests": [
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::admits#tree keeps the lane law": {
   "body": "c618eab596f6ed1a",
@@ -30493,24 +30498,6 @@
   "note": "memo",
   "research": "",
   "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/tree.py::lane_record#end set on its host": {
-  "body": "2eaec673774859c3",
-  "claim": "end set on its host - GUESS village-lanes.drawing: within `CARRY_FT` (20 ft), past the page's 12 ft hook leg, the end set on its foot; farther, a leg on to it - the page gives no carry distance",
-  "code": "7b3dcf64d88c4160",
-  "core": "b32981bcedeb836f",
-  "date": "2026-10-18",
-  "note": "0081.drawing does not record a 20 ft carry as a guess: it has only the 12 ft hook leg (§64) and the 25 ft lane-end join (§59), and neither is this decision. Make it a bare GUESS, or record CARRY_FT on that page.",
-  "pages": {
-   "0081-village-lanes.drawing.html": "a6423940921ce579"
-  },
-  "research": "af9a8a86b5d8c81f",
-  "rests": [
-   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
-   "0081-village-lanes.drawing.html:65ad16eace199d92",
-   "0081-village-lanes.drawing.html:a857325132f8d4ee"
-  ],
-  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/tree.py::lane_record#tree lane tread by role": {
   "body": "2eaec673774859c3",
@@ -31023,17 +31010,21 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/tree_base.py::TreeBase.__init__#plumbing": {
-  "body": "3dba3f48bf687fba",
-  "claim": "plumbing - NONE: how the tree's own verdicts (`tree.admits`' claims) are computed",
-  "code": "320f7237d1e516cf",
+ "l7r/diagram/hamletgen/ways/tree_base.py::TreeBase.__init__#track out's width as judged": {
+  "body": "b972d17a19b44ddb",
+  "claim": "track out's width as judged - village-lanes.drawing: the track out's stub judged at 6 ft, the track out as drawn",
+  "code": "4fbb5ce2c9a720d5",
   "core": "619d0d71122864a5",
   "date": "2026-10-18",
-  "note": "the stub lane {\"w\": 6.0} sets the root track's width for the face/needle verdicts. Need law.web_lines, to see whether it reads \"w\", and the track-out's drawn width with its backing: if 6.0 restates that figure, NONE is fine; if not, it is an unclaimed width",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "CANNOT-TELL"
+  "note": "stub \"w\": 6.0 matches the 6 ft track out",
+  "pages": {
+   "0081-village-lanes.drawing.html": "a6423940921ce579"
+  },
+  "research": "af9a8a86b5d8c81f",
+  "rests": [
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree_base.py::TreeBase.append#plumbing": {
   "body": "ad207285cfe70212",
@@ -62312,13 +62303,21 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._relax_gardens_south#nudged bed must not overlap any house, yard, garden or grove footprint (_garden_beds_clear); whether it re-checks the 39 ft house-shade rule (§20) after the move is not visible here": {
-  "code": "ca933c078092d73b",
+ "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._relax_gardens_south#nudged bed off every footprint": {
+  "body": "ac0ff49dc88c7cb8",
+  "claim": "nudged bed off every footprint - sunlight-and-shade-on-the-farm.drawing: nudged south into open ground - no house, yard, bed or grove of any homestead under the bed once nudged (`_garden_beds_clear`)",
+  "code": "7016424406267f90",
   "core": "ca933c078092d73b",
   "date": "2026-10-18",
-  "note": "nudged bed must not overlap any house, yard, garden or grove footprint (_garden_beds_clear); whether it re-checks the 39 ft house-shade rule (§20) after the move is not visible here",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the code checks the nudged beds against every homestead's house, yard, beds and grove, which matches the claim, but §23 says a bed hemmed in to the south by paddy, lane or neighbor stays where it is; whether `_garden_beds_clear` refuses those is in its body, which the bundle does not include",
+  "pages": {
+   "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
+  },
+  "research": "3874df1f1301e65f",
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:cef95d825324536e"
+  ],
+  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._relax_gardens_south#nudged bed's sun ground clear of crowns, promised persimmons and bamboo": {
   "body": "ac0ff49dc88c7cb8",
@@ -62340,14 +62339,21 @@
  },
  "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._relax_gardens_south#own deep windward stand exempt from the east test": {
   "body": "ac0ff49dc88c7cb8",
-  "claim": "own deep windward stand exempt from the east test - UNRESEARCHED: the farm's own deep windward stand is not tested as a neighbor's grove, since it stands on the wind's side",
-  "code": "561dcb1b0e6c45bf",
+  "claim": "own deep windward stand exempt from the east test - sunlight-and-shade-on-the-farm.drawing: the nudge is for a NEIGHBOR's grove hard against a bed's east, the windbreak standing on the wind's side; the farm's own thin grove band east of the bed is tested too - GUESS (feature 291)",
+  "code": "5a01ca2dcc3b92fa",
   "core": "ca933c078092d73b",
   "date": "2026-10-18",
-  "note": "the cited drawing page answers this: it names only \"a neighbor's grove hard against its east\" as what triggers the nudge, and §25 puts the windbreak on the wind's side, so the claim should cite research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html rather than say UNRESEARCHED. The page does not record the code also testing the farm's own thin grove band east of the bed (feature 291), so that part should be labelled GUESS",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "the page's nudge is for a neighbor's grove at a bed's east, so exempting only the farm's own deep stand fits; testing the farm's own thin band too is the guess the claim names",
+  "pages": {
+   "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
+  },
+  "research": "3874df1f1301e65f",
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:0f20160d442c6378",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:cef95d825324536e"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin.farmsteads#draw-order and footprint plumbing": {
   "code": "84d52c1f6a8923b4",

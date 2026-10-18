@@ -194,6 +194,9 @@ class TreeBase:
     __slots__ = ("_judged", "drawn_of", "ends", "host", "key", "lanes", "recs", "root", "runs", "stub", "view")
 
     def __init__(self, key: tuple[Any, ...], recs: Sequence[Mapping[str, Any]], root: Poly | None, view: Mapping[str, Any], lay: Callable[[Poly], Poly]) -> None:
+        """The base built from `recs`, appended one by one, with the track out's stub as `tree.admits` judged it.
+
+        Research: track out's width as judged - research/questions/0081-village-lanes.drawing.html: the track out's stub judged at 6 ft, the track out as drawn"""
         self.key, self.root, self.view = key, root, view
         self.recs: list[Mapping[str, Any]] = []
         self.host: list[int | None] = []
