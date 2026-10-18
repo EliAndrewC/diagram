@@ -98,7 +98,7 @@ def draw_bank_trees(s: Settlement, trees: list[tuple[float, float, float, str]])
     g = ['<g class="pond-bank">']
     for x, y, r, kind in trees:
         fill, rim = TREE_TONES[kind]
-        g.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r:.1f}" fill="{fill}" stroke="{rim}" stroke-width="0.8" opacity="0.92"/>')
+        g.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r:.1f}" fill="{fill}" stroke="{rim}" stroke-width="0.8"/>')
     g.append("</g>")
     s.add("".join(g), cls="pond-bank tree")
     s._record_crowns([(x, y, r) for x, y, r, _k in trees])
