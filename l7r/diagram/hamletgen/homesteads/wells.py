@@ -402,7 +402,7 @@ def seat_wells(
 
     Research:
         wells among the houses - research/questions/0196-communal-wells-ido.drawing.html: seats with a dwelling near and a neighborhood round them, each later one serving the worst-served household
-        the first well's seat - GUESS research/questions/0196-communal-wells-ido.drawing.html: the innermost seat where one well is owed; where two or more are, the middle of its own share of the houses, the shares cut along the cluster's long axis (`first_share_middle`)
+        the first well's seat - GUESS: the innermost seat where one well is owed; where two or more are, the middle of its own share of the houses, the shares cut along the cluster's long axis (`first_share_middle`)
         seated a little closer than the check - GUESS research/questions/0196-communal-wells-ido.drawing.html: a dwelling's wall within `WELL_SEAT_FT` (80 ft, a GUESS the page names), the 95 ft check unchanged
         no well serving more than ten - research/questions/0196-communal-wells-ido.drawing.html: the five to ten houses each dug well served at Karihama; a seat that keeps every well at ten or fewer ranked first
         not in the windbreak - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: belt seats sorted last, never refused
@@ -410,6 +410,8 @@ def seat_wells(
         wells apart - UNRESEARCHED: 170 px between wells
         no well past the crop - research/questions/0196-communal-wells-ido.drawing.html: every well stands among the houses it serves; refused where the wellhead would widen the crop
         no well over a household's wood floor - UNRESEARCHED: no well seated over a household's reserved wood-floor seats
+        later wells by the worst walk - UNRESEARCHED: ranked by the worst-served household's walk after the dig, in 66 px buckets, the crop's overreach added 1:1
+        ties among later wells - UNRESEARCHED: the crop's overreach, then the belt, then the want_near-th nearest house
     """
     new: list[Pt] = []
     if not houses or len(placed) >= want:

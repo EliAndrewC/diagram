@@ -19,8 +19,6 @@ from __future__ import annotations
 from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
-import numpy as np
-
 from l7r.diagram.settlement.shrines_wells.wells import well_gap_to_dwellings
 
 from ..consts import Pt
@@ -32,6 +30,8 @@ class SeatSweep:
     __slots__ = ("dist", "houses", "pts")
 
     def __init__(self, pts: Sequence[Pt], houses: Sequence[Mapping[str, Any]]) -> None:
+        import numpy as np  # loaded when a well is seated, never at import (feature 237: no heavy library at import time)
+
         self.pts = [(float(x), float(y)) for x, y in pts]
         self.houses = houses
         p = np.asarray(self.pts, dtype=float).reshape(-1, 2)
@@ -48,6 +48,8 @@ class SeatSweep:
         wall farther than `gap`), and `seat_ok`.
 
         Research: the rung's test - NONE: `seat_wells`' own neighborhood and seat gap, computed for the lattice at once"""
+        import numpy as np
+
         out: list[tuple[float, float, float]] = []
         kth: dict[tuple[float, float, float], float] = {}
         if len(self.houses) < want_near or not self.pts:
@@ -73,6 +75,8 @@ class PairAhead:
     __slots__ = ("hx", "hy", "sx", "sy")
 
     def __init__(self, seats: Sequence[tuple[float, float, float]], houses: Sequence[Mapping[str, Any]]) -> None:
+        import numpy as np  # loaded when a well is seated, never at import (feature 237: no heavy library at import time)
+
         self.sx = np.asarray([c[1] for c in seats], dtype=float)
         self.sy = np.asarray([c[2] for c in seats], dtype=float)
         self.hx = np.asarray([float(h["x"]) for h in houses], dtype=float)
@@ -85,6 +89,8 @@ class PairAhead:
         Research:
             no well serving more than ten - research/questions/0196-communal-wells-ido.drawing.html: the five to ten houses each dug well served at Karihama
             the second well held 170 px off the first - UNRESEARCHED: the pair's spacing, `seat_wells`' own "wells apart"; no page gives a hamlet's wells' spacing"""
+        import numpy as np
+
         if not len(self.sx):
             return False
         apart = np.hypot(self.sx - c[1], self.sy - c[2]) >= spacing
