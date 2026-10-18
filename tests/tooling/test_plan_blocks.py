@@ -152,6 +152,16 @@ def test_the_bundle_is_lean_and_whole_where_it_must_be(tmp_path: pathlib.Path) -
     assert "BLOCKS=1" in manifest.read_text()
     size = sum(f.stat().st_size for f in b.iterdir())
     assert size < len(SPEC) + len(PLAN) + 2000, "a bundle no larger than the spec and plan it stands in for"
+    # feature 385 T29: each block set its own directory, so a second review's bundle never overwrites one being read
+    assert b.name.startswith(f"plan-{d.name}-blocks-") and b.name != f"plan-{d.name}-blocks", b.name
+    (d / "plan.md").write_text(PLAN.replace("by the lane (FR-002)", "by the lane, three to a lane (FR-002)"))
+    try:
+        os.chdir(d.parent.parent)
+        out2 = subprocess.run([sys.executable, str(script("plan_gate")), "delta", str(d)], capture_output=True, text=True, check=True).stdout
+    finally:
+        os.chdir(here)
+    b2 = pathlib.Path(out2.split("read ", 1)[1].split(" and the files", 1)[0]).parent
+    assert b2 != b and (b / "blocks.md").is_file() and "two to a lane" in (b / "blocks.md").read_text(), "the first review's bundle stands"
 
 
 def test_a_block_deleted_by_hand_is_owed_and_its_removal_reviewed(tmp_path: pathlib.Path) -> None:
