@@ -14145,6 +14145,14 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a row village's whole farmstead, grove included, stands off the field (`_reach` from `_g0[\"bbox\"]` on the linear form), not just the house and yard": {
+  "code": "3c4b0be3ae6261c7",
+  "core": "3c4b0be3ae6261c7",
+  "date": "2026-10-18",
+  "note": "a row village's whole farmstead, grove included, stands off the field (`_reach` from `_g0[\"bbox\"]` on the linear form), not just the house and yard",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a scattered hamlet's seating": {
   "body": "05c51fe1c2c811b9",
   "claim": "a scattered hamlet's seating - clustered-and-scattered-villages-shuson-sanson.drawing: a front row along the paddy's chords, ranks behind in a brick pattern (off the line only on an alleys hamlet), a rescue cloud, then the exhaustive pass",
@@ -14163,20 +14171,23 @@
   ],
   "verdict": "DRIFTED"
  },
- "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#front-row standoff from the field set by the homestead core's reach (house, yard, shed, well pocket; garden excluded)": {
+ "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#front-row standoff from the field set by the house and its yard": {
   "body": "05c51fe1c2c811b9",
-  "claim": "front-row standoff from the field set by the homestead core's reach (house, yard, shed, well pocket; garden excluded) - farmhouses-minka.drawing: never nearer the paddy than 6 ft, drawn 10 to 13 ft; the front seat stands the core's reach toward the field off its chord, at the largest house the roll can take; the garden's side is chosen later by the sun, so it is not counted",
-  "code": "8dbe3d779b9a12b7",
+  "claim": "front-row standoff from the field set by the house and its yard - farmhouses-minka.drawing: never nearer the paddy than 6 ft, drawn 10 to 13 ft, no farmhouse held to a maximum; the yard before the south wall turns with the house as one, so the front seat stands their reach toward the field off its chord, at the largest house the roll can take",
+  "code": "fcbddd9f4bfc1e37",
   "core": "3c4b0be3ae6261c7",
   "date": "2026-10-18",
-  "note": "the 6 ft floor is held (`_wall_on_the_bund`), but the code puts the core's near edge on the chord, and whether that lands the house 10 to 13 ft off depends on `front_row(standoff=None, envelope=...)` and `turn_the_seat`, neither in the bundle; with the yard facing the paddy the house stands a yard's depth off",
+  "note": "the 6 ft floor holds by construction: the reach is taken at the largest house's corners and then turned (`turn_the_seat`). Whether front houses stand the page's \"drawn 10 to 13 ft\" off the paddy needs three values the bundle does not inline: `HOUSE_PADDY_GAP_FT`, `STANDOFF_SLACK_PX`, and the keep-out the site-boundary chords are already pushed out by. It also needs to know whether the placer pulls a smaller house in toward the field. If it does not, a house rolled at 0.85 of the length stands its reach off at `_house_max` (46*1.35), so it sits up to about 11.5 ft farther out than the largest house; if the largest sits at 10 to 13 ft, that is past the page's range.",
   "pages": {
    "0029-farmhouses-minka.drawing.html": "28761adf1d2dece2"
   },
   "research": "a3cfa2fba63bb45d",
   "rests": [
    "0029-farmhouses-minka.drawing.html:0596cd67c0df9440",
-   "0029-farmhouses-minka.drawing.html:2f4048f3df8fcb07"
+   "0029-farmhouses-minka.drawing.html:2f4048f3df8fcb07",
+   "0029-farmhouses-minka.drawing.html:66b65af7ef3446a2",
+   "0029-farmhouses-minka.drawing.html:9dd34b89f26d4272",
+   "0029-farmhouses-minka.drawing.html:a708d49b4d686be7"
   ],
   "verdict": "CANNOT-TELL"
  },
@@ -14265,6 +14276,17 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the shed counted in the standoff, the garden not": {
+  "body": "05c51fe1c2c811b9",
+  "claim": "the shed counted in the standoff, the garden not - UNRESEARCHED: the page places neither the shed nor the beds against the paddy; the shed is held at the wall's gap with the house, and the garden's side, chosen later by the sun, is left free to stand nearer",
+  "code": "d2c8c340f0fb837a",
+  "core": "3c4b0be3ae6261c7",
+  "date": "2026-10-18",
+  "note": "the page applies the minimum to the house wall only and turns the yard and beds with the house; it never places a shed or garden beds against the paddy, so counting the shed in `_core` and leaving the garden out is unresearched",
+  "pages": {},
+  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_rank_rounds#a lane's room between ranks": {
