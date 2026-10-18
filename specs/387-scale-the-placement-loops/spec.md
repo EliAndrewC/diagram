@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-18
 
-**Status**: Done 2026-10-18 - T01-T07 ticked; make done green; landing cohort 54/54 (fresh 6 of 48); spec accepted by the round arbiter at its round cap, plan CLEAR; FR-004 withdrawn as measured
+**Status**: Done 2026-10-18 - T01-T07 ticked; make done green; landing cohort 54/54 (fresh 6 of 48); spec accepted by the round arbiter at its round cap, plan CLEAR; FR-004 withdrawn as measured. SC-001 met for the tree, the field way and the knots; NOT met for the merges (3.2 / 3.1 / 7.6 bund measures a merge at 10 / 20 / 40 households, `m:counts-after`): the remaining measures are of cells the merge changed, which a bigger cluster has more of - no exact way found to skip them. Time bought: -10% on the five stages at 40 households (`m:five-stages-ab`)
 
 **Approved**: the GM, 2026-10-18, "I don't think we need to re-check everything after each addition, and you've already proposed fixes for the others, so please file a feature for this and then make it happen."
 
