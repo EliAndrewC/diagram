@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-17
 
-**Status**: In progress - filed; spec-fidelity round 1 CHANGES REQUIRED (5 items), round 2 CHANGES REQUIRED (2 items); round 3 verdict FAITHFUL (spec-fidelity, 2026-10-18)
+**Status**: Done 2026-10-18 - T01 and T02 ticked, make done green, landing cohort 54/54 on its own engine; spec-fidelity round 1 CHANGES REQUIRED (5 items), round 2 CHANGES REQUIRED (2 items); round 3 verdict FAITHFUL (spec-fidelity, 2026-10-18)
 
 **Approved**: the GM, 2026-10-17, "Sounds good, please implement your recommendation as a feature - file it and then implement it now, thanks."
 
