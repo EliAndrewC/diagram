@@ -51,7 +51,7 @@
    "declared": "spec-fidelity"
   },
   "## Landing": {
-   "sha256": "a0174b5a8f1aa78ba1de2830d5fbf79e9998fe7e45f15bea7346051469bc0958",
+   "sha256": "5eb50eba4b775082f0eaf96a2271c42f611c0b50374d6ce8829ad4205b94299f",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -472,6 +472,84 @@
   },
   "### T27 Decisions": {
    "sha256": "0c3e4d7376dd3567e7d1890ee77cc9c566a139fa40123a2a9ea55d476e3c82d0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T28 - an ask's bundle shows which numbers are researched (the round arbiter's fix on ask:t06-scattered-single-file)": {
+   "sha256": "43111c0b1cfce7415d96950cbdbad4555cd0b384ebd6c9cbc8b040c4050c750c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T28 Approach (checklist part A)": {
+   "sha256": "3526d87a260b2063e003537aaf8b837fa5370405c95549dfded3307ab4e363ab",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T28 Decisions": {
+   "sha256": "f25a105b29c0c7781eb5b88db007c130c55e108d21972c43a6e507871825c866",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T06 - a scattered hamlet seated in single file round its fields (the ranking row `_seat_households#a scattered hamlet's seating`)": {
+   "sha256": "2f05041175198c4656f628ae92ef4b22c306a226a6a6e5142e2254fb7b720a2a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T06 Approach (checklist part A)": {
+   "sha256": "bbdb5cf00c9c5cfce105ccb77e000977498a2402fb21a2d060bd0c8f2daae0b1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T06 Decisions": {
+   "sha256": "d2c0c1bc1c37ef1e1e0ea359a7bfb0c48d801d5049a53a4ae1a3d541f250471f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T29 - each plan review its own bundle (the round arbiter's fix on hour:385-approach-checklist@13)": {
+   "sha256": "cd35985f4640720e666f5b1b8734d50fffc1de11c07e527c7ec729bd8867d3a3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T29 Approach (checklist part A)": {
+   "sha256": "2de364de52bd135f053f329301ccdef0fdad6d634b6ee8b66fa54bf7e5d10ca7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T29 Decisions": {
+   "sha256": "634abb0285f444451c47a0dbce4fa74d949377a1474dc449f9ffd40d5dcf1069",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T30 - nothing merged under a running gate (the round arbiter's fix on red-gate@2026-10-18T12:36:36Z)": {
+   "sha256": "09f22fd634e3aa84c01aaf1589cc07c6490198388e4791998cbbf73b226cf85b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T30 Approach (checklist part A)": {
+   "sha256": "e306a2d85fdbdcadaa67904f58dcee83a59424db24436c64398b9e27770c1ee1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T30 Decisions": {
+   "sha256": "ddeb6dc3a9550c367633757d814e7007a95623cd34861fa86dcab080cb98e04c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T06 part B (2026-10-18T12:40Z)": {
+   "sha256": "8da3cdc54c5bc4f40ff94e67e75b555e8afd3b851a4a942d0a2777cea5a6a7a0",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -3031,6 +3109,448 @@
      "why": "D9 says the owed block is 'stamped after the trigger'. Read to the second, a block stamped 10:25Z for a trigger at 10:25:14Z is before it, so D49 relaxes D9 within the trigger's own minute. Two of MODE 1's grounds apply. First, the literal rule cannot be met in the format the tool itself requires: the heading `owe` prints, and D9's own `### Txx part B (<UTC>)` form, carry minutes only. A block answered in the trigger's own minute, headed as instructed, can never pass. The session's only ways out would be to wait out the clock or stamp a false future minute. Second, the literal reading defeats D9's purpose (a fresh answer after the trigger, not one carried in from before) instead of serving it: the only extra blocks it lets through were written in the same sub-minute window, and a block from any earlier minute still refuses. The relaxation goes no further than the precision of the format the spec chose. It is one case, not several bundled together, and nothing in the GM's request asks for second-level precision. The T27 Approach's wording 'at or after' describes the same minute-level comparison."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T28 - an ask's bundle shows which numbers are researched (the round arbiter's fix on ask:t06-scattered-single-file)",
+    "### T28 Approach (checklist part A)",
+    "### T28 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Landing-T28",
+     "summary": "T28 appended to the Lands-open list: it lands when it closes, with its retro row.",
+     "class": "within",
+     "why": "The same one-task-then-retro landing FR-006 sets for every task; the only change from the block's CLEAR text is T28's id."
+    },
+    {
+     "id": "T28-A2/A9-test",
+     "summary": "A test red without the claims section.",
+     "class": "within",
+     "why": "Enforcement of the arbiter's fix itself: delete the claims section and the test has nothing to check (GM 2026-09-20). It serves the fix."
+    },
+    {
+     "id": "D50a-identifier-match",
+     "summary": "claims_section matches ALL_CAPS constants and backticked identifiers in the ask's question and its evidence files, and lists each claim on a unit of that name with key, class, claim line and last verdict.",
+     "class": "within",
+     "why": "Matching by identifier is the mechanism; a tool cannot resolve prose such as 'the field's size' to a claim key. Reading the question as well as the evidence only widens what the arbiter sees. Copying each claim with the class the registry gives it carries the fix's 'claim rows (source class ...)'. Since the round is blocked anyway, the revision should also say which of the listed classes (presumably DEVIATION) a number set by a GM ruling carries, because the fix names 'GM ruling' as a class and the list does not visibly hold one."
+    },
+    {
+     "id": "D50b-words-unmatched",
+     "summary": "A number named only in words ('1.3 acres') is not matched, on the premise that the evidence names its constant, as T06's did.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The fix covers 'every number its evidence file names', and its purpose is that the arbiter 'can tell researched numbers from guessed ones without reading the repository'. Under D50 a figure the evidence gives only in words produces no row and no flag, and a missing row looks the same as a number with no claim. That is the misreading the fix exists to prevent, so the carve-out defeats the fix's purpose. Its justification is one measured case (T06) standing in for every future ask, which is an assumed state, not a measured one. Resolving prose is not required. What is required is that the gap is visible: the bundle lists every figure with a unit in the question or evidence that it could not tie to an identifier (e.g. 'unmatched: 1.3 acres - name its constant'), or the ask refuses or warns on such a figure. Either one makes this a legitimate exception. Value-matching is not asked for."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T28 - an ask's bundle shows which numbers are researched (the round arbiter's fix on ask:t06-scattered-single-file)",
+    "### T28 Approach (checklist part A)",
+    "### T28 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Landing-T28",
+     "summary": "T28 added to the tasks that land open, each with its retro row.",
+     "class": "within",
+     "why": "FR-006: one task at a time, each landing when it closes."
+    },
+    {
+     "id": "T28-Approach",
+     "summary": "Goal, constraints and order of T28 restate the arbiter's fix; done is one goal with a test red without it.",
+     "class": "within",
+     "why": "Restates the round arbiter's fix (feature 379: the arbiter stands where the GM was asked) and serves the GM's amendment 6 'implement any obvious ... tooling / process improvements'. Its item 9 done-measure is judged with D50: it constructs an ask naming GROSS_ACRES_PER_HOUSEHOLD rather than replaying the ask the fix was ruled on."
+    },
+    {
+     "id": "D50-scope-and-classes",
+     "summary": "claims_section reads ALL_CAPS constants and backticked identifiers in the ask's question and evidence files and copies each claim's key, registry class (research page, GUESS, UNRESEARCHED, CONVENTION, DEVIATION, CANON, NONE), claim line and last verdict.",
+     "class": "within",
+     "why": "Question plus evidence files is a superset of 'its evidence file'. The registry's classes cover the fix's four source classes (research, GM ruling = CANON/DEVIATION, ours = GUESS/UNRESEARCHED, convention); the CANON/DEVIATION premise is not measurable from the bundle, but the claim line itself is copied, so the arbiter sees the source whatever the label."
+    },
+    {
+     "id": "D50-unmatched",
+     "summary": "A number with a unit given with no identifier within 60 characters is listed as 'unmatched' with the tip to name its constant, and gets no claim row.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The fix says claim rows 'for every number its evidence file names ... so the arbiter can tell researched numbers from guessed ones without reading the repository'. For an unmatched number the arbiter still cannot tell, and cannot act on the tip: it does not write the ask and may not read the repository. Round 1's carve-out is kept and labeled; the same numbers still get no rows. Not impossible: resolve a words-only number to its claim by its value and unit against the registry, or have make arbiter-bundle refuse (or tell the SESSION, before the bundle is built) until each such number is named by its constant, so no 'unmatched' row reaches the arbiter. Not implied by the fix, which says 'every number'; the literal reading is the fix's purpose. The fix names its own case, 'here the dispersed field size and the farmstead pitch'; whether T06's evidence gives them as constants or in words cannot be seen from this bundle, and D50's own examples ('1.3 acres', '273 ft') are how they would read in words. To clear it: no number with a unit reaches the arbiter without its claim row, and the done-measure replays ask:t06-scattered-single-file as written, red if either of those two numbers arrives without its row."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T28 - an ask's bundle shows which numbers are researched (the round arbiter's fix on ask:t06-scattered-single-file)",
+    "### T28 Approach (checklist part A)",
+    "### T28 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Landing: T28 lands open",
+     "summary": "T28 joins the lands-open list, landing when it closes with its retro row while later tasks stay open.",
+     "class": "within",
+     "why": "FR-006: tasks run one at a time, each closing with its retro row before the next starts."
+    },
+    {
+     "id": "D50 (question as well as evidence)",
+     "summary": "claims_section reads the ask's question as well as its evidence files.",
+     "class": "within",
+     "why": "Serves the arbiter's fix (rows for every number the ask's evidence names); it adds rows and removes none."
+    },
+    {
+     "id": "D50 (registry CLASSES)",
+     "summary": "The fix's four source classes (research, GM ruling, ours, convention) are given in the registry's own CLASSES (research page, GUESS, UNRESEARCHED, CONVENTION, DEVIATION, CANON, NONE).",
+     "class": "within",
+     "why": "Uses the registry's vocabulary for the fix's words; each of the four maps to a class, and none is lost."
+    },
+    {
+     "id": "D50 (identifier pass)",
+     "summary": "ALL_CAPS constants and backticked identifiers in the ask get their claim key, class, claim line and last verdict listed.",
+     "class": "within",
+     "why": "The fix's mechanism for numbers named by their constant."
+    },
+    {
+     "id": "D50 + item 9 (numbers given in words: value lookup, 'no claim states it', and the pitch's done-measure)",
+     "summary": "A number given in words is matched only against claims whose line states that value and unit; otherwise the bundle says no claim states it ('a measurement, or a value derived from others'). Item 9's done-measure accepts 'no claim states it' beside the farmstead pitch's '273 ft'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The arbiter's fix names exactly two numbers whose claim rows must reach the bundle: 'here the dispersed field size and the farmstead pitch'. Approach item 4 MEASURED the pitch's claim: BUNDLE_PITCH on 0038 (DRIFTED). Yet item 9 counts T28 done when the pitch reaches the arbiter as having no claim. So the fix's 'claim rows for every number its evidence file names' is cut down to 'rows only where a claim line states the literal value, or where the words carry the identifier'. The cut is word-plausible but defeats the fix's purpose ('so the arbiter can tell researched numbers from guessed ones'): a number produced by a constant that has a research claim, even a drifted one, shown as 'a measurement, or a value derived from others' reads to the arbiter as unresearched, and that is the exact confusion the fix exists to end. The cut is not impossible (item 4 already found the row), not implied by the arbiter's words (he named the pitch), and not needed to serve the fix's purpose. Required: (1) item 9's done-measure must give BUNDLE_PITCH's claim, class and last verdict beside the farmstead pitch / '273 ft', the same way it gives GROSS_ACRES_PER_HOUSEHOLD's beside '1.3 acres'; (2) D50 must say how a number given in words, whose literal value no claim line states but which a constant with a claim produces, reaches that constant's claim row. 'No claim states it' may be printed only when the record truly holds no claim for the number. Whether the evidence file happens to backtick BUNDLE_PITCH does not settle this, because item 9 is the commitment and it does not require the pitch's row."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T28 - an ask's bundle shows which numbers are researched (the round arbiter's fix on ask:t06-scattered-single-file)",
+    "### T28 Approach (checklist part A)",
+    "### T28 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing-T28",
+     "summary": "T28 added to the tasks that land open, each landing when it closes with its retro row.",
+     "class": "within",
+     "why": "FR-006 (one task, then the retro) and the GM's 'we do one task and then we measure'; adding the new task to the existing landing rule decides nothing new."
+    },
+    {
+     "id": "T28-scope",
+     "summary": "T28 implements the round arbiter's fix on ask:t06-scattered-single-file: an ask's bundle carries the claim rows for the numbers it names.",
+     "class": "within",
+     "why": "The arbiter stands where the GM was asked (feature 379) and its fix is the ruling; amendment 6 asks the overnight run to 'implement any obvious performance / tooling / process improvements along the way', and the request's core is that a session ask 'which parts ... are based on our research and which parts ... are just arbitrary implementation details' - this puts that answer in front of the arbiter."
+    },
+    {
+     "id": "Approach-3",
+     "summary": "A number is named by its ALL_CAPS constant or a backticked identifier (marked ours, O).",
+     "class": "within",
+     "why": "An implementation choice for finding the names the fix refers to; it narrows nothing because D50 also looks numbers up by value, so a number named without an identifier is still covered."
+    },
+    {
+     "id": "Approach-4",
+     "summary": "Premise, measured 2026-10-18: GROSS_ACRES_PER_HOUSEHOLD rests on 0017; the 205-273 ft 'farmstead pitch' is a scattered farmstead's own box (parts claimed separately, the sum stated by no claim), not BUNDLE_PITCH (the nucleated row pitch, 100 ft).",
+     "class": "within",
+     "why": "Round 3's finding (the pitch attributed to BUNDLE_PITCH's claim) is corrected; the premise now carries its date and method (make claims-report, no line with '273 ft' or '205 ft'), and is consistent with item 9 and D50, which say 'no claim states it' beside '273 ft'. Not re-run here: the bundle review reads nothing in the repository."
+    },
+    {
+     "id": "D50-names",
+     "summary": "claims_section reads ALL_CAPS constants and backticked identifiers in the ask's question AND its evidence files, and lists each claim on a unit of that name with key, class (the registry's CLASSES, GM-set numbers as CANON/DEVIATION), claim line and last verdict.",
+     "class": "within",
+     "why": "The fix's 'claim rows (source class: research, GM ruling, ours, convention)' map onto the registry's classes one for one (research page; CANON/DEVIATION; GUESS/UNRESEARCHED; CONVENTION). Reading the question as well as the evidence files reaches the numbers the ask turns on (the T06 ruling turned on a number the question named) - it serves the fix's stated purpose rather than adding behavior."
+    },
+    {
+     "id": "D50-values",
+     "summary": "Every number with a unit in the words is looked up by value; matching claims are listed beside it, and a value no claim states is said to have none ('a measurement, or a value derived from others').",
+     "class": "within",
+     "why": "The fix says 'every number its evidence file names'; a number stated bare (273 ft) has no identifier, so without the value lookup it would reach the arbiter with no row and no word - the exact gap the ruled ask showed. Item 9's done case is followed literally by this mechanism: 1.3 acres gets GROSS_ACRES_PER_HOUSEHOLD's row, 273 ft gets 'no claim states it'."
+    },
+    {
+     "id": "Done-9",
+     "summary": "One goal, measured on the ruled ask's own words, with a test red without it.",
+     "class": "within",
+     "why": "FR-015 (one goal a task) and SC-004/SC-009's 'test red without it'; the test enforces the fix and is not unrequested scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T06 - a scattered hamlet seated in single file round its fields (the ranking row `_seat_households#a scattered hamlet's seating`)",
+    "## T29 - each plan review its own bundle (the round arbiter's fix on hour:385-approach-checklist@13)",
+    "### T06 Approach (checklist part A)",
+    "### T06 Decisions",
+    "### T29 Approach (checklist part A)",
+    "### T29 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing-T29",
+     "summary": "T29 added to the tasks that land open, one at a time",
+     "class": "within",
+     "why": "FR-006 (one task, then the retro); adding the new task to the existing list changes nothing else."
+    },
+    {
+     "id": "D51a",
+     "summary": "Single file tried first on a deep copy; the real map is seated that way only if every household seats, otherwise in ranks as at HEAD",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is the one narrowing: on 14 of the 18 dispersed seeds the ranking row's single file is not delivered. Physically impossible under grounded constraints: measured 2026-10-18 (t06-evidence.md), the line round the paddy and its dry plots runs 1 to 8 farms short on those seeds. The constraints that cause it are research or GM-level: 0031's 'do not squeeze the homesteads' and 'keeps its own spacing', feature 318's every household seated or the site refused with no farm taken back, and 0017's researched area. The one unresearched knob found (the seat-radius bound) was removed rather than defended (D51e), and the room was widened from the paddy to the paddy plus dry plots (the more-room exit) before the shortfall was accepted. The shortfall is not hidden: it is recorded per seed (meta.dispersed_seating) and filed as 0031's known gap (D52). The exit that would close it (farmsteads within the paddy) depends on an unanswered research question, so passing it to the GM serves the request's purpose (no packing search against a constraint, no rule dropped quietly) and does not weaken it. Not verified: the two arbiter rulings the plan cites (ask:t06-scattered-single-file, ask:t06-single-file-short) are not in the bundle, so this ruling rests on the criteria above and not on those rulings."
+    },
+    {
+     "id": "D51b",
+     "summary": "In single file the site boundary asks the field by containment on every side (site_boundary ringed=True, cache keyed on it)",
+     "class": "within",
+     "why": "Mechanism that carries the requested line round the fields; it narrows nothing."
+    },
+    {
+     "id": "D51c",
+     "summary": "Seats offered along every outward chord of the paddy and its dry plots unioned",
+     "class": "within",
+     "why": "The line round all the cultivated ground is the ranking row's 'round its fields'; widening from the paddy alone is the checklist's more-room exit, taken."
+    },
+    {
+     "id": "D51d",
+     "summary": "Step between seats is one farmstead's box with its grove",
+     "class": "within",
+     "why": "Labeled ours (O) and grounded in 0031's 'keeps its own spacing' and 'do not squeeze the homesteads'; it follows the page and does not narrow it."
+    },
+    {
+     "id": "D51e",
+     "summary": "No seat-radius bound in single file (ours, UNRESEARCHED, reason recorded at the point of change)",
+     "class": "within",
+     "why": "The request's own guardrail applied: an unresearched number treated as a knob, its loosening recorded where the code changes. The count (10 of seed 1's 23 ring seats refused) is recorded at the point of change, which is a way back to the observation."
+    },
+    {
+     "id": "D51f",
+     "summary": "No ranks, no cloud, no exhaustive pass in single file",
+     "class": "within",
+     "why": "Single file is what the row asks for, and refusing an exhaustive search is the GM's anti-bin-packing purpose word for word."
+    },
+    {
+     "id": "D51g",
+     "summary": "meta.dispersed_seating records 'single file' or 'ranks'",
+     "class": "within",
+     "why": "Makes each seed's outcome checkable, which the done-measure in item 9 needs; it is measurement, not new behavior."
+    },
+    {
+     "id": "D52a",
+     "summary": "Seeds seated in ranks filed as a found row naming 0031's known gap (status quo, not a DEVIATION)",
+     "class": "within",
+     "why": "This is the record side of D51a's narrowing and is ruled with it. Filing the gap openly on a row is what keeps the narrowing visible, not hidden."
+    },
+    {
+     "id": "D52b",
+     "summary": "Farmsteads carved within the paddy proposed to the GM as a feature of its own, which first settles 0017's area and the farmstead width's research",
+     "class": "within",
+     "why": "Proposed, not filed (filing needs the GM's approval); it raises the open research question for the GM to rule on and adds no scope to this feature."
+    },
+    {
+     "id": "T06-item9",
+     "summary": "Done: cohort 54/54, every dispersed seed in single file (all households, no rank) or as at HEAD, the short seeds named on a found row",
+     "class": "within",
+     "why": "One goal (FR-015). The corrected wording now matches D51/D52 (the gap is the seeds seated in ranks), so it is no longer inverted."
+    },
+    {
+     "id": "D53a",
+     "summary": "make plan-delta writes to /tmp/l7r-check/plan-<feature>-blocks-<tasks or 'plan'>-<first 8 of the blocks' digest>; the dispatch names that MANIFEST",
+     "class": "within",
+     "why": "The arbiter's fix verbatim ('a path keyed by its tasks'). The digest suffix extends the key and narrows nothing: two rounds on the same task's blocks also stop sharing a directory, an obvious tooling improvement under amendment 6. Bundle contents unchanged."
+    },
+    {
+     "id": "D53b",
+     "summary": "The decision preflight (make decide, keyed by its one task) unchanged",
+     "class": "within",
+     "why": "The fix names make plan-delta only; leaving make decide alone is outside the fix, not a narrowing of it."
+    },
+    {
+     "id": "T29-test",
+     "summary": "Done: two plan-delta runs on different blocks write two bundles, the first left whole; a test red without it",
+     "class": "within",
+     "why": "Enforcement of the requested fix; nothing beyond it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "### T06 part B (2026-10-18T12:38Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T06-B.1 the three reds fixed",
+     "summary": "The three red gates are fixed one cause at a time: the bundle test is renamed to the moved seating body, a unit test is added for the single-file line's two branches, and the gate is rerun on a stable tree.",
+     "class": "within",
+     "why": "Repairing a red gate does not change what T06 delivers. The new unit test fails only when the single-file behavior already settled in part A is missing, so it enforces the request and adds no scope."
+    },
+    {
+     "id": "T06-B.2 land with 4/18 and the filed gap",
+     "summary": "T06 lands with A3 and A4 unchanged since part A. The line holds on 4 of the cohort's 18 dispersed seeds, the rest is the gap already filed, and the fallback is the arbiter's.",
+     "class": "within",
+     "why": "This repeats part A's decisions and makes no new one. The bundle holds only blocks changed since their CLEAR verdict, and part A is not in it, so part A is unchanged since it was judged. The fallback for the seeds the line misses is the round arbiter's ruling (G), and under feature 379 the arbiter stands where the GM was asked, so the session is not carving out those seeds itself."
+    },
+    {
+     "id": "T06-B.9 merge-under-a-gate fix filed as T30",
+     "summary": "The hook's clone-sync merged main into the clone while the session's own gate was running. Fixing that is filed as an owed task, T30, instead of being done in T06.",
+     "class": "within",
+     "why": "That merge is exactly the case FR-010 covers (a write to the working tree while the session's own gate runs), though the block does not cite FR-010. The block does not exempt the hook's merge from the rule. It files the hole in the guard as its own task, still owed before the feature closes. FR-015 requires a second goal to become its own task, and amendment 6 asks for tooling fixes along the way. The fix is filed, not dropped."
+    },
+    {
+     "id": "T06-B.7 next step",
+     "summary": "The next step is the landing cohort (make cohort-landing), then the gated push.",
+     "class": "within",
+     "why": "This is the ordinary landing route, and it measures before landing as FR-003/FR-004 and the checklist require. It decides nothing the spec left open."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T30 - nothing merged under a running gate (the round arbiter's fix on red-gate@2026-10-18T12:36:36Z)",
+    "### T30 Approach (checklist part A)",
+    "### T30 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Landing: T30 lands open",
+     "summary": "T30 added to the Lands open list, landing on its own when it closes.",
+     "class": "within",
+     "why": "FR-006 (one task at a time, each landing before the next); amendment 6 asks for each improvement as its own task."
+    },
+    {
+     "id": "D54a - own-make.sh process test in place of the lock file",
+     "summary": "No gate-in-progress lock written by make done on start and removed on exit; the existing live-make process test (own-make.sh, feature 310) stands in as 'the lock'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The arbiter's fix names the mechanism verbatim: a lock that make done writes on start and removes on exit, and a test that holds that lock. The lock is not impossible, nothing in the fix implies a process test instead, and the reasons given are 'what the prompt path already trusts' (consistency with existing code) and 'a killed gate would leave a stale file' (an awkwardness, not an impossibility: a stale-lock rule can be added to the arbiter's lock). On purpose: the fix is keyed to make done's gate. The plan does not measure that own-make.sh sees that gate for its whole run, including any part run detached or between make invocations. Its own premise is that the prompt path already used this test, and a merge still landed between two gates. The substitution also moves the trigger the other way: it holds on ANY make in the clone (make quick, make figures) when no gate runs, which the fix did not ask for. Write the lock as the arbiter specified; a stale-lock rule may be added to it."
+    },
+    {
+     "id": "D54b - the check on the tool-call path; the prompt path left unchanged",
+     "summary": "The check is added before feature 212's sync-in on the tool-call path; the prompt hook's clone-sync, which the arbiter's fix names, is left as feature 310 made it.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The fix's subject is 'the prompt hook's clone-sync', and the plan leaves it untouched. Adding the check to the tool-call path as well serves the stated purpose (nothing writes to a tree while its gate runs) and is within. Moving the fix there INSTEAD rests on an unmeasured premise. Approach item 4's measurement shows only that a merge commit 'Merge remote-tracking branch origin/main' landed at 08:35 between a green gate and a red one. It does not show which path wrote that merge, and the plan itself calls the tool-call path a fast-forward, which writes no merge commit. Apply the lock check to the prompt hook's clone-sync as the fix says. Keeping the tool-call path's check too is fine. If the session still holds that the prompt path cannot have done the merge, it must measure which hook made it (from a hook log, not from memory) and put that to the arbiter rather than settle it in the plan."
+    },
+    {
+     "id": "Behaviour while held: merge nothing, refuse nothing, say the merge waits",
+     "summary": "While a gate runs, the sync merges nothing and does not refuse the tool call, and it says the merge waits until the run ends.",
+     "class": "within",
+     "why": "The fix says to postpone the merge to the next turn and never merge. Not refusing the call and re-checking on a later sync carries that out."
+    },
+    {
+     "id": "Feature 212's fast-forward kept for a clone with no run",
+     "summary": "With no gate running, existing sync behaviour is unchanged.",
+     "class": "within",
+     "why": "The fix changes behaviour only while a gate runs."
+    },
+    {
+     "id": "Done / test: tests/hooks/test-clone-sync-hooks.sh red without it",
+     "summary": "A test drives a sync while a run is held and checks that nothing merged; it is red without the fix.",
+     "class": "within",
+     "why": "The fix asks for exactly this test. Its assertions must be the ones the fix names, HEAD and the working tree unchanged, and the test must hold the gate-in-progress lock (see D54a), not just a live make."
+    },
+    {
+     "id": "Budget 20 min, exit (c), tooling only",
+     "summary": "Process parameters of the task.",
+     "class": "within",
+     "why": "The task's own bookkeeping; amendment 6 files tooling fixes as their own tasks."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T30 - nothing merged under a running gate (the round arbiter's fix on red-gate@2026-10-18T12:36:36Z)",
+    "### T30 Approach (checklist part A)",
+    "### T30 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing-T30",
+     "summary": "T30 is added to the tasks that land open, each landing with its retro row before the next starts.",
+     "class": "within",
+     "why": "FR-006 (one task at a time, each closed with its retro) as the GM's request asks: 'we do one task and then we measure'."
+    },
+    {
+     "id": "D54a",
+     "summary": "test_arbiter_fix.py checks arbiter-fix-done's land-settle-tick order by reading the recipe's text instead of running make -n on it in the real repository (whose $(MAKE) line executed land-tooling and merged main into the clone under its gate).",
+     "class": "within",
+     "why": "Removes the measured cause (reflog, land-tooling run log, guard log, 2026-10-18) of the writes the arbiter's fix exists to stop - 'nothing writes to a tree while its gate runs' - and FR-010; amendment 6 asks for obvious tooling fixes along the way. It is no longer offered in place of the lock (round 1's finding): D54b carries the lock. The order FR-018 needs is still asserted. Narrows nothing."
+    },
+    {
+     "id": "D54b-lock",
+     "summary": "The lock asked is the existing gate.lock that make done acquires with its pid at its first line; held means a live owner, so a dead owner holds nothing and no stale lock is cleared by hand.",
+     "class": "within",
+     "why": "The arbiter asks for 'a gate-in-progress lock that make done writes on start and removes on exit'. The plan writes it at make done's first line and defines 'held' as a live owner, with no file removal stated: liveness stands in for removal. That meets the fix's purpose - the lock is held exactly while the gate's process lives and is released on every exit, a crash included - so it is the lock the arbiter asked for, not a narrowing of it."
+    },
+    {
+     "id": "D54b-prompt",
+     "summary": "clone-sync's prompt path counts a held gate lock as mid-task (as it counts uncommitted work and a live make, feature 310), so the merge of origin/main is skipped that turn and taken on a later one; its test holds the lock and asserts HEAD and the working tree unchanged.",
+     "class": "within",
+     "why": "This is the arbiter's fix verbatim: the prompt hook's clone-sync checks the lock and while it is held postpones the merge to the next turn, never merges. The arbiter's test names HEAD and the working tree; Approach constraint 2 carries both ('a test holds the lock and asserts HEAD and the tree unchanged'), and the Done line's '(HEAD unchanged)' is a shorter restatement of that constraint. Within: the plan already commits to both assertions."
+    },
+    {
+     "id": "D54b-toolcall",
+     "summary": "clone-sync's tool-call path (feature 212's fast-forward) also asks the gate lock and a live make; while either holds it merges nothing and refuses nothing, telling the session the merge waits. Feature 212's fast-forward is kept for a clone with no gate.",
+     "class": "within",
+     "why": "Extends the same postponement to the second path that merges into the clone, which the arbiter's purpose ('nothing writes to a tree while its gate runs') and FR-010 cover. The Done line's 'the tool-call path merges and refuses nothing' is read with 'nothing' the object of both verbs, as D54(b) states outright ('merges nothing and refuses nothing'); the other reading would be a merge under the gate and NOT LEGITIMATE, so its test under a held lock asserts HEAD and the working tree unchanged, as the prompt path's does. It refuses no session tool call, adding no blocking behavior, and narrows nothing asked."
+    },
+    {
+     "id": "D54b-land-tooling",
+     "summary": "land-tooling.sh refuses to merge main into a clone whose gate lock is held.",
+     "class": "within",
+     "why": "land-tooling is the writer measured merging main under the gate; refusing that merge while the gate runs is the arbiter's purpose and FR-010 applied to the actual cause, with amendment 6's mandate for obvious tooling fixes. Its reach is that one merge, nothing beyond."
+    },
+    {
+     "id": "Exit-c",
+     "summary": "The exit taken is (c): a rule that removes the case (no merge while the gate's lock is held), budget 40 min, one goal.",
+     "class": "within",
+     "why": "Checklist part A answered as FR-003 and FR-015 require; one goal named."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "### T06 part B (2026-10-18T12:40Z)",
+    "(removed) ### T06 part B (2026-10-18T12:38Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T06-B-stepback",
+     "summary": "The re-stamped part B also answers the hour-14 step-back (ruled continue), alongside the two red-gate rulings.",
+     "class": "within",
+     "why": "The hourly step-back is one of the 'work resists' moments the GM approved (request: 'the hourly step-back from feature 383'; FR-004). Answering it with the checklist is what FR-004 asks; the nine answers are byte-identical to the block judged CLEAR at 12:38Z."
+    },
+    {
+     "id": "T06-B-order",
+     "summary": "The step-back's next steps (gate on stable tree, part B, landing cohort, gated landing, T30's lock) were done in that order except that T30's lock landed before T06's landing.",
+     "class": "within",
+     "why": "A record of work order, not a reduction of what was asked. Landing the merge-under-a-gate guard (FR-010's 'a guard, not a reminder') before the landing it protects serves the request and the GM's amendment-6 instruction to implement tooling improvements along the way; nothing the spec requires is dropped."
+    },
+    {
+     "id": "T06-B-removed-1238",
+     "summary": "The 12:38Z part B heading is removed, replaced by the 12:40Z re-stamp.",
+     "class": "within",
+     "why": "Its content is carried over unchanged into the 12:40Z block; the removal drops no answer and no requirement."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -3087,6 +3607,63 @@
      "summary": "After the hour-10 step-back ruled 'continue': re-dispatch the three refused checks, then land",
      "class": "within",
      "why": "This follows the arbiter's ruling toward the same goal and adds or removes no scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T06": {
+   "section_sha256": "bfc106f0fc40ecb2d30612e23103d2cc7f272a080f3baed3e773c6d245cbc647",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D51-fallback",
+     "summary": "Single file is seated only where a copy seats every household; otherwise the hamlet keeps HEAD's ranks (14 of 20 dispersed cohort seeds, measured 2026-10-18)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The cut (every farm in the line, else HEAD's seating) is the round arbiter's own wording in ask:t06-single-file-short, and under feature 379 the arbiter stands where the GM was asked, so the session did not draw this line. It is backed by measured impossibility, not by awkwardness: the margin holds 3-6 farmsteads at their own width against 12-20 households, the row's own rule says do not squeeze the homesteads, feature 318 forbids taking a farm back, and XIII forbids a seed passing at HEAD failing. A partial line would break those, and the fallback changes nothing that does not already depart from research."
+    },
+    {
+     "id": "D51-mechanics",
+     "summary": "Ringed containment boundary, seats along outward chords of paddy plus dry plots, one farmstead box (grove included) apart, no seat-radius bound, no ranks/cloud/exhaustive pass",
+     "class": "within",
+     "why": "This is how 0031's single-file line is made. Containment on every side and one box per step follow 'hugged to the field edge in single file' and 'keeps its own spacing'. Dropping the seat-radius bound removes a knob of ours, which the checklist allows, but the Approach does not say where that bound came from. Its reason should be recorded where the code changes, and T06's retro should check that it is."
+    },
+    {
+     "id": "D51-record",
+     "summary": "meta.dispersed_seating records 'single file' or 'ranks'",
+     "class": "within",
+     "why": "Lets the one Done goal be checked seed by seed. It is verification of the requested behavior, not new behavior."
+    },
+    {
+     "id": "D51-order",
+     "summary": "Line tried on a deep copy before any farm is seated",
+     "class": "within",
+     "why": "Needed by feature 318 (no farm taken back, nothing seated twice). It is a constraint the work must meet, not a scope change."
+    },
+    {
+     "id": "D52-gap",
+     "summary": "Dispersed seeds left in ranks are filed as a found row for 0031's known gap (status quo, not a DEVIATION)",
+     "class": "within",
+     "why": "'The gap filed' is the arbiter's ruling. Their seating is unchanged from HEAD, so it is an open gap, not a new departure from research that would need a DEVIATION."
+    },
+    {
+     "id": "D52-proposal",
+     "summary": "Farmsteads carved within the paddy proposed to the GM as a feature of its own, first settling 0017's 1.3 acres and the 205-273 ft width",
+     "class": "within",
+     "why": "The arbiter's ruling. It is proposed, not filed, which respects feature 377's rule that features are filed only with the GM's approval."
+    },
+    {
+     "id": "carried-T05-standoff",
+     "summary": "T05's standoff claim judged on the 6 ft floor only (10-13 ft treated as a drawn figure, not a maximum); the row village's whole-farmstead standoff left UNCLAIMED",
+     "class": "within",
+     "why": "Carried by the round arbiter (ask:t05-old-drifts-at-landing). That attribution comes from the dispatch, and the bundle does not show whether the arbiter ruled on this reading or only moved the claim. Whether 10-13 ft is a maximum is a research-ladder question, not a fidelity one. Nothing in T06 widens or narrows the claim."
+    },
+    {
+     "id": "Done-one-goal",
+     "summary": "One goal: cohort 54/54, each dispersed seed in single file (all households, no rank) or as at HEAD",
+     "class": "within",
+     "why": "One goal, as FR-015 requires, and matches the arbiter's 'cohort 54/54'. Step 9's wording is inverted: it says 'seeds whose line holds' are filed as the gap, while D52 files the seeds in ranks. This is a drafting error to fix before Done is measured, not a narrowing."
     }
    ],
    "verdict": "CLEAR"

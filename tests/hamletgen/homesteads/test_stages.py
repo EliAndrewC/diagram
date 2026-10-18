@@ -70,3 +70,32 @@ def test_a_margin_with_no_lawful_way_out_seats_no_one(monkeypatch: pytest.Monkey
     s, plan = _toy_hamlet(10)
     monkeypatch.setattr(st, "exit_bearing", lambda *a: None)
     assert st._seat_households(s, plan) == (0, 0) and not s.M["houses"]
+
+
+def test_a_scattered_hamlet_takes_its_line_only_where_the_line_seats_every_farm(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 385 T06 (the round arbiter on ask:t06-single-file-short): the line round the fields is tried on a copy first and
+    seated only if it holds every household; otherwise the hamlet is seated as before - no farm is ever taken back."""
+    import types
+
+    from l7r.diagram.hamletgen.homesteads import stages as st
+
+    calls: list[tuple[bool, bool]] = []
+    holds = {"n": 0}
+
+    def seat(s: object, plan: object, single_file: bool) -> tuple[int, int]:
+        calls.append((single_file, s is real))
+        return (holds["n"] if single_file else 12, 0)
+
+    monkeypatch.setattr(st, "_seat_households_as", seat)
+    real = types.SimpleNamespace(M={})
+    plan = types.SimpleNamespace(settlement_form="dispersed", spec=types.SimpleNamespace(households=12))
+    holds["n"] = 12
+    assert st._seat_households(real, plan) == (12, 0)  # type: ignore[arg-type]
+    assert calls == [(True, False), (True, True)] and real.M["meta"]["dispersed_seating"] == "single file", "tried on a copy, then seated"
+    calls.clear()
+    holds["n"] = 11
+    st._seat_households(real, plan)  # type: ignore[arg-type]
+    assert calls == [(True, False), (False, True)] and real.M["meta"]["dispersed_seating"] == "ranks", "one short: seated as before"
+    calls.clear()
+    st._seat_households(real, types.SimpleNamespace(settlement_form="nucleated", spec=plan.spec))  # type: ignore[arg-type]
+    assert calls == [(False, True)], "another form is seated once, as before"

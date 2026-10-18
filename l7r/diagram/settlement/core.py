@@ -77,7 +77,7 @@ class Settlement(
 
         Research:
             a threshing yard at every farmstead - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: on unless the generator declares no grain grown
-            swept ground kept clear of scatter - research/questions/0224-ground-swept-clear-around-shrines-and-graves.html: the clearings registry
+            swept ground kept clear of scatter - research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html: the clearings registry, empty until a shrine or grave plot registers the ground it occupies (the verge `_clear_ground` grows round it is that unit's, a ranked row)
             no house racks by default - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: settled harvest weather where none is stated, so no rack by each house's yard
             registries and record streams - NONE
         """
@@ -123,6 +123,10 @@ class Settlement(
         # ground from everything, and the corridor grid; None outside a hamlet's homestead stage, where the fit test runs its old path
         self._site_chains: Any = None
         self._site_corridors: Any = None
+        # a scattered hamlet's line (feature 385 T06): the field asked by containment on every side, and the chords seats are
+        # offered along, round the paddy and its dry plots
+        self._fields_ringed: bool = False
+        self._seat_ring_chains: list[Any] = []
         self._free_ground: Any = None  # the static ground's surely-taken cells while a site boundary is installed (feature 276)
         # which way the farmhouses face (269 B18, `rolling/bearing.py`): the common bearing a hamlet rolls, and the margin its
         # lanes follow; None elsewhere, where `_house_rot` keeps the +/-5 degree rake

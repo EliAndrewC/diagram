@@ -408,3 +408,36 @@ today, and now it would be refused). **The habit it changes:** none.
 
 About 15 min (one plan round). `owe` printed the heading it asked for to the minute and then judged it to the second, so a
 block written as told could not pass; found when the ticks of T05 and T22 refused. **The habit it changes:** none.
+
+## T28 - the retro row
+
+About 50 min (four plan rounds). The arbiter asked for the claim on every number an ask names; rounds 1-3 each found a way a
+number reached the arbiter without it (words only, an "unmatched" row, then my own item 4 calling `BUNDLE_PITCH` the farmstead
+pitch). Built: claims by identifier, and by value for a number in words, or "no claim states it". **The habit it changes:** check
+an Approach premise against the record before it goes to review - round 3 was a premise I had not checked.
+
+## T29 - the retro row
+
+About 15 min (one plan round). Each plan review now writes its bundle at its own path, keyed by its tasks and its blocks'
+digest, so a second review is built while one reads. **The habit it changes:** none.
+
+## T06 - the retro row
+
+About 2 h 45 min. The ranking row asked for a scattered hamlet's farms in single file on the field edge; measured first, the
+margin a hamlet faces holds 3 to 6 farmsteads at their own width against 12 to 20 households, so the literal fix refused every
+seed. Two arbiter asks with the measurements decided the route: single file round the whole cultivated ground (the paddy and its
+dry plots - the north seats fell on the dry plots until they were joined), which holds every farm on 4 of the cohort's 18
+dispersed seeds; where it falls short the hamlet is seated as before (decided on a copy of the map first, so no farm is taken
+back - the GM's 2026-10-03 rule), the gap filed and farmsteads within the paddy proposed to the GM. Cohort 54/54. Three claims
+rounds; three red gates on three causes (a test naming the moved body, two branches untested, and main merged under the running gate - T30); landing cohort 54/54. **The habit it changes:** a seating rule is measured against the room it needs before it is built - the arithmetic
+(households x farmstead width against the edge's length) answered in minutes what the first experiment took 20 to show.
+
+## T30 - the retro row
+
+About 70 min (two plan rounds). The arbiter's fix assumed clone-sync merged main under the gate; round 1 asked which hook did,
+and the measurement found neither did: T18's own test ran `make -n` on `arbiter-fix-done LAND=... TICK=...` in the real
+repository, and make EXECUTES a -n line holding `$(MAKE)` - so every gate in every clone ran a real land-tooling, and its push,
+and since T24 a stale patch there merged main in mid-gate. Nothing landed (every push refused), but the other session's clone
+showed the same runs. Fixed at the cause (the test reads the recipe), and the gate's existing lock is now asked by clone-sync on
+both paths and by land-tooling. **The habit it changes:** never run `make -n` on a target whose recipe calls `$(MAKE)` - read the
+recipe instead; and measure who did a thing before fixing the one you suspect (round 1 would have fixed the wrong hook).

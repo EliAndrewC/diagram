@@ -229,6 +229,7 @@
  "l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#row spacing one frame per farm, capped at rowfrontagemaxft 2": "E0",
  "l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#row step capped at ROW_FRONTAGE_MAX_FT": "E0",
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a lane's room between ranks": "E0",
+ "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a scattered hamlet's seating": "E3",
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a yard's sun between ranks": "E2",
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#front-row standoff from the field set by the homestead core's reach (house, yard, shed, well pocket; garden excluded)": "E0",
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#how deep a scattered hamlet runs at most four rank rounds be": "E3",

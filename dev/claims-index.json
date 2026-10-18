@@ -11137,15 +11137,41 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/homesteads/boundary.py::install_site_boundary#a scattered hamlet's line round its own fields": {
+  "body": "53bced89ed33a83f",
+  "claim": "a scattered hamlet's line round its own fields - clustered-and-scattered-villages-shuson-sanson.drawing: the paddy and its dry plots unioned as one cultivated outline, a scattered farm's own fields",
+  "code": "18980474aeabc136",
+  "core": "8c2a409f586685b5",
+  "date": "2026-10-18",
+  "note": "the ring is drawn round the planted outline (paddy and dry plots joined), as the page's \"within reach of the rice that is drawn\" and \"hugged to the field edge in single file\" say",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+  },
+  "research": "4e7ba7479292ad40",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3477bf438758147d",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:4391a37aafe094b1",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:4ea19f2ff9e71342",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bc33ef71630b4b4c"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/homesteads/boundary.py::install_site_boundary#no house on the toe marsh": {
-  "code": "d3a5aa02a0f2fe90",
-  "core": "5b0bc8fe512827c8",
-  "date": "2026-10-03",
-  "note": "the toe band is added to hard_polys once, before seating; the page says \"a drawn marsh is ground nothing is built on\"",
+  "body": "53bced89ed33a83f",
+  "claim": "no house on the toe marsh - ground-too-wet-to-build-on.drawing: the reed toe hard ground before it is drawn",
+  "code": "afe5c00c34259a65",
+  "core": "8c2a409f586685b5",
+  "date": "2026-10-18",
+  "note": "the toe band is registered as hard ground before it is drawn, so no house, byre or well stands on drawn marsh",
   "pages": {
    "0058-ground-too-wet-to-build-on.drawing.html": "d989d5be5b8d7839"
   },
   "research": "b2af2942f0a54e5d",
+  "rests": [
+   "0058-ground-too-wet-to-build-on.drawing.html:0e70f73e1c241a87",
+   "0058-ground-too-wet-to-build-on.drawing.html:b9283c4db442e8c6",
+   "0058-ground-too-wet-to-build-on.drawing.html:f4e450ab6438f79c"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/boundary.py::seating_window#plumbing": {
@@ -11157,11 +11183,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/boundary.py::site_boundary#site boundary": {
-  "code": "bf80ddfb422f3358",
-  "core": "f7ca6e82e39a4396",
-  "date": "2026-10-03",
-  "note": "union of existing tests' members at their own pads",
+  "body": "9589f0bd1f31cf0b",
+  "claim": "site boundary - NONE: the ground tests indexed once, every member at the pad its own test held it to; no placement rule moves here",
+  "code": "d42f74c3a431f0ec",
+  "core": "f14cc5d129406459",
+  "date": "2026-10-18",
+  "note": "indexing and union plumbing; the ringed switch carries a choice claimed upstream in `_seat_households`",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/boundary.py::web_hard_ground#the web's hard ground at seating": {
@@ -14238,13 +14268,43 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a household's wood share": {
-  "body": "05c51fe1c2c811b9",
+ "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a scattered hamlet's seating": {
+  "body": "e9d534b358c49ecd",
+  "claim": "a scattered hamlet's seating - clustered-and-scattered-villages-shuson-sanson.drawing: the whole line hugged to the field edge in single file, round the paddy and its dry plots, where the line holds every farm; otherwise ranks behind a front row, the page's known gap",
+  "code": "ccfad018b0154d70",
+  "core": "4873b2d0639dc303",
+  "date": "2026-10-18",
+  "note": "the single-file half matches §29 (\"the whole line is hugged to the field edge in single file\"), but the fallback `return _seat_households_as(s, plan, False)` seats ranks behind a front row on 14 of 18 dispersed seeds, a form 0031 drawing does not attest and does not record as a known gap; §29's remedy is \"a roomier field, or declare fewer households\". The fallback needs its own DEVIATION label recorded on 0031 drawing, or CANON naming the arbiter's ruling",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+  },
+  "research": "4e7ba7479292ad40",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3477bf438758147d",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:4ea19f2ff9e71342",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bc33ef71630b4b4c"
+  ],
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the line tried on a copy": {
+  "body": "e9d534b358c49ecd",
+  "claim": "the line tried on a copy - NONE: the trial decides the form of the seating, and nothing of it is drawn",
+  "code": "f3740d339de7ddf1",
+  "core": "4873b2d0639dc303",
+  "date": "2026-10-18",
+  "note": "the deepcopy trial and the meta record are plumbing; the choice of form they feed is claimed by the seating claim",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households_as#a household's wood share": {
+  "body": "25d11e8186d54127",
   "claim": "a household's wood share - groves-of-trees-around-farmhouses-yashikirin.drawing: seated only where it reserves `HOMESTEAD_WOOD_FT2` of copse within `COPSE_HOUSE_REACH_FT`",
-  "code": "b0dc40cc24ef0a84",
-  "core": "3c4b0be3ae6261c7",
-  "date": "2026-10-17",
-  "note": "reserves the 6,000 sq ft floor within the dooryard copse's 90 ft reach",
+  "code": "fb3b8e51564d2fac",
+  "core": "cad6663612919c9b",
+  "date": "2026-10-18",
+  "note": "a clustered household is seated only where it reserves the 6,000 sq ft floor within the copse's 90 ft reach",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
@@ -14257,25 +14317,25 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a pushed front seat's retry": {
-  "body": "05c51fe1c2c811b9",
+ "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households_as#a pushed front seat's retry": {
+  "body": "25d11e8186d54127",
   "claim": "a pushed front seat's retry - UNRESEARCHED: a front seat pushed across the brook retried a quarter pitch either way along the row",
-  "code": "13c2878d53a6f899",
-  "core": "3c4b0be3ae6261c7",
-  "date": "2026-10-17",
-  "note": "quarter-pitch retry, unresearched",
+  "code": "78eb139fa0258b28",
+  "core": "cad6663612919c9b",
+  "date": "2026-10-18",
+  "note": "quarter-pitch retries; nothing in the bundle answers this",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a row village's rows": {
-  "body": "05c51fe1c2c811b9",
+ "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households_as#a row village's rows": {
+  "body": "25d11e8186d54127",
   "claim": "a row village's rows - row-villages-resson, row-villages-resson.drawing: the rows take every household, stepped at a farmstead's width capped at `ROW_FRONTAGE_MAX_FT`, never ranks behind",
-  "code": "934661e476dcd006",
-  "core": "3c4b0be3ae6261c7",
-  "date": "2026-10-17",
-  "note": "pitch is the frame width capped at 240 ft; no ranks are seated behind a row",
+  "code": "5f1f502ad19c0610",
+  "core": "cad6663612919c9b",
+  "date": "2026-10-18",
+  "note": "the pitch is the farmstead's width capped at 240 ft, the rows take every household, never ranks behind",
   "pages": {
    "0033-row-villages-resson.drawing.html": "7f062305b79e2200",
    "0033-row-villages-resson.html": "484faa488ad676c6"
@@ -14283,28 +14343,38 @@
   "research": "a9aa86f8eee368dc",
   "rests": [
    "0033-row-villages-resson.drawing.html:03adf3d96fcebcdf",
+   "0033-row-villages-resson.drawing.html:0a23ce156774ee9f",
    "0033-row-villages-resson.drawing.html:a88545fe00a7de6d",
+   "0033-row-villages-resson.drawing.html:e3b2e0c2c477c495",
    "0033-row-villages-resson.html:0a40ab8c614384bc",
-   "0033-row-villages-resson.html:79c103aabcc7b882",
-   "0033-row-villages-resson.html:e389da796967af90"
+   "0033-row-villages-resson.html:79c103aabcc7b882"
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a row village's whole farmstead, grove included, stands off the field (`_reach` from `_g0[\"bbox\"]` on the linear form), not just the house and yard": {
-  "code": "3c4b0be3ae6261c7",
-  "core": "3c4b0be3ae6261c7",
+ "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households_as#a scattered hamlet's room": {
+  "body": "25d11e8186d54127",
+  "claim": "a scattered hamlet's room - clustered-and-scattered-villages-shuson-sanson.drawing: one band for every form, which a scattered hamlet's line never reads - its \"roughly twice the room per farm\" is the ring round its fields",
+  "code": "905643f5665e13a7",
+  "core": "cad6663612919c9b",
   "date": "2026-10-18",
-  "note": "a row village's whole farmstead, grove included, stands off the field (`_reach` from `_g0[\"bbox\"]` on the linear form), not just the house and yard",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the single-file line ignores `bound`, the ranks and the band's dep/lat. It seats on the fields' ring at a farmstead's own width with its grove, so the page's \"roughly twice the room per farm ... hugged to the field edge in single file\" is the ring round the fields, and no homestead is squeezed",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+  },
+  "research": "4e7ba7479292ad40",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3477bf438758147d",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bc33ef71630b4b4c"
+  ],
+  "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a scattered hamlet's seating": {
-  "body": "05c51fe1c2c811b9",
+ "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households_as#a scattered hamlet's seating": {
+  "body": "25d11e8186d54127",
   "claim": "a scattered hamlet's seating - clustered-and-scattered-villages-shuson-sanson.drawing: a front row along the paddy's chords, ranks behind in a brick pattern (off the line only on an alleys hamlet), a rescue cloud, then the exhaustive pass",
-  "code": "340c9f4da2f3427e",
-  "core": "3c4b0be3ae6261c7",
-  "date": "2026-10-17",
-  "note": "front_cap (sqrt(N x aspect band), at least 6) plus _seat_rank_rounds puts up to four ranks behind the row on a dispersed hamlet, but 0031 says \"the whole line is hugged to the field edge in single file\" and each farm stands within reach of its field; the code should seat the dispersed form in one file along the field, or the page should record ranks as a deviation",
+  "code": "a94f68b2e44c6de2",
+  "core": "cad6663612919c9b",
+  "date": "2026-10-18",
+  "note": "the claim describes only the ranks mode (front row, brick ranks, rescue cloud, exhaustive pass), which 0031 drawing does not attest for a scattered hamlet (\"in single file\"), and it omits the `single_file` branch this body now runs. Restate it for both branches and label the ranks mode a DEVIATION (or CANON) recorded on the page",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
@@ -14316,13 +14386,112 @@
   ],
   "verdict": "DRIFTED"
  },
- "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#front-row standoff from the field set by the house and its yard": {
-  "body": "05c51fe1c2c811b9",
+ "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households_as#front-row standoff from the field set by the house and its yard": {
+  "body": "25d11e8186d54127",
   "claim": "front-row standoff from the field set by the house and its yard - farmhouses-minka.drawing: never nearer the paddy than 6 ft, drawn 10 to 13 ft, no farmhouse held to a maximum; the yard before the south wall turns with the house as one, so the front seat stands their reach toward the field off its chord, at the largest house the roll can take",
-  "code": "fcbddd9f4bfc1e37",
-  "core": "3c4b0be3ae6261c7",
+  "code": "f1819ffb00a64342",
+  "core": "cad6663612919c9b",
   "date": "2026-10-18",
-  "note": "the 6 ft floor holds by construction: the reach is taken at the largest house's corners and then turned (`turn_the_seat`). Whether front houses stand the page's \"drawn 10 to 13 ft\" off the paddy needs three values the bundle does not inline: `HOUSE_PADDY_GAP_FT`, `STANDOFF_SLACK_PX`, and the keep-out the site-boundary chords are already pushed out by. It also needs to know whether the placer pulls a smaller house in toward the field. If it does not, a house rolled at 0.85 of the length stands its reach off at `_house_max` (46*1.35), so it sits up to about 11.5 ft farther out than the largest house; if the largest sits at 10 to 13 ft, that is past the page's range.",
+  "note": "judged on the floor only: the standoff is `HOUSE_PADDY_GAP_FT` (6) + 1 + slack + the core's reach at the largest house, on the facing chains and the ring chords alike, and the yard turns with the house",
+  "pages": {
+   "0029-farmhouses-minka.drawing.html": "28761adf1d2dece2"
+  },
+  "research": "a3cfa2fba63bb45d",
+  "rests": [
+   "0029-farmhouses-minka.drawing.html:0476c2bcf92070f2",
+   "0029-farmhouses-minka.drawing.html:2f4048f3df8fcb07",
+   "0029-farmhouses-minka.drawing.html:638262e8cb13670d",
+   "0029-farmhouses-minka.drawing.html:85a8cc308b1e2e3b",
+   "0029-farmhouses-minka.drawing.html:882eae57cf31d6f9",
+   "0029-farmhouses-minka.drawing.html:9dd34b89f26d4272",
+   "0029-farmhouses-minka.drawing.html:a708d49b4d686be7"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households_as#shared byre pockets": {
+  "body": "25d11e8186d54127",
+  "claim": "shared byre pockets - draft-oxen-and-horses-and-their-byres-umaya.drawing: reserved in the seat band before any house",
+  "code": "6461830c6b0d0d13",
+  "core": "cad6663612919c9b",
+  "date": "2026-10-18",
+  "note": "the shared sheds' ground is reserved among the houses on the `detached_commons` roll before any house; the order is a calibrated method",
+  "pages": {
+   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html": "314aa8e38b10f2d2"
+  },
+  "research": "a75e3ada6edbbc9b",
+  "rests": [
+   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:5d684f32a43c296a",
+   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:8e9a1c027cabe064",
+   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:9dd3e953a6b92d53"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households_as#the front row's offer": {
+  "body": "25d11e8186d54127",
+  "claim": "the front row's offer - UNRESEARCHED: at most 12 front-row seats offered on a form other than a row",
+  "code": "e5aadd0a9d4f81a2",
+  "core": "cad6663612919c9b",
+  "date": "2026-10-18",
+  "note": "at most 12 seats offered on the ranks path; nothing in the bundle answers the figure (the line's exemption is listed UNCLAIMED below)",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households_as#the front row's size": {
+  "body": "25d11e8186d54127",
+  "claim": "the front row's size - clustered-and-scattered-villages-shuson-sanson.drawing: the square root of the households times the rolled shape's aspect band, at least 6, ranks seated behind it, where the page has a scattered hamlet's line hugged to the field edge in single file",
+  "code": "946cce5c6635eb98",
+  "core": "cad6663612919c9b",
+  "date": "2026-10-18",
+  "note": "`front_cap = ... sqrt(households * (_lo_a + _hi_a))` stands a scattered hamlet in ranks behind a row, against §29's \"in single file\". The aspect comes from `CLUSTER_DRAWN_ASPECT`, the shapes of a village cluster (§41), which the page never gives a scattered form. The claim itself names the contradiction; label the ranks fallback a recorded DEVIATION or CANON",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+  },
+  "research": "4e7ba7479292ad40",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3477bf438758147d",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:4ea19f2ff9e71342",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b0d4f27ae1dbec07",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bc33ef71630b4b4c"
+  ],
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households_as#the line's offer": {
+  "body": "25d11e8186d54127",
+  "claim": "the line's offer - clustered-and-scattered-villages-shuson-sanson.drawing: every household in the line and none in ranks behind it (`front_cap` the households, `_rows_seated`) - the whole line hugged to the field edge in single file; the seats are the ring's own, a farmstead's width apart",
+  "code": "ddc83dd144a720ee",
+  "core": "cad6663612919c9b",
+  "date": "2026-10-18",
+  "note": "`front_cap` equals the household count, `front_row` is offered every household on `_seat_ring_chains` with the pitch set to the farmstead's own width and an unlimited reach, and `_rows_seated` skips both the ranks and `seat_the_rest`. That is the page's \"whole line is hugged to the field edge in single file\"",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+  },
+  "research": "4e7ba7479292ad40",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3477bf438758147d",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bc33ef71630b4b4c"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households_as#the line's reach": {
+  "body": "25d11e8186d54127",
+  "claim": "the line's reach - UNRESEARCHED: the whole ring of the field, not held to the seat's 1.3-bound reach (ours, and it refused the far side's farms)",
+  "code": "e3021806eafbc647",
+  "core": "cad6663612919c9b",
+  "date": "2026-10-18",
+  "note": "the page says each farm stands by its own fields in single file but not how far round the field the line runs; `reach=inf` and the dropped 1.3-bound are ours",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households_as#the line's standoff": {
+  "body": "25d11e8186d54127",
+  "claim": "the line's standoff - farmhouses-minka.drawing: a single-file farm's house and yard held off the paddy as a front row's are (the core's reach, at least 6 ft); its grove only kept out of the paddy by the fit test, not held off it",
+  "code": "7de51a2b67d783d8",
+  "core": "cad6663612919c9b",
+  "date": "2026-10-18",
+  "note": "in single file `_reach` stays the core (house, yard, shed). Only the row village swaps in the whole bbox. So the offset is `HOUSE_PADDY_GAP_FT` + 1 + slack + the core's reach toward the chord: never under 6 ft, about 10 ft at the wall, no maximum. The grove is left to the fit test",
   "pages": {
    "0029-farmhouses-minka.drawing.html": "28761adf1d2dece2"
   },
@@ -14330,106 +14499,77 @@
   "rests": [
    "0029-farmhouses-minka.drawing.html:0596cd67c0df9440",
    "0029-farmhouses-minka.drawing.html:2f4048f3df8fcb07",
-   "0029-farmhouses-minka.drawing.html:66b65af7ef3446a2",
    "0029-farmhouses-minka.drawing.html:9dd34b89f26d4272",
    "0029-farmhouses-minka.drawing.html:a708d49b4d686be7"
   ],
-  "verdict": "CANNOT-TELL"
- },
- "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#shared byre pockets": {
-  "body": "05c51fe1c2c811b9",
-  "claim": "shared byre pockets - draft-oxen-and-horses-and-their-byres-umaya.drawing: reserved in the seat band before any house",
-  "code": "e8d17f2ef5f79581",
-  "core": "3c4b0be3ae6261c7",
-  "date": "2026-10-17",
-  "note": "shared shed on common ground among the houses, reserved before them",
-  "pages": {
-   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html": "314aa8e38b10f2d2"
-  },
-  "research": "a75e3ada6edbbc9b",
-  "rests": [
-   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:8e9a1c027cabe064",
-   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:9dd3e953a6b92d53"
-  ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the front row's offer": {
-  "body": "05c51fe1c2c811b9",
-  "claim": "the front row's offer - UNRESEARCHED: at most 12 front-row seats offered on a form other than a row",
-  "code": "16c595d2d2f9a837",
-  "core": "3c4b0be3ae6261c7",
-  "date": "2026-10-17",
-  "note": "cap of 12 offers, unresearched",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the front row's size": {
-  "body": "05c51fe1c2c811b9",
-  "claim": "the front row's size - clustered-and-scattered-villages-shuson-sanson.drawing: the square root of the households times the rolled shape's aspect band, at least 6, ranks seated behind it, where the page has a scattered hamlet's line hugged to the field edge in single file",
-  "code": "19cf2956b35c9f41",
-  "core": "3c4b0be3ae6261c7",
+ "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households_as#the line's step": {
+  "body": "25d11e8186d54127",
+  "claim": "the line's step - clustered-and-scattered-villages-shuson-sanson.drawing: each homestead with its own grove keeps its own spacing - the line's farms one farmstead's own box apart (its width, grove in it)",
+  "code": "2d2280b6d82d8f1a",
+  "core": "cad6663612919c9b",
   "date": "2026-10-18",
-  "note": "on the dispersed path the row is capped at `max(6, round(sqrt(N*(lo+hi))))` and `_seat_rank_rounds` seats ranks behind it, but the page has a scattered settlement's \"whole line is hugged to the field edge in single file\"; either seat single file or record a DEVIATION on the page",
+  "note": "the pitch is `max(_bb[2], _bb[3])` of the full farmstead box, grove included: \"each homestead carries its own grove and keeps its own spacing\", a fitting rule, not a measured distance",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
   "research": "4e7ba7479292ad40",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:4ea19f2ff9e71342",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b0d4f27ae1dbec07",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7e82a3d8b8b3ed66",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bc33ef71630b4b4c"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the passage share": {
-  "body": "05c51fe1c2c811b9",
+ "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households_as#the passage share": {
+  "body": "25d11e8186d54127",
   "claim": "the passage share - how-our-maps-lay-a-clustered-settlements-lanes.drawing: each clustered (grown) settlement rolls its share of households reached across a neighbor's land; the other forms roll none",
-  "code": "c3eb850170715da0",
-  "core": "3c4b0be3ae6261c7",
-  "date": "2026-10-17",
-  "note": "rolled only when the cluster grows (clustered), 0 on the other forms",
+  "code": "307c98d23064857e",
+  "core": "cad6663612919c9b",
+  "date": "2026-10-18",
+  "note": "rolled only for the grown (nucleated) form, within 0 to a quarter; the other forms get 0, and a dispersed hamlet has no lanes",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
   },
   "research": "60b94d3c15ae221a",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:71315c33d0ad6f37",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the seating band": {
-  "body": "05c51fe1c2c811b9",
+ "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households_as#the seating band": {
+  "body": "25d11e8186d54127",
   "claim": "the seating band - UNRESEARCHED: `SEATING_GROUND_FT` of band per household, the whole ground and wood floor of one holding",
-  "code": "ec11009aff392d46",
-  "core": "3c4b0be3ae6261c7",
-  "date": "2026-10-17",
-  "note": "SEATING_GROUND_FT per household, unresearched",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the seating's reach": {
-  "body": "05c51fe1c2c811b9",
-  "claim": "the seating's reach - UNRESEARCHED: a front-row seat within 1.3 times `FORM_BOUND` (1.15, 2.5 for a row) times the band's half-diagonal of the seat, and a rescue round's seat within `FORM_BOUND` times it; the four rank rounds are held only by their depth (the row's plus four rank steps at most), and the exhaustive pass by the legal ground",
-  "code": "589032b944b1028e",
-  "core": "3c4b0be3ae6261c7",
-  "date": "2026-10-17",
-  "note": "bound*1.3 for the front row, FORM_BOUND with 1.15 default and 2.5 for linear, rescue held to bound, rank rounds held by depth, as the claim says",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the shed counted in the standoff, the garden not": {
-  "body": "05c51fe1c2c811b9",
-  "claim": "the shed counted in the standoff, the garden not - UNRESEARCHED: the page places neither the shed nor the beds against the paddy; the shed is held at the wall's gap with the house, and the garden's side, chosen later by the sun, is left free to stand nearer",
-  "code": "d2c8c340f0fb837a",
-  "core": "3c4b0be3ae6261c7",
+  "code": "f63b253876b46e94",
+  "core": "cad6663612919c9b",
   "date": "2026-10-18",
-  "note": "the page applies the minimum to the house wall only and turns the yard and beds with the house; it never places a shed or garden beds against the paddy, so counting the shed in `_core` and leaving the garden out is unresearched",
+  "note": "no cited page gives ground per household, so `SEATING_GROUND_FT` = 162 is rightly UNRESEARCHED. 0031's \"roughly twice the room\" is only a ratio between forms, and the room claim already covers it",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households_as#the seating's reach": {
+  "body": "25d11e8186d54127",
+  "claim": "the seating's reach - UNRESEARCHED: a front-row seat within 1.3 times `FORM_BOUND` (1.15, 2.5 for a row) times the band's half-diagonal of the seat, and a rescue round's seat within `FORM_BOUND` times it; the four rank rounds are held only by their depth (the row's plus four rank steps at most), and the exhaustive pass by the legal ground",
+  "code": "fb36a7803acafab2",
+  "core": "cad6663612919c9b",
+  "date": "2026-10-18",
+  "note": "the 1.3 x `FORM_BOUND` front-row bound and the rescue's bound; nothing in the bundle answers them (the line's exemption is listed UNCLAIMED below)",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households_as#the shed counted in the standoff, the garden not": {
+  "body": "25d11e8186d54127",
+  "claim": "the shed counted in the standoff, the garden not - UNRESEARCHED: the page places neither the shed nor the beds against the paddy; the shed is held at the wall's gap with the house, and the garden's side, chosen later by the sun, is left free to stand nearer",
+  "code": "e78ec4bb1f2bf25b",
+  "core": "cad6663612919c9b",
+  "date": "2026-10-18",
+  "note": "the core reach takes the house, yard, shed and well and leaves out the garden; the page places neither the shed nor the beds against the paddy",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -41874,6 +42014,18 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/_geom/primitives.py::ring_chords#coordinate math": {
+  "body": "5d3ccf5d16468190",
+  "claim": "coordinate math - NONE",
+  "code": "707ed50c561f5c91",
+  "core": "dbd02a4306b1c84a",
+  "date": "2026-10-18",
+  "note": "simplification and pushing chords out along their normals by the tolerance, coordinate math only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/_geom/primitives.py::ring_meets_ellipse#coordinate math": {
   "code": "0bb108c03c4138e1",
   "core": "d76603889b07d2d3",
@@ -48591,51 +48743,69 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement.__init__#a threshing yard at every farmstead": {
-  "code": "a0cf08b527706c18",
-  "core": "aade0a786906bc6c",
-  "date": "2026-10-08",
-  "note": "`_work_yards = True` unless the generator declares no grain",
+  "body": "30fdabb36f0d1265",
+  "claim": "a threshing yard at every farmstead - threshing-and-drying-yards-at-farmhouses-niwa.drawing: on unless the generator declares no grain grown",
+  "code": "608e45fcb39f03ba",
+  "core": "5db1addd4bd9bfab",
+  "date": "2026-10-18",
+  "note": "`_work_yards = True` by default",
   "pages": {
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "b5fc46ab116a4b72"
   },
   "research": "4cd9ea0eb987d90e",
   "rests": [
-   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:3610a4b606e49804",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809"
   ],
-  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement.__init__#no house racks by default": {
-  "code": "b1cff9b7f1df4e50",
-  "core": "aade0a786906bc6c",
-  "date": "2026-10-03",
-  "note": "0016: unstated weather -> settled, so no rack",
+  "body": "30fdabb36f0d1265",
+  "claim": "no house racks by default - rice-drying-racks-hasa-hasagi.drawing: settled harvest weather where none is stated, so no rack by each house's yard",
+  "code": "fc1a749ddb5a8ca2",
+  "core": "5db1addd4bd9bfab",
+  "date": "2026-10-18",
+  "note": "`_house_racks = False`: settled weather where none is stated",
   "pages": {
    "0016-rice-drying-racks-hasa-hasagi.drawing.html": "63977fd38b35883b"
   },
   "research": "f94cd7cea915d311",
-  "triaged": "2026-10-12",
+  "rests": [
+   "0016-rice-drying-racks-hasa-hasagi.drawing.html:329b76a32a9e4883",
+   "0016-rice-drying-racks-hasa-hasagi.drawing.html:6af92987eeb511b9",
+   "0016-rice-drying-racks-hasa-hasagi.drawing.html:cd323d78a44a7ec9"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement.__init__#registries and record streams": {
-  "code": "38df020faae1c04a",
-  "core": "aade0a786906bc6c",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or class",
+  "body": "30fdabb36f0d1265",
+  "claim": "registries and record streams - NONE",
+  "code": "f8e7f1a6e85bc134",
+  "core": "5db1addd4bd9bfab",
+  "date": "2026-10-18",
+  "note": "empty registries and the manifest; the new `_fields_ringed` and `_seat_ring_chains` are state only",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement.__init__#swept ground kept clear of scatter": {
-  "code": "aa778f7bb34bafb2",
-  "core": "aade0a786906bc6c",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or class",
+  "body": "30fdabb36f0d1265",
+  "claim": "swept ground kept clear of scatter - GUESS ground-swept-clear-around-shrines-and-graves.drawing: the clearings registry; the tended verge is the record's own guess",
+  "code": "ffd26230987c8d9d",
+  "core": "5db1addd4bd9bfab",
+  "date": "2026-10-18",
+  "note": "the unit only sets up an empty `clearings` registry; keeping scrub off \"the ground a shrine or a grave plot itself occupies\" is the page's own rule, not a guess, so the claim should cite 0224.drawing (or NONE for the empty list). The \"tended verge\" that the claim and the stale comment describe (\"clears a small verge around each\", \"the collar tended around graves\") goes against \"Our maps claim no swept ground\", \"no swept collar beyond it\" and \"no cleared band is drawn around it\". Only how far the precinct reaches past the hall is a GUESS",
   "pages": {
-   "0224-ground-swept-clear-around-shrines-and-graves.html": "ac45206dd1b05fe0"
+   "0224-ground-swept-clear-around-shrines-and-graves.drawing.html": "719a904d62879cf8"
   },
-  "research": "6466d41a1eb45257",
-  "verdict": "IN-STEP"
+  "research": "d5c0ae4d9c14de45",
+  "rests": [
+   "0224-ground-swept-clear-around-shrines-and-graves.drawing.html:355a0ec5f78852a0",
+   "0224-ground-swept-clear-around-shrines-and-graves.drawing.html:3f924a063cb2e3bc",
+   "0224-ground-swept-clear-around-shrines-and-graves.drawing.html:98b6299154322c59",
+   "0224-ground-swept-clear-around-shrines-and-graves.drawing.html:a8ac24f814d8ec20"
+  ],
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/settlement/core.py::Settlement._cid#drawing engine plumbing": {
   "code": "57ca18c8b9d38956",
@@ -62588,11 +62758,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._field_chains#keep-out geometry, index and cache plumbing": {
-  "code": "33d320a4d75f1387",
-  "core": "300b351c789b853d",
-  "date": "2026-10-03",
-  "note": "chord simplification tolerance",
+  "body": "fc19cb9b6b4f995d",
+  "claim": "keep-out geometry, index and cache plumbing - NONE",
+  "code": "e7c11932d8a7fba9",
+  "core": "99ee8b2d6153c9aa",
+  "date": "2026-10-18",
+  "note": "cache key and ring/chain geometry; the ringed choice is claimed upstream in `_seat_households`",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._field_within#keep-out geometry, index and cache plumbing": {

@@ -156,7 +156,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30
 
 ## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)
 
@@ -752,6 +752,70 @@ Owed by the hour-12 step-back (`hour:385-approach-checklist@12`, ruled `continue
 8. **Routes measured before asking?** Yes - the pool rolled before ask:t05-old-drifts-at-landing.
 9. **After a ruling.** `continue` (hour 12) and `continue` (the ask): land T05; its fixes T25 (landed) and T26 (in review).
 
+## T06 - a scattered hamlet seated in single file round its fields (the ranking row `_seat_households#a scattered hamlet's seating`)
+
+### T06 Approach (checklist part A)
+
+1. **The goal, in the world.** A scattered hamlet's farms stand each by its own fields, in one line round the cultivated ground,
+   not in ranks behind a front row - where that line can hold every farm.
+2. **The constraints.** 0031's drawing rule ("the whole line is hugged to the field edge in single file ... do not squeeze the
+   homesteads"); the field's area (0017, 1.3 acres a household); every household seated or the site refused, no farm taken back
+   (feature 318); no seed passing at HEAD may fail (XIII); the two arbiter rulings (ask:t06-scattered-single-file,
+   ask:t06-single-file-short); carried from T05: the standoff claim, judged on the 6 ft floor only (10 to 13 ft is a drawn
+   figure, not a maximum), and the row village's whole-farmstead standoff UNCLAIMED.
+3. **Where each comes from.** Single file is 0031's drawing rule, which the page itself calls "a rule about fitting the drawing"
+   (O, a convention); "each farm amid its own fields" is 0031's finding (R); the area is 0017's (R); the fallback is the
+   arbiter's (G); the farmstead's width with its grove as the line's step is ours (O), the page's "keeps its own spacing".
+4. **Do they describe the world here?** Measured 2026-10-18 (`t06-evidence.md`): the margin a hamlet faces holds 3 to 6
+   farmsteads at their own width (205-273 ft), against 12 to 20 households; round the paddy alone the north seats fell on the dry
+   plots; round the paddy and its dry plots the line holds every farm on 4 of the cohort's 18 dispersed seeds (1, 19, 31, 46),
+   1 to 8 short on the other 14. No pool map is dispersed.
+5. **The order.** The line is tried before any farm is seated, on a copy, so the fallback seats nothing twice and takes nothing
+   back.
+6. **The exits.** (e) conform where the line holds; (c) the fallback where it does not (the arbiter's); (a) the field's area is
+   researched and stays; (b), (d) n/a.
+7. **The search smell.** Two routes measured and taken to the arbiter rather than tuned (step-back hour 13: "has not packed").
+8. **The budget.** 2-3 h (the arbiter's estimate); the line round all the cultivated ground was the third measurement.
+9. **Done, measured.** One goal: the cohort 54/54 with every dispersed seed seated either in single file (all its households,
+   no rank) or as at HEAD (`meta.dispersed_seating` says which); the seeds whose line falls short, seated in ranks, named on a
+   found row as 0031's known gap.
+
+### T06 part B (2026-10-18T12:40Z)
+
+Owed by the red-gate rulings red-gate@2026-10-18T12:27:25Z and red-gate@2026-10-18T12:36:36Z and the hour-14 step-back
+(hour:385-approach-checklist@14), all `continue`; the step-back's next steps - the gate on the stable tree, this part B, the
+landing cohort, the gated landing, then T30's lock - are done in that order but the landing (T30 landed first, the lock).
+
+1. **What is refusing?** Three red gates, three causes, each fixed once: T25's own bundle test named the seating body by its old
+   name (`_seat_households`, moved to `_seat_households_as`); the single-file line's two branches had no unit test (the gate rolls
+   no dispersed map); and the prompt hook's clone-sync merged main (feature 387's ways refactor) into the clone under the running
+   gate, so the tests and the coverage report read two trees. The rerun on the stable tree is green (221 s).
+2. **A3 again.** Unchanged: single file is 0031's drawing rule (O), each farm amid its own fields 0031's finding (R), the area
+   0017's (R), the fallback the arbiter's (G).
+3. **A4 again.** Unchanged; measured again by the cohort, 54/54.
+4. **Moving something earlier for something later?** No - the line is tried before any farm is seated.
+5. **Tuning or changing?** Neither since part A: the reds were a test's name, a missing test and a merge, not a number.
+6. **The one-sentence test.** "A scattered hamlet is seated in single file round its fields where the line holds every farm" -
+   true on 4 of the cohort's 18 dispersed seeds, the rest the filed gap.
+7. **The next step is a measurement.** The landing cohort (`make cohort-landing`), then the gated push.
+8. **Routes measured before asking?** Yes - both asks carried the cohort; this part B's rulings were on the run log.
+9. **After a ruling.** `continue` both: rerun the gate (done, green), land T06; the merge-under-a-gate fix is T30 (owed).
+
+### T06 Decisions
+
+**D51 - the line round the cultivated ground, tried first.** For a dispersed hamlet, `_seat_households` seats the margin on a
+deep copy of the map in single file (`_seat_households_as(..., single_file=True)`), and seats the real map that way only if the
+copy seated every household; otherwise as before. In single file: the site boundary asks the field by containment on every side
+(`site_boundary(..., ringed=True)`, the fit test's ring path, its cache keyed on it); seats are offered along every outward chord
+of the paddy and its dry plots unioned (`ring_chords`), one farmstead's box apart (its grove in it), with no seat-radius bound
+(ours, UNRESEARCHED: it refused 10 of seed 1's 23 ring seats, the far side's, recorded at the point of change);
+no ranks, no cloud, no exhaustive pass. `meta.dispersed_seating` records "single file" or "ranks".
+
+**D52 - the gap filed, the research answer proposed.** The dispersed seeds seated in ranks are 0031's known gap, filed as a found
+row (status quo, not a DEVIATION); farmsteads carved within the paddy, amid their own holdings (0031's finding), is proposed to
+the GM as a feature of its own, which first settles whether 0017's 1.3 acres include the farmstead and whether the farmstead's
+205-273 ft is researched (ask:t06-single-file-short).
+
 ## T15 - a cohort rolled over an uncommitted engine diff says so (found by T04)
 
 ### T15 Approach (checklist part A)
@@ -1135,6 +1199,98 @@ the arbiter's second option.
 
 **D49 - to the minute.** `approach_gate.refusal` compares an owed row's time truncated to the minute, the precision `owe` prints in
 the heading it asks for; a block stamped a minute earlier still refuses.
+
+## T28 - an ask's bundle shows which numbers are researched (the round arbiter's fix on ask:t06-scattered-single-file)
+
+### T28 Approach (checklist part A)
+
+1. **The goal, in the world.** The round arbiter rules on an ask knowing, from its bundle alone, which numbers the question turns
+   on are researched and which are ours.
+2. **The constraints.** The arbiter's fix ("copies into the bundle the claim rows (source class: research, GM ruling, ours,
+   convention) for every number its evidence file names"); the bundle read without the repository; a test red without it.
+3. **Where each comes from.** The fix is the arbiter's (G); naming a number by its constant or a backticked identifier is ours (O).
+4. **Do they describe the world here?** Yes - measured on T06 (2026-10-18): the ask named the dispersed field's size and the
+   farmstead pitch, the ruling turned on whether the field's size was researched, and the bundle carried only the session's
+   evidence; the claims say `GROSS_ACRES_PER_HOUSEHOLD` rests on 0017 (IN-STEP). The "farmstead pitch" of 205-273 ft is not
+   `BUNDLE_PITCH` (the nucleated row pitch, 100 ft, on 0038): it is a scattered farmstead's own box, house, yard, garden and grove
+   bands together, read off its geometry (`_g0["bbox"]`) - each part claimed on its own, the sum stated by no claim (measured
+   2026-10-18: `make claims-report` holds no line with "273 ft" or "205 ft").
+5. **The order.** The section, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: the ruled ask's own words (ask:t06-scattered-single-file: "the field's size, is researched
+   (0017's 1.3 acres a household)", the pitch "273 ft") give `GROSS_ACRES_PER_HOUSEHOLD`'s claim, class and last verdict beside
+   "1.3 acres", and "no claim states it" beside "273 ft"; a test red without it.
+
+### T28 Decisions
+
+**D50 - the claims on what an ask names.** `arbiter_bundle.claims_section` reads every ALL_CAPS constant and backticked
+identifier in the ask's question and its evidence files, and lists each research claim on a unit of that name: its key, its
+class (a research page, GUESS, UNRESEARCHED, CONVENTION, DEVIATION, CANON, NONE - the registry's own `CLASSES`; a number the GM
+set carries CANON, his setting's canon, or DEVIATION, a departure he ruled, as its claim records it) with the claim line, and its
+last verdict. And every number with a unit the words give ("1.3 acres", "273 ft") is looked up by its VALUE: the claims whose line
+states that value and unit are listed beside it, and a value no claim states is said to be one ("a measurement, or a value
+derived from others") - so no number reaches the arbiter without its claim row or the word that it has none (rounds 1 and 2).
+
+## T29 - each plan review its own bundle (the round arbiter's fix on hour:385-approach-checklist@13)
+
+### T29 Approach (checklist part A)
+
+1. **The goal, in the world.** A second plan review can be built and sent while another is still reading its bundle.
+2. **The constraints.** The arbiter's fix ("writes each plan review's bundle to a path keyed by its tasks"); the bundle's contents
+   unchanged; a test red without it; tooling only.
+3. **Where each comes from.** The fix is the arbiter's (G); adding the blocks' digest to the key is ours (O), so two rounds on the
+   same task's blocks never share a directory either.
+4. **Do they describe the world here?** Yes - measured on 2026-10-18 (hour 13's bundle): T26's review waited on T25's twice, and
+   one round's verdict was refused because the shared `plan-385-approach-checklist-blocks` changed under it.
+5. **The order.** The path, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: two `make plan-delta` runs on different blocks write two bundles, the first left whole; a test
+   red without it.
+
+### T29 Decisions
+
+**D53 - the bundle's directory names its tasks and its blocks.** `plan_bundle.delta_prompt` writes to
+`/tmp/l7r-check/plan-<feature>-blocks-<the tasks its block headings name, or "plan">-<the first 8 of the blocks' digest>`; the
+dispatch it prints names that MANIFEST, as before. The decision preflight (`make decide`, keyed by its one task) is unchanged.
+
+## T30 - nothing merged under a running gate (the round arbiter's fix on red-gate@2026-10-18T12:36:36Z)
+
+### T30 Approach (checklist part A)
+
+1. **The goal, in the world.** A gate's verdict belongs to one tree: nothing is merged into a clone while its gate runs.
+2. **The constraints.** The arbiter's fix (clone-sync checks a gate-in-progress lock `make done` writes; while it is held the merge
+   waits, never runs; a test holds the lock and asserts HEAD and the tree unchanged); FR-010 (no write to a tree while its gate
+   runs); feature 212's fast-forward kept for a clone with no gate; a test red without each; tooling only.
+3. **Where each comes from.** The fix is the arbiter's (G). The lock exists: `make done` acquires `<git dir>/gate.lock` with its
+   own pid at its first line (`gate_lock.py`, feature 375's follow-up), a dead owner holding nothing - so the fix asks it (G).
+   Fixing the test that set the merge off is ours (O), and constitution XIV's.
+4. **Do they describe the world here?** Measured 2026-10-18 (the clone's reflog, `.git/land-tooling-steps.jsonl`, the guard log):
+   main was merged in at 08:21:02 and 08:35:10 local, each under a running gate; the guard log holds no clone-sync `synced-in`
+   for this clone then, and land-tooling's run log holds two runs in THIS clone inside each gate (12:26, 12:35, 12:44 UTC), each
+   ending `push-exit-1`. The cause: `tests/tooling/test_arbiter_fix.py` ran `make -n -C <the real repository> arbiter-fix-done
+   LAND=... F=385 TICK=T18`; a `-n` recipe line holding `$(MAKE)` is executed, and that line also runs `land-tooling.sh` - so
+   every gate ran a real land-tooling in the clone it tested, and since T24 a stale patch there merged main in. After the fix,
+   all 1,924 tooling tests run with no land-tooling run and HEAD unchanged.
+5. **The order.** The test first (the cause), then the lock asked by clone-sync on both paths and by land-tooling, then the tests.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 40 min.
+9. **Done, measured.** One goal: no merge into a clone under its gate - the tooling suite runs no land-tooling; with a live gate's
+   lock the prompt path skips the merge (HEAD unchanged), the tool-call path merges and refuses nothing, and land-tooling refuses
+   a stale patch with nothing merged; each test red without it.
+
+### T30 Decisions
+
+**D54 - the cause removed, and the gate's lock asked before any merge.** (a) `test_arbiter_fix.py` reads the `arbiter-fix-done`
+recipe's text for the land-settle-tick order instead of running `make -n` on it in the real repository. (b) `gate_lock.py held
+<git dir>` (exit 0 while a live `make done` owns the clone); clone-sync's prompt path counts a held lock as mid-task, as it counts
+uncommitted work and a live make (feature 310); its tool-call path (feature 212's fast-forward) asks both the lock and the live
+make and, while either holds, merges nothing and refuses nothing, telling the session the merge waits; `land-tooling.sh` refuses
+to merge main under a held lock. A dead owner holds nothing, so no stale lock is ever cleared by hand.
 
 ## T11 - the close
 

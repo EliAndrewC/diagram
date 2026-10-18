@@ -338,6 +338,24 @@ def facing_chains(outline: Sequence[Pt], seat: Pt, eps: float) -> list[list[Chor
     return chains
 
 
+def ring_chords(outline: Sequence[Pt], eps: float) -> list[Chord]:
+    """Every chord of the outline simplified at `eps`, pushed out along its outward normal - one closed run round the whole
+    ring, for sampling seats on every side of a field (feature 385 T06: a scattered hamlet's farms stand by their own fields)."""
+    chords = simplify_ring(outline, eps)
+    n = len(chords)
+    if n < 3:
+        return []
+    ccw = _signed_area(list(chords)) > 0
+    out: list[Chord] = []
+    for i in range(n):
+        a, b = chords[i], chords[(i + 1) % n]
+        ex, ey = b[0] - a[0], b[1] - a[1]
+        el = math.hypot(ex, ey) or 1.0
+        nx, ny = (ey / el, -ex / el) if ccw else (-ey / el, ex / el)
+        out.append(((a[0] + nx * eps, a[1] + ny * eps), (b[0] + nx * eps, b[1] + ny * eps), (nx, ny)))
+    return out
+
+
 def _facing_chains(outline: Sequence[Pt], seat: Pt, eps: float) -> list[list[Chord]]:
     """THE OPEN CHAINS ON THE HOUSE SIDE (feature 140, GM 2026-08-28: *"just a few line segments on one side of
     the field that you are checking that you are on the correct side of ... not forming a closed shape"*):

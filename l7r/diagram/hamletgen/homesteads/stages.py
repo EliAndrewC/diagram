@@ -3,6 +3,7 @@ Research: seating plumbing - NONE: stage order, margins, reservations and bookke
 
 from __future__ import annotations
 
+import copy
 import math
 import random
 from collections.abc import Callable
@@ -421,6 +422,26 @@ def _ground_push(s_: Settlement, seat_: Pt, n_: Pt, house_: tuple[float, float])
 
 
 def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
+    """Seat the chosen margin's households (`_seat_households_as`). A SCATTERED HAMLET IS SEATED IN SINGLE FILE ROUND ITS
+    FIELDS WHERE THE LINE HOLDS EVERY FARM (feature 385 T06, the round arbiter on ask:t06-scattered-single-file and
+    ask:t06-single-file-short): the line is tried first on a copy of the map, and only if it seats every household is it
+    seated here; otherwise the hamlet is seated as before, in ranks behind a front row - a known gap on 0031, never a farm
+    taken back (feature 318). Measured on the 48-seed cohort, 2026-10-18: the line held 4 of its 18 dispersed seeds (1, 19, 31, 46).
+
+    Research:
+        a scattered hamlet's seating - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the whole line hugged to the field edge in single file, round the paddy and its dry plots, where the line holds every farm; otherwise ranks behind a front row, the page's known gap
+        the line tried on a copy - NONE: the trial decides the form of the seating, and nothing of it is drawn
+    """
+    if plan.settlement_form == "dispersed":
+        trial = copy.deepcopy(s)
+        line = _seat_households_as(trial, copy.deepcopy(plan), True)[0] >= plan.spec.households
+        s.M.setdefault("meta", {})["dispersed_seating"] = "single file" if line else "ranks"  # the known gap's measure (0031)
+        if line:
+            return _seat_households_as(s, plan, True)
+    return _seat_households_as(s, plan, False)
+
+
+def _seat_households_as(s: Settlement, plan: SitePlan, single_file: bool) -> tuple[int, int]:
     """Seat the households on `plan.seat`'s margin: the site boundary installed for it, the exit strip and the field's
     corridor, then - a nucleated cluster - the growth (`growth.grow_the_margin`), or - a dispersed hamlet - the front row,
     the ranks, the rescue rounds and the exhaustive pass over the legal ground within reach (homes H14), or - a row
@@ -436,14 +457,19 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         the passage share - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: each clustered (grown) settlement rolls its share of households reached across a neighbor's land; the other forms roll none
         the seating's reach - UNRESEARCHED: a front-row seat within 1.3 times `FORM_BOUND` (1.15, 2.5 for a row) times the band's half-diagonal of the seat, and a rescue round's seat within `FORM_BOUND` times it; the four rank rounds are held only by their depth (the row's plus four rank steps at most), and the exhaustive pass by the legal ground
         the seating band - UNRESEARCHED: `SEATING_GROUND_FT` of band per household, the whole ground and wood floor of one holding
+        a scattered hamlet's room - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: one band for every form, which a scattered hamlet's line never reads - its "roughly twice the room per farm" is the ring round its fields
+        the line's standoff - research/questions/0029-farmhouses-minka.drawing.html: a single-file farm's house and yard held off the paddy as a front row's are (the core's reach, at least 6 ft); its grove only kept out of the paddy by the fit test, not held off it
         the front row's size - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the square root of the households times the rolled shape's aspect band, at least 6, ranks seated behind it, where the page has a scattered hamlet's line hugged to the field edge in single file
         front-row standoff from the field set by the house and its yard - research/questions/0029-farmhouses-minka.drawing.html: never nearer the paddy than 6 ft, drawn 10 to 13 ft, no farmhouse held to a maximum; the yard before the south wall turns with the house as one, so the front seat stands their reach toward the field off its chord, at the largest house the roll can take
+        the line's step - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: each homestead with its own grove keeps its own spacing - the line's farms one farmstead's own box apart (its width, grove in it)
+        the line's reach - UNRESEARCHED: the whole ring of the field, not held to the seat's 1.3-bound reach (ours, and it refused the far side's farms)
+        the line's offer - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: every household in the line and none in ranks behind it (`front_cap` the households, `_rows_seated`) - the whole line hugged to the field edge in single file; the seats are the ring's own, a farmstead's width apart
         the shed counted in the standoff, the garden not - UNRESEARCHED: the page places neither the shed nor the beds against the paddy; the shed is held at the wall's gap with the house, and the garden's side, chosen later by the sun, is left free to stand nearer
     """
     seat = plan.seat
     # THE SITE BOUNDARY FIRST (feature 226): one outline separating the buildable ground from everything the map holds,
     # computed once; the fit test reads it instead of its five ground scans, and the seats below are proposed from it.
-    install_site_boundary(s, plan)
+    install_site_boundary(s, plan, single_file)
     face_the_houses(s, plan)
     s._seat_region = None  # built below once the access tree stands (feature 297, plan B1); none for a form without one
     # EACH HOUSEHOLD'S LOT, keyed on seat order (feature 287, plan M5): the k-th house seated takes rung k of the size
@@ -616,10 +642,11 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     # CONNECTOR, which `stage_track` lays only after the houses, so at this moment it offers nothing. A linear hamlet's row
     # takes every household it can seat along its field, and the track is then laid along the row (`stage_track`).
     _linear = plan.settlement_form == "linear"
+    _single_file = single_file  # a scattered hamlet's line round its fields (T06)
     # A NUCLEATED CLUSTER IS GROWN (feature 308, plan D1-D2; FR-007): no front row, no ranks, no exhaustive pass - `growth.py`
     _grown = grows(plan)
     _rows_seated = False  # a row village whose streets were planned takes no ranks (feature 291 plan D15)
-    if _linear:
+    if _linear or _single_file:
         front_cap = plan.spec.households
 
     # ...AND A FRONT-ROW SEAT MUST ALSO BE REACHABLE FROM A TRACK, not merely near the paddy
@@ -673,6 +700,9 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         _bb = _g0["bbox"]
         _reach = (_bb[0] - _bb[2] / 2, _bb[1] - _bb[3] / 2, _bb[0] + _bb[2] / 2, _bb[1] + _bb[3] / 2)
         _row_kw = {"pitch": min(max(_bb[2], _bb[3]), s.px(ROW_FRONTAGE_MAX_FT)), "reach": float("inf")}  # never past a lot's frontage (`rows.py`)
+    elif _single_file:  # each farmstead at its own width, its grove in it, round the whole ring (T06)
+        _bb = _g0["bbox"]
+        _row_kw = {"pitch": max(_bb[2], _bb[3]), "reach": float("inf")}
     # A ROW VILLAGE'S FARMS STAND IN ROWS ALONG THEIR STREETS (feature 291 amendment 3, `rows.py`; research/questions/0033-row-villages-resson.html
     # and 156): the row takes every household it can, and no front-row, frontage or rank pass takes the rest. Where its
     # streets cannot hold every farm, `seat_every_household` takes them back and seats the next margin, and past the last
@@ -685,7 +715,14 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         _rows_seated = True  # NEVER IN RANKS (FR-013, plan D15): a margin whose streets cannot hold every farm is left for the next
     for _rung in () if _grown else (0,):
         for (fx, fy), _n in front_row(
-            plan, plan.spec.households if _linear else min(plan.spec.households, 12), standoff=None, chains=s._site_chains, house=_house_max, envelope=_reach, with_normals=True, **_row_kw
+            plan,
+            plan.spec.households if (_linear or _single_file) else min(plan.spec.households, 12),
+            standoff=None,
+            chains=(s._seat_ring_chains if _single_file else s._site_chains),
+            house=_house_max,
+            envelope=_reach,
+            with_normals=True,
+            **_row_kw,
         ):
             if placed >= front_cap:
                 break
@@ -712,7 +749,10 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
             # split its lane web in two; the extra tries go only where the water moved the seat.
             _tries = [(fx, fy)] + ([(fx - _n[1] * d, fy + _n[0] * d) for d in (BUNDLE_PITCH / 4.0, -BUNDLE_PITCH / 4.0)] if _by_water else [])
             for tx, ty in _tries:
-                if math.hypot(tx - seat["cx"], ty - seat["cy"]) <= bound * 1.3 and _offer_seat(s, tx, ty) and s.try_place(tx, ty, "plain"):
+                # ...NOT BOUND TO THE SEAT IN SINGLE FILE (feature 385 T06): the line runs round the whole field, so the far side's farms
+                # stand well past 1.3 bounds of the margin's seat - measured, the bound refused 10 of seed 1's 23 ring seats (8 seated, 15
+                # without it); the bound is ours (the seating's reach, UNRESEARCHED) and the line's own reach is the ring
+                if (_single_file or math.hypot(tx - seat["cx"], ty - seat["cy"]) <= bound * 1.3) and _offer_seat(s, tx, ty) and s.try_place(tx, ty, "plain"):
                     placed += 1
                     break
     # ...then rows FLANKING the lanes, before any shape fill. A lane exists to be fronted, and a
@@ -741,6 +781,8 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     # does not exist when the homesteads are seated, so it placed nothing; a row village's farms now stand along the
     # streets its row planned (`rows.py`, research/questions/0033-row-villages-resson.html), and a linear hamlet takes no other pass.
     _cloud_placed = 0
+    if _single_file:  # no ranks, no cloud, no exhaustive pass behind the line (T06)
+        _rows_seated = True
     s._seat_search["front"] = placed  # the households the front row seated (R2 reads it beside the cap)
     if not (_rows_seated or _grown):  # NEVER IN RANKS BEHIND A ROW (FR-016), and a grown cluster takes none (feature 308)
         placed, _cloud_placed = _seat_rank_rounds(s, plan, placed, rng, (lat, dep), bound, _house_max)
