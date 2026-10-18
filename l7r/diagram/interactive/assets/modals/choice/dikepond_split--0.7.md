@@ -1,12 +1,11 @@
-About: In this village a parcel was about seven parts water to three of planted bank. In a dike-pond village each parcel was dug into a
+About: In this village a parcel was about seven parts water to three of planted bank. In a dike-pond village a parcel was dug into a
 fish pond and the spoil heaped into the bank, or dike, round it, where mulberry grew. Water and bank were kept in
 proportion, so that the mulberry, by way of the silkworms it fed, could feed the fish in the pond beside it.
 
 How a parcel was split between water and bank is not settled. In modern times it was six parts water to four of dike
-or, perhaps in another region, six parts dike to four of pond; seven of water to three of dike where the fish were also
-fed from beyond the bank; and water and dike equal where the mulberry alone fed them. No older text gives the split as a
-number: the oldest figures, for one township of the Pearl River delta in the seventeenth century, give only how much of
-its land went to fish, half in one passage and eight tenths in another.
+or, perhaps in another region, six parts dike to four of pond, or seven of water to three of dike where the fish were also
+fed from beyond the bank. In the seventeenth century, in one township of the Pearl River delta, half of
+its land went to fish, or by another count eight tenths; how each parcel was split is not recorded.
 
 Guesses:
 - That a village takes each of the three splits at even odds: no account gives a share between them, and every account
