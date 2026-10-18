@@ -112,7 +112,7 @@ where a premise did not hold, the requirement below is the form of that goal the
   landing cohort, the pool hamlets' gate and the review checks their occasions owe - never byte-identity.
 - **FR-011 The merges find every live neighbor (amendment 1).** A cell made by a staircase split after a merge is a neighbor the
   merge's search can find: the search's index is kept current as cells are added, so a failing cell may merge into a split part
-  (the defect FR-003 recorded: 42 of 502 searches at 40 households, seed 4, `soak/40-4.json`). Merges the old code could not
+  (the defect FR-003 recorded: 42 of 502 searches at 40 households, seed 4, `soak/40-4.json` as committed at `48043550d`). Merges the old code could not
   make are allowed; every merged basin keeps the ring rules (`verdict`) as before.
 - **FR-012 The well seating scales (amendment 1).** `wells.seat_wells`, which seats the cluster's wells in the appurtenances
   stage and the lane-side wells after the web, costs 10-43 s a 40-household roll (`m:five-stages-ab`'s note; profile 2026-10-18:
@@ -214,3 +214,5 @@ where a premise did not hold, the requirement below is the form of that goal the
 - **spec-fidelity, amendment 1, round 2 (2026-10-18): CHANGES REQUIRED, 1 item** - the documents had turned the permission into a
   ban ("never a requirement", "never write ... identical maps") in five places, the constitution among them: each now says a speed
   change MAY move maps; FR-013 says "the GM's permission, not a prohibition"; the session's own account taken out of them.
+- **spec-fidelity, amendment 1, round 3 (2026-10-18): FAITHFUL.** Its asides taken: FR-011's figure pinned to `48043550d`, the
+  soak's files committed, `dev/performance.md`'s section told that amendment 1 moves maps.
