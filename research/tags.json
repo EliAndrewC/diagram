@@ -100,6 +100,10 @@
    "name": "Markets",
    "description": "Questions about markets, shops and trade."
   },
+  "money": {
+   "name": "Money and prices",
+   "description": "Coinage, prices, wages, credit, land values and taxes reckoned in money - asked for by gm-assistant's money skill (feature 389)."
+  },
   "law-and-justice": {
    "name": "Law and justice",
    "description": "Questions about courts, jails, punishment and public notice."

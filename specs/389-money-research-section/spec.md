@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-18
 
-**Status**: Draft
+**Status**: Done - every task ticked; make done green 2026-10-18; impl-check owes nothing
 
 **Affects**: research record, research process
 
@@ -96,7 +96,9 @@ must return; the first real request gm-assistant opens then goes through it end 
   issue. It states what a request carries (the question, the figure the skill needs, the canon it must sit beside) and
   what an answer returns (fragment files, verdicts, open items). Closing follows the user-level "Working a GitHub issue"
   rule.
-- **FR-005**: Nothing in this feature changes engine code, a map, or the GM's canon.
+- **FR-005**: Nothing in this feature changes a map or the GM's canon. Its one engine change is the record loader's: it
+  accepts a section declared before its first question (plan D2), because the loader refuses a section whose rule matches
+  no question.
 
 ### Key Entities
 
@@ -108,9 +110,9 @@ must return; the first real request gm-assistant opens then goes through it end 
 
 ### Measurable Outcomes
 
-- **SC-001**: The section builds, and lists every question tagged `money` (proved with a test fixture).
-- **SC-002**: A fixture question tagged only `money` passes every record check with 0 findings about a missing drawing page.
-- **SC-003**: The protocol text exists where a diagram session reads it before working an issue, and names all three parts
+- **SC-001** (FR-001, FR-005): The section builds, and lists every question tagged `money` (proved with a test fixture).
+- **SC-002** (FR-002): A fixture question tagged only `money` passes every record check with 0 findings about a missing drawing page.
+- **SC-003** (FR-003, FR-004): The protocol text exists where a diagram session reads it before working an issue, and names all three parts
   of a request and all three parts of an answer.
 
 ## Decisions Recorded
@@ -140,3 +142,9 @@ This feature draws nothing and states nothing on a map. Its decisions are about 
 - **spec-fidelity-verify round 2 (2026-10-18): CHANGES REQUIRED, 1 item.** The checklist still cited FR-006 after the
   renumbering; now FR-005.
 - **spec-fidelity-verify round 3 (2026-10-18): FAITHFUL.**
+- **Plan review 1 (2026-10-18): BLOCKED.** Deferring the section to the first question's feature narrowed FR-001; D2 now
+  declares the section with `awaiting`, and FR-005 allows that one loader change.
+- **spec-fidelity-verify on the FR-005 amendment (2026-10-18): CHANGES REQUIRED, 1 item.** FR-005 faithful; tasks.md T02
+  still built the overturned D2 - rewritten as T02 (loader and section) and T03 (protocol).
+- **Plan review 2 (2026-10-18): CLEAR**, 10 blocks.
+- **spec-fidelity-verify on the tasks rewrite (2026-10-18): FAITHFUL.**

@@ -80,7 +80,9 @@ class Vocabulary:
 @dataclass
 class Section:
     """A section of the table of contents: what it is called, what it says in each half (the research, and how our maps
-    draw it), the rule it takes questions by, and its subsections. `takes` empty is a container of subsections."""
+    draw it), the rule it takes questions by, and its subsections. `takes` empty is a container of subsections.
+    `awaiting` says why a section's rule may match no question yet (feature 389: the money section is declared before the
+    first request writes its first question); it is refused once a question arrives."""
 
     id: str
     title: str
@@ -89,6 +91,7 @@ class Section:
     takes: list[dict[str, list[str]]]
     sections: list[Section] = field(default_factory=list)
     parent: Section | None = None
+    awaiting: str = ""
 
     def path(self) -> list[Section]:
         """This section and its ancestors, outermost first."""
@@ -158,7 +161,7 @@ def _section(raw: object, vocab: Vocabulary, parent: Section | None, seen: set[s
     if not isinstance(raw.get("title"), str) or not raw["title"]:
         raise ContentsError(f"{where}: no `title`")
     takes = [_clause(where, c, vocab) for c in raw.get("takes", [])]
-    section = Section(sid, raw["title"], str(raw.get("description", "")), str(raw.get("drawing_description", "")), takes, parent=parent)
+    section = Section(sid, raw["title"], str(raw.get("description", "")), str(raw.get("drawing_description", "")), takes, parent=parent, awaiting=str(raw.get("awaiting", "")))
     section.sections = [_section(s, vocab, section, seen) for s in raw.get("sections", [])]
     if not section.takes and not section.sections:
         raise ContentsError(f"{where}: takes nothing and holds nothing")
@@ -231,10 +234,15 @@ def parse_tags(text: str, where: str, vocab: Vocabulary) -> Tags | None:
 
 def idle_rules(sections: list[Section], every: list[Tags]) -> list[str]:
     """A message for each clause that matches no question at all - a typo, not a regrouping (spec FR-010). A section
-    whose matches were all homed earlier is not here: it is empty, and the build omits it."""
+    whose matches were all homed earlier is not here: it is empty, and the build omits it. A section `awaiting` its first
+    question is exempt until one of its clauses matches, and then its `awaiting` is refused as stale (feature 389)."""
     bad = []
     for s in walk(sections):
-        for c in s.takes:
-            if not any(matches(c, t) for t in every):
-                bad.append(f"{CONTENTS} section `{s.id}`: the clause {json.dumps(c, sort_keys=True)} matches no question")
+        idle = [c for c in s.takes if not any(matches(c, t) for t in every)]
+        if s.awaiting:
+            if len(idle) < len(s.takes):
+                bad.append(f"{CONTENTS} section `{s.id}`: it holds a question now - delete its `awaiting`")
+            continue
+        for c in idle:
+            bad.append(f"{CONTENTS} section `{s.id}`: the clause {json.dumps(c, sort_keys=True)} matches no question")
     return bad

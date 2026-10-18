@@ -1,0 +1,217 @@
+{
+ "feature": "389-money-research-section",
+ "blocks": {
+  "preamble": {
+   "sha256": "617955c2e3ba4927e09df0a3083142a4472c9a921010e2f09162b2f50bd1b8e8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "0b4d2a01a72bf2950ec3069492e111c542041094cc88ec7f405c09b70f2a1562",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "bce6c9cfcfe9814d3b8ad7c9e1cb7c7f9f1955671021005af8a0e40af931526e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "c847346ef492a5f7302a91d4935d3008c2e48d3f9976a6193ad605b2cda83259",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - the tag (FR-001)": {
+   "sha256": "75b47349f5baf1749248728e2ce47a37f820cc0977edb058c41156a65f3d9575",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - the protocol (FR-003, FR-004)": {
+   "sha256": "21fe8f7e836f7eca02bee93c18ab1dded0ae0b1396c0326c6eb86b34e7884b6c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## D4 - the test (SC-001, SC-002, SC-003)": {
+   "sha256": "27b6ee09436a93068d8c1a1ec526b66bc4c00fc28c1a3bc26166df173407f193",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T01 - land": {
+   "sha256": "67b73e5e2eaf9ab79323c744b159f1d366cc45c370d96375063d90f46ba4e794",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - the section is declared now, `awaiting` its first question (FR-001, FR-002)": {
+   "sha256": "c78de93f00ff36fb3ebe1179d0760e03418a62f33b1448bd8da437621b1a7fb4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the tag (FR-001)",
+    "## D2 - the section arrives with the first money question (FR-001, FR-002)",
+    "## D3 - the protocol (FR-003, FR-004)",
+    "## D4 - the test (SC-001, SC-002, SC-003)",
+    "## Summary",
+    "## T01 - land",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "research/tags.json gains subject 'money' (\"Money and prices\": coinage, prices, wages, credit, land values, taxes reckoned in money); a tag no question carries is accepted by the build.",
+     "class": "within",
+     "why": "FR-001's tag, with FR-001's own gloss; the GM approved a money research section of the record."
+    },
+    {
+     "id": "D2",
+     "summary": "The money section is NOT added to research/contents.json by this feature; its block is written into the protocol file and is added to contents.json by whichever later feature writes the first money question. Relaxing the record check's refusal of a section whose rule matches no question, and a placeholder question, are both declined.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-001 says the record MUST have a contents section, and the GM approved 'a diagram feature for the money research section of the research record'. D2 ships that section as text in a rule file, and the real record gets no section from this feature. Declining the placeholder question is sound (unrequested research). But the other route, a scoped change so the record accepts this section before it has questions, is declined only because of what it costs: weakening a check, more code changed, keeping existing behavior the GM did not ask to keep. None of those makes an exception legitimate. Nothing in the request or spec rules that route out: FR-005 forbids engine code, and nothing in the bundle says the record loader/check is engine code (the plan already edits record files and lands by the no-engine-code route). So literal compliance is not physically impossible. The scope also rests on a premise nobody measured. Only a takes clause that matches no question was measured as refused. A section with no clause or an empty one was not tried. The GM's words do not imply the deferral either. To clear this: either amend FR-001 to say the section block is written now and lands with the first money question, and take that amendment back through spec-fidelity against the GM's words; or deliver the section in contents.json, e.g. with a scoped acceptance of a section that has no questions yet. Which one is the session's design choice."
+    },
+    {
+     "id": "D3-file",
+     "summary": "Protocol is a new rule file research/money-requests.md ('Load this file when: you work a money research request'), with one row added to research/CLAUDE.md's load table.",
+     "class": "within",
+     "why": "FR-004: written where a diagram session reads it before working a money issue."
+    },
+    {
+     "id": "D3-contents",
+     "summary": "Request = question, figure the skill needs, canon to sit beside (Japan-first/China-first when the asker says); answer = fragment files, per-figure verdicts (ATTESTED, ATTESTED ONLY FOR, NOT ATTESTED, SILENT), open items.",
+     "class": "within",
+     "why": "The three parts of a request and the three of an answer, as FR-004 and SC-003 list them; the extra detail stays inside those parts."
+    },
+    {
+     "id": "D3-canon",
+     "summary": "A contradiction with canon is recorded as found and reported to the GM, who decides; no canon changes.",
+     "class": "within",
+     "why": "Carries out FR-005 (no change to the GM's canon) and FR-004's 'canon it must sit beside'."
+    },
+    {
+     "id": "D3-impl-check",
+     "summary": "Fixed impl-check line '- NNNN: no code implements it - consumed by gm-assistant's money skill; searched: <the grep>'.",
+     "class": "within",
+     "why": "FR-003 as written: it names the consumer and what was searched."
+    },
+    {
+     "id": "D3-closing",
+     "summary": "Closing follows the user-level 'Working a GitHub issue' rule (the asker closes).",
+     "class": "within",
+     "why": "FR-004's closing clause, cited rather than restated."
+    },
+    {
+     "id": "D4",
+     "summary": "tests/interactive/test_money_section.py pins the real tag, builds a fixture record with one question tagged only money and no drawing page, and checks the protocol file's request/answer parts, impl-check line and section block.",
+     "class": "within",
+     "why": "Enforces SC-001, SC-002 and SC-003. If the requested behavior is deleted, these checks have nothing left to check."
+    },
+    {
+     "id": "ConstitutionCheck-XII",
+     "summary": "Every task is 'research: rendering'; price-deciding questions come later as their own requests and features.",
+     "class": "within",
+     "why": "The GM's second and third messages: the research is requested later through issues; this feature is the section and the coordination."
+    },
+    {
+     "id": "T01",
+     "summary": "Land by make quick and the direct sync route; make impl-check F=389 owes nothing because the feature changes no question.",
+     "class": "within",
+     "why": "FR-003 applies to features that change a money question, and FR-005 means no engine code."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the tag (FR-001)",
+    "## D2 - the section is declared now, `awaiting` its first question (FR-001, FR-002)",
+    "## D3 - the protocol (FR-003, FR-004)",
+    "## D4 - the test (SC-001, SC-002, SC-003)",
+    "## Summary",
+    "## T01 - land",
+    "## Technical Context",
+    "(removed) ## D2 - the section arrives with the first money question (FR-001, FR-002)",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary/TechnicalContext",
+     "summary": "Scope: money tag, protocol rule file, section declared awaiting, a test; no map or canon change; one loader change.",
+     "class": "within",
+     "why": "Restates FR-001..FR-005; the GM approved 'a diagram feature for the money research section of the research record'."
+    },
+    {
+     "id": "ConstitutionCheck-XII",
+     "summary": "Every task is research: rendering; price-deciding questions come later as their own requests and features.",
+     "class": "within",
+     "why": "The GM's request has research done later via issues from the money skill; this feature files no question, consistent with FR-003 applying only to features that change a money question."
+    },
+    {
+     "id": "D1",
+     "summary": "research/tags.json gains subject 'money', 'Money and prices' with the FR-001 gloss (taxes 'reckoned in money' for 'taxes as money').",
+     "class": "within",
+     "why": "FR-001 verbatim in substance."
+    },
+    {
+     "id": "D2-awaiting",
+     "summary": "Section declared now in contents.json taking primary money, with an 'awaiting' field; loader (contents.py idle_rules) skips an awaiting section and refuses a stale awaiting once a clause matches; the refusal of dead rules stays for every other section.",
+     "class": "within",
+     "why": "FR-001 requires the section now; the plan cites a dated measurement that the loader refuses an empty rule, so declaring it now needs a loader change, which FR-005 in the accepted spec names as the feature's one engine change. The stale-awaiting refusal only enforces that the exemption ends when a money question exists."
+    },
+    {
+     "id": "D2-no-page-until-question",
+     "summary": "The build already omits an empty section, so no money page appears until the first question.",
+     "class": "within",
+     "why": "Existing build behavior, not a carve-out: FR-001 asks for a section listing the questions that carry the tag, and with zero such questions it lists all of them; SC-001 is proved by fixture per the spec."
+    },
+    {
+     "id": "D2-declined-placeholder",
+     "summary": "No placeholder question to hold the section open.",
+     "class": "within",
+     "why": "A placeholder would be research no request asked for; declining it keeps scope to the request."
+    },
+    {
+     "id": "D2-declined-deferral / removed old D2",
+     "summary": "Section is not deferred to the first question's feature; the earlier block that did so is removed.",
+     "class": "within",
+     "why": "Deferral would have narrowed FR-001 ('asks for the section now'); its removal restores what was asked. No narrowing remains."
+    },
+    {
+     "id": "D3-protocol",
+     "summary": "New research/money-requests.md (load-when line, CLAUDE.md load-table row): request carries question, figure needed, canon to sit beside (Japan-first/China-first when the asker says); answer returns fragment files, verdicts (ATTESTED / ATTESTED ONLY FOR / NOT ATTESTED / SILENT), open items; canon contradictions recorded and reported to the GM, canon unchanged; impl-check line naming gm-assistant's money skill and the grep; first money question's feature deletes awaiting; asker closes.",
+     "class": "within",
+     "why": "Carries FR-004's three-and-three parts and FR-003's impl-check line; canon handling follows FR-005; 'asker closes' matches the user-level rule's step 6 ('the side that ASKED closes it'), checked. Japan/China-first is conditional on the asker and adds no obligation."
+    },
+    {
+     "id": "D4-test",
+     "summary": "tests/interactive/test_money_section.py on fixture and real record: awaiting loads empty, empty rule without awaiting still refused, stale awaiting refused, money-only question with no drawing page homed in section, protocol text names its parts, load table points at it.",
+     "class": "within",
+     "why": "Enforces SC-001, SC-002, SC-003 and the D2 mechanism; it fails only when the requested things are absent."
+    },
+    {
+     "id": "T01",
+     "summary": "Land via make done and gated sync; impl-check owes nothing because the feature changes no question.",
+     "class": "within",
+     "why": "FR-003 applies to a feature that changes a money question; this one changes none."
+    }
+   ]
+  }
+ ]
+}
