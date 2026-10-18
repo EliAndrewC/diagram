@@ -81,7 +81,9 @@
    "values": {
     "0.6": "six parts water to four of dike",
     "0.4": "four parts water to six of dike",
-    "0.7": "seven parts water to three of dike"
+    "0.7": "seven parts water to three of dike",
+    "0.5": "water and dike in equal parts",
+    "0.3": "three parts water to seven of dike"
    }
   },
   {

@@ -974,10 +974,10 @@ def test_the_dikepond_inset_leaves_the_rolled_split_water() -> None:
     from l7r.diagram.settlement._knobs import KNOBS
     from l7r.diagram.settlement.fields.landuse import DIKEPOND_WATER_INSET, dikepond_inset
 
-    assert KNOBS["dikepond_split"].value_space == [0.6, 0.4, 0.7]
+    assert KNOBS["dikepond_split"].value_space == [0.6, 0.4, 0.7, 0.5, 0.3]
     rect = [(0.0, 0.0), (120.0, 0.0), (120.0, 80.0), (0.0, 80.0)]
     small, big = [(0.0, 0.0), (60.0, 0.0), (60.0, 40.0), (0.0, 40.0)], [(0.0, 0.0), (200.0, 0.0), (200.0, 150.0), (0.0, 150.0)]
-    for share in (0.6, 0.4, 0.7):
+    for share in (0.6, 0.4, 0.7, 0.5, 0.3):
         d = dikepond_inset([small, rect, big], share)
         apo = (60 + 40 + 60 + 40) / 4  # the rectangle's mean centroid-to-edge-midpoint distance
         assert (1 - d / apo) ** 2 == pytest.approx(share), "the median parcel, scaled as `_rounded_pond` scales it, is the share water"

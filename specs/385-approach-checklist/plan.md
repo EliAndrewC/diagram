@@ -1637,6 +1637,13 @@ the mulberry rows between bank and water, and the sties' bank seat (`pondstock.B
 value. `DIKEPOND_WATER_INSET` (23 ft) stays as the water-heavy split's value on Kuwabata, labeled so, the fallback where no parcel
 is known. The drawing page's known-gap sentence becomes the knob's (a page session).
 
+**D74b - all five recorded splits** (T10's record check, 2026-10-18: "nobody has said why the record's 1:1 and three-to-seven splits
+are not rolled"). 0018 records five forms, not the ranking row's three: six of water to four of dike, six of dike to four of pond,
+seven of water to three of dike, one to one (a modern working paper, where the mulberry alone feeds the fish), and the Guangdong
+gazetteer office's three-to-seven read in the order it names - three parts water to seven of dike. Several attested forms are a
+knob, so `dikepond_split` rolls all five water shares (0.6, 0.4, 0.7, 0.5, 0.3), at even odds (GUESS); each has its title-card
+pop-up, and 0018's drawing page names all five.
+
 ## T45 - a box the round arbiter filed lands open (found by T07's landing)
 
 ### T45 Approach (checklist part A)

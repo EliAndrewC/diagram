@@ -47,11 +47,11 @@ Research: mulberry row spacing - research/questions/0018-dike-ponds-fish-ponds-r
 
 
 # A DIKE-POND VILLAGE'S SPLIT OF WATER AND DIKE (feature 385 T10, 0018): six parts water to four of dike, six of dike to four of
-# pond, or seven of water to three of dike - the water share of a parcel, rolled per village; the inset is derived from it
+# pond, seven of water to three of dike, one to one, or three of water to seven of dike - the water share of a parcel, rolled per village; the inset is derived from it
 # (`fields.landuse.dikepond_inset`).
-register_knob(Knob("dikepond_split", [0.6, 0.4, 0.7], default=0.6))
+register_knob(Knob("dikepond_split", [0.6, 0.4, 0.7, 0.5, 0.3], default=0.6))
 """Research:
-    dike-pond split values - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: water six to four, dike six to four, water seven to three
+    dike-pond split values - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: water six to four, dike six to four, water seven to three, one to one, and the gazetteer's three of water to seven of dike
     dike-pond split odds - GUESS: even odds (the record gives no share between them)"""
 
 

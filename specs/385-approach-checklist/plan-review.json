@@ -735,7 +735,7 @@
    "declared": "spec-fidelity"
   },
   "### T10 Decisions": {
-   "sha256": "43cd5b97131892a682523c1430058e371ea1ea1f70919a6ef9946e696b153c70",
+   "sha256": "190e09ed56e06ec6cf0a96a6a63cd2b49913573ee8531e86b48f004b6a630367",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -4322,6 +4322,39 @@
      "summary": "T56 part B: the hour-20 step-back ruled `continue`; the ruling's tooling fix split out as its own task (T57).",
      "class": "within",
      "why": "FR-015 (one goal a task): a second goal found in a task becomes its own task. No narrowing of what was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "### T10 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D74 (split rolled)",
+     "summary": "The dike-pond water share is rolled per map from the seed as a settlement knob (dikepond_split, pinnable by a hamlet spec), at even odds marked GUESS.",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict. A ranking-row claim fix (the original request's 'about five ranking rows', Amendment 7's ten more, FR-020) that makes several attested forms a knob instead of pinning one. That matches the research and narrows nothing the GM asked for."
+    },
+    {
+     "id": "D74 (inset derived)",
+     "summary": "The water inset is derived once per map from the rolled share on the median parcel (the rectangle's law) and stored on the settlement, so the pond outline, the mulberry rows and the sties' bank seat all read one value.",
+     "class": "within",
+     "why": "Unchanged. An implementation choice that derives the figure from the rolled share instead of pinning it. It keeps every use of the claim and excludes no case."
+    },
+    {
+     "id": "D74 (23 ft fallback)",
+     "summary": "DIKEPOND_WATER_INSET (23 ft) stays as the water-heavy split's value, labeled as such, and is used only where no parcel is known.",
+     "class": "within",
+     "why": "Unchanged. A labeled fallback for the no-parcel case. It does not narrow the roll wherever a parcel exists."
+    },
+    {
+     "id": "D74b (all five recorded splits)",
+     "summary": "dikepond_split rolls all five water shares the 0018 record carries (0.6, 0.4, 0.7, 0.5, 0.3). The gazetteer's three-to-seven is read in the order it names (three water to seven dike). Even odds (GUESS), a title-card pop-up for each, and 0018's drawing page names all five.",
+     "class": "within",
+     "why": "The new decision. It widens the roll from three forms to every form the record attests, which closes a gap left by the earlier three-form roll (the record check's own question). Matching the record is what a ranking-row claim fix is for, so this is in service of the request and is not a narrowing. Reading the gazetteer's ratio in the order it names follows the source and invents no exception. Pop-ups and the page naming the forms are how this project carries a claim."
     }
    ]
   }
