@@ -54,6 +54,15 @@ check "tier 1: pytest run in-process via -c"   blocked "python3 -c 'import pytes
 check "tier 2: the documented override"        blocked "make done FULL=1 REF_WHY=pre-push verification"
 check "tier 2: the reference-gate override"    blocked "REF_OK=1 make maps"
 check "tier 2: the -k gate override"           blocked "GATE_OK=1 make done"
+# feature 385 T61 (plan D80): make keeps the last of two assignments of one variable, silently
+check "one variable set twice on a make call"   blocked "make quote-verbatim Q=0018 Q=0027"
+check "...the quoted list passes"               ok      'make quote-verbatim Q="0018 0027"'
+check "...two variables pass"                   ok      "make record-owed Q=0018 IN=ways"
+check "...one each on two calls passes"         ok      "make quote-verbatim Q=0018 && make quote-verbatim Q=0027"
+check "...a mention in a message passes"        ok      "git log --grep 'make x Q=1 Q=2'"
+rc=$(run "make quote-verbatim Q=0018 Q=0027")
+if grep -q 'sets Q twice' "$HOOK_ERR" && grep -q 'Q=\"<a> <b>\"' "$HOOK_ERR"; then echo "  ok      ...the refusal names the variable and the quoted list"; PASS=$((PASS+1))
+else echo "  FAIL    ...the refusal names the variable and the quoted list"; FAIL=$((FAIL+1)); fi
 check "tier 4: a forged makefile"              blocked "make -f /tmp/evil.mk probe"
 check "tier 4: --file spelling"                blocked "make --file /tmp/evil.mk probe"
 check "tier 4: --makefile spelling"            blocked "make --makefile=/tmp/evil.mk probe"
