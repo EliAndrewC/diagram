@@ -29,8 +29,17 @@ def _r(verdict: str, *blocks: str) -> dict:
 
 
 def test_a_task_s_plan_rounds_are_counted_back_to_its_last_clear(tmp_path: pathlib.Path) -> None:
-    root = _clone(tmp_path, [_r("BLOCKED", "### T14 Decisions"), _r("CLEAR", "### T14 Decisions"), _r("BLOCKED", "## Landing", "### T14 Approach (checklist part A)"),
-                             _r("BLOCKED", "### T03 Decisions"), _r("BLOCKED", "### T14 Decisions"), _r("CLEAR", "### T140 Decisions")])
+    root = _clone(
+        tmp_path,
+        [
+            _r("BLOCKED", "### T14 Decisions"),
+            _r("CLEAR", "### T14 Decisions"),
+            _r("BLOCKED", "## Landing", "### T14 Approach (checklist part A)"),
+            _r("BLOCKED", "### T03 Decisions"),
+            _r("BLOCKED", "### T14 Decisions"),
+            _r("CLEAR", "### T140 Decisions"),
+        ],
+    )
     assert rr.plan_rounds(root / "specs" / "385-x", "T14") == 2, "back to T14's CLEAR; T03's and T140's rounds are not T14's"
     assert rr.plan_rounds(tmp_path / "none", "T14") == 0
 

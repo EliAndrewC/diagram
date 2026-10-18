@@ -167,7 +167,12 @@ def test_an_ask_about_a_plan_review_carries_its_rounds_and_the_plan_s_diffs(tmp_
     (d / "plan.md").write_text("# plan\n")
     rounds = [
         {"reviewed": "r0", "blocks": ["### T01 Decisions"], "verdict": "CLEAR", "decisions": []},
-        {"reviewed": "r1", "blocks": ["### T14 Decisions"], "verdict": "BLOCKED", "decisions": [{"id": "D30", "class": "narrowing, NOT LEGITIMATE", "summary": "the window dropped", "why": "the GM named it"}]},
+        {
+            "reviewed": "r1",
+            "blocks": ["### T14 Decisions"],
+            "verdict": "BLOCKED",
+            "decisions": [{"id": "D30", "class": "narrowing, NOT LEGITIMATE", "summary": "the window dropped", "why": "the GM named it"}],
+        },
         {"reviewed": "r2", "blocks": ["### T14 Decisions", "## Landing"], "verdict": "BLOCKED", "decisions": [{"id": "D31", "class": "within"}]},
     ]
     (d / "plan-review.json").write_text(json.dumps({"block_reviews": rounds}))
@@ -190,8 +195,10 @@ def test_a_plan_round_trigger_s_bundle_carries_the_plan_s_rounds(tmp_path: pathl
     d = root / "specs" / "385-x"
     d.mkdir(parents=True)
     (d / "plan.md").write_text("# plan\n")
-    rounds = [{"reviewed": "r1", "blocks": ["### T17 Decisions"], "verdict": "BLOCKED", "decisions": [{"id": "D39", "class": "narrowing, NOT LEGITIMATE", "summary": "two steps", "why": "all three"}]},
-              {"reviewed": "r2", "blocks": ["### T17 Decisions"], "verdict": "BLOCKED", "decisions": []}]
+    rounds = [
+        {"reviewed": "r1", "blocks": ["### T17 Decisions"], "verdict": "BLOCKED", "decisions": [{"id": "D39", "class": "narrowing, NOT LEGITIMATE", "summary": "two steps", "why": "all three"}]},
+        {"reviewed": "r2", "blocks": ["### T17 Decisions"], "verdict": "BLOCKED", "decisions": []},
+    ]
     (d / "plan-review.json").write_text(json.dumps({"block_reviews": rounds}))
     subprocess.run(["git", "init", "-q", str(root)], check=True)
     trig = "round:spec-fidelity|plan:385-x#T17@3"

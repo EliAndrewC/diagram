@@ -20,8 +20,7 @@ def _agent(d: pathlib.Path, aid: str, start: str, read: int, written: int, meta:
     d.mkdir(parents=True, exist_ok=True)
     (d / f"agent-{aid}.meta.json").write_text(json.dumps(meta), encoding="utf-8")
     usage = {"cache_read_input_tokens": read, "cache_creation_input_tokens": written}
-    rows = [{"type": "user", "timestamp": start, "message": {"role": "user", "content": "go"}},
-            {"type": "assistant", "timestamp": start, "message": {"id": f"m-{aid}", "usage": usage, "content": []}}]
+    rows = [{"type": "user", "timestamp": start, "message": {"role": "user", "content": "go"}}, {"type": "assistant", "timestamp": start, "message": {"id": f"m-{aid}", "usage": usage, "content": []}}]
     (d / f"agent-{aid}.jsonl").write_text("\n".join(json.dumps(r) for r in rows) + "\nnot json\n", encoding="utf-8")
 
 
@@ -44,12 +43,25 @@ def test_a_workflow_wave_against_the_last_hand_launched_one(tmp_path: pathlib.Pa
     for i, tid in enumerate(hand):
         _agent(session / "subagents", f"h{i}", f"2026-10-17T20:00:0{i}.000Z", 2336 if i == 0 else 4443, 4620 if i == 0 else 2514, {"agentType": "quote-check", "toolUseId": tid})
     # the hand wave: one message written as one record per tool call, under the message's id
-    launches = [{"type": "assistant", "timestamp": "2026-10-17T19:59:59.000Z", "message": {"id": "launch", "content": [
-        {"type": "tool_use", "id": tid, "name": "Agent", "input": {"subagent_type": "quote-check"}}]}} for tid in hand]
-    main = [*launches, _note("2026-10-17T20:01:00.000Z", "toolu_h0"), _turn("2026-10-17T20:01:01.000Z", 400_000),
-            _note("2026-10-17T20:02:00.000Z", "toolu_h1"), _turn("2026-10-17T20:02:01.000Z", 410_000),
-            _note("2026-10-17T20:03:00.000Z", "toolu_other"), _turn("2026-10-17T20:03:01.000Z", 1),
-            _note("2026-10-17T22:34:44.500Z", "toolu_wf"), _turn("2026-10-17T22:34:45.000Z", 930_000)]
+    launches = [
+        {
+            "type": "assistant",
+            "timestamp": "2026-10-17T19:59:59.000Z",
+            "message": {"id": "launch", "content": [{"type": "tool_use", "id": tid, "name": "Agent", "input": {"subagent_type": "quote-check"}}]},
+        }
+        for tid in hand
+    ]
+    main = [
+        *launches,
+        _note("2026-10-17T20:01:00.000Z", "toolu_h0"),
+        _turn("2026-10-17T20:01:01.000Z", 400_000),
+        _note("2026-10-17T20:02:00.000Z", "toolu_h1"),
+        _turn("2026-10-17T20:02:01.000Z", 410_000),
+        _note("2026-10-17T20:03:00.000Z", "toolu_other"),
+        _turn("2026-10-17T20:03:01.000Z", 1),
+        _note("2026-10-17T22:34:44.500Z", "toolu_wf"),
+        _turn("2026-10-17T22:34:45.000Z", 930_000),
+    ]
     (proj / "s1.jsonl").write_text("\n".join(json.dumps(r) for r in main) + "\n", encoding="utf-8")
     out = wr.report(run)
     assert "WORKFLOW RUN wf_1 (s1): 4 agent(s)" in out

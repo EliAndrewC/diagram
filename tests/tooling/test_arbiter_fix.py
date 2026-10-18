@@ -381,11 +381,11 @@ def test_one_command_lands_a_fix_and_settles_it(root: pathlib.Path) -> None:
     with pytest.raises(ValueError, match=r"the same make arbiter-fix-done with LAND="):
         ha.settle_fix(root, TRIGGER, "done", "the fix was built", "tests/test_x.py")
     repo = pathlib.Path(__file__).resolve().parents[2]
-    dry = subprocess.run(["make", "-n", "-C", str(repo), "arbiter-fix-done", "ID=x", "NOTE=a b c d", "TEST=tests/t.py", "LAND=scripts/a.py"],
-                         capture_output=True, text=True, check=False).stdout
+    dry = subprocess.run(["make", "-n", "-C", str(repo), "arbiter-fix-done", "ID=x", "NOTE=a b c d", "TEST=tests/t.py", "LAND=scripts/a.py"], capture_output=True, text=True, check=False).stdout
     assert "scripts/land-tooling.sh scripts/a.py tests/t.py && git fetch -q origin &&" in dry
-    ticked = subprocess.run(["make", "-n", "-C", str(repo), "arbiter-fix-done", "ID=x", "NOTE=a b c d", "TEST=tests/t.py", "LAND=scripts/a.py", "F=385", "TICK=T18"],
-                            capture_output=True, text=True, check=False).stdout
+    ticked = subprocess.run(
+        ["make", "-n", "-C", str(repo), "arbiter-fix-done", "ID=x", "NOTE=a b c d", "TEST=tests/t.py", "LAND=scripts/a.py", "F=385", "TICK=T18"], capture_output=True, text=True, check=False
+    ).stdout
     assert 'fix done "x" "a b c d" "tests/t.py" && make --no-print-directory tick F="385" T="T18"' in ticked.replace("/usr/bin/make", "make"), "lands, settles, ticks"
     no_f = subprocess.run(["make", "-C", str(repo), "arbiter-fix-done", "ID=x", "NOTE=a b c d", "TEST=tests/t.py", "TICK=T18"], capture_output=True, text=True, check=False)
     assert no_f.returncode == 2 and "TICK= ticks a task of F=<feature>" in no_f.stderr
