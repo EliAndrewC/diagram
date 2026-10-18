@@ -1,0 +1,133 @@
+{
+ "feature": "388-retire-roll-village",
+ "blocks": {
+  "preamble": {
+   "sha256": "38345a58ec1cb9c38f9755292a108561d5c59b7c25e1655c3960987655c44d37",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "81fb63e3597c182377390fbe0c40b3b1bfc2c5687bd1477a4001fb11709702bb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "c1d5096aa1f02b41238830be1acd56116b92898107a20204e1cd722318680972",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "44ffb6831d748775eea79b7eacc3109c27f9a1bbb9f331319cc7775067e1ec9d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "1be63bfa075a57dff3039e95d8b18253318501be4da432be88d41fc72d7e384f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T01 - the deletion (FR-001, FR-002)": {
+   "sha256": "370efc43dd3e4e1d03d0107233372f87be7a86565ece6a90bab9a30772220219",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T02 - the prose (FR-003, FR-004)": {
+   "sha256": "c4480e50cb698ea79bb475261d03219d54c1bb2893255a190f9e8658e590240f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T03 - measure and land (FR-006, SC-002 - SC-004)": {
+   "sha256": "f86fca497fadf5edcafae371288f951ab351da9bac4b2ab6ea2ceaa2a79ddc22",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Project Structure": {
+   "sha256": "e870b67c40b1791fbf48eb3034af5dbb3fca366eedbf950f17357250d87e89a5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Complexity Tracking": {
+   "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## T01 - the deletion (FR-001, FR-002)",
+    "## T02 - the prose (FR-003, FR-004)",
+    "## T03 - measure and land (FR-006, SC-002 - SC-004)",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-table",
+     "summary": "Every closure name (roll.py and its mixin, water_sources_for/water_source_anchor, crop_to_content, cremation_ground/ROOFED_SHARE/cremation_outline, edge_seat/EdgeGround/ANGLES/rect_gap/rect_samples, cut_undeckable_lanes/CUT_GAP_FT, PlacerMixin.headman, build_comb) is found reached by no production code but roll.py and is deleted; none is kept.",
+     "class": "within",
+     "why": "FR-001 deletes the closure and keeps only a name shipping code reaches; the plan records the reachability check per name (dated, method stated) and finds no keeper. The GM: 'if nothing ships from it then we should just delete it'."
+    },
+    {
+     "id": "T01-build_comb-docstring",
+     "summary": "build_comb (a wrapper) is deleted and its docstring describing the comb layout moves onto carve_comb, which the scripted hamlet calls.",
+     "class": "within",
+     "why": "Deletion per FR-001; keeping the layout description on the live function is FR-003's prose repointing, not new behavior."
+    },
+    {
+     "id": "T01-closure-iterated",
+     "summary": "The closure is re-run after the deletion until it names nothing more; any further name passes the same shipping-reach table before deletion. Lines the coverage floor then names are deleted if no shipping code reaches them, else a test is owed.",
+     "class": "within",
+     "why": "Code reachable only from the deleted engine is part of 'everything only it reached' (FR-001); the shipping-reach test protects FR-006; the coverage handling is what SC-002 (make done green) requires. Nothing here narrows the deletion."
+    },
+    {
+     "id": "T01-tests",
+     "summary": "Tests of deleted names go across the named files (incl. the soak village test); in tests/hamletgen/test_burial.py only test_rect_gap, test_the_edge_seat_* and _seat go, hamlet and convex_hull tests stay; a file left empty is removed; the composed-surface guard's member list drops the names.",
+     "class": "within",
+     "why": "Matches FR-002 word for word, and SC-004 (soak loses the village test)."
+    },
+    {
+     "id": "T02-prose",
+     "summary": "Docstrings/comments naming deleted definitions as live are repointed (crop_to_content -> content_view/crop_to_view, build_comb -> carve_comb/finish_comb, roll_village mentions incl. the hamletgen comparison table losing its middle column), the five CLAUDE.md indexes updated, the claims index rebuilt by its target.",
+     "class": "within",
+     "why": "FR-003 lists exactly these sites and the claims index handling."
+    },
+    {
+     "id": "T02-380-spec",
+     "summary": "Feature 380's 'Carried: from 387' section is removed; its cremation-ground and burial-ground items name the cited code as deleted by 388 and readable from git, design and rulings unchanged; the legacy pool is untouched.",
+     "class": "within",
+     "why": "FR-004 and FR-005 as written; the GM: 'not even move it into the 384 backlog'."
+    },
+    {
+     "id": "TC/T03-verification",
+     "summary": "FR-006 proven by make maps with an empty manifest diff across the live pool and by the landing cohort; make soak, make done, perf end bookend, claims gate, feature report, gated push.",
+     "class": "within",
+     "why": "Enforces FR-006 and SC-002 - SC-004; verification of the requested deletion, nothing new verified."
+    },
+    {
+     "id": "perf-bookends",
+     "summary": "388-start before the first edit, 388-end before the push; a flag over band mentioned with its load caveat.",
+     "class": "within",
+     "why": "Standing project process; neither narrows nor adds behavior to the request."
+    }
+   ]
+  }
+ ]
+}

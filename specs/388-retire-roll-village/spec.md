@@ -38,8 +38,9 @@ holds; the instruction is to delete it now, and NOT to carry the failure anywher
   reached by shipping code (a pool map, the scripted hamlet, a Mode A sheet, the page) is kept, and the plan says who reaches it.
 - **FR-002**: Their tests are deleted; a test file left empty is removed. This reaches one scripted-hamlet test file,
   `tests/hamletgen/test_burial.py`: its tests of `edge_seat`, `EdgeGround` and `rect_gap` (`test_rect_gap`, the
-  `test_the_edge_seat_*` tests and their `_seat` helper) go, its tests of what the hamlet does (no ground of its own, the
-  village's ground beyond the last house) and of `convex_hull` stay, and its docstring stops naming the edge seat as live. The
+  `test_the_edge_seat_*` tests, `test_the_ground_stands_beyond_the_last_house_not_in_a_gap_among_them` - which tests
+  the seat through `_seat` - and the `_seat` helper) go; only
+  `test_a_hamlet_draws_no_ground_of_its_own_and_records_where_its_dead_lie` and `test_convex_hull_of_few_points` stay, and its docstring stops naming the edge seat as live. The
   `rolls_map` marker lists in `tests/test_markers.py` drop `roll_village`.
 - **FR-003**: Prose that describes `roll_village` or the closure's names as live is updated where it stands: the package indexes
   (`settlement/CLAUDE.md`, `settlement/rolling/CLAUDE.md`, `settlement/civic_grounds/CLAUDE.md`, `waterfields/CLAUDE.md`,
