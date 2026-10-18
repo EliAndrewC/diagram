@@ -156,7 +156,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26
 
 ## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)
 
@@ -1002,6 +1002,83 @@ merge, and the route's own rule (feature 379) is that the clone's history is lef
 untouched" stands. `sync-in` itself is not run: its mirror refresh and render steps are not the merge's, and a plain merge is
 what its refusal named. A merge that conflicts is aborted (the clone left as it was) and refuses, naming `sync-in` to resolve
 by hand; a second failed apply refuses as today; FILES uncommitted still refuse before anything runs.
+
+## T25 - a claims bundle carries what the unit's code reads from other modules (the round arbiter's fix on ask:t05-old-drifts-at-landing)
+
+### T25 Approach (checklist part A)
+
+1. **The goal, in the world.** impl-drift judges a claim on the first round whenever the code it turns on is in the repository:
+   no CANNOT-TELL only because the bundle left out a function or constant the unit reads.
+2. **The constraints.** `callees` (the arbiter's fix on ask:t03-claims-at-landing): the unit's own module's functions, at most
+   `CALLEES_MAX`; a bundle stays a bundle (copied out, read once); a test red without it; tooling only.
+3. **Where each comes from.** `callees` is the arbiter's (G); so is this fix (G, ask:t05-old-drifts-at-landing: "inlines a judged
+   unit's direct callees and every module-level constant they read (transitively one level) whenever a claim's label names a
+   distance, gap or standoff"); doing it for every claim, not only those labels, is ours (O) - a CANNOT-TELL for want of a callee
+   is not a distance claim's alone (T03's `_clear_link` was a link test).
+4. **Do they describe the world here?** Yes - measured on T05 (2026-10-18): the standoff claim on `_seat_households` came back
+   CANNOT-TELL three rounds running, each for the next layer - `front_row` and `turn_the_seat` (imported from sibling modules), then
+   `_front_row_from_chains` and `install_site_boundary`, then `HOUSE_PADDY_GAP_FT` and `STANDOFF_SLACK_PX` (module constants) -
+   three dispatches, about 8 min of agent time (their ledger rows' wall times, 122 s, 272 s and 83 s), and a tripwire.
+5. **The order.** The measurement, then (a), (b) and (c), then the tests.
+6. **The exits.** (c); (a) n/a - the arbiter's level is uncapped; (b), (d), (e) n/a.
+7. **The search smell.** None.
+8. **The budget.** 40 min.
+9. **Done, measured.** One goal: the standoff claim's FIRST bundle (no CANNOT-TELL before it, no `WITH=`) carries `front_row`,
+   `turn_the_seat`, `_front_row_from_chains`, `install_site_boundary`, `STANDOFF_SLACK_PX` and `HOUSE_PADDY_GAP_FT`
+   (`m:t25-bundle`: 154 KB, 118 entries, each once); a test red without each of (a), (b) and (c).
+
+### T25 Decisions
+
+**D47 - a distance claim's first bundle reaches the call that reads its constant.** Measured (2026-10-18, `m:t25-bundle` -
+`make claims-bundle UNITS=<the standoff key>` on `_seat_households`, its size and its CONTEXT headings): one level of direct
+callees is 29 (48 KB of source) and misses `HOUSE_PADDY_GAP_FT`, read two calls down (`front_row` -> `_front_row_from_chains` ->
+it); two levels, with the constants read there, is a 154 KB bundle of 118 context entries that carries every name the standoff's
+three CANNOT-TELL rounds asked for. No bundle size limit is set (T05's 44-claim round-2 bundle was 232 KB - measured 2026-10-18,
+`ls -l` on its MANIFEST.md), so (a) goes two levels.
+In `scripts/record/claims_context.py` (`claims.py` is at 982 of its 1,000 lines):
+- **(a) the arbiter's fix, reaching its purpose** - for a claim whose label names a distance, gap or standoff (`DISTANCE`:
+  distance, gap, standoff, apart, reach, clear of, off the, ft, feet), the bundle carries every engine function the unit calls,
+  its own module's and imported, and theirs - two calls down - with every module constant any of them reads, UNCAPPED (`direct`;
+  round 1: a cap drops what "every" names; round 2: one level stops short of the standoff's constant).
+- **(b) every claim's first bundle** carries, beside its own module's callees (at most `CALLEES_MAX`, 6, as before), every module
+  constant the unit reads, imported ones too (`callees`) - ours (O), for claims the label trigger misses (T03's `_clear_link`).
+- **(c) a re-bundle of a claim last judged CANNOT-TELL** carries each engine name its note puts in backticks - resolved through the
+  unit's imports, else by its module-level definition anywhere under `l7r/` (at most three) - and, breadth first through each
+  function found, the functions and constants it calls or reads, within `CHASE_CHARS` (30,000) (`chase`) - ours (O), for what a
+  check still names past (a)'s two levels or (b).
+A name from outside `l7r/` is never followed (LEGITIMATE, rounds 1 and 2). Nothing in (a) is capped; (c)'s budget bounds only its
+own chase. Each context entry appears once.
+
+## T26 - a review never reads an absent or stale render (the round arbiter's fix on hour:385-approach-checklist@12)
+
+### T26 Approach (checklist part A)
+
+1. **The goal, in the world.** A glyph or settlement check judges the map as its manifest stands: its render is there, and newer
+   than what it renders.
+2. **The constraints.** The arbiter's fix (render first, or refuse naming `make map GEN=...`); one map rendered by `make map`, the
+   one command that renders; the snapshot and its prompts unchanged otherwise; a test red without it; tooling only.
+3. **Where each comes from.** The fix is the arbiter's (G); rendering rather than refusing is the first of its two options (G);
+   newer-than read by file times is ours (O).
+4. **Do they describe the world here?** Yes - measured on T05 (2026-10-18, 10:17): `make maps SCOPE=all` regenerated the pool
+   without renders (the `.png` and `.html` are untracked and the roll cache evicts them), so `make verify` wrote three glyph
+   prompts noting "missing in the clone: .png .html"; a render pass and a second verify followed, about 4 min (the
+   session transcript's timestamps, 10:17 to 10:21).
+5. **The order.** The staleness test, then verify's loop, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 25 min.
+9. **Done, measured.** One goal: `review_snapshot.py --stale-renders` names each owed map whose `.png` or `.html` is missing or
+   older than its `.gen.py` or `.json`, `make verify` runs `make map` on each before the snapshot, and a test is red without it.
+
+### T26 Decisions
+
+**D48 - render, then snapshot.** `review_snapshot.stale_renders(root, units)` returns the generator of each owed unit's map whose
+`.png` or `.html` is missing or older than the map's `.gen.py` or `.json` (the `.json` is what a pool roll writes per map, beside
+the tracked `.gen.py`, `.svg` and `.notes.md`); `--stale-renders` prints them; `make verify` runs `$(MAKE) map GEN=<each>` before
+it takes the snapshot and writes the prompts. Every unit is asked (round 1: "every unit"): an entry with no generator - none in
+the pool, measured 2026-10-18 (every `pool/*/*/` and `legacy-hand-authored-pool/*/*/` directory holds its `.gen.py`) - whose
+`.png` is missing is listed as `sheet:<its .svg>`, and `make verify` refuses it, naming `make sheet-render SHEET=<svg> OUT=<png>`,
+the arbiter's second option.
 
 ## T11 - the close
 
