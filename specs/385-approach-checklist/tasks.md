@@ -188,9 +188,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T65 An archived plan block edited by a typo after its review is not owed (plan D84)
       research: rendering
       verify: DONE. archived typo-edited blocks owe nothing; landed, test_plan_gate green
-- [ ] T66 A requirement cited from another feature is bundled from that feature (plan D85)
+- [ ] T66 A requirement cited from another feature is bundled from that feature (plan D85) [lands-open]
       research: rendering
-- [ ] T67 land-tooling lints before it tests (plan D86)
+- [ ] T67 land-tooling lints before it tests (plan D86) [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
