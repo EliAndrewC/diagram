@@ -139,7 +139,7 @@ class FixtureSitingMixin:
         the peasantry through it via the settlement's one required-literate reader - the
         headman, or a hamlet's senior farmer answering to the village headman - and officials
         also read notices aloud, so even a 50-inhabitant hamlet's board works). Deterministic:
-        draws NO RNG, so calling it inside `roll_village` cannot perturb a rolled map's seed
+        draws NO RNG, so calling it inside a roll cannot perturb a rolled map's seed
         stream. Reads the SAME manifest route fields the validator's siting checks read (the
         dev-loop same-source doctrine): MAIN ways only (`roads`/`M['road']` + `main: True`
         town streets - kosatsuba_on_a_main_way, GM 2026-08-02) when the map declares any,

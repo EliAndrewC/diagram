@@ -11,7 +11,6 @@ import pytest
 
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.city.bridges import deck_admitted, undeckable_at
-from l7r.diagram.settlement.civic_grounds.edge_seat import EdgeGround, edge_seat
 from l7r.diagram.settlement.homestead_parts.groves import crown_lift
 from l7r.diagram.settlement.homestead_parts.stands import crown_reach
 from l7r.diagram.settlement.homestead_parts.wood_share import BAR_MARGIN_PX, ground_blocks, open_water_discs
@@ -127,20 +126,6 @@ def test_a_carried_deck_the_registry_refuses_is_a_crossing_no_deck_seats() -> No
     assert [k for k, _p in undeckable_at(way, 6.0, waters, 1.0, (), s.M)] == [0], "a house where the deck would land"
     s.M["bridges"].append({"x": 500.0, "y": 300.0, "rot": 90.0, "span": 20.0, "w": 6.0})
     assert not deck_admitted(s.M, (500.0, 300.0), 90.0, 20.0, 6.0), "a deck on another is merged, not refused - the house refuses it"
-
-
-def test_a_burial_ground_is_not_seated_on_an_access_corridor() -> None:
-    s = _hamlet()
-    for x in (600.0, 800.0):
-        s.M["houses"].append({"x": x, "y": 600.0, "w": 40.0, "h": 28.0, "rot": 0.0})
-    ground = EdgeGround(s, clear_px=60.0, stream_px=0.0, ditch_px=0.0, field_px=0.0)
-    free = edge_seat(s, 90.0, 60.0, 40.0, ground, reach_px=400.0, step_px=20.0)
-    assert free is not None
-    s.standing.reserved.reserve_corridor((free[0] - 200.0, free[1]), (free[0] + 200.0, free[1]), 7.0)
-    moved = edge_seat(s, 90.0, 60.0, 40.0, ground, reach_px=400.0, step_px=20.0)
-    assert moved is not None and moved != free
-    rec = {"x": round(moved[0], 1), "y": round(moved[1], 1), "w": 60.0, "h": 40.0, "rot": 0.0}
-    assert s.admits("cemeteries", rec) and not s.admits("cemeteries", dict(rec, x=round(free[0], 1), y=round(free[1], 1)))
 
 
 # ---- water W53: every part a bundle lays asks the registry of what stands first -------------------------------------

@@ -10,7 +10,7 @@
 - [x] Focused on user value and business needs
 - [x] Written for non-technical stakeholders
 - [x] All mandatory sections completed
-- [x] A speed feature remembers maps MAY change - not a speed feature; changes no map (FR-006)
+- [x] A speed feature remembers maps MAY change - not a speed feature; changes no map (FR-005)
 
 ## Requirement Completeness
 

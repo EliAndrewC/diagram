@@ -408,7 +408,6 @@ _ROLLING_SURFACE = frozenset(
         "headman",
         "line_seeds",
         "ring",
-        "roll_village",
         "scatter_seeds",
         "sun_corridor",
         "waterfront_seeds",
@@ -468,7 +467,6 @@ def test_no_member_of_the_pre_split_rolling_surface_is_lost():
     # SUPERSET, not equality, deliberately: a later decomposition legitimately adds named private
     # helpers, and equality would turn every such change into a contract edit - training a reader to
     # bump the frozenset without thinking, which is the reflex that lets a real subtraction through.
-    # This feature is itself that case: the roll_village stage split adds seven _roll_* members.
     from l7r.diagram.settlement.rolling import RollingMixin
 
     composed = set().union(*(_own_members(c) for c in RollingMixin.__mro__))
@@ -654,63 +652,12 @@ def test_bundle_side_fits_refuses_a_layout_whose_lot_fixture_found_no_seat() -> 
     assert s._bundle_side_fits(geom) is False, "...and is refused once a fixture of its lot is unlaid"
 
 
-def _village_with_houses(seed: int = 1, pin: str | None = None) -> Settlement:
-    s = Settlement(1600, 1600, seed=seed)
-    s.meta(name="V", scale="village", ftpx=2)
-    s.M["houses"] = [{"x": x, "y": y, "w": 23.0, "h": 14.0} for x, y in ((760, 760), (800, 760), (760, 800), (800, 800))]
-    if pin:
-        s.knob_pins["cremation_seat"] = pin
-    return s
-
-
-def test_a_village_cremation_ground_stands_apart_and_on_its_own_draws_no_jizo() -> None:
-    """Research 530 and the GM's ruling of 2026-09-27 (feature 273): a village draws its own cremation ground, 120 ft
-    clear of the houses, near their middle, down the fall line where clear. Feature 280 M71 (research 700): the six jizo
-    stand at a burial ground's entrance, and a cremation ground on its own draws none."""
-    from l7r.diagram.settlement.civic_grounds.edge_seat import rect_gap
-
-    s = _village_with_houses(pin="apart")
-    s._roll_cremation(90.0, [(780.0, 700.0), (780.0, 660.0)])  # the shrine's approach runs north of the houses
-    (g,) = s.M["cremation_grounds"]
-    assert s.M["meta"]["cremation_seat"] == "apart" and "cremation_seat_note" not in s.M["meta"]
-    assert g["y"] > 800, "below the houses, down the fall line"
-    assert min(rect_gap((g["x"], g["y"], g["w"], g["h"]), (h["x"], h["y"], h["w"], h["h"])) for h in s.M["houses"]) >= s.px(120)
-    assert math.dist((g["x"], g["y"]), (780, 780)) <= s.px(650)
-    assert "jizo" not in g
-
-
-def test_beside_the_burial_ground_says_so_while_the_village_draws_none() -> None:
-    s = _village_with_houses(pin="beside_burial")
-    s._roll_cremation(90.0, [(780.0, 700.0)])
-    assert s.M["meta"]["cremation_seat_note"].startswith("beside the burial ground")
-    assert s.M["cremation_grounds"]
-
-
-def test_the_cremation_seat_knob_rolls_both_and_refuses_nonsense() -> None:
-    seen = {(_s := _village_with_houses(seed=k), _s._roll_cremation(90.0, [(780.0, 700.0)]), _s.M["meta"]["cremation_seat"])[2] for k in range(1, 30)}
-    assert seen == {"apart", "beside_burial"}
-    with pytest.raises(ValueError, match="cremation_seat"):
-        _village_with_houses(pin="in_the_well")._roll_cremation(90.0, [(780.0, 700.0)])
-
-
-def test_no_seat_draws_no_cremation_ground() -> None:
-    s = _village_with_houses(pin="apart")
-    s.M["fields"] = [{"outline": [(0, 0), (1600, 0), (1600, 1600), (0, 1600)]}]
-    s.M["dry_plots"] = [{"poly": [(0, 0), (1600, 0), (1600, 1600), (0, 1600)]}]  # every seat on a dry plot
-    s._roll_cremation(90.0, [(780.0, 700.0)])
-    assert s.M["meta"]["cremation_ground"] == "no seat" and not s.M["cremation_grounds"]
-
-
-def test_a_hamlet_draws_no_cremation_ground_shrine_or_headman() -> None:
+def test_no_shipped_hamlet_carries_a_cremation_ground_shrine_or_headman() -> None:
     """FR-003 (feature 273): within its district the village alone keeps the shrine, the headman's house and the
-    cremation ground. The roller's civic stage draws nothing for a hamlet, and no shipped hamlet carries any of them."""
+    cremation ground, and no shipped hamlet carries any of them."""
     import glob
     import json
 
-    s = Settlement(1600, 1600, seed=1)
-    s.meta(name="H", scale="hamlet", ftpx=1)
-    s._roll_civic({"gateway": (800.0, 800.0)}, "hamlet", True, 0.0, 1.0)
-    assert not s.M["cremation_grounds"] and not s.M["shrines"] and not s.M["torii"]
     for path in glob.glob("pool/hamlets/*/*.json"):
         with open(path, encoding="utf-8") as fh:
             m = json.load(fh)
@@ -889,3 +836,16 @@ def test_a_bundles_parts_are_turned_and_boxed_as_the_turn_helpers_turn_and_box_t
                 assert geom["boxes"][k] == turned_box(geom[k], rot)
             assert [turned_box(g, rot) for g in geom["gardens"]] == geom["boxes"]["gardens"]
             assert geom["yard"][2:] == s._bundle_geom(500.0, 500.0, 46.0, 28.0, "SE", True, rot=rot)["yard"][2:]
+
+
+def test_the_parts_refuse_a_house_too_near_a_neighbor(monkeypatch) -> None:
+    """`_parts_fit`'s house rules - off a tread, its eave gap, reachable ground - refuse a layout every other part rule admits
+    (the line the retired roller's tests used to reach, feature 388)."""
+    from tests.settlement._builders import _nuc_village
+
+    s = _nuc_village()
+    geom = s._bundle_geom(600.0, 500.0, 46.0, 28.0, "W")
+    geom.pop("unlaid", None)
+    assert s._parts_fit(geom) is True, "the case: every part rule admits this layout"
+    monkeypatch.setattr(s, "_house_too_near_a_neighbor", lambda house: True)
+    assert s._parts_fit(geom) is False, "...and the eave gap alone refuses it"

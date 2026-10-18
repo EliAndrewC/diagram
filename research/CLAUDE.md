@@ -11,6 +11,7 @@ download list) applies here and is not repeated; its full text is `docs/research
 | write or restyle a section | [`STYLE.md`](STYLE.md) - how an entry reads |
 | need a source only the GM can fetch, process the GM's downloads, archive a cited URL, or the GM says "ingest"/"sync" | [`downloads.md`](downloads.md) |
 | push a record change: which checks it owes, recording an answer, the code's `Research:` claims, a modal's section moving | [`record-checks.md`](record-checks.md) |
+| work a money research request (a GitHub issue from gm-assistant's money skill) | [`money-requests.md`](money-requests.md) |
 
 ## Where things are (features 258, 303)
 

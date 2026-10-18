@@ -25,6 +25,16 @@ def uncovered(report: str) -> list[str]:
     return [f"{m.group(1)}:{m.group(2).strip()}" for line in report.splitlines() if (m := ROW.match(line.strip()))]
 
 
+#: what `coverage report` prints when it cannot report at all - a file the data names is gone (feature 388: a module the change
+#: deleted, carried in from a baseline) - so the report lists no row and the record would say nothing
+ERROR = re.compile(r"^(No source for code: .+|Couldn't parse .+|No data to report\.)$")
+
+
+def errors(output: str) -> list[str]:
+    """The report's own error lines, as `coverage-error <line>` marks."""
+    return [f"coverage-error {m.group(1)}" for line in output.splitlines() if (m := ERROR.match(line.strip()))]
+
+
 def main() -> int:
     path = os.environ.get("L7R_GATE_FAILURES")
     if not path:
@@ -33,11 +43,16 @@ def main() -> int:
         except OSError, subprocess.CalledProcessError:
             return 0
         path = os.path.join(gitdir, "gate-failures")
-    report = subprocess.run([sys.executable, "-m", "coverage", "report", "-m", "--skip-covered"], capture_output=True, text=True).stdout
-    rows = uncovered(report)
-    if rows:
+    run = subprocess.run([sys.executable, "-m", "coverage", "report", "-m", "--skip-covered"], capture_output=True, text=True)
+    marks = errors(run.stdout + "\n" + run.stderr)
+    report = run.stdout
+    if marks:  # the report stopped at the error: ask it again past the error, for the rows it would have listed (the round
+        # arbiter's tooling fix on red-gate@2026-10-18T21:00:44Z - a red that named nothing because the report itself failed)
+        report = subprocess.run([sys.executable, "-m", "coverage", "report", "-m", "--skip-covered", "--ignore-errors"], capture_output=True, text=True).stdout
+    marks += [f"uncovered {row}" for row in uncovered(report)]
+    if marks:
         with open(path, "a") as f:
-            f.writelines(f"{time.time():.3f} uncovered {row}\n" for row in rows)
+            f.writelines(f"{time.time():.3f} {mark}\n" for mark in marks)
     return 0
 
 

@@ -13,12 +13,11 @@ in size.
 | file | look here when |
 |---|---|
 | `__init__.py` | you need the composition itself; never add logic here |
-| `funerary.py` | ground given over to the DEAD: `cemetery` (parish rectangle vs organic common ground - the Louzeyuan-vs-Japan distinction lives in its docstring), `mausoleum`, `cremation_ground`, `ossuary`, and `_ward_fence_cap`, the ward-fence predicate `mausoleum` sites against |
+| `funerary.py` | ground given over to the DEAD: `cemetery` (parish rectangle vs organic common ground - the Louzeyuan-vs-Japan distinction lives in its docstring), `mausoleum`, `ossuary`, and `_ward_fence_cap`, the ward-fence predicate `mausoleum` sites against |
 | `justice.py` | ground given over to PUNISHMENT: `punishment_spot` (the in-settlement post/stocks), `execution_ground` (the outside-the-settlement siting rules - road, boundary, outcast side), and `boundary_marker` |
 | `civic.py` | institutional and COMMERCIAL works - what a domain builds because it administers and trades, as opposed to what its inhabitants build to live: `granary`, `merchant_storehouses`, `merchant_residences`, `district`, `terrace`, and `precinct_interior` (the sovereign temple precinct's interior program) |
 | `lodging.py` | where travelers and their ANIMALS stop: `flophouse`, `inn`, `stables`, `animal_ground`, `flush_stable_yards` (the deferred draw that puts the yards on the map last, at crop time, when the map is complete), plus the way-bearing helpers `_way_bearing_near` and `_way_seat_near` |
 | `stable_yard.py` | the working YARD around a gate stables, as STAGES: the beaten-earth scatter, the road-parallel rail, the interior rails, the trough cluster and its well, the dung heaps. **Read its module docstring - the stages table and the RNG rules - BEFORE editing it** |
-| `edge_seat.py` | a SEAT AT THE SETTLEMENT'S EDGE for a ground that must stand apart from the houses (feature 273): beyond the last house, clear of houses and wells by its own distance, out of the water by the caller's bank margin - how a village's cremation ground is placed |
 | `_yardctx.py` | `_YardCtx` - one yard's shared state (keep-outs, the wall, prior yards' rails/troughs/heaps, the candidate ring) and the six predicates every stage tests against (`clear`, `take`, `rail_rec`, `draw_hitch`, `rail_clear_of_heaps`, `glyph_free`). Not a mixin; it is constructed per yard |
 
 ## Composition, and why it is in `__init__.py`
@@ -88,9 +87,9 @@ the rule is [`../CLAUDE.md`](../CLAUDE.md)'s.
 
 ## The guard, and what it is for
 
-`tests/settlement/test_civic_grounds.py` holds the 22 pre-split members as a SUBSET of what the
+`tests/settlement/test_civic_grounds.py` holds the 21 pre-split members still live (feature 388 retired `cremation_ground`) as a SUBSET of what the
 composed class exposes, a second test holds that no two sub-mixins define the same name, and a third
-holds that all 22 resolve on `Settlement` itself. Both breakage classes were proven to fire before
+holds that all 21 resolve on `Settlement` itself. Both breakage classes were proven to fire before
 the guard was trusted (feature 115 T007/T017).
 
 - **Subset, not equality** - so the decomposition's added private stages need no bookkeeping. The

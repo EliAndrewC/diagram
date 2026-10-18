@@ -352,24 +352,6 @@ def test_full_tilt_lays_a_row_caption_along_the_row():
     assert "rotate(-54" in "".join(s.out)  # the caption carries the row's own angle
 
 
-def test_a_rolled_cluster_band_is_sized_in_REAL_FEET_at_the_map_s_grain():
-    """THE RATCHET for the other half of that fix (see `roll_village`).
-
-    A cluster band is sized per homestead BUNDLE - house plus its yard and dooryard garden, ~92 ft
-    of pitch once the placer's collision circles are paid for - and that is a REAL-FEET quantity, so
-    the band must shrink with the map's grain. It used to convert through `bscale`, which every tier
-    pins to 1/ftpx except villages, which pin it to 1.0 for legacy reasons; a village band was
-    therefore asked for twice the ground its (half-size) bundles occupy and strung its cluster thin
-    over a hollow hull. The failure mode of the ORIGINAL 56 ft figure is nastier and is why this is
-    pinned: too small does not show up as a shortfall, because the caller keeps seeding until the
-    quota is met - it shows up as a cluster too solid to seat a wellhead in."""
-    hamlet, village = Settlement(900, 900, seed=1), Settlement(900, 900, seed=1)
-    hamlet.meta(scale="hamlet", ftpx=1)
-    village.meta(scale="village", ftpx=2)
-    assert hamlet.px(settlement.BUNDLE_PITCH_FT) == pytest.approx(settlement.BUNDLE_PITCH_FT)
-    assert village.px(settlement.BUNDLE_PITCH_FT) == pytest.approx(settlement.BUNDLE_PITCH_FT / 2)
-
-
 # ---- THE PACKAGE SURFACE (feature 117) --------------------------------------------------------
 # _geom was one 1,303-line module until feature 117 cut it into eleven submodules behind a
 # star-import re-export (specs/117-geom-package/contracts/surface.md). Two properties hold that
@@ -394,7 +376,7 @@ def test_a_rolled_cluster_band_is_sized_in_REAL_FEET_at_the_map_s_grain():
 # pond's inset core, replaced by `ring_meets_ellipse` when the pond's placer and its test were made to read one
 # predicate on the full rim (feature 287, FR-003).
 _PRE_SPLIT_GEOM_SURFACE = (
-    'BUNDLE_PITCH_FT', 'CARRIED_LANDING_FLOOR_FT', 'FLOODED_SHADES', 'GOVERNOR_CAPTION_FS', 'HALL_CAPTION_FS', 'Indexed', 'LABEL_AIR_CAP', 'LABEL_AIR_RINGS', 'LABEL_AIR_STEP', 'LABEL_MIN_AIR',
+    'CARRIED_LANDING_FLOOR_FT', 'FLOODED_SHADES', 'GOVERNOR_CAPTION_FS', 'HALL_CAPTION_FS', 'Indexed', 'LABEL_AIR_CAP', 'LABEL_AIR_RINGS', 'LABEL_AIR_STEP', 'LABEL_MIN_AIR',
     'LAND', 'LANDING_FT', 'LANE_CROSSES_MIN_DEG', 'LANE_THROUGH_TOL', 'Manifest', 'PADDY_SHADES', 'PLANK_ABUTMENT', 'PLANK_BANK_REACH', 'PLANK_VILLAGE_REACH', 'PointGrid', 'Poly', 'Pt',
     'RICE_GREENS', 'RIPE_SHADES', 'SeatMemo', 'TORII_PITCH_FT', 'WARD_BARRED_KINDS', 'YARD_GLYPH_SLACK', '_VILLAGE_POP_DIST', '_aabb_gap', '_assert_not_main_tree',
     '_box_hits_run', '_rect_ring', '_signed_area', '_union_area', 'boxed_grid', 'boxed_hit', 'boxed_polys', 'boxed_seg_hit', 'boxed_segs', 'edge_dist', 'fillet_polyline',

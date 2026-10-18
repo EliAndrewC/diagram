@@ -36722,11 +36722,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/record/contents.py::Section#plumbing": {
-  "code": "38550d0630019c86",
-  "core": "2ee7d7386696a3e8",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
+  "body": "6e496561310aefd9",
+  "claim": "plumbing - NONE",
+  "code": "16120b9e238af2b7",
+  "core": "6279041eb5d1c5c1",
+  "date": "2026-10-18",
+  "note": "a dataclass for a table-of-contents section of the record; decides nothing about the map",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/record/contents.py::Section.path#plumbing": {
@@ -36834,11 +36838,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/record/contents.py::_section#plumbing": {
-  "code": "167104645ab8de57",
-  "core": "19683dd83e8fe691",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
+  "body": "bd3a324f5adb8ecb",
+  "claim": "plumbing - NONE",
+  "code": "a2d2d1674f3b9138",
+  "core": "7ac842a5b42ba823",
+  "date": "2026-10-18",
+  "note": "parses and checks a contents.json section; plumbing",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/record/contents.py::_tag#plumbing": {
@@ -36858,11 +36866,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/record/contents.py::idle_rules#plumbing": {
-  "code": "d6627d75ab641257",
-  "core": "effddbbe285f104c",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
+  "body": "9b53bd6ccd4b4dfc",
+  "claim": "plumbing - NONE",
+  "code": "2a466ba86d5e1ff2",
+  "core": "4a9562eda432a3bb",
+  "date": "2026-10-18",
+  "note": "reports clauses that match no question and stale `awaiting` entries; plumbing",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/record/contents.py::load_contents#plumbing": {
@@ -42894,14 +42906,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/_geom/village.py::BUNDLE_PITCH_FT#homestead bundle pitch": {
-  "code": "7ee0987b1b10a28d",
-  "core": "a2738f8641e9bbb8",
-  "date": "2026-10-03",
-  "note": "no page in the bundle answers",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/settlement/_geom/village.py::FARMHOUSE_EAVE_GAP_FT#farmhouse wall-to-wall clearance": {
   "code": "2c1d9726b8735731",
   "core": "232d3ac8ac8b4b8c",
@@ -45419,22 +45423,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/city/bridges.py::BridgesMixin.cut_undeckable_lanes#a lane stops at water it cannot bridge": {
-  "code": "e023e11e6b732176",
-  "core": "cc15e69ffdb5682d",
-  "date": "2026-10-03",
-  "note": "nothing in the bundle on it",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/city/bridges.py::CUT_GAP_FT#lane end short of unbridged water": {
-  "code": "6aab37c5834a3376",
-  "core": "6f1b8dc9cc6bf543",
-  "date": "2026-10-03",
-  "note": "nothing in the bundle on it",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/settlement/city/bridges.py::DECK_SPAN_DEFAULT_FT#unrecorded span": {
   "code": "ff0ae67bfd799537",
   "core": "212f34fd481113bf",
@@ -45557,14 +45545,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/city/bridges.py::_sub_run#plumbing": {
-  "code": "df92e2e996027a8a",
-  "core": "425a7581572ae5bb",
-  "date": "2026-10-03",
-  "note": "geometry",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/settlement/city/bridges.py::crossing_deck#landing past each bank": {
   "code": "fbe3208ba591d5e8",
   "core": "9dc618b8849796dc",
@@ -45617,14 +45597,6 @@
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:367d166bf8fb0b33",
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:431c9ba134441966"
   ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/city/bridges.py::cut_at#plumbing": {
-  "code": "889348b31e96b922",
-  "core": "61fad50577f6ddd4",
-  "date": "2026-10-03",
-  "note": "geometry",
-  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::deck_admitted#plumbing": {
@@ -47925,143 +47897,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/civic_grounds/edge_seat.py::ANGLES#bearing order": {
-  "code": "ac1be0297669b211",
-  "core": "a5c573271dc3c6cf",
-  "date": "2026-10-03",
-  "note": "search order; the downslope preference is claimed on edge_seat",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/civic_grounds/edge_seat.py::EdgeGround#plumbing": {
-  "code": "911c7a526bd13577",
-  "core": "45d47d15b58c96af",
-  "date": "2026-10-03",
-  "note": "class shell",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/civic_grounds/edge_seat.py::EdgeGround.__init__#plumbing": {
-  "code": "6e6ed0ebda7a5374",
-  "core": "dbf7039902b246ac",
-  "date": "2026-10-03",
-  "note": "builds indexes; decisions claimed on clear",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/civic_grounds/edge_seat.py::EdgeGround.clear#beyond the last house": {
-  "code": "e1c1aa96794fa625",
-  "core": "3a4d7f74eb4028df",
-  "date": "2026-10-03",
-  "note": "outside the hull, \"just beyond the last of them\"",
-  "pages": {
-   "0235-village-burial-grounds-bochi.drawing.html": "fa6fc256f086d28d"
-  },
-  "research": "94b02a00c1f2f166",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/civic_grounds/edge_seat.py::EdgeGround.clear#clear of houses and wells": {
-  "code": "adaa9ea816e4b2eb",
-  "core": "3a4d7f74eb4028df",
-  "date": "2026-10-03",
-  "note": "caller's clear_px; none for burial, 120 ft for cremation",
-  "pages": {
-   "0235-village-burial-grounds-bochi.drawing.html": "fa6fc256f086d28d",
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html": "47b8cfda99c75467"
-  },
-  "research": "798de1c981a8e482",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/civic_grounds/edge_seat.py::EdgeGround.clear#never in a paddy or marsh": {
-  "code": "c76edef50ba991cb",
-  "core": "3a4d7f74eb4028df",
-  "date": "2026-10-03",
-  "note": "never in a flooded field",
-  "pages": {
-   "0235-village-burial-grounds-bochi.drawing.html": "fa6fc256f086d28d"
-  },
-  "research": "94b02a00c1f2f166",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/civic_grounds/edge_seat.py::EdgeGround.clear#off the dry plots": {
-  "code": "8daf0dfb2fb98ab3",
-  "core": "3a4d7f74eb4028df",
-  "date": "2026-10-03",
-  "note": "honest UNRESEARCHED",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/civic_grounds/edge_seat.py::EdgeGround.clear#out of the water": {
-  "code": "2582db1ccddfb244",
-  "core": "3a4d7f74eb4028df",
-  "date": "2026-10-03",
-  "note": "caller's per-water margins, no set-back beyond the bank",
-  "pages": {
-   "0235-village-burial-grounds-bochi.drawing.html": "fa6fc256f086d28d"
-  },
-  "research": "94b02a00c1f2f166",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/civic_grounds/edge_seat.py::STEP_FT#search step": {
-  "code": "2b42953fd1f5aef2",
-  "core": "e3bbe3a7edb35017",
-  "date": "2026-10-03",
-  "note": "search granularity",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/civic_grounds/edge_seat.py::convex_hull#plumbing": {
-  "code": "8ef38da47560f568",
-  "core": "6bfe2e30ae26eb52",
-  "date": "2026-10-03",
-  "note": "geometry",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/civic_grounds/edge_seat.py::edge_seat#as near the houses as the ground allows": {
-  "code": "a84df52a5bea80be",
-  "core": "2fe35188065c3cdf",
-  "date": "2026-10-03",
-  "note": "nearest ring out, no set distance",
-  "pages": {
-   "0235-village-burial-grounds-bochi.drawing.html": "fa6fc256f086d28d"
-  },
-  "research": "94b02a00c1f2f166",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/civic_grounds/edge_seat.py::edge_seat#downslope first among equals": {
-  "code": "2821e165ade1c58c",
-  "core": "2fe35188065c3cdf",
-  "date": "2026-10-03",
-  "note": "ANGLES runs to +-180 and every bearing of a nearer ring wins before the next ring, so the ground seats upslope/upstream whenever that is nearer; 0235 drawing: \"never upstream of them on the village's stream\"",
-  "pages": {
-   "0235-village-burial-grounds-bochi.drawing.html": "fa6fc256f086d28d"
-  },
-  "research": "94b02a00c1f2f166",
-  "triaged": "2026-10-05",
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/civic_grounds/edge_seat.py::rect_gap#plumbing": {
-  "code": "f9c332eaacd0e629",
-  "core": "59882734cbe4eb7b",
-  "date": "2026-10-03",
-  "note": "geometry",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/civic_grounds/edge_seat.py::rect_samples#plumbing": {
-  "code": "0344b382610275f1",
-  "core": "279e1613e3fba676",
-  "date": "2026-10-03",
-  "note": "geometry",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin#plumbing": {
   "code": "911c7a526bd13577",
   "core": "45d47d15b58c96af",
@@ -49258,97 +49093,129 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement#coppice crown": {
-  "code": "b786fde9c6cb4bd4",
-  "core": "614ffa58ec08ef90",
-  "date": "2026-10-08",
-  "note": "4-4.5 ft radius is the page's 8-9 ft crown (value as the claim states it; the constant is not inline)",
+  "body": "23b8a73a370ecac2",
+  "claim": "coppice crown - how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing: COMMONS_CROWN_R_FT 4 to 4.5 ft",
+  "code": "2a8d65376fa87a4d",
+  "core": "84098b6510c187fb",
+  "date": "2026-10-18",
+  "note": "4 to 4.5 ft radius is the page's \"8-9 ft across\", which the page records as a GUESS",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
   "research": "050eb194338f2925",
   "rests": [
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:02347cd7bad4385d",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:0dafa8d8a7ffcc86",
-   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:5b4dfd1254dbb70e"
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:7f54cfe8dba1be5f"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement#coppice stocking": {
-  "code": "c235bbff06dfa175",
-  "core": "614ffa58ec08ef90",
-  "date": "2026-10-08",
-  "note": "8 ft centers, the page's 1,700 a hectare",
+  "body": "23b8a73a370ecac2",
+  "claim": "coppice stocking - how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing: COMMONS_SPACING_FT 8 ft centers",
+  "code": "679912b2371cacee",
+  "core": "84098b6510c187fb",
+  "date": "2026-10-18",
+  "note": "8 ft centers matches \"about 1,700 a hectare on 8 ft centers\"",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
   "research": "050eb194338f2925",
   "rests": [
-   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:5b4dfd1254dbb70e"
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:02347cd7bad4385d",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:51c0bdd2e9b13085",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:5b4dfd1254dbb70e",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:744d442667efd8c5",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:7f54cfe8dba1be5f",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:bcd7a453c2dd25b4",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:cca3c488ce22f75b"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement#forest floor tint": {
-  "code": "bd4cb4bdf94a9af6",
-  "core": "614ffa58ec08ef90",
-  "date": "2026-10-08",
-  "note": "a tint only",
+  "body": "23b8a73a370ecac2",
+  "claim": "forest floor tint - CONVENTION: FOREST_FLOOR",
+  "code": "ca879c5f812cc513",
+  "core": "84098b6510c187fb",
+  "date": "2026-10-18",
+  "note": "a ground tint is purely how the wood is shown",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement#hill-wood crown": {
-  "code": "8380d228766d524e",
-  "core": "614ffa58ec08ef90",
-  "date": "2026-10-08",
-  "note": "8.5 ft mean radius as the page draws it",
+  "body": "23b8a73a370ecac2",
+  "claim": "hill-wood crown - how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing: CANOPY_R_FT 8.5 ft mean radius",
+  "code": "33012d6201a87237",
+  "core": "84098b6510c187fb",
+  "date": "2026-10-18",
+  "note": "8.5 ft mean radius matches \"The mean crown radius is 8.5 ft\"",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
   "research": "050eb194338f2925",
   "rests": [
-   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a40ebd3a6acb1f87"
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:02347cd7bad4385d",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:7f54cfe8dba1be5f",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:9c18680acc256e2e",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a40ebd3a6acb1f87",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a52bbfe64bb3c3b8",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:c42d5b3f4f69bf47"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement#hill-wood stocking": {
-  "code": "6f7564e2c52934a6",
-  "core": "614ffa58ec08ef90",
-  "date": "2026-10-08",
-  "note": "13 ft centers, 600 a hectare",
+  "body": "23b8a73a370ecac2",
+  "claim": "hill-wood stocking - how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing: CANOPY_SPACING_FT 13 ft centers",
+  "code": "721eab1d5466babb",
+  "core": "84098b6510c187fb",
+  "date": "2026-10-18",
+  "note": "13 ft centers matches \"on centers about 13 ft apart\"",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
   "research": "050eb194338f2925",
   "rests": [
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:02347cd7bad4385d",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:744d442667efd8c5",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:7f54cfe8dba1be5f",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:c42d5b3f4f69bf47",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:e0f372bc46e81fac"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement#layer offsets and the crown pad": {
-  "code": "5258b3614a4e80c2",
-  "core": "614ffa58ec08ef90",
-  "date": "2026-10-10",
-  "note": "CANOPY_PAD 0.6 is a margin so crown coordinates rounded to 0.1 px clear a wall (per _crown_covers); it is plumbing, not a fact about the place",
+  "body": "23b8a73a370ecac2",
+  "claim": "layer offsets and the crown pad - NONE",
+  "code": "38b7c8b2cda3f945",
+  "core": "84098b6510c187fb",
+  "date": "2026-10-18",
+  "note": "draw-layer offsets and padding are plumbing",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement#what sets the frame": {
-  "code": "999dcd604d1b014e",
-  "core": "614ffa58ec08ef90",
-  "date": "2026-10-08",
-  "note": "framing only",
+  "body": "23b8a73a370ecac2",
+  "claim": "what sets the frame - CONVENTION: _CROP_HARD and _CROP_CITY, the features the crop contains",
+  "code": "37e824c25870fe6a",
+  "core": "84098b6510c187fb",
+  "date": "2026-10-18",
+  "note": "which features the crop holds is a framing choice",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement#wood revealed by the crop": {
-  "code": "e24aed3fd8b68d9c",
-  "core": "614ffa58ec08ef90",
-  "date": "2026-10-08",
-  "note": "how much wood the frame shows, a framing choice",
+  "body": "23b8a73a370ecac2",
+  "claim": "wood revealed by the crop - CONVENTION: FOREST_REVEAL_FT, about 110 ft past the tree line",
+  "code": "0d012397feaaf9e6",
+  "core": "84098b6510c187fb",
+  "date": "2026-10-18",
+  "note": "how much wood the frame shows is framing, not how the wood stood",
   "pages": {},
   "research": "",
   "rests": [],
@@ -61436,11 +61303,15 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/rolling/__init__.py::RollingMixin#package composition": {
-  "code": "1ab5258e7d0f9c07",
-  "core": "e42deff531b53ad2",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
+  "body": "12e6837b2e5f5c3e",
+  "claim": "package composition - NONE",
+  "code": "50d780d7358dd4d2",
+  "core": "dc11c33fece70775",
+  "date": "2026-10-18",
+  "note": "the mixin list and the `_nucleated: bool` annotation are type plumbing and decide nothing",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/access.py::ACCESS_HALF_FT#corridor room": {
@@ -65479,413 +65350,6 @@
    "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html": "44a3744ac1eacfe3"
   },
   "research": "f86a0d6160742f02",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin#orchestration plumbing": {
-  "code": "5598686003ac29cc",
-  "core": "45d47d15b58c96af",
-  "date": "2026-10-03",
-  "note": "mixin shell",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_civic#no shrine in a hamlet": {
-  "code": "60122ac4be6ee7e3",
-  "core": "887c36bddbe6e414",
-  "date": "2026-10-03",
-  "note": "0001",
-  "pages": {
-   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html": "44a3744ac1eacfe3"
-  },
-  "research": "f86a0d6160742f02",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_civic#shrine hall size at the threshold": {
-  "code": "d90ba0d5d0cebcb0",
-  "core": "887c36bddbe6e414",
-  "date": "2026-10-03",
-  "note": "the threshold is seated off px(62) x px(42) while 0215 draws the hall \"about 60 by 48 ft\", so the innermost arch's 12 ft is measured from a face 6 ft shallower than the one drawn; use the drawn hall's size, or record the 62 x 42 on the page",
-  "pages": {
-   "0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.drawing.html": "927d108f9d5903aa"
-  },
-  "research": "37abc2a854f53729",
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_civic#torii count and pitch": {
-  "code": "6804bf4ef2a13759",
-  "core": "887c36bddbe6e414",
-  "date": "2026-10-03",
-  "note": "1/3/7 on the tier's distribution, 12 ft pitch, as 0220",
-  "pages": {
-   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html": "e385403eda71f0a2"
-  },
-  "research": "187ffe8b48289099",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_civic#village shrine at the gateway": {
-  "code": "13b52c1b06058a7c",
-  "core": "887c36bddbe6e414",
-  "date": "2026-10-03",
-  "note": "at the entrance where the water leaves, as 0215",
-  "pages": {
-   "0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.drawing.html": "927d108f9d5903aa"
-  },
-  "research": "37abc2a854f53729",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_cluster#headman at the skeleton's prime spot": {
-  "code": "cdca7f77357bf011",
-  "core": "7e06dad0e5e9c007",
-  "date": "2026-10-03",
-  "note": "the headman is seated at the lane junction and a ring of 62/44/96 px offsets around it; 0030 drawing puts it \"in the settlement's oldest cluster - a GUESS\" and says \"Nothing we read supports putting it on the road for the road's sake\"",
-  "pages": {
-   "0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.drawing.html": "e6399a21c1165051"
-  },
-  "research": "5c6205a80b826fc7",
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_cluster#lane skeleton": {
-  "code": "94ef0c0c11d95a9b",
-  "core": "7e06dad0e5e9c007",
-  "date": "2026-10-03",
-  "note": "the code lays `self.lane(...)` from `skeleton_layout` BEFORE seating any house; 0081 drawing: \"The farmhouses are placed first, and the lanes are drawn among them after\" (the Imperial road is the only exception); 0031 attests road-first only for a row",
-  "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
-  },
-  "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_cluster#lane stops at the reeds": {
-  "code": "2208bfbfdf491747",
-  "core": "7e06dad0e5e9c007",
-  "date": "2026-10-03",
-  "note": "`trim_off_marsh`; \"does not cross the reeds\"",
-  "pages": {
-   "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
-  },
-  "research": "324b10775c9108ef",
-  "triaged": "2026-10-18",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_cluster#lane width and clearance": {
-  "body": "fef52611f066186e",
-  "claim": "lane width and clearance - village-lanes.drawing, how-our-maps-lay-a-clustered-settlements-lanes.drawing: 5 px wide, 40 px cleared",
-  "code": "662100d2e5de0d79",
-  "core": "7e06dad0e5e9c007",
-  "date": "2026-10-18",
-  "note": "5 px matches §1's 5 ft spine, but `clearance=40` appears on neither page: 0246 gives \"a lane's room of 18 ft - 7 ft at each garden fence\" and a 7 ft middle-to-fence gap, and 0081 §19 a 3 ft tread-to-wall gap; the 40 should match those or be claimed GUESS/UNRESEARCHED (the bundle does not show whether `self.lane`'s clearance is measured to a house's center or its wall)",
-  "pages": {
-   "0081-village-lanes.drawing.html": "c6ac7410edabbd2d",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
-  },
-  "research": "eb340109f5785558",
-  "rests": [
-   "0081-village-lanes.drawing.html:417841cd16f112d9",
-   "0081-village-lanes.drawing.html:91a5765af6230403",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
-  ],
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_cluster#seed pool": {
-  "code": "985b80f9cba186d7",
-  "core": "7e06dad0e5e9c007",
-  "date": "2026-10-03",
-  "note": "candidate count",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_cremation#cremation ground's clearances": {
-  "code": "90a049ca1c1284d3",
-  "core": "24b0a6c585573940",
-  "date": "2026-10-03",
-  "note": "120 / 6 / 30 ft as 0238; 650 ft is the scan's reach only",
-  "pages": {
-   "0235-village-burial-grounds-bochi.drawing.html": "fa6fc256f086d28d",
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html": "47b8cfda99c75467"
-  },
-  "research": "1f00626ab7b40b53",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_cremation#cremation ground's seat": {
-  "code": "d8783b26ea8bbeb4",
-  "core": "24b0a6c585573940",
-  "date": "2026-10-03",
-  "note": "even-odds knob per 0238 (\"beside\" falls back to \"apart\" while the village draws no burial ground, which 0235 says every village has)",
-  "pages": {
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html": "47b8cfda99c75467"
-  },
-  "research": "fdf6aa354ef6d6e1",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_cremation#cremation ground's size": {
-  "code": "05256a20ba4a9e78",
-  "core": "24b0a6c585573940",
-  "date": "2026-10-03",
-  "note": "75 x 52.5 ft inside 0238's 30-80 ft GUESS",
-  "pages": {
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html": "47b8cfda99c75467"
-  },
-  "research": "fdf6aa354ef6d6e1",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_cremation#jizo at a lone cremation ground": {
-  "code": "822c9d69e7606c61",
-  "core": "24b0a6c585573940",
-  "date": "2026-10-03",
-  "note": "jizo=False on its own, as 0238/0235",
-  "pages": {
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html": "47b8cfda99c75467"
-  },
-  "research": "fdf6aa354ef6d6e1",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_field#land-use overlay": {
-  "code": "370e75fa9dd7abb6",
-  "core": "61bc77f88a3ef4fb",
-  "date": "2026-10-03",
-  "note": "delegation",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_field#pond chain": {
-  "code": "6cbffdad3710b0d0",
-  "core": "61bc77f88a3ef4fb",
-  "date": "2026-10-05",
-  "note": "a rolled chain of ponds is a form the page lists, but it is drawn as one pond at mid_margin's spot; draw the chain or remove it from water_source_position",
-  "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
-  },
-  "research": "4e7ba7479292ad40",
-  "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:e73f457f7f5367a3",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:f0cff1f9b2900437"
-  ],
-  "triaged": "2026-10-05",
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_field#source pond and stream": {
-  "code": "976b5c89a350066f",
-  "core": "61bc77f88a3ef4fb",
-  "date": "2026-10-03",
-  "note": "nothing in the bundle covers the sizes",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_field#source pond size": {
-  "body": "f580f2729c799372",
-  "claim": "source pond size - reservoir-ponds-tameike.drawing: a fixed 88 x 56 px, never sized to the paddy it waters (two or three parts in ten)",
-  "code": "6306fdfafa0e34aa",
-  "core": "61bc77f88a3ef4fb",
-  "date": "2026-10-18",
-  "note": "the code fixes `(…, 88.0, 56.0)` for a pond that is the field's only water source (no feeder is set), but 0061 says \"a reservoir pond is sized by the paddy it waters\", two or three parts in ten for a field whose only water it is; size the pond from the paddy, or record the fixed size as a DEVIATION on the drawing page",
-  "pages": {
-   "0061-reservoir-ponds-tameike.drawing.html": "c22de534b95132ef"
-  },
-  "research": "5b102e334372ecb3",
-  "rests": [
-   "0061-reservoir-ponds-tameike.drawing.html:18eca3ea34b26d65",
-   "0061-reservoir-ponds-tameike.drawing.html:2e197d3da9c3b4be",
-   "0061-reservoir-ponds-tameike.drawing.html:87dfb00c0e8768ca"
-  ],
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_knobs#corner intake beside a high cluster": {
-  "code": "09bdf5298c50e09a",
-  "core": "3f13c9ead8b42e50",
-  "date": "2026-10-03",
-  "note": "nothing in the bundle covers it",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_knobs#water source above the fields": {
-  "code": "ef3e2954421134bd",
-  "core": "3f13c9ead8b42e50",
-  "date": "2026-10-03",
-  "note": "gravity-valid roll, as 0031",
-  "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
-  },
-  "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_margin_frame#band sized from the households": {
-  "code": "00fa795141b9ceff",
-  "core": "98b249e8dbe5b24b",
-  "date": "2026-10-03",
-  "note": "no bundled question sizes the band",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_margin_frame#band standoff from the rice": {
-  "code": "9c921c1ed5706248",
-  "core": "98b249e8dbe5b24b",
-  "date": "2026-10-03",
-  "note": "nothing in the bundle covers it",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_margin_frame#cluster on the dry margin": {
-  "code": "47f3bc035cf46149",
-  "core": "98b249e8dbe5b24b",
-  "date": "2026-10-03",
-  "note": "the position knob's dry margin, as 0031",
-  "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
-  },
-  "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_margin_frame#positions told apart": {
-  "code": "9adafdde48294efb",
-  "core": "98b249e8dbe5b24b",
-  "date": "2026-10-05",
-  "note": "0031 drawing names the dry margin (§1236) but says nothing of per-position seat biases or of three positions drawing alike; the claim should be UNRESEARCHED (or a DEVIATION a page records)",
-  "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
-  },
-  "research": "4e7ba7479292ad40",
-  "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:fe3597622484dbd6"
-  ],
-  "verdict": "NEEDS-RESEARCH"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_wells#wells among the houses": {
-  "code": "f4145c153a89caa4",
-  "core": "14b9938023175d97",
-  "date": "2026-10-13",
-  "note": "always seats the among-the-houses form (`place_wells` grid, off lanes) with no roll, where 0196 says \"Whether a village's wells stand by the lane or among the houses is a knob\". The 40 px inset and 185 px spacing are not on the page and should be claimed GUESS/UNRESEARCHED",
-  "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
-  },
-  "research": "530e826bbd37f9c5",
-  "rests": [
-   "0196-communal-wells-ido.drawing.html:a24e8638e374e060",
-   "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
-   "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
-  ],
-  "triaged": "2026-10-17",
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_windbreak#belt always on one side, a straight strip": {
-  "code": "2ae5af70856c330e",
-  "core": "91712273a1fa222c",
-  "date": "2026-10-08",
-  "note": "`belt` is always one rectangle on the uphill side (lines 1119-1125), but the page attests \"on one side or two\" and \"hooks or straight strips\"; \"never two sides\" is on no page. Roll one side against a two-sided hook per settlement, or record the single strip as a DEVIATION on the drawing page",
-  "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
-  },
-  "research": "5892781a1ab23bcb",
-  "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:4523f93a7cad32ee",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:8e692f283f7947e4"
-  ],
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_windbreak#communal windbreak behind the cluster": {
-  "code": "d52e3dd8452ed66a",
-  "core": "91712273a1fa222c",
-  "date": "2026-10-08",
-  "note": "the code takes the uphill side as windward (`bc = bcx - dx*(reach_up+62)` in the fall frame), but the page says \"Every map takes the northwest wind unless it declares a local one\" and \"No map drawn so far records one\". Unless the map declares an off-the-hill wind, the belt belongs on the north and west. The +46 px span is also not on the page; one band per cluster is fine (§8)",
-  "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
-  },
-  "research": "5892781a1ab23bcb",
-  "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:0c9dba0334c6fdfb",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:5e9ac2daf3925f70",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
-  ],
-  "triaged": "2026-10-08",
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_windbreak#windbreak standoff and depth": {
-  "code": "a369910ec2b81c76",
-  "core": "91712273a1fa222c",
-  "date": "2026-10-08",
-  "note": "neither page gives the 62 px standoff or the 68 px depth. 0038 rules on clear ground from yards and beds, not houses. The inner face 28 ft from the house sits below the 37 ft low end of §11's calibrated range, and 68 ft is wider than Tarama's 33-49 ft. Mark it UNRESEARCHED",
-  "pages": {
-   "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
-  },
-  "research": "1914c7edd9c14373",
-  "rests": [
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:b827c5a10b15cbbc",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:cf77608be5e193f8",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:31f1ea9e18204d6a",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:e27cdaba5177821d"
-  ],
-  "triaged": "2026-10-08",
-  "verdict": "NEEDS-RESEARCH"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin.roll_village#a rolled village is clustered": {
-  "code": "335273cd9b62db5c",
-  "core": "d028d8428cc4370e",
-  "date": "2026-10-03",
-  "note": "`self.M[\"meta\"][\"nucleated\"] = True` fixes the form, but 0031 drawing rolls every settlement among clustered, scattered and row (5:3:2); if a caller rolls the form before this runs, the claim should say it is the clustered value of that knob",
-  "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
-  },
-  "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin.roll_village#notice board": {
-  "code": "f1da03f6738e75a9",
-  "core": "d028d8428cc4370e",
-  "date": "2026-10-11",
-  "note": "`self.place_kosatsuba()` runs before `hinterland()`, `crop_to_content` and `title`, so the board is sited with no view and before the scrub, but the page has \"the board is the last thing placed, after the map is cropped to its frame\"; move the call after the crop and title, or claim it as a DEVIATION the drawing page records. The claim's \"at the busiest node\" is also stale, since the seat is rolled",
-  "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
-  },
-  "research": "5b977d097fda2bb4",
-  "rests": [
-   "0190-notice-boards-kosatsuba.drawing.html:10ca8908cd449c17",
-   "0190-notice-boards-kosatsuba.drawing.html:170cd7ce98fd6d9a",
-   "0190-notice-boards-kosatsuba.drawing.html:90ee84eca3eec3ca",
-   "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
-  ],
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin.roll_village#plank bridges over the field ditches": {
-  "code": "8b13e38a0b019004",
-  "core": "d028d8428cc4370e",
-  "date": "2026-10-03",
-  "note": "crossings at intervals along long ditches (0084 gives no interval)",
-  "pages": {
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
-  },
-  "research": "43cf74757fcb48f3",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin.roll_village#where the canal offtakes sit along the field (defaults `offtakes_a` (0.22, 0.45, 0.68, 0.88), `offtakes_b` (0.45, 0.8))": {
-  "code": "d028d8428cc4370e",
-  "core": "d028d8428cc4370e",
-  "date": "2026-10-11",
-  "note": "where the canal offtakes sit along the field (defaults `offtakes_a` (0.22, 0.45, 0.68, 0.88), `offtakes_b` (0.45, 0.8))",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/settlement/rolling/roll.py::_MarginFrame#orchestration plumbing": {
-  "code": "de7e1e03281ba9c4",
-  "core": "f93acba9c5a0adad",
-  "date": "2026-10-03",
-  "note": "frame value",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/rolling/roll.py::_MarginFrame.to_screen#orchestration plumbing": {
-  "code": "dbcb9173069cf1da",
-  "core": "be29ca36166b30a5",
-  "date": "2026-10-03",
-  "note": "transform",
-  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/route.py::ROUTE_LEGS#most legs of a routed path": {
@@ -71327,48 +70791,6 @@
   "date": "2026-10-03",
   "note": "formula matches; bundle silent",
   "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/water_source.py::WaterSourceMixin#plumbing": {
-  "code": "77cc9f57d0dedb89",
-  "core": "45d47d15b58c96af",
-  "date": "2026-10-08",
-  "note": "an empty carrier class",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/water_source.py::WaterSourceMixin.water_source_anchor#where the water comes in": {
-  "code": "b929a82627c9be6c",
-  "core": "310342e443ca18ff",
-  "date": "2026-10-08",
-  "note": "corner, margin, chain or stream edge; a source below the field is refused",
-  "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
-  },
-  "research": "4e7ba7479292ad40",
-  "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:d12a5e6b4d47918f",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:e73f457f7f5367a3",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:f0cff1f9b2900437"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/water_source.py::WaterSourceMixin.water_sources_for#water source above the field": {
-  "code": "5de3a44de02b6183",
-  "core": "5a2d77305ba6c1e6",
-  "date": "2026-10-08",
-  "note": "pond and stream forms by the water's kind; downhill positions excluded",
-  "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
-  },
-  "research": "4e7ba7479292ad40",
-  "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:d12a5e6b4d47918f",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:e73f457f7f5367a3",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:f0cff1f9b2900437"
-  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/__init__.py::WaterWaysMixin#the composed mixin": {

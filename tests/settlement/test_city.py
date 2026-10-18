@@ -547,28 +547,6 @@ def test_a_merged_deck_is_redrawn_to_reach_both_crossings() -> None:
     assert deck["span"] == 42.0 and 'width="42.0"' in s.top[int(deck["z"]) - s.TOPZ]
 
 
-def test_a_village_cuts_its_lanes_where_no_deck_seats_before_it_lays_its_decks() -> None:
-    """Feature 287 (ways W12): `roll_village` has no web settle, and `bridges()` raises on a crossing no deck seats. So the
-    village cuts its lanes by the same predicate first (`undeckable_at`): the crossing and a bank's width either side come
-    out, the pieces stand, a lane with nothing left goes, and `bridges()` then decks what remains."""
-    from l7r.diagram.settlement.city.bridges import cut_at, undeckable_at
-
-    s = _crop_settlement()
-    s.M["field_ditches"] = [{"poly": [[0.0, 100.0], [400.0, 110.0]], "w": 4.0}]
-    grazing = [[0.0, 95.0], [400.0, 118.0]]  # two degrees off the ditch's own line: no deck seats
-    square = [[200.0, 0.0], [200.0, 300.0]]  # square over it: a deck seats
-    for pts in (grazing, square, [[105.0, 102.55], [108.0, 102.72]]):  # the last is all crossing: nothing of it is left
-        s.lane(pts, width=3)
-    waters = [([[0.0, 100.0], [400.0, 110.0]], 4.0)]
-    assert undeckable_at([(0.0, 95.0), (400.0, 118.0)], 3.0, waters) and not undeckable_at([(200.0, 0.0), (200.0, 300.0)], 3.0, waters)
-    assert s.cut_undeckable_lanes() >= 1
-    assert all(not undeckable_at([(float(x), float(y)) for x, y in ln["pts"]], 3.0, waters) for ln in s.M["lanes"])
-    assert s.bridges() >= 1, "the square crossing is decked; nothing raises"
-    assert cut_at([(0.0, 0.0), (100.0, 0.0)], 0, (50.0, 0.0), 10.0) == [[(0.0, 0.0), (40.0, 0.0)], [(60.0, 0.0), (100.0, 0.0)]]
-    assert cut_at([(0.0, 0.0), (10.0, 0.0), (100.0, 0.0)], 0, (5.0, 0.0), 10.0) == [[(15.0, 0.0), (100.0, 0.0)]], "a head with no length goes; the cut runs on past a vertex"
-    assert cut_at([(0.0, 0.0), (0.0, 0.0)], 0, (0.0, 0.0), 1.0) == []
-
-
 def test_a_plank_s_seats_are_tried_wide_first_then_widest_left() -> None:
     """Feature 328 (0084's drawing page: "Where no wide spot is free, a crossing takes the widest spot left"): every seat whose
     water earns a board, nearest the slot first, then the rest widest first - never a narrow seat before a wide one, and no
@@ -579,3 +557,23 @@ def test_a_plank_s_seats_are_tried_wide_first_then_widest_left() -> None:
     got = seat_order(list(width), lambda fr: width[fr] >= 2.0, width.__getitem__)
     assert got == [-0.1, 0.1, 0.3, 0.0, -0.2]
     assert seat_order([0.0, 0.1], lambda fr: False, lambda fr: 1.0) == [0.0, 0.1], "equal widths: nearest the slot first"
+
+
+def test_a_footplank_does_not_land_on_a_farms_garden() -> None:
+    """The plank siter keeps its decks off a farm's worked ground - its kitchen garden and its own grove (feature 291) -
+    by each one's recorded box: a ditch whose whole run lies under a garden takes no plank, where alone it takes one."""
+    s = _crop_settlement()
+    s.M["fields"] = [{"outline": [[50, 120], [850, 120], [850, 480], [50, 480]]}]
+    s.M["field_ditches"] = [{"poly": [[100, 300], [800, 300]], "w": 5, "role": "main"}]
+    s.M["gardens"] = [{"x": 450.0, "y": 300.0, "w": 760.0, "h": 60.0}]
+    assert s.channel_footbridges(spacing=320) == 0, "every seat along the ditch lands on the garden"
+
+
+def test_a_footplank_is_not_laid_across_the_hem_crop() -> None:
+    """...and off the dry hem crop (`dry_polys`), tested half a foot wider all round so a deck on a plot's edge counts as on
+    the plot: a ditch whose whole run lies under a dry plot takes no plank."""
+    s = _crop_settlement()
+    s.M["fields"] = [{"outline": [[50, 120], [850, 120], [850, 480], [50, 480]]}]
+    s.M["field_ditches"] = [{"poly": [[100, 300], [800, 300]], "w": 5, "role": "main"}]
+    s.dry_polys.append([(70.0, 270.0), (830.0, 270.0), (830.0, 330.0), (70.0, 330.0)])
+    assert s.channel_footbridges(spacing=320) == 0, "every seat along the ditch lands on the dry plot"

@@ -425,7 +425,7 @@ def test_a_depiction_bundle_says_which_maps_draw_what_its_conditions_name() -> N
     the knob's form; the bundle now carries each named knob's forms, typing rule and engine lines."""
     note = mb.knobs_note("Drawing: research/questions/0020-x.drawing.html [land_use_overlay=mulberry_fishpond]\n")
     assert "## land_use_overlay" in note and "mulberry_fishpond" in note and "def _land_use_ok" in note
-    assert "rolling/roll.py" in note, "where the engine resolves it"
+    assert "settlement/fields/landuse.py" in note, "where the engine resolves it (the roller that also did went in feature 388)"
     assert mb.knobs_note("no condition here") == ""
 
 
