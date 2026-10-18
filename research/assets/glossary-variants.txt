@@ -740,6 +740,7 @@ discharge channel	discharge channel
 discharge channels	discharge channel
 dish pond	sara-ike
 dish ponds	sara-ike
+dishui	dishui
 dispersed farmstead	dispersed settlement
 dispersed farmsteads	dispersed settlement
 dispersed settlement	dispersed settlement
@@ -813,8 +814,11 @@ draw-basins	draw-basin
 drawdown	drawdown
 dressed stone	dressed stone
 drill ground	drill ground
+drip ground	dishui
 drip line	drip line
 drip lines	drip line
+drip strip	dishui
+drip strips	dishui
 drum tower	drum tower
 drum towers	drum tower
 dry edge	dry edge
