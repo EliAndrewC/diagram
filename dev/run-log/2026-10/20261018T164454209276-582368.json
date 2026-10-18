@@ -1,0 +1,37 @@
+{
+  "utc": "2026-10-18T16:44:54Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 146,
+  "result": "failed: test-full",
+  "commit": "98f1aa7d2",
+  "first_failure_s": 135.8,
+  "last_failure_s": 145.3,
+  "failed_names": [
+    "uncovered l7r/diagram/hamletgen/pondbank.py:97"
+  ],
+  "host": {
+    "load": [
+      3.8,
+      4.62
+    ],
+    "mem_avail_mb": [
+      9263,
+      9330
+    ],
+    "cpu_temp_c": [
+      56.0,
+      59.0
+    ],
+    "stall_s": {
+      "cpu": 0.6,
+      "io": 0.2,
+      "io_full": 0.2,
+      "memory": 0.1
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  }
+}
