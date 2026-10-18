@@ -184,8 +184,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T64 make task-add files a task box and its plan section with the next free id (the GM 2026-10-18, plan D83)
       research: rendering
       verify: DONE. make task-add filed T65-T67; landed, test_task_add green
-- [ ] T65 An archived plan block edited by a typo after its review is not owed (plan D84)
+- [x] T65 An archived plan block edited by a typo after its review is not owed (plan D84)
       research: rendering
+      verify: DONE. archived typo-edited blocks owe nothing; landed, test_plan_gate green
 - [ ] T66 A requirement cited from another feature is bundled from that feature (plan D85)
       research: rendering
 - [ ] T67 land-tooling lints before it tests (plan D86)

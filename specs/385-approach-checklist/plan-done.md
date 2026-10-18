@@ -1877,3 +1877,36 @@ says so, since parallel sessions can sum past the hour. With `--transcript` (a r
 
 **D83 - the next id, the right places.** `scripts/task-add.py` takes the highest `T<n>` in `tasks.md` and `plan.md` together (so an id named only in a heading is never reused), adds one, writes the box before the GM-review box with its research line, and, given SECTION, writes that file's text with `{T}` replaced into `plan.md` before its `## T11 - the close` heading (or at the end). It prints the id.
 
+<!-- plan-archive: archived 2026-10-18 -->
+## T65 - an archived block edited by a typo after its review is not owed (found ticking T59, 2026-10-18)
+
+### T65 Approach (checklist part A)
+
+1. **The goal, in the world.** Archiving a finished plan section never makes a review owed.
+2. **The constraints.** Feature 375 FR-044: the archive moves a finished section and voids nothing; FR-005(b): a typo-scale change from the reviewed text is no change. Tooling only; a test red without it.
+3. **Where each comes from.** Feature 375 (O); the defect is found at T63's first ticks (amendment 6, the GM's "obvious ... tooling ... improvements").
+4. **Do they describe the world here?** Yes - measured 2026-10-18: `make tick F=385 T=T59` was refused for `(removed) ### T49 Approach` and `(removed) ### T49 Decisions`. Both blocks are in `plan-done.md` (a grep counts one heading there, none in `plan.md`), at a digest other than the reviewed one: the T47-to-T49 renumbering was a typo-scale edit after their review, which the live check accepts and the archived check (`block_status`, digest match only) does not.
+5. **The order.** The archived check reads the typo rule, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: a recorded block that `plan-done.md` holds under its own key, its text there a typo-scale change from the reviewed text, is not owed; `tests/tooling/test_plan_gate.py` red without it, and T59's tick goes through.
+
+### T65 part B (2026-10-18T23:26Z)
+
+Owed by the hour-23 step-back (hour:385-approach-checklist@23, `change-route`).
+
+1. **What is refusing?** Nothing now: T65 landed and T59-T64 ticked through it.
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged: T59's tick went through once T65 landed.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Changing: the archived check takes the typo rule.
+6. **The one-sentence test.** "Archiving a finished section owes no review" - true by its test and by six ticks that archived.
+7. **The next step is a measurement.** None owed; T65 ticks.
+8. **Routes measured before asking?** n/a - no ask.
+9. **After a ruling.** `change-route` taken: T65 was its first step; T66 and T67 wait for T10.
+
+### T65 Decisions
+
+**D84 - the archived block judged as the live one is.** `block_status`'s removed-block loop skips a recorded key when `plan-done.md` holds a block of that key whose text is `typo_only` against the reviewed text (the record's own `text`, else the history's at its digest), exactly as a block still in `plan.md` is judged; a digest match still skips it as before, and anything more than a typo is owed as before.
+
