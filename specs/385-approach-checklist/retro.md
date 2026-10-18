@@ -607,3 +607,9 @@ found. The first plan matched a fixed list of units and the review blocked it (t
 
 About 15 min. `tick-task.py` runs `plan_gate.archive` after every tick it wrote and prints what moved; an archive error is printed
 and the tick stands. **The habit it changes:** `make plan-archive` is no longer a step to remember.
+
+## T64 - the retro row
+
+About 25 min. `make task-add F= TITLE= [SECTION=] [RESEARCH=physical]` takes the next id past every `T<n>` the feature's three
+files name, puts the box before the GM-review box and the section before the close. **The habit it changes:** a task is filed
+with one command, never a hand-written insertion script.
