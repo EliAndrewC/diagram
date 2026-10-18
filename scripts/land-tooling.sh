@@ -74,8 +74,23 @@ step worktree
 cleanup() { git -C "$ROOT" worktree remove --force "$WT" 2>/dev/null; rm -f "$patch"; }
 trap cleanup EXIT
 
-git -C "$WT" apply --index "$patch" 2>&1 | sed 's/^/  /' >&2
-[ "${PIPESTATUS[0]}" -eq 0 ] || die "FILES do not apply cleanly onto the latest main - merge main into the clone (sync-in), then run this again"
+# GUARD_EDIT_OK: feature 385 T24 (plan D46) - A STALE BASE IS MERGED, NOT REFUSED: measured 2026-10-18, three of three tooling
+# landings were refused here because the ledger and the make-targets page moved on main, and each landed unchanged after a
+# `sync-in`. So on a failed apply the clone merges origin/main (a merge commit, never a rebase), the patch is taken again from
+# the new merge base, and it is applied once more; only a merge that conflicts, or a second failed apply, refuses.
+if ! git -C "$WT" apply --index "$patch" 2>/dev/null; then
+  if ! git -C "$ROOT" merge -q --no-edit origin/main >/dev/null 2>&1; then
+    git -C "$ROOT" merge --abort 2>/dev/null
+    die "FILES do not apply cleanly onto the latest main, and merging main into the clone conflicts - run scripts/sync-with-main.sh sync-in, resolve the conflict, commit, then run this again"
+  fi
+  printf 'land-tooling: main had moved under FILES - merged origin/main into the clone and took the patch again\n' >&2
+  base=$(git -C "$ROOT" merge-base HEAD origin/main) || die "no merge base with origin/main"
+  git -C "$ROOT" diff --binary "$base" HEAD -- "$@" > "$patch"
+  [ -s "$patch" ] || die "FILES carry no change since main - nothing to land (main already has them)"
+  git -C "$WT" reset -q --hard
+  git -C "$WT" apply --index "$patch" 2>&1 | sed 's/^/  /' >&2
+  [ "${PIPESTATUS[0]}" -eq 0 ] || die "FILES do not apply cleanly onto the latest main even after merging it - run scripts/sync-with-main.sh sync-in, then run this again"
+fi
 case " $* " in *" Makefile "*) ( cd "$WT" && make -s docs >/dev/null 2>&1 ) && git -C "$WT" add docs/make-targets.html 2>/dev/null ;; esac
 subjects=$(git -C "$ROOT" log --format='- %s' "$base"..HEAD -- "$@" | head -20)
 msg=$(printf 'Tooling from %s, landed alone mid-feature (make land-tooling, feature 379)\n\n%s\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n' "$(basename "$ROOT")" "$subjects")

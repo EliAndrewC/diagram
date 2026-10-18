@@ -76,9 +76,21 @@ printf 'y\n' > "$C/scripts/b.sh"; git -C "$C" commit -qam "b here"
 printf 'z\n' > "$T/seed/scripts/b.sh"; git -C "$T/seed" commit -qam "b there"; git -C "$T/seed" push -q "$T/o.git" main
 land scripts/b.sh; rc=$?
 ok "a conflicting change is refused" '[ "$rc" -ne 0 ] && grep -q "do not apply cleanly" "$T/out" && [ "$(on_main scripts/b.sh)" = "z" ]'
+ok "...the merge it tried is aborted, the clone as it was (385 T24)" '! git -C "$C" rev-parse -q --verify MERGE_HEAD >/dev/null && [ "$(git -C "$C" log -1 --format=%s)" = "b here" ]'
 ok "and its worktree is gone" '[ ! -e "$T/m/.clones/c-tooling" ]'
 LAND_TOOLING_CHECKS=false land scripts/a.sh; rc=$?
 ok "a failed check lands nothing" '[ "$rc" -ne 0 ] && grep -q "checks failed" "$T/out" && [ "$(on_main scripts/a.sh | tail -1)" = "two" ]'
+
+echo "3c. a stale base that merges cleanly lands on the first try (feature 385 T24: three landings refused in one day for this)"
+setup
+printf '1\n2\n3\n' > "$T/seed/scripts/c.sh"; git -C "$T/seed" add -A; git -C "$T/seed" commit -qm "c"; git -C "$T/seed" push -q "$T/o.git" main
+git -C "$C" pull -q --no-rebase --no-edit origin main
+printf '1\n2\nTHREE\n' > "$C/scripts/c.sh"; git -C "$C" commit -qam "c here, line 3"
+printf 'ONE\n2\n3\n' > "$T/seed/scripts/c.sh"; git -C "$T/seed" commit -qam "c there, line 1"; git -C "$T/seed" push -q "$T/o.git" main
+land scripts/c.sh; rc=$?
+ok "the patch's context moved on main, the merge is clean: landed" '[ "$rc" -eq 0 ] && [ "$(on_main scripts/c.sh)" = "$(printf "ONE\n2\nTHREE")" ]'
+ok "...saying it merged main in" 'grep -q "merged origin/main into the clone" "$T/out"'
+ok "...and the clone holds a merge, never a rewrite" '[ "$(git -C "$C" log -1 --format=%P | wc -w)" -eq 2 ] && git -C "$C" log --format=%s | grep -q "c here, line 3"'
 
 echo "3b. a landed test is run, and one needing the clone's unlanded engine work is refused"
 setup
