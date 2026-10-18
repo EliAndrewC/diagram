@@ -58210,46 +58210,46 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/houses.py::HousesMixin._on_a_tread#a building's corners held to it": {
-  "body": "48e079dc5e52effc",
+  "body": "9c4fc97fe19801c5",
   "claim": "a building's corners held to it - GUESS: every corner of a footprint `_fits` seats (a house's wall, a shed's) held 7 ft off a lane's middle, as the page holds a fence",
-  "code": "c24a1cf93917a177",
-  "core": "af40be542150693f",
+  "code": "edeb7d0b5da1bf9d",
+  "core": "f287f677ebcdede9",
   "date": "2026-10-18",
-  "note": "for a farmhouse, 0081 §19 now answers the wall-to-tread distance (3 ft from the tread's edge, so 4.5/5.5/6 ft off the middle for the 3/5/6 ft widths), so `max(half + hair, middle)` at 7 ft always governs, beyond the attested figure; for houses the claim should cite 0081 §19 and record the 7 ft as a DEVIATION, keeping GUESS only for sheds and byres",
+  "note": "the cited pages set the 7 ft clearance only for a garden fence (0246 §16) and set only the 3 ft wall clearance for a farmhouse (0081 §35); nothing answers 7 ft from any building to a lane's middle, so GUESS is right. The code measures every wall whole, which also holds every corner, as the claim says",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/houses.py::HousesMixin._on_a_tread#no building corner on a lane": {
-  "body": "48e079dc5e52effc",
-  "claim": "no building corner on a lane - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the tread's edge `TREAD_WALL_FT` clear of every corner",
-  "code": "4ba43a169e2c7137",
-  "core": "af40be542150693f",
+  "body": "9c4fc97fe19801c5",
+  "claim": "no building corner on a lane - how-our-maps-lay-a-clustered-settlements-lanes.drawing, village-lanes.drawing: nothing built on a lane (0246), the tread's edge `TREAD_WALL_FT`, 3 ft, clear of every wall (0081) - each wall measured whole, not its corners alone",
+  "code": "50995aa251043570",
+  "core": "f287f677ebcdede9",
   "date": "2026-10-18",
-  "note": "the rule \"no corner of a house stands on its tread\" is 0246's, but the `TREAD_WALL_FT` 3 ft figure is 0081 §19's, which the claim does not cite, so a later edit to §19 would not re-check this; add 0081-village-lanes.drawing.html",
+  "note": "`poly_seg_dist(quad, ...) < max(half + hair, middle)` keeps the whole rotated footprint off the tread, matching \"no corner of a house stands on its tread\", and keeps the tread's edge at least `TREAD_WALL_FT` (3 ft) clear of the wall, matching \"keeps 3 ft clear of a farmhouse wall\"",
   "pages": {
+   "0081-village-lanes.drawing.html": "c6ac7410edabbd2d",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "5f7d877470ab7081",
   "rests": [
+   "0081-village-lanes.drawing.html:417841cd16f112d9",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
   ],
-  "triage": "touched",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/houses.py::HousesMixin._on_a_tread#the lane middle's 7 ft": {
-  "body": "48e079dc5e52effc",
+  "body": "9c4fc97fe19801c5",
   "claim": "the lane middle's 7 ft - how-our-maps-lay-a-clustered-settlements-lanes.drawing: `LANE_MIDDLE_CLEAR_FT`, the 7 ft a lane's middle keeps off a garden fence",
-  "code": "67648d142f69b774",
-  "core": "ec40e40148c5c024",
-  "date": "2026-10-17",
-  "note": "each corner at max(half + 4, 7)",
+  "code": "d32014e1ed72b27a",
+  "core": "f287f677ebcdede9",
+  "date": "2026-10-18",
+  "note": "`LANE_MIDDLE_CLEAR_FT`=7.0 is the page's \"a lane's middle keeps at least 7 ft clear of a garden fence\"; using it for a building is the extension the GUESS claim records",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
   },
   "research": "60b94d3c15ae221a",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
   "verdict": "IN-STEP"

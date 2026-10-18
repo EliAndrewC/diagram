@@ -3921,6 +3921,50 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T44": {
+   "section_sha256": "bcff70a483b3f4e465c9b753a53a45faa86040fbccbfeaf49190b9d67ecc62d6",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T44-goal",
+     "summary": "The hourly step-back's arbiter reads what every session working the feature said and did in the hour, not only the busiest session's.",
+     "class": "within",
+     "why": "It restates the arbiter's fix (G), and that fix is tooling the GM asked for in amendment 6 ('implement any obvious performance / tooling / process improvements along the way'). The arbiter stands where the GM was asked (feature 379). Measured case: the window held three sessions and words.md carried only one."
+    },
+    {
+     "id": "T44-fix-as-constraint",
+     "summary": "The constraint is the arbiter's fix, quoted: words from every session transcript active in the hour, keeping the newest, listing any transcript left out or cut.",
+     "class": "within",
+     "why": "The fix is carried as written and nothing in it is narrowed. Being an arbiter's fix, its full text is outside request.md and this bundle (the quote is elided at '...'), so its content was not re-verified against the arbiter's ruling here."
+    },
+    {
+     "id": "T44-replay-unchanged",
+     "summary": "The replay flags (--transcript, SC-008) stay unchanged.",
+     "class": "within",
+     "why": "This keeps an accepted success criterion (SC-008, amendment 4's replay of T03) working. It does not keep any behavior the fix asks to change: the fix is about which transcripts the hourly bundle reads, not the replay path."
+    },
+    {
+     "id": "T44-tooling-only-and-test",
+     "summary": "Tooling only; a test in tests/tooling/test_checkpoint.py that is red without the change.",
+     "class": "within",
+     "why": "Tooling only matches the fix's scope. The test only fails when the requested behavior is missing, so it enforces the request and is not unrequested scope."
+    },
+    {
+     "id": "T44-order-exit-budget",
+     "summary": "The order is sessions, then words, refusals and time over them, then tests. Exit (c) is taken (a rule that removes the case: read every session, not the busiest). The budget is 40 min.",
+     "class": "within",
+     "why": "These are execution choices inside the fix and the checklist's own fields (FR-003). None of them changes what is delivered."
+    },
+    {
+     "id": "T44-done-measure",
+     "summary": "Done means that, on an hour of two sessions, the bundle carries both sessions' words, each labeled, and names a session whose transcript it could not find.",
+     "class": "within",
+     "why": "One goal, as FR-015 requires. Labeling each session's words is what 'from every session' needs to be readable, so it adds nothing. The done check tests 'left out' but does not separately test 'keeping the newest' or listing a transcript it 'cut'. Those stay binding through constraint 2, so this is not a narrowing. It is a gap the test would ideally cover: see the aside."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

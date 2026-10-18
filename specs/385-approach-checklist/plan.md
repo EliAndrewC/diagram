@@ -838,6 +838,30 @@ the GM as a feature of its own, which first settles whether 0017's 1.3 acres inc
 9. **Done, measured.** One goal: `TREAD_WALL_FT`'s claim cites what the pass found, or says UNRESEARCHED with the pass named; the
    ranking row marked with its wave.
 
+### T07 part B (2026-10-18T15:05Z)
+
+Owed by the hour-16 step-back (hour:385-approach-checklist@16, `continue`, ruled 14:49Z); the asks ask:t07-two-findings-at-landing
+(`continue`) and ask:t07-span-walkable-cannot-tell (`accept`) ruled on the claims left at landing.
+
+1. **What is refusing?** Nothing on the maps: the pool rolls clean and the cohort holds 54/54 at 3 ft. The claims rounds found the
+   joint gap held only the narrower lane's half-width (fixed: the wider), a threshing yard folded into the garden's claim (split,
+   UNRESEARCHED), and `_on_a_tread` measuring a footprint's corners and center only, so a footpath could cross a long house 10 ft
+   off its center (fixed: each wall measured whole, `poly_seg_dist`; Inashiro re-rolled, pool clean, cohort 54/54). Three findings
+   on code T07 did not write the rule of are carried into T43 by the rulings.
+2. **A3 again.** Unchanged: 3 ft is 0247's and 0081's drawing page (R); 0246's "nothing built on a lane" (R); the 7 ft corner hold
+   ours (GUESS, carried in T43).
+3. **A4 again.** Measured: the pass found a Japanese village house set back about 3 ft from a road and a north Chinese drip strip
+   of 2-3 chi; the record carries both (0247).
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Changing a number to the research (4 to 3 ft), and fixing a predicate that measured a different
+   footprint than the one drawn - neither a tune.
+6. **The one-sentence test.** "A lane's tread keeps 3 ft off a farmhouse wall, measured to every wall" - true by the unit tests
+   (each red without its rule) and on the pool.
+7. **The next step is a measurement.** The gate, then the landing cohort, then the gated push.
+8. **Routes measured before asking?** Yes - each ask carried the pool and cohort results; one measurement I gave the arbiter was
+   wrong (the far end of a household's own lane does reach `span_walkable`), and the ruling corrected it.
+9. **After a ruling.** `continue` / `accept`: land T07 under CLAIMS_OK with T43 carrying the three findings.
+
 ### T07 Decisions
 
 **D55 - research, then label.** A `research-pass` agent searches the archive, then the web (Chinese, Japanese, English), for the
@@ -1384,6 +1408,34 @@ round 6's own answer ("9 READ, 0 CONTRADICTED", recorded 14:17:55Z) at its curre
 owed in the ruling's bundle only because round 6's answers were not yet recorded when it was built. So the netting is the existing
 rule; `test_a_note_read_at_its_words_is_netted_and_an_absence_note_owes_no_reading` reproduces the q:0081 case (a READ note
 netted, a re-worded absence note owing no reading - red without (a)).
+
+### T44 Approach (checklist part A)
+
+1. **The goal, in the world.** The hourly step-back's arbiter reads what every session working the feature said and did in the
+   hour.
+2. **The constraints.** The arbiter's fix: "make step-back's words.md should take the words from every session transcript of the
+   feature that was active in the hour, keeping the newest ... and should list any transcript it left out or cut"; the replay flags
+   (`--transcript`, SC-008) unchanged; tooling only; a test red without it.
+3. **Where each comes from.** The fix is the arbiter's (G).
+4. **Do they describe the world here?** Yes - measured on hour:385-approach-checklist@16 (13:47-14:47Z): the feature's event log
+   has three sessions in the window - the T07 page session's check run (439 events, from 14:03), this session (322) and the write
+   run (169, from 13:47). `session_of` took the busiest, so `words.md` held the check run's words (14:03-14:27) and none of this
+   session's, while `dispatches.md`, read from the event log, ran to 14:47.
+5. **The order.** Sessions, then words, refusals and time over them, then the tests.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 40 min.
+9. **Done, measured.** One goal: a bundle built over an hour of two sessions carries both sessions' words, each labeled, and names
+   a session whose transcript it could not find; `tests/tooling/test_checkpoint.py` red without it.
+
+### T44 Decisions
+
+**D58 - every session of the hour.** `stepback_bundle.sessions_of` lists every `sid` with events in the window, busiest first.
+Without `--transcript`, `build` reads each one's transcript (`transcript_of`) and merges their records by timestamp, each tagged
+with its session. `words.md` labels each entry with the session's first 8 characters when the hour has more than one, keeps the
+newest over the cap (the existing shrink, then the cut, whose notice stays), and opens with the sessions it read and any whose
+transcript it did not find ("left out"). `refusals.md` takes every session's refusals. `time.md` sums over the sessions read and
+says so, since parallel sessions can sum past the hour. With `--transcript` (a replay) the one transcript is read as before.
 
 ## T11 - the close
 
