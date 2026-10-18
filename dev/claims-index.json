@@ -6894,15 +6894,19 @@
  },
  "l7r/diagram/hamletgen/consts.py::POND_BANK_CROWN_FT#a bank tree's crown radius": {
   "body": "720df070b26d5b39",
-  "claim": "a bank tree's crown radius - GUESS: a pollarded mulberry's crown about 12 ft across, the dike fruit tree's mark scaled",
-  "code": "633fc9dfd993b64e",
+  "claim": "a bank tree's crown radius - GUESS reservoir-ponds-tameike.drawing: a tree whose shade the tethered cattle take (the manual), about 12 ft across - not sunlight-and-shade-on-the-farm.drawing's field mulberry trained as low bushes",
+  "code": "36dc316df3c5ed18",
   "core": "5efeb905b7d48b3f",
   "date": "2026-10-18",
-  "note": "this is labeled a bare GUESS (a 12 ft pollarded crown), but bundle pages bear on it. 0038 has cultivated mulberry \"trained as low bushes\", and 0027 draws dike mulberry as touching bushes 4.4 ft apart. The claim should cite those pages and record the tree-sized crown as a guess or deviation on 0061's drawing page",
-  "pages": {},
-  "research": "",
-  "triage": "touched",
-  "verdict": "MISLABELED"
+  "note": "radius 6 ft gives a crown 12 ft across, which the drawing page records as a guess (\"each crown is about 12 ft across, a GUESS\")",
+  "pages": {
+   "0061-reservoir-ponds-tameike.drawing.html": "c22de534b95132ef"
+  },
+  "research": "5b102e334372ecb3",
+  "rests": [
+   "0061-reservoir-ponds-tameike.drawing.html:9ba649087fb63da1"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::POND_BANK_PITCH_FT#one tree about every 30 ft of bank": {
   "body": "347cd16150ed2bf6",
@@ -17494,15 +17498,19 @@
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#pond reference size": {
   "body": "84d0dc57d1df3109",
-  "claim": "pond reference size - UNRESEARCHED: 116 x 74 ft radii at 15 households, scaled by the square root",
-  "code": "c57e8c99493e9811",
+  "claim": "pond reference size - GUESS field-drains-akusuiro.drawing: about 230 by 150 ft at 15 households (116 x 74 ft radii), grown with the hamlet by the square root",
+  "code": "5197c13afd1d7b18",
   "core": "82c5696cf249ea91",
   "date": "2026-10-18",
-  "note": "0060 records this exact figure (\"in a hamlet of fifteen households it is about 230 by 150 ft ... grows with the hamlet\"), as a GUESS. Should read GUESS research/questions/0060-field-drains-akusuiro.drawing.html",
-  "pages": {},
-  "research": "",
-  "triage": "touched",
-  "verdict": "MISLABELED"
+  "note": "116 x 74 ft radii (about 232 x 148 ft) at REF_HOUSEHOLDS=15, radius grown by sqrt(households/15) so the area share holds; recorded as a guess (\"about 230 by 150 ft ... grows with the hamlet so that the share stays the same\")",
+  "pages": {
+   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
+  },
+  "research": "8ff7ceb036c4856e",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:c68b896ac3cc1631"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#pond's role": {
   "body": "84d0dc57d1df3109",
@@ -17551,14 +17559,18 @@
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#too far below, no pond": {
   "body": "84d0dc57d1df3109",
-  "claim": "too far below, no pond - UNRESEARCHED: past POND_SETBACK_LIMIT the field drains off the frame",
-  "code": "1af9cf731fa395af",
+  "claim": "too far below, no pond - GUESS field-drains-akusuiro.drawing: a pond that would sit far below the fields sends the drain off the map; past POND_SETBACK_LIMIT (300 ft, its guess)",
+  "code": "90e815ccc02442a6",
   "core": "82c5696cf249ea91",
   "date": "2026-10-18",
-  "note": "0060 records the fallback (\"a map whose pond would have to sit far below the fields sends its drain off the map\"). Should be GUESS research/questions/0060-field-drains-akusuiro.drawing.html; the 300 ft figure is its guess",
-  "pages": {},
-  "research": "",
-  "triage": "touched",
+  "note": "the rule is on the page (\"A map whose pond would have to sit far below the fields sends its drain off the map as well\"), but the 300 ft POND_SETBACK_LIMIT is not; the claim's \"(300 ft, its guess)\" puts on 0060 a figure it never gives. Fix: cite 0060 for the rule and mark the 300 ft as UNRESEARCHED, as pond_seat's \"set-back limit\" claim already does",
+  "pages": {
+   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
+  },
+  "research": "8ff7ceb036c4856e",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:fddf3b65d30ae7c2"
+  ],
   "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/sink.py::pond_clear_of_crop#tameike clear of the paddy": {
@@ -60920,16 +60932,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#reeds off the mounds": {
+  "body": "586f39781f692c05",
+  "claim": "reeds off the mounds - reservoir-ponds-tameike.drawing: no reed or tint on a dike crest or a pond bank",
   "code": "7ffde642f5b7c4fb",
   "core": "c2cd04e8c7b38736",
-  "date": "2026-10-03",
-  "note": "matches the cited finding",
+  "date": "2026-10-18",
+  "note": "keeping reeds off the fish-pond mulberry banks (slot 2) and the pond ellipse is what 0061 finds (\"nor on any raised rim around a pond\"). Keeping reeds off a polder perimeter dike crest (slot 1) has no backing: 0061 is about pond embankments only, and 0019's page says nothing about reeds on a crest. Split the claim and mark the dike-crest half UNRESEARCHED",
   "pages": {
-   "0061-reservoir-ponds-tameike.drawing.html": "be8eb7a4bb23863d"
+   "0061-reservoir-ponds-tameike.drawing.html": "c22de534b95132ef"
   },
-  "research": "06a7923692f832d3",
-  "triage": "touched",
-  "verdict": "IN-STEP"
+  "research": "5b102e334372ecb3",
+  "rests": [
+   "0061-reservoir-ponds-tameike.drawing.html:b4e3ac5d9de888f6"
+  ],
+  "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#reeds to the water and the paddy": {
   "code": "1958768780b3fcf1",
@@ -61128,15 +61144,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::pond_fringe_ring#pond reed fringe": {
+  "body": "d43fbeadb9e6d82f",
+  "claim": "pond reed fringe - reservoir-ponds-tameike.drawing: reeds round the shore at the caller's margin",
   "code": "9ac9289e78a24298",
   "core": "f2c11c7ec4b5a862",
-  "date": "2026-10-03",
-  "note": "matches the cited finding",
+  "date": "2026-10-18",
+  "note": "a ring of reeds round the pond's shore, at the margin the caller passes in",
   "pages": {
-   "0061-reservoir-ponds-tameike.drawing.html": "be8eb7a4bb23863d"
+   "0061-reservoir-ponds-tameike.drawing.html": "c22de534b95132ef"
   },
-  "research": "06a7923692f832d3",
-  "triage": "touched",
+  "research": "5b102e334372ecb3",
+  "rests": [
+   "0061-reservoir-ponds-tameike.drawing.html:a70a5b42abaea94f",
+   "0061-reservoir-ponds-tameike.drawing.html:d6c10e2a38c86b30"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::surface_water_dist#watered by surface water": {

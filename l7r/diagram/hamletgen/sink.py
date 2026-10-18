@@ -606,7 +606,7 @@ def lay_sink(s: Settlement, plan: SitePlan) -> None:
         pond's role - research/questions/0060-field-drains-akusuiro.drawing.html: a drain that ends in a pond of its own is a GUESS recorded there; the pond is laid at the drain's foot as the
             field's sink, not as a reservoir that waters the paddy
         pond reference size - GUESS research/questions/0060-field-drains-akusuiro.drawing.html: about 230 by 150 ft at 15 households (116 x 74 ft radii), grown with the hamlet by the square root
-        too far below, no pond - GUESS research/questions/0060-field-drains-akusuiro.drawing.html: a pond that would sit far below the fields sends the drain off the map; past POND_SETBACK_LIMIT (300 ft, its guess)
+        too far below, no pond - GUESS research/questions/0060-field-drains-akusuiro.drawing.html: a pond that would sit far below the fields sends the drain off the map (how far is pond_seat's set-back limit)
         reed fringe - research/questions/0061-reservoir-ponds-tameike.drawing.html: a fringe of reeds at the shore
         reed fringe width - UNRESEARCHED: a 44 ft ring
         no building on the water - UNRESEARCHED: 10 ft round the pond's box
