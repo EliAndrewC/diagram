@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-17
 
-**Status**: In progress - T01, T02 and T03 landed 2026-10-17 (their retros in `retro.md`); amendments 1 and 2 FAITHFUL, amendment 3 (T13) landed, amendment 4 (T14) filed; Spec FAITHFUL (round 2); checklist v1 drafted (`checklist.md`) and refined by the audit (`audit.md`, 13 pitfalls) and by T01
+**Status**: In progress - T01-T06 and T13-T30 landed by 2026-10-18 (their retros in `retro.md`); amendments 1-6 FAITHFUL or landed, amendment 7 (T31-T40, ten more ranking rows) filed 2026-10-18; Spec FAITHFUL (round 2); checklist v1 drafted (`checklist.md`) and refined by the audit (`audit.md`, 13 pitfalls) and by the tasks' retros
 
 **Approved**: the GM, 2026-10-17, "the shape that you have proposed looks right. So please file it, draft checklist version 1, and start the cheap audit."
 
@@ -19,6 +19,8 @@
 **Amendment 5 approved**: the GM, 2026-10-18, "Either way, I do want you to file amendment 5 for the 3 tooling fixes"
 
 **Amendment 6 approved**: the GM, 2026-10-18, "Please make sure to implement any obvious performance / tooling / process improvements along the way." (the overnight run through the rest of the feature; each improvement its own task, one goal a task)
+
+**Amendment 7 approved**: the GM, 2026-10-18, "I would like to amend the feature to pull in 10 more claims." (ten more of 328's ranking rows, worked one task at a time as T06-T10 are)
 
 **Affects**: tooling, review process, hamlet, research record
 
@@ -215,6 +217,13 @@ calls): 346 of T03's 354 tool turns made one call, but only 18 of those were a b
 folded lookups, 127 scripts, 43 make steps, the rest agents and edits - dependent steps, not batchable lookups. No batching
 change is made: the lever is fewer rework round trips, two of which FR-017 and FR-018 remove.
 
+### Amendment 7 - ten more ranking rows (the GM, 2026-10-18)
+
+- **FR-020 (ten more claims)**: ten more of 328's ranking's open rows (`ranking.json`, `audit/waves.json`) are taken, as T31 to
+  T40, each chosen at its task's start - a row of a kind not yet tried where one is left, the checklist answered for it, and
+  marked with its wave - and worked one task at a time under FR-006 (its retro row) and 384's FR-002, as T06-T10 are. They run
+  after T07-T10 and before T12 and T11, the close, which stays last.
+
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
@@ -235,6 +244,7 @@ change is made: the lever is fewer rework round trips, two of which FR-017 and F
   phase table and decision-log skeleton the hand count above found; T04's retro row is written from them and compared with
   T03 phase by phase.
 - **SC-009** (FR-017, FR-018, FR-019): each refusal names its one command, and each has a test red without it.
+- **SC-010** (FR-020): ten more ranking rows marked with their waves in 328's `audit/waves.json`, each task with its retro row.
 - **SC-006** (FR-012): T03's retro row compares the blind Approach with the sealed conclusions rule by rule, and names the checklist
   change each miss calls for, or that there was none.
 

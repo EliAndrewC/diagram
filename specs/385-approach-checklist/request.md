@@ -180,3 +180,11 @@ The GM, verbatim:
 > If memory serves we have 10 tasks in this feature, right?  Or at least, we pulled in about 10 things from the claims report, and now we're chugging through them?  I'm going to go to sleep soon and I wanted you to keep working in my absence. I think goinbg through the rest of this featuye seems like a good overnight task.  We can see how well everything worked out whe  run ovr a long period with a dicent sample size.  How does that sound?
 
 > Sounds great, I'm gonna go to sleep now, I look forward to hearing how the remaining tasks turned out.  Please make sure to implement any obvious performance / tooling / process improvements along the way.  Thanks.
+
+## Amendment 7 (2026-10-18) - ten more ranking rows
+
+The GM, verbatim (after the session reported T01-T06 done and T07 under way):
+
+> How's it going?  If I recall correctly, we have 10 claims to fix in this feature.  How many of them have we managed so far?
+
+> Okay, I would like to amend the feature to pull in 10 more claims.  I'm leaving for Meeting for Worship, so I'll be gone for about 5 hours and want to make sure that there's enough work for you to keep working in my absence.

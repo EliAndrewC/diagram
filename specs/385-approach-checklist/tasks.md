@@ -38,6 +38,26 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T10 A ranking row; its retro row [lands-open]
       research: rendering
+- [ ] T31 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
+      research: rendering
+- [ ] T32 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
+      research: rendering
+- [ ] T33 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
+      research: rendering
+- [ ] T34 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
+      research: rendering
+- [ ] T35 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
+      research: rendering
+- [ ] T36 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
+      research: rendering
+- [ ] T37 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
+      research: rendering
+- [ ] T38 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
+      research: rendering
+- [ ] T39 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
+      research: rendering
+- [ ] T40 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
+      research: rendering
 - [ ] T12 Carried from T03 by the round arbiter (hour:385-approach-checklist@6, ask:t03-d17-route, ask:t03-seed57-residue): D17's side-by-side merge (saved; F1-F3 merged and seed 49 fixed, six seeds regressed - 7, 24, 37, 51, 52, 57 - because the later settle passes are blind to the junctions it makes), seed 49, seed 55 (lane_knots 1, as at HEAD), seed 57 (lanes 1/13, ends 21.6 ft apart, settle_knots' gather refused by needle_loops; 2 knots against HEAD's 1) and Inashiro F1-F3's glyph-check NEEDS-WORK; done when seed 57 PASSES. Its Approach first asks whether the merge needs a fixed reach at all (REACH 20 then 25 ft is ours), whether the refusals behind seed 49 (a field and farmhouses unreached) rest on research, and whether needle_loops' and needle_joins' rules are research or ours; only then the design that makes the later passes aware of the merge's junctions. Also carried at T03's landing (ask:t03-claims-at-landing): settle.py::theirs DRIFTED - take a lane's own household from fabric.owned_gardens instead of the 80 ft radius, measured on the cohort; Lawful.fault's doubled tail at 15 degrees against 0081's 20 - which number the research fixes, first; clearance.py::_clear_link re-checked once its bundle carries link_survives; its retro row [lands-open]
       research: rendering
 - [x] T13 Amendment 3 (FR-013, the GM's option 3): the claims gate carries a finding a page edit surfaced on unchanged code instead of refusing it - `make claims-carry F=<n>` files it as an open task the open-task refusal honors; T03's three findings filed by it; its retro row
@@ -85,10 +105,12 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T27 The heading an owed Approach or part B asks for passes the tick: stamps compared to the minute the heading carries (found ticking T05 and T22, plan D49) [lands-open]
       research: rendering
       verify: DONE. landed on main; tests/tooling/test_approach_gate.py green; T05 and T22 tick with the headings owe printed
-- [ ] T28 An arbiter's ask bundle carries the research claims on every number its question or evidence names (the arbiter's fix on ask:t06-scattered-single-file, plan D50) [lands-open]
+- [x] T28 An arbiter's ask bundle carries the research claims on every number its question or evidence names (the arbiter's fix on ask:t06-scattered-single-file, plan D50) [lands-open]
       research: rendering
-- [ ] T29 Each plan review's bundle has its own path, keyed by its tasks and its blocks' digest (the arbiter's fix on hour:385-approach-checklist@13, plan D53) [lands-open]
+      verify: DONE. landed on main; tests/tooling/test_arbiter_fixes_352.py green, red without claims_section; the ruled ask's own words give 1.3 acres its claim and 273 ft no claim; the arbiter's fix on ask:t06-scattered-single-file settled
+- [x] T29 Each plan review's bundle has its own path, keyed by its tasks and its blocks' digest (the arbiter's fix on hour:385-approach-checklist@13, plan D53) [lands-open]
       research: rendering
+      verify: DONE. landed on main; tests/tooling/test_plan_blocks.py green, red without the keyed path; two plan-delta runs write two bundles; the arbiter's fix on hour@13 settled
 - [x] T30 Nothing is merged into a clone while a make runs in it, on the tool-call path too (the arbiter's fix on red-gate@2026-10-18T12:36:36Z, plan D54) [lands-open]
       research: rendering
       verify: DONE. landed on main; the tooling suite runs no land-tooling (1,924 tests, HEAD unchanged); the gate lock holds the merge on both clone-sync paths and in land-tooling, each test red without it

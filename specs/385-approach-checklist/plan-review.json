@@ -51,7 +51,7 @@
    "declared": "spec-fidelity"
   },
   "## Landing": {
-   "sha256": "5eb50eba4b775082f0eaf96a2271c42f611c0b50374d6ce8829ad4205b94299f",
+   "sha256": "545c14c91ac6df940e8b464668f1a7f12a334039ca7f6e3a88d54973afe0f1bd",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -3549,6 +3549,21 @@
      "summary": "The 12:38Z part B heading is removed, replaced by the 12:40Z re-stamp.",
      "class": "within",
      "why": "Its content is carried over unchanged into the 12:40Z block; the removal drops no answer and no requirement."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing: T31-T40 land open",
+     "summary": "The ten tasks added by amendment 7 (FR-020, T31-T40) join the 'Lands open' list: each lands when it closes, with its retro row, while the tasks after it stay open.",
+     "class": "within",
+     "why": "The GM asked on 2026-10-18 (amendment 7) to 'pull in 10 more claims' so that there is enough work while he is away. FR-020 takes them as T31 to T40. The block applies the landing rule it already used for T02-T30, which was judged CLEAR (earlier.md): one task at a time, each closed with its retro row before the next starts (FR-006), and the GM's request is that each task be measured and assessed before the next. Nothing is narrowed. All ten tasks are kept, and none is dropped, merged or deferred. Landing each task open does not let the feature close with open tasks, and it adds no scope the request did not ask for."
     }
    ]
   }
