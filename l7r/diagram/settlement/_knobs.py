@@ -879,7 +879,7 @@ def windbreak_faces(clumps: Sequence[Sequence[float]], r: float, houses: Sequenc
 def crop_boxes(M: Any, city: bool, ftpx: float, W: float, H: float) -> list[tuple[float, float, float, float, str]]:
     """Every feature that SETS the render frame, as labeled boxes (x0, x1, y0, y1, what).
 
-    SINGLE SOURCE OF TRUTH, shared by `crop_to_content` / `crop_city` - which reduce it to a
+    SINGLE SOURCE OF TRUTH, shared by `content_view` / `crop_city` - which reduce it to a
     bounding box - and by check_village's `crop_not_held_open_by_one_feature`, which asks the
     opposite question: WHICH feature is setting each edge, and is it out there on its own?
     Keeping one list is what stops the crop and the check that gates it from drifting apart

@@ -146,7 +146,7 @@ STAGES = (
     # Everything else here reserves ground or grows into it. The board does neither: it is a 16 x 6 ft roofed frame on its footing,
     # which a village sets beside a way once the village is there. Placing it last means it can
     # see the whole map, and - the part that fixes the defect by construction - nothing is placed
-    # after it for it to displace. It also runs after `crop_to_content`, so the frame is already
+    # after it for it to displace. It also runs after the crop (`content_view`), so the frame is already
     # decided and the board can simply be kept inside it, instead of being sited blind and re-seated
     # by a frame guard that knew nothing about why it had been put where it was.
     stage_notice,

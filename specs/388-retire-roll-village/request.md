@@ -7,3 +7,8 @@ hamlet-scale map from a seed; no pool map ships from it any more (the scripted h
 it, and the session offered to move the finding from 380 to 384's backlog.
 
 The GM: "I think if nothing ships from it then we should just delete it now and not even move it into the 384 backlog."
+
+## Amendment 1 (2026-10-18)
+
+The session's report said four helpers were kept because frozen legacy exhibits call them, and that which exhibits must stay
+runnable was the GM's call. The GM: "I am completely fine freezing old legacy maps. Especially if it streamlines our code base and reduces our support surface, etc. So yes, I believe that the frozen maps do not need to stay runnable, and therefore the four helpers can go too. Thanks. I assume that that is what you were asking for my sign-off on with the GM review?"

@@ -106,7 +106,7 @@ Progress is not a single line. A settlement map is a **tier** crossed with a **f
   `ribbon_valley`, `mulberry_dike_fishpond`, each optionally carrying a **land-use overlay**
   (`mulberry_fishpond`, `lotus`, `tea_fringe`).
 
-The engine already builds all five (`build_comb`, `build_terraces`, `build_polder`, `build_ribbon`,
+The engine already builds all five (`carve_comb` + `finish_comb`, `build_terraces`, `build_polder`, `build_ribbon`,
 plus `apply_land_use`). The generator has to learn how to COMPOSE each one - where the water enters,
 what the settlement does when the field shape changes, which way the lanes run.
 

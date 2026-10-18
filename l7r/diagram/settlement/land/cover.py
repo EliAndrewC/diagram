@@ -752,7 +752,7 @@ class GroundCoverMixin:
         (each farmstead's own grown outline on a nucleated hamlet, so no cover creeps among the houses), and NONE is a
         crop anchor (`_CROP_HARD`), so
         they BLEED off the frame and the crop stays tight. Call AFTER fields + cluster + pond + dry fields,
-        BEFORE crop_to_content. `down_deg` (defaults to meta's) picks which frame side the scrub ring OMITS
+        BEFORE the crop. `down_deg` (defaults to meta's) picks which frame side the scrub ring OMITS
         (the toe side) AND orients the marsh itself: the toe is a CONTOUR BAND perpendicular to the fall, so it
         rotates with the map like every other feature (see the comment at the marsh block); the scrub ring is
         radial. A comb-FAN field leaves the opposite bbox corner open; the interior fill (`interior_fill`) clothes the
@@ -990,7 +990,7 @@ class GroundCoverMixin:
 
     def reserve_clearing(self: Settlement, x: float, y: float, w: float, h: float, extra: float = 46) -> None:  # type: ignore[misc]
         """Pre-register a swept-ground clearing for a sacred/funerary feature a gen draws LATER (e.g. a
-        precinct dropped in after crop_to_content, or placed after the hinterland scatter). The scrub/marsh
+        precinct dropped in after the crop, or placed after the hinterland scatter). The scrub/marsh
         scatter only skips clearings that already exist when it runs, so a late precinct must reserve its
         ground FIRST or the scrub covers it. The later shrine_hall/cemetery registers its own clearing too;
         the overlap is harmless. Pass roughly the footprint you will draw (a slightly generous `extra` is

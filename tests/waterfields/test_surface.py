@@ -71,7 +71,6 @@ CONSUMED_PUBLIC = [
     "PADDY_CELL_ACRES",
     "aze_w",
     "bead_runs",
-    "build_comb",
     "build_polder",
     "build_ribbon",
     "build_terraces",
@@ -115,7 +114,7 @@ def _census() -> set[str]:
     names: set[str] = set()
     skip_dirs = {"__pycache__", ".git", "waterfields"}
     # the project's trees only (feature 329): the repository root also holds specs/, scripts/ and, in the mirror, .clones/
-    for root, dirs, files in (w for tree in ("l7r", "tests", "pool", "legacy-hand-authored-pool") for w in os.walk(os.path.join(HERE, tree))):
+    for root, dirs, files in (w for tree in ("l7r", "tests", "pool") for w in os.walk(os.path.join(HERE, tree))):
         dirs[:] = [d for d in dirs if d not in skip_dirs and not d.startswith(".")]
         for fn in files:
             if not fn.endswith(".py") or fn == "waterfields.py":

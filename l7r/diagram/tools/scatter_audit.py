@@ -61,7 +61,7 @@ def _translated_spans(svg: str) -> list[tuple[int, int, float, float]]:
 def parse_bases(svg: str, families: tuple[str, ...] | None = None) -> dict[str, list[Base]]:
     """Every scatter BASE point per family, in document order, in WORLD coordinates.
 
-    Most element coords already are world coords - `crop_to_content` crops via the viewBox and never
+    Most element coords already are world coords - the crop works via the viewBox and never
     rewrites coordinates, which `crop_map.py` relies on too. But GROVE CLUMPS are not: `_draw_grove`
     emits its canopy inside `<g transform="translate(cx,cy)">`, so a crown's `cx`/`cy` are LOCAL to
     the clump. Reading them raw put a crown at world (710.9, 1815.8) on the map at (4.9, -14.2).

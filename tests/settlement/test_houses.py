@@ -319,7 +319,7 @@ def test_cluster_anchor_places_each_position_on_the_right_dry_margin():
 
 
 def test_plot_texture_drives_build_comb_grain():
-    from l7r.diagram.waterfields import build_comb
+    from tests.waterfields._builders import lay_comb
 
     s = Settlement(1400, 1800, seed=1)
     s.meta(name="Pt", scale="village", ftpx=2)  # ftpx>=2 -> the real-feet calibration branch (the ft/px=1 hamlet legacy branch is covered by honda/shimizu)
@@ -328,8 +328,8 @@ def test_plot_texture_drives_build_comb_grain():
     a_large, _step_large = s.plot_texture("large_block", "organic")
     assert a_small < a_large  # smaller plot_across = smaller paddies
     # ONE fan each (T20, GM 2026-08-26): the property is "smaller plot_across -> more plots on the same field", which any fan shows; two 5-fan combs cost 4 s for it
-    net_small = build_comb(900, 1100, (360, 160), full_or(1, 3), down_deg=90, field_fall=500, offtakes_a=(0.5,), offtakes_b=(), plot_across=a_small, row_step=step_small)
-    net_large = build_comb(900, 1100, (360, 160), full_or(1, 3), down_deg=90, field_fall=500, offtakes_a=(0.5,), offtakes_b=(), plot_across=a_large)
+    net_small = lay_comb(900, 1100, (360, 160), full_or(1, 3), down_deg=90, field_fall=500, offtakes_a=(0.5,), offtakes_b=(), plot_across=a_small, row_step=step_small)
+    net_large = lay_comb(900, 1100, (360, 160), full_or(1, 3), down_deg=90, field_fall=500, offtakes_a=(0.5,), offtakes_b=(), plot_across=a_large)
     assert len(net_small["plots"]) > len(net_large["plots"])  # small paddies -> more plots
     # grid tightens the row-step spread vs organic
     _a, org = s.plot_texture("medium", "organic")

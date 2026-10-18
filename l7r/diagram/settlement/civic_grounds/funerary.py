@@ -15,35 +15,16 @@ from .._geom import (
     point_in_poly,
     smooth_closed,
 )
-from .._knobs import CITY_TIER_SCALES
 
 if TYPE_CHECKING:
     from ..core import Settlement
 
-# THE ROOFED FIRE BED IS THE MINORITY (feature 280 M70, research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.html 'Cremation grounds and bone mounds (kasoba)'): most cremation grounds were
-# open-air to the end of Edo, the four-post roofed bed and the snow-country hut coming in around mid-Edo. How many were
-# roofed no page says - a GUESS, rolled off the ground's own seat.
-ROOFED_SHARE = 0.25
 """The share of cremation grounds whose fire bed is roofed.
 
 Research:
     roofed bed the minority - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html
     the share - GUESS: 0.25
 """
-
-
-def cremation_outline(cx: float, cy: float, rx: float, ry: float, n: int, jitter: float, rnd: random.Random) -> str:
-    """An SVG points string for a worn, ragged oval: n vertices round (cx, cy), each radius scaled by a factor
-    drawn from 1 +/- jitter - the cremation ground's cleared edge, its burned ground and its ash bed (feature 272).
-
-    Research: worn ragged outline - CONVENTION
-    """
-    pts = []
-    for k in range(n):
-        a = 2 * math.pi * k / n
-        f = 1 + rnd.uniform(-jitter, jitter)
-        pts.append(f"{cx + rx * f * math.cos(a):.1f},{cy + ry * f * math.sin(a):.1f}")
-    return " ".join(pts)
 
 
 class FuneraryGroundsMixin:
@@ -87,7 +68,7 @@ class FuneraryGroundsMixin:
             no cleared band round the ground - research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html
             keep-clear margin - research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html: no cleared band; other features placed without regard to it
             caption - CONVENTION
-            six jizo at its entrance - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: at a burial ground's entrance; the code draws them only on a cremation ground's rim (the found row funerary.py::cremation_ground#six jizo at a burial ground's entrance fixes it)
+            six jizo at its entrance - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: at a burial ground's entrance; the code draws none (the cremation ground that drew them on its rim went in feature 388)
             stupa and its seats - UNRESEARCHED: a stupa 13 px tall at the rear corners of a ruled plot, inside an organic one
         """
         if organic is None:
@@ -232,81 +213,6 @@ class FuneraryGroundsMixin:
             # temple halls dropped to 9 - above the governor's yamen at 11, whose compound is 525x300
             # ft - which is the size-by-rank ladder the whole change exists to remove.
             self.label(cx, ly, label, HALL_CAPTION_FS, weight="bold", italic=True, color="#3A352C", ref=(x0, y0, x1, y1))
-
-    def cremation_ground(self: Settlement, cx: float, cy: float, label: str = "cremation ground", label_above: bool = False, jizo: bool = False) -> None:  # type: ignore[misc]
-        """The CREMATORY (kasoba) - where the dead are burned before their bones are interred. Smoke, fire
-        risk, and death-pollution put it OUTSIDE the walls; monks officiate with burakumin assistants (a
-        religious order stands outside the caste system, so handling the dead does not pollute its caste).
-        A cleared, scorched ground with its fire bed - a stone-framed trench on the leveled ground, open to the sky on most
-        grounds and under a roof on four posts on a few (`roofed`). Records M['cremation_grounds']; blocks placement.
-
-        THE FORMS BEFORE MODERN TIMES (feature 280 M70, research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.html 'Cremation grounds and bone mounds (kasoba)'): the open pyre, the stone-framed
-        trench beside a burial ground, and the four-post roofed bed and the snow-country hut dated to around mid-Edo - with
-        most grounds open-air to the end of Edo. So the roof is the minority (`ROOFED_SHARE`, a GUESS), and no raised stone
-        pyre platform or officiants' hut is drawn: neither is attested. A roof stands on four posts a few feet out from the
-        bed, about 11 ft square. SIX JIZO (`jizo`) stand at a BURIAL ground's entrance (feature 280 M71, 700): a caller
-        passes them only for a cremation ground beside a burial ground; one standing on its own has none.
-
-        Research:
-            cleared ground size - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: 75 ft at a village or town, 130 ft at a city
-            cleared ground's depth - UNRESEARCHED: 0.7 of its width
-            fire bed's form - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: a stack of firewood or a stone-framed trench; the code draws the trench alone (the found row funerary.py::cremation_ground#the fire bed's two forms fixes it)
-            no walled hut - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: in snow country a walled hut of four to six tatami over the bed; the code never draws it (the found row funerary.py::cremation_ground#the snow-country hut fixes it)
-            fire bed - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: about a coffin's length and a little wider, about 6 x 3 ft
-            roofed bed the minority - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: ROOFED_SHARE off the seat
-            roof size - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: about 11 ft square on four posts
-            six jizo at a burial ground's entrance - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html, research/questions/0235-village-burial-grounds-bochi.html
-            jizo drawn size - CONVENTION: at least 2.4 x 3.2 px
-            ragged outline, bed off center - CONVENTION
-            keep-clear margin - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: no fire clearance drawn around a pyre; its 120 ft from houses and wells held where it is seated
-            pyre ground unwalled - research/questions/0237-burial-grounds-of-towns-and-cities-and-paupers-grounds-yizhong.drawing.html: the pyre stands in a walled yard; drawn as an open ragged ground, no wall
-            jizo size - research/questions/0235-village-burial-grounds-bochi.drawing.html: about 2 ft tall, drawn 2.0 by 2.7 ft at a 1.4-width pitch
-            scorched patch - UNRESEARCHED: about half the ground's radii
-        """
-        # TO SCALE (GM 2026-07-19; anchors in research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html): a sanmai's cleared working core is
-        # 30-80 real ft for a village/town (a GUESS: the only sizes are 1922 and later - 202), ~80-160 ft for a provincial
-        # city (Edo's Yoyogi crematory, 900 tsubo, ~180 ft square, the one premodern extent); the fire bed ~12x8 ft. The old
-        # glyph was FIXED-PIXEL (116x80px) and silently tripled at city scale.
-        across = 130.0 if self.M["meta"].get("scale") in CITY_TIER_SCALES else 75.0
-        crx, cry = max(self.px(across) / 2, 14.0), max(self.px(across * 0.7) / 2, 10.0)
-        # A WORN, RAGGED ground with its fire bed OFF CENTER (feature 272, settlement-review 2026-09-27 on
-        # Hoshigaoka): a ruled ellipse with a centered dark ellipse and a centered dark block read as an eye or a
-        # pit at fit zoom, and it was the only ruled ground on maps whose clearings are drawn ragged. The jitter
-        # is seeded from the seat, so a map redraws the same ground every time.
-        rnd = random.Random(f"cremation:{cx:.1f},{cy:.1f}")
-        self.add(
-            f'<polygon points="{cremation_outline(cx, cy, crx, cry, 22, 0.09, rnd)}" fill="#C9BCA0" stroke="#8C7A56" stroke-width="1.5" stroke-linejoin="round" opacity="0.85"/>'
-        )  # cleared scorched ground
-        fx = cx + crx * 0.08  # the fire bed a little east of center; the shelter keeps the east rim
-        self.add(f'<polygon points="{cremation_outline(fx + crx * 0.05, cy + cry * 0.07, crx * 0.52, cry * 0.5, 14, 0.2, rnd)}" fill="#9A8A6A" opacity="0.5"/>')  # the burned ground
-        abw, abh = max(self.px(6), 2.0), max(self.px(3), 1.2)  # the fire bed, about one coffin long and a little wider (0238), a trench in the leveled ground
-        self.add(
-            f'<rect x="{fx - abw / 2 - 0.8:.1f}" y="{cy - abh / 2 - 0.8:.1f}" width="{abw + 1.6:.1f}" height="{abh + 1.6:.1f}" rx="0.8" fill="none" stroke="#8C8470" stroke-width="1.2"/>'
-        )  # its stone frame
-        self.add(f'<polygon points="{cremation_outline(fx, cy, abw / 2, abh / 2, 9, 0.25, rnd)}" fill="#5A463A"/>')  # the ash bed, irregular
-        roofed = self._hjit(cx, cy, 202.0) < ROOFED_SHARE
-        if roofed:  # a roof on four posts a few feet out from the bed (~11 ft square), drawn as its outline and its posts
-            rw = max(self.px(11), 6.0)
-            self.add(f'<rect x="{fx - rw / 2:.1f}" y="{cy - rw / 2:.1f}" width="{rw:.1f}" height="{rw:.1f}" fill="#CDB890" fill-opacity="0.35" stroke="#5A4326" stroke-width="1.0"/>')
-            self.add("".join(f'<circle cx="{fx + sx * (rw / 2 - 0.8):.1f}" cy="{cy + sy * (rw / 2 - 0.8):.1f}" r="0.9" fill="#5A4326"/>' for sx in (-1, 1) for sy in (-1, 1)))
-        rec: dict[str, Any] = {"x": round(cx, 1), "y": round(cy, 1), "w": round(2 * crx, 1), "h": round(2 * cry, 1), "rot": 0, "roofed": roofed}
-        if jizo:
-            # SIX STONE JIZO in a row on the ground's upper rim - the entrance of the burial ground this cremation ground
-            # stands beside (research 0235 'Village burial grounds (bochi)', feature 280 M71: dated at graveyards, 1678-1797; at a
-            # cremation ground on its own only one undated modern page puts them). A stone jizo is about 2 ft; drawn at least 2.4 x 3.2 px - a map drawing convention, so
-            # they can be seen (the hand-drawn Hoshigaoka ground's size, feature 272).
-            jw, jh = max(self.px(2.0), 2.4), max(self.px(2.7), 3.2)
-            pitch = jw * 1.4
-            stones = [(round(cx - 2.5 * pitch + k * pitch, 1), round(cy - cry - jh, 1)) for k in range(6)]
-            for jx, jy in stones:
-                self.add(f'<rect x="{jx - jw / 2:.1f}" y="{jy - jh / 2:.1f}" width="{jw:.1f}" height="{jh:.1f}" rx="{jw * 0.45:.1f}" fill="#A8A294" stroke="#4A463C" stroke-width="0.5"/>')
-            rec["jizo"] = [list(p) for p in stones]
-        self.M["cremation_grounds"].append(rec)
-        self.placed.append((cx, cy, 2 * crx, 2 * cry))
-        m = 0  # no fire clearance is drawn around a pyre (0238); its 120 ft from houses and wells is held where it is seated
-        self.block_polys.append([(cx - crx - m, cy - cry - m), (cx + crx + m, cy - cry - m), (cx + crx + m, cy + cry + m), (cx - crx - m, cy + cry + m)])
-        if label:
-            self.label(cx, cy - cry - 8 if label_above else cy + cry + 14, label, 11, italic=True, color="#6B5A3C", ref=(cx - crx, cy - cry, cx + crx, cy + cry))
 
     def ossuary(self: Settlement, cx: float, cy: float, label: str = "pauper ossuary mound") -> None:  # type: ignore[misc]
         """A PAUPER OSSUARY MOUND - a communal earthen mound where the bones of the poor and the

@@ -17,7 +17,7 @@ class ForestMixin:
         INDIVIDUAL TREES (see _tree_stand for the density research). Blocks houses. Deterministic
         (RNG saved/restored) so it never perturbs house placement. The TREE LINE is recorded
         separately from the filled polygon because the frame reveals only a shallow band of wood
-        past it (crop_to_content) - deeper in it is undifferentiated canopy, i.e. wasted image.
+        past it (`content_view`) - deeper in it is undifferentiated canopy, i.e. wasted image.
 
         Research:
             wood drawn as a stand of trees - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: _tree_stand to the canvas edge

@@ -17,7 +17,7 @@ from tests.settlement._builders import _inwall_settlement, _town, _village
 
 
 def _comb(*args, **kw):
-    """`build_comb` memoized on its arguments, handing every caller its OWN deep copy.
+    """the comb builder memoized on its arguments, handing every caller its OWN deep copy.
 
     WHY THE COPY IS NOT OPTIONAL: `draw_comb_field` MUTATES the net it is given - measured 2026-08-30,
     it rewrites `bund_beans` and `threads` - so a shared net would let one test's draw change what the
@@ -25,7 +25,7 @@ def _comb(*args, **kw):
     would surface as an unrelated test failing depending on execution order.
 
     WHY IT IS WORTH IT: a build is 0.501 s and a deepcopy of the result is 0.0018 s - 272x cheaper. This
-    file called `build_comb` ten times across about five distinct argument sets (2026-08-30 profile, the
+    file called the comb builder ten times across about five distinct argument sets (2026-08-30 profile, the
     heaviest test file in the suite).
 
     AND WHY THE CACHE IS ON DISK RATHER THAN IN A DICT. A module-level dict is per-PROCESS, and with
@@ -35,10 +35,10 @@ def _comb(*args, **kw):
     disk, so one build serves every worker. The same mistake, and the same correction, as the comb tests
     in `tests/waterfields/`.
     """
-    from l7r.diagram.waterfields import build_comb  # local, as every caller in this file had it
+    from tests.waterfields._builders import lay_comb  # local, as every caller in this file had it
 
     key = f"test_fields-comb:{args!r}:{sorted(kw.items())!r}"
-    return copy.deepcopy(rollcache.obtain(key, lambda: build_comb(*args, **kw))[0])
+    return copy.deepcopy(rollcache.obtain(key, lambda: lay_comb(*args, **kw))[0])
 
 
 def test_ring_big_falls_back_to_plain_when_capped():
@@ -412,7 +412,7 @@ def test_draw_comb_field_existing_stream_and_cascade_sources():
 
 def test_paddy_field_polygon_shape_records_the_field():
     # the legacy paddy_field's POLYGON branch: kept exercised here now that no pool map draws a
-    # legacy quilt anymore (the towns moved to build_comb; only ad-hoc callers use this path)
+    # legacy quilt anymore (the towns moved to the comb builder; only ad-hoc callers use this path)
     s = Settlement(W=1200, H=1200, seed=3)
     s.meta(name="Pf", scale="town", ftpx=1)
     s.paddy_field([(200, 200), (500, 220), (520, 500), (240, 520)], "", "poly-paddy", amp=14, plot=58)
@@ -763,7 +763,7 @@ def test_plot_pond_refuses_a_neighbor_corner_inside_the_rim_that_the_old_core_le
 
 
 def test_hem_on_water_sees_a_stream_and_a_pond_separately():
-    """`build_comb` lays the fan from pure geometry and `draw_comb_field` used to render it blind - it
+    """the comb builder lays the fan from pure geometry and `draw_comb_field` used to render it blind - it
     was the ONLY placer that consulted nothing, so a dry-hem plot could be drawn straight across a
     stream authored earlier (Ubame's). The two arms are different geometry: a stroked watercourse with
     a half-width, and the pond's ellipse."""
@@ -790,7 +790,7 @@ def test_comb_base_fill_can_floor_the_whole_envelope():
 
 
 def test_the_dry_hem_stops_at_the_bank_of_a_watercourse_that_was_there_first():
-    """`build_comb` lays the fan from pure geometry, so a hem plot can be drafted straight across a
+    """the comb builder lays the fan from pure geometry, so a hem plot can be drafted straight across a
     stream authored earlier (Ubame's). The draw yields: the crop stops at the bank rather than being
     inked over the water."""
     s = Settlement(1000, 1000, seed=1)

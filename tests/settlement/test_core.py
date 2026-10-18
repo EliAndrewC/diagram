@@ -10,7 +10,7 @@ import pytest
 from l7r.diagram.settlement import Settlement, roll_torii_count, surface_water_dist, village_population
 from l7r.diagram.waterfields import dedup_ring, floor_overhang, pointed_ring, polyline_cum, supply_bank_clearance
 from tests._scope import full_or
-from tests.settlement._builders import _cap020, _castle_map, _crop_settlement, _max_turn_deg, _memo_city, _town
+from tests.settlement._builders import _cap020, _castle_map, _crop_settlement, _max_turn_deg, _memo_city, _town, crop
 
 
 @pytest.mark.renders  # a test OF rendering (feature 213): it clears the suite's skip-render default for its first half
@@ -43,14 +43,14 @@ def test_village_population_draws_from_the_weighted_distribution():
     assert c.most_common(1)[0][0] == 350  # 350 is the mode
 
 
-def test_crop_to_content_frames_hard_features_with_margin():
+def test_crop_frames_hard_features_with_margin():
     s = _crop_settlement()
     s.M["houses"] = [{"x": 500, "y": 500, "w": 40, "h": 30}]
-    s.crop_to_content(margin=20)
+    crop(s, margin=20)
     assert s.view == (460, 465, 80, 70)  # house 500 +/- (20/2) +/- 20 margin
 
 
-def test_crop_to_content_covers_fields_pond_and_poly_features():
+def test_crop_covers_fields_pond_and_poly_features():
     s = _crop_settlement()
     s.M["houses"] = [{"x": 500, "y": 500, "w": 20, "h": 20}]  # w/h branch
     s.M["groves"] = [{"poly": [[430, 430], [460, 430], [460, 460], [430, 460]]}]  # poly branch (a homestead grove still sets the frame)
@@ -58,11 +58,11 @@ def test_crop_to_content_covers_fields_pond_and_poly_features():
     s.M["fields"] = [{"outline": [[400, 400], [600, 400], [600, 600], [400, 600]], "vis_bbox": [420, 420, 580, 580]}]  # vis_bbox branch
     s.M["pond"] = [700, 700, 50, 40]  # pond branch
     s.M["wells"] = [{"x": 410, "y": 500, "r": 8}]  # r branch (latent bug 2026-07-20: wells set the frame too)
-    s.crop_to_content(margin=0)
+    crop(s, margin=0)
     assert s.view == (402, 420, 348, 320)  # well W (410-8), field N, pond E/S - the windbreak at 300 is CLIPPED
 
 
-def test_crop_to_content_frames_a_torii_arch():
+def test_crop_frames_a_torii_arch():
     # a torii arch is a visible structure: its TRUE-SCALE glyph box (torii_halfbox) must be inside the frame, so
     # a torii beyond the houses pushes the crop out to contain it (matches the hard_features_within_frame check).
     # At ftpx=1 the plan-view arch's half-box is (10, 3.28, 3.28) (feature 268), so the torii at y=640 reaches
@@ -70,15 +70,15 @@ def test_crop_to_content_frames_a_torii_arch():
     s = _crop_settlement()
     s.M["houses"] = [{"x": 500, "y": 500, "w": 20, "h": 20}]  # hard core 490..510
     s.M["torii"] = [[500, 640, 1]]  # a gateway S of the houses
-    s.crop_to_content(margin=0)
+    crop(s, margin=0)
     assert s.view == (490, 490, 20, 153)  # x from houses/arch (490..510), S edge = torii y 640 + 3.28 rounded
 
 
-def test_crop_to_content_uses_field_outline_when_no_vis_bbox():
+def test_crop_uses_field_outline_when_no_vis_bbox():
     s = _crop_settlement()
     s.M["houses"] = [{"x": 500, "y": 500, "w": 20, "h": 20}]
     s.M["fields"] = [{"outline": [[400, 400], [900, 400], [900, 900], [400, 900]]}]  # no vis_bbox -> falls back to outline
-    s.crop_to_content(margin=0)
+    crop(s, margin=0)
     assert s.view == (400, 400, 500, 500)
 
 
@@ -90,7 +90,7 @@ def test_crop_ignores_the_commons_which_just_clips_at_the_frame():
     s = _crop_settlement()
     s.M["houses"] = [{"x": 500, "y": 500, "w": 20, "h": 20}]  # hard core 490..510
     s.M["commons"] = [{"poly": [[200, 200], [800, 200], [800, 800], [200, 800]]}]  # huge, overhangs ALL four sides
-    s.crop_to_content(margin=10)
+    crop(s, margin=10)
     assert s.view == (480, 480, 40, 40)  # hard 490..510 + 10 margin; commons ignored
 
 
@@ -155,7 +155,7 @@ def test_rng_scope_gives_repeat_calls_on_one_key_their_own_numbers():
         assert [random.random() for _ in range(3)] == first  # ...but a fresh map reproduces them
 
 
-def test_crop_to_content_includes_forest_clamped_to_canvas():
+def test_crop_includes_forest_clamped_to_canvas():
     # the forest is a big EDGE feature recorded as a POINT-LIST (not dicts). On the axis it FACES, the crop
     # frames it CLAMPED to the canvas so the view never opens past the edge (an edge feature must REACH the
     # frame edge, not stop short). On the axis it RUNS ALONG - here N-S, off BOTH canvas ends - it sets
@@ -163,16 +163,16 @@ def test_crop_to_content_includes_forest_clamped_to_canvas():
     s = Settlement(2000, 1500, seed=1)
     s.M["houses"] = [{"x": 30, "y": 700, "w": 20, "h": 20}]
     s.M["forest"] = [[1800, -10], [1820, 750], [1800, 1510], [2012, 1510], [2012, -10]]  # fills the E to canvas+12
-    s.crop_to_content(margin=40)
+    crop(s, margin=40)
     assert s.view == (0, 650, 2000, 100)  # E edge clamped to the canvas; N/S tight to the house
 
 
-def test_crop_to_content_frames_a_forest_that_ends_inside_the_canvas():
+def test_crop_frames_a_forest_that_ends_inside_the_canvas():
     # ... but a tree line that STOPS inside the canvas bounds something real, so its own span is content
     s = Settlement(2000, 1500, seed=1)
     s.M["houses"] = [{"x": 30, "y": 700, "w": 20, "h": 20}]
     s.M["forest"] = [[1800, 300], [1820, 750], [1800, 1200], [2012, 1200], [2012, 300]]
-    s.crop_to_content(margin=40)
+    crop(s, margin=40)
     assert s.view == (0, 260, 2000, 980)
 
 
@@ -223,7 +223,8 @@ def test_build_comb_supply_banks_hems_bunds_onto_the_channel_banks():
     # supply_banks=True holds every carved corner off every supply stroke by its local half-width
     # + BANK_MARGIN*grain, perpendicular to the stroke; the default (False) keeps the legacy carve
     # so the hand-authored pool re-runs byte-identical.
-    from l7r.diagram.waterfields import BANK_MARGIN, build_comb
+    from l7r.diagram.waterfields import BANK_MARGIN
+    from tests.waterfields._builders import lay_comb
 
     def buried_corners(net, line_off):
         n = 0
@@ -249,14 +250,14 @@ def test_build_comb_supply_banks_hems_bunds_onto_the_channel_banks():
         return n
 
     kw = dict(down_deg=90, field_fall=1260, offtakes_a=(0.32, 0.7), offtakes_b=(0.5,))
-    net = build_comb(1300, 1700, (520, 220), full_or(2, 5), supply_banks=True, **kw)  # a 3-fan comb (T19: the 5-fan one cost 2.3 s and proved the same clearance)
+    net = lay_comb(1300, 1700, (520, 220), full_or(2, 5), supply_banks=True, **kw)  # a 3-fan comb (T19: the 5-fan one cost 2.3 s and proved the same clearance)
     assert any(c.get("role") != "drain" for c in net["channels"])  # the comb drew supply strokes
     assert buried_corners(net, BANK_MARGIN - 0.15) == 0  # every corner clear of every bank (the gate's own line)
     # ... and since feature 302 the fix IS the default: the plots tile a region cut from the envelope less every stroke and its
     # bank (`partition.planted_region`), so the same comb without the flag buries no corner either. (This half used to assert
     # the legacy carve laid sector bunds on the thread centerlines, inside the drawn water - and said that the day it went
     # green the fix had become the default. The flag stays: it still decides whether the stroke rule judges the bunds.)
-    assert buried_corners(build_comb(1300, 1700, (520, 220), full_or(2, 5), **kw), BANK_MARGIN - 0.15) == 0
+    assert buried_corners(lay_comb(1300, 1700, (520, 220), full_or(2, 5), **kw), BANK_MARGIN - 0.15) == 0
 
 
 def test_paddy_grain_hits_the_real_feet_target():
@@ -827,15 +828,15 @@ def test_surface_water_dist_reads_the_checks_own_sources():
     assert surface_water_dist({"canals": [{"poly": [[0, 0], [100, 0]]}]}, 50, 25) == pytest.approx(25.0)  # a town canal is an open watercourse, and does
 
 
-def test_crop_to_content_takes_reserved_ground_as_content():
+def test_crop_takes_reserved_ground_as_content():
     """Feature 150: the title pocket a full sheet reserves OUTSIDE its content is handed to the crop as
     content, so the frame holds it in; without it the crop hugs the houses alone."""
     s = _crop_settlement()
     s.M["houses"] = [{"x": 500, "y": 500, "w": 40, "h": 30}]
-    s.crop_to_content(margin=10)
+    crop(s, margin=10)
     x0, y0, _w, _h = s.view
     assert y0 > 300
-    s.crop_to_content(margin=10, extra=[(400.0, 200.0, 600.0, 300.0)])
+    crop(s, margin=10, extra=[(400.0, 200.0, 600.0, 300.0)])
     assert s.view[1] <= 190 and s.view[0] <= 390
 
 

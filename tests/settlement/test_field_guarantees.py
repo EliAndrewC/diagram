@@ -18,10 +18,10 @@ from l7r.diagram.waterfields.ring_rules import RingContext, as_recorded, ring_ar
 def _comb() -> dict:
     """One small comb net, built once on disk (as `tests/settlement/test_fields.py` builds its own) and deep-copied per
     caller, because drawing and carving MUTATE the net."""
-    from l7r.diagram.waterfields import build_comb
+    from tests.waterfields._builders import lay_comb
 
     key = "test_field_guarantees-comb:v1"
-    return copy.deepcopy(rollcache.obtain(key, lambda: build_comb(1400, 1400, (700, 200), 1, down_deg=90, field_fall=400, grain=2.0, supply_banks=True))[0])
+    return copy.deepcopy(rollcache.obtain(key, lambda: lay_comb(1400, 1400, (700, 200), 1, down_deg=90, field_fall=400, grain=2.0, supply_banks=True))[0])
 
 
 def _lattice(n: int, side: float = 40.0) -> list[dict]:

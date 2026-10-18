@@ -27,7 +27,7 @@ from .wood_rank import house_floor as house_floor
 from .wood_rank import low_by_the_water as low_by_the_water
 from .wood_rank import woodland_tier as woodland_tier
 
-CROP_MARGIN = 48.0  # the one crop margin, shared by stage_frame's crop_to_content call and the
+CROP_MARGIN = 48.0  # the one crop margin, shared by stage_frame's crop and the
 # predicted-kept-window math in open_ground_patches - two hardcoded 48s would drift
 """Research: crop margin - CONVENTION: 48 px round the framed content"""
 
@@ -366,7 +366,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
     _floor = house_floor([(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])], plan.fall)
     _rivers = WaterZone([st for st, _ in streams], marshes)
 
-    # THE PATCHES MUST NOT STRETCH THE FRAME. `crop_to_content` frames the map to its HARD features,
+    # THE PATCHES MUST NOT STRETCH THE FRAME. The crop frames the map to its HARD features,
     # and a woodland patch is one - so a patch parked in a far corner of the working canvas drags the
     # crop out with it, leaving a band of empty scrub on one side and (worse) putting the map edge
     # beyond the reach of the drain brook, which then no longer runs off the frame. That is three
@@ -379,7 +379,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
 
     # ...AND CONFINED TO THE PREDICTED KEPT WINDOW (known-open ledger 2026-08-16, Sawada: two of
     # three parcels wholly above the frame, the third half-cropped under the title; Kashikawa and
-    # Mizuguchi the same shape). The commons never set the frame (crop_to_content: woods bleed at
+    # Mizuguchi the same shape). The commons never set the frame (`content_view`: woods bleed at
     # the edge), so a parcel the keep-outs push past the future crop simply vanishes from the
     # sheet. The decision, over "let the crop admit them": the frame stays tight to the working
     # settlement - the documented reason commons do not set the frame at all - and a coppice is

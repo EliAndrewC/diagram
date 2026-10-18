@@ -12,7 +12,6 @@ def test_nucleated_cluster_is_grove_less_with_yards_and_gardens():
 
     s = _nuc_village()
     s.lane([(300, 180), (322, 620)], width=5, clearance=11, worn=True)  # the WORN (unpaved) lane branch
-    assert s.headman(520, 300)  # headman = a LARGER plain farmhouse; its whole envelope (194 x 166) west of the paddy at x=640
     # SEATS ON A LATTICE, as the generator proposes them (feature 227): the placer tests the homestead's whole envelope
     # once and makes no spiral, so a random throw mostly lands on a standing bundle and is refused - the way to seat a
     # cluster is to propose seats at the pitch, which is what `stage_homesteads` does.
@@ -27,9 +26,6 @@ def test_nucleated_cluster_is_grove_less_with_yards_and_gardens():
     assert not s.M["groves"]  # nucleated -> NO per-house grove
     assert len(s.M["threshing_yards"]) >= drawn - 1  # each homestead keeps a yard
     assert len(s.M["gardens"]) >= drawn - 1  # ... and an (adaptive-side) garden
-    hm = [h for h in s.M["houses"] if h.get("role") == "headman"][0]
-    assert hm["kind"] == "plain" and hm["w"] >= 40  # the headman is a plain, larger house
-    assert all(h["w"] <= hm["w"] for h in s.M["houses"])  # ... and the largest
 
 
 def test_rect_hits_detects_a_pure_edge_crossing():
@@ -157,23 +153,6 @@ def test_a_persimmon_keeps_out_of_its_own_and_its_neighbors_yards_and_beds_sun()
     own_shade = {"yard": (360, 380, 36, 26), "gardens": [], "fixtures": {"persimmon": (360, 340, 23, 23)}}
     assert s._persimmon_sun_conflict(own_shade) is False and own_shade["fixtures"] == {}, "its own tree over its own yard: dropped"
     assert s._persimmon_sun_conflict({"yard": (700, 600, 36, 26), "gardens": [], "fixtures": {"persimmon": (700, 560, 23, 23)}}) is False, "far from both"
-
-
-def test_headman_refuses_a_non_toscale_map():
-    # the legacy (pre-to-scale) headman rec branch was dead code after the Hikari fix and is gone
-    s = Settlement(800, 800, seed=5)
-    s.meta(name="T", scale="town")
-    with pytest.raises(ValueError):
-        s.headman(400, 400)
-
-
-def test_a_hamlet_scale_map_can_draw_no_headman():
-    """Feature 287, homes H18: the role's one producer refuses a hamlet - a hamlet has no headman of its own."""
-    s = Settlement(800, 800, seed=5)
-    s.meta(name="H", scale="hamlet", ftpx=1, toscale=True)
-    with pytest.raises(ValueError, match="no headman of its own"):
-        s.headman(400, 400)
-    assert not any(h.get("role") == "headman" for h in s.M["houses"])
 
 
 def test_garden_beds_clear_rejects_a_bed_on_a_neighbor():
@@ -405,7 +384,6 @@ _ROLLING_SURFACE = frozenset(
     {
         # public - called from pool gens, wip/, other engine modules and tests
         "farmsteads",
-        "headman",
         "line_seeds",
         "ring",
         "scatter_seeds",

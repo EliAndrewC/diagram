@@ -57,7 +57,7 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
     plan.net = net
     plan.acres = net_acres(net, plan.ftpx)
 
-    # THE DRAIN'S CONTINUATION IS ALWAYS OURS TO DRAW. `build_comb` hands back a `brook` and
+    # THE DRAIN'S CONTINUATION IS ALWAYS OURS TO DRAW. The comb builder hands back a `brook` and
     # `draw_comb_field` draws it when it is there - straight downhill, a FIXED 520 px. Both sinks
     # need something else. A hamlet draining into its own tameike must have NO brook at all (the
     # runoff stops at the pond, and `stage_sink` supplies the ditch that reaches it). A hamlet

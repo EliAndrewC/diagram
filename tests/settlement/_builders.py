@@ -14,6 +14,15 @@ def _town():
     return s
 
 
+def crop(s, margin=30, extra=()):
+    """Frame `s` to its hard content now: the view `content_view` computes, set by `crop_to_view` - the pair the scripted
+    hamlet calls (its view decided in `hamletgen.hinterland.frame.frame_for`). The one-call engine wrapper went with its last
+    caller (feature 388); the frame tests call this instead."""
+    from l7r.diagram.settlement.core import content_view
+
+    s.crop_to_view(content_view(s._crop_boxes(city=False), extra, margin, s.W, s.H))
+
+
 def _crop_settlement():
     s = Settlement(2000, 1500, seed=1)
     s.meta(name="V", scale="village")
