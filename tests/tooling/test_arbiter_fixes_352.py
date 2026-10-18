@@ -179,3 +179,23 @@ def test_an_ask_about_a_plan_review_carries_its_rounds_and_the_plan_s_diffs(tmp_
     assert "(r0)" not in text, "another block's rounds are not this review's"
     assert (tmp_path / "out" / "edits.diff").is_file() and "specs/385-x/plan.md" in text
     assert ab.plan_rounds(tmp_path)[0] == ["## The plan review's rounds\n\n- (none recorded in plan-review.json)\n"]
+
+
+def test_a_plan_round_trigger_s_bundle_carries_the_plan_s_rounds(tmp_path: pathlib.Path) -> None:
+    """The round arbiter's tooling fix on round:spec-fidelity|plan:385-approach-checklist#T17@3: the plan-round cap's bundle (T16)
+    pointed at spec.md's Review history, which holds no plan rounds - the arbiter ruled with no verdicts and a counter of 0 of 0."""
+    import subprocess
+
+    root = _clone(tmp_path, "385-x")
+    d = root / "specs" / "385-x"
+    d.mkdir(parents=True)
+    (d / "plan.md").write_text("# plan\n")
+    rounds = [{"reviewed": "r1", "blocks": ["### T17 Decisions"], "verdict": "BLOCKED", "decisions": [{"id": "D39", "class": "narrowing, NOT LEGITIMATE", "summary": "two steps", "why": "all three"}]},
+              {"reviewed": "r2", "blocks": ["### T17 Decisions"], "verdict": "BLOCKED", "decisions": []}]
+    (d / "plan-review.json").write_text(json.dumps({"block_reviews": rounds}))
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+    trig = "round:spec-fidelity|plan:385-x#T17@3"
+    ha.trip(root, trig, "round", "spec-fidelity|plan:385-x#T17", "round 3 of T17's plan review")
+    text = ab.bundle(root, trig, tmp_path / "out", allow_missing="a fixture").read_text()
+    assert "### Round 1: BLOCKED (r1)" in text and "D39 - narrowing, NOT LEGITIMATE: two steps all three" in text
+    assert "spec.md`'s Review history" not in text, "a plan round is not the spec's"
