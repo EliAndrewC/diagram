@@ -115,7 +115,7 @@ def carve_comb(
 
     The COMB layout (the historical default - Kishu school / Chinese canal doctrine):
     the sluice's head-race forks at one division point into TWO supply canals hugging the
-    high margins (canal A runs cross-slope at down-37 deg, canal B down the other margin at
+    high margins (canal A runs across the slope at down-42 deg, canal B down the other margin at
     down+58 deg), delivery ditches drop downhill off them (a couple splitting once), and one
     drain collector (akusui) crosses the LOW side and leaves the map. Paddies are carved
     between the ditch threads; water cascades plot-to-plot within each block (tagoshi).
@@ -168,6 +168,7 @@ def carve_comb(
         default hem depth - UNRESEARCHED: the dry hem 70-132 px deep
         default bund-bean share - UNRESEARCHED: 0.28 of the bunds carry a bean row
         fan middle - UNRESEARCHED: the fan's middle takes the "cleared" form by default (`fan_middle`)
+        supply canal bank - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: the plots hem onto a bank beside each supply canal where the caller asks (`supply_banks`; the scripted hamlet always does), off by default for a caller that draws its own
     """
     R = random.Random(seed)
     F = _Frame(down_deg)

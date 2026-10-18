@@ -47965,10 +47965,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#six jizo at its entrance": {
-  "code": "72419dc25a8f2d3e",
+  "body": "4db3d4ee6c37aff7",
+  "claim": "six jizo at its entrance - cremation-grounds-and-bone-mounds-kasoba.drawing: at a burial ground's entrance; the code draws none (the cremation ground that drew them on its rim went in feature 388)",
+  "code": "9a3a819cc2cdc909",
   "core": "72236120606e82b4",
-  "date": "2026-10-07",
-  "note": "cemetery draws no jizo at all, but the page has \"Six small stone jizo stand in a row at the entrance of a village's burial ground\"; the claim itself admits it; draw them at the burial ground's entrance here",
+  "date": "2026-10-18",
+  "note": "the page says the maps draw \"six small stone jizo ... in a row at the entrance of a village's burial ground\", but cemetery() draws none (the claim itself says \"the code draws none\"); either the burial ground draws them (about 2 ft, at least visible), or the claim should be a DEVIATION that the drawing page records",
   "pages": {
    "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html": "47b8cfda99c75467"
   },
@@ -48002,198 +48004,6 @@
    "0235-village-burial-grounds-bochi.html:44460e5c0345d552"
   ],
   "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#cleared ground size": {
-  "code": "84b8b3b4615ebc8d",
-  "core": "7e27ab1193f62564",
-  "date": "2026-10-07",
-  "note": "75 ft is within 30-80 for a village or town; 130 ft is within \"up to about 180 ft square\" for a city",
-  "pages": {
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html": "47b8cfda99c75467"
-  },
-  "research": "fdf6aa354ef6d6e1",
-  "rests": [
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html:7424e9cc43246f65",
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html:9ae5cf4ef11103ba",
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html:ef89b99e3d23cc25"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#cleared ground's depth": {
-  "code": "cbe29c2d8031c2e9",
-  "core": "7e27ab1193f62564",
-  "date": "2026-10-07",
-  "note": "the page gives only extents, not proportions",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html:7424e9cc43246f65",
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html:9ae5cf4ef11103ba"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#fire bed": {
-  "code": "c321d73f00108258",
-  "core": "7e27ab1193f62564",
-  "date": "2026-10-07",
-  "note": "px(6) x px(3), a coffin's length and a little wider (the inline comment's \"~12x8 ft\" is stale)",
-  "pages": {
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html": "47b8cfda99c75467"
-  },
-  "research": "fdf6aa354ef6d6e1",
-  "rests": [
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html:b166ff8b7936f733"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#fire bed's form": {
-  "code": "c057a0fc1ee88be2",
-  "core": "7e27ab1193f62564",
-  "date": "2026-10-07",
-  "note": "the claim records two attested forms (a firewood stack and a stone-framed trench), yet the code always draws the framed trench and no drawing page records that as a deviation; roll per seed. The cited drawing page names neither form, so the claim should also cite 0238.html",
-  "pages": {
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html": "47b8cfda99c75467"
-  },
-  "research": "fdf6aa354ef6d6e1",
-  "rests": [
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html:b166ff8b7936f733",
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html:ee5c2ac7b4c3d937",
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html:f7324521b26c50fb"
-  ],
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#jizo drawn size": {
-  "code": "4a2173b2069f17c4",
-  "core": "7e27ab1193f62564",
-  "date": "2026-10-07",
-  "note": "the minimum mark size is a convention",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0235-village-burial-grounds-bochi.drawing.html:7a977de34ea42248"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#jizo size": {
-  "code": "731ff6ca96ad84b5",
-  "core": "7e27ab1193f62564",
-  "date": "2026-10-10",
-  "note": "jh = px(2.7) draws the jizo 2.7 ft tall, but the page takes \"a stone jizo ... at about 2 ft tall\"; nothing cited gives the 2.7 ft or the 1.4-width pitch, so draw it 2 ft tall or label the 2.7 and the pitch GUESS",
-  "pages": {
-   "0235-village-burial-grounds-bochi.drawing.html": "fa6fc256f086d28d"
-  },
-  "research": "94b02a00c1f2f166",
-  "rests": [
-   "0235-village-burial-grounds-bochi.drawing.html:7a977de34ea42248"
-  ],
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#keep-clear margin": {
-  "code": "da55eeae03aefedf",
-  "core": "7e27ab1193f62564",
-  "date": "2026-10-07",
-  "note": "m=0; 120 ft is held at seating",
-  "pages": {
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html": "47b8cfda99c75467"
-  },
-  "research": "fdf6aa354ef6d6e1",
-  "rests": [
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html:75c4e81c243d0f40",
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html:7a9248c93a16f4ae"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#no walled hut": {
-  "code": "4a98711a858261ff",
-  "core": "7e27ab1193f62564",
-  "date": "2026-10-07",
-  "note": "the page attests \"in snow country, set in a walled hut of about four to six tatami\", but the code rolls only open or roofed and never draws the hut; add it as a form, keyed to snow country",
-  "pages": {
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html": "47b8cfda99c75467"
-  },
-  "research": "fdf6aa354ef6d6e1",
-  "rests": [
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html:b166ff8b7936f733"
-  ],
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#pyre ground unwalled": {
-  "code": "65a769375ddf8660",
-  "core": "7e27ab1193f62564",
-  "date": "2026-10-07",
-  "note": "0237 has \"The pyre stands in a walled yard\" while the code draws an open ground with no wall and no page records a deviation (0238 §204 says \"an open, cleared ground\", so the pages conflict too); draw the yard wall or label the claim DEVIATION with a page recording it",
-  "pages": {
-   "0237-burial-grounds-of-towns-and-cities-and-paupers-grounds-yizhong.drawing.html": "9bd072978438f810"
-  },
-  "research": "3498788a25b3d082",
-  "rests": [
-   "0237-burial-grounds-of-towns-and-cities-and-paupers-grounds-yizhong.drawing.html:1bfeb57117e3f22e"
-  ],
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#ragged outline, bed off center": {
-  "code": "597fec9f24c2699e",
-  "core": "7e27ab1193f62564",
-  "date": "2026-10-07",
-  "note": "a drawing choice; a ragged edge for ground cleared by use",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#roof size": {
-  "code": "586f71f393ad02f6",
-  "core": "7e27ab1193f62564",
-  "date": "2026-10-07",
-  "note": "px(11) on four posts, within 10-12 ft square",
-  "pages": {
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html": "47b8cfda99c75467"
-  },
-  "research": "fdf6aa354ef6d6e1",
-  "rests": [
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html:b166ff8b7936f733"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#roofed bed the minority": {
-  "code": "b6f54df891f9e3a9",
-  "core": "7e27ab1193f62564",
-  "date": "2026-10-07",
-  "note": "ROOFED_SHARE 0.25, a seeded draw",
-  "pages": {
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html": "47b8cfda99c75467"
-  },
-  "research": "fdf6aa354ef6d6e1",
-  "rests": [
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html:f7324521b26c50fb"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#scorched patch": {
-  "code": "5338f0675f2fedf8",
-  "core": "7e27ab1193f62564",
-  "date": "2026-10-10",
-  "note": "0238 does not size a burned patch inside the cleared ground",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#six jizo at a burial ground's entrance": {
-  "code": "8bc8d1376c007b8f",
-  "core": "7e27ab1193f62564",
-  "date": "2026-10-07",
-  "note": "the stones are seated on the cremation ground's own upper rim (cy - cry - jh), but the page puts them \"at the burial ground's entrance, not at a cremation ground\", shared with a cremation ground beside it; seat them at the burial ground's entrance",
-  "pages": {
-   "0235-village-burial-grounds-bochi.html": "e45079639dc7b88f",
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html": "47b8cfda99c75467"
-  },
-  "research": "8e0bbe71d63d2249",
-  "rests": [
-   "0235-village-burial-grounds-bochi.html:f681332815e285bc",
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html:6959ef9775d2f97c"
-  ],
-  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.mausoleum#caption": {
   "code": "827d6df67149e98b",
@@ -48298,33 +48108,6 @@
    "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html": "47b8cfda99c75467"
   },
   "research": "3d98379e3c76a697",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/civic_grounds/funerary.py::ROOFED_SHARE#roofed bed the minority": {
-  "code": "aa0b865b7a89e04d",
-  "core": "4334a4dcc62d7738",
-  "date": "2026-10-03",
-  "note": "most grounds open-air",
-  "pages": {
-   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html": "47b8cfda99c75467"
-  },
-  "research": "fdf6aa354ef6d6e1",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/civic_grounds/funerary.py::ROOFED_SHARE#the share": {
-  "code": "419ef5fe20f43826",
-  "core": "4334a4dcc62d7738",
-  "date": "2026-10-03",
-  "note": "GUESS, the record silent on a share",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/civic_grounds/funerary.py::cremation_outline#worn ragged outline": {
-  "code": "5521f9f71603f1f9",
-  "core": "2ba686ff2d3c8fb8",
-  "date": "2026-10-03",
-  "note": "drawing convention",
-  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/civic_grounds/justice.py::JusticeGroundsMixin#plumbing": {
@@ -49367,14 +49150,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/core.py::Settlement.crop_to_content#framed to the hard content": {
-  "code": "28d4701f73d3fc8a",
-  "core": "7bf9f793d044327f",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or class",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/settlement/core.py::Settlement.crop_to_view#framed to a decided view": {
   "code": "dbef56869d2a878e",
   "core": "af6b3c7b00d1833a",
@@ -49469,12 +49244,16 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/core.py::content_view#drawing engine plumbing": {
-  "code": "c0af5f27f2339021",
+ "l7r/diagram/settlement/core.py::content_view#framed to the hard content": {
+  "body": "95877329cf8ea26a",
+  "claim": "framed to the hard content - CONVENTION: the frame-setting boxes plus a margin",
+  "code": "eb701e380781b918",
   "core": "9c87c36e0354faaf",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or class",
+  "date": "2026-10-18",
+  "note": "only crops the view to the frame-setting boxes plus a margin, clamped to the canvas",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::ANNEX_LENGTH_FT#annex length": {
@@ -50203,10 +49982,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#plot size and crop": {
-  "code": "67e4faa2c59e46ad",
+  "body": "5e66203a4acd5cf1",
+  "claim": "plot size and crop - NONE: taken from the net as the comb builder laid them",
+  "code": "688f13ae27103c89",
   "core": "242b2b262ce32810",
-  "date": "2026-10-07",
-  "note": "passes the net's plots through and decides nothing itself",
+  "date": "2026-10-18",
+  "note": "poly, fill, crop, furrow and theta are read from the net unchanged; this unit decides none of them",
   "pages": {},
   "research": "",
   "rests": [],
@@ -65127,39 +64908,6 @@
   "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/rolling/place.py::PlacerMixin.headman#headman a plain farmstead enlarged": {
-  "code": "68343431f28acbba",
-  "core": "36ce76a0338b9e29",
-  "date": "2026-10-03",
-  "note": "through the bundle, no wing, as 0030",
-  "pages": {
-   "0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.drawing.html": "e6399a21c1165051"
-  },
-  "research": "5c6205a80b826fc7",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/rolling/place.py::PlacerMixin.headman#headman's house size": {
-  "code": "15367b17dd89b3e4",
-  "core": "36ce76a0338b9e29",
-  "date": "2026-10-03",
-  "note": "92 x 56 ft, four times, as 0030 drawing",
-  "pages": {
-   "0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.drawing.html": "e6399a21c1165051"
-  },
-  "research": "5c6205a80b826fc7",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/rolling/place.py::PlacerMixin.headman#no headman in a hamlet": {
-  "code": "6e837099ebd18f59",
-  "core": "36ce76a0338b9e29",
-  "date": "2026-10-03",
-  "note": "0001: a hamlet has no headman",
-  "pages": {
-   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html": "44a3744ac1eacfe3"
-  },
-  "research": "f86a0d6160742f02",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/settlement/rolling/route.py::ROUTE_LEGS#most legs of a routed path": {
   "code": "39c3dc81db177fc6",
   "core": "c9a4cab67e287326",
@@ -73221,72 +72969,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/waterfields/comb.py::build_comb#comb layout": {
-  "code": "07305a566e441ad6",
-  "core": "5128542c1e250913",
-  "date": "2026-10-03",
-  "note": "0053 comb; docstring's \"down-37 deg\" is stale (code 42)",
-  "pages": {
-   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "92978f4124b5a89e"
-  },
-  "research": "8b7dec608b28495e",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/comb.py::build_comb#default bund-bean share": {
-  "code": "d711121212884c8d",
-  "core": "5128542c1e250913",
-  "date": "2026-10-03",
-  "note": "0014 says only \"Some bunds carry a row of soybeans\"",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/comb.py::build_comb#default hem depth": {
-  "code": "c8a1c00af5b1a5a1",
-  "core": "5128542c1e250913",
-  "date": "2026-10-03",
-  "note": "0006 gives no depth; 0010's 140-265 ft is a city-only calibration",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/comb.py::build_comb#default paddy grain": {
-  "code": "118445a6486192b9",
-  "core": "5128542c1e250913",
-  "date": "2026-10-05",
-  "note": "48 px across and 26-36 px along is the hamlet basin at 1 ft/px",
-  "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
-  },
-  "research": "18b908bbb50f7c1f",
-  "rests": [
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf"
-  ],
-  "triaged": "2026-10-09",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/comb.py::build_comb#default skeleton": {
-  "code": "4783318dab310db4",
-  "core": "5128542c1e250913",
-  "date": "2026-10-03",
-  "note": "unanswered in the bundle",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/comb.py::build_comb#water passes plot to plot": {
-  "code": "aaf1f79c555a2cfc",
-  "core": "5128542c1e250913",
-  "date": "2026-10-05",
-  "note": "below each delivery's end the plots take water over their bunds (tagoshi)",
-  "pages": {
-   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
-  },
-  "research": "39036ea15e57c448",
-  "rests": [
-   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:0d4f9efff883c0d1",
-   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:0fc478156a744cc7"
-  ],
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/waterfields/comb.py::carve_comb#bends swept before clearing": {
   "code": "56cb9a352abe8f93",
   "core": "54310dc19637ea2e",
@@ -73297,6 +72979,25 @@
   },
   "research": "a3b4c3a9112374b7",
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/comb.py::carve_comb#comb layout": {
+  "body": "8c32b734d4dbc041",
+  "claim": "comb layout - irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing: a head race forking into two supply canals on the high margins, deliveries down the slope, one collector on the low line",
+  "code": "8e47918428203623",
+  "core": "54310dc19637ea2e",
+  "date": "2026-10-18",
+  "note": "the page has the deliveries \"leaving them at right angles and running down the slope\", but canal A is dug at DOWN - radians(42) and its deliveries head DOWN + R.uniform(-0.15, 0.1), so they leave it at about 33-51 deg, not 90; the docstring's \"canal A ... at down-37 deg\" is also stale against the code's 42",
+  "pages": {
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "92978f4124b5a89e"
+  },
+  "research": "8b7dec608b28495e",
+  "rests": [
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:3bd5e9166c70b8ab",
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:93e10cc9a8adc19b",
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:c3c7f4605659e6ad",
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e105c2f647566aa0"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/comb.py::carve_comb#default bund-bean share": {
   "code": "78dcb0394fb39559",
@@ -73347,6 +73048,14 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/comb.py::carve_comb#supply canal bank off by default (supply_banks=False), where the drawing page draws a bare 5 ft bank beside every supply canal": {
+  "code": "54310dc19637ea2e",
+  "core": "54310dc19637ea2e",
+  "date": "2026-10-18",
+  "note": "supply canal bank off by default (supply_banks=False), where the drawing page draws a bare 5 ft bank beside every supply canal",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/waterfields/comb.py::carve_comb#water first": {
   "code": "f30e8a8156a6dfb0",
   "core": "54310dc19637ea2e",
@@ -73357,6 +73066,23 @@
   },
   "research": "8b7dec608b28495e",
   "triaged": "2026-10-05",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/comb.py::carve_comb#water passes plot to plot": {
+  "body": "8c32b734d4dbc041",
+  "claim": "water passes plot to plot - where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing: below each delivery's end the plots take their water over the bunds",
+  "code": "971b4d056f451ad1",
+  "core": "54310dc19637ea2e",
+  "date": "2026-10-18",
+  "note": "threads are clipped at the collector's bank, plots are cut between them below each ditch's end, and the cascade cap (250-330 px, about 7-12 rows) fits \"several to about ten plots\"",
+  "pages": {
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
+  },
+  "research": "39036ea15e57c448",
+  "rests": [
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:0d4f9efff883c0d1",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:0fc478156a744cc7"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/comb.py::finish_comb#furrows vary": {
