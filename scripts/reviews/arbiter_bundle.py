@@ -424,13 +424,33 @@ def red_gate_runs(root: Path, keep: int = 4) -> list[str]:
             r = json.loads(f.read_text(encoding="utf-8"))
         except OSError, ValueError:
             continue
-        if r.get("target") == "done" and str(r.get("result", "")).startswith("failed"):
+        # A TREE-MOVED ABORT IS NO RED GATE (feature 385 T49, the round arbiter's fix on red-gate@2026-10-18T16:44:54Z): its
+        # test-full never ran - a `make done --dry-run` recorded one after 2 s and owed a second red-gate trigger
+        if r.get("target") == "done" and str(r.get("result", "")).startswith("failed") and r.get("result") != "failed: tree moved":
             runs.append(r)
     lines = []
-    for r in runs[-keep:]:
+    shown = runs[-keep:]
+    for k, r in enumerate(shown):
+        if k:
+            lines += _between(root, shown[k - 1], r)
         lines.append(f"- {r.get('utc', '?')} at {r.get('commit', '?')}: {r.get('result')}, {r.get('failed_tests', '?')} test(s) failed")
         lines += [f"  - {n}" for n in r.get("failed_names") or []]
     return ["## The red gates counted, each with its own failed tests\n\n" + ("\n".join(lines) or "- (no red make done in the run log)") + "\n"]
+
+
+def _between(root: Path, a: dict, b: dict) -> list[str]:
+    """What changed between two counted reds (feature 385 T49): the diff between their recorded commits, its stat first. A run
+    record keeps its commit and no tree state, so two reds on one commit say so rather than show an empty diff."""
+    ca, cb = str(a.get("commit") or ""), str(b.get("commit") or "")
+    if not ca or not cb:
+        return ["  (between these two: a run without a commit - no diff)"]
+    if ca == cb:
+        return ["  (between these two: the same commit; uncommitted edits between them are not recorded)"]
+    stat = subprocess.run(["git", "-C", str(root), "diff", "--stat", ca, cb], capture_output=True, text=True).stdout.strip()
+    diff = subprocess.run(["git", "-C", str(root), "diff", ca, cb], capture_output=True, text=True).stdout.rstrip()
+    if not stat and not diff:
+        return [f"  (between these two: no diff from {ca} to {cb} - a commit is not in this clone, or nothing changed)"]
+    return [f"  between {ca} and {cb}:", "", "```", stat, "", diff, "```", ""]
 
 
 def evidence_section(out: Path, files: Sequence[str]) -> list[str]:

@@ -4285,33 +4285,51 @@
    "verdict": "CLEAR"
   },
   "T08": {
-   "section_sha256": "4a831694fae8b1a8debd34a1c6baf015c2528130ea9c73815b226dae801fc2e8",
+   "section_sha256": "70341a4912b9889f7b1e58187a961cb4bea1a16ed314b938fccb33953288e217",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "D60",
-     "summary": "POND_BANKS = (bare, planted) knob rolled per hamlet from the seed at even odds (GUESS), HamletSpec.pond_bank override, recorded as meta.pond_bank; only a hamlet whose sink is a pond rolls it.",
+     "summary": "POND_BANKS knob (bare, planted) rolled per hamlet at even odds (GUESS), HamletSpec override, meta.pond_bank; only a pond sink rolls it",
      "class": "within",
-     "why": "The ranking row asks exactly this: roll the sparsely treed bank against the bare bank. Even odds is a labeled GUESS where the source gives no share. Restricting the roll to pond sinks is not a carve-out: an off-map sink has no bank to plant."
+     "why": "Unchanged since its CLEAR verdict; the ranking row asks for exactly this knob, rolled from the seed per the knob rule."
     },
     {
      "id": "D61",
-     "summary": "New stage_pond_bank after the houses, ways and wells and before the hinterland; trees seated on a ring at the reed fringe's outer edge plus half a crown, at a GUESS pitch of about 30 ft, jittered; a seat is kept only where clear of buildings, wellheads, ways, crop and water; a ring with no free seat draws none, recorded in meta.pond_bank_trees.",
+     "summary": "stage_pond_bank after stage_lane_wells, before stage_hinterland; seats walked at a GUESS pitch round the fringe's outer edge plus half a crown, each kept only where clear of buildings, wells, ways, crop and water",
      "class": "within",
-     "why": "Draws the planted bank's trees as the row asks, placing them after the houses and ways rather than moving anything for them (the homesteads-before-lanes principle), and keeping them off the reeds as 0061 requires. Dropping a seat that would overlap is the standing overlap matrix applied, not a narrowing of the row. A planted ring with no free seat cannot hold a tree without breaking that matrix, and the case is recorded rather than hidden. The pitch is labeled a knob, not a target."
+     "why": "Unchanged since its CLEAR verdict; draws the planted form's trees, seated after houses and ways, forced onto nothing."
     },
     {
-     "id": "D62",
-     "summary": "Each tree is the dike's standard tree (crown POND_BANK_CROWN_FT, GUESS) drawn through _plant_run so thin_planted_trees and structures_clear_of_trees apply; mulberry and cudrania alternate (GUESS), cudrania a shade darker; new feature class 'pond-bank tree' with its pop-up.",
+     "id": "D61b",
+     "summary": "For every tail pond, bare or planted, the bank's ellipse (pond radii + SINK_FRINGE + POND_BANK_FT 18 ft GUESS) joins block_polys so the toe marsh and scatters stay off the bank; each tree jittered across the bank within the 6 ft the crown leaves",
      "class": "within",
-     "why": "The row says draw the trees and names both species. The existing tree checks (0038 sun, structures clear of trees) are standing project rules, not new limits. The pop-up is owed for any new element. The alternation and crown are labeled GUESS."
+     "why": "Carries a constraint Part A already named and was judged CLEAR on (0061: reeds and wet tint kept off the bank), measured as broken by the glyph check (30 trunks in the toe marsh on Inashiro). It covers bare banks too, and that is not extra scope: the bare form the knob rolls is 0061's trodden or mown bank, not marsh, so keeping it dry is part of drawing both rolled forms faithfully. The new numbers are labeled GUESS knobs. It narrows nothing that was asked."
+    },
+    {
+     "id": "D62 (amended)",
+     "summary": "The bank tree is held to thin_planted_trees' sun rule at seating rather than through _plant_run (which writes only planted_trees, unread by structures_clear_of_trees); crown recorded in tree_crowns; kinds in pond_bank_trees; the bank mulberry read as 0061's shade tree for cattle, not 0038's exempt field bush",
+     "class": "within",
+     "why": "Part A's sun-rule constraint (0038) is kept, and the structure-overlap test is now actually reached. This changes how the rule is applied, not what it covers; nothing is exempted."
     },
     {
      "id": "D63",
-     "summary": "0061's drawing bullet 'A bank with a few trees on it is not drawn yet' is rewritten by a page session to describe the knob, with the pitch, crown and alternation labeled GUESS.",
+     "summary": "0061's 'not drawn yet' bullet rewritten to the knob's own, GUESSes labeled, by a page session",
      "class": "within",
-     "why": "The record has to match the drawing once the row is implemented. This keeps the page in step and adds no scope."
+     "why": "Unchanged since its CLEAR verdict; the record line a new element owes."
+    },
+    {
+     "id": "PartB-carry",
+     "summary": "Four older _OVERLAP_EXEMPT drifts re-opened by the one added key carried into T43, landing under CLAIMS_OK on ask:t08-overlap-exempt-drifts (continue); per-entry keying of the claims record left to the GM's review",
+     "class": "within",
+     "why": "This is the GM's amendment 3 option three: a finding on unchanged code is filed as an open task and does not block the landing. Not starting an overhaul of the claims record that nobody asked for narrows nothing."
+    },
+    {
+     "id": "Approach-reanswer",
+     "summary": "Re-answered Approach: goal now includes the bank standing dry; done = no toe-marsh inside any bank ellipse and no bank trunk in any marsh, on pool and cohort, glyph check passing; 90 min budget; bank width a knob band",
+     "class": "within",
+     "why": "One goal still: the two attested bank forms drawn faithfully. The added done-conditions are the measurable test of D61b and of Part A's 0061 constraint, which is enforcement of what was asked, not a second goal (FR-015)."
     }
    ],
    "verdict": "CLEAR"

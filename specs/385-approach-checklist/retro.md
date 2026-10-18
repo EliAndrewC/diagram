@@ -495,3 +495,10 @@ read the tool - a sentence in a reply becomes an arbiter's fix.
 About 20 min. Twice in an hour I stamped a part B ahead of the clock by hand; the gate only asked that a stamp not precede its
 trigger, so a future stamp passed. The tick's check and `make plan-delta` now refuse a stamp past the current UTC minute.
 **The habit it changes:** a time the gate trusts is read from the clock or checked against it, never typed and believed.
+
+## T49 - the retro row
+
+About 45 min (two plan rounds). A `make done --dry-run` I typed to learn a trigger's name recorded a 2 s "tree moved" abort as a
+red gate and owed a second trigger. The abort now records its own target, so it never counts as a red in a row while still never
+vouching for the tree, and the red-gate bundle shows the diff between the reds it counts. Round 1 blocked a `--stat` alone: the
+arbiter asked for the diff. **The habit it changes:** never dry-run a gate to read its refusal - ask the tool that owns the name.

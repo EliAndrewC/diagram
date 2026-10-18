@@ -7,6 +7,7 @@ holds only the next dispatch on its unit (or the next gate), and every ruling be
 from __future__ import annotations
 
 import json
+import subprocess
 import pathlib
 
 import pytest
@@ -649,3 +650,32 @@ def test_a_red_gate_bundle_names_what_each_red_gate_failed_on(tmp_path: pathlib.
     assert "zz_probe" not in runs, "the cumulative cache is not read"
     (empty,) = ab.red_gate_runs(tmp_path / "nowhere")
     assert "(no red make done in the run log)" in empty
+
+
+def test_a_red_gate_bundle_skips_a_tree_moved_abort_and_shows_the_diff_between_reds(tmp_path: pathlib.Path) -> None:
+    """Feature 385 T49 (the round arbiter's fix on red-gate@2026-10-18T16:44:54Z): a tree-moved abort, whose test-full never ran,
+    is not among the counted reds, and between two reds the bundle carries the diff between their commits, its stat first; two reds
+    on one commit say that nothing between them is recorded."""
+    def git(*a: str) -> str:
+        return subprocess.run(["git", "-C", str(tmp_path), *a], capture_output=True, text=True, check=True).stdout.strip()
+
+    git("init", "-q")
+    git("config", "user.email", "t@t")
+    git("config", "user.name", "t")
+    (tmp_path / "f.py").write_text("x = 1\n")
+    git("add", "-A")
+    git("commit", "-qm", "one")
+    c1 = git("rev-parse", "HEAD")
+    (tmp_path / "f.py").write_text("x = 2\n")
+    git("commit", "-qam", "two")
+    c2 = git("rev-parse", "HEAD")
+    log = tmp_path / "dev" / "run-log" / "2026-10"
+    log.mkdir(parents=True)
+    rows = [("a", "t1", c1, "failed: test-full"), ("b", "t2", c2, "failed: tree moved"), ("c", "t3", c2, "failed: coverage"), ("d", "t4", c2, "failed: lint")]
+    for name, utc, commit, result in rows:
+        (log / f"{name}.json").write_text(json.dumps({"utc": utc, "target": "done", "result": result, "commit": commit}), encoding="utf-8")
+    (runs,) = ab.red_gate_runs(tmp_path)
+    assert "t2" not in runs, "the tree-moved abort is no red gate"
+    assert f"between {c1} and {c2}:" in runs and "-x = 1" in runs and "+x = 2" in runs and "f.py | 2 +-" in runs, "the diff, its stat first"
+    assert "the same commit; uncommitted edits between them are not recorded" in runs, "t3 and t4 share a commit"
+

@@ -230,3 +230,21 @@ def test_a_second_red_gate_in_a_row_trips_the_arbiter(repo: Path) -> None:
     owed.write_text("not json")
     trigger = state.second_red_gate(repo, now="2026-10-10T00:00:00Z")
     assert trigger == "red-gate@2026-10-10T00:00:00Z" and trigger in json.loads(owed.read_text())
+
+
+def test_a_tree_moved_abort_is_no_red_gate_in_a_row(repo: Path) -> None:
+    """Feature 385 T49 (the round arbiter's fix on red-gate@2026-10-18T16:44:54Z): the Makefile records a tree-moved abort under
+    its own target, so a red gate, an abort, and a red gate owe one trigger, not two - and the abort still overwrites a green
+    record, so nothing vouches for the moved tree."""
+    import json
+
+    recipe = (Path(__file__).resolve().parents[3] / "Makefile").read_text(encoding="utf-8")
+    assert '"failed: tree moved"; $(STATE) failed-gate tree-moved;' in recipe, "the abort records its own target"
+    owed = repo / ".git" / "arbiter-owed.json"
+    state.write(repo, state.FAILED, "done")
+    state.write(repo, state.FAILED, "tree-moved")
+    assert not owed.exists(), "an abort after one red gate is not a second"
+    state.write(repo, state.FAILED, "done")
+    assert len(json.loads(owed.read_text())) == 1, "two real red gates in a row"
+    state.write(repo, state.GREEN, "done")
+    assert state.write(repo, state.FAILED, "tree-moved").event == state.FAILED, "the abort overwrites the green record"
