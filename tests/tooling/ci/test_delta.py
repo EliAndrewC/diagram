@@ -154,6 +154,17 @@ def test_the_key_is_blind_to_comments_docstrings_and_formatting(repo: Path) -> N
     assert engine_key(repo, "HEAD") != k1, "a manifest keys on its bytes - any edit moves it"
 
 
+def test_a_constants_claim_docstring_does_not_move_the_key(repo: Path) -> None:
+    """Feature 385 T57 (the round arbiter's fix on hour:385-approach-checklist@20): a constant's claim docstring - a bare string
+    after its assignment, not a body's first statement - is no code, so a claim's rewording owes no gate; its value still moves it."""
+    commit(repo, S + "l7r/diagram/c.py", 'PITCH = 100.0\n"""Research: row pitch - 0038: 100 ft"""\n')
+    k0 = engine_key(repo, "HEAD")
+    commit(repo, S + "l7r/diagram/c.py", 'PITCH = 100.0\n"""Research: the along-row span - UNRESEARCHED: 100 ft"""\n')
+    assert engine_key(repo, "HEAD") == k0, "a claim docstring after an assignment does not move the key"
+    commit(repo, S + "l7r/diagram/c.py", 'PITCH = 92.0\n"""Research: the along-row span - UNRESEARCHED: 100 ft"""\n')
+    assert engine_key(repo, "HEAD") != k0, "the value does"
+
+
 # ---- the short-circuit key IS the remote key (feature 132, second amendment) ---------------------
 
 
