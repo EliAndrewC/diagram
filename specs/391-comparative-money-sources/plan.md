@@ -57,10 +57,11 @@ N/A: the build check adds one set lookup per cited key.
 
 ## D2 - the build catches a misuse (FR-004)
 
-In `site.py`, `_works` takes the question's tags. A cited key whose PRIMARY kind is `comparative`, on a question whose
-subjects do not include `comparative`, is refused: "`<where>`: cites `<k>`, a comparative source - only a comparative
+In `site.py`, `_works` takes the question's tags. A cited key that carries the kind `comparative` in ANY position, on a
+question whose subjects do not include `comparative`, is refused: "`<where>`: cites `<k>`, a comparative source - only a comparative
 money question (subject `comparative`) may cite it (research/CLAUDE.md, Comparative money sources)." A test on the small
-fixture record proves both the refusal and the pass, and that the comparative chip reaches the built page.
+fixture record proves the refusal for `comparative` as the first kind and as a later kind, the pass on a comparative
+question, and that the comparative chip reaches the built page.
 
 ## D3 - the guidelines (FR-001)
 
@@ -76,7 +77,8 @@ fixture record proves both the refusal and the pass, and that the comparative ch
 
 ## D4 - the source check judges it (FR-003)
 
-`source-applicability.md` gains a paragraph. A work whose primary kind is `comparative` is judged on two things:
+`source-applicability.md` gains a paragraph. A work that carries the kind `comparative` in any position is judged on
+two things:
 - whether it is a sound record of ITS OWN society's money: a source of the time, or scholarship on it;
 - whether its write-up states the comparative limits.
 
@@ -97,7 +99,8 @@ The text is archived (`make archive`).
 
 gm-assistant's 25 `complete-servant` rows are copied from `ledger.jsonl` on gm-assistant `main` into the feature
 directory (`extraction/rows.jsonl`, with the commit). A `source-reader` agent checks each row against the archived text:
-- READ, MISQUOTED, WRONG-POST, WRONG-SECTION or NOT-FOUND, each with the passage;
+- each row's QUOTE and its FIGURE (the wage, its unit and period) are both checked against the text: READ,
+  MISQUOTED, WRONG-FIGURE, WRONG-POST, WRONG-SECTION or NOT-FOUND, each with the passage;
 - whether any wage line names the housekeeper or the house steward.
 
 Its reply is kept as `extraction/check.md`.

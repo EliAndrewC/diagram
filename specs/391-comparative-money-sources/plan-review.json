@@ -1,0 +1,218 @@
+{
+ "feature": "391-comparative-money-sources",
+ "blocks": {
+  "preamble": {
+   "sha256": "23273a3aa8350bb2d96a121474ba198cb39a5388d77eb29ebe0d85e9e135b030",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "54d28c1c29233de1fc822d10f5968a095c56d99cee88110b89dec641c0357393",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "235b95ade8c97ab7ee0952b930ed9299c05382bfb9dccd19cd9ad0e6b94e94d7",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "c5039dd757835eb26319c20f5d1c57eba614f4a66caf42ec28ce5ea529398a25",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "a96ca2ca45fb2ff153977c1064ce6a12694e749d55f58709bd8836eea71e9dcc",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - the vocabulary marks it (FR-002)": {
+   "sha256": "e9d409c028e6bbe1e68a27eca744460019a327a29ceea74831bb1c6c7f137caf",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - the build catches a misuse (FR-004)": {
+   "sha256": "472b326f370305fdd54c6eac38249551da9611e1035955341f9312d9ee89abcd",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - the guidelines (FR-001)": {
+   "sha256": "33bca8e9e1a33c548868e5dbde69d12e6c7275cbf01a789f0890897ef4912346",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## D4 - the source check judges it (FR-003)": {
+   "sha256": "3894904be54ef6ca7bb16d8214e282d656c48d5ab8640f359c38d68e95b09546",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## D5 - the source (FR-005)": {
+   "sha256": "444fbab69a475f24f7f11cfe6bd5b334133482e9da1795746bd027a0b11aa708",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## D6 - the extraction check (FR-005; SC-003)": {
+   "sha256": "704cedc493ae3ffbbc27c9d96739d637be5bbe5d1b6aed420a30efd3b4957656",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## D7 - the questions (FR-006)": {
+   "sha256": "785faf99faab86b28cc2e396aa9dcf8c94142a112a1fcf9a19bfaea103f810bd",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## D8 - the answer (FR-007)": {
+   "sha256": "ae52ff6c7dac2aa66fca8ede00486cb931c861cb759599b16bccede2752b1a85",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T - the order": {
+   "sha256": "adc82fcf752fb26741333b7de5e8e0f61dcc8bdc460a4ba2626bbbf7eb9a45cd",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the vocabulary marks it (FR-002)",
+    "## D2 - the build catches a misuse (FR-004)",
+    "## D3 - the guidelines (FR-001)",
+    "## D4 - the source check judges it (FR-003)",
+    "## D5 - the source (FR-005)",
+    "## D6 - the extraction check (FR-005; SC-003)",
+    "## D7 - the questions (FR-006)",
+    "## D8 - the answer (FR-007)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary",
+     "summary": "Category built as guideline rule, kind+subject marks, build refusal, source-applicability judgment; first use The Complete Servant (archive, independent check of 25 rows, comparative questions, answer on #2).",
+     "class": "within",
+     "why": "Restates FR-001..FR-007 and the GM's ruling (option 1); adds nothing."
+    },
+    {
+     "id": "TC-1 one write page session (three questions) then one check session",
+     "summary": "Record edits in one write session and one check session.",
+     "class": "within",
+     "why": "Method only; carries FR-006."
+    },
+    {
+     "id": "TC-2 edition and page from the Internet Archive scan Gutenberg was made from",
+     "summary": "Gutenberg text has no page numbers, so pages come from the IA scan named in the registry entry.",
+     "class": "within",
+     "why": "The means of meeting FR-007's edition-and-page clause and the asker's 'Note the edition and page of each figure'."
+    },
+    {
+     "id": "TC-3 'Where a page cannot be read on the scan, the answer says so'",
+     "summary": "Fallback when a figure's page cannot be read on the scan.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Carve-out from FR-007 'MUST give the edition and page of each figure', but only for the case where giving the page is physically impossible (an unreadable page on the scan); it reports the gap rather than hiding it. It does not license skipping a readable page."
+    },
+    {
+     "id": "Performance bookends N/A",
+     "summary": "No performance bookends; one set lookup per cited key.",
+     "class": "within",
+     "why": "No map or render work; no fidelity question."
+    },
+    {
+     "id": "Constitution Check",
+     "summary": "Principle mapping: questions research:physical, tooling research:rendering, coverage held.",
+     "class": "within",
+     "why": "Process conformance; narrows nothing asked."
+    },
+    {
+     "id": "D1 kind/section/subject/contents vocabulary and europe/elsewhere note",
+     "summary": "Source kind 'comparative' (carried as PRIMARY), works section, question subject, questions section with limits in its description; europe/elsewhere explanations note the money-only yardstick use.",
+     "class": "within",
+     "why": "Carries FR-002 (marked where a reader meets them) and keeps the tags consistent with FR-001's limits."
+    },
+    {
+     "id": "D2 build refusal keyed on PRIMARY kind 'comparative'",
+     "summary": "_works refuses a cited key whose PRIMARY kind is comparative on a question without subject comparative; test proves refusal, pass and chip.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-004 says 'A comparative source cited by a question that is not comparative MUST be caught' - not 'a source whose primary kind is comparative'. The vocabulary's own multi-value form (kind=comparative,primary, D1) admits 'comparative' as a NON-primary kind beside another (e.g. a scholarship work on Regency wages tagged kind=scholarship,primary;comparative). Such a work cited by a Rokugani question passes D2 unchecked - exactly the GM's limit ('not because we will use it to establish the actual value of a koku'). D1 states the convention that a comparative work carries the kind as primary, but no block enforces it. Not impossible, not implied by the GM, does not serve the purpose. Fix (either): D2 refuses a cited key carrying kind 'comparative' at ANY position; OR the vocabulary/build refuses 'comparative' as a non-primary kind (and the test proves that refusal too)."
+    },
+    {
+     "id": "D2 question test on subject 'comparative' (not comparative+money)",
+     "summary": "A question counts as comparative when its subjects include comparative.",
+     "class": "within",
+     "why": "Matches FR-004's wording 'a question that is not comparative'; D1 tags every comparative question comparative,money and FR-001's money-only limit lives in the guidelines."
+    },
+    {
+     "id": "D3 guidelines section in research/CLAUDE.md, pointer in money-requests.md, full text with GM verbatim in docs/research-record-rules.md",
+     "summary": "What it is, why (GM's words), limits as FR-001 lists, how marked.",
+     "class": "within",
+     "why": "Carries FR-001 and the GM's 'update our research guidelines to indicate what this category is and why it exists, and also what the limits are'; all four FR-001 limits are listed."
+    },
+    {
+     "id": "D4 source-applicability judges comparative works on own-society soundness and stated limits, not East-Asia fit; NOT-APPLICABLE for misuse",
+     "summary": "New paragraph in the contract; vocabulary block re-derived.",
+     "class": "within",
+     "why": "Carries FR-003 and the GM's ruling that the record takes the book as a comparative source. Note: it is keyed on PRIMARY kind like D2; the D2 fix (any-position or primary-only enforced) closes the same seam here."
+    },
+    {
+     "id": "D5 registry entry adams-1825-complete-servant with limits in write-ups; tags period/region/kind; make archive",
+     "summary": "The source registered and archived.",
+     "class": "within",
+     "why": "Carries FR-005 'MUST be archived' and the asker's item 1 'archive the text'."
+    },
+    {
+     "id": "D6 extraction check verdict list READ / MISQUOTED / WRONG-POST / WRONG-SECTION / NOT-FOUND",
+     "summary": "source-reader checks each of the 25 copied rows against the archived text with this closed verdict set, plus the housekeeper/house steward finding; reply kept as extraction/check.md.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The asker asked for 'each quote AND FIGURE against the text' (request, 'check gm-assistant's extraction - its 25 complete-servant servant-wage rows ... each quote and figure against the text'); FR-005 requires 'each discrepancy named'. The closed list has no slot for a row whose quote is verbatim but whose extracted wage figure disagrees with it (or with the text), and the block does not tell the reader to compare the figure field at all. A discrepancy the asker named explicitly can therefore go unreported or be mis-filed as MISQUOTED. Fix: add a WRONG-FIGURE verdict (the row's figure disagrees with its quote or the text) and state that each row's figure field is compared, not only its quote."
+    },
+    {
+     "id": "D6 rows copied from gm-assistant main into extraction/rows.jsonl with the commit",
+     "summary": "Pins the 25 rows checked.",
+     "class": "within",
+     "why": "Carries FR-005's '25 at gm-assistant 9459638a'."
+    },
+    {
+     "id": "D7 three comparative questions, tagged subject=comparative,money; setting=city; level=counts-and-measurements; no drawing page; intro states yardstick",
+     "summary": "Wages by post (from checked rows), income division and servants by income, provision prices verbatim with SILENT for unpriced items.",
+     "class": "within",
+     "why": "Carries FR-006's three bullets, FR-002's marking and the GM's 'openly comparative question ... what did a Regency English household pay its servants?'. FR-006 allows 'one or more' questions."
+    },
+    {
+     "id": "D8 answer comment on #2",
+     "summary": "Per question: fragment file, verdicts, what is open; extraction result per row; edition and page per figure.",
+     "class": "within",
+     "why": "Carries FR-007 and the asker's 'Same answer format: fragment files, verdicts, what is still open'."
+    },
+    {
+     "id": "T order",
+     "summary": "Vocabulary/build, guidelines/contract, source, extraction check, questions, implementation check, answer, done and land.",
+     "class": "within",
+     "why": "Sequencing only."
+    }
+   ]
+  }
+ ]
+}
