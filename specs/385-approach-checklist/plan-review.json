@@ -51,7 +51,7 @@
    "declared": "spec-fidelity"
   },
   "## Landing": {
-   "sha256": "516a769b610ebb0b5e51bf79a57b86010e8c69d2033ea1d787984817ab03644b",
+   "sha256": "054a5d519cb513dfa3ba8515ca84d999b33f9a3bbfd896dc3c05688621334f2d",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -388,6 +388,24 @@
   },
   "### T23 Decisions": {
    "sha256": "7e131584f9babe7769acfe9988ce9fdb4e7df21f0493bbed40fcfd8cb1219244",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T24 - a tooling landing merges main in first (found landing T21, T22 and T23)": {
+   "sha256": "64f9e5d8da2aaad01f660d12400d223e4168ff12967682c73395eae91cfe8a00",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T24 Approach (checklist part A)": {
+   "sha256": "8963261fc55d7258416e7019832d205a11e68a65cd8ff6d8717fe1a71f1d91b8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T24 Decisions": {
+   "sha256": "277966f76298cb0c615db24b148600646bb2facac9212c2eb63821081989c9c3",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -2494,6 +2512,82 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "It is an exception to FR-013's last sentence ('a finding on ... a changed claim is still introduced and still refuses'). Legitimate on three grounds. (1) Purpose: FR-013 exists so a finding is fixed or re-checked clean before its feature closes; Approach step 4 records, dated 2026-10-18 with its method (make claims-owed, claims.py gate), that three claims relabeled as round 2's MISLABELED prescribed are not re-owed yet are refused, so the literal rule leaves a finding that is both fixed and unclearable, and the prescribed fix can never land. (2) The GM's own words: amendment 3 option 3, locked by the GM, 'Never block on unchanged code'; D45 requires the unit body unchanged. (3) Class check, each case on its own: the carve-out covers only MISLABELED with the body unchanged; a relabel with the body moved stays owed and judged, and a MISLABELED with unchanged text refuses as before, so FR-013's refusal of changed code survives whole. Premise the ruling rests on (not checkable from the bundle): the mechanism tests 'text differs', not 'text matches the prescription', and is defended as the same test feature 374's relabeled_only already applies on the owed side; the gate is brought into line with that existing rule, not given a new one."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T24 - a tooling landing merges main in first (found landing T21, T22 and T23)",
+    "### T24 Approach (checklist part A)",
+    "### T24 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T24 (filing)",
+     "summary": "File a new task T24: make land-tooling merge main in before building its patch, found when T21, T22 and T23 were each refused for main having moved and each landed unchanged after a hand sync-in.",
+     "class": "within",
+     "why": "Amendment 6, the GM verbatim: 'Please make sure to implement any obvious performance / tooling / process improvements along the way.' Three of three landings refused and fixed by the refusal's own remedy, run by hand, is an obvious tooling improvement, and it is its own task as the dispatch says amendment 6's improvements are. It names one goal (FR-015)."
+    },
+    {
+     "id": "Landing (T24 lands open)",
+     "summary": "T24 added to the Lands open list: it lands when it closes, with its retro row, while later tasks stay open.",
+     "class": "within",
+     "why": "The same per-task landing every other task carries, which serves FR-006 (one task, then the retro) and the request's 'we do one task and then we measure ... then we go on and do the next task'. The only change from the CLEAR earlier text is T24 appended."
+    },
+    {
+     "id": "D46 - merge main in first",
+     "summary": "After its fetch, when origin/main is not an ancestor of HEAD, land-tooling.sh runs scripts/sync-with-main.sh sync-in (a merge commit, never a rebase), takes the merge base again, and builds the patch from the clone's own change on today's main; a failed merge refuses naming the hand command; uncommitted FILES still refuse first.",
+     "class": "within",
+     "why": "It automates the remedy the existing refusal already tells the session to run by hand, and keeps feature 379's route (new commit on latest main, detached worktree, every push check, no history rewrite). Keeping the conflict and uncommitted-file refusals keeps today's behavior and drops no requirement. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T24 Approach (budget, exits, done, test)",
+     "summary": "Approach block: exit (c) chosen, others n/a; 25 min budget; done is one goal measured by a behind-main clone landing in one command, a conflicting merge still refusing, and tests/hooks/test-land-tooling.sh red without the merge.",
+     "class": "within",
+     "why": "FR-003 requires each task's Approach block answering the checklist. The test is red only when the requested improvement is absent, so it enforces the improvement and is not added scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "### T24 Approach (checklist part A)",
+    "### T24 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T24 Approach - goal and constraints",
+     "summary": "make land-tooling lands first try when the clone's files merge with main; feature 379's route kept (new commit on latest main, detached worktree, every push check, no history rewrite, real conflict still refuses naming files), tooling only, a test red without it",
+     "class": "within",
+     "why": "A tooling improvement removing a measured repeated refusal (three of three landings, 2026-10-18 logs) is what amendment 6 asks: 'Please make sure to implement any obvious performance / tooling / process improvements along the way.' The constraints keep existing guards rather than relaxing any; nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T24 Approach - exit (c), automate the refusal's own remedy",
+     "summary": "the script runs the step its refusal already tells the session to take by hand",
+     "class": "within",
+     "why": "Automates an existing manual remedy; changes no rule the GM set and removes no check."
+    },
+    {
+     "id": "D46 - merge main in only when FILES' patch fails to apply",
+     "summary": "on a failed apply, git merge --no-edit origin/main into the clone (merge commit, never rebase), recompute merge base and patch, apply once more; no merge when the patch applies, so feature 379's 'clone's history is untouched' test stands",
+     "class": "within",
+     "why": "Meets the block's goal (never refused only because main moved) while leaving 379's route byte-for-byte as it was on the path that already worked. Merging only in the case that previously refused is the smallest change that reaches the goal; it narrows nothing the GM asked for. A merge commit, not a rebase, honors 'never rewrite history'."
+    },
+    {
+     "id": "D46 - plain git merge rather than sync-in",
+     "summary": "sync-in's mirror refresh and render steps are not run; only the merge",
+     "class": "within",
+     "why": "An implementation choice about which existing command performs the merge; the GM's request says nothing about sync-in, and the outcome the goal needs (main merged into the clone) is the same."
+    },
+    {
+     "id": "D46 - conflicting merge aborted and refuses; second failed apply refuses; uncommitted FILES refuse first",
+     "summary": "conflict leaves the clone as it was and names sync-in for manual resolution; other refusals unchanged",
+     "class": "within",
+     "why": "Keeps every existing refusal and adds a clean abort; no guard is loosened."
     }
    ]
   }

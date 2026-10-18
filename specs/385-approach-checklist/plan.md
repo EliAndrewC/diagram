@@ -156,7 +156,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24
 
 ## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)
 
@@ -972,6 +972,36 @@ check (`<agent type> on <bundle>`) instead of "dispatch".
 from the text its verdict was recorded against (`claim` in the index row) while the unit's body is the one judged (`body`) - the
 relabel that verdict prescribed, as `relabeled_only` already rules for `owed`. A relabel with the body moved stays owed and is
 judged again; a MISLABELED with its text unchanged is refused as before.
+
+## T24 - a tooling landing merges main in first (found landing T21, T22 and T23)
+
+### T24 Approach (checklist part A)
+
+1. **The goal, in the world.** `make land-tooling` lands on the first try whenever the clone's files merge with main: it is never
+   refused only because main moved since the clone last merged it.
+2. **The constraints.** Feature 379's route unchanged: a new commit on the latest main, built in a detached worktree, every push
+   check run; never rewrite history; a real conflict still refuses, naming the files; a test red without it; tooling only.
+3. **Where each comes from.** The route is feature 379's (G); merging main in first is the step its refusal already tells the
+   session to take by hand (`sync-in`, then run this again) - ours to automate (O).
+4. **Do they describe the world here?** Yes - measured on 2026-10-18 (this session's logs `land-t21`, `land-t22`, `land-t23`):
+   three of three landings were first refused "FILES do not apply cleanly onto the latest main" (the ledger and the make-targets
+   page moved on main), and each landed unchanged after a `sync-in` - about 2 min and two commands each.
+5. **The order.** The merge before the patch is built, then the test.
+6. **The exits.** (c) - the refusal's own remedy, run by the script; (a), (b), (d), (e) n/a.
+7. **The search smell.** None.
+8. **The budget.** 25 min.
+9. **Done, measured.** One goal: a clone whose patch went stale on main lands its tooling in one `make land-tooling`; a
+   conflicting merge still refuses and is aborted; `tests/hooks/test-land-tooling.sh` red without the merge.
+
+### T24 Decisions
+
+**D46 - main merged in when the patch no longer applies.** When FILES' patch fails to apply onto the latest main,
+`land-tooling.sh` merges `origin/main` into the clone (`git merge --no-edit`: a merge commit, never a rebase), takes the merge
+base and the patch again, and applies it once more. Only then, not whenever the clone is behind: a patch that applies needs no
+merge, and the route's own rule (feature 379) is that the clone's history is left as it was - its test "the clone's history is
+untouched" stands. `sync-in` itself is not run: its mirror refresh and render steps are not the merge's, and a plain merge is
+what its refusal named. A merge that conflicts is aborted (the clone left as it was) and refuses, naming `sync-in` to resolve
+by hand; a second failed apply refuses as today; FILES uncommitted still refuse before anything runs.
 
 ## T11 - the close
 
