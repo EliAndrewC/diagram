@@ -86,7 +86,11 @@ def seat_free(s: Settlement, x: float, y: float, r: float) -> bool:
 
 def draw_bank_trees(s: Settlement, trees: list[tuple[float, float, float, str]]) -> None:
     """Each tree its crown and rim (`TREE_TONES`), one string of the "pond-bank tree" class; the crowns recorded in
-    `tree_crowns` so every structure test reads them, and the trees with their kinds in `pond_bank_trees`."""
+    `tree_crowns` so every structure test reads them, and the trees with their kinds in `pond_bank_trees`.
+
+    Research:
+        a bank tree's mark - CONVENTION: the dike's standard tree, a round crown with a darker rim
+        the crowns in tree_crowns - NONE: plumbing, so the structure tests read the bank's trees as they read every crown"""
     if not trees:
         return
     g = ['<g class="pond-bank">']
