@@ -65,18 +65,18 @@ no task carries the physical checkboxes. The GM's words are in [`request.md`](re
 
 ## Amendment 1
 
-- [ ] T11 FR-006(a): `make guard-edit` and the permit store (plan D1-D3) (SC-008)
+- [x] T11 FR-006(a): `make guard-edit` and the permit store (plan D1-D3) (SC-008)
       research: rendering
-      verify: a grant in a fixture repo, a refused non-guard file, a refused short reason
+      verify: DONE. test-guard-file-hooks.sh 52/52 (section 8 red with the permit branch disabled, 2 fails); backstop red on a probe marker; quick 771 passed; hooks-test 21 suites green; spec FAITHFUL r1, plan CLEAR
 
-- [ ] T12 FR-006(b)-(d): the hook accepts a live permit; the root Makefile takes no new marker; the words (plan D4, D5) (SC-008)
+- [x] T12 FR-006(b)-(d): the hook accepts a live permit; the root Makefile takes no new marker; the words (plan D4, D5) (SC-008)
       research: rendering
-      verify: `tests/hooks/test-guard-file-hooks.sh` section 8
+      verify: DONE. test-guard-file-hooks.sh 52/52 (section 8 red with the permit branch disabled, 2 fails); backstop red on a probe marker; quick 771 passed; hooks-test 21 suites green; spec FAITHFUL r1, plan CLEAR
 
-- [ ] T13 FR-006(e): the backstop, the suite, the docs (plan D6, D7) (SC-008)
+- [x] T13 FR-006(e): the backstop, the suite, the docs (plan D6, D7) (SC-008)
       research: rendering
-      verify: section 8 red with the permit branch deleted, green with it; the backstop test
+      verify: DONE. test-guard-file-hooks.sh 52/52 (section 8 red with the permit branch disabled, 2 fails); backstop red on a probe marker; quick 771 passed; hooks-test 21 suites green; spec FAITHFUL r1, plan CLEAR
 
-- [ ] T14 Close: the checks, the report, landed (plan D8)
+- [x] T14 Close: the checks, the report, landed (plan D8)
       research: rendering
-      verify: `make hooks-test`, `make quick`, `make docs` clean, zero markers in the Makefile
+      verify: DONE. report written; quick 771 passed; hooks-test 21 suites green; make docs clean after regeneration; zero GUARD_EDIT_OK in the root Makefile

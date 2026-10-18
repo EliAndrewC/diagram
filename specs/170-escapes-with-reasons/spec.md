@@ -2,7 +2,7 @@
 
 **Amendment 1 approved**: the GM, 2026-10-18, "yes please file that feature and then work it... though actually I think that should just be an amendment to the feature we already just worked"
 
-**Status (Amendment 1)**: reopened 2026-10-18 for FR-006; T11-T14 in `tasks.md`; SC-008.
+**Status (Amendment 1)**: Done 2026-10-18 - FR-006 built (T11-T14 ticked); spec FAITHFUL round 1, plan CLEAR; `report.md`.
 
 **Status**: **APPROVED** 2026-08-30 - `spec-fidelity` round 5 returned FAITHFUL with nothing
 blocking. Specified 2026-08-30. [`request.md`](request.md) is the authority.
