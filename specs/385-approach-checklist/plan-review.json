@@ -363,8 +363,14 @@
    "declared": "spec-fidelity"
   },
   "### T22 Decisions": {
-   "sha256": "5b56ba98556b62cc2d780da7315d12fedd2d65627bbc53edaef7eaea8e548e26",
-   "verdict": "BLOCKED",
+   "sha256": "00c6d1ba5f41de4e0f736bf746ff013585e28773418cf0986189dc9daf285445",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T22 Approach (re-answered 2026-10-18T09:33Z)": {
+   "sha256": "3f3ee954ceb5577c672466aea683ad5c7a12204bc221fa7441f6008a610263d8",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
   }
@@ -2405,6 +2411,40 @@
      "summary": "The check-bundle and pair hooks' decide-first refusals name the check as '<agent type> on <bundle>' instead of 'dispatch'.",
      "class": "within",
      "why": "The arbiter's 'names the check and unit it refused, not just dispatch'. The bundle path is the dispatch's unit (e.g. q-0196-quote-check, plan-385-...-T05). Applying the same wording to the pair hook's own decide-first refusal changes a message only and sits inside 'two changes to the pair hooks'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "### T22 Approach (re-answered 2026-10-18T09:33Z)",
+    "### T22 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D44 window start",
+     "summary": "The stop guard reads the transcript from its last system/turn_duration entry, else from the session's start; never from the GM's last prompt.",
+     "class": "within",
+     "why": "Implements the guard's own purpose (a check the session meant to run is never silently left unrun, under amendment 6's 'implement any obvious ... tooling / process improvements'). The new window is wider than the CLEAR version's (session start replaces the GM's-last-prompt fallback), so it narrows nothing. Premises re-measured on d2dc8c63: turn_duration at 03:50:51.954Z, prompt enqueued 03:57:47.951Z, four refused results 03:57:57-03:58:06, turn_duration 03:59:25.019Z; and the two blocked stop_hook_summary entries in that transcript (2026-10-17T17:59:13Z, 18:33:16Z) were each followed by no turn_duration while all 89 passed ones were, so a blocked turn end does keep the refusal in the window."
+    },
+    {
+     "id": "D44 no state file",
+     "summary": "The dispatch-seen state file is dropped; the transcript's turn_duration entries are the record of turn ends.",
+     "class": "within",
+     "why": "Mechanism only; the guard's reach and what it refuses are unchanged."
+    },
+    {
+     "id": "D44 answered / blocked (unchanged)",
+     "summary": "A refusal is answered by a later unrefused same-type call on the same bundle or by make dispatch-dropped; until then every turn end is blocked naming both commands; decide-first refusals name the check.",
+     "class": "within",
+     "why": "Text identical to the block's last CLEAR verdict (earlier.md)."
+    },
+    {
+     "id": "Approach re-answer",
+     "summary": "The T22 Approach block re-answered for the new window: source of the window labeled (the arbiter's, G; turn_duration reading ours, O), incident timeline, two added hook tests (refusal after a mid-turn prompt; session with no turn ended yet), budget unchanged.",
+     "class": "within",
+     "why": "Answers the checklist as FR-003 requires and adds only tests that fail when the requested behavior is absent. The arbiter's ruling it cites is not in the bundle, but the window it adopts is no narrower than either version reviewed."
     }
    ]
   }

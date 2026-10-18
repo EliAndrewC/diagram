@@ -6,8 +6,11 @@ refused four with identical lines that named no check. The session re-sent three
 was never re-sent, and the session ended its turn "waiting on" it - about 5 h idle until the GM came back. The round arbiter's
 fix on hour:385-approach-checklist@11: the turn's end is refused while a refused dispatch is neither re-sent nor recorded.
 
-WHAT IS READ. The Stop payload's `transcript_path`, from the last turn end this guard passed (`<gitdir>/dispatch-seen`, an
-ISO timestamp; absent, from the GM's last prompt). A REFUSAL is an Agent call whose result is an error a PreToolUse hook
+WHAT IS READ. The Stop payload's `transcript_path`, from its last TURN END - a `system` entry of subtype `turn_duration`,
+which the harness writes only for a turn that ended (a turn end this guard blocks writes none, so a refusal stays in the
+window until answered) - or from the session's start when there is none. Never from the GM's last prompt: measured, the
+incident's refusals (03:57:57-03:58:06) came after a prompt queued at 03:57:47 and taken into the running turn, so that
+window would have missed them (spec-fidelity, T22 round 2). A REFUSAL is an Agent call whose result is an error a PreToolUse hook
 wrote (`PreToolUse:Agent hook error`). It is ANSWERED by a later Agent call of the same `subagent_type` and the same KEY
 that was not refused, or by `make dispatch-dropped TYPE= BUNDLE= WHY=`, which appends to `<gitdir>/dropped-dispatches.jsonl`.
 The KEY is the first bundle the prompt names (a `.../MANIFEST.md`, else a `/tmp/l7r-check/...` path), else the call's
@@ -29,7 +32,6 @@ from pathlib import Path
 
 BUNDLE = re.compile(r"[^\s`'\"]*/MANIFEST\.md|/tmp/l7r-check/[^\s`'\")]+")
 REFUSED = "PreToolUse:Agent hook error"
-SEEN = "dispatch-seen"
 DROPPED = "dropped-dispatches.jsonl"
 
 
@@ -64,8 +66,9 @@ def _content(entry: dict) -> list:
     return c if isinstance(c, list) else []
 
 
-def last_human(rows: list[dict]) -> str:
-    stamps = [r.get("timestamp", "") for r in rows if (r.get("origin") or {}).get("kind") == "human"]
+def last_turn_end(rows: list[dict]) -> str:
+    """The timestamp of the transcript's last ended turn, or "" (the session's start) when none has ended."""
+    stamps = [r.get("timestamp", "") for r in rows if r.get("type") == "system" and r.get("subtype") == "turn_duration"]
     return stamps[-1] if stamps else ""
 
 
@@ -132,18 +135,10 @@ def stop(root: Path, payload: dict) -> int:
     if not transcript.is_file():
         return 0
     rows = list(entries(transcript))
-    seen_file = gitdir(root) / SEEN
-    try:
-        since = seen_file.read_text().strip()
-    except OSError:
-        since = last_human(rows)
-    left = unanswered(rows, since, dropped(root))
+    left = unanswered(rows, last_turn_end(rows), dropped(root))
     if left:
         print(refusal(left), file=sys.stderr)
         return 2
-    stamp = max((r.get("timestamp", "") for r in rows), default="")
-    if stamp:
-        seen_file.write_text(stamp + "\n")
     return 0
 
 

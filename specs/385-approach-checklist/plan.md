@@ -916,14 +916,31 @@ re-owes its unit. `make record-owed`'s footer names the command for both.
 9. **Done, measured.** One goal: a turn whose refused dispatch was neither re-sent nor recorded cannot end, shown by a hook test
    red without the Stop layer; the decide-first refusal names the agent type and bundle, shown by a test red without it.
 
+### T22 Approach (re-answered 2026-10-18T09:33Z)
+
+1. **The goal, in the world.** Unchanged: a check the session meant to run is never silently left unrun.
+2. **The constraints.** Unchanged, plus round 2's: the window is the arbiter's "since the last turn end", read literally.
+3. **Where each comes from.** The window's start is the arbiter's (G); reading turn ends from the transcript's `turn_duration`
+   entries is ours (O), measured on three transcripts (spec-fidelity, round 2).
+4. **Do they describe the world here?** Yes - measured on d2dc8c63: the last turn end before the incident at 03:50:51, the
+   GM's prompt queued at 03:57:47 into the running turn, the four refusals 03:57:57-03:58:06, the turn's end at 03:59:25. A
+   window from that prompt starts after the refusals; one from the last turn end holds them.
+5. **The order.** Unchanged.
+6. **The exits.** (c), unchanged.
+7. **The search smell.** None; round 2 is the first change of the window, no tuning loop.
+8. **The budget.** 40 min, unchanged; 35 spent at round 2.
+9. **Done, measured.** Unchanged, plus: the hook test holds a refusal taken after a mid-turn prompt, and one in a session
+   with no turn ended yet.
+
 ### T22 Decisions
 
 **D44 - the refused dispatch held at the turn's end.** `pair-hooks.sh stop` (a no-op since feature 383) reads the session's
-transcript from the last turn end it passed (`<gitdir>/dispatch-seen`; absent, from the GM's last prompt) and lists each
-Agent call a hook refused (its result the harness's `PreToolUse:Agent hook error`, whatever the hook's wording). The window
-starts at the last PASSED turn end, not the GM's last prompt: measured, the 03:57 refusals came before the GM's 03:59 prompt
-(it arrived mid-turn), so a window from that prompt would have missed the incident; a blocked turn end moves nothing, so a
-refusal stays listed across turns a task notification starts until it is answered. A refusal is answered when a later Agent call of the same
+transcript from its last turn end (the harness's `system`/`turn_duration` entry, written only for a turn that ended), or
+from the session's start when none has, and lists each Agent call a hook refused (its result the harness's
+`PreToolUse:Agent hook error`, whatever the hook's wording). Never from the GM's last prompt: measured, the incident's
+refusals (03:57:57-03:58:06) came after a prompt queued at 03:57:47 and taken into the running turn, so that window would
+have missed them; a turn end this guard blocks writes no `turn_duration`, so a refusal stays in the window until answered.
+No state file: the transcript is the record of turn ends. A refusal is answered when a later Agent call of the same
 `subagent_type` naming the same bundle (the first `/tmp/l7r-check/...` path in its prompt; the description when the prompt names
 none) was not refused, or when `make dispatch-dropped TYPE=<agent type> BUNDLE=<path> WHY="<reason>"` recorded it dropped in
 `<gitdir>/dropped-dispatches.jsonl`. While one is unanswered the turn's end is blocked, every time, naming each refused check
