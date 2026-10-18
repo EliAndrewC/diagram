@@ -633,3 +633,9 @@ pop-ups) and the house-style check on tool-written notes are the tools.
 
 About 15 min. `land-tooling.sh` runs its lint alone first; a failure stops before the guard suites and tooling tests start, so a
 format slip costs seconds, not two minutes. **The habit it changes:** none needed - the order decides it.
+
+## T66 - the retro row
+
+About 20 min. `plan_bundle.build` reads "375 FR-044", "feature 375's FR-002" and the like as that feature's requirement, from its
+own spec, under a `<!-- feature 375 -->` line, and no longer hands the reviewed feature's same-numbered one for it. **The habit it
+changes:** none needed - the bundle reads the feature the block names.
