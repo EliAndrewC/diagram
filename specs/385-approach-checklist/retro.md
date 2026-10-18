@@ -588,3 +588,9 @@ About 25 min. The EDIT pattern's optional newline before `>>>` let a lone empty 
 so a paragraph split was applied as a deletion; a lazy optional group now tells them apart, and an emptied whole line takes its
 newline. The first test packed two cases into a string trick and tested the wrong thing; written plainly it passed. **The habit it
 changes:** none needed - the parse decides it.
+
+## T61 - the retro row
+
+About 20 min. `hm_make.doubled_var` reads each make invocation on the stripped command (so a quoted list is one assignment and a
+mention in a message is none) and `make-only-hooks.sh` refuses a variable set twice, naming the quoted list or one call per
+value. **The habit it changes:** none needed - the guard refuses the form that dropped 0018's bundle.
