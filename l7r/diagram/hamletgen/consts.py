@@ -573,7 +573,8 @@ ROLLED_ARCHETYPES = ("valley_paddy",)
 # ACHIEVED pitch that the circle inflates, not this number. Retiring the circle closes that gap by
 # itself - the cluster lands at the pitch it asks for instead of overshooting it.
 #
-# THIS NUMBER IS HISTORICALLY GROUNDED, which is why it survives the fix unchanged: the spacing of
+# THE SPACING BETWEEN ROWS IS SET BY THE THRESHING YARD'S SUN - and since feature 385 T09 that spacing is
+# `homesteads.stages._rank_step` (0038's house, yard and 39 ft of sun), not this number, which once stood for it. The spacing of
 # farmsteads in a nucleated wet-rice village is set by the THRESHING YARD'S SUN, not by how tightly
 # buildings can be packed. Rice dries on the niwa, so a yard needs clear ground to its south; a
 # kayabuki thatch must be pitched 45 deg or steeper to shed rain, putting the ridge ~20 ft up, and
@@ -594,10 +595,10 @@ ROLLED_ARCHETYPES = ("valley_paddy",)
 #     canopy crown is held out of every plot's sun ground where it is drawn (`_sun_keepouts`, feature 310);
 #   - feature 121 retired the circumscribed-circle spacing for real rotated footprints, and
 #     `_house_too_near_a_neighbor` is an eave-drip rule of a couple of feet, not a sun rule.
-# So THIS number is a ROW-PLANNING pitch and nothing else: nothing pays 100 ft east-west. See
+# So THIS number is a planning span along the rows and nothing else: nothing pays 100 ft east-west. See
 # specs/126-derived-lanes-and-form/research.md R8.
 #
-# RAISED 92 -> 100 when the SUN CORRIDOR landed (2026-08-13). The pitch was calibrated before the
+# RAISED 92 -> 100 when the SUN CORRIDOR landed (2026-08-13), when it was still taken for the row pitch. The pitch was calibrated before the
 # rule existed, and a row now needs house depth (28) + yard (~26) + 39 ft of sun + the gaps between
 # them, which comes to about 100 rather than 92. Asking the band for less than a row needs does not
 # make the cluster tighter - it makes the placer spill the overflow OUTSIDE the band, which is how
@@ -614,7 +615,7 @@ Research: the along-row span - UNRESEARCHED: 100 ft, the step along a row and th
 # band's AREA (`plan.band_extent`, `households x HOMESTEAD_GROUND_FT^2`, which also sizes the canvas's room for the seat).
 # It was `BUNDLE_PITCH`, and grows with the yard: 280 moved the rice hamlet's yard median from 18 to 25 tsubo, and at the
 # apron's 1.45 aspect the median yard is sqrt(18 x 35.583 / 1.45) = 21.0 ft deep before and sqrt(25 x 35.583 / 1.45) =
-# 24.8 ft after - 3.8 ft more ground in the row's sum above, so 104. The along-row span stays 100: it plans offers the placer
+# 24.8 ft after - 3.8 ft more yard, added to the along-row span as the band's margin, so 104. The along-row span stays 100: it plans offers the placer
 # staggers from (and the web's reach is tied to it, `WEB_REACH_FT`). MEASURED (`make cohort N=1 SEED=<n>`; a detached
 # worktree at 287's HEAD passes seed 18): with the band at 100 the merge held 13 of seed 18's 15 households on its best
 # margin and refused the site; with the band at 104 all 15 seat. Raising the along-row span to 104 as well seated seed 18 but

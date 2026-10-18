@@ -156,6 +156,7 @@
  "l7r/diagram/hamletgen/cluster.py::seat_cluster#never below the drain": "E2",
  "l7r/diagram/hamletgen/cluster.py::seat_cluster#not in the reed fringe": "E0",
  "l7r/diagram/hamletgen/cluster.py::seat_cluster#the seat center set dep + 12 ft out from the field margin": "E0",
+ "l7r/diagram/hamletgen/consts.py::BUNDLE_PITCH#row pitch": "E3",
  "l7r/diagram/hamletgen/consts.py::COPSE_BELT_REACH_FT#copse against the belt": "E2",
  "l7r/diagram/hamletgen/consts.py::COPSE_SITINGS#village copse siting": "E2",
  "l7r/diagram/hamletgen/consts.py::HARVEST_WEATHERS#standing rack forms": "E3",

@@ -11824,6 +11824,23 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/consts.py::BUNDLE_PITCH#row pitch",
+  "tier": "E3",
+  "fix": "BUNDLE_PITCH 100.0 -> 92.0 (0038: rows set 92 ft apart); re-derive HOMESTEAD_GROUND_FT and WEB_REACH_FT ties",
+  "files": [
+   "l7r/diagram/hamletgen/consts.py"
+  ],
+  "after": [
+   "l7r/diagram/hamletgen/ways/joints.py::_one_joint#a fold or Z at a joint becomes a T"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "moved": "wave 2: at 92 ft (0038) Kuwabata's lanes 3 and 8 zigzag across a joint the engine cannot yet re-route; held back to 100 in wave 2, the row waits for that row",
+  "verdict": "DRIFTED",
+  "wave": "160",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/consts.py::HARVEST_WEATHERS#standing rack forms",
   "tier": "E3",
   "fix": "add the two attested standing rack forms (Niigata's living alder posts on the bunds, Ehime's permanent roofed racks) as rolled forms with their own glyphs",
@@ -12675,23 +12692,6 @@
   "tier_as_ranked": "E2",
   "moved": "T95a (fresh reader): joints.py:296-307; 0081 drawing page: 'where the one would turn back into the other, the arriving lane meets the other's side as a T instead, and a jog across the meeting point is pulled straight like any other' and 'A lane does not zigzag ... pulled straight'. One function's logic, one module",
   "wave": "37",
-  "scope": "kept"
- },
- {
-  "key": "l7r/diagram/hamletgen/consts.py::BUNDLE_PITCH#row pitch",
-  "tier": "E3",
-  "fix": "BUNDLE_PITCH 100.0 -> 92.0 (0038: rows set 92 ft apart); re-derive HOMESTEAD_GROUND_FT and WEB_REACH_FT ties",
-  "files": [
-   "l7r/diagram/hamletgen/consts.py"
-  ],
-  "after": [
-   "l7r/diagram/hamletgen/ways/joints.py::_one_joint#a fold or Z at a joint becomes a T"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "moved": "wave 2: at 92 ft (0038) Kuwabata's lanes 3 and 8 zigzag across a joint the engine cannot yet re-route; held back to 100 in wave 2, the row waits for that row",
-  "verdict": "DRIFTED",
-  "wave": "",
   "scope": "kept"
  },
  {

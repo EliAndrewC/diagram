@@ -6282,21 +6282,17 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/consts.py::BUNDLE_PITCH#row pitch": {
-  "code": "996ede6e0ce8649b",
+ "l7r/diagram/hamletgen/consts.py::BUNDLE_PITCH#the along-row span": {
+  "body": "d7c933c9e52bb209",
+  "claim": "the along-row span - UNRESEARCHED: 100 ft, the step along a row and the grids' spacing; the rows themselves stand `_rank_step` apart, 0038's house, yard and 39 ft of sun",
+  "code": "df2f3d24061605b9",
   "core": "444f866ae8da7cd0",
-  "date": "2026-10-07",
-  "note": "the code is `BUNDLE_PITCH = 100.0`, but the cited page says \"Rows are set 92 ft apart\" (house 28 + yard 26 + 39 sun = about 93 ft); the page or the constant must be brought into line",
-  "pages": {
-   "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
-  },
-  "research": "3874df1f1301e65f",
-  "rests": [
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:1744d5d384a63127",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:3cf9dd5c14103b6d",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:d3e8abcab30e5886"
-  ],
-  "verdict": "DRIFTED"
+  "date": "2026-10-18",
+  "note": "the 100 ft step along a row is a planning figure. 0037 says nothing about east-west spacing, so UNRESEARCHED is right.",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::CARDINAL_BEARINGS#polder grid's orientation": {
   "code": "9e683c60a9cabc3d",
@@ -6608,10 +6604,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::HOMESTEAD_GROUND_FT#ground per homestead": {
-  "code": "a1b33d08aa8caeb4",
+  "body": "997f6765ea20c9b9",
+  "claim": "ground per homestead - UNRESEARCHED: 104 ft square, the 100 ft along-row span plus 3.8 ft of yard, cohort-measured",
+  "code": "89e259c52c9edc44",
   "core": "eb28050c0cba0a13",
-  "date": "2026-10-03",
-  "note": "no figure in the bundle",
+  "date": "2026-10-18",
+  "note": "the square's side is measured on the cohort, which no research answers. Its 3.8 ft of yard uses the 25 tsubo median, which matches 0037.",
+  "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },

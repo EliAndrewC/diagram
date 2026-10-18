@@ -545,3 +545,11 @@ About 30 min. The hour-19 ruling and the next cohort each owed a part B to a tas
 outlived its task. A mark naming a ticked or missing task now falls back to the first open task. Its first run broke a fixture
 whose marked task had no box - the fixture now lists it. **The habit it changes:** start the next task before measuring for it, so
 what the measurement owes lands on it.
+
+## T09 - the retro row
+
+About 75 min. The ranking row asked to move `BUNDLE_PITCH` 100 -> 92 ft on 0038's row pitch; moved, the cohort lost seeds 17 and
+43. Reading the uses showed `BUNDLE_PITCH` is no row pitch at all - it is the step along a row and the grids' span - while the
+rows already stand `_rank_step` apart, 0038's own sum of house, yard and 39 ft of sun. The fix was the label, not the number; no
+map moved. **The habit it changes:** before moving a constant to a researched figure, list what each use of it measures - one name
+can carry four quantities, and only one of them is the research's.

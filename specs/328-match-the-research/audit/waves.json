@@ -730,5 +730,6 @@
   "l7r/diagram/hamletgen/homesteads/wells.py::stage_lane_wells#lane-side wells after the lanes": "154",
   "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a scattered hamlet's seating": "157",
   "l7r/diagram/settlement/houses.py::HousesMixin._on_a_tread#no building corner on a lane": "158",
-  "l7r/diagram/hamletgen/sink.py::lay_sink#pond bank form": "159"
+  "l7r/diagram/hamletgen/sink.py::lay_sink#pond bank form": "159",
+  "l7r/diagram/hamletgen/consts.py::BUNDLE_PITCH#row pitch": "160"
 }
