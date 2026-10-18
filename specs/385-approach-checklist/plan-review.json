@@ -51,7 +51,7 @@
    "declared": "spec-fidelity"
   },
   "## Landing": {
-   "sha256": "a0174b5a8f1aa78ba1de2830d5fbf79e9998fe7e45f15bea7346051469bc0958",
+   "sha256": "6a648ae03d87ba1597c8f6f08ef3bae5e99b61478867ba5a014e49b8abf8e9fe",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -472,6 +472,24 @@
   },
   "### T27 Decisions": {
    "sha256": "0c3e4d7376dd3567e7d1890ee77cc9c566a139fa40123a2a9ea55d476e3c82d0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T28 - an ask's bundle shows which numbers are researched (the round arbiter's fix on ask:t06-scattered-single-file)": {
+   "sha256": "43111c0b1cfce7415d96950cbdbad4555cd0b384ebd6c9cbc8b040c4050c750c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T28 Approach (checklist part A)": {
+   "sha256": "3526d87a260b2063e003537aaf8b837fa5370405c95549dfded3307ab4e363ab",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T28 Decisions": {
+   "sha256": "f25a105b29c0c7781eb5b88db007c130c55e108d21972c43a6e507871825c866",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -3029,6 +3047,177 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "D9 says the owed block is 'stamped after the trigger'. Read to the second, a block stamped 10:25Z for a trigger at 10:25:14Z is before it, so D49 relaxes D9 within the trigger's own minute. Two of MODE 1's grounds apply. First, the literal rule cannot be met in the format the tool itself requires: the heading `owe` prints, and D9's own `### Txx part B (<UTC>)` form, carry minutes only. A block answered in the trigger's own minute, headed as instructed, can never pass. The session's only ways out would be to wait out the clock or stamp a false future minute. Second, the literal reading defeats D9's purpose (a fresh answer after the trigger, not one carried in from before) instead of serving it: the only extra blocks it lets through were written in the same sub-minute window, and a block from any earlier minute still refuses. The relaxation goes no further than the precision of the format the spec chose. It is one case, not several bundled together, and nothing in the GM's request asks for second-level precision. The T27 Approach's wording 'at or after' describes the same minute-level comparison."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T28 - an ask's bundle shows which numbers are researched (the round arbiter's fix on ask:t06-scattered-single-file)",
+    "### T28 Approach (checklist part A)",
+    "### T28 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Landing-T28",
+     "summary": "T28 appended to the Lands-open list: it lands when it closes, with its retro row.",
+     "class": "within",
+     "why": "The same one-task-then-retro landing FR-006 sets for every task; the only change from the block's CLEAR text is T28's id."
+    },
+    {
+     "id": "T28-A2/A9-test",
+     "summary": "A test red without the claims section.",
+     "class": "within",
+     "why": "Enforcement of the arbiter's fix itself: delete the claims section and the test has nothing to check (GM 2026-09-20). It serves the fix."
+    },
+    {
+     "id": "D50a-identifier-match",
+     "summary": "claims_section matches ALL_CAPS constants and backticked identifiers in the ask's question and its evidence files, and lists each claim on a unit of that name with key, class, claim line and last verdict.",
+     "class": "within",
+     "why": "Matching by identifier is the mechanism; a tool cannot resolve prose such as 'the field's size' to a claim key. Reading the question as well as the evidence only widens what the arbiter sees. Copying each claim with the class the registry gives it carries the fix's 'claim rows (source class ...)'. Since the round is blocked anyway, the revision should also say which of the listed classes (presumably DEVIATION) a number set by a GM ruling carries, because the fix names 'GM ruling' as a class and the list does not visibly hold one."
+    },
+    {
+     "id": "D50b-words-unmatched",
+     "summary": "A number named only in words ('1.3 acres') is not matched, on the premise that the evidence names its constant, as T06's did.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The fix covers 'every number its evidence file names', and its purpose is that the arbiter 'can tell researched numbers from guessed ones without reading the repository'. Under D50 a figure the evidence gives only in words produces no row and no flag, and a missing row looks the same as a number with no claim. That is the misreading the fix exists to prevent, so the carve-out defeats the fix's purpose. Its justification is one measured case (T06) standing in for every future ask, which is an assumed state, not a measured one. Resolving prose is not required. What is required is that the gap is visible: the bundle lists every figure with a unit in the question or evidence that it could not tie to an identifier (e.g. 'unmatched: 1.3 acres - name its constant'), or the ask refuses or warns on such a figure. Either one makes this a legitimate exception. Value-matching is not asked for."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T28 - an ask's bundle shows which numbers are researched (the round arbiter's fix on ask:t06-scattered-single-file)",
+    "### T28 Approach (checklist part A)",
+    "### T28 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Landing-T28",
+     "summary": "T28 added to the tasks that land open, each with its retro row.",
+     "class": "within",
+     "why": "FR-006: one task at a time, each landing when it closes."
+    },
+    {
+     "id": "T28-Approach",
+     "summary": "Goal, constraints and order of T28 restate the arbiter's fix; done is one goal with a test red without it.",
+     "class": "within",
+     "why": "Restates the round arbiter's fix (feature 379: the arbiter stands where the GM was asked) and serves the GM's amendment 6 'implement any obvious ... tooling / process improvements'. Its item 9 done-measure is judged with D50: it constructs an ask naming GROSS_ACRES_PER_HOUSEHOLD rather than replaying the ask the fix was ruled on."
+    },
+    {
+     "id": "D50-scope-and-classes",
+     "summary": "claims_section reads ALL_CAPS constants and backticked identifiers in the ask's question and evidence files and copies each claim's key, registry class (research page, GUESS, UNRESEARCHED, CONVENTION, DEVIATION, CANON, NONE), claim line and last verdict.",
+     "class": "within",
+     "why": "Question plus evidence files is a superset of 'its evidence file'. The registry's classes cover the fix's four source classes (research, GM ruling = CANON/DEVIATION, ours = GUESS/UNRESEARCHED, convention); the CANON/DEVIATION premise is not measurable from the bundle, but the claim line itself is copied, so the arbiter sees the source whatever the label."
+    },
+    {
+     "id": "D50-unmatched",
+     "summary": "A number with a unit given with no identifier within 60 characters is listed as 'unmatched' with the tip to name its constant, and gets no claim row.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The fix says claim rows 'for every number its evidence file names ... so the arbiter can tell researched numbers from guessed ones without reading the repository'. For an unmatched number the arbiter still cannot tell, and cannot act on the tip: it does not write the ask and may not read the repository. Round 1's carve-out is kept and labeled; the same numbers still get no rows. Not impossible: resolve a words-only number to its claim by its value and unit against the registry, or have make arbiter-bundle refuse (or tell the SESSION, before the bundle is built) until each such number is named by its constant, so no 'unmatched' row reaches the arbiter. Not implied by the fix, which says 'every number'; the literal reading is the fix's purpose. The fix names its own case, 'here the dispersed field size and the farmstead pitch'; whether T06's evidence gives them as constants or in words cannot be seen from this bundle, and D50's own examples ('1.3 acres', '273 ft') are how they would read in words. To clear it: no number with a unit reaches the arbiter without its claim row, and the done-measure replays ask:t06-scattered-single-file as written, red if either of those two numbers arrives without its row."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T28 - an ask's bundle shows which numbers are researched (the round arbiter's fix on ask:t06-scattered-single-file)",
+    "### T28 Approach (checklist part A)",
+    "### T28 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Landing: T28 lands open",
+     "summary": "T28 joins the lands-open list, landing when it closes with its retro row while later tasks stay open.",
+     "class": "within",
+     "why": "FR-006: tasks run one at a time, each closing with its retro row before the next starts."
+    },
+    {
+     "id": "D50 (question as well as evidence)",
+     "summary": "claims_section reads the ask's question as well as its evidence files.",
+     "class": "within",
+     "why": "Serves the arbiter's fix (rows for every number the ask's evidence names); it adds rows and removes none."
+    },
+    {
+     "id": "D50 (registry CLASSES)",
+     "summary": "The fix's four source classes (research, GM ruling, ours, convention) are given in the registry's own CLASSES (research page, GUESS, UNRESEARCHED, CONVENTION, DEVIATION, CANON, NONE).",
+     "class": "within",
+     "why": "Uses the registry's vocabulary for the fix's words; each of the four maps to a class, and none is lost."
+    },
+    {
+     "id": "D50 (identifier pass)",
+     "summary": "ALL_CAPS constants and backticked identifiers in the ask get their claim key, class, claim line and last verdict listed.",
+     "class": "within",
+     "why": "The fix's mechanism for numbers named by their constant."
+    },
+    {
+     "id": "D50 + item 9 (numbers given in words: value lookup, 'no claim states it', and the pitch's done-measure)",
+     "summary": "A number given in words is matched only against claims whose line states that value and unit; otherwise the bundle says no claim states it ('a measurement, or a value derived from others'). Item 9's done-measure accepts 'no claim states it' beside the farmstead pitch's '273 ft'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The arbiter's fix names exactly two numbers whose claim rows must reach the bundle: 'here the dispersed field size and the farmstead pitch'. Approach item 4 MEASURED the pitch's claim: BUNDLE_PITCH on 0038 (DRIFTED). Yet item 9 counts T28 done when the pitch reaches the arbiter as having no claim. So the fix's 'claim rows for every number its evidence file names' is cut down to 'rows only where a claim line states the literal value, or where the words carry the identifier'. The cut is word-plausible but defeats the fix's purpose ('so the arbiter can tell researched numbers from guessed ones'): a number produced by a constant that has a research claim, even a drifted one, shown as 'a measurement, or a value derived from others' reads to the arbiter as unresearched, and that is the exact confusion the fix exists to end. The cut is not impossible (item 4 already found the row), not implied by the arbiter's words (he named the pitch), and not needed to serve the fix's purpose. Required: (1) item 9's done-measure must give BUNDLE_PITCH's claim, class and last verdict beside the farmstead pitch / '273 ft', the same way it gives GROSS_ACRES_PER_HOUSEHOLD's beside '1.3 acres'; (2) D50 must say how a number given in words, whose literal value no claim line states but which a constant with a claim produces, reaches that constant's claim row. 'No claim states it' may be printed only when the record truly holds no claim for the number. Whether the evidence file happens to backtick BUNDLE_PITCH does not settle this, because item 9 is the commitment and it does not require the pitch's row."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T28 - an ask's bundle shows which numbers are researched (the round arbiter's fix on ask:t06-scattered-single-file)",
+    "### T28 Approach (checklist part A)",
+    "### T28 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing-T28",
+     "summary": "T28 added to the tasks that land open, each landing when it closes with its retro row.",
+     "class": "within",
+     "why": "FR-006 (one task, then the retro) and the GM's 'we do one task and then we measure'; adding the new task to the existing landing rule decides nothing new."
+    },
+    {
+     "id": "T28-scope",
+     "summary": "T28 implements the round arbiter's fix on ask:t06-scattered-single-file: an ask's bundle carries the claim rows for the numbers it names.",
+     "class": "within",
+     "why": "The arbiter stands where the GM was asked (feature 379) and its fix is the ruling; amendment 6 asks the overnight run to 'implement any obvious performance / tooling / process improvements along the way', and the request's core is that a session ask 'which parts ... are based on our research and which parts ... are just arbitrary implementation details' - this puts that answer in front of the arbiter."
+    },
+    {
+     "id": "Approach-3",
+     "summary": "A number is named by its ALL_CAPS constant or a backticked identifier (marked ours, O).",
+     "class": "within",
+     "why": "An implementation choice for finding the names the fix refers to; it narrows nothing because D50 also looks numbers up by value, so a number named without an identifier is still covered."
+    },
+    {
+     "id": "Approach-4",
+     "summary": "Premise, measured 2026-10-18: GROSS_ACRES_PER_HOUSEHOLD rests on 0017; the 205-273 ft 'farmstead pitch' is a scattered farmstead's own box (parts claimed separately, the sum stated by no claim), not BUNDLE_PITCH (the nucleated row pitch, 100 ft).",
+     "class": "within",
+     "why": "Round 3's finding (the pitch attributed to BUNDLE_PITCH's claim) is corrected; the premise now carries its date and method (make claims-report, no line with '273 ft' or '205 ft'), and is consistent with item 9 and D50, which say 'no claim states it' beside '273 ft'. Not re-run here: the bundle review reads nothing in the repository."
+    },
+    {
+     "id": "D50-names",
+     "summary": "claims_section reads ALL_CAPS constants and backticked identifiers in the ask's question AND its evidence files, and lists each claim on a unit of that name with key, class (the registry's CLASSES, GM-set numbers as CANON/DEVIATION), claim line and last verdict.",
+     "class": "within",
+     "why": "The fix's 'claim rows (source class: research, GM ruling, ours, convention)' map onto the registry's classes one for one (research page; CANON/DEVIATION; GUESS/UNRESEARCHED; CONVENTION). Reading the question as well as the evidence files reaches the numbers the ask turns on (the T06 ruling turned on a number the question named) - it serves the fix's stated purpose rather than adding behavior."
+    },
+    {
+     "id": "D50-values",
+     "summary": "Every number with a unit in the words is looked up by value; matching claims are listed beside it, and a value no claim states is said to have none ('a measurement, or a value derived from others').",
+     "class": "within",
+     "why": "The fix says 'every number its evidence file names'; a number stated bare (273 ft) has no identifier, so without the value lookup it would reach the arbiter with no row and no word - the exact gap the ruled ask showed. Item 9's done case is followed literally by this mechanism: 1.3 acres gets GROSS_ACRES_PER_HOUSEHOLD's row, 273 ft gets 'no claim states it'."
+    },
+    {
+     "id": "Done-9",
+     "summary": "One goal, measured on the ruled ask's own words, with a test red without it.",
+     "class": "within",
+     "why": "FR-015 (one goal a task) and SC-004/SC-009's 'test red without it'; the test enforces the fix and is not unrequested scope."
     }
    ]
   }

@@ -37,3 +37,21 @@ exhaustive pass, the rest to the next margin (as a row village):
 | 1 | 1,147 ft | 4,619 ft | 4,080 ft |
 | 14 | 585 ft | 4,786 ft | 4,800 ft |
 | 5 | 1,019 ft | 3,615 ft | 2,880 ft |
+
+## Route (A), built as an experiment (ask:t06-scattered-single-file, ruled continue) - 2026-10-18
+
+Single file round the whole cultivated ground (the paddy and its dry plots, unioned - the north-side seats otherwise fell on the
+dry plots, the scattered farm's own fields too), each farmstead at its own width with its grove, no seat-radius bound, no ranks,
+no cloud, no exhaustive pass; the field asked by containment on every side (the facing chains assume one side):
+
+| seed | households | seated | |
+|---|---|---|---|
+| 1 | 17 | 17 | in full |
+| 14 | 20 | 14 | refused |
+| 5 | 12 | 11 | refused |
+
+The 48-seed cohort (`make cohort N=48`): 40/54 pass; 14 dispersed seeds NEWLY FAILING, each 1 to 8 households short
+(5: 11/12, 6: 16/19, 14: 14/20, 15: 12/16, 16: 11/12, 28: 13/19, 32: 12/14, 34: 11/17, 35: 10/13, 43: 8/14, 45: 13/17,
+48: 14/16, 905: 12/20, 906: 11/16); the other dispersed seeds seat in full. What still refuses a ring seat is marsh and wet plots
+on the drain side and the brook. The field's AREA is researched (`GROSS_ACRES_PER_HOUSEHOLD` 1.3 acres, 0017); its SHAPE is the
+water engine's fan for that area, not a seating knob.

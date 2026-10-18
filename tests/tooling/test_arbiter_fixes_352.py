@@ -206,3 +206,18 @@ def test_a_plan_round_trigger_s_bundle_carries_the_plan_s_rounds(tmp_path: pathl
     text = ab.bundle(root, trig, tmp_path / "out", allow_missing="a fixture").read_text()
     assert "### Round 1: BLOCKED (r1)" in text and "D39 - narrowing, NOT LEGITIMATE: two steps all three" in text
     assert "spec.md`'s Review history" not in text, "a plan round is not the spec's"
+
+
+def test_an_asks_bundle_carries_the_claims_on_the_numbers_it_names() -> None:
+    """Feature 385 T28 (the round arbiter's tooling fix on ask:t06-scattered-single-file): whether the field's size and the
+    farmstead pitch were researched decided the route, and the bundle held only the session's word for it."""
+    root = pathlib.Path(__file__).resolve().parents[2]
+    out = "\n".join(ab.claims_section(root, ["the area is researched (`GROSS_ACRES_PER_HOUSEHOLD`, 0017), and BUNDLE_PITCH"]))
+    assert "consts.py::GROSS_ACRES_PER_HOUSEHOLD#paddy per household` - a research page" in out
+    assert "consts.py::BUNDLE_PITCH#" in out and "(last verdict " in out
+    assert ab.claims_section(root, ["nothing named here"]) == []
+    assert ab.claims_section(root, ["`NO_SUCH_NAME_ANYWHERE`"]) == []
+    # the ruled ask's own words (ask:t06-scattered-single-file): the field's size and the pitch, given only as numbers
+    words = "\n".join(ab.claims_section(root, ["The ruling's first lever, the field's size, is researched (0017's 1.3 acres a household); the farmstead pitch 273 ft"]))
+    assert "- `1.3 acres`: `l7r/diagram/hamletgen/consts.py::GROSS_ACRES_PER_HOUSEHOLD#paddy per household` - a research page" in words, words
+    assert "- `273 ft`: no claim states it" in words, "a value no claim states is said to be one, never left out"

@@ -28,6 +28,7 @@ import subprocess
 import sys
 from collections.abc import Sequence
 from pathlib import Path
+from typing import Any
 
 HERE = Path(__file__).resolve().parent
 for _d in ("../hooks/lib", "../measure"):
@@ -461,6 +462,44 @@ _ROUTES = re.compile(r"\broutes?\b|\bregress", re.I)
 _MAP_WORDS = re.compile(r"\bmaps?\b|\bseeds?\b|\bcohorts?\b|\bpool\b|\binashiro\b|\.gen\.py|l7r/diagram/|\bhamlets?\b|\bvillages?\b", re.I)
 
 
+#: a name an ask's words or evidence cite that the code may claim: an ALL_CAPS constant, or a backticked identifier
+_NAMED = re.compile(r"`([A-Za-z_]\w*)`|\b([A-Z][A-Z0-9_]{3,})\b")
+#: a number with a unit, as an ask's words give one ("1.3 acres", "273 ft", "8 %")
+_LOOSE = re.compile(r"\b\d[\d,]*(?:\.\d+)?\s*(?:ft|feet|acres?|px|sq ft|degrees?|%|households?)\b", re.I)
+
+
+def claims_section(root: Path, texts: Sequence[str]) -> list[str]:
+    """Each research claim on a name the question or its evidence cites, with its class (a page, GUESS, UNRESEARCHED,
+    CONVENTION...) and its last verdict - so the arbiter tells a researched number from one of ours without reading the
+    repository (the round arbiter's tooling fix on ask:t06-scattered-single-file, feature 385 T28: the field's size and the
+    farmstead pitch were named, and whether either was researched decided the route)."""
+    names = {a or b for text in texts for a, b in _NAMED.findall(text)}
+    numbers = sorted({" ".join(m.group(0).split()) for text in texts for m in _LOOSE.finditer(text)})
+    if not names and not numbers:
+        return []
+    sys.path.insert(0, str((HERE / "../record").resolve()))
+    import claims as cx
+
+    index = cx.load_index(root / cx.INDEX)
+    cur = cx.current(root)
+
+    def line(key: str, row: Any) -> str:  # noqa: ANN401
+        kind = "a research page" if row.claim.backing == "POINTER" else row.claim.backing
+        return f"`{key}` - {kind}: `{row.claim.line}` (last verdict {index.get(key, {}).get('verdict', 'none')})"
+
+    rows = [f"- {line(k, r)}" for k, r in sorted(cur.items()) if k.split("::", 1)[1].split("#", 1)[0].rsplit(".", 1)[-1] in names]
+    # ...and every number with a unit the words give, looked up by its VALUE in the claims that state it (spec-fidelity, T28
+    # rounds 1 and 2: a number named only in words reached the arbiter with no row); one no claim states is said to be so
+    for n in numbers:
+        value, unit = re.match(r"([\d,.]+)\s*(.*)", n).groups()  # type: ignore[union-attr]
+        pat = re.compile(rf"(?<![\d.]){re.escape(value.replace(',', ''))}\s*{re.escape(unit[:2])}", re.I)
+        hits = [line(k, r) for k, r in sorted(cur.items()) if pat.search(r.claim.line.replace(",", ""))][:4]
+        rows.append(f"- `{n}`: " + ("; ".join(hits) if hits else "no claim states it - a measurement, or a value derived from others"))
+    if not rows:
+        return []
+    return ["## The numbers it names, as the code claims them (research, ours or a convention)\n\n" + "\n".join(rows) + "\n"]
+
+
 def pool_unstated(why: str, files: Sequence[str]) -> list[str]:
     """What a route or regression question leaves unstated about the POOL (the round arbiter's tooling fix, ask:b13-w149-route-
     matrix: an accept was taken on the cohort and the 44 rolls alone, and the pool then refused the reference map under it): a
@@ -510,6 +549,7 @@ def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "", evidenc
             "process is wrong - name the fix as `tooling_fix`. Say in `what` exactly what the session does next.\n"
         )
         parts += evidence_section(out, evidence)
+        parts += claims_section(root, [str(owed.get("detail", "")), *(Path(f).read_text(encoding="utf-8") for f in evidence if Path(f).is_file())])
         if _PLAN_REVIEW.search(str(owed.get("detail", ""))) and d is not None:
             plan_parts, plan = plan_rounds(d)
             parts += plan_parts
