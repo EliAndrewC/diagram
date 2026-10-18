@@ -421,4 +421,3 @@ def test_figures_never_runs_a_command_that_names_a_placeholder(tmp_path: pathlib
     _failures, _reports, skipped = figures_cli.rerun(d)
     assert not marker.exists(), "the command was run"
     assert any("names a <placeholder>" in s for s in skipped)
-
