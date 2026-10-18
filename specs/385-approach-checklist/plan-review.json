@@ -5273,51 +5273,44 @@
    "verdict": "CLEAR"
   },
   "T62": {
-   "section_sha256": "0cf09712e0f831856d4c747054b23fe19fe5de3a4737680241588b9e1efaa235",
+   "section_sha256": "9ab2406f1e0231d20aeb4ddc014c442c3c5370bd247cada623da780e5ca44103",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "A2-flag",
-     "summary": "A flag in claims-owed, never a refusal; tooling only; a test red without it.",
+     "id": "D81-trigger",
+     "summary": "A claimed module-level constant counts as changed when its value or its claim line differs between the merge base and the head.",
      "class": "within",
-     "why": "The arbiter's fix asks the claims check to 'flag' stale pages; a test that only fails when the flag is absent enforces it (GM 2026-09-20). Amendment 6 asks for tooling improvements along the way."
+     "why": "The arbiter's fix fires 'when a claimed constant's value or derivation changes'; the value compare carries the value, the claim line carries the derivation (DIKEPOND_WATER_INSET going from a literal 23 to a derived value changes both)."
     },
     {
-     "id": "D81-trigger",
-     "summary": "Trigger: a claimed module-level constant whose value or claim line differs between the merge base and head.",
+     "id": "D81-match",
+     "summary": "Pages are searched for the OLD value as a whole number, whatever unit follows it (changed from a fixed unit list ft/px/%/acres).",
      "class": "within",
-     "why": "The arbiter's 'value or derivation changes' - a derivation change (fixed 23 to dikepond_inset(...)) changes the constant's value expression, so the case the arbiter names is reached."
+     "why": "The arbiter asks for pages that 'still state the old figure'; no unit list is in the fix, so dropping the list moves the rule toward the arbiter's words, and not matching digits inside longer numbers only stops false matches."
     },
     {
      "id": "D81-link-filter",
-     "summary": "Keep only pages that link a question the constant's claim cites.",
+     "summary": "Only pages that link a question the constant's claim cites are kept (four of the seven pages stating '23 ft').",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "why": "The arbiter's words are 'states the old figure FOR THAT UNIT', so attributing the figure to the constant is implied by the fix itself and some proxy is needed; the block's dated measurement (7 pages state 23 ft, 4 link 0018, the stale ones among the 4) shows the filter loses no stale figure-bearing page on the arbiter's own case."
+     "why": "Implied by the arbiter's own words: the fix flags pages stating the old figure 'for that unit', so some way of tying a page's figure to the constant is required, and without one every page containing that number would be flagged. The plan's measurement (2026-10-18) puts the stale pages that state 23 ft (0022, 0025, plus 0027) inside the four linking pages, so on the case that prompted the fix the filter drops no stale page that states the figure. The purpose, catching stale figures at the edit, is kept. If a stale page stating the figure but not linking the cited question is ever found, this ruling's factual basis is gone."
     },
     {
-     "id": "D81-unit-list",
-     "summary": "The old value is searched only when followed by one of four units: ft, px, %, acres.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The arbiter's rule is general - any claimed constant whose value changes, 'every' page still stating the old figure. A fixed four-unit list means a changed constant in any other unit never flags, and the GM's request names two such figures verbatim: 'a 19 degree angle' (degrees/deg/the degree sign) and 'within 700 feet' (spelled out, which 'ft' does not match). The list was not derived from a measurement of what units the claimed constants and drawing pages actually use - only the 23 ft case was measured - so the scope rests on an unmeasured premise. Not impossible, not implied by the arbiter's words, not needed for the purpose. Fix: match the old figure followed by the unit tokens the drawing pages actually use, measured (at minimum ft/foot/feet, degrees/deg/the degree sign, m/metres, px, %/percent, acres), or the old figure on a linked page regardless of unit."
-    },
-    {
-     "id": "A4-0024-not-found",
-     "summary": "A page restating the old value in other words (0024's 'six in ten', no figure) is not found; the claims rounds still read the pages.",
+     "id": "D81-0024",
+     "summary": "0024, one of the arbiter's named examples, is not reached: it states the split as 'six in ten' and no figure; the claims rounds still read it.",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "why": "The arbiter named 0024 as an example, but the arbiter's rule is to flag pages that 'still state the old figure', and 0024 states no figure, so its exclusion follows from the arbiter's own words and the block states the loss openly rather than claiming 0024 is caught. The ruling rests on that wording: the block establishes only that a figure search misses 0024, not that nothing mechanical reaches it (whether 0024 links a question the claim cites is unmeasured here); the session should measure that and record it in T62's retro, since if it does, a link-only flag would reach it."
+     "why": "The arbiter's mechanism is figure-based ('flag every research drawing page that still states the old figure'), and 0024 states no figure, so that mechanism cannot reach it. A link rule would not either: measured 2026-10-18, 0024 links no question the claim cites. Of the named examples, 0022 and 0025 state the figure and are caught; 0024 is a different kind of case and the arbiter's sentence does not cover it. The plan says so openly and leaves it to the existing claims rounds, so no case is quietly dropped."
     },
     {
-     "id": "A5-order-budget",
-     "summary": "Order: the flag in claims-owed, then its test; exits (c); budget 40 min; one goal.",
+     "id": "D81-flag-surface",
+     "summary": "A flag only, never a refusal, printed by claims-owed from scripts/record/claims.py as 'stale figure: <page> states <figure> (<constant> was <old>)'; a test in test_claims_index.py red without it.",
      "class": "within",
-     "why": "Sequencing and budget of the arbiter's fix; decide nothing the fix left open beyond scheduling."
+     "why": "The arbiter says 'the claims check in scripts/record/claims.py should flag'; a flag in that check is what was asked, and a test that fails only when the flag is missing enforces it."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   }
  }
 }
