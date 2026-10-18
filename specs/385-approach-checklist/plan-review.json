@@ -5351,6 +5351,50 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T66": {
+   "section_sha256": "a1309ea6bd389c8f0ac832d913b631a866ca00b83687c770341811ddb92387b0",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T66 (the task)",
+     "summary": "Fix plan_bundle.build, feature 375's plan-review bundler, inside feature 385 as a tooling task, because T65's plan review was handed 385's FR-005 where the block meant 375's requirement.",
+     "class": "within",
+     "why": "Amendment 6 (the GM, verbatim): 'Please make sure to implement any obvious performance / tooling / process improvements along the way.' A bundle that gives the reviewer a different requirement from the one the block cites is a tooling defect found during this feature's own work. This bundle shows the defect too: its spec-cited.md carries 385's FR-005 and none of 375's FR-044/FR-046."
+    },
+    {
+     "id": "D85(a) - qualified forms",
+     "summary": "build reads '(?:feature )?NNN(?:'s|,)? (FR|SC)-NNN' as a citation of feature NNN's requirement and writes it to spec-cited.md under a '<!-- feature NNN -->' line.",
+     "class": "within",
+     "why": "This is the mechanism of the fix. It serves the goal that the reviewer reads the requirement the block names. The request does not settle this design detail."
+    },
+    {
+     "id": "D85(b) - unresolvable feature",
+     "summary": "When there are no specs/NNN-* directories, or more than one, the qualified id is left out, the same way an unknown id is left out today.",
+     "class": "within",
+     "why": "With no directory there is nothing to include. With several, which one is meant is undecidable. This repeats the bundler's existing unknown-id behavior and removes nothing the GM asked for."
+    },
+    {
+     "id": "D85(c) - bare ids stay the reviewed feature's",
+     "summary": "An unqualified id still resolves against the reviewed feature only. A block citing another feature writes that feature beside every id it means, and the tool does not guess.",
+     "class": "within",
+     "why": "This is a design choice inside a tooling improvement and narrows no request clause. The Done line covers both cases: the qualified form gets the other feature's paragraph, and the same-numbered local requirement is included only when the block also cites it bare."
+    },
+    {
+     "id": "D85(d) - spec-index unchanged",
+     "summary": "spec-index.md keeps indexing only the reviewed feature's requirements.",
+     "class": "within",
+     "why": "The goal is about cited requirements (spec-cited.md). Leaving the index alone keeps the change to what the defect needs."
+    },
+    {
+     "id": "Approach 9 - done, measured",
+     "summary": "One goal: the four qualified forms bundle 375's FR-044 headed with its feature. tests/tooling/test_plan_blocks.py is red without it.",
+     "class": "within",
+     "why": "The test exists only to enforce the requested fix (GM 2026-09-20). It is one goal, per FR-015."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
