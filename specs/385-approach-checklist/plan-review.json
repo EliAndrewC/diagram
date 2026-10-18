@@ -2426,7 +2426,7 @@
     },
     {
      "id": "D44c",
-     "summary": "A refusal is recognised by the harness's 'PreToolUse:Agent hook error' result, whatever the hook's wording.",
+     "summary": "A refusal is recognized by the harness's 'PreToolUse:Agent hook error' result, whatever the hook's wording.",
      "class": "within",
      "why": "The arbiter's 'any dispatch refused' covers a refusal by any hook. Keying on the harness marker is the literal reading, and is wider than the hook's own BLOCKED wording."
     },
