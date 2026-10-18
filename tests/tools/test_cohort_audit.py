@@ -76,9 +76,13 @@ def test_ANYWAY_skips_the_reference_gate_because_a_rule_with_no_escape_gets_work
 
 def test_a_clean_reference_runs_the_cohort_and_passes_its_arguments_through(_clean, monkeypatch: pytest.MonkeyPatch) -> None:
     seen: dict[str, Any] = {}
-    monkeypatch.setattr(ca, "audit", lambda count, seed, only, jobs, households: seen.update(count=count, seed=seed, only=only, jobs=jobs, households=households) or 0)
-    assert ca.main(["--count", "6", "--seed", "9", "--only", "wells", "--jobs", "2", "--households", "40"]) == 0
-    assert seen == {"count": 6, "seed": 9, "only": "wells", "jobs": 2, "households": 40}
+    monkeypatch.setattr(
+        ca,
+        "audit",
+        lambda count, seed, only, jobs, households, fresh, fresh_from: seen.update(count=count, seed=seed, only=only, jobs=jobs, households=households, fresh=fresh, fresh_from=fresh_from) or 0,
+    )
+    assert ca.main(["--count", "6", "--seed", "9", "--only", "wells", "--jobs", "2", "--households", "40", "--fresh", "4", "--fresh-from", "12345"]) == 0
+    assert seen == {"count": 6, "seed": 9, "only": "wells", "jobs": 2, "households": 40, "fresh": 4, "fresh_from": 12345}
 
 
 def test_roll_one_goes_through_GENERATE_which_is_the_path_that_ships(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -303,6 +307,34 @@ def test_a_served_roll_says_so_and_the_audit_writes_its_per_seed_record(monkeypa
     assert [(s["seed"], s["how"], s["verdict"]) for s in rec["seeds"]] == [(1, "served", "pass"), (2, "rolled", "fail"), (3, "served", "refused")]
     assert rec["seeds"][0]["form"] == "linear" and rec["seeds"][1]["failures"] == ["wells_are_shared[1]"] and rec["seeds"][2]["pins"] == {"row_line": "street"}
     assert rec["seeds"][1]["counts"] == {"lane_knots": 4} and rec["seeds"][0]["counts"] == {}, "each failing rule's count (feature 385 T03)"
+
+
+def test_the_fresh_block_is_rolled_beside_the_fixed_seeds_and_is_a_rate_never_the_verdict(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str], tmp_path: Any) -> None:
+    """Feature 386 (the GM 2026-10-17: "a block of fresh seeds that rotates each run, recorded as a failure rate rather than a
+    pass/fail"): the block rolls in the same run and record, each seed marked; its failures print as a rate and leave the pass count
+    and the exit code to the fixed seeds and the pinned rows."""
+    import json
+
+    seen: list[tuple] = []
+    _patch_roll(
+        monkeypatch,
+        lambda spec: (
+            seen.append(spec)
+            or (f"--- seed {spec[0]} row={('street/one/own', 'edge/both/shared')[spec[0] % 2]} water={('channel', 'well')[spec[0] % 2]}", ["lane_knots[1]"] if spec[0] == 20001 else [], [])
+        ),
+    )
+    assert ca.audit(2, 1, jobs=1, fresh=3, fresh_from=20000) == 0, "a failing fresh seed never fails the cohort"
+    out = capsys.readouterr().out
+    assert f"{2 + len(ca.PINNED_ROWS)}/{2 + len(ca.PINNED_ROWS)} passed the whole gate" in out and "lane_knots" not in out.split("passed the whole gate")[0]
+    assert "fresh block from seed 20000: 1 of 3 failed (33%) - seeds 20001; a rate, never a pass/fail" in out
+    assert [s[0] for s in seen][-3:] == [20000, 20001, 20002]
+    rec = json.loads(next((tmp_path / "cohort-log").glob("*.json")).read_text(encoding="utf-8"))
+    assert [s["seed"] for s in rec["seeds"] if s.get("fresh")] == [20000, 20001, 20002] and (rec["fresh_first"], rec["fresh_count"]) == (20000, 3)
+    assert not any(s.get("fresh") for s in rec["seeds"][:-3])
+    seen.clear()
+    ca.audit(1, 1, jobs=1, households=40, fresh=3, fresh_from=20000)
+    assert seen == [(1, 40)], "a scaling roll rolls no fresh block, as it rolls no pinned row"
+    assert ca.fresh_specs(3, None) == [] and ca.fresh_specs(0, 5) == []
 
 
 def test_the_audit_writes_one_record_a_run(monkeypatch: pytest.MonkeyPatch, tmp_path: Any) -> None:

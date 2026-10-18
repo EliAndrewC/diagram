@@ -1,0 +1,17 @@
+{
+ "fresh-block-cost": {
+  "quantity": "the per-fix cohort's wall time, cold, at 16 maps (FRESH=0) and at 18 and 20 maps (a 2- and 4-seed fresh block), the median of each size's runs",
+  "observed": "2026-10-18",
+  "source": "this clone at feature 386's T01, 22 cpus, 20 workers; load 3.2-10.8 (other sessions running)",
+  "command": "bash specs/386-landing-cohort/fresh_cost.sh",
+  "method": "fresh_cost.sh as committed: three repeats of 16, 18 and 20 maps interleaved, each on seeds no run had used (every fixed seed cold, the pinned rows served), the median of each size kept. That run (seeds 2100-2900): 16 maps 69.8, 57.2, 45.6; 18 maps 73.6, 58.1, 56.2; 20 maps 56.7, 58.2, 52.9. Not part of the value: an earlier round of 16/20/24 maps on seeds 7000-10240, twice - 16 maps 73.2, 49.0; 20 maps 64.1, 55.7; 24 maps 78.3, 61.4",
+  "unit": "s",
+  "varies": true,
+  "value": {
+   "16 maps": 57.2,
+   "18 maps": 58.1,
+   "20 maps": 56.7
+  },
+  "band": "within 5% of the 16-map (FRESH=0) median - perf band 1; 20 maps' 56.7 s is under 57.2 s x 1.05 = 60.1 s"
+ }
+}

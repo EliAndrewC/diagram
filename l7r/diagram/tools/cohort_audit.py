@@ -213,25 +213,49 @@ def never_drawn(headers: Any) -> list[str]:
     return [f"well_siting={v}" for v, n in sorted(rolled.items()) if n >= NEVER_DRAWN_ROLLS and v not in drawn]
 
 
-def audit(count: int, first_seed: int, only: str | None = None, jobs: int | None = None, households: int | None = None) -> int:
+def fresh_specs(fresh: int, fresh_from: int | None) -> list[Any]:
+    """THE FRESH BLOCK (feature 386, the GM 2026-10-17: "a block of fresh seeds that rotates each run, recorded as a failure rate
+    rather than a pass/fail"): `fresh` seeds from `fresh_from`, a start the Makefile derives from the engine's content
+    (`scripts/gates/cohort_gate.py fresh-seed`, 10000 or more), so no fixed seed, pinned row or hand roll is among them. Seeds 1-48
+    all passed on main while 6 of 48 never-rolled seeds failed: fixes had been aimed at the fixed seeds, so only seeds nobody tuned
+    on say how the generator does."""
+    if not fresh or fresh_from is None:
+        return []
+    return [(fresh_from + i, 10 + ((fresh_from + i) * 7) % 11) for i in range(fresh)]
+
+
+def fresh_line(specs: Sequence[Any], results: Sequence[tuple[str, list[str], list[str]]]) -> str:
+    """The fresh block's RATE - printed, never counted in the pass count or the exit code (feature 386, FR-002)."""
+    bad = [spec[0] for spec, (_h, failures, _l) in zip(specs, results, strict=True) if failures]
+    return (
+        f"fresh block from seed {specs[0][0]}: {len(bad)} of {len(specs)} failed ({100 * len(bad) / len(specs):.0f}%)"
+        + (f" - seeds {', '.join(map(str, bad))}" if bad else "")
+        + "; a rate, never a pass/fail (make cohort-seeds keeps the trend)"
+    )
+
+
+def audit(count: int, first_seed: int, only: str | None = None, jobs: int | None = None, households: int | None = None, fresh: int = 0, fresh_from: int | None = None) -> int:
     """Roll `count` hamlets, gate each, and print the failures with the gate's own messages.
 
     The rolls fan out across processes (the 2026-08-15 timings block flagged the serial cohort as
     the biggest available win: 24 maps x ~12 s on an idle 22-cpu box). Results are collected and
     printed in seed order, so the report reads identically to the serial one. `households` rolls every seed at that size,
     the scaling rolls' question (does a change refuse a larger hamlet?) asked without timing it (feature 328), and leaves
-    the pinned rows out."""
-    jobs = hg.default_jobs(count) if jobs is None else max(1, jobs)  # ONE courtesy rule, defined in the driver
+    the pinned rows out, as `only` does - and the fresh block with them. The fresh block rolls in the same pool and lands in the same
+    record, each seed marked `fresh`; its failures print as a rate after the report and count in neither the pass count nor the exit."""
     specs: list[Any] = [(first_seed + i, households if households is not None else 10 + ((first_seed + i) * 7) % 11) for i in range(count)]
     specs += [(PINNED_FIRST_SEED + i, 10 + ((PINNED_FIRST_SEED + i) * 7) % 11, pins) for i, pins in enumerate(PINNED_ROWS)] if not (only or households) else []
     count = len(specs)
+    extra = fresh_specs(fresh, fresh_from) if not (only or households) else []
+    jobs = hg.default_jobs(count + len(extra)) if jobs is None else max(1, jobs)  # ONE courtesy rule, defined in the driver
     if jobs == 1:
-        rolled = [roll_how(s) for s in specs]
+        rolled = [roll_how(s) for s in [*specs, *extra]]
     else:
         with concurrent.futures.ProcessPoolExecutor(max_workers=jobs) as ex:
-            rolled = list(ex.map(roll_how, specs))
+            rolled = list(ex.map(roll_how, [*specs, *extra]))
+    write_record([*specs, *extra], rolled, first_seed, households, fresh=len(extra))
+    rolled, fresh_rolled = rolled[:count], rolled[count:]
     results = [r for r, _how in rolled]
-    write_record(specs, rolled, first_seed, households)
 
     tally: collections.Counter[str] = collections.Counter()
     failing = 0
@@ -270,6 +294,8 @@ def audit(count: int, first_seed: int, only: str | None = None, jobs: int | None
         failing += 1
         tally.update(["knob_value_never_drawn"])
     print(f"\n{count - failing}/{count} passed the whole gate")
+    if extra:
+        print(fresh_line(extra, [r for r, _how in fresh_rolled]))
     if tally:
         print("residue by check:")
         for name, n in tally.most_common():
@@ -281,11 +307,12 @@ def audit(count: int, first_seed: int, only: str | None = None, jobs: int | None
 LOG_DIR: str | None = None
 
 
-def write_record(specs: Sequence[Any], rolled: Sequence[tuple[tuple[str, list[str], list[str]], str]], first_seed: int, households: int | None) -> str:
+def write_record(specs: Sequence[Any], rolled: Sequence[tuple[tuple[str, list[str], list[str]], str]], first_seed: int, households: int | None, fresh: int = 0) -> str:
     """The cohort's PER-SEED RECORD (feature 375 amendment 7, FR-029): one file a run under `dev/cohort-log/` - per seed,
     served or rolled, its verdict and the failures it found - so whether fewer seeds would find the same failures can be
     counted (feature 374's findings by seed lived only in its plan's prose). `make cohort` commits it, as `make done` does
-    its run record. Returns the path."""
+    its run record. The last `fresh` specs are the fresh block (feature 386): each is marked `"fresh": true`, and the record names
+    the block's first seed and size. Returns the path."""
     import json  # noqa: PLC0415
     import re  # noqa: PLC0415
     import subprocess  # noqa: PLC0415
@@ -300,7 +327,8 @@ def write_record(specs: Sequence[Any], rolled: Sequence[tuple[tuple[str, list[st
     # A "before" leg rolled in a detached worktree keeps its record in the CLONE (the plan review): the worktree is removed
     clone_root = os.path.dirname(common) if os.path.basename(common) == ".git" else HERE
     log_dir = LOG_DIR or os.path.join(clone_root, "dev", "cohort-log")
-    for spec, ((header, failures, _lines), how) in zip(specs, rolled, strict=True):
+    first_fresh = len(specs) - fresh
+    for i, (spec, ((header, failures, _lines), how)) in enumerate(zip(specs, rolled, strict=True)):
         verdict = "refused" if any(f.startswith("refused:") for f in failures) else ("fail" if failures else "pass")
         seeds.append(
             {
@@ -314,6 +342,7 @@ def write_record(specs: Sequence[Any], rolled: Sequence[tuple[tuple[str, list[st
                 # seed failing at HEAD and after a change read as "pre-existing" though its lane knots went from 1 to 4 (seed 57)
                 "counts": {m.group(1): int(m.group(2)) for line in _lines if (m := re.match(r"FAIL (\S+) -> (\d+)", line))},
                 "form": header.split(" form=")[1].split()[0] if " form=" in header else "",
+                **({"fresh": True} if i >= first_fresh else {}),
             }
         )
     stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
@@ -334,6 +363,7 @@ def write_record(specs: Sequence[Any], rolled: Sequence[tuple[tuple[str, list[st
                 "households": households,
                 "count": len(seeds),
                 "served": sum(s["how"] == "served" for s in seeds),
+                **({"fresh_first": specs[first_fresh][0], "fresh_count": fresh} if fresh else {}),
                 "seeds": seeds,
             },
             fh,
@@ -365,6 +395,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--only", default=None, help="report only failures of this check")
     ap.add_argument("--jobs", type=int, default=None, help="worker processes (default: cpus - 2, capped at --count)")
     ap.add_argument("--households", type=int, default=None, help="roll every seed at this size (the scaling question, untimed)")
+    ap.add_argument("--fresh", type=int, default=0, help="roll this many fresh seeds beside the fixed ones - a rate, never a pass/fail (feature 386)")
+    ap.add_argument("--fresh-from", type=int, default=None, help="the fresh block's first seed (make cohort derives it from the engine)")
     ap.add_argument("--anyway", action="store_true", help="run even if the reference settlement is failing (say why in the same breath)")
     args = ap.parse_args(list(argv) if argv is not None else None)
 
@@ -394,7 +426,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             print("(--anyway overrides, when you genuinely need the seed list from a red tree.)")
             return 2
         print("\033[1mreference settlement clean\033[0m - running the cohort\n", flush=True)
-    return audit(args.count, args.seed, args.only, args.jobs, args.households)
+    return audit(args.count, args.seed, args.only, args.jobs, args.households, args.fresh, args.fresh_from)
 
 
 if __name__ == "__main__":

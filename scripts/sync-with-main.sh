@@ -416,6 +416,9 @@ push_cmd() {
     *)           echo "sync-with-main: route $route (diagram engine code in our delta -> GATED, CodeBuild; otherwise DIRECT)" ;;
   esac
   if [ "$route" = GATED ] || [ "$route" = GATED-LOCAL ]; then
+    # GUARD_EDIT_OK: feature 386 - THE LANDING COHORT: engine work lands with 48 seeds rolled on its engine, none regressed
+    # against main, and a fresh block whose rate is printed (the GM 2026-10-17). Here and not above: a DIRECT delta changes no map.
+    "$ROOT/scripts/gates/cohort-gate.sh" || exit 1
     if [ -n "$seams" ] && [ -n "${CI_MERGE:-}" ]; then bash -c "$CI_MERGE"; else ( cd "$ROOT" && make --no-print-directory ci-merge ${FULL:+FULL=1} ); fi \
       || die "gated route: nothing landed (the conditions or the build refused - see above; the work stays in this clone)"
     case "$(cat "$ROOT/.git/ci-verdict" 2>/dev/null)" in

@@ -13,7 +13,7 @@
 # .PHONY entry is shadowed by any file of that name)
 .PHONY: modal-bundle modal-prepass done docs static format typecheck test test-full guard perf perf-report maps _reference bypass-audit quick durations test-file page-check tick claim speckit-todo audit guard-log perf-gate hooks-test explain citations fragment-move \
 	 switches ci-off ci-on _switch \
-	 map cohort hamlet cache-audit placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
+	 map cohort cohort-landing hamlet cache-audit placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 why-placed   pack-audit     help \
 	 notes-census glossary page-lit picture-diff \
 	 ci-status ci-check ci-merge ci-measure ci-image commit-permitted \
@@ -377,6 +377,8 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 
 # GUARD_EDIT_OK: the reference-first macro is UNCHANGED in behavior - it just calls the target by its
 # internal name now that the public rung is retired (GM 2026-09-06). Same roll, same stop-if-red.
+# THE PER-FIX COHORT'S FRESH BLOCK (feature 386): sized by measurement so the ten-seed loop stays as fast as it was - see specs/386-landing-cohort/plan.md D3
+COHORT_FRESH = 4
 REF_FIRST = @$(if $(REF_OK),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)",$(MAKE) --no-print-directory _reference)
 RUN = @python3 -m l7r.diagram
 
@@ -477,6 +479,7 @@ cohort:         ## [maps] roll N seeds and report every failure      N=10 [SEED=
 ##  N=<seeds>   how many seeds to roll, besides the six pinned rows (default: 10 - the GM, 2026-10-12, on the per-seed record: `make cohort-seeds`)
 ##  SEED=<n>    the FIRST seed to roll (default: 1) - `N=1 SEED=15` reproduces the cohort's own Audit-15
 ##  JOBS=<n>    worker processes (default: cpus - 2) - each holds a roll, ~0.5 GB; the containers share a 10 GB cap
+##  FRESH=<n>   fresh seeds rolled beside the fixed ones, a rate never a pass/fail (default: COHORT_FRESH; 0 rolls none) - feature 386
 # GUARD_EDIT_OK: feature 375 amendment 8 (FR-038) - the GM chose ten seeds over 48 ("it's also fine to do the 10 seeds"); N= still asks for more. Kept below the `##` lines: between them it cut make docs' argument list short.
 # GUARD_EDIT_OK: feature 314 - the cohort's workers were cpus - 2 with no way to ask fewer: 20 on this host, ~10 GB, past the
 # containers' shared cap while other sessions run (the memwatch warned at 9.6 GB). JOBS hands cohort_audit its own --jobs.
@@ -485,7 +488,17 @@ cohort:         ## [maps] roll N seeds and report every failure      N=10 [SEED=
 	@: "GUARD_EDIT_OK: feature 374, the round arbiter's tooling fix on ask:w155-cohort-seed10 - a failing cohort names the open found rows that already list its failing seeds (scripts/measure/cohort_known.py)"
 	@: "GUARD_EDIT_OK: feature 385 T04 - a record rolled over an uncommitted engine diff carries its digest (cohort_known --stamp) and is never a baseline"
 	@: "GUARD_EDIT_OK: feature 375 amendment 7, FR-029 - the cohort's per-seed record (dev/cohort-log/) is committed alone, as the gate's run record is; amendment 8, FR-038 - ten seeds by default, the GM's choice (GUARD_EDIT_OK: feature 374 - cohort_known.py runs after a failing roll)"
-	$(RUN).tools.cohort_audit --count $(or $(N),10) $(if $(SEED),--seed $(SEED),) $(if $(JOBS),--jobs $(JOBS),) $(if $(HOUSEHOLDS),--households $(HOUSEHOLDS),); rc=$$?; python3 scripts/measure/cohort_known.py --root . --stamp; $(COMMIT_RUN_RECORD) "$$([ $$rc = 0 ] && echo pass || echo fail)" last-cohort-record; [ $$rc = 0 ] || python3 scripts/measure/cohort_known.py --root .; exit $$rc
+	@: "GUARD_EDIT_OK: feature 386 - the fresh block on every run (the GM 2026-10-17: a block of fresh seeds that rotates each run, recorded as a failure rate rather than a pass/fail): FRESH seeds from a start cohort_gate.py derives from the engine, in the same pool and record; never in the pass count or the exit code"
+	$(RUN).tools.cohort_audit --count $(or $(N),10) $(if $(SEED),--seed $(SEED),) $(if $(JOBS),--jobs $(JOBS),) $(if $(HOUSEHOLDS),--households $(HOUSEHOLDS),) $(if $(filter-out 0,$(or $(FRESH),$(COHORT_FRESH))),--fresh $(or $(FRESH),$(COHORT_FRESH)) --fresh-from $$(python3 scripts/gates/cohort_gate.py fresh-seed),); rc=$$?; python3 scripts/measure/cohort_known.py --root . --stamp; $(COMMIT_RUN_RECORD) "$$([ $$rc = 0 ] && echo pass || echo fail)" last-cohort-record; [ $$rc = 0 ] || python3 scripts/measure/cohort_known.py --root .; exit $$rc
+
+cohort-landing: ## [maps] the landing cohort a gated push requires: main's baseline first when its engine has none, then seeds 1-48, the pinned rows and a 48-seed fresh block (a rate, never a refusal) - and what the push will say
+	@: "GUARD_EDIT_OK: feature 386 - a NEW target (the GM 2026-10-17: 48 seeds when engine work lands, and a fresh block recorded as a rate). The baseline is rolled BEFORE the landing record: cohort_known.baselines reads only older records (spec-fidelity round 1). A failing roll is carried on: its record is what scripts/gates/cohort-gate.sh reads"
+	@if python3 scripts/gates/cohort_gate.py needs-baseline; then \
+	  b=$$(mktemp -d)/base; echo "cohort-landing: main's engine has no 48-seed record - rolling main's baseline first, in a detached worktree ($$b)"; \
+	  git fetch -q origin 2>/dev/null; git worktree add -q --detach "$$b" origin/main && { $(MAKE) --no-print-directory -C "$$b" cohort N=48 FRESH=0; git worktree remove --force "$$b"; }; \
+	fi
+	-@$(MAKE) --no-print-directory cohort N=48 FRESH=48
+	@python3 scripts/gates/cohort_gate.py check
 
 # GUARD_EDIT_OK: `tripwire` RETIRED as a target (GM 2026-09-05), folded into `maps`. It ran the same
 # `mapcheck` with the same auto scope, so with no SCOPE set it was `maps` minus the index refresh -

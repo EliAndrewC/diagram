@@ -190,5 +190,7 @@
    "counts": {},
    "form": "dispersed"
   }
- ]
+ ],
+ "fresh": true,
+ "note": "feature 386's motivating measurement: seeds nobody had rolled, a fresh block before the tooling existed"
 }

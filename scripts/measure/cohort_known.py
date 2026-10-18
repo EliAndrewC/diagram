@@ -82,7 +82,7 @@ def standing(record: dict, base: dict[int, dict]) -> list[str]:
     """One line per seed that fails now or failed at its baseline: FIXED, NEWLY FAILING, WORSENED (a rule's count up, or a rule
     new to it), PRE-EXISTING - or, with no baseline on main's engine, the command that rolls one."""
     out = []
-    for x in record.get("seeds") or []:
+    for x in (y for y in record.get("seeds") or [] if not y.get("fresh")):  # a fresh seed has no baseline by construction (feature 386)
         n, b, now_bad = int(x["seed"]), base.get(int(x["seed"])), x.get("verdict") != "pass"
         rules = ", ".join(f"{k} {v}" for k, v in sorted((x.get("counts") or {}).items())) or ", ".join(x.get("failures") or [])
         if b is None:

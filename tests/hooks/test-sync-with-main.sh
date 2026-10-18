@@ -512,6 +512,18 @@ OUT=$( cd "$D/main/.clones/c-tooling" && CI_ROUTE=DIRECT CI_MERGE="false" CLONE_
 [ -f "$(git -C "$D/main/.clones/c-tooling" rev-parse --absolute-git-dir)/sync-with-main.stamp" ] && PASS=$((PASS+1)) || { echo "FAIL  no stamp in the worktree's git dir: $OUT"; FAIL=$((FAIL+1)); }
 }
 
+case_27() {  # 6 s
+echo "W2. THE LANDING COHORT (feature 386): an engine tree with no cohort record is refused on the GATED route, before ci-merge; COHORT_OK lands it"
+D=$(topology lc)
+# a real-shaped tree (a Makefile: the seams are off), whose route is GATED-LOCAL and whose ci-merge would vouch for it
+( cd "$D/main/.clones/c" && printf 'ci-status:\n\t@echo GATED-LOCAL\nperf-review:\n\t@true\nci-merge:\n\t@echo SKIP-VERIFIED > .git/ci-verdict\ncohort-landing:\n\t@true\n' > Makefile \
+  && echo 'def a(): return 7' > pool/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
+OUT=$(syncmain "$D" push); check "IT FIRES: no landing cohort -> the gated push is refused" 1 $?
+expect_out "make cohort-landing"
+[ "$(git -C "$D/github.git" rev-parse main)" != "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  a gated push with no landing cohort landed"; FAIL=$((FAIL+1)); }
+OUT=$(COHORT_OK="a fixture with nothing rolled" syncmain "$D" push); check "COHORT_OK with a reason lands it" 0 $?
+}
+
 
 # GUARD_EDIT_OK: feature 375 amendment 4 (FR-022) - THE CASES RUN IN PARALLEL PARTS. This suite is held to the whole scripts
 # tree (feature 172: its push path reaches scripts at run time), so every script change re-runs it, and at 202-230 s it was
@@ -520,8 +532,8 @@ OUT=$( cd "$D/main/.clones/c-tooling" && CI_ROUTE=DIRECT CI_MERGE="false" CLONE_
 # longest first onto the lightest part (the times are the measured ones beside each case; a new case without one counts
 # 10 s), each part a subshell with its own $T, HOME and guard log. Every check still runs and is counted; a part that ends
 # before a case reports fails the suite and names the case. SYNC_PARTS=1 runs them one after another, as before.
-CASES=(case_01 case_02 case_03 case_04 case_05 case_06 case_07 case_08 case_09 case_10 case_11 case_11b case_11c case_12 case_13 case_14 case_15 case_16 case_17 case_18 case_19 case_20 case_21 case_22 case_23 case_24 case_25 case_26)
-declare -A WEIGHT=([case_01]=1 [case_02]=1 [case_03]=1 [case_04]=1 [case_05]=3 [case_06]=5 [case_07]=4 [case_08]=5 [case_09]=6 [case_10]=4 [case_11]=15 [case_11b]=7 [case_11c]=7 [case_12]=1 [case_13]=2 [case_14]=1 [case_15]=7 [case_16]=3 [case_17]=12 [case_18]=3 [case_19]=6 [case_20]=3 [case_21]=7 [case_22]=6 [case_23]=2 [case_24]=4 [case_25]=5 [case_26]=3)  # seconds, each case alone, measured 2026-10-17 (feature 383 amendment 3)
+CASES=(case_01 case_02 case_03 case_04 case_05 case_06 case_07 case_08 case_09 case_10 case_11 case_11b case_11c case_12 case_13 case_14 case_15 case_16 case_17 case_18 case_19 case_20 case_21 case_22 case_23 case_24 case_25 case_26 case_27)
+declare -A WEIGHT=([case_01]=1 [case_02]=1 [case_03]=1 [case_04]=1 [case_05]=3 [case_06]=5 [case_07]=4 [case_08]=5 [case_09]=6 [case_10]=4 [case_11]=15 [case_11b]=7 [case_11c]=7 [case_12]=1 [case_13]=2 [case_14]=1 [case_15]=7 [case_16]=3 [case_17]=12 [case_18]=3 [case_19]=6 [case_20]=3 [case_21]=7 [case_22]=6 [case_23]=2 [case_24]=4 [case_25]=5 [case_26]=3 [case_27]=6)  # seconds, each case alone, measured 2026-10-17 (feature 383 amendment 3)
 # SYNC_CASES="case_11 case_17" runs only those cases - to time one case where it lives (feature 383 amendment 3, plan D27); the
 # runner itself is tests/hooks/parts.sh since amendment 4 (plan D28), shared by every split suite
 [ -n "${SYNC_CASES:-}" ] && PARTS_CASES=$SYNC_CASES
