@@ -7,7 +7,6 @@ holds only the next dispatch on its unit (or the next gate), and every ruling be
 from __future__ import annotations
 
 import json
-import subprocess
 import pathlib
 import subprocess
 
