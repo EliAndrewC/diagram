@@ -18,11 +18,16 @@ In 0027's drawing page: the "23 ft crop dikes" sentence of the band bullet is re
 - `choice/land_use_overlay--mulberry_fishpond.md` (six in ten)
 - `hamlet/fish-pond.md` (six in ten)
 - `hamlet/fruit-dike.md` (23 ft; not named by the arbiter, but the brief's grep finds it)
-- `hamlet/mulberry-dike.md` ("three splits" in its first Guess; the brief's grep misses it)
+- `hamlet/mulberry-dike.md` ("three splits" in its first Guess, and its Depiction's "one of the three"; the brief's grep misses it)
 
 The brief's grep pattern `six in ten` misses the actual text `six parts in ten`; a check should grep `six parts in ten\|23 ft\|three splits`.
-Left stale, outside this brief's "Guesses only": `hamlet/mulberry-dike.md`'s Depiction ("each settlement's ponds are drawn at
-one of the three") and `field_archetype`'s Depiction ("kept broader than the pond banks"), which is false at the drier splits.
+A second commit also fixed `hamlet/mulberry-dike.md`'s Depiction ("drawn at one of the three" -> the five), the same stale
+count, in a file already owed its round. Left stale, outside this brief: `field_archetype`'s Depiction ("kept broader than the
+pond banks"), false at the drier splits, an engine finding.
+
+Engine note (not fixed, no code edited): `_mulberry_rows` (landuse.py ~528-530) still sets its water-edge homothety and its
+skip test from the fixed `DIKEPOND_WATER_INSET` (23 ft), not the rolled `dikepond_inset`, while the rows at ~569 and the pond
+at ~471 use the rolled inset. The overlay path (`apply_land_use`, ~282-289) does roll the split, so the overlay pop-ups' text holds.
 
 ## The bank-width finding
 
