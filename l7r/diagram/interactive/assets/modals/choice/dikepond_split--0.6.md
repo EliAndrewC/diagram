@@ -5,8 +5,8 @@ proportion, so that the mulberry, by way of the silkworms it fed, could feed the
 How a parcel was split between water and bank varied. Modern writers give it as six parts water to four of dike
 or, perhaps in another region, six parts dike to four of pond, or seven of water to three of dike, the water-heavy splits being for ponds whose fish were also
 fed from beyond the bank; one puts them equal where the mulberry alone fed the fish, and another
-three of water to seven of dike. In the seventeenth century one township of the Pearl River delta gave
-between half and eight tenths of its land to fish.
+three or four of water to seven or six of dike, if its figures are read in the order it names them. In the seventeenth century one township of the Pearl River delta gave
+half of its land to fish by one account, and by another eight tenths to its fish ponds.
 
 Guesses:
 - That each of the five splits was as common as the others: no account gives a share between them, and every account
@@ -20,6 +20,6 @@ wetter; the planted bank fills the ring between the pond and the canal.
 
 Name: Six parts water to four of dike
 Covers: `meta.dikepond_split = 0.6`
-Sources: fao-ac241e, gd-gazetteer-sangji, guangdong-xinyu-22, sdlib-shunde-jitang
+Sources: cssn-sangji-yutang, fao-ac241e, gd-gazetteer-sangji, guangdong-xinyu-22, sdlib-shunde-jitang
 Entry: research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html, research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.html
 Drawing: research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html

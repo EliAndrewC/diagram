@@ -1,6 +1,6 @@
 About: A fish pond in a dike-pond hamlet was dug out of low ground that flooded, and its mud was heaped round it into a
 dike planted with mulberry: the dike-pond, sangji yutang, "mulberry dike, fish pond". The mulberry leaves fed silkworms,
-the silkworms' droppings fed the fish, and mud dredged from the pond went back onto the dike. A pond lay among the
+the silkworms' droppings fed the fish, and mud dredged from the pond went back onto the dike. In the Qing, feed grown on the pond's surface went to the pigs, and their dung went with the pond mud onto the mulberry. A pond lay among the
 polder's creeks and canals, watered and drained through gates in the polder's outer dike.
 
 What lived in it was carp. The young fish were not bred there: in the Pearl River delta they were netted wild in the West
@@ -11,8 +11,8 @@ lay in a mosaic among winding rivers. In the 17th century a pond was drained at 
 seedlings in spring.
 
 In modern times a pond there runs about 1 to 1.5 acres (0.4 to 0.6 ha) and 7 to 10 ft (2 to 3 m) deep, and a block about
-six parts water to four of dike, or the reverse. An ordinary pond's size before then is not recorded; the largest reached
-several tens of mu (a mu is about 7,200 sq ft), several acres.
+six parts water to four of dike, or the reverse. An ordinary pond's size before then is not recorded; the larger reached
+several tens of mu (a mu is about 7,200 sq ft), several acres, and ponds built out into the sea were reckoned by the hundred mu.
 
 Guesses:
 - That a hamlet's ponds take one of the five recorded splits of water and dike, each at even odds, and that one split
@@ -32,5 +32,5 @@ plots, in patches, and leave the rest in rice, as ponds stood among the rice rat
 Name: fish pond
 Covers: the dug water of every `dikeponds[]` parcel - the pond inset inside its mulberry dike
 Sources: sdlib-shunde-jitang, gmrb-2024-sangji, minle-dou-people, guangdong-xinyu-22, pwsannong-zhusanjiao-nongyeshi, isis-dykepond, tian-dike-pond, fao-ac241e, cssn-sangji-yutang, zhwiki-guangdong-xinyu
-Entry: research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html, research/questions/0024-fish-fry-and-nursery-ponds-yumiao.html, research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html
+Entry: research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html, research/questions/0024-fish-fry-and-nursery-ponds-yumiao.html, research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html, research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html
 Drawing: research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0024-fish-fry-and-nursery-ponds-yumiao.drawing.html, research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html

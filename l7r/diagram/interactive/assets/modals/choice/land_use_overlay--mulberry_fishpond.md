@@ -1,14 +1,14 @@
-About: A village could give some of its low rice land to dike-ponds: fish ponds dug out of hollows that flooded, the mud
+About: A village could give some of its low rice land to a crop it grew for sale, the dike-pond: fish ponds dug out of hollows that flooded, the mud
 heaped round each to make a dike planted with mulberry. The leaves fed silkworms, the silkworms' droppings fed the fish, and
 the pond mud was dredged back onto the dike. Around Lake Tai, where floods and waterlogging were frequent, and in the Pearl
-River delta, farmers made them so; in the delta they arose in the early Ming and reached their height at the end of the Qing.
+River delta, farmers made them so. In the delta the ponds arose in the Ming with fruit trees on their dikes; mulberry took the fruit trees' place in the late Ming and early Qing, and the mulberry dike-pond reached its height at the end of the Qing.
 
-Such a village showed ponds among its rice on the low ground, each ringed by its planted bank, the higher paddies left in
-rice. Modern ponds are about 1 to 1.5 acres (0.4 to 0.6 ha) and 7 to 10 ft (2 to 3 m) deep, inside banks some 20 to 33 ft
+Such a village showed ponds among its rice on the low ground, each ringed by a bank of mulberry kept as low bushes, about head high, the rest of its fields left in
+rice. In the delta today most ponds are about 1 to 1.5 acres (0.4 to 0.6 ha) and 7 to 10 ft (2 to 3 m) deep, inside banks usually some 20 to 33 ft
 (6 to 10 m) wide.
 
 Most of the time the ponds took only part of the land. In the survey of 1581 the ponds of Longshan, one of the two earliest
-pond districts of Shunde county, came to 18% of its hill, dry land and ponds; in
+pond districts of Shunde county, came to 18% of its hill, dry land and ponds, a total that seems to leave out its paddy; in
 the 18th century they had taken three-quarters of its farmland. As late as the 1980s a quarter of the delta's dike-pond
 heartland was still in rice.
 
@@ -29,6 +29,6 @@ size. A village whose ponds took nearly all its land is drawn as a dike-pond fie
 
 Name: Mulberry and fishponds on the rice land
 Covers: `meta.land_use_overlay = mulberry_fishpond`
-Sources: gmrb-2024-sangji, sdlib-shunde-jitang, cssn-sangji-yutang, isis-dykepond, wanli-fishpond-summary, fao-ac241e, gd-gazetteer-sangji, guangdong-xinyu-22
-Entry: research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html
+Sources: gmrb-2024-sangji, sdlib-shunde-jitang, cssn-sangji-yutang, isis-dykepond, wanli-fishpond-summary, fao-ac241e, gd-gazetteer-sangji, guangdong-xinyu-22, pwsannong-zhusanjiao-nongyeshi, kuwa-jawiki
+Entry: research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html, research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.html
 Drawing: research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html

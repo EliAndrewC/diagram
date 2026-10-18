@@ -10,7 +10,7 @@ lychee and longan.
 
 How closely the trees stood along a dike is not recorded. Turned to orchard, a field took twenty-odd lychee to the mu
 (about 7,200 sq ft), or twice as many longan, each on a mound of silt about 2 ft high against the floods: about one lychee
-to 300 sq ft. Modern pond dikes are about 20 to 33 ft (6 to 10 m) wide and stand 2 to 3 ft above the water; a dike's
+to 300 sq ft. Modern pond dikes in the Pearl River delta are usually about 20 to 33 ft (6 to 10 m) wide and stand 2 to 3 ft above the water; a dike's
 width before modern times is not recorded.
 
 Guesses:
