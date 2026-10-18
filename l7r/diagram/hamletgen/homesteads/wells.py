@@ -54,7 +54,7 @@ WELL_SEAT_FT = 80.0
 """How near a dwelling's wall a communal well is seated: "the map places its wells a little closer than" the 95 ft check
 (0196), so a seat the placer takes always passes the check with room (feature 374 wave 154).
 
-Research: seated a little closer than the check - research/questions/0196-communal-wells-ido.drawing.html: "a little closer than" the 95 ft, 80 ft its calibration, a GUESS the page names"""
+Research: seated a little closer than the check - GUESS research/questions/0196-communal-wells-ido.drawing.html: "a little closer than" the 95 ft, 80 ft its calibration, a GUESS the page names"""
 
 WELL_SERVES_MAX = 10
 """The most households one communal well is the nearest well to, where a seat keeps it so: "the five to ten houses that each
@@ -221,6 +221,7 @@ def shared_row_wells(s: Settlement, houses: Sequence[Mapping[str, Any]], streets
         off the tread - GUESS: the wellhead's half-extent and 8 ft off the street's centerline
         no well in a street bend - GUESS: no shared well at a mark where the street turns `BEND_WELL_DEG` (30 degrees) or more within `BEND_LOOK_FT` (40 ft, the zigzag run) on either side; no page gives a bend rule for wells
         fallback seats along the street - GUESS: a seat tried at the mark, then a half and a quarter lot either way along the street; no page gives the offsets
+        a farm counted to each street within two farmstead frames - GUESS: every street within two frames of it, not only the nearest (`d <= 2.0 * frame_w`); no page gives how far a row's farm may stand from its street
     """
     if not streets or not houses:
         return 0
@@ -391,7 +392,7 @@ def seat_wells(
     Research:
         wells among the houses - research/questions/0196-communal-wells-ido.drawing.html: seats with a dwelling near and a neighborhood round them, each later one serving the worst-served household
         the first well's seat - GUESS research/questions/0196-communal-wells-ido.drawing.html: the innermost seat where one well is owed; where two or more are, the middle of its own share of the houses, the shares cut along the cluster's long axis (`first_share_middle`)
-        seated a little closer than the check - research/questions/0196-communal-wells-ido.drawing.html: a dwelling's wall within `WELL_SEAT_FT` (80 ft, a GUESS the page names), the 95 ft check unchanged
+        seated a little closer than the check - GUESS research/questions/0196-communal-wells-ido.drawing.html: a dwelling's wall within `WELL_SEAT_FT` (80 ft, a GUESS the page names), the 95 ft check unchanged
         no well serving more than ten - research/questions/0196-communal-wells-ido.drawing.html: the five to ten houses each dug well served at Karihama; a seat that keeps every well at ten or fewer ranked first
         not in the windbreak - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: belt seats sorted last, never refused
         surface water counts - research/questions/0196-communal-wells-ido.drawing.html: a house within 760 ft (over the map's ft per px) of surface water needs no well

@@ -265,8 +265,8 @@ def test_the_hour_is_decided_once_per_message_and_its_refusals_reach_the_step_ba
     assert cp.due(clone, "Agent", "quote-check", now=T0 + 3601) == "", "the same message: admitted though the hour turned"
     assert "make step-back" in cp.due(clone, "Agent", "quote-check", now=T0 + 3610), "a later message is refused"
     assert "make step-back" in cp.due(clone, "Agent", "quote-check", now=T0 + 3604), (
-        "the window counts from the last dispatch admitted under the hour, not from a grace admission: it never chains into "
-        "the next message (T05's plan review, the ruling's limit)")
+        "the window counts from the last dispatch admitted under the hour, not from a grace admission: it never chains into the next message (T05's plan review, the ruling's limit)"
+    )
     assert "make step-back" in cp.due(clone, "Bash", now=T0 + 3601), "the grace is the message's dispatches, not a gate"
     log = tmp_path / "guard-log"
     log.mkdir()

@@ -313,7 +313,6 @@ def test_a_block_already_applied_is_not_applied_twice(tmp_path, capsys) -> None:
     assert "already applied" in capsys.readouterr().out
 
 
-
 def test_an_edit_applied_by_hand_word_for_word_settles_through_its_reply(tmp_path, capsys) -> None:
     """Feature 385 T21 (the round arbiter's fix on ask:t05-lane-popup-round3): the test is the diff matching the round's EDIT line
     for line, however it was applied - T05 applied 0196's and the pop-ups' EDITs by hand and re-owed both rounds."""

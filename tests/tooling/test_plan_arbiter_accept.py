@@ -13,6 +13,7 @@ pg = _load("plan_gate")
 
 TRIG = "round:spec-fidelity|plan:385-x#T17@3"
 
+
 def _clean_env() -> dict[str, str]:
     """The environment without the outer make's variables: a test run under `make arbiter-fix-done LAND=...` inherits LAND= through
     MAKEFLAGS, and a `make` the test runs would then land tooling for real (found 2026-10-18, T20's landing)."""
@@ -20,7 +21,6 @@ def _clean_env() -> dict[str, str]:
 
     params = {"LAND", "TICK", "F", "T", "ID", "NOTE", "TEST", "ENGINE", "WRITE", "ARBITER", "FILE", "AS", "BLOCKS", "TASK"}
     return {k: v for k, v in os.environ.items() if k not in ("MAKEFLAGS", "MFLAGS", "MAKELEVEL", "MAKEOVERRIDES") and k not in params}
-
 
 
 def _feature(tmp: pathlib.Path, rows: list[dict]) -> pathlib.Path:
