@@ -182,7 +182,9 @@ def test_no_two_ways_run_side_by_side_past_a_pitch(gen: str) -> None:
 # (4122.4, 2042.1) and turns back 27 ft to lane 1's door, where lane 1 leaves north-east - two turns past 50 degrees inside
 # 40 ft across the joint. It waits on the found row specs/328-match-the-research/audit/found-wave54.jsonl ("a zigzag across a
 # joint at a door"). STRICT: the day it is straightened this fails, and its name comes off the list.
-_ZIGZAGS_WAITING = {"sawada"}
+# Sawada left it on 2026-10-18 (feature 385 T05): with no well pocket in its seating, its door's lane no longer zigzags across
+# the joint - an incidental fix, so the ranked row (`_smooth_web#a zigzag across a joint at a door`) stays open for the rule.
+_ZIGZAGS_WAITING: set[str] = set()
 
 
 @pytest.mark.parametrize(
