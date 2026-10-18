@@ -4,13 +4,15 @@
 
 **Created**: 2026-10-17
 
-**Status**: In progress - T01 landed 2026-10-17 (its retro in `retro.md`); amendments 1 and 2 FAITHFUL; T02 next. Spec FAITHFUL (round 2); checklist v1 drafted (`checklist.md`) and refined by the audit (`audit.md`, 13 pitfalls) and by T01
+**Status**: In progress - T01, T02 and T03 landed 2026-10-17 (their retros in `retro.md`); amendments 1 and 2 FAITHFUL, amendment 3 (T13) filed; Spec FAITHFUL (round 2); checklist v1 drafted (`checklist.md`) and refined by the audit (`audit.md`, 13 pitfalls) and by T01
 
 **Approved**: the GM, 2026-10-17, "the shape that you have proposed looks right. So please file it, draft checklist version 1, and start the cheap audit."
 
 **Amendment 1 approved**: the GM, 2026-10-17, "Yes, please append the spec to include those four items."
 
 **Amendment 2 approved**: the GM, 2026-10-17, "yes please make the blind approach T03's first step."
+
+**Amendment 3 approved**: the GM, 2026-10-17, "Yes, please lock in option three. Thanks." (option 3 of the claims-gate question the round arbiter raised at T03's landing, `ask:t03-claims-at-landing`)
 
 **Affects**: tooling, review process, hamlet, research record
 
@@ -150,6 +152,22 @@ decision points, and the record checks' own counts in `dev/review-ledger.md`):
   which it missed, and the checklist change a miss calls for. The session then writes T03's plan section from the blind block
   and its own, saying where they differ.
 
+### Amendment 3 - a finding on unchanged code is carried, not refused (the GM, 2026-10-17)
+
+At T03's landing the claims gate refused three findings that a one-paragraph edit to page 0246 surfaced on code T03 did not
+change (`settle.py::theirs`, the doubled tail's angle, `clearance.py::_clear_link`): the gate counts a finding as INTRODUCED when
+its code changed OR the research it cites changed (`scripts/record/claims.py`, `classify`), so a page edit makes every finding on
+unchanged code that cites the page block the landing. The round arbiter let T03 land under `CLAIMS_OK`, carried the three to
+T12 by hand, and put the rule to the GM, who chose option 3 of three (keep it strict; block only on findings about the edited
+block; never block on unchanged code, the finding filed as an open task):
+
+- **FR-013 (carried, not refused)**: a finding that did not stand at the merge base, on a unit whose code and claim are unchanged
+  since it - surfaced because a page it cites changed, or because the claim was judged again - is CARRIED: it does not refuse the push once it is filed as an open task of the feature
+  being landed (the active task's feature), so that feature cannot close until the finding is fixed or re-checked clean. A carried finding not yet filed refuses, naming
+  the one command that files it (`make claims-carry F=<feature>`), which writes the task box and its record; the open-task
+  refusal honors that box. A finding on changed code or a changed claim is still introduced and still refuses, as before; a
+  finding that stood at the base still only warns.
+
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
@@ -164,6 +182,8 @@ decision points, and the record checks' own counts in `dev/review-ledger.md`):
 - **SC-004** (FR-003, FR-004): the refusals of FR-003 and FR-004 each have a test that is red without them.
 - **SC-005** (FR-008, FR-009, FR-010, FR-011): on the next task, the checks owed per changed line - dispatches, tokens and wall time - are below
   T01's, measured by FR-011's record; or the report says why not.
+- **SC-007** (FR-013): replayed on T03's landing, the three findings are carried, not refused, and the push goes ahead without
+  `CLAIMS_OK` once `make claims-carry` has filed them; a finding on changed code still refuses (each a test red without it).
 - **SC-006** (FR-012): T03's retro row compares the blind Approach with the sealed conclusions rule by rule, and names the checklist
   change each miss calls for, or that there was none.
 

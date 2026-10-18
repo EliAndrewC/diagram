@@ -178,6 +178,14 @@ def lands_open_ids(d: Path) -> set[str]:
     return set(re.findall(r"T\d+\w*", m.group(1))) if plan_gate.owed(d) is None else set()
 
 
+def carried_ids(d: Path) -> set[str]:
+    """The task ids the claims gate filed a carried finding into (`claims-carried.jsonl`, feature 385 FR-013 D28): boxes the
+    tooling put there, which hold no landing."""
+    f = d / "claims-carried.jsonl"
+    lines = f.read_text(errors="replace").splitlines() if f.is_file() else []
+    return {str(json.loads(ln).get("task")) for ln in lines if ln.strip()}
+
+
 def gm_rows(d: Path) -> int:
     """The GM's open review rows for the feature (`gm-review.jsonl`, plan D12): its GM-review box is honored only while there
     is one - a feature with nothing for the GM has no such box (FR-012). A row the GM has reviewed carries `reviewed`."""
@@ -198,10 +206,10 @@ def holding(d: Path) -> list[str]:
         if body.rstrip().endswith(_LANDS_OPEN):  # the TAG closing the line; a mention inside a task's words is no mark
             if body.strip() == gm and gm_rows(d):
                 continue
-            ids = lands_open_ids(d) if ids is None else ids
+            ids = (lands_open_ids(d) | carried_ids(d)) if ids is None else ids
             if body.split(" ", 1)[0] in ids:
                 continue
-            out.append(f"{body.strip()}  <- {_LANDS_OPEN} honored only on the GM-review box of a feature with rows for the GM, or a task the reviewed plan's **Lands open**: line names")
+            out.append(f"{body.strip()}  <- {_LANDS_OPEN} honored only on the GM-review box of a feature with rows for the GM, or a task the reviewed plan's **Lands open**: line or the claims gate's carry record names")
         else:
             out.append(body.strip())
     return out

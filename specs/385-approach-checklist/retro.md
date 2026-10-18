@@ -218,3 +218,31 @@ mislabeled reach. Part B was written three times; each named the measurement tha
 
 **What the tooling did.** D9's approach gate fired twice on real work (hours 5 and 6), each time a short honest part B. The
 arbiter fixed the cohort to compare seed by seed against HEAD with counts. The same-review re-answer fix saved a round.
+
+## T13 - the retro row
+
+**The numbers (`make feature-report F=385`, the per-task table).** Started 01:24Z (`make task-start`), done by 01:42Z: about
+20 min against a one-hour budget, 4 decision points (three plan rounds - BLOCKED, BLOCKED, CLEAR - and the hour-8 step-back's
+part B). Red gates 0; check dispatches 4 (three plan rounds, one arbiter step-back); regressions 0.
+
+**What landed.** The claims gate carries a finding on a unit whose code and claim are unchanged since the merge base - a page
+it cites changed, or it was only judged again - instead of refusing it as introduced (`claims.classify`, D26). An unfiled carry
+refuses once, naming `make claims-carry F=<n> [T=<Txx>]`, which files it as an open task of the active feature only, with a row
+in `claims-carried.jsonl` (D27); the open-task refusal honors that box, and ticking it un-files the key (D28). Changed code or a
+changed claim still refuses; a finding standing at the base still warns.
+
+**SC-007, replayed.** A scratch clone at T03's landed tree (`28d945bb3`), its base the main it was pushed onto (`dd7d619b8`),
+the new tooling copied in: of the three findings the arbiter carried by hand, `settle.py::theirs` and `clearance.py::_clear_link`
+come back `carry:`, and after `make claims-carry F=385 T=T12` they warn as `carried (385-approach-checklist T12)`. The third,
+`Lawful.fault#no doubled tail`, is still introduced - correctly: T03 changed `Lawful.fault` itself (it returns rule names now),
+so it is not unchanged code. Under the new rule T03 would still have needed one ruling, on that one finding, not three.
+D29's filing into T12 was not needed on the live tree: T03 has landed, so its three findings now stand at the base and warn as
+pre-existing (`make claims-carry F=385 T=T12`: "no carried finding is unfiled").
+
+**Which checklist items fired.** A6(c) - the GM's option dissolves the case. B did not fire: nothing resisted but the plan
+review, whose three rounds each narrowed the rule toward the GM's words (round 1: no carry for a moved unit, none into another
+feature; round 2: a re-judgment on unchanged code is carried too; round 3's aside: with no active task the refusal names
+`make task-start` first, not a command that would fail).
+
+**What changed from the plan.** The push's verdict (`gate`, `classified`) moved into `scripts/record/claims_carry.py` to keep
+`claims.py` under the 1,000-line bar; `claims.gate` delegates. The checklist needs no change from this task.

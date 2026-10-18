@@ -53,11 +53,13 @@ OUT="$(PYTHONDONTWRITEBYTECODE=1 python3 "$CG_HERE/../record/claims.py" --root "
 [ "$rc" -eq 0 ] && exit 0
 
 guard_log claims-gate blocked "$(printf '%s' "$OUT" | grep 'REFUSED' | head -c 400)" claims
-printf '\n\033[1mCLAIMS GATE: research claims owed a check, or a finding this delta introduced.\033[0m\n' >&2
+printf '\n\033[1mCLAIMS GATE: research claims owed a check, a finding this delta introduced, or one to carry.\033[0m\n' >&2
 printf '%s\n' "$OUT" | grep 'REFUSED' | sed 's/^claims-gate: REFUSED /  /' | head -40 >&2
 n="$(printf '%s\n' "$OUT" | grep -c 'REFUSED')"
 [ "$n" -gt 40 ] && printf '  ... and %s more (`make claims-owed`)\n' "$((n - 40))" >&2
 printf '\nAn OWED claim: `make claims-bundle MODULE=<file>` (or OWED=1), dispatch `impl-drift` on the MANIFEST it prints, save\n' >&2
 printf 'its reply to a file, then `make claims-checked BUNDLE=<dir> REPLY=<file>`. An INTRODUCED finding: fix the code or the\n' >&2
-printf 'claim and re-check it. CLAIMS_OK="<why>" discharges every refusal, to dev/bypass-log/.\n\n' >&2
+printf 'claim and re-check it. A CARRY (a page edit'"'"'s finding on unchanged code): `make claims-carry F=<n>` files it as an open\n' >&2
+printf 'task of the feature being landed, and the push goes ahead (feature 385 FR-013). CLAIMS_OK="<why>" discharges every\n' >&2
+printf 'refusal, to dev/bypass-log/.\n\n' >&2
 exit 1

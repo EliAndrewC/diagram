@@ -52,14 +52,16 @@ PY
 ( cd "$T" && "$GATE" >/dev/null 2>&1 ); ok "$?" 0 "every claim recorded"
 g add -A; g commit -q -m base
 
-# a finding introduced against an IN-STEP base: refused
+# a finding on unchanged code against an IN-STEP base (a re-judgment): a CARRY, refused until filed, the tip naming the command
+# (feature 385 FR-013, the GM 2026-10-17: "Yes, please lock in option three.")
 python3 - "$S/dev/claims-index.json" <<'PY'
 import json, sys
 p = sys.argv[1]; d = json.load(open(p)); d["l7r/diagram/hamletgen/rows.py::far_row#dry share"]["verdict"] = "DRIFTED"
 open(p, "w").write(json.dumps(d))
 PY
-out="$( cd "$T" && "$GATE" 2>&1 )"; ok "$?" 1 "an introduced finding refuses"
-case "$out" in *"introduced: DRIFTED"*) ok y y "says introduced" ;; *) ok n y "says introduced" ;; esac
+out="$( cd "$T" && "$GATE" 2>&1 )"; ok "$?" 1 "an unfiled carry refuses"
+case "$out" in *"carry: DRIFTED"*) ok y y "says carry" ;; *) ok n y "says carry" ;; esac
+case "$out" in *'`make claims-carry F=<n>` files it as an open'*) ok y y "names make claims-carry" ;; *) ok n y "names make claims-carry" ;; esac
 
 # the same finding at both ends: pre-existing, passes with the warning
 g add -A; g commit -q -m drift

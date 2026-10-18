@@ -51,7 +51,7 @@
    "declared": "spec-fidelity"
   },
   "## Landing": {
-   "sha256": "b05c4156f0b232054da0329e5b6876710abeb645b54a64f19fe85d676094f855",
+   "sha256": "6aa99260c8472d0969262ca390b4ff6770215ecf644e36b0112a9d8c5b02011c",
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
@@ -130,6 +130,30 @@
   },
   "### T03 part B (2026-10-17T23:08Z)": {
    "sha256": "b26013d617b63e8d89da999d97a03b230cdd9e1d3d33bff4d36b96488ec3e782",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "## T13 - a finding on unchanged code is carried, not refused (amendment 3, FR-013)": {
+   "sha256": "d5d94c4416937aed72f50db47254e6b535f33004e0bf8ee9e8f6d54fd7992b95",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T13 Approach (checklist part A)": {
+   "sha256": "0e0373482f38f81b345024e4e31b8559398a4f97f856151ea79442ce4876eb9b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T13 Decisions": {
+   "sha256": "b2a20775a4d90176a1c8710b8b08c7ca459eec8f47c5cb2b4613bf29917ddb0a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T13 part B (2026-10-18T01:29Z)": {
+   "sha256": "b787c5e8733fc202991001bf37506beb70f8153606e3ed6434a927682c845dab",
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
@@ -1170,6 +1194,244 @@
      "summary": "After the tick, the per-task table is compared with T01's.",
      "class": "within",
      "why": "This is the per-task measurement and retro comparison the GM asked for (FR-005, FR-006, SC-001). It does not remove the FR-012/SC-006 blind-Approach comparison owed in T03's retro row."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Landing",
+    "## T13 - a finding on unchanged code is carried, not refused (amendment 3, FR-013)",
+    "### T13 Approach (checklist part A)",
+    "### T13 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Landing-T13",
+     "summary": "T13 added to the Lands open list.",
+     "class": "within",
+     "why": "Same per-task landing FR-006 sets for every earlier task; nothing narrowed."
+    },
+    {
+     "id": "Approach-6",
+     "summary": "Exit (c) chosen: option 3 replaces 'introduced' with 'carried' for this case; conform declined.",
+     "class": "within",
+     "why": "Restates the GM's option 3 and FR-013."
+    },
+    {
+     "id": "D26-core",
+     "summary": "classify returns a third class, CARRIED: no finding at base, code+claim fingerprint unchanged, research fingerprint changed; every other first finding keeps today's verdict (a re-judgment on nothing changed stays introduced).",
+     "class": "within",
+     "why": "FR-013 and option 3 'never block on unchanged code', with the strict half (changed code or claim still refuses, base finding still warns) kept as FR-013 says."
+    },
+    {
+     "id": "D26-move",
+     "summary": "With no base row, a finding is also CARRIED when its unit is 'gone at the head - a move', with no test that its code and claim are unchanged.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "A move is a change this task made. A move that leaves the code alone is already carried by the 'core matches the base's' test, so the parenthetical adds only moves that don't. It carries findings on code the task touched, against option 3 ('unchanged code'), FR-013's strict half ('a finding on changed code ... still refuses') and the Approach's own item 1 ('code that task never touched'). Fix: a moved unit is carried only when its core at the new place equals the base's and its claim is unchanged, otherwise it is introduced. Or drop the parenthetical."
+    },
+    {
+     "id": "D27-command-record",
+     "summary": "make claims-carry files unfiled carried findings into a [lands-open] open box (new, or the open task T= names) and appends to specs/<feature>/claims-carried.jsonl; ticking the task un-files the key so a finding still standing refuses again.",
+     "class": "within",
+     "why": "Option 3's 'writes each finding into the feature's tasks.md as an open item' so the feature 'can't close' until it is fixed; un-filing on tick enforces that. Gap: with T= the keys must also be written into that box's text in tasks.md, not only the jsonl. T12 already names T03's three (D29), but the rule should say it."
+    },
+    {
+     "id": "D27-any-feature-write",
+     "summary": "F=<n> lets the landing session file its carried finding into ANY feature, and a key counts as FILED while ANY feature's record names it with an open task.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM: 'writes each finding into the feature's tasks.md' and 'must still be fixed before the feature closes'. That is the feature being landed. Filing into another feature (say a long-lived backlog feature) lets this feature close with its finding still open, which guts the stated purpose. No reason is given. Reading another feature's filing is within: a push from B can pass on a finding A already filed. Writing is not. Fix: claims-carry writes only to the active (landing) feature, as D28's message already names, and FILED for this landing's own carried findings means filed in that feature. FR-013's 'an open task of a feature' carries the same looseness, the spec-already-carries-it case."
+    },
+    {
+     "id": "D28-refuse-and-name",
+     "summary": "The push REFUSES an unfiled carried finding and names make claims-carry F=<active feature>; a filed one warns. The gate does not write tasks.md itself mid-push.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Option 3 says 'Never block on unchanged code; the gate files the finding'. The plan does block, once, for the filing only, and never asks for a fix before the landing goes ahead, which is what option 3 was chosen for ('just not before this task lands'). Two concrete legs. (1) A push-time gate cannot put its filing into the commit being pushed, so 'the gate writes tasks.md and the landing goes ahead' leaves the open item only in a working tree while the code is on main. That defeats option 3's own guarantee that the feature cannot close with the finding open. (2) The GM's own approved amendment 1 item 3 (FR-010: 'Refuse writes to the tree while your own gate runs') forbids exactly a gate writing the tree during its run."
+    },
+    {
+     "id": "D28-holding",
+     "summary": "holding honors an open [lands-open] box only when a row of the feature's claims-carried.jsonl names it; claims-gate.sh footer names the command.",
+     "class": "within",
+     "why": "FR-013 'the open-task refusal honors that box'; it is limited to boxes the tooling placed."
+    },
+    {
+     "id": "D29",
+     "summary": "T03's three findings filed into T12 (whose words already cover them), docs/guards.md rows updated, no engine change.",
+     "class": "within",
+     "why": "An open task of the landing feature, the feature cannot close until T12 closes, and ticking T12 un-files them. Serves option 3 and SC-007."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Landing",
+    "## T13 - a finding on unchanged code is carried, not refused (amendment 3, FR-013)",
+    "### T13 Approach (checklist part A)",
+    "### T13 Decisions",
+    "### T13 part B (2026-10-18T01:29Z)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Landing-T13",
+     "summary": "T13 added to Lands open; each task lands when it closes, with its retro row",
+     "class": "within",
+     "why": "FR-006, one task at a time; the GM's request to work task by task and measure each."
+    },
+    {
+     "id": "D26-carried",
+     "summary": "A first finding is CARRIED when its unit's code and claim are unchanged and the research its claim cites changed (base row: code fp equal, research fp differs; no base row: core under the same key matches, research_fp differs)",
+     "class": "within",
+     "why": "Option 3 (amendment 3): never block on unchanged code; FR-013's carried case."
+    },
+    {
+     "id": "D26-move",
+     "summary": "A moved or renamed unit is never carried; a finding on it is introduced or pre-existing as today",
+     "class": "within",
+     "why": "Round 1 settled that a move is a change to the code, so this is outside 'unchanged code' and the strict half of FR-013 applies."
+    },
+    {
+     "id": "D26-rejudgment",
+     "summary": "A first finding where nothing changed (code, claim and research all unchanged since a base row with no finding; a re-judgment) is INTRODUCED and refuses, 'keeping today's verdict'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM approved 'Never block on unchanged code; the gate files the finding as an open task instead.' A re-judgment is a finding on unchanged code and an unchanged claim, and this clause refuses it. It is not impossible to carry it (the claims-carry path works the same). It is not implied by anything else the GM said: the only strict half kept is 'changed code or a changed claim still refuses' (feature 316), and a re-judgment is neither. It defeats option 3's purpose for this case, since a task's landing is held on code it never touched. Its only justification is keeping today's behavior, which the GM did not ask to keep. It is also inconsistent with D26's own no-base-row branch, where the same unchanged inputs give pre-existing and only warn. Fix: a first finding whose unit's code and claim are unchanged is carried whether or not its research moved, and introduced is kept for changed code or a changed claim. If the path is unreachable, say so and give it no refusing verdict. FR-013's 'arises only because a page it cites changed' carries the same narrowing and may need the same amendment."
+    },
+    {
+     "id": "D27-scope",
+     "summary": "make claims-carry files into the active task's feature only; another F= refused; a key is filed only by the active feature's record",
+     "class": "within",
+     "why": "FR-013 (the feature being landed, i.e. the active task's feature); option 3's 'the feature's tasks.md'."
+    },
+    {
+     "id": "D27-no-active-task",
+     "summary": "With no active task no key is filed, so a carried finding refuses (CLAIMS_OK the escape)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Option 3 files into 'the feature's tasks.md'. With no active task there is no feature being landed and no box the closure rule could hold, so filing is impossible by the request's own words. Round 1 already closed the route of filing into any feature, because a finding could be parked in a long-lived feature. CLAIMS_OK stays the escape (Approach constraint 2)."
+    },
+    {
+     "id": "D27-box",
+     "summary": "T= appends the keys to that open box's text; without T= a new '[lands-open]' box with a research: rendering line; record rows {task, keys, utc} in claims-carried.jsonl",
+     "class": "within",
+     "why": "Option 3: 'writes each finding into the feature's tasks.md as an open item'; the landing goes ahead, so the box lands open."
+    },
+    {
+     "id": "D27-unfile",
+     "summary": "A ticked task un-files its keys, so a finding still standing refuses again",
+     "class": "within",
+     "why": "Enforces the GM's 'the finding must still be fixed before the feature closes'."
+    },
+    {
+     "id": "D28-refuse-until-filed",
+     "summary": "gate refuses an unfiled carried finding as 'carry:', naming make claims-carry F=<active feature>; the gate does not write tasks.md itself",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This departs from option 3's 'the gate itself writes' and 'never block', but a pre-push gate cannot add a box to the commits it is pushing. The box has to be in the pushed tree, on main, for 'a feature can't close with an open task' to hold. FR-010 (this feature) also refuses writes to the working tree while the gate runs. One named command that writes the box is the nearest reachable form of 'the gate files it', and it keeps the purpose: the finding lands with the task as an open item and is not lost."
+    },
+    {
+     "id": "D28-warn-holding",
+     "summary": "A filed carry warns; holding honors an open [lands-open] box only where a row of the feature's claims-carried.jsonl names it; the claims-gate.sh footer names the command",
+     "class": "within",
+     "why": "FR-013: the open-task refusal honors that box. Limiting the honor to boxes the tooling wrote enforces the open-task rule."
+    },
+    {
+     "id": "D29",
+     "summary": "T03's three findings filed into T12 (whose box already names them), not a new box; docs/guards.md rows say carried; DIRECT route",
+     "class": "within",
+     "why": "Option 3's open item already exists as T12's open box; SC-007 replays T03's landing."
+    },
+    {
+     "id": "Approach-done",
+     "summary": "Budget about one hour; done = tests red without each rule, hooks-test green, claims-carry F=385 T=T12 files T03's three, push without CLAIMS_OK",
+     "class": "within",
+     "why": "Tests that enforce the requested rule; SC-007."
+    },
+    {
+     "id": "PartB",
+     "summary": "Step-back answers; no new decision",
+     "class": "within",
+     "why": "Answers the checklist. It decides nothing beyond D26 to D29."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Landing",
+    "## T13 - a finding on unchanged code is carried, not refused (amendment 3, FR-013)",
+    "### T13 Approach (checklist part A)",
+    "### T13 Decisions",
+    "### T13 part B (2026-10-18T01:29Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing",
+     "summary": "Each task lands when it closes with its retro row while later tasks stay open; T13 added to the lands-open list.",
+     "class": "within",
+     "why": "FR-006 and the approved shape (one task, a retro, then the next) require each task's change on main before the next is measured; listing T13 adds no scope."
+    },
+    {
+     "id": "D26 (re-judgment clause, round 3)",
+     "summary": "A first finding on a unit whose code fingerprint (code plus claim) equals the base row's is CARRIED whether the research moved or the claim was only judged again.",
+     "class": "within",
+     "why": "Option 3 as the GM locked it in is 'Never block on unchanged code'; it carries no qualifier on why the finding surfaced. Carrying a re-judgment on unchanged code and claim follows those words; round 2's NOT LEGITIMATE was against the narrower earlier text, and this text removes the narrowing. The amended FR-013 sentence ('surfaced because a page it cites changed, or because the claim was judged again') is faithful to option 3 for the same reason."
+    },
+    {
+     "id": "D26 (no base row)",
+     "summary": "Without a base row, carried when the unit's core under the same key matches the base and research_fp differs; otherwise pre-existing (warns).",
+     "class": "within",
+     "why": "Both branches leave unchanged code unblocked (carried or a warning), as option 3 requires."
+    },
+    {
+     "id": "D26 (moved or renamed unit)",
+     "summary": "A unit moved or renamed is never carried; introduced or pre-existing as today.",
+     "class": "within",
+     "why": "Moving or renaming a unit is a change the task made to that code, so it is not 'unchanged code' under option 3 or FR-013 ('a unit whose code and claim are unchanged'); this is the text round 1 asked for."
+    },
+    {
+     "id": "D26 (changed code or claim)",
+     "summary": "A first finding where the code or claim changed stays introduced and refuses.",
+     "class": "within",
+     "why": "Option 3 covers only unchanged code; FR-013 keeps the strict half explicitly."
+    },
+    {
+     "id": "D27 (filing command and scope)",
+     "summary": "make claims-carry F=<n> [T=<Txx>] files unfiled carried findings into the active task's feature only, into a named open task or a new [lands-open] box, and appends to claims-carried.jsonl; another F= is refused.",
+     "class": "within",
+     "why": "Option 3 writes the finding 'into the feature's tasks.md as an open item' so that 'the finding must still be fixed before the feature closes'; FR-013 names the feature being landed. Filing only there is what keeps that purpose (round 1's ruling)."
+    },
+    {
+     "id": "D27 (un-filed on tick; none with no active task)",
+     "summary": "A key is filed only while its record row's task is an open box of the active feature; ticking that task un-files it, and with no active task nothing is filed (so a carried finding refuses).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The tick half serves option 3's purpose: the finding blocks again once the task meant to fix it claims to be done. The no-active-task half refuses a finding on unchanged code, which option 3's words ('never block') do not allow. But option 3's own mechanism ('the feature's tasks.md', 'a feature can't close with an open task') assumes there is a feature being landed. With no such feature there is nowhere to file, and filing into any other feature is the parking that round 1 ruled defeats the purpose. That case keeps today's refusal, with CLAIMS_OK as the escape."
+    },
+    {
+     "id": "D28 (the push refuses an unfiled carry, naming the command)",
+     "summary": "gate refuses an unfiled carried finding as 'carry:' naming make claims-carry; a filed one warns; holding honors the tooling-written [lands-open] box.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Option 3 says the gate itself writes the box. Here the gate refuses until one command writes it. That is a block, briefly, on unchanged code. The literal reading cannot work: the gate runs at push, after the commits being pushed are fixed, so a tasks.md written during the gate is not in what lands, and the open task the option relies on would never reach main. It would also be a write to the tree while the session's own gate runs, which FR-010 refuses. One named command run before the push, then a push that goes ahead, keeps the option's purpose: the landing is not held for a fix and the finding stays open until fixed. The accepted FR-013 already carries this."
+    },
+    {
+     "id": "D29 (T03's three into T12)",
+     "summary": "The three T03 findings are filed into T12 (whose words already cover them) via T=T12; guards.md rows updated; no engine change.",
+     "class": "within",
+     "why": "SC-007 replays exactly these three as carried; filing them into the open task that already owns the fix is option 3's open item, and documenting the gate is not new scope."
+    },
+    {
+     "id": "Approach A / part B",
+     "summary": "Checklist answers: exit (c) chosen per the GM's option 3; done measured by tests red without each rule and the T03 replay landing without CLAIMS_OK.",
+     "class": "within",
+     "why": "The answers are the FR-003 checklist content and SC-007's own test. They decide nothing beyond D26-D29."
     }
    ]
   }

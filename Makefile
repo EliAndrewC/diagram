@@ -1426,6 +1426,12 @@ claims-triaged: ## [project] record a triage reply: a claim it names (TOUCHES) i
 	@if [ -z "$(BUNDLE)" ] || [ -z "$(REPLY)" ]; then printf 'make claims-triaged: BUNDLE=<dir> and REPLY=<file> are required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" triaged --bundle "$(abspath $(BUNDLE))" --reply "$(abspath $(REPLY))"
 
+# GUARD_EDIT_OK: feature 385 amendment 3 (the GM 2026-10-17, "Yes, please lock in option three.") adds an operation - a page
+# edit's finding on unchanged code is filed as an open task of the feature being landed instead of refusing the push.
+claims-carry: ## [project] file every carried claims finding (a page edit's, on unchanged code) as an open task of the active feature, so the push lands (feature 385 FR-013)   F=<feature> [T=<open task to file into>]
+	@if [ -z "$(F)" ]; then printf 'make claims-carry: F=<feature> is required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" carry --feature "$(F)" $(if $(T),--task "$(T)",)
+
 claims-backfill: ## [project] give every index row checked at today's research the pages it was checked at, so a later edit to them is triaged, not re-judged in full
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" backfill
 

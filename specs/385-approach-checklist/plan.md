@@ -156,7 +156,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13
 
 ## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)
 
@@ -493,6 +493,75 @@ makes) and D24's seed 49 are NOT done in T03. With seed 55 (one lane knot, as at
 to T12, as the arbiter ruled: seed 57's residue is lanes 1/13, ends 21.6 ft apart, `settle_knots`' gather of lane 13 refused by
 `needle_loops`, brought in by the own-garden fix; 57 stands at 2 knots against HEAD's 1, waived by ask:t03-seed57-residue.
 D22's done is read accordingly: the four seeds pass, no seed newly fails against HEAD, and every exit is owned by T12.
+
+## T13 - a finding on unchanged code is carried, not refused (amendment 3, FR-013)
+
+### T13 Approach (checklist part A)
+
+1. **The goal, in the world.** A research page can be corrected without the correction blocking the task that made it on code
+   that task never touched, and without the findings it surfaces being lost: each is an open task, so its feature cannot close
+   until the code or the claim agrees with the research again.
+2. **The constraints.** The GM's option 3 (amendment 3); a finding on changed code or a changed claim still refuses; a finding at
+   the base still warns; every refusal names its compliant command (CLAUDE.md, "What is enforced"); the open-task refusal
+   (`speckit-todo.py` `holding`) honors a `[lands-open]` box only where the tooling or a reviewed plan put it; a test red without
+   each rule; `CLAIMS_OK` stays the escape.
+3. **Where each comes from.** The rule is the GM's (G, 2026-10-17, "Yes, please lock in option three."), the strict half kept from
+   feature 316 (G). The record file's name and the task box's words are ours (O).
+4. **Do they describe the world here?** Yes - measured on T03's landing (`ask:t03-claims-at-landing`): three findings, all on code
+   T03 left unchanged, all surfaced by one page paragraph.
+5. **The order.** The rule in `classify` first (the decider), then the record and the command that writes it, then the open-task
+   honor, then the gate's message; T03's three findings filed through the new command last, as its first real use.
+6. **The exits.** (c) a rule that dissolves the case - **chosen**: the GM's option 3 replaces "introduced" with "carried" for this
+   case. (a), (b), (d) n/a; (e) conform - the strict rule the GM declined.
+7. **The search smell.** None: one classification and one record.
+8. **The budget.** About one hour; twice that is part B.
+9. **Done, measured.** The tests in `tests/tooling/test_claims_index.py` red without each rule (carried vs introduced vs
+   pre-existing; a filed carry passes; an unfiled one refuses naming `make claims-carry`; the carried box honored by `holding`);
+   `make hooks-test` green; `make claims-carry F=385 T=T12` files T03's three, and the push lands without `CLAIMS_OK`.
+
+### T13 Decisions
+
+**D26 - carried, decided in `classify`.** A finding that did not stand at the base (no base row, or a base verdict that is no
+finding) is CARRIED when its unit's code and claim are unchanged: with a base row, the row's `code` fingerprint (code plus
+claim) equals the head's, whether its research moved or the claim was only judged again (spec-fidelity, T13 round 2: a
+re-judgment is a finding on unchanged code, which option 3 never blocks); with none, the unit's core
+under the same key at the base matches the head's and `research_fp` against the base questions differs. A unit moved or
+renamed is never carried: a finding on it is introduced or pre-existing as today (spec-fidelity, T13 round 1). Every other first
+finding keeps today's verdict: introduced where the code or the claim changed; pre-existing where neither the code nor the
+research moved and the base had no row (it warns, as today). `classify` returns (introduced, pre-existing, carried).
+
+**D27 - filed by one command, held in a record.** `make claims-carry F=<n> [T=<Txx>]` (`claims.py carry`) files every carried
+finding not yet filed, into the feature being landed only - the active task's feature (`plan_gate.active_task`); another
+`F=` is refused, so a finding cannot be parked in a long-lived feature while this one closes (spec-fidelity, T13 round 1):
+into the open task `T=` names, its keys appended to that box's text, or, without `T=`, a new box at the end of the feature's tasks - `- [ ] T<next>
+Carried by the claims gate (FR-013): findings a page edit surfaced on code left unchanged - fix the code or the claim and re-check
+each: <keys> [lands-open]` with its `research: rendering` line - and appends `{"task", "keys", "utc"}` to
+`specs/<feature>/claims-carried.jsonl`. A key is FILED while a row of the active feature's record names it and that row's
+task is still an open box in its `tasks.md` (no active task: no key is filed); a ticked task un-files it, so a finding still standing refuses again.
+
+**D28 - the push.** `gate` refuses an unfiled carried finding as `carry: <line>`, the message naming `make claims-carry
+F=<the active feature>` (`plan_gate.active_task`, `<n>` when none); a filed one warns as `carried (<feature> <task>): <line>`.
+`claims-gate.sh`'s footer names the command for a carry. `holding` honors an open `[lands-open]` box whose id a row of the
+feature's `claims-carried.jsonl` names - the tooling put it there, as the open-task rule requires.
+
+**D29 - T03's three.** `settle.py::theirs`, the doubled tail and `_clear_link` are already in T12's words; they are filed into T12
+(`T=T12`), not a second box. `docs/guards.md`'s claims-gate rows say carried. Nothing in the engine: the route is DIRECT.
+
+### T13 part B (2026-10-18T01:29Z)
+
+Owed by the hour-8 step-back (`hour:385-approach-checklist@8`, ruled `continue`).
+
+1. **What is refusing?** Nothing in the code yet; the plan review (round 1) BLOCKED two clauses - D26's move clause and D27's
+   filing into any feature - both narrowed now as it asked.
+2. **A3 again.** The rule is the GM's option 3 (G); the record file and the box's words are ours (O).
+3. **A4 again.** n/a - no map, no place on the ground.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither; one round of review, each point taken as written.
+6. **The one-sentence test.** "A page edit's finding on untouched code is filed as an open task of this feature instead of
+   blocking the landing" - the GM's own option.
+7. **The next step is a measurement.** The round-2 plan review, then the tests red without each rule.
+8. **Routes measured before asking?** Nothing is being asked.
+9. **After a ruling.** The ruling is `continue`; the step it names is T13 once its plan is reviewed.
 
 ## T04 to T10 - T48, T47's patch, five ranking rows
 

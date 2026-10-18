@@ -201,7 +201,7 @@ def test_a_finding_in_a_deferred_unit_is_reported_deferred(tmp_path: pathlib.Pat
     deferred = frozenset({k.rsplit("#", 1)[0]})
     text = cx.report(cx.current(skill), index, deferred=deferred)
     assert "IN-STEP 4, DEFERRED 1" in text and f"DEFERRED       {k} - 296" in text and "DRIFTED" not in text
-    assert cx.classify(cx.current(skill), index, {}, {}, tmp_path, deferred) == ([], [])
+    assert cx.classify(cx.current(skill), index, {}, {}, tmp_path, deferred) == ([], [], [])
     f = tmp_path / "deferred.json"
     f.write_text('{"why": "legacy", "units": ["a::b"], "keys": ["c::d#e"]}')
     assert cx.load_deferred(f) == frozenset({"a::b", "c::d#e"}) and cx.load_deferred(tmp_path / "none.json") == frozenset()
@@ -218,11 +218,11 @@ def test_classify_introduced_and_pre_existing(tmp_path: pathlib.Path) -> None:
     base = cx.current(base_skill)
     cores, bq = cx.base_cores(base_skill), base_skill / "research" / "questions"
     k = "l7r/diagram/hamletgen/rows.py::far_row#dry share"
-    # IN-STEP at the base, a finding now: introduced
-    assert cx.classify(base, {k: _row(base, k, "DRIFTED")}, {k: _row(base, k, "IN-STEP")}, cores, bq)[0]
+    # IN-STEP at the base, a finding now on the same code, claim and research - a re-judgment: carried (385 FR-013, round 2)
+    assert cx.classify(base, {k: _row(base, k, "DRIFTED")}, {k: _row(base, k, "IN-STEP")}, cores, bq) == ([], [], [(k, f"DRIFTED        {k} - n")])
     # a finding at both ends, whatever changed: pre-existing
     head = cx.current(_tree(tmp_path / "head", MOD.replace("x * SHARE", "x * SHARE + 1")))
-    assert cx.classify(head, {k: _row(head, k, "DRIFTED")}, {k: _row(base, k, "DRIFTED")}, cores, bq) == ([], [f"DRIFTED        {k} - n"])
+    assert cx.classify(head, {k: _row(head, k, "DRIFTED")}, {k: _row(base, k, "DRIFTED")}, cores, bq) == ([], [f"DRIFTED        {k} - n"], [])
     # no base row: untouched code and research is pre-existing; changed code is introduced
     assert cx.classify(base, {k: _row(base, k, "DRIFTED")}, {}, cores, bq)[0] == []
     assert cx.classify(head, {k: _row(head, k, "DRIFTED")}, {}, cores, bq)[0]
@@ -233,11 +233,11 @@ def test_classify_introduced_and_pre_existing(tmp_path: pathlib.Path) -> None:
     copied = cx.current(_tree(tmp_path / "copy", MOD + MOD[MOD.index("def far_row") :].split("def helper")[0].replace("def far_row", "def far_row2")))
     kc = k.replace("far_row#", "far_row2#")
     assert cx.classify(copied, {kc: _row(copied, kc, "MISLABELED")}, {}, cores, bq)[0]
-    # the cited question's findings changed under a first finding: introduced
+    # the cited question's findings changed under a first finding on unchanged code: carried, not introduced (385 FR-013)
     moved = cx.current(_tree(tmp_path / "moved", page=PAGE.replace("face the street", "face south")))
-    assert cx.classify(moved, {k: _row(moved, k, "DRIFTED")}, {}, cores, bq)[0]
+    assert cx.classify(moved, {k: _row(moved, k, "DRIFTED")}, {}, cores, bq) == ([], [], [(k, f"DRIFTED        {k} - n")])
     # an IN-STEP row is no finding
-    assert cx.classify(base, {k: _row(base, k, "IN-STEP")}, {}, cores, bq) == ([], [])
+    assert cx.classify(base, {k: _row(base, k, "IN-STEP")}, {}, cores, bq) == ([], [], [])
 
 
 def test_a_base_with_no_claims_at_all_makes_every_first_finding_on_untouched_code_pre_existing(tmp_path: pathlib.Path) -> None:
@@ -248,7 +248,7 @@ def test_a_base_with_no_claims_at_all_makes_every_first_finding_on_untouched_cod
     assert cx.current(base_skill) == {} or all("rows.py" not in k for k in cx.current(base_skill))
     head = cx.current(_tree(tmp_path / "head"))
     k = "l7r/diagram/hamletgen/rows.py::far_row#dry share"
-    intro, pre = cx.classify(head, {k: _row(head, k, "DRIFTED")}, {}, cx.base_cores(base_skill), base_skill / "research" / "questions")
+    intro, pre, _carried = cx.classify(head, {k: _row(head, k, "DRIFTED")}, {}, cx.base_cores(base_skill), base_skill / "research" / "questions")
     assert intro == [] and pre
 
 
@@ -262,10 +262,87 @@ def test_the_gate_refuses_owed_and_introduced_and_warns_pre_existing(tmp_path: p
     idx = cx.load_index(root / cx.INDEX)
     idx[k]["verdict"] = "DRIFTED"
     cx.save_index(root / cx.INDEX, idx)
-    refuse, warn = cx.gate(root)  # HEAD is the merge base (no origin/main): IN-STEP there, DRIFTED now
-    assert refuse == [f"introduced: DRIFTED        {k} - "] and warn == []
+    refuse, warn = cx.gate(root)  # HEAD is the merge base (no origin/main): IN-STEP there, DRIFTED now on the same code
+    assert refuse == [f"carry: DRIFTED        {k} -  - a page edit's finding on unchanged code: file it with `make task-start F=<n> T=<Txx>`, then `make claims-carry F=<n>`"] and warn == []
+    (root / "l7r" / "diagram" / "hamletgen" / "rows.py").write_text(MOD.replace("x * SHARE", "x * SHARE + 1"))
+    cur = cx.current(root)
+    idx[k] |= {"code": cur[k].code, "core": cur[k].unit.core}
+    cx.save_index(root / cx.INDEX, idx)
+    assert cx.gate(root)[0] == [f"introduced: DRIFTED        {k} - "]  # the code changed under it: introduced, as before
     _commit(root, "drift")
     assert cx.gate(root) == ([], [f"pre-existing: DRIFTED        {k} - "])
+
+
+def test_a_page_edit_finding_on_unchanged_code_is_carried_not_introduced(tmp_path: pathlib.Path) -> None:
+    """Feature 385 amendment 3 (the GM 2026-10-17, "Yes, please lock in option three."): a finding whose code and claim stand
+    as at the base, surfaced only because its cited page changed, is CARRIED; changed code under the same page edit is still
+    introduced, and a moved unit is never carried."""
+    base_skill = _tree(tmp_path / "base")
+    base = cx.current(base_skill)
+    cores, bq = cx.base_cores(base_skill), base_skill / "research" / "questions"
+    k = "l7r/diagram/hamletgen/rows.py::far_row#dry share"
+    edited = PAGE.replace("face the street", "face south")
+    page = cx.current(_tree(tmp_path / "page", page=edited))
+    # IN-STEP at the base, the page edited, the code and claim as they were: carried
+    assert cx.classify(page, {k: _row(page, k, "DRIFTED")}, {k: _row(base, k, "IN-STEP")}, cores, bq)[2] == [(k, f"DRIFTED        {k} - n")]
+    # the same page edit with the code changed too: introduced
+    both = cx.current(_tree(tmp_path / "both", MOD.replace("x * SHARE", "x * SHARE + 1"), page=edited))
+    assert cx.classify(both, {k: _row(both, k, "DRIFTED")}, {k: _row(base, k, "IN-STEP")}, cores, bq)[:3:2] == ([f"DRIFTED        {k} - n"], [])
+    assert cx.classify(both, {k: _row(both, k, "DRIFTED")}, {}, cores, bq)[:3:2] == ([f"DRIFTED        {k} - n"], [])
+    # a renamed unit under a page edit: never carried
+    ren = cx.current(_tree(tmp_path / "ren", MOD.replace("def far_row", "def far_rows"), page=edited))
+    kr = k.replace("far_row#", "far_rows#")
+    assert cx.classify(ren, {kr: _row(ren, kr, "DRIFTED")}, {}, cores, bq)[2] == []
+
+
+def _active(root: pathlib.Path, feature: str = "900-x", tasks: str = "- [ ] T01 the work [lands-open]\n      research: rendering\n") -> pathlib.Path:
+    d = root / "specs" / feature
+    d.mkdir(parents=True, exist_ok=True)
+    (d / "tasks.md").write_text("# Tasks\n\n" + tasks + "- [ ] GM review (make gm-reviewed F=900) [lands-open]\n")
+    (root / ".specify").mkdir(exist_ok=True)
+    (root / ".specify" / "feature.json").write_text(json.dumps({"feature_directory": f"specs/{feature}"}))
+    return d
+
+
+def test_the_gate_refuses_an_unfiled_carry_naming_the_command_and_lets_a_filed_one_through(tmp_path: pathlib.Path) -> None:
+    root = _repo(tmp_path)
+    cx.save_index(root / cx.INDEX, _all_in_step(root))
+    d = _active(root)
+    _commit(root, "base")
+    k = "l7r/diagram/hamletgen/rows.py::far_row#dry share"
+    q = root / "research" / "questions" / "0033-row-villages-resson.html"
+    q.write_text(PAGE.replace("face the street", "face south"))
+    idx = cx.load_index(root / cx.INDEX)
+    for key, row in cx.current(root).items():  # every claim on the page re-checked against its edit; one comes back DRIFTED
+        idx[key]["research"] = row.research
+    idx[k]["verdict"] = "DRIFTED"
+    cx.save_index(root / cx.INDEX, idx)
+    refuse, _warn = cx.gate(root)
+    assert refuse == [f"carry: DRIFTED        {k} -  - a page edit's finding on unchanged code: file it with `make claims-carry F=900`"]
+    # filing into another feature is refused; into the active one, a new box before the GM-review box
+    other = root / "specs" / "901-y"
+    other.mkdir()
+    (other / "tasks.md").write_text("- [ ] T01 x [lands-open]\n")
+    assert cx.main(["--root", str(root), "carry", "--feature", "901"]) == 2
+    assert cx.main(["--root", str(root), "carry", "--feature", "900"]) == 0
+    text = (d / "tasks.md").read_text()
+    assert (
+        f"- [ ] T02 Carried by the claims gate (FR-013): findings a page edit surfaced on code left unchanged - fix the code or the claim and re-check each: {k} [lands-open]\n      research: rendering\n- [ ] GM review"
+        in text
+    )
+    refuse, warn = cx.gate(root)
+    assert refuse == [] and warn == [f"carried (900-x T02): DRIFTED        {k} - "]
+    assert cx.main(["--root", str(root), "carry", "--feature", "900"]) == 0  # nothing left unfiled: writes nothing
+    assert (d / "tasks.md").read_text() == text
+    # ticking the task un-files the key: it refuses again
+    (d / "tasks.md").write_text(text.replace("- [ ] T02", "- [x] T02"))
+    assert cx.gate(root)[0][0].startswith("carry: ")
+    # with T=, into an existing open box's words
+    (d / "tasks.md").write_text(text.replace("- [ ] T02", "- [x] T02"))
+    assert cx.main(["--root", str(root), "carry", "--feature", "900", "--task", "T01"]) == 0
+    assert f"- [ ] T01 the work; carried by the claims gate (FR-013): {k} [lands-open]" in (d / "tasks.md").read_text()
+    assert cx.gate(root)[0] == []
+    assert cx.main(["--root", str(root), "carry", "--feature", "900", "--task", "T02"]) == 0  # nothing unfiled
 
 
 def test_the_command_line(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:

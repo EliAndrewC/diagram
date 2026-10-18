@@ -90,3 +90,12 @@ def test_the_holding_command_line(tmp_path: pathlib.Path, capsys) -> None:  # no
     d = _feature(tmp_path, "377-x", "- [ ] T01 a\n- [ ] T99 later [lands-open]\n")
     assert todo.main(["--holding", str(d)]) == 0
     assert capsys.readouterr().out == "T01 a\n"
+
+
+def test_a_box_the_claims_gate_filed_a_carry_into_lands_open(tmp_path: pathlib.Path) -> None:
+    """Feature 385 FR-013 (D28): a `[lands-open]` box the claims gate's carry record names is the tooling's, and holds nothing;
+    the same box with no record is a hand-typed mark."""
+    d = _feature(tmp_path, "385-x", "- [x] T01 a\n- [ ] T14 Carried by the claims gate (FR-013): k [lands-open]\n")
+    assert "honored only" in todo.holding(d)[0] and "carry record" in todo.holding(d)[0]
+    (d / "claims-carried.jsonl").write_text('{"task": "T14", "keys": ["k"], "utc": "2026-10-17T00:00:00Z"}\n\n')
+    assert todo.holding(d) == [] and todo.carried_ids(d) == {"T14"}

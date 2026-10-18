@@ -131,3 +131,14 @@ The session proposed, verbatim:
 The GM, verbatim:
 
 > yes please make the blind approach T03's first step. And no, I don't think I want the two-hour threshold, like, on record. Because, to be honest, I haven't even looked at what we would be doing. So I don't know for sure that a two-hour threshold is bad for it, although my instinct is that for the things that we are doing, it is bad. But I don't think that that's a matter of a specific threshold. I think that's more about just, you know, doing a review after the fact and seeing how it goes, and then, you know, doing measurements until we figure out how long stuff takes in practice when we don't seem to be going in circles.
+
+## Amendment 3 (2026-10-17)
+
+The GM asked: "Please explain the one ruling that you say seems worth my judgment so that I can make a ruling on it now." The
+session put the claims-gate question (`ask:t03-claims-at-landing`) as three options, verbatim in part:
+
+> 3. **Never block on unchanged code; the gate files the finding as an open task instead.** The landing goes ahead, and the gate itself writes each finding into the feature's `tasks.md` as an open item. Since a feature can't close with an open task, the finding must still be fixed before the feature closes, just not before this task lands. This automates what the arbiter did by hand for T03.
+
+The GM, verbatim:
+
+> Yes, please lock in option three. Thanks.

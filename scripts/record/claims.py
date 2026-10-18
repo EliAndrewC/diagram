@@ -48,9 +48,8 @@ import re
 import shutil
 import subprocess
 import sys
-import textwrap
 import tarfile
-import tempfile
+import textwrap
 from collections import Counter
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
@@ -60,6 +59,7 @@ from typing import Any
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 sys.dont_write_bytecode = True  # the push runs this in fixture trees whose `git status` must stay clean
+import claims_carry  # noqa: E402
 import record_cache as rc  # noqa: E402
 import record_units as ru  # noqa: E402
 from claims_triage import (  # noqa: E402,F401 - the triage half, split out (feature 375 T09); re-exported
@@ -371,7 +371,7 @@ def callees(root: Path, unit: Any, source: str) -> list[str]:
     try:
         tree = ast.parse(textwrap.dedent(source))
         module = ast.parse((root / unit.path).read_text(encoding="utf-8"))
-    except (OSError, SyntaxError, ValueError):
+    except OSError, SyntaxError, ValueError:
         return []
     defined = {n.name for n in module.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))}
     own = unit.qualname.split(".")[-1]
@@ -724,28 +724,40 @@ def classify(
     cores: dict[str, str],
     base_qdir: Path,
     deferred: frozenset[str] = frozenset(),
-) -> tuple[list[str], list[str]]:
-    """(introduced, pre-existing) finding lines (spec FR-010). `cores` is every unit's core at the merge base (`base_cores`),
-    `base_qdir` the base's questions: a first finding is introduced only when its unit's code matches no base unit's (its own
-    key's, or one gone at the head - a rename or a move) or its claim's cited findings differ from the base's."""
+) -> tuple[list[str], list[str], list[tuple[str, str]]]:
+    """(introduced, pre-existing, carried) findings (spec FR-010; carried: 385 FR-013, `claims_carry`). `cores`: every unit's core
+    at the merge base, `base_qdir` its questions. CARRIED (key, line): its code and claim unchanged under the same key - its cited
+    research moved, or it was only judged again (never a moved unit). Else a first finding is introduced when its code matches no base unit's (its own
+    key's, or one gone at the head - a move) or its cited findings differ from the base's."""
     head_uids = {r.uid for r in cur.values()}
     gone_cores = {core for uid, core in cores.items() if uid not in head_uids}
     memo: dict[str, str] = {}
     intro: list[str] = []
     pre: list[str] = []
+    carried: list[tuple[str, str]] = []
     for key, v in sorted(live_rows(cur, index).items()):
         if v["verdict"] not in FINDINGS or shown(key, v["verdict"], deferred) == "DEFERRED":
             continue
         was = base_index.get(key)
         line = f"{v['verdict']:<14} {key} - {v.get('note', '')}"
-        if was is not None:
-            (pre if was.get("verdict") in FINDINGS else intro).append(line)
+        if was is not None and was.get("verdict") in FINDINGS:
+            pre.append(line)
             continue
         uid, core = key.rsplit("#", 1)[0], v.get("core", "")
-        code_changed = not (cores.get(uid) == core or core in gone_cores)
-        research_changed = key in cur and research_fp(cur[key].claim.pointers, base_qdir, memo) != cur[key].research
-        (intro if code_changed or research_changed else pre).append(line)
-    return intro, pre
+        row = cur.get(key)
+        if was is not None:
+            if row is not None and was.get("code") == row.code:
+                carried.append((key, line))
+            else:
+                intro.append(line)
+            continue
+        research_changed = row is not None and research_fp(row.claim.pointers, base_qdir, memo) != row.research
+        if cores.get(uid) == core and research_changed:
+            carried.append((key, line))
+        else:
+            code_changed = not (cores.get(uid) == core or core in gone_cores)
+            (intro if code_changed or research_changed else pre).append(line)
+    return intro, pre, carried
 
 
 def split_keys(text: str, known: Mapping[str, Any]) -> list[str]:
@@ -769,19 +781,8 @@ def split_keys(text: str, known: Mapping[str, Any]) -> list[str]:
 
 
 def gate(root: Path) -> tuple[list[str], list[str]]:
-    """(refusals, warnings) for the push: owed units, introduced findings; pre-existing findings warn."""
-    skill = root
-    cur = current(skill)
-    index = load_index(root / INDEX)
-    due = owed(cur, index, skill / "research" / "questions", load_store(root / STORE))
-    refuse = [f"owed ({why}): {key}" for key, why in due]
-    mb = (_git(root, "merge-base", "HEAD", "origin/main") or _git(root, "rev-parse", "HEAD") or "").strip()
-    base_index = json.loads(_git(root, "show", f"{mb}:{INDEX}") or "{}") if mb else {}
-    with tempfile.TemporaryDirectory() as tmp:
-        bskill = base_tree(root, mb, Path(tmp)) if mb else Path(tmp)
-        cores = base_cores(bskill, keep=root) if mb else {}
-        intro, pre = classify(cur, index, base_index, cores, bskill / "research" / "questions", load_deferred(root / DEFERRED))
-    return refuse + [f"introduced: {x}" for x in intro], [f"pre-existing: {x}" for x in pre]
+    """(refusals, warnings) for the push (`claims_carry.gate`)."""
+    return claims_carry.gate(sys.modules[__name__], root)
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -809,6 +810,9 @@ def _parser() -> argparse.ArgumentParser:
     sub.add_parser("backfill-sections")
     sub.add_parser("report")
     sub.add_parser("gate")
+    cc = sub.add_parser("carry")
+    cc.add_argument("--feature", required=True)
+    cc.add_argument("--task", default="")
     cv = sub.add_parser("coverage")
     cv.add_argument("--path", default="", help="only units whose file path contains this")
     ap.add_argument("--root", default=".")
@@ -825,6 +829,13 @@ def main(argv: Sequence[str] | None = None) -> int:
         for x in refuse:
             print(f"claims-gate: REFUSED {x}")
         return 1 if refuse else 0
+    if args.cmd == "carry":
+        try:
+            print(claims_carry.carry(root, args.feature, args.task, [k for k, _ln in claims_carry.classified(sys.modules[__name__], root)[3] if k not in claims_carry.filed(root)]))
+        except ValueError as e:
+            print(f"claims-carry: {e}", file=sys.stderr)
+            return 2
+        return 0
     if args.cmd == "coverage":
         cl = engine(root)
         qs = {p.name for p in (root / QUESTIONS).glob("*.html")}
