@@ -29,19 +29,27 @@ holds; the instruction is to delete it now, and NOT to carry the failure anywher
    `specs/388-retire-roll-village/closure.py`): `water_sources_for`, `water_source_anchor`, `crop_to_content`,
    `cremation_ground` (with `ROOFED_SHARE`, `cremation_outline`), `civic_grounds/edge_seat.py`'s `edge_seat`, `EdgeGround`,
    `ANGLES`, `rect_gap`, `rect_samples`, `cut_undeckable_lanes` (with `CUT_GAP_FT`), `PlacerMixin.headman` and `build_comb`.
-   Code with no production caller is not shipping, so it is part of "it"; the plan confirms each name before it goes.
+   Code with no production caller is not shipping, so it is part of "it"; the plan confirms each name before it goes. The
+   closure matches NAMES, so a definition whose name is also defined elsewhere is checked by hand: `edge_seat.py`'s own
+   `convex_hull` (its one caller `EdgeGround`; the live callers import `_geom/primitives.convex_hull`) and its `STEP_FT`
+   (referenced nowhere) go with the module.
 3. **Its tests**: every test that calls (1) or (2) - deleted, not ported.
 
 ## Requirements
 
 - **FR-001**: `roll_village` and everything in "What it is" (2) are deleted from the engine. A name the plan finds still
   reached by shipping code (a pool map, the scripted hamlet, a Mode A sheet, the page) is kept, and the plan says who reaches it.
-- **FR-002**: Their tests are deleted; a test file left empty is removed. This reaches one scripted-hamlet test file,
-  `tests/hamletgen/test_burial.py`: its tests of `edge_seat`, `EdgeGround` and `rect_gap` (`test_rect_gap`, the
-  `test_the_edge_seat_*` tests, `test_the_ground_stands_beyond_the_last_house_not_in_a_gap_among_them` - which tests
-  the seat through `_seat` - and the `_seat` helper) go; only
-  `test_a_hamlet_draws_no_ground_of_its_own_and_records_where_its_dead_lie` and `test_convex_hull_of_few_points` stay, and its docstring stops naming the edge seat as live. The
-  `rolls_map` marker lists in `tests/test_markers.py` drop `roll_village`.
+- **FR-002**: A test goes with the code it tests: a test whose SUBJECT is deleted code is deleted, and a test file left
+  empty is removed. This reaches one scripted-hamlet test file, `tests/hamletgen/test_burial.py`: `test_rect_gap`, the
+  `test_the_edge_seat_*` tests, `test_the_ground_stands_beyond_the_last_house_not_in_a_gap_among_them` (it tests the seat
+  through `_seat`), `test_convex_hull_of_few_points` (it tests `edge_seat.py`'s own hull) and the `_seat` helper go; only
+  `test_a_hamlet_draws_no_ground_of_its_own_and_records_where_its_dead_lie` stays, and the docstring stops naming the edge
+  seat as live. A test whose subject SHIPS but which reached it through a deleted one-call wrapper keeps its subject and
+  calls the live code instead: the comb tests that laid a field with `build_comb` call `finish_comb(carve_comb(...))`
+  (the pair the scripted hamlet calls) through one test helper, and the frame tests that cropped with `crop_to_content`
+  call `crop_to_view(content_view(...))` (the pair the scripted hamlet calls) through one test helper; a test of the
+  wrapper ITSELF (carve-then-finish equals the wrapper) loses that clause. The `rolls_map` marker lists in
+  `tests/test_markers.py` drop `roll_village`.
 - **FR-003**: Prose that describes `roll_village` or the closure's names as live is updated where it stands: the package indexes
   (`settlement/CLAUDE.md`, `settlement/rolling/CLAUDE.md`, `settlement/civic_grounds/CLAUDE.md`, `waterfields/CLAUDE.md`,
   `tests/soak/CLAUDE.md`), the module and function docstrings that cite them (`hamletgen/__init__.py`, `hamletgen/cluster.py`,
@@ -72,9 +80,11 @@ holds; the instruction is to delete it now, and NOT to carry the failure anywher
 
 ## Decisions Recorded
 
-- **D1 - delete, not port**: the tests of deleted code go with it (FR-002); none is ported, because the scripted hamlet draws
-  none of it and its own tests cover what it draws - `test_burial.py` keeps its tests of that and loses only those of the
-  deleted edge seat. Who chose: the GM ("just delete it").
+- **D1 - a test follows its subject**: a test of deleted code goes with it (FR-002); none is ported to the scripted hamlet,
+  which draws none of it. A test of SHIPPING code (the comb, the frame rule) that happened to call a deleted wrapper keeps
+  testing that code through the live calls, because deleting it would drop tests of what the hamlet draws. Who chose: the
+  GM ruled the deletion ("just delete it"); keeping the tests of live code is the session's reading of it - nothing that
+  ships loses a test.
 - **D2 - the legacy `.gen.py` files stay as written** (FR-005): editing frozen exhibits is a hand-map edit; leaving a call to
   a deleted method in a file nothing runs costs nothing. Alternative priced: rewrite their headers to say the engine is gone -
   rejected as an edit to frozen files the GM has not asked for.
