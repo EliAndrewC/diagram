@@ -18,8 +18,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T03 FIRST the blind Approach (amendment 2, FR-012): a fresh agent writes T03's part A from the task, the checklist, the code and the record alone; then the four cohort seeds failing at HEAD (17, 21, 40, 45), as T01 leaves them, and the side-by-side shape T01 leaves (the glyph-check of 2026-10-17, F1-F3 on Inashiro: a stub and a lane run side by side, joined by a rung) - the merge decided as one general test, not a fourth detector; its retro row [lands-open]
       research: rendering
       verify: DONE. seeds 17, 21, 40, 45 pass; nothing newly fails against HEAD; pool clean (Kashikawa lane 9 straightened); D17's merge, seeds 49, 55 and 57's residue carried to T12 by the round arbiter; claims and record checks answered; gate green; retro row in retro.md
-- [ ] T04 T48: the web carries a re-deal of the seats (384's User Story 2, SC-004); its retro row [lands-open]
+- [x] T04 T48: the web carries a re-deal of the seats (384's User Story 2, SC-004); its retro row [lands-open]
       research: rendering
+      verify: DONE. see retro.md's T04 row; plan CLEAR (T04 round 2)
 - [ ] T05 T47: the wave 155 pocket-well patch re-landed, no waiver; its retro row [lands-open]
       research: rendering
 - [ ] T06 A ranking row (chosen at its start, a kind not yet tried); its retro row [lands-open]
@@ -40,10 +41,12 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T14 Amendment 4 (FR-014 to FR-016): the report tells the session's calls from its subagents' and prints each task's phases and its decision-log skeleton; the checklist's one goal a task; T03 replayed; its retro row
       research: rendering
       verify: DONE. report tells session from subagent calls (transcripts exact, window estimate per run), foreground runs as waiting, idle apart, per-task phases and decision-log skeleton; checklist A9 one goal, C8 to the skeleton; T03 replayed (202 of 549 calls subagents'); tests in test_event_log.py red without each; arbiter fix on ask:t14-plan-round4 done; retro row
-- [ ] T15 A cohort rolled over an uncommitted engine diff says so (found by T04, plan D36): `cohort_known --stamp`, its readers skip it [lands-open]
+- [x] T15 A cohort rolled over an uncommitted engine diff says so (found by T04, plan D36): `cohort_known --stamp`, its readers skip it [lands-open]
       research: rendering
-- [ ] T16 A plan review's third round on one task waits for the round arbiter (the arbiter's fix on hour:385-approach-checklist@9, plan D37) [lands-open]
+      verify: DONE. see retro.md's T15 row; plan CLEAR (T04 round 2)
+- [x] T16 A plan review's third round on one task waits for the round arbiter (the arbiter's fix on hour:385-approach-checklist@9, plan D37) [lands-open]
       research: rendering
+      verify: DONE. see retro.md's T16 row; plan CLEAR (T04 round 2)
 - [ ] T11 The close: the checklist to `docs/`, the refusals extended to every feature (FR-001), the final report (SC-001, SC-002); and D30's wording, filed by the round arbiter's ruling on ask:t14-plan-round4 (T14's plan round 4, rows 1-3 - the code already does each, `test_a_transcript_named_call_is_its_run_s_anywhere_and_a_mixed_overlap_is_the_missing_run_s_estimate`): the outside-every-window clause carries its own condition (no `by`, no transcript names it), the overlap clause says "still an estimate", and a call inside both a found and a missing run's window is the missing run's estimate [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
