@@ -96,6 +96,10 @@ case "$VERDICT" in
     # taken and whether the stated reasons were valid use cases"*).
     escape_or_refuse make-only GUARD_EDIT_OK guard-edit-ok "$HERE"
     exit 0 ;;
+  make-dup-var:*)
+    # GUARD_EDIT_OK: feature 385 T61 (plan D80) - make keeps the last of two assignments of one variable and says nothing
+    V=${VERDICT#make-dup-var:}; VERDICT=make-dup-var
+    block "this make call sets $V twice, and make silently keeps only the last value." "one call with $V=\"<a> <b>\" (a quoted list), or one make call per value" ;;
   foreign-makefile)
     block "a make driven by a named makefile. This project's targets are in its own Makefile, and a foreign one is the documented way to walk past every guard here." "make <target>   (from the repository root)" ;;
   engine-entry-point)

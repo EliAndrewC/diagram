@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 167 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 168 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -211,6 +211,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make style-prepass</td><td class=a><div class=ad><span class=an>Q=&lt;NNNN&gt;</span><span class=aw>the question, by number (both pages) or a page&#x27;s file name</span></div></td><td>the style guide&#x27;s mechanical half for one question - metric figures with no feet, and every lead line to rule on - run BEFORE record-style</td></tr>
 <tr><td class=n>make subagent-cache</td><td class=a>SINCE</td><td>what subagents write to the prompt cache fresh, per agent type, and the repeated text in their bundles (feature 383 amendment 6)   [SINCE=YYYY-MM-DD]</td></tr>
 <tr><td class=n>make switches</td><td class=a>&ndash;</td><td>the iteration switch: remote on|off, with reason, who and when (feature 132)</td></tr>
+<tr><td class=n>make task-add</td><td class=a>F RESEARCH SECTION TITLE</td><td>file a task box (and its plan section) with the next free id: F=385 TITLE=&quot;...&quot; [SECTION=&lt;file with {T} for the id&gt;] [RESEARCH=physical]</td></tr>
 <tr><td class=n>make task-start</td><td class=a>F T</td><td>name the task you are starting, so its checks wait for its decisions&#x27; verdict (feature 375)</td></tr>
 <tr><td class=n>make tick</td><td class=a><div class=ad><span class=an>F=&lt;feature&gt;</span><span class=aw>the feature number or slug - e.g. `188`</span></div><div class=ad><span class=an>T=&lt;task&gt;</span><span class=aw>the task id - e.g. `T03`</span></div><div class=ad><span class=an>NOTE=&lt;text&gt;</span><span class=aw>what was VERIFIED, which is what the tick is asserting</span></div><div class=ad><span class=an>BOXES=1</span><span class=aw>also tick the three physical-research boxes (only legitimate on a `research: physical` task)</span></div><div class=ad><span class=an>PLAN_REVIEW_OK=&lt;reason&gt;</span><span class=aw>tick although the plan has no current CLEAR review (feature 243) - recorded</span></div></td><td>tick a task: F=188 T=T03 NOTE=&quot;what was verified&quot; [BOXES=1 ticks the research boxes]</td></tr>
 <tr><td class=n>make translation-owed</td><td class=a>Q</td><td>the translated quotations new or changed since the merge base - each owes a translation-check   [Q=0412]</td></tr>

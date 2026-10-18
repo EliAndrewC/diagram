@@ -211,6 +211,18 @@ def main(argv: list[str]) -> int:
             return 2
     path.write_text(new, encoding="utf-8")
     print(f"ticked {line[:90]}\n{remaining} task(s) still open in {path.relative_to(root)}")
+    # THE PLAN ARCHIVED AT THE TICK (feature 385 T63, the GM 2026-10-18: "perhaps that should be something that is run
+    # automatically when certain actions are taken"): 385's plan.md reached 168 KB with 54 finished sections, every review
+    # reading them, because `make plan-archive` was a step to remember. A tick is what finishes a section's last task. An archive
+    # error never refuses the tick, which is already written; it is printed, and the next tick tries again.
+    if (d / "plan.md").is_file():
+        try:
+            moved = _plan_gate.archive(d)
+        except Exception as e:  # noqa: BLE001 - any failure is reported, never raised past a written tick
+            print(f"tick: the plan's finished sections were not archived ({e}); `make plan-archive F={feature}` to retry")
+        else:
+            if moved:
+                print(f"tick: archived the plan sections of {', '.join(moved)} to plan-done.md")
     return 0
 
 

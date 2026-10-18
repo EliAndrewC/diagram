@@ -158,3 +158,28 @@ def test_boxes_written_below_the_verify_line_survive_the_tick() -> None:
     assert "verify: DONE. it passes\n      - [ ] research pass\n      - [x] source-reader confirmed\n- [ ] T25" in new
     boxed, _ = tt.tick(text, "T24", "it passes", boxes=True)
     assert "      - [x] research pass\n" in boxed
+
+
+def test_a_tick_archives_the_plan_s_finished_sections_and_an_archive_error_never_refuses_it(tmp_path: pathlib.Path, monkeypatch, capsys) -> None:
+    """Feature 385 T63 (the GM 2026-10-18): 385's plan.md reached 168 KB because `make plan-archive` was a step to remember."""
+    d = tmp_path / "specs" / "188-alpha"
+    d.mkdir(parents=True)
+    (d / "tasks.md").write_text(TASKS, encoding="utf-8")
+    plan = b"# plan\n"
+    (d / "plan.md").write_bytes(plan)
+    (d / "plan-review.json").write_text(json.dumps({"plan_sha256": hashlib.sha256(plan).hexdigest(), "decisions": [], "verdict": "CLEAR"}), encoding="utf-8")
+    monkeypatch.setattr(tt, "repo_root", lambda start=None: tmp_path)
+    sys.path.insert(0, str(REPO / "scripts" / "gates"))
+    import plan_gate  # noqa: PLC0415
+
+    calls: list[pathlib.Path] = []
+    monkeypatch.setattr(plan_gate, "archive", lambda spec_dir: calls.append(spec_dir) or ["T02"])
+    assert tt.main(["188", "T02", "done"]) == 0
+    assert calls == [d] and "archived the plan sections of T02 to plan-done.md" in capsys.readouterr().out
+
+    def broken(spec_dir: pathlib.Path) -> list[str]:
+        raise OSError("disk full")
+
+    monkeypatch.setattr(plan_gate, "archive", broken)
+    assert tt.main(["188", "T03", "done"]) == 0  # the tick stands
+    assert "not archived (disk full)" in capsys.readouterr().out and "- [x] T03" in (d / "tasks.md").read_text(encoding="utf-8")
