@@ -124,7 +124,7 @@ def fail(gitdir: str, phase: str) -> None:
 
 def _failure_marks(gitdir: str) -> tuple[list[float], int, list[str]]:
     """Every failure moment, how many tests failed, and their ids (a mark's third field, written since feature 385; an older
-    bare `<stamp> test` mark names none). A test phase's own end mark is dropped when its tests left marks: it would make
+    bare `<stamp> test` mark names none), and each uncovered module with its lines where the coverage floor failed. A test phase's own end mark is dropped when its tests left marks: it would make
     `last_failure_s` the phase's end. With no test marks (a coverage floor, the roll census) the phase end is the only
     moment there is, and it stands."""
     tests, phases, names = [], [], []
@@ -135,6 +135,10 @@ def _failure_marks(gitdir: str) -> tuple[list[float], int, list[str]]:
         except ValueError:
             continue
         kind, _, nodeid = kind.partition(" ")
+        if kind == "uncovered":  # a coverage floor's module and lines (`uncovered_marks.py`, feature 387): named, a phase's moment
+            names.append(f"uncovered {nodeid}")
+            phases.append((moment, "phase:coverage"))
+            continue
         if kind == "test":
             tests.append(moment)
             if nodeid:

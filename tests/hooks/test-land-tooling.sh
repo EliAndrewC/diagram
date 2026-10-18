@@ -14,6 +14,9 @@ export GIT_AUTHOR_NAME=t GIT_AUTHOR_EMAIL=t@t GIT_COMMITTER_NAME=t GIT_COMMITTER
 export LAND_TOOLING_CHECKS=true LAND_TOOLING_PUSH="git push -q origin HEAD:main"
 
 ok() { if eval "$2"; then echo "  ok      $1"; PASS=$((PASS+1)); else echo "  FAIL    $1"; FAIL=$((FAIL+1)); fi; }
+# (an assertion pipes into `grep PATTERN >/dev/null`, never `grep -q`: under `pipefail` a `grep -q` that exits on its first match
+# can kill the writer with SIGPIPE, and the pipeline fails though the line is there - "the clone holds a merge" failed so, now
+# and then, inside a land-tooling run, feature 387)
 
 # origin with main; a clone at $T/m/.clones/c with an engine commit and a tooling commit; main moved by another session
 setup() {
@@ -53,7 +56,7 @@ ok "landed" '[ "$rc" -eq 0 ] && grep -q "landed scripts/a.sh" "$T/out"'
 ok "main carries the guard fix" '[ "$(on_main scripts/a.sh | tail -1)" = "TWO" ]'
 ok "main carries none of the engine work" '[ "$(on_main l7r/e.py)" = "e = 1" ]'
 ok "main keeps the other session's work" '[ "$(on_main other.txt)" = "other" ]'
-ok "the worktree is gone" '[ ! -e "$T/m/.clones/c-tooling" ] && ! git -C "$C" worktree list | grep -q c-tooling'
+ok "the worktree is gone" '[ ! -e "$T/m/.clones/c-tooling" ] && ! git -C "$C" worktree list | grep c-tooling >/dev/null'
 ok "each step is timed in the log (383 amendment 2, FR-017)" 'for s in prepare worktree patch guard-suites tooling-tests checks push; do grep -q "^land-tooling: step $s [0-9.]* s$" "$C/.git/land-tooling.log" || exit 1; done'
 ok "...and the landing's steps are one JSON line" 'python3 -c "import json,sys; r=json.loads(open(sys.argv[1]).readlines()[-1]); sys.exit(not (r[\"outcome\"] == \"push-exit-0\" and set(r[\"steps\"]) == {\"prepare\", \"worktree\", \"patch\", \"guard-suites\", \"tooling-tests\", \"checks\", \"push\"}))" "$C/.git/land-tooling-steps.jsonl"'
 ok "the clone's history is untouched" '[ "$(git -C "$C" log --format=%s -1)" = "a guard fix" ]'
@@ -68,7 +71,7 @@ ok "they overlapped: the checks took less than the two jobs one after the other"
 setup
 LAND_TOOLING_CHECKS= LAND_TOOLING_GUARDS='echo guard-out; exit 1' LAND_TOOLING_TOOLING='true' land scripts/a.sh; rc=$?
 ok "a failing job is named and lands nothing" '[ "$rc" -ne 0 ] && grep -q "checks failed in the worktree (guard-suites" "$T/out" && grep -q guard-out "$C/.git/land-tooling.log" && [ "$(on_main scripts/a.sh | tail -1)" = "two" ]'
-ok "...and leaves no job file behind" '! ls "$C/.git/" | grep -q "land-tooling.log\\."'
+ok "...and leaves no job file behind" '! ls "$C/.git/" | grep "land-tooling.log\\." >/dev/null'
 
 echo "3. a change that does not apply cleanly onto main, and a failed check, land nothing"
 setup
@@ -90,7 +93,7 @@ printf 'ONE\n2\n3\n' > "$T/seed/scripts/c.sh"; git -C "$T/seed" commit -qam "c t
 land scripts/c.sh; rc=$?
 ok "the patch's context moved on main, the merge is clean: landed" '[ "$rc" -eq 0 ] && [ "$(on_main scripts/c.sh)" = "$(printf "ONE\n2\nTHREE")" ]'
 ok "...saying it merged main in" 'grep -q "merged origin/main into the clone" "$T/out"'
-ok "...and the clone holds a merge, never a rewrite" '[ "$(git -C "$C" log -1 --format=%P | wc -w)" -eq 2 ] && git -C "$C" log --format=%s | grep -q "c here, line 3"'
+ok "...and the clone holds a merge, never a rewrite" '[ "$(git -C "$C" log -1 --format=%P | wc -w)" -eq 2 ] && git -C "$C" log --format=%s | grep "c here, line 3" >/dev/null'
 
 echo "3b. a landed test is run, and one needing the clone's unlanded engine work is refused"
 setup

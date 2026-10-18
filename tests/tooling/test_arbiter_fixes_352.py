@@ -221,3 +221,36 @@ def test_an_asks_bundle_carries_the_claims_on_the_numbers_it_names() -> None:
     words = "\n".join(ab.claims_section(root, ["The ruling's first lever, the field's size, is researched (0017's 1.3 acres a household); the farmstead pitch 273 ft"]))
     assert "- `1.3 acres`: `l7r/diagram/hamletgen/consts.py::GROSS_ACRES_PER_HOUSEHOLD#paddy per household` - a research page" in words, words
     assert "- `273 ft`: no claim states it" in words, "a value no claim states is said to be one, never left out"
+
+
+def test_a_spec_round_trigger_s_bundle_carries_each_round_s_reply_with_its_findings_marked(tmp_path: pathlib.Path) -> None:
+    """The round arbiter's tooling fix on round:spec-fidelity|387-scale-the-placement-loops#1@6: the spec-round cap's bundle
+    pointed at the session's own Review history and held no reviewer verdict, so reversals and duplicate dispatches had to be
+    inferred. Each spec review dispatch's reply is now beside the MANIFEST, its findings marked; a plan review is not a round."""
+    subs = tmp_path / "transcripts" / "-proj" / "sess" / "subagents"
+    subs.mkdir(parents=True)
+
+    def agent(n: int, prompt: str, reply: str | None) -> None:
+        recs = [{"message": {"role": "user", "content": prompt}}]
+        if reply is not None:
+            recs.append({"message": {"role": "assistant", "content": [{"type": "text", "text": reply}]}})
+        f = subs / f"agent-a{n}.jsonl"
+        f.write_text("\n".join(json.dumps(r) for r in recs) + "\n")
+        import os
+
+        os.utime(f, (1000 + n, 1000 + n))
+
+    agent(1, "MODE 2: SPECIFICATION REVIEW of feature 9. Spec: /x/specs/9-x/spec.md", "**Verdict: CHANGES REQUIRED**\n\n1. FR-002's premise is wrong: the rounds do not grow.\n")
+    agent(2, "MODE 4: PLAN REVIEW of 3 changed block(s) of specs/9-x", "Verdict: BLOCKED\n\n1. D1 narrows.\n")
+    agent(3, "MODE 3 (VERIFY) - round 2 of specs/9-x", "Verdict: CHANGES REQUIRED\n\n1. FR-002's premise is wrong: the rounds do not grow.\n")
+    agent(4, "MODE 2: SPECIFICATION REVIEW of specs/9-x", None)
+    agent(5, "MODE 2: SPECIFICATION REVIEW of specs/10-other", "Verdict: FAITHFUL\n")
+    out = tmp_path / "out"
+    out.mkdir()
+    text = "".join(ab.spec_rounds(out, "9-x", tmp_path / "transcripts"))
+    r1, r2 = text.split("### Round 2")[0], text.split("### Round 2")[1].split("### Round 3")[0]
+    assert "### Round 1: spec-fidelity (CHANGES REQUIRED)" in r1 and "- NEW: " in r1 and "FR-002's premise is wrong" in r1
+    assert ": spec-fidelity (CHANGES REQUIRED)" in r2 and "- REPEATED: " in r2 and "FR-002's premise is wrong" in r2, "the plan review is no round"
+    assert "### Round 3: spec-fidelity (no reply (stopped))" in text and "Round 4" not in text, "another feature's review is not this one's"
+    assert (out / "round-1-spec-fidelity.md").read_text().startswith("**Verdict: CHANGES REQUIRED**")
+    assert ab.spec_rounds(out, "11-none", tmp_path / "transcripts") == ["- (no spec review dispatch found in the subagent transcripts - read the Review history)\n"]

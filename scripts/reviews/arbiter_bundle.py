@@ -136,7 +136,7 @@ def _insertion(o: str, n: str) -> str | None:
 def _trigrams(text: str) -> set[tuple[str, ...]]:
     """Every run of three content words in `text`, in order - a phrase, where `_content` is a bag."""
     w = [x for x in _words(text).split() if len(x) > 3 and x not in _STOP]
-    return {tuple(w[i:i + 3]) for i in range(len(w) - 2)}
+    return {tuple(w[i : i + 3]) for i in range(len(w) - 2)}
 
 
 def mark_rounds(replies: list[str], others: list[tuple[str, str]] | None = None) -> list[list[tuple[str, str]]]:
@@ -382,7 +382,7 @@ def record_round_counter(root: Path, unit: str) -> list[str]:
     path = hc.state_path(str(root))
     try:
         state = json.loads(path.read_text(encoding="utf-8")) if path is not None else {}
-    except (OSError, ValueError):
+    except OSError, ValueError:
         return []
     n = int(state.get("rounds", {}).get(unit, 0))
     if not n:
@@ -403,7 +403,7 @@ def round_counter(root: Path, unit: str) -> list[str]:
     try:
         feature = json.loads((root / ".specify" / "feature.json").read_text()).get("feature_directory", "") or "none"
         kept = json.loads((root / ".git" / "review-rounds.json").read_text()).get(feature, {}).get(unit, [])
-    except (OSError, ValueError):
+    except OSError, ValueError:
         return []
     landed = int(_git(root, "log", "-1", "--format=%ct", "origin/main", "--", f"{feature}/tasks.md").strip() or 0)
     live = [k for k in kept if (int(k.rsplit("@", 1)[1]) if "@" in k else 0) >= landed]
@@ -422,7 +422,7 @@ def red_gate_runs(root: Path, keep: int = 4) -> list[str]:
     for f in sorted((root / "dev" / "run-log").glob("*/*.json")):
         try:
             r = json.loads(f.read_text(encoding="utf-8"))
-        except (OSError, ValueError):
+        except OSError, ValueError:
             continue
         if r.get("target") == "done" and str(r.get("result", "")).startswith("failed"):
             runs.append(r)
@@ -542,6 +542,7 @@ def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "", evidenc
             "round's verdict and what was applied. Rule as for any round cap: `accept` lets the spec stand as the last round "
             "left it (the review gate takes the ruling as its verdict).\n"
         )
+        parts += spec_rounds(out, subject)
     if trigger.startswith("ask:"):
         parts.append(
             f"## The question\n\n{owed.get('detail', '')}\n\nA process question the session would have put to the GM. "
@@ -598,6 +599,50 @@ def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "", evidenc
 _PLAN_REVIEW = re.compile(r"\bplan(?:'s)? (?:review|round)s?\b|\bplan-delta\b", re.I)
 
 
+#: a spec review's dispatch: MODE 2's first reading or a later round's MODE 3, never a plan's MODE 4
+_SPEC_ROUND = re.compile(r"MODE (?:2|3)\b|SPECIFICATION REVIEW")
+_VERDICT = re.compile(r"[Vv]erdict\W{0,6}(FAITHFUL|CHANGES REQUIRED|NOT FAITHFUL|BLOCKED|CLEAR)")
+
+
+def _first_prompt(transcript: Path) -> str:
+    """The text a subagent was dispatched with: its transcript's first record."""
+    try:
+        with transcript.open(encoding="utf-8", errors="replace") as fh:
+            first = json.loads(fh.readline() or "{}")
+    except OSError, ValueError:
+        return ""
+    content = (first.get("message") or {}).get("content")
+    if isinstance(content, str):
+        return content
+    return "".join(b.get("text", "") for b in content or [] if isinstance(b, dict))
+
+
+def spec_rounds(out: Path, subject: str, transcripts: Path | None = None) -> list[str]:
+    """A spec review's rounds, each reviewer's whole reply beside the MANIFEST (`round-N-spec-fidelity.md`) and its findings
+    marked NEW, REPEATED or REVERSING (`mark_rounds`) - the round arbiter's tooling fix on round:spec-fidelity|387-scale-the-
+    placement-loops#1@6: that bundle pointed at the session's own Review history and held no verdict, so the reversals and the
+    duplicate dispatches had to be inferred. Read from the subagent transcripts whose dispatch names `specs/<subject>` and is a
+    spec review (MODE 2 or 3, not a plan's MODE 4), oldest first; a dispatch with no reply (stopped) is listed as such."""
+    found = []
+    for f in sorted((transcripts or TRANSCRIPTS).glob("*/*/subagents/agent-*.jsonl")):
+        prompt = _first_prompt(f)
+        if f"specs/{subject}" in prompt and _SPEC_ROUND.search(prompt) and "MODE 4" not in prompt:
+            found.append((f.stat().st_mtime, f))
+    if not found:
+        return ["- (no spec review dispatch found in the subagent transcripts - read the Review history)\n"]
+    replies = [hc._reply_of(str(f), "") for _m, f in sorted(found)]
+    lines = []
+    for i, (reply, marked) in enumerate(zip(replies, mark_rounds(replies), strict=True), 1):
+        verdict = (m.group(1) if (m := _VERDICT.search(reply)) else "no verdict") if reply else "no reply (stopped)"
+        lines.append(f"### Round {i}: spec-fidelity ({verdict})\n")
+        if reply:
+            (out / f"round-{i}-spec-fidelity.md").write_text(reply, encoding="utf-8")
+            lines.append(f"The whole reply: `round-{i}-spec-fidelity.md` beside this file.")
+        lines += [f"- {m}: {f}" for m, f in marked] or ["- (no findings it numbers or bullets - read the whole reply)" if reply else "- (no reply)"]
+        lines.append("")
+    return ["\n".join(lines) + "\n"]
+
+
 def plan_rounds(d: Path) -> tuple[list[str], Path]:
     """An ask about a plan review carries that review's rounds (the round arbiter's tooling fix, ask:t14-plan-round4: the
     bundle held none of T14's three rounds, so "each fixed as written" was ruled on the session's account): every recorded
@@ -629,7 +674,7 @@ def _json(path: Path) -> dict:
     """A JSON file's object, or {} where it does not parse."""
     try:
         d = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, ValueError):
+    except OSError, ValueError:
         return {}
     return d if isinstance(d, dict) else {}
 
