@@ -685,6 +685,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
+  },
+  "### T08 Approach (re-answered 2026-10-18T17:08Z)": {
+   "sha256": "3e4a9ff5cbd1c5f0cd9b5311335570a784a2da390aa1975bd30ea09aa1a4267f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T08 part B (2026-10-18T17:45Z)": {
+   "sha256": "7aaedb3dc2d9c42171081f25829ebce1690c74b39670a3785642ccf83ea0162f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
   }
  },
  "reviewed": "2026-10-17",
@@ -4047,6 +4059,110 @@
      "why": "The second half of the arbiter's fix verbatim ('the red-gate bundle should carry the diff between each pair of counted reds'), and the bundle's filter matches the counter's D66a so the arbiter sees the reds the trigger counted. Serves FR-004's tripwire; adds no behavior beyond the bundle's contents."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "### T08 Approach (re-answered 2026-10-18T17:08Z)",
+    "### T08 part B (2026-10-18T17:45Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T08-A1 dry bank for every tail pond",
+     "summary": "The bank's ellipse (pond radii + SINK_FRINGE + POND_BANK_FT) is added to the no-build blocks for every tail pond, bare or planted, so the toe marsh and later scatters stay off it.",
+     "class": "within",
+     "why": "This is D61b as the spec already states it, and it carries 0061's drawing page ('reeds and the wet tint are kept off the embankment ... nor on any raised rim around a pond'), i.e. matching the research, which is the request carried from 384. Covering bare banks as well as planted ones follows from the page, which names any raised rim; the block narrows nothing."
+    },
+    {
+     "id": "T08-A2 bank width 18 ft, a GUESS knob",
+     "summary": "POND_BANK_FT = 18 ft, labeled ours (GUESS) and treated as a knob band (exit a).",
+     "class": "within",
+     "why": "D61b already fixes the 18 ft GUESS. Labeling it ours and a knob is the checklist's 'where does this number come from' question the GM asked for, answered."
+    },
+    {
+     "id": "T08-A3 radial jitter of tree seats",
+     "summary": "Each bank tree's seat is jittered across the bank as well as along it, within the 6 ft the crown leaves, so the trees do not stand on a ruled ring.",
+     "class": "within",
+     "why": "Stated in D61b; answers the glyph check's F2. It adds no constraint the request or spec lacks."
+    },
+    {
+     "id": "T08-A4 order: reserve the bank in the trees' own stage, before the hinterland",
+     "summary": "Bank block first, then the jitter, then tests, pool, cohort, glyph check; part B Q4 says nothing is moved earlier for something later.",
+     "class": "within",
+     "why": "Implementation order that the spec leaves open. It keeps generation in the order things came about (the bank exists with the pond, before the hinterland's marsh), as the checklist asks."
+    },
+    {
+     "id": "T08-A9 done: one goal",
+     "summary": "Done = every tail pond's bank dry beyond its reeds and no bank-tree trunk in any marsh, on the pool and cohort, glyph check passing.",
+     "class": "within",
+     "why": "One goal (a dry bank with its trees on it), as FR-015 requires; the side fixes met on the way were split out as their own tasks (T50 tooling, T51 test race), as FR-015 asks."
+    },
+    {
+     "id": "T08-A8 budget 90 min",
+     "summary": "The Approach block's budget answer is 90 min.",
+     "class": "within",
+     "why": "The checklist's budget question (FR-001/FR-003) answered for one task. It is not a standing threshold of the kind the GM declined in amendment 2."
+    },
+    {
+     "id": "T08-B9 continue: land T08",
+     "summary": "Part B after the hour-18 step-back: the cause is measured (the toe marsh was cut only by the pond's ellipse), the fix is D61b, the next step is the glyph check at landing, and the ruling is continue.",
+     "class": "within",
+     "why": "Part B answers FR-004's resist-trigger checklist and decides nothing beyond D61b; it narrows neither the request nor the spec."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "### T08 Approach (re-answered 2026-10-18T17:08Z)",
+    "### T08 part B (2026-10-18T17:45Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T08-A1 dry bank for every tail pond",
+     "summary": "The bank's ellipse (pond radii + SINK_FRINGE + POND_BANK_FT) is added to the no-build blocks for every tail pond, bare or planted, so the toe marsh and later scatters stay off it.",
+     "class": "within",
+     "why": "This is D61b as the spec already states it, and it carries 0061's drawing page ('reeds and the wet tint are kept off the embankment ... nor on any raised rim around a pond'), i.e. matching the research, which is the request carried from 384. Covering bare banks as well as planted ones follows from the page, which names any raised rim; the block narrows nothing."
+    },
+    {
+     "id": "T08-A2 bank width 18 ft, a GUESS knob",
+     "summary": "POND_BANK_FT = 18 ft, labeled ours (GUESS) and treated as a knob band (exit a).",
+     "class": "within",
+     "why": "D61b already fixes the 18 ft GUESS. Labeling it ours and a knob is the checklist's 'where does this number come from' question the GM asked for, answered."
+    },
+    {
+     "id": "T08-A3 radial jitter of tree seats",
+     "summary": "Each bank tree's seat is jittered across the bank as well as along it, within the 6 ft the crown leaves, so the trees do not stand on a ruled ring.",
+     "class": "within",
+     "why": "Stated in D61b; answers the glyph check's F2. It adds no constraint the request or spec lacks."
+    },
+    {
+     "id": "T08-A4 order: reserve the bank in the trees' own stage, before the hinterland",
+     "summary": "Bank block first, then the jitter, then tests, pool, cohort, glyph check; part B Q4 says nothing is moved earlier for something later.",
+     "class": "within",
+     "why": "Implementation order that the spec leaves open. It keeps generation in the order things came about (the bank exists with the pond, before the hinterland's marsh), as the checklist asks."
+    },
+    {
+     "id": "T08-A9 done: one goal",
+     "summary": "Done = every tail pond's bank dry beyond its reeds and no bank-tree trunk in any marsh, on the pool and cohort, glyph check passing.",
+     "class": "within",
+     "why": "One goal (a dry bank with its trees on it), as FR-015 requires. Part B records two reds with separate causes fixed on the way to the same goal (a 0.92 crown, an unreached line), and a third, a test race, split out as T51; T08's tooling fix was T50. Getting the gate green on the same goal is not a second goal."
+    },
+    {
+     "id": "T08-A8 budget 90 min",
+     "summary": "The Approach block's budget answer is 90 min.",
+     "class": "within",
+     "why": "The checklist's budget question (FR-001/FR-003) answered for one task. It is not a standing threshold of the kind the GM declined in amendment 2."
+    },
+    {
+     "id": "T08-B9 continue: land T08",
+     "summary": "Part B after the hour-18 step-back: the cause is measured (the toe marsh was cut only by the pond's ellipse), the fix is D61b, the next step is the glyph check at landing, and the ruling is continue.",
+     "class": "within",
+     "why": "Part B answers FR-004's resist-trigger checklist and decides nothing beyond D61b; it narrows neither the request nor the spec."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -4492,6 +4608,32 @@
      "summary": "The formatter's sorting of T49's test imports, seen on the same gate, is left to T49 and re-lands with T49 rather than being fixed here.",
      "class": "within",
      "why": "Not a narrowing of any request: the defect is still fixed, in the task that owns it. Keeping it out of T51 follows FR-015 (one goal a task), which the GM approved in amendment 4 ('a second goal becomes its own task')."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T52": {
+   "section_sha256": "f493890381359b6c31558274b8ee5ff7f6774d2b4a444d136bf6c2e502daf6cc",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D69",
+     "summary": "land-tooling's checks step runs ruff check and ruff format --check on the .py files among FILES, in the landing's worktree; a failure is a failing check, so nothing lands, and the message names the files and the fix (ruff format <file> or the rule)",
+     "class": "within",
+     "why": "Amendment 6 (GM 2026-10-18, verbatim): 'Please make sure to implement any obvious performance / tooling / process improvements along the way.' Measured 2026-10-18 per the Approach: T49's and T51's landings put unformatted Python on main, caught only by the next make done. Applying the gate's own existing lint/format rules (constitution: ruff, ruff format) at landing is an obvious tooling fix; it adds no new rule, only moves an existing check earlier. Limiting it to .py files and to the landed files is the extent of the gap found, not a cut to anything the GM asked for."
+    },
+    {
+     "id": "D69-seam",
+     "summary": "LAND_TOOLING_LINT environment variable, defaulting to the two ruff commands, as a seam for tests/hooks/test-land-tooling.sh",
+     "class": "within",
+     "why": "A test seam whose default is the requested check; it exists only so the red-without-it test can run. It enforces the improvement and does not change behavior for anyone who leaves it at its default."
+    },
+    {
+     "id": "Approach-scope",
+     "summary": "Tooling only; one goal (refuse a landed Python file failing ruff check or ruff format --check); test red without it",
+     "class": "within",
+     "why": "Matches FR-015's one-goal rule and SC-style red-without-it testing; adds nothing the request did not authorize under amendment 6."
     }
    ],
    "verdict": "CLEAR"

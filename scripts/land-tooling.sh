@@ -13,7 +13,7 @@
 # own history is untouched; its next merge of main meets identical hunks. FILES is required: a file lands whole, and
 # mid-feature a doc or Makefile edit may describe work that has not landed.
 #
-# Test seams (tests/hooks/test-land-tooling.sh): LAND_TOOLING_CHECKS, LAND_TOOLING_TEST (how one landed test file runs) and
+# Test seams (tests/hooks/test-land-tooling.sh): LAND_TOOLING_CHECKS, LAND_TOOLING_LINT, LAND_TOOLING_TEST (how one landed test file runs) and
 # LAND_TOOLING_PUSH replace the checks, the landed tests' runner and the push.
 set -uo pipefail
 
@@ -121,6 +121,12 @@ step patch
 guards=${LAND_TOOLING_GUARDS:-${LAND_TOOLING_CHECKS:-make hooks-test HOOKS_PYTEST_SKIP=tests/tooling/}}
 tooling_tests=${LAND_TOOLING_TOOLING:-${LAND_TOOLING_CHECKS:-make test-file FILE=tests/tooling}}
 run_test=${LAND_TOOLING_TEST:-make test-file FILE=}
+# GUARD_EDIT_OK: feature 385 T52 - THE PYTHON THAT LANDS IS LINTED FIRST: T49's test landed with its imports unsorted (and a merge's
+# duplicate import after it), T51's fixture with the wrong blank lines - each caught by the next session's `make done`, on main.
+# `ruff check` and `ruff format --check` on the landed .py files, in the worktree, beside the other two checks
+pys=""; for f in "$@"; do case "$f" in *.py) pys="$pys $f" ;; esac; done
+lint=${LAND_TOOLING_LINT:-${pys:+ruff check$pys && ruff format --check$pys}}
+lint=${lint:-true}
 for f in "$@"; do case "$f" in tests/tooling/*|tests/hooks/*) ;; tests/*test_*.py) [ -f "$WT/$f" ] && tooling_tests="$tooling_tests && $run_test\"$f\"" ;; esac; done
 # GUARD_EDIT_OK: feature 374 batch 4 - THE CHECKS RUN WITHOUT THE CALLER'S ESCAPES: a LEDGER_ROWS_OK meant for the push reached
 # the hook suites, where it waived the very refusals they test, and ten sync-with-main cases failed (twice, 2026-10-12). The
@@ -135,9 +141,9 @@ check() { # <step name> <command>: run in the worktree without the escapes, to <
   awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" 'BEGIN { printf "%.2f", b - a }' > "$log.$1.s"
   echo "$rc" > "$log.$1.rc"
 }
-check guard-suites "$guards" & check tooling-tests "$tooling_tests" & wait
+check guard-suites "$guards" & check tooling-tests "$tooling_tests" & check lint "$lint" & wait
 failed=""
-for j in guard-suites tooling-tests; do
+for j in guard-suites tooling-tests lint; do
   s=$(cat "$log.$j.s"); rc=$(cat "$log.$j.rc")
   { printf -- '--- %s: exit %s\n' "$j" "$rc"; cat "$log.$j"; printf 'land-tooling: step %s %s s\n' "$j" "$s"; } >> "$log"
   steps_json="$steps_json${steps_json:+, }\"$j\": $s"
@@ -148,6 +154,7 @@ step checks
 if [ -n "$failed" ]; then
   steps_done "checks-failed:${failed# }"
   tail -25 "$log" >&2
+  case " $failed " in *" lint "*) printf 'land-tooling: lint failed on%s - `ruff format%s` for the format, the rule ruff names for the rest\n' "$pys" "$pys" >&2 ;; esac
   die "the checks failed in the worktree (${failed# }; full log: $log) - fix in the clone, commit, run this again"
 fi
 push=${LAND_TOOLING_PUSH:-scripts/sync-with-main.sh done}

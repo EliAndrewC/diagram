@@ -1504,6 +1504,23 @@ Owed by the re-decided D61b (the glyph check's NEEDS-WORK on Inashiro).
 9. **Done, measured.** One goal: every tail pond's bank is dry beyond its reeds (no toe-marsh ground inside the bank's ellipse)
    and no bank tree's trunk stands in any marsh, on the pool and the cohort; the glyph check passes.
 
+### T08 part B (2026-10-18T17:45Z)
+
+Owed by the hour-18 step-back (hour:385-approach-checklist@18, `continue`, 16:57Z).
+
+1. **What is refusing?** The glyph check's NEEDS-WORK on Inashiro: every bank tree stood in the toe marsh, laid after the trees,
+   and the ring read as ruled. Fixed by D61b (the bank kept dry beyond the reeds for every tail pond; the trees jittered across it):
+   0 trunks in any marsh on Inashiro and Mizuguchi, pool clean, cohort-landing 54/54, the gate green. Two reds on the way had
+   separate causes (a 0.92 crown, an unreached line) and a third gate went red on a test race (fixed as T51).
+2. **A3 again.** Unchanged, plus 0061's dry embankment (R) and its 18 ft width (GUESS).
+3. **A4 again.** Measured: the toe marsh was cut only by the pond's ellipse - a drift older than T08.
+4. **Moving something earlier for something later?** No - the bank is reserved in the trees' own stage, before the hinterland.
+5. **Tuning or changing?** Changing: the bank's ground follows the page.
+6. **The one-sentence test.** "A tail pond's bank stands dry beyond its reeds, bare or planted" - true on the pool.
+7. **The next step is a measurement.** The glyph check again, at the landing.
+8. **Routes measured before asking?** n/a - no ask.
+9. **After a ruling.** `continue`: land T08; its tooling fix was T50.
+
 ### T08 Decisions
 
 **D60 - the knob.** `POND_BANKS = ("bare", "planted")` in `consts.py`, rolled per hamlet from the seed (`_roll(seed, "pond_bank",
@@ -1691,6 +1708,32 @@ with the time it is written". `make plan-delta` asks the same reader, so both re
 
 **D68 - each test's own bundle directory.** An autouse fixture in `tests/tooling/test_plan_gate.py` points `plan_bundle.OUT` at the
 test's `tmp_path`, so no two tests share a bundle path.
+
+## T52 - make land-tooling lints the Python it lands (found by T49 and T51)
+
+### T52 Approach (checklist part A)
+
+1. **The goal, in the world.** A file `make land-tooling` puts on main passes the lint and the formatter every gate runs, so no
+   session's next gate fails on another's landing.
+2. **The constraints.** The checks run in the landing's worktree, on the landed files only, as its tooling tests do; a failure
+   lands nothing and names the fix (`ruff format <file>` / the ruff rule); tooling only; a test red without it.
+3. **Where each comes from.** `land-tooling`'s checks step is feature 379's (O); the lint and format rules are the gate's (G,
+   constitution: ruff and ruff format).
+4. **Do they describe the world here?** Yes - measured 2026-10-18: T49's test landed with its imports unsorted, and a merge then
+   left a duplicate `import subprocess` that landed too; T51's fixture landed with the wrong blank lines. Each was caught only by
+   the next `make done`'s formatter, after it was on main.
+5. **The order.** The check in the worktree's checks step, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: `make land-tooling` refuses a Python file that fails `ruff check` or `ruff format --check`,
+   naming the file and the fix; `tests/hooks/test-land-tooling.sh` red without it.
+
+### T52 Decisions
+
+**D69 - the landed Python linted in the worktree.** `land-tooling`'s checks step adds `ruff check` and `ruff format --check` on the
+`.py` files among FILES, in the worktree (`LAND_TOOLING_LINT`, default those two commands, a seam for the test); a failure is one of
+the checks that fail, so nothing lands and the message names the files and `ruff format <file>` or the rule.
 
 ## T11 - the close
 

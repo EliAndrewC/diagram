@@ -131,13 +131,19 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T45 A box the round arbiter filed lands open with no hand edit to the reviewed plan (found by T07's landing, plan D59)
       research: rendering
       verify: DONE. landed on main; tests/tooling/test_claims_index.py red without it; a hand-typed box citing a recorded ruling still holds (test_lands_open); T43's three findings filed with their rulings
-- [ ] T46 make land-tooling lands a changed Makefile only with the clone's make-targets page current, and lands the page beside it (the arbiter's fix on hour:385-approach-checklist@17, plan D64)
+- [x] T46 make land-tooling lands a changed Makefile only with the clone's make-targets page current, and lands the page beside it (the arbiter's fix on hour:385-approach-checklist@17, plan D64)
       research: rendering
-- [ ] T49 A tree-moved abort is no red gate, and the red-gate bundle shows what changed between reds (the arbiter's fix on red-gate@2026-10-18T16:44:54Z, plan D66)
+      verify: DONE. landed on main; its test red without it; see its retro row
+- [x] T49 A tree-moved abort is no red gate, and the red-gate bundle shows what changed between reds (the arbiter's fix on red-gate@2026-10-18T16:44:54Z, plan D66)
       research: rendering
-- [ ] T50 A part B stamped in the future is refused (the arbiter's fix on hour:385-approach-checklist@18, plan D67)
+      verify: DONE. landed on main; its test red without it; see its retro row
+- [x] T50 A part B stamped in the future is refused (the arbiter's fix on hour:385-approach-checklist@18, plan D67)
       research: rendering
-- [ ] T51 The plan-gate tests write their bundles under their own tmp_path (a flaky red gate found by T08's gate, plan D68)
+      verify: DONE. landed on main; its test red without it; see its retro row
+- [x] T51 The plan-gate tests write their bundles under their own tmp_path (a flaky red gate found by T08's gate, plan D68)
+      research: rendering
+      verify: DONE. landed on main; its test red without it; see its retro row
+- [ ] T52 make land-tooling lints the Python it lands (found by T49 and T51, plan D69)
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering

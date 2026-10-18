@@ -519,3 +519,10 @@ with three new pop-ups, 0061's drawing page through a write and a check session,
 review as an overhaul. Two calls were wasted: a triage agent dispatched on a bundle holding only a forced claim, and a part B stamped
 in the future by hand. **The habit it changes:** before adding a key to a claimed dict, check what else the unit's claims will
 re-owe - a bookkeeping key that needs no entry (as `cover.py`'s turned out not to) is cheaper left out.
+
+## T52 - the retro row
+
+About 25 min. Twice a test file landed on main unformatted (T49's imports, then a merge's duplicate import; T51's blank lines) and
+only the next gate's formatter caught it. `make land-tooling` now lints and format-checks the Python it lands, beside its other two
+checks, and names `ruff format` when it refuses. Its own suite had a fixture the formatter rejects, found on the first run.
+**The habit it changes:** a path to main that skips the gate runs the gate's cheapest checks itself.
