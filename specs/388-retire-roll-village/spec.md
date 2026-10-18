@@ -33,7 +33,8 @@ holds; the instruction is to delete it now, and NOT to carry the failure anywher
    closure matches NAMES, so a definition whose name is also defined elsewhere is checked by hand: `edge_seat.py`'s own
    `convex_hull` (its one caller `EdgeGround`; the live callers import `_geom/primitives.convex_hull`) and its `STEP_FT`
    (referenced nowhere) go with the module.
-3. **Its tests**: every test that calls (1) or (2) - deleted, not ported.
+3. **Its tests**: every test whose SUBJECT is (1) or (2) - deleted, not ported; a test of shipping code that reached it
+   through a deleted one-call wrapper in (2) is repointed to the live pair (FR-002).
 
 ## Requirements
 

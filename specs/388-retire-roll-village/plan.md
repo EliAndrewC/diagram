@@ -50,7 +50,7 @@ The closure is run again after the deletion (`closure.py` with the newly deleted
 further name goes through the same table before it is deleted. Tests: every test of a deleted name goes (the
 `roll_village` tests in `tests/settlement/test_rolling.py`, `tests/gate/settlement/test_rolling.py`,
 `tests/full/settlement/test_rolling.py`, `tests/soak/test_village_determinism.py`; the tests of the closure names in
-`test_houses.py`, `test_crop_framing.py`, `test_civic_grounds.py`, `tier_city/.../test_civic_grounds.py`,
+`test_houses.py` (its water-source test), `test_civic_grounds.py`, `tier_city/.../test_civic_grounds.py`,
 `hamletgen/test_burial.py` (`test_rect_gap`, the `test_the_edge_seat_*` tests,
 `test_the_ground_stands_beyond_the_last_house_not_in_a_gap_among_them`, `test_convex_hull_of_few_points` and `_seat`; only
 the no-ground-of-its-own test stays), `test_city.py`, `test_villages.py`, `test_caption_paths.py`, `test_map_vocabulary.py` and the
