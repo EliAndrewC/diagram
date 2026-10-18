@@ -1,0 +1,39 @@
+{
+  "utc": "2026-10-18T20:27:03Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 293,
+  "result": "failed: test-full",
+  "commit": "a3c9b566c",
+  "first_failure_s": 241.7,
+  "last_failure_s": 263.8,
+  "failed_tests": 2,
+  "failed_names": [
+    "tests/tooling/test_modal_checks.py::test_a_depiction_bundle_says_which_maps_draw_what_its_conditions_name",
+    "tests/waterfields/test_surface.py::test_census_covers_every_real_consumer"
+  ],
+  "host": {
+    "load": [
+      9.33,
+      10.0
+    ],
+    "mem_avail_mb": [
+      7065,
+      6639
+    ],
+    "cpu_temp_c": [
+      65.0,
+      63.0
+    ],
+    "stall_s": {
+      "cpu": 3.8,
+      "io": 2.3,
+      "io_full": 1.8,
+      "memory": 0.5
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  }
+}
