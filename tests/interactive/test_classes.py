@@ -64,6 +64,7 @@ SPEC_CLASSES = [
     # have none - the class is present on the page only when the map drew one)
     "weir",
     "washing place",
+    "pond-bank tree",  # feature 385 T08: a tail pond's planted bank (0061)
     # the one `field ditch` became two (feature 230, GM 2026-09-12: the ditches that feed the paddies and the
     # ditch that drains them are different questions with different records behind them)
     "irrigation ditch",

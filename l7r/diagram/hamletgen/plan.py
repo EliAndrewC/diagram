@@ -51,6 +51,7 @@ from .consts import (
     OFFTAKE_LADDER,
     PLOT_SIZES,
     POLDER_ARCHETYPES,
+    POND_BANKS,
     POND_LAYOUTS,
     REF_HOUSEHOLDS,
     ROLLED_ARCHETYPES,
@@ -138,6 +139,7 @@ class HamletSpec:
     kosatsuba_siting: str | None = None  # frontage, the one form left (feature 328; `KOSATSUBA_SITINGS`)
     byre_form: str | None = None  # courtyard | yard_shed | detached_commons - the settlement engine's knob, pinnable so the pool can exhibit each (feature 261; 269 B16)
     dike_crop: str | None = None  # a dike-pond's dike planting, mulberry | fruit | tea (feature 150, 269 B34; `DIKE_CROPS`)
+    pond_bank: str | None = None  # a tail pond's bank, bare | planted (feature 385 T08; `POND_BANKS`)
     leftover: str | None = None  # a dike-pond block's unconverted parcels, rice | pond (feature 150, 269 E9; `LEFTOVER_FORMS`)
     plot_size: str | None = None
     grain_drift: int | None = None
@@ -158,6 +160,8 @@ class HamletSpec:
             raise ValueError(f"field_archetype {self.field_archetype!r} is not one this generator draws: {sorted(FIELD_ARCHETYPES)}")
         if self.dike_crop is not None and self.dike_crop not in DIKE_CROPS:
             raise ValueError(f"dike_crop {self.dike_crop!r} must be one of {sorted(set(DIKE_CROPS))}")
+        if self.pond_bank is not None and self.pond_bank not in POND_BANKS:
+            raise ValueError(f"pond_bank {self.pond_bank!r} must be one of {list(POND_BANKS)}")
         if self.leftover is not None and self.leftover not in LEFTOVER_FORMS:
             raise ValueError(f"leftover {self.leftover!r} must be one of {sorted(set(LEFTOVER_FORMS))}")
         if self.manure_form is not None and self.manure_form not in MANURE_FORMS:

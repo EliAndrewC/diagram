@@ -35,6 +35,12 @@ class SinkRefused(RuntimeError):
 # ---- STAGE 3: where the runoff goes -------------------------------------------------------------
 
 
+SINK_FRINGE = 44.0
+"""The tail pond's reed fringe, out from its shore; the bank's trees stand beyond it (`pondbank`).
+
+Research: reed fringe width - UNRESEARCHED: a 44 ft ring"""
+
+
 def drain_outfall(s: Settlement, name: str) -> Pt | None:
     """The last vertex of the field's drain collector, READ BACK from the manifest.
 
@@ -831,7 +837,7 @@ def lay_sink(s: Settlement, plan: SitePlan) -> None:
     # rule, which a literal here quietly broke.
     drain_run(s, ditch, "pond")
     # A reedy fringe rims the shore - the shallow margin of any standing water.
-    ring: Poly = pond_fringe_ring(pcx, pcy, prx, pry, 44.0)  # the shared ring (feature 151); a tameike keeps a wider fringe than a comb's source pond
+    ring: Poly = pond_fringe_ring(pcx, pcy, prx, pry, SINK_FRINGE)  # the shared ring (feature 151); a tameike keeps a wider fringe than a comb's source pond
     s.marsh(ring, role="pond_fringe")
     # No building on the water.
     s.block_polys.append([(pcx - prx - 10, pcy - pry - 10), (pcx + prx + 10, pcy - pry - 10), (pcx + prx + 10, pcy + pry + 10), (pcx - prx - 10, pcy + pry + 10)])

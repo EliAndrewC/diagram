@@ -493,4 +493,3 @@ def test_findings_a_round_arbiter_ruling_carried_are_filed_with_the_ruling(tmp_p
     assert row["task"] == "T02" and row["keys"] == [k] and row["ruling"] == "ask:t07-x"
     assert cx.main(args[:5] + ["--task", "T01"] + args[5:]) == 0
     assert f"- [ ] T01 the work; carried by the round arbiter's ruling ask:t07-x: {k} [lands-open]" in (d / "tasks.md").read_text()
-

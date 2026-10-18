@@ -36,6 +36,7 @@ from .homesteads import stage_appurtenances, stage_homesteads
 from .homesteads.sties import stage_sties
 from .homesteads.wells import stage_lane_wells
 from .plan import HamletSpec, SitePlan, plan_site
+from .pondbank import stage_pond_bank
 from .pondstock import stage_pond_stock
 from .sink import stage_sink
 from .washing import stage_washing
@@ -121,6 +122,7 @@ STAGES = (
     # threads around.
     stage_web,
     stage_lane_wells,  # the communal wells the lanes wait for: the lane-side form on a lane's verge (feature 374 wave 154, 0196)
+    stage_pond_bank,  # a tail pond's bank, bare or planted sparsely with mulberry and cudrania, its trees seated against what stands (feature 385 T08, 0061)
     stage_hinterland,
     stage_woodland,
     stage_windbreak,
@@ -169,6 +171,7 @@ Research:
     lane-side wells after the web - research/questions/0196-communal-wells-ido.drawing.html: a clustered hamlet's lane-side well seated on a lane's verge once the lanes stand (`stage_lane_wells`)
     web after everything that reserves ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the web drawn last, round what stood first; each household's own way is laid and reserved at the end of the homesteads stage, once the last house stands, so the later stages keep off it
     pig sties after the crossings - CANON: the GM's ruling of 2026-10-12, the order an implementation detail where the placement keeps to the research; each sty is seated where no way runs, as research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html has a household's way go round its fixtures, and in the bundle it moved the seating and the web refused maps (m:w151-sty-room)
+    pond-bank trees after the wells - UNRESEARCHED: seated against the houses, ways and wells already standing, before the hinterland's scrub and copse fill round them (`stage_pond_bank`)
     washing places after the crossings - research/questions/0065-washing-places-at-the-waters-edge.drawing.html: where a lane, a bridge or a building takes a footing's spot it is moved along the bank, so they stand first
     notice board last - research/questions/0190-notice-boards-kosatsuba.drawing.html: placed once everything else stands
     notice board after the frame - research/questions/0190-notice-boards-kosatsuba.drawing.html: placed after the map is cropped to its frame (the GM's ruling of 2026-08-29)

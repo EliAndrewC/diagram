@@ -44,6 +44,7 @@ WIDENED_SINCE_189: dict[str, str] = {
 }
 #: Kinds the map draws that the snapshot's registry did not have at all.
 ADDED_SINCE_189: tuple[str, ...] = (
+    "pond-bank tree",  # feature 385 T08: the trees on a tail pond's planted bank, on the pond-bank knob (0061)
     "household grave",  # feature 374 wave 136: a farmstead's own grave, on the household-graves knob
     "floodplain meadow",  # feature 374 wave 147: a river-flat map's open meadow past its fields (0078)
     "paddy's grass hill",  # feature 374 wave 148: a small grass hill set aside for one paddy, the tazuke kusayama (0078)

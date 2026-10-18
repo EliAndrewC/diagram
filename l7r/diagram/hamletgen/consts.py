@@ -505,6 +505,17 @@ KOSATSUBA_SITINGS = ("frontage",)
 # 2026-09-28 a form attested only in modern sources is not drawn - they are no longer options. The weighting
 # is a GUESS, a degree (constitution XII): mulberry the Qing norm at 3 in 6, fruit the oldest form at 2, tea,
 # named after lychee and never as a district's type, at 1.
+# A TAIL POND'S BANK (feature 385 T08): bare, or planted sparsely with mulberry and cudrania (0061, Chen Fu's Nongshu), rolled
+# per hamlet whose sink is a pond.
+POND_BANKS = ("bare", "planted")
+"""Research: pond bank form - research/questions/0061-reservoir-ponds-tameike.drawing.html: a bare bank, or one planted sparsely with mulberry and cudrania; even odds a GUESS (no share given)"""
+
+POND_BANK_PITCH_FT = 30.0
+"""Research: one tree about every 30 ft of bank - GUESS: 0061's "sparsely" gives no figure"""
+
+POND_BANK_CROWN_FT = 6.0
+"""Research: a bank tree's crown radius - GUESS: a pollarded mulberry's crown about 12 ft across, the dike fruit tree's mark scaled"""
+
 DIKE_CROPS = ("mulberry", "mulberry", "mulberry", "fruit", "fruit", "tea")
 """Research: dike crop - research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html: mulberry half, fruit a third, tea a sixth"""
 

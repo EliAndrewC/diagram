@@ -56,3 +56,9 @@ class PaddysGrassHill(Kind):
 
 class Marsh(Kind):
     key = 'marsh'
+
+
+# Feature 385 T08: a tail pond's planted bank (0061, the Song manual's mulberry and cudrania) - its own kind, not a planting on
+# the pond, since the bank is not drawn as a feature.
+class PondBankTree(Kind):
+    key = 'pond-bank tree'

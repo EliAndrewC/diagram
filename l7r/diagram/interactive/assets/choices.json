@@ -75,6 +75,14 @@
    }
   },
   {
+   "key": "pond_bank",
+   "name": "The tail pond's bank",
+   "values": {
+    "bare": "a bare bank",
+    "planted": "planted sparsely with mulberry and cudrania"
+   }
+  },
+  {
    "key": "grove_sides",
    "name": "Which sides of each farm its grove takes",
    "when": "[settlement_form=dispersed|linear]",

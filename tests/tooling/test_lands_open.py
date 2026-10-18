@@ -109,4 +109,3 @@ def test_a_hand_typed_box_citing_a_recorded_ruling_still_holds(tmp_path: pathlib
     assert "honored only" in todo.holding(d)[0]
     (d / "claims-carried.jsonl").write_text('{"task": "T43", "keys": ["k"], "ruling": "ask:t07-x", "utc": "2026-10-18T00:00:00Z"}\n')
     assert todo.holding(d) == []
-
