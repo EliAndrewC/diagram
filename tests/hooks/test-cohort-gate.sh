@@ -36,7 +36,8 @@ PY
 g init -q -b main; g commit -q --allow-empty -m root
 ( cd "$T" && "$GATE" >/dev/null 2>&1 ); ok "$?" 0 "no cohort-landing target, silent"
 
-mkdir -p "$T/l7r/diagram/hamletgen" "$T/pool"
+mkdir -p "$T/l7r/diagram/hamletgen" "$T/pool" "$T/scripts/gates"
+cp "$HERE/../../scripts/gates/gate-stamp.py" "$T/scripts/gates/"  # the engine key loads it from the tree it reads
 printf 'cohort-landing:\n\t@true\n' > "$T/Makefile"
 printf 'X = 1\n' > "$T/l7r/diagram/hamletgen/rows.py"; printf 'p\n' > "$T/pool/p.txt"
 g add -A; g commit -q -m "main's engine"; base="$(git -C "$T" rev-parse --short HEAD)"
@@ -70,6 +71,13 @@ case "$out" in *"seed 5 NEWLY FAILING"*) ok y y "names the regressed seed" ;; *)
 rec 20261003T000100Z "$base" 1 "5"; rec 20261003T000200Z "$head" 1 "5"
 out="$( cd "$T" && "$GATE" 2>&1 )"; ok "$?" 0 "a pre-existing failure passes"
 case "$out" in *"seed 5 PRE-EXISTING"*) ok y y "prints it pre-existing" ;; *) ok n y "prints it pre-existing" ;; esac
+
+# a commit of docs, a docstring and a comment under l7r/ is the same engine: the landing record still counts (the GM, 2026-10-18)
+printf 'docs\n' > "$T/l7r/diagram/CLAUDE.md"; printf '"""Rows."""\n# why\nX  =  2\n' > "$T/l7r/diagram/hamletgen/rows.py"
+g add -A; g commit -qm "docs and a docstring"
+( cd "$T" && "$GATE" >/dev/null 2>&1 ); ok "$?" 0 "a docs or docstring commit keeps the landing record"
+printf 'X = 3\n' > "$T/l7r/diagram/hamletgen/rows.py"; g commit -qam "a code token"
+( cd "$T" && "$GATE" >/dev/null 2>&1 ); ok "$?" 1 "a code token moved: the landing record no longer counts"
 
 printf 'test-cohort-gate: %d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]

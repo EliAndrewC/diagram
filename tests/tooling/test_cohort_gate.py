@@ -31,11 +31,14 @@ def _git(root: pathlib.Path, *a: str) -> str:
 
 
 def _repo(tmp: pathlib.Path) -> tuple[pathlib.Path, str, str]:
-    """main's engine at `base`; branch `work` changes it at `head`."""
+    """main's engine at `base`; branch `work` changes it at `head`. `gate-stamp.py` is copied in, as `tests/tooling/ci/conftest.py`
+    does: the engine key loads it from the tree it reads."""
     (tmp / "l7r").mkdir()
     (tmp / "pool").mkdir()
+    (tmp / "scripts/gates").mkdir(parents=True)
+    (tmp / "scripts/gates/gate-stamp.py").write_text((REPO / "scripts/gates/gate-stamp.py").read_text(encoding="utf-8"), encoding="utf-8")
     (tmp / "l7r/a.py").write_text("X = 1\n")
-    (tmp / "pool/p.txt").write_text("p\n")
+    (tmp / "pool/p.json").write_text("{}\n")
     _git(tmp, "init", "-q", "-b", "main")
     _git(tmp, "add", "-A")
     _git(tmp, "commit", "-qm", "base")
@@ -65,11 +68,29 @@ def test_the_fresh_seed_follows_the_engine_and_stays_above_the_fixed_range(tmp_p
     one = cg.fresh_seed(root)
     assert one == cg.fresh_seed(root), "one engine, one block: a re-run is served from the roll cache"
     assert cg.FRESH_BASE <= one < cg.FRESH_BASE + cg.FRESH_SPAN
-    (root / "pool/p.txt").write_text("q\n")
+    (root / "pool/p.json").write_text("[]\n")
     assert cg.fresh_seed(root) != one, "an uncommitted engine diff is another engine"
-    (root / "pool/p.txt").write_text("p\n")
+    (root / "pool/p.json").write_text("{}\n")
     (root / "README").write_text("docs\n")
     assert cg.fresh_seed(root) == one, "a change outside the engine is the same engine"
+    (root / "l7r/CLAUDE.md").write_text("docs\n")
+    (root / "l7r/a.py").write_text('"""A docstring."""\n\n# a comment\nX  =  2\n')
+    assert cg.fresh_seed(root) == one, "docs, a docstring, a comment or formatting under l7r/ is the same engine (the GM, 2026-10-18)"
+
+
+def test_a_record_before_a_docs_or_docstring_commit_is_still_on_the_engine(tmp_path: pathlib.Path) -> None:
+    """The GM, 2026-10-18: a docs-only edit under `l7r/` is no engine change. A landing record rolled before a commit that only
+    touched docs, a docstring or a comment is still the landing record; one before a code token moved is not."""
+    root, _base, head = _repo(tmp_path)
+    landing = _rec(root, "u1", head, 1)
+    (root / "l7r/CLAUDE.md").write_text("docs\n")
+    (root / "l7r/a.py").write_text('"""A docstring."""\n\n# a comment\nX  =  2\n')
+    _git(root, "add", "-A")
+    _git(root, "commit", "-qm", "docs")
+    assert cg.pick(root, [landing]) == landing
+    (root / "l7r/a.py").write_text("X = 3\n")
+    _git(root, "commit", "-qam", "code")
+    assert cg.pick(root, [landing]) is None
 
 
 def test_which_records_count(tmp_path: pathlib.Path) -> None:

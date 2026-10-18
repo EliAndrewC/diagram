@@ -21,8 +21,9 @@ push gate holds the gated route to that record; the seed report gains the fresh 
 - XIII: the gate IS the cohort half of XIII at the push; nothing is loosened.
 - XIV: the six failing fresh seeds are defects found; their kinds belong to feature 385's lane-law and web-settle work and feature
   384's rows, and go to the GM (spec, Out of scope). `cohort_seeds` counting any seed of 901 or more as pinned is fixed (D7).
-  `cohort_known --stamp` treating a docs-only edit under `l7r/` as an engine diff is reported, not changed (feature 385's, and
-  conservative: it only withholds a record from being a baseline).
+  `cohort_known --stamp` treating a docs-only edit under `l7r/` as an engine diff was reported here, then fixed after the landing
+  at the GM's ask (2026-10-18): `cohort_known` and `cohort_gate` now compare `l7r/diagram/ci/delta.py`'s `engine_key`, blind to
+  docs, comments, docstrings and formatting, as the push route and `make done` are.
 - XVI: built as the three bullets and "That would change the cohort default and the landing route" say (spec, "read literally").
 
 ## T01 - the fresh block, the landing cohort, its gate and the rate (FR-001 to FR-010)

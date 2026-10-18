@@ -18,6 +18,13 @@ def _load():  # noqa: ANN202
     return mod
 
 
+def _engine_tree(root: pathlib.Path) -> None:
+    """`l7r/` and the `gate-stamp.py` the engine key loads from the tree it reads (as `tests/tooling/ci/conftest.py` copies it)."""
+    (root / "l7r").mkdir(parents=True)
+    (root / "scripts/gates").mkdir(parents=True)
+    (root / "scripts/gates/gate-stamp.py").write_text((REPO / "scripts/gates/gate-stamp.py").read_text(encoding="utf-8"), encoding="utf-8")
+
+
 def test_the_seeds_a_row_lists_are_read_from_its_words() -> None:
     ck = _load()
     assert ck.seeds_named("re-dealt seats move a refusal into the cohort (seeds 7, 2, 10, 8 under routes B-D)") == {7, 2, 10, 8}
@@ -92,7 +99,7 @@ def test_a_commit_is_on_mains_engine_when_no_engine_file_differs(tmp_path: pathl
 
     ck = _load()
     root = tmp_path / "r"
-    (root / "l7r").mkdir(parents=True)
+    _engine_tree(root)
 
     def git(*a: str) -> str:
         return subprocess.run(["git", "-C", str(root), "-c", "user.name=t", "-c", "user.email=t@t", *a], check=True, capture_output=True, text=True).stdout.strip()
@@ -106,11 +113,18 @@ def test_a_commit_is_on_mains_engine_when_no_engine_file_differs(tmp_path: pathl
     git("commit", "-qm", "a spec")
     spec_only = git("rev-parse", "HEAD")
     git("checkout", "-q", "-b", "side")
+    (root / "l7r" / "CLAUDE.md").write_text("docs\n")
+    (root / "l7r" / "a.py").write_text('"""A docstring."""\n\n# a comment\nx  =  1\n')
+    git("add", "-A")
+    git("commit", "-qm", "docs, a docstring, a comment and formatting under l7r/")
+    words_only = git("rev-parse", "HEAD")
     (root / "l7r" / "a.py").write_text("x = 2\n")
     git("commit", "-qam", "engine moved")
     moved = git("rev-parse", "HEAD")
     git("checkout", "-q", "main")
     assert ck.same_engine(root, spec_only) and not ck.same_engine(root, moved)
+    assert ck.same_engine(root, words_only), "a docs or docstring edit under l7r/ is main's engine still (the GM, 2026-10-18)"
+    assert not ck.same_engine(root, "nosuchcommit") and ck.engine_key(root, "nosuchcommit") == ""
 
 
 def test_a_roll_over_an_uncommitted_engine_diff_is_stamped_and_never_a_baseline(tmp_path: pathlib.Path) -> None:
@@ -120,7 +134,7 @@ def test_a_roll_over_an_uncommitted_engine_diff_is_stamped_and_never_a_baseline(
 
     ck = _load()
     root = tmp_path / "r"
-    (root / "l7r").mkdir(parents=True)
+    _engine_tree(root)
     (root / "dev" / "cohort-log").mkdir(parents=True)
 
     def git(*a: str) -> None:
@@ -134,6 +148,9 @@ def test_a_roll_over_an_uncommitted_engine_diff_is_stamped_and_never_a_baseline(
     rec.write_text(json.dumps({"utc": "20261018T0000Z", "commit": "main1", "seeds": [_seed(10)]}))
     assert ck.stamp(root) == "" and "engine_diff" not in json.loads(rec.read_text()), "a clean engine stamps nothing"
     assert ck.main(["--root", str(root), "--stamp"]) == 0
+    (root / "l7r" / "CLAUDE.md").write_text("docs\n")
+    (root / "l7r" / "a.py").write_text('"""A docstring."""\n\n# a comment\nx  =  1\n')
+    assert ck.stamp(root) == "", "docs, a docstring or a comment under l7r/ is no engine diff (the GM, 2026-10-18)"
     (root / "l7r" / "a.py").write_text("x = 2\n")
     assert ck.main(["--root", str(root), "--stamp"]) == 0
     stamped = json.loads(rec.read_text())

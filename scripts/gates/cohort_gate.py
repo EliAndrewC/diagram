@@ -41,10 +41,9 @@ def git(root: pathlib.Path, *a: str) -> subprocess.CompletedProcess[str]:
 
 
 def fresh_seed(root: pathlib.Path) -> int:
-    """The fresh block's first seed: from the engine's content, so one engine always rolls one block (plan D3)."""
-    trees = [git(root, "rev-parse", f"HEAD:{p}").stdout.strip() for p in cohort_known.ENGINE_PATHS]
-    diff = git(root, "diff", "HEAD", "--", *cohort_known.ENGINE_PATHS).stdout
-    h = hashlib.sha256(" ".join([*trees, diff]).encode()).hexdigest()
+    """The fresh block's first seed: from the working tree's engine key, so one engine always rolls one block (plan D3) - and a
+    docs, comment or docstring edit is the same engine (`cohort_known.engine_key`)."""
+    h = hashlib.sha256(cohort_known.engine_key(root, None).encode()).hexdigest()
     return FRESH_BASE + int(h[:12], 16) % FRESH_SPAN
 
 
@@ -63,9 +62,9 @@ def landing_shaped(rec: dict[str, Any], need_fresh: bool = True) -> bool:
 
 
 def on_engine(root: pathlib.Path, rec: dict[str, Any]) -> bool:
-    """Was the record rolled on HEAD's engine (the `l7r` and `pool` trees)?"""
+    """Was the record rolled on HEAD's engine (`cohort_known.same_key`: a docs, comment or docstring edit since is the same one)?"""
     c = str(rec.get("commit") or "")
-    return bool(c) and git(root, "rev-parse", "-q", "--verify", f"{c}^{{commit}}").returncode == 0 and git(root, "diff", "--quiet", c, "HEAD", "--", *cohort_known.ENGINE_PATHS).returncode == 0
+    return bool(c) and git(root, "rev-parse", "-q", "--verify", f"{c}^{{commit}}").returncode == 0 and cohort_known.same_key(root, c, "HEAD")
 
 
 def records(root: pathlib.Path) -> list[dict[str, Any]]:

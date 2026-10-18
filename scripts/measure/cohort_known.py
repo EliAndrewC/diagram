@@ -11,7 +11,6 @@ takes its failing seeds, and prints every OPEN found row (`specs/328-match-the-r
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import pathlib
 import re
@@ -63,7 +62,46 @@ def same_engine(root: pathlib.Path, commit: str) -> bool:
     """Was `commit` rolled on main's engine - the generator and the pool's generators as they are on main? A record rolled in a
     detached worktree at the clone's HEAD counts whenever the clone's own commits change no engine file."""
     ref = "origin/main" if subprocess.run(["git", "-C", str(root), "rev-parse", "-q", "--verify", "origin/main"], capture_output=True).returncode == 0 else "main"
-    return subprocess.run(["git", "-C", str(root), "diff", "--quiet", commit, ref, "--", "l7r", "pool"], capture_output=True).returncode == 0
+    return same_key(root, commit, ref)
+
+
+# WHAT "THE SAME ENGINE" MEANS is the push route's and the gate's own (`l7r/diagram/ci/delta.py`: `is_engine`, and `engine_key`,
+# which keys a `.py` on its AST without docstrings - `gate-stamp.py semantic_bytes`). The GM, 2026-10-18: "Can we fix that
+# cohort_known treats a docs-only edit under l7r/ as an engine change? I thought we had logic in other places to distinguish code
+# changes from docstring changes." A raw `git diff -- l7r pool` called a CLAUDE.md, a comment or a docstring under `l7r/` another
+# engine, so a roll over it was stamped and never read as a baseline, and a commit that only touched docs was off main's engine.
+_KEYS: dict[tuple[str, str], str] = {}
+
+
+def _delta():  # noqa: ANN202 - the module
+    """`l7r.diagram.ci.delta` from THIS checkout (the script's), not from the root it reads: a fixture tree has no engine package."""
+    here = str(pathlib.Path(__file__).resolve().parents[2])
+    if here not in sys.path:
+        sys.path.insert(0, here)
+    from l7r.diagram.ci import delta  # noqa: PLC0415
+
+    return delta
+
+
+def engine_key(root: pathlib.Path, ref: str | None) -> str:
+    """The engine key of `ref` (a commit), or of the working tree for None; '' for a ref that does not resolve. Memoized per
+    resolved commit: `baselines` asks once per record."""
+    if ref is None:
+        return str(_delta().engine_key_worktree(root))
+    sha = subprocess.run(["git", "-C", str(root), "rev-parse", "-q", "--verify", f"{ref}^{{commit}}"], capture_output=True, text=True).stdout.strip()
+    if not sha:
+        return ""
+    if (str(root), sha) not in _KEYS:
+        _KEYS[(str(root), sha)] = str(_delta().engine_key(root, sha))
+    return _KEYS[(str(root), sha)]
+
+
+def same_key(root: pathlib.Path, a: str, b: str) -> bool:
+    """Do commits `a` and `b` carry the same engine? Identical bytes answer at once; otherwise the semantic keys decide."""
+    if subprocess.run(["git", "-C", str(root), "diff", "--quiet", a, b, "--", *ENGINE_PATHS], capture_output=True).returncode == 0:
+        return True
+    ka = engine_key(root, a)
+    return bool(ka) and ka == engine_key(root, b)
 
 
 def baselines(record: dict, earlier: list[dict], ok) -> dict[int, dict]:  # noqa: ANN001 - a predicate on a commit
@@ -111,14 +149,17 @@ ENGINE_PATHS = ("l7r", "pool")
 
 
 def stamp(root: pathlib.Path) -> str:
-    """Mark the newest record rolled over an uncommitted engine diff with that diff's digest (`engine_diff`), so it is never read
-    as its commit's baseline (feature 385 T04: the wave 155 patch, applied uncommitted, rolled a record that named HEAD and read
-    as a second HEAD baseline). Returns the digest, or '' for a clean engine."""
+    """Mark the newest record rolled over an uncommitted engine diff with that working tree's engine key (`engine_diff`), so it
+    is never read as its commit's baseline (feature 385 T04: the wave 155 patch, applied uncommitted, rolled a record that named
+    HEAD and read as a second HEAD baseline). A docs, comment or docstring edit is no engine diff (the key is `same_key`'s); an
+    untracked engine file is one. Returns the digest, or '' for a clean engine."""
     logs = sorted((root / "dev/cohort-log").glob("[0-9]*.json"))
-    diff = subprocess.run(["git", "-C", str(root), "diff", "HEAD", "--", *ENGINE_PATHS], capture_output=True, text=True).stdout
-    if not logs or not diff:
+    if not logs:
         return ""
-    digest = hashlib.sha256(diff.encode()).hexdigest()[:16]
+    now = engine_key(root, None)
+    if now == engine_key(root, "HEAD"):
+        return ""
+    digest = now[:16]
     rec = json.loads(logs[-1].read_text())
     rec["engine_diff"] = digest
     logs[-1].write_text(json.dumps(rec, indent=1) + "\n")
