@@ -4141,6 +4141,32 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T46": {
+   "section_sha256": "95c0ba68fc29ecc0002ef8010252de3319c6a33b15fc3746dedefc3ddd7f6a78",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D64",
+     "summary": "With Makefile in FILES, land-tooling runs the make-docs check in the clone before building the patch; a stale clone page is refused naming `make docs`; a current page that differs from main's is added to FILES; the worktree's own regeneration stays.",
+     "class": "within",
+     "why": "This is the arbiter's fix, which stands where the GM was asked (feature 379): 'runs make docs and lands the regenerated make-targets page together with a changed Makefile, refusing to land when the page would be stale'. D64 does each part. The refusal is the arbiter's own named refusal, and it reaches only the Makefile case. Landing the page beside the Makefile is the 'lands ... together'. The worktree regeneration that is kept is the 'runs make docs'. It also serves Amendment 5 item 1 (check the page whenever the Makefile changes, approved as 'file amendment 5 for the 3 tooling fixes'), FR-017, and Amendment 6's 'implement any obvious ... tooling ... improvements'. Nothing is excepted or narrowed."
+    },
+    {
+     "id": "T46-check-seam",
+     "summary": "The check command can be overridden through LAND_TOOLING_DOCS_CHECK (default `python3 scripts/make-docs.py . --check`).",
+     "class": "within",
+     "why": "This is a test seam for the arbiter's required tests/hooks test, which is 'red without each'. The default runs the real check. It adds no behavior and changes no scope."
+    },
+    {
+     "id": "T46-done",
+     "summary": "One goal: refuse while the clone's page is stale, land the page when it is current; tests/hooks/test-land-tooling.sh red without each.",
+     "class": "within",
+     "why": "The goal is single (FR-015) and the test is the one the arbiter asked for. The test only enforces the requested behavior, so it serves the request (GM 2026-09-20)."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

@@ -58,6 +58,17 @@ if ! printf '%s\n' "$@" | grep -qx 'dev/review-ledger.md' && ! git -C "$ROOT" di
   set -- "$@" dev/review-ledger.md
   printf 'land-tooling: dev/review-ledger.md lands too - the push answers this clone'"'"'s check passes from it\n' >&2
 fi
+# GUARD_EDIT_OK: feature 385 T46 (the round arbiter's fix on hour:385-approach-checklist@17) - A LANDED MAKEFILE BRINGS ITS PAGE: the
+# worktree regenerates main's make-targets page, but the clone's own copy stayed stale, and the clone's next push refused it. So a
+# Makefile in FILES lands only with the clone's page current, and that page lands beside it.
+if printf '%s\n' "$@" | grep -qx 'Makefile'; then
+  ( cd "$ROOT" && eval "${LAND_TOOLING_DOCS_CHECK:-python3 scripts/make-docs.py . --check}" ) >/dev/null 2>&1 \
+    || die "docs/make-targets.html is stale against the clone's Makefile - run \`make docs\`, commit the page, and land again"
+  if ! printf '%s\n' "$@" | grep -qx 'docs/make-targets.html' && ! git -C "$ROOT" diff --quiet "$base" HEAD -- docs/make-targets.html 2>/dev/null; then
+    set -- "$@" docs/make-targets.html
+    printf 'land-tooling: docs/make-targets.html lands too - the page generated from the Makefile\n' >&2
+  fi
+fi
 for f in "$@"; do
   tooling "$f" || die "$f is not tooling (scripts/, tests/, .claude/agents/, .claude/skills/, .claude/workflows/, a CLAUDE.md, the Makefile, .claude/settings.json, docs/make-targets.html) - it lands with its feature"
 done

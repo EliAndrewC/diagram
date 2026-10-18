@@ -131,6 +131,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T45 A box the round arbiter filed lands open with no hand edit to the reviewed plan (found by T07's landing, plan D59)
       research: rendering
       verify: DONE. landed on main; tests/tooling/test_claims_index.py red without it; a hand-typed box citing a recorded ruling still holds (test_lands_open); T43's three findings filed with their rulings
+- [ ] T46 make land-tooling lands a changed Makefile only with the clone's make-targets page current, and lands the page beside it (the arbiter's fix on hour:385-approach-checklist@17, plan D64)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

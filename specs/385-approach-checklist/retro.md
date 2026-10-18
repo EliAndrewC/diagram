@@ -482,3 +482,10 @@ on the plan's Lands open line cost a review round. My first rule honored a box t
 hand-typed box could paste a trigger. Built instead: `make claims-carry KEYS= RULING=` writes the box and its record row together,
 the ruling checked against `arbiter.jsonl`. **The habit it changes:** a "this box is the tooling's" rule reads a record the tooling
 wrote, never words in the box.
+
+## T46 - the retro row
+
+About 20 min. The hour-17 step-back took a stale make-targets page at T45's landing for a gap in `land-tooling`; measured, the
+worktree already regenerated main's page, and the stale copy was the clone's own. Built to the arbiter's words: a Makefile lands
+only with the clone's page current, and the page lands beside it. **The habit it changes:** before naming a tool's gap in prose,
+read the tool - a sentence in a reply becomes an arbiter's fix.

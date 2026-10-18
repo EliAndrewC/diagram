@@ -1517,6 +1517,33 @@ task or a new box, and a `claims-carried.jsonl` row naming the task, its keys an
 hand-typed box citing any trigger still holds the landing. The push's claims gate is unchanged: an introduced finding still needs
 CLAIMS_OK citing the ruling. T43 is filed this way (`T=T43`), and its id comes off the Lands open line at T45's next plan edit.
 
+## T46 - a landed Makefile brings its make-targets page (the arbiter's fix on hour:385-approach-checklist@17)
+
+### T46 Approach (checklist part A)
+
+1. **The goal, in the world.** A Makefile landed alone by `make land-tooling` never leaves the clone's make-targets page stale,
+   so the clone's next push is not refused for it.
+2. **The constraints.** The arbiter's fix: "scripts/land-tooling.sh (make land-tooling) runs make docs and lands the regenerated
+   make-targets page together with a changed Makefile, refusing to land when the page would be stale, with a test in
+   tests/hooks"; tooling only; a test red without it.
+3. **Where each comes from.** The fix is the arbiter's (G).
+4. **Do they describe the world here?** Measured at T45's landing (2026-10-18): `land-tooling` already regenerates the page in its
+   worktree, so main's copy was current; the clone's own copy was stale (T45 changed a `##` line and never ran `make docs`), so
+   the clone's next `sync-with-main.sh done` refused it ("docs/make-targets.html is stale against the Makefile").
+5. **The order.** The refusal, the page added to FILES, then the tests.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: `land-tooling` with the Makefile in FILES refuses while the clone's page is stale (naming `make
+   docs`), and lands the clone's page beside the Makefile when it is current; `tests/hooks/test-land-tooling.sh` red without each.
+
+### T46 Decisions
+
+**D64 - the page checked in the clone and landed with the Makefile.** With `Makefile` in FILES, `land-tooling` runs the
+make-docs check in the clone (`LAND_TOOLING_DOCS_CHECK`, default `python3 scripts/make-docs.py . --check`) before it builds the
+patch; a stale page is refused with the fix ("run `make docs`, commit, and land again"). A current page that differs from main's
+is added to FILES, as the ledger is. The worktree's own regeneration stays, so main's page is current in either case.
+
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).
