@@ -1,0 +1,38 @@
+{
+  "utc": "2026-10-18T13:18:35Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 143,
+  "result": "failed: test-full",
+  "commit": "7c674d328",
+  "first_failure_s": 21.9,
+  "last_failure_s": 21.9,
+  "failed_tests": 1,
+  "failed_names": [
+    "tests/test_memory.py::test_no_engine_module_imports_a_heavy_library_at_import_time@engine_ast"
+  ],
+  "host": {
+    "load": [
+      9.02,
+      8.55
+    ],
+    "mem_avail_mb": [
+      8426,
+      8471
+    ],
+    "cpu_temp_c": [
+      74.0,
+      76.0
+    ],
+    "stall_s": {
+      "cpu": 1.5,
+      "io": 0.1,
+      "io_full": 0.1,
+      "memory": 0.1
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  }
+}
