@@ -1,7 +1,10 @@
 {
- "admits": 75,
- "needles": 78,
+ "admits": 99,
+ "field_runs": 1,
+ "needles": 91,
  "neighbors": 107,
  "neighbors_missing_a_split_part": 3,
- "sun": 1911
+ "partners": 4,
+ "sun": 2631,
+ "web_ends": 2
 }
