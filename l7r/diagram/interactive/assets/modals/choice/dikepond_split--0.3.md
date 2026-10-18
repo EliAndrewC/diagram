@@ -3,13 +3,13 @@ fish pond and the spoil heaped into the bank, or dike, round it, where mulberry 
 proportion, so that the mulberry, by way of the silkworms it fed, could feed the fish in the pond beside it.
 
 How a parcel was split between water and bank varied. Modern writers give it as six parts water to four of dike
-or, perhaps in another region, six parts dike to four of pond, or seven of water to three of dike, the water-heavy splits for fish also
-fed from beyond the bank; one modern paper puts them equal where the mulberry alone fed the fish, and the Guangdong gazetteer office
-writes three of water to seven of dike. In the seventeenth century one township of the Pearl River delta gave
+or, perhaps in another region, six parts dike to four of pond, or seven of water to three of dike, the water-heavy splits being for ponds whose fish were also
+fed from beyond the bank; one puts them equal where the mulberry alone fed the fish, and another
+three of water to seven of dike. In the seventeenth century one township of the Pearl River delta gave
 between half and eight tenths of its land to fish.
 
 Guesses:
-- That a village takes each of the five splits at even odds: no account gives a share between them, and every account
+- That each of the five splits was as common as the others: no account gives a share between them, and every account
   found that writes the split as a ratio is modern.
 - That one split holds for the whole village: the accounts give the split for dike-ponds in general, or for a single pond
   as a worked example, never how it varied from one parcel to the next in one village.

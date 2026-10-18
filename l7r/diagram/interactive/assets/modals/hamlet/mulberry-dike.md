@@ -21,12 +21,12 @@ Guesses:
 - Each bush's crown, 4.4 to 7 ft across: no account gives how wide a mulberry bush grew.
 
 Depiction: The map draws each bank as mottled earth under rows of low bushes, about 4.4 ft apart in the row, about one
-bush to 24 sq ft: the late-Qing spacing, the one density dated before modern times. At it the crowns run together in
+bush to 24 sq ft: the late-Qing spacing, the one density dated before modern times. At that spacing the crowns run together in
 stretches with earth showing between, where the far denser root-cut planting would fuse into one band of green. No
 berries are drawn: a mulberry's fruit would be smaller than the map can show, and whether a bush stripped for its leaves
 bore fruit is not recorded. A bush always stands on the bank, though its crown may lean over the canal at the bank's foot.
-Water and bank were split both ways round, six parts to four either way, seven of water to three of bank, one to one, and
-three of water to seven of bank; each settlement's ponds are drawn at one of the five. The bank is drawn as a ring round the water, so pointing at a dike lights the bank and not the pond inside it. Every dike
+Each settlement's ponds are drawn at one of five splits of water to bank: six parts to four either way, seven of water to three of bank, one to one, or
+three of water to seven of bank. The bank is drawn as a ring round the water, so pointing at a dike lights the bank and not the pond inside it. Every dike
 of a hamlet carries the same crop, so each hamlet reads as one kind of dike-pond village; the title card says which.
 
 Name: mulberry dike

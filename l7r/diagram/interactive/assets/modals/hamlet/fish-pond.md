@@ -19,7 +19,7 @@ Guesses:
   holds for every pond of the hamlet: no split written as a number before modern times was found, and no account gives a
   share between them.
 
-Depiction: The map draws a block of dike-ponds as a mosaic, every pond four-sided but skewed to an uneven shape, or on some hamlets as a chessboard of ponds in straight rows, both layouts being recorded.
+Depiction: The map draws a block of dike-ponds as a mosaic, every pond four-sided but skewed to an uneven shape, or on some hamlets as a chessboard of ponds in straight rows.
 Each pond is set in from the
 edge of its plot, its planted bank filling the ring between.
 The gates drawn are the polder's own, in its outer dike; no pond has a sluice through its own bank, that being known only from

@@ -8,8 +8,8 @@ The ponds lay as a mosaic, mostly narrow rectangles side by side, with squares a
 They lay among the creeks and canals of the polder around them, watered and drained through sluice gates in the polder's own
 dike. Modern ponds are about 1 to 1.5 acres (0.4 to 0.6 ha) and 7 to 10 ft deep, their dikes 20 to 33 ft wide.
 
-In 1678 a writer put the fish at half of one delta township's
-land, and its ponds at eight tenths. Water and dike were kept in proportion, so the mulberry could feed the
+In 1678, early in the Qing, the fish took half of one delta township's
+land, and its ponds eight tenths. Water and dike were kept in proportion, so the mulberry could feed the
 fish beside it: in modern times about six parts water to four of dike, or the reverse.
 
 Guesses:

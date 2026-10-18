@@ -8,7 +8,7 @@ rice. Modern ponds are about 1 to 1.5 acres (0.4 to 0.6 ha) and 7 to 10 ft (2 to
 (6 to 10 m) wide.
 
 Most of the time the ponds took only part of the land. In the survey of 1581 the ponds of Longshan, one of the two earliest
-pond districts of Shunde county, came to 18% of its hill, dry land and ponds, its paddy, it seems, left out of the count; in
+pond districts of Shunde county, came to 18% of its hill, dry land and ponds; in
 the 18th century they had taken three-quarters of its farmland. As late as the 1980s a quarter of the delta's dike-pond
 heartland was still in rice.
 
