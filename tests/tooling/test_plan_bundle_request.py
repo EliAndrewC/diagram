@@ -77,6 +77,12 @@ def test_an_earlier_amendment_carries_every_later_one() -> None:
     assert index.count("## Amendment") == 1
 
 
+def test_a_later_amendment_correcting_an_earlier_requirement_carries_the_earlier_words() -> None:
+    n = pb.answered([("## Amendment 3, reopened (FR-002 corrected)", "## Amendment 3, reopened (FR-002 corrected)\n\n**D9 - x.**")], SPEC)
+    req, _index = pb.trimmed_request(REQUEST, n)
+    assert n == 1 and "> one" in req and "> three" in req, "FR-002 is amendment 1's: its words come with the block"
+
+
 def test_the_earliest_of_several_blocks_wins() -> None:
     n = pb.answered([("## Amendment 3", "x"), ("## Amendment 1, reopened", "y")], SPEC)
     assert n == 1 and "> one more" in pb.trimmed_request(REQUEST, n)[0]

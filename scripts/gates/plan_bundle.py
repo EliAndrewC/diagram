@@ -71,13 +71,14 @@ def spec_amendments(spec: str) -> dict[str, int]:
 
 
 def answered(under: list[tuple[str, str]], spec: str) -> int | None:
-    """The earliest amendment the blocks answer: a block heading's `Amendment N`, else the amendment holding an id it cites;
-    None when any block answers none - the original plan, which is judged against the whole request."""
+    """The earliest amendment the blocks answer: per block, the earliest of its heading's `Amendment N` and the amendment of
+    every id it cites (a later amendment correcting an earlier one's requirement answers the earlier one too - spec review of
+    amendment 8); None when any block answers none - the original plan, which is judged against the whole request."""
     of = spec_amendments(spec)
     found: list[int] = []
     for key, body in under:
         m = re.search(r"\bAmendment (\d+)\b", key) or re.match(r"\s*#+ Amendment (\d+)\b", body)
-        ns = [int(m.group(1))] if m else [of[i.group(1)] for i in _IDS.finditer(body) if i.group(1) in of]
+        ns = ([int(m.group(1))] if m else []) + [of[i.group(1)] for i in _IDS.finditer(key + "\n" + body) if i.group(1) in of]
         if not ns:
             return None
         found.append(min(ns))

@@ -285,7 +285,8 @@ long-running feature does for itself, on the clock glyph-check already keeps.
   holds the feature's original request (what comes before its first amendment heading) and every amendment section from the
   EARLIEST one the blocks under review answer through the last - a later amendment can change what an earlier one asked, so
   none after it is left out - and `request-index.md` holds the heading and first line of each section left out. The amendment
-  a block answers is the one its heading names, else the one whose spec section holds the requirements it cites; a block that
+  a block answers is the EARLIEST of the one its heading names and every one whose spec section holds a requirement it cites
+  (a block of a later amendment correcting an earlier one's requirement carries that earlier amendment's words); a block that
   answers none (the original plan) gets the whole request, as does a request with no amendment headings. A spec-delta bundle
   for later spec rounds and a spec archive are NOT built: later rounds read ~0 characters of the spec since the round hook's
   diff, and first rounds ~2.4k per agent (research R22).
@@ -400,7 +401,8 @@ long-running feature does for itself, on the clock glyph-check already keeps.
   hand-launched wave of its check (research).
 - **SC-035** (FR-047) A plan review of the newest amendment's block on 383 carries the original request and that amendment
   alone, a fraction of the whole (measured on the bundle), with every other section's heading in `request-index.md`; a block of
-  an earlier amendment carries it and every later one; a block of the original plan, or a feature with no amendments, the whole
+  an earlier amendment carries it and every later one, and so does a block headed with a later amendment that cites an earlier
+  one's requirement; a block of the original plan, or a feature with no amendments, the whole
   request (tests of the bundle builder).
 
 ## Review history
