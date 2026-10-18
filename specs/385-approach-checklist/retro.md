@@ -349,3 +349,12 @@ About 15 min inside T05's window (the arbiter's hour-10 fix): `checkpoint.due` a
 one admitted under it - the rest of that message - never a gate, never a chain into the next message (the window counts from the
 last dispatch admitted under the hour); `stepback_bundle.refusals` reads `refused` too. Plan CLEAR first round (D42a a narrowing
 ruled LEGITIMATE). Closed by T18's one command (land, settle, tick).
+
+## T21 - the retro row
+
+About 25 min (two plan rounds). The round settling `apply-edits` already did reached no batch reply (a batch opens with prose, so
+no check was named) and no EDIT the session had applied by hand - both T05's cases. Now a batch names its check from its first
+counts line, and an EDIT applied by hand, word for word, settles through `make apply-edits FROM=<the reply>` (the block put back
+and re-applied, the file unchanged). Round 1 of the plan review caught the first form keeping the hand-applied case out - the very
+case that cost T05 its round-2 page checks. **The habit it changes:** apply a check's EDITs from its reply or transcript, never
+retyped (`make record-owed`'s footer says so).

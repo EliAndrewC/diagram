@@ -156,7 +156,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21
 
 ## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)
 
@@ -866,6 +866,34 @@ wants to word itself can still be added by hand.
 **D42 - one decision per message.** `checkpoint.due` marks each admitted dispatch's time (`<git dir>/checkpoint-admitted`); past
 the hour, a dispatch within `SAME_MESSAGE_S` (5 s) of an admitted one is admitted - the rest of the message it began. A gate is
 never admitted by the window. `stepback_bundle.refusals` reads `refused` as well as `blocked`, the pair guard's own word.
+
+## T21 - a batch reply's own EDITs settle its units (the round arbiter's fix on ask:t05-lane-popup-round3)
+
+### T21 Approach (checklist part A)
+
+1. **The goal, in the world.** A check's own verbatim fix, applied, owes no round that reads the check's words back.
+2. **The constraints.** The round settling `apply-edits` already does (feature 335's arbiter, 375 amendment 3); a unit whose diff departs
+   from the round's EDIT stays owed; every refusal names its step; a test red without it; tooling only.
+3. **Where each comes from.** The settling is the arbiter's rule (G, 335/375); the batch's counts-line read is ours (O).
+4. **Do they describe the world here?** Yes - measured on T05 (2026-10-18): the settling exists, but the session applied page 0196's
+   EDITs from a hand-made file with no counts line, and the pop-ups' by hand; and a batch reply (FR-009) opens with prose, so even
+   `apply-edits` on it named no check. Both round-2 page checks and one pop-up round followed.
+5. **The order.** The batch read first, then the tip in `make record-owed`'s footer.
+6. **The exits.** (c) - the existing settling reaches batch replies; (e) n/a.
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: `tests/tooling/test_apply_edits.py` red without the batch read; the footer names `make apply-edits
+   FROM=<reply or transcript>`.
+
+### T21 Decisions
+
+**D43 - the batch read and the tip.** `record_owed.reply_checks` names a reply's check from its first line, else from the first
+counts line of a known check anywhere in it (`modal-depiction: <unit> - COVERAGE ...`), so `make apply-edits FROM=<a batch's reply
+or transcript>` settles each unit its own EDITs alone moved. An EDIT already applied by hand settles too, through the same command (spec-fidelity, T21
+round 1: the arbiter's test is the diff matching the EDIT line for line, however it got there): a block whose new text stands
+once in its file and whose old text is gone is put back to its old text, so the settling sees the round's own blocks move the
+unit, and is re-applied - the file ends as it was. A hand edit that departs from the EDIT, or one with no reply to read, still
+re-owes its unit. `make record-owed`'s footer names the command for both.
 
 ## T11 - the close
 

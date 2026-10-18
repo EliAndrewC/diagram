@@ -51,7 +51,7 @@
    "declared": "spec-fidelity"
   },
   "## Landing": {
-   "sha256": "48b8e13307517e730da5e886507a0036621d41ff110f26141c54f400fc1dd2c9",
+   "sha256": "a000c859cf163ff2ca29adc9de3404bb37e96400cf1b05e2238f4e156b0deb64",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -328,6 +328,24 @@
   },
   "### T20 Decisions": {
    "sha256": "5b28e2bb74100ae9afc4160a1957edfaced12872adc68838a042450dbb41e72e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T21 - a batch reply's own EDITs settle its units (the round arbiter's fix on ask:t05-lane-popup-round3)": {
+   "sha256": "85616fdb8841feadc3811cd7e1f2f147520cae9480c42b24325313acf5eb8523",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T21 Approach (checklist part A)": {
+   "sha256": "727e1c1993ad356f749d0a0faa70c38de14ad85847b84077b2e693d635a18e6e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T21 Decisions": {
+   "sha256": "05f25c28b5b0296d7d5869beed987413d79395046ab0c5580593810d6ee85aeb",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -2163,6 +2181,106 @@
      "summary": "stepback_bundle.refusals reads the hour guard's own 'refused' events as well as 'blocked'",
      "class": "within",
      "why": "It enforces what was asked: the GM's step-back is meant to see the session's refusals, and the hour guard's own word was being missed. Delete the step-back in your head and this change has nothing left to fix."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T21 - a batch reply's own EDITs settle its units (the round arbiter's fix on ask:t05-lane-popup-round3)",
+    "### T21 Approach (checklist part A)",
+    "### T21 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Landing-T21",
+     "summary": "T21 added to the Lands open list",
+     "class": "within",
+     "why": "FR-006: each task lands when it closes; adding the new task to the list only applies the existing landing rule."
+    },
+    {
+     "id": "D43-batch-read",
+     "summary": "record_owed.reply_checks names a reply's check from its first line, else from the first counts line of a known check anywhere in it, so apply-edits FROM=<batch reply or transcript> settles the units its EDITs moved",
+     "class": "within",
+     "why": "Makes the settling the arbiter already ruled (feature 335, 375 amendment 3) reach FR-009 batch replies, which open with prose. That is the arbiter's fix on ask:t05-lane-popup-round3 working on the case T05 measured, and a tooling improvement amendment 6 asks for."
+    },
+    {
+     "id": "D43-footer-tip",
+     "summary": "make record-owed's footer tells the session to apply a round's EDITs with make apply-edits FROM=<reply or transcript>",
+     "class": "within",
+     "why": "A process improvement under amendment 6 (the GM 2026-10-18: implement any obvious tooling / process improvements). Does not include the footer's second sentence, which is ruled under D43-hand-edit-not-settled."
+    },
+    {
+     "id": "T21-done-test",
+     "summary": "tests/tooling/test_apply_edits.py red without the batch read",
+     "class": "within",
+     "why": "A test whose only effect is to enforce the requested fix; enforcement of what was asked."
+    },
+    {
+     "id": "D43-hand-edit-not-settled",
+     "summary": "An edit matching the finding's EDIT line for line settles its unit only when applied through apply-edits FROM=<reply>; an EDIT typed or copied by hand re-owes its unit. Appears in three places: Approach item 2 ('a unit changed any other way stays owed'), D43's 'Not built: settling an EDIT applied by hand', and D43's footer text ('an EDIT typed or copied by hand re-owes its unit').",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The arbiter's ruling, which reached this review only as the dispatch's quote and not in the bundle, says: 'the modal-depiction re-owe guard should treat an edit whose diff matches, line for line, the verbatim EDIT the last round's finding supplied as settling that finding.' Its test is a property of the DIFF. D43 swaps that for a property of the MECHANISM. (1) Not impossible. D43's reason is 'the settling needs the reply's own blocks to tell a check's words from the session's'. That names an input the check needs, not something that cannot be done: apply-edits FROM=<reply or transcript> already takes that reply, and the same reply lets the check compare a working-tree diff with its EDIT blocks, however the edit reached the tree. If the plan's real premise is that the finding's EDIT text is kept nowhere the guard can read when the session edits by hand, that is a factual claim the block never measures, and scope cannot rest on it. (2) Not implied by the ruling: 'whose diff matches, line for line' read plainly covers any route an edit takes. (3) It defeats the ruling's purpose. Approach item 4 records that the T05 incident behind the ruling was hand-applied EDITs (page 0196's from a hand-made file, the pop-ups' by hand), so the carve-out leaves out the very case the ruling was written for, and the footer turns the carve-out into guidance that contradicts the ruling. Fix: the guard settles a unit when its working-tree diff matches, line for line, an EDIT in the last round's finding (the supplied reply or transcript), however the edit was applied; apply-edits FROM= stays one way to produce that match, not the only one that settles. Strike 'a unit changed any other way stays owed' from Approach item 2 (a unit whose diff departs from the EDIT stays owed) and the hand-edit sentence from the footer, and replace the 'Not built' sentence. An edit that departs from the EDIT, or one made with no reply to compare against, still re-owes."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T21 - a batch reply's own EDITs settle its units (the round arbiter's fix on ask:t05-lane-popup-round3)",
+    "### T21 Approach (checklist part A)",
+    "### T21 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing-T21",
+     "summary": "T21 added to the tasks that land open, one at a time",
+     "class": "within",
+     "why": "FR-006: each task lands when it closes while later ones stay open."
+    },
+    {
+     "id": "T21-exists",
+     "summary": "T21 implements the round arbiter's fix on ask:t05-lane-popup-round3 as a tooling task",
+     "class": "within",
+     "why": "The arbiter's ruling is the authority for the fix, and amendment 6 asks for 'any obvious performance / tooling / process improvements along the way'; 'tooling only' keeps it to that."
+    },
+    {
+     "id": "D43-batch-read",
+     "summary": "reply_checks names a reply's check from its first line, else from the first counts line of a known check anywhere in it, so apply-edits on a batch (FR-009) reply or transcript settles the units its EDITs moved",
+     "class": "within",
+     "why": "Makes the existing apply-edits settling (the arbiter's rule) reach FR-009 batch replies, which open with prose; without it the arbiter's fix does not fire on the case measured on T05."
+    },
+    {
+     "id": "D43-departs-or-alone",
+     "summary": "a unit whose diff departs from the EDIT, or that other changes besides its own EDITs moved, still re-owes",
+     "class": "within",
+     "why": "This is the arbiter's own test: the diff must match the verbatim EDIT line for line."
+    },
+    {
+     "id": "D43-hand-applied-via-command",
+     "summary": "an EDIT already applied by hand settles through make apply-edits FROM=<reply or transcript> (block put back, re-applied, file ends as it was), not by the guard recognising the diff unaided; the record-owed footer names the command",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Round 1's NOT LEGITIMATE item is answered: a hand edit matching the EDIT line for line now settles, however it got there, as the arbiter ruled. The command stands between because the guard can only compare against an EDIT whose text it is handed; nothing in the bundle shows the guard holds the reply independently, so the command is the route to the comparison the arbiter's test needs, and the footer names it exactly where the guard would re-owe. The purpose (a verbatim fix owes no round) is reached."
+    },
+    {
+     "id": "D43-no-reply",
+     "summary": "a hand edit with no reply or transcript to read still re-owes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible otherwise: the arbiter's test is a match against the verbatim EDIT the finding supplied, and with neither reply nor transcript there is no EDIT to match."
+    },
+    {
+     "id": "D43-put-back-precondition",
+     "summary": "a hand-applied block is put back only when its new text stands once in its file and its old text is gone; one that fails this re-owes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The reply is the command's only input; a block whose new text cannot be located once (or whose old text still stands, so the EDIT is not applied as written) cannot be identified as the EDIT's own change from the reply alone. The case left owed is the duplicate-text edge, not the class of matching hand edits the arbiter ruled on, so the purpose is not gutted."
     }
    ]
   }
