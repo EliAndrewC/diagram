@@ -1,5 +1,5 @@
 {
- "captured": "2026-10-02T18:32:28+00:00",
+ "captured": "2026-10-18T23:19:37+00:00",
  "final_url": "https://github.com/EliAndrewC/l7r/blob/master/setting/l7r.md",
  "first": "b8/b8fdbcdbdae2/20261002T183226Z",
  "gm_copies": [],
@@ -18,13 +18,14 @@
   "l7r-choyo-festival",
   "l7r-justice",
   "l7r-geisha-houses",
-  "l7r-estates-toward-capital"
+  "l7r-estates-toward-capital",
+  "l7r-money"
  ],
  "notes": [],
  "outcome": "archived",
- "path": "b8/b8fdbcdbdae2/20261002T183226Z",
+ "path": "b8/b8fdbcdbdae2/20261018T231935Z",
  "reason": "",
  "revision": "",
- "sha256": "d05b5c44fd6679d341ea565df8f39715caae43a451f26876def71c38100a810d",
+ "sha256": "3dc5effac3f17d07139686c2cadbe1cb5656863110de3bf69e914e0c46bc14af",
  "url": "https://github.com/EliAndrewC/l7r/blob/master/setting/l7r.md"
 }
