@@ -17,6 +17,7 @@
 **Amendment 6 reopened**: the GM, 2026-10-17, "Yes, go ahead and reopen amendment 6 for all five. Thank you."
 
 **Amendment 7 approved**: the GM, 2026-10-17, "So please take a look at that and then implement its recommendations, because there's some pretty good analysis in there that I think will really help us out."
+**Approved**: the GM, 2026-10-17, "And yes it may land without T56."
 
 **Amendment 4 approved**: the GM, 2026-10-17, "I think I do want a next round uh, for the guard suites running serially, so uh, splitting those up does seem good." and "So yes, please fold those two into the same round as the sweet splitting. and then go ahead and work that."
 

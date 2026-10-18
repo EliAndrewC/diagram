@@ -656,6 +656,12 @@ turns a `<task-notification>` naming one of the wave's tool-use ids STARTED, as 
   before it (9 `modal-depiction`, session d2dc8c63, 17:50) read 2,336 / wrote 4,620 first and 4,443 / ~2,514 each after, and
   caused 2 wakes (605k median). Per agent, the two write about the same: the defined agent's prefix is reused either way.
 
+**`omitClaudeMd` holds inside a workflow** (checked 2026-10-17 at the GM's question; observed 2026-10-17, the method: a
+count of `Contents of /...CLAUDE.md` blocks in each agent's transcript): the probe's four typed `claims-triage` agents
+carry 0, where two ad-hoc general-purpose agents of the same session carry 1 each - the transcript records the block when it
+is loaded - and their first requests total ~6.2k tokens, beside ~7.0k for a hand-launched typed agent and 35.5k for the
+workflow's default subagent (R20).
+
 The first REAL wave (FR-046) has not run: on 2026-10-17 nothing owed one (`make record-owed`, `claims-owed`, `modal-triage`
 each reported nothing). The Workflow guard names `make wave-report` to the session whenever a `check-wave` run starts, so
 the measurement is taken where the wave runs.
