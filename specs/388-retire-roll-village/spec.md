@@ -56,7 +56,7 @@ holds; the instruction is to delete it now, and NOT to carry the failure anywher
 ## Success Criteria
 
 - **SC-001**: `grep -rn roll_village l7r pool tests` finds nothing (the legacy pool and `specs/` excepted, FR-005).
-- **SC-002**: `make done` is green - the 100% coverage floor over the engine, ruff, pyrefly, and every test - with the
+- **SC-002**: `make done` is green - the full-coverage floor over the engine, ruff, pyrefly, and every test - with the
   deleted code gone.
 - **SC-003**: The landing cohort (`make cohort-landing`) regresses no seed against main, and the pool hamlets regenerate
   byte-identical (FR-006; `git diff HEAD` on their manifests after `make maps` is empty).
