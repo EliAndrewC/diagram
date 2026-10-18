@@ -78,13 +78,13 @@ where a premise did not hold, the requirement below is the form of that goal the
   40 households) and the knots' judgments (none at 10 households, 22 trials and 0.83 s at 40, each trial asking the whole web's counts again).
   The field way finds its candidates without measuring every point: the work it does per candidate kept does not grow with
   the network. A knot's trial gather moves only the lanes it edits, so of the whole web's five counts (`_WHOLE_RULES`) the trial
-  re-asks near those lanes only the ones an edit can change only near itself: `doorstep_ends` (the free ends at each house - an
-  edit changes its own ends and the junctions of ends within the touch gap of them) and `doubled_tails` and `shadows` (pair by
-  pair - an edit changes only the pairs it is in). Two stay whole, each because the gather can change its answer anywhere:
-  `way_outs` (each household's way out is a route through the whole web, which one moved end can re-route) and `needle_loops`
-  (a face of the web is bounded by lanes anywhere round it; it is one shapely call over the web, and an exact local face test
-  does not exist without the whole arrangement). Not the withdrawn R12 lever (feature 297: rounds that ran only the steps the law
-  named broken, slower and withdrawn) - no round is narrowed and no law is asked first.
+  re-asks only where an edit can change them: `doorstep_ends` (the free ends at each house - an edit changes its own ends and
+  the junctions of ends within the touch gap of the edited lane's old or new LINE, since `fronting_ends` tests an end against the
+  whole way), `doubled_tails` and `shadows` (pair by pair - an edit changes only the pairs it is in) and `needle_loops` (a face
+  that meets no edited lane's old or new line is the same face before and after the edit, so only the faces that meet one are
+  judged; the web is still noded and polygonized whole, one shapely call). One stays whole: `way_outs` (each household's way out
+  is a route through the whole web, which one moved end can re-route anywhere). Not the withdrawn R12 lever (feature 297: rounds
+  that ran only the steps the law named broken, slower and withdrawn) - no round is narrowed and no law is asked first.
 - **FR-003 The cell merges.** Each merge judges only the union it would make; what grows is its neighbor search (spec-fidelity
   round 1, measured 2026-10-18: 3.3 shared-bund measurements per merge at 10 households, 15.7 at 40; 2.06 s of the merges'
   3.80 s), which queries an index of the cells built before any merge and measures the shared bund of every stale entry before
@@ -124,11 +124,12 @@ where a premise did not hold, the requirement below is the form of that goal the
 
 ## Success criteria
 
-- **SC-001** (FR-001, FR-002, FR-003) The work done per addition is COUNTED at each re-check site at 10, 20 and 40 households,
-  seed 4, before and after - the tree lanes judged per candidate way, the network points measured per field-way candidate kept
-  and, at 40 households (the only size seed 4 makes trials at, 0 at 10 and 20 - `m:counts-before`), the web's
-  ends and lane pairs re-asked per knot trial against the web's total ends and pairs, the shared-bund measurements per merge - and after the change none grows with the household
-  count; the counting command and the counts are recorded in `measurements.json`.
+- **SC-001** (FR-001, FR-002, FR-003) The work done per addition is COUNTED, before and after, from profiles at 10, 20 and 40
+  households, seed 4 (`m:counts-before` and its after): the tree lanes judged per candidate way, the network points measured per
+  field-way candidate kept and the shared-bund measurements per merge - after the change none grows with the household count;
+  and, at 40 households (the only size seed 4 makes knot trials at: 0 at 10 and 20), the ends, lane pairs and faces re-asked per
+  knot trial are fewer than the web's total ends, pairs and faces. The counting command and the counts are recorded in
+  `measurements.json`.
 - **SC-002** (FR-001 - FR-006, FR-009) Each site's time (the five kept, FR-004 withdrawn) at 40 households, seed 4, is reported before and after; the
   end bookend's 40-household total is reported against the start's, with both loads.
 - **SC-003** (FR-007, FR-008) `make cohort` and the landing cohort pass with no seed newly failing against main; the pool
@@ -162,3 +163,8 @@ where a premise did not hold, the requirement below is the form of that goal the
   it now names which whole-web counts a trial re-asks locally (`doorstep_ends`, `doubled_tails`, `shadows`) and which stay
   whole, with why (`way_outs`, `needle_loops`). (2) The knots count could not be judged across sizes (trials only at 40 on seed 4)
   - the bar is now at 40 households, re-asked against the web's totals. (3) SC-005 had no task - plan and tasks T07 carry it.
+- **spec-fidelity round 4 (2026-10-18): CHANGES REQUIRED, 2 items.** (1) `doorstep_ends`' local set named too few ends: a gather
+  moves a lane's middle (`teed_onto`, `contracted`) and `fronting_ends` tests an end against the whole way - now the ends within
+  the touch gap of the edited lane's old or new LINE. (2) SC-001's knots clause had no failing case - now "fewer than the web's
+  totals", and "none grows" covers only the three-size counts. Its note on the needle test (plan D1 local, FR-002 whole): made
+  one - both judge only the faces that meet a changed lane, the arrangement polygonized whole; `way_outs` alone stays whole.

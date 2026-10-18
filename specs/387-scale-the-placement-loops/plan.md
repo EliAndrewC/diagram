@@ -85,15 +85,18 @@ the point's place in `samples_along`), the old `sorted` being stable on that pla
 call, the same list. **Counted**: `run_on_target` calls per kept run.
 
 **D2b - the knots' whole-web counts.** `knots.settle_knots.judge` asks, for each trial gather, `memo.count` of each of the whole
-web's five rules on the WHOLE trial web (`_WHOLE_RULES`). A gather moves only the lanes in `edits`. Three counts are re-asked only
-where an edit can change them: `doorstep_ends` - the web's per-end verdicts (which house an end is discharged at, or that a
-junction discharges it) are kept from the web as it stands, and a trial re-asks only the edited lanes' ends and the ends within
-`JOIN_TOL` of an edited lane's old or new ends (a junction can only appear or vanish there); `doubled_tails` and `shadows` - the
-web's partner lists per lane are kept, and a trial re-asks only the pairs that hold an edited lane (`WebMemo.pair` already keeps
-each pair's answer by the two lanes' points). Two stay whole, as FR-002 says: `way_outs` (a route through the whole web) and
-`needle_loops` (one shapely polygonize over the web; a face is not local). **Equivalence**: each trial's five counts, old and new,
-the same numbers. **Counted** (SC-001, at 40 households): ends and pairs re-asked per trial, against the web's totals. Not R12:
-no round narrowed, no law asked to pick steps.
+web's five rules on the WHOLE trial web (`_WHOLE_RULES`). A gather moves only the lanes in `edits` - their ends and, by
+`teed_onto` and `contracted`, their middles. Four counts are re-asked only where an edit can change them, from the web's own
+verdicts kept for the web as it stands (rebuilt only once a gather is applied, as `had` is today): `doorstep_ends` - each end's
+verdict (the house that discharges it, or a junction) is kept, and a trial re-asks the edited lanes' ends and every end within
+`JOIN_TOL` of an edited lane's old or new LINE (`fronting_ends` measures an end to the whole way, `_min_dist`); `doubled_tails` and
+`shadows` - each lane's partner list is kept, and a trial re-asks only the pairs holding an edited lane (`WebMemo.pair` already
+keeps each pair's answer); `needle_loops` - the web's faces are kept with their verdicts, and the trial's count is the web's,
+less the thin faces of the web that meet an edited lane's old or new line, plus the thin faces of the trial that meet one (a face
+meeting neither is the same face in both arrangements; the trial is still noded and polygonized whole). One stays whole:
+`way_outs` (a route through the whole web; one moved end can re-route a household anywhere). **Equivalence**: each trial's five
+counts, old and new, the same numbers. **Counted** (SC-001, at 40 households): ends, pairs and faces re-asked per trial, against
+the web's totals. Not R12: no round narrowed, no law asked to pick steps.
 
 ## T03 - the cell merges (FR-003)
 
@@ -141,7 +144,7 @@ verdict is also asked by the straight scan and a difference raises, so an input 
 ## T06 - measure, sweep and record (FR-009, FR-010, SC-001 - SC-004)
 
 The counts at 10/20/40 households, seed 4, before (taken on unmodified `0910936e4`'s engine) and after, into `measurements.json`
-with the command, their logs kept in `counts-before/` and `counts-after/` beside it (the raw profiles they name are gitignored;
+with the command (`retake_counts.sh`, which `make figures` can re-run), their logs kept in `counts-before/` and `counts-after/` beside it (the raw profiles they name are gitignored;
 the command re-takes them); `make cohort`, `make maps` and `make done`; the end bookend; `dev/performance.md` gains "Judge the addition, build once,
 index the scan (feature 387)" with each site's before/after. A seed newly failing blocks (XIII).
 
