@@ -1562,6 +1562,22 @@ CLAIMS_OK citing the ruling. T43 is filed this way (`T=T43`), and its id comes o
 9. **Done, measured.** One goal: `land-tooling` with the Makefile in FILES refuses while the clone's page is stale (naming `make
    docs`), and lands the clone's page beside the Makefile when it is current; `tests/hooks/test-land-tooling.sh` red without each.
 
+### T46 part B (2026-10-18T16:52Z)
+
+Owed by the red-gate rulings red-gate@2026-10-18T16:44:54Z and red-gate@2026-10-18T16:45:47Z (`continue` both), which fell while
+T46 was the active task; the reds were T08's (`t08-red-gates.md`), and T46 itself landed before them.
+
+1. **What is refusing?** Nothing of T46's: it landed (the arbiter's fix settled); its tick waits on T08's glyph check, which the
+   last checkpoint owes.
+2. **A3 again.** Unchanged: the fix is the arbiter's (G).
+3. **A4 again.** Unchanged; measured at T45's landing.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither since part A.
+6. **The one-sentence test.** "A landed Makefile brings a current make-targets page" - true by its test, red without each half.
+7. **The next step is a measurement.** T08's gate, then its glyph check, then T46's tick.
+8. **Routes measured before asking?** n/a - no ask.
+9. **After a ruling.** `continue`: a local `make test-full` green before T08's next gate.
+
 ### T46 Decisions
 
 **D64 - the page checked in the clone and landed with the Makefile.** With `Makefile` in FILES, `land-tooling` runs the
