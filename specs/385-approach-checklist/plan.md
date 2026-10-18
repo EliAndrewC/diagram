@@ -264,6 +264,22 @@ Owed by the hour-21 step-back (hour:385-approach-checklist@21, `continue`).
 8. **Routes measured before asking?** n/a - no ask.
 9. **After a ruling.** `continue`, with its guidance taken into the page session; its tooling fix is its own task.
 
+### T10 part B (2026-10-18T23:21Z)
+
+Owed by the hour-22 step-back (hour:385-approach-checklist@22, its tooling fix built as T60 and T61) and the hour-23 one
+(hour:385-approach-checklist@23, `change-route`).
+
+1. **What is refusing?** Nothing on the maps. The tick waited on hour 22's fix and on `ask:t10-findings-at-landing`'s (T62); both
+   are built, landed and settled. The claims findings are carried into T43 at landing (CLAIMS_OK names the four).
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged: Kuwabata rolls 0.3, its median parcel drawn at 0.700 water; the cohort 54/54.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither now - landing what was checked.
+6. **The one-sentence test.** "A dike-pond village takes one of the five recorded splits, rolled" - true by the knob and its test.
+7. **The next step is a measurement.** The gate, the landing cohort and the glyph check on Kuwabata's ponds.
+8. **Routes measured before asking?** n/a - no ask.
+9. **After a ruling.** `change-route` taken: T10 lands before T66 and T67 are built.
+
 ### T10 Decisions
 
 **D74 - the split rolled, the inset derived.** The recorded splits as the water share of a parcel (three at first; all five since D74b), rolled per map

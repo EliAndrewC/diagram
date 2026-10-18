@@ -5331,6 +5331,26 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T67": {
+   "section_sha256": "67a3c844f8013b342bcda3c03b2515c15c3c2b8dda95e5dfd61d53d554074c1e",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D86",
+     "summary": "land-tooling.sh runs the lint check first and alone; a lint failure stops at once with its output and the ruff format line, before the guard suites and tooling tests start; a passing lint goes on to the other two in parallel as now.",
+     "class": "within",
+     "why": "A tooling performance fix, which amendment 6 asks for in the GM's words ('Please make sure to implement any obvious performance / tooling / process improvements along the way'), made on a defect measured on 2026-10-18 from .git/land-tooling.log (a 0.05 s lint failure reported only after a 122.20 s step). It takes nothing out of anything the GM asked for or anything the spec requires: no FR in spec-index.md governs land-tooling's order of checks (FR-017 to FR-019 are about the push, the arbiter fix command and the ledger). Every check still runs on a landing that passes lint. The Approach's constraint 'every check's failure is still reported' (T52) holds for the checks that run; the suites skipped after a lint failure have no result to report, and the landing fails either way. The constraint is a plan-internal one, not the request's, so this does not narrow anything."
+    },
+    {
+     "id": "T67-done",
+     "summary": "Done as one goal: a landing whose lint fails stops before the suites start, checked by tests/hooks/test-land-tooling.sh, which is red without the change.",
+     "class": "within",
+     "why": "A test whose only job is to enforce D86. Enforcing what was asked is not extra scope (GM 2026-09-20). It is one goal, as FR-015 requires."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
