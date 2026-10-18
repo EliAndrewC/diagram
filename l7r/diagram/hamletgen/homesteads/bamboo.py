@@ -454,7 +454,9 @@ class StripNear:
     registry's own (`indexed_grid`, extended on an append, rebuilt on anything else); the rest is filed at construction. Under
     `L7R_CHECK_CACHES=1` (the suite) each query checks those still hold what was filed and raises if not.
 
-    Research: what a strip keeps off, found near it - NONE: plumbing; the clearances are `_strip_blocked`'s claims"""
+    Research:
+        what a strip keeps off, found near it - NONE: plumbing; the clearances are `_strip_blocked`'s claims
+        a fixture with no recorded size - UNRESEARCHED: taken as 16 ft across (`r` 8), as `_strip_blocked` always took it"""
 
     __slots__ = ("_filed", "crowns", "houses", "kinds", "lanes", "s", "segs")
 

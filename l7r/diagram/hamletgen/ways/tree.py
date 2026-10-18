@@ -150,9 +150,10 @@ def lanes_of(M: Mapping[str, Any], recs: Sequence[Mapping[str, Any]], host: Sequ
 def lane_record(r: Mapping[str, Any], pts: Poly, on: Poly | None) -> dict[str, Any]:
     """Run `r`'s tree lane, drawn at `pts` (laid and rounded), its end carried onto `on` - its host's drawn run - as
     `lanes_of` carries it; one lane at a time, so the base tree's lanes are built once and a candidate's alone after them
-    (feature 387, `tree_base`).
+    (feature 387, `tree_base`). The carry onto the host within `CARRY_FT` is that constant's claim.
 
-    Research: tree lane assembled - NONE: the run set on its host as the web draws it (`lanes_of`'s claims)"""
+    Research:
+        tree lane tread by role - research/questions/0081-village-lanes.drawing.html: house access 3 ft, a branch 5 ft"""
     # ...ITS END CARRIED ONTO ITS HOST AS DRAWN: the host is squared at its water crossings, and a run that met it on the
     # stretch the squaring moved (cohort seed 8: the exit strip over a channel) is carried on to the foot on it
     # ...UNLESS IT STANDS ON THE CONNECTOR'S TREAD ALREADY, where the strip is cut back to the connector's start: the web's

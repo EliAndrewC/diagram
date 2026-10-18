@@ -10193,10 +10193,104 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::StripGround#strip ground": {
-  "code": "cf3adad2cf0f280c",
-  "core": "538eb0228520426d",
-  "date": "2026-10-12",
-  "note": "a container",
+  "body": "d5bedf648628506c",
+  "claim": "strip ground - NONE: the ground gathered once for the strip tests",
+  "code": "56752778c5030237",
+  "core": "198af81c390ead59",
+  "date": "2026-10-18",
+  "note": "a record that gathers the ground once; it decides nothing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/bamboo.py::StripNear#a fixture with no recorded size": {
+  "body": "040f557fc50e843a",
+  "claim": "a fixture with no recorded size - UNRESEARCHED: taken as 16 ft across (`r` 8), as `_strip_blocked` always took it",
+  "code": "fb4fee1d70ad1e25",
+  "core": "c0135bf20a73a08a",
+  "date": "2026-10-18",
+  "note": "the 16 ft (r 8) size for a fixture with no recorded size is a choice the code makes, and the unit cites no question that answers it, so UNRESEARCHED is the right label",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/bamboo.py::StripNear#what a strip keeps off, found near it": {
+  "body": "040f557fc50e843a",
+  "claim": "what a strip keeps off, found near it - NONE: plumbing; the clearances are `_strip_blocked`'s claims",
+  "code": "57899fcece2175ae",
+  "core": "c0135bf20a73a08a",
+  "date": "2026-10-18",
+  "note": "a spatial prefilter; the exact tests stay in _strip_blocked",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/bamboo.py::StripNear.__init__#a well, notice board, byre, shed or retirement house with no recorded size is taken as 16 ft across (r defaults to 8) for the strip's 6 ft clearance": {
+  "code": "747436459b64cf97",
+  "core": "747436459b64cf97",
+  "date": "2026-10-18",
+  "note": "a well, notice board, byre, shed or retirement house with no recorded size is taken as 16 ft across (r defaults to 8) for the strip's 6 ft clearance",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/homesteads/bamboo.py::StripNear.__init__#strip geometry": {
+  "body": "02d671738951e5f7",
+  "claim": "strip geometry - NONE: frames, indexes and ground lookups; the units that decide carry their own claims",
+  "code": "fe66e7697ed3c8cc",
+  "core": "747436459b64cf97",
+  "date": "2026-10-18",
+  "note": "files items into grids (the 16 ft default size is listed below as UNCLAIMED)",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/bamboo.py::StripNear._state#strip geometry": {
+  "body": "5392970c83f5b7f1",
+  "claim": "strip geometry - NONE: frames, indexes and ground lookups; the units that decide carry their own claims",
+  "code": "8b2453333b23bfa5",
+  "core": "769cc7ae0a575d47",
+  "date": "2026-10-18",
+  "note": "a staleness fingerprint",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/bamboo.py::StripNear.check#strip geometry": {
+  "body": "b3052571cfb1129b",
+  "claim": "strip geometry - NONE: frames, indexes and ground lookups; the units that decide carry their own claims",
+  "code": "a325b296aa82b5bd",
+  "core": "7b9311df9beda934",
+  "date": "2026-10-18",
+  "note": "a cache assertion under the suite",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/bamboo.py::StripNear.count#strip geometry": {
+  "body": "db219770612feba6",
+  "claim": "strip geometry - NONE: frames, indexes and ground lookups; the units that decide carry their own claims",
+  "code": "a3fd499dc16f836f",
+  "core": "5a7ac908375d5e4d",
+  "date": "2026-10-18",
+  "note": "counts the items tested; its pad copies the query reach",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/bamboo.py::StripNear.placed#strip geometry": {
+  "body": "71b08aca3cd53737",
+  "claim": "strip geometry - NONE: frames, indexes and ground lookups; the units that decide carry their own claims",
+  "code": "4b7bbe34376339ea",
+  "core": "44b2982160d7c6ef",
+  "date": "2026-10-18",
+  "note": "the versioned grid of placed boxes",
   "pages": {},
   "research": "",
   "rests": [],
@@ -10226,11 +10320,25 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/homesteads/bamboo.py::_KINDS#strip geometry": {
+  "body": "6795c6e8b9392fac",
+  "claim": "strip geometry - NONE: frames, indexes and ground lookups; the units that decide carry their own claims",
+  "code": "d03afe6162adf84d",
+  "core": "d70d0b6232685c28",
+  "date": "2026-10-18",
+  "note": "the list of record kinds to file; the 6 ft clearance it feeds is claimed on _strip_blocked",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::_strip_blocked#no lane across it": {
-  "code": "cc5efb3b3ad3eb7f",
-  "core": "b342bf270913dd58",
-  "date": "2026-10-13",
-  "note": "refuses a lane tread within half-width of a corner, crossing an edge, or ending inside; matches \"no lane or well is drawn across it\" (wells kept off at 6 ft in the loop above)",
+  "body": "e41512c0881fd688",
+  "claim": "no lane across it - bamboo-groves-chikurin.drawing: no lane or well is drawn across a strip; a tread within its half-width of a corner, or crossing an edge, refuses it",
+  "code": "dfc6e9f6f9e7cebf",
+  "core": "74dc0e665fba6942",
+  "date": "2026-10-18",
+  "note": "a tread within its half-width (6 ft added) of a sample point, crossing an edge or ending inside refuses the strip; wells are kept 6 ft off through near.kinds; matches \"no lane or well is drawn across it\"",
   "pages": {
    "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
@@ -10241,34 +10349,40 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::_strip_blocked#off the notice board, byres and retirement houses": {
-  "code": "ebc9391c15ef40cf",
-  "core": "b342bf270913dd58",
-  "date": "2026-10-13",
-  "note": "the kosatsuba, byres and retirement_houses keys are cleared at 6 ft, the same as wells and sheds; no cited page speaks to these clearances",
+  "body": "e41512c0881fd688",
+  "claim": "off the notice board, byres and retirement houses - UNRESEARCHED: 6 ft off each, as off wells and sheds",
+  "code": "df657dafa271d9f2",
+  "core": "74dc0e665fba6942",
+  "date": "2026-10-18",
+  "note": "6 ft off every _KINDS box; no page gives a clearance",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::_strip_blocked#off the paddy": {
-  "code": "e2500ba27823bee3",
-  "core": "b342bf270913dd58",
-  "date": "2026-10-13",
-  "note": "refuses any corner inside or within 6 ft of a paddy ring",
+  "body": "e41512c0881fd688",
+  "claim": "off the paddy - bamboo-groves-chikurin.drawing: no stand on a paddy",
+  "code": "2d293904662bcb64",
+  "core": "74dc0e665fba6942",
+  "date": "2026-10-18",
+  "note": "the paddy test samples only the 4 corners and the center (`boxed_ring_hit(q[0], q[1], ft.rings.near(...), 6.0) for q in corners`), so a paddy that reaches into the edge of a long strip between the sample points goes unseen. A sheltered farm's south band is frame-wide, about 240 ft. The page says \"No bamboo stand is drawn on a paddy\". Test the paddy against the strip's area or edges, as the lane test does (feature 137)",
   "pages": {
    "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
   "research": "7d323351e0241d76",
   "rests": [
+   "0075-bamboo-groves-chikurin.drawing.html:e27bb8739d8ba657",
    "0075-bamboo-groves-chikurin.drawing.html:e76b74de88c86e77"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::_strip_blocked#what a strip or fixture keeps off": {
-  "code": "9fd8fb199c58774f",
-  "core": "b342bf270913dd58",
-  "date": "2026-10-13",
-  "note": "the margins, and the new crown-to-box test, are not answered by the cited pages",
+  "body": "e41512c0881fd688",
+  "claim": "what a strip or fixture keeps off - UNRESEARCHED: the pads, 2 ft off placed boxes and houses, 6 ft off wells and sheds and paddy or marsh, 3 ft off dry plots, off water and crowns, 20 ft past the pond",
+  "code": "0768b5fb3f30625e",
+  "core": "74dc0e665fba6942",
+  "date": "2026-10-18",
+  "note": "code matches the account: the 30 ft map margin, 2 ft off placed boxes and other houses, 6 ft off fixtures, paddy and marsh, 3 ft off dry plots, off water, off crowns (radius + 0.6), 20 ft past the pond ellipse; no cited block gives these",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -10330,33 +10444,40 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#a grove farm's bamboo in its grove": {
-  "code": "73bd81f27f1b1370",
-  "core": "5d5f273ec81653fc",
-  "date": "2026-10-13",
-  "note": "a grove farm that is not sheltered gets no strip and is counted",
+  "body": "35dd72e761dc8816",
+  "claim": "a grove farm's bamboo in its grove - bamboo-groves-chikurin.drawing: no strip, counted for the grove",
+  "code": "cd77fa30aa5e4251",
+  "core": "d58cd60cb3225d99",
+  "date": "2026-10-18",
+  "note": "a non-sheltered farm with groves gets no strip and is counted; its bamboo is drawn in the grove (the sheltered exception follows §15)",
   "pages": {
    "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
   "research": "7d323351e0241d76",
   "rests": [
+   "0075-bamboo-groves-chikurin.drawing.html:e27bb8739d8ba657",
    "0075-bamboo-groves-chikurin.drawing.html:e7c00c0357d35ec7"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#a stepped strip its own farm's": {
-  "code": "1eada4e2ee0904a1",
-  "core": "5d5f273ec81653fc",
-  "date": "2026-10-13",
-  "note": "no page covers a nearest-house rule; §13 says the stepping reach is a GUESS",
+  "body": "35dd72e761dc8816",
+  "claim": "a stepped strip its own farm's - UNRESEARCHED: none seated nearer another house's center than its own",
+  "code": "c10e52041e9d515a",
+  "core": "d58cd60cb3225d99",
+  "date": "2026-10-18",
+  "note": "the page says only that the reach is a GUESS; the nearest-house rule is not answered",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#row farm's bamboo to the south": {
-  "code": "2003f81434db7ec7",
-  "core": "5d5f273ec81653fc",
-  "date": "2026-10-13",
-  "note": "knob gate homestead/both, every sheltered farm keeps it, south_band, none where there is no room",
+  "body": "35dd72e761dc8816",
+  "claim": "row farm's bamboo to the south - row-villages-resson.drawing, bamboo-groves-chikurin.drawing: on a row village that rolled the second form and a map whose farmsteads keep bamboo, every farm the grove row across its street shelters keeps it, a band along its south side (`south_band`)",
+  "code": "52a550312e00ee0e",
+  "core": "d58cd60cb3225d99",
+  "date": "2026-10-18",
+  "note": "a sheltered farm always keeps bamboo, and only when the knob gives the farmsteads bamboo; south_band is frame-wide and a strip deep, past the sun ground, stepped south, and none when there is no room",
   "pages": {
    "0033-row-villages-resson.drawing.html": "7f062305b79e2200",
    "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
@@ -10370,10 +10491,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#side rolled, then the others": {
-  "code": "aefe2e7727cc7309",
-  "core": "5d5f273ec81653fc",
-  "date": "2026-10-13",
-  "note": "weighted side first, then the rest",
+  "body": "35dd72e761dc8816",
+  "claim": "side rolled, then the others - bamboo-groves-chikurin.drawing: the weighted side first, the rest in listed order",
+  "code": "c4fb25388db3ded3",
+  "core": "d58cd60cb3225d99",
+  "date": "2026-10-18",
+  "note": "per-farmstead roll on weights back .35, wind .30, shed .25, side .10, as the page's 35/30/25/10",
   "pages": {
    "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
@@ -10384,36 +10507,34 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip clearances": {
-  "code": "20f00b866c5f33fe",
-  "core": "5d5f273ec81653fc",
-  "date": "2026-10-13",
-  "note": "§12 says no lane crosses a strip but gives no clearance figure",
+  "body": "35dd72e761dc8816",
+  "claim": "strip clearances - UNRESEARCHED: 6 ft off the walls and every lane, `PART_GAP_FT` off every seated part",
+  "code": "9bdb86e0a276af36",
+  "core": "d58cd60cb3225d99",
+  "date": "2026-10-18",
+  "note": "6 ft wall gap in the seats, lanes' half-width plus px(6), PART_GAP_FT through strip_refused; no page gives these",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip kept off the village's shelter belt (`belt`)": {
-  "code": "5d5f273ec81653fc",
-  "core": "5d5f273ec81653fc",
-  "date": "2026-10-13",
-  "note": "strip kept off the village's shelter belt (`belt`)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip off the copse seats": {
-  "code": "52c7a008f601dc68",
-  "core": "5d5f273ec81653fc",
-  "date": "2026-10-13",
-  "note": "§19 covers what the copse is planted with, not where the strip may stand",
+  "body": "35dd72e761dc8816",
+  "claim": "strip off the copse seats - UNRESEARCHED: off every household's reserved copse seats by the bamboo keep-out",
+  "code": "6cd78ddb2d3ef0ee",
+  "core": "d58cd60cb3225d99",
+  "date": "2026-10-18",
+  "note": "the seats are gathered for stand_spares_seats; the record is silent on this",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip on its house's bank": {
-  "code": "62bb01c531091bb4",
-  "core": "5d5f273ec81653fc",
-  "date": "2026-10-13",
-  "note": "the farmstead stays whole on one bank",
+  "body": "35dd72e761dc8816",
+  "claim": "strip on its house's bank - villages-beside-their-stream-one-bank-or-both.drawing: refused across a stream",
+  "code": "23831b860da1ccd0",
+  "core": "d58cd60cb3225d99",
+  "date": "2026-10-18",
+  "note": "crosses_a_stream from house to strip, as the one-bank rule",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
@@ -10425,10 +10546,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip out of the sun": {
-  "code": "05807b7083fdb16f",
-  "core": "5d5f273ec81653fc",
-  "date": "2026-10-13",
-  "note": "BAMBOO_SHADE_FT 50 ft, as §95 says for bamboo",
+  "body": "35dd72e761dc8816",
+  "claim": "strip out of the sun - sunlight-and-shade-on-the-farm.drawing: kept 50 ft (bamboo's reach) off every yard's and bed's sun",
+  "code": "7aed523fb36cf268",
+  "core": "d58cd60cb3225d99",
+  "date": "2026-10-18",
+  "note": "sun keep-outs gathered at BAMBOO_SHADE_FT = 50, as \"no bamboo - a household's stand ... within 50 ft east, west or south\"",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
@@ -10439,48 +10562,49 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip refused on paddy, marsh and pond (fields/marsh/pond in StripGround; 0075 §23 backs the paddy part)": {
-  "code": "5d5f273ec81653fc",
-  "core": "5d5f273ec81653fc",
-  "date": "2026-10-13",
-  "note": "strip refused on paddy, marsh and pond (fields/marsh/pond in StripGround; 0075 §23 backs the paddy part)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip seated after the lanes": {
-  "code": "e95157274a5e4d44",
-  "core": "5d5f273ec81653fc",
-  "date": "2026-10-13",
-  "note": "CANON names the GM's 2026-10-12 ruling; no cited page gives a seating order, and its condition matches the page's \"no lane or well is drawn across it\" (the strip keeps 6 ft off every lane)",
+  "body": "35dd72e761dc8816",
+  "claim": "strip seated after the lanes - CANON: seated after the web; no page gives an order, and the GM ruled it an implementation detail (2026-10-12: \"the ordering is an implementation detail\") so long as no lane crosses a strip",
+  "code": "82738a6a6b28ad2f",
+  "core": "d58cd60cb3225d99",
+  "date": "2026-10-18",
+  "note": "CANON names the GM's 2026-10-12 ruling; no cited page gives an order",
   "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip size": {
-  "code": "abf418d611e7b6ee",
-  "core": "5d5f273ec81653fc",
-  "date": "2026-10-13",
-  "note": "22 x 16 ft, recorded as a GUESS",
+  "body": "35dd72e761dc8816",
+  "claim": "strip size - bamboo-groves-chikurin.drawing: `HOUSEHOLD_BAMBOO_FT`, a strip 22 x 16 ft",
+  "code": "1b76008e26c9fd03",
+  "core": "d58cd60cb3225d99",
+  "date": "2026-10-18",
+  "note": "HOUSEHOLD_BAMBOO_FT (22, 16) for farm strips; the band's frame width follows §15",
   "pages": {
    "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
   "research": "7d323351e0241d76",
   "rests": [
-   "0075-bamboo-groves-chikurin.drawing.html:b9d2178357ac666a"
+   "0075-bamboo-groves-chikurin.drawing.html:b9d2178357ac666a",
+   "0075-bamboo-groves-chikurin.drawing.html:e27bb8739d8ba657"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#which farms keep bamboo": {
-  "code": "332539fd896c679b",
-  "core": "5d5f273ec81653fc",
-  "date": "2026-10-13",
-  "note": "0.6 by position hash under the knob; sheltered farms are covered by their own claim",
+  "body": "35dd72e761dc8816",
+  "claim": "which farms keep bamboo - bamboo-groves-chikurin.drawing: `HOUSEHOLD_BAMBOO_PREVALENCE` by each house's position hash",
+  "code": "310ebdf1fa24ecb2",
+  "core": "d58cd60cb3225d99",
+  "date": "2026-10-18",
+  "note": "_hjit < 0.6 by house position, as \"about three in five\" (GUESS); only when the knob is homestead or both",
   "pages": {
    "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
   "research": "7d323351e0241d76",
   "rests": [
    "0075-bamboo-groves-chikurin.drawing.html:16e1255fd1f6b4b9",
+   "0075-bamboo-groves-chikurin.drawing.html:c299baf40666f6ab",
    "0075-bamboo-groves-chikurin.drawing.html:e6d16be9cc94af32"
   ],
   "verdict": "IN-STEP"
@@ -10668,40 +10792,47 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::strip_refused#no strip in the belt": {
-  "code": "fde3beed8c89a024",
-  "core": "910a05db3c5ea9cf",
-  "date": "2026-10-12",
-  "note": "no page bears on it",
+  "body": "7ac324e18ead7789",
+  "claim": "no strip in the belt - UNRESEARCHED: no strip with its center or a corner inside the belt (`in_belt`)",
+  "code": "ad3bf399cc1bf6a6",
+  "core": "f68b9581ea7f211b",
+  "date": "2026-10-18",
+  "note": "in_belt tests the center and corners; no cited block answers it",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::strip_refused#strip clearances": {
-  "code": "ff72989dd86e7b4b",
-  "core": "910a05db3c5ea9cf",
-  "date": "2026-10-12",
-  "note": "no page gives the clearances",
+  "body": "7ac324e18ead7789",
+  "claim": "strip clearances - UNRESEARCHED: 6 ft off the walls, `PART_GAP_FT` off every seated part",
+  "code": "990f54f686bc0a48",
+  "core": "f68b9581ea7f211b",
+  "date": "2026-10-18",
+  "note": "the class is right but the account is wrong: this unit sets no 6 ft wall clearance (the 6 ft is strip_candidates' `gap`). It keeps PART_GAP_FT = 2 ft off parts and, through _strip_blocked, 2 ft off other houses. The claim should read \"PART_GAP_FT off every seated part, 2 ft off other houses\"",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::strip_refused#strip off the copse seats": {
-  "code": "703d3a907e9ae007",
-  "core": "910a05db3c5ea9cf",
-  "date": "2026-10-12",
-  "note": "no page gives it",
+  "body": "7ac324e18ead7789",
+  "claim": "strip off the copse seats - UNRESEARCHED: off every household's reserved copse seats by the bamboo keep-out",
+  "code": "c22152abc9abe2ad",
+  "core": "f68b9581ea7f211b",
+  "date": "2026-10-18",
+  "note": "stand_spares_seats; the record is silent",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::strip_refused#strip on its house's bank": {
-  "code": "92b533ccf7ab425e",
-  "core": "910a05db3c5ea9cf",
-  "date": "2026-10-12",
-  "note": "crosses_a_stream refusal",
+  "body": "7ac324e18ead7789",
+  "claim": "strip on its house's bank - villages-beside-their-stream-one-bank-or-both.drawing: refused across a stream",
+  "code": "8f0fb5484089402c",
+  "core": "f68b9581ea7f211b",
+  "date": "2026-10-18",
+  "note": "crosses_a_stream, the straight-line rule",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
@@ -10713,10 +10844,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::strip_refused#strip out of the sun": {
-  "code": "83cab74b3326f501",
-  "core": "910a05db3c5ea9cf",
-  "date": "2026-10-12",
-  "note": "in_the_sun at 50 ft",
+  "body": "7ac324e18ead7789",
+  "claim": "strip out of the sun - sunlight-and-shade-on-the-farm.drawing: kept 50 ft (bamboo's reach) off every yard's and bed's sun",
+  "code": "398d610cb721a837",
+  "core": "f68b9581ea7f211b",
+  "date": "2026-10-18",
+  "note": "in_the_sun against the 50 ft keep-outs",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
@@ -10728,13 +10861,14 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::strip_refused#the strip on its house's side of a lane": {
-  "code": "f201fdda967093a8",
-  "core": "910a05db3c5ea9cf",
-  "date": "2026-10-12",
-  "note": "no page bears on it",
+  "body": "7ac324e18ead7789",
+  "claim": "the strip on its house's side of a lane - UNRESEARCHED: no lane's centerline between a house and its strip (`across_a_lane`)",
+  "code": "f5341344dd426a79",
+  "core": "f68b9581ea7f211b",
+  "date": "2026-10-18",
+  "note": "§12 forbids a lane across the strip, not one between the house and the strip, so UNRESEARCHED holds",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::wind_seat#windward seat": {
@@ -11791,55 +11925,65 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_draw_pending#a lane between pit and house allowed": {
-  "code": "8612a92111e256e7",
-  "core": "87dc01b73a5adabc",
-  "date": "2026-10-09",
-  "note": "the pit at the field or road edge, the laid seat as fallback",
+  "body": "229106aa3c1fd360",
+  "claim": "a lane between pit and house allowed - farm-privies-and-their-night-soil-benjo.drawing: the pit stands at the field or road, the laid seat where none is clear",
+  "code": "a1bc911bc3f301e1",
+  "core": "d8a3cc132b54cd76",
+  "date": "2026-10-18",
+  "note": "the code seeks the pit at the nearest field or road edge first and falls back to the laid seat beside the privy, which is what the page says",
   "pages": {
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
   "research": "410a08bb56c17449",
   "rests": [
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:52eb031787c16126"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:52eb031787c16126",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:c5d84fdf328cced8"
   ],
-  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_draw_pending#field pit off a lane": {
-  "code": "164d790f27b3f334",
-  "core": "87dc01b73a5adabc",
-  "date": "2026-10-08",
-  "note": "the questions are silent",
+  "body": "229106aa3c1fd360",
+  "claim": "field pit off a lane - UNRESEARCHED: 3 ft clear of a lane's edge (its half-width plus 3 ft), so the pit stands beside the way, not on it",
+  "code": "892bc87a12252d7b",
+  "core": "d8a3cc132b54cd76",
+  "date": "2026-10-18",
+  "note": "the page says nothing on a pit's clearance from a lane; half-width plus 3 ft is applied (edge_index, _strip_blocked)",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_draw_pending#field pit off the edge": {
-  "code": "2a09fb5db4fbec9f",
-  "core": "87dc01b73a5adabc",
-  "date": "2026-10-08",
-  "note": "UNRESEARCHED is right. §31 puts the pit at the edge of the nearest paddy or road but gives no distance in from that edge, so the 8 ft setback is not covered.",
+  "body": "229106aa3c1fd360",
+  "claim": "field pit off the edge - UNRESEARCHED: set `_PIT_EDGE_CLEAR_FT` (8 ft) in from the paddy or road edge - the placer's 6 ft paddy margin plus two, on the bund-side ground; no page says how far from the field a pit stood",
+  "code": "816b7872e8620684",
+  "core": "d8a3cc132b54cd76",
+  "date": "2026-10-18",
+  "note": "the page gives no distance between pit and field; the 8 ft plus half the pit is stepped toward the house",
   "pages": {},
   "research": "",
-  "rests": [
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:52eb031787c16126"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_draw_pending#field pit size": {
-  "code": "d349859b8bf3bbdc",
-  "core": "87dc01b73a5adabc",
-  "date": "2026-10-03",
-  "note": "px(3.5), no figure in the bundle",
+  "body": "229106aa3c1fd360",
+  "claim": "field pit size - UNRESEARCHED: drawn 3.5 ft square",
+  "code": "25ae7efba1c8be54",
+  "core": "d8a3cc132b54cd76",
+  "date": "2026-10-18",
+  "note": "the page gives no pit size; px(3.5) square",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_draw_pending#field pit's reach": {
-  "code": "0513ccf36e5a182f",
-  "core": "87dc01b73a5adabc",
-  "date": "2026-10-09",
-  "note": "160 ft, the page's GUESS",
+  "body": "229106aa3c1fd360",
+  "claim": "field pit's reach - farm-privies-and-their-night-soil-benjo.drawing: within `PIT_FIELD_REACH_FT` (160 ft) of the house, the page's GUESS",
+  "code": "8adf1d9fcd55cfbc",
+  "core": "d8a3cc132b54cd76",
+  "date": "2026-10-18",
+  "note": "160 ft from the house to the paddy or road edge, which the page records as a GUESS",
   "pages": {
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
@@ -11847,26 +11991,35 @@
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:52eb031787c16126"
   ],
-  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_flexible_clear#pit off every grove": {
-  "code": "b46b739e588f4b70",
-  "core": "987e262417af00a4",
-  "date": "2026-10-03",
-  "note": "record silent",
+  "body": "56cfcc0b220823b9",
+  "claim": "pit off every grove - UNRESEARCHED: clear of every farm's grove band",
+  "code": "22b9a7dc83e34a23",
+  "core": "151c658d956263e1",
+  "date": "2026-10-18",
+  "note": "the cited page says nothing on groves; the code makes a box-overlap refusal against every grove band",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_flexible_clear#pit on its house's bank": {
-  "code": "1dfff9212d7de063",
-  "core": "987e262417af00a4",
-  "date": "2026-10-03",
-  "note": "every fixture on the house's bank",
+  "body": "56cfcc0b220823b9",
+  "claim": "pit on its house's bank - villages-beside-their-stream-one-bank-or-both.drawing: no brook between pit and house",
+  "code": "d450501a3c8ae08a",
+  "core": "151c658d956263e1",
+  "date": "2026-10-18",
+  "note": "across_the_brook refuses a seat whose line to the house crosses a stream; this is the page's rule for every fixture",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
   "research": "d47738a05844fe19",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:52835a76bb3e8115",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:6062bfc803d4863c"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_ring#fixture drawing plumbing": {
@@ -21093,6 +21246,64 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/corridors.py::_run_from#field path to the bund": {
+  "body": "b3e3d0b826ffaa49",
+  "claim": "field path to the bund - bunds-between-the-paddies-aze.drawing: from the network on to the paddy's edge",
+  "code": "0eb27f7ea123eeb3",
+  "core": "75543877ab3159d7",
+  "date": "2026-10-18",
+  "note": "the run goes from the network point to the paddy's edge, found with unlimited reach, so it never ends short of the bund; this matches \"runs from the hamlet to the paddy's outer bund and joins it\"",
+  "pages": {
+   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+  },
+  "research": "9c5292e27312fca8",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947",
+   "0014-bunds-between-the-paddies-aze.drawing.html:af5d565ccf760fa8"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/corridors.py::_run_from#no run-on past the far landing": {
+  "body": "b3e3d0b826ffaa49",
+  "claim": "no run-on past the far landing - UNRESEARCHED: the straight run is offered as found, and the lane law's crossing rule cuts a crossing made off a ford before any is drawn (`settle._crossing_fault`, 0035); behavior as before feature 387, which moved this out of `field_runs` unchanged",
+  "code": "464abbfb1563471b",
+  "core": "75543877ab3159d7",
+  "date": "2026-10-18",
+  "note": "the page has no rule for when nothing lies past the far landing; the straight run is only offered and is left to the crossing rule to cut.",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/corridors.py::_run_from#over the brook at a ford": {
+  "body": "b3e3d0b826ffaa49",
+  "claim": "over the brook at a ford - villages-beside-their-stream-one-bank-or-both.drawing: square, at the ford that makes the walk shortest",
+  "code": "565c412bd55da9a0",
+  "core": "75543877ab3159d7",
+  "date": "2026-10-18",
+  "note": "the run crosses at a ford's two landings, near to far; the squareness and the choice of ford sit in ford_crossing, which this unit calls.",
+  "pages": {
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
+  },
+  "research": "d47738a05844fe19",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/corridors.py::_shortest_runs#the shortest runs first": {
+  "body": "c91befb16e6f59ea",
+  "claim": "the shortest runs first - NONE: plumbing; the order is `field_runs`' claim",
+  "code": "781eeb1ce0e31b44",
+  "core": "12b42cc0f54c5b62",
+  "date": "2026-10-18",
+  "note": "the band search and the doubling are plumbing that keep the `limit` shortest runs; the ordering is claimed on field_runs.",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/corridors.py::building_quads#roles and indexing": {
   "code": "fc31fccb07aa44f3",
   "core": "39b28771fcff27a8",
@@ -21254,26 +21465,30 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_runs#dry hem after the paddy": {
-  "code": "f9d7a7afe2954d56",
-  "core": "53599a5f1bab1917",
-  "date": "2026-10-04",
-  "note": "the run stops at the ground's edge, paddy first",
+  "body": "ac375a2c5e461ef5",
+  "claim": "dry hem after the paddy - village-lanes.drawing: the spur stops at the hem's edge, offered only after the paddy's",
+  "code": "f695c980ac5ab015",
+  "core": "20bb914d44544a06",
+  "date": "2026-10-18",
+  "note": "the spur runs on to the hem's edge and stops there; the hem's runs come after the paddy's in the grounds order.",
   "pages": {
    "0081-village-lanes.drawing.html": "a6423940921ce579"
   },
   "research": "af9a8a86b5d8c81f",
   "rests": [
    "0081-village-lanes.drawing.html:bd66b84c6bda826f",
-   "0081-village-lanes.drawing.html:f2368e271306e3c2"
+   "0081-village-lanes.drawing.html:f2368e271306e3c2",
+   "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
-  "triaged": "2026-10-17",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_runs#field path to the bund": {
-  "code": "55f9874d4f0e45e9",
-  "core": "53599a5f1bab1917",
-  "date": "2026-10-05",
-  "note": "network to the outer bund, shortest first",
+  "body": "ac375a2c5e461ef5",
+  "claim": "field path to the bund - bunds-between-the-paddies-aze.drawing: from the network on to the paddy's edge, shortest first",
+  "code": "aa1eb0515e6f0657",
+  "core": "20bb914d44544a06",
+  "date": "2026-10-18",
+  "note": "a run from the network on to the paddy's outer bund, nearest first; joining at the nearest point is the page's GUESS; SPUR_TRIES is a candidate count.",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
@@ -21284,19 +21499,22 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_runs#over the brook at a ford": {
-  "code": "6e791727a6de9757",
-  "core": "53599a5f1bab1917",
-  "date": "2026-10-04",
-  "note": "crosses square at a ford",
+  "body": "ac375a2c5e461ef5",
+  "claim": "over the brook at a ford - villages-beside-their-stream-one-bank-or-both.drawing: square, at the ford that makes the walk shortest",
+  "code": "d00d462edbed56c1",
+  "core": "20bb914d44544a06",
+  "date": "2026-10-18",
+  "note": "two mismatches. First, in _run_from, when ford_crossing finds landings but the far landing has no run-on, `return [q, tgt]` keeps the straight run across the brook with no crossing, against \"cross the brook squarely, on a plank bridge\". Second, in _shortest_runs, runs are ranked by raw polyline_len with no charge for a crossing, against \"the maps charge a crossing as that much extra walk\" (about 150 ft). Fix: drop the run that crosses unbridged, and add the crossing charge to the ranking.",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
   "research": "d47738a05844fe19",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::is_tree#a row's streets kept": {
   "code": "a966aa721b250c9a",
@@ -23553,33 +23771,39 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::settle_knots#a lane with no width judged as a footpath": {
-  "code": "45c21f103b6dabe6",
-  "core": "e214f29bc2f21538",
-  "date": "2026-10-17",
-  "note": "3 ft footpath",
+  "body": "f32f894b7fe9f88a",
+  "claim": "a lane with no width judged as a footpath - village-lanes.drawing: a lane with no recorded width is judged at the footpath's 3 ft",
+  "code": "045d74d4f72f1cea",
+  "core": "e7d9ac5eb7fa1942",
+  "date": "2026-10-18",
+  "note": "`lanes[i].get(\"w\") or 3.0` is the footpath's 3 ft, a drawing convention on the page",
   "pages": {
    "0081-village-lanes.drawing.html": "a6423940921ce579"
   },
   "research": "af9a8a86b5d8c81f",
   "rests": [
+   "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "triaged": "2026-10-17",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::settle_knots#lane ends gathered": {
-  "code": "4fa4cdc769d20cd7",
-  "core": "e214f29bc2f21538",
-  "date": "2026-10-17",
-  "note": "25 ft",
+  "body": "f32f894b7fe9f88a",
+  "claim": "lane ends gathered - village-lanes.drawing: ends within 25 ft are joined at a single point",
+  "code": "3e3836bf6c900122",
+  "core": "e7d9ac5eb7fa1942",
+  "date": "2026-10-18",
+  "note": "gathers each knot at one node via next_gather (the 25 ft knot test is in knots, not here); ends a fence or garden parts are left alone (ground_apart); a gather is refused where it would break the network or leave a farmhouse unreached",
   "pages": {
    "0081-village-lanes.drawing.html": "a6423940921ce579"
   },
   "research": "af9a8a86b5d8c81f",
   "rests": [
-   "0081-village-lanes.drawing.html:42f6597ddcc88d3a"
+   "0081-village-lanes.drawing.html:34425c991aa27503",
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
+   "0081-village-lanes.drawing.html:9b3232646d7ce694"
   ],
-  "triaged": "2026-10-17",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::teed_onto#lane ends gathered": {
@@ -24403,6 +24627,18 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/law.py::is_needle#plumbing": {
+  "body": "bc2e4d9ca5cd6b3e",
+  "claim": "plumbing - NONE: `needle_loops`' own test, one face at a time (feature 387)",
+  "code": "f600304c3a2a6e2e",
+  "core": "6cefe896dc06aaf1",
+  "date": "2026-10-18",
+  "note": "mean width (2A/perimeter) test against constants it reads; the 1 ft speck is a noding tolerance, and the 20 ft figure is NEEDLE_LOOP_FT's to claim, not this predicate's",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/law.py::kink_faults#a forced turn is lawful": {
   "body": "8413b11c443b9b7c",
   "claim": "a forced turn is lawful - village-lanes.drawing: \"A turn the ground forces is drawn as walked\" - the chord the vertex before the first turn to the vertex after the last",
@@ -24593,10 +24829,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::needle_loops#plumbing and wrappers": {
-  "code": "3d1d31b46d65c072",
-  "core": "4adea84a52e832a7",
-  "date": "2026-10-11",
-  "note": "finds faces and their bounding ways; the 1 ft way floor, 0.5 ft buffer and speck skip are plumbing; the needle width is decided at NEEDLE_LOOP_FT, not here",
+  "body": "861786d5f7fdd27b",
+  "claim": "plumbing and wrappers - NONE: each rule is claimed at the predicate that decides it",
+  "code": "dca8d751867cc25e",
+  "core": "df1c723bc50d17f9",
+  "date": "2026-10-18",
+  "note": "collects faces and their bounding lanes; the 0.5 ft buffer and 1 ft overlap are geometric tolerances",
   "pages": {},
   "research": "",
   "rests": [],
@@ -24797,6 +25035,30 @@
   "date": "2026-10-03",
   "note": "matches the claim",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/law.py::web_faces#plumbing": {
+  "body": "0021c8685dbeb7c1",
+  "claim": "plumbing - NONE",
+  "code": "d9ca3ada86ffa675",
+  "core": "d74b589e9ef4c41b",
+  "date": "2026-10-18",
+  "note": "noding and polygonizing only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/law.py::web_lines#plumbing": {
+  "body": "c73676b95b730cc0",
+  "claim": "plumbing - NONE",
+  "code": "31e5e3b63cd06331",
+  "core": "9726e9e44fdc07fc",
+  "date": "2026-10-18",
+  "note": "turns lanes into lines; the 1 ft cut drops degenerate fragments",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::width_steps#one width a way": {
@@ -30102,46 +30364,45 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::admits#free ends at a house": {
-  "code": "e154b07a157a7e86",
-  "core": "92c77771287305a5",
-  "date": "2026-10-07",
-  "note": "no page gives a count of lane ends at a house",
+  "body": "c618eab596f6ed1a",
+  "claim": "free ends at a house - UNRESEARCHED: at most DOORSTEP_MAX (2) free lane ends at a house",
+  "code": "5dc7cadf408e797f",
+  "core": "001d990fc5d115a3",
+  "date": "2026-10-18",
+  "note": "no cited page counts the free lane ends at a house; the cap is unresearched",
   "pages": {},
   "research": "",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
-  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::admits#no doubled band": {
-  "code": "9b278fc02b661d8b",
-  "core": "92c77771287305a5",
-  "date": "2026-10-07",
-  "note": "no cited page covers lanes running side by side",
+  "body": "c618eab596f6ed1a",
+  "claim": "no doubled band - UNRESEARCHED: an access lane may not run beside another past a pitch",
+  "code": "4771aaee3b3434ff",
+  "core": "001d990fc5d115a3",
+  "date": "2026-10-18",
+  "note": "0081 drawing answers this: \"Two paths running side by side are drawn as one\" (under 20 degrees), and \"Two lanes that meet end to end are read as one\" covers walked_shadows; the claim should cite research/questions/0081-village-lanes.drawing.html as a convention, not UNRESEARCHED",
   "pages": {},
   "research": "",
-  "rests": [
-   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b"
-  ],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/tree.py::admits#no sliver between the tree's lanes": {
-  "code": "ca69fda9e7b6002f",
-  "core": "92c77771287305a5",
-  "date": "2026-10-07",
-  "note": "no cited page covers needles or slivers",
+  "body": "c618eab596f6ed1a",
+  "claim": "no sliver between the tree's lanes - UNRESEARCHED: no needle (`needle_loops`), asked of the tree with its ends joined as the settle joins them (`as_joined`), and no doubled tail",
+  "code": "d626e3b92d49ae8e",
+  "core": "001d990fc5d115a3",
+  "date": "2026-10-18",
+  "note": "0081 drawing answers this: \"Ends within 25 ft of one another are joined\" is the as_joined judging, the side-by-side rule is the needle, and \"A lane does not run on past a crossing as a stub\" is the doubled tail; the claim should cite research/questions/0081-village-lanes.drawing.html, not UNRESEARCHED",
   "pages": {},
   "research": "",
-  "rests": [
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
-  ],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/tree.py::admits#track out's width as judged": {
-  "code": "df56486a8131554b",
-  "core": "92c77771287305a5",
-  "date": "2026-10-07",
-  "note": "stub w 6.0, the track out's 6 ft at the hamlet's 1 ft/px",
+  "body": "c618eab596f6ed1a",
+  "claim": "track out's width as judged - village-lanes.drawing: the track out's stub judged at 6 ft, the track out as drawn",
+  "code": "bdce04c3c06f6c53",
+  "core": "001d990fc5d115a3",
+  "date": "2026-10-18",
+  "note": "the page sets \"the track out to the wider world 6 ft\", but the stub's width is set in tree_base.base_for (tb.stub), which the bundle does not include; need that code",
   "pages": {
    "0081-village-lanes.drawing.html": "a6423940921ce579"
   },
@@ -30149,40 +30410,41 @@
   "rests": [
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "triaged": "2026-10-17",
-  "verdict": "IN-STEP"
+  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/hamletgen/ways/tree.py::admits#tree keeps the lane law": {
-  "code": "6a94afe0b447e6ff",
-  "core": "92c77771287305a5",
-  "date": "2026-10-17",
-  "note": "ways laid once the houses stand, keeping the law",
+  "body": "c618eab596f6ed1a",
+  "claim": "tree keeps the lane law - village-lanes.drawing, how-our-maps-lay-a-clustered-settlements-lanes.drawing: each household's way, laid once the last house stands, admitted with no hook, fold, hairpin or dangling end among the tree's lanes",
+  "code": "2cfdca3eb834b826",
+  "core": "001d990fc5d115a3",
+  "date": "2026-10-18",
+  "note": "each way is laid once the last house stands and judged by the lane law (hook, hairpin, dangling end)",
   "pages": {
    "0081-village-lanes.drawing.html": "a6423940921ce579",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
   },
   "research": "a8f4b242bde96769",
   "rests": [
-   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
    "0081-village-lanes.drawing.html:3b9a5312c92335d3",
    "0081-village-lanes.drawing.html:a857325132f8d4ee",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "triaged": "2026-10-17",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::admits#way out crosses each brook once": {
-  "code": "d954c5b6103120af",
-  "core": "92c77771287305a5",
-  "date": "2026-10-07",
-  "note": "0035 covers square plank crossings, the ~150 ft crossing charge and one bank per farmstead, but never says a way crosses each brook at most once; mark it UNRESEARCHED or have the page record the rule",
+  "body": "c618eab596f6ed1a",
+  "claim": "way out crosses each brook once - villages-beside-their-stream-one-bank-or-both.drawing",
+  "code": "e24f1c4880f4330a",
+  "core": "001d990fc5d115a3",
+  "date": "2026-10-18",
+  "note": "0035 drawing sets a price on a crossing (\"charge a crossing as that much extra walk\") and says crossings are square, but nowhere bars a way out from crossing the same brook twice; the claim should say UNRESEARCHED or GUESS",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
   "research": "d47738a05844fe19",
   "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:52835a76bb3e8115",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
@@ -30232,6 +30494,41 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/tree.py::lane_record#end set on its host": {
+  "body": "2eaec673774859c3",
+  "claim": "end set on its host - GUESS village-lanes.drawing: within `CARRY_FT` (20 ft), past the page's 12 ft hook leg, the end set on its foot; farther, a leg on to it - the page gives no carry distance",
+  "code": "7b3dcf64d88c4160",
+  "core": "b32981bcedeb836f",
+  "date": "2026-10-18",
+  "note": "0081.drawing does not record a 20 ft carry as a guess: it has only the 12 ft hook leg (§64) and the 25 ft lane-end join (§59), and neither is this decision. Make it a bare GUESS, or record CARRY_FT on that page.",
+  "pages": {
+   "0081-village-lanes.drawing.html": "a6423940921ce579"
+  },
+  "research": "af9a8a86b5d8c81f",
+  "rests": [
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
+   "0081-village-lanes.drawing.html:65ad16eace199d92",
+   "0081-village-lanes.drawing.html:a857325132f8d4ee"
+  ],
+  "verdict": "MISLABELED"
+ },
+ "l7r/diagram/hamletgen/ways/tree.py::lane_record#tree lane tread by role": {
+  "body": "2eaec673774859c3",
+  "claim": "tree lane tread by role - village-lanes.drawing: house access 3 ft, a branch 5 ft",
+  "code": "8e83cf09604df3c2",
+  "core": "b32981bcedeb836f",
+  "date": "2026-10-18",
+  "note": "access lanes are 3.0 ft and branches 5 ft, matching \"a footpath is drawn 3 ft wide, the cluster's spine and its spur to the fields 5 ft\"",
+  "pages": {
+   "0081-village-lanes.drawing.html": "a6423940921ce579"
+  },
+  "research": "af9a8a86b5d8c81f",
+  "rests": [
+   "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/tree.py::lanes_chain#access tree plumbing": {
   "code": "b0e9e1316af3ea1d",
   "core": "dc6587448ff5110b",
@@ -30243,10 +30540,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::lanes_of#tree lane tread by role": {
-  "code": "ef528ad866b585a6",
-  "core": "24383a6ffa1fe441",
-  "date": "2026-10-04",
-  "note": "3 ft footpath, 5 ft lane",
+  "body": "baa9038b76b09baf",
+  "claim": "tree lane tread by role - village-lanes.drawing: house access 3 ft",
+  "code": "1c9fd6418a925816",
+  "core": "032f2d2d4505ff2b",
+  "date": "2026-10-18",
+  "note": "through lane_record, access lanes get 3 ft and branch lanes 5 ft, as the page sets",
   "pages": {
    "0081-village-lanes.drawing.html": "a6423940921ce579"
   },
@@ -30254,17 +30553,17 @@
   "rests": [
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "triaged": "2026-10-17",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::lanes_of#tree lanes assembled": {
-  "code": "1f2d6406b00f2d07",
-  "core": "24383a6ffa1fe441",
-  "date": "2026-10-04",
-  "note": "plumbing",
+  "body": "baa9038b76b09baf",
+  "claim": "tree lanes assembled - NONE: the runs squared and set on their hosts as the web draws them",
+  "code": "3825bc7ee635ba1c",
+  "core": "032f2d2d4505ff2b",
+  "date": "2026-10-18",
+  "note": "assembly only; the squaring rule belongs to settle.square_run",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::left_to_the_tree#every farmhouse served": {
@@ -30562,6 +30861,298 @@
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
   "research": "d47738a05844fe19",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree_base.py::Ends#plumbing": {
+  "body": "3a69b10f1b924e8e",
+  "claim": "plumbing - NONE: how the tree's own verdicts (`tree.admits`' claims) are computed",
+  "code": "8d24832a376687a2",
+  "core": "43429a5ba0724962",
+  "date": "2026-10-18",
+  "note": "class shell, index bookkeeping",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree_base.py::Ends.__init__#plumbing": {
+  "body": "e3cc6c2c5c4d60c8",
+  "claim": "plumbing - NONE: how the tree's own verdicts (`tree.admits`' claims) are computed",
+  "code": "8c61d44898f0fd04",
+  "core": "bed899c46c70bb0e",
+  "date": "2026-10-18",
+  "note": "grid setup only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree_base.py::Ends._joined_by#plumbing": {
+  "body": "b206b66ca3ab2667",
+  "claim": "plumbing - NONE: how the tree's own verdicts (`tree.admits`' claims) are computed",
+  "code": "7aac32309a88fa5a",
+  "core": "41fd64cd9b26876e",
+  "date": "2026-10-18",
+  "note": "spatial query with the junction tolerance",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree_base.py::Ends.add#plumbing": {
+  "body": "dea988eca84c217f",
+  "claim": "plumbing - NONE: how the tree's own verdicts (`tree.admits`' claims) are computed",
+  "code": "f695f27ef3f60a76",
+  "core": "2920eeef86b4c316",
+  "date": "2026-10-18",
+  "note": "incremental bookkeeping that reuses law's verdicts",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree_base.py::Ends.counts#plumbing": {
+  "body": "4ee3b3aaa2e880b1",
+  "claim": "plumbing - NONE: how the tree's own verdicts (`tree.admits`' claims) are computed",
+  "code": "24e2098f8d3a7978",
+  "core": "dd1cb9674615c61d",
+  "date": "2026-10-18",
+  "note": "tally",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree_base.py::Ends.joined#plumbing": {
+  "body": "39ddfd20e207aa10",
+  "claim": "plumbing - NONE: how the tree's own verdicts (`tree.admits`' claims) are computed",
+  "code": "fcd66defe1a2c200",
+  "core": "90d88c7a0357a8d6",
+  "date": "2026-10-18",
+  "note": "tolerance test",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree_base.py::Ends.nearest#plumbing": {
+  "body": "81498a595141fc7c",
+  "claim": "plumbing - NONE: how the tree's own verdicts (`tree.admits`' claims) are computed",
+  "code": "a3ef126926047f6a",
+  "core": "528f5f46e62a55ed",
+  "date": "2026-10-18",
+  "note": "nearest-neighbour search; the 64.0 start radius is a search box, not a figure about the place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree_base.py::Ends.with_one_more#plumbing": {
+  "body": "95e5bf57edac7286",
+  "claim": "plumbing - NONE: how the tree's own verdicts (`tree.admits`' claims) are computed",
+  "code": "e15a4c1592f1c8bf",
+  "core": "e202d8e312fa5636",
+  "date": "2026-10-18",
+  "note": "incremental recount; the 0.5 is a same-point tolerance",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree_base.py::Faces#plumbing": {
+  "body": "116f02598181297a",
+  "claim": "plumbing - NONE: how the tree's own verdicts (`tree.admits`' claims) are computed",
+  "code": "18beb33a03abf823",
+  "core": "82e8de18decda608",
+  "date": "2026-10-18",
+  "note": "class shell",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree_base.py::Faces.__init__#plumbing": {
+  "body": "8b39e0b29bb01703",
+  "claim": "plumbing - NONE: how the tree's own verdicts (`tree.admits`' claims) are computed",
+  "code": "a2c185c93b0a22de",
+  "core": "25eee46b546eed8a",
+  "date": "2026-10-18",
+  "note": "caches law's needle verdicts",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree_base.py::Faces.count#plumbing": {
+  "body": "4b83324d2975477d",
+  "claim": "plumbing - NONE: how the tree's own verdicts (`tree.admits`' claims) are computed",
+  "code": "4769dc5f2dc2b225",
+  "core": "06ca80e6cf32eb6a",
+  "date": "2026-10-18",
+  "note": "tally",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree_base.py::Faces.needles_with#plumbing": {
+  "body": "83633cd86ee3bc67",
+  "claim": "plumbing - NONE: how the tree's own verdicts (`tree.admits`' claims) are computed",
+  "code": "54d89c5e00b1262d",
+  "core": "2e093fd752916d31",
+  "date": "2026-10-18",
+  "note": "incremental re-judging; the hair buffer is a float epsilon",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree_base.py::TreeBase#track out's width as judged": {
+  "body": "6404ac8884bef285",
+  "claim": "track out's width as judged - village-lanes.drawing: the track out's stub judged at 6 ft, the track out as drawn (`tree.admits`' own)",
+  "code": "5a5305b703424946",
+  "core": "8d16699469c4c223",
+  "date": "2026-10-18",
+  "note": "judging the track out at 6 ft matches \"the track out to the wider world 6 ft\"",
+  "pages": {
+   "0081-village-lanes.drawing.html": "a6423940921ce579"
+  },
+  "research": "af9a8a86b5d8c81f",
+  "rests": [
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree_base.py::TreeBase.__init__#plumbing": {
+  "body": "3dba3f48bf687fba",
+  "claim": "plumbing - NONE: how the tree's own verdicts (`tree.admits`' claims) are computed",
+  "code": "320f7237d1e516cf",
+  "core": "619d0d71122864a5",
+  "date": "2026-10-18",
+  "note": "the stub lane {\"w\": 6.0} sets the root track's width for the face/needle verdicts. Need law.web_lines, to see whether it reads \"w\", and the track-out's drawn width with its backing: if 6.0 restates that figure, NONE is fine; if not, it is an unclaimed width",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "CANNOT-TELL"
+ },
+ "l7r/diagram/hamletgen/ways/tree_base.py::TreeBase.append#plumbing": {
+  "body": "ad207285cfe70212",
+  "claim": "plumbing - NONE: how the tree's own verdicts (`tree.admits`' claims) are computed",
+  "code": "8069b025d599f43f",
+  "core": "6bb1a1071926d7e9",
+  "date": "2026-10-18",
+  "note": "appends a record; ON_TREE_PX is a tolerance",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree_base.py::TreeBase.host_of#plumbing": {
+  "body": "f6d3ef1a0fbe3f34",
+  "claim": "plumbing - NONE: how the tree's own verdicts (`tree.admits`' claims) are computed",
+  "code": "05e0ec67f3f6bc66",
+  "core": "9e471d3a9f02bff4",
+  "date": "2026-10-18",
+  "note": "host lookup within a tolerance, using tree.hosts' rule",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree_base.py::TreeBase.judged#plumbing": {
+  "body": "65c8d1714ccf54fc",
+  "claim": "plumbing - NONE: how the tree's own verdicts (`tree.admits`' claims) are computed",
+  "code": "76736ca274b0a4f4",
+  "core": "f88a822417afffd4",
+  "date": "2026-10-18",
+  "note": "lazy cache",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree_base.py::TreeBase.lane_for#plumbing": {
+  "body": "120b4523b520314f",
+  "claim": "plumbing - NONE: how the tree's own verdicts (`tree.admits`' claims) are computed",
+  "code": "083c3d20dd6a8d0b",
+  "core": "1bf325179f597d89",
+  "date": "2026-10-18",
+  "note": "hands off to tree.lane_record",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree_base.py::_HAIR#plumbing": {
+  "body": "d7cd1b6ffa853c1f",
+  "claim": "plumbing - NONE: how the tree's own verdicts (`tree.admits`' claims) are computed",
+  "code": "4667b421bcfe9ca1",
+  "core": "c3924e8347d19c07",
+  "date": "2026-10-18",
+  "note": "float epsilon",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree_base.py::_JOIN#plumbing": {
+  "body": "daa348dacfd19b61",
+  "claim": "plumbing - NONE: how the tree's own verdicts (`tree.admits`' claims) are computed",
+  "code": "0336432ee50f7789",
+  "core": "a0e41106fdac5717",
+  "date": "2026-10-18",
+  "note": "alias of law.JOIN_TOL",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree_base.py::_KEYED#plumbing": {
+  "body": "d6f30472072a972a",
+  "claim": "plumbing - NONE: how the tree's own verdicts (`tree.admits`' claims) are computed",
+  "code": "6903b7de8041d1c4",
+  "core": "81d446219b36a1b8",
+  "date": "2026-10-18",
+  "note": "registry names for cache keys",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree_base.py::_near_segs#plumbing": {
+  "body": "8be764df9cb81d81",
+  "claim": "plumbing - NONE: how the tree's own verdicts (`tree.admits`' claims) are computed",
+  "code": "47c688708f485b52",
+  "core": "f7d75e183338c05a",
+  "date": "2026-10-18",
+  "note": "spatial query",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree_base.py::_seg_items#plumbing": {
+  "body": "381a8db3952a58a4",
+  "claim": "plumbing - NONE: how the tree's own verdicts (`tree.admits`' claims) are computed",
+  "code": "a9f823c8e8929199",
+  "core": "d90f36891b820869",
+  "date": "2026-10-18",
+  "note": "bounding boxes",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree_base.py::base_for#plumbing": {
+  "body": "e9b317a3cd87cfbb",
+  "claim": "plumbing - NONE: how the tree's own verdicts (`tree.admits`' claims) are computed",
+  "code": "76d6e9bd047711bf",
+  "core": "d4e68f2d9e553ea8",
+  "date": "2026-10-18",
+  "note": "cache validity and rebuild",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::SKELETON_ARM_WIDTH#skeleton arm width": {
@@ -31461,6 +32052,162 @@
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:88b0dc9025f38b30"
   ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/web_counts.py::Partners#plumbing": {
+  "body": "a4ff8beb34d675e5",
+  "claim": "plumbing - NONE: how the whole web's rules (`law.LAW`, `knots._WHOLE_RULES`) are counted on a trial",
+  "code": "a836f2875ebc8292",
+  "core": "ba9812e3d8a73302",
+  "date": "2026-10-18",
+  "note": "slots of a pair-rule tally; decides nothing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/web_counts.py::Partners.__init__#plumbing": {
+  "body": "4272fe8e2b3f0b31",
+  "claim": "plumbing - NONE: how the whole web's rules (`law.LAW`, `knots._WHOLE_RULES`) are counted on a trial",
+  "code": "be777f66fbcd1598",
+  "core": "69bcf4d7b51aa8d1",
+  "date": "2026-10-18",
+  "note": "caches partners under the caller's pair rule; the rule itself lives elsewhere",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/web_counts.py::Partners.count#plumbing": {
+  "body": "8866ed835ad93744",
+  "claim": "plumbing - NONE: how the whole web's rules (`law.LAW`, `knots._WHOLE_RULES`) are counted on a trial",
+  "code": "a15b6a3a9520f7b3",
+  "core": "c77f86861d21d869",
+  "date": "2026-10-18",
+  "note": "counts lanes that have a partner",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/web_counts.py::Partners.trial#plumbing": {
+  "body": "447d8a5ba295dfd5",
+  "claim": "plumbing - NONE: how the whole web's rules (`law.LAW`, `knots._WHOLE_RULES`) are counted on a trial",
+  "code": "e8567c94745edbbc",
+  "core": "546ab221d060ccd1",
+  "date": "2026-10-18",
+  "note": "incremental recount of the same pair rule for edited lanes",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/web_counts.py::WebEnds#plumbing": {
+  "body": "ccfd6cf10a6335ed",
+  "claim": "plumbing - NONE: how the whole web's rules (`law.LAW`, `knots._WHOLE_RULES`) are counted on a trial",
+  "code": "12c7a7319726cff5",
+  "core": "7619724cdbc651ea",
+  "date": "2026-10-18",
+  "note": "slots of an end/discharge tally",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/web_counts.py::WebEnds.__init__#plumbing": {
+  "body": "7bd984c90e2b9bf4",
+  "claim": "plumbing - NONE: how the whole web's rules (`law.LAW`, `knots._WHOLE_RULES`) are counted on a trial",
+  "code": "0fb5c2b13c969f80",
+  "core": "1557cdfbe07f5ec2",
+  "date": "2026-10-18",
+  "note": "indexes lane ends and copies law's junction and discharge tests; adds no figure of its own",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/web_counts.py::WebEnds._joined#plumbing": {
+  "body": "bf523b342fb98c86",
+  "claim": "plumbing - NONE: how the whole web's rules (`law.LAW`, `knots._WHOLE_RULES`) are counted on a trial",
+  "code": "dbe720adc1de8c37",
+  "core": "f2c2c873b6ec94b7",
+  "date": "2026-10-18",
+  "note": "junction test at law.JOIN_TOL, mirroring law",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/web_counts.py::WebEnds.count#plumbing": {
+  "body": "98d3486cfe35e6fc",
+  "claim": "plumbing - NONE: how the whole web's rules (`law.LAW`, `knots._WHOLE_RULES`) are counted on a trial",
+  "code": "444598e3deba9ee6",
+  "core": "23bb9466937bf58d",
+  "date": "2026-10-18",
+  "note": "counts houses over law.DOORSTEP_MAX; the threshold is law's, not decided here",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/web_counts.py::WebEnds.trial#plumbing": {
+  "body": "9972b32e7f6e026f",
+  "claim": "plumbing - NONE: how the whole web's rules (`law.LAW`, `knots._WHOLE_RULES`) are counted on a trial",
+  "code": "d034e9fb9f8f1898",
+  "core": "88ea8cc3754299cf",
+  "date": "2026-10-18",
+  "note": "the same law.DOORSTEP_MAX count over trial_counts",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/web_counts.py::WebEnds.trial_counts#plumbing": {
+  "body": "45d0c3b5017e3cfd",
+  "claim": "plumbing - NONE: how the whole web's rules (`law.LAW`, `knots._WHOLE_RULES`) are counted on a trial",
+  "code": "87822c1f931120fe",
+  "core": "86c29fbf8411020c",
+  "date": "2026-10-18",
+  "note": "incremental recount of law.fronted_ends for edited lanes",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/web_counts.py::_JOIN#plumbing": {
+  "body": "daa348dacfd19b61",
+  "claim": "plumbing - NONE: how the whole web's rules (`law.LAW`, `knots._WHOLE_RULES`) are counted on a trial",
+  "code": "27999032eb777672",
+  "core": "a0e41106fdac5717",
+  "date": "2026-10-18",
+  "note": "local alias of law.JOIN_TOL, a junction tolerance",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/web_counts.py::_counted#plumbing": {
+  "body": "23e180dd764b1649",
+  "claim": "plumbing - NONE: how the whole web's rules (`law.LAW`, `knots._WHOLE_RULES`) are counted on a trial",
+  "code": "af4bc6cd06ccdd58",
+  "core": "229c5212b76edf22",
+  "date": "2026-10-18",
+  "note": "skips connectors and degenerate lanes, as law's rules do",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/web_counts.py::_discharger#plumbing": {
+  "body": "87d0e0d94c2d5b78",
+  "claim": "plumbing - NONE: how the whole web's rules (`law.LAW`, `knots._WHOLE_RULES`) are counted on a trial",
+  "code": "b3b32d63dd0ce0c6",
+  "core": "521390aa9bd03abb",
+  "date": "2026-10-18",
+  "note": "nearest house as the key fronting_ends uses, gated by law.reach_to_steading; reproduces law's rule",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/weld.py::WELD_PX#a sliver, not ground": {
@@ -40385,6 +41132,18 @@
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/_geom/indexes.py::Indexed.touch#spatial indexes": {
+  "body": "1b05e7b4b1a8ac80",
+  "claim": "spatial indexes - NONE: prefilters that prune, the caller's test decides",
+  "code": "4389f62e6bfec790",
+  "core": "184c9c782a227133",
+  "date": "2026-10-18",
+  "note": "version bump that invalidates indexes; pure plumbing, decides nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::KeepoutGrid#spatial indexes": {
@@ -55398,11 +56157,25 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._sun_boxes#the plots' sun read once per state": {
+  "body": "60496c5c4659bf16",
+  "claim": "the plots' sun read once per state - NONE: plumbing; the sun ground is `sun_box`'s claim",
+  "code": "18171c8d8a8a1357",
+  "core": "8c984a0f9f16aa1c",
+  "date": "2026-10-18",
+  "note": "a memo and grid keyed by registry version; the sun ground itself is sun_box's claim",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._sun_keepouts#every canopy tree out of the plots' sun": {
-  "code": "8d4779687ca0abca",
-  "core": "804b7a51874f2bc9",
-  "date": "2026-10-08",
-  "note": "the reach defaults to CANOPY_SHADE_FT, 50 ft, as the page sets; the shape of the clear box is drawn in sun_box, not here; the memo changes nothing about what the method returns",
+  "body": "c890b5abcf2e3568",
+  "claim": "every canopy tree out of the plots' sun - sunlight-and-shade-on-the-farm.drawing: each yard and bed widened by 50 ft, or by bamboo's own reach where a caller asks it",
+  "code": "cbb861e604edc7f8",
+  "core": "f4eecfa9b4f901cd",
+  "date": "2026-10-18",
+  "note": "CANOPY_SHADE_FT 50 ft around every yard and bed matches the page's clear ground for every canopy tree; bamboo is held to the same rule; the opt-in corridor matches the hand-drawn maps' exemption",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
@@ -55410,8 +56183,21 @@
   "rests": [
    "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:c3578d51ce1e884d",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:eec3f6a7b5017ede"
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:eec3f6a7b5017ede",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:fb011b8973aa73bf"
   ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._sun_plots#plumbing": {
+  "body": "677ae9a512fe376c",
+  "claim": "plumbing - NONE",
+  "code": "7b49928c693aed7f",
+  "core": "183cb311912d65be",
+  "date": "2026-10-18",
+  "note": "collects the drawn and placed yards and beds as boxes; which plots keep sun is _sun_keepouts' claim",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._urban_keepouts#swept halo": {
@@ -55440,6 +56226,30 @@
   },
   "research": "3874df1f1301e65f",
   "triaged": "2026-10-05",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/keepouts.py::_SUN_CELL#grid cell": {
+  "body": "1fe85552106dd5a6",
+  "claim": "grid cell - NONE: plumbing",
+  "code": "c381fa12ee3abe3a",
+  "core": "c205fc932abd4acf",
+  "date": "2026-10-18",
+  "note": "spatial-index cell size, no physical meaning",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/keepouts.py::_sun_near#grid read": {
+  "body": "416dffee19f65c66",
+  "claim": "grid read - NONE: plumbing",
+  "code": "620cb149d1d0a0b8",
+  "core": "5ac6b06cb15bc3f5",
+  "date": "2026-10-18",
+  "note": "grid lookup; the caller's overlap test decides",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::BELT_BEARING_MAX_DEG#belt on the windward side": {
@@ -61486,45 +62296,58 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._relax_gardens_south#east-shaded garden nudged south": {
-  "code": "818479d798af74b6",
-  "core": "251024b23534df29",
-  "date": "2026-10-03",
-  "note": "best-effort nudge south into open ground (0038); steps are 4 px x bscale",
+  "body": "ac0ff49dc88c7cb8",
+  "claim": "east-shaded garden nudged south - sunlight-and-shade-on-the-farm.drawing: best effort, 4 px steps up to the bed's height plus the house's plus 6 px",
+  "code": "a7b6b72ed9475cc8",
+  "core": "ca933c078092d73b",
+  "date": "2026-10-18",
+  "note": "the page says a bed with a grove against its east is \"moved a little south\", as a best effort that leaves a hemmed-in bed where it is; a cap of the bed's height plus the house's plus 6 px is a calibrated \"a little\"",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "3874df1f1301e65f",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:0f20160d442c6378",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:cef95d825324536e"
+  ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._relax_gardens_south#nudged bed must not overlap any house, yard, garden or grove footprint (_garden_beds_clear); whether it re-checks the 39 ft house-shade rule (§20) after the move is not visible here": {
+  "code": "ca933c078092d73b",
+  "core": "ca933c078092d73b",
+  "date": "2026-10-18",
+  "note": "nudged bed must not overlap any house, yard, garden or grove footprint (_garden_beds_clear); whether it re-checks the 39 ft house-shade rule (§20) after the move is not visible here",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._relax_gardens_south#nudged bed's sun ground clear of crowns, promised persimmons and bamboo": {
-  "code": "fcba566c30c93635",
-  "core": "251024b23534df29",
-  "date": "2026-10-07",
-  "note": "beds_sun_clear at 50 ft for trees and bamboo",
+  "body": "ac0ff49dc88c7cb8",
+  "claim": "nudged bed's sun ground clear of crowns, promised persimmons and bamboo - sunlight-and-shade-on-the-farm.drawing: 50 ft clear (CANOPY_SHADE_FT, BAMBOO_SHADE_FT)",
+  "code": "702f9a7f72d54378",
+  "core": "ca933c078092d73b",
+  "date": "2026-10-18",
+  "note": "the page holds every crown, persimmon and bamboo stand 50 ft east, west or south of a bed, measured from the bed's north edge; the code checks the nudged bed against exactly this at CANOPY_SHADE_FT and BAMBOO_SHADE_FT (both 50)",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "3874df1f1301e65f",
   "rests": [
    "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:cef95d825324536e",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:eec3f6a7b5017ede"
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:eec3f6a7b5017ede",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:fb011b8973aa73bf"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._relax_gardens_south#own deep windward stand exempt from the east test": {
-  "code": "d21295fb192c28fc",
-  "core": "251024b23534df29",
-  "date": "2026-10-07",
-  "note": "0038 names only a neighbor's grove for the nudge; the sun rule covers the farm's own grove separately",
+  "body": "ac0ff49dc88c7cb8",
+  "claim": "own deep windward stand exempt from the east test - UNRESEARCHED: the farm's own deep windward stand is not tested as a neighbor's grove, since it stands on the wind's side",
+  "code": "561dcb1b0e6c45bf",
+  "core": "ca933c078092d73b",
+  "date": "2026-10-18",
+  "note": "the cited drawing page answers this: it names only \"a neighbor's grove hard against its east\" as what triggers the nudge, and §25 puts the windbreak on the wind's side, so the claim should cite research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html rather than say UNRESEARCHED. The page does not record the code also testing the farm's own thin grove band east of the bed (feature 291), so that part should be labelled GUESS",
   "pages": {},
   "research": "",
-  "rests": [
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:cef95d825324536e"
-  ],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin.farmsteads#draw-order and footprint plumbing": {
   "code": "84d52c1f6a8923b4",
@@ -75456,11 +76279,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::Fabric.__init__#settle plumbing": {
-  "code": "5b70b525a0ac9456",
-  "core": "8177710934538189",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
+  "body": "23afd724c8b38c92",
+  "claim": "settle plumbing - NONE: grid snapping, polygon cleanup, union and shared-length measures, the cell index",
+  "code": "0c26f2c533b4c863",
+  "core": "6f8d6f905dc274e1",
+  "date": "2026-10-18",
+  "note": "grid snapping (GRID 0.1), polygon cleanup, splitting cells that fail on \"steps\" and building the index: plumbing only",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::Fabric.add#settle plumbing": {
@@ -75499,12 +76326,28 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/waterfields/settle.py::Fabric.neighbors#settle plumbing": {
-  "code": "073629912df27f8a",
-  "core": "62f22570315e18de",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
+ "l7r/diagram/waterfields/settle.py::Fabric.neighbors#neighbors by the shared bund": {
+  "body": "950be8bbbc605ca0",
+  "claim": "neighbors by the shared bund - NONE: plumbing, the merge's order is `merge`'s claim",
+  "code": "f634e7f291497ac2",
+  "core": "f2729112840980d3",
+  "date": "2026-10-18",
+  "note": "finds owners through the index (0.2 query tolerance), removes duplicates and sorts by shared length: plumbing; the merge order is merge's claim",
+  "pages": {},
   "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/settle.py::Fabric.shared#settle plumbing": {
+  "body": "7c8eb406aa6833b9",
+  "claim": "settle plumbing - NONE: grid snapping, polygon cleanup, union and shared-length measures, the cell index",
+  "code": "486b6c3e2f1afa7a",
+  "core": "222c65c74e56ee89",
+  "date": "2026-10-18",
+  "note": "caches the shared-length measure, keyed on polygon identity: plumbing only",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::Fabric.split#staircase split": {

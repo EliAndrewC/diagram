@@ -240,7 +240,16 @@ def field_runs(segs: Sequence[tuple[Pt, Pt]], grounds: Sequence[WorkedGround], h
 
 
 def _run_from(q: Pt, ground: WorkedGround, half: float, brook: tuple[Pt, ...], fords: Sequence[Pt]) -> Poly | None:
-    """The field run from network point `q` on to the bund (`field_runs`): straight, or over the brook at a ford; None where none."""
+    """The field run from network point `q` on to the bund (`field_runs`): straight, or over the brook at a ford; None where none.
+
+    Research:
+        field path to the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: from the network on to
+            the paddy's edge
+        over the brook at a ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: square,
+            at the ford that makes the walk shortest
+        no run-on past the far landing - UNRESEARCHED: the straight run is offered as found, and the lane law's crossing rule cuts
+            a crossing made off a ford before any is drawn (`settle._crossing_fault`, 0035); behavior as before feature 387, which
+            moved this out of `field_runs` unchanged"""
     tgt = run_on_target(q, ground, half, reach=math.inf)
     if tgt is None:
         return None

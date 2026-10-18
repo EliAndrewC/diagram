@@ -187,7 +187,9 @@ class Faces:
 
 
 class TreeBase:
-    """The base tree for one state (see the module docstring): records, root, hosts, laid lanes, their ends and faces."""
+    """The base tree for one state (see the module docstring): records, root, hosts, laid lanes, their ends and faces.
+
+    Research: track out's width as judged - research/questions/0081-village-lanes.drawing.html: the track out's stub judged at 6 ft, the track out as drawn (`tree.admits`' own)"""
 
     __slots__ = ("_judged", "drawn_of", "ends", "host", "key", "lanes", "recs", "root", "runs", "stub", "view")
 
