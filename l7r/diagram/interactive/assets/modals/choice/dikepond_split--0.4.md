@@ -2,10 +2,10 @@ About: In this village a parcel was about six parts planted bank to four of wate
 fish pond and the spoil heaped into the bank, or dike, round it, where mulberry grew. Water and bank were kept in
 proportion, so that the mulberry, by way of the silkworms it fed, could feed the fish in the pond beside it.
 
-How a parcel was split between water and bank is not settled. In modern times it was six parts water to four of dike
+How a parcel was split between water and bank is not settled. Every ratio given for it is a modern one: six parts water to four of dike
 or, perhaps in another region, six parts dike to four of pond, or seven of water to three of dike where the fish were also
-fed from beyond the bank. In the seventeenth century one township of the Pearl River delta gave
-half its land to fish, or by another account eight tenths.
+fed from beyond the bank. Both water-heavy splits assumed such feed; where the mulberry alone fed the fish, water and bank were equal. In the seventeenth century one township of the Pearl River delta gave
+half its land to fish, or, by the same writer's other count, eight tenths to its ponds.
 
 Guesses:
 - That a village takes each of the three splits at even odds: no account gives a share between them, and every account
