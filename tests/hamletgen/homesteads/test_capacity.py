@@ -359,3 +359,18 @@ def test_the_pass_gives_a_margin_up_after_a_dry_spell_and_a_take_restarts_it() -
     s = _Seater(set())
     assert capacity.offer_seats(s, seats, 0, 5, None) == (0, 10, 0), "no cap: every seat offered"  # type: ignore[arg-type]
     assert capacity.offer_seats(_Seater({seats[0]}), seats, 0, 1, 3)[:2] == (1, 1), "the want met: no more offered"  # type: ignore[arg-type]
+
+
+def test_a_scattered_hamlets_line_takes_no_ranks_cloud_or_exhaustive_pass_behind_it(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 385 T06 (plan D51): in single file the line is offered round the ring at a farmstead's own width, and nothing
+    is seated behind it - no rank round, no cloud, no exhaustive pass; what the line cannot hold is left to the margin ladder."""
+    _the_passes_the_dispersed_form_keeps(monkeypatch)
+    s, plan = _toy(10)
+    plan.settlement_form = "dispersed"
+    asked: list[dict] = []
+    monkeypatch.setattr(stages, "front_row", lambda plan_, count, **kw: asked.append({"count": count, **kw}) or [])
+    monkeypatch.setattr(stages, "_seat_rank_rounds", lambda *a, **k: pytest.fail("a rank round behind the line"))
+    monkeypatch.setattr(stages, "seat_the_rest", lambda *a, **k: pytest.fail("the exhaustive pass behind the line"))
+    assert stages._seat_households_as(s, plan, True) == (0, 0)
+    assert asked and asked[0]["count"] == 10 and asked[0]["reach"] == float("inf"), "every household offered round the whole ring"
+    assert asked[0]["chains"] == s._seat_ring_chains and s._seat_ring_chains and asked[0]["pitch"] > 0, "the ring's chords, at a farmstead's own width"
