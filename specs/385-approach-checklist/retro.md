@@ -509,3 +509,13 @@ About 25 min (two plan rounds). T08's gate went red on a test that passed alone:
 under `/tmp/l7r-check` from different workers. Each now writes under its own `tmp_path`. Round 1 blocked folding in T49's import
 order - a second goal - so that re-landed with T49. **The habit it changes:** a test that writes a real path is a race waiting
 for xdist; give it its own `tmp_path` when it is written.
+
+## T08 - the retro row
+
+About 3 h. The ranking row asked for the Song manual's planted bank rolled against the bare bank; built as a knob on the tail
+pond, its trees seated last against what stands (every seat came up free on the pool and six rolled seeds, both forms drawn),
+with three new pop-ups, 0061's drawing page through a write and a check session, and four claims rounds. Round 1 cost 372 s and
+1.29M input tokens, nearly all on one dict's 19 claims re-opened by the one key T08 added - the per-entry keying went to the GM's
+review as an overhaul. Two calls were wasted: a triage agent dispatched on a bundle holding only a forced claim, and a part B stamped
+in the future by hand. **The habit it changes:** before adding a key to a claimed dict, check what else the unit's claims will
+re-owe - a bookkeeping key that needs no entry (as `cover.py`'s turned out not to) is cheaper left out.

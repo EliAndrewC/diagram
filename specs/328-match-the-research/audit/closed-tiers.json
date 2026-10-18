@@ -258,6 +258,7 @@
  "l7r/diagram/hamletgen/pondstock.py::_bank_seats#edge midpoints first": "E2",
  "l7r/diagram/hamletgen/pondstock.py::_bank_seats#sty seat pulled in by half the bank bankinsetft so it stands": "E0",
  "l7r/diagram/hamletgen/sink.py::drain_run#no-build corridor": "E2",
+ "l7r/diagram/hamletgen/sink.py::lay_sink#pond bank form": "E3",
  "l7r/diagram/hamletgen/sink.py::lay_sink#pond's role": "E0",
  "l7r/diagram/hamletgen/water/brook.py::bend_runs#bend across the fall": "E2",
  "l7r/diagram/hamletgen/water/brook.py::brook_violations#runs downhill": "E2",
