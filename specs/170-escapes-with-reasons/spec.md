@@ -1,5 +1,9 @@
 # Feature 170 - Escapes Carry a Reason, and a Finished Run Is Not "Waiting"
 
+**Amendment 1 approved**: the GM, 2026-10-18, "yes please file that feature and then work it... though actually I think that should just be an amendment to the feature we already just worked"
+
+**Status (Amendment 1)**: reopened 2026-10-18 for FR-006; T11-T14 in `tasks.md`; SC-008.
+
 **Status**: **APPROVED** 2026-08-30 - `spec-fidelity` round 5 returned FAITHFUL with nothing
 blocking. Specified 2026-08-30. [`request.md`](request.md) is the authority.
 
@@ -174,15 +178,43 @@ A READ from main's tree, and a `cd` into it, produce nothing at all.
 tooling would have prevented the reported error. The honest answer is that it prevents the
 single-command shape and not the one that actually happened; FR-005 is what makes the answer yes.
 
+### FR-006 - a guard file's reason can be given outside the file (Amendment 1)
+
+The reason FR-001 demands stays mandatory and recorded; what changes is WHERE it may be written. An in-file marker is
+a comment that outlives its edit: the root Makefile had collected 2,452 lines, more than half of them `GUARD_EDIT_OK`
+narration, some of it no longer true, and every session reads it. The Bash route already takes the reason as a trailing
+comment on the command, which writes nothing into the file (the round arbiter's fix on hour:383@4).
+
+- **(a) `make guard-edit FILE=<guard file> WHY="<reason>"`** records a permit: the file, the reason, the time. The reason
+  meets FR-001's floor (two words, eight characters); a file that is not a guard file, or a missing reason, is refused with
+  the command to run. The permit lives in the clone's own git directory and lasts 60 minutes.
+- **(b) guard-file-hooks.sh accepts an Edit or Write of a guard file with no marker when a live permit names that file**,
+  and records it as an escape with the permit's reason (slug `guard-permit`, distinct from `guard-edit-ok`, so `make audit`
+  tells the two routes apart).
+- **(c) The root Makefile takes no new marker.** An Edit or Write that leaves the root Makefile holding more `GUARD_EDIT_OK`
+  than the text it replaces is refused, and the refusal names `make guard-edit`. The other guard files keep the in-file
+  marker as an accepted form: their comments are their code's documentation, and the GM's request was the Makefile.
+- **(d) The guard says so before the edit.** The Read-time context of the root Makefile names `make guard-edit` as the way,
+  and the no-marker refusal names it beside the marker for every guard file.
+- **(e) A backstop.** A tooling test holds the root Makefile at zero `GUARD_EDIT_OK`, which catches the shell route too.
+
+Where the intent lives instead, for the Makefile: the guard log (`make guard-log GUARD=guard-file`, and `make audit`'s list of
+escapes with their reasons) and the commit message. This departs from feature 127's "intent in the diff" for this one file, by
+the GM's request above.
+
+OUT: the in-file markers already in the hook scripts and other guard files (not asked); any change to what a guard refuses
+besides (c).
+
 ## Success Criteria
 
 - **SC-001**: for every escape token (the thirteen; not the two `not-an-escape` macros, which permit nothing): a bare use is refused with a message showing the compliant form; a one-word or under-eight-character reason (`GATE_OK: ok`) is refused; a reason meeting the floor is permitted exactly as before; and **`CI is down` is permitted**, named here because it is the case the floor was chosen to admit and the case the retired 15-character version would have refused. (Round 2 caught the old number surviving in this criterion, which is what an implementer builds the test from.)
 - **SC-002**: every permitted escape produces a firing-log entry whose detail is the reason - proved by driving each guard, not by reading the source.
 - **SC-003**: `make audit` can answer "every escape taken, with its stated reason" from the log alone.
 - **SC-004**: a finished, unsurfaced background run is reported at the next prompt and at turn end, with its exit status and age; an acknowledged one is not reported again.
-- **SC-005**: no guard refuses anything it did not refuse before, except a bare escape token and the main-tree write newly refused by FR-005. (Round 4 caught the first version contradicting FR-005 outright - an implementer building a test from it would have asserted that FR-005 must fail.)
+- **SC-005**: no guard refuses anything it did not refuse before, except a bare escape token, the main-tree write newly refused by FR-005, and (Amendment 1) a marker added to the root Makefile by FR-006(c). (Round 4 caught the first version contradicting FR-005 outright - an implementer building a test from it would have asserted that FR-005 must fail.)
 - **SC-006**: a write issued while the session's cwd is main's tree - with no `cd` in the command - is refused; the same write from a clone, and a READ from main's tree, are untouched. Both shapes of the reported incident are fixture cases.
 - **SC-007**: `make hooks-test` and `make done` green.
+- **SC-008** (FR-006): with a live permit, an Edit of the root Makefile carrying no marker is accepted and recorded with the permit's reason; with none, or one for another file, or an expired one, it is refused naming `make guard-edit`; an edit adding a marker to the root Makefile is refused; the root Makefile holds zero `GUARD_EDIT_OK` at the push.
 
 ## Decisions Recorded
 
