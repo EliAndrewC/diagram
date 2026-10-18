@@ -259,10 +259,19 @@ def settle(store_dir: pathlib.Path, slug: str, before: str, after: str) -> str:
 _AGENT_CHECKS = {"modal-research": ("modal-accuracy", "modal-references", "modal-gaps")}
 
 
+#: the checks a reply's counts line may name - a BATCH reply (one agent, several pop-ups; feature 385 FR-009) opens with prose
+#: and carries one counts line per unit (`modal-depiction: choice.well_siting--lane - COVERAGE 0 ...`)
+BATCH_CHECKS = ("modal-depiction", "modal-form", "modal-research", "quote-check", "record-format", "intro-check", "entry-drift")
+
+
 def reply_checks(reply: str) -> tuple[str, ...]:
-    """The checks whose units a reply answers, from its FIRST line (`record-format: 33 of 33 ...`), else ()."""
+    """The checks whose units a reply answers, from its FIRST line (`record-format: 33 of 33 ...`), else from the first counts
+    line of a known check anywhere in it (a batch reply: the round arbiter's tooling fix on ask:t05-lane-popup-round3, where a
+    batch's own verbatim EDIT, applied, re-owed a third round because its reply's first line named no check), else ()."""
     first = next((ln.strip() for ln in reply.splitlines() if ln.strip()), "")
     m = re.match(r"`?([a-z]+(?:-[a-z]+)+):", first)
+    if not m:
+        m = re.search(rf"^`?({'|'.join(BATCH_CHECKS)}): \S", reply, re.M)
     if not m:
         return ()
     return _AGENT_CHECKS.get(m.group(1), (m.group(1),))
@@ -401,6 +410,8 @@ def report(rows: Sequence[ru.Unit], now: ru.Record | None = None, answered_slugs
         else:
             lines.append(f"  {u.slug}  - {u.occasion}\n      {command(u, now)}")
     lines.append("Answer each with `make record-checked CHECK=<check> BUNDLE=<its bundle> RESULT=\"<counts>\"` when its check returns.")
+    lines.append("Apply a round's own EDITs with `make apply-edits FROM=<the agent's reply or its transcript>` - its unit then settles, owing no "
+                 "round to re-read its own words - the same command settles an EDIT you already applied by hand, word for word (feature 385 T21).")
     return "\n".join(lines) + "\n"
 
 
