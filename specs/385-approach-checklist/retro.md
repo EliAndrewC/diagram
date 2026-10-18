@@ -532,3 +532,16 @@ checks, and names `ruff format` when it refuses. Its own suite had a fixture the
 About 20 min. Three landings in an hour ran 35 s of checks before the push refused them for owed ledger rows; `land-tooling` now
 asks the ledger as committed first, waived by the same `LEDGER_ROWS_OK` the push honors. **The habit it changes:** a refusal the
 end of a pipeline will certainly make is asked at its start.
+
+## T55 - the retro row
+
+About 15 min. T52's landing lint named its files to ruff, which then linted them even where `pyproject.toml` excludes them - so a
+script the gate never lints would be refused (found before it bit, on T54's `plan_gate.py`). `--force-exclude` keeps the gate's
+scope. **The habit it changes:** a check copied from the gate copies the gate's scope with it, measured on a file outside it.
+
+## T54 - the retro row
+
+About 30 min. The hour-19 ruling and the next cohort each owed a part B to a task already ticked, because the task-start mark
+outlived its task. A mark naming a ticked or missing task now falls back to the first open task. Its first run broke a fixture
+whose marked task had no box - the fixture now lists it. **The habit it changes:** start the next task before measuring for it, so
+what the measurement owes lands on it.

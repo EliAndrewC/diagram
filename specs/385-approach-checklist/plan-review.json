@@ -4682,6 +4682,46 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T54": {
+   "section_sha256": "511bfc9ba90dc2cf2b6adfd9aff06fb66f77bb7bbd74718b9cd3829b43e761b2",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D71",
+     "summary": "plan_gate.active_task honors .git/active-task only while its task's box is open; a mark naming a ticked or missing task falls back to the first open task, as when there is no mark.",
+     "class": "within",
+     "why": "FR-004 / D9 (the GM's 'a checklist ... that comes up when a session is taking a while', enforced by make tick) only works if an owed part B lands on a task that can still be ticked; a part B owed by a ticked task is unenforceable. The fallback restores the enforcement the GM asked for and does not narrow it: it adds no trigger, removes none, and changes no floor. 'First open task' matches FR-006 (tasks run one at a time, in order). The session's own make task-start mark still wins while its task is open, so nothing the session chose is overridden. Covered also by amendment 6 ('implement any obvious performance / tooling / process improvements along the way')."
+    },
+    {
+     "id": "D71-readers",
+     "summary": "Every reader of the active task (approach-gate triggers and 375's decide-first guards) gets the same fallback answer.",
+     "class": "within",
+     "why": "With a stale mark, a decide-first guard read the ticked task, whose decisions already stood, so it passed on work belonging to the next task - a gap in the guard, not a scope. Giving every reader the same answer closes that gap; it adds no refusal of a new kind and widens no reach beyond the work the guards already cover, and FR-003a's rule is unchanged as the constraints state."
+    },
+    {
+     "id": "T54-approach-constraints",
+     "summary": "Tooling only; FR-003a and D9 unchanged; a test in tests/tooling/test_plan_gate.py red without the fallback; budget 20 min; exit (c).",
+     "class": "within",
+     "why": "The test only fails when the requested enforcement (FR-004's owed block landing on a live task) is absent, so it enforces the request (SC-004: refusals of FR-003 and FR-004 each have a test red without them). Nothing in the constraints narrows a requirement."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T55": {
+   "section_sha256": "aff2b4997746607d71eafa1cbe702a504612ca735f671a467c2cd2493b7373fd",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D72",
+     "summary": "T52's two ruff commands (check and format) in make land-tooling carry --force-exclude, so pyproject.toml's extend-exclude holds for the files a landing names explicitly, as it does for the gate's own `ruff check .`.",
+     "class": "within",
+     "why": "Amendment 6 asks the session to 'implement any obvious performance / tooling / process improvements along the way'; T52's landing lint is session tooling under that clause, and this decision repairs a defect in it rather than narrowing anything the GM asked. It does not loosen T52's stated purpose (no landed file fails the gate's lint): the gate does not lint excluded paths, so linting them on a landing refused work the gate would pass (the measured case, T54's fix to scripts/gates/plan_gate.py). The included-file case is still refused, and a test red without the flag is in the Done line. No GM clause and no FR (FR-017/FR-018/FR-019 included) is narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

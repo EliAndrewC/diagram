@@ -69,6 +69,17 @@ ok "a clean file lands" '[ "$rc" -eq 0 ] && [ "$(on_main scripts/c.py)" = "x = 1
 ok "the lint step is timed in the log" 'grep "^land-tooling: step lint [0-9.]* s$" "$C/.git/land-tooling.log" >/dev/null'
 setup
 
+echo "1e. the landing's lint keeps the gate's scope: an excluded file is not refused (385 T55)"
+setup
+printf '[tool.ruff]\nextend-exclude = ["scripts"]\n' > "$T/seed/pyproject.toml"; git -C "$T/seed" add -A; git -C "$T/seed" commit -qm "the lint scope"; git -C "$T/seed" push -q "$T/o.git" main
+printf 'import sys\nsys.exit(0)\n' > "$C/scripts/d.py"; mkdir -p "$C/tests"; printf 'import sys\nsys.exit(0)\n' > "$C/tests/test_d.py"
+git -C "$C" add -A; git -C "$C" commit -qm "an excluded script and a test, both unformatted"
+land scripts/d.py; rc=$?
+ok "an excluded script lands, as the gate never lints it" '[ "$rc" -eq 0 ] && [ -n "$(on_main scripts/d.py)" ]'
+LAND_TOOLING_TEST="true " land tests/test_d.py; rc=$?
+ok "an included file that fails is still refused" '[ "$rc" -ne 0 ] && grep "ruff format tests/test_d.py" "$T/out" >/dev/null'
+setup
+
 echo "1d. owed ledger rows are refused before any check runs (385 T53)"
 setup
 LAND_TOOLING_LEDGER="echo owed-row-here >&2; false" LAND_TOOLING_CHECKS="touch $T/checks-ran" land scripts/a.sh; rc=$?

@@ -137,7 +137,9 @@ run_test=${LAND_TOOLING_TEST:-make test-file FILE=}
 # duplicate import after it), T51's fixture with the wrong blank lines - each caught by the next session's `make done`, on main.
 # `ruff check` and `ruff format --check` on the landed .py files, in the worktree, beside the other two checks
 pys=""; for f in "$@"; do case "$f" in *.py) pys="$pys $f" ;; esac; done
-lint=${LAND_TOOLING_LINT:-${pys:+ruff check$pys && ruff format --check$pys}}
+# --force-exclude (feature 385 T55): ruff lints a file it is NAMED even where pyproject.toml excludes it, and the gate leaves
+# scripts/ and tests/hooks/ out on purpose - so without it a script's fix was refused for rules the gate never applies there
+lint=${LAND_TOOLING_LINT:-${pys:+ruff check --force-exclude$pys && ruff format --check --force-exclude$pys}}
 lint=${lint:-true}
 for f in "$@"; do case "$f" in tests/tooling/*|tests/hooks/*) ;; tests/*test_*.py) [ -f "$WT/$f" ] && tooling_tests="$tooling_tests && $run_test\"$f\"" ;; esac; done
 # GUARD_EDIT_OK: feature 374 batch 4 - THE CHECKS RUN WITHOUT THE CALLER'S ESCAPES: a LEDGER_ROWS_OK meant for the push reached

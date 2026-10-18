@@ -1760,6 +1760,54 @@ the checks that fail, so nothing lands and the message names the files and `ruff
 ledger as committed at HEAD - what the landing carries - (`LAND_TOOLING_LEDGER`, a seam for the test); an owed pass refuses with
 its rows and `make ledger-owed WRITE=...`, unless `LEDGER_ROWS_OK` is set, which the push honors too.
 
+## T54 - a ticked task is no active task (found by T52's and T53's ticks)
+
+### T54 Approach (checklist part A)
+
+1. **The goal, in the world.** What a trigger owes - a part B, a decision check - lands on a task that still has work, never on
+   one already ticked.
+2. **The constraints.** `make task-start`'s mark is the session's choice and wins while its task is open; FR-003a and D9 unchanged;
+   tooling only; a test red without it.
+3. **Where each comes from.** The mark and its fallback are 375's and 385's (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-18: the hour-19 ruling owed T52 a part B after T52 was ticked, and
+   the next cohort owed ticked T53 a part B for seeds 17 and 43 (T09's first measurement) - in each case the mark still named the
+   ticked task.
+5. **The order.** The fallback in `plan_gate.active_task`, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: with the mark naming a ticked task, `active_task` returns the first open task;
+   `tests/tooling/test_plan_gate.py` red without it.
+
+### T54 Decisions
+
+**D71 - a stale mark falls back.** `plan_gate.active_task` honors `.git/active-task` only while its task's box is open; a mark
+naming a ticked (or missing) task falls back to the first open task, as no mark does. Every reader of the active task - the
+approach gate's triggers, the decide-first guards - gets the same answer.
+
+## T55 - the landing's lint keeps the gate's scope (a defect in T52)
+
+### T55 Approach (checklist part A)
+
+1. **The goal, in the world.** `make land-tooling` refuses only what the gate itself would fail on, so a fix to a script lands.
+2. **The constraints.** T52's purpose (no landed file fails the gate's lint); `pyproject.toml`'s `extend-exclude` is the scope the
+   gate lints (scripts/, tests/hooks/ and the rest left out on purpose, `tests/tooling/test_lint_scope.py`); tooling only; a test
+   red without it.
+3. **Where each comes from.** The lint scope is the project's (O, pinned by its own test); T52's check is ours (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-18: ruff lints an explicitly named file even when excluded, so
+   T52's check would refuse `scripts/gates/plan_gate.py` (T54's fix) for a SIM905 and a format the gate never checks there.
+5. **The order.** The flag, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: an excluded `.py` that ruff would flag lands; an included one that fails is still refused;
+   `tests/hooks/test-land-tooling.sh` red without it.
+
+### T55 Decisions
+
+**D72 - `--force-exclude`.** T52's two ruff commands carry `--force-exclude`, so the project's excludes hold for the files a landing
+names, as they hold for the gate's own `ruff check .`.
+
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).
