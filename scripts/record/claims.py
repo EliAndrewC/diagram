@@ -61,6 +61,7 @@ sys.path.insert(0, str(HERE))
 sys.dont_write_bytecode = True  # the push runs this in fixture trees whose `git status` must stay clean
 import claims_carry  # noqa: E402
 import claims_context  # noqa: E402
+import claims_stale  # noqa: E402
 import record_cache as rc  # noqa: E402
 import record_units as ru  # noqa: E402
 from claims_triage import (  # noqa: E402,F401 - the triage half, split out (feature 375 T09); re-exported
@@ -857,6 +858,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         # for one word. Every session asks `claims-owed` after an edit, so it says so first.
         for x in form_problems(root):
             print(f"claims-form: {x} - the gate's test_claims_coverage fails on it")
+        for x in claims_stale.stale(root):  # feature 385 T62: a changed constant's old figure, still on its research's pages
+            print(x)
         due = owed(cur, index, qdir, store)
         if not due:
             print("claims-owed: no claim is owed")
