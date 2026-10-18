@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-18T23:52:28Z",
+  "target": "claims-gate",
+  "commit": "20a2cd579",
+  "why": "CLAIMS_OK: the round arbiter's ruling ask:t10-findings-at-landing carried all four introduced findings into T43 (filed there with claims-carry)"
+}
