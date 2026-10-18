@@ -33,15 +33,15 @@ Every task changes how a verdict is computed, not what is drawn or where: nothin
 - [x] T07 Land (SC-003, SC-005): `make cohort-landing`, the gated push, the feature report; the landing report carries FR-004's withdrawal (measurement, 297 R9), FR-002's and FR-003's restated premises with what was measured, and FR-003's split-part defect with its frequency
       research: rendering
       verify: DONE. landing cohort on this engine: 54/54 (dev/cohort-log/20261018T121355Z, fresh 6 of 48); report.md written with the GM's section (SC-005); the gated push follows
-- [ ] T08 (amendment 1) The merges find every live neighbor (plan T08, D8; FR-011): the neighbor index kept current as split parts are added; the split-part count 0 in the soak; every kept basin passes `verdict`; unit test red before
+- [x] T08 (amendment 1) The merges find every live neighbor (plan T08, D8; FR-011): the neighbor index kept current as split parts are added; the split-part count 0 in the soak; every kept basin passes `verdict`; unit test red before
       research: rendering
-      verify:
+      verify: DONE. Fabric.late keeps the cells added after the index and neighbors asks them by box; unit test red without it; soak: split parts missed 0 on 15-4, 40-4, 40-25, 40-39, 40-47 (was 42/502, 20/160, 10/126); Sawada's paddy cells moved, pool gate clean; cohort 16/16
 - [ ] T09 (amendment 1) The well seating scales (plan T09, D9; FR-012): each candidate seat's nearest houses, wall gap, pair look-ahead and verge answered from what is near it or once a pass; tests against the old forms where the answer is kept
       research: rendering
       verify:
-- [ ] T12 (amendment 1) The guidelines and checklists say speed may always change maps (plan T12; FR-013): the constitution (Principle X clause 15, v2.31.0), root CLAUDE.md, the engine's dev loop, dev/performance.md, docs/efficiency-tooling.md, the spec and plan templates, the speckit-specify checklist
+- [x] T12 (amendment 1) The guidelines and checklists say speed may always change maps (plan T12; FR-013): the constitution (Principle X clause 15, v2.31.0), root CLAUDE.md, the engine's dev loop, dev/performance.md, docs/efficiency-tooling.md, the spec and plan templates, the speckit-specify checklist
       research: rendering
-      verify:
+      verify: DONE. the GM's 2026-10-18 permission in the constitution (Principle X clause 15, v2.31.0), root CLAUDE.md, l7r/diagram/CLAUDE.md, dev/performance.md, docs/efficiency-tooling.md, the spec and plan templates and the speckit-specify checklist - a permission, not a ban; spec FAITHFUL round 3
 - [ ] T10 (amendment 1) Measure, sweep and record (plan T10; SC-006 - SC-008): the counts and the two well stages' time before/after, the soak, `make cohort`, `make maps` (moved maps committed), `make done`, `dev/performance.md`
       research: rendering
       verify:

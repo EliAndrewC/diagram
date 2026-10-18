@@ -323,5 +323,58 @@
     12.16
    ]
   }
+ },
+ "m:wells-ab": {
+  "command": "make perf LABEL=387-end SCALING=1 (clone, 3a4dc87ab), then make perf SCALING=1 in a detached worktree at origin/main 46f2d1f09, back to back; timing/base-46f2d1f09.json and dev/perf-log/*387-end*.json",
+  "date": "2026-10-18",
+  "load_start": {
+   "base": 1.6,
+   "new": 3.31
+  },
+  "note": "the other stages unchanged within noise (homesteads 4.51 -> 4.46 at 40); the 40-household roll's mean 30.7 -> 15.1 s",
+  "seconds_40_by_seed_4_25_39_47": {
+   "base": [
+    28.1,
+    57.3,
+    21.2,
+    16.1
+   ],
+   "new": [
+    17.0,
+    17.6,
+    12.2,
+    13.4
+   ]
+  },
+  "stage_means_base_new": {
+   "appurtenances": {
+    "10": [
+     0.49,
+     0.17
+    ],
+    "20": [
+     0.52,
+     0.13
+    ],
+    "40": [
+     2.94,
+     0.3
+    ]
+   },
+   "lane_wells": {
+    "10": [
+     0.3,
+     0.09
+    ],
+    "20": [
+     2.38,
+     0.49
+    ],
+    "40": [
+     15.14,
+     2.15
+    ]
+   }
+  }
  }
 }
