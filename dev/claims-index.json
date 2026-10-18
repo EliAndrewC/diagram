@@ -36680,11 +36680,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/record/contents.py::Section#plumbing": {
-  "code": "38550d0630019c86",
-  "core": "2ee7d7386696a3e8",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
+  "body": "6e496561310aefd9",
+  "claim": "plumbing - NONE",
+  "code": "16120b9e238af2b7",
+  "core": "6279041eb5d1c5c1",
+  "date": "2026-10-18",
+  "note": "a dataclass for a table-of-contents section of the record; decides nothing about the map",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/record/contents.py::Section.path#plumbing": {
@@ -36792,11 +36796,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/record/contents.py::_section#plumbing": {
-  "code": "167104645ab8de57",
-  "core": "19683dd83e8fe691",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
+  "body": "bd3a324f5adb8ecb",
+  "claim": "plumbing - NONE",
+  "code": "a2d2d1674f3b9138",
+  "core": "7ac842a5b42ba823",
+  "date": "2026-10-18",
+  "note": "parses and checks a contents.json section; plumbing",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/record/contents.py::_tag#plumbing": {
@@ -36816,11 +36824,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/record/contents.py::idle_rules#plumbing": {
-  "code": "d6627d75ab641257",
-  "core": "effddbbe285f104c",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
+  "body": "9b53bd6ccd4b4dfc",
+  "claim": "plumbing - NONE",
+  "code": "2a466ba86d5e1ff2",
+  "core": "4a9562eda432a3bb",
+  "date": "2026-10-18",
+  "note": "reports clauses that match no question and stale `awaiting` entries; plumbing",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/record/contents.py::load_contents#plumbing": {
