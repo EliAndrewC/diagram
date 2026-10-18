@@ -104,13 +104,13 @@
    "declared": "spec-fidelity"
   },
   "## T12 - the guidelines say it (FR-013)": {
-   "sha256": "bf24248f573dc4731bf01122ff6a17c1c6b6c7ffe839d763d41ddb8970243595",
+   "sha256": "c1643d493ddd4f8a2aaca00b61cf69a352473559ba9c44a7e08ff5352d2454e0",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
   },
   "## T10 - measure (SC-006 - SC-009)": {
-   "sha256": "4b989b923ed06e1c80bba5eb8e3bcb3857b49ca6f96bf4a9a7c88711ebfea123",
+   "sha256": "ab241d842eb8d094dd0bc437f9ce6e70d98f6b510458843ad01ca0f503becf21",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -530,6 +530,40 @@
      "summary": "Adds homesteads/wells.py and new homesteads/well_seats.py as amendment 1's files.",
      "class": "within",
      "why": "Bookkeeping of the files FR-012's work touches; decides nothing the spec left open."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## T10 - measure (SC-006 - SC-009)",
+    "## T12 - the guidelines say it (FR-013)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T12-a",
+     "summary": "The constitution's Principle X clause 15 is widened from a placer, fill or scatter to every change made for speed (v2.31.0, MINOR), alongside the documents already listed.",
+     "class": "within",
+     "why": "FR-013 names the constitution and this exact widening; the GM asked that the project guidelines say that ANY change made for speed may move maps within the research, and a clause limited to placers/fills/scatters says less than that."
+    },
+    {
+     "id": "T12-b",
+     "summary": "The documents carrying the GM's words: root CLAUDE.md, l7r/diagram/CLAUDE.md (Performance), dev/performance.md, docs/efficiency-tooling.md, the spec template's success criteria, the plan template's performance bookends, the speckit-specify quality checklist.",
+     "class": "within",
+     "why": "Matches FR-013's list one for one (the engine's dev loop is l7r/diagram/CLAUDE.md) and SC-009; the GM asked for 'project guidelines and checklists and such'."
+    },
+    {
+     "id": "T12-c",
+     "summary": "No guard: the earlier spec-lint check 7 (a speed spec requiring identical maps is a finding) is dropped.",
+     "class": "within",
+     "why": "The request and FR-013 ask that the guidelines and checklists SAY it; neither asks for a lint that blocks specs. Dropping a check the request did not call for removes nothing the GM asked for, and every document FR-013 names is still written."
+    },
+    {
+     "id": "T10-a",
+     "summary": "The end bookend (make perf LABEL=387-end SCALING=1) is re-taken after the last engine edit, on top of the unchanged soak, well-stage timings, house-distance counts, cohort, maps and done.",
+     "class": "within",
+     "why": "FR-009 requires the -end bookend after the last engine edit; this restates that requirement rather than narrowing anything, and the rest of the block is unchanged from its CLEAR text."
     }
    ]
   }

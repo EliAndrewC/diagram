@@ -1,0 +1,20 @@
+perf-profile seed 4 stage lane_wells: 15.1s under cProfile (the stages before it took 5.0s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261018T130225Z-seed4-lane_wells.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         36653662 function calls (34631187 primitive calls) in 14.982 seconds
+
+   Ordered by: cumulative time
+   List reduced from 204 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000   15.097   15.097 /tmp/claude-1000/-diagram/480a86f8-6911-4b06-8982-d9ead2656680/scratchpad/wt-wellbase/l7r/diagram/hamletgen/homesteads/wells.py:697(stage_lane_wells)
+        1    0.000    0.000   15.096   15.096 /tmp/claude-1000/-diagram/480a86f8-6911-4b06-8982-d9ead2656680/scratchpad/wt-wellbase/l7r/diagram/hamletgen/homesteads/wells.py:732(reach_wells)
+        2    0.124    0.062   15.095    7.548 /tmp/claude-1000/-diagram/480a86f8-6911-4b06-8982-d9ead2656680/scratchpad/wt-wellbase/l7r/diagram/hamletgen/homesteads/wells.py:373(seat_wells)
+4795287/2772812    1.377    0.000    7.416    0.000 {built-in method builtins.min}
+    20269    0.019    0.000    6.572    0.000 /tmp/claude-1000/-diagram/480a86f8-6911-4b06-8982-d9ead2656680/scratchpad/wt-wellbase/l7r/diagram/settlement/shrines_wells/wells.py:36(well_gap_to_dwellings)
+   425649    0.526    0.000    6.470    0.000 /tmp/claude-1000/-diagram/480a86f8-6911-4b06-8982-d9ead2656680/scratchpad/wt-wellbase/l7r/diagram/settlement/shrines_wells/wells.py:47(<genexpr>)
+  3180001    1.650    0.000    5.354    0.000 /tmp/claude-1000/-diagram/480a86f8-6911-4b06-8982-d9ead2656680/scratchpad/wt-wellbase/l7r/diagram/settlement/_geom/primitives.py:54(seg_dist)
+   405380    0.417    0.000    5.029    0.000 /tmp/claude-1000/-diagram/480a86f8-6911-4b06-8982-d9ead2656680/scratchpad/wt-wellbase/l7r/diagram/settlement/_geom/overlap.py:137(point_quad_dist)
+  2022475    0.891    0.000    3.826    0.
+wrote dev/perf-log/20261018T130225Z-profile-adhoc-seed4-lane_wells.txt (4771 bytes)
+archived 20261018T130225Z-seed4-lane_wells.prof to https://github.com/EliAndrewC/mapgen-perflogs

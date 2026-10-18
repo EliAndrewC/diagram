@@ -44,6 +44,16 @@ COUNTS: dict[str, list[tuple[str, str]]] = {
         ("sun_asks", r"keepouts.py:\d+\(_sun_keepouts\)"),
         ("plot_box", r"tree_shade.py:\d+\(plot_box\)"),
     ],
+    "appurtenances": [
+        ("seat_sweeps", r"wells.py:\d+\(seat_wells\)"),
+        ("hypot_one_at_a_time", r"<built-in method math.hypot>"),
+        ("wall_measures", r"overlap.py:\d+\(point_quad_dist\)"),
+    ],
+    "lane_wells": [
+        ("seat_sweeps", r"wells.py:\d+\(seat_wells\)"),
+        ("hypot_one_at_a_time", r"<built-in method math.hypot>"),
+        ("wall_measures", r"overlap.py:\d+\(point_quad_dist\)"),
+    ],
     "hinterland": [
         ("strip_candidates", r"bamboo.py:\d+\(_strip_blocked\)"),
         ("strip_items", r"bamboo.py:\d+\(<genexpr>\)"),
@@ -77,7 +87,7 @@ def main(argv: list[str]) -> int:
         raw = next((ln.split()[1] for ln in open(os.path.join(logs, fname)) if ln.startswith("raw:")), None)
         if raw is None:
             continue
-        prof = os.path.join(ROOT, raw)
+        prof = os.path.join(os.environ.get("COUNT_ROOT") or ROOT, raw)  # a worktree's profiles: COUNT_ROOT names its root
         out.setdefault(stage, {})[hh] = {name: _calls(prof, pat) for name, pat in COUNTS[stage]}
     print(json.dumps(out, indent=1, sort_keys=True))
     path = os.path.join(HERE, "measurements.json")

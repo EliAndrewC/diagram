@@ -191,6 +191,84 @@
    }
   }
  },
+ "m:counts-wells-after": {
+  "command": "make perf-profile SEED=4 STAGE=<stage> HOUSEHOLDS=<10|20|40>; /diagram/.clones/diagram-unit-tests/specs/387-scale-the-placement-loops/count_work.py /diagram/.clones/diagram-unit-tests/specs/387-scale-the-placement-loops/counts-wells-after m:counts-wells-after",
+  "counts": {
+   "appurtenances": {
+    "10": {
+     "hypot_one_at_a_time": 59424,
+     "seat_sweeps": 1,
+     "wall_measures": 4433
+    },
+    "20": {
+     "hypot_one_at_a_time": 68533,
+     "seat_sweeps": 1,
+     "wall_measures": 3286
+    },
+    "40": {
+     "hypot_one_at_a_time": 170776,
+     "seat_sweeps": 1,
+     "wall_measures": 7174
+    }
+   },
+   "lane_wells": {
+    "10": {
+     "hypot_one_at_a_time": 60,
+     "seat_sweeps": 0,
+     "wall_measures": 0
+    },
+    "20": {
+     "hypot_one_at_a_time": 648474,
+     "seat_sweeps": 2,
+     "wall_measures": 24795
+    },
+    "40": {
+     "hypot_one_at_a_time": 1132550,
+     "seat_sweeps": 2,
+     "wall_measures": 27492
+    }
+   }
+  }
+ },
+ "m:counts-wells-before": {
+  "command": "make perf-profile SEED=4 STAGE=<stage> HOUSEHOLDS=<10|20|40>; /diagram/.clones/diagram-unit-tests/specs/387-scale-the-placement-loops/count_work.py /diagram/.clones/diagram-unit-tests/specs/387-scale-the-placement-loops/counts-wells-before m:counts-wells-before",
+  "counts": {
+   "appurtenances": {
+    "10": {
+     "hypot_one_at_a_time": 395449,
+     "seat_sweeps": 1,
+     "wall_measures": 38710
+    },
+    "20": {
+     "hypot_one_at_a_time": 673207,
+     "seat_sweeps": 1,
+     "wall_measures": 51180
+    },
+    "40": {
+     "hypot_one_at_a_time": 5929872,
+     "seat_sweeps": 1,
+     "wall_measures": 228800
+    }
+   },
+   "lane_wells": {
+    "10": {
+     "hypot_one_at_a_time": 60,
+     "seat_sweeps": 0,
+     "wall_measures": 0
+    },
+    "20": {
+     "hypot_one_at_a_time": 4467548,
+     "seat_sweeps": 2,
+     "wall_measures": 405380
+    },
+    "40": {
+     "hypot_one_at_a_time": 10010520,
+     "seat_sweeps": 2,
+     "wall_measures": 886600
+    }
+   }
+  }
+ },
  "m:five-stages-ab": {
   "command": "make perf LABEL=387-end SCALING=1 (clone), then make perf SCALING=1 in a detached worktree at 0910936e4 (before any engine edit), back to back; the five changed stages summed per roll, mean of seeds 4/25/39/47; timing/base-0910936e4.json and dev/perf-log/*387-end*.json",
   "date": "2026-10-18",

@@ -1,0 +1,23 @@
+perf-profile seed 4 stage lane_wells: 0.0s under cProfile (the stages before it took 2.1s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261018T130348Z-seed4-lane_wells.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         305 function calls in 0.000 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/wells.py:708(stage_lane_wells)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/wells.py:743(reach_wells)
+        2    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/wells.py:733(dry_households)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/wells.py:789(record_over_ten)
+       20    0.000    0.000    0.000    0.000 {built-in method builtins.min}
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/wells.py:142(most_served_after)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/wells.py:807(lane_and_fallback_wells)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+       40    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/wells.py:740(<genexpr>)
+      108    0.000    0.000    0.000    0.000 {method 'get' of 'dict' objects}
+       20    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/wells.py:801(<lambda>)
+       20    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/wells.py:149(<lambda>)
+       60    0.000    0.00
+wrote dev/perf-log/20261018T130348Z-profile-adhoc-seed4-lane_wells.txt (2407 bytes)
+archived 20261018T130348Z-seed4-lane_wells.prof to https://github.com/EliAndrewC/mapgen-perflogs

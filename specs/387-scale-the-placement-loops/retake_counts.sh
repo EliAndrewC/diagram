@@ -6,8 +6,8 @@ here="$(cd "$(dirname "$0")" && pwd)"
 out="$here/$1"
 mkdir -p "$out"
 for hh in 10 20 40; do
-  for st in homesteads field web windbreak hinterland; do
-    make -C "$here/../.." --no-print-directory perf-profile SEED=4 STAGE="$st" HOUSEHOLDS="$hh" > "$out/$st-$hh.log" 2>&1
+  for st in ${STAGES:-homesteads field web windbreak hinterland}; do
+    make -C "${COUNT_ROOT:-$here/../..}" --no-print-directory perf-profile SEED=4 STAGE="$st" HOUSEHOLDS="$hh" > "$out/$st-$hh.log" 2>&1
   done
 done
-python3 "$here/count_work.py" "$out" "$2"
+COUNT_ROOT="${COUNT_ROOT:-}" python3 "$here/count_work.py" "$out" "$2"
