@@ -613,3 +613,9 @@ and the tick stands. **The habit it changes:** `make plan-archive` is no longer 
 About 25 min. `make task-add F= TITLE= [SECTION=] [RESEARCH=physical]` takes the next id past every `T<n>` the feature's three
 files name, puts the box before the GM-review box and the section before the close. **The habit it changes:** a task is filed
 with one command, never a hand-written insertion script.
+
+## T65 - the retro row
+
+About 20 min. Found at T63's first tick: the archived-block check matched digests only, so a block a typo away from its reviewed
+text (T49, renumbered) was owed once archived; it now takes the typo rule the live check takes. **The habit it changes:** none
+needed - the archive owes nothing by construction.

@@ -251,9 +251,17 @@ def block_status(review: dict, plan_text: str, ruled: set[str], history: History
             owed.append(key)
     now = {k for k, _b, _a in blocks(plan_text)}
     archived = {block_digest(b) for _k, b, _a in blocks(done)} if done else set()
+    # AN ARCHIVED BLOCK IS JUDGED AS A LIVE ONE IS (feature 385 T65, plan D84): the archive moves a section byte for byte, so a
+    # block edited by a typo after its review (T47 renumbered T49) reached plan-done.md at another digest, and the tick that
+    # archived it was refused for two "(removed)" blocks. Its text there, typo-scale against the reviewed text, owes nothing.
+    done_text = {k: b for k, b, _a in blocks(done)} if done else {}
     for key, entry in have.items():
         if key in now or key == "preamble" or not isinstance(entry, dict) or entry.get("sha256") in archived:
             continue
+        if key in done_text:
+            earlier = entry.get("text") or (history.block(key, str(entry.get("sha256"))) if history and entry.get("sha256") else None)
+            if earlier is not None and typo_only(ARCHIVE_LINE.sub("", earlier), ARCHIVE_LINE.sub("", done_text[key])):
+                continue
         owed.append(REMOVED + key)
     return owed, blocked
 

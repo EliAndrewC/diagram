@@ -178,6 +178,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T64 make task-add files a task box and its plan section with the next free id (the GM 2026-10-18, plan D83)
       research: rendering
+- [ ] T65 An archived plan block edited by a typo after its review is not owed (plan D84)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

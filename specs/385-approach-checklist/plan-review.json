@@ -5311,6 +5311,26 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T65": {
+   "section_sha256": "a78d0f3570d0244173a09cd38aa188f4484aaf278f0ffc0b66b836aa21b9b14e",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T65-A (goal, constraints, exit c)",
+     "summary": "Tooling-only fix: archiving a finished plan section never makes a review owed; a test red without it; the exit taken is (c), a rule that removes the case.",
+     "class": "within",
+     "why": "Amendment 6 asks the overnight run to 'implement any obvious performance / tooling / process improvements along the way', and amendment 8 asks that the plan archive be run automatically and that the tooling 'do the thing correctly automatically every time'. An archive that turns an already-reviewed block into an owed review is a defect in exactly that automatic tooling; fixing it with a test serves those words and narrows nothing."
+    },
+    {
+     "id": "D84",
+     "summary": "block_status's removed-block loop skips a recorded key when plan-done.md holds a block of that key whose text is typo_only against the reviewed text (record's text, else history's at its digest), the same judgment a live block in plan.md already gets; digest match still skips, anything beyond a typo is still owed.",
+     "class": "within",
+     "why": "It does not loosen review: it applies to an archived block the same typo rule the live check already applies, so moving a section to plan-done.md changes nothing about whether a review is owed - which is what the archive is meant to guarantee (moving a finished section voids nothing). Changes beyond typo scale remain owed, so no reviewed-text guarantee is given up. No part of the GM's request is narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
