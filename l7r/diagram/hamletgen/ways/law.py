@@ -42,6 +42,7 @@ from l7r.diagram.settlement.city.bridges import PLANK_DITCH_FT as PLANK_DITCH_FT
 from l7r.diagram.settlement.city.bridges import deck_covers as deck_covers
 from l7r.diagram.settlement.city.bridges import undeckable_at as undeckable_at
 from l7r.diagram.settlement.homestead_parts.fixture_seats import TRUNK_FT
+from l7r.diagram.settlement.rolling.access import TREAD_HALF_FT, TREAD_WALL_FT
 from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes
 
 from ..consts import WEB_FABRIC_GAP, Poly, Pt
@@ -464,10 +465,11 @@ def span_walkable(M: Mapping[str, Any], p: Pt, q: Pt, skip: Sequence[int] = ()) 
     farmhouse (`house_hit`), no household's yard or garden, and not along another way (its middle within `JOIN_TOL` of a
     way other than the lanes `skip` - a span that doubles a tread rather than meeting it)?
     Research:
-        a walkable span - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: off water, crop, marsh and houses, its line 7 ft (`WEB_FABRIC_GAP`) off yards and gardens
+        a walkable span - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: off water, crop, marsh and houses, its line 7 ft (`WEB_FABRIC_GAP`) off a garden fence
+        a span off a threshing yard - UNRESEARCHED: the garden fence's 7 ft (`WEB_FABRIC_GAP`) held off a threshing yard too; no page sets a gap from a yard
         a defense marsh left out - UNRESEARCHED: a town's moat-side wet ground, crossed at its bridge and judged by the crossing rules
         no span along another way - research/questions/0081-village-lanes.drawing.html: "Two paths running side by side are drawn as one" - a span whose middle runs within `JOIN_TOL` (4 ft) along another way would draw one tread twice
-        a span off a farmhouse - UNRESEARCHED: kept 3 ft off a house (`house_hit` at 3 ft), a tread's width"""
+        a span off a farmhouse - research/questions/0081-village-lanes.drawing.html: its line a footpath's half-tread (`TREAD_HALF_FT`) and the 3 ft a lane's tread keeps off a farmhouse wall (`TREAD_WALL_FT`) off a house"""
     for wpts, _w in bridge_crossed_waters(M):
         wp = [(float(a[0]), float(a[1])) for a in wpts]
         if any(segments_cross(p, q, u, v) for u, v in zip(wp, wp[1:], strict=False)):
@@ -477,7 +479,7 @@ def span_walkable(M: Mapping[str, Any], p: Pt, q: Pt, skip: Sequence[int] = ()) 
     rings += [[(float(a), float(b)) for a, b in m["poly"]] for m in M.get("marshes") or [] if len(m.get("poly") or ()) >= 3 and m.get("role") != "defense"]
     if any(segments_cross(p, q, r[k], r[(k + 1) % len(r)]) for r in rings for k in range(len(r))):
         return False
-    if house_hit([p, q], 3.0, M.get("houses") or []):
+    if house_hit([p, q], TREAD_HALF_FT + TREAD_WALL_FT, M.get("houses") or []):  # the line: a footpath's half-tread and its 3 ft off the wall
         return False
     yards = [[(float(a), float(b)) for a, b in rec["poly"]] for key in ("threshing_yards", "gardens") for rec in M.get(key) or [] if rec.get("poly")]
     if _crosses_fabric([p, q], yards, WEB_FABRIC_GAP):

@@ -581,4 +581,14 @@ def test_every_corner_stands_seven_ft_off_a_narrow_lanes_middle():
     assert s._on_a_tread(700.0, 700.0 + 6.0 + h / 2, w, h), "a corner 6 ft off a footpath's middle is refused"
     assert not s._on_a_tread(700.0, 700.0 + 7.5 + h / 2, w, h), "and 7.5 ft off it is clear"
     s.lane([[200.0, 300.0], [1200.0, 300.0]], width=16, clearance=22)
-    assert s._on_a_tread(700.0, 300.0 + 11.0 + h / 2, w, h), "a wide way keeps its half-width and the hair (8 + 4 ft)"
+    assert s._on_a_tread(700.0, 300.0 + 10.5 + h / 2, w, h), "a wide way keeps its half-width and the hair (8 + 3 ft)"
+
+def test_each_wall_is_measured_whole_not_its_corners_alone():
+    """385 T07 (impl-drift on `_on_a_tread`): the corners and the center alone let a footpath run square across a long house
+    10 ft off its center - every corner 10 ft off the tread and the center 10 ft off it, all past the 7 ft. Each wall is
+    measured whole now, so the crossing is refused; the same path 8 ft clear of the end wall is not."""
+    s = Settlement(1400, 1400, seed=3)
+    s.meta(name="Across", scale="hamlet", ftpx=1, toscale=True, households=12)
+    s.lane([[710.0, 500.0], [710.0, 900.0]], width=3, clearance=7)
+    assert s._on_a_tread(700.0, 700.0, 40.0, 20.0), "a path square across a 40 ft house 10 ft off its center is refused"
+    assert not s._on_a_tread(682.0, 700.0, 40.0, 20.0), "the same path 8 ft off the house's end wall is clear"

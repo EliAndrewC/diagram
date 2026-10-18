@@ -13988,6 +13988,21 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/settlement/houses.py::HousesMixin._on_a_tread#a building's corners held to it",
+  "verdict": "MISLABELED",
+  "tier": "E3",
+  "fix": "Question, not a record to make: hold a building's corners to the attested 3 ft from a footpath's or spur's tread (0081's drawing page, 0247), keeping 0246's 7 ft (LANE_MIDDLE_CLEAR_FT) only where a garden fence is what stands there - or record the 7 ft as a DEVIATION. Changing the rule is the first route to try (the arbiter's ruling)",
+  "files": [
+   "l7r/diagram/settlement/houses.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 385 T07, filed by the round arbiter's ruling on ask:t07-two-findings-at-landing (2026-10-18); carried as 385 T43",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/settlement/houses.py::HousesMixin._try_place_bundle#a caller's squarer house kept",
   "verdict": "DRIFTED",
   "tier": "E3",
@@ -14493,17 +14508,16 @@
  },
  {
   "key": "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_cluster#lane width and clearance",
+  "verdict": "DRIFTED",
   "tier": "E3",
-  "fix": "lane width 5 / clearance 40 raw px -> feet via px(): 5 ft (spine) or 3/6 ft per 0081, clearance to the recorded 7-18 ft room",
+  "fix": "Question, not a record to make: the legacy village roll's clearance=40 appears on no page; re-derive it from 0246's lane room (18 ft) and 0081's tread-to-wall 3 ft, or retire the legacy roll",
   "files": [
    "l7r/diagram/settlement/rolling/roll.py"
   ],
-  "after": [
-   "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_cluster#lane skeleton"
-  ],
+  "after": [],
   "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
+  "found": "feature 385 T07, filed by the round arbiter's ruling on ask:t07-two-findings-at-landing (2026-10-18); carried as 385 T43",
+  "tier_as_ranked": "E3",
   "wave": "",
   "scope": "deferred"
  },
@@ -15491,7 +15505,7 @@
  },
  {
   "key": "l7r/diagram/hamletgen/ways/law.py::span_walkable#a walkable span",
-  "verdict": "NEEDS-RESEARCH",
+  "verdict": "CANNOT-TELL",
   "tier": "E4",
   "fix": "as fouls_fabric: the 7 ft off a threshing yard is on no page; research the margin off a yard first",
   "files": [
@@ -15501,8 +15515,8 @@
    "l7r/diagram/hamletgen/ways/law.py::fouls_fabric#foul margin"
   ],
   "flag": "",
-  "found": "feature 374 batch 2's re-checks (2026-10-10): the verdict moved from DRIFTED",
-  "tier_as_ranked": "E4",
+  "found": "feature 385 T07, filed by the round arbiter's ruling on ask:t07-span-walkable-cannot-tell (2026-10-18); carried as 385 T43",
+  "tier_as_ranked": "E3",
   "moved": "wave 4 re-check: NEEDS-RESEARCH (the yard margin)",
   "wave": "",
   "scope": "kept"

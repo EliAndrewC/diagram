@@ -616,7 +616,8 @@ def door_path(s: Settlement, door: Pt, segs: Sequence[tuple[Pt, Pt]], hard: list
     Research:
         a worn path takes the shortest way - research/questions/0081-village-lanes.drawing.html: straight where clear,
             else routed and pulled taut
-        no sliver with the ways it meets - research/questions/0081-village-lanes.drawing.html: lanes meet as a T, so a door path closing a sliver (`closes_a_needle`) is refused"""
+        no sliver with the ways it meets - research/questions/0081-village-lanes.drawing.html: lanes meet as a T, so a door path closing a sliver (`closes_a_needle`) is refused
+        a door path off the fixtures - UNRESEARCHED: its line 3 ft off every fixture and off what the overlap matrix forbids (`over_a_fixture`, `forbidden_segment` at 3 ft)"""
     from l7r.diagram.overlap.registry import forbidden_segment
 
     from .law import over_a_fixture

@@ -6,7 +6,7 @@ import random
 from collections.abc import Iterator
 from typing import TYPE_CHECKING, Any, cast
 
-from ._geom import PointGrid, Pt, boxed_polys, drawn_extent, edge_dist, indexed_grid, point_in_poly, rot_rect, seg_dist
+from ._geom import PointGrid, Pt, boxed_polys, drawn_extent, edge_dist, indexed_grid, point_in_poly, poly_seg_dist, rot_rect, seg_dist
 from ._knobs import skeleton_layout
 from .rolling.access import LANE_MIDDLE_CLEAR_FT, TREAD_WALL_FT
 from .rolling.bearing import house_rot
@@ -264,20 +264,27 @@ class HousesMixin:
         and the bundle placer gets it from `_house_rot`. GAP VERDICT family (this skill's dev/placement.md, "CENTER vs
         FOOTPRINT"): real rotated corners, never a center, never a circumscribed radius.
         Research:
-            no building corner on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the tread's edge `TREAD_WALL_FT` clear of every corner
+            no building corner on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0081-village-lanes.drawing.html: nothing built on a lane (0246), the tread's edge `TREAD_WALL_FT`, 3 ft, clear of every wall (0081) - each wall measured whole, not its corners alone
             the lane middle's 7 ft - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `LANE_MIDDLE_CLEAR_FT`, the 7 ft a lane's middle keeps off a garden fence
             a building's corners held to it - GUESS: every corner of a footprint `_fits` seats (a house's wall, a shed's) held 7 ft off a lane's middle, as the page holds a fence"""
         if not self.treads:
             return False
         quad = rot_rect(x, y, w, h, rot)
-        corners = [*quad, (x, y)]
+        # EACH WALL MEASURED WHOLE (feature 385 T07, impl-drift: the four corners and the center alone let a tread come within
+        # the clearance of a long wall's middle, or cross a long house 10 ft off its center): `poly_seg_dist` is zero where a
+        # tread crosses the footprint or lies inside it. The half-diagonal box test first passes over a tread segment too far off.
+        reach = math.hypot(w, h) / 2
         # ...AND THE TREAD'S EDGE STANDS `TREAD_WALL_FT` CLEAR OF THE WALL (feature 294 B7, the review's "lane tread to house wall"
         # class: one tread ran 3.85 ft from a wall under the 2 ft hair `houses_clear_of_lanes` allowed)
         # ...AND EVERY CORNER `LANE_MIDDLE_CLEAR_FT` OFF THE LANE'S MIDDLE AT LEAST (feature 328 wave 48, 0246: "a lane's middle
         # keeps at least 7 ft clear of a garden fence") - the half-width and the hair held a narrow way's corners nearer
         hair, middle = self.px(TREAD_WALL_FT), self.px(LANE_MIDDLE_CLEAR_FT)
         return any(
-            not self._tread_skipped(orig, skip) and any(seg_dist(qx, qy, tp[i], tp[i + 1]) < max(half + hair, middle) for qx, qy in corners for i in range(len(tp) - 1))
+            not self._tread_skipped(orig, skip)
+            and any(
+                seg_dist(x, y, tp[i], tp[i + 1]) < reach + max(half + hair, middle) and poly_seg_dist(quad, tp[i], tp[i + 1]) < max(half + hair, middle)
+                for i in range(len(tp) - 1)
+            )
             for tp, half, orig in self.treads
         )
 

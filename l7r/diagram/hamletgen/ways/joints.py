@@ -36,6 +36,7 @@ from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, seg_closest, seg_dist
+from l7r.diagram.settlement.rolling.access import TREAD_WALL_FT
 
 from ..consts import WEB_CLEARANCE, Poly, Pt
 from .clearance import _HAIRPIN_DEG, _bends_badly, _clear_link, _clear_touch, kink_spans
@@ -301,7 +302,7 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
         a fold at a joint becomes a T - research/questions/0081-village-lanes.drawing.html: a fold at the meeting point made a T; a Z across it pulled straight like any jog, the joint moved back a vertex where the pull cannot clear it
         the shorter link the T's stem - GUESS: of the two arriving lanes, the one whose clear link to the other's side is shorter becomes the stem; searched research/questions/0081-village-lanes.drawing.html (a fold at a joint becomes a T, a worn path takes the shortest or easiest way, but not which lane is the stem) and research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html (ways joined at a T, no stem rule)
         no new kink from a pull - research/questions/0081-village-lanes.drawing.html: a lane does not zigzag (two turns over 50 degrees within 40 ft) or double back, so a pull at a joint that leaves more kink_spans than the two lanes had is refused
-        a pulled lane's clearance - CONVENTION: where a straightened lane touches a building it keeps max(_TOUCH_GAP 4 ft, half its width + 2 ft), a 5 ft width assumed when none is set; research/questions/0081-village-lanes.drawing.html lets it come right up to the buildings within 6 ft of the old line and calls every distance in its lane bullets a drawing convention, but gives no clearance figure
+        a pulled lane's clearance - research/questions/0081-village-lanes.drawing.html: where a straightened lane touches a building its tread keeps the 3 ft a lane's tread keeps off a farmhouse wall - max(_TOUCH_GAP 4 ft, half the wider of the two lanes' widths + `TREAD_WALL_FT`), a 5 ft width assumed when none is set; the page lets it come right up to the buildings within 6 ft of the old line
         all but the buildings keep the usual clearance - research/questions/0081-village-lanes.drawing.html: the touch is the buildings' (houses, farm sheds, byres, retirement houses); a fence, a grove, a well, a fixture and the crop keep `_clear_link`'s margins, as an unpulled lane does
         a jog across a joint pulled straight - research/questions/0081-village-lanes.drawing.html: string-pulled wherever the
             chord keeps the usual clearance; where it touches a building, every dropped vertex within 6 ft of the new line
@@ -326,7 +327,8 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
             continue
         built = {_key(q) for q in buildings}
         two = lanes[i].get("w") != lanes[j].get("w") or bool(lanes[i].get("web")) != bool(lanes[j].get("web"))
-        gap = max(_TOUCH_GAP, float(lanes[i].get("w") or 5.0) / 2.0 + 2.0)
+        # the WIDER tread 3 ft off a wall (0081; 385 T07): the pulled line carries lane j too, which may be the wider
+        gap = max(_TOUCH_GAP, max(float(lanes[i].get("w") or 5.0), float(lanes[j].get("w") or 5.0)) / 2.0 + TREAD_WALL_FT)
 
         def ok(a: int, b: int, p: Poly = old, g: float = gap, bt: set[tuple[tuple[float, float], ...]] = built) -> bool:
             if _clear_link(p[a], p[b], hard, walls, water):

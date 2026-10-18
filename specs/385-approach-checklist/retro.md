@@ -449,3 +449,10 @@ pair hook may refuse it, so T07's write session met a round cap on zero readings
 dispatch still pending after 60 s: it narrowed the arbiter's "started an agent and kept a reply" to half its condition and left
 a minute in which a refusal still counted. Built instead: a round counts when its agent returns a reply. **The habit it
 changes:** take the arbiter's condition as the moment to act, not a timer standing in for it.
+
+## T42 - the retro row
+
+About 30 min (two plan rounds). An absence note names no page, so it owes no source-reader; the third part of the arbiter's fix
+(net a note round 6 had READ) I first called "already done" without measuring, and round 1 blocked it - measured, the existing
+answered rule does net them (round 6's answers were recorded after the ruling's bundle was built). **The habit it changes:** a
+claim that existing code already does a thing is a measurement, with its record named, never an assertion.

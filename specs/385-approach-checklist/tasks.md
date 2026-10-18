@@ -114,11 +114,15 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T30 Nothing is merged into a clone while a make runs in it, on the tool-call path too (the arbiter's fix on red-gate@2026-10-18T12:36:36Z, plan D54) [lands-open]
       research: rendering
       verify: DONE. landed on main; the tooling suite runs no land-tooling (1,924 tests, HEAD unchanged); the gate lock holds the merge on both clone-sync paths and in land-tooling, each test red without it
-- [ ] T41 A check dispatch a later hook refused is counted as no round (the arbiter's fix on round:source-reader|q:0081@3, plan D56) [lands-open]
+- [x] T41 A check dispatch a later hook refused is counted as no round (the arbiter's fix on round:source-reader|q:0081@3, plan D56) [lands-open]
       research: rendering
-- [ ] T42 An absence note owes no source-reader round (the arbiter's fix on round:source-reader|q:0081@5, plan D57) [lands-open]
+      verify: DONE. landed on main; its test green and red without it; the arbiter's fix settled
+- [x] T42 An absence note owes no source-reader round (the arbiter's fix on round:source-reader|q:0081@5, plan D57) [lands-open]
       research: rendering
+      verify: DONE. landed on main; its test green and red without it; the arbiter's fix settled
 - [ ] T11 The close: the checklist to `docs/`, the refusals extended to every feature (FR-001), the final report (SC-001, SC-002); and D30's wording, filed by the round arbiter's ruling on ask:t14-plan-round4 (T14's plan round 4, rows 1-3 - the code already does each, `test_a_transcript_named_call_is_its_run_s_anywhere_and_a_mixed_overlap_is_the_missing_run_s_estimate`): the outside-every-window clause carries its own condition (no `by`, no transcript names it), the overlap clause says "still an estimate", and a call inside both a found and a missing run's window is the missing run's estimate [lands-open]
+      research: rendering
+- [ ] T43 Carried at T07's landing by the round arbiter (ask:t07-two-findings-at-landing): (1) `settlement/houses.py::HousesMixin._on_a_tread#a building's corners held to it` MISLABELED - should a building's corners be held to the attested 3 ft from a footpath's or spur's tread (0081, 0247), keeping 0246's 7 ft only where a garden fence stands, or the 7 ft recorded as a DEVIATION? Changing the rule is the first route to try; (2) `settlement/rolling/roll.py::RollVillageMixin._roll_cluster#lane width and clearance` DRIFTED - re-derive the legacy roll's clearance=40 from 0246's lane room and 0081's tread-to-wall figure, or retire the roll. And (3), by the round arbiter's ruling on ask:t07-span-walkable-cannot-tell: `hamletgen/ways/law.py::span_walkable#a walkable span` CANNOT-TELL - near_misses skips only a household way's DOOR end (`end == 0 and ln.get("of")`); the FAR end of a household's own lane reaches span_walkable (law.py:544), which holds the household's own garden and own threshing yard at 7 ft (`WEB_FABRIC_GAP`) with no owner exemption. Read 0246 to settle whether the household's own allowance covers its yard (fabric.py::_homestead_polys#a path leaves its own yard reads it as the dooryard) or its garden fence; then pass the owning household into span_walkable and exempt its own ground, or label the clause DEVIATION/UNRESEARCHED, and re-check it. Each fixed or re-checked clean before 385 closes (FR-013); 328 found-wave158 [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
