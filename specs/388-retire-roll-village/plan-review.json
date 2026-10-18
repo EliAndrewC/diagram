@@ -32,13 +32,13 @@
    "declared": "spec-fidelity"
   },
   "## T01 - the deletion (FR-001, FR-002)": {
-   "sha256": "fc98eb9fd8a382753967b3b205f3b803040cb74d8ba5a699816d18df4fe711d6",
+   "sha256": "d545f5d53921957677ddf2268d8a78c8e51478638efbb0212dd1670fb6913bc1",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
   },
   "## T02 - the prose (FR-003, FR-004)": {
-   "sha256": "c4480e50cb698ea79bb475261d03219d54c1bb2893255a190f9e8658e590240f",
+   "sha256": "9221792248c7ab1a638fe8da5de94f15cb2f704e241d371e0364b070113e47be",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -165,6 +165,165 @@
      "summary": "test_houses.py's deletion is limited to its water-source test (its comb tests are repointed)",
      "class": "within",
      "why": "Follows FR-002: tests of deleted water_sources_for go; tests of shipping comb code are repointed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## T01 - the deletion (FR-001, FR-002)",
+    "## T02 - the prose (FR-003, FR-004)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T01-keep-exhibit-helpers",
+     "summary": "KEEP build_comb, crop_to_content, cremation_ground (+ ROOFED_SHARE, cremation_outline): reached by 13, 11 and 7 frozen legacy exhibits",
+     "class": "within",
+     "why": "FR-005: every other exhibit still runs and no other name it calls is deleted; FR-001 keeps a name still reached and the plan names who reaches it. Counts of 13, 11 and 7 cannot be only the three roll_village exhibits, so other exhibits reach them. The GM asked to delete roll_village, not the helpers other maps call. Ruled on FR-005 alone: the block cites 'spec D1b', which the bundle does not supply (absent from spec-cited.md and spec-index.md)."
+    },
+    {
+     "id": "T01-keep-headman",
+     "summary": "KEEP PlacerMixin.headman: reached by '3 frozen exhibits', which are not named",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-005 protects only names that exhibits OTHER than Honda, Shimizu and Kikuta call, because those three no longer run. The roll.py row's callers are '3 frozen exhibits (Honda, Shimizu, Kikuta)', and headman's are '3 frozen exhibits' with no names. If they are the same three, keeping headman keeps code that nothing still running reaches, against FR-001 and the GM's 'just delete it now'. FR-001 requires 'the plan says who reaches it', and a count does not say who. Fix: name headman's callers. If at least one is not Honda, Shimizu or Kikuta the keep is within FR-005. Otherwise headman is deleted."
+    },
+    {
+     "id": "T01-bundle-pitch",
+     "summary": "Delete BUNDLE_PITCH_FT, its re-export in settlement/__init__.py and its test, found by re-running the closure",
+     "class": "within",
+     "why": "FR-001 (closure of roll_village, deleted when nothing still running reaches it) and FR-002 (a test whose subject is deleted goes)."
+    },
+    {
+     "id": "T01-nucleated-annotation",
+     "summary": "Settlement keeps a class-level annotation of _nucleated on RollingMixin, with no runtime member",
+     "class": "within",
+     "why": "An implementation detail of deleting roll.py, which held the one assignment the type checker read. It adds no behavior."
+    },
+    {
+     "id": "T01-test-deletions",
+     "summary": "Reshaped test deletion list: add test_m8_placers_287 edge-seat test and test_geom band-pitch test/surface entry; no longer delete the civic_grounds, villages, caption-paths and map-vocabulary tests or repoint comb/crop tests",
+     "class": "within",
+     "why": "FR-002: a test goes with the code it tests. These changes follow the deletion list (edge seat and band pitch deleted, comb/crop/cremation helpers kept), and the test_burial.py list matches FR-002 exactly."
+    },
+    {
+     "id": "T01-coverage-rule",
+     "summary": "A line only the deleted tests reached is deleted if NOTHING reaches it (was: no shipping code), else a test is owed",
+     "class": "within",
+     "why": "FR-005: frozen exhibits still run, so a line they reach counts as reached."
+    },
+    {
+     "id": "T02-init-table",
+     "summary": "hamletgen/__init__.py comparison table's middle column becomes 'the knob engine', retired, rather than being dropped",
+     "class": "within",
+     "why": "FR-003 requires that the prose stop describing roll_village as live, and a column marked retired does that."
+    },
+    {
+     "id": "T02-file-list",
+     "summary": "waterfields/CLAUDE.md dropped from the index list, settlement/rolling/__init__.py and settlement/_geom/CLAUDE.md added",
+     "class": "within",
+     "why": "FR-003 updates prose that describes a deleted name as live. waterfields/CLAUDE.md was listed for build_comb, which is now kept. Any roll_village mention left in it is still caught by the block's verify grep over l7r (SC-001), which enforces the clause. The two added files carry deleted names (the rolling package, the band pitch)."
+    },
+    {
+     "id": "T02-claims",
+     "summary": "The claims index is updated by its own targets (claims-owed, impl-drift, claims-checked)",
+     "class": "within",
+     "why": "FR-003: the claims tooling regenerates or drops the entries for the deleted code."
+    },
+    {
+     "id": "T02-380",
+     "summary": "Feature 380 loses 'Carried: from 387'; its cremation-ground and burial-ground items name the roller's cremation seat and the edge seat as deleted by 388, readable from git, with design and rulings unchanged",
+     "class": "within",
+     "why": "FR-004 as written, which carries the GM's 'not even move it into the 384 backlog'. The legacy pool is untouched (FR-005)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## T01 - the deletion (FR-001, FR-002)",
+    "## T02 - the prose (FR-003, FR-004)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-roll",
+     "summary": "Delete settlement/rolling/roll.py (RollVillageMixin, roll_village, _roll_*, _roll_cremation, _MarginFrame) and drop the base from RollingMixin; the three frozen roller exhibits stop running",
+     "class": "within",
+     "why": "The GM: 'if nothing ships from it then we should just delete it now'. FR-001 deletes it; FR-005 carries the three frozen exhibits keeping their words and no longer running."
+    },
+    {
+     "id": "T01-water-source",
+     "summary": "Delete settlement/water_source.py and WaterSourceMixin from Settlement's bases",
+     "class": "within",
+     "why": "Part of the closure FR-001 deletes; no caller (fit.py names it in prose only, repointed by T02)."
+    },
+    {
+     "id": "T01-edge-seat",
+     "summary": "Delete settlement/civic_grounds/edge_seat.py whole",
+     "class": "within",
+     "why": "Closure under FR-001; live convex_hull callers import _geom/primitives' copy; FR-004 already records the edge seat as deleted by 388."
+    },
+    {
+     "id": "T01-undeckable",
+     "summary": "Delete cut_undeckable_lanes and CUT_GAP_FT",
+     "class": "within",
+     "why": "Closure under FR-001, no caller."
+    },
+    {
+     "id": "T01-band-pitch",
+     "summary": "Delete BUNDLE_PITCH_FT, its re-export and its test",
+     "class": "within",
+     "why": "Found by the closure re-run FR-001 asks for; its test's subject is the roller's band, so FR-002 removes it."
+    },
+    {
+     "id": "T01-keep",
+     "summary": "KEEP build_comb, crop_to_content, cremation_ground (+ROOFED_SHARE, cremation_outline) and PlacerMixin.headman, naming their callers: build_comb 13 and crop_to_content 11 scripts (Ikegami, Akagahara, Moritono, villages, towns, cities), cremation_ground 7, headman 3 (Hikari-no-sato, Ueda, Hoshigaoka - none a roller exhibit)",
+     "class": "within",
+     "why": "The request deletes roll_village, not helpers other running code calls. FR-001 keeps a name still reached and requires the plan to say who reaches it; FR-005 states every other exhibit still runs and no name it calls is deleted. The previous round's gap - headman's three callers might have been the three roller exhibits, which would make it dead - is closed: they are named and none is Honda, Shimizu or Kikuta. The other counts (13, 11, 7) exceed the three roller exhibits, so each has a non-roller caller. Figures carry a dated one-shot label and method (2026-10-18, grep -rnw, every hit read)."
+    },
+    {
+     "id": "T01-nucleated",
+     "summary": "Keep a class-level _nucleated annotation on RollingMixin with no runtime member",
+     "class": "within",
+     "why": "A type-checker artifact of the deletion; adds no behavior and keeps nothing of roll_village alive."
+    },
+    {
+     "id": "T01-closure-rerun",
+     "summary": "Re-run the closure after deletion until it names nothing more; coverage-floor lines reached only by deleted tests are deleted if unreached, else a test is owed",
+     "class": "within",
+     "why": "Carries FR-001's 'everything in What it is (2)' to completion; a test owed only for a line live code reaches enforces SC-002's floor."
+    },
+    {
+     "id": "T01-tests",
+     "summary": "Delete every test whose subject is a deleted name (listed), keep the pool scan of the no-cremation-ground test and the burial no-ground-of-its-own test, remove emptied files",
+     "class": "within",
+     "why": "FR-002 verbatim, including its test_burial.py enumeration and the mixed-test rule."
+    },
+    {
+     "id": "T02-prose",
+     "summary": "Repoint docstrings, comments and package indexes naming deleted definitions as live (FR-003's list plus settlement/rolling/__init__.py, settlement/_geom/CLAUDE.md and test_burial.py's docstring); kept helpers' prose untouched",
+     "class": "within",
+     "why": "FR-003's rule is 'prose that describes roll_village or the closure's names as live is updated where it stands'; the extra files are further instances of that rule (FR-002 also names test_burial's docstring)."
+    },
+    {
+     "id": "T02-claims",
+     "summary": "Claims index updated by its own targets",
+     "class": "within",
+     "why": "FR-003: the claims tooling regenerates or drops the entries."
+    },
+    {
+     "id": "T02-380",
+     "summary": "Remove feature 380's 'Carried: from 387' section; reword its cremation-ground and burial-ground items to name the code as deleted by 388 and readable from git, design and rulings unchanged",
+     "class": "within",
+     "why": "FR-004 and the GM's 'not even move it into the 384 backlog'."
+    },
+    {
+     "id": "T02-legacy",
+     "summary": "Legacy pool not touched",
+     "class": "within",
+     "why": "FR-005."
     }
    ]
   }
