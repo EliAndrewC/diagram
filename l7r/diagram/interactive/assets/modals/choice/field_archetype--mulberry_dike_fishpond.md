@@ -13,10 +13,10 @@ land, and its ponds at eight tenths. Water and dike were kept in proportion, so 
 fish beside it: in modern times about six parts water to four of dike, or the reverse.
 
 Guesses:
-- About six parts in ten of each pond's parcel water: every split written as a number is modern, so the share is read from
-  the 1678 writer's two figures taken together, which he never set side by side.
-- A pond's bank about 23 ft wide: no width of a pond dike before modern times was found, so it is drawn inside the modern
-  figures.
+- That a village takes each of the five recorded splits of water and dike at even odds, one split for all its ponds: no
+  account gives a share between them, and every account found that writes the split as a ratio is modern.
+- A pond's bank as wide as the village's split leaves it, from about 15 ft to about 42 ft: no width of a pond dike before
+  modern times was found, and the widest banks are broader than any modern figure but one village's former dikes.
 - [dike_crop=mulberry] A mulberry bush about 4 to 7 ft across: no source gives a bush's crown width.
 
 Depiction: The map draws the block as a polder converted nearly or wholly wall to wall into ponds. The ponds

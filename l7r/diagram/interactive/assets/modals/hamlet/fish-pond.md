@@ -15,9 +15,9 @@ six parts water to four of dike, or the reverse. An ordinary pond's size before 
 several tens of mu (a mu is about 7,200 sq ft), several acres.
 
 Guesses:
-- That about six parts in ten of a pond's plot is water: no split of water and dike written as a number before modern
-  times was found, so the share is read from the two Qu Dajun gave in 1678 for Jiujiang, its fish taking half the land and
-  its ponds eight tenths.
+- That a hamlet's ponds take one of the five recorded splits of water and dike, each at even odds, and that one split
+  holds for every pond of the hamlet: no split written as a number before modern times was found, and no account gives a
+  share between them.
 
 Depiction: The map draws a block of dike-ponds as a mosaic, every pond four-sided but skewed to an uneven shape, or on some hamlets as a chessboard of ponds in straight rows, both layouts being recorded.
 Each pond is set in from the

@@ -17,9 +17,8 @@ Guesses:
   rather than evenly scattered: no source says who dug a pond or how ponds spread.
 - That low ground alone did not make a dike-pond district: as low and wet as they were, the sandy fields of the outer delta
   are not recorded going over to ponds, and no source says why.
-- That a pond took about six parts in ten of its plot and its bank the rest: every water-to-bank split written as a number
-  is modern, and the sources give it both ways round, so the share is read from two figures a writer of 1678 gave for one
-  delta township.
+- That a village's ponds take one of the five recorded splits of water and bank, each at even odds: every water-to-bank
+  split written as a number is modern, the sources give it both ways round, and none gives a share between them.
 - How often a settlement grows this crop rather than lotus, tea or none: no source counts them, so the choices come up evenly
   where the ground allows them.
 

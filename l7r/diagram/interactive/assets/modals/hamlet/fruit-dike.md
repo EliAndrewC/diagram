@@ -18,8 +18,8 @@ Guesses:
 - The trees' spacing on the map, about 18 ft apart in a single line along the middle of the bank: no spacing along a
   dike was found, so it is reckoned from the orchard figure of one lychee to about 300 sq ft.
 - Each tree's crown, 8 to 10 ft across: no account gives the crown of a lychee, longan or orange tree on a dike.
-- The bank's width on the map, 23 ft: no pond dike's width from before modern times was found, so it is drawn inside the
-  modern 20 to 33 ft.
+- The bank's width on the map, as wide as the hamlet's split of water and dike leaves it, from about 15 ft to about 42 ft:
+  no pond dike's width from before modern times was found, and the widest banks are broader than the modern 20 to 33 ft.
 
 Depiction: The map draws the fruit dike as a single line of round-crowned trees along the middle of each bank, so a
 reader can tell it at a glance from the mulberry's rows of bushes and the tea's clipped hedges. Every dike of a hamlet

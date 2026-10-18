@@ -14,7 +14,7 @@ delta's root-cut planting today to about one to 24 sq ft in a late-Qing field of
 grew. A dike's width before modern times is not recorded. Water and bank were kept in proportion, so that the bank's mulberry could feed the fish beside it; today the split is given as about six parts water to four of bank, or the reverse, or seven to three, and how it ran before modern times is not recorded.
 
 Guesses:
-- That each of the three splits of water and bank is drawn at even odds: the accounts carry all three, and may differ by region rather than in error,
+- That each of the five recorded splits of water and bank is drawn at even odds: the accounts carry all five, and may differ by region rather than in error,
   and every account found that writes the split as a ratio is modern.
 - That one split holds for every pond of a village, so the bank is as wide as that split makes it: no width of a pond
   dike from before modern times was found, and the one modern account of how the split was set says only that in practice it was more complicated and generally governed by tradition.
