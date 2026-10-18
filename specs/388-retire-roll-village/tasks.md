@@ -19,3 +19,6 @@ Every task deletes code no shipping map runs, or repoints prose to what does: no
 - [ ] T03 Measure and land (plan T03; FR-006, SC-001 - SC-004): `make maps` byte-identical, `make soak`, `make done`, the end bookend, `make cohort-landing`, the claims gate, the feature report, the gated push
       research: rendering
       verify:
+- [ ] GM review (make gm-reviewed F=388) [lands-open]
+      research: rendering
+      verify: the GM reviewed every row (make gm-review lists them)

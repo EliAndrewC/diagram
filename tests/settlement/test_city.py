@@ -577,4 +577,3 @@ def test_a_footplank_is_not_laid_across_the_hem_crop() -> None:
     s.M["field_ditches"] = [{"poly": [[100, 300], [800, 300]], "w": 5, "role": "main"}]
     s.dry_polys.append([(70.0, 270.0), (830.0, 270.0), (830.0, 330.0), (70.0, 330.0)])
     assert s.channel_footbridges(spacing=320) == 0, "every seat along the ditch lands on the dry plot"
-
