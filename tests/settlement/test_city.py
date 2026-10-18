@@ -567,3 +567,14 @@ def test_a_footplank_does_not_land_on_a_farms_garden() -> None:
     s.M["field_ditches"] = [{"poly": [[100, 300], [800, 300]], "w": 5, "role": "main"}]
     s.M["gardens"] = [{"x": 450.0, "y": 300.0, "w": 760.0, "h": 60.0}]
     assert s.channel_footbridges(spacing=320) == 0, "every seat along the ditch lands on the garden"
+
+
+def test_a_footplank_is_not_laid_across_the_hem_crop() -> None:
+    """...and off the dry hem crop (`dry_polys`), tested half a foot wider all round so a deck on a plot's edge counts as on
+    the plot: a ditch whose whole run lies under a dry plot takes no plank."""
+    s = _crop_settlement()
+    s.M["fields"] = [{"outline": [[50, 120], [850, 120], [850, 480], [50, 480]]}]
+    s.M["field_ditches"] = [{"poly": [[100, 300], [800, 300]], "w": 5, "role": "main"}]
+    s.dry_polys.append([(70.0, 270.0), (830.0, 270.0), (830.0, 330.0), (70.0, 330.0)])
+    assert s.channel_footbridges(spacing=320) == 0, "every seat along the ditch lands on the dry plot"
+
