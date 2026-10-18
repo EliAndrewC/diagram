@@ -529,6 +529,39 @@ def record_blocks(spec_dir: pathlib.Path, review: dict, declared: str, today: st
     return {"verdict": verdict, "blocks": sorted(named), "decisions": decisions, **({"approach_owed": owed} if owed else {})}
 
 
+ACCEPTS = ("accept", "process-fault")
+
+
+def arbiter_accept(spec_dir: pathlib.Path, trigger: str, today: str | None = None) -> list[str]:
+    """Past the plan-round cap (feature 385 T16), the round arbiter's `accept` (or `process-fault`) on the task's plan round
+    stands as the plan's verdict, as the spec review gate takes a ruling as its verdict (feature 379): every block owed or
+    BLOCKED is recorded CLEAR at its digest now, declared `round-arbiter`. Without this the cap deadlocked the task - the review
+    closed, the plan never CLEAR (T17, 2026-10-18). Only a ruling the feature's `arbiter.jsonl` records counts. Returns the
+    blocks so recorded."""
+    if not trigger.startswith("round:spec-fidelity|plan:"):
+        raise ValueError(f"{trigger} is not a plan review's round trigger")
+    lines = (spec_dir / "arbiter.jsonl").read_text(encoding="utf-8").splitlines() if (spec_dir / "arbiter.jsonl").is_file() else []
+    rows = [json.loads(ln) for ln in lines if ln.strip()]
+    if not any(r.get("trigger") == trigger and r.get("ruling") in ACCEPTS for r in rows):
+        raise PermissionError(f"declined: {spec_dir.name}'s arbiter.jsonl holds no accept on {trigger} - only the round arbiter's ruling stands as a verdict")
+    plan = spec_dir / "plan.md"
+    text = plan.read_text(encoding="utf-8") if plan.is_file() else ""
+    rec_path = spec_dir / RECORD
+    out = slim_record(json.loads(rec_path.read_text(encoding="utf-8"))) if rec_path.is_file() else {"feature": spec_dir.name}
+    owed_keys, blocked = block_status(out, text, set())
+    named = {k: block_digest(b) for k, b, _a in blocks(text) if k in set(owed_keys) | set(blocked)}
+    when = today or datetime.date.today().isoformat()
+    for key, sha in named.items():
+        out.setdefault("blocks", {})[key] = {"sha256": sha, "verdict": "CLEAR", "reviewed": when, "declared": "round-arbiter"}
+    for key in owed_keys:
+        if key.startswith(REMOVED):
+            out.setdefault("blocks", {}).pop(key[len(REMOVED):], None)
+    out.setdefault("block_reviews", []).append({"reviewed": when, "blocks": sorted(named), "verdict": "CLEAR", "declared": "round-arbiter",
+                                                "decisions": [{"id": trigger, "class": "within", "summary": "the round arbiter accepted the plan as it stands"}]})
+    rec_path.write_text(json.dumps(out, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+    return sorted(named)
+
+
 _DECISIONS_HEAD = re.compile(r"^#{2,4}\s+(T\d+[a-z]?)\s+Decisions\b")
 
 
@@ -676,7 +709,24 @@ def decide_prompt(spec_dir: pathlib.Path, task: str) -> str:
     return plan_bundle.task_prompt(spec_dir, task)
 
 
+def _arbiter_accept_cmd(feature: str, trigger: str) -> int:
+    """`plan_gate.py arbiter-accept <feature> <trigger>` (feature 385 T16; lifted out of `main` at the function cap)."""
+    d = resolve(feature)
+    if d is None:
+        print(f"arbiter-accept: no single specs/{feature}* directory", file=sys.stderr)
+        return 2
+    try:
+        done = arbiter_accept(d, trigger)
+    except (PermissionError, ValueError) as e:
+        print(f"arbiter-accept: {e}", file=sys.stderr)
+        return 2
+    print(f"arbiter-accept: {len(done)} block(s) of {d.name}'s plan recorded CLEAR on {trigger}")
+    return 0
+
+
 def main(argv: list[str]) -> int:
+    if argv[:1] == ["arbiter-accept"] and len(argv) == 3:  # feature 385 T16: the arbiter's accept past the plan-round cap
+        return _arbiter_accept_cmd(argv[1], argv[2])
     if argv[:1] == ["decided"]:
         why = decision_refusal(pathlib.Path(argv[1] if len(argv) > 1 else "."))
         if why:

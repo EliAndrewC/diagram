@@ -1200,13 +1200,14 @@ tick:           ## [project] tick a task: F=188 T=T03 NOTE="what was verified" [
 ##  PLAN_REVIEW_OK=<reason>  tick although the plan has no current CLEAR review (feature 243) - recorded
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/tick-task.py" "$(F)" "$(T)" --note-from-env $(if $(BOXES),--boxes,)
 
-plan-verdict:   ## [project] {internal} record a plan review - the spec-fidelity SUBAGENT runs this   F=243 FILE=<json> AS=spec-fidelity
+plan-verdict:   ## [project] {internal} record a plan review - the spec-fidelity SUBAGENT runs this; ARBITER=<trigger> applies the round arbiter's accept past the plan-round cap   F=243 FILE=<json> AS=spec-fidelity | F=<n> ARBITER=<trigger>
 ##  F=<feature>        the feature number or slug whose plan.md was reviewed
 ##  FILE=<json>        the reviewer's JSON: plan_sha256, decisions, verdict (feature 243 plan P3)
 ##  AS=spec-fidelity   who is recording - only the subagent may pass this, and nothing else distinguishes the shells
 	@: "GUARD_EDIT_OK: feature 375 FR-003(a) - TASK= records a decision preflight on one task's plan section"
 	@: "GUARD_EDIT_OK: feature 375 amendment 11 (D61) - BLOCKS=1 records a review of the plan's changed blocks"
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/plan_gate.py" $(if $(BLOCKS),record-blocks "$(F)",$(if $(TASK),record-task "$(F)" "$(TASK)",record "$(F)")) "$(abspath $(FILE))" --as "$(or $(AS),main)"
+	@: "GUARD_EDIT_OK: feature 385 T16 - ARBITER=<trigger> applies the round arbiter's accept past the plan-round cap as the verdict"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/plan_gate.py" $(if $(ARBITER),arbiter-accept "$(F)" "$(ARBITER)",$(if $(BLOCKS),record-blocks "$(F)",$(if $(TASK),record-task "$(F)" "$(TASK)",record "$(F)")) "$(abspath $(FILE))" --as "$(or $(AS),main)")
 
 # GUARD_EDIT_OK: feature 375 amendment 11 (the GM 2026-10-13: "Yes please do all 4 items now") - two new operations: the review of a
 # plan's changed blocks alone, and the move of finished sections out of plan.md.

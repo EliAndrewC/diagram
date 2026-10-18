@@ -52,9 +52,9 @@
   },
   "## Landing": {
    "sha256": "406dd4cac3ce0663870645811f6f22057e8a559bd45d9934ed0f3580c444f781",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-17",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)": {
    "sha256": "a0b57acda8087bcfe98d579f7bee7d25fb120b2c234736a8ae05192014d61e4f",
@@ -238,57 +238,57 @@
   },
   "## T17 - the make-targets page checked on every route (amendment 5, FR-017)": {
    "sha256": "53881500802de6fd2472fe7c68cd928b9d98f4a347af5eab4eb60fca43a4ef12",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-17",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T17 Approach (checklist part A)": {
    "sha256": "c629a3f67c33180b9cd91173509e190b1f76710239b36ae35ec6c1153ec21c8a",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-17",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T17 Decisions": {
    "sha256": "c4da1c672beb2f30efdb12b015cba38e5c56f7d3c5b6ab60aa0c170606395838",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-17",
-   "declared": "spec-fidelity"
-  },
-  "## T18 - an arbiter's fix landed and settled in one command (amendment 5, FR-018)": {
-   "sha256": "72cb9a9faf484ca6c58d2ad8e0ce83b2655038764c50325cb299176e133f9481",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-10-17",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T18 Approach (checklist part A)": {
-   "sha256": "cb6c3e9366fee433c4391878e4fb1a904bf507eb991db9af02ad6bb23fce1989",
-   "verdict": "BLOCKED",
+   "sha256": "72a54eaff0c17d507804c9ee372b8139d41c2f9c1ed6891db3ce2b40e66e1d07",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-17",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T18 Decisions": {
    "sha256": "222ecfdd80c2e7b735a816183e7c1a037b2a9415911f05a71234fc68bbef0057",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-17",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## T19 - a ledger row written from the record (amendment 5, FR-019)": {
    "sha256": "39881cf545f661c192d4cea1bfd3410c9de14a5caacf4b759b9b3f898102288f",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-17",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T19 Approach (checklist part A)": {
    "sha256": "46480888bf53f23173d7b2ff5ade03b2238fbad083df64d6c86593beb2fa9a6d",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-17",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T19 Decisions": {
    "sha256": "d9ad93827805c1ed53cac6d84bf43d4cb87e7b2bb8bc917c4bf84dca3da52ff1",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-17",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
+  },
+  "## T18 - an arbiter's fix landed, settled and its task ticked in one command (amendment 5, FR-018)": {
+   "sha256": "d939ab716410f093dfc04dff11f3f8b65372febefeec2bb0fc271fa7dfec5cbc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "round-arbiter"
   }
  },
  "reviewed": "2026-10-17",
@@ -1999,6 +1999,30 @@
      "summary": "make ledger-owed WRITE= appends each owed row filled from the agent's reply; push-check and hook refusals name it; a hand-worded row is still allowed.",
      "class": "within",
      "why": "Matches FR-019 (accepted), which carries the GM's approved item 3. The hand route left open does not weaken the refusal, which now names the command."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Landing",
+    "## T17 - the make-targets page checked on every route (amendment 5, FR-017)",
+    "## T18 - an arbiter's fix landed, settled and its task ticked in one command (amendment 5, FR-018)",
+    "## T19 - a ledger row written from the record (amendment 5, FR-019)",
+    "### T17 Approach (checklist part A)",
+    "### T17 Decisions",
+    "### T18 Approach (checklist part A)",
+    "### T18 Decisions",
+    "### T19 Approach (checklist part A)",
+    "### T19 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:385-approach-checklist#T17@3",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
   }

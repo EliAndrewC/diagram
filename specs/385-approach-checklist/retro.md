@@ -337,3 +337,8 @@ Settled by T18's one command - its first use.
 
 **Which checklist items fired.** A9's one goal kept the three apart (three tasks, not one). B did not fire. The plan review found
 the same miss twice (a two-step leftover) - the arbiter's ruling names it as wording, which the tests settle.
+
+**A defect in T16, found by its first firing.** The cap's `accept` closed T17's plan review, but nothing made it the plan's verdict,
+so `make tick` refused for want of a CLEAR - a deadlock. Fixed (feature 379's rule for spec reviews, applied to plans): recording an
+`accept` or `process-fault` on a `round:spec-fidelity|plan:` trigger records the owed blocks CLEAR at their digest, declared
+`round-arbiter`; `make plan-verdict F=<n> ARBITER=<trigger>` applies one already recorded (`tests/tooling/test_plan_arbiter_accept.py`).

@@ -597,6 +597,13 @@ def main(argv: list[str]) -> int:
         print(f"arbiter-ruled: {row['trigger']} - {row['ruling']} (binding; recorded in arbiter.jsonl and for the GM's review)")
         # GUARD_EDIT_OK: feature 385 T02, plan D9 - an hour or red-gate ruling owes the task's part B answered (nothing loosened)
         owed = _approach().ruled(root, row["trigger"])
+        if row["trigger"].startswith("round:spec-fidelity|plan:") and row["ruling"] in ("accept", "process-fault"):  # feature 385 T16
+            d = feature_dir(root)
+            if d is not None:
+                sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "gates"))
+                import plan_gate  # noqa: PLC0415
+
+                print(f"arbiter-ruled: {len(plan_gate.arbiter_accept(d, row['trigger']))} plan block(s) recorded CLEAR - the accept is the plan's verdict")
         if owed:
             print(owed)
         return 0
