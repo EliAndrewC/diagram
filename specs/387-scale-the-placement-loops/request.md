@@ -56,3 +56,30 @@ SEED=4 STAGE=<stage> HOUSEHOLDS=40`):
 > please file a feature for this and then make it happen.
 
 ("No thanks" declines rendering the 40-household scaling legs; "the limitation" is the hamlet band of 10-20 households.)
+
+## Amendment 1 - the GM, 2026-10-18 (verbatim)
+
+> I don't need the maps to be identical.  It's okay if maps change to make things faster, so long as they remain compatible
+> with our research.
+>
+> I do therefore want you to do this:
+> >  - Missed field-cell neighbors. The search can't see a cell that was split after a merge. That happened in 42 of 502
+> >  searches on one 40-household seed, 20 of 160 and 10 of 126 on two others, and never at 15 households. Fixing it would
+> >  allow merges the old code never made and change maps, so I left it for you to decide.
+>
+> Please also fix this:
+> > The biggest 40-household cost now comes from another session's work. The well placement that landed on main today takes
+> > 10–43 s per 40-household roll (it was zero before). It checks every candidate well against every house, about 6.8 million
+> > times on one seed. Placing buildings also rose from 0.02 s to about 3.5 s
+>
+> You can amend the current feature to rewrite the spec to allow maps to change so long as we're conformant to our research,
+> and then mkake these changes as part of the same feature.
+
+("Placing buildings" is the `appurtenances` stage; its rise is the same well seating (`seat_wells`), which seats the cluster's
+wells there and the lane-side wells in `stage_lane_wells` - measured 2026-10-18 by `make perf-profile SEED=25 STAGE=appurtenances
+HOUSEHOLDS=40`.)
+
+## Amendment 1, continued - the GM, 2026-10-18 (verbatim, mid-turn)
+
+> We should also update our project guidelines and checklists and such to explain that **anytime** we are trying to make things
+> faster, it's **always** okay for maps to change, so long as the changes don't violate our research findings.

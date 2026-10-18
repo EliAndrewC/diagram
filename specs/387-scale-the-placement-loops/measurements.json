@@ -191,6 +191,84 @@
    }
   }
  },
+ "m:counts-wells-after": {
+  "command": "make perf-profile SEED=4 STAGE=<stage> HOUSEHOLDS=<10|20|40>; /diagram/.clones/diagram-unit-tests/specs/387-scale-the-placement-loops/count_work.py /diagram/.clones/diagram-unit-tests/specs/387-scale-the-placement-loops/counts-wells-after m:counts-wells-after",
+  "counts": {
+   "appurtenances": {
+    "10": {
+     "hypot_one_at_a_time": 59424,
+     "seat_sweeps": 1,
+     "wall_measures": 4433
+    },
+    "20": {
+     "hypot_one_at_a_time": 68533,
+     "seat_sweeps": 1,
+     "wall_measures": 3286
+    },
+    "40": {
+     "hypot_one_at_a_time": 170776,
+     "seat_sweeps": 1,
+     "wall_measures": 7174
+    }
+   },
+   "lane_wells": {
+    "10": {
+     "hypot_one_at_a_time": 60,
+     "seat_sweeps": 0,
+     "wall_measures": 0
+    },
+    "20": {
+     "hypot_one_at_a_time": 648474,
+     "seat_sweeps": 2,
+     "wall_measures": 24795
+    },
+    "40": {
+     "hypot_one_at_a_time": 1132550,
+     "seat_sweeps": 2,
+     "wall_measures": 27492
+    }
+   }
+  }
+ },
+ "m:counts-wells-before": {
+  "command": "make perf-profile SEED=4 STAGE=<stage> HOUSEHOLDS=<10|20|40>; /diagram/.clones/diagram-unit-tests/specs/387-scale-the-placement-loops/count_work.py /diagram/.clones/diagram-unit-tests/specs/387-scale-the-placement-loops/counts-wells-before m:counts-wells-before",
+  "counts": {
+   "appurtenances": {
+    "10": {
+     "hypot_one_at_a_time": 395449,
+     "seat_sweeps": 1,
+     "wall_measures": 38710
+    },
+    "20": {
+     "hypot_one_at_a_time": 673207,
+     "seat_sweeps": 1,
+     "wall_measures": 51180
+    },
+    "40": {
+     "hypot_one_at_a_time": 5929872,
+     "seat_sweeps": 1,
+     "wall_measures": 228800
+    }
+   },
+   "lane_wells": {
+    "10": {
+     "hypot_one_at_a_time": 60,
+     "seat_sweeps": 0,
+     "wall_measures": 0
+    },
+    "20": {
+     "hypot_one_at_a_time": 4467548,
+     "seat_sweeps": 2,
+     "wall_measures": 405380
+    },
+    "40": {
+     "hypot_one_at_a_time": 10010520,
+     "seat_sweeps": 2,
+     "wall_measures": 886600
+    }
+   }
+  }
+ },
  "m:five-stages-ab": {
   "command": "make perf LABEL=387-end SCALING=1 (clone), then make perf SCALING=1 in a detached worktree at 0910936e4 (before any engine edit), back to back; the five changed stages summed per roll, mean of seeds 4/25/39/47; timing/base-0910936e4.json and dev/perf-log/*387-end*.json",
   "date": "2026-10-18",
@@ -244,6 +322,77 @@
     13.54,
     12.16
    ]
+  }
+ },
+ "m:fresh-ab": {
+  "command": "the landing cohort's fresh block (seeds 52791-52838) on 387 amendment 1's engine (dev/cohort-log/20261018T133350Z-diagram-unit-tests-3919855.json), then make cohort N=48 SEED=52791 FRESH=0 on origin/main 2fb29542e in a detached worktree",
+  "date": "2026-10-18",
+  "failed": {
+   "amendment_1": 9,
+   "main": 10
+  },
+  "kinds": {
+   "amendment_1": {
+    "lane_knots": 7,
+    "refused": 2
+   },
+   "main": {
+    "lane_knots": 8,
+    "refused:WebRefused": 2
+   }
+  }
+ },
+ "m:wells-ab": {
+  "command": "make perf LABEL=387-end SCALING=1 (clone, 3a4dc87ab), then make perf SCALING=1 in a detached worktree at origin/main 46f2d1f09, back to back; timing/base-46f2d1f09.json and dev/perf-log/*387-end*.json",
+  "date": "2026-10-18",
+  "load_start": {
+   "base": 1.6,
+   "new": 3.31
+  },
+  "note": "the other stages unchanged within noise (homesteads 4.51 -> 4.46 at 40); the 40-household roll's mean 30.7 -> 15.1 s",
+  "seconds_40_by_seed_4_25_39_47": {
+   "base": [
+    28.1,
+    57.3,
+    21.2,
+    16.1
+   ],
+   "new": [
+    17.0,
+    17.6,
+    12.2,
+    13.4
+   ]
+  },
+  "stage_means_base_new": {
+   "appurtenances": {
+    "10": [
+     0.49,
+     0.17
+    ],
+    "20": [
+     0.52,
+     0.13
+    ],
+    "40": [
+     2.94,
+     0.3
+    ]
+   },
+   "lane_wells": {
+    "10": [
+     0.3,
+     0.09
+    ],
+    "20": [
+     2.38,
+     0.49
+    ],
+    "40": [
+     15.14,
+     2.15
+    ]
+   }
   }
  }
 }

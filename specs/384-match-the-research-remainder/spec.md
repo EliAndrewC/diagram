@@ -118,6 +118,9 @@ fixed, not escaped).
   - `ways/corridors.field_runs#over the brook at a ford` DRIFTED: the field runs are ranked by length with no charge for a crossing
     (0035: "the maps charge a crossing as that much extra walk", about 150 ft), and a run whose far landing finds no run-on is offered
     straight across the brook (the crossing rule cuts it later; `_run_from`'s UNRESEARCHED claim).
+  - `homesteads/wells.seat_wells#not in the windbreak` DRIFTED (387 amendment 1's impl-drift): a belt seat is ranked behind the
+    worst-served walk, so it is taken when it gains a bucket; 0072 says a wellhead in the belt removes the clumps round it, "so it
+    holds there as written". Refuse belt seats, or have the page record the preference.
 - **The GM's open question from 374**: whether the three hand-drawn magistracy sheets can be redrawn as smaller compounds
   around a 49-67 tsubo residence (the session's recommendation: yes).
 

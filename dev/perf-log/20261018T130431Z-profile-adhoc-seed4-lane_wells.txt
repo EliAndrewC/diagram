@@ -1,0 +1,36 @@
+perf-profile seed 4 stage lane_wells: 3.6s under cProfile (the stages before it took 11.2s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261018T130431Z-seed4-lane_wells.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         8089938 function calls (7957448 primitive calls) in 3.611 seconds
+
+   Ordered by: cumulative time
+   List reduced from 221 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    3.628    3.628 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/wells.py:708(stage_lane_wells)
+        1    0.004    0.004    3.627    3.627 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/wells.py:743(reach_wells)
+        2    0.019    0.009    3.618    1.809 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/wells.py:384(seat_wells)
+     2655    0.010    0.000    1.076    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/shrines_wells/wells.py:225(well_at)
+        3    0.124    0.041    1.062    0.354 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/well_seats.py:41(seats)
+823799/691309    0.294    0.000    1.003    0.000 {built-in method builtins.min}
+        3    0.003    0.001    0.686    0.229 {method 'sort' of 'list' objects}
+     4597    0.009    0.000    0.682    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/wells.py:641(_key)
+   387258    0.202    0.000    0.645    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/_geom/primitives.py:54(seg_dist)
+        2    0.002    0.001    0.553    0.276 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/hinterland/belt.py:201(belt_polygon)
+     4600    0.100    0.000    0.550    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/wells.py:142(most_served_after)
+    22165    0.016    0.000    0.486    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/shrines_wells/wells.py:36(well_gap_to_dwellings)
+     2655    0.002    0.000    0.482    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/core.py:341(admits)
+     2655    0.004    0.000    0.480    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/overlap/registry.py:312(admits)
+     2657    0.043    0.000    0.476    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/overlap/registry.py:262(conflicts)
+      510    0.003    0.000    0.471    0.001 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/houses.py:308(_fits)
+    49657    0.044    0.000    0.454    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/shrines_wells/wells.py:47(<genexpr>)
+      510    0.004    0.000    0.409    0.001 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/houses.py:247(_on_a_tread)
+    13609    0.035    0.000    0.404    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/houses.py:279(<genexpr>)
+   387258    0.271    0.000    0.384    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/_geom/primitives.py:45(seg_closest)
+    19862    0.012    0.000    0.370    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/wells.py:499(<lambda>)
+   161771    0.101    0.000    0.367    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/houses.py:280(<genexpr>)
+    27492    0.030    0.000    0.342    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/_geom/overlap.py:137(point_quad_dist)
+        2    0.014    0.007    0.324    0.162 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/hinterland/belt.py:361(fouled)
+   113768    0.056    0.000    0.310    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/hinterland/belt.py:362(<genexpr>)
+
+

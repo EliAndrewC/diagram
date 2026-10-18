@@ -120,3 +120,18 @@ This report took 0.8 s to build; its own runs are the `make feature-report` rows
   (0 before), the same unindexed shape - each candidate well measured against every dwelling, 6.8 million times on seed 25 - and
   appurtenances went 0.02 -> 3.3-3.8 s. And the soak tier's village determinism test fails on main (13 of 18 households seated),
   carried to feature 380.
+
+## Amendment 1 (the GM, 2026-10-18): maps may change where the research holds
+
+- **The well seating, fixed.** At 40 households the whole roll went 30.7 -> 15.1 s (mean of seeds 4/25/39/47; seed 25 57.3 -> 17.6 s):
+  the lane-side wells 15.1 -> 2.2 s and the appurtenances 2.9 -> 0.3 s, timed back to back with main's engine (`m:wells-ab`). Each
+  candidate seat is answered from one distance array a call, the walls of the houses near it, a vectorized pair look ahead, a crop
+  box per well landed and an index of the lane legs (`homesteads/well_seats.py`); one-at-a-time house distances 10.0 million ->
+  1.1 million (`m:counts-wells-*`).
+- **The missed field-cell neighbors, fixed.** The merges now find a cell a split made after the index was built; the soak counts
+  0 missed on every roll (was 42/502, 20/160, 10/126). Sawada's paddy cells moved; every pool map passes its gate.
+- **Maps moved and the research holds**: cohort 16/16, landing cohort 54/54; its fresh block failed 9 of 48 against 10 of 48 for
+  the same seeds on main (`m:fresh-ab`: lane knots and WebRefused, feature 385's).
+- **The guidelines say it**: the constitution (Principle X clause 15, v2.31.0), the root and engine CLAUDE.md, dev/performance.md,
+  docs/efficiency-tooling.md, the spec and plan templates and the speckit-specify checklist - a permission, not a ban.
+- **Carried to 384 from amendment 1's impl-drift**: the wells' belt preference (0072 says a wellhead in the belt holds as written).

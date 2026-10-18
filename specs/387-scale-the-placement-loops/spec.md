@@ -4,9 +4,11 @@
 
 **Created**: 2026-10-18
 
-**Status**: Done 2026-10-18 - T01-T07 ticked; make done green; landing cohort 54/54 (fresh 6 of 48); spec accepted by the round arbiter at its round cap, plan CLEAR; FR-004 withdrawn as measured. SC-001 met for the tree, the field way and the knots; NOT met for the merges (3.2 / 3.1 / 7.6 bund measures a merge at 10 / 20 / 40 households, `m:counts-after`): the remaining measures are of cells the merge changed, which a bigger cluster has more of - no exact way found to skip them. Time bought: -10% on the five stages at 40 households (`m:five-stages-ab`)
+**Status**: Done 2026-10-18 - amendment 1 landed: T08-T12 ticked, make done green, landing cohort 54/54 (fresh 9 of 48 against main's 10 on the same seeds, `m:fresh-ab`); the 40-household roll 30.7 -> 15.1 s (`m:wells-ab`); spec FAITHFUL (amendment 1 round 3)
 
 **Approved**: the GM, 2026-10-18, "I don't think we need to re-check everything after each addition, and you've already proposed fixes for the others, so please file a feature for this and then make it happen."
+
+**Amendment 1 approved**: the GM, 2026-10-18, "You can amend the current feature to rewrite the spec to allow maps to change so long as we're conformant to our research, and then mkake these changes as part of the same feature."
 
 **Affects**: hamlet
 
@@ -89,8 +91,8 @@ where a premise did not hold, the requirement below is the form of that goal the
   round 1, measured 2026-10-18: 3.3 shared-bund measurements per merge at 10 households, 15.7 at 40; 2.06 s of the merges'
   3.80 s), which queries an index of the cells built before any merge and measures the shared bund of every stale entry before
   duplicates are dropped. A merge measures each live neighbor once, so the bund measurements per merge do not grow with the
-  household count. The index is NOT made current: a cell a staircase split makes is one it never held, so indexing it would find
-  merges the current code cannot and move maps against FR-007 - recorded as a defect found and reported (SC-005).
+  household count. The index was not made current here (a cell a staircase split makes is one it never held) - recorded as a defect
+  found and reported (SC-005), and fixed by amendment 1 (FR-011).
 - **FR-004 The house layout geometry - withdrawn as measured.** The layout is already built once for the inputs it depends on:
   its template is cached on a key that includes the seat it is asked at (`bundle._bundle_template`), and the rest of
   `_bundle_geom` (the turn, the turned boxes, the persimmon) depends on that position - so each reach check is a different
@@ -102,10 +104,30 @@ where a premise did not hold, the requirement below is the form of that goal the
   answered from a spatial index of them, not a filter over all.
 - **FR-006 The bamboo strip check.** A candidate strip asks spatial indexes, built once per pass and kept current as things
   are placed, for what stands near it; the verdict equals the straight scan's.
-- **FR-007 Equivalence first (this governs FR-001 - FR-006).** Each change is proved verdict-equivalent to the code it replaces - by a test that runs both on
-  the same inputs - unless it cannot be; a change that alters an answer says so at the point of change and in the plan, and the
-  maps it moves are judged against the rules (cohort, pool hamlets), never byte-identity (`l7r/diagram/CLAUDE.md`,
-  "Performance").
+- **FR-007 Held to the research, not to the old maps (amendment 1; this governs FR-001 - FR-012).** The GM, 2026-10-18: *"It's
+  okay if maps change to make things faster, so long as they remain compatible with our research."* A change that keeps the old
+  answers is proved so by a test that runs the old form and the new on the same inputs (FR-001 - FR-006, as landed); a change
+  that alters an answer (FR-011, FR-012) says what it changes at the point of change and in the plan, keeps every research
+  claim of the code it touches in step (impl-drift), and the maps it moves are judged against the rules - the cohort, the
+  landing cohort, the pool hamlets' gate and the review checks their occasions owe - never byte-identity.
+- **FR-011 The merges find every live neighbor (amendment 1).** A cell made by a staircase split after a merge is a neighbor the
+  merge's search can find: the search's index is kept current as cells are added, so a failing cell may merge into a split part
+  (the defect FR-003 recorded: 42 of 502 searches at 40 households, seed 4, `soak/40-4.json` as committed at `48043550d`). Merges the old code could not
+  make are allowed; every merged basin keeps the ring rules (`verdict`) as before.
+- **FR-012 The well seating scales (amendment 1).** `wells.seat_wells`, which seats the cluster's wells in the appurtenances
+  stage and the lane-side wells after the web, costs 10-43 s a 40-household roll (`m:five-stages-ab`'s note; profile 2026-10-18:
+  6.8 million house distances on seed 25). Each candidate seat's questions - its nearest houses, its gap to a dwelling's wall,
+  the pair look-ahead's households per well, a lane's verge - are answered from what is near it or computed once per pass, not
+  by walking every house or lane per seat. The seats chosen may change; each well still keeps 0196's and 0072's rules as its
+  claims state (among the dwellings, a wall within the seat gap, no well serving more than ten where a seat avoids it, not in
+  the belt, not past the crop).
+- **FR-013 The guidelines say it (amendment 1).** The GM, 2026-10-18: *"We should also update our project guidelines and
+  checklists and such to explain that **anytime** we are trying to make things faster, it's **always** okay for maps to change,
+  so long as the changes don't violate our research findings."* The constitution (Principle X clause 15, whose "maps may move"
+  covered only a placer, fill or scatter, widened to every change made for speed), the root `CLAUDE.md`, the engine's dev loop,
+  `dev/performance.md`, `docs/efficiency-tooling.md`, the spec and plan templates and the spec-quality checklist
+  (`speckit-specify`) say so - the GM's permission, not a prohibition: a speed change MAY move maps; a feature whose correctness
+  is identity (a cache) may still require it.
 - **FR-008 No rule loosened.** No check is removed, coarsened, sampled or given a wider tolerance to buy speed
   (`dev/performance.md`: a slow check is INDEXED, never coarsened).
 - **FR-009 Measured.** Bookends `make perf LABEL=387-start SCALING=1` before the first engine edit and `-end` after the last,
@@ -121,6 +143,7 @@ where a premise did not hold, the requirement below is the form of that goal the
 - Hot spots the three bullets did not name (the commons byres' clearance checks, open-ground patches, grove index inserts): noted
   in the report as the next candidates, not changed here.
 - The memory trades in `dev/performance.md` "Time traded for memory" are not undone.
+- (Amendment 1) The village roll's seating (feature 380's carried item) and the two behaviors carried to 384 stay where they are.
 
 ## Success criteria
 
@@ -138,6 +161,15 @@ where a premise did not hold, the requirement below is the form of that goal the
 - **SC-005** (FR-002, FR-003, FR-004) The landing report to the GM names FR-004 as withdrawn, with its measurement and 297 R9,
   says that FR-002's and FR-003's premises were restated from the diagnosis the GM approved, each with what was measured, and names FR-003's
   split-part defect.
+
+- **SC-006** (FR-011) The merges' neighbor search finds the split parts the soak counted (`neighbors_missing_a_split_part` 0 on
+  the four 40-household rolls), and every kept basin passes `verdict`.
+- **SC-007** (FR-012) At 40 households, seeds 4 / 25 / 39 / 47, the `appurtenances` and `lane_wells` stages' wall time is
+  reported before and after, timed back to back; and the house distances and wall measures the seating computes one at a time
+  in Python (counted at 10 / 20 / 40 households) fall - the rest asked of the houses near a seat or as one array a call.
+- **SC-009** (FR-013) Each named document, the constitution among them, carries the GM's 2026-10-18 words.
+- **SC-008** (FR-007, FR-011, FR-012) `make cohort`, the landing cohort and `make maps` pass with the maps moved; the moved
+  pool maps are committed; no seed newly fails against main.
 
 ## Assumptions
 
@@ -174,3 +206,13 @@ where a premise did not hold, the requirement below is the form of that goal the
 - **round-arbiter (2026-10-18), trigger round:spec-fidelity|387-scale-the-placement-loops#1@6: ACCEPT** - the review converged
   (4, 3, 3, 2, 1 items, none repeated, round 5's a stale task line, applied); the spec stands as round 5 left it. Its tooling fix
   (the arbiter bundle carries each round's verdict file with each finding marked) is an open item of this feature.
+- **spec-fidelity, amendment 1, first reading (2026-10-18): CHANGES REQUIRED, 2 items.** (1) `spec-lint` check 7 was
+  UNREQUESTED - the GM asked the guidelines to explain the rule, and a guard flagging identical output would refuse a cache
+  feature whose correctness is byte-identity: dropped from FR-013, SC-009, the code and the documents. (2) The constitution was
+  MISSING from FR-013: Principle X clause 15 widened (v2.31.0). With them, SC-007's count restated: the matrix still measures
+  each seat against every house, in one array call, so the count is of the one-at-a-time Python measures.
+- **spec-fidelity, amendment 1, round 2 (2026-10-18): CHANGES REQUIRED, 1 item** - the documents had turned the permission into a
+  ban ("never a requirement", "never write ... identical maps") in five places, the constitution among them: each now says a speed
+  change MAY move maps; FR-013 says "the GM's permission, not a prohibition"; the session's own account taken out of them.
+- **spec-fidelity, amendment 1, round 3 (2026-10-18): FAITHFUL.** Its asides taken: FR-011's figure pinned to `48043550d`, the
+  soak's files committed, `dev/performance.md`'s section told that amendment 1 moves maps.

@@ -268,6 +268,11 @@ The machinery in one picture, with the GM's rulings and the measurements: `docs/
   the record (`make audit`, `scripts/measure/gatecost.py <target>`), never written here.
 - `make done` reports every failure together: fix them all, re-run once. Background the final gate
   and act on its notification; never poll.
+- **Speed work may ALWAYS change maps** (the GM, 2026-10-18: *"anytime we are trying to make things faster, it's always okay
+  for maps to change, so long as the changes don't violate our research findings"*; earlier 2026-09-30, feature 297). A faster
+  placer that decides differently is held to the rules and the research claims - the cohort, the landing cohort, the gate,
+  impl-drift on the code it touched - rather than to identical output; an equivalence test is needed only where an answer is
+  kept on purpose.
 - Python: ruff, ruff format, pyrefly, and 100% coverage owed by everything the day it lands, held as a
   floor on the gate (never `fail_under` in `pyproject.toml`). An inner function that is hard to test
   is lifted to module level and tested with plain inputs; dropping the test is not an option. A

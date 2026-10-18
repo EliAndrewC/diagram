@@ -12,7 +12,8 @@ The GM, 2026-09-30 (feature 297): *"it is perfectly acceptable for maps to chang
 They do NOT need to remain identical in output"*, and *"if anything in our project guidelines says that maps can't change
 when making optimizations then we should strike it and say the opposite."* Earlier the same: *"It is absolutely not
 required that the changes ... result in bite identical output"* (feature 218) and *"I even prefer it if it gets us
-performance benefits"* (feature 284).
+performance benefits"* (feature 284). And again, 2026-10-18 (feature 387): *"anytime we are trying to make things faster, it's always okay for maps to change,
+so long as the changes don't violate our research findings."*
 
 So a placer, a fill or a scatter may be rebuilt in a faster form that DECIDES differently - a coarser lattice, a
 conservative raster of the blocked ground, candidates proposed from a region instead of refused one by one, a different
@@ -405,6 +406,12 @@ asking both (`tests/soak/test_scale_equivalence_387.py`); the pool regenerated b
   a cluster that absorbed a cell is a new polygon, and a bigger cluster has a longer edge - new pairs, not re-checks. The house
   layout geometry was NOT built once per household: it is a different layout at each seat, and keying it per household was tried
   and withdrawn (297 R9) - the diagnosis was wrong there, recorded in the spec's premises table.
+- **Amendment 1 (the GM: maps may change where the research holds) moved maps and bought the time.** The merges now find a split
+  part (Sawada's paddy cells moved; no split part missed in the soak), and the well seating answers each seat from one distance
+  array per call, the near houses' walls, a vectorized pair look ahead, a crop box per well landed and an index of the lane legs:
+  at 40 households the lane-side wells 15.1 -> 2.2 s and the appurtenances 2.9 -> 0.3 s (means of four seeds), the whole roll
+  30.7 -> 15.1 s, seed 25 57.3 -> 17.6 s (`m:wells-ab`, timed back to back); one-at-a-time house distances 10.0 million -> 1.1
+  million in the lane wells (`m:counts-wells-*`).
 - **And what it bought in time: little.** The five stages at 40 households, summed and averaged over the four seeds, went 13.5 ->
   12.2 s (-10%), unchanged at 10-20 (`m:five-stages-ab`, the end bookend and the engine before it timed back to back). The counts
   fell 5-20 fold and the seconds did not follow: the loops the diagnosis read off cProfile were a small part of each stage's wall

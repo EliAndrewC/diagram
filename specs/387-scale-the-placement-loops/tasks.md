@@ -5,7 +5,9 @@ Every task changes how a verdict is computed, not what is drawn or where: nothin
 
 ## Occasions
 
-- none: no glyph, caption or placement rule changes - each site keeps the old verdicts, proved call by call by its equivalence
+- none: amendment 1 moves maps but changes no rule - the merges keep `verdict` and may now find a split part as a partner; the
+  wells keep every 0196/0072 rule and are found by a cheaper search - so no element is re-placed by substantially different rules
+- none (as landed before amendment 1): no glyph, caption or placement rule changes - each site keeps the old verdicts, proved call by call by its equivalence
   test; a map that moves anyway is judged by the cohort and the gate (FR-007), and its move named in the report
 
 ## Tasks
@@ -31,6 +33,21 @@ Every task changes how a verdict is computed, not what is drawn or where: nothin
 - [x] T07 Land (SC-003, SC-005): `make cohort-landing`, the gated push, the feature report; the landing report carries FR-004's withdrawal (measurement, 297 R9), FR-002's and FR-003's restated premises with what was measured, and FR-003's split-part defect with its frequency
       research: rendering
       verify: DONE. landing cohort on this engine: 54/54 (dev/cohort-log/20261018T121355Z, fresh 6 of 48); report.md written with the GM's section (SC-005); the gated push follows
+- [x] T08 (amendment 1) The merges find every live neighbor (plan T08, D8; FR-011): the neighbor index kept current as split parts are added; the split-part count 0 in the soak; every kept basin passes `verdict`; unit test red before
+      research: rendering
+      verify: DONE. Fabric.late keeps the cells added after the index and neighbors asks them by box; unit test red without it; soak: split parts missed 0 on 15-4, 40-4, 40-25, 40-39, 40-47 (was 42/502, 20/160, 10/126); Sawada's paddy cells moved, pool gate clean; cohort 16/16
+- [x] T09 (amendment 1) The well seating scales (plan T09, D9; FR-012): each candidate seat's nearest houses, wall gap, pair look-ahead and verge answered from what is near it or once a pass; tests against the old forms where the answer is kept
+      research: rendering
+      verify: DONE. well_seats.SeatSweep (one distance array a call, the wall gap of the near houses), PairAhead (vectorized look ahead, the old pair_keeps_ten the test's oracle), the crop box once a well landed, the verge legs indexed, numpy loaded at seat time; tests against the old forms (test_well_seats_387, 300-seed sweep); lane_wells 15.1 -> 2.2 s, appurtenances 2.9 -> 0.3 s at 40 hh (m:wells-ab); claims IN-STEP or relabeled, the belt drift carried to 384; make done green
+- [x] T12 (amendment 1) The guidelines and checklists say speed may always change maps (plan T12; FR-013): the constitution (Principle X clause 15, v2.31.0), root CLAUDE.md, the engine's dev loop, dev/performance.md, docs/efficiency-tooling.md, the spec and plan templates, the speckit-specify checklist
+      research: rendering
+      verify: DONE. the GM's 2026-10-18 permission in the constitution (Principle X clause 15, v2.31.0), root CLAUDE.md, l7r/diagram/CLAUDE.md, dev/performance.md, docs/efficiency-tooling.md, the spec and plan templates and the speckit-specify checklist - a permission, not a ban; spec FAITHFUL round 3
+- [x] T10 (amendment 1) Measure, sweep and record (plan T10; SC-006 - SC-008): the counts and the two well stages' time before/after, the soak, `make cohort`, `make maps` (moved maps committed), `make done`, `dev/performance.md`
+      research: rendering
+      verify: DONE. counts (m:counts-wells-*: lane_wells one-at-a-time distances 10.0M -> 1.1M, wall measures 886,600 -> 27,492 at 40 hh); soak green, split parts missed 0; cohort 16/16; make maps clean, Sawada moved and committed; end bookend and main's engine back to back (m:wells-ab: 40-hh roll 30.7 -> 15.1 s); dev/performance.md; make done green
+- [x] T11 (amendment 1) Land: the claims of the touched code re-judged, the landing cohort, the gated push, the report
+      research: rendering
+      verify: DONE. claims judged (impl-drift: 23 + 7 + 1, relabeled where owed, the belt drift carried to 384); landing cohort 54/54 (dev/cohort-log/20261018T133350Z), fresh 9/48 vs main 10/48 on the same seeds; report updated; the gated push follows
 - [ ] GM review (make gm-reviewed F=387) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

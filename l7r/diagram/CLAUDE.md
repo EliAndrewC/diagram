@@ -124,8 +124,9 @@ re-running a generator; a diagnostic that restates what it observes will lie to 
 
 - Every slow gen profiled here was *a per-candidate scan of geometry that does not change during the scan*: build the
   blocked ground ONCE (`PointGrid` / `RingIndex` / `KeepoutGrid`) and ask it per candidate (constitution X clause 15).
-- **Maps may change for speed** (GM 2026-09-30: *"They do NOT need to remain identical in output"*), held to the rules,
-  never to byte-identity. A slow CHECK is INDEXED, never coarsened. Trust the A/B against HEAD, not cProfile's seconds.
+- **Maps may ALWAYS change for speed** (GM 2026-09-30: *"They do NOT need to remain identical in output"*; 2026-10-18:
+  *"anytime we are trying to make things faster, it's always okay for maps to change, so long as the changes don't violate
+  our research findings"*), held to the rules and the research claims, rather than to byte-identity. A slow CHECK is INDEXED, never coarsened. Trust the A/B against HEAD, not cProfile's seconds.
 - **Some slowness is bought memory** (GM 2026-10-05): read `dev/performance.md` "Time traded for memory" before
   undoing one; the RAM each undo costs goes to the GM.
 

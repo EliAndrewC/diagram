@@ -164,12 +164,62 @@ index the scan (feature 387)" with each site's before/after. A seed newly failin
 carries (SC-005): FR-004 withdrawn, with its measurement and 297 R9; FR-002's and FR-003's premises restated from the approved
 diagnosis, each with what was measured; FR-003's split-part defect, with D3's measurement of how often it occurs.
 
+## Amendment 1 (the GM, 2026-10-18): maps may change where the research holds
+
+FR-007 now holds every change to the research, not to the old maps. T01-T07 stand as landed (their equivalence tests prove
+answers kept); the two changes below move maps, each named at its point of change, judged by the cohort, the landing cohort,
+the pool hamlets' gate and impl-drift on the code it touches.
+
+## T08 - the merges find every live neighbor (FR-011)
+
+**D8 - the cells added after the index are kept and asked by their box.** `Fabric.__init__` builds its STRtree once; `add` after
+that appends the new id to `late` (a staircase split's parts are the only cells added then). `neighbors` takes, beside the
+index's live owners, every `late` cell's live owner whose bounds meet the query box (`me.buffer(0.2).bounds`), then measures each
+once as before. A failing cell may now merge into a split part; the union is judged by `verdict` as every union is. `late` stays
+small (splits after a merge are rare), so a box test over it is cheaper than rebuilding the STRtree. **Proved**: a unit test with
+a cell added after the index (red without `late`); the soak's neighbor oracle becomes "the old neighbors are among the new, in
+the old order", and its split-part count must read 0 on the four 40-household rolls (SC-006).
+
+## T09 - the well seating scales (FR-012)
+
+**D9 - each seat's questions answered for the lattice at once, or once a pass.** In `wells.seat_wells`: (a) the lattice's
+distances to every house are one numpy array per call (`well_seats.SeatSweep`), read by every rung - the rung's `want_near`-th
+nearest house (`np.partition`), the nearest; the ranking's neighborhood tie-break reads the same value instead of sorting the
+houses per seat; (b) the wall gap (`well_gap_to_dwellings`) is asked of the houses whose centers stand within the seat gap plus
+the widest half-diagonal - a house farther has its wall farther than the gap, so the `<= gap` verdict is the same; (c) the first
+well's pair look ahead counts each household's nearer well for every second seat in one array operation (`PairAhead`, the
+first well on a tie, as `min` took it) - the old `pair_keeps_ten` becomes the test's oracle and its claims move to
+`PairAhead.keeps_ten`; (d) the crop's box is taken once per well landed, not once per seat popped (`crop_box`, `extent_past`);
+(e) the lane-side verge test asks a `PointGrid` of the lane legs, each padded by its half-width and the reach. numpy's distance
+may round a threshold seat differently from `math.hypot` in the last place - a map may move there (FR-007). **Proved**: unit
+tests against the old forms on random hamlets (`test_well_seats_387.py`); the cohort and the pool for the moved maps.
+**Measured**: `lane_wells` on seed 25 at 40 households 132.6 -> 15.6 s under cProfile (2026-10-18); T10 times it unprofiled.
+
+## T12 - the guidelines say it (FR-013)
+
+The GM's 2026-10-18 words go into the constitution (Principle X clause 15 widened from a placer, fill or scatter to every change
+made for speed, v2.31.0, MINOR), the root `CLAUDE.md` (Verification and iteration), `l7r/diagram/CLAUDE.md` (Performance),
+`dev/performance.md` ("Maps may change for speed"), `docs/efficiency-tooling.md`, the spec template's success criteria, the plan
+template's performance bookends and the speckit-specify quality checklist. No guard: the GM asked for the guidelines to say it.
+
+## T10 - measure (SC-006 - SC-009)
+
+The soak (the split-part count 0); the two well stages timed before and after at 40 households, seeds 4/25/39/47, back to back;
+the house distances asked per seat at 10/20/40 households (counted); `make cohort`, `make maps` with the moved pool maps
+committed, `make done`, and the end bookend re-taken after the last engine edit (FR-009); `dev/performance.md`'s section gains
+the two.
+
+## T11 - land
+
+impl-drift on the touched code's claims, the landing cohort, the gated push, the report's section for the GM updated.
+
 ## Project Structure
 
 New: `l7r/diagram/hamletgen/ways/tree_base.py` (D1), `tests/hamletgen/ways/test_tree_base.py`, one equivalence test per site
 beside that site's tests, and `tests/soak/test_scale_equivalence_387.py` (the rolled shadow comparison). Changed: `ways/tree.py`, `ways/corridors.py`, `ways/knots.py`,
 `waterfields/settle.py`, `settlement/homestead_parts/keepouts.py`, `settlement/_geom/indexes.py` (`Indexed.touch`),
-`settlement/rolling/farmsteads.py` (the bump), `homesteads/bamboo.py`,
+`settlement/rolling/farmsteads.py` (the bump), `homesteads/bamboo.py`, `homesteads/wells.py` and the new
+`homesteads/well_seats.py` (amendment 1),
 `tests/conftest.py` (`L7R_CHECK_CACHES=1`).
 
 ## Complexity Tracking

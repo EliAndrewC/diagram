@@ -1,0 +1,20 @@
+perf-profile seed 4 stage appurtenances: 1.2s under cProfile (the stages before it took 1.5s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261018T130147Z-seed4-appurtenances.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         2907289 function calls (2701350 primitive calls) in 1.227 seconds
+
+   Ordered by: cumulative time
+   List reduced from 415 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    1.233    1.233 /tmp/claude-1000/-diagram/480a86f8-6911-4b06-8982-d9ead2656680/scratchpad/wt-wellbase/l7r/diagram/hamletgen/homesteads/stages.py:922(stage_appurtenances)
+        1    0.000    0.000    1.218    1.218 /tmp/claude-1000/-diagram/480a86f8-6911-4b06-8982-d9ead2656680/scratchpad/wt-wellbase/l7r/diagram/hamletgen/homesteads/wells.py:325(place_wells)
+        1    0.020    0.020    1.218    1.218 /tmp/claude-1000/-diagram/480a86f8-6911-4b06-8982-d9ead2656680/scratchpad/wt-wellbase/l7r/diagram/hamletgen/homesteads/wells.py:373(seat_wells)
+349737/143856    0.107    0.000    0.707    0.000 {built-in method builtins.min}
+     3871    0.003    0.000    0.640    0.000 /tmp/claude-1000/-diagram/480a86f8-6911-4b06-8982-d9ead2656680/scratchpad/wt-wellbase/l7r/diagram/settlement/shrines_wells/wells.py:36(well_gap_to_dwellings)
+    42581    0.054    0.000    0.628    0.000 /tmp/claude-1000/-diagram/480a86f8-6911-4b06-8982-d9ead2656680/scratchpad/wt-wellbase/l7r/diagram/settlement/shrines_wells/wells.py:47(<genexpr>)
+    38710    0.041    0.000    0.482    0.000 /tmp/claude-1000/-diagram/480a86f8-6911-4b06-8982-d9ead2656680/scratchpad/wt-wellbase/l7r/diagram/settlement/_geom/overlap.py:137(point_quad_dist)
+   253971    0.133    0.000    0.436    0.000 /tmp/claude-1000/-diagram/480a86f8-6911-4b06-8982-d9ead2656680/scratchpad/wt-wellbase/l7r/diagram/settlement/_geom/primitives.py:54(seg_dist)
+   192765    0.086    0.000    0.366  
+wrote dev/perf-log/20261018T130147Z-profile-adhoc-seed4-appurtenances.txt (4762 bytes)
+archived 20261018T130147Z-seed4-appurtenances.prof to https://github.com/EliAndrewC/mapgen-perflogs

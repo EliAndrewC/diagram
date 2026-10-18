@@ -166,6 +166,7 @@ Given that feature description, do this:
       - [ ] Focused on user value and business needs
       - [ ] Written for non-technical stakeholders
       - [ ] All mandatory sections completed
+      - [ ] A speed feature remembers maps MAY change: its requirements hold them to the research, not to identical output - unless identity is itself what is right (a cache) (the GM, 2026-10-18)
       
       ## Requirement Completeness
       
