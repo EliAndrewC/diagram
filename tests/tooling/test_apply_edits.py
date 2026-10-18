@@ -289,6 +289,19 @@ def test_another_checks_reply_settles_only_its_own_units(tmp_path) -> None:
     assert "record-format:0094" in _owed(d), "a quote-check round's edits never answer record-format"
 
 
+def test_a_reply_with_no_counts_line_says_its_units_stay_owed_and_how_to_settle_them(tmp_path, capsys) -> None:
+    """Feature 385 T10: three form replies saved with their EDIT blocks alone applied cleanly and settled nothing, silently."""
+    d, page = _repo(tmp_path)
+    _answer_now(d)
+    _apply(d, page, "The Russians built theirs at the border.", "The Russians built theirs.", reply="")
+    assert "record-format:0094" in _owed(d)
+    out = capsys.readouterr().out
+    assert "the reply names no check, so the units it answered stay owed" in out
+    assert "put the agent's counts line" in out and "at the top of the reply file and run this again" in out
+    _apply(d, page, "The Russians built theirs at the border.", "The Russians built theirs.")
+    assert "record-format:0094" not in _owed(d), "the same blocks, with the counts line, settle the unit"
+
+
 def test_the_checks_a_reply_answers_are_read_from_its_counts_line() -> None:
     ro = ae._sibling("record_owed")
     assert ro.reply_checks(REPLY) == ("record-format",)
