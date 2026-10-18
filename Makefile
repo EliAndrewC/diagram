@@ -898,6 +898,13 @@ test-file:      ## [tests] run test files whole, or a targeted subset   FILE=tes
 	@if [ -z "$(strip $(FILE))" ]; then echo "test-file: no FILE given - run \`make test-file FILE=tests/<path>\` (the variable is FILE, not F); \`make test-full\` runs every test" >&2; exit 2; fi
 	@L7R_TEST_DEPS=$${L7R_TEST_DEPS:-record} python3 -m pytest -p tests.tooling._test_deps -n $(XDIST_WORKERS) --dist worksteal -q --no-cov $(if $(K),-k "$(K)",) $(FILE) && $(STATE) green-local test-file
 
+sweep:          ## [tests] run a random-equivalence test over more seeds than its default, the file unchanged   FILE=tests/hamletgen/ways/test_web_counts.py SEEDS=2000
+##  FILE=<paths>  the test file(s) whose sweeps read `tests/_sweep.py`
+##  SEEDS=<n>     how many seeds each sweep takes (`L7R_SWEEP_SEEDS`)
+	@: "GUARD_EDIT_OK: the round arbiter's tooling fix on hour:387-scale-the-placement-loops@1 - a new operation: a sweep widened from the command line, never by editing the tracked test"
+	@if [ -z "$(strip $(FILE))" ] || [ -z "$(SEEDS)" ]; then echo "sweep: FILE=<test file> and SEEDS=<n> are required" >&2; exit 2; fi
+	@L7R_SWEEP_SEEDS=$(SEEDS) $(MAKE) --no-print-directory test-file FILE="$(FILE)"
+
 roll-audit:     ## [tests] per rolling context of the gate baseline, the engine lines NO other context reaches   MIN_LINES=2000 (the tier knob)
 	$(RUN).tools.roll_audit --min-lines $(or $(MIN_LINES),2000)
 

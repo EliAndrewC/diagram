@@ -12,6 +12,7 @@ from typing import Any
 
 from l7r.diagram.hamletgen.ways import law
 from l7r.diagram.hamletgen.ways.tree_base import Ends, Faces
+from tests._sweep import seeds
 
 
 def _web(rng: random.Random, n: int) -> list[dict[str, Any]]:
@@ -35,7 +36,7 @@ def _counts(M: dict[str, Any]) -> dict[int, int]:
 
 
 def test_with_one_more_is_fronting_ends_on_the_grown_web() -> None:
-    for seed in range(30):
+    for seed in seeds(30):
         rng = random.Random(seed)
         houses = _houses(rng, rng.randint(1, 12))
         yards = [{"x": h["x"], "y": h["y"] + 30.0, "w": 30.0, "h": 20.0, "of": [h["x"], h["y"]]} for h in houses if rng.random() < 0.5]
@@ -60,7 +61,7 @@ def test_with_one_more_is_fronting_ends_on_the_grown_web() -> None:
 
 
 def test_needles_with_is_needle_loops_on_the_changed_web() -> None:
-    for seed in range(40):
+    for seed in seeds(40):
         rng = random.Random(1000 + seed)
         lanes = _web(rng, rng.randint(2, 10))
         if rng.random() < 0.5:  # a sliver: a lane laid along another, a few feet off

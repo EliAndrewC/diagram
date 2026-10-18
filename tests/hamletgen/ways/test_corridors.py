@@ -5,6 +5,7 @@ import math
 
 from l7r.diagram.hamletgen.ways import corridors as co
 from l7r.diagram.hamletgen.ways.geom import WorkedGround
+from tests._sweep import seeds
 
 
 def _house(x, y, rot=180.0, w=40.0, h=28.0):
@@ -146,7 +147,7 @@ def test_the_field_runs_are_the_old_forms_whole_measure_on_random_networks() -> 
     """Feature 387 T02 (plan D2a): the best-first search by distance band keeps exactly the runs the old whole measure kept."""
     import random
 
-    for seed in range(60):
+    for seed in seeds(60):
         rng = random.Random(seed)
         segs = []
         x, y = rng.uniform(-300, 300), rng.uniform(-300, 300)

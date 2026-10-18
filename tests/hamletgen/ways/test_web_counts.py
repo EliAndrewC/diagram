@@ -10,6 +10,7 @@ from typing import Any
 from l7r.diagram.hamletgen.ways import law
 from l7r.diagram.hamletgen.ways.knots import WebMemo
 from l7r.diagram.hamletgen.ways.web_counts import Partners, WebEnds
+from tests._sweep import seeds
 
 
 def _pts(ln: dict[str, Any]) -> list[tuple[float, float]]:
@@ -49,7 +50,7 @@ def _edit(rng: random.Random, M: dict[str, Any]) -> dict[int, list[tuple[float, 
 
 
 def test_each_count_by_its_edits_is_the_whole_rules_on_the_trial() -> None:
-    for seed in range(120):
+    for seed in seeds(120):
         rng = random.Random(seed)
         M = _web(rng)
         lanes = M["lanes"]

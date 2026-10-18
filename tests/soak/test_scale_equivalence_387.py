@@ -78,10 +78,10 @@ def _old_admits(base: Any, M: Mapping[str, Any], run: Any, role: str, house: Any
 @pytest.fixture
 def shadowed(monkeypatch: pytest.MonkeyPatch) -> dict[str, int]:
     """Every changed site wrapped to ask its old form too; the calls compared, by site."""
+    import l7r.diagram.waterfields.settle as settle  # the submodule itself, not through the package surface (its census, tests/waterfields/test_surface.py)
     from l7r.diagram.hamletgen.homesteads import bamboo, fixtures
     from l7r.diagram.hamletgen.ways import law, reach, tree, tree_base, web_counts
     from l7r.diagram.settlement import Settlement
-    from l7r.diagram.waterfields import settle
     from tests.hamletgen.homesteads.test_strip_near_387 import _scan_blocked
     from tests.hamletgen.ways.test_corridors import _old_field_runs
     from tests.settlement.test_sun_keepouts_387 import _old as _old_sun

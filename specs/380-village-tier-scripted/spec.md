@@ -123,3 +123,11 @@ Moved word for word on 2026-10-10 (the GM, 2026-10-10: "Yes, please."); 357 keep
   M70 (the roofed pyre ground, platform and hut), M71 (six jizo at a cremation ground alone), M80 (the basin's roof,
   drawn plain, its roof a guess); Kikuta - M56, M58. (M50, M52, M53 and M64 were kept by the GM on 2026-09-29.)
 
+
+## Carried: from 387 (found by the soak tier, 2026-10-18)
+
+- **The village roll seats too few households**: `tests/soak/test_village_determinism.py` fails on origin/main (`72b93d15c`,
+  measured 2026-10-18 in a detached worktree; method: `make soak`): `roll_village("R", households=18, ...)` on seed 7 seats 13
+  houses where the test holds 15-19. The soak tier runs only by hand, so nothing caught it; it fails the same on main without feature 387, whose own soak equivalence ran beside it green.
+  Owed: find which change dropped the seated count (`git bisect` on
+  `make soak`), and either restore the seating or record why 13 of 18 is right.
