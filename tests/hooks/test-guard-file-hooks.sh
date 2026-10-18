@@ -53,7 +53,7 @@ check ok "$ROOT/specs/127-gated-make-commands/spec.md"
 
 echo
 echo "3. THE ESCAPE WORKS, and puts the intent in the diff"
-check ok "$ROOT/Makefile" "GUARD_EDIT_OK - adding a target for a new operation"
+check ok "$ROOT/scripts/hooks/make-only-hooks.sh" "GUARD_EDIT_OK - adding a verdict for a new operation"
 check ok "$ROOT/scripts/hooks/gate-hooks.sh" "GUARD_EDIT_OK - it was firing on correct work"
 
 echo
@@ -68,8 +68,9 @@ else echo "  FAIL    refusal did not carry the escape or the categories"; FAIL=$
 echo
 echo "5. A RECIPE COMMENT THAT WOULD RUN IS REFUSED (feature 212)"
 TAB=$(printf '\t')
-hazard() { # label, expected, new_string (Edit) - against the skill Makefile
-  local rc; rc=$(run "$ROOT/Makefile" "$3" Edit)
+# Against a Makefile below the root: every Makefile is checked for hazards, and only the root one also takes no marker (section 8).
+hazard() { # label, expected, new_string (Edit)
+  local rc; rc=$(run "$ROOT/specs/001-x/Makefile" "$3" Edit)
   if { [ "$2" = ok ] && [ "$rc" -eq 0 ]; } || { [ "$2" = blocked ] && [ "$rc" -ne 0 ]; }; then
     echo "  ok      $1"; PASS=$((PASS+1))
   else echo "  FAIL    $1 (expected $2, rc=$rc)"; sed 's/^/          /' "$HOOK_ERR" | head -3; FAIL=$((FAIL+1)); fi
@@ -122,6 +123,35 @@ ev "$ROOT/Makefile" "" "Read" | "$HOOK" pretool >/dev/null 2>&1
 n=$(grep -rl read-reminder "$GUARD_LOG_ROOT" 2>/dev/null | wc -l)
 if [ "$n" -eq 1 ]; then echo "  ok      a guard file's Read records its reminder"; PASS=$((PASS+1))
 else echo "  FAIL    a guard file's Read recorded $n entries, not 1"; FAIL=$((FAIL+1)); fi
+
+echo
+echo "8. A GUARD FILE'S REASON OUTSIDE THE FILE: make guard-edit's permit (feature 170 amendment 1)"
+FIX=$(mktemp -d); git -C "$FIX" init -q; mkdir -p "$FIX/scripts/hooks"; : >"$FIX/Makefile"; : >"$FIX/scripts/hooks/x-hooks.sh"
+PERMIT="$ROOT/scripts/hooks/lib/hm_guard_permit.py"
+ev2() { python3 -c 'import json,sys; print(json.dumps({"session_id":"g","tool_name":"Edit","tool_input":{"file_path":sys.argv[1],"old_string":sys.argv[2],"new_string":sys.argv[3]}}))' "$1" "$2" "$3"; }
+case8() { # label, expected, file, old_string, new_string [, clock]
+  local rc; rc=$(ev2 "$3" "$4" "$5" | L7R_PERMIT_NOW="${6:-}" "$HOOK" pretool >/dev/null 2>"$HOOK_ERR"; echo $?)
+  if { [ "$2" = ok ] && [ "$rc" -eq 0 ]; } || { [ "$2" = blocked ] && [ "$rc" -ne 0 ]; }; then echo "  ok      $1"; PASS=$((PASS+1))
+  else echo "  FAIL    $1 (expected $2, rc=$rc)"; sed 's/^/          /' "$HOOK_ERR" | head -3; FAIL=$((FAIL+1)); fi; }
+T0=1000000000
+case8 "no permit: the root Makefile is refused" blocked "$FIX/Makefile" "a" "b" "$T0"
+grep -q 'make guard-edit FILE=' "$HOOK_ERR" && { echo "  ok      the refusal names make guard-edit"; PASS=$((PASS+1)); } || { echo "  FAIL    the refusal does not name make guard-edit"; FAIL=$((FAIL+1)); }
+L7R_PERMIT_NOW=$T0 python3 "$PERMIT" grant "$FIX/Makefile" "x" >/dev/null 2>&1 && { echo "  FAIL    a one-word reason was granted"; FAIL=$((FAIL+1)); } || { echo "  ok      a short reason is not granted"; PASS=$((PASS+1)); }
+python3 "$PERMIT" grant "$FIX/README.md" "documenting the fixture" >/dev/null 2>&1 && { echo "  FAIL    a non-guard file was granted"; FAIL=$((FAIL+1)); } || { echo "  ok      a non-guard file is not granted"; PASS=$((PASS+1)); }
+L7R_PERMIT_NOW=$T0 python3 "$PERMIT" grant "$FIX/Makefile" "adding a target for a new operation" >/dev/null
+rm -rf "$GUARD_LOG_ROOT"/*
+case8 "a live permit: the same edit is accepted" ok "$FIX/Makefile" "a" "b" "$((T0 + 60))"
+grep -rl guard-permit "$GUARD_LOG_ROOT" 2>/dev/null | xargs -r grep -l "adding a target for a new operation" | grep -q . \
+  && { echo "  ok      it is recorded as a guard-permit escape with the permit's reason"; PASS=$((PASS+1)); } || { echo "  FAIL    the permit's escape was not recorded with its reason"; FAIL=$((FAIL+1)); }
+case8 "a permit for another file does not stand in" blocked "$FIX/scripts/hooks/x-hooks.sh" "a" "b" "$((T0 + 60))"
+case8 "an expired permit is refused" blocked "$FIX/Makefile" "a" "b" "$((T0 + 3601))"
+case8 "a marker added to the root Makefile is refused, permit or not" blocked "$FIX/Makefile" "a" "# GUARD_EDIT_OK: a reason given in the file" "$((T0 + 60))"
+grep -q 'takes none' "$HOOK_ERR" && { echo "  ok      that refusal says why and names the command"; PASS=$((PASS+1)); } || { echo "  FAIL    the marker refusal is unhelpful"; FAIL=$((FAIL+1)); }
+case8 "an edit keeping a marker it replaces is not refused for it" ok "$FIX/Makefile" "# GUARD_EDIT_OK: old reason here" "# GUARD_EDIT_OK: old reason here, reworded" "$((T0 + 60))"
+case8 "another guard file still takes the in-file marker" ok "$FIX/scripts/hooks/x-hooks.sh" "a" "# GUARD_EDIT_OK: a reason given in the file" "$T0"
+ctx=$(ev "$FIX/Makefile" "" "Read" | "$HOOK" pretool 2>/dev/null)
+printf '%s' "$ctx" | grep -q "make guard-edit FILE=Makefile" && { echo "  ok      the root Makefile's Read names make guard-edit"; PASS=$((PASS+1)); } || { echo "  FAIL    the root Makefile's Read context: $ctx"; FAIL=$((FAIL+1)); }
+rm -rf "$FIX"
 
 echo "passed $PASS, failed $FAIL"
 [ "$FAIL" -eq 0 ]

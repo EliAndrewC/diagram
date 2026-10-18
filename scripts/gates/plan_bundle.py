@@ -35,6 +35,8 @@ OUT = pathlib.Path("/tmp/l7r-check")
 _IDS = re.compile(r"\b((?:FR|SC)-\d{3}[a-z]?|D\d+[a-z]?)\b")
 _ITEM = re.compile(r"^- \*\*((?:FR|SC)-\d{3}[a-z]?)\b", re.M)
 _DECISION = re.compile(r"^\*\*(D\d+[a-z]?) - ", re.M)
+#: the older specs' form, a requirement as its own heading (`### FR-001 - ...`, 12 specs among them 170): to the next heading
+_HEAD_ITEM = re.compile(r"^#{2,4} ((?:FR|SC)-\d{3}[a-z]?)\b", re.M)
 
 
 def _paragraphs(text: str, pattern: re.Pattern[str]) -> dict[str, str]:
@@ -44,6 +46,15 @@ def _paragraphs(text: str, pattern: re.Pattern[str]) -> dict[str, str]:
     for i, m in enumerate(starts):
         end = min([x for x in (text.find("\n\n", m.start()), starts[i + 1].start() if i + 1 < len(starts) else -1) if x > 0] or [len(text)])
         out.setdefault(m.group(1), text[m.start():end].rstrip() + "\n")
+    return out
+
+
+def requirements(spec: str) -> dict[str, str]:
+    """{FR or SC id: its text} - a `- **FR-NNN**` item to its paragraph's end, a `### FR-NNN` heading to the next heading."""
+    out = _paragraphs(spec, _ITEM)
+    for m in _HEAD_ITEM.finditer(spec):
+        nxt = re.search(r"^#{1,4} ", spec[m.end() :], re.M)
+        out.setdefault(m.group(1), spec[m.start() : m.end() + nxt.start() if nxt else len(spec)].rstrip() + "\n")
     return out
 
 
@@ -105,7 +116,7 @@ def build(spec_dir: pathlib.Path, name: str, under: list[tuple[str, str]], earli
     out.mkdir(parents=True)
     spec = (spec_dir / "spec.md").read_text(encoding="utf-8") if (spec_dir / "spec.md").is_file() else ""
     plans = "".join((spec_dir / f).read_text(encoding="utf-8") for f in ("plan.md", "plan-done.md") if (spec_dir / f).is_file())
-    items, decisions = _paragraphs(spec, _ITEM), _paragraphs(plans, _DECISION)
+    items, decisions = requirements(spec), _paragraphs(plans, _DECISION)
     cited = list(dict.fromkeys(m.group(1) for _k, body in under for m in _IDS.finditer(body)))
     # a decision's own paragraph is in blocks.md already; the requirements it answers to, and the decisions it leans on, are cited
     own = {m.group(1) for _k, body in under for m in _DECISION.finditer(body)}

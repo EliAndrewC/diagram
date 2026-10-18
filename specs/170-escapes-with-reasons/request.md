@@ -39,3 +39,19 @@ own and is amended in place rather than left to mislead the next reader):
   mirror ahead of GitHub; `clone-sync-hooks.sh` names the stray commit), which only fires once the
   commit exists. FR-005 is what makes the answer yes.
 - The SECOND is not prevented by anything, and nothing in the repository would have caught it.
+
+## Amendment 1 (2026-10-18, the diagram-makefile session)
+
+The GM asked:
+
+> It looks like our makefile is full of unnecessary and even outdated comments, which both eat tokens and make it confusing to read. Can you clean that up?
+
+The session stripped them (cbf1721ff: 2,452 -> 1,142 lines) and reported why they pile up: guard-file-hooks.sh refuses an
+Edit of the Makefile unless the new text itself holds `GUARD_EDIT_OK` and a reason, so every edit leaves a marker comment in
+the file. It proposed letting the hook take the reason outside the file, *"the way it already does for Bash commands, so it
+never has to be written into the file. Would you like me to file that as a feature?"* The GM:
+
+> yes please file that feature and then work it... though actually I think that should just be an amendment to the feature we already just worked
+
+(The cleanup itself was a tweak with no number. This feature is the one whose FR-001 made the in-edit reason mandatory, so it
+takes the amendment.)

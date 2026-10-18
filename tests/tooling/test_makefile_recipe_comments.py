@@ -78,3 +78,15 @@ def test_the_detector_fires_on_each_hazard_and_passes_each_safe_form() -> None:
         assert hm.recipe_comment_hazards(line) == [], line
     text = "target:\n" + safe[0] + "\n" + fires[0] + "\n" + fires[2] + "\n"
     assert [n for n, _ in hm.recipe_comment_hazards(text)] == [3, 4]
+
+
+def test_the_root_makefile_holds_no_guard_edit_marker() -> None:
+    """Feature 170 amendment 1 (FR-006(e)): the root Makefile takes no `GUARD_EDIT_OK` comment - its reasons go through
+    `make guard-edit` into the guard log. guard-file-hooks.sh refuses one on the Edit route; this catches the shell route.
+    Two came back within hours of the cleanup that removed 1,300 lines of them (cbf1721ff)."""
+    text = (REPO / "Makefile").read_text(encoding="utf-8")
+    lines = [n for n, line in enumerate(text.splitlines(), 1) if "GUARD_EDIT_OK" in line]
+    assert not lines, (
+        f"the root Makefile holds GUARD_EDIT_OK on line(s) {lines}: delete the marker, and give its reason with "
+        'make guard-edit FILE=Makefile WHY="<reason>" before the edit, and in the commit message'
+    )

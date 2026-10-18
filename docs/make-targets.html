@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 165 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 166 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -165,6 +165,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make figures</td><td class=a>SPEC</td><td>re-run every recorded measurement and report what moved   [SPEC=specs/NNN-slug; default every spec with a measurements.json]</td></tr>
 <tr><td class=n>make gm-review</td><td class=a>EXPLAIN F ROW</td><td>what waits on the GM: HELD rows (work cannot go on) and, per feature, the TO REVIEW rows counted (landed; he may overturn) - feature 375   [F=&lt;NNN&gt; that feature&#x27;s rows] [EXPLAIN=1 what needs the GM, or with F= each row in full] [ROW=&lt;n&gt;]</td></tr>
 <tr><td class=n>make gm-reviewed</td><td class=a>F OVERTURN TO WORDS</td><td>the GM has reviewed a feature&#x27;s rows; OVERTURN=&lt;row&gt; TO=&lt;feature&gt; turns one into an open row there (feature 375); WORDS= his words when a session marks a row he discussed</td></tr>
+<tr><td class=n>make guard-edit</td><td class=a>FILE WHY</td><td>permit edits to one guard file for an hour, the reason recorded in the guard log - the root Makefile takes no marker comment (feature 170 amendment 1)</td></tr>
 <tr><td class=n>make guard-log</td><td class=a>EVENT FULL GUARD SINCE</td><td>the guard firings, listed - GUARD=&lt;name&gt; SINCE=YYYY-MM-DD EVENT=blocked|rewrote|escaped|reminded FULL=1</td></tr>
 <tr><td class=n>make help</td><td class=a>&ndash;</td><td>list every target with its one-line purpose</td></tr>
 <tr><td class=n>make hookbench</td><td class=a><div class=ad><span class=an>GUARD=&lt;name&gt;</span><span class=aw>a guard whose decision is importable (feature 239 FR-001); others are refused by name</span></div><div class=ad><span class=an>AGAINST=&lt;ref&gt;</span><span class=aw>also print the verdict diff against the guard as it stood at &lt;ref&gt; - what an exemption change owes</span></div><div class=ad><span class=an>REFRESH=1</span><span class=aw>freeze a new dated window of real commands into tests/hooks/fixtures/ instead</span></div></td><td>replay the frozen command window through a guard decision, in process</td></tr>
