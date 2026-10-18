@@ -1562,7 +1562,7 @@ CLAIMS_OK citing the ruling. T43 is filed this way (`T=T43`), and its id comes o
 9. **Done, measured.** One goal: `land-tooling` with the Makefile in FILES refuses while the clone's page is stale (naming `make
    docs`), and lands the clone's page beside the Makefile when it is current; `tests/hooks/test-land-tooling.sh` red without each.
 
-### T46 part B (2026-10-18T16:52Z)
+### T46 part B (2026-10-18T16:48Z)
 
 Owed by the red-gate rulings red-gate@2026-10-18T16:44:54Z and red-gate@2026-10-18T16:45:47Z (`continue` both), which fell while
 T46 was the active task; the reds were T08's (`t08-red-gates.md`), and T46 itself landed before them.
