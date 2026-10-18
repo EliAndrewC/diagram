@@ -51130,20 +51130,27 @@
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._rounded_pond#pond inset and rounded": {
   "body": "3f8e86692bad3142",
-  "claim": "pond inset and rounded - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: inset inside its bank, every corner eased",
-  "code": "42a7a47843307dcb",
+  "claim": "pond inset and rounded - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: inset inside its bank, the parcel scaled about its centroid",
+  "code": "3934df36475a5b8c",
   "core": "edb9c619ca0295e5",
   "date": "2026-10-18",
-  "note": "the homothetic inset matches §90, but no block bears on corner easing (fillet reach, the 0.8-1.15 erosion jitter); \"ponds of uneven shape\" is the nearest. The rounding should say UNRESEARCHED",
+  "note": "the pond is set in from its parcel's edge by a homothety about the centroid, as the page says",
   "pages": {
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
   },
   "research": "dede4a3ae0c4c6d4",
   "rests": [
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:5d8136b689a7529e",
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:9aaf0a58da02aa2b"
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:5d8136b689a7529e"
   ],
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._rounded_pond#the pond's scale floor of 0.4, so a pond never falls below about 16% of its parcel's area, however small the parcel": {
+  "code": "edb9c619ca0295e5",
+  "core": "edb9c619ca0295e5",
+  "date": "2026-10-18",
+  "note": "the pond's scale floor of 0.4, so a pond never falls below about 16% of its parcel's area, however small the parcel",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin.crescent_pond#half-moon pond": {
   "code": "4f52b6fe80877885",
@@ -51566,24 +51573,32 @@
   "research": "8159982a6874674a",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/fields/landuse.py::<module>#plumbing": {
-  "body": "860523dae95a2463",
-  "claim": "plumbing - NONE: row cutting, geometry and manifest records",
-  "code": "612d5620f1428651",
-  "core": "0917d4646861fe09",
+ "l7r/diagram/settlement/fields/landuse.py::DIKEPOND_SPLIT#dike-pond split odds": {
+  "body": "5ea7c59e0ba4c228",
+  "claim": "dike-pond split odds - GUESS: even odds (the record gives no share between them)",
+  "code": "a00a1a05388bafbd",
+  "core": "1cb7e2a2fefa06ae",
   "date": "2026-10-18",
-  "note": "the unit registers the dikepond_split knob [0.6, 0.4, 0.7, 0.5, 0.3], the five attested water/dike splits rolled per village; it should cite 0018 drawing §89, not NONE",
+  "note": "the page records even odds among the five splits as a GUESS",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/fields/landuse.py::<module>#the five water/dike splits (0.6, 0.4, 0.7, 0.5, 0.3) as a per-village knob": {
-  "code": "0917d4646861fe09",
-  "core": "0917d4646861fe09",
+ "l7r/diagram/settlement/fields/landuse.py::DIKEPOND_SPLIT#dike-pond split values": {
+  "body": "5ea7c59e0ba4c228",
+  "claim": "dike-pond split values - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: water six to four, dike six to four, water seven to three, one to one, and the gazetteer's three of water to seven of dike",
+  "code": "ceb7e18053068056",
+  "core": "1cb7e2a2fefa06ae",
   "date": "2026-10-18",
-  "note": "the five water/dike splits (0.6, 0.4, 0.7, 0.5, 0.3) as a per-village knob",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the water shares 0.6, 0.4, 0.7, 0.5 and 0.3 are exactly the page's five recorded splits, rolled per village",
+  "pages": {
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
+  },
+  "research": "dede4a3ae0c4c6d4",
+  "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:21db06d77d82879b"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/landuse.py::DIKEPOND_WATER_INSET#pond bank width": {
   "body": "6dc735a91c089cf1",
@@ -51659,6 +51674,14 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_draw_plot#corner rounding sizes of 8 ft for the bank and 16 ft for the water, passed to `_rounded_pond": {
+  "code": "737f52f51af88acd",
+  "core": "737f52f51af88acd",
+  "date": "2026-10-18",
+  "note": "corner rounding sizes of 8 ft for the bank and 16 ft for the water, passed to `_rounded_pond",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_draw_plot#fry pond turbid": {
   "body": "5adee3f35aae8a9b",
   "claim": "fry pond turbid - fish-fry-and-nursery-ponds-yumiao.drawing: FRY_WATER for a fry pond",
@@ -51691,28 +51714,21 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_draw_plot#pond corner fillets, reach 8 ft on the bank and 16 ft on the water; dig-back shrink floored at 0.7": {
-  "code": "737f52f51af88acd",
-  "core": "737f52f51af88acd",
-  "date": "2026-10-18",
-  "note": "pond corner fillets, reach 8 ft on the bank and 16 ft on the water; dig-back shrink floored at 0.7",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_draw_plot#pond unit": {
   "body": "5adee3f35aae8a9b",
-  "claim": "pond unit - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: bank at the parcel line, water inset DIKEPOND_WATER_INSET, dug back off a canal",
-  "code": "d15c1fca13ec32a5",
+  "claim": "pond unit - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: bank at the parcel line, water inset the map's own (`dikepond_inset`), dug back off a canal",
+  "code": "d12a7082f8b31ba8",
   "core": "737f52f51af88acd",
   "date": "2026-10-18",
-  "note": "the page has a bent canal \"may graze a parcel's edge by a foot and a half or so\", on purpose, with the bank on the true parcel line; the code shrinks the whole unit (scale down to 0.7) until the bank clears any canal centerline inside the parcel by 1 px. Either the page records the dig-back or the code lets the graze stand",
+  "note": "the page says \"the bank stays on the true parcel line\" and that a canal \"may graze the edge of a bank, on purpose\", but the code shrinks the whole unit (`_s2 = max(0.7, 1.0 - (pen + 1.0) / _dm)`) whenever any canal sample falls inside the parcel; the page does not record this dig-back, so either record it on the page or drop it",
   "pages": {
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
   },
   "research": "dede4a3ae0c4c6d4",
   "rests": [
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:5d8136b689a7529e",
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:8cb3b577416449af"
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:8cb3b577416449af",
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:e8fdf34d7bd0e81d"
   ],
   "verdict": "DRIFTED"
  },
@@ -51765,23 +51781,23 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._mulberry_rows#bank mottle": {
-  "body": "efc44488ad259f65",
+  "body": "577fe014560f0802",
   "claim": "bank mottle - CONVENTION: earth patches every 30 px",
-  "code": "c2a89bbfb99076c1",
-  "core": "1e563f821e840c97",
+  "code": "e2da62501f3bfdf6",
+  "core": "5f0c1e578f694bb4",
   "date": "2026-10-18",
-  "note": "earth patches, a convention",
+  "note": "the mottled earth bank is how the page shows the bank, so CONVENTION is the right label",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._mulberry_rows#fruit trees": {
-  "body": "efc44488ad259f65",
+  "body": "577fe014560f0802",
   "claim": "fruit trees - mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing: one line along the bank at 18 ft, crowns r 4-5 px",
-  "code": "f8d7dc1912649d7f",
-  "core": "1e563f821e840c97",
+  "code": "c4f6d1f473d31faa",
+  "core": "5f0c1e578f694bb4",
   "date": "2026-10-18",
-  "note": "the 18 ft pitch and r 4-5 crowns match, but the line runs at s_w+0.5 band with s_w from the constant DIKEPOND_WATER_INSET (23), so it stands about 11.5 ft in whatever the bank's width, not \"along the middle of the bank\" (about 21 ft in on Kuwabata's 42 ft bank); s_w should come from self.dikepond_inset",
+  "note": "one line at the band's centerline at an 18 ft step, crowns r 4-5 px (8-10 ft across)",
   "pages": {
    "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html": "9dd5f2a5abf3954e"
   },
@@ -51790,39 +51806,43 @@
    "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html:4bba012c10bd394d",
    "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html:60aee2690bd65df2"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._mulberry_rows#mulberry bushes": {
-  "body": "efc44488ad259f65",
+  "body": "577fe014560f0802",
   "claim": "mulberry bushes - mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing: crowns r 2.2-3.6 px at a 4.4 px pitch, none centered within 3.5 px of a canal",
-  "code": "6aa371f464f60aba",
-  "core": "1e563f821e840c97",
+  "code": "976433ac6242291c",
+  "core": "5f0c1e578f694bb4",
   "date": "2026-10-18",
-  "note": "s_w and the apo guard use the constant DIKEPOND_WATER_INSET (23), while the water is drawn at self.dikepond_inset. On a 3:7 village (bank about 42 ft) the 8 rows from mulberry_row_ts crowd into the outer 23 ft, about 2.9 ft apart against \"one row to every 5.5 ft\", and the inner bank is bare; on a 7:3 village (bank about 15 ft) crowns are laid over the water. §90: the rows \"follow its width\"",
+  "note": "`rng.uniform(2.2, 3.6)` draws crowns 4.4 to 7.2 ft across, but the page says \"4.4 to 7 ft across\"; the code should use r 3.5 or the page should say 7.2 ft. The 4.4 ft pitch, the rows per 5.5 ft and centers kept off the canal all match",
   "pages": {
    "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html": "9dd5f2a5abf3954e"
   },
   "research": "5204a1fdda1ca89b",
+  "rests": [
+   "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html:d1469e6daa9c666b"
+  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._mulberry_rows#tea and fruit off the canal": {
-  "body": "efc44488ad259f65",
+  "body": "577fe014560f0802",
   "claim": "tea and fruit off the canal - UNRESEARCHED: tea hedges kept 3.0 px and fruit trees 5.5 px off a canal centerline",
-  "code": "97116961cc0d42c1",
-  "core": "1e563f821e840c97",
+  "code": "a6e2e34e245e132f",
+  "core": "5f0c1e578f694bb4",
   "date": "2026-10-18",
-  "note": "no block gives a clearance for tea or fruit",
+  "note": "the canal rule on the page covers mulberry bushes only; nothing gives a canal clearance for tea or fruit",
   "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._mulberry_rows#tea hedges": {
-  "body": "efc44488ad259f65",
+  "body": "577fe014560f0802",
   "claim": "tea hedges - mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing: two hedges 2.8 px wide, three steps drawn and two left open",
-  "code": "80ccdb7fa1e5a2b8",
-  "core": "1e563f821e840c97",
+  "code": "83c9d53e3838c376",
+  "core": "5f0c1e578f694bb4",
   "date": "2026-10-18",
-  "note": "2.8 px hedges, three 2.5 px steps on and two off, match §134, but the rows at t 0.32/0.70 are placed from the constant 23 ft s_w. On a 7:3 village's 15 ft bank the inner hedge (about 15.6 ft in) runs at or over the water; on a 42 ft bank both hug the outer 23 ft. The hedges should follow self.dikepond_inset",
+  "note": "two hedges about 3 ft wide, drawn in 7.5 ft runs with breaks, recorded on the page as a GUESS",
   "pages": {
    "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html": "9dd5f2a5abf3954e"
   },
@@ -51830,7 +51850,7 @@
   "rests": [
    "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html:27ddbd14d16bb415"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._pick_overlay_plots#dike-pond patches": {
   "code": "a84e852fa266f8ca",
@@ -51897,14 +51917,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin.apply_land_use#lotus plots picked unclustered (§113 sets converted plots in patches)": {
-  "code": "dbb7ab6fe10fdace",
-  "core": "dbb7ab6fe10fdace",
-  "date": "2026-10-18",
-  "note": "lotus plots picked unclustered (§113 sets converted plots in patches)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin.apply_land_use#no rape": {
   "body": "cbf07a080223db6d",
   "claim": "no rape - the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing: never drawn beside the rice",
@@ -51950,13 +51962,22 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin.apply_land_use#the village's water/dike split rolled and the one inset derived from it": {
-  "code": "dbb7ab6fe10fdace",
+ "l7r/diagram/settlement/fields/landuse.py::LandUseMixin.apply_land_use#the village's split and its inset": {
+  "body": "cbf07a080223db6d",
+  "claim": "the village's split and its inset - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: the split rolled per village (`dikepond_split`) and the one inset every reader takes derived from it (`dikepond_inset`)",
+  "code": "c28295f20019f5ff",
   "core": "dbb7ab6fe10fdace",
   "date": "2026-10-18",
-  "note": "the village's water/dike split rolled and the one inset derived from it",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the split is rolled per village and one inset is taken from the median-area parcel and used by every reader",
+  "pages": {
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
+  },
+  "research": "dede4a3ae0c4c6d4",
+  "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:21db06d77d82879b",
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:5d8136b689a7529e"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/landuse.py::MULBERRY_ROW_FT#mulberry row spacing": {
   "code": "38705aaaf5f2662e",
