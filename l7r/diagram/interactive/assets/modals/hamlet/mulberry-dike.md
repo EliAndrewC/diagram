@@ -14,10 +14,10 @@ delta's root-cut planting today to about one to 24 sq ft in a late-Qing field of
 grew. A dike's width before modern times is not recorded.
 
 Guesses:
-- That a village takes each of the three splits of water and bank at even odds: no account gives a share between them,
+- That each of the three splits of water and bank is drawn at even odds: no account gives a share between them,
   and every account found that writes the split as a ratio is modern.
-- That one split holds for every parcel of a village, so the bank is as wide as that split makes it: no width of a pond
-  dike from before modern times was found, and no account says how the split varied from one parcel to the next.
+- That one split holds for every pond of a village, so the bank is as wide as that split makes it: no width of a pond
+  dike from before modern times was found, and no account says how the split varied from one pond to the next.
 - Each bush's crown, 4.4 to 7 ft across: no account gives how wide a mulberry bush grew.
 
 Depiction: The map draws each bank as mottled earth under rows of low bushes, about 4.4 ft apart in the row, about one
