@@ -73007,6 +73007,17 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/comb.py::carve_comb#default grain": {
+  "body": "fa82f6023ef5f5dd",
+  "claim": "default grain - NONE: 1.0 where a caller passes none; the scripted hamlet passes the principled 2 / ftpx (`hamletgen.consts.GRAIN`), as this docstring explains",
+  "code": "486e99739bbe5e76",
+  "core": "54310dc19637ea2e",
+  "date": "2026-10-18",
+  "note": "a scale factor (feet per px into px), and 1.0 is the right value for the builder's stated 1px = 2ft, so the default decides nothing physical; the real-feet sizes it scales are claimed elsewhere",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/comb.py::carve_comb#default hem depth": {
   "code": "ea0fc10fab500b27",
   "core": "54310dc19637ea2e",
@@ -73029,14 +73040,6 @@
   ],
   "triaged": "2026-10-09",
   "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/comb.py::carve_comb#default plot-and-channel scale `grain=1.0`, which the docstring says draws ditches and \"too narrow to plant\" thresholds at half their true size where 2.0 is the principled value": {
-  "code": "54310dc19637ea2e",
-  "core": "54310dc19637ea2e",
-  "date": "2026-10-18",
-  "note": "default plot-and-channel scale `grain=1.0`, which the docstring says draws ditches and \"too narrow to plant\" thresholds at half their true size where 2.0 is the principled value",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/waterfields/comb.py::carve_comb#default skeleton": {
   "code": "86d35240e4f55dd3",
