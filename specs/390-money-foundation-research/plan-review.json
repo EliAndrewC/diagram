@@ -1,0 +1,207 @@
+{
+ "feature": "390-money-foundation-research",
+ "blocks": {
+  "preamble": {
+   "sha256": "9d7e145b5480014e324ee1d944b461b714a5f89d2a2d939cb3acb067750ed368",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "cc83334f4bff2de33513e4434c554593b9a48d5eac649081431425b7d90d8f02",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "f40a34704f928edb165731bb00d8c325e37f5b3028c403a6b76bc2d48663d4a5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "8268316d5b8a73749cdd459a45e7a962a806420ffe4a649fbbaa74e4e2246019",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - the four questions (FR-001, FR-002; scenarios 1-4)": {
+   "sha256": "833a3151c570ad2dfd3c93479673316e326c2af2ee740d2f5578bb66c2a9150c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - the canon contradictions go to the GM (FR-005; edge case 2)": {
+   "sha256": "6e12d5a4e9a2b5f03350260ca88baa0042a62ec3a9354f55597e6c7041a2552c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - the implementation check (FR-004)": {
+   "sha256": "47ccc52a9a2458694102f240f884e9831adcf32d983670d3f40b6f91b95a2e01",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## D4 - the answer (FR-005)": {
+   "sha256": "4d91dfb4ba19839785cc101507ee91d8b904e0c25de20d46ca16efe9e508affd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T - the order": {
+   "sha256": "9902d2bf81601ca9d2aad8fad38ae7afff9183f70e30643c67460bbd3aa14dc0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the four questions (FR-001, FR-002; scenarios 1-4)",
+    "## D2 - the canon contradictions go to the GM (FR-005; edge case 2)",
+    "## D3 - the implementation check (FR-004)",
+    "## D4 - the answer (FR-005)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary",
+     "summary": "Four new money questions from the passes already run, written and checked in fresh page sessions, answered on diagram#1; no code, map or canon change.",
+     "class": "within",
+     "why": "Restates FR-001/FR-002/FR-005/FR-006 and the asker's four questions; decides nothing new."
+    },
+    {
+     "id": "TC-1 page sessions",
+     "summary": "One write session for all four questions (the four-question cap) and one check-and-apply session; past ten new registry keys a continuation brief takes the rest.",
+     "class": "within",
+     "why": "Process for FR-001/FR-002; drops no question and no check."
+    },
+    {
+     "id": "TC-2 passes as leads",
+     "summary": "passes/q1-q4 are leads; each passage is read on its page before citing; an unreadable PDF is read locally, archived and cited at its public URL.",
+     "class": "within",
+     "why": "Serves the asker's Q4 'quoted verbatim' and the diagram's own reply that Q4 is quoted from the paper, not Chris's copy; adds no scope."
+    },
+    {
+     "id": "TC-3 awaiting line",
+     "summary": "The write session deletes the money section's awaiting line in the same commit as the first question.",
+     "class": "within",
+     "why": "Is FR-003 as written."
+    },
+    {
+     "id": "Performance bookends",
+     "summary": "N/A, no generator change.",
+     "class": "within",
+     "why": "Follows FR-006."
+    },
+    {
+     "id": "Constitution Check",
+     "summary": "I-XI N/A; XII research: physical with five boxes; XIII record checks green; XVI built as the FRs.",
+     "class": "within",
+     "why": "Restates gates; narrows nothing in the request."
+    },
+    {
+     "id": "D1-a tags and headings",
+     "summary": "Each question reserved, tagged subject=money with per-question setting/level tags, no drawing page, headed by a reader's question.",
+     "class": "within",
+     "why": "FR-001 (money first, no drawing pages); the setting/level choices and headings are record taxonomy the request leaves open, and every heading covers its question's whole subject."
+    },
+    {
+     "id": "D1-b coverage",
+     "summary": "Each question answers every clause with a verdict per figure the request names; the asker's comparisons (50-koku farm and interest, 2017 wage figures, budgets.md and l7r.md on the koku, the 2017 basket snapshot) are set against the evidence.",
+     "class": "within",
+     "why": "Judged against the request's own clauses since the bundle does not carry the scenarios: 'every clause ... verdict per figure the request names' commits to Q1 Japan and China, irrigated/dry, near-city/remote, rate of return; Q2 rice and coin, city/country, working days, Qing comparison; Q3 volume and weights by period/domain, kg per liter, each budgets.md figure, the shi/dan note; Q4 Basket A verbatim and any Basket B/respectability variants. The bulleted list is the comparisons, not the figure list, so its brevity (e.g. not spelling out 15 koku / 1/3 tax / 1/6 rent cap) narrows nothing."
+    },
+    {
+     "id": "D1-c canon never corrected on the page",
+     "summary": "The GM's canon is quoted only where a comparison needs it and never corrected on the page.",
+     "class": "within",
+     "why": "Q3's 'cite or correct those budgets.md figures' is met by the verdict per figure set against the evidence (D1-b); what is not done is altering the canon, which is FR-006 and the asker's 'The GM decides what the canon means' / 'report the history as found and flag it; the GM decides'. The page must still state the historical figure for each budgets.md and l7r.md figure."
+    },
+    {
+     "id": "D2 contradictions flagged",
+     "summary": "Where a finding contradicts l7r.md or budgets.md, the question states the history and the issue answer flags it through escalation-check for the GM.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The request says 'Where history contradicts the canon above ... flag it; the GM decides', and Q4's 'Canon beside it' lists the 2017 snapshot, so scoping flags to two files is narrower in letter. It is implied by the asker's own words: Q2 says 'Canon beside it: none fixed' for the 2017 wage figures, and Q4's purpose is that 'the skill's 2017 snapshot can be checked against the source' by the skill, which 'will verify against the files'. Those figures are the skill's working data, not the GM's canon to rule on, and any mismatch still reaches the asker through D1-b and D4's verdict per figure. The purpose of flagging (the GM decides his canon, l7r.md and budgets.md) is intact."
+    },
+    {
+     "id": "D3 implementation check",
+     "summary": "One implementation-check line per question: no code implements it, consumed by gm-assistant's money skill, with the grep searched.",
+     "class": "within",
+     "why": "Is FR-004 as written."
+    },
+    {
+     "id": "D4 the answer",
+     "summary": "Comment on diagram#1 gives per question the fragment FILE, the verdict per figure and what is open.",
+     "class": "within",
+     "why": "FR-005 and the asker's 'What the skill needs back'; the contradiction flags are carried by D2."
+    },
+    {
+     "id": "T order",
+     "summary": "Write and check, implementation check, issue answer, report and land by the direct route.",
+     "class": "within",
+     "why": "Sequence only; drops no step the spec requires."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## D4 - the answer (FR-005)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D4-a",
+     "summary": "The answer is a comment on EliAndrewC/diagram#1 giving, per question, the fragment FILE, a verdict per figure and what is still open.",
+     "class": "within",
+     "why": "Exactly what the asker's 'What the skill needs back' lists and FR-005 requires. Note: the block's list omits FR-005's fourth element, each contradiction with canon flagged for the GM; the block cites FR-005, so this is read as carried by the citation, but the redraft of D4-b should state it."
+    },
+    {
+     "id": "D4-b",
+     "summary": "A source figure that differs from the 2017 basket snapshot is named in one line and not escalated (flagged) to the GM, on the ground that the snapshot is not canon.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The request says 'Where history contradicts the canon above, report the history as found and flag it; the GM decides', and for Q4 the asker lists under 'Canon beside it' precisely 'the 2017 snapshot (rice 114 kg at 1.49 g/kg ... total 325.816 g)'. The plan's premise that the snapshot is not canon contradicts the request's own labeling (contrast Q2, where the asker wrote 'none fixed' and called the 2017 figure a 'working figure'). Flagging is not impossible, is not implied anywhere by the GM's or the asker's words (the GM only approved the feature), and the carve-out cuts against Q4's stated purpose: the snapshot exists in the request 'so the skill's 2017 snapshot can be checked against the source', and a difference is exactly what the GM must decide on. That diagram's own 2026-10-18 comment listed other canon items is diagram's paraphrase, not the request. D4 should say: each figure where the paper differs from the 2017 snapshot is flagged for the GM like every other canon contradiction (FR-005)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## D4 - the answer (FR-005)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D4a",
+     "summary": "The answer is a comment on EliAndrewC/diagram#1 giving, per question, the fragment file, a verdict per figure, what is still open, and each contradiction with canon flagged for the GM.",
+     "class": "within",
+     "why": "This is the asker's 'What the skill needs back' (fragment FILE, verdict per figure, what is still open; contradictions reported as found and flagged, the GM decides) and FR-005, clause for clause. Nothing is dropped and nothing is added."
+    },
+    {
+     "id": "D4b",
+     "summary": "The asker lists the 2017 basket snapshot as Q4's canon, so a source figure that differs from it is flagged for the GM in the same way.",
+     "class": "within",
+     "why": "The issue's Q4 gives 'Canon beside it: the 2017 snapshot (...)', and the request says 'Where history contradicts the canon above, report the history as found and flag it; the GM decides.' Treating the snapshot as Q4's canon applies that rule to the canon the asker named. It neither narrows nor widens it, and it fits Q4's stated purpose of checking the 2017 snapshot against the source."
+    }
+   ]
+  }
+ ]
+}
