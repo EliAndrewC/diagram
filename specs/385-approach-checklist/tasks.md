@@ -150,10 +150,12 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T53 make land-tooling refuses owed ledger rows before its checks, not after them at the push (the arbiter's fix on hour:385-approach-checklist@19, plan D70)
       research: rendering
       verify: DONE. landed on main; tests/hooks/test-land-tooling.sh red without it (an owed pass refuses before any check ran)
-- [ ] T54 A task-start mark naming a ticked task is stale: the active task falls back to the first open one (found by T53's tick and T09's first cohort, plan D71)
+- [x] T54 A task-start mark naming a ticked task is stale: the active task falls back to the first open one (found by T53's tick and T09's first cohort, plan D71)
       research: rendering
-- [ ] T55 make land-tooling's lint keeps the gate's own scope (--force-exclude), so a script the gate never lints is not refused (a defect in T52, plan D72)
+      verify: DONE. landed on main; its test red without it; retro row in retro.md
+- [x] T55 make land-tooling's lint keeps the gate's own scope (--force-exclude), so a script the gate never lints is not refused (a defect in T52, plan D72)
       research: rendering
+      verify: DONE. landed on main; its test red without it; retro row in retro.md
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
