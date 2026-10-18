@@ -48,3 +48,21 @@ def test_the_running_gate_is_read_from_the_process_table_and_the_command_line(tm
     assert gl.main(["acquire", str(tmp_path), "4243"]) == 0
     assert gl.main([]) == 2
     assert sys.executable
+
+
+def test_held_says_whether_a_live_gate_owns_the_clone(tmp_path: Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 385 T30 (the round arbiter on red-gate@2026-10-18T12:36:36Z): what clone-sync and land-tooling ask before they merge
+    main into a clone - a live gate holds it, a dead or unrelated owner does not, and no lock holds nothing."""
+    assert not gl.held(tmp_path) and gl.main(["held", str(tmp_path)]) == 1
+    live = subprocess.Popen(["sleep", "30"])
+    try:
+        monkeypatch.setattr(gl, "cmdline", lambda pid: "make done" if pid == live.pid else "")
+        assert gl.acquire(tmp_path, live.pid) == ""
+        assert gl.held(tmp_path) and gl.main(["held", str(tmp_path)]) == 0
+        monkeypatch.setattr(gl, "cmdline", lambda pid: "sleep 30")
+        assert not gl.held(tmp_path), "a reused pid is no gate"
+    finally:
+        live.kill()
+        live.wait()
+    (tmp_path / gl.LOCK).write_text("not json")
+    assert not gl.held(tmp_path)

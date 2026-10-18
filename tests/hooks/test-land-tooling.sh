@@ -94,6 +94,19 @@ land scripts/c.sh; rc=$?
 ok "the patch's context moved on main, the merge is clean: landed" '[ "$rc" -eq 0 ] && [ "$(on_main scripts/c.sh)" = "$(printf "ONE\n2\nTHREE")" ]'
 ok "...saying it merged main in" 'grep -q "merged origin/main into the clone" "$T/out"'
 ok "...and the clone holds a merge, never a rewrite" '[ "$(git -C "$C" log -1 --format=%P | wc -w)" -eq 2 ] && git -C "$C" log --format=%s | grep "c here, line 3" >/dev/null'
+# feature 385 T30: ...but never under a running gate - the merge is refused and the clone left as it was
+setup
+printf '1\n2\n3\n' > "$T/seed/scripts/c.sh"; git -C "$T/seed" add -A; git -C "$T/seed" commit -qm "c"; git -C "$T/seed" push -q "$T/o.git" main
+git -C "$C" pull -q --no-rebase --no-edit origin main
+printf '1\n2\nTHREE\n' > "$C/scripts/c.sh"; git -C "$C" commit -qam "c here, line 3"
+printf 'ONE\n2\n3\n' > "$T/seed/scripts/c.sh"; git -C "$T/seed" commit -qam "c there, line 1"; git -C "$T/seed" push -q "$T/o.git" main
+mkdir -p "$C/scripts/gates"; cp "$HERE/../../scripts/gates/gate_lock.py" "$C/scripts/gates/"; git -C "$C" add scripts/gates; git -C "$C" commit -qm "the lock"
+(exec -a make bash -c 'sleep 120; :' done) & GL=$!
+sleep 0.3; printf '{"pid": %s, "t": 0}' "$GL" > "$C/.git/gate.lock"
+BEFORE=$(git -C "$C" rev-parse HEAD)
+land scripts/c.sh; rc=$?
+kill "$GL" 2>/dev/null; wait "$GL" 2>/dev/null
+ok "a stale patch under a running gate is refused, nothing merged (385 T30)" '[ "$rc" -ne 0 ] && grep "a gate is running in this clone" "$T/out" >/dev/null && [ "$(git -C "$C" rev-parse HEAD)" = "$BEFORE" ]'
 
 echo "3b. a landed test is run, and one needing the clone's unlanded engine work is refused"
 setup

@@ -12,6 +12,8 @@ exists and is still a `make` running `done` - is refused, naming it. An owner th
 restarted) is no owner, so there is never a stale lock to clear by hand.
 
     gate_lock.py acquire <git dir> <make pid>    exit 0 and own the gate, or exit 1 naming the running one
+    gate_lock.py held <git dir>                  exit 0 while a live gate owns the clone, 1 otherwise - asked before anything
+                                                 merges into the clone (feature 385 T30: main was merged in under two gates)
 """
 
 from __future__ import annotations
@@ -53,7 +55,19 @@ def acquire(git_dir: Path, pid: int, now: float | None = None) -> str:
     return ""
 
 
+def held(git_dir: Path) -> bool:
+    """Whether a live gate owns the clone (feature 385 T30, the round arbiter's fix on red-gate@2026-10-18T12:36:36Z: nothing may
+    merge into a tree while its gate runs - a dead owner holds nothing)."""
+    try:
+        pid = int(json.loads((git_dir / LOCK).read_text(encoding="utf-8")).get("pid") or 0)
+    except (OSError, ValueError):
+        return False
+    return bool(pid) and running_gate(pid)
+
+
 def main(argv: list[str]) -> int:
+    if len(argv) == 2 and argv[0] == "held":
+        return 0 if held(Path(argv[1])) else 1
     if len(argv) == 3 and argv[0] == "acquire":
         why = acquire(Path(argv[1]), int(argv[2]))
         if why:
