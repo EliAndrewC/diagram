@@ -14,7 +14,7 @@
    "declared": "spec-fidelity"
   },
   "## Constitution Check": {
-   "sha256": "31b98dc060fecad6f84673ab33330909bd6d49b2a265873c5df79c612b8c9c4d",
+   "sha256": "2755133950c0ea3787cd6f789caa2470f72a1fb54d9525549abfddf68d44b1f5",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -143,6 +143,39 @@
      "summary": "Lands on the GATED route through its own landing cohort; verification lists make quick, hooks-test, the three tooling files, make cohort, make cohort-landing then push, cohort-seeds, make done.",
      "class": "within",
      "why": "SC-004 and SC-001/SC-003 as accepted."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Constitution Check"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "XIV-engine-key",
+     "summary": "cohort_known and cohort_gate stop treating a docs-only edit under l7r/ as an engine change: both now compare delta.py's engine_key (blind to docs, comments, docstrings, formatting), as the push route and make done already do. Earlier text: reported, not changed.",
+     "class": "within",
+     "why": "The request is to roll 48 seeds when a feature lands (FR-004/FR-005) and to judge fixed seeds against main's engine (FR-006). A record whose engine_key equals the landing's measures the same engine, so the gate still needs a 48-seed record of the generator actually being landed; the change only stops a re-roll that cannot change a result, and makes more records usable as baselines. It does not exempt any engine change from the landing cohort, so it does not narrow bullet 2 or its purpose (catching 17/21/40/45-type failures the same day). Note: the 'at the GM's ask (2026-10-18)' it cites is not in request.md; this ruling does not rest on it."
+    },
+    {
+     "id": "XIV-pinned-901",
+     "summary": "cohort_seeds counting any seed of 901 or more as pinned is fixed (D7). Unchanged since the last CLEAR.",
+     "class": "within",
+     "why": "Serves FR-008/D7: fixed seeds and the six pinned rows counted correctly, fresh seeds reported as a rate."
+    },
+    {
+     "id": "XIV-fresh-defects-out-of-scope",
+     "summary": "The six failing fresh seeds go to features 384/385 and the GM rather than being fixed here. Unchanged.",
+     "class": "within",
+     "why": "The request asks to record fresh seeds as a failure rate, not to fix them; leaving them out does not narrow anything asked."
+    },
+    {
+     "id": "X-XIII-VI",
+     "summary": "Tooling checks, coverage, statement cap, gate proved red on a fixture; nothing loosened. Unchanged.",
+     "class": "within",
+     "why": "Verification of the requested gate; no change to what was asked."
     }
    ]
   }

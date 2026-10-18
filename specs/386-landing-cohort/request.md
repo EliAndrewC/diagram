@@ -31,3 +31,7 @@ The log (`dev/cohort-log/`): on 2026-10-12/13 about 30 ten-seed cohorts passed, 
 ## The GM's approval, 2026-10-17
 
 > Sounds good, please implement your recommendation as a feature - file it and then implement it now, thanks.
+
+## The GM, 2026-10-18 (after the landing)
+
+> Can we fix that cohort_known treats a docs-only edit under l7r/ as an engine change?  I thought we had logic in other places to distinguish code changes from docstring changes.
