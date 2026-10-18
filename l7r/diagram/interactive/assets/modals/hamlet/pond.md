@@ -24,7 +24,7 @@ reed on it. No reed harvest is drawn, since none is recorded at a pond. Where a 
 the two waters are drawn as one.
 
 [field_archetype=polder_grid|mulberry_dike_fishpond] The pond that waters a polder stands above it, with one outlet and
-one main ditch leaving it, which forks below, on the reading that a pond had one way out to its fields.
+one main ditch leaving it, which forks below, since a pond seems to have had one way out to its fields.
 
 [water_sink=pond][field_archetype=valley_paddy|contour_terraces|ribbon_valley] The map draws a pond at the foot of the
 fields, fed by their drain: that siting is how the map ends the drainage, where a real reservoir pond stood above the

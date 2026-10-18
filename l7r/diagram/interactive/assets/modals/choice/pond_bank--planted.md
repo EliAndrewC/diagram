@@ -8,7 +8,7 @@ Guesses:
 - That half of hamlets' ponds have the planted bank and half the bare one: no account gives a share between them.
 - One tree about every 30 ft of bank: the manual says only "sparsely".
 
-Depiction: The map draws a few round green crowns on the bank beyond the reeds, mulberry and cudrania in turn, each left out
+Depiction: The map draws round green crowns spaced along the bank beyond the reeds, mulberry and cudrania in turn, the cudrania drawn a shade darker so the two read apart; each is left out
 where it would fall on a roof, a wellhead, a yard's or a kitchen bed's sun, a lane, the crop or the water.
 
 Name: A planted pond bank

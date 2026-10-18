@@ -14,7 +14,7 @@ Guesses:
 - Mulberry and cudrania in turn round the bank: the manual names both, not their order.
 
 Depiction: The map draws each tree as a round green crown on the bank beyond the reeds, the cudrania a shade darker than the
-mulberry. A tree is left out wherever its crown would fall on a roof, a wellhead or the sun of a yard or a kitchen bed, or its
+mulberry, so the two kinds read apart. A tree is left out wherever its crown would fall on a roof, a wellhead or the sun of a yard or a kitchen bed, or its
 trunk on a lane, the crop or the water, so a bank crowded by the farms carries fewer trees, or none.
 
 Name: pond-bank tree
