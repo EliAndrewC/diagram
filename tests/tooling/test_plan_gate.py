@@ -366,3 +366,13 @@ def test_a_mark_naming_a_ticked_task_falls_back_to_the_first_open_task(tmp_path:
     assert gate.active_task(root) == (d, "T05"), "a ticked marked task falls back to the first open one"
     (root / ".git" / "active-task").write_text(json.dumps({"feature": "375-x", "task": "T99"}))
     assert gate.active_task(root) == (d, "T05"), "a task the list does not hold, too"
+
+
+def test_a_task_s_own_heading_wins_its_section_over_a_mention() -> None:
+    """Feature 385 T56 (D75): the umbrella "T04 to T10 - T48, T47's patch" took T10's, T47's and T48's preflights; a heading that
+    begins with the id is that task's own section, and one that only names it is the fallback."""
+    plan = "# plan\n\n## T04 to T10 - T48, T47's patch\n\numbrella\n\n## T10 - the split\n\n### T10 Decisions\n\nD74\n\n## T11 - the close\n"
+    sec = gate.task_sections(plan)
+    assert sec["T10"].startswith("## T10 - the split") and "D74" in sec["T10"] and "umbrella" not in sec["T10"]
+    assert sec["T04"].startswith("## T04 to T10"), "T04 has no heading of its own: the mention stands"
+    assert sec["T48"].startswith("## T04 to T10") and sec["T11"].startswith("## T11")
