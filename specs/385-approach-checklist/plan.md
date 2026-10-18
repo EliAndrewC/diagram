@@ -156,7 +156,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41
 
 ## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)
 
@@ -1320,6 +1320,37 @@ recipe's text for the land-settle-tick order instead of running `make -n` on it 
 uncommitted work and a live make (feature 310); its tool-call path (feature 212's fast-forward) asks both the lock and the live
 make and, while either holds, merges nothing and refuses nothing, telling the session the merge waits; `land-tooling.sh` refuses
 to merge main under a held lock. A dead owner holds nothing, so no stale lock is ever cleared by hand.
+
+## T41 - a refused dispatch is no round (the round arbiter's fix on round:source-reader|q:0081@3)
+
+### T41 Approach (checklist part A)
+
+1. **The goal, in the world.** A record check's round cap counts readings, not attempts: a dispatch a hook refused before any
+   agent started uses no round.
+2. **The constraints.** The arbiter's fix ("count only dispatches that started an agent and kept a reply, and not those the pair
+   hook refused ... with a test where a refused dispatch leaves the count unchanged"); feature 375's cap of two rounds per subject;
+   `hm_checks.dispatch` runs as the check-bundle hook, before the pair hook decides; a test red without it; tooling only.
+3. **Where each comes from.** The fix is the arbiter's (G), and counting at the reply is its own wording ("started an agent and
+   kept a reply") made the moment of counting (round 1: a count refunded on a timer narrowed it).
+4. **Do they describe the world here?** Yes - measured on T07's write session (2026-10-18, the ruling on q:0081@3): the two
+   source-reader dispatches the pair hook refused for its step-back were counted as rounds 1 and 2, and the cap fired on zero
+   readings.
+5. **The order.** The count moved to the reply, then its test and the tests that counted by dispatch.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: a refused dispatch and a dispatch whose agent kept no reply leave the count unchanged, and a
+   reading counts once; `tests/tooling/test_hm_checks.py` red without it.
+
+### T41 Decisions
+
+**D56 - a round counted when it is read.** `hm_checks.dispatch` no longer counts a round: it records on the dispatch the units it
+would count (`counted`, after the same batch, fresh-reading and first-look tests as before), and `returned` - the agent's
+SubagentStop, or a foreground check's PostToolUse - counts them once (`rounded`) when the agent comes back with a non-empty reply.
+So a dispatch a later hook refused (it never launches) and one whose agent kept no reply leave the count unchanged, as the fix
+says ("count only dispatches that started an agent and kept a reply"); no timer. The cap is still asked at dispatch against the
+rounds read so far, and a re-dispatch into a round still running is refused as before (FR-003c), so no round in flight is
+double-booked. The tests that counted a round by dispatch alone now read each round (`_read`: launched, then returned with a reply).
 
 ## T11 - the close
 

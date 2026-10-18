@@ -309,19 +309,23 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
             if n >= cap:
                 hm_arbiter.trip(root, f"round:{unit}@{n + 1}", "round", unit, f"round {n + 1} of {check} on {s}", now)
                 return f"round {n + 1} of `{check}` on {s} in this feature passes its cap of {cap} - " + hm_arbiter.refusal([f"round:{unit}@{n + 1}"], root)
+    counted: list[str] = []
     for s in subjects:
         if not open_round(state, s, now):
             state.setdefault("edits", {})[s] = []  # a new round: the last round's proposals are spent
         unit = f"{check}|{s}"
         if not sibling[s] and not fresh_reading(state, unit, notes) and not first_look(state, unit, current.get(s, [])):  # a fresh reading is no repeat
-            state.setdefault("rounds", {})[unit] = state.get("rounds", {}).get(unit, 0) + 1  # every other dispatch let through is a round
+            # ...COUNTED WHEN IT IS READ, not when it is sent (feature 385 T41, the round arbiter on round:source-reader|q:0081@3: two
+            # dispatches the pair hook refused before any agent started were counted, and the cap fired on zero readings): the unit
+            # is recorded here and counted by `returned` once the agent comes back with a reply
+            counted.append(unit)
         state.setdefault("round_batch", {})[unit] = batch_of(root)  # the batch this round counts in (`new_cause`)
         if s in current:  # what this check has now read of the subject, for the next dispatch's first-look test
             seen = state.setdefault("seen", {}).setdefault(unit, [])
             seen.extend(sorted({_sentence_key(x) for x in current[s]} - set(seen)))
         read = state.setdefault("notes_read", {}).setdefault(unit, [])
         read.extend(sorted((notes or {"*"}) - set(read)))  # "*": a whole-page reading, every note read
-    state.setdefault("dispatches", {})[tid] = {"check": check, "subjects": subjects, "manifest": manifest, "t": now, "state": "pending",
+    state.setdefault("dispatches", {})[tid] = {"check": check, "subjects": subjects, "manifest": manifest, "t": now, "state": "pending", "counted": counted,
                                                 "owed": re.findall(r"^owed: (.+)$", text, re.M)}  # why each unit was due (374)
     return ""
 
@@ -358,6 +362,10 @@ def returned(state: dict[str, Any], agent_id: str, reply: str, keep: Path | None
             keep.mkdir(parents=True, exist_ok=True)
             (keep / f"{re.sub(r'[^A-Za-z0-9_-]', '_', tid)}.md").write_text(reply, encoding="utf-8")
             d["reply"] = str(keep / f"{re.sub(r'[^A-Za-z0-9_-]', '_', tid)}.md")
+        if d.get("aid") == agent_id and reply.strip() and not d.get("rounded"):  # a reading: its rounds count now, once (T41)
+            for unit in d.get("counted") or []:
+                state.setdefault("rounds", {})[unit] = state.get("rounds", {}).get(unit, 0) + 1
+            d["rounded"] = True
         if d.get("aid") == agent_id and d.get("state") == "running":
             d["state"] = "returned"
             for path, old, new in _blocks(reply):

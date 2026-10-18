@@ -55,6 +55,12 @@ def test_a_page_is_frozen_while_its_check_runs_and_takes_only_the_proposed_edits
     assert hc.edit_refusal(st, PAGE, "the well", "a well", 3) == "", "answered: free again"
 
 
+def _read(st: dict, tid: str) -> None:
+    """The dispatch `tid` read: its agent started and came back with a reply - only then is it a round (feature 385 T41)."""
+    hc.launched(st, tid, f"ag-{tid}", True)
+    hc.returned(st, f"ag-{tid}", "a reading")
+
+
 def test_a_check_is_not_re_dispatched_into_a_round_that_is_still_running() -> None:
     st: dict = {}
     hc.dispatch(st, "t1", "quote-check", "/m", MANIFEST, 0)
@@ -76,10 +82,13 @@ def test_a_split_bundles_batches_go_out_together_in_one_round() -> None:
     assert hc.dispatch(st, "t1", "quote-check", "/tmp/l7r-check/q-0105-quote-check/batch-1/MANIFEST.md", MANIFEST, 0) == ""
     hc.launched(st, "t1", "ag1", True)
     assert hc.dispatch(st, "t2", "quote-check", "/tmp/l7r-check/q-0105-quote-check/batch-2/MANIFEST.md", MANIFEST, 1) == ""
-    assert st["rounds"]["quote-check|q:0105"] == 1, "one round for the two batches"
     assert hc.batch_root("/tmp/l7r-check/q-0105-quote-check/batch-2/MANIFEST.md") == "/tmp/l7r-check/q-0105-quote-check"
     assert hc.batch_root("/tmp/l7r-check/q-0105-quote-check/MANIFEST.md") == ""
     assert "already in q:0105's round" in hc.dispatch(st, "t3", "quote-check", "/tmp/l7r-check/q-0105-quote-check/MANIFEST.md", MANIFEST, 2), "an unbatched re-dispatch"
+    hc.launched(st, "t2", "ag2", True)
+    hc.returned(st, "ag1", "a reading")  # both batches read: the round counts once they reply (feature 385 T41)
+    hc.returned(st, "ag2", "a reading")
+    assert st["rounds"]["quote-check|q:0105"] == 1, "one round for the two batches"
 
 
 def _clone(tmp: pathlib.Path) -> pathlib.Path:
@@ -99,12 +108,14 @@ def test_the_third_round_goes_to_the_arbiter(tmp_path: pathlib.Path, monkeypatch
     st: dict = {}
     for i in range(2):
         assert hc.dispatch(st, f"t{i}", "quote-check", "/m", MANIFEST, i, root) == ""
+        _read(st, f"t{i}")
         hc.answered(st, "quote-check", ["q:0105"])
     msg = hc.dispatch(st, "t9", "quote-check", "/m", MANIFEST, 5, root)
     assert "round 3 of `quote-check` on q:0105 in this feature passes its cap of 2" in msg and "make arbiter-bundle" in msg
     assert list(ha.owed(root)) == ["round:quote-check|q:0105@3"]
     ha.record_ruling(root, "round:quote-check|q:0105@3", {"ruling": "continue", "why": "a new finding each round", "what": "the notes"}, "round-arbiter")
     assert hc.dispatch(st, "t9", "quote-check", "/m", MANIFEST, 5, root) == "" and ha.owed(root) == {}
+    _read(st, "t9")
     hc.answered(st, "quote-check", ["q:0105"])
     assert "passes its cap of 3" in hc.dispatch(st, "t10", "quote-check", "/m", MANIFEST, 6, root)
     ha.record_ruling(root, "round:quote-check|q:0105@4", {"ruling": "accept", "why": "what is left is wording"}, "round-arbiter")
@@ -114,6 +125,7 @@ def test_the_third_round_goes_to_the_arbiter(tmp_path: pathlib.Path, monkeypatch
     moved = MANIFEST.replace("abc123", "def456")  # a later change re-owes the unit: the accept no longer closes it (374 FR-005)
     for i in range(2):
         assert hc.dispatch(st, f"m{i}", "quote-check", "/m", moved, 8 + i, root) == "", "the new change's rounds count afresh"
+        _read(st, f"m{i}")
         hc.answered(st, "quote-check", ["q:0105"])
     assert "round 6 of `quote-check` on q:0105 in this feature passes its cap of 5" in hc.dispatch(st, "m2", "quote-check", "/m", moved, 11, root)
     assert hc.dispatch(st, "ti", "impl-drift", "/m", "unit: impl-drift:x 1\n", 5) == "" and st["dispatches"]["ti"]["subjects"] == []
@@ -129,14 +141,17 @@ def test_a_first_reading_of_new_notes_is_not_a_repeat_round(tmp_path: pathlib.Pa
     st: dict = {}
     for i, notes in enumerate((("a", "b"), ("c",), ("d", "e"))):
         assert hc.dispatch(st, f"t{i}", "quote-check", "/m", scoped(*notes), i, root) == "", notes
+        _read(st, f"t{i}")
         hc.answered(st, "quote-check", ["q:0105"])
     assert st["rounds"]["quote-check|q:0105"] == 1
     assert hc.dispatch(st, "t5", "quote-check", "/m", scoped("c"), 5, root) == ""  # re-reads c: round 2
+    _read(st, "t5")
     hc.answered(st, "quote-check", ["q:0105"])
     assert "round 3 of `quote-check` on q:0105" in hc.dispatch(st, "t6", "quote-check", "/m", scoped("a", "z"), 6, root)
     st2: dict = {}
     for i in range(2):  # a whole-page reading reads every note: a later scoped one is a round
         assert hc.dispatch(st2, f"w{i}", "quote-check", "/m", MANIFEST if i == 0 else scoped("q"), i, root) == ""
+        _read(st2, f"w{i}")
         hc.answered(st2, "quote-check", ["q:0105"])
     assert st2["rounds"]["quote-check|q:0105"] == 2
 
@@ -185,9 +200,12 @@ def test_the_hook_entry_points_and_the_state_file(tmp_path: pathlib.Path, monkey
     edit = {"cwd": cwd, "tool_name": "Edit", "tool_input": {"file_path": PAGE, "old_string": "a", "new_string": "b"}}
     assert "frozen" in hc.handle("edit", edit, 2)
     assert hc.handle("edit", {**edit, "tool_input": {**edit["tool_input"], "new_string": 'b FREEZE_OK="the GM asked for it"'}}, 2) == ""
-    assert hc.handle("dispatch", {**agent, "tool_input": {"subagent_type": "quote-check", "prompt": f'{m} FREEZE_OK="a backfill run"'}}, 3) == ""
+    frozen_ok = {**agent, "tool_use_id": "t2", "tool_input": {"subagent_type": "quote-check", "prompt": f'{m} FREEZE_OK="a backfill run"'}}
+    assert hc.handle("dispatch", frozen_ok, 3) == ""
+    assert hc.handle("launched", {**frozen_ok, "tool_response": {"status": "async_launched", "agentId": "ag2"}}, 3) == ""
     assert hc.handle("dispatch", {**agent, "tool_input": {"subagent_type": "Explore", "prompt": "x"}}, 3) == ""
     assert hc.handle("returned", {"cwd": cwd, "agent_id": "ag1", "last_assistant_message": REPLY}, 4) == ""
+    assert hc.handle("returned", {"cwd": cwd, "agent_id": "ag2", "last_assistant_message": REPLY}, 4) == ""
     assert hc.handle("edit", {"cwd": cwd, "tool_name": "Bash", "tool_input": {"command": 'make apply-edits FROM=x FREEZE_OK="a test escape"'}}, 5) == ""
     assert hc.handle("edit", {"cwd": cwd, "tool_name": "Bash", "tool_input": {"command": "ls"}}, 5) == ""
     assert hc.handle("other", {"cwd": cwd}, 5) == ""
@@ -197,7 +215,7 @@ def test_the_hook_entry_points_and_the_state_file(tmp_path: pathlib.Path, monkey
     assert json.loads((tmp_path / ".git" / hc.STATE).read_text())["dispatches"]["t1"]["state"] == "answered"
     (tmp_path / ".specify" / "feature.json").write_text('{"feature_directory": "specs/376-y"}')
     assert hc.handle("dispatch", agent, 6) == ""
-    assert json.loads((tmp_path / ".git" / hc.STATE).read_text())["rounds"] == {"quote-check|q:0105": 1}, "a new feature counts afresh"
+    assert json.loads((tmp_path / ".git" / hc.STATE).read_text())["rounds"] == {}, "a new feature counts afresh - a round once it is read"
     monkeypatch.chdir(tmp_path)
     assert hc.main(["close", "q:0105", "x"]) == 2
     st = json.loads((tmp_path / ".git" / hc.STATE).read_text())
@@ -480,6 +498,7 @@ def test_a_later_batch_counts_its_rounds_afresh_and_a_batch_s_own_edits_do_not(t
     edited = "owed-checks: quote-check\nunit: quote-check:0105.drawing#bath-size zzz999\n"  # the round's own edit moved the words
     for i, m in enumerate((MANIFEST, edited)):
         assert hc.dispatch(st, f"t{i}", "quote-check", "/m", m, i, root) == ""
+        _read(st, f"t{i}")
         hc.answered(st, "quote-check", ["q:0105"])
     assert "passes its cap of 2" in hc.dispatch(st, "t2", "quote-check", "/m", "owed-checks: quote-check\nunit: quote-check:0105#x yyy\n", 2, root), (
         "the same batch: round 3 trips, edits notwithstanding"
@@ -487,6 +506,7 @@ def test_a_later_batch_counts_its_rounds_afresh_and_a_batch_s_own_edits_do_not(t
     batch["b"] = "main-2"  # a landing: a later batch owes the unit
     for i in range(2):
         assert hc.dispatch(st, f"n{i}", "quote-check", "/m", MANIFEST, 3 + i, root) == "", "a later batch's rounds count afresh"
+        _read(st, f"n{i}")
         hc.answered(st, "quote-check", ["q:0105"])
     assert "passes its cap of 4" in hc.dispatch(st, "n2", "quote-check", "/m", MANIFEST, 5, root), "and are capped like any other"
     assert not hc.new_cause({}, "u", "b") and not hc.new_cause({"round_batch": {"u": "a"}}, "u", ""), "no counted round, no batch: no new cause"
@@ -546,3 +566,21 @@ def test_a_refused_wave_run_drops_its_dispatches(tmp_path: pathlib.Path) -> None
     hc.drop_run(str(clone), "wave:r9:")
     assert list(hc.load(path)["dispatches"]) == ["toolu_hand"]
     hc.drop_run(str(tmp_path / "nowhere"), "wave:")  # no clone: nothing to drop, and no error
+
+
+def test_a_dispatch_a_later_hook_refused_is_no_round(tmp_path: pathlib.Path) -> None:
+    """Feature 385 T41 (the round arbiter on round:source-reader|q:0081@3): the pair hook refused two source-reader dispatches
+    before any agent started, and the counter counted both - the cap fired on zero readings. A round counts only once its agent
+    started and came back with a reply: a refused dispatch, or one that kept no reply, leaves the count unchanged."""
+    root = _clone(tmp_path)
+    st: dict = {}
+    assert hc.dispatch(st, "r1", "quote-check", "/m", MANIFEST, 0, root) == ""
+    assert st.get("rounds", {}).get("quote-check|q:0105", 0) == 0, "sent, never launched: no round"
+    assert hc.dispatch(st, "r2", "quote-check", "/m", MANIFEST, 1, root) == ""
+    hc.launched(st, "r2", "a2", True)
+    hc.returned(st, "a2", "")
+    assert st.get("rounds", {}).get("quote-check|q:0105", 0) == 0, "started, kept no reply: no round"
+    assert hc.dispatch(st, "r3", "quote-check", "/m", MANIFEST, 2, root) == ""
+    hc.launched(st, "r3", "a3", False, reply="quote-check: 1 VERBATIM")
+    hc.returned(st, "a3", "quote-check: 1 VERBATIM")
+    assert st["rounds"]["quote-check|q:0105"] == 1, "a reading counts, once"

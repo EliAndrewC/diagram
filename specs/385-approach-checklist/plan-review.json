@@ -51,7 +51,7 @@
    "declared": "spec-fidelity"
   },
   "## Landing": {
-   "sha256": "545c14c91ac6df940e8b464668f1a7f12a334039ca7f6e3a88d54973afe0f1bd",
+   "sha256": "5690644063130d034068380293f51235419b74a75a250d1da46a49c771d20c8e",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -550,6 +550,24 @@
   },
   "### T06 part B (2026-10-18T12:40Z)": {
    "sha256": "8da3cdc54c5bc4f40ff94e67e75b555e8afd3b851a4a942d0a2777cea5a6a7a0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T41 - a refused dispatch is no round (the round arbiter's fix on round:source-reader|q:0081@3)": {
+   "sha256": "ade29cbf0fe2f63aac7a650f38f098ed5c6dfc5064054e38075f8a0c7dbe5103",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T41 Approach (checklist part A)": {
+   "sha256": "e6ad252a4f6509d3f1634f643bf1998b2fece8b64aeebb61c2f904f6bbc2de2e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T41 Decisions": {
+   "sha256": "e68990c5cdca0bcad38d53a75ac26030b1192819bcfc62df1d39fa0fdab8e0c8",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -3564,6 +3582,86 @@
      "summary": "The ten tasks added by amendment 7 (FR-020, T31-T40) join the 'Lands open' list: each lands when it closes, with its retro row, while the tasks after it stay open.",
      "class": "within",
      "why": "The GM asked on 2026-10-18 (amendment 7) to 'pull in 10 more claims' so that there is enough work while he is away. FR-020 takes them as T31 to T40. The block applies the landing rule it already used for T02-T30, which was judged CLEAR (earlier.md): one task at a time, each closed with its retro row before the next starts (FR-006), and the GM's request is that each task be measured and assessed before the next. Nothing is narrowed. All ten tasks are kept, and none is dropped, merged or deferred. Landing each task open does not let the feature close with open tasks, and it adds no scope the request did not ask for."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T41 - a refused dispatch is no round (the round arbiter's fix on round:source-reader|q:0081@3)",
+    "### T41 Approach (checklist part A)",
+    "### T41 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Landing/T41",
+     "summary": "T41 added to 'Lands open': it lands when it closes, with its retro row, while later tasks stay open.",
+     "class": "within",
+     "why": "FR-006 (one task, then the retro) and the Landing rule already judged CLEAR; the only change is adding T41 to the list."
+    },
+    {
+     "id": "T41",
+     "summary": "File the round arbiter's tooling fix on round:source-reader|q:0081@3 as its own task, tooling only.",
+     "class": "within",
+     "why": "Amendment 6: 'Please make sure to implement any obvious performance / tooling / process improvements along the way', each as its own task; the task's scope is the arbiter's fix, verbatim, and its test."
+    },
+    {
+     "id": "D56-started-no-reply",
+     "summary": "'A check that started and kept no reply stays counted, as the arbiter's \"started an agent\" allows.'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The fix says count ONLY dispatches that 'started an agent AND kept a reply'. A dispatch that started and kept no reply fails that test, so the fix says it is not counted. D56 counts it, and justifies that by quoting half of a two-part condition. That is completing the arbiter's thought for them. It also defeats the plan's own stated goal ('the cap counts readings, not attempts'), because a started agent with no reply is not a reading. Nothing makes the literal reading impossible. D56 must stop counting a started dispatch that kept no reply, or this carve-out must go to the arbiter."
+    },
+    {
+     "id": "D56-60s-window",
+     "summary": "A refused dispatch is taken back only when a later dispatch finds it still 'pending' REFUSED_AFTER_S (60 s) after it was recorded. Until then it stays counted, including at a dispatch made within that minute.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The fix says refused dispatches 'should not count'. It names the pair hook's step-back block and 'any other refusal before launch', and asks for 'a test where a refused dispatch leaves the count unchanged'. Under D56, a session that dispatches again within 60 s of a refusal (the likely response to a step-back block) is charged a round for the refused dispatch at that next dispatch. The cap can then fire on readings that never happened, which is the incident's failure. The plan's own Done line ('a dispatch never launched is taken back at the next dispatch') is false in that case. The window is the plan's own choice (Approach item 3 marks it O), and its reason is that one hook cannot see another hook's refusal. That makes this mechanism awkward. It does not make the requirement impossible: the arbiter's own wording, 'started an agent and kept a reply', can be met by counting a dispatch once it shows a launch or a reply, rather than by counting first and refunding on a timer. Also unmeasured: the premise that 'the launch's PostToolUse follows in seconds'. Approach item 4 measures only the incident. If a foreground dispatch's PostToolUse comes when the agent finishes, a reading in flight for more than 60 s would be taken back, contradicting D56's 'a launched dispatch is never taken back'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T41 - a refused dispatch is no round (the round arbiter's fix on round:source-reader|q:0081@3)",
+    "### T41 Approach (checklist part A)",
+    "### T41 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing/T41",
+     "summary": "T41 is added to the Lands-open list: it lands when it closes, with its retro row, while later tasks stay open.",
+     "class": "within",
+     "why": "FR-006 (one task, then the retro) and the GM's request to work task by task, measuring each; the block only extends the existing list to the new task."
+    },
+    {
+     "id": "D56a - count at the reply",
+     "summary": "hm_checks.dispatch no longer counts a round; it records the units it would count, and the return (SubagentStop, or PostToolUse for a foreground check) counts them once when the agent comes back with a non-empty reply. A dispatch refused before launch, or whose agent kept no reply, leaves the count unchanged. No timer, no refund.",
+     "class": "within",
+     "why": "This is the arbiter's fix in its own words: 'count only dispatches that started an agent and kept a reply, and should not count those the pair hook refused (step-back block or any other refusal before launch)'. Counting at a non-empty return implements both conditions (started, kept a reply) and every refusal before launch generally, not only the step-back. Round 1's two carve-outs (a started dispatch with no reply still counted; a 60 s refund window) are gone. The tooling fix is covered by amendment 6 ('implement any obvious performance / tooling / process improvements along the way') and the arbiter's ruling."
+    },
+    {
+     "id": "D56b - unit selection unchanged",
+     "summary": "The units recorded on the dispatch pass the same batch, fresh-reading and first-look tests as before.",
+     "class": "within",
+     "why": "Keeps what the fix did not ask to change; the fix concerns only WHEN a round is counted, not which units are owed."
+    },
+    {
+     "id": "D56c - cap asked at dispatch; in-flight re-dispatch refused",
+     "summary": "The two-round cap (feature 375) is still checked at dispatch against rounds read so far, and a re-dispatch into a round still running is refused as before (FR-003c), so a round in flight is not double-booked.",
+     "class": "within",
+     "why": "Pre-existing behavior kept, and it is what keeps the cap meaningful once counting moves to the reply (otherwise concurrent dispatches could each pass a cap check before any returned). A refused re-dispatch never launches, so by D56a it is not counted, consistent with the fix. It narrows nothing the GM or the arbiter asked for."
+    },
+    {
+     "id": "D56d - tests",
+     "summary": "A test where a refused dispatch and a no-reply dispatch leave the count unchanged and a reading counts once, red without the change; existing tests that counted a round by dispatch alone now read each round via _read (launched, then returned with a reply).",
+     "class": "within",
+     "why": "The arbiter required 'a test where a refused dispatch leaves the count unchanged'; the no-reply and counts-once cases enforce the same fix's 'kept a reply' clause and add no behavior. Updating the old tests to the new counting moment is the fix's direct consequence."
     }
    ]
   }
