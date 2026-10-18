@@ -173,6 +173,11 @@ def delta_prompt(spec_dir: pathlib.Path, keys: list[str]) -> str:
     shas = json.dumps({**{k: pg.block_digest(b) for k, b in under}, **{pg.REMOVED + k: "removed" for k in removed}})
     how = (f"Record it: the JSON is `{{\"blocks\": {shas}, \"decisions\": [...]}}`, written under /tmp, then "
            f"`make plan-verdict F={n} BLOCKS=1 FILE=<it> AS=spec-fidelity`.")
-    manifest = build(spec_dir, "blocks", under, {k: t for k, t in earlier.items() if t}, how)
+    # EACH BLOCK SET ITS OWN BUNDLE (feature 385 T29, the round arbiter's fix on hour:385-approach-checklist@13): one shared
+    # `plan-<feature>-blocks` meant a second plan review could not be built while one was reading - T26 waited on T25 twice, and
+    # one round's verdict was lost - so the directory names the tasks its blocks belong to and the blocks' own digest
+    tasks = sorted({m.group(1) for k, _b in under for m in [re.match(r"#+ (T\d+)\b", k)] if m})
+    name = f"blocks-{'-'.join(tasks) or 'plan'}-{pg.digest(shas.encode())[:8]}"
+    manifest = build(spec_dir, name, under, {k: t for k, t in earlier.items() if t}, how)
     return (f"MODE 4: PLAN REVIEW of {len(under) + len(removed)} changed block(s) of feature {spec_dir.name}'s plan (feature 375 FR-043), on their "
             f"bundle: read {manifest} and the files beside it, and nothing in the repository.")
