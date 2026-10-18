@@ -136,5 +136,8 @@ def classified(cx: Any, root: Path) -> tuple[list[str], list[str], list[str], li
     with tempfile.TemporaryDirectory() as tmp:
         bskill = cx.base_tree(root, mb, Path(tmp)) if mb else Path(tmp)
         cores = cx.base_cores(bskill, keep=root) if mb else {}
-        intro, pre, carried = cx.classify(cur, index, base_index, cores, bskill / "research" / "questions", cx.load_deferred(root / cx.DEFERRED))
+        answered = frozenset(k for k, v in index.items() if k in cur and cx.relabel_answered(v, cur[k], root))
+        intro, pre, carried = cx.classify(
+            cur, index, base_index, cores, bskill / "research" / "questions", cx.load_deferred(root / cx.DEFERRED), answered
+        )
     return [f"owed ({why}): {key}" for key, why in due], intro, pre, carried

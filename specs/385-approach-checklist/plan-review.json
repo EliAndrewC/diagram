@@ -51,7 +51,7 @@
    "declared": "spec-fidelity"
   },
   "## Landing": {
-   "sha256": "06d1063116b3fb6446d046d1cd315cb5ea9bbf80790fbcb3df91c3a899646083",
+   "sha256": "516a769b610ebb0b5e51bf79a57b86010e8c69d2033ea1d787984817ab03644b",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -370,6 +370,24 @@
   },
   "### T22 Approach (re-answered 2026-10-18T09:33Z)": {
    "sha256": "3f3ee954ceb5577c672466aea683ad5c7a12204bc221fa7441f6008a610263d8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T23 - a relabel answers its MISLABELED at the gate too (found by T05)": {
+   "sha256": "1f5d8a74ec823a7d8ee869c2372ad8c2285ee5de273c8efddb9e010665f6cf61",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T23 Approach (checklist part A)": {
+   "sha256": "d0713c5a382cde0522f7762d7349ee8807b1b2fe810f0487cd219309e7d2c397",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T23 Decisions": {
+   "sha256": "7e131584f9babe7769acfe9988ce9fdb4e7df21f0493bbed40fcfd8cb1219244",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -2445,6 +2463,37 @@
      "summary": "The T22 Approach block re-answered for the new window: source of the window labeled (the arbiter's, G; turn_duration reading ours, O), incident timeline, two added hook tests (refusal after a mid-turn prompt; session with no turn ended yet), budget unchanged.",
      "class": "within",
      "why": "Answers the checklist as FR-003 requires and adds only tests that fail when the requested behavior is absent. The arbiter's ruling it cites is not in the bundle, but the window it adopts is no narrower than either version reviewed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T23 - a relabel answers its MISLABELED at the gate too (found by T05)",
+    "### T23 Approach (checklist part A)",
+    "### T23 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing: T23 lands open",
+     "summary": "T23 is appended to the Lands-open list, landing on its own when it closes like every other task.",
+     "class": "within",
+     "why": "FR-006 (one task at a time, each landing before the next) applied to a new task; amendment 6 asks for each tooling improvement found along the way to be made, and FR-015 makes it its own task."
+    },
+    {
+     "id": "T23 filed",
+     "summary": "A tooling task found by T05: the claims gate refuses a MISLABELED claim already relabeled as prescribed, with no command to clear it.",
+     "class": "within",
+     "why": "Amendment 6, the GM verbatim: 'Please make sure to implement any obvious performance / tooling / process improvements along the way.' A gate refusal nothing can clear is an obvious tooling defect; tooling only, one goal."
+    },
+    {
+     "id": "D45",
+     "summary": "claims.classify skips a MISLABELED finding whose current claim text differs from the text its verdict was recorded against while the unit body is the one judged; a relabel with the body moved stays owed and is judged again; a MISLABELED with unchanged text still refuses.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It is an exception to FR-013's last sentence ('a finding on ... a changed claim is still introduced and still refuses'). Legitimate on three grounds. (1) Purpose: FR-013 exists so a finding is fixed or re-checked clean before its feature closes; Approach step 4 records, dated 2026-10-18 with its method (make claims-owed, claims.py gate), that three claims relabeled as round 2's MISLABELED prescribed are not re-owed yet are refused, so the literal rule leaves a finding that is both fixed and unclearable, and the prescribed fix can never land. (2) The GM's own words: amendment 3 option 3, locked by the GM, 'Never block on unchanged code'; D45 requires the unit body unchanged. (3) Class check, each case on its own: the carve-out covers only MISLABELED with the body unchanged; a relabel with the body moved stays owed and judged, and a MISLABELED with unchanged text refuses as before, so FR-013's refusal of changed code survives whole. Premise the ruling rests on (not checkable from the bundle): the mechanism tests 'text differs', not 'text matches the prescription', and is defended as the same test feature 374's relabeled_only already applies on the owed side; the gate is brought into line with that existing rule, not given a new one."
     }
    ]
   }

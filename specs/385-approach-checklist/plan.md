@@ -156,7 +156,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23
 
 ## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)
 
@@ -946,6 +946,32 @@ none) was not refused, or when `make dispatch-dropped TYPE=<agent type> BUNDLE=<
 `<gitdir>/dropped-dispatches.jsonl`. While one is unanswered the turn's end is blocked, every time, naming each refused check
 with both commands - always satisfiable, so no once-only valve. The check-bundle and pair hooks' decide-first refusals name the
 check (`<agent type> on <bundle>`) instead of "dispatch".
+
+## T23 - a relabel answers its MISLABELED at the gate too (found by T05)
+
+### T23 Approach (checklist part A)
+
+1. **The goal, in the world.** A claim relabeled as its MISLABELED verdict prescribed is answered: not re-owed (as today) and not
+   refused at the claims gate.
+2. **The constraints.** `relabeled_only` (feature 374): a relabel after MISLABELED, the unit's body unchanged, owes no new round;
+   the gate's three classes (FR-010, FR-013) otherwise unchanged; a test red without it; tooling only.
+3. **Where each comes from.** The owed side's rule is feature 374's (G); applying it at the gate is ours (O), its other half.
+4. **Do they describe the world here?** Yes - measured on T05 (2026-10-18): three claims relabeled from round 2's MISLABELED
+   (`stage_homesteads#the declared cluster shape`, `WELL_SEAT_FT` and `seat_wells`'s `seated a little closer than the check`)
+   were not re-owed by `make claims-owed`, yet `claims.py gate` refused all three as introduced MISLABELED - no command clears them.
+5. **The order.** The gate's skip, then its test.
+6. **The exits.** (c) - one rule shared by both sides; (a), (b), (d), (e) n/a.
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: the gate passes a MISLABELED whose claim text changed since the verdict with the unit's body
+   unchanged, and still refuses one whose text did not change; a test red without the skip.
+
+### T23 Decisions
+
+**D45 - the gate reads `relabeled_only`'s answer.** `claims.classify` skips a MISLABELED finding whose current claim text differs
+from the text its verdict was recorded against (`claim` in the index row) while the unit's body is the one judged (`body`) - the
+relabel that verdict prescribed, as `relabeled_only` already rules for `owed`. A relabel with the body moved stays owed and is
+judged again; a MISLABELED with its text unchanged is refused as before.
 
 ## T11 - the close
 
