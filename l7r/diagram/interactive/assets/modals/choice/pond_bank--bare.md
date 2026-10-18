@@ -1,8 +1,8 @@
-About: A pond's bank could be left bare of trees, open ground beyond the reeds at the shore. A Song-dynasty Chinese farming
-manual had a new pond's bank raised high and large, and trodden firm by cattle. Whether a bare bank was earth or turf, who kept
+About: A pond's bank could be left bare of trees, open ground beyond the reeds at the shore. In Song-dynasty China, a new pond's
+bank was to be raised high and large, and trodden firm by cattle. Whether a bare bank was earth or turf, who kept
 it clear, and how high or wide it stood are not recorded.
 
-No account before modern times says a pond's bank was mown or burned. One Edo-period domain turfed the slopes of its river
+Whether a pond's bank was mown or burned before modern times is not recorded. One Edo-period domain turfed the slopes of its river
 embankments to stop the soil washing away. Today a pond's embankment is kept clear of grass and trees, mown and burned, so that
 it keeps its strength, and sun-loving flowers grow on it.
 

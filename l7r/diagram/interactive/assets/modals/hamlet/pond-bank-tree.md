@@ -3,13 +3,13 @@ cudrania, so that cattle could be tied there in the shade; the cattle trod the b
 pond's water. The same pond's bank could also be left bare, as ponds' banks are kept today, mown and burned to keep their
 strength.
 
-This hamlet's pond, where its runoff ends, has the planted bank: a few mulberry and cudrania trees stand on it, beyond the
+Where a hamlet's pond, at the end of its runoff, has the planted bank, a few mulberry and cudrania trees stand on it, beyond the
 reeds at the shore.
 
 How many trees a planted bank carried, how far apart, and how big they grew there is not recorded.
 
 Guesses:
-- One tree about every 30 ft of bank: the manual says only "sparsely".
+- One tree about every 30 ft of bank: the Song-dynasty advice says only "sparsely".
 - A crown about 12 ft across: no account gives the trees' size on a bank.
 - Mulberry and cudrania in turn round the bank: the manual names both, not their order.
 
