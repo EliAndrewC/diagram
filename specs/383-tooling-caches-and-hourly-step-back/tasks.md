@@ -209,7 +209,7 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T55 The authorization and its test (plan D49) (SC-032)
       research: rendering
       verify: DONE. verified: workflow-hooks 23/23, agent-prefix 22/22 (red 3/21 on HEAD's stagger guard), test_hm_checks 26, test_agent_models 11, test_wave_report 2, hooks-test green, quick clean
-- [ ] T56 The first real wave, measured (plan D50) (SC-034)
+- [ ] T56 The first real wave, measured (plan D50) (SC-034) [lands-open]
       research: rendering
 - [x] T57 Close: the checks, the report, landed
       research: rendering
