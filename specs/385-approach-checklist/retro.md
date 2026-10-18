@@ -619,3 +619,12 @@ with one command, never a hand-written insertion script.
 About 20 min. Found at T63's first tick: the archived-block check matched digests only, so a block a typo away from its reviewed
 text (T49, renumbered) was owed once archived; it now takes the typo rule the live check takes. **The habit it changes:** none
 needed - the archive owes nothing by construction.
+
+## T10 - the retro row
+
+About 5 h across the day (the step-back's table books 211 min to it before the hour-22 fixes). The split became a knob over the
+five recorded splits, the inset derived per map on the median parcel by the apothem law (the rectangle law missed by 0.07). Most
+of its 109 agent runs were five sibling pop-ups checked as five units, round after round - the cost the approved proposal 1
+removes. Its landing waited on three arbiter fixes (T60-T62), then a British spelling in a tool-written claims note and a stale
+Kuwabata manifest (the ink count) cost two gate runs. **The habit it changes:** none by memory - proposal 1 (grouped sibling
+pop-ups) and the house-style check on tool-written notes are the tools.
