@@ -48,6 +48,11 @@ lists only the first, it is not finished being planned.
 
 ## Performance bookends (REQUIRED for any diagram-generator change, constitution VI)
 
+A change made for speed may move maps - ALWAYS (the GM, 2026-10-18: *"anytime we are trying to make things faster, it's
+always okay for maps to change, so long as the changes don't violate our research findings"*). Hold it to the rules and the
+research claims (the cohort, the gate, impl-drift), never to identical output; an equivalence test is a proof where an answer
+is kept, never a requirement.
+
 | | label | total | median | worst | notes |
 |---|---|---|---|---|---|
 | before | `<NNN>-start` | | | | taken on UNMODIFIED code, before the first edit |

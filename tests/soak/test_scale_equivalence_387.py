@@ -151,7 +151,8 @@ def shadowed(monkeypatch: pytest.MonkeyPatch) -> dict[str, int]:
 
     def neighbors_both(self: Any, i: int) -> list[int]:
         got = neighbors(self, i)
-        assert got == _old_neighbors(self, i), "Fabric.neighbors"
+        old = _old_neighbors(self, i)  # amendment 1 (FR-011): the old search plus the split parts it could not see
+        assert set(old) <= set(got) and [j for j in got if j in old] == old, "Fabric.neighbors"
         seen("neighbors")
         me = self.alive[i]  # plan D3's defect: a live neighbor the stale index cannot find (a split part)
         if any(j != i and j not in got and settle.shared_length(me, c) > 0.0 for j, c in self.alive.items()):

@@ -121,6 +121,11 @@ where a premise did not hold, the requirement below is the form of that goal the
   by walking every house or lane per seat. The seats chosen may change; each well still keeps 0196's and 0072's rules as its
   claims state (among the dwellings, a wall within the seat gap, no well serving more than ten where a seat avoids it, not in
   the belt, not past the crop).
+- **FR-013 The guidelines say it (amendment 1).** The GM, 2026-10-18: *"We should also update our project guidelines and
+  checklists and such to explain that **anytime** we are trying to make things faster, it's **always** okay for maps to change,
+  so long as the changes don't violate our research findings."* The root `CLAUDE.md`, the engine's dev loop, `dev/performance.md`,
+  `docs/efficiency-tooling.md`, the spec and plan templates and the spec-quality checklist say so, and `spec-lint` flags a speed
+  spec's requirement that holds the maps identical (enforcing it rather than remembering it).
 - **FR-008 No rule loosened.** No check is removed, coarsened, sampled or given a wider tolerance to buy speed
   (`dev/performance.md`: a slow check is INDEXED, never coarsened).
 - **FR-009 Measured.** Bookends `make perf LABEL=387-start SCALING=1` before the first engine edit and `-end` after the last,
@@ -160,6 +165,8 @@ where a premise did not hold, the requirement below is the form of that goal the
 - **SC-007** (FR-012) At 40 households, seeds 4 / 25 / 39 / 47, the `appurtenances` and `lane_wells` stages' wall time is
   reported before and after (timed back to back), and the house distances asked per candidate seat no longer grow with the
   household count (counted at 10 / 20 / 40 households, recorded in `measurements.json`).
+- **SC-009** (FR-013) Each named document carries the GM's 2026-10-18 words; `spec-lint` check 7 fires on a speed spec asking for
+  identical maps and stays quiet where the requirement lets them change (its test).
 - **SC-008** (FR-007, FR-011, FR-012) `make cohort`, the landing cohort and `make maps` pass with the maps moved; the moved
   pool maps are committed; no seed newly fails against main.
 

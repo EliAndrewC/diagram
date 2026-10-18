@@ -81,3 +81,15 @@ def test_each_live_neighbor_is_measured_once(monkeypatch: pytest.MonkeyPatch) ->
         calls.clear()
         fab.neighbors(i)
         assert len(calls) == len(set(calls)), "a live neighbor measured twice"
+
+
+def test_a_cell_added_after_the_index_is_found_as_a_neighbor() -> None:
+    """Amendment 1 (FR-011): a staircase split after a merge adds parts under ids the index was not built with - a split part
+    was never a neighbor (42 of 502 searches on a 40-household seed). A cell added after the index stands is found by its box."""
+    ctx = RingContext(cell=CELL, g=1.0)
+    fab = st.Fabric([_box(0, 0, 48, 31), _box(200, 200, 248, 231)], ctx, ACROSS, CELL)
+    part = fab.add(_box(48, 0, 51, 31))  # as `split` adds a part, after the index was built
+    left = next(k for k, c in fab.alive.items() if round(c.bounds[0]) == 0)
+    assert part in fab.neighbors(left), "the part beside it is its neighbor"
+    assert left in fab.neighbors(part)
+    assert fab.neighbors(next(k for k, c in fab.alive.items() if round(c.bounds[0]) == 200)) == [], "a far cell has none"

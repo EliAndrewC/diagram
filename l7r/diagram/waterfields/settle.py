@@ -179,6 +179,7 @@ class Fabric:
         self.ids = list(self.alive)
         self.tree = shapely.STRtree([self.alive[k] for k in self.ids])
         self.owner = {k: k for k in self.ids}
+        self.late: list[int] = []  # the cells added since the index was built - a staircase split's parts (feature 387, FR-011)
 
     def judge(self, poly: Any) -> set[str]:
         return verdict(poly, self.ctx, self.plot_across, self.cell)
@@ -186,6 +187,8 @@ class Fabric:
     def add(self, poly: Any) -> int:
         poly = valid(poly)
         k = self._next
+        if hasattr(self, "late"):  # ...after the index is built: the index never holds it, so it is kept here to be found
+            self.late.append(k)
         self.alive[k], self.fails[k] = poly, self.judge(poly)
         self._next += 1
         return k
@@ -218,13 +221,21 @@ class Fabric:
         cells absorb each other most of its hits are stale cells whose owner is one live cell - and each hit's shared bund was
         measured before the set dropped the duplicates (15.7 measurements a merge at 40 households against 3.3 at 10,
         `m:counts-before`). The owners are found and deduplicated first, then each measured once: the same set, the same order.
-        THE INDEX IS NOT MADE CURRENT, a defect recorded rather than fixed: a cell a `split` makes after a merge gets an id the
-        index never held, so a split part is never found as a neighbor; indexing the parts would find merges this code cannot
-        and move maps, against the feature's equivalence (FR-007) - reported to the GM with how often it happens.
+        AND A CELL THE INDEX NEVER HELD IS FOUND TOO (feature 387 amendment 1, FR-011): a staircase split after a merge adds its
+        parts under new ids the index was not built with, so a split part was never a neighbor - 42 of 502 searches on a
+        40-household seed missed one (`soak/40-4.json`). The cells added since the index was built are kept (`late`) and asked
+        by their box; a failing cell may now merge into a split part, and the union is judged by `verdict` as any other.
 
         Research: neighbors by the shared bund - NONE: plumbing, the merge's order is `merge`'s claim"""
         me = self.alive[i]
         owners = {j for jj in self.tree.query(me.buffer(0.2)) if (j := self.find(self.ids[int(jj)])) != i and j in self.alive}
+        bx0, by0, bx1, by1 = me.buffer(0.2).bounds
+        for k in self.late:
+            j = self.find(k)
+            if j != i and j in self.alive and j not in owners:
+                b = self.alive[j].bounds
+                if b[0] <= bx1 and b[2] >= bx0 and b[1] <= by1 and b[3] >= by0:
+                    owners.add(j)
         scored = {(shared, j) for j in owners if (shared := self.shared(i, j)) > 0.0}
         return [j for _s, j in sorted(scored, reverse=True)]
 

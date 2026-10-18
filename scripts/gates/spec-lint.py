@@ -264,6 +264,37 @@ def check_stale_tasks(spec: pathlib.Path, tasks: pathlib.Path) -> list[str]:
     return bad
 
 
+#: a speed feature: its title or its opening says it makes something faster
+_SPEED = re.compile(r"\b(faster|speed|slow(?:er|ness)?|perf(?:ormance)?|scal(?:e|es|ing)|cost(?:s)?)\b", re.I)
+#: a requirement holding the maps to identical output
+_IDENTICAL = re.compile(r"byte[- ]identi|identical (?:maps|output)|maps? (?:unchanged|stay the same)|verdict[- ]equivalent|same answers?\b", re.I)
+#: ...unless the same requirement lets them move
+_MAY_CHANGE = re.compile(r"may (?:change|move)|never (?:to )?byte[- ]identity|not (?:to )?(?:the old maps|byte[- ]identity)", re.I)
+
+
+def check_speed_identity(spec: pathlib.Path) -> list[str]:
+    """Check 7 (feature 387, the GM 2026-10-18): a speed feature's requirement that holds the maps to identical output.
+    *"anytime we are trying to make things faster, it's always okay for maps to change, so long as the changes don't violate
+    our research findings"* - feature 387 wrote "verdict-equivalent to the code it replaces" into its own spec and left a
+    defect unfixed for it. A requirement (`- **FR-...`) of a spec whose title or first section speaks of speed, naming
+    identical maps or answers without also letting them change, is flagged."""
+    text = spec.read_text()
+    head = text[: text.find("\n## ", text.find("\n## ") + 1)] if "\n## " in text else text
+    if not _SPEED.search(head):
+        return []
+    bad = []
+    for m in re.finditer(r"^- \*\*FR-[^\n]*(?:\n  [^\n]*)*", text, re.M):
+        block = m.group(0)
+        if _IDENTICAL.search(block) and not _MAY_CHANGE.search(block):
+            line = text[: m.start()].count("\n") + 1
+            bad.append(
+                f"{spec}:{line}: a speed requirement holds the maps to identical output - maps may ALWAYS change for speed so long "
+                "as the research holds (the GM, 2026-10-18): hold it to the rules (the cohort, the gate, the claims), not to "
+                "byte-identity; an equivalence test may still prove an unchanged answer"
+            )
+    return bad
+
+
 def lint(spec_dir: pathlib.Path, specs_root: pathlib.Path | None = None,
          tree_root: pathlib.Path | None = None) -> list[str]:
     """Every complaint about one `specs/NNN-*/` directory.
@@ -284,6 +315,7 @@ def lint(spec_dir: pathlib.Path, specs_root: pathlib.Path | None = None,
     # it reads every touched spec (the feature-239 cutoff was ruled NOT LEGITIMATE) once a tasks.md exists.
     bad += check_measured_figures(spec_dir)
     bad += check_approval(spec_dir)   # check 6 (feature 377) needs no tasks.md: a filed spec is the case it exists for
+    bad += check_speed_identity(spec)  # check 7 (feature 387): speed never asks for identical maps
     return bad
 
 

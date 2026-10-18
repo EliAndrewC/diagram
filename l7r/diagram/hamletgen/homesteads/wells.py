@@ -10,12 +10,15 @@ from collections.abc import Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, surface_water_dist
+from l7r.diagram.settlement._geom.indexes import PointGrid
 from l7r.diagram.settlement.homestead_parts.wood_share import ReservedSeats, well_keepout
-from l7r.diagram.settlement.shrines_wells.wells import WELL_AMONG_DWELLINGS_PX, well_gap_to_dwellings
+from l7r.diagram.settlement.shrines_wells.wells import WELL_AMONG_DWELLINGS_PX
+from l7r.diagram.settlement.shrines_wells.wells import well_gap_to_dwellings as well_gap_to_dwellings  # re-exported: the tests ask it here
 
 from ..consts import WELL_VERGE_FT, Pt
 from ..plan import SitePlan
 from .holds import release_held
+from .well_seats import PairAhead, SeatSweep
 
 _WELL_DRAWN_R = 12.376
 """The wellhead's DRAWN half-extent, used when asking how far a candidate seat would push the crop: the glyph's own `vr`
@@ -43,10 +46,28 @@ def crop_extent_added(s: Any, c: Pt, xs: Sequence[float], ys: Sequence[float]) -
     """How far past the crop's predicted box a wellhead at `c` (its drawn radius included) reaches - 0 inside it
     (feature 287, homes H12). The box is `_crop_boxes`, what `crop_to_content` reads; a settlement that keeps none (a
     stand-in) is judged against the house centers' own box."""
+    return extent_past(crop_box(s, xs, ys), drawn_r(s), c)
+
+
+def crop_box(s: Any, xs: Sequence[float], ys: Sequence[float]) -> tuple[float, float, float, float]:
+    """The crop's predicted box (x0, x1, y0, y1): `_crop_boxes`, what `crop_to_content` reads, or the house centers' box on a
+    settlement that keeps none. Taken once per well landed by `seat_wells` (feature 387: 13,205 builds a roll, 11.8 s profiled).
+
+    Research: the crop's box - NONE: `crop_extent_added`'s own reading, taken once"""
     boxes = s._crop_boxes(city=False) if hasattr(s, "_crop_boxes") else []
-    bx0, bx1 = min((b[0] for b in boxes), default=min(xs)), max((b[1] for b in boxes), default=max(xs))
-    by0, by1 = min((b[2] for b in boxes), default=min(ys)), max((b[3] for b in boxes), default=max(ys))
-    r = drawn_r(s)
+    return (
+        min((b[0] for b in boxes), default=min(xs)),
+        max((b[1] for b in boxes), default=max(xs)),
+        min((b[2] for b in boxes), default=min(ys)),
+        max((b[3] for b in boxes), default=max(ys)),
+    )
+
+
+def extent_past(box: tuple[float, float, float, float], r: float, c: Pt) -> float:
+    """How far a wellhead of drawn radius `r` at `c` reaches past `box` (x0, x1, y0, y1) - 0 inside it.
+
+    Research: past the crop - NONE: arithmetic; the rule is `crop_extent_added`'s"""
+    bx0, bx1, by0, by1 = box
     return max(0.0, bx0 - (c[0] - r), (c[0] + r) - bx1, by0 - (c[1] - r), (c[1] + r) - by1)
 
 
@@ -116,16 +137,6 @@ PAIR_LOOK = 40
 bound on the pairs it measures, the nearest 40 of a rung's few hundred seats.
 
 Research: the look ahead's bound - NONE: a bound on the search's cost, not a rule of the map"""
-
-
-def pair_keeps_ten(c: tuple[float, float, float], seats: Sequence[tuple[float, float, float]], houses: Sequence[Mapping[str, Any]]) -> bool:
-    """Would a first well at `c` leave a second seat among `seats`, 170 px off it, with both wells nearest to no more than
-    `WELL_SERVES_MAX` households? The look ahead the first of two wells is ranked by (feature 374 wave 155).
-
-    Research:
-        no well serving more than ten - research/questions/0196-communal-wells-ido.drawing.html: the five to ten houses each dug well served at Karihama
-        the second well held 170 px off the first - UNRESEARCHED: the pair's spacing, `seat_wells`' own "wells apart"; no page gives a hamlet's wells' spacing"""
-    return any(math.hypot(c[1] - d[1], c[2] - d[2]) >= 170.0 and most_served_after(d, houses, [(c[1], c[2])]) <= WELL_SERVES_MAX for d in seats)
 
 
 def most_served_after(c: tuple[float, float, float], houses: Sequence[Mapping[str, Any]], wells: Sequence[Pt]) -> int:
@@ -468,6 +479,7 @@ def seat_wells(
     # ONE WELL INDEX FOR THE WHOLE LADDER (dev/performance.md, `frozen_terrain`): a well laid here moves no water and no crop,
     # and each `well_at` built the water, dry-plot and wet-ring grids again for its one seat (cohort seed 44: 71 builds);
     # the scope asserts on exit that the terrain it froze is the terrain that stands
+    sweep: SeatSweep | None = None
     with s.frozen_terrain():
         for third, want_near in rungs:
             if len(placed) >= want:
@@ -482,19 +494,9 @@ def seat_wells(
             # dwelling's wall within 95 px, so an open-field corner of the padded box is rejected exactly
             # as the docstring above promises.
             pad = 120.0
-            for x, y in candidates if candidates is not None else grid_points(min(xs) - pad, max(xs) + pad, min(ys) - pad, max(ys) + pad, step):
-                near = sorted(math.hypot(x - h["x"], y - h["y"]) for h in houses)
-                # the center distance PREFILTERS (a wall is never nearer than its center less the half-diagonal); the
-                # rule's own predicate decides
-                if (
-                    len(near) >= want_near
-                    and near[want_near - 1] <= third
-                    and near[0] <= gap + reach_r
-                    and well_gap_to_dwellings(houses, round(x, 1), round(y, 1)) <= gap
-                    and seat_ok(x, y)
-                    and not _wood.disc_covers(x, y, _well_r)
-                ):
-                    seats.append((math.hypot(x - ccx, y - ccy), x, y))
+            if sweep is None:  # ...ONE DISTANCE TABLE FOR EVERY RUNG (feature 387, plan D9): the lattice and the houses do not change
+                sweep = SeatSweep(list(candidates) if candidates is not None else list(grid_points(min(xs) - pad, max(xs) + pad, min(ys) - pad, max(ys) + pad, step)), houses)
+            seats, _near_of = sweep.seats(third, want_near, gap, reach_r, lambda x, y: seat_ok(x, y) and not _wood.disc_covers(x, y, _well_r), (ccx, ccy))
             # GREEDY COVERAGE, not central-first throughout (settlement-review, Mizuguchi/Sawada
             # 2026-08-15): sorting every well toward the centroid put both of Mizuguchi's wells in one
             # lobe of a two-lobed cluster - the six eastern households walked 248-424 ft while the west
@@ -510,16 +512,17 @@ def seat_wells(
             pool = sorted(seats, key=lambda c: (_in_belt(c), math.hypot(c[1] - _fx, c[2] - _fy)))  # never in the belt if anywhere else will do
             if not placed and want - len(placed) >= 2:
                 # ...AND ONE STEP AHEAD: the nearest seats to the share's middle are ranked by whether the best second well
-                # this rung offers, 170 px off, would leave both at ten or fewer (`pair_keeps_ten`) - a first seat the rung's
+                # this rung offers, 170 px off, would leave both at ten or fewer (`well_seats.PairAhead`) - a first seat the rung's
                 # ground pushed off its share left the second three or four households on three of the 44 rolls (m:w155-wells)
-                pool[:PAIR_LOOK] = sorted(pool[:PAIR_LOOK], key=lambda c: not pair_keeps_ten(c, seats, served))
+                ahead = PairAhead(seats, served)  # the second seats and the households, as arrays once (feature 387)
+                pool[:PAIR_LOOK] = sorted(pool[:PAIR_LOOK], key=lambda c: not ahead.keeps_ten(c))
             # RE-SORTED ONLY WHEN A WELL HAS LANDED (feature 278, FR-004). The key reads the wells placed and the crop boxes, and
             # inside this loop only a well that lands changes either - so a pass that popped a seat and placed nothing left a
             # list already sorted by the key it would be sorted by again (Kuwabata: 168 sorts, 72,324 key evaluations, the
             # most of its 1.8 s appurtenance stage). The house-distance part of the key never reads the wells, so it is
             # computed once per seat.
             _sorted_at = -1
-            _near_of: dict[tuple[float, float, float], float] = {}
+            _crop_box: tuple[int, tuple[float, float, float, float]] | None = None
             while pool and len(placed) < want:
                 if placed and len(placed) != _sorted_at:
                     # ...by MINIMAX NEED, in ~3-grid-step buckets, centrality breaking ties inside a
@@ -625,10 +628,8 @@ def seat_wells(
                     # is minimized by hugging one outlying farmhouse, which is the same mistake in the
                     # other direction. Every seat in the pool already passed the rung, so this only
                     # orders seats that are all legally "among the dwellings".
-                    def _neighborhood(c: tuple[float, float, float], wn: int = want_near, memo: dict[tuple[float, float, float], float] = _near_of) -> float:
-                        if c not in memo:
-                            memo[c] = sorted(math.hypot(c[1] - h["x"], c[2] - h["y"]) for h in houses)[wn - 1]
-                        return memo[c]
+                    def _neighborhood(c: tuple[float, float, float], memo: dict[tuple[float, float, float], float] = _near_of) -> float:
+                        return memo[c]  # the rung's own want_near-th nearest house, taken once by the sweep (`SeatSweep.seats`)
 
                     # THE BELT TERM SITS BEHIND COVERAGE, not in front of it. Ranked first it is a
                     # filter, and it behaved like every other filter this function has tried: Mizuguchi's
@@ -646,7 +647,9 @@ def seat_wells(
                 _, x, y = pool.pop(0)
                 if any(math.hypot(x - px, y - py) < 170.0 for px, py in placed):
                     continue  # `wells_not_clustered`: shared wells serve separate courtyards
-                if crop_extent_added(s, (x, y), xs, ys) > 0.0:
+                if _crop_box is None or _crop_box[0] != len(placed):  # the crop's box moves only when a well lands (feature 387)
+                    _crop_box = (len(placed), crop_box(s, xs, ys))
+                if extent_past(_crop_box[1], drawn_r(s), (x, y)) > 0.0:
                     # NO WELL HOLDS THE CROP OPEN (feature 287, homes H12): the frame term was a score because a padded seat was
                     # sometimes the only way to water a household; a lattice well that reaches past the box the crop will set
                     # is refused, not drawn, and the reach is held by `reach_wells` (feature 374 wave 155)
@@ -687,9 +690,17 @@ def on_a_verge(s: Settlement) -> Any:
     M = getattr(s, "M", None) or {}
     lanes = [([(float(p[0]), float(p[1])) for p in ln["pts"]], float(ln.get("w", 3.0)) / 2) for ln in [*(M.get("lanes") or []), *(M.get("access_corridors") or [])] if len(ln.get("pts") or []) >= 2]
     reach = s._well_vr() + s.px(WELL_VERGE_FT) if lanes else 0.0
+    # ...EACH LEG FILED ONCE, its box padded by its half-width and the reach (feature 387): a seat asks the legs near it, not every
+    # leg of every lane (the lattice at 11 px asked them all, seat by seat)
+    legs = PointGrid()
+    legs.extend(
+        (a, b, half, min(a[0], b[0]) - half - reach, min(a[1], b[1]) - half - reach, max(a[0], b[0]) + half + reach, max(a[1], b[1]) + half + reach)
+        for pts, half in lanes
+        for a, b in zip(pts, pts[1:], strict=False)
+    )
 
     def ok(x: float, y: float) -> bool:
-        return any(seg_dist(x, y, a, b) - half <= reach for pts, half in lanes for a, b in zip(pts, pts[1:], strict=False))
+        return any(seg_dist(x, y, a, b) - half <= reach for a, b, half, *_ in legs.near(x, y, 0.0))
 
     return ok
 

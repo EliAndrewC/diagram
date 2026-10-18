@@ -78,3 +78,8 @@ SEED=4 STAGE=<stage> HOUSEHOLDS=40`):
 ("Placing buildings" is the `appurtenances` stage; its rise is the same well seating (`seat_wells`), which seats the cluster's
 wells there and the lane-side wells in `stage_lane_wells` - measured 2026-10-18 by `make perf-profile SEED=25 STAGE=appurtenances
 HOUSEHOLDS=40`.)
+
+## Amendment 1, continued - the GM, 2026-10-18 (verbatim, mid-turn)
+
+> We should also update our project guidelines and checklists and such to explain that **anytime** we are trying to make things
+> faster, it's **always** okay for maps to change, so long as the changes don't violate our research findings.

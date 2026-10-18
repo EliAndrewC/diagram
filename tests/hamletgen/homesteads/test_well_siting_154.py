@@ -165,8 +165,11 @@ def test_the_first_well_looks_one_well_ahead() -> None:
     a well; a seat with no second seat 170 px off it keeps nothing."""
     houses = [{"x": float(10 * i), "y": 0.0} for i in range(8)] + [{"x": 400.0 + 10 * i, "y": 0.0} for i in range(8)]
     seats = [(0.0, 35.0, 0.0), (0.0, 435.0, 0.0), (0.0, 235.0, 0.0)]
-    assert wl.pair_keeps_ten(seats[0], seats, houses), "one group's middle: the other group's seat keeps both at eight"
-    assert not wl.pair_keeps_ten(seats[2], seats[2:], houses), "no second seat 170 px off: nothing keeps ten"
+    from l7r.diagram.hamletgen.homesteads.well_seats import PairAhead
+
+    assert PairAhead(seats, houses).keeps_ten(seats[0]), "one group's middle: the other group's seat keeps both at eight"
+    assert not PairAhead(seats[2:], houses).keeps_ten(seats[2]), "no second seat 170 px off: nothing keeps ten"
+    assert not PairAhead([], houses).keeps_ten(seats[0]), "no second seat at all"
 
 
 def test_one_more_well_where_one_serves_more_than_ten(monkeypatch: pytest.MonkeyPatch) -> None:

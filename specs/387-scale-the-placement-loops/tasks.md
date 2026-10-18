@@ -39,6 +39,9 @@ Every task changes how a verdict is computed, not what is drawn or where: nothin
 - [ ] T09 (amendment 1) The well seating scales (plan T09, D9; FR-012): each candidate seat's nearest houses, wall gap, pair look-ahead and verge answered from what is near it or once a pass; tests against the old forms where the answer is kept
       research: rendering
       verify:
+- [ ] T12 (amendment 1) The guidelines and checklists say speed may always change maps (plan T12; FR-013): root CLAUDE.md, the engine's dev loop, dev/performance.md, docs/efficiency-tooling.md, the spec and plan templates, the speckit-specify checklist; `spec-lint` check 7 with its test
+      research: rendering
+      verify:
 - [ ] T10 (amendment 1) Measure, sweep and record (plan T10; SC-006 - SC-008): the counts and the two well stages' time before/after, the soak, `make cohort`, `make maps` (moved maps committed), `make done`, `dev/performance.md`
       research: rendering
       verify:

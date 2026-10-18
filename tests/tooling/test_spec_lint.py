@@ -421,3 +421,15 @@ def test_figures_never_runs_a_command_that_names_a_placeholder(tmp_path: pathlib
     _failures, _reports, skipped = figures_cli.rerun(d)
     assert not marker.exists(), "the command was run"
     assert any("names a <placeholder>" in s for s in skipped)
+
+
+def test_check_7_a_speed_spec_holding_the_maps_identical(tmp_path: pathlib.Path) -> None:
+    """Feature 387 (the GM, 2026-10-18): "anytime we are trying to make things faster, it's always okay for maps to change, so
+    long as the changes don't violate our research findings" - a speed spec's requirement asking for identical maps is flagged."""
+    spec = tmp_path / "spec.md"
+    spec.write_text("# Feature: make the seating faster\n\n## Why\n\nIt is slow.\n\n## Requirements\n\n- **FR-001 Same.** Each change is\n  verdict-equivalent to the old code; the maps stay the same.\n")
+    assert any("holds the maps to identical output" in b for b in lint.check_speed_identity(spec))
+    spec.write_text("# Feature: make the seating faster\n\n## Why\n\nIt is slow.\n\n## Requirements\n\n- **FR-001 Rules.** Maps may change;\n  the old answers proved verdict-equivalent where kept.\n")
+    assert lint.check_speed_identity(spec) == [], "a requirement that lets the maps move"
+    spec.write_text("# Feature: a new glyph\n\n## Why\n\nA shrine.\n\n## Requirements\n\n- **FR-001 Same.** The maps stay the same.\n")
+    assert lint.check_speed_identity(spec) == [], "not a speed feature"
