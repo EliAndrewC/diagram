@@ -67,7 +67,20 @@ def filed(root: Path) -> dict[str, str]:
     return {k: str(r["task"]) for r in rows(d) if r.get("task") in live for k in r.get("keys") or []}
 
 
-def _file_into(text: str, task: str, keys: list[str]) -> str:
+def _ruled(d: Path, ruling: str) -> bool:
+    """Is `ruling` a `trigger` the feature's round-arbiter record holds (`arbiter.jsonl`)?"""
+    f = d / "arbiter.jsonl"
+    for ln in f.read_text(encoding="utf-8").splitlines() if f.is_file() else []:
+        try:
+            r = json.loads(ln)
+        except ValueError:
+            continue
+        if isinstance(r, dict) and r.get("trigger") == ruling:
+            return True
+    return False
+
+
+def _file_into(text: str, task: str, keys: list[str], by: str = "the claims gate (FR-013)") -> str:
     """`text` (a tasks.md) with `keys` appended to open box `task`'s line, before its closing `[lands-open]`."""
     for m in _BOX.finditer(text):
         if m.group(2) != task:
@@ -77,40 +90,48 @@ def _file_into(text: str, task: str, keys: list[str]) -> str:
         line = m.group(0)
         tail = _LANDS_OPEN if line.endswith(_LANDS_OPEN) else ""
         body = line[: len(line) - len(tail)] if tail else line
-        return text[: m.start()] + f"{body}; carried by the claims gate (FR-013): {', '.join(keys)}{tail}" + text[m.end() :]
+        return text[: m.start()] + f"{body}; carried by {by}: {', '.join(keys)}{tail}" + text[m.end() :]
     raise ValueError(f"no task {task} in tasks.md")
 
 
-def _new_box(text: str, keys: list[str]) -> tuple[str, str]:
+def _new_box(text: str, keys: list[str], ruling: str = "") -> tuple[str, str]:
     """(`text` with a new open box for `keys`, the box's id): numbered after the highest task, before the GM-review box."""
     task = f"T{max((int(m.group(2)[1:]) for m in _BOX.finditer(text)), default=0) + 1:02d}"
-    box = (
-        f"- [ ] {task} Carried by the claims gate (FR-013): findings a page edit surfaced on code left unchanged - fix the code "
-        f"or the claim and re-check each: {', '.join(keys)}{_LANDS_OPEN}\n      research: rendering\n"
-    )
+    by = f"the round arbiter's ruling {ruling}: findings it carried" if ruling else "the claims gate (FR-013): findings a page edit surfaced on code left unchanged"
+    box = f"- [ ] {task} Carried by {by} - fix the code or the claim and re-check each: {', '.join(keys)}{_LANDS_OPEN}\n      research: rendering\n"
     gm = re.search(r"^- \[[ x]\] GM review\b", text, re.M)
     if gm:
         return text[: gm.start()] + box + text[gm.start() :], task
     return text.rstrip("\n") + "\n" + box, task
 
 
-def carry(root: Path, feature: str, task: str, keys: list[str], now: str | None = None) -> str:
-    """File `keys` into the feature being landed (D27); returns what was done. Raises ValueError naming what to do instead."""
+def carry(root: Path, feature: str, task: str, keys: list[str], now: str | None = None, ruling: str = "") -> str:
+    """File `keys` into the feature being landed (D27); returns what was done. Raises ValueError naming what to do instead.
+
+    `ruling` (feature 385 T45, D59): `keys` are findings the gate counts as introduced, which that round-arbiter ruling carried;
+    it must be a `trigger` in the feature's `arbiter.jsonl`, and the record's row names it. The box and its row are written
+    together, so `holding` honors the box by its id - never a box that merely cites a trigger."""
     d = _plan_gate().resolve(feature, root)
     here = active_feature(root)
     if d is None or here is None or d.resolve() != here.resolve():
         raise ValueError(f"a carried finding is filed only into the feature being landed - the active task's ({here.name if here else 'none: `make task-start F=<n> T=<Txx>` first'}), not {feature}")
+    if ruling and not _ruled(d, ruling):
+        raise ValueError(f"RULING={ruling} is no trigger in {d.name}/arbiter.jsonl - name the round arbiter's recorded ruling that carried these findings")
     if not keys:
         return "claims-carry: no carried finding is unfiled"
     tasks = d / "tasks.md"
     text = tasks.read_text(encoding="utf-8")
+    by = f"the round arbiter's ruling {ruling}" if ruling else "the claims gate (FR-013)"
     if task:
-        text = _file_into(text, task, keys)
+        text = _file_into(text, task, keys, by)
     else:
-        text, task = _new_box(text, keys)
+        text, task = _new_box(text, keys, ruling)
     tasks.write_text(text, encoding="utf-8")
+    row: dict[str, Any] = {"task": task, "keys": keys, "utc": now or time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
+    if ruling:
+        row["ruling"] = ruling
     with (d / RECORD).open("a", encoding="utf-8") as f:
-        f.write(json.dumps({"task": task, "keys": keys, "utc": now or time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}) + "\n")
+        f.write(json.dumps(row) + "\n")
     return f"claims-carry: {len(keys)} finding(s) filed into {d.name} {task}; commit tasks.md and {RECORD} with the landing"
 
 

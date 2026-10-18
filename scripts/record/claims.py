@@ -812,6 +812,8 @@ def _parser() -> argparse.ArgumentParser:
     cc = sub.add_parser("carry")
     cc.add_argument("--feature", required=True)
     cc.add_argument("--task", default="")
+    cc.add_argument("--keys", default="", help="findings a round-arbiter ruling carried, ';'-separated (with --ruling)")
+    cc.add_argument("--ruling", default="", help="the arbiter.jsonl trigger that carried --keys")
     cv = sub.add_parser("coverage")
     cv.add_argument("--path", default="", help="only units whose file path contains this")
     ap.add_argument("--root", default=".")
@@ -830,7 +832,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 1 if refuse else 0
     if args.cmd == "carry":
         try:
-            print(claims_carry.carry(root, args.feature, args.task, [k for k, _ln in claims_carry.classified(sys.modules[__name__], root)[3] if k not in claims_carry.filed(root)]))
+            if bool(args.keys) != bool(args.ruling):
+                raise ValueError("KEYS= and RULING= go together: the findings a round-arbiter ruling carried, and that ruling's trigger")
+            keys = [k.strip() for k in args.keys.split(";") if k.strip()] if args.keys else [k for k, _ln in claims_carry.classified(sys.modules[__name__], root)[3] if k not in claims_carry.filed(root)]
+            print(claims_carry.carry(root, args.feature, args.task, keys, ruling=args.ruling))
         except ValueError as e:
             print(f"claims-carry: {e}", file=sys.stderr)
             return 2

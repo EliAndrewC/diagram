@@ -697,9 +697,9 @@ claims-triaged: ## [project] record a triage reply: a claim it names (TOUCHES) i
 	@if [ -z "$(BUNDLE)" ] || [ -z "$(REPLY)" ]; then printf 'make claims-triaged: BUNDLE=<dir> and REPLY=<file> are required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" triaged --bundle "$(abspath $(BUNDLE))" --reply "$(abspath $(REPLY))"
 
-claims-carry: ## [project] file every carried claims finding (a page edit's, on unchanged code) as an open task of the active feature, so the push lands (feature 385 FR-013)   F=<feature> [T=<open task to file into>]
+claims-carry: ## [project] file every carried claims finding (a page edit's, on unchanged code) as an open task of the active feature, so the push lands (feature 385 FR-013)   F=<feature> [T=<open task to file into>] [KEYS="<k>;<k>" RULING=<arbiter trigger>: findings a ruling carried]
 	@if [ -z "$(F)" ]; then printf 'make claims-carry: F=<feature> is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" carry --feature "$(F)" $(if $(T),--task "$(T)",)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" carry --feature "$(F)" $(if $(T),--task "$(T)",) $(if $(KEYS),--keys "$(KEYS)",) $(if $(RULING),--ruling "$(RULING)",)
 
 claims-backfill: ## [project] give every index row checked at today's research the pages it was checked at, so a later edit to them is triaged, not re-judged in full
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" backfill
