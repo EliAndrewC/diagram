@@ -129,5 +129,8 @@ Moved word for word on 2026-10-10 (the GM, 2026-10-10: "Yes, please."); 357 keep
 - **The village roll seats too few households**: `tests/soak/test_village_determinism.py` fails on origin/main (`72b93d15c`,
   measured 2026-10-18 in a detached worktree; method: `make soak`): `roll_village("R", households=18, ...)` on seed 7 seats 13
   houses where the test holds 15-19. The soak tier runs only by hand, so nothing caught it; it fails the same on main without feature 387, whose own soak equivalence ran beside it green.
-  Owed: find which change dropped the seated count (`git bisect` on
-  `make soak`), and either restore the seating or record why 13 of 18 is right.
+  FOUND (2026-10-18, `git bisect` on the test alone, `make test-file FILE=tests/soak/test_village_determinism.py`): the first
+  failing commit is `221a9a08e`, feature 328 wave 78 - the grave cut's re-hold keeps a paddy ring only at the placer's lines
+  (25 deg, a quarter cell, the arrowhead); its checks were the pool and the hamlet cohort, never the village soak. Owed: see
+  why the stricter re-hold leaves the village roll 13 houses of 18 (fewer basins kept, the field larger, the cluster's ground
+  smaller?), and restore the seating or record why 13 of 18 is right.
