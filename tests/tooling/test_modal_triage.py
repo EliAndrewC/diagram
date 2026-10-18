@@ -103,6 +103,17 @@ def test_the_command_line(drawn: pathlib.Path, capsys: pytest.CaptureFixture[str
     assert mt.keep(drawn, "research/questions/no-such.html") == ""
 
 
+def test_a_transcript_reply_is_read_for_its_last_reply(drawn: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
+    # read raw, a transcript's TOUCHES lines sit inside JSON strings and every pop-up was answered untouched (385 T07)
+    _edit(drawn, "Wells stand by the door.", "Wells stand by the kitchen.")
+    assert mt.main(["--root", str(drawn), "bundle", "--out", str(drawn.parent / "t")]) == 0
+    capsys.readouterr()
+    said = {"type": "assistant", "message": {"content": [{"type": "text", "text": "TOUCHES `hamlet/farmhouse` - the well"}]}}
+    (drawn.parent / "r.jsonl").write_text(json.dumps(said) + "\n")
+    assert mt.main(["--root", str(drawn), "record", "--bundle", str(drawn.parent / "t"), "--reply", str(drawn.parent / "r.jsonl")]) == 0
+    assert "1 of 1 unit(s) sent on to their checks" in capsys.readouterr().out
+
+
 FIX = pathlib.Path(__file__).resolve().parents[1] / "fixtures" / "modal-triage-343"
 Q99 = "research/questions/0099-the-hearing-court-shirasu.html"
 Q104 = "research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html"

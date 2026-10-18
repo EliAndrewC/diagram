@@ -33,6 +33,7 @@ from collections.abc import Mapping, Sequence
 HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 sys.dont_write_bytecode = True
+import apply_edits as ae  # noqa: E402
 import modal_owed as mo  # noqa: E402
 import record_owed as ro  # noqa: E402
 import record_units as ru  # noqa: E402
@@ -237,7 +238,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
         return 0
     data = json.loads((pathlib.Path(a.bundle) / "triage.json").read_text(encoding="utf-8"))
-    msgs = record(ro.store(root), data["units"], pathlib.Path(a.reply).read_text(encoding="utf-8"), data.get("pages"), data.get("blobs"))
+    # a transcript (.jsonl / .output) is read for its last reply, as `make apply-edits` reads one: read raw, no line opened
+    # with TOUCHES and every pop-up was answered untouched (feature 385 T07, 2026-10-18)
+    msgs = record(ro.store(root), data["units"], ae.reply_of(pathlib.Path(a.reply)), data.get("pages"), data.get("blobs"))
     for msg in msgs:
         print(f"modal-triaged: {msg}")
     n = sum(1 for msg in msgs if msg.startswith("touched"))
