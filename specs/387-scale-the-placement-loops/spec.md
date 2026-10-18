@@ -123,9 +123,10 @@ where a premise did not hold, the requirement below is the form of that goal the
   the belt, not past the crop).
 - **FR-013 The guidelines say it (amendment 1).** The GM, 2026-10-18: *"We should also update our project guidelines and
   checklists and such to explain that **anytime** we are trying to make things faster, it's **always** okay for maps to change,
-  so long as the changes don't violate our research findings."* The root `CLAUDE.md`, the engine's dev loop, `dev/performance.md`,
-  `docs/efficiency-tooling.md`, the spec and plan templates and the spec-quality checklist say so, and `spec-lint` flags a speed
-  spec's requirement that holds the maps identical (enforcing it rather than remembering it).
+  so long as the changes don't violate our research findings."* The constitution (Principle X clause 15, whose "maps may move"
+  covered only a placer, fill or scatter, widened to every change made for speed), the root `CLAUDE.md`, the engine's dev loop,
+  `dev/performance.md`, `docs/efficiency-tooling.md`, the spec and plan templates and the spec-quality checklist
+  (`speckit-specify`) say so.
 - **FR-008 No rule loosened.** No check is removed, coarsened, sampled or given a wider tolerance to buy speed
   (`dev/performance.md`: a slow check is INDEXED, never coarsened).
 - **FR-009 Measured.** Bookends `make perf LABEL=387-start SCALING=1` before the first engine edit and `-end` after the last,
@@ -163,10 +164,9 @@ where a premise did not hold, the requirement below is the form of that goal the
 - **SC-006** (FR-011) The merges' neighbor search finds the split parts the soak counted (`neighbors_missing_a_split_part` 0 on
   the four 40-household rolls), and every kept basin passes `verdict`.
 - **SC-007** (FR-012) At 40 households, seeds 4 / 25 / 39 / 47, the `appurtenances` and `lane_wells` stages' wall time is
-  reported before and after (timed back to back), and the house distances asked per candidate seat no longer grow with the
-  household count (counted at 10 / 20 / 40 households, recorded in `measurements.json`).
-- **SC-009** (FR-013) Each named document carries the GM's 2026-10-18 words; `spec-lint` check 7 fires on a speed spec asking for
-  identical maps and stays quiet where the requirement lets them change (its test).
+  reported before and after, timed back to back; and the house distances and wall measures the seating computes one at a time
+  in Python (counted at 10 / 20 / 40 households) fall - the rest asked of the houses near a seat or as one array a call.
+- **SC-009** (FR-013) Each named document, the constitution among them, carries the GM's 2026-10-18 words.
 - **SC-008** (FR-007, FR-011, FR-012) `make cohort`, the landing cohort and `make maps` pass with the maps moved; the moved
   pool maps are committed; no seed newly fails against main.
 
@@ -205,3 +205,8 @@ where a premise did not hold, the requirement below is the form of that goal the
 - **round-arbiter (2026-10-18), trigger round:spec-fidelity|387-scale-the-placement-loops#1@6: ACCEPT** - the review converged
   (4, 3, 3, 2, 1 items, none repeated, round 5's a stale task line, applied); the spec stands as round 5 left it. Its tooling fix
   (the arbiter bundle carries each round's verdict file with each finding marked) is an open item of this feature.
+- **spec-fidelity, amendment 1, first reading (2026-10-18): CHANGES REQUIRED, 2 items.** (1) `spec-lint` check 7 was
+  UNREQUESTED - the GM asked the guidelines to explain the rule, and a guard flagging identical output would refuse a cache
+  feature whose correctness is byte-identity: dropped from FR-013, SC-009, the code and the documents. (2) The constitution was
+  MISSING from FR-013: Principle X clause 15 widened (v2.31.0). With them, SC-007's count restated: the matrix still measures
+  each seat against every house, in one array call, so the count is of the one-at-a-time Python measures.

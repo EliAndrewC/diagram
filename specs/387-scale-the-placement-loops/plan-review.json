@@ -74,13 +74,49 @@
    "declared": "spec-fidelity"
   },
   "## Project Structure": {
-   "sha256": "d1fdb6e02c6d483f0220eed4b2c6554be5cb26606d3430da19e107813375a253",
+   "sha256": "4bc93a5557dfe6ae50f47ab522a95f51187cc740093828cce7b42aa8b257742f",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
   },
   "## Complexity Tracking": {
    "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Amendment 1 (the GM, 2026-10-18): maps may change where the research holds": {
+   "sha256": "63e5c5a3c4332d834e5e1dae82b8a4bd42a10d8c0a0785d945c218e043bc16f8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T08 - the merges find every live neighbor (FR-011)": {
+   "sha256": "a9576ffffbae9024241677321b2ff1c66e7e11d02546d8621f8460f170bfcd09",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T09 - the well seating scales (FR-012)": {
+   "sha256": "0f2323633027a8b0d7219ef3963ba93b2c496eb11d1695fe1ac66b655ee71bf0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T12 - the guidelines say it (FR-013)": {
+   "sha256": "bf24248f573dc4731bf01122ff6a17c1c6b6c7ffe839d763d41ddb8970243595",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T10 - measure (SC-006 - SC-009)": {
+   "sha256": "4b989b923ed06e1c80bba5eb8e3bcb3857b49ca6f96bf4a9a7c88711ebfea123",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T11 - land": {
+   "sha256": "9dc57ca9dbae3394232732a3424fda4096fda96394d506019f621ad5c49269da",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -395,6 +431,105 @@
      "summary": "Fabric.neighbors maps hits to live owners, removes duplicates and measures each once; refinement: a pair's shared-bund measure is kept with the two polygons it was taken on and reused while neither cell changes; the index is still not made current (defect recorded)",
      "class": "within",
      "why": "FR-003 asks that bund measurements per merge stop growing with the household count, and the after-count shows measuring once per merge still grew (3.2/3.1/9.4). Reusing a measure taken on the very same two polygons removes recomputation of an unchanged value and gives exactly the same answer under FR-007, with no check removed or loosened under FR-008. This is what the GM asked for under 'rebuilding things that don't change' and 'the cell merges ... redo the whole check'. The index carve-out is unchanged from the CLEAR text and from FR-003 itself."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Amendment 1 (the GM, 2026-10-18): maps may change where the research holds",
+    "## Project Structure",
+    "## T08 - the merges find every live neighbor (FR-011)",
+    "## T09 - the well seating scales (FR-012)",
+    "## T10 - measure (SC-006 - SC-009)",
+    "## T11 - land",
+    "## T12 - the guidelines say it (FR-013)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "A1-judged-by-rules",
+     "summary": "Amendment 1 block: FR-007 holds the research, not the old maps; T01-T07 stand as landed with their equivalence tests; T08/T09's moved maps are named at the point of change and judged by the cohort, the landing cohort, the pool gate and impl-drift.",
+     "class": "within",
+     "why": "The GM: 'It's okay if maps change to make things faster, so long as they remain compatible with our research.' Keeping T01-T07's already-proved answers is permitted, not required against; judging moved maps by the rule checks rather than byte-identity is FR-007 verbatim."
+    },
+    {
+     "id": "D8",
+     "summary": "Cells added after Fabric's STRtree is built go to a 'late' list; neighbors() also takes every late cell's live owner whose bounds meet the same query box, then measures as before; a failing cell may merge into a split part, each union judged by verdict.",
+     "class": "within",
+     "why": "The GM asked for the missed split-part neighbors to be fixed. FR-011 says the search's index is 'kept current as cells are added'; a box test over the late list is an index kept current by another mechanism and returns the same candidate set as an STRtree query on that box would. SC-006's split-part count 0 and verdict on every union are both carried. Nothing narrowed."
+    },
+    {
+     "id": "D8-oracle",
+     "summary": "The soak's neighbor oracle becomes 'old neighbors are a subset of the new, in the old order', with the split-part count required to read 0 on the four 40-household rolls.",
+     "class": "within",
+     "why": "Test enforcing FR-011/SC-006; it only fails when the requested fix is absent."
+    },
+    {
+     "id": "D9a",
+     "summary": "Lattice-to-house distances computed as one numpy array per call, read by every rung (want_near-th nearest via np.partition, nearest) and by the ranking tie-break.",
+     "class": "within",
+     "why": "FR-012: questions 'computed once per pass, not by walking every house per seat'. Rules unchanged; last-place rounding moving a threshold seat is a map change the GM allowed."
+    },
+    {
+     "id": "D9b",
+     "summary": "Wall-gap test asked only of houses whose centers lie within seat gap + widest half-diagonal.",
+     "class": "within",
+     "why": "A house beyond that bound has every wall point farther than the gap, so the <= gap verdict is unchanged; answered 'from what is near it' per FR-012; no tolerance widened (FR-008)."
+    },
+    {
+     "id": "D9c",
+     "summary": "First well's pair look-ahead computed for every second seat in one array op (PairAhead, ties to the first well as min did); old pair_keeps_ten becomes the test oracle, its claims moved to PairAhead.keeps_ten.",
+     "class": "within",
+     "why": "FR-012 names the pair look-ahead's households per well; the ten-household rule is kept and its research claims move with the code (FR-007 impl-drift)."
+    },
+    {
+     "id": "D9d",
+     "summary": "Crop box taken once per well landed, not per seat popped.",
+     "class": "within",
+     "why": "Computed once per pass per FR-012; the 'not past the crop' rule is unchanged."
+    },
+    {
+     "id": "D9e",
+     "summary": "Lane-side verge test asks a PointGrid of lane legs padded by half-width and reach.",
+     "class": "within",
+     "why": "FR-012 names 'a lane's verge' to be answered from what is near; the verge rule is unchanged."
+    },
+    {
+     "id": "D9-proof",
+     "summary": "Unit tests of each new form against the old on random hamlets (test_well_seats_387.py); cohort and pool for moved maps; lane_wells timed unprofiled in T10.",
+     "class": "within",
+     "why": "Enforcement of FR-012 and FR-007; the cProfile figure carries a date and method."
+    },
+    {
+     "id": "T12",
+     "summary": "The GM's words go into root CLAUDE.md, l7r/diagram/CLAUDE.md (Performance), dev/performance.md, docs/efficiency-tooling.md, the spec template's success criteria, the plan template's bookends and the speckit-specify quality checklist; spec-lint check 7 flags a speed spec's requirement holding maps/answers identical without letting them change, tested firing and quiet.",
+     "class": "within",
+     "why": "The GM: 'update our project guidelines and checklists and such to explain that anytime we are trying to make things faster, it's always okay for maps to change'. The document list is FR-013's; check 7 is FR-013's accepted enforcement, scoped to speed specs exactly as the GM's 'anytime we are trying to make things faster'."
+    },
+    {
+     "id": "T12-speed-spec-heuristic",
+     "summary": "spec-lint check 7 treats a spec as a speed spec when its title or opening speaks of speed.",
+     "class": "within",
+     "why": "FR-013 says 'a speed spec' without a detector; a lint can only approximate intent, and the guideline text itself still states the GM's 'anytime' rule in full, so the rule is not narrowed - only its mechanical catch is bounded."
+    },
+    {
+     "id": "T10",
+     "summary": "Measure: soak split-part count 0; appurtenances and lane_wells timed before/after at 40 households seeds 4/25/39/47; house distances per seat counted at 10/20/40; make cohort, make maps with moved pool maps committed, make done; dev/performance.md gains the two.",
+     "class": "within",
+     "why": "Carries SC-006 - SC-009 and FR-010; the two stages timed are the GM's 'well placement' and 'Placing buildings'. No unrequested map or tier added (the sizes and seeds are the spec's own)."
+    },
+    {
+     "id": "T11",
+     "summary": "Land: impl-drift on touched claims, landing cohort, gated push, the report's GM section updated.",
+     "class": "within",
+     "why": "FR-007's impl-drift and landing cohort; SC-008."
+    },
+    {
+     "id": "ProjectStructure",
+     "summary": "Adds homesteads/wells.py and new homesteads/well_seats.py as amendment 1's files.",
+     "class": "within",
+     "why": "Bookkeeping of the files FR-012's work touches; decides nothing the spec left open."
     }
    ]
   }

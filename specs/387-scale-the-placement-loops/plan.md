@@ -197,17 +197,17 @@ tests against the old forms on random hamlets (`test_well_seats_387.py`); the co
 
 ## T12 - the guidelines say it (FR-013)
 
-The GM's 2026-10-18 words go into the root `CLAUDE.md` (Verification and iteration), `l7r/diagram/CLAUDE.md` (Performance),
-`dev/performance.md` ("Maps may change for speed"), `docs/efficiency-tooling.md`, the spec template's success criteria, the
-plan template's performance bookends and the speckit-specify quality checklist. **Enforced**: `spec-lint` check 7 - a
-requirement of a speed spec (its title or opening speaks of speed) naming identical maps or answers without letting them change
-is a finding; its test shows it firing and quiet.
+The GM's 2026-10-18 words go into the constitution (Principle X clause 15 widened from a placer, fill or scatter to every change
+made for speed, v2.31.0, MINOR), the root `CLAUDE.md` (Verification and iteration), `l7r/diagram/CLAUDE.md` (Performance),
+`dev/performance.md` ("Maps may change for speed"), `docs/efficiency-tooling.md`, the spec template's success criteria, the plan
+template's performance bookends and the speckit-specify quality checklist. No guard: the GM asked for the guidelines to say it.
 
 ## T10 - measure (SC-006 - SC-009)
 
 The soak (the split-part count 0); the two well stages timed before and after at 40 households, seeds 4/25/39/47, back to back;
 the house distances asked per seat at 10/20/40 households (counted); `make cohort`, `make maps` with the moved pool maps
-committed, `make done`; `dev/performance.md`'s section gains the two.
+committed, `make done`, and the end bookend re-taken after the last engine edit (FR-009); `dev/performance.md`'s section gains
+the two.
 
 ## T11 - land
 

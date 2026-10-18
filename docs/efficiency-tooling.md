@@ -272,8 +272,7 @@ The machinery in one picture, with the GM's rulings and the measurements: `docs/
   for maps to change, so long as the changes don't violate our research findings"*; earlier 2026-09-30, feature 297). A faster
   placer that decides differently is held to the rules and the research claims - the cohort, the landing cohort, the gate,
   impl-drift on the code it touched - never to identical output. An equivalence test is a proof where an answer is kept, never a
-  requirement. Feature 387 wrote "verdict-equivalent" into its own spec and left a known defect unfixed for it; `spec-lint`
-  check 7 now flags a speed spec's requirement that holds the maps identical.
+  requirement. Feature 387 wrote "verdict-equivalent" into its own spec and left a known defect unfixed for it.
 - Python: ruff, ruff format, pyrefly, and 100% coverage owed by everything the day it lands, held as a
   floor on the gate (never `fail_under` in `pyproject.toml`). An inner function that is hard to test
   is lifted to module level and tested with plain inputs; dropping the test is not an option. A

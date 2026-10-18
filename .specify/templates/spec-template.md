@@ -117,7 +117,7 @@
 <!--
   A SPEED feature (the GM, 2026-10-18): "anytime we are trying to make things faster, it's always okay for maps to change,
   so long as the changes don't violate our research findings." Its criteria are the time (measured, before and after) and
-  the rules holding (the cohort, the gate, the research claims) - never identical maps (`spec-lint` check 7).
+  the rules holding (the cohort, the gate, the research claims) - never identical maps.
 -->
 
 - **SC-001**: [Measurable metric, e.g., "Users can complete account creation in under `2 minutes`"]
