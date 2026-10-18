@@ -3279,6 +3279,63 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T06": {
+   "section_sha256": "bfc106f0fc40ecb2d30612e23103d2cc7f272a080f3baed3e773c6d245cbc647",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D51-fallback",
+     "summary": "Single file is seated only where a copy seats every household; otherwise the hamlet keeps HEAD's ranks (14 of 20 dispersed cohort seeds, measured 2026-10-18)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The cut (every farm in the line, else HEAD's seating) is the round arbiter's own wording in ask:t06-single-file-short, and under feature 379 the arbiter stands where the GM was asked, so the session did not draw this line. It is backed by measured impossibility, not by awkwardness: the margin holds 3-6 farmsteads at their own width against 12-20 households, the row's own rule says do not squeeze the homesteads, feature 318 forbids taking a farm back, and XIII forbids a seed passing at HEAD failing. A partial line would break those, and the fallback changes nothing that does not already depart from research."
+    },
+    {
+     "id": "D51-mechanics",
+     "summary": "Ringed containment boundary, seats along outward chords of paddy plus dry plots, one farmstead box (grove included) apart, no seat-radius bound, no ranks/cloud/exhaustive pass",
+     "class": "within",
+     "why": "This is how 0031's single-file line is made. Containment on every side and one box per step follow 'hugged to the field edge in single file' and 'keeps its own spacing'. Dropping the seat-radius bound removes a knob of ours, which the checklist allows, but the Approach does not say where that bound came from. Its reason should be recorded where the code changes, and T06's retro should check that it is."
+    },
+    {
+     "id": "D51-record",
+     "summary": "meta.dispersed_seating records 'single file' or 'ranks'",
+     "class": "within",
+     "why": "Lets the one Done goal be checked seed by seed. It is verification of the requested behavior, not new behavior."
+    },
+    {
+     "id": "D51-order",
+     "summary": "Line tried on a deep copy before any farm is seated",
+     "class": "within",
+     "why": "Needed by feature 318 (no farm taken back, nothing seated twice). It is a constraint the work must meet, not a scope change."
+    },
+    {
+     "id": "D52-gap",
+     "summary": "Dispersed seeds left in ranks are filed as a found row for 0031's known gap (status quo, not a DEVIATION)",
+     "class": "within",
+     "why": "'The gap filed' is the arbiter's ruling. Their seating is unchanged from HEAD, so it is an open gap, not a new departure from research that would need a DEVIATION."
+    },
+    {
+     "id": "D52-proposal",
+     "summary": "Farmsteads carved within the paddy proposed to the GM as a feature of its own, first settling 0017's 1.3 acres and the 205-273 ft width",
+     "class": "within",
+     "why": "The arbiter's ruling. It is proposed, not filed, which respects feature 377's rule that features are filed only with the GM's approval."
+    },
+    {
+     "id": "carried-T05-standoff",
+     "summary": "T05's standoff claim judged on the 6 ft floor only (10-13 ft treated as a drawn figure, not a maximum); the row village's whole-farmstead standoff left UNCLAIMED",
+     "class": "within",
+     "why": "Carried by the round arbiter (ask:t05-old-drifts-at-landing). That attribution comes from the dispatch, and the bundle does not show whether the arbiter ruled on this reading or only moved the claim. Whether 10-13 ft is a maximum is a research-ladder question, not a fidelity one. Nothing in T06 widens or narrows the claim."
+    },
+    {
+     "id": "Done-one-goal",
+     "summary": "One goal: cohort 54/54, each dispersed seed in single file (all households, no rank) or as at HEAD",
+     "class": "within",
+     "why": "One goal, as FR-015 requires, and matches the arbiter's 'cohort 54/54'. Step 9's wording is inverted: it says 'seeds whose line holds' are filed as the gap, while D52 files the seeds in ranks. This is a drafting error to fix before Done is measured, not a narrowing."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
