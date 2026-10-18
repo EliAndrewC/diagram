@@ -216,13 +216,14 @@ def corridor_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:
     return house_clear(a, b, own, house_gap(s)) and fixtures_clear(s, a, b, own) and parts_clear(s, a, b, own) and standing_clear(s, a, b)
 
 
-#: How far a way's tread edge stands from a farmhouse wall, in feet (feature 294 B7): GUESS, anchored on the research's three-shaku
-#: (~3 ft) eaves strip before a townhouse (research/contents.json#compounds) with a margin for the eaves themselves; the recorded defect was a
-#: tread 3.85 ft from a wall, and every pool map measured 4.9 ft or more when the rule was written (rules-recon.md item 8). The
-#: house seating holds a house off every tread by it (`houses._on_a_tread`, which imports it from here) and a corridor holds its
-#: tread off its own house by it (`house_gap`).
-TREAD_WALL_FT = 4.0
-"""Research: tread clear of a wall - GUESS: 4 ft, on a townhouse's three-shaku eaves strip with a margin"""
+#: How far a way's tread edge stands from a farmhouse wall, in feet (feature 294 B7; RESEARCHED by feature 385 T07, 2026-10-18): a
+#: Japanese village house stood about 3 ft (3 shaku) back from a road's boundary (Wigmore 1892, Mino), and a north Chinese house kept
+#: a drip strip of 2 or 3 chi at its wall foot, which takes in the drip of eaves reaching out 2.2 chi (0247). It was 4 ft - a
+#: townhouse's three-shaku strip and a foot of margin, the foot a GUESS - and the unresearched foot is dropped. The house seating
+#: holds a house off every tread by it (`houses._on_a_tread`, which imports it from here) and a corridor holds its tread off its own
+#: house by it (`house_gap`).
+TREAD_WALL_FT = 3.0
+"""Research: tread clear of a wall - research/questions/0081-village-lanes.drawing.html: 3 ft, a Japanese village house's setback from a road and within a north Chinese house's drip strip"""
 
 LANE_MIDDLE_CLEAR_FT = 7.0
 """How far every corner of a building stands from a lane's MIDDLE at least (feature 328 wave 48): the tread's half-width and

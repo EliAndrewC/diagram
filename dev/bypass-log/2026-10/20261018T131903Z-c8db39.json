@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-18T13:19:03Z",
+  "target": "claims-gate",
+  "commit": "0ac09460b",
+  "why": "CLAIMS_OK: ask:t06-single-file-short rules the dispersed ranks fallback a known gap (found-wave157), as ask:t05-old-drifts-at-landing carried it into T06"
+}
