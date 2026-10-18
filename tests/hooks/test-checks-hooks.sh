@@ -82,6 +82,7 @@ printf 'owed-checks: record-format\nunit: record-format:0200 abc\n' > "$T/b/MANI
 python3 -c 'import json,sys; print(json.dumps({"cwd":sys.argv[1],"tool_name":"Agent","tool_use_id":"t9","tool_input":{"subagent_type":"record-format","prompt":"Read "+sys.argv[2]}}))' "$C" "$T/b/MANIFEST.md" \
   | "$H/check-bundle-hooks.sh" pretool >/dev/null 2>"$T/err"; rc=$?
 [ "$rc" = 2 ] && grep -q "decide first" "$T/err" && grep -q "make decide F=999 T=T01" "$T/err" && ok "IT FIRES: a check before its task's decisions are ruled on, with the command" || no "decide-first did not fire" "rc=$rc $(cat "$T/err")"
+grep -q "record-format on $T/b/MANIFEST.md: " "$T/err" && ok "the decide-first refusal names its check and bundle (feature 385 T22: four identical lines read as three checks)" || no "the refusal names no check" "$(cat "$T/err")"
 python3 -c 'import json,sys; print(json.dumps({"cwd":sys.argv[1],"tool_name":"Agent","tool_use_id":"t10","tool_input":{"subagent_type":"record-format","prompt":"Read "+sys.argv[2]+" DECIDE_OK=\"the GM asked for this check\""}}))' "$C" "$T/b/MANIFEST.md" \
   | "$H/check-bundle-hooks.sh" pretool >/dev/null 2>"$T/err"; rc=$?
 [ "$rc" = 0 ] && ok "STAYS QUIET: DECIDE_OK with a reason" || no "the escape did not pass" "rc=$rc $(cat "$T/err")"
