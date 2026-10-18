@@ -29,7 +29,7 @@ if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds
     from shapely.ops import unary_union
 
 from l7r.diagram.settlement._geom.indexes import PointGrid, RingIndex
-from l7r.diagram.settlement._geom.primitives import FIELD_KEEPOUT_EPS, facing_chains, seg_dist
+from l7r.diagram.settlement._geom.primitives import FIELD_KEEPOUT_EPS, facing_chains, ring_chords, seg_dist
 from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.sitegen.geom import crop_polys
 
@@ -89,7 +89,9 @@ def _prepare(geom: Any) -> None:
     shapely.prepare(geom)
 
 
-def site_boundary(s: Settlement, seat: tuple[float, float]) -> tuple[list[list[Any]], tuple[list[Seg], list[Seg]], tuple[list[list[tuple[float, float]]], list[list[tuple[float, float]]]]]:
+def site_boundary(
+    s: Settlement, seat: tuple[float, float], ringed: bool = False
+) -> tuple[list[list[Any]], tuple[list[Seg], list[Seg]], tuple[list[list[tuple[float, float]]], list[list[tuple[float, float]]]]]:
     """`(chains, (water, registered), (rings, holes))` for the homestead stage, from every geometry the bundle's fit test reads
     (spec FR-001): the area members unioned and reduced to the chains facing `seat`; the water obstacles and the
     registered corridors as two sets of `(a, b, clearance)` segments, each asked the way its own test asks today."""
@@ -114,10 +116,12 @@ def site_boundary(s: Settlement, seat: tuple[float, float]) -> tuple[list[list[A
     #     still buildable. A first cut put the paddy and everything else into one facing blob, and the mosaic's far chords
     #     refused the ground behind them: Kuwabata seated 11 of 16 households.
     chains: list[list[Any]] = []
-    for poly in s.field_polys:
-        if len(poly) >= 4:
-            chains += facing_chains([(float(v[0]), float(v[1])) for v in poly], seat, FIELD_KEEPOUT_EPS)
     members: list[Polygon] = []
+    for poly in s.field_polys:
+        if len(poly) >= 4 and not ringed:
+            chains += facing_chains([(float(v[0]), float(v[1])) for v in poly], seat, FIELD_KEEPOUT_EPS)
+        elif ringed and (q := member(poly)) is not None:  # a scattered hamlet's line (T06): the field asked by containment, every side
+            members.append(q)
     for poly in s.block_polys:
         q = member(poly)
         if q is not None:
@@ -514,7 +518,7 @@ def seating_window(s: Settlement, seat: tuple[float, float], households: int) ->
     return (max(0.0, math.floor((seat[0] - r) / c) * c), max(0.0, math.floor((seat[1] - r) / c) * c), min(float(s.W), seat[0] + r), min(float(s.H), seat[1] + r))
 
 
-def install_site_boundary(s: Settlement, plan: SitePlan) -> None:
+def install_site_boundary(s: Settlement, plan: SitePlan, ringed: bool = False) -> None:
     """Compute the boundary for this roll's seat and set it on the settlement for the fit test (`_site_chains`,
     `_site_corridors`), recording it in the manifest for the gate and the measurement - no page element (FR-001).
 
@@ -531,8 +535,18 @@ def install_site_boundary(s: Settlement, plan: SitePlan) -> None:
     _toe = [(float(a), float(b)) for a, b in (s.toe_band() or [])]
     if len(_toe) >= 3 and _toe not in s.hard_polys:
         s.hard_polys.append(_toe)
-    chains, corridors, outline = site_boundary(s, seat)
+    chains, corridors, outline = site_boundary(s, seat, ringed)
     s._site_chains = chains
+    s._fields_ringed = ringed
+    s._seat_ring_chains = []
+    if ringed:  # round ALL the cultivated ground - the paddy and its dry plots, a scattered farm's own fields (T06)
+        _load_shapely()
+        polys = [Polygon([(float(v[0]), float(v[1])) for v in q]) for q in s.field_polys if len(q) >= 4]
+        polys += [Polygon([(float(v[0]), float(v[1])) for v in d["poly"]]) for d in (s.M.get("dry_plots", []) or []) if d.get("poly") and len(d["poly"]) >= 3]
+        land = unary_union([q if q.is_valid else q.buffer(0) for q in polys]).buffer(FIELD_KEEPOUT_EPS).buffer(-FIELD_KEEPOUT_EPS)
+        for part in list(land.geoms) if hasattr(land, "geoms") else [land]:
+            if isinstance(part, Polygon) and part.area > 0:
+                s._seat_ring_chains.append(ring_chords([(float(x), float(y)) for x, y in part.exterior.coords[:-1]], FIELD_KEEPOUT_EPS))
     s._site_corridors = SiteCorridors(corridors, outline)
     s._free_ground = FreeGround(chains, corridors, outline, seating_window(s, seat, plan.spec.households))
     s._unreachable = UnreachableGround(web_hard_ground(s, plan))

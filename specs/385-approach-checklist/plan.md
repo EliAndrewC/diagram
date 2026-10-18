@@ -156,7 +156,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28
 
 ## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)
 
@@ -752,6 +752,47 @@ Owed by the hour-12 step-back (`hour:385-approach-checklist@12`, ruled `continue
 8. **Routes measured before asking?** Yes - the pool rolled before ask:t05-old-drifts-at-landing.
 9. **After a ruling.** `continue` (hour 12) and `continue` (the ask): land T05; its fixes T25 (landed) and T26 (in review).
 
+## T06 - a scattered hamlet seated in single file round its fields (the ranking row `_seat_households#a scattered hamlet's seating`)
+
+### T06 Approach (checklist part A)
+
+1. **The goal, in the world.** A scattered hamlet's farms stand each by its own fields, in one line round the cultivated ground,
+   not in ranks behind a front row - where that line can hold every farm.
+2. **The constraints.** 0031's drawing rule ("the whole line is hugged to the field edge in single file ... do not squeeze the
+   homesteads"); the field's area (0017, 1.3 acres a household); every household seated or the site refused, no farm taken back
+   (feature 318); no seed passing at HEAD may fail (XIII); the two arbiter rulings (ask:t06-scattered-single-file,
+   ask:t06-single-file-short); carried from T05: the standoff claim, judged on the 6 ft floor only (10 to 13 ft is a drawn
+   figure, not a maximum), and the row village's whole-farmstead standoff UNCLAIMED.
+3. **Where each comes from.** Single file is 0031's drawing rule, which the page itself calls "a rule about fitting the drawing"
+   (O, a convention); "each farm amid its own fields" is 0031's finding (R); the area is 0017's (R); the fallback is the
+   arbiter's (G); the farmstead's width with its grove as the line's step is ours (O), the page's "keeps its own spacing".
+4. **Do they describe the world here?** Measured 2026-10-18 (`t06-evidence.md`): the margin a hamlet faces holds 3 to 6
+   farmsteads at their own width (205-273 ft), against 12 to 20 households; round the paddy alone the north seats fell on the dry
+   plots; round the paddy and its dry plots the line holds every farm on 6 of the cohort's 20 dispersed seeds, 1 to 8 short on
+   the other 14. No pool map is dispersed.
+5. **The order.** The line is tried before any farm is seated, on a copy, so the fallback seats nothing twice and takes nothing
+   back.
+6. **The exits.** (e) conform where the line holds; (c) the fallback where it does not (the arbiter's); (a) the field's area is
+   researched and stays; (b), (d) n/a.
+7. **The search smell.** Two routes measured and taken to the arbiter rather than tuned (step-back hour 13: "has not packed").
+8. **The budget.** 2-3 h (the arbiter's estimate); the line round all the cultivated ground was the third measurement.
+9. **Done, measured.** One goal: the cohort 54/54 with every dispersed seed seated either in single file (all its households,
+   no rank) or as at HEAD (`meta.dispersed_seating` says which); seeds whose line holds named on a found row as 0031's known gap.
+
+### T06 Decisions
+
+**D51 - the line round the cultivated ground, tried first.** For a dispersed hamlet, `_seat_households` seats the margin on a
+deep copy of the map in single file (`_seat_households_as(..., single_file=True)`), and seats the real map that way only if the
+copy seated every household; otherwise as before. In single file: the site boundary asks the field by containment on every side
+(`site_boundary(..., ringed=True)`, the fit test's ring path, its cache keyed on it); seats are offered along every outward chord
+of the paddy and its dry plots unioned (`ring_chords`), one farmstead's box apart (its grove in it), with no seat-radius bound;
+no ranks, no cloud, no exhaustive pass. `meta.dispersed_seating` records "single file" or "ranks".
+
+**D52 - the gap filed, the research answer proposed.** The dispersed seeds seated in ranks are 0031's known gap, filed as a found
+row (status quo, not a DEVIATION); farmsteads carved within the paddy, amid their own holdings (0031's finding), is proposed to
+the GM as a feature of its own, which first settles whether 0017's 1.3 acres include the farmstead and whether the farmstead's
+205-273 ft is researched (ask:t06-single-file-short).
+
 ## T15 - a cohort rolled over an uncommitted engine diff says so (found by T04)
 
 ### T15 Approach (checklist part A)
@@ -1135,6 +1176,39 @@ the arbiter's second option.
 
 **D49 - to the minute.** `approach_gate.refusal` compares an owed row's time truncated to the minute, the precision `owe` prints in
 the heading it asks for; a block stamped a minute earlier still refuses.
+
+## T28 - an ask's bundle shows which numbers are researched (the round arbiter's fix on ask:t06-scattered-single-file)
+
+### T28 Approach (checklist part A)
+
+1. **The goal, in the world.** The round arbiter rules on an ask knowing, from its bundle alone, which numbers the question turns
+   on are researched and which are ours.
+2. **The constraints.** The arbiter's fix ("copies into the bundle the claim rows (source class: research, GM ruling, ours,
+   convention) for every number its evidence file names"); the bundle read without the repository; a test red without it.
+3. **Where each comes from.** The fix is the arbiter's (G); naming a number by its constant or a backticked identifier is ours (O).
+4. **Do they describe the world here?** Yes - measured on T06 (2026-10-18): the ask named the dispersed field's size and the
+   farmstead pitch, the ruling turned on whether the field's size was researched, and the bundle carried only the session's
+   evidence; the claims say `GROSS_ACRES_PER_HOUSEHOLD` rests on 0017 (IN-STEP). The "farmstead pitch" of 205-273 ft is not
+   `BUNDLE_PITCH` (the nucleated row pitch, 100 ft, on 0038): it is a scattered farmstead's own box, house, yard, garden and grove
+   bands together, read off its geometry (`_g0["bbox"]`) - each part claimed on its own, the sum stated by no claim (measured
+   2026-10-18: `make claims-report` holds no line with "273 ft" or "205 ft").
+5. **The order.** The section, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: the ruled ask's own words (ask:t06-scattered-single-file: "the field's size, is researched
+   (0017's 1.3 acres a household)", the pitch "273 ft") give `GROSS_ACRES_PER_HOUSEHOLD`'s claim, class and last verdict beside
+   "1.3 acres", and "no claim states it" beside "273 ft"; a test red without it.
+
+### T28 Decisions
+
+**D50 - the claims on what an ask names.** `arbiter_bundle.claims_section` reads every ALL_CAPS constant and backticked
+identifier in the ask's question and its evidence files, and lists each research claim on a unit of that name: its key, its
+class (a research page, GUESS, UNRESEARCHED, CONVENTION, DEVIATION, CANON, NONE - the registry's own `CLASSES`; a number the GM
+set carries CANON, his setting's canon, or DEVIATION, a departure he ruled, as its claim records it) with the claim line, and its
+last verdict. And every number with a unit the words give ("1.3 acres", "273 ft") is looked up by its VALUE: the claims whose line
+states that value and unit are listed beside it, and a value no claim states is said to be one ("a measurement, or a value
+derived from others") - so no number reaches the arbiter without its claim row or the word that it has none (rounds 1 and 2).
 
 ## T11 - the close
 

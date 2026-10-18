@@ -949,3 +949,16 @@ def test_seg_dists_is_seg_dist_for_every_pair() -> None:
     for i, p in enumerate(pts):
         for j, (a, b) in enumerate(segs):
             assert d[i, j] == pytest.approx(seg_dist(p[0], p[1], a, b), abs=1e-9)
+
+
+def test_ring_chords_run_round_the_whole_outline_pushed_out() -> None:
+    """Feature 385 T06: every chord of a field ring, each pushed out along its outward normal, for a scattered hamlet's line."""
+    from l7r.diagram.settlement._geom.primitives import ring_chords
+
+    sq = [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0)]
+    for ring in (sq, sq[::-1]):
+        chords = ring_chords(ring, 1.0)
+        assert len(chords) == 4
+        assert {(round(n[0]), round(n[1])) for _a, _b, n in chords} == {(0, -1), (1, 0), (0, 1), (-1, 0)}, "outward, whatever the winding"
+        assert all(min(a[0], b[0]) < 0 or max(a[0], b[0]) > 10 or min(a[1], b[1]) < 0 or max(a[1], b[1]) > 10 for a, b, _n in chords)
+    assert ring_chords([(0.0, 0.0), (1.0, 0.0)], 1.0) == []

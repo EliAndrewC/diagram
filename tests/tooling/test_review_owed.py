@@ -700,6 +700,8 @@ def test_verify_renders_a_map_whose_render_is_missing_or_older_than_the_map(tmp_
     sheet = tmp_path / "pool" / "sheets" / "s"
     sheet.mkdir(parents=True)
     (sheet / "s.svg").write_text("x")
-    assert snap.stale_renders(tmp_path, [types.SimpleNamespace(on="s"), types.SimpleNamespace(on="")]) == ["sheet:pool/sheets/s/s.svg"], "a sheet with no generator and no render is listed, to be refused"
+    assert snap.stale_renders(tmp_path, [types.SimpleNamespace(on="s"), types.SimpleNamespace(on="")]) == ["sheet:pool/sheets/s/s.svg"], (
+        "a sheet with no generator and no render is listed, to be refused"
+    )
     (sheet / "s.png").write_text("x")
     assert snap.stale_renders(tmp_path, [types.SimpleNamespace(on="s")]) == [], "...and not once it has one"

@@ -336,3 +336,25 @@ def test_cells_past_the_window_decided_in_one_call_answer_as_one_at_a_time() -> 
     bare = FreeGround([], ([], []), None, (0.0, 0.0, 100.0, 100.0))
     bare.decide_beyond([500.0], [500.0])
     assert bare._beyond[(62, 62)] == (False, True)
+
+
+def test_a_scattered_hamlets_boundary_rings_its_fields_on_every_side() -> None:
+    """Feature 385 T06 (the round arbiter on ask:t06-scattered-single-file): a scattered farm stands by its own fields on any
+    side, so the field is asked by CONTAINMENT, not by chords facing one seat, and seats are offered round the paddy and its
+    dry plots together - the north-side seats otherwise fell on the dry plots."""
+    from l7r.diagram.hamletgen.homesteads.boundary import install_site_boundary
+
+    s = _site()
+    chains, _corr, (rings, _holes) = site_boundary(s, (500.0, 150.0), ringed=True)
+    assert chains == [], "no facing chains: the field is in the containment outline"
+    assert any(min(p[0] for p in r) <= 300.0 and max(p[0] for p in r) >= 700.0 and max(p[1] for p in r) >= 700.0 for r in rings), "the paddy itself is a ring"
+    plan = type("P", (), {"seat": {"cx": 500.0, "cy": 150.0}, "spec": type("S", (), {"households": 10})()})()
+    install_site_boundary(s, plan, True)  # type: ignore[arg-type]
+    assert s._fields_ringed and len(s._seat_ring_chains) == 1
+    ring = s._seat_ring_chains[0]
+    assert min(min(a[1], b[1]) for a, b, _n in ring) < 280.0, "the ring runs round the dry plot north of the paddy, not the paddy alone"
+    assert {(round(n[0]), round(n[1])) for _a, _b, n in ring} >= {(0, -1), (1, 0), (0, 1), (-1, 0)}, "chords face every side"
+    assert s._site_blocks_rect((500.0, 500.0, 40.0, 28.0)), "a house in the paddy is refused by containment"
+    assert not s._site_blocks_rect((200.0, 500.0, 40.0, 28.0)), "...and one west of it, on a side no chord faced, stands"
+    install_site_boundary(s, plan)  # type: ignore[arg-type]
+    assert not s._fields_ringed and s._seat_ring_chains == [] and s._site_chains, "the clustered boundary, as before"

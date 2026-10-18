@@ -137,10 +137,10 @@ class BundleFitMixin:
         vertices). Returns `(chains, rings)`: one of them empty. Cached by the registry's identity and length."""
         polys = self.field_polys
         face = getattr(self, "field_face", None)
-        key = (id(polys), len(polys), face)
+        key = (id(polys), len(polys), face, getattr(self, "_fields_ringed", False))  # a scattered hamlet's line asks rings (385 T06)
         cached = getattr(self, "_field_chain_cache", None)
         if cached is None or cached[0] != key:
-            if face is not None:
+            if face is not None and not getattr(self, "_fields_ringed", False):
                 chains = [c for p in polys if len(p) >= 4 for c in facing_chains(p, face, FIELD_KEEPOUT_EPS)]
                 cached = (key, (chains, Indexed()))
             else:

@@ -129,6 +129,9 @@ def test_a_field_is_measured_by_chains_when_the_seat_is_known_and_by_a_ring_when
     assert s._field_blocks_point(450.0, 450.0, 14.0)  # the middle of the field
     assert s._field_blocks_point(450.0, 120.0, 14.0) is False  # well north of it
     assert s._field_blocks_rect((450.0, 450.0, 40.0, 26.0)) and not s._field_blocks_rect((450.0, 100.0, 40.0, 26.0))
+    s._fields_ringed = True  # a scattered hamlet's line (feature 385 T06): rings, whatever the seat - and the cache knows it
+    chains, rings = s._field_chains()
+    assert not chains and len(rings) == 1, "a cache built for the seat's chains is not handed to the ringed fit test"
 
 
 def test_field_within_measures_by_the_chains_when_the_seat_is_known() -> None:
