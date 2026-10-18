@@ -172,3 +172,17 @@ def test_a_page_session_s_passes_get_rows_written_from_their_replies(tmp_path: P
     assert "| findings | 1. the lantern is on no drawing page | judgment | - | applied or filed as specs/343-x/briefs/'s checks file records |" in rows[1]
     assert ll.problems(ledger.read_text()) == [], "the written rows pass the ledger's lint"
     assert len(lo.unanswered(lo.distinct(lo.settled(lo.load_passes(log), tmp_path)), ledger.read_text())) == 1, "s2's pass is left for s2"
+
+
+def test_the_refusal_names_the_command_that_writes_each_row(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 385 amendment 5 (FR-019): rows were typed by hand, about 2 min a task; `make ledger-owed WRITE=` writes them from
+    each agent's reply (the page sessions' form), and the refusal names it."""
+    log = tmp_path / "passes.jsonl"
+    log.write_text(json.dumps({"agent": "a1", "check": "spec-fidelity", "date": "2026-10-18", "subject": "s", "wall": "60 s", "tokens": "9k in / 1k out"}) + "\n")
+    ledger = tmp_path / "ledger.md"
+    ledger.write_text("")
+    assert lo.main(["--log", str(log), "--ledger", str(ledger), "--transcripts", str(tmp_path)]) == 0
+    assert 'make ledger-owed WRITE="<where you recorded what you did>"' in capsys.readouterr().out
+    repo = Path(__file__).resolve().parents[2]
+    dry = subprocess.run(["make", "-n", "-C", str(repo), "ledger-owed", "WRITE=the plan records"], capture_output=True, text=True, check=False).stdout
+    assert '--write "the plan records"' in dry

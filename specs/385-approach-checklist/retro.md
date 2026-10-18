@@ -310,3 +310,30 @@ stays as written (append-only; 54/54, as HEAD's). No checklist change.
 About 10 min: the review-round guard counts a plan review's rounds per active task back to its CLEAR and trips the round arbiter
 at the third (`round:spec-fidelity|plan:<feature>#<task>@3`); `continue` lifts it by one, `ARBITER_OK` passes it. Its first real
 use will be the next task whose plan reaches a third round. No checklist change: C-items had asked the session to remember this.
+
+## Amendment 5 - T17, T18, T19, the retro rows
+
+**The batching question first (the GM's).** Measured on the session transcript (2026-10-18): 346 of T03's 354 tool turns made
+one call, but only 18 were a bare lookup - the one shape `batching-hooks.sh` blocks; the rest were folded lookups (143), scripts
+(127), make steps (43), agents and edits. The hook does its job; the remaining single calls are dependent steps. No batching
+change: the lever is fewer rework round trips (a refused command re-sent, a test re-run after a slip), and T17 and T18 remove two.
+
+**The numbers.** About 45 min for the three (02:58Z to about 03:45Z), three plan rounds (BLOCKED, BLOCKED, then the plan-round cap
+T16 built firing on its first real use, the round arbiter ruling `accept`). Red gates 0; regressions 0.
+
+- **T17 (FR-017).** The push checks run `make-docs.py --check` wherever the tree keeps the page (`docs/make-targets.html`); a
+  stale page is refused naming `make docs`. Its first run found the sync suite's fixture trees have no page - the check keys on
+  the page, not the Makefile.
+- **T18 (FR-018).** `make arbiter-fix-done ... LAND="<files>" F=<n> TICK=<Txx>` lands the fix, settles it and ticks the task, each
+  step only after the one before succeeds; both refusals name it. Round 1 caught the first form leaving the tick out (the GM's
+  "all three"); round 2 caught the Approach still saying two.
+- **T19 (FR-019).** `make ledger-owed WRITE="<where>"` writes each owed row from the agent's reply; the refusals name it. Its first
+  use wrote this amendment's two rows; the finding cell takes the reply's first line, which for a plan review is its verdict
+  sentence - less pointed than a hand row, kept: the rows are written, not typed.
+
+**The round arbiter's tooling fix on round:spec-fidelity|plan:385-approach-checklist#T17@3.** The cap's bundle pointed at
+spec.md's Review history, which holds no plan rounds; it now carries plan-review.json's rounds (`plan_rounds`, T14's helper).
+Settled by T18's one command - its first use.
+
+**Which checklist items fired.** A9's one goal kept the three apart (three tasks, not one). B did not fire. The plan review found
+the same miss twice (a two-step leftover) - the arbiter's ruling names it as wording, which the tests settle.

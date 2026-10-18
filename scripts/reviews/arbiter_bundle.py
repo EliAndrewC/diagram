@@ -491,7 +491,13 @@ def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "", evidenc
     ]
     check, subject, files, unit = target(root, trigger, owed)
     # feature 379 amendment 2: the two kinds that used to go to the GM say where their record is
-    if check == "spec-fidelity":
+    if check == "spec-fidelity" and "|plan:" in trigger and d is not None:
+        # a PLAN review's round cap (feature 385 T16): its rounds are plan-review.json's, not spec.md's Review history (the round
+        # arbiter's tooling fix on round:spec-fidelity|plan:385-approach-checklist#T17@3: that bundle held no verdicts, "0 of 0")
+        plan_parts, plan = plan_rounds(d)
+        parts += plan_parts
+        files = files or ([str(plan.relative_to(root))] if plan.is_file() else [])
+    elif check == "spec-fidelity":
         parts.append(
             f"## Rounds - the spec review of {subject}\n\nIts rounds are `spec.md`'s Review history (beside this file): each "
             "round's verdict and what was applied. Rule as for any round cap: `accept` lets the spec stand as the last round "

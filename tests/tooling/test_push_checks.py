@@ -126,3 +126,16 @@ def test_a_passed_self_test_is_kept_until_its_code_or_an_import_changes(tmp_path
     assert ran.read_text() == "xxx", "a changed import re-ran it, and a failure is never kept"
     stamps = json.loads((root / ".git" / "l7r-cache" / "selftests.json").read_text(encoding="utf-8"))
     assert list(stamps) == ["gates/check-x.py"]
+
+
+def test_a_stale_make_targets_page_is_refused_at_the_push(tmp_path: pathlib.Path) -> None:
+    """Feature 385 amendment 5 (FR-017): T13 landed a make target by the direct route, which runs no gate, and the stale page
+    failed T16's land-tooling a task later. The push runs the gate's own check."""
+    entry = next(c for c in pc.CHECKS if c[0] == "make-docs")
+    assert entry[1] == "make-docs.py" and entry[2] == ("{root}", "--check") and "make docs" in entry[3]
+    (tmp_path / "docs").mkdir()
+    (tmp_path / "Makefile").write_text("all:  ## [project] a target\n\t@true\n")
+    (tmp_path / "docs" / "make-targets.html").write_text("stale\n")
+    page = ROOT / "scripts" / "make-docs.py"
+    assert subprocess.run([sys.executable, str(page), str(tmp_path), "--check"], capture_output=True, check=False).returncode != 0
+    assert pc.run_one(page, [str(tmp_path), "--check"], tmp_path, quiet=True) != 0, "the push's own runner refuses it too"

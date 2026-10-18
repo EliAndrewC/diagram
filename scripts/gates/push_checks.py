@@ -46,7 +46,10 @@ CHECKS: tuple[tuple[str, str, tuple[str, ...], str, bool, str], ...] = (
     ("file-scale", "gates/check-file-scale.py", ("{root}",), "a Python file is past the ~1,000-line bar (above) - constitution Principle X clause 13, gated since feature 173", False, ""),
     ("function-cap selftest", "gates/check-function-cap.py", ("--selftest",), "check-function-cap selftest failed - fix scripts/gates/check-function-cap.py before pushing", True, ""),
     ("function-cap", "gates/check-function-cap.py", ("{root}",), "a function is past the 100-statement cap, or a suppression of it says not why (above) - feature 370", False, ""),
-    ("ledger-owed", "reviews/ledger_owed.py", ("--ledger", "{root}/dev/review-ledger.md", "--refuse"), "a check's pass has no row in dev/review-ledger.md (above) - add the row printed, its ?s filled; feature 371", False, ""),
+    # feature 385 amendment 5 (FR-017): the gate's test_make_docs, on every route - T13 landed a target by the direct route, which
+    # runs no gate, and the stale page failed T16's land-tooling a task later
+    ("make-docs", "make-docs.py", ("{root}", "--check"), "docs/make-targets.html is stale against the Makefile (above) - run `make docs` and commit the page; feature 385 FR-017", False, "docs/make-targets.html"),
+    ("ledger-owed", "reviews/ledger_owed.py", ("--ledger", "{root}/dev/review-ledger.md", "--refuse"), "a check's pass has no row in dev/review-ledger.md (above) - write each from its reply: make ledger-owed WRITE=\"<where you recorded what you did>\" (or add the row printed, its ?s filled); features 371, 385 FR-019", False, ""),
     ("entry-headings selftest", "gates/check-entry-headings.py", ("--selftest",), "check-entry-headings selftest failed - the guard itself is broken; fix scripts/gates/check-entry-headings.py before pushing", True, ""),
     ("entry-headings", "gates/check-entry-headings.py", ("{root}",), "a class entry names a research heading that no longer resolves (above) - a rename owes its inbound links, feature 234", False, ""),
     ("research-pointers selftest", "gates/check-research-pointers.py", ("--selftest",), "check-research-pointers selftest failed - the guard itself is broken; fix scripts/gates/check-research-pointers.py before pushing", True, ""),

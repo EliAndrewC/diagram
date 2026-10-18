@@ -156,7 +156,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19
 
 ## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)
 
@@ -731,6 +731,71 @@ main's engine moves.
 naming one of its blocks (`## Txx` / `### Txx`), back to one CLEAR. The dispatch that would be round 3 trips
 `round:spec-fidelity|plan:<feature>#<task>@3` and is refused with the arbiter's step; each `continue` ruling lifts the cap by one
 round; `ARBITER_OK="<reason>"` passes it, recorded.
+
+## T17 - the make-targets page checked on every route (amendment 5, FR-017)
+
+### T17 Approach (checklist part A)
+
+1. **The goal, in the world.** A Makefile change that leaves `docs/make-targets.html` stale is refused at the push it arrives in, not a task later.
+2. **The constraints.** FR-017 (G, amendment 5); the push checks run in one process (`push_checks.py`, feature 383); every refusal names its compliant command; a test red without it; tooling only.
+3. **Where each comes from.** FR-017 is the GM's (G); the check is the gate's own `test_make_docs`, moved earlier (O).
+4. **Do they describe the world here?** Yes - each is one of T04's four landing refusals (its phase table, 02:51-02:57).
+5. **The order.** The check added to `push_checks.CHECKS`, then its test.
+6. **The exits.** (c) - the push runs the gate's check. (a), (b), (d) n/a; (e) n/a.
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: a push with a stale page refused, naming `make docs`; a test red without the entry.
+
+### T17 Decisions
+
+**D38 - `make-docs` in the push checks.** `push_checks.CHECKS` gains `("make-docs", "make-docs.py", ("--check",), ...)`, its refusal
+naming `make docs` and a commit; it runs from the clone's root on both routes, as every other entry does.
+
+## T18 - an arbiter's fix landed, settled and its task ticked in one command (amendment 5, FR-018)
+
+### T18 Approach (checklist part A)
+
+1. **The goal, in the world.** Closing a task whose arbiter fix is tooling is one command: the files land with their test, the fix settles, the task is ticked.
+2. **The constraints.** FR-018 (G); `make land-tooling`'s own checks unchanged; the fix's test must be on main before it settles (feature 379); every refusal names its compliant command; a test red without it; tooling only.
+3. **Where each comes from.** FR-018 is the GM's (G); the order land-then-settle is feature 379's (G).
+4. **Do they describe the world here?** Yes - each is one of T04's four landing refusals (its phase table, 02:51-02:57).
+5. **The order.** `LAND=` and `TICK=` in the recipe, then the refusal texts.
+6. **The exits.** (c) - the one command runs the three steps in order, each only after the one before succeeds. (a), (b), (d) n/a; (e) n/a.
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: `make arbiter-fix-done ... LAND="<files>" F=<n> TICK=<Txx>` lands, settles and ticks, in that
+   order; `TICK=` without `F=` is refused naming it; the refusal for a test not on main and `make tick`'s open-fix refusal both
+   name the full form - each with a test red without it (`tests/tooling/test_arbiter_fix.py`).
+
+### T18 Decisions
+
+**D39 - `LAND=` and `TICK=`: the three steps, one command.** `make arbiter-fix-done ID= NOTE= TEST= LAND="<the fix's files>" F=<n>
+TICK=<Txx>` runs `scripts/land-tooling.sh` on the files and the test, settles the fix only when they land, then runs `make tick` on
+the task with the same NOTE - each step only after the one before succeeds, so the order cannot be got wrong; `TICK=` without
+`F=` is refused naming it; without `LAND=` or `TICK=` the command behaves as today. The refusal for a test not on main
+(`hm_arbiter.settle_fix`) and `make tick`'s open-fix refusal name the full form (spec-fidelity, amendment 5 round 1: the GM's
+"One command could do all three").
+
+## T19 - a ledger row written from the record (amendment 5, FR-019)
+
+### T19 Approach (checklist part A)
+
+1. **The goal, in the world.** An owed ledger row is written by one command from the agent's own reply, not typed.
+2. **The constraints.** FR-019 (G); the row's cost cells stay `make review-cost`'s (feature 371); what the push refuses is unchanged; every refusal names its compliant command; a test red without it; tooling only.
+3. **Where each comes from.** FR-019 is the GM's (G); `ledger_owed.filled_row` already writes rows for page sessions (feature 371).
+4. **Do they describe the world here?** Yes - each is one of T04's four landing refusals (its phase table, 02:51-02:57).
+5. **The order.** `WRITE=` on the make target, then the refusal texts.
+6. **The exits.** (c) - the page sessions' command, offered to every session. (a), (b), (d) n/a; (e) n/a.
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: the refusal names `make ledger-owed WRITE=`; the target writes the rows; a test red without each.
+
+### T19 Decisions
+
+**D40 - `make ledger-owed WRITE=`.** The target passes `WRITE="<where the session recorded what it did>"` to `ledger_owed.py
+--write`, which appends each owed row filled from the agent's reply (its verdict, its first line, `nothing` when clean); the push
+check's refusal and the hook's notice name that command in place of "add the row printed, its ?s filled". A row the session
+wants to word itself can still be added by hand.
 
 ## T11 - the close
 

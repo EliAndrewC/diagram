@@ -1245,11 +1245,13 @@ arbiter-nit:  ## [project] answer an accepted unit again after the wording fix i
 
 # GUARD_EDIT_OK: feature 379 (the GM 2026-10-10) - an arbiter's tooling fix is made, not lost: the two ways an open fix is
 # settled, each a row of the GM's review; `make tick` and the closing check refuse while one is open.
-arbiter-fix-done:  ## [project] the round arbiter's tooling fix is MADE: what was built and its test (feature 379)   ID="<trigger> [<trigger> ...]" NOTE="<what was built>" TEST=tests/...
+arbiter-fix-done:  ## [project] the round arbiter's tooling fix is MADE: what was built and its test (feature 379); LAND= lands its files first, TICK= ticks the task after   ID="<trigger> [<trigger> ...]" NOTE="<what was built>" TEST=tests/... [LAND="<the fix's files>"] [F=<feature> TICK=<Txx>]
 	@: "GUARD_EDIT_OK: 2026-10-11 hourly check - several fixes one change made settle in one command (343 carried 36 open)"
 	@if [ -z "$(ID)" ] || [ -z "$(NOTE)" ] || [ -z "$(TEST)" ]; then printf 'make arbiter-fix-done: ID=, NOTE= and TEST= are required\n' >&2; exit 2; fi
+	@if [ -n "$(TICK)" ] && [ -z "$(F)" ]; then printf 'make arbiter-fix-done: TICK= ticks a task of F=<feature> - name the feature\n' >&2; exit 2; fi
 	@: "GUARD_EDIT_OK: feature 385 - ENGINE=1: an engine fix lands with its feature (land-tooling refuses engine files)"
-	@cd "$$(git rev-parse --show-toplevel)" && ARBITER_FIX_ENGINE="$(ENGINE)" python3 scripts/hooks/lib/hm_arbiter.py fix done "$(ID)" "$(NOTE)" "$(TEST)"
+	@: "GUARD_EDIT_OK: feature 385 amendment 5 (FR-018) - LAND= lands the fix's files with its test, then settles it: one command"
+	@cd "$$(git rev-parse --show-toplevel)" && $(if $(LAND),scripts/land-tooling.sh $(LAND) $(TEST) && git fetch -q origin &&,) ARBITER_FIX_ENGINE="$(ENGINE)" python3 scripts/hooks/lib/hm_arbiter.py fix done "$(ID)" "$(NOTE)" "$(TEST)"$(if $(TICK), && $(MAKE) --no-print-directory tick F="$(F)" T="$(TICK)" NOTE="$(NOTE)",)
 
 # GUARD_EDIT_OK: feature 383 FR-009 - a new operation: the feature's hourly checkpoint opened and its step-back bundle built in one
 # command (the GM 2026-10-12: "converting the check that we are doing now into something that every session does for itself").
@@ -1678,8 +1680,9 @@ review-paired-gate:  ## [project] the settlement-review's paired gate - green, r
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/review_prereq.py" gate-state --clone "$$(git rev-parse --show-toplevel)"
 
 # GUARD_EDIT_OK: feature 371 adds an operation - read-only; the push's refusal is sync-with-main.sh's, not this
-ledger-owed:     ## [project] every check pass logged in this clone with no row in the review ledger, each with the row to add (feature 371)
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/ledger_owed.py" --ledger "$$(git rev-parse --show-toplevel)/dev/review-ledger.md"
+ledger-owed:     ## [project] every check pass logged in this clone with no row in the review ledger, each with the row to add (feature 371); WRITE= writes them from each reply   [WRITE="<where you recorded what you did>"]
+	@: "GUARD_EDIT_OK: feature 385 amendment 5 (FR-019) - WRITE= writes each owed row from the agent's reply, the page sessions' form"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/ledger_owed.py" --ledger "$$(git rev-parse --show-toplevel)/dev/review-ledger.md" $(if $(WRITE),--write "$(WRITE)",)
 
 review-cost:     ## [project] a finished review agent's wall time and tokens - the ledger's cost cells (feature 294)   AGENT=<agent id>
 ##  AGENT=<id>  the agent id the Agent tool's result names

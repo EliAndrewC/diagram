@@ -224,7 +224,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     if not owed:
         return 0
     stream = sys.stderr if args.refuse else sys.stdout
-    print(f"ledger-owed: {len(owed)} check pass(es) have no row in dev/review-ledger.md's measured table - add each, filling the ?s:", file=stream)
+    print(f"ledger-owed: {len(owed)} check pass(es) have no row in dev/review-ledger.md's measured table - write them from each agent's reply: "
+          'make ledger-owed WRITE="<where you recorded what you did>" (feature 385 FR-019); or add each by hand, filling the ?s:', file=stream)
     for p in owed:
         print("  " + row_for(p), file=stream)
     print(

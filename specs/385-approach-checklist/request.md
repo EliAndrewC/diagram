@@ -158,3 +158,17 @@ The session proposed, verbatim in part:
 The GM, verbatim:
 
 > Yesa please implement the proposals you made for what to do before task 4, as amendment 4.
+
+## Amendment 5 (2026-10-18)
+
+After T04 (about 20 min), the session listed, verbatim in part:
+
+> 1. **The make-targets page wasn't rebuilt when T13 added a target, and nothing caught it.** A landing with no engine code doesn't run that check, so it surfaced a task later and failed T16's landing. I'd make that route check the page whenever the Makefile changes.
+> 2. **Closing a task with an arbiter's tooling fix takes three ordered commands:** land the tooling, mark the fix done, then tick. I ran them in the wrong order and got two refusals. One command could do all three.
+> 3. **I fill in the ledger rows for plan reviews by hand,** about 2 minutes a task. Their verdict and findings cells could be pre-filled from the recorded plan verdict.
+
+The GM, verbatim:
+
+> We already have some hooks around forcing batching of commands; were we NOT batching commands?
+>
+> Either way, I do want you to file amendment 5 for the 3 tooling fixes, and then I wonder if another tooling fix would make us more likely to batch commands if you're saying that we're not doing that.

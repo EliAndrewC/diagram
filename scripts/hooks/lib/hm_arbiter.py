@@ -505,7 +505,7 @@ def fix_hold(d: Path) -> str:
         return ""
     return ("the round arbiter's tooling fix is open - make it, with its test, in this feature before going on (feature 379):\n"
             + "\n".join(f"    {t}: {fix}" for t, fix in fixes)
-            + '\n  made:     make arbiter-fix-done ID="<trigger>" NOTE="<what was built>" TEST=<its test under tests/>'
+            + '\n  made:     make arbiter-fix-done ID="<trigger>" NOTE="<what was built>" TEST=<its test under tests/> LAND="<the fix\'s files>" F=<feature> TICK=<the task> (lands them, settles the fix, ticks the task)'
             + '\n  overhaul: make arbiter-fix-declined ID="<trigger>" REASON="<why it overhauls a process>" (the GM reviews it after landing)')
 
 
@@ -529,7 +529,7 @@ def settle_fix(root: Path, trigger: str, status: str, note: str, test: str = "",
         # the row says it lands with the feature; a tooling fix still lands first.
         if not on_main(root, test):  # amendment 1, FR-006: made in one clone is not done for the sessions on the mirror's hooks
             if not (os.environ.get("ARBITER_FIX_ENGINE") and committed_here(root, test)):
-                raise ValueError(f"{test} is not on main as it is here - land the fix first: make land-tooling FILES=\"{test} <the fix's files>\""
+                raise ValueError(f"{test} is not on main as it is here - land and settle it in one command: the same make arbiter-fix-done with LAND=\"<the fix's files>\" (it runs make land-tooling on them first)"
                                  " (an ENGINE fix, which land-tooling refuses, lands with its feature: commit it and its test, then the same command with ENGINE=1)")
             note += " (an engine fix: it lands with the feature)"
     elif status != "declined":

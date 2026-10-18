@@ -47,6 +47,12 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T16 A plan review's third round on one task waits for the round arbiter (the arbiter's fix on hour:385-approach-checklist@9, plan D37) [lands-open]
       research: rendering
       verify: DONE. see retro.md's T16 row; plan CLEAR (T04 round 2)
+- [ ] T17 Amendment 5, FR-017: the push checks the make-targets page is current [lands-open]
+      research: rendering
+- [ ] T18 Amendment 5, FR-018: `make arbiter-fix-done LAND=` lands the fix and settles it in one command [lands-open]
+      research: rendering
+- [ ] T19 Amendment 5, FR-019: the ledger refusal names `make ledger-owed WRITE=`, which writes each row from the reply [lands-open]
+      research: rendering
 - [ ] T11 The close: the checklist to `docs/`, the refusals extended to every feature (FR-001), the final report (SC-001, SC-002); and D30's wording, filed by the round arbiter's ruling on ask:t14-plan-round4 (T14's plan round 4, rows 1-3 - the code already does each, `test_a_transcript_named_call_is_its_run_s_anywhere_and_a_mixed_overlap_is_the_missing_run_s_estimate`): the outside-every-window clause carries its own condition (no `by`, no transcript names it), the overlap clause says "still an estimate", and a call inside both a found and a missing run's window is the missing run's estimate [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]

@@ -369,3 +369,26 @@ def test_an_engine_fix_is_done_with_its_test_committed_and_lands_with_the_featur
     monkeypatch.setenv("ARBITER_FIX_ENGINE", "1")
     row = ha.settle_fix(root, TRIGGER, "done", "rollcache keeps a crashed child's traceback", "tests/tooling/test_gate_lock.py")
     assert "lands with the feature" in row["note"] and ha.open_fixes(d) == []
+
+
+def test_one_command_lands_a_fix_and_settles_it(root: pathlib.Path) -> None:
+    """Feature 385 amendment 5 (FR-018): T04 met the three-step order (land, settle, tick) as two refusals. `LAND=` runs
+    land-tooling on the fix's files and its test, then settles; both refusals that named the steps name it."""
+    ha.record_ruling(root, TRIGGER, RULING_378, "round-arbiter")
+    assert 'LAND="<the fix\'s files>" F=<feature> TICK=<the task>' in ha.fix_hold(root / "specs" / "900-z")
+    (root / "tests").mkdir(exist_ok=True)
+    (root / "tests" / "test_x.py").write_text("def test_x():\n    pass\n")
+    with pytest.raises(ValueError, match=r"the same make arbiter-fix-done with LAND="):
+        ha.settle_fix(root, TRIGGER, "done", "the fix was built", "tests/test_x.py")
+    repo = pathlib.Path(__file__).resolve().parents[2]
+    dry = subprocess.run(["make", "-n", "-C", str(repo), "arbiter-fix-done", "ID=x", "NOTE=a b c d", "TEST=tests/t.py", "LAND=scripts/a.py"],
+                         capture_output=True, text=True, check=False).stdout
+    assert "scripts/land-tooling.sh scripts/a.py tests/t.py && git fetch -q origin &&" in dry
+    ticked = subprocess.run(["make", "-n", "-C", str(repo), "arbiter-fix-done", "ID=x", "NOTE=a b c d", "TEST=tests/t.py", "LAND=scripts/a.py", "F=385", "TICK=T18"],
+                            capture_output=True, text=True, check=False).stdout
+    assert 'fix done "x" "a b c d" "tests/t.py" && make --no-print-directory tick F="385" T="T18"' in ticked.replace("/usr/bin/make", "make"), "lands, settles, ticks"
+    no_f = subprocess.run(["make", "-C", str(repo), "arbiter-fix-done", "ID=x", "NOTE=a b c d", "TEST=tests/t.py", "TICK=T18"], capture_output=True, text=True, check=False)
+    assert no_f.returncode == 2 and "TICK= ticks a task of F=<feature>" in no_f.stderr
+    plain = subprocess.run(["make", "-n", "-C", str(repo), "arbiter-fix-done", "ID=x", "NOTE=a b c d", "TEST=tests/t.py"], capture_output=True, text=True, check=False).stdout
+    line = next(ln for ln in plain.splitlines() if "hm_arbiter.py fix done" in ln)
+    assert "land-tooling.sh" not in line, "without LAND= it settles alone"

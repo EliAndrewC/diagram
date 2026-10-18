@@ -16,6 +16,8 @@
 
 **Amendment 4 approved**: the GM, 2026-10-18, "Yesa please implement the proposals you made for what to do before task 4, as amendment 4."
 
+**Amendment 5 approved**: the GM, 2026-10-18, "Either way, I do want you to file amendment 5 for the 3 tooling fixes"
+
 **Affects**: tooling, review process, hamlet, research record
 
 **Input**: `request.md` - the GM, 2026-10-17, verbatim.
@@ -191,6 +193,26 @@ memory, up to an hour off.
   the plan - its start, every agent returned (type, verdict, duration), every cohort and gate run, every part B or re-answered
   Approach stamp, its tick - in time order, so a retro's decision log is filled in from it, not reconstructed.
 
+### Amendment 5 - three landing frictions T04 measured (the GM, 2026-10-18)
+
+T04's last 6 min (02:51-02:57, its phase table) were four refusals in a row, each mechanical:
+
+- **FR-017 (the make-targets page, checked on every route)**: a push checks that `docs/make-targets.html` is current
+  (`make-docs.py --check`), as the gate's `test_make_docs` does - T13 landed a target by the direct route, which runs no gate, and
+  the stale page failed T16's `make land-tooling` a task later.
+- **FR-018 (an arbiter's fix landed, settled and its task ticked in one command)**: `make arbiter-fix-done` takes the fix's files
+  (`LAND=`) and the task it holds (`F=` `TICK=`): it lands them with its test by `make land-tooling`, settles the fix, then ticks
+  the task; the refusals that name the three-step order name this instead (spec-fidelity, amendment 5 round 1: "One command could
+  do all three").
+- **FR-019 (a ledger row written from the record)**: the push's and the hook's ledger refusal names the command that writes each
+  owed row from the agent's own reply (`make ledger-owed WRITE="<where the session recorded what it did>"`, the form page sessions
+  already use), not "add the row printed, its ?s filled" by hand.
+
+The GM also asked whether the session was batching. Measured (2026-10-18, the session transcript, each assistant turn's tool
+calls): 346 of T03's 354 tool turns made one call, but only 18 of those were a bare lookup the batching hook blocks; 143 were
+folded lookups, 127 scripts, 43 make steps, the rest agents and edits - dependent steps, not batchable lookups. No batching
+change is made: the lever is fewer rework round trips, two of which FR-017 and FR-018 remove.
+
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
@@ -210,6 +232,7 @@ memory, up to an hour off.
 - **SC-008** (FR-014, FR-015, FR-016): replayed on T03, the report attributes its 202 subagent calls to the subagents and shows the
   phase table and decision-log skeleton the hand count above found; T04's retro row is written from them and compared with
   T03 phase by phase.
+- **SC-009** (FR-017, FR-018, FR-019): each refusal names its one command, and each has a test red without it.
 - **SC-006** (FR-012): T03's retro row compares the blind Approach with the sealed conclusions rule by rule, and names the checklist
   change each miss calls for, or that there was none.
 

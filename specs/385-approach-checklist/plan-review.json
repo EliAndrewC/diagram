@@ -51,8 +51,8 @@
    "declared": "spec-fidelity"
   },
   "## Landing": {
-   "sha256": "114c007a10b228c9f7cf2ac5f03bb36a35bfead28ed8ae97a6c033986983560f",
-   "verdict": "CLEAR",
+   "sha256": "406dd4cac3ce0663870645811f6f22057e8a559bd45d9934ed0f3580c444f781",
+   "verdict": "BLOCKED",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
   },
@@ -233,6 +233,60 @@
   "### T16 Decisions": {
    "sha256": "e85af149a7c61e74411a3fb16bb87eb7ffcf8c141465d659817fa0d3f6e4a0dd",
    "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "## T17 - the make-targets page checked on every route (amendment 5, FR-017)": {
+   "sha256": "53881500802de6fd2472fe7c68cd928b9d98f4a347af5eab4eb60fca43a4ef12",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T17 Approach (checklist part A)": {
+   "sha256": "c629a3f67c33180b9cd91173509e190b1f76710239b36ae35ec6c1153ec21c8a",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T17 Decisions": {
+   "sha256": "c4da1c672beb2f30efdb12b015cba38e5c56f7d3c5b6ab60aa0c170606395838",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "## T18 - an arbiter's fix landed and settled in one command (amendment 5, FR-018)": {
+   "sha256": "72cb9a9faf484ca6c58d2ad8e0ce83b2655038764c50325cb299176e133f9481",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T18 Approach (checklist part A)": {
+   "sha256": "cb6c3e9366fee433c4391878e4fb1a904bf507eb991db9af02ad6bb23fce1989",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T18 Decisions": {
+   "sha256": "222ecfdd80c2e7b735a816183e7c1a037b2a9415911f05a71234fc68bbef0057",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "## T19 - a ledger row written from the record (amendment 5, FR-019)": {
+   "sha256": "39881cf545f661c192d4cea1bfd3410c9de14a5caacf4b759b9b3f898102288f",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T19 Approach (checklist part A)": {
+   "sha256": "46480888bf53f23173d7b2ff5ade03b2238fbad083df64d6c86593beb2fa9a6d",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T19 Decisions": {
+   "sha256": "d9ad93827805c1ed53cac6d84bf43d4cb87e7b2bb8bc917c4bf84dca3da52ff1",
+   "verdict": "BLOCKED",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
   }
@@ -1853,6 +1907,98 @@
      "summary": "On a MODE 4 dispatch the review-round guard counts the active task's plan rounds back to one CLEAR; round 3 trips round:spec-fidelity|plan:<feature>#<task>@3 and is refused with the arbiter's step; each continue lifts the cap one round; ARBITER_OK with a reason passes, recorded.",
      "class": "within",
      "why": "The round arbiter's fix on hour:385-approach-checklist@9 (the arbiter stands where the GM was asked, feature 379), enforcing CLAUDE.md's existing tripwire 'a check's third round on one subject' (G, 375) by a guard rather than memory, as FR-010 does for its case. Its reach is MODE 4 dispatches only, with the existing ARBITER_OK escape; no other agent type or command is touched."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Landing",
+    "## T17 - the make-targets page checked on every route (amendment 5, FR-017)",
+    "## T18 - an arbiter's fix landed and settled in one command (amendment 5, FR-018)",
+    "## T19 - a ledger row written from the record (amendment 5, FR-019)",
+    "### T17 Approach (checklist part A)",
+    "### T17 Decisions",
+    "### T18 Approach (checklist part A)",
+    "### T18 Decisions",
+    "### T19 Approach (checklist part A)",
+    "### T19 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Landing",
+     "summary": "T17, T18, T19 added to the tasks that land open, each landing when it closes (FR-006).",
+     "class": "within",
+     "why": "FR-006's one-task-then-retro order applied to the three new tasks; nothing in amendment 5 asks them to land otherwise."
+    },
+    {
+     "id": "D38",
+     "summary": "make-docs.py --check added to push_checks.CHECKS, run on both routes on every push, its refusal naming make docs.",
+     "class": "within",
+     "why": "The proposal the GM adopted (item 1) asks the direct route to check the page whenever the Makefile changes; checking on every push is broader in trigger, not narrower, and reaches the named case (T13's direct-route landing) on the plan's premise that push_checks runs on the direct route - a premise stated, not verifiable from the bundle."
+    },
+    {
+     "id": "D39",
+     "summary": "make arbiter-fix-done LAND= lands the fix's files with its test, then settles the fix; make tick stays a separate command whose open-fix refusal names the LAND= form.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The fix the GM told the session to file (item 2) is: 'Closing a task with an arbiter's tooling fix takes three ordered commands: land the tooling, mark the fix done, then tick ... One command could do all three.' D39 folds two and leaves tick out, so closing is still two commands and the tick-first wrong order (one of the two refusals the session hit) stays reachable. Folding tick is not shown impossible, the GM's words imply no exclusion, and leaving it out defeats the stated purpose (no ordered sequence to get wrong). FR-018 carries the same narrowing, which is self-consistency, not fidelity. The plan's own T18 Approach goal ('Closing a task ... is one command') is not met by its decision. Fix: the one command also ticks the task (or arbiter-fix-done's LAND= form ends with the tick), with a test red without it; or the session obtains the GM's words that two commands are enough and records them."
+    },
+    {
+     "id": "D40",
+     "summary": "make ledger-owed WRITE= appends each owed row filled from the agent's recorded reply (verdict, first line, nothing when clean); the push and hook refusals name it; a hand-worded row is still allowed.",
+     "class": "within",
+     "why": "Item 3 asks that plan-review rows' verdict and findings cells be pre-filled from the recorded plan verdict rather than typed (about 2 min a task). D40 fills them from the reviewer's recorded reply, which carries the verdict and findings, and covers every owed row - a different source for the same cells and a broader reach, not a narrowing. The hand route is optional and does not preserve the typing the request removes, since the refusals now name WRITE=."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Landing",
+    "## T17 - the make-targets page checked on every route (amendment 5, FR-017)",
+    "## T18 - an arbiter's fix landed and settled in one command (amendment 5, FR-018)",
+    "## T19 - a ledger row written from the record (amendment 5, FR-019)",
+    "### T17 Approach (checklist part A)",
+    "### T17 Decisions",
+    "### T18 Approach (checklist part A)",
+    "### T18 Decisions",
+    "### T19 Approach (checklist part A)",
+    "### T19 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Landing",
+     "summary": "T17-T19 each land open when they close, with their retro row, one task at a time.",
+     "class": "within",
+     "why": "FR-006 (one task, then the retro); the GM's 'we do one task and then we measure'."
+    },
+    {
+     "id": "D38",
+     "summary": "push_checks.CHECKS gains make-docs.py --check, run on both routes, its refusal naming make docs.",
+     "class": "within",
+     "why": "FR-017 (accepted) says a push checks the page is current. Running it unconditionally on both routes covers the session's 'whenever the Makefile changes' and is enforcement of the requested check, not new scope."
+    },
+    {
+     "id": "D39",
+     "summary": "make arbiter-fix-done ... LAND= F= TICK= lands the files with the test, settles only when they land, then ticks; TICK= without F= refused; refusals name the full form; without LAND=/TICK= behaves as today.",
+     "class": "within",
+     "why": "Carries the GM's approved item 2 'One command could do all three' and FR-018 as amended in round 1. Keeping the bare form is needed for an arbiter fix that is not tooling (no files to land), and the refusals send the session to the full form, so it does not gut the purpose."
+    },
+    {
+     "id": "T18-done",
+     "summary": "T18 Approach items 5, 6, 9 and the T18 heading still describe a two-step command: item 9 'Done, measured' is 'lands and settles; a refusal for a test not on main names it; a test red without each'; item 6 'runs the two in order'; item 5 names only LAND=; heading 'landed and settled in one command'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Item 9 is the plan's decision on what counts as T18 done and, under SC-009, what the tests enforce. As written, a T18 that lands and settles but does not tick, and a make tick open-fix refusal still naming the three-step order, passes its own done criterion. That narrows FR-018 ('landed, settled and its task ticked in one command') and the GM's 'all three' at the measurement: the round 1 gap fixed in D39 and item 1 but not carried to the rest of the Approach. Fix: item 9 names all three steps and both new refusal texts (TICK= without F=; make tick's open-fix refusal naming the full form), each with a test red without it; item 6 says the three in order; item 5 adds TICK=; the heading matches FR-018."
+    },
+    {
+     "id": "D40",
+     "summary": "make ledger-owed WRITE= appends each owed row filled from the agent's reply; push-check and hook refusals name it; a hand-worded row is still allowed.",
+     "class": "within",
+     "why": "Matches FR-019 (accepted), which carries the GM's approved item 3. The hand route left open does not weaken the refusal, which now names the command."
     }
    ]
   }
