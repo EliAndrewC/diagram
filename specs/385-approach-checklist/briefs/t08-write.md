@@ -20,7 +20,7 @@ code, modal or sheet.
   the crop or the water - so a crowded bank carries fewer trees.
 - A bare bank is drawn as open ground beyond the reeds, as before.
 
-## Your item (one question)
+## Your items (one question)
 
 - **0061** (`research/questions/0061-reservoir-ponds-tameike.drawing.html`): the bullet now headed "A bank with a few trees on
   it is not drawn yet." becomes the knob's own bullet (a heading a reader would ask, for example "Is a pond's bank bare, or
