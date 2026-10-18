@@ -600,6 +600,9 @@ def test_carry_copies_a_reused_tooling_tests_coverage_closure_and_edges_from_the
     bdir.mkdir()
     monkeypatch.setattr(incremental, "baseline_dir", lambda root: bdir)
     a, b = str(tmp_path / "e/a.py"), str(tmp_path / "e/b.py")
+    (tmp_path / "e").mkdir()
+    for f in (a, b):
+        Path(f).write_text("x = 1\n", encoding="utf-8")
     reused = "tests/tooling/test_t.py::a"
     _cov(bdir / incremental.COVERAGE_DB, {f"{reused}|run": {a: [3]}, "fixture:f": {b: [1]}, "fixture:g": {b: [5]}, "t::z|run": {a: [9]}})
     fresh = _cov(tmp_path / ".coverage", {"t::y|run": {b: [2]}, "fixture:g": {b: [6]}})
@@ -617,6 +620,27 @@ def test_carry_copies_a_reused_tooling_tests_coverage_closure_and_edges_from_the
     assert json.loads((bdir / (incremental.TESTS + ".next")).read_text(encoding="utf-8")) == {reused: ["f", "g"], "t::y": ["g"]}
     assert json.loads((bdir / (incremental.GRAPH + ".next")).read_text(encoding="utf-8")) == {"f": [reused], "g": ["t::y"]}
     assert not (bdir / incremental.TOOLING_REUSED).exists(), "carried once"
+
+
+def test_carry_drops_a_file_the_tree_no_longer_holds(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 388: a reused tooling test's baseline coverage measured a module the change deleted - carried, it made the
+    floor's report fail on "No source for code". Only files still on disk are carried."""
+    import coverage
+
+    bdir = tmp_path / "gb"
+    bdir.mkdir()
+    monkeypatch.setattr(incremental, "baseline_dir", lambda root: bdir)
+    kept, gone = tmp_path / "kept.py", tmp_path / "gone.py"
+    kept.write_text("x = 1\n", encoding="utf-8")
+    reused = "tests/tooling/test_t.py::a"
+    _cov(bdir / incremental.COVERAGE_DB, {f"{reused}|run": {str(kept): [1], str(gone): [1]}})
+    fresh = _cov(tmp_path / ".coverage", {"t::y|run": {str(kept): [1]}})
+    (bdir / incremental.TESTS).write_text(json.dumps({reused: []}), encoding="utf-8")
+    (bdir / incremental.TOOLING_REUSED).write_text(json.dumps([reused]), encoding="utf-8")
+    assert incremental.carry(tmp_path, fresh) == 1
+    data = coverage.CoverageData(str(fresh))
+    data.read()
+    assert set(data.measured_files()) == {str(kept)}, "the deleted file's rows are not carried"
 
 
 def test_main_carry_says_what_it_carried(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
