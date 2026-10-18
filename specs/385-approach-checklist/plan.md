@@ -816,6 +816,35 @@ row (status quo, not a DEVIATION); farmsteads carved within the paddy, amid thei
 the GM as a feature of its own, which first settles whether 0017's 1.3 acres include the farmstead and whether the farmstead's
 205-273 ft is researched (ask:t06-single-file-short).
 
+## T07 - the clearance between a farmhouse wall and a lane's tread, researched (the ranking row `houses.py::HousesMixin._on_a_tread#no building corner on a lane`)
+
+### T07 Approach (checklist part A)
+
+1. **The goal, in the world.** The gap a map keeps between a farmhouse wall and the lane beside it is the one villages kept - or,
+   where no source says, it is labeled ours.
+2. **The constraints.** The ranking row ("the 4 ft wall-to-tread margin (`TREAD_WALL_FT`) has no source; research the clearance or
+   claim it UNRESEARCHED"); the research rules (a search pass before a guess is written; the archive before the web; a citation
+   quotes its source verbatim); 0246's "no corner of a house stands on its tread" (R); the pool rolls clean and the cohort keeps
+   every seed passing at HEAD (XIII) if the number moves.
+3. **Where each comes from.** 4 ft is ours - `TREAD_WALL_FT`'s own claim, "GUESS: 4 ft, on a townhouse's three-shaku eaves strip
+   with a margin" (O); "no corner on the tread" is 0246's (R).
+4. **Do they describe the world here?** To be measured: the search pass answers whether a farmhouse's eaves line, its drip strip
+   or a set-back stood between its wall and a village lane, in China first, Japan as the tiebreaker.
+5. **The order.** The search pass first; then the label (or the number and the record) from what it finds.
+6. **The exits.** (a) the number is ours and moves to the research if the research gives one; (e) conform the label if it gives
+   none; (b), (c), (d) n/a.
+7. **The search smell.** One pass; a second only on a lead the first names.
+8. **The budget.** 60 min (a pass, then a label or a record edit).
+9. **Done, measured.** One goal: `TREAD_WALL_FT`'s claim cites what the pass found, or says UNRESEARCHED with the pass named; the
+   ranking row marked with its wave.
+
+### T07 Decisions
+
+**D55 - research, then label.** A `research-pass` agent searches the archive, then the web (Chinese, Japanese, English), for the
+clearance between a village house's wall or eaves and a lane: an eaves-drip strip (amaochi / 滴水), a lane's set-back, a building
+line. If it finds an attested figure, the record gains it (a page session), `TREAD_WALL_FT` moves to it if the figure differs and
+the pool and cohort are rolled; if it finds none, the claim reads UNRESEARCHED naming the pass, and the 4 ft stays.
+
 ## T15 - a cohort rolled over an uncommitted engine diff says so (found by T04)
 
 ### T15 Approach (checklist part A)

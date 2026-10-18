@@ -3667,6 +3667,38 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T07": {
+   "section_sha256": "e4283cf6558e4a1096b7c72dc1ce768a3245325baf28b84b5d43c353549973eb",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D55",
+     "summary": "A research-pass agent searches the archive then the web (Chinese, Japanese, English) for a village house's wall/eaves-to-lane clearance (eaves-drip strip, set-back, building line); an attested figure enters the record and TREAD_WALL_FT moves to it (pool and cohort rolled); none found, the claim reads UNRESEARCHED naming the pass and 4 ft stays.",
+     "class": "within",
+     "why": "The ranking row itself reads 'research the clearance or claim it UNRESEARCHED'; D55 is exactly those two outcomes, in that order. Keeping 4 ft under an UNRESEARCHED label is the row's own second branch, and nothing in the task forces the knob to move. The request asks for about five ranking rows of different kinds, and this is a research-first one."
+    },
+    {
+     "id": "Approach-6 exits",
+     "summary": "Exits (a) refine the number and (e) conform the label apply; (b) exception, (c) new rule, (d) more room are n/a.",
+     "class": "within",
+     "why": "No rule is being worked against here. The task is a sourcing question on one constant, so exception, new-rule and more-room exits have nothing to act on. Judging them n/a answers the checklist (FR-003) and does not narrow the row."
+    },
+    {
+     "id": "Approach-4/7 search scope",
+     "summary": "China first, Japan as the tiebreaker; one search pass, a second only on a lead the first names.",
+     "class": "within",
+     "why": "The research rules the plan cites set the source order and the search-before-guess discipline. A one-pass limit with a lead-driven second pass decides how much effort the research gets. It does not drop any part of what the row asks for, which is to research the clearance or label it UNRESEARCHED."
+    },
+    {
+     "id": "Approach-8/9 budget and done",
+     "summary": "60 min budget; one goal: TREAD_WALL_FT's claim cites the pass's finding or reads UNRESEARCHED with the pass named, and the ranking row is marked with its wave.",
+     "class": "within",
+     "why": "The per-task budget and the single goal are the measured, one-task-at-a-time process the GM asked for (FR-006, FR-015). The done condition is the ranking row's own two outcomes."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
