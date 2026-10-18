@@ -51,7 +51,7 @@
    "declared": "spec-fidelity"
   },
   "## Landing": {
-   "sha256": "054a5d519cb513dfa3ba8515ca84d999b33f9a3bbfd896dc3c05688621334f2d",
+   "sha256": "7fc9314edaa951daf006a59bbd1de35228db5086cf6b9cfac55de191b1679b93",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -406,6 +406,42 @@
   },
   "### T24 Decisions": {
    "sha256": "277966f76298cb0c615db24b148600646bb2facac9212c2eb63821081989c9c3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T25 - a claims bundle carries what the unit's code reads from other modules (the round arbiter's fix on ask:t05-old-drifts-at-landing)": {
+   "sha256": "2e55c615e5a7d25879ce8f5ca94418f20f9c31e33d11cf6ab68571241a2a6d3d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T25 Approach (checklist part A)": {
+   "sha256": "45ae6020bdf86ceb52b56b03ec7481dbbace58aa0dab09e3e9d11ce7b4257b34",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T25 Decisions": {
+   "sha256": "940e0d7e7436b62c421d154f86ad7061f45c2baf9ef1fcad66385a0a3087ce3d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T26 - a review never reads an absent or stale render (the round arbiter's fix on hour:385-approach-checklist@12)": {
+   "sha256": "86596dfdd371578d48a3d6635072371276788b67dd385ce9683a83cd793316ab",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T26 Approach (checklist part A)": {
+   "sha256": "ac3dc7dcc25684d3b8aba4a08e7e050b546d32c17a486f0679ad53a9d4e80114",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T26 Decisions": {
+   "sha256": "e4fa6ff38a6fe45e11516c2d3c8f46be92dfb223ca527b61a20c6c09cee949c0",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -2588,6 +2624,304 @@
      "summary": "conflict leaves the clone as it was and names sync-in for manual resolution; other refusals unchanged",
      "class": "within",
      "why": "Keeps every existing refusal and adds a clean abort; no guard is loosened."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T25 - a claims bundle carries what the unit's code reads from other modules (the round arbiter's fix on ask:t05-old-drifts-at-landing)",
+    "### T25 Approach (checklist part A)",
+    "### T25 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Landing: T25 lands open",
+     "summary": "T25 added to the Lands open list; nothing else in the block changed from its CLEAR text.",
+     "class": "within",
+     "why": "FR-006 one task at a time, each landing as it closes; T25 is a task like the others."
+    },
+    {
+     "id": "Approach 3: every claim",
+     "summary": "The cross-module callee/constant inlining runs for every claim, not only claims whose label names a distance, gap or standoff.",
+     "class": "within",
+     "why": "A superset of the arbiter's trigger, not a carve-out from it: every claim the arbiter named still gets the inlining. Amendment 6 ('implement any obvious performance / tooling / process improvements') covers the widening, and the plan cites the evidence (T03's _clear_link, a link claim, hit the same CANNOT-TELL)."
+    },
+    {
+     "id": "D47 depth",
+     "summary": "Follows imported engine names and goes one call deeper from each callee found.",
+     "class": "within",
+     "why": "The arbiter's words: 'direct callees ... (transitively one level)'. The measured case (front_row then _front_row_from_chains / install_site_boundary) needs exactly that depth."
+    },
+    {
+     "id": "D47 constant definition",
+     "summary": "A constant is an ALL_CAPS module-level name the unit or a callee reads, inlined as its assignment line with its comment.",
+     "class": "within",
+     "why": "An operational definition of the arbiter's word 'module-level constant' (the PEP 8 convention the codebase uses: HOUSE_PADDY_GAP_FT, STANDOFF_SLACK_PX), not a case taken out of it."
+    },
+    {
+     "id": "D47 l7r/ only",
+     "summary": "A name outside l7r/ (standard library, third-party) is never followed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Literally narrower than 'direct callees', but the fix states its purpose as ending 'asking for its call chain a round at a time', and every layer the three CANNOT-TELL rounds asked for (Approach item 4) was a project name; builtins and C extensions have no Python source to inline at all. The narrowing removes nothing the purpose needs."
+    },
+    {
+     "id": "D47 cap",
+     "summary": "CALLEES_MAX rises from 6 to 12; past it the nearest first (the rest are dropped). Approach item 6: 'the cap is ours and stays'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The arbiter's fix inlines 'direct callees and EVERY module-level constant they read (transitively one level)'. A cap that keeps the nearest 12 and drops the rest is not every, and a unit whose two depths and constants exceed 12 goes back to CANNOT-TELL and asks for the next layer, the exact failure the fix exists to end. The plan's own item 6 says the cap is ours, so keeping it is preserving existing behavior nobody asked to keep. It is not impossible to include everything (the depth is already bounded at two levels), and no arbiter or GM words in the bundle ask for a bound. D47 also does not say whether constants count toward the cap; either way something the ruling names is dropped. It would be within if nothing in the two depths is silently dropped, or at the very least if constants are never capped and an overflow is reported, not cut. Note too that done (item 9) names the six cross-module items but has not measured how many own-module callees _seat_households adds, so it has not shown the measured case fits in 12."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T25 - a claims bundle carries what the unit's code reads from other modules (the round arbiter's fix on ask:t05-old-drifts-at-landing)",
+    "### T25 Approach (checklist part A)",
+    "### T25 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Landing/T25",
+     "summary": "T25 lands open, on its own, with its retro row, before the next task starts.",
+     "class": "within",
+     "why": "FR-006 (one task, then the retro) and the GM's 'we do one task and then we measure' as written."
+    },
+    {
+     "id": "D47(a)",
+     "summary": "For a claim whose label names a distance, gap or standoff (trigger words: distance, gap, standoff, apart, reach, clear of, off the, ft, feet), the bundle carries every engine function the unit calls, its own module's and imported, and every module constant it or they read, one level on, UNCAPPED.",
+     "class": "within",
+     "why": "On its words, this is the arbiter's tooling_fix as worded: 'direct callees and every module-level constant they read (transitively one level) whenever a claim's label names a distance, gap or standoff'. It is uncapped, so round 1's NOT LEGITIMATE cap of 12 is gone. The trigger carries the arbiter's three words literally and adds more distance words, which widens it. 'It or they' adds the unit's own constant reads, which also widens it. Its reach on the arbiter's motivating case is ruled separately (D47-reach)."
+    },
+    {
+     "id": "D47-reach",
+     "summary": "On the standoff claim on _seat_households, the arbiter's motivating case, the first bundle stops one hop down. HOUSE_PADDY_GAP_FT, read by _front_row_from_chains two calls below the unit, and install_site_boundary are reached only by (c), on a re-bundle after a first-round CANNOT-TELL. D47 justifies this with 'no fixed depth both fits a bundle and reaches it'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The arbiter's fix states its purpose in the same sentence: 'so a standoff claim is judged in one round instead of asking for its call chain a round at a time'. By the blocks' own account, the claim the fix was written for still costs a CANNOT-TELL round. D47(c) says (c) reaches _front_row_from_chains, STANDOFF_SLACK_PX and HOUSE_PADDY_GAP_FT, 'the layer past one level', from a CANNOT-TELL note. That is fewer rounds, but still a round at a time on the named case. The impossibility premise is not measured and the blocks' own numbers contradict it: two levels of every callee is 82 KB, and the one-level bundle D47 accepts is 115 KB, so depth two is not shown not to fit. No bundle size limit is stated anywhere in the blocks. Under MODE 1 this is neither impossible nor implied by the words, and it defeats the fix's stated purpose on its own named case. The blocks also assert both outcomes at once: Approach item 1 ('judges a claim on the first round') and item 9 (the standoff unit's bundle carries install_site_boundary and HOUSE_PADDY_GAP_FT 'with no WITH=', quoted with (a)'s 115 KB / 63-entry figures) claim the first-round result that D47(a)'s 'one level on' and D47(c)'s 'layer past one level' say the first bundle does not deliver."
+    },
+    {
+     "id": "D47(b)",
+     "summary": "Every claim's first bundle carries its own module's callees (at most CALLEES_MAX, 6, the existing t03 fix unchanged) plus every module constant the unit reads, imported ones too.",
+     "class": "within",
+     "why": "The callee cap is the arbiter's earlier fix (ask:t03-claims-at-landing) and is not changed here. Constants on every claim are an addition beside the arbiter's fix, covered by the GM's 'Please make sure to implement any obvious performance / tooling / process improvements along the way' (amendment 6). For a distance claim (a) still applies uncapped, so (b)'s cap takes nothing from the arbiter's fix."
+    },
+    {
+     "id": "D47(c)",
+     "summary": "A re-bundle of a claim last judged CANNOT-TELL chases each engine name its note backticks (resolved through imports, otherwise through at most three module-level definitions under l7r/), and walks breadth first through what those call or read, within CHASE_CHARS (30,000). The budget bounds only material past the arbiter's level.",
+     "class": "within",
+     "why": "This is an addition of ours past the arbiter's one level, under amendment 6's 'implement any obvious ... tooling improvements'. Its caps (three definitions, 30,000 characters) bound only our own addition: the block states that nothing in (a) is capped and that a chase stopping at the arbiter's level drops nothing from (a). It serves the arbiter's stated purpose ('judged in one round instead of asking for its call chain a round at a time') beyond what one level reaches."
+    },
+    {
+     "id": "D47-scope",
+     "summary": "A name from outside l7r/ is never inlined or followed: (a)'s 'every engine function' and (c)'s chase reach only code under l7r/.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is round 1's LEGITIMATE ruling, carried on the block's own wording. The arbiter's purpose is a bundle that keeps the judge from 'asking for its call chain a round at a time' on an engine claim, and that chain is the engine's code. Library and builtin calls, and tooling outside l7r/, are not what such a claim turns on (builtins written in C have no source to inline). The 'module-level constant' in the same sentence also refers to the engine's modules."
+    },
+    {
+     "id": "T25-Approach",
+     "summary": "The checklist part A answers: the goal is a first-round judgment; constraints and sources are labelled G or O; the measurement on T05 drove the design; budget 40 min; done is one goal with a test red without each of (a), (b), (c).",
+     "class": "within",
+     "why": "FR-003 (the Approach block) and FR-015 (one goal a task). Every addition is labelled as ours (O), not passed off as the arbiter's (G)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T25 - a claims bundle carries what the unit's code reads from other modules (the round arbiter's fix on ask:t05-old-drifts-at-landing)",
+    "## T26 - a review never reads an absent or stale render (the round arbiter's fix on hour:385-approach-checklist@12)",
+    "### T25 Approach (checklist part A)",
+    "### T25 Decisions",
+    "### T26 Approach (checklist part A)",
+    "### T26 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Landing-T25-T26",
+     "summary": "T25 and T26 are added to the tasks that land open, each with its retro row, before the next task starts.",
+     "class": "within",
+     "why": "FR-006 verbatim: one task at a time, each closed with its retro row before the next make task-start. Each fix is its own task (FR-015, one goal a task)."
+    },
+    {
+     "id": "D47(a)-reach",
+     "summary": "For a claim whose label names a distance, gap or standoff, the bundle carries every engine function the unit calls (own module and imported) and their callees, two calls down, with every module constant any of them reads, uncapped.",
+     "class": "within",
+     "why": "Unchanged from round 3. The arbiter's fix states its purpose (a standoff claim judged in one round); one level was measured (m:t25-bundle) to stop short of HOUSE_PADDY_GAP_FT. Two levels keeps everything the arbiter's 'transitively one level' names - direct callees, imported ones, their constants, uncapped - and goes further toward its own purpose. Widening is not a narrowing."
+    },
+    {
+     "id": "D47(a)-trigger",
+     "summary": "The DISTANCE label trigger is distance, gap, standoff, apart, reach, clear of, off the, ft, feet.",
+     "class": "within",
+     "why": "Unchanged: carries the arbiter's three words and adds others; a superset drops no claim the arbiter's trigger covers."
+    },
+    {
+     "id": "D47(b)",
+     "summary": "Every claim's first bundle carries its own module's callees (at most CALLEES_MAX, 6, as before) plus every module constant the unit reads, imported ones too. Ours (O).",
+     "class": "within",
+     "why": "Unchanged: adds to (a) for claims the label misses (T03's _clear_link), takes nothing from (a); CALLEES_MAX is the arbiter's earlier fix (ask:t03-claims-at-landing). An amendment 6 tooling improvement."
+    },
+    {
+     "id": "D47(c)",
+     "summary": "Re-bundling a claim last judged CANNOT-TELL chases the engine names its note backticks (at most three), breadth first, within CHASE_CHARS (30,000). Ours (O).",
+     "class": "within",
+     "why": "Unchanged: an addition past (a) and (b); its caps bound only its own chase, and the block states nothing in (a) is capped. Amendment 6 tooling improvement."
+    },
+    {
+     "id": "D47-outside-l7r",
+     "summary": "A name from outside l7r/ (standard library, third-party) is never followed, in (a), (b) or (c).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Unchanged from rounds 1-3. Literally the arbiter's 'direct callees' includes library calls, so it narrows; but the fix's purpose is judging the claim on the engine code it turns on, every name the standoff's rounds asked for is engine code, and inlining library (some compiled) source would bloat the bundle against that purpose."
+    },
+    {
+     "id": "D47-placement",
+     "summary": "The code goes in scripts/record/claims_context.py, because claims.py is near its line limit. Each context entry appears once.",
+     "class": "within",
+     "why": "Implementation placement and dedup narrow nothing asked for."
+    },
+    {
+     "id": "T25-Approach-9-done",
+     "summary": "One goal: the standoff claim's FIRST bundle, with no prior CANNOT-TELL and no WITH=, carries the six names (m:t25-bundle), plus a test red without each of (a), (b) and (c).",
+     "class": "within",
+     "why": "One goal per FR-015; measures the first bundle, the arbiter's 'judged in one round'. Round 3's figure notes are taken: three CANNOT-TELL rounds stated consistently, 232 KB carries 'ls -l on its MANIFEST.md, 2026-10-18', 8 min carries its ledger wall times (122+272+83 s = 477 s). A test red without each part enforces the fix."
+    },
+    {
+     "id": "D48-render-not-refuse",
+     "summary": "make verify runs $(MAKE) map GEN=<each> for every stale or absent render before it takes the snapshot and writes the prompts, rather than refusing.",
+     "class": "within",
+     "why": "The arbiter's fix offers render 'or refuses naming that command'; taking the first of its two options is within it. Ordering (before snapshot and prompts) is the arbiter's words."
+    },
+    {
+     "id": "D48-staleness-test",
+     "summary": "Stale means the .png or .html is missing or older (by file mtime) than the map's .gen.py or .json.",
+     "class": "within",
+     "why": "The arbiter's test is 'missing or older than its .gen.py or pool output'. Both renders (.png, .html) are checked, the .gen.py is checked, and the .json is the pool roll's output for a map (Approach item 4: make maps regenerated the pool and left renders missing). File times are the plain reading of 'older than' (labeled ours, O). If a pool roll writes any other per-map output a render depends on, it belongs in this list too - the arbiter said 'pool output', not '.json' - but nothing in the bundle names one."
+    },
+    {
+     "id": "D48-owed-units",
+     "summary": "Only owed units (those make verify writes glyph-check prompts for) are checked and rendered.",
+     "class": "within",
+     "why": "The arbiter's fix is scoped to the renders verify 'snapshots and writes glyph-check prompts' for; a unit with no prompt owed has no glyph-check that could read a stale render."
+    },
+    {
+     "id": "D48-mode-a-excluded",
+     "summary": "A Mode A sheet, which has no .gen.py, is never listed as stale.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Literally the arbiter's 'every unit whose render is missing' includes a Mode A sheet, so this narrows. Rendering it with make map GEN= is impossible (no generator), but the arbiter gave a second option, refusing - and the plan takes neither: a Mode A sheet is silently never listed, so if one can be owed with its .png or .html absent, a glyph-check runs on an absent render, which is exactly what the fix's purpose ('a glyph-check never runs on an absent or stale render') forbids. The plan states no reason, and nothing in the bundle establishes that a Mode A sheet's render cannot be absent or that it is never owed a glyph-check. Fix: list a Mode A sheet whose .png or .html is missing and refuse naming what restores it (only the 'older than its .gen.py' half has nothing to compare against), or keep the exclusion and state the measured premise that makes it a non-case (for example, that a Mode A sheet's render is tracked and a pool roll never removes it)."
+    },
+    {
+     "id": "T26-goal-includes-settlement-check",
+     "summary": "Approach item 1 states the goal as a glyph OR settlement check reading a present, current render.",
+     "class": "within",
+     "why": "The behavior is the arbiter's alone: one render pass ahead of the snapshot. A settlement check reading the same snapshot benefits from it incidentally; no new behavior is added for it."
+    },
+    {
+     "id": "T26-Approach-9-done",
+     "summary": "One goal: review_snapshot.py --stale-renders names each owed map whose .png or .html is missing or older than its .gen.py or .json, make verify runs make map on each before the snapshot, and a test is red without it.",
+     "class": "within",
+     "why": "One goal per FR-015, stated as the arbiter's fix. The --stale-renders flag is the inspection surface for the same test; a test red without the fix is enforcement, not added scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T25 - a claims bundle carries what the unit's code reads from other modules (the round arbiter's fix on ask:t05-old-drifts-at-landing)",
+    "## T26 - a review never reads an absent or stale render (the round arbiter's fix on hour:385-approach-checklist@12)",
+    "### T25 Approach (checklist part A)",
+    "### T25 Decisions",
+    "### T26 Approach (checklist part A)",
+    "### T26 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing",
+     "summary": "Each task lands when it closes, with its retro row, while later tasks stay open (T02-T26 land open)",
+     "class": "within",
+     "why": "FR-006 and the GM's 'we do one task and then we measure ... and then we go on and do the next task'."
+    },
+    {
+     "id": "D47 (a)",
+     "summary": "A distance/gap/standoff claim's bundle carries engine callees two calls down, imported too, with every module constant they read, uncapped; trigger words widened (apart, reach, clear of, off the, ft, feet)",
+     "class": "within",
+     "why": "Block digest unchanged since its CLEAR ruling. Widens, never narrows, the arbiter's fix (direct callees and their constants, one level) to reach its stated purpose; the GM asked (amendment 6) for obvious tooling improvements along the way."
+    },
+    {
+     "id": "D47 (b)",
+     "summary": "Every claim's first bundle carries the unit's own-module callees (CALLEES_MAX, the arbiter's earlier fix) plus every module constant the unit reads, imported ones too",
+     "class": "within",
+     "why": "Block digest unchanged since its CLEAR ruling. Adds to the arbiter's ask:t03 fix; no case it covered is dropped."
+    },
+    {
+     "id": "D47 (c)",
+     "summary": "A re-bundle after CANNOT-TELL chases each backticked engine name in the note, breadth first within CHASE_CHARS",
+     "class": "within",
+     "why": "Block digest unchanged since its CLEAR ruling. An addition of ours; its budget bounds only its own chase, not (a)."
+    },
+    {
+     "id": "D47 outside-l7r",
+     "summary": "A name from outside l7r/ is never followed",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Block digest unchanged since its CLEAR ruling; carried forward as rounds 1 and 2 ruled. The fix's purpose is a judgment on the engine code a claim turns on ('whenever the code it turns on is in the repository'); code outside l7r/ is not that code."
+    },
+    {
+     "id": "D47 placement",
+     "summary": "The code goes in scripts/record/claims_context.py, not claims.py",
+     "class": "within",
+     "why": "Block digest unchanged since its CLEAR ruling. Where the code sits is not a fidelity question."
+    },
+    {
+     "id": "D48 render-first",
+     "summary": "For units with a generator, make verify runs $(MAKE) map GEN=<each> before it snapshots and writes the prompts, rather than refusing",
+     "class": "within",
+     "why": "The arbiter's first option, word for word (G)."
+    },
+    {
+     "id": "D48 file-times",
+     "summary": "'Older than' is read from file modification times",
+     "class": "within",
+     "why": "The plain reading of the arbiter's 'older than'; nothing is narrowed."
+    },
+    {
+     "id": "D48 pool-output",
+     "summary": "'Pool output' is read as the map's .json; staleness is .png or .html missing or older than .gen.py or .json",
+     "class": "within",
+     "why": "Within on the plan's stated premise that the .json is what a pool roll writes per map, beside the tracked .gen.py, .svg and .notes.md. Nothing in the bundle says a roll writes anything else per map. If one does, this becomes a narrowing and has to be ruled on."
+    },
+    {
+     "id": "D48 owed-units",
+     "summary": "Only units owed a check are tested for stale renders ('each owed unit'), where the arbiter said 'every unit'",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the fix's own purpose clause, 'so a glyph-check never runs on an absent or stale render': a glyph or settlement check runs only on an owed unit. This holds only if the snapshot takes no render for any unit outside the owed set. If it does, the narrowing guts the purpose."
+    },
+    {
+     "id": "D48 sheet-refuse-command",
+     "summary": "An entry with no generator is listed as sheet:<svg>, and make verify refuses it naming make sheet-render SHEET=<svg> OUT=<png> instead of make map GEN=...",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "make map GEN= is physically impossible without a generator. This is the arbiter's second option (refuse), naming the one command that does render such an entry. Every unit is now asked, which fixes last round's BLOCKED finding."
+    },
+    {
+     "id": "D48 sheet-png-missing-only",
+     "summary": "A no-generator entry is checked only for a missing .png: no .html check and no older-than test",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled separately from the refuse-command decision. It rests on two premises. First, a hand-authored sheet has no .gen.py and no pool output to be older than, so the arbiter's 'older than its .gen.py or pool output' has nothing to compare against. Second, no sheet unit has or reads an .html: make sheet-render writes only the .png, so an .html check would refuse with no command that fixes it. The measured 'none in the pool' (2026-10-18) makes the case empty today, which is why these premises go on record: a later measurement can prove them false."
     }
    ]
   }
