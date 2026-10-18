@@ -1,0 +1,38 @@
+{
+  "utc": "2026-10-18T17:24:12Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 152,
+  "result": "failed: test-full",
+  "commit": "13e87654f",
+  "first_failure_s": 110.6,
+  "last_failure_s": 110.6,
+  "failed_tests": 1,
+  "failed_names": [
+    "tests/tooling/test_plan_gate.py::test_a_check_waits_for_its_task_s_decisions"
+  ],
+  "host": {
+    "load": [
+      4.24,
+      4.22
+    ],
+    "mem_avail_mb": [
+      9177,
+      9219
+    ],
+    "cpu_temp_c": [
+      57.0,
+      58.0
+    ],
+    "stall_s": {
+      "cpu": 0.7,
+      "io": 0.1,
+      "io_full": 0.1,
+      "memory": 0.1
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  }
+}
