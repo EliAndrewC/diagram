@@ -51,8 +51,9 @@ further name goes through the same table before it is deleted. Tests: every test
 `roll_village` tests in `tests/settlement/test_rolling.py`, `tests/gate/settlement/test_rolling.py`,
 `tests/full/settlement/test_rolling.py`, `tests/soak/test_village_determinism.py`; the tests of the closure names in
 `test_houses.py`, `test_crop_framing.py`, `test_civic_grounds.py`, `tier_city/.../test_civic_grounds.py`,
-`hamletgen/test_burial.py` (only `test_rect_gap`, the `test_the_edge_seat_*` tests and `_seat`; its hamlet and
-`convex_hull` tests stay), `test_city.py`, `test_villages.py`, `test_caption_paths.py`, `test_map_vocabulary.py` and the
+`hamletgen/test_burial.py` (`test_rect_gap`, the `test_the_edge_seat_*` tests,
+`test_the_ground_stands_beyond_the_last_house_not_in_a_gap_among_them` and `_seat`; only the no-ground-of-its-own test and
+`test_convex_hull_of_few_points` stay), `test_city.py`, `test_villages.py`, `test_caption_paths.py`, `test_map_vocabulary.py` and the
 composed-surface guard's member list), and a file left with no test is removed. The coverage floor then names any line only
 the deleted tests reached: it is deleted if no shipping code reaches it (the same table), else a test is owed.
 
