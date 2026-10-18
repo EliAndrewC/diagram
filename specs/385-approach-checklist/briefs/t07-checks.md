@@ -1,0 +1,14 @@
+- quote-check 0081: r1 4 notes, 2 SUPPORTS 1 PARTIAL, JOINED-WRONG + locator case fixed; r2 'Shandong county' -> 'Jiaxiang county' (no quote names the province); closed
+- quote-check 0247: r1 11 notes, 6 SUPPORTS 4 PARTIAL, 3 wording + 4 joins + 3 locators + 1 unfootnoted fixed; r3 8 SUPPORTS 2 PARTIAL; closed with rows filed (below)
+- record-format 0081: r1 dishui glossed, session note to comment, stray comma; r2 vicinage glossed; r3 clean
+- record-format 0247: r1 session note to comment; r2 bao/du glossed in brackets, 'storied shop-house' (machiya tooltip) -> 'a shop with an upper story'; r3 clean
+- translation-check 0081: r1 Hongyaidi -> Hongyadi (also in 0247); r2 5 FAITHFUL
+- translation-check 0247: r1 3 LOOSE fixed (tuku, shop, illegible chars); r3 18 FAITHFUL (r2's CANNOT-TELL on 坃 in an unused bound, filed)
+- intro-check 0247: NO-INTRO-NEEDED
+- source-applicability wang-2021-qing-huabei-dishui: WITH-LIMITS, limits gained the 1930 survey and Baoding a city; period=premodern,modern-preindustrial
+- source-applicability wigmore-1892-servitudes: WITH-LIMITS, the era hedge narrowed for the Ono and Otori entries
+- source-reader wang (9 notes): 9 READ; wigmore (4 notes): 4 READ; the two absence notes: round-arbiter ACCEPT (batch q:0081@5, q:0247@3, q:0247@5)
+- modal-triage: 3 of 10 touched (r2; r1 was answered against a since-moved page); modal-depiction lane_web--alleys, lane_web--back_lane, village-lane: COVERAGE/TRUTH/LINKS clean
+- ROWS (not edited, each owes another round): 0247 'a few feet wide at most' is an inference (Kaifeng sets no width; quote conclusion (1), l.214); -3 drops the source's 'somewhat'; -1 'Qing-period ... customs' rests on the 1930 survey; -3/-2 the table's source sentence (南京政府...《民事习惯调查报告录》) to quote; -4/-5 Shanghai and 1883 only in the gloss (quote 如上海光绪九年(1883年)九月罗进达等卖房地契中); -6 Baoding only in the gloss; the 1868 Shandong deed's 南至大门外三尺为界 (l.190), a lead for the setback; 坃 in the 1809 Baoding deed unread
+- claims: settlement/houses.py::HousesMixin._on_a_tread still NEEDS-RESEARCH on '4 ft TREAD_WALL_FT' (three modal-depiction runs flagged it); feature 378 owes its Research: pointer to 0247 and an impl-drift verdict
+- tooling: make modal-triaged read a .jsonl transcript raw and answered every pop-up untouched; fixed in ef707007c (reads the last reply, as apply-edits does)
