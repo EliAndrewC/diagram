@@ -85,3 +85,14 @@ def test_a_tree_whose_seat_is_taken_is_left_out_and_a_bare_bank_draws_none() -> 
     none = _s()
     pb.stage_pond_bank(none, _plan(pond=None))
     assert "pond_bank" not in none.M["meta"]
+
+
+def test_a_planted_bank_with_no_free_seat_draws_nothing() -> None:
+    """D61: a planted bank whose every seat is taken draws no tree and records none - the drawer adds no empty group."""
+    s = _s()
+    n = len(s.out)
+    pb.draw_bank_trees(s, [])
+    assert len(s.out) == n and "pond_bank_trees" not in s.M
+    s.W = s.H = 1  # every seat off the canvas
+    pb.stage_pond_bank(s, _plan(form="planted"))
+    assert s.M["meta"]["pond_bank"] == "planted" and s.M["meta"]["pond_bank_trees"] == 0 and len(s.out) == n
