@@ -6875,6 +6875,46 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/consts.py::POND_BANKS#pond bank form": {
+  "body": "ce9cc2270d0f1fb5",
+  "claim": "pond bank form - reservoir-ponds-tameike.drawing: a bare bank, or one planted sparsely with mulberry and cudrania; even odds a GUESS (no share given)",
+  "code": "dcf6bd0930d83f75",
+  "core": "db7297a523b86705",
+  "date": "2026-10-18",
+  "note": "the code rolls between the two forms §6 attests, which is what the doctrine wants. But the cited drawing page still says \"every bank is drawn bare\" and that the maps \"do not yet vary between the two\", and it records no even-odds guess. Bring the page up to the code: record the roll and its odds as a GUESS",
+  "pages": {
+   "0061-reservoir-ponds-tameike.drawing.html": "be8eb7a4bb23863d"
+  },
+  "research": "06a7923692f832d3",
+  "rests": [
+   "0061-reservoir-ponds-tameike.drawing.html:8275002e55cb9474",
+   "0061-reservoir-ponds-tameike.drawing.html:acc57fcad91076b2",
+   "0061-reservoir-ponds-tameike.drawing.html:f9e5a5b88e2a9590"
+  ],
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/hamletgen/consts.py::POND_BANK_CROWN_FT#a bank tree's crown radius": {
+  "body": "720df070b26d5b39",
+  "claim": "a bank tree's crown radius - GUESS: a pollarded mulberry's crown about 12 ft across, the dike fruit tree's mark scaled",
+  "code": "633fc9dfd993b64e",
+  "core": "5efeb905b7d48b3f",
+  "date": "2026-10-18",
+  "note": "this is labeled a bare GUESS (a 12 ft pollarded crown), but bundle pages bear on it. 0038 has cultivated mulberry \"trained as low bushes\", and 0027 draws dike mulberry as touching bushes 4.4 ft apart. The claim should cite those pages and record the tree-sized crown as a guess or deviation on 0061's drawing page",
+  "pages": {},
+  "research": "",
+  "verdict": "MISLABELED"
+ },
+ "l7r/diagram/hamletgen/consts.py::POND_BANK_PITCH_FT#one tree about every 30 ft of bank": {
+  "body": "347cd16150ed2bf6",
+  "claim": "one tree about every 30 ft of bank - GUESS: 0061's \"sparsely\" gives no figure",
+  "code": "d966c59fcdf3b810",
+  "core": "f9869fee1052b437",
+  "date": "2026-10-18",
+  "note": "\"sparsely\" carries no figure",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/consts.py::POND_LAYOUTS#dike-pond layout": {
   "code": "140ed1dd7030678f",
   "core": "bfbdbf4350cd9733",
@@ -7648,52 +7688,67 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/driver.py::STAGES#hinterland, woodland, windbreak and bamboo laid after every built thing, bamboo over the scrub": {
+  "code": "b084280cc46a20dc",
+  "core": "b084280cc46a20dc",
+  "date": "2026-10-18",
+  "note": "hinterland, woodland, windbreak and bamboo laid after every built thing, bamboo over the scrub",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/hamletgen/driver.py::STAGES#homesteads before lanes": {
-  "code": "e2f90f5e8ae5aec8",
-  "core": "1047d304f1cf9a90",
-  "date": "2026-10-13",
+  "body": "baf2e84b25807fb2",
+  "claim": "homesteads before lanes - how-our-maps-lay-a-clustered-settlements-lanes.drawing: every lane drawn after the farmhouses",
+  "code": "7a828906f2e9fdec",
+  "core": "b084280cc46a20dc",
+  "date": "2026-10-18",
   "note": "farmhouses seated before any lane",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
   },
   "research": "60b94d3c15ae221a",
   "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7"
   ],
-  "triaged": "2026-10-17",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#labels last": {
-  "code": "c099adc5ad186020",
-  "core": "1047d304f1cf9a90",
-  "date": "2026-10-13",
-  "note": "label placement order is drawing only",
+  "body": "baf2e84b25807fb2",
+  "claim": "labels last - CONVENTION",
+  "code": "8a5bd65a4745f4bb",
+  "core": "b084280cc46a20dc",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#lane-side wells after the web": {
-  "body": "55589d5fb5bc9c50",
+  "body": "baf2e84b25807fb2",
   "claim": "lane-side wells after the web - communal-wells-ido.drawing: a clustered hamlet's lane-side well seated on a lane's verge once the lanes stand (`stage_lane_wells`)",
-  "code": "015ac28af041557c",
-  "core": "1047d304f1cf9a90",
+  "code": "0c10f74146df8b2b",
+  "core": "b084280cc46a20dc",
   "date": "2026-10-18",
-  "note": "stage_lane_wells runs after stage_web",
+  "note": "the lane-side well is seated once the lanes stand",
   "pages": {
    "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
   "research": "530e826bbd37f9c5",
   "rests": [
+   "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#notice board after the frame": {
-  "code": "7c41b2dd46f42169",
-  "core": "1047d304f1cf9a90",
-  "date": "2026-10-13",
-  "note": "placed after the crop",
+  "body": "baf2e84b25807fb2",
+  "claim": "notice board after the frame - notice-boards-kosatsuba.drawing: placed after the map is cropped to its frame (the GM's ruling of 2026-08-29)",
+  "code": "01c5d6f9f98e0dd4",
+  "core": "b084280cc46a20dc",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
@@ -7704,10 +7759,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#notice board last": {
-  "code": "86e659fe78c1cc28",
-  "core": "1047d304f1cf9a90",
-  "date": "2026-10-13",
-  "note": "the last thing placed",
+  "body": "baf2e84b25807fb2",
+  "claim": "notice board last - notice-boards-kosatsuba.drawing: placed once everything else stands",
+  "code": "8e956aa247e918c0",
+  "core": "b084280cc46a20dc",
+  "date": "2026-10-18",
+  "note": "last placed feature; the labels draw no feature",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
@@ -7718,29 +7775,46 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#pig sties after the crossings": {
-  "code": "a9d58cf57810074b",
-  "core": "1047d304f1cf9a90",
-  "date": "2026-10-13",
-  "note": "CANON names the GM's ruling of 2026-10-12",
+  "body": "baf2e84b25807fb2",
+  "claim": "pig sties after the crossings - CANON: the GM's ruling of 2026-10-12, the order an implementation detail where the placement keeps to the research; each sty is seated where no way runs, as how-our-maps-lay-a-clustered-settlements-lanes.drawing has a household's way go round its fixtures, and in the bundle it moved the seating and the web refused maps (m:w151-sty-room)",
+  "code": "225f7a90e30c86df",
+  "core": "b084280cc46a20dc",
+  "date": "2026-10-18",
+  "note": "the claim names the GM's ruling; the sty stays against its house",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/driver.py::STAGES#track before the wells": {
-  "code": "1fd382954e3a91eb",
-  "core": "1047d304f1cf9a90",
-  "date": "2026-10-13",
-  "note": "0196 is silent on the order",
+ "l7r/diagram/hamletgen/driver.py::STAGES#pond-bank trees after the wells": {
+  "body": "baf2e84b25807fb2",
+  "claim": "pond-bank trees after the wells - UNRESEARCHED: seated against the houses, ways and wells already standing, before the hinterland's scrub and copse fill round them (`stage_pond_bank`)",
+  "code": "f46e7ca0f1737c6d",
+  "core": "b084280cc46a20dc",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/driver.py::STAGES#track before the wells": {
+  "body": "baf2e84b25807fb2",
+  "claim": "track before the wells - UNRESEARCHED: a well dug where the track already runs",
+  "code": "17e231f77e64bc78",
+  "core": "b084280cc46a20dc",
+  "date": "2026-10-18",
+  "note": "0196 orders the lane-side well after the lanes, not after the track",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/driver.py::STAGES#washing places after the crossings": {
-  "code": "1d45c2af63928aa5",
-  "core": "1047d304f1cf9a90",
-  "date": "2026-10-13",
-  "note": "a footing is moved along the bank off a lane or bridge",
+  "body": "baf2e84b25807fb2",
+  "claim": "washing places after the crossings - washing-places-at-the-waters-edge.drawing: where a lane, a bridge or a building takes a footing's spot it is moved along the bank, so they stand first",
+  "code": "3db28c80d29d8c17",
+  "core": "b084280cc46a20dc",
+  "date": "2026-10-18",
+  "note": "a footing is moved along the bank where a lane, bridge or building takes its spot",
   "pages": {
    "0065-washing-places-at-the-waters-edge.drawing.html": "53f6bbd749f189f6"
   },
@@ -7751,10 +7825,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#water, then field, then sink": {
-  "code": "65590fba5abae6df",
-  "core": "1047d304f1cf9a90",
-  "date": "2026-10-13",
-  "note": "the water network first, the drain along the low line",
+  "body": "baf2e84b25807fb2",
+  "claim": "water, then field, then sink - irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing, field-drains-akusuiro.drawing: the field shaped by its water, the drain along its field's low line",
+  "code": "a188102a5b36dffd",
+  "core": "b084280cc46a20dc",
+  "date": "2026-10-18",
+  "note": "water net laid first, then the paddies, then the drain on the low line",
   "pages": {
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "92978f4124b5a89e",
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
@@ -7767,29 +7843,32 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#waterward fringe before the houses": {
-  "code": "7e7a0bebb8276f4b",
-  "core": "1047d304f1cf9a90",
-  "date": "2026-10-13",
-  "note": "the cited pages are silent on this order",
+  "body": "baf2e84b25807fb2",
+  "claim": "waterward fringe before the houses - UNRESEARCHED: a polder's reed fringe outside the dike laid before the houses and the track, which treat it as wet ground",
+  "code": "435645c0eab5fab4",
+  "core": "b084280cc46a20dc",
+  "date": "2026-10-18",
+  "note": "0019 records the fringe but not its order",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#web after everything that reserves ground": {
-  "code": "97af449648117a89",
-  "core": "1047d304f1cf9a90",
-  "date": "2026-10-13",
-  "note": "lanes laid round what stands, each way laid once the last house stands",
+  "body": "baf2e84b25807fb2",
+  "claim": "web after everything that reserves ground - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the web drawn last, round what stood first; each household's own way is laid and reserved at the end of the homesteads stage, once the last house stands, so the later stages keep off it",
+  "code": "53ec32a29f0821f1",
+  "core": "b084280cc46a20dc",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
   },
   "research": "60b94d3c15ae221a",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:82d03d7e6a2180e2",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7"
   ],
-  "triaged": "2026-10-17",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGE_PROFILE_ENV#driving the roll": {
@@ -7801,10 +7880,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::_run_stages#driving the roll": {
-  "code": "626b72570603ebb1",
-  "core": "9e15edd1a57cb0a9",
-  "date": "2026-10-13",
-  "note": "plumbing",
+  "body": "887b3eee6badee23",
+  "claim": "driving the roll - NONE: building, finishing, staging, cohorts, the baseline and the CLI",
+  "code": "b3f5dc720442d03d",
+  "core": "3fbfacfd37530659",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {},
   "research": "",
   "rests": [],
@@ -16057,73 +16138,88 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::HamletSpec#declared fields honored, the rest rolled": {
-  "code": "61cd5da809247b3e",
-  "core": "e1f7ecdaa1c0e2f0",
-  "date": "2026-10-13",
-  "note": "plumbing",
+  "body": "774c3cb4b910ab5b",
+  "claim": "declared fields honored, the rest rolled - NONE: the spec's plumbing; each knob table carries its own claim in consts",
+  "code": "b6455c9f55cf2c84",
+  "core": "82fd70bbd9f76907",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::HamletSpec#default households": {
-  "code": "79cb60c17e0a7ac6",
-  "core": "e1f7ecdaa1c0e2f0",
-  "date": "2026-10-13",
-  "note": "inside the 10-20 band; the page does not answer the default",
+  "body": "774c3cb4b910ab5b",
+  "claim": "default households - UNRESEARCHED: 15 when none declared (REF_HOUSEHOLDS), Ikegami's count",
+  "code": "725d3ceaec3dbfa5",
+  "core": "82fd70bbd9f76907",
+  "date": "2026-10-18",
+  "note": "15 sits inside the attested 10-20 band",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::HamletSpec.__post_init__#hamlet household band": {
-  "code": "d381005c67e53b15",
-  "core": "eba5b7742264aea9",
-  "date": "2026-10-13",
-  "note": "10 to 20",
+  "body": "4056cf12078221aa",
+  "claim": "hamlet household band - the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing: 10 to 20 households",
+  "code": "6f789e234e77dd54",
+  "core": "e18ab23f4930f20c",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {
    "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html": "8d5bae222470dc31"
   },
   "research": "c673ec140d58f7c3",
   "rests": [
+   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html:4fa5403a32a6734d",
    "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html:dfca015722198f5b"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::HamletSpec.__post_init__#knob values": {
-  "code": "19260c7b749ce563",
-  "core": "eba5b7742264aea9",
-  "date": "2026-10-13",
-  "note": "validation only",
+  "body": "4056cf12078221aa",
+  "claim": "knob values - NONE: each table carries its own claim in consts",
+  "code": "0751fae973a5edc9",
+  "core": "e18ab23f4930f20c",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::HamletSpec.__post_init__#pond layout values": {
-  "code": "272cceea6c53accd",
-  "core": "eba5b7742264aea9",
-  "date": "2026-10-13",
+  "body": "4056cf12078221aa",
+  "claim": "pond layout values - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the mosaic or the chessboard (grid), both attested at pond scale",
+  "code": "1693c248c87fcb3a",
+  "core": "e18ab23f4930f20c",
+  "date": "2026-10-18",
   "note": "mosaic or chessboard",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
   "research": "765c28e2d975a432",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f2476cca851905fb"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::HamletSpec.__post_init__#water sink values": {
-  "code": "36a4a4a2c16d9b51",
-  "core": "eba5b7742264aea9",
-  "date": "2026-10-13",
-  "note": "a pond at the foot or off the map",
+  "body": "4056cf12078221aa",
+  "claim": "water sink values - field-drains-akusuiro.drawing: a pond at the foot or off the map",
+  "code": "a499ebb41651aea1",
+  "core": "e18ab23f4930f20c",
+  "date": "2026-10-18",
+  "note": "a pond at the foot, or off the map / to the brook",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
   "research": "8ff7ceb036c4856e",
   "rests": [
    "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
+   "0060-field-drains-akusuiro.drawing.html:d3e99aaa0ddc4599",
    "0060-field-drains-akusuiro.drawing.html:fddf3b65d30ae7c2"
   ],
   "verdict": "IN-STEP"
@@ -16505,6 +16601,172 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/pondbank.py::TREE_TONES#the two trees' marks": {
+  "body": "382cde552ed84de4",
+  "claim": "the two trees' marks - CONVENTION: the dike's standard tree, two greens so the two kinds read apart",
+  "code": "9ea09171f70dd13a",
+  "core": "e8ee7f37514744bc",
+  "date": "2026-10-18",
+  "note": "",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/pondbank.py::bank_seats#each bank seat jittered up to a quarter pitch along the ring": {
+  "code": "db5fb56a7509bac7",
+  "core": "db5fb56a7509bac7",
+  "date": "2026-10-18",
+  "note": "each bank seat jittered up to a quarter pitch along the ring",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/pondbank.py::bank_seats#on the bank, beyond the reeds": {
+  "body": "a468e8ef8bf39b15",
+  "claim": "on the bank, beyond the reeds - reservoir-ponds-tameike.drawing: reeds at the shore, the embankment beyond them",
+  "code": "f57be52ef11adb0d",
+  "core": "db5fb56a7509bac7",
+  "date": "2026-10-18",
+  "note": "seats are on the ring beyond the reed fringe",
+  "pages": {
+   "0061-reservoir-ponds-tameike.drawing.html": "be8eb7a4bb23863d"
+  },
+  "research": "06a7923692f832d3",
+  "rests": [
+   "0061-reservoir-ponds-tameike.drawing.html:8275002e55cb9474",
+   "0061-reservoir-ponds-tameike.drawing.html:b4e3ac5d9de888f6",
+   "0061-reservoir-ponds-tameike.drawing.html:f9e5a5b88e2a9590"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/pondbank.py::bank_seats#sparsely": {
+  "body": "a468e8ef8bf39b15",
+  "claim": "sparsely - GUESS: one tree about every 30 ft of bank (`POND_BANK_PITCH_FT`)",
+  "code": "004f5a91c0e0ced4",
+  "core": "db5fb56a7509bac7",
+  "date": "2026-10-18",
+  "note": "",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/pondbank.py::draw_bank_trees#a bank tree's mark": {
+  "body": "14f2dc9688d6891a",
+  "claim": "a bank tree's mark - CONVENTION: the dike's standard tree, a round crown with a darker rim",
+  "code": "ea1f6e5a46ad9bfe",
+  "core": "3e6aab04691428c4",
+  "date": "2026-10-18",
+  "note": "",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/pondbank.py::draw_bank_trees#the crowns in tree_crowns": {
+  "body": "14f2dc9688d6891a",
+  "claim": "the crowns in tree_crowns - NONE: plumbing, so the structure tests read the bank's trees as they read every crown",
+  "code": "c021dabbdbb6da1f",
+  "core": "3e6aab04691428c4",
+  "date": "2026-10-18",
+  "note": "",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/pondbank.py::pond_bank#pond bank form": {
+  "body": "015d1948d8fba66c",
+  "claim": "pond bank form - reservoir-ponds-tameike.drawing: a bare bank, or one planted sparsely with mulberry and cudrania",
+  "code": "5278cb0fca99e104",
+  "core": "b7796f95451e789c",
+  "date": "2026-10-18",
+  "note": "the code rolls bare/planted per hamlet as §6 attests, but the cited drawing page still says every bank is drawn bare and not varied. The page must record the roll",
+  "pages": {
+   "0061-reservoir-ponds-tameike.drawing.html": "be8eb7a4bb23863d"
+  },
+  "research": "06a7923692f832d3",
+  "rests": [
+   "0061-reservoir-ponds-tameike.drawing.html:8275002e55cb9474",
+   "0061-reservoir-ponds-tameike.drawing.html:acc57fcad91076b2",
+   "0061-reservoir-ponds-tameike.drawing.html:f9e5a5b88e2a9590"
+  ],
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/hamletgen/pondbank.py::seat_free#no crown on a roof or a wellhead": {
+  "body": "4aa07b32bd0dbd8a",
+  "claim": "no crown on a roof or a wellhead - groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing: against a wall, never on it",
+  "code": "a655557b9b1b4035",
+  "core": "1b6be475ac108ee7",
+  "date": "2026-10-18",
+  "note": "a crown stands against a wall, never on it",
+  "pages": {
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241"
+  },
+  "research": "90cf9ff106c766c9",
+  "rests": [
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:5267e319c5872785"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/pondbank.py::seat_free#no trunk on a way, crop or water": {
+  "body": "4aa07b32bd0dbd8a",
+  "claim": "no trunk on a way, crop or water - NONE: a tree stands on open ground",
+  "code": "51cb9322cb2fa75f",
+  "core": "1b6be475ac108ee7",
+  "date": "2026-10-18",
+  "note": "this is a placement rule, not plumbing: trunk off treads, paddy, dry plots, the reed marsh, and streams by w/2+1. Label it UNRESEARCHED; the reed-marsh exclusion can cite 0061",
+  "pages": {},
+  "research": "",
+  "verdict": "MISLABELED"
+ },
+ "l7r/diagram/hamletgen/pondbank.py::seat_free#out of the plots' sun": {
+  "body": "4aa07b32bd0dbd8a",
+  "claim": "out of the plots' sun - sunlight-and-shade-on-the-farm.drawing: no canopy over a yard's or bed's sun ground",
+  "code": "bbc3505adab8c427",
+  "core": "1b6be475ac108ee7",
+  "date": "2026-10-18",
+  "note": "the code holds the bank mulberry to the canopy-tree sun rule. 0038 says cultivated mulberry is \"trained as low bushes\" and is \"not held to the rule\". Either exempt the mulberry, or record why a tameike bank's mulberry is a canopy tree (the same reading as POND_BANK_CROWN_FT)",
+  "pages": {
+   "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
+  },
+  "research": "3874df1f1301e65f",
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:eec3f6a7b5017ede"
+  ],
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/hamletgen/pondbank.py::stage_pond_bank#after the houses, ways and wells": {
+  "body": "907e785687fd3b53",
+  "claim": "after the houses, ways and wells - UNRESEARCHED: seated against what stands, before the hinterland's scrub and copse",
+  "code": "66418f0010cf691c",
+  "core": "2652ad08e9add502",
+  "date": "2026-10-18",
+  "note": "",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/pondbank.py::stage_pond_bank#bank trees kept at least two crown radii apart (crowns never overlap)": {
+  "code": "2652ad08e9add502",
+  "core": "2652ad08e9add502",
+  "date": "2026-10-18",
+  "note": "bank trees kept at least two crown radii apart (crowns never overlap)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/pondbank.py::stage_pond_bank#the two trees in turn": {
+  "body": "907e785687fd3b53",
+  "claim": "the two trees in turn - GUESS: 0061 names mulberry and cudrania, not their order; they alternate round the ring",
+  "code": "2f55fd6d33cb1ff0",
+  "core": "2652ad08e9add502",
+  "date": "2026-10-18",
+  "note": "0061 names both trees but no order or mix",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/pondstock.py::BANK_INSET_FT#sty on the bank": {
   "code": "ee9c63ed419e2e26",
   "core": "39e02fedc7cb2a35",
@@ -16877,6 +17139,17 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/sink.py::SINK_FRINGE#reed fringe width": {
+  "body": "d4803ee2a331e3a4",
+  "claim": "reed fringe width - UNRESEARCHED: a 44 ft ring",
+  "code": "a392fd02f2423d30",
+  "core": "8b791e6a9595beb5",
+  "date": "2026-10-18",
+  "note": "no width given",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/sink.py::SinkRefused#drain plumbing": {
   "code": "0e587b056d01df2e",
   "core": "000ff59f78e20f64",
@@ -17121,18 +17394,24 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#bowed ditch": {
-  "code": "c87dbdfd6c34719d",
-  "core": "663f14d8eb68de69",
-  "date": "2026-10-03",
-  "note": "drawing",
+  "body": "84d0dc57d1df3109",
+  "claim": "bowed ditch - CONVENTION",
+  "code": "c6970f238c64f456",
+  "core": "82c5696cf249ea91",
+  "date": "2026-10-18",
+  "note": "",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#brook first, then off the frame": {
-  "code": "a96d78cdb4ad0e98",
-  "core": "663f14d8eb68de69",
-  "date": "2026-10-05",
-  "note": "joins the passing brook where in reach, else off the map",
+  "body": "84d0dc57d1df3109",
+  "claim": "brook first, then off the frame - field-drains-akusuiro.drawing",
+  "code": "062e57c307876375",
+  "core": "82c5696cf249ea91",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
@@ -17141,101 +17420,131 @@
    "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
    "0060-field-drains-akusuiro.drawing.html:fddf3b65d30ae7c2"
   ],
-  "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#no building on the water": {
-  "code": "1b0f19911bda8aff",
-  "core": "663f14d8eb68de69",
-  "date": "2026-10-03",
-  "note": "10 ft",
+  "body": "84d0dc57d1df3109",
+  "claim": "no building on the water - UNRESEARCHED: 10 ft round the pond's box",
+  "code": "6c81f571e32af072",
+  "core": "82c5696cf249ea91",
+  "date": "2026-10-18",
+  "note": "",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#off-map route search": {
-  "code": "99f044e101cd0e6d",
-  "core": "663f14d8eb68de69",
-  "date": "2026-10-03",
-  "note": "search under the rules",
+  "body": "84d0dc57d1df3109",
+  "claim": "off-map route search - NONE: swings, junction distances and run lengths under route_refusals",
+  "code": "36c6f58ef0c8340d",
+  "core": "82c5696cf249ea91",
+  "date": "2026-10-18",
+  "note": "",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#pond area": {
-  "code": "87bcdef676790f86",
-  "core": "663f14d8eb68de69",
-  "date": "2026-10-03",
-  "note": "~3% of paddy at every size, below 0061's 2-3 tenths (0061's reduction is for a watering pond, this is a drain sink)",
-  "pages": {
-   "0061-reservoir-ponds-tameike.drawing.html": "be8eb7a4bb23863d"
-  },
-  "research": "06a7923692f832d3",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::lay_sink#pond bank form": {
-  "code": "e7655615f0b47133",
-  "core": "663f14d8eb68de69",
-  "date": "2026-10-05",
-  "note": "the page itself calls every-bank-bare \"a shortfall, not a finding\"; the Song manual's sparsely treed bank is a second attested form that should be rolled",
+  "body": "84d0dc57d1df3109",
+  "claim": "pond area - reservoir-ponds-tameike.drawing: held below two or three tenths of its paddy",
+  "code": "d8132c674871cde5",
+  "core": "82c5696cf249ea91",
+  "date": "2026-10-18",
+  "note": "the pond is a drainage sink, not a reservoir. 0060 says the 2-3 tenths \"is for a pond that waters its fields\" and gives the sink pond about 3/100 of its paddy, a GUESS. Re-point to GUESS research/questions/0060-field-drains-akusuiro.drawing.html",
   "pages": {
    "0061-reservoir-ponds-tameike.drawing.html": "be8eb7a4bb23863d"
   },
   "research": "06a7923692f832d3",
   "rests": [
-   "0061-reservoir-ponds-tameike.drawing.html:8275002e55cb9474",
-   "0061-reservoir-ponds-tameike.drawing.html:f9e5a5b88e2a9590"
+   "0061-reservoir-ponds-tameike.drawing.html:18eca3ea34b26d65",
+   "0061-reservoir-ponds-tameike.drawing.html:fdcc457670adaf7c"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "MISLABELED"
+ },
+ "l7r/diagram/hamletgen/sink.py::lay_sink#pond bank form": {
+  "body": "84d0dc57d1df3109",
+  "claim": "pond bank form - reservoir-ponds-tameike.drawing: every bank bare; the second attested form, a bank planted sparsely with mulberry and cudrania, is never rolled",
+  "code": "acd851b61edd79e0",
+  "core": "82c5696cf249ea91",
+  "date": "2026-10-18",
+  "note": "stale. lay_sink no longer decides the bank, and stage_pond_bank now rolls the planted form this claim says \"is never rolled\". Drop the claim from lay_sink",
+  "pages": {
+   "0061-reservoir-ponds-tameike.drawing.html": "be8eb7a4bb23863d"
+  },
+  "research": "06a7923692f832d3",
+  "rests": [
+   "0061-reservoir-ponds-tameike.drawing.html:8275002e55cb9474"
+  ],
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#pond reference size": {
-  "code": "6ae86cd47e827df3",
-  "core": "663f14d8eb68de69",
-  "date": "2026-10-03",
-  "note": "116 x 74 sqrt-scaled",
+  "body": "84d0dc57d1df3109",
+  "claim": "pond reference size - UNRESEARCHED: 116 x 74 ft radii at 15 households, scaled by the square root",
+  "code": "c57e8c99493e9811",
+  "core": "82c5696cf249ea91",
+  "date": "2026-10-18",
+  "note": "0060 records this exact figure (\"in a hamlet of fifteen households it is about 230 by 150 ft ... grows with the hamlet\"), as a GUESS. Should read GUESS research/questions/0060-field-drains-akusuiro.drawing.html",
+  "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#pond's role": {
-  "code": "08352f3185544f47",
-  "core": "663f14d8eb68de69",
-  "date": "2026-10-07",
-  "note": "the pond sits at the drain's foot as its sink (`pond_role` \"drainage\"), and the page records the drain-ending-in-a-pond as a GUESS",
+  "body": "84d0dc57d1df3109",
+  "claim": "pond's role - field-drains-akusuiro.drawing: a drain that ends in a pond of its own is a GUESS recorded there; the pond is laid at the drain's foot as the field's sink, not as a reservoir that waters the paddy",
+  "code": "4586ea227497c32b",
+  "core": "82c5696cf249ea91",
+  "date": "2026-10-18",
+  "note": "the drain ending in its own pond is a GUESS recorded there; meta pond_role is drainage",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
   "research": "8ff7ceb036c4856e",
   "rests": [
-   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
    "0060-field-drains-akusuiro.drawing.html:a6dd4c8ccae9300d",
-   "0060-field-drains-akusuiro.drawing.html:fddf3b65d30ae7c2"
+   "0060-field-drains-akusuiro.drawing.html:c68b896ac3cc1631"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#reed fringe": {
-  "code": "6ab71331bed6d544",
-  "core": "663f14d8eb68de69",
-  "date": "2026-10-03",
-  "note": "pond_fringe marsh ring; 0061: \"a fringe of reeds standing on wet ground at its shore\"",
+  "body": "84d0dc57d1df3109",
+  "claim": "reed fringe - reservoir-ponds-tameike.drawing: a fringe of reeds at the shore",
+  "code": "a191ad03222b4be3",
+  "core": "82c5696cf249ea91",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {
    "0061-reservoir-ponds-tameike.drawing.html": "be8eb7a4bb23863d"
   },
   "research": "06a7923692f832d3",
+  "rests": [
+   "0061-reservoir-ponds-tameike.drawing.html:d6c10e2a38c86b30",
+   "0061-reservoir-ponds-tameike.drawing.html:f9e5a5b88e2a9590"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#reed fringe width": {
-  "code": "067f828c38965edb",
-  "core": "663f14d8eb68de69",
-  "date": "2026-10-03",
-  "note": "44.0 ring; 0061 gives no width",
+  "body": "84d0dc57d1df3109",
+  "claim": "reed fringe width - UNRESEARCHED: a 44 ft ring",
+  "code": "1ebd2003b3953838",
+  "core": "82c5696cf249ea91",
+  "date": "2026-10-18",
+  "note": "",
+  "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#too far below, no pond": {
-  "code": "47fed7330492ba81",
-  "core": "663f14d8eb68de69",
-  "date": "2026-10-03",
-  "note": "300 limit",
+  "body": "84d0dc57d1df3109",
+  "claim": "too far below, no pond - UNRESEARCHED: past POND_SETBACK_LIMIT the field drains off the frame",
+  "code": "1af9cf731fa395af",
+  "core": "82c5696cf249ea91",
+  "date": "2026-10-18",
+  "note": "0060 records the fallback (\"a map whose pond would have to sit far below the fields sends its drain off the map\"). Should be GUESS research/questions/0060-field-drains-akusuiro.drawing.html; the 300 ft figure is its guess",
+  "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/sink.py::pond_clear_of_crop#tameike clear of the paddy": {
   "code": "c1bdfeddfddc973c",
@@ -33277,6 +33586,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/interactive/classes/greenery.py::PondBankTree#modal explanation": {
+  "body": "06cff58227670cad",
+  "claim": "modal explanation - NONE: the explanation's research is its Entry:, checked by entry-drift",
+  "code": "a539198b2b3d0d7b",
+  "core": "f3c302aa81d4b3d9",
+  "date": "2026-10-18",
+  "note": "",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/interactive/classes/greenery.py::ScrubAndRoughGrazing#modal explanation": {
   "code": "715e77fb52322943",
   "core": "f84b1d4bb7432fca",
@@ -39597,10 +39918,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::tested#registry plumbing": {
-  "code": "73e52fd909f32c8c",
-  "core": "4f55f33d860b7c2d",
-  "date": "2026-10-12",
-  "note": "plumbing",
+  "body": "92eb3e0494fdf5dc",
+  "claim": "registry plumbing - NONE: recording, indexing and asking the matrix",
+  "code": "3c40002c1aeb8bfe",
+  "core": "7593f6e951c48676",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {},
   "research": "",
   "rests": [],
@@ -40546,28 +40869,36 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MX_NOT_GEOMETRY#geometry and bookkeeping": {
-  "code": "fc77f72b564ee914",
-  "core": "e9b861e53a0a7635",
-  "date": "2026-10-03",
-  "note": "list of non-geometry keys",
+  "body": "7ae15d38ca261446",
+  "claim": "geometry and bookkeeping - NONE: types, loaders and polygon measures",
+  "code": "1219184f328dc529",
+  "core": "b0c1492eeede016f",
+  "date": "2026-10-18",
+  "note": "",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_CLASSIFIED#geometry and bookkeeping": {
-  "code": "82b5721eca38b5f3",
-  "core": "260583e9b4a68bf1",
-  "date": "2026-10-13",
-  "note": "set union",
+  "body": "53079c7febf3228f",
+  "claim": "geometry and bookkeeping - NONE: types, loaders and polygon measures",
+  "code": "f338767a91977a00",
+  "core": "2afd06bc38f1fddc",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#annexes abut their house": {
-  "code": "31e31e1a8d519a81",
-  "core": "4f4e1908e021bcf3",
-  "date": "2026-10-13",
-  "note": "kura annex convention; grove sides and 24 ft strip",
+  "body": "138376739d21ec5e",
+  "claim": "annexes abut their house - the-farmstead-and-what-stood-on-it-yashiki.drawing, farm-storehouses-kura.drawing, groves-of-trees-around-farmhouses-yashikirin.drawing: the kura against its own farmhouse (west wall scattered, north wall clustered); the grove along the plot edge on its rolled 2-4 sides, its windward stand about 24 ft off the house and only the thinner bands beside it",
+  "code": "428caf5368fb4742",
+  "core": "9a4b534519efc747",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c",
@@ -40576,42 +40907,51 @@
   "research": "8bf4154cb971fb14",
   "rests": [
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:57e17cedabbc7ead",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:24c94c3020a1389e",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:3828f77fb045b041",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:872aa364f298b45c",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:c2e7b505cf13f306",
    "0040-farm-storehouses-kura.drawing.html:d1a4c048a3cb6d63"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#bookkeeping records": {
-  "code": "e32b307bf99968c4",
-  "core": "4f4e1908e021bcf3",
-  "date": "2026-10-13",
-  "note": "records, not ink",
+  "body": "138376739d21ec5e",
+  "claim": "bookkeeping records - NONE: districts, quarters, precincts, clearings, row plans and tree records",
+  "code": "08cab7836a88ae5c",
+  "core": "9a4b534519efc747",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#border as a line": {
-  "code": "6a480ce34656da5f",
-  "core": "4f4e1908e021bcf3",
-  "date": "2026-10-13",
-  "note": "deviation recorded",
+  "body": "138376739d21ec5e",
+  "claim": "border as a line - DEVIATION clan-borders-and-their-markers.drawing: a line of law with no footprint, which a frontier magistracy's wall stands on (the parley room with the line across its floor); no mound drawn, nothing keeps clear",
+  "code": "7ae7f24d9f48233a",
+  "core": "9a4b534519efc747",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {
    "0083-clan-borders-and-their-markers.drawing.html": "aae7d10697713dff"
   },
   "research": "4acfcf3809873ba2",
   "rests": [
    "0083-clan-borders-and-their-markers.drawing.html:0e0382314cbd0076",
+   "0083-clan-borders-and-their-markers.drawing.html:ae415b96bff5fbc3",
    "0083-clan-borders-and-their-markers.drawing.html:eaec007272de042c"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#built on what it serves": {
-  "code": "fa46b093a5eebc3b",
-  "core": "4f4e1908e021bcf3",
-  "date": "2026-10-13",
-  "note": "the `log_booms` exemption is \"a cabled chain of floating logs\", where 0210 has the stock \"never as a floating log boom\"; the exemption and claim should name the moored rafts",
+  "body": "138376739d21ec5e",
+  "claim": "built on what it serves - road-bridges-over-rivers-and-canals-hashi.drawing, where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing, water-gates-and-sluices-shuimen.drawing, city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing, wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing, towers-along-the-city-wall-mamian.drawing, timber-yards-and-log-booms-kiba.drawing, washing-places-at-the-waters-edge.drawing: bridges, weirs, gates, jetties, towers, booms, washing places on their banks",
+  "code": "6ef7b4f8fd2a6c86",
+  "core": "9a4b534519efc747",
+  "date": "2026-10-18",
+  "note": "the log_booms entry exempts \"a cabled chain of floating logs\" that \"FLOATS on the river\". 0210 says \"No floating log boom is drawn\"; what is drawn is moored raft-mats or a pond. Re-word the entry and its claim to the moored stock",
   "pages": {
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884",
    "0065-washing-places-at-the-waters-edge.drawing.html": "53f6bbd749f189f6",
@@ -40624,16 +40964,30 @@
   },
   "research": "4f90d0da44ab444f",
   "rests": [
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:fb25778e65e5d8bd",
+   "0065-washing-places-at-the-waters-edge.drawing.html:8c38dba2f4c10ba6",
+   "0065-washing-places-at-the-waters-edge.drawing.html:de3a336bab36800b",
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:2bea76047e1862a0",
+   "0148-towers-along-the-city-wall-mamian.drawing.html:d568b9cefbaa02c3",
+   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:aa542f9e785bb0a1",
+   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:dcd25bf8ea2758a1",
+   "0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html:c6491b5671cda144",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:067bd7a407956917",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:088c44a5ca24eaf0",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:cf888beb9dde091c",
+   "0210-timber-yards-and-log-booms-kiba.drawing.html:0c90da5ebf0041c2",
    "0210-timber-yards-and-log-booms-kiba.drawing.html:4ef8408e54f82f55",
    "0210-timber-yards-and-log-booms-kiba.drawing.html:eac260ce154f9535"
   ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#copse and bamboo against a house": {
-  "code": "c00a3d3e92e6b8ba",
-  "core": "4f4e1908e021bcf3",
-  "date": "2026-10-13",
-  "note": "against a house, never on it",
+  "body": "138376739d21ec5e",
+  "claim": "copse and bamboo against a house - groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing, shelter-belts-on-a-villages-windward-side-bofurin.drawing: a clump stands against a house, never on it, so the village groves and bamboo stands, drawn last in open ground, may abut a house; the copse spread through the gaps between the houses, the belt on the windward north and west; the copse draws no bamboo, the thicket a stand of its own",
+  "code": "ec25d25d2559022f",
+  "core": "9a4b534519efc747",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
@@ -40642,31 +40996,35 @@
   "rests": [
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:5267e319c5872785",
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:6d00137e5f270209",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:8e692f283f7947e4",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#in-field ditches": {
-  "code": "7b5650a2f291005f",
-  "core": "4f4e1908e021bcf3",
-  "date": "2026-10-13",
-  "note": "ditches end within the field",
+  "body": "138376739d21ec5e",
+  "claim": "in-field ditches - where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing: drawn on the paddy",
+  "code": "d3e13056edff9af4",
+  "core": "9a4b534519efc747",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
   },
   "research": "39036ea15e57c448",
   "rests": [
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:0d4f9efff883c0d1",
-   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:0fc478156a744cc7"
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:fe85b102b5eb5beb"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#in-field ponds, rocks and graves": {
-  "code": "4860f75eb006b7f7",
-  "core": "4f4e1908e021bcf3",
-  "date": "2026-10-13",
-  "note": "sunk in one plot, paddy carved round",
+  "body": "138376739d21ec5e",
+  "claim": "in-field ponds, rocks and graves - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: each sunk into one paddy plot, the field tiling round it, drawn on the paddy",
+  "code": "fca974d104158a2f",
+  "core": "9a4b534519efc747",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
   },
@@ -40674,59 +41032,74 @@
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:07108ce9127e5e0d",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:0e8fb94bb06b48b6",
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:118c0e65bc0df044",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e2a5023c80820d14"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#inspection post on the gate": {
-  "code": "0ad0c772a6f6e571",
-  "core": "4f4e1908e021bcf3",
-  "date": "2026-10-13",
-  "note": "the exemption lets the inspection post \"overlap the gate furniture\", where 0147 has \"the buildings at a gate never overlap\", the hall stepped out until clear with about 36 ft round each",
+  "body": "138376739d21ec5e",
+  "claim": "inspection post on the gate - city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing: may overlap the gate furniture",
+  "code": "95de3540de0cb4fc",
+  "core": "9a4b534519efc747",
+  "date": "2026-10-18",
+  "note": "the exemption lets the inspection post overlap the gate furniture. 0147 says \"The buildings at a gate never overlap\" and each keeps about 36 ft clear. Drop the exemption, or record the overlap as a deviation",
   "pages": {
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html": "49298f0d00bbf69d"
   },
   "research": "1e01770d340670bb",
   "rests": [
-   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:4703eb61a63eff0d",
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:94f63315ef481c6c",
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:9825dafa2be7c1f4",
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:ec3f0e008c8c4528"
   ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#merchant estate court": {
-  "code": "400260388c0d7489",
-  "core": "4f4e1908e021bcf3",
-  "date": "2026-10-13",
-  "note": "walled court round the house",
+  "body": "138376739d21ec5e",
+  "claim": "merchant estate court - rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing: a walled court round its inner building, which is itself an overlap-checked footprint",
+  "code": "994bd15e01401ba5",
+  "core": "9a4b534519efc747",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {
    "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html": "8bbd1b525592811a"
   },
   "research": "fecf245455f376f6",
   "rests": [
-   "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html:1b43d2f683a78fe0"
+   "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html:1b43d2f683a78fe0",
+   "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html:a8283c4d273ee7ca",
+   "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html:ef188e7005fcd323"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#merchant storehouses": {
-  "code": "c132c93f91f1e9f1",
-  "core": "4f4e1908e021bcf3",
-  "date": "2026-10-13",
-  "note": "storehouses on the merchant's lot",
+  "body": "138376739d21ec5e",
+  "claim": "merchant storehouses - rich-merchants-walled-houses-and-their-fireproof-storehouses-kura: exempt as an annex abutting its shop",
+  "code": "c787f98e7511f0a3",
+  "core": "9a4b534519efc747",
+  "date": "2026-10-18",
+  "note": "the entry exempts kura \"abutting its shop\". 0155 stands them in a row or hook behind the main house, at the back of the lot (one beside the entrance at Hasegawa), and the drawing page says the maps do not draw that rule yet. Record the abutting annex as a deviation on the drawing page, or follow the page",
   "pages": {
    "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.html": "125c108c12eec337"
   },
   "research": "bbd5f6847264a04c",
   "rests": [
    "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.html:3eb6dc26135ce630",
-   "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.html:6d547dbe1da596cf"
+   "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.html:52553628b1cd5a2c",
+   "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.html:6d547dbe1da596cf",
+   "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.html:8faef3ee57cdcecd",
+   "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.html:a909804f81c95bfc"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#mill beside its stream": {
-  "code": "77fa9a2d33741da6",
-  "core": "4f4e1908e021bcf3",
-  "date": "2026-10-13",
-  "note": "bank seat, wheel in its race",
+  "body": "138376739d21ec5e",
+  "claim": "mill beside its stream - water-mills-suisha.drawing: on the bank beside its watercourse, its wheel dipping into the water",
+  "code": "68154bb95c6b7510",
+  "core": "9a4b534519efc747",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {
    "0064-water-mills-suisha.drawing.html": "e3fdbcecc090b29c"
   },
@@ -40737,24 +41110,29 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#pig sty on the dike": {
-  "code": "2b626ab938bfee08",
-  "core": "4f4e1908e021bcf3",
-  "date": "2026-10-13",
-  "note": "set in by half the bank",
+  "body": "138376739d21ec5e",
+  "claim": "pig sty on the dike - pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing: exempt because it stands on the pond dike, on the bank itself, half the bank's width in from the plot's edge, not over the water",
+  "code": "596a490d52f22d90",
+  "core": "9a4b534519efc747",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html": "a80ff0e81f8d433e"
   },
   "research": "1fcdf871b340e87e",
   "rests": [
-   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:3e1c51af898dc6ed"
+   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:3e1c51af898dc6ed",
+   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:de063a6450bfc6d1"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#polder dike crossed": {
-  "code": "a88d8f8cfcfadaa2",
-  "core": "4f4e1908e021bcf3",
-  "date": "2026-10-13",
-  "note": "walkable top, channels through a cut",
+  "body": "138376739d21ec5e",
+  "claim": "polder dike crossed - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: a walked bank the lanes cross, and the channels through a cut in it, with their footbridges",
+  "code": "28f2186efe734dcf",
+  "core": "9a4b534519efc747",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "12e062826b81046a"
   },
@@ -40766,41 +41144,47 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#stable yard round its stables": {
-  "code": "cdc3fcbea4f09dca",
-  "core": "4f4e1908e021bcf3",
-  "date": "2026-10-13",
-  "note": "beaten-earth scatter",
+  "body": "138376739d21ec5e",
+  "claim": "stable yard round its stables - stable-yards-and-watering-troughs.drawing: a ground scatter of beaten earth that surrounds its stables and fills the open pocket",
+  "code": "6229f197a007783e",
+  "core": "9a4b534519efc747",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {
    "0195-stable-yards-and-watering-troughs.drawing.html": "15451a48113d9f9d"
   },
   "research": "d16baad4c6a0e9f3",
   "rests": [
-   "0195-stable-yards-and-watering-troughs.drawing.html:4ae2e1d99a78ba2e",
-   "0195-stable-yards-and-watering-troughs.drawing.html:ab7e3ee60728257b"
+   "0195-stable-yards-and-watering-troughs.drawing.html:010b3d0aa1acb7d1",
+   "0195-stable-yards-and-watering-troughs.drawing.html:1d3812068f096e13",
+   "0195-stable-yards-and-watering-troughs.drawing.html:4ae2e1d99a78ba2e"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#wellhead among the houses": {
-  "code": "79c900264eb1bcbd",
-  "core": "4f4e1908e021bcf3",
-  "date": "2026-10-13",
-  "note": "among the houses it serves",
+  "body": "138376739d21ec5e",
+  "claim": "wellhead among the houses - communal-wells-ido.drawing: in the gaps between dwellings",
+  "code": "010980fc147d65b4",
+  "core": "9a4b534519efc747",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {
    "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
   "research": "530e826bbd37f9c5",
   "rests": [
-   "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
+   "0196-communal-wells-ido.drawing.html:6d02204b060e2a7f",
    "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
   ],
-  "triaged": "2026-10-17",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#yard persimmon near its house": {
-  "code": "80e0cd8313154f26",
-  "core": "4f4e1908e021bcf3",
-  "date": "2026-10-13",
-  "note": "front or behind, within about 30 ft",
+  "body": "138376739d21ec5e",
+  "claim": "yard persimmon near its house - fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing: in front of the house or behind it, its crown's edge within about 30 ft of the house; exempt here because its crown is tested as a tree crown and the placer keeps its trunk off every footprint",
+  "code": "03d47634162d7fa7",
+  "core": "9a4b534519efc747",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
@@ -40812,10 +41196,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#yard, garden and fixtures against the house": {
-  "code": "573b715cbb3fa499",
-  "core": "4f4e1908e021bcf3",
-  "date": "2026-10-13",
-  "note": "the claim seats the wood shed \"a ken beyond the wall's clear strip, about 9.5 ft off a wall\", but 0043 says \"about 6 ft (a ken) off a wall\". Either the placer's 9.5 ft or the page needs to change so they agree; the yard, bath and sty parts match their pages",
+  "body": "138376739d21ec5e",
+  "claim": "yard, garden and fixtures against the house - threshing-and-drying-yards-at-farmhouses-niwa.drawing, kitchen-gardens-beside-farmhouses-yashikibatake.drawing, sunlight-and-shade-on-the-farm.drawing, the-farmstead-and-what-stood-on-it-yashiki.drawing, baths-on-the-farm-furo.drawing, firewood-stacks-and-sheds-kigoya.drawing, pigs-and-ducks-in-south-china-rice-villages.drawing: the yard drawn beside its house, the bed beside the house (0038 on which sides), fixtures seated on the plot, the bath joined to the main house, the wood shed a ken beyond the wall's clear strip, about 9.5 ft off a wall, the pig sty against a wall of the house or an outbuilding",
+  "code": "858b618879045189",
+  "core": "9a4b534519efc747",
+  "date": "2026-10-18",
+  "note": "the claim puts the wood shed \"about 9.5 ft off a wall\", but 0043 says \"about 6 ft (a ken) off a wall\". This unit decides neither figure, so fix the claim, or the placer that owns the figure",
   "pages": {
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "b5fc46ab116a4b72",
@@ -40827,11 +41213,13 @@
   },
   "research": "813dd45cdb7424da",
   "rests": [
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:0b02f5e3492a4ce2",
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:03bd5cc33e2068a4",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:b4f6885af6bd959a",
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55",
    "0044-baths-on-the-farm-furo.drawing.html:78f622a8252b9b53",
-   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:b533db817cf2560b"
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:b533db817cf2560b",
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:b9f3c80b07059d82"
   ],
   "verdict": "DRIFTED"
  },

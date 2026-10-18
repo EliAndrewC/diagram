@@ -42,7 +42,8 @@ def bank_seats(s: Settlement, pond: tuple[float, float, float, float]) -> list[P
 
     Research:
         on the bank, beyond the reeds - research/questions/0061-reservoir-ponds-tameike.drawing.html: reeds at the shore, the embankment beyond them
-        sparsely - GUESS: one tree about every 30 ft of bank (`POND_BANK_PITCH_FT`)"""
+        sparsely - GUESS: one tree about every 30 ft of bank (`POND_BANK_PITCH_FT`)
+        each seat jittered - CONVENTION: up to a quarter pitch along the ring by its position, so the trees do not stand as a ruled ring"""
     cx, cy, rx, ry = pond
     off = SINK_FRINGE + s.px(POND_BANK_CROWN_FT)
     ax, ay = rx + off, ry + off
@@ -62,8 +63,9 @@ def seat_free(s: Settlement, x: float, y: float, r: float) -> bool:
 
     Research:
         no crown on a roof or a wellhead - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: against a wall, never on it
-        out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no canopy over a yard's or bed's sun ground
-        no trunk on a way, crop or water - NONE: a tree stands on open ground"""
+        out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html, research/questions/0061-reservoir-ponds-tameike.drawing.html: no canopy over a yard's or bed's sun ground; the bank mulberry is the manual's shade tree for cattle (0061), a canopy tree, not 0038's field mulberry trained as low bushes, which the rule exempts
+        no trunk in the reeds - research/questions/0061-reservoir-ponds-tameike.drawing.html: the reeds stand at the shore, the bank beyond them
+        no trunk on a way, crop or water - UNRESEARCHED: off every tread, paddy, dry plot and marsh, and a stream's half-width and a foot"""
     if not (r <= x <= s.W - r and r <= y <= s.H - r):
         return False
     box = (x - r, y - r, x + r, y + r)
@@ -116,6 +118,7 @@ def stage_pond_bank(s: Settlement, plan: SitePlan) -> None:
 
     Research:
         the two trees in turn - GUESS: 0061 names mulberry and cudrania, not their order; they alternate round the ring
+        no two crowns overlap - CONVENTION: a tree kept two crown radii from the last, so each reads as one tree
         after the houses, ways and wells - UNRESEARCHED: seated against what stands, before the hinterland's scrub and copse"""
     form = pond_bank(plan)
     if not form:

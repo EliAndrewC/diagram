@@ -602,13 +602,11 @@ def lay_sink(s: Settlement, plan: SitePlan) -> None:
     Research:
         brook first, then off the frame - research/questions/0060-field-drains-akusuiro.drawing.html
         off-map route search - NONE: swings, junction distances and run lengths under route_refusals
-        pond area - research/questions/0061-reservoir-ponds-tameike.drawing.html: held below two or three tenths of its paddy
+        pond area - GUESS research/questions/0060-field-drains-akusuiro.drawing.html: a drainage sink about 3/100 of its paddy, not 0061's watering pond of two or three tenths
         pond's role - research/questions/0060-field-drains-akusuiro.drawing.html: a drain that ends in a pond of its own is a GUESS recorded there; the pond is laid at the drain's foot as the
             field's sink, not as a reservoir that waters the paddy
-        pond bank form - research/questions/0061-reservoir-ponds-tameike.drawing.html: every bank bare; the second attested form,
-            a bank planted sparsely with mulberry and cudrania, is never rolled
-        pond reference size - UNRESEARCHED: 116 x 74 ft radii at 15 households, scaled by the square root
-        too far below, no pond - UNRESEARCHED: past POND_SETBACK_LIMIT the field drains off the frame
+        pond reference size - GUESS research/questions/0060-field-drains-akusuiro.drawing.html: about 230 by 150 ft at 15 households (116 x 74 ft radii), grown with the hamlet by the square root
+        too far below, no pond - GUESS research/questions/0060-field-drains-akusuiro.drawing.html: a pond that would sit far below the fields sends the drain off the map; past POND_SETBACK_LIMIT (300 ft, its guess)
         reed fringe - research/questions/0061-reservoir-ponds-tameike.drawing.html: a fringe of reeds at the shore
         reed fringe width - UNRESEARCHED: a 44 ft ring
         no building on the water - UNRESEARCHED: 10 ft round the pond's box

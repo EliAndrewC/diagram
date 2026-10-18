@@ -514,7 +514,7 @@ POND_BANK_PITCH_FT = 30.0
 """Research: one tree about every 30 ft of bank - GUESS: 0061's "sparsely" gives no figure"""
 
 POND_BANK_CROWN_FT = 6.0
-"""Research: a bank tree's crown radius - GUESS: a pollarded mulberry's crown about 12 ft across, the dike fruit tree's mark scaled"""
+"""Research: a bank tree's crown radius - GUESS research/questions/0061-reservoir-ponds-tameike.drawing.html: a tree whose shade the tethered cattle take (the manual), about 12 ft across - not research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html's field mulberry trained as low bushes"""
 
 DIKE_CROPS = ("mulberry", "mulberry", "mulberry", "fruit", "fruit", "tea")
 """Research: dike crop - research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html: mulberry half, fruit a third, tea a sixth"""
