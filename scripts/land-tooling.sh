@@ -79,6 +79,10 @@ trap cleanup EXIT
 # `sync-in`. So on a failed apply the clone merges origin/main (a merge commit, never a rebase), the patch is taken again from
 # the new merge base, and it is applied once more; only a merge that conflicts, or a second failed apply, refuses.
 if ! git -C "$WT" apply --index "$patch" 2>/dev/null; then
+  # GUARD_EDIT_OK: feature 385 T30 - never merged under a running gate (the round arbiter on red-gate@2026-10-18T12:36:36Z)
+  if [ -f "$ROOT/scripts/gates/gate_lock.py" ] && python3 "$ROOT/scripts/gates/gate_lock.py" held "$(git -C "$ROOT" rev-parse --absolute-git-dir)"; then
+    die "FILES do not apply onto the latest main, and a gate is running in this clone - nothing is merged under it; run this again when it ends"
+  fi
   if ! git -C "$ROOT" merge -q --no-edit origin/main >/dev/null 2>&1; then
     git -C "$ROOT" merge --abort 2>/dev/null
     die "FILES do not apply cleanly onto the latest main, and merging main into the clone conflicts - run scripts/sync-with-main.sh sync-in, resolve the conflict, commit, then run this again"
