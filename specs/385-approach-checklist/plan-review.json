@@ -5123,6 +5123,26 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T59": {
+   "section_sha256": "7479722acc05bed6ab0878cff77d0e8a5bdc6830a708b19924d075ef6b276c99",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D78",
+     "summary": "hm_checks keeps what a dispatch's reading would mark (seen sentences, notes read, the fresh round's edits reset) on its pending record and applies it only in launched(), when an agent id returns; a dispatch refused before launch changes nothing but its own pending record, which expires via _live and counts no round.",
+     "class": "within",
+     "why": "This is how the plan carries out the arbiter's fix (the arbiter stands where the GM was asked, feature 379; amendment 6 also asks for obvious tooling/process fixes along the way). It reaches the fix's stated purpose, that a refused dispatch cannot push a unit to its round cap, because the marks that made the next real dispatch count as a later round are never applied. It covers a refusal by any hook, not only the wave guard. That is wider than the fix names, not narrower, and adds no new refusing or blocking behavior. T41's reply rule is left unchanged, as the constraints require. The fix's 'or keep as a pending round' clause is met because the pending record counts no round, and the Done measure checks this: the next dispatch of the same unit must be a first look."
+    },
+    {
+     "id": "T59-done-test",
+     "summary": "tests/tooling/test_hm_checks.py: a recorded-but-never-launched dispatch leaves seen, notes_read and the round's edits unchanged, and the next dispatch of the unit is a first look; red without the fix.",
+     "class": "within",
+     "why": "Its only job is to enforce the arbiter's fix and the task's single goal. It is verification of the requested behavior, not added scope."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

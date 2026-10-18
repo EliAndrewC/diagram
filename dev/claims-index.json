@@ -51128,6 +51128,17 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._rounded_pond#corners eased": {
+  "body": "3f8e86692bad3142",
+  "claim": "corners eased - UNRESEARCHED: a fillet of the caller's reach, jittered 0.8 to 1.15, at every corner",
+  "code": "a84f65c7ab05983e",
+  "core": "edb9c619ca0295e5",
+  "date": "2026-10-18",
+  "note": "nothing on the page covers corner fillets; UNRESEARCHED is right",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._rounded_pond#pond inset and rounded": {
   "body": "3f8e86692bad3142",
   "claim": "pond inset and rounded - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: inset inside its bank, the parcel scaled about its centroid",
@@ -51143,14 +51154,6 @@
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:5d8136b689a7529e"
   ],
   "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._rounded_pond#the pond's scale floor of 0.4, so a pond never falls below about 16% of its parcel's area, however small the parcel": {
-  "code": "edb9c619ca0295e5",
-  "core": "edb9c619ca0295e5",
-  "date": "2026-10-18",
-  "note": "the pond's scale floor of 0.4, so a pond never falls below about 16% of its parcel's area, however small the parcel",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin.crescent_pond#half-moon pond": {
   "code": "4f52b6fe80877885",
@@ -51673,14 +51676,6 @@
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:e636a667b77a7329"
   ],
   "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_draw_plot#corner rounding sizes of 8 ft for the bank and 16 ft for the water, passed to `_rounded_pond": {
-  "code": "737f52f51af88acd",
-  "core": "737f52f51af88acd",
-  "date": "2026-10-18",
-  "note": "corner rounding sizes of 8 ft for the bank and 16 ft for the water, passed to `_rounded_pond",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_draw_plot#fry pond turbid": {
   "body": "5adee3f35aae8a9b",

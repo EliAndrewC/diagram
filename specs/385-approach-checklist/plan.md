@@ -2021,6 +2021,34 @@ computed by the old rule. Every engine key moves once with the rule, so each ses
 one) is told: "this session has no Workflow tool (a headless page session): put WAVE_OK: <reason> in each prompt of the batch" -
 and not shown the check-wave call. An interactive session's message is unchanged.
 
+## T59 - a refused dispatch leaves no reading behind (the arbiter's fix on round:modal-form|modal:choice/dikepond_split--0.7@3)
+
+### T59 Approach (checklist part A)
+
+1. **The goal, in the world.** A check dispatch that another hook refuses before any agent runs changes nothing a later dispatch's
+   round count reads.
+2. **The constraints.** The arbiter's fix: "hm_checks.py's round counter must not count, or keep as a pending round, a modal-form
+   dispatch that the wave guard refused (WAVE_OK missing) before any agent ran, so a refused dispatch cannot push a unit to its round
+   cap"; T41's rule (a round counted at its reply) unchanged; tooling only; a test red without it.
+3. **Where each comes from.** The fix is the arbiter's (G); the round counter is 375's (O), T41's reply rule ours (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-18: the pair hook records a dispatch at PreToolUse, and the wave guard
+   (a separate hook, run beside it) refused T10's modal-form wave; the refused dispatch's record still marked its units' notes read
+   and opened a fresh round (`seen`, `notes_read`, the round's edits reset), so the next real dispatch was no longer a first look
+   and was counted - the 0.7 card reached its cap.
+5. **The order.** The marks deferred to the launch, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: a dispatch recorded and never launched leaves `seen`, `notes_read` and the round's edits as they
+   were, and the next dispatch of the same unit is a first look; `tests/tooling/test_hm_checks.py` red without it.
+
+### T59 Decisions
+
+**D78 - the marks applied at launch.** `hm_checks` keeps, on the pending dispatch record, what its reading WOULD mark (the units'
+seen sentences, the notes read, the fresh round's edits reset) and applies it in `launched()`, when an agent id comes back. A
+dispatch refused anywhere never launches, so it changes nothing but its own pending record, which expires as before (`_live`) and
+counts no round.
+
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).

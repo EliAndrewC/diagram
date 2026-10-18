@@ -166,6 +166,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T58 The wave guard names WAVE_OK as a headless session's route, which has no Workflow tool (the arbiter's fix on hour:385-approach-checklist@21, plan D77)
       research: rendering
       verify: DONE. landed on main; tests/hooks/test-agent-prefix-hooks.sh red without it
+- [ ] T59 A dispatch another hook refused leaves no reading behind: its seen notes and fresh round are applied at launch (the arbiter's fix on round:modal-form|modal:choice/dikepond_split--0.7@3, plan D78)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

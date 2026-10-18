@@ -573,3 +573,11 @@ rule about "docstrings" is tested on the docstrings this project actually writes
 About 15 min. T10's headless check session was refused twice for a 4th same-kind launch and pointed at a Workflow call its
 `claude -p` session does not have. A session carrying `L7R_DISPATCHER` is now told `WAVE_OK` is its route. **The habit it changes:**
 a refusal names a route the refused session can take - test it from a headless session, not only from this one.
+
+## T59 - the retro row
+
+About 40 min. The pair hook records a dispatch at PreToolUse, beside the wave guard; when the guard refused T10's modal-form wave,
+the refused dispatch had already marked its notes read and opened a fresh round, so the next real dispatch was counted as a repeat.
+What a reading marks now waits on the pending record and is applied at launch. The first test asserted the wrong thing (a first
+reading IS round 1); probing the old and new code side by side found the real difference. **The habit it changes:** a hook that
+records an action at PreToolUse cannot assume the action happens - other hooks run beside it.

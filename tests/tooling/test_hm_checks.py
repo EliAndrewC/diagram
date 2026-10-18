@@ -584,3 +584,20 @@ def test_a_dispatch_a_later_hook_refused_is_no_round(tmp_path: pathlib.Path) -> 
     hc.launched(st, "r3", "a3", False, reply="quote-check: 1 VERBATIM")
     hc.returned(st, "a3", "quote-check: 1 VERBATIM")
     assert st["rounds"]["quote-check|q:0105"] == 1, "a reading counts, once"
+
+
+def test_a_dispatch_never_launched_leaves_no_reading_behind(tmp_path: pathlib.Path) -> None:
+    """Feature 385 T59 (the round arbiter on round:modal-form|modal:choice/dikepond_split--0.7@3): the wave guard refused a dispatch
+    the pair hook had already recorded, and its record marked the notes read, so the next real dispatch was no first look and was
+    counted. The marks are applied when the agent launches: a dispatch that never launches leaves none."""
+    root = _clone(tmp_path)
+    scoped = MANIFEST + "| the question - ONLY the notes a and the blocks that carry them |\n"
+    st: dict = {}
+    assert hc.dispatch(st, "t1", "quote-check", "/m", scoped, 0, root) == ""  # refused by another hook: never launched
+    assert not st.get("notes_read", {}).get("quote-check|q:0105"), "a refused dispatch marks no note read"
+    assert hc.dispatch(st, "t2", "quote-check", "/m", scoped, hc.PENDING_S + 1, root) == ""
+    assert not st.get("notes_read", {}).get("quote-check|q:0105"), "...nor does a dispatch until it launches"
+    hc.launched(st, "t2", "ag2", True)
+    assert st["notes_read"]["quote-check|q:0105"] == ["a"], "launched: its reading is marked, once"
+    hc.launched(st, "t2", "ag2", True)
+    assert st["notes_read"]["quote-check|q:0105"] == ["a"]
