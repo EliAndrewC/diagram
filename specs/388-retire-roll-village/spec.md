@@ -96,6 +96,7 @@ holds; the instruction is to delete it now, and NOT to carry the failure anywher
 - **SC-006** (FR-001, FR-002, FR-003, amendment 1): no engine module defines or calls `build_comb`, `crop_to_content`,
   `cremation_ground` or `PlacerMixin.headman`; `make dead-closure BASE=<the commit before the amendment>` names nothing NEWLY
   DEAD and no PINNED test, and its STILL CALLED lines name only frozen exhibits.
+
 ## Decisions Recorded
 
 - **D1 - a test follows its subject**: a test of deleted code goes with it (FR-002); none is ported to the scripted

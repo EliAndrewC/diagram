@@ -60,6 +60,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
+  },
+  "## Amendment 1 (the GM, 2026-10-18): the four helpers go": {
+   "sha256": "10448beb181d8d0c3624a13b45722e3dafece135c1c4275b10455dba68a15a49",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T04 - the four helpers and their tests (FR-001, FR-002, amendment 1)": {
+   "sha256": "89721acc0354373f6244f0bcd0acb161034abbaddca76fe67bbf72c4dd05a85a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T05 - the prose (FR-003, amendment 1)": {
+   "sha256": "8cf10b5f97631e6e865a90c2b4cd4a6c4791b7ddaad29d9e3e861cc53fc5fcdf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T06 - measure and land (FR-006, SC-002, SC-003, SC-006)": {
+   "sha256": "762e9109d2da11d5399f569a31043ad7aa6779de0132604e9576d89cd5f3da68",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -324,6 +348,78 @@
      "summary": "Legacy pool not touched",
      "class": "within",
      "why": "FR-005."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Amendment 1 (the GM, 2026-10-18): the four helpers go",
+    "## T04 - the four helpers and their tests (FR-001, FR-002, amendment 1)",
+    "## T05 - the prose (FR-003, amendment 1)",
+    "## T06 - measure and land (FR-006, SC-002, SC-003, SC-006)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "A1-heading",
+     "summary": "Amendment 1 section heading; no body, decides nothing",
+     "class": "within",
+     "why": "A heading that groups T04-T06 under the GM's amendment 1; it carries no decision."
+    },
+    {
+     "id": "T04-delete-four",
+     "summary": "Delete build_comb, crop_to_content, cremation_ground (with ROOFED_SHARE, cremation_outline and its caption-path/surface entries) and PlacerMixin.headman",
+     "class": "within",
+     "why": "Amendment 1: 'the four helpers can go too'; SC-006. ROOFED_SHARE and cremation_outline are named as going WITH cremation_ground - its own support, which the GM's stated purpose (streamline, reduce support surface) and SC-006's no-NEWLY-DEAD bar both reach. Nothing is kept back."
+    },
+    {
+     "id": "T04-docstrings-move",
+     "summary": "build_comb's docstring and research claims move onto carve_comb; crop_to_content's frame rule onto content_view",
+     "class": "within",
+     "why": "FR-003 amendment 1 says exactly this: the comb builder's account moves onto carve_comb, the crop's frame rule onto content_view."
+    },
+    {
+     "id": "T04-test-helpers",
+     "summary": "lay_comb (finish_comb(carve_comb(...))) and crop (crop_to_view(content_view(...))) test helpers replace the wrappers in the comb and frame tests; the wrapper-equals-pair clause goes",
+     "class": "within",
+     "why": "FR-002 amendment 1 verbatim: tests of shipping code keep their subject through one test helper calling the live pair; a test of the wrapper itself loses that clause."
+    },
+    {
+     "id": "T04-tests-go",
+     "summary": "cremation_ground tests in test_civic_grounds.py, test_rolling.py's two headman refusals, and the headman lines of its nucleated-cluster test go",
+     "class": "within",
+     "why": "FR-002: a test whose subject is deleted goes; a mixed test keeps its live part (the nucleated-cluster test keeps its non-headman lines)."
+    },
+    {
+     "id": "T04-censuses",
+     "summary": "waterfields and hamletgen surface censuses stop scanning legacy-hand-authored-pool; pinned lists drop the deleted names",
+     "class": "within",
+     "why": "FR-002 amendment 1: the surface censuses stop scanning the legacy pool; the GM: frozen maps need not stay runnable."
+    },
+    {
+     "id": "T04-coverage-lines",
+     "summary": "A line only deleted tests reached is deleted if nothing live reaches it, else a test is owed",
+     "class": "within",
+     "why": "Removes newly dead code (the GM's purpose: streamline, reduce support surface; SC-006 no NEWLY DEAD) and keeps live code covered (SC-002); FR-001's keep-if-reached rule. Widens nothing beyond the request and narrows nothing."
+    },
+    {
+     "id": "T04-dead-closure",
+     "summary": "make dead-closure BASE=<before> run before the first gate",
+     "class": "within",
+     "why": "SC-006's own check."
+    },
+    {
+     "id": "T05-prose",
+     "summary": "Repoint every docstring, comment and index naming the four as live; waterfields/CLAUDE.md and civic_grounds/CLAUDE.md rows; moved claims re-checked by make claims-owed / impl-drift",
+     "class": "within",
+     "why": "FR-003 amendment 1. The task covers all four names; its Verify grep names only build_comb and crop_to_content (cremation_ground and headman are also ordinary words in the engine, so a bare grep would not decide them) - a weaker check, not a narrowing of the work, which the task states for all four."
+    },
+    {
+     "id": "T06-land",
+     "summary": "make maps (pool unchanged), make done, make cohort-landing, end bookend, report GM section, gated push",
+     "class": "within",
+     "why": "FR-006, SC-002, SC-003 as written."
     }
    ]
   }
