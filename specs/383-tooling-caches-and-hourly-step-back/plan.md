@@ -671,6 +671,7 @@ heading's `Amendment N` and every spec `### Amendment N` section holding an FR o
 none; `trimmed_request(text, n)` is the
 original request and every section from amendment `n` on, with `request-index.md` the heading and first line of each left out,
 or the whole request when `n` is none or the request has no amendment headings. `build` writes both; the MANIFEST names
-`request-index.md`. Tests in `tests/tooling/` on a fixture feature: the newest amendment's block, an earlier one's, an original
-block, no amendments; and the measured cut on 383's own bundle goes in research R22.
+`request-index.md`. Tests in `tests/tooling/` on a fixture feature: the newest amendment's block, an earlier one's, a block headed with
+a later amendment that cites an earlier one's requirement (it carries that earlier amendment on, the index listing only the
+sections before it), an original block, no amendments; and the measured cut on 383's own bundle goes in research R22.
 

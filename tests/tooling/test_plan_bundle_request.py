@@ -81,6 +81,7 @@ def test_a_later_amendment_correcting_an_earlier_requirement_carries_the_earlier
     n = pb.answered([("## Amendment 3, reopened (FR-002 corrected)", "## Amendment 3, reopened (FR-002 corrected)\n\n**D9 - x.**")], SPEC)
     req, _index = pb.trimmed_request(REQUEST, n)
     assert n == 1 and "> one" in req and "> three" in req, "FR-002 is amendment 1's: its words come with the block"
+    assert _index == "", "nothing before amendment 1 is left out but the original request, which is always carried"
 
 
 def test_the_earliest_of_several_blocks_wins() -> None:
