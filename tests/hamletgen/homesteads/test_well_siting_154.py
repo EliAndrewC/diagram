@@ -188,3 +188,10 @@ def test_one_more_well_where_one_serves_more_than_ten(monkeypatch: pytest.Monkey
     monkeypatch.setattr(wl, "seat_wells", lambda s_, plan, h, placed, *a, **k: s_.M["wells"].append({"x": 500.0, "y": 0.0}) or placed.append((500.0, 0.0)) or [(500.0, 0.0)])
     wl.reach_wells(stuck, types.SimpleNamespace(well_siting="cluster", ftpx=1.0))  # type: ignore[arg-type]
     assert len(stuck.M["wells"]) == 2, "a well that served none of the twelve: not tried again"
+
+
+def test_seat_wells_seats_none_with_no_houses_or_its_count_met() -> None:
+    """Feature 385 T05: the pocket path that once reached `seat_wells` with nothing to seat is gone, so its early return is held here."""
+    plan = types.SimpleNamespace(ftpx=1.0)
+    assert wl.seat_wells(_s([], HOUSES), plan, [], [], 1, [(95.0, 5)], "cluster") == []  # type: ignore[arg-type]
+    assert wl.seat_wells(_s([], HOUSES), plan, HOUSES, [(0.0, 0.0)], 1, [(95.0, 5)], "cluster") == []  # type: ignore[arg-type]
