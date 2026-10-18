@@ -7,8 +7,8 @@ holds only the next dispatch on its unit (or the next gate), and every ruling be
 from __future__ import annotations
 
 import json
-import subprocess
 import pathlib
+import subprocess
 
 import pytest
 
@@ -656,6 +656,7 @@ def test_a_red_gate_bundle_skips_a_tree_moved_abort_and_shows_the_diff_between_r
     """Feature 385 T49 (the round arbiter's fix on red-gate@2026-10-18T16:44:54Z): a tree-moved abort, whose test-full never ran,
     is not among the counted reds, and between two reds the bundle carries the diff between their commits, its stat first; two reds
     on one commit say that nothing between them is recorded."""
+
     def git(*a: str) -> str:
         return subprocess.run(["git", "-C", str(tmp_path), *a], capture_output=True, text=True, check=True).stdout.strip()
 
@@ -678,4 +679,3 @@ def test_a_red_gate_bundle_skips_a_tree_moved_abort_and_shows_the_diff_between_r
     assert "t2" not in runs, "the tree-moved abort is no red gate"
     assert f"between {c1} and {c2}:" in runs and "-x = 1" in runs and "+x = 2" in runs and "f.py | 2 +-" in runs, "the diff, its stat first"
     assert "the same commit; uncommitted edits between them are not recorded" in runs, "t3 and t4 share a commit"
-
