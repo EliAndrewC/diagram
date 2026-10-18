@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-18
 
-**Status**: Draft
+**Status**: Done 2026-10-18 - T01-T03 ticked: make done green, make maps clean (pool unchanged), make soak 9 passed, cohort-landing 54/54, bookends 18.9 -> 18.8 s, claims none owed; spec FAITHFUL (round 6), plan CLEAR; the GM review lands open
 
 **Approved**: the GM, 2026-10-18, "I think if nothing ships from it then we should just delete it now and not even move it into the 384 backlog."
 
