@@ -3,85 +3,85 @@
  "blocks": {
   "preamble": {
    "sha256": "0f88103cd567d6578c7a095ede93a5f0d1e3642dddbbbb14d25e3bdd48bf6282",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
   },
   "## Summary": {
    "sha256": "a7dfc08b3d8dce5a29705a432b6751eac9c9e3c73d78835cc17cda5405b50960",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
   },
   "## Technical Context": {
    "sha256": "1ad33e75df5cfafc57ed4a17a8d2b0e987af2398166524af81c47e88c461114a",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
   },
   "## Performance bookends": {
    "sha256": "82b3ef391af75a63df9b78271de2eb4c64d900fe727d474e42743d2dfd083605",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
   },
   "## Constitution Check": {
    "sha256": "e87597169f5f0131526a5adf7862807ae6f80ef2f664f3c26bbb16d4d420fc5a",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
   },
   "## T01 - the way tree (FR-001)": {
-   "sha256": "3e03275639bc11ec5147e31f0d1cc560f1a108f1d6d368874b20e963788e56e8",
-   "verdict": "BLOCKED",
+   "sha256": "01c60de87e37b255d6c6c472366b986071f76fad3084c01d8ee6b9a838d74324",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
   },
   "## T02 - the web's field way and the knots (FR-002)": {
    "sha256": "e82fea6e197573201c6e192ef4dd08ec5aa8a10f060bc31906ea25343184c7e9",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
   },
   "## T03 - the cell merges (FR-003)": {
    "sha256": "e869d4f563b086308f08b9db1943661e9eed8fd90cf8be4105a038fb2e8e952a",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
   },
   "## T04 - the sun keep-outs (FR-005)": {
-   "sha256": "98c6e11013a3fbb1299346d4b543e7d2494a2cb60dcbb0f74edad34ed204e286",
-   "verdict": "BLOCKED",
+   "sha256": "a5a0ddd8f5220e49903b002e09ee971181de3c91a632094b7ae95eef156286f0",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
   },
   "## T05 - the bamboo strip check (FR-006)": {
-   "sha256": "b57404c517a9c9f1021eac89a299736d41798bae32688676684cdc733fb0fb82",
-   "verdict": "BLOCKED",
+   "sha256": "666e607234d7853f1429384396a2c79ddddcee9863687d18b6da6a8de42bdc83",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
   },
   "## T06 - measure, sweep and record (FR-009, FR-010, SC-001 - SC-004)": {
    "sha256": "efce12821f8df5ce8548450c9424b633297eaf3a6a2da4b0d7c2b28a0856874c",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
   },
   "## T07 - land (SC-003, SC-005)": {
    "sha256": "48d78969cce77e3f346ab6e3222a73550f2d7f9c02f2a017e8cfd5d2c2460ff7",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
   },
   "## Project Structure": {
-   "sha256": "d8f74e518bcba5b5d2445dbe7ce76179f46351b9d1813fa941dca3f8f20e6c52",
-   "verdict": "BLOCKED",
+   "sha256": "d1fdb6e02c6d483f0220eed4b2c6554be5cb26606d3430da19e107813375a253",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
   },
   "## Complexity Tracking": {
    "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
   }
@@ -216,6 +216,112 @@
      "summary": "Landing cohort, gated push, report naming FR-004 withdrawn, the restated premises and the split-part defect.",
      "class": "within",
      "why": "SC-003, SC-005."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## T01 - the way tree (FR-001)",
+    "## T02 - the web's field way and the knots (FR-002)",
+    "## T03 - the cell merges (FR-003)",
+    "## T04 - the sun keep-outs (FR-005)",
+    "## T05 - the bamboo strip check (FR-006)",
+    "## T06 - measure, sweep and record (FR-009, FR-010, SC-001 - SC-004)",
+    "## T07 - land (SC-003, SC-005)",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary: two-tier equivalence (unit oracle in tests, rolled soak at 40 hh)",
+     "summary": "Each site proved against the old form by a unit test (old form kept only in the test module) and a soak test that rolls the reference spec and four cohort seeds at 40 households, wrapping each new function to also ask the old form.",
+     "class": "within",
+     "why": "Enforces FR-007's equivalence on the requested changes; 40 households is the size the accepted spec's SC-001/FR-009 already measure and the GM's purpose is growth beyond the hamlet band. The GM's 'No thanks' declined rendering scaling legs for him, not a test."
+    },
+    {
+     "id": "Technical Context: reference map then cohort and pool",
+     "summary": "Each task proves its change on Inashiro and its equivalence test; T06 sweeps cohort and pool.",
+     "class": "within",
+     "why": "Verification of the requested changes (FR-007, SC-003); no new scope."
+    },
+    {
+     "id": "Performance bookends: 387-start on the spec commit, 387-end before push",
+     "summary": "Bookends with SCALING=1, start recorded, end taken back to back where load allows.",
+     "class": "within",
+     "why": "Exactly FR-009."
+    },
+    {
+     "id": "Constitution Check: admits split, new ways/tree_base.py, research: rendering, XIII baseline",
+     "summary": "Code-structure and process conformance; D3 defect recorded.",
+     "class": "within",
+     "why": "Layout of the requested work and project gates; decides nothing the request or spec left to narrow."
+    },
+    {
+     "id": "D1",
+     "summary": "Base tree (records, hosts, laid lanes, fronting ends with junction answers, and its faces each with its thin/not verdict) built once per content-keyed tree state; the candidate is judged on its own host, lane, fronting-end delta, and the faces meeting a changed line (new lane; for the joined form each lane as_joined redraws, old and new line). Needle iff a thin base face meets no changed line or a thin candidate face meets one. Noding/polygonize stays one call over the web. Faces judged per candidate added to the SC-001 count.",
+     "class": "within",
+     "why": "Answers last round's NOT LEGITIMATE dirty-base fallback: the face rule is now exact whatever the base holds (a face meeting no changed line is the same face in both arrangements, as D2b's), so the whole-test fallback is gone and no case judges the whole tree again (FR-001). The whole-web polygonize is the arrangement, not a judgment - the accepted FR-002 sanctions exactly this for the knots, and SC-001 counts lanes/faces judged, now including faces. Equivalence on every gap-pass candidate (FR-007)."
+    },
+    {
+     "id": "D2a",
+     "summary": "field_runs takes points best-first by distance to the ground's edge and stops once limit runs are kept and the next lower bound exceeds the longest kept; ties keep the old order.",
+     "class": "within",
+     "why": "Implements FR-002's 'finds its candidates without measuring every point' with an equivalence test on every call (FR-007)."
+    },
+    {
+     "id": "D2b",
+     "summary": "Knot trials re-ask doorstep_ends, doubled_tails, shadows and needle_loops only where an edit can change them, from the web's kept verdicts; way_outs stays whole.",
+     "class": "within",
+     "why": "Is FR-002's own text clause by clause, including way_outs staying whole and the whole noding; not the R12 lever."
+    },
+    {
+     "id": "D3",
+     "summary": "Hits mapped to live owners and deduplicated before shared_length; index not made current, split-part miss recorded as a defect with its frequency.",
+     "class": "within",
+     "why": "Is FR-003 as accepted, including the not-current index and the SC-005 defect report."
+    },
+    {
+     "id": "D4",
+     "summary": "Sun-keepout key becomes (reach, yards.version, gardens.version, houses.version); the registries are stated to be already Indexed (StandingList), so no core.py change; the one in-place writer bumps houses via Indexed.touch(); L7R_CHECK_CACHES=1 re-derives the content key on every hit; boxes filed in a PointGrid per key; every caller served.",
+     "class": "within",
+     "why": "Is FR-005 (keyed on registries' own versions, not a count or identity; answered from an index). The 'already Indexed' premise changes only where the version comes from, not what is keyed; it cannot be checked from the bundle and is proven or refuted at implementation, failing loudly rather than silently if wrong."
+    },
+    {
+     "id": "D5",
+     "summary": "_strip_blocked requires the index; household_bamboo builds it once per pass with placed boxes kept current via indexed_grid on s.placed's version; the fixtures caller (_flexible_clear) builds its own index and hands it in; the straight scan stays only as the test oracle; a narrower lane list (own_ground) is honored by intersecting the index's candidates with it.",
+     "class": "within",
+     "why": "Answers last round's NOT LEGITIMATE fixtures carve-out: no caller keeps the straight scan, so FR-006 holds for every caller. The own_ground filter applies the same test to the same items the narrower list held, so the verdict equals the straight scan's."
+    },
+    {
+     "id": "T06",
+     "summary": "Counts at 10/20/40, seed 4, before and after into measurements.json with a re-runnable command; cohort, maps, done, end bookend, dev/performance.md section.",
+     "class": "within",
+     "why": "FR-009, FR-010, SC-001, SC-004."
+    },
+    {
+     "id": "T07",
+     "summary": "Landing cohort, gated push, report naming FR-004 withdrawn, restated premises and the split-part defect.",
+     "class": "within",
+     "why": "SC-003 and SC-005 as written."
+    },
+    {
+     "id": "Project Structure",
+     "summary": "New tree_base.py and tests; changed files listed; core.py dropped from the list.",
+     "class": "within",
+     "why": "Follows from D1-D5; dropping core.py follows D4's premise and narrows nothing requested."
+    },
+    {
+     "id": "preamble / Complexity Tracking",
+     "summary": "Header and 'None'.",
+     "class": "within",
+     "why": "No decision."
     }
    ]
   }

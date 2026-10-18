@@ -141,8 +141,9 @@ list narrower than the index's (`own_ground`, a sheltered farm's lanes less its 
 index's candidates that are in it. What changes while the pass runs is `s.placed` (each seated strip is appended to it) and nothing else the check reads (the
 pass writes only `placed`, `block_polys` - which the check does not read - and its own output); so the placed boxes are indexed
 through `indexes.indexed_grid` on `s.placed`'s own version (an append extends the grid, anything else rebuilds it), and the houses,
-the other kinds, the lanes and the crowns are filed once at the pass's start. Under `L7R_CHECK_CACHES=1` every candidate's
-verdict is also asked by the straight scan and a difference raises, so an input changed mid-pass fails the suite. **Equivalence**: every candidate's verdict, old and new. **Counted**: items tested per candidate.
+the other kinds, the lanes and the crowns are filed once at the pass's start. Under `L7R_CHECK_CACHES=1` the index checks, on each
+query, that the registries it filed once still hold what it filed (their versions, and the crowns' and lanes' lengths), and raises
+if not, so an input changed mid-pass fails the suite; the straight scan itself runs only in the equivalence tests. **Equivalence**: every candidate's verdict, old and new. **Counted**: items tested per candidate.
 
 ## T06 - measure, sweep and record (FR-009, FR-010, SC-001 - SC-004)
 
