@@ -381,8 +381,7 @@ def test_a_task_s_own_heading_wins_its_section_over_a_mention() -> None:
 def test_an_archived_block_a_typo_from_its_reviewed_text_is_not_owed() -> None:
     """Feature 385 T65 (plan D84): T49's two blocks, renumbered by a typo after their review, refused T59's tick once archived."""
     body = "### T49 Decisions\n\n**D70 - the mark falls back.** When the mark names a ticked task.\n"
-    review = {"blocks": {"preamble": {"sha256": gate.block_digest("# Plan\n"), "verdict": "CLEAR"},
-                         "### T49 Decisions": {"sha256": gate.block_digest(body), "verdict": "CLEAR", "text": body}}}
+    review = {"blocks": {"preamble": {"sha256": gate.block_digest("# Plan\n"), "verdict": "CLEAR"}, "### T49 Decisions": {"sha256": gate.block_digest(body), "verdict": "CLEAR", "text": body}}}
     typo = body.replace("When the mark", "when the mark")
     changed = body.replace("falls back", "is refused")
     assert gate.block_status(review, "# Plan\n", set(), done=typo) == ([], [])

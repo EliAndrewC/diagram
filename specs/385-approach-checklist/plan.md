@@ -456,6 +456,24 @@ counts no round.
 
 **D84 - the archived block judged as the live one is.** `block_status`'s removed-block loop skips a recorded key when `plan-done.md` holds a block of that key whose text is `typo_only` against the reviewed text (the record's own `text`, else the history's at its digest), exactly as a block still in `plan.md` is judged; a digest match still skips it as before, and anything more than a typo is owed as before.
 
+## T66 - a requirement cited from another feature is bundled from that feature (found by T65's plan review, 2026-10-18)
+
+### T66 Approach (checklist part A)
+
+1. **The goal, in the world.** A plan review reads the requirement a block cites, not a same-numbered requirement of another feature.
+2. **The constraints.** Feature 375 amendment 11 (FR-046): `spec-cited.md` holds every requirement the blocks name, in full. Tooling only; a test red without it.
+3. **Where each comes from.** Feature 375 (O); the defect is T65's plan review's finding (amendment 6, the GM's "obvious ... tooling ... improvements").
+4. **Do they describe the world here?** Yes - measured 2026-10-18: T65's blocks cite "Feature 375 FR-044" and "FR-005(b)"; the bundle's `spec-cited.md` carried 385's own FR-005 (the per-task time split), a different requirement, and nothing of 375's - `plan_bundle.build` reads the ids against the reviewed feature's `spec.md` alone. 385's plan names another feature's requirement in this form ("feature 375 FR-0..", "375 FR-0..", "feature 375, FR-0..") in 22 places (a grep of plan.md for the form, 385 itself left out).
+5. **The order.** The qualified reading in `build`, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 25 min.
+9. **Done, measured.** One goal: a block citing `375 FR-044` (or `feature 375 FR-044`, `feature 375's FR-044`, `feature 375, FR-044`) gets 375's FR-044 paragraph in `spec-cited.md`, headed with its feature, and the reviewed feature's same-numbered requirement only when the block also cites it unqualified; `tests/tooling/test_plan_blocks.py` red without it.
+
+### T66 Decisions
+
+**D85 - a qualified citation read from its own feature.** `plan_bundle.build` reads `(?:feature )?NNN(?:'s|,)? (FR|SC)-NNN` as a citation of feature NNN's requirement, resolved from that feature's `specs/NNN-*/spec.md` (the one directory; none or several, it is left out as an unknown id is now) and written to `spec-cited.md` under a `<!-- feature NNN -->` line; an unqualified id is the reviewed feature's, as before - so a block that cites another feature's requirement writes the feature beside every id it means (the reviewer reads what the block names, no guess at which feature a bare id meant). `spec-index.md` is unchanged.
+
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).
