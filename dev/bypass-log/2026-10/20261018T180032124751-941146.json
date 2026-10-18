@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-18T18:00:32Z",
+  "target": "review-accept",
+  "commit": "65e6c46c3",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--pond-bank-tree--inashiro F3: four of 30 crowns run past the cropped frame's edge; the frame is cropped after the trees by the placer, and no norm holds a scatter inside the crop - the same as any tree near the edge"
+}

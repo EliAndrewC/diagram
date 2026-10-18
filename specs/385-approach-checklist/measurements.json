@@ -1,0 +1,32 @@
+{
+ "t08-glyph-f1-dry-bank": {
+  "observed": "2026-10-18",
+  "subject": "glyph-check--pond-bank-tree--inashiro",
+  "answers": "0c6c602293ac",
+  "source": "pool/hamlets/inashiro/inashiro.json",
+  "quantity": "bank-tree trunks inside any marsh",
+  "verifies": "F1",
+  "command": "python3 <scratchpad>/measure_bank.py inashiro (point-in-polygon of each pond_bank_trees trunk against every marshes poly)",
+  "method": "the bank's ellipse is a no-build block the toe marsh subtracts (D61b)",
+  "value": {
+   "trunks": 30,
+   "in_a_marsh": 0,
+   "note": "0 of 30 trunks in any marsh; the toe marsh left on the bank is the 32-gon's chords, about 350 sq ft along 1,300 ft of bank"
+  }
+ },
+ "t08-glyph-f2-jitter": {
+  "observed": "2026-10-18",
+  "subject": "glyph-check--pond-bank-tree--inashiro",
+  "answers": "0c6c602293ac",
+  "source": "pool/hamlets/inashiro/inashiro.json",
+  "quantity": "the trunks' radial spread across the bank",
+  "verifies": "F2",
+  "command": "each trunk's normalized radius against the ring at the fringe plus 6 ft",
+  "method": "seats jittered across the bank by position as well as along it (D61b)",
+  "value": {
+   "radial_ratio_min": 1.001,
+   "radial_ratio_max": 1.046,
+   "note": "the trunks spread over the bank's 6 ft play, so they no longer stand on one ellipse"
+  }
+ }
+}

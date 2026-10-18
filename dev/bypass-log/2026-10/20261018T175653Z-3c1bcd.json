@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-18T17:56:53Z",
+  "target": "claims-gate",
+  "commit": "69c263002",
+  "why": "CLAIMS_OK: the round arbiter's ruling ask:t08-overlap-exempt-drifts: four _OVERLAP_EXEMPT findings carried into 385 T43"
+}
