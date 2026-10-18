@@ -7232,19 +7232,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::WELL_SITINGS#the wells' siting": {
+  "body": "1089f7cd1fb57841",
+  "claim": "the wells' siting - communal-wells-ido.drawing: by the lane or among the houses, a knob",
   "code": "6a9dc10d9db06a8a",
   "core": "0855bafee0aadee0",
-  "date": "2026-10-13",
-  "note": "the two attested forms, rolled per settlement",
+  "date": "2026-10-18",
+  "note": "the two forms the page records as a knob",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8ef5e51443475932"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "69aa52fc50e9b01b",
+  "research": "530e826bbd37f9c5",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::WELL_VERGE_FT#on the lane's verge": {
@@ -7252,14 +7252,14 @@
   "claim": "on the lane's verge - GUESS communal-wells-ido.drawing: the curb within about 8 ft of the tread, a GUESS the page names",
   "code": "90635e73726c64c6",
   "core": "232d3ac8ac8b4b8c",
-  "date": "2026-10-17",
-  "note": "curb within about 8 ft of the tread, a GUESS the page names",
+  "date": "2026-10-18",
+  "note": "8 ft, recorded on the page as a GUESS",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b90dd1f63e73f44b",
+  "research": "530e826bbd37f9c5",
   "rests": [
-   "0196-communal-wells-ido.drawing.html:fb7019b36f4c6031"
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
   "verdict": "IN-STEP"
  },
@@ -7677,15 +7677,14 @@
   "claim": "lane-side wells after the web - communal-wells-ido.drawing: a clustered hamlet's lane-side well seated on a lane's verge once the lanes stand (`stage_lane_wells`)",
   "code": "015ac28af041557c",
   "core": "1047d304f1cf9a90",
-  "date": "2026-10-17",
-  "note": "stage_lane_wells runs after stage_web, so the lane-side well is seated once the lanes stand",
+  "date": "2026-10-18",
+  "note": "stage_lane_wells runs after stage_web",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b90dd1f63e73f44b",
+  "research": "530e826bbd37f9c5",
   "rests": [
-   "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
-   "0196-communal-wells-ido.drawing.html:fb7019b36f4c6031"
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
   "verdict": "IN-STEP"
  },
@@ -14166,15 +14165,20 @@
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#front-row standoff from the field set by the homestead core's reach (house, yard, shed, well pocket; garden excluded)": {
   "body": "05c51fe1c2c811b9",
-  "claim": "front-row standoff from the field set by the homestead core's reach (house, yard, shed, well pocket; garden excluded) - UNRESEARCHED: the front seat stands the core's reach toward the field off its chord, at the largest house the roll can take; the garden's side is chosen later by the sun, so it is not counted",
-  "code": "bda59d0c7ed0cdc1",
+  "claim": "front-row standoff from the field set by the homestead core's reach (house, yard, shed, well pocket; garden excluded) - farmhouses-minka.drawing: never nearer the paddy than 6 ft, drawn 10 to 13 ft; the front seat stands the core's reach toward the field off its chord, at the largest house the roll can take; the garden's side is chosen later by the sun, so it is not counted",
+  "code": "8dbe3d779b9a12b7",
   "core": "3c4b0be3ae6261c7",
-  "date": "2026-10-17",
-  "note": "how far a farmhouse stands off its paddy is answered by 0029 (never within 6 ft, drawn at 10-13 ft); cite 0029 drawing; also check the case where the yard faces the paddy, which puts the house about a yard's depth plus the gap off (~29 ft or more), past 13 ft",
-  "pages": {},
-  "research": "",
-  "triage": "touched",
-  "verdict": "MISLABELED"
+  "date": "2026-10-18",
+  "note": "the 6 ft floor is held (`_wall_on_the_bund`), but the code puts the core's near edge on the chord, and whether that lands the house 10 to 13 ft off depends on `front_row(standoff=None, envelope=...)` and `turn_the_seat`, neither in the bundle; with the yard facing the paddy the house stands a yard's depth off",
+  "pages": {
+   "0029-farmhouses-minka.drawing.html": "28761adf1d2dece2"
+  },
+  "research": "a3cfa2fba63bb45d",
+  "rests": [
+   "0029-farmhouses-minka.drawing.html:0596cd67c0df9440",
+   "0029-farmhouses-minka.drawing.html:2f4048f3df8fcb07"
+  ],
+  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#shared byre pockets": {
   "body": "05c51fe1c2c811b9",
@@ -14207,15 +14211,21 @@
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the front row's size": {
   "body": "05c51fe1c2c811b9",
-  "claim": "the front row's size - UNRESEARCHED: the square root of the households times the rolled shape's aspect band, at least 6",
-  "code": "60871164b9d041d1",
+  "claim": "the front row's size - clustered-and-scattered-villages-shuson-sanson.drawing: the square root of the households times the rolled shape's aspect band, at least 6, ranks seated behind it, where the page has a scattered hamlet's line hugged to the field edge in single file",
+  "code": "19cf2956b35c9f41",
   "core": "3c4b0be3ae6261c7",
-  "date": "2026-10-17",
-  "note": "on the only form it binds (dispersed), 0031 answers it: the whole line is hugged to the field edge in single file, so it is not UNRESEARCHED, and against that page the cap is a drift (see \"a scattered hamlet's seating\")",
-  "pages": {},
-  "research": "",
-  "triage": "touched",
-  "verdict": "MISLABELED"
+  "date": "2026-10-18",
+  "note": "on the dispersed path the row is capped at `max(6, round(sqrt(N*(lo+hi))))` and `_seat_rank_rounds` seats ranks behind it, but the page has a scattered settlement's \"whole line is hugged to the field edge in single file\"; either seat single file or record a DEVIATION on the page",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+  },
+  "research": "4e7ba7479292ad40",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:4ea19f2ff9e71342",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b0d4f27ae1dbec07",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bc33ef71630b4b4c"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the passage share": {
   "body": "05c51fe1c2c811b9",
@@ -14600,14 +14610,20 @@
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#the declared cluster shape": {
   "body": "cd638eed2f5781b6",
-  "claim": "the declared cluster shape - GUESS: the cluster's shape rolled as a knob and declared as the drawing resolves it, where the record has a hamlet's shape follow its dry ground",
-  "code": "37660d314aad29ab",
+  "claim": "the declared cluster shape - GUESS clustered-and-scattered-villages-shuson-sanson.drawing: the cluster's shape rolled as a knob and declared as the drawing resolves it, where the record has a hamlet's shape follow its dry ground",
+  "code": "be01f13947e948eb",
   "core": "da789b7f4f8332f8",
-  "date": "2026-10-17",
-  "note": "0031 drawing records the shape knob (a hamlet rolls its cluster shape by chance; crescent and split a GUESS there), so the claim should cite research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html rather than a bare GUESS",
-  "pages": {},
-  "research": "",
-  "triage": "touched",
+  "date": "2026-10-18",
+  "note": "the page's own rule rolls the shape: \"A hamlet chooses its cluster's shape ... by chance\". Only the crescent and the split are marked GUESS. Should be a plain question claim on the 0031 drawing page",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+  },
+  "research": "4e7ba7479292ad40",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7d95dd13600b3685",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b0d4f27ae1dbec07"
+  ],
   "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#the track's stretch the ways join": {
@@ -14842,34 +14858,33 @@
   "claim": "three, then two houses - GUESS communal-wells-ido.drawing: the cluster form's only where fewer than five households share a well, and the fallback's, as the page records; the lane-side form's neighborhood (no page gives one) and the 190/300/520 px reaches are this project's",
   "code": "20f33016d6e90b4d",
   "core": "7ea0dc95b29c3b72",
-  "date": "2026-10-17",
-  "note": "three then two for a share under five and for the fallback, as the page records; the reaches are this project's",
+  "date": "2026-10-18",
+  "note": "three/two where fewer than five households, and the fallback, as the page records; the reaches are unanswered",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b90dd1f63e73f44b",
+  "research": "530e826bbd37f9c5",
   "rests": [
-   "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
-   "0196-communal-wells-ido.drawing.html:fb7019b36f4c6031"
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::WATER_REACH_FT#watering reach": {
+  "body": "3b1135b550eb87d4",
+  "claim": "watering reach - row-villages-resson.drawing, communal-wells-ido.drawing: 760 ft",
   "code": "76b47ad93332ec36",
   "core": "986cd1a70f4aab32",
-  "date": "2026-10-05",
+  "date": "2026-10-18",
   "note": "760 ft",
   "pages": {
    "0033-row-villages-resson.drawing.html": "7f062305b79e2200",
-   "0196-communal-wells-ido.drawing.html": "8ef5e51443475932"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b1d589edb3385104",
+  "research": "ef94d2d96ab46d34",
   "rests": [
    "0033-row-villages-resson.drawing.html:18c4dc9ae3cbd807",
    "0196-communal-wells-ido.drawing.html:ef7c809e824ffb35"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::WELL_SEAT_FT#seated a little closer than the check": {
@@ -14877,31 +14892,33 @@
   "claim": "seated a little closer than the check - communal-wells-ido.drawing: \"a little closer than\" the 95 ft, 80 ft its calibration, a GUESS the page names",
   "code": "e4fc2a07887a57a7",
   "core": "3c46ea823e395ddc",
-  "date": "2026-10-17",
-  "note": "80 ft against the 95 ft check, a GUESS the page names",
+  "date": "2026-10-18",
+  "note": "the page says \"The 8 ft and the 80 ft are each a GUESS\"; label it `GUESS research/questions/0196-communal-wells-ido.drawing.html`, as WELL_VERGE_FT is",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b90dd1f63e73f44b",
+  "research": "530e826bbd37f9c5",
   "rests": [
-   "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb",
-   "0196-communal-wells-ido.drawing.html:fb7019b36f4c6031"
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b",
+   "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::WELL_SERVES_MAX#five to ten houses a well": {
+  "body": "7102b985fdb9408e",
+  "claim": "five to ten houses a well - communal-wells-ido.drawing: the five to ten houses each dug well served at Karihama",
   "code": "8eec4b3bc072048d",
   "core": "83b822582d9990e7",
-  "date": "2026-10-13",
-  "note": "10 is the top of Karihama's five to ten",
+  "date": "2026-10-18",
+  "note": "ten, the top of Karihama's five to ten",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8ef5e51443475932"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "69aa52fc50e9b01b",
+  "research": "530e826bbd37f9c5",
   "rests": [
-   "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914"
+   "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::_WELL_DRAWN_R#wellhead drawn extent": {
@@ -14956,15 +14973,15 @@
   "claim": "the first well at its share's middle - GUESS communal-wells-ido.drawing: five to ten houses a well at Karihama; the shares cut along the long axis are this project's choice, no page says how a hamlet's wells divided its houses",
   "code": "b12e34acecd68dac",
   "core": "fd271712ae43edcd",
-  "date": "2026-10-17",
-  "note": "shares cut along the long axis, a GUESS; the page is silent on how wells divide houses",
+  "date": "2026-10-18",
+  "note": "the page is silent on how wells divide the houses",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b90dd1f63e73f44b",
+  "research": "530e826bbd37f9c5",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
-   "0196-communal-wells-ido.drawing.html:fb7019b36f4c6031"
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
   "verdict": "IN-STEP"
  },
@@ -15011,14 +15028,14 @@
   "claim": "the fallback - DEVIATION communal-wells-ido.drawing: among three houses, then two, at the 95 ft, where neither form finds a seat, marked `fallback`",
   "code": "3fb4f8192ed9510a",
   "core": "152720021615f79f",
-  "date": "2026-10-17",
-  "note": "three, then two, at 95 (px = ft at a hamlet's scale), marked fallback, counted",
+  "date": "2026-10-18",
+  "note": "three, then two at 95, marked fallback, recorded as a deviation",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b90dd1f63e73f44b",
+  "research": "530e826bbd37f9c5",
   "rests": [
-   "0196-communal-wells-ido.drawing.html:fb7019b36f4c6031"
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
   "verdict": "IN-STEP"
  },
@@ -15027,15 +15044,15 @@
   "claim": "the order of the forms - communal-wells-ido.drawing: the lane-side form on a verge once the lanes stand, the other form where no verge has room",
   "code": "b3114d5269657db7",
   "core": "152720021615f79f",
-  "date": "2026-10-17",
-  "note": "lane-side form on a verge, then the other form, then the fallback",
+  "date": "2026-10-18",
+  "note": "lane-side, then cluster, then fallback where neither form seats",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b90dd1f63e73f44b",
+  "research": "530e826bbd37f9c5",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
-   "0196-communal-wells-ido.drawing.html:fb7019b36f4c6031"
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
   "verdict": "IN-STEP"
  },
@@ -15064,15 +15081,15 @@
   "claim": "a lane-side well's seat - communal-wells-ido.drawing: on a lane's verge, clear of the tread, its curb within `WELL_VERGE_FT`",
   "code": "009cd6e1641630b4",
   "core": "21bb6bc1ccfb6b8c",
-  "date": "2026-10-17",
-  "note": "center within vr plus 8 ft of the tread's edge; a curb on the tread is left to well_at",
+  "date": "2026-10-18",
+  "note": "curb within `WELL_VERGE_FT` of the tread",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b90dd1f63e73f44b",
+  "research": "530e826bbd37f9c5",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
-   "0196-communal-wells-ido.drawing.html:fb7019b36f4c6031"
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
   "verdict": "IN-STEP"
  },
@@ -15089,25 +15106,29 @@
   "claim": "no well serving more than ten - communal-wells-ido.drawing: the five to ten houses each dug well served at Karihama",
   "code": "d9f02ca2fd9de7ca",
   "core": "a20529724316fef4",
-  "date": "2026-10-17",
-  "note": "look ahead holds both wells to at most 10",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b90dd1f63e73f44b",
+  "research": "530e826bbd37f9c5",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
-   "0196-communal-wells-ido.drawing.html:fb7019b36f4c6031"
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::pair_keeps_ten#the second well held 170 px off the first": {
-  "code": "a20529724316fef4",
+  "body": "fa6ca1fb7d958d35",
+  "claim": "the second well held 170 px off the first - UNRESEARCHED: the pair's spacing, `seat_wells`' own \"wells apart\"; no page gives a hamlet's wells' spacing",
+  "code": "128a1953bafc16a1",
   "core": "a20529724316fef4",
-  "date": "2026-10-17",
-  "note": "the second well held 170 px off the first",
+  "date": "2026-10-18",
+  "note": "the page gives no spacing between wells",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::place_wells#grove farms take their own water": {
   "body": "4c4c6813881b08d4",
@@ -15135,17 +15156,17 @@
   "claim": "no well in a household's homestead - the-farmstead-and-what-stood-on-it-yashiki.drawing, communal-wells-ido.drawing: the well shared off the farmstead, by the lane or among the houses, never a pocket inside one household's homestead",
   "code": "44c67742dafe44cb",
   "core": "3e3de2e62bd29398",
-  "date": "2026-10-17",
-  "note": "no pocket is laid; every owed well is shared and seated by the rolled form",
+  "date": "2026-10-18",
+  "note": "no pocket for a clustered household; grove farms are left to their own water",
   "pages": {
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc",
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "cbd712316e815c95",
+  "research": "cecc2726b8d7b8e0",
   "rests": [
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:aa9c2b7faa468c9a",
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:b8b213d06a88fd60",
-   "0196-communal-wells-ido.drawing.html:fb7019b36f4c6031"
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
   "verdict": "IN-STEP"
  },
@@ -15154,15 +15175,15 @@
   "claim": "the wells' siting rolled - communal-wells-ido.drawing: by the lane or among the houses, a knob; the cluster form seated before the lanes, the lane-side form tried beside the track first and seated on a lane's verge once the lanes stand",
   "code": "2d4b9f2b3c557b66",
   "core": "3e3de2e62bd29398",
-  "date": "2026-10-17",
-  "note": "well_siting knob; cluster form seated now, lane-side form beside the standing ways, the rest after the web",
+  "date": "2026-10-18",
+  "note": "knob; cluster form before the lanes, lane-side once ways stand",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b90dd1f63e73f44b",
+  "research": "530e826bbd37f9c5",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
-   "0196-communal-wells-ido.drawing.html:fb7019b36f4c6031"
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
   "verdict": "IN-STEP"
  },
@@ -15171,16 +15192,15 @@
   "claim": "a well for every household beyond reach - communal-wells-ido.drawing: every household within 760 ft of a well or open water, one more shared well where the houses spread past the hamlet's one or two",
   "code": "03db406bc8ad021f",
   "core": "03b7269415efd519",
-  "date": "2026-10-17",
-  "note": "one more shared well while a household is past 760 ft",
+  "date": "2026-10-18",
+  "note": "760 ft of a well or open water",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b90dd1f63e73f44b",
+  "research": "530e826bbd37f9c5",
   "rests": [
-   "0196-communal-wells-ido.drawing.html:525a4dfac658db9c",
    "0196-communal-wells-ido.drawing.html:ef7c809e824ffb35",
-   "0196-communal-wells-ido.drawing.html:fb7019b36f4c6031"
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
   "verdict": "IN-STEP"
  },
@@ -15189,16 +15209,15 @@
   "claim": "one more well where one serves more than ten - communal-wells-ido.drawing: the five to ten houses a Karihama well served, a hamlet's wells as many as one to 2-20 households",
   "code": "6a42206481154334",
   "core": "03b7269415efd519",
-  "date": "2026-10-17",
-  "note": "one more well while the busiest serves more than 10; stays within one well to 2-20 households",
+  "date": "2026-10-18",
+  "note": "within one well to 2-20 households for a hamlet",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b90dd1f63e73f44b",
+  "research": "530e826bbd37f9c5",
   "rests": [
    "0196-communal-wells-ido.drawing.html:525a4dfac658db9c",
-   "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
-   "0196-communal-wells-ido.drawing.html:fb7019b36f4c6031"
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
   "verdict": "IN-STEP"
  },
@@ -15207,14 +15226,14 @@
   "claim": "the forms' order - communal-wells-ido.drawing: the rolled siting first, the other form, then the fallback (`lane_and_fallback_wells`)",
   "code": "602f0a9d73e2094b",
   "core": "03b7269415efd519",
-  "date": "2026-10-17",
-  "note": "rolled form, the other form, then the fallback",
+  "date": "2026-10-18",
+  "note": "the same form first, then the other, then the fallback",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b90dd1f63e73f44b",
+  "research": "530e826bbd37f9c5",
   "rests": [
-   "0196-communal-wells-ido.drawing.html:fb7019b36f4c6031"
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
   "verdict": "IN-STEP"
  },
@@ -15223,14 +15242,14 @@
   "claim": "more than ten to a well, recorded - DEVIATION communal-wells-ido.drawing: the well serving more than ten stands where no seat keeps every well to ten, marked on the map's record",
   "code": "74289c699459f9b1",
   "core": "1fc94ebfa6fa0b6b",
-  "date": "2026-10-17",
-  "note": "the page records this deviation; counted in meta.wells_over_ten",
+  "date": "2026-10-18",
+  "note": "the deviation the page records",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b90dd1f63e73f44b",
+  "research": "530e826bbd37f9c5",
   "rests": [
-   "0196-communal-wells-ido.drawing.html:fb7019b36f4c6031"
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
   "verdict": "IN-STEP"
  },
@@ -15239,15 +15258,15 @@
   "claim": "among five to ten houses - communal-wells-ido.drawing: the cluster form in the open ground among five to ten houses, off every lane",
   "code": "9acc7f84f0f5cdd3",
   "core": "02579f03e6bd7ffb",
-  "date": "2026-10-17",
-  "note": "five nearest within the reach, off the lanes, the ceiling of ten ranked in seat_wells",
+  "date": "2026-10-18",
+  "note": "five-house neighborhood",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b90dd1f63e73f44b",
+  "research": "530e826bbd37f9c5",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
-   "0196-communal-wells-ido.drawing.html:fb7019b36f4c6031"
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
   "verdict": "IN-STEP"
  },
@@ -15256,15 +15275,15 @@
   "claim": "off every lane - communal-wells-ido.drawing: the cluster well off every lane, its verge included (`on_a_verge`)",
   "code": "b56dd4c125229ccc",
   "core": "02579f03e6bd7ffb",
-  "date": "2026-10-17",
-  "note": "seat refused on any verge",
+  "date": "2026-10-18",
+  "note": "verge seats refused",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b90dd1f63e73f44b",
+  "research": "530e826bbd37f9c5",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
-   "0196-communal-wells-ido.drawing.html:fb7019b36f4c6031"
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
   "verdict": "IN-STEP"
  },
@@ -15273,14 +15292,14 @@
   "claim": "the reach widens first - GUESS communal-wells-ido.drawing: how far round a seat the five may stand is this project's choice - 190, 300, 520 px, then 760 ft - widened before the count gives way",
   "code": "45546bcc31397429",
   "core": "02579f03e6bd7ffb",
-  "date": "2026-10-17",
-  "note": "190/300/520 px then 760 ft before the count gives way, a GUESS the page names",
+  "date": "2026-10-18",
+  "note": "the page calls the reach this project's choice, widened before the count",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b90dd1f63e73f44b",
+  "research": "530e826bbd37f9c5",
   "rests": [
-   "0196-communal-wells-ido.drawing.html:fb7019b36f4c6031"
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
   "verdict": "IN-STEP"
  },
@@ -15289,14 +15308,14 @@
   "claim": "three, then two, only where five cannot be gathered - communal-wells-ido.drawing: a household is still owed a well within reach",
   "code": "b27f0e47631aa823",
   "core": "02579f03e6bd7ffb",
-  "date": "2026-10-17",
-  "note": "only where fewer than five households share the wells (len(houses) < 5)",
+  "date": "2026-10-18",
+  "note": "`len(houses) < 5` is the page's \"fewer than five households\"",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b90dd1f63e73f44b",
+  "research": "530e826bbd37f9c5",
   "rests": [
-   "0196-communal-wells-ido.drawing.html:fb7019b36f4c6031"
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
   "verdict": "IN-STEP"
  },
@@ -15334,15 +15353,15 @@
   "claim": "no well serving more than ten - communal-wells-ido.drawing: the five to ten houses each dug well served at Karihama; a seat that keeps every well at ten or fewer ranked first",
   "code": "8192a66991560bf9",
   "core": "a974cde59de88f0e",
-  "date": "2026-10-17",
-  "note": "seats keeping every well at 10 or fewer ranked first",
+  "date": "2026-10-18",
+  "note": "first key term ranks seats that keep every well at ten or fewer",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b90dd1f63e73f44b",
+  "research": "530e826bbd37f9c5",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
-   "0196-communal-wells-ido.drawing.html:fb7019b36f4c6031"
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
   "verdict": "IN-STEP"
  },
@@ -15368,17 +15387,17 @@
   "claim": "seated a little closer than the check - communal-wells-ido.drawing: a dwelling's wall within `WELL_SEAT_FT` (80 ft, a GUESS the page names), the 95 ft check unchanged",
   "code": "91db7f7d7ce499cb",
   "core": "a974cde59de88f0e",
-  "date": "2026-10-17",
-  "note": "default gap 80 ft/ftpx; fallback 95",
+  "date": "2026-10-18",
+  "note": "the 80 ft is a GUESS the page names; label it `GUESS research/questions/0196-communal-wells-ido.drawing.html`",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b90dd1f63e73f44b",
+  "research": "530e826bbd37f9c5",
   "rests": [
-   "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb",
-   "0196-communal-wells-ido.drawing.html:fb7019b36f4c6031"
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b",
+   "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#surface water counts": {
   "body": "fa707ec7f7a03ee6",
@@ -15397,23 +15416,39 @@
   "triaged": "2026-10-17",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#wells among the houses": {
+ "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#the first well's seat": {
   "body": "fa707ec7f7a03ee6",
-  "claim": "wells among the houses - communal-wells-ido.drawing: seats with a dwelling near and a neighborhood round them, the first innermost, each later one serving the worst-served household",
-  "code": "4cfc78366acb8181",
+  "claim": "the first well's seat - GUESS communal-wells-ido.drawing: the innermost seat where one well is owed; where two or more are, the middle of its own share of the houses, the shares cut along the cluster's long axis (`first_share_middle`)",
+  "code": "e600d1bfbcb26d53",
   "core": "a974cde59de88f0e",
-  "date": "2026-10-17",
-  "note": "the account says \"the first innermost\", but when two or more wells are owed the code seats the first at its share's middle with the pair look ahead (first_share_middle, a GUESS 0196 is silent on); split that first-seat rule out as GUESS and keep the neighborhood and worst-served parts on 0196",
+  "date": "2026-10-18",
+  "note": "the page is silent on where the first well stands",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b90dd1f63e73f44b",
+  "research": "530e826bbd37f9c5",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#wells among the houses": {
+  "body": "fa707ec7f7a03ee6",
+  "claim": "wells among the houses - communal-wells-ido.drawing: seats with a dwelling near and a neighborhood round them, each later one serving the worst-served household",
+  "code": "8f4c13739e715402",
+  "core": "a974cde59de88f0e",
+  "date": "2026-10-18",
+  "note": "dwelling near, neighborhood, worst-served minimax",
+  "pages": {
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+  },
+  "research": "530e826bbd37f9c5",
+  "rests": [
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b",
    "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
   ],
-  "triage": "touched",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#wells apart": {
   "body": "fa707ec7f7a03ee6",
@@ -15427,18 +15462,33 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/homesteads/wells.py::shared_row_wells#a farm counted to each street within two farmstead frames": {
+  "body": "e531d7147da5ab41",
+  "claim": "a farm counted to each street within two farmstead frames - GUESS: every street within two frames of it, not only the nearest (`d <= 2.0 * frame_w`); no page gives how far a row's farm may stand from its street",
+  "code": "c6a2cbaba86b1daa",
+  "core": "478bc9e62f7db0c6",
+  "date": "2026-10-18",
+  "note": "the label now says \"every street within two frames, not only the nearest\", which is what `d <= 2.0 * frame_w` does, run once per street; the pages give a frame's width and the street's offset from the dry edge, but not how far a row's farm may stand from its street, so GUESS is right",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/homesteads/wells.py::shared_row_wells#beside the street": {
+  "body": "e531d7147da5ab41",
+  "claim": "beside the street - communal-wells-ido.drawing: the lane-side form, on the verge clear of the tread, either side",
   "code": "a75d33c918913587",
   "core": "478bc9e62f7db0c6",
-  "date": "2026-10-13",
-  "note": "every shared row well is fixed in the lane-side form (off = half + px(8) beside the tread), but 0196 makes \"by the lane or among the houses\" a per-settlement knob; roll the form for row villages too, or record the fixed form as a DEVIATION [0196 §8, §9]",
+  "date": "2026-10-18",
+  "note": "curb about 5 ft off a 6 ft street's tread, either side",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b90dd1f63e73f44b",
-  "triage": "touched",
-  "triaged": "2026-10-17",
-  "verdict": "DRIFTED"
+  "research": "530e826bbd37f9c5",
+  "rests": [
+   "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::shared_row_wells#fallback seats along the street": {
   "code": "6aed246f8cccb4a0",
@@ -15486,20 +15536,28 @@
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/homesteads/wells.py::shared_row_wells#the farmstead frame is taken as the larger side of the largest house bbox, with 240 ft as the fallback (the 240 ft matches §7's widest frontage but no claim cites it)": {
+  "code": "478bc9e62f7db0c6",
+  "core": "478bc9e62f7db0c6",
+  "date": "2026-10-18",
+  "note": "the farmstead frame is taken as the larger side of the largest house bbox, with 240 ft as the fallback (the 240 ft matches §7's widest frontage but no claim cites it)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/hamletgen/homesteads/wells.py::stage_lane_wells#lane-side wells after the lanes": {
   "body": "8a4c3c1edd216013",
   "claim": "lane-side wells after the lanes - communal-wells-ido.drawing: the lane-side form on a lane verge, clear of the tread, within reach of the houses",
   "code": "dfb81c369816ed6e",
   "core": "d17d684bf25567b6",
-  "date": "2026-10-17",
-  "note": "seated on a lane verge once the web stands",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b90dd1f63e73f44b",
+  "research": "530e826bbd37f9c5",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
-   "0196-communal-wells-ido.drawing.html:fb7019b36f4c6031"
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
   "verdict": "IN-STEP"
  },
@@ -15508,14 +15566,14 @@
   "claim": "the old ladder a recorded deviation - DEVIATION communal-wells-ido.drawing: three, then two houses at the 95 ft check, marked `fallback`, past both forms",
   "code": "bc2eac164a0e3ebf",
   "core": "d17d684bf25567b6",
-  "date": "2026-10-17",
-  "note": "three, then two at 95, marked fallback and counted",
+  "date": "2026-10-18",
+  "note": "",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b90dd1f63e73f44b",
+  "research": "530e826bbd37f9c5",
   "rests": [
-   "0196-communal-wells-ido.drawing.html:fb7019b36f4c6031"
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
   "verdict": "IN-STEP"
  },
@@ -15524,15 +15582,15 @@
   "claim": "the other form only after the reach widened - communal-wells-ido.drawing: both forms the research's",
   "code": "859aff0a8ebaad57",
   "core": "d17d684bf25567b6",
-  "date": "2026-10-17",
-  "note": "both forms are the page's; the other form is tried before the fallback",
+  "date": "2026-10-18",
+  "note": "both forms attested; the other form taken where the first finds no seat",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b90dd1f63e73f44b",
+  "research": "530e826bbd37f9c5",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
-   "0196-communal-wells-ido.drawing.html:fb7019b36f4c6031"
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
   "verdict": "IN-STEP"
  },
@@ -15545,18 +15603,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::well_target#how many wells": {
+  "body": "6e5c53faa81fe661",
+  "claim": "how many wells - communal-wells-ido.drawing: one per 6 households, one or two",
   "code": "c1d3909dd76e10f2",
   "core": "e5156dc05025697a",
-  "date": "2026-10-13",
-  "note": "one per 6 households, capped at 2: \"a hamlet draws one or two\"",
+  "date": "2026-10-18",
+  "note": "one or two for a hamlet",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8ef5e51443475932"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "69aa52fc50e9b01b",
+  "research": "530e826bbd37f9c5",
   "rests": [
    "0196-communal-wells-ido.drawing.html:525a4dfac658db9c"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::worst_after#well arithmetic": {
@@ -21652,15 +21711,15 @@
   "claim": "a cluster well keeps its verge - communal-wells-ido.drawing: a cluster-form well off every lane, the lanes laid after it held `WELL_VERGE_FT` off its curb fixtures are fabric a lane keeps off",
   "code": "90db9a4ee5ed5a89",
   "core": "005fba1cef0bbd7e",
-  "date": "2026-10-17",
-  "note": "a cluster-form well's obstacle is grown by WELL_VERGE_FT, so later lanes keep off it",
+  "date": "2026-10-18",
+  "note": "a cluster well's obstacle grown by `WELL_VERGE_FT`",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8b1b8c439368e453"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "b90dd1f63e73f44b",
+  "research": "530e826bbd37f9c5",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
-   "0196-communal-wells-ido.drawing.html:fb7019b36f4c6031"
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
   "verdict": "IN-STEP"
  },
@@ -57046,13 +57105,22 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/houses.py::HousesMixin._try_place_bundle#a farmhouse no longer than 2.7:1 (FARMHOUSE_MAX_ASPECT; 0029 §424 answers it)": {
-  "code": "981f9b2ef840a80e",
+ "l7r/diagram/settlement/houses.py::HousesMixin._try_place_bundle#a farmhouse no longer than 2.7:1": {
+  "body": "a3d0584c63cf2349",
+  "claim": "a farmhouse no longer than 2.7:1 - farmhouses-minka.drawing: `FARMHOUSE_MAX_ASPECT`, the length and depth jitter's 1.3-2.7 bar; a caller's longer house is refused",
+  "code": "5ab758205b21c0c4",
   "core": "981f9b2ef840a80e",
-  "date": "2026-10-17",
-  "note": "a farmhouse no longer than 2.7:1 (FARMHOUSE_MAX_ASPECT; 0029 §424 answers it)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "date": "2026-10-18",
+  "note": "a caller's size past 2.7:1 is refused; the jitter stays about 1.3 to 2.5",
+  "pages": {
+   "0029-farmhouses-minka.drawing.html": "28761adf1d2dece2"
+  },
+  "research": "a3cfa2fba63bb45d",
+  "rests": [
+   "0029-farmhouses-minka.drawing.html:66b65af7ef3446a2",
+   "0029-farmhouses-minka.drawing.html:c63bd40e8d97f1e8"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/houses.py::HousesMixin._try_place_bundle#farmhouse size": {
   "body": "a3d0584c63cf2349",
@@ -59463,16 +59531,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::surface_water_dist#watered by surface water": {
+  "body": "d934dbe0a0b62d53",
+  "claim": "watered by surface water - communal-wells-ido.drawing: canals, streams, the moat and the pond, never an irrigation ditch",
   "code": "d9049ad02973c8b7",
   "core": "7365ab5eaacf7128",
-  "date": "2026-10-03",
-  "note": "0196 drawing counts a household watered by \"a channel, pond, stream or moat\" (channel water \"served domestic and drinking use\"); water_lines excludes every irrigation channel - the code or the question must change",
+  "date": "2026-10-18",
+  "note": "the page's watering water is \"a channel, pond, stream or moat\", and it says channel water served domestic use; the code drops every irrigation channel and the page nowhere says \"never an irrigation ditch\". Count channels, or record the exclusion as a DEVIATION on the page",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8ef5e51443475932"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "69aa52fc50e9b01b",
-  "triage": "touched",
-  "triaged": "2026-10-13",
+  "research": "530e826bbd37f9c5",
+  "rests": [
+   "0196-communal-wells-ido.drawing.html:ef7c809e824ffb35"
+  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/land/wet.py::surface_water_within#plumbing": {
@@ -59484,16 +59555,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::water_lines#watered by surface water": {
+  "body": "1636159ed5aa804a",
+  "claim": "watered by surface water - communal-wells-ido.drawing: canals, streams and the moat, never an irrigation ditch",
   "code": "e130ad73bc097d99",
   "core": "569e90f1e1bd8c6b",
-  "date": "2026-10-03",
-  "note": "returns canals, streams and moat only, but 0196 drawing names \"a channel, pond, stream or moat\" as watering a household; the \"never an irrigation ditch\" exclusion is not on the page",
+  "date": "2026-10-18",
+  "note": "same as surface_water_dist: §5 counts \"a channel\", and the lines read only canals, streams and the moat; count channels or record a DEVIATION",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8ef5e51443475932"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "69aa52fc50e9b01b",
-  "triage": "touched",
-  "triaged": "2026-10-13",
+  "research": "530e826bbd37f9c5",
+  "rests": [
+   "0196-communal-wells-ido.drawing.html:ef7c809e824ffb35"
+  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/rolling/__init__.py::RollingMixin#package composition": {
@@ -61481,14 +61555,6 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._bundle_common_fits#house, yard, kura and well pocket held off the fields (fields=True)": {
-  "code": "6d31d5dc7e7d3455",
-  "core": "6d31d5dc7e7d3455",
-  "date": "2026-10-17",
-  "note": "house, yard, kura and well pocket held off the fields (fields=True)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._bundle_common_fits#no grove on a lane": {
   "body": "bdaf24305f43ddbd",
   "claim": "no grove on a lane - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a farm's grove bands off every drawn tread",
@@ -61502,6 +61568,22 @@
   "research": "60b94d3c15ae221a",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._bundle_common_fits#the farmstead off the fields": {
+  "body": "bdaf24305f43ddbd",
+  "claim": "the farmstead off the fields - farmhouses-minka.drawing: the house, yard, kura and a dispersed farm's well pocket held off every field (`fields=True`), a farmhouse never nearer the paddy than 6 ft",
+  "code": "3ffb67d4830e44de",
+  "core": "6d31d5dc7e7d3455",
+  "date": "2026-10-18",
+  "note": "parts held off fields, the wall 6 ft off the paddy",
+  "pages": {
+   "0029-farmhouses-minka.drawing.html": "28761adf1d2dece2"
+  },
+  "research": "a3cfa2fba63bb45d",
+  "rests": [
+   "0029-farmhouses-minka.drawing.html:2f4048f3df8fcb07"
   ],
   "verdict": "IN-STEP"
  },
@@ -65222,38 +65304,37 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._farm_wells#every farmhouse within reach of a well": {
+  "body": "487a5bdac015d1bf",
+  "claim": "every farmhouse within reach of a well - communal-wells-ido.drawing: 500 ft",
   "code": "86f0dd637a86f81c",
   "core": "1f41d4681719b877",
-  "date": "2026-10-05",
-  "note": "the claimed 500 ft is no reach the page states: water within about 760 ft on hamlet and village maps, 870 ft for a city's commoners; the claim (or reach_ft) should take the page's figure",
+  "date": "2026-10-18",
+  "note": "the page gives 760 ft (§5) and a city's 870 ft (§15), never 500 ft; label UNRESEARCHED until a pass answers the farm belt's reach",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8ef5e51443475932"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "69aa52fc50e9b01b",
+  "research": "530e826bbd37f9c5",
   "rests": [
    "0196-communal-wells-ido.drawing.html:223bbdbc906575ad",
    "0196-communal-wells-ido.drawing.html:ef7c809e824ffb35"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-13",
-  "verdict": "DRIFTED"
+  "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._farm_wells#fallback on field-rim ground off the crop": {
+  "body": "487a5bdac015d1bf",
+  "claim": "fallback on field-rim ground off the crop - communal-wells-ido.drawing: a dwelling within about 95 ft on hamlet and town maps; a 6 px grid out to 156 px",
   "code": "0e4ba0fa5e97d5b6",
   "core": "1f41d4681719b877",
-  "date": "2026-10-13",
-  "note": "the grid reaches 156 px from a house center (comment: \"~240 ft at city grain\"), against \"a dwelling within about 95 ft on hamlet and town maps\"; need which map tiers call _farm_wells and whether well_at enforces the 95 ft wall gap",
+  "date": "2026-10-18",
+  "note": "the 156 px grid runs about 250 ft from a house center at city grain; I need `well_at`'s dwelling-gap test, and its units, to see whether the 95 ft holds",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8ef5e51443475932"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "69aa52fc50e9b01b",
+  "research": "530e826bbd37f9c5",
   "rests": [
    "0196-communal-wells-ido.drawing.html:3c550b8df2ea63e9",
-   "0196-communal-wells-ido.drawing.html:8b6c0f73372eb433",
    "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-13",
   "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._farm_wells#fallback seat off the house": {
@@ -65269,21 +65350,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._farm_wells#seated in a steading's dooryard": {
+  "body": "487a5bdac015d1bf",
+  "claim": "seated in a steading's dooryard - communal-wells-ido.drawing: rings of 20 to 150 px round the densest cluster's houses",
   "code": "c85ff69d2a8e0899",
   "core": "1f41d4681719b877",
-  "date": "2026-10-13",
-  "note": "the rings reach 150 px from the house; same open question as the fallback: which tiers call it and whether well_at holds the 95 ft gap; the page gives no ring figures",
+  "date": "2026-10-18",
+  "note": "0196 has wells among the houses within 95 ft and nothing on a dooryard seat or 20-150 px rings, and 0028 draws \"the well, shared off the farmstead\"; label UNRESEARCHED or GUESS",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8ef5e51443475932"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "69aa52fc50e9b01b",
+  "research": "530e826bbd37f9c5",
   "rests": [
-   "0196-communal-wells-ido.drawing.html:3c550b8df2ea63e9",
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b",
    "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-13",
-  "verdict": "CANNOT-TELL"
+  "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._place_wells#a dwelling within reach": {
   "code": "169acc07032dcbcc",
@@ -65309,16 +65390,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._place_wells#no dwelling left without a well": {
+  "body": "ecdce4c613d52d23",
+  "claim": "no dwelling left without a well - communal-wells-ido.drawing: the coverage pass, six seats at 0.45 to 0.6 of near",
   "code": "dc4dd9e63dd01e21",
   "core": "6301212a5d7a74aa",
-  "date": "2026-10-03",
-  "note": "coverage guarantee per 0196.drawing",
+  "date": "2026-10-18",
+  "note": "coverage seats within the near reach of an unserved dwelling",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "8ef5e51443475932"
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
   },
-  "research": "69aa52fc50e9b01b",
-  "triage": "touched",
-  "triaged": "2026-10-13",
+  "research": "530e826bbd37f9c5",
+  "rests": [
+   "0196-communal-wells-ido.drawing.html:223bbdbc906575ad",
+   "0196-communal-wells-ido.drawing.html:ef7c809e824ffb35",
+   "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._place_wells#standing room demanded": {
