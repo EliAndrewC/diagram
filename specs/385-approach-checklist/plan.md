@@ -348,6 +348,96 @@ seen sentences, the notes read, the fresh round's edits reset) and applies it in
 dispatch refused anywhere never launches, so it changes nothing but its own pending record, which expires as before (`_live`) and
 counts no round.
 
+## T60 - apply-edits takes a paragraph break and an emptied line (the arbiter's fix on hour:385-approach-checklist@22, part 1)
+
+### T60 Approach (checklist part A)
+
+1. **The goal, in the world.** A check's EDIT that splits a paragraph or empties a line applies as written, with no hand finish.
+2. **The constraints.** The arbiter's fix, part 1: "scripts/record/apply_edits.py should apply an EDIT whose replacement is a bare paragraph break, and should drop the line an empty replacement empties instead of leaving a stray blank line, each with its test in tests/tooling/test_apply_edits.py"; every other EDIT applies as before; tooling only; a test red without it.
+3. **Where each comes from.** The fix is the arbiter's (G); `apply_edits` is 250's (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-18: two hand finishes in T10's check session (the fruit-dike pop-up at 20:28, the perimeter dike at 20:53): an EDIT whose new text is one empty line parsed as no text and deleted the old instead of breaking it; an EDIT emptying a line left the blank line behind.
+5. **The order.** The parse, the empty-line drop, then their tests
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: an EDIT whose new text is a lone empty line puts a paragraph break where its old text stood, and an empty replacement that empties its line removes the line; `tests/tooling/test_apply_edits.py` red without each.
+
+### T60 Decisions
+
+**D79 - the empty line kept, the emptied line dropped.** The EDIT pattern keeps what stands between `===` and `>>>`: a block whose new text is exactly one empty line replaces its old text with a paragraph break (`\n\n` inside a line, a blank line between lines); a block whose new text is empty and whose old text was the whole of its line removes that line and its newline. Every other block applies as before.
+
+## T61 - a make call that sets one variable twice is refused (the arbiter's fix on hour:385-approach-checklist@22, part 2)
+
+### T61 Approach (checklist part A)
+
+1. **The goal, in the world.** A make call never silently drops a value it was given.
+2. **The constraints.** The arbiter's fix, part 2: "a Bash guard should refuse a make invocation that assigns the same variable twice (e.g. `make quote-verbatim Q=0018 Q=0027`, where make silently keeps the last), naming the quoted-list form Q=\"0018 0027\" or one call per value"; a quoted list and distinct variables pass; tooling only; a test red without it.
+3. **Where each comes from.** The fix is the arbiter's (G); the make-only guard is 127's (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-18: T10's round-2 check session ran `make ... Q=0018 Q=0027`, make kept 0027, and a record-format pass read a stale 0018 bundle and was thrown away (my brief told it to).
+5. **The order.** The verdict in `hm_make.classify`, the refusal in `make-only-hooks.sh`, then the tests
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: `make x Q=a Q=b` is refused naming `Q="a b"` or one call per value, while `make x Q="a b"` and `make x Q=a R=b` pass; `tests/hooks/test-make-only-hooks.sh` red without it.
+
+### T61 Decisions
+
+**D80 - a doubled assignment refused.** `hm_make.classify` returns `make-dup-var` when one `make` invocation (quotes and heredocs stripped, as the guard strips them) assigns one variable name twice; `make-only-hooks.sh` refuses it with the variable named and the two compliant forms. The escape is the guard's own `GUARD_EDIT_OK`, recorded.
+
+## T62 - a changed constant names the pages still stating its old figure (the arbiter's fix on ask:t10-findings-at-landing)
+
+### T62 Approach (checklist part A)
+
+1. **The goal, in the world.** When a claimed constant's value or claim changes, every drawing page still stating its old figure is named at the change, not found at landing.
+2. **The constraints.** The arbiter's fix: "When a claimed constant's value or derivation changes (here DIKEPOND_WATER_INSET going from a fixed 23 ft to a value derived per map by dikepond_inset), the claims check in scripts/record/claims.py should flag every research drawing page that still states the old figure for that unit, so stale pages like 0022/0024/0025 are caught at the edit rather than at landing"; a flag, never a refusal; tooling only; a test red without it.
+3. **Where each comes from.** The fix is the arbiter's (G); the claims index is 316's (O).
+4. **Do they describe the world here?** Measured 2026-10-18: of the seven drawing pages stating "23 ft", those that also link the constant's cited page (0018) are 0018 itself, 0022, 0025 and 0027 - the stale three among them; 0024 states the split as six in ten and no figure, so a figure search does not find it.
+5. **The order.** The flag in `claims-owed`, then its test
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 40 min.
+9. **Done, measured.** One goal: `make claims-owed` lists, for each claimed constant whose value or claim changed since the merge base, every drawing page that states its old figure with a unit and links a question its claim cites; `tests/tooling/test_claims_index.py` red without it.
+
+### T62 Decisions
+
+**D81 - the old figure looked for where the constant's research lives.** `claims.py` compares each claimed module-level constant's value and claim line at the merge base and the head; for one that changed, it searches the drawing pages for its OLD value followed by a unit (ft, px, %, acres), keeping the pages that link any question the constant's claim cites, and `claims-owed` prints each as `stale figure: <page> states <figure> (<constant> was <old>)`. A flag only: wording elsewhere ("six in ten") is not found, and the claims rounds still read the pages.
+
+## T63 - make tick archives finished plan sections (the GM 2026-10-18)
+
+### T63 Approach (checklist part A)
+
+1. **The goal, in the world.** A feature's `plan.md` holds only its open work, without anyone remembering to archive it.
+2. **The constraints.** The GM, 2026-10-18: "anytime that you can just forget to do [it], make our tooling do the thing correctly automatically every time"; `make plan-archive`'s rule unchanged (every task of a section ticked, its review CLEAR); the archive never moves an open task's section; tooling only; a test red without it.
+3. **Where each comes from.** The GM's (G); plan-archive is 375 FR-044 (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-18: 385's `plan.md` had grown to 168 KB and 2,054 lines, 54 finished sections never archived; one `make plan-archive` took it to 27 KB.
+5. **The order.** The call at the end of a successful tick, then its test
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: a tick that finishes a section's last task moves that section to `plan-done.md` and says so; `tests/tooling/test_plan_gate.py` (or the tick's own test) red without it.
+
+### T63 Decisions
+
+**D82 - archived at the tick.** `tick-task.py`, after a tick it made, runs `plan_gate.archive` on the feature and prints the sections it moved; an archive error never refuses the tick (the tick has already been written), it is printed.
+
+## T64 - make task-add (the GM 2026-10-18)
+
+### T64 Approach (checklist part A)
+
+1. **The goal, in the world.** A task is added to a feature with one command that picks its id and places it, with no hand-written insertion.
+2. **The constraints.** The GM, 2026-10-18: "we either have or don't need tooling for things like inserting a task somewhere in the middle of the task list"; the box lands before the GM-review box, as `claims-carry` places its boxes; a plan section, when given, lands before the feature's close section; tooling only; a test red without it.
+3. **Where each comes from.** The GM's (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-18: about 30 tasks added by hand-written insertion scripts, each 1-2k tokens of command text, and two hand-picked ids (T47, T48) collided with an umbrella heading.
+5. **The order.** The target and its script, then the test
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 40 min.
+9. **Done, measured.** One goal: `make task-add F=<n> TITLE="..." [SECTION=<file>] [RESEARCH=physical]` writes the box with the next free id and prints it, and the plan section with `T64` filled; `tests/tooling/test_task_add.py` red without it.
+
+### T64 Decisions
+
+**D83 - the next id, the right places.** `scripts/task-add.py` takes the highest `T<n>` in `tasks.md` and `plan.md` together (so an id named only in a heading is never reused), adds one, writes the box before the GM-review box with its research line, and, given SECTION, writes that file's text with `{T}` replaced into `plan.md` before its `## T11 - the close` heading (or at the end). It prints the id.
+
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).

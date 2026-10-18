@@ -5143,6 +5143,102 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T60": {
+   "section_sha256": "907599b9ad7e72788213e12e5bd5fc3008eb5534991950819fb7788645b3d5da",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T60-scope",
+     "summary": "T60 is a tooling-only task: apply_edits.py takes an EDIT whose new text is a paragraph break, and drops a line an empty replacement empties, each with a test in tests/tooling/test_apply_edits.py red without it; every other EDIT applies as before.",
+     "class": "within",
+     "why": "The GM's amendment 6 (2026-10-18) asks the session to 'implement any obvious performance / tooling / process improvements along the way'; the task carries the arbiter's fix part 1 as quoted, no wider, and was measured (two hand finishes in T10's check session). The tests only fail when the requested behavior is absent, so they enforce the fix rather than add scope."
+    },
+    {
+     "id": "D79",
+     "summary": "A block whose new text is exactly one empty line replaces its old text with a paragraph break (\\n\\n inside a line, a blank line between lines); a block whose new text is empty and whose old text was the whole of its line removes the line and its newline; every other block applies as before.",
+     "class": "within",
+     "why": "This is the arbiter's fix stated as a parse rule: 'a bare paragraph break' read as a lone empty line between === and >>>, and 'the line an empty replacement empties' read as an empty replacement of a line's whole text. Neither reading excludes a case the fix names, and 'every other block applies as before' preserves only what the fix did not ask to change."
+    },
+    {
+     "id": "T60-order-budget",
+     "summary": "Order: the parse, the empty-line drop, then their tests; exit (c); budget 30 min; one goal.",
+     "class": "within",
+     "why": "Sequencing and a time budget inside the requested work; the one-goal 'done' follows FR-015 (amendment 4)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T61": {
+   "section_sha256": "92cc84cf7d2637b0604b6131329b8c30117aa60505419058a099b417b734318f",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D80",
+     "summary": "hm_make.classify returns make-dup-var when one make invocation assigns one variable name twice; make-only-hooks.sh refuses it, naming the variable and the two compliant forms (quoted list, or one call per value).",
+     "class": "within",
+     "why": "This is the arbiter's fix part 2 as quoted in the Approach (a Bash guard refusing a make call that assigns a variable twice, naming Q=\"a b\" or one call per value); feature 379 has the arbiter's ruling stand where the GM was asked, and amendment 6 directs obvious tooling/process improvements along the way. The refusal reaches exactly the case the fix names and no other command or agent type."
+    },
+    {
+     "id": "D80-strip",
+     "summary": "Quotes and heredocs are stripped before counting assignments, as the guard already strips them.",
+     "class": "within",
+     "why": "Implements the fix's own carve-in that a quoted list passes (Q=\"0018 0027\" is one assignment); reuses the guard's existing parse rather than adding a new scope."
+    },
+    {
+     "id": "D80-pass",
+     "summary": "make x Q=\"a b\" and make x Q=a R=b pass.",
+     "class": "within",
+     "why": "Both are stated by the arbiter's fix (the quoted-list form is the named compliant form; distinct variables are a different case from a doubled assignment)."
+    },
+    {
+     "id": "D80-escape",
+     "summary": "The escape is the guard's existing GUARD_EDIT_OK, recorded.",
+     "class": "within",
+     "why": "Not a carve-out of any case: no class of doubled assignment is exempted by rule, and the override is the existing, recorded escape every refusal in this guard already carries. It adds no new mechanism or default."
+    },
+    {
+     "id": "T61-test",
+     "summary": "tests/hooks/test-make-only-hooks.sh carries a test red without the refusal.",
+     "class": "within",
+     "why": "Enforcement of the requested refusal (the fix itself says a test red without it); if the refusal is deleted the test has nothing left to check."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T64": {
+   "section_sha256": "84dd6a802d4475e8dbb3c5ded003a387f0dc186b5c13cb37b114bbd2358312f9",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T64-scope",
+     "summary": "Add a make task-add target (tooling only) that adds a task to a feature in one command, with a test red without it.",
+     "class": "within",
+     "why": "Amendment 6 (GM 2026-10-18, verbatim in request.md): 'Please make sure to implement any obvious performance / tooling / process improvements along the way.' Replacing ~30 hand-written insertion scripts and an id collision (T47/T48) with one command is a process/tooling improvement of exactly that kind, and it changes no engine behavior, no claim and no requirement the GM set. The Approach's own quote ('we either have or don't need tooling for things like inserting a task...') does not appear in request.md, so it cannot be checked from this bundle; the task's authority here rests on amendment 6, not on that quote. The test is enforcement of the task's own goal, not added scope."
+    },
+    {
+     "id": "D83-id",
+     "summary": "The new id is the highest T<n> found in tasks.md and plan.md together, plus one, so an id named only in a heading is never reused.",
+     "class": "within",
+     "why": "A mechanism choice serving the stated goal (no collisions like T47/T48); it narrows nothing the GM asked for."
+    },
+    {
+     "id": "D83-placement",
+     "summary": "The box is written before the GM-review box with its research line (as claims-carry places boxes); a SECTION file, with {T} replaced, is written into plan.md before the '## T11 - the close' heading, or at the end if absent; the id is printed.",
+     "class": "within",
+     "why": "Placement follows the existing convention for task boxes and keeps the close section last; it is implementation of the tool, not a carve-out from any request or requirement."
+    },
+    {
+     "id": "T64-done-one-goal",
+     "summary": "Done names one goal: the target writes the box with the next free id and the plan section, and tests/tooling/test_task_add.py is red without it.",
+     "class": "within",
+     "why": "Conforms to FR-015 (one goal a task, amendment 4); nothing excluded."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
