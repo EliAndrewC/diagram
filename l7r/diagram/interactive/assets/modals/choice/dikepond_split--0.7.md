@@ -1,8 +1,8 @@
 About: In this village each parcel was seven parts water to three of planted bank. A dike-pond village dug each parcel into a
-fish pond and heaped the spoil into the bank round it, where mulberry grew.
+fish pond and heaped the spoil into the bank, or dike, round it, where mulberry grew.
 
-Accounts differ on how a parcel was split between water and bank: six parts water to four of dike, six parts dike to four
-of pond, and seven of water to three of dike are all given, and the difference may be regional.
+Villages split a parcel between water and bank in different ways: six parts water to four of dike, six parts dike to four
+of pond, or seven of water to three of dike, and the difference may have been regional.
 
 Guesses:
 - That a village takes each of the three splits at even odds: no account gives a share between them, and every account
