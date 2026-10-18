@@ -163,6 +163,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T57 A constant's claim docstring is no engine change: every bare string statement is stripped from the semantic id (the arbiter's fix on hour:385-approach-checklist@20, plan D76)
       research: rendering
       verify: DONE. landed on main; tests/tooling/ci/test_delta.py red without it (a claim docstring moved the key)
+- [ ] T58 The wave guard names WAVE_OK as a headless session's route, which has no Workflow tool (the arbiter's fix on hour:385-approach-checklist@21, plan D77)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

@@ -5097,6 +5097,32 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T58": {
+   "section_sha256": "8b37000f9de737f94f75874ec6d50f51793d78b9559ea130ddb77b0d94a856ef",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D77",
+     "summary": "In agent-prefix-hooks.sh's wave refusal, a session carrying L7R_DISPATCHER is told it has no Workflow tool and to put WAVE_OK: <reason> in each prompt of the batch, and is not shown the check-wave call; an interactive session's message is unchanged.",
+     "class": "within",
+     "why": "This is the arbiter's fix as worded (name WAVE_OK as the route when the session has no Workflow tool, instead of pointing a headless session at a tool it lacks). The arbiter stands where the GM was asked (feature 379), and the GM's amendment 6 asks for obvious tooling and process improvements along the way. Leaving the interactive message unchanged keeps the existing behavior the fix did not ask to change. Nothing is carved out."
+    },
+    {
+     "id": "T58-detect",
+     "summary": "'The session has no Workflow tool' is detected by L7R_DISPATCHER being set (queued headless page sessions carry it; interactive ones do not).",
+     "class": "within",
+     "why": "This is the mechanism for the fix's own condition, not a narrowing of it. The fix's stated object is a headless session pointed at a tool it lacks, and Approach item 4 records as measured (2026-10-18, page_session_runner.headless_env) that queued headless sessions carry the variable. The incident that prompted the fix was such a session (T10's check session at 19:48)."
+    },
+    {
+     "id": "T58-test",
+     "summary": "tests/hooks/test-agent-prefix-hooks.sh gains a case that is red without the branch: with L7R_DISPATCHER the refusal names WAVE_OK and no Workflow call; without it, the message is as before.",
+     "class": "within",
+     "why": "The test enforces exactly what was asked, and its only effect is that the requested refusal text happens and keeps happening. That is enforcement of the request, not unrequested scope. The fix itself names 'a test red without it' as part of the work."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

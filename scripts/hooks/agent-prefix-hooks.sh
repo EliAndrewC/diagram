@@ -41,7 +41,12 @@ except Exception: pass' 2>/dev/null)"
         printf 'Every agent launched by hand wakes the main session when it finishes, and each wake re-reads its whole context\n'
         printf '(5,544 wakes a month, a median 405k tokens each - feature 383 research R20). A workflow staggers the launches by itself\n'
         printf 'and wakes the session once, and its guard holds each unit to every check this one would have:\n'
-        if python3 -c 'import sys; sys.path.insert(0, sys.argv[1]); import hm_workflow; sys.exit(sys.argv[2] not in hm_workflow.WAVE_JOBS)' "$AP_HERE/lib" "$kind" 2>/dev/null; then
+        # GUARD_EDIT_OK: feature 385 T58 (the round arbiter's fix on hour:385-approach-checklist@21) - A HEADLESS SESSION HAS NO
+        # WORKFLOW TOOL: a queued page session (`L7R_DISPATCHER`, page_session_runner.headless_env) was pointed at Workflow(...) it
+        # lacks, refused twice, and relaunched by hand; it is told its one route
+        if [ -n "${L7R_DISPATCHER:-}" ]; then
+          printf 'This session has no Workflow tool (a headless page session): put WAVE_OK: <reason> in each prompt of the batch.\n'
+        elif python3 -c 'import sys; sys.path.insert(0, sys.argv[1]); import hm_workflow; sys.exit(sys.argv[2] not in hm_workflow.WAVE_JOBS)' "$AP_HERE/lib" "$kind" 2>/dev/null; then
           printf '  Workflow({name: "check-wave", args: {agentType: "%s", units: [{label: "<unit>", prompt: "<its prompt>"}, ...]}})\n' "$kind"
           printf 'Two or three of a type stay plain Agent calls. If this batch must stay hand-launched: WAVE_OK: <reason> in the prompt.\n'
         else

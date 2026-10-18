@@ -1996,6 +1996,31 @@ that is a bare string constant (Python evaluates and discards it - no token of i
 empty dumps as an empty list. The semantic-id cache's file is renamed (`semantic-id-cache-2.json`), since its entries were
 computed by the old rule. Every engine key moves once with the rule, so each session's next gate re-runs once.
 
+## T58 - a headless session's wave route (the arbiter's fix on hour:385-approach-checklist@21)
+
+### T58 Approach (checklist part A)
+
+1. **The goal, in the world.** A headless page session refused for a 4th same-kind launch is told the route it can take.
+2. **The constraints.** The arbiter's fix: "The agent-prefix wave guard (a 4th same-kind Agent launch within seconds) should name
+   WAVE_OK as the route in its refusal when the session has no Workflow tool, instead of pointing a headless session at a tool it
+   lacks"; the interactive session's route unchanged (the check-wave workflow first); tooling only; a test red without it.
+3. **Where each comes from.** The fix is the arbiter's (G); the wave guard is 383 amendment 7's (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-18: at 19:48 T10's check session was refused twice and pointed at
+   `Workflow(...)`, a tool `claude -p` sessions lack, and relaunched two modal-depiction checks at 19:51. A queued session carries
+   `L7R_DISPATCHER` (`page_session_runner.headless_env`); an interactive one does not.
+5. **The order.** The branch in the guard's refusal, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: with `L7R_DISPATCHER` set, the refusal names `WAVE_OK: <reason>` as the route and no Workflow call;
+   without it, as before; `tests/hooks/test-agent-prefix-hooks.sh` red without it.
+
+### T58 Decisions
+
+**D77 - the headless route named.** In `agent-prefix-hooks.sh`'s wave refusal, a session carrying `L7R_DISPATCHER` (a queued, headless
+one) is told: "this session has no Workflow tool (a headless page session): put WAVE_OK: <reason> in each prompt of the batch" -
+and not shown the check-wave call. An interactive session's message is unchanged.
+
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).

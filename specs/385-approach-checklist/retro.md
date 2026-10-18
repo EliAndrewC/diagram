@@ -567,3 +567,9 @@ About 30 min. T09 changed only comments and constants' claim docstrings and stil
 the semantic id stripped a docstring only where it is a body's first statement - and every claim on a constant is a bare string
 after its assignment. Every bare string statement is stripped now (the cache renamed with the rule). **The habit it changes:** a
 rule about "docstrings" is tested on the docstrings this project actually writes - the claims - not on Python's definition.
+
+## T58 - the retro row
+
+About 15 min. T10's headless check session was refused twice for a 4th same-kind launch and pointed at a Workflow call its
+`claude -p` session does not have. A session carrying `L7R_DISPATCHER` is now told `WAVE_OK` is its route. **The habit it changes:**
+a refusal names a route the refused session can take - test it from a headless session, not only from this one.
