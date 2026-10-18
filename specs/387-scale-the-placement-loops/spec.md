@@ -22,15 +22,16 @@ size, not a map anyone draws; it matters because the village, town and city tier
 
 ## The three bullets, read literally
 
-1. **"Re-checking everything after each addition"** names three sites: **the way tree** (each candidate household way is
-   admitted by judging the whole tree with it), **the web's settling passes** (each pass re-checks the whole lane network),
-   **the cell merges** (each paddy-cell merge re-runs every ring rule). The GM: *"I don't think we need to re-check everything
-   after each addition"* - at each site an addition is judged on what it can change, not by re-checking everything.
-2. **"Rebuilding things that don't change"** names two: **the house layout geometry** (a household's bundle geometry, rebuilt
-   for every reach check) and **the sun keep-outs** (rebuilt for every grove). Each is built once for the inputs it depends on
-   and reused while those inputs stand.
-3. **"One straight scan with no index"** names one: **the bamboo strip check** - a candidate strip is tested against the placed
-   boxes, houses, fixtures and lanes NEAR it, found by a spatial index built once, not by walking all of them.
+This section reads the GM's words; what the code was measured to do at each site is the premises table below, and where a
+premise did not hold the requirement is restated on the measurement (FR-002, FR-003) or withdrawn (FR-004).
+
+1. **"Re-checking everything after each addition"** names three sites: **the way tree**, **the web's settling passes** and
+   **the cell merges**. The GM: *"I don't think we need to re-check everything after each addition"* - at each site the work
+   done for one addition does not re-do what that addition cannot change.
+2. **"Rebuilding things that don't change"** names two: **the house layout geometry** and **the sun keep-outs** - built once
+   for the inputs they depend on, and reused while those inputs stand.
+3. **"One straight scan with no index"** names one: **the bamboo strip check** - a candidate strip is tested against what
+   stands NEAR it, found by a spatial index, not by walking everything.
 
 The session's own estimate in the diagnosis ("should cut the 40-household time by well over half") is an estimate, not a bar
 the GM set; this feature measures and reports what each change bought (SC-002).
@@ -63,7 +64,7 @@ where a premise did not hold, the requirement below is the form of that goal the
 | the way tree | each candidate way re-judges the whole tree | `ways/tree.admits` rebuilds every lane's drawn form (`lanes_of`) and asks the whole tree for needles, fronting ends, doubled bands and walked shadows - pairs and faces no candidate touches - for each of 88 candidates | YES |
 | the web's settling | 36 passes, each re-checking the whole web | 2-3 rounds of the 18 settle steps at every size (36 step calls = 2 x 18); the growth is inside steps - the field way's candidates measured from every network point, the knots judged | NO as stated; the re-done work is inside two steps |
 | the cell merges | each merge re-runs every cell's ring rules | each merge judges only the union it would make (`Fabric.merge` -> `verdict`); its NEIGHBOR SEARCH grows - an index built once and never updated, every stale entry's shared bund measured before duplicates drop (3.3 measurements a merge at 10 households, 15.7 at 40) | NO as stated; the re-done work is the neighbor search |
-| the house layout geometry | rebuilt per call when it could be built once | its rolls (yard size, garden jitter, bed split, the fixtures laid round it) are keyed on the seat asked (feature 276 D10): 771 reach checks at 771 seats; the layout is already cached per seat (2,049 of 4,346 asks served) | NO - each seat's layout is a different layout |
+| the house layout geometry | rebuilt per call when it could be built once | its rolls (yard size, garden jitter, bed split, the fixtures laid round it) are keyed on the seat asked: 771 reach checks at 771 seats; the layout is already cached per seat (2,049 of 4,346 asks served); keying it per household was tried and withdrawn (297 R9) | NO - each seat's layout is a different layout |
 | the sun keep-outs | rebuilt per grove | the sun boxes are remembered per plot set, but each of 1,816 asks rebuilds the plot list and its key from every yard and bed (159,808 `plot_box` calls) and filters every box | YES - the key, not the boxes |
 | the bamboo strip check | a straight scan, no index | each of 1,102 candidates walks every placed box, house, fixture, lane segment and crown | YES |
 
@@ -74,18 +75,23 @@ where a premise did not hold, the requirement below is the form of that goal the
 - **FR-002 The web's settling.** The settle runs 2-3 rounds at every size (seed 4: 3 at 10 households, 2 at 40), so the
   rounds are not what grows; the growth is INSIDE steps (spec-fidelity round 1, measured 2026-10-18): the field way's candidate
   runs (`field_runs`: every sampled point of the network measured to the worked ground, 0.32 -> 1.21 s for its one call at 10 ->
-  40 households) and the knots' judgments (none at 10 households, 22 calls and 0.83 s at 40). Each such step finds its candidates
-  without measuring every point or re-judging every knot for each one: the work it does per candidate kept does not grow with the
+  40 households) and the knots' judgments (none at 10 households, 22 trials and 0.83 s at 40, each trial asking the whole web's counts again).
+  Each such step finds its candidates without measuring every point, and judges a knot's trial gather without re-asking the
+  whole web for each one: the work it does per candidate kept does not grow with the
   network. Not the withdrawn R12 lever (feature 297: rounds that ran only the steps the law named broken, slower and withdrawn) -
   no round is narrowed and no law is asked first.
 - **FR-003 The cell merges.** Each merge judges only the union it would make; what grows is its neighbor search (spec-fidelity
   round 1, measured 2026-10-18: 3.3 shared-bund measurements per merge at 10 households, 15.7 at 40; 2.06 s of the merges'
   3.80 s), which queries an index of the cells built before any merge and measures the shared bund of every stale entry before
-  duplicates are dropped. A merge measures each live neighbor once, from an index that stays current as cells absorb each other,
-  so the bund measurements per merge do not grow with the household count.
-- **FR-004 The house layout geometry - withdrawn as measured.** The layout is a function of the seat it is asked at (feature 276
-  D10) and is already built once per seat; making it once per household would change the rolls 276 decided, not the cost of
-  re-building one thing. The measurement stands in the premises table and the report; nothing is changed here.
+  duplicates are dropped. A merge measures each live neighbor once, so the bund measurements per merge do not grow with the
+  household count. The index is NOT made current: a cell a staircase split makes is one it never held, so indexing it would find
+  merges the current code cannot and move maps against FR-007 - recorded as a defect found and reported (SC-005).
+- **FR-004 The house layout geometry - withdrawn as measured.** The layout is already built once for the inputs it depends on:
+  its template is cached on a key that includes the seat it is asked at (`bundle._bundle_template`), and the rest of
+  `_bundle_geom` (the turn, the turned boxes, the persimmon) depends on that position - so each reach check is a different
+  layout. Keying it on the household instead was TRIED AND WITHDRAWN (feature 297, plan C, research R9, recorded at
+  `place.py`'s `_place_bundle`): the yard's size rolled once per household lost the per-seat rolls that fit a large-yard
+  household into a tight spot, and seed 3 seated 9 of 10 households and had its site refused. Nothing is changed here.
 - **FR-005 The sun keep-outs.** The plots' sun boxes and their key are built once for each state of the yards, beds and placed
   homesteads they read (invalidated by the registries' own versions, never by a count or identity guess), and a grove's ask is
   answered from a spatial index of them, not a filter over all.
@@ -115,13 +121,16 @@ where a premise did not hold, the requirement below is the form of that goal the
 
 - **SC-001** (FR-001, FR-002, FR-003) The work done per addition is COUNTED at each re-check site at 10, 20 and 40 households,
   seed 4, before and after - the tree lanes judged per candidate way, the network points measured per field-way candidate kept
-  and the knots judged per settle, the shared-bund measurements per merge - and after the change none grows with the household
+  and the web's ends re-asked per knot trial, the shared-bund measurements per merge - and after the change none grows with the household
   count; the counting command and the counts are recorded in `measurements.json`.
 - **SC-002** (FR-001 - FR-006, FR-009) Each site's time (the five kept, FR-004 withdrawn) at 40 households, seed 4, is reported before and after; the
   end bookend's 40-household total is reported against the start's, with both loads.
 - **SC-003** (FR-007, FR-008) `make cohort` and the landing cohort pass with no seed newly failing against main; the pool
   hamlets regenerate and pass their gate; each equivalence test is green.
 - **SC-004** (FR-010) `dev/performance.md` carries the three rules with their numbers.
+- **SC-005** (FR-002, FR-003, FR-004) The landing report to the GM names FR-004 as withdrawn, with its measurement and 297 R9,
+  says that FR-002's and FR-003's premises were restated from the diagnosis the GM approved, each with what was measured, and names FR-003's
+  split-part defect.
 
 ## Assumptions
 
@@ -137,3 +146,9 @@ where a premise did not hold, the requirement below is the form of that goal the
   shape passes at 1 - restated as the work per addition, counted. (4) "the diagnosis did not name" -> "the three bullets did
   not name". Its note on FR-001 vs FR-007: FR-007 now says it governs. The session's own premise checks (the premises table,
   FR-004 withdrawn as measured, FR-005 restated on the key) were made in the same pass.
+- **spec-fidelity round 2 (2026-10-18): CHANGES REQUIRED, 3 items.** (A) SC-001's knots count was per settle, which grows with
+  the knots - now the ends re-asked per knot trial, FR-002's own bar. (B) "The three bullets, read literally" still restated the
+  premises the table marks NO - it now reads the GM's words and points at the table. (C) FR-004's withdrawal ruled faithful on
+  two conditions: its reason cites 297 R9 (keying per household tried and withdrawn, seed 3 lost a household), not 276 D10; and
+  the report to the GM is required - SC-005. With them, FR-003's "an index that stays current" was taken out (the plan keeps the
+  index as it was, D3) and the split-part defect is reported under SC-005.
