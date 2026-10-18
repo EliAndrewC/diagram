@@ -18,13 +18,13 @@ sheet, and never edit the GM's canon (`l7r.md`, `budgets.md`), which you quote o
 it, read it with `pdftotext`, `make archive URL=<public url>`, and cite the public URL. The local copies the passes made
 are listed in each file.
 
-## Your four questions
+## Your items (four new questions)
 
 Reserve each with `make reserve KIND=question KEY=<heading id>`. Tag each `subject=money` first, with no drawing page. The
 first one written deletes the `"awaiting"` line of the `money` section in `research/contents.json`, in the same commit
 (the build refuses it once a question is homed).
 
-1. **"What did farmland sell for, against what it yielded?"** (`setting=countryside; level=counts-and-measurements`)
+- Q1 **"What did farmland sell for, against what it yielded?"** (`setting=countryside; level=counts-and-measurements`)
    - China: the Minnan pledged-rent returns (Cao Shuji: 6.5-37% a year, mean 12.6% over 36 cases; dian about two-thirds
      of the outright price; the 1792 outright sale at 7%). Pomeranz's 60-80%, and village credit at 12%, often 36%. The
      Songjiang price-and-rent pairs from 閱世編, with the pass's computed multiples labeled as the project's arithmetic
@@ -35,7 +35,7 @@ first one written deletes the `"awaiting"` line of the `money` section in `resea
      attested only through the tax form; near-city against remote is SILENT.
    - Set the canon's ~50-koku, ~20x farm and its 15-20% city and ~25% countryside interest beside these, as the asker's
      comparison.
-2. **"What did an unskilled laborer earn?"** (`setting=countryside,city; level=counts-and-measurements`)
+- Q2 **"What did an unskilled laborer earn?"** (`setting=countryside,city; level=counts-and-measurements`)
    - Kyoto ~0.9 monme, ~1.9-2 kg of rice a day (Bassino & Ma; cite the econhistdbm.com copy); Edo the same from 1818.
    - City against village (Saito 2003): higher in the city early, equal from the 1750s-60s (1.0 against 0.92 monme in
      1802-4).
@@ -44,7 +44,7 @@ first one written deletes the `"awaiting"` line of the `money` section in `resea
    - The 250 working days is a modern convention (both papers say so), not a premodern count.
    - A verdict on each 2017 working figure: 1.33 zeni a day, 3.32 koku a year (~2 kg a day, 250 days), farm labor 3.5
      koku a year.
-3. **"How much rice was a koku?"** (`setting=countryside; level=foundational`)
+- Q3 **"How much rice was a koku?"** (`setting=countryside; level=foundational`)
    - The new Kyōmasu (1669; in use from the 1620s) at 180.39 L, the earlier one ~3.6% smaller, and domain measures.
    - Brown rice ~150 kg (the 1950 government basis of 400 monme a shō, ~0.83 kg/L; MAFF 1949 146.3 kg; MAFF 2023
      827 g/L): modern measurements applied by analogy, and say so.
@@ -57,7 +57,7 @@ first one written deletes the `"awaiting"` line of the `money` section in `resea
      "feeds a man for a year"; the 2017 spreadsheet's 151.5 kg; and the asker's ~120 kg (40 gallons at 0.8 kg/L).
    - The pass reads ~136 and ~187 as brown-rice equivalents. Say what the sources support, never which the canon
      "means".
-4. **"What did a Kyoto laborer's year of goods cost?"** (`setting=city; level=counts-and-measurements`)
+- Q4 **"What did a Kyoto laborer's year of goods cost?"** (`setting=city; level=counts-and-measurements`)
    - Bassino & Ma's Table 1 (baskets A and B) and Table 3 (the Kyoto 1745-54 prices and the basket's total of 326 g),
      verbatim.
    - The source note on which prices were recorded (rice and lamp oil only) and which were derived.
