@@ -11,7 +11,7 @@ PASS=0; FAIL=0
 T=$(mktemp -d)
 trap 'rm -rf "$T"' EXIT
 export GIT_AUTHOR_NAME=t GIT_AUTHOR_EMAIL=t@t GIT_COMMITTER_NAME=t GIT_COMMITTER_EMAIL=t@t
-export LAND_TOOLING_CHECKS=true LAND_TOOLING_PUSH="git push -q origin HEAD:main"
+export LAND_TOOLING_CHECKS=true LAND_TOOLING_PUSH="git push -q origin HEAD:main" LAND_TOOLING_LEDGER=true
 
 ok() { if eval "$2"; then echo "  ok      $1"; PASS=$((PASS+1)); else echo "  FAIL    $1"; FAIL=$((FAIL+1)); fi; }
 # (an assertion pipes into `grep PATTERN >/dev/null`, never `grep -q`: under `pipefail` a `grep -q` that exits on its first match
@@ -67,6 +67,15 @@ ok "a lint failure lands nothing and names ruff format" '[ "$rc" -ne 0 ] && grep
 LAND_TOOLING_LINT=true land scripts/c.py; rc=$?
 ok "a clean file lands" '[ "$rc" -eq 0 ] && [ "$(on_main scripts/c.py)" = "x = 1" ]'
 ok "the lint step is timed in the log" 'grep "^land-tooling: step lint [0-9.]* s$" "$C/.git/land-tooling.log" >/dev/null'
+setup
+
+echo "1d. owed ledger rows are refused before any check runs (385 T53)"
+setup
+LAND_TOOLING_LEDGER="echo owed-row-here >&2; false" LAND_TOOLING_CHECKS="touch $T/checks-ran" land scripts/a.sh; rc=$?
+ok "an owed pass refuses at once, naming the rows and the command" '[ "$rc" -ne 0 ] && grep "owed-row-here" "$T/out" >/dev/null && grep "make ledger-owed WRITE" "$T/out" >/dev/null'
+ok "...before any check ran, and nothing landed" '[ ! -e "$T/checks-ran" ] && [ "$(on_main scripts/a.sh | tail -1)" = "two" ]'
+LEDGER_ROWS_OK="a fixture's waiver" LAND_TOOLING_LEDGER="false" land scripts/a.sh; rc=$?
+ok "LEDGER_ROWS_OK waives it, as it waives the push's" '[ "$rc" -eq 0 ]'
 setup
 
 echo "2. the tooling lands alone, on top of main, and the clone merges main cleanly (SC-003)"

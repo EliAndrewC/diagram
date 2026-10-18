@@ -13,7 +13,7 @@
 # own history is untouched; its next merge of main meets identical hunks. FILES is required: a file lands whole, and
 # mid-feature a doc or Makefile edit may describe work that has not landed.
 #
-# Test seams (tests/hooks/test-land-tooling.sh): LAND_TOOLING_CHECKS, LAND_TOOLING_LINT, LAND_TOOLING_TEST (how one landed test file runs) and
+# Test seams (tests/hooks/test-land-tooling.sh): LAND_TOOLING_CHECKS, LAND_TOOLING_LEDGER, LAND_TOOLING_LINT, LAND_TOOLING_TEST (how one landed test file runs) and
 # LAND_TOOLING_PUSH replace the checks, the landed tests' runner and the push.
 set -uo pipefail
 
@@ -73,6 +73,18 @@ for f in "$@"; do
   tooling "$f" || die "$f is not tooling (scripts/, tests/, .claude/agents/, .claude/skills/, .claude/workflows/, a CLAUDE.md, the Makefile, .claude/settings.json, docs/make-targets.html) - it lands with its feature"
 done
 git -C "$ROOT" diff --quiet HEAD -- "$@" || die "uncommitted changes in FILES - commit them first; only committed work lands"
+# GUARD_EDIT_OK: feature 385 T53 (the round arbiter's fix on hour:385-approach-checklist@19) - OWED LEDGER ROWS ARE REFUSED FIRST: the
+# push refused them only after about 35 s of checks, three times in one hour. Asked of the ledger as committed - what lands - and
+# waived by LEDGER_ROWS_OK, as the push's own check is
+if [ -z "${LEDGER_ROWS_OK:-}" ]; then
+  committed=$(mktemp)
+  git -C "$ROOT" show HEAD:dev/review-ledger.md > "$committed" 2>/dev/null || :
+  if ! ( cd "$ROOT" && eval "${LAND_TOOLING_LEDGER:-python3 scripts/reviews/ledger_owed.py --refuse --ledger}" "$committed" ) >&2; then
+    rm -f "$committed"
+    die "check passes owe ledger rows (above) - write them (make ledger-owed WRITE=\"<where you recorded what you did>\"), commit, and land again"
+  fi
+  rm -f "$committed"
+fi
 patch=$(mktemp)
 git -C "$ROOT" diff --binary "$base" HEAD -- "$@" > "$patch"
 [ -s "$patch" ] || { rm -f "$patch"; die "FILES carry no change since main - nothing to land"; }
