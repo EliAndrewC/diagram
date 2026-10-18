@@ -15688,15 +15688,14 @@
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#ties among later wells": {
   "body": "a75224726c337c79",
-  "claim": "ties among later wells - UNRESEARCHED: the crop's overreach, then the belt, then the want_near-th nearest house",
-  "code": "973372284ad2a0e7",
+  "claim": "ties among later wells - UNRESEARCHED: the belt, then the crop's overreach, then the exact worst walk, then the want_near-th nearest house",
+  "code": "340f1544bbf4b9f4",
   "core": "afa310e679762310",
   "date": "2026-10-18",
-  "note": "the claim's order is wrong: _key ranks within a bucket by _in_belt, then _e (overreach), then _w (exact worst walk), then _neighborhood; it should read \"the belt, then the crop's overreach, then the exact worst walk, then the want_near-th nearest house\"",
+  "note": "the tie order behind the 66 px bucket (belt, then crop overreach, then exact worst walk, then the want_near-th nearest house) matches the key tuple; neither page says how tied seats are ranked",
   "pages": {},
   "research": "",
-  "rests": [],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#wells among the houses": {
   "body": "a75224726c337c79",
