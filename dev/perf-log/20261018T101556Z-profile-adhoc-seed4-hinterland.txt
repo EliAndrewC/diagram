@@ -1,0 +1,36 @@
+perf-profile seed 4 stage hinterland: 6.3s under cProfile (the stages before it took 11.4s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261018T101556Z-seed4-hinterland.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         6178445 function calls (6176126 primitive calls) in 6.256 seconds
+
+   Ordered by: cumulative time
+   List reduced from 933 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.003    0.003    6.292    6.292 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/hinterland/stages.py:78(stage_hinterland)
+        1    0.019    0.019    1.629    1.629 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/hinterland/parcels.py:323(open_ground_patches)
+        1    0.008    0.008    1.505    1.505 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/hinterland/stages.py:272(plant_the_belt)
+        1    0.006    0.006    1.490    1.490 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/homestead_parts/stands.py:203(village_grove)
+     6514    0.051    0.000    1.267    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/hinterland/parcels.py:488(_ok)
+        1    0.003    0.003    1.265    1.265 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/bamboo.py:332(seat_strips)
+        1    0.003    0.003    1.255    1.255 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/bamboo.py:72(household_bamboo)
+      604    0.005    0.000    1.222    0.002 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/bamboo.py:272(strip_refused)
+        2    0.019    0.010    1.195    0.597 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/land/cover.py:728(hinterland)
+28863/28862    0.130    0.000    1.102    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:73(wrapped)
+     5376    0.015    0.000    1.079    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/hinterland/parcels.py:909(open_ground_region)
+      604    0.277    0.000    0.995    0.002 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/bamboo.py:439(_strip_blocked)
+        6    0.038    0.006    0.915    0.153 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/land/cover.py:380(commons)
+12892/11349    0.024    0.000    0.850    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:171(wrapper)
+        1    0.106    0.106    0.791    0.791 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/homestead_parts/grove_fill.py:349(close_belt_gaps)
+       10    0.036    0.004    0.726    0.073 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/_geom/region.py:57(fill_many)
+        7    0.003    0.000    0.427    0.061 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/_geom/indexes.py:604(shape)
+        7    0.013    0.002    0.424    0.061 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/_geom/indexes.py:610(_trees_for)
+     2361    0.026    0.000    0.378    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/_geom/region.py:96(poly)
+        2    0.002    0.001    0.376    0.188 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/hinterland/belt.py:201(belt_polygon)
+   136347    0.069    0.000    0.368    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/bamboo.py:499(<genexpr>)
+   138531    0.112    0.000    0.359    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/_geom/primitives.py:54(seg_dist)
+     2616    0.031    0.000    0.358    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/_geom/region.py:71(_stroke)
+       30    0.335    0.011    0.336    0.011 /home/agent/.local/lib/python3.14/site-packages/shapely/set_operations.py:463(union_all)
+    15887    0.021    0.000    0.332    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/homestead_parts/grove_blocks.py:187(static_clear)
+
+
