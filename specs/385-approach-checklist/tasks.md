@@ -137,6 +137,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T50 A part B stamped in the future is refused (the arbiter's fix on hour:385-approach-checklist@18, plan D67)
       research: rendering
+- [ ] T51 The plan-gate tests write their bundles under their own tmp_path (a flaky red gate found by T08's gate, plan D68)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

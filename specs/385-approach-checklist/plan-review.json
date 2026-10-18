@@ -4469,6 +4469,33 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T51": {
+   "section_sha256": "07a6d4163bad0a1d96541ddce2d8629d2695609979c8f3027301f76147c358f8",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D68",
+     "summary": "An autouse fixture in tests/tooling/test_plan_gate.py points plan_bundle.OUT at each test's tmp_path, so no two tests share a bundle path.",
+     "class": "within",
+     "why": "A race in the tooling suite found by T08's gate (measured 2026-10-18: FileNotFoundError on /tmp/l7r-check/plan-375-x-T05, passed alone). Fixing it is an obvious tooling improvement under amendment 6 ('implement any obvious performance / tooling / process improvements along the way'); it changes no behaviour the request asked for."
+    },
+    {
+     "id": "T51-constraint-2",
+     "summary": "Bundles a session dispatches stay at /tmp/l7r-check; only the tests move theirs.",
+     "class": "within",
+     "why": "Keeps the dispatch path the plan reviews rely on unchanged; it narrows nothing the request or spec asks for."
+    },
+    {
+     "id": "T51-lint-bundled",
+     "summary": "The formatter's import reorder of T49's tests/tooling/test_hm_arbiter.py lands inside T51: Approach items 1, 3, 5 and 9 name it as a second defect with its own fix and its own ordered step, and 'done' reads 'One goal:' followed by two conditions joined by 'and'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "An exception to FR-015 (amendment 4, GM-approved: 'a task's done names one goal, and a second goal becomes its own task'), which the block does not cite. On the block's own text this is a second goal under a one-goal label: item 1 states two goals (same answer across workers; what lands passes lint), item 3 says 'both defects', constraint 2 'a fix for each defect', item 5 orders 'the formatting' as a step. FR-015's remedy is available, not impossible: file the reorder as its own task landed before T51. That it is a one-line formatter change is cost, not fidelity, and 'the GM would not mind this one' is completing the GM's thought. Remedy: either make it its own task, or, if the reorder is only the gate's formatter output that rides along on any landing, say so in the block and drop it from item 1's goal and from 'done' so T51 names one goal."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

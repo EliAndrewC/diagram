@@ -1669,6 +1669,29 @@ reds on one commit say so ("the same commit; uncommitted edits between them are 
 rule does, with the current UTC minute; a later stamp is refused with "stamped <stamp>, after the clock (<now>) - stamp a part B
 with the time it is written". `make plan-delta` asks the same reader, so both refuse it.
 
+## T51 - the plan-gate tests write their own bundles (found by T08's gate)
+
+### T51 Approach (checklist part A)
+
+1. **The goal, in the world.** The tooling suite gives the same answer however its tests are spread across workers.
+2. **The constraints.** The bundles a session dispatches stay where they are (`/tmp/l7r-check`); only the tests move theirs;
+   tooling only.
+3. **Where each comes from.** The defect is ours (O): two tests writing one shared path.
+4. **Do they describe the world here?** Yes - measured on T08's gate (2026-10-18): `test_a_check_waits_for_its_task_s_decisions`
+   failed with `FileNotFoundError: /tmp/l7r-check/plan-375-x-T05`, and passed alone; `decide_prompt` writes that path, as does
+   `test_the_decide_commands` in the same module, so two workers raced on it. (The same gate's formatter sorted T49's test imports;
+   that is T49's own defect and re-lands with T49 - round 1's ruling.)
+5. **The order.** The fixture, then the module run.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: `tests/tooling/test_plan_gate.py` writes no bundle under `/tmp/l7r-check`.
+
+### T51 Decisions
+
+**D68 - each test's own bundle directory.** An autouse fixture in `tests/tooling/test_plan_gate.py` points `plan_bundle.OUT` at the
+test's `tmp_path`, so no two tests share a bundle path.
+
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).
