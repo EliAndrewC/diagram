@@ -212,6 +212,36 @@ def test_the_bundle_carries_the_hour(clone: Path, tmp_path: Path) -> None:
     assert "T01 a task" in (out / "task.md").read_text()
 
 
+def test_the_bundle_reads_every_session_of_the_hour_and_names_one_it_left_out(clone: Path, tmp_path: Path) -> None:
+    """The round arbiter's tooling fix on hour:385-approach-checklist@16: three sessions worked the feature that hour and the
+    busiest - a page session - was the only one read, so the working session's words were missing. Every session is read now,
+    each entry labeled; one with no transcript is named, and a cut says so."""
+    t1 = T0 + 3600
+
+    def said(text: str, at: float) -> dict:
+        return {"type": "assistant", "timestamp": _iso(at), "message": {"content": [{"type": "text", "text": text}]}}
+
+    projects = tmp_path / "projects"
+    (projects / "p").mkdir(parents=True)
+    (projects / "p" / "busy0000-page.jsonl").write_text(json.dumps(said("page session checks 0081", t1 + 30)) + "\n")
+    (projects / "p" / "work0000-main.jsonl").write_text(json.dumps(said("T07 asks the arbiter", t1 + 60)) + "\n")
+    events = [{"t": _iso(t1 + i), "ev": "", "sid": "busy0000-page"} for i in range(5)]
+    events += [{"t": _iso(t1 + 50 + i), "ev": "", "sid": sid} for i, sid in enumerate(("work0000-main", "work0000-main", "gone0000-lost"))]
+    (clone / ".git" / "l7r-events" / "999-test.jsonl").write_text("\n".join(json.dumps(e) for e in events) + "\n")
+    out = tmp_path / "bundle"
+    sb.build("hour:999-test@1", clone, out, t1, t1 + 3600, None, projects=projects)
+    words = (out / "words.md").read_text()
+    assert "page session checks 0081" in words and "T07 asks the arbiter" in words, "every session's words, not the busiest's alone"
+    assert words.index("page session") < words.index("T07 asks"), "merged in time order"
+    assert "busy0000] SAID" in words and "work0000] SAID" in words, "each entry labeled by its session"
+    assert "left out (no transcript found): gone0000" in words
+    assert "summed over 2 sessions" in (out / "time.md").read_text()
+    long = [said("x" * 500 + f" {i}", t1 + 100 + i) for i in range(100)]
+    (projects / "p" / "work0000-main.jsonl").write_text("\n".join(json.dumps(r) for r in long) + "\n")
+    sb.build("hour:999-test@1", clone, out, t1, t1 + 3600, None, projects=projects)
+    assert "cut to the cap" in (out / "words.md").read_text().split("\n\n")[1], "a cut is named at the top"
+
+
 def test_over_the_cap_commands_shrink_before_any_reply_is_dropped() -> None:
     """The round arbiter's tooling fix on hour:383@1: long heredoc commands filled the cap and the hour's first replies were
     cut. Now each command keeps its first line and every reply stays, while they fit."""
@@ -272,5 +302,5 @@ def test_the_hour_is_decided_once_per_message_and_its_refusals_reach_the_step_ba
     log.mkdir()
     (log / "20261018T031500Z-a.json").write_text(json.dumps({"event": "refused", "guard": "pair", "rule": "step-back-due", "detail": "Agent quote-check", "sid": "s1"}))
     (log / "20261018T031600Z-b.json").write_text(json.dumps({"event": "escaped", "guard": "pair", "sid": "s1"}))
-    got = sb.refusals("s1", cp.time.mktime((2026, 10, 18, 3, 0, 0, 0, 0, 0)) - cp.time.timezone, 2e9, log)
+    got = sb.refusals(["s1"], cp.time.mktime((2026, 10, 18, 3, 0, 0, 0, 0, 0)) - cp.time.timezone, 2e9, log)
     assert got == ["- 03:15 pair: step-back-due - Agent quote-check"]
