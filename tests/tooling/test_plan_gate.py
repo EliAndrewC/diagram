@@ -328,6 +328,7 @@ def test_the_decide_commands(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyP
     root = tmp_path / "clone"
     _git_init(root)
     d = feature(root, plan=PLAN_TASKS, name="375-x")
+    (d / "tasks.md").write_text("- [ ] T05 the bath\n- [ ] T06 the wells\n")  # T06 open, so its mark is honored (385 T54, D71)
     monkeypatch.chdir(root)
     assert gate.main(["decide", "375", "T05"]) == 0 and "MODE 4" in capsys.readouterr().out
     assert gate.main(["section-sha", "375", "T05"]) == 0
@@ -348,3 +349,20 @@ def test_the_decide_commands(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyP
     (root / ".specify" / "feature.json").write_text('{"feature_directory": "specs/375-x"}')
     assert gate.main(["decided", str(root)]) == 1 and "T06: its plan section" in capsys.readouterr().out
     assert d.is_dir()
+
+
+def test_a_mark_naming_a_ticked_task_falls_back_to_the_first_open_task(tmp_path: pathlib.Path) -> None:
+    """Feature 385 T54 (D71): `make task-start`'s mark wins while its task is open; once its task is ticked, the active task is the
+    first open one, so a trigger never owes a ticked task its part B."""
+    root = tmp_path / "clone"
+    _git_init(root)
+    d = feature(root, plan=PLAN_TASKS, name="375-x")
+    (d / "tasks.md").write_text("- [x] T04 done\n- [ ] T05 the bath\n- [ ] T07 docs\n")
+    (root / ".specify").mkdir()
+    (root / ".specify" / "feature.json").write_text('{"feature_directory": "specs/375-x"}')
+    (root / ".git" / "active-task").write_text(json.dumps({"feature": "375-x", "task": "T07"}))
+    assert gate.active_task(root) == (d, "T07"), "an open marked task wins"
+    (root / ".git" / "active-task").write_text(json.dumps({"feature": "375-x", "task": "T04"}))
+    assert gate.active_task(root) == (d, "T05"), "a ticked marked task falls back to the first open one"
+    (root / ".git" / "active-task").write_text(json.dumps({"feature": "375-x", "task": "T99"}))
+    assert gate.active_task(root) == (d, "T05"), "a task the list does not hold, too"

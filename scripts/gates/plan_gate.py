@@ -411,9 +411,12 @@ def active_task(root: pathlib.Path) -> tuple[pathlib.Path | None, str]:
         mark = json.loads((pathlib.Path(common) / "active-task").read_text(encoding="utf-8")) if common else {}
     except (OSError, ValueError):
         mark = {}
-    if mark.get("feature") == d.name and mark.get("task"):
+    tasks = (d / "tasks.md").read_text(encoding="utf-8")
+    # A MARK NAMING A TICKED TASK IS STALE (feature 385 T54): the hour-19 ruling owed ticked T52 a part B, and the next cohort owed
+    # ticked T53 one - the mark outlived the task's work. Honored only while its box is open, else the first open task, as no mark.
+    if mark.get("feature") == d.name and mark.get("task") and re.search(rf"^- \[ \] {re.escape(str(mark['task']))}\b", tasks, re.M):
         return d, str(mark["task"])
-    m = re.search(r"^- \[ \] (T\d+[a-z]?)\b", (d / "tasks.md").read_text(encoding="utf-8"), re.M)
+    m = re.search(r"^- \[ \] (T\d+[a-z]?)\b", tasks, re.M)
     return d, (m.group(1) if m else "")
 
 
