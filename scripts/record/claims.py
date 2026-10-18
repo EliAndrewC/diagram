@@ -60,6 +60,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 sys.dont_write_bytecode = True  # the push runs this in fixture trees whose `git status` must stay clean
 import claims_carry  # noqa: E402
+import claims_context  # noqa: E402
 import record_cache as rc  # noqa: E402
 import record_units as ru  # noqa: E402
 from claims_triage import (  # noqa: E402,F401 - the triage half, split out (feature 375 T09); re-exported
@@ -367,28 +368,14 @@ def context_source(root: Path, ref: str) -> str:
     return ast.get_source_segment(text, node) or ""
 
 
-#: the most callees a unit carries into its bundle as context (`callees`)
+#: the most of its own module's functions a unit carries into its bundle as context (`callees`)
 CALLEES_MAX = 6
 
 
 def callees(root: Path, unit: Any, source: str) -> list[str]:
-    """`path::name` of each module-level function of the unit's own module that its code calls, in order of first call, at most
-    `CALLEES_MAX` (the round arbiter's tooling fix on ask:t03-claims-at-landing: `_clear_link` was judged CANNOT-TELL because its
-    bundle lacked `link_survives`, the function its answer turns on). Names the module does not define are left out."""
-    try:
-        tree = ast.parse(textwrap.dedent(source))
-        module = ast.parse((root / unit.path).read_text(encoding="utf-8"))
-    except OSError, SyntaxError, ValueError:
-        return []
-    defined = {n.name for n in module.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))}
-    own = unit.qualname.split(".")[-1]
-    out: list[str] = []
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id in defined and node.func.id != own:
-            ref = f"{unit.path}::{node.func.id}"
-            if ref not in out:
-                out.append(ref)
-    return out[:CALLEES_MAX]
+    """`path::name` of each of its own module's functions the unit calls (at most `CALLEES_MAX`; the arbiter's fix on
+    ask:t03-claims-at-landing) and each module constant it reads, imported ones too (385 T25, `claims_context`)."""
+    return claims_context.callees(root, unit, source, CALLEES_MAX)
 
 
 def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path, context: Sequence[str] = (), pages: Sequence[str] = ()) -> Path:
@@ -401,6 +388,7 @@ def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path, cont
     for k in keys:
         by_uid.setdefault(cur[k].uid, []).append(cur[k])
     qdir = root / QUESTIONS
+    index = load_index(root / INDEX)
     cited: list[str] = []
     parts = [
         "# Bundle for impl-drift (feature 316)\n",
@@ -423,8 +411,10 @@ def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path, cont
             parts.append("- constants it reads: " + "; ".join(f"`{n}`" for n in unit.names))
         src = _source(root, unit)
         parts.append(f"\n```{lang}\n{src}\n```\n")
-        if unit.kind != "section":  # ...and the module's own functions it calls, as context (`callees`)
-            context = [*context, *(c for c in callees(root, unit, src) if c not in context)]
+        if unit.kind != "section":  # ...the module's own functions it calls, and what a CANNOT-TELL asked for (385 T25, D47)
+            asked = [n for r in rows for n in re.findall(r"`([A-Za-z_]\w*)", (index.get(r.key) or {}).get("note", "")) if (index.get(r.key) or {}).get("verdict") == "CANNOT-TELL"]
+            far = claims_context.direct(root, unit, src, context_source) if any(claims_context.DISTANCE.search(r.claim.label) for r in rows) else []
+            context = list(dict.fromkeys([*context, *callees(root, unit, src), *far, *claims_context.chase(root, unit.path, asked, context_source)]))
         # every page ANY claim of the unit cites, owed or not: an UNRESEARCHED or GUESS claim cites nothing, and its check
         # can only see a page that answers it if the unit's other claims bring it (the torii re-check, 2026-10-03)
         for c in unit.claims:
