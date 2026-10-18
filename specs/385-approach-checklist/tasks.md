@@ -182,6 +182,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T66 A requirement cited from another feature is bundled from that feature (plan D85)
       research: rendering
+- [ ] T67 land-tooling lints before it tests (plan D86)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
