@@ -1,0 +1,86 @@
+{
+ "m:counts-before": {
+  "command": "make perf-profile SEED=4 STAGE=<stage> HOUSEHOLDS=<10|20|40>; specs/387-scale-the-placement-loops/count_work.py /tmp/claude-1000/-diagram/480a86f8-6911-4b06-8982-d9ead2656680/scratchpad/counts-before m:counts-before",
+  "counts": {
+   "field": {
+    "10": {
+     "merges": 17,
+     "shared_length": 56
+    },
+    "20": {
+     "merges": 25,
+     "shared_length": 82
+    },
+    "40": {
+     "merges": 502,
+     "shared_length": 7907
+    }
+   },
+   "hinterland": {
+    "10": {
+     "strip_candidates": 311,
+     "strip_items": 66106
+    },
+    "20": {
+     "strip_candidates": 604,
+     "strip_items": 260724
+    },
+    "40": {
+     "strip_candidates": 1102,
+     "strip_items": 693184
+    }
+   },
+   "homesteads": {
+    "10": {
+     "fronting_pairs": 697,
+     "tree_candidates": 10,
+     "tree_lays": 79
+    },
+    "20": {
+     "fronting_pairs": 4630,
+     "tree_candidates": 23,
+     "tree_lays": 314
+    },
+    "40": {
+     "fronting_pairs": 29540,
+     "tree_candidates": 88,
+     "tree_lays": 1886
+    }
+   },
+   "web": {
+    "10": {
+     "doorstep_ends": 3,
+     "field_runs": 1,
+     "knot_trials": 0,
+     "run_on_target": 2596
+    },
+    "20": {
+     "doorstep_ends": 3,
+     "field_runs": 1,
+     "knot_trials": 0,
+     "run_on_target": 4084
+    },
+    "40": {
+     "doorstep_ends": 7,
+     "field_runs": 1,
+     "knot_trials": 22,
+     "run_on_target": 8552
+    }
+   },
+   "windbreak": {
+    "10": {
+     "plot_box": 10442,
+     "sun_asks": 454
+    },
+    "20": {
+     "plot_box": 42488,
+     "sun_asks": 904
+    },
+    "40": {
+     "plot_box": 159808,
+     "sun_asks": 1816
+    }
+   }
+  }
+ }
+}
