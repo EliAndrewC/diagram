@@ -130,3 +130,13 @@ This feature draws nothing and states nothing on a map. Its decisions are about 
   feature sets no rule for it.
 - Issue watch works on both repositories with the tokens the GM granted on 2026-10-18 (checked: write access answers 422,
   not 403, on both).
+
+## Review history
+
+- **spec-fidelity round 1 (2026-10-18): CHANGES REQUIRED, 2 items.** (1) Four pre-chosen research questions (US3, FR-005,
+  SC-001, SC-002) went beyond the approval, which names a section; the questions now come as requests through FR-004.
+  (2) Rules about what the gm-assistant skill does were cut; history is recorded as found and a contradiction with canon
+  goes to the GM.
+- **spec-fidelity-verify round 2 (2026-10-18): CHANGES REQUIRED, 1 item.** The checklist still cited FR-006 after the
+  renumbering; now FR-005.
+- **spec-fidelity-verify round 3 (2026-10-18): FAITHFUL.**
