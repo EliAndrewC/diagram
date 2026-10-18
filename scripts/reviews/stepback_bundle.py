@@ -32,6 +32,7 @@ import json
 import re
 import sys
 import time
+from collections.abc import Sequence
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -115,7 +116,8 @@ def model_time(records: list[dict], since: float, until: float) -> float:
 
 
 def words(records: list[dict], since: float, until: float, cap: int = WORDS_CAP) -> str:
-    """The session's own words in the window, in order: replies, commands, edits - never a tool's output. The newest kept."""
+    """The sessions' own words in the window, in order: replies, commands, edits - never a tool's output. The newest kept. A
+    record tagged `_sid` (`build`, more than one session in the hour) is labeled with its session's first 8 characters."""
     parts: list[str] = []
     for d in records:
         if d.get("isSidechain") or "timestamp" not in d or d.get("type") != "assistant":
@@ -123,7 +125,7 @@ def words(records: list[dict], since: float, until: float, cap: int = WORDS_CAP)
         t = _ts(d["timestamp"])
         if not since <= t <= until:
             continue
-        stamp = datetime.fromtimestamp(t, UTC).strftime("%H:%M")
+        stamp = datetime.fromtimestamp(t, UTC).strftime("%H:%M") + (f" {str(d['_sid'])[:8]}" if d.get("_sid") else "")
         for b in (d.get("message") or {}).get("content") or []:
             if not isinstance(b, dict):
                 continue
@@ -167,8 +169,9 @@ def dispatches(events: list[dict], since: float, until: float) -> list[str]:
     return out
 
 
-def refusals(sid: str, since: float, until: float, log: Path = GUARD_LOG) -> list[str]:
-    """One line per guard refusal of this session in the window (the guard log: a file per firing, named by its UTC time)."""
+def refusals(sids: Sequence[str], since: float, until: float, log: Path = GUARD_LOG) -> list[str]:
+    """One line per guard refusal of these sessions in the window (the guard log: a file per firing, named by its UTC time); no
+    session named, every refusal."""
     out = []
     lo, hi = time.strftime("%Y%m%dT%H%M%S", time.gmtime(since)), time.strftime("%Y%m%dT%H%M%S", time.gmtime(until + 1))
     for f in sorted(log.glob("*.json")) if log.is_dir() else []:
@@ -180,15 +183,19 @@ def refusals(sid: str, since: float, until: float, log: Path = GUARD_LOG) -> lis
             continue
         # `refused` too: the pair guard's hour refusal logs so, and the hour-10 step-back's list missed it (the round arbiter's
         # tooling fix on hour:385-approach-checklist@10)
-        if isinstance(r, dict) and r.get("event") in ("blocked", "refused") and (not sid or r.get("session") == sid or r.get("sid") == sid):
+        if isinstance(r, dict) and r.get("event") in ("blocked", "refused") and (not sids or r.get("session") in sids or r.get("sid") in sids):
             out.append(f"- {f.name[9:11]}:{f.name[11:13]} {r.get('guard')}: {r.get('rule') or ''} - {str(r.get('detail') or '')[:200]}")
     return out
 
 
-def session_of(events: list[dict], since: float, until: float) -> str:
-    """The session that worked the feature in the window: the most frequent `sid` of its events there."""
+def sessions_of(events: list[dict], since: float, until: float) -> list[str]:
+    """Every session that worked the feature in the window, busiest first: the `sid`s of its events there.
+
+    EVERY ONE, NOT THE BUSIEST (the round arbiter's tooling fix on hour:385-approach-checklist@16): that hour had three - this
+    feature's page session's check run (439 events), the session working the task (322) and the write run (169) - and the
+    busiest alone was read, so `words.md` held the page session's words and none of the working session's."""
     sids = collections.Counter(str(e.get("sid")) for e in events if e.get("sid") and "t" in e and since <= _ts(str(e["t"])) <= until)
-    return sids.most_common(1)[0][0] if sids else ""
+    return [s for s, _n in sids.most_common()]
 
 
 def transcript_of(sid: str, projects: Path = PROJECTS) -> Path | None:
@@ -226,28 +233,50 @@ Record it: write the JSON `{{"ruling": ..., "why": ..., "what": ..., "tooling_fi
 """
 
 
-def build(trigger: str, root: Path, out: Path, since: float, until: float, transcript: Path | None, sid: str = "") -> Path:
+def _records(sids: list[str], transcript: Path | None, projects: Path) -> tuple[list[dict], list[str], list[str]]:
+    """(the records, merged by time, the sessions read, the sessions whose transcript was not found). A replay's `transcript` is
+    read alone, as before (SC-008); else every session's, each record tagged `_sid` when there is more than one."""
+    if transcript is not None:
+        return _lines(transcript), [transcript.stem], []
+    read, missing, records = [], [], []
+    for sid in sids:
+        path = transcript_of(sid, projects)
+        if path is None:
+            missing.append(sid)
+            continue
+        read.append(sid)
+        records += [{**d, "_sid": sid} if len(sids) > 1 else d for d in _lines(path)]
+    records.sort(key=lambda d: _ts(d["timestamp"]) if "timestamp" in d else 0.0)
+    return records, read, missing
+
+
+def build(trigger: str, root: Path, out: Path, since: float, until: float, transcript: Path | None, sids: Sequence[str] = (), projects: Path = PROJECTS) -> Path:
     feature = trigger.split(":", 1)[-1].rsplit("@", 1)[0]
     g = ro._gitdir(root)  # noqa: SLF001
     events = _lines(g / "l7r-events" / f"{feature}.jsonl") if g is not None else []
-    sid = sid or session_of(events, since, until)
-    transcript = transcript or transcript_of(sid)
-    records = _lines(transcript) if transcript is not None else []
+    sids = list(sids) or sessions_of(events, since, until)
+    records, read, missing = _records(sids, transcript, projects)
     out.mkdir(parents=True, exist_ok=True)
     tools, spent, count, longest = tool_time(records, since, until)
     model = model_time(records, since, until)
     wall = until - since
     rows = [f"- {spent[k] / 60:5.1f} min x{count[k]:<3} {k} (longest {longest[k][0]:.0f} s: `{longest[k][1]}`)" for k, _ in spent.most_common(15)]
     (out / "time.md").write_text(
-        f"# Where the hour went ({_iso(since)} to {_iso(until)})\n\nwall {wall / 60:.0f} min; the model {model / 60:.1f} min; tools "
+        f"# Where the hour went ({_iso(since)} to {_iso(until)})\n\n"
+        + (f"summed over {len(read)} sessions, which may run side by side and so sum past the hour\n\n" if len(read) > 1 else "")
+        + f"wall {wall / 60:.0f} min; the model {model / 60:.1f} min; tools "
         f"{tools / 60:.1f} min; the rest (waiting on background work, subagents or the GM) {max(wall - model - tools, 0) / 60:.1f} min\n\n"
         "## Tools by command\n\n" + ("\n".join(rows) or "(no tool call in the window)") + "\n", encoding="utf-8")
     (out / "dispatches.md").write_text("# Subagents dispatched\n\n" + ("\n".join(dispatches(events, since, until)) or "(none)") + "\n", encoding="utf-8")
-    (out / "refusals.md").write_text("# Guard refusals\n\n" + ("\n".join(refusals(sid, since, until)) or "(none)") + "\n", encoding="utf-8")
+    (out / "refusals.md").write_text("# Guard refusals\n\n" + ("\n".join(refusals(sids, since, until)) or "(none)") + "\n", encoding="utf-8")
     tasks = root / "specs" / feature / "tasks.md"
     open_boxes = [ln for ln in tasks.read_text(encoding="utf-8").splitlines() if ln.startswith("- [ ]")] if tasks.is_file() else []
     (out / "task.md").write_text(f"# Open tasks of {feature}\n\n" + ("\n".join(open_boxes[:30]) or "(none)") + "\n", encoding="utf-8")
-    (out / "words.md").write_text("# The session's own words\n\n" + (words(records, since, until) or "(no transcript found)") + "\n", encoding="utf-8")
+    said = words(records, since, until)
+    head = f"sessions read: {', '.join(s[:8] for s in read) or 'none'}" + (f"; left out (no transcript found): {', '.join(s[:8] for s in missing)}" if missing else "")
+    if said.startswith("[... the hour's earlier words cut"):
+        head += "; cut to the cap: the hour's earliest words"
+    (out / "words.md").write_text("# The sessions' own words\n\n" + head + "\n\n" + (said or "(no transcript found)") + "\n", encoding="utf-8")
     (out / "MANIFEST.md").write_text(MANIFEST.format(trigger=trigger, feature=feature, since=_iso(since), until=_iso(until)), encoding="utf-8")
     return out / "MANIFEST.md"
 
