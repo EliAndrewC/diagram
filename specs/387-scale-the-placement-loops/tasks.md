@@ -45,9 +45,9 @@ Every task changes how a verdict is computed, not what is drawn or where: nothin
 - [x] T10 (amendment 1) Measure, sweep and record (plan T10; SC-006 - SC-008): the counts and the two well stages' time before/after, the soak, `make cohort`, `make maps` (moved maps committed), `make done`, `dev/performance.md`
       research: rendering
       verify: DONE. counts (m:counts-wells-*: lane_wells one-at-a-time distances 10.0M -> 1.1M, wall measures 886,600 -> 27,492 at 40 hh); soak green, split parts missed 0; cohort 16/16; make maps clean, Sawada moved and committed; end bookend and main's engine back to back (m:wells-ab: 40-hh roll 30.7 -> 15.1 s); dev/performance.md; make done green
-- [ ] T11 (amendment 1) Land: the claims of the touched code re-judged, the landing cohort, the gated push, the report
+- [x] T11 (amendment 1) Land: the claims of the touched code re-judged, the landing cohort, the gated push, the report
       research: rendering
-      verify:
+      verify: DONE. claims judged (impl-drift: 23 + 7 + 1, relabeled where owed, the belt drift carried to 384); landing cohort 54/54 (dev/cohort-log/20261018T133350Z), fresh 9/48 vs main 10/48 on the same seeds; report updated; the gated push follows
 - [ ] GM review (make gm-reviewed F=387) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
