@@ -32,7 +32,7 @@
    "declared": "spec-fidelity"
   },
   "## T01 - the deletion (FR-001, FR-002)": {
-   "sha256": "370efc43dd3e4e1d03d0107233372f87be7a86565ece6a90bab9a30772220219",
+   "sha256": "fc98eb9fd8a382753967b3b205f3b803040cb74d8ba5a699816d18df4fe711d6",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -128,6 +128,103 @@
      "why": "Standing project process; neither narrows nor adds behavior to the request."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## T01 - the deletion (FR-001, FR-002)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-edge-seat-module",
+     "summary": "edge_seat.py is deleted whole, taking its own convex_hull (sole caller EdgeGround) and STEP_FT (unreferenced) with it, rather than deleting only the closure's names and keeping the module if anything remains",
+     "class": "within",
+     "why": "The GM: 'if nothing ships from it then we should just delete it'. Code whose only caller is deleted code ships nothing; FR-001 deletes the closure and FR-002 already names test_convex_hull_of_few_points (edge_seat.py's own hull) among the tests that go. Widens nothing beyond deletion of dead code and narrows nothing."
+    },
+    {
+     "id": "T01-test-burial-cut",
+     "summary": "test_burial.py loses test_rect_gap, the test_the_edge_seat_* tests, test_the_ground_stands_beyond_the_last_house_not_in_a_gap_among_them, test_convex_hull_of_few_points and _seat; only the no-ground-of-its-own test stays",
+     "class": "within",
+     "why": "Matches FR-002's enumeration of that file word for word."
+    },
+    {
+     "id": "T01-repoint-wrapper-tests",
+     "summary": "Tests of shipping code that called build_comb or crop_to_content are repointed through one helper each (lay_comb = finish_comb(carve_comb(...)) in tests/waterfields/_builders.py; a crop helper = crop_to_view(content_view(...)) in tests/settlement/_builders.py) instead of deleted; the wrapper-equals-pair clause goes; test_crop_framing.py moves from the delete list to the repoint list",
+     "class": "within",
+     "why": "FR-002 settles this: a test whose subject ships keeps its subject and calls the pair the scripted hamlet calls through one test helper, and a test of the wrapper itself loses that clause. Keeping these tests is not a carve-out from the deletion - their subjects (carve_comb/finish_comb, content_view/crop_to_view) ship, and FR-001 keeps what shipping code reaches."
+    },
+    {
+     "id": "T01-docstrings-move",
+     "summary": "crop_to_content's account of the frame rule moves onto content_view; build_comb's account of the comb layout onto carve_comb",
+     "class": "within",
+     "why": "Prose for live code kept on the live code (FR-003's prose upkeep); no behavior added or retained."
+    },
+    {
+     "id": "T01-test-houses-scope",
+     "summary": "test_houses.py's deletion is limited to its water-source test (its comb tests are repointed)",
+     "class": "within",
+     "why": "Follows FR-002: tests of deleted water_sources_for go; tests of shipping comb code are repointed."
+    }
+   ]
   }
- ]
+ ],
+ "tasks": {
+  "T01": {
+   "section_sha256": "0d3afd1d993f912a0a23447a81461f8c07c8eacccbfede902e80a07e2b2d9f8c",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T01-table",
+     "summary": "Every closure name (roll.py's RollVillageMixin/roll_village/_roll_*/_MarginFrame, water_sources_for/water_source_anchor, crop_to_content, cremation_ground/ROOFED_SHARE/cremation_outline, edge_seat module names, cut_undeckable_lanes/CUT_GAP_FT, PlacerMixin.headman, build_comb) is confirmed unreached by production code and deleted; RollingMixin drops the base.",
+     "class": "within",
+     "why": "FR-001 deletes roll_village and its closure, keeping only names shipping code reaches; the table names no such caller, and the GM asked that it be deleted outright since nothing ships from it."
+    },
+    {
+     "id": "T01-edge-seat-whole",
+     "summary": "edge_seat.py is deleted whole, taking its private convex_hull and unreferenced STEP_FT that the name-level closure cannot see.",
+     "class": "within",
+     "why": "Removes more dead code, not less; FR-002 already deletes test_convex_hull_of_few_points as a test of edge_seat.py's own hull, so the spec contemplates the hull going. No narrowing of the request."
+    },
+    {
+     "id": "T01-bundle-pitch",
+     "summary": "BUNDLE_PITCH_FT, its settlement/__init__ re-export and its roller-band test are deleted, found by a closure re-run that does not count re-exports as uses.",
+     "class": "within",
+     "why": "Code only roll.py read is part of what the GM asked to delete; its test's subject is the roller's band, so FR-002's rule (a test goes with the code it tests) applies."
+    },
+    {
+     "id": "T01-closure-iterate",
+     "summary": "The closure is re-run after deletion until it names nothing more, each further name passing through the same reached-by-shipping-code table.",
+     "class": "within",
+     "why": "Applies FR-001's own keep-rule to names the first pass could not see; completes the deletion rather than narrowing it."
+    },
+    {
+     "id": "T01-tests-deleted",
+     "summary": "Tests whose subject is a deleted name are deleted across the listed files (rolling, soak village determinism, civic grounds, burial, city, villages, caption paths, map vocabulary, composed-surface guard member list); emptied files are removed; test_burial.py keeps only the no-ground-of-its-own test.",
+     "class": "within",
+     "why": "FR-002 verbatim, including the test_burial.py list; removing the soak village test is the failing test the GM's question was about."
+    },
+    {
+     "id": "T01-tests-repointed",
+     "summary": "Comb tests use a lay_comb helper (finish_comb(carve_comb(...))) and frame tests a crop helper (crop_to_view(content_view(...))) in place of the deleted wrappers; the wrapper-equals-pair clause goes.",
+     "class": "within",
+     "why": "FR-002 prescribes exactly this: tests of shipping code reached through a deleted one-call wrapper keep their subject via one helper calling the pair the scripted hamlet calls."
+    },
+    {
+     "id": "T01-docstrings-move",
+     "summary": "build_comb's account of the comb layout moves onto carve_comb and crop_to_content's account of the frame rule onto content_view; other prose naming them is repointed in T02.",
+     "class": "within",
+     "why": "Serves FR-003 (prose describing deleted names as live is updated where it stands) without keeping any deleted code."
+    },
+    {
+     "id": "T01-coverage-floor",
+     "summary": "A line only deleted tests reached is deleted if no shipping code reaches it (same table), otherwise a test is owed.",
+     "class": "within",
+     "why": "Same keep-rule as FR-001; keeps the coverage floor (SC-002) without preserving dead code or dropping coverage of shipping code."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ }
 }

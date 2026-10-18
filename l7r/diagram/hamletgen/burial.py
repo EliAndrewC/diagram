@@ -12,8 +12,8 @@ ground of its own rests only on twentieth-century folklore records and surveys -
 spec 280 D1 counts as modern (`undated-custom`), and by the GM's ruling of 2026-09-28 a form attested only in modern
 times is not drawn. So the knob keeps its one attested value: the hamlet's dead lie in the village's ground (or its
 temple's), off the map, and the hamlet draws none. If the GM re-sorts the undated records as premodern, the own ground
-returns as the knob's second value - its sizing and seat were the record's band (750-2,450 sq ft) and the shared edge
-seat (`settlement/civic_grounds/edge_seat.py`), which the village's cremation ground still uses.
+returns as the knob's second value - its sizing the record's band (750-2,450 sq ft), its seat at the settlement's edge
+(the shared edge seat that did this went with its last caller in feature 388; git has it at the commit before).
 """
 
 from __future__ import annotations

@@ -12,12 +12,12 @@ IT DOES NOT REPLACE ANYTHING. Nothing here is imported by `settlement.py`, `chec
 new module, its own tests, and its own demo maps in `pool/hamlets/` (marked `meta.generated_by` in
 their manifests). Delete the module and those maps and the current method is exactly as it was.
 
-WHAT IT IS NOT. It is not the knob engine - `Settlement.roll_village` (feature 005) already rolls a
-gate-passing hamlet from a seed, and Honda and Shimizu in `pool/hamlets/` are the proof. This module
-STANDS ON that work and closes the gap between what it produces and what a hand-authored map like
-Ikegami contains, which is where the interesting engineering turned out to be:
+WHAT IT REPLACED. The feature-005 knob engine rolled a gate-passing hamlet from a seed (the frozen Honda and Shimizu
+exhibits were drawn with it); this module stood on that work and closed the gap between what it produced and what a
+hand-authored map like Ikegami contains, which is where the interesting engineering turned out to be. The knob engine
+was retired by feature 388, once nothing shipped from it:
 
-  | Ikegami (authored)                 | roll_village          | here                            |
+  | Ikegami (authored)                 | the knob engine       | here                            |
   |------------------------------------|-----------------------|---------------------------------|
   | drainage tameike at the low foot    | source pond only      | DERIVED from the drain outfall  |
   | a connector track running off-map   | none                  | DERIVED, steered clear of crops |

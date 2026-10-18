@@ -30,9 +30,9 @@ from tests._scope import EXHAUSTIVE
 # gate tests as un-marked map-rollers. They roll nothing.
 #
 # So a dotted call must come off the generator module, and only the distinctive bare names count.
-ROLLING_ATTRS = frozenset({"build", "generate", "main", "roll_village", "cohort", "roll_pool", "gate_obtain", "hamlet", "report", "keyed_to", "rolled_map", "rolled_report"})
+ROLLING_ATTRS = frozenset({"build", "generate", "main", "cohort", "roll_pool", "gate_obtain", "hamlet", "report", "keyed_to", "rolled_map", "rolled_report"})
 ROLLING_RECEIVERS = frozenset({"hg", "hamletgen", "driver", "rollcache"})  # rollcache.hamlet / .report roll on a miss (feature 135)
-ROLLING_BARE = frozenset({"roll_village", "cohort", "gate_obtain"})
+ROLLING_BARE = frozenset({"cohort", "gate_obtain"})
 
 # ADDED AFTER PROFILING RATHER THAN BY GUESSING, and the two additions were the two most expensive
 # tests in the suite: `hg.main([...])` runs the generator through its CLI (24.8 s) and
@@ -54,7 +54,7 @@ TESTS = pathlib.Path(__file__).resolve().parent
 # or `"generate"` and then call `hg.main` / `hg.cohort` - the call is real, the roll is not, and they measure in
 # milliseconds. Matching the call alone put them in the gate tree carrying `rolls_map`. So the walk first reads the
 # stubs: with `generate` stubbed nothing below it can roll; with `cohort` stubbed, `main`/`cohort` calls roll nothing
-# (`build`, `generate`, `roll_village`, `gate_obtain` still do). Both directions are pinned by the unit test below.
+# (`build`, `generate`, `gate_obtain` still do). Both directions are pinned by the unit test below.
 _STUBBABLE = frozenset({"cohort", "generate", "_run_stages"})
 _VIA_COHORT = frozenset({"main", "cohort"})
 _VIA_STAGES = frozenset({"build", "generate"})  # with the stages stubbed, a build runs none of them (feature 385 T03)

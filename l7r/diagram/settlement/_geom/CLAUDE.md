@@ -23,7 +23,7 @@ and `from settlement._geom import ...` resolve exactly as before the split.
 | `curves.py` | making a line or ring look hand-made: `fillet_polyline` (the swept-bend research), `smooth_closed` / `smooth_points` (Catmull-Rom, and why the manifest records the SAMPLED curve), `organic_bbox`, `organic_poly`, `winding` |
 | `region.py` | THE REGION (feature 297): the ground a thing may not take, painted ONCE, then read per candidate as array lookups |
 | `water_index.py` | a grid over every watercourse segment with each segment's keep-out half-width (feature 138), cached on the settlement and rebuilt when a source list changes length |
-| `village.py` | `village_population`, `_VILLAGE_POP_DIST`, `BUNDLE_PITCH_FT` - and see "Placements that look wrong" below before moving them |
+| `village.py` | `village_population`, `_VILLAGE_POP_DIST`, `FARMHOUSE_EAVE_GAP_FT` - and see "Placements that look wrong" below before moving them |
 
 ## The surface is DERIVED, not maintained
 
@@ -84,7 +84,7 @@ and the wall-dodging are all `settlement/shrines_wells/torii.py` and were not to
 
 ### `village.py` is a module of its own
 
-A village population roll and a homestead-bundle pitch are not geometry; feature 025's positional cut put them here, and
+A village population roll and the farmhouses' eave gap are not geometry; feature 025's positional cut put them here, and
 they sit isolated in one module (read by `rolling/`, `homestead_parts/`, `shrines_wells/` and the hamlet's ways) so a
 move is a one-file change. **Moving them is a separate change with its own verification** - do not fold it into
 something else.

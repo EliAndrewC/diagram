@@ -32,54 +32,47 @@ should move nothing; a flag over the band is mentioned at the landing with its l
 
 ## T01 - the deletion (FR-001, FR-002)
 
-Each name of the spec's closure, confirmed by hand (2026-10-18; method: `grep -rnw <name> l7r pool scripts Makefile`, every
-hit read):
+Each name of the spec's closure, confirmed by hand (2026-10-18; method: `grep -rnw <name> l7r pool scripts Makefile
+legacy-hand-authored-pool`, every hit read):
 
-| name | where | production code that calls it, other than `roll.py` | verdict |
+| name | where | who else calls it | verdict |
 |---|---|---|---|
-| `RollVillageMixin`, `roll_village`, `_roll_*`, `_roll_cremation`, `_MarginFrame` | `settlement/rolling/roll.py` | none | delete the file; drop the base from `RollingMixin` |
-| `water_sources_for`, `water_source_anchor` | `settlement/water_source.py` | none (`hamletgen/water/fit.py` names `water_source_anchor` in prose only) | delete |
-| `crop_to_content` | `settlement/core.py` | none - the scripted hamlet crops through `content_view` / `crop_to_view` (`hamletgen/hinterland/frame.py`); 15 docstrings and comments name it | delete; repoint the prose (T02) |
-| `cremation_ground`, `ROOFED_SHARE`, `cremation_outline` | `settlement/civic_grounds/funerary.py` | none | delete |
-| `edge_seat`, `EdgeGround`, `ANGLES`, `rect_gap`, `rect_samples` | `settlement/civic_grounds/edge_seat.py` | none (`hamletgen/burial.py` names it in prose: the hamlet draws no burial ground) | delete the module whole: its own `convex_hull` (one caller, `EdgeGround`) and `STEP_FT` (no reference) go with it - the closure, name-level, cannot see them because the names are also defined elsewhere |
+| `RollVillageMixin`, `roll_village`, `_roll_*`, `_roll_cremation`, `_MarginFrame` | `settlement/rolling/roll.py` | no engine module, no live map; 3 frozen exhibits (Honda, Shimizu, Kikuta) | delete the file; drop the base from `RollingMixin` (the GM's ruling; FR-005) |
+| `water_sources_for`, `water_source_anchor` | `settlement/water_source.py` | none (`hamletgen/water/fit.py` names the anchor in prose only) | delete the module and `WaterSourceMixin` from `Settlement`'s bases |
+| `edge_seat`, `EdgeGround`, `ANGLES`, `rect_gap`, `rect_samples`, its own `convex_hull`, `STEP_FT` | `settlement/civic_grounds/edge_seat.py` | none (`hamletgen/burial.py` names it in prose; the live callers of `convex_hull` import `_geom/primitives`'s) | delete the module whole |
 | `cut_undeckable_lanes`, `CUT_GAP_FT` | `settlement/city/bridges.py` | none | delete |
-| `PlacerMixin.headman` | `settlement/rolling/place.py` | none (the word "headman" elsewhere is the role, not the method) | delete |
-| `build_comb` | `waterfields/comb.py` | none - the scripted hamlet calls `carve_comb` and `finish_comb` (`hamletgen/water/fit.py`); 20-odd docstrings name it as the comb builder | delete the wrapper; its docstring (the comb layout, `grain`) moves onto `carve_comb`; repoint the prose (T02) |
+| `BUNDLE_PITCH_FT` | `settlement/_geom/village.py`, re-exported by `settlement/__init__.py` | none - found by the closure's re-run with re-exports not counted as uses | delete it, its re-export and its test (`test_a_rolled_cluster_band_is_sized_in_REAL_FEET_at_the_map_s_grain`, whose subject is the roller's band) |
+| `build_comb`, `crop_to_content`, `cremation_ground` (+ `ROOFED_SHARE`, `cremation_outline`), `PlacerMixin.headman` | `waterfields/comb.py`, `settlement/core.py`, `civic_grounds/funerary.py`, `rolling/place.py` | 13, 11, 7 and 3 frozen exhibits | KEEP (spec D1b, feature 174's precedent) |
 
-The closure is run again after the deletion (`closure.py` with the newly deleted files) until it names nothing more; any
-further name goes through the same table before it is deleted. Tests: every test of a deleted name goes (the
-`roll_village` tests in `tests/settlement/test_rolling.py`, `tests/gate/settlement/test_rolling.py`,
-`tests/full/settlement/test_rolling.py`, `tests/soak/test_village_determinism.py`; the tests of the closure names in
-`test_houses.py` (its water-source test), `test_civic_grounds.py`, `tier_city/.../test_civic_grounds.py`,
-`hamletgen/test_burial.py` (`test_rect_gap`, the `test_the_edge_seat_*` tests,
-`test_the_ground_stands_beyond_the_last_house_not_in_a_gap_among_them`, `test_convex_hull_of_few_points` and `_seat`; only
-the no-ground-of-its-own test stays), `test_city.py`, `test_villages.py`, `test_caption_paths.py`, `test_map_vocabulary.py` and the
-composed-surface guard's member list), and a file left with no test is removed. Tests of SHIPPING code that called a deleted wrapper are repointed, not deleted (spec FR-002, D1): `lay_comb` in
-`tests/waterfields/_builders.py` (`finish_comb(carve_comb(...))`) replaces `build_comb` in the comb tests
-(`test_core.py`, `test_fields.py`, `test_field_guarantees.py`, `test_houses.py`, `test_water_ways.py`, `test_comb_flow.py`,
-`test_comb_topology.py`, `test_branches_145.py`), whose wrapper-equals-pair clause goes; a crop helper in
-`tests/settlement/_builders.py` (`crop_to_view(content_view(_crop_boxes(False), extra, margin, W, H))`, the body
-`crop_to_content` had) replaces `crop_to_content` in the frame tests (`test_core.py`, `test_crop_framing.py`,
-`test_hinterland_cover.py`). `crop_to_content`'s account of the frame rule moves onto `content_view`, and `build_comb`'s
-account of the comb layout onto `carve_comb`. The coverage floor then names any line only
-the deleted tests reached: it is deleted if no shipping code reaches it (the same table), else a test is owed.
+`Settlement` keeps a class-level annotation of `_nucleated` on `RollingMixin` (no runtime member): `roll.py` held the one
+assignment pyrefly read it by. The closure is run again after the deletion until it names nothing more; any further name
+goes through the same table. Tests: every test whose subject is a deleted name goes - the `roll_village` tests in
+`tests/settlement/test_rolling.py` (the cremation-seat tests and `_village_with_houses`; the no-cremation-ground test keeps
+its pool scan), `tests/gate/settlement/test_rolling.py`, `tests/full/settlement/test_rolling.py`,
+`tests/soak/test_village_determinism.py`; `test_houses.py`'s water-source test, `test_city.py`'s undeckable-lanes test,
+`test_m8_placers_287.py`'s edge-seat test, `test_geom.py`'s band-pitch test and surface entry, and in
+`hamletgen/test_burial.py` `test_rect_gap`, the `test_the_edge_seat_*` tests,
+`test_the_ground_stands_beyond_the_last_house_not_in_a_gap_among_them`, `test_convex_hull_of_few_points` and `_seat` (only
+the no-ground-of-its-own test stays) - and a file left with no test is removed. The coverage floor then names any line only
+the deleted tests reached: it is deleted if nothing reaches it (the same table), else a test is owed.
 
 Verify: `make quick` per step; `make done` green.
 
 ## T02 - the prose (FR-003, FR-004)
 
-Repoint, at the point of change, every docstring and comment that names a deleted definition as live: `crop_to_content` ->
-the crop (`content_view` / `crop_to_view`); `build_comb` -> `carve_comb` / `finish_comb`; `roll_village` mentions in
-`hamletgen/__init__.py` (the comparison table loses its middle column), `hamletgen/cluster.py`, `settlement/houses.py`,
-`settlement/_geom/village.py`, `settlement/city/bridges.py`, `settlement/structures/fixtures/siting.py`, `hamletgen/burial.py`
-(the edge seat "the village's cremation ground still uses"), `tests/hamletgen/test_burial.py`'s docstring; the indexes
-`settlement/CLAUDE.md`, `settlement/rolling/CLAUDE.md`, `settlement/civic_grounds/CLAUDE.md`, `waterfields/CLAUDE.md`,
-`tests/soak/CLAUDE.md`. The
-claims index (`dev/claims-index.json`, `dev/claims-deferred.json`) is rebuilt by its own target. Feature 380's spec loses its
-"Carried: from 387" section, and its cremation-ground and burial-ground items name the code they cited as deleted by 388 and
-readable from git at the commit before the deletion, their design and rulings unchanged (FR-004). The legacy pool is not touched (FR-005).
+Repoint, at the point of change, every docstring and comment that names a deleted definition as live: the `roll_village`
+mentions in `hamletgen/__init__.py` (the comparison table's middle column becomes "the knob engine", retired),
+`hamletgen/cluster.py`, `hamletgen/water/fit.py` (the water-source anchor), `settlement/houses.py`, `settlement/_geom/village.py`
+(the band pitch), `settlement/city/bridges.py` (the undeckable-lanes pass), `settlement/structures/fixtures/siting.py`,
+`settlement/rolling/__init__.py`, `hamletgen/burial.py` (the edge seat "the village's cremation ground still uses"),
+`tests/hamletgen/test_burial.py`'s docstring; the indexes `settlement/CLAUDE.md`, `settlement/rolling/CLAUDE.md`,
+`settlement/civic_grounds/CLAUDE.md` (the edge-seat row), `settlement/_geom/CLAUDE.md` (the band pitch), `tests/soak/CLAUDE.md`.
+The kept helpers' prose is untouched. The claims index is updated by its own targets (`make claims-owed`, impl-drift,
+`make claims-checked`). Feature 380's spec loses its "Carried: from 387" section, and its cremation-ground and burial-ground
+items name the code they cited (the roller's cremation seat, the edge seat) as deleted by 388 and readable from git at the
+commit before the deletion, their design and rulings unchanged (FR-004). The legacy pool is not touched (FR-005).
 
-Verify: `grep -rn roll_village l7r pool tests` empty (SC-001); `grep -rnw "crop_to_content\|build_comb" l7r` empty.
+Verify: `grep -rn roll_village l7r pool tests` empty (SC-001); `grep -rnwE "edge_seat|water_source_anchor|cut_undeckable_lanes|BUNDLE_PITCH_FT" l7r` names nothing live.
 
 ## T03 - measure and land (FR-006, SC-002 - SC-004)
 

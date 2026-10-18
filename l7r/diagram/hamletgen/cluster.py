@@ -212,7 +212,7 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), toe: Poly | Non
     wx, wy = plan.wind
     # A band sized from the household count x the ground a homestead ACTUALLY takes.
     #
-    # THE PITCH IS THE WHOLE THING, and getting it wrong is silent. `roll_village` sizes its band at
+    # THE PITCH IS THE WHOLE THING, and getting it wrong is silent. The old knob engine (retired, feature 388) sized its band at
     # a 56 px pitch per household, which is the FARMHOUSE - but the to-scale tiers do not place a
     # farmhouse, they place a BUNDLE: house (46 x 28 ft) plus its threshing yard below and its
     # dooryard garden beside, ~71 x 57 ft of reserved ground, and the placer keeps bundles apart by

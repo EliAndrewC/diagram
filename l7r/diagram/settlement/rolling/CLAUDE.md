@@ -7,11 +7,14 @@ context-window tokens). **Load only the file the task calls for**; this index is
 **This package is a CHAIN, and that shapes everything below.** `structures/` and `civic_grounds/`
 were residue buckets - unrelated subsystems feature 025 happened to leave in one file - so their
 submodules are grouped by "what a session comes here to change" and are deliberately uneven.
-`rolling.py` was never a bucket: it is one cohesive pipeline, from *roll a whole village out of a
-seed* down to *does this rectangle touch a ditch*. So its core modules are its LINKS, in order:
+`rolling.py` was never a bucket: it is one cohesive pipeline, from *a seat's candidates* down to *does this rectangle
+touch a ditch*. So its core modules are its LINKS, in order:
 
-    roll -> seeds -> bundle -> fit -> place -> farmsteads
-    (compose)  (candidates)  (geometry)  (may it stand?)  (find a spot)  (draw it)
+    seeds -> bundle -> fit -> place -> farmsteads
+    (candidates)  (geometry)  (may it stand?)  (find a spot)  (draw it)
+
+(Its head link, `roll.py` - the feature-005 knob engine that rolled a whole hamlet from a seed - was retired by feature
+388 once nothing shipped from it; the scripted hamlet, `hamletgen/`, composes these links now.)
 
 The partition was chosen by testing it against real tasks rather than by theme, because a partition
 is only worth its churn if tasks stop straddling files:
@@ -22,14 +25,12 @@ is only worth its churn if tasks stop straddling files:
 | the standing "placer must test the ROTATED footprint it draws" debt ([`dev/placement.md`](../../../../dev/placement.md), CENTER vs FOOTPRINT item 3) | `fit.py` alone - `_bundle_common_fits` is the named three-line landing site |
 | the collision-circle swap (item 2) | `fit.py` + `place.py` |
 | change what the flush DRAWS (the kura side, the garden relaxation) | `farmsteads.py` alone |
-| tune a `roll_village` phase | `roll.py` alone |
 
 ## Look here when
 
 | file | look here when |
 |---|---|
 | `__init__.py` | you need the composition itself; never add logic here |
-| `roll.py` | you are changing what a seed-rolled hamlet or village COMES OUT AS: `roll_village` (the orchestrator) and its seven stages - `_roll_knobs` (which knobs, and the gravity-valid water-source roll), `_roll_field` (sluice, comb, land-use overlay), `_roll_margin_frame` (where the cluster band sits and how big it is - carries the bundle-pitch post-mortem), `_roll_cluster` (lanes, headman, the seed loop), `_roll_wells`, `_roll_windbreak`, `_roll_civic`. Plus `_MarginFrame`, the value object the stages pass around |
 | `seeds.py` | you are adding or changing a settlement FORM - the shape houses are strung in before any is placed: `line_seeds` (linear ribbon), `scatter_seeds` (dispersed), `waterfront_seeds` (water town), and the perimeter ring (`_perim_bbox`, `_perim_poly`, `ring`) |
 | `bundle.py` | you are changing what a homestead BUNDLE is - the dimensions: `_bundle_geom` (the whole metric layout, nucleated and dispersed), `_garden_beds` (the 1-or-2 bed dooryard garden and its three split forms), `_bbox_of`. **Pure geometry** - it places nothing, draws nothing, and calls nothing outside itself |
 | `dispersed.py` | you are changing the DISPERSED farmstead's layout (feature 291): the canonical frame (wind from the NW, deep bands N and W, yard S, garden E), the thin bands on the other rolled sides and the way in through a ring (`canonical_farmstead`), and the carry to the map's wind (`dispersed_layout`). Pure geometry, a leaf `bundle.py` calls |
@@ -45,11 +46,11 @@ is only worth its churn if tasks stop straddling files:
 | `farmsteads.py` | you are changing what the deferred flush DRAWS or the ORDER it draws in - this is the module the DRAW ORDER contract ([`dev/placement.md`](../../../../dev/placement.md)) is about: `farmsteads` (the entry point and its one `rng_scope`), `_farmsteads_bundle` (to-scale: groves recorded, south-nudge, yards/gardens/houses, arms LAST), `_farmsteads_legacy`, `_relax_gardens_south`, `_kura_side`, `_east_trees`, `_garden_beds_clear` |
 
 **`bundle.py` is a pure leaf** - the property that makes it the right place for the researched dimension numbers: a
-change there cannot ripple sideways within the package. `place.py` is the hub the flush and the roller both reach.
+change there cannot ripple sideways within the package. `place.py` is the hub the flush reaches.
 
 ## Composition, and why it is in `__init__.py`
 
-`RollingMixin` is `class RollingMixin(RollVillageMixin, SeedFormsMixin, BundleGeomMixin,
+`RollingMixin` is `class RollingMixin(SeedFormsMixin, BundleGeomMixin,
 BundleFitMixin, PlacerMixin, FarmsteadFlushMixin)` with no members of its own. It exists ONLY so
 `core.py` keeps its single import and `RollingMixin` keeps its position in the
 `class Settlement(...)` base list - which means the partition here can be re-cut later without
@@ -61,19 +62,13 @@ order is source order and is behaviorally irrelevant, because no name is defined
 what the composed-surface guard's second assertion exists to keep true
 (`tests/settlement/test_rolling.py`).
 
-## Two invariants the split does NOT touch
+## The invariant the split does NOT touch
 
 - **DRAW ORDER is a runtime contract.** `farmsteads.py` is the module most exposed to it: the
   bundle flush records grove rects first (the garden relaxation needs them), then draws
   yards/gardens/houses, then draws the yashikirin arms LAST so `_draw_grove`'s keep-out can see
   the houses. Moving a method's TEXT between files never changes when it runs; reordering the
   statements inside `_farmsteads_bundle` does.
-- **`roll_village` draws NOTHING from the main RNG stream.** All four generators it constructs are
-  seeded from `self.seed`, and its knobs go through `scope_seed`/`knob_rng`. Every main-stream draw
-  happens inside a callee (`lane`, `try_place`, `farmsteads`, `place_wells`, `village_grove`,
-  `hinterland`, `bridges`), so **the sequence of those calls IS the output.** That is what made the
-  stage decomposition safe, and it is the property to re-check (measure, do not reason) before
-  moving a stage boundary again.
 
 Monkeypatching: patch the DEFINING submodule (`settlement._geom.overlap.poly_gap`, never `settlement.poly_gap`) - the
 rule is [`../CLAUDE.md`](../CLAUDE.md)'s.

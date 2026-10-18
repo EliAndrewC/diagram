@@ -35,14 +35,18 @@ funerary grounds. The design, already researched:
 - **The GM's ruling of 2026-09-27** (0226, 530): a village has a cremation ground and a hamlet none;
   the country monk lives in the main village and serves its district; within its district the village alone keeps the
   shrine, the headsman's house and the cremation ground.
-- **The cremation ground**: already drawn by the roller's village tier (`_roll_civic` -> `_roll_cremation`, feature 273):
-  530's `cremation_seat` knob, the shared `edge_seat`, six jizo, the ragged off-center glyph (feature 272). The village
-  generator reuses it.
+- **The cremation ground**: drawn by the feature-005 roller's village tier (`_roll_civic` -> `_roll_cremation`, feature 273):
+  530's `cremation_seat` knob, the shared `edge_seat`, six jizo, the ragged off-center glyph (feature 272). The glyph
+  (`civic_grounds/funerary.py` `cremation_ground`) stays; the SEAT - `_roll_cremation` and the edge seat - was deleted by
+  feature 388 with the roller (nothing shipped from it) and is readable from git at `ab8471ab6`
+  (`settlement/rolling/roll.py`, `settlement/civic_grounds/edge_seat.py`). The village generator builds the seat anew or
+  recovers it from there.
 - **The burial ground**: 0236's knob (in the shrine or temple yard, or a ground of its own apart;
   even odds; a hilltop shrine always apart) and 270's siting (a ground apart downstream, beyond the last house,
   within ~650 ft of the middle of the houses); sized by 160's rule in the population served (the village's own
   households plus those of its hamlets, whose dead lie in the village's ground - `hamletgen/burial.py`, feature 280 M68);
-  seated through `settlement/civic_grounds/edge_seat.py`. The cremation ground's "beside_burial" form then has something
+  seated at the settlement's edge (the shared edge seat, `settlement/civic_grounds/edge_seat.py`, was deleted by feature 388;
+  git has it at `ab8471ab6`). The cremation ground's "beside_burial" form then has something
   to stand beside. **A way reaches it**: no generator connects a graveyard at any tier today, and the record says a path
   was there (religion-and-death 140: at the seventh-day festival of the dead "the graves and the paths to the graves are
   cleaned", ndl-crd-nanukabon; 190 gives the pyre "a minor funeral path"). Register the ground's edge nearest the houses as
@@ -123,14 +127,3 @@ Moved word for word on 2026-10-10 (the GM, 2026-10-10: "Yes, please."); 357 keep
   M70 (the roofed pyre ground, platform and hut), M71 (six jizo at a cremation ground alone), M80 (the basin's roof,
   drawn plain, its roof a guess); Kikuta - M56, M58. (M50, M52, M53 and M64 were kept by the GM on 2026-09-29.)
 
-
-## Carried: from 387 (found by the soak tier, 2026-10-18)
-
-- **The village roll seats too few households**: `tests/soak/test_village_determinism.py` fails on origin/main (`72b93d15c`,
-  measured 2026-10-18 in a detached worktree; method: `make soak`): `roll_village("R", households=18, ...)` on seed 7 seats 13
-  houses where the test holds 15-19. The soak tier runs only by hand, so nothing caught it; it fails the same on main without feature 387, whose own soak equivalence ran beside it green.
-  FOUND (2026-10-18, `git bisect` on the test alone, `make test-file FILE=tests/soak/test_village_determinism.py`): the first
-  failing commit is `221a9a08e`, feature 328 wave 78 - the grave cut's re-hold keeps a paddy ring only at the placer's lines
-  (25 deg, a quarter cell, the arrowhead); its checks were the pool and the hamlet cohort, never the village soak. Owed: see
-  why the stricter re-hold leaves the village roll 13 houses of 18 (fewer basins kept, the field larger, the cluster's ground
-  smaller?), and restore the seating or record why 13 of 18 is right.
