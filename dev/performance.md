@@ -12,8 +12,7 @@ The GM, 2026-09-30 (feature 297): *"it is perfectly acceptable for maps to chang
 They do NOT need to remain identical in output"*, and *"if anything in our project guidelines says that maps can't change
 when making optimizations then we should strike it and say the opposite."* Earlier the same: *"It is absolutely not
 required that the changes ... result in bite identical output"* (feature 218) and *"I even prefer it if it gets us
-performance benefits"* (feature 284). And again, 2026-10-18 (feature 387, whose own spec had held five speed changes to the old
-answers and left a defect unfixed for it): *"anytime we are trying to make things faster, it's always okay for maps to change,
+performance benefits"* (feature 284). And again, 2026-10-18 (feature 387): *"anytime we are trying to make things faster, it's always okay for maps to change,
 so long as the changes don't violate our research findings."*
 
 So a placer, a fill or a scatter may be rebuilt in a faster form that DECIDES differently - a coarser lattice, a

@@ -1,9 +1,0 @@
-{
- "admits": 70,
- "field_runs": 1,
- "needles": 87,
- "neighbors": 160,
- "neighbors_missing_a_split_part": 20,
- "strip": 811,
- "sun": 1931
-}

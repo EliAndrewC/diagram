@@ -5,9 +5,8 @@ Version change: 2.30.0 → 2.31.0
 
 Version 2.31.0 (amended 2026-10-18, feature 387 amendment 1): Principle X clause 15's "maps may move" widens from a placer,
 fill or scatter to EVERY change made for speed - the GM: "anytime we are trying to make things faster, it's always okay for
-maps to change, so long as the changes don't violate our research findings". Held to the rules and the research claims, never
-to identical output; an equivalence test proves a kept answer and is never a requirement (feature 387's own spec had made it
-one and left a defect unfixed for it). MINOR (a principle's scope widens).
+maps to change, so long as the changes don't violate our research findings". A speed change may move maps, held to the rules and
+the research claims rather than to identical output. MINOR (a principle's scope widens).
 
 Version 2.30.0 (amended 2026-10-11, feature 375 amendment 5): Principle VI's performance bands become a FLAG, never a gate -
 the GM: "it doesn't need to be a gate anymore". The bookends stay and record each stage's CPU seconds beside its wall seconds
@@ -1235,10 +1234,10 @@ any single rule is reason enough to refuse "done" status.
     placer's alone (v2.31.0, GM 2026-10-18, feature 387): *"anytime we
     are trying to make things faster, it's always okay for maps to
     change, so long as the changes don't violate our research
-    findings"* - a speed change is held to the rules and the research
-    claims (the cohort, the gate, impl-drift), never to identical
-    output; an old-against-new equivalence test proves an answer that is
-    kept, and is never a requirement. The GM's
+    findings"* - a speed change MAY move maps, held to the rules and the
+    research claims (the cohort, the gate, impl-drift) rather than to
+    identical output; an old-against-new equivalence test is needed only
+    where an answer is kept on purpose. The GM's
     words: *"We will need to take care to make sure that We do not have
     literally every item on the map checking for overlap with literally
     every other item. or anything silly like that"* - a rule that matters

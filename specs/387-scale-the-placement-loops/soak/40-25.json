@@ -1,8 +1,7 @@
 {
  "admits": 71,
  "needles": 87,
- "neighbors": 126,
- "neighbors_missing_a_split_part": 10,
+ "neighbors": 124,
  "partners": 2,
  "strip": 1312,
  "sun": 2742,

@@ -126,7 +126,8 @@ where a premise did not hold, the requirement below is the form of that goal the
   so long as the changes don't violate our research findings."* The constitution (Principle X clause 15, whose "maps may move"
   covered only a placer, fill or scatter, widened to every change made for speed), the root `CLAUDE.md`, the engine's dev loop,
   `dev/performance.md`, `docs/efficiency-tooling.md`, the spec and plan templates and the spec-quality checklist
-  (`speckit-specify`) say so.
+  (`speckit-specify`) say so - the GM's permission, not a prohibition: a speed change MAY move maps; a feature whose correctness
+  is identity (a cache) may still require it.
 - **FR-008 No rule loosened.** No check is removed, coarsened, sampled or given a wider tolerance to buy speed
   (`dev/performance.md`: a slow check is INDEXED, never coarsened).
 - **FR-009 Measured.** Bookends `make perf LABEL=387-start SCALING=1` before the first engine edit and `-end` after the last,
@@ -210,3 +211,6 @@ where a premise did not hold, the requirement below is the form of that goal the
   feature whose correctness is byte-identity: dropped from FR-013, SC-009, the code and the documents. (2) The constitution was
   MISSING from FR-013: Principle X clause 15 widened (v2.31.0). With them, SC-007's count restated: the matrix still measures
   each seat against every house, in one array call, so the count is of the one-at-a-time Python measures.
+- **spec-fidelity, amendment 1, round 2 (2026-10-18): CHANGES REQUIRED, 1 item** - the documents had turned the permission into a
+  ban ("never a requirement", "never write ... identical maps") in five places, the constitution among them: each now says a speed
+  change MAY move maps; FR-013 says "the GM's permission, not a prohibition"; the session's own account taken out of them.

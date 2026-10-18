@@ -120,7 +120,7 @@ full").
 - `make done` reports every failure together: fix them all, re-run once.
 - **Speed work may ALWAYS change maps** (the GM, 2026-10-18: *"anytime we are trying to make things faster, it's always okay
   for maps to change, so long as the changes don't violate our research findings"*): hold it to the rules and the research
-  claims, never to identical output.
+  claims rather than to identical output.
 - Python: ruff, ruff format, pyrefly, 100% coverage held as a floor; a Python file past 1,000 raw lines fails the gate.
 - Edit with `Edit`; a large file through its make target; batch the lookups you already know you need.
 - An overlap check builds an index once (`settlement/_geom/indexes.py`) and asks it per candidate; a plan that adds one says

@@ -50,8 +50,8 @@ lists only the first, it is not finished being planned.
 
 A change made for speed may move maps - ALWAYS (the GM, 2026-10-18: *"anytime we are trying to make things faster, it's
 always okay for maps to change, so long as the changes don't violate our research findings"*). Hold it to the rules and the
-research claims (the cohort, the gate, impl-drift), never to identical output; an equivalence test is a proof where an answer
-is kept, never a requirement.
+research claims (the cohort, the gate, impl-drift) rather than to identical output; an equivalence test is needed only where an
+answer is kept on purpose.
 
 | | label | total | median | worst | notes |
 |---|---|---|---|---|---|
