@@ -241,3 +241,16 @@ def test_a_re_decide_reviewed_with_its_re_answered_approach_owes_nothing_more(tm
     _git(root, "commit", "-qam", "re-decided with its answer")
     got = review(["### T01 Decisions", "### T01 Approach (re-answered 2026-10-17T22:10Z)"])
     assert "approach_owed" not in got
+
+
+def test_the_heading_owe_asks_for_passes_at_a_trigger_with_seconds(tmp_path: pathlib.Path) -> None:
+    """Feature 385 T27 (plan D49): `owe` prints the heading to the minute, and a trigger at 10:25:14 refused T05's
+    `### T05 part B (2026-10-18T10:25Z)` - the very heading it had asked for - as stamped before it."""
+    root, d = feature(tmp_path, git=True)
+    msg = ag.owe(root, "999-x", "T01", "hour:999-x@12", "B", now="2026-10-18T10:25:14Z")
+    head = msg.split("`")[1]
+    assert head == "### T01 part B (2026-10-18T10:25Z)"
+    (d / "plan.md").write_text(PLAN + f"\n{head}\n\n1. the lane law\n2. R, checked\n")
+    assert ag.refusal(d, root, "T01") is None, "the heading it asked for answers it"
+    (d / "plan.md").write_text(PLAN + "\n### T01 part B (2026-10-18T10:24Z)\n\n1. the lane law\n2. R, checked\n")
+    assert "no block stamped after it" in str(ag.refusal(d, root, "T01")), "a minute earlier still refuses"

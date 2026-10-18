@@ -134,7 +134,8 @@ def refusal(spec_dir: pathlib.Path, root: pathlib.Path, task: str) -> str | None
         if row.get("feature") != spec_dir.name or row.get("task") != task:
             continue
         part = str(row.get("part") or "B")
-        exists, missing = _best(text, task, part, part_items(lines, part), parse_utc(str(row.get("utc"))))
+        # feature 385 T27: to the minute, as `owe` prints the heading it asks for - its seconds made that very heading too early
+        exists, missing = _best(text, task, part, part_items(lines, part), parse_utc(str(row.get("utc"))[:16] + "Z"))
         if not exists or missing:
             what = "no block stamped after it" if not exists else f"item(s) {', '.join(map(str, missing))} unanswered"
             return (f"{row.get('trigger')} at {row.get('utc')} owes {task} the checklist's {PART_TITLE.get(part, part)}: {what} - "
