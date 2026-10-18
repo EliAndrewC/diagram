@@ -628,3 +628,8 @@ of its 109 agent runs were five sibling pop-ups checked as five units, round aft
 removes. Its landing waited on three arbiter fixes (T60-T62), then a British spelling in a tool-written claims note and a stale
 Kuwabata manifest (the ink count) cost two gate runs. **The habit it changes:** none by memory - proposal 1 (grouped sibling
 pop-ups) and the house-style check on tool-written notes are the tools.
+
+## T67 - the retro row
+
+About 15 min. `land-tooling.sh` runs its lint alone first; a failure stops before the guard suites and tooling tests start, so a
+format slip costs seconds, not two minutes. **The habit it changes:** none needed - the order decides it.

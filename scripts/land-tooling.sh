@@ -155,9 +155,16 @@ check() { # <step name> <command>: run in the worktree without the escapes, to <
   awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" 'BEGIN { printf "%.2f", b - a }' > "$log.$1.s"
   echo "$rc" > "$log.$1.rc"
 }
-check guard-suites "$guards" & check tooling-tests "$tooling_tests" & check lint "$lint" & wait
+# LINT FIRST, ALONE (feature 385 T67, plan D86): it takes 0.05 s, and T65's landing waited 122 s on the tests before its lint said
+# one test file would be reformatted. A lint failure stops here, the other two never started; a clean lint runs them in parallel.
+check lint "$lint"
+ran=lint
+if [ "$(cat "$log.lint.rc")" = 0 ]; then
+  check guard-suites "$guards" & check tooling-tests "$tooling_tests" & wait
+  ran="guard-suites tooling-tests lint"
+fi
 failed=""
-for j in guard-suites tooling-tests lint; do
+for j in $ran; do
   s=$(cat "$log.$j.s"); rc=$(cat "$log.$j.rc")
   { printf -- '--- %s: exit %s\n' "$j" "$rc"; cat "$log.$j"; printf 'land-tooling: step %s %s s\n' "$j" "$s"; } >> "$log"
   steps_json="$steps_json${steps_json:+, }\"$j\": $s"
