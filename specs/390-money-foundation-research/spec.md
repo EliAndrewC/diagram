@@ -36,14 +36,20 @@ each answering with quoted, checked sources, and cites them in its ledger.
 **Acceptance Scenarios**:
 
 1. **Given** the land question, **When** it is read, **Then** it gives what land sold for in years of its net yield, for
-   Japan and for China separately, with any attested rate of return, or says what was searched and not found.
+   Japan and for China separately, and how the multiple varied between irrigated rice land and dry land and between
+   near-city and remote land, or what was searched and not found. It gives any attested interest or rate of return on
+   land, set beside the canon's 15-20% city and ~25% countryside interest and the ~50-koku, ~20x farm.
 2. **Given** the wage question, **When** it is read, **Then** it gives an unskilled laborer's day wage in rice and in
-   coin, city against countryside, and the working days in a year, 18th-century Japan first and Qing China beside it.
+   coin, city against countryside, and the working days in a year, 18th-century Japan first and Qing China beside it;
+   the laborer's year in koku of rice and the city/country ratio; and a verdict on each 2017 working figure: 1.33 zeni a
+   day, 3.32 koku a year (~2 kg a day, 250 days), farm labor 3.5 koku a year.
 3. **Given** the koku question, **When** it is read, **Then** it gives the koku's volume and its weight as brown,
-   polished and unhulled rice, the weight of a liter of uncooked rice, and a person's yearly rice. It checks each
-   `budgets.md` figure the request lists, and each `l7r.md` figure.
+   polished and unhulled rice, how that weight varied by period and domain, the weight of a liter of uncooked rice, and
+   a person's yearly grain (budgets.md's ~1.5 koku) against l7r.md's "feeds a man for a year". It checks each
+   `budgets.md` figure the request lists, each `l7r.md` figure, and the 2017 spreadsheet's 151.5 kg and the asker's
+   ~120 kg (40 gallons at 0.8 kg/L).
 4. **Given** the basket question, **When** it is read, **Then** it quotes Basket A's quantities and Kyoto 1745-54 silver
-   prices verbatim from a public copy of the paper, notes any variant baskets, and compares them with the 2017 snapshot.
+   prices verbatim from a public copy of the paper, quotes what any Basket B or "respectability" variant holds, and compares them with the 2017 snapshot.
 
 ### User Story 2 - The asker gets its answer on the issue (Priority: P1)
 
@@ -98,3 +104,10 @@ This feature draws nothing on a map. Its findings are labeled in the record itse
 
 - The four questions fit one write session, which is capped at four questions and ten new registry keys. If they run
   past ten keys, the session's continuation brief takes the rest.
+
+## Review history
+
+- **spec-fidelity round 1 (2026-10-18): CHANGES REQUIRED, 5 items.** Scenarios 1-4 gained the issue's dropped clauses
+  (land by kind and distance with the canon's interest beside it; the 2017 wage figures; the koku by period and domain,
+  the 2017 spreadsheet figures, yearly grain; what variant baskets hold); request.md now carries the issue verbatim.
+- **spec-fidelity-verify round 2 (2026-10-18): FAITHFUL.**
