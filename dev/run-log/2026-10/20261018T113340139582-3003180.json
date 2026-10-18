@@ -1,0 +1,38 @@
+{
+  "utc": "2026-10-18T11:33:40Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 230,
+  "result": "failed: test-full",
+  "commit": "864ce2504",
+  "first_failure_s": 202.6,
+  "last_failure_s": 202.6,
+  "failed_tests": 1,
+  "failed_names": [
+    "tests/waterfields/test_surface.py::test_census_covers_every_real_consumer"
+  ],
+  "host": {
+    "load": [
+      4.53,
+      8.44
+    ],
+    "mem_avail_mb": [
+      8898,
+      9233
+    ],
+    "cpu_temp_c": [
+      61.0,
+      61.0
+    ],
+    "stall_s": {
+      "cpu": 4.1,
+      "io": 0.8,
+      "io_full": 0.7,
+      "memory": 0.3
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  }
+}
