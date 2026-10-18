@@ -25,9 +25,9 @@ Every task changes how a verdict is computed, not what is drawn or where: nothin
 - [x] T05 The bamboo strip check asks an index (plan T05, D5; FR-006): the per-pass grid in `household_bamboo`, `_strip_blocked(near=...)` at both callers (the strips and the field pit), seated strips added as seated; equivalence test
       research: rendering
       verify: DONE. StripNear at both callers, the straight scan only in the test oracle (items per candidate 212/431/629 -> 31/36/40); equivalence: test_strip_near_387 and the soak; make done green
-- [ ] T06 Measure, sweep and record (plan T06; FR-009, FR-010, SC-001 - SC-004): the counts at 10/20/40 after into `measurements.json`; the soak equivalence run (`make soak`); `make cohort`, `make maps`, `make done`; the end bookend; `dev/performance.md`'s section
+- [x] T06 Measure, sweep and record (plan T06; FR-009, FR-010, SC-001 - SC-004): the counts at 10/20/40 after into `measurements.json`; the soak equivalence run (`make soak`); `make cohort`, `make maps`, `make done`; the end bookend; `dev/performance.md`'s section
       research: rendering
-      verify:
+      verify: DONE. counts after (m:counts-after: tree lays/candidate 1.9/1.8/1.4, fronting pairs 0, run_on_target 512/504/568, merges 3.2/3.1/7.6 a merge, plot_box 0, strip items 31/36/40); soak equivalence 5 rolls green; cohort 16/16; make maps byte-identical; make done green; end bookend and the pre-feature engine back to back: the five stages 13.5 -> 12.2 s at 40 hh (-10%), flat at 10-20 (m:five-stages-ab); dev/performance.md section
 - [ ] T07 Land (SC-003, SC-005): `make cohort-landing`, the gated push, the feature report; the landing report carries FR-004's withdrawal (measurement, 297 R9), FR-002's and FR-003's restated premises with what was measured, and FR-003's split-part defect with its frequency
       research: rendering
       verify:

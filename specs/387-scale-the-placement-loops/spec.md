@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-18
 
-**Status**: In progress - spec accepted by the round arbiter (2026-10-18), plan CLEAR
+**Status**: Done 2026-10-18 - T01-T07 ticked; make done green; landing cohort 54/54 (fresh 6 of 48); spec accepted by the round arbiter at its round cap, plan CLEAR; FR-004 withdrawn as measured
 
 **Approved**: the GM, 2026-10-18, "I don't think we need to re-check everything after each addition, and you've already proposed fixes for the others, so please file a feature for this and then make it happen."
 
