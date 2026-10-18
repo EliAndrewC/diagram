@@ -530,12 +530,6 @@
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
   },
-  "### T06 part B (2026-10-18T12:38Z)": {
-   "sha256": "86483f1d031795f43c1958dfc46164a0ca3892040095ecac629026d75c24a186",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-18",
-   "declared": "spec-fidelity"
-  },
   "## T30 - nothing merged under a running gate (the round arbiter's fix on red-gate@2026-10-18T12:36:36Z)": {
    "sha256": "09f22fd634e3aa84c01aaf1589cc07c6490198388e4791998cbbf73b226cf85b",
    "verdict": "CLEAR",
@@ -550,6 +544,12 @@
   },
   "### T30 Decisions": {
    "sha256": "ddeb6dc3a9550c367633757d814e7007a95623cd34861fa86dcab080cb98e04c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T06 part B (2026-10-18T12:40Z)": {
+   "sha256": "8da3cdc54c5bc4f40ff94e67e75b555e8afd3b851a4a942d0a2777cea5a6a7a0",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -3521,6 +3521,34 @@
      "summary": "The exit taken is (c): a rule that removes the case (no merge while the gate's lock is held), budget 40 min, one goal.",
      "class": "within",
      "why": "Checklist part A answered as FR-003 and FR-015 require; one goal named."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "### T06 part B (2026-10-18T12:40Z)",
+    "(removed) ### T06 part B (2026-10-18T12:38Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T06-B-stepback",
+     "summary": "The re-stamped part B also answers the hour-14 step-back (ruled continue), alongside the two red-gate rulings.",
+     "class": "within",
+     "why": "The hourly step-back is one of the 'work resists' moments the GM approved (request: 'the hourly step-back from feature 383'; FR-004). Answering it with the checklist is what FR-004 asks; the nine answers are byte-identical to the block judged CLEAR at 12:38Z."
+    },
+    {
+     "id": "T06-B-order",
+     "summary": "The step-back's next steps (gate on stable tree, part B, landing cohort, gated landing, T30's lock) were done in that order except that T30's lock landed before T06's landing.",
+     "class": "within",
+     "why": "A record of work order, not a reduction of what was asked. Landing the merge-under-a-gate guard (FR-010's 'a guard, not a reminder') before the landing it protects serves the request and the GM's amendment-6 instruction to implement tooling improvements along the way; nothing the spec requires is dropped."
+    },
+    {
+     "id": "T06-B-removed-1238",
+     "summary": "The 12:38Z part B heading is removed, replaced by the 12:40Z re-stamp.",
+     "class": "within",
+     "why": "Its content is carried over unchanged into the 12:40Z block; the removal drops no answer and no requirement."
     }
    ]
   }

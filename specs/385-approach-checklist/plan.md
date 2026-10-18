@@ -780,9 +780,11 @@ Owed by the hour-12 step-back (`hour:385-approach-checklist@12`, ruled `continue
    no rank) or as at HEAD (`meta.dispersed_seating` says which); the seeds whose line falls short, seated in ranks, named on a
    found row as 0031's known gap.
 
-### T06 part B (2026-10-18T12:38Z)
+### T06 part B (2026-10-18T12:40Z)
 
-Owed by the red-gate rulings red-gate@2026-10-18T12:27:25Z and red-gate@2026-10-18T12:36:36Z (both `continue`).
+Owed by the red-gate rulings red-gate@2026-10-18T12:27:25Z and red-gate@2026-10-18T12:36:36Z and the hour-14 step-back
+(hour:385-approach-checklist@14), all `continue`; the step-back's next steps - the gate on the stable tree, this part B, the
+landing cohort, the gated landing, then T30's lock - are done in that order but the landing (T30 landed first, the lock).
 
 1. **What is refusing?** Three red gates, three causes, each fixed once: T25's own bundle test named the seating body by its old
    name (`_seat_households`, moved to `_seat_households_as`); the single-file line's two branches had no unit test (the gate rolls
