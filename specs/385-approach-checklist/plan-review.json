@@ -51,7 +51,7 @@
    "declared": "spec-fidelity"
   },
   "## Landing": {
-   "sha256": "6aa99260c8472d0969262ca390b4ff6770215ecf644e36b0112a9d8c5b02011c",
+   "sha256": "c3b9554b2807542faf5479e6a346b03c286208b1fd1300466c2ac041e737cf14",
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
@@ -154,6 +154,24 @@
   },
   "### T13 part B (2026-10-18T01:29Z)": {
    "sha256": "b787c5e8733fc202991001bf37506beb70f8153606e3ed6434a927682c845dab",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "## T14 - T03 measured again: whose time, each phase, the decision log printed (amendment 4, FR-014 to FR-016)": {
+   "sha256": "7243e1370c82702e8e44b6b35e06fb0dea1b5f8b3c6afde3e4fa38ce3d1b1b4f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T14 Approach (checklist part A)": {
+   "sha256": "1e03631da72cf3c5be055e4cc6c3d2a2fb678ae215e2a43b3fa0f14ba1de8b3f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T14 Decisions": {
+   "sha256": "0a340b98498f0aa0388a0b62ef7fa4c635521a199b49faf88abf021bf99d930e",
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
@@ -1432,6 +1450,220 @@
      "summary": "Checklist answers: exit (c) chosen per the GM's option 3; done measured by tests red without each rule and the T03 replay landing without CLAIMS_OK.",
      "class": "within",
      "why": "The answers are the FR-003 checklist content and SC-007's own test. They decide nothing beyond D26-D29."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Landing",
+    "## T14 - T03 measured again: whose time, each phase, the decision log printed (amendment 4, FR-014 to FR-016)",
+    "### T14 Approach (checklist part A)",
+    "### T14 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Landing",
+     "summary": "T14 added to Lands open",
+     "class": "within",
+     "why": "FR-006: each task lands when it closes while later tasks stay open; T14 is the same pattern as T02-T13."
+    },
+    {
+     "id": "D30",
+     "summary": "A tool event is a subagent's when its tool_use id is in a subagent transcript; otherwise the hook-recorded aid; an event with neither is the session's",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Transcripts first is within accepted FR-014, and recording agent_id from the hook payload is the GM-approved proposal's first clause; neither is faulted. But both the approved proposal ('otherwise use each agent's start and stop window') and FR-014 ('the window an estimate only where they do not') keep the start/stop window as the fallback, and D30 drops it: an event with neither a transcript match nor an aid goes to the session. That is the very misattribution amendment 4 exists to fix ('thinking 64%' that was not the session's), and it returns on every log whose transcripts are gone and whose events predate aid recording - every task through T03, the task SC-008 replays. 'None unmatched on T03' is one task's measurement, not a reason the fallback is never needed; the window is computable from the SubagentStart/SubagentStop events D31 already reads, so it is not impossible. Required: an event matched by neither a transcript id nor an aid that falls inside a subagent's start-stop window is that subagent's and is counted as an estimate in D31's 'how they were attributed' line; only an event outside every window is the session's."
+    },
+    {
+     "id": "D31",
+     "summary": "Where the time went splits into session working, session waiting (Stop to next event), subagents' own work (start to stop, summed, shown beside)",
+     "class": "within",
+     "why": "FR-014's three categories as written."
+    },
+    {
+     "id": "A3-cap",
+     "summary": "Approach item 3: a 10 min cap on a session working gap (ours)",
+     "class": "within",
+     "why": "A measurement threshold of ours inside FR-014's split, not a narrowing of what was asked. But the blocks do not say where the time beyond the cap goes, and FR-014 splits each task's WHOLE time into the three categories (the GM-approved proposal named idle as the third bin): the revision should state in D31 that the excess is counted as waiting/idle, not dropped, so the split still covers the task."
+    },
+    {
+     "id": "D32",
+     "summary": "Per task, a phase table between decision points: span, what ended it, session calls, working and waiting minutes, subagents that ran",
+     "class": "within",
+     "why": "FR-014's phase table column for column."
+    },
+    {
+     "id": "D33",
+     "summary": "Per task decision-log skeleton in time order: task-start, agents returned, make cohort/cohorts/done/verify runs, part B / re-answered stamps, tick, with a blank cell; C8 points at it",
+     "class": "within",
+     "why": "FR-016. FR-016 says EVERY cohort and gate run; the bundle cannot show whether done and verify are all of the project's gate targets, so the implementation must take 'every' as governing, not this list."
+    },
+    {
+     "id": "D34",
+     "summary": "Checklist part A item 9 names ONE goal; a second goal becomes its own task before work on it; a judgment, not a guard",
+     "class": "within",
+     "why": "FR-015 and the GM-approved proposal ('a checklist item'); no guard is faithful to that. Aside: the '21 min' figure for T03's merge carries no m: pointer or date/method label; add one in the same revision."
+    },
+    {
+     "id": "A9-done",
+     "summary": "T14 done: tests red without each rule; feature-report on T03 attributes 202 calls to subagents, prints phases and skeleton; hooks-test green",
+     "class": "within",
+     "why": "SC-008 and the enforcement of FR-014 to FR-016."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Landing",
+    "## T14 - T03 measured again: whose time, each phase, the decision log printed (amendment 4, FR-014 to FR-016)",
+    "### T14 Approach (checklist part A)",
+    "### T14 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Landing",
+     "summary": "T14 added to the lands-open list; each task lands with its retro row while later tasks stay open",
+     "class": "within",
+     "why": "FR-006: one task at a time, each landing before the next starts."
+    },
+    {
+     "id": "Approach-6",
+     "summary": "Exit (c): transcripts as the primary source of whose call, no heuristic primary",
+     "class": "within",
+     "why": "FR-014 'exactly where the transcripts show it'; the GM's proposal asks for the recorded attribution first."
+    },
+    {
+     "id": "Approach-5/9",
+     "summary": "Order attribution, phases, skeleton, checklist line; T03 replayed as acceptance (202 subagent calls)",
+     "class": "within",
+     "why": "SC-008 names the T03 replay and its 202 calls; order is sequencing only."
+    },
+    {
+     "id": "D30",
+     "summary": "Whose call: transcript id match exact; hook 'by' recorded; window estimate only for a session with NO subagent transcripts found and a call with no 'by'; a call unnamed by found transcripts is the session's",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The window fallback is decided per SESSION, but the GM wrote 'otherwise use each agent's start and stop window' and FR-014 makes the window the estimate 'where they [the transcripts] do not' show it. A run whose own agent-<aid>.jsonl is absent while its siblings' are found (detectable: a SubagentStart aid with no transcript file) has its calls credited to the session, as exact, the very misattribution amendment 4 exists to end. Neither impossible nor implied by the GM's words. Should say: a call with no 'by' inside the window of a run whose transcript is NOT found is that run's, as an ESTIMATE; a call unnamed by transcripts inside a window whose transcript WAS found is the session's; outside every window, the session's. The round-1 fix (the session's own Agent call never credited to the subagent) stands."
+    },
+    {
+     "id": "D31",
+     "summary": "Session time split: working = its tool time and gaps between its own calls (Stop-gaps excepted); waiting = a Stop until the next event; subagents' own work shown beside; idle past IDLE_CAP_S counted apart",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Idle apart is the GM's own 'the session, the subagents and idle' and is fine. But waiting is defined only as a Stop until the next event, and working includes the session's 'tool time'. A FOREGROUND subagent run produces no session Stop: it is the session's own Agent call, spanning SubagentStart..SubagentStop. As written, that span is the session's WORKING time, while the same minutes appear again as the subagent's work. FR-014 puts it in 'the session waiting (on a subagent ...)', and amendment 4's purpose is that time not the session's stops being shown as the session's (T03's 'thinking 64%'). The mechanism cannot reach that purpose for foreground runs. Should add: the span of the session's own Agent call (and any session gap containing a SubagentStart..SubagentStop of its own run) is the session WAITING on a subagent, never its working time."
+    },
+    {
+     "id": "D32",
+     "summary": "Per-task phase table: span, what ended it, session calls, working, waiting, idle minutes, subagents (type x n, minutes)",
+     "class": "within",
+     "why": "FR-014's phase table column for column; idle column from the GM's 'and idle'. Its working/waiting columns inherit D31's fix."
+    },
+    {
+     "id": "D33",
+     "summary": "Decision-log skeleton in time order: task-start, every agent returned, every cohort and gate run by rule (make target starting 'cohort', gate category, 'verify'), part B / re-answered stamps, tick; blank 'what decided it' cell",
+     "class": "within",
+     "why": "FR-016 item for item; 'every' carried as a rule, as round 1 asked; the blank cell is the retro filling it, which FR-016 states."
+    },
+    {
+     "id": "D34",
+     "summary": "Checklist part A item 9 names ONE goal; a second goal becomes its own task before work on it; a judgment, not a guard",
+     "class": "within",
+     "why": "FR-015; the GM approved 'A checklist item', so no guard is owed. The 21 min now carries its source and date."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Landing",
+    "## T14 - T03 measured again: whose time, each phase, the decision log printed (amendment 4, FR-014 to FR-016)",
+    "### T14 Approach (checklist part A)",
+    "### T14 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Landing-T14",
+     "summary": "T14 added to the lands-open list: it lands when it closes, with later tasks still open.",
+     "class": "within",
+     "why": "FR-006: one task at a time, each closing with its retro row before the next starts."
+    },
+    {
+     "id": "Approach-T14",
+     "summary": "Part A answers: goal, constraints, sources, order (attribution first, T03 replayed last), exit (c), done measured on T03's 202 subagent calls.",
+     "class": "within",
+     "why": "Serves FR-014 to FR-016 and SC-008; the one goal named in item 9 is the FR-015 rule applied to this task. The figures carry their dates and methods."
+    },
+    {
+     "id": "D30-join",
+     "summary": "A tool event is a subagent's when its tool_use id appears in that session's subagent transcript; the hook also records `by` from the payload's agent_id.",
+     "class": "within",
+     "why": "The GM's approved proposal: 'Record which subagent made each tool call, if the hook input carries that'. FR-014: 'exactly where the transcripts show it'."
+    },
+    {
+     "id": "D30-window-per-run",
+     "summary": "A call with no `by`, inside the window of a run whose transcript is not found, is that run's (an ESTIMATE). A call no transcript names, inside the window of a run whose transcript was found, is the session's. A call outside every window is the session's.",
+     "class": "within",
+     "why": "FR-014: 'the window an estimate only where they do not'. The GM: 'otherwise use each agent's start and stop window'. This carries round 2's item 1 as written."
+    },
+    {
+     "id": "D30-only-outside-clause",
+     "summary": "D30's first sentence still says '; only a call outside every window is the session's'. That sends every unmatched call inside any window to a subagent, whether or not that run's transcript was found, and so contradicts D30's own next sentence.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is round 2's rule, kept beside its replacement instead of being replaced by it. Read literally, it uses the window where the transcripts DO show whose the call was, which FR-014 forbids ('the window an estimate only where they do not'). An implementer who follows it builds the round-2 defect. Fix: strike '; only a call outside every window is the session's' from the first sentence. The GM citation can stay with the window rule, and the second sentence then stands as the only statement."
+    },
+    {
+     "id": "D31",
+     "summary": "The session's time is split into working (its own tool time and gaps, a gap with a Stop excepted), waiting (Stop until the next event, plus the span of a foreground Agent call and every gap inside it) and the subagents' own work (run windows summed, shown apart). Gaps past IDLE_CAP_S are counted apart as IDLE, never dropped.",
+     "class": "within",
+     "why": "FR-014: the session working, the session waiting (on a subagent, a background run, the GM) and the subagents' own work. Counting idle apart keeps the task's whole time split. This carries round 2's item 2 as written."
+    },
+    {
+     "id": "D32",
+     "summary": "Per task, a phase table: span, what ended it, the session's calls, working/waiting/idle minutes, the subagents that ran in it.",
+     "class": "within",
+     "why": "FR-014's phase table, column by column. The idle column follows from D31 and narrows nothing."
+    },
+    {
+     "id": "D33",
+     "summary": "Per task, a decision-log skeleton in time order: start, every agent returned, every cohort* make run and every gate-category or verify run, every part B / re-answered Approach stamp, the tick, each with a blank 'what decided it' cell. Checklist C8 points at it.",
+     "class": "within",
+     "why": "FR-016, item by item. 'Every' is defined by a rule (target prefix and event category), not a list, as round 1 asked."
+    },
+    {
+     "id": "D34",
+     "summary": "Checklist part A item 9 names ONE goal; a second goal becomes its own task (a new box or a carried row) before any work on it. A judgment, not a guard.",
+     "class": "within",
+     "why": "FR-015 and the GM's approved 'A checklist item: a task's done names one goal'. A new box and a carried row are both open tasks."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Landing",
+    "## T14 - T03 measured again: whose time, each phase, the decision log printed (amendment 4, FR-014 to FR-016)",
+    "### T14 Approach (checklist part A)",
+    "### T14 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D30 item 1 (round 3's clause)",
+     "summary": "The clause '; only a call outside every window is the session's' is not removed but edited: 'only' is dropped, leaving '; a call outside every window is the session's'.",
+     "class": "within",
+     "why": "Without 'only' the clause no longer claims exclusivity, so it no longer contradicts the preceding rule that an unnamed call inside a found-transcript run's window is the session's. It is the second half of the sentence opening 'A call no transcript names', in the paragraph under WHERE NEITHER SAYS, so it is a fallback that applies only after the transcript and 'by' rules have failed. It does not override the transcript rule and does not narrow FR-014's 'exactly where the transcripts show it'."
+    },
+    {
+     "id": "D30 item 2 (overlap sentence)",
+     "summary": "Where the windows of several runs with no transcript overlap, an unattributed call is the earliest-started run's.",
+     "class": "within",
+     "why": "'such runs' is bound to runs whose own transcript is not found, and the clause is elliptical for 'is that run's, counted as an ESTIMATE' under WHERE NEITHER SAYS. The window decides only calls no transcript names and no 'by' records, and it is counted as an estimate: FR-014's 'the window an estimate only where they do not', exactly."
     }
    ]
   }

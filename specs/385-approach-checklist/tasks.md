@@ -37,7 +37,10 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T13 Amendment 3 (FR-013, the GM's option 3): the claims gate carries a finding a page edit surfaced on unchanged code instead of refusing it - `make claims-carry F=<n>` files it as an open task the open-task refusal honors; T03's three findings filed by it; its retro row
       research: rendering
       verify: DONE. claims gate carries a page edit's finding on unchanged code (D26-D28); make claims-carry files it into the active feature only; tests red without each rule (test_claims_index, test_lands_open, test-claims-gate.sh); SC-007 replayed on T03's landing: theirs and _clear_link carried, the doubled tail still introduced (T03 changed that code); retro row in retro.md
-- [ ] T11 The close: the checklist to `docs/`, the refusals extended to every feature (FR-001), the final report (SC-001, SC-002) [lands-open]
+- [x] T14 Amendment 4 (FR-014 to FR-016): the report tells the session's calls from its subagents' and prints each task's phases and its decision-log skeleton; the checklist's one goal a task; T03 replayed; its retro row
+      research: rendering
+      verify: DONE. report tells session from subagent calls (transcripts exact, window estimate per run), foreground runs as waiting, idle apart, per-task phases and decision-log skeleton; checklist A9 one goal, C8 to the skeleton; T03 replayed (202 of 549 calls subagents'); tests in test_event_log.py red without each; arbiter fix on ask:t14-plan-round4 done; retro row
+- [ ] T11 The close: the checklist to `docs/`, the refusals extended to every feature (FR-001), the final report (SC-001, SC-002); and D30's wording, filed by the round arbiter's ruling on ask:t14-plan-round4 (T14's plan round 4, rows 1-3 - the code already does each, `test_a_transcript_named_call_is_its_run_s_anywhere_and_a_mixed_overlap_is_the_missing_run_s_estimate`): the outside-every-window clause carries its own condition (no `by`, no transcript names it), the overlap clause says "still an estimate", and a call inside both a found and a missing run's window is the missing run's estimate [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering

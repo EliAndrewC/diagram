@@ -146,8 +146,36 @@ def test_a_route_question_must_state_the_pool(tmp_path: pathlib.Path) -> None:
     a.write_text("pool: Inashiro refused; cohort 16/16\n")
     b.write_text("cohort seed 7 fails\n")
     assert ab.pool_unstated("may the cap be raised?", []) == []
-    assert ab.pool_unstated("which route lands?", [])[0].startswith("the question names a route")
-    assert ab.pool_unstated("which route lands?", [str(a)]) == []
-    assert ab.pool_unstated("which route lands? A or B", [str(a), str(b)]) == [f"{b}: a route's evidence states no pool result"]
+    assert ab.pool_unstated("which route lands seed 49?", [])[0].startswith("the question names a route")
+    assert ab.pool_unstated("which route lands seed 49?", [str(a)]) == []
+    assert ab.pool_unstated("which route lands the map? A or B", [str(a), str(b)]) == [f"{b}: a route's evidence states no pool result"]
+    # "route" in its process sense, no map named: no pool owed (the round arbiter's tooling fix, ask:t14-plan-round4)
+    assert ab.pool_unstated("tooling only: does the process route differently after a third plan round?", []) == []
     assert ab.main(["--check-ask", "a regression on seed 10: waive it?"]) == 2
     assert ab.main(["--check-ask", "a regression on seed 10, the pool clean: waive it?"]) == 0
+
+
+def test_an_ask_about_a_plan_review_carries_its_rounds_and_the_plan_s_diffs(tmp_path: pathlib.Path) -> None:
+    """The round arbiter's tooling fix on ask:t14-plan-round4: the ask's bundle held none of T14's three plan rounds, so "each
+    fixed as written" was ruled on the session's account. An ask naming a plan review now carries every recorded round of the
+    newest round's blocks - its verdict and each decision not ruled within - and the plan's history as `edits.diff`."""
+    import subprocess
+
+    root = _clone(tmp_path, "385-x")
+    d = root / "specs" / "385-x"
+    d.mkdir(parents=True)
+    (d / "plan.md").write_text("# plan\n")
+    rounds = [
+        {"reviewed": "r0", "blocks": ["### T01 Decisions"], "verdict": "CLEAR", "decisions": []},
+        {"reviewed": "r1", "blocks": ["### T14 Decisions"], "verdict": "BLOCKED", "decisions": [{"id": "D30", "class": "narrowing, NOT LEGITIMATE", "summary": "the window dropped", "why": "the GM named it"}]},
+        {"reviewed": "r2", "blocks": ["### T14 Decisions", "## Landing"], "verdict": "BLOCKED", "decisions": [{"id": "D31", "class": "within"}]},
+    ]
+    (d / "plan-review.json").write_text(json.dumps({"block_reviews": rounds}))
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+    ha.trip(root, "ask:t14-plan-round4", "ask", "", "T14's plan review has run three rounds: may a fourth run?")
+    text = ab.bundle(root, "ask:t14-plan-round4", tmp_path / "out").read_text()
+    assert "## The plan review's rounds" in text and "### Round 1: BLOCKED (r1)" in text and "### Round 2: BLOCKED (r2)" in text
+    assert "D30 - narrowing, NOT LEGITIMATE: the window dropped the GM named it" in text and "- every decision within" in text
+    assert "(r0)" not in text, "another block's rounds are not this review's"
+    assert (tmp_path / "out" / "edits.diff").is_file() and "specs/385-x/plan.md" in text
+    assert ab.plan_rounds(tmp_path)[0] == ["## The plan review's rounds\n\n- (none recorded in plan-review.json)\n"]

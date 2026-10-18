@@ -48,6 +48,9 @@ Answer each in writing in the task's plan section. One line each is enough where
 8. **The budget.** About how long should this task take? Twice that is a trigger for part B.
 9. **Done, measured.** What shows the task done - the test that is red now, the seeds, the map - and the baseline it is
    compared with (taken at HEAD, CLAUDE.md "No known regressions").
+   **One goal.** It names ONE goal; a second goal found in the task becomes its own task (a new box, or a carried row) before
+   any work on it starts (amendment 4, FR-015: T03's merge was a second goal - 21 min, failed, and it pulled the seeds' landing
+   into arbiter rulings).
 
 ## B. When the work resists
 
@@ -88,7 +91,8 @@ step-back; the task past twice its budget; an approach about to change. Answer b
    HEAD (`make cohort` prints it since T03); a pass count hid two failing seeds and a changed denominator (T03: "59/60" was
    `N=54`).
 8. **Times in a log are read from the event log, never written from memory** (T03: a decision log an hour off, caught by the
-   hourly step-back).
+   hourly step-back): a retro's decision log starts from the skeleton `make feature-report F=<n>` prints for the task
+   ("Each task's decision-log skeleton", amendment 4, FR-016), its last column filled in.
 5. **A tripwire is read before it is obeyed.** When a round cap fires, check first that the owing diff changed visible words of
    this unit and that the rounds counted are this feature's: of 106 round-cap accepts, 27 were owed only by a later
    edit and 13 by a counting or bundle error (audit #13). A tripwire that fired on tooling error is a tooling fix, made then.

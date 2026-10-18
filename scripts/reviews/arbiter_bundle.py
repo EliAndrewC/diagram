@@ -456,6 +456,9 @@ def evidence_section(out: Path, files: Sequence[str]) -> list[str]:
 
 
 _ROUTES = re.compile(r"\broutes?\b|\bregress", re.I)
+#: what makes a route a MAP question (the round arbiter's tooling fix, ask:t14-plan-round4): "route" in its process sense - "does
+#: the process route differently?" - asked a pool roll of a tooling-only question with no map in it
+_MAP_WORDS = re.compile(r"\bmaps?\b|\bseeds?\b|\bcohorts?\b|\bpool\b|\binashiro\b|\.gen\.py|l7r/diagram/|\bhamlets?\b|\bvillages?\b", re.I)
 
 
 def pool_unstated(why: str, files: Sequence[str]) -> list[str]:
@@ -463,7 +466,7 @@ def pool_unstated(why: str, files: Sequence[str]) -> list[str]:
     matrix: an accept was taken on the cohort and the 44 rolls alone, and the pool then refused the reference map under it): a
     question that names a route or a regression and states no pool result in its words or its evidence, and each cited route
     file (a name starting `route`) that states none. Empty where nothing is owed."""
-    if not _ROUTES.search(why):
+    if not _ROUTES.search(why) or not _MAP_WORDS.search(why):
         return []
     texts = {f: Path(f).read_text(encoding="utf-8", errors="replace") for f in files if Path(f).is_file()}
     gaps = [f"{f}: a route's evidence states no pool result" for f, txt in texts.items() if Path(f).name.lower().startswith("route") and "pool" not in txt.lower()]
@@ -501,6 +504,10 @@ def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "", evidenc
             "process is wrong - name the fix as `tooling_fix`. Say in `what` exactly what the session does next.\n"
         )
         parts += evidence_section(out, evidence)
+        if _PLAN_REVIEW.search(str(owed.get("detail", ""))) and d is not None:
+            plan_parts, plan = plan_rounds(d)
+            parts += plan_parts
+            files = files or ([str(plan.relative_to(root))] if plan.is_file() else [])
     rounds: list[dict] = []
     missing: list[str] = []
     if subject and check != "spec-fidelity":
@@ -540,6 +547,30 @@ def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "", evidenc
     parts.append(feature_section(root, out, d, trigger))
     (out / "MANIFEST.md").write_text("\n".join(parts) + "\n", encoding="utf-8")
     return out / "MANIFEST.md"
+
+
+_PLAN_REVIEW = re.compile(r"\bplan(?:'s)? (?:review|round)s?\b|\bplan-delta\b", re.I)
+
+
+def plan_rounds(d: Path) -> tuple[list[str], Path]:
+    """An ask about a plan review carries that review's rounds (the round arbiter's tooling fix, ask:t14-plan-round4: the
+    bundle held none of T14's three rounds, so "each fixed as written" was ruled on the session's account): every recorded
+    round of the blocks the newest round reviewed - its date, verdict and each decision it did not rule within - newest last.
+    The plan's diffs ride the bundle's `edits.diff` (the caller names the plan as its file). Returns (lines, the plan's path)."""
+    review = _json(d / "plan-review.json")
+    rounds = [r for r in review.get("block_reviews") or [] if isinstance(r, dict)]
+    plan = d / "plan.md"
+    if not rounds:
+        return ["## The plan review's rounds\n\n- (none recorded in plan-review.json)\n"], plan
+    subject = set(rounds[-1].get("blocks") or [])
+    mine = [r for r in rounds if subject & set(r.get("blocks") or [])]
+    rows = []
+    for i, r in enumerate(mine, 1):
+        found = [x for x in r.get("decisions") or [] if isinstance(x, dict) and x.get("class") != "within"]
+        rows.append(f"### Round {i}: {r.get('verdict', '?')} ({r.get('reviewed', '?')})\n")
+        rows += [f"- {x.get('id', '?')} - {x.get('class', '?')}: {x.get('summary', '')} {x.get('why', '')}".rstrip() for x in found] or ["- every decision within"]
+        rows.append("")
+    return ["## The plan review's rounds (the blocks of the newest round)\n\n" + "\n".join(rows) + "\n"], plan
 
 
 def batch_dir(trigger: str) -> str:

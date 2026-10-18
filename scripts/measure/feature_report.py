@@ -38,6 +38,7 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.dont_write_bytecode = True
 import event_log as el  # noqa: E402
+import task_phases as tp  # noqa: E402
 
 #: A gap longer than this is the session left alone (the GM away, a night), not work: counted apart, never as thinking.
 IDLE_CAP_S = 3600
@@ -96,6 +97,7 @@ def split_time(events: Sequence[Mapping[str, Any]], name: str) -> Counter[str]:
     by_sid: dict[str, list[Mapping[str, Any]]] = defaultdict(list)
     for e in events:
         by_sid[str(e.get("sid"))].append(e)
+    fg = tp.foreground_spans(events)  # feature 385 amendment 4, plan D31: a foreground run is the session waiting
     for evs in by_sid.values():
         open_calls: dict[str, Mapping[str, Any]] = {}
         for a, b in zip(evs, evs[1:], strict=False):
@@ -107,7 +109,9 @@ def split_time(events: Sequence[Mapping[str, Any]], name: str) -> Counter[str]:
                 continue
             if a["ev"] == "PreToolUse":
                 open_calls[str(a.get("id"))] = a
-            if a["ev"] == "PreToolUse" and b["ev"] == "PostToolUse" and b.get("id") == a.get("id"):
+            if (run := tp.in_span(parse_t(a["t"]), fg)):
+                out[f"waiting: {run}"] += gap
+            elif a["ev"] == "PreToolUse" and b["ev"] == "PostToolUse" and b.get("id") == a.get("id"):
                 out[_tool_cat(a)] += gap
             elif a["ev"] == "Stop":
                 out[_waiting(b)] += gap
@@ -413,17 +417,22 @@ def _passes() -> list[dict[str, str]]:
 
 
 def report(root: Path, feature: str, transcripts: Sequence[Path] = (), since: str = "", until: str = "",
-           clones: Path = CLONES) -> str:
+           clones: Path = CLONES, projects: Path = tp.PROJECTS) -> str:
     t0 = time.monotonic()
     d = spec_dir(root, feature)
     if d is None:
         raise SystemExit(f"feature-report: no specs/{feature}-* directory")
     name = d.name
     events = load_events(event_logs(root, name, clones), transcripts, since, until)
+    # WHOSE CALL (feature 385 amendment 4, plan D30): a subagent's tool calls reach the session's hooks under its id, so each
+    # is marked from the subagent transcripts before any table reads the session's time
+    events = tp.attribute(events, *tp.subagent_calls({str(e.get("sid") or "") for e in events}, projects))
+    how = tp.attribution(events)
+    own_calls, sub_calls = tp.call_counts(events)
     span = (events[0]["t"], events[-1]["t"]) if events else ("", "")
     cs = commits(root, feature, since, until)
     shas = {c[0] for c in cs}
-    split = split_time(events, name)
+    split = split_time(tp.session_events(events), name)
     by_type, rounds = dispatches(events)
     checks = sum(n for e_type, n in by_type.items() if el.agent_category(e_type) in CHECK_CATS)
     lines = diff_lines(root, shas)
@@ -439,7 +448,12 @@ def report(root: Path, feature: str, transcripts: Sequence[Path] = (), since: st
     for k, v in sorted(split.items(), key=lambda kv: -kv[1]):
         share = "-" if k.startswith("idle") else f"{100 * v / whole:.0f}%"
         out.append(f"| {k} | {_hm(v)} | {share} |")
-    detail = tool_detail(events)
+    runs = tp.subagent_runs(events)
+    out += ["", f"The session's own time above; its {sub_calls} subagent tool call(s) (of {own_calls + sub_calls}) are counted apart "
+            f"({how['transcript']} by the subagent transcripts, {how['hook']} by the hook's `by`, {how['window']} by the agents' windows - "
+            f"an estimate; plan D30). The subagents' own work: {len(runs)} run(s), "
+            f"{_hm(sum(b - a for a, b, _k, _v in runs))} in all, much of it while the session waited or worked on."]
+    detail = tool_detail(tp.session_events(events))
     if detail:
         out += ["", "## Inside `other tool` (the five largest)", "", "| tool or make target | time |", "|---|---|"]
         out += [f"| {k} | {_hm(v)} |" for k, v in detail.most_common(5)]
@@ -464,7 +478,21 @@ def report(root: Path, feature: str, transcripts: Sequence[Path] = (), since: st
     if starts:  # feature 385 T02, plan D10 (FR-005)
         out += ["", "## Each task, split at its decision points", "",
                 "| task | start to tick | to its last decision | after it | decisions | segments (min) |", "|---|---|---|---|---|---|"]
-        out += task_rows(events, starts, task_ticks(root, name))
+        ticks = task_ticks(root, name)
+        out += task_rows(events, starts, ticks)
+        last_t = parse_t(str(events[-1]["t"])) if events else 0.0
+        spans = [(task, start, ticks.get(task) or last_t) for task, start in sorted(starts.items(), key=lambda kv: kv[1])]
+        spans = [s for s in spans if s[2] > s[1]]  # a task wholly outside SINCE/UNTIL has no phases there
+        out += ["", "## Each task's phases (plan D32)", "",
+                "| task | span (UTC) | ended by | session calls | session working (min) | session waiting (min) | idle (min) | subagents started in it |",
+                "|---|---|---|---|---|---|---|---|"]
+        for task, start, end in spans:
+            out += tp.phase_rows(events, task, start, end, frozenset(DECISION_AGENTS))
+        plan_text = (d / "plan.md").read_text(encoding="utf-8") if (d / "plan.md").is_file() else ""
+        out += ["", "## Each task's decision-log skeleton (plan D33) - fill the last column in the retro", "",
+                "| task | UTC | point | what decided it |", "|---|---|---|---|"]
+        for task, start, end in spans:
+            out += tp.skeleton_rows(events, task, start, end, plan_text, task in ticks)
     try:
         costs = check_rows(events, _passes(), lines)
     except (OSError, ImportError, ValueError):

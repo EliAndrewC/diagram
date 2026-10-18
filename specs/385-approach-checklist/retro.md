@@ -246,3 +246,32 @@ feature; round 2: a re-judgment on unchanged code is carried too; round 3's asid
 
 **What changed from the plan.** The push's verdict (`gate`, `classified`) moved into `scripts/record/claims_carry.py` to keep
 `claims.py` under the 1,000-line bar; `claims.gate` delegates. The checklist needs no change from this task.
+
+## T14 - the retro row
+
+**The numbers (`make feature-report F=385`, its new tables).** Started 01:58Z, done by about 02:22Z: about 24 min against a
+90 min budget, 5 decision points (plan rounds BLOCKED, BLOCKED, BLOCKED, the arbiter's `continue` on a last round, CLEAR). The
+session made 61 of the window's 82 tool calls; its subagents 21 (all attributed by their transcripts). Red gates 0; check
+dispatches 6 (four plan rounds, one arbiter, and none else); regressions 0.
+
+**SC-008, replayed on T03.** `make feature-report F=385 SINCE=2026-10-17T20:44:00Z UNTIL=2026-10-17T23:10:00Z` now says 202 of
+the window's 549 tool calls were subagents' (202 by transcript, 0 by window), prints T03's twelve phases and its skeleton. What
+the corrected tables show that the old one hid: T03's session was WORKING about 130 of its 145 min and waiting only about 14 -
+the reviews mostly ran while it worked on. Its own model time (the gaps between its own calls) was 92 min, spread over 347
+calls: the median gap 7.4 s, the fastest tenth 3.7 s - about 18 min of T03 is the fixed cost of a call, paid 347 times (the
+event log, read 2026-10-18). The phase 22:27-22:57 (the record checks after the 0246 edit) is 30 min with 8 of it waiting.
+
+**What landed.** Whose call (D30): transcripts exact, the hook's `by` for the future, a run with no transcript of its own
+estimated by its window, the session's own `Agent` launch always its own; a foreground run is waited on (D31); idle counted
+apart; each task's phases (D32) and decision-log skeleton (D33) printed; checklist A9 one goal (D34) and C8 pointed at the
+skeleton. The round arbiter's tooling fix on `ask:t14-plan-round4`: the ask check's pool demand fires only on a map question
+(the bare word "route" refused a tooling question), and an ask about a plan review carries its rounds.
+
+**Which checklist items fired.** A5 (measure first): the transcripts were checked for tool ids before any design, which
+replaced the proposed window heuristic as the primary source. B did not fire - the work did not resist; the plan review did,
+four rounds, each finding a real narrowing of the GM's words (the window fallback per run, a foreground run as waiting, a
+contradicting leftover clause). Round 4's three wording rows went to T11 (the code already does each, tested).
+
+**For T04, from these numbers.** Two levers are now measured, not guessed: the per-call cost (fewer, batched calls - the root
+CLAUDE.md's "batch the lookups you already know you need"), and the record-check phase after a page edit. T04's row is read
+phase by phase against T03's with these tables.

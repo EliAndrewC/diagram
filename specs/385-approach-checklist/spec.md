@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-17
 
-**Status**: In progress - T01, T02 and T03 landed 2026-10-17 (their retros in `retro.md`); amendments 1 and 2 FAITHFUL, amendment 3 (T13) filed; Spec FAITHFUL (round 2); checklist v1 drafted (`checklist.md`) and refined by the audit (`audit.md`, 13 pitfalls) and by T01
+**Status**: In progress - T01, T02 and T03 landed 2026-10-17 (their retros in `retro.md`); amendments 1 and 2 FAITHFUL, amendment 3 (T13) landed, amendment 4 (T14) filed; Spec FAITHFUL (round 2); checklist v1 drafted (`checklist.md`) and refined by the audit (`audit.md`, 13 pitfalls) and by T01
 
 **Approved**: the GM, 2026-10-17, "the shape that you have proposed looks right. So please file it, draft checklist version 1, and start the cheap audit."
 
@@ -13,6 +13,8 @@
 **Amendment 2 approved**: the GM, 2026-10-17, "yes please make the blind approach T03's first step."
 
 **Amendment 3 approved**: the GM, 2026-10-17, "Yes, please lock in option three. Thanks." (option 3 of the claims-gate question the round arbiter raised at T03's landing, `ask:t03-claims-at-landing`)
+
+**Amendment 4 approved**: the GM, 2026-10-18, "Yesa please implement the proposals you made for what to do before task 4, as amendment 4."
 
 **Affects**: tooling, review process, hamlet, research record
 
@@ -168,6 +170,27 @@ block; never block on unchanged code, the finding filed as an open task):
   refusal honors that box. A finding on changed code or a changed claim is still introduced and still refuses, as before; a
   finding that stood at the base still only warns.
 
+### Amendment 4 - T03 measured again, before T04 (the GM, 2026-10-18)
+
+The GM asked for T03's 2 h 25 min broken down before T04. Read from the event log by hand (2026-10-18, `retro.md`'s T03 rows):
+about 50 min went to the four seeds (37 min diagnosing and fixing, 14 min on seed 57, which the fixes worsened), 21 min to the
+side-by-side merge, a second goal that failed and was carried, 24 min to the front (11.5 min of it the one-time blind Approach),
+and 50 min to checks and landing. The report's own table could not show this: it put 64% under "thinking", because a
+subagent's tool calls are logged under the session's id with no marker - 202 of the 549 calls in T03's window were
+subagents' (matched against the subagent transcripts' tool ids, 2026-10-18). And T03's decision log was first written from
+memory, up to an hour off.
+
+- **FR-014 (whose time)**: `make feature-report` tells the session's own tool calls from its subagents' - exactly where the
+  transcripts show it, the window an estimate only where they do not - and splits each task's time into the session working,
+  the session waiting (on a subagent, a background run, the GM) and the subagents' own work; and prints, per task, a table of
+  its phases between decision points: each phase's span, what ended it, the session's calls and working time, the time spent
+  waiting, and the subagents that ran in it.
+- **FR-015 (one goal a task)**: the checklist's "done" names ONE goal; a second goal found in a task becomes its own task before
+  work on it starts.
+- **FR-016 (the decision log, printed)**: `make feature-report` prints each task's decision-log skeleton from the event log and
+  the plan - its start, every agent returned (type, verdict, duration), every cohort and gate run, every part B or re-answered
+  Approach stamp, its tick - in time order, so a retro's decision log is filled in from it, not reconstructed.
+
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
@@ -184,6 +207,9 @@ block; never block on unchanged code, the finding filed as an open task):
   T01's, measured by FR-011's record; or the report says why not.
 - **SC-007** (FR-013): replayed on T03's landing, the three findings are carried, not refused, and the push goes ahead without
   `CLAIMS_OK` once `make claims-carry` has filed them; a finding on changed code still refuses (each a test red without it).
+- **SC-008** (FR-014 to FR-016): replayed on T03, the report attributes its 202 subagent calls to the subagents and shows the
+  phase table and decision-log skeleton the hand count above found; T04's retro row is written from them and compared with
+  T03 phase by phase.
 - **SC-006** (FR-012): T03's retro row compares the blind Approach with the sealed conclusions rule by rule, and names the checklist
   change each miss calls for, or that there was none.
 

@@ -414,11 +414,172 @@ def test_task_starts_and_ticks_are_read_from_the_record(tmp_path: Path) -> None:
 def test_a_batch_reply_is_read_by_its_units_and_an_empty_bundle_is_named() -> None:
     """The round arbiter's tooling fix on hour:385-approach-checklist@7: a multi-KIND depiction reply opened with prose, and an
     empty claims-triage bundle, both read "no verdict read"."""
-    batch = ("All four pop-ups are clean on COVERAGE and LINKS.\n\n---\n\nunit: x\n\n"
-             "modal-depiction: choice.lane_skeleton--T - COVERAGE 0 findings; TRUTH 1; LINKS 0\n\n"
-             "modal-depiction: choice.lane_skeleton--Y - COVERAGE 0 findings; TRUTH 0; LINKS 0\n")
+    batch = (
+        "All four pop-ups are clean on COVERAGE and LINKS.\n\n---\n\nunit: x\n\n"
+        "modal-depiction: choice.lane_skeleton--T - COVERAGE 0 findings; TRUTH 1; LINKS 0\n\n"
+        "modal-depiction: choice.lane_skeleton--Y - COVERAGE 0 findings; TRUTH 0; LINKS 0\n"
+    )
     assert el.verdict_of(batch) == "findings"
     assert el.verdict_of(batch.replace("TRUTH 1", "TRUTH 0")) == "clean"
     empty = "The manifest at /tmp/x/MANIFEST.md lists no changed pages and no claims, only its header, so I have no TOUCHES lines."
     assert el.verdict_of(empty) == "empty bundle"
     assert el.verdict_of("Some prose with nothing to count.") == ""
+
+
+tp = _load("task_phases")
+
+
+def _sub_project(tmp: Path, sid: str, aid: str, ids: list[str]) -> Path:
+    d = tmp / "projects" / "-x" / sid / "subagents"
+    d.mkdir(parents=True)
+    (d / f"agent-{aid}.jsonl").write_text("\n".join(json.dumps({"message": {"content": [{"type": "tool_use", "id": i}]}}) for i in ids))
+    return tmp / "projects"
+
+
+def test_a_subagent_s_calls_are_told_from_the_session_s(tmp_path: Path) -> None:
+    """Feature 385 amendment 4, plan D30: a subagent's tool calls reach the session's hooks under its sid; its transcript's
+    tool ids (or the hook's `by`) say whose each is, and the session's time is counted on its own events alone."""
+    projects = _sub_project(tmp_path, "s1", "a9", ["toolu_sub"])
+    assert tp.subagent_calls({"s1", ""}, projects) == ({"toolu_sub": "a9"}, {"a9"})
+    evs = [
+        {"t": "2026-10-17T10:00:00Z", "sid": "s1", "ev": "PreToolUse", "tool": "Bash", "id": "toolu_own", "cat": "other tool"},
+        {"t": "2026-10-17T10:00:10Z", "sid": "s1", "ev": "PostToolUse", "tool": "Bash", "id": "toolu_own", "cat": "other tool"},
+        {"t": "2026-10-17T10:00:20Z", "sid": "s1", "ev": "PreToolUse", "tool": "Read", "id": "toolu_sub", "cat": "other tool"},
+        {"t": "2026-10-17T10:05:20Z", "sid": "s1", "ev": "PostToolUse", "tool": "Read", "id": "toolu_sub", "cat": "other tool"},
+        {"t": "2026-10-17T10:05:30Z", "sid": "s1", "ev": "PreToolUse", "tool": "Grep", "id": "toolu_hook", "cat": "other tool", "by": "a8"},
+        {"t": "2026-10-17T10:06:00Z", "sid": "s1", "ev": "PreToolUse", "tool": "Bash", "id": "toolu_own2", "cat": "other tool"},
+    ]
+    marked = tp.attribute(evs, *tp.subagent_calls({"s1"}, projects))
+    assert [e.get("by") for e in marked] == [None, None, "a9", "a9", "a8", None]
+    assert tp.attribution(marked) == {"transcript": 1, "hook": 1}
+    assert tp.call_counts(marked) == (2, 2)
+    own = tp.session_events(marked)
+    assert [e["id"] for e in own] == ["toolu_own", "toolu_own", "toolu_own2"]
+    split = fr.split_time(own, "385-x")
+    assert split["other tool"] == 10 and split["thinking"] == 350, "the subagent's 5 min Read is not the session's tool time"
+    assert fr.split_time(evs, "385-x")["other tool"] > 10, "unmarked, the subagent's call reads as the session's"
+
+
+def test_the_hook_records_a_subagent_s_own_call() -> None:
+    base = {"hook_event_name": "PreToolUse", "session_id": "s", "tool_name": "Read", "tool_use_id": "t1", "tool_input": {}}
+    assert el.line({**base, "agent_id": "a7"}, "T")["by"] == "a7"
+    assert "by" not in el.line(base, "T")
+
+
+def _phase_events() -> list[dict]:
+    return [
+        {"t": "2026-10-17T10:00:00Z", "sid": "s", "ev": "PreToolUse", "tool": "Bash", "id": "1"},
+        {"t": "2026-10-17T10:01:00Z", "sid": "s", "ev": "PostToolUse", "tool": "Bash", "id": "1", "make": "cohort", "ms": 120000},
+        {"t": "2026-10-17T10:02:00Z", "sid": "s", "ev": "PreToolUse", "tool": "Agent", "id": "2"},
+        {"t": "2026-10-17T10:02:00Z", "sid": "s", "ev": "SubagentStart", "aid": "r1", "agent": "spec-fidelity"},
+        {"t": "2026-10-17T10:02:01Z", "sid": "s", "ev": "PostToolUse", "tool": "Agent", "id": "2", "aid": "r1"},
+        {"t": "2026-10-17T10:03:00Z", "sid": "s", "ev": "Stop"},
+        {"t": "2026-10-17T10:04:00Z", "sid": "s", "ev": "PreToolUse", "tool": "Read", "id": "3", "by": "r1"},
+        {"t": "2026-10-17T10:10:00Z", "sid": "s", "ev": "SubagentStop", "aid": "r1", "agent": "spec-fidelity", "verdict": "CLEAR"},
+        {"t": "2026-10-17T10:12:00Z", "sid": "s", "ev": "PreToolUse", "tool": "Bash", "id": "4"},
+        {"t": "2026-10-17T10:20:00Z", "sid": "s", "ev": "PostToolUse", "tool": "Bash", "id": "4"},
+    ]
+
+
+def test_each_task_s_phases_split_working_from_waiting() -> None:
+    """Plan D32: a phase per segment between decision points - the session's calls, its working and waiting minutes (a Stop
+    until what woke it), the subagents that started in it; a subagent's call is not the session's."""
+    evs = _phase_events()
+    rows = tp.phase_rows(evs, "T05", fr.parse_t("2026-10-17T10:00:00Z"), fr.parse_t("2026-10-17T10:20:00Z"), frozenset(fr.DECISION_AGENTS))
+    assert rows == [
+        "| T05 | 10:00-10:10 | spec-fidelity CLEAR | 2 | 3 | 7 | 0 | spec-fidelity x1 (8 min) |",
+        "| T05 | 10:10-10:20 | the tick or the last event | 1 | 10 | 0 | 0 | - |",
+    ]
+
+
+def test_each_task_s_decision_log_skeleton_is_printed_in_time_order() -> None:
+    """Plan D33: the start, every agent returned, every cohort and gate run, the plan's stamped blocks, the tick."""
+    plan = "### T05 part B (2026-10-17T10:05Z)\n\n### T05 Approach (re-answered 2026-10-17T10:06Z)\n\n### T06 part B (2026-10-17T10:07Z)\n"
+    rows = tp.skeleton_rows(_phase_events(), "T05", fr.parse_t("2026-10-17T10:00:00Z"), fr.parse_t("2026-10-17T10:20:00Z"), plan, True)
+    assert rows == [
+        "| T05 | 10:00 | started (`make task-start`) | |",
+        "| T05 | 10:01 | `make cohort` (2 min) | |",
+        "| T05 | 10:05 | part B written | |",
+        "| T05 | 10:06 | Approach re-answered | |",
+        "| T05 | 10:10 | spec-fidelity returned CLEAR (8 min) | |",
+        "| T05 | 10:20 | ticked | |",
+    ]
+    assert tp.skeleton_rows(_phase_events(), "T05", fr.parse_t("2026-10-17T10:00:00Z"), fr.parse_t("2026-10-17T10:20:00Z"), "", False)[-1].endswith("CLEAR (8 min) | |")
+
+
+def test_with_no_transcripts_a_call_inside_a_subagent_s_window_is_its_estimate() -> None:
+    """Plan D30 (spec-fidelity, T14 round 1): where neither a transcript nor the hook says, the agent's start-to-stop window
+    does - an estimate; a session whose transcripts were found is exact, and a call outside every window is the session's."""
+    evs = [{k: v for k, v in e.items() if k != "by"} for e in _phase_events()]
+    est = tp.attribute(evs, {}, set())
+    assert [e.get("by") for e in est if e.get("ev") == "PreToolUse"] == [None, None, "r1", None], "the session's launch is its own"
+    assert tp.attribution(est) == {"window": 1}
+    assert tp.attribution(tp.attribute(evs, {}, {"r1"})) == {}, "r1's transcript found: exact, no window estimate"
+
+
+def test_an_idle_gap_is_counted_apart_and_every_cohort_and_gate_run_is_listed() -> None:
+    evs = [
+        {"t": "2026-10-17T10:00:00Z", "sid": "s", "ev": "PreToolUse", "tool": "Bash", "id": "1"},
+        {"t": "2026-10-17T10:00:30Z", "sid": "s", "ev": "PostToolUse", "tool": "Bash", "id": "1", "make": "done", "cat": "gate", "ms": 60000},
+        {"t": "2026-10-17T12:00:30Z", "sid": "s", "ev": "PreToolUse", "tool": "Bash", "id": "2"},
+        {"t": "2026-10-17T12:01:00Z", "sid": "s", "ev": "PostToolUse", "tool": "Bash", "id": "2", "make": "cohorts", "ms": 60000},
+        {"t": "2026-10-17T12:02:00Z", "sid": "s", "ev": "PostToolUse", "tool": "Bash", "id": "3", "make": "verify-wait", "ms": 60000},
+    ]
+    row = tp.phase_rows(evs, "T05", fr.parse_t("2026-10-17T10:00:00Z"), fr.parse_t("2026-10-17T12:02:00Z"), frozenset())[0]
+    assert row == "| T05 | 10:00-12:02 | the tick or the last event | 2 | 2 | 0 | 120 | - |"
+    sk = tp.skeleton_rows(evs, "T05", fr.parse_t("2026-10-17T10:00:00Z"), fr.parse_t("2026-10-17T12:02:00Z"), "", False)
+    assert [r.split(" | ")[2] for r in sk] == ["started (`make task-start`)", "`make done` (1 min)", "`make cohorts` (1 min)"]
+
+
+def test_a_run_s_missing_transcript_is_estimated_by_its_window_and_a_foreground_run_is_waited_on(tmp_path: Path) -> None:
+    """Plan D30 per RUN, D31 (spec-fidelity, T14 round 2): a run with no transcript of its own gets the window estimate though
+    another run's transcript is found; a foreground `Agent` call - its run returns before the call does - is the session
+    waiting, never working, in both tables."""
+    evs = [{k: v for k, v in e.items() if k != "by"} for e in _phase_events()]
+    projects = _sub_project(tmp_path, "s", "other", ["toolu_x"])
+    marked = tp.attribute(evs, *tp.subagent_calls({"s"}, projects))
+    assert tp.attribution(marked) == {"window": 1}, "r1's own transcript is missing: its call is estimated, not the session's"
+    _sub_project(tmp_path / "b", "s", "r1", ["toolu_nothing"])
+    exact = tp.attribute(evs, *tp.subagent_calls({"s"}, tmp_path / "b" / "projects"))
+    assert tp.attribution(exact) == {}, "r1's transcript found and silent on the call: the session's"
+    fg = [
+        {"t": "2026-10-17T10:00:00Z", "sid": "s", "ev": "PreToolUse", "tool": "Agent", "id": "g", "agent": "spec-fidelity"},
+        {"t": "2026-10-17T10:00:01Z", "sid": "s", "ev": "SubagentStart", "aid": "f1", "agent": "spec-fidelity"},
+        {"t": "2026-10-17T10:05:00Z", "sid": "s", "ev": "SubagentStop", "aid": "f1", "agent": "spec-fidelity"},
+        {"t": "2026-10-17T10:05:01Z", "sid": "s", "ev": "PostToolUse", "tool": "Agent", "id": "g", "aid": "f1"},
+        {"t": "2026-10-17T10:06:01Z", "sid": "s", "ev": "PreToolUse", "tool": "Bash", "id": "h"},
+    ]
+    assert tp.foreground_spans(fg) == [(fr.parse_t("2026-10-17T10:00:00Z"), fr.parse_t("2026-10-17T10:05:01Z"), "spec-fidelity")]
+    split = fr.split_time(fg, "385-x")
+    assert split["waiting: spec-fidelity"] == 301 and split["thinking"] == 60
+    row = tp.phase_rows(fg, "T05", fr.parse_t("2026-10-17T10:00:00Z"), fr.parse_t("2026-10-17T10:06:01Z"), frozenset())[0]
+    assert row.split(" | ")[4:6] == ["1", "5"], "1 min working, 5 waiting on the foreground run"
+
+
+def test_overlapping_windows_give_a_call_to_the_earliest_started_run() -> None:
+    """Plan D30 (spec-fidelity, T14 round 3's aside): two runs with no transcript, their windows overlapping - the earliest-
+    started's, still an estimate; listed in stop order, the later run would have taken it."""
+    evs = [
+        {"t": "2026-10-17T10:00:00Z", "sid": "s", "ev": "SubagentStart", "aid": "early"},
+        {"t": "2026-10-17T10:01:00Z", "sid": "s", "ev": "SubagentStart", "aid": "late"},
+        {"t": "2026-10-17T10:02:00Z", "sid": "s", "ev": "PreToolUse", "tool": "Read", "id": "c"},
+        {"t": "2026-10-17T10:03:00Z", "sid": "s", "ev": "SubagentStop", "aid": "late", "agent": "quote-check"},
+        {"t": "2026-10-17T10:04:00Z", "sid": "s", "ev": "SubagentStop", "aid": "early", "agent": "impl-drift"},
+    ]
+    assert [e.get("by") for e in tp.attribute(evs, {}, set()) if e.get("tool")] == ["early"]
+
+
+def test_a_transcript_named_call_is_its_run_s_anywhere_and_a_mixed_overlap_is_the_missing_run_s_estimate() -> None:
+    """Plan D30, round 4's rows 1 and 3: a call a transcript names is that run's even outside every window (a run still going,
+    or one whose stop was never logged); a call no transcript names, inside both a found run's window and a missing run's, is
+    the missing run's estimate - the found transcript shows it is not that run's, nothing shows it is the session's."""
+    evs = [
+        {"t": "2026-10-17T10:00:00Z", "sid": "s", "ev": "SubagentStart", "aid": "found"},
+        {"t": "2026-10-17T10:00:30Z", "sid": "s", "ev": "SubagentStart", "aid": "missing"},
+        {"t": "2026-10-17T10:01:00Z", "sid": "s", "ev": "PreToolUse", "tool": "Read", "id": "mixed"},
+        {"t": "2026-10-17T10:02:00Z", "sid": "s", "ev": "SubagentStop", "aid": "found", "agent": "quote-check"},
+        {"t": "2026-10-17T10:03:00Z", "sid": "s", "ev": "SubagentStop", "aid": "missing", "agent": "impl-drift"},
+        {"t": "2026-10-17T10:09:00Z", "sid": "s", "ev": "PreToolUse", "tool": "Grep", "id": "late"},
+    ]
+    marked = tp.attribute(evs, {"late": "running"}, {"found", "running"})
+    assert [(e.get("by"), e.get("how")) for e in marked if e.get("tool")] == [("missing", "window"), ("running", "transcript")]

@@ -156,7 +156,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14
 
 ## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)
 
@@ -562,6 +562,69 @@ Owed by the hour-8 step-back (`hour:385-approach-checklist@8`, ruled `continue`)
 7. **The next step is a measurement.** The round-2 plan review, then the tests red without each rule.
 8. **Routes measured before asking?** Nothing is being asked.
 9. **After a ruling.** The ruling is `continue`; the step it names is T13 once its plan is reviewed.
+
+## T14 - T03 measured again: whose time, each phase, the decision log printed (amendment 4, FR-014 to FR-016)
+
+### T14 Approach (checklist part A)
+
+1. **The goal, in the world.** The GM reads a task's row and sees where its time went - the session working, the session
+   waiting, the reviewers' own work - phase by phase, and a retro's decision log is filled from a printed skeleton, so the next
+   question ("why did four seeds take 2 h 25?") is answered by `make feature-report`, not by hand.
+2. **The constraints.** FR-014 to FR-016 (the GM's, amendment 4); the event log never refuses and never prints (event_log.py's
+   contract); the report reads, never writes, but for `WRITE=1`; a test red without each rule; tooling lands by
+   `scripts/sync-with-main.sh done` (no engine code).
+3. **Where each comes from.** The requirements are the GM's (G, 2026-10-18). The attribution by transcript is a measurement
+   (2026-10-18: 202 of T03's 549 calls matched a subagent transcript's tool id, 347 the session's, none unmatched); the table columns and the window
+   fallback's form are ours (O); the idle cap is the report's existing hour (`IDLE_CAP_S`).
+4. **Do they describe the world here?** Yes - each is T03's own measured gap: the "thinking 64%" that was not the session's (the report's own output, `make feature-report F=385
+SINCE=2026-10-17T20:44:00Z UNTIL=2026-10-17T23:10:00Z`, run 2026-10-18 before this task),
+   the merge a second goal, the decision log reconstructed wrong.
+5. **The order.** Attribution first (every other table reads it), then the phase table, then the skeleton, then the checklist
+   line; T03 replayed last as the acceptance.
+6. **The exits.** (c) a rule that dissolves the case - **chosen**: the transcripts already say whose each call was, so no
+   heuristic is the primary source. (a), (b), (d) n/a; (e) conform - n/a.
+7. **The search smell.** None: a join on recorded ids.
+8. **The budget.** About 90 min; twice that is part B.
+9. **Done, measured.** ONE goal: the report shows T03 as the hand count did. Tests in `tests/tooling/test_feature_report.py`
+   red without each rule; `make feature-report F=385` on T03 attributes 202 calls to subagents and prints its phases and its
+   skeleton; `make hooks-test` green.
+
+### T14 Decisions
+
+**D30 - whose call, from the transcripts.** A tool event is a SUBAGENT's when its `id` (the tool_use id) appears in a subagent
+transcript of its session - `<projects dir>/<sid>/subagents/agent-<aid>.jsonl`, the session's transcripts found under
+`~/.claude/projects/*/` by `sid`. The event-log hook also records `by` on a tool event whose payload carries `agent_id`, so a
+log whose transcripts are gone still says it. WHERE NEITHER SAYS, decided per subagent RUN (spec-fidelity, T14 round 2): a
+call with no `by`, inside the start-to-stop window (`SubagentStart` to `SubagentStop`) of a run whose own transcript
+(`agent-<aid>.jsonl`) is not found, is that run's, counted as an ESTIMATE - never the session's own `Agent` call, which launches it; where the windows of several such runs overlap,
+the earliest-started's (the GM's "otherwise use each agent's start and stop window";
+spec-fidelity, T14 round 1). A call no transcript names, inside the window of a run whose transcript was found, is
+the session's; a call outside every window is the session's. `split_time` counts only the session's events; the subagents' calls are counted apart, and the line under "Where the
+time went" says how many were attributed by transcript, by the hook and by window.
+
+**D31 - the session's time split three ways.** "Where the time went" gains a line naming how many tool calls were subagents'
+and how they were attributed, and its categories separate: the session working (its tool time and its gaps between its own
+calls, a gap with a `Stop` in it excepted), the session waiting (a `Stop` until the next event: on a subagent, a background run
+or the GM, as `_waiting` already names) - and, waiting too, the span of the session's own `Agent` call (a foreground run: no `Stop`
+comes, the call lasts from launch to return), and every gap inside it (spec-fidelity, T14 round 2: never its working time) -
+and the subagents' own work (each run's start to stop, from `SubagentStart` /
+`SubagentStop`, summed, shown beside the session's and never added to its share). A session gap past the hour cap
+(`IDLE_CAP_S`) is IDLE, counted apart in both tables, never dropped - so a task's whole time is split.
+
+**D32 - each task's phases.** Per task, a table of its segments between decision points (the cuts `task_rows` already makes):
+the span (UTC), what ended it (the agent and verdict, or the tick), the session's calls, its working minutes, its waiting
+minutes, its idle minutes, and the subagents that ran in it (`type x n, minutes`).
+
+**D33 - the decision-log skeleton.** Per task, in time order: its start (`task-start`), every agent returned (type, verdict,
+minutes), every cohort and gate run - every make run whose target starts `cohort`, and every run the event log files under the
+`gate` category or names `verify` (its minutes; spec-fidelity, T14 round 1: "every" is the rule, not a list), every plan heading stamped
+`part B (<UTC>)` or `Approach (re-answered <UTC>)`, its tick - each row with a blank "what decided it" cell for the retro to
+fill. Checklist C8 points at it.
+
+**D34 - one goal a task.** Checklist part A item 9 ("Done, measured") gains: it names ONE goal; a second goal found in the task
+becomes its own task (a new box, or a carried row) before any work on it - T03's merge was the second goal that cost 21 min (the event log, read 2026-10-18 - `retro.md`'s T03 phases, 21:45-22:06)
+and
+pulled the seeds' landing into arbiter rulings. A judgment, not a guard: no mechanical test tells two goals from one.
 
 ## T04 to T10 - T48, T47's patch, five ranking rows
 

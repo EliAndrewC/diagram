@@ -11,7 +11,8 @@ THE LINE (plan D7). `event-log-hooks.sh` hands every PreToolUse, PostToolUse, Su
 UserPromptSubmit and Stop payload here; one JSON line goes to `<git common dir>/l7r-events/<feature dir>.jsonl`, the feature
 being the clone's `.specify/feature.json` (`_unassigned.jsonl` without one). Fields: `t` (UTC), `sid`, `ev`, and where they
 apply `tool`, `id` (tool_use_id), `cat` (`category`), `make` (a Bash call's make target), `path`, `old`/`new` (digests of an
-Edit's strings - the reversal wire), `agent`/`aid`/`manifest` (an agent's type, id and the MANIFEST its prompt names),
+Edit's strings - the reversal wire), `agent`/`aid`/`manifest` (an agent's type, id and the MANIFEST its prompt names), `by` (the subagent whose tool call it
+is, where the payload names one - feature 385 amendment 4),
 `ms` (PostToolUse's duration), `verdict` (a returned agent's verdict word, or `clean` / `findings`). The gap from one PostToolUse to the next PreToolUse is the model's own time. A clone's git dir
 outlives its sessions and any compaction, and the report reads every clone's log for the feature.
 
@@ -171,6 +172,8 @@ def line(payload: Mapping[str, Any], t: str | None = None) -> dict[str, Any]:
         ti = payload.get("tool_input") or {}
         ti = ti if isinstance(ti, Mapping) else {}
         out.update(tool=tool, id=payload.get("tool_use_id") or "", cat=category(str(tool), ti))
+        if payload.get("agent_id"):  # a subagent's own call, where the payload says so (feature 385 amendment 4, plan D30)
+            out["by"] = payload["agent_id"]
         if tool == "Bash":
             target = make_target(str(ti.get("command") or ""))
             if target:

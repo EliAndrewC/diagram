@@ -142,3 +142,19 @@ session put the claims-gate question (`ask:t03-claims-at-landing`) as three opti
 The GM, verbatim:
 
 > Yes, please lock in option three. Thanks.
+
+## Amendment 4 (2026-10-18)
+
+The GM, verbatim:
+
+> Okay, so whenever you finish locking in that option 3 stuff, let's talk how how we did on task number three  It looks like it took nearly two and a half hours to fix 4 broken seeds.  That still feels not great.  You mentioned it took 2 hours and 25 minutes.  Can you break that down and see whether there are other improvements we need to make, other process improvements, etc?  Go ahead and finish your option 3 implementatilon before working on this, I don't mean to interrupt you, I just want to make sure we do more measurements before we proceed with T04 and see how things are working.
+
+The session proposed, verbatim in part:
+
+> - **Fix the measurement.** Record which subagent made each tool call, if the hook input carries that; otherwise use each agent's start and stop window. `make feature-report` would then split time into the session, the subagents and idle, and print a per-phase table like the one above.
+> - **One goal per task.** A checklist item: a task's "done" names one goal, and a second goal becomes its own task.
+> - **The decision log comes from the tooling.** `make feature-report` prints the log's skeleton (agent runs, cohorts, part B stamps, ticks), so a retro is filled in rather than reconstructed.
+
+The GM, verbatim:
+
+> Yesa please implement the proposals you made for what to do before task 4, as amendment 4.
