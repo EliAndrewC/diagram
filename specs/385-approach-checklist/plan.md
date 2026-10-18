@@ -156,7 +156,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27
 
 ## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)
 
@@ -1013,6 +1013,20 @@ judged again; a MISLABELED with its text unchanged is refused as before.
 9. **Done, measured.** One goal: a clone whose patch went stale on main lands its tooling in one `make land-tooling`; a
    conflicting merge still refuses and is aborted; `tests/hooks/test-land-tooling.sh` red without the merge.
 
+### T24 Approach (re-answered 2026-10-18T09:52Z)
+
+1. **The goal, in the world.** Unchanged: a tooling landing never refused only because main moved.
+2. **The constraints.** Unchanged, plus round 2's: the clone's history is left as it was when the patch applies.
+3. **Where each comes from.** Unchanged; merging only on a failed apply is ours (O), the route's own rule kept (G, feature 379).
+4. **Do they describe the world here?** Yes - its first use (T26's landing, 2026-10-18) met a real conflict, main's comment strip
+   of the Makefile, and refused with the merge aborted, as designed.
+5. **The order.** Unchanged.
+6. **The exits.** (c), unchanged.
+7. **The search smell.** None.
+8. **The budget.** 25 min; about 20 spent.
+9. **Done, measured.** Unchanged: `tests/hooks/test-land-tooling.sh` case 3c (a stale base lands) and case 3 (a conflict refuses,
+   the merge aborted), red without the merge.
+
 ### T24 Decisions
 
 **D46 - main merged in when the patch no longer applies.** When FILES' patch fails to apply onto the latest main,
@@ -1099,6 +1113,28 @@ it takes the snapshot and writes the prompts. Every unit is asked (round 1: "eve
 the pool, measured 2026-10-18 (every `pool/*/*/` and `legacy-hand-authored-pool/*/*/` directory holds its `.gen.py`) - whose
 `.png` is missing is listed as `sheet:<its .svg>`, and `make verify` refuses it, naming `make sheet-render SHEET=<svg> OUT=<png>`,
 the arbiter's second option.
+
+## T27 - the heading the tool asks for passes its own check (found ticking T05 and T22)
+
+### T27 Approach (checklist part A)
+
+1. **The goal, in the world.** A task given an owed Approach or part B block, headed as the refusal says, ticks.
+2. **The constraints.** D9 (feature 385): an owed part is answered by a block stamped at or after its trigger; the stamp format
+   `owe` prints; a test red without it; tooling only.
+3. **Where each comes from.** D9 is ours (O, plan D9); comparing to the minute is ours (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-18 at 11:05: `make tick` refused T05 ("hour:385-approach-checklist@12
+   at 2026-10-18T10:25:14Z ... no block stamped after it") with `### T05 part B (2026-10-18T10:25Z)` in place - the heading `owe`
+   printed, to the minute - and T22 the same at 09:33:15Z against `09:33Z`.
+5. **The order.** The comparison, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 10 min.
+9. **Done, measured.** One goal: a block headed as `owe` prints passes `make tick`; a test red without it.
+
+### T27 Decisions
+
+**D49 - to the minute.** `approach_gate.refusal` compares an owed row's time truncated to the minute, the precision `owe` prints in
+the heading it asks for; a block stamped a minute earlier still refuses.
 
 ## T11 - the close
 

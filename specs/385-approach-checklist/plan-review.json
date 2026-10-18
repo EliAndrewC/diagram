@@ -51,7 +51,7 @@
    "declared": "spec-fidelity"
   },
   "## Landing": {
-   "sha256": "7fc9314edaa951daf006a59bbd1de35228db5086cf6b9cfac55de191b1679b93",
+   "sha256": "a0174b5a8f1aa78ba1de2830d5fbf79e9998fe7e45f15bea7346051469bc0958",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -448,6 +448,30 @@
   },
   "### T05 part B (2026-10-18T10:25Z)": {
    "sha256": "f26e995b2884abfe8bfca105319451a93661949a8fe97121422afe75ae0e5b08",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T24 Approach (re-answered 2026-10-18T09:52Z)": {
+   "sha256": "3c70eba2e6b1fe2cb31f19384620646e41cd5a7f3e23d9bc68073528a03993ae",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T27 - the heading the tool asks for passes its own check (found ticking T05 and T22)": {
+   "sha256": "fe8be8be3c8d5f08f026e3a12bcf086e39ab8903c18f0bcbcba6f77d7c66e6f3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T27 Approach (checklist part A)": {
+   "sha256": "fa030111bd91bb87825b3441247253b33d889a9cddfdae5042773a6cb5e18bce",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T27 Decisions": {
+   "sha256": "0c3e4d7376dd3567e7d1890ee77cc9c566a139fa40123a2a9ea55d476e3c82d0",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -2967,6 +2991,44 @@
      "summary": "Next step is the landing cohort (make cohort-landing), then the push; T25 landed and T26 in review as T05's fixes.",
      "class": "within",
      "why": "Measurement before landing, consistent with the request's measure-each-task process; decides nothing the spec left open."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T27 - the heading the tool asks for passes its own check (found ticking T05 and T22)",
+    "### T24 Approach (re-answered 2026-10-18T09:52Z)",
+    "### T27 Approach (checklist part A)",
+    "### T27 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing: T27 lands open",
+     "summary": "T27 is added to the Lands open list, landing when it closes with its retro row while later tasks stay open.",
+     "class": "within",
+     "why": "The same rule already applied to T02-T26, which carries FR-006 (one task, then the retro). Adding the new task to that list decides nothing new."
+    },
+    {
+     "id": "T24 Approach re-answered",
+     "summary": "T24's Approach is re-stamped after its round-2 re-review. It keeps the goal, order, exit (c) and done-measure, adds round 2's constraint (the clone's history is left as it was when the patch applies), and answers item 4 afresh with the first real use: a real conflict on T26's landing refused with the merge aborted.",
+     "class": "within",
+     "why": "D9's third trigger and FR-003 ask for the Approach block to be answered again and stamped after the re-review. This block does that. 'Unchanged' is a real answer where nothing changed, and the item that could change (whether the constraints describe the world, item 4) is re-answered with new evidence. The added constraint narrows how the tooling acts, not what the GM asked for. The work itself is a tooling improvement under amendment 6."
+    },
+    {
+     "id": "T27 filing",
+     "summary": "T27 is filed as its own task: a defect where the heading `owe` prints, stamped to the minute, is refused by `make tick` against a trigger time that carries seconds. It was found ticking T05 and T22.",
+     "class": "within",
+     "why": "Amendment 6 (the GM: 'Please make sure to implement any obvious performance / tooling / process improvements along the way') covers it, and it is a tooling-only defect fix. It names one goal (FR-015). It was measured, not assumed: item 4 quotes the refusals of T05 (10:25:14Z vs 10:25Z) and T22 (09:33:15Z vs 09:33Z)."
+    },
+    {
+     "id": "D49",
+     "summary": "approach_gate.refusal truncates the owed row's trigger time to the minute before comparing, so a block stamped in the trigger's own minute (the precision `owe` prints) passes, and a block stamped a minute earlier still refuses.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "D9 says the owed block is 'stamped after the trigger'. Read to the second, a block stamped 10:25Z for a trigger at 10:25:14Z is before it, so D49 relaxes D9 within the trigger's own minute. Two of MODE 1's grounds apply. First, the literal rule cannot be met in the format the tool itself requires: the heading `owe` prints, and D9's own `### Txx part B (<UTC>)` form, carry minutes only. A block answered in the trigger's own minute, headed as instructed, can never pass. The session's only ways out would be to wait out the clock or stamp a false future minute. Second, the literal reading defeats D9's purpose (a fresh answer after the trigger, not one carried in from before) instead of serving it: the only extra blocks it lets through were written in the same sub-minute window, and a block from any earlier minute still refuses. The relaxation goes no further than the precision of the format the spec chose. It is one case, not several bundled together, and nothing in the GM's request asks for second-level precision. The T27 Approach's wording 'at or after' describes the same minute-level comparison."
     }
    ]
   }

@@ -403,3 +403,8 @@ About 25 min (two plan rounds). `make verify` now renders an owed map whose rend
 writes the prompts; round 1 held the arbiter's "every unit" against a sheet exclusion that had no measured basis (none exists
 today, and now it would be refused). **The habit it changes:** none.
 
+
+## T27 - the retro row
+
+About 15 min (one plan round). `owe` printed the heading it asked for to the minute and then judged it to the second, so a
+block written as told could not pass; found when the ticks of T05 and T22 refused. **The habit it changes:** none.
