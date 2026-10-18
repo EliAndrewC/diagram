@@ -1,0 +1,32 @@
+{
+  "utc": "2026-10-18T16:45:47Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 2,
+  "result": "failed: tree moved",
+  "commit": "00ae2a785",
+  "host": {
+    "load": [
+      2.37,
+      2.37
+    ],
+    "mem_avail_mb": [
+      9018,
+      9059
+    ],
+    "cpu_temp_c": [
+      55.0,
+      56.0
+    ],
+    "stall_s": {
+      "cpu": 0.0,
+      "io": 0.0,
+      "io_full": 0.0,
+      "memory": 0.0
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  }
+}
