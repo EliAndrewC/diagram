@@ -180,6 +180,8 @@ single-command shape and not the one that actually happened; FR-005 is what make
 
 ### FR-006 - a guard file's reason can be given outside the file (Amendment 1)
 
+**FR-006 - the reason FR-001 demands may be given by `make guard-edit` instead of inside the edit.**
+
 The reason FR-001 demands stays mandatory and recorded; what changes is WHERE it may be written. An in-file marker is
 a comment that outlives its edit: the root Makefile had collected 2,452 lines, more than half of them `GUARD_EDIT_OK`
 narration, some of it no longer true, and every session reads it. The Bash route already takes the reason as a trailing
@@ -214,7 +216,7 @@ besides (c).
 - **SC-005**: no guard refuses anything it did not refuse before, except a bare escape token, the main-tree write newly refused by FR-005, and (Amendment 1) a marker added to the root Makefile by FR-006(c). (Round 4 caught the first version contradicting FR-005 outright - an implementer building a test from it would have asserted that FR-005 must fail.)
 - **SC-006**: a write issued while the session's cwd is main's tree - with no `cd` in the command - is refused; the same write from a clone, and a READ from main's tree, are untouched. Both shapes of the reported incident are fixture cases.
 - **SC-007**: `make hooks-test` and `make done` green.
-- **SC-008** (FR-006): with a live permit, an Edit of the root Makefile carrying no marker is accepted and recorded with the permit's reason; with none, or one for another file, or an expired one, it is refused naming `make guard-edit`; an edit adding a marker to the root Makefile is refused; the root Makefile holds zero `GUARD_EDIT_OK` at the push.
+- **SC-008** (FR-006): with a live permit, an Edit of the root Makefile carrying no marker is accepted and recorded with the permit's reason; with none, or one for another file, or an expired one, it is refused naming `make guard-edit`; an edit adding a marker to the root Makefile is refused; `make guard-edit` refuses a reason under FR-001's floor and a file that is not a guard file; the root Makefile's Read-time context names `make guard-edit`; the root Makefile holds zero `GUARD_EDIT_OK` at the push.
 
 ## Decisions Recorded
 
