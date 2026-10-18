@@ -502,3 +502,10 @@ About 45 min (two plan rounds). A `make done --dry-run` I typed to learn a trigg
 red gate and owed a second trigger. The abort now records its own target, so it never counts as a red in a row while still never
 vouching for the tree, and the red-gate bundle shows the diff between the reds it counts. Round 1 blocked a `--stat` alone: the
 arbiter asked for the diff. **The habit it changes:** never dry-run a gate to read its refusal - ask the tool that owns the name.
+
+## T51 - the retro row
+
+About 25 min (two plan rounds). T08's gate went red on a test that passed alone: two plan-gate tests wrote one shared bundle path
+under `/tmp/l7r-check` from different workers. Each now writes under its own `tmp_path`. Round 1 blocked folding in T49's import
+order - a second goal - so that re-landed with T49. **The habit it changes:** a test that writes a real path is a race waiting
+for xdist; give it its own `tmp_path` when it is written.
