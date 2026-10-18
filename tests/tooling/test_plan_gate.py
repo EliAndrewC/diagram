@@ -31,7 +31,6 @@ tt = importlib.util.module_from_spec(_tt)
 _tt.loader.exec_module(tt)
 
 
-
 @pytest.fixture(autouse=True)
 def _own_bundles(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Each test writes its plan bundles under its own `tmp_path` (feature 385 T51): `decide_prompt` wrote the shared
@@ -40,6 +39,7 @@ def _own_bundles(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> Non
     import plan_bundle  # noqa: PLC0415 - the module `plan_gate` imports by this name
 
     monkeypatch.setattr(plan_bundle, "OUT", tmp_path / "l7r-check")
+
 
 PLAN = b"# plan\n\n**P1 - a decision.**\n"
 TASKS = "# Tasks\n\n- [ ] T01 plan review\n      verify:\n- [ ] T02 build it\n      verify:\n"
