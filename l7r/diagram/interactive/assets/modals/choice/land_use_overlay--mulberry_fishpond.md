@@ -3,7 +3,7 @@ heaped round each to make a dike planted with mulberry. The leaves fed silkworms
 the pond mud was dredged back onto the dike. Around Lake Tai, where floods and waterlogging were frequent, and in the Pearl
 River delta, farmers made them so. In the delta the ponds arose in the Ming with fruit trees on their dikes; mulberry took the fruit trees' place in the late Ming and early Qing, and the mulberry dike-pond reached its height at the end of the Qing.
 
-Such a village showed ponds among its rice on the low ground, each ringed by a bank of mulberry kept as low bushes, about head high, the rest of its fields left in
+Such a village showed ponds among its rice on the low ground, each ringed by a bank of mulberry kept as low bushes, the rest of its fields left in
 rice. In the delta today most ponds are about 1 to 1.5 acres (0.4 to 0.6 ha) and 7 to 10 ft (2 to 3 m) deep, inside banks usually some 20 to 33 ft
 (6 to 10 m) wide.
 

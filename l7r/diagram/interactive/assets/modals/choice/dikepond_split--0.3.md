@@ -6,7 +6,7 @@ How a parcel was split between water and bank varied. Modern writers give it as 
 or, perhaps in another region, six parts dike to four of pond, or seven of water to three of dike, the water-heavy splits being for ponds whose fish were also
 fed from beyond the bank; one puts them equal where the mulberry alone fed the fish, and another
 three or four of water to seven or six of dike, if its figures are read in the order it names them. In the seventeenth century one township of the Pearl River delta gave
-half of its land to fish by one account, and by another eight tenths to its fish ponds.
+half of its land to fish by one writer's account, and, in another passage of the same writer, eight tenths to its fish ponds.
 
 Guesses:
 - That each of the five splits was as common as the others: no account gives a share between them, and every account

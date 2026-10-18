@@ -2,12 +2,12 @@ About: A dike-pond was a fish pond ringed by a planted dike, most often of mulbe
 the silkworms' droppings fed the fish, and the mud dredged from the pond was banked back up round the mulberry. The villagers of the polder they lay in kept them, raising fish in the water and silkworms on the leaf; the fish were carp, bought as fry netted wild in the rivers. Ponds were dug out of low ground that
 flooded, their mud heaped into the dike, in the Pearl River delta and in Jiangsu and Zhejiang.
 
-In the delta the ponds arose in the Ming with fruit trees, lychee above all, on their dikes; mulberry took the fruit trees' place in the late Ming and early Qing, though in 1678 fruit trees and tea still stood beside it, and the mulberry dike-pond reached its height at the end of the Qing. Most of the time ponds took only
+In the delta the ponds arose in the Ming with fruit trees on their dikes; mulberry took the fruit trees' place in the late Ming and early Qing, though in 1678 fruit trees, lychee above all, and tea still stood beside it, and the mulberry dike-pond reached its height at the end of the Qing. Most of the time ponds took only
 part of a village's rice land, but in the 18th century, at Longshan, "outside the dwellings all was pond", three-quarters of the farmland.
 
-In some districts the ponds lay as a mosaic, in others as a chessboard, its lines the dikes and its squares the ponds; most were narrow rectangles side by side, with squares and odd shapes pressed in to fit the ground.
+Across the delta the ponds lay as a mosaic among winding rivers, and in 1678 one township's pond land was likened to a chessboard, its lines the dikes and its squares the ponds; most were narrow rectangles side by side, with squares and odd shapes pressed in to fit the ground.
 They lay among the creeks and canals of the polder around them, watered and drained through sluice gates in the polder's own
-dike. In the delta today most ponds are about 1 to 1.5 acres (0.4 to 0.6 ha) and 7 to 10 ft deep, their dikes from under 16 ft to about 33 ft wide.
+dike. In the delta in modern times most ponds are about 1 to 1.5 acres (0.4 to 0.6 ha) and 7 to 10 ft deep, their dikes from under 16 ft to about 33 ft wide, standing 2 to 3 ft above the water. In Guangzhou's villages in the 17th century the ponds were drained at the year's end and sown with rice seedlings in spring; in modern times they are drained two or three times a year, their mud dredged onto the dikes.
 
 In 1678, early in the Qing, the fish took half of one delta township's
 land, and its ponds eight tenths. Water and dike were kept in proportion, so the mulberry could feed the

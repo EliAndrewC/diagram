@@ -19,10 +19,10 @@ Guesses:
   holds for every pond of the hamlet: no split written as a number before modern times was found, and no account gives a
   share between them.
 
-Depiction: The map draws a block of dike-ponds as a mosaic, every pond four-sided but skewed to an uneven shape, or on some hamlets as a chessboard of ponds in straight rows.
+Depiction: Where a hamlet is laid out as a block of dike-ponds inside a polder, the map draws the block as a mosaic, every pond four-sided but skewed to an uneven shape, or on some hamlets as a chessboard of ponds in straight rows.
 Each pond is set in from the
 edge of its plot, its planted bank filling the ring between.
-The gates drawn are the polder's own, in its outer dike; no pond has a sluice through its own bank, that being known only from
+The gates drawn there are the polder's own, in its outer dike; no pond has a sluice through its own bank, that being known only from
 modern times. Where a hamlet raises fry, its nursery ponds are drawn in muddier water, as fry water was turbid
 and grown-fish water clear. The title card says which layout this hamlet takes and whether it raises fry.
 
