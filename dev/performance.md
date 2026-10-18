@@ -405,6 +405,11 @@ asking both (`tests/soak/test_scale_equivalence_387.py`); the pool regenerated b
   a cluster that absorbed a cell is a new polygon, and a bigger cluster has a longer edge - new pairs, not re-checks. The house
   layout geometry was NOT built once per household: it is a different layout at each seat, and keying it per household was tried
   and withdrawn (297 R9) - the diagnosis was wrong there, recorded in the spec's premises table.
+- **And what it bought in time: little.** The five stages at 40 households, summed and averaged over the four seeds, went 13.5 ->
+  12.2 s (-10%), unchanged at 10-20 (`m:five-stages-ab`, the end bookend and the engine before it timed back to back). The counts
+  fell 5-20 fold and the seconds did not follow: the loops the diagnosis read off cProfile were a small part of each stage's wall
+  time under cProfile's inflation of Python calls (this file's own rule: price a change by the stage's wall time, not the calls it
+  removes). The next lever is not these loops - it is what the stages spend the rest on, measured by the wall clock.
 
 ## Memory: what the gate's RAM is, and the rules it left (features 208, 210, 2026-09-13 profile)
 

@@ -38,13 +38,13 @@
    "declared": "spec-fidelity"
   },
   "## T02 - the web's field way and the knots (FR-002)": {
-   "sha256": "e82fea6e197573201c6e192ef4dd08ec5aa8a10f060bc31906ea25343184c7e9",
+   "sha256": "73219f1c42f08914f209679145185743970e4b888c1db98b58b502c54944b997",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
   },
   "## T03 - the cell merges (FR-003)": {
-   "sha256": "e869d4f563b086308f08b9db1943661e9eed8fd90cf8be4105a038fb2e8e952a",
+   "sha256": "6205891cae08c2bf1e6045aa6e8a5aa4c10fa94648374eadf59b05e253c41cc7",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -367,6 +367,34 @@
      "summary": "Equivalence: every candidate's verdict, old and new. Counted: items tested per candidate",
      "class": "within",
      "why": "Enforces FR-006/FR-007 and the counting in SC-001/SC-002; enforcement of the request."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## T02 - the web's field way and the knots (FR-002)",
+    "## T03 - the cell merges (FR-003)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D2a",
+     "summary": "field_runs takes network points nearest-first by distance to the worked ground's edge and stops once limit runs are kept and the next point's lower bound exceeds the longest kept; refinement: within a band, points' edge distances come from one vectorized shapely.distance call and their runs are asked nearest first, stopping when the next point's distance less the stop exceeds the longest kept",
+     "class": "within",
+     "why": "FR-002 asks that the field way find its candidates without measuring every point, so that the work per candidate kept does not grow with the network. The refinement batches the distance step the block already used and tightens the early stop with a lower bound (distance less the stop) that never cuts a run shorter than one kept. It keeps the same output list, checked by the call-by-call equivalence test under FR-007, and rules on nothing the request did not ask for."
+    },
+    {
+     "id": "D2b",
+     "summary": "knot trials re-ask doorstep_ends, doubled_tails, shadows and needle_loops only where an edit can change them; way_outs stays whole",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict; it is FR-002's own text and stops re-checking the whole web on every trial, which is what the GM approved."
+    },
+    {
+     "id": "D3",
+     "summary": "Fabric.neighbors maps hits to live owners, removes duplicates and measures each once; refinement: a pair's shared-bund measure is kept with the two polygons it was taken on and reused while neither cell changes; the index is still not made current (defect recorded)",
+     "class": "within",
+     "why": "FR-003 asks that bund measurements per merge stop growing with the household count, and the after-count shows measuring once per merge still grew (3.2/3.1/9.4). Reusing a measure taken on the very same two polygons removes recomputation of an unchanged value and gives exactly the same answer under FR-007, with no check removed or loosened under FR-008. This is what the GM asked for under 'rebuilding things that don't change' and 'the cell merges ... redo the whole check'. The index carve-out is unchanged from the CLEAR text and from FR-003 itself."
     }
    ]
   }

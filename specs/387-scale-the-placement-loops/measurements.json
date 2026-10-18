@@ -190,5 +190,60 @@
     }
    }
   }
+ },
+ "m:five-stages-ab": {
+  "command": "make perf LABEL=387-end SCALING=1 (clone), then make perf SCALING=1 in a detached worktree at 0910936e4 (before any engine edit), back to back; the five changed stages summed per roll, mean of seeds 4/25/39/47; timing/base-0910936e4.json and dev/perf-log/*387-end*.json",
+  "date": "2026-10-18",
+  "load_start_end": {
+   "base": [
+    2.19,
+    4.48
+   ],
+   "new": [
+    7.32,
+    4.77
+   ]
+  },
+  "note": "base, new. The rolls' totals are not comparable: the end engine carries main's well siting (lane_wells 0 -> 10-43 s at 40 households, appurtenances 0.02 -> 3.3-3.8 s), measured on origin/main 6ce06d467 too.",
+  "per_stage_40": {
+   "field": [
+    2.62,
+    2.45
+   ],
+   "hinterland": [
+    2.61,
+    2.05
+   ],
+   "homesteads": [
+    4.66,
+    4.65
+   ],
+   "web": [
+    2.1,
+    1.74
+   ],
+   "windbreak": [
+    1.56,
+    1.27
+   ]
+  },
+  "seconds": {
+   "10": [
+    2.58,
+    2.54
+   ],
+   "15": [
+    3.93,
+    3.81
+   ],
+   "20": [
+    5.55,
+    5.55
+   ],
+   "40": [
+    13.54,
+    12.16
+   ]
+  }
  }
 }
