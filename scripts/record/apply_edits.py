@@ -51,7 +51,7 @@ import sys
 # the list's, not the file's, and is taken off each line of the old and new text. record-format wrote its first
 # cities/fabric 140 report that way and the unindented pattern found no block in it at all (feature 250 T55).
 EDIT = re.compile(
-    r"^(?P<ind>[ \t]*)EDIT[ \t]+`?(?P<path>[^\n`]+?)`?[ \t]*\n(?P=ind)<<<\n(?P<old>.*?)\n(?P=ind)===\n(?P<new>.*?)\n?(?P=ind)>>>[ \t]*$",
+    r"^(?P<ind>[ \t]*)EDIT[ \t]+`?(?P<path>[^\n`]+?)`?[ \t]*\n(?P=ind)<<<\n(?P<old>.*?)\n(?P=ind)===\n(?:(?P<new>.*?)\n)??(?P=ind)>>>[ \t]*$",
     re.S | re.M,
 )
 GLOSSARY = re.compile(r"^[ \t]*GLOSSARY[ \t]+(?P<term>[^|\n]+?)[ \t]*\|[ \t]*(?P<variants>[^|\n]*?)[ \t]*\|[ \t]*(?P<def>[^\n]+?)[ \t]*$", re.M)
@@ -103,7 +103,13 @@ def dedent(text: str, indent: str) -> str:
 
 def blocks(report: str) -> list[dict]:
     """Every EDIT and GLOSSARY block, in the report's order, numbered from 1."""
-    found = [(m.start(), {"kind": "edit", "path": m["path"].strip(), "old": dedent(m["old"], m["ind"]), "new": dedent(m["new"], m["ind"])}) for m in EDIT.finditer(report)]
+    # A LONE EMPTY LINE IS A PARAGRAPH BREAK, NO LINE IS A DELETION (feature 385 T60, the round arbiter on
+    # hour:385-approach-checklist@22): `===` then `>>>` deletes; `===`, one empty line, `>>>` breaks. Both used to parse as no text,
+    # so a split paragraph was deleted instead, and T10's check session finished two pop-ups by hand.
+    found = [
+        (m.start(), {"kind": "edit", "path": m["path"].strip(), "old": dedent(m["old"], m["ind"]), "new": dedent(m["new"] or "", m["ind"]), "brk": m["new"] == ""})
+        for m in EDIT.finditer(report)
+    ]
     found += [
         (m.start(), {"kind": "glossary", "term": m["term"].strip(), "variants": [v.strip() for v in m["variants"].split(",") if v.strip() not in ("", "-")], "def": m["def"].strip()})
         for m in GLOSSARY.finditer(report)
@@ -150,8 +156,24 @@ def apply_edit(root: pathlib.Path, b: dict, dry: bool, form: bool = False) -> st
     if count != 1:
         return f"REFUSED - the old text occurs {count} times in {target.name}, not once"
     if not dry:
-        target.write_text(text.replace(b["old"], b["new"], 1), encoding="utf-8")
+        target.write_text(replaced(text, b), encoding="utf-8")
     return f"applied to {target.name}"
+
+
+def replaced(text: str, b: dict) -> str:
+    """The file with the block's one occurrence replaced (T60): a break is a blank line where the old text was whole lines,
+    two newlines inside a line; an empty replacement of whole lines takes their newline with them, leaving no blank line."""
+    i = text.index(b["old"])
+    j = i + len(b["old"])
+    whole = (i == 0 or text[i - 1] == "\n") and (j == len(text) or text[j] == "\n")
+    if b.get("brk"):
+        new = "" if whole else "\n\n"
+    elif not b["new"] and whole:
+        new = ""
+        j += j < len(text)  # the emptied line's own newline
+    else:
+        new = b["new"]
+    return text[:i] + new + text[j:]
 
 
 def slug(term: str) -> str:
