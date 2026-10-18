@@ -662,3 +662,14 @@ month's hand-launched waves' numbers meanwhile.
 
 **Lands open**: T56
 
+## Amendment 8 (FR-047)
+
+**D51 - The request a plan-review bundle carries (FR-047, SC-035).** `scripts/gates/plan_bundle.py`: `request_sections(text)`
+splits `request.md` into the original request (before the first `## Amendment N` heading) and its amendment sections (a `###`
+under one belongs to it); `answered(blocks, spec)` is the earliest amendment the blocks answer - a block heading's `Amendment N`,
+else the spec `### Amendment N` section holding an FR or SC the block cites, else none; `trimmed_request(text, n)` is the
+original request and every section from amendment `n` on, with `request-index.md` the heading and first line of each left out,
+or the whole request when `n` is none or the request has no amendment headings. `build` writes both; the MANIFEST names
+`request-index.md`. Tests in `tests/tooling/` on a fixture feature: the newest amendment's block, an earlier one's, an original
+block, no amendments; and the measured cut on 383's own bundle goes in research R22.
+

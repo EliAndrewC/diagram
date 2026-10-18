@@ -681,3 +681,6 @@ first prompt):
   ~2.4k of `spec.md`.
 - So what still grows with a feature is the whole `request.md` each plan-review bundle copies (383's is ~20k characters at
   amendment 7). Hence FR-047, and no spec-delta or spec archive.
+- Measured on 383's own bundle once FR-047 was built (observed 2026-10-17; the method: `make plan-delta F=383` on amendment
+  8's block, the bundle's files counted): `request.md` 21,301 -> 8,632 characters (the original request and amendment 8),
+  with a 1,168-character `request-index.md` of the seven sections left out.

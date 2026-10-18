@@ -8,7 +8,9 @@ one-line index of the rest, the GM's own words whole, the blocks under review an
 repository, where no `CLAUDE.md` rides along:
 
     MANIFEST.md     what to judge, and how to record it
-    request.md      the GM's words, copied whole (a fidelity review must have them verbatim)
+    request.md      the GM's words verbatim: the original request and every amendment from the earliest one the blocks answer
+                    on (feature 383 amendment 8, FR-047: a whole copy grew with every amendment - 383's reached ~20k characters)
+    request-index.md  the heading and first line of each request section left out
     spec-cited.md   each FR, SC and D the blocks name, its paragraph in full
     spec-index.md   the first line of every other FR and SC
     blocks.md       the blocks under review, each with its key and digest
@@ -45,6 +47,55 @@ def _paragraphs(text: str, pattern: re.Pattern[str]) -> dict[str, str]:
     return out
 
 
+_AMEND = re.compile(r"^## Amendment (\d+)\b", re.M)
+_SPEC_AMEND = re.compile(r"^### Amendment (\d+)\b", re.M)
+
+
+def request_sections(text: str) -> tuple[str, list[tuple[int, str]]]:
+    """`request.md` as (the original request, [(amendment number, its section)]) - a `###` under an amendment is part of it."""
+    starts = list(_AMEND.finditer(text))
+    if not starts:
+        return text, []
+    head = text[: starts[0].start()]
+    return head, [(int(m.group(1)), text[m.start() : starts[i + 1].start() if i + 1 < len(starts) else len(text)]) for i, m in enumerate(starts)]
+
+
+def spec_amendments(spec: str) -> dict[str, int]:
+    """{FR or SC id: the amendment whose spec section holds it} - the ids under a `### Amendment N` heading, to the next `##`."""
+    out: dict[str, int] = {}
+    for m in _SPEC_AMEND.finditer(spec):
+        nxt = re.search(r"^##", spec[m.end() :], re.M)
+        for i in _ITEM.finditer(spec[m.end() : m.end() + nxt.start() if nxt else len(spec)]):
+            out.setdefault(i.group(1), int(m.group(1)))
+    return out
+
+
+def answered(under: list[tuple[str, str]], spec: str) -> int | None:
+    """The earliest amendment the blocks answer: a block heading's `Amendment N`, else the amendment holding an id it cites;
+    None when any block answers none - the original plan, which is judged against the whole request."""
+    of = spec_amendments(spec)
+    found: list[int] = []
+    for key, body in under:
+        m = re.search(r"\bAmendment (\d+)\b", key) or re.match(r"\s*#+ Amendment (\d+)\b", body)
+        ns = [int(m.group(1))] if m else [of[i.group(1)] for i in _IDS.finditer(body) if i.group(1) in of]
+        if not ns:
+            return None
+        found.append(min(ns))
+    return min(found) if found else None
+
+
+def trimmed_request(text: str, n: int | None) -> tuple[str, str]:
+    """(the request a review of amendment `n` reads, the index of what it leaves out). Every amendment from `n` on is kept: a
+    later one can change what an earlier one asked."""
+    head, parts = request_sections(text)
+    if n is None or not parts:
+        return text, ""
+    kept = [body for k, body in parts if k >= n]
+    left = [body for k, body in parts if k < n]
+    index = "".join(f"{body.splitlines()[0]} - {next((ln for ln in body.splitlines()[1:] if ln.strip()), '').strip()[:160]}\n" for body in left)
+    return head + "".join(kept), index
+
+
 def build(spec_dir: pathlib.Path, name: str, under: list[tuple[str, str]], earlier: dict[str, str], how: str) -> pathlib.Path:
     """Write the bundle for the blocks `under` ([(key, text)]) and return its MANIFEST."""
     out = OUT / f"plan-{spec_dir.name}-{name}"
@@ -62,7 +113,9 @@ def build(spec_dir: pathlib.Path, name: str, under: list[tuple[str, str]], earli
     (out / "spec-index.md").write_text("# Every other requirement, its first line\n\n" + "".join(
         p.splitlines()[0] + "\n" for i, p in items.items() if i not in cited), encoding="utf-8")
     if (spec_dir / "request.md").is_file():
-        shutil.copy(spec_dir / "request.md", out / "request.md")
+        req, index = trimmed_request((spec_dir / "request.md").read_text(encoding="utf-8"), answered(under, spec))
+        (out / "request.md").write_text(req, encoding="utf-8")
+        (out / "request-index.md").write_text("# The request's sections left out - each earlier amendment, its heading and first line\n\n" + (index or "(none - the whole request is in request.md)\n"), encoding="utf-8")
     (out / "blocks.md").write_text("".join(f"<!-- block {json.dumps(k)} sha256 {pg.block_digest(b)} -->\n{b}\n" for k, b in under), encoding="utf-8")
     (out / "earlier.md").write_text("# Each changed block's text at its last CLEAR verdict\n\n" + ("".join(
         f"<!-- block {json.dumps(k)} -->\n{t}\n" for k, t in earlier.items()) or "(none - every block here is new)\n"), encoding="utf-8")
@@ -70,7 +123,8 @@ def build(spec_dir: pathlib.Path, name: str, under: list[tuple[str, str]], earli
     manifest.write_text(f"""# Plan review bundle - {spec_dir.name}, {name}
 
 A MODE 4 plan review of the blocks in `blocks.md` and nothing else of the plan (feature 375 amendment 11). Read the files beside
-this MANIFEST and nothing in the repository: `request.md` is the GM's words verbatim; `spec-cited.md` holds every requirement and
+this MANIFEST and nothing in the repository: `request.md` is the GM's words verbatim - the original request and every amendment
+from the one these blocks answer on, the earlier ones indexed in `request-index.md`; `spec-cited.md` holds every requirement and
 decision the blocks name, in full; `spec-index.md` the first line of every other requirement - grep it for one the blocks
 should have named; `earlier.md` what a changed block said when last judged CLEAR.
 
