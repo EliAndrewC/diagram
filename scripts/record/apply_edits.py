@@ -295,6 +295,14 @@ def settle_round(root: pathlib.Path, report: str, found: list[dict], apply) -> i
         if lines:
             print(f"apply-edits: the {'/'.join(rnd.checks)} round's own EDITs, applied verbatim:")
             print("\n".join(lines))
+    elif rnd is not None and applied:
+        # feature 385 T10: a reply saved without its counts line applied every block and settled nothing, without a word -
+        # three pop-ups stayed owed a form round they had passed
+        print(
+            "apply-edits: the reply names no check, so the units it answered stay owed - put the agent's counts line "
+            "(`modal-form: <name> - 2 findings`, `quote-check: ...`) at the top of the reply file and run this again; "
+            "the blocks already in are settled, not applied twice"
+        )
     return applied
 
 
