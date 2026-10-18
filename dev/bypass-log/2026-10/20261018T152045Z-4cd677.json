@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-18T15:20:45Z",
+  "target": "claims-gate",
+  "commit": "3353714f5",
+  "why": "CLAIMS_OK: the round arbiter's rulings ask:t07-two-findings-at-landing and ask:t07-span-walkable-cannot-tell: the three findings carried into 385 T43"
+}
