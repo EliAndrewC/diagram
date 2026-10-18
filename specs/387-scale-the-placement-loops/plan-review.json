@@ -56,7 +56,7 @@
    "declared": "spec-fidelity"
   },
   "## T05 - the bamboo strip check (FR-006)": {
-   "sha256": "666e607234d7853f1429384396a2c79ddddcee9863687d18b6da6a8de42bdc83",
+   "sha256": "5d8f526c4d2b56014e29f5aac7d0f635bdf9e7f86e38eacce276dcfce0e74414",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -322,6 +322,51 @@
      "summary": "Header and 'None'.",
      "class": "within",
      "why": "No decision."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## T05 - the bamboo strip check (FR-006)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D5-index",
+     "summary": "household_bamboo builds one PointGrid (128 px) per pass of placed boxes, turned house boxes, wells/kosatsuba/byres/sheds/retirement houses, lane segment boxes padded by half-width, and crowns; _strip_blocked takes it as required `near` and scans its candidates for the strip box padded by the largest margin, then applies the SAME test",
+     "class": "within",
+     "why": "Exactly the GM's 'one straight scan with no index' item and FR-006 (indexes built once per pass, same verdict); the per-item test is unchanged so no rule is loosened (FR-008)."
+    },
+    {
+     "id": "D5-fixture-caller",
+     "summary": "The field pit's seat (homesteads/fixtures._flexible_clear), the other caller of _strip_blocked, builds one index for its pass and passes it in",
+     "class": "within",
+     "why": "It is the same strip check the request names; with `near` required, its caller must supply the index or the change cannot land. Same test, same verdicts."
+    },
+    {
+     "id": "D5-own-ground",
+     "summary": "A narrower lane list (own_ground) is honored by filtering the index's candidates to that list",
+     "class": "within",
+     "why": "Keeps the old verdict for that call (FR-006 equivalence); no scope change."
+    },
+    {
+     "id": "D5-currency",
+     "summary": "s.placed is indexed through indexes.indexed_grid on its own version (append extends, else rebuild); houses, other kinds, lanes and crowns filed once at pass start because the pass changes nothing else the check reads",
+     "class": "within",
+     "why": "FR-006's 'kept current as things are placed'; the filed-once inputs rest on the stated fact that the pass writes only placed, block_polys (not read) and its output."
+    },
+    {
+     "id": "D5-cache-check (changed)",
+     "summary": "Under L7R_CHECK_CACHES=1 the index now checks on each query that the once-filed registries still hold what was filed (their versions, crowns' and lanes' lengths) and raises if not; the straight scan no longer runs in that mode and runs only in the equivalence tests",
+     "class": "within",
+     "why": "The request asks for the index and FR-006 for a verdict equal to the straight scan's; that equality is still proved by the equivalence test running both (block's Equivalence line, FR-007). The debug mode is an extra guard on the filed-once premise, not something the GM asked for in a particular form, and swapping its method narrows nothing the GM or the spec requires."
+    },
+    {
+     "id": "D5-proof",
+     "summary": "Equivalence: every candidate's verdict, old and new. Counted: items tested per candidate",
+     "class": "within",
+     "why": "Enforces FR-006/FR-007 and the counting in SC-001/SC-002; enforcement of the request."
     }
    ]
   }

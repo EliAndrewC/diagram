@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-18
 
-**Status**: Draft
+**Status**: In progress - spec accepted by the round arbiter (2026-10-18), plan CLEAR
 
 **Approved**: the GM, 2026-10-18, "I don't think we need to re-check everything after each addition, and you've already proposed fixes for the others, so please file a feature for this and then make it happen."
 
@@ -73,7 +73,7 @@ where a premise did not hold, the requirement below is the form of that goal the
 - **FR-001 The way tree.** Admitting a candidate household way judges the way against the tree it joins and the rules the
   addition can break, not the whole tree again; the verdict equals the whole judgment's on the same tree and way.
 - **FR-002 The web's settling.** The settle runs 2-3 rounds at every size (seed 4: 3 at 10 households, 2 at 40), so the
-  rounds are not what grows; the growth is INSIDE steps (spec-fidelity round 1, measured 2026-10-18): the field way's candidate
+  rounds are not what grows; the growth is INSIDE steps (observed 2026-10-18; method: spec-fidelity round 1, `make perf-profile SEED=4 STAGE=web HOUSEHOLDS=<10|40>` under cProfile): the field way's candidate
   runs (`field_runs`: every sampled point of the network measured to the worked ground, 0.32 -> 1.21 s for its one call at 10 ->
   40 households) and the knots' judgments (none at 10 households, 22 trials and 0.83 s at 40, each trial asking the whole web's counts again).
   The field way finds its candidates without measuring every point: the work it does per candidate kept does not grow with
@@ -130,7 +130,7 @@ where a premise did not hold, the requirement below is the form of that goal the
   and, at 40 households (the only size seed 4 makes knot trials at: 0 at 10 and 20), the ends, lane pairs and faces (those whose width is tested) re-asked per
   knot trial are fewer than the web's total ends, pairs and faces. The counting command and the counts are recorded in
   `measurements.json`.
-- **SC-002** (FR-001 - FR-006, FR-009) Each site's time (the five kept, FR-004 withdrawn) at 40 households, seed 4, is reported before and after; the
+- **SC-002** (FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-009) Each site's time (the five kept, FR-004 withdrawn) at 40 households, seed 4, is reported before and after; the
   end bookend's 40-household total is reported against the start's, with both loads.
 - **SC-003** (FR-007, FR-008) `make cohort` and the landing cohort pass with no seed newly failing against main; the pool
   hamlets regenerate and pass their gate; each equivalence test is green.
@@ -171,3 +171,6 @@ where a premise did not hold, the requirement below is the form of that goal the
 - **spec-fidelity round 5 (2026-10-18): CHANGES REQUIRED, 1 item** - tasks T02 named three of FR-002's four local counts; it now
   names `needle_loops` too, `way_outs` whole. Its note on SC-001's faces: the faces counted are those whose width is tested.
   The round cap reached, the arbiter's ruling follows.
+- **round-arbiter (2026-10-18), trigger round:spec-fidelity|387-scale-the-placement-loops#1@6: ACCEPT** - the review converged
+  (4, 3, 3, 2, 1 items, none repeated, round 5's a stale task line, applied); the spec stands as round 5 left it. Its tooling fix
+  (the arbiter bundle carries each round's verdict file with each finding marked) is an open item of this feature.

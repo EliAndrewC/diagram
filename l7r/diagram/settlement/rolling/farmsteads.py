@@ -247,6 +247,9 @@ class FarmsteadFlushMixin:
                         geom["gardens"] = shifted
                         if "boxes" in geom:
                             geom["boxes"]["gardens"] = drawn  # the beds' drawn boxes move with them
+                        houses = self.M.get("houses")
+                        if hasattr(houses, "touch"):  # the beds moved inside a record: the plots' sun boxes are keyed on this version (feature 387)
+                            houses.touch()
                         break
                 dy += step
 

@@ -95,10 +95,10 @@ def test_an_ask_on_a_standing_state_reuses_the_built_plots(monkeypatch: pytest.M
     monkeypatch.delenv("L7R_CHECK_CACHES", raising=False)
     s = _sunny(5)
     s._sun_keepouts((0.0, 0.0, 10.0, 10.0))
-    built = s.__dict__["_sun_memo"]
+    built = next(iter(s.__dict__["_sun_memo"].values()))
     for bbox in _asks(random.Random(6)):
         s._sun_keepouts(bbox)
-    assert s.__dict__["_sun_memo"] is built, "the plots are read once per state, not once per ask"
+    assert next(iter(s.__dict__["_sun_memo"].values())) is built, "the plots are read once per state, not once per ask"
     s.M["gardens"].append({"x": 1.0, "y": 1.0, "w": 14.0, "h": 20.0})
     s._sun_keepouts((0.0, 0.0, 10.0, 10.0))
-    assert s.__dict__["_sun_memo"] is not built, "a new plot is a new state"
+    assert next(iter(s.__dict__["_sun_memo"].values())) is not built, "a new plot is a new state"

@@ -5,15 +5,24 @@ Split from test_hamletgen.py by feature 111; test bodies verbatim. See hamletgen
 
 import contextlib
 import math
+from typing import Any
 
 import pytest
 
 import l7r.diagram.settlement.rolling.access as access_mod
 from l7r.diagram import hamletgen as hg
+from l7r.diagram.hamletgen.homesteads.bamboo import StripNear
 from l7r.diagram.hamletgen.homesteads.capacity import SiteRefused
 from l7r.diagram.settlement import Settlement
 
 from ._builders import a_plan, a_seat
+
+
+def _blocked(s: Any, *a: Any, **k: Any) -> bool:
+    """`_strip_blocked` with the index its callers build for their pass (feature 387: `StripNear`, filed from `s` as it stands)."""
+    from l7r.diagram.hamletgen.homesteads.bamboo import StripNear, _strip_blocked
+
+    return _strip_blocked(s, *a, near=StripNear(s, a[9] if len(a) > 9 else k.get("lanes", [])), **k)
 
 
 def _the_passes_the_dispersed_form_keeps(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -131,7 +140,7 @@ def _strip_settlement() -> tuple[object, object]:
 
 def test_strip_blocked_refuses_the_canvas_edge_a_crossing_lane_and_a_drawn_crown() -> None:
     s, _plan = _strip_settlement()
-    blocked = hg.homesteads._strip_blocked
+    blocked = _blocked
     assert blocked(s, 20, 500, 30, 20, 0, 0, [], [], None, []) is True, "over the canvas edge"
     assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, []) is False, "open ground"
     lane = [([(500, 400), (500, 600)], 3.0)]  # a lane running THROUGH the strip, both ends outside it
@@ -144,7 +153,7 @@ def test_strip_blocked_refuses_a_well_or_a_shed_seated_before_it() -> None:
     """The T49 arm: a wellhead (by its radius) or a shed (by its box) within 6 ft of the strip blocks it - asserted directly
     since the pool's maps stopped reaching it when the yard persimmon moved behind the house (GM 2026-10-02)."""
     s, _plan = _strip_settlement()
-    blocked = hg.homesteads._strip_blocked
+    blocked = _blocked
     s.M["wells"] = [{"x": 520.0, "y": 500.0, "r": 4.0}]
     assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, []) is True, "a wellhead at the strip's end"
     s.M["wells"] = []
@@ -169,7 +178,7 @@ def test_strip_blocked_refuses_a_lane_that_only_crosses_the_strip() -> None:
     """Feature 146: the crossing arm of `_strip_blocked` - a lane whose ENDS are both outside the strip but
     whose segment passes through it (the corner test above cannot see that one)."""
     s, _plan = _strip_settlement()
-    blocked = hg.homesteads._strip_blocked
+    blocked = _blocked
     across = [([(440.0, 500.0), (560.0, 500.0)], 1.0)]  # a hairline lane straight through, ends well clear
     assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, across) is True
     beside = [([(440.0, 300.0), (560.0, 300.0)], 1.0)]
@@ -181,7 +190,7 @@ def test_strip_blocked_refuses_a_dry_plot_and_a_watercourse(monkeypatch) -> None
     cohort seeds until feature 214 packed them away, so asserted directly: a strip with a corner inside a dry hem
     plot is blocked, and so is one whose corner stands on a watercourse."""
     s, _plan = _strip_settlement()
-    blocked = hg.homesteads._strip_blocked
+    blocked = _blocked
     s.M["dry_plots"] = [{"poly": [(480.0, 480.0), (520.0, 480.0), (520.0, 520.0), (480.0, 520.0)]}]
     assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, []) is True, "a corner inside a dry plot"
     s.M["dry_plots"] = []
@@ -194,7 +203,6 @@ def test_strip_blocked_sees_a_lane_that_crosses_the_strip_between_its_samples() 
     """Five sample points on a 22 by 16 ft strip let a lane cross it DIAGONALLY between them (cohort
     seed 03), and `lanes_clear_of_bamboo` walks the tread's quarter-points, so the gate saw what the
     placer did not. The tread is therefore tested as a segment against the strip's own edges."""
-    from l7r.diagram.hamletgen.homesteads import _strip_blocked
 
     s = Settlement(1000, 1000, seed=1)
     s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
@@ -202,24 +210,23 @@ def test_strip_blocked_sees_a_lane_that_crosses_the_strip_between_its_samples() 
     # line earlier. This one clips the strip between them: 2.2 px from the nearest sample, well past
     # the tread's own half-width, and still straight through the strip.
     clipping = [([(480.0, 505.0), (520.0, 485.0)], 1.0)]
-    assert _strip_blocked(s, 500.0, 500.0, 22.0, 16.0, 900.0, 900.0, [], [], None, clipping)
-    assert not _strip_blocked(s, 200.0, 800.0, 22.0, 16.0, 900.0, 900.0, [], [], None, clipping)
+    assert _blocked(s, 500.0, 500.0, 22.0, 16.0, 900.0, 900.0, [], [], None, clipping)
+    assert not _blocked(s, 200.0, 800.0, 22.0, 16.0, 900.0, 900.0, [], [], None, clipping)
 
 
 def test_strip_blocked_excuses_its_own_farmhouse_and_the_skipped_bundle_boxes_and_nothing_else() -> None:
     """A strip beside its OWN farmhouse is not blocked by it, nor by a reserved box the caller passes in `skip`
     (feature 261: the homestead bundle boxes, whose parts are each registered); any other placed box it touches blocks it."""
-    from l7r.diagram.hamletgen.homesteads import _strip_blocked
 
     s = Settlement(1000, 1000, seed=1)
     s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
     s.placed.append((500.0, 500.0, 40.0, 30.0))  # its own farmhouse, under the strip's center
-    assert not _strip_blocked(s, 500.0, 500.0, 22.0, 16.0, 500.0, 500.0, [], [], None, []), "its own house is not something"
-    assert _strip_blocked(s, 500.0, 500.0, 22.0, 16.0, 900.0, 900.0, [], [], None, []), "a house not its own is"
+    assert not _blocked(s, 500.0, 500.0, 22.0, 16.0, 500.0, 500.0, [], [], None, []), "its own house is not something"
+    assert _blocked(s, 500.0, 500.0, 22.0, 16.0, 900.0, 900.0, [], [], None, []), "a house not its own is"
     bundle = (515.0, 500.0, 20.0, 20.0)
     s.placed.append(bundle)
-    assert _strip_blocked(s, 500.0, 500.0, 22.0, 16.0, 500.0, 500.0, [], [], None, []), "an unexcused box blocks it"
-    assert not _strip_blocked(s, 500.0, 500.0, 22.0, 16.0, 500.0, 500.0, [], [], None, [], skip=frozenset({bundle})), "a skipped box does not"
+    assert _blocked(s, 500.0, 500.0, 22.0, 16.0, 500.0, 500.0, [], [], None, []), "an unexcused box blocks it"
+    assert not _blocked(s, 500.0, 500.0, 22.0, 16.0, 500.0, 500.0, [], [], None, [], skip=frozenset({bundle})), "a skipped box does not"
 
 
 def test_a_linear_hamlet_stands_in_rows_along_its_streets_and_never_in_ranks() -> None:
@@ -752,8 +759,8 @@ def test_strip_blocked_refuses_a_strip_standing_on_a_paddy() -> None:
     stopped reaching once Sawada's stranded field-house seat was refused (feature 278)."""
     s, _plan = _strip_settlement()
     paddy = [(480.0, 480.0), (700.0, 480.0), (700.0, 700.0), (480.0, 700.0)]
-    assert hg.homesteads._strip_blocked(s, 500, 500, 30, 20, 0, 0, [paddy], [], None, []) is True
-    assert hg.homesteads._strip_blocked(s, 300, 300, 30, 20, 0, 0, [paddy], [], None, []) is False
+    assert _blocked(s, 500, 500, 30, 20, 0, 0, [paddy], [], None, []) is True
+    assert _blocked(s, 300, 300, 30, 20, 0, 0, [paddy], [], None, []) is False
 
 
 def test_a_front_seat_is_pushed_across_a_brook_by_the_waters_reach() -> None:
@@ -780,7 +787,7 @@ def test_strip_blocked_refuses_another_farmhouse_as_drawn() -> None:
     """The every-other-farmhouse arm of `_strip_blocked` (feature 280: the re-packed pool rolls no longer reach it)."""
     s, _plan = _strip_settlement()
     s.M["houses"] = [{"x": 500.0, "y": 500.0, "w": 46.0, "h": 28.0, "rot": 0.0}]
-    blocked = hg.homesteads._strip_blocked
+    blocked = _blocked
     assert blocked(s, 500, 500, 30, 20, 300, 300, [], [], None, []) is True, "a neighbor's house"
     assert blocked(s, 500, 500, 30, 20, 500, 500, [], [], None, []) is False, "its own house is excused"
 
@@ -814,9 +821,9 @@ def test_a_flexible_pit_keeps_off_every_grove_band(monkeypatch: pytest.MonkeyPat
     monkeypatch.setattr(fixtures, "_strip_blocked", lambda *a, **k: False)
     monkeypatch.setattr(fixtures, "across_the_brook", lambda *a: False)
     h = {"x": 400.0, "y": 400.0}
-    assert fixtures._flexible_clear(s, h, (420.0, 460.0), (8.0, 8.0), [], [], None, [], None)  # type: ignore[arg-type]
+    assert fixtures._flexible_clear(s, h, (420.0, 460.0), (8.0, 8.0), [], [], None, [], None, StripNear(s, []))  # type: ignore[arg-type]
     s.M["groves"] = [{"x": 420.0, "y": 460.0, "w": 100.0, "h": 30.0}]
-    assert not fixtures._flexible_clear(s, h, (420.0, 460.0), (8.0, 8.0), [], [], None, [], None)  # type: ignore[arg-type]
+    assert not fixtures._flexible_clear(s, h, (420.0, 460.0), (8.0, 8.0), [], [], None, [], None, StripNear(s, []))  # type: ignore[arg-type]
 
 
 def test_a_far_row_farm_whose_holding_finds_no_room_is_not_seated_there(monkeypatch: pytest.MonkeyPatch) -> None:

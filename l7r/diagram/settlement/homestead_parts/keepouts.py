@@ -3,6 +3,7 @@
 Research: plumbing - NONE"""
 
 import math
+import os
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
@@ -11,6 +12,24 @@ from .tree_shade import CANOPY_SHADE_FT, plot_box, sun_box
 
 if TYPE_CHECKING:
     from ..core import Settlement
+
+
+_SUN_CELL = 256.0
+"""The sun-box grid's cell (px): a plot's sun box is its plot widened by 50 ft each way, so a box spans a cell or a few.
+
+Research: grid cell - NONE: plumbing"""
+
+
+def _sun_near(sun: Sequence[tuple[float, float, float, float]], cells: dict[tuple[int, int], list[int]], bbox: tuple[float, float, float, float]) -> list[int]:
+    """The sun boxes' places, in order, whose cells meet `bbox` - every box that can meet it, and some that cannot (the caller's
+    overlap test decides). A box wider than the map (the strip pass asks the whole plane) reads every place.
+
+    Research: grid read - NONE: plumbing"""
+    bx0, by0, bx1, by1 = bbox
+    i0, i1, j0, j1 = int(bx0 // _SUN_CELL), int(bx1 // _SUN_CELL), int(by0 // _SUN_CELL), int(by1 // _SUN_CELL)
+    if (i1 - i0 + 1) * (j1 - j0 + 1) > len(cells):
+        return list(range(len(sun)))
+    return sorted({k for i in range(i0, i1 + 1) for j in range(j0, j1 + 1) for k in cells.get((i, j), ())})
 
 
 class KeepoutsMixin:
@@ -224,24 +243,50 @@ class KeepoutsMixin:
                 each yard and bed widened by 50 ft, or by bamboo's own reach where a caller asks it"""
         if not getattr(self, "_sun_corridor_ft", 0.0):
             return []
-        reach = self.px(reach_ft)
+        sun, cells = self._sun_boxes(self.px(reach_ft))
+        bx0, by0, bx1, by1 = bbox
+        return [sun[k] for k in _sun_near(sun, cells, bbox) if (b := sun[k])[0] + b[2] >= bx0 and b[0] - b[2] <= bx1 and b[1] + b[3] >= by0 and b[1] - b[3] <= by1]
+
+    def _sun_boxes(self: Settlement, reach: float) -> tuple[list[tuple[float, float, float, float]], dict[tuple[int, int], list[int]]]:  # type: ignore[misc]
+        """Every plot's sun box at `reach`, in the plots' order, and a grid of them: BUILT ONCE PER STATE OF THE PLOTS (feature 387,
+        plan D4). The plots are read from three registries - the drawn yards and beds and every placed homestead's - and each
+        ask used to rebuild the list and its content key from all of them (1,816 asks and 159,808 `plot_box` calls at 40
+        households, `m:counts-before`). The state is now the registries' OWN versions (`indexes.Indexed`: a mutation is the only
+        way content changes, and every mutator bumps; the one writer that edits a record in place, the bed shift, bumps by
+        `touch`), never a count or an identity guess - and the registries themselves are held, so a list rebound in their place
+        is a new state. A registry that is not versioned is never served from the memo. Under the suite (`L7R_CHECK_CACHES=1`)
+        every hit re-reads the plots and raises if they moved, so a writer that forgot to bump fails a test instead of
+        answering stale.
+
+        Research: the plots' sun read once per state - NONE: plumbing; the sun ground is `sun_box`'s claim"""
+        srcs = tuple(self.M.get(k) for k in ("threshing_yards", "gardens", "houses"))
+        versioned = all(hasattr(s, "version") for s in srcs)
+        memo = self.__dict__.setdefault("_sun_memo", {})  # by reach: the canopy's and the bamboo's are asked in turn, grove by grove
+        got = memo.get(reach)
+        if versioned and got is not None and all(a is b for a, b in zip(got[1], srcs, strict=True)) and got[2] == tuple(s.version for s in srcs):  # type: ignore[union-attr]
+            if os.environ.get("L7R_CHECK_CACHES") and got[3] != self._sun_plots():
+                raise AssertionError("the plots' sun boxes are stale: a plot changed in place with no version bump (feature 387 - bump its registry with `touch()`)")
+            return got[4], got[5]
+        plots = self._sun_plots()
+        sun = [sun_box(p, reach) for p in plots]
+        cells: dict[tuple[int, int], list[int]] = {}
+        for k, (x, y, hw, hh) in enumerate(sun):
+            for i in range(int((x - hw) // _SUN_CELL), int((x + hw) // _SUN_CELL) + 1):
+                for j in range(int((y - hh) // _SUN_CELL), int((y + hh) // _SUN_CELL) + 1):
+                    cells.setdefault((i, j), []).append(k)
+        if versioned:
+            memo[reach] = (reach, srcs, tuple(s.version for s in srcs), plots, sun, cells)  # type: ignore[union-attr]
+        return sun, cells
+
+    def _sun_plots(self: Settlement) -> list[tuple[float, float, float, float]]:  # type: ignore[misc]
+        """The drawn plots and every placed homestead's yard and beds, as boxes, in the order `_sun_keepouts` has always read them."""
         plots = [b for k in ("threshing_yards", "gardens") for o in self.M.get(k) or () if (b := plot_box(o)) is not None]
         for rec in self.M.get("houses") or ():
             g = rec.get("geom") or {}
             boxes = g.get("boxes") or {}
             yard = boxes.get("yard", g.get("yard"))
-            plots += [p for p in ([yard] if yard is not None else []) + list(boxes.get("gardens", g.get("gardens")) or ())]
-        # THE SUN BOXES TAKEN ONCE FOR THE SAME GROUND (batch 4's perf audit: `village_grove` asked this 633 times on cohort seed 39 at
-        # 40 households, each rebuilding every plot's sun box - 112,000 `sun_box` calls): keyed on the reach and the plots themselves,
-        # so a plot moved or added is a new key, never a stale answer
-        key = (reach, tuple(tuple(map(float, p)) for p in plots))
-        memo = self.__dict__.setdefault("_sun_box_memo", {})
-        sun = memo.get(key)
-        if sun is None:
-            memo.clear()  # one ground at a time: the plots only grow while a map is drawn
-            sun = memo[key] = [sun_box(p, reach) for p in plots]
-        bx0, by0, bx1, by1 = bbox
-        return [b for b in sun if b[0] + b[2] >= bx0 and b[0] - b[2] <= bx1 and b[1] + b[3] >= by0 and b[1] - b[3] <= by1]
+            plots += [tuple(map(float, p)) for p in ([yard] if yard is not None else []) + list(boxes.get("gardens", g.get("gardens")) or ())]
+        return [tuple(map(float, p)) for p in plots]  # type: ignore[misc]
 
     def _plant_run(self: Settlement, kind: str, pieces: Sequence[str], trees: Sequence[tuple[float, float, float] | None], cls: Any) -> int:  # type: ignore[misc]
         """Emit a dike's planted string - `pieces`, of which those with a `trees` entry (x, y, r) are canopy trees (a willow, a

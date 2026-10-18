@@ -567,20 +567,41 @@ Research: noding speck - NONE"""
 def needle_loops(M: Mapping[str, Any]) -> list[tuple[Any, list[int]]]:
     """(face, the lanes bounding it) for every face of the drawn lane web (the treads noded where they cross, then
     polygonized) whose mean width is under `NEEDLE_LOOP_FT` - two ways laid round a sliver of ground, or along the same ground (a face of no area at all)."""
-    from shapely.geometry import LineString
-    from shapely.ops import polygonize, unary_union
-
-    ways = _ways(M)
-    lines = {i: LineString(p) for i, p in enumerate(ways) if len(p) >= 2 and polyline_len(p) >= 1.0}
-    if len(lines) < 2:
-        return []
+    lines = web_lines(M)
     out = []
-    for face in polygonize(unary_union(list(lines.values()))):
-        if face.length < NODING_SPECK_FT or 2.0 * face.area / face.length >= NEEDLE_LOOP_FT:
+    for face in web_faces(lines):
+        if not is_needle(face):
             continue
         edge = face.exterior.buffer(0.5)
         out.append((face, sorted(i for i, ln in lines.items() if ln.intersection(edge).length > 1.0)))
     return out
+
+
+def web_lines(M: Mapping[str, Any]) -> dict[int, Any]:
+    """The web's treads as lines, by lane: each lane of two points or more and 1 ft long or more (`needle_loops`' own cut).
+
+    Research: plumbing - NONE"""
+    from shapely.geometry import LineString
+
+    return {i: LineString(p) for i, p in enumerate(_ways(M)) if len(p) >= 2 and polyline_len(p) >= 1.0}
+
+
+def web_faces(lines: Mapping[int, Any]) -> list[Any]:
+    """Every face of the web's treads noded where they cross, then polygonized (none under two lines).
+
+    Research: plumbing - NONE"""
+    from shapely.ops import polygonize, unary_union
+
+    if len(lines) < 2:
+        return []
+    return list(polygonize(unary_union(list(lines.values()))))
+
+
+def is_needle(face: Any) -> bool:
+    """Is a face of the web a needle - longer than a noding speck, its mean width under `NEEDLE_LOOP_FT`?
+
+    Research: plumbing - NONE: `needle_loops`' own test, one face at a time (feature 387)"""
+    return not (face.length < NODING_SPECK_FT or 2.0 * face.area / face.length >= NEEDLE_LOOP_FT)
 
 
 def short_fragments(M: Mapping[str, Any], ground: WorkedGround | None = None) -> list[int]:

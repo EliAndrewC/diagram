@@ -147,27 +147,34 @@ def lanes_of(
     for i in chosen:
         drawn_of[i] = _rounded(sq(recs[i]["pts"]))
     for i in chosen:
-        r, pts = recs[i], drawn_of[i]
-        # ...ITS END CARRIED ONTO ITS HOST AS DRAWN: the host is squared at its water crossings, and a run that met it on the
-        # stretch the squaring moved (cohort seed 8: the exit strip over a channel) is carried on to the foot on it
         h = host[i]
-        on = drawn_of.get(h) if h is not None else None
-        # ...UNLESS IT STANDS ON THE CONNECTOR'S TREAD ALREADY, where the strip is cut back to the connector's start: the web's
-        # touch pass can carry the connector's start a few feet inward along the strip, past the point the seating hung
-        # corridors from (Inashiro, feature 306: 2.6 ft), and a corridor's end carried back onto that start turned its 355 ft
-        # leg a third of a degree - enough to make the corridor hung from it a 19.9 degree needle, a tree lane no settle may
-        # cut. On the connector's tread the end meets the network as the seating judged it, so it is drawn where it was.
-        if on is not None and len(on) >= 2 and not _on(pts[-1], on):
-            q = pts[-1]
-            k = min(range(len(on) - 1), key=lambda m: seg_dist(q[0], q[1], on[m], on[m + 1]))
-            foot = seg_closest(q[0], q[1], on[k], on[k + 1])
-            # a few feet off: the end is set on the foot (a leg that short would be a hook); farther, a leg on to it
-            pts = _rounded([*pts[:-1], foot] if math.dist(q, foot) <= CARRY_FT and len(pts) >= 2 and math.dist(pts[-2], foot) > 1e-6 else [*pts, foot])
-        lane: dict[str, Any] = {"pts": pts, "w": ACCESS_WIDTH if r["role"] == ACCESS_ROLE else BRANCH_WIDTH, "role": r["role"]}
-        if r["of"] is not None:
-            lane["of"] = [round(r["of"][0], 1), round(r["of"][1], 1)]
-        out.append(lane)
+        out.append(lane_record(recs[i], drawn_of[i], drawn_of.get(h) if h is not None else None))
     return out
+
+
+def lane_record(r: Mapping[str, Any], pts: Poly, on: Poly | None) -> dict[str, Any]:
+    """Run `r`'s tree lane, drawn at `pts` (laid and rounded), its end carried onto `on` - its host's drawn run - as
+    `lanes_of` carries it; one lane at a time, so the base tree's lanes are built once and a candidate's alone after them
+    (feature 387, `tree_base`).
+
+    Research: tree lane assembled - NONE: the run set on its host as the web draws it (`lanes_of`'s claims)"""
+    # ...ITS END CARRIED ONTO ITS HOST AS DRAWN: the host is squared at its water crossings, and a run that met it on the
+    # stretch the squaring moved (cohort seed 8: the exit strip over a channel) is carried on to the foot on it
+    # ...UNLESS IT STANDS ON THE CONNECTOR'S TREAD ALREADY, where the strip is cut back to the connector's start: the web's
+    # touch pass can carry the connector's start a few feet inward along the strip, past the point the seating hung
+    # corridors from (Inashiro, feature 306: 2.6 ft), and a corridor's end carried back onto that start turned its 355 ft
+    # leg a third of a degree - enough to make the corridor hung from it a 19.9 degree needle, a tree lane no settle may
+    # cut. On the connector's tread the end meets the network as the seating judged it, so it is drawn where it was.
+    if on is not None and len(on) >= 2 and not _on(pts[-1], on):
+        q = pts[-1]
+        k = min(range(len(on) - 1), key=lambda m: seg_dist(q[0], q[1], on[m], on[m + 1]))
+        foot = seg_closest(q[0], q[1], on[k], on[k + 1])
+        # a few feet off: the end is set on the foot (a leg that short would be a hook); farther, a leg on to it
+        pts = _rounded([*pts[:-1], foot] if math.dist(q, foot) <= CARRY_FT and len(pts) >= 2 and math.dist(pts[-2], foot) > 1e-6 else [*pts, foot])
+    lane: dict[str, Any] = {"pts": pts, "w": ACCESS_WIDTH if r["role"] == ACCESS_ROLE else BRANCH_WIDTH, "role": r["role"]}
+    if r["of"] is not None:
+        lane["of"] = [round(r["of"][0], 1), round(r["of"][1], 1)]
+    return lane
 
 
 class _Standing(dict):  # type: ignore[type-arg]
@@ -198,44 +205,55 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
         no doubled band - UNRESEARCHED: an access lane may not run beside another past a pitch
         free ends at a house - UNRESEARCHED: at most DOORSTEP_MAX (2) free lane ends at a house
         track out's width as judged - research/questions/0081-village-lanes.drawing.html: the track out's stub judged at 6 ft, the track out as drawn"""
-    recs: list[dict[str, Any]] = [*tree_records(M), {"role": role, "of": (float(house["x"]), float(house["y"])) if house is not None else None, "pts": _dedup([_pt(q) for q in run])}]
-    root = _root(M)
-    host = hosts(recs, root)
-    k = len(recs) - 1
-    if host[k] is None or len(recs[k]["pts"]) < 2:
+    from .tree_base import base_for
+
+    def lay(run: Poly) -> Poly:
+        return laid_run(base, M, run)
+
+    # THE BASE TREE BUILT ONCE PER STATE (feature 387, plan D1): every earlier record's host, laid lane, free end and face is
+    # the base's; this candidate costs its own host, its own lane, the ends it can change and the faces it meets
+    tb = base_for(base, M, lay)
+    rec: dict[str, Any] = {"role": role, "of": (float(house["x"]), float(house["y"])) if house is not None else None, "pts": _dedup([_pt(q) for q in run])}
+    k = len(tb.recs)
+    h = tb.host_of(rec["pts"][-1])
+    if h is None or len(rec["pts"]) < 2:
         return False
-    stub: list[dict[str, Any]] = [{"pts": root, "w": 6.0, "connector": True}] if root is not None else []  # the track out as drawn
+    recs, host = [*tb.recs, rec], [*tb.host, h]
+    stub = tb.stub
     houses = [*(M.get("houses") or []), *([house] if house is not None else [])]
     yards = [*(M.get("threshing_yards") or []), *([yard] if yard is not None else [])]
     view = _trial(M, houses=houses, threshing_yards=yards)
     law_ = copy.copy(base)
     law_.tree = False
     chain = chain_of(recs, host, k)
-    whole = [*range(k), k]
+    new_lane = tb.lane_for(rec, h, lay)[1]
+    whole = [*tb.lanes, new_lane]
 
-    def lay(run: Poly) -> Poly:
-        return laid_run(base, M, run)
-
-    for ctx in (whole, [*reversed(chain[1:]), k]):
-        lanes = lanes_of(M, recs, host, ctx, drawn=False, laid=lay)
+    for lanes in (whole, [*(tb.lanes[i] for i in reversed(chain[1:])), new_lane]):
         new = lanes[-1]
         law_.M = _trial(view, lanes=[*lanes[:-1], *stub])
         if not law_(new["pts"], float(new["w"])):
             return False
-        if ctx is whole:
+        if lanes is whole:
+            faces, joined_base, joined_faces = tb.judged()
             # ...NOR CLOSES A SLIVER WITH OTHER TREE LANES (the tree had none; two corridors on one host point did, cohort seeds
             # 21 and 25). A corridor may CROSS another - a crossroads is lawful, and was refused here at first for closing a loop
             # (seed 8: 44 of its seats, and the margin with them) - since only a face thinner than `law.NEEDLE_LOOP_FT` is a
-            # fault, and a face in a part of the tree is never thinner than the faces the whole tree made of it
-            if law.needle_loops({"lanes": [*lanes, *stub]}):  # ...the track out among them, as the strip was (feature 320)
+            # fault, and a face in a part of the tree is never thinner than the faces the whole tree made of it. Judged on the
+            # faces the new lane meets, the rest kept from the base (`tree_base.Faces`)
+            if faces.needles_with([*lanes, *stub], [new["pts"]]):  # ...the track out among them, as the strip was (feature 320)
                 return False
             # ...NOR CLOSES ONE ONCE THE WEB JOINS ITS ENDS (feature 317, plan D6): the settle carries a free end that stops
             # short of a way onto it (`settle.settle_joins`, `law.near_misses`), and on seed 13 at 20 households a corridor's
             # start 15 ft from another's end was carried onto it and closed a sliver with a third - lawful as judged, refused
-            # as drawn (feature 314 research R12). So the tree is asked again with its ends joined as the web will join them.
-            if law.needle_loops({"lanes": as_joined(_trial(view, lanes=[*lanes, *stub]), lanes)}):
+            # as drawn (feature 314 research R12). So the tree is asked again with its ends joined as the web will join them -
+            # the faces judged where a lane the joining drew differently from the base's, or the new lane, meets them
+            trial = _trial(view, lanes=[*lanes, *stub])
+            joined = as_joined(trial, lanes)
+            moved = [pts for i in range(k) if (old := joined_base[i]["pts"]) != (now := joined[i]["pts"]) for pts in (old, now)]
+            if joined_faces.needles_with(joined, [*moved, joined[k]["pts"]]):
                 return False
-            if any(len(ends) > law.DOORSTEP_MAX for ends in law.fronting_ends(_trial(view, lanes=[*lanes, *stub])).values()):
+            if any(n > law.DOORSTEP_MAX for n in tb.ends.with_one_more(k, new, house, trial).values()):
                 return False
             if not way_out_once(M, [lanes_chain(recs, host, lanes, k)]):
                 return False

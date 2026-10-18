@@ -5,7 +5,6 @@ every placed box, house, fixture, lane segment and crown - and gives the straigh
 from __future__ import annotations
 
 import random
-
 from collections.abc import Sequence
 from typing import Any
 
@@ -88,18 +87,13 @@ def _scan_blocked(
     return bool(pond) and ((cx - pond[0]) / (pond[2] + 20.0)) ** 2 + ((cy - pond[1]) / (pond[3] + 20.0)) ** 2 <= 1.0
 
 
-
-
 def _scene(seed: int) -> tuple[Settlement, list[tuple[list[tuple[float, float]], float]]]:
     rng = random.Random(seed)
     s = Settlement(2000, 2000, seed=1)
     s.meta(name="S", scale="hamlet", ftpx=1, down_deg=90)
     for _ in range(60):
         s.placed.append((rng.uniform(100, 1900), rng.uniform(100, 1900), rng.uniform(10, 60), rng.uniform(10, 60)))
-    s.M["houses"].extend(
-        {"x": rng.uniform(100, 1900), "y": rng.uniform(100, 1900), "w": rng.uniform(30, 50), "h": rng.uniform(20, 30), "rot": rng.uniform(-30, 30)}
-        for _ in range(40)
-    )
+    s.M["houses"].extend({"x": rng.uniform(100, 1900), "y": rng.uniform(100, 1900), "w": rng.uniform(30, 50), "h": rng.uniform(20, 30), "rot": rng.uniform(-30, 30)} for _ in range(40))
     s.M["wells"] = [{"x": rng.uniform(100, 1900), "y": rng.uniform(100, 1900), "r": 4.0} for _ in range(8)]
     s.M["farm_sheds"] = [{"x": rng.uniform(100, 1900), "y": rng.uniform(100, 1900), "w": 20.0, "h": 12.0} for _ in range(20)]
     s.M["byres"] = [{"x": rng.uniform(100, 1900), "y": rng.uniform(100, 1900), "w": 16.0, "h": 11.0} for _ in range(10)]

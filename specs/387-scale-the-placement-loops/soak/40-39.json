@@ -1,0 +1,11 @@
+{
+ "admits": 54,
+ "field_runs": 1,
+ "needles": 92,
+ "neighbors": 160,
+ "neighbors_missing_a_split_part": 20,
+ "partners": 2,
+ "strip": 1261,
+ "sun": 1849,
+ "web_ends": 1
+}

@@ -31,3 +31,6 @@ Every task changes how a verdict is computed, not what is drawn or where: nothin
 - [ ] T07 Land (SC-003, SC-005): `make cohort-landing`, the gated push, the feature report; the landing report carries FR-004's withdrawal (measurement, 297 R9), FR-002's and FR-003's restated premises with what was measured, and FR-003's split-part defect with its frequency
       research: rendering
       verify:
+- [ ] GM review (make gm-reviewed F=387) [lands-open]
+      research: rendering
+      verify: the GM reviewed every row (make gm-review lists them)

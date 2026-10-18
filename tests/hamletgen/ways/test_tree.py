@@ -308,14 +308,10 @@ def test_a_tree_that_hands_a_house_more_ends_than_its_doorstep_takes_is_refused(
     M = _tree()
     run, house = [(100.0, 80.0), (100.0, 0.0)], _house(100.0, 100.0)
     assert tree.admits(_law(M), M, run, ACCESS_ROLE, house), "lawful with the doorstep's ends at its limit"
-    real = law.fronting_ends
-    crowded = {(300.0, 100.0): [object()] * (law.DOORSTEP_MAX + 1)}
+    from l7r.diagram.hamletgen.ways import tree_base
 
-    def fronting(m):  # crowded only in the WHOLE tree's reading, the one that holds the new corridor's own lane
-        mine = any(abs(q[0] - 100.0) < 1.0 and abs(q[1] - 80.0) < 1.0 for lane in m.get("lanes") or [] for q in lane["pts"][:1])
-        return crowded if mine else real(m)
-
-    monkeypatch.setattr(tree.law, "fronting_ends", fronting)
+    # crowded only with the new corridor's lane in (feature 387: the base tree's ends asked what one more lane changes)
+    monkeypatch.setattr(tree_base.Ends, "with_one_more", lambda self, k, lane, house, M: {7: law.DOORSTEP_MAX + 1})
     assert not tree.admits(_law(M), M, run, ACCESS_ROLE, house), "one end past the doorstep: refused"
 
 
@@ -382,9 +378,11 @@ def test_a_corridor_whose_joined_tree_closes_a_sliver_is_refused(monkeypatch) ->
     ok = _law(M)
     house = _house(100.0, 100.0)
     assert tree.admits(ok, M, [(100.0, 80.0), (100.0, 0.0)], ACCESS_ROLE, house), "lawful as laid and as joined"
-    real = law.needle_loops
+    from l7r.diagram.hamletgen.ways import tree_base
+
+    real = tree_base.Faces.needles_with
     monkeypatch.setattr(tree, "as_joined", lambda trial, lanes: [{**ln, "joined": True} for ln in lanes])
-    monkeypatch.setattr(law, "needle_loops", lambda M_: ["sliver"] if any(ln.get("joined") for ln in M_["lanes"]) else real(M_))
+    monkeypatch.setattr(tree_base.Faces, "needles_with", lambda self, lanes, changed: 1 if any(ln.get("joined") for ln in lanes) else real(self, lanes, changed))
     assert not tree.admits(_law(M), M, [(100.0, 80.0), (100.0, 0.0)], ACCESS_ROLE, house), "a sliver only once joined: refused"
 
 

@@ -211,15 +211,20 @@ class Fabric:
         return k
 
     def neighbors(self, i: int) -> list[int]:
-        """The cells sharing a stretch of bund with cell `i`, the longest shared stretch first."""
+        """The cells sharing a stretch of bund with cell `i`, the longest shared stretch first.
+
+        EACH LIVE NEIGHBOR MEASURED ONCE (feature 387, plan D3): the index holds the cells as they stood before any merge, so as
+        cells absorb each other most of its hits are stale cells whose owner is one live cell - and each hit's shared bund was
+        measured before the set dropped the duplicates (15.7 measurements a merge at 40 households against 3.3 at 10,
+        `m:counts-before`). The owners are found and deduplicated first, then each measured once: the same set, the same order.
+        THE INDEX IS NOT MADE CURRENT, a defect recorded rather than fixed: a cell a `split` makes after a merge gets an id the
+        index never held, so a split part is never found as a neighbor; indexing the parts would find merges this code cannot
+        and move maps, against the feature's equivalence (FR-007) - reported to the GM with how often it happens.
+
+        Research: neighbors by the shared bund - NONE: plumbing, the merge's order is `merge`'s claim"""
         me = self.alive[i]
-        scored = set()
-        for jj in self.tree.query(me.buffer(0.2)):
-            j = self.find(self.ids[int(jj)])
-            if j != i and j in self.alive:
-                shared = shared_length(me, self.alive[j])
-                if shared > 0.0:
-                    scored.add((shared, j))
+        owners = {j for jj in self.tree.query(me.buffer(0.2)) if (j := self.find(self.ids[int(jj)])) != i and j in self.alive}
+        scored = {(shared, j) for j in owners if (shared := shared_length(me, self.alive[j])) > 0.0}
         return [j for _s, j in sorted(scored, reverse=True)]
 
     def merge(self, i: int) -> bool:
