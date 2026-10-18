@@ -50,6 +50,15 @@ mkdir -p "$C/.claude/workflows"; printf 'export const meta = {}\n' > "$C/.claude
 land; ok "a saved workflow is offered as tooling" 'grep -q ".claude/workflows/w.js" "$T/out"'
 setup  # section 2 counts the clone's commits from a fresh setup
 
+echo "1b. a Makefile lands only with the clone's make-targets page current, and the page lands beside it (385 T46)"
+setup
+mkdir -p "$C/docs"; printf 'all:\n' > "$C/Makefile"; printf 'page v1\n' > "$C/docs/make-targets.html"; git -C "$C" add -A; git -C "$C" commit -qm "a target"
+LAND_TOOLING_DOCS_CHECK=false land Makefile; rc=$?
+ok "a stale page refuses the landing, naming make docs" '[ "$rc" -ne 0 ] && grep "make docs" "$T/out" >/dev/null && [ -z "$(on_main Makefile)" ]'
+LAND_TOOLING_DOCS_CHECK=true land Makefile; rc=$?
+ok "a current page lands beside the Makefile" '[ "$rc" -eq 0 ] && grep "docs/make-targets.html lands too" "$T/out" >/dev/null && [ "$(on_main docs/make-targets.html)" = "page v1" ]'
+setup
+
 echo "2. the tooling lands alone, on top of main, and the clone merges main cleanly (SC-003)"
 land scripts/a.sh; rc=$?
 ok "landed" '[ "$rc" -eq 0 ] && grep -q "landed scripts/a.sh" "$T/out"'
