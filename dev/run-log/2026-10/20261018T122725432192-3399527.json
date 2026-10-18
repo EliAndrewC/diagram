@@ -1,0 +1,37 @@
+{
+  "utc": "2026-10-18T12:27:25Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 163,
+  "result": "failed: test-full",
+  "commit": "8d6a67509",
+  "first_failure_s": 153.2,
+  "last_failure_s": 162.8,
+  "failed_names": [
+    "uncovered l7r/diagram/hamletgen/homesteads/stages.py:704-705, 785"
+  ],
+  "host": {
+    "load": [
+      5.56,
+      6.51
+    ],
+    "mem_avail_mb": [
+      9116,
+      9037
+    ],
+    "cpu_temp_c": [
+      64.0,
+      64.0
+    ],
+    "stall_s": {
+      "cpu": 1.4,
+      "io": 0.1,
+      "io_full": 0.1,
+      "memory": 0.1
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  }
+}
