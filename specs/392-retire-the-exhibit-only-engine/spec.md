@@ -61,7 +61,7 @@ hill-rice field builders. The GM asked for them to be filed and deleted.
   every test - with the deleted code gone.
 - **SC-002** (FR-001): `make dead-closure BASE=<the commit before>` names nothing NEWLY DEAD and no PINNED test, and its STILL
   CALLED lines name only frozen exhibits (or a recorded false alarm).
-- **SC-003** (FR-006): `make maps` regenerates the live pool unchanged, and the landing cohort (`make cohort-landing`)
+- **SC-003** (FR-005, FR-006): `git diff` shows no file under `legacy-hand-authored-pool/` changed; `make maps` regenerates the live pool unchanged, and the landing cohort (`make cohort-landing`)
   regresses no seed against main.
 - **SC-004** (FR-003, FR-004): no package index or docstring names a deleted module or member as live; 380, 381 and 382
   carry the pointer line.
