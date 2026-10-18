@@ -51,7 +51,7 @@
    "declared": "spec-fidelity"
   },
   "## Landing": {
-   "sha256": "cf4f965f45fac25a23e92eef35aea5f13d7ffa8dbb31e0d08eeecd944d2cbcce",
+   "sha256": "f24d029becb500fbb420c1861b2370d042f97693068b5785906f0a417e5c47e8",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -586,6 +586,36 @@
   },
   "### T42 Decisions": {
    "sha256": "6239b1bf9458850972b066d654c4ffe5100143a7a4aeb31531d03a6446f495e9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T07 - the clearance between a farmhouse wall and a lane's tread, researched (the ranking row `houses.py::HousesMixin._on_a_tread#no building corner on a lane`)": {
+   "sha256": "6787cd62d4c20bd8ab36db868fdc9bf36ed38d47b5b48f5ccbcbef078f53b4d3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T07 Approach (checklist part A)": {
+   "sha256": "80c73674a5527892f0a3716c154f6b92315bc1f8e63b33e20a0eeb40ea35a556",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T07 part B (2026-10-18T15:05Z)": {
+   "sha256": "3772cf0625cda9ae062e276b98a7a89e20493476865dc181bf0799876c8794cc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T07 Decisions": {
+   "sha256": "4a849dad0c84786f4e7721db4d885d3886c0950e5b238cb896e0ff590462dc61",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T44 Decisions": {
+   "sha256": "40c93c6a6ccb99370fa077fec41d053d33637ddf3fc822df4048efe7a0cf80bf",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -3771,6 +3801,76 @@
      "summary": "a note the latest returned round READ, unchanged since, is netted by the existing answered-at-fingerprint rule; no new code, the cause measured on HEAD and the q:0081 case reproduced in a test",
      "class": "within",
      "why": "The arbiter's part 3 ('net out of the owed list any note that the latest returned round READ with no edit since') is delivered, not narrowed: the plan now carries a dated, method-labeled measurement (2026-10-18, .git/record-checks/ then make record-owed UNANSWERED=1) that the three notes carry round 6's answer at their current fingerprints and are not unanswered, so the ruling's bundle predated the answers' recording. The new test reproduces the case with a READ note that must be netted, so it fails if the existing rule does not net, and red without (a) for the absence half. Round 1's two objections (unmeasured cause, a test that could not fail) are both answered."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## T07 - the clearance between a farmhouse wall and a lane's tread, researched (the ranking row `houses.py::HousesMixin._on_a_tread#no building corner on a lane`)",
+    "### T07 Approach (checklist part A)",
+    "### T07 Decisions",
+    "### T07 part B (2026-10-18T15:05Z)",
+    "### T44 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T07-A (Approach: research pass first, then the label or the number; exits (a)/(e); one goal; 60 min budget)",
+     "summary": "T07 answers the checklist: the 4 ft TREAD_WALL_FT is ours (O), 0246's no-corner-on-the-tread is research (R); one search pass, then the number moves to an attested figure or the claim says UNRESEARCHED naming the pass; done names one goal.",
+     "class": "within",
+     "why": "This is the checklist the request asks to be answered at task start (proposal: 'where does this rule or number come from: research, your ruling, or us?', 'refine the number'; FR-003, FR-015 one goal), applied to one of the ranking rows the request takes in (proposal scope 'about five ranking rows'; amendment 7 'pull in 10 more claims'). The ranking row's own instruction is 'research the clearance or claim it UNRESEARCHED'; the Approach drops neither branch."
+    },
+    {
+     "id": "D55 (research, then label)",
+     "summary": "A research-pass agent searches archive then web (zh/ja/en) for a house-wall-to-lane clearance; an attested figure goes into the record and TREAD_WALL_FT moves to it with pool and cohort rolled; none found leaves 4 ft labeled UNRESEARCHED.",
+     "class": "within",
+     "why": "Exactly the two outcomes the ranking row names, and the request's own example of the right move (a number that is ours is a knob refined to the research, not a target defended - the 700 ft case). Keeping 4 ft when nothing is found is not a carve-out: the row offers 'claim it UNRESEARCHED' as a full resolution."
+    },
+    {
+     "id": "T07-B1 (TREAD_WALL_FT 4 -> 3 ft from the pass's findings)",
+     "summary": "The pass found a Japanese village house set ~3 ft back from a road and a north Chinese drip strip of 2-3 chi; the record (0247) carries both and the constant moves to 3 ft.",
+     "class": "within",
+     "why": "The D55 branch the research triggered: an implementation number moved to what the record attests. Nothing the GM asked for is reduced."
+    },
+    {
+     "id": "T07-B2 (fixes found by the claims rounds on code T07 changed: joint gap takes the wider lane's half-width; _on_a_tread measures every wall whole via poly_seg_dist; threshing yard split from the garden's claim as UNRESEARCHED)",
+     "summary": "Defects the claims rounds found in the rule T07 touched are fixed inside T07 before landing.",
+     "class": "within",
+     "why": "Each makes the researched clearance and 0246's 'no corner of a house on its tread' hold as stated (a predicate that checked corners and centre only let a footpath cross a long house); splitting the yard claim and labeling it UNRESEARCHED is the request's 'which parts are research and which are ours' applied honestly. None relaxes a rule or drops a requested outcome."
+    },
+    {
+     "id": "T07-B3 (three findings on code T07 did not write carried into T43; the 7 ft corner hold remains ours, GUESS, carried in T43)",
+     "summary": "Per the arbiter rulings (ask:t07-two-findings-at-landing continue, ask:t07-span-walkable-cannot-tell accept), T07 lands under CLAIMS_OK with T43 holding the three findings as open work.",
+     "class": "within",
+     "why": "The landing reaches the outcome of the GM's option 3 (amendment 3: 'Never block on unchanged code ... the finding as an open task instead ... must still be fixed before the feature closes'; FR-013) by an arbiter-ruled CLAIMS_OK landing with the three findings carried into the open task T43, rather than by the gate filing them itself. Whether the gate also filed them cannot be seen from the bundle. The purpose holds either way: the findings are deferred to open work that blocks the feature's close, not waived, so nothing requested is narrowed."
+    },
+    {
+     "id": "D58 (step-back bundle reads every session of the hour)",
+     "summary": "stepback_bundle.sessions_of lists every sid with events in the window; build merges all their transcripts by timestamp, tags entries by session, notes sessions it could not find, takes every session's refusals, and time.md sums over sessions and says parallel sessions can exceed the hour; --transcript replay unchanged.",
+     "class": "within",
+     "why": "A tooling improvement to the hourly step-back that the approved proposal names as a 'work resists' checkpoint (FR-004), made under amendment 6 ('implement any obvious performance / tooling / process improvements along the way'). It widens what the step-back sees; the unchanged --transcript replay path and the existing cap/cut are prior behavior the GM asked nothing about, not an exception to anything requested."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing/T43-lands-open",
+     "summary": "T43 (claims-gate findings carried and filed as an open task by the round arbiter's rulings) is added to the Lands open line: it lands when it closes, with its retro row, while later tasks stay open.",
+     "class": "within",
+     "why": "FR-006 (one task at a time, each closing with its retro before the next) is the block's stated basis and applies to every task unchanged. Filing a carried finding as an open task that must close before the feature does is Amendment 3's option 3, which the GM locked in ('Yes, please lock in option three'); landing that task open narrows nothing - the feature still cannot close with it open."
+    },
+    {
+     "id": "Landing/T44-lands-open",
+     "summary": "T44 (the arbiter's tooling fix on hour:385-approach-checklist@16) is added to the Lands open line on the same terms.",
+     "class": "within",
+     "why": "A tooling fix taken as its own task serves Amendment 6 ('Please make sure to implement any obvious performance / tooling / process improvements along the way') and the feature's purpose (Request: measure each task and improve the process between them); landing it per-task under FR-006 is the block's existing rule extended to a new task, with no requirement dropped or weakened."
     }
    ]
   }

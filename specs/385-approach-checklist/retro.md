@@ -456,3 +456,21 @@ About 30 min (two plan rounds). An absence note names no page, so it owes no sou
 (net a note round 6 had READ) I first called "already done" without measuring, and round 1 blocked it - measured, the existing
 answered rule does net them (round 6's answers were recorded after the ruling's bundle was built). **The habit it changes:** a
 claim that existing code already does a thing is a measurement, with its record named, never an assertion.
+
+## T07 - the retro row
+
+About 4 h 30 min. The ranking row asked for a source for the 4 ft wall-to-tread margin; one search pass found a Japanese village
+house set back about 3 ft from a road and a north Chinese drip strip of 2-3 chi, so the number moved to 3 ft with a new question
+(0247) and 0081's drawing bullet, through two page sessions and three record-check rounds (two source-reader rounds closed by the
+arbiter). Five claims rounds on the code that reads it found three real defects: the joint gap held only the narrower lane's
+half-width, a threshing yard rode on the garden's citation, and `_on_a_tread` measured a footprint's corners and center only, so a
+footpath could cross a long house 10 ft off its center - fixed, each wall measured whole. Three findings on rules T07 did not write
+went to T43 by two rulings. Pool clean (Kuwabata, then Inashiro, re-rolled), cohort 54/54. One measurement I gave the arbiter was
+wrong (the far end of a household's own lane does reach `span_walkable`). **The habit it changes:** before telling the arbiter
+what a caller never does, read the caller's skip condition line by line - "door ends are excluded" was half of it.
+
+## T44 - the retro row
+
+About 25 min. The hour-16 step-back's words held a page session's words and none of the working session's, because the bundle
+read the busiest session of the hour; it reads every one now, labeled, and names one it could not find or a cut. **The habit it
+changes:** a bundle that picks "the" session of an hour picks wrong whenever page sessions run - read them all and label them.

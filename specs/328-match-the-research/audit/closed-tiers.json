@@ -625,6 +625,7 @@
  "l7r/diagram/settlement/homestead_parts/wood_share.py::copse_keepouts#south strip in feet": "E1",
  "l7r/diagram/settlement/homestead_parts/yards.py::ThreshingYardsMixin._attach_yard#no floor without rice": "E0",
  "l7r/diagram/settlement/homestead_parts/yards.py::ThreshingYardsMixin._yard_area_ft2#yard median": "E0",
+ "l7r/diagram/settlement/houses.py::HousesMixin._on_a_tread#no building corner on a lane": "E4",
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin._stock_woodland#no crown under another": "E1",
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#grass ground forms": "E3",
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#marsh edge": "E3",
