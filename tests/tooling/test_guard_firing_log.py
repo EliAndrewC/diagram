@@ -374,6 +374,7 @@ _ESCAPES = {
         "a make variable passed as --not-owed-ok to check_bundle.py (feature 311), which a mention cannot set; reason floor via _hm_escape.reason_is_enough",
     ),
     "RECORD_CHECKS_OK": ("environment", "read as ${RECORD_CHECKS_OK:-} by scripts/gates/entry-gate.sh (feature 311), which a mention cannot set; reason floor via hm_escape.py reason-ok"),
+    "COHORT_OK": ("environment", "read as ${COHORT_OK:-} by scripts/gates/cohort-gate.sh (feature 386), which a mention cannot set; reason floor via hm_escape.py reason-ok"),
     "CLAIMS_OK": ("environment", "read as ${CLAIMS_OK:-} by scripts/gates/claims-gate.sh (feature 316), which a mention cannot set; reason floor via hm_escape.py reason-ok"),
     "LEDGER_ROWS_OK": (
         "environment",

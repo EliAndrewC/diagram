@@ -51,8 +51,8 @@ OUT="$(PYTHONDONTWRITEBYTECODE=1 python3 "$CO_HERE/cohort_gate.py" check 2>&1)";
 guard_log cohort-gate blocked "$(printf '%s' "$OUT" | grep 'REFUSED' | head -c 400)" cohort
 printf '\n\033[1mCOHORT GATE: engine work lands with its landing cohort - 48 seeds on this engine, none regressed, and a fresh block.\033[0m\n' >&2
 printf '%s\n' "$OUT" | grep 'REFUSED' | sed 's/^cohort-gate: REFUSED /  /' >&2
-printf '\nRun `make cohort-landing` (about 2 min each roll uncached, seconds when served): it rolls seeds 1-48 and the pinned rows,\n' >&2
-printf 'then the fresh block, rolls main'"'"'s baseline in a detached worktree when a failing seed has none, and says what this gate will.\n' >&2
+printf '\nRun `make cohort-landing`: it rolls seeds 1-48, the pinned rows and a 48-seed fresh block (main'"'"'s baseline FIRST when\n' >&2
+printf 'main'"'"'s engine has none, in a detached worktree), and says what this gate will.\n' >&2
 printf 'A seed NEWLY FAILING or WORSENED is a regression (constitution XIII): fix it, or take the round arbiter'"'"'s waiver\n' >&2
 printf '(`make arbiter-ask`). COHORT_OK="<why>" discharges every refusal, to dev/bypass-log/.\n\n' >&2
 exit 1
