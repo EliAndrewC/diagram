@@ -81,7 +81,10 @@ worked ground (`run_on_target`, 8,552 calls at 40 households) and keeps the `lim
 straight, or over a ford - is at least `q`'s distance to the ground's edge, so the points are taken in that distance's order
 (the distance asked of the ground's ring index, `RingIndex.edge_within`/its outline) and the search stops once `limit` runs are
 in hand and the next point's distance exceeds the longest kept. Ties keep the old order: the kept runs are sorted by (length,
-the point's place in `samples_along`), the old `sorted` being stable on that place. **Equivalence**: `field_runs` old and new on every
+the point's place in `samples_along`), the old `sorted` being stable on that place. Within a band the points are measured to the edge in one vectorized call (`shapely.distance`)
+and their runs asked nearest first, stopping once `limit` runs are kept and the next point's distance less the stop exceeds
+the longest kept (measured 2026-10-18: the band alone still asked 1,044 / 1,176 / 1,776 points at 10 / 20 / 40 households,
+`m:counts-after` before this refinement). **Equivalence**: `field_runs` old and new on every
 call, the same list. **Counted**: `run_on_target` calls per kept run.
 
 **D2b - the knots' whole-web counts.** `knots.settle_knots.judge` asks, for each trial gather, `memo.count` of each of the whole
@@ -103,7 +106,10 @@ the web's totals. Not R12: no round narrowed, no law asked to pick steps.
 **D3 - each live neighbor measured once.** `Fabric.neighbors` queries the index built in `Fabric.__init__`, maps each hit to its
 live owner (`find`) and measures the shared bund (`shared_length`, a shapely buffer and intersection) for EVERY hit before the
 set drops duplicates: 15.7 measurements a merge at 40 households against 3.3 at 10. The hits are mapped to their owners first,
-deduplicated, then each measured once. **Equivalence** is exact by construction (the same owners, the same measure of each, the
+deduplicated, then each measured once. And a pair's measure is KEPT while neither cell changes (each kept with the two polygons it was taken
+on; a merge changes only the cell that took the other): with each live neighbor measured once per merge the count still
+grew 3.2 / 3.1 / 9.4 a merge at 10 / 20 / 40 households (`m:counts-after` before this refinement), the same failing cells'
+unchanged neighbors measured again round after round. **Equivalence** is exact by construction (the same owners, the same measure of each, the
 same sort) and is tested on every merge of the rolls. **The index kept current - not done, a defect recorded**: a cell a `split` makes
 gets a new id the index never held, so a neighbor that is a split part is never found (`split` deletes the cell and adds its
 parts; `find` of the old id returns an id no longer alive). Indexing the parts would find merges the current code cannot and

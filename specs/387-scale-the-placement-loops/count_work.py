@@ -25,12 +25,16 @@ COUNTS: dict[str, list[tuple[str, str]]] = {
         ("tree_candidates", r"ways/tree.py:\d+\(judge\)|tree.py:\d+\(judge\)"),
         ("tree_lays", r"tree.py:\d+\(lay\)"),
         ("fronting_pairs", r"law.py:\d+\(<genexpr>\)@fronting"),
+        ("faces_judged", r"law.py:\d+\(is_needle\)"),
+        ("ends_reached", r"law.py:\d+\(reach_to_steading\)"),
     ],
     "web": [
         ("field_runs", r"corridors.py:\d+\(field_runs\)"),
         ("run_on_target", r"bund.py:\d+\(run_on_target\)"),
         ("knot_trials", r"knots.py:\d+\(judge\)"),
         ("doorstep_ends", r"law.py:\d+\(doorstep_ends\)"),
+        ("knot_pair_asks", r"knots.py:\d+\(pair\)"),
+        ("faces_judged", r"law.py:\d+\(is_needle\)"),
     ],
     "field": [
         ("merges", r"waterfields/settle.py:\d+\(merge\)|settle.py:\d+\(merge\)"),

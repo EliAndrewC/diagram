@@ -169,6 +169,7 @@ class Fabric:
         self.ctx, self.plot_across, self.cell = ctx, plot_across, cell
         self.alive: dict[int, Any] = {}
         self.fails: dict[int, set[str]] = {}
+        self._shared: dict[tuple[int, int], tuple[Any, Any, float]] = {}
         self._next = 0
         for snapped in shapely.set_precision(cells, GRID):
             for q in polygons(snapped):
@@ -224,8 +225,19 @@ class Fabric:
         Research: neighbors by the shared bund - NONE: plumbing, the merge's order is `merge`'s claim"""
         me = self.alive[i]
         owners = {j for jj in self.tree.query(me.buffer(0.2)) if (j := self.find(self.ids[int(jj)])) != i and j in self.alive}
-        scored = {(shared, j) for j in owners if (shared := shared_length(me, self.alive[j])) > 0.0}
+        scored = {(shared, j) for j in owners if (shared := self.shared(i, j)) > 0.0}
         return [j for _s, j in sorted(scored, reverse=True)]
+
+    def shared(self, i: int, j: int) -> float:
+        """`shared_length` of cell `i` along cell `j`, KEPT while neither cell changes (feature 387): a merge changes one cell, the
+        one that took the other, so a failing cell asked again finds every unchanged neighbor's bund already measured (9.4
+        measurements a merge at 40 households with each live neighbor measured once, `m:counts-after`). Kept with the two
+        polygons it was measured on and re-measured when either is not the cell that stands now."""
+        me, other = self.alive[i], self.alive[j]
+        got = self._shared.get((i, j))
+        if got is None or got[0] is not me or got[1] is not other:
+            got = self._shared[(i, j)] = (me, other, shared_length(me, other))
+        return got[2]
 
     def merge(self, i: int) -> bool:
         """Cell `i` merged into the first neighbor that may take it (`takes`); True if it was.

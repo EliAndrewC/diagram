@@ -266,14 +266,25 @@ def _shortest_runs(ground: WorkedGround, pts: Sequence[Pt], tree: Any, half: flo
     Research: the shortest runs first - NONE: plumbing; the order is `field_runs`' claim"""
     if ground.edge is None:
         return []
+    import shapely
+
     stop = half + TIP_MARGIN_FT
     runs: dict[int, Poly | None] = {}
+    asked: set[int] = set()
     band = 64.0
     while True:
-        for i in sorted(int(i) for i in tree.query(ground.edge, predicate="dwithin", distance=band) if int(i) not in runs):
+        # ...EACH POINT IN THE BAND MEASURED TO THE EDGE IN ONE CALL, and its run asked in that order: a point's run is at least its
+        # distance less the stop, so the asking ends once `limit` runs are kept and the next point could not be shorter
+        new = sorted(int(i) for i in tree.query(ground.edge, predicate="dwithin", distance=band) if int(i) not in asked)
+        asked |= set(new)
+        dists = shapely.distance(ground.edge, shapely.points([pts[i] for i in new])) if new else []
+        for d, i in sorted(zip((float(x) for x in dists), new, strict=True)):
+            kept = sorted((polyline_len(r), k) for k, r in runs.items() if r is not None)[:limit]
+            if len(kept) >= limit and d - stop - 1e-6 > kept[-1][0]:
+                break  # no point left in the band can be shorter than the runs kept
             runs[i] = _run_from(pts[i], ground, half, brook, fords)
-        kept = sorted(((polyline_len(r), i) for i, r in runs.items() if r is not None))[:limit]
-        if len(runs) == len(pts) or (len(kept) >= limit and kept[-1][0] < band - stop - 1e-6):
+        kept = sorted((polyline_len(r), k) for k, r in runs.items() if r is not None)[:limit]
+        if len(asked) == len(pts) or (len(kept) >= limit and kept[-1][0] < band - stop - 1e-6):
             return [cast(Poly, runs[i]) for _n, i in kept]
         band *= 2.0
 
