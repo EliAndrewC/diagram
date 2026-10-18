@@ -5,7 +5,9 @@ Every task changes how a verdict is computed, not what is drawn or where: nothin
 
 ## Occasions
 
-- none: no glyph, caption or placement rule changes - each site keeps the old verdicts, proved call by call by its equivalence
+- none: amendment 1 moves maps but changes no rule - the merges keep `verdict` and may now find a split part as a partner; the
+  wells keep every 0196/0072 rule and are found by a cheaper search - so no element is re-placed by substantially different rules
+- none (as landed before amendment 1): no glyph, caption or placement rule changes - each site keeps the old verdicts, proved call by call by its equivalence
   test; a map that moves anyway is judged by the cohort and the gate (FR-007), and its move named in the report
 
 ## Tasks
@@ -31,6 +33,18 @@ Every task changes how a verdict is computed, not what is drawn or where: nothin
 - [x] T07 Land (SC-003, SC-005): `make cohort-landing`, the gated push, the feature report; the landing report carries FR-004's withdrawal (measurement, 297 R9), FR-002's and FR-003's restated premises with what was measured, and FR-003's split-part defect with its frequency
       research: rendering
       verify: DONE. landing cohort on this engine: 54/54 (dev/cohort-log/20261018T121355Z, fresh 6 of 48); report.md written with the GM's section (SC-005); the gated push follows
+- [ ] T08 (amendment 1) The merges find every live neighbor (plan T08, D8; FR-011): the neighbor index kept current as split parts are added; the split-part count 0 in the soak; every kept basin passes `verdict`; unit test red before
+      research: rendering
+      verify:
+- [ ] T09 (amendment 1) The well seating scales (plan T09, D9; FR-012): each candidate seat's nearest houses, wall gap, pair look-ahead and verge answered from what is near it or once a pass; tests against the old forms where the answer is kept
+      research: rendering
+      verify:
+- [ ] T10 (amendment 1) Measure, sweep and record (plan T10; SC-006 - SC-008): the counts and the two well stages' time before/after, the soak, `make cohort`, `make maps` (moved maps committed), `make done`, `dev/performance.md`
+      research: rendering
+      verify:
+- [ ] T11 (amendment 1) Land: the claims of the touched code re-judged, the landing cohort, the gated push, the report
+      research: rendering
+      verify:
 - [ ] GM review (make gm-reviewed F=387) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

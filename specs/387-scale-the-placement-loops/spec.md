@@ -4,9 +4,11 @@
 
 **Created**: 2026-10-18
 
-**Status**: Done 2026-10-18 - T01-T07 ticked; make done green; landing cohort 54/54 (fresh 6 of 48); spec accepted by the round arbiter at its round cap, plan CLEAR; FR-004 withdrawn as measured. SC-001 met for the tree, the field way and the knots; NOT met for the merges (3.2 / 3.1 / 7.6 bund measures a merge at 10 / 20 / 40 households, `m:counts-after`): the remaining measures are of cells the merge changed, which a bigger cluster has more of - no exact way found to skip them. Time bought: -10% on the five stages at 40 households (`m:five-stages-ab`)
+**Status**: In progress - amendment 1 (2026-10-18): maps may change where the research holds; FR-011 the merges' neighbors, FR-012 the well seating
 
 **Approved**: the GM, 2026-10-18, "I don't think we need to re-check everything after each addition, and you've already proposed fixes for the others, so please file a feature for this and then make it happen."
+
+**Amendment 1 approved**: the GM, 2026-10-18, "You can amend the current feature to rewrite the spec to allow maps to change so long as we're conformant to our research, and then mkake these changes as part of the same feature."
 
 **Affects**: hamlet
 
@@ -89,8 +91,8 @@ where a premise did not hold, the requirement below is the form of that goal the
   round 1, measured 2026-10-18: 3.3 shared-bund measurements per merge at 10 households, 15.7 at 40; 2.06 s of the merges'
   3.80 s), which queries an index of the cells built before any merge and measures the shared bund of every stale entry before
   duplicates are dropped. A merge measures each live neighbor once, so the bund measurements per merge do not grow with the
-  household count. The index is NOT made current: a cell a staircase split makes is one it never held, so indexing it would find
-  merges the current code cannot and move maps against FR-007 - recorded as a defect found and reported (SC-005).
+  household count. The index was not made current here (a cell a staircase split makes is one it never held) - recorded as a defect
+  found and reported (SC-005), and fixed by amendment 1 (FR-011).
 - **FR-004 The house layout geometry - withdrawn as measured.** The layout is already built once for the inputs it depends on:
   its template is cached on a key that includes the seat it is asked at (`bundle._bundle_template`), and the rest of
   `_bundle_geom` (the turn, the turned boxes, the persimmon) depends on that position - so each reach check is a different
@@ -102,10 +104,23 @@ where a premise did not hold, the requirement below is the form of that goal the
   answered from a spatial index of them, not a filter over all.
 - **FR-006 The bamboo strip check.** A candidate strip asks spatial indexes, built once per pass and kept current as things
   are placed, for what stands near it; the verdict equals the straight scan's.
-- **FR-007 Equivalence first (this governs FR-001 - FR-006).** Each change is proved verdict-equivalent to the code it replaces - by a test that runs both on
-  the same inputs - unless it cannot be; a change that alters an answer says so at the point of change and in the plan, and the
-  maps it moves are judged against the rules (cohort, pool hamlets), never byte-identity (`l7r/diagram/CLAUDE.md`,
-  "Performance").
+- **FR-007 Held to the research, not to the old maps (amendment 1; this governs FR-001 - FR-012).** The GM, 2026-10-18: *"It's
+  okay if maps change to make things faster, so long as they remain compatible with our research."* A change that keeps the old
+  answers is proved so by a test that runs the old form and the new on the same inputs (FR-001 - FR-006, as landed); a change
+  that alters an answer (FR-011, FR-012) says what it changes at the point of change and in the plan, keeps every research
+  claim of the code it touches in step (impl-drift), and the maps it moves are judged against the rules - the cohort, the
+  landing cohort, the pool hamlets' gate and the review checks their occasions owe - never byte-identity.
+- **FR-011 The merges find every live neighbor (amendment 1).** A cell made by a staircase split after a merge is a neighbor the
+  merge's search can find: the search's index is kept current as cells are added, so a failing cell may merge into a split part
+  (the defect FR-003 recorded: 42 of 502 searches at 40 households, seed 4, `soak/40-4.json`). Merges the old code could not
+  make are allowed; every merged basin keeps the ring rules (`verdict`) as before.
+- **FR-012 The well seating scales (amendment 1).** `wells.seat_wells`, which seats the cluster's wells in the appurtenances
+  stage and the lane-side wells after the web, costs 10-43 s a 40-household roll (`m:five-stages-ab`'s note; profile 2026-10-18:
+  6.8 million house distances on seed 25). Each candidate seat's questions - its nearest houses, its gap to a dwelling's wall,
+  the pair look-ahead's households per well, a lane's verge - are answered from what is near it or computed once per pass, not
+  by walking every house or lane per seat. The seats chosen may change; each well still keeps 0196's and 0072's rules as its
+  claims state (among the dwellings, a wall within the seat gap, no well serving more than ten where a seat avoids it, not in
+  the belt, not past the crop).
 - **FR-008 No rule loosened.** No check is removed, coarsened, sampled or given a wider tolerance to buy speed
   (`dev/performance.md`: a slow check is INDEXED, never coarsened).
 - **FR-009 Measured.** Bookends `make perf LABEL=387-start SCALING=1` before the first engine edit and `-end` after the last,
@@ -121,6 +136,7 @@ where a premise did not hold, the requirement below is the form of that goal the
 - Hot spots the three bullets did not name (the commons byres' clearance checks, open-ground patches, grove index inserts): noted
   in the report as the next candidates, not changed here.
 - The memory trades in `dev/performance.md` "Time traded for memory" are not undone.
+- (Amendment 1) The village roll's seating (feature 380's carried item) and the two behaviors carried to 384 stay where they are.
 
 ## Success criteria
 
@@ -138,6 +154,14 @@ where a premise did not hold, the requirement below is the form of that goal the
 - **SC-005** (FR-002, FR-003, FR-004) The landing report to the GM names FR-004 as withdrawn, with its measurement and 297 R9,
   says that FR-002's and FR-003's premises were restated from the diagnosis the GM approved, each with what was measured, and names FR-003's
   split-part defect.
+
+- **SC-006** (FR-011) The merges' neighbor search finds the split parts the soak counted (`neighbors_missing_a_split_part` 0 on
+  the four 40-household rolls), and every kept basin passes `verdict`.
+- **SC-007** (FR-012) At 40 households, seeds 4 / 25 / 39 / 47, the `appurtenances` and `lane_wells` stages' wall time is
+  reported before and after (timed back to back), and the house distances asked per candidate seat no longer grow with the
+  household count (counted at 10 / 20 / 40 households, recorded in `measurements.json`).
+- **SC-008** (FR-007, FR-011, FR-012) `make cohort`, the landing cohort and `make maps` pass with the maps moved; the moved
+  pool maps are committed; no seed newly fails against main.
 
 ## Assumptions
 
