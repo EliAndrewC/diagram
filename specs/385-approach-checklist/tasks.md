@@ -24,8 +24,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T04 T48: the web carries a re-deal of the seats (384's User Story 2, SC-004); its retro row [lands-open]
       research: rendering
       verify: DONE. see retro.md's T04 row; plan CLEAR (T04 round 2)
-- [ ] T05 T47: the wave 155 pocket-well patch re-landed, no waiver; its retro row [lands-open]
+- [x] T05 T47: the wave 155 pocket-well patch re-landed, no waiver; its retro row [lands-open]
       research: rendering
+      verify: DONE. pool clean on T05's tree; make done green (199 s); glyph-checks PASS on inashiro, kuwabata, sawada; make cohort-landing 54/54; claims gate clear but the front row and the standoff, carried into T06 by ask:t05-old-drifts-at-landing
 - [ ] T06 A ranking row (chosen at its start, a kind not yet tried); its retro row [lands-open]
       research: rendering
 - [ ] T07 A ranking row; its retro row [lands-open]
@@ -59,22 +60,30 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T19 Amendment 5, FR-019: the ledger refusal names `make ledger-owed WRITE=`, which writes each row from the reply [lands-open]
       research: rendering
       verify: DONE. see retro.md's amendment 5 rows; plan accepted by the round arbiter on round:spec-fidelity|plan:385-approach-checklist#T17@3
-- [ ] T20 The hour decided once per message, and the step-back lists the hour guard's refusals (the arbiter's fix on hour:385-approach-checklist@10, plan D42) [lands-open]
+- [x] T20 The hour decided once per message, and the step-back lists the hour guard's refusals (the arbiter's fix on hour:385-approach-checklist@10, plan D42) [lands-open]
       research: rendering
-- [ ] T21 A batch reply's own EDITs settle its units; `make record-owed` names `make apply-edits FROM=<reply>` (the arbiter's fix on ask:t05-lane-popup-round3, plan D43) [lands-open]
+      verify: DONE. landed on main; tests/tooling/test_checkpoint.py green (the hour decided once per message; the step-back lists refused events)
+- [x] T21 A batch reply's own EDITs settle its units; `make record-owed` names `make apply-edits FROM=<reply>` (the arbiter's fix on ask:t05-lane-popup-round3, plan D43) [lands-open]
       research: rendering
-- [ ] T22 A refused dispatch is sent again or recorded dropped before a turn ends, and the decide-first refusal names its check (the arbiter's fix on hour:385-approach-checklist@11, plan D44) [lands-open]
+      verify: DONE. landed on main; tests/tooling/test_apply_edits.py 18 green; the arbiter's fix on ask:t05-lane-popup-round3 settled
+- [x] T22 A refused dispatch is sent again or recorded dropped before a turn ends, and the decide-first refusal names its check (the arbiter's fix on hour:385-approach-checklist@11, plan D44) [lands-open]
       research: rendering
-- [ ] T23 The claims gate takes a MISLABELED answered by its prescribed relabel as answered, as `claims-owed` already does (found by T05, plan D45) [lands-open]
+      verify: DONE. landed on main; tests/hooks/test-pair-hooks.sh 97 green, red without the stop layer; the arbiter's fix on hour@11 settled
+- [x] T23 The claims gate takes a MISLABELED answered by its prescribed relabel as answered, as `claims-owed` already does (found by T05, plan D45) [lands-open]
       research: rendering
-- [ ] T24 `make land-tooling` merges main in itself when the clone is behind, so a landing never fails on a stale base (found three times on 2026-10-18, plan D46) [lands-open]
+      verify: DONE. landed on main; tests/tooling/test_claims_scoping.py green, red without the gate's skip; T05's three relabels no longer refused
+- [x] T24 `make land-tooling` merges main in itself when the clone is behind, so a landing never fails on a stale base (found three times on 2026-10-18, plan D46) [lands-open]
       research: rendering
-- [ ] T25 A claims bundle inlines the callees a unit reads from other modules and the constants they read, one level on (the arbiter's fix on ask:t05-old-drifts-at-landing, plan D47) [lands-open]
+      verify: DONE. landed on main; tests/hooks/test-land-tooling.sh 33 green (3c a stale base lands, 3 a conflict refuses with the merge aborted)
+- [x] T25 A claims bundle inlines the callees a unit reads from other modules and the constants they read, one level on (the arbiter's fix on ask:t05-old-drifts-at-landing, plan D47) [lands-open]
       research: rendering
-- [ ] T26 `make verify` renders each owed map whose render is missing or older than its generator or manifest before it writes the review prompts (the arbiter's fix on hour:385-approach-checklist@12, plan D48) [lands-open]
+      verify: DONE. landed on main; tests/tooling/test_claims_index.py green; the standoff's first bundle carries every name its rounds asked for (154 KB); the arbiter's fix on ask:t05-old-drifts-at-landing settled
+- [x] T26 `make verify` renders each owed map whose render is missing or older than its generator or manifest before it writes the review prompts (the arbiter's fix on hour:385-approach-checklist@12, plan D48) [lands-open]
       research: rendering
-- [ ] T27 The heading an owed Approach or part B asks for passes the tick: stamps compared to the minute the heading carries (found ticking T05 and T22, plan D49) [lands-open]
+      verify: DONE. landed on main; tests/tooling/test_review_owed.py 66 green; the arbiter's fix on hour@12 settled
+- [x] T27 The heading an owed Approach or part B asks for passes the tick: stamps compared to the minute the heading carries (found ticking T05 and T22, plan D49) [lands-open]
       research: rendering
+      verify: DONE. landed on main; tests/tooling/test_approach_gate.py green; T05 and T22 tick with the headings owe printed
 - [ ] T11 The close: the checklist to `docs/`, the refusals extended to every feature (FR-001), the final report (SC-001, SC-002); and D30's wording, filed by the round arbiter's ruling on ask:t14-plan-round4 (T14's plan round 4, rows 1-3 - the code already does each, `test_a_transcript_named_call_is_its_run_s_anywhere_and_a_mixed_overlap_is_the_missing_run_s_estimate`): the outside-every-window clause carries its own condition (no `by`, no transcript names it), the overlap clause says "still an estimate", and a call inside both a found and a missing run's window is the missing run's estimate [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
