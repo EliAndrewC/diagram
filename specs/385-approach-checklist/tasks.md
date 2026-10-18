@@ -88,6 +88,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T29 Each plan review's bundle has its own path, keyed by its tasks and its blocks' digest (the arbiter's fix on hour:385-approach-checklist@13, plan D53) [lands-open]
       research: rendering
+- [ ] T30 Nothing is merged into a clone while a make runs in it, on the tool-call path too (the arbiter's fix on red-gate@2026-10-18T12:36:36Z, plan D54) [lands-open]
+      research: rendering
 - [ ] T11 The close: the checklist to `docs/`, the refusals extended to every feature (FR-001), the final report (SC-001, SC-002); and D30's wording, filed by the round arbiter's ruling on ask:t14-plan-round4 (T14's plan round 4, rows 1-3 - the code already does each, `test_a_transcript_named_call_is_its_run_s_anywhere_and_a_mixed_overlap_is_the_missing_run_s_estimate`): the outside-every-window clause carries its own condition (no `by`, no transcript names it), the overlap clause says "still an estimate", and a call inside both a found and a missing run's window is the missing run's estimate [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]

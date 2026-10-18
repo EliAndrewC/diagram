@@ -274,7 +274,7 @@ OUT=$(printf '{"session_id":"sid-run"}' \
 kill "$GLPID" 2>/dev/null; wait "$GLPID" 2>/dev/null; rm -f "$RUNC/.git/gate.lock"
 case $OUT in *"clone merge skipped"*) printf 'ok    a live gate lock holds the prompt path off the merge (385 T30)\n' ;;
              *) printf 'FAIL  the prompt path merged under a gate lock\n      out: %s\n' "$OUT"; FAILED=1 ;; esac
-[ "$(git -C "$RUNC" rev-parse HEAD)" = "$BEFORE" ] && printf 'ok    ...HEAD unchanged under the lock\n' || { printf 'FAIL  HEAD moved under the lock\n'; FAILED=1; }
+[ "$(git -C "$RUNC" rev-parse HEAD)" = "$BEFORE" ] && [ -z "$(git -C "$RUNC" status --porcelain)" ] && printf 'ok    ...HEAD and the working tree unchanged under the lock\n' || { printf 'FAIL  HEAD moved under the lock\n'; FAILED=1; }
 
 # once per session - a warning that repeats every prompt is noise the GM learns to skip
 OUT=$(printf '{"session_id":"sid-fj"}' \

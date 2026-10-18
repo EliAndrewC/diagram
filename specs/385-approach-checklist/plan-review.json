@@ -51,7 +51,7 @@
    "declared": "spec-fidelity"
   },
   "## Landing": {
-   "sha256": "6b3dc330808883f943930a495b72f6723bcc6c7ddc1adb6b644d8c4d42a4213e",
+   "sha256": "5eb50eba4b775082f0eaf96a2271c42f611c0b50374d6ce8829ad4205b94299f",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -526,6 +526,30 @@
   },
   "### T29 Decisions": {
    "sha256": "634abb0285f444451c47a0dbce4fa74d949377a1474dc449f9ffd40d5dcf1069",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T06 part B (2026-10-18T12:38Z)": {
+   "sha256": "86483f1d031795f43c1958dfc46164a0ca3892040095ecac629026d75c24a186",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T30 - nothing merged under a running gate (the round arbiter's fix on red-gate@2026-10-18T12:36:36Z)": {
+   "sha256": "09f22fd634e3aa84c01aaf1589cc07c6490198388e4791998cbbf73b226cf85b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T30 Approach (checklist part A)": {
+   "sha256": "e306a2d85fdbdcadaa67904f58dcee83a59424db24436c64398b9e27770c1ee1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T30 Decisions": {
+   "sha256": "ddeb6dc3a9550c367633757d814e7007a95623cd34861fa86dcab080cb98e04c",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -3354,6 +3378,149 @@
      "summary": "Done: two plan-delta runs on different blocks write two bundles, the first left whole; a test red without it",
      "class": "within",
      "why": "Enforcement of the requested fix; nothing beyond it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "### T06 part B (2026-10-18T12:38Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T06-B.1 the three reds fixed",
+     "summary": "The three red gates are fixed one cause at a time: the bundle test is renamed to the moved seating body, a unit test is added for the single-file line's two branches, and the gate is rerun on a stable tree.",
+     "class": "within",
+     "why": "Repairing a red gate does not change what T06 delivers. The new unit test fails only when the single-file behavior already settled in part A is missing, so it enforces the request and adds no scope."
+    },
+    {
+     "id": "T06-B.2 land with 4/18 and the filed gap",
+     "summary": "T06 lands with A3 and A4 unchanged since part A. The line holds on 4 of the cohort's 18 dispersed seeds, the rest is the gap already filed, and the fallback is the arbiter's.",
+     "class": "within",
+     "why": "This repeats part A's decisions and makes no new one. The bundle holds only blocks changed since their CLEAR verdict, and part A is not in it, so part A is unchanged since it was judged. The fallback for the seeds the line misses is the round arbiter's ruling (G), and under feature 379 the arbiter stands where the GM was asked, so the session is not carving out those seeds itself."
+    },
+    {
+     "id": "T06-B.9 merge-under-a-gate fix filed as T30",
+     "summary": "The hook's clone-sync merged main into the clone while the session's own gate was running. Fixing that is filed as an owed task, T30, instead of being done in T06.",
+     "class": "within",
+     "why": "That merge is exactly the case FR-010 covers (a write to the working tree while the session's own gate runs), though the block does not cite FR-010. The block does not exempt the hook's merge from the rule. It files the hole in the guard as its own task, still owed before the feature closes. FR-015 requires a second goal to become its own task, and amendment 6 asks for tooling fixes along the way. The fix is filed, not dropped."
+    },
+    {
+     "id": "T06-B.7 next step",
+     "summary": "The next step is the landing cohort (make cohort-landing), then the gated push.",
+     "class": "within",
+     "why": "This is the ordinary landing route, and it measures before landing as FR-003/FR-004 and the checklist require. It decides nothing the spec left open."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T30 - nothing merged under a running gate (the round arbiter's fix on red-gate@2026-10-18T12:36:36Z)",
+    "### T30 Approach (checklist part A)",
+    "### T30 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Landing: T30 lands open",
+     "summary": "T30 added to the Lands open list, landing on its own when it closes.",
+     "class": "within",
+     "why": "FR-006 (one task at a time, each landing before the next); amendment 6 asks for each improvement as its own task."
+    },
+    {
+     "id": "D54a - own-make.sh process test in place of the lock file",
+     "summary": "No gate-in-progress lock written by make done on start and removed on exit; the existing live-make process test (own-make.sh, feature 310) stands in as 'the lock'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The arbiter's fix names the mechanism verbatim: a lock that make done writes on start and removes on exit, and a test that holds that lock. The lock is not impossible, nothing in the fix implies a process test instead, and the reasons given are 'what the prompt path already trusts' (consistency with existing code) and 'a killed gate would leave a stale file' (an awkwardness, not an impossibility: a stale-lock rule can be added to the arbiter's lock). On purpose: the fix is keyed to make done's gate. The plan does not measure that own-make.sh sees that gate for its whole run, including any part run detached or between make invocations. Its own premise is that the prompt path already used this test, and a merge still landed between two gates. The substitution also moves the trigger the other way: it holds on ANY make in the clone (make quick, make figures) when no gate runs, which the fix did not ask for. Write the lock as the arbiter specified; a stale-lock rule may be added to it."
+    },
+    {
+     "id": "D54b - the check on the tool-call path; the prompt path left unchanged",
+     "summary": "The check is added before feature 212's sync-in on the tool-call path; the prompt hook's clone-sync, which the arbiter's fix names, is left as feature 310 made it.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The fix's subject is 'the prompt hook's clone-sync', and the plan leaves it untouched. Adding the check to the tool-call path as well serves the stated purpose (nothing writes to a tree while its gate runs) and is within. Moving the fix there INSTEAD rests on an unmeasured premise. Approach item 4's measurement shows only that a merge commit 'Merge remote-tracking branch origin/main' landed at 08:35 between a green gate and a red one. It does not show which path wrote that merge, and the plan itself calls the tool-call path a fast-forward, which writes no merge commit. Apply the lock check to the prompt hook's clone-sync as the fix says. Keeping the tool-call path's check too is fine. If the session still holds that the prompt path cannot have done the merge, it must measure which hook made it (from a hook log, not from memory) and put that to the arbiter rather than settle it in the plan."
+    },
+    {
+     "id": "Behaviour while held: merge nothing, refuse nothing, say the merge waits",
+     "summary": "While a gate runs, the sync merges nothing and does not refuse the tool call, and it says the merge waits until the run ends.",
+     "class": "within",
+     "why": "The fix says to postpone the merge to the next turn and never merge. Not refusing the call and re-checking on a later sync carries that out."
+    },
+    {
+     "id": "Feature 212's fast-forward kept for a clone with no run",
+     "summary": "With no gate running, existing sync behaviour is unchanged.",
+     "class": "within",
+     "why": "The fix changes behaviour only while a gate runs."
+    },
+    {
+     "id": "Done / test: tests/hooks/test-clone-sync-hooks.sh red without it",
+     "summary": "A test drives a sync while a run is held and checks that nothing merged; it is red without the fix.",
+     "class": "within",
+     "why": "The fix asks for exactly this test. Its assertions must be the ones the fix names, HEAD and the working tree unchanged, and the test must hold the gate-in-progress lock (see D54a), not just a live make."
+    },
+    {
+     "id": "Budget 20 min, exit (c), tooling only",
+     "summary": "Process parameters of the task.",
+     "class": "within",
+     "why": "The task's own bookkeeping; amendment 6 files tooling fixes as their own tasks."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T30 - nothing merged under a running gate (the round arbiter's fix on red-gate@2026-10-18T12:36:36Z)",
+    "### T30 Approach (checklist part A)",
+    "### T30 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing-T30",
+     "summary": "T30 is added to the tasks that land open, each landing with its retro row before the next starts.",
+     "class": "within",
+     "why": "FR-006 (one task at a time, each closed with its retro) as the GM's request asks: 'we do one task and then we measure'."
+    },
+    {
+     "id": "D54a",
+     "summary": "test_arbiter_fix.py checks arbiter-fix-done's land-settle-tick order by reading the recipe's text instead of running make -n on it in the real repository (whose $(MAKE) line executed land-tooling and merged main into the clone under its gate).",
+     "class": "within",
+     "why": "Removes the measured cause (reflog, land-tooling run log, guard log, 2026-10-18) of the writes the arbiter's fix exists to stop - 'nothing writes to a tree while its gate runs' - and FR-010; amendment 6 asks for obvious tooling fixes along the way. It is no longer offered in place of the lock (round 1's finding): D54b carries the lock. The order FR-018 needs is still asserted. Narrows nothing."
+    },
+    {
+     "id": "D54b-lock",
+     "summary": "The lock asked is the existing gate.lock that make done acquires with its pid at its first line; held means a live owner, so a dead owner holds nothing and no stale lock is cleared by hand.",
+     "class": "within",
+     "why": "The arbiter asks for 'a gate-in-progress lock that make done writes on start and removes on exit'. The plan writes it at make done's first line and defines 'held' as a live owner, with no file removal stated: liveness stands in for removal. That meets the fix's purpose - the lock is held exactly while the gate's process lives and is released on every exit, a crash included - so it is the lock the arbiter asked for, not a narrowing of it."
+    },
+    {
+     "id": "D54b-prompt",
+     "summary": "clone-sync's prompt path counts a held gate lock as mid-task (as it counts uncommitted work and a live make, feature 310), so the merge of origin/main is skipped that turn and taken on a later one; its test holds the lock and asserts HEAD and the working tree unchanged.",
+     "class": "within",
+     "why": "This is the arbiter's fix verbatim: the prompt hook's clone-sync checks the lock and while it is held postpones the merge to the next turn, never merges. The arbiter's test names HEAD and the working tree; Approach constraint 2 carries both ('a test holds the lock and asserts HEAD and the tree unchanged'), and the Done line's '(HEAD unchanged)' is a shorter restatement of that constraint. Within: the plan already commits to both assertions."
+    },
+    {
+     "id": "D54b-toolcall",
+     "summary": "clone-sync's tool-call path (feature 212's fast-forward) also asks the gate lock and a live make; while either holds it merges nothing and refuses nothing, telling the session the merge waits. Feature 212's fast-forward is kept for a clone with no gate.",
+     "class": "within",
+     "why": "Extends the same postponement to the second path that merges into the clone, which the arbiter's purpose ('nothing writes to a tree while its gate runs') and FR-010 cover. The Done line's 'the tool-call path merges and refuses nothing' is read with 'nothing' the object of both verbs, as D54(b) states outright ('merges nothing and refuses nothing'); the other reading would be a merge under the gate and NOT LEGITIMATE, so its test under a held lock asserts HEAD and the working tree unchanged, as the prompt path's does. It refuses no session tool call, adding no blocking behavior, and narrows nothing asked."
+    },
+    {
+     "id": "D54b-land-tooling",
+     "summary": "land-tooling.sh refuses to merge main into a clone whose gate lock is held.",
+     "class": "within",
+     "why": "land-tooling is the writer measured merging main under the gate; refusing that merge while the gate runs is the arbiter's purpose and FR-010 applied to the actual cause, with amendment 6's mandate for obvious tooling fixes. Its reach is that one merge, nothing beyond."
+    },
+    {
+     "id": "Exit-c",
+     "summary": "The exit taken is (c): a rule that removes the case (no merge while the gate's lock is held), budget 40 min, one goal.",
+     "class": "within",
+     "why": "Checklist part A answered as FR-003 and FR-015 require; one goal named."
     }
    ]
   }
