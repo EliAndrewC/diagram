@@ -12122,6 +12122,21 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/homesteads/wells.py::on_a_verge#a lane-side well's seat",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "0196 seats a lane-side well 'clear of the tread', but on_a_verge sets only the curb's greatest distance and measures from the 3 ft lane width, not the drawn stroke: Inashiro's SW well's apron runs 41 sq ft onto lane 14 - hold the apron clear of the drawn tread as well",
+  "files": [
+   "l7r/diagram/hamletgen/homesteads/wells.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 385 T05's glyph-check of Inashiro's wells, F7 (2026-10-18)",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/homesteads/wells.py::place_wells#wells among the houses",
   "tier": "E3",
   "fix": "roll lane-side vs cluster wells per settlement and seat the cluster form among five to ten houses, not 3 then 2",
@@ -12136,6 +12151,22 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/homesteads/wells.py::seat_cluster#off every lane",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "a cluster well seated before the lanes is hugged by them afterwards: Kuwabata's wells[0] stands in the angle where lane 7 ends on lane 6, about 24 ft from each, where a lane-side well would stand, and at fit zoom the two forms cannot be told apart - keep the lanes' later routing off a cluster well's open ground, or reseat it once the lanes stand",
+  "files": [
+   "l7r/diagram/hamletgen/homesteads/wells.py",
+   "l7r/diagram/hamletgen/ways/fabric.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 385 T05's glyph-check of Kuwabata's wells, F8 QUESTIONABLE (2026-10-18)",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/homesteads/wells.py::shared_row_wells#beside the street",
   "verdict": "DRIFTED",
   "tier": "E3",
@@ -12146,6 +12177,21 @@
   "after": [],
   "flag": "",
   "found": "feature 374 wave 154 (2026-10-13): impl-drift on the wave's claims; pre-existing, shown when 0196 drawing named the knob for a clustered hamlet",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/homesteads/wells.py::stage_lane_wells#a lane-side well among the houses it serves",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "0196 has every well among the houses it serves, but the lane-side seat search takes any verge within reach: Inashiro's SW well stands 63 ft outside the outline of its five houses, on one farm's own access lane, where it reads as that farm's own well - prefer verge seats inside the served group's outline",
+  "files": [
+   "l7r/diagram/hamletgen/homesteads/wells.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 385 T05's glyph-check of Inashiro's wells, F6 QUESTIONABLE (2026-10-18)",
   "tier_as_ranked": "E3",
   "wave": "",
   "scope": "kept"
@@ -13923,6 +13969,22 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/houses.py::HousesMixin._try_place_bundle#a caller's squarer house kept",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "0029 has 'No farmhouse is drawn squarer than about 1.3 to 1', but a caller's stated size is held only to the 2.7:1 ceiling and the length-depth jitter's own corner is 1.27:1 (0.85 x 46 over 1.10 x 28): hold every farmhouse, sized or jittered, to the 1.3:1 floor, or record the exemption on 0029 as a DEVIATION",
+  "files": [
+   "l7r/diagram/settlement/houses.py",
+   "l7r/diagram/settlement/rolling/lot.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 385 T05's impl-drift round 3 (2026-10-18), filed by the round arbiter's ruling on ask:t05-old-drifts-at-landing",
+  "tier_as_ranked": "E3",
   "wave": "",
   "scope": "kept"
  },
