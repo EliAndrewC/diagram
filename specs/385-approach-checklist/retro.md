@@ -594,3 +594,11 @@ changes:** none needed - the parse decides it.
 About 20 min. `hm_make.doubled_var` reads each make invocation on the stripped command (so a quoted list is one assignment and a
 mention in a message is none) and `make-only-hooks.sh` refuses a variable set twice, naming the quoted list or one call per
 value. **The habit it changes:** none needed - the guard refuses the form that dropped 0018's bundle.
+
+## T62 - the retro row
+
+About 35 min. `claims_stale.stale` compares each claimed module-level constant at the merge base and in the tree; for a changed
+one it looks for its old figures as whole numbers on the drawing pages that are, or link, a question its claim cites, and
+`claims-owed` prints each. On this clone (T10 not yet landed) it names 0018, 0022, 0025 and 0027 - the four the measurement
+found. The first plan matched a fixed list of units and the review blocked it (the GM's own figures say "feet" and "degree").
+**The habit it changes:** none needed - `claims-owed` prints the pages at the edit.

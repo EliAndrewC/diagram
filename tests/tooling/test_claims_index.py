@@ -7,6 +7,7 @@ a pre-existing finding warns. One case per acceptance scenario of spec US2-US4, 
 
 from __future__ import annotations
 
+import ast
 import importlib.util
 import json
 import pathlib
@@ -493,3 +494,27 @@ def test_findings_a_round_arbiter_ruling_carried_are_filed_with_the_ruling(tmp_p
     assert row["task"] == "T02" and row["keys"] == [k] and row["ruling"] == "ask:t07-x"
     assert cx.main(args[:5] + ["--task", "T01"] + args[5:]) == 0
     assert f"- [ ] T01 the work; carried by the round arbiter's ruling ask:t07-x: {k} [lands-open]" in (d / "tasks.md").read_text()
+
+
+def test_a_changed_constant_names_the_drawing_pages_still_stating_its_old_figure(tmp_path: pathlib.Path) -> None:
+    """Feature 385 T62, the round arbiter on ask:t10-findings-at-landing: three stale 23 ft pages were found at landing, not at the edit."""
+    st = cx.claims_stale
+    root = tmp_path
+    mod = root / "l7r" / "rows.py"
+    mod.parent.mkdir(parents=True)
+    mod.write_text('INSET = 23.0\n"""Research: inset - research/questions/0018-ponds.drawing.html: 23 ft"""\nOTHER = 23\n')
+    q = root / "research" / "questions"
+    q.mkdir(parents=True)
+    (q / "0018-ponds.drawing.html").write_text("<p>set in 23 ft</p>")  # the cited page itself
+    (q / "0022-bunds.drawing.html").write_text('<p>23 feet, as <a href="0018-ponds.html">the ponds</a></p>')  # links it
+    (q / "0030-other.drawing.html").write_text("<p>23 ft</p>")  # states it, links nothing cited
+    (q / "0031-near.drawing.html").write_text('<p>123 ft or 23.5 ft, <a href="0018-ponds.html">x</a></p>')  # a longer number only
+    _git(root, "init", "-q", "-b", "main")
+    _commit(root)
+    base = subprocess.run(["git", "-C", str(root), "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
+    assert st.stale(root, base) == []  # nothing changed
+    mod.write_text('INSET = 23.0\n"""Research: inset - research/questions/0018-ponds.drawing.html: derived per map"""\nOTHER = 23\n')
+    found = st.stale(root, base)
+    assert [ln.split()[2] for ln in found] == ["research/questions/0018-ponds.drawing.html", "research/questions/0022-bunds.drawing.html"]
+    assert "INSET was 23.0 in l7r/rows.py" in found[0]
+    assert st.figures(ast.parse("x = (0, 1, 2.5, 30.0)").body[0].value) == ["2.5", "30"]  # type: ignore[attr-defined]
