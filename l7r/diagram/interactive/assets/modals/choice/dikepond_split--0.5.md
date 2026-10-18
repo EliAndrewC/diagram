@@ -22,4 +22,4 @@ Name: Water and dike in equal parts
 Covers: `meta.dikepond_split = 0.5`
 Sources: cssn-sangji-yutang, fao-ac241e, gd-gazetteer-sangji, guangdong-xinyu-22, sdlib-shunde-jitang
 Entry: research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html, research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.html
-Drawing: research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html
+Drawing: research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html, research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html

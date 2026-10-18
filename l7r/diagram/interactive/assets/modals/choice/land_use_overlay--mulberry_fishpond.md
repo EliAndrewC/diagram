@@ -24,13 +24,13 @@ Guesses:
 - That the ponds lie in the two lowest rows of the valley floor: how wide a valley's wet bottom ran is not recorded, so the
   two rows are taken so that the ponds show.
 
-Depiction: The map converts some of the plots in the two lowest rows of the valley floor to ponds, in patches, and leaves the
+Depiction: The map converts some of the plots in the two lowest rows of the valley floor to ponds, in patches (on so narrow a strip a patch and an even scatter look much alike), and leaves the
 rest in rice. Each
-converted plot is drawn as a pond inside a bank of its own, planted with rows of low mulberry bushes drawn at their true
-size. A village whose ponds took nearly all its land is drawn as a dike-pond field throughout, the title card's field form.
+converted plot is drawn as a pond inside a bank of its own, planted with rows of low mulberry bushes, each drawn a few feet
+across and never enlarged into a tree symbol. A village whose ponds took nearly all its land is drawn as a dike-pond field throughout, the title card's field form, its banks all planted with one crop chosen for the village: mulberry, fruit trees or tea.
 
 Name: Mulberry and fishponds on the rice land
 Covers: `meta.land_use_overlay = mulberry_fishpond`
 Sources: gmrb-2024-sangji, sdlib-shunde-jitang, cssn-sangji-yutang, isis-dykepond, wanli-fishpond-summary, fao-ac241e, gd-gazetteer-sangji, guangdong-xinyu-22, pwsannong-zhusanjiao-nongyeshi, kuwa-jawiki
 Entry: research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html, research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.html
-Drawing: research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html
+Drawing: research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html, research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html
