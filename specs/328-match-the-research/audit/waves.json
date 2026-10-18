@@ -732,5 +732,6 @@
   "l7r/diagram/settlement/houses.py::HousesMixin._on_a_tread#no building corner on a lane": "158",
   "l7r/diagram/hamletgen/sink.py::lay_sink#pond bank form": "159",
   "l7r/diagram/hamletgen/consts.py::BUNDLE_PITCH#row pitch": "160",
-  "l7r/diagram/hamletgen/water/polder.py::stage_polder#pond layout": "139"
+  "l7r/diagram/hamletgen/water/polder.py::stage_polder#pond layout": "139",
+  "l7r/diagram/settlement/fields/landuse.py::DIKEPOND_WATER_INSET#pond bank width": "161"
 }

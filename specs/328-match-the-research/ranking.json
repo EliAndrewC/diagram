@@ -13534,7 +13534,7 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "161",
   "scope": "kept"
  },
  {
@@ -13550,6 +13550,21 @@
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "deferred"
+ },
+ {
+  "key": "l7r/diagram/settlement/fields/landuse.py::dikepond_inset#the inset from the split",
+  "verdict": "NEEDS-RESEARCH",
+  "tier": "E3",
+  "fix": "Question, not a record to make: does 0027's 16-33 ft sty-bearing bank (5-10 m, the manual 0018 cites) bound the inset derived from the rolled split? At three of water to seven of dike Kuwabata's bank is about 42 ft, at seven to three about 15 ft; deciding which source bounds the inset changes how all five splits draw. DIKEPOND_WATER_INSET's 23 ft fallback stays as claimed",
+  "files": [
+   "l7r/diagram/settlement/fields/landuse.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 385 T10, filed by the round arbiter's ruling on ask:t10-findings-at-landing (2026-10-18)",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": "l7r/diagram/settlement/fields/paddy.py::PaddyMixin._paddy_plots#bunds along contour and fall",

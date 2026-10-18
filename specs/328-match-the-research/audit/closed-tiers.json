@@ -555,6 +555,7 @@
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_pond#field pond glyph": "E2",
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin.pond#pond feeder width": "E1",
  "l7r/diagram/settlement/fields/grain.py::WINTER_CROP#winter-crop weights": "E2",
+ "l7r/diagram/settlement/fields/landuse.py::DIKEPOND_WATER_INSET#pond bank width": "E3",
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_repaint_leftovers#leftovers as standing rice": "E0",
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#column bund wanders": "E1",
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#each plot's green": "E1",
