@@ -18,6 +18,8 @@
 
 **Amendment 5 approved**: the GM, 2026-10-18, "Either way, I do want you to file amendment 5 for the 3 tooling fixes"
 
+**Amendment 6 approved**: the GM, 2026-10-18, "Please make sure to implement any obvious performance / tooling / process improvements along the way." (the overnight run through the rest of the feature; each improvement its own task, one goal a task)
+
 **Affects**: tooling, review process, hamlet, research record
 
 **Input**: `request.md` - the GM, 2026-10-17, verbatim.

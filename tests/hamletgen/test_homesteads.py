@@ -65,7 +65,7 @@ def test_a_well_is_held_to_the_wall_gap_the_test_reads_not_to_a_center_distance(
     the two used to disagree: a lattice seat 110 px from a 26 px-deep house's CENTER, inside the old rungs' 112 px, but
     97 px from its wall. It is refused - on the lattice, by the rescue ring and at the last resort alike, which is
     handed the same seat - and the hamlet digs no well there. A seat the same center distance off the house's long
-    end (wall 80 px off) is taken, and so is a last-resort seat among the doors."""
+    end (wall 80 px off) is taken. (A clustered household's pocket, always drawn here before, is gone: feature 374 wave 155.)"""
     from types import SimpleNamespace
 
     from l7r.diagram.hamletgen.homesteads.wells import WELL_AMONG_DWELLINGS_PX, well_gap_to_dwellings
@@ -83,28 +83,27 @@ def test_a_well_is_held_to_the_wall_gap_the_test_reads_not_to_a_center_distance(
 
     door = (1001.5, 960.0)  # off the lattice: with no rescue and no last resort (feature 287, H10-H12), nothing seeks it
     assert hg.place_wells(_only_seat(*door, open_seat=door), plan, _WELL_HOUSES) == 0  # type: ignore[arg-type]
-    pocketed = [{**_WELL_HOUSES[0], "well_pocket": [1000.0, 1040.0]}, *_WELL_HOUSES[1:]]
-    wells: list[tuple[float, float]] = []
-    fake = _only_seat(*door)
-    fake.well = lambda x, y: wells.append((x, y))  # type: ignore[attr-defined]
-    assert hg.place_wells(fake, plan, pocketed) == 1 and wells == [(1000.0, 1040.0)], "...but a pocket is always drawn"  # type: ignore[arg-type]
 
 
-def test_a_lattice_well_keeps_170_px_off_a_pocket_well() -> None:
-    """`wells_not_clustered`: with a household's pocket well standing, the lattice's seat 117 px from it - one the engine
-    would allow - is passed over, and no second well is dug near the first. Asserted directly since the pool's maps
-    stopped reaching it when the yard persimmon moved behind the house (GM 2026-10-02)."""
+def test_a_lattice_well_keeps_170_px_off_a_standing_well() -> None:
+    """`wells_not_clustered`: with a well standing, the lattice's seat 117 px from it - one the engine would allow - is
+    passed over, and no second well is dug near the first. Asserted directly since the pool's maps stopped reaching it
+    when the yard persimmon moved behind the house (GM 2026-10-02); the standing well was a household's pocket until
+    feature 374 wave 155 made every clustered well a shared one."""
     from types import SimpleNamespace
 
-    plan = SimpleNamespace(spec=SimpleNamespace(households=12), ftpx=1.0, well_siting="cluster")  # two wells wanted
+    from l7r.diagram.hamletgen.homesteads.wells import seat_wells
+
+    plan = SimpleNamespace(spec=SimpleNamespace(households=12), ftpx=1.0, well_siting="cluster")
     east = (1110.0, 1000.0)
-    pocketed = [{**_WELL_HOUSES[0], "well_pocket": [1000.0, 1040.0]}, *_WELL_HOUSES[1:]]
     wells: list[tuple[float, float]] = []
     fake = _only_seat(*east)
     fake.well = lambda x, y: wells.append((x, y))  # type: ignore[attr-defined]
     fake._crop_boxes = lambda city=False: []  # type: ignore[attr-defined]
+    standing = [(1000.0, 1040.0)]
     assert math.hypot(east[0] - 1000.0, east[1] - 1040.0) < 170.0
-    assert hg.place_wells(fake, plan, pocketed) == 1 and wells == [(1000.0, 1040.0)]  # type: ignore[arg-type]
+    assert seat_wells(fake, plan, _WELL_HOUSES, standing, 2, ((520.0, 2),), "cluster") == [] and wells == []  # type: ignore[arg-type]
+    assert seat_wells(fake, plan, _WELL_HOUSES, [], 1, ((520.0, 2),), "cluster") == [east], "with nothing standing it is taken"  # type: ignore[arg-type]
 
 
 def test_the_well_gap_reads_the_turned_wall_and_passes_over_a_derelict() -> None:

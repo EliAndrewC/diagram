@@ -32,7 +32,7 @@ the marker shows where the well stands, not how much ground it takes. Wells stan
 among the houses they serve, never in the fields or on open common ground, and the map draws more of them than a real
 village counted, and keeps every household within reach of water. A shrine set apart from the houses keeps a well of its own
 beside its hall, and a hilltop shrine none; the shrine's water is drawn as a well rather than a ditch or a pond by the map's
-convention, since which waters a shrine drew on is not known.
+convention, since which waters a shrine drew on is not recorded.
 
 [settlement_form=dispersed] A scattered farm draws its own water, a well in its dooryard or a small channel led off the
 nearest irrigation ditch into its grounds; the title card says which.

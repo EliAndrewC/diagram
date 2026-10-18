@@ -11,7 +11,6 @@ from typing import TYPE_CHECKING, Any
 from .._geom import Indexed, Pt, point_in_poly
 from .access import seat_reaches_tree
 from .fit import part_box
-from .lot import watered
 from .passage import landlocked
 
 if TYPE_CHECKING:
@@ -243,7 +242,6 @@ class PlacerMixin:
             a tight seat only on landlocked land - research/questions/0081-village-lanes.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: taken only where some layout walks to the neighbor's yard and none has a way of its own (`passage.landlocked`)
             a seat refused unless its yard opens onto lane ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no way is sought for a household while it is seated; its dooryard must open onto the ground the lanes are laid in (`SeatRegion.opens`)
             the village roll's corridor - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a roll with no seat region (a village's) asks for a corridor candidate instead (`seat_reaches_tree`)
-            a seat refused where the household is not watered - research/questions/0196-communal-wells-ido.drawing.html: its own pocket, or a well or open water within reach (`lot.watered`)
         """
         self._seat_search["placer_calls"] += 1
         # THE UNION FIRST, ONE RECTANGLE: the box around every configuration (`_bundle_envelope`). Where it fits - the
@@ -265,12 +263,10 @@ class PlacerMixin:
         # laying the household's fixtures, were built for nothing on a third of the exhaustive pass's offers.
         if self._house_box_refused(self._house_box(x, y, hw, hh)):
             return None
-        # THE SEAT'S OWN QUESTIONS, ONCE (feature 297, FR-002, plan C, amended by research R10): the water depends only on
-        # where the house stands (no distance from the field refuses a seat, feature 318) - asked here, before any layout; the
-        # corridor to the access tree depends on the house and its yard, common to all four garden sides (558 of 558 seats measured, research R6) - asked ONCE per seat
-        # below, after the envelope (the cheaper refusal: asked first, it ran the costliest search on every offered seat, R10).
-        if getattr(self, "_household_watered", False) and not watered(self, x, y, bool(getattr(self, "_household_well", False))):
-            return None
+        # THE SEAT'S OWN QUESTIONS, ONCE (feature 297, FR-002, plan C, amended by research R10): the corridor to the access tree
+        # depends on the house and its yard, common to all four garden sides (558 of 558 seats measured, research R6) - asked ONCE
+        # per seat below, after the envelope (the cheaper refusal: asked first, it ran the costliest search on every offered seat,
+        # R10). No seat is refused for its water (feature 374 wave 155): the wells are seated after the houses, with the reach.
         # THE FOUR CONFIGURATIONS BUILT ONCE (dev/performance.md): the envelope is their union, and the loop below judges
         # each at this seat - it built all four again (seed 17: 25,000 bundles, half of them rebuilt)
         _at = {side: self._bundle_geom(x, y, hw, hh, side, shed) for side in self._NUC_SIDES}

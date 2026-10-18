@@ -51,10 +51,10 @@
    "declared": "spec-fidelity"
   },
   "## Landing": {
-   "sha256": "406dd4cac3ce0663870645811f6f22057e8a559bd45d9934ed0f3580c444f781",
+   "sha256": "48b8e13307517e730da5e886507a0036621d41ff110f26141c54f400fc1dd2c9",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-17",
-   "declared": "round-arbiter"
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
   },
   "## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)": {
    "sha256": "a0b57acda8087bcfe98d579f7bee7d25fb120b2c234736a8ae05192014d61e4f",
@@ -289,6 +289,48 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "round-arbiter"
+  },
+  "## T05 - T47: the wave 155 pocket-well patch re-landed, no waiver (384 FR-007)": {
+   "sha256": "ab42271bb6724be18371738d7b94da2f2f61d01fcf915bc9d59436dcdb4b81eb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Approach (checklist part A)": {
+   "sha256": "5da4fafbeb5af7ba5e1ebe70b7fae40d87289c51628710b494d2de2b44bd2d91",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Decisions": {
+   "sha256": "709a45de50ab3920a8d043e7560a8c4308ce1797fa19533b7527942577ae2dc3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T05 part B (2026-10-18T03:50Z)": {
+   "sha256": "c42812202070c1382e5f09c6d17195042defef571c25cf9d76505a822305fb28",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T20 - the hour decided once per message (the round arbiter's fix on hour:385-approach-checklist@10)": {
+   "sha256": "3dab5789c944e122748853b2e3ac14fde8533229773c19523a4da44dacc9b91d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T20 Approach (checklist part A)": {
+   "sha256": "add7157649eaa295b28eebbe5e455dbe5312becabcd98d76d66b5fd371151c9f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T20 Decisions": {
+   "sha256": "5b28e2bb74100ae9afc4160a1957edfaced12872adc68838a042450dbb41e72e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
   }
  },
  "reviewed": "2026-10-17",
@@ -2023,6 +2065,104 @@
      "id": "round:spec-fidelity|plan:385-approach-checklist#T17@3",
      "class": "within",
      "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## T05 - T47: the wave 155 pocket-well patch re-landed, no waiver (384 FR-007)",
+    "### T05 Approach (checklist part A)",
+    "### T05 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D41a",
+     "summary": "The wave 155 pocket-well patch is re-landed as built; its decisions are 374's W155-1 to W155-6, unchanged, and no waiver is taken.",
+     "class": "within",
+     "why": "The approved scope lists 'T47's patch re-landed' and FR-007 moves T47 here under 384's FR-002 (374's rules). Re-landing as built, with no waiver, is the literal request. The decisions inside the patch were already ruled in 374 and nothing here changes them."
+    },
+    {
+     "id": "D41b",
+     "summary": "In the W155-4 bar, the 54-seed cohort (T04: 54/54 at HEAD and patched) stands in for the 44 rolls of 374's scratch tooling (tools13/roll13.sh).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This swaps the measured set the bar was ruled against, so I judge it as an exception. Two grounds make it legitimate. First, the literal set cannot be used: per the plan, the 44 rolls came from scratch tooling outside the repository and cannot be reproduced. Second, the accepted spec already points this way: 385's SC-003 judges the moved work by 384's SC-004, which the plan says already used this cohort. The bar is there to catch regressions: no roll that passes at HEAD may refuse once patched. The substitute still does that job. The cohort is 384's fixed cohort, chosen before this patch, so it was not picked to suit it. It is larger (54 against 44). Every other clause of W155-4 stays: the pool is clean, no well inside a homestead, every household within 760 ft of water, no well serving more than ten households, the counts recorded. The bar is no weaker in its purpose. Caveat: I could not see 384's SC-004 or the 44-roll record from inside the bundle. If 374's 44 seeds were in fact recorded in the repository, this ground falls and they should be run."
+    },
+    {
+     "id": "D41c",
+     "summary": "The owed glyph checks are 374's three placement-changed occasions (wells moved on Inashiro, Kuwabata, Sawada), each a check of that map's wells.",
+     "class": "within",
+     "why": "These are the checks the patch already owes under 374's tasks. None is dropped or added."
+    },
+    {
+     "id": "A5-order",
+     "summary": "Wells are seated after the houses using wave 154's forms, and nothing placed earlier moves for a well; the seating lays no pocket well.",
+     "class": "within",
+     "why": "This keeps the GM's stated principle: things placed earlier do not move for things placed later ('nobody moves their house'). It is also the patch's existing order."
+    },
+    {
+     "id": "A6-exit",
+     "summary": "Exit taken: (e) conform, re-land as built; the patch's own exits (more room priced first, a third well within the research range) stay as 374's W155-6 priced them.",
+     "class": "within",
+     "why": "Conforming is what was asked. The other exits are 374's own, already ruled, and are not reopened here."
+    },
+    {
+     "id": "A8-budget",
+     "summary": "Budget of about 90 min for the task.",
+     "class": "within",
+     "why": "This is the checklist's budget item, an estimate. It is not a success threshold put on record, which the GM declined in amendment 2, and it narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T20 - the hour decided once per message (the round arbiter's fix on hour:385-approach-checklist@10)",
+    "### T05 part B (2026-10-18T03:50Z)",
+    "### T20 Approach (checklist part A)",
+    "### T20 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing-T20",
+     "summary": "T20 added to the Lands-open list; each task lands when it closes, before the next starts",
+     "class": "within",
+     "why": "The only change from the text last judged CLEAR is T20 joining the list; the landing rule itself is FR-006 unchanged."
+    },
+    {
+     "id": "T05B-continue",
+     "summary": "Hour-10 step-back answers: the bar's rules restated from part A (0028/0196 R, 760 ft R, shares GUESS recorded); the patch re-lands as built, measured as 374 measured it; wells seated after the houses; next step re-dispatching the three refused checks and landing",
+     "class": "within",
+     "why": "No new plan decision: the rules and their sources are part A's, already CLEAR. Re-landing T47's patch is in the approved scope ('T47's patch re-landed'), and seating wells after the houses follows the GM's homesteads-before-paths words. The figure '3 to 10 households' is a one-shot observation stamped with the block's time and method ('asked at the pool's wells'), not a decision."
+    },
+    {
+     "id": "T20-own-task",
+     "summary": "The hour-guard fix is filed as its own task T20, not folded into T05",
+     "class": "within",
+     "why": "FR-015 (amendment 4, GM-approved): a second goal found in a task becomes its own task. The fix is the round arbiter's ruling, and the arbiter stands where the GM was asked (feature 379); FR-018 already provides for an arbiter's fix landing as a task. The GM's 'proceed with implementing task 05' is not narrowed: T05 continues, and T20 is the tooling fix that T05's step-back turned up. T20's done line tests two mechanisms, the window and the refused read, but both serve one goal: the hour guard's refusal path, as the step-back meets it. I class that as one goal."
+    },
+    {
+     "id": "D42a-same-message-window",
+     "summary": "Past the hour, a dispatch within SAME_MESSAGE_S (5 s) of an admitted dispatch is admitted - the rest of the message the admitted one began",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the hour guard (the GM's hourly step-back, 383): some dispatches past the hour are no longer refused. Presumed wrong. It survives on purpose and on the GM's own words. The step-back's purpose is that no new decision is taken after the hour without stepping back. The dispatches of one assistant message were all decided together, before the guard spoke, so the step-back cannot reach that decision. Refusing part of the message only splits it by hook latency (T05's five went two and three), and the refused part is re-dispatched after the step-back anyway (T05 part B item 9). The step-back still comes before every message emitted after the hour, and gates stay outside the window (D42b). The GM's amendment 5 ('I wonder if another tooling fix would make us more likely to batch commands') asks for more batching, and a guard that splits a batch penalizes exactly that. PREMISE this ruling rests on: the plan carries out 'same message' as nearness in time (5 s from an admitted dispatch), not as the message's identity. The ruling covers only the plan's stated bound, 'the rest of the message it began'. A window that admits a dispatch from a FOLLOWING message, for example one emitted within 5 s of a dispatch that returned at once, or a chain that carries past the message, would be outside this ruling and would need a new one. The test should hold that bound. Approach item 3's 'the batching hook's same-turn window, widened' is read as a wider value used by checkpoint.due only. D42 names only checkpoint.due and stepback_bundle.refusals. A change to the batching hook's own window would reach beyond the arbiter's fix."
+    },
+    {
+     "id": "D42b-gate-never-windowed",
+     "summary": "A gate is never admitted by the same-message window",
+     "class": "within",
+     "why": "It bounds the D42a exception and does not widen it: the hour guard keeps its full force on gates."
+    },
+    {
+     "id": "D42c-refusals-read-refused",
+     "summary": "stepback_bundle.refusals reads the hour guard's own 'refused' events as well as 'blocked'",
+     "class": "within",
+     "why": "It enforces what was asked: the GM's step-back is meant to see the session's refusals, and the hour guard's own word was being missed. Delete the step-back in your head and this change has nothing left to fix."
     }
    ]
   }

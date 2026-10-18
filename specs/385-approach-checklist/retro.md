@@ -342,3 +342,10 @@ the same miss twice (a two-step leftover) - the arbiter's ruling names it as wor
 so `make tick` refused for want of a CLEAR - a deadlock. Fixed (feature 379's rule for spec reviews, applied to plans): recording an
 `accept` or `process-fault` on a `round:spec-fidelity|plan:` trigger records the owed blocks CLEAR at their digest, declared
 `round-arbiter`; `make plan-verdict F=<n> ARBITER=<trigger>` applies one already recorded (`tests/tooling/test_plan_arbiter_accept.py`).
+
+## T20 - the retro row
+
+About 15 min inside T05's window (the arbiter's hour-10 fix): `checkpoint.due` admits, past the hour, a dispatch within 5 s of
+one admitted under it - the rest of that message - never a gate, never a chain into the next message (the window counts from the
+last dispatch admitted under the hour); `stepback_bundle.refusals` reads `refused` too. Plan CLEAR first round (D42a a narrowing
+ruled LEGITIMATE). Closed by T18's one command (land, settle, tick).

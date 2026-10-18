@@ -156,7 +156,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20
 
 ## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)
 
@@ -684,6 +684,54 @@ Owed by the hour-9 step-back (`hour:385-approach-checklist@9`, ruled `continue`)
 8. **Routes measured before asking?** Nothing is being asked.
 9. **After a ruling.** `continue`; the step it names is T04's plan review, then the stamp - moved to T15 by that review.
 
+## T05 - T47: the wave 155 pocket-well patch re-landed, no waiver (384 FR-007)
+
+### T05 Approach (checklist part A)
+
+1. **The goal, in the world.** A clustered hamlet's well stands off every farmstead, shared, as 0028 and 0196 describe ("shared
+   off the farmstead"; "one or two" a hamlet, five to ten households a well); no household's homestead holds a pocket well.
+2. **The constraints.** 374's W155-4 bar: no roll passing at HEAD refuses (the pool, the cohort); no well inside a homestead; every
+   household within reach of water (`WATER_REACH_FT`, 760 ft, 0196); no well over ten households; the counts recorded. The lane
+   law; the claims and record checks the patch's changes owe; three glyph-check occasions (a pool map's well moved: Inashiro,
+   Kuwabata, Sawada - 374's tasks.md); the gate, green.
+3. **Where each comes from.** The bar is the GM's process (G, 374) over research rules: 0028/0196 (R) for off the farmstead and the
+   count; 760 ft (R, 0196); the shares cut along the long axis (GUESS, W155-5, recorded); the third well for ten (R, 0196's range).
+4. **Do they describe the world here?** Measured by T04 on today's engine: the patched cohort passes 54/54. Each refusal the pool
+   or a check names is asked again at the place it refuses (B1-B3).
+5. **The order.** The seating lays no pocket; the wells are seated after the houses (wave 154's forms) - nothing placed earlier
+   moves for a well.
+6. **The exits.** The patch's own were priced in 374 (W155-6: more room priced first, the third well inside the research range
+   taken). Here: (e) conform - re-land as built, no waiver.
+7. **The search smell.** None new: the patch's searches are wave 154's, measured.
+8. **The budget.** About 90 min (the pool, the record and claims checks, three glyph checks, the gate).
+9. **Done, measured.** One goal: the patch on main with no waiver - the pool clean, the cohort as HEAD (T04: 54/54 both), the
+   wells measured (`m:w155-wells`'s quantities on the pool), every owed check answered, the gate green.
+
+### T05 Decisions
+
+**D41 - the patch re-landed as built.** `w155-pocket-attempt.patch` applies cleanly to today's HEAD (2026-10-18; the engine
+unchanged since T04's cohorts). Its decisions are 374's W155-1 to W155-6, each ruled within by 374's plan review; nothing in
+them changes here. Its bar is W155-4, measured on the pool and the 54-seed cohort (T04: 54/54 at HEAD and patched); the 44 rolls
+of 374's scratch tooling (`tools13/roll13.sh`) are not reproducible from the repository, so the cohort stands in for them, as
+384's SC-004 already did. The occasions are 374's three (placement-changed: well on Inashiro, Kuwabata, Sawada), each a
+glyph-check of its map's wells.
+
+### T05 part B (2026-10-18T03:50Z)
+
+Owed by the hour-10 step-back (`hour:385-approach-checklist@10`, ruled `continue`).
+
+1. **What is refusing?** Nothing on the maps: the pool rolls clean with the patch; no well on any homestead piece. The record
+   checks found three wordings in 0196's changed block (applied together); the hour guard split one batch of dispatches (T20).
+2. **A3 again.** The bar's rules as part A: 0028/0196 (R), 760 ft (R), the shares (GUESS, recorded).
+3. **A4 again.** Asked at the pool's wells: they stand off every farmstead, each serving 3 to 10 households.
+4. **Moving something earlier for something later?** No: the wells are seated after the houses.
+5. **Tuning or changing?** Neither.
+6. **The one-sentence test.** "The patch re-lands as built, measured as 374 measured it" - nothing to question but the bar's
+   numbers, recorded beside it.
+7. **The next step is a measurement.** The remaining checks' answers, then the gate.
+8. **Routes measured before asking?** Nothing is being asked.
+9. **After a ruling.** `continue`; the step it names is re-dispatching the three refused checks (done) and the landing.
+
 ## T15 - a cohort rolled over an uncommitted engine diff says so (found by T04)
 
 ### T15 Approach (checklist part A)
@@ -796,6 +844,28 @@ the task with the same NOTE - each step only after the one before succeeds, so t
 --write`, which appends each owed row filled from the agent's reply (its verdict, its first line, `nothing` when clean); the push
 check's refusal and the hook's notice name that command in place of "add the row printed, its ?s filled". A row the session
 wants to word itself can still be added by hand.
+
+## T20 - the hour decided once per message (the round arbiter's fix on hour:385-approach-checklist@10)
+
+### T20 Approach (checklist part A)
+
+1. **The goal, in the world.** A message's dispatches are admitted or refused together at the hour, and the step-back sees the
+   hour guard's own refusals.
+2. **The constraints.** The hourly step-back (G, 383); every refusal names its step; a test red without each; tooling only.
+3. **Where each comes from.** The step-back is the GM's (G); the 5 s window is ours (O, the batching hook's same-turn window,
+   widened).
+4. **Do they describe the world here?** Yes - T05's five dispatches in one message were split two and three.
+5. **The order.** The admission mark, then the refusal list.
+6. **The exits.** (c) - an admitted dispatch admits its message's others. (a), (b), (d) n/a; (e) n/a.
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: `tests/tooling/test_checkpoint.py` red without the window or the `refused` read.
+
+### T20 Decisions
+
+**D42 - one decision per message.** `checkpoint.due` marks each admitted dispatch's time (`<git dir>/checkpoint-admitted`); past
+the hour, a dispatch within `SAME_MESSAGE_S` (5 s) of an admitted one is admitted - the rest of the message it began. A gate is
+never admitted by the window. `stepback_bundle.refusals` reads `refused` as well as `blocked`, the pair guard's own word.
 
 ## T11 - the close
 

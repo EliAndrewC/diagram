@@ -181,6 +181,13 @@ def hold(root: Path, now: float | None = None) -> str:
     return ""
 
 
+#: dispatches this close after an admitted one are the same assistant message (the batching hook's SAME_TURN_MS, widened): the hour
+#: is decided once per message (the round arbiter's tooling fix on hour:385-approach-checklist@10 - the hour turned between the
+#: second and third of five dispatches in one message, and the batch was split, three re-sent)
+SAME_MESSAGE_S = 5.0
+ADMITTED = "checkpoint-admitted"
+
+
 def due(root: Path, tool: str, atype: str = "", now: float | None = None) -> str:
     """The refusal a `make done` or an agent dispatch gets when the feature's hour is up and its step-back is not yet open,
     or "". THE STEP-BACK FIRES ON THE HOUR, NOT ONLY AT THE TICK (the round arbiter's tooling fix on hour:374@2: the hour ran
@@ -188,9 +195,20 @@ def due(root: Path, tool: str, atype: str = "", now: float | None = None) -> str
     arbiter's own dispatch passes - it is the step-back."""
     if tool == "Agent" and atype == "round-arbiter":
         return ""
+    now = time.time() if now is None else now
+    g = ro._gitdir(root)  # noqa: SLF001
+    mark = g / ADMITTED if g is not None else None
     st = state(root, now)
     if not st.get("due") or st.get("open"):
+        if mark is not None and tool == "Agent":
+            mark.write_text(f"{now}\n", encoding="utf-8")
         return ""
+    try:
+        last = float(mark.read_text(encoding="utf-8")) if mark is not None and mark.is_file() else 0.0
+    except ValueError:
+        last = 0.0
+    if tool == "Agent" and 0 <= now - last <= SAME_MESSAGE_S:
+        return ""  # the message's earlier dispatches were admitted: so are the rest of it
     return ("the feature's hour is up and its step-back is not open: run `make step-back` and dispatch `round-arbiter` on the "
             "bundle it builds, then carry on (feature 383; the round arbiter's tooling fix on hour:374@2)")
 

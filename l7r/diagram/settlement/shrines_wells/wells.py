@@ -23,12 +23,11 @@ if TYPE_CHECKING:
 
 WELL_AMONG_DWELLINGS_PX = 95.0
 """How far a well may stand from the nearest dwelling's WALL - `wells_among_dwellings`' bar, the figure the retired
-finished-map test read, unchanged by feature 287, which lays each well pocket inside its household's envelope beside the
-yard and refuses a layout whose pocket would stand farther (`rolling/bundle.py:pocket_clear_of_beds`). Its origin is not
+finished-map test read, unchanged by feature 287 (whose clustered well pocket, refused past this bar, feature 374 wave 155
+retired: a clustered hamlet's wells are all shared, off the farmstead). Its origin is not
 recorded beside it; what the record gives is the reason for a bar at all - a well is dug among the doors it serves, the
 dooryard well of the idiom 井戸端会議 (idobata kaigi, "well-side meeting"), not out in the commons. MOVED here from
-`hamletgen/homesteads/wells.py` (feature 287, homes H09) so the bundle's pocket asks the same predicate the placer does;
-the hamlet module imports it back.
+`hamletgen/homesteads/wells.py` (feature 287, homes H09); the hamlet module imports it back.
 
 Research: a well among the dwellings it serves - research/questions/0196-communal-wells-ido.drawing.html: 95 px from the nearest dwelling's wall
 """
@@ -38,7 +37,7 @@ def well_gap_to_dwellings(houses: Sequence[Mapping[str, Any]], x: float, y: floa
     """The gap from a well at (x, y) to the nearest dwelling's drawn wall - 0 inside one; abandoned houses are no dwelling.
 
     THE ONE PREDICATE of the among-the-dwellings rule (feature 287, FR-003, homes H09): every seat `place_wells` offers
-    is held to `WELL_AMONG_DWELLINGS_PX` by it, every well pocket the bundle lays (`pocket_clear_of_beds`), and the
+    is held to `WELL_AMONG_DWELLINGS_PX` by it (the hamlet's `seat_wells` at its own nearer seat gap), and the
     finished-map test reads it. The two used to disagree: the placer's lattice asked for a house CENTER within 105-112 px,
     which admits a wall 99 px off beside a 26 px-deep house, while the test measured the gap to an unturned box. The
     test's reading is the right one, turned: a gap verdict reads the footprint, never the center (`dev/placement.md`,

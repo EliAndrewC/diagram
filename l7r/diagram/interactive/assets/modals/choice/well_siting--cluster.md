@@ -17,7 +17,7 @@ Guesses:
 Depiction: The map sets each shared well in the open ground among about five houses, off every lane, with a house near it;
 where a hamlet has fewer than five households to share a well, it stands among three, or two. The well is drawn as a marker
 larger than life, about 19 ft across, so a reader can find it; a real well's curb was a frame only a few feet across round
-a shaft about 3 ft (1 m) wide. Over a well on shallow water the map draws a sweep, a pole swinging on a post of its own, even where the real bucket hung from a plain pole with no post.
+a shaft about 3 ft (1 m) wide.
 
 Name: Shared wells among the houses
 Covers: `meta.well_siting = cluster`

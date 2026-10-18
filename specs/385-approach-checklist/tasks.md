@@ -5,6 +5,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 
 ## Occasions
 
+- placement-changed: well on inashiro - T05: the pocket well off its farmstead, a shared well of the rolled siting (374 wave 155)
+- placement-changed: well on kuwabata - T05: as Inashiro
+- placement-changed: well on sawada - T05: as Inashiro
 - placement-changed: village lane - T01: a turn or meeting the ground forces is lawful, and a lane end running nearly along another way over open ground is merged onto it (plan D2, D4)
 
 ## Tasks
@@ -56,6 +59,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T19 Amendment 5, FR-019: the ledger refusal names `make ledger-owed WRITE=`, which writes each row from the reply [lands-open]
       research: rendering
       verify: DONE. see retro.md's amendment 5 rows; plan accepted by the round arbiter on round:spec-fidelity|plan:385-approach-checklist#T17@3
+- [ ] T20 The hour decided once per message, and the step-back lists the hour guard's refusals (the arbiter's fix on hour:385-approach-checklist@10, plan D42) [lands-open]
+      research: rendering
 - [ ] T11 The close: the checklist to `docs/`, the refusals extended to every feature (FR-001), the final report (SC-001, SC-002); and D30's wording, filed by the round arbiter's ruling on ask:t14-plan-round4 (T14's plan round 4, rows 1-3 - the code already does each, `test_a_transcript_named_call_is_its_run_s_anywhere_and_a_mixed_overlap_is_the_missing_run_s_estimate`): the outside-every-window clause carries its own condition (no `by`, no transcript names it), the overlap clause says "still an estimate", and a call inside both a found and a missing run's window is the missing run's estimate [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
