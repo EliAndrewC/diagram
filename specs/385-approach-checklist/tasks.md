@@ -157,6 +157,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T55 make land-tooling's lint keeps the gate's own scope (--force-exclude), so a script the gate never lints is not refused (a defect in T52, plan D72)
       research: rendering
       verify: DONE. landed on main; its test red without it; retro row in retro.md
+- [ ] T56 A task's own heading wins its section over a heading that only mentions it (found by T47/T48 and T10's preflights, plan D75)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

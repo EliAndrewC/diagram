@@ -1604,6 +1604,39 @@ UNRESEARCHED: 100 ft, the step along a row and the grids' spacing; the rows them
 and 39 ft of sun". The comments that call it "the ground one homestead takes" or "the row pitch" are corrected to match. Moving the
 along-row span is not asked by the research and regressed two seeds when tried, so it stays (room before packing).
 
+## T10 - a dike-pond village's water and dike split, rolled (the ranking row `settlement/fields/landuse.py::DIKEPOND_WATER_INSET#pond bank width`)
+
+### T10 Approach (checklist part A)
+
+1. **The goal, in the world.** A dike-pond village's ponds and banks stand in one of the splits the record gives, rolled per
+   village, rather than every map in the one water-heavy split.
+2. **The constraints.** The ranking row ("roll the dike-pond inset per village between the recorded splits (water-heavy,
+   dike-heavy, 7:3)"); several attested forms are a knob rolled from the seed (CLAUDE.md); 0018's drawing page ("the split would
+   be rolled village by village; our maps draw only the water-heavy order, so the dike-heavy order and the seven-to-three split
+   are a known gap"); the mulberry rows, the banks' sties and the bank's lit ring all read the same inset; no known regression.
+3. **Where each comes from.** The three splits are 0018's (R: six parts water to four of dike, six of dike to four of pond, seven of
+   water to three of dike - each written as a number only in modern sources, as the page says); the even odds ours (GUESS); 23 ft is
+   the water-heavy split's calibration on Kuwabata's parcels (O, labeled so).
+4. **Do they describe the world here?** To be measured: the water share each inset leaves on the pool's dike-pond map (Kuwabata)
+   and on the cohort's dike-pond seeds.
+5. **The order.** The knob and its roll; the inset derived from the rolled share on the map's own parcels; every reader of the
+   inset given the map's value; the drawing page's known-gap sentence brought up to the knob; tests, pool, cohort, glyph check.
+6. **The exits.** (a) the 23 ft is ours and becomes the derived inset; (b)-(e) n/a.
+7. **The search smell.** None - the record already holds the three splits.
+8. **The budget.** 3 hours.
+9. **Done, measured.** One goal: a dike-pond map's parcels are drawn at its rolled split's water share (within a few points,
+   measured on its parcels), the split recorded in the manifest, all three splits coming up across seeds.
+
+### T10 Decisions
+
+**D74 - the split rolled, the inset derived.** `DIKEPOND_SPLITS = (0.6, 0.4, 0.7)` (the water share of a parcel), rolled per map
+from its seed as a settlement knob (`dikepond_split`, a hamlet spec may pin it), even odds (GUESS). The inset is derived ONCE per map
+from the rolled share on the map's median parcel - the depth `d` at which an inset of the parcel's area `A` and perimeter `P` leaves
+that share water (`4d^2 - P d + (1 - f) A = 0`, the rectangle's law) - and stored on the settlement, so the pond's water outline,
+the mulberry rows between bank and water, and the sties' bank seat (`pondstock.BANK_INSET_FT`, half the inset) all read the one
+value. `DIKEPOND_WATER_INSET` (23 ft) stays as the water-heavy split's value on Kuwabata, labeled so, the fallback where no parcel
+is known. The drawing page's known-gap sentence becomes the knob's (a page session).
+
 ## T45 - a box the round arbiter filed lands open (found by T07's landing)
 
 ### T45 Approach (checklist part A)
@@ -1854,6 +1887,43 @@ approach gate's triggers, the decide-first guards - gets the same answer.
 
 **D72 - `--force-exclude`.** T52's two ruff commands carry `--force-exclude`, so the project's excludes hold for the files a landing
 names, as they hold for the gate's own `ruff check .`.
+
+## T56 - a task's own heading wins its section (found by T47/T48 and T10's preflights)
+
+### T56 Approach (checklist part A)
+
+1. **The goal, in the world.** A task's decision preflight reviews that task's own section, never a heading that only names it.
+2. **The constraints.** FR-003a (a task's decisions reviewed alone); the plans already written keep their headings; tooling only; a
+   test red without it.
+3. **Where each comes from.** `task_sections` is 375's (O, plan D3).
+4. **Do they describe the world here?** Yes - measured 2026-10-18: the preflights of T47 and T48 reviewed the umbrella heading "T04
+   to T10 - T48, T47's patch, five ranking rows", and T10's did too - the first heading naming an id took it, so each task's own
+   later `## Txx - ...` section went unreviewed (the tasks were renumbered T49/T50 to get past it).
+5. **The order.** The rule, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: a plan with an umbrella heading naming T10 before T10's own section gives T10 its own section;
+   `tests/tooling/test_plan_gate.py` red without it.
+
+### T56 part B (2026-10-18T19:04Z)
+
+Owed by the hour-20 step-back (hour:385-approach-checklist@20, `continue`), which fell while T56 was the active task.
+
+1. **What is refusing?** Nothing of T56's: its test passes, red without the rule.
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged; measured on the three preflights.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither since part A.
+6. **The one-sentence test.** "A task's preflight reviews its own section" - true by its test.
+7. **The next step is a measurement.** T10's preflight on its own section.
+8. **Routes measured before asking?** n/a.
+9. **After a ruling.** `continue`; the ruling's tooling fix is its own task (T57).
+
+### T56 Decisions
+
+**D75 - own before mention.** `task_sections` first takes, for each id, the first heading whose title BEGINS with that id (`## T10 - ...`,
+`### T10 Approach`); only an id no heading begins with falls back to the first heading that mentions it, as before.
 
 ## T11 - the close
 

@@ -553,3 +553,10 @@ About 75 min. The ranking row asked to move `BUNDLE_PITCH` 100 -> 92 ft on 0038'
 rows already stand `_rank_step` apart, 0038's own sum of house, yard and 39 ft of sun. The fix was the label, not the number; no
 map moved. **The habit it changes:** before moving a constant to a researched figure, list what each use of it measures - one name
 can carry four quantities, and only one of them is the research's.
+
+## T56 - the retro row
+
+About 20 min. Three preflights - T47's, T48's and T10's - reviewed the umbrella heading "T04 to T10 - T48, T47's patch" instead of
+each task's own section, because the first heading naming an id took it; T47 and T48 were renumbered to get past it, which hid the
+bug for an hour. A heading that begins with the id now wins. **The habit it changes:** when a tool answers the wrong thing twice,
+fix the tool - renaming around it moves the cost to the next task.

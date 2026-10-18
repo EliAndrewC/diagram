@@ -277,6 +277,7 @@
  "l7r/diagram/hamletgen/water/polder.py::stage_polder#dike-pond mosaic bend strength pondlayoutmosaic05, and the m": "E3",
  "l7r/diagram/hamletgen/water/polder.py::stage_polder#inlet stub extended outside the dike to the pond's rim inlet": "E3",
  "l7r/diagram/hamletgen/water/polder.py::stage_polder#polder fabric per archetype cell 190160, parcel mix, gap sel": "E0",
+ "l7r/diagram/hamletgen/water/polder.py::stage_polder#pond layout": "E3",
  "l7r/diagram/hamletgen/water/polder.py::stage_polder#reservoir first seated pry  30 px uphill of the ring's head": "E3",
  "l7r/diagram/hamletgen/water/polder.py::stage_polder#reservoir size": "E4",
  "l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#a lane end within 6 ft (BUND_REACH_FT) of the paddy counts as joined to the bund": "E0",

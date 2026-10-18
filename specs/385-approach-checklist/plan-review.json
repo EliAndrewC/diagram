@@ -4797,6 +4797,52 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T10": {
+   "section_sha256": "693c119c0066cfd0ea02c004425dac6e877b3a5bf9fb147b650d1f28fe4110a8",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T04-T10 scope",
+     "summary": "T04 to T10 carry T48, T47's patch re-landed, and five ranking rows (T10 being one of the ranking rows)",
+     "class": "within",
+     "why": "The approved proposal's Scope lists exactly these after the lane law and the four seeds: T48, T47's patch, 'about five ranking rows of different kinds'; FR-007 moves them here. Seven tasks T04-T10 equal 1 + 1 + 5."
+    },
+    {
+     "id": "order and choice at start",
+     "summary": "Each task is decided at its start, in the order FR-007 / 384's 'How it starts' sets; the ranking row is chosen then rather than now",
+     "class": "within",
+     "why": "The proposal says 'taken in the order 384's \"How it starts\" already sets'; FR-007 says the ranking rows 'are chosen at the start of their task'. Deferring the row choice to task start is what the spec requires, not a narrowing."
+    },
+    {
+     "id": "section reviewed by make decide",
+     "summary": "Each task's section is added to this plan and reviewed by make decide",
+     "class": "within",
+     "why": "The approved proposal hooks the checklist into 'the existing make task-start / make decide step' (FR-003); this is the requested mechanism, not new behavior."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T56": {
+   "section_sha256": "4f10c43f2c7d55a8b85217e629f14dd8fdd84471ea05fd6442174726688c85d3",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D75",
+     "summary": "task_sections first gives each id the first heading whose title BEGINS with that id (## T10 - ..., ### T10 Approach); only an id no heading begins with falls back to the first heading that mentions it, as before.",
+     "class": "within",
+     "why": "A tooling fix so a task's decision preflight reviews that task's own section rather than an umbrella heading that only names it - the per-task check the GM approved (request: the checklist asked at task start 'enforced by the existing decide/tick tooling', and amendment 6 'implement any obvious performance / tooling / process improvements along the way'). It removes a measured defect (T47/T48/T10 preflights reviewed the umbrella heading) without narrowing anything the request or spec asks; the fallback keeps every plan already written resolving as before."
+    },
+    {
+     "id": "T56-scope",
+     "summary": "Tooling only, plans already written keep their headings, one goal, a test in tests/tooling/test_plan_gate.py red without the rule.",
+     "class": "within",
+     "why": "One goal per task is FR-015 (amendment 4); the test only fails when the requested behavior is absent, so it is enforcement of the fix, not added scope; leaving existing plans' headings untouched narrows nothing the GM asked for."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

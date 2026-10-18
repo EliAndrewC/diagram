@@ -95,15 +95,19 @@ def task_sections(plan_text: str) -> dict[str, str]:
     """`{task id: its section}` - every `##`-`####` heading of the plan naming a task id, to the next heading at its level or
     above (feature 375, FR-003(a), plan D3): the decisions of that task, which a decision preflight rules on alone."""
     heads = [(m.start(), len(m.group(1)), m.group(2)) for m in _HEAD.finditer(plan_text)]
-    out: dict[str, str] = {}
+    own: dict[str, str] = {}
+    mentioned: dict[str, str] = {}
     for i, (at, level, title) in enumerate(heads):
         ids = _TASK_ID.findall(title)
         if not ids:
             continue
         end = next((a for a, lv, _t in heads[i + 1:] if lv <= level), len(plan_text))
+        # A TASK'S OWN HEADING WINS (feature 385 T56): a title that BEGINS with the id is that task's section; one that only
+        # names it - the umbrella "T04 to T10 - T48, T47's patch, five ranking rows" - took T10's, T47's and T48's preflights
+        lead = _TASK_ID.match(title.strip())
         for t in ids:
-            out.setdefault(t, plan_text[at:end])
-    return out
+            (own if lead and lead.group(0) == t else mentioned).setdefault(t, plan_text[at:end])
+    return {**mentioned, **own}
 
 
 def task_current(review: dict, plan_text: str, task: str, history: History | None = None) -> bool:
