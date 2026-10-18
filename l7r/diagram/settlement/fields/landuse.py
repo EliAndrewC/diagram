@@ -49,7 +49,7 @@ Research: mulberry row spacing - research/questions/0018-dike-ponds-fish-ponds-r
 # A DIKE-POND VILLAGE'S SPLIT OF WATER AND DIKE (feature 385 T10, 0018): six parts water to four of dike, six of dike to four of
 # pond, seven of water to three of dike, one to one, or three of water to seven of dike - the water share of a parcel, rolled per village; the inset is derived from it
 # (`fields.landuse.dikepond_inset`).
-register_knob(Knob("dikepond_split", [0.6, 0.4, 0.7, 0.5, 0.3], default=0.6))
+DIKEPOND_SPLIT = register_knob(Knob("dikepond_split", [0.6, 0.4, 0.7, 0.5, 0.3], default=0.6))
 """Research:
     dike-pond split values - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: water six to four, dike six to four, water seven to three, one to one, and the gazetteer's three of water to seven of dike
     dike-pond split odds - GUESS: even odds (the record gives no share between them)"""
@@ -210,6 +210,7 @@ class LandUseMixin:
             eligible ground - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: the low plots, or every plot on a wholesale dike-pond block
             converted share - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: `fraction` of the eligible plots, at least two
             patches for dike-ponds - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: clustered on a partial dike-pond overlay
+            the village's split and its inset - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: the split rolled per village (`dikepond_split`) and the one inset every reader takes derived from it (`dikepond_inset`)
             overlay colors - CONVENTION: pond and lotus teals
             no rape - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: never drawn beside the rice"""
         if overlay not in ("none", "mulberry_fishpond", "lotus", "tea_fringe"):
@@ -420,7 +421,7 @@ class LandUseMixin:
         `dikeponds` and `crown_q` are appended to in place - the caller needs both after the loop.
 
         Research:
-            pond unit - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: bank at the parcel line, water inset DIKEPOND_WATER_INSET, dug back off a canal
+            pond unit - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: bank at the parcel line, water inset the map's own (`dikepond_inset`), dug back off a canal
             bank as a ring - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: the band between bank and water lit as the dike
             fry pond turbid - research/questions/0024-fish-fry-and-nursery-ponds-yumiao.drawing.html: FRY_WATER for a fry pond
             lotus field - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: a teal plot with three blooms"""
@@ -506,7 +507,7 @@ class LandUseMixin:
         bushes with ~4-6 ft crowns in dense rows (~1 bush per 10-20 sq ft - hundreds per pond), so at
         1 px = 1 ft honest "actual trees" ARE a packed dot band; the crowns here are r 2.2-3.6 px at ~6 px
         in-row spacing (the loose end of the attested 3-5 ft, for pixel separation), never inflated glyphs.
-        Rows are homothetic loops between the water inset (`DIKEPOND_WATER_INSET`) and the bank edge (the true parcel line);
+        Rows are homothetic loops between the water inset (the map's `dikepond_inset`, `DIKEPOND_WATER_INSET` where none) and the bank edge (the true parcel line);
         everything clips to the bank path, so a crown may overhang the water edge (organic) but never
         spills onto the polder floor. BUSHES KEEP CLEAR OF THE CANALS (GM 2026-07-23, refined 2026-07-24):
         the bush TRUNK stays off the canal - any crown whose CENTER lies within 3.5 px of a channel
@@ -525,9 +526,10 @@ class LandUseMixin:
         n = len(poly)
         mids = [((poly[i][0] + poly[(i + 1) % n][0]) / 2, (poly[i][1] + poly[(i + 1) % n][1]) / 2) for i in range(n)]
         apo = sum(math.hypot(mx - cx, my - cy) for mx, my in mids) / n
-        if apo <= DIKEPOND_WATER_INSET + 1.0:
+        inset = getattr(self, "dikepond_inset", DIKEPOND_WATER_INSET)  # the map's own inset (feature 385 T10: the rows follow the bank's width)
+        if apo <= inset + 1.0:
             return  # a parcel too small to hold the water inset has no bank to plant
-        s_w = max(0.4, 1.0 - DIKEPOND_WATER_INSET / apo)  # the water-edge homothety (matches _rounded_pond's inset)
+        s_w = max(0.4, 1.0 - inset / apo)  # the water-edge homothety (matches _rounded_pond's inset)
         s_b = 1.0  # the bank edge is the TRUE parcel line (the canal at the toe bounds the bank)
         cid = self._cid("mb")
         g = [f'<clipPath id="{cid}"><path d="{bank_d}"/></clipPath>', f'<g clip-path="url(#{cid})">']
