@@ -1685,6 +1685,10 @@ ledger-owed:     ## [project] every check pass logged in this clone with no row 
 	@: "GUARD_EDIT_OK: feature 385 amendment 5 (FR-019) - WRITE= writes each owed row from the agent's reply, the page sessions' form"
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/ledger_owed.py" --ledger "$$(git rev-parse --show-toplevel)/dev/review-ledger.md" $(if $(WRITE),--write "$(WRITE)",)
 
+dispatch-dropped: ## [project] record that a dispatch a guard refused is no longer wanted, so the turn may end (feature 385 T22)   TYPE=<agent type> BUNDLE=<path> WHY="<reason>"
+	@: "GUARD_EDIT_OK: feature 385 T22 - the escape of pair-hooks.sh's stop layer, its reason logged"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/hooks/lib/hm_dropped.py" drop --root "$$(git rev-parse --show-toplevel)" --type "$(TYPE)" --bundle "$(BUNDLE)" --why "$(WHY)"
+
 review-cost:     ## [project] a finished review agent's wall time and tokens - the ledger's cost cells (feature 294)   AGENT=<agent id>
 ##  AGENT=<id>  the agent id the Agent tool's result names
 	@: "GUARD_EDIT_OK: feature 294 FR-010, adding an operation - the ledger's measured table copies its cost from this, never from memory"

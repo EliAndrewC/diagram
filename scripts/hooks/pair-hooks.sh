@@ -354,7 +354,8 @@ print(str(pathlib.Path(tp).parent / sid / "subagents") if tp and sid else "")
     else
       why="$(python3 "$PAIR_HERE/../gates/plan_gate.py" decided "${CLONE_ROOT:-.}" 2>/dev/null)"
       if [ -n "$why" ]; then
-        printf '\nBLOCKED: %s\n(or DECIDE_OK="<reason>" in the prompt; scripts/hooks/pair-hooks.sh, feature 375)\n' "$why" >&2
+        # GUARD_EDIT_OK: feature 385 T22 - the refusal names the check and its unit, so a batch of identical refusals is counted right
+        printf '\nBLOCKED: %s on %s: %s\n(or DECIDE_OK="<reason>" in the prompt; scripts/hooks/pair-hooks.sh, feature 375)\n' "$atype" "$(printf '%s' "$ptext" | grep -oE '[^ `"]*/MANIFEST\.md|/tmp/l7r-check/[^ `")]*' | head -1 | grep . || echo 'its prompt')" "$why" >&2
         guard_log pair blocked "$atype" decide-first
         exit 2
       fi
@@ -510,9 +511,18 @@ else:
 
 
 # GUARD_EDIT_OK: feature 383 FR-003 - the STOP branch is retired: a turn may end on a green gate with reviews owed, which
-# come due on the feature's hour (the checkpoint's hold on `make tick`) or at the landing (review-gate.sh). The `stop` verb
-# stays a no-op so a session whose settings were loaded before this landed does not see a hook error at each turn's end.
-stop() { cat >/dev/null; exit 0; }
+# come due on the feature's hour (the checkpoint's hold on `make tick`) or at the landing (review-gate.sh).
+# GUARD_EDIT_OK: feature 385 T22 (plan D44; the round arbiter's fix on hour:385-approach-checklist@11) - the turn's end IS held
+# for one thing: an Agent dispatch a guard refused that was neither sent again nor recorded dropped (`make dispatch-dropped`).
+# Measured: a refused impl-drift was never re-sent and the session idled 5 h "waiting on" it (scripts/hooks/lib/hm_dropped.py).
+stop() {
+  local payload; payload="$(cat)"
+  find_root "$payload"
+  [ -n "${CLONE_ROOT:-}" ] || exit 0
+  printf '%s' "$payload" | python3 "$PAIR_HERE/lib/hm_dropped.py" stop --root "$CLONE_ROOT" && exit 0
+  guard_log pair blocked "stop" dispatch-dropped
+  exit 2
+}
 
 state() {
   find_root

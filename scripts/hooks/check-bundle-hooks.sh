@@ -58,7 +58,9 @@ if not root:
     sys.exit(0)
 r = subprocess.run([sys.executable, os.environ["CB_HERE"] + "/../gates/plan_gate.py", "decided", root], capture_output=True, text=True)
 if r.returncode == 1 and r.stdout.strip():
-    print(r.stdout.strip()); sys.exit(1)
+    # GUARD_EDIT_OK: feature 385 T22 - name the check and its unit, so four identical refusals in one message read as four checks
+    b = re.search(r"[^\s`\"]*/MANIFEST\.md|/tmp/l7r-check/[^\s`\")]+", str(ti.get("prompt") or ""))
+    print(str(ti.get("subagent_type")) + " on " + (b.group(0) if b else "its prompt") + ": " + r.stdout.strip()); sys.exit(1)
 ' 2>&1)"; then
     printf '\nBLOCKED: %s\n(or DECIDE_OK="<reason>" in the prompt; scripts/hooks/check-bundle-hooks.sh, feature 375)\n' "$err" >&2
     guard_log check-bundle blocked "dispatch" decide-first "$err"

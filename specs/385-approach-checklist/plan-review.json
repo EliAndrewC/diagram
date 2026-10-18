@@ -51,7 +51,7 @@
    "declared": "spec-fidelity"
   },
   "## Landing": {
-   "sha256": "a000c859cf163ff2ca29adc9de3404bb37e96400cf1b05e2238f4e156b0deb64",
+   "sha256": "06d1063116b3fb6446d046d1cd315cb5ea9bbf80790fbcb3df91c3a899646083",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -347,6 +347,24 @@
   "### T21 Decisions": {
    "sha256": "05f25c28b5b0296d7d5869beed987413d79395046ab0c5580593810d6ee85aeb",
    "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T22 - a refused dispatch is not lost (the round arbiter's fix on hour:385-approach-checklist@11)": {
+   "sha256": "2326f031491dcd4fcfa40cb74e97f60ba149db7a8c34586e62ee2631d8fc0d04",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T22 Approach (checklist part A)": {
+   "sha256": "8d2c264d5faec47f372acb32e866a26c0852fefca8780bee90e22735928cece6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T22 Decisions": {
+   "sha256": "5b56ba98556b62cc2d780da7315d12fedd2d65627bbc53edaef7eaea8e548e26",
+   "verdict": "BLOCKED",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
   }
@@ -2283,6 +2301,171 @@
      "why": "The reply is the command's only input; a block whose new text cannot be located once (or whose old text still stands, so the EDIT is not applied as written) cannot be identified as the EDIT's own change from the reply alone. The case left owed is the duplicate-text edge, not the class of matching hand edits the arbiter ruled on, so the purpose is not gutted."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T22 - a refused dispatch is not lost (the round arbiter's fix on hour:385-approach-checklist@11)",
+    "### T22 Approach (checklist part A)",
+    "### T22 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing-T22",
+     "summary": "T22 is added to the tasks that land open, each landing when it closes before the next starts.",
+     "class": "within",
+     "why": "The same one-task-at-a-time landing FR-006 sets for T02-T21; the only change from the CLEAR text is T22 appended."
+    },
+    {
+     "id": "T22-scope",
+     "summary": "T22 implements the arbiter's two changes on hour:385-approach-checklist@11 as tooling only.",
+     "class": "within",
+     "why": "Amendment 6 (the GM: 'implement any obvious performance / tooling / process improvements along the way') and feature 379, which stands the arbiter where the GM was asked; the task's goal ('a dispatch a guard refused is sent again or recorded as dropped before the session ends a turn') restates the arbiter's first change and does not narrow it."
+    },
+    {
+     "id": "T22-order-exits-budget-done",
+     "summary": "Refusal text first, then the Stop layer; exit (c) one Stop guard; budget 40 min; done = a hook test red without the Stop layer and a test red without the named refusal.",
+     "class": "within",
+     "why": "Order and budget are execution choices the request leaves open; each done test fails only when one of the arbiter's two changes is absent, so it enforces the fix rather than adding scope. The figures in Approach item 4 carry a one-shot label (2026-10-18, the session transcript); 40 min is a budget, not a measurement."
+    },
+    {
+     "id": "D44-window",
+     "summary": "The Stop hook reads the transcript from the GM's last prompt (not a tool result or task notification) rather than from the last turn end.",
+     "class": "within",
+     "why": "Not narrower than the arbiter's 'since the last turn end': every turn end since the GM's last prompt was either blocked or passed with nothing unanswered, so the window covers at least the arbiter's, and it reaches across task-notification turns, which is exactly the T05 incident (the session ended its turn waiting on a refused check and was woken later)."
+    },
+    {
+     "id": "D44-refused",
+     "summary": "A refusal is an Agent call whose result is an error carrying BLOCKED.",
+     "class": "within",
+     "why": "This is how a refusal is recognized in the transcript, not a carve-out of any kind of refusal: no class of guard refusal is excluded by the decision. It is within only if every hook that refuses an Agent call carries that marker; a refusing hook without it would be an implementation defect against 'any dispatch refused', and T22's hook test should exercise the decide-first refusal's actual text."
+    },
+    {
+     "id": "D44-answered",
+     "summary": "A refusal is answered by a later unrefused Agent call of the same subagent_type naming the same bundle (first /tmp/l7r-check path, else the description), or by make dispatch-dropped TYPE= BUNDLE= WHY= recorded in <gitdir>/dropped-dispatches.jsonl.",
+     "class": "within",
+     "why": "Implements the arbiter's 'neither sent again nor recorded'. The match is strict (a re-send under a different bundle path does not answer), which can only block more, and the record route is the arbiter's own second exit and carries a reason, as the root CLAUDE.md guard rule asks."
+    },
+    {
+     "id": "D44-block-every-time",
+     "summary": "While any refusal is unanswered the turn end is blocked every time, naming each refused check with both commands; no once-only valve.",
+     "class": "within",
+     "why": "The arbiter says 'refuses to end a turn while any ... and names each such check'; blocking every time with no valve is the literal rule, and it is always satisfiable through dispatch-dropped, so no exception is made."
+    },
+    {
+     "id": "D44-refusal-text",
+     "summary": "The check-bundle and pair hooks' decide-first refusals name the check as '<agent type> on <bundle>' instead of 'dispatch'.",
+     "class": "within",
+     "why": "The arbiter's second change: 'names the check and unit it refused, not just dispatch'. The agent type names the check and the bundle path names the unit it was dispatched on. Covering the pair hooks' decide-first refusal as well as check-bundle's does not narrow; it is the same message in the hooks the arbiter's ruling names ('two changes to the pair hooks')."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "### T22 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D44a",
+     "summary": "The Stop hook's window starts at the last turn end it passed (<gitdir>/dispatch-seen); a blocked turn end moves nothing, so a refusal stays listed across turns until answered.",
+     "class": "within",
+     "why": "The arbiter's 'since the last turn end': a turn end the hook blocked is not a turn end, so the window from the last PASSED one is the literal reading, and it is the one that catches the measured incident (refusals 03:57, GM prompt 03:59 mid-turn)."
+    },
+    {
+     "id": "D44b",
+     "summary": "When <gitdir>/dispatch-seen is absent, the window starts at the GM's last prompt.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The arbiter's window is 'since the last turn end', and the block itself measures that a window from the GM's last prompt misses the incident's shape (a refusal before a prompt that arrives mid-turn). The fallback brings that miss back on every clone's first turn end, where the file is always absent because the hook was a no-op until now. The literal rule can be followed: the transcript records each turn end as a system/turn_duration entry after a stop_hook_summary with preventedContinuation false (observed 2026-10-18 by counting entry types in three session transcripts under ~/.claude/projects). It should say: with no record, the window starts at the transcript's last turn end that passed, or at the session's start when there is none. It must not start at the GM's last prompt. The incident's shape, observed 2026-10-18 by listing the session transcript d2dc8c63's entries from 03:50 to 04:05: the GM's 'If memory serves' prompt was queued at 03:57:47 and taken into the running turn at 03:58:10. Four PreToolUse:Agent refusals fell between 03:57:57 and 03:58:06, and the turn ended at 03:59:25. A window from that prompt starts after all four refusals, and the turn end before them (03:50:51) is in the transcript."
+    },
+    {
+     "id": "D44c",
+     "summary": "A refusal is recognised by the harness's 'PreToolUse:Agent hook error' result, whatever the hook's wording.",
+     "class": "within",
+     "why": "The arbiter's 'any dispatch refused' covers a refusal by any hook. Keying on the harness marker is the literal reading, and is wider than the hook's own BLOCKED wording."
+    },
+    {
+     "id": "D44d",
+     "summary": "A refusal is answered by a later, unrefused Agent call of the same subagent_type naming the same bundle (the first /tmp/l7r-check path, else the description), or by make dispatch-dropped TYPE= BUNDLE= WHY= recording it in <gitdir>/dropped-dispatches.jsonl.",
+     "class": "within",
+     "why": "These are the arbiter's 'sent again' and 'recorded'. A bundle path is reused: plan-385-approach-checklist-blocks appears 239 times in this session's transcript, observed 2026-10-18 by grep. A later unrefused dispatch on the same path therefore answers an earlier refusal on it. That stays within 'sent again' because a regenerated bundle carries everything still owed (MANIFEST: a block is owed until its CLEAR verdict), so the refused work is in the resend. A key that misses a real resend only blocks, and the record command answers it."
+    },
+    {
+     "id": "D44e",
+     "summary": "Blocked every time while one is unanswered, naming each refused check with both commands; no once-only valve.",
+     "class": "within",
+     "why": "The arbiter's 'refuses to end a turn while ... and names each such check'. Naming the two commands that answer it is part of the message, not new behavior."
+    },
+    {
+     "id": "D44f",
+     "summary": "The check-bundle and pair hooks' decide-first refusals name the check as '<agent type> on <bundle>' instead of 'dispatch'.",
+     "class": "within",
+     "why": "The arbiter's 'names the check and unit it refused, not just dispatch'. The bundle path is the dispatch's unit (e.g. q-0196-quote-check, plan-385-...-T05). Applying the same wording to the pair hook's own decide-first refusal changes a message only and sits inside 'two changes to the pair hooks'."
+    }
+   ]
   }
- ]
+ ],
+ "tasks": {
+  "T05": {
+   "section_sha256": "87b2fc2adc6d934e47875d41a24a5f6167fc74109db6e0589b379c412ec21cd7",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D41",
+     "summary": "w155-pocket-attempt.patch re-landed as built on today's HEAD; its decisions are 374's W155-1..W155-6 unchanged, its bar 374's W155-4",
+     "class": "within",
+     "why": "The approved proposal's scope names 'T47's patch re-landed' and FR-007 moves T47 here under 384's FR-002 (374's rules as amended). Re-landing it as built, with the decisions 374's plan review already ruled within, is exactly the item asked for; nothing in it is changed or carved out."
+    },
+    {
+     "id": "D41-cohort",
+     "summary": "The 54-seed cohort (with the pool) stands in for the 44 rolls of 374's scratch tooling (tools13/roll13.sh), which are not reproducible from the repository",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It drops one instrument 374 used, so it is ruled. The literal alternative - re-running the same 44 rolls - is impossible: the scratch tooling is not in the repository. W155-4 as A2 states it names the pool and the cohort, and both are kept, so the bar's purpose (no roll passing at HEAD refuses) is still tested on the instrument the bar names. The accepted spec's SC-003 adopts 384's SC-004 for the moved work, and the plan says that criterion already makes this substitution (384's SC-004 text is not in the bundle, so that part is the plan's word). One wording point, which does not change the ruling: part B6's sentence 'measured as 374 measured it' overstates this. The measurement is 374's bar on the pool and the cohort, not 374's rolls."
+    },
+    {
+     "id": "D41-occasions",
+     "summary": "The owed glyph-checks are the three placement-changed occasions 374 recorded (Inashiro, Kuwabata, Sawada wells)",
+     "class": "within",
+     "why": "These are the checks the patch's own changes owe under the project's rules, taken from 374's record of which pool maps' wells move. The engine is unchanged since T04 and the patch applies as built, so it moves the same wells. This settles which checks the changes owe; it does not cut any check the GM asked for."
+    },
+    {
+     "id": "A6-exit",
+     "summary": "Exit taken: (e) conform - re-land as built, no waiver",
+     "class": "within",
+     "why": "The task is the re-landing of an existing patch, and the patch's own exits were priced in 374 (W155-6). 'No waiver' holds the task to the full bar rather than relaxing it, so nothing is narrowed."
+    },
+    {
+     "id": "A8-budget",
+     "summary": "Budget about 90 min",
+     "class": "within",
+     "why": "This is an estimate the checklist's budget question asks for, not a pass/fail threshold put on record (Amendment 2's concern). It narrows nothing."
+    },
+    {
+     "id": "A9-done",
+     "summary": "One goal: the patch on main with no waiver, pool clean, cohort as HEAD, wells measured on the pool, owed checks answered, gate green",
+     "class": "within",
+     "why": "One goal per task is FR-015 (Amendment 4). The done line is the requested item measured against its own bar."
+    },
+    {
+     "id": "B1-0196-wordings",
+     "summary": "The three wordings the record checks found in 0196's changed block are applied together",
+     "class": "within",
+     "why": "This answers checks the patch's own changes owe; it is the 'every owed check answered' part of done. Batching them is a process choice and touches no scope."
+    },
+    {
+     "id": "B9-continue",
+     "summary": "After the hour-10 step-back ruled 'continue': re-dispatch the three refused checks, then land",
+     "class": "within",
+     "why": "This follows the arbiter's ruling toward the same goal and adds or removes no scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ }
 }

@@ -521,5 +521,33 @@ out=$(run_pretool "$(stdin_for Agent '{"subagent_type":"round-arbiter","descript
 check "the round arbiter's own dispatch passes" '[[ "$out" != *"make step-back"* ]]'
 rm -rf "$CLONE/specs/998-hour" "$CLONE/.specify" "$CLONE/.git/l7r-events"
 
+# --- T22. a refused dispatch is sent again or recorded dropped before the turn ends (feature 385 T22, plan D44) ------------
+# GUARD_EDIT_OK: feature 385 T22 - the incident's shape: a decide-first refusal of an impl-drift, never re-sent
+TR="$TMP/proj/sid-t22.jsonl"; BUN=/tmp/l7r-check/claims-owed/MANIFEST.md
+human() { printf '{"type":"user","timestamp":"%s","origin":{"kind":"human"},"message":{"role":"user","content":"go"}}\n' "$1"; }
+call() { printf '{"type":"assistant","timestamp":"%s","message":{"role":"assistant","content":[{"type":"tool_use","id":"%s","name":"Agent","input":{"subagent_type":"impl-drift","description":"d","prompt":"Judge %s"}}]}}\n' "$1" "$2" "$BUN"; }
+refused() { printf '{"type":"user","timestamp":"%s","message":{"role":"user","content":[{"type":"tool_result","tool_use_id":"%s","is_error":true,"content":"PreToolUse:Agent hook error: [check-bundle-hooks.sh]: \\nBLOCKED: impl-drift on %s: decide first"}]}}\n' "$1" "$2" "$BUN"; }
+launched() { printf '{"type":"user","timestamp":"%s","message":{"role":"user","content":[{"type":"tool_result","tool_use_id":"%s","content":"Async agent launched successfully."}]}}\n' "$1" "$2"; }
+STOP22=$(printf '{"transcript_path":"%s","session_id":"sid-t22","cwd":"%s"}' "$TR" "$CLONE")
+rm -f "$CLONE/.git/dropped-dispatches.jsonl"; printf '2026-10-18T03:50:00Z\n' > "$CLONE/.git/dispatch-seen"   # a turn end passed at 03:50
+{ call 2026-10-18T03:57:57Z a1; refused 2026-10-18T03:57:58Z a1; human 2026-10-18T03:59:42Z; } > "$TR"
+out=$( cd "$CLONE" && printf '%s' "$STOP22" | "$HOOK" stop 2>&1 ); rc=$?
+check "IT FIRES: a turn ends with a refused impl-drift never re-sent (the refusal before the GM's next prompt)" '[ "$rc" -eq 2 ]'
+check "...naming the check, its bundle and both commands" '[[ "$out" == *"impl-drift on $BUN"* && "$out" == *"make dispatch-dropped TYPE=impl-drift"* ]]'
+( cd "$CLONE" && printf '%s' "$STOP22" | "$HOOK" stop >/dev/null 2>&1 ); rc=$?
+check "...and again at the next turn end, the blocked one having moved nothing" '[ "$rc" -eq 2 ]'
+{ call 2026-10-18T09:40:00Z a2; launched 2026-10-18T09:40:01Z a2; } >> "$TR"
+( cd "$CLONE" && printf '%s' "$STOP22" | "$HOOK" stop >/dev/null 2>&1 ); rc=$?
+check "STAYS QUIET: the same check on the same bundle sent again and launched" '[ "$rc" -eq 0 ]'
+{ call 2026-10-18T10:00:00Z a3; refused 2026-10-18T10:00:01Z a3; } >> "$TR"
+( cd "$CLONE" && printf '%s' "$STOP22" | "$HOOK" stop >/dev/null 2>&1 ); rc=$?
+check "a refusal after the last passed turn end is held" '[ "$rc" -eq 2 ]'
+( cd "$CLONE" && make -s -f "$(dirname "$HOOK")/../../Makefile" dispatch-dropped TYPE=impl-drift BUNDLE="$BUN" WHY="x" >/dev/null 2>&1 ); rc=$?
+check "dispatch-dropped refuses a reason of one word" '[ "$rc" -ne 0 ]'
+( cd "$CLONE" && python3 scripts/hooks/lib/hm_dropped.py drop --root . --type impl-drift --bundle "$BUN" --why "the round was folded into the next" >/dev/null 2>&1 )
+( cd "$CLONE" && printf '%s' "$STOP22" | "$HOOK" stop >/dev/null 2>&1 ); rc=$?
+check "STAYS QUIET: the refusal recorded dropped with a reason" '[ "$rc" -eq 0 ]'
+rm -f "$CLONE/.git/dispatch-seen" "$CLONE/.git/dropped-dispatches.jsonl" "$TR"
+
 printf '\ntest-pair-hooks: %d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]

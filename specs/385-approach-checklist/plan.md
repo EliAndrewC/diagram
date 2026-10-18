@@ -156,7 +156,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22
 
 ## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)
 
@@ -894,6 +894,41 @@ round 1: the arbiter's test is the diff matching the EDIT line for line, however
 once in its file and whose old text is gone is put back to its old text, so the settling sees the round's own blocks move the
 unit, and is re-applied - the file ends as it was. A hand edit that departs from the EDIT, or one with no reply to read, still
 re-owes its unit. `make record-owed`'s footer names the command for both.
+
+## T22 - a refused dispatch is not lost (the round arbiter's fix on hour:385-approach-checklist@11)
+
+### T22 Approach (checklist part A)
+
+1. **The goal, in the world.** A check the session meant to run is never silently left unrun: a dispatch a guard refused is sent
+   again or recorded as dropped before the session ends a turn.
+2. **The constraints.** The arbiter's ruling on hour:385-approach-checklist@11 (two changes); a guard matches invocations, its
+   message names the compliant command, its escape carries a reason of two words, every firing logged (root CLAUDE.md); a
+   test red without each; tooling only.
+3. **Where each comes from.** The two changes are the arbiter's (G, feature 379 stands it where the GM was asked); the matching
+   rule below (same agent type and same bundle) is ours (O).
+4. **Do they describe the world here?** Yes - measured on T05 (2026-10-18, the session transcript): of seven agents sent at 03:57
+   four were refused by the decide-first guard with identical lines naming no check; three were re-sent at 04:02, impl-drift round
+   2 was not, and the session ended its turn "waiting on" it; about 5 h passed idle.
+5. **The order.** The refusal's text first (it names the check and its bundle), then the Stop layer.
+6. **The exits.** (c) - one Stop guard; (a), (b), (d), (e) n/a.
+7. **The search smell.** None.
+8. **The budget.** 40 min.
+9. **Done, measured.** One goal: a turn whose refused dispatch was neither re-sent nor recorded cannot end, shown by a hook test
+   red without the Stop layer; the decide-first refusal names the agent type and bundle, shown by a test red without it.
+
+### T22 Decisions
+
+**D44 - the refused dispatch held at the turn's end.** `pair-hooks.sh stop` (a no-op since feature 383) reads the session's
+transcript from the last turn end it passed (`<gitdir>/dispatch-seen`; absent, from the GM's last prompt) and lists each
+Agent call a hook refused (its result the harness's `PreToolUse:Agent hook error`, whatever the hook's wording). The window
+starts at the last PASSED turn end, not the GM's last prompt: measured, the 03:57 refusals came before the GM's 03:59 prompt
+(it arrived mid-turn), so a window from that prompt would have missed the incident; a blocked turn end moves nothing, so a
+refusal stays listed across turns a task notification starts until it is answered. A refusal is answered when a later Agent call of the same
+`subagent_type` naming the same bundle (the first `/tmp/l7r-check/...` path in its prompt; the description when the prompt names
+none) was not refused, or when `make dispatch-dropped TYPE=<agent type> BUNDLE=<path> WHY="<reason>"` recorded it dropped in
+`<gitdir>/dropped-dispatches.jsonl`. While one is unanswered the turn's end is blocked, every time, naming each refused check
+with both commands - always satisfiable, so no once-only valve. The check-bundle and pair hooks' decide-first refusals name the
+check (`<agent type> on <bundle>`) instead of "dispatch".
 
 ## T11 - the close
 
