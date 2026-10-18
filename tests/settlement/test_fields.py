@@ -966,3 +966,20 @@ def test_the_mulberry_rows_grow_with_the_bank_so_the_spacing_holds() -> None:
 
     assert len(mulberry_row_ts(11.0)) == 2 and len(mulberry_row_ts(23.0)) == 4 and len(mulberry_row_ts(3.0)) == 2
     assert all(0.0 < t < 1.0 for t in mulberry_row_ts(23.0))
+
+
+def test_the_dikepond_inset_leaves_the_rolled_split_water() -> None:
+    """Feature 385 T10 (D74): the inset is derived from the rolled split on the map's median parcel, so that parcel is the split's
+    share water - six, four or seven parts in ten (0018); with no parcel, the water-heavy split's 23 ft stands."""
+    from l7r.diagram.settlement._knobs import KNOBS
+    from l7r.diagram.settlement.fields.landuse import DIKEPOND_WATER_INSET, dikepond_inset
+
+    assert KNOBS["dikepond_split"].value_space == [0.6, 0.4, 0.7]
+    rect = [(0.0, 0.0), (120.0, 0.0), (120.0, 80.0), (0.0, 80.0)]
+    small, big = [(0.0, 0.0), (60.0, 0.0), (60.0, 40.0), (0.0, 40.0)], [(0.0, 0.0), (200.0, 0.0), (200.0, 150.0), (0.0, 150.0)]
+    for share in (0.6, 0.4, 0.7):
+        d = dikepond_inset([small, rect, big], share)
+        apo = (60 + 40 + 60 + 40) / 4  # the rectangle's mean centroid-to-edge-midpoint distance
+        assert (1 - d / apo) ** 2 == pytest.approx(share), "the median parcel, scaled as `_rounded_pond` scales it, is the share water"
+    assert dikepond_inset([rect], 0.4) > dikepond_inset([rect], 0.6) > dikepond_inset([rect], 0.7), "drier splits, wider banks"
+    assert dikepond_inset([], 0.4) == DIKEPOND_WATER_INSET

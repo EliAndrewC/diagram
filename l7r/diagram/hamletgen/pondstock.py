@@ -39,7 +39,7 @@ def _centroid(poly: list[Any]) -> Pt:
     return (sum(float(p[0]) for p in poly) / len(poly), sum(float(p[1]) for p in poly) / len(poly))
 
 
-def _bank_seats(parcel: list[Any], toward: Pt) -> list[tuple[Pt, float]]:
+def _bank_seats(parcel: list[Any], toward: Pt, inset: float = BANK_INSET_FT) -> list[tuple[Pt, float]]:
     """EVERY seat on a parcel's bank, ranked by distance to `toward`: each the midpoint of a parcel
     edge, pulled in by half the bank so the fixture stands on the planted band, not on the canal at the
     edge. Each is (center, rotation along the edge in degrees).
@@ -52,7 +52,7 @@ def _bank_seats(parcel: list[Any], toward: Pt) -> list[tuple[Pt, float]]:
 
     Research:
         bank seats by distance - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: ranked nearest the houses, every seat of the bank - its midpoints and its eighths - in one ranking
-        sty seat on the bank - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: each bank seat set in from the parcel's edge by `BANK_INSET_FT`, half the bank's width, so the sty stands on the bank and not out by the canal
+        sty seat on the bank - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: each bank seat set in from the parcel's edge by half the bank's width - the map's own inset since feature 385 T10 (`BANK_INSET_FT` the fallback) - so the sty stands on the bank and not out by the canal
     """
     cx, cy = _centroid(parcel)
     n = len(parcel)
@@ -66,7 +66,7 @@ def _bank_seats(parcel: list[Any], toward: Pt) -> list[tuple[Pt, float]]:
                 mx, my = float(a[0]) + (float(b[0]) - float(a[0])) * f, float(a[1]) + (float(b[1]) - float(a[1])) * f
                 vx, vy = cx - mx, cy - my
                 vl = math.hypot(vx, vy) or 1.0
-                seats.append(((mx + vx / vl * BANK_INSET_FT, my + vy / vl * BANK_INSET_FT), rot))
+                seats.append(((mx + vx / vl * inset, my + vy / vl * inset), rot))
         seats.sort(key=lambda s: math.dist(s[0], toward))
         return seats
 
@@ -130,7 +130,7 @@ def reserve_sty_seat(s: Settlement, plan: SitePlan) -> tuple[Pt, float, int] | N
         seat = next(
             (
                 ((x, y), rot)
-                for (x, y), rot in _bank_seats(par, toward)
+                for (x, y), rot in _bank_seats(par, toward, getattr(s, "dikepond_inset", DIKEPOND_WATER_INSET) / 2)
                 if sty_on_near_half((x, y), par, toward, 0.5) and sty_in_reach(s, (x, y), [{"x": toward[0], "y": toward[1]}]) and s.pond_fixture_fits(x, y, rot)
             ),
             None,
@@ -226,7 +226,11 @@ def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
         par = ponds[i]["parcel"]
         # ...AND WITHIN A HOUSEHOLD'S REACH (feature 280, `sty_in_reach`): a seat past every farmhouse's reach is no seat
         seat = next(
-            (((x, y), rot) for (x, y), rot in _bank_seats(par, hc) if sty_on_near_half((x, y), par, hc, 0.5) and sty_in_reach(s, (x, y), houses) and s.pond_fixture_fits(x, y, rot)),
+            (
+                ((x, y), rot)
+                for (x, y), rot in _bank_seats(par, hc, getattr(s, "dikepond_inset", DIKEPOND_WATER_INSET) / 2)
+                if sty_on_near_half((x, y), par, hc, 0.5) and sty_in_reach(s, (x, y), houses) and s.pond_fixture_fits(x, y, rot)
+            ),
             None,
         )
         if seat is None:
