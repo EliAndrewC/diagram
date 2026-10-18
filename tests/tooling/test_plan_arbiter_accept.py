@@ -13,6 +13,14 @@ pg = _load("plan_gate")
 
 TRIG = "round:spec-fidelity|plan:385-x#T17@3"
 
+def _clean_env() -> dict[str, str]:
+    """The environment without the outer make's variables: a test run under `make arbiter-fix-done LAND=...` inherits LAND= through
+    MAKEFLAGS, and a `make` the test runs would then land tooling for real (found 2026-10-18, T20's landing)."""
+    import os
+
+    return {k: v for k, v in os.environ.items() if k not in ("MAKEFLAGS", "MFLAGS", "MAKELEVEL", "MAKEOVERRIDES")}
+
+
 
 def _feature(tmp: pathlib.Path, rows: list[dict]) -> pathlib.Path:
     d = tmp / "specs" / "385-x"
@@ -50,7 +58,7 @@ def test_an_accept_records_the_owed_blocks_clear_and_nothing_else_does(tmp_path:
 
 def test_make_plan_verdict_arbiter_runs_only_the_accept() -> None:
     repo = pathlib.Path(__file__).resolve().parents[2]
-    dry = subprocess.run(["make", "-n", "-C", str(repo), "plan-verdict", "F=385", f"ARBITER={TRIG}"], capture_output=True, text=True, check=False).stdout
+    dry = subprocess.run(["make", "-n", "-C", str(repo), "plan-verdict", "F=385", f"ARBITER={TRIG}"], capture_output=True, text=True, check=False, env=_clean_env()).stdout
     line = next(ln for ln in dry.splitlines() if "plan_gate.py" in ln)
     assert f'arbiter-accept "385" "{TRIG}"' in line and "--as" not in line
 

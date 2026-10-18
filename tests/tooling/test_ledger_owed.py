@@ -30,6 +30,14 @@ _lint.loader.exec_module(ll)
 
 HEAD = f"# ledger\n\n{ll.MEASURED_HEADING}\n\nprose\n\n| {' | '.join(ll.COLUMNS)} |\n|{'---|' * len(ll.COLUMNS)}\n"
 
+def _clean_env() -> dict[str, str]:
+    """The environment without the outer make's variables: a test run under `make arbiter-fix-done LAND=...` inherits LAND= through
+    MAKEFLAGS, and a `make` the test runs would then land tooling for real (found 2026-10-18, T20's landing)."""
+    import os
+
+    return {k: v for k, v in os.environ.items() if k not in ("MAKEFLAGS", "MFLAGS", "MAKELEVEL", "MAKEOVERRIDES")}
+
+
 
 def _pass(check: str = "glyph-check", wall: str = "80 s", tokens: str = "244k in (199k cached) / 7.8k out", subject: str = "copse on inashiro") -> dict[str, str]:
     return {"date": "2026-10-10", "check": check, "subject": subject, "agent": "a1", "wall": wall, "tokens": tokens}
@@ -184,5 +192,5 @@ def test_the_refusal_names_the_command_that_writes_each_row(tmp_path: Path, caps
     assert lo.main(["--log", str(log), "--ledger", str(ledger), "--transcripts", str(tmp_path)]) == 0
     assert 'make ledger-owed WRITE="<where you recorded what you did>"' in capsys.readouterr().out
     repo = Path(__file__).resolve().parents[2]
-    dry = subprocess.run(["make", "-n", "-C", str(repo), "ledger-owed", "WRITE=the plan records"], capture_output=True, text=True, check=False).stdout
+    dry = subprocess.run(["make", "-n", "-C", str(repo), "ledger-owed", "WRITE=the plan records"], capture_output=True, text=True, check=False, env=_clean_env()).stdout
     assert '--write "the plan records"' in dry
