@@ -1,0 +1,34 @@
+{
+  "utc": "2026-10-18T21:00:44Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 173,
+  "result": "failed: test-full",
+  "commit": "cfaae7220",
+  "first_failure_s": 173.1,
+  "last_failure_s": 173.1,
+  "host": {
+    "load": [
+      5.99,
+      5.67
+    ],
+    "mem_avail_mb": [
+      6167,
+      7468
+    ],
+    "cpu_temp_c": [
+      78.0,
+      63.0
+    ],
+    "stall_s": {
+      "cpu": 1.2,
+      "io": 0.4,
+      "io_full": 0.4,
+      "memory": 0.1
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  }
+}
