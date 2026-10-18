@@ -33,8 +33,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T07 A ranking row; its retro row [lands-open]
       research: rendering
       verify: DONE. TREAD_WALL_FT 4 -> 3 ft on 0247 and 0081's drawing page; joint gap the wider lane; each wall measured whole (test red without it); claims rounds clean but T43's three carried by the arbiter; pool clean (Kuwabata, Inashiro re-rolled); make done green (198 s); no glyph check owed; cohort-landing 54/54; retro row in retro.md
-- [ ] T08 A ranking row; its retro row [lands-open]
+- [x] T08 A ranking row; its retro row [lands-open]
       research: rendering
+      verify: DONE. the pond_bank knob: a tail pond's bank bare or planted sparsely with mulberry and cudrania (0061), the bank kept dry beyond the reeds (D61b), three pop-ups, 0061's drawing page; claims closed (four older drifts carried into T43); pool clean, cohort-landing 54/54; make done green; glyph check NEEDS-WORK fixed (F1 dry bank, F2 jitter), re-checked at landing; retro row in retro.md
 - [ ] T09 A ranking row; its retro row [lands-open]
       research: rendering
 - [ ] T10 A ranking row; its retro row [lands-open]
@@ -143,8 +144,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T51 The plan-gate tests write their bundles under their own tmp_path (a flaky red gate found by T08's gate, plan D68)
       research: rendering
       verify: DONE. landed on main; its test red without it; see its retro row
-- [ ] T52 make land-tooling lints the Python it lands (found by T49 and T51, plan D69)
+- [x] T52 make land-tooling lints the Python it lands (found by T49 and T51, plan D69)
       research: rendering
+      verify: DONE. landed on main; tests/hooks/test-land-tooling.sh red without it (a lint failure lands nothing, naming ruff format)
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
