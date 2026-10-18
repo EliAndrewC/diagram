@@ -583,6 +583,7 @@ def test_every_corner_stands_seven_ft_off_a_narrow_lanes_middle():
     s.lane([[200.0, 300.0], [1200.0, 300.0]], width=16, clearance=22)
     assert s._on_a_tread(700.0, 300.0 + 10.5 + h / 2, w, h), "a wide way keeps its half-width and the hair (8 + 3 ft)"
 
+
 def test_each_wall_is_measured_whole_not_its_corners_alone():
     """385 T07 (impl-drift on `_on_a_tread`): the corners and the center alone let a footpath run square across a long house
     10 ft off its center - every corner 10 ft off the tread and the center 10 ft off it, all past the 7 ft. Each wall is

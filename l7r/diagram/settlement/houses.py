@@ -281,10 +281,7 @@ class HousesMixin:
         hair, middle = self.px(TREAD_WALL_FT), self.px(LANE_MIDDLE_CLEAR_FT)
         return any(
             not self._tread_skipped(orig, skip)
-            and any(
-                seg_dist(x, y, tp[i], tp[i + 1]) < reach + max(half + hair, middle) and poly_seg_dist(quad, tp[i], tp[i + 1]) < max(half + hair, middle)
-                for i in range(len(tp) - 1)
-            )
+            and any(seg_dist(x, y, tp[i], tp[i + 1]) < reach + max(half + hair, middle) and poly_seg_dist(quad, tp[i], tp[i + 1]) < max(half + hair, middle) for i in range(len(tp) - 1))
             for tp, half, orig in self.treads
         )
 
