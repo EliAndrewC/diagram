@@ -19,8 +19,8 @@ Guesses:
 - [water_sink=pond][field_archetype=valley_paddy|contour_terraces|ribbon_valley] That the fields' drain ends in a pond
   below them at all: every drain found emptied into a river or a natural watercourse, and none into a pond of its own.
 
-Depiction: Each pond is drawn with a fringe of reeds on ground tinted wet at its shore, and its embankment bare, with no
-reed on it. No reed harvest is drawn, since none is recorded at a pond. Where a channel enters a pond the rim opens and
+Depiction: Each pond is drawn with a fringe of reeds on ground tinted wet at its shore, and no reed or wet tint on its
+embankment. No reed harvest is drawn, since none is recorded at a pond. Where a channel enters a pond the rim opens and
 the two waters are drawn as one.
 
 [field_archetype=polder_grid|mulberry_dike_fishpond] The pond that waters a polder stands above it, with one outlet and
@@ -34,4 +34,4 @@ Name: pond
 Covers: `pond` - the tameike
 Sources: tameike-jawiki, inamino-tameike-museum, inamino-saraike, tabayashi-1987, chenfu-nongshu-juanshang, kotobank-chenfu-nongshu, maff-tameike-shizen, seitai-kobo-kaibori-2017, mdpi-kunisaki
 Entry: research/questions/0061-reservoir-ponds-tameike.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html, research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html, research/questions/0062-sharing-water-between-villages-bunsui.html, research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html, research/questions/0060-field-drains-akusuiro.html [water_sink=pond][field_archetype=valley_paddy|contour_terraces|ribbon_valley]
-Drawing: research/questions/0061-reservoir-ponds-tameike.drawing.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html, research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html, research/questions/0060-field-drains-akusuiro.drawing.html [water_sink=pond][field_archetype=valley_paddy|contour_terraces|ribbon_valley]
+Drawing: research/questions/0061-reservoir-ponds-tameike.drawing.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html [water_sink=pond][field_archetype=valley_paddy|contour_terraces|ribbon_valley], research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html, research/questions/0060-field-drains-akusuiro.drawing.html [water_sink=pond][field_archetype=valley_paddy|contour_terraces|ribbon_valley]
