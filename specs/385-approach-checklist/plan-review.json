@@ -445,6 +445,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
+  },
+  "### T05 part B (2026-10-18T10:25Z)": {
+   "sha256": "f26e995b2884abfe8bfca105319451a93661949a8fe97121422afe75ae0e5b08",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
   }
  },
  "reviewed": "2026-10-17",
@@ -2922,6 +2928,45 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "Ruled separately from the refuse-command decision. It rests on two premises. First, a hand-authored sheet has no .gen.py and no pool output to be older than, so the arbiter's 'older than its .gen.py or pool output' has nothing to compare against. Second, no sheet unit has or reads an .html: make sheet-render writes only the .png, so an .html check would refuse with no command that fixes it. The measured 'none in the pool' (2026-10-18) makes the case empty today, which is why these premises go on record: a later measurement can prove them false."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "### T05 part B (2026-10-18T10:25Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T05B-1 carry old drifts into T06",
+     "summary": "The claims gate's refusals of old behavior the patch's unit touched (front row size, standoff) are carried into T06 by ask:t05-old-drifts-at-landing rather than fixed before T05 lands.",
+     "class": "within",
+     "why": "The block records a ruling already made on the ask (ruled continue), not a new plan decision; the finding stays an open task in this feature (T06), which is the purpose the GM locked in with amendment 3's option 3 - fixed before the feature closes, not necessarily before this task lands. Nothing leaves the feature."
+    },
+    {
+     "id": "T05B-2 claims relabeled to the record",
+     "summary": "Claims relabeled to what the record says: 0031 for the cluster shape, the 80 ft seat a GUESS 0196 names, the standoff split (house and yard on 0029; shed-in and garden-out marked UNRESEARCHED).",
+     "class": "within",
+     "why": "This is exactly the checklist's part A question the request asks for - which parts of a rule rest on research and which are ours - applied to T47's patch, which the approved scope says is re-landed. No number or behavior changes."
+    },
+    {
+     "id": "T05B-3 near-lane seats filed, not tuned",
+     "summary": "Two well seats that read near a lane (Inashiro F6/F7, Kuwabata F8) are filed as found rows of wave 155 rather than tuned in T05.",
+     "class": "within",
+     "why": "A second goal found inside a task becomes its own item (amendment 4, FR-015 one goal a task); the request leaves everything outside the ~10 moved items with 384's backlog. The glyph-checks the block cites pass (no well in a farmstead, each serving 3-10 households), so T05's own goal is not narrowed."
+    },
+    {
+     "id": "T05B-4 no tuning, re-land as built",
+     "summary": "No number moved; every change since part A is a label, test or record; the patch re-lands as built.",
+     "class": "within",
+     "why": "The approved scope item is 'T47's patch re-landed'; re-landing it as built is that item."
+    },
+    {
+     "id": "T05B-5 next step",
+     "summary": "Next step is the landing cohort (make cohort-landing), then the push; T25 landed and T26 in review as T05's fixes.",
+     "class": "within",
+     "why": "Measurement before landing, consistent with the request's measure-each-task process; decides nothing the spec left open."
     }
    ]
   }
