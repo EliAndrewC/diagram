@@ -394,3 +394,12 @@ def test_group_shared_opacity_composites_each_run_once_and_keeps_the_order():
     # a dropped lane's blanked ink sat between two treads on Inashiro and split them into two groups that still stacked
     block, at = group_shared_opacity([a, "", b])
     assert block[0] == '<g opacity="0.9">' and block.count("</g>") == 1 and at == [1, 2, 3]
+
+
+def test_title_obstacles_hold_the_notice_board() -> None:
+    """Feature 150 (the settlement-review of Kuwabata): the notice board, a traffic-sited fixture with no box of its own
+    beyond its `w`/`h`, is an obstacle the placard must miss."""
+    s = Settlement(W=1000, H=1000, seed=1)
+    assert s._box_clear(490, 490, 510, 510, s._title_obstacles()) is True, "the case: bare ground"
+    s.M["kosatsuba"] = [{"x": 500.0, "y": 500.0, "w": 14.0, "h": 8.0}]
+    assert s._box_clear(490, 490, 510, 510, s._title_obstacles()) is False, "...and the board on it blocks the title"

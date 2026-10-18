@@ -305,32 +305,6 @@ def deck_admitted(M: Any, p: Pt, rot: float, span: float, width: float) -> bool:
     return not [c for c in st.conflicts("bridges", rec) if c[1] != "bridges"]
 
 
-"""Research: lane end short of unbridged water - UNRESEARCHED: 2 ft past the bank"""
-
-
-def _sub_run(pts: list[Pt], s0: float, s1: float) -> list[Pt]:
-    """The part of the polyline `pts` between arc lengths `s0` and `s1`, clamped to it."""
-    out: list[Pt] = []
-    acc = 0.0
-    for a, b in zip(pts, pts[1:], strict=False):
-        d = math.dist(a, b)
-        if d > 0 and acc + d >= s0 and acc <= s1:
-            t0, t1 = max(0.0, (s0 - acc) / d), min(1.0, (s1 - acc) / d)
-            for t in (t0, t1) if not out else (t1,):
-                out.append((a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t))
-        acc += d
-    return out
-
-
-def cut_at(pts: list[Pt], k: int, p: Pt, gap: float) -> list[list[Pt]]:
-    """The way `pts` with the stretch within `gap` (along it) of `p`, a point on its segment `k`, taken out: the pieces
-    either side, each dropped if it keeps no length."""
-    at = sum(math.dist(u, v) for u, v in zip(pts[: k + 1], pts[1 : k + 1], strict=False)) + math.dist(pts[k], p)
-    total = sum(math.dist(u, v) for u, v in zip(pts, pts[1:], strict=False))
-    pieces = (_sub_run(pts, 0.0, at - gap) if at - gap > 0 else [], _sub_run(pts, at + gap, total) if at + gap < total else [])
-    return [q for q in pieces if len(q) >= 2 and sum(math.dist(u, v) for u, v in zip(q, q[1:], strict=False)) >= 1.0]
-
-
 # THE DITCH CROSSING'S FORM IS A KNOB (269 B21; research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html, and research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html, "Plank bridges over farm ditches
 # (itabashi)"). Three forms of crossing over small water are attested and the record cannot say which was laid over a
 # paddy ditch: a SINGLE LOG (or one board, the same object in the Chinese definition), LOGS UNDER TRODDEN EARTH (the

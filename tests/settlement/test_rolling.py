@@ -836,3 +836,16 @@ def test_a_bundles_parts_are_turned_and_boxed_as_the_turn_helpers_turn_and_box_t
                 assert geom["boxes"][k] == turned_box(geom[k], rot)
             assert [turned_box(g, rot) for g in geom["gardens"]] == geom["boxes"]["gardens"]
             assert geom["yard"][2:] == s._bundle_geom(500.0, 500.0, 46.0, 28.0, "SE", True, rot=rot)["yard"][2:]
+
+
+def test_the_parts_refuse_a_house_too_near_a_neighbor(monkeypatch) -> None:
+    """`_parts_fit`'s house rules - off a tread, its eave gap, reachable ground - refuse a layout every other part rule admits
+    (the line the retired roller's tests used to reach, feature 388)."""
+    from tests.settlement._builders import _nuc_village
+
+    s = _nuc_village()
+    geom = s._bundle_geom(600.0, 500.0, 46.0, 28.0, "W")
+    geom.pop("unlaid", None)
+    assert s._parts_fit(geom) is True, "the case: every part rule admits this layout"
+    monkeypatch.setattr(s, "_house_too_near_a_neighbor", lambda house: True)
+    assert s._parts_fit(geom) is False, "...and the eave gap alone refuses it"

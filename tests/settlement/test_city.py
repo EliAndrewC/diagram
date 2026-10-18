@@ -557,3 +557,13 @@ def test_a_plank_s_seats_are_tried_wide_first_then_widest_left() -> None:
     got = seat_order(list(width), lambda fr: width[fr] >= 2.0, width.__getitem__)
     assert got == [-0.1, 0.1, 0.3, 0.0, -0.2]
     assert seat_order([0.0, 0.1], lambda fr: False, lambda fr: 1.0) == [0.0, 0.1], "equal widths: nearest the slot first"
+
+
+def test_a_footplank_does_not_land_on_a_farms_garden() -> None:
+    """The plank siter keeps its decks off a farm's worked ground - its kitchen garden and its own grove (feature 291) -
+    by each one's recorded box: a ditch whose whole run lies under a garden takes no plank, where alone it takes one."""
+    s = _crop_settlement()
+    s.M["fields"] = [{"outline": [[50, 120], [850, 120], [850, 480], [50, 480]]}]
+    s.M["field_ditches"] = [{"poly": [[100, 300], [800, 300]], "w": 5, "role": "main"}]
+    s.M["gardens"] = [{"x": 450.0, "y": 300.0, "w": 760.0, "h": 60.0}]
+    assert s.channel_footbridges(spacing=320) == 0, "every seat along the ditch lands on the garden"
