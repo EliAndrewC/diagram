@@ -155,7 +155,9 @@ diagnosis, each with what was measured; FR-003's split-part defect, with D3's me
 
 New: `l7r/diagram/hamletgen/ways/tree_base.py` (D1), `tests/hamletgen/ways/test_tree_base.py`, one equivalence test per site
 beside that site's tests, and `tests/soak/test_scale_equivalence_387.py` (the rolled shadow comparison). Changed: `ways/tree.py`, `ways/corridors.py`, `ways/knots.py`,
-`waterfields/settle.py`, `settlement/homestead_parts/keepouts.py`, `hinterland/stands.py` (the scope), `homesteads/bamboo.py`.
+`waterfields/settle.py`, `settlement/homestead_parts/keepouts.py`, `settlement/_geom/indexes.py` (`Indexed.touch`),
+`settlement/core.py` (the two registries `Indexed`), `settlement/rolling/farmsteads.py` (the bump), `homesteads/bamboo.py`,
+`tests/conftest.py` (`L7R_CHECK_CACHES=1`).
 
 ## Complexity Tracking
 
