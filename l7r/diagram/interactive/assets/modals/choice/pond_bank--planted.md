@@ -1,7 +1,6 @@
-About: A planted pond bank was set sparsely with mulberry and
-cudrania, so that cattle could be tied there in the shade; the cattle trod the bank firm, and the trees grew well on the pond's
-water - as a Song-dynasty Chinese farming manual advised a farmer who dug a pond. This hamlet's pond, where its runoff ends, has
-that bank.
+About: A planted pond bank was raised high and set sparsely with mulberry and
+cudrania, so that cattle could be tied there in the shade, and the cattle trod the bank firm,
+as a Song-dynasty Chinese farming manual advised a farmer who dug a pond. This hamlet's pond has that bank.
 
 How many trees a planted bank carried, and how far apart, is not recorded.
 

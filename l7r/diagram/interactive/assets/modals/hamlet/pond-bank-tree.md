@@ -1,16 +1,16 @@
 About: In Song-dynasty China, a farmer who dug a pond was advised to plant its bank sparsely with mulberry and
-cudrania, so that cattle could be tied there in the shade; the cattle trod the bank firm, and the trees grew well on the
-pond's water. The same pond's bank could also be left bare, as ponds' banks are kept today, mown and burned to keep their
+cudrania, so that cattle could be tied there in the shade, and the cattle trod the bank firm.
+The same pond's bank could also be left bare, as ponds' banks are kept today, mown and burned to keep their
 strength.
 
-Where a hamlet's pond, at the end of its runoff, has the planted bank, a few mulberry and cudrania trees stand on it, beyond the
+Where a hamlet's pond has the planted bank, a few mulberry and cudrania trees stand on it, beyond the
 reeds at the shore.
 
-How many trees a planted bank carried, how far apart, and how big they grew there is not recorded.
+How many trees a planted bank carried, how far apart, and how wide their crowns spread is not recorded.
 
 Guesses:
 - One tree about every 30 ft of bank: the Song-dynasty advice says only "sparsely".
-- A crown about 12 ft across: no account gives the trees' size on a bank.
+- A crown about 12 ft across: no account gives how wide a bank tree's crown spread.
 - Mulberry and cudrania in turn round the bank: the manual names both, not their order.
 
 Depiction: The map draws each tree as a round green crown on the bank beyond the reeds, the cudrania a shade darker than the

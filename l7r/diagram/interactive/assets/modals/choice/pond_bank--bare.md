@@ -1,12 +1,12 @@
-About: A pond's bank could be left bare of trees, open ground beyond the reeds at the shore. In Song-dynasty China, a new pond's
-bank was to be raised high and large, and trodden firm by cattle. Whether a bare bank was earth or turf, who kept
+About: A pond's bank could be left bare of trees, open ground beyond the reeds at the shore. In Song-dynasty China, one farming manual had a pond's
+bank raised high and trodden firm by cattle, tied to a few trees it had planted there. Whether a bare bank was earth or turf, who kept
 it clear, and how high or wide it stood are not recorded.
 
 Whether a pond's bank was mown or burned before modern times is not recorded. One Edo-period domain turfed the slopes of its river
 embankments to stop the soil washing away. Today a pond's embankment is kept clear of grass and trees, mown and burned, so that
 it keeps its strength, and sun-loving flowers grow on it.
 
-This hamlet's pond, where its runoff ends, has a bare bank.
+This hamlet's pond has a bare bank.
 
 Guesses:
 - That half of hamlets' ponds have the bare bank and half the planted one: no account gives a share between them.
