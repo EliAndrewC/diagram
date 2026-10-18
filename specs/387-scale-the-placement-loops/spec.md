@@ -127,7 +127,7 @@ where a premise did not hold, the requirement below is the form of that goal the
 - **SC-001** (FR-001, FR-002, FR-003) The work done per addition is COUNTED, before and after, from profiles at 10, 20 and 40
   households, seed 4 (`m:counts-before` and its after): the tree lanes judged per candidate way, the network points measured per
   field-way candidate kept and the shared-bund measurements per merge - after the change none grows with the household count;
-  and, at 40 households (the only size seed 4 makes knot trials at: 0 at 10 and 20), the ends, lane pairs and faces re-asked per
+  and, at 40 households (the only size seed 4 makes knot trials at: 0 at 10 and 20), the ends, lane pairs and faces (those whose width is tested) re-asked per
   knot trial are fewer than the web's total ends, pairs and faces. The counting command and the counts are recorded in
   `measurements.json`.
 - **SC-002** (FR-001 - FR-006, FR-009) Each site's time (the five kept, FR-004 withdrawn) at 40 households, seed 4, is reported before and after; the
@@ -168,3 +168,6 @@ where a premise did not hold, the requirement below is the form of that goal the
   the touch gap of the edited lane's old or new LINE. (2) SC-001's knots clause had no failing case - now "fewer than the web's
   totals", and "none grows" covers only the three-size counts. Its note on the needle test (plan D1 local, FR-002 whole): made
   one - both judge only the faces that meet a changed lane, the arrangement polygonized whole; `way_outs` alone stays whole.
+- **spec-fidelity round 5 (2026-10-18): CHANGES REQUIRED, 1 item** - tasks T02 named three of FR-002's four local counts; it now
+  names `needle_loops` too, `way_outs` whole. Its note on SC-001's faces: the faces counted are those whose width is tested.
+  The round cap reached, the arbiter's ruling follows.

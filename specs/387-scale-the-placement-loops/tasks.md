@@ -13,7 +13,7 @@ Every task changes how a verdict is computed, not what is drawn or where: nothin
 - [ ] T01 The way tree judged on what a candidate adds (plan T01, D1; FR-001): `ways/tree_base.py` holds the base tree per content state; `admits` asks only the candidate's host, lane, chain and the ends it changes; equivalence test red without the base
       research: rendering
       verify:
-- [ ] T02 The web's field way best-first and the knots' local counts by the edited lanes (plan T02, D2a, D2b; FR-002): `field_runs` stops once no nearer point is left; `settle_knots.judge` re-asks `doorstep_ends`, `doubled_tails` and `shadows` only where the edit can change them; equivalence tests
+- [ ] T02 The web's field way best-first and the knots' local counts by the edited lanes (plan T02, D2a, D2b; FR-002): `field_runs` stops once no nearer point is left; `settle_knots.judge` re-asks `doorstep_ends`, `doubled_tails`, `shadows` and `needle_loops` only where the edit can change them (`way_outs` stays whole); equivalence tests
       research: rendering
       verify:
 - [ ] T03 The cell merges measure each live neighbor once (plan T03, D3; FR-003): owners deduplicated before `shared_length`; the split-part defect recorded and measured; equivalence test
