@@ -1,6 +1,6 @@
 {
  "m:counts-before": {
-  "command": "make perf-profile SEED=4 STAGE=<stage> HOUSEHOLDS=<10|20|40>; specs/387-scale-the-placement-loops/count_work.py /tmp/claude-1000/-diagram/480a86f8-6911-4b06-8982-d9ead2656680/scratchpad/counts-before m:counts-before",
+  "command": "for hh in 10 20 40; do for st in homesteads field web windbreak hinterland; do make perf-profile SEED=4 STAGE=$st HOUSEHOLDS=$hh > specs/387-scale-the-placement-loops/counts-before/$st-$hh.log; done; done; python3 specs/387-scale-the-placement-loops/count_work.py specs/387-scale-the-placement-loops/counts-before m:counts-before (on the engine of 0910936e4, before any edit)",
   "counts": {
    "field": {
     "10": {

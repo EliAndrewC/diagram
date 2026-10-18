@@ -76,10 +76,15 @@ where a premise did not hold, the requirement below is the form of that goal the
   rounds are not what grows; the growth is INSIDE steps (spec-fidelity round 1, measured 2026-10-18): the field way's candidate
   runs (`field_runs`: every sampled point of the network measured to the worked ground, 0.32 -> 1.21 s for its one call at 10 ->
   40 households) and the knots' judgments (none at 10 households, 22 trials and 0.83 s at 40, each trial asking the whole web's counts again).
-  Each such step finds its candidates without measuring every point, and judges a knot's trial gather without re-asking the
-  whole web for each one: the work it does per candidate kept does not grow with the
-  network. Not the withdrawn R12 lever (feature 297: rounds that ran only the steps the law named broken, slower and withdrawn) -
-  no round is narrowed and no law is asked first.
+  The field way finds its candidates without measuring every point: the work it does per candidate kept does not grow with
+  the network. A knot's trial gather moves only the lanes it edits, so of the whole web's five counts (`_WHOLE_RULES`) the trial
+  re-asks near those lanes only the ones an edit can change only near itself: `doorstep_ends` (the free ends at each house - an
+  edit changes its own ends and the junctions of ends within the touch gap of them) and `doubled_tails` and `shadows` (pair by
+  pair - an edit changes only the pairs it is in). Two stay whole, each because the gather can change its answer anywhere:
+  `way_outs` (each household's way out is a route through the whole web, which one moved end can re-route) and `needle_loops`
+  (a face of the web is bounded by lanes anywhere round it; it is one shapely call over the web, and an exact local face test
+  does not exist without the whole arrangement). Not the withdrawn R12 lever (feature 297: rounds that ran only the steps the law
+  named broken, slower and withdrawn) - no round is narrowed and no law is asked first.
 - **FR-003 The cell merges.** Each merge judges only the union it would make; what grows is its neighbor search (spec-fidelity
   round 1, measured 2026-10-18: 3.3 shared-bund measurements per merge at 10 households, 15.7 at 40; 2.06 s of the merges'
   3.80 s), which queries an index of the cells built before any merge and measures the shared bund of every stale entry before
@@ -121,7 +126,8 @@ where a premise did not hold, the requirement below is the form of that goal the
 
 - **SC-001** (FR-001, FR-002, FR-003) The work done per addition is COUNTED at each re-check site at 10, 20 and 40 households,
   seed 4, before and after - the tree lanes judged per candidate way, the network points measured per field-way candidate kept
-  and the web's ends re-asked per knot trial, the shared-bund measurements per merge - and after the change none grows with the household
+  and, at 40 households (the only size seed 4 makes trials at, 0 at 10 and 20 - `m:counts-before`), the web's
+  ends and lane pairs re-asked per knot trial against the web's total ends and pairs, the shared-bund measurements per merge - and after the change none grows with the household
   count; the counting command and the counts are recorded in `measurements.json`.
 - **SC-002** (FR-001 - FR-006, FR-009) Each site's time (the five kept, FR-004 withdrawn) at 40 households, seed 4, is reported before and after; the
   end bookend's 40-household total is reported against the start's, with both loads.
@@ -152,3 +158,7 @@ where a premise did not hold, the requirement below is the form of that goal the
   two conditions: its reason cites 297 R9 (keying per household tried and withdrawn, seed 3 lost a household), not 276 D10; and
   the report to the GM is required - SC-005. With them, FR-003's "an index that stays current" was taken out (the plan keeps the
   index as it was, D3) and the split-part defect is reported under SC-005.
+- **spec-fidelity round 3 (2026-10-18): CHANGES REQUIRED, 3 items.** (1) FR-002's knots sentence promised more than the plan:
+  it now names which whole-web counts a trial re-asks locally (`doorstep_ends`, `doubled_tails`, `shadows`) and which stay
+  whole, with why (`way_outs`, `needle_loops`). (2) The knots count could not be judged across sizes (trials only at 40 on seed 4)
+  - the bar is now at 40 households, re-asked against the web's totals. (3) SC-005 had no task - plan and tasks T07 carry it.

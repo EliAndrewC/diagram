@@ -49,7 +49,7 @@ its change on the reference map and its equivalence test, then T06 sweeps the co
 
 **D1 - the base tree built once per tree state, the candidate judged on what it adds.** `ways/tree.admits` today rebuilds, for
 each candidate, every tree record (`tree_records`), every run's host (`hosts`), every lane's laid and drawn form (`lanes_of`,
-1,886 `lay` calls on 126 asks at 40 households), and the whole tree's fronting ends (29,540 end-way pairs on 44 asks). None of
+1,886 `lay` calls for 88 candidates - 126 `lanes_of` calls, the whole tree and the candidate's chain - at 40 households), and the whole tree's fronting ends (29,540 end-way pairs on 44 asks). None of
 that depends on the candidate: a candidate is appended LAST, its host is the earliest run it stands on (`hosts`), and every
 earlier lane's drawn form depends only on its own run and its own host's (`lanes_of`). So `tree_base.TreeBase` holds, for one
 state of the tree, the records, the root, their hosts, the laid lanes (whole tree), and the fronting ends with, for each free end,
@@ -75,14 +75,15 @@ the point's place in `samples_along`), the old `sorted` being stable on that pla
 call, the same list. **Counted**: `run_on_target` calls per kept run.
 
 **D2b - the knots' whole-web counts.** `knots.settle_knots.judge` asks, for each trial gather, `memo.count` of each of the whole
-web's rules on the WHOLE trial web (`_WHOLE_RULES`; `way_outs_crossing` and `doorstep_ends` re-walked whole, 0.30 s of its
-0.83 s). A gather moves the ends of the lanes in `edits` only. `doorstep_ends` is a sum over each house of the free ends near it:
-the trial's count is the web's count minus the edited lanes' old ends plus their new ends, each end's junction test asked against
-every way (it is only the junction an end meets that can change, and an edited end can newly join another lane's end, so the
-ends of every lane within `JOIN_TOL` of an edited end are re-asked too). `way_outs_crossing` is a route through the whole web:
-kept whole - an edit can change any household's route, and a local answer would be a guess. **Equivalence**: each trial's
-counts old and new, the same numbers. **Counted**: ends re-asked per
-trial. Not R12: no round narrowed, no law asked to pick steps.
+web's five rules on the WHOLE trial web (`_WHOLE_RULES`). A gather moves only the lanes in `edits`. Three counts are re-asked only
+where an edit can change them: `doorstep_ends` - the web's per-end verdicts (which house an end is discharged at, or that a
+junction discharges it) are kept from the web as it stands, and a trial re-asks only the edited lanes' ends and the ends within
+`JOIN_TOL` of an edited lane's old or new ends (a junction can only appear or vanish there); `doubled_tails` and `shadows` - the
+web's partner lists per lane are kept, and a trial re-asks only the pairs that hold an edited lane (`WebMemo.pair` already keeps
+each pair's answer by the two lanes' points). Two stay whole, as FR-002 says: `way_outs` (a route through the whole web) and
+`needle_loops` (one shapely polygonize over the web; a face is not local). **Equivalence**: each trial's five counts, old and new,
+the same numbers. **Counted** (SC-001, at 40 households): ends and pairs re-asked per trial, against the web's totals. Not R12:
+no round narrowed, no law asked to pick steps.
 
 ## T03 - the cell merges (FR-003)
 
@@ -123,13 +124,16 @@ suite. **Equivalence**: every candidate's verdict, old and new. **Counted**: ite
 
 ## T06 - measure, sweep and record (FR-009, FR-010, SC-001 - SC-004)
 
-The counts at 10/20/40 households, seed 4, before (taken now, on `2976fd8bf`) and after, into `measurements.json` with the
-command; `make cohort`, `make maps` and `make done`; the end bookend; `dev/performance.md` gains "Judge the addition, build once,
+The counts at 10/20/40 households, seed 4, before (taken on unmodified `0910936e4`'s engine) and after, into `measurements.json`
+with the command, their logs kept in `counts-before/` and `counts-after/` beside it (the raw profiles they name are gitignored;
+the command re-takes them); `make cohort`, `make maps` and `make done`; the end bookend; `dev/performance.md` gains "Judge the addition, build once,
 index the scan (feature 387)" with each site's before/after. A seed newly failing blocks (XIII).
 
-## T07 - land (SC-003)
+## T07 - land (SC-003, SC-005)
 
-`make cohort-landing`, then the gated push (`scripts/sync-with-main.sh done`), the feature report.
+`make cohort-landing`, then the gated push (`scripts/sync-with-main.sh done`), the feature report. The landing report to the GM
+carries (SC-005): FR-004 withdrawn, with its measurement and 297 R9; FR-002's and FR-003's premises restated from the approved
+diagnosis, each with what was measured; FR-003's split-part defect, with D3's measurement of how often it occurs.
 
 ## Project Structure
 

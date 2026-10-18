@@ -1,0 +1,25 @@
+perf-profile seed 4 stage web: 4.1s under cProfile (the stages before it took 8.0s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261018T101550Z-seed4-web.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         3972671 function calls (3939224 primitive calls) in 4.030 seconds
+
+   Ordered by: cumulative time
+   List reduced from 654 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.003    0.003    4.061    4.061 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/web.py:548(stage_web)
+        1    0.000    0.000    2.719    2.719 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/settle.py:963(settle_the_web)
+ 3345/142    0.006    0.000    2.447    0.017 {built-in method builtins.sum}
+       36    0.002    0.000    2.443    0.068 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/settle.py:977(<genexpr>)
+        2    0.001    0.000    1.985    0.993 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/settle.py:915(settle_reach)
+        1    0.000    0.000    1.514    1.514 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/reach.py:60(settle_field)
+        2    0.000    0.000    1.368    0.684 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/reach.py:86(candidates)
+        1    0.018    0.018    1.368    1.368 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/corridors.py:216(field_runs)
+     4084    0.018    0.000    0.967    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/bund.py:52(run_on_target)
+        1    0.008    0.008    0.795    0.795 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/web.py:112(_lay_skeleton)
+    36291    0.200    0.000    0.793    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:73(wrapped)
+     4084    0.039    0.000    0.609    0.000 /diagram/.clones/diagram-unit
+wrote dev/perf-log/20261018T101550Z-profile-adhoc-seed4-web.txt (3743 bytes)
+archive FAILED (https://github.com/EliAndrewC/mapgen-perflogs
+ ! [remote rejected] HEAD -> main (cannot lock ref 'refs/heads/main': is at f73cc2ee311860a1278725895633eec5f68a28e7 but expected 62e050d30a43aae8180d7d4266995c41b1b0ef43)
+error: failed to push some refs to 'https://github.com/EliAndrewC/mapgen-perflogs') - the derived table is committed here regardless (FR-011b)

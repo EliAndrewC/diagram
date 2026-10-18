@@ -13,7 +13,7 @@ Every task changes how a verdict is computed, not what is drawn or where: nothin
 - [ ] T01 The way tree judged on what a candidate adds (plan T01, D1; FR-001): `ways/tree_base.py` holds the base tree per content state; `admits` asks only the candidate's host, lane, chain and the ends it changes; equivalence test red without the base
       research: rendering
       verify:
-- [ ] T02 The web's field way best-first and the knots' doorstep ends by the edited ends (plan T02, D2a, D2b; FR-002): `field_runs` stops once no nearer point is left; `settle_knots.judge` re-asks only the ends the gather can change; equivalence tests
+- [ ] T02 The web's field way best-first and the knots' doorstep ends by the edited ends (plan T02, D2a, D2b; FR-002): `field_runs` stops once no nearer point is left; `settle_knots.judge` re-asks `doorstep_ends`, `doubled_tails` and `shadows` only where the edit can change them; equivalence tests
       research: rendering
       verify:
 - [ ] T03 The cell merges measure each live neighbor once (plan T03, D3; FR-003): owners deduplicated before `shared_length`; the split-part defect recorded and measured; equivalence test
@@ -28,6 +28,6 @@ Every task changes how a verdict is computed, not what is drawn or where: nothin
 - [ ] T06 Measure, sweep and record (plan T06; FR-009, FR-010, SC-001 - SC-004): the counts at 10/20/40 after into `measurements.json`; the soak equivalence run (`make soak`); `make cohort`, `make maps`, `make done`; the end bookend; `dev/performance.md`'s section
       research: rendering
       verify:
-- [ ] T07 Land (SC-003): `make cohort-landing`, the gated push, the feature report
+- [ ] T07 Land (SC-003, SC-005): `make cohort-landing`, the gated push, the feature report; the landing report carries FR-004's withdrawal (measurement, 297 R9), FR-002's and FR-003's restated premises with what was measured, and FR-003's split-part defect with its frequency
       research: rendering
       verify:
