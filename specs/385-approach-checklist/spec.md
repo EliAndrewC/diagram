@@ -207,7 +207,7 @@ memory, up to an hour off.
   T01's, measured by FR-011's record; or the report says why not.
 - **SC-007** (FR-013): replayed on T03's landing, the three findings are carried, not refused, and the push goes ahead without
   `CLAIMS_OK` once `make claims-carry` has filed them; a finding on changed code still refuses (each a test red without it).
-- **SC-008** (FR-014 to FR-016): replayed on T03, the report attributes its 202 subagent calls to the subagents and shows the
+- **SC-008** (FR-014, FR-015, FR-016): replayed on T03, the report attributes its 202 subagent calls to the subagents and shows the
   phase table and decision-log skeleton the hand count above found; T04's retro row is written from them and compared with
   T03 phase by phase.
 - **SC-006** (FR-012): T03's retro row compares the blind Approach with the sealed conclusions rule by rule, and names the checklist
