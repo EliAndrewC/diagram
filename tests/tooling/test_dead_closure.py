@@ -70,3 +70,23 @@ def test_an_unparseable_source_still_counts_its_names() -> None:
     dc = _load()
     assert dc._tokens('x = "unterminated\n')["x"] == 1
     assert dc._defs("def (:\n", "p") == {}
+
+
+def test_a_test_pinned_to_a_deleted_file_or_name_is_named() -> None:
+    """The round arbiter's tooling fix on red-gate@2026-10-18T20:36:37Z: 388's first red gate was a tooling test asserting
+    `"rolling/roll.py" in note` after roll.py went. A string naming a deleted file (short or full path) or name is PINNED."""
+    dc = _load()
+    base = {"l7r/diagram/eng/roll.py": "def roll():\n    return 1\n", "l7r/diagram/eng/keep.py": "def keep():\n    return 1\n"}
+    now = {"l7r/diagram/eng/keep.py": base["l7r/diagram/eng/keep.py"]}
+    tests = {
+        "tests/t.py": 'def test_x():\n    assert "eng/roll.py" in note\n    # a comment naming roll() is not a pin\n    assert "keep" in note\n',
+        "tests/u.py": 'NAMES = ("roll", "other")\n',
+        "scripts/s.sh": "echo l7r/diagram/eng/roll.py\n",
+    }
+    got = dc.pinned(base, now, tests)
+    assert "PINNED        eng/roll.py  in tests/t.py:2" in got, got
+    assert "PINNED        roll  in tests/u.py:1" in got, "a deleted name inside a string"
+    assert any(g.startswith("PINNED        l7r/diagram/eng/roll.py  in scripts/s.sh:1") for g in got), got
+    assert not any("tests/t.py:3" in g or "tests/t.py:4" in g for g in got), "comments and live names are not pins"
+    assert dc._strings('x = "unterminated\n') == [(1, 'x = "unterminated')]
+
