@@ -1627,9 +1627,43 @@ along-row span is not asked by the research and regressed two seeds when tried, 
 9. **Done, measured.** One goal: a dike-pond map's parcels are drawn at its rolled split's water share (within a few points,
    measured on its parcels), the split recorded in the manifest, all three splits coming up across seeds.
 
+### T10 Approach (re-answered 2026-10-18T20:09Z)
+
+Owed by D74b (all five recorded splits).
+
+1. **The goal, in the world.** Unchanged: a dike-pond village's ponds and banks stand in one of the splits the record gives - now
+   all five it gives.
+2. **The constraints.** Part A's, and the knob rule: every attested form is rolled, so the ranking row's three are widened to
+   0018's five (D74b).
+3. **Where each comes from.** The five splits 0018's (R); the even odds, the one inset per village ours (GUESS).
+4. **Do they describe the world here?** Measured: on Kuwabata (rolled 0.7) the median parcel draws 0.700 water, the parcels 0.56 to
+   0.80; pool clean, cohort 54/54 at three splits.
+5. **The order.** The two splits added, their pop-ups; 0018's drawing page, the stale "23 ft" and "six in ten" text elsewhere and
+   the bank-width finding (the hour-21 ruling's guidance) in a page session; the claims; the pool, the cohort and the gate.
+6. **The exits.** Unchanged.
+7. **The search smell.** None.
+8. **The budget.** 2 more hours.
+9. **Done, measured.** Unchanged, at five splits.
+
+### T10 part B (2026-10-18T20:09Z)
+
+Owed by the hour-21 step-back (hour:385-approach-checklist@21, `continue`).
+
+1. **What is refusing?** Nothing on the maps. The record check found two recorded splits not rolled (fixed, D74b) and text
+   elsewhere still saying 23 ft and six in ten; the ruling asks that T10 close those, and settle the bank-width finding from 0018 and
+   0027 before it goes to the GM.
+2. **A3 again.** Unchanged, plus the two splits (R).
+3. **A4 again.** Measured on Kuwabata: the derived inset leaves the median parcel at its share.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Changing: the roll widened to the record.
+6. **The one-sentence test.** "A dike-pond village takes one of the five recorded splits, rolled" - true by the knob and its test.
+7. **The next step is a measurement.** The page session's checks, then the claims.
+8. **Routes measured before asking?** n/a - no ask.
+9. **After a ruling.** `continue`, with its guidance taken into the page session; its tooling fix is its own task.
+
 ### T10 Decisions
 
-**D74 - the split rolled, the inset derived.** `DIKEPOND_SPLITS = (0.6, 0.4, 0.7)` (the water share of a parcel), rolled per map
+**D74 - the split rolled, the inset derived.** The recorded splits as the water share of a parcel (three at first; all five since D74b), rolled per map
 from its seed as a settlement knob (`dikepond_split`, a hamlet spec may pin it), even odds (GUESS). The inset is derived ONCE per map
 from the rolled share on the map's median parcel - the depth `d` at which an inset of the parcel's area `A` and perimeter `P` leaves
 that share water (`4d^2 - P d + (1 - f) A = 0`, the rectangle's law) - and stored on the settlement, so the pond's water outline,

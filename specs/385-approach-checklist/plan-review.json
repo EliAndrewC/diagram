@@ -735,7 +735,7 @@
    "declared": "spec-fidelity"
   },
   "### T10 Decisions": {
-   "sha256": "190e09ed56e06ec6cf0a96a6a63cd2b49913573ee8531e86b48f004b6a630367",
+   "sha256": "b48cb957c7ac58f5901a253aa8c08abc2db32282b269c9a153cc158b51ac5e14",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -760,6 +760,18 @@
   },
   "### T56 Decisions": {
    "sha256": "98b41335558124c23c3ec52c0f94870fef70da5d1bf8f2b8fa743960f00b853e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T10 Approach (re-answered 2026-10-18T20:09Z)": {
+   "sha256": "0403bfd010b7667dd11d76a1f2948025efc1c0b13de0fd87252e5ff7fcbd451f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T10 part B (2026-10-18T20:09Z)": {
+   "sha256": "21213419b6a3540f1771e363856ab42db55f6a02d508b1a6cd86deef70969dda",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -4355,6 +4367,53 @@
      "summary": "dikepond_split rolls all five water shares the 0018 record carries (0.6, 0.4, 0.7, 0.5, 0.3). The gazetteer's three-to-seven is read in the order it names (three water to seven dike). Even odds (GUESS), a title-card pop-up for each, and 0018's drawing page names all five.",
      "class": "within",
      "why": "The new decision. It widens the roll from three forms to every form the record attests, which closes a gap left by the earlier three-form roll (the record check's own question). Matching the record is what a ranking-row claim fix is for, so this is in service of the request and is not a narrowing. Reading the gazetteer's ratio in the order it names follows the source and invents no exception. Pop-ups and the page naming the forms are how this project carries a claim."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "### T10 Approach (re-answered 2026-10-18T20:09Z)",
+    "### T10 Decisions",
+    "### T10 part B (2026-10-18T20:09Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D74",
+     "summary": "The recorded splits (now all five, per D74b) rolled per map from the seed as the settlement knob dikepond_split at even odds (GUESS); the inset derived once per map from the rolled share on the median parcel and stored on the settlement for the water outline, mulberry rows and sty bank seat; DIKEPOND_WATER_INSET (23 ft) kept as the labeled fallback.",
+     "class": "within",
+     "why": "The only edit since the last CLEAR verdict replaces the literal three-value tuple with 'three at first; all five since D74b', bringing D74 into line with D74b; the substance was already judged. Fixing a ranking-row claim so the drawn ponds follow the record is the work the GM asked for in amendment 7 ('pull in 10 more claims'), and rolling a knob over attested forms widens toward the record rather than narrowing anything."
+    },
+    {
+     "id": "D74b",
+     "summary": "dikepond_split rolls all five water shares 0018 records (0.6, 0.4, 0.7, 0.5, 0.3), not the ranking row's three; each gets a title-card pop-up and 0018's drawing page names all five.",
+     "class": "within",
+     "why": "Same text as when last judged CLEAR. It enlarges the rolled set to the full record, so it narrows nothing the request or the claim asks for."
+    },
+    {
+     "id": "Approach-3/4 one inset per village",
+     "summary": "One derived inset per village (GUESS), measured on Kuwabata at a rolled 0.7: the median parcel draws 0.700 water, individual parcels 0.56 to 0.80.",
+     "class": "within",
+     "why": "This is the D74 mechanism already judged CLEAR. It is labeled GUESS, and its effect on non-median parcels is measured and disclosed, not hidden. It is how the claim is implemented and does not carve a case out of what was asked."
+    },
+    {
+     "id": "Approach-5 / part B-1 order and scope",
+     "summary": "Add the two splits and their pop-ups; in a page session fix 0018's drawing page, the stale '23 ft' and 'six in ten' text elsewhere, and the bank-width finding from 0018 and 0027 (as the hour-21 ruling guides), before it reaches the GM; then claims, pool, cohort and gate.",
+     "class": "within",
+     "why": "Closing stale text the change makes false, and settling a finding the arbiter's ruling asked for, both serve the claim fix. Nothing the request or the ruling names is dropped."
+    },
+    {
+     "id": "part B-9 ruling's tooling fix as its own task",
+     "summary": "The hour-21 ruling's tooling fix is taken as its own task, not folded into T10.",
+     "class": "within",
+     "why": "FR-015 (one goal a task) requires a second goal to become its own task. The fix is moved, not dropped, so amendment 6's 'implement any obvious ... tooling ... improvements along the way' is still honored."
+    },
+    {
+     "id": "Approach-8 budget",
+     "summary": "2 more hours.",
+     "class": "within",
+     "why": "A working budget the checklist asks for. It is not a recorded threshold on the task's success, which is what amendment 2 declined, and it narrows nothing."
     }
    ]
   }
