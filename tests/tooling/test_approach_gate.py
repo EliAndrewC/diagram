@@ -265,4 +265,3 @@ def test_a_part_b_stamped_after_the_clock_is_refused() -> None:
     assert why is not None and "16:31Z" in why and "T08 part B (2026-10-18T16:40Z)" in why
     assert ag.future_refusal(plan, now="2026-10-18T16:40:00Z") is None, "at the minute it was stamped"
     assert ag.future_refusal("### T08 Approach (checklist part A)\n", now="2026-10-18T16:31:00Z") is None, "an unstamped part A"
-

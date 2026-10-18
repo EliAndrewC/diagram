@@ -639,7 +639,49 @@
    "declared": "spec-fidelity"
   },
   "### T08 Decisions": {
-   "sha256": "fb86d0ebd94d1fc85bea3e16a027b1e98854ca5c2e740dc0f8e055059e5b7dba",
+   "sha256": "bcfeedaf951134014529e4d3a3eac4fa46d402408af79292b7c3d208a1ae037d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T46 - a landed Makefile brings its make-targets page (the arbiter's fix on hour:385-approach-checklist@17)": {
+   "sha256": "7bdb933b1da3e852974d78849bda8a210a0890d6bdff6beda22d1c8be92aa067",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T46 Approach (checklist part A)": {
+   "sha256": "8e41fb75b5dc8a458ca6836a9b502daec4d2ecfb7d0d66a9c253a39b4859ace7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T46 part B (2026-10-18T16:48Z)": {
+   "sha256": "c25f04b5a3b343ce2d55477f327a3d50d284871e615312d257135d81657bdaba",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T46 Decisions": {
+   "sha256": "77dc59e5c57073b169572a39e65f8ccc81efcdf71d0691e9c42d640fa5370755",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T49 - a tree-moved abort is no red gate, and the red-gate bundle shows what changed between reds (the arbiter's fix on red-gate@2026-10-18T16:44:54Z)": {
+   "sha256": "0f4eaa9e2cfdf12e7dd1ff4301f9b1713897af37a506c5b234637a0136d30c99",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T49 Approach (checklist part A)": {
+   "sha256": "f1a89a51189c5c283afbf75f065d05247b4baae5114a4539c729b50470e755ce",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T49 Decisions": {
+   "sha256": "cae1c75c7bbcdcdd3b7cf8cd218772042a51ee07c869c1d91129b44b7930e3ee",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -3964,6 +4006,47 @@
      "why": "This updates the record to match the drawn element the row asks for, and adds nothing beyond it."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## T46 - a landed Makefile brings its make-targets page (the arbiter's fix on hour:385-approach-checklist@17)",
+    "## T49 - a tree-moved abort is no red gate, and the red-gate bundle shows what changed between reds (the arbiter's fix on red-gate@2026-10-18T16:44:54Z)",
+    "### T08 Decisions",
+    "### T46 Approach (checklist part A)",
+    "### T46 Decisions",
+    "### T46 part B (2026-10-18T16:48Z)",
+    "### T49 Approach (checklist part A)",
+    "### T49 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D61b",
+     "summary": "T08: every tail pond's bank (pond radii + reed fringe + POND_BANK_FT, 18 ft GUESS) joins the no-build blocks the toe marsh and scatters subtract, so the bank stays dry beyond the reeds; bank trees jittered across the bank as well as along it so they do not stand on one ruled ellipse.",
+     "class": "within",
+     "why": "The only text changed in T08's Decisions since its CLEAR (D60-D63 are word-for-word as judged). It serves the ranking row the GM pulled in (Amendment 7: claims matched to research): 0061's own drawing page keeps reeds and wet tint off the embankment, and the toe marsh cut only by the pond's ellipse contradicted that. Applying it to bare banks too follows 0061's 'any raised rim' wording, not an addition of ours; the 18 ft width is labeled GUESS as a knob. It removes no case from what was asked."
+    },
+    {
+     "id": "D64",
+     "summary": "T46: with Makefile in FILES, land-tooling runs the make-docs check in the clone (LAND_TOOLING_DOCS_CHECK) before building the patch, refuses a stale page naming `make docs`, adds a current page that differs from main's to FILES; the worktree's own regeneration stays.",
+     "class": "within",
+     "why": "Carries the arbiter's fix (feature 379: the arbiter stands where the GM was asked) in both halves: the page lands with the Makefile and landing is refused when the page would be stale; the worktree still regenerates main's copy, so 'runs make docs' is kept. It serves FR-017 (the make-targets page checked on every route) and Amendment 5 item 1. Followed literally on its own case (T45: clone page stale after a ## edit), the refusal forces the clone's page current, so the clone's next sync push is not refused - the mechanism reaches its stated goal. Its reach is the exact thing the fix names (Makefile in FILES), nothing wider."
+    },
+    {
+     "id": "D66a",
+     "summary": "T49: the Makefile's tree-moved abort records `failed-gate tree-moved` rather than `failed-gate done`, so ci/state.py's red-in-a-row slot (counting only `done`) is untouched, while the failed record still overwrites the green slot so the moved tree is never vouched for.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It carves a case out of FR-004's red-gate tripwire (the approved proposal's 'a second red gate'), so it is judged as an exception. Purpose test: the trigger exists to ask the checklist when the WORK resists; a tree-moved abort ran no test-full (2 s, 16:45:47Z, per the block's own A4) and says nothing about the work, so counting it fires the arbiter on no evidence and defeats the trigger's purpose. The carve-out does not gut it: the abort leaves the counter as it was rather than resetting it, so two real reds around an abort still trip; FR-004's push refusal of an unvouched tree and FR-010's write guard are kept. It is also the arbiter's own fix, standing in for the GM. One case, adjudicated alone."
+    },
+    {
+     "id": "D66b",
+     "summary": "T49: arbiter_bundle.red_gate_runs skips runs whose result is 'failed: tree moved', and writes `git diff --stat` between each pair of listed reds (or 'the same commit').",
+     "class": "within",
+     "why": "The second half of the arbiter's fix verbatim ('the red-gate bundle should carry the diff between each pair of counted reds'), and the bundle's filter matches the counter's D66a so the arbiter sees the reds the trigger counted. Serves FR-004's tripwire; adds no behavior beyond the bundle's contents."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -4327,6 +4410,44 @@
      "summary": "Tooling only: the rule in approach_gate.py, then a test in tests/tooling/test_approach_gate.py red without it; one goal.",
      "class": "within",
      "why": "Exactly the arbiter's fix (rule plus a test that a future-stamped part B is refused and a present one passes), one goal per FR-015; the test only fails when the requested refusal is absent, so it is verification of the request, not added scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T49": {
+   "section_sha256": "59e93e43c18a6b5bff87e59aa88d59c401c621e82a55b84334fc2a73fd0286c5",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D66(a)",
+     "summary": "The Makefile's tree-check abort records `failed-gate tree-moved` instead of `failed-gate done`; ci/state.py already counts only `done` toward red-in-a-row, so no engine change; the failed record still overwrites the green slot.",
+     "class": "within",
+     "why": "The first half of the arbiter's fix, as the block quotes it: a tree-moved abort is not counted as a red make done. Keeping the green slot overwritten preserves FR-004/FR-010's rule that nothing vouches for a moved tree. The arbiter's words are quoted inside the block rather than supplied in request.md; taken as quoted under feature 379, and the Approach's request.md basis is amendment 6 ('implement any obvious ... tooling / process improvements')."
+    },
+    {
+     "id": "D66(b)-filter",
+     "summary": "arbiter_bundle.red_gate_runs passes over a run whose result is 'failed: tree moved'.",
+     "class": "within",
+     "why": "The same half of the arbiter's fix applied to the bundle: a tree-moved abort is not among the counted reds the arbiter is shown."
+    },
+    {
+     "id": "D66(b)-diff",
+     "summary": "Between each pair of listed reds, the bundle carries the full `git diff <earlier> <later>` between their recorded commits, with its --stat as a header.",
+     "class": "within",
+     "why": "The second half of the arbiter's fix, 'the diff between each pair of counted reds'. This replaces the earlier text's --stat-only version, which fell short of 'the diff', and moves toward the arbiter's words rather than away from them. The Done line (Approach item 9) was updated to match."
+    },
+    {
+     "id": "D66(b)-same-commit",
+     "summary": "Two reds on one commit are reported as 'the same commit; uncommitted edits between them are not recorded' rather than as an empty diff.",
+     "class": "within",
+     "why": "This does not exclude a case from the rule. It labels what the rule produces: between identical recorded commits the diff is empty, and the clause states that and says what the record cannot show. Nothing the arbiter asked the bundle to carry is withheld. Reading the fix as also requiring the gate to start recording working-tree state would be completing the arbiter's thought. The premise 'a run record keeps its commit and no tree state' is the plan's statement and was not measured in this review, because the bundle allows no repository reads."
+    },
+    {
+     "id": "Approach",
+     "summary": "Tooling only; order: abort record, then bundle filter and diffs, then tests; exit (c); 40 min budget; one goal, with a test red without each half.",
+     "class": "within",
+     "why": "Sequencing, budget and the testing obligation decide nothing the arbiter's fix or 375's FR-004/FR-010 left open in a narrowing direction. A test red without each half enforces the requested fix."
     }
    ],
    "verdict": "CLEAR"

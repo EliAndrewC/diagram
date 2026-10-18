@@ -513,6 +513,9 @@ POND_BANKS = ("bare", "planted")
 POND_BANK_PITCH_FT = 30.0
 """Research: one tree about every 30 ft of bank - GUESS: 0061's "sparsely" gives no figure"""
 
+POND_BANK_FT = 18.0
+"""Research: a tail pond's bank beyond its reeds - GUESS research/questions/0061-reservoir-ponds-tameike.drawing.html: the embankment kept dry beyond the reed fringe; 18 ft of it, room for a crown and a little play (no crest width recorded)"""
+
 POND_BANK_CROWN_FT = 6.0
 """Research: a bank tree's crown radius - GUESS research/questions/0061-reservoir-ponds-tameike.drawing.html: a tree whose shade the tethered cattle take (the manual), about 12 ft across - not research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html's field mulberry trained as low bushes"""
 

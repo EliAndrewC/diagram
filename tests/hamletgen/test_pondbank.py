@@ -8,7 +8,7 @@ import types
 import pytest
 
 from l7r.diagram.hamletgen import pondbank as pb
-from l7r.diagram.hamletgen.consts import POND_BANK_CROWN_FT, POND_BANK_PITCH_FT, POND_BANKS
+from l7r.diagram.hamletgen.consts import POND_BANK_CROWN_FT, POND_BANK_FT, POND_BANK_PITCH_FT, POND_BANKS
 from l7r.diagram.hamletgen.plan import HamletSpec
 from l7r.diagram.hamletgen.sink import SINK_FRINGE
 from l7r.diagram.settlement import Settlement
@@ -41,9 +41,11 @@ def test_the_seats_stand_beyond_the_reeds_about_a_pitch_apart() -> None:
     s = _s()
     seats = pb.bank_seats(s, POND)
     cx, cy, rx, ry = POND
-    off = SINK_FRINGE + POND_BANK_CROWN_FT
-    for x, y in seats:
-        assert ((x - cx) / (rx + off)) ** 2 + ((y - cy) / (ry + off)) ** 2 == pytest.approx(1.0), "on the ring a crown beyond the fringe"
+    lo, hi = SINK_FRINGE + POND_BANK_CROWN_FT, SINK_FRINGE + POND_BANK_FT - POND_BANK_CROWN_FT
+    out = [math.hypot((x - cx) / (rx + lo), (y - cy) / (ry + lo)) for x, y in seats]
+    inn = [math.hypot((x - cx) / (rx + hi), (y - cy) / (ry + hi)) for x, y in seats]
+    assert all(o >= 1.0 - 1e-9 for o in out) and all(i <= 1.0 + 1e-9 for i in inn), "on the bank, a crown beyond the fringe and inside the bank"
+    assert max(out) - min(out) > 0.01, "jittered across the bank too: no ruled ring (the glyph check's F2)"
     gaps = [math.dist(a, b) for a, b in zip(seats, seats[1:] + seats[:1], strict=True)]
     assert sum(gaps) / len(gaps) == pytest.approx(POND_BANK_PITCH_FT, rel=0.2)
 
@@ -96,3 +98,21 @@ def test_a_planted_bank_with_no_free_seat_draws_nothing() -> None:
     s.W = s.H = 1  # every seat off the canvas
     pb.stage_pond_bank(s, _plan(form="planted"))
     assert s.M["meta"]["pond_bank"] == "planted" and s.M["meta"]["pond_bank_trees"] == 0 and len(s.out) == n
+
+
+def test_every_tail_pond_keeps_its_bank_dry() -> None:
+    """D61b (the glyph check's F1 on Inashiro: every trunk in the toe marsh): the bank's ellipse is a no-build block the toe marsh
+    and the scatters subtract, for a bare bank as for a planted one; no pond, no block."""
+    cx, cy, rx, ry = POND
+    for form in ("bare", "planted"):
+        s = _s()
+        n = len(s.block_polys)
+        pb.stage_pond_bank(s, _plan(form=form))
+        assert len(s.block_polys) == n + 1
+        ring = s.block_polys[-1]
+        assert max(x for x, _y in ring) == pytest.approx(cx + rx + SINK_FRINGE + POND_BANK_FT)
+        assert max(y for _x, y in ring) == pytest.approx(cy + ry + SINK_FRINGE + POND_BANK_FT)
+    none = _s()
+    n = len(none.block_polys)
+    pb.stage_pond_bank(none, _plan(pond=None))
+    assert len(none.block_polys) == n

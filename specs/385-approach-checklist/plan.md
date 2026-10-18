@@ -1486,6 +1486,24 @@ Owed by the hour-17 step-back (hour:385-approach-checklist@17, `continue`, ruled
 9. **After a ruling.** `continue`: carry the four into T43, land under CLAIMS_OK; the per-entry keying declined to the GM's review
    (an overhaul of the claims record).
 
+### T08 Approach (re-answered 2026-10-18T17:08Z)
+
+Owed by the re-decided D61b (the glyph check's NEEDS-WORK on Inashiro).
+
+1. **The goal, in the world.** Unchanged: a tail pond's bank is bare or planted sparsely with mulberry and cudrania - and now the
+   bank itself stands dry beyond the reeds, as 0061's drawing page says it is kept.
+2. **The constraints.** Part A's, and 0061's "reeds and the wet tint are kept off the embankment ... nor on any raised rim around
+   a pond"; the glyph check's F1 (no trunk in the marsh) and F2 (no ruled ring).
+3. **Where each comes from.** The dry bank is 0061's (R); its width, 18 ft, ours (GUESS); the radial jitter ours (GUESS).
+4. **Do they describe the world here?** Measured by the glyph check: on Inashiro all 30 trunks stood in the toe marsh, laid by
+   the hinterland after the trees; the toe marsh was cut only by the pond's ellipse.
+5. **The order.** The bank's block, then the trees' radial jitter, then the tests, the pool, the cohort, and the glyph check again.
+6. **The exits.** (a) the bank width is ours, a knob band; (e) n/a.
+7. **The search smell.** None.
+8. **The budget.** 90 min.
+9. **Done, measured.** One goal: every tail pond's bank is dry beyond its reeds (no toe-marsh ground inside the bank's ellipse)
+   and no bank tree's trunk stands in any marsh, on the pool and the cohort; the glyph check passes.
+
 ### T08 Decisions
 
 **D60 - the knob.** `POND_BANKS = ("bare", "planted")` in `consts.py`, rolled per hamlet from the seed (`_roll(seed, "pond_bank",
@@ -1614,7 +1632,7 @@ is added to FILES, as the ledger is. The worktree's own regeneration stays, so m
 7. **The search smell.** None.
 8. **The budget.** 40 min.
 9. **Done, measured.** One goal: a tree-moved abort leaves the red-in-a-row slot as it was and is not listed among the bundle's
-   reds, and the bundle shows `git diff --stat` between each pair of listed reds; tests red without each half.
+   reds, and the bundle carries the diff between each pair of listed reds; tests red without each half.
 
 ### T49 Decisions
 
@@ -1622,7 +1640,9 @@ is added to FILES, as the ledger is. The worktree's own regeneration stays, so m
 records `failed-gate tree-moved` (its own target): `ci/state.py` counts only a `done` toward the red-in-a-row slot, so the abort
 never owes a trigger, while the failed record still overwrites the green slot, so nothing vouches for the moved tree - no engine
 change. (b) `arbiter_bundle.red_gate_runs` passes over a run whose result is "failed: tree moved", and between each pair of the
-reds it lists writes `git diff --stat <earlier commit> <later commit>` (or "the same commit" when they match).
+reds it lists writes the diff between their recorded commits - `git diff <earlier> <later>`, its `--stat` as a header - into the
+bundle (round 1 BLOCKED a `--stat` alone: the arbiter asked for "the diff"). A run record keeps its commit and no tree state, so two
+reds on one commit say so ("the same commit; uncommitted edits between them are not recorded") rather than showing an empty diff.
 
 ## T50 - a part B stamped in the future is refused (the arbiter's fix on hour:385-approach-checklist@18)
 
