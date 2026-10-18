@@ -342,31 +342,6 @@ def test_plot_texture_drives_build_comb_grain():
             s.plot_texture(*bad)
 
 
-def test_water_source_anchor_gravity_and_valid_set():
-    # water_source_position resolves to a sluice/entry point on the field's UPHILL margin; a downhill source
-    # is rejected (gravity), and water_sources_for lists only the feedable set for a given fall + water kind.
-    s = Settlement(2000, 2000, seed=1)
-    s.meta(name="Ws", scale="village")
-    fb = (600.0, 400.0, 1400.0, 1200.0)  # center (1000, 800); down_deg 90 -> downhill = +y (S)
-    # an uphill (N) pond corner is fine and sits above the field
-    sx, sy = s.water_source_anchor("corner_NW", fb, 90.0)
-    assert sy < 400  # north of the field's top edge
-    assert s.water_source_anchor("mid_margin", fb, 90.0)[1] < 400  # the uphill margin
-    # a downhill (S) corner cannot gravity-feed a south-falling field -> rejected
-    with pytest.raises(ValueError):
-        s.water_source_anchor("corner_SW", fb, 90.0)
-    with pytest.raises(ValueError):
-        s.water_source_anchor("edge_S", fb, 90.0)
-    with pytest.raises(ValueError):
-        s.water_source_anchor("bogus", fb, 90.0)
-    # the gravity-valid sets: ponds exclude the two south corners for a south fall; streams keep the non-S edges
-    ponds = s.water_sources_for(90.0, "pond")
-    assert "corner_NW" in ponds and "corner_NE" in ponds and "mid_margin" in ponds
-    assert "corner_SW" not in ponds and "corner_SE" not in ponds
-    streams = s.water_sources_for(90.0, "stream")
-    assert set(streams) == {"edge_N", "edge_E", "edge_W"}  # not edge_S (downhill)
-
-
 def test_cluster_seeds_record_false_and_bad_shape():
     import random as _r
 

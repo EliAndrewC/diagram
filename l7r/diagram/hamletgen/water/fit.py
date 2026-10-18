@@ -332,7 +332,7 @@ def head_sluice(plan: SitePlan) -> tuple[Pt, str]:
     the ground the field will occupy, and the only real freedom is WHICH point of that head margin -
     a brook coming down the left shoulder, the right, or straight into the middle.
 
-    This is deliberately NOT the engine's `water_source_anchor`. That helper resolves the knob
+    This is deliberately NOT the old knob engine's water-source anchor (retired with it, feature 388). That helper resolved the knob
     catalog's `edge_N`/`edge_W`-style positions against a canvas-relative box, so a lateral entry
     (`edge_W` on a south-falling map) lands at the box's MID-height: legal by the gravity test, but
     it leaves the fan only half the canvas to run down, and the field then saturates far under the

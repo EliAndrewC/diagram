@@ -281,8 +281,7 @@ def undeckable_at(pts: Any, width: float, waters: Any, ftpx: float = 1.0, wet: A
     """(segment index, crossing point) for every crossing of `waters` (`bridge_crossed_waters`) by a way along `pts` where
     no deck seats (`crossing_deck`, the very solve `bridges()` makes) - or where the registry of what stands on `M` refuses
     the deck as `bridge()` would record it (`deck_admitted`, feature 287 M8). THE ONE PREDICATE: the lane law asks it of a
-    finished web (`hamletgen/ways/law.py`), the web's last pass cuts what it names, and a settlement rolled without that
-    pass cuts its lanes by it before `bridges()` (`cut_undeckable_lanes`, feature 287)."""
+    finished web (`hamletgen/ways/law.py`), and the web's last pass cuts what it names."""
     out = []
     for k, (ra, rb) in enumerate(zip(pts, pts[1:], strict=False)):
         for wpts, ww in waters:
@@ -304,35 +303,6 @@ def deck_admitted(M: Any, p: Pt, rot: float, span: float, width: float) -> bool:
         return True
     rec = {"x": round(p[0], 1), "y": round(p[1], 1), "rot": round(rot, 1), "span": round(span, 1), "w": round(width, 1)}
     return not [c for c in st.conflicts("bridges", rec) if c[1] != "bridges"]
-
-
-#: How far past the water's edge each piece of a lane cut at an undeckable crossing stops, in ft - the lane ends on the
-#: bank, not in the water (`settle_the_web`'s own `CROSSING_GAP_FT`).
-CUT_GAP_FT = 2.0
-"""Research: lane end short of unbridged water - UNRESEARCHED: 2 ft past the bank"""
-
-
-def _sub_run(pts: list[Pt], s0: float, s1: float) -> list[Pt]:
-    """The part of the polyline `pts` between arc lengths `s0` and `s1`, clamped to it."""
-    out: list[Pt] = []
-    acc = 0.0
-    for a, b in zip(pts, pts[1:], strict=False):
-        d = math.dist(a, b)
-        if d > 0 and acc + d >= s0 and acc <= s1:
-            t0, t1 = max(0.0, (s0 - acc) / d), min(1.0, (s1 - acc) / d)
-            for t in (t0, t1) if not out else (t1,):
-                out.append((a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t))
-        acc += d
-    return out
-
-
-def cut_at(pts: list[Pt], k: int, p: Pt, gap: float) -> list[list[Pt]]:
-    """The way `pts` with the stretch within `gap` (along it) of `p`, a point on its segment `k`, taken out: the pieces
-    either side, each dropped if it keeps no length."""
-    at = sum(math.dist(u, v) for u, v in zip(pts[: k + 1], pts[1 : k + 1], strict=False)) + math.dist(pts[k], p)
-    total = sum(math.dist(u, v) for u, v in zip(pts, pts[1:], strict=False))
-    pieces = (_sub_run(pts, 0.0, at - gap) if at - gap > 0 else [], _sub_run(pts, at + gap, total) if at + gap < total else [])
-    return [q for q in pieces if len(q) >= 2 and sum(math.dist(u, v) for u, v in zip(q, q[1:], strict=False)) >= 1.0]
 
 
 # THE DITCH CROSSING'S FORM IS A KNOB (269 B21; research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html, and research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html, "Plank bridges over farm ditches
@@ -487,40 +457,6 @@ class BridgesMixin:
             self.bridge(p[0], p[1], _rot_used, _span, rw)
             n += 1
         return n
-
-    def cut_undeckable_lanes(self: Settlement) -> int:  # type: ignore[misc]
-        """Cut every lane at every crossing where no deck seats (`undeckable_at`, the predicate `bridges()` raises on), so a
-        settlement rolled without the web's last pass (`roll_village`) never hands `bridges()` a crossing it cannot deck
-        (feature 287, ways W12). Each cut takes the crossing and `CUT_GAP_FT` past each bank out of the lane - the pieces
-        either side kept, the first in place - so every cut strictly shortens the lane and the loop ends. Returns the cuts.
-
-        Research: a lane stops at water it cannot bridge - UNRESEARCHED: cut CUT_GAP_FT past each bank
-        """
-        waters, wet = bridge_crossed_waters(self.M), flooded_ground(self.M)
-        cuts = 0
-        i = 0
-        while i < len(self.M.get("lanes") or []):
-            ln = self.M["lanes"][i]
-            pts = [(float(x), float(y)) for x, y in ln.get("pts") or []]
-            bad = undeckable_at(pts, float(ln.get("w", 6)), waters, self.ftpx, wet, self.M)
-            if not bad:
-                i += 1
-                continue
-            k, p = bad[0]
-            near = max(
-                (float(ww) / 2 for wpts, ww in waters if any(seg_dist(p[0], p[1], (float(u[0]), float(u[1])), (float(v[0]), float(v[1]))) <= float(ww) for u, v in zip(wpts, wpts[1:], strict=False))),
-                default=3.0,
-            )
-            pieces = cut_at(pts, k, p, near + CUT_GAP_FT / self.ftpx)
-            cuts += 1
-            if not pieces:
-                self.drop_lanes([i])
-                continue
-            ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in pieces[0]]
-            self.reink_lane(i)
-            for q in pieces[1:]:
-                self.lane(q, width=float(ln.get("w", 6)), clearance=float(ln.get("clearance", 22)), worn=bool(ln.get("worn")))
-        return cuts
 
     def _reseat_to_cover(self: Settlement, deck: dict[str, Any], p: Pt) -> None:  # type: ignore[misc]
         """Lengthen a standing deck along its own bearing until it reaches `p` - a second crossing close enough that its own

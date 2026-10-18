@@ -2,9 +2,9 @@
 
 **This directory holds the tests that roll MORE than the gate's floor strictly needs** (constitution VI
 v2.23.0, GM 2026-09-08, feature 216: *"the correct place for the kind of test in which we make more map
-rolls than are strictly necessary is in the AWS tests. or the CI tests"*). Today it holds one:
-`test_village_determinism.py`, the village roll's determinism test (two real rolls whose only unique line became a unit
-test). `make soak` runs the tier by hand.
+rolls than are strictly necessary is in the AWS tests. or the CI tests"*). Today it holds
+`test_row_village_doors.py` and `test_scale_equivalence_387.py` (the knob engine's determinism test went with the engine,
+feature 388). `make soak` runs the tier by hand.
 
 **Nothing here is collected by any ordinary run** - not `make quick`, not `make done`, not
 `make test-full`. The deselection is one line, `norecursedirs` in `pyproject.toml`, chosen over an

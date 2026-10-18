@@ -771,3 +771,13 @@ def test_a_households_byre_is_never_stabled_across_the_brook_from_its_house(monk
     monkeypatch.setattr(Settlement, "_yard_shed_seat", lambda self, h, bw, bh: None)
     s.draft_byres()
     assert all(b["y"] > 290.0 for b in s.M["byres"]), "the spiral's seats north of the brook are refused"
+
+
+def test_the_coverage_pass_seats_a_well_beside_a_dwelling_the_grid_left_dry() -> None:
+    """`place_wells`'s COVERAGE pass (research 0196: no dwelling left without a well): a dwelling no grid well can serve -
+    here the grid seats none, its only dwelling far outside the box - gets one dropped beside it."""
+    s = Settlement(800, 800, seed=5)
+    s.M["houses"] = [{"x": 600.0, "y": 600.0, "w": 20.0, "h": 14.0}]
+    seats = s.place_wells((100, 100, 300, 300), spacing=80, near=150)
+    assert len(seats) == 1, seats
+    assert math.dist(seats[0], (600.0, 600.0)) <= 150 * 0.6 + 1e-6, "seated beside the dwelling, within its reach"

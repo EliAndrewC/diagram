@@ -352,6 +352,15 @@ def prune(db: Path, root: Path, drop_files: tuple[str, ...], drop_contexts: set[
         con.close()
 
 
+def measured_paths(db: Path) -> list[str]:
+    """Every file path a coverage database holds rows for (absolute, as coverage records them)."""
+    con = sqlite3.connect(str(db))
+    try:
+        return [r[0] for r in con.execute("select path from file").fetchall()]
+    finally:
+        con.close()
+
+
 def all_contexts(db: Path) -> list[str]:
     con = sqlite3.connect(str(db))
     try:
@@ -450,7 +459,10 @@ def carry(root: Path, fresh: Path) -> int:
     wanted = {f"fixture:{f}" for n in reused for f in closures.get(n, [])} - have
     tmp = fresh.with_suffix(".carrying")
     shutil.copyfile(bdir / COVERAGE_DB, tmp)
-    prune(tmp, root, (), {c for c in all_contexts(tmp) if c.rsplit("|", 1)[0] not in reused and c not in wanted})
+    # A FILE THE TREE NO LONGER HOLDS IS NOT CARRIED (feature 388): the baseline measured a module this change deleted, and
+    # carrying its rows made the floor's report fail on "No source for code" for a file nothing runs any more.
+    gone = tuple(p for p in measured_paths(tmp) if not Path(p).is_file())
+    prune(tmp, root, gone, {c for c in all_contexts(tmp) if c.rsplit("|", 1)[0] not in reused and c not in wanted})
     data = coverage.CoverageData(str(fresh))
     data.read()
     kept = coverage.CoverageData(str(tmp))
