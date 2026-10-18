@@ -4178,6 +4178,7 @@ vermilion-seal	shuinchi
 vermilion-seal land	shuinchi
 vermilion-seal lands	shuinchi
 vff	VFF
+vicinage	vicinage
 village district	village district
 vinaya	Vinaya
 visiting grave	visiting grave

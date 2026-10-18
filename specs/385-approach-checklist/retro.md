@@ -441,3 +441,11 @@ and since T24 a stale patch there merged main in mid-gate. Nothing landed (every
 showed the same runs. Fixed at the cause (the test reads the recipe), and the gate's existing lock is now asked by clone-sync on
 both paths and by land-tooling. **The habit it changes:** never run `make -n` on a target whose recipe calls `$(MAKE)` - read the
 recipe instead; and measure who did a thing before fixing the one you suspect (round 1 would have fixed the wrong hook).
+
+## T41 - the retro row
+
+About 35 min (two plan rounds). The round counter counted a check at its dispatch, which the check-bundle hook sees before the
+pair hook may refuse it, so T07's write session met a round cap on zero readings. Round 1 blocked my first fix, a refund of any
+dispatch still pending after 60 s: it narrowed the arbiter's "started an agent and kept a reply" to half its condition and left
+a minute in which a refusal still counted. Built instead: a round counts when its agent returns a reply. **The habit it
+changes:** take the arbiter's condition as the moment to act, not a timer standing in for it.
