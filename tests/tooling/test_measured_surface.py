@@ -104,8 +104,8 @@ def test_test_full_records_a_green_state_so_the_strongest_local_proof_counts() -
     body = makefile.split("\ntest-full:")[1].split("\n\n")[0]
     assert "$(STATE) green-local test-full" in body, "test-full must record, like done/quick/reference/test-file"
     assert "&& $(STATE) green-local test-full" in body, "ONLY on success - a red sweep must vouch for nothing"
-    # ...and the four that already recorded still do, so this widened the set rather than moving it.
-    for target in ("green-local quick", "green-local reference", "green-local test-file"):
+    # ...and the others that record still do (`_reference` stopped recording on 2026-09-06: a green reference is no credential).
+    for target in ("green-local quick", "green-local test-file"):
         assert target in makefile, f"{target} must still record"
 
 
