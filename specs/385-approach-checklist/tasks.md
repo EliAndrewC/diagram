@@ -36,8 +36,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T08 A ranking row; its retro row [lands-open]
       research: rendering
       verify: DONE. the pond_bank knob: a tail pond's bank bare or planted sparsely with mulberry and cudrania (0061), the bank kept dry beyond the reeds (D61b), three pop-ups, 0061's drawing page; claims closed (four older drifts carried into T43); pool clean, cohort-landing 54/54; make done green; glyph check NEEDS-WORK fixed (F1 dry bank, F2 jitter), re-checked at landing; retro row in retro.md
-- [ ] T09 A ranking row; its retro row [lands-open]
+- [x] T09 A ranking row; its retro row [lands-open]
       research: rendering
+      verify: DONE. BUNDLE_PITCH relabeled the along-row span (UNRESEARCHED); the rows stand _rank_step apart, 0038's sum; claims IN-STEP; no map changes; quick clean; retro row in retro.md
 - [ ] T10 A ranking row; its retro row [lands-open]
       research: rendering
 - [ ] T31 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]

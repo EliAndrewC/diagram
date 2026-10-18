@@ -1581,6 +1581,21 @@ rolled, the pitch, crown and alternation labeled GUESS - written by a page sessi
 9. **Done, measured.** One goal: `BUNDLE_PITCH`'s claim says what it is - the along-row and grid span, UNRESEARCHED - and names
    `_rank_step` as the row pitch on 0038; the claims check IN-STEP; no map changes.
 
+### T09 part B (2026-10-18T18:42Z)
+
+Owed by the cohort at 18:35Z (seed 43 newly failing) - the second of the two experiments item 4 records, not the code that lands.
+
+1. **What is refusing?** Nothing that lands: the experiments moved the along-row span to 92 ft (all of it, then the rank and row
+   offers alone) and regressed seeds 17 and 43; both were put back. What lands is the claim relabeled, with no map change.
+2. **A3 again.** Unchanged: 92 ft is 0038's row-to-row figure, and `_rank_step` already carries it.
+3. **A4 again.** Measured: the along-row span, not the rows, is what `BUNDLE_PITCH` sets.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: a label conformed to what the code does.
+6. **The one-sentence test.** "A hamlet's rows stand 0038's 92 ft apart, through `_rank_step`" - true by its claim, IN-STEP.
+7. **The next step is a measurement.** None owed: no map moved.
+8. **Routes measured before asking?** Yes - both experiments, before the decision.
+9. **After a ruling.** n/a.
+
 ### T09 Decisions
 
 **D73 - the label conformed, not the number.** `BUNDLE_PITCH` keeps 100 ft. Its claim "row pitch - 0038: 100 ft, house, yard and

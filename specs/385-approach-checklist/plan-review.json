@@ -697,6 +697,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
+  },
+  "## T09 - the hamlet's row pitch is 0038's sum, and `BUNDLE_PITCH` is no row pitch (the ranking row `hamletgen/consts.py::BUNDLE_PITCH#row pitch`)": {
+   "sha256": "dddaa4fac29d574a1148c2542e8d952addffcc3b78af676fcac70fd8aef81c3f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T09 Approach (checklist part A)": {
+   "sha256": "f7d3b2d62af0577d16c60bbeb3413deb1dc634a066f9791a79a4c1e1ca4d55cd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T09 part B (2026-10-18T18:42Z)": {
+   "sha256": "8508c06ca8034701faab6fbcbc549e6dac422d760b8849e820e35163b0dcd4b5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T09 Decisions": {
+   "sha256": "21d451e32c873f9995c1dd79b720ce0021d5cf631a1f3398b724393db0982d08",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
   }
  },
  "reviewed": "2026-10-17",
@@ -4161,6 +4185,43 @@
      "summary": "Part B after the hour-18 step-back: the cause is measured (the toe marsh was cut only by the pond's ellipse), the fix is D61b, the next step is the glyph check at landing, and the ruling is continue.",
      "class": "within",
      "why": "Part B answers FR-004's resist-trigger checklist and decides nothing beyond D61b; it narrows neither the request nor the spec."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## T09 - the hamlet's row pitch is 0038's sum, and `BUNDLE_PITCH` is no row pitch (the ranking row `hamletgen/consts.py::BUNDLE_PITCH#row pitch`)",
+    "### T09 Approach (checklist part A)",
+    "### T09 Decisions",
+    "### T09 part B (2026-10-18T18:42Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D73",
+     "summary": "BUNDLE_PITCH keeps 100 ft and its claim is relabeled (the along-row and grid span, UNRESEARCHED; the rows stand _rank_step apart on 0038) instead of the ranking row's '100.0 -> 92.0'; no map changes, and so HOMESTEAD_GROUND_FT and WEB_REACH_FT, tied to BUNDLE_PITCH, are not re-derived.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The ranking row's prescribed number change is narrowed to a label change, so it is judged as an exception. It is legitimate on purpose, not convenience: the row exists so that a hamlet's rows stand 0038's 92 ft apart. A4's one-shot experiment (2026-10-18, cohort 52/54) measured what BUNDLE_PITCH sets: moving it to 92 shrinks the along-row and grid spans, not the rows. The other half of the premise - that the rows already stand 0038's distance apart - is NOT measured in these blocks; it rests on _rank_step's existing claim citing 0038 (envelope depth plus the larger of lane room and the 39 ft sun corridor) and is what A9's IN-STEP claims check verifies, so that check is load-bearing for this decision. Given that, moving BUNDLE_PITCH to 92 would change an along-row span 0038 does not speak to and leave the rows where they are: the literal reading defeats the row's own purpose, and conforming the mislabeled claim is what 384's 'match the research' asks. The GM's request names this exit itself: ask which parts of a rule are based on research and which are implementation details of ours. The two-seed regression is NOT part of this ruling - it is cost, not fidelity - and the decision stands without it. Not re-deriving the HOMESTEAD_GROUND_FT and WEB_REACH_FT ties is the dependent of the same narrowing: the row asks for them only as a consequence of BUNDLE_PITCH moving, and it does not move."
+    },
+    {
+     "id": "D73-comments",
+     "summary": "Comments calling BUNDLE_PITCH 'the ground one homestead takes' or 'the row pitch' are corrected to match the relabeled claim.",
+     "class": "within",
+     "why": "Consequence of the claim correction; makes the record say what the code does."
+    },
+    {
+     "id": "A5-A9",
+     "summary": "Order (relabel, check claims, no map change), exit (e) conform the label, 45 min budget, one goal 'done'.",
+     "class": "within",
+     "why": "Process answers to the checklist the spec requires (FR-003, FR-015); no scope departs from the request."
+    },
+    {
+     "id": "partB",
+     "summary": "Part B records the two experiments (all of BUNDLE_PITCH to 92; the rank and row offers alone) as reverted, owed by the 18:35Z cohort, and that no map moves.",
+     "class": "within",
+     "why": "The resistance checklist answered as FR-004 requires; it decides nothing beyond D73."
     }
    ]
   }
