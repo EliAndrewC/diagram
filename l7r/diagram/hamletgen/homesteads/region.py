@@ -215,7 +215,7 @@ def smallest_sides(s: Settlement) -> tuple[list[tuple[float, float, float, float
     unturned, relative to the house's center, as (x0, y0, x1, y1) - and the yard's box the same way (None for a bundle with no
     yard)."""
     hw, hh = s.px(46) * LENGTH_FACTORS[0], s.px(28) * DEPTH_FACTORS[0]
-    saved = {k: s.__dict__.pop(k) for k in ("_household_seat", "_household_byre", "_household_well", "_household_fixtures") if k in s.__dict__}
+    saved = {k: s.__dict__.pop(k) for k in ("_household_seat", "_household_byre", "_household_fixtures") if k in s.__dict__}
     try:
         sides: list[tuple[float, float, float, float]] = []
         yard: tuple[float, float, float, float] | None = None

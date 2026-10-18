@@ -156,7 +156,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27
 
 ## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)
 
@@ -684,6 +684,74 @@ Owed by the hour-9 step-back (`hour:385-approach-checklist@9`, ruled `continue`)
 8. **Routes measured before asking?** Nothing is being asked.
 9. **After a ruling.** `continue`; the step it names is T04's plan review, then the stamp - moved to T15 by that review.
 
+## T05 - T47: the wave 155 pocket-well patch re-landed, no waiver (384 FR-007)
+
+### T05 Approach (checklist part A)
+
+1. **The goal, in the world.** A clustered hamlet's well stands off every farmstead, shared, as 0028 and 0196 describe ("shared
+   off the farmstead"; "one or two" a hamlet, five to ten households a well); no household's homestead holds a pocket well.
+2. **The constraints.** 374's W155-4 bar: no roll passing at HEAD refuses (the pool, the cohort); no well inside a homestead; every
+   household within reach of water (`WATER_REACH_FT`, 760 ft, 0196); no well over ten households; the counts recorded. The lane
+   law; the claims and record checks the patch's changes owe; three glyph-check occasions (a pool map's well moved: Inashiro,
+   Kuwabata, Sawada - 374's tasks.md); the gate, green.
+3. **Where each comes from.** The bar is the GM's process (G, 374) over research rules: 0028/0196 (R) for off the farmstead and the
+   count; 760 ft (R, 0196); the shares cut along the long axis (GUESS, W155-5, recorded); the third well for ten (R, 0196's range).
+4. **Do they describe the world here?** Measured by T04 on today's engine: the patched cohort passes 54/54. Each refusal the pool
+   or a check names is asked again at the place it refuses (B1-B3).
+5. **The order.** The seating lays no pocket; the wells are seated after the houses (wave 154's forms) - nothing placed earlier
+   moves for a well.
+6. **The exits.** The patch's own were priced in 374 (W155-6: more room priced first, the third well inside the research range
+   taken). Here: (e) conform - re-land as built, no waiver.
+7. **The search smell.** None new: the patch's searches are wave 154's, measured.
+8. **The budget.** About 90 min (the pool, the record and claims checks, three glyph checks, the gate).
+9. **Done, measured.** One goal: the patch on main with no waiver - the pool clean, the cohort as HEAD (T04: 54/54 both), the
+   wells measured (`m:w155-wells`'s quantities on the pool), every owed check answered, the gate green.
+
+### T05 Decisions
+
+**D41 - the patch re-landed as built.** `w155-pocket-attempt.patch` applies cleanly to today's HEAD (2026-10-18; the engine
+unchanged since T04's cohorts). Its decisions are 374's W155-1 to W155-6, each ruled within by 374's plan review; nothing in
+them changes here. Its bar is W155-4, measured on the pool and the 54-seed cohort (T04: 54/54 at HEAD and patched); the 44 rolls
+of 374's scratch tooling (`tools13/roll13.sh`) are not reproducible from the repository, so the cohort stands in for them, as
+384's SC-004 already did. The occasions are 374's three (placement-changed: well on Inashiro, Kuwabata, Sawada), each a
+glyph-check of its map's wells.
+
+### T05 part B (2026-10-18T03:50Z)
+
+Owed by the hour-10 step-back (`hour:385-approach-checklist@10`, ruled `continue`).
+
+1. **What is refusing?** Nothing on the maps: the pool rolls clean with the patch; no well on any homestead piece. The record
+   checks found three wordings in 0196's changed block (applied together); the hour guard split one batch of dispatches (T20).
+2. **A3 again.** The bar's rules as part A: 0028/0196 (R), 760 ft (R), the shares (GUESS, recorded).
+3. **A4 again.** Asked at the pool's wells: they stand off every farmstead, each serving 3 to 10 households.
+4. **Moving something earlier for something later?** No: the wells are seated after the houses.
+5. **Tuning or changing?** Neither.
+6. **The one-sentence test.** "The patch re-lands as built, measured as 374 measured it" - nothing to question but the bar's
+   numbers, recorded beside it.
+7. **The next step is a measurement.** The remaining checks' answers, then the gate.
+8. **Routes measured before asking?** Nothing is being asked.
+9. **After a ruling.** `continue`; the step it names is re-dispatching the three refused checks (done) and the landing.
+
+### T05 part B (2026-10-18T10:25Z)
+
+Owed by the hour-12 step-back (`hour:385-approach-checklist@12`, ruled `continue`).
+
+1. **What is refusing?** Nothing on the maps: the pool rolled on T05's tree is clean (`make maps SCOPE=all`, 2026-10-18), the gate
+   green (199 s) after three reds of three causes (a reviewer's British spelling in a record, a stale notes census with Sawada's
+   door zigzag gone - its strict xfail cleared - and `seat_wells`' early return uncovered), and the three well glyph-checks PASS.
+   The claims gate refused only old behavior the patch's unit touched (the front row's size, the standoff), carried into T06 by
+   ask:t05-old-drifts-at-landing.
+2. **A3 again.** The bar's rules as part A; the claims relabeled to what the record says (0031 for the cluster shape, the 80 ft
+   seat a GUESS 0196 names), the standoff split (house and yard on 0029; the shed in and the garden out UNRESEARCHED).
+3. **A4 again.** Asked at the drawn wells by the glyph-checks: none stands in a farmstead, each serves 3 to 10 households; two seats
+   read near a lane (Inashiro F6/F7, Kuwabata F8) - filed as found rows of wave 155, not tuned here.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: no number moved; every change since part A was a label, a test or a record.
+6. **The one-sentence test.** "The patch re-lands as built, its claims saying what the record says" - true.
+7. **The next step is a measurement.** The landing cohort (`make cohort-landing`), then the push.
+8. **Routes measured before asking?** Yes - the pool rolled before ask:t05-old-drifts-at-landing.
+9. **After a ruling.** `continue` (hour 12) and `continue` (the ask): land T05; its fixes T25 (landed) and T26 (in review).
+
 ## T15 - a cohort rolled over an uncommitted engine diff says so (found by T04)
 
 ### T15 Approach (checklist part A)
@@ -796,6 +864,277 @@ the task with the same NOTE - each step only after the one before succeeds, so t
 --write`, which appends each owed row filled from the agent's reply (its verdict, its first line, `nothing` when clean); the push
 check's refusal and the hook's notice name that command in place of "add the row printed, its ?s filled". A row the session
 wants to word itself can still be added by hand.
+
+## T20 - the hour decided once per message (the round arbiter's fix on hour:385-approach-checklist@10)
+
+### T20 Approach (checklist part A)
+
+1. **The goal, in the world.** A message's dispatches are admitted or refused together at the hour, and the step-back sees the
+   hour guard's own refusals.
+2. **The constraints.** The hourly step-back (G, 383); every refusal names its step; a test red without each; tooling only.
+3. **Where each comes from.** The step-back is the GM's (G); the 5 s window is ours (O, the batching hook's same-turn window,
+   widened).
+4. **Do they describe the world here?** Yes - T05's five dispatches in one message were split two and three.
+5. **The order.** The admission mark, then the refusal list.
+6. **The exits.** (c) - an admitted dispatch admits its message's others. (a), (b), (d) n/a; (e) n/a.
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: `tests/tooling/test_checkpoint.py` red without the window or the `refused` read.
+
+### T20 Decisions
+
+**D42 - one decision per message.** `checkpoint.due` marks each admitted dispatch's time (`<git dir>/checkpoint-admitted`); past
+the hour, a dispatch within `SAME_MESSAGE_S` (5 s) of an admitted one is admitted - the rest of the message it began. A gate is
+never admitted by the window. `stepback_bundle.refusals` reads `refused` as well as `blocked`, the pair guard's own word.
+
+## T21 - a batch reply's own EDITs settle its units (the round arbiter's fix on ask:t05-lane-popup-round3)
+
+### T21 Approach (checklist part A)
+
+1. **The goal, in the world.** A check's own verbatim fix, applied, owes no round that reads the check's words back.
+2. **The constraints.** The round settling `apply-edits` already does (feature 335's arbiter, 375 amendment 3); a unit whose diff departs
+   from the round's EDIT stays owed; every refusal names its step; a test red without it; tooling only.
+3. **Where each comes from.** The settling is the arbiter's rule (G, 335/375); the batch's counts-line read is ours (O).
+4. **Do they describe the world here?** Yes - measured on T05 (2026-10-18): the settling exists, but the session applied page 0196's
+   EDITs from a hand-made file with no counts line, and the pop-ups' by hand; and a batch reply (FR-009) opens with prose, so even
+   `apply-edits` on it named no check. Both round-2 page checks and one pop-up round followed.
+5. **The order.** The batch read first, then the tip in `make record-owed`'s footer.
+6. **The exits.** (c) - the existing settling reaches batch replies; (e) n/a.
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: `tests/tooling/test_apply_edits.py` red without the batch read; the footer names `make apply-edits
+   FROM=<reply or transcript>`.
+
+### T21 Decisions
+
+**D43 - the batch read and the tip.** `record_owed.reply_checks` names a reply's check from its first line, else from the first
+counts line of a known check anywhere in it (`modal-depiction: <unit> - COVERAGE ...`), so `make apply-edits FROM=<a batch's reply
+or transcript>` settles each unit its own EDITs alone moved. An EDIT already applied by hand settles too, through the same command (spec-fidelity, T21
+round 1: the arbiter's test is the diff matching the EDIT line for line, however it got there): a block whose new text stands
+once in its file and whose old text is gone is put back to its old text, so the settling sees the round's own blocks move the
+unit, and is re-applied - the file ends as it was. A hand edit that departs from the EDIT, or one with no reply to read, still
+re-owes its unit. `make record-owed`'s footer names the command for both.
+
+## T22 - a refused dispatch is not lost (the round arbiter's fix on hour:385-approach-checklist@11)
+
+### T22 Approach (checklist part A)
+
+1. **The goal, in the world.** A check the session meant to run is never silently left unrun: a dispatch a guard refused is sent
+   again or recorded as dropped before the session ends a turn.
+2. **The constraints.** The arbiter's ruling on hour:385-approach-checklist@11 (two changes); a guard matches invocations, its
+   message names the compliant command, its escape carries a reason of two words, every firing logged (root CLAUDE.md); a
+   test red without each; tooling only.
+3. **Where each comes from.** The two changes are the arbiter's (G, feature 379 stands it where the GM was asked); the matching
+   rule below (same agent type and same bundle) is ours (O).
+4. **Do they describe the world here?** Yes - measured on T05 (2026-10-18, the session transcript): of seven agents sent at 03:57
+   four were refused by the decide-first guard with identical lines naming no check; three were re-sent at 04:02, impl-drift round
+   2 was not, and the session ended its turn "waiting on" it; about 5 h passed idle.
+5. **The order.** The refusal's text first (it names the check and its bundle), then the Stop layer.
+6. **The exits.** (c) - one Stop guard; (a), (b), (d), (e) n/a.
+7. **The search smell.** None.
+8. **The budget.** 40 min.
+9. **Done, measured.** One goal: a turn whose refused dispatch was neither re-sent nor recorded cannot end, shown by a hook test
+   red without the Stop layer; the decide-first refusal names the agent type and bundle, shown by a test red without it.
+
+### T22 Approach (re-answered 2026-10-18T09:33Z)
+
+1. **The goal, in the world.** Unchanged: a check the session meant to run is never silently left unrun.
+2. **The constraints.** Unchanged, plus round 2's: the window is the arbiter's "since the last turn end", read literally.
+3. **Where each comes from.** The window's start is the arbiter's (G); reading turn ends from the transcript's `turn_duration`
+   entries is ours (O), measured on three transcripts (spec-fidelity, round 2).
+4. **Do they describe the world here?** Yes - measured on d2dc8c63: the last turn end before the incident at 03:50:51, the
+   GM's prompt queued at 03:57:47 into the running turn, the four refusals 03:57:57-03:58:06, the turn's end at 03:59:25. A
+   window from that prompt starts after the refusals; one from the last turn end holds them.
+5. **The order.** Unchanged.
+6. **The exits.** (c), unchanged.
+7. **The search smell.** None; round 2 is the first change of the window, no tuning loop.
+8. **The budget.** 40 min, unchanged; 35 spent at round 2.
+9. **Done, measured.** Unchanged, plus: the hook test holds a refusal taken after a mid-turn prompt, and one in a session
+   with no turn ended yet.
+
+### T22 Decisions
+
+**D44 - the refused dispatch held at the turn's end.** `pair-hooks.sh stop` (a no-op since feature 383) reads the session's
+transcript from its last turn end (the harness's `system`/`turn_duration` entry, written only for a turn that ended), or
+from the session's start when none has, and lists each Agent call a hook refused (its result the harness's
+`PreToolUse:Agent hook error`, whatever the hook's wording). Never from the GM's last prompt: measured, the incident's
+refusals (03:57:57-03:58:06) came after a prompt queued at 03:57:47 and taken into the running turn, so that window would
+have missed them; a turn end this guard blocks writes no `turn_duration`, so a refusal stays in the window until answered.
+No state file: the transcript is the record of turn ends. A refusal is answered when a later Agent call of the same
+`subagent_type` naming the same bundle (the first `/tmp/l7r-check/...` path in its prompt; the description when the prompt names
+none) was not refused, or when `make dispatch-dropped TYPE=<agent type> BUNDLE=<path> WHY="<reason>"` recorded it dropped in
+`<gitdir>/dropped-dispatches.jsonl`. While one is unanswered the turn's end is blocked, every time, naming each refused check
+with both commands - always satisfiable, so no once-only valve. The check-bundle and pair hooks' decide-first refusals name the
+check (`<agent type> on <bundle>`) instead of "dispatch".
+
+## T23 - a relabel answers its MISLABELED at the gate too (found by T05)
+
+### T23 Approach (checklist part A)
+
+1. **The goal, in the world.** A claim relabeled as its MISLABELED verdict prescribed is answered: not re-owed (as today) and not
+   refused at the claims gate.
+2. **The constraints.** `relabeled_only` (feature 374): a relabel after MISLABELED, the unit's body unchanged, owes no new round;
+   the gate's three classes (FR-010, FR-013) otherwise unchanged; a test red without it; tooling only.
+3. **Where each comes from.** The owed side's rule is feature 374's (G); applying it at the gate is ours (O), its other half.
+4. **Do they describe the world here?** Yes - measured on T05 (2026-10-18): three claims relabeled from round 2's MISLABELED
+   (`stage_homesteads#the declared cluster shape`, `WELL_SEAT_FT` and `seat_wells`'s `seated a little closer than the check`)
+   were not re-owed by `make claims-owed`, yet `claims.py gate` refused all three as introduced MISLABELED - no command clears them.
+5. **The order.** The gate's skip, then its test.
+6. **The exits.** (c) - one rule shared by both sides; (a), (b), (d), (e) n/a.
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: the gate passes a MISLABELED whose claim text changed since the verdict with the unit's body
+   unchanged, and still refuses one whose text did not change; a test red without the skip.
+
+### T23 Decisions
+
+**D45 - the gate reads `relabeled_only`'s answer.** `claims.classify` skips a MISLABELED finding whose current claim text differs
+from the text its verdict was recorded against (`claim` in the index row) while the unit's body is the one judged (`body`) - the
+relabel that verdict prescribed, as `relabeled_only` already rules for `owed`. A relabel with the body moved stays owed and is
+judged again; a MISLABELED with its text unchanged is refused as before.
+
+## T24 - a tooling landing merges main in first (found landing T21, T22 and T23)
+
+### T24 Approach (checklist part A)
+
+1. **The goal, in the world.** `make land-tooling` lands on the first try whenever the clone's files merge with main: it is never
+   refused only because main moved since the clone last merged it.
+2. **The constraints.** Feature 379's route unchanged: a new commit on the latest main, built in a detached worktree, every push
+   check run; never rewrite history; a real conflict still refuses, naming the files; a test red without it; tooling only.
+3. **Where each comes from.** The route is feature 379's (G); merging main in first is the step its refusal already tells the
+   session to take by hand (`sync-in`, then run this again) - ours to automate (O).
+4. **Do they describe the world here?** Yes - measured on 2026-10-18 (this session's logs `land-t21`, `land-t22`, `land-t23`):
+   three of three landings were first refused "FILES do not apply cleanly onto the latest main" (the ledger and the make-targets
+   page moved on main), and each landed unchanged after a `sync-in` - about 2 min and two commands each.
+5. **The order.** The merge before the patch is built, then the test.
+6. **The exits.** (c) - the refusal's own remedy, run by the script; (a), (b), (d), (e) n/a.
+7. **The search smell.** None.
+8. **The budget.** 25 min.
+9. **Done, measured.** One goal: a clone whose patch went stale on main lands its tooling in one `make land-tooling`; a
+   conflicting merge still refuses and is aborted; `tests/hooks/test-land-tooling.sh` red without the merge.
+
+### T24 Approach (re-answered 2026-10-18T09:52Z)
+
+1. **The goal, in the world.** Unchanged: a tooling landing never refused only because main moved.
+2. **The constraints.** Unchanged, plus round 2's: the clone's history is left as it was when the patch applies.
+3. **Where each comes from.** Unchanged; merging only on a failed apply is ours (O), the route's own rule kept (G, feature 379).
+4. **Do they describe the world here?** Yes - its first use (T26's landing, 2026-10-18) met a real conflict, main's comment strip
+   of the Makefile, and refused with the merge aborted, as designed.
+5. **The order.** Unchanged.
+6. **The exits.** (c), unchanged.
+7. **The search smell.** None.
+8. **The budget.** 25 min; about 20 spent.
+9. **Done, measured.** Unchanged: `tests/hooks/test-land-tooling.sh` case 3c (a stale base lands) and case 3 (a conflict refuses,
+   the merge aborted), red without the merge.
+
+### T24 Decisions
+
+**D46 - main merged in when the patch no longer applies.** When FILES' patch fails to apply onto the latest main,
+`land-tooling.sh` merges `origin/main` into the clone (`git merge --no-edit`: a merge commit, never a rebase), takes the merge
+base and the patch again, and applies it once more. Only then, not whenever the clone is behind: a patch that applies needs no
+merge, and the route's own rule (feature 379) is that the clone's history is left as it was - its test "the clone's history is
+untouched" stands. `sync-in` itself is not run: its mirror refresh and render steps are not the merge's, and a plain merge is
+what its refusal named. A merge that conflicts is aborted (the clone left as it was) and refuses, naming `sync-in` to resolve
+by hand; a second failed apply refuses as today; FILES uncommitted still refuse before anything runs.
+
+## T25 - a claims bundle carries what the unit's code reads from other modules (the round arbiter's fix on ask:t05-old-drifts-at-landing)
+
+### T25 Approach (checklist part A)
+
+1. **The goal, in the world.** impl-drift judges a claim on the first round whenever the code it turns on is in the repository:
+   no CANNOT-TELL only because the bundle left out a function or constant the unit reads.
+2. **The constraints.** `callees` (the arbiter's fix on ask:t03-claims-at-landing): the unit's own module's functions, at most
+   `CALLEES_MAX`; a bundle stays a bundle (copied out, read once); a test red without it; tooling only.
+3. **Where each comes from.** `callees` is the arbiter's (G); so is this fix (G, ask:t05-old-drifts-at-landing: "inlines a judged
+   unit's direct callees and every module-level constant they read (transitively one level) whenever a claim's label names a
+   distance, gap or standoff"); doing it for every claim, not only those labels, is ours (O) - a CANNOT-TELL for want of a callee
+   is not a distance claim's alone (T03's `_clear_link` was a link test).
+4. **Do they describe the world here?** Yes - measured on T05 (2026-10-18): the standoff claim on `_seat_households` came back
+   CANNOT-TELL three rounds running, each for the next layer - `front_row` and `turn_the_seat` (imported from sibling modules), then
+   `_front_row_from_chains` and `install_site_boundary`, then `HOUSE_PADDY_GAP_FT` and `STANDOFF_SLACK_PX` (module constants) -
+   three dispatches, about 8 min of agent time (their ledger rows' wall times, 122 s, 272 s and 83 s), and a tripwire.
+5. **The order.** The measurement, then (a), (b) and (c), then the tests.
+6. **The exits.** (c); (a) n/a - the arbiter's level is uncapped; (b), (d), (e) n/a.
+7. **The search smell.** None.
+8. **The budget.** 40 min.
+9. **Done, measured.** One goal: the standoff claim's FIRST bundle (no CANNOT-TELL before it, no `WITH=`) carries `front_row`,
+   `turn_the_seat`, `_front_row_from_chains`, `install_site_boundary`, `STANDOFF_SLACK_PX` and `HOUSE_PADDY_GAP_FT`
+   (`m:t25-bundle`: 154 KB, 118 entries, each once); a test red without each of (a), (b) and (c).
+
+### T25 Decisions
+
+**D47 - a distance claim's first bundle reaches the call that reads its constant.** Measured (2026-10-18, `m:t25-bundle` -
+`make claims-bundle UNITS=<the standoff key>` on `_seat_households`, its size and its CONTEXT headings): one level of direct
+callees is 29 (48 KB of source) and misses `HOUSE_PADDY_GAP_FT`, read two calls down (`front_row` -> `_front_row_from_chains` ->
+it); two levels, with the constants read there, is a 154 KB bundle of 118 context entries that carries every name the standoff's
+three CANNOT-TELL rounds asked for. No bundle size limit is set (T05's 44-claim round-2 bundle was 232 KB - measured 2026-10-18,
+`ls -l` on its MANIFEST.md), so (a) goes two levels.
+In `scripts/record/claims_context.py` (`claims.py` is at 982 of its 1,000 lines):
+- **(a) the arbiter's fix, reaching its purpose** - for a claim whose label names a distance, gap or standoff (`DISTANCE`:
+  distance, gap, standoff, apart, reach, clear of, off the, ft, feet), the bundle carries every engine function the unit calls,
+  its own module's and imported, and theirs - two calls down - with every module constant any of them reads, UNCAPPED (`direct`;
+  round 1: a cap drops what "every" names; round 2: one level stops short of the standoff's constant).
+- **(b) every claim's first bundle** carries, beside its own module's callees (at most `CALLEES_MAX`, 6, as before), every module
+  constant the unit reads, imported ones too (`callees`) - ours (O), for claims the label trigger misses (T03's `_clear_link`).
+- **(c) a re-bundle of a claim last judged CANNOT-TELL** carries each engine name its note puts in backticks - resolved through the
+  unit's imports, else by its module-level definition anywhere under `l7r/` (at most three) - and, breadth first through each
+  function found, the functions and constants it calls or reads, within `CHASE_CHARS` (30,000) (`chase`) - ours (O), for what a
+  check still names past (a)'s two levels or (b).
+A name from outside `l7r/` is never followed (LEGITIMATE, rounds 1 and 2). Nothing in (a) is capped; (c)'s budget bounds only its
+own chase. Each context entry appears once.
+
+## T26 - a review never reads an absent or stale render (the round arbiter's fix on hour:385-approach-checklist@12)
+
+### T26 Approach (checklist part A)
+
+1. **The goal, in the world.** A glyph or settlement check judges the map as its manifest stands: its render is there, and newer
+   than what it renders.
+2. **The constraints.** The arbiter's fix (render first, or refuse naming `make map GEN=...`); one map rendered by `make map`, the
+   one command that renders; the snapshot and its prompts unchanged otherwise; a test red without it; tooling only.
+3. **Where each comes from.** The fix is the arbiter's (G); rendering rather than refusing is the first of its two options (G);
+   newer-than read by file times is ours (O).
+4. **Do they describe the world here?** Yes - measured on T05 (2026-10-18, 10:17): `make maps SCOPE=all` regenerated the pool
+   without renders (the `.png` and `.html` are untracked and the roll cache evicts them), so `make verify` wrote three glyph
+   prompts noting "missing in the clone: .png .html"; a render pass and a second verify followed, about 4 min (the
+   session transcript's timestamps, 10:17 to 10:21).
+5. **The order.** The staleness test, then verify's loop, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 25 min.
+9. **Done, measured.** One goal: `review_snapshot.py --stale-renders` names each owed map whose `.png` or `.html` is missing or
+   older than its `.gen.py` or `.json`, `make verify` runs `make map` on each before the snapshot, and a test is red without it.
+
+### T26 Decisions
+
+**D48 - render, then snapshot.** `review_snapshot.stale_renders(root, units)` returns the generator of each owed unit's map whose
+`.png` or `.html` is missing or older than the map's `.gen.py` or `.json` (the `.json` is what a pool roll writes per map, beside
+the tracked `.gen.py`, `.svg` and `.notes.md`); `--stale-renders` prints them; `make verify` runs `$(MAKE) map GEN=<each>` before
+it takes the snapshot and writes the prompts. Every unit is asked (round 1: "every unit"): an entry with no generator - none in
+the pool, measured 2026-10-18 (every `pool/*/*/` and `legacy-hand-authored-pool/*/*/` directory holds its `.gen.py`) - whose
+`.png` is missing is listed as `sheet:<its .svg>`, and `make verify` refuses it, naming `make sheet-render SHEET=<svg> OUT=<png>`,
+the arbiter's second option.
+
+## T27 - the heading the tool asks for passes its own check (found ticking T05 and T22)
+
+### T27 Approach (checklist part A)
+
+1. **The goal, in the world.** A task given an owed Approach or part B block, headed as the refusal says, ticks.
+2. **The constraints.** D9 (feature 385): an owed part is answered by a block stamped at or after its trigger; the stamp format
+   `owe` prints; a test red without it; tooling only.
+3. **Where each comes from.** D9 is ours (O, plan D9); comparing to the minute is ours (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-18 at 11:05: `make tick` refused T05 ("hour:385-approach-checklist@12
+   at 2026-10-18T10:25:14Z ... no block stamped after it") with `### T05 part B (2026-10-18T10:25Z)` in place - the heading `owe`
+   printed, to the minute - and T22 the same at 09:33:15Z against `09:33Z`.
+5. **The order.** The comparison, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 10 min.
+9. **Done, measured.** One goal: a block headed as `owe` prints passes `make tick`; a test red without it.
+
+### T27 Decisions
+
+**D49 - to the minute.** `approach_gate.refusal` compares an owed row's time truncated to the minute, the precision `owe` prints in
+the heading it asks for; a block stamped a minute earlier still refuses.
 
 ## T11 - the close
 

@@ -14,7 +14,7 @@ from .._geom.water_index import crosses_a_stream
 from ..farm_fixtures import PERSIMMON_CROWN_FT
 from ..homestead_parts.tree_shade import CANOPY_SHADE_FT, crown_shades
 from .access import access_corridor, legs
-from .lot import bundle_admitted, watered
+from .lot import bundle_admitted
 from .passage import opens, passage_of
 
 if TYPE_CHECKING:
@@ -68,17 +68,14 @@ def near_reaches(index: PointGrid, a: Pt, b: Pt) -> list[dict[str, Any]]:
 
 class BundleFitMixin:
     # WHAT A HAMLET'S SEATING INSTALLS for the fit test (feature 287, plan M3 and M5), None outside it: the access tree
-    # (`rolling/access.py`), the well pockets laid so far, the households' lots and the byre form their bundles reserve a
+    # (`rolling/access.py`), the households' lots and the byre form their bundles reserve a
     # stall for (`rolling/lot.py`), and - for the one household being sought a seat - which of those parts its bundle carries
     _access: Any = None
     _way_out_anchor: Any = None  # the seating's reach seed past the seat band (feature 320 D1, `stages._seat_households`)
     _way_out_bearing: Any = None  # ...and its lawful bearing out, the gate's (feature 320 D2)
-    _pockets: Any = None
     _lots: Any = None
     _byre_form: str | None = None
     _household_byre: str | None = None
-    _household_well: bool = False
-    _household_watered: bool = False  # the household being sought is held to `lot.watered` (homes wave 5)
     _byre_pockets: Any = None  # the shared sheds' pockets the seating reserved (`detached_commons`, homes H06)
     _household_fixtures: Any = ()  # the fixture kinds the household being sought a seat keeps (homes H32)
     _fixture_forms: Any = None  # the hamlet's rolled fixture forms, set by the seating (`FixtureForms`)
@@ -348,8 +345,6 @@ class BundleFitMixin:
         if geom.get("unlaid"):
             return False
         house = geom["house"]
-        if not self._candidate_watered(geom):
-            return False
         # THE FEW LOOKUPS THAT REFUSE MOST OF WHAT THE CORRIDOR WOULD BE ASKED, FIRST (the perf-audit's owed lever, 287
         # 2026-09-30): a part over a seat another household's wood reserved, a yard or bed out of the sun. Each only refuses
         # and reads neither the corridor nor anything its search writes, so the order changes no verdict. Measured per rule
@@ -753,21 +748,14 @@ class BundleFitMixin:
         Research: windbreak off the plots' afternoon sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: `feet` clear west and southwest of every yard and bed"""
         self._west_sun_ft = float(feet)
 
-    def _candidate_watered(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
-        """Does the household being seated reach water from this candidate's house (`lot.watered`)? Asked only while a
-        household is sought (`_household_watered`, set by `household_parts`)."""
-        if not getattr(self, "_household_watered", False):
-            return True
-        return watered(self, geom["house"][0], geom["house"][1], geom.get("well") is not None)
-
     def _bundle_common_fits(self: Settlement, geom: Any, grove_off_field: bool = True) -> bool:  # type: ignore[misc]
         """The fit checks that do NOT depend on which side the garden is on - the house, the south threshing
         yard, a north kura, the windward grove (dispersed only), and the yard sun-corridor. Same for every
         garden side at a given position, so it is tested once per position.
 
-        Research: no grove on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a farm's grove bands off every drawn tread"""
-        if not self._candidate_watered(geom):
-            return False
+        Research:
+            no grove on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a farm's grove bands off every drawn tread
+            the farmstead off the fields - research/questions/0029-farmhouses-minka.drawing.html: the house, yard, kura and a dispersed farm's well pocket held off every field (`fields=True`), a farmhouse never nearer the paddy than 6 ft"""
         if (
             self._rect_blocked(part_box(geom, "house"), fields=True)
             or (geom.get("yard") is not None and self._rect_blocked(part_box(geom, "yard"), fields=True))

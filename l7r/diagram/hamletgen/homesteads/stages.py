@@ -143,7 +143,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         the belt's afternoon lane - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: switched on here, `WEST_SUN_FT` (50 ft) west and southwest of a plot
         houses before lanes - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every household seated while no lane stands on the map, none is reserved and no way is sought for it; the track out chosen once the last house stands, and each household's way laid to it (`household_ways`, `gap_ways.lay_the_ways`)
         the track's stretch the ways join - UNRESEARCHED: within `JOIN_FAR_FT` of the homesteads' extent and the track's start, so no way joins it past the frame
-        the declared cluster shape - GUESS: the cluster's shape rolled as a knob and declared as the drawing resolves it, where the record has a hamlet's shape follow its dry ground
+        the declared cluster shape - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the cluster's shape rolled by chance, the page's own rule, and declared as the drawing resolves it, where the record has a hamlet's shape follow its dry ground
         a grove farm's own bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: drawn in its grove where the `bamboo` knob is homestead or both
     """
     # A YARD KEEPS ITS SUN (GM 2026-08-13; researched in research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html). 39 ft is the 9-to-3 drying window at 38N in the 10th month for a minka's ~20 ft
@@ -235,7 +235,6 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     s._way_out_anchor = s._way_out_bearing = None  # type: ignore[attr-defined]
     s._seat_region = None
     s._unreachable = None
-    s._pockets = None  # the pockets are drawn by `place_wells` from the house records (`well_pocket`)
     s._lots = None  # the lots are the seating's (the byre form stays: `draft_byres` draws the stalls it reserved)
     # THE ROLLED SHAPE MUST LEAVE A TRACE EVEN WHEN THE CLOUD NEVER RUNS (known-open ledger
     # 2026-08-16, Kashikawa: the front rows + lane frontage seated all 20 households, the
@@ -437,8 +436,9 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         the passage share - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: each clustered (grown) settlement rolls its share of households reached across a neighbor's land; the other forms roll none
         the seating's reach - UNRESEARCHED: a front-row seat within 1.3 times `FORM_BOUND` (1.15, 2.5 for a row) times the band's half-diagonal of the seat, and a rescue round's seat within `FORM_BOUND` times it; the four rank rounds are held only by their depth (the row's plus four rank steps at most), and the exhaustive pass by the legal ground
         the seating band - UNRESEARCHED: `SEATING_GROUND_FT` of band per household, the whole ground and wood floor of one holding
-        the front row's size - UNRESEARCHED: the square root of the households times the rolled shape's aspect band, at least 6
-        front-row standoff from the field set by the homestead core's reach (house, yard, shed, well pocket; garden excluded) - UNRESEARCHED: the front seat stands the core's reach toward the field off its chord, at the largest house the roll can take; the garden's side is chosen later by the sun, so it is not counted
+        the front row's size - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the square root of the households times the rolled shape's aspect band, at least 6, ranks seated behind it, where the page has a scattered hamlet's line hugged to the field edge in single file
+        front-row standoff from the field set by the house and its yard - research/questions/0029-farmhouses-minka.drawing.html: never nearer the paddy than 6 ft, drawn 10 to 13 ft, no farmhouse held to a maximum; the yard before the south wall turns with the house as one, so the front seat stands their reach toward the field off its chord, at the largest house the roll can take
+        the shed counted in the standoff, the garden not - UNRESEARCHED: the page places neither the shed nor the beds against the paddy; the shed is held at the wall's gap with the house, and the garden's side, chosen later by the sun, is left free to stand nearer
     """
     seat = plan.seat
     # THE SITE BOUNDARY FIRST (feature 226): one outline separating the buildable ground from everything the map holds,
@@ -450,7 +450,6 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     # ladder and the k-th place in the kura quota, so the counts close whatever seat each household lands on
     s._byre_form, _share = household_byre_form(s)
     s._byre_pockets = []
-    s._pockets = []  # the well pockets this seating has laid (feature 287, homes H10-H11; `needs_pocket`)
     # ...AND EACH HOUSEHOLD'S SHARE OF THE WOOD FLOOR (feature 287, woods W25 made absolute; plan D9): a household is seated
     # only where it can reserve copse seats covering `HOMESTEAD_WOOD_FT2`'s floor within the dooryard copse's reach of its
     # own house, and no later household or corridor takes them (`homestead_parts/wood_share.py`)
@@ -661,13 +660,8 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     # the homestead's CORE - the house, the yard south of it, the kura north - is what always faces the paddy the same
     # way; the garden's side is chosen later by the sun, so it is not in the reach (counted, it stood every front house
     # off a paddy beside it by a garden's width, 81 px on Inashiro against the 60 the cluster is held to)
-    # ...AND THE WELL POCKET (feature 287, homes H10): a household carrying one - the first always does, and it is the most
-    # central front seat - reaches that much further toward a paddy beside or before its yard, so the row stands off by it
-    s._household_well = True
-    try:
-        _g0 = s._bundle_geom(0.0, 0.0, _house_max[0], _house_max[1], "E", shed=True, rot=0.0)  # unturned: each seat adds its own turn
-    finally:
-        s._household_well = False
+    # (a clustered household carries no well pocket since feature 374 wave 155, so the reach holds none)
+    _g0 = s._bundle_geom(0.0, 0.0, _house_max[0], _house_max[1], "E", shed=True, rot=0.0)  # unturned: each seat adds its own turn
     _core = s._bbox_of([r for r in (_g0["house"], _g0["yard"], _g0.get("shed"), _g0.get("well")) if r is not None])
     _reach = (_core[0] - _core[2] / 2, _core[1] - _core[3] / 2, _core[0] + _core[2] / 2, _core[1] + _core[3] / 2)  # (left, top, right, bottom) about the house center
     # A ROW VILLAGE'S ROW (feature 291): the whole farmstead - its grove too, which may face the field - stands off the field,

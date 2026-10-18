@@ -248,7 +248,7 @@ def test_the_next_households_reach_is_rolled_with_its_own_lot_and_its_parts_take
     s._bundle_envelope = envelope  # type: ignore[method-assign]
     assert household_reach(s, (10.0, 20.0), (99.0, 99.0)) == (20.0, 20.0, 30.0, 30.0)  # type: ignore[arg-type]
     assert asked == [(46 * 1.2, 28 * 1.1, True, ("privy",))], "its own house from the size ladder, its kura, its fixtures set"
-    assert s._household_fixtures == () and s._household_well is False, "...and taken down after"
+    assert s._household_fixtures == (), "...and taken down after"
     s2 = _Ground(room=40.0)
     s2._bundle_envelope = lambda x, y, w, h, shed=False: asked.append((w, h, shed, ())) or (x, y, 10.0, 10.0)  # type: ignore[method-assign]
     household_reach(s2, (0.0, 0.0), (99.0, 98.0))  # type: ignore[arg-type]

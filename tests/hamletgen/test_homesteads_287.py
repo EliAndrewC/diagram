@@ -1,4 +1,4 @@
-"""Feature 287's homes guarantees at the homestead stage: the well pockets laid at seating and drawn (H10-H12), the
+"""Feature 287's homes guarantees at the homestead stage: the wells (H12; no clustered pocket since feature 374 wave 155), the
 household bamboo on its house's bank (H01), the eaves stack against its steading (H35) and the woodpile form (H33).
 
 Split from test_homesteads.py when feature 287 took it past the 1,000-line bar; the helpers stay there.
@@ -31,61 +31,16 @@ def test_a_well_past_the_crop_is_refused_now_the_pockets_water_every_house() -> 
     assert hg.place_wells(fake, plan, _WELL_HOUSES) == 0, "the one legal seat reaches 22 px past the box"  # type: ignore[arg-type]
 
 
-def test_every_household_seated_has_a_well_pocket_or_water_within_reach() -> None:
-    """Feature 287, homes H10 and H11: the first household always carries a pocket; a later one exactly when no pocket
-    and no open water stands within 760 ft - so every house is watered and no settlement is wellless."""
-    from l7r.diagram.settlement.rolling.lot import needs_pocket
-
-    s = Settlement(3000, 3000, seed=3)
-    s.meta(name="W", scale="hamlet", ftpx=1, toscale=True)
-    assert not needs_pocket(s, 100.0, 100.0), "no seating: no pockets asked"
-    s._pockets = []
-    assert needs_pocket(s, 100.0, 100.0), "the first household carries one"
-    s._pockets.append((100.0, 100.0))
-    assert not needs_pocket(s, 700.0, 100.0), "600 ft from a pocket"
-    assert needs_pocket(s, 1000.0, 100.0), "900 ft from it, and no water"
-    s.M["streams"] = [{"poly": [[1000.0, 0.0], [1000.0, 200.0]], "w": 6.0}]
-    assert not needs_pocket(s, 1000.0, 100.0), "open water beside it"
-
-
-def test_a_household_moved_off_the_seat_it_was_sought_from_past_every_pockets_reach_is_refused() -> None:
-    """Feature 287, homes wave 5 (`test_every_household_can_reach_water`): the pocket is decided at the seek point, and the
-    placer may carry the house off it - a candidate out of every pocket's and every water's reach, carrying no pocket of its
-    own, is refused (`lot.watered`, asked by `_parts_fit` and `_bundle_common_fits`); within reach, or with its own pocket,
-    it is not. The rule rests once the household is seated."""
-    from l7r.diagram.settlement.rolling.lot import household_parts, seat_parts_done, watered
-
-    s = Settlement(3000, 3000, seed=3)
-    s.meta(name="W", scale="hamlet", ftpx=1, toscale=True)
-    s._nucleated = True  # a nucleated bundle: a grove farm's carries its own pocket always (feature 291 on 287)
-    s._pockets = [(800.0, 300.0)]
-    assert household_parts(s, 800.0, 1000.0, "plain", None)[2] is False, "sought 700 ft from the pocket: no pocket of its own"
-    near, far = s._bundle_geom(800.0, 1000.0, 46.0, 28.0), s._bundle_geom(800.0, 1100.0, 46.0, 28.0)
-    assert s._candidate_watered(near) and s._bundle_common_fits(near)
-    assert not s._candidate_watered(far) and not s._bundle_common_fits(far) and not s._parts_fit(far), "moved 100 ft on, 800 ft off: dry"
-    assert watered(s, 800.0, 1100.0, True), "a candidate carrying its own pocket is watered wherever it stands"
-    seat_parts_done(s)
-    assert s._candidate_watered(far), "no household sought: nothing asked"
-
-
-def test_a_seating_draws_a_well_at_every_pocket_it_laid() -> None:
-    """The seat half and the draw half together: a toy hamlet's pockets are laid in the bundles (inside each envelope,
-    beside the yard, among the doors) and `place_wells` draws every one."""
+def test_no_clustered_household_carries_a_well_pocket_and_every_well_is_shared() -> None:
+    """Feature 374 wave 155 (row 787, 0028: "the well, shared off the farmstead"): a clustered hamlet's seating lays no
+    well inside any household's homestead, and every well `place_wells` draws is a shared well of the rolled siting."""
     from l7r.diagram.hamletgen.homesteads import stage_homesteads
-    from l7r.diagram.hamletgen.homesteads.wells import WELL_AMONG_DWELLINGS_PX, well_gap_to_dwellings
 
-    s, plan = _toy_hamlet(10, seed=4)  # seed 4: under feature 280's forms seed 3's margin seats eight of ten and is refused
+    s, plan = _toy_hamlet(10, seed=4)
     stage_homesteads(s, plan)
-    pockets = [h for h in s.M["houses"] if h.get("well_pocket")]
-    assert pockets and pockets[0] is s.M["houses"][0], "the first household carries one"
-    for h in pockets:
-        px, py = h["well_pocket"]
-        ex, ey, ew, eh = h["geom"]["bbox"]
-        assert abs(px - ex) <= ew / 2 and abs(py - ey) <= eh / 2
-        assert well_gap_to_dwellings(s.M["houses"], px, py) <= WELL_AMONG_DWELLINGS_PX
+    assert not any(h.get("well_pocket") for h in s.M["houses"]), "no household's homestead holds a well"
     hg.place_wells(s, plan, s.M["houses"])
-    drawn = {(round(w["x"], 1), round(w["y"], 1)) for w in s.M["wells"]}
-    assert all((round(h["well_pocket"][0], 1), round(h["well_pocket"][1], 1)) in drawn for h in pockets)
+    assert s.M["wells"] and {w.get("form") for w in s.M["wells"]} <= {"cluster", "lane"}
 
 
 def test_a_household_bamboo_strip_stands_on_its_house_bank_and_names_its_house() -> None:

@@ -51,10 +51,10 @@
    "declared": "spec-fidelity"
   },
   "## Landing": {
-   "sha256": "406dd4cac3ce0663870645811f6f22057e8a559bd45d9934ed0f3580c444f781",
+   "sha256": "a0174b5a8f1aa78ba1de2830d5fbf79e9998fe7e45f15bea7346051469bc0958",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-17",
-   "declared": "round-arbiter"
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
   },
   "## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)": {
    "sha256": "a0b57acda8087bcfe98d579f7bee7d25fb120b2c234736a8ae05192014d61e4f",
@@ -289,6 +289,192 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "round-arbiter"
+  },
+  "## T05 - T47: the wave 155 pocket-well patch re-landed, no waiver (384 FR-007)": {
+   "sha256": "ab42271bb6724be18371738d7b94da2f2f61d01fcf915bc9d59436dcdb4b81eb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Approach (checklist part A)": {
+   "sha256": "5da4fafbeb5af7ba5e1ebe70b7fae40d87289c51628710b494d2de2b44bd2d91",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Decisions": {
+   "sha256": "709a45de50ab3920a8d043e7560a8c4308ce1797fa19533b7527942577ae2dc3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T05 part B (2026-10-18T03:50Z)": {
+   "sha256": "c42812202070c1382e5f09c6d17195042defef571c25cf9d76505a822305fb28",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T20 - the hour decided once per message (the round arbiter's fix on hour:385-approach-checklist@10)": {
+   "sha256": "3dab5789c944e122748853b2e3ac14fde8533229773c19523a4da44dacc9b91d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T20 Approach (checklist part A)": {
+   "sha256": "add7157649eaa295b28eebbe5e455dbe5312becabcd98d76d66b5fd371151c9f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T20 Decisions": {
+   "sha256": "5b28e2bb74100ae9afc4160a1957edfaced12872adc68838a042450dbb41e72e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T21 - a batch reply's own EDITs settle its units (the round arbiter's fix on ask:t05-lane-popup-round3)": {
+   "sha256": "85616fdb8841feadc3811cd7e1f2f147520cae9480c42b24325313acf5eb8523",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T21 Approach (checklist part A)": {
+   "sha256": "727e1c1993ad356f749d0a0faa70c38de14ad85847b84077b2e693d635a18e6e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T21 Decisions": {
+   "sha256": "05f25c28b5b0296d7d5869beed987413d79395046ab0c5580593810d6ee85aeb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T22 - a refused dispatch is not lost (the round arbiter's fix on hour:385-approach-checklist@11)": {
+   "sha256": "2326f031491dcd4fcfa40cb74e97f60ba149db7a8c34586e62ee2631d8fc0d04",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T22 Approach (checklist part A)": {
+   "sha256": "8d2c264d5faec47f372acb32e866a26c0852fefca8780bee90e22735928cece6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T22 Decisions": {
+   "sha256": "00c6d1ba5f41de4e0f736bf746ff013585e28773418cf0986189dc9daf285445",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T22 Approach (re-answered 2026-10-18T09:33Z)": {
+   "sha256": "3f3ee954ceb5577c672466aea683ad5c7a12204bc221fa7441f6008a610263d8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T23 - a relabel answers its MISLABELED at the gate too (found by T05)": {
+   "sha256": "1f5d8a74ec823a7d8ee869c2372ad8c2285ee5de273c8efddb9e010665f6cf61",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T23 Approach (checklist part A)": {
+   "sha256": "d0713c5a382cde0522f7762d7349ee8807b1b2fe810f0487cd219309e7d2c397",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T23 Decisions": {
+   "sha256": "7e131584f9babe7769acfe9988ce9fdb4e7df21f0493bbed40fcfd8cb1219244",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T24 - a tooling landing merges main in first (found landing T21, T22 and T23)": {
+   "sha256": "64f9e5d8da2aaad01f660d12400d223e4168ff12967682c73395eae91cfe8a00",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T24 Approach (checklist part A)": {
+   "sha256": "8963261fc55d7258416e7019832d205a11e68a65cd8ff6d8717fe1a71f1d91b8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T24 Decisions": {
+   "sha256": "277966f76298cb0c615db24b148600646bb2facac9212c2eb63821081989c9c3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T25 - a claims bundle carries what the unit's code reads from other modules (the round arbiter's fix on ask:t05-old-drifts-at-landing)": {
+   "sha256": "2e55c615e5a7d25879ce8f5ca94418f20f9c31e33d11cf6ab68571241a2a6d3d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T25 Approach (checklist part A)": {
+   "sha256": "45ae6020bdf86ceb52b56b03ec7481dbbace58aa0dab09e3e9d11ce7b4257b34",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T25 Decisions": {
+   "sha256": "940e0d7e7436b62c421d154f86ad7061f45c2baf9ef1fcad66385a0a3087ce3d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T26 - a review never reads an absent or stale render (the round arbiter's fix on hour:385-approach-checklist@12)": {
+   "sha256": "86596dfdd371578d48a3d6635072371276788b67dd385ce9683a83cd793316ab",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T26 Approach (checklist part A)": {
+   "sha256": "ac3dc7dcc25684d3b8aba4a08e7e050b546d32c17a486f0679ad53a9d4e80114",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T26 Decisions": {
+   "sha256": "e4fa6ff38a6fe45e11516c2d3c8f46be92dfb223ca527b61a20c6c09cee949c0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T05 part B (2026-10-18T10:25Z)": {
+   "sha256": "f26e995b2884abfe8bfca105319451a93661949a8fe97121422afe75ae0e5b08",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T24 Approach (re-answered 2026-10-18T09:52Z)": {
+   "sha256": "3c70eba2e6b1fe2cb31f19384620646e41cd5a7f3e23d9bc68073528a03993ae",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T27 - the heading the tool asks for passes its own check (found ticking T05 and T22)": {
+   "sha256": "fe8be8be3c8d5f08f026e3a12bcf086e39ab8903c18f0bcbcba6f77d7c66e6f3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T27 Approach (checklist part A)": {
+   "sha256": "fa030111bd91bb87825b3441247253b33d889a9cddfdae5042773a6cb5e18bce",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T27 Decisions": {
+   "sha256": "0c3e4d7376dd3567e7d1890ee77cc9c566a139fa40123a2a9ea55d476e3c82d0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
   }
  },
  "reviewed": "2026-10-17",
@@ -2025,6 +2211,885 @@
      "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## T05 - T47: the wave 155 pocket-well patch re-landed, no waiver (384 FR-007)",
+    "### T05 Approach (checklist part A)",
+    "### T05 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D41a",
+     "summary": "The wave 155 pocket-well patch is re-landed as built; its decisions are 374's W155-1 to W155-6, unchanged, and no waiver is taken.",
+     "class": "within",
+     "why": "The approved scope lists 'T47's patch re-landed' and FR-007 moves T47 here under 384's FR-002 (374's rules). Re-landing as built, with no waiver, is the literal request. The decisions inside the patch were already ruled in 374 and nothing here changes them."
+    },
+    {
+     "id": "D41b",
+     "summary": "In the W155-4 bar, the 54-seed cohort (T04: 54/54 at HEAD and patched) stands in for the 44 rolls of 374's scratch tooling (tools13/roll13.sh).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This swaps the measured set the bar was ruled against, so I judge it as an exception. Two grounds make it legitimate. First, the literal set cannot be used: per the plan, the 44 rolls came from scratch tooling outside the repository and cannot be reproduced. Second, the accepted spec already points this way: 385's SC-003 judges the moved work by 384's SC-004, which the plan says already used this cohort. The bar is there to catch regressions: no roll that passes at HEAD may refuse once patched. The substitute still does that job. The cohort is 384's fixed cohort, chosen before this patch, so it was not picked to suit it. It is larger (54 against 44). Every other clause of W155-4 stays: the pool is clean, no well inside a homestead, every household within 760 ft of water, no well serving more than ten households, the counts recorded. The bar is no weaker in its purpose. Caveat: I could not see 384's SC-004 or the 44-roll record from inside the bundle. If 374's 44 seeds were in fact recorded in the repository, this ground falls and they should be run."
+    },
+    {
+     "id": "D41c",
+     "summary": "The owed glyph checks are 374's three placement-changed occasions (wells moved on Inashiro, Kuwabata, Sawada), each a check of that map's wells.",
+     "class": "within",
+     "why": "These are the checks the patch already owes under 374's tasks. None is dropped or added."
+    },
+    {
+     "id": "A5-order",
+     "summary": "Wells are seated after the houses using wave 154's forms, and nothing placed earlier moves for a well; the seating lays no pocket well.",
+     "class": "within",
+     "why": "This keeps the GM's stated principle: things placed earlier do not move for things placed later ('nobody moves their house'). It is also the patch's existing order."
+    },
+    {
+     "id": "A6-exit",
+     "summary": "Exit taken: (e) conform, re-land as built; the patch's own exits (more room priced first, a third well within the research range) stay as 374's W155-6 priced them.",
+     "class": "within",
+     "why": "Conforming is what was asked. The other exits are 374's own, already ruled, and are not reopened here."
+    },
+    {
+     "id": "A8-budget",
+     "summary": "Budget of about 90 min for the task.",
+     "class": "within",
+     "why": "This is the checklist's budget item, an estimate. It is not a success threshold put on record, which the GM declined in amendment 2, and it narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T20 - the hour decided once per message (the round arbiter's fix on hour:385-approach-checklist@10)",
+    "### T05 part B (2026-10-18T03:50Z)",
+    "### T20 Approach (checklist part A)",
+    "### T20 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing-T20",
+     "summary": "T20 added to the Lands-open list; each task lands when it closes, before the next starts",
+     "class": "within",
+     "why": "The only change from the text last judged CLEAR is T20 joining the list; the landing rule itself is FR-006 unchanged."
+    },
+    {
+     "id": "T05B-continue",
+     "summary": "Hour-10 step-back answers: the bar's rules restated from part A (0028/0196 R, 760 ft R, shares GUESS recorded); the patch re-lands as built, measured as 374 measured it; wells seated after the houses; next step re-dispatching the three refused checks and landing",
+     "class": "within",
+     "why": "No new plan decision: the rules and their sources are part A's, already CLEAR. Re-landing T47's patch is in the approved scope ('T47's patch re-landed'), and seating wells after the houses follows the GM's homesteads-before-paths words. The figure '3 to 10 households' is a one-shot observation stamped with the block's time and method ('asked at the pool's wells'), not a decision."
+    },
+    {
+     "id": "T20-own-task",
+     "summary": "The hour-guard fix is filed as its own task T20, not folded into T05",
+     "class": "within",
+     "why": "FR-015 (amendment 4, GM-approved): a second goal found in a task becomes its own task. The fix is the round arbiter's ruling, and the arbiter stands where the GM was asked (feature 379); FR-018 already provides for an arbiter's fix landing as a task. The GM's 'proceed with implementing task 05' is not narrowed: T05 continues, and T20 is the tooling fix that T05's step-back turned up. T20's done line tests two mechanisms, the window and the refused read, but both serve one goal: the hour guard's refusal path, as the step-back meets it. I class that as one goal."
+    },
+    {
+     "id": "D42a-same-message-window",
+     "summary": "Past the hour, a dispatch within SAME_MESSAGE_S (5 s) of an admitted dispatch is admitted - the rest of the message the admitted one began",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the hour guard (the GM's hourly step-back, 383): some dispatches past the hour are no longer refused. Presumed wrong. It survives on purpose and on the GM's own words. The step-back's purpose is that no new decision is taken after the hour without stepping back. The dispatches of one assistant message were all decided together, before the guard spoke, so the step-back cannot reach that decision. Refusing part of the message only splits it by hook latency (T05's five went two and three), and the refused part is re-dispatched after the step-back anyway (T05 part B item 9). The step-back still comes before every message emitted after the hour, and gates stay outside the window (D42b). The GM's amendment 5 ('I wonder if another tooling fix would make us more likely to batch commands') asks for more batching, and a guard that splits a batch penalizes exactly that. PREMISE this ruling rests on: the plan carries out 'same message' as nearness in time (5 s from an admitted dispatch), not as the message's identity. The ruling covers only the plan's stated bound, 'the rest of the message it began'. A window that admits a dispatch from a FOLLOWING message, for example one emitted within 5 s of a dispatch that returned at once, or a chain that carries past the message, would be outside this ruling and would need a new one. The test should hold that bound. Approach item 3's 'the batching hook's same-turn window, widened' is read as a wider value used by checkpoint.due only. D42 names only checkpoint.due and stepback_bundle.refusals. A change to the batching hook's own window would reach beyond the arbiter's fix."
+    },
+    {
+     "id": "D42b-gate-never-windowed",
+     "summary": "A gate is never admitted by the same-message window",
+     "class": "within",
+     "why": "It bounds the D42a exception and does not widen it: the hour guard keeps its full force on gates."
+    },
+    {
+     "id": "D42c-refusals-read-refused",
+     "summary": "stepback_bundle.refusals reads the hour guard's own 'refused' events as well as 'blocked'",
+     "class": "within",
+     "why": "It enforces what was asked: the GM's step-back is meant to see the session's refusals, and the hour guard's own word was being missed. Delete the step-back in your head and this change has nothing left to fix."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T21 - a batch reply's own EDITs settle its units (the round arbiter's fix on ask:t05-lane-popup-round3)",
+    "### T21 Approach (checklist part A)",
+    "### T21 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Landing-T21",
+     "summary": "T21 added to the Lands open list",
+     "class": "within",
+     "why": "FR-006: each task lands when it closes; adding the new task to the list only applies the existing landing rule."
+    },
+    {
+     "id": "D43-batch-read",
+     "summary": "record_owed.reply_checks names a reply's check from its first line, else from the first counts line of a known check anywhere in it, so apply-edits FROM=<batch reply or transcript> settles the units its EDITs moved",
+     "class": "within",
+     "why": "Makes the settling the arbiter already ruled (feature 335, 375 amendment 3) reach FR-009 batch replies, which open with prose. That is the arbiter's fix on ask:t05-lane-popup-round3 working on the case T05 measured, and a tooling improvement amendment 6 asks for."
+    },
+    {
+     "id": "D43-footer-tip",
+     "summary": "make record-owed's footer tells the session to apply a round's EDITs with make apply-edits FROM=<reply or transcript>",
+     "class": "within",
+     "why": "A process improvement under amendment 6 (the GM 2026-10-18: implement any obvious tooling / process improvements). Does not include the footer's second sentence, which is ruled under D43-hand-edit-not-settled."
+    },
+    {
+     "id": "T21-done-test",
+     "summary": "tests/tooling/test_apply_edits.py red without the batch read",
+     "class": "within",
+     "why": "A test whose only effect is to enforce the requested fix; enforcement of what was asked."
+    },
+    {
+     "id": "D43-hand-edit-not-settled",
+     "summary": "An edit matching the finding's EDIT line for line settles its unit only when applied through apply-edits FROM=<reply>; an EDIT typed or copied by hand re-owes its unit. Appears in three places: Approach item 2 ('a unit changed any other way stays owed'), D43's 'Not built: settling an EDIT applied by hand', and D43's footer text ('an EDIT typed or copied by hand re-owes its unit').",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The arbiter's ruling, which reached this review only as the dispatch's quote and not in the bundle, says: 'the modal-depiction re-owe guard should treat an edit whose diff matches, line for line, the verbatim EDIT the last round's finding supplied as settling that finding.' Its test is a property of the DIFF. D43 swaps that for a property of the MECHANISM. (1) Not impossible. D43's reason is 'the settling needs the reply's own blocks to tell a check's words from the session's'. That names an input the check needs, not something that cannot be done: apply-edits FROM=<reply or transcript> already takes that reply, and the same reply lets the check compare a working-tree diff with its EDIT blocks, however the edit reached the tree. If the plan's real premise is that the finding's EDIT text is kept nowhere the guard can read when the session edits by hand, that is a factual claim the block never measures, and scope cannot rest on it. (2) Not implied by the ruling: 'whose diff matches, line for line' read plainly covers any route an edit takes. (3) It defeats the ruling's purpose. Approach item 4 records that the T05 incident behind the ruling was hand-applied EDITs (page 0196's from a hand-made file, the pop-ups' by hand), so the carve-out leaves out the very case the ruling was written for, and the footer turns the carve-out into guidance that contradicts the ruling. Fix: the guard settles a unit when its working-tree diff matches, line for line, an EDIT in the last round's finding (the supplied reply or transcript), however the edit was applied; apply-edits FROM= stays one way to produce that match, not the only one that settles. Strike 'a unit changed any other way stays owed' from Approach item 2 (a unit whose diff departs from the EDIT stays owed) and the hand-edit sentence from the footer, and replace the 'Not built' sentence. An edit that departs from the EDIT, or one made with no reply to compare against, still re-owes."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T21 - a batch reply's own EDITs settle its units (the round arbiter's fix on ask:t05-lane-popup-round3)",
+    "### T21 Approach (checklist part A)",
+    "### T21 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing-T21",
+     "summary": "T21 added to the tasks that land open, one at a time",
+     "class": "within",
+     "why": "FR-006: each task lands when it closes while later ones stay open."
+    },
+    {
+     "id": "T21-exists",
+     "summary": "T21 implements the round arbiter's fix on ask:t05-lane-popup-round3 as a tooling task",
+     "class": "within",
+     "why": "The arbiter's ruling is the authority for the fix, and amendment 6 asks for 'any obvious performance / tooling / process improvements along the way'; 'tooling only' keeps it to that."
+    },
+    {
+     "id": "D43-batch-read",
+     "summary": "reply_checks names a reply's check from its first line, else from the first counts line of a known check anywhere in it, so apply-edits on a batch (FR-009) reply or transcript settles the units its EDITs moved",
+     "class": "within",
+     "why": "Makes the existing apply-edits settling (the arbiter's rule) reach FR-009 batch replies, which open with prose; without it the arbiter's fix does not fire on the case measured on T05."
+    },
+    {
+     "id": "D43-departs-or-alone",
+     "summary": "a unit whose diff departs from the EDIT, or that other changes besides its own EDITs moved, still re-owes",
+     "class": "within",
+     "why": "This is the arbiter's own test: the diff must match the verbatim EDIT line for line."
+    },
+    {
+     "id": "D43-hand-applied-via-command",
+     "summary": "an EDIT already applied by hand settles through make apply-edits FROM=<reply or transcript> (block put back, re-applied, file ends as it was), not by the guard recognising the diff unaided; the record-owed footer names the command",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Round 1's NOT LEGITIMATE item is answered: a hand edit matching the EDIT line for line now settles, however it got there, as the arbiter ruled. The command stands between because the guard can only compare against an EDIT whose text it is handed; nothing in the bundle shows the guard holds the reply independently, so the command is the route to the comparison the arbiter's test needs, and the footer names it exactly where the guard would re-owe. The purpose (a verbatim fix owes no round) is reached."
+    },
+    {
+     "id": "D43-no-reply",
+     "summary": "a hand edit with no reply or transcript to read still re-owes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible otherwise: the arbiter's test is a match against the verbatim EDIT the finding supplied, and with neither reply nor transcript there is no EDIT to match."
+    },
+    {
+     "id": "D43-put-back-precondition",
+     "summary": "a hand-applied block is put back only when its new text stands once in its file and its old text is gone; one that fails this re-owes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The reply is the command's only input; a block whose new text cannot be located once (or whose old text still stands, so the EDIT is not applied as written) cannot be identified as the EDIT's own change from the reply alone. The case left owed is the duplicate-text edge, not the class of matching hand edits the arbiter ruled on, so the purpose is not gutted."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T22 - a refused dispatch is not lost (the round arbiter's fix on hour:385-approach-checklist@11)",
+    "### T22 Approach (checklist part A)",
+    "### T22 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing-T22",
+     "summary": "T22 is added to the tasks that land open, each landing when it closes before the next starts.",
+     "class": "within",
+     "why": "The same one-task-at-a-time landing FR-006 sets for T02-T21; the only change from the CLEAR text is T22 appended."
+    },
+    {
+     "id": "T22-scope",
+     "summary": "T22 implements the arbiter's two changes on hour:385-approach-checklist@11 as tooling only.",
+     "class": "within",
+     "why": "Amendment 6 (the GM: 'implement any obvious performance / tooling / process improvements along the way') and feature 379, which stands the arbiter where the GM was asked; the task's goal ('a dispatch a guard refused is sent again or recorded as dropped before the session ends a turn') restates the arbiter's first change and does not narrow it."
+    },
+    {
+     "id": "T22-order-exits-budget-done",
+     "summary": "Refusal text first, then the Stop layer; exit (c) one Stop guard; budget 40 min; done = a hook test red without the Stop layer and a test red without the named refusal.",
+     "class": "within",
+     "why": "Order and budget are execution choices the request leaves open; each done test fails only when one of the arbiter's two changes is absent, so it enforces the fix rather than adding scope. The figures in Approach item 4 carry a one-shot label (2026-10-18, the session transcript); 40 min is a budget, not a measurement."
+    },
+    {
+     "id": "D44-window",
+     "summary": "The Stop hook reads the transcript from the GM's last prompt (not a tool result or task notification) rather than from the last turn end.",
+     "class": "within",
+     "why": "Not narrower than the arbiter's 'since the last turn end': every turn end since the GM's last prompt was either blocked or passed with nothing unanswered, so the window covers at least the arbiter's, and it reaches across task-notification turns, which is exactly the T05 incident (the session ended its turn waiting on a refused check and was woken later)."
+    },
+    {
+     "id": "D44-refused",
+     "summary": "A refusal is an Agent call whose result is an error carrying BLOCKED.",
+     "class": "within",
+     "why": "This is how a refusal is recognized in the transcript, not a carve-out of any kind of refusal: no class of guard refusal is excluded by the decision. It is within only if every hook that refuses an Agent call carries that marker; a refusing hook without it would be an implementation defect against 'any dispatch refused', and T22's hook test should exercise the decide-first refusal's actual text."
+    },
+    {
+     "id": "D44-answered",
+     "summary": "A refusal is answered by a later unrefused Agent call of the same subagent_type naming the same bundle (first /tmp/l7r-check path, else the description), or by make dispatch-dropped TYPE= BUNDLE= WHY= recorded in <gitdir>/dropped-dispatches.jsonl.",
+     "class": "within",
+     "why": "Implements the arbiter's 'neither sent again nor recorded'. The match is strict (a re-send under a different bundle path does not answer), which can only block more, and the record route is the arbiter's own second exit and carries a reason, as the root CLAUDE.md guard rule asks."
+    },
+    {
+     "id": "D44-block-every-time",
+     "summary": "While any refusal is unanswered the turn end is blocked every time, naming each refused check with both commands; no once-only valve.",
+     "class": "within",
+     "why": "The arbiter says 'refuses to end a turn while any ... and names each such check'; blocking every time with no valve is the literal rule, and it is always satisfiable through dispatch-dropped, so no exception is made."
+    },
+    {
+     "id": "D44-refusal-text",
+     "summary": "The check-bundle and pair hooks' decide-first refusals name the check as '<agent type> on <bundle>' instead of 'dispatch'.",
+     "class": "within",
+     "why": "The arbiter's second change: 'names the check and unit it refused, not just dispatch'. The agent type names the check and the bundle path names the unit it was dispatched on. Covering the pair hooks' decide-first refusal as well as check-bundle's does not narrow; it is the same message in the hooks the arbiter's ruling names ('two changes to the pair hooks')."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "### T22 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D44a",
+     "summary": "The Stop hook's window starts at the last turn end it passed (<gitdir>/dispatch-seen); a blocked turn end moves nothing, so a refusal stays listed across turns until answered.",
+     "class": "within",
+     "why": "The arbiter's 'since the last turn end': a turn end the hook blocked is not a turn end, so the window from the last PASSED one is the literal reading, and it is the one that catches the measured incident (refusals 03:57, GM prompt 03:59 mid-turn)."
+    },
+    {
+     "id": "D44b",
+     "summary": "When <gitdir>/dispatch-seen is absent, the window starts at the GM's last prompt.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The arbiter's window is 'since the last turn end', and the block itself measures that a window from the GM's last prompt misses the incident's shape (a refusal before a prompt that arrives mid-turn). The fallback brings that miss back on every clone's first turn end, where the file is always absent because the hook was a no-op until now. The literal rule can be followed: the transcript records each turn end as a system/turn_duration entry after a stop_hook_summary with preventedContinuation false (observed 2026-10-18 by counting entry types in three session transcripts under ~/.claude/projects). It should say: with no record, the window starts at the transcript's last turn end that passed, or at the session's start when there is none. It must not start at the GM's last prompt. The incident's shape, observed 2026-10-18 by listing the session transcript d2dc8c63's entries from 03:50 to 04:05: the GM's 'If memory serves' prompt was queued at 03:57:47 and taken into the running turn at 03:58:10. Four PreToolUse:Agent refusals fell between 03:57:57 and 03:58:06, and the turn ended at 03:59:25. A window from that prompt starts after all four refusals, and the turn end before them (03:50:51) is in the transcript."
+    },
+    {
+     "id": "D44c",
+     "summary": "A refusal is recognized by the harness's 'PreToolUse:Agent hook error' result, whatever the hook's wording.",
+     "class": "within",
+     "why": "The arbiter's 'any dispatch refused' covers a refusal by any hook. Keying on the harness marker is the literal reading, and is wider than the hook's own BLOCKED wording."
+    },
+    {
+     "id": "D44d",
+     "summary": "A refusal is answered by a later, unrefused Agent call of the same subagent_type naming the same bundle (the first /tmp/l7r-check path, else the description), or by make dispatch-dropped TYPE= BUNDLE= WHY= recording it in <gitdir>/dropped-dispatches.jsonl.",
+     "class": "within",
+     "why": "These are the arbiter's 'sent again' and 'recorded'. A bundle path is reused: plan-385-approach-checklist-blocks appears 239 times in this session's transcript, observed 2026-10-18 by grep. A later unrefused dispatch on the same path therefore answers an earlier refusal on it. That stays within 'sent again' because a regenerated bundle carries everything still owed (MANIFEST: a block is owed until its CLEAR verdict), so the refused work is in the resend. A key that misses a real resend only blocks, and the record command answers it."
+    },
+    {
+     "id": "D44e",
+     "summary": "Blocked every time while one is unanswered, naming each refused check with both commands; no once-only valve.",
+     "class": "within",
+     "why": "The arbiter's 'refuses to end a turn while ... and names each such check'. Naming the two commands that answer it is part of the message, not new behavior."
+    },
+    {
+     "id": "D44f",
+     "summary": "The check-bundle and pair hooks' decide-first refusals name the check as '<agent type> on <bundle>' instead of 'dispatch'.",
+     "class": "within",
+     "why": "The arbiter's 'names the check and unit it refused, not just dispatch'. The bundle path is the dispatch's unit (e.g. q-0196-quote-check, plan-385-...-T05). Applying the same wording to the pair hook's own decide-first refusal changes a message only and sits inside 'two changes to the pair hooks'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "### T22 Approach (re-answered 2026-10-18T09:33Z)",
+    "### T22 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D44 window start",
+     "summary": "The stop guard reads the transcript from its last system/turn_duration entry, else from the session's start; never from the GM's last prompt.",
+     "class": "within",
+     "why": "Implements the guard's own purpose (a check the session meant to run is never silently left unrun, under amendment 6's 'implement any obvious ... tooling / process improvements'). The new window is wider than the CLEAR version's (session start replaces the GM's-last-prompt fallback), so it narrows nothing. Premises re-measured on d2dc8c63: turn_duration at 03:50:51.954Z, prompt enqueued 03:57:47.951Z, four refused results 03:57:57-03:58:06, turn_duration 03:59:25.019Z; and the two blocked stop_hook_summary entries in that transcript (2026-10-17T17:59:13Z, 18:33:16Z) were each followed by no turn_duration while all 89 passed ones were, so a blocked turn end does keep the refusal in the window."
+    },
+    {
+     "id": "D44 no state file",
+     "summary": "The dispatch-seen state file is dropped; the transcript's turn_duration entries are the record of turn ends.",
+     "class": "within",
+     "why": "Mechanism only; the guard's reach and what it refuses are unchanged."
+    },
+    {
+     "id": "D44 answered / blocked (unchanged)",
+     "summary": "A refusal is answered by a later unrefused same-type call on the same bundle or by make dispatch-dropped; until then every turn end is blocked naming both commands; decide-first refusals name the check.",
+     "class": "within",
+     "why": "Text identical to the block's last CLEAR verdict (earlier.md)."
+    },
+    {
+     "id": "Approach re-answer",
+     "summary": "The T22 Approach block re-answered for the new window: source of the window labeled (the arbiter's, G; turn_duration reading ours, O), incident timeline, two added hook tests (refusal after a mid-turn prompt; session with no turn ended yet), budget unchanged.",
+     "class": "within",
+     "why": "Answers the checklist as FR-003 requires and adds only tests that fail when the requested behavior is absent. The arbiter's ruling it cites is not in the bundle, but the window it adopts is no narrower than either version reviewed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T23 - a relabel answers its MISLABELED at the gate too (found by T05)",
+    "### T23 Approach (checklist part A)",
+    "### T23 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing: T23 lands open",
+     "summary": "T23 is appended to the Lands-open list, landing on its own when it closes like every other task.",
+     "class": "within",
+     "why": "FR-006 (one task at a time, each landing before the next) applied to a new task; amendment 6 asks for each tooling improvement found along the way to be made, and FR-015 makes it its own task."
+    },
+    {
+     "id": "T23 filed",
+     "summary": "A tooling task found by T05: the claims gate refuses a MISLABELED claim already relabeled as prescribed, with no command to clear it.",
+     "class": "within",
+     "why": "Amendment 6, the GM verbatim: 'Please make sure to implement any obvious performance / tooling / process improvements along the way.' A gate refusal nothing can clear is an obvious tooling defect; tooling only, one goal."
+    },
+    {
+     "id": "D45",
+     "summary": "claims.classify skips a MISLABELED finding whose current claim text differs from the text its verdict was recorded against while the unit body is the one judged; a relabel with the body moved stays owed and is judged again; a MISLABELED with unchanged text still refuses.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It is an exception to FR-013's last sentence ('a finding on ... a changed claim is still introduced and still refuses'). Legitimate on three grounds. (1) Purpose: FR-013 exists so a finding is fixed or re-checked clean before its feature closes; Approach step 4 records, dated 2026-10-18 with its method (make claims-owed, claims.py gate), that three claims relabeled as round 2's MISLABELED prescribed are not re-owed yet are refused, so the literal rule leaves a finding that is both fixed and unclearable, and the prescribed fix can never land. (2) The GM's own words: amendment 3 option 3, locked by the GM, 'Never block on unchanged code'; D45 requires the unit body unchanged. (3) Class check, each case on its own: the carve-out covers only MISLABELED with the body unchanged; a relabel with the body moved stays owed and judged, and a MISLABELED with unchanged text refuses as before, so FR-013's refusal of changed code survives whole. Premise the ruling rests on (not checkable from the bundle): the mechanism tests 'text differs', not 'text matches the prescription', and is defended as the same test feature 374's relabeled_only already applies on the owed side; the gate is brought into line with that existing rule, not given a new one."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T24 - a tooling landing merges main in first (found landing T21, T22 and T23)",
+    "### T24 Approach (checklist part A)",
+    "### T24 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T24 (filing)",
+     "summary": "File a new task T24: make land-tooling merge main in before building its patch, found when T21, T22 and T23 were each refused for main having moved and each landed unchanged after a hand sync-in.",
+     "class": "within",
+     "why": "Amendment 6, the GM verbatim: 'Please make sure to implement any obvious performance / tooling / process improvements along the way.' Three of three landings refused and fixed by the refusal's own remedy, run by hand, is an obvious tooling improvement, and it is its own task as the dispatch says amendment 6's improvements are. It names one goal (FR-015)."
+    },
+    {
+     "id": "Landing (T24 lands open)",
+     "summary": "T24 added to the Lands open list: it lands when it closes, with its retro row, while later tasks stay open.",
+     "class": "within",
+     "why": "The same per-task landing every other task carries, which serves FR-006 (one task, then the retro) and the request's 'we do one task and then we measure ... then we go on and do the next task'. The only change from the CLEAR earlier text is T24 appended."
+    },
+    {
+     "id": "D46 - merge main in first",
+     "summary": "After its fetch, when origin/main is not an ancestor of HEAD, land-tooling.sh runs scripts/sync-with-main.sh sync-in (a merge commit, never a rebase), takes the merge base again, and builds the patch from the clone's own change on today's main; a failed merge refuses naming the hand command; uncommitted FILES still refuse first.",
+     "class": "within",
+     "why": "It automates the remedy the existing refusal already tells the session to run by hand, and keeps feature 379's route (new commit on latest main, detached worktree, every push check, no history rewrite). Keeping the conflict and uncommitted-file refusals keeps today's behavior and drops no requirement. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T24 Approach (budget, exits, done, test)",
+     "summary": "Approach block: exit (c) chosen, others n/a; 25 min budget; done is one goal measured by a behind-main clone landing in one command, a conflicting merge still refusing, and tests/hooks/test-land-tooling.sh red without the merge.",
+     "class": "within",
+     "why": "FR-003 requires each task's Approach block answering the checklist. The test is red only when the requested improvement is absent, so it enforces the improvement and is not added scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "### T24 Approach (checklist part A)",
+    "### T24 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T24 Approach - goal and constraints",
+     "summary": "make land-tooling lands first try when the clone's files merge with main; feature 379's route kept (new commit on latest main, detached worktree, every push check, no history rewrite, real conflict still refuses naming files), tooling only, a test red without it",
+     "class": "within",
+     "why": "A tooling improvement removing a measured repeated refusal (three of three landings, 2026-10-18 logs) is what amendment 6 asks: 'Please make sure to implement any obvious performance / tooling / process improvements along the way.' The constraints keep existing guards rather than relaxing any; nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T24 Approach - exit (c), automate the refusal's own remedy",
+     "summary": "the script runs the step its refusal already tells the session to take by hand",
+     "class": "within",
+     "why": "Automates an existing manual remedy; changes no rule the GM set and removes no check."
+    },
+    {
+     "id": "D46 - merge main in only when FILES' patch fails to apply",
+     "summary": "on a failed apply, git merge --no-edit origin/main into the clone (merge commit, never rebase), recompute merge base and patch, apply once more; no merge when the patch applies, so feature 379's 'clone's history is untouched' test stands",
+     "class": "within",
+     "why": "Meets the block's goal (never refused only because main moved) while leaving 379's route byte-for-byte as it was on the path that already worked. Merging only in the case that previously refused is the smallest change that reaches the goal; it narrows nothing the GM asked for. A merge commit, not a rebase, honors 'never rewrite history'."
+    },
+    {
+     "id": "D46 - plain git merge rather than sync-in",
+     "summary": "sync-in's mirror refresh and render steps are not run; only the merge",
+     "class": "within",
+     "why": "An implementation choice about which existing command performs the merge; the GM's request says nothing about sync-in, and the outcome the goal needs (main merged into the clone) is the same."
+    },
+    {
+     "id": "D46 - conflicting merge aborted and refuses; second failed apply refuses; uncommitted FILES refuse first",
+     "summary": "conflict leaves the clone as it was and names sync-in for manual resolution; other refusals unchanged",
+     "class": "within",
+     "why": "Keeps every existing refusal and adds a clean abort; no guard is loosened."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T25 - a claims bundle carries what the unit's code reads from other modules (the round arbiter's fix on ask:t05-old-drifts-at-landing)",
+    "### T25 Approach (checklist part A)",
+    "### T25 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Landing: T25 lands open",
+     "summary": "T25 added to the Lands open list; nothing else in the block changed from its CLEAR text.",
+     "class": "within",
+     "why": "FR-006 one task at a time, each landing as it closes; T25 is a task like the others."
+    },
+    {
+     "id": "Approach 3: every claim",
+     "summary": "The cross-module callee/constant inlining runs for every claim, not only claims whose label names a distance, gap or standoff.",
+     "class": "within",
+     "why": "A superset of the arbiter's trigger, not a carve-out from it: every claim the arbiter named still gets the inlining. Amendment 6 ('implement any obvious performance / tooling / process improvements') covers the widening, and the plan cites the evidence (T03's _clear_link, a link claim, hit the same CANNOT-TELL)."
+    },
+    {
+     "id": "D47 depth",
+     "summary": "Follows imported engine names and goes one call deeper from each callee found.",
+     "class": "within",
+     "why": "The arbiter's words: 'direct callees ... (transitively one level)'. The measured case (front_row then _front_row_from_chains / install_site_boundary) needs exactly that depth."
+    },
+    {
+     "id": "D47 constant definition",
+     "summary": "A constant is an ALL_CAPS module-level name the unit or a callee reads, inlined as its assignment line with its comment.",
+     "class": "within",
+     "why": "An operational definition of the arbiter's word 'module-level constant' (the PEP 8 convention the codebase uses: HOUSE_PADDY_GAP_FT, STANDOFF_SLACK_PX), not a case taken out of it."
+    },
+    {
+     "id": "D47 l7r/ only",
+     "summary": "A name outside l7r/ (standard library, third-party) is never followed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Literally narrower than 'direct callees', but the fix states its purpose as ending 'asking for its call chain a round at a time', and every layer the three CANNOT-TELL rounds asked for (Approach item 4) was a project name; builtins and C extensions have no Python source to inline at all. The narrowing removes nothing the purpose needs."
+    },
+    {
+     "id": "D47 cap",
+     "summary": "CALLEES_MAX rises from 6 to 12; past it the nearest first (the rest are dropped). Approach item 6: 'the cap is ours and stays'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The arbiter's fix inlines 'direct callees and EVERY module-level constant they read (transitively one level)'. A cap that keeps the nearest 12 and drops the rest is not every, and a unit whose two depths and constants exceed 12 goes back to CANNOT-TELL and asks for the next layer, the exact failure the fix exists to end. The plan's own item 6 says the cap is ours, so keeping it is preserving existing behavior nobody asked to keep. It is not impossible to include everything (the depth is already bounded at two levels), and no arbiter or GM words in the bundle ask for a bound. D47 also does not say whether constants count toward the cap; either way something the ruling names is dropped. It would be within if nothing in the two depths is silently dropped, or at the very least if constants are never capped and an overflow is reported, not cut. Note too that done (item 9) names the six cross-module items but has not measured how many own-module callees _seat_households adds, so it has not shown the measured case fits in 12."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T25 - a claims bundle carries what the unit's code reads from other modules (the round arbiter's fix on ask:t05-old-drifts-at-landing)",
+    "### T25 Approach (checklist part A)",
+    "### T25 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Landing/T25",
+     "summary": "T25 lands open, on its own, with its retro row, before the next task starts.",
+     "class": "within",
+     "why": "FR-006 (one task, then the retro) and the GM's 'we do one task and then we measure' as written."
+    },
+    {
+     "id": "D47(a)",
+     "summary": "For a claim whose label names a distance, gap or standoff (trigger words: distance, gap, standoff, apart, reach, clear of, off the, ft, feet), the bundle carries every engine function the unit calls, its own module's and imported, and every module constant it or they read, one level on, UNCAPPED.",
+     "class": "within",
+     "why": "On its words, this is the arbiter's tooling_fix as worded: 'direct callees and every module-level constant they read (transitively one level) whenever a claim's label names a distance, gap or standoff'. It is uncapped, so round 1's NOT LEGITIMATE cap of 12 is gone. The trigger carries the arbiter's three words literally and adds more distance words, which widens it. 'It or they' adds the unit's own constant reads, which also widens it. Its reach on the arbiter's motivating case is ruled separately (D47-reach)."
+    },
+    {
+     "id": "D47-reach",
+     "summary": "On the standoff claim on _seat_households, the arbiter's motivating case, the first bundle stops one hop down. HOUSE_PADDY_GAP_FT, read by _front_row_from_chains two calls below the unit, and install_site_boundary are reached only by (c), on a re-bundle after a first-round CANNOT-TELL. D47 justifies this with 'no fixed depth both fits a bundle and reaches it'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The arbiter's fix states its purpose in the same sentence: 'so a standoff claim is judged in one round instead of asking for its call chain a round at a time'. By the blocks' own account, the claim the fix was written for still costs a CANNOT-TELL round. D47(c) says (c) reaches _front_row_from_chains, STANDOFF_SLACK_PX and HOUSE_PADDY_GAP_FT, 'the layer past one level', from a CANNOT-TELL note. That is fewer rounds, but still a round at a time on the named case. The impossibility premise is not measured and the blocks' own numbers contradict it: two levels of every callee is 82 KB, and the one-level bundle D47 accepts is 115 KB, so depth two is not shown not to fit. No bundle size limit is stated anywhere in the blocks. Under MODE 1 this is neither impossible nor implied by the words, and it defeats the fix's stated purpose on its own named case. The blocks also assert both outcomes at once: Approach item 1 ('judges a claim on the first round') and item 9 (the standoff unit's bundle carries install_site_boundary and HOUSE_PADDY_GAP_FT 'with no WITH=', quoted with (a)'s 115 KB / 63-entry figures) claim the first-round result that D47(a)'s 'one level on' and D47(c)'s 'layer past one level' say the first bundle does not deliver."
+    },
+    {
+     "id": "D47(b)",
+     "summary": "Every claim's first bundle carries its own module's callees (at most CALLEES_MAX, 6, the existing t03 fix unchanged) plus every module constant the unit reads, imported ones too.",
+     "class": "within",
+     "why": "The callee cap is the arbiter's earlier fix (ask:t03-claims-at-landing) and is not changed here. Constants on every claim are an addition beside the arbiter's fix, covered by the GM's 'Please make sure to implement any obvious performance / tooling / process improvements along the way' (amendment 6). For a distance claim (a) still applies uncapped, so (b)'s cap takes nothing from the arbiter's fix."
+    },
+    {
+     "id": "D47(c)",
+     "summary": "A re-bundle of a claim last judged CANNOT-TELL chases each engine name its note backticks (resolved through imports, otherwise through at most three module-level definitions under l7r/), and walks breadth first through what those call or read, within CHASE_CHARS (30,000). The budget bounds only material past the arbiter's level.",
+     "class": "within",
+     "why": "This is an addition of ours past the arbiter's one level, under amendment 6's 'implement any obvious ... tooling improvements'. Its caps (three definitions, 30,000 characters) bound only our own addition: the block states that nothing in (a) is capped and that a chase stopping at the arbiter's level drops nothing from (a). It serves the arbiter's stated purpose ('judged in one round instead of asking for its call chain a round at a time') beyond what one level reaches."
+    },
+    {
+     "id": "D47-scope",
+     "summary": "A name from outside l7r/ is never inlined or followed: (a)'s 'every engine function' and (c)'s chase reach only code under l7r/.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is round 1's LEGITIMATE ruling, carried on the block's own wording. The arbiter's purpose is a bundle that keeps the judge from 'asking for its call chain a round at a time' on an engine claim, and that chain is the engine's code. Library and builtin calls, and tooling outside l7r/, are not what such a claim turns on (builtins written in C have no source to inline). The 'module-level constant' in the same sentence also refers to the engine's modules."
+    },
+    {
+     "id": "T25-Approach",
+     "summary": "The checklist part A answers: the goal is a first-round judgment; constraints and sources are labelled G or O; the measurement on T05 drove the design; budget 40 min; done is one goal with a test red without each of (a), (b), (c).",
+     "class": "within",
+     "why": "FR-003 (the Approach block) and FR-015 (one goal a task). Every addition is labelled as ours (O), not passed off as the arbiter's (G)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T25 - a claims bundle carries what the unit's code reads from other modules (the round arbiter's fix on ask:t05-old-drifts-at-landing)",
+    "## T26 - a review never reads an absent or stale render (the round arbiter's fix on hour:385-approach-checklist@12)",
+    "### T25 Approach (checklist part A)",
+    "### T25 Decisions",
+    "### T26 Approach (checklist part A)",
+    "### T26 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Landing-T25-T26",
+     "summary": "T25 and T26 are added to the tasks that land open, each with its retro row, before the next task starts.",
+     "class": "within",
+     "why": "FR-006 verbatim: one task at a time, each closed with its retro row before the next make task-start. Each fix is its own task (FR-015, one goal a task)."
+    },
+    {
+     "id": "D47(a)-reach",
+     "summary": "For a claim whose label names a distance, gap or standoff, the bundle carries every engine function the unit calls (own module and imported) and their callees, two calls down, with every module constant any of them reads, uncapped.",
+     "class": "within",
+     "why": "Unchanged from round 3. The arbiter's fix states its purpose (a standoff claim judged in one round); one level was measured (m:t25-bundle) to stop short of HOUSE_PADDY_GAP_FT. Two levels keeps everything the arbiter's 'transitively one level' names - direct callees, imported ones, their constants, uncapped - and goes further toward its own purpose. Widening is not a narrowing."
+    },
+    {
+     "id": "D47(a)-trigger",
+     "summary": "The DISTANCE label trigger is distance, gap, standoff, apart, reach, clear of, off the, ft, feet.",
+     "class": "within",
+     "why": "Unchanged: carries the arbiter's three words and adds others; a superset drops no claim the arbiter's trigger covers."
+    },
+    {
+     "id": "D47(b)",
+     "summary": "Every claim's first bundle carries its own module's callees (at most CALLEES_MAX, 6, as before) plus every module constant the unit reads, imported ones too. Ours (O).",
+     "class": "within",
+     "why": "Unchanged: adds to (a) for claims the label misses (T03's _clear_link), takes nothing from (a); CALLEES_MAX is the arbiter's earlier fix (ask:t03-claims-at-landing). An amendment 6 tooling improvement."
+    },
+    {
+     "id": "D47(c)",
+     "summary": "Re-bundling a claim last judged CANNOT-TELL chases the engine names its note backticks (at most three), breadth first, within CHASE_CHARS (30,000). Ours (O).",
+     "class": "within",
+     "why": "Unchanged: an addition past (a) and (b); its caps bound only its own chase, and the block states nothing in (a) is capped. Amendment 6 tooling improvement."
+    },
+    {
+     "id": "D47-outside-l7r",
+     "summary": "A name from outside l7r/ (standard library, third-party) is never followed, in (a), (b) or (c).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Unchanged from rounds 1-3. Literally the arbiter's 'direct callees' includes library calls, so it narrows; but the fix's purpose is judging the claim on the engine code it turns on, every name the standoff's rounds asked for is engine code, and inlining library (some compiled) source would bloat the bundle against that purpose."
+    },
+    {
+     "id": "D47-placement",
+     "summary": "The code goes in scripts/record/claims_context.py, because claims.py is near its line limit. Each context entry appears once.",
+     "class": "within",
+     "why": "Implementation placement and dedup narrow nothing asked for."
+    },
+    {
+     "id": "T25-Approach-9-done",
+     "summary": "One goal: the standoff claim's FIRST bundle, with no prior CANNOT-TELL and no WITH=, carries the six names (m:t25-bundle), plus a test red without each of (a), (b) and (c).",
+     "class": "within",
+     "why": "One goal per FR-015; measures the first bundle, the arbiter's 'judged in one round'. Round 3's figure notes are taken: three CANNOT-TELL rounds stated consistently, 232 KB carries 'ls -l on its MANIFEST.md, 2026-10-18', 8 min carries its ledger wall times (122+272+83 s = 477 s). A test red without each part enforces the fix."
+    },
+    {
+     "id": "D48-render-not-refuse",
+     "summary": "make verify runs $(MAKE) map GEN=<each> for every stale or absent render before it takes the snapshot and writes the prompts, rather than refusing.",
+     "class": "within",
+     "why": "The arbiter's fix offers render 'or refuses naming that command'; taking the first of its two options is within it. Ordering (before snapshot and prompts) is the arbiter's words."
+    },
+    {
+     "id": "D48-staleness-test",
+     "summary": "Stale means the .png or .html is missing or older (by file mtime) than the map's .gen.py or .json.",
+     "class": "within",
+     "why": "The arbiter's test is 'missing or older than its .gen.py or pool output'. Both renders (.png, .html) are checked, the .gen.py is checked, and the .json is the pool roll's output for a map (Approach item 4: make maps regenerated the pool and left renders missing). File times are the plain reading of 'older than' (labeled ours, O). If a pool roll writes any other per-map output a render depends on, it belongs in this list too - the arbiter said 'pool output', not '.json' - but nothing in the bundle names one."
+    },
+    {
+     "id": "D48-owed-units",
+     "summary": "Only owed units (those make verify writes glyph-check prompts for) are checked and rendered.",
+     "class": "within",
+     "why": "The arbiter's fix is scoped to the renders verify 'snapshots and writes glyph-check prompts' for; a unit with no prompt owed has no glyph-check that could read a stale render."
+    },
+    {
+     "id": "D48-mode-a-excluded",
+     "summary": "A Mode A sheet, which has no .gen.py, is never listed as stale.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Literally the arbiter's 'every unit whose render is missing' includes a Mode A sheet, so this narrows. Rendering it with make map GEN= is impossible (no generator), but the arbiter gave a second option, refusing - and the plan takes neither: a Mode A sheet is silently never listed, so if one can be owed with its .png or .html absent, a glyph-check runs on an absent render, which is exactly what the fix's purpose ('a glyph-check never runs on an absent or stale render') forbids. The plan states no reason, and nothing in the bundle establishes that a Mode A sheet's render cannot be absent or that it is never owed a glyph-check. Fix: list a Mode A sheet whose .png or .html is missing and refuse naming what restores it (only the 'older than its .gen.py' half has nothing to compare against), or keep the exclusion and state the measured premise that makes it a non-case (for example, that a Mode A sheet's render is tracked and a pool roll never removes it)."
+    },
+    {
+     "id": "T26-goal-includes-settlement-check",
+     "summary": "Approach item 1 states the goal as a glyph OR settlement check reading a present, current render.",
+     "class": "within",
+     "why": "The behavior is the arbiter's alone: one render pass ahead of the snapshot. A settlement check reading the same snapshot benefits from it incidentally; no new behavior is added for it."
+    },
+    {
+     "id": "T26-Approach-9-done",
+     "summary": "One goal: review_snapshot.py --stale-renders names each owed map whose .png or .html is missing or older than its .gen.py or .json, make verify runs make map on each before the snapshot, and a test is red without it.",
+     "class": "within",
+     "why": "One goal per FR-015, stated as the arbiter's fix. The --stale-renders flag is the inspection surface for the same test; a test red without the fix is enforcement, not added scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T25 - a claims bundle carries what the unit's code reads from other modules (the round arbiter's fix on ask:t05-old-drifts-at-landing)",
+    "## T26 - a review never reads an absent or stale render (the round arbiter's fix on hour:385-approach-checklist@12)",
+    "### T25 Approach (checklist part A)",
+    "### T25 Decisions",
+    "### T26 Approach (checklist part A)",
+    "### T26 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing",
+     "summary": "Each task lands when it closes, with its retro row, while later tasks stay open (T02-T26 land open)",
+     "class": "within",
+     "why": "FR-006 and the GM's 'we do one task and then we measure ... and then we go on and do the next task'."
+    },
+    {
+     "id": "D47 (a)",
+     "summary": "A distance/gap/standoff claim's bundle carries engine callees two calls down, imported too, with every module constant they read, uncapped; trigger words widened (apart, reach, clear of, off the, ft, feet)",
+     "class": "within",
+     "why": "Block digest unchanged since its CLEAR ruling. Widens, never narrows, the arbiter's fix (direct callees and their constants, one level) to reach its stated purpose; the GM asked (amendment 6) for obvious tooling improvements along the way."
+    },
+    {
+     "id": "D47 (b)",
+     "summary": "Every claim's first bundle carries the unit's own-module callees (CALLEES_MAX, the arbiter's earlier fix) plus every module constant the unit reads, imported ones too",
+     "class": "within",
+     "why": "Block digest unchanged since its CLEAR ruling. Adds to the arbiter's ask:t03 fix; no case it covered is dropped."
+    },
+    {
+     "id": "D47 (c)",
+     "summary": "A re-bundle after CANNOT-TELL chases each backticked engine name in the note, breadth first within CHASE_CHARS",
+     "class": "within",
+     "why": "Block digest unchanged since its CLEAR ruling. An addition of ours; its budget bounds only its own chase, not (a)."
+    },
+    {
+     "id": "D47 outside-l7r",
+     "summary": "A name from outside l7r/ is never followed",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Block digest unchanged since its CLEAR ruling; carried forward as rounds 1 and 2 ruled. The fix's purpose is a judgment on the engine code a claim turns on ('whenever the code it turns on is in the repository'); code outside l7r/ is not that code."
+    },
+    {
+     "id": "D47 placement",
+     "summary": "The code goes in scripts/record/claims_context.py, not claims.py",
+     "class": "within",
+     "why": "Block digest unchanged since its CLEAR ruling. Where the code sits is not a fidelity question."
+    },
+    {
+     "id": "D48 render-first",
+     "summary": "For units with a generator, make verify runs $(MAKE) map GEN=<each> before it snapshots and writes the prompts, rather than refusing",
+     "class": "within",
+     "why": "The arbiter's first option, word for word (G)."
+    },
+    {
+     "id": "D48 file-times",
+     "summary": "'Older than' is read from file modification times",
+     "class": "within",
+     "why": "The plain reading of the arbiter's 'older than'; nothing is narrowed."
+    },
+    {
+     "id": "D48 pool-output",
+     "summary": "'Pool output' is read as the map's .json; staleness is .png or .html missing or older than .gen.py or .json",
+     "class": "within",
+     "why": "Within on the plan's stated premise that the .json is what a pool roll writes per map, beside the tracked .gen.py, .svg and .notes.md. Nothing in the bundle says a roll writes anything else per map. If one does, this becomes a narrowing and has to be ruled on."
+    },
+    {
+     "id": "D48 owed-units",
+     "summary": "Only units owed a check are tested for stale renders ('each owed unit'), where the arbiter said 'every unit'",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the fix's own purpose clause, 'so a glyph-check never runs on an absent or stale render': a glyph or settlement check runs only on an owed unit. This holds only if the snapshot takes no render for any unit outside the owed set. If it does, the narrowing guts the purpose."
+    },
+    {
+     "id": "D48 sheet-refuse-command",
+     "summary": "An entry with no generator is listed as sheet:<svg>, and make verify refuses it naming make sheet-render SHEET=<svg> OUT=<png> instead of make map GEN=...",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "make map GEN= is physically impossible without a generator. This is the arbiter's second option (refuse), naming the one command that does render such an entry. Every unit is now asked, which fixes last round's BLOCKED finding."
+    },
+    {
+     "id": "D48 sheet-png-missing-only",
+     "summary": "A no-generator entry is checked only for a missing .png: no .html check and no older-than test",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled separately from the refuse-command decision. It rests on two premises. First, a hand-authored sheet has no .gen.py and no pool output to be older than, so the arbiter's 'older than its .gen.py or pool output' has nothing to compare against. Second, no sheet unit has or reads an .html: make sheet-render writes only the .png, so an .html check would refuse with no command that fixes it. The measured 'none in the pool' (2026-10-18) makes the case empty today, which is why these premises go on record: a later measurement can prove them false."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "### T05 part B (2026-10-18T10:25Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T05B-1 carry old drifts into T06",
+     "summary": "The claims gate's refusals of old behavior the patch's unit touched (front row size, standoff) are carried into T06 by ask:t05-old-drifts-at-landing rather than fixed before T05 lands.",
+     "class": "within",
+     "why": "The block records a ruling already made on the ask (ruled continue), not a new plan decision; the finding stays an open task in this feature (T06), which is the purpose the GM locked in with amendment 3's option 3 - fixed before the feature closes, not necessarily before this task lands. Nothing leaves the feature."
+    },
+    {
+     "id": "T05B-2 claims relabeled to the record",
+     "summary": "Claims relabeled to what the record says: 0031 for the cluster shape, the 80 ft seat a GUESS 0196 names, the standoff split (house and yard on 0029; shed-in and garden-out marked UNRESEARCHED).",
+     "class": "within",
+     "why": "This is exactly the checklist's part A question the request asks for - which parts of a rule rest on research and which are ours - applied to T47's patch, which the approved scope says is re-landed. No number or behavior changes."
+    },
+    {
+     "id": "T05B-3 near-lane seats filed, not tuned",
+     "summary": "Two well seats that read near a lane (Inashiro F6/F7, Kuwabata F8) are filed as found rows of wave 155 rather than tuned in T05.",
+     "class": "within",
+     "why": "A second goal found inside a task becomes its own item (amendment 4, FR-015 one goal a task); the request leaves everything outside the ~10 moved items with 384's backlog. The glyph-checks the block cites pass (no well in a farmstead, each serving 3-10 households), so T05's own goal is not narrowed."
+    },
+    {
+     "id": "T05B-4 no tuning, re-land as built",
+     "summary": "No number moved; every change since part A is a label, test or record; the patch re-lands as built.",
+     "class": "within",
+     "why": "The approved scope item is 'T47's patch re-landed'; re-landing it as built is that item."
+    },
+    {
+     "id": "T05B-5 next step",
+     "summary": "Next step is the landing cohort (make cohort-landing), then the push; T25 landed and T26 in review as T05's fixes.",
+     "class": "within",
+     "why": "Measurement before landing, consistent with the request's measure-each-task process; decides nothing the spec left open."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T27 - the heading the tool asks for passes its own check (found ticking T05 and T22)",
+    "### T24 Approach (re-answered 2026-10-18T09:52Z)",
+    "### T27 Approach (checklist part A)",
+    "### T27 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing: T27 lands open",
+     "summary": "T27 is added to the Lands open list, landing when it closes with its retro row while later tasks stay open.",
+     "class": "within",
+     "why": "The same rule already applied to T02-T26, which carries FR-006 (one task, then the retro). Adding the new task to that list decides nothing new."
+    },
+    {
+     "id": "T24 Approach re-answered",
+     "summary": "T24's Approach is re-stamped after its round-2 re-review. It keeps the goal, order, exit (c) and done-measure, adds round 2's constraint (the clone's history is left as it was when the patch applies), and answers item 4 afresh with the first real use: a real conflict on T26's landing refused with the merge aborted.",
+     "class": "within",
+     "why": "D9's third trigger and FR-003 ask for the Approach block to be answered again and stamped after the re-review. This block does that. 'Unchanged' is a real answer where nothing changed, and the item that could change (whether the constraints describe the world, item 4) is re-answered with new evidence. The added constraint narrows how the tooling acts, not what the GM asked for. The work itself is a tooling improvement under amendment 6."
+    },
+    {
+     "id": "T27 filing",
+     "summary": "T27 is filed as its own task: a defect where the heading `owe` prints, stamped to the minute, is refused by `make tick` against a trigger time that carries seconds. It was found ticking T05 and T22.",
+     "class": "within",
+     "why": "Amendment 6 (the GM: 'Please make sure to implement any obvious performance / tooling / process improvements along the way') covers it, and it is a tooling-only defect fix. It names one goal (FR-015). It was measured, not assumed: item 4 quotes the refusals of T05 (10:25:14Z vs 10:25Z) and T22 (09:33:15Z vs 09:33Z)."
+    },
+    {
+     "id": "D49",
+     "summary": "approach_gate.refusal truncates the owed row's trigger time to the minute before comparing, so a block stamped in the trigger's own minute (the precision `owe` prints) passes, and a block stamped a minute earlier still refuses.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "D9 says the owed block is 'stamped after the trigger'. Read to the second, a block stamped 10:25Z for a trigger at 10:25:14Z is before it, so D49 relaxes D9 within the trigger's own minute. Two of MODE 1's grounds apply. First, the literal rule cannot be met in the format the tool itself requires: the heading `owe` prints, and D9's own `### Txx part B (<UTC>)` form, carry minutes only. A block answered in the trigger's own minute, headed as instructed, can never pass. The session's only ways out would be to wait out the clock or stamp a false future minute. Second, the literal reading defeats D9's purpose (a fresh answer after the trigger, not one carried in from before) instead of serving it: the only extra blocks it lets through were written in the same sub-minute window, and a block from any earlier minute still refuses. The relaxation goes no further than the precision of the format the spec chose. It is one case, not several bundled together, and nothing in the GM's request asks for second-level precision. The T27 Approach's wording 'at or after' describes the same minute-level comparison."
+    }
+   ]
   }
- ]
+ ],
+ "tasks": {
+  "T05": {
+   "section_sha256": "87b2fc2adc6d934e47875d41a24a5f6167fc74109db6e0589b379c412ec21cd7",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D41",
+     "summary": "w155-pocket-attempt.patch re-landed as built on today's HEAD; its decisions are 374's W155-1..W155-6 unchanged, its bar 374's W155-4",
+     "class": "within",
+     "why": "The approved proposal's scope names 'T47's patch re-landed' and FR-007 moves T47 here under 384's FR-002 (374's rules as amended). Re-landing it as built, with the decisions 374's plan review already ruled within, is exactly the item asked for; nothing in it is changed or carved out."
+    },
+    {
+     "id": "D41-cohort",
+     "summary": "The 54-seed cohort (with the pool) stands in for the 44 rolls of 374's scratch tooling (tools13/roll13.sh), which are not reproducible from the repository",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It drops one instrument 374 used, so it is ruled. The literal alternative - re-running the same 44 rolls - is impossible: the scratch tooling is not in the repository. W155-4 as A2 states it names the pool and the cohort, and both are kept, so the bar's purpose (no roll passing at HEAD refuses) is still tested on the instrument the bar names. The accepted spec's SC-003 adopts 384's SC-004 for the moved work, and the plan says that criterion already makes this substitution (384's SC-004 text is not in the bundle, so that part is the plan's word). One wording point, which does not change the ruling: part B6's sentence 'measured as 374 measured it' overstates this. The measurement is 374's bar on the pool and the cohort, not 374's rolls."
+    },
+    {
+     "id": "D41-occasions",
+     "summary": "The owed glyph-checks are the three placement-changed occasions 374 recorded (Inashiro, Kuwabata, Sawada wells)",
+     "class": "within",
+     "why": "These are the checks the patch's own changes owe under the project's rules, taken from 374's record of which pool maps' wells move. The engine is unchanged since T04 and the patch applies as built, so it moves the same wells. This settles which checks the changes owe; it does not cut any check the GM asked for."
+    },
+    {
+     "id": "A6-exit",
+     "summary": "Exit taken: (e) conform - re-land as built, no waiver",
+     "class": "within",
+     "why": "The task is the re-landing of an existing patch, and the patch's own exits were priced in 374 (W155-6). 'No waiver' holds the task to the full bar rather than relaxing it, so nothing is narrowed."
+    },
+    {
+     "id": "A8-budget",
+     "summary": "Budget about 90 min",
+     "class": "within",
+     "why": "This is an estimate the checklist's budget question asks for, not a pass/fail threshold put on record (Amendment 2's concern). It narrows nothing."
+    },
+    {
+     "id": "A9-done",
+     "summary": "One goal: the patch on main with no waiver, pool clean, cohort as HEAD, wells measured on the pool, owed checks answered, gate green",
+     "class": "within",
+     "why": "One goal per task is FR-015 (Amendment 4). The done line is the requested item measured against its own bar."
+    },
+    {
+     "id": "B1-0196-wordings",
+     "summary": "The three wordings the record checks found in 0196's changed block are applied together",
+     "class": "within",
+     "why": "This answers checks the patch's own changes owe; it is the 'every owed check answered' part of done. Batching them is a process choice and touches no scope."
+    },
+    {
+     "id": "B9-continue",
+     "summary": "After the hour-10 step-back ruled 'continue': re-dispatch the three refused checks, then land",
+     "class": "within",
+     "why": "This follows the arbiter's ruling toward the same goal and adds or removes no scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ }
 }

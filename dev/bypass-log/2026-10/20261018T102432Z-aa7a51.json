@@ -1,0 +1,6 @@
+{
+  "utc": "20261018T102432Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: the last PASS (engine 4b7d9d117127) reviewed the well placement T05 replaces; this round reviews its replacement, and that review's F1/F2 seat questions are what this round re-judges on the new seat"
+}

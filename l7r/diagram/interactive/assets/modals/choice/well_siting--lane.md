@@ -19,7 +19,7 @@ Guesses:
 Depiction: The map sets each shared well on a lane's verge, its curb clear of the tread, with a house near it. Where no lane
 near a well's houses has room beside it - the lanes running between the farmsteads' yards and beds - the well stands in the open
 ground among the houses instead. The well is drawn as a marker larger than life, about 19 ft across, so a reader can find
-it; a real well's curb was a frame only a few feet across round a shaft about 3 ft wide.
+it; a real well's curb was a frame only a few feet across round a shaft about 3 ft (1 m) wide.
 
 Name: Shared wells by the lane
 Covers: `meta.well_siting = lane`

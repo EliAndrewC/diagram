@@ -160,89 +160,35 @@ class HouseholdLots:
         return lf, df, self.kura[k], self.byre[k]
 
 
-#: How far a household may live from water, in feet: `settlement_dwellings_watered`'s ~760 real ft to the nearest well,
-#: channel, pond or stream (homes H11) - the figure `place_wells` has always served.
-WATER_REACH_FT = 760.0
-"""Research: farthest a household lives from water - research/questions/0196-communal-wells-ido.drawing.html: 760 real ft to a well, channel, pond or stream"""
-
-
-def needs_pocket(s: Any, x: float, y: float) -> bool:
-    """Does a household seated at (x, y) carry a WELL POCKET (feature 287, homes H10 and H11)? The first household
-    always does - so a settlement always has a well - and every later one exactly when no pocket stands within
-    `WATER_REACH_FT` of it and no surface water serves it (`surface_water_dist`, the watered rule's own measure): so every
-    household is within reach of a well or open water by construction, and two pockets stand at least that far apart.
-
-    Research: wells shared, one where none is near - research/questions/0196-communal-wells-ido.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: the first household carries a well, a later one only beyond every well's and water's reach
-    """
-    pockets = getattr(s, "_pockets", None)
-    if pockets is None:
-        return False
-    if not pockets:
-        return True
-    from ..land.wet import surface_water_within  # the leaf stays free of the land package at import
-
-    reach = s.px(WATER_REACH_FT)
-    return all(math.hypot(x - px, y - py) > reach for px, py in pockets) and not surface_water_within(s.M, x, y, reach, water_index(s))
-
-
-def water_index(s: Any) -> Any:
-    """The surface water's segments in a `PointGrid`, built once and kept while the water it reads stands (its lines and their
-    each its own list and length, the moat and the pond as they are) - the seating asks `needs_pocket` of every seat it lays out."""
-    from .._geom.indexes import PointGrid
-    from ..land.wet import water_lines
-
-    lines = water_lines(s.M)
-    sig = (tuple((id(ln), len(ln)) for ln in lines), id(s.M.get("moat")), tuple(s.M.get("pond") or ()))
-    got = s.__dict__.get("_water_index")
-    if got is None or got[0] != sig:
-        grid = PointGrid()
-        grid.extend((a, b, min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])) for ln in lines for a, b in zip(ln, ln[1:], strict=False))
-        got = s.__dict__["_water_index"] = (sig, grid)
-    return got[1]
-
-
-def watered(s: Any, x: float, y: float, well: bool) -> bool:
-    """THE ONE PREDICATE of a household's water (feature 287, homes wave 5; `test_every_household_can_reach_water`): a
-    household whose house stands at (x, y) reaches water - it carries its own well pocket (`well`), or a pocket already laid
-    or surface water stands within `WATER_REACH_FT` (`needs_pocket` asks no more of it). Asked of the house where it is
-    PLACED: the pocket was decided at the point the seat was sought from, and the placer may move the house off it (the
-    envelope's computed move, the dispersed slides), so a candidate carried out of every pocket's reach is refused.
-
-    Research: every household watered - research/questions/0196-communal-wells-ido.drawing.html: its own pocket, or a well or open water within `WATER_REACH_FT`
-    """
-    return well or not needs_pocket(s, x, y)
-
-
-def household_parts(s: Any, x: float, y: float, kind: str, role: Any) -> tuple[tuple[float, float, bool, bool] | None, str | None, bool]:
+def household_parts(s: Any, x: float, y: float, kind: str, role: Any) -> tuple[tuple[float, float, bool, bool] | None, str | None]:
     """What the household about to be seated at (x, y) carries (plan M5): its lot (the k-th plain household takes lot
-    k), the byre form its bundle reserves a stall for (a keeper on a household form), whether it carries a well pocket, and
-    its farmstead fixtures (the lot's kinds). Set on the settlement for the seat search (`_household_byre`,
-    `_household_well`, `_household_fixtures`, and `_household_watered`, which holds its candidates to `watered`), where
-    `_bundle_layout` lays the parts inside the envelope; `seat_parts_done` takes them down.
+    k), the byre form its bundle reserves a stall for (a keeper on a household form), and its farmstead fixtures (the
+    lot's kinds). Set on the settlement for the seat search (`_household_byre`, `_household_fixtures`), where
+    `_bundle_layout` lays the parts inside the envelope; `seat_parts_done` takes them down. No household carries a well
+    pocket and none is held to a watered seat (feature 374 wave 155): a clustered hamlet's wells are shared, off the
+    farmstead, and seated after the houses with the water reach (`homesteads/wells.reach_wells`); a grove farm's own well
+    is laid in its canonical frame whatever the seat (`dispersed.canonical_farmstead`).
 
     Research:
         quota, record and registry plumbing - NONE: the k-th plain household takes lot k; the parts set on the settlement for the seat search
         a role household gets no byre and no farmstead fixtures - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: a household with a role (the headman) takes no lot, so no stall and no fixtures, where 0028 says a headman's carries several
-        watered seats for plain households - UNRESEARCHED: only plain households are held to watered seats and given a well pocket
     """
     lots = getattr(s, "_lots", None)
     k = sum(1 for h in s.M["houses"] if h.get("kind") == "plain")
     lot = lots.lot(k) if lots is not None and kind == "plain" and role is None else None
     form = getattr(s, "_byre_form", None) if lot is not None and lot[3] else None
-    well = kind == "plain" and needs_pocket(s, x, y)
-    s._household_byre, s._household_well = form, well
-    s._household_watered = kind == "plain"  # the placer holds a household's candidates to `watered`
+    s._household_byre = form
     s._household_fixtures = lots.fixtures_of(k) if lots is not None and lot is not None else ()
-    return lot, form, well
+    return lot, form
 
 
 def seat_parts_done(s: Any) -> None:
-    s._household_byre, s._household_well, s._household_fixtures, s._household_watered = None, False, (), False
+    s._household_byre, s._household_fixtures = None, ()
 
 
 def record_parts(s: Any, rec: dict[str, Any], geom: Any, form: str | None) -> None:
     """The reserved parts a seated household's record carries: its stall (`byre`: where it is drawn, its turn, its box),
-    its well pocket (`well_pocket`, the wellhead's center), which the seating also remembers (`_pockets`), its farmstead
+    a grove farm's own well pocket (`well_pocket`, the wellhead's center), its farmstead
     fixtures (`fixtures`: each laid in the bundle), and its share of the wood floor (`wood_share`: the copse seats it
     reserved, their crowns' radius and the ground they cover in sq ft)."""
     cx, cy = rec["x"], rec["y"]
@@ -254,8 +200,6 @@ def record_parts(s: Any, rec: dict[str, Any], geom: Any, form: str | None) -> No
         rec["byre"] = {"x": bx, "y": by, "rot": rec["rot"] + turn, "box": list(geom["boxes"]["byre"])}
     if geom.get("well") is not None:
         rec["well_pocket"] = [geom["well"][0], geom["well"][1]]
-        if getattr(s, "_pockets", None) is not None:  # remembered only while a seating runs (a grove farm's bundle lays its own)
-            s._pockets.append((geom["well"][0], geom["well"][1]))
     boxes = (geom.get("boxes") or {}).get("fixtures") or {}
     if geom.get("fixtures"):  # the fixtures laid in the bundle (homes H32), drawn where they were laid (`farmstead_fixtures`)
         rec["fixtures"] = [{"kind": k, "x": r[0], "y": r[1], "w": r[2], "h": r[3], "box": list(boxes[k])} for k, r in geom["fixtures"].items()]

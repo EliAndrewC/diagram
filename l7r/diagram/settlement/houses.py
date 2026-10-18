@@ -668,7 +668,8 @@ class HousesMixin:
         """Seat one to-scale homestead bundle.
         Research:
             farmhouse size - research/questions/0029-farmhouses-minka.drawing.html: 46 x 28 ft base, by the lot's ladder or 0.85-1.35 x 0.90-1.10; dispersed 0.9 / 1.0 / 1.12 by position, big 64 x 40
-            storehouse - research/questions/0040-farm-storehouses-kura.drawing.html: one farm in eight by count (else by position), the headman always, on the north wall"""
+            storehouse - research/questions/0040-farm-storehouses-kura.drawing.html: one farm in eight by count (else by position), the headman always, on the north wall
+            a farmhouse no longer than 2.7:1 - research/questions/0029-farmhouses-minka.drawing.html: `FARMHOUSE_MAX_ASPECT`, the length and depth jitter's 1.3-2.7 bar; a caller's longer house is refused"""
         # a farmhouse shares the MAP'S building grain (bscale): at village/hamlet scale bscale is
         # 1.0 (full size), but a town/city compresses its urban buildings, and a peasant farmhouse
         # must not render LARGER than the samurai and merchant houses inside the walls - so it
@@ -692,8 +693,8 @@ class HousesMixin:
         # (px(46) = 23px at 2 ft/px). A modest, position-seeded wealth tier scales the whole bundle. See
         # research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html ('How far is it across this map? The scale, tier by tier'.
         # THE HOUSEHOLD'S PARTS (feature 287, plan M5): its lot - the k-th plain household seated takes lot k, its size
-        # rung, its kura and its beast - and its well pocket, whatever seat it lands on (`rolling/lot.py`)
-        _lot, _byre_form, _well = household_parts(self, x, y, kind, role)
+        # rung, its kura and its beast, whatever seat it lands on (`rolling/lot.py`)
+        _lot, _byre_form = household_parts(self, x, y, kind, role)
         if size is not None:  # explicit footprint in FEET (e.g. a larger headman)
             if max(size) > FARMHOUSE_MAX_ASPECT * min(size):  # a caller's input error, not a map check (homes H08)
                 raise ValueError(f"a farmhouse of {size[0]} x {size[1]} ft runs past {FARMHOUSE_MAX_ASPECT}:1 - it would read as a shed")
