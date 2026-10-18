@@ -674,18 +674,6 @@
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
   },
-  "### T49 Approach (checklist part A)": {
-   "sha256": "f1a89a51189c5c283afbf75f065d05247b4baae5114a4539c729b50470e755ce",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-18",
-   "declared": "spec-fidelity"
-  },
-  "### T49 Decisions": {
-   "sha256": "cae1c75c7bbcdcdd3b7cf8cd218772042a51ee07c869c1d91129b44b7930e3ee",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-18",
-   "declared": "spec-fidelity"
-  },
   "### T08 Approach (re-answered 2026-10-18T17:08Z)": {
    "sha256": "3e4a9ff5cbd1c5f0cd9b5311335570a784a2da390aa1975bd30ea09aa1a4267f",
    "verdict": "CLEAR",
@@ -772,6 +760,12 @@
   },
   "### T10 part B (2026-10-18T20:09Z)": {
    "sha256": "21213419b6a3540f1771e363856ab42db55f6a02d508b1a6cd86deef70969dda",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T10 part B (2026-10-18T23:21Z)": {
+   "sha256": "375d6fa7f5af1637648b8848eb5006148754fcf7bc7a723e3808324b2ec0cea5",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -4414,6 +4408,41 @@
      "summary": "2 more hours.",
      "class": "within",
      "why": "A working budget the checklist asks for. It is not a recorded threshold on the task's success, which is what amendment 2 declined, and it narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "### T10 part B (2026-10-18T23:21Z)",
+    "(removed) ### T49 Approach (checklist part A)",
+    "(removed) ### T49 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T10-B1 claims findings carried into T43",
+     "summary": "T10 ticks and lands with its four claims findings carried into T43 (CLAIMS_OK names them) rather than fixed before landing.",
+     "class": "within",
+     "why": "This is amendment 3 option 3 as the GM locked it in ('Never block on unchanged code; the gate files the finding as an open task instead ... must still be fixed before the feature closes'), carried by FR-013 (carried, not refused). The block should have cited FR-013. The class rests on the premise that CLAIMS_OK names findings FR-013's own test admits: findings on units whose code and claim are unchanged, filed into an open task (T43), so they are still fixed before the feature closes. If any of the four is on a unit T10 changed, parking it is outside option 3 and would be a NOT LEGITIMATE narrowing; the bundle carries no evidence either way and the repository was not read."
+    },
+    {
+     "id": "T10-B9 change-route",
+     "summary": "After the hour-23 step-back ruling, T10 lands before T66 and T67 are built.",
+     "class": "within",
+     "why": "An ordering choice. T66 and T67 are still built; nothing is dropped. Nothing in request.md places T66/T67 ahead of T10, and amendment 8's order approval covers the step-back's items one to four, not these. Items 2-8 of the block are status answers to the part-B checklist, not decisions."
+    },
+    {
+     "id": "T49 Approach (removed)",
+     "summary": "The T49 Approach block (red-gate tripwire ignores tree-moved aborts; bundle diffs between reds) deleted from plan.md.",
+     "class": "within",
+     "why": "Judged from earlier.md alone. T49 is an arbiter's tooling fix, not a clause of the GM's request, and deleting its plan text narrows no sentence of request.md nor rescinds 375's FR-004/FR-010 (a tree-moved run still never vouches for the tree). The class rests on the premise that this is the archiving of a finished section (amendment 8: plan archive should run automatically), not an abandonment of the fix; the bundle does not show T49's status."
+    },
+    {
+     "id": "T49 Decisions D66 (removed)",
+     "summary": "D66 (abort recorded as failed-gate tree-moved; red_gate_runs skips tree-moved runs and writes git diff --stat between listed reds) deleted from plan.md.",
+     "class": "within",
+     "why": "Same ground as the T49 Approach removal: D66 implemented an arbiter's fix, its own text kept FR-004's refusal intact ('nothing vouches for the moved tree'), and removing the plan text after the task is done narrows nothing the GM asked. Rests on the premise that D66 was built and the section archived, not reversed."
     }
    ]
   }
