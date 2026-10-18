@@ -14,10 +14,10 @@ delta's root-cut planting today to about one to 24 sq ft in a late-Qing field of
 grew. A dike's width before modern times is not recorded.
 
 Guesses:
-- The bank's width on the map, 23 ft: no width of a pond dike from before modern times was found, so it is set inside the
-  modern 20 to 33 ft.
-- That about six parts in ten of a pond's plot is water and the rest bank: no split written as a number before modern
-  times was found, so the share is read from the two figures Qu Dajun gave in 1678 for one township, Jiujiang.
+- That a village takes each of the three splits of water and bank at even odds: no account gives a share between them,
+  and every account found that writes the split as a ratio is modern.
+- That one split holds for every parcel of a village, so the bank is as wide as that split makes it: no width of a pond
+  dike from before modern times was found, and no account says how the split varied from one parcel to the next.
 - Each bush's crown, 4.4 to 7 ft across: no account gives how wide a mulberry bush grew.
 
 Depiction: The map draws each bank as mottled earth under rows of low bushes, about 4.4 ft apart in the row, about one
