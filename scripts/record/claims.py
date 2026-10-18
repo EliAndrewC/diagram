@@ -317,6 +317,13 @@ def relabeled_only(was: Mapping[str, Any], row: Row, root: Path) -> bool:
     return was.get("claim") == text or was.get("verdict") == "MISLABELED"
 
 
+def relabel_answered(was: Mapping[str, Any], row: Row, root: Path) -> bool:
+    """A MISLABELED verdict answered by the relabel it prescribed - the claim's text rewritten since, the unit's body the one
+    judged - so the gate does not refuse what `owed` no longer asks of it (385 T23, plan D45)."""
+    text = row.claim.normalized() if row.claim is not None else ""
+    return was.get("verdict") == "MISLABELED" and was.get("claim") not in (None, text) and relabeled_only(was, row, root)
+
+
 def _source(root: Path, unit: Any) -> str:  # noqa: ANN401
     """A unit's lines, with the comment block directly above it (a constant's why lives there)."""
     lines = (root / unit.path).read_text(encoding="utf-8").split("\n")
@@ -724,11 +731,13 @@ def classify(
     cores: dict[str, str],
     base_qdir: Path,
     deferred: frozenset[str] = frozenset(),
+    answered: frozenset[str] = frozenset(),
 ) -> tuple[list[str], list[str], list[tuple[str, str]]]:
     """(introduced, pre-existing, carried) findings (spec FR-010; carried: 385 FR-013, `claims_carry`). `cores`: every unit's core
     at the merge base, `base_qdir` its questions. CARRIED (key, line): its code and claim unchanged under the same key - its cited
     research moved, or it was only judged again (never a moved unit). Else a first finding is introduced when its code matches no base unit's (its own
-    key's, or one gone at the head - a move) or its cited findings differ from the base's."""
+    key's, or one gone at the head - a move) or its cited findings differ from the base's. `answered`: MISLABELED keys their
+    prescribed relabel answered (`relabel_answered`), no finding at all."""
     head_uids = {r.uid for r in cur.values()}
     gone_cores = {core for uid, core in cores.items() if uid not in head_uids}
     memo: dict[str, str] = {}
@@ -736,7 +745,7 @@ def classify(
     pre: list[str] = []
     carried: list[tuple[str, str]] = []
     for key, v in sorted(live_rows(cur, index).items()):
-        if v["verdict"] not in FINDINGS or shown(key, v["verdict"], deferred) == "DEFERRED":
+        if v["verdict"] not in FINDINGS or key in answered or shown(key, v["verdict"], deferred) == "DEFERRED":
             continue
         was = base_index.get(key)
         line = f"{v['verdict']:<14} {key} - {v.get('note', '')}"

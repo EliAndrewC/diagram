@@ -316,6 +316,24 @@ def test_a_relabel_a_mislabeled_verdict_prescribed_owes_no_new_round(tmp_path: p
     assert dict(cx.owed(cx.current(skill), index, qdir, store)).get(FAR) == "code changed", "a change to the body owes a round"
 
 
+def test_the_gate_takes_a_relabel_as_the_answer_to_its_mislabeled(tmp_path: pathlib.Path) -> None:
+    """Feature 385 T23 (plan D45; found by T05): `owed` asks nothing of a relabel its MISLABELED verdict prescribed, so the gate
+    must not refuse that verdict - it did, as an introduced finding no command could clear. Its text unchanged, it still refuses."""
+    skill, index, store = _checked(tmp_path)
+    index[FAR]["verdict"] = "MISLABELED"
+    cur = cx.current(skill)
+    assert not cx.relabel_answered(index[FAR], cur[FAR], skill), "the text unchanged: not answered"
+    assert cx.classify(cur, index, {}, {}, skill / QDIR)[0], "an unanswered MISLABELED on code the base lacks is introduced"
+    mod = next(skill.rglob("rows.py"))
+    relabeled = mod.read_text().replace("0033-row-villages-resson.html\n    \"\"\"", "0033-row-villages-resson.html: the far row\n    \"\"\"")
+    mod.write_text(relabeled)
+    cur = cx.current(skill)
+    assert cx.relabel_answered(index[FAR], cur[FAR], skill), "the prescribed relabel answers it"
+    assert FAR not in " ".join(cx.classify(cur, index, {}, {}, skill / QDIR, frozenset(), frozenset({FAR}))[0])
+    mod.write_text(relabeled.replace("return x * SHARE", "return x * SHARE * 2"))
+    assert not cx.relabel_answered(index[FAR], cx.current(skill)[FAR], skill), "the body moved: judged again, not answered"
+
+
 def test_claims_checked_at_different_versions_each_see_their_own_changes(tmp_path: pathlib.Path) -> None:
     """Feature 385 T02 (plan D11): the triage listed one page's changed blocks once for every claim citing it, so a claim
     checked at a later version was shown changes it had already been checked against. Each version is now its own section."""
