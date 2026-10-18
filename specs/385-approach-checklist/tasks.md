@@ -147,6 +147,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T52 make land-tooling lints the Python it lands (found by T49 and T51, plan D69)
       research: rendering
       verify: DONE. landed on main; tests/hooks/test-land-tooling.sh red without it (a lint failure lands nothing, naming ruff format)
+- [ ] T53 make land-tooling refuses owed ledger rows before its checks, not after them at the push (the arbiter's fix on hour:385-approach-checklist@19, plan D70)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

@@ -526,3 +526,9 @@ About 25 min. Twice a test file landed on main unformatted (T49's imports, then 
 only the next gate's formatter caught it. `make land-tooling` now lints and format-checks the Python it lands, beside its other two
 checks, and names `ruff format` when it refuses. Its own suite had a fixture the formatter rejects, found on the first run.
 **The habit it changes:** a path to main that skips the gate runs the gate's cheapest checks itself.
+
+## T53 - the retro row
+
+About 20 min. Three landings in an hour ran 35 s of checks before the push refused them for owed ledger rows; `land-tooling` now
+asks the ledger as committed first, waived by the same `LEDGER_ROWS_OK` the push honors. **The habit it changes:** a refusal the
+end of a pipeline will certainly make is asked at its start.

@@ -4637,6 +4637,51 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T53": {
+   "section_sha256": "4eeea9aabf5fc36f9fa41485fbf9e078a5e896ad885cbc09c9e2a2e3fdeaa7a1",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D70-early-check",
+     "summary": "land-tooling (and so arbiter-fix-done, which lands through it) runs ledger_owed.py --refuse before its worktree and before any timed check, refusing at once with the owed rows",
+     "class": "within",
+     "why": "This is the arbiter's fix as quoted in the Approach (the arbiter stands where the GM was asked, feature 379), and it is the kind of obvious tooling improvement the GM asked for in amendment 6. 'Before its worktree' falls inside 'before it starts its timed checks'."
+    },
+    {
+     "id": "D70-push-check-stays",
+     "summary": "the push's own ledger check is kept; the early check is added in front of it",
+     "class": "within",
+     "why": "The fix moves when the refusal is felt and does not repeal the rule. Keeping the push's check (385 FR-019's refusal) removes nothing anyone asked for."
+    },
+    {
+     "id": "D70-at-HEAD",
+     "summary": "the early check reads the ledger as committed at HEAD, which is what the landing carries, through a LAND_TOOLING_LEDGER seam for the test",
+     "class": "within",
+     "why": "Checking what will land is what makes the early refusal agree with the push it replaces in time. The seam is there only so the requested test can be red without the check. That is enforcement of the request, not added scope."
+    },
+    {
+     "id": "D70-names-command",
+     "summary": "the refusal names the owed rows and the command `make ledger-owed WRITE=...`",
+     "class": "within",
+     "why": "The fix says 'naming the owed rows', and 385 FR-019 has every ledger refusal name the command that writes the rows."
+    },
+    {
+     "id": "D70-waiver",
+     "summary": "LEDGER_ROWS_OK waives the early check as it already waives the push's",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Read literally, 'refuses at once' has no waiver, so this carves out a case. But the fix's own words imply it: the refusal comes 'instead of after the checks have run, at the push', so it moves the push's refusal earlier. Where the push would not refuse (waiver set), an early refusal would be a new block the fix never asked for and would defeat its purpose of refusing earlier only what will be refused anyway. One case, one argument; no seam."
+    },
+    {
+     "id": "D70-test",
+     "summary": "tests/hooks/test-land-tooling.sh is red without the early check",
+     "class": "within",
+     "why": "The fix asks for a test red without the change (and 385 SC-009 asks for the same). The test only checks that the requested refusal happens."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

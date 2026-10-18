@@ -1735,6 +1735,31 @@ test's `tmp_path`, so no two tests share a bundle path.
 `.py` files among FILES, in the worktree (`LAND_TOOLING_LINT`, default those two commands, a seam for the test); a failure is one of
 the checks that fail, so nothing lands and the message names the files and `ruff format <file>` or the rule.
 
+## T53 - owed ledger rows refused before the checks (the arbiter's fix on hour:385-approach-checklist@19)
+
+### T53 Approach (checklist part A)
+
+1. **The goal, in the world.** A landing that will be refused for owed ledger rows is refused at once, not after its checks run.
+2. **The constraints.** The arbiter's fix: "scripts/land-tooling.sh (and so make arbiter-fix-done, which lands through it) runs the
+   make ledger-owed check before it starts its timed checks and refuses at once naming the owed rows, instead of after the checks
+   have run, at the push"; the push's own check stays (it is the rule); `LEDGER_ROWS_OK` waives both, as it waives the push's;
+   tooling only; a test red without it.
+3. **Where each comes from.** The fix is the arbiter's (G); the ledger rule is 385 FR-019 (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-18: landings at 17:07, 17:18 and 17:54 each ran about 35 s of
+   checks, then the push refused for owed rows.
+5. **The order.** The early check, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 25 min.
+9. **Done, measured.** One goal: `make land-tooling` with an owed pass refuses before any check runs, naming the rows and the
+   command; `tests/hooks/test-land-tooling.sh` red without it.
+
+### T53 Decisions
+
+**D70 - the ledger asked first, as it will land.** Before its worktree, `land-tooling` runs `ledger_owed.py --refuse` against the
+ledger as committed at HEAD - what the landing carries - (`LAND_TOOLING_LEDGER`, a seam for the test); an owed pass refuses with
+its rows and `make ledger-owed WRITE=...`, unless `LEDGER_ROWS_OK` is set, which the push honors too.
+
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).
