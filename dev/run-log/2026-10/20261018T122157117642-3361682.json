@@ -1,0 +1,38 @@
+{
+  "utc": "2026-10-18T12:21:57Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 164,
+  "result": "failed: test-full",
+  "commit": "1d6e4908f",
+  "first_failure_s": 109.7,
+  "last_failure_s": 109.7,
+  "failed_tests": 1,
+  "failed_names": [
+    "tests/tooling/test_claims_index.py::test_a_bundle_carries_the_constants_a_unit_reads_and_what_a_cannot_tell_names"
+  ],
+  "host": {
+    "load": [
+      4.03,
+      5.41
+    ],
+    "mem_avail_mb": [
+      9029,
+      9187
+    ],
+    "cpu_temp_c": [
+      62.0,
+      63.0
+    ],
+    "stall_s": {
+      "cpu": 1.0,
+      "io": 0.1,
+      "io_full": 0.1,
+      "memory": 0.0
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  }
+}
