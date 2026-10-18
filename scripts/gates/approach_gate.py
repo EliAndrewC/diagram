@@ -189,7 +189,7 @@ def newly_failing(record: dict, earlier: list[dict], on_main) -> list[int]:  # n
             if str(r.get("utc")) >= str(record.get("utc")) or r.get("households") != record.get("households"):
                 continue
             base = next((b for b in r.get("seeds") or [] if b.get("seed") == s.get("seed")), None)
-            if base is None or not r.get("commit") or not on_main(str(r["commit"])):
+            if base is None or not r.get("commit") or r.get("engine_diff") or not on_main(str(r["commit"])):
                 continue
             if base.get("verdict") == "pass":
                 out.append(int(s["seed"]))

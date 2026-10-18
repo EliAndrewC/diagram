@@ -167,6 +167,10 @@ def test_a_seed_is_newly_failing_only_against_a_baseline_on_main() -> None:
     ]
     # 2 passed at m1; 3 failed at its newest baseline (m2); 4 failed at m1 (the later pass is not earlier); 5 passed only off main
     assert ag.newly_failing(now, earlier, main) == [2]
+    # feature 385 T04: a roll over an uncommitted engine diff is no baseline - seed 3's newest m2 record is dirty, so m1's pass is
+    dirty = {**_rec("20261017T1500Z", "m2", {3: "fail"}), "engine_diff": "abc"}
+    assert ag.newly_failing(now, [*earlier, dirty], main) == [2], "the dirty fail would have hidden nothing here"
+    assert ag.newly_failing(now, [_rec("20261017T1000Z", "m1", {3: "pass"}), {**_rec("20261017T1500Z", "m1", {3: "fail"}), "engine_diff": "abc"}], main) == [3]
 
 
 def test_a_cohort_with_a_newly_failing_seed_owes_part_b(tmp_path: pathlib.Path) -> None:

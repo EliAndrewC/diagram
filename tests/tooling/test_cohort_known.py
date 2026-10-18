@@ -111,3 +111,33 @@ def test_a_commit_is_on_mains_engine_when_no_engine_file_differs(tmp_path: pathl
     moved = git("rev-parse", "HEAD")
     git("checkout", "-q", "main")
     assert ck.same_engine(root, spec_only) and not ck.same_engine(root, moved)
+
+
+def test_a_roll_over_an_uncommitted_engine_diff_is_stamped_and_never_a_baseline(tmp_path: pathlib.Path) -> None:
+    """Feature 385 T04: the wave 155 patch, applied uncommitted, rolled a record naming HEAD's commit - read as a second HEAD
+    baseline. `--stamp` writes the diff's digest into the newest record; `baselines` and the approach gate skip such a record."""
+    import subprocess
+
+    ck = _load()
+    root = tmp_path / "r"
+    (root / "l7r").mkdir(parents=True)
+    (root / "dev" / "cohort-log").mkdir(parents=True)
+
+    def git(*a: str) -> None:
+        subprocess.run(["git", "-C", str(root), "-c", "user.name=t", "-c", "user.email=t@t", *a], check=True, capture_output=True)
+
+    git("init", "-q", "-b", "main")
+    (root / "l7r" / "a.py").write_text("x = 1\n")
+    git("add", "-A")
+    git("commit", "-qm", "engine")
+    rec = root / "dev" / "cohort-log" / "20261018T0000Z-x.json"
+    rec.write_text(json.dumps({"utc": "20261018T0000Z", "commit": "main1", "seeds": [_seed(10)]}))
+    assert ck.stamp(root) == "" and "engine_diff" not in json.loads(rec.read_text()), "a clean engine stamps nothing"
+    assert ck.main(["--root", str(root), "--stamp"]) == 0
+    (root / "l7r" / "a.py").write_text("x = 2\n")
+    assert ck.main(["--root", str(root), "--stamp"]) == 0
+    stamped = json.loads(rec.read_text())
+    assert len(stamped["engine_diff"]) == 16
+    now = {"utc": "20261018T0100Z", "commit": "x", "households": None, "seeds": [_seed(10, "fail", {"bends": 1})]}
+    assert ck.baselines(now, [stamped], lambda c: True) == {}, "a dirty roll is no baseline"
+    assert ck.baselines(now, [{k: v for k, v in stamped.items() if k != "engine_diff"}], lambda c: True)

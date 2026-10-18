@@ -156,7 +156,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16
 
 ## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)
 
@@ -629,6 +629,108 @@ pulled the seeds' landing into arbiter rulings. A judgment, not a guard: no mech
 ## T04 to T10 - T48, T47's patch, five ranking rows
 
 Each decided at its start, in this order (spec FR-007), its section added here and reviewed by `make decide`.
+
+## T04 - T48: the web carries a re-deal of the seats (384 User Story 2, SC-004)
+
+### T04 Approach (checklist part A)
+
+1. **The goal, in the world.** Wave 155's pocket-well change (the well off the farmstead, `w155-pocket-attempt.patch`) moves
+   where homesteads are seated; the lanes are trodden after the houses stand, so whatever seats the re-deal produces, the web
+   walks round them - no seed refused for a web that could have been walked.
+2. **The constraints.** SC-004: the re-deal cohort (`m:w156-redeal-cohort`'s method - `make cohort N=48`, then the patch applied
+   and the same cohort) fails no seed that passes at HEAD; the lane law's rules (`ways/law.py`); the pool; 384 FR-002 (374's rules
+   as amended). Baseline 2026-10-13: HEAD 50/54, patched 49/54 - 10 and 24 newly failing, 17 mended. T03 has since fixed 17, 21,
+   40 and 45 at HEAD, so the baseline is retaken first.
+3. **Where each comes from.** SC-004 is the GM's (G, 384). Each lane-law rule a refusal names is checked, R/G/O, from its claim,
+   when it refuses (B2) - not listed in advance from memory.
+4. **Do they describe the world here?** Asked of each refusal at the place it refuses, from a dump of the geometry (B1, B3):
+   would a reader of the research call that map wrong?
+5. **The order.** Homesteads first, then lanes (GM 2026-10-02): the fix is in the web, never a re-deal moved to suit a lane.
+6. **The exits.** Weighed per refusal once measured: (a) an O number, (b) an exception the ground forces (`forced.py`), (c) a
+   rule that dissolves it, (e) conform. (d) more room is the re-deal's own business, not the web's.
+7. **The search smell.** Watch for a retry or re-order loop in the settle; the third tuning of one thing is a step back (B5).
+8. **The budget.** About two hours (a guess: the retaken baseline, two seeds' causes, their fixes, one cohort, the landing).
+9. **Done, measured.** ONE goal: the patched 48-seed cohort fails no seed that passes at HEAD, both rolled now, compared by
+   `cohort_known` (FIXED / NEWLY FAILING / WORSENED / PRE-EXISTING). T05 (re-landing the patch itself) is a separate task.
+
+### T04 Decisions
+
+**D35 - measured first, and the web already carries the re-deal: no engine change.** Retaken 2026-10-18 by
+`m:w156-redeal-cohort`'s method on today's HEAD (055a12b5c): `make cohort N=48` passes 54/54
+(`dev/cohort-log/20261018T023923Z-diagram-backlog-373625.json`); with `w155-pocket-attempt.patch` applied (it applies cleanly) the
+same cohort passes 54/54 (`dev/cohort-log/20261018T024147Z-diagram-backlog-378026.json`; the reference map a roll-cache MISS, so
+the patched engine rolled). Seeds 10 and 24, newly failing under the patch on 2026-10-13, pass: T03's fixes (the own-garden gap,
+the last resort's join order, the sty band) were what the re-deal had been knotting on. SC-004 is met as the code stands;
+building a web change to meet it would be a fix with nothing to fix. The patch is reverted in the tree - re-landing it, with its
+pool and record checks, is T05's one goal (D34).
+
+The tooling fix this task's measurement found (a cohort record rolled over an uncommitted engine diff reads as its commit's)
+is its own task, T15 (D34: one goal a task; spec-fidelity, T04 round 1); the hour-9 step-back's tooling fix is T16. T04's goal is
+384's SC-004 (here FR-007, SC-003).
+
+
+### T04 part B (2026-10-18T02:49Z)
+
+Owed by the hour-9 step-back (`hour:385-approach-checklist@9`, ruled `continue`).
+
+1. **What is refusing?** Nothing in the maps: both cohorts pass 54/54. The plan review (round 1) BLOCKED D36 as a second goal.
+2. **A3 again.** SC-004 is the GM's (G, 384); no lane-law rule refused, so none to place.
+3. **A4 again.** n/a - no refusal on the ground.
+4. **Moving something earlier for something later?** No: nothing moved.
+5. **Tuning or changing?** Neither.
+6. **The one-sentence test.** "The re-deal already passes; nothing to build" - nothing for the GM to question but the measurement,
+   which names both records.
+7. **The next step is a measurement.** None owed: SC-004 is measured. The next step is T04's tick.
+8. **Routes measured before asking?** Nothing is being asked.
+9. **After a ruling.** `continue`; the step it names is T04's plan review, then the stamp - moved to T15 by that review.
+
+## T15 - a cohort rolled over an uncommitted engine diff says so (found by T04)
+
+### T15 Approach (checklist part A)
+
+1. **The goal, in the world.** A cohort record says what was rolled: a roll over an uncommitted engine diff is never read as its
+   commit's baseline, so FIXED / NEWLY FAILING stays true.
+2. **The constraints.** The records are append-only once committed; a test red without the rule; tooling only.
+3. **Where each comes from.** The baseline rule is ours (O, feature 385 T03's tooling fix); "No known regressions" (G, XIII).
+4. **Do they describe the world here?** Yes - T04's patched record named HEAD's commit and nothing else.
+5. **The order.** The stamp before the record is committed, then the readers skip it.
+6. **The exits.** (c) - the record carries the diff's digest; (e) n/a.
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: `tests/tooling/test_cohort_known.py` and `test_approach_gate.py` red without the stamp or the skip.
+
+### T15 Decisions
+
+**D36 - the stamp and the skip.** The patched record names HEAD's commit and nothing else, so
+it read as a second baseline of HEAD's engine. `make cohort` now runs `cohort_known.py --stamp` before committing the record: when
+`git diff HEAD -- l7r pool` is not empty, the newest record gains `engine_diff` (the diff's digest), and `cohort_known.baselines`
+and `approach_gate.newly_failing` skip any record carrying it. Tooling only (`scripts/`, the Makefile, tests). The record already
+committed without the stamp stays as written (append-only); it passes every seed, as HEAD's does, and stops counting once
+main's engine moves.
+
+## T16 - a plan review's third round on one task waits for the round arbiter (the round arbiter's fix on hour:385-approach-checklist@9)
+
+### T16 Approach (checklist part A)
+
+1. **The goal, in the world.** A plan review past CLAUDE.md's tripwire ("a check's third round on one subject") is refused by
+   the guard, not held back by the session remembering the rule (T14's fourth round was).
+2. **The constraints.** CLAUDE.md's tripwire (G, 375); every refusal names its compliant step; `ARBITER_OK` with a reason the
+   escape, as for a spec review's cap; a test red without it.
+3. **Where each comes from.** The cap is the GM's (G, 375's tripwires); counting per task is the arbiter's ruling (hour 9).
+4. **Do they describe the world here?** Yes - T13 and T14 ran three and four plan rounds.
+5. **The order.** The count, then the refusal, then the escape.
+6. **The exits.** (c) - count per task from `plan-review.json`'s block reviews; (e) n/a.
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: `tests/tooling/test_plan_round_cap.py` red without the cap; `make hooks-test` green.
+
+### T16 Decisions
+
+**D37 - a task's plan rounds, counted back to its CLEAR.** On a MODE 4 dispatch the review-round guard
+(`hm_review_round.plan_cap_refusal`) counts the active task's rounds: the newest entries of `plan-review.json`'s block reviews
+naming one of its blocks (`## Txx` / `### Txx`), back to one CLEAR. The dispatch that would be round 3 trips
+`round:spec-fidelity|plan:<feature>#<task>@3` and is refused with the arbiter's step; each `continue` ruling lifts the cap by one
+round; `ARBITER_OK="<reason>"` passes it, recorded.
 
 ## T11 - the close
 

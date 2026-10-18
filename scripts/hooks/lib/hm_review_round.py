@@ -89,6 +89,49 @@ def spec_cap_refusal(root: pathlib.Path, feature: str, round_no: int, prompt: st
     return (f"BLOCKED: round {round_no} of specs/{feature}'s spec review - past the five-round cap the round arbiter rules, "
             "not the GM (feature 379). Nothing was dispatched and no round was counted.\n" + hm_arbiter.refusal([trigger]))
 
+#: a plan review's rounds on one task before the round arbiter rules: CLAUDE.md's tripwire, "a check's third round on one subject"
+#: (the round arbiter's tooling fix on hour:385-approach-checklist@9 - T14's plan went to a fourth round held back only by the
+#: session remembering the rule, the guard counting rounds per bundle and never per task)
+PLAN_ROUND_CAP = 2
+
+
+def plan_rounds(feature_dir: pathlib.Path, task: str) -> int:
+    """The rounds `task`'s plan blocks have had since their last CLEAR: the newest entries of `plan-review.json`'s block reviews
+    that name one of its blocks (`## Txx ...` / `### Txx ...`), counted back to a CLEAR."""
+    try:
+        reviews = json.loads((feature_dir / "plan-review.json").read_text(encoding="utf-8")).get("block_reviews") or []
+    except (OSError, ValueError):
+        return 0
+    head = re.compile(rf"^#{{2,4}}\s+{re.escape(task)}\b")
+    n = 0
+    for r in reversed([r for r in reviews if isinstance(r, dict) and any(head.match(str(b)) for b in r.get("blocks") or [])]):
+        if r.get("verdict") == "CLEAR":
+            break
+        n += 1
+    return n
+
+
+def plan_cap_refusal(root: pathlib.Path) -> str:
+    """Why the active task's next plan round waits for the round arbiter, or ''. Each `continue` ruling on the task's plan lifts
+    the cap by one round, as for a spec review."""
+    sys.path.insert(0, str(HERE.parents[1] / "gates"))
+    import plan_gate  # noqa: PLC0415 - the active task, one rule
+
+    d, task = plan_gate.active_task(root)
+    if d is None or not task:
+        return ""
+    round_no = plan_rounds(d, task) + 1
+    if round_no <= PLAN_ROUND_CAP:
+        return ""
+    prefix = f"round:spec-fidelity|plan:{d.name}#{task}@"
+    if round_no - PLAN_ROUND_CAP <= hm_arbiter.continues(root, prefix):
+        return ""
+    trigger = f"{prefix}{round_no}"
+    hm_arbiter.trip(root, trigger, "round", f"spec-fidelity|plan:{d.name}#{task}", f"round {round_no} of {task}'s plan review")
+    return (f"BLOCKED: round {round_no} of {task}'s plan review - a check's third round on one subject owes the round arbiter's "
+            "ruling first (CLAUDE.md, the tripwires). Nothing was dispatched.\n" + hm_arbiter.refusal([trigger]))
+
+
 #: feature 253 (GM 2026-09-19): before a later round is SPENT, the feature directory is searched for the old
 #: value of whatever changed; candidates refuse the dispatch once, and this token (with a reason) says they
 #: were looked at and are not stale.
@@ -333,6 +376,12 @@ def judge(payload: dict, clone: str) -> dict:
         return {"event": "", "rule": "", "detail": "", "exit": 0, "stdout": "", "stderr": ""}
     prompt = str(ti.get("prompt") or "")
     mode = classify_mode(prompt)
+    if mode == "plan" and clone:
+        held = plan_cap_refusal(pathlib.Path(clone))
+        if held and reason_is_enough(escape_reason(prompt, ARBITER_TOKEN)):
+            return {"event": "escaped", "rule": "plan-round-cap", "detail": escape_reason(prompt, ARBITER_TOKEN), "exit": 0, "stdout": "", "stderr": ""}
+        if held:
+            return {"event": "blocked", "rule": "plan-round-cap", "detail": held.splitlines()[0][:200], "exit": 2, "stdout": "", "stderr": held}
     if mode != "spec":
         return {"event": "permitted", "rule": "other-mode", "detail": f"{mode} review passes untouched", "exit": 0, "stdout": "", "stderr": ""}
     feature = feature_of(prompt)

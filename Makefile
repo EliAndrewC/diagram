@@ -483,8 +483,9 @@ cohort:         ## [maps] roll N seeds and report every failure      N=10 [SEED=
 	$(REF_FIRST)
 	@: "GUARD_EDIT_OK: feature 328 - HOUSEHOLDS rolls the cohort at one size, the scaling question (does a change refuse a 20- or 40-household hamlet?) asked without the perf snapshot's timing - five make perf runs were spent as refusal checks on 2026-10-08"
 	@: "GUARD_EDIT_OK: feature 374, the round arbiter's tooling fix on ask:w155-cohort-seed10 - a failing cohort names the open found rows that already list its failing seeds (scripts/measure/cohort_known.py)"
+	@: "GUARD_EDIT_OK: feature 385 T04 - a record rolled over an uncommitted engine diff carries its digest (cohort_known --stamp) and is never a baseline"
 	@: "GUARD_EDIT_OK: feature 375 amendment 7, FR-029 - the cohort's per-seed record (dev/cohort-log/) is committed alone, as the gate's run record is; amendment 8, FR-038 - ten seeds by default, the GM's choice (GUARD_EDIT_OK: feature 374 - cohort_known.py runs after a failing roll)"
-	$(RUN).tools.cohort_audit --count $(or $(N),10) $(if $(SEED),--seed $(SEED),) $(if $(JOBS),--jobs $(JOBS),) $(if $(HOUSEHOLDS),--households $(HOUSEHOLDS),); rc=$$?; $(COMMIT_RUN_RECORD) "$$([ $$rc = 0 ] && echo pass || echo fail)" last-cohort-record; [ $$rc = 0 ] || python3 scripts/measure/cohort_known.py --root .; exit $$rc
+	$(RUN).tools.cohort_audit --count $(or $(N),10) $(if $(SEED),--seed $(SEED),) $(if $(JOBS),--jobs $(JOBS),) $(if $(HOUSEHOLDS),--households $(HOUSEHOLDS),); rc=$$?; python3 scripts/measure/cohort_known.py --root . --stamp; $(COMMIT_RUN_RECORD) "$$([ $$rc = 0 ] && echo pass || echo fail)" last-cohort-record; [ $$rc = 0 ] || python3 scripts/measure/cohort_known.py --root .; exit $$rc
 
 # GUARD_EDIT_OK: `tripwire` RETIRED as a target (GM 2026-09-05), folded into `maps`. It ran the same
 # `mapcheck` with the same auto scope, so with no SCOPE set it was `maps` minus the index refresh -

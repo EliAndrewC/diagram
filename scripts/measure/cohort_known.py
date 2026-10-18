@@ -11,6 +11,7 @@ takes its failing seeds, and prints every OPEN found row (`specs/328-match-the-r
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import pathlib
 import re
@@ -69,7 +70,8 @@ def baselines(record: dict, earlier: list[dict], ok) -> dict[int, dict]:  # noqa
     """Each seed's baseline: its entry in the newest earlier record, rolled at the same household count on main's engine."""
     out: dict[int, dict] = {}
     for r in sorted(earlier, key=lambda r: str(r.get("utc")), reverse=True):
-        if str(r.get("utc")) >= str(record.get("utc")) or r.get("households") != record.get("households") or not r.get("commit") or not ok(str(r["commit"])):
+        if (str(r.get("utc")) >= str(record.get("utc")) or r.get("households") != record.get("households") or not r.get("commit")
+                or r.get("engine_diff") or not ok(str(r["commit"]))):  # a roll over an uncommitted engine diff is not its commit's
             continue
         for b in r.get("seeds") or []:
             out.setdefault(int(b["seed"]), b)
@@ -105,11 +107,35 @@ def newest(root: pathlib.Path) -> dict | None:
     return json.loads(logs[-1].read_text()) if logs else None
 
 
+ENGINE_PATHS = ("l7r", "pool")
+
+
+def stamp(root: pathlib.Path) -> str:
+    """Mark the newest record rolled over an uncommitted engine diff with that diff's digest (`engine_diff`), so it is never read
+    as its commit's baseline (feature 385 T04: the wave 155 patch, applied uncommitted, rolled a record that named HEAD and read
+    as a second HEAD baseline). Returns the digest, or '' for a clean engine."""
+    logs = sorted((root / "dev/cohort-log").glob("[0-9]*.json"))
+    diff = subprocess.run(["git", "-C", str(root), "diff", "HEAD", "--", *ENGINE_PATHS], capture_output=True, text=True).stdout
+    if not logs or not diff:
+        return ""
+    digest = hashlib.sha256(diff.encode()).hexdigest()[:16]
+    rec = json.loads(logs[-1].read_text())
+    rec["engine_diff"] = digest
+    logs[-1].write_text(json.dumps(rec, indent=1) + "\n")
+    return digest
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--root", default=".")
+    ap.add_argument("--stamp", action="store_true", help="only mark the newest record with its uncommitted engine diff's digest")
     args = ap.parse_args(argv)
     root = pathlib.Path(args.root)
+    if args.stamp:
+        d = stamp(root)
+        if d:
+            print(f"cohort: rolled over an uncommitted engine diff ({d}) - recorded so, never read as {ENGINE_PATHS} at its commit")
+        return 0
     record = newest(root)
     for line in known(root, record) if record else []:
         print(line)

@@ -51,7 +51,7 @@
    "declared": "spec-fidelity"
   },
   "## Landing": {
-   "sha256": "c3b9554b2807542faf5479e6a346b03c286208b1fd1300466c2ac041e737cf14",
+   "sha256": "114c007a10b228c9f7cf2ac5f03bb36a35bfead28ed8ae97a6c033986983560f",
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
@@ -172,6 +172,66 @@
   },
   "### T14 Decisions": {
    "sha256": "0a340b98498f0aa0388a0b62ef7fa4c635521a199b49faf88abf021bf99d930e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "## T04 - T48: the web carries a re-deal of the seats (384 User Story 2, SC-004)": {
+   "sha256": "546727b8f724f3266c0945a412b5601f5962a3e06745676e1123085ae63c69ca",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Approach (checklist part A)": {
+   "sha256": "1075eb09fb66b00d91ccef255d204b7aaac9dbdc775b2aae731d88e651b44bdf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Decisions": {
+   "sha256": "4365faa62ce1a43999b287c96cd3e5f3a956d8145502b088342cc76fa71f7333",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T04 part B (2026-10-18T02:49Z)": {
+   "sha256": "7015d2d9143f911c73913927d5b4beeba48a51d65a49e674f23bb9650a288c8f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "## T15 - a cohort rolled over an uncommitted engine diff says so (found by T04)": {
+   "sha256": "467ee098112e7161604d199af63c2cce64de19cbd7393bf558add0bcf9080cdb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T15 Approach (checklist part A)": {
+   "sha256": "ad6b352e35a47146e722b1b728890211358a192245f4348007b13b0ca51bc75e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T15 Decisions": {
+   "sha256": "2efcdb6cd00f93e9fa59fa74f2a5a135f971869fb3700def3cb924ac21783cbb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "## T16 - a plan review's third round on one task waits for the round arbiter (the round arbiter's fix on hour:385-approach-checklist@9)": {
+   "sha256": "2e544d04941567639814ccb3648b59ccc8144d03551dfb3d72b820d963d4b826",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T16 Approach (checklist part A)": {
+   "sha256": "c432ace4052bd4276b8945e154d7ef8191a797966f7b3c80c35d31cdc3a2601b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
+  },
+  "### T16 Decisions": {
+   "sha256": "e85af149a7c61e74411a3fb16bb87eb7ffcf8c141465d659817fa0d3f6e4a0dd",
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
@@ -1664,6 +1724,135 @@
      "summary": "Where the windows of several runs with no transcript overlap, an unattributed call is the earliest-started run's.",
      "class": "within",
      "why": "'such runs' is bound to runs whose own transcript is not found, and the clause is elliptical for 'is that run's, counted as an ESTIMATE' under WHERE NEITHER SAYS. The window decides only calls no transcript names and no 'by' records, and it is counted as an estimate: FR-014's 'the window an estimate only where they do not', exactly."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## T04 - T48: the web carries a re-deal of the seats (384 User Story 2, SC-004)",
+    "### T04 Approach (checklist part A)",
+    "### T04 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Approach-2",
+     "summary": "Retake the 2026-10-13 baseline on today's HEAD before any work, since T03 fixed 17, 21, 40, 45.",
+     "class": "within",
+     "why": "Measured, not remembered; serves 384's SC-004 as carried by FR-007/SC-003."
+    },
+    {
+     "id": "Approach-5",
+     "summary": "Homesteads first, then lanes: the fix is in the web, never a re-deal moved to suit a lane.",
+     "class": "within",
+     "why": "The GM's own words in request.md: nobody moves their house so a footpath joins at a better angle."
+    },
+    {
+     "id": "Approach-6",
+     "summary": "Exit (d) more room is excluded as the re-deal's business, not the web's.",
+     "class": "within",
+     "why": "Same ground as Approach-5: T04's object is the web carrying whatever seats the re-deal produces; room for seats is the re-deal's (T05/T47's) concern."
+    },
+    {
+     "id": "Approach-9",
+     "summary": "ONE goal: the patched 48-seed cohort fails no seed passing at HEAD; re-landing the patch is T05.",
+     "class": "within",
+     "why": "The approved scope lists T48 and T47's patch re-landed as separate items; FR-015/D34 requires one goal a task."
+    },
+    {
+     "id": "D35",
+     "summary": "SC-004 measured as already met on HEAD 055a12b5c (54/54 both, patched engine confirmed rolled by a roll-cache MISS); no engine change built; patch reverted, re-landing is T05.",
+     "class": "within",
+     "why": "Nothing was asked for but the outcome, and the outcome was measured on today's HEAD with both runs' logs named and the 10-13 failures (10, 24) explained by T03's fixes. Declining to build a change for a met criterion narrows nothing; leaving the re-landing to T05 is the approved scope's own split."
+    },
+    {
+     "id": "D36",
+     "summary": "make cohort stamps records rolled over an uncommitted engine diff (engine_diff); cohort_known.baselines and approach_gate.newly_failing skip them; done inside T04.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Narrows FR-015/D34 (amendment 4, the GM: 'a second goal becomes its own task') by an unlabeled exception: a forward-looking cohort-tooling fix done inside T04. It does not serve T04's goal - D36 itself says the patched record stays unstamped and is harmless now - so deleting T04's goal leaves D36 its whole job: a second goal. Following FR-015 is not impossible (one box or carried row), is not excepted by the GM's words, and folding it in defeats the purpose of this task as the GM stated it ('we'll see how long it took'): it inflates T04's own measured time. Remedy: D36 becomes its own task (a new box or carried row) and T04's decisions cite it by id; its content is not at issue, its placement is."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Landing",
+    "## T04 - T48: the web carries a re-deal of the seats (384 User Story 2, SC-004)",
+    "## T15 - a cohort rolled over an uncommitted engine diff says so (found by T04)",
+    "## T16 - a plan review's third round on one task waits for the round arbiter (the round arbiter's fix on hour:385-approach-checklist@9)",
+    "### T04 Approach (checklist part A)",
+    "### T04 Decisions",
+    "### T04 part B (2026-10-18T02:49Z)",
+    "### T15 Approach (checklist part A)",
+    "### T15 Decisions",
+    "### T16 Approach (checklist part A)",
+    "### T16 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing: T15, T16 lands-open",
+     "summary": "T15 and T16 join the lands-open list; each task lands when it closes.",
+     "class": "within",
+     "why": "FR-006 (one task, then the retro): each task's change reaches main before the next; the two new tasks are treated like every other."
+    },
+    {
+     "id": "T04 A9 / goal",
+     "summary": "T04's one goal is 384's SC-004: the patched 48-seed cohort fails no seed that passes at HEAD, both rolled now, compared by cohort_known; re-landing the patch is T05.",
+     "class": "within",
+     "why": "FR-007 / SC-003 carry 384's SC-004 for T48 here; D34/FR-015 one goal a task; the proposal the GM approved lists 'T48' and 'T47's patch re-landed' as separate items."
+    },
+    {
+     "id": "T04 A6 exit (d)",
+     "summary": "Exit (d) 'more room' is put out of the web's reach: room is the re-deal's business; the web weighs (a) a number, (b) a forced exception, (c) a dissolving rule, (e) conform.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the GM's own words: lanes are laid after homesteads and 'Nobody in real life moves their house so that a footpath will join'; more room for a lane means moving seats, which the GM ruled out. The checklist's 'at least three exits besides conform' is still met by (a), (b), (c). Moot in practice: no refusal occurred."
+    },
+    {
+     "id": "T04 A8 budget",
+     "summary": "About two hours, labeled a guess.",
+     "class": "within",
+     "why": "A checklist part A estimate, not a pass/fail threshold; the GM's 2026-10-17 objection was to a two-hour threshold put on record as a test of the process, which this is not."
+    },
+    {
+     "id": "D35",
+     "summary": "Baseline retaken on today's HEAD first; both cohorts pass 54/54 (records named); SC-004 is met as the code stands, so no engine change; patch reverted, its re-landing is T05.",
+     "class": "within",
+     "why": "SC-004 is an outcome; measuring it met before building is the request's own purpose (stop building fixes with nothing to fix, measure, step back). The premise is measured, with both cohort records named, not assumed."
+    },
+    {
+     "id": "D35 para 2: T15 and T16 split out",
+     "summary": "The cohort-record stamp (D36) becomes T15 and the hour-9 step-back's tooling fix becomes T16; T04 keeps one goal.",
+     "class": "within",
+     "why": "FR-015 / D34: a second goal found in a task becomes its own task before any work on it. This answers round 1's NOT LEGITIMATE item exactly."
+    },
+    {
+     "id": "T04 part B",
+     "summary": "Part B owed by the hour-9 step-back, answered: no refusal on the ground, nothing moved, nothing tuned; next step is the tick.",
+     "class": "within",
+     "why": "FR-004 (asked when the work resists): the step-back's checklist answered; it decides nothing beyond D35."
+    },
+    {
+     "id": "T15 goal and D36 stamp/skip",
+     "summary": "make cohort stamps a record rolled over an uncommitted l7r/pool diff with engine_diff; cohort_known.baselines and approach_gate.newly_failing skip it; tooling only, tests red without it.",
+     "class": "within",
+     "why": "A second goal found by T04, made its own task per FR-015; a process fix named by a task (FR-006 'any change it names made') whose only effect is that FIXED / NEWLY FAILING stays true, i.e. that the measurement SC-004 and XIII rely on means what it says."
+    },
+    {
+     "id": "D36 append-only record left unstamped",
+     "summary": "The patched record already committed without the stamp stays as written; it passes every seed as HEAD's does and stops counting once main's engine moves.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Purpose test: T15 exists so a mis-read record cannot produce a false FIXED / NEWLY FAILING verdict. This record's results are identical to HEAD's true baseline (54/54 both), so reading it as a second HEAD baseline changes no classification, and it ceases to count once the commit moves. The exception does not gut the purpose; the append-only rule is the project's standing rule, not a convenience."
+    },
+    {
+     "id": "T16 goal and D37",
+     "summary": "On a MODE 4 dispatch the review-round guard counts the active task's plan rounds back to one CLEAR; round 3 trips round:spec-fidelity|plan:<feature>#<task>@3 and is refused with the arbiter's step; each continue lifts the cap one round; ARBITER_OK with a reason passes, recorded.",
+     "class": "within",
+     "why": "The round arbiter's fix on hour:385-approach-checklist@9 (the arbiter stands where the GM was asked, feature 379), enforcing CLAUDE.md's existing tripwire 'a check's third round on one subject' (G, 375) by a guard rather than memory, as FR-010 does for its case. Its reach is MODE 4 dispatches only, with the existing ARBITER_OK escape; no other agent type or command is touched."
     }
    ]
   }

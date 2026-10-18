@@ -275,3 +275,38 @@ contradicting leftover clause). Round 4's three wording rows went to T11 (the co
 **For T04, from these numbers.** Two levers are now measured, not guessed: the per-call cost (fewer, batched calls - the root
 CLAUDE.md's "batch the lookups you already know you need"), and the record-check phase after a page edit. T04's row is read
 phase by phase against T03's with these tables.
+
+## T04 - the retro row
+
+**The numbers (`make feature-report F=385`, the phase table and skeleton - T04 is the first task measured by them).** Started
+02:36Z, ticked about 02:55Z: about 20 min against a two-hour budget (the guess the Approach named), 3 decision points (the hour-9
+step-back, plan round 1 BLOCKED, round 2 CLEAR). Of the session's own time: about 15 min working, 1 min waiting; its subagents
+3 runs, 7 min. Two cohorts (2 min each, the second a roll-cache miss); red gates 0; regressions 0.
+
+**Against T03 (2 h 25 min), phase by phase.** T03's front (24 min) was 11.5 min of one-time blind Approach and two plan rounds;
+T04's front was the Approach block and the HEAD cohort, 5 min. T03's seeds took about 50 min of diagnosis; T04 had none to do -
+measured first, the re-deal already passed. T03's merge (21 min, a second goal) has no counterpart: the one second goal T04 found
+(the cohort-record stamp) was split out by the plan review before any of its time was T04's (T15). T03's landing was 50 min of
+record checks; T04 changed no engine, no page and no pop-up, so it owed none.
+
+**What decided the time.** A5 and part A item 2 - "the baseline is retaken first" - before any design: the measurement ended the
+task. Writing a web change from the 2026-10-13 numbers would have built a fix for two seeds that no longer fail.
+
+**Which checklist items fired.** A2 (retake the baseline), A9's one goal (enforced by the plan review on the session's own D36:
+the rule the session built an hour earlier, applied to it). B did not fire.
+
+**What the tooling did.** The phase table and skeleton (T14) gave this row's numbers without a hand count. The hook recorded
+`by` on every subagent call (12 of 12), confirming the payload carries `agent_id`. The hour-9 step-back found one guard gap,
+closed as T16.
+
+## T15 - the retro row
+
+About 10 min (built inside T04's window, ticked once split): `cohort_known --stamp` before the record is committed, `engine_diff`
+skipped by `baselines` and `approach_gate.newly_failing`; tests red without each. The record T04 rolled before the stamp existed
+stays as written (append-only; 54/54, as HEAD's). No checklist change.
+
+## T16 - the retro row
+
+About 10 min: the review-round guard counts a plan review's rounds per active task back to its CLEAR and trips the round arbiter
+at the third (`round:spec-fidelity|plan:<feature>#<task>@3`); `continue` lifts it by one, `ARBITER_OK` passes it. Its first real
+use will be the next task whose plan reaches a third round. No checklist change: C-items had asked the session to remember this.
