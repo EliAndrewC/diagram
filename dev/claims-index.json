@@ -6908,6 +6908,24 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/consts.py::POND_BANK_FT#a tail pond's bank beyond its reeds": {
+  "body": "b6495f11c3ce8533",
+  "claim": "a tail pond's bank beyond its reeds - GUESS reservoir-ponds-tameike.drawing: the embankment kept dry beyond the reed fringe; 18 ft of it, room for a crown and a little play (no crest width recorded)",
+  "code": "10bd505b06878d88",
+  "core": "14aaee2fbe7c7694",
+  "date": "2026-10-18",
+  "note": "18 ft is a fair guess (the page gives no bank width), but the drawing page it names never records this figure as a guess; it should be a bare GUESS like keep_the_bank_dry's \"how wide\", or the page should record the 18 ft",
+  "pages": {
+   "0061-reservoir-ponds-tameike.drawing.html": "c22de534b95132ef"
+  },
+  "research": "5b102e334372ecb3",
+  "rests": [
+   "0061-reservoir-ponds-tameike.drawing.html:9ba649087fb63da1",
+   "0061-reservoir-ponds-tameike.drawing.html:a70a5b42abaea94f",
+   "0061-reservoir-ponds-tameike.drawing.html:b4e3ac5d9de888f6"
+  ],
+  "verdict": "MISLABELED"
+ },
  "l7r/diagram/hamletgen/consts.py::POND_BANK_PITCH_FT#one tree about every 30 ft of bank": {
   "body": "347cd16150ed2bf6",
   "claim": "one tree about every 30 ft of bank - GUESS: 0061's \"sparsely\" gives no figure",
@@ -16622,67 +16640,94 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondbank.py::bank_seats#each seat jittered": {
-  "body": "a468e8ef8bf39b15",
-  "claim": "each seat jittered - CONVENTION: up to a quarter pitch along the ring by its position, so the trees do not stand as a ruled ring",
-  "code": "3fbc1591a93be979",
-  "core": "db5fb56a7509bac7",
+  "body": "338dbc8707955fe4",
+  "claim": "each seat jittered - GUESS: up to a quarter pitch along the ring and across the bank's play by its position - trees planted irregularly, not in a ruled row, within the page's one about every 30 ft",
+  "code": "c0b2fc53d8eb21e0",
+  "core": "0752ea4749f21e84",
   "date": "2026-10-18",
-  "note": "the jitter moves where each bank tree stands, by up to a quarter pitch, so it says how the trees were planted (irregularly, not in a ruled row), not just how they are shown; label it GUESS, within 0061's \"about one every 30 ft of bank\"",
+  "note": "quarter-pitch jitter along the ring and play across the bank; the page says nothing on regularity",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondbank.py::bank_seats#on the bank, beyond the reeds": {
-  "body": "a468e8ef8bf39b15",
+  "body": "338dbc8707955fe4",
   "claim": "on the bank, beyond the reeds - reservoir-ponds-tameike.drawing: reeds at the shore, the embankment beyond them",
-  "code": "f57be52ef11adb0d",
-  "core": "db5fb56a7509bac7",
+  "code": "2efae3e5a499f6bd",
+  "core": "0752ea4749f21e84",
   "date": "2026-10-18",
-  "note": "seats sit SINK_FRINGE plus a 6 ft crown radius beyond the pond, which is \"on the bank beyond the reed fringe\"; a 12 ft crown matches the page",
+  "note": "trunks sit between fringe+crown and fringe+18-crown, so crowns stay on the bank beyond the reeds",
   "pages": {
    "0061-reservoir-ponds-tameike.drawing.html": "c22de534b95132ef"
   },
   "research": "5b102e334372ecb3",
   "rests": [
    "0061-reservoir-ponds-tameike.drawing.html:9ba649087fb63da1",
-   "0061-reservoir-ponds-tameike.drawing.html:a70a5b42abaea94f",
-   "0061-reservoir-ponds-tameike.drawing.html:b4e3ac5d9de888f6"
+   "0061-reservoir-ponds-tameike.drawing.html:a70a5b42abaea94f"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondbank.py::bank_seats#sparsely": {
-  "body": "a468e8ef8bf39b15",
+  "body": "338dbc8707955fe4",
   "claim": "sparsely - GUESS: one tree about every 30 ft of bank (`POND_BANK_PITCH_FT`)",
-  "code": "004f5a91c0e0ced4",
-  "core": "db5fb56a7509bac7",
+  "code": "592dae49fd15610d",
+  "core": "0752ea4749f21e84",
   "date": "2026-10-18",
-  "note": "",
+  "note": "30 ft pitch, as the page records it, a GUESS",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondbank.py::draw_bank_trees#a bank tree's mark": {
-  "body": "14f2dc9688d6891a",
+  "body": "015c42b9f6551056",
   "claim": "a bank tree's mark - CONVENTION: the dike's standard tree, a round crown with a darker rim",
-  "code": "ea1f6e5a46ad9bfe",
-  "core": "3e6aab04691428c4",
+  "code": "5ae282409b076ede",
+  "core": "6b64d019d7cc75a5",
   "date": "2026-10-18",
-  "note": "",
+  "note": "how the tree is drawn; the darker cudrania tone is the page's convention",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/pondbank.py::draw_bank_trees#the crowns in tree_crowns": {
+  "body": "015c42b9f6551056",
+  "claim": "the crowns in tree_crowns - NONE: plumbing, so the structure tests read the bank's trees as they read every crown",
+  "code": "299b45bf4126355f",
+  "core": "6b64d019d7cc75a5",
+  "date": "2026-10-18",
+  "note": "plumbing that records the crowns",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/pondbank.py::draw_bank_trees#the crowns in tree_crowns": {
-  "body": "14f2dc9688d6891a",
-  "claim": "the crowns in tree_crowns - NONE: plumbing, so the structure tests read the bank's trees as they read every crown",
-  "code": "c021dabbdbb6da1f",
-  "core": "3e6aab04691428c4",
+ "l7r/diagram/hamletgen/pondbank.py::keep_the_bank_dry#how wide": {
+  "body": "faf4820ae165f5a2",
+  "claim": "how wide - GUESS: 18 ft beyond the reeds (`POND_BANK_FT`)",
+  "code": "750f5acf089987db",
+  "core": "b4bcbfc1b92845e6",
   "date": "2026-10-18",
-  "note": "",
+  "note": "the page gives no bank width, so a bare GUESS is right",
   "pages": {},
   "research": "",
   "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/pondbank.py::keep_the_bank_dry#the bank kept dry": {
+  "body": "faf4820ae165f5a2",
+  "claim": "the bank kept dry - reservoir-ponds-tameike.drawing: \"reeds and the wet tint are kept off the embankment\", \"nor on any raised rim around a pond\"",
+  "code": "547b58e59213a729",
+  "core": "b4bcbfc1b92845e6",
+  "date": "2026-10-18",
+  "note": "the no-build ellipse keeps the wet tint and scrub off the embankment, bare or planted",
+  "pages": {
+   "0061-reservoir-ponds-tameike.drawing.html": "c22de534b95132ef"
+  },
+  "research": "5b102e334372ecb3",
+  "rests": [
+   "0061-reservoir-ponds-tameike.drawing.html:9ba649087fb63da1",
+   "0061-reservoir-ponds-tameike.drawing.html:b4e3ac5d9de888f6"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondbank.py::pond_bank#pond bank form": {
@@ -16772,35 +16817,35 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondbank.py::stage_pond_bank#after the houses, ways and wells": {
-  "body": "907e785687fd3b53",
+  "body": "6a4e34e411421072",
   "claim": "after the houses, ways and wells - UNRESEARCHED: seated against what stands, before the hinterland's scrub and copse",
-  "code": "66418f0010cf691c",
-  "core": "2652ad08e9add502",
+  "code": "da3d35ad2d550479",
+  "core": "94525cb266553268",
   "date": "2026-10-18",
-  "note": "",
+  "note": "the staging order is unresearched; the page is silent",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondbank.py::stage_pond_bank#no two crowns overlap": {
-  "body": "907e785687fd3b53",
+  "body": "6a4e34e411421072",
   "claim": "no two crowns overlap - CONVENTION: a tree kept two crown radii from the last, so each reads as one tree",
-  "code": "d308c9e68268000d",
-  "core": "2652ad08e9add502",
+  "code": "e57106b249e1e0b1",
+  "core": "94525cb266553268",
   "date": "2026-10-18",
-  "note": "a 2r gap (12 ft) against a 30 ft pitch with at most a quarter pitch of jitter; it only ever binds as a draw guard",
+  "note": "two crown radii apart is a spacing for legibility",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondbank.py::stage_pond_bank#the two trees in turn": {
-  "body": "907e785687fd3b53",
+  "body": "6a4e34e411421072",
   "claim": "the two trees in turn - GUESS: 0061 names mulberry and cudrania, not their order; they alternate round the ring",
-  "code": "2f55fd6d33cb1ff0",
-  "core": "2652ad08e9add502",
+  "code": "942e704ddebf332a",
+  "core": "94525cb266553268",
   "date": "2026-10-18",
-  "note": "0061 names both trees but no order or mix",
+  "note": "mulberry and cudrania alternate, as the page records, a GUESS",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
