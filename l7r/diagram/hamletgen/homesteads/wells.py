@@ -411,7 +411,7 @@ def seat_wells(
         no well past the crop - research/questions/0196-communal-wells-ido.drawing.html: every well stands among the houses it serves; refused where the wellhead would widen the crop
         no well over a household's wood floor - UNRESEARCHED: no well seated over a household's reserved wood-floor seats
         later wells by the worst walk - UNRESEARCHED: ranked by the worst-served household's walk after the dig, in 66 px buckets, the crop's overreach added 1:1
-        ties among later wells - UNRESEARCHED: the crop's overreach, then the belt, then the want_near-th nearest house
+        ties among later wells - UNRESEARCHED: the belt, then the crop's overreach, then the exact worst walk, then the want_near-th nearest house
     """
     new: list[Pt] = []
     if not houses or len(placed) >= want:
