@@ -36,17 +36,24 @@ holds; the instruction is to delete it now, and NOT to carry the failure anywher
 
 - **FR-001**: `roll_village` and everything in "What it is" (2) are deleted from the engine. A name the plan finds still
   reached by shipping code (a pool map, the scripted hamlet, a Mode A sheet, the page) is kept, and the plan says who reaches it.
-- **FR-002**: Their tests are deleted; a test file left empty is removed. The `rolls_map` marker lists in
-  `tests/test_markers.py` drop `roll_village`.
-- **FR-003**: Prose that describes `roll_village` as live is updated where it stands: the package indexes
-  (`settlement/CLAUDE.md`, `settlement/rolling/CLAUDE.md`), the module and function docstrings that cite it
-  (`hamletgen/__init__.py`, `hamletgen/cluster.py`, `settlement/houses.py`, `settlement/_geom/village.py`,
-  `settlement/city/bridges.py`, `settlement/structures/fixtures/siting.py`) and the research claims index entries for the
-  deleted code (the claims tooling regenerates or drops them). Specs are history and keep their words.
+- **FR-002**: Their tests are deleted; a test file left empty is removed. This reaches one scripted-hamlet test file,
+  `tests/hamletgen/test_burial.py`: its tests of `edge_seat`, `EdgeGround` and `rect_gap` (`test_rect_gap`, the
+  `test_the_edge_seat_*` tests and their `_seat` helper) go, its tests of what the hamlet does (no ground of its own, the
+  village's ground beyond the last house) and of `convex_hull` stay, and its docstring stops naming the edge seat as live. The
+  `rolls_map` marker lists in `tests/test_markers.py` drop `roll_village`.
+- **FR-003**: Prose that describes `roll_village` or the closure's names as live is updated where it stands: the package indexes
+  (`settlement/CLAUDE.md`, `settlement/rolling/CLAUDE.md`, `settlement/civic_grounds/CLAUDE.md`, `waterfields/CLAUDE.md`,
+  `tests/soak/CLAUDE.md`), the module and function docstrings that cite them (`hamletgen/__init__.py`, `hamletgen/cluster.py`,
+  `hamletgen/burial.py` - "which the village's cremation ground still uses" -, `settlement/houses.py`,
+  `settlement/_geom/village.py`, `settlement/city/bridges.py`, `settlement/structures/fixtures/siting.py`, and every docstring
+  naming `crop_to_content` or `build_comb`) and the research claims index entries for the deleted code (the claims tooling
+  regenerates or drops them). Specs are history and keep their words - except feature 380's, a live placeholder (FR-004).
 - **FR-004**: The village soak failure is NOT carried: the "Carried: from 387" section of feature 380's spec is removed (the
-  GM: "not even move it into the 384 backlog"). Feature 380's placeholder gains one line naming the commit before this
-  feature's deletion, so the village tier can read the old cremation-ground seat (research 0238) from git if it wants it - a
-  pointer, not an owed item.
+  GM: "not even move it into the 384 backlog"). Feature 380's two items that cite deleted code are reworded where they stand:
+  the cremation ground ("already drawn by the roller's village tier ... The village generator reuses it") and the burial
+  ground ("seated through `settlement/civic_grounds/edge_seat.py`") name that code as deleted by feature 388 and readable from
+  git at the commit before the deletion. Their design and the GM's rulings keep their words; the village tier builds the seat
+  anew or recovers it from git - nothing is owed to the deleted code.
 - **FR-005**: The frozen legacy maps that were drawn with `roll_village` (`legacy-hand-authored-pool/hamlets/honda`,
   `.../shimizu`, `legacy-hand-authored-pool/villages/kikuta`) are NOT edited: the legacy pool is frozen, its maps exhibits
   that are never regenerated, so their `.gen.py` keep their words and simply no longer run. Their manifests, renders and
@@ -64,8 +71,9 @@ holds; the instruction is to delete it now, and NOT to carry the failure anywher
 
 ## Decisions Recorded
 
-- **D1 - delete, not port**: the tests of deleted code go with it (FR-002); none is ported to the scripted hamlet, because the
-  scripted hamlet's own tests already cover what it draws. Who chose: the GM ("just delete it").
+- **D1 - delete, not port**: the tests of deleted code go with it (FR-002); none is ported, because the scripted hamlet draws
+  none of it and its own tests cover what it draws - `test_burial.py` keeps its tests of that and loses only those of the
+  deleted edge seat. Who chose: the GM ("just delete it").
 - **D2 - the legacy `.gen.py` files stay as written** (FR-005): editing frozen exhibits is a hand-map edit; leaving a call to
   a deleted method in a file nothing runs costs nothing. Alternative priced: rewrite their headers to say the engine is gone -
   rejected as an edit to frozen files the GM has not asked for.

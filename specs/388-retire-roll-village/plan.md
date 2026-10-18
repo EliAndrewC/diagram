@@ -51,7 +51,8 @@ further name goes through the same table before it is deleted. Tests: every test
 `roll_village` tests in `tests/settlement/test_rolling.py`, `tests/gate/settlement/test_rolling.py`,
 `tests/full/settlement/test_rolling.py`, `tests/soak/test_village_determinism.py`; the tests of the closure names in
 `test_houses.py`, `test_crop_framing.py`, `test_civic_grounds.py`, `tier_city/.../test_civic_grounds.py`,
-`hamletgen/test_burial.py`, `test_city.py`, `test_villages.py`, `test_caption_paths.py`, `test_map_vocabulary.py` and the
+`hamletgen/test_burial.py` (only `test_rect_gap`, the `test_the_edge_seat_*` tests and `_seat`; its hamlet and
+`convex_hull` tests stay), `test_city.py`, `test_villages.py`, `test_caption_paths.py`, `test_map_vocabulary.py` and the
 composed-surface guard's member list), and a file left with no test is removed. The coverage floor then names any line only
 the deleted tests reached: it is deleted if no shipping code reaches it (the same table), else a test is owed.
 
@@ -62,10 +63,13 @@ Verify: `make quick` per step; `make done` green.
 Repoint, at the point of change, every docstring and comment that names a deleted definition as live: `crop_to_content` ->
 the crop (`content_view` / `crop_to_view`); `build_comb` -> `carve_comb` / `finish_comb`; `roll_village` mentions in
 `hamletgen/__init__.py` (the comparison table loses its middle column), `hamletgen/cluster.py`, `settlement/houses.py`,
-`settlement/_geom/village.py`, `settlement/city/bridges.py`, `settlement/structures/fixtures/siting.py`; the indexes
-`settlement/CLAUDE.md`, `settlement/rolling/CLAUDE.md`, `settlement/civic_grounds/CLAUDE.md`, `waterfields/CLAUDE.md`. The
+`settlement/_geom/village.py`, `settlement/city/bridges.py`, `settlement/structures/fixtures/siting.py`, `hamletgen/burial.py`
+(the edge seat "the village's cremation ground still uses"), `tests/hamletgen/test_burial.py`'s docstring; the indexes
+`settlement/CLAUDE.md`, `settlement/rolling/CLAUDE.md`, `settlement/civic_grounds/CLAUDE.md`, `waterfields/CLAUDE.md`,
+`tests/soak/CLAUDE.md`. The
 claims index (`dev/claims-index.json`, `dev/claims-deferred.json`) is rebuilt by its own target. Feature 380's spec loses its
-"Carried: from 387" section and gains the one-line pointer (FR-004). The legacy pool is not touched (FR-005).
+"Carried: from 387" section, and its cremation-ground and burial-ground items name the code they cited as deleted by 388 and
+readable from git at the commit before the deletion, their design and rulings unchanged (FR-004). The legacy pool is not touched (FR-005).
 
 Verify: `grep -rn roll_village l7r pool tests` empty (SC-001); `grep -rnw "crop_to_content\|build_comb" l7r` empty.
 
