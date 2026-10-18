@@ -29,6 +29,15 @@ RULING_378 = {
 }
 TRIGGER = "red-gate@2026-10-10T22:25:57Z"
 
+def _clean_env() -> dict[str, str]:
+    """The environment without the outer make's variables: a test run under `make arbiter-fix-done LAND=...` inherits LAND= through
+    MAKEFLAGS, and a `make` the test runs would then land tooling for real (found 2026-10-18, T20's landing)."""
+    import os
+
+    params = {"LAND", "TICK", "F", "T", "ID", "NOTE", "TEST", "ENGINE", "WRITE", "ARBITER", "FILE", "AS", "BLOCKS", "TASK"}
+    return {k: v for k, v in os.environ.items() if k not in ("MAKEFLAGS", "MFLAGS", "MAKELEVEL", "MAKEOVERRIDES") and k not in params}
+
+
 
 @pytest.fixture
 def root(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> pathlib.Path:
@@ -381,14 +390,14 @@ def test_one_command_lands_a_fix_and_settles_it(root: pathlib.Path) -> None:
     with pytest.raises(ValueError, match=r"the same make arbiter-fix-done with LAND="):
         ha.settle_fix(root, TRIGGER, "done", "the fix was built", "tests/test_x.py")
     repo = pathlib.Path(__file__).resolve().parents[2]
-    dry = subprocess.run(["make", "-n", "-C", str(repo), "arbiter-fix-done", "ID=x", "NOTE=a b c d", "TEST=tests/t.py", "LAND=scripts/a.py"], capture_output=True, text=True, check=False).stdout
+    dry = subprocess.run(["make", "-n", "-C", str(repo), "arbiter-fix-done", "ID=x", "NOTE=a b c d", "TEST=tests/t.py", "LAND=scripts/a.py"], capture_output=True, text=True, check=False, env=_clean_env()).stdout
     assert "scripts/land-tooling.sh scripts/a.py tests/t.py && git fetch -q origin &&" in dry
     ticked = subprocess.run(
         ["make", "-n", "-C", str(repo), "arbiter-fix-done", "ID=x", "NOTE=a b c d", "TEST=tests/t.py", "LAND=scripts/a.py", "F=385", "TICK=T18"], capture_output=True, text=True, check=False
     ).stdout
-    assert 'fix done "x" "a b c d" "tests/t.py" && make --no-print-directory tick F="385" T="T18"' in ticked.replace("/usr/bin/make", "make"), "lands, settles, ticks"
-    no_f = subprocess.run(["make", "-C", str(repo), "arbiter-fix-done", "ID=x", "NOTE=a b c d", "TEST=tests/t.py", "TICK=T18"], capture_output=True, text=True, check=False)
+    assert 'fix done "x" "a b c d" "tests/t.py" && ' in ticked and '--no-print-directory tick F="385" T="T18"' in ticked, "lands, settles, ticks (whatever $(MAKE) expands to)"
+    no_f = subprocess.run(["make", "-C", str(repo), "arbiter-fix-done", "ID=x", "NOTE=a b c d", "TEST=tests/t.py", "TICK=T18"], capture_output=True, text=True, check=False, env=_clean_env())
     assert no_f.returncode == 2 and "TICK= ticks a task of F=<feature>" in no_f.stderr
-    plain = subprocess.run(["make", "-n", "-C", str(repo), "arbiter-fix-done", "ID=x", "NOTE=a b c d", "TEST=tests/t.py"], capture_output=True, text=True, check=False).stdout
+    plain = subprocess.run(["make", "-n", "-C", str(repo), "arbiter-fix-done", "ID=x", "NOTE=a b c d", "TEST=tests/t.py"], capture_output=True, text=True, check=False, env=_clean_env()).stdout
     line = next(ln for ln in plain.splitlines() if "hm_arbiter.py fix done" in ln)
     assert "land-tooling.sh" not in line, "without LAND= it settles alone"

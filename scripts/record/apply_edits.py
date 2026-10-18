@@ -329,6 +329,19 @@ def main(argv: list[str] | None = None) -> int:
             print(f"  {b['n']}. {said}   ({b.get('path') or 'GLOSSARY ' + b['term']})")
         return edited
 
+    # AN EDIT ALREADY APPLIED BY HAND SETTLES TOO (feature 385 T21; the round arbiter's fix on ask:t05-lane-popup-round3 and
+    # its plan review: the test is the diff matching the EDIT line for line, not how it got there). A block whose new text
+    # stands once in its file and whose old text is gone is put back to its old text here, so the settling below sees the
+    # round's own blocks move the unit, and re-applies it: the file ends as it was, the unit settles as if applied here.
+    if not args.dry_run:
+        for b in found:
+            if b["kind"] != "edit" or b["n"] in skip or not b["old"] or b["old"] in b["new"]:
+                continue
+            target = resolve(root, b["path"])
+            text = target.read_text(encoding="utf-8") if target is not None and target.is_file() else ""
+            if text and text.count(b["old"]) == 0 and text.count(b["new"]) == 1:
+                target.write_text(text.replace(b["new"], b["old"], 1), encoding="utf-8")
+                print(f"  {b['n']}. found applied by hand - settled through its reply   ({b['path']})")
     # a dry run writes nothing, so it settles nothing; a reply with no EDIT block changes no unit's words
     if args.dry_run or not any(b["kind"] == "edit" for b in found):
         apply()

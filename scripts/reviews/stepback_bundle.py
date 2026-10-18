@@ -178,7 +178,9 @@ def refusals(sid: str, since: float, until: float, log: Path = GUARD_LOG) -> lis
             r = json.loads(f.read_text(encoding="utf-8"))
         except (OSError, ValueError):
             continue
-        if isinstance(r, dict) and r.get("event") == "blocked" and (not sid or r.get("session") == sid or r.get("sid") == sid):
+        # `refused` too: the pair guard's hour refusal logs so, and the hour-10 step-back's list missed it (the round arbiter's
+        # tooling fix on hour:385-approach-checklist@10)
+        if isinstance(r, dict) and r.get("event") in ("blocked", "refused") and (not sid or r.get("session") == sid or r.get("sid") == sid):
             out.append(f"- {f.name[9:11]}:{f.name[11:13]} {r.get('guard')}: {r.get('rule') or ''} - {str(r.get('detail') or '')[:200]}")
     return out
 

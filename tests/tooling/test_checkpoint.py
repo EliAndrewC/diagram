@@ -255,3 +255,22 @@ def test_an_hour_spent_waiting_on_the_gm_opens_no_step_back(clone: Path) -> None
     rows[-1]["gm"] = False  # a notification, not the GM
     ev.write_text("".join(json.dumps(r) + "\n" for r in rows))
     assert cp.gm_waits(clone, "999-test", T0, T0 + 63 * 60) == 0.0 and cp.state(clone, T0 + 63 * 60)["due"]
+
+
+def test_the_hour_is_decided_once_per_message_and_its_refusals_reach_the_step_back(clone: Path, tmp_path: Path) -> None:
+    """The round arbiter's tooling fix on hour:385-approach-checklist@10: the hour turned between the second and third of five
+    dispatches in one message, so the batch was split and three were re-sent; and the step-back's refusals.md missed the pair
+    guard's refusals, logged `refused`, not `blocked`."""
+    assert cp.due(clone, "Agent", "impl-drift", now=T0 + 3598) == "", "under the hour: admitted, and marked"
+    assert cp.due(clone, "Agent", "quote-check", now=T0 + 3601) == "", "the same message: admitted though the hour turned"
+    assert "make step-back" in cp.due(clone, "Agent", "quote-check", now=T0 + 3610), "a later message is refused"
+    assert "make step-back" in cp.due(clone, "Agent", "quote-check", now=T0 + 3604), (
+        "the window counts from the last dispatch admitted under the hour, not from a grace admission: it never chains into "
+        "the next message (T05's plan review, the ruling's limit)")
+    assert "make step-back" in cp.due(clone, "Bash", now=T0 + 3601), "the grace is the message's dispatches, not a gate"
+    log = tmp_path / "guard-log"
+    log.mkdir()
+    (log / "20261018T031500Z-a.json").write_text(json.dumps({"event": "refused", "guard": "pair", "rule": "step-back-due", "detail": "Agent quote-check", "sid": "s1"}))
+    (log / "20261018T031600Z-b.json").write_text(json.dumps({"event": "escaped", "guard": "pair", "sid": "s1"}))
+    got = sb.refusals("s1", cp.time.mktime((2026, 10, 18, 3, 0, 0, 0, 0, 0)) - cp.time.timezone, 2e9, log)
+    assert got == ["- 03:15 pair: step-back-due - Agent quote-check"]

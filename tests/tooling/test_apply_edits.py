@@ -294,6 +294,10 @@ def test_the_checks_a_reply_answers_are_read_from_its_counts_line() -> None:
     assert ro.reply_checks(REPLY) == ("record-format",)
     assert ro.reply_checks("\nmodal-research: Farmhouse - ACCURACY 0 findings") == ("modal-accuracy", "modal-references", "modal-gaps")
     assert ro.reply_checks("EDIT notes/x.md\n<<<") == ()
+    # a batch reply opens with prose and names its check on each unit's counts line (feature 385 T21)
+    batch = "I judged all three pop-ups unit by unit.\n\nunit: modal-depiction:choice/x 1\n\nmodal-depiction: choice.x - COVERAGE 0 findings; TRUTH 1\n"
+    assert ro.reply_checks(batch) == ("modal-depiction",)
+    assert ro.reply_checks("Some prose.\nrecord-format notes: none") == (), "a known name with no counts line is no check"
 
 
 def test_a_block_already_applied_is_not_applied_twice(tmp_path, capsys) -> None:
@@ -307,3 +311,29 @@ def test_a_block_already_applied_is_not_applied_twice(tmp_path, capsys) -> None:
     ae.main([str(report), "--root", str(tmp_path)])
     assert q.read_text(encoding="utf-8").count("a yearly one") == 1
     assert "already applied" in capsys.readouterr().out
+
+
+
+def test_an_edit_applied_by_hand_word_for_word_settles_through_its_reply(tmp_path, capsys) -> None:
+    """Feature 385 T21 (the round arbiter's fix on ask:t05-lane-popup-round3): the test is the diff matching the round's EDIT line
+    for line, however it was applied - T05 applied 0196's and the pop-ups' EDITs by hand and re-owed both rounds."""
+    d, page = _repo(tmp_path)
+    _answer_now(d)
+    page.write_text(PAGE.replace("The Russians built theirs at the border.", "The Russians built theirs."), encoding="utf-8")
+    assert "record-format:0094" in _owed(d), "applied by hand, the unit re-owes"
+    before = page.read_text(encoding="utf-8")
+    _apply(d, page, "The Russians built theirs at the border.", "The Russians built theirs.")
+    assert page.read_text(encoding="utf-8") == before, "the file ends as the hand left it"
+    assert "record-format:0094" not in _owed(d), "settled through its reply"
+    out = capsys.readouterr().out
+    assert "found applied by hand - settled through its reply" in out and "settled with its answered round" in out
+
+
+def test_a_hand_edit_that_departs_from_the_edit_still_owes(tmp_path) -> None:
+    d, page = _repo(tmp_path)
+    _answer_now(d)
+    page.write_text(PAGE.replace("The Russians built theirs at the border.", "The Russians built theirs, they say."), encoding="utf-8")
+    r = d.parent / "reply.md"
+    r.write_text(REPLY + _report(str(page.relative_to(d)), "The Russians built theirs at the border.", "The Russians built theirs."), encoding="utf-8")
+    assert ae.main([str(r), "--root", str(d)]) == 1, "its old text is gone and its new text is not there: refused"
+    assert "record-format:0094" in _owed(d)
