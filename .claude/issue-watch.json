@@ -1,4 +1,4 @@
 {
   "agent": "diagram",
-  "token": {"ini": "/host-l7r-repo/gm-assistant/webapp/development-secrets.ini", "section": "github", "key": "codebuild_pat"}
+  "token": {"ini": "/host-l7r-repo/gm-assistant/webapp/development-secrets.ini", "section": "github", "key": "push_pat"}
 }
