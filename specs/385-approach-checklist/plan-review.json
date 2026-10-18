@@ -4258,6 +4258,78 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T47": {
+   "section_sha256": "693c119c0066cfd0ea02c004425dac6e877b3a5bf9fb147b650d1f28fe4110a8",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T04-T10 allocation",
+     "summary": "T04 to T10 carry T48, T47's patch and five ranking rows, one task each",
+     "class": "within",
+     "why": "The approved proposal's scope lists exactly these after the lane law and the four seeds: 'T48', 'T47's patch re-landed', 'about five ranking rows of different kinds'; FR-007 moves them here. Seven items over seven tasks narrows nothing."
+    },
+    {
+     "id": "order",
+     "summary": "Taken in the order T48, T47's patch, then the ranking rows",
+     "class": "within",
+     "why": "The proposal says the items are 'taken in the order 384's \"How it starts\" already sets' and lists them in this order; FR-007 cites the same moved work."
+    },
+    {
+     "id": "decided at start via make decide",
+     "summary": "Each task's section is decided at its own start, added to the plan and reviewed by make decide",
+     "class": "within",
+     "why": "The proposal hooks the checklist into 'the existing make task-start / make decide step' before the first edit, and FR-007 says the ranking rows are 'chosen at the start of their task'. Deferring each section to its task start is what was asked, not a narrowing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T48": {
+   "section_sha256": "693c119c0066cfd0ea02c004425dac6e877b3a5bf9fb147b650d1f28fe4110a8",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T48-scope",
+     "summary": "The remaining moved items are T48, T47's patch and five ranking rows, one task each (T04 to T10).",
+     "class": "within",
+     "why": "The approved proposal's scope lists exactly these after the lane law and the four seeds: T48, T47's patch re-landed, about five ranking rows; FR-007 moves T48 and T47 here."
+    },
+    {
+     "id": "T48-order",
+     "summary": "Taken in the order T48, T47's patch, then the ranking rows.",
+     "class": "within",
+     "why": "The proposal says the items are taken in the order 384's How it starts sets, listed as lane law, seeds, T48, T47's patch, ranking rows; the block keeps that order."
+    },
+    {
+     "id": "T48-decided-at-start",
+     "summary": "Each task decided at its start, its plan section added then and reviewed by make decide.",
+     "class": "within",
+     "why": "FR-007: ranking rows chosen at the start of their task; FR-003: each task's plan section carries an Approach block; the proposal hooks the checklist into make task-start / make decide."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T50": {
+   "section_sha256": "943c1ec7c6d94d5017d0f58ad16d8994fe9a4b9d0765c2e4e96a325927b33a1f",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D67",
+     "summary": "approach_gate.py's part-B reader compares each '### Tnn part B (<stamp>)' stamp, truncated to the minute per T27's rule, with the current UTC minute and refuses a later one, naming the stamp and the clock; make plan-delta asks the same reader so both gates refuse it.",
+     "class": "within",
+     "why": "Enforcement of D9/FR-004 (a part B 'stamped after the trigger'): a stamp later than the clock satisfies the after-the-trigger comparison without being written after it, so the refusal makes the requested rule actually hold. It is the arbiter's fix as worded (both the tick's check and make plan-delta, with a test), leaves T27's minute rule unchanged, and reaches no other command or agent; it also falls under the GM's amendment 6 ('implement any obvious performance / tooling / process improvements along the way')."
+    },
+    {
+     "id": "T50 Approach scope",
+     "summary": "Tooling only: the rule in approach_gate.py, then a test in tests/tooling/test_approach_gate.py red without it; one goal.",
+     "class": "within",
+     "why": "Exactly the arbiter's fix (rule plus a test that a future-stamped part B is refused and a present one passes), one goal per FR-015; the test only fails when the requested refusal is absent, so it is verification of the request, not added scope."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

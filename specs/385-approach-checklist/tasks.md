@@ -133,6 +133,10 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       verify: DONE. landed on main; tests/tooling/test_claims_index.py red without it; a hand-typed box citing a recorded ruling still holds (test_lands_open); T43's three findings filed with their rulings
 - [ ] T46 make land-tooling lands a changed Makefile only with the clone's make-targets page current, and lands the page beside it (the arbiter's fix on hour:385-approach-checklist@17, plan D64)
       research: rendering
+- [ ] T49 A tree-moved abort is no red gate, and the red-gate bundle shows what changed between reds (the arbiter's fix on red-gate@2026-10-18T16:44:54Z, plan D66)
+      research: rendering
+- [ ] T50 A part B stamped in the future is refused (the arbiter's fix on hour:385-approach-checklist@18, plan D67)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

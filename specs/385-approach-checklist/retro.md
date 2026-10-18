@@ -489,3 +489,9 @@ About 20 min. The hour-17 step-back took a stale make-targets page at T45's land
 worktree already regenerated main's page, and the stale copy was the clone's own. Built to the arbiter's words: a Makefile lands
 only with the clone's page current, and the page lands beside it. **The habit it changes:** before naming a tool's gap in prose,
 read the tool - a sentence in a reply becomes an arbiter's fix.
+
+## T50 - the retro row
+
+About 20 min. Twice in an hour I stamped a part B ahead of the clock by hand; the gate only asked that a stamp not precede its
+trigger, so a future stamp passed. The tick's check and `make plan-delta` now refuse a stamp past the current UTC minute.
+**The habit it changes:** a time the gate trusts is read from the clock or checked against it, never typed and believed.

@@ -254,3 +254,15 @@ def test_the_heading_owe_asks_for_passes_at_a_trigger_with_seconds(tmp_path: pat
     assert ag.refusal(d, root, "T01") is None, "the heading it asked for answers it"
     (d / "plan.md").write_text(PLAN + "\n### T01 part B (2026-10-18T10:24Z)\n\n1. the lane law\n2. R, checked\n")
     assert "no block stamped after it" in str(ag.refusal(d, root, "T01")), "a minute earlier still refuses"
+
+
+def test_a_part_b_stamped_after_the_clock_is_refused() -> None:
+    """Feature 385 T50 (the round arbiter's fix on hour:385-approach-checklist@18): a part B stamped later than the current UTC
+    minute is refused, naming it and the clock; one stamped at the minute or before passes."""
+    plan = "### T08 part B (2026-10-18T16:40Z)\n\n1. x\n\n### T46 part B (2026-10-18T16:31Z)\n\n1. y\n"
+    assert ag.future_stamps(plan, now="2026-10-18T16:31:59Z") == ["### T08 part B (2026-10-18T16:40Z)"]
+    why = ag.future_refusal(plan, now="2026-10-18T16:31:59Z")
+    assert why is not None and "16:31Z" in why and "T08 part B (2026-10-18T16:40Z)" in why
+    assert ag.future_refusal(plan, now="2026-10-18T16:40:00Z") is None, "at the minute it was stamped"
+    assert ag.future_refusal("### T08 Approach (checklist part A)\n", now="2026-10-18T16:31:00Z") is None, "an unstamped part A"
+

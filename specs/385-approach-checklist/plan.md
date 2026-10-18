@@ -1501,6 +1501,16 @@ where its crown stands clear of every building, wellhead and way and its trunk o
 farmstead trees already use (`_canopy_keepouts`, the lanes' treads) - so no tree is forced onto anything; a ring with no free seat
 draws none, recorded (`meta.pond_bank_trees`).
 
+**D61b - the bank kept dry, and the trees off a ruled ring** (the glyph check's NEEDS-WORK on Inashiro, 2026-10-18: all 30 trunks
+stood in the hinterland's toe marsh, laid after the trees, and the ring read as a ruled dotted border). 0061's drawing page already
+says "reeds and the wet tint are kept off the embankment ... nor on any raised rim around a pond", and the toe marsh was cut only by
+the pond's ellipse - a drift older than T08 that the trees made visible. So `stage_pond_bank` adds, for every tail pond whether
+its bank is bare or planted, the bank's ellipse - the pond's radii plus the reed fringe (`SINK_FRINGE`) plus `POND_BANK_FT` - to
+the no-build blocks the toe marsh and the scatters already subtract (`block_polys`; `pond_cut` keeps every block but the pond's
+own box), so the bank stands dry beyond the reeds and nothing later is built on it. `POND_BANK_FT` is 18 ft, a GUESS (no width
+recorded for a tameike's crest; room for a crown and a little play). Each tree's seat is jittered across the bank as well as
+along it, within the 6 ft the crown leaves, so the trees do not stand on one ellipse.
+
 **D62 - the mark, the record and the pop-up.** Each tree is the dike's standard tree (a crown of `POND_BANK_CROWN_FT`, a GUESS from
 the habit of a pollarded mulberry; the mark CONVENTION), held at seating to the sun rule `thin_planted_trees` applies (0038: a
 canopy tree; the bank mulberry is 0061's shade tree for cattle, not 0038's field bush) - amended at implementation: `_plant_run`
@@ -1584,6 +1594,60 @@ T46 was the active task; the reds were T08's (`t08-red-gates.md`), and T46 itsel
 make-docs check in the clone (`LAND_TOOLING_DOCS_CHECK`, default `python3 scripts/make-docs.py . --check`) before it builds the
 patch; a stale page is refused with the fix ("run `make docs`, commit, and land again"). A current page that differs from main's
 is added to FILES, as the ledger is. The worktree's own regeneration stays, so main's page is current in either case.
+
+## T49 - a tree-moved abort is no red gate, and the red-gate bundle shows what changed between reds (the arbiter's fix on red-gate@2026-10-18T16:44:54Z)
+
+### T49 Approach (checklist part A)
+
+1. **The goal, in the world.** The red-gate tripwire fires on two gates that ran and failed in a row, never on a gate that aborted
+   because the tree moved, and its arbiter sees what changed between the reds it counts.
+2. **The constraints.** The arbiter's fix: "The red-gate counter behind make done / make arbiter-bundle should not count a 'tree
+   moved' abort (test-full never ran, as at 16:45:47Z) as a red make done, and the red-gate bundle should carry the diff between
+   each pair of counted reds"; a tree-moved run still never vouches for the tree (FR-004: the push refuses it); tooling only; a
+   test red without each half.
+3. **Where each comes from.** The fix is the arbiter's (G); FR-004 and FR-010 are 375's (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-18: the Makefile's tree-check abort (line 84) records
+   `failed-gate done`, which `ci/state.py` counts in its "red in a row" slot; a `make done --dry-run` at 16:45:47Z recorded such an
+   abort after 2 s and owed a second red-gate trigger; and `red_gate_runs` listed it among the reds.
+5. **The order.** The Makefile's abort record, the bundle's filter and diffs, then the tests.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 40 min.
+9. **Done, measured.** One goal: a tree-moved abort leaves the red-in-a-row slot as it was and is not listed among the bundle's
+   reds, and the bundle shows `git diff --stat` between each pair of listed reds; tests red without each half.
+
+### T49 Decisions
+
+**D66 - the abort recorded as its own target, the bundle reading only gates that ran.** (a) The Makefile's tree-check abort
+records `failed-gate tree-moved` (its own target): `ci/state.py` counts only a `done` toward the red-in-a-row slot, so the abort
+never owes a trigger, while the failed record still overwrites the green slot, so nothing vouches for the moved tree - no engine
+change. (b) `arbiter_bundle.red_gate_runs` passes over a run whose result is "failed: tree moved", and between each pair of the
+reds it lists writes `git diff --stat <earlier commit> <later commit>` (or "the same commit" when they match).
+
+## T50 - a part B stamped in the future is refused (the arbiter's fix on hour:385-approach-checklist@18)
+
+### T50 Approach (checklist part A)
+
+1. **The goal, in the world.** A part B's stamp says when it was written, so "written after its trigger" is a fact the gate
+   checks, not a time the session typed.
+2. **The constraints.** The arbiter's fix: "The approach gate (make plan-delta and the tick's part-B check) refuses a '### Tnn
+   part B (<stamp>)' heading whose stamp is later than the current UTC clock, with a test that a future-stamped part B is refused
+   and a present one passes"; T27's minute rule unchanged; tooling only.
+3. **Where each comes from.** The fix is the arbiter's (G); part B and its stamp are 385's (G, plan D9; T27).
+4. **Do they describe the world here?** Yes - measured 2026-10-18: T08's part B was stamped 16:40Z at 16:31 and T46's 16:52Z at
+   16:48, each caught by eye; the gate compares only that the stamp is not before its trigger.
+5. **The order.** The rule in `approach_gate.py`, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: a part B stamped past the current UTC minute is refused by the tick's check and by
+   `make plan-delta`, naming the stamp and the clock; `tests/tooling/test_approach_gate.py` red without it.
+
+### T50 Decisions
+
+**D67 - the clock bounds the stamp.** `approach_gate.py`'s part-B reader compares each stamp, truncated to the minute as T27's
+rule does, with the current UTC minute; a later stamp is refused with "stamped <stamp>, after the clock (<now>) - stamp a part B
+with the time it is written". `make plan-delta` asks the same reader, so both refuse it.
 
 ## T11 - the close
 
