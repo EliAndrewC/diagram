@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-18
 
-**Status**: In progress - amendment 1 (2026-10-18): maps may change where the research holds; FR-011 the merges' neighbors, FR-012 the well seating
+**Status**: Done 2026-10-18 - amendment 1 landed: T08-T12 ticked, make done green, landing cohort 54/54 (fresh 9 of 48 against main's 10 on the same seeds, `m:fresh-ab`); the 40-household roll 30.7 -> 15.1 s (`m:wells-ab`); spec FAITHFUL (amendment 1 round 3)
 
 **Approved**: the GM, 2026-10-18, "I don't think we need to re-check everything after each addition, and you've already proposed fixes for the others, so please file a feature for this and then make it happen."
 

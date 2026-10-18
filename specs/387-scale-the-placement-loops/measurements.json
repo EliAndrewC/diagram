@@ -324,6 +324,24 @@
    ]
   }
  },
+ "m:fresh-ab": {
+  "command": "the landing cohort's fresh block (seeds 52791-52838) on 387 amendment 1's engine (dev/cohort-log/20261018T133350Z-diagram-unit-tests-3919855.json), then make cohort N=48 SEED=52791 FRESH=0 on origin/main 2fb29542e in a detached worktree",
+  "date": "2026-10-18",
+  "failed": {
+   "amendment_1": 9,
+   "main": 10
+  },
+  "kinds": {
+   "amendment_1": {
+    "lane_knots": 7,
+    "refused": 2
+   },
+   "main": {
+    "lane_knots": 8,
+    "refused:WebRefused": 2
+   }
+  }
+ },
  "m:wells-ab": {
   "command": "make perf LABEL=387-end SCALING=1 (clone, 3a4dc87ab), then make perf SCALING=1 in a detached worktree at origin/main 46f2d1f09, back to back; timing/base-46f2d1f09.json and dev/perf-log/*387-end*.json",
   "date": "2026-10-18",
