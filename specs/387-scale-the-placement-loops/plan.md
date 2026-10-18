@@ -4,6 +4,9 @@
 
 ## Summary
 
+Every figure below is from the 2026-10-18 profiles: `m:counts-before` (`make perf-profile SEED=4 STAGE=<stage>
+HOUSEHOLDS=<n>`, the command in `measurements.json`) or the 40-household seed-4 profile `request.md` cites.
+
 Five placement sites stop redoing work that does not change between the questions they ask. Each change is held to the verdict of
 the code it replaces (FR-007) by EQUIVALENCE tests at two tiers. A unit test per site (`tests/`, built inputs, no roll) asks the
 old form and the new on cases built to hit each branch, the old form kept in the test module as the oracle, never in the engine.
@@ -57,10 +60,17 @@ the junction test's answer; it is keyed on the CONTENT it is built from (the acc
 records, the lanes' points, the water `laid_run` already keys on) - never on a count or an identity (`indexes.Indexed`'s
 lesson). The candidate then costs: its own host (one `_on` scan of the runs), its own laid lane, its chain's lanes (taken from
 the base), and: `law_(new)` as today (already the candidate against what it meets); fronting ends as the base's ends minus
-those the new lane now joins (an end within `JOIN_TOL` of it) plus the new lane's own ends tested against every way; the needle
-faces, `as_joined`, `way_out_once`, `tree_shadows` and `walked_shadows` as today (each already asks the new lane against the rest,
-or is one shapely call - `needle_loops` 0.12 s of the 1.84 s profiled, kept whole: a face is not local to the lanes near the new
-one, and an incremental face test would trade an exact answer for a guess). **Equivalence**: `admits` and the old whole-tree
+those the new lane now joins (an end within `JOIN_TOL` of it) plus the new lane's own ends tested against every way; `as_joined`,
+`way_out_once`, `tree_shadows` and `walked_shadows` as today (each already asks the new lane against the rest). **The needle faces
+are judged only where the new lane bounds them**: `law.needle_loops` polygonizes the web and tests each face's mean width; adding
+a lane can only create or split the faces it bounds, and every other face of the arrangement is a face of the base tree unchanged.
+So the base tree's needle verdict is kept, and a candidate's faces are tested only where a face shares an edge with the new lane
+(or, for the joined form, with a lane `as_joined` drew differently from the base's own joined form). Exact when the base is clean:
+a face the new lane does not bound is the base's; and where a joined end moves off a base face, the faces it parted merge, and a
+merged face's mean width is at least the smaller of its parts' (2(a+b)/(p+q-2s) >= min(2a/p, 2b/q)), so no needle appears there.
+Where the base itself holds a needle (a tree not built by `admits` alone), the whole test runs, as today. The noding and
+polygonize stay one shapely call over the web - its arrangement is not bounded to the new lane's neighborhood (a face the new
+lane bounds can be closed by lanes anywhere round it) - but only the faces the addition made are judged. **Equivalence**: `admits` and the old whole-tree
 form on every candidate the gap pass asks, the same booleans. **Counted** (SC-001): `lanes_of`'s `lay` calls and
 `fronting_ends`'s pairs per candidate.
 
@@ -100,16 +110,20 @@ per merge.
 
 ## T04 - the sun keep-outs (FR-005)
 
-**D4 - the plots taken once while the grove is drawn, the sun boxes indexed.** `_sun_keepouts` rebuilds its plot list and key
-from every yard and bed on each of its 1,816 asks (159,808 `plot_box` calls), then filters every sun box. Its callers in the
-windbreak stage (`village_grove` -> `_draw_grove`) add crowns, never yards, beds or homesteads. A scope, `s.plots_stand()`, set
-by `village_grove` around its drawing, builds the plots, their sun boxes and a `PointGrid` of the boxes once; inside it
-`_sun_keepouts` answers from the grid (the boxes whose cell range meets `bbox`, then the same overlap test, returned in the
-plots' order so a caller iterating them sees the same order). Outside the scope it is unchanged. **Exactness held by a
-check, not assumed**: under the test suite (`L7R_CHECK_SCOPES=1`, set by `tests/conftest.py`) the scope re-takes the plot list
-when it closes and raises if it changed - so a later stage that adds a plot inside the scope fails the suite instead of
-answering stale. **Equivalence**: every ask's answer, old and new, the same list in the same order. **Counted**:
-`plot_box` calls per grove.
+**D4 - the plots' sun boxes keyed on the registries' versions, and indexed.** `_sun_keepouts` rebuilds its plot list and its key
+from every yard and bed on each of its 1,816 asks at 40 households (159,808 `plot_box` calls; `m:counts-before`), then filters
+every sun box. Its key becomes the versions of the registries the plots are read from, as FR-005 says: `M["threshing_yards"]`
+and `M["gardens"]` become `indexes.Indexed` (as `M["houses"]` is), and the key is `(reach, yards.version, gardens.version,
+houses.version)`. A house's plots are also written IN PLACE on its record (`rolling/farmsteads._relax_gardens_south` shifts its
+beds and their drawn boxes), which no list version sees - so that writer bumps the houses registry's version through one named
+helper, `Indexed.touch()` (a public bump; the test that every list mutator bumps is extended to it), and the inventory of such
+writers is the grep this plan ran (`geom["gardens"] =`, `geom["boxes"]...`, `["threshing_yards"]`, `["gardens"]`): that site
+alone. **A writer missed is caught, never served stale, under the suite**: with `L7R_CHECK_CACHES=1` (set by `tests/conftest.py`)
+every hit re-derives the content key it replaced and raises if they differ - so the equivalence soak and every rolled test check
+the version key on every ask. The sun boxes are then filed once per key in a `PointGrid`; an ask returns, in the plots' order,
+the boxes the grid names for `bbox` that pass the same overlap test. Every caller is served, inside the grove's drawing or out
+(windbreak, woods, bamboo, cover). **Equivalence**: every ask's answer, old and new, the same list in the same order.
+**Counted**: `plot_box` calls per ask.
 
 ## T05 - the bamboo strip check (FR-006)
 
@@ -118,9 +132,11 @@ placed boxes, the houses' turned boxes, the wells / kosatsuba / byres / farm she
 padded by its half-width, and the tree crowns. `_strip_blocked` takes the index as an optional argument (`near`); with it, each
 straight scan becomes a scan of the grid's candidates for the strip's box padded by the largest margin that scan uses (2, 6 ft
 and the lane's half-width), then the SAME test on each; without it (the fixtures' caller, `homesteads/fixtures.py`), it scans
-as now. What the pass adds while it runs (the strips it seats are walls to one another) is appended to the index as it is
-seated, through the one function that records a seated strip. The same scope check as D4 guards the pass's inputs under the
-suite. **Equivalence**: every candidate's verdict, old and new. **Counted**: items tested per candidate.
+as now. What changes while the pass runs is `s.placed` (each seated strip is appended to it) and nothing else the check reads (the
+pass writes only `placed`, `block_polys` - which the check does not read - and its own output); so the placed boxes are indexed
+through `indexes.indexed_grid` on `s.placed`'s own version (an append extends the grid, anything else rebuilds it), and the houses,
+the other kinds, the lanes and the crowns are filed once at the pass's start. Under `L7R_CHECK_CACHES=1` every candidate's
+verdict is also asked by the straight scan and a difference raises, so an input changed mid-pass fails the suite. **Equivalence**: every candidate's verdict, old and new. **Counted**: items tested per candidate.
 
 ## T06 - measure, sweep and record (FR-009, FR-010, SC-001 - SC-004)
 
