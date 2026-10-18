@@ -560,3 +560,10 @@ About 20 min. Three preflights - T47's, T48's and T10's - reviewed the umbrella 
 each task's own section, because the first heading naming an id took it; T47 and T48 were renumbered to get past it, which hid the
 bug for an hour. A heading that begins with the id now wins. **The habit it changes:** when a tool answers the wrong thing twice,
 fix the tool - renaming around it moves the cost to the next task.
+
+## T57 - the retro row
+
+About 30 min. T09 changed only comments and constants' claim docstrings and still owed a full gate and a landing cohort, because
+the semantic id stripped a docstring only where it is a body's first statement - and every claim on a constant is a bare string
+after its assignment. Every bare string statement is stripped now (the cache renamed with the rule). **The habit it changes:** a
+rule about "docstrings" is tested on the docstrings this project actually writes - the claims - not on Python's definition.

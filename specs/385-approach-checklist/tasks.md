@@ -159,6 +159,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       verify: DONE. landed on main; its test red without it; retro row in retro.md
 - [ ] T56 A task's own heading wins its section over a heading that only mentions it (found by T47/T48 and T10's preflights, plan D75)
       research: rendering
+- [ ] T57 A constant's claim docstring is no engine change: every bare string statement is stripped from the semantic id (the arbiter's fix on hour:385-approach-checklist@20, plan D76)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

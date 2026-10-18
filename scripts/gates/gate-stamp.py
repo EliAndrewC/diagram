@@ -274,22 +274,19 @@ def semantic_bytes(data: bytes, name: str) -> bytes:
         tree = ast.parse(data)
     except (SyntaxError, ValueError):
         return data
+    # EVERY BARE STRING STATEMENT, NOT ONLY A BODY'S FIRST (feature 385 T57, the round arbiter's fix on
+    # hour:385-approach-checklist@20): a constant's claim docstring is a bare string after its assignment - the form this
+    # project's claims take - and it kept the id moving, so a docstring-only edit (T09's) owed a full gate and a landing
+    # cohort. Python evaluates a bare string statement and discards it; no token of it runs.
     for node in ast.walk(tree):
-        body = getattr(node, "body", None)
-        if (
-            isinstance(
-                node, ast.Module | ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef
-            )
-            and body
-            and isinstance(body[0], ast.Expr)
-            and isinstance(body[0].value, ast.Constant)
-            and isinstance(body[0].value.value, str)
-        ):
-            del body[0]
+        for field in ("body", "orelse", "finalbody"):
+            stmts = getattr(node, field, None)
+            if isinstance(stmts, list):
+                stmts[:] = [s for s in stmts if not (isinstance(s, ast.Expr) and isinstance(s.value, ast.Constant) and isinstance(s.value.value, str))]
     return ast.dump(tree).encode()
 
 
-_CACHE_NAME = "semantic-id-cache.json"
+_CACHE_NAME = "semantic-id-cache-2.json"  # -2: feature 385 T57 changed the rule, so the old entries are not reused
 
 
 def git_blob_id(data: bytes) -> str:

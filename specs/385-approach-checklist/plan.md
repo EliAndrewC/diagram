@@ -1925,6 +1925,36 @@ Owed by the hour-20 step-back (hour:385-approach-checklist@20, `continue`), whic
 **D75 - own before mention.** `task_sections` first takes, for each id, the first heading whose title BEGINS with that id (`## T10 - ...`,
 `### T10 Approach`); only an id no heading begins with falls back to the first heading that mentions it, as before.
 
+## T57 - a constant's claim docstring is no engine change (the arbiter's fix on hour:385-approach-checklist@20)
+
+### T57 Approach (checklist part A)
+
+1. **The goal, in the world.** A comment- or docstring-only change to engine Python owes neither a full `make done` nor a landing
+   cohort.
+2. **The constraints.** The arbiter's fix: "The green-gate guard and scripts/sync-with-main.sh done's landing-cohort requirement
+   should count a changed .py file as engine work only when its AST, with docstrings and comments stripped, differs from HEAD's,
+   so a comment- or docstring-only change (whose claims the claims gate already covers) owes neither a full make done nor make
+   cohort-landing"; ONE definition (`gate-stamp.py semantic_bytes`, which `ci/delta.py` loads by path); every token that runs
+   still moves the key; tooling only; a test red without it.
+3. **Where each comes from.** The fix is the arbiter's (G); the semantic id is the GM's 2026-08-26 ruling (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-18: T09 changed only comments and constants' claim docstrings, yet
+   the push asked for a full gate and a landing cohort (about 11 minutes). `semantic_bytes` strips a docstring only where it is the
+   FIRST statement of a module, class or function; a constant's claim docstring - a bare string after its assignment, the form
+   this project's claims take - stayed in the id.
+5. **The order.** The rule, the cache's name, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: two versions of a module differing only in a constant's claim docstring and a comment have one
+   semantic id, and a changed value does not; `tests/tooling/test_gate_stamp*` red without it.
+
+### T57 Decisions
+
+**D76 - every bare string statement stripped.** `semantic_bytes` removes, from every statement list in the tree, each statement
+that is a bare string constant (Python evaluates and discards it - no token of it runs), not only a body's first; a body left
+empty dumps as an empty list. The semantic-id cache's file is renamed (`semantic-id-cache-2.json`), since its entries were
+computed by the old rule. Every engine key moves once with the rule, so each session's next gate re-runs once.
+
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).

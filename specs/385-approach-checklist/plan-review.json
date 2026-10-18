@@ -721,6 +721,48 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
+  },
+  "## T10 - a dike-pond village's water and dike split, rolled (the ranking row `settlement/fields/landuse.py::DIKEPOND_WATER_INSET#pond bank width`)": {
+   "sha256": "91bb618f9fb60d7e2de8d7d8b5ca068775758247343fb3b9c23c0c3df1712b76",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T10 Approach (checklist part A)": {
+   "sha256": "48dad0520828c228c4d55d31dc3986e8b30fba475a7ccc17f4070ce611564139",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T10 Decisions": {
+   "sha256": "43cd5b97131892a682523c1430058e371ea1ea1f70919a6ef9946e696b153c70",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T56 - a task's own heading wins its section (found by T47/T48 and T10's preflights)": {
+   "sha256": "4bda073dd8c5b053dfed502fbd44de3f8147ff7aa42da91730a3ba4211afa0b0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T56 Approach (checklist part A)": {
+   "sha256": "71b8e60c88ced4bf20193b1bea192a28d42fdd8f07fceb4ca0edbd0dc67cdac1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T56 part B (2026-10-18T19:04Z)": {
+   "sha256": "6cff88f2ad639ad39d65e68cf450657e8987a32f75d56acf1f8d8aae28407852",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T56 Decisions": {
+   "sha256": "98b41335558124c23c3ec52c0f94870fef70da5d1bf8f2b8fa743960f00b853e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
   }
  },
  "reviewed": "2026-10-17",
@@ -4224,6 +4266,64 @@
      "why": "The resistance checklist answered as FR-004 requires; it decides nothing beyond D73."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## T10 - a dike-pond village's water and dike split, rolled (the ranking row `settlement/fields/landuse.py::DIKEPOND_WATER_INSET#pond bank width`)",
+    "## T56 - a task's own heading wins its section (found by T47/T48 and T10's preflights)",
+    "### T10 Approach (checklist part A)",
+    "### T10 Decisions",
+    "### T56 Approach (checklist part A)",
+    "### T56 Decisions",
+    "### T56 part B (2026-10-18T19:04Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D74a",
+     "summary": "T10: the three recorded splits (water share 0.6, 0.4, 0.7) rolled per map from its seed as a settlement knob `dikepond_split`, even odds (GUESS), a hamlet spec may pin it.",
+     "class": "within",
+     "why": "Exactly the ranking row the task takes (roll the inset per village between the recorded splits: water-heavy, dike-heavy, 7:3), taken under FR-020 / amendment 7's ten more claims; the three values are 0018's splits as written; even odds is the labeled guess where the record gives no weights; a pinnable knob is the project's rolled-knob convention, not new scope."
+    },
+    {
+     "id": "D74b",
+     "summary": "T10: the inset derived once per map from the rolled share on the map's median parcel (the rectangle's law 4d^2 - Pd + (1-f)A = 0) and stored on the settlement.",
+     "class": "within",
+     "why": "The row asks the inset to follow the rolled split; one per-village value is what 'per village' asks. Deriving it from the parcel instead of pinning a new number per split is the derive-don't-pin practice. The done line measures the water share on the map's parcels, so the median-parcel shortcut is held to the request by measurement."
+    },
+    {
+     "id": "D74c",
+     "summary": "T10: every reader of the inset (pond water outline, mulberry rows, sties' bank seat `pondstock.BANK_INSET_FT` as half the inset) given the map's one value.",
+     "class": "within",
+     "why": "Approach item 2 records that all three read the same inset today; rolling the inset without carrying its readers would draw banks, rows and sties inconsistent with the rolled split, defeating the row. Consequence of the requested change, not added scope."
+    },
+    {
+     "id": "D74d",
+     "summary": "T10: `DIKEPOND_WATER_INSET` (23 ft) kept, labeled as the water-heavy split's value on Kuwabata, as the fallback where no parcel is known.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It is a carve-out from 'the inset follows the rolled split'. Legitimate because deriving a depth from a parcel's area and perimeter needs a parcel; where none is known the derivation is physically impossible, and ponds are drawn inside parcels, so a map with no known parcel draws no dike-pond for the fallback to mis-split. The purpose of the row (drawn ponds in the village's rolled split) is untouched. It would not be legitimate if the fallback were reached on a map that draws dike-pond parcels; the done line (every dike-pond map's parcels at its rolled split's share, all three splits across seeds) would catch that."
+    },
+    {
+     "id": "D74e",
+     "summary": "T10: the drawing page's known-gap sentence (0018) brought up to the knob, by a page session.",
+     "class": "within",
+     "why": "The page states the dike-heavy and 7:3 splits are a known gap of our maps; once they are drawn the sentence is false. Keeping the record true for the change made serves the row; it adds no behavior."
+    },
+    {
+     "id": "D75",
+     "summary": "T56: `task_sections` first takes, for each id, the first heading whose title begins with that id; only an id no heading begins with falls back to the first heading that mentions it, as before.",
+     "class": "within",
+     "why": "A tooling fix so a task's decision preflight reviews that task's own section (FR-003's per-task Approach and decide-first gate; the preflights of T47, T48 and T10 measured reviewing an umbrella heading instead). Within amendment 6 ('implement any obvious performance / tooling / process improvements along the way'). Keeping the mention fallback and the already-written headings narrows nothing the GM asked; it preserves existing coverage for ids with no own heading."
+    },
+    {
+     "id": "T56-B9",
+     "summary": "T56 part B: the hour-20 step-back ruled `continue`; the ruling's tooling fix split out as its own task (T57).",
+     "class": "within",
+     "why": "FR-015 (one goal a task): a second goal found in a task becomes its own task. No narrowing of what was asked."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -4799,27 +4899,51 @@
    "verdict": "CLEAR"
   },
   "T10": {
-   "section_sha256": "693c119c0066cfd0ea02c004425dac6e877b3a5bf9fb147b650d1f28fe4110a8",
+   "section_sha256": "f2c1f9342376c88bcd991e27e0a7f25769b42c9ac5a25692e7745d2b0cc3ef11",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "T04-T10 scope",
-     "summary": "T04 to T10 carry T48, T47's patch re-landed, and five ranking rows (T10 being one of the ranking rows)",
+     "id": "D74a",
+     "summary": "The three splits recorded as water shares (0.6, 0.4, 0.7) - 6:4 water, 6:4 dike, 7:3 water.",
      "class": "within",
-     "why": "The approved proposal's Scope lists exactly these after the lane law and the four seeds: T48, T47's patch, 'about five ranking rows of different kinds'; FR-007 moves them here. Seven tasks T04-T10 equal 1 + 1 + 5."
+     "why": "Exactly the three splits the ranking row names (water-heavy, dike-heavy, 7:3), sourced to 0018."
     },
     {
-     "id": "order and choice at start",
-     "summary": "Each task is decided at its start, in the order FR-007 / 384's 'How it starts' sets; the ranking row is chosen then rather than now",
+     "id": "D74b",
+     "summary": "The split rolled per map from its seed as a settlement knob `dikepond_split`, pinnable by a hamlet spec.",
      "class": "within",
-     "why": "The proposal says 'taken in the order 384's \"How it starts\" already sets'; FR-007 says the ranking rows 'are chosen at the start of their task'. Deferring the row choice to task start is what the spec requires, not a narrowing."
+     "why": "The row asks for the inset rolled per village; a seed-rolled knob is the project's standing form for several attested forms. Per map is per village here (one village a map)."
     },
     {
-     "id": "section reviewed by make decide",
-     "summary": "Each task's section is added to this plan and reviewed by make decide",
+     "id": "D74c",
+     "summary": "Even odds between the three splits, labeled GUESS.",
      "class": "within",
-     "why": "The approved proposal hooks the checklist into 'the existing make task-start / make decide step' (FR-003); this is the requested mechanism, not new behavior."
+     "why": "The row says roll between the splits and gives no weights; even odds labeled GUESS settles an open detail without excluding any split."
+    },
+    {
+     "id": "D74d",
+     "summary": "The inset derived once per map from the rolled share on the map's median parcel by the rectangle law, stored on the settlement.",
+     "class": "within",
+     "why": "Implements the inset as the rolled split's value on the map's own parcels; done is measured on all its parcels (within a few points), so no split or parcel is excused."
+    },
+    {
+     "id": "D74e",
+     "summary": "Every reader of the inset (pond water outline, mulberry rows, sties' bank seat at half the inset) reads the one stored value.",
+     "class": "within",
+     "why": "Keeps the readers consistent with the rolled split; without it the roll would reach only the water outline."
+    },
+    {
+     "id": "D74f",
+     "summary": "DIKEPOND_WATER_INSET (23 ft) kept, labeled as the water-heavy split's value on Kuwabata, as the fallback where no parcel is known.",
+     "class": "within",
+     "why": "A fallback for the no-parcel case only; every map with parcels takes the derived inset of its rolled split, so it narrows nothing the row asks."
+    },
+    {
+     "id": "D74g",
+     "summary": "0018's drawing page known-gap sentence rewritten to the knob, by a page session.",
+     "class": "within",
+     "why": "The gap the page names is the one this row closes; bringing the page up to the code keeps the record true."
     }
    ],
    "verdict": "CLEAR"
@@ -4840,6 +4964,44 @@
      "summary": "Tooling only, plans already written keep their headings, one goal, a test in tests/tooling/test_plan_gate.py red without the rule.",
      "class": "within",
      "why": "One goal per task is FR-015 (amendment 4); the test only fails when the requested behavior is absent, so it is enforcement of the fix, not added scope; leaving existing plans' headings untouched narrows nothing the GM asked for."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T57": {
+   "section_sha256": "cc4ec861723f09068269441e010fa4099f0605eb396e8b99925c1b7579d583fe",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T57-goal",
+     "summary": "A comment- or docstring-only change to engine Python owes neither a full make done nor a landing cohort; the fix goes in the one definition (gate-stamp.py semantic_bytes, loaded by ci/delta.py) that both the green-gate guard and sync-with-main.sh's cohort requirement read.",
+     "class": "within",
+     "why": "It is the arbiter's fix restated (the arbiter stands where the GM was asked, feature 379), and it is the obvious tooling improvement that Amendment 6 asked for along the way. Putting it in the single shared definition reaches both mechanisms the fix names and nothing else. Nothing the fix covers is left out."
+    },
+    {
+     "id": "D76",
+     "summary": "semantic_bytes removes every bare string-constant statement from every statement list, not only a body's first statement; an emptied body dumps as an empty list.",
+     "class": "within",
+     "why": "The fix's purpose is that a change touching no code that runs owes no engine gate, and its named case is a constant's claim docstring, which Python does not treat as a docstring because it is not the first statement. Stripping only first statements would leave that exact case unfixed (the measured T09 incident). A bare Constant string is evaluated and thrown away, so the constraint that every token that runs still moves the key holds. f-strings are JoinedStr nodes, not bare constants, so they stay in the id. This widens what counts as non-engine only to strings that do not execute, which is what the fix is for. It does not narrow it."
+    },
+    {
+     "id": "D76-cache",
+     "summary": "The semantic-id cache file is renamed to semantic-id-cache-2.json, so every engine key moves once and each session's next gate re-runs once.",
+     "class": "within",
+     "why": "Implementation hygiene so that ids computed by the old rule are not reused. It is a one-time cost of applying the fix and drops nothing that was asked."
+    },
+    {
+     "id": "T57-test",
+     "summary": "Done is one goal: two module versions differing only in a constant's claim docstring and a comment share one semantic id and a changed value does not; tests/tooling/test_gate_stamp* is red without it.",
+     "class": "within",
+     "why": "The fix asks for a test that is red without it. This test only fails when the requested behavior is missing, so it enforces the fix. The changed-value half checks the fix's own constraint that code which runs still moves the key."
+    },
+    {
+     "id": "T57-process",
+     "summary": "Order (rule, cache name, test), exit (c), no search smell, 30-minute budget.",
+     "class": "within",
+     "why": "Process fields of the checklist (FR-003). They narrow nothing that was asked."
     }
    ],
    "verdict": "CLEAR"
