@@ -51,7 +51,7 @@
    "declared": "spec-fidelity"
   },
   "## Landing": {
-   "sha256": "5690644063130d034068380293f51235419b74a75a250d1da46a49c771d20c8e",
+   "sha256": "cf4f965f45fac25a23e92eef35aea5f13d7ffa8dbb31e0d08eeecd944d2cbcce",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -568,6 +568,24 @@
   },
   "### T41 Decisions": {
    "sha256": "e68990c5cdca0bcad38d53a75ac26030b1192819bcfc62df1d39fa0fdab8e0c8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T42 - an absence note owes no source-reader (the round arbiter's fix on round:source-reader|q:0081@5)": {
+   "sha256": "ef8dc71494880f85638425791444d7e131efca6fe59d4281ea4690c42570ef10",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T42 Approach (checklist part A)": {
+   "sha256": "68894d5589ad53745cbf276199f6a94d182340b9b2c23533742b52f0df194599",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T42 Decisions": {
+   "sha256": "6239b1bf9458850972b066d654c4ffe5100143a7a4aeb31531d03a6446f495e9",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -3662,6 +3680,97 @@
      "summary": "A test where a refused dispatch and a no-reply dispatch leave the count unchanged and a reading counts once, red without the change; existing tests that counted a round by dispatch alone now read each round via _read (launched, then returned with a reply).",
      "class": "within",
      "why": "The arbiter required 'a test where a refused dispatch leaves the count unchanged'; the no-reply and counts-once cases enforce the same fix's 'kept a reply' clause and add no behavior. Updating the old tests to the new counting moment is the fix's direct consequence."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T42 - an absence note owes no source-reader (the round arbiter's fix on round:source-reader|q:0081@5)",
+    "### T42 Approach (checklist part A)",
+    "### T42 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Landing: T42 lands open",
+     "summary": "T42 is appended to the Lands-open list; it lands at its own close with its retro row while later tasks stay open.",
+     "class": "within",
+     "why": "The only change from the CLEAR text is T42 joining the list. One task at a time, each landing before the next, is FR-006 and the original request (do one task, measure it, then do the next)."
+    },
+    {
+     "id": "T42 as its own task under amendment 6",
+     "summary": "The arbiter's tooling fix on q:0081@5 is filed as a separate task.",
+     "class": "within",
+     "why": "Amendment 6: 'Please make sure to implement any obvious performance / tooling / process improvements along the way'. The arbiter's ruling is the fix. One goal per task is FR-015."
+    },
+    {
+     "id": "Where the change is made (record_units.py, not hm_checks.py)",
+     "summary": "The arbiter named scripts/hooks/lib/hm_checks.py. The plan makes the change in scripts/record/record_units.owed, where the owed list is computed.",
+     "class": "within",
+     "why": "The arbiter's fix is defined by what it does to the owed list, not by which file holds it. Making the change where that list is computed carries out the fix as ruled and leaves out none of it."
+    },
+    {
+     "id": "D57(a)",
+     "summary": "record_units.owed owes no source-reader unit on a note whose words contain 'no publicly readable source', whether the note is new or changed. Its quote-check and the page's record-format are still owed as before.",
+     "class": "within",
+     "why": "This is the arbiter's first part, 'stop owing a source-reader round when a ... (absence) note's wording changes, since there is no page to read'. Adding 'new' does not narrow it. It applies the arbiter's own stated reason (no page to read) to a case where that reason holds the same way. It is an obvious tooling consequence under amendment 6. The phrase match is the arbiter's own wording for an absence note. Keeping quote-check and record-format owed preserves what the arbiter did not touch, so nothing in the request is cut."
+    },
+    {
+     "id": "D57(b)",
+     "summary": "The sibling note an absence note defers to is owed and read on its own words, so a READ on the sibling settles the absence note with no unit of its own.",
+     "class": "within",
+     "why": "This is the arbiter's second part, 'take a READ on the sibling note it defers to as settling it', carried out literally. The absence note gets no unit (part a). The sibling has a page and stays owed under the normal rules until it is READ, so its READ is what settles the absence note."
+    },
+    {
+     "id": "D57(c)",
+     "summary": "Netting out a note the latest returned round READ, unchanged since, uses the existing 'answered' fingerprint rule. The leftover owed notes on q:0081 are put down to the round cap stopping the answers from being recorded, which T41 now counts by readings. No new rule is written, and the existing test pins the behavior.",
+     "class": "narrowing",
+     "why": "The arbiter's third part is an outcome he asked to have built: 'net out of the owed list any note that the latest returned round READ with no edit since'. The plan builds nothing for it. It says the existing 'answered' rule already does this, and that the three READ-unchanged notes stayed owed on q:0081 only because the round cap blocked their answers from being recorded, which T41 has since fixed. That cause is stated with no measurement label: Approach step 4 measures the five owed notes at the time of the ruling, not that the same record at post-T41 HEAD drops the three READ notes. The test the plan pins (test_the_command_names_the_units_and_drops_the_answered_ones) already exists and already passes, so it cannot be red without T42. Nothing in the plan would fail if those three notes were still owed after T41. So one of the arbiter's three parts is dropped on an unmeasured premise, which is completing the arbiter's thought. That is not physical impossibility, not implied by his words, and not a case where the literal fix would defeat its own purpose. To clear: either (1) re-run record_units.owed on q:0081@5's record state at post-T41 HEAD, show the three READ-unchanged notes are not owed, and label that measurement in the plan (date and method, or m:<key>), with a test that reproduces the q:0081 shape; or (2) build the netting so that a note the latest returned round READ, unedited since, is not owed, with a test in test_record_owed.py that is red without it.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "T42 Approach constraints and Done",
+     "summary": "Tooling only; a test in tests/tooling/test_record_owed.py that is red without the change; done = no source-reader unit owed on an absence note, and a note READ at its current words is not owed.",
+     "class": "within",
+     "why": "These restate the arbiter's fix as measurable outcomes. A test that fails only when the fix is missing enforces the request. Nothing outside the arbiter's three parts is added."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T42 - an absence note owes no source-reader (the round arbiter's fix on round:source-reader|q:0081@5)",
+    "### T42 Approach (checklist part A)",
+    "### T42 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing-T42",
+     "summary": "T42 added to the tasks that land open, one at a time with its retro row",
+     "class": "within",
+     "why": "FR-006 (one task, then the retro); a bookkeeping line, decides nothing new."
+    },
+    {
+     "id": "D57(a)",
+     "summary": "record_units.owed owes no source-reader unit on a note carrying 'no publicly readable source', new or changed; its quote-check and the page's record-format stay owed",
+     "class": "within",
+     "why": "The arbiter's part 1 verbatim ('stop owing a source-reader round when a ... (absence) note's wording changes, since there is no page to read'). Extending it to a NEW absence note is the arbiter's own stated reason (no page to read) applied to the identical case, not a completion of an unstated thought; the other checks on the note are kept, so nothing beyond the source-reader is dropped. Tooling fix under amendment 6 ('implement any obvious ... tooling / process improvements')."
+    },
+    {
+     "id": "D57(b)",
+     "summary": "the sibling note an absence note defers to is owed and read on its own words, and its READ settles the absence note with no unit of its own",
+     "class": "within",
+     "why": "The arbiter's part 2 ('take a READ on the sibling note it defers to as settling it'). Siblings stay owed whenever new or changed, so the deferred-to content is still read; the mechanism follows from (a) without loosening any check on the sibling."
+    },
+    {
+     "id": "D57(c)",
+     "summary": "a note the latest returned round READ, unchanged since, is netted by the existing answered-at-fingerprint rule; no new code, the cause measured on HEAD and the q:0081 case reproduced in a test",
+     "class": "within",
+     "why": "The arbiter's part 3 ('net out of the owed list any note that the latest returned round READ with no edit since') is delivered, not narrowed: the plan now carries a dated, method-labeled measurement (2026-10-18, .git/record-checks/ then make record-owed UNANSWERED=1) that the three notes carry round 6's answer at their current fingerprints and are not unanswered, so the ruling's bundle predated the answers' recording. The new test reproduces the case with a READ note that must be netted, so it fails if the existing rule does not net, and red without (a) for the absence half. Round 1's two objections (unmeasured cause, a test that could not fail) are both answered."
     }
    ]
   }

@@ -98,6 +98,13 @@ def test_a_changed_note_owes_the_source_reader_and_quote_check_on_it_and_record_
     assert _units(_q(), now) == ["quote-check:0094#kyakhta", "record-format:0094", "source-reader:0094#kyakhta"]
 
 
+def test_a_reworded_absence_note_owes_no_source_reader() -> None:
+    """Feature 385 T42 (the round arbiter on round:source-reader|q:0081@5): a "no publicly readable source" note names no page, so
+    a change to its words owes its quote-check and the page's record-format, never a source-reader round on nothing."""
+    now = _q(notes=NOTES.replace("no publicly readable source", "no publicly readable source<!-- searched again --> beyond the post"))
+    assert _units(_q(), now) == ["quote-check:0094#absence", "record-format:0094"]
+
+
 def test_a_note_cites_its_linked_keys_and_never_a_bare_code_symbol() -> None:
     """Feature 319 (G4): Sugiura's table letters went into `<code>` to keep the glossary's tooltips off them, and
     `make record-owed` then asked for a source-reader bundle of a source named `be`."""
@@ -134,11 +141,9 @@ def test_a_new_question_owes_every_check() -> None:
         "quote-check:0094.drawing#absence",
         "quote-check:0094.drawing#kyakhta",
         "record-format:0094",
-        "source-reader:0094#absence",
         "source-reader:0094#kyakhta",
-        "source-reader:0094.drawing#absence",
         "source-reader:0094.drawing#kyakhta",
-    ]
+    ], "an absence note names no page: no source-reader on it (feature 385 T42)"
 
 
 def test_a_question_moved_or_renumbered_owes_the_intro_check_on_its_heading_alone() -> None:
@@ -229,6 +234,22 @@ def test_the_command_names_the_units_and_drops_the_answered_ones(tmp_path: pathl
     assert ro.unanswered(d) == []
     (d / Q / "0094-rooms.html").write_text(_with_intro(PAGE, INTRO.replace("some", "certain")), encoding="utf-8")
     assert [u.slug for u in ro.unanswered(d)] == ["intro-check:0094", "record-format:0094"]
+
+
+def test_a_note_read_at_its_words_is_netted_and_an_absence_note_owes_no_reading(tmp_path: pathlib.Path) -> None:
+    """Feature 385 T42 (q:0081@5): the round that READ a note with no edit since answers it at its fingerprint, so it leaves the
+    owed list (measured: 0081.drawing#wang-2021-qing-huabei-dishui-2 and 0247's -6 and -7 carry round 6's "9 READ" at their
+    current fingerprints); an absence note re-worded in the same round owes its quote-check, never a source-reader."""
+    d = _repo(tmp_path)
+    notes = NOTES.replace("quickly built", "built").replace("no publicly readable source", "no publicly readable source, beyond the post")
+    (d / Q / "0094-rooms.notes.html").write_text(notes, encoding="utf-8")
+    _git(d, "commit", "-qam", "notes")
+    slugs = [u.slug for u in ro.unanswered(d)]
+    assert "source-reader:0094#kyakhta" in slugs and "source-reader:0094#absence" not in slugs and "quote-check:0094#absence" in slugs
+    for u in ro.units(d):
+        if u.slug == "source-reader:0094#kyakhta":
+            ro.write_answer(ro.store(d), u.slug, u.fingerprint, "1 READ, 0 CONTRADICTED")
+    assert "source-reader:0094#kyakhta" not in [u.slug for u in ro.unanswered(d)], "READ at its words: netted"
 
 
 def test_the_command_replays_a_commit_pair(tmp_path: pathlib.Path) -> None:

@@ -66,6 +66,8 @@ _CODE = re.compile(r'<a href="[^"]*"(?: [^>]*)?>\s*<code>([a-z0-9][a-z0-9-]*)</c
 
 #: the checks this module decides, in the order a report lists them
 CHECKS = ("intro-check", "record-format", "source-reader", "quote-check", "source-applicability")
+#: an absence note's own words: it cites no page, so no source-reader round is owed on it (feature 385 T42)
+ABSENCE = "no publicly readable source"
 
 
 def words(text: str) -> str:
@@ -266,7 +268,10 @@ def owed(now: Record, base: Record) -> list[Unit]:
                 owe(f"quote-check:{stem}#unfootnoted", "a block with no note mark changed (an uncited claim?)")
         for k, w in now.notes.get(stem, {}).items():
             if w not in ix.notes:
-                owe(f"source-reader:{stem}#{k}", "the note is new or changed")
+                # ...NOT AN ABSENCE NOTE (feature 385 T42, the round arbiter on round:source-reader|q:0081@5): "no publicly readable
+                # source" names no page, so a source-reader has nothing to read; what it defers to is its sibling notes' own reading
+                if ABSENCE not in w:
+                    owe(f"source-reader:{stem}#{k}", "the note is new or changed")
                 owe(f"quote-check:{stem}#{k}", "the note is new or changed")
                 owe(f"record-format:{q}", "visible words new or changed")
     # an intro removed: its words are gone, and the question it stood on is still here under its slug

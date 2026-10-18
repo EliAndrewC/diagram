@@ -156,7 +156,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42
 
 ## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)
 
@@ -1351,6 +1351,39 @@ So a dispatch a later hook refused (it never launches) and one whose agent kept 
 says ("count only dispatches that started an agent and kept a reply"); no timer. The cap is still asked at dispatch against the
 rounds read so far, and a re-dispatch into a round still running is refused as before (FR-003c), so no round in flight is
 double-booked. The tests that counted a round by dispatch alone now read each round (`_read`: launched, then returned with a reply).
+
+## T42 - an absence note owes no source-reader (the round arbiter's fix on round:source-reader|q:0081@5)
+
+### T42 Approach (checklist part A)
+
+1. **The goal, in the world.** A source-reader round is owed only where there is a page to read.
+2. **The constraints.** The arbiter's fix (three parts: "stop owing a source-reader round when a 'no publicly readable source'
+   (absence) note's wording changes, since there is no page to read; take a READ on the sibling note it defers to as settling it,
+   and net out of the owed list any note that the latest returned round READ with no edit since"); the record's other checks on an
+   absence note unchanged (its quote-check, the page's record-format); a test red without it; tooling only.
+3. **Where each comes from.** The fix is the arbiter's (G).
+4. **Do they describe the world here?** Yes - measured on T07's check session (2026-10-18, the ruling on q:0081@5): the round-6
+   source-reader came back 9 READ, 0 CONTRADICTED, yet five notes stood owed - two absence notes re-worded to defer to the
+   2.2-chi figure, and three notes round 6 had READ with no edit since.
+5. **The order.** The absence rule, then its tests.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: no source-reader unit is owed on an absence note, new or changed; a note READ at its current words
+   is not owed; `tests/tooling/test_record_owed.py` red without it.
+
+### T42 Decisions
+
+**D57 - the three parts.** (a) `record_units.owed` owes no `source-reader` unit on a note whose words carry "no publicly readable
+source" (`ABSENCE`), new or changed; its quote-check and the page's record-format are owed as before. (b) What such a note defers
+to is its sibling notes' own reading - each is owed and read on its own words, so a READ on the sibling settles the absence note's
+content with no unit of its own. (c) A note the latest returned round READ, unchanged since, is answered at its fingerprint (the
+existing `answered` rule, `record_owed.py`). Measured 2026-10-18 on HEAD (`.git/record-checks/`, then `make record-owed
+UNANSWERED=1`): the three notes the ruling found owed - 0081.drawing#wang-2021-qing-huabei-dishui-2, 0247#...-6 and -7 - each carry
+round 6's own answer ("9 READ, 0 CONTRADICTED", recorded 14:17:55Z) at its current fingerprint, and none is unanswered: they stood
+owed in the ruling's bundle only because round 6's answers were not yet recorded when it was built. So the netting is the existing
+rule; `test_a_note_read_at_its_words_is_netted_and_an_absence_note_owes_no_reading` reproduces the q:0081 case (a READ note
+netted, a re-worded absence note owing no reading - red without (a)).
 
 ## T11 - the close
 
