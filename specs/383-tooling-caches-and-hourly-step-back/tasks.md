@@ -215,3 +215,11 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
       research: rendering
       verify: DONE. verified: feature report written; hooks-test green; quick clean; plan review CLEAR; T56 lands open per plan D50
 
+## Amendment 8
+
+- [x] T58 The bundle's request trimmed to the amendments its blocks answer (plan D51) (SC-035)
+      research: rendering
+      verify: DONE. verified: test_plan_bundle_request 6/6, test_plan_blocks 7/7; 383's own bundle request 21,301 -> 8,632 chars + 1,168 index (R22); spec FAITHFUL r2, plan CLEAR r2
+- [x] T59 Close: the checks, the report, landed
+      verify: DONE. verified: report written, tooling landed on main, spec FAITHFUL, plan CLEAR
+

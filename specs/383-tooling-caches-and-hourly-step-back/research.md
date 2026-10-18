@@ -665,3 +665,22 @@ workflow's default subagent (R20).
 The first REAL wave (FR-046) has not run: on 2026-10-17 nothing owed one (`make record-owed`, `claims-owed`, `modal-triage`
 each reported nothing). The Workflow guard names `make wave-report` to the session whenever a `check-wave` run starts, so
 the measurement is taken where the wave runs.
+
+## R22 Amendment 8 - what a feature's size costs, read from the transcripts
+
+Measured 2026-10-17 over every subagent transcript under `~/.claude/projects/-diagram*` (observed 2026-10-17; the method: each
+tool call naming a feature file, the characters its result put into the agent's context, by the review's kind read from its
+first prompt):
+
+- A file's size on disk costs nothing; only what a command prints enters a context. 374's 246k `plan-review.json` gave its
+  main session 8k characters over the feature and each `spec-fidelity` agent ~12k, in slices.
+- 374's planning files were read mostly by `spec-fidelity`: `plan.md` 1,271k characters (84 agents), `spec.md` 1,067k (66),
+  `plan-review.json` 681k (55). By kind, since 10-10: plan reviews reading the repository, 198 agents, ~5M characters - all but
+  one before 10-13, when 375 amendment 11's bundles took over; bundled plan reviews since 10-13, 75 agents at ~17k characters
+  each, of which ~8.7k is `request.md`; later spec rounds, 18 agents at ~0 (the round hook's diff); first rounds, 25 agents at
+  ~2.4k of `spec.md`.
+- So what still grows with a feature is the whole `request.md` each plan-review bundle copies (383's is ~20k characters at
+  amendment 7). Hence FR-047, and no spec-delta or spec archive.
+- Measured on 383's own bundle once FR-047 was built (observed 2026-10-17; the method: `make plan-delta F=383` on amendment
+  8's block, the bundle's files counted): `request.md` 21,301 -> 8,632 characters (the original request and amendment 8),
+  with a 1,168-character `request-index.md` of the seven sections left out.

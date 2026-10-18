@@ -70,6 +70,10 @@ run "git add -A"
 printf '%s' "$OUT" | grep -q "specs/378-widget-cache/spec.md: no approval line" && ok "...naming the file and the failed check" || no "the refusal names neither"
 printf '%s' "$OUT" | grep -q '\*\*Approved\*\*: the GM, [0-9-]*, "<the GM' && ok "...and giving the exact line to add" || no "the line's form is missing"
 printf '%s' "$OUT" | grep -qi "escape" && printf '%s' "$OUT" | grep -q "There is no escape variable" && ok "...and saying there is no escape" || no "the no-escape sentence is missing"
+! printf '%s' "$OUT" | grep -q "before the command" && ok "...with no write-then-land note when the command touches no spec.md" || no "the note fired on a plain add"
+# GUARD_EDIT_OK: feature 383, the round arbiter's tooling fix on hour:383@6 - a command that writes the line and lands in one go
+run "printf '**Approved**: x\n' >> specs/378-widget-cache/spec.md && git add -A"
+[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "before the command" && printf '%s' "$OUT" | grep -q "approval line in its own" && ok "a command that writes the spec.md and adds in one go is told the guard read the file before it ran, and the fix" || no "the write-then-land note is missing" "(rc=$RC)"
 git -C "$FIX" add -A >/dev/null 2>&1
 run "git commit -m wip"
 [ "$RC" -eq 2 ] && ok "git commit of the staged spec is blocked too" || no "commit not blocked" "(rc=$RC)"

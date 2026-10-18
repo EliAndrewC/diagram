@@ -251,6 +251,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
+  },
+  "## Amendment 8 (FR-047)": {
+   "sha256": "688dce370587c4ca966251b6f0ba618053aa6818329ef081805686700eed1140",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-17",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1420,6 +1426,85 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "It narrows when FR-046 is met, not what it requires: the feature lands with the measurement still owed. FR-046 and the GM's request (Amendment 7: 'the first real wave measured') require a REAL wave; measuring one at landing is impossible when no real check is owed, and manufacturing a wave to measure would itself break the 'real' the request names. The requirement is not dropped or weakened - T56 stays open, the comparison baseline is recorded in R21, and the guard names wave-report at every check-wave run so the first real wave is measured when it comes. The rule's purpose (learn what a real wave costs against the hand-launched one) is deferred, not gutted. The premise that no check was owed is stated as measured (R21, dated 2026-10-17)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Amendment 8 (FR-047)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D51a",
+     "summary": "request_sections: the original request is everything before the first '## Amendment N' heading; a '###' under an amendment belongs to it",
+     "class": "within",
+     "why": "FR-047 defines the original request as what precedes the first amendment heading; folding sub-headings into their amendment keeps each amendment's words whole."
+    },
+    {
+     "id": "D51b",
+     "summary": "answered(): per block, the earliest of its heading's Amendment N and every spec '### Amendment N' section holding an FR or SC it cites; a block with neither answers none",
+     "class": "within",
+     "why": "This is FR-047's 'EARLIEST of the one its heading names and every one whose spec section holds a requirement it cites'. Counting cited SCs too can only move the cut earlier, so the bundle carries more of the request, never less. 'Answers none' gets the whole request, as FR-047 says."
+    },
+    {
+     "id": "D51c",
+     "summary": "trimmed_request(text, n): the original request plus every section from amendment n on; request-index.md lists the heading and first line of each section left out; the whole request when n is none or there are no amendment headings",
+     "class": "within",
+     "why": "Matches FR-047 clause for clause. Nothing after the cut is dropped, and both fallbacks give the whole request."
+    },
+    {
+     "id": "D51d",
+     "summary": "build writes request.md and request-index.md, and the MANIFEST names request-index.md",
+     "class": "within",
+     "why": "FR-047 requires request-index.md. Naming it in the MANIFEST is how the reviewer learns it exists."
+    },
+    {
+     "id": "D51e",
+     "summary": "Tests on a fixture feature cover only: the newest amendment's block, an earlier amendment's block, an original-plan block, and no amendments; the measured cut on 383's own bundle goes in R22",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "SC-035 names a fifth case: 'a block headed with a later amendment that cites an earlier one's requirement' must carry the earlier amendment and every later one. The plan's list leaves it out, and none of the four cases listed exercises the cross-citation path of answered() (the 'every spec section holding a requirement it cites' half of FR-047's EARLIEST rule). That path exists so a later block correcting an earlier requirement still carries the earlier amendment's words, and the GM asked for exactly this trim. None of MODE 1's grounds applies: the test is not impossible, the request does not imply leaving it out, and including it does not defeat the purpose. Fix: add the cross-citation fixture case (a block headed Amendment k that cites an FR/SC from an earlier amendment j's spec section carries amendment j and every one after it, with only sections before j in request-index.md)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-17",
+   "blocks": [
+    "## Amendment 8 (FR-047)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D51-split",
+     "summary": "request_sections splits request.md into the original request (before the first '## Amendment N') and amendment sections, a ### under one belonging to it",
+     "class": "within",
+     "why": "FR-047 defines the original request as what comes before the first amendment heading and carries amendment sections whole; treating subheadings as part of their amendment is the mechanism, not a narrowing."
+    },
+    {
+     "id": "D51-answered",
+     "summary": "answered(): per block the earliest of its heading's Amendment N and every spec Amendment section holding an FR/SC it cites; a block with neither answers none",
+     "class": "within",
+     "why": "Restates FR-047's rule exactly (EARLIEST of heading and cited requirements' sections; none -> whole request)."
+    },
+    {
+     "id": "D51-trim",
+     "summary": "trimmed_request(text, n): original + every section from n on, index of heading and first line of each left out; whole request when n is none or no amendment headings",
+     "class": "within",
+     "why": "FR-047 and SC-035 verbatim: nothing after the earliest answered amendment is dropped; whole request in both fallback cases."
+    },
+    {
+     "id": "D51-build",
+     "summary": "build writes request.md and request-index.md; MANIFEST names request-index.md",
+     "class": "within",
+     "why": "FR-047 requires request-index.md in the bundle; naming it in the MANIFEST lets the reviewer find it."
+    },
+    {
+     "id": "D51-tests",
+     "summary": "Fixture tests: newest amendment's block, an earlier one's, a later-headed block citing an earlier amendment's requirement (carries that earlier amendment on, index lists only sections before it), an original block, no amendments; measured cut on 383's own bundle in research R22",
+     "class": "within",
+     "why": "The changed text adds the later-headed-cites-earlier case, which SC-035 names explicitly; every case enforces FR-047/SC-035 and nothing beyond them. The R22 measurement is the 'measured on the bundle' SC-035 asks for."
     }
    ]
   }

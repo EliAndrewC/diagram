@@ -161,3 +161,22 @@ run as a `Workflow` with `agentType` on every `agent()` call, authorized in the 
 the first real wave measured. The GM:
 
 > Thanks. I came up with a new set of recommendations around subagents, which have now been saved to diagram-fanout-workflows.md in the main L7R checkout on the host. So please take a look at that and then implement its recommendations, because there's some pretty good analysis in there that I think will really help us out.
+
+## Amendment 8 (2026-10-17, same session)
+
+The GM asked what a feature's size costs:
+
+> In the meantime, I'm a little concerned about what happens when a feature grows too large.  How much it likely hurts our token consumption, etc.  Like look at feature 374.  Does the fact that plan-review.json is 241k hurt us?  Or is that only read and modified by tools so its size doesn't affect token usage?  Same question for other json and jsonl files in that directory?
+>
+> Similarly, do the .md files being dozens of kilobytes mean that we're eating more tokens because of the files being big when we have to edit them and such?  Or do we just load them once and then continue and it doesn't create an ongoing issue?
+
+The session measured 374 and proposed a spec-delta bundle for later review rounds and a `make spec-archive`; the GM:
+
+> yes please implement that; it seems like it would help with long-running features.
+
+Measuring before building showed later spec rounds already read almost nothing and first rounds little, and that what still
+grows with a feature is the whole `request.md` every plan-review bundle carries; the session proposed doing only that trim. The
+GM:
+
+> Okay sounds good.  But as a clarification: when we make an amendment to a feature, where does that go?  Do I need to worry about too many amendments being token inefficient, relative to filing a whole new feature?
+
