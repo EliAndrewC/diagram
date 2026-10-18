@@ -166,18 +166,24 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T58 The wave guard names WAVE_OK as a headless session's route, which has no Workflow tool (the arbiter's fix on hour:385-approach-checklist@21, plan D77)
       research: rendering
       verify: DONE. landed on main; tests/hooks/test-agent-prefix-hooks.sh red without it
-- [ ] T59 A dispatch another hook refused leaves no reading behind: its seen notes and fresh round are applied at launch (the arbiter's fix on round:modal-form|modal:choice/dikepond_split--0.7@3, plan D78)
+- [x] T59 A dispatch another hook refused leaves no reading behind: its seen notes and fresh round are applied at launch (the arbiter's fix on round:modal-form|modal:choice/dikepond_split--0.7@3, plan D78)
       research: rendering
-- [ ] T60 apply-edits applies a bare paragraph break and drops the line an emptied replacement leaves (the arbiter's fix on hour:385-approach-checklist@22, part 1, plan D79)
+      verify: DONE. hm_checks applies a dispatch's marks at launch; landed, tests/hooks green
+- [x] T60 apply-edits applies a bare paragraph break and drops the line an emptied replacement leaves (the arbiter's fix on hour:385-approach-checklist@22, part 1, plan D79)
       research: rendering
-- [ ] T61 A make call that sets one variable twice is refused, naming the quoted-list form (the arbiter's fix on hour:385-approach-checklist@22, part 2, plan D80)
+      verify: DONE. apply-edits break and emptied-line rules; landed, test_apply_edits green
+- [x] T61 A make call that sets one variable twice is refused, naming the quoted-list form (the arbiter's fix on hour:385-approach-checklist@22, part 2, plan D80)
       research: rendering
-- [ ] T62 A claimed constant whose value or claim changes names the drawing pages still stating its old figure (the arbiter's fix on ask:t10-findings-at-landing, plan D81)
+      verify: DONE. make-only refuses a doubled make variable; landed, make-only suite green
+- [x] T62 A claimed constant whose value or claim changes names the drawing pages still stating its old figure (the arbiter's fix on ask:t10-findings-at-landing, plan D81)
       research: rendering
-- [ ] T63 make tick archives the plan's finished sections itself (the GM 2026-10-18: what can be forgotten runs automatically, plan D82)
+      verify: DONE. claims-owed names 0018/0022/0025/0027 on this clone; landed, test_claims_index green
+- [x] T63 make tick archives the plan's finished sections itself (the GM 2026-10-18: what can be forgotten runs automatically, plan D82)
       research: rendering
-- [ ] T64 make task-add files a task box and its plan section with the next free id (the GM 2026-10-18, plan D83)
+      verify: DONE. tick archives finished plan sections; landed, test_tick_task green
+- [x] T64 make task-add files a task box and its plan section with the next free id (the GM 2026-10-18, plan D83)
       research: rendering
+      verify: DONE. make task-add filed T65-T67; landed, test_task_add green
 - [ ] T65 An archived plan block edited by a typo after its review is not owed (plan D84)
       research: rendering
 - [ ] T66 A requirement cited from another feature is bundled from that feature (plan D85)
