@@ -232,4 +232,3 @@ def test_a_coverage_report_that_errors_is_named_in_the_run_record() -> None:
     out = "Name  Stmts\nNo source for code: '/x/l7r/gone.py'; see https://coverage.readthedocs.io/x\n"
     assert um.errors(out) == ["coverage-error No source for code: '/x/l7r/gone.py'; see https://coverage.readthedocs.io/x"]
     assert um.errors("Name   Stmts   Miss\nTOTAL  1  0\n") == []
-

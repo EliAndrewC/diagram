@@ -89,4 +89,3 @@ def test_a_test_pinned_to_a_deleted_file_or_name_is_named() -> None:
     assert any(g.startswith("PINNED        l7r/diagram/eng/roll.py  in scripts/s.sh:1") for g in got), got
     assert not any("tests/t.py:3" in g or "tests/t.py:4" in g for g in got), "comments and live names are not pins"
     assert dc._strings('x = "unterminated\n') == [(1, 'x = "unterminated')]
-
