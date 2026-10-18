@@ -28,8 +28,9 @@ The record has no home for these questions yet:
 - **No protocol.** The two sessions coordinate through GitHub issues (issue watch, landed on main 2026-10-18), but nothing
   says what a request carries or what an answer returns.
 
-This feature supplies those three, and answers the first questions the existing notes raise
-(`/host-l7r-repo/money/digest.md`, the GM's old emails and spreadsheets digested on 2026-10-18).
+This feature supplies those three. The questions themselves come later, one approved request at a time, from the side
+building the skill (FR-004). The GM's old notes are digested at `/host-l7r-repo/money/digest.md` as leads for those
+requests.
 
 ## User Scenarios & Testing
 
@@ -40,7 +41,7 @@ record lists it under a "Money and prices" section, with no drawing page, and ev
 
 **Why this priority**: without a home, nothing else in this feature can land.
 
-**Independent Test**: build the record with one money question present. It appears in the new section. `make record-owed`
+**Independent Test**: build the record with a test fixture question tagged `money`. It appears in the new section. `make record-owed`
 names its checks like any other question's, and no check refuses it for lacking a drawing page.
 
 **Acceptance Scenarios**:
@@ -59,8 +60,8 @@ verdicts and the figures the record now supports. The asking side verifies the a
 
 **Why this priority**: this is how all later money research reaches the skill.
 
-**Independent Test**: the first seeded question goes through the protocol end to end, and its issue closes with the
-fragment files named.
+**Independent Test**: the protocol text answers, for a sample request, what the request must carry and what the answer
+must return; the first real request gm-assistant opens then goes through it end to end.
 
 **Acceptance Scenarios**:
 
@@ -68,39 +69,15 @@ fragment files named.
    question fragment FILE (never a built page), the verdict of each figure (ATTESTED, ATTESTED ONLY FOR, NOT ATTESTED or
    SILENT) and anything left open.
 2. **Given** a request whose figure contradicts the GM's canon (`setting/l7r.md` "Money", `setting/budgets.md`), **When**
-   it is answered, **Then** the answer reports the history and leaves the canon as it is. The canon wins in the skill;
-   the record records what history says.
-
-### User Story 3 - The first questions are answered (Priority: P2)
-
-The four questions the notes left open are written, checked and cited:
-- **Q1 - land price against yield.** What farmland sold for, in years of its net yield, in Tokugawa Japan and Qing China.
-  The GM has asked this since 2013; Rokugan's "~50 koku, ~20 times the yearly profit" is *"based largely on nothing"*.
-- **Q2 - unskilled day wages.** Day wages in rice and coin, city against countryside, Japan in the 18th century and
-  China.
-- **Q3 - the koku of rice.** The volume and weight of a koku of rice, the historical measure beside the canon's 40
-  gallons. The 2017 spreadsheet converts at 151.5 kg (its silver-per-zeni constant 2.257575 = 100 zeni per 151.5 kg at
-  1.49 g/kg). That is 40 gallons read as 151 kg, while 40 gallons of uncooked rice weighs nearer 120 kg.
-- **Q4 - the Kyoto basket.** Bassino & Ma's Japan Basket A, 1745-54, with its quantities and silver prices, quoted
-  verbatim from the paper. This is the basket the PPP conversion re-prices.
-
-**Why this priority**: the skill's first conversion (PPP dollars per koku) rests on Q3 and Q4. Its wages and land rules
-rest on Q1 and Q2.
-
-**Independent Test**: each question's fragment exists, carries its verbatim citations, and has passed `quote-check`,
-`source-reader` and `source-applicability`.
-
-**Acceptance Scenarios**:
-
-1. **Given** the four questions, **When** the feature closes, **Then** each is checked, and its issue on `EliAndrewC/diagram`
-   is answered and closed by the asking side.
+   it is answered, **Then** the answer reports the history as found, flags the contradiction for the GM to decide, and
+   changes no canon.
 
 ### Edge Cases
 
 - **A question also bears on a map** (a market's prices beside its stalls). It takes both tags; a drawing page follows
   only if the maps draw it, under the existing rules.
-- **The history disagrees with the canon.** The finding is recorded as found. The skill states the canon and labels the
-  difference as a deliberate deviation, never the reverse.
+- **The history disagrees with the canon.** The finding is recorded as found and the contradiction is reported to the GM,
+  who decides.
 - **A source is the GM's own book** (Goldsmith's *Premodern Financial Systems*, McClain & Wakita's *Osaka*). It goes on
   `research/to-download.md`; the GM's 2013-2017 summaries are leads, never citations.
 - **A Japan-first question.** Tokugawa price and wage series are the richest data, so a request may name Japan first. The
@@ -119,9 +96,7 @@ rest on Q1 and Q2.
   issue. It states what a request carries (the question, the figure the skill needs, the canon it must sit beside) and
   what an answer returns (fragment files, verdicts, open items). Closing follows the user-level "Working a GitHub issue"
   rule.
-- **FR-005**: Q1-Q4 MUST be written in page sessions, at most four questions a write, and checked by the existing agents
-  unchanged.
-- **FR-006**: Nothing in this feature changes engine code, a map, or the GM's canon.
+- **FR-005**: Nothing in this feature changes engine code, a map, or the GM's canon.
 
 ### Key Entities
 
@@ -133,10 +108,10 @@ rest on Q1 and Q2.
 
 ### Measurable Outcomes
 
-- **SC-001**: The built record lists 4 money questions under their section, and each has 0 open check findings.
-- **SC-002**: Each of Q1-Q4 has at least one verbatim, checked citation, or an absence note saying what was searched.
-- **SC-003**: Every money request issue opened during the feature is closed by its asker, with the fragment files named.
-- **SC-004**: `make impl-check F=389` reports nothing missing.
+- **SC-001**: The section builds, and lists every question tagged `money` (proved with a test fixture).
+- **SC-002**: A fixture question tagged only `money` passes every record check with 0 findings about a missing drawing page.
+- **SC-003**: The protocol text exists where a diagram session reads it before working an issue, and names all three parts
+  of a request and all three parts of an answer.
 
 ## Decisions Recorded
 
@@ -146,11 +121,22 @@ This feature draws nothing and states nothing on a map. Its decisions are about 
 |---|---|---|---|
 | Money research lives in this record, not in gm-assistant | process decision (the GM, 2026-10-18) | one checked research machinery, no copy to drift | `request.md`; this spec |
 | Money questions carry no drawing page | map drawing convention (none drawn) | no map draws a price | the section's description in `research/contents.json` |
-| Canon over history in the skill; history recorded as found | process decision (CLAUDE.md: never contradict the GM's notes) | the record reports, the skill rules | FR-004's protocol text |
+| History recorded as found; a contradiction with canon is reported to the GM, who decides | process decision (CLAUDE.md: never contradict the GM's notes) | the record reports; the canon is the GM's | FR-004's protocol text |
 
 ## Assumptions
 
 - The GM starts the diagram session that works each money issue; this repository does not run sessions by itself.
-- The gm-assistant money skill is a separate gm-assistant feature. Only its existence as the consumer matters here.
+- The gm-assistant money skill is a separate gm-assistant feature. Only its existence as the consumer matters here; this
+  feature sets no rule for it.
 - Issue watch works on both repositories with the tokens the GM granted on 2026-10-18 (checked: write access answers 422,
   not 403, on both).
+
+## Review history
+
+- **spec-fidelity round 1 (2026-10-18): CHANGES REQUIRED, 2 items.** (1) Four pre-chosen research questions (US3, FR-005,
+  SC-001, SC-002) went beyond the approval, which names a section; the questions now come as requests through FR-004.
+  (2) Rules about what the gm-assistant skill does were cut; history is recorded as found and a contradiction with canon
+  goes to the GM.
+- **spec-fidelity-verify round 2 (2026-10-18): CHANGES REQUIRED, 1 item.** The checklist still cited FR-006 after the
+  renumbering; now FR-005.
+- **spec-fidelity-verify round 3 (2026-10-18): FAITHFUL.**
