@@ -581,3 +581,10 @@ the refused dispatch had already marked its notes read and opened a fresh round,
 What a reading marks now waits on the pending record and is applied at launch. The first test asserted the wrong thing (a first
 reading IS round 1); probing the old and new code side by side found the real difference. **The habit it changes:** a hook that
 records an action at PreToolUse cannot assume the action happens - other hooks run beside it.
+
+## T60 - the retro row
+
+About 25 min. The EDIT pattern's optional newline before `>>>` let a lone empty line and no line at all parse alike, as no text,
+so a paragraph split was applied as a deletion; a lazy optional group now tells them apart, and an emptied whole line takes its
+newline. The first test packed two cases into a string trick and tested the wrong thing; written plainly it passed. **The habit it
+changes:** none needed - the parse decides it.

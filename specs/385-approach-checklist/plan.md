@@ -396,20 +396,20 @@ counts no round.
 6. **The exits.** (c).
 7. **The search smell.** None.
 8. **The budget.** 40 min.
-9. **Done, measured.** One goal: `make claims-owed` lists, for each claimed constant whose value or claim changed since the merge base, every drawing page that states its old figure with a unit and links a question its claim cites; `tests/tooling/test_claims_index.py` red without it.
+9. **Done, measured.** One goal: `make claims-owed` lists, for each claimed constant whose value or claim changed since the merge base, every drawing page that states its old figure as a whole number and links a question its claim cites; `tests/tooling/test_claims_index.py` red without it.
 
 ### T62 Decisions
 
-**D81 - the old figure looked for where the constant's research lives.** `claims.py` compares each claimed module-level constant's value and claim line at the merge base and the head; for one that changed, it searches the drawing pages for its OLD value followed by a unit (ft, px, %, acres), keeping the pages that link any question the constant's claim cites, and `claims-owed` prints each as `stale figure: <page> states <figure> (<constant> was <old>)`. A flag only: wording elsewhere ("six in ten") is not found, and the claims rounds still read the pages.
+**D81 - the old figure looked for where the constant's research lives.** `claims.py` compares each claimed module-level constant's value and claim line at the merge base and the head; for one that changed, it searches the drawing pages for its OLD value as a whole number (not a digit of a longer one, whatever unit follows it - 23 ft, 19 degrees, 700 feet alike), keeping the pages that link any question the constant's claim cites, and `claims-owed` prints each as `stale figure: <page> states <figure> (<constant> was <old>)`. A flag only: wording elsewhere ("six in ten") is not found, and the claims rounds still read the pages. Measured 2026-10-18 (a grep of its links): 0024 links no question the claim cites, so no link-only rule would have caught it either.
 
 ## T63 - make tick archives finished plan sections (the GM 2026-10-18)
 
 ### T63 Approach (checklist part A)
 
 1. **The goal, in the world.** A feature's `plan.md` holds only its open work, without anyone remembering to archive it.
-2. **The constraints.** The GM, 2026-10-18: "anytime that you can just forget to do [it], make our tooling do the thing correctly automatically every time"; `make plan-archive`'s rule unchanged (every task of a section ticked, its review CLEAR); the archive never moves an open task's section; tooling only; a test red without it.
+2. **The constraints.** The GM, 2026-10-18 (amendment 8): "If you could have run plan archive but then forgot to do it before, then perhaps that should be something that is run automatically when certain actions are taken"; `make plan-archive`'s rule unchanged (every task of a section ticked, its review CLEAR); the archive never moves an open task's section; tooling only; a test red without it.
 3. **Where each comes from.** The GM's (G); plan-archive is 375 FR-044 (O).
-4. **Do they describe the world here?** Yes - measured 2026-10-18: 385's `plan.md` had grown to 168 KB and 2,054 lines, 54 finished sections never archived; one `make plan-archive` took it to 27 KB.
+4. **Do they describe the world here?** Yes - measured 2026-10-18: 385's `plan.md` had grown to 168 KB and 2,054 lines (`wc -c -l`), 54 finished sections never archived (the count `make plan-archive` printed when it moved them); that one run took it to 27 KB.
 5. **The order.** The call at the end of a successful tick, then its test
 6. **The exits.** (c).
 7. **The search smell.** None.
@@ -425,9 +425,9 @@ counts no round.
 ### T64 Approach (checklist part A)
 
 1. **The goal, in the world.** A task is added to a feature with one command that picks its id and places it, with no hand-written insertion.
-2. **The constraints.** The GM, 2026-10-18: "we either have or don't need tooling for things like inserting a task somewhere in the middle of the task list"; the box lands before the GM-review box, as `claims-carry` places its boxes; a plan section, when given, lands before the feature's close section; tooling only; a test red without it.
+2. **The constraints.** The GM, 2026-10-18 (amendment 8): "inserting a task somewhere in the middle of the task list. Because as of now, that sounds like something that could potentially eat up a lot of tokens if we are doing it by hand. And hence why it should get tooling"; the box lands before the GM-review box, as `claims-carry` places its boxes; a plan section, when given, lands before the feature's close section; tooling only; a test red without it.
 3. **Where each comes from.** The GM's (G).
-4. **Do they describe the world here?** Yes - measured 2026-10-18: about 30 tasks added by hand-written insertion scripts, each 1-2k tokens of command text, and two hand-picked ids (T47, T48) collided with an umbrella heading.
+4. **Do they describe the world here?** Yes - measured 2026-10-18: tasks T41-T64 (24) were each added by a hand-written insertion script, about 1-2k tokens of command text apiece (the scripts in this session's transcript; the T60-T64 one alone ran to about 9k characters), and two hand-picked ids (T47, T48) collided with an umbrella heading.
 5. **The order.** The target and its script, then the test
 6. **The exits.** (c).
 7. **The search smell.** None.
