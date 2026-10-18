@@ -156,7 +156,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29
 
 ## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)
 
@@ -768,8 +768,8 @@ Owed by the hour-12 step-back (`hour:385-approach-checklist@12`, ruled `continue
    arbiter's (G); the farmstead's width with its grove as the line's step is ours (O), the page's "keeps its own spacing".
 4. **Do they describe the world here?** Measured 2026-10-18 (`t06-evidence.md`): the margin a hamlet faces holds 3 to 6
    farmsteads at their own width (205-273 ft), against 12 to 20 households; round the paddy alone the north seats fell on the dry
-   plots; round the paddy and its dry plots the line holds every farm on 6 of the cohort's 20 dispersed seeds, 1 to 8 short on
-   the other 14. No pool map is dispersed.
+   plots; round the paddy and its dry plots the line holds every farm on 4 of the cohort's 18 dispersed seeds (1, 19, 31, 46),
+   1 to 8 short on the other 14. No pool map is dispersed.
 5. **The order.** The line is tried before any farm is seated, on a copy, so the fallback seats nothing twice and takes nothing
    back.
 6. **The exits.** (e) conform where the line holds; (c) the fallback where it does not (the arbiter's); (a) the field's area is
@@ -777,7 +777,8 @@ Owed by the hour-12 step-back (`hour:385-approach-checklist@12`, ruled `continue
 7. **The search smell.** Two routes measured and taken to the arbiter rather than tuned (step-back hour 13: "has not packed").
 8. **The budget.** 2-3 h (the arbiter's estimate); the line round all the cultivated ground was the third measurement.
 9. **Done, measured.** One goal: the cohort 54/54 with every dispersed seed seated either in single file (all its households,
-   no rank) or as at HEAD (`meta.dispersed_seating` says which); seeds whose line holds named on a found row as 0031's known gap.
+   no rank) or as at HEAD (`meta.dispersed_seating` says which); the seeds whose line falls short, seated in ranks, named on a
+   found row as 0031's known gap.
 
 ### T06 Decisions
 
@@ -785,7 +786,8 @@ Owed by the hour-12 step-back (`hour:385-approach-checklist@12`, ruled `continue
 deep copy of the map in single file (`_seat_households_as(..., single_file=True)`), and seats the real map that way only if the
 copy seated every household; otherwise as before. In single file: the site boundary asks the field by containment on every side
 (`site_boundary(..., ringed=True)`, the fit test's ring path, its cache keyed on it); seats are offered along every outward chord
-of the paddy and its dry plots unioned (`ring_chords`), one farmstead's box apart (its grove in it), with no seat-radius bound;
+of the paddy and its dry plots unioned (`ring_chords`), one farmstead's box apart (its grove in it), with no seat-radius bound
+(ours, UNRESEARCHED: it refused 10 of seed 1's 23 ring seats, the far side's, recorded at the point of change);
 no ranks, no cloud, no exhaustive pass. `meta.dispersed_seating` records "single file" or "ranks".
 
 **D52 - the gap filed, the research answer proposed.** The dispersed seeds seated in ranks are 0031's known gap, filed as a found
@@ -1209,6 +1211,30 @@ set carries CANON, his setting's canon, or DEVIATION, a departure he ruled, as i
 last verdict. And every number with a unit the words give ("1.3 acres", "273 ft") is looked up by its VALUE: the claims whose line
 states that value and unit are listed beside it, and a value no claim states is said to be one ("a measurement, or a value
 derived from others") - so no number reaches the arbiter without its claim row or the word that it has none (rounds 1 and 2).
+
+## T29 - each plan review its own bundle (the round arbiter's fix on hour:385-approach-checklist@13)
+
+### T29 Approach (checklist part A)
+
+1. **The goal, in the world.** A second plan review can be built and sent while another is still reading its bundle.
+2. **The constraints.** The arbiter's fix ("writes each plan review's bundle to a path keyed by its tasks"); the bundle's contents
+   unchanged; a test red without it; tooling only.
+3. **Where each comes from.** The fix is the arbiter's (G); adding the blocks' digest to the key is ours (O), so two rounds on the
+   same task's blocks never share a directory either.
+4. **Do they describe the world here?** Yes - measured on 2026-10-18 (hour 13's bundle): T26's review waited on T25's twice, and
+   one round's verdict was refused because the shared `plan-385-approach-checklist-blocks` changed under it.
+5. **The order.** The path, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: two `make plan-delta` runs on different blocks write two bundles, the first left whole; a test
+   red without it.
+
+### T29 Decisions
+
+**D53 - the bundle's directory names its tasks and its blocks.** `plan_bundle.delta_prompt` writes to
+`/tmp/l7r-check/plan-<feature>-blocks-<the tasks its block headings name, or "plan">-<the first 8 of the blocks' digest>`; the
+dispatch it prints names that MANIFEST, as before. The decision preflight (`make decide`, keyed by its one task) is unchanged.
 
 ## T11 - the close
 

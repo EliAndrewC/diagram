@@ -51,7 +51,7 @@
    "declared": "spec-fidelity"
   },
   "## Landing": {
-   "sha256": "6a648ae03d87ba1597c8f6f08ef3bae5e99b61478867ba5a014e49b8abf8e9fe",
+   "sha256": "6b3dc330808883f943930a495b72f6723bcc6c7ddc1adb6b644d8c4d42a4213e",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -490,6 +490,42 @@
   },
   "### T28 Decisions": {
    "sha256": "f25a105b29c0c7781eb5b88db007c130c55e108d21972c43a6e507871825c866",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T06 - a scattered hamlet seated in single file round its fields (the ranking row `_seat_households#a scattered hamlet's seating`)": {
+   "sha256": "2f05041175198c4656f628ae92ef4b22c306a226a6a6e5142e2254fb7b720a2a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T06 Approach (checklist part A)": {
+   "sha256": "bbdb5cf00c9c5cfce105ccb77e000977498a2402fb21a2d060bd0c8f2daae0b1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T06 Decisions": {
+   "sha256": "d2c0c1bc1c37ef1e1e0ea359a7bfb0c48d801d5049a53a4ae1a3d541f250471f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T29 - each plan review its own bundle (the round arbiter's fix on hour:385-approach-checklist@13)": {
+   "sha256": "cd35985f4640720e666f5b1b8734d50fffc1de11c07e527c7ec729bd8867d3a3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T29 Approach (checklist part A)": {
+   "sha256": "2de364de52bd135f053f329301ccdef0fdad6d634b6ee8b66fa54bf7e5d10ca7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T29 Decisions": {
+   "sha256": "634abb0285f444451c47a0dbce4fa74d949377a1474dc449f9ffd40d5dcf1069",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -3218,6 +3254,106 @@
      "summary": "One goal, measured on the ruled ask's own words, with a test red without it.",
      "class": "within",
      "why": "FR-015 (one goal a task) and SC-004/SC-009's 'test red without it'; the test enforces the fix and is not unrequested scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T06 - a scattered hamlet seated in single file round its fields (the ranking row `_seat_households#a scattered hamlet's seating`)",
+    "## T29 - each plan review its own bundle (the round arbiter's fix on hour:385-approach-checklist@13)",
+    "### T06 Approach (checklist part A)",
+    "### T06 Decisions",
+    "### T29 Approach (checklist part A)",
+    "### T29 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing-T29",
+     "summary": "T29 added to the tasks that land open, one at a time",
+     "class": "within",
+     "why": "FR-006 (one task, then the retro); adding the new task to the existing list changes nothing else."
+    },
+    {
+     "id": "D51a",
+     "summary": "Single file tried first on a deep copy; the real map is seated that way only if every household seats, otherwise in ranks as at HEAD",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is the one narrowing: on 14 of the 18 dispersed seeds the ranking row's single file is not delivered. Physically impossible under grounded constraints: measured 2026-10-18 (t06-evidence.md), the line round the paddy and its dry plots runs 1 to 8 farms short on those seeds. The constraints that cause it are research or GM-level: 0031's 'do not squeeze the homesteads' and 'keeps its own spacing', feature 318's every household seated or the site refused with no farm taken back, and 0017's researched area. The one unresearched knob found (the seat-radius bound) was removed rather than defended (D51e), and the room was widened from the paddy to the paddy plus dry plots (the more-room exit) before the shortfall was accepted. The shortfall is not hidden: it is recorded per seed (meta.dispersed_seating) and filed as 0031's known gap (D52). The exit that would close it (farmsteads within the paddy) depends on an unanswered research question, so passing it to the GM serves the request's purpose (no packing search against a constraint, no rule dropped quietly) and does not weaken it. Not verified: the two arbiter rulings the plan cites (ask:t06-scattered-single-file, ask:t06-single-file-short) are not in the bundle, so this ruling rests on the criteria above and not on those rulings."
+    },
+    {
+     "id": "D51b",
+     "summary": "In single file the site boundary asks the field by containment on every side (site_boundary ringed=True, cache keyed on it)",
+     "class": "within",
+     "why": "Mechanism that carries the requested line round the fields; it narrows nothing."
+    },
+    {
+     "id": "D51c",
+     "summary": "Seats offered along every outward chord of the paddy and its dry plots unioned",
+     "class": "within",
+     "why": "The line round all the cultivated ground is the ranking row's 'round its fields'; widening from the paddy alone is the checklist's more-room exit, taken."
+    },
+    {
+     "id": "D51d",
+     "summary": "Step between seats is one farmstead's box with its grove",
+     "class": "within",
+     "why": "Labeled ours (O) and grounded in 0031's 'keeps its own spacing' and 'do not squeeze the homesteads'; it follows the page and does not narrow it."
+    },
+    {
+     "id": "D51e",
+     "summary": "No seat-radius bound in single file (ours, UNRESEARCHED, reason recorded at the point of change)",
+     "class": "within",
+     "why": "The request's own guardrail applied: an unresearched number treated as a knob, its loosening recorded where the code changes. The count (10 of seed 1's 23 ring seats refused) is recorded at the point of change, which is a way back to the observation."
+    },
+    {
+     "id": "D51f",
+     "summary": "No ranks, no cloud, no exhaustive pass in single file",
+     "class": "within",
+     "why": "Single file is what the row asks for, and refusing an exhaustive search is the GM's anti-bin-packing purpose word for word."
+    },
+    {
+     "id": "D51g",
+     "summary": "meta.dispersed_seating records 'single file' or 'ranks'",
+     "class": "within",
+     "why": "Makes each seed's outcome checkable, which the done-measure in item 9 needs; it is measurement, not new behavior."
+    },
+    {
+     "id": "D52a",
+     "summary": "Seeds seated in ranks filed as a found row naming 0031's known gap (status quo, not a DEVIATION)",
+     "class": "within",
+     "why": "This is the record side of D51a's narrowing and is ruled with it. Filing the gap openly on a row is what keeps the narrowing visible, not hidden."
+    },
+    {
+     "id": "D52b",
+     "summary": "Farmsteads carved within the paddy proposed to the GM as a feature of its own, which first settles 0017's area and the farmstead width's research",
+     "class": "within",
+     "why": "Proposed, not filed (filing needs the GM's approval); it raises the open research question for the GM to rule on and adds no scope to this feature."
+    },
+    {
+     "id": "T06-item9",
+     "summary": "Done: cohort 54/54, every dispersed seed in single file (all households, no rank) or as at HEAD, the short seeds named on a found row",
+     "class": "within",
+     "why": "One goal (FR-015). The corrected wording now matches D51/D52 (the gap is the seeds seated in ranks), so it is no longer inverted."
+    },
+    {
+     "id": "D53a",
+     "summary": "make plan-delta writes to /tmp/l7r-check/plan-<feature>-blocks-<tasks or 'plan'>-<first 8 of the blocks' digest>; the dispatch names that MANIFEST",
+     "class": "within",
+     "why": "The arbiter's fix verbatim ('a path keyed by its tasks'). The digest suffix extends the key and narrows nothing: two rounds on the same task's blocks also stop sharing a directory, an obvious tooling improvement under amendment 6. Bundle contents unchanged."
+    },
+    {
+     "id": "D53b",
+     "summary": "The decision preflight (make decide, keyed by its one task) unchanged",
+     "class": "within",
+     "why": "The fix names make plan-delta only; leaving make decide alone is outside the fix, not a narrowing of it."
+    },
+    {
+     "id": "T29-test",
+     "summary": "Done: two plan-delta runs on different blocks write two bundles, the first left whole; a test red without it",
+     "class": "within",
+     "why": "Enforcement of the requested fix; nothing beyond it."
     }
    ]
   }

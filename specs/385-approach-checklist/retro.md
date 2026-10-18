@@ -408,3 +408,15 @@ today, and now it would be refused). **The habit it changes:** none.
 
 About 15 min (one plan round). `owe` printed the heading it asked for to the minute and then judged it to the second, so a
 block written as told could not pass; found when the ticks of T05 and T22 refused. **The habit it changes:** none.
+
+## T28 - the retro row
+
+About 50 min (four plan rounds). The arbiter asked for the claim on every number an ask names; rounds 1-3 each found a way a
+number reached the arbiter without it (words only, an "unmatched" row, then my own item 4 calling `BUNDLE_PITCH` the farmstead
+pitch). Built: claims by identifier, and by value for a number in words, or "no claim states it". **The habit it changes:** check
+an Approach premise against the record before it goes to review - round 3 was a premise I had not checked.
+
+## T29 - the retro row
+
+About 15 min (one plan round). Each plan review now writes its bundle at its own path, keyed by its tasks and its blocks'
+digest, so a second review is built while one reads. **The habit it changes:** none.
