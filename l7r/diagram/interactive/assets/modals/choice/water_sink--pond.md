@@ -16,9 +16,9 @@ Guesses:
 - That a settlement's drain ends in a pond about two times in three: no source counts where drains ended.
 
 Depiction: The map ends the drain in a pond at the foot of the field, with a fringe of reeds on wet ground at its shore and a
-bare embankment beyond them; placing the pond there is how the map ends the drain, a drawing convention rather than a
-surveyed example. Like every drain on the map, it is drawn at its true width, narrow at its head and widening to its
-outfall.
+bank beyond them, bare on some maps and on others planted sparsely with mulberry and cudrania trees, the cudrania drawn a shade darker so the two read apart.
+Like every drain on the map, it is drawn at its real width, about 1.2 ft across at its head and widening to about 5.5 ft at its
+outfall, except that its head is drawn a little wider, at 1.5 ft, so it does not vanish from the map.
 
 Name: Drain into a pond below the fields
 Covers: `meta.water_sink = pond`

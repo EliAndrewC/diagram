@@ -7,10 +7,10 @@ The same manual has the farmer give up two or three parts in every ten of a high
 Guesses:
 - That the pond stands at this corner rather than another, or midway along an edge: no source says where on a village's high ground its pond lay, so the place is chosen by chance among those above the fields.
 
-Depiction: The map draws the pond just beyond the northeast corner of the fields, uphill of them, and the water comes into the fields there. A pond is only ever drawn where its water could run down onto the fields: one below the fields it feeds is never drawn, because water does not run uphill. Reeds stand on wet ground at the pond's shore, and one ditch leaves it for the fields.
+Depiction: The map draws the pond just beyond the northeast corner of the fields, uphill of them, and the water comes into the fields there. The pond that waters the fields is only ever drawn where its water could run down onto them: one below the fields it feeds is never drawn, because water does not run uphill. Reeds stand on wet ground at the pond's shore, and one ditch leaves it for the fields.
 
 Name: Water from a pond at the northeast corner
 Covers: `meta.water_source_position = corner_NE`
 Sources: tabayashi-1987, chenfu-nongshu-juanshang, kotobank-chenfu-nongshu, kagawa-tameike-structure, inamino-tameike-museum, maff-tameike-shizen, beitang-studies
 Entry: research/questions/0061-reservoir-ponds-tameike.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html
-Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0061-reservoir-ponds-tameike.drawing.html
+Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0061-reservoir-ponds-tameike.drawing.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html

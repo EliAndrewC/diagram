@@ -7,7 +7,7 @@ The same manual has the farmer give up two or three parts in every ten of a high
 Guesses:
 - That the pond stands at this corner rather than another, or midway along an edge: no source says where on a village's high ground its pond lay, so the place is chosen by chance among those above the fields.
 
-Depiction: The map draws the pond just beyond the southwest corner of the fields, uphill of them, and the water comes into the fields there. A pond is only ever drawn where its water could run down onto the fields: one below the fields it feeds is never drawn, because water does not run uphill. Reeds stand on wet ground at the pond's shore, and one ditch leaves it for the fields.
+Depiction: The map draws the pond just beyond the southwest corner of the fields, uphill of them, and the water comes into the fields there. The pond that waters the fields is only ever drawn above them: a water source below the fields it feeds is never drawn, because water does not run uphill. Reeds stand on wet ground at the pond's shore, and one ditch leaves it for the fields.
 
 Name: Water from a pond at the southwest corner
 Covers: `meta.water_source_position = corner_SW`

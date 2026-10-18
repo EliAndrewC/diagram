@@ -10,8 +10,8 @@ waterlily floated on its open water. The embankment above was kept free of them:
 cattle, and planted with a few mulberry trees to shade them. When a pond was drained, its rich mud went onto the
 vegetable fields and its fish were eaten.
 
-The largest ponds covered several hectares (a hectare is about 2.5 acres); the smallest, about 33 ft on a side, were
-kept by one owner. The manual gave a pond two or three parts in every ten of the field it watered.
+A small pond might water about 25 acres (10 ha) of paddy; the largest in Japan watered some 11,000 acres. The largest ponds covered several hectares (a hectare is about 2.5 acres); the smallest, about 33 ft on a side, were
+kept by one owner; a larger pond could serve several villages, which took its water in turns when it ran low. The manual had the farmer give two or three parts in every ten of his land to the pond, so that it was a quarter to over two-fifths the size of the field it watered.
 
 Guesses:
 - That a pond with a stream also feeding its fields is drawn smaller than the manual's two or three tenths, and how much
@@ -32,6 +32,6 @@ fields it watered.
 
 Name: pond
 Covers: `pond` - the tameike
-Sources: tameike-jawiki, inamino-tameike-museum, inamino-saraike, tabayashi-1987, chenfu-nongshu-juanshang, kotobank-chenfu-nongshu, maff-tameike-shizen, seitai-kobo-kaibori-2017
-Entry: research/questions/0061-reservoir-ponds-tameike.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html, research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html, research/questions/0060-field-drains-akusuiro.html [water_sink=pond][field_archetype=valley_paddy|contour_terraces|ribbon_valley]
+Sources: tameike-jawiki, inamino-tameike-museum, inamino-saraike, tabayashi-1987, chenfu-nongshu-juanshang, kotobank-chenfu-nongshu, maff-tameike-shizen, seitai-kobo-kaibori-2017, mdpi-kunisaki
+Entry: research/questions/0061-reservoir-ponds-tameike.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html, research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html, research/questions/0062-sharing-water-between-villages-bunsui.html, research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html, research/questions/0060-field-drains-akusuiro.html [water_sink=pond][field_archetype=valley_paddy|contour_terraces|ribbon_valley]
 Drawing: research/questions/0061-reservoir-ponds-tameike.drawing.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html, research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html, research/questions/0060-field-drains-akusuiro.drawing.html [water_sink=pond][field_archetype=valley_paddy|contour_terraces|ribbon_valley]

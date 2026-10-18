@@ -1,7 +1,7 @@
 About: In Song-dynasty China, a farmer who dug a pond was advised to plant its bank sparsely with mulberry and
 cudrania, so that cattle could be tied there in the shade, and the cattle trod the bank firm.
-The same pond's bank could also be left bare, as ponds' banks are kept today, mown and burned to keep their
-strength.
+Today a pond's bank is kept bare instead, mown and burned to keep its
+strength; whether banks were kept bare before modern times is not recorded.
 
 Where a hamlet's pond has the planted bank, a few mulberry and cudrania trees stand on it, beyond the
 reeds at the shore.

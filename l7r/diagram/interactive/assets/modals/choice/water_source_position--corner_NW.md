@@ -13,4 +13,4 @@ Name: Water from a pond at the northwest corner
 Covers: `meta.water_source_position = corner_NW`
 Sources: tabayashi-1987, chenfu-nongshu-juanshang, kotobank-chenfu-nongshu, kagawa-tameike-structure, inamino-tameike-museum, maff-tameike-shizen, beitang-studies
 Entry: research/questions/0061-reservoir-ponds-tameike.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html
-Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0061-reservoir-ponds-tameike.drawing.html
+Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0061-reservoir-ponds-tameike.drawing.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html

@@ -8,10 +8,10 @@ Guesses:
 - That a small village keeps a chain of ponds rather than one reservoir: the stacked pond is a named form, but no source shows one at a single village's scale.
 - That the water comes in midway along the high edge rather than at a corner: no source says where on a village's high ground its ponds lay, so the place is chosen by chance among those above the fields.
 
-Depiction: The water comes into the fields just beyond the middle of their high edge, uphill of them. A pond is only ever drawn where its water could run down onto the fields: one below the fields it feeds is never drawn, because water does not run uphill.
+Depiction: The water comes into the fields midway along their high edge, uphill of them. The pond that waters the fields is only ever drawn where its water could run down onto them: a source below the fields it feeds is never drawn, because water does not run uphill.
 
 Name: Water down a chain of ponds
 Covers: `meta.water_source_position = chain`
 Sources: tameike-jawiki, tabayashi-1987, pwsannong-changteng-jiegua, kagawa-tameike-structure
 Entry: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html, research/questions/0061-reservoir-ponds-tameike.html
-Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0061-reservoir-ponds-tameike.drawing.html
+Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html, research/questions/0061-reservoir-ponds-tameike.drawing.html

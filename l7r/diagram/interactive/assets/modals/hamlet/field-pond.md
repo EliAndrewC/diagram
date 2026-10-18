@@ -15,7 +15,7 @@ in a valley whose stream watered every plot, to the dense pond country of a dry 
 Guesses:
 - How often a field keeps a pond, a little over half the time where it has low plots: no count of ponds per field or per
   village was found, and the dense pond country of Kagawa bounds it only from above.
-- How large a field pond is: no page gives the size of a pond sunk in one plot, so the map fits it to the low plot it sits
+- How large a field pond is: the record gives only the smallest ponds, about 33 ft (10 m) on a side, and a twelfth-century Chinese manual's pond of two or three parts in ten of its field, and no pond-to-field ratio for Japan before modern times was found, so the map fits it to the low plot it sits
   in, as large as the plot holds clear of its bunds.
 - How much of the pond is open water, and how wide the belt of reeds at its shallow edge: no page gives a dish pond's
   proportions, so the map draws the open water across about three quarters of the pond and the reeds in a ring between
