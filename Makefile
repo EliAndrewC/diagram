@@ -430,6 +430,8 @@ verify:         ## [tests] THE PAIRED RUN: start the gate and dispatch the settl
 	  else \
 	    mirror=""; case "$$root" in */.clones/*) mirror="$${root%%/.clones/*}";; esac; \
 	    : "GUARD_EDIT_OK: feature 248 - ONE AGENT PER MAP, and the tooling writes each prompt (GM 2026-09-14: whatever the tooling is doing to kick off reviews should make the correct thing happen automatically). The old one-line instruction naming every map was followed literally on feature 247 - one agent, four maps, serialized, 11 of 36 minutes - so the snapshot script now writes <map>/dispatch.md per map and the pair guard refuses a dispatch naming more than one."; \
+	    : "GUARD_EDIT_OK: feature 385 T26 - render first: a pool roll writes no renders, and a review must not read an absent or stale one"; \
+	    for gen in $$(python3 "$$root/scripts/reviews/review_snapshot.py" --root "$$root" --stale-renders $$maps); do printf 'verify: rendering %s (its render was missing or older than its map)\n' "$$gen"; $(MAKE) --no-print-directory map GEN="$$gen" >/dev/null || { printf 'verify: make map GEN=%s failed - run it by hand, then make verify again\n' "$$gen" >&2; exit 2; }; done; \
 	    snap=$$(python3 "$$root/scripts/reviews/review_snapshot.py" --root "$$root" $${mirror:+--mirror "$$mirror"} --key "$$(cat "$$root/.git/pairing-key" 2>/dev/null)" $$maps); \
 	    n=$$(printf '%s\n' $$maps | wc -l); \
 	    printf 'owed: %s\n%s\n' "$$why" "$$snap"; \
