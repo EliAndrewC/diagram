@@ -91,3 +91,11 @@ def test_a_house_crowded_by_an_edit_is_counted() -> None:
     trial = {**M, "lanes": [*lanes[:3], {**lanes[3], "pts": [[x, y] for x, y in moved]}]}
     tw = [*ways[:3], moved]
     assert ends.trial(trial, lanes, ways, tw, [3]) == len(law.doorstep_ends(trial))
+
+
+def test_a_web_with_no_house_discharges_nothing() -> None:
+    lanes = [{"pts": [[0.0, 300.0], [-80.0, 300.0]], "w": 6.0, "connector": True}, {"pts": [[0.0, 0.0], [50.0, 50.0]], "w": 3.0}]
+    M = {"lanes": lanes, "houses": []}
+    ways = [_pts(ln) for ln in lanes]
+    ends = WebEnds(M, lanes, ways)
+    assert ends.count() == 0 and ends.trial_counts(M, lanes, ways, ways, [1]) == {}

@@ -121,25 +121,20 @@ def chain_of(recs: Sequence[Mapping[str, Any]], host: Sequence[int | None], i: i
     return out
 
 
-def lanes_of(
-    M: Mapping[str, Any], recs: Sequence[Mapping[str, Any]], host: Sequence[int | None], chosen: Sequence[int], drawn: bool = True, square: Any = None, laid: Any = None
-) -> list[dict[str, Any]]:
+def lanes_of(M: Mapping[str, Any], recs: Sequence[Mapping[str, Any]], host: Sequence[int | None], chosen: Sequence[int], drawn: bool = True, square: Any = None) -> list[dict[str, Any]]:
     """The tree lanes for the runs `chosen` (their chains' closure taken by the caller), squared at their water crossings as
     the web draws every lane (`settle.square_run`, or `square` - the seating's `Lawful.squared`, the same answer asked only
-    where water comes near, and remembered per run). `laid`, where given, is the whole of that - a run
-    rejoined (`rejoined`) and squared - as the seating remembers it per run (`admits`).
+    where water comes near, and remembered per run). The seating's tree lays its runs one at a time on a kept base
+    (`tree_base`, feature 387), each through `lane_record`.
 
     Research:
         tree lane tread by role - research/questions/0081-village-lanes.drawing.html: house access 3 ft
         tree lanes assembled - NONE: the runs squared and set on their hosts as the web draws them"""
-    if laid is not None:
-        sq = laid
-    else:
-        raw_sq = square if square is not None else (lambda run: square_run_of(M, run))
-        waters = square_waters_of(M)
+    raw_sq = square if square is not None else (lambda run: square_run_of(M, run))
+    waters = square_waters_of(M)
 
-        def sq(run: Poly) -> Poly:
-            return raw_sq(rejoined(run, waters))
+    def sq(run: Poly) -> Poly:
+        return raw_sq(rejoined(run, waters))
 
     out: list[dict[str, Any]] = []
     root = _root(M)

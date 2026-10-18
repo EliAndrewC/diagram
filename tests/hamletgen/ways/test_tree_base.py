@@ -82,3 +82,22 @@ def test_needles_with_is_needle_loops_on_the_changed_web() -> None:
         grown = [*changed, added]
         moved.append([(float(p[0]), float(p[1])) for p in added["pts"]])
         assert faces.needles_with(grown, moved) == len(law.needle_loops({"lanes": grown})), seed
+
+
+def test_with_no_house_standing_no_end_is_discharged() -> None:
+    ends = Ends([])
+    lane = {"pts": [[0.0, 0.0], [100.0, 0.0]], "w": 3.0}
+    ends.add(0, lane, {"houses": [], "lanes": [lane]})
+    new = {"pts": [[0.0, 50.0], [100.0, 50.0]], "w": 3.0}
+    assert ends.with_one_more(1, new, None, {"houses": [], "lanes": [lane, new]}) == {}, "no house, none discharges an end"
+
+
+def test_a_web_changed_nowhere_keeps_its_needle_count() -> None:
+    lanes = [
+        {"pts": [[0.0, 0.0], [100.0, 0.0]], "w": 3.0},
+        {"pts": [[0.0, 3.0], [100.0, 3.0]], "w": 3.0},
+        {"pts": [[0.0, -5.0], [0.0, 10.0]], "w": 3.0},
+        {"pts": [[100.0, -5.0], [100.0, 10.0]], "w": 3.0},
+    ]
+    faces = Faces(lanes)
+    assert faces.needles_with(lanes, []) == faces.count() == len(law.needle_loops({"lanes": lanes})) == 1

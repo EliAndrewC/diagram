@@ -19,4 +19,3 @@ def test_a_sweep_takes_its_default_or_the_widened_count(monkeypatch: pytest.Monk
 def test_make_sweep_widens_through_the_environment() -> None:
     make = (pathlib.Path(__file__).resolve().parents[1] / "Makefile").read_text()
     assert "\nsweep:" in make and "L7R_SWEEP_SEEDS=$(SEEDS)" in make
-

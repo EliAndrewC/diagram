@@ -166,3 +166,9 @@ def test_the_field_runs_are_the_old_forms_whole_measure_on_random_networks() -> 
             fords = [(brook[1][0], rng.uniform(-300, 300)) for _ in range(rng.randint(1, 3))]
         limit = rng.choice([1, 3, co.SPUR_TRIES])
         assert co.field_runs(segs, grounds, 2.5, brook, fords, limit) == _old_field_runs(segs, grounds, 2.5, brook, fords, limit), seed
+
+
+def test_no_network_or_no_ground_gives_no_field_run() -> None:
+    paddy = WorkedGround([[(200.0, -100.0), (400.0, -100.0), (400.0, 100.0), (200.0, 100.0)]])
+    assert co.field_runs([], [paddy], 2.5) == [], "no network: no point to leave it from"
+    assert co.field_runs([((0.0, 0.0), (0.0, 50.0))], [WorkedGround([])], 2.5) == [], "no worked ground: nothing to run on to"

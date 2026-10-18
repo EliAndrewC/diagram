@@ -28,13 +28,14 @@ def _old_admits(base: Any, M: Mapping[str, Any], run: Any, role: str, house: Any
         _dedup,
         _pt,
         _root,
+        _rounded,
         _trial,
         as_joined,
         chain_of,
         hosts,
         laid_run,
+        lane_record,
         lanes_chain,
-        lanes_of,
         tree_records,
         tree_shadows,
         walked_shadows,
@@ -56,7 +57,10 @@ def _old_admits(base: Any, M: Mapping[str, Any], run: Any, role: str, house: Any
     chain = chain_of(recs, host, k)
     whole = [*range(k), k]
     for ctx in (whole, [*reversed(chain[1:]), k]):
-        lanes = lanes_of(M, recs, host, ctx, drawn=False, laid=lambda r: laid_run(base, M, r))
+        drawn_of = {-1: root} if root is not None else {}  # `lanes_of` as it was, each run laid as the seating remembers it
+        for i in ctx:
+            drawn_of[i] = _rounded(laid_run(base, M, recs[i]["pts"]))
+        lanes = [lane_record(recs[i], drawn_of[i], drawn_of.get(host[i]) if host[i] is not None else None) for i in ctx]
         new = lanes[-1]
         law_.M = _trial(view, lanes=[*lanes[:-1], *stub])
         if not law_(new["pts"], float(new["w"])):

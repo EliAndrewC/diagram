@@ -144,3 +144,17 @@ def test_the_index_tests_fewer_items_than_the_scan() -> None:
     near = StripNear(s, lanes)
     total = len(s.placed) + len(s.M["houses"]) + sum(len(p) - 1 for p, _h in lanes) + len(s.M["tree_crowns"]) // 3
     assert near.count(1000.0, 1000.0, 22.0, 16.0) < total / 4
+
+
+def test_a_registry_changed_mid_pass_is_caught_under_the_suite(monkeypatch) -> None:
+    """Plan D5: the index files the houses, the other kinds, the crowns and the lanes once; under `L7R_CHECK_CACHES` a query after
+    one of them changed raises rather than answering from what was filed."""
+    import pytest
+
+    monkeypatch.setenv("L7R_CHECK_CACHES", "1")
+    s, lanes = _scene(9)
+    near = StripNear(s, lanes)
+    near.check()
+    s.M["houses"].append({"x": 900.0, "y": 900.0, "w": 40.0, "h": 28.0, "rot": 0.0})
+    with pytest.raises(AssertionError, match="stale"):
+        near.check()

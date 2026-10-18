@@ -37,13 +37,12 @@ def _seg_items(tag: Any, pts: Sequence[Pt], pad: float) -> list[tuple[Any, ...]]
 
 
 def _near_segs(grid: PointGrid, pts: Sequence[Pt], pad: float) -> list[Any]:
-    """Every item filed in `grid` whose box comes within `pad` of one of `pts`' legs (a superset; the caller's test decides)."""
+    """Every item filed in `grid` whose box comes within `pad` of one of `pts`' legs (a superset; the caller's test decides) -
+    `pts` a way of two points or more, as every caller asks."""
     out: list[Any] = []
     for a, b in zip(pts, pts[1:], strict=False):
         cx, cy = (a[0] + b[0]) / 2, (a[1] + b[1]) / 2
         out += grid.near(cx, cy, max(abs(a[0] - b[0]), abs(a[1] - b[1])) / 2 + pad)
-    if len(pts) == 1:
-        out += grid.near(pts[0][0], pts[0][1], pad)
     return out
 
 

@@ -206,3 +206,17 @@ def test_a_mark_carries_its_tests_id(tmp_path: pathlib.Path, monkeypatch: pytest
     path = tmp_path / "gate-failures"
     assert _gate_failures.mark(types.SimpleNamespace(failed=True, nodeid="tests/test_a.py::test_b"), str(path))
     assert path.read_text().endswith(" test tests/test_a.py::test_b\n")
+
+
+def test_a_coverage_floor_s_modules_and_lines_are_named_in_the_run_record(tmp_path: pathlib.Path) -> None:
+    """The round arbiter's tooling fix on red-gate@2026-10-18T11:42:39Z (feature 387): a gate red on the 100% floor left "? test(s)
+    failed" - the marks `uncovered_marks.py` writes put each module and its missing lines in the record's `failed_names`."""
+    _um = importlib.util.spec_from_file_location("uncovered_marks", REPO / "scripts/measure/uncovered_marks.py")
+    assert _um is not None and _um.loader is not None
+    um = importlib.util.module_from_spec(_um)
+    _um.loader.exec_module(um)
+    report = "Name   Stmts   Miss  Cover   Missing\n-----\nl7r/a.py   10   2   80%   12, 15-16\nl7r/b.py   5   0   100%\nTOTAL   15   2   87%\n"
+    assert um.uncovered(report) == ["l7r/a.py:12, 15-16"]
+    (tmp_path / "gate-failures").write_text("10.000 uncovered l7r/a.py:12, 15-16\n11.000 phase:test-full\n")
+    moments, failed, names = runstats._failure_marks(str(tmp_path))
+    assert names == ["uncovered l7r/a.py:12, 15-16"] and failed == 0 and 10.0 in moments

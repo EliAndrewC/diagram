@@ -1138,7 +1138,8 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 	python3 -m l7r.diagram.ci incremental merge || exit 1; \
 	python3 -m l7r.diagram.ci incremental carry || exit 1; \
 	cov_ec=0; \
-	python3 -m coverage report -m --fail-under=100 || { echo "COVERAGE: a module is under 100% - the table above names it and its missing lines."; cov_ec=1; }; \
+	: "GUARD_EDIT_OK: the round arbiter's tooling fix on red-gate@2026-10-18T11:42:39Z - a floor failure's modules and lines go into the run record (uncovered_marks.py), nothing loosened"; \
+	python3 -m coverage report -m --fail-under=100 || { echo "COVERAGE: a module is under 100% - the table above names it and its missing lines."; cov_ec=1; python3 scripts/measure/uncovered_marks.py || true; }; \
 	L7R_ROLL_CENSUS="$(ROLL_CENSUS)" python3 -m l7r.diagram.tools.hamlet_floor || cov_ec=1; \
 	rc_mode=$$(python3 -m l7r.diagram.ci incremental mode 2>/dev/null || echo full); \
 	L7R_ROLL_CENSUS="$(ROLL_CENSUS)" python3 -m l7r.diagram.ci rollcensus verdict $$([ "$$rc_mode" = full ] && echo full) || cov_ec=1; \
