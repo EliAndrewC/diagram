@@ -51,7 +51,7 @@
    "declared": "spec-fidelity"
   },
   "## Landing": {
-   "sha256": "f24d029becb500fbb420c1861b2370d042f97693068b5785906f0a417e5c47e8",
+   "sha256": "50363d82d39667eef4c60287ef5db00067dec3ddb1a43bd709bbba79bab7b42e",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -616,6 +616,30 @@
   },
   "### T44 Decisions": {
    "sha256": "40c93c6a6ccb99370fa077fec41d053d33637ddf3fc822df4048efe7a0cf80bf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T08 - a pond's bank planted sparsely with mulberry and cudrania, or bare (the ranking row `hamletgen/sink.py::lay_sink#pond bank form`)": {
+   "sha256": "6b44baa4023e5b4e4f9f1fe5362ad9df0ba7ae862baf4f06ec3a76b1d574c7bf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T08 Approach (checklist part A)": {
+   "sha256": "ab867412f336c125e011001c2edc311db080eae13ee1da39c727723d83d69270",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T08 part B (2026-10-18T16:31Z)": {
+   "sha256": "f4dd3e096ab8cc57893ae48d583a978dcc6260a726b9c4ad07b652c34a6b16f5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T08 Decisions": {
+   "sha256": "fb86d0ebd94d1fc85bea3e16a027b1e98854ca5c2e740dc0f8e055059e5b7dba",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -3871,6 +3895,73 @@
      "summary": "T44 (the arbiter's tooling fix on hour:385-approach-checklist@16) is added to the Lands open line on the same terms.",
      "class": "within",
      "why": "A tooling fix taken as its own task serves Amendment 6 ('Please make sure to implement any obvious performance / tooling / process improvements along the way') and the feature's purpose (Request: measure each task and improve the process between them); landing it per-task under FR-006 is the block's existing rule extended to a new task, with no requirement dropped or weakened."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing",
+    "## T08 - a pond's bank planted sparsely with mulberry and cudrania, or bare (the ranking row `hamletgen/sink.py::lay_sink#pond bank form`)",
+    "### T08 Approach (checklist part A)",
+    "### T08 Decisions",
+    "### T08 part B (2026-10-18T16:31Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing/T46",
+     "summary": "T46 added to the tasks that land open, each on main before the next starts.",
+     "class": "within",
+     "why": "The only change from the CLEAR text is one more task under the same per-task landing that FR-006 and the GM's 'do one task and then we measure' require; it changes no task's scope."
+    },
+    {
+     "id": "T08-A (part A)",
+     "summary": "Goal: a tail pond's bank bare or sparsely planted with mulberry and cudrania, rolled per map; trees seated late, after the ways, around the outside of the reed fringe; spacing ours (GUESS), a knob band and never a target; one done-goal; 3 h budget.",
+     "class": "within",
+     "why": "This carries out the ranking row as quoted and answers the checklist the GM asked for (where each number comes from, with the spacing labeled ours and treated as a knob). It has one goal (amendment 4) and seats the trees after the houses and ways, which follows the GM's 'homesteads before lanes' purpose."
+    },
+    {
+     "id": "T08-B carry",
+     "summary": "The four older _OVERLAP_EXEMPT drifts that the added key re-opened are carried into T43, and T08 lands under CLAIMS_OK.",
+     "class": "within",
+     "why": "These are findings on unchanged older entries. Amendment 3 (option three, 'never block on unchanged code; the gate files the finding as an open task'), carried out as FR-013, rules exactly this: carried to an open task the feature cannot close without, not refused and not dropped. The arbiter's `continue` ruling stands where the GM was asked (feature 379)."
+    },
+    {
+     "id": "T08-B keying",
+     "summary": "Per-entry keying of the claims record is declined as a T08 change and put to the GM's review as an overhaul.",
+     "class": "within",
+     "why": "Nothing the GM asked is narrowed. Amendment 6 asks for 'obvious' tooling improvements along the way; an overhaul of the claims record is not obvious, and putting it to the GM instead of building it unasked keeps the scope where it is."
+    },
+    {
+     "id": "T08-B research reading",
+     "summary": "The bank mulberry is held to the canopy sun rule as 0061's shade tree for cattle, not 0038's field bush; the trunk rule is labeled UNRESEARCHED.",
+     "class": "within",
+     "why": "This is a sourcing and labeling decision answered by checklist questions A1-A3 (research versus ours), which is the practice the GM's request asks for. It narrows nothing that was asked."
+    },
+    {
+     "id": "D60",
+     "summary": "POND_BANKS knob (bare, planted), rolled per hamlet from the seed at even odds (GUESS), with a spec override and recorded in meta; only a hamlet whose sink is a pond rolls it.",
+     "class": "within",
+     "why": "The ranking row asks for a knob rolled between the two forms. The pond-only limit is not a carve-out: an off-map sink has no bank to plant."
+    },
+    {
+     "id": "D61",
+     "summary": "New stage after lane wells and before hinterland; seats walked round the reed fringe's outer ring at a GUESS pitch; a seat is kept only where its crown is clear of buildings, wellheads and ways and its trunk is off crop and water; a ring with no free seat draws none, and that is recorded.",
+     "class": "within",
+     "why": "The trees are placed after what already stands and never force anything to move, which is the GM's own principle (nothing moves for a later feature, and no packing search). A free-seat-only rule is not an exception to 'drawing its trees': part B measured every planted bank in the pool and the rolled seeds holding every seat free, and an empty ring is recorded rather than hidden."
+    },
+    {
+     "id": "D62",
+     "summary": "The dike's standard tree as the mark, with a GUESS crown; held to the thin_planted_trees sun rule; amended so the crown is recorded in tree_crowns for the structure tests; mulberry and cudrania alternate (GUESS); a new 'pond-bank tree' feature class carries the pop-up.",
+     "class": "within",
+     "why": "This draws the trees the row asks for, with each guess labeled. Recording the crown where the structure tests read it only enforces the no-overlap requirement and adds no new behavior. The pop-up is the project's standing obligation for a new element."
+    },
+    {
+     "id": "D63",
+     "summary": "0061's 'not drawn yet' bullet becomes the knob's own record line, with the pitch, crown and alternation labeled GUESS, written by a page session and then checked.",
+     "class": "within",
+     "why": "This updates the record to match the drawn element the row asks for, and adds nothing beyond it."
     }
    ]
   }

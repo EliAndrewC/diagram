@@ -156,7 +156,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46
 
 ## T02 - the tooling: the Approach block required, the triggers, the split, and the check costs T01 measured (FR-003 to FR-005, FR-008 to FR-011)
 
@@ -1463,6 +1463,29 @@ says so, since parallel sessions can sum past the hour. With `--transcript` (a r
    reeds, clear of every house, way, crop and water; the knob recorded in the manifest; tests red without the knob and the seat
    rule.
 
+### T08 part B (2026-10-18T16:31Z)
+
+Owed by the hour-17 step-back (hour:385-approach-checklist@17, `continue`, ruled 15:53Z); the ask ask:t08-overlap-exempt-drifts
+(`continue`) ruled on the claims left at landing.
+
+1. **What is refusing?** Nothing on the maps: the pool rolls clean, the cohort holds 54/54, both forms come up (seeds 4, 9, 11
+   planted with 30 trees each, seed 7 bare; Inashiro planted 30, Mizuguchi 24). Claims round 1 found the drawing page behind the
+   code (the page session brought it up), the bank mulberry held to the canopy sun rule though 0038 exempts field mulberry (the
+   claim now reads 0061's shade tree for cattle - a tree, not a trained bush), the trunk rule labeled plumbing (now UNRESEARCHED),
+   and four older `_OVERLAP_EXEMPT` drifts re-opened by the one added key (carried into T43).
+2. **A3 again.** Unchanged: the two forms 0061's (R); even odds, the pitch, the crown, the alternation ours (GUESS); the two greens
+   CONVENTION.
+3. **A4 again.** Measured: every planted bank in the pool and the six rolled seeds held every seat free - the tail pond stands
+   below the fields, away from the farms.
+4. **Moving something earlier for something later?** No - the trees are seated after the houses, ways and wells.
+5. **Tuning or changing?** Changing: a new element on its knob.
+6. **The one-sentence test.** "A tail pond's bank is bare or planted sparsely with mulberry and cudrania, rolled" - true on the
+   pool and the rolled seeds.
+7. **The next step is a measurement.** Claims round 2, the gate, the glyph check, the landing cohort.
+8. **Routes measured before asking?** Yes - the ask carried the pool and cohort.
+9. **After a ruling.** `continue`: carry the four into T43, land under CLAIMS_OK; the per-entry keying declined to the GM's review
+   (an overhaul of the claims record).
+
 ### T08 Decisions
 
 **D60 - the knob.** `POND_BANKS = ("bare", "planted")` in `consts.py`, rolled per hamlet from the seed (`_roll(seed, "pond_bank",
@@ -1479,8 +1502,10 @@ farmstead trees already use (`_canopy_keepouts`, the lanes' treads) - so no tree
 draws none, recorded (`meta.pond_bank_trees`).
 
 **D62 - the mark, the record and the pop-up.** Each tree is the dike's standard tree (a crown of `POND_BANK_CROWN_FT`, a GUESS from
-the habit of a pollarded mulberry; the mark CONVENTION), drawn through `_plant_run` so `thin_planted_trees` takes out any in a
-yard's or bed's sun (0038), its crown in `tree_crowns` so `structures_clear_of_trees` sees it. Mulberry and cudrania alternate
+the habit of a pollarded mulberry; the mark CONVENTION), held at seating to the sun rule `thin_planted_trees` applies (0038: a
+canopy tree; the bank mulberry is 0061's shade tree for cattle, not 0038's field bush) - amended at implementation: `_plant_run`
+records a tree only in `planted_trees`, which `structures_clear_of_trees` does not read - its crown in `tree_crowns` so the
+structure tests see it, the trees with their kinds in `pond_bank_trees`. Mulberry and cudrania alternate
 round the ring (0061 names both; the alternation is ours, GUESS), the cudrania a shade darker. A new feature class, "pond-bank
 tree", carries the pop-up (its About from 0061, its Depiction the mark, its Guesses the pitch, the crown and the alternation).
 

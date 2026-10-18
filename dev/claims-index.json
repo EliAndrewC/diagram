@@ -16738,14 +16738,19 @@
  },
  "l7r/diagram/hamletgen/pondbank.py::seat_free#no trunk on a way, crop or water": {
   "body": "4aa07b32bd0dbd8a",
-  "claim": "no trunk on a way, crop or water - NONE: a tree stands on open ground",
-  "code": "51cb9322cb2fa75f",
+  "claim": "no trunk on a way, crop or water - reservoir-ponds-tameike.drawing: a tree left out where its trunk would stand on a lane, the crop or the water - off every tread, paddy, dry plot and marsh, and a stream's half-width and a foot",
+  "code": "d14e7116a408f810",
   "core": "1b6be475ac108ee7",
   "date": "2026-10-18",
-  "note": "this is a placement rule, not plumbing: trunk off treads, paddy, dry plots, the reed marsh, and streams by w/2+1. Label it UNRESEARCHED; the reed-marsh exclusion can cite 0061",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "the drawing page's rule is to leave a tree out where its trunk would stand on a lane, the crop or the water, and the code does that: it rejects a trunk seat on a tread, inside a field, dry plot or marsh, or within a stream's half-width plus a foot. The pond itself is not checked here; the page puts the bank trees beyond the reed fringe, so placement elsewhere keeps them off the pond.",
+  "pages": {
+   "0061-reservoir-ponds-tameike.drawing.html": "c22de534b95132ef"
+  },
+  "research": "5b102e334372ecb3",
+  "rests": [
+   "0061-reservoir-ponds-tameike.drawing.html:9ba649087fb63da1"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondbank.py::seat_free#out of the plots' sun": {
   "body": "4aa07b32bd0dbd8a",
