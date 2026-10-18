@@ -217,7 +217,8 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 
 ## Amendment 8
 
-- [ ] T58 The bundle's request trimmed to the amendments its blocks answer (plan D51) (SC-035)
+- [x] T58 The bundle's request trimmed to the amendments its blocks answer (plan D51) (SC-035)
       research: rendering
+      verify: DONE. verified: test_plan_bundle_request 6/6, test_plan_blocks 7/7; 383's own bundle request 21,301 -> 8,632 chars + 1,168 index (R22); spec FAITHFUL r2, plan CLEAR r2
 - [ ] T59 Close: the checks, the report, landed
 
