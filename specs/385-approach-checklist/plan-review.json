@@ -4722,6 +4722,20 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T09": {
+   "section_sha256": "5a06c4322791f13803afbbcf3a14d3d362af963cde6819e397734176273f374f",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D73",
+     "summary": "BUNDLE_PITCH keeps 100 ft; its claim is conformed from 'row pitch - 0038' (MISLABELED) to 'the along-row span - UNRESEARCHED', naming stages._rank_step (envelope depth + max(lane room, SUN_CORRIDOR_FT 39 ft)) as the row-to-row step that carries 0038's 92 ft; comments calling it the row pitch or a homestead's ground are corrected; no map changes",
+     "class": "within",
+     "why": "The GM asked for ranking rows (claims) to be taken so the code matches the research (request: 'about five ranking rows', amendment 7 'pull in 10 more claims'). The research figure is 0038's rows 92 ft apart; the plan says the row-to-row step is already _rank_step (house + yard + 39 ft sun, about 93 ft per 0038's own words) and that BUNDLE_PITCH is the along-row and grid span, so the research is met and the defect is the label. The ranking row's '100 -> 92' prescription is the ranking's own suggested fix, not the GM's words; the plan's measurement (2026-10-18, BUNDLE_PITCH at 92: rows unchanged, cohort 52/54 with seeds 17 and 43 regressing) shows that prescription would not move the rows at all, so following it would not serve the purpose. Choosing 'conform the label' among named exits is what the GM-approved checklist asks for, and recording BUNDLE_PITCH honestly as UNRESEARCHED narrows nothing the GM asked. The ranking row's re-derive of HOMESTEAD_GROUND_FT and WEB_REACH_FT ties is consequential on a number move that does not happen; the plan still states each one's source (WEB_REACH_FT 0246, HOMESTEAD_GROUND_FT UNRESEARCHED)."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

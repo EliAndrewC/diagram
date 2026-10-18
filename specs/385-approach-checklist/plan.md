@@ -1557,6 +1557,38 @@ tree", carries the pop-up (its About from 0061, its Depiction the mark, its Gues
 **D63 - the record.** 0061's drawing bullet "A bank with a few trees on it is not drawn yet" becomes the knob's own: both forms are
 rolled, the pitch, crown and alternation labeled GUESS - written by a page session, then its checks.
 
+## T09 - the hamlet's row pitch is 0038's sum, and `BUNDLE_PITCH` is no row pitch (the ranking row `hamletgen/consts.py::BUNDLE_PITCH#row pitch`)
+
+### T09 Approach (checklist part A)
+
+1. **The goal, in the world.** A hamlet's rows of houses stand 92 ft apart, as 0038 sets them, and the record says which number
+   does that.
+2. **The constraints.** The ranking row ("BUNDLE_PITCH 100.0 -> 92.0 (0038: rows set 92 ft apart); re-derive HOMESTEAD_GROUND_FT
+   and WEB_REACH_FT ties"); room before packing; no known regression (XIII).
+3. **Where each comes from.** 92 ft is 0038's (R: "Rows are set 92 ft apart, and a house (28 ft deep), its yard (about 26 ft) and
+   39 ft of sun come to about 93 ft"). The hamlet's rank-to-rank step is `stages._rank_step` - an envelope's depth plus the larger
+   of the lane's room and `SUN_CORRIDOR_FT` (39 ft, 0038) - already claimed on 0038 as "the page's rows 92 ft apart". `BUNDLE_PITCH`
+   (100, ours, O) is the step ALONG a row (`seats.front_row`'s offers), a homestead's floor in the row aspect, the capacity grid
+   and its exclusion radius, the web's doubled-run and tie spans - none of them the distance between rows. `WEB_REACH_FT` is 0246's
+   "within 100 ft"; `HOMESTEAD_GROUND_FT` (104) the band, UNRESEARCHED.
+4. **Do they describe the world here?** Measured 2026-10-18: moving `BUNDLE_PITCH` itself to 92 - pool clean, cohort 52/54 (seed 17
+   refused at the web, seed 43 seated 10 of 14) - shrinks the along-row and grid spans, not the rows; and the row-to-row step
+   already follows 0038 through `_rank_step`.
+5. **The order.** The claim relabeled; the claims checked; no map changes.
+6. **The exits.** (e) conform the label: the code already does what the research says, through another number.
+7. **The search smell.** None.
+8. **The budget.** 45 min.
+9. **Done, measured.** One goal: `BUNDLE_PITCH`'s claim says what it is - the along-row and grid span, UNRESEARCHED - and names
+   `_rank_step` as the row pitch on 0038; the claims check IN-STEP; no map changes.
+
+### T09 Decisions
+
+**D73 - the label conformed, not the number.** `BUNDLE_PITCH` keeps 100 ft. Its claim "row pitch - 0038: 100 ft, house, yard and
+the yard's 39 ft of sun" - MISLABELED, since the row-to-row step is `_rank_step` and 0038 gives 92 - becomes "the along-row span -
+UNRESEARCHED: 100 ft, the step along a row and the grids' spacing; the rows themselves stand `_rank_step` apart, 0038's house, yard
+and 39 ft of sun". The comments that call it "the ground one homestead takes" or "the row pitch" are corrected to match. Moving the
+along-row span is not asked by the research and regressed two seeds when tried, so it stays (room before packing).
+
 ## T45 - a box the round arbiter filed lands open (found by T07's landing)
 
 ### T45 Approach (checklist part A)

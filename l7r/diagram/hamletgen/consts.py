@@ -604,23 +604,27 @@ ROLLED_ARCHETYPES = ("valley_paddy",)
 # seed 18 grew a two-farm satellite 500 px off the nucleus, 777 px from the nearest water against a
 # 760 px reach, with every legal well seat around it already taken by its own two courtyards.
 BUNDLE_PITCH = 100.0
-"""Research: row pitch - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: 100 ft, house, yard and the yard's 39 ft of sun"""
+"""The along-row span: the step between homesteads along a row, and the grids' and the web's spans that borrow it. It is NOT the
+distance between rows: the ranks stand `homesteads.stages._rank_step` apart - a homestead's depth and the yard's 39 ft of sun
+(`SUN_CORRIDOR_FT`), 0038's "rows set 92 ft apart" (feature 385 T09: this claim once called 100 ft the row pitch, on 0038).
+
+Research: the along-row span - UNRESEARCHED: 100 ft, the step along a row and the grids' spacing; the rows themselves stand `_rank_step` apart, 0038's house, yard and 39 ft of sun"""
 
 # THE GROUND ONE HOMESTEAD TAKES, as the side of a square (feature 280 M16 merged into feature 287, 2026-09-29): the seat
 # band's AREA (`plan.band_extent`, `households x HOMESTEAD_GROUND_FT^2`, which also sizes the canvas's room for the seat).
 # It was `BUNDLE_PITCH`, and grows with the yard: 280 moved the rice hamlet's yard median from 18 to 25 tsubo, and at the
 # apron's 1.45 aspect the median yard is sqrt(18 x 35.583 / 1.45) = 21.0 ft deep before and sqrt(25 x 35.583 / 1.45) =
-# 24.8 ft after - 3.8 ft more ground in the row's sum above, so 104. The ROW pitch stays 100: it plans offers the placer
+# 24.8 ft after - 3.8 ft more ground in the row's sum above, so 104. The along-row span stays 100: it plans offers the placer
 # staggers from (and the web's reach is tied to it, `WEB_REACH_FT`). MEASURED (`make cohort N=1 SEED=<n>`; a detached
 # worktree at 287's HEAD passes seed 18): with the band at 100 the merge held 13 of seed 18's 15 households on its best
-# margin and refused the site; with the band at 104 all 15 seat. Raising the row pitch to 104 as well seated seed 18 but
+# margin and refused the site; with the band at 104 all 15 seat. Raising the along-row span to 104 as well seated seed 18 but
 # left one farmhouse off the way network on seeds 11 and 43 - measured and not taken.
 HOMESTEAD_GROUND_FT = 104.0
 """The ground one homestead takes, the pitch the cluster band is sized on.
 
 Research:
     the yard within it - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: 25 tsubo
-    ground per homestead - UNRESEARCHED: 104 ft square, the 100 ft row pitch plus 3.8 ft of yard, cohort-measured
+    ground per homestead - UNRESEARCHED: 104 ft square, the 100 ft along-row span plus 3.8 ft of yard, cohort-measured
 """
 
 # THE GROUND THE SEATING SPREADS ITS HOUSEHOLDS OVER, as the side of a square (feature 306, FR-010; a GUESS with its reasoning -
