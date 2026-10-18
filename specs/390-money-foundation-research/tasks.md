@@ -42,3 +42,6 @@ The four questions are `research: physical` with their five boxes; the rest are 
       research: rendering
 - [ ] T07 Close: report and land
       research: rendering
+- [ ] GM review (make gm-reviewed F=390) [lands-open]
+      research: rendering
+      verify: the GM reviewed every row (make gm-review lists them)
