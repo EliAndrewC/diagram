@@ -675,3 +675,31 @@ def test_with_no_reopening_or_an_older_one_the_first_event_starts_the_hour(clone
     monkeypatch.setattr(hm_approval, "_state_at", lambda *a: calls.append(a[1]) or real(*a))
     owed.feature_start(clone, "999-test")
     assert calls == [], "the kept answer is reused while the directory's newest commit is unchanged"
+
+
+def test_verify_renders_a_map_whose_render_is_missing_or_older_than_the_map(tmp_path: Path) -> None:
+    """Feature 385 T26 (plan D48; the round arbiter's fix on hour:385-approach-checklist@12): a pool roll writes no renders, and
+    `make verify` once wrote three glyph prompts on maps whose `.png` and `.html` were missing."""
+    import os
+    import types
+
+    d = tmp_path / "pool" / "hamlets" / "m"
+    d.mkdir(parents=True)
+    for s in (".gen.py", ".json"):
+        (d / f"m{s}").write_text("x")
+    unit = types.SimpleNamespace(on="m")
+    assert snap.stale_renders(tmp_path, [unit]) == ["pool/hamlets/m/m.gen.py"], "no render at all"
+    for s in (".png", ".html"):
+        (d / f"m{s}").write_text("x")
+    past = time.time() - 60
+    os.utime(d / "m.gen.py", (past, past))
+    os.utime(d / "m.json", (past, past))
+    assert snap.stale_renders(tmp_path, [unit]) == [], "renders newer than the map"
+    os.utime(d / "m.json", (time.time() + 60, time.time() + 60))
+    assert snap.stale_renders(tmp_path, [unit, unit]) == ["pool/hamlets/m/m.gen.py"], "a manifest rolled after its render, listed once"
+    sheet = tmp_path / "pool" / "sheets" / "s"
+    sheet.mkdir(parents=True)
+    (sheet / "s.svg").write_text("x")
+    assert snap.stale_renders(tmp_path, [types.SimpleNamespace(on="s"), types.SimpleNamespace(on="")]) == ["sheet:pool/sheets/s/s.svg"], "a sheet with no generator and no render is listed, to be refused"
+    (sheet / "s.png").write_text("x")
+    assert snap.stale_renders(tmp_path, [types.SimpleNamespace(on="s")]) == [], "...and not once it has one"

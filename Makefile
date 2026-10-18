@@ -132,6 +132,9 @@ verify:         ## [tests] THE PAIRED RUN: start the gate and dispatch the settl
 	    printf '\n\033[1mNO REVIEW CHECK OWED\033[0m: %s (feature 294: a check is owed on its occasion, never because a manifest moved). The gate runs alone; the GM looks at the map.\n' "$$why"; \
 	  else \
 	    mirror=""; case "$$root" in */.clones/*) mirror="$${root%%/.clones/*}";; esac; \
+	    for gen in $$(python3 "$$root/scripts/reviews/review_snapshot.py" --root "$$root" --stale-renders $$maps); do \
+	      case "$$gen" in sheet:*) svg="$${gen#sheet:}"; printf 'verify: %s has no generator and no render - make sheet-render SHEET=%s OUT=%s, then make verify again\n' "$$svg" "$$svg" "$${svg%.svg}.png" >&2; exit 2;; esac; \
+	      printf 'verify: rendering %s (its render was missing or older than its map)\n' "$$gen"; $(MAKE) --no-print-directory map GEN="$$gen" >/dev/null || { printf 'verify: make map GEN=%s failed - run it by hand, then make verify again\n' "$$gen" >&2; exit 2; }; done; \
 	    snap=$$(python3 "$$root/scripts/reviews/review_snapshot.py" --root "$$root" $${mirror:+--mirror "$$mirror"} --key "$$(cat "$$root/.git/pairing-key" 2>/dev/null)" $$maps); \
 	    n=$$(printf '%s\n' $$maps | wc -l); \
 	    printf 'owed: %s\n%s\n' "$$why" "$$snap"; \
