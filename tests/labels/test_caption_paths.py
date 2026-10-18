@@ -30,7 +30,6 @@ D8_HAND_SEATS = frozenset(
         ("city/waterfront.py", "log_boom"),
         ("civic_grounds/civic.py", "granary"),
         ("civic_grounds/funerary.py", "cemetery"),
-        ("civic_grounds/funerary.py", "cremation_ground"),
         ("civic_grounds/funerary.py", "mausoleum"),
         ("civic_grounds/funerary.py", "ossuary"),
         ("civic_grounds/justice.py", "boundary_marker"),

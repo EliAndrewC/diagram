@@ -29,7 +29,7 @@ def build_terraces(
     """Contour TERRACES (梯田): stacked thin paddies following the hillside contours, stepping downhill from
     `top` (the high catchment where water enters). Each terrace step is a gently curved band PERPENDICULAR to
     the fall, itself SPLIT ALONG THE CONTOUR into individual leveled cells; a supply channel runs down one
-    flank and the stack cascades to a drain at the foot. Returns the same keys as `build_comb` so
+    flank and the stack cascades to a drain at the foot. Returns the same keys as the comb builder so
     `Settlement.draw_comb_field` can draw it, plus `bund_lines` (the retaining-wall lip at each terrace's
     downhill edge, drawn by the gen). China-first grounding (research.md D4): the south-China / SE-Asia rice
     terrace (Yuanyang 元陽, Longsheng 龍勝) is THE field archetype for HILL ground.
@@ -129,7 +129,7 @@ def build_terraces(
     sluice = flank[0]
     channels = [
         {"pts": [(round(x, 1), round(y, 1)) for x, y in flank], "role": "main", "w": 6.0, "w_tail": 3.0},
-        {"pts": drain_pts, "role": "drain", "w": 1.5, "w_tail": 5.0},  # gathers fe -> fw: a THREAD at its head (see build_comb's drain), full at the low-flank outfall
+        {"pts": drain_pts, "role": "drain", "w": 1.5, "w_tail": 5.0},  # gathers fe -> fw: a THREAD at its head (see the comb builder's drain), full at the low-flank outfall
     ]
     brook = [drain_pts[-1], (round(drain_pts[-1][0] + dx * 300, 1), round(drain_pts[-1][1] + dy * 300, 1))]  # straight downhill off-map
     # the toe stops at the ditch's BANK: the last terrace's low edge is a WIGGLY contour and the
@@ -173,7 +173,7 @@ def build_ribbon(
 ) -> dict[str, Any]:
     """RIBBON VALLEY (谷地田 / a narrow valley-floor strip): a long, NARROW paddy strung along a MEANDERING
     valley floor, the field archetype for a confined valley where the flat ground is only a thin winding
-    ribbon beside the brook. Returns build_comb-compatible keys. China-first grounding (research.md D4): the
+    ribbon beside the brook. Returns comb-compatible keys. China-first grounding (research.md D4): the
     valley-bottom rice ribbon of hill country - the brook runs down the center, paddy bands flank it, and the
     whole strip WANDERS with the valley (the distinguishing read against the broad comb fan or the polder).
 

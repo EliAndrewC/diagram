@@ -359,8 +359,8 @@ Research: linear and dispersed canvas - CONVENTION: 1.0 times the clustered canv
 def canvas_for(target_acres: float, ftpx: float) -> tuple[int, int]:
     """A working canvas comfortably larger than the fan it must hold.
 
-    The canvas is NOT the map: `crop_to_content` frames the finished drawing to its hard features,
-    so this only has to be big enough that `build_comb` never clamps the fan against a canvas edge
+    The canvas is NOT the map: the crop frames the finished drawing to its hard features,
+    so this only has to be big enough that the comb builder never clamps the fan against a canvas edge
     (which truncates threads and leaves a fan with a flat, obviously-artificial side) and big enough
     to leave margin ground for the cluster, its grove and the hinterland.
 
@@ -513,7 +513,7 @@ def plan_site(spec: HamletSpec) -> SitePlan:
     if _form in ("linear", "dispersed"):
         # A ROW VILLAGE NEEDS ITS LENGTH (feature 291 plan D14): its farms stand one grove frame (some 240 ft) apart along
         # their streets, and a canvas sized for a clustered hamlet ran each street off the sheet after a few lots (cohort
-        # seed 12: 13 of 17 seated on six streets). The unused ground is cropped away with the rest (`crop_to_content`).
+        # seed 12: 13 of 17 seated on six streets). The unused ground is cropped away with the rest (the crop (`content_view`)).
         # ...AND SO DOES A DISPERSED HAMLET OF GROVE FARMS, each farm the same frame: a twenty-farm one ran off the sheet's
         # edge at sixteen (the pinned Audit-905, the same with a well or a channel)
         W, H = int(W * LINEAR_CANVAS), int(H * LINEAR_CANVAS)

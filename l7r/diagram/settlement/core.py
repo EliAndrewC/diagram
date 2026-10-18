@@ -749,27 +749,9 @@ class Settlement(
         reads too so the crop and the check that gates it cannot drift apart."""
         return crop_boxes(self.M, city, self.ftpx, self.W, self.H)
 
-    def crop_to_content(self: Settlement, margin: float = 30, extra: Sequence[tuple[float, float, float, float]] = ()) -> None:
-        """Frame the map to its CONTENT: set the render viewBox to the bounding box of the HARD features placed
-        SO FAR plus `margin`, so the image is exactly as large as the settlement + its fields, tight to `margin`
-        on every side (nonstandard sizes are fine, and the checks already treat the crop - not the canvas - as
-        the map edge). Call this AFTER the large features (water, fields, houses) AND after any SET-APART
-        hard feature that would otherwise sit outside the frame (a back-slope graveyard, an outlying shrine -
-        those must be placed BEFORE the crop so it includes them), and BEFORE the small features that DROP INTO
-        the framed space (wells among the houses, monk plots) AND the title.
-        HARD (`_CROP_HARD` + torii arches + the fields' VISIBLE extent + the pond) is what sets the frame. Everything else -
-        the BLEED commons scrub AND the linear/off-map RUNNERS (streams, channels, lanes) - does NOT affect the
-        frame: it is drawn and simply CLIPS at the edge, trailing off as 'more wild ground / more map this way'.
-        (We used to extend the frame to preserve 2/3 of a trailing commons, but the GM wants the frame tight to
-        the real content - a graveyard, the pond - never held open by empty back-slope grazing, so the commons
-        now clips like the marsh instead of dragging the frame out.)
-
-        Research: framed to the hard content - CONVENTION: the frame-setting boxes plus a 30 px margin"""
-        self.crop_to_view(content_view(self._crop_boxes(city=False), extra, margin, self.W, self.H))
-
     def crop_to_view(self: Settlement, view: tuple[float, float, float, float]) -> None:
         """Frame the map to a view DECIDED EARLIER (feature 287, M6): the woods' canopy is flushed, seeing the complete
-        map, and the view is set exactly. `crop_to_content` is this with the view computed on the spot; a scripted hamlet
+        map, and the view is set exactly (`content_view` says what sets it). A scripted hamlet
         decides its view once, at the end of `stage_hinterland`, and hands that view here.
 
         Research: framed to a decided view - CONVENTION"""
@@ -778,10 +760,19 @@ class Settlement(
 
 
 def content_view(boxes: Sequence[tuple[float, float, float, float, str]], extra: Sequence[tuple[float, float, float, float]], margin: float, W: float, H: float) -> tuple[float, float, float, float]:
-    """The view `crop_to_content` frames: the frame-setting `boxes` (x0, x1, y0, y1, what - `crop_boxes`) and the `extra`
+    """The view a map is cropped to: the frame-setting `boxes` (x0, x1, y0, y1, what - `crop_boxes`) and the `extra`
     ground reserved as content (x0, y0, x1, y1 - the title pocket a full sheet had to make room for, feature 150), grown
-    by `margin`, clamped to the canvas and rounded. ONE body (feature 287, M6): `crop_to_content` and a hamlet's view
-    decision (`hamletgen.hinterland.frame.frame_for`) both read it, so the view decided early is the view the crop takes."""
+    by `margin`, clamped to the canvas and rounded. A hamlet decides it once (`hamletgen.hinterland.frame.frame_for`) and
+    hands it to `Settlement.crop_to_view`.
+
+    HARD content (`_CROP_HARD` + torii arches + the fields' VISIBLE extent + the pond) is what sets the frame. Everything
+    else - the BLEED commons scrub AND the linear/off-map RUNNERS (streams, channels, lanes) - does NOT: it is drawn and
+    simply CLIPS at the edge, trailing off as 'more wild ground / more map this way'. (The frame once grew to keep 2/3 of a
+    trailing commons, but the GM wants it tight to the real content - a graveyard, the pond - never held open by empty
+    back-slope grazing, so the commons clips like the marsh.) A SET-APART hard feature (a back-slope graveyard, an outlying
+    shrine) must be placed before the view is decided, so the frame includes it.
+
+    Research: framed to the hard content - CONVENTION: the frame-setting boxes plus a margin"""
     _boxes = [*boxes, *[(b[0], b[2], b[1], b[3], "title-pocket") for b in extra]]
     hx = [v for b in _boxes for v in (b[0], b[1])]
     hy = [v for b in _boxes for v in (b[2], b[3])]

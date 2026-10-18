@@ -32,13 +32,13 @@
    "declared": "spec-fidelity"
   },
   "## T01 - the deletion (FR-001, FR-002)": {
-   "sha256": "d545f5d53921957677ddf2268d8a78c8e51478638efbb0212dd1670fb6913bc1",
+   "sha256": "474c5abd827a6dfe52535c5473ce2e4c78f10f05e66918b8080b5143f61b12c3",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
   },
   "## T02 - the prose (FR-003, FR-004)": {
-   "sha256": "9221792248c7ab1a638fe8da5de94f15cb2f704e241d371e0364b070113e47be",
+   "sha256": "afca11ea8944e3dcfe1b0f7ef456ec9162d7ea0c69f5f11bfcb21340200e9d32",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -420,6 +420,106 @@
      "summary": "make maps (pool unchanged), make done, make cohort-landing, end bookend, report GM section, gated push",
      "class": "within",
      "why": "FR-006, SC-002, SC-003 as written."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## T01 - the deletion (FR-001, FR-002)",
+    "## T02 - the prose (FR-003, FR-004)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-a",
+     "summary": "Delete settlement/rolling/roll.py (RollVillageMixin, roll_village, _roll_*, _roll_cremation, _MarginFrame) and drop its base from RollingMixin; the three roller exhibits stop running",
+     "class": "within",
+     "why": "The GM: 'just delete it now'; FR-001 deletes roll_village, FR-005 freezes Honda/Shimizu/Kikuta unedited."
+    },
+    {
+     "id": "T01-b",
+     "summary": "Delete settlement/water_source.py and WaterSourceMixin from Settlement's bases",
+     "class": "within",
+     "why": "Part of the closure FR-001 deletes; no caller found, fit.py names it in prose only (T02 repoints that)."
+    },
+    {
+     "id": "T01-c",
+     "summary": "Delete settlement/civic_grounds/edge_seat.py whole",
+     "class": "within",
+     "why": "FR-001 closure; FR-002 names the edge-seat tests going with it."
+    },
+    {
+     "id": "T01-d",
+     "summary": "Delete cut_undeckable_lanes and CUT_GAP_FT from city/bridges.py",
+     "class": "within",
+     "why": "FR-001 closure, no other caller."
+    },
+    {
+     "id": "T01-e",
+     "summary": "Delete BUNDLE_PITCH_FT, its re-export and its test, found by re-running the closure",
+     "class": "within",
+     "why": "FR-001 deletes the closure and FR-002 deletes a test whose subject is deleted; the band pitch is the roller's."
+    },
+    {
+     "id": "T01-f",
+     "summary": "build_comb, crop_to_content, cremation_ground (+ROOFED_SHARE, cremation_outline), PlacerMixin.headman are kept as first landed and deleted by T04 (amendment 1, spec D1b)",
+     "class": "within",
+     "why": "Changed since last CLEAR: KEEP became 'kept as first landed; deleted by T04'. Amendment 1 ('the four helpers can go too') is honored in full - this only orders it as a later task, and the end state deletes all four. No narrowing: nothing the GM asked to delete is kept."
+    },
+    {
+     "id": "T01-g",
+     "summary": "Settlement keeps a class-level annotation of _nucleated on RollingMixin (no runtime member) for pyrefly",
+     "class": "within",
+     "why": "A type annotation for a live attribute, not a definition of the deleted closure; nothing deleted survives."
+    },
+    {
+     "id": "T01-h",
+     "summary": "Re-run the closure after deletion until it names nothing more; further names go through the same table",
+     "class": "within",
+     "why": "Enforces FR-001's 'everything in What it is' completely."
+    },
+    {
+     "id": "T01-i",
+     "summary": "Delete every test whose subject is a deleted name (listed), keep the no-cremation-ground test's pool scan, remove files left empty; lines only deleted tests reached are deleted if unreached, else a test is owed",
+     "class": "within",
+     "why": "FR-002 verbatim, including the test_burial.py list and the mixed-subject rule."
+    },
+    {
+     "id": "T02-a",
+     "summary": "Repoint every docstring, comment and package index naming a deleted definition as live, at the listed files (adds settlement/rolling/__init__.py, settlement/_geom/CLAUDE.md, test_burial.py's docstring to FR-003's list)",
+     "class": "within",
+     "why": "FR-003's rule is 'prose that describes roll_village or the closure's names as live'; the added files are instances of it, and test_burial.py's docstring is FR-002's. waterfields/CLAUDE.md, in FR-003's list but not T02's, is still reached by T02's general rule and SC-001's grep, and by T05 for build_comb."
+    },
+    {
+     "id": "T02-b",
+     "summary": "hamletgen/__init__.py's comparison table's middle column becomes 'the knob engine', retired",
+     "class": "within",
+     "why": "FR-003 updates prose naming roll_village as live where it stands."
+    },
+    {
+     "id": "T02-c",
+     "summary": "The kept helpers' prose is untouched as first landed; T05 repoints it (amendment 1)",
+     "class": "within",
+     "why": "Changed since last CLEAR: now defers to T05 rather than leaving the prose permanently. Amendment 1's prose repointing (FR-003 amendment 1) is carried by T05; sequencing only."
+    },
+    {
+     "id": "T02-d",
+     "summary": "Claims index updated by its own targets (claims-owed, impl-drift, claims-checked)",
+     "class": "within",
+     "why": "FR-003: 'the claims tooling regenerates or drops them'."
+    },
+    {
+     "id": "T02-e",
+     "summary": "Feature 380's spec loses 'Carried: from 387'; its cremation-ground and burial-ground items name the code as deleted by 388 and readable from git, design and rulings unchanged",
+     "class": "within",
+     "why": "FR-004 verbatim; the GM: 'not even move it into the 384 backlog'."
+    },
+    {
+     "id": "T02-f",
+     "summary": "The legacy pool is not touched",
+     "class": "within",
+     "why": "FR-005 and amendment 1: frozen maps need not stay runnable and are not edited."
     }
    ]
   }

@@ -44,13 +44,13 @@ def drawn_r(s: Any) -> float:
 
 def crop_extent_added(s: Any, c: Pt, xs: Sequence[float], ys: Sequence[float]) -> float:
     """How far past the crop's predicted box a wellhead at `c` (its drawn radius included) reaches - 0 inside it
-    (feature 287, homes H12). The box is `_crop_boxes`, what `crop_to_content` reads; a settlement that keeps none (a
+    (feature 287, homes H12). The box is `_crop_boxes`, what `content_view` reads; a settlement that keeps none (a
     stand-in) is judged against the house centers' own box."""
     return extent_past(crop_box(s, xs, ys), drawn_r(s), c)
 
 
 def crop_box(s: Any, xs: Sequence[float], ys: Sequence[float]) -> tuple[float, float, float, float]:
-    """The crop's predicted box (x0, x1, y0, y1): `_crop_boxes`, what `crop_to_content` reads, or the house centers' box on a
+    """The crop's predicted box (x0, x1, y0, y1): `_crop_boxes`, what `content_view` reads, or the house centers' box on a
     settlement that keeps none. Taken once per well landed by `seat_wells` (feature 387: 13,205 builds a roll, 11.8 s profiled).
 
     Research: the crop's box - NONE: `crop_extent_added`'s own reading, taken once"""
@@ -582,7 +582,7 @@ def seat_wells(
                     # courtyard. Cohort seed 29 then did bite - a well 64 px north of every other feature,
                     # inside the centers' box and holding the whole frame open.
                     #
-                    # `_crop_boxes` is what `crop_to_content` itself reads, so asking it is asking the
+                    # `_crop_boxes` is what `content_view` itself reads, so asking it is asking the
                     # question the check will ask: a seat inside the box the crop will set cannot hold the
                     # frame open, whatever its relation to the house centers. Same-source doctrine, and it
                     # picks up the houses' DRAWN extents plus their yards, gardens, sheds and byres rather

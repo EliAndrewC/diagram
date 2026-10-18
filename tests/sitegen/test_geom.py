@@ -20,7 +20,7 @@ def test_polygon_area_is_the_shoelace_area() -> None:
 
 def test_acreage_is_measured_from_the_plots_not_the_envelope() -> None:
     """One 43,560 sq ft plot is one acre at 1 ft/px, and four of them are four - the conversion has
-    to carry ftpx squared, which is the trap `build_comb`'s own `acres` falls into on a hamlet."""
+    to carry ftpx squared, which is the trap the comb's own `acres` falls into on a hamlet."""
     plot = [(0.0, 0.0), (220.0, 0.0), (220.0, 198.0), (0.0, 198.0)]  # 43,560 px^2
     assert sg.net_acres({"plots": [{"poly": plot}] * 4}, ftpx=1.0) == pytest.approx(4.0)
     assert sg.net_acres({"plots": [{"poly": plot}] * 4}, ftpx=2.0) == pytest.approx(16.0)

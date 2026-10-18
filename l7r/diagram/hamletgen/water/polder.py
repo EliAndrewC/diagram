@@ -162,7 +162,7 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
     Not a variation on the comb - the opposite of it. A comb is grown around a head-race running down
     a slope and its shape follows the water; a polder is a planned block whose water enters at a
     corner, rings the module in a perimeter feeder, and drains to the low corner. `build_polder`
-    returns `build_comb`-compatible keys on purpose, so `draw_comb_field` draws either.
+    returns comb-compatible keys on purpose, so `draw_comb_field` draws either.
 
     The SOURCE is a header reservoir OUTSIDE the dike above the high corner, charged through a sluice
     in the dike - not a brook running in over the crop, which is what a valley hamlet has.
@@ -601,7 +601,7 @@ def stage_waterward(s: Settlement, plan: SitePlan) -> None:
     over a connector already routed through it; `driver.py` records the move). The hinterland's own toe
     marsh and scrub come later and keep out of it. Each strip hugs the dike's outer face (reeds auto-skip the band and the ponds via the
     keep-outs) and runs off the frame - it is wild ground continuing, not a feature with an edge,
-    so `crop_to_content` ignores it. `meta.waterward` declares the water-facing flanks, and the frame holds each
+    so the crop ignores it. `meta.waterward` declares the water-facing flanks, and the frame holds each
     strip to the view's edge (`to_the_strips`, `waterward_to_the_frame`).
 
     THE STRIP STOPS AT THE MOUND (feature 150 T54, GM 2026-08-28: "the marshland overlaps with the

@@ -176,7 +176,7 @@ verdicts - a superset of candidates measured with the same predicate - so every 
 live pool map came out byte-identical (the feature's sweep). Measured solo: the seed-19 polder
 110 -> ~30 s, the reference hamlet 37 -> ~21 s. What remains is spread over `stage_homesteads`
 (the bundle fit's `point_in_poly` on large polygons), `stage_hinterland` (scatter samples against
-the commons outline) and, on comb hamlets, `fit_field`'s seven `build_comb` rounds - each a few
+the commons outline) and, on comb hamlets, `fit_field`'s seven comb-carve rounds - each a few
 seconds, none of them the router's shape, and the solver is left alone because a different
 convergence draws a different map.
 

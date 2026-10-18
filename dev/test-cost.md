@@ -44,7 +44,7 @@ before bisecting seeds for a slow run, ask `make durations` - it names the slow 
   heaviest file. Scheduling work, `--dist` tuning and more workers are worthless for a roll-bound phase; only fewer
   or cheaper rolls help.
 - **One expensive construction repeated is the usual shape of a slow test file.** Build the subject once and hand
-  out a deepcopy (a `build_comb` costs ~270x its deepcopy) - and always a deepcopy when a downstream step mutates
+  out a deepcopy (a comb build costs ~270x its deepcopy) - and always a deepcopy when a downstream step mutates
   the subject (`draw_comb_field` rewrites the net it is given), or one test's draw changes what the next builds on,
   as an ordering-dependent failure.
 - **A per-process cache shares almost nothing under `--dist worksteal`.** `functools.lru_cache` and a module-level

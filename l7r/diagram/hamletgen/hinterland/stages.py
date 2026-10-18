@@ -315,7 +315,7 @@ def plant_the_belt(s: Settlement, plan: SitePlan) -> None:
     #
     # The clamp can be exact rather than a guess, because every HARD feature that sets the crop is
     # already placed by the time this stage runs: ask `_crop_boxes` - the very source
-    # `crop_to_content` reads - and hold the belt inside that box. Same-source doctrine, and the same
+    # the crop (`content_view`) reads - and hold the belt inside that box. Same-source doctrine, and the same
     # move the title-pocket dent above already makes: push the vertices, keep the belt.
     #
     # SINCE FEATURE 287 (M6) the frame is `frame_bounds` - the one function the view is decided by, asked just before the

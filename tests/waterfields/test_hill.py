@@ -66,7 +66,7 @@ def test_a_ribbon_valley_is_LONG_AND_NARROW_which_is_what_makes_it_that_archetyp
 
 
 def test_both_engines_carry_the_water_a_hill_field_needs() -> None:
-    """A paddy that cannot be filled or drained is not a paddy. Both return build_comb-compatible
+    """A paddy that cannot be filled or drained is not a paddy. Both return comb-compatible
     keys, and both owe the same three: a supply channel, a drain, and the brook the valley runs on."""
     for name, net in (("terraces", _terraces()), ("ribbon", _ribbon())):
         assert net["channels"], f"{name}: a supply channel cascades terrace-to-terrace"

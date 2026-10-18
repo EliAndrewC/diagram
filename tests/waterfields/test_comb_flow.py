@@ -22,7 +22,7 @@ import math
 import pytest
 
 from l7r.diagram.pipeline import rollcache
-from l7r.diagram.waterfields.comb import build_comb
+from tests.waterfields._builders import lay_comb
 
 FALLS = (0.0, 45.0, 90.0, 180.0)
 """The falls this module asserts over. FOUR, NOT SIX, and the count is a cost decision with a stated
@@ -44,7 +44,7 @@ def _net(down_deg: float, seed: int = 5):  # noqa: D401
     # tests reading the same net land on the SAME xdist worker, and with `--dist worksteal` they usually
     # do not - so each of the eight processes was rebuilding its own copy. `rollcache.obtain` keys on the
     # engine as well as these parameters, so the build is paid once per (fall, seed) per code change.
-    return rollcache.obtain(f"comb-flow:{down_deg}:{seed}", lambda: build_comb(2400, 2400, (300.0, 300.0), seed=seed, down_deg=down_deg))[0]
+    return rollcache.obtain(f"comb-flow:{down_deg}:{seed}", lambda: lay_comb(2400, 2400, (300.0, 300.0), seed=seed, down_deg=down_deg))[0]
 
 
 def _drain_bearing(down_deg: float, seed: int = 5) -> tuple[float, float]:
@@ -85,12 +85,12 @@ def test_the_collector_turns_with_the_map() -> None:
 # assertions still run at every fall, and a failure still names which one - and halves this file's cost.
 
 
-def test_the_carves_region_is_what_the_finish_plants_and_a_finished_carve_is_a_build(seed: int = 7) -> None:
+def test_the_carves_region_is_what_the_finish_plants(seed: int = 7) -> None:
     """Feature 302 (on 220): `fit_field` scores each guess on `CombCarve.region.area` - the ground the finish will tile - and
-    finishes only the winner. Two facts hold the design up: the finish plants the region, but for the scraps it leaves bare
-    (the bound: `0.5%` of it, specs/302 SC-003), and carve-then-finish IS `build_comb`, key for key."""
+    finishes only the winner. The design rests on the finish planting the region, but for the scraps it leaves bare
+    (the bound: `0.5%` of it, specs/302 SC-003)."""
     from l7r.diagram.sitegen.geom import poly_area
-    from l7r.diagram.waterfields import build_comb, carve_comb, finish_comb
+    from l7r.diagram.waterfields import carve_comb, finish_comb
 
     args = dict(W=1400, H=1400, sluice=(200.0, 200.0), seed=seed, down_deg=60.0, canal_a_len=(700.0, 800.0), canal_b_len=(400.0, 460.0))
     carve = carve_comb(**args)  # type: ignore[arg-type]
@@ -99,5 +99,3 @@ def test_the_carves_region_is_what_the_finish_plants_and_a_finished_carve_is_a_b
     net = finish_comb(carve)
     planted = sum(poly_area(p["poly"]) for p in net["plots"])
     assert 0.995 * region <= planted <= region * 1.001, (region, planted)
-    built = build_comb(**args)  # type: ignore[arg-type]
-    assert built.keys() == net.keys() and built["plots"] == net["plots"] and built["channels"] == net["channels"] and built["acres"] == net["acres"]

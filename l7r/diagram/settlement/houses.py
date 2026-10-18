@@ -902,14 +902,14 @@ class HousesMixin:
         return (cx, cy, ex, ey)
 
     def plot_texture(self: Settlement, plot_size: str = "medium", plot_regularity: str = "organic", record: bool = True) -> tuple[float, tuple[float, float]]:  # type: ignore[misc]
-        """Resolve the `plot_size` + `plot_regularity` knobs into `build_comb`'s `(plot_across, row_step)` levers
+        """Resolve the `plot_size` + `plot_regularity` knobs into `carve_comb`'s `(plot_across, row_step)` levers
         so they actually change the paddy grain. `plot_across` sets how many bunded plots tile across each canal
         reach (small = many small paddies, large_block = few big ones, strip = narrow but long); `row_step` is
         the along-canal row spacing, and its SPREAD is the regularity: a WIDE spread reads organic/old-grown, a
         TIGHT spread reads as a planned/surveyed grid. Records the two knobs on the manifest. Grounding: old
         wet-rice terraces grew as small irregular paddies fitted to the microtopography; large regular blocks or
         long strips signal a later planned reclamation/allotment (which is why `grid` is typing-gated to a
-        planned field origin). Returns `(plot_across, row_step)` to pass straight into `build_comb`.
+        planned field origin). Returns `(plot_across, row_step)` to pass straight into `carve_comb`.
 
         SIZED IN REAL FEET at ftpx >= 2 (GM 2026-07-22): for a village or provincial city each `plot_size`
         picks a real-feet CELL-AREA target (acres) and an aspect, and `waterfields.paddy_grain` converts that to

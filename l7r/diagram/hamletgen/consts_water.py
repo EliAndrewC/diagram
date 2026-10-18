@@ -58,7 +58,7 @@ BROOK_SKIRT = 34.0
 """Research: brook outside the crop - UNRESEARCHED: 34 ft floor"""
 # ...and how far outside THAT floor the course may stray. Small, and bounded by the frame rather than by
 # taste: the sheet is cropped to its hard content and a watercourse is deliberately not content (it "clips at
-# the edge, trailing off as more map this way" - `crop_to_content`), so a brook that strays more than the
+# the edge, trailing off as more map this way" - the crop (`content_view`)), so a brook that strays more than the
 # crop's own margin runs outside the picture. It did: `settlement-review` measured a course drawn just beyond
 # the left edge for its whole length, reappearing at the bottom, which reads as two unrelated bits of water.
 # The course's variety comes from the field's own outline, which it now follows at this distance, and the walk
@@ -120,7 +120,7 @@ WEIR_SKEW_DEG = 30.0
 """Research: weir runs diagonally upstream - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: 30 degrees"""
 
 # DELIVERY-DITCH DENSITY by household count. A comb's offtakes are how many delivery ditches drop
-# off the supply canal; too many on a small fan waters the same ground twice (build_comb drops the
+# off the supply canal; too many on a small fan waters the same ground twice (the comb builder drops the
 # redundant near-pairs itself, so an over-dense request is silently thinned - which is worse than
 # asking for the right number, because the drawn net then no longer matches the declared one).
 # Ikegami's 15 households run a deliberately SPARSE two-offtake net.
@@ -130,7 +130,7 @@ WEIR_SKEW_DEG = 30.0
 # tail that dies at the crop edge, which is what a real canal does - it peters out where the last
 # plot it waters ends). Ikegami's authored (0.30, 0.66) leaves a third of the canal as tail and gets
 # away with it because its fan happens to be wide there; across a cohort of twenty that came back as
-# one dangling collector. A last offtake at ~0.88 - which is also `build_comb`'s own default - keeps
+# one dangling collector. A last offtake at ~0.88 - which is also `carve_comb`'s own default - keeps
 # the tail short and inside the rice.
 # ...AND EVERY ROW DRAWS CANAL B (GM caught Inashiro's bare west margin 2026-08-16; researched -
 # research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html). A gravity canal commands

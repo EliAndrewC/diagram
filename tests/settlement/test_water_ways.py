@@ -401,19 +401,19 @@ def test_draw_comb_field_snaps_the_intake_onto_a_nearby_stream():
     # the hairline intake's START snaps onto the stream centerline when the sluice sits on the
     # bank (within the 30px anchor band) - the confluence at the offtake; a feeder brook ending
     # exactly AT the sluice (distance ~0) is already joined and stays untouched
-    from l7r.diagram.waterfields import build_comb
+    from tests.waterfields._builders import lay_comb
 
     s = Settlement(W=1400, H=1400, seed=5)
     s.meta(name="Sn", scale="town", ftpx=1, down_deg=90)
     s.stream([(680, 50), (680, 1350)], width=9)  # runs 20px west of the sluice
-    net = build_comb(1400, 1400, (700, 200), full_or(1, 5), down_deg=90, field_fall=400)
+    net = lay_comb(1400, 1400, (700, 200), full_or(1, 5), down_deg=90, field_fall=400)
     net["brook"] = []
     s.draw_comb_field(net, "f1", {"kind": "stream"})
     hx, hy = s.M["channels"][-1]["poly"][0]
     assert abs(hx - 680) < 0.5 and abs(hy - 200) < 0.5  # snapped onto the centerline
     s2 = Settlement(W=1400, H=1400, seed=6)
     s2.meta(name="Sn2", scale="town", ftpx=1, down_deg=90)
-    net2 = build_comb(1400, 1400, (700, 200), full_or(2, 6), down_deg=90, field_fall=400)
+    net2 = lay_comb(1400, 1400, (700, 200), full_or(2, 6), down_deg=90, field_fall=400)
     net2["brook"] = []
     s2.draw_comb_field(net2, "f2", {"kind": "stream", "stream": [(700, 40), (702, 120), (700, 200)]})
     assert s2.M["channels"][-1]["poly"][0] == [700, 200]  # feeder ends at the sluice: already joined

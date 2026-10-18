@@ -45,7 +45,7 @@ Research:
 def fit_field(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_step: tuple[float, float], tolerance: float = 0.06, rounds: int = 9, fan_middle: str = "cleared") -> dict[str, Any]:
     """SOLVE the comb for the acreage the household count demands, instead of guessing a fall length.
 
-    `build_comb` takes a `field_fall` in PIXELS, and the relationship between that number and the
+    `carve_comb` takes a `field_fall` in PIXELS, and the relationship between that number and the
     acreage that comes out is not analytic - the carve drops sectors too narrow to plant, the fan's
     width follows the canal lengths, and the envelope's shape depends on where the threads clamp. An
     author picks a number, looks at the render, and adjusts; Ikegami's 1150 is such a number, and it

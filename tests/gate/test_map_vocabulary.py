@@ -2,8 +2,8 @@
 
 KEPT through feature 287 because no single placer owns it: every layer's ink must carry a class, so it is a property of
 the finished drawing as a whole (the census at `settlement/finish.py`). Its sibling `hamlet_has_no_headman` was retired
-by feature 287 - `settlement/rolling/place.py:PlacerMixin.headman` refuses the role on a hamlet
-(`tests/settlement/test_rolling.py::test_a_hamlet_scale_map_can_draw_no_headman`; specs/287-placer-guarantees/research.md R8).
+by feature 287 (specs/287-placer-guarantees/research.md R8); since feature 388 no engine code draws the role at all, and
+`tests/settlement/test_rolling.py::test_no_shipped_hamlet_carries_a_cremation_ground_shrine_or_headman` holds the pool to it.
 """
 
 from __future__ import annotations

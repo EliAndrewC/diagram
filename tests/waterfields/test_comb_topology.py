@@ -3,7 +3,7 @@
 Carries `delivery_ditches_taper`, `water_channels_obtuse_turns` and `field_ditches_terminate`, which the
 retired battery re-measured on every finished map.
 
-`build_comb` lays the whole net at once - the sluice's head-race forks at one division point into two
+the comb builder lays the whole net at once - the sluice's head-race forks at one division point into two
 supply canals hugging the high margins, and the laterals comb off them - so these are properties of one
 construction rather than of any single placement, and they belong beside it. It takes plain numbers and
 returns plain data, so the whole family runs in about a second across several seeds.
@@ -17,7 +17,7 @@ import math
 import pytest
 
 from l7r.diagram.pipeline import rollcache
-from l7r.diagram.waterfields.comb import build_comb
+from tests.waterfields._builders import lay_comb
 
 SEEDS = (3, 5, 11)
 """The seeds this module asserts over. THREE, NOT FOUR (2026-08-30): a comb build is ~1 s and four tests
@@ -37,7 +37,7 @@ def _net(seed: int):
     # SHARED ACROSS WORKERS - see the note in test_comb_flow.py's `_net`. `lru_cache` only helps within
     # one xdist process; `rollcache.obtain` keys on the engine too, so the build is paid once per seed
     # per code change however the tests are distributed.
-    return rollcache.obtain(f"comb-topology:{seed}", lambda: build_comb(2400, 2400, (300.0, 300.0), seed=seed, down_deg=90))[0]
+    return rollcache.obtain(f"comb-topology:{seed}", lambda: lay_comb(2400, 2400, (300.0, 300.0), seed=seed, down_deg=90))[0]
 
 
 def _turns(pts):

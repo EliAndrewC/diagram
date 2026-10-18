@@ -67,7 +67,7 @@ def hem_on_water(poly: Poly, wet: Sequence[tuple[Any, float]] | WetLines, pond: 
     """Does this dry-hem plot lie across a watercourse or over the pond?
 
     LIFTED OUT OF `_comb_draw_hem` (feature 146, GM 2026-08-28 on inner functions and testability). The
-    hem yields to standing water because `build_comb` lays the fan from pure geometry and `draw_comb_field`
+    hem yields to standing water because the comb builder lays the fan from pure geometry and `draw_comb_field`
     used to render it blind - it was the ONLY placer that consulted nothing, so a hem plot could be drawn
     straight across a stream that had been authored earlier (Ubame's). The stream arm and the pond arm are
     different geometry and want asking separately, which through the method meant building a whole comb net.
@@ -127,7 +127,7 @@ class CombMixin:
     _pending_block: Poly | None
 
     def comb_base_fill(self: Settlement, net: dict[str, Any], name: str, color: str = "", full_envelope: bool = False) -> None:  # type: ignore[misc]
-        """Draw a FIELD FLOOR under a build_comb net's plots and record it (M['comb_floors'][name]),
+        """Draw a FIELD FLOOR under a comb net's plots and record it (M['comb_floors'][name]),
         so the parchment BACKGROUND never shows through as bare 'white' at the canal junctions the
         carve cannot tessellate (the head-race fork, the outfall corner where a supply canal dies at
         the drain, the confluence wedges - the 'blank bits on the paddies' the GM circled repeatedly,
@@ -250,7 +250,7 @@ class CombMixin:
             self.add(f'<g fill="{AZE}" stroke="none">{"".join(out)}</g>', cls="bund")
 
     def draw_comb_field(self: Settlement, net: dict[str, Any], name: str, source: dict[str, Any], inwall_drain_moat_bias: Pt | None = None) -> list[Pt]:  # type: ignore[misc]
-        """Draw a `build_comb` net (dry hem + flooded paddies + bunds + channels) AND register the field's
+        """Draw a comb net (dry hem + flooded paddies + bunds + channels) AND register the field's
         manifest + water topology, in one call - the ~50 lines every comb gen otherwise repeats inline. Feeds
         the roll-from-seed entrypoint (which cannot hand-place any of it) but is reusable by any comb gen.
         `source` describes where the water comes from: {"kind":"pond", "pond":(cx,cy,rx,ry)} draws a tameike at
@@ -341,7 +341,7 @@ class CombMixin:
             hem placement - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the dry plots upslope of the supply canal, as the net lays them
             hem off rice and water - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a plot on an earlier fan's rice, on water or on the field's own ditch is dropped
             bank beside the source brook - GUESS: a bund's width, 3 ft, past the drawn 7 ft brook's bank, at the map's scale
-            plot size and crop - NONE: taken from the net as build_comb laid them
+            plot size and crop - NONE: taken from the net as the comb builder laid them
             coarse-grain top-up - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: the reserve plots `_coarse_grain_top_up` returns are drawn after the refused plots, by the same refusal rule
             fallback watercourse widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html, research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: where a record carries no width, a channel 4.5 ft and a canal 6 ft (0068), a brook 7 ft (0059's brook) - at the map's scale; 0068's brook narrower than the head race it feeds is the open conflict, the found row comb.py::CombMixin._comb_draw_source#feeder brook narrower than the head race
             nothing built or planted on a dry plot - UNRESEARCHED: each drawn hem plot registered as blocked ground (`block_polys`) and dry ground (`dry_polys`)
@@ -354,7 +354,7 @@ class CombMixin:
         # tests). Same predicate as the dry_plots_clear_of_paddies gate - see hem_on_paddy's
         # docstring (waterfields.py) for the why and the motivating Tango incident.
         _prior_paddies = [fld["outline"] for fld in self.M["fields"] if fld.get("kind") == "paddy"]
-        # WHAT IS ALREADY ON THE MAP (GM go-ahead 2026-07-26). build_comb lays the fan from pure
+        # WHAT IS ALREADY ON THE MAP (GM go-ahead 2026-07-26). The comb builder lays the fan from pure
         # geometry, and draw_comb_field used to render it blind - it was the ONLY placer that
         # consulted nothing - so a hem plot could be drawn straight across a watercourse that had
         # been authored earlier (Ubame's stream). Now the hem yields to standing water. Maps whose
@@ -765,16 +765,16 @@ class CombMixin:
             "bund_beans": [[round(bx, 1), round(by, 1)] for bx, by in net["bund_beans"]],
         }
         if net.get("cell") is not None:
-            # THE DESIGN CELL this fan was carved to, in px^2 (build_comb only - the terrace, ribbon
+            # THE DESIGN CELL this fan was carved to, in px^2 (the comb only - the terrace, ribbon
             # and polder engines record none, and the size floor is deliberately comb-only). Carried
             # so `paddy_basins_are_worth_their_bund` measures each basin against the reference the
             # PLACER used instead of re-deriving one from `meta.ftpx`, which `plot_texture` makes
             # wrong. Legacy manifests lack it and the check skips them.
             _fld["cell"] = round(float(net["cell"]), 1)
         if net.get("down_deg") is not None:
-            _fld["down_deg"] = net["down_deg"]  # this fan's LOCAL fall (see build_comb)
+            _fld["down_deg"] = net["down_deg"]  # this fan's LOCAL fall (see `carve_comb`)
         if net.get("fork") is not None:
-            # the bunsuiguchi division point (build_comb only - a polder net records none), read by
+            # the bunsuiguchi division point (the comb only - a polder net records none), read by
             # comb_supply_commands_both_flanks; legacy manifests lack it, so the check skips them
             _fld["fork"] = [round(net["fork"][0], 1), round(net["fork"][1], 1)]
         self.M["fields"].append(_fld)

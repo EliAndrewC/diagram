@@ -166,7 +166,7 @@ def test_a_halls_caption_is_kept_out_of_its_OWN_sando() -> None:
 
 def test_a_canvas_filling_forest_records_its_TREE_LINE_apart_from_its_polygon() -> None:
     """The two are recorded separately because the frame reveals only a shallow band of wood past
-    the tree line - deeper in it is undifferentiated canopy, i.e. wasted image (`crop_to_content`,
+    the tree line - deeper in it is undifferentiated canopy, i.e. wasted image (`content_view`,
     and `forest_reveal_x` is the shared rule).
 
     Also asserted: the litter floor is pushed a crown's width BACK from the tree line, so its
