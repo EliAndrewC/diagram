@@ -59,6 +59,16 @@ LAND_TOOLING_DOCS_CHECK=true land Makefile; rc=$?
 ok "a current page lands beside the Makefile" '[ "$rc" -eq 0 ] && grep "docs/make-targets.html lands too" "$T/out" >/dev/null && [ "$(on_main docs/make-targets.html)" = "page v1" ]'
 setup
 
+echo "1c. the Python that lands is linted first, and a failure lands nothing, naming the fix (385 T52)"
+setup
+printf 'x = 1\n' > "$C/scripts/c.py"; git -C "$C" add -A; git -C "$C" commit -qm "a script"
+LAND_TOOLING_LINT=false land scripts/c.py; rc=$?
+ok "a lint failure lands nothing and names ruff format" '[ "$rc" -ne 0 ] && grep "ruff format scripts/c.py" "$T/out" >/dev/null && [ -z "$(on_main scripts/c.py)" ]'
+LAND_TOOLING_LINT=true land scripts/c.py; rc=$?
+ok "a clean file lands" '[ "$rc" -eq 0 ] && [ "$(on_main scripts/c.py)" = "x = 1" ]'
+ok "the lint step is timed in the log" 'grep "^land-tooling: step lint [0-9.]* s$" "$C/.git/land-tooling.log" >/dev/null'
+setup
+
 echo "2. the tooling lands alone, on top of main, and the clone merges main cleanly (SC-003)"
 land scripts/a.sh; rc=$?
 ok "landed" '[ "$rc" -eq 0 ] && grep -q "landed scripts/a.sh" "$T/out"'
@@ -67,7 +77,7 @@ ok "main carries none of the engine work" '[ "$(on_main l7r/e.py)" = "e = 1" ]'
 ok "main keeps the other session's work" '[ "$(on_main other.txt)" = "other" ]'
 ok "the worktree is gone" '[ ! -e "$T/m/.clones/c-tooling" ] && ! git -C "$C" worktree list | grep c-tooling >/dev/null'
 ok "each step is timed in the log (383 amendment 2, FR-017)" 'for s in prepare worktree patch guard-suites tooling-tests checks push; do grep -q "^land-tooling: step $s [0-9.]* s$" "$C/.git/land-tooling.log" || exit 1; done'
-ok "...and the landing's steps are one JSON line" 'python3 -c "import json,sys; r=json.loads(open(sys.argv[1]).readlines()[-1]); sys.exit(not (r[\"outcome\"] == \"push-exit-0\" and set(r[\"steps\"]) == {\"prepare\", \"worktree\", \"patch\", \"guard-suites\", \"tooling-tests\", \"checks\", \"push\"}))" "$C/.git/land-tooling-steps.jsonl"'
+ok "...and the landing's steps are one JSON line" 'python3 -c "import json,sys; r=json.loads(open(sys.argv[1]).readlines()[-1]); sys.exit(not (r[\"outcome\"] == \"push-exit-0\" and set(r[\"steps\"]) == {\"prepare\", \"worktree\", \"patch\", \"guard-suites\", \"tooling-tests\", \"lint\", \"checks\", \"push\"}))" "$C/.git/land-tooling-steps.jsonl"'
 ok "the clone's history is untouched" '[ "$(git -C "$C" log --format=%s -1)" = "a guard fix" ]'
 git -C "$C" pull -q --no-rebase --no-edit origin main >"$T/out" 2>&1; rc=$?
 ok "the clone's next merge of main is clean" '[ "$rc" -eq 0 ] && [ "$(cat "$C/l7r/e.py")" = "e = 2" ]'
@@ -124,7 +134,7 @@ printf 'import pathlib, sys\nsys.exit(0 if pathlib.Path("l7r/e.py").read_text() 
 git -C "$C" add tests; git -C "$C" commit -qm "the engine work's test"
 LAND_TOOLING_TEST="python3 " land tests/test_e.py; rc=$?
 ok "a test failing without the held engine work is refused" '[ "$rc" -ne 0 ] && grep -q "checks failed" "$T/out" && [ -z "$(on_main tests/test_e.py)" ]'
-printf 'import sys\nsys.exit(0)\n' > "$C/tests/test_ok.py"; git -C "$C" add tests; git -C "$C" commit -qm "a test standing alone"
+printf 'import sys\n\nsys.exit(0)\n' > "$C/tests/test_ok.py"; git -C "$C" add tests; git -C "$C" commit -qm "a test standing alone"
 LAND_TOOLING_TEST="python3 " land tests/test_ok.py; rc=$?
 ok "a test standing alone lands" '[ "$rc" -eq 0 ] && [ -n "$(on_main tests/test_ok.py)" ]'
 
