@@ -19,6 +19,15 @@ Every task deletes code no shipping map runs, or repoints prose to what does: no
 - [x] T03 Measure and land (plan T03; FR-006, SC-001 - SC-004): `make maps` byte-identical, `make soak`, `make done`, the end bookend, `make cohort-landing`, the claims gate, the feature report, the gated push
       research: rendering
       verify: DONE. DONE. make maps clean (all CACHED, pool unchanged); make soak 9 passed; make done green; bookends 18.9 -> 18.8 s; cohort-landing 54/54 (fresh 9 of 48, a rate); claims-owed none; four red-gate tripwires accepted, their tooling fixes landed
+- [ ] T04 (amendment 1) The four helpers and their tests (plan T04; FR-001, FR-002): `build_comb`, `crop_to_content`, `cremation_ground`, `headman` deleted; comb and frame tests through `lay_comb` / `crop`; the censuses stop scanning the legacy pool; `make dead-closure` before the gate
+      research: rendering
+      verify:
+- [ ] T05 (amendment 1) The prose (plan T05; FR-003): the four repointed in docstrings, comments and indexes; the moved claims re-checked
+      research: rendering
+      verify:
+- [ ] T06 (amendment 1) Measure and land (plan T06; FR-006, SC-002, SC-003, SC-006): `make maps`, `make done`, `make cohort-landing`, the end bookend, the report, the push
+      research: rendering
+      verify:
 - [ ] GM review (make gm-reviewed F=388) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

@@ -89,3 +89,37 @@ Touched: `l7r/diagram/settlement/{rolling,civic_grounds,city}/`, `settlement/{co
 ## Complexity Tracking
 
 None.
+
+## Amendment 1 (the GM, 2026-10-18): the four helpers go
+
+## T04 - the four helpers and their tests (FR-001, FR-002, amendment 1)
+
+Delete `build_comb` (`waterfields/comb.py`; its docstring - the comb layout and `grain` - moves onto `carve_comb`, its
+research claims with it), `crop_to_content` (`settlement/core.py`; its frame rule moves onto `content_view`'s docstring),
+`cremation_ground` with `ROOFED_SHARE` and `cremation_outline` (`civic_grounds/funerary.py`; its caption-path and surface
+entries go), and `PlacerMixin.headman` (`rolling/place.py`). Tests: `lay_comb` in `tests/waterfields/_builders.py`
+(`finish_comb(carve_comb(...))`) replaces `build_comb` in the comb tests, whose wrapper-equals-pair clause goes; a `crop`
+helper in `tests/settlement/_builders.py` (`crop_to_view(content_view(s._crop_boxes(city=False), extra, margin, W, H))`,
+`crop_to_content`'s body) replaces it in the frame tests; the `cremation_ground` tests (`tests/tier_city/settlement/
+test_civic_grounds.py`) and the `headman` method tests (`test_rolling.py`'s two refusals, and the headman lines of its
+nucleated-cluster test) go; `tests/waterfields/test_surface.py`'s and `tests/hamletgen/test_surface.py`'s censuses stop
+scanning `legacy-hand-authored-pool`, and their pinned lists drop the deleted names. The coverage floor then names any line
+only the deleted tests reached: deleted if nothing live reaches it, else a test is owed. `make dead-closure BASE=<before>`
+run before the first gate (SC-006).
+
+Verify: `make quick`; `make dead-closure`; `make done` green.
+
+## T05 - the prose (FR-003, amendment 1)
+
+Repoint every docstring, comment and index naming the four as live: `build_comb` -> the comb builder / `carve_comb`,
+`crop_to_content` -> the crop / `content_view` (the edits the first landing made and rolled back on 2026-10-18, saved then).
+`waterfields/CLAUDE.md` and `civic_grounds/CLAUDE.md`'s rows; the claims the moved docstrings carry are re-checked
+(`make claims-owed`, impl-drift).
+
+Verify: `grep -rnwE "build_comb|crop_to_content" l7r docs dev/*.md` names nothing live; claims none owed.
+
+## T06 - measure and land (FR-006, SC-002, SC-003, SC-006)
+
+`make maps` (pool unchanged), `make done`, `make cohort-landing`, the end bookend, the feature report's GM section updated,
+the gated push.
+
