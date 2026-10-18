@@ -118,13 +118,19 @@ def dispatch_text(rec: dict[str, Any], root: Path, key: str) -> str:
 def stale_renders(root: Path, units: Sequence[Any]) -> list[str]:
     """The generator (`pool/.../<map>.gen.py`, relative to `root`) of each owed unit's map whose `.png` or `.html` is missing or
     older than its `.gen.py` or `.json` - rendered by `make verify` before the snapshot (feature 385 T26, plan D48; the round
-    arbiter's fix on hour:385-approach-checklist@12: a pool roll wrote no renders and three glyph prompts said so). A Mode A
-    sheet has no generator and is never listed."""
+    arbiter's fix on hour:385-approach-checklist@12: a pool roll wrote no renders and three glyph prompts said so). An entry
+    with no generator (none in the pool on 2026-10-18: every map and sheet has one) whose `.png` is missing is listed as
+    `sheet:<its .svg>`, which `make verify` refuses, naming `make sheet-render` (spec-fidelity, T26 round 1: "every unit")."""
     out: list[str] = []
     for unit in units:
         src = map_dir(root, unit.on) if unit.on else None
-        gen = src / f"{unit.on}.gen.py" if src is not None else None
-        if gen is None or not gen.is_file():
+        if src is None:
+            continue
+        gen = src / f"{unit.on}.gen.py"
+        if not gen.is_file():
+            svg = src / f"{unit.on}.svg"
+            if svg.is_file() and not (src / f"{unit.on}.png").is_file():
+                out.append(f"sheet:{svg.relative_to(root).as_posix()}")
             continue
         made = max(f.stat().st_mtime for f in (gen, src / f"{unit.on}.json") if f.is_file())
         renders = [src / f"{unit.on}{s}" for s in (".png", ".html")]
