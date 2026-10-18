@@ -79,6 +79,24 @@ def unanswered(body: str, items: list[int]) -> list[int]:
     return [n for n in items if n not in got]
 
 
+def future_stamps(plan_text: str, now: str | None = None) -> list[str]:
+    """Every part B or re-answered Approach heading stamped after the current UTC minute (feature 385 T50, the round arbiter's fix
+    on hour:385-approach-checklist@18): a stamp the session typed ahead of the clock let "written after its trigger" pass without
+    being so - T08's part B was stamped 16:40Z at 16:31, T46's 16:52Z at 16:48."""
+    clock = parse_utc((now or now_utc())[:16] + "Z") or 0.0
+    head = re.compile(r"^#{3,4}\s+T\d+\w*\s+(?:part B|Approach)\b.*$", re.M | re.I)
+    return [m.group(0) for m in head.finditer(plan_text) if (t := parse_utc(m.group(0))) is not None and t > clock]
+
+
+def future_refusal(plan_text: str, now: str | None = None) -> str | None:
+    """The refusal for a plan with a heading stamped in the future, or None."""
+    ahead = future_stamps(plan_text, now)
+    if not ahead:
+        return None
+    return (f"stamped after the clock ({(now or now_utc())[:16]}Z): {'; '.join(ahead)} - stamp a part B with the time it is "
+            "written (feature 385 T50)")
+
+
 def _best(plan_text: str, task: str, part: str, items: list[int], since: float | None) -> tuple[bool, list[int]]:
     """(a block exists, the items the most complete block stamped at or after `since` leaves unanswered)."""
     found = [(h, b) for h, b in task_blocks(plan_text, task, part)
@@ -122,6 +140,8 @@ def refusal(spec_dir: pathlib.Path, root: pathlib.Path, task: str) -> str | None
         return None
     if not path.is_file():
         return f"the plan opts in to the approach checklist at {path.relative_to(root)}, which does not exist"
+    if ahead := future_refusal(text):
+        return ahead
     lines = path.read_text(encoding="utf-8")
     items = part_items(lines, "A")
     exists, missing = _best(text, task, "A", items, None)

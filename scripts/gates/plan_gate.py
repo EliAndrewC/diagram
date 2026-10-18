@@ -810,6 +810,9 @@ def main(argv: list[str]) -> int:
         except (OSError, ValueError):
             review = {}
         text = (spec_dir / "plan.md").read_text(encoding="utf-8")
+        if ahead := _approach_gate().future_refusal(text):  # feature 385 T50: a future stamp is refused before it is reviewed
+            print(f"plan-delta: {ahead}", file=sys.stderr)
+            return 1
         ruled = {t for t in task_sections(text) if task_current(review, text, t, History(spec_dir / "plan.md"))}
         done = (spec_dir / "plan-done.md").read_text(encoding="utf-8") if (spec_dir / "plan-done.md").is_file() else ""
         keys, blocked = block_status(review, text, ruled, History(spec_dir / "plan.md"), done)
