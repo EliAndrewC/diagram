@@ -55,7 +55,7 @@ from l7r.diagram.settlement.land.wet import marsh_ground
 
 from ..consts import Poly, Pt
 from ..plan import SitePlan
-from .bamboo import Footing, _strip_blocked
+from .bamboo import Footing, StripNear, _strip_blocked
 from .holds import release_held
 from .retirement import RETIREMENT_FT, RETIREMENT_GAP_FT
 
@@ -418,6 +418,7 @@ def _draw_pending(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, A
     pond = s.M.get("pond")
     lanes = [([(float(a), float(b)) for a, b in ln["pts"]], float(ln.get("w", 3)) / 2 + px(3.0)) for ln in s.M.get("lanes", []) if len(ln.get("pts") or []) >= 2]
     footing = Footing(s, fields, marsh)
+    near = StripNear(s, lanes)  # what stands, filed once for the pass (feature 387)
     _dry = [[(float(a), float(b)) for a, b in o.get("poly") or []] for o in s.M.get("dry_plots", [])]
     edges = edge_index(fields + _dry, lanes)
     count = 0
@@ -430,7 +431,7 @@ def _draw_pending(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, A
             (
                 (x, y, road)
                 for x, y, road in field_edge_seats(edges, hx, hy, px(PIT_FIELD_REACH_FT), px(_PIT_EDGE_CLEAR_FT) + d / 2)
-                if _flexible_clear(s, h, (x, y), (d, d), fields, marsh, pond, lanes, footing)
+                if _flexible_clear(s, h, (x, y), (d, d), fields, marsh, pond, lanes, footing, near)
                 and not under_a_lane(s.M, (x, y, d, d, rot))
                 and s.admits("farm_fixtures", {"x": round(x, 1), "y": round(y, 1), "w": d, "h": d, "rot": rot, "of": [round(hx, 1), round(hy, 1)]})
             ),
@@ -458,7 +459,7 @@ def under_a_lane(M: Mapping[str, Any], fixture: tuple[float, float, float, float
     return any(over_a_fixture(lane_pts(ln), float(ln.get("w") or 3.0), [quad]) is not None for ln in M.get("lanes") or [] if len(ln.get("pts") or ()) >= 2)
 
 
-def _flexible_clear(s: Settlement, h: Mapping[str, Any], q: Pt, ext: tuple[float, float], fields: Any, marsh: Any, pond: Any, lanes: Any, footing: Footing) -> bool:
+def _flexible_clear(s: Settlement, h: Mapping[str, Any], q: Pt, ext: tuple[float, float], fields: Any, marsh: Any, pond: Any, lanes: Any, footing: Footing, near: StripNear) -> bool:
     """May the field pit stand at `q`: off every drawn footprint and the ground (`_strip_blocked`), on its house's bank. A
     lane between it and the house is allowed - it stands at the field or the road (the kizuma, which kept to its yard's side
     of every lane, went with feature 280's modern-only forms).
@@ -468,7 +469,7 @@ def _flexible_clear(s: Settlement, h: Mapping[str, Any], q: Pt, ext: tuple[float
         pit off every grove - UNRESEARCHED: clear of every farm's grove band
     """
     hx, hy = float(h["x"]), float(h["y"])
-    if _strip_blocked(s, q[0], q[1], ext[0], ext[1], hx, hy, fields, marsh, pond, lanes, footing):
+    if _strip_blocked(s, q[0], q[1], ext[0], ext[1], hx, hy, fields, marsh, pond, lanes, footing, near=near):
         return False
     # ...nor in any farm's grove band (feature 291 on 287: `grove_rules.fixtures_on_groves`, the same boxes)
     if any(

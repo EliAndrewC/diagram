@@ -1,0 +1,36 @@
+perf-profile seed 4 stage field: 8.9s under cProfile (the stages before it took 0.0s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261018T095101Z-seed4-field.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         10677703 function calls (10576640 primitive calls) in 8.854 seconds
+
+   Ordered by: cumulative time
+   List reduced from 1415 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.003    0.003    8.891    8.891 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/water/comb.py:21(stage_field)
+        1    0.000    0.000    7.824    7.824 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/water/fit.py:45(fit_field)
+        1    0.001    0.001    7.396    7.396 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/water/fit.py:126(_finish_first_admissible)
+        1    0.007    0.007    7.377    7.377 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/comb.py:191(finish_comb)
+        1    0.000    0.000    4.570    4.570 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/settle.py:244(settle_cells)
+43635/32372    0.050    0.000    3.310    0.000 {built-in method builtins.sum}
+   151975    0.382    0.000    3.205    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:73(wrapped)
+      325    0.002    0.000    3.186    0.010 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/settle.py:252(<genexpr>)
+      502    0.008    0.000    3.184    0.006 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/settle.py:225(merge)
+71816/50874    0.093    0.000    2.673    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:171(wrapper)
+     3204    0.004    0.000    1.936    0.001 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/settle.py:182(judge)
+     3204    0.024    0.000    1.932    0.001 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/settle.py:64(verdict)
+      502    0.029    0.000    1.667    0.003 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/settle.py:213(neighbors)
+     3246    0.029    0.000    1.594    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/ring_rules.py:472(ring_violations)
+     7907    0.031    0.000    1.555    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/settle.py:134(shared_length)
+        1    0.001    0.001    1.404    1.404 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/hem.py:20(_comb_dry_and_beans)
+        1    0.006    0.006    1.380    1.380 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/settle.py:166(__init__)
+     2189    0.004    0.000    1.096    0.001 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/settle.py:185(add)
+        1    0.005    0.005    1.048    1.048 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/partition.py:395(cut)
+     1163    0.006    0.000    0.959    0.001 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/settle.py:144(takes)
+    12698    0.055    0.000    0.934    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/geometry/base.py:462(buffer)
+     8214    0.007    0.000    0.908    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/geometry/base.py:668(intersection)
+     8214    0.853    0.000    0.853    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/set_operations.py:112(intersection)
+    12705    0.638    0.000    0.724    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/constructive.py:136(buffer)
+        1    0.002    0.002    0.655    0.655 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/hem.py:160(middle_reserve)
+
+

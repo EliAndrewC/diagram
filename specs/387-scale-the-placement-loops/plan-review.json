@@ -1,0 +1,402 @@
+{
+ "feature": "387-scale-the-placement-loops",
+ "blocks": {
+  "preamble": {
+   "sha256": "0f88103cd567d6578c7a095ede93a5f0d1e3642dddbbbb14d25e3bdd48bf6282",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "a7dfc08b3d8dce5a29705a432b6751eac9c9e3c73d78835cc17cda5405b50960",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "1ad33e75df5cfafc57ed4a17a8d2b0e987af2398166524af81c47e88c461114a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "82b3ef391af75a63df9b78271de2eb4c64d900fe727d474e42743d2dfd083605",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "e87597169f5f0131526a5adf7862807ae6f80ef2f664f3c26bbb16d4d420fc5a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T01 - the way tree (FR-001)": {
+   "sha256": "01c60de87e37b255d6c6c472366b986071f76fad3084c01d8ee6b9a838d74324",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T02 - the web's field way and the knots (FR-002)": {
+   "sha256": "73219f1c42f08914f209679145185743970e4b888c1db98b58b502c54944b997",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T03 - the cell merges (FR-003)": {
+   "sha256": "6205891cae08c2bf1e6045aa6e8a5aa4c10fa94648374eadf59b05e253c41cc7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T04 - the sun keep-outs (FR-005)": {
+   "sha256": "a5a0ddd8f5220e49903b002e09ee971181de3c91a632094b7ae95eef156286f0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T05 - the bamboo strip check (FR-006)": {
+   "sha256": "5d8f526c4d2b56014e29f5aac7d0f635bdf9e7f86e38eacce276dcfce0e74414",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T06 - measure, sweep and record (FR-009, FR-010, SC-001 - SC-004)": {
+   "sha256": "efce12821f8df5ce8548450c9424b633297eaf3a6a2da4b0d7c2b28a0856874c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T07 - land (SC-003, SC-005)": {
+   "sha256": "48d78969cce77e3f346ab6e3222a73550f2d7f9c02f2a017e8cfd5d2c2460ff7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Project Structure": {
+   "sha256": "d1fdb6e02c6d483f0220eed4b2c6554be5cb26606d3430da19e107813375a253",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Complexity Tracking": {
+   "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## T01 - the way tree (FR-001)",
+    "## T02 - the web's field way and the knots (FR-002)",
+    "## T03 - the cell merges (FR-003)",
+    "## T04 - the sun keep-outs (FR-005)",
+    "## T05 - the bamboo strip check (FR-006)",
+    "## T06 - measure, sweep and record (FR-009, FR-010, SC-001 - SC-004)",
+    "## T07 - land (SC-003, SC-005)",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary-equivalence-tiers",
+     "summary": "Equivalence held by a unit test per site (old form kept as oracle in the test module) and a soak test rolling the reference spec and four cohort seeds at 40 households with every new function shadowed by the old.",
+     "class": "within",
+     "why": "FR-007 asks for a test that runs both forms on the same inputs; the soak at 40 households is the size SC-001/SC-002 measure at. The GM's 'No thanks' declined rendering the 40-household legs, not measuring at them. Enforces what was asked."
+    },
+    {
+     "id": "TechContext-verification-route",
+     "summary": "Reference map then cohort then pool; landing cohort before the push.",
+     "class": "within",
+     "why": "SC-003's own verification route."
+    },
+    {
+     "id": "Bookends",
+     "summary": "387-start taken on the unmodified spec commit with SCALING=1; 387-end back to back before the push.",
+     "class": "within",
+     "why": "FR-009."
+    },
+    {
+     "id": "Constitution-admits-split-and-tree_base-file",
+     "summary": "admits split into base-tree and candidate questions; the base-tree cache in a new ways/tree_base.py to keep tree.py under 1,000 lines.",
+     "class": "within",
+     "why": "Code placement under the project's size limits; decides nothing about what is judged."
+    },
+    {
+     "id": "D1-base-tree",
+     "summary": "TreeBase holds, per tree state keyed on content, the records, root, hosts, laid lanes and fronting ends with junction answers; a candidate costs its own host, its own lane, its chain from the base, and the as-today candidate-vs-rest questions; fronting ends are base ends minus those the new lane joins plus the new lane's ends.",
+     "class": "within",
+     "why": "Exactly FR-001 and the GM's first bullet: judge the addition, not the whole tree again, with the verdict equal (equivalence test on every gap-pass candidate)."
+    },
+    {
+     "id": "D1-needle-faces-incremental",
+     "summary": "Needle faces judged only where a face shares an edge with the new lane (or a lane as_joined drew differently); merged faces cannot become needles (mediant bound); noding and polygonize stay one shapely call over the web.",
+     "class": "within",
+     "why": "Answers the earlier pass's D1-needle_loops ruling: only faces the addition can create or split are judged, which is FR-001's 'the rules the addition can break'. The whole-web polygonize is the same reading the accepted spec's FR-002 gives the knots ('still noded and polygonized whole, one shapely call'); the judgment is what is narrowed to the addition."
+    },
+    {
+     "id": "D1-dirty-base-fallback",
+     "summary": "'Where the base itself holds a needle (a tree not built by admits alone), the whole test runs, as today.'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "An except-when that does the whole check again - the exact behavior the GM's first bullet and FR-001 ('not the whole tree again') exist to remove. Not physically impossible: the plan's own D2b handles a dirty web incrementally (keep each face with its verdict, subtract the thin faces an edit touches, add the trial's thin ones), and if admits asks a boolean an untouched base needle decides the candidate at once. Not implied by the GM's words. When it fires is an unmeasured premise ('a tree not built by admits alone' asserts that such trees exist without saying where or how often), and D1's Counted (lay calls, fronting pairs) would never show it firing. Remedy: drop the fallback by keeping the base's faces with per-face verdicts (D2b's form), and add faces judged per candidate to D1's Counted so SC-001 would catch the whole test returning."
+    },
+    {
+     "id": "D2a-field-runs-best-first",
+     "summary": "Sampled points taken in order of their distance to the ground's edge (a lower bound on any run from them), stopping once limit runs are held and the next point's distance strictly exceeds the longest kept; ties keep the old stable order.",
+     "class": "within",
+     "why": "FR-002's field-way clause: the work per candidate kept stops growing with the network; the strict 'exceeds' still visits ties, so the list equals the old (tested on every call)."
+    },
+    {
+     "id": "D2b-knot-counts-incremental",
+     "summary": "doorstep_ends, doubled_tails, shadows and needle_loops re-asked only where an edit can change them (ends within JOIN_TOL of an edited lane's old or new line; pairs holding an edited lane; faces meeting an edited lane's old or new line), from verdicts kept per web state.",
+     "class": "within",
+     "why": "FR-002 verbatim, and the GM's 'web's settling ... redo the whole check every time'. A face meeting neither line is the same face in both arrangements, so the count is exact."
+    },
+    {
+     "id": "D2b-way_outs-whole",
+     "summary": "way_outs stays a whole-web question per trial.",
+     "class": "within",
+     "why": "Carried by the accepted FR-002, and checked against the request: the rule is itself global (a route through the whole web, which one moved end can re-route anywhere), so asking it is judging the rule the addition can break, not re-judging the web out of habit."
+    },
+    {
+     "id": "D3-dedupe-before-measuring",
+     "summary": "Index hits mapped to live owners and deduplicated before each shared bund is measured once.",
+     "class": "within",
+     "why": "FR-003 and the GM's cell-merge bullet; exact by construction and tested on every merge."
+    },
+    {
+     "id": "D3-index-not-current",
+     "summary": "The cell index is not kept current for split parts; recorded at neighbors and in the report as a defect with a measurement of how often a split part neighbors a failing cell.",
+     "class": "within",
+     "why": "Carried by the accepted FR-003 and SC-005; against the request it narrows nothing - the GM asked for the merges to stop redoing work, and fixing the defect would move maps against FR-007's equivalence rather than speed anything. Recording it is XIV."
+    },
+    {
+     "id": "D4-version-key",
+     "summary": "threshing_yards and gardens become Indexed; the sun-box key is (reach, yards.version, gardens.version, houses.version); the in-place garden writer bumps houses via Indexed.touch(); under L7R_CHECK_CACHES=1 every hit re-derives the content key and raises on a difference.",
+     "class": "within",
+     "why": "Answers the earlier D4-mechanism ruling: FR-005 asks for invalidation by the registries' own versions, never a count or identity guess; touch() is what makes the houses registry's version true for the one in-place writer, and the suite check is enforcement of that requirement."
+    },
+    {
+     "id": "D4-all-callers-indexed",
+     "summary": "Sun boxes filed once per key in a PointGrid; every caller (windbreak, woods, bamboo, cover) is served from it, same list in the same order.",
+     "class": "within",
+     "why": "Answers the earlier D4-outside-scope ruling: the GM's bullet is that the sun keep-outs are recomputed per call when they could be built once; every caller is that."
+    },
+    {
+     "id": "D5-bamboo-index",
+     "summary": "household_bamboo builds a PointGrid once per pass of placed boxes, house boxes, other kinds, padded lane segments and crowns; placed kept current through indexed_grid on its version; the same test on each grid candidate; under L7R_CHECK_CACHES=1 the straight scan double-checks every verdict.",
+     "class": "within",
+     "why": "FR-006 and the GM's third bullet."
+    },
+    {
+     "id": "D5-fixtures-caller-straight-scan",
+     "summary": "_strip_blocked takes the index as an optional argument; without it - the caller in homesteads/fixtures.py - it scans as now.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The optional argument keeps a straight-scan path alive for the bamboo strip check, the exact pattern the GM's third bullet names, and routes one caller to it with no stated ground: the plan does not say that caller is test-only, asks a different question, or asks once per pass. A carve-out offered with no reason cannot meet any ground. Remedy: state what the homesteads/fixtures.py caller asks and how often (if it is not a candidate-strip check, or asks a bounded handful of times, say so with the measurement and it is within), or give it the index."
+    },
+    {
+     "id": "T06-counts-sweep-record",
+     "summary": "Counts at 10/20/40, seed 4, before and after into measurements.json with a re-runnable command; cohort, maps, done; end bookend; dev/performance.md rule with each site's before/after.",
+     "class": "within",
+     "why": "SC-001, FR-009, FR-010, SC-004, SC-003."
+    },
+    {
+     "id": "T07-land-and-report",
+     "summary": "Landing cohort, gated push, report naming FR-004 withdrawn, the restated premises and the split-part defect.",
+     "class": "within",
+     "why": "SC-003, SC-005."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## T01 - the way tree (FR-001)",
+    "## T02 - the web's field way and the knots (FR-002)",
+    "## T03 - the cell merges (FR-003)",
+    "## T04 - the sun keep-outs (FR-005)",
+    "## T05 - the bamboo strip check (FR-006)",
+    "## T06 - measure, sweep and record (FR-009, FR-010, SC-001 - SC-004)",
+    "## T07 - land (SC-003, SC-005)",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary: two-tier equivalence (unit oracle in tests, rolled soak at 40 hh)",
+     "summary": "Each site proved against the old form by a unit test (old form kept only in the test module) and a soak test that rolls the reference spec and four cohort seeds at 40 households, wrapping each new function to also ask the old form.",
+     "class": "within",
+     "why": "Enforces FR-007's equivalence on the requested changes; 40 households is the size the accepted spec's SC-001/FR-009 already measure and the GM's purpose is growth beyond the hamlet band. The GM's 'No thanks' declined rendering scaling legs for him, not a test."
+    },
+    {
+     "id": "Technical Context: reference map then cohort and pool",
+     "summary": "Each task proves its change on Inashiro and its equivalence test; T06 sweeps cohort and pool.",
+     "class": "within",
+     "why": "Verification of the requested changes (FR-007, SC-003); no new scope."
+    },
+    {
+     "id": "Performance bookends: 387-start on the spec commit, 387-end before push",
+     "summary": "Bookends with SCALING=1, start recorded, end taken back to back where load allows.",
+     "class": "within",
+     "why": "Exactly FR-009."
+    },
+    {
+     "id": "Constitution Check: admits split, new ways/tree_base.py, research: rendering, XIII baseline",
+     "summary": "Code-structure and process conformance; D3 defect recorded.",
+     "class": "within",
+     "why": "Layout of the requested work and project gates; decides nothing the request or spec left to narrow."
+    },
+    {
+     "id": "D1",
+     "summary": "Base tree (records, hosts, laid lanes, fronting ends with junction answers, and its faces each with its thin/not verdict) built once per content-keyed tree state; the candidate is judged on its own host, lane, fronting-end delta, and the faces meeting a changed line (new lane; for the joined form each lane as_joined redraws, old and new line). Needle iff a thin base face meets no changed line or a thin candidate face meets one. Noding/polygonize stays one call over the web. Faces judged per candidate added to the SC-001 count.",
+     "class": "within",
+     "why": "Answers last round's NOT LEGITIMATE dirty-base fallback: the face rule is now exact whatever the base holds (a face meeting no changed line is the same face in both arrangements, as D2b's), so the whole-test fallback is gone and no case judges the whole tree again (FR-001). The whole-web polygonize is the arrangement, not a judgment - the accepted FR-002 sanctions exactly this for the knots, and SC-001 counts lanes/faces judged, now including faces. Equivalence on every gap-pass candidate (FR-007)."
+    },
+    {
+     "id": "D2a",
+     "summary": "field_runs takes points best-first by distance to the ground's edge and stops once limit runs are kept and the next lower bound exceeds the longest kept; ties keep the old order.",
+     "class": "within",
+     "why": "Implements FR-002's 'finds its candidates without measuring every point' with an equivalence test on every call (FR-007)."
+    },
+    {
+     "id": "D2b",
+     "summary": "Knot trials re-ask doorstep_ends, doubled_tails, shadows and needle_loops only where an edit can change them, from the web's kept verdicts; way_outs stays whole.",
+     "class": "within",
+     "why": "Is FR-002's own text clause by clause, including way_outs staying whole and the whole noding; not the R12 lever."
+    },
+    {
+     "id": "D3",
+     "summary": "Hits mapped to live owners and deduplicated before shared_length; index not made current, split-part miss recorded as a defect with its frequency.",
+     "class": "within",
+     "why": "Is FR-003 as accepted, including the not-current index and the SC-005 defect report."
+    },
+    {
+     "id": "D4",
+     "summary": "Sun-keepout key becomes (reach, yards.version, gardens.version, houses.version); the registries are stated to be already Indexed (StandingList), so no core.py change; the one in-place writer bumps houses via Indexed.touch(); L7R_CHECK_CACHES=1 re-derives the content key on every hit; boxes filed in a PointGrid per key; every caller served.",
+     "class": "within",
+     "why": "Is FR-005 (keyed on registries' own versions, not a count or identity; answered from an index). The 'already Indexed' premise changes only where the version comes from, not what is keyed; it cannot be checked from the bundle and is proven or refuted at implementation, failing loudly rather than silently if wrong."
+    },
+    {
+     "id": "D5",
+     "summary": "_strip_blocked requires the index; household_bamboo builds it once per pass with placed boxes kept current via indexed_grid on s.placed's version; the fixtures caller (_flexible_clear) builds its own index and hands it in; the straight scan stays only as the test oracle; a narrower lane list (own_ground) is honored by intersecting the index's candidates with it.",
+     "class": "within",
+     "why": "Answers last round's NOT LEGITIMATE fixtures carve-out: no caller keeps the straight scan, so FR-006 holds for every caller. The own_ground filter applies the same test to the same items the narrower list held, so the verdict equals the straight scan's."
+    },
+    {
+     "id": "T06",
+     "summary": "Counts at 10/20/40, seed 4, before and after into measurements.json with a re-runnable command; cohort, maps, done, end bookend, dev/performance.md section.",
+     "class": "within",
+     "why": "FR-009, FR-010, SC-001, SC-004."
+    },
+    {
+     "id": "T07",
+     "summary": "Landing cohort, gated push, report naming FR-004 withdrawn, restated premises and the split-part defect.",
+     "class": "within",
+     "why": "SC-003 and SC-005 as written."
+    },
+    {
+     "id": "Project Structure",
+     "summary": "New tree_base.py and tests; changed files listed; core.py dropped from the list.",
+     "class": "within",
+     "why": "Follows from D1-D5; dropping core.py follows D4's premise and narrows nothing requested."
+    },
+    {
+     "id": "preamble / Complexity Tracking",
+     "summary": "Header and 'None'.",
+     "class": "within",
+     "why": "No decision."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## T05 - the bamboo strip check (FR-006)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D5-index",
+     "summary": "household_bamboo builds one PointGrid (128 px) per pass of placed boxes, turned house boxes, wells/kosatsuba/byres/sheds/retirement houses, lane segment boxes padded by half-width, and crowns; _strip_blocked takes it as required `near` and scans its candidates for the strip box padded by the largest margin, then applies the SAME test",
+     "class": "within",
+     "why": "Exactly the GM's 'one straight scan with no index' item and FR-006 (indexes built once per pass, same verdict); the per-item test is unchanged so no rule is loosened (FR-008)."
+    },
+    {
+     "id": "D5-fixture-caller",
+     "summary": "The field pit's seat (homesteads/fixtures._flexible_clear), the other caller of _strip_blocked, builds one index for its pass and passes it in",
+     "class": "within",
+     "why": "It is the same strip check the request names; with `near` required, its caller must supply the index or the change cannot land. Same test, same verdicts."
+    },
+    {
+     "id": "D5-own-ground",
+     "summary": "A narrower lane list (own_ground) is honored by filtering the index's candidates to that list",
+     "class": "within",
+     "why": "Keeps the old verdict for that call (FR-006 equivalence); no scope change."
+    },
+    {
+     "id": "D5-currency",
+     "summary": "s.placed is indexed through indexes.indexed_grid on its own version (append extends, else rebuild); houses, other kinds, lanes and crowns filed once at pass start because the pass changes nothing else the check reads",
+     "class": "within",
+     "why": "FR-006's 'kept current as things are placed'; the filed-once inputs rest on the stated fact that the pass writes only placed, block_polys (not read) and its output."
+    },
+    {
+     "id": "D5-cache-check (changed)",
+     "summary": "Under L7R_CHECK_CACHES=1 the index now checks on each query that the once-filed registries still hold what was filed (their versions, crowns' and lanes' lengths) and raises if not; the straight scan no longer runs in that mode and runs only in the equivalence tests",
+     "class": "within",
+     "why": "The request asks for the index and FR-006 for a verdict equal to the straight scan's; that equality is still proved by the equivalence test running both (block's Equivalence line, FR-007). The debug mode is an extra guard on the filed-once premise, not something the GM asked for in a particular form, and swapping its method narrows nothing the GM or the spec requires."
+    },
+    {
+     "id": "D5-proof",
+     "summary": "Equivalence: every candidate's verdict, old and new. Counted: items tested per candidate",
+     "class": "within",
+     "why": "Enforces FR-006/FR-007 and the counting in SC-001/SC-002; enforcement of the request."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## T02 - the web's field way and the knots (FR-002)",
+    "## T03 - the cell merges (FR-003)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D2a",
+     "summary": "field_runs takes network points nearest-first by distance to the worked ground's edge and stops once limit runs are kept and the next point's lower bound exceeds the longest kept; refinement: within a band, points' edge distances come from one vectorized shapely.distance call and their runs are asked nearest first, stopping when the next point's distance less the stop exceeds the longest kept",
+     "class": "within",
+     "why": "FR-002 asks that the field way find its candidates without measuring every point, so that the work per candidate kept does not grow with the network. The refinement batches the distance step the block already used and tightens the early stop with a lower bound (distance less the stop) that never cuts a run shorter than one kept. It keeps the same output list, checked by the call-by-call equivalence test under FR-007, and rules on nothing the request did not ask for."
+    },
+    {
+     "id": "D2b",
+     "summary": "knot trials re-ask doorstep_ends, doubled_tails, shadows and needle_loops only where an edit can change them; way_outs stays whole",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict; it is FR-002's own text and stops re-checking the whole web on every trial, which is what the GM approved."
+    },
+    {
+     "id": "D3",
+     "summary": "Fabric.neighbors maps hits to live owners, removes duplicates and measures each once; refinement: a pair's shared-bund measure is kept with the two polygons it was taken on and reused while neither cell changes; the index is still not made current (defect recorded)",
+     "class": "within",
+     "why": "FR-003 asks that bund measurements per merge stop growing with the household count, and the after-count shows measuring once per merge still grew (3.2/3.1/9.4). Reusing a measure taken on the very same two polygons removes recomputation of an unchanged value and gives exactly the same answer under FR-007, with no check removed or loosened under FR-008. This is what the GM asked for under 'rebuilding things that don't change' and 'the cell merges ... redo the whole check'. The index carve-out is unchanged from the CLEAR text and from FR-003 itself."
+    }
+   ]
+  }
+ ]
+}

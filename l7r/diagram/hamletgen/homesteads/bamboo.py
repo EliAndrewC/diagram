@@ -6,11 +6,12 @@ Research: strip geometry - NONE: frames, indexes and ground lookups; the units t
 from __future__ import annotations
 
 import math
+import os
 from collections.abc import Iterator, Mapping, Sequence
 from typing import Any, NamedTuple
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, segments_cross
-from l7r.diagram.settlement._geom import PointGrid, boxed_grid, boxed_ring_hit, boxed_rings, boxed_segs
+from l7r.diagram.settlement._geom import PointGrid, boxed_grid, boxed_ring_hit, boxed_rings, boxed_segs, indexed_grid
 from l7r.diagram.settlement._geom.water_index import crosses_a_stream
 from l7r.diagram.settlement.homestead_parts.bamboo_keepout import stand_spares_seats
 from l7r.diagram.settlement.homestead_parts.fixture_seats import weighted
@@ -112,17 +113,19 @@ def household_bamboo(
     px = s.px
     fields = [list(f) for f in s.field_polys]
     marsh = marsh_ground(s.M)
+    lanes = [([(float(a), float(b)) for a, b in ln["pts"]], float(ln.get("w", 3)) / 2 + px(6.0)) for ln in s.M.get("lanes", []) if len(ln.get("pts") or []) >= 2]
     ground = StripGround(
         fields=fields,
         marsh=marsh,
         pond=s.M.get("pond"),
-        lanes=[([(float(a), float(b)) for a, b in ln["pts"]], float(ln.get("w", 3)) / 2 + px(6.0)) for ln in s.M.get("lanes", []) if len(ln.get("pts") or []) >= 2],
+        lanes=lanes,
         footing=Footing(s, fields, marsh),  # the static ground, indexed once for every strip this pass tests (feature 218)
         seats=[(float(p[0]), float(p[1])) for q in s.M.get("houses") or [] for p in (q.get("wood_share") or {}).get("seats") or ()],
         # ...AND EVERY PLOT'S SUN GROUND at bamboo's reach (feature 315): gathered once - every plot stands, as seated or drawn
         sun=s._sun_keepouts((-1e9, -1e9, 1e9, 1e9), BAMBOO_SHADE_FT),
         belt=plan.belt if belt is None else belt,
         skip=skip,
+        near=StripNear(s, lanes),  # what stands, filed once for the pass (feature 387)
     )
     centers = [(float(q["x"]), float(q["y"])) for q in houses]
     meta = s.M["meta"]
@@ -238,6 +241,7 @@ class StripGround(NamedTuple):
     sun: Sequence[tuple[float, float, float, float]]
     belt: Sequence[Pt] | None
     skip: frozenset[tuple[float, float, float, float]]
+    near: StripNear
 
 
 def strip_candidates(h: Mapping[str, Any], wind: Pt, px: Any, roll: float) -> Iterator[tuple[float, float, float, float]]:
@@ -275,7 +279,7 @@ def strip_refused(s: Settlement, cx: float, cy: float, cw: float, ch: float, hou
     stream or a lane from its `house`?
 
     Research:
-        strip clearances - UNRESEARCHED: 6 ft off the walls, `PART_GAP_FT` off every seated part
+        strip clearances - UNRESEARCHED: `PART_GAP_FT` (2 ft) off every seated part, and through `_strip_blocked` 2 ft off other houses (the 6 ft off the walls is `strip_candidates`')
         strip out of the sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: kept 50 ft (bamboo's reach) off every yard's and bed's sun
         strip off the copse seats - UNRESEARCHED: off every household's reserved copse seats by the bamboo keep-out
         strip on its house's bank - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: refused across a stream
@@ -283,7 +287,7 @@ def strip_refused(s: Settlement, cx: float, cy: float, cw: float, ch: float, hou
         the strip on its house's side of a lane - UNRESEARCHED: no lane's centerline between a house and its strip (`across_a_lane`)"""
     hx, hy = house
     g = ground
-    if _strip_blocked(s, cx, cy, cw, ch, hx, hy, g.fields, g.marsh, g.pond, g.lanes, g.footing, g.skip) or in_belt(g.belt, cx, cy, cw, ch):
+    if _strip_blocked(s, cx, cy, cw, ch, hx, hy, g.fields, g.marsh, g.pond, g.lanes, g.footing, g.skip, near=g.near) or in_belt(g.belt, cx, cy, cw, ch):
         return True
     if parts_hit(cx, cy, cw, ch, parts, s.px(PART_GAP_FT)):  # a homestead as seated, its own included
         return True
@@ -436,6 +440,87 @@ class Footing:
         return s._on_watercourse(x, y, pad=4.0, near=self.water.near)
 
 
+_KINDS = ("wells", "kosatsuba", "byres", "farm_sheds", "retirement_houses")  # everything seated between the sheds and the strips (T49)
+
+
+class StripNear:
+    """What stands near a candidate strip, filed ONCE per pass (feature 387, plan D5) - the placed boxes, every farmhouse's turned
+    box, the wells, notice board, byres, sheds and retirement houses, each lane segment and each drawn crown - so `_strip_blocked`
+    tests the items near the strip, not every item on the map (1,102 candidates at 40 households asked 693,184 items of the
+    straight scan, `m:counts-before`). A PREFILTER: the grid hands back every item whose box comes within the strip's reach
+    (and some that do not); the exact test each item met before still decides, so the verdict is the straight scan's.
+
+    `s.placed` is the one thing the pass adds to as it runs (each seated strip a wall to the next), so its grid is the
+    registry's own (`indexed_grid`, extended on an append, rebuilt on anything else); the rest is filed at construction. Under
+    `L7R_CHECK_CACHES=1` (the suite) each query checks those still hold what was filed and raises if not.
+
+    Research:
+        what a strip keeps off, found near it - NONE: plumbing; the clearances are `_strip_blocked`'s claims
+        a fixture with no recorded size - UNRESEARCHED: taken as 16 ft across (`r` 8), as `_strip_blocked` always took it"""
+
+    __slots__ = ("_filed", "crowns", "houses", "kinds", "lanes", "s", "segs")
+
+    def __init__(self, s: Settlement, lanes: Sequence[tuple[Poly, float]]) -> None:
+        """Every item of what stands, filed by its box.
+
+        Research: a fixture with no recorded size - UNRESEARCHED: taken as 16 ft across (`r` 8), as `_strip_blocked` always took it"""
+        self.s, self.lanes = s, lanes
+        houses = []
+        for o in s.M.get("houses", []):
+            ox, oy = float(o["x"]), float(o["y"])
+            _, _, ow, oh = turned_box((ox, oy, float(o["w"]), float(o["h"])), float(o.get("rot", 0.0)))
+            houses.append((ox, oy, ow, oh, ox - ow / 2, oy - oh / 2, ox + ow / 2, oy + oh / 2))
+        self.houses = boxed_grid(houses)
+        kinds = []
+        for key in _KINDS:
+            for o in s.M.get(key, []):
+                ow, oh = float(o.get("w", 2 * float(o.get("r", 8)))), float(o.get("h", 2 * float(o.get("r", 8))))
+                x, y = float(o["x"]), float(o["y"])
+                kinds.append((x, y, ow, oh, x - ow / 2, y - oh / 2, x + ow / 2, y + oh / 2))
+        self.kinds = boxed_grid(kinds)
+        segs = []
+        for lane in lanes:
+            pts, half = lane
+            for k in range(len(pts) - 1):
+                a, b = pts[k], pts[k + 1]
+                segs.append((lane, a, b, min(a[0], b[0]) - half, min(a[1], b[1]) - half, max(a[0], b[0]) + half, max(a[1], b[1]) + half))
+        self.segs = boxed_grid(segs)
+        tc = s.M.get("tree_crowns") or []
+        crowns = []
+        for k in range(0, len(tc) - 2, 3):
+            tx, ty, r = float(tc[k]), float(tc[k + 1]), float(tc[k + 2]) + 0.6
+            crowns.append((tx, ty, float(tc[k + 2]), tx - r, ty - r, tx + r, ty + r))
+        self.crowns = boxed_grid(crowns)
+        self._filed = self._state()
+
+    def _state(self) -> tuple[Any, ...]:
+        M = self.s.M
+        return (*(getattr(M.get(k), "version", len(M.get(k) or ())) for k in ("houses", *_KINDS)), len(M.get("tree_crowns") or ()), len(self.lanes))
+
+    def placed(self) -> PointGrid:
+        """The placed boxes, from `s.placed`'s own versioned grid."""
+
+        def build(lst: Any) -> PointGrid:
+            grid = PointGrid()
+            add(grid, lst)
+            return grid
+
+        def add(grid: PointGrid, items: Any) -> None:
+            grid.extend((*b[:4], float(b[0]) - float(b[2]) / 2, float(b[1]) - float(b[3]) / 2, float(b[0]) + float(b[2]) / 2, float(b[1]) + float(b[3]) / 2) for b in items)
+
+        return indexed_grid(self.s.placed, "strip_near_placed", build, add)
+
+    def check(self) -> None:
+        """Under the suite: the registries filed once still hold what was filed."""
+        if os.environ.get("L7R_CHECK_CACHES") and self._state() != self._filed:
+            raise AssertionError(f"StripNear is stale: what it filed changed mid-pass ({self._filed} -> {self._state()})")
+
+    def count(self, cx: float, cy: float, cw: float, ch: float) -> int:
+        """How many items a strip here is tested against (SC-001's count)."""
+        pad = max(cw, ch) / 2 + 6.0
+        return sum(len(g.near(cx, cy, pad)) for g in (self.placed(), self.houses, self.kinds, self.segs, self.crowns))
+
+
 def _strip_blocked(
     s: Settlement,
     cx: float,
@@ -450,6 +535,8 @@ def _strip_blocked(
     lanes: Sequence[tuple[Poly, float]],
     footing: Footing | None = None,
     skip: frozenset[tuple[float, float, float, float]] = frozenset(),
+    *,
+    near: StripNear,
 ) -> bool:
     """Would a household bamboo strip centered here stand on something? Its own farmhouse is not something, and neither
     is a reserved box in `skip` (a caller whose parts are each registered passes the homestead BUNDLE boxes: feature 261,
@@ -465,7 +552,9 @@ def _strip_blocked(
         return True
     ft = footing or Footing(s, fields, marsh)  # a caller that tests many seats builds one and passes it (feature 218)
     corners = [(cx - cw / 2, cy - ch / 2), (cx + cw / 2, cy - ch / 2), (cx + cw / 2, cy + ch / 2), (cx - cw / 2, cy + ch / 2), (cx, cy)]
-    for px_, py_, pw, ph, *_ in s.placed:
+    near.check()
+    reach = max(cw, ch) / 2 + 6.0  # past every margin a test below keeps (2 and 6 ft), the lanes' own half-widths filed in their boxes
+    for px_, py_, pw, ph, *_ in near.placed().near(cx, cy, reach):
         if (px_ == hx and py_ == hy) or (px_, py_, pw, ph) in skip:
             continue
         if abs(cx - px_) < (cw + pw) / 2 + 2 and abs(cy - py_) < (ch + ph) / 2 + 2:
@@ -474,18 +563,14 @@ def _strip_blocked(
     # map whose houses carry no separate placed box that excused the neighbor's house as well - Kuwabata's woodpile landed
     # on the next house's gable once the 269 landing's bearing fix moved the row (the retired finished-map overlap test; since
     # feature 287 M8 the registry of what stands refuses it at record time, `overlap/registry.py`).
-    for o in s.M.get("houses", []):
-        ox, oy = float(o["x"]), float(o["y"])
+    for ox, oy, ow, oh, *_ in near.houses.near(cx, cy, reach):
         if abs(ox - hx) < 0.5 and abs(oy - hy) < 0.5:
             continue
-        _, _, ow, oh = turned_box((ox, oy, float(o["w"]), float(o["h"])), float(o.get("rot", 0.0)))
         if abs(cx - ox) < (cw + ow) / 2 + 2 and abs(cy - oy) < (ch + oh) / 2 + 2:
             return True
-    for key in ("wells", "kosatsuba", "byres", "farm_sheds", "retirement_houses"):  # everything seated between the sheds and this pass (T49)
-        for o in s.M.get(key, []):
-            ow, oh = float(o.get("w", 2 * float(o.get("r", 8)))), float(o.get("h", 2 * float(o.get("r", 8))))
-            if abs(cx - float(o["x"])) < (cw + ow) / 2 + 6 and abs(cy - float(o["y"])) < (ch + oh) / 2 + 6:
-                return True
+    for ox, oy, ow, oh, *_ in near.kinds.near(cx, cy, reach):  # everything seated between the sheds and this pass (T49)
+        if abs(cx - ox) < (cw + ow) / 2 + 6 and abs(cy - oy) < (ch + oh) / 2 + 6:
+            return True
     if any(boxed_ring_hit(q[0], q[1], ft.rings.near(q[0], q[1]), 6.0) for q in corners):  # a paddy or the marsh, inside or within 6 ft of an edge
         return True
     # A LANE THROUGH THE STRIP, not only past its corners (feature 137, cohort seed 03): five sample
@@ -493,13 +578,16 @@ def _strip_blocked(
     # `lanes_clear_of_bamboo` walks the tread's quarter-points. So the tread is also tested as a
     # segment against the strip's edges - a crossing, or an end inside, is a stand on a lane.
     _edges = [(corners[k], corners[(k + 1) % 4]) for k in range(4)]
-    for pts, half in lanes:
-        for k in range(len(pts) - 1):
-            a, b = pts[k], pts[k + 1]
-            if any(seg_dist(q[0], q[1], a, b) < half for q in corners):
-                return True
-            if any(segments_cross(a, b, e0, e1) for e0, e1 in _edges) or any(abs(p[0] - cx) < cw / 2 and abs(p[1] - cy) < ch / 2 for p in (a, b)):
-                return True
+    # ...a lane list narrower than the index's (`own_ground`: a sheltered farm's lanes less its own door path) keeps its own lanes
+    mine = None if lanes is near.lanes else {id(ln) for ln in lanes}
+    for lane, a, b, *_ in near.segs.near(cx, cy, max(cw, ch) / 2):
+        if mine is not None and id(lane) not in mine:
+            continue
+        half = lane[1]
+        if any(seg_dist(q[0], q[1], a, b) < half for q in corners):
+            return True
+        if any(segments_cross(a, b, e0, e1) for e0, e1 in _edges) or any(abs(p[0] - cx) < cw / 2 and abs(p[1] - cy) < ch / 2 for p in (a, b)):
+            return True
     # the dry hem's plots and the watercourses (unlock tripwire seed 47: a fixture on a dry plot and one
     # on the stream - neither is a paddy, a lane or the pond, so nothing above saw them), and any crown
     # already drawn (seed 37: a fixture seated under a grove crown drawn two stages earlier)
@@ -507,9 +595,7 @@ def _strip_blocked(
         return True
     if any(ft.on_water(s, q[0], q[1]) for q in corners):
         return True
-    tc = s.M.get("tree_crowns") or []
-    for k in range(0, len(tc) - 2, 3):
-        tx, ty, tr = float(tc[k]), float(tc[k + 1]), float(tc[k + 2])
+    for tx, ty, tr, *_ in near.crowns.near(cx, cy, max(cw, ch) / 2):
         # the stand is drawn axis-aligned (cw x ch), so a crown is measured to its own box: squaring it on the half-diagonal, as
         # a raked footprint is, made a sheltered farm's 240 x 16 ft south band a 240 ft square that every crown within 120 ft of
         # it refused (feature 374 wave 153: Kashikawa's 77 frame-wide offers all refused, the bands left a third of the farm wide)

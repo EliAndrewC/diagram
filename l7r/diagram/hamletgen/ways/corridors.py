@@ -14,14 +14,14 @@ from __future__ import annotations
 
 import math
 from collections.abc import Callable, Mapping, Sequence
-from typing import Any
+from typing import Any, cast
 
 from l7r.diagram.settlement import edge_dist, point_in_poly, rot_rect, seg_dist, segments_cross
 from l7r.diagram.settlement._geom.indexes import PointGrid
 
 from ..consts import WEB_FABRIC_GAP, Poly, Pt
 from . import law
-from .bund import BRANCH_STEP_FT, run_on_target
+from .bund import BRANCH_STEP_FT, TIP_MARGIN_FT, run_on_target
 from .checks import ford_crossing, unreached_houses
 from .fabric import _homestead_polys
 from .geom import WorkedGround, _components, polyline_len
@@ -229,22 +229,73 @@ def field_runs(segs: Sequence[tuple[Pt, Pt]], grounds: Sequence[WorkedGround], h
     out: list[Poly] = []
     pts = samples_along(segs)
     brook = tuple((float(x), float(y)) for x, y in brook)  # hashable: `ford_crossing` finds each ford's segment once
+    if not pts:
+        return out
+    import shapely
+
+    tree = shapely.STRtree(shapely.points(pts))
     for ground in grounds:
-        runs: list[Poly] = []
-        for q in pts:
-            tgt = run_on_target(q, ground, half, reach=math.inf)
-            if tgt is None:
-                continue
-            land = ford_crossing(q, tgt, brook, fords) if len(brook) >= 2 else []
-            far = run_on_target(land[1], ground, half, reach=math.inf) if land else None
-            if land and far is not None:
-                # a network point standing on the near landing - the end of a way already walked to the ford - is where the
-                # crossing starts, not a leg of its own
-                runs.append([q, land[1], far] if math.dist(q, land[0]) <= ON_TREE_PX else [q, land[0], land[1], far])
-            else:
-                runs.append([q, tgt])
-        out += sorted(runs, key=polyline_len)[:limit]
+        out += _shortest_runs(ground, pts, tree, half, brook, fords, limit)
     return out
+
+
+def _run_from(q: Pt, ground: WorkedGround, half: float, brook: tuple[Pt, ...], fords: Sequence[Pt]) -> Poly | None:
+    """The field run from network point `q` on to the bund (`field_runs`): straight, or over the brook at a ford; None where none.
+
+    Research:
+        field path to the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: from the network on to
+            the paddy's edge
+        over the brook at a ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: square,
+            at the ford that makes the walk shortest
+        no run-on past the far landing - UNRESEARCHED: the straight run is offered as found, and the lane law's crossing rule cuts
+            a crossing made off a ford before any is drawn (`settle._crossing_fault`, 0035); behavior as before feature 387, which
+            moved this out of `field_runs` unchanged"""
+    tgt = run_on_target(q, ground, half, reach=math.inf)
+    if tgt is None:
+        return None
+    land = ford_crossing(q, tgt, brook, fords) if len(brook) >= 2 else []
+    far = run_on_target(land[1], ground, half, reach=math.inf) if land else None
+    if land and far is not None:
+        # a network point standing on the near landing - the end of a way already walked to the ford - is where the
+        # crossing starts, not a leg of its own
+        return [q, land[1], far] if math.dist(q, land[0]) <= ON_TREE_PX else [q, land[0], land[1], far]
+    return [q, tgt]
+
+
+def _shortest_runs(ground: WorkedGround, pts: Sequence[Pt], tree: Any, half: float, brook: tuple[Pt, ...], fords: Sequence[Pt], limit: int) -> list[Poly]:
+    """The `limit` shortest field runs from the network points `pts` on to `ground`, as `field_runs` has always taken them - every
+    point's run, sorted shortest first (ties in the points' order) - but asked only of the points that can be among them
+    (feature 387, plan D2a). Every run from a point, straight or over a ford, is at least the point's distance to the ground's
+    edge less the run-on's stop (`run_on_target` stops half a tread and `TIP_MARGIN_FT` short; a ford's far leg starts no nearer
+    the edge than the stop), so the points are taken in widening bands of distance from the edge (the points' index, asked for
+    those within the band), and the search ends once `limit` runs are kept and the longest is shorter than any point beyond the
+    band could give. The network points measured no longer grow with the network (8,552 `run_on_target` calls at 40
+    households, `m:counts-before`).
+
+    Research: the shortest runs first - NONE: plumbing; the order is `field_runs`' claim"""
+    if ground.edge is None:
+        return []
+    import shapely
+
+    stop = half + TIP_MARGIN_FT
+    runs: dict[int, Poly | None] = {}
+    asked: set[int] = set()
+    band = 64.0
+    while True:
+        # ...EACH POINT IN THE BAND MEASURED TO THE EDGE IN ONE CALL, and its run asked in that order: a point's run is at least its
+        # distance less the stop, so the asking ends once `limit` runs are kept and the next point could not be shorter
+        new = sorted(int(i) for i in tree.query(ground.edge, predicate="dwithin", distance=band) if int(i) not in asked)
+        asked |= set(new)
+        dists = shapely.distance(ground.edge, shapely.points([pts[i] for i in new])) if new else []
+        for d, i in sorted(zip((float(x) for x in dists), new, strict=True)):
+            kept = sorted((polyline_len(r), k) for k, r in runs.items() if r is not None)[:limit]
+            if len(kept) >= limit and d - stop - 1e-6 > kept[-1][0]:
+                break  # no point left in the band can be shorter than the runs kept
+            runs[i] = _run_from(pts[i], ground, half, brook, fords)
+        kept = sorted((polyline_len(r), k) for k, r in runs.items() if r is not None)[:limit]
+        if len(asked) == len(pts) or (len(kept) >= limit and kept[-1][0] < band - stop - 1e-6):
+            return [cast(Poly, runs[i]) for _n, i in kept]
+        band *= 2.0
 
 
 ROUTED_FIELD_TRIES = 4

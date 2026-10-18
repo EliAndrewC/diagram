@@ -1,0 +1,36 @@
+perf-profile seed 4 stage field: 2.7s under cProfile (the stages before it took 0.0s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261018T100631Z-seed4-field.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         2014978 function calls (1985666 primitive calls) in 2.677 seconds
+
+   Ordered by: cumulative time
+   List reduced from 1402 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.002    0.002    2.701    2.701 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/water/comb.py:21(stage_field)
+        1    0.000    0.000    1.776    1.776 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/water/fit.py:45(fit_field)
+        1    0.001    0.001    1.322    1.322 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/water/fit.py:126(_finish_first_admissible)
+        1    0.002    0.002    1.310    1.310 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/comb.py:191(finish_comb)
+        1    0.000    0.000    0.749    0.749 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/settle.py:244(settle_cells)
+        1    0.002    0.002    0.710    0.710 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/settle.py:166(__init__)
+      429    0.002    0.000    0.577    0.001 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/settle.py:185(add)
+      446    0.001    0.000    0.553    0.001 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/settle.py:182(judge)
+      446    0.007    0.000    0.552    0.001 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/settle.py:64(verdict)
+        1    0.000    0.000    0.520    0.520 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/water/brook.py:517(feed_brook)
+    14538    0.075    0.000    0.483    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:73(wrapped)
+        1    0.003    0.003    0.453    0.453 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/water/fit.py:177(_fit_at_aspect)
+        3    0.000    0.000    0.446    0.149 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/comb.py:86(carve_comb)
+      448    0.008    0.000    0.429    0.001 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/ring_rules.py:472(ring_violations)
+        1    0.001    0.001    0.392    0.392 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/fields/comb.py:252(draw_comb_field)
+6459/5757    0.014    0.000    0.346    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:171(wrapper)
+        1    0.000    0.000    0.343    0.343 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/hem.py:20(_comb_dry_and_beans)
+        3    0.000    0.000    0.259    0.086 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/comb.py:730(_comb_canal_pieces)
+        3    0.000    0.000    0.248    0.083 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/twins.py:130(drop_twin_deliveries)
+        1    0.000    0.000    0.238    0.238 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/water/brook.py:458(settle_course)
+        2    0.001    0.001    0.197    0.098 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/water/brook.py:369(bend_runs)
+    136/4    0.001    0.000    0.195    0.049 <frozen importlib._bootstrap>:1360(_find_and_load)
+    136/4    0.001    0.000    0.195    0.049 <frozen importlib._bootstrap>:1308(_find_and_load_unlocked)
+    129/4    0.004    0.000    0.194    0.048 <frozen importlib._bootstrap>:914(_load_unlocked)
+    122/4    0.001    0.000    0.194    0.048 <frozen importlib._bootstrap_external>:753(exec_module)
+
+

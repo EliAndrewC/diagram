@@ -1,0 +1,23 @@
+perf-profile seed 4 stage web: 4.8s under cProfile (the stages before it took 9.6s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261018T112259Z-seed4-web.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         10449460 function calls (10315537 primitive calls) in 4.663 seconds
+
+   Ordered by: cumulative time
+   List reduced from 837 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.002    0.002    4.760    4.760 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/web.py:548(stage_web)
+        1    0.000    0.000    3.550    3.550 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/settle.py:963(settle_the_web)
+26032/281    0.026    0.000    2.897    0.010 {built-in method builtins.sum}
+       36    0.003    0.000    2.892    0.080 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/settle.py:977(<genexpr>)
+        2    0.000    0.000    1.180    0.590 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/settle.py:915(settle_reach)
+        2    0.000    0.000    0.739    0.370 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/knots.py:405(settle_knots)
+        4    0.000    0.000    0.722    0.180 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/knots.py:227(next_gather)
+        1    0.005    0.005    0.717    0.717 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/web.py:112(_lay_skeleton)
+        3    0.001    0.000    0.685    0.228 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/tree.py:436(settle_tree)
+       22    0.001    0.000    0.679    0.031 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/knots.py:436(judge)
+   396482    0.205    0.000    0.651    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/_geom/primitives.py:54(seg_dist)
+    27951    0.089    0.000    0.618    0.000 /diagram/.clones/diagram
+wrote dev/perf-log/20261018T112259Z-profile-adhoc-seed4-web.txt (3771 bytes)
+archived 20261018T112259Z-seed4-web.prof to https://github.com/EliAndrewC/mapgen-perflogs

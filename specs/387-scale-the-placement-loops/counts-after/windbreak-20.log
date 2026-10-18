@@ -1,0 +1,22 @@
+perf-profile seed 4 stage windbreak: 1.1s under cProfile (the stages before it took 5.9s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261018T112208Z-seed4-windbreak.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         1800380 function calls in 1.108 seconds
+
+   Ordered by: cumulative time
+   List reduced from 215 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.008    0.008    1.109    1.109 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/hinterland/stages.py:373(stage_windbreak)
+        1    0.032    0.032    1.033    1.033 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/homestead_parts/stands.py:203(village_grove)
+     5214    0.294    0.000    0.379    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/_geom/indexes.py:330(add)
+        1    0.006    0.006    0.339    0.339 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/homestead_parts/grove_fill.py:467(ink_and_record_grove)
+      452    0.031    0.000    0.333    0.001 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/homestead_parts/groves.py:715(_draw_grove)
+        9    0.002    0.000    0.288    0.032 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/homestead_parts/wood_goal.py:70(canopy_of)
+     6176    0.012    0.000    0.254    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/homestead_parts/stands.py:305(_seat)
+        1    0.017    0.017    0.239    0.239 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/homestead_parts/wood_goal.py:78(trim_to_goal)
+      452    0.044    0.000    0.091    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/homestead_parts/keepouts.py:319(_canopy_keepouts)
+   507729    0.085    0.000    0.085    0.000 {method 'add' of 'set' objects}
+     5068    0.005    0.000    0.084    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlem
+wrote dev/perf-log/20261018T112208Z-profile-adhoc-seed4-windbreak.txt (3923 bytes)
+archived 20261018T112208Z-seed4-windbreak.prof to https://github.com/EliAndrewC/mapgen-perflogs

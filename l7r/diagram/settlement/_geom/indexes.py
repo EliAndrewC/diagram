@@ -104,6 +104,12 @@ class Indexed(list):  # type: ignore[type-arg]
     def _bump(self) -> None:
         self.version += 1
 
+    def touch(self) -> None:
+        """Bump the version for a change made INSIDE one of the records (feature 387): a writer that edits a record in place - a
+        house's beds shifted on its own geometry (`farmsteads._relax_gardens_south`) - changes no list, so it says so here, and
+        every index keyed on this registry's version is rebuilt."""
+        self._bump()
+
     def append(self, item: Any) -> None:
         self.appends += 1
         self._bump()

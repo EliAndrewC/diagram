@@ -92,5 +92,23 @@ def feature_status(root: Path, name: str | None) -> FeatureStatus:
         return FeatureStatus(name=name, exists=False)
     held = holding(d)
     open_tasks = tuple(t[:80] for m in _OPEN.finditer(tasks.read_text(encoding="utf-8")) if any(h.startswith(t := m.group(1).strip()) for h in held))
-    faithful = spec.is_file() and "FAITHFUL" in spec.read_text(encoding="utf-8")
+    faithful = (spec.is_file() and "FAITHFUL" in spec.read_text(encoding="utf-8")) or spec_accepted(d, name)
     return FeatureStatus(name=name, exists=True, faithful=faithful, open_tasks=open_tasks)
+
+
+def spec_accepted(d: Path, name: str) -> bool:
+    """Did the round arbiter ACCEPT the spec at its review's round cap (feature 379: "accept lets the spec stand as the last round
+    left it - the review gate takes the ruling as its verdict")? Read from the feature's own `arbiter.jsonl`. Feature 387 found the
+    merge's feature-complete check asking only for the word FAITHFUL in `spec.md`, so a spec the arbiter accepted was refused here
+    while the review gate let it through - two readings of one verdict drifted apart, as 375 batch 2 found of the open tasks."""
+    log = d / "arbiter.jsonl"
+    if not log.is_file():
+        return False
+    for line in log.read_text(encoding="utf-8").splitlines():
+        try:
+            r = json.loads(line)
+        except ValueError:
+            continue
+        if str(r.get("trigger", "")).startswith(f"round:spec-fidelity|{name}#") and r.get("ruling") == "accept":
+            return True
+    return False

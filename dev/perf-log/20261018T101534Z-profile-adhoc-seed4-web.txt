@@ -1,0 +1,36 @@
+perf-profile seed 4 stage web: 1.9s under cProfile (the stages before it took 4.0s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261018T101534Z-seed4-web.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         2506119 function calls (2485910 primitive calls) in 1.853 seconds
+
+   Ordered by: cumulative time
+   List reduced from 824 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.002    0.002    1.866    1.866 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/web.py:548(stage_web)
+        1    0.000    0.000    1.187    1.187 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/settle.py:963(settle_the_web)
+ 2352/184    0.006    0.000    1.095    0.006 {built-in method builtins.sum}
+       54    0.001    0.000    1.080    0.020 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/settle.py:977(<genexpr>)
+        3    0.000    0.000    0.676    0.225 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/settle.py:915(settle_reach)
+        1    0.000    0.000    0.466    0.466 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/reach.py:60(settle_field)
+        2    0.000    0.000    0.415    0.207 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/reach.py:86(candidates)
+        1    0.007    0.007    0.414    0.414 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/corridors.py:216(field_runs)
+     2596    0.006    0.000    0.296    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/bund.py:52(run_on_target)
+        2    0.000    0.000    0.256    0.128 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/route.py:162(_route)
+        1    0.001    0.001    0.242    0.242 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/web.py:112(_lay_skeleton)
+    23077    0.065    0.000    0.236    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:73(wrapped)
+        2    0.071    0.036    0.202    0.101 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/route.py:83(lattice_search)
+        4    0.000    0.000    0.189    0.047 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/tree.py:418(settle_tree)
+       36    0.000    0.000    0.181    0.005 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/clearance.py:121(fabric_index)
+     2597    0.013    0.000    0.180    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/geom.py:406(nearest)
+128207/110666    0.055    0.000    0.149    0.000 {built-in method builtins.min}
+       11    0.043    0.004    0.145    0.013 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/clearance.py:147(__init__)
+7161/6677    0.009    0.000    0.124    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:171(wrapper)
+     5229    0.023    0.000    0.123    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/geometry/point.py:54(__new__)
+    90817    0.073    0.000    0.122    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/_geom/primitives.py:115(segments_cross)
+     2549    0.013    0.000    0.121    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/keeper.py:39(keyed)
+    51247    0.036    0.000    0.115    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/_geom/primitives.py:54(seg_dist)
+        4    0.000    0.000    0.114    0.028 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/tree.py:124(lanes_of)
+       40    0.000    0.000    0.111    0.003 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/ways/tree.py:141(sq)
+
+

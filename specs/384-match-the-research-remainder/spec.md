@@ -111,6 +111,13 @@ fixed, not escaped).
   sty on its own farm's grove bands, dispersed - the sty seated by wave 151).
 - **374's "What it carries" items still open**: every held decision for the GM (374's spec, "Every decision still owed to the
   GM", and 374's `gm-review.jsonl`), the items carried from 372, and the tooling gaps not yet fixed - as listed in 374's spec.
+- **Carried from 387 (impl-drift, 2026-10-18; behavior 387 held equal by design, so not changed there)**:
+  - `homesteads/bamboo._strip_blocked#off the paddy` DRIFTED: the paddy is asked at the strip's four corners and center only, so a
+    paddy reaching into a long strip's edge between them is unseen - a sheltered row farm's south band runs ~240 ft (0075: no stand
+    on a paddy). Test the strip's edges against the rings, as the lane test does (feature 137).
+  - `ways/corridors.field_runs#over the brook at a ford` DRIFTED: the field runs are ranked by length with no charge for a crossing
+    (0035: "the maps charge a crossing as that much extra walk", about 150 ft), and a run whose far landing finds no run-on is offered
+    straight across the brook (the crossing rule cuts it later; `_run_from`'s UNRESEARCHED claim).
 - **The GM's open question from 374**: whether the three hand-drawn magistracy sheets can be redrawn as smaller compounds
   around a 49-67 tsubo residence (the session's recommendation: yes).
 
