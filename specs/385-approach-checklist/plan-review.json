@@ -5209,33 +5209,33 @@
    "verdict": "CLEAR"
   },
   "T64": {
-   "section_sha256": "84dd6a802d4475e8dbb3c5ded003a387f0dc186b5c13cb37b114bbd2358312f9",
+   "section_sha256": "bc8be34a6d10bac709ab39f1688f92911d911516e47b47a18888409c5072a114",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "T64-scope",
-     "summary": "Add a make task-add target (tooling only) that adds a task to a feature in one command, with a test red without it.",
+     "id": "T64-A (build the tool)",
+     "summary": "A task is added by one command, make task-add, that picks the id and places the box and plan section; tooling only, with a test that fails without it.",
      "class": "within",
-     "why": "Amendment 6 (GM 2026-10-18, verbatim in request.md): 'Please make sure to implement any obvious performance / tooling / process improvements along the way.' Replacing ~30 hand-written insertion scripts and an id collision (T47/T48) with one command is a process/tooling improvement of exactly that kind, and it changes no engine behavior, no claim and no requirement the GM set. The Approach's own quote ('we either have or don't need tooling for things like inserting a task...') does not appear in request.md, so it cannot be checked from this bundle; the task's authority here rests on amendment 6, not on that quote. The test is enforcement of the task's own goal, not added scope."
+     "why": "Amendment 8, verbatim: 'do we need some tooling around how to insert a task ... somewhere in the middle of the task list ... that sounds like something that could potentially eat up a lot of tokens if we are doing it by hand. And hence why it should get tooling.' The block now quotes these words exactly (the earlier text quoted only the first half). The test only fails when the requested tool is missing, so it enforces the request."
     },
     {
-     "id": "D83-id",
-     "summary": "The new id is the highest T<n> found in tasks.md and plan.md together, plus one, so an id named only in a heading is never reused.",
+     "id": "T64-A2 (placement)",
+     "summary": "The task box goes before the GM-review box (as claims-carry places its boxes). A plan section, if given, goes before the feature's close section, or at the end.",
      "class": "within",
-     "why": "A mechanism choice serving the stated goal (no collisions like T47/T48); it narrows nothing the GM asked for."
+     "why": "The GM asked for tooling to insert a task 'somewhere in the middle of the task list', not at the end. Putting it before the trailing GM-review and close sections is exactly that middle insertion. The request does not ask to insert at any chosen position, so this narrows nothing the GM asked for."
     },
     {
-     "id": "D83-placement",
-     "summary": "The box is written before the GM-review box with its research line (as claims-carry places boxes); a SECTION file, with {T} replaced, is written into plan.md before the '## T11 - the close' heading, or at the end if absent; the id is printed.",
+     "id": "T64-A4 (the measured world)",
+     "summary": "Revised from 'about 30 tasks' to a dated count: T41-T64, 24 tasks, each added by a hand-written script of about 1-2k tokens, with two ids (T47, T48) that collided.",
      "class": "within",
-     "why": "Placement follows the existing convention for task boxes and keeps the close section last; it is implementation of the tool, not a carve-out from any request or requirement."
+     "why": "A dated, sourced measurement backing the GM's premise that hand insertion costs tokens. It corrects a figure and changes no scope."
     },
     {
-     "id": "T64-done-one-goal",
-     "summary": "Done names one goal: the target writes the box with the next free id and the plan section, and tests/tooling/test_task_add.py is red without it.",
+     "id": "D83",
+     "summary": "The next id is the highest T<n> across tasks.md and plan.md, plus one, so an id that appears only in a heading is never reused. The script writes the box with its research line, replaces {T} in the SECTION text and puts it before '## T11 - the close', then prints the id.",
      "class": "within",
-     "why": "Conforms to FR-015 (one goal a task, amendment 4); nothing excluded."
+     "why": "This is how the requested tool works: choosing the id by hand is what caused the T47/T48 collision. Unchanged since its last CLEAR verdict."
     }
    ],
    "verdict": "CLEAR"
