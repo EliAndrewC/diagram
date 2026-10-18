@@ -169,6 +169,7 @@ def carve_comb(
         default bund-bean share - UNRESEARCHED: 0.28 of the bunds carry a bean row
         fan middle - UNRESEARCHED: the fan's middle takes the "cleared" form by default (`fan_middle`)
         supply canal bank - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: the plots hem onto a bank beside each supply canal where the caller asks (`supply_banks`; the scripted hamlet always does), off by default for a caller that draws its own
+        default grain - NONE: 1.0 where a caller passes none; the scripted hamlet passes the principled 2 / ftpx (`hamletgen.consts.GRAIN`), as this docstring explains
     """
     R = random.Random(seed)
     F = _Frame(down_deg)

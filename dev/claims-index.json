@@ -73030,6 +73030,14 @@
   "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/comb.py::carve_comb#default plot-and-channel scale `grain=1.0`, which the docstring says draws ditches and \"too narrow to plant\" thresholds at half their true size where 2.0 is the principled value": {
+  "code": "54310dc19637ea2e",
+  "core": "54310dc19637ea2e",
+  "date": "2026-10-18",
+  "note": "default plot-and-channel scale `grain=1.0`, which the docstring says draws ditches and \"too narrow to plant\" thresholds at half their true size where 2.0 is the principled value",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/waterfields/comb.py::carve_comb#default skeleton": {
   "code": "86d35240e4f55dd3",
   "core": "54310dc19637ea2e",
@@ -73048,13 +73056,22 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/waterfields/comb.py::carve_comb#supply canal bank off by default (supply_banks=False), where the drawing page draws a bare 5 ft bank beside every supply canal": {
-  "code": "54310dc19637ea2e",
+ "l7r/diagram/waterfields/comb.py::carve_comb#supply canal bank": {
+  "body": "fa82f6023ef5f5dd",
+  "claim": "supply canal bank - where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing: the plots hem onto a bank beside each supply canal where the caller asks (`supply_banks`; the scripted hamlet always does), off by default for a caller that draws its own",
+  "code": "3dfc791ecbf93759",
   "core": "54310dc19637ea2e",
   "date": "2026-10-18",
-  "note": "supply canal bank off by default (supply_banks=False), where the drawing page draws a bare 5 ft bank beside every supply canal",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the cited page draws a bare earth bank between every supply canal and its fields, and the carve hems the plots onto it when `supply_banks` is set; the 5 ft width is not decided in this unit, and whether every caller using the off default really draws its own bank cannot be seen from the bundle",
+  "pages": {
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
+  },
+  "research": "39036ea15e57c448",
+  "rests": [
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:0d4f9efff883c0d1",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:60f41f927442ee20"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/comb.py::carve_comb#water first": {
   "code": "f30e8a8156a6dfb0",
