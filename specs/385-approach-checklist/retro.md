@@ -602,3 +602,8 @@ one it looks for its old figures as whole numbers on the drawing pages that are,
 `claims-owed` prints each. On this clone (T10 not yet landed) it names 0018, 0022, 0025 and 0027 - the four the measurement
 found. The first plan matched a fixed list of units and the review blocked it (the GM's own figures say "feet" and "degree").
 **The habit it changes:** none needed - `claims-owed` prints the pages at the edit.
+
+## T63 - the retro row
+
+About 15 min. `tick-task.py` runs `plan_gate.archive` after every tick it wrote and prints what moved; an archive error is printed
+and the tick stands. **The habit it changes:** `make plan-archive` is no longer a step to remember.
