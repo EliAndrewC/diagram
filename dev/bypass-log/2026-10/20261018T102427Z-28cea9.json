@@ -1,0 +1,6 @@
+{
+  "utc": "20261018T102427Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: the last PASS (engine 4b7d9d117127) reviewed the pocket-well placement T05 removes; this round reviews its replacement, and that review's F6/F7 items are the wellhead marker's drift already open in the claims report"
+}

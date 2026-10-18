@@ -732,6 +732,26 @@ Owed by the hour-10 step-back (`hour:385-approach-checklist@10`, ruled `continue
 8. **Routes measured before asking?** Nothing is being asked.
 9. **After a ruling.** `continue`; the step it names is re-dispatching the three refused checks (done) and the landing.
 
+### T05 part B (2026-10-18T10:25Z)
+
+Owed by the hour-12 step-back (`hour:385-approach-checklist@12`, ruled `continue`).
+
+1. **What is refusing?** Nothing on the maps: the pool rolled on T05's tree is clean (`make maps SCOPE=all`, 2026-10-18), the gate
+   green (199 s) after three reds of three causes (a reviewer's British spelling in a record, a stale notes census with Sawada's
+   door zigzag gone - its strict xfail cleared - and `seat_wells`' early return uncovered), and the three well glyph-checks PASS.
+   The claims gate refused only old behavior the patch's unit touched (the front row's size, the standoff), carried into T06 by
+   ask:t05-old-drifts-at-landing.
+2. **A3 again.** The bar's rules as part A; the claims relabeled to what the record says (0031 for the cluster shape, the 80 ft
+   seat a GUESS 0196 names), the standoff split (house and yard on 0029; the shed in and the garden out UNRESEARCHED).
+3. **A4 again.** Asked at the drawn wells by the glyph-checks: none stands in a farmstead, each serves 3 to 10 households; two seats
+   read near a lane (Inashiro F6/F7, Kuwabata F8) - filed as found rows of wave 155, not tuned here.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: no number moved; every change since part A was a label, a test or a record.
+6. **The one-sentence test.** "The patch re-lands as built, its claims saying what the record says" - true.
+7. **The next step is a measurement.** The landing cohort (`make cohort-landing`), then the push.
+8. **Routes measured before asking?** Yes - the pool rolled before ask:t05-old-drifts-at-landing.
+9. **After a ruling.** `continue` (hour 12) and `continue` (the ask): land T05; its fixes T25 (landed) and T26 (in review).
+
 ## T15 - a cohort rolled over an uncommitted engine diff says so (found by T04)
 
 ### T15 Approach (checklist part A)

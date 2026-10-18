@@ -358,3 +358,48 @@ counts line, and an EDIT applied by hand, word for word, settles through `make a
 and re-applied, the file unchanged). Round 1 of the plan review caught the first form keeping the hand-applied case out - the very
 case that cost T05 its round-2 page checks. **The habit it changes:** apply a check's EDITs from its reply or transcript, never
 retyped (`make record-owed`'s footer says so).
+
+## T05 - the retro row
+
+About 7 h 25 min wall (03:37-11:01), of which about 5 h idle: the session ended its turn at 04:20 "waiting on" an impl-drift
+round a guard had refused at 03:57, and nothing woke it until the GM at 09:15 (T22 closes that). Of the active time: the patch and
+its first claims round about 25 min; claims rounds 2-4 and the standoff's three CANNOT-TELLs about 70 min (T23 and T25 came from
+them); the arbiter's ask on the old drifts about 10 min; three red gates (a reviewer's British spelling in a record, a stale
+notes census with Sawada's zigzag XPASS, an uncovered early return) about 20 min; renders missing at the first `make verify`
+(T26) and three glyph-checks (PASS) about 25 min; the landing cohort 54/54 (fresh block 14 of 48). No number moved: every change
+after part A was a label, a test or a record. **The habit it changes:** a refused dispatch is re-sent before anything else, and a
+check that asks for more context is given all of it at once (both now enforced, T22 and T25).
+
+## T22 - the retro row
+
+About 45 min (three plan rounds). The incident was a refused dispatch nobody counted: four identical refusals read as three. Round
+2's catch mattered - the GM's prompt arrived mid-turn, so a window from his last prompt would have missed exactly the incident; the
+transcript's own `turn_duration` entries are the turn ends, so no state file. **The habit it changes:** none needed - the turn
+cannot end with a refused dispatch unanswered.
+
+## T23 - the retro row
+
+About 15 min (one plan round). `owed` already took a prescribed relabel as answering a MISLABELED; the gate did not, so three
+relabels could never land. One shared rule, `relabel_answered`. **The habit it changes:** none.
+
+## T24 - the retro row
+
+About 20 min (two plan rounds). Three of three tooling landings that day were refused for a stale base and landed unchanged after
+a `sync-in`; now the script merges main in itself when its patch no longer applies. Its first real use (T26) met a true conflict
+(main had stripped the Makefile's comments) and refused as designed. **The habit it changes:** none.
+
+## T25 - the retro row
+
+About 70 min (four plan rounds). The arbiter's fix as worded (one level of callees for a distance claim) would not have reached
+the standoff's constant, three calls down; measuring first would have saved two rounds - round 1 was a cap I had not measured
+against, round 2 a depth I had not measured against. Built: the distance claim's first bundle two calls down (154 KB), constants
+on every first bundle, and a CANNOT-TELL re-bundle that chases what its note names. Round 3's verdict was lost because I edited
+the plan's Landing block while it was being reviewed. **The habit it changes:** measure the motivating case against the design
+before the plan goes to review; never edit `plan.md` while a plan review runs (a guard for that is the next improvement).
+
+## T26 - the retro row
+
+About 25 min (two plan rounds). `make verify` now renders an owed map whose render is missing or older than its map before it
+writes the prompts; round 1 held the arbiter's "every unit" against a sheet exclusion that had no measured basis (none exists
+today, and now it would be refused). **The habit it changes:** none.
+
