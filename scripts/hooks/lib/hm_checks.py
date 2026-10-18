@@ -310,9 +310,14 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
                 hm_arbiter.trip(root, f"round:{unit}@{n + 1}", "round", unit, f"round {n + 1} of {check} on {s}", now)
                 return f"round {n + 1} of `{check}` on {s} in this feature passes its cap of {cap} - " + hm_arbiter.refusal([f"round:{unit}@{n + 1}"], root)
     counted: list[str] = []
+    # A READING'S MARKS ARE APPLIED WHEN IT LAUNCHES (feature 385 T59, the round arbiter on round:modal-form|modal:choice/
+    # dikepond_split--0.7@3): this hook records a dispatch at PreToolUse, beside other hooks - the wave guard refused T10's
+    # modal-form wave, yet the refused dispatch had marked its notes read and opened a fresh round, so the next real dispatch was no
+    # first look and was counted. What a reading marks is kept on the pending record and applied by `launched`.
+    marks: dict[str, Any] = {"fresh": [], "seen": {}, "read": {}}
     for s in subjects:
         if not open_round(state, s, now):
-            state.setdefault("edits", {})[s] = []  # a new round: the last round's proposals are spent
+            marks["fresh"].append(s)  # a new round: the last round's proposals are spent, once this one launches
         unit = f"{check}|{s}"
         if not sibling[s] and not fresh_reading(state, unit, notes) and not first_look(state, unit, current.get(s, [])):  # a fresh reading is no repeat
             # ...COUNTED WHEN IT IS READ, not when it is sent (feature 385 T41, the round arbiter on round:source-reader|q:0081@3: two
@@ -320,14 +325,25 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
             # is recorded here and counted by `returned` once the agent comes back with a reply
             counted.append(unit)
         state.setdefault("round_batch", {})[unit] = batch_of(root)  # the batch this round counts in (`new_cause`)
-        if s in current:  # what this check has now read of the subject, for the next dispatch's first-look test
-            seen = state.setdefault("seen", {}).setdefault(unit, [])
-            seen.extend(sorted({_sentence_key(x) for x in current[s]} - set(seen)))
-        read = state.setdefault("notes_read", {}).setdefault(unit, [])
-        read.extend(sorted((notes or {"*"}) - set(read)))  # "*": a whole-page reading, every note read
+        if s in current:  # what this check will have read of the subject, for the next dispatch's first-look test
+            marks["seen"][unit] = sorted({_sentence_key(x) for x in current[s]})
+        marks["read"][unit] = sorted(notes or {"*"})  # "*": a whole-page reading, every note read
     state.setdefault("dispatches", {})[tid] = {"check": check, "subjects": subjects, "manifest": manifest, "t": now, "state": "pending", "counted": counted,
-                                                "owed": re.findall(r"^owed: (.+)$", text, re.M)}  # why each unit was due (374)
+                                                "marks": marks, "owed": re.findall(r"^owed: (.+)$", text, re.M)}  # why each unit was due (374)
     return ""
+
+
+def _apply_marks(state: dict[str, Any], d: dict[str, Any]) -> None:
+    """What a launched dispatch's reading marks (T59): its fresh rounds' edits reset, its seen sentences, its notes read - once."""
+    marks = d.pop("marks", None) or {}
+    for s in marks.get("fresh", []):
+        state.setdefault("edits", {})[s] = []
+    for unit, keys in (marks.get("seen") or {}).items():
+        seen = state.setdefault("seen", {}).setdefault(unit, [])
+        seen.extend(k for k in keys if k not in seen)
+    for unit, keys in (marks.get("read") or {}).items():
+        read = state.setdefault("notes_read", {}).setdefault(unit, [])
+        read.extend(k for k in keys if k not in read)
 
 
 def launched(state: dict[str, Any], tid: str, agent_id: str, background: bool, reply: str = "", keep: Path | None = None) -> None:
@@ -340,6 +356,7 @@ def launched(state: dict[str, Any], tid: str, agent_id: str, background: bool, r
         return
     d["aid"] = agent_id
     d["state"] = "running"
+    _apply_marks(state, d)
     if not background:
         returned(state, agent_id, reply, keep)
 
