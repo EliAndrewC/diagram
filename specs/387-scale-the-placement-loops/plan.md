@@ -64,15 +64,15 @@ those the new lane now joins (an end within `JOIN_TOL` of it) plus the new lane'
 `way_out_once`, `tree_shadows` and `walked_shadows` as today (each already asks the new lane against the rest). **The needle faces
 are judged only where the new lane bounds them**: `law.needle_loops` polygonizes the web and tests each face's mean width; adding
 a lane can only create or split the faces it bounds, and every other face of the arrangement is a face of the base tree unchanged.
-So the base tree's needle verdict is kept, and a candidate's faces are tested only where a face shares an edge with the new lane
-(or, for the joined form, with a lane `as_joined` drew differently from the base's own joined form). Exact when the base is clean:
-a face the new lane does not bound is the base's; and where a joined end moves off a base face, the faces it parted merge, and a
-merged face's mean width is at least the smaller of its parts' (2(a+b)/(p+q-2s) >= min(2a/p, 2b/q)), so no needle appears there.
-Where the base itself holds a needle (a tree not built by `admits` alone), the whole test runs, as today. The noding and
+So the base tree's faces are kept, each with its verdict (thin or not), as D2b keeps the web's: a candidate's tree holds a needle
+exactly when a thin base face meets no changed lane's line, or a thin face of the candidate's arrangement meets one - "changed"
+being the new lane (and, for the joined form, every lane `as_joined` draws differently from the base's own joined form, its old
+and its new line). A face that meets no changed line is the same face in both arrangements, so nothing else needs judging, and
+no whole test is kept for a base that already holds a needle. The noding and
 polygonize stay one shapely call over the web - its arrangement is not bounded to the new lane's neighborhood (a face the new
 lane bounds can be closed by lanes anywhere round it) - but only the faces the addition made are judged. **Equivalence**: `admits` and the old whole-tree
-form on every candidate the gap pass asks, the same booleans. **Counted** (SC-001): `lanes_of`'s `lay` calls and
-`fronting_ends`'s pairs per candidate.
+form on every candidate the gap pass asks, the same booleans. **Counted** (SC-001): `lanes_of`'s `lay` calls,
+`fronting_ends`'s pairs and the faces judged per candidate.
 
 ## T02 - the web's field way and the knots (FR-002)
 
@@ -116,7 +116,8 @@ per merge.
 **D4 - the plots' sun boxes keyed on the registries' versions, and indexed.** `_sun_keepouts` rebuilds its plot list and its key
 from every yard and bed on each of its 1,816 asks at 40 households (159,808 `plot_box` calls; `m:counts-before`), then filters
 every sun box. Its key becomes the versions of the registries the plots are read from, as FR-005 says: `M["threshing_yards"]`
-and `M["gardens"]` become `indexes.Indexed` (as `M["houses"]` is), and the key is `(reach, yards.version, gardens.version,
+and `M["gardens"]` are already `indexes.Indexed`, as `M["houses"]` is (the manifest's registry makes every list it holds a
+`StandingList`, `overlap/registry.py`), and the key is `(reach, yards.version, gardens.version,
 houses.version)`. A house's plots are also written IN PLACE on its record (`rolling/farmsteads._relax_gardens_south` shifts its
 beds and their drawn boxes), which no list version sees - so that writer bumps the houses registry's version through one named
 helper, `Indexed.touch()` (a public bump; the test that every list mutator bumps is extended to it), and the inventory of such
@@ -132,10 +133,12 @@ the boxes the grid names for `bbox` that pass the same overlap test. Every calle
 
 **D5 - the strip asks an index of what stands.** `household_bamboo` builds, once per pass, a `PointGrid` (cell 128 px) of: the
 placed boxes, the houses' turned boxes, the wells / kosatsuba / byres / farm sheds / retirement houses, each lane segment's box
-padded by its half-width, and the tree crowns. `_strip_blocked` takes the index as an optional argument (`near`); with it, each
-straight scan becomes a scan of the grid's candidates for the strip's box padded by the largest margin that scan uses (2, 6 ft
-and the lane's half-width), then the SAME test on each; without it (the fixtures' caller, `homesteads/fixtures.py`), it scans
-as now. What changes while the pass runs is `s.placed` (each seated strip is appended to it) and nothing else the check reads (the
+padded by its half-width, and the tree crowns. `_strip_blocked` takes the index (`near`, required); each straight scan becomes a scan of the grid's candidates for the strip's
+box padded by the largest margin that scan uses (2, 6 ft and the lane's half-width), then the SAME test on each. Its other
+caller, the field pit's seat (`homesteads/fixtures._flexible_clear`, the same candidate-box question for a fixture), builds one
+index for its pass and hands it in the same way; the straight scan stays only in the equivalence test, as the oracle. A lane
+list narrower than the index's (`own_ground`, a sheltered farm's lanes less its own door path) is honored by keeping only the
+index's candidates that are in it. What changes while the pass runs is `s.placed` (each seated strip is appended to it) and nothing else the check reads (the
 pass writes only `placed`, `block_polys` - which the check does not read - and its own output); so the placed boxes are indexed
 through `indexes.indexed_grid` on `s.placed`'s own version (an append extends the grid, anything else rebuilds it), and the houses,
 the other kinds, the lanes and the crowns are filed once at the pass's start. Under `L7R_CHECK_CACHES=1` every candidate's
@@ -159,7 +162,7 @@ diagnosis, each with what was measured; FR-003's split-part defect, with D3's me
 New: `l7r/diagram/hamletgen/ways/tree_base.py` (D1), `tests/hamletgen/ways/test_tree_base.py`, one equivalence test per site
 beside that site's tests, and `tests/soak/test_scale_equivalence_387.py` (the rolled shadow comparison). Changed: `ways/tree.py`, `ways/corridors.py`, `ways/knots.py`,
 `waterfields/settle.py`, `settlement/homestead_parts/keepouts.py`, `settlement/_geom/indexes.py` (`Indexed.touch`),
-`settlement/core.py` (the two registries `Indexed`), `settlement/rolling/farmsteads.py` (the bump), `homesteads/bamboo.py`,
+`settlement/rolling/farmsteads.py` (the bump), `homesteads/bamboo.py`,
 `tests/conftest.py` (`L7R_CHECK_CACHES=1`).
 
 ## Complexity Tracking

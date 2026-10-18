@@ -22,7 +22,7 @@ Every task changes how a verdict is computed, not what is drawn or where: nothin
 - [ ] T04 The sun keep-outs keyed on the registries' versions (plan T04, D4; FR-005): yards and gardens `Indexed`, `Indexed.touch()` at the in-place bed shift, the version key checked against the content key under the suite, the sun-box grid; equivalence test
       research: rendering
       verify:
-- [ ] T05 The bamboo strip check asks an index (plan T05, D5; FR-006): the per-pass grid in `household_bamboo`, `_strip_blocked(near=...)`, seated strips added as seated; equivalence test
+- [ ] T05 The bamboo strip check asks an index (plan T05, D5; FR-006): the per-pass grid in `household_bamboo`, `_strip_blocked(near=...)` at both callers (the strips and the field pit), seated strips added as seated; equivalence test
       research: rendering
       verify:
 - [ ] T06 Measure, sweep and record (plan T06; FR-009, FR-010, SC-001 - SC-004): the counts at 10/20/40 after into `measurements.json`; the soak equivalence run (`make soak`); `make cohort`, `make maps`, `make done`; the end bookend; `dev/performance.md`'s section
