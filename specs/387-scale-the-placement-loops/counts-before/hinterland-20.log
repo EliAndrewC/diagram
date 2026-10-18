@@ -1,0 +1,22 @@
+perf-profile seed 4 stage hinterland: 6.3s under cProfile (the stages before it took 11.4s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261018T101556Z-seed4-hinterland.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         6178445 function calls (6176126 primitive calls) in 6.256 seconds
+
+   Ordered by: cumulative time
+   List reduced from 933 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.003    0.003    6.292    6.292 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/hinterland/stages.py:78(stage_hinterland)
+        1    0.019    0.019    1.629    1.629 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/hinterland/parcels.py:323(open_ground_patches)
+        1    0.008    0.008    1.505    1.505 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/hinterland/stages.py:272(plant_the_belt)
+        1    0.006    0.006    1.490    1.490 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/homestead_parts/stands.py:203(village_grove)
+     6514    0.051    0.000    1.267    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/hinterland/parcels.py:488(_ok)
+        1    0.003    0.003    1.265    1.265 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/bamboo.py:332(seat_strips)
+        1    0.003    0.003    1.255    1.255 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/bamboo.py:72(household_bamboo)
+      604    0.005    0.000    1.222    0.002 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/bamboo.py:272(strip_refused)
+        2    0.019    0.010    1.195    0.597 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/land/cover.py:728(hinterland)
+28863/28862    0.130    0.000    1.102    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:73(wrapped)
+     5376    0.015    0.000    1.079    0.000 /diagram/.cl
+wrote dev/perf-log/20261018T101556Z-profile-adhoc-seed4-hinterland.txt (4036 bytes)
+archived 20261018T101556Z-seed4-hinterland.prof to https://github.com/EliAndrewC/mapgen-perflogs

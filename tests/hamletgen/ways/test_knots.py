@@ -87,15 +87,14 @@ def test_a_gather_that_closes_a_needle_loop_is_refused(monkeypatch) -> None:
     """A gather that closes a sliver the lane law refuses (`law.needle_loops`) is not made (feature 328 wave 4: the
     20-household seed 4 of the reference spec was refused `needle_loops` with the gather in) - Inashiro's knot in small, its
     two ends gathered closing a loop."""
-    from l7r.diagram.hamletgen.ways import law
+    from l7r.diagram.hamletgen.ways import tree_base
 
     s = _S([CONN, [(-100.0, 150.0), (-100.0, 0.0)], [(-106.0, -150.0), (-106.0, 0.0)]], houses=[(-100.0, 180.0), (-106.0, -180.0)])
 
-    def loops(M):
-        ls = M["lanes"]
-        return ["sliver"] if math.dist(ls[1]["pts"][-1], ls[2]["pts"][-1]) < 1e-6 else []
+    def loops(self, lanes, changed):  # the trial's needle count (feature 387: the faces an edit meets, `tree_base.Faces`)
+        return 1 if math.dist(lanes[1]["pts"][-1], lanes[2]["pts"][-1]) < 1e-6 else 0
 
-    monkeypatch.setattr(law, "needle_loops", loops)
+    monkeypatch.setattr(tree_base.Faces, "needles_with", loops)
     assert kn.settle_knots(s) == 0
     assert kn.knots(s.M["lanes"]), "left as it was"
 

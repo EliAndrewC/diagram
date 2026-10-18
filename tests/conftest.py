@@ -34,6 +34,12 @@ from l7r.diagram._invocation import assert_via_make
 # variable for its own reasons is not overridden.
 os.environ.setdefault("DIAGRAM_SKIP_RENDER", "1")
 
+# THE ENGINE'S VERSION-KEYED CACHES CHECK THEMSELVES UNDER THE SUITE (feature 387, plan D4/D5): a cache keyed on a registry's
+# own version is right only while every writer bumps it - so here every hit of the plots' sun boxes re-reads the plots, and the
+# bamboo strip index re-reads what it filed, and each raises if they moved. A writer that forgot to bump fails a test instead of
+# answering stale. Off outside the suite: the check costs what the cache saves.
+os.environ.setdefault("L7R_CHECK_CACHES", "1")
+
 # At import of the suite's root conftest - once, before any test runs.
 # No durations in the message (2026-09-27): it said ~33 s and ~5.5 min long after both had moved, the stale
 # figure test_guard_message_durations.py forbids - a literal handed to `assert_via_make` is printed, but

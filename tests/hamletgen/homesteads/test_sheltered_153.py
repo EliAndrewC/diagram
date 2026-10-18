@@ -65,7 +65,9 @@ def test_the_spec_takes_the_two_forms_and_refuses_another() -> None:
 
 
 def test_its_own_door_path_does_not_part_a_farm_from_its_band() -> None:
-    ground = bm.StripGround(fields=[], marsh=[], pond=None, lanes=[([(0.0, 0.0), (10.0, 0.0)], 4.0), ([(0.0, 5.0), (9.0, 5.0)], 4.0)], footing=None, seats=[], sun=[], belt=None, skip=frozenset())  # type: ignore[arg-type]
+    ground = bm.StripGround(
+        fields=[], marsh=[], pond=None, lanes=[([(0.0, 0.0), (10.0, 0.0)], 4.0), ([(0.0, 5.0), (9.0, 5.0)], 4.0)], footing=None, seats=[], sun=[], belt=None, skip=frozenset(), near=None
+    )  # type: ignore[arg-type]
     lanes = [{"pts": [[0, 0], [10, 0]], "serves": [100.0, 100.0]}, {"pts": [[0, 5], [9, 5]]}, {"pts": [[1, 1]]}]
     mine = bm.own_ground(ground, lanes, (100.0, 100.0))
     assert mine.lanes == [ground.lanes[1]], "its own path out, a public lane kept"

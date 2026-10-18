@@ -1,0 +1,22 @@
+perf-profile seed 4 stage homesteads: 4.5s under cProfile (the stages before it took 1.2s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261018T112147Z-seed4-homesteads.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         7263395 function calls (7127509 primitive calls) in 4.445 seconds
+
+   Ordered by: cumulative time
+   List reduced from 1703 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.019    0.019    4.486    4.486 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/stages.py:79(stage_homesteads)
+        1    0.000    0.000    2.856    2.856 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/stages.py:272(seat_every_household)
+        1    0.002    0.002    2.855    2.855 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/stages.py:424(_seat_households)
+        1    0.008    0.008    2.111    2.111 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/growth.py:361(grow_the_margin)
+        1    0.015    0.015    1.106    1.106 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/rolling/gap_ways.py:395(lay_the_ways)
+     2475    0.053    0.000    0.924    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/rolling/bundle.py:148(_bundle_geom)
+      191    0.003    0.000    0.907    0.005 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/growth.py:146(settled_seat)
+      433    0.001    0.000    0.858    0.002 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/growth.py:392(reach_at)
+      433    0.002    0.000    0.858    0.002 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/homesteads/growth.py:176(household_reach)
+      433    0.005    0.000    0.841    0.002 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/rolling/bundle.py:141(_bundle_envelope)
+      151    0.000    0.000    0.76
+wrote dev/perf-log/20261018T112147Z-profile-adhoc-seed4-homesteads.txt (4066 bytes)
+archived 20261018T112147Z-seed4-homesteads.prof to https://github.com/EliAndrewC/mapgen-perflogs

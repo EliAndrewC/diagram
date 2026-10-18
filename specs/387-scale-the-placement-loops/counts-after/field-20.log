@@ -1,0 +1,23 @@
+perf-profile seed 4 stage field: 2.3s under cProfile (the stages before it took 0.0s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261018T112151Z-seed4-field.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         3737339 function calls (3693619 primitive calls) in 2.252 seconds
+
+   Ordered by: cumulative time
+   List reduced from 1408 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.001    0.001    2.269    2.269 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/water/comb.py:21(stage_field)
+        1    0.000    0.000    1.721    1.721 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/water/fit.py:45(fit_field)
+        1    0.000    0.000    1.444    1.444 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/water/fit.py:126(_finish_first_admissible)
+        1    0.002    0.002    1.436    1.436 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/comb.py:191(finish_comb)
+        1    0.000    0.000    0.559    0.559 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/settle.py:261(settle_cells)
+        1    0.000    0.000    0.519    0.519 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/hem.py:20(_comb_dry_and_beans)
+        1    0.002    0.002    0.505    0.505 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/settle.py:166(__init__)
+    27409    0.059    0.000    0.425    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:73(wrapped)
+      811    0.001    0.000    0.408    0.001 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/settle.py:186(add)
+      836    0.001    0.000    0.402    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/settle.py:183(judge)
+      836    0.006    0.000    0.401    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/settle.py:64(verdict)
+      848    0.006    0.000    0.322    
+wrote dev/perf-log/20261018T112151Z-profile-adhoc-seed4-field.txt (3825 bytes)
+archived 20261018T112151Z-seed4-field.prof to https://github.com/EliAndrewC/mapgen-perflogs

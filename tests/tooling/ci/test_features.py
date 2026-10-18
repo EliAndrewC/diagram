@@ -80,3 +80,23 @@ def test_a_lands_open_box_the_reviewed_plan_names_does_not_hold_the_merge(tmp_pa
     (d / "tasks.md").write_text("- [x] T01 done\n- [ ] T98 typed by hand [lands-open]\n", encoding="utf-8")
     fs = feature_status(tmp_path, "375-x")
     assert not fs.complete and fs.open_tasks == ("T98 typed by hand [lands-open]",)
+
+
+def test_a_spec_the_round_arbiter_accepted_at_its_cap_is_faithful(tmp_path: Path) -> None:
+    """Feature 387: the spec review went past its round cap and the arbiter ruled `accept`; the review gate took the ruling as the
+    verdict and this check, reading only for FAITHFUL, refused the merge. A plan's cap, another feature's or a `continue` is no verdict."""
+    import json
+
+    _feature(tmp_path, "387-x", "- [x] T01 done\n", spec="## Review history\n- round 5: CHANGES REQUIRED\n")
+    d = tmp_path / "specs" / "387-x"
+    assert not feature_status(tmp_path, "387-x").faithful
+    rows = [
+        {"trigger": "round:spec-fidelity|plan:387-x#T01@3", "ruling": "accept"},
+        {"trigger": "round:spec-fidelity|388-y#1@6", "ruling": "accept"},
+        {"trigger": "round:spec-fidelity|387-x#1@6", "ruling": "continue"},
+    ]
+    (d / "arbiter.jsonl").write_text("\n".join(json.dumps(r) for r in rows) + "\nnot json\n")
+    assert not feature_status(tmp_path, "387-x").faithful
+    with (d / "arbiter.jsonl").open("a") as fh:
+        fh.write(json.dumps({"trigger": "round:spec-fidelity|387-x#1@6", "ruling": "accept"}) + "\n")
+    assert feature_status(tmp_path, "387-x").complete

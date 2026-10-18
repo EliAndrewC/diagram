@@ -188,7 +188,8 @@ class FarmsteadFlushMixin:
         south stays put (gardens_unshaded_from_east flags only the AVOIDABLE ones). See research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html ('gardens'.
 
         Research: east-shaded garden nudged south - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: best effort, 4 px steps up to the bed's height plus the house's plus 6 px
-            own deep windward stand exempt from the east test - UNRESEARCHED: the farm's own deep windward stand is not tested as a neighbor's grove, since it stands on the wind's side
+            own deep windward stand exempt from the east test - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the nudge is for a NEIGHBOR's grove hard against a bed's east, the windbreak standing on the wind's side; the farm's own thin grove band east of the bed is tested too - GUESS (feature 291)
+            nudged bed off every footprint - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: nudged south into open ground - no house, yard, bed or grove of any homestead under the bed once nudged (`_garden_beds_clear`)
             nudged bed's sun ground clear of crowns, promised persimmons and bamboo - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: 50 ft clear (CANOPY_SHADE_FT, BAMBOO_SHADE_FT)
         """
         step = 4 * self.bscale
@@ -247,6 +248,9 @@ class FarmsteadFlushMixin:
                         geom["gardens"] = shifted
                         if "boxes" in geom:
                             geom["boxes"]["gardens"] = drawn  # the beds' drawn boxes move with them
+                        houses = self.M.get("houses")
+                        if hasattr(houses, "touch"):  # the beds moved inside a record: the plots' sun boxes are keyed on this version (feature 387)
+                            houses.touch()
                         break
                 dy += step
 

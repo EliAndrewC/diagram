@@ -5,6 +5,7 @@ import math
 
 from l7r.diagram.hamletgen.ways import corridors as co
 from l7r.diagram.hamletgen.ways.geom import WorkedGround
+from tests._sweep import seeds
 
 
 def _house(x, y, rot=180.0, w=40.0, h=28.0):
@@ -115,3 +116,59 @@ def test_an_owner_named_by_an_id_is_never_the_routes_own() -> None:
 
     assert owner_point((10.0, 20.0)) and owner_point([10, 20])
     assert not owner_point("a1") and not owner_point(None) and not owner_point((1.0, 2.0, 3.0)) and not owner_point(("a", "b"))
+
+
+def _old_field_runs(segs, grounds, half, brook=(), fords=(), limit=co.SPUR_TRIES):
+    """`field_runs` before feature 387 (plan D2a): every network point measured, every run sorted - the oracle."""
+    from l7r.diagram.hamletgen.ways.bund import run_on_target
+    from l7r.diagram.hamletgen.ways.checks import ford_crossing
+    from l7r.diagram.hamletgen.ways.geom import polyline_len
+
+    out = []
+    pts = co.samples_along(segs)
+    brook = tuple((float(x), float(y)) for x, y in brook)
+    for ground in grounds:
+        runs = []
+        for q in pts:
+            tgt = run_on_target(q, ground, half, reach=math.inf)
+            if tgt is None:
+                continue
+            land = ford_crossing(q, tgt, brook, fords) if len(brook) >= 2 else []
+            far = run_on_target(land[1], ground, half, reach=math.inf) if land else None
+            if land and far is not None:
+                runs.append([q, land[1], far] if math.dist(q, land[0]) <= co.ON_TREE_PX else [q, land[0], land[1], far])
+            else:
+                runs.append([q, tgt])
+        out += sorted(runs, key=polyline_len)[:limit]
+    return out
+
+
+def test_the_field_runs_are_the_old_forms_whole_measure_on_random_networks() -> None:
+    """Feature 387 T02 (plan D2a): the best-first search by distance band keeps exactly the runs the old whole measure kept."""
+    import random
+
+    for seed in seeds(60):
+        rng = random.Random(seed)
+        segs = []
+        x, y = rng.uniform(-300, 300), rng.uniform(-300, 300)
+        for _ in range(rng.randint(1, 25)):
+            nx, ny = x + rng.uniform(-200, 200), y + rng.uniform(-200, 200)
+            segs.append(((x, y), (nx, ny)))
+            x, y = (nx, ny) if rng.random() < 0.8 else (rng.uniform(-300, 300), rng.uniform(-300, 300))
+        grounds = []
+        for _g in range(rng.randint(1, 2)):
+            gx, gy, w, h = rng.uniform(100, 500), rng.uniform(-400, 400), rng.uniform(80, 300), rng.uniform(80, 300)
+            grounds.append(WorkedGround([[(gx, gy), (gx + w, gy), (gx + w, gy + h), (gx, gy + h)]]))
+        brook, fords = ((), ())
+        if rng.random() < 0.5:  # a brook between the network and the field, with fords on it
+            bx = rng.uniform(40, 120)
+            brook = [(bx, -600.0), (bx + rng.uniform(-30, 30), 0.0), (bx, 600.0)]
+            fords = [(brook[1][0], rng.uniform(-300, 300)) for _ in range(rng.randint(1, 3))]
+        limit = rng.choice([1, 3, co.SPUR_TRIES])
+        assert co.field_runs(segs, grounds, 2.5, brook, fords, limit) == _old_field_runs(segs, grounds, 2.5, brook, fords, limit), seed
+
+
+def test_no_network_or_no_ground_gives_no_field_run() -> None:
+    paddy = WorkedGround([[(200.0, -100.0), (400.0, -100.0), (400.0, 100.0), (200.0, 100.0)]])
+    assert co.field_runs([], [paddy], 2.5) == [], "no network: no point to leave it from"
+    assert co.field_runs([((0.0, 0.0), (0.0, 50.0))], [WorkedGround([])], 2.5) == [], "no worked ground: nothing to run on to"

@@ -455,12 +455,38 @@ def settle_knots(s: Any) -> int:
                 return False
         finally:
             lawful.M = s.M
+        # ...EACH WHOLE-WEB COUNT ASKED BY WHAT THE GATHER CHANGED (feature 387, plan D2b, `web_counts`): the web's own verdicts
+        # kept once a web, the trial's re-asked only where an edit can change them - `way_outs` alone asked of the whole trial
         for name in _WHOLE_RULES:
             if name not in had:
-                had[name] = memo.count(name, s.M, ways, ids)
-            if memo.count(name, trial, tw, ti) > had[name]:
+                had[name] = base(name).count() if name != "way_outs" else memo.count(name, s.M, ways, ids)
+            if trial_count(name, trial, tw, ti, list(edits)) > had[name]:
                 return False
         return True
+
+    def base(name: str) -> Any:
+        """The web's own verdicts for one whole-web rule, kept until a gather is applied (`had` is cleared then)."""
+        from .tree_base import Faces
+        from .web_counts import Partners, WebEnds
+
+        key = "_base_" + name
+        if key not in had:
+            if name in ("doubled_tails", "shadows"):
+                had[key] = Partners("doubled" if name == "doubled_tails" else "beside", memo.pair, lanes, ways, ids)
+            elif name == "doorstep_ends":
+                had[key] = WebEnds(s.M, lanes, ways)
+            else:
+                had[key] = Faces(lanes)
+        return had[key]
+
+    def trial_count(name: str, trial: Mapping[str, Any], tw: list[Poly], ti: list[int], edits: list[int]) -> int:
+        if name in ("doubled_tails", "shadows"):
+            return int(base(name).trial(memo.pair, lanes, tw, ti, edits))
+        if name == "doorstep_ends":
+            return int(base(name).trial(trial, lanes, ways, tw, edits))
+        if name == "needle_loops":
+            return int(base(name).needles_with(trial["lanes"], [p for k in edits for p in (ways[k], tw[k])]))
+        return memo.count(name, trial, tw, ti)
 
     for _ in range(4 * len(lanes)):
         had.clear()

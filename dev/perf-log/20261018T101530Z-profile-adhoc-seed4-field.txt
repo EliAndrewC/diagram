@@ -1,0 +1,36 @@
+perf-profile seed 4 stage field: 2.2s under cProfile (the stages before it took 0.0s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261018T101530Z-seed4-field.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         2014978 function calls (1985666 primitive calls) in 2.162 seconds
+
+   Ordered by: cumulative time
+   List reduced from 1402 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.002    0.002    2.181    2.181 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/water/comb.py:21(stage_field)
+        1    0.000    0.000    1.365    1.365 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/water/fit.py:45(fit_field)
+        1    0.001    0.001    0.995    0.995 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/water/fit.py:126(_finish_first_admissible)
+        1    0.002    0.002    0.983    0.983 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/comb.py:191(finish_comb)
+        1    0.000    0.000    0.444    0.444 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/water/brook.py:517(feed_brook)
+        1    0.001    0.001    0.396    0.396 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/hem.py:20(_comb_dry_and_beans)
+        1    0.000    0.000    0.385    0.385 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/settle.py:244(settle_cells)
+        1    0.000    0.000    0.369    0.369 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/water/fit.py:177(_fit_at_aspect)
+        3    0.000    0.000    0.366    0.122 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/comb.py:86(carve_comb)
+        1    0.001    0.001    0.361    0.361 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/fields/comb.py:252(draw_comb_field)
+        1    0.001    0.001    0.349    0.349 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/settle.py:166(__init__)
+    14538    0.045    0.000    0.311    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:73(wrapped)
+      429    0.001    0.000    0.283    0.001 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/settle.py:185(add)
+      446    0.001    0.000    0.278    0.001 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/settle.py:182(judge)
+      446    0.004    0.000    0.278    0.001 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/settle.py:64(verdict)
+        3    0.001    0.000    0.265    0.088 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/comb.py:730(_comb_canal_pieces)
+        3    0.000    0.000    0.263    0.088 /diagram/.clones/diagram-unit-tests/l7r/diagram/waterfields/twins.py:130(drop_twin_deliveries)
+    136/4    0.001    0.000    0.231    0.058 <frozen importlib._bootstrap>:1360(_find_and_load)
+    136/4    0.002    0.000    0.231    0.058 <frozen importlib._bootstrap>:1308(_find_and_load_unlocked)
+    431/6    0.001    0.000    0.230    0.038 <frozen importlib._bootstrap>:483(_call_with_frames_removed)
+    129/4    0.001    0.000    0.230    0.057 <frozen importlib._bootstrap>:914(_load_unlocked)
+6459/5757    0.011    0.000    0.230    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:171(wrapper)
+    122/4    0.001    0.000    0.229    0.057 <frozen importlib._bootstrap_external>:753(exec_module)
+    516/2    0.001    0.000    0.229    0.114 {built-in method builtins.__import__}
+    122/4    0.001    0.000    0.228    0.057 {built-in method builtins.exec}
+
+
