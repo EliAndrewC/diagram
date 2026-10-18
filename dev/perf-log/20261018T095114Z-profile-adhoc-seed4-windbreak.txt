@@ -1,0 +1,36 @@
+perf-profile seed 4 stage windbreak: 4.3s under cProfile (the stages before it took 17.7s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261018T095114Z-seed4-windbreak.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         6811503 function calls in 4.317 seconds
+
+   Ordered by: cumulative time
+   List reduced from 210 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.016    0.016    4.317    4.317 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/hinterland/stages.py:373(stage_windbreak)
+        1    0.088    0.088    4.160    4.160 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/homestead_parts/stands.py:203(village_grove)
+        1    0.015    0.015    2.187    2.187 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/homestead_parts/grove_fill.py:467(ink_and_record_grove)
+      908    0.095    0.000    2.171    0.002 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/homestead_parts/groves.py:715(_draw_grove)
+     1816    0.242    0.000    1.141    0.001 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/homestead_parts/keepouts.py:215(_sun_keepouts)
+    12181    0.788    0.000    1.069    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/_geom/indexes.py:324(add)
+       11    0.010    0.001    0.893    0.081 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/homestead_parts/wood_goal.py:70(canopy_of)
+        1    0.100    0.100    0.843    0.843 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/homestead_parts/wood_goal.py:78(trim_to_goal)
+   159808    0.427    0.000    0.680    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/homestead_parts/tree_shade.py:74(plot_box)
+    14571    0.029    0.000    0.624    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/homestead_parts/stands.py:305(_seat)
+      908    0.171    0.000    0.342    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/homestead_parts/keepouts.py:274(_canopy_keepouts)
+  1175048    0.281    0.000    0.281    0.000 {method 'add' of 'set' objects}
+  1555253    0.270    0.000    0.270    0.000 {method 'get' of 'dict' objects}
+      908    0.237    0.000    0.240    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/shrines_wells/woods.py:174(_crowns_near)
+    12007    0.013    0.000    0.213    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/homestead_parts/stands.py:318(<lambda>)
+    13810    0.017    0.000    0.205    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/homestead_parts/grove_blocks.py:164(taken_by)
+    12865    0.053    0.000    0.202    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/homestead_parts/grove_blocks.py:253(too_near)
+    31558    0.040    0.000    0.169    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/_geom/region.py:131(taken)
+    42779    0.103    0.000    0.146    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/_geom/indexes.py:267(near)
+   660562    0.123    0.000    0.143    0.000 {built-in method builtins.min}
+   742760    0.129    0.000    0.129    0.000 {built-in method builtins.max}
+   321432    0.121    0.000    0.121    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/homestead_parts/keepouts.py:237(<genexpr>)
+    31558    0.031    0.000    0.120    0.000 /home/agent/.local/lib/python3.14/site-packages/PIL/Image.py:1752(getpixel)
+     5573    0.025    0.000    0.113    0.000 /diagram/.clones/diagram-unit-tests/l7r/diagram/settlement/homestead_parts/groves.py:880(seat)
+        2    0.003    0.001    0.107    0.054 /diagram/.clones/diagram-unit-tests/l7r/diagram/hamletgen/hinterland/stages.py:498(wood_canopy)
+
+
