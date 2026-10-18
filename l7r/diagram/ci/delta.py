@@ -173,7 +173,9 @@ def engine_key(root: Path, tree: str) -> str:
     way on its merge. Each file's id is its SEMANTIC content (`_content_id`), not its blob sha: a
     comment or docstring edit to engine Python keeps the key (GM 2026-08-26).
     """
-    out = _git(root, "ls-tree", "-r", tree)
+    # ONLY THE ENGINE TREES ARE LISTED (2026-10-18): `is_engine` keeps nothing else, and the whole repository is ~21,000 entries -
+    # `cohort_known.same_key` keys ~90 commits of the cohort log per push check, and the full listing cost 9 of its 11 s.
+    out = _git(root, "ls-tree", "-r", tree, "--", *sorted({prefix for prefix, _ in _ENGINE_DIRS}))
     entries = [(line.split()[2], line.split(maxsplit=3)[3]) for line in out.splitlines() if line.strip() and is_engine(line.split(maxsplit=3)[3])]
     return _key_from_ids(root, entries, lambda shas: _cat_blobs(root, shas))
 
