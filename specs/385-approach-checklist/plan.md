@@ -1437,6 +1437,56 @@ newest over the cap (the existing shrink, then the cut, whose notice stays), and
 transcript it did not find ("left out"). `refusals.md` takes every session's refusals. `time.md` sums over the sessions read and
 says so, since parallel sessions can sum past the hour. With `--transcript` (a replay) the one transcript is read as before.
 
+## T08 - a pond's bank planted sparsely with mulberry and cudrania, or bare (the ranking row `hamletgen/sink.py::lay_sink#pond bank form`)
+
+### T08 Approach (checklist part A)
+
+1. **The goal, in the world.** A hamlet's tail pond stands with one of the two banks the record attests: bare, or planted
+   sparsely with mulberry and cudrania, rolled per map.
+2. **The constraints.** The ranking row ("add the pond bank knob: roll the Song manual's sparsely treed bank (mulberry and
+   cudrania) against the bare bank, drawing its trees"); several attested forms are a knob rolled from the seed (CLAUDE.md); the
+   reeds and wet tint stay off the bank (0061); a tree keeps out of a yard's or bed's sun (0038, `thin_planted_trees`); nothing
+   seated on a house, way, crop or water (the overlap matrix); a new element owes its pop-up, its record line and a glyph-check;
+   no known regression (XIII).
+3. **Where each comes from.** The two forms are 0061's (R: Chen Fu's *Nongshu*, Song, "on the bank plant mulberry and cudrania
+   sparsely, to which cattle can be tethered"; the bare bank from the same passage's cattle-trodden bank and today's mown bank);
+   the knob rule the GM's (G); the spacing "sparsely" has no figure (O - ours, labeled GUESS); the crown size ours (CONVENTION, the
+   dike's standard tree).
+4. **Do they describe the world here?** To be measured: how many tail ponds the pool and cohort draw, and how much bank ring stays
+   free of houses, ways and fields at each, before the trees are seated.
+5. **The order.** Measure the free bank; the knob and its roll; the trees, seated late (after the ways) round the reed fringe's
+   outer edge, each asked of the matrix; the pop-up and the record line; tests; pool and cohort.
+6. **The exits.** (a) the spacing is ours - a knob band, never a target; (b)-(e) n/a.
+7. **The search smell.** One search pass only if the spacing or the share of planted banks is asked for (0061 gives neither).
+8. **The budget.** 3 hours.
+9. **Done, measured.** One goal: across the cohort, both forms are drawn, each planted bank's trees stand on the ring beyond its
+   reeds, clear of every house, way, crop and water; the knob recorded in the manifest; tests red without the knob and the seat
+   rule.
+
+### T08 Decisions
+
+**D60 - the knob.** `POND_BANKS = ("bare", "planted")` in `consts.py`, rolled per hamlet from the seed (`_roll(seed, "pond_bank",
+...)`, a `HamletSpec.pond_bank` override), recorded as `meta.pond_bank`. Even odds: 0061 attests both forms and gives no share
+(GUESS, labeled at the constant). Only a hamlet whose sink is a pond rolls it; an off-map sink has no bank.
+
+**D61 - where the trees stand.** A new stage `stage_pond_bank`, after `stage_lane_wells` and before `stage_hinterland`: the houses,
+ways and wells stand, so a tree is seated against them, and the hinterland's scrub and copse work round the trees. The ring is the
+reed fringe's outer edge (the pond's radii plus the fringe margin `pond_fringe_ring` takes) plus half a crown, so a crown stands on
+the bank, never in the reeds (0061: reeds and tint kept off the bank). Seats are walked round that ring at `POND_BANK_PITCH_FT`, a
+GUESS "sparsely" (no figure in 0061: one tree about every 30 ft of bank), each jittered by position (`_hjit`). A seat is kept only
+where its crown stands clear of every building, wellhead and way and its trunk off crop and water - the canopy keepouts the
+farmstead trees already use (`_canopy_keepouts`, the lanes' treads) - so no tree is forced onto anything; a ring with no free seat
+draws none, recorded (`meta.pond_bank_trees`).
+
+**D62 - the mark, the record and the pop-up.** Each tree is the dike's standard tree (a crown of `POND_BANK_CROWN_FT`, a GUESS from
+the habit of a pollarded mulberry; the mark CONVENTION), drawn through `_plant_run` so `thin_planted_trees` takes out any in a
+yard's or bed's sun (0038), its crown in `tree_crowns` so `structures_clear_of_trees` sees it. Mulberry and cudrania alternate
+round the ring (0061 names both; the alternation is ours, GUESS), the cudrania a shade darker. A new feature class, "pond-bank
+tree", carries the pop-up (its About from 0061, its Depiction the mark, its Guesses the pitch, the crown and the alternation).
+
+**D63 - the record.** 0061's drawing bullet "A bank with a few trees on it is not drawn yet" becomes the knob's own: both forms are
+rolled, the pitch, crown and alternation labeled GUESS - written by a page session, then its checks.
+
 ## T45 - a box the round arbiter filed lands open (found by T07's landing)
 
 ### T45 Approach (checklist part A)

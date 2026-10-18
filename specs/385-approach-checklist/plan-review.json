@@ -4109,6 +4109,38 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T08": {
+   "section_sha256": "4a831694fae8b1a8debd34a1c6baf015c2528130ea9c73815b226dae801fc2e8",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D60",
+     "summary": "POND_BANKS = (bare, planted) knob rolled per hamlet from the seed at even odds (GUESS), HamletSpec.pond_bank override, recorded as meta.pond_bank; only a hamlet whose sink is a pond rolls it.",
+     "class": "within",
+     "why": "The ranking row asks exactly this: roll the sparsely treed bank against the bare bank. Even odds is a labeled GUESS where the source gives no share. Restricting the roll to pond sinks is not a carve-out: an off-map sink has no bank to plant."
+    },
+    {
+     "id": "D61",
+     "summary": "New stage_pond_bank after the houses, ways and wells and before the hinterland; trees seated on a ring at the reed fringe's outer edge plus half a crown, at a GUESS pitch of about 30 ft, jittered; a seat is kept only where clear of buildings, wellheads, ways, crop and water; a ring with no free seat draws none, recorded in meta.pond_bank_trees.",
+     "class": "within",
+     "why": "Draws the planted bank's trees as the row asks, placing them after the houses and ways rather than moving anything for them (the homesteads-before-lanes principle), and keeping them off the reeds as 0061 requires. Dropping a seat that would overlap is the standing overlap matrix applied, not a narrowing of the row. A planted ring with no free seat cannot hold a tree without breaking that matrix, and the case is recorded rather than hidden. The pitch is labeled a knob, not a target."
+    },
+    {
+     "id": "D62",
+     "summary": "Each tree is the dike's standard tree (crown POND_BANK_CROWN_FT, GUESS) drawn through _plant_run so thin_planted_trees and structures_clear_of_trees apply; mulberry and cudrania alternate (GUESS), cudrania a shade darker; new feature class 'pond-bank tree' with its pop-up.",
+     "class": "within",
+     "why": "The row says draw the trees and names both species. The existing tree checks (0038 sun, structures clear of trees) are standing project rules, not new limits. The pop-up is owed for any new element. The alternation and crown are labeled GUESS."
+    },
+    {
+     "id": "D63",
+     "summary": "0061's drawing bullet 'A bank with a few trees on it is not drawn yet' is rewritten by a page session to describe the knob, with the pitch, crown and alternation labeled GUESS.",
+     "class": "within",
+     "why": "The record has to match the drawing once the row is implemented. This keeps the page in step and adds no scope."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
