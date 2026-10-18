@@ -72,6 +72,13 @@ BAD=$(printf '%s' "$INPUT" | FA_CWD="$PWD" python3 "$FA_HERE/lib/hm_approval.py"
     printf 'THEN push. Until then it stays committed in your clone, backed up by every refused push. Only work you mean\n'
     printf 'to land undone needs the GM'"'"'s approval below - and then its status line should say it is open.\n' ;;
   esac
+  # GUARD_EDIT_OK: feature 383, the round arbiter's tooling fix on hour:383-tooling-caches-and-hourly-step-back@6 - a command
+  # that writes the approval line AND lands in one go is judged on spec.md as it stood BEFORE the command ran
+  case "$INPUT" in *spec.md*)
+    printf '\nThis command itself touches a spec.md, but the guard judged the file as it stands NOW, before the command\n'
+    printf 'runs: an approval line the command would write is not seen. Write and commit the approval line in its own\n'
+    printf 'command first, then run the git add / commit / sync-with-main.sh step on its own.\n' ;;
+  esac
   printf '\nA feature is filed only when the GM says to (the GM, 2026-10-10). Ask the GM in this session, in your\n'
   printf 'final message rather than mid-stream, and prefer extending and reopening the feature the work came from.\n'
   printf 'Once the GM approves, put their words on a line of its own in the spec.md, verbatim:\n'
