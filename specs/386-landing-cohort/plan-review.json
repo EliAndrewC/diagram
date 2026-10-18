@@ -1,0 +1,150 @@
+{
+ "feature": "386-landing-cohort",
+ "blocks": {
+  "preamble": {
+   "sha256": "d70bda03c7d611b885bb7480fe8e6659327babbed79c975909b8b3c8241ce45b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "90cb65572e48621feebbd016b97c2eecd6abfc7f4703e6ff09fdfa3d0effa612",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "31b98dc060fecad6f84673ab33330909bd6d49b2a265873c5df79c612b8c9c4d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T01 - the fresh block, the landing cohort, its gate and the rate (FR-001 to FR-010)": {
+   "sha256": "38c4f1d106a1ca72217cd9025e266f110df916c7a74033587ec13400a838bb7e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Decisions": {
+   "sha256": "3e44da3d2590fab4cd3b455defef81173393786b3b86371b7197ead2184bb037",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T01 verification": {
+   "sha256": "1a62fa3946f6b5798f0203ea9451d1dbbbf8168300cb095a502456b5a94ac5fc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T01 measurements": {
+   "sha256": "8521b2c96480b72e80468b907d8040685fbdba79859df3e759ca9567d2b6027e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Constitution Check",
+    "## Summary",
+    "## T01 - the fresh block, the landing cohort, its gate and the rate (FR-001 to FR-010)",
+    "### T01 Decisions",
+    "### T01 measurements",
+    "### T01 verification",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "The fresh block is rolled inside cohort_audit (--fresh/--fresh-from) in the same pool and record as the fixed seeds; pass count, residue, knob coverage and exit code read no fresh seed; one engine-tree edit accepted, re-keying the roll cache once.",
+     "class": "within",
+     "why": "FR-002 puts the block in the same run and record, kept out of the pass/fail and printed as a rate - bullet 3's 'recorded as a failure rate rather than a pass/fail'. The in-process choice serves bullet 1's 48 s inner loop; the one-time cold re-key is implementation cost, not scope."
+    },
+    {
+     "id": "D1-scope",
+     "summary": "A --households (scaling) or --only (named seeds) run of cohort_audit rolls no fresh block, as it rolls no pinned row.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This carves two invocations out of 'make cohort rolls a fresh block by default'. Legitimate because the request itself scopes the change: 'That would change the cohort default and the landing route', and FR-001 defines the default as the ten fixed seeds plus the pinned rows, which neither a scaling roll nor a named-seed run rolls. Already implied by the approved words, not a completion of the GM's thought; the per-fix and landing runs the bullets name both carry the block."
+    },
+    {
+     "id": "D2",
+     "summary": "A landing record is the newest record on the landed engine (commit resolves, no l7r/pool diff to HEAD, no engine_diff) with first seed 1, no households, >=48 fixed seeds and >=48 fresh seeds; pinned rows are 901-906.",
+     "class": "within",
+     "why": "Makes FR-004/FR-005's landing record decidable; it demands the full 48+48 shape the landing cohort rolls (bullet 2 plus bullet 3) and loosens nothing."
+    },
+    {
+     "id": "D3-start",
+     "summary": "Fresh first seed = 10000 + sha256(l7r tree, pool tree, uncommitted engine diff) mod 990000: one engine, one block; a changed engine (committed or not), another.",
+     "class": "within",
+     "why": "FR-003 (engine-content derivation) already settles this; the formula is its implementation. Hashing the uncommitted diff means any tuning moves the block, which is what keeps bullet 3's 'seeds it has never been tuned on' true; a re-run of an identical engine is the same deterministic roll."
+    },
+    {
+     "id": "D3-size",
+     "summary": "Fresh block size 48 on the landing cohort; COHORT_FRESH = 4 on the per-fix run, from m:fresh-block-cost (20 maps 56.7 s vs 57.2 s for 16 maps), inside band 1 (within 5% of the FRESH=0 median, 60.1 s); 24 maps showed cost, so the block stops at 4.",
+     "class": "within",
+     "why": "FR-002's own rule: the per-fix default is set by a recorded measurement so the cold default stays within the band of FRESH=0 (bullet 1's inner loop). The band is now stated and the recorded median sits inside it. 48 on landing matches FR-004 and is comparable with the request's 12% on 400-447."
+    },
+    {
+     "id": "D4",
+     "summary": "The regression reading is cohort_known's baselines/standing; fresh seeds skipped; NEWLY FAILING, WORSENED or NO BASELINE refuse; FIXED and PRE-EXISTING pass.",
+     "class": "within",
+     "why": "FR-006 refuses NEWLY FAILING or WORSENED against main's baseline. NO BASELINE refusing widens the refusal rather than narrowing the request, and D6 rolls main's baseline first so the normal route never meets it. Pre-existing failures passing is FR-006/SC-002 as accepted."
+    },
+    {
+     "id": "D5",
+     "summary": "cohort-gate.sh runs on the GATED and GATED-LOCAL routes before make ci-merge; refuses with no landing record on this engine or on a regression line, naming make cohort-landing; prints and never refuses on the fresh rate; COHORT_OK with a reason discharges; a DIRECT push never meets it.",
+     "class": "within",
+     "why": "FR-005 (gated route), FR-007 (rate printed, never refuses), FR-009 and SC-001 (named command, escape with reason) settle all of this; the Summary ties the GATED route to an engine-tree change, so the DIRECT exemption is FR-005's, not the plan's. Bullet 2: 48 seeds when a feature lands."
+    },
+    {
+     "id": "D5-fixture",
+     "summary": "The gate is silent in a tree whose Makefile has no cohort-landing target (guard-suite fixtures holding l7r/diagram).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A case where the gate does not fire. The gate script and the cohort-landing target ship in the same tree from this feature on, so no real tree that runs the gate lacks the target; the carve-out reaches only guard-suite fixtures, which are not landings. It excludes nothing bullet 2 covers, and applying the gate to fixtures would wake every unrelated push-check suite without serving the request's purpose."
+    },
+    {
+     "id": "D6",
+     "summary": "make cohort-landing first rolls main's 48-seed baseline in a detached worktree when needs-baseline finds none, then cohort N=48 FRESH=48, then cohort_gate.py check, whose exit is the target's.",
+     "class": "within",
+     "why": "FR-004 and SC-002 settle the baseline-first roll and the 48+48 shape; ordering it first follows from cohort_known reading only older records. Bullet 2 and bullet 3 on the landing run."
+    },
+    {
+     "id": "D7",
+     "summary": "cohort_seeds leaves fresh seeds (marked, or of a record marked fresh or starting at >=10000, incl. the two 2026-10-18 probe records) out of failures and fixed-seed counts, counts a seed pinned only if it is one of the six rows, and lists per-record and pooled fresh rates.",
+     "class": "within",
+     "why": "FR-008 and SC-003. The pinned-row fix is required, not opportunistic: fresh seeds start at 10000, which the old >=901 rule would count as pinned, corrupting FR-008's fixed-seed count. Marking the probe records keeps them out of the fixed-seed tally."
+    },
+    {
+     "id": "D8",
+     "summary": "Docs: l7r/diagram/CLAUDE.md loop, tools table, docs/guards.md row with escape, FRESH= help line, make docs.",
+     "class": "within",
+     "why": "FR-010 and FR-009's guards row."
+    },
+    {
+     "id": "D9",
+     "summary": "Tests in test_cohort_audit, test_cohort_gate, hooks test-cohort-gate.sh, sync-with-main case 27 (red without the gate's call), test_measure_reports.",
+     "class": "within",
+     "why": "Each test only fails when the requested behavior (block as rate, landing gate, escape, report rate) is absent: enforcement of the request, per the GM 2026-09-20."
+    },
+    {
+     "id": "Constitution-XIV",
+     "summary": "The six failing fresh seeds are reported to the GM, not fixed here; cohort_known --stamp treating docs-only l7r edits as engine diffs is reported, not changed.",
+     "class": "within",
+     "why": "The request asks for cohort stages and a fresh rate, not generator fixes; reporting rather than fixing keeps scope to what was asked, and the --stamp behavior only withholds baselines (conservative)."
+    },
+    {
+     "id": "Summary/verification",
+     "summary": "Lands on the GATED route through its own landing cohort; verification lists make quick, hooks-test, the three tooling files, make cohort, make cohort-landing then push, cohort-seeds, make done.",
+     "class": "within",
+     "why": "SC-004 and SC-001/SC-003 as accepted."
+    }
+   ]
+  }
+ ]
+}
