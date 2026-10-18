@@ -1,0 +1,105 @@
+{
+ "feature": "170-escapes-with-reasons",
+ "blocks": {
+  "preamble": {
+   "sha256": "2a875df6782b05e77c4a0902ff14bef2d6ab04937967bea2231712618811635b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Amendment 1 (FR-006)": {
+   "sha256": "0fcaf8604a194c5a259879ddca9e3abc0dcef7edf37ede6dce668da873654682",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T11 - the permit and its command": {
+   "sha256": "574f3dcb4a3defdb779c07cd44ee649bd5001633e315b267d6a7c7bb549f225d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T12 - the hook accepts the permit, and the Makefile takes no new marker": {
+   "sha256": "005e2c467258f81391ad99a976651539711922be5db823d921a129547bf53eef",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T13 - the backstop, the suite, the docs": {
+   "sha256": "b6fe8728c0ad4ed394695cdf4685a3b4c605027c3e87be8f9c49392a7b7e70a2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T14 - close": {
+   "sha256": "835f3b816e50adbbdafc5ae62511f8ffc2bd6ebfd0e227d15db7c3da41c0eb48",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Amendment 1 (FR-006)",
+    "### T11 - the permit and its command",
+    "### T12 - the hook accepts the permit, and the Makefile takes no new marker",
+    "### T13 - the backstop, the suite, the docs",
+    "### T14 - close",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Permit store: per-clone JSON lines under the git dir, never committed, live 3600 s, newest per file wins, expired lines dropped, injectable clock",
+     "class": "within",
+     "why": "Mechanism for the GM-approved proposal to take the reason outside the file. The one-hour window does not weaken the audit the original request asks for, because D4 logs every permitted edit with the permit's reason (the record is per edit, not per grant). Expiry is named by SC-008. Judged against SC-008 because the bundle's spec-cited.md carried no FR-006 text."
+    },
+    {
+     "id": "D2",
+     "summary": "grant refuses a non-guard path and a reason failing hm_escape.reason_is_enough, printing the command to run",
+     "class": "within",
+     "why": "Reusing the reason floor enforces the original request's 'force the session to specify why'; refusing non-guard paths keeps the permit store from becoming a general escape. The grantable set covers every guard file, which goes beyond the Makefile SC-008 names, but that widens scope rather than narrowing it and still records a reason for each edit."
+    },
+    {
+     "id": "D3",
+     "summary": "make guard-edit FILE= WHY= target, reason passed through the environment, listed by make help/docs, classified ok by hm_make",
+     "class": "within",
+     "why": "SC-008 names make guard-edit as the route; quoting through the environment and the classify check are mechanism."
+    },
+    {
+     "id": "D4",
+     "summary": "Hook order: unchanged recipe-hazard and guard-file checks; a new refusal of an increased GUARD_EDIT_OK count for the root Makefile only (Edit old_string / Write disk text); the existing marker branch unchanged for the other guard files; a permit check before the no-marker refusal, logged guard-permit with the reason",
+     "class": "within",
+     "why": "Implements SC-008 and FR-006(c) as SC-005 bounds it: the new refusal is limited to a marker added to the root Makefile, which is exactly the spec's scope, and the GM's amendment concerned the Makefile. Leaving the marker branch alone for the other guard files keeps their existing behavior and narrows nothing the GM asked to change. The permit check runs for every guard file, which goes beyond SC-008's Makefile wording (it widens scope, it does not narrow it). Every permitted edit is logged with its reason, as the original request requires. Judged against SC-005/SC-008 in lieu of FR-006 text, which was absent from the bundle."
+    },
+    {
+     "id": "D5",
+     "summary": "Read-context and refusal wording names make guard-edit; the Makefile context says it takes no marker; the reason belongs in the guard log and commit message",
+     "class": "within",
+     "why": "Wording that steers sessions to the route the amendment creates."
+    },
+    {
+     "id": "D6",
+     "summary": "Suite section 8 on a fixture repo covering permit/no permit/other file/expired/bare reason/non-guard file/added marker/kept marker/hook-file marker; section 3's Makefile marker case moved to a hook file; mutation proof; backstop assertion of zero GUARD_EDIT_OK in the root Makefile",
+     "class": "within",
+     "why": "Each case enforces a clause of SC-008/SC-005, so this is enforcement of the request and not unrequested scope. Section 3 changes because FR-006(c) now refuses its old case."
+    },
+    {
+     "id": "D7",
+     "summary": "docs/guards.md's guard-file row and escape-table row name the permit",
+     "class": "within",
+     "why": "Documents the new route; nothing beyond."
+    },
+    {
+     "id": "D8",
+     "summary": "Close: hooks-test, quick, help, docs with clean status, zero GUARD_EDIT_OK in the Makefile, report, status line, direct landing",
+     "class": "within",
+     "why": "Closure checks matching SC-007/SC-008."
+    }
+   ]
+  }
+ ]
+}

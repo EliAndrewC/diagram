@@ -62,10 +62,17 @@ if guard and not re.search(r"/tests/hooks/test-[\w-]+-hooks\.sh$", path):
             "roll reaches, and the census verdict FAILS a rostered roll with none. Run `make roll-audit` first "
             "and point the new row (its audit= field) at the research section recording it; pack the assertion onto a roll "  # GUARD_EDIT_OK: feature 217 - no apostrophe inside this single-quoted program: one broke the whole hook
             "already made, make it a unit test, or move the test to tests/soak/ before you add a roll.")
+    elif path.endswith("/Makefile"):
+        context = (
+            "This is the root Makefile, a GUARD file. It takes no GUARD_EDIT_OK comment: before editing it, run "
+            "make guard-edit FILE=Makefile WHY=\"<why this edit is legitimate>\" - the reason goes in the guard log, "
+            "and belongs in the commit message. Say which you are doing: fixing a guard that fires on correct work, "
+            "adding a guard or an operation, or making a guard stop blocking something you want (that last one is "
+            "what the rule exists to catch).")
     else:
         context = (
             "This is a GUARD file. An edit to it is refused unless the edit itself contains "
-            "GUARD_EDIT_OK and a short reason - put the intent in the diff, where the GM reads it. "
+            "GUARD_EDIT_OK and a short reason, or make guard-edit FILE=<this file> WHY=\"<reason>\" ran first. "
             "Say which you are doing: fixing a guard that fires on correct work, adding a guard or "
             "an operation, or making a guard stop blocking something you want (that last one is what "
             "the rule exists to catch).")
@@ -142,6 +149,28 @@ esac
 # A hook editing its own test file is how these get maintained; only the guards themselves are held.
 case "$FILE" in */tests/hooks/test-*-hooks.sh) exit 0 ;; esac
 
+# Feature 170 amendment 1 (FR-006): the root Makefile takes no new marker - a marker is a comment that outlives its edit, and
+# the file had grown to 2,452 lines of them. The reason goes through `make guard-edit` instead, honored below.
+if "$GF2_HERE/lib/hm_guard_permit.py" root-makefile "$FILE" 2>/dev/null; then
+  GF_MORE=$(printf '%s' "$INPUT" | python3 -c 'import json,sys
+d = json.load(sys.stdin).get("tool_input", {}) or {}
+if "content" in d:
+    try: old = open(d.get("file_path", ""), encoding="utf-8").read()
+    except OSError: old = ""
+    new = d.get("content") or ""
+else:
+    old, new = d.get("old_string") or "", d.get("new_string") or ""
+print("yes" if new.count("GUARD_EDIT_OK") > old.count("GUARD_EDIT_OK") else "")' 2>/dev/null)
+  if [ -n "$GF_MORE" ]; then
+    printf 'BLOCKED: this edit adds a GUARD_EDIT_OK comment to the root Makefile, which takes none.\n\n' >&2
+    printf 'Take the marker out of the text and run this first, then make the same edit:\n\n' >&2
+    printf '    make guard-edit FILE=Makefile WHY="<why this edit is legitimate>"\n\n' >&2
+    printf 'The reason goes in the guard log; put it in the commit message too. (feature 170 amendment 1)\n' >&2
+    guard_log guard-file blocked "$FILE" makefile-marker
+    exit 2
+  fi
+fi
+
 # GUARD_EDIT_OK: feature 170 - the marker must carry a REASON, not merely be present. The repository's
 # own convention already writes it that way (135 of the tree's occurrences use the colon form), so this
 # makes the convention the rule, through the same floor every command guard uses.
@@ -160,6 +189,13 @@ if [ "$NEW" = "True" ]; then
   exit 0
 fi
 
+# Feature 170 amendment 1 (FR-006): a reason given by `make guard-edit` within the hour stands in for the marker.
+GF_PERMIT=$("$GF2_HERE/lib/hm_guard_permit.py" check "$FILE" 2>/dev/null)
+if [ -n "$GF_PERMIT" ]; then
+  guard_log guard-file escaped "$GF_PERMIT" guard-permit
+  exit 0
+fi
+
 cat >&2 <<TAIL
 BLOCKED: $FILE is a GUARD, not ordinary source.
 
@@ -167,9 +203,12 @@ The guards are what stop an expensive run being started by picking a different c
 one silently is the only remaining bypass that does not announce itself, so an edit here has to be
 deliberate rather than incidental.
 
-If the edit is legitimate - and it often is, these files get maintained like any other - put
-GUARD_EDIT_OK in it with a short reason. That is not a formality: it puts the intent in the diff,
-where the GM reads it.
+If the edit is legitimate - and it often is, these files get maintained like any other - run
+
+    make guard-edit FILE=$FILE WHY="<why this edit is legitimate>"
+
+and make the same edit again (the root Makefile takes only this), or put GUARD_EDIT_OK in the edit
+with a short reason. Either way the reason is recorded; put it in the commit message too.
 
 Before you do, check which of these you are actually doing:
   - fixing a guard that fires on correct work        -> legitimate, and important; say so

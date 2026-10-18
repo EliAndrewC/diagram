@@ -419,6 +419,16 @@ case $MODE in
       # leaves the clone behind falls through to the refusal below, unchanged. The DIRTY clone is not
       # touched (mid-task work is sacred; the GM's 2026-09-05 ruling above) and neither is the
       # stray-mirror-commit case, which is refused before this point.
+      # GUARD_EDIT_OK: feature 385 T30 (the round arbiter's fix on red-gate@2026-10-18T12:36:36Z) - NOT UNDER A RUNNING MAKE. The
+      # prompt path skips a clone with a live make (feature 310), but this path did not: a clean clone whose gate was running fell
+      # behind main mid-turn, the session's next tool call merged feature 387's refactor in under it, and the gate went red on
+      # coverage measured across two trees. While a make runs in the clone nothing is merged and nothing refused; told.
+      if (cd "$clone" && "$(dirname "${BASH_SOURCE[0]}")/lib/own-make.sh" "") 2>/dev/null \
+         || { [ -f "$clone/scripts/gates/gate_lock.py" ] && python3 "$clone/scripts/gates/gate_lock.py" held "$(git -C "$clone" rev-parse --absolute-git-dir 2>/dev/null)" 2>/dev/null; }; then
+        guard_log clone-sync permitted "$clone" behind-under-a-make
+        printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","additionalContext":"clone-sync: %s is behind main, but a make runs in it - nothing is merged under a running gate or roll (feature 385 T30); the merge waits until it ends. Write nothing to the tree meanwhile."}}\n' "$clone"
+        exit 0
+      fi
       if [ -x "$clone/scripts/sync-with-main.sh" ] \
          && ( cd "$clone" && timeout 25 scripts/sync-with-main.sh sync-in >/dev/null 2>&1 ) \
          && git -C "$clone" merge-base --is-ancestor "$main_head" HEAD 2>/dev/null; then
@@ -498,6 +508,8 @@ case $MODE in
       midtask="has uncommitted work (mid-task)"
     elif (cd "$clone" && "$(dirname "${BASH_SOURCE[0]}")/lib/own-make.sh" "") 2>/dev/null; then
       midtask="has a make run going (a gate or a roll)"
+    elif gl="$clone/scripts/gates/gate_lock.py" && [ -f "$gl" ] && python3 "$gl" held "$(git -C "$clone" rev-parse --absolute-git-dir 2>/dev/null)" 2>/dev/null; then
+      midtask="holds a running gate's lock"  # feature 385 T30: the gate's own lock, asked as well as the process table
     fi
     if [ -n "$midtask" ]; then
       if out=$(cd "$clone" && scripts/sync-with-main.sh sync-in --mirror-only --background-render 2>&1); then

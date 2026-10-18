@@ -3,7 +3,7 @@
 # Comments go above a target as `#` lines. A recipe's `: "..."` string is shell, so a backtick or $$( in it RUNS.
 # A .PHONY name with no rule still exits 0: retire a target's .PHONY entry with its rule.
 
-.PHONY: modal-bundle modal-prepass done docs static format typecheck test test-full guard perf perf-report maps _reference bypass-audit quick durations test-file page-check tick claim speckit-todo audit guard-log perf-gate hooks-test explain citations fragment-move \
+.PHONY: modal-bundle modal-prepass done docs static format typecheck test test-full guard perf perf-report maps _reference bypass-audit quick durations test-file page-check tick claim speckit-todo audit guard-edit guard-log perf-gate hooks-test explain citations fragment-move \
 	 switches ci-off ci-on _switch \
 	 map cohort cohort-landing hamlet cache-audit placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 why-placed   pack-audit     help \
@@ -365,6 +365,10 @@ perf-gate:      ## [performance] require the feature's -start bookend, take -end
 	fi; \
 	$(MAKE) --no-print-directory perf LABEL="$$n-end" >/dev/null; \
 	$(MAKE) --no-print-directory perf-report AGAINST="$$n-start"
+
+guard-edit: export GUARD_WHY = $(WHY)
+guard-edit:     ## [project] permit edits to one guard file for an hour, the reason recorded in the guard log - the root Makefile takes no marker comment (feature 170 amendment 1)   FILE=Makefile WHY="<why the edit is legitimate>"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/hooks/lib/hm_guard_permit.py" grant "$(abspath $(FILE))" "$$GUARD_WHY"
 
 guard-log:      ## [project] the guard firings, listed - GUARD=<name> SINCE=YYYY-MM-DD EVENT=blocked|rewrote|escaped|reminded FULL=1
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/guard-log.py" $(if $(GUARD),--guard $(GUARD)) $(if $(SINCE),--since $(SINCE)) $(if $(EVENT),--event $(EVENT)) $(if $(FULL),--full)
@@ -901,7 +905,6 @@ test-file:      ## [tests] run test files whole, or a targeted subset   FILE=tes
 sweep:          ## [tests] run a random-equivalence test over more seeds than its default, the file unchanged   FILE=tests/hamletgen/ways/test_web_counts.py SEEDS=2000
 ##  FILE=<paths>  the test file(s) whose sweeps read `tests/_sweep.py`
 ##  SEEDS=<n>     how many seeds each sweep takes (`L7R_SWEEP_SEEDS`)
-	@: "GUARD_EDIT_OK: the round arbiter's tooling fix on hour:387-scale-the-placement-loops@1 - a new operation: a sweep widened from the command line, never by editing the tracked test"
 	@if [ -z "$(strip $(FILE))" ] || [ -z "$(SEEDS)" ]; then echo "sweep: FILE=<test file> and SEEDS=<n> are required" >&2; exit 2; fi
 	@L7R_SWEEP_SEEDS=$(SEEDS) $(MAKE) --no-print-directory test-file FILE="$(FILE)"
 
@@ -1138,7 +1141,6 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 	python3 -m l7r.diagram.ci incremental merge || exit 1; \
 	python3 -m l7r.diagram.ci incremental carry || exit 1; \
 	cov_ec=0; \
-	: "GUARD_EDIT_OK: the round arbiter's tooling fix on red-gate@2026-10-18T11:42:39Z - a floor failure's modules and lines go into the run record (uncovered_marks.py), nothing loosened"; \
 	python3 -m coverage report -m --fail-under=100 || { echo "COVERAGE: a module is under 100% - the table above names it and its missing lines."; cov_ec=1; python3 scripts/measure/uncovered_marks.py || true; }; \
 	L7R_ROLL_CENSUS="$(ROLL_CENSUS)" python3 -m l7r.diagram.tools.hamlet_floor || cov_ec=1; \
 	rc_mode=$$(python3 -m l7r.diagram.ci incremental mode 2>/dev/null || echo full); \

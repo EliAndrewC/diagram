@@ -160,6 +160,18 @@ OUT=$(printf '{"session_id":"sid-me","tool_input":{"file_path":"%s/.clones/misce
       | CLONE_MAIN="$FMAIN2" CLONE_SESSIONS_DIR="$SESS" "$HOOK" pretool 2>&1); check "canonical clone behind main -> synced in, edit allowed (feature 212)" 0 $?
 case $OUT in *"merged in"*) echo "ok    ...and the session is told main was merged in" ;; *) echo "FAIL  the permit did not say main was merged in: $OUT"; FAILED=1 ;; esac
 [ "$(git -C "$FMAIN2/.clones/miscellaneous" rev-parse HEAD)" = "$(git -C "$FMAIN2" rev-parse HEAD)" ] && echo "ok    ...and the clone is at main's tip" || { echo "FAIL  the clone was not fast-forwarded"; FAILED=1; }
+# feature 385 T30 (the round arbiter on red-gate@2026-10-18T12:36:36Z): ...but NOT under a running make - a clean clone whose gate
+# runs falls behind main mid-turn, and the next tool call must neither merge main under the gate nor refuse the call
+echo c > "$FMAIN2/f"; git -C "$FMAIN2" commit -qam c   # main moves again
+BEFORE=$(git -C "$FMAIN2/.clones/miscellaneous" rev-parse HEAD)
+(cd "$FMAIN2/.clones/miscellaneous" && exec -a make sleep 120) & GATEPID=$!
+sleep 0.3
+OUT=$(printf '{"session_id":"sid-me","tool_input":{"file_path":"%s/.clones/miscellaneous/a.txt"}}' "$FMAIN2" \
+      | CLONE_MAIN="$FMAIN2" CLONE_SESSIONS_DIR="$SESS" "$HOOK" pretool 2>&1); RC=$?
+kill "$GATEPID" 2>/dev/null; wait "$GATEPID" 2>/dev/null
+check "a clean clone behind main with a live make -> nothing merged, nothing refused (385 T30)" 0 "$RC"
+[ "$(git -C "$FMAIN2/.clones/miscellaneous" rev-parse HEAD)" = "$BEFORE" ] && [ -z "$(git -C "$FMAIN2/.clones/miscellaneous" status --porcelain)" ] && echo "ok    ...HEAD and the working tree unchanged under the run" || { echo "FAIL  main was merged under a running make"; FAILED=1; }
+case $OUT in *"a make runs in it"*) echo "ok    ...and the session is told the merge waits" ;; *) echo "FAIL  no notice of the held merge: $OUT"; FAILED=1 ;; esac
 
 # ...but a clone that is merely AHEAD of main (the normal state right after committing your own
 # work, before the push back) must keep working. The equality test this replaced blocked it, which
@@ -251,6 +263,18 @@ OUT=$(printf '{"session_id":"sid-run"}' \
       | CLONE_MAIN="$FMAIN4" CLONE_GITHUB="$FMAIN4" CLONE_SESSIONS_DIR="$SESS" "$HOOK" prompt 2>&1)
 case $OUT in *"make run going"*) printf 'FAIL  a clone with no run was held as if one ran\n      out: %s\n' "$OUT"; FAILED=1 ;;
              *) printf 'ok    with the run gone, the clean clone is not held\n' ;; esac
+# feature 385 T30: the gate's OWN lock holds the merge too (a live gate named in <git dir>/gate.lock), HEAD unchanged
+mkdir -p "$RUNC/scripts/gates"; cp "$(dirname "$HOOK")/../gates/gate_lock.py" "$RUNC/scripts/gates/"
+(exec -a make bash -c 'sleep 120; :' done) & GLPID=$!
+sleep 0.3
+printf '{"pid": %s, "t": 0}' "$GLPID" > "$RUNC/.git/gate.lock"
+BEFORE=$(git -C "$RUNC" rev-parse HEAD)
+OUT=$(printf '{"session_id":"sid-run"}' \
+      | CLONE_MAIN="$FMAIN4" CLONE_GITHUB="$FMAIN4" CLONE_SESSIONS_DIR="$SESS" "$HOOK" prompt 2>&1)
+kill "$GLPID" 2>/dev/null; wait "$GLPID" 2>/dev/null; rm -f "$RUNC/.git/gate.lock"
+case $OUT in *"clone merge skipped"*) printf 'ok    a live gate lock holds the prompt path off the merge (385 T30)\n' ;;
+             *) printf 'FAIL  the prompt path merged under a gate lock\n      out: %s\n' "$OUT"; FAILED=1 ;; esac
+[ "$(git -C "$RUNC" rev-parse HEAD)" = "$BEFORE" ] && [ -z "$(git -C "$RUNC" status --porcelain)" ] && printf 'ok    ...HEAD and the working tree unchanged under the lock\n' || { printf 'FAIL  HEAD moved under the lock\n'; FAILED=1; }
 
 # once per session - a warning that repeats every prompt is noise the GM learns to skip
 OUT=$(printf '{"session_id":"sid-fj"}' \

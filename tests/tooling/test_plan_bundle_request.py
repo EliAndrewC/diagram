@@ -100,3 +100,12 @@ def test_a_block_of_the_original_plan_and_a_request_with_no_amendments_get_it_wh
 
 def test_spec_amendments_map_each_id_to_its_section() -> None:
     assert pb.spec_amendments(SPEC) == {"FR-002": 1, "FR-003": 2, "SC-009": 2}
+
+
+def test_a_requirement_written_as_a_heading_is_cited_whole() -> None:
+    """The older specs write a requirement as its own heading (`### FR-006 - ...`, feature 170's among them); the bundle's
+    `spec-cited.md` came out empty for a plan citing one, so its reviewer judged FR-006 without its text (170 amendment 1)."""
+    spec = "## Requirements\n\n### FR-006 - the reason outside the file\n\nThe body.\n\n- (c) a clause\n\n### FR-007 - next\n\nx\n\n- **SC-008** (FR-006): done.\n"
+    got = pb.requirements(spec)
+    assert got["FR-006"] == "### FR-006 - the reason outside the file\n\nThe body.\n\n- (c) a clause\n"
+    assert got["SC-008"] == "- **SC-008** (FR-006): done.\n" and set(got) == {"FR-006", "FR-007", "SC-008"}

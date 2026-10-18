@@ -390,14 +390,14 @@ def test_one_command_lands_a_fix_and_settles_it(root: pathlib.Path) -> None:
     with pytest.raises(ValueError, match=r"the same make arbiter-fix-done with LAND="):
         ha.settle_fix(root, TRIGGER, "done", "the fix was built", "tests/test_x.py")
     repo = pathlib.Path(__file__).resolve().parents[2]
-    dry = subprocess.run(
-        ["make", "-n", "-C", str(repo), "arbiter-fix-done", "ID=x", "NOTE=a b c d", "TEST=tests/t.py", "LAND=scripts/a.py"], capture_output=True, text=True, check=False, env=_clean_env()
-    ).stdout
-    assert "scripts/land-tooling.sh scripts/a.py tests/t.py && git fetch -q origin &&" in dry
-    ticked = subprocess.run(
-        ["make", "-n", "-C", str(repo), "arbiter-fix-done", "ID=x", "NOTE=a b c d", "TEST=tests/t.py", "LAND=scripts/a.py", "F=385", "TICK=T18"], capture_output=True, text=True, check=False
-    ).stdout
-    assert 'fix done "x" "a b c d" "tests/t.py" && ' in ticked and '--no-print-directory tick F="385" T="T18"' in ticked, "lands, settles, ticks (whatever $(MAKE) expands to)"
+    # NEVER `make -n` this target with LAND= (feature 385 T30): its line holds `$(MAKE)`, so -n runs it - land-tooling and all
+    # THE TICKED FORM IS READ FROM THE RECIPE, NEVER RUN (feature 385 T30): under `make -n` a recipe line holding `$(MAKE)` is
+    # executed, and this one also holds `land-tooling.sh` - every gate ran a real land-tooling (and its push) in the clone it
+    # tested, which since T24 merged main into that clone mid-gate (2026-10-18, 12:21 and 12:35)
+    recipe = (repo / "Makefile").read_text().split("\narbiter-fix-done:", 1)[1].split("\n\n", 1)[0]
+    lands, settles, ticks = recipe.index("scripts/land-tooling.sh $(LAND)"), recipe.index("hm_arbiter.py fix done"), recipe.index("$(MAKE) --no-print-directory tick")
+    assert lands < settles < ticks and 'tick F="$(F)" T="$(TICK)"' in recipe, "lands, settles, ticks - in that order"
+    assert "scripts/land-tooling.sh $(LAND) $(TEST) && git fetch -q origin &&" in recipe, "the fix's files and its test land, then main is fetched"
     no_f = subprocess.run(["make", "-C", str(repo), "arbiter-fix-done", "ID=x", "NOTE=a b c d", "TEST=tests/t.py", "TICK=T18"], capture_output=True, text=True, check=False, env=_clean_env())
     assert no_f.returncode == 2 and "TICK= ticks a task of F=<feature>" in no_f.stderr
     plain = subprocess.run(["make", "-n", "-C", str(repo), "arbiter-fix-done", "ID=x", "NOTE=a b c d", "TEST=tests/t.py"], capture_output=True, text=True, check=False, env=_clean_env()).stdout
