@@ -539,6 +539,26 @@ def street_arrives(h: Mapping[str, Any], door: Pt, segs: Sequence[tuple[Pt, Pt]]
     return end_serves(q, (), [(float(h["x"]), float(h["y"]))], None, steadings)
 
 
+def street_anchors(s: Settlement) -> list[Pt]:
+    """The point of its own street nearest the house of each row farm that street already serves (`street_arrives`) - where
+    a further street must not be cut back past (`street.trim_streets`, at a reach of a foot: each point stands on its own
+    street). Feature 385 T97 (D125): the trim anchored at a door within 12 ft of its street while a farm took no door path
+    wherever `street_arrives` held, so a street could be cut back past a farm it served.
+
+    Research: a street kept to the last farm it serves - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back to the last house it serves"""
+    streets = [[(tuple(a), tuple(b)) for a, b in zip(ln["pts"], ln["pts"][1:], strict=False)] for ln in s.M.get("lanes") or [] if ln.get("street") and ln.get("street_index") is not None]
+    steadings = steading_footprints(s.M)
+    out: list[Pt] = []
+    for h in s.M.get("houses") or []:
+        door = front_door(h, DOOR_STEP_FT)
+        k = own_street(h, streets)  # type: ignore[arg-type]
+        if door is None or k is None or not street_arrives(h, door, streets[k], k, steadings):  # type: ignore[arg-type]
+            continue
+        c = (float(h["x"]), float(h["y"]))
+        out.append(min((seg_closest(c[0], c[1], a, b) for a, b in streets[k]), key=lambda p: math.dist(p, c)))  # type: ignore[arg-type]
+    return out
+
+
 def flank_doors(h: Mapping[str, Any]) -> list[Pt]:
     """A farm's dooryard flanks that face NO BAND of its own grove (`rolling.access.doors_of`, beside the yard carried past
     the gable) - on the grove's open side, so in practice a two-sided grove's (spec-fidelity's condition on FR-019's

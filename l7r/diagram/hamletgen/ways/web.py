@@ -42,7 +42,7 @@ from .geom import _TOUCH_GAP, _components, _trim_to_service, lane_houses, polyli
 from .joints import center_lane_ends, fold_the_connector_hairpin, meet_end_to_end, split_at_crossings, straighten_joints
 from .law_water import _brooks
 from .route import _route
-from .serve import _lay_web_lane, front_door, lay_door_paths
+from .serve import _lay_web_lane, front_door, lay_door_paths, street_anchors
 from .settle import settle_the_web
 from .smooth import _STUB_REACH_FT, _smooth_web
 from .street import lay_row_streets, trim_streets
@@ -885,10 +885,9 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         # before any door path existed
         _sweep_doubled_tails(s)
         tidy_lane_ends(s, list(plan.envelope), streets=True)
-        # ...and a further street ends at its outermost joint, not past its last farm's path - or its last farm's door, where
-        # that stood within the arrival reach and so took no path; the first runs on off the map at both ends as the road (0033)
-        _doors = [d for h in s.M.get("houses") or [] if (d := front_door(h, DOOR_STEP_FT)) is not None]
-        trim_streets(s, _TOUCH_GAP, _doors, STEADING_ARRIVAL_FT)
+        # ...and a further street ends at its outermost joint, not past its last farm's path - or the last farm it serves without
+        # one (`street_anchors`, T97: the street's point nearest each such house); the first runs on off the map as the road (0033)
+        trim_streets(s, _TOUCH_GAP, street_anchors(s), 1.0)
     s.M["meta"]["field_path"] = a_way_onto_the_bund(s)
     s.M["meta"]["lane_web"] = plan.lane_web
     # ...AND THE WEB SETTLES ITSELF, LAST (feature 287, M4): every rule of the lane law is asked of the web as it stands and
