@@ -552,6 +552,20 @@ Owed by the cohort record in which seed 904 newly failed (`row_rules`, four `far
 8. **Every route measured before offering one?** Yes: the drop was traced to its step before the exemption was written.
 9. **After a ruling: the step it names?** No ruling is pending on T97.
 
+
+### T97 part B (2026-10-19T09:58Z)
+
+Owed by the round arbiter's ruling on hour:385-approach-checklist@31 (continue).
+
+1. **What is refusing?** Nothing now: the door path's exemption from the fragment rule is decided, reviewed CLEAR and built.
+2. **A3 again.** Unchanged since the part B above.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither in this part B: the change is D125's, decided and reviewed.
+6. **The one-sentence test.** "A farm is reached as 0246 counts it, and its door path stays" - true by seed 904 and the cohort.
+7. **The next step is a measurement.** The claims check, then the gate and the landing cohort.
+8. **Every route measured before offering one?** No route is offered.
+9. **After a ruling: the step it names?** Yes - the ruling says go on with T97's review, claims check, gate and landing.
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).
