@@ -72,4 +72,4 @@ A note on EliAndrewC/diagram#9 names 0260, the changed verdict, and what is stil
   rows quoted in the rewritten note (403's owed item); Moll-Murata and HathiTrust retried or named with the failure and
   dates, and "not public" narrowed to "no public scan found" with the places searched.
 - **spec-fidelity round 2 (2026-10-19, verify): CHANGES REQUIRED, 1 item.** The s1 brief's opening (and request.md's summary) said "no public scan exists"; now "was found", with the places searched.
-- **Accepted by the round arbiter (ask:404-spec-round3, 2026-10-19): a waiver, not a check's verdict.** Round 2's item fixed and confirmed by a grep for 'scan of the Zhili original exists' and 'not public' over spec, plan, request and the s1 brief (no hit).
+- **Accepted by the round arbiter (ask:404-spec-round3, 2026-10-19): FAITHFUL on this text, a waiver, not a check's verdict.** Round 2's item fixed and confirmed by a grep for 'scan of the Zhili original exists' and 'not public' over spec, plan, request and the s1 brief (no hit).
