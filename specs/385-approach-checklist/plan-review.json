@@ -7349,6 +7349,38 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T121": {
+   "section_sha256": "4386ba285bfea50096659bf30a7e33f079a25e232d59209870efcbb4d546ee1e",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T121 (the task)",
+     "summary": "A guard-file bypass found working T117 (a python heredoc wrote the Makefile through open(p, \"w\") with no refusal) is fixed as its own task.",
+     "class": "within",
+     "why": "The GM asked that obvious tooling improvements be made along the way (amendment 6) and that a tooling fix carry a measured cost or a defect that reached main (amendment 10, change 1); this is a measured defect (2026-10-19, T117's heredoc wrote a guard file unrefused) in a guard on main. It is split from T117 per the one-goal rule the GM approved (amendment 4). It adds no GM-facing behavior: it makes an existing rule (guard files edited only through make guard-edit) hold for a write route it missed."
+    },
+    {
+     "id": "D143 (open() literal)",
+     "summary": "hm_make's raw python-write patterns gain open(\"<guard>\", \"w\"|\"a\"|\"x\").",
+     "class": "within",
+     "why": "Closes a measured gap in an existing guard rule; refuses only what the rule already forbids. Amendment 10 change 2 (simplify a misfiring guard before adding one) is not engaged: no new guard is added, and the existing one under-fires rather than misfires."
+    },
+    {
+     "id": "D143 (string-bound names)",
+     "summary": "_GUARD_BIND also binds a name to a plain string literal naming a guard path; that name then counts as a write through open(<name>, \"w\"|\"a\"|\"x\") or .write_text(.",
+     "class": "within",
+     "why": "This is exactly the T117 shape (p=\"Makefile\"; open(p,\"w\").write(...)); same rule, same reach."
+    },
+    {
+     "id": "Exit (c) / reads and mentions stay legal",
+     "summary": "The match is widened by the measured shapes only; refusing any python heredoc that names a guard file was weighed and refused; open(p) and open(p, \"r\") stay legal.",
+     "class": "within",
+     "why": "Keeps feature 164's standing rule (a guard filename's presence is never a write). Nothing the GM asked for is narrowed: the request asks for no guard reach here, and this choice keeps the guard from refusing work it does not concern."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
