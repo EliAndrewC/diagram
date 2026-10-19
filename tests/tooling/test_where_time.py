@@ -60,3 +60,24 @@ def test_a_window_is_classed_by_the_prompt_that_ends_it() -> None:
     ]
     c = wt.tables(events, starts)[0]["T05"]
     assert round(c[wt.WAIT_WORK] / 60) == 3 and round(c[wt.WAIT_GM] / 60) == 20 and c[wt.GM_AWAY] == 0
+
+
+def test_a_gap_is_booked_to_the_task_its_call_names_else_the_last_named_else_the_mark() -> None:
+    """T89 (plan D110): booked by the mark, T10 showed 320 min of other tasks' planning; a call names its own task."""
+    assert wt.named_task('{"command": "make decide F=385 T=T60"}', "385") == "T60"
+    assert wt.named_task('{"command": "git commit -m \\"385 T61: x\\""}', "385") == "T61"
+    assert wt.named_task('{"prompt": "read /tmp/l7r-check/plan-385-approach-checklist-T62/MANIFEST.md"}', "385") == "T62"
+    assert wt.named_task('{"command": "ticked T59-T64 and T65"}', "385") == "", "a range or a list names no one task"
+    starts = [(wt.fr.parse_t(_t(0)), "T10")]
+    events = [
+        ev("UserPromptSubmit", 0),
+        ev("PreToolUse", 1, tool="Bash", cat="gate", id="a"),
+        ev("PostToolUse", 3, tool="Bash"),
+        ev("PreToolUse", 4, tool="Bash", cat="gate", id="b"),
+        ev("Stop", 6),
+    ]
+    rules = wt.Counter()
+    out = wt.tables(events, starts, {"a": '{"command": "make decide F=385 T=T60"}'}, "385", rules)[0]
+    assert round(out["T60"]["gate/tests"] / 60) == 4, "named, then carried to the next call that names none"
+    assert out["T10"] == wt.Counter({"model": 60.0}), "before any call names a task: the mark"
+    assert round(rules["named"] / 60) == 2 and round(rules["the mark"] / 60) == 1
