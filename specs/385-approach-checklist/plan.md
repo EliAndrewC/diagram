@@ -803,6 +803,20 @@ Owed by cohort@20261019T064540Z: seeds 3, 4, 901, 902 and 904 newly failing at 0
 10. **Before moving a constant.** n/a - `BUND_REACH_FT` stays 6 ft.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
+### T33 part B (2026-10-19T16:38Z)
+
+Owed by the round arbiter's ruling on hour:385-approach-checklist@37 (continue), taken while T33 was the active task.
+
+1. **What is refusing?** Nothing: D152 built, its record checks answered and its claims IN-STEP or filed.
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither in this part B: the change is D152's, decided and reviewed; the relabels made after it rest on its block.
+6. **The one-sentence test.** "0014 says how near a lane end must come to join the bund" - true by the record checks.
+7. **The next step is a measurement.** Done: the record checks and the claims rounds.
+8. **Every route measured before offering one?** No route is offered.
+9. **After a ruling: the step it names?** Yes - T33's checks, then T34-T40 from live code.
+
 ### T33 Decisions
 
 **D152 - the joining reach, recorded.** 0014's rule paragraph gains, after "never passes through a gap in it, since no page we read tells of either.": "A lane end that stops within 6 ft of the paddy's edge is drawn as joining it, a GUESS at how near reads as touching at the map's scale." The claim `a_way_onto_the_bund#on the bund` reads "GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a lane end within 6 ft of the paddy's edge (`BUND_REACH_FT`) counts as joined to the bund". The row is marked in 328's `audit/waves.json`.

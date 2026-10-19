@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-19T16:35:44Z",
+  "target": "claims-gate",
+  "commit": "127c73946",
+  "why": "CLAIMS_OK: findings on unchanged bund and field-reach code, filed as 385 T140-T142, T131 widened"
+}
