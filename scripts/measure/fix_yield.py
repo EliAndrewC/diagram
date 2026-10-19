@@ -121,7 +121,7 @@ def table(rows: Sequence[Mapping[str, Any]]) -> str:
     lines = ["| fix (trigger) | measure | cost ruled (min) | before /h | after /h | after hours | verdict |", "|---|---|---|---|---|---|---|"]
     for r in rows:
         lines.append(
-            f"| {r['trigger']} | `{r['measure']}` | {r.get('fix_minutes') if r.get('fix_minutes') is not None else '-'} | "
+            f"| {r['trigger']} | `{str(r['measure']).replace('|', chr(92) + '|')}` | {r.get('fix_minutes') if r.get('fix_minutes') is not None else '-'} | "
             f"{r.get('before', '-')} | {r.get('after', '-')} | {r.get('after_hours', '-')} | {r['verdict']} |"
         )
     return (
