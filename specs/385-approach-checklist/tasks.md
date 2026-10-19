@@ -359,8 +359,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       verify: DONE. landed by land-tooling 2026-10-19; _QUALIFIED reads a decision through its amendment (D145); test red without it
 - [ ] T124 web._web_cut_lines' _extent falls back to every house in the cluster when no house stands within WEB_REACH_FT of a cut, so such a lane runs the whole cluster serving none, against 0246 (along the houses it serves; a stretch joining nothing is not drawn) (impl-drift, T106's round) [lands-open]
       research: rendering
-- [ ] T125 web.stage_web's headman filter ends 'or True' and filters nothing - the comment or the code is stale; and _web_cut_lines' cross-lane tie running 30 ft (pad) past the outermost back lane is UNCLAIMED (impl-drift, T106's round) [lands-open]
+- [x] T125 web.stage_web's headman filter ends 'or True' and filters nothing - the comment or the code is stale; and _web_cut_lines' cross-lane tie running 30 ft (pad) past the outermost back lane is UNCLAIMED (impl-drift, T106's round) [lands-open]
       research: rendering
+      verify: DONE. landed in batch T132+T125+T137: the batch's gate green (228 s), landing cohort 54/54, hooks-test green; claims IN-STEP after one DRIFTED and one MISLABELED fixed in their tasks; tests red without each
 - [ ] T126 geom._trim_to_service pops a whole last segment before its 4 ft walk, pulling an end back past the last house it serves (0246 §6) - DRIFTED (impl-drift, T106's round) [lands-open]
       research: rendering
 - [ ] T127 settle.settle_street_ends cuts a street end to other lanes' ends only, never street_anchors, so a farm the street serves without a door path is cut off it (0246 §6) - DRIFTED (impl-drift, T106's round) [lands-open]
@@ -374,8 +375,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       verify: DONE. landed 2026-10-19 by sync-with-main done; run-on reach relabeled GUESS, no page as source (wording only); IN-STEP; T136 filed
 - [ ] T131 Two UNCLAIMED rules: run_lanes_on_to_the_bund never carries a row street's ends on (skips street); dangling_lane_ends exempts the connector - claim each (impl-drift, T106's round) [lands-open]
       research: rendering
-- [ ] T132 street.to_its_joints with exactly one joint returns two coincident points that trim_streets admits, cutting the street to nothing; its docstring says fewer than one joint (impl-drift, T106's round) [lands-open]
+- [x] T132 street.to_its_joints with exactly one joint returns two coincident points that trim_streets admits, cutting the street to nothing; its docstring says fewer than one joint (impl-drift, T106's round) [lands-open]
       research: rendering
+      verify: DONE. landed in batch T132+T125+T137: the batch's gate green (228 s), landing cohort 54/54, hooks-test green; claims IN-STEP after one DRIFTED and one MISLABELED fixed in their tasks; tests red without each
 - [ ] T133 Stale words on the lane-end rules: _pull_back's 'ends the lane at the homestead'; WAY_END_REACH_FT's docstring naming the field at 60 ft; _lay_skeleton's span floor 100 ft vs the code's 50; sweeps _SERVE_FT 100 vs 0246's 60; 0246 §6 cited both plain and GUESS (impl-drift, T106's round) [lands-open]
       research: rendering
 - [ ] T134 settle.theirs drops the 7 ft gap for every steading within DOORSTEP_FT of a lane end, neighbors' gardens at a junction too - 0246 §16 keeps it off another household's garden: record a DEVIATION or narrow the exemption to the lane's own household (impl-drift, T108's round) [lands-open]
@@ -388,6 +390,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [ ] T137 T136 landed a malformed claim (RUN_ON_TURN_DEG: CONVENTION takes no pointer) to main by the direct route, which never runs the claim-form test - fix the claim, and make the form check run before a direct landing (found by the T132+T125 gate) [lands-open]
       research: rendering
 - [ ] T138 street.to_its_joints' touch (how close an end must come to count as a joint) arrives from its callers unclaimed - check each call site's value against 0246's reach to another way and claim it; and whether the callers pass field-path and bund ends as joints (0246 §6 lets a lane run on to them) (impl-drift, the T132 batch's round) [lands-open]
+      research: rendering
+- [ ] T139 make tick refuses a task whose last land-tooling failed even after its files reached main by another route (T137: land-tooling failed, then land-batch landed it gated) - a failed landing whose every file now matches origin/main is landed (found at the T132 batch's landing) [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering

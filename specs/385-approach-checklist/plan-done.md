@@ -3009,3 +3009,45 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@32 (continue),
 
 **D146 - laid 30 ft past, trimmed to the last house.** 0246's back-lane bullet "each runs only along the houses it serves, and about 30 ft past the last of them;" becomes "each is laid along the houses it serves and about 30 ft past the last of them - the room it is cut in - and its end is then pulled back to the last house it serves, as every lane end that reaches nothing is;". The claim `web.stage_web#the web's frame` reads "research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a back lane is laid about 30 ft past the last house it serves and its end then pulled back to that house - the frame (`BUNDLE_PITCH` ...) is only the room the cuts are laid in, and the trims (`tidy_lane_ends`) bring each end back to the last house it serves".
 
+<!-- plan-archive: archived 2026-10-19 -->
+## T132 - a street with one joint is left whole, not cut to a point (impl-drift, T106's round)
+
+### T132 Approach (checklist part A)
+
+1. **The goal, in the world.** A further street that meets only one other way keeps its length, instead of being cut to nothing.
+2. **The constraints.** 0246's drawing page: a lane end that reaches nothing is pulled back to the last house it serves - the streets' own trim at `street_anchors` and the door anchors does that. `to_its_joints`' docstring: a street is cut to the stretch between its outermost joints, "or as it is where fewer than one joint stands on it". A test red without it; the landing cohort.
+3. **Where each comes from.** 0246's drawing page (O); the function's own contract (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T106's claims round, then a read of `to_its_joints`, `cut_between` and `reshape_lane`): with exactly one joint `lo == hi`, `cut_between` returns two coincident points, `trim_streets` admits them (`len(cut) >= 2`), and `reshape_lane` writes them - a point overlaps nothing the matrix refuses - so the street is cut to a point.
+5. **The order.** `to_its_joints` returns the street as it is where fewer than two joints stand; the docstring says two; the unit test; the landing cohort.
+6. **The exits.** (c) - a stretch needs two ends; cutting a one-joint street to its joint and the farther door was weighed and refused here (`trim_streets` passes the door anchors among the ends, so a served farm already counts as a joint).
+7. **The search smell.** None.
+8. **The budget.** 30 min, landing with T125 by `make land-batch`.
+9. **Done, measured.** One goal: `to_its_joints` with one joint returns the street unchanged; `tests/hamletgen/ways/` red without it; the landing cohort refuses no seed against main.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T132 Decisions
+
+**D147 - two joints make a stretch.** `to_its_joints` returns `list(street)` where fewer than two joints stand on it (`len(at) < 2`), and its docstring reads "fewer than two joints".
+
+<!-- plan-archive: archived 2026-10-19 -->
+## T125 - the web's dead headman filter removed, its cross-lane tie claimed (impl-drift, T106's round)
+
+### T125 Approach (checklist part A)
+
+1. **The goal, in the world.** `stage_web` says plainly which houses its web serves, and the 30 ft its cross-lane ties run past the outermost back lane is claimed.
+2. **The constraints.** `stage_web` reads `[h for h in ... if h.get("role") != "headman" or True]` - every house, the headman's included, since the `or True` makes the test always pass; 0246's drawing page: every farmhouse is served. Every rendering decision labeled; 0246 records the back lanes' 30 ft pad and its cross lanes about one to every 300 ft, but no distance a tie runs past the outermost back lane. A test red without it; the landing cohort.
+3. **Where each comes from.** The code (O); 0246's drawing page (O); the root CLAUDE.md's research rules (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T106's claims round: the `or True` filters nothing; `_web_cut_lines`' tie runs `pad`, 30 ft, past the outermost back lane, UNCLAIMED).
+5. **The order.** The filter written as what it does, every house; the tie's claim; the claims check; the landing cohort.
+6. **The exits.** (c) - write the filter as it runs; excluding the headman's house was weighed and refused (0246 serves every farmhouse, and the maps have drawn it served).
+7. **The search smell.** None.
+8. **The budget.** 20 min, landing with T132 by `make land-batch`.
+9. **Done, measured.** One goal: `stage_web` takes every house with no headman test, its behavior unchanged; `_web_cut_lines` carries a claim for the tie's 30 ft; the claims check IN-STEP; the landing cohort refuses no seed against main.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T125 Decisions
+
+**D148 - every house, said so.** `stage_web`'s house list is `list(s.M.get("houses", []))`, the dead headman test gone; `_web_cut_lines` gains the claim "a tie's run past the back lanes - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a cross lane runs the back lanes' own 30 ft pad past the outermost of them; the page gives no distance".
+
