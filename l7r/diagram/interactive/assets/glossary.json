@@ -922,7 +922,8 @@
   "variants": [
    "chinju",
    "Chinjusan",
-   "tutelary shrine"
+   "tutelary shrine",
+   "tutelary shrines"
   ]
  },
  "chinju no mori": {
@@ -5635,7 +5636,9 @@
   "def": "A covering building put over a small shrine sanctuary to shelter it from wind and rain.",
   "variants": [
    "ōiya",
-   "covering house"
+   "covering house",
+   "cover-shed",
+   "cover-sheds"
   ]
  },
  "chikaraishi": {
@@ -16821,6 +16824,137 @@
   "def": "A small island town Edward Morse described in 1886: one street up a ravine between hills, densely crowded with houses, the narrowest of alleys leading to the houses behind it.",
   "variants": [
    "Enoshima"
+  ]
+ },
+ "shinmei-zukuri": {
+  "def": "The plain Shinmei style of shrine building, as at Ise: a raised, gabled box of unpainted wood with a straight, uncurved roof, entered on its long side.",
+  "variants": [
+   "shinmei-zukuri",
+   "Shinmei-style",
+   "shinmei"
+  ]
+ },
+ "openwork transom": {
+  "def": "A ranma: a pierced or carved wooden panel set high between the lintel of a door or partition and the ceiling, letting air and light pass.",
+  "variants": [
+   "openwork transom",
+   "openwork transoms",
+   "transom",
+   "transoms",
+   "ranma"
+  ]
+ },
+ "beam-end nose": {
+  "def": "The end of a beam or tie that projects past a post, which shrine carvers often shaped as an animal's head or a scroll.",
+  "variants": [
+   "beam-end nose",
+   "beam-end noses",
+   "beam end",
+   "beam ends",
+   "kibana"
+  ]
+ },
+ "cambered beam": {
+  "def": "A kōryō or \"rainbow beam\": a tie beam cut with a slight upward arch, often carved at its ends, across the front of a shrine or temple building.",
+  "variants": [
+   "cambered beam",
+   "cambered beams",
+   "koryo"
+  ]
+ },
+ "tie-rail": {
+  "def": "A horizontal timber fixed across a building's posts to tie them together, in a shrine building often carved.",
+  "variants": [
+   "tie-rail",
+   "tie-rails"
+  ]
+ },
+ "levy horse": {
+  "def": "A horse, or a laborer, that village households supplied as a duty for common work such as a shrine's rebuilding, rather than one hired.",
+  "variants": [
+   "levy horse",
+   "levy horses",
+   "levy laborer",
+   "levy laborers"
+  ]
+ },
+ "kanmon": {
+  "def": "A count of copper coin: 1,000 mon. Sums paid in copper coin were reckoned in kanmon and mon.",
+  "variants": [
+   "kanmon"
+  ]
+ },
+ "reliquary": {
+  "def": "A small container for relics. In Buddhist use it holds shari, grains taken to be the remains of the Buddha or of a holy teacher, and it is often of gilt bronze, set inside a pagoda or on an altar.",
+  "variants": [
+   "reliquary",
+   "reliquaries"
+  ]
+ },
+ "mizunoto": {
+  "def": "The tenth of the ten heavenly stems, \"water, younger\". Paired with one of the twelve zodiac branches, it names a year in the sixty-year cycle. Tenpo 4 (1833) was a mizunoto year.",
+  "variants": [
+   "mizunoto"
+  ]
+ },
+ "kin": {
+  "def": "A Japanese unit of weight, 160 monme or 16 ryo of weight. Today's legal kin is 600 g (~1.3 lb); the Edo-period kin was somewhat lighter. A hundred kin made a picul.",
+  "variants": [
+   "kin"
+  ]
+ },
+ "liang": {
+  "def": "A Chinese unit of weight, a sixteenth of a jin. Used as a weight of silver, the same unit is the tael.",
+  "variants": [
+   "liang"
+  ]
+ },
+ "Right Transmission Commissioner": {
+  "def": "One of the vice-heads of the Qing Office of Transmission, which received memorials from the provinces and passed them on to the throne.",
+  "variants": [
+   "Right Transmission Commissioner"
+  ]
+ },
+ "chihaya": {
+  "def": "A loose white over-robe of thin silk that shrine maidens wear for a rite; the 1549 Izumo enshrinement list counts it in hiki of silk.",
+  "variants": [
+   "chihaya"
+  ]
+ },
+ "suikan": {
+  "def": "A plain robe of starched cloth, once the everyday dress of low-ranking courtiers, worn by shrine attendants at a rite; the 1549 Izumo enshrinement list counts it in tan of cloth.",
+  "variants": [
+   "suikan"
+  ]
+ },
+ "couplet": {
+  "def": "In Chinese calligraphy, a matched pair of lines of verse written on two vertical strips, hung one on each side of a door or a painting.",
+  "variants": [
+   "couplet",
+   "couplets"
+  ]
+ },
+ "enshrinement": {
+  "def": "The rite in which a shrine's priests install its god in the sanctuary, when the building is new or after it has been rebuilt or repaired.",
+  "variants": [
+   "enshrinement",
+   "enshrinements",
+   "enshrinement's"
+  ]
+ },
+ "perpetual memorial": {
+  "def": "Memorial services a Buddhist temple undertakes, against a payment made in advance, to hold for a dead person for all time, so that the rites go on when no family is left to ask for them.",
+  "variants": [
+   "perpetual memorial",
+   "eitai kuyo"
+  ]
+ },
+ "Gion festival": {
+  "def": "The summer festival of the god of Gion, held in Kyoto and in towns such as Hakata, where the wards take turns to build and parade its great floats.",
+  "variants": [
+   "Gion festival",
+   "Gion festivals",
+   "Gion"
   ]
  }
 }

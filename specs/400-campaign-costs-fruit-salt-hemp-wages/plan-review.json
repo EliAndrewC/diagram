@@ -1,0 +1,277 @@
+{
+ "feature": "400-campaign-costs-fruit-salt-hemp-wages",
+ "blocks": {
+  "preamble": {
+   "sha256": "f9e08dbb96cfea8a458f822038cf4e88c0fbe6d1f906080d3b89fdac8c0985e6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "c26d036411582d5c7b21b379a253345901bddc52aae6424cdecd2a8282f44d6c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "e74421f7dda657a7ad1dee8c1b1f34b78d722cf66cb66a7f81b99a1a22d41aa4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "99fbdeccbfbd66edf40fe2ec6f1c5aadb8e5ec75d91b966d48c7b6412a810289",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - the four questions (FR-001, FR-002)": {
+   "sha256": "ed8004279442ece1d0d4998bc14c5b4ab334c3be943222a8022703e0d65f251b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - the implementation check (FR-003)": {
+   "sha256": "343179d36bb80d0f308d0f838d599754b275ba6a4073a64ee28603f3f9efb380",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - the answer (FR-004)": {
+   "sha256": "a18a2ba5c1f01988a6a625b2a352a437437e95df53c17a4f74f1b013e2b6b637",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## T - the order": {
+   "sha256": "a546546a20ff0dc1c925669cab981969374479f6904353bc5da8504b5579f722",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-19",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the four questions (FR-001, FR-002)",
+    "## D2 - the implementation check (FR-003)",
+    "## D3 - the answer (FR-004)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary-sessions",
+     "summary": "One write page session of four questions (the cap), one check-and-apply session, then the answer on #5; no code, map or canon change.",
+     "class": "within",
+     "why": "Matches diagram's own comment on #5 ('four money questions in one write session') and FR-005."
+    },
+    {
+     "id": "TC-record-route",
+     "summary": "Passes are leads, each passage read on its page before citing; scanned pages rendered and sent to source-reader with IMAGES=.",
+     "class": "within",
+     "why": "Method of meeting FR-002's checks; narrows nothing asked."
+    },
+    {
+     "id": "TC-point-not-repeat",
+     "summary": "Where 0250/0255/0256/0261/0262/0263 already give a figure, the question points at it and states its limit.",
+     "class": "within",
+     "why": "Restates FR-001 and the diagram comment that the wage question gathers 0250/0256/0255/0262."
+    },
+    {
+     "id": "TC-wage-silence",
+     "summary": "Each price sits beside the same place and period's day wage where a source gives one; where none does, the question says SILENT and names the nearest wage with its class, place, unit and gap in years.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The request asks each price beside the same place and period's unskilled day wage; where no source attests that wage, placing it is physically impossible, and naming the nearest with class, place, unit and gap keeps the comparison the request is for. The added craftsman's wage beside the price is an addition, not a narrowing; 'a craftsman's wage is never shown as the unskilled wage' guards the request's own comparison."
+    },
+    {
+     "id": "TC-no-conversion",
+     "summary": "No price converted between coins unless its source converts it.",
+     "class": "within",
+     "why": "The request frames every comparison as price beside same-place wage and the salt markup as a ratio; nothing asked depends on a project conversion."
+    },
+    {
+     "id": "ConstCheck",
+     "summary": "XII research: physical with five boxes; XIII record checks green; XVI built as the FRs.",
+     "class": "within",
+     "why": "Process conformance, no scope change."
+    },
+    {
+     "id": "D1-tags-level",
+     "summary": "Four new questions tagged subject=money, no drawing page, level counts-and-measurements, setting tags countryside/city.",
+     "class": "within",
+     "why": "FR-001."
+    },
+    {
+     "id": "D1-fruit",
+     "summary": "Fruit question covers the Kanto persimmon, Edo and castle-town silences, Qing court fruit prices, Shengjing valuations, Ming stolen-goods valuation.",
+     "class": "within",
+     "why": "Japan-first with China as comparison, as asked; the covering sentence ('every attested figure, every silence') carries the rest. Note for the implementer: the request names apples (wa-ringo) and pears as well as persimmons, so their price or their stated silence in Edo and castle towns is owed, not only the persimmon."
+    },
+    {
+     "id": "D1-salt",
+     "summary": "Salt question covers Kashimo 1763-74 beside its laborer, Otsukawa 1842, the hearsay inland ladder, Qing field/official/retail prices and stated markups.",
+     "class": "within",
+     "why": "Inland and the Qing monopoly markup are asked and carried; the covering sentence carries every silence. Note for the implementer: the request asks retail 'in Edo and inland' and this row, unlike the fruit and wage rows, names no Edo figure or Edo silence - the Edo retail price or its stated silence is owed."
+    },
+    {
+     "id": "D1-hemp-amulets",
+     "summary": "Hemp/amulet question covers the Etchu hemp lot, Beijing 1736 and 1615 hemp and ramie beside cotton, the Ise oshi's 1813 takings, the silences.",
+     "class": "within",
+     "why": "Hemp per tan against cotton and the customary amulet donation are both carried; ramie and Beijing are the China comparison the request invites."
+    },
+    {
+     "id": "D1-wages",
+     "summary": "Wage question covers Osaka building trades, the Edo silence and one-sided figures, Saito's village pair, Zhili 1769 and the 1813 norm, tailors, smiths, fletchers.",
+     "class": "within",
+     "why": "The skilled/unskilled ratio with figures for the named trades, Edo and castle towns first, China as comparison."
+    },
+    {
+     "id": "D1-computed-label",
+     "summary": "A figure the project computes is labeled as the project's arithmetic.",
+     "class": "within",
+     "why": "Honesty labeling; narrows nothing."
+    },
+    {
+     "id": "D2",
+     "summary": "implementation-check.md holds one 'no code implements it - consumed by gm-assistant's money skill' line per question, with the search.",
+     "class": "within",
+     "why": "FR-003."
+    },
+    {
+     "id": "D3-page-instead-of-verdict",
+     "summary": "The answer on #5 gives each question's fragment FILE, 'the checked verdict for every figure (or the page that covers it)', and what is still open.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The asker's words: 'Per question: the fragment FILE, the verdict per figure, and what is still open. I (gm-assistant) verify and close.' The accepted spec's SC-003 says 'a verdict for every figure'. The parenthetical offers a page pointer as an alternative to the verdict, which hands the asker the work of extracting verdicts they asked to be given. Giving a verdict per figure is not physically impossible, the substitute is not implied by the request (the opposite), and the literal reading is the request's purpose. FR-004's reference to research/money-requests.md cannot rescue it from this bundle. Fix: delete '(or the page that covers it)', or change it to '(with the page that covers it)' so the page accompanies each verdict rather than replacing it."
+    },
+    {
+     "id": "T-order",
+     "summary": "Page sessions, implementation check, the answer, then report and land by the direct route.",
+     "class": "within",
+     "why": "Matches the request's 'I'll post the checked answer here' and FR-003/FR-004."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-19",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the four questions (FR-001, FR-002)",
+    "## D2 - the implementation check (FR-003)",
+    "## D3 - the answer (FR-004)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary-sessions",
+     "summary": "One write page session holding all four questions, one check-and-apply session, then the answer on #5; no code, map or canon change.",
+     "class": "within",
+     "why": "The diagram comment commits to 'four money questions in one write session'; FR-005 bars code/map/canon change."
+    },
+    {
+     "id": "TC-passes-are-leads",
+     "summary": "Search passes are leads; each passage read on its page before citing; image-only pages rendered and sent to source-reader with IMAGES=.",
+     "class": "within",
+     "why": "Process for producing checked figures (FR-002); narrows nothing the request asks."
+    },
+    {
+     "id": "TC-point-at-existing",
+     "summary": "Where 0250, 0255, 0256, 0261, 0262, 0263 already give a figure, the question points at it and states its limit rather than repeating it.",
+     "class": "within",
+     "why": "FR-001 verbatim; the diagram comment names these entries as what the wage question gathers."
+    },
+    {
+     "id": "TC-wages-beside",
+     "summary": "Each price beside the craftsman's and unskilled laborer's same place/period day wage; where none, SILENT plus nearest with class, place, unit and gap; craftsman's wage never shown as unskilled.",
+     "class": "within",
+     "why": "Implements the issue's 'each price beside the same place and period's unskilled day wage'; reporting silence with the nearest wage keeps rather than drops the comparison."
+    },
+    {
+     "id": "TC-no-coin-conversion",
+     "summary": "No price converted between coins unless its source converts it; project arithmetic labeled as such (D1).",
+     "class": "within",
+     "why": "Keeps figures as attested so the per-figure verdict the request asks for is checkable; prices per piece/sho/kg/tan and the ratio are still given, with computed figures labeled."
+    },
+    {
+     "id": "CC-research-physical",
+     "summary": "Each question task is research: physical with five boxes; record checks green.",
+     "class": "within",
+     "why": "Project process for FR-002; no narrowing of the request."
+    },
+    {
+     "id": "D1-shape",
+     "summary": "Four new questions, subject=money, no drawing page, level counts-and-measurements, setting tags countryside/city.",
+     "class": "within",
+     "why": "FR-001; the request is four price questions with figures, which counts-and-measurements carries."
+    },
+    {
+     "id": "D1-fruit",
+     "summary": "Kanto persimmon; Edo and castle-town prices for persimmons, pears and native apples, or each one's silence named; Qing court prices, Shengjing valuations, Ming stolen-goods valuation as comparison.",
+     "class": "within",
+     "why": "Covers the request's three fruits in Edo and castle towns, Japan first, China as comparison. Round 1's note is answered: the Edo prices are now sought and named or their silence stated, not presumed silent."
+    },
+    {
+     "id": "D1-salt",
+     "summary": "Edo retail or its silence named; Kashimo 1763-74 beside its laborer; Otsukawa 1842; the hearsay inland ladder; Qing field, official and retail prices and the stated markups.",
+     "class": "within",
+     "why": "Covers Edo retail, inland, and the Qing monopoly with its markup, as asked. Round 1's note answered: Edo retail is now named explicitly."
+    },
+    {
+     "id": "D1-hemp-amulets",
+     "summary": "Etchu hemp lot; Beijing 1736 and 1615 hemp and ramie beside cotton (0261 for Japanese cotton by the tan); Ise oshi 1813 takings; the silences.",
+     "class": "within",
+     "why": "Covers hemp against cotton and what shrines charged or expected for amulets; where no customary donation figure is found, the silence is reported rather than the question dropped."
+    },
+    {
+     "id": "D1-wages",
+     "summary": "Osaka building trades; the Edo silence and one-sided figures gathered; Saito's village pair; Zhili 1769 and the 1813 norm; tailors, smiths, fletchers.",
+     "class": "within",
+     "why": "Gives the skilled/unskilled ratio with figures across the named crafts, Japan first and China as comparison, and states the Edo pairing gap rather than hiding it; matches the diagram comment's plan for the question."
+    },
+    {
+     "id": "D1-acceptance",
+     "summary": "Every attested figure, every silence, each figure beside its wages; computed figures labeled as project arithmetic.",
+     "class": "within",
+     "why": "Serves the request's 'verdict per figure, and what is still open'."
+    },
+    {
+     "id": "D2",
+     "summary": "implementation-check.md: one 'no code implements it - consumed by gm-assistant's money skill' line per question, with the search.",
+     "class": "within",
+     "why": "FR-003 verbatim."
+    },
+    {
+     "id": "D3",
+     "summary": "Comment on #5 gives each question's fragment FILE, the checked verdict for every figure (with the page that covers it, where another question gives it), and what is still open.",
+     "class": "within",
+     "why": "Matches 'Per question: the fragment FILE, the verdict per figure, and what is still open' exactly. Round 1's block is cured: the verdict for every figure is now always given, and the page pointer is an addition beside it, not a substitute for it."
+    },
+    {
+     "id": "T-order",
+     "summary": "Page sessions, implementation check, answer, then report and land by the direct route.",
+     "class": "within",
+     "why": "Sequencing only; matches the comment's 'I'll post the checked answer here' after the checks."
+    }
+   ]
+  }
+ ]
+}

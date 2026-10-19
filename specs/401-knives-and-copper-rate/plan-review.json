@@ -1,0 +1,150 @@
+{
+ "feature": "401-knives-and-copper-rate",
+ "blocks": {
+  "preamble": {
+   "sha256": "542b7a2acf701bfbf9f08cff0e1aa83c8d14521eee2ce031199b619671226f3f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "9315b44b22d2aa648e41ac7cb76707e1993ec3e0af5123b15de743bdf2f6e744",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "695fb4152e72c5cbb82f1098ac6fe46c4d2676689f1b83500b074f8cc12daaeb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "99fbdeccbfbd66edf40fe2ec6f1c5aadb8e5ec75d91b966d48c7b6412a810289",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - the two questions (FR-001, FR-002, FR-003)": {
+   "sha256": "bb3565518b7d0006a28d4adec9cc6f1b33f062a0c53bd716e9916336c3a1749f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - the implementation check (FR-004)": {
+   "sha256": "dc0a113d3321afd864b409d87133f9f876870d10bef45628799569e366059a4e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - the answer (FR-005)": {
+   "sha256": "da915f79ff82f913494eacdf3395b4820d3e4710263c87d7a13ce5838c61254c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## T - the order": {
+   "sha256": "a546546a20ff0dc1c925669cab981969374479f6904353bc5da8504b5579f722",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-19",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the two questions (FR-001, FR-002, FR-003)",
+    "## D2 - the implementation check (FR-004)",
+    "## D3 - the answer (FR-005)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary/sessions",
+     "summary": "One write page session for both questions, one check-and-apply session, then the issue answer; no code, map or canon change.",
+     "class": "within",
+     "why": "Process shape only; covers both questions the issue asks and the answer it asks for; no-code matches FR-006."
+    },
+    {
+     "id": "TC/page-reading",
+     "summary": "Search passes are leads; every passage read on its page before citation; NDL scans read on page images and sent to source-reader with IMAGES=.",
+     "class": "within",
+     "why": "Serves FR-002's checks; adds no scope beyond the record's own discipline."
+    },
+    {
+     "id": "TC/rate-script",
+     "summary": "Kobe RIEB Excel archived first; a named script computes decade means; notes state days used, midpoint where min/max given, missing years, 1844-49 as administered floor.",
+     "class": "within",
+     "why": "Carries FR-003 and the issue's own commitments verbatim (archive first, decade means labeled as arithmetic with method stated, 1844-49 shown as a floor). The midpoint rule is a stated method, as the issue asks."
+    },
+    {
+     "id": "TC/wages",
+     "summary": "Each knife price beside craftsman's and laborer's day wage of same place and period where a source gives them; otherwise SILENT with the nearest named (class, place, unit, gap in years).",
+     "class": "within",
+     "why": "The issue asks for each price beside the same place and period's wages and its own comment says 'beside the nearest wages, as before'. Where no source gives the matching wage the literal reading is impossible; the plan still marks that SILENT and supplies the nearest with its gap, which does not lower the request."
+    },
+    {
+     "id": "TC/rate-unconverted",
+     "summary": "The rate question gives rates, not converted prices.",
+     "class": "within",
+     "why": "The issue asks for mon per monme by decade and the official rate beside it; it never asks the rate question to convert prices. The cross-check is carried in D3."
+    },
+    {
+     "id": "Constitution",
+     "summary": "XII research: physical tasks with five boxes; XIII record tests green; XVI built as FRs.",
+     "class": "within",
+     "why": "Compliance statements, no scope decision."
+    },
+    {
+     "id": "D1/form",
+     "summary": "Both questions new, subject=money, no drawing page, level counts-and-measurements; setting tags city,countryside (knives) and city (rate).",
+     "class": "within",
+     "why": "FR-001 settles money tag and no drawing page; level and setting tags are classification choices that do not cut content."
+    },
+    {
+     "id": "D1/knives-content",
+     "summary": "Knife question covers the 1851 Edo wholesale list by kind and grade, Tsuyama 1665, the four named makers (recorded SILENT), Sakai's 1761 output rule, the smith/sharpener/handle-maker split, Qing and Ming cleaver, wages beside.",
+     "class": "within",
+     "why": "Every clause of issue question 1 has a home: ordinary and fine price (list by grade), named makers, smith output, trade split, Ming/Qing cleaver, wages. Recording the four makers SILENT is the expected finding of the passes, not a dropped clause: the issue asks for 'what is still open', and the same plan has every passage read on its page, so a maker price found in the session is still written in."
+    },
+    {
+     "id": "D1/rate-content",
+     "summary": "Rate question covers official 60 monme = 4,000 mon and 1842's 6,500; Osaka series by decade in mon per monme and mon per ryo beside the source's units; 1844-49 floor; Edo printed figures or SILENT; before 1787; anchor years 1802-04 and 1842.",
+     "class": "within",
+     "why": "Matches issue question 2 (monme and ryo, 1780s-1850s, Osaka and Edo, official beside market) and its own plan comment (Edo only printed figures, floor labeled). 'Before 1787' covers the 1780s the series misses; anchor year 1842 serves the Kazusa cross-check the issue names."
+    },
+    {
+     "id": "D2",
+     "summary": "implementation-check.md: one 'no code implements it - consumed by gm-assistant's money skill' line per question, with the search.",
+     "class": "within",
+     "why": "Is FR-004 as written."
+    },
+    {
+     "id": "D3",
+     "summary": "Issue comment gives each fragment FILE, checked verdict per figure, what is open, and whether the rate supports the Kazusa 1842 132-mon conversion without adopting it.",
+     "class": "within",
+     "why": "The issue's 'What the skill needs back' list plus its stated purpose for the rate ('a checked rate cross-checks that conversion'); not adopting it leaves the verify-and-close to gm-assistant as the issue says."
+    },
+    {
+     "id": "T",
+     "summary": "Order: page sessions, implementation check, answer, report and land by the direct route.",
+     "class": "within",
+     "why": "Sequencing only."
+    }
+   ]
+  }
+ ]
+}

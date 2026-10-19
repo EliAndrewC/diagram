@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-19T12:03:47+00:00",
+ "final_url": "https://web.archive.org/web/20241108222701id_/https://rekihaku.repo.nii.ac.jp/record/1336/files/kenkyuhokoku_121_02.pdf",
+ "first": "63/63c7fbb56513/20261019T120345Z",
+ "gm_copies": [],
+ "keys": [
+  "uno-2005-hakata-gion"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "63/63c7fbb56513/20261019T120345Z",
+ "reason": "HTTP 406",
+ "revision": "",
+ "sha256": "5e1879e4d0a9c88a5bfa676410125fb0085d4364b713d111d972571dff75b926",
+ "url": "https://rekihaku.repo.nii.ac.jp/record/1336/files/kenkyuhokoku_121_02.pdf"
+}

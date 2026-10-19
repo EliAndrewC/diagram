@@ -200,7 +200,11 @@ baulk	baulk
 baulks	baulk
 bay	bay
 bays	bay
+beam end	beam-end nose
+beam ends	beam-end nose
 beam span	ridge span
+beam-end nose	beam-end nose
+beam-end noses	beam-end nose
 bed load	bedload
 bed shear stress	bed shear stress
 bedload	bedload
@@ -352,6 +356,8 @@ calendar calibration	calendar calibration
 calenderer	calenderer
 calenderers	calenderer
 calibrated liberty	calibrated liberty
+cambered beam	cambered beam
+cambered beams	cambered beam
 canal corridor	canal corridor
 canal corridors	canal corridor
 cangue	cangue
@@ -442,6 +448,7 @@ chicken-feather inn	chicken-feather inn
 chicken-feather inns	chicken-feather inn
 chigaidana	staggered shelves
 chigaya	chigaya
+chihaya	chihaya
 chikaraishi	chikaraishi
 chikugo	Chikugo
 chikugo province	Chikugo
@@ -604,6 +611,8 @@ county magistrate	county magistrate
 county magistrates	county magistrate
 county seat	county seat
 county seats	county seat
+couplet	couplet
+couplets	couplet
 coursed	coursing
 courses	coursing
 coursing	coursing
@@ -613,6 +622,8 @@ courtesy name	courtesy name
 courtesy names	courtesy name
 covenant association	covenant association
 covenant associations	covenant association
+cover-shed	ōiya
+cover-sheds	ōiya
 covering house	ōiya
 cpc	CPC
 crab clan	Crab Clan
@@ -910,6 +921,7 @@ egune's	igune
 eight trigrams	eight trigrams
 eighty-eighth night	eighty-eighth night
 eiro	eiro
+eitai kuyo	perpetual memorial
 eitaijima	Eitaijima
 ekika	ekika
 elder house	karo
@@ -946,6 +958,9 @@ enpo	Enpo era
 enpo era	Enpo era
 enpō	Enpo era
 enpō era	Enpo era
+enshrinement	enshrinement
+enshrinement's	enshrinement
+enshrinements	enshrinement
 equipage	equipage
 eta	eta
 etchu	Etchu
@@ -1281,6 +1296,9 @@ geta	geta
 geza	geza
 ghusl	ghusl
 ginmisho	ginmisho
+gion	Gion festival
+gion festival	Gion festival
+gion festivals	Gion festival
 girder	girder
 girders	girder
 gis	GIS
@@ -1996,6 +2014,7 @@ kangxi	Kangxi
 kanjo bugyo	finance commissioner
 kanjo-nawa	kanjo-nawa
 kanjo-tsuri	kanjo-nawa
+kanmon	kanmon
 kannon	Kannon
 kannon biraki	kannon-biraki
 kannon-biraki	kannon-biraki
@@ -2086,6 +2105,7 @@ keyaki	keyaki
 khitan	Khitan
 kiangsu	Kiangsu
 kiba	kiba
+kibana	beam-end nose
 kichin	kichin
 kichin charge	kichin
 kichin-yado	kichin-yado
@@ -2100,6 +2120,7 @@ kiln house	kiln house
 kiln houses	kiln house
 kimoiri	shoya
 kimon	kimon
+kin	kin
 kinai	Kinai
 king post	king post
 king posts	king post
@@ -2173,6 +2194,7 @@ konya	kon-ya
 konyamachi	Kon'yamachi
 koraimon	koraimon
 kori	kori
+koryo	cambered beam
 kosatsu	kosatsuba
 kosatsuba	kosatsuba
 koshiate	koshiate-mori
@@ -2290,12 +2312,17 @@ legacy of ieyasu	hundred articles
 leping	Leping
 levee	levee
 levees	levee
+levy horse	levy horse
+levy horses	levy horse
+levy laborer	levy horse
+levy laborers	levy horse
 levy store	levy storehouse
 levy storehouse	levy storehouse
 levy storehouses	levy storehouse
 levy stores	levy storehouse
 li	li
 li river	Li River
+liang	liang
 liao	Liao dynasty
 liao dynasty	Liao dynasty
 liao dynasty's	Liao dynasty
@@ -2559,6 +2586,7 @@ mizuka	mizuya
 mizunara	mizunara
 mizunoe	mizunoe
 mizunomi	mizunomi
+mizunoto	mizunoto
 mizunoto-u	mizunoto-u
 mizuya	mizuya
 mlit	MLIT
@@ -2862,6 +2890,8 @@ ooku	ooku
 oona	oona
 open-ended dike	open-ended dike
 open-ended dikes	open-ended dike
+openwork transom	openwork transom
+openwork transoms	openwork transom
 ordination platform	ordination platform
 ordination platforms	ordination platform
 origake	origake
@@ -2965,6 +2995,7 @@ percolation	percolation
 periodic market	periodic market
 periodic markets	periodic market
 periodic-market	periodic market
+perpetual memorial	perpetual memorial
 perquisite	perquisite
 perquisites	perquisite
 persimmon tannin	persimmon tannin
@@ -3135,6 +3166,7 @@ rank 11	rank
 rank 12	rank
 rank 5	rank
 rank 9	rank
+ranma	openwork transom
 raozhou	Raozhou
 rape	rape
 raper	raper
@@ -3187,6 +3219,8 @@ relay offices	toiyaba
 relay town	relay town
 relay towns	relay town
 relief	relief
+reliquaries	reliquary
+reliquary	reliquary
 remand	remand
 remanded	remand
 ren	ren
@@ -3243,6 +3277,7 @@ ridge-divided nagaya	ridge-divided nagaya
 ridge-raising	ridge-raising
 riffle	riffle
 riffles	riffle
+right transmission commissioner	Right Transmission Commissioner
 rikuzen	Rikuzen
 rikuzen province	Rikuzen
 rin	rin
@@ -3574,6 +3609,9 @@ shinden togashi	Shinden Togashi
 shingon	Shingon
 shingon sect	Shingon
 shinkabe	shinkabe
+shinmei	shinmei-zukuri
+shinmei-style	shinmei-zukuri
+shinmei-zukuri	shinmei-zukuri
 shinpen tsuika	Shinpen Tsuika
 shinsei	Shinsei
 shinshu	Jodo Shinshu
@@ -3836,6 +3874,7 @@ suid	suid
 suiden	suiden
 suids	suid
 suijin	suijin
+suikan	suikan
 suimon	suimon
 suiren	Suiren
 suisha	suisha
@@ -4077,6 +4116,8 @@ throwing	throwing
 tian'geng	bund
 tiangeng	bund
 tiangong kaiwu	Tiangong kaiwu
+tie-rail	tie-rail
+tie-rails	tie-rail
 tier	tier
 tiers	tier
 tiller	tillering
@@ -4159,6 +4200,8 @@ training retreat	training retreat
 training retreats	training retreat
 transect	transect
 transects	transect
+transom	openwork transom
+transoms	openwork transom
 transport commissioner	transport commissioner
 transport commissioners	transport commissioner
 tread	tread
@@ -4227,6 +4270,7 @@ tung	tung
 tung tree	tung
 tung trees	tung
 tutelary shrine	chinju
+tutelary shrines	chinju
 twelve-mat	tatami
 two-grave	two-grave
 two-grave settlements	two-grave
