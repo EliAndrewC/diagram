@@ -144,7 +144,11 @@ if best:
           L_T=${LAST%%|*}; L_REST=${LAST#*|}; L_RES=${L_REST%%|*}; L_ID=${L_REST#*|}
           AGE=$(( $(date +%s) - L_T ))
           CADENCE=${MEASURE_CADENCE_S:-10800}
-          if [ "$L_RES" = green ] && [ "$AGE" -lt "$CADENCE" ] && [ "$(cat "$STATE.cadence" 2>/dev/null)" != "$L_ID" ]; then
+          # A RED PREFLIGHT IS A RED GATE (feature 385 T103, D120): it stops before the run-log record is written, so
+          # T98's re-run was refused as "last full gate GREEN 30 min ago"; `done` marks the git directory when it fails there
+          RED_MARK="$(git -C "$CWD" rev-parse --absolute-git-dir 2>/dev/null || printf '%s/.git' "$ROOT")/gate-preflight-red"
+          RED_T=$(stat -c %Y "$RED_MARK" 2>/dev/null || echo 0)
+          if [ "$L_RES" = green ] && [ "$AGE" -lt "$CADENCE" ] && [ "$RED_T" -le "$L_T" ] && [ "$(cat "$STATE.cadence" 2>/dev/null)" != "$L_ID" ]; then
             printf '%s' "$L_ID" > "$STATE.cadence"   # once per green run: re-issuing goes through
             guard_log measure blocked-cadence "$(guard_cmd)"
             MIN=$(( AGE / 60 ))

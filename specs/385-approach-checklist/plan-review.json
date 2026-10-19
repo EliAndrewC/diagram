@@ -6776,6 +6776,44 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T103": {
+   "section_sha256": "16568f8ad8007104c9af00c610e5b780af4ee7711cacd29d51ab4d8b55bd0fc5",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T103 (the task itself)",
+     "summary": "A tooling fix found while working T98 is filed as its own task: a gate re-run after a red preflight is let through by the measure guard.",
+     "class": "within",
+     "why": "Amendment 6 (GM, verbatim): 'Please make sure to implement any obvious performance / tooling / process improvements along the way'; amendment 4's one-goal-per-task rule (FR-015) is why it is its own task rather than folded into T98. The fix makes the guard keep its own stated rule ('a run after a red goes through') in a case it was measured to miss on 2026-10-19; it adds no behavior beyond that rule."
+    },
+    {
+     "id": "D120",
+     "summary": "done's preflight failure branch touches <git dir>/gate-preflight-red; measure-hooks.sh lets the full measurement through, without refusing once, when that file is newer than the last green run-log record.",
+     "class": "within",
+     "why": "Mechanism for the guard's existing rule; it widens what the guard admits only to the case the rule already names (a red gate, here red at preflight). A tool rather than a reminder, as amendment 1 item 3 and amendment 8 ('make our tooling do the thing correctly automatically every time') ask. Narrows nothing the GM asked for."
+    },
+    {
+     "id": "Exit (c): an untracked mark rather than a run-log record",
+     "summary": "The red preflight is recorded as a mark in the git directory; writing a dev/run-log record is refused because those are tracked files the landing sweeps.",
+     "class": "within",
+     "why": "Implementation choice between two routes to the same goal; the request settles neither, and neither route drops any part of the goal."
+    },
+    {
+     "id": "Item 9: an older preflight failure changes nothing",
+     "summary": "A preflight red older than the last green gate does not lift the guard's refusal.",
+     "class": "within",
+     "why": "Not an exception to the request: the guard's rule lets through a run after a red, and a red that a later green superseded is not the last result. This keeps the guard's existing refusal for the case its rule already covers, and the GM asked for nothing in that case to change."
+    },
+    {
+     "id": "Item 9: the test in tests/hooks/test-measure-hooks.sh, red without the fix",
+     "summary": "A hook-suite test that fails without the mark.",
+     "class": "within",
+     "why": "Enforcement of the requested behavior only (a tool, never a reminder); it checks nothing beyond D120."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
