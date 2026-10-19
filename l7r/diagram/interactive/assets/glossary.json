@@ -3269,7 +3269,8 @@
  "ryo": {
   "def": "The gold coin of Edo Japan, the largest unit of its money, far above the copper mon.",
   "variants": [
-   "ryo"
+   "ryo",
+   "ryō"
   ]
  },
  "ryobosei": {
@@ -6939,7 +6940,8 @@
  "sho": {
   "def": "A Japanese measure of volume, a tenth of a to. The shogunate's rice bale held 3 to and 5 sho.",
   "variants": [
-   "sho"
+   "sho",
+   "shō"
   ]
  },
  "steelyard": {
@@ -16349,6 +16351,30 @@
    "ground tenants",
    "ground tenancy",
    "ground tenancies"
+  ]
+ },
+ "capitalize": {
+  "def": "To value land or another asset as the sum that would earn its yearly net income as interest at a given rate: a net income capitalized at 5% is worth twenty times that income.",
+  "variants": [
+   "capitalize",
+   "capitalized",
+   "capitalizing",
+   "capitalization"
+  ]
+ },
+ "Suruga": {
+  "def": "A province of Japan on the Pacific coast west of Edo, around today's Shizuoka, on the Tokaido road.",
+  "variants": [
+   "Suruga",
+   "Suruga province"
+  ]
+ },
+ "Kyōmasu": {
+  "def": "The Kyoto grain measure, the square wooden box that held one shō, which the shogunate made Japan's standard in 1669; a koku was a hundred of them, about 180 liters.",
+  "variants": [
+   "Kyōmasu",
+   "kyomasu",
+   "Kyoto masu"
   ]
  }
 }

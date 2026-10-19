@@ -347,6 +347,10 @@ canopy trees	canopy-tree
 canton	Canton
 cao wei	Three Kingdoms
 caoshi	caoshi
+capitalization	capitalize
+capitalize	capitalize
+capitalized	capitalize
+capitalizing	capitalize
 caravan ground	caravan ground
 caravan grounds	caravan ground
 caravan inn	caravan inn
@@ -2170,6 +2174,8 @@ kyo-machiya	machiya
 kyogen	kyogen
 kyoho	Kyoho
 kyoma	Kyoto measure
+kyomasu	Kyōmasu
+kyoto masu	Kyōmasu
 kyoto measure	Kyoto measure
 kyowa	Kyowa
 kyozo	sutra house
@@ -2182,6 +2188,7 @@ kyuyo	Kyuyo
 kyō-ma	Kyoto measure
 kyōgen	kyogen
 kyōhō	Kyoho
+kyōmasu	Kyōmasu
 kyūnin	kyunin
 kyūyō	Kyuyo
 kō	kō
@@ -3219,6 +3226,7 @@ ryukyu	Ryukyu kingdom
 ryukyu kingdom	Ryukyu kingdom
 ryukyu-koku yuraiki	Ryukyu-koku yuraiki
 ryukyus	Ryukyu kingdom
+ryō	ryo
 rōjū	Roju
 rōnin	ronin
 rōya	roya
@@ -3529,6 +3537,7 @@ shungiku	shungiku
 shunzhi	Shunzhi
 shuri	Shuri
 shuson	shuson
+shō	sho
 shōtoku	Shotoku era
 shōtoku era	Shotoku era
 shōwa	Showa
@@ -3741,6 +3750,8 @@ superelevates	superelevation
 superelevation	superelevation
 superstructure	superstructure
 supplement to the farm manual	Bu nongshu
+suruga	Suruga
+suruga province	Suruga
 surveillance commissioner	surveillance commissioner
 surveillance commissioners	surveillance commissioner
 survey register	kenchicho
