@@ -479,7 +479,7 @@ Found by T31's claims round (amendment 6, a defect fixed where found - not a ran
 3. **Where each comes from.** 0246's 7 ft is O, a map drawing convention; row 841's fix is the ranking's (O).
 4. **Do they describe the world here?** Yes - measured 2026-10-19 (T31's impl-drift round, then a read of `street.py`): the leg is drawn at `STREET_WIDTH` by `_draw_web`, a lane; measured 2026-10-19 (`make cohort` with the leg at `WEB_FABRIC_GAP`): 16 of 16 pass, the fresh block 0 of 4 failed.
 5. **The order.** The leg's routing gap, its claim, then the landing cohort.
-6. **The exits.** (a) - the leg takes the lane's own number; none other needed, the cohort passes.
+6. **The exits.** (a) refine an O number: none to refine - the leg read the footpath's number, not a wrong lane number; (b) an exception: none - nothing obstructs the lane's 7 ft (the cohort passes); (c) a new rule: none needed; (d) more room: none needed, nothing fails; (e) conform - chosen: the leg is a lane, so it keeps the lane's 7 ft as the rule stands.
 7. **The search smell.** None.
 8. **The budget.** 30 min.
 9. **Done, measured.** One goal: `join_to` routes its leg at `WEB_FABRIC_GAP` and its claim cites 0246's 7 ft; the claims check finds it IN-STEP and the landing cohort passes.
