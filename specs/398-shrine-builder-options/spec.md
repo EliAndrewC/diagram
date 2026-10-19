@@ -37,7 +37,8 @@ SILENT; or "covered by NNNN" where 0255-0258 give it):
 1. **Sanctuary alternatives, halls and finishes.**
    - **Kasuga- and shinmei-zukuri sanctuaries:** SILENT.
    - **A stone hokora:** SILENT.
-   - **A cover-shed:** covered by 0255.
+   - **A cover-shed:** covered by 0255 only inside the bundled Mitake repair (about 9 ryo 2 bu for the sanctuary and its
+     covering house plus a repainting); the shed alone is SILENT.
    - **A worship pavilion:** covered by 0255 for the hall. Its fittings and doors (Shibasaki 1841) are ATTESTED ONLY FOR a
      deposit and a final payment. An offering hall is SILENT.
    - **Hinoki, keyaki and sugi timber:** SILENT.
@@ -45,11 +46,13 @@ SILENT; or "covered by NNNN" where 0255-0258 give it):
    - **Shingle:** ATTESTED ONLY FOR one purchase of roof boards (Shibasaki 1840).
    - **Copper:** covered by 0256.
    - **Vermilion, bengara and black lacquer:** SILENT.
-   - **Carving:** ATTESTED (Tanashi 1858, 147 pieces on a 4.3-shaku-bay sanctuary, 135 ryo). Kawagoe Hikawa is an upper
-     bound only.
+   - **Relief panels:** covered by 0255 (3 ryo a panel, Shibasaki).
+   - **Carved beam ends (accents):** ATTESTED ONLY FOR a whole sanctuary's carving set that includes them (Tanashi 1858,
+     147 pieces on a 4.3-shaku-bay sanctuary, 135 ryo, called "exceptionally low" by its source).
+   - **Kawagoe Hikawa:** an upper bound only.
    - **Openwork transoms:** SILENT.
 2. **Stone work.**
-   - **A stone torii:** covered by 0257.
+   - **A small stone torii:** SILENT. 0257's great torii (3,200 ryo, 1708-09) is an upper bound only.
    - **A pair of stone lanterns:** ATTESTED (Shibasaki 1841, 4 ryo 3 bu delivered).
    - **A tall lantern:** SILENT.
    - **Mason-days:** ATTESTED ONLY FOR the 1841 payment for four extra men.
@@ -62,7 +65,8 @@ SILENT; or "covered by NNNN" where 0255-0258 give it):
 4. **Rites and the dead.**
    - **A night enshrinement:** the cost share is covered by 0255/0256. The priests' fee is SILENT.
    - **A goryo festival:** ATTESTED ONLY FOR one Hakata ward's Gion float duty (1838).
-   - **Eitai kuyo, a portion to Koyasan, washing bones:** SILENT.
+   - **Eitai kuyo, washing bones:** SILENT.
+   - **A portion of remains to a distant mountain temple:** SILENT (searched as Koyasan).
    - **A calligrapher's plaque fee:** SILENT in Japan. ATTESTED ONLY FOR a Chinese price list (Zheng Banqiao, 1759).
 
 Each figure is set beside the craftsman's and the unskilled laborer's day wage of the same place and period where a
@@ -98,3 +102,9 @@ covered by), and what is still open.
 
 - Four questions fit one write session.
 - The verdicts above are the search passes'. The write may narrow them; it may not widen them without a source.
+
+## Review history
+
+- **spec-fidelity round 1 (2026-10-19): CHANGES REQUIRED, 3 items.** Relief panels and carved beam ends given one line
+  each; the small stone torii SILENT with 0257's great torii an upper bound, and the cover-shed's bundling stated; the
+  mountain temple SILENT as searched (Koyasan).
