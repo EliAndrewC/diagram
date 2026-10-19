@@ -44,6 +44,7 @@ from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import hm_arbiter  # noqa: E402
+import hm_planhold  # noqa: E402
 
 STATE = "checks-open.json"
 #: the checks whose subject is a question page or a pop-up, and so freeze it while they run
@@ -770,6 +771,9 @@ def _handle(mode: str, payload: Mapping[str, Any], path: Path, now: float) -> st
             if root is not None and m and m.group(1).strip() in hm_arbiter.rulings(root):
                 return f"{m.group(1).strip()} is already ruled - one ruling per trigger, binding (feature 375 FR-011)"
             return ""
+        if check == "spec-fidelity":  # feature 385 T85: a plan review holds the section or blocks it reads
+            hm_planhold.hold(state, str(payload.get("tool_use_id") or now), str(ti.get("prompt") or ""), now)
+            save(path, state)  # a plan review is no check kind: the branch below returns before the state is saved
         if check not in CHECK_KINDS:
             return ""
         prompt = str(ti.get("prompt") or "")
@@ -801,10 +805,15 @@ def _handle(mode: str, payload: Mapping[str, Any], path: Path, now: float) -> st
                 hm_arbiter.trip(root, trigger, "cascade", "", f"{n} check dispatches over {lines} changed lines", now)
     elif mode == "launched" and payload.get("tool_name") == "Agent":
         resp = payload.get("tool_response") if isinstance(payload.get("tool_response"), Mapping) else {}
+        hm_planhold.launched(state, str(payload.get("tool_use_id") or ""), str(resp.get("agentId") or ""))
         launched(state, str(payload.get("tool_use_id") or ""), str(resp.get("agentId") or ""), resp.get("status") == "async_launched", response_text(resp), path.parent / "check-replies")
     elif mode == "returned":
+        hm_planhold.returned(state, str(payload.get("agent_id") or ""))
         pair_wave(state, str(payload.get("agent_id") or ""), str(payload.get("agent_transcript_path") or ""))
         returned(state, str(payload.get("agent_id") or ""), _reply_of(str(payload.get("agent_transcript_path") or ""), str(payload.get("last_assistant_message") or "")), path.parent / "check-replies")
+    elif mode == "edit" and (held := hm_planhold.refusal(state, _root(payload), str(payload.get("tool_name") or ""), ti, now,
+                                                        escaped("PLAN_EDIT_OK", " ".join(str(v) for v in ti.values())))):
+        return held
     elif mode == "edit" and payload.get("tool_name") == "Bash":
         command = str(ti.get("command") or "")
         root = _root(payload)
