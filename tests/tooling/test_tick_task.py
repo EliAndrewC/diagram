@@ -193,16 +193,24 @@ def test_a_note_saying_landed_is_refused_while_the_landing_is_not_on_main(tmp_pa
     gd.mkdir()
     rows = gd / "land-tooling.jsonl"
     differs: set[str] = set()
+    ahead: list[str] = []
 
     def fake_run(cmd, **kw):  # noqa: ANN001, ANN003, ANN202
         out = "" if "diff" not in cmd else ""
         if "--git-common-dir" in cmd:
             out = str(gd)
+        if "log" in cmd:
+            out = "\n".join(ahead)
         rc = 1 if "diff" in cmd and cmd[-1] in differs else 0
         return sp.CompletedProcess(cmd, rc, out, "")
 
     monkeypatch.setattr(tt.subprocess, "run", fake_run)
-    assert tt.landed_refusal(tmp_path, "385-x", "T72", "Landed on main") == "", "no run recorded: not refused"
+    assert tt.landed_refusal(tmp_path, "385-x", "T72", "Landed on main") == "", "no run recorded, nothing off main: not refused"
+    ahead[:] = ["specs/385-x/retro.md", "dev/review-ledger.md"]
+    assert tt.landed_refusal(tmp_path, "385-x", "T72", "Landed on main") == "", "only the feature's records ahead of main"
+    ahead.append("l7r/diagram/interactive/assets/glossary/24330-Enoshima.json")  # feature 385 T113: T110's push stood refused
+    assert "24330-Enoshima.json is committed here and not on origin/main" in tt.landed_refusal(tmp_path, "385-x", "T72", "landed")
+    ahead.clear()
     rows.write_text(json.dumps({"feature": "385-x", "task": "T72", "files": ["scripts/a.py"], "outcome": "failed: the checks failed", "log": "L"}) + "\n")
     assert "ended 'failed: the checks failed' (L)" in tt.landed_refusal(tmp_path, "385-x", "T72", "Landed on main")
     assert tt.landed_refusal(tmp_path, "385-x", "T72", "built, tests green") == "", "a note not claiming a landing is not checked"
