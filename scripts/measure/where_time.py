@@ -15,6 +15,7 @@ task active at its launch. The step-back checklist (specs/385-approach-checklist
 from __future__ import annotations
 
 import argparse
+import datetime
 import json
 import re
 import sys
@@ -163,6 +164,35 @@ def tables(
     return out, agents, secs
 
 
+def parse_ticks(log_p: str) -> list[tuple[float, str]]:
+    """(UTC seconds, task) of each task's tick: the first commit in `git log --reverse --format=@@%cI -p -- tasks.md` that turned
+    its box `[x]` (feature 385 T115, D132)."""
+    out: list[tuple[float, str]] = []
+    seen: set[str] = set()
+    cur: float | None = None
+    for line in log_p.splitlines():
+        if line.startswith("@@") and line[2:3].isdigit():
+            cur = datetime.datetime.fromisoformat(line[2:].strip()).timestamp()
+        elif (m := re.match(r"^\+- \[x\] (T\d+[a-z]?)\b", line)) and cur is not None and m.group(1) not in seen:
+            seen.add(m.group(1))
+            out.append((cur, m.group(1)))
+    return out
+
+
+def tick_windows(ticks: Sequence[tuple[float, str]], since: float) -> list[tuple[float, float, str]]:
+    """(start, end, label) of each tick's window - from the tick before it (or `since`) to it - the tasks ticked in one commit
+    sharing a window, "T96+T98" (D132)."""
+    by_t: dict[float, list[str]] = defaultdict(list)
+    for t, k in ticks:
+        if t >= since:
+            by_t[t].append(k)
+    out, prev = [], since
+    for t in sorted(by_t):
+        out.append((prev, t, "+".join(by_t[t])))
+        prev = t
+    return out
+
+
 def render(out: Mapping[str, Counter], agents: Mapping[str, Counter], secs: Mapping[str, Counter], order: Iterable[str]) -> str:
     order = [k for k in order if k in out or k in agents]
     lines = ["| task | total | " + " | ".join(COLUMNS) + " |", "|---|---|" + "---|" * len(COLUMNS)]
@@ -177,11 +207,16 @@ def render(out: Mapping[str, Counter], agents: Mapping[str, Counter], secs: Mapp
     return "\n".join(lines)
 
 
+def _hm(t: float) -> str:
+    return datetime.datetime.fromtimestamp(t, datetime.timezone.utc).strftime("%H:%M")
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
     ap.add_argument("feature")
     ap.add_argument("--since", default="")
     ap.add_argument("--root", default=".")
+    ap.add_argument("--by-tick", action="store_true", help="book each tick window to the task(s) ticked at its end (T115, D132)")
     args = ap.parse_args(argv)
     root = Path(fr._git(Path(args.root), "rev-parse", "--show-toplevel").strip() or args.root)
     d = fr.spec_dir(root, args.feature)
@@ -192,6 +227,16 @@ def main(argv: Sequence[str] | None = None) -> int:
     rows = [json.loads(x) for x in (common / "task-starts.jsonl").read_text(encoding="utf-8").splitlines() if x.strip()] if (common / "task-starts.jsonl").is_file() else []
     starts = sorted((fr.parse_t(r["utc"]), r["task"]) for r in rows if r.get("feature") == d.name and (not args.since or r["utc"] >= args.since))
     events = fr.load_events(fr.event_logs(root, d.name), [], args.since, "")
+    if args.by_tick:  # ...EACH TASK'S TICK WINDOW (feature 385 T115, D132): what the GM's speed question was answered with by hand
+        log_p = fr._git(root, "log", "--reverse", "--format=@@%cI", "-p", "--", str((d / "tasks.md").relative_to(root)))
+        t0 = fr.parse_t(args.since) if args.since else min((fr.parse_t(e["t"]) for e in events), default=0.0)
+        wins = tick_windows(parse_ticks(log_p), t0)
+        out, agents, secs = tables(events, [(s, k) for s, _e, k in wins], None, d.name.split("-")[0])
+        print(render(out, agents, secs, [k for _s, _e, k in wins]))
+        print("\n| window | from (UTC) | to (UTC) | wall minutes |\n|---|---|---|---|")
+        for s, e, k in wins:
+            print(f"| {k} | {_hm(s)} | {_hm(e)} | {(e - s) / 60:.0f} |")
+        return 0
     rules: Counter = Counter()
     inputs = transcript_inputs({str(e.get("sid")) for e in events})
     out, agents, secs = tables(events, starts, inputs, d.name.split("-")[0], rules)
