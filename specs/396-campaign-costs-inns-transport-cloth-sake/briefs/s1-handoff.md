@@ -7,9 +7,9 @@
 0262 (`what-did-sake-cost-by-the-shop-and-by-the-cup`, I4) is reserved, tagged and claimed but EMPTY: the ten-key cap was
 spent on I1-I3, so I4 went to the continuation brief, whose session appends its SECTION line, figures and keys here.
 
-source-reader ran on every note of 0259-0261 (18 bundles, 70 claims: all READ, 4 CONTRADICTED, all four in registry
-write-ups or one date range) and is recorded; its fixes owe their second round, and the new note `kotobank-seken-munezanyo`
-(0261) has had no read yet. Every other check (quote-check, record-format, intro-check, translation-check,
+source-reader ran on every note of 0259-0261 (18 bundles, about 72 items: 68 READ, 4 CONTRADICTED, three in registry
+write-ups and one a date range) and is recorded; its fixes owe their second round, and the new notes `kotobank-seken-munezanyo`
+(0261) and `akiyama-kaido-shukuba-mamechishiki` (0260, the three loads) have had no read yet. Every other check (quote-check, record-format, intro-check, translation-check,
 source-applicability on the write-ups) is session 2's.
 
 Units throughout: the prices are in copper mon (cloth in silver monme) and the wages in silver; a mon price beside a silver
@@ -90,7 +90,7 @@ gao-shouxian-jiuqing-wuliao (0261); kotobank-seken-munezanyo (0261, an eleventh 
 source-reader found that no registered page said Seken munezan'yo is Saikaku's fiction, which the brief requires the 1692
 silk price to carry).
 
-Uncited entries now cited: kotobank-chuma, imidas-tenma-yaku (0260). Reused with a Money "Used for:" added:
+Uncited entries now cited: kotobank-chuma, imidas-tenma-yaku, akiyama-kaido-shukuba-mamechishiki (0260). Reused with a Money "Used for:" added:
 kichinyado-kotobank, tokaido-qa-mlit-hatago, michie-siberian-overland, ye-mengzhu-yueshibian (its citation line now names
 食貨六), allen-2009-china-wages.
 
