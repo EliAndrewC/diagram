@@ -420,3 +420,15 @@ def test_a_part_b_that_decides_nothing_owes_no_review_and_one_that_decides_does(
     assert gate.block_status(review, plan + quiet, set())[0] == []
     for loud in (pb("No.", "Changing: the rule widens."), pb("Yes - the wells move.", "Neither."), pb("No.", "Neither.", "7. **Next.** D11 - a new rule.\n")):
         assert gate.block_status(review, plan + loud, set())[0] == [head], loud
+
+
+def test_a_quiet_part_b_leaves_its_task_s_section_reviewed() -> None:
+    """Feature 385 T80 (plan D99): T78's part B moved its section's digest, and three reviewed blocks fell back to block reviews."""
+    sec = "## T05 - x\n\n### T05 Approach (checklist part A)\n\n1. **G.** y\n\n### T05 Decisions\n\n**D10 - a rule.** z\n\n"
+    plan = "# Plan\n\n" + sec
+    review = {"tasks": {"T05": {"verdict": "CLEAR", "section_sha256": gate.digest(sec.encode()), "section_text": sec}}}
+    quiet = "### T05 part B (2026-10-19T01:30Z)\n\n4. **Moving?** No.\n5. **Tuning or changing?** Neither.\n\n"
+    loud = "### T05 part B (2026-10-19T01:30Z)\n\n4. **Moving?** No.\n5. **Tuning or changing?** Changing: wider.\n\n"
+    for part_b, current in ((quiet, True), (loud, False)):
+        text = plan.replace("### T05 Decisions", part_b + "### T05 Decisions")
+        assert gate.task_current(review, text, "T05") is current, part_b
