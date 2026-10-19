@@ -578,6 +578,10 @@ arbiter-fix-done:  ## [project] the round arbiter's tooling fix is MADE: what wa
 	@if [ -n "$(TICK)" ] && [ -z "$(F)" ]; then printf 'make arbiter-fix-done: TICK= ticks a task of F=<feature> - name the feature\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && $(if $(LAND),scripts/land-tooling.sh $(LAND) $(TEST) && git fetch -q origin &&,) ARBITER_FIX_ENGINE="$(ENGINE)" python3 scripts/hooks/lib/hm_arbiter.py fix done "$(ID)" "$(NOTE)" "$(TEST)"$(if $(TICK), && $(MAKE) --no-print-directory tick F="$(F)" T="$(TICK)" NOTE="$(NOTE)",)
 
+use-feature:  ## [project] make F the clone's active feature for the hooks (.specify/feature.json) - instead of writing the file by hand (the round arbiter on hour:396@1)   F=<feature number>
+	@if [ -z "$(F)" ]; then printf 'make use-feature: F=<feature number> is required - e.g. make use-feature F=396\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && d=$$(ls -d specs/$(F)-* 2>/dev/null | head -1) && [ -n "$$d" ] || { printf 'make use-feature: no specs/$(F)-* directory\n' >&2; exit 2; }; printf '{\n  "feature_directory": "%s"\n}\n' "$$d" > .specify/feature.json && printf 'use-feature: .specify/feature.json names %s; export SPECIFY_FEATURE=%s\n' "$$d" "$${d#specs/}"
+
 step-back:  ## [project] the feature's hourly checkpoint: open it and build the round arbiter's step-back bundle (feature 383)   [TRIGGER=hour:<f>@<n> TRANSCRIPT=<jsonl> SINCE=<ISO> UNTIL=<ISO>: replay an hour]
 	@cd "$$(git rev-parse --show-toplevel)" && if [ -n "$(TRIGGER)" ]; then python3 scripts/reviews/stepback_bundle.py "$(TRIGGER)" --root "$$(pwd)" $(if $(TRANSCRIPT),--transcript "$(TRANSCRIPT)",) $(if $(SINCE),--since "$(SINCE)",) $(if $(UNTIL),--until "$(UNTIL)",) $(if $(OUT),--out "$(OUT)",); else t=$$(python3 scripts/reviews/checkpoint.py open) && python3 scripts/reviews/stepback_bundle.py "$$t" --root "$$(pwd)"; fi
 
