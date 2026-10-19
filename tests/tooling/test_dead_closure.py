@@ -89,3 +89,100 @@ def test_a_test_pinned_to_a_deleted_file_or_name_is_named() -> None:
     assert any(g.startswith("PINNED        l7r/diagram/eng/roll.py  in scripts/s.sh:1") for g in got), got
     assert not any("tests/t.py:3" in g or "tests/t.py:4" in g for g in got), "comments and live names are not pins"
     assert dc._strings('x = "unterminated\n') == [(1, 'x = "unterminated')]
+
+
+def test_an_island_and_a_class_constant_are_dead_and_a_nested_function_is_no_definition() -> None:
+    """The round arbiter's tooling fix on hour:392-retire-the-exhibit-only-engine@1: 392's census missed names that only
+    reach each other (citybudget's dataclasses and printer), class constants nothing reads (`_WARD_STROKE`), and read a
+    nested function's name (`fit`) as a deleted definition."""
+    dc = _load()
+    base = {
+        "l7r/e/plan.py": "from .budget import Budget, fmt\n\n\ndef plan():\n    return fmt(Budget())\n",
+        "l7r/e/budget.py": "class Budget:\n    STROKE = 1.0\n\n\ndef fmt(b):\n    def fit(x):\n        return x\n    return fit(b.STROKE)\n",
+        "l7r/e/run.py": "from .plan import plan\nplan()\n",
+    }
+    now = {**base, "l7r/e/run.py": "", "l7r/e/plan.py": "from .budget import Budget, fmt\n\n\ndef plan():\n    return fmt(Budget())\n"}
+    lines = dc.report(base, now)
+    dead = {ln.split()[2] for ln in lines if ln.startswith("NEWLY DEAD")}
+    assert {"plan", "Budget", "fmt", "STROKE"} <= dead, lines
+    assert "fit" not in dead and not any("STILL CALLED  fit" in ln for ln in lines), "a nested function is no one's to call"
+
+
+def test_the_fixpoint_cuts_the_ring_its_docstring_and_the_re_export_until_a_class_empties(tmp_path: pathlib.Path) -> None:
+    dc = _load()
+    files = {
+        "l7r/e/__init__.py": "from .k import GAP as GAP\nfrom .k import live as live\n",
+        "l7r/e/k.py": '# the gap a lane keeps\nGAP = 2.0\n"""Research: lane gap - GUESS"""\n\n\ndef helper():\n    return GAP\n\n\ndef live():\n    return 1\n\n\nclass Mix:\n    def gone_one(self):\n        return helper()\n',
+        "l7r/e/use.py": "from .k import live, Mix\nlive()\nMix().gone_one()\n",
+    }
+    for path, src in files.items():
+        (tmp_path / path).parent.mkdir(parents=True, exist_ok=True)
+        (tmp_path / path).write_text(src, encoding="utf-8")
+    base = dict(files)
+    (tmp_path / "l7r/e/use.py").write_text("from .k import live, Mix\nlive()\nMix\n", encoding="utf-8")
+    log = dc.fixpoint(tmp_path, base)
+    k = (tmp_path / "l7r/e/k.py").read_text(encoding="utf-8")
+    assert "def gone_one" not in k and "def helper" not in k and "GAP = 2.0" not in k, k
+    assert "Research: lane gap" not in k and "# the gap a lane keeps" not in k, "a cut constant takes its comment and docstring"
+    assert "def live" in k, "a live definition stays"
+    assert "GAP as GAP" not in (tmp_path / "l7r/e/__init__.py").read_text(encoding="utf-8"), "the re-export of a cut name goes"
+    assert any("a class emptied - stop" in ln for ln in log), log
+    assert dc.emptied(base, dc._tree_now(tmp_path)) == ["l7r/e/k.py:Mix"]
+
+
+def test_what_code_already_unreached_uses_is_not_cut_from_under_it() -> None:
+    """392's fixpoint cut `_uf_f` because its live caller went, though a test-only `water_field` (unreached before and
+    after, so not this change's to delete) still used it. Code that stays keeps what it uses."""
+    dc = _load()
+    base = {
+        "l7r/e/f.py": "def _uf(x):\n    return x\n\n\ndef paddy():\n    return _uf(1)\n\n\ndef water():\n    return _uf(2)\n",
+        "l7r/e/run.py": "from .f import paddy\npaddy()\n",
+    }
+    now = {**base, "l7r/e/run.py": ""}
+    dead = {ln.split()[2] for ln in dc.report(base, now) if ln.startswith("NEWLY DEAD")}
+    assert dead == {"paddy"}, dead
+
+
+def test_the_fixpoint_holds_a_name_assigned_from_a_call(tmp_path: pathlib.Path) -> None:
+    """392's fixpoint cut `DIKEPOND_SPLIT = register_knob(...)`: nothing named it, but the call registers a knob read by its
+    string. An assignment from a call is held for a hand check, never cut."""
+    dc = _load()
+    files = {"l7r/e/k.py": "def register(x):\n    return x\n\n\nKNOB = register('split')\nTABLE = {1: 2}\n\n\ndef roll():\n    return TABLE, KNOB\n", "l7r/e/run.py": "from .k import roll\nroll()\n"}
+    for path, src in files.items():
+        (tmp_path / path).parent.mkdir(parents=True, exist_ok=True)
+        (tmp_path / path).write_text(src, encoding="utf-8")
+    (tmp_path / "l7r/e/run.py").write_text("", encoding="utf-8")
+    log = dc.fixpoint(tmp_path, dict(files))
+    k = (tmp_path / "l7r/e/k.py").read_text(encoding="utf-8")
+    assert "KNOB = register" in k and "TABLE" not in k and "def roll" not in k, k
+    assert any("HOLDS KNOB" in ln for ln in log), log
+
+
+def test_callers_counts_calls_bare_and_by_attribute_never_the_definition(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """The round arbiter's tooling fix on hour:392-retire-the-exhibit-only-engine@2: `ring` and `river` hid their callers from
+    the name census because `.ring` is also a common attribute. A use is a call or a `.name` read (never the definition), and a
+    frozen exhibit's are counted apart; over-counting a read only keeps code, never cuts it."""
+    dc = _load()
+    files = {
+        "l7r/e/s.py": "class S:\n    def ring(self):\n        return 1\n\n\ndef f(h):\n    return h.ring\n",
+        "l7r/e/u.py": "from .s import S\nS().ring()\n",
+        "legacy-hand-authored-pool/x/x.gen.py": "s.ring()\ns.ring()\n",
+    }
+    (line,) = dc.callers(files, ["ring"])
+    assert "live 2: l7r/e/s.py:7 l7r/e/u.py:2" in line and "frozen 2:" in line, line  # `h.ring` read counts: the safe side
+    for path, src in files.items():
+        (tmp_path / path).parent.mkdir(parents=True, exist_ok=True)
+        (tmp_path / path).write_text(src, encoding="utf-8")
+    assert dc.main(["--callers", "ring", "nothing"], tmp_path) == 0
+    out = capsys.readouterr().out
+    assert "CALLERS       nothing  live 0" in out
+    assert dc.call_sites({"l7r/bad.py": "x = (\n"}) == {}, "an unparseable file is skipped"
+
+
+def test_callers_counts_a_method_passed_as_a_value() -> None:
+    """392 cut `_nearest_field_point` and `exact_clear` as frozen-only: live code passes them as values, never calls them."""
+    dc = _load()
+    files = {"l7r/e/s.py": "def go(s, b, x):\n    s._slide(1, s._nearest)\n    return (b.exact if x else b.static)(1)\n", "l7r/e/t.py": "def f(o):\n    o.attr = 1\n"}
+    sites = dc.call_sites(files)
+    assert "_nearest" in sites and "exact" in sites, sites
+    assert "attr" not in sites, "an assignment target is not a use"

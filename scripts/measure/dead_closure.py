@@ -14,13 +14,29 @@ constant only the deleted code read (`BUNDLE_PITCH_FT`) looked live. This asks b
     PINNED        a test or script that names a deleted FILE, or a deleted name, inside a string - an assertion pinned to
                   a path the deletion removes (388's `"rolling/roll.py" in note`), found before `make done` rather than
                   as a red run (the round arbiter's tooling fix on red-gate@2026-10-18T20:36:37Z)
+    EMPTIED       a class whose every member is gone (`--fixpoint` stops there: delete the module or the mixin by hand)
+
+DEAD IS UNREACHABLE (the round arbiter's tooling fix on hour:392-retire-the-exhibit-only-engine@1). A definition is a
+top-level function, class or constant, or a method or constant in a class body - never a nested function, whose name
+(`fit`, `overlap`) is no one's to call. It is live when module-level code (outside every definition) names it, or a live
+definition does; so a group of names that only reach each other (392's `citybudget.py` dataclasses and their printer) is
+dead together, and so is a class constant nothing reads (392's `_WARD_STROKE`).
+
+`--fixpoint` cuts every NEWLY DEAD definition, the comment lines above it and a research docstring just below a constant,
+drops each package re-export (`X as X`) of a name no longer defined, and runs again until nothing new is orphaned
+(feature 392 needed hand-written loops for this).
 
 References are code tokens (not comments or docstrings) over `l7r/`, `pool/` and `legacy-hand-authored-pool/` - the roots
 the waterfields census scans - and a re-export `X as X` is not a use. Name-level, like the census: two definitions sharing
 a name count as one, and a local variable of a deleted name's spelling reads as a call (388's run named `cut_at` in
 `hamletgen/ways/tails.py`, a local), so read every line it prints before acting on it.
 
-    dead_closure.py [--base REF]          (default REF: HEAD)
+    dead_closure.py [--base REF] [--fixpoint]          (default REF: HEAD)
+    dead_closure.py --callers NAME [NAME...]           each name's CALL SITES - `name(` and `.name(`, definitions not
+                                                       counted - in live code and in the frozen exhibits, from one pass
+                                                       (the round arbiter's fix on hour:392-retire-the-exhibit-only-engine@2:
+                                                       a name that is also a common attribute - `ring`, `river` - hides
+                                                       its callers from every name census)
 """
 
 from __future__ import annotations
@@ -49,19 +65,73 @@ def _tokens(src: str) -> Counter[str]:
         return Counter(re.findall(r"\b[A-Za-z_]\w*\b", src))
 
 
+def _name_of(n: ast.stmt) -> str | None:
+    if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+        return n.name
+    if isinstance(n, ast.Assign) and len(n.targets) == 1 and isinstance(n.targets[0], ast.Name):
+        return n.targets[0].id
+    if isinstance(n, ast.AnnAssign) and isinstance(n.target, ast.Name):
+        return n.target.id
+    return None
+
+
+def _units(tree: ast.Module) -> list[tuple[str, ast.stmt]]:
+    """(name, node) of every definition: top-level functions, classes and constants, and a class body's methods and
+    constants - never a nested function."""
+    out: list[tuple[str, ast.stmt]] = []
+    for n in tree.body:
+        if (name := _name_of(n)) is not None:
+            out.append((name, n))
+        if isinstance(n, ast.ClassDef):
+            out += [(nm, b) for b in n.body if (nm := _name_of(b)) is not None]
+    return out
+
+
 def _defs(src: str, path: str) -> dict[str, list[str]]:
-    """Top-level and class-level functions, classes and module constants a source defines, each with `path:line`."""
+    """Every definition a source makes (`_units`), each with `path:line`."""
     out: dict[str, list[str]] = {}
     try:
         tree = ast.parse(src)
     except SyntaxError:
         return out
-    for n in ast.walk(tree):
-        if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
-            out.setdefault(n.name, []).append(f"{path}:{n.lineno}")
-        elif isinstance(n, ast.Assign) and n.col_offset == 0 and isinstance(n.targets[0], ast.Name):
-            out.setdefault(n.targets[0].id, []).append(f"{path}:{n.lineno}")
+    for name, n in _units(tree):
+        out.setdefault(name, []).append(f"{path}:{n.lineno}")
     return out
+
+
+def _reach(files: dict[str, str], seeds: set[str] = frozenset()) -> set[str]:
+    """The names reachable from module-level code: roots are the tokens outside every definition (in any file, so a frozen
+    exhibit's call is a root) and the `seeds`, and a reached definition reaches every name its body holds."""
+    roots: Counter[str] = Counter(seeds)
+    bodies: dict[str, Counter[str]] = {}
+    for src in files.values():
+        try:
+            tree = ast.parse(src)
+        except SyntaxError:
+            roots.update(_tokens(src))
+            continue
+        lines = src.split("\n")
+        inside: set[int] = set()
+        for name, n in _units(tree):
+            first = min([n.lineno] + [d.lineno for d in getattr(n, "decorator_list", [])])
+            # a class reaches its bases and decorators; its members are reached by name
+            last = n.body[0].lineno - 1 if isinstance(n, ast.ClassDef) else n.end_lineno
+            seg = "\n".join(lines[first - 1 : last])
+            bodies.setdefault(name, Counter()).update(_tokens(seg) - Counter({name: 1}))
+            inside |= set(range(first, (n.end_lineno or n.lineno) + 1))
+        for n in tree.body:  # an import names what it binds; only a use is a root
+            if isinstance(n, (ast.Import, ast.ImportFrom)):
+                inside |= set(range(n.lineno, (n.end_lineno or n.lineno) + 1))
+        roots.update(_tokens("\n".join(ln for i, ln in enumerate(lines, 1) if i not in inside)))
+    seen = {n for n in roots if n in bodies} | set(roots)
+    todo = [n for n in seen if n in bodies]
+    while todo:
+        for m in bodies[todo.pop()]:
+            if m not in seen:
+                seen.add(m)
+                if m in bodies:
+                    todo.append(m)
+    return seen
 
 
 def census(files: dict[str, str]) -> tuple[Counter[str], dict[str, list[str]], dict[str, set[str]]]:
@@ -80,19 +150,150 @@ def census(files: dict[str, str]) -> tuple[Counter[str], dict[str, list[str]], d
     return refs, defs, where
 
 
-def _dead(refs: Counter[str], defs: dict[str, list[str]]) -> set[str]:
-    return {n for n, at in defs.items() if not n.startswith("__") and refs[n] <= len(at)}
+def _dead(files: dict[str, str], defs: dict[str, list[str]], keep: set[str] = frozenset()) -> set[str]:
+    """Definitions nothing reaches. `keep` seeds the reach: a definition already unreachable at BASE stays (it is not this
+    change's to delete), so what IT uses must stay too (392's run cut `_uf_f` out from under a test-only `water_field`)."""
+    live = _reach(files, keep)
+    return {n for n in defs if not n.startswith("__") and n not in live}
+
+
+def _newly_dead(base: dict[str, str], now: dict[str, str]) -> set[str]:
+    bdefs, ndefs = census(base)[1], census(now)[1]
+    was = _dead(base, bdefs)
+    return _dead(now, ndefs, was & set(ndefs)) - was
 
 
 def report(base: dict[str, str], now: dict[str, str]) -> list[str]:
-    """The lines to print: NEWLY DEAD and STILL CALLED, sorted."""
-    brefs, bdefs, _ = census(base)
+    """The lines to print: NEWLY DEAD, EMPTIED and STILL CALLED, sorted."""
+    _, bdefs, _ = census(base)
     nrefs, ndefs, nwhere = census(now)
-    lines = [f"NEWLY DEAD    {n}  {' '.join(ndefs[n])}" for n in sorted(_dead(nrefs, ndefs) - _dead(brefs, bdefs))]
+    lines = [f"NEWLY DEAD    {n}  {' '.join(ndefs[n])}" for n in sorted(_newly_dead(base, now))]
+    lines += [f"EMPTIED       {c}" for c in emptied(base, now)]
     for n in sorted(set(bdefs) - set(ndefs)):
         if nrefs[n]:
             lines.append(f"STILL CALLED  {n}  by {' '.join(sorted(nwhere[n]))}")
     return lines
+
+
+def emptied(base: dict[str, str], now: dict[str, str]) -> list[str]:
+    """`path:Class` for each class that had a member at BASE and has none now (only a docstring or `pass` left)."""
+    def classes(files: dict[str, str]) -> dict[str, bool]:
+        out = {}
+        for path, src in files.items():
+            if not path.startswith(DEFINING):
+                continue
+            try:
+                tree = ast.parse(src)
+            except SyntaxError:
+                continue
+            for n in tree.body:
+                if isinstance(n, ast.ClassDef):
+                    out[f"{path}:{n.name}"] = any(_name_of(b) is not None for b in n.body)
+        return out
+    b, n = classes(base), classes(now)
+    return sorted(k for k, had in b.items() if had and k in n and not n[k])
+
+
+def cut(src: str, names: set[str]) -> str:
+    """`src` less each definition named (top-level or class-body), the comment lines just above it, and a string statement
+    just below a cut constant (its research docstring)."""
+    tree = ast.parse(src)
+    lines = src.split("\n")
+    drop: set[int] = set()
+    def walk(body: list[ast.stmt]) -> None:
+        for i, n in enumerate(body):
+            if _name_of(n) in names:
+                a = min([n.lineno] + [d.lineno for d in getattr(n, "decorator_list", [])])
+                while a > 1 and lines[a - 2].strip().startswith("#"):
+                    a -= 1
+                b = n.end_lineno or n.lineno
+                nxt = body[i + 1] if i + 1 < len(body) else None
+                if isinstance(n, (ast.Assign, ast.AnnAssign)) and isinstance(nxt, ast.Expr) and isinstance(nxt.value, ast.Constant) and isinstance(nxt.value.value, str):
+                    b = nxt.end_lineno or b
+                drop.update(range(a, b + 1))
+            elif isinstance(n, ast.ClassDef):
+                walk(n.body)
+    walk(tree.body)
+    keep: dict[int, str] = {}
+    for c in (n for n in ast.walk(tree) if isinstance(n, ast.ClassDef)):  # a class cut bare keeps a `pass`, so it parses
+        if all(set(range(b.lineno, (b.end_lineno or b.lineno) + 1)) <= drop for b in c.body):
+            keep[c.body[0].lineno] = " " * c.body[0].col_offset + "pass"
+    return "\n".join(keep.get(i, ln) for i, ln in enumerate(lines, 1) if i not in drop or i in keep)
+
+
+def _assigned_from_a_call(files: dict[str, str], ats: list[str]) -> bool:
+    """Is every definition of a name (`path:line`) an assignment from a call - `X = register_knob(...)`, whose side effect a
+    name census cannot see?"""
+    for at in ats:
+        path, line = at.rsplit(":", 1)
+        node = next((n for n in ast.walk(ast.parse(files[path])) if getattr(n, "lineno", None) == int(line) and isinstance(n, (ast.Assign, ast.AnnAssign))), None)
+        if node is None or not isinstance(node.value, ast.Call):
+            return False
+    return True
+
+
+def fixpoint(root: Path, base: dict[str, str], rounds: int = 20) -> list[str]:
+    """Cut every NEWLY DEAD definition in the working tree and drop the re-exports of names no longer defined, until a
+    round finds none or a class empties. Returns what it did, a line per cut file and round."""
+    log: list[str] = []
+    for r in range(rounds):
+        now = _tree_now(root)
+        _, ndefs, _ = census(now)
+        gone = set(census(base)[1]) - set(ndefs)
+        for path in [p for p in now if p.startswith(DEFINING)]:
+            src = now[path]
+            new = re.sub(r"^from [.\w]+ import (\w+) as \1\n", lambda m, g=gone: "" if m.group(1) in g else m.group(0), src, flags=re.M)
+            if new != src:
+                (root / path).write_text(new, encoding="utf-8")
+        now = _tree_now(root)
+        _, ndefs, _ = census(now)
+        dead = sorted(_newly_dead(base, now))
+        held = {n for n in dead if _assigned_from_a_call(now, ndefs[n])}  # a call may register something (392: a knob)
+        log += [f"fixpoint: round {r} HOLDS {n} - assigned from a call, check it by hand" for n in sorted(held)]
+        dead = [n for n in dead if n not in held]
+        if not dead or emptied(base, now):
+            log.append(f"fixpoint: round {r}, {len(dead)} newly dead" + ("; a class emptied - stop" if emptied(base, now) else ""))
+            break
+        by: dict[str, set[str]] = {}
+        for n in dead:
+            for at in ndefs[n]:
+                by.setdefault(at.rsplit(":", 1)[0], set()).add(n)
+        for path, names in sorted(by.items()):
+            (root / path).write_text(cut(now[path], names), encoding="utf-8")
+            log.append(f"fixpoint: round {r} cut {' '.join(sorted(names))} in {path}")
+    return log
+
+
+def call_sites(files: dict[str, str]) -> dict[str, list[str]]:
+    """Every USE in `files` as {name: [path:line]}: a NAME token followed by `(`, bare or after `.`, or read as `.name` (a
+    value passed or tested), not after `def`/`class` and not an assignment target - one tokenize pass over each file."""
+    out: dict[str, list[str]] = {}
+    for path, src in files.items():
+        try:
+            toks = [tk for tk in tokenize.generate_tokens(io.StringIO(src).readline) if tk.type not in (tokenize.NL, tokenize.NEWLINE, tokenize.COMMENT, tokenize.INDENT, tokenize.DEDENT)]
+        except (tokenize.TokenError, IndentationError, SyntaxError):
+            continue
+        for i, tk in enumerate(toks[:-1]):
+            if tk.type != tokenize.NAME or (i and toks[i - 1].string in ("def", "class")):
+                continue
+            nxt = toks[i + 1].string
+            # a CALL, or a reference passed as a value after a dot (`self._slide(..., self._nearest_field_point)`, `blocks.exact_clear
+            # if exact else ...`) - 392 cut both as frozen-only because only `(` counted. An assignment target is neither.
+            if nxt == "(" or (i and toks[i - 1].string == "." and nxt not in ("=",) and not nxt.endswith("=")):
+                out.setdefault(tk.string, []).append(f"{path}:{tk.start[0]}")
+    return out
+
+
+def callers(files: dict[str, str], names: list[str]) -> list[str]:
+    """`CALLERS name  live N: ...  frozen M: ...` per name - live is `l7r/` and `pool/`, frozen the legacy pool."""
+    sites = call_sites(files)
+    out = []
+    for n in names:
+        at = sites.get(n, [])
+        live = [a for a in at if a.startswith(DEFINING)]
+        frozen = [a for a in at if not a.startswith(DEFINING)]
+        out.append(f"CALLERS       {n}  live {len(live)}: {' '.join(live[:6])}  frozen {len(frozen)}: {' '.join(frozen[:3])}")
+    return out
 
 
 def _strings(src: str) -> list[tuple[int, str]]:
@@ -135,9 +336,17 @@ def _tree_at(root: Path, ref: str) -> dict[str, str]:
 def main(argv: list[str] | None = None, root: Path | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--base", default="HEAD")
+    ap.add_argument("--fixpoint", action="store_true", help="cut what is newly dead and run again until nothing is")
+    ap.add_argument("--callers", nargs="+", metavar="NAME", help="each name's call sites, live and frozen")
     args = ap.parse_args(argv)
     root = root or Path(subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True, check=True).stdout.strip())
-    base, now = _tree_at(root, args.base), _tree_now(root)
+    if args.callers:
+        print("\n".join(callers(_tree_now(root), args.callers)))
+        return 0
+    base = _tree_at(root, args.base)
+    if args.fixpoint:
+        print("\n".join(fixpoint(root, base)))
+    now = _tree_now(root)
     lines = report(base, now) + pinned(base, now, _tree_now(root, PINNING))
     print("\n".join(lines) if lines else f"dead-closure: nothing newly dead and nothing deleted still called, against {args.base}")
     return 0
