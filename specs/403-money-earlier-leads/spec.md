@@ -72,7 +72,7 @@ still open.
   passage read on its page.
 - **FR-002**: Each changed question MUST pass the record's checks on what changed.
 - **FR-003**: `make impl-check` closes with a "no code implements it" line per changed question.
-- **FR-004**: The asker is told on GitHub, as FR-004 of feature 402.
+- **FR-004**: The asker is told on GitHub (on EliAndrewC/diagram#9, opened for 402 and 403): the changed fragment FILES, each changed verdict, the leads closed as not publicly readable, and what is still open.
 - **FR-005**: Nothing changes engine code, a map, or the GM's canon.
 
 ## Success Criteria
