@@ -7329,6 +7329,26 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T114": {
+   "section_sha256": "d5bcfa840b18cb40a08a5a1908bfb255ce88741b9bf0573f5f136ee0793f9d3b",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D142",
+     "summary": "plan_bundle.build passes each earlier text with the verdict the record holds for it (tasks.<id>.verdict or blocks.<key>.verdict), marks it <!-- block \"<key>\" verdict X --> (CLEAR, BLOCKED or 'no verdict recorded'), heads earlier.md 'Each changed block's text when last judged, with that verdict', and the MANIFEST sentence says the same; the alternative of showing only CLEAR texts is refused.",
+     "class": "within",
+     "why": "A tooling correctness fix: the bundle's heading claims every earlier text was ruled CLEAR while it can show a BLOCKED one (the premise is visible in this very bundle's earlier.md heading, 'at its last CLEAR verdict'). Labeling the truth removes nothing a reviewer was given and narrows no clause of the request; it serves amendment 6's 'implement any obvious performance / tooling / process improvements along the way' and amendment 8's 'make our tooling do the thing correctly automatically every time'. Refusing the CLEAR-only option keeps the round-1 BLOCKED text in front of the round-2 reviewer, which preserves rather than narrows what plan review reads."
+    },
+    {
+     "id": "T114-test",
+     "summary": "a test under tests/tooling/ red without the verdict heading and per-block verdict line",
+     "class": "within",
+     "why": "Enforcement of D142 only: delete D142 and the test has nothing to check (GM 2026-09-20)."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

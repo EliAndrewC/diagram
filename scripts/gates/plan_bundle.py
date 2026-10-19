@@ -14,7 +14,7 @@ repository, where no `CLAUDE.md` rides along:
     spec-cited.md   each FR, SC and D the blocks name, its paragraph in full
     spec-index.md   the first line of every other FR and SC
     blocks.md       the blocks under review, each with its key and digest
-    earlier.md      each changed block's text at its last CLEAR verdict (git), where there was one
+    earlier.md      each changed block's text when last judged (git), with that verdict, where there was one
 
 `plan_gate.decide_prompt` (`make decide`) and `plan_gate.py delta` (`make plan-delta`) print the dispatch naming the MANIFEST.
 """
@@ -49,7 +49,7 @@ def _paragraphs(text: str, pattern: re.Pattern[str]) -> dict[str, str]:
     starts = list(pattern.finditer(text))
     for i, m in enumerate(starts):
         end = min([x for x in (text.find("\n\n", m.start()), starts[i + 1].start() if i + 1 < len(starts) else -1) if x > 0] or [len(text)])
-        out.setdefault(m.group(1), text[m.start():end].rstrip() + "\n")
+        out.setdefault(m.group(1), text[m.start() : end].rstrip() + "\n")
     return out
 
 
@@ -130,8 +130,9 @@ def foreign(spec_dir: pathlib.Path, others: list[tuple[str, str]]) -> list[str]:
     return out
 
 
-def build(spec_dir: pathlib.Path, name: str, under: list[tuple[str, str]], earlier: dict[str, str], how: str) -> pathlib.Path:
-    """Write the bundle for the blocks `under` ([(key, text)]) and return its MANIFEST."""
+def build(spec_dir: pathlib.Path, name: str, under: list[tuple[str, str]], earlier: dict[str, tuple[str, str]], how: str) -> pathlib.Path:
+    """Write the bundle for the blocks `under` ([(key, text)]) and return its MANIFEST; `earlier` is {key: (its text when last
+    judged, the verdict it got)}."""
     out = OUT / f"plan-{spec_dir.name}-{name}"
     if out.exists():
         shutil.rmtree(out)
@@ -145,30 +146,42 @@ def build(spec_dir: pathlib.Path, name: str, under: list[tuple[str, str]], earli
     cited = list(dict.fromkeys(m.group(1) for _k, body in under for m in _IDS.finditer(_QUALIFIED.sub(lambda q: "" if q.group(1) != own_no else q.group(2), body))))
     # a decision's own paragraph is in blocks.md already; the requirements it answers to, and the decisions it leans on, are cited
     own = {m.group(1) for _k, body in under for m in _DECISION.finditer(body)}
-    (out / "spec-cited.md").write_text("# The requirements and decisions the blocks name, in full\n\n" + "\n".join(
-        [(items.get(i) or decisions.get(i) or "") for i in cited if i not in own and (i in items or i in decisions)] + foreign(spec_dir, others)), encoding="utf-8")
-    (out / "spec-index.md").write_text("# Every other requirement, its first line\n\n" + "".join(
-        p.splitlines()[0] + "\n" for i, p in items.items() if i not in cited), encoding="utf-8")
+    (out / "spec-cited.md").write_text(
+        "# The requirements and decisions the blocks name, in full\n\n"
+        + "\n".join([(items.get(i) or decisions.get(i) or "") for i in cited if i not in own and (i in items or i in decisions)] + foreign(spec_dir, others)),
+        encoding="utf-8",
+    )
+    (out / "spec-index.md").write_text("# Every other requirement, its first line\n\n" + "".join(p.splitlines()[0] + "\n" for i, p in items.items() if i not in cited), encoding="utf-8")
     if (spec_dir / "request.md").is_file():
         req, index = trimmed_request((spec_dir / "request.md").read_text(encoding="utf-8"), answered(under, spec))
         (out / "request.md").write_text(req, encoding="utf-8")
-        (out / "request-index.md").write_text("# The request's sections left out - each earlier amendment, its heading and first line\n\n" + (index or "(none - the whole request is in request.md)\n"), encoding="utf-8")
+        (out / "request-index.md").write_text(
+            "# The request's sections left out - each earlier amendment, its heading and first line\n\n" + (index or "(none - the whole request is in request.md)\n"), encoding="utf-8"
+        )
     (out / "blocks.md").write_text("".join(f"<!-- block {json.dumps(k)} sha256 {pg.block_digest(b)} -->\n{b}\n" for k, b in under), encoding="utf-8")
-    (out / "earlier.md").write_text("# Each changed block's text at its last CLEAR verdict\n\n" + ("".join(
-        f"<!-- block {json.dumps(k)} -->\n{t}\n" for k, t in earlier.items()) or "(none - every block here is new)\n"), encoding="utf-8")
+    # ...WITH THE VERDICT IT GOT (feature 385 T114, D142): headed "at its last CLEAR verdict" whatever the record held, T102's
+    # round-2 bundle showed its round-1 text, ruled BLOCKED, as if it had been cleared
+    (out / "earlier.md").write_text(
+        "# Each changed block's text when last judged, with that verdict\n\n"
+        + ("".join(f"<!-- block {json.dumps(k)} verdict {v or 'no verdict recorded'} -->\n{t}\n" for k, (t, v) in earlier.items()) or "(none - every block here is new)\n"),
+        encoding="utf-8",
+    )
     manifest = out / "MANIFEST.md"
-    manifest.write_text(f"""# Plan review bundle - {spec_dir.name}, {name}
+    manifest.write_text(
+        f"""# Plan review bundle - {spec_dir.name}, {name}
 
 A MODE 4 plan review of the blocks in `blocks.md` and nothing else of the plan (feature 375 amendment 11). Read the files beside
 this MANIFEST and nothing in the repository: `request.md` is the GM's words verbatim - the original request and every amendment
 from the one these blocks answer on, the earlier ones indexed in `request-index.md`; `spec-cited.md` holds every requirement and
 decision the blocks name, in full; `spec-index.md` the first line of every other requirement - grep it for one the blocks
-should have named; `earlier.md` what a changed block said when last judged CLEAR.
+should have named; `earlier.md` what a changed block said when last judged, and the verdict it got.
 
 Find each decision in the blocks, class it `within` or `narrowing`, and rule on each narrowing (LEGITIMATE / NOT LEGITIMATE).
 
 {how}
-""", encoding="utf-8")
+""",
+        encoding="utf-8",
+    )
     return manifest
 
 
@@ -179,16 +192,20 @@ def task_prompt(spec_dir: pathlib.Path, task: str) -> str:
     section = pg.task_sections(text).get(task, "")
     try:
         review = json.loads((spec_dir / pg.RECORD).read_text(encoding="utf-8"))
-    except (OSError, ValueError):
+    except OSError, ValueError:
         review = {}
     entry = (review.get("tasks") or {}).get(task) or {}
     earlier = pg.History(plan).section(task, str(entry["section_sha256"])) if entry.get("section_sha256") else None
     n = spec_dir.name.split("-")[0]
-    how = (f"Record it: the JSON is `{{\"section_sha256\": \"{pg.digest(section.encode())}\", \"decisions\": [...]}}`, written under "
-           f"/tmp, then `make plan-verdict F={n} TASK={task} FILE=<it> AS=spec-fidelity`.")
-    manifest = build(spec_dir, task, [(f"the section of {task}", section)], {task: earlier} if earlier else {}, how)
-    return (f"MODE 4: PLAN REVIEW of one task's section - feature {spec_dir.name}, task {task} (a decision preflight, feature 375 "
-            f"FR-003a), on its bundle: read {manifest} and the files beside it, and nothing in the repository.")
+    how = (
+        f"Record it: the JSON is `{{\"section_sha256\": \"{pg.digest(section.encode())}\", \"decisions\": [...]}}`, written under "
+        f"/tmp, then `make plan-verdict F={n} TASK={task} FILE=<it> AS=spec-fidelity`."
+    )
+    manifest = build(spec_dir, task, [(f"the section of {task}", section)], {task: (earlier, str(entry.get("verdict") or ""))} if earlier else {}, how)
+    return (
+        f"MODE 4: PLAN REVIEW of one task's section - feature {spec_dir.name}, task {task} (a decision preflight, feature 375 "
+        f"FR-003a), on its bundle: read {manifest} and the files beside it, and nothing in the repository."
+    )
 
 
 def delta_prompt(spec_dir: pathlib.Path, keys: list[str]) -> str:
@@ -198,22 +215,24 @@ def delta_prompt(spec_dir: pathlib.Path, keys: list[str]) -> str:
     under = [(k, b) for k, b, _a in pg.blocks(text) if k in keys]
     try:
         review = json.loads((spec_dir / pg.RECORD).read_text(encoding="utf-8"))
-    except (OSError, ValueError):
+    except OSError, ValueError:
         review = {}
     have, hist = pg.reviewed_blocks(review), pg.History(plan)
-    removed = [k[len(pg.REMOVED):] for k in keys if k.startswith(pg.REMOVED)]
+    removed = [k[len(pg.REMOVED) :] for k in keys if k.startswith(pg.REMOVED)]
     earlier = {k: (have[k].get("text") or hist.block(k, str(have[k].get("sha256"))) or "") for k, _b in under if k in have}
     # a block deleted by hand is judged on what it said: its earlier text, and `"removed"` as its digest
     earlier.update({pg.REMOVED + k: (have[k].get("text") or hist.block(k, str(have[k].get("sha256"))) or "") for k in removed if k in have})
     n = spec_dir.name.split("-")[0]
     shas = json.dumps({**{k: pg.block_digest(b) for k, b in under}, **{pg.REMOVED + k: "removed" for k in removed}})
-    how = (f"Record it: the JSON is `{{\"blocks\": {shas}, \"decisions\": [...]}}`, written under /tmp, then "
-           f"`make plan-verdict F={n} BLOCKS=1 FILE=<it> AS=spec-fidelity`.")
+    how = f"Record it: the JSON is `{{\"blocks\": {shas}, \"decisions\": [...]}}`, written under /tmp, then `make plan-verdict F={n} BLOCKS=1 FILE=<it> AS=spec-fidelity`."
     # EACH BLOCK SET ITS OWN BUNDLE (feature 385 T29, the round arbiter's fix on hour:385-approach-checklist@13): one shared
     # `plan-<feature>-blocks` meant a second plan review could not be built while one was reading - T26 waited on T25 twice, and
     # one round's verdict was lost - so the directory names the tasks its blocks belong to and the blocks' own digest
     tasks = sorted({m.group(1) for k, _b in under for m in [re.match(r"#+ (T\d+)\b", k)] if m})
     name = f"blocks-{'-'.join(tasks) or 'plan'}-{pg.digest(shas.encode())[:8]}"
-    manifest = build(spec_dir, name, under, {k: t for k, t in earlier.items() if t}, how)
-    return (f"MODE 4: PLAN REVIEW of {len(under) + len(removed)} changed block(s) of feature {spec_dir.name}'s plan (feature 375 FR-043), on their "
-            f"bundle: read {manifest} and the files beside it, and nothing in the repository.")
+    verdict = {k: str(have[k.removeprefix(pg.REMOVED)].get("verdict") or "") for k in earlier}
+    manifest = build(spec_dir, name, under, {k: (t, verdict[k]) for k, t in earlier.items() if t}, how)
+    return (
+        f"MODE 4: PLAN REVIEW of {len(under) + len(removed)} changed block(s) of feature {spec_dir.name}'s plan (feature 375 FR-043), on their "
+        f"bundle: read {manifest} and the files beside it, and nothing in the repository."
+    )

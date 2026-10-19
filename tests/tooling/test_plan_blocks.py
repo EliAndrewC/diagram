@@ -149,6 +149,7 @@ def test_the_bundle_is_lean_and_whole_where_it_must_be(tmp_path: pathlib.Path) -
     assert "FR-003" not in (b / "spec-cited.md").read_text() and "FR-003 Unrelated" in (b / "spec-index.md").read_text()
     assert "two to a lane" in (b / "blocks.md").read_text() and "Batch 1" not in (b / "blocks.md").read_text()
     assert "by the lane (FR-002)" in (b / "earlier.md").read_text(), "the block as last judged CLEAR, from git"
+    assert "verdict CLEAR -->" in (b / "earlier.md").read_text(), "feature 385 T114: the verdict it got, named"
     assert "BLOCKS=1" in manifest.read_text()
     size = sum(f.stat().st_size for f in b.iterdir())
     assert size < len(SPEC) + len(PLAN) + 2000, "a bundle no larger than the spec and plan it stands in for"
@@ -265,3 +266,17 @@ def test_decide_refuses_an_item_4_figure_whose_sentence_carries_no_measurement()
     assert plan_lint.unlabeled_figure(bad) == "Then it took 2.5 h.", "each sentence carries its own label"
     assert plan_lint.unlabeled_figure(head + "4. **World.** It takes `4.4 s` (measured).\n") != "", "a value in a code span is read"
     assert plan_lint.unlabeled_figure(head + "4. **World.** It takes 19 degrees, m:turn-angle.\n") == ""
+
+
+def test_earlier_text_ruled_blocked_is_shown_as_blocked(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 385 T114 (D142): T102's round-2 bundle showed its round-1 text, ruled BLOCKED, under "its last CLEAR verdict"."""
+    sys.path.insert(0, str(script("plan_gate").parent))
+    import plan_bundle  # noqa: PLC0415
+
+    d = feature(tmp_path)
+    monkeypatch.setattr(plan_bundle, "OUT", tmp_path / "out")
+    m = plan_bundle.build(d, "T05", [("the section of T05", "now")], {"T05": ("then", "BLOCKED"), "T06": ("before", "")}, "how")
+    text = (m.parent / "earlier.md").read_text()
+    assert text.startswith("# Each changed block's text when last judged, with that verdict")
+    assert '<!-- block "T05" verdict BLOCKED -->\nthen' in text and '"T06" verdict no verdict recorded' in text
+    assert "CLEAR" not in text and "and the verdict it got" in m.read_text()
