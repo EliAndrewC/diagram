@@ -16256,5 +16256,99 @@
   "variants": [
    "vicinage"
   ]
+ },
+ "troy ounce": {
+  "def": "The ounce used to weigh silver and gold, about 31.1 g. It is heavier than the everyday ounce of about 28.3 g.",
+  "variants": [
+   "troy ounce",
+   "troy oz",
+   "troy ounces"
+  ]
+ },
+ "real wage": {
+  "def": "A wage measured by what it buys rather than in coin. Bassino and Ma's figure is a day's wage divided by the year's cost of the consumption basket, so 2.82 g against 326 g is 0.009.",
+  "variants": [
+   "real wage",
+   "real wages"
+  ]
+ },
+ "miso": {
+  "def": "A salty paste of fermented soybeans, used in soup and as a seasoning.",
+  "variants": [
+   "miso"
+  ]
+ },
+ "deflate": {
+  "def": "Of a money sum: divided by a price, or by the cost of a basket of goods, to measure it in goods rather than coin.",
+  "variants": [
+   "deflate",
+   "deflated",
+   "deflating"
+  ]
+ },
+ "tael": {
+  "def": "A Chinese unit of silver counted by weight, in which Qing wages and prices were reckoned.",
+  "variants": [
+   "tael",
+   "taels"
+  ]
+ },
+ "qian": {
+  "def": "A Chinese weight of silver, a tenth of a tael. Prices in silver were given in taels and qian.",
+  "variants": [
+   "qian"
+  ]
+ },
+ "wen": {
+  "def": "A copper coin of Qing China, the \"cash\", counted singly and by the string.",
+  "variants": [
+   "wen"
+  ]
+ },
+ "live sale": {
+  "def": "In Qing China, a sale of land that the seller kept the right to buy back, at a price below an outright sale (usually 60-80% of it). At Shicang it was the same thing as a pledge.",
+  "variants": [
+   "live sale",
+   "live sales",
+   "live-sale",
+   "living sale"
+  ]
+ },
+ "subsoil owner": {
+  "def": "In southern Fujian, where a field's ownership was split in two, the holder of the underlying title, who was paid the \"large rent\" by the topsoil owner.",
+  "variants": [
+   "subsoil owner",
+   "subsoil owners",
+   "large rent"
+  ]
+ },
+ "topsoil owner": {
+  "def": "In southern Fujian, the holder of the right to a field's surface, who paid the \"large rent\" to the subsoil owner and collected a \"small rent\" from the farmer who worked it.",
+  "variants": [
+   "topsoil owner",
+   "topsoil owners",
+   "small rent"
+  ]
+ },
+ "gengshen": {
+  "def": "The 57th year of the sixty-year cycle by which Chinese years were named. Kangxi 19, 1680, was a gengshen year.",
+  "variants": [
+   "gengshen"
+  ]
+ },
+ "xinyou": {
+  "def": "The 58th year of the sixty-year cycle by which Chinese years were named. Kangxi 20, 1681, was a xinyou year.",
+  "variants": [
+   "xinyou"
+  ]
+ },
+ "ground tenant": {
+  "def": "In an Edo town, a tenant who rented a plot of ground from its owner and put up their own building on it, paying a ground rent.",
+  "variants": [
+   "ground tenant",
+   "ground tenants",
+   "ground tenancy",
+   "ground tenancies"
+  ]
  }
 }
