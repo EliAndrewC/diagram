@@ -432,13 +432,13 @@ def test_a_door_the_coarse_lattice_cannot_leave_is_routed_on_the_fine_one(monkey
 
 
 def test_a_row_farm_takes_no_door_path_only_where_its_street_already_arrives() -> None:
-    """Off the network the reach alone is asked; on a row's own street, only where the street's point nearest the door is
-    an end the lane law counts as serving the farm (`end_serves`) - Mizuguchi's east-end farm, its door 11 ft off the
-    street but its house 77 ft and its yard 19, needed a path (2026-10-01)."""
+    """On a row's own street or off it (feature 385 T97, D125: off it the door's reach alone was once asked), only where the
+    way's point nearest the house is an end the lane law counts as serving the farm (`end_serves`) - Mizuguchi's east-end
+    farm, its door 11 ft off the street but its house 77 ft and its yard 19, needed a path (2026-10-01)."""
     farm = {"x": 0.0, "y": 0.0}
     street = [((-100.0, 77.0), (100.0, 77.0))]
     yard = [[(-20.0, 20.0), (20.0, 20.0), (20.0, 58.0), (-20.0, 58.0)]]
-    assert _serve.street_arrives(farm, (0.0, 66.0), street, None, yard), "off a row's street: the reach alone"
+    assert not _serve.street_arrives(farm, (0.0, 66.0), street, None, yard), "off a row's street: the same predicate (T97)"
     assert not _serve.street_arrives(farm, (0.0, 66.0), street, 0, yard), "the street 19 ft off the yard and 77 off the house"
     near = [((-100.0, 66.0), (100.0, 66.0))]
     assert _serve.street_arrives(farm, (0.0, 60.0), near, 0, yard), "8 ft off the yard: it arrives"

@@ -5,7 +5,7 @@ from __future__ import annotations
 import pytest
 
 from l7r.diagram.hamletgen.consts import DOOR_STEP_FT, FOOTPATH_FABRIC_GAP
-from l7r.diagram.hamletgen.ways.serve import DOOR_REACH_FT, front_door, lay_door_paths
+from l7r.diagram.hamletgen.ways.serve import front_door, lay_door_paths, street_arrives
 from l7r.diagram.settlement import Settlement, seg_dist
 from l7r.diagram.settlement.homestead_parts.grove_sides import bundle_turn
 from l7r.diagram.settlement.rolling.dispersed import dispersed_layout
@@ -50,10 +50,10 @@ def test_a_door_far_from_the_lanes_gets_a_footpath_to_them() -> None:
     s.M["houses"] = [h]
     s.M["lanes"] = [{"pts": [[100.0, 700.0], [1300.0, 700.0]], "w": 6, "connector": True}]
     door = front_door(h, DOOR_STEP_FT)
-    assert door is not None and seg_dist(door[0], door[1], (100.0, 700.0), (1300.0, 700.0)) > DOOR_REACH_FT
+    assert door is not None and not street_arrives(h, door, [((100.0, 700.0), (1300.0, 700.0))], None, [])
     assert lay_door_paths(s, [], [], []) == 1
     segs = [(a, b) for ln in s.M["lanes"] for a, b in zip(ln["pts"], ln["pts"][1:], strict=False)]
-    assert min(seg_dist(door[0], door[1], a, b) for a, b in segs) <= DOOR_REACH_FT
+    assert street_arrives(h, door, segs, None, [])
     assert lay_door_paths(s, [], [], []) == 0, "a door already reached gets nothing"
 
 
@@ -182,3 +182,17 @@ def test_a_door_path_keeps_the_room_off_a_grove_however_it_was_found(monkeypatch
     args = (s, (0.0, 0.0), [((100.0, -50.0), (100.0, 50.0))], [], [band], [], [], _Law())
     assert serve.door_path(*args) == [(0.0, 0.0), (100.0, 0.0)], "the band only as a wall: crossing it is all that is asked"
     assert serve.door_path(*args, [band]) == detour, "held off the band by the footpath's gap, the step goes round"
+
+
+def test_a_way_near_the_door_but_far_from_the_house_still_owes_a_footpath() -> None:
+    """Feature 385 T97 (D125): off a row the door's distance alone was asked, so a way within 60 ft of the door point, 8 ft
+    past the yard, counted the farm reached though it stood beyond 0246's 60 ft of the house and 12 ft of its built ground."""
+    h = _farm(700.0, 400.0)
+    door = front_door(h, DOOR_STEP_FT)
+    assert door is not None
+    c = (700.0, 400.0)
+    ux, uy = (door[0] - c[0]) / ((door[0] - c[0]) ** 2 + (door[1] - c[1]) ** 2) ** 0.5, (door[1] - c[1]) / ((door[0] - c[0]) ** 2 + (door[1] - c[1]) ** 2) ** 0.5
+    far = (door[0] + 55.0 * ux, door[1] + 55.0 * uy)  # 55 ft past the door, straight out from the house
+    way = [((far[0] - 50.0 * uy, far[1] + 50.0 * ux), (far[0] + 50.0 * uy, far[1] - 50.0 * ux))]
+    assert seg_dist(door[0], door[1], *way[0]) < 60.0 < seg_dist(c[0], c[1], *way[0])
+    assert not street_arrives(h, door, way, None, []), "beyond 60 ft of the house: the farm owes its footpath"

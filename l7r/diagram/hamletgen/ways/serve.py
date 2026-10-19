@@ -424,14 +424,6 @@ as the dry exit's grid is.
 
 Research: door router's finer lattice - NONE"""
 
-DOOR_REACH_FT = 60.0
-"""How far a grove farm's front door may stand from the lane network before a footpath is laid to it (feature 291; the
-settlement-review of Kashikawa: a farm whose only lane stopped against the outside of its east band, 89 ft from the door).
-The front is the side the grove leaves open for the way in (research/homesteads/715), so the path arrives there; 60 ft is
-the reach at which the lane page counts a way as reaching a farmhouse, itself a GUESS there (feature 328).
-
-Research: a door reached - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 60 ft from the network, the page's reach for a way reaching a farmhouse"""
-
 
 def own_street(h: Mapping[str, Any], streets: Sequence[Sequence[tuple[Pt, Pt]]]) -> int | None:
     """The index of the street a row farm's way ends on - the nearest to its FRONT DOOR (its house where it has none) - or
@@ -445,15 +437,15 @@ def own_street(h: Mapping[str, Any], streets: Sequence[Sequence[tuple[Pt, Pt]]])
     return min(range(len(streets)), key=lambda k: min((seg_dist(hx, hy, a, b) for a, b in streets[k]), default=float("inf")))
 
 
-def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], reach: float = DOOR_REACH_FT) -> int:
-    """A footpath from each grove farm's front door (`front_door`) to the ways, where the door stands more than `reach`
-    from them: to the connected lane network, or - for a row farm (feature 291 plan D17) - to its OWN street (the nearest
+def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> int:
+    """A footpath from each grove farm's front door (`front_door`) to the ways, where no way already reaches the farm as 0246
+    counts it (`street_arrives`: the way's point nearest the house within 60 ft of it or 12 ft of its built ground): to the connected lane network, or - for a row farm (feature 291 plan D17) - to its OWN street (the nearest
     street laid, `own_street`), routed round the farm's grove when the street lies on its windward side. Each path records
     the farm it serves (`serves`); the nearest few points are tried, nearest first. Returns the paths drawn.
 
     Research:
         every grove farm reached at its door - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0081-village-lanes.drawing.html:
-            a 3 ft footpath where the door stands past the 60 ft reach
+            a 3 ft footpath where no way stands within 60 ft of the house or 12 ft of its built ground (`street_arrives`)
         round the grove to the street - research/questions/0033-row-villages-resson.drawing.html: a path round the grove,
             a GUESS there
         off the fixtures and grove bands - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: walls to the path
@@ -499,7 +491,7 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
         ]  # a row's own street, not a join
         k = own_street(h, streets)  # type: ignore[arg-type]
         segs = streets[k] if k is not None else served_network(s.M.get("lanes") or [])
-        if door is None or not segs or (min(seg_dist(door[0], door[1], a, b) for a, b in segs) <= reach and street_arrives(h, door, segs, k, steadings)):  # type: ignore[arg-type]
+        if door is None or not segs or street_arrives(h, door, segs, k, steadings):  # type: ignore[arg-type]
             continue
         # ...FROM THE FRONT DOOR, ELSE A FLANK OF THE DOORYARD (`access.doors_of`, the corridors' own doors): a far-row farm
         # fronts its holding, away from its street, and with its grove on the street's side the front had no way round it
@@ -532,19 +524,18 @@ def _arrives_at(h: Mapping[str, Any], steadings: Sequence[Poly]) -> Any:
 
 
 def street_arrives(h: Mapping[str, Any], door: Pt, segs: Sequence[tuple[Pt, Pt]], street: int | None, steadings: Sequence[Poly]) -> bool:
-    """Does a farm's way already arrive at it without a door path? Off the network, yes (the reach alone was asked, as
-    ever). On a row's OWN street (`street` an index) only where the street's point nearest the door is an end the lane law
-    counts as serving the farm (`end_serves`: within `WAY_END_REACH_FT` of the house, or `STEADING_ARRIVAL_FT` of its built
-    ground) - the predicate the settle trims a street's end by. At the door's reach alone, Mizuguchi's east-end farm, its door
+    """Does a farm's way already arrive at it without a door path? Only where the way's point nearest the HOUSE is an end the
+    lane law counts as serving the farm (`end_serves`: within `WAY_END_REACH_FT` of the house, or `STEADING_ARRIVAL_FT` of its
+    built ground) - the predicate the settle trims a street's end by - on a row's own street or off it (feature 385 T97: off a
+    row it once returned True and the door's distance alone was asked, which a way beyond both of 0246's reaches could pass). At the door's reach alone, Mizuguchi's east-end farm, its door
     11 ft off the street but its yard 19, took no path; the street's end past the last path then served nothing the law
     counts, the settle cut it back a frame, and the farm stood off every way (2026-10-01).
 
     Research:
         the street serves the farm - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 60 ft of the house or
             12 ft of its built ground"""
-    if street is None:
-        return True
-    q = min((seg_closest(door[0], door[1], a, b) for a, b in segs), key=lambda p: math.dist(p, door))
+    c = (float(h["x"]), float(h["y"]))
+    q = min((seg_closest(c[0], c[1], a, b) for a, b in segs), key=lambda p: math.dist(p, c))
     return end_serves(q, (), [(float(h["x"]), float(h["y"]))], None, steadings)
 
 

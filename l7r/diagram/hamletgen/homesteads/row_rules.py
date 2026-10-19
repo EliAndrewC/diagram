@@ -25,7 +25,8 @@ from typing import Any
 from l7r.diagram.settlement import seg_dist
 
 from ..consts import DOOR_STEP_FT, Pt
-from ..ways.serve import DOOR_REACH_FT, front_door
+from ..ways.geom import steading_footprints
+from ..ways.serve import front_door, street_arrives
 from .wells import WATER_REACH_FT
 
 
@@ -76,7 +77,7 @@ def row_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
         street one continuous way - research/questions/0033-row-villages-resson.drawing.html: each planned street drawn unbroken
         far-row holding drawn - research/questions/0033-row-villages-resson.drawing.html: every reserved holding drawn behind its farm
         way ends on its own street - research/questions/0033-row-villages-resson.drawing.html: the door within reach of its street, or a door path to it
-        door reach of a street - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a door within `DOOR_REACH_FT` (60 ft) of its street needs no door path
+        door reach of a street - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a farm needs no door path where its street's point nearest the house stands within 60 ft of it or 12 ft of its built ground (`serve.street_arrives`)
     """
     meta = M.get("meta") or {}
     plans = M.get("row_street_plans") or []
@@ -136,12 +137,14 @@ def row_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
             out.append(("holding_not_drawn", _key(rec["of"])))
     # EVERY ROW FARM'S WAY ENDS ON ITS OWN STREET: its door within the door reach of that street, or a door path serving it
     served = {_key(ln["serves"]) for ln in lanes if ln.get("serves")}
+    steadings = steading_footprints(M)
     for h in houses:
         door = front_door(h, DOOR_STEP_FT)
         k = own.get(_key((h["x"], h["y"])))
         if door is None or k is None:
             continue
-        if _dist(door, drawn_st.get(k, [])) > DOOR_REACH_FT and _key((h["x"], h["y"])) not in served:
+        segs = drawn_st.get(k, [])
+        if (not segs or not street_arrives(h, door, segs, k, steadings)) and _key((h["x"], h["y"])) not in served:
             out.append(("farm_not_on_its_street", _key((h["x"], h["y"]))))
     return out
 

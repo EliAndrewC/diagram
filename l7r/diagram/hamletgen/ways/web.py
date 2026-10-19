@@ -42,7 +42,7 @@ from .geom import _TOUCH_GAP, _components, _trim_to_service, lane_houses, polyli
 from .joints import center_lane_ends, fold_the_connector_hairpin, meet_end_to_end, split_at_crossings, straighten_joints
 from .law_water import _brooks
 from .route import _route
-from .serve import DOOR_REACH_FT, _lay_web_lane, front_door, lay_door_paths
+from .serve import _lay_web_lane, front_door, lay_door_paths
 from .settle import settle_the_web
 from .smooth import _STUB_REACH_FT, _smooth_web
 from .street import lay_row_streets, trim_streets
@@ -593,8 +593,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         lanes after the houses - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html
         belt crossed not followed - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a lane
             may cross a shelter belt, the planting resuming on both sides, but not run its length
-        door path reach - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: STEADING_ARRIVAL_FT 12 ft off the steading's built ground
-        door path distance - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: DOOR_REACH_FT 60 ft, the page's reach at which a way counts as reaching a farmhouse
+        door path reach - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a farm takes no door path where a way's point nearest its house stands within 60 ft of it or `STEADING_ARRIVAL_FT` (12 ft) of its built ground (`serve.street_arrives`)
         web lanes off the hard ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0081-village-lanes.drawing.html: a stretch that would cross the field, a crop or wet ground is cut out
         web lane margin off the hard ground - research/questions/0081-village-lanes.drawing.html: the page lets a lane touch a plot's boundary - a web lane kept a half-tread off the field and the crop (`WEB_CROP_GAP`), 8 ft off the toe and marsh (`WEB_HARD_GAP`, UNRESEARCHED)
         a web lane's middle off the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: WEB_FABRIC_GAP, 7 ft clear of a garden fence (`clear_runs`' tight margin)
@@ -879,7 +878,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # 60 ft of a house center) and the settle trimmed it back farm by farm - Mizuguchi's east row, its doors 33-39 ft off the
     # street and so given no path at the 40 ft reach, ended 200-1,090 ft off any way. Each farm's own path meets its street,
     # as the seating's corridor meets the tree on a nucleated map, and the street's end then stands at a junction.
-    lay_door_paths(s, hard_built, walls, list(plan.watercourses) + drawn_water, reach=STEADING_ARRIVAL_FT if _rows else DOOR_REACH_FT)
+    lay_door_paths(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     if _rows:
         # ...and a door path laid beside a lane that was there first meets it rather than doubling it (Kashikawa: a
         # join-orphans lane ran on 64 ft beside the door path of the farm at (2299, 2724)) - the sweep that ran above,
