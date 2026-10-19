@@ -6422,61 +6422,65 @@
    "verdict": "BLOCKED"
   },
   "T85": {
-   "section_sha256": "bb3abcf91cd5240efb627f67668afc6961aa6af8fdc0d6aeabd616232a225b71",
+   "section_sha256": "486803722216ff1e14b13dbd7a3037ed775d0ac7da9af185b8d99406d1c8cecf",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "D106-scope",
-     "summary": "Only a spec-fidelity dispatch of a task preflight (plan-<feature>-<T>) holds a section; a block review (plan-delta) holds nothing because 'its blocks are many and short-lived'.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "Proposal B as the GM approved it (amendment 9) covers any 'section whose review is running', and doesn't name a kind of review. The plan's own item 1 says 'A plan review is never wasted'. A plan-delta review records a digest per block, so editing a block while it runs loses that block's verdict the same way. 'Many and short-lived' is an implementation-cost argument: if the holds are short-lived, so is the inconvenience. Fix: every running plan review holds each section or block its bundle names, whether make decide or make plan-delta dispatched it."
+     "summary": "Every running spec-fidelity plan review holds what its bundle names: a task preflight holds that task's section, a plan-delta block review holds each block in its blocks.md.",
+     "class": "within",
+     "why": "Proposal B (amendment 9): 'refuses an edit to a section whose review is running'. A block under a plan-delta review is a section whose review is running. This removes the narrowing the earlier text carried ('a block review holds nothing')."
     },
     {
-     "id": "D106-bash-heading",
-     "summary": "The Bash path refuses a write to the plan only when the command text names the held section's heading ('## <T> - ' or '### <T> ').",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The GM asked for a refusal of 'an edit to a section'. A section is its body, not just its heading line. A sed -i or python replace that quotes a body line edits the held section without naming its heading, so it passes this test. You can't know an arbitrary command's effect before it runs, which justifies some heuristic, but not one that misses the ordinary case. Fix: refuse when the command's write targets include the plan and its text contains the heading OR any line of the held section, the same test the Edit path applies to old_string."
+     "id": "D106-edit",
+     "summary": "An Edit of the plan is refused when its old_string lies in held text or its new_string lands in it.",
+     "class": "within",
+     "why": "This is how proposal B's refusal works on the Edit tool. It carves nothing out."
     },
     {
-     "id": "write-tool-omitted",
-     "summary": "Item 5 wires the refusal to the Edit tool and Bash writes only; a Write of plan.md is not covered.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "Write is also a 'plan-write path' in the GM's words. Its whole content is known before it runs, so checking whether the held section's text changes is fully possible. The plan doesn't label this omission. Fix: the Write tool on that plan is refused when the held section's text in the new content differs from the text under review."
+     "id": "D106-write",
+     "summary": "A Write of the plan is refused when the new content differs from the plan in held text.",
+     "class": "within",
+     "why": "Proposal B's refusal on the Write tool. It widens the earlier text, which covered Edit only."
     },
     {
-     "id": "PLAN_EDIT_OK",
-     "summary": "The refusal can be passed with PLAN_EDIT_OK=\"<reason>\", and the pass is recorded.",
+     "id": "D106-bash",
+     "summary": "A Bash command is refused when its write targets (hm_house.write_targets) include the plan and its text contains the held heading or any line of held text.",
+     "class": "within",
+     "why": "A detection mechanism for proposal B's refusal. The plan exempts nothing in words. Two notes for the caller. (a) Item 9's measured Done tests only 'naming that task's section heading', while D106 promises heading-or-any-line, so the widening has no measure as the block is written. (b) A Bash write that changes held text without quoting any of it passes this test. The GM said 'the plan-write path', which may mean a make target that writes a section by its task id (make decide, task-add, plan-archive). This bundle cannot show whether such a route exists, so it is not ruled a narrowing here, but the caller should check it."
+    },
+    {
+     "id": "D106-names",
+     "summary": "The refusal names the running review's agent and its task or blocks.",
+     "class": "within",
+     "why": "'naming the agent' is the GM's own wording (proposal B)."
+    },
+    {
+     "id": "D106-elsewhere",
+     "summary": "Edits to other sections, and to the plan's other files, go through.",
+     "class": "within",
+     "why": "The other half of 'a section whose review is running'. Proposal B refuses only the section under review."
+    },
+    {
+     "id": "D106-escape-dead-hold",
+     "summary": "PLAN_EDIT_OK=\"<reason>\", recorded, passes a hold that a dead dispatch left.",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "why": "This narrows 'refuses'. It passes the purpose test: the cost the GM named is a round lost without anyone choosing to lose it. A refusal that stops the accidental edit and passes a deliberate, recorded one still loses no rounds by accident. It also covers a hold left behind by a dead dispatch, where literally refusing would block an edit to a section no review is reading. Two conditions: the test must be red when the refusal is missing, not green because of the escape; and the escape must not become the usual way to edit plan-delta blocks, which is why D106-scope must be fixed rather than worked around with the escape."
+     "why": "Once the dispatch is dead, no review is running for the hold to protect. Applied literally, the rule would block that section with no end, which defeats the request's stated purpose (a plan review is never wasted on a section edited while it ran) and is outside its words ('whose review is running')."
     },
     {
-     "id": "other-sections-pass",
-     "summary": "Edits to other sections and to the plan's other files go through.",
-     "class": "within",
-     "why": "The GM's own 'a section whose review is running' limits the refusal to that section."
+     "id": "D106-escape-deliberate",
+     "summary": "PLAN_EDIT_OK=\"<reason>\", recorded, also passes 'a deliberate edit' of a section while its live review runs.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Exceptions start out presumed wrong, and none of the three grounds holds. It is not physically impossible to obey: the literal path is to wait the few minutes until the review returns. Nothing in request.md implies it: proposal B is 'the plan-write path refuses an edit to a section whose review is running', with no override. Obeying the rule literally does not defeat its purpose, which is that no running review is wasted. The escape excepts exactly the case the rule exists for, a live review whose section changes under it. The fact that other guards in this project carry recorded escapes is not a ground. The earlier CLEAR does not cover this: that text allowed PLAN_EDIT_OK but did not name a deliberate edit of a live review's section as a sanctioned use."
     },
     {
-     "id": "refusal-message",
-     "summary": "The refusal names the task and the running review.",
+     "id": "D106-test",
+     "summary": "tests/tooling/test_plan_edit_refusal.py is red without the hook and never green by the escape.",
      "class": "within",
-     "why": "The GM said 'naming the agent'. The message must name the running dispatch (the agent), not only the task."
-    },
-    {
-     "id": "edit-old-string",
-     "summary": "The Edit path refuses when old_string falls inside the held section.",
-     "class": "within",
-     "why": "This is the requested refusal for the Edit tool. Note: an old_string that starts just after the section's end (for example the next heading) can add text into the held section. The exact test, which can be computed for Edit, is whether applying the edit changes the held section's text."
-    },
-    {
-     "id": "mechanics",
-     "summary": "The refusal lives in hm_checks; tests/tooling/test_plan_edit_refusal.py is red without it; budget 40 min; exit (c).",
-     "class": "within",
-     "why": "Mechanism, enforcement of the request, and cost, not scope."
+     "why": "Enforces the requested refusal (proposal B, 'A test red without it' in the constraints). It serves the request."
     }
    ],
    "verdict": "BLOCKED"

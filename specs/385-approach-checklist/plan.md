@@ -336,7 +336,7 @@ Owed by the hour-26 step-back (hour:385-approach-checklist@26, `continue`).
 ### T85 Approach (checklist part A)
 
 1. **The goal, in the world.** A plan review is never wasted on a section edited while it ran.
-2. **The constraints.** The GM, 2026-10-18 23:00 EDT (amendment 9): "build all 7 of those as 385 tasks"; proposal B: "the plan-write path refuses an edit to a section whose review is running, naming the agent". Edits to other sections, and to the plan's other files, go through; the escape is `PLAN_EDIT_OK="<reason>"`, recorded. A test red without it.
+2. **The constraints.** The GM, 2026-10-18 23:00 EDT (amendment 9): "build all 7 of those as 385 tasks"; proposal B: "the plan-write path refuses an edit to a section whose review is running, naming the agent". Edits to other sections, and to the plan's other files, go through; the escape is `PLAN_EDIT_OK="<reason>"`, recorded, for a dead dispatch's hold only. A test red without it.
 3. **Where each comes from.** The GM (G); the tools it changes are this feature's and 375's (O).
 4. **Do they describe the world here?** Yes - measured 2026-10-19 (the second pass): 2 of the evening's 42 plan reviews returned unrecorded - `plan-verdict` refused them, "section_sha256 does not match ... it changed while it was being reviewed" - after I edited T76's and T77's sections while their reviews ran.
 5. **The order.** The refusal in `hm_checks` (which knows each running dispatch and its bundle), wired to the Edit and Write tools and to a Bash write of the plan, then its test.
@@ -349,7 +349,7 @@ Owed by the hour-26 step-back (hour:385-approach-checklist@26, `continue`).
 
 ### T85 Decisions
 
-**D106 - the section or block under review is held.** Every running `spec-fidelity` plan review holds what its bundle names: a task preflight (`plan-<feature>-<T>`) that task's section, a block review (`make plan-delta`) each block in its `blocks.md`. A write that would change held text is refused, naming the running review's agent and its task or blocks: an `Edit` of the plan whose `old_string` lies in, or whose `new_string` lands in, held text; a `Write` of the plan whose new content differs from the plan in held text; a Bash command whose write targets (`hm_house.write_targets`) include the plan and whose text contains the held heading or any line of held text (the same test the Edit path applies). `PLAN_EDIT_OK="<reason>"` passes it, recorded - a deliberate edit, or a hold a dead dispatch left - and the suite shows the refusal red without the hook, never green by the escape.
+**D106 - the section or block under review is held.** Every running `spec-fidelity` plan review holds what its bundle names: a task preflight (`plan-<feature>-<T>`) that task's section, a block review (`make plan-delta`) each block in its `blocks.md`. A write that would change held text is refused, naming the running review's agent and its task or blocks: an `Edit` of the plan whose `old_string` lies in, or whose `new_string` lands in, held text; a `Write` of the plan whose new content differs from the plan in held text; a Bash command whose write targets (`hm_house.write_targets`) include the plan and whose text contains the held heading or any line of held text (the same test the Edit path applies). `PLAN_EDIT_OK="<reason>"` passes it, recorded, only for a hold a dead dispatch left (no agent of that review still running, by the pair state); a live review's held text has no escape - the session waits for it to return (the plan review, 2026-10-19). The suite shows the refusal red without the hook, never green by the escape, and covers the held-line case as well as the heading.
 
 ## T86 - `make decide` refuses a measured figure with no date and method (proposal C, 2026-10-19)
 
@@ -363,13 +363,13 @@ Owed by the hour-26 step-back (hour:385-approach-checklist@26, `continue`).
 6. **The exits.** (c).
 7. **The search smell.** None.
 8. **The budget.** 20 min.
-9. **Done, measured.** One goal: `make decide` on a section whose Approach item 4 states a figure and no `measured <date> (<method>)` or `m:` key refuses, naming the figure; `tests/tooling/test_plan_blocks.py` red without it.
+9. **Done, measured.** One goal: `make decide` on a section whose Approach item 4 states a figure whose own sentence carries no `measured <date> (<method>)` or `m:` key refuses, naming the figure; `tests/tooling/test_plan_blocks.py` red without it.
 10. **Before moving a constant.** n/a - none moves.
 11. **Before fitting things into room.** n/a - nothing is fitted.
 
 ### T86 Decisions
 
-**D107 - item 4's figures carry their measurement.** `make decide` reads Approach item 4 of the task's section; where, with its dates, clock times, ids and code spans taken out, it still holds a number, it must also hold `measured 20\d\d-\d\d-\d\d` followed within the item by a parenthesized method, or an `m:<key>`; otherwise the decide refuses, naming the first such figure. Budgets (item 8) and other items are not checked: they are not measurements.
+**D107 - each figure carries its measurement beside it.** `make decide` reads Approach item 4 of the task's section, sentence by sentence (a sentence ends at `. ` or a line break outside a code span). A figure is a number left once dates, clock times and ids (`T10`, `D84`, `FR-005`, a question's `0018`) are set aside, and once code spans that hold a path, a key or a command (a `/`, `::`, `=` or a `make `) are set aside - a code span holding a measured value (`` `4.4 s` ``) is read like prose. Each sentence holding a figure must itself carry `measured 20\d\d-\d\d-\d\d` with a parenthesized method, or an `m:<key>`; one label covers the figures of its own sentence. Otherwise the decide refuses, naming the first figure without one. No escape.
 
 ## T87 - the gate does not call its own re-rolled map a tree move (proposal D, 2026-10-19)
 
