@@ -45,9 +45,9 @@ SILENT):
    - **Edo paper and ink:** SILENT. The two web figures disagree and neither is a citable source.
 3. **Rents.**
    - **A back-tenement room:** ATTESTED ONLY FOR one Bunsei-era Edo carpenter's rent (10 monme a month).
-   - **Qing rents by the month:** ATTESTED for government houses per bay (the 1727 schedule) and for shop-front rooms
-     (Daoguang-era contracts; the 1871-1911 government file). An official's 15-16-bay house (Li Ciming, 1871) is the
-     nearest to a modest residence.
+   - **Qing rents by the month:** ATTESTED ONLY FOR government houses per bay (the 1727 schedule) and shop-front rooms
+     (Daoguang-era contracts; the 1871-1911 government file).
+   - **A modest residence in Qing Beijing:** ATTESTED ONLY FOR one official's 15-16-bay house (Li Ciming, 1871).
    - **The rent-to-value ratio:** ATTESTED ONLY FOR the value of an Edo lot with its houses (3-5% net; 4.8% gross by
      Mitsui's 1811 rule) and for Qing administrative prices per bay (about 4-6%). Against the building alone: SILENT.
    - **SILENT in Japan:** a street-front shop, a small house, a samurai residence and a storehouse by the month;
@@ -109,3 +109,5 @@ Uemura 1987 are on `research/to-download.md`, each naming 0251 as what rests on 
   - the rent ratio narrowed to lot-with-houses and administrative prices;
   - donations added and rural troupes narrowed;
   - SC-003 now carries "what is still open".
+- **spec-fidelity round 2 (2026-10-19): CHANGES REQUIRED, 1 item.** The Qing rents now read ATTESTED ONLY FOR, and the
+  Li Ciming house has its own verdict.
