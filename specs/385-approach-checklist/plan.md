@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -234,9 +234,43 @@ Owed by the hour-20 step-back (hour:385-approach-checklist@20, `continue`), whic
 10. **Before moving a constant.** n/a - none moves.
 11. **Before fitting things into room.** n/a - nothing is fitted.
 
+### T78 part B (2026-10-19T01:27Z)
+
+Owed by the hour-25 step-back (hour:385-approach-checklist@25, `continue`).
+
+1. **What is refusing?** Nothing: T78 is built and landed, both tests green.
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither - the change is landed.
+6. **The one-sentence test.** "A tool writes an agent's words in the house style" - true by its two tests.
+7. **The next step is a measurement.** None owed for T78.
+8. **Routes measured before asking?** n/a - no ask.
+9. **After a ruling.** `continue`; its tooling fix (a tick claiming "landed") is its own task.
+
 ### T78 Decisions
 
 **D97 - one corrector, three callers.** The hook's nested plain-text correction (`PAIRS` outside the held spans) becomes `hm_house.americanize(text) -> str`, which the hook calls as before; `claims.py record` passes each note it parsed from a reply through it (never the whole reply: a claim key or path carrying a British spelling must still match - the plan review's point, 2026-10-19), and `apply_edits.py` passes each EDIT's new text through it before writing (the old text is matched as written). An EDIT on a file the GM wrote (`specs/*/request.md`) is not corrected, as the hook does not correct one.
+
+## T79 - a tick saying "landed" is refused while the landing is not on main (the round arbiter's fix on hour:385-approach-checklist@25)
+
+### T79 Approach (checklist part A)
+
+1. **The goal, in the world.** A task's tick never claims a landing that did not happen.
+2. **The constraints.** The arbiter's fix: "`make tick` refuses a task whose NOTE says 'landed' while any file in that task's last `make land-tooling` FILES still differs from origin/main, or while that landing's log ends in a failure, naming the file and the log"; a note that does not say "landed" is not checked. A test red without it.
+3. **Where each comes from.** The fix is the arbiter's (G); `make tick` is 188's (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the hour-25 bundle): at 00:49 `make tick F=385 T=T72` ticked with the note "landed" while T72's latest `make land-tooling` had failed - a whole-string replace in its test missed a dict the formatter had split across lines.
+5. **The order.** `land-tooling.sh` records each run's FILES and outcome; `tick-task.py` reads the last record for the task; then the tests.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 40 min.
+9. **Done, measured.** One goal: a tick whose NOTE says "landed" is refused while the task's last land-tooling run failed, or one of its FILES differs from origin/main, naming the file or the log; `tests/tooling/test_tick_task.py` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T79 Decisions
+
+**D98 - the landing's record read at the tick.** `land-tooling.sh` appends `{task, files, outcome, utc}` to `<git dir>/land-tooling.jsonl` at each run's end (the task is the clone's active one, from `task-starts.jsonl`; `outcome` is "landed" or the step that failed). `tick-task.py`, when the NOTE matches `\blanded\b`, takes the task's last such row: a failed outcome refuses, naming the log; a landed one refuses where `git diff --quiet origin/main -- <file>` fails for a file in it (after a fetch), naming the file. A task with no row is not refused (it did not land through the tool, or lands with its feature).
 
 ## T11 - the close
 

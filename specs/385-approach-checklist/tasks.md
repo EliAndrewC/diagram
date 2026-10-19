@@ -223,6 +223,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       verify: DONE. make where-time prints both tables, between turns its own column; landed, test_where_time green
 - [ ] T78 The house style corrects what the tools write from an agent's reply (plan D97) [lands-open]
       research: rendering
+- [ ] T79 A tick saying landed is refused while the landing is not on main (the arbiter's fix on hour:385-approach-checklist@25, plan D98) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
