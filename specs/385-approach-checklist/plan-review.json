@@ -7649,6 +7649,26 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T148": {
+   "section_sha256": "e423f8c5cc56f4fd561994fe556e183d11e5a46f304f4bfa451feb57da6ec12e",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D156",
+     "summary": "hm_checks' TaskStop branch, beside hm_planhold.returned, marks every running or pending dispatch whose aid is the stopped task answered, closed 'stopped by the session (TaskStop)' - the record make check-closed AGENT= already writes by hand",
+     "class": "within",
+     "why": "Amendment 11 keeps T148 in 385 as an open tooling task (the GM: 'all open process tasks stay in 385'); amendment 6 asks for obvious tooling/process fixes along the way; amendment 1 item 3 and FR-010 set the GM's rule of a tool rather than a reminder. D156 automates an existing hand step (check-closed AGENT=, 'a check you stopped yourself') and mirrors D121's TaskStop release of plan holds. The freeze's purpose (no page edit while a check reads it) is untouched: a stopped agent reads nothing and returns no reply. No check a session did not stop is closed, and nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "Approach item 6 - exit (c)",
+     "summary": "close at the TaskStop, where the session's intent is known; closing on make dispatch-dropped weighed and refused because it names a refused dispatch that never ran",
+     "class": "within",
+     "why": "A choice of where the fix lives, inside the defect's own scope. Refusing the dispatch-dropped route keeps the close from reaching dispatches that were never stopped; it excludes nothing the request asked for."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
