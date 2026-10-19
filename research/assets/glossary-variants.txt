@@ -474,6 +474,7 @@ cho-bu	cho
 cho-hanare	machi-hanare
 chobu	cho
 chodaigamae	nando-gamae
+chogin	chogin
 chome	chome
 chongning	Chongning
 chongsheng hall	Chongsheng shrine
@@ -502,6 +503,7 @@ chumon-zukuri	chumon-zukuri
 chunyou	Chunyou
 chunyou era	Chunyou
 chō	cho
+chōgin	chogin
 chōtsuke	chōtsuke
 chōzuya	temizuya
 circuit	wall circuit
@@ -2463,6 +2465,8 @@ main stem	main stem
 major axis	major axis
 makomo	makomo
 makusa	makusa
+mameita-gin	mameita-gin
+mameitagin	mameita-gin
 mamian	mamian
 man ration	man rations
 man rations	man rations

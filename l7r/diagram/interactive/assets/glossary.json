@@ -17126,5 +17126,19 @@
   "variants": [
    "Takefu"
   ]
+ },
+ "chogin": {
+  "def": "An Edo-period silver piece, one of the two basic silver currencies with the smaller mameita-gin. It passed by its weight in monme on a balance, not by count.",
+  "variants": [
+   "chogin",
+   "chōgin"
+  ]
+ },
+ "mameita-gin": {
+  "def": "Small Edo-period silver pieces, one of the two basic silver currencies with the chogin. Like the chogin they passed by their weight in monme on a balance, not by count.",
+  "variants": [
+   "mameita-gin",
+   "mameitagin"
+  ]
  }
 }
