@@ -17161,5 +17161,72 @@
   "variants": [
    "hinoe-saru"
   ]
+ },
+ "tobi": {
+  "def": "In Edo, a laborer hired by the day for the odd work of building sites and earthwork; also called shigotoshi, and the same as the helpers (tetsudai) of Kyoto and Osaka.",
+  "variants": [
+   "tobi",
+   "tobi's",
+   "tobi laborer",
+   "tobi laborers"
+  ]
+ },
+ "tarudai": {
+  "def": "In Edo, the payment a tenant gave the yanushi on first renting ground or a house, or on moving in from elsewhere. It was called \"sake money\" and was more or less fixed for each house: from 2 shu or 1 bu of gold to as much as 10 ryo.",
+  "variants": [
+   "tarudai"
+  ]
+ },
+ "sekku-sen": {
+  "def": "In Edo, the payment a tenant gave the yanushi at each of the five festivals, by the house: from 50 or 70 mon to 500 or 600 mon, or 2 shu or 1 bu. Kyoto and Osaka had no such payment.",
+  "variants": [
+   "sekku-sen"
+  ]
+ },
+ "tanachin": {
+  "def": "The monthly house rent an Edo tenant paid to the yanushi at the end of each month.",
+  "variants": [
+   "tanachin"
+  ]
+ },
+ "five festivals": {
+  "def": "The five seasonal festival days of the year: the 7th day of the first month, the 3rd of the third, the 5th of the fifth, the 7th of the seventh and the 9th of the ninth (the Double Ninth).",
+  "variants": [
+   "five festivals",
+   "gosekku"
+  ]
+ },
+ "debasement": {
+  "def": "A lowering of what a coin is worth - less metal in it, or more coins issued at the same face value - so that more coins are paid for the same thing.",
+  "variants": [
+   "debasement",
+   "debased"
+  ]
+ },
+ "morohaku": {
+  "def": "\"Both white\": sake brewed with polished rice in both the yeast starter and the main mash, the finest grade of clear sake in Edo-period Japan; Morisada puts good morohaku in Edo at about 250 mon a sho in the 1810s-1820s and 350 to 400 in 1837-1853.",
+  "variants": [
+   "morohaku",
+   "morohaku sake"
+  ]
+ },
+ "udon": {
+  "def": "Thick wheat-flour noodles served in broth; in Morisada's day a plain bowl sold at the same 16 mon as soba in both Edo and Kyoto-Osaka.",
+  "variants": [
+   "udon"
+  ]
+ },
+ "shippoku": {
+  "def": "Soba or udon topped with an assortment of things such as fish cake, mushroom and vegetables, named after the shippoku cooking of Nagasaki; 24 mon on the shop boards of both Edo and Kyoto-Osaka in the Morisada manko.",
+  "variants": [
+   "shippoku"
+  ]
+ },
+ "odamaki": {
+  "def": "Udon steamed in a savory egg custard in a lidded bowl, named after a spool of thread; 36 mon on Morisada's Kyoto-Osaka shop notice, the dearest dish on it.",
+  "variants": [
+   "odamaki",
+   "odamaki-mushi"
+  ]
  }
 }
