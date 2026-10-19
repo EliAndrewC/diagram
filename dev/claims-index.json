@@ -20315,6 +20315,23 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/bund.py::RUN_ON_TURN_DEG#run-on turn limit": {
+  "body": "bb196e3d47981aab",
+  "claim": "run-on turn limit - village-lanes.drawing: a lane run on to a bund turns no more than 60 degrees anywhere - the page records its turn limits as drawing conventions",
+  "code": "8a326df6489b33e4",
+  "core": "c0101826cceee8b7",
+  "date": "2026-10-19",
+  "note": "60 degrees is the page's limit for a lane run on to a bund, and the page labels its turn limits drawing conventions",
+  "pages": {
+   "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
+  },
+  "research": "324b10775c9108ef",
+  "rests": [
+   "0081-village-lanes.drawing.html:65ad16eace199d92",
+   "0081-village-lanes.drawing.html:a857325132f8d4ee"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks#plumbing": {
   "code": "911c7a526bd13577",
   "core": "45d47d15b58c96af",
@@ -29241,21 +29258,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/street.py::to_its_joints#street cut to its outermost joints": {
-  "body": "cbec2d3c19b3e667",
+  "body": "dc77e3838079dc67",
   "claim": "street cut to its outermost joints - how-our-maps-lay-a-clustered-settlements-lanes.drawing: an end reaching nothing is pulled back",
-  "code": "833fdf7011b0b8f4",
-  "core": "bd486323775ab0d8",
+  "code": "83b8bf680fa98413",
+  "core": "0f45c92b0982c2d2",
   "date": "2026-10-19",
-  "note": "both ends are cut to the outermost joints among the ends it is handed",
+  "note": "when fewer than two joints stand on the street, `if len(at) < 2: return list(street)` leaves the whole street uncut, so an end past a single farm's path stays even though it reaches nothing. The page says \"a lane end that reaches nothing is pulled back to the last house it serves\" and gives no exception. Either the claim should record the one-joint case (D147) as a DEVIATION on the page, or the code should pull back the dangling end(s)",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c90fc4f6fee86c66"
   ],
-  "triage": "touched",
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/street.py::trim_streets#a further street cut to its joints": {
   "body": "f2c4acf2bbadeac0",
@@ -32765,22 +32782,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_web_cut_lines#a tie's run past the back lanes": {
-  "body": "f4a7163f49d41d1c",
-  "claim": "a tie's run past the back lanes - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: a cross lane runs the back lanes' own 30 ft pad past the outermost of them; the page gives no distance",
-  "code": "e44a5453aba6bcab",
+  "body": "9682a2380cf490c4",
+  "claim": "a tie's run past the back lanes - GUESS: a cross lane runs the back lanes' own 30 ft pad (`pad`) past the outermost of them; no page gives a distance",
+  "code": "8b336bb90e429fe1",
   "core": "60a01d72af988a64",
   "date": "2026-10-19",
-  "note": "GUESS is the right class, since the record is silent on how far a cross lane runs past the outermost back lane, but the cited drawing page does not record this figure as a guess: it records the 30 ft only as a back lane's run past its last house (§11), and the general run-on rule (§6) only for a lane passing its last house. The claim's own words admit \"the page gives no distance\", so it should be a bare `GUESS` with no page, or the page should record the tie's 30 ft run-on as a GUESS",
-  "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
-  },
-  "research": "92410dbfeea7511e",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:0462100d871c3cb0",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c90fc4f6fee86c66"
-  ],
-  "verdict": "MISLABELED"
+  "note": "no page gives how far a cross lane's candidate line runs past the outermost back lane. The page's 30 ft is for a back lane past its last house, and the rule that a joining lane's tail is cut covers the drawn lane, not this candidate line",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_web_cut_lines#a web lane's span": {
   "body": "f4a7163f49d41d1c",
