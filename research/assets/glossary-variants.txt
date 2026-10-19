@@ -3430,6 +3430,7 @@ sendai plain	Sendai
 sengisho	sengisho
 sengoku	Sengoku
 sengoku house	Sengoku house
+senior councilor	Roju
 senior retainer	retainer
 senior retainers	retainer
 senkomizu	senkomizu
