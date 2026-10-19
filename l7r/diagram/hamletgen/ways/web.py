@@ -490,9 +490,9 @@ def _web_cut_lines(plan: SitePlan, frame: _margin_frame, arcs: list[float], stan
         web cut spacing - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every house within WEB_REACH_FT (100 ft) of a cut, so the cuts stand up to about twice that apart
         a cut's room - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: MIN_WEB_GAP, 7 ft clear of a garden fence on each side and a 4 ft tread, within the page's 3 ft footpath to 5 ft spine
         a web lane's span - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane runs only along the houses it serves - those within WEB_REACH_FT (100 ft) of its cut
-        a tie's run past the back lanes - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a cross lane runs the back lanes' own 30 ft pad past the outermost of them; the page gives no distance
+        a tie's run past the back lanes - GUESS: a cross lane runs the back lanes' own 30 ft pad (`pad`) past the outermost of them; no page gives a distance
     """
-    pad = 30.0  # a lane runs a little past the last steading it serves, not up to its wall
+    pad = 30.0  # a lane runs a little past the last steading it serves, not up to its wall; a tie runs as far past the outermost back lane
 
     # A WEB LANE SPANS THE HOUSES IT SERVES, AND NO MORE. Spanning the whole cluster's extent
     # instead leaves a tail running past the last steading into open ground at whichever end has no

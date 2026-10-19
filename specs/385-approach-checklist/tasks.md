@@ -385,6 +385,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T136 bund.py claim hygiene: RUN_ON_TURN_DEG's comment says map drawing convention while its claim cites 0081 as a finding - settle which; BRANCH_STEP_FT has no Research: claim (likely NONE, plumbing) (impl-drift, T130's round) [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 by sync-with-main done; turn limit CONVENTION, sampling step NONE, its comment corrected (wording only); IN-STEP
+- [ ] T137 T136 landed a malformed claim (RUN_ON_TURN_DEG: CONVENTION takes no pointer) to main by the direct route, which never runs the claim-form test - fix the claim, and make the form check run before a direct landing (found by the T132+T125 gate) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

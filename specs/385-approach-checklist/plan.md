@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92, T93, T94, T95, T96, T97, T98, T99, T100, T102, T103, T104, T105, T106, T107, T109, T110, T111, T112, T113, T114, T115, T116, T117, T118, T119, T120, T121, T122, T123, T124, T125, T126, T127, T128, T129, T130, T131, T132, T133, T134, T135, T136
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92, T93, T94, T95, T96, T97, T98, T99, T100, T102, T103, T104, T105, T106, T107, T109, T110, T111, T112, T113, T114, T115, T116, T117, T118, T119, T120, T121, T122, T123, T124, T125, T126, T127, T128, T129, T130, T131, T132, T133, T134, T135, T136, T137
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -735,6 +735,26 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@35 (change-rou
 ### T125 Decisions
 
 **D148 - every house, said so.** `stage_web`'s house list is `list(s.M.get("houses", []))`, the dead headman test gone; `_web_cut_lines` gains the claim "a tie's run past the back lanes - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a cross lane runs the back lanes' own 30 ft pad past the outermost of them; the page gives no distance".
+
+## T137 - a malformed claim never lands by either route (found by the T132+T125 gate, 2026-10-19)
+
+### T137 Approach (checklist part A)
+
+1. **The goal, in the world.** A claim written in a form the claims tooling cannot read is refused before it lands, whichever route lands it.
+2. **The constraints.** Feature 316: every unit in scope carries a claim in the claims grammar (`tools/claims.GRAMMAR`, `coverage`), held by `tests/tooling/test_claims_coverage.py` at the gate; the claims gate (`scripts/gates/claims-gate.sh`, `claims.py gate`) runs on both routes. The round arbiter's fix bar (amendment 10): a defect that reached main. A test red without it.
+3. **Where each comes from.** 316 (O); the root CLAUDE.md's session-clone rules (O); the GM (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the T132+T125 gate, red in test-full on `test_every_unit_in_scope_carries_a_claim`): T136 landed `RUN_ON_TURN_DEG`'s claim as "CONVENTION <page>" - "`CONVENTION` takes no pointer" - by `sync-with-main.sh done`'s direct route (a docstring-only change, no gate), and the claims check had judged it IN-STEP, owing no form check.
+5. **The order.** The claim corrected to a plain citation of the drawing page; `claims.py gate` refusing a `coverage` problem in a file the delta changed; the test.
+6. **The exits.** (c) - the form check where both routes already pass; running the whole coverage test on the direct route was weighed and refused (the gate's own test does that; the push needs only the delta's files).
+7. **The search smell.** None.
+8. **The budget.** 30 min, landing with T132 and T125 by `make land-batch`.
+9. **Done, measured.** One goal: `make claims-gate` refuses when a file changed since origin/main carries a claim `coverage` reports, naming it and the grammar; the corrected claim passes; `tests/tooling/` red without it.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T137 Decisions
+
+**D149 - the form refused at the push.** `RUN_ON_TURN_DEG`'s claim cites 0081's drawing page plainly ("... - the page records its turn limits as drawing conventions"). `claims.py gate` adds to its refusals each `coverage` problem whose file is in `git diff --name-only origin/main...HEAD`: "<problem> - the claims grammar: <GRAMMAR>". No escape: a form is fixed, never carried.
 
 ## T11 - the close
 

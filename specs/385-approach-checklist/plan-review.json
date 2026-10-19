@@ -7453,6 +7453,52 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T132": {
+   "section_sha256": "06aa9a61f1ae13c1fa7afc53a924e80779e037d5d2ebeb53acf8e88e26495a41",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D147",
+     "summary": "to_its_joints returns list(street) where fewer than two joints stand on it (len(at) < 2); its docstring reads 'fewer than two joints'",
+     "class": "within",
+     "why": "It carries out the task's own filed goal (a one-joint street left whole, not cut to a point) under the claim-fix work the GM approved (amendments 6 and 7, FR-020). The request says nothing about street geometry, so nothing it asks for is narrowed."
+    },
+    {
+     "id": "A6-refused-exit",
+     "summary": "Cutting a one-joint street to its joint and the farther door was weighed and refused, because trim_streets already passes the door anchors among the ends",
+     "class": "within",
+     "why": "A design choice between two ways of reaching the same goal. Nothing the GM asked for is given up, and choosing between them is not a fidelity question."
+    },
+    {
+     "id": "A8-batched-landing",
+     "summary": "T132 lands with T125 by make land-batch",
+     "class": "within",
+     "why": "This is the second lever of amendment 10 ('batch the gate and the landing cohort across two or three small engine fixes'), which the GM approved."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T125": {
+   "section_sha256": "77cfba7ad0e125c978d66616e7d481633c213220ddd6b8a901793dbf854d9b86",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D148 (filter)",
+     "summary": "stage_web's house list becomes list(s.M.get(\"houses\", [])): the dead `role != \"headman\" or True` test is deleted, so the code says what it already does (every house served), behavior unchanged; excluding the headman's house was weighed and refused.",
+     "class": "within",
+     "why": "The task is an impl-drift finding the gate filed as an open task under the GM's Amendment 3 ruling (\"lock in option three\": findings filed as open tasks, fixed before the feature closes). Making the code state its existing behavior fixes the drift without changing any map; the refused alternative (dropping the headman's house) would have been the behavior change, and the plan cites 0246's page for every farmhouse being served. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "D148 (claim)",
+     "summary": "_web_cut_lines gains a GUESS claim for the cross-lane tie's 30 ft run past the outermost back lane, citing 0246's drawing page and saying the page gives no distance.",
+     "class": "within",
+     "why": "Labeling an unclaimed rendering figure is what the claims round owed under the GM's Amendment 3 ruling (the gate files each finding as an open task, fixed before the feature closes) and the approved checklist's 'Where does it come from? ... If it's ours, it's a knob'. It labels the 30 ft honestly as ours (a GUESS, the page silent on the distance) rather than dressing it as research. No value moves and no requested behavior is excepted."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
