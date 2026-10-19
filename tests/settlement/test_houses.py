@@ -28,17 +28,6 @@ def test_farmsteads_yard_on_the_sunny_south_front():
     assert y["of"] == [500, 500] and y["y"] > 500  # the yard sits on the house's south/front (+y) side
 
 
-def test_farmsteads_drops_a_farmhouse_with_no_yard_room():
-    # a tiny bounding ring around the house leaves no room for a yard on any side (even nudged), so the
-    # farmhouse is dropped - keeping the firm 100%-have-a-yard invariant. Exercises the bound, nudge-None,
-    # and drop branches.
-    s = _town()
-    assert s.try_place(500, 500, "plain")
-    s.bound = [(490, 490), (510, 490), (510, 510), (490, 510)]
-    assert s.farmsteads() == 0
-    assert s.M["houses"] == [] and s.M["threshing_yards"] == []
-
-
 # --- dooryard kitchen garden: every farmstead also gets a saien on a sunny side --------------
 def test_farmsteads_garden_on_a_sunny_side():
     s = _town()
@@ -46,16 +35,6 @@ def test_farmsteads_garden_on_a_sunny_side():
     assert s.farmsteads() == 1
     gd = s.M["gardens"][0]
     assert gd["of"] == [500, 500] and gd["y"] >= 500 - 5  # never the shady north back
-
-
-def test_farmsteads_drops_a_farmhouse_with_no_garden_room():
-    # a bound that admits the house + its south yard but leaves NO sunny side for a garden -> the
-    # 100%-garden invariant drops the farmhouse. Exercises _find_appurtenances' garden-None path.
-    s = _town()
-    assert s.try_place(500, 500, "plain")
-    s.bound = [(486, 486), (514, 486), (514, 540), (486, 540)]  # a thin N-S slot: yard fits south, no E/W room
-    assert s.farmsteads() == 0
-    assert s.M["houses"] == [] and s.M["gardens"] == []
 
 
 def test_dry_polys_block_a_footprint_margin_not_just_the_center():

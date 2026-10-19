@@ -222,16 +222,6 @@ def test_a_garden_record_with_no_box_is_skipped() -> None:
     assert gardens_east_shaded(M) == []
 
 
-def test_a_face_with_no_ground_and_no_held_ground_is_counted_not_dropped_unseen() -> None:
-    """The house-first ladder: a face that finds no ground and was held none is counted in `meta.grove_faces_unplanted`."""
-    s = Settlement(600, 600, seed=7)
-    s.meta(name="C", scale="village", grove_sides=3, grove_flank=-1)
-    s._grove_fits = lambda *a: False  # type: ignore[method-assign]  # no ground anywhere
-    assert s._find_grove_arms(300.0, 300.0, 23.0, 14.0) == []
-    assert s.M["meta"]["grove_faces_unplanted"] == 3, "both deep faces and the thin one"
-    assert s._grove_room(300.0, 300.0, 23.0, 14.0) is False
-
-
 def test_the_garden_relax_steers_clear_of_a_neighbors_whole_homestead() -> None:
     """`_relax_gardens_south` with two homesteads: the shaded one's garden moves south clear of the other's house, yard,
     garden and grove bands."""

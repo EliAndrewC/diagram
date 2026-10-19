@@ -25,7 +25,6 @@ from ._geom import PLANK_BANK_REACH as PLANK_BANK_REACH
 from ._geom import Indexed as Indexed
 from ._geom import PointGrid as PointGrid
 from ._geom import _assert_not_main_tree as _assert_not_main_tree
-from ._geom import _union_area as _union_area
 from ._geom import aligned_tilt as aligned_tilt
 from ._geom import boxed_grid as boxed_grid
 from ._geom import boxed_hit as boxed_hit
@@ -76,14 +75,12 @@ from ._knobs import bridge_carried_ways as bridge_carried_ways
 from ._knobs import bridge_crossed_waters as bridge_crossed_waters
 from ._knobs import crop_boxes as crop_boxes
 from ._knobs import knob_rng as knob_rng
-from ._knobs import moat_current_at as moat_current_at
 from ._knobs import register_knob as register_knob
 from ._knobs import resolve_knob as resolve_knob
 from ._knobs import scope_seed as scope_seed
 from ._knobs import skeleton_layout as skeleton_layout
 from ._knobs import web_cuts as web_cuts
 from .city.knobs import machi_mouths as machi_mouths
-from .city.knobs import moat_swept_tap as moat_swept_tap
 from .core import Settlement as Settlement
 from .houses import HOUSE_PADDY_GAP_FT as HOUSE_PADDY_GAP_FT
 from .land import surface_water_dist as surface_water_dist

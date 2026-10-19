@@ -476,3 +476,20 @@ def test_the_coverage_pass_seats_a_well_beside_a_dwelling_the_grid_left_dry() ->
     seats = s.place_wells((100, 100, 300, 300), spacing=80, near=150)
     assert len(seats) == 1, seats
     assert math.dist(seats[0], (600.0, 600.0)) <= 150 * 0.6 + 1e-6, "seated beside the dwelling, within its reach"
+
+
+def test_a_torii_refuses_a_seat_in_a_ward_fence() -> None:
+    """Feature 392: the arch never stands in a barrier (`torii_seat_on_wall`); the ward fence is recorded directly, the
+    ward drawer having gone with the town and city code."""
+    s = Settlement(800, 800, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1, toscale=True)
+    s.M["wards"] = [{"name": "samurai", "boundary": [[100, 400], [700, 400]]}]
+    with pytest.raises(ValueError, match="would stand in"):
+        s._torii(400, 400, 0)
+
+
+def test_well_at_refuses_ground_already_taken_by_a_well() -> None:
+    s = Settlement(800, 800, seed=1)
+    s.meta(name="W", scale="hamlet", ftpx=1, toscale=True)
+    assert s.well_at(400, 400), "the case: open ground takes a well"
+    assert not s.well_at(400, 400), "...and the same spot again does not"

@@ -8,7 +8,7 @@ Research: search and prefilter plumbing - NONE
 import math
 from typing import TYPE_CHECKING, Any
 
-from .._geom import Indexed, Pt, point_in_poly
+from .._geom import Pt, point_in_poly
 from .access import seat_reaches_tree
 from .fit import part_box
 from .passage import landlocked
@@ -323,50 +323,3 @@ class PlacerMixin:
                 if len(seen) >= 2:
                     return True
         return False
-
-    def _solve_homestead(self: Settlement, rec: Any) -> Any:  # type: ignore[misc]
-        """Find the best position for a farmhouse so its WHOLE homestead fits - threshing yard + dooryard
-        garden + room for its grove on every side the settlement rolled. Searches the placed spot first, then a
-        widening spiral, and stops as soon as the home spot already leaves grove-room (no churn); takes the least
-        displacement among the spots that hold the whole homestead. A farm that has a grove (`_wants_grove`) takes
-        ONLY a spot with room for all of it (feature 291, FR-010: no farm quietly loses sides - the old fallback to a
-        yard-and-garden-only spot is gone), so with none within its nudges it is not seated, as a to-scale farm whose
-        bundle does not fit is not. Updates rec's position + reservation. Returns (yard_spot, garden_spot), or None.
-
-        Research:
-            whole homestead or none - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a grove farm takes only a spot with room for every rolled side, its yard and garden
-            least displacement - NONE: the nearest nudge that holds the whole homestead
-        """
-        x0, y0, w, h = rec["x"], rec["y"], rec["w"], rec["h"]
-        self.placed: list[Any] = Indexed(
-            p for p in self.placed if p != (x0, y0, w, h)
-        )  # lift own reservation while searching (Indexed, not a plain list - a rebind must not silently drop _fits' index into the uncached fallback)
-        best: Any = None  # (has_grove_room, -displacement, cx, cy, spot)
-        for nx, ny in self._farmstead_nudges():
-            cx, cy = x0 + nx, y0 + ny
-            if not self._fits(cx, cy, w, h) or not self._field_adjacent(cx, cy):
-                continue
-            spot = self._find_appurtenances(cx, cy, w, h, rec["rot"], rec["kind"], rec["shed"], rec["wealth"])
-            if spot is None:
-                continue
-            wf = rec["wealth"]  # the grove is drawn at the WEALTH size, so reserve room for THAT
-            held = self._grove_reserve(cx, cy, w * wf, h * wf, [tuple(p) for p in spot])
-            if held is None and self._wants_grove(cx, cy):
-                continue
-            cand = (held is not None, -(abs(nx) + abs(ny)), cx, cy, spot, held)
-            if best is None or cand[:2] > best[:2]:
-                best = cand
-            if cand[0] and nx == 0 and ny == 0:
-                break  # already perfect at the home spot
-        cx, cy = (best[2], best[3]) if best else (x0, y0)
-        rec["x"], rec["y"] = cx, cy
-        houses = self.M.get("houses")
-        if isinstance(houses, Indexed):
-            houses._bump()  # a record MOVED in place: the fit rules' house index (rolling/fit.py) must not answer from its old box
-        self.placed.append((cx, cy, w, h))  # re-reserve at the chosen (or original) spot
-        # ...AND HOLD ITS GROVE'S LEAST GROUND (feature 291, `_grove_reserve`) until the second pass plants it, so a farm
-        # seated after this one cannot take the room this one was seated for
-        if best and best[5] is not None and self._wants_grove(cx, cy):
-            rec["grove_reserve"], rec["grove_avoid"] = best[5], [tuple(p) for p in best[4]]
-            self.placed.extend(best[5])
-        return best[4] if best else None

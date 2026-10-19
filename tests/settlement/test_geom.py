@@ -152,14 +152,6 @@ def test_boxed_prefilters_agree_exactly_with_the_bare_scan():
     assert 200 < hits < 3800, f"the sample must straddle both answers to have teeth, got {hits}/4000"
 
 
-def test_union_area_empty_and_overlapping_spans():
-    # empty (or all-degenerate) rects -> zero area; and a rect fully shadowed by a taller one in the
-    # same x-slab must be counted ONCE (the y1 <= cy skip), not double-counted.
-    assert settlement._union_area([]) == 0.0
-    assert settlement._union_area([(0, 0, 2, 2)]) == 4.0  # single rect
-    assert settlement._union_area([(0, 0, 10, 10), (0, 2, 10, 5)]) == 100.0  # inner rect adds nothing
-
-
 def test_main_tree_guard_blocks_main_allows_clones_and_gm_override(monkeypatch, tmp_path):
     # MAIN IS THE TREE THAT CONTAINS .clones/ (feature 131): no path is hardcoded, so the fixture is
     # a checkout with a .clones/ directory, whatever it is called and wherever it is mounted.
@@ -305,8 +297,8 @@ def test_poly_gap_measures_true_clearance_and_zero_on_overlap():
 _PRE_SPLIT_GEOM_SURFACE = (
     'CARRIED_LANDING_FLOOR_FT', 'FLOODED_SHADES', 'Indexed', 'LABEL_AIR_CAP', 'LABEL_AIR_RINGS', 'LABEL_AIR_STEP', 'LABEL_MIN_AIR',
     'LAND', 'LANDING_FT', 'Manifest', 'PLANK_ABUTMENT', 'PLANK_BANK_REACH', 'PLANK_VILLAGE_REACH', 'PointGrid', 'Poly', 'Pt',
-    'RICE_GREENS', 'RIPE_SHADES', 'WARD_BARRED_KINDS', '_VILLAGE_POP_DIST', '_assert_not_main_tree',
-    '_box_hits_run', '_rect_ring', '_signed_area', '_union_area', 'boxed_grid', 'boxed_hit', 'boxed_polys', 'boxed_seg_hit', 'boxed_segs', 'edge_dist', 'fillet_polyline',
+    'RICE_GREENS', 'RIPE_SHADES', '_VILLAGE_POP_DIST', '_assert_not_main_tree',
+    '_box_hits_run', '_rect_ring', '_signed_area', 'boxed_grid', 'boxed_hit', 'boxed_polys', 'boxed_seg_hit', 'boxed_segs', 'edge_dist', 'fillet_polyline',
     'forest_frame_span', 'forest_reveal_x', 'indexed_grid', 'label_aabb', 'label_quad', 'label_tilt', 'lane_runs', 'linear_tilt', 'linear_tilt_full',
     'organic_bbox', 'organic_poly', 'paddy_wet_rings', 'point_in_poly', 'point_quad_dist', 'poly_gap', 'quad_hits_poly', 'quad_hits_seg', 'rects_overlap',
     'ring_touches', 'rot_rect', 'sat_overlap', 'seg_closest', 'seg_dist', 'seg_intersect', 'segments_cross', 'smooth_closed', 'smooth_points', 'stroke_quads',
@@ -820,3 +812,42 @@ def test_ring_chords_run_round_the_whole_outline_pushed_out() -> None:
         assert {(round(n[0]), round(n[1])) for _a, _b, n in chords} == {(0, -1), (1, 0), (0, 1), (-1, 0)}, "outward, whatever the winding"
         assert all(min(a[0], b[0]) < 0 or max(a[0], b[0]) > 10 or min(a[1], b[1]) < 0 or max(a[1], b[1]) > 10 for a, b, _n in chords)
     assert ring_chords([(0.0, 0.0), (1.0, 0.0)], 1.0) == []
+
+
+# ---- feature 392: the shared helpers' branches the retired town and city tests used to reach ----------------------
+
+
+def test_a_forest_reveals_its_tree_line_plus_the_reveal_band_when_one_is_recorded() -> None:
+    from l7r.diagram.settlement._geom.extents import forest_reveal_x
+
+    forest = [(-50.0, 0.0), (300.0, 0.0), (300.0, 200.0)]
+    assert forest_reveal_x(forest, None, 40.0, 500.0) == [0.0, 300.0, 300.0], "no tree line: the clamped polygon"
+    assert forest_reveal_x(forest, [(100.0, 0.0), (480.0, 50.0)], 40.0, 500.0) == [100.0, 480.0, 140.0, 500.0], "the line plus the band, clamped"
+
+
+def test_a_wall_tower_quad_turns_with_its_wall_and_grows_on_request() -> None:
+    from l7r.diagram.settlement._geom.extents import tower_quad
+
+    flat = tower_quad({"x": 10.0, "y": 20.0})
+    assert flat == [(-9.0, 1.0), (29.0, 1.0), (29.0, 39.0), (-9.0, 39.0)], "the legacy 38 x 38 default"
+    turned = tower_quad({"x": 0.0, "y": 0.0, "w": 10, "h": 4, "rot": 90}, grow=1.0)
+    assert max(abs(p[0]) for p in turned) == pytest.approx(3.0) and max(abs(p[1]) for p in turned) == pytest.approx(6.0)
+
+
+def test_wall_runs_reads_a_ward_fence_and_its_wall_caps() -> None:
+    runs = wall_runs({"wards": [{"name": "samurai", "boundary": [[0, 0], [100, 0]], "wall_caps": [{"pts": [[100, 0], [110, 0]]}]}]})
+    assert ("the samurai ward fence", [(0.0, 0.0), (100.0, 0.0)], 2.5) in runs
+    assert ("a ward fence wall-cap", [(100.0, 0.0), (110.0, 0.0)], 5.5) in runs
+
+
+def test_a_box_meets_a_thick_run_that_crosses_it_without_ending_inside() -> None:
+    assert _box_hits_run((40.0, 40.0, 60.0, 60.0), [(0.0, 50.0), (100.0, 50.0)], 1.0), "a run straight through the box"
+    assert not _box_hits_run((40.0, 40.0, 60.0, 60.0), [(0.0, 0.0), (100.0, 0.0)], 1.0)
+
+
+def test_the_water_index_answers_a_fixture_wider_than_its_slack_by_walking_every_segment() -> None:
+    from l7r.diagram.settlement._geom.water_index import SLACK, WaterIndex
+
+    idx = WaterIndex({"streams": [{"pts": [[0, 100], [400, 100]], "w": 6}]})
+    assert not idx.clear(200.0, 100.0 + SLACK, SLACK + 10.0), "a broad fixture reaching the stream"
+    assert idx.clear(200.0, 100.0 + 4 * SLACK, SLACK + 10.0)

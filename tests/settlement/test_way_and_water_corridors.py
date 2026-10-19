@@ -23,18 +23,6 @@ def _s() -> Settlement:
     return s
 
 
-def test_a_stream_reserves_a_corridor_and_the_placer_refuses_it() -> None:
-    """`no_structure_on_stream`. The corridor is `max(30, width/2 + 20)` - deliberately wider than the
-    water, because a wall on the bank is a wall in the water when the stream is up."""
-    s = _s()
-    before = len(s.corridors)
-    s.river([(100.0, 400.0), (1100.0, 400.0)], width=20.0)
-    assert len(s.corridors) > before, "a drawn river registers a no-build corridor"
-    assert s._near_corridor(600.0, 400.0), "on the water itself"
-    assert s._near_corridor(600.0, 425.0), "and on the bank the corridor reserves"
-    assert not s._near_corridor(600.0, 800.0), "well away from it the ground is free"
-
-
 def test_a_lane_reserves_a_setback_that_clears_building_CORNERS_not_only_centres() -> None:
     """`houses_clear_of_lanes` / `no_farmhouse_stands_on_a_lane`. The lane's corridor is
     `width/2 + 11`, and the +11 is there so a house whose CENTRE clears the tread does not put its

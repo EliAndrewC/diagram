@@ -33,7 +33,6 @@ from .indexes import *
 from .labels import *
 from .overlap import *
 from .overlap import _rect_ring as _rect_ring
-from .overlap import _union_area as _union_area
 from .primitives import *
 from .primitives import _signed_area as _signed_area
 from .village import *

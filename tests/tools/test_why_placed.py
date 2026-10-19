@@ -22,7 +22,7 @@ from l7r.diagram import settlement
 s = settlement.Settlement(600, 500, seed=1)
 s.meta(name="T", scale="town", ftpx=1)
 s.building(300, 300, 20, 12, "shop")
-s.try_place(300, 300, "plain")           # refused: it lands on the one just placed
+s._fits(300, 300, 20, 12)                # refused: it lands on the one just placed
 s.M.setdefault("late_key", []).append({"x": 302.0, "y": 301.0, "w": 3.0, "h": 3.0, "kind": "late"})
 """
 

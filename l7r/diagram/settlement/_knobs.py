@@ -633,55 +633,6 @@ def bridge_crossed_waters(M: Any) -> list[tuple[Any, float]]:
     return waters
 
 
-def moat_current_at(ring: Any, inlet: Pt, outlet: Pt, pt: Pt) -> tuple[float, float] | None:
-    """The moat's flow direction at `pt`: the ring tangent pointing the way water travels toward the
-    outlet along the arc `pt` sits on.
-
-    A ring has NO single downstream side - water entering the inlet runs BOTH ways round to the
-    outlet - so "the moat's current" is only ever a local quantity. SHARED between the generators
-    (which sweep an offtake throat and land a drain culvert with it) and check_village's
-    `moat_junctions_swept_with_the_current` (which judges the result), because a check that
-    re-derives what the generator computed drifts from it.
-
-    The tangent is the chord between the vertex's two NEIGHBORS, not the forward segment: taking the
-    forward segment alone tilts every reading by about half the vertex's turn angle, consistently
-    enough (~8-9 deg on these rings) to misclassify a square tap as upstream-facing.
-    Research: a fed ring runs both ways to its outlet - research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html"""
-    n = len(ring)
-    if n < 3:
-        return None
-
-    def ix(q: Pt) -> int:
-        return min(range(n), key=lambda k: math.hypot(ring[k][0] - q[0], ring[k][1] - q[1]))
-
-    i_in, i_out, it = ix(inlet), ix(outlet), ix(pt)
-    step = 1 if (it - i_in) % n <= (i_out - i_in) % n else -1
-    a, b = ring[(it - step) % n], ring[(it + step) % n]
-    vx, vy = b[0] - a[0], b[1] - a[1]
-    L = math.hypot(vx, vy)
-    return None if L == 0 else (vx / L, vy / L)
-
-
-def _below_drain(x: float, y: float, drain: Any, fx: float, fy: float, berth: float = 26.0) -> bool:
-    """Is (x, y) downslope of the drain COLLECTOR? Measured to the NEAREST POINT on the drain
-    polyline and projected along the fall - which is what the check does. A global cut along the
-    fall axis is not the same thing and lets a farmstead sit in the toe where the drain bends.
-    Research: below the drain - NONE: projected on the fall from the nearest drain point, a 26 px berth"""
-    best = (float("inf"), drain[0])
-    for k in range(len(drain) - 1):
-        ax, ay = drain[k]
-        bx, by = drain[k + 1]
-        dx, dy = bx - ax, by - ay
-        ll = dx * dx + dy * dy or 1.0
-        t = max(0.0, min(1.0, ((x - ax) * dx + (y - ay) * dy) / ll))
-        px_, py_ = ax + t * dx, ay + t * dy
-        d = math.hypot(x - px_, y - py_)
-        if d < best[0]:
-            best = (d, (px_, py_))
-    nx, ny = best[1]
-    return bool((x - nx) * fx + (y - ny) * fy > -berth)
-
-
 def windbreak_face(clumps: Sequence[Sequence[float]], r: float, houses: Sequence[Mapping[str, Any]]) -> tuple[int, int, float] | None:
     """The communal belt's INNER FACE - the edge of its canopy that faces the settlement.
 

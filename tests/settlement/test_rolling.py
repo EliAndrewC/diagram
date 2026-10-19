@@ -182,43 +182,6 @@ def test_slide_stops_on_no_target_and_on_arrival():
     assert s._slide(200, 200, 40, 26, lambda x, y: (x, y), True) == (200, 200)
 
 
-def test_kura_side_flips_to_the_north_wall_when_the_west_is_taken():
-    # A legacy farmstead reserves its base rect but DRAWS its west kura past it, so the side is
-    # chosen at flush time against the neighbors actually on the ground (Minami 2026-08-08, a farm
-    # shed drawn on a garden). West by default, north when the west is taken - and when BOTH are
-    # taken the west stands, so the overlap matrix reports a homestead with no room for its kura
-    # rather than the engine hiding it.
-    s = Settlement(600, 600, seed=1)
-    s.meta(name="V", scale="village", ftpx=2)
-    rec = {"x": 300.0, "y": 300.0, "w": 44.0, "h": 29.0, "rot": 0.0, "shed": True}
-    assert s._kura_side(rec, 44.0, 29.0) == "W"
-    s.M["gardens"].append({"x": 300 - 0.64 * 44, "y": 300.0, "w": 10.0, "h": 10.0})  # a neighbor's bed on the west wall
-    assert s._kura_side(rec, 44.0, 29.0) == "N"
-    s.M["gardens"].append({"x": 300.0, "y": 300 - 0.60 * 29, "w": 10.0, "h": 10.0})  # ...and one on the back wall too
-    assert s._kura_side(rec, 44.0, 29.0) == "W"
-
-
-def test_a_legacy_grove_farm_with_no_room_for_its_whole_grove_is_not_seated() -> None:
-    """Feature 291, plan D8: the old fallback to a yard-and-garden-only spot is gone for a farm that has a grove."""
-    s = Settlement(1200, 900, seed=3)
-    s.meta(name="L", scale="hamlet", grove_sides=4, grove_flank=-1)
-    s._grove_reserve = lambda *a: None  # type: ignore[method-assign]  # no seat anywhere holds the whole grove
-    rec = {"x": 600.0, "y": 450.0, "w": 23.0, "h": 14.0, "rot": 0.0, "kind": "plain", "shed": False, "wealth": 1.0}
-    s.placed.append((600.0, 450.0, 23.0, 14.0))
-    assert s._solve_homestead(rec) is None
-    s._wants_grove = lambda *a: False  # type: ignore[method-assign]  # a farm with no grove keeps its yard-and-garden seat
-    assert s._solve_homestead(dict(rec)) is not None
-
-
-def test_a_farm_inside_a_city_wall_wants_no_grove() -> None:
-    s = Settlement(800, 800, seed=1)
-    s.meta(name="C", scale="city")
-    s.M["wall"] = [(100, 100), (700, 100), (700, 700), (100, 700), (100, 100)]
-    assert not s._wants_grove(400, 400)
-    s.M["meta"]["inwall_groves"] = True
-    assert s._wants_grove(400, 400)
-
-
 def test_relax_gardens_south_skips_a_bundle_without_gardens():
     # defensive: a homestead bundle whose geom carries no garden beds is simply skipped (no shift, no error)
     s = Settlement(800, 800, seed=1)
@@ -263,18 +226,6 @@ def test_bundle_side_fits_rejects_a_bbox_running_off_the_canvas():
 def test_garden_beds_clear_rejects_a_bed_on_a_paddy():
     s = _nuc_village()  # field_polys carries a paddy over the east half (x >= 640)
     assert s._garden_beds_clear([(880, 400, 30, 20)], []) is False  # bed sits in the paddy
-
-
-# ---- ring: a BIG house whose placement FAILS is un-counted ---------------------------------
-def test_ring_decrements_the_big_count_when_a_placement_fails():
-    # every candidate lands on paddy (whole map is a field), so try_place fails; each 'big' that was
-    # counted up must be counted back down, leaving the tally at zero.
-    s = _nuc_village()
-    s.field_polys.append([(0, 0), (1200, 0), (1200, 900), (0, 900)])  # the entire canvas is flooded paddy
-    s._nbig = 0
-    s.ring((100, 100, 500, 500), 8, 30, ["big"], max_big=10)
-    assert s._nbig == 0  # each big incremented then decremented on its failed placement
-    assert not s.M["houses"]  # nothing could be placed
 
 
 def test_waterfront_seeds_line_both_banks_of_a_canal():
@@ -342,7 +293,6 @@ _ROLLING_SURFACE = frozenset(
         # public - called from pool gens, wip/, other engine modules and tests
         "farmsteads",
         "line_seeds",
-        "ring",
         "scatter_seeds",
         "sun_corridor",
         "waterfront_seeds",
@@ -356,17 +306,12 @@ _ROLLING_SURFACE = frozenset(
         "_closest_on_seg",
         "_east_trees",
         "_farmsteads_bundle",
-        "_farmsteads_legacy",
-        "_field_adjacent",
         "_garden_beds",
         "_garden_beds_clear",
         "_garden_shaded",
         "_gardens_sun_ok",
-        "_kura_side",
         "_nearest_field_point",
         "_nearest_placed_point",
-        "_perim_bbox",
-        "_perim_poly",
         "_place_bundle",
         "_place_bundle_nucleated",
         "_poly_bboxes",
@@ -376,7 +321,6 @@ _ROLLING_SURFACE = frozenset(
         "_rect_on_water",
         "_relax_gardens_south",
         "_slide",
-        "_solve_homestead",
         "_sun_corridor_ok",
         "_water_obstacles",
         "_yard_sun_conflict",

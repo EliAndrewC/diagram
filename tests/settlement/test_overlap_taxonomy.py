@@ -403,3 +403,10 @@ def test_matrix_extents_SKIPS_a_record_that_carries_no_geometry() -> None:
     and a sweep that crashed on a malformed record would take the whole overlap matrix down with it."""
     assert matrix_extents({"meta": {"W": 100, "H": 100}, "streams": [{"w": 4.0}]}) == [], "a linear record with no poly and no pts"
     assert matrix_extents({"meta": {"W": 100, "H": 100}, "houses": ["not a record at all"]}) == [], "and a non-dict in a classified key"
+
+
+def test_a_named_key_pair_is_allowed_by_its_own_reason() -> None:
+    """Feature 392: the named pairs (`_MATRIX_ALLOWED_KEYS`) answer before the class rules - the quay and its jetty."""
+    from l7r.diagram.overlap.taxonomy import matrix_policy
+
+    assert "SPRINGS FROM the quay face" in (matrix_policy("quays", "jetties") or "")

@@ -51,15 +51,6 @@ def torii_halfbox(ftpx: float, span_ft: float = 16.0) -> tuple[float, float, flo
     return s2 + pad, post / 2 + pad, post / 2 + pad
 
 
-# Urban building kinds a SAMURAI WARD refuses (Settlement.ward / Settlement.building): the commoner
-# dwellings and commerce the fence exists to keep out (GM 2026-08-02, on Minami: laborer houses in
-# the middle of the samurai neighborhood, on the samurai side of the fence). servant is deliberately
-# absent - samurai households' live-in domestics lodge inside the ward, and the city gens interleave
-# them on purpose. So is monk_house: a temple may legitimately stand inside the ward (Tango's
-# Bishamon precinct - the warrior fortune beside the garrison quarter) and its clergy row belongs
-# with its temple, held to it by the temple-neighborhood checks. The zoning rule this encodes:
-# research/questions/0161-the-samurai-quarter-where-a-citys-samurai-live-and-how-many-bukechi.drawing.html.
-WARD_BARRED_KINDS = frozenset({"laborer", "laborer_large", "merchant", "merchant_house", "merchant_large", "burakumin", "shop", "inn"})
 """Research: samurai ward keeps commoners out - research/questions/0161-the-samurai-quarter-where-a-citys-samurai-live-and-how-many-bukechi.drawing.html: laborers, merchants, shops, inns, burakumin barred"""
 
 

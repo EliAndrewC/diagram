@@ -223,27 +223,6 @@ def test_skeleton_layout_rejects_unknown_kind():
         settlement.skeleton_layout("spiral", 0, 0, 10, 10)
 
 
-def test_moat_current_and_swept_tap_degenerate_rings():
-    # a "ring" of two points is not a ring: both helpers bail rather than index past the ends
-    assert settlement.moat_current_at([(0, 0), (10, 0)], (0, 0), (10, 0), (5, 5)) is None
-    assert settlement.moat_swept_tap([(0, 0), (10, 0)], (0, 0), (10, 0), (5, 5), (9, 9)) == (9, 9)
-
-
-def test_moat_swept_tap_handles_a_zero_length_edge_and_an_unreachable_target():
-    # a duplicated consecutive vertex gives a zero-length edge to step over; want_deg=-1 can never be
-    # met, so the walk exhausts max_back and falls back to the best angle it saw
-    ring = [(400, 300), (700, 300), (700, 300), (700, 700), (400, 700), (400, 300)]
-    got = settlement.moat_swept_tap(ring, (400, 300), (700, 700), (250, 500), (400, 500), want_deg=-1.0, max_back=60.0)
-    assert isinstance(got, tuple) and len(got) == 2
-
-
-def test_moat_swept_tap_scores_a_zero_length_throat_as_unusable():
-    # `other` sitting exactly on the candidate leaves no direction to measure - scored 999, never chosen
-    ring = [(400, 300), (700, 300), (700, 700), (400, 700), (400, 300)]
-    got = settlement.moat_swept_tap(ring, (400, 300), (700, 700), (400, 500), (400, 500), want_deg=-1.0, max_back=40.0)
-    assert isinstance(got, tuple)
-
-
 def test_sharp_corners_skips_a_duplicate_vertex_instead_of_counting_it():
     """A repeated vertex turns through no angle at all, so it is neither a hard corner nor an eased
     one - counting it either way would misreport the parcel-fabric shape the manifest records.

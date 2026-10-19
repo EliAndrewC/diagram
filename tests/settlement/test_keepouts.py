@@ -134,17 +134,6 @@ def test_a_field_is_measured_by_chains_when_the_seat_is_known_and_by_a_ring_when
     assert not chains and len(rings) == 1, "a cache built for the seat's chains is not handed to the ringed fit test"
 
 
-def test_field_within_measures_by_the_chains_when_the_seat_is_known() -> None:
-    """`_field_within` (feature 145): with a planned seat the reach is measured to the CHORDS, not to a ring."""
-    s = Settlement(900, 900, seed=1)
-    s.meta(name="F", scale="hamlet")
-    s.field_polys.append([(300.0, 300.0), (600.0, 300.0), (600.0, 600.0), (300.0, 600.0)])
-    s.field_face = (450.0, 60.0)  # the cluster stands north of the field
-    assert s._field_chains()[0], "the fixture must give chains, not a ring"
-    assert s._field_within(450.0, 280.0, 40.0) is True  # 20 px north of the facing chord, inside the reach
-    assert s._field_within(450.0, 100.0, 40.0) is False  # 200 px north of it
-
-
 def test_a_noisy_band_takes_no_more_chords_than_the_cap_and_still_contains_every_point() -> None:
     """Feature 287, homes H27: a 400-vertex noisy ring at the dike's own tolerance simplifies to at most 24 chords for the
     keep-out and at most 12 for the facing chains, and the keep-out still contains every covered point."""

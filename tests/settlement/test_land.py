@@ -405,16 +405,8 @@ _LAND_SURFACE = frozenset(
         "toe_band",
         "trim_off_marsh",
         # private - reached through self., including from OUTSIDE the package
-        "_attach_grove",
-        "_farmstead_nudges",
-        "_find_appurtenances",
     }
 )
-
-# The three that deliberately left the package. Recorded as its own pin because the RELOCATION is a
-# decision, not an accident: every function they call was already in homestead_parts.py, and a
-# future session moving them back into land/ should have to say so rather than drift.
-_RELOCATED_TO_HOMESTEAD_PARTS = frozenset({"_attach_grove", "_farmstead_nudges", "_find_appurtenances"})
 
 
 def _own(cls: type) -> set[str]:
@@ -449,21 +441,6 @@ def test_no_land_member_is_defined_in_two_sub_mixins():
                 dupes.append(f"{name} in both {seen[name]} and {cls.__name__}")
             seen[name] = cls.__name__
     assert not dupes, f"defined twice: {sorted(dupes)}"
-
-
-def test_the_relocated_farmstead_helpers_live_in_homestead_parts_not_in_land():
-    from l7r.diagram.settlement.homestead_parts import HomesteadPartsMixin
-    from l7r.diagram.settlement.land import LandMixin
-
-    land_names = set().union(*(_own(c) for c in LandMixin.__mro__))
-    # THE MRO, not the class body: feature 173 split homestead_parts.py into a package whose
-    # `HomesteadPartsMixin` composes seven sub-mixins and has no members of its own by design (the
-    # settlement/structures/ pattern). The three helpers live on `farmstead.py`'s sub-mixin, which is
-    # the same surface on the composed Settlement - which is what this test is actually about. Read
-    # the way `land_names` above has always been read.
-    parts_names = set().union(*(_own(c) for c in HomesteadPartsMixin.__mro__))
-    assert parts_names >= _RELOCATED_TO_HOMESTEAD_PARTS, f"not relocated: {sorted(_RELOCATED_TO_HOMESTEAD_PARTS - parts_names)}"
-    assert not (_RELOCATED_TO_HOMESTEAD_PARTS & land_names), f"still in land/: {sorted(_RELOCATED_TO_HOMESTEAD_PARTS & land_names)}"
 
 
 def test_surface_water_dist_survives_the_split_at_both_import_paths():

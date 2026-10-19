@@ -8,9 +8,7 @@ Research: plumbing - NONE
 from typing import TYPE_CHECKING, Any
 
 from .._geom import (
-    WARD_BARRED_KINDS,
     drawn_extent,
-    point_in_poly,
 )
 
 if TYPE_CHECKING:
@@ -42,34 +40,14 @@ class UrbanBuildingMixin:
         "burakumin": ('#BCB29C', '#7A7058', 38, 26),
     }
 
-    def building(self: Settlement, cx: float, cy: float, w: float, h: float, kind: str = "shop", rot: float = 0, of: Any = None) -> bool:  # type: ignore[misc]
+    def building(self: Settlement, cx: float, cy: float, w: float, h: float, kind: str = "shop", rot: float = 0) -> bool:  # type: ignore[misc]
         """An urban building (shophouse, laborer dwelling, samurai house, etc.) -
         boxier than a farmhouse, oriented to the street not the sun. Blocks placement.
 
-        Returns False - and places NOTHING - for a commoner dwelling/business (WARD_BARRED_KINDS)
-        whose center lies inside a declared samurai ward (GM 2026-08-02, on Minami: 2 laborer
-        houses and a merchant row inside the ward fence, leaked in by whole-interior top-up sweeps
-        whose rectangles overlap the ward). The refusal lives HERE, at the one seat every pack,
-        frontage and gen-side top-up funnels through, rather than in each gen's region arithmetic -
-        a refused candidate simply seats elsewhere on a later pass. Gated by
-        city_samurai_ward_residents_only.
-
         Research:
-            samurai ward refuses commoners - research/questions/0161-the-samurai-quarter-where-a-citys-samurai-live-and-how-many-bukechi.drawing.html: WARD_BARRED_KINDS refused inside it
-            ward servant bound to a household - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html: a servant without `of` refused
             building glyph - CONVENTION: rounded box, ridge, door stub, burakumin dashed
             awning depth - UNRESEARCHED: 5 ft at the building grain, floored at 2.4 px
             hanging sign - CONVENTION: a location marker, floored at 6 x 5 px"""
-        if self._samurai_ward_interiors and any(point_in_poly(cx, cy, rg) for rg in self._samurai_ward_interiors):
-            if kind in WARD_BARRED_KINDS:
-                return False
-            # ...and a SERVANT inside the ward must be service accommodation BOUND to a samurai
-            # household (`of`), never a freestanding cottage. Barring the commoner kinds alone just
-            # handed their ground to the servant packs, and a servant glyph IS a laborer glyph with
-            # a 4 ft trim - so the ward came back reading MORE commoner, not less (GM 2026-08-02).
-            # Placed via servant_ranges(); see research/contents.json#government and its research.
-            if kind == "servant" and of is None:
-                return False
         fill, edge = self.URBAN.get(kind, self.URBAN["shop"])[:2]
         x0, y0 = -w / 2, -h / 2
         dash = ' stroke-dasharray="5,3"' if kind == "burakumin" else ''
@@ -120,8 +98,6 @@ class UrbanBuildingMixin:
         g.append('</g>')
         self.add(''.join(g))
         rec: dict[str, Any] = {"x": cx, "y": cy, "w": w, "h": h, "kind": kind, "rot": rot}
-        if of is not None:
-            rec["of"] = [round(of["x"], 1), round(of["y"], 1)]  # the household this is service accommodation FOR
         self.M["buildings"].append(rec)
         # DECLARE THE DRAWN EXTENT (feature 121). A building is drawn at `rot`, and 390 of the
         # pool's building records carry a non-zero one - many at 90 deg, where `w` and `h` swap

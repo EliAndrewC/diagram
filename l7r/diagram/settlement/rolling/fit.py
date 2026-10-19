@@ -9,7 +9,7 @@ import math
 from typing import TYPE_CHECKING, Any, cast
 
 from .._geom import FARMHOUSE_EAVE_GAP_FT, Indexed, PointGrid, Pt, eave_gap, edge_dist, point_in_poly, seg_dist, segments_cross
-from .._geom.primitives import FIELD_KEEPOUT_EPS, chain_distance, chain_violated, facing_chains, keepout_ring
+from .._geom.primitives import FIELD_KEEPOUT_EPS, chain_violated, facing_chains, keepout_ring
 from .._geom.water_index import crosses_a_stream
 from ..farm_fixtures import PERSIMMON_CROWN_FT
 from ..homestead_parts.tree_shade import CANOPY_SHADE_FT, crown_shades
@@ -83,28 +83,6 @@ class BundleFitMixin:
     _corridor_ground: Any = None  # the ways' test of a corridor's ground, installed by a hamlet's seating (`access.lawful_ground`)
     _wood: Any = None  # the households' shares of the wood floor (`homestead_parts/wood_share.py`, woods W25)
 
-    def _field_adjacent(self: Settlement, x: float, y: float) -> bool:  # type: ignore[misc]
-        """A RAIL, NOT A NORM: a nudge may not drift a farmhouse off the map's farmland entirely.
-
-        THE NUMBER IS ARBITRARY AND THAT IS ALL RIGHT, as long as nobody reads it as a historical claim
-        (GM 2026-09-13, asking exactly that question of this line). The record gives a 6 ft MINIMUM - bund
-        plus levee path plus eave overhang, below which a wall's drip line falls in the rice - and NO
-        MAXIMUM at all (`research/questions/0029-farmhouses-minka.drawing.html`; the
-        retirement record in `hamletgen/consts.py` says the same). What the record does offer is a
-        DESCRIPTION in the other direction: a back-row house about 700 ft from the crops "reads as the honest
-        back of a compact village" (no limit: feature 318 removed the reach once held at it), and a hamlet "is legitimately loose and is not held to" the village
-        coverage floor at all. So 165 catches a house that has left the farmland; it does not describe how
-        far a farmer lives from the paddy, and a cluster standing further out than this is not thereby
-        wrong. It formerly cited "the gate's ADJ=165" - `all_houses_field_adjacent`, which died with the
-        check battery in feature 166, so the citation pointed at nothing for a fortnight.
-
-        Left at 165 deliberately: widening it would admit nudges the placer currently refuses and re-roll
-        the pool, which is a real cost for no gain, since nothing downstream reads the figure as a norm
-        once this docstring says it is not one.
-
-        Research: farmland rail - CANON: the GM's ruling of 2026-09-13, a rail and not a norm: a nudge may not carry a house past 165 px of the field; research/questions/0029-farmhouses-minka.drawing.html sets no maximum"""
-        return self._field_within(x, y, 165) if self.field_polys else True
-
     def _rect_corners(self: Settlement, rect: Any) -> list[Pt]:  # type: ignore[misc]
         cx, cy, w, h = rect
         return [(cx - w / 2, cy - h / 2), (cx + w / 2, cy - h / 2), (cx + w / 2, cy + h / 2), (cx - w / 2, cy + h / 2)]
@@ -163,12 +141,6 @@ class BundleFitMixin:
             cx, cy, w, h = rect
             return any(chain_violated(px, py, chains, 0.0) for px, py in ((cx - w / 2, cy - h / 2), (cx + w / 2, cy - h / 2), (cx + w / 2, cy + h / 2), (cx - w / 2, cy + h / 2), (cx, cy)))
         return bool(self._rect_hits(rect, rings))
-
-    def _field_within(self: Settlement, x: float, y: float, reach: float) -> bool:  # type: ignore[misc]
-        chains, rings = self._field_chains()
-        if chains:
-            return chain_distance(x, y, chains) <= reach
-        return any(edge_dist(x, y, poly) <= reach for poly in rings)
 
     def _rect_hits(self: Settlement, rect: Any, polys: Any) -> bool:  # type: ignore[misc]
         """Whether an axis-aligned rect overlaps any polygon in `polys` (corner-in, vertex-in, or edge-cross).

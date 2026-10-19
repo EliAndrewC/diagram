@@ -72,29 +72,6 @@ def sat_overlap(p: Sequence[Sequence[float]], q: Sequence[Sequence[float]]) -> b
     return True
 
 
-def _union_area(rects: Any) -> float:
-    """Total area covered by a set of axis-aligned rects (x0, y0, x1, y1), counting overlap ONCE. The grove's
-    belt arms abut at the windward corner, so summing their areas double-counts it; the honest grove footprint
-    is the union. Few small rects, so a coordinate-compression sweep is ample."""
-    rects = [r for r in rects if r[2] > r[0] and r[3] > r[1]]
-    if not rects:
-        return 0.0
-    xs = sorted({r[0] for r in rects} | {r[2] for r in rects})
-    area = 0.0
-    for i in range(len(xs) - 1):
-        x0, x1 = xs[i], xs[i + 1]
-        spans = sorted((r[1], r[3]) for r in rects if r[0] <= x0 and r[2] >= x1)
-        cy = -1e18
-        covered = 0.0
-        for y0, y1 in spans:
-            if y1 <= cy:
-                continue
-            covered += y1 - max(y0, cy)
-            cy = y1
-        area += (x1 - x0) * covered
-    return area
-
-
 def quad_hits_poly(quad: Poly, poly: Poly) -> bool:
     """Does a convex cell REGION meet an arbitrary polygon? Containment either way, plus edge
     crossings - so a polygon threading between the cell's sample points is still caught."""

@@ -199,7 +199,6 @@ class Settlement(
         # The tread is the hard thing - the surface a cart runs on - and a building's FOOTPRINT may
         # not overlap it at any angle. See `_fits`, which tests them differently on purpose.
         self.treads: list[Any] = []
-        self._samurai_ward_interiors: list[Poly] = []  # closed samurai-ward region(s), cached by s.ward - s.building refuses WARD_BARRED_KINDS inside them
         self.bound: Any = None  # optional bounding polygon: placement stays inside it (city wall)
         self.view: Any = None  # optional (ox,oy,w,h) viewBox crop - render/checks treat it as the map edge
         self.field_polys: Indexed = Indexed()  # smoothed outlines used for blocking (Indexed: _in_blocked keeps a spatial index on it)
