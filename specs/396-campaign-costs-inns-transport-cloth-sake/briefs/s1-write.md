@@ -7,7 +7,8 @@ research record's `CLAUDE.md` above all, along with `research/money-requests.md`
 **What is asked.** EliAndrewC/diagram#3 (gm-assistant's money skill): what a night at an inn, a hired horse or porter,
 cloth and clothing, and sake cost, Japan first (China where the request names it), each figure beside the UNSKILLED
 laborer's day wage of the same place and period. Where no source gives one, say that wage is SILENT and name the nearest
-(a craftsman's only if no unskilled wage exists), with its place, its unit and its gap in years. The request is verbatim
+(a craftsman's only if no unskilled wage exists, always named as a craftsman's and never shown as the unskilled wage),
+with its class, its place, its unit and its gap in years. The request is verbatim
 in `specs/396-campaign-costs-inns-transport-cloth-sake/request.md`. This is research only: edit no code, modal, sheet or
 canon.
 

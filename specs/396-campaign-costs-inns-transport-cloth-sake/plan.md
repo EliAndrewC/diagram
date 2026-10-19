@@ -13,8 +13,9 @@ code, map or canon change.
 - **The record.** `make page-session BRIEF="briefs/s1-write.md briefs/s1-check.md"`. The passes are leads: each passage
   is read on its page before it is cited.
 - **The wages.** Each figure sits beside the unskilled laborer's day wage of the same place and period where a source
-  gives one. Where none does, the question says that wage is SILENT and names the nearest wage, with its place, its unit
-  and its gap in years. A craftsman's wage is used only where no unskilled wage exists. Wages in hand:
+  gives one. Where none does, the question says that wage is SILENT and names the nearest wage, with its class (unskilled
+  or craftsman), its place, its unit and its gap in years. A craftsman's wage is used only where no unskilled wage exists,
+  is always named as a craftsman's, and is never shown as the unskilled wage. Wages in hand:
   - Kyoto 1802-04, unskilled and craftsman (0250);
   - Osaka in the 1620s, unskilled (0257);
   - Edo in the 1850s, craftsman (0256);
