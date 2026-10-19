@@ -2,3 +2,7 @@
 - 0262: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'sake|soba|morohaku|nihachi' l7r pool (glossary entries, a buckwheat modal and code comments using "for its own sake"; no price or rule)
 - 0264: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'hanshi|paper_price|ink_stick' l7r pool (no price or rule)
 - 0265: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniwE 'rent|rents|tanachin|tarudai|sekku|yanushi' l7r pool (glossary entries only - yamori, ground tenant, rent bursary and the like; no price or rule)
+- 0250: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'gamble|fuel.store|day_wage|daily_wage|laborer_wage' l7r pool (only a notice-board modal's 'gamblers'; no wage or rule)
+- 0260: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'dachin|porter|pack.horse|cart_rate|freight' l7r pool (glossary entries for post-station porters and horses; no fare or rule)
+- 0261: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'kimono|tsumugi|cotton_price|sewing|furugi' l7r pool (glossary entries only - kosode, tsumugi, a dry-goods ward; no price or rule)
+- 0266: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'kabuki|theater|theatre|sajiki|ticket' l7r pool (the theater_stage taxonomy kind and glossary entries; no price or rule)
