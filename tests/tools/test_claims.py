@@ -437,3 +437,20 @@ def test_the_cores_hash_is_the_modules_own_and_the_cache_keys_hash_is_another() 
 
     assert cl._sha("x") == hashlib.sha256(b"x").hexdigest()[:16]
     assert cl._key_sha("x") == hashlib.sha256(b"x").hexdigest() and cl._key_sha("a", "b") != cl._key_sha("a\x00b", "")
+
+
+def test_a_claimed_dictionary_s_claims_are_keyed_by_their_own_line_and_its_entries_are_blocks() -> None:
+    """Feature 385 T83 (plan D103): one entry added to `_OVERLAP_EXEMPT` at T08 re-owed all 17 of its claims."""
+    src = 'X = {\n    "a": "one",\n    "b": "two",\n}\n"""Research: rule one - CONVENTION: x"""\n'
+    added = src.replace('    "b": "two",\n', '    "b": "two",\n    "c": "three",\n')
+    (u,) = [x for x in cl.module_units(src, "m.py")[2] if x.qualname == "X"]
+    (v,) = [x for x in cl.module_units(added, "m.py")[2] if x.qualname == "X"]
+    assert u.blocks == ("'a': 'one'", "'b': 'two'") and len(v.blocks) == 3
+    assert u.code(u.claims[0]) == v.code(v.claims[0]), "an entry added leaves the claim's own code"
+    assert u.core != v.core, "...while the core moves, which owes the triage"
+    plain = 'Y = (1, 2)\n"""Research: rule two - CONVENTION: y"""\n'
+    (w,) = [x for x in cl.module_units(plain, "m.py")[2] if x.qualname == "Y"]
+    spread = 'B = {"a": 1}\nZ = {**B, "c": 3}\n"""Research: rule three - CONVENTION: z"""\n'
+    (z,) = [x for x in cl.module_units(spread, "m.py")[2] if x.qualname == "Z"]
+    assert z.blocks == ("**B", "'c': 3")
+    assert w.blocks == () and w.code(w.claims[0]) != cl._sha("section-claim\x1f" + w.claims[0].normalized()), "not a dict: as before"

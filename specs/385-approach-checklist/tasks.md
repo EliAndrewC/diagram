@@ -188,10 +188,57 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T65 An archived plan block edited by a typo after its review is not owed (plan D84)
       research: rendering
       verify: DONE. archived typo-edited blocks owe nothing; landed, test_plan_gate green
-- [ ] T66 A requirement cited from another feature is bundled from that feature (plan D85) [lands-open]
+- [x] T66 A requirement cited from another feature is bundled from that feature (plan D85) [lands-open]
       research: rendering
-- [ ] T67 land-tooling lints before it tests (plan D86) [lands-open]
+      verify: DONE. qualified FR/SC read from their own feature; landed, test_plan_blocks green
+- [x] T67 land-tooling lints before it tests (plan D86) [lands-open]
       research: rendering
+      verify: DONE. lint runs first and alone; landed, land-tooling suite green
+- [x] T68 make test-file formats the changed Python (plan D87) [lands-open]
+      research: rendering
+      verify: DONE. test-file formats the changed Python; landed, test_test_file_format green
+- [x] T69 A task filed mid-feature lands open (plan D88) [lands-open]
+      research: rendering
+      verify: DONE. task-add keeps the Lands open line; T70/T71 filed by it; landed
+- [x] T70 A feature is worked until it is set down (plan D89, D90) [lands-open]
+      research: rendering
+      verify: DONE. set-down-hooks.sh stop refuses a quiet turn with tasks open; make set-down records a reason; suite 13/13; landed
+- [x] T71 A decision cited from another feature's plan is bundled from that plan (plan D91) [lands-open]
+      research: rendering
+      verify: DONE. qualified decisions read from their own plan; landed, test_plan_blocks green
+- [x] T72 A plan review's ledger row is written at landing (plan D92) [lands-open]
+      research: rendering
+      verify: DONE. landings write and commit plan reviews' ledger rows (the reply names its make plan-verdict record); landed, test_ledger_owed green
+- [x] T74 A task id added to the Lands open line owes no review (the arbiter's fix on hour:385-approach-checklist@24, plan D93) [lands-open]
+      research: rendering
+      verify: DONE. appended Lands open ids owe no review; landed, test_plan_gate green
+- [x] T75 A part B that names no new decision owes no review (proposal 3, plan D94) [lands-open]
+      research: rendering
+      verify: DONE. a part B deciding nothing passes without review; landed, test_plan_gate green
+- [x] T76 Part A asks what a constant measures and for the capacity arithmetic first (proposal 7, plan D95) [lands-open]
+      research: rendering
+      verify: DONE. part A items 10 and 11 in checklist.md, the gate holds them; test green here; lands with the spec directory at T11 (land-tooling carries no specs/)
+- [x] T77 make where-time, with the time between turns counted as such (proposal 8, plan D96) [lands-open]
+      research: rendering
+      verify: DONE. make where-time prints both tables, between turns its own column; landed, test_where_time green
+- [x] T78 The house style corrects what the tools write from an agent's reply (plan D97) [lands-open]
+      research: rendering
+      verify: DONE. americanize corrects claims notes and EDIT text; landed, both tests green
+- [x] T79 A tick saying landed is refused while the landing is not on main (the arbiter's fix on hour:385-approach-checklist@25, plan D98) [lands-open]
+      research: rendering
+      verify: DONE. land-tooling records each run, tick refuses an untrue landed; landed, suites green
+- [x] T80 A quiet part B leaves its task's section reviewed (plan D99) [lands-open]
+      research: rendering
+      verify: DONE. quiet part Bs leave a section reviewed; landed, test_plan_gate green
+- [x] T81 Pop-ups owed one check are checked by one agent (proposal 1, plan D100, D101) [lands-open]
+      research: rendering
+      verify: DONE. record-owed names one batched bundle per pop-up check; the guard refuses a single dispatch of a batch; landed, tests green
+- [x] T82 An archive line in a task's section leaves it reviewed (plan D102) [lands-open]
+      research: rendering
+      verify: DONE. archive lines leave a section reviewed; landed, test_plan_gate green
+- [x] T83 A dictionary's claims keyed per entry (step 5 of the GM's order, plan D103, D104) [lands-open]
+      research: rendering
+      verify: DONE. dict entries are blocks, claims keyed by their own line; backfill re-keyed 109 owing nothing; probe entry owed 17 triages, 0 code changed; gate green, cohort 54/54
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

@@ -528,3 +528,19 @@ def test_a_reply_s_notes_are_written_in_the_house_style_and_its_keys_as_given() 
     key = f"l7r/x.py::{brit}_band#a {brit} edge"
     assert key in verdicts, "the key is matched as written"
     assert verdicts[key] == ("DRIFTED", "the gray band is wider") and unclaimed == [("l7r/x.py::f", "a gray stone")]
+
+
+def test_an_entry_added_to_a_claimed_dict_owes_its_claims_a_triage_and_an_edited_claim_its_check(tmp_path: pathlib.Path) -> None:
+    """Feature 385 T83 (plan D104): after the backfill, a dict's new entry owes `section triage`, never `code changed` for all."""
+    mod = f'BANDS = {{\n    "a": 1,\n    "b": 2,\n}}\n"""Research:\n    band a - {Q}\n    band b - {Q}\n"""\n'
+    root = _tree(tmp_path, mod=mod)
+    cur = cx.current(root)
+    index, store = _all_in_step(root), {}
+    for k, r in cur.items():  # the dict's rows as the old fingerprint (the whole value) wrote them
+        if "::BANDS#" in k:
+            index[k]["code"] = cx.engine(REPO)._sha(r.unit.core + "\x1f" + r.claim.normalized())
+    assert cx.backfill_sections(cur, index, store) == 2 and cx.owed(cur, index) == []
+    (root / "l7r" / "diagram" / "hamletgen" / "rows.py").write_text(mod.replace('    "b": 2,\n', '    "b": 2,\n    "c": 3,\n'))
+    assert sorted(w for _k, w in cx.owed(cx.current(root), index)) == [cx.SECTION_TRIAGE, cx.SECTION_TRIAGE]
+    (root / "l7r" / "diagram" / "hamletgen" / "rows.py").write_text(mod.replace("band b - ", "band b, wider - "))
+    assert [w for _k, w in cx.owed(cx.current(root), index)] == ["new"], "an edited claim line is a new claim, checked in full"

@@ -268,7 +268,7 @@ def owed(
             out.append((key, "code changed"))
         elif was.get("triage") == "touched":
             out.append((key, "triage touched"))
-        elif row.unit.kind == "section" and "section" in was and was["section"] != row.unit.core:
+        elif row.unit.line_keyed and "section" in was and was["section"] != row.unit.core:
             out.append((key, SECTION_TRIAGE))  # feature 375 FR-002: its own line stands; the rest of its section moved
         elif was.get("research") != row.research:
             out.append(
@@ -439,7 +439,7 @@ def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path, cont
     snapshots: dict[str, list[str]] = {}
     memo: dict[str, Any] = {}
     for k in keys:  # a section claim's section, snapshot by its blocks: what a later section triage diffs (feature 375, FR-002)
-        if cur[k].unit.kind == "section":
+        if cur[k].unit.line_keyed:
             snapshots[cur[k].unit.core] = [ru.digest([b]) for b in cur[k].unit.blocks]
     for name in cited:
         page = ru.read_page((qdir / name).read_text(encoding="utf-8"))
@@ -467,7 +467,7 @@ def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path, cont
             "research": cur[k].research,
             "uid": cur[k].uid,
             "pages": {ptr.rsplit("/", 1)[1]: page_blocks(ptr.rsplit("/", 1)[1], qdir, memo)[0] for ptr in cur[k].claim.pointers},
-            **({"section": cur[k].unit.core} if cur[k].unit.kind == "section" else {}),
+            **({"section": cur[k].unit.core} if cur[k].unit.line_keyed else {}),
         }
         for k in keys
     }
@@ -604,7 +604,7 @@ def backfill_sections(cur: dict[str, Row], index: dict[str, dict[str, Any]], sto
     n = 0
     for key, row in cur.items():
         was = index.get(key)
-        if was is None or row.unit.kind != "section" or "section" in was:
+        if was is None or not row.unit.line_keyed or "section" in was:
             continue
         if was.get("code") == cl._sha(row.unit.core + "\x1f" + row.claim.normalized()):
             was.update(code=row.code, section=row.unit.core)

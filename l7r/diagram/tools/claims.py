@@ -209,6 +209,12 @@ class Unit:
     names: tuple[str, ...] = ()
     blocks: tuple[str, ...] = ()  # a procedure section's blocks, its claim markers out (feature 375, FR-002)
 
+    @property
+    def line_keyed(self) -> bool:
+        """Its claims fingerprinted by their own line, the rest owing a triage: a procedure section (feature 375, FR-002), even an
+        empty one, and a claimed dictionary, whose entries are its blocks (feature 385 T83)."""
+        return self.kind == "section" or bool(self.blocks)
+
     def key(self, claim: Claim) -> str:
         """The index key of one claim of this unit."""
         return f"{self.path}::{self.qualname}#{claim.label}"
@@ -219,7 +225,7 @@ class Unit:
         claim, so no position says which words a claim rests on, and fingerprinting the whole section re-owed every claim of
         it on any edit (372's wave 106: impl-drift over 73, 105 and 105 claims, nearly all IN-STEP). The rest of the section is
         `core`, and an edit there owes a TRIAGE of its changed blocks (`scripts/record/claims.py`)."""
-        if self.kind == "section":
+        if self.line_keyed:  # ...and a claimed dictionary, whose entries are its blocks (feature 385 T83)
             return _sha("section-claim\x1f" + claim.normalized())
         return _sha(self.core + "\x1f" + claim.normalized())
 
@@ -396,9 +402,20 @@ def module_units(
         read = node.value if isinstance(node, (ast.Assign, ast.AnnAssign)) and node.value is not None else _own_statements(node)  # a constant names itself only as its target
         dump, (vals, names) = nameless_dump(node), values(read)
         end = node.end_lineno or node.lineno  # type: ignore[attr-defined]
-        units.append(Unit(path, qual, kind, node.lineno, end, claims or (mod_claims if inherited else []), inherited, _sha(dump + "\x1d" + vals), errors, names))  # type: ignore[attr-defined]
+        blocks = entry_blocks(read) if kind == "constant" and claims else ()
+        units.append(Unit(path, qual, kind, node.lineno, end, claims or (mod_claims if inherited else []), inherited, _sha(dump + "\x1d" + vals), errors, names, blocks))  # type: ignore[attr-defined]
     units.sort(key=lambda u: u.lineno)
     return mod_claims, mod_errors, units
+
+
+def entry_blocks(value: ast.AST) -> tuple[str, ...]:
+    """A claimed DICTIONARY's blocks, one per entry, `key: value` unparsed (feature 385 T83, plan D103; the GM 2026-10-18): one
+    entry added to `_OVERLAP_EXEMPT` at T08 re-owed all 17 of its claims - a 64-claim round of 372 s. Read as a section is: each
+    claim fingerprinted by its own line, a changed entry owing a TRIAGE of the claims (`scripts/record/claims.py`). Not a dict
+    literal: no blocks, and its claims keep the whole value's fingerprint."""
+    if not isinstance(value, ast.Dict):
+        return ()
+    return tuple(f"{ast.unparse(k)}: {ast.unparse(v)}" if k is not None else f"**{ast.unparse(v)}" for k, v in zip(value.keys, value.values, strict=True))
 
 
 def doc_units(text: str, path: str, tops: tuple[str, ...] | None) -> list[Unit]:

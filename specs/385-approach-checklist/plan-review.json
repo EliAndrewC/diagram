@@ -51,7 +51,7 @@
    "declared": "spec-fidelity"
   },
   "## Landing": {
-   "sha256": "270fd005bb99f66b9811f393dbdbdfcb3809d7781409836690f93da20b6d7b45",
+   "sha256": "48d066e932c746d1c5170fa25b736cdf12c9ade8dc6ac8f5340721a548156844",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -790,6 +790,84 @@
   },
   "### T65 Decisions": {
    "sha256": "0d04b047b5a151e55a42cd33b781ad3bc980ec58c0d02d05c91aba1e647fce7c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T70 - a feature is worked until it is set down (the GM 2026-10-18, step 3 of the approved order)": {
+   "sha256": "f562c7298e99ff252c63234c182ace5e3548515b42aaddaf83936422b83b0843",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T70 Approach (checklist part A)": {
+   "sha256": "b81293b487651b08cef022f31824d233aea70ae29135674620a25a635508b658",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T70 Decisions": {
+   "sha256": "f2604eec6f2869a95e785e2368416905d18acd1307a0f4ecfa06cd527f4721f8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T72 - a plan review's ledger row is written at landing (found landing T70, 2026-10-19)": {
+   "sha256": "2193af9b3276f0fc46de9698b9d5cd256e2ccb69578dea42d7159bab2bcab791",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T72 Approach (checklist part A)": {
+   "sha256": "24525992bc8984819e9289dd568ddce4123c222e794434e9c52814f56b685f65",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T72 part B (2026-10-19T00:24Z)": {
+   "sha256": "21705faa65eed0e7d8a2037c490e789944ebb6bf48cc247f9de61fbfdb5bf517",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T72 Decisions": {
+   "sha256": "154d20d8462f70c2e4aec7874280d68cbad7ac4a9cf0bfe9d469741673a49f09",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T75 - a part B that names no new decision owes no review (the GM-approved proposal 3, 2026-10-18)": {
+   "sha256": "a59715b9dd5e9208d84fb4feed8a4b62570726c4ce1dff7740c5c2d59bc575ed",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T75 Approach (checklist part A)": {
+   "sha256": "42b08ccf9e25a27733a039530b5198d7cff92035cc0fffd70afb91a2ec136a49",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T75 Decisions": {
+   "sha256": "2af79c7e56d345fd06f4ce6fc21de50377a3004838943154bf05b4265f224dee",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T77 - make where-time, the step-back's tables, with the time between turns counted as such (the GM-approved proposal 8, 2026-10-18)": {
+   "sha256": "dac4ac4f49ff43a00d5ecd333e2f54011b954fd6d8cadfcf10423cf8f293f350",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T77 Approach (checklist part A)": {
+   "sha256": "eca806fd8fb01aa3e3918b24296958df01288b71b18ca4991a1ab006437a36e7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T77 Decisions": {
+   "sha256": "015282db9fee9f03ed4094de313540b346ffbfd898e133e0439d2f035da38f16",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -4520,6 +4598,167 @@
      "why": "FR-006 requires tasks run one at a time, each closing with its retro row before the next task-start; the GM's request is 'we do one task and then we measure ... and then we go on and do the next task', and amendment 8 has the step-back's fixes worked as tasks on this feature now ('just make it another task on this feature ... we should do it now'). Landing two more tasks per task, like the rest, narrows nothing the request or spec asks for and decides nothing the spec leaves open beyond applying FR-006 to them."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing: T68-T71 land open",
+     "summary": "The only change since the block's CLEAR verdict: T68, T69, T70 and T71 are added to the 'Lands open' list, so each of these newly inserted tasks lands on main when it closes, with its retro row, while the later tasks stay open - the same rule the block already applies to every other task.",
+     "class": "within",
+     "why": "This applies FR-006's existing one-task-then-retro landing to tasks added since. It is what the GM asked for in the original request ('we do one task and then we measure ... and then we go on and do the next task') and in Amendment 8 ('just make it another task on this feature ... we should do it now'). The rule's wording is unchanged and no task is taken out of the list, so nothing that was asked is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## T70 - a feature is worked until it is set down (the GM 2026-10-18, step 3 of the approved order)",
+    "## T72 - a plan review's ledger row is written at landing (found landing T70, 2026-10-19)",
+    "### T70 Approach (checklist part A)",
+    "### T70 Decisions",
+    "### T72 Approach (checklist part A)",
+    "### T72 Decisions",
+    "### T72 part B (2026-10-19T00:24Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T70-A2 Stop guard, not a cron",
+     "summary": "The check fires at every turn's end (Stop hook) instead of a 10-minute cron.",
+     "class": "within",
+     "why": "The GM's 22:35Z request asked for a 10-minute cron; the session's step 3 proposed the Stop hook in its place, and the GM approved that order ('For one, two, three, and four'). This is the approved shape."
+    },
+    {
+     "id": "T70-A2 question escape dropped",
+     "summary": "Of the approved proposal's three escapes, the second (a turn ending with a question to the GM) is dropped; a turn that really waits on the GM must set the feature down with WHY=\"awaiting the GM on <what>\".",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This departs from the proposal the GM approved, so it gets a ruling. It meets two of the tests. (1) It is implied by the GM's own words: the request names exactly two acceptable states, 'either still in progress or has been correctly set down', and a turn ending in a question is neither. (2) Keeping the escape would defeat the request's stated purpose, 'stopping with tasks partially done is a constant problem'. The motivating case is the overnight run of amendment 6, where a turn ending 'Shall I go on to the next task?' while the GM sleeps is exactly the stall the guard exists to stop, and nothing in a Stop hook can tell a rhetorical question from a real one. Nothing the GM relies on is taken away: a turn that really waits on him stays reachable through a recorded set-down that names what it waits for (Approach step 2), which makes it more visible to him, not less."
+    },
+    {
+     "id": "T70-A2 running work not held",
+     "summary": "The guard never holds a turn while a background command or agent started in the session has not reported back.",
+     "class": "within",
+     "why": "This is the approved proposal's first escape ('something is still running that will wake the session (a background gate, an agent)'). The proposal's safety net for a hung job is the existing 90-minute ceiling, which is unchanged."
+    },
+    {
+     "id": "T70-A2 set-down reason of two words or more, recorded",
+     "summary": "make set-down F= WHY= requires a reason of at least two words and writes a row to set-downs.jsonl.",
+     "class": "within",
+     "why": "This enforces the GM's 'correctly set down' and the approved third escape ('explicitly set down with a new make set-down F= WHY= record'). A check whose only effect is to make the requested set-down a real one serves the request."
+    },
+    {
+     "id": "T70 D89 in-progress from the clone's last task-start",
+     "summary": "The feature checked is the one named by the clone's last task-starts.jsonl record; the guard is silent in a clone with no task-start.",
+     "class": "within",
+     "why": "The GM asked for this 'when a feature is begun'. task-start is the moment a feature's work begins, and a clone with no task-start has no feature begun."
+    },
+    {
+     "id": "T70 D89 GM-review box excluded from 'open task'",
+     "summary": "A feature counts as in progress when its tasks.md has an open box other than the GM-review box and its status line does not close it.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows what counts as 'in progress'. Applied literally, the rule would defeat its own purpose. The GM-review box is the GM's own step, not one the session can work. If that box is the only one open, the feature has nothing left for the session to do, so it is not 'still in progress' in the sense of the GM's words. Holding the turn would demand work that does not exist and would make the session invent work or set the feature down without cause. A feature whose status line closes it is likewise not in progress. Each other open task is still caught."
+    },
+    {
+     "id": "T70 D89 running work read from the transcript",
+     "summary": "RUNNING is a background command ('running in background with ID') or an async agent ('agentId:') with no later task notification of that id.",
+     "class": "within",
+     "why": "This is how the approved first escape is implemented. It decides nothing the request left open."
+    },
+    {
+     "id": "T70 D89 fail open on read error, recorded",
+     "summary": "On any error reading its inputs the guard lets the turn end and records that it failed open.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a carve-out the GM never mentioned: the guard is silent exactly when it cannot decide. It is legitimate because failing closed would defeat the purpose and could leave no reachable exit. If the guard cannot read task-starts.jsonl, tasks.md or set-downs.jsonl, then make set-down, the only escape it offers, may itself fail to satisfy it. A Stop hook that refuses every turn end in that state holds the session in a loop that neither the GM's 'in progress' nor his 'set down' describes. Each fail-open is recorded in the guard log, so the GM can see every silent turn. It is not a quiet exemption."
+    },
+    {
+     "id": "T70 D90 refusal names the next step and is logged",
+     "summary": "The refusal names the open-task count, the first open box's id and title, and the make set-down command; each firing is recorded.",
+     "class": "within",
+     "why": "This is the refusal's wording and its record. It serves the GM's request that the session either keep working or set the feature down, and adds no behavior beyond it."
+    },
+    {
+     "id": "T70-A9 guard suite red without it",
+     "summary": "tests/hooks/test-set-down-hooks.sh, red without the guard.",
+     "class": "within",
+     "why": "Its only effect is to keep the requested guard in place, so it enforces the request."
+    },
+    {
+     "id": "T72-A2 plan-review rows written by the tooling, others unchanged",
+     "summary": "land-tooling and sync-with-main.sh done write and commit the ledger row of every owed pass whose subject is MODE 4: PLAN REVIEW; every other owed pass still refuses, under FR-019's make ledger-owed WRITE=.",
+     "class": "within",
+     "why": "Amendment 5 item 3 is specifically the plan reviews' ledger rows ('could be pre-filled from the recorded plan verdict'), and the GM asked for amendment 5 to be filed for it. Automating that row also answers amendment 8's 'make our tooling do the thing correctly automatically every time'. Leaving the other checks under FR-019's existing command keeps FR-019 as written. Nothing asked for every row to be auto-written, so leaving the others out narrows nothing."
+    },
+    {
+     "id": "T72 D92 acted-on cell names the plan-verdict record",
+     "summary": "The where cell of an auto-written plan-review row reads 'the plan-verdict record (make plan-verdict)'.",
+     "class": "within",
+     "why": "The GM's words were 'verdict and findings cells could be pre-filled', and this also fills the where cell. That is still within: FR-019 says the cell names where the pass was recorded, and a plan review is always recorded by make plan-verdict before the agent returns (Approach step 4). So the cell's content is fixed and true for every such pass."
+    },
+    {
+     "id": "T72-A2 written at landing, never under a gate; committed",
+     "summary": "The writer runs inside land-tooling.sh and sync-with-main.sh done, before their ledger checks, and commits dev/review-ledger.md when it wrote any rows.",
+     "class": "within",
+     "why": "This applies FR-010's constraint against tree writes while a gate runs, and places the write where the refusal would otherwise come. It decides nothing the request left open."
+    },
+    {
+     "id": "T72-A9 module test red without it",
+     "summary": "tests/tooling/test_ledger_owed.py, red without the writer.",
+     "class": "within",
+     "why": "It enforces only the requested writer."
+    },
+    {
+     "id": "T72 part B T74 for the Lands open line",
+     "summary": "The step-back continues; its tooling fix, the Lands open line, is filed as T74.",
+     "class": "within",
+     "why": "This records a later task and decides nothing in these blocks' scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## T75 - a part B that names no new decision owes no review (the GM-approved proposal 3, 2026-10-18)",
+    "## T77 - make where-time, the step-back's tables, with the time between turns counted as such (the GM-approved proposal 8, 2026-10-18)",
+    "### T75 Approach (checklist part A)",
+    "### T75 Decisions",
+    "### T77 Approach (checklist part A)",
+    "### T77 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D94",
+     "summary": "plan_gate.block_status skips a part B block only when its own answers show it decides nothing (item 4 'No', item 5 'Neither', every D-id it names defined elsewhere); one that changes a rule, tunes a number, moves an earlier placement or names a new decision is owed a review as now; make tick keeps checking its items",
+     "class": "within",
+     "why": "Implements step-back change 3, which the GM approved in amendment 8 ('I do like all of your other proposals'): 'A part B is checked mechanically; only one that adds a new decision gets a spec-fidelity review'. The exemption it adds to 375 FR-043 is the GM's own approved change, not the plan's. Treating a rule change, a tuned number or a moved placement as a decision even without a D-id is a faithful reading of 'adds a new decision' and keeps the review where deciding happens, so it does not narrow the request."
+    },
+    {
+     "id": "T75-order",
+     "summary": "the rule lives in plan_gate.block_status with a test in tests/tooling/test_plan_gate.py, red without it",
+     "class": "within",
+     "why": "Change 3 is labeled tooling ('checked mechanically'); a test that fails only when the exemption is missing or too wide enforces the request."
+    },
+    {
+     "id": "D96",
+     "summary": "where_time.py books each gap to the task active at its start under split_time's categories, except that every gap from a Stop to the session's next UserPromptSubmit is 'between turns', with no attempt to tell background waiting from idle",
+     "class": "within",
+     "why": "Implements step-back change 8 ('make where-time produces the tables above'), approved in amendment 8. The between-turns rule is the session's own (labeled O) and fixes a measured defect: the overnight stall was booked as thinking. FR-014 already groups waiting on a subagent, a background run or the GM as one category, 'the session waiting', and the agents table and background-run column still report what ran. So the merged column drops nothing that was asked for. Ruled as an implementation rule of ours that serves the approved target's purpose (the idle column right), not as a carve-out."
+    },
+    {
+     "id": "T77-scope",
+     "summary": "make where-time F= [SINCE=] prints the per-task table and the agents table; the categories stay feature_report.split_time's; scratch script promoted to scripts/measure/where_time.py with tests/tooling/test_where_time.py",
+     "class": "within",
+     "why": "Change 8 asks for the step-back's tables as one command. FR-005 and FR-014 are cited as the shape the tables follow. Reusing the existing categories adds no new taxonomy. The step-back report's tables are not in the bundle, so the claim that these two tables are 'the tables above' was not checked against them."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -5496,6 +5735,505 @@
      "summary": "One goal: the four qualified forms bundle 375's FR-044 headed with its feature. tests/tooling/test_plan_blocks.py is red without it.",
      "class": "within",
      "why": "The test exists only to enforce the requested fix (GM 2026-09-20). It is one goal, per FR-015."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T69": {
+   "section_sha256": "4a6ce7a11daa31a18742c43265bcd3179feefbcbe3811cdf82efcc38cb1e515c",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D88",
+     "summary": "make task-add, when plan.md holds a **Lands open**: line, appends the new task id to it and writes the box with [lands-open]; the line's block still owes its review (make plan-delta).",
+     "class": "within",
+     "why": "Amendment 6 asks for obvious tooling/process improvements along the way, amendment 8 asks for task-insertion tooling and that the tooling do the thing correctly automatically every time rather than rely on remembering. The defect is measured (T10's push refused over T66/T67). The guard it touches is kept: the line's edit still owes its block review, so the reviewed-plan condition of the landing rule is not bypassed."
+    },
+    {
+     "id": "D88-no-line",
+     "summary": "A plan with no **Lands open**: line is left untouched by task-add.",
+     "class": "within",
+     "why": "Leaves existing behavior for features that do not land task by task; narrows nothing the GM asked for, since the request concerns the task-by-task landing that tripped."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T68": {
+   "section_sha256": "53ec11da396934fe6ebd160d1a348179717a051eade15dd4734ffa7c8e0d2ca1",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D87",
+     "summary": "make test-file runs ruff format --force-exclude over the .py files changed against the merge base with origin/main (committed, uncommitted and untracked) before pytest, printing 'test-file: formatted <files>' when any changed and staying silent otherwise.",
+     "class": "within",
+     "why": "Amendment 8 (the GM): 'anytime that you can just forget to do ... make our tooling do the thing correctly automatically every time', and 'something that is run automatically when certain actions are taken'; amendment 6 asks for 'any obvious performance / tooling / process improvements along the way'. Running the formatter in the step a session already runs before every landing, so a forgotten make format can no longer reach a lint, is that request carried out directly. Printing what it reformatted reports the automatic action; it adds no behavior."
+    },
+    {
+     "id": "T68-A2-push-unchanged",
+     "summary": "The gate's and land-tooling's ruff format --check stay check-only (no rewrite at the push).",
+     "class": "within",
+     "why": "The request asks for automation where a step can be forgotten; it never asks for the push to rewrite files. Leaving the existing checks as they are keeps behavior the GM did not ask to change, and the checks stay as the backstop for a session that skips test-file. Nothing asked for is dropped."
+    },
+    {
+     "id": "T68-A2-scope",
+     "summary": "Only .py files the clone changed against its merge base with origin/main are formatted.",
+     "class": "within",
+     "why": "This limits the automatic rewrite to the session's own work. It removes nothing the request covers: the forgotten step being automated is formatting the Python the session changed. Formatting files the session did not touch would be a change nobody asked for."
+    },
+    {
+     "id": "T68-A9-test",
+     "summary": "New tests/tooling/test_test_file_format.py, red without the format step.",
+     "class": "within",
+     "why": "Enforcement of the requested automation: delete the format step and the test has nothing left to check (GM 2026-09-20)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T71": {
+   "section_sha256": "aecf7d907479b7bac848727e1c23ce8f1fa587144749bd2e506967cddf506300",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T71 (the task)",
+     "summary": "A tooling task: a plan-review bundle must carry the decision a block cites from another feature, not this feature's same-numbered decision.",
+     "class": "within",
+     "why": "Amendment 6 asks the overnight run to 'implement any obvious performance / tooling / process improvements along the way'; a review bundle that hands the reviewer the wrong D18 (385's sty predicate for 375's) is a defect in the plan-stage review tooling this feature runs on, and fixing it is exactly such an improvement. It adds no behavior beyond reading the cited text."
+    },
+    {
+     "id": "D91",
+     "summary": "D85's qualified-citation reader widened from FR/SC to decisions: (?:plan )?D<n> after a feature number resolves from that feature's plan.md + plan-done.md through the same paragraph reader, under the same <!-- feature NNN --> line; an unknown id is left out.",
+     "class": "within",
+     "why": "It extends D85's existing rule to the one id kind it missed, using the same sources this feature's own decisions are read from and the same unknown-id handling D85 already sets; it narrows nothing the request or spec asks for, and its done-test (red without it) only enforces the fix."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T70": {
+   "section_sha256": "d9fd0bc74550f74a660eb3ec2945a6a3870739415855ddba1bfd84a598ad1ecd",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T70-drop-question-escape",
+     "summary": "The approved proposal's second escape (a turn ending with a question to the GM) is dropped; a turn that truly waits on the GM sets the feature down with WHY=\"awaiting the GM on <what>\" instead (Approach items 2 and 9, D89).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A departure from the approved proposal (amendment 8, 22:38Z, approved by 'I do like all of your other proposals'), so presumed wrong, but it passes on two grounds. (1) The GM's own words imply it: the check he asked for is 'whether or not the feature is either still in progress or has been correctly set down'. That gives two states and no third. A turn that ends on a question, with nothing running and no set-down, is neither. The question escape was the session's addition, not his. (2) Keeping it would defeat the request's stated purpose, and the failure is concrete: 'stopping with tasks partially done is a constant problem with the Opus line of models', and the classic form of that stop is a summary ending 'Shall I go on to the next task?' while the GM sleeps. The question escape lets exactly that turn through. Nothing the escape served is lost: a real wait on the GM is still allowed, as a recorded set-down with a reason, which is the 'correctly set down' state he named. The departure is stated openly in the plan rather than buried."
+    },
+    {
+     "id": "D89-in-progress",
+     "summary": "IN PROGRESS = the last task-start's feature has an open box other than the GM-review box, and its status line does not close it.",
+     "class": "within",
+     "why": "This is how the GM's 'still in progress' is put into practice. The GM-review box is the GM's own step, not left work the session can do. Unchanged since the block's last CLEAR verdict."
+    },
+    {
+     "id": "D89-running",
+     "summary": "RUNNING = a background command or async agent in the transcript with no later task notification of its id.",
+     "class": "within",
+     "why": "Carries the approved escape 'something is still running that will wake the session'. Unchanged."
+    },
+    {
+     "id": "D89-set-down",
+     "summary": "SET-DOWN = a set-downs.jsonl row for the feature at or after the task-start, written by make set-down F= WHY= with a reason of two words or more.",
+     "class": "within",
+     "why": "Carries the approved 'make set-down F= WHY= record' and the GM's 'correctly set down'. Unchanged."
+    },
+    {
+     "id": "D89-silent-no-task-start-and-fail-open",
+     "summary": "Silent in a clone with no task-start. Fails open, recorded, on any read error.",
+     "class": "within",
+     "why": "With no task-start, no feature has been begun, and the GM asked for a check 'when a feature is begun'. Failing open guards against a Stop guard that holds a session in a loop. The failure is recorded, so it is not silently allowed. Unchanged since the CLEAR verdict."
+    },
+    {
+     "id": "D90-refusal-text",
+     "summary": "The refusal names the open-task count, the first open task and the make set-down command. Each firing is logged.",
+     "class": "within",
+     "why": "The refusal names the next step, as Approach item 9 requires. Its wording is not a fidelity matter."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T72": {
+   "section_sha256": "85c245edff58effaacdfeb6d76875e4754e159444cde6877ced9e7b94e7f33ee",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D92",
+     "summary": "ledger_owed.py --write-plan-reviews appends the filled row of every owed pass whose subject starts 'MODE 4: PLAN REVIEW', its where cell 'the plan-verdict record (make plan-verdict)'; land-tooling.sh and sync-with-main.sh done run it before their ledger check and commit dev/review-ledger.md when it wrote any",
+     "class": "within",
+     "why": "Amendment 5 item 3 (the session: plan reviews' ledger rows filled by hand, 'could be pre-filled from the recorded plan verdict'), approved by the GM ('file amendment 5 for the 3 tooling fixes'); amendment 8 ('make our tooling do the thing correctly automatically every time') and amendment 6 ('implement any obvious ... tooling ... improvements'). FR-019's rule that the acted-on cell names where the pass was recorded is kept: a plan review is recorded by make plan-verdict. Widens automation; narrows nothing asked."
+    },
+    {
+     "id": "T72-scope-plan-reviews-only",
+     "summary": "only MODE 4 plan-review passes are written automatically; every other owed pass still refuses as now and keeps FR-019's make ledger-owed WRITE= route",
+     "class": "within",
+     "why": "Amendment 5 item 3 names plan reviews only; FR-019 (write each other row from the agent's reply with the session's word on what was acted on) is left whole for other checks. Not a carve-out from anything requested."
+    },
+    {
+     "id": "T72-timing-at-landing",
+     "summary": "the rows are written and committed at landing (land-tooling, sync-with-main.sh done), before the ledger check, never while a gate runs",
+     "class": "within",
+     "why": "FR-019 requires the row before a push; FR-010 refuses a tree write under the session's own gate. Writing at landing satisfies both."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T74": {
+   "section_sha256": "483c60fe95f40df1c9233908bb4bba1993c1acba573c66fa7ef60152052024bb",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T74-approach",
+     "summary": "Goal, constraints, order, exits and Done line (unchanged from the text last judged CLEAR): a block differing from its reviewed text only by ids appended to its Lands open line is not owed; any other change, an id removed among them, is owed.",
+     "class": "within",
+     "why": "Byte-identical to the CLEAR text in earlier.md; it carries the round arbiter's fix as the block quotes it (the arbiter stands where the GM was asked, feature 379; request.md itself carries no arbiter ruling, so the authority for this block is the plan's quotation of it) and keeps FR-043's default for every other change."
+    },
+    {
+     "id": "D93a",
+     "summary": "A reordering, or an id dropped or repeated, on the Lands open line is owed, with a test showing a reorder-only edit owed.",
+     "class": "within",
+     "why": "This is the arbiter's own 'any other change to the block, an id removed among them, is owed as now' and FR-043's default that a changed block owes its review. It removes an over-exemption the earlier subset wording carried (a reorder, or a reorder plus an addition, would have passed as a superset); it brings the rule closer to FR-043, not further from it."
+    },
+    {
+     "id": "D93b",
+     "summary": "The Lands open line is read as an ordered list: the block is not owed only where the reviewed ids are the current line's start (ids appended), not where they are merely a subset.",
+     "class": "within",
+     "why": "It brings the mechanism into line with the Done line already judged CLEAR ('only by ids appended'). It matches the arbiter's 'a task id added by make task-add' exactly if task-add writes the new id at the end of the line. That premise is not settled by the bundle, and the arbiter's required test ('a test showing such a delta is CLEAR without a dispatch') is what settles it: that test must be driven by make task-add's real output, not a hand-appended id, so that a mid-line insertion by task-add would turn it red. That test enforces the arbiter's fix; it is not new scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T76": {
+   "section_sha256": "8d40a8d1436e34f70dde2d71c8a994d516377b50f7da53929de867effe81e4db",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D95-numbered",
+     "summary": "The two questions become new numbered items 10 and 11 of checklist.md part A (not sub-bullets under item 4).",
+     "class": "within",
+     "why": "Change 7 of the step-back report, approved by the GM's 'I do like all of your other proposals' (amendment 8), asks for 'Two new checklist items in the start-of-task Approach'. Two new numbered part A items is the literal reading, and under D8 a numbered item is one the gate refuses a tick without, which honors the GM's rule 'a checklist item or a tool, never a reminder'. This revision follows the request more closely than the earlier CLEAR version (sub-bullets under item 4)."
+    },
+    {
+     "id": "D95-numbers-kept",
+     "summary": "Items 1-9 keep their numbers; 10 and 11 are appended.",
+     "class": "within",
+     "why": "This is how the items are placed. It narrows nothing the request asked for and keeps answers already written meaning what they meant."
+    },
+    {
+     "id": "D95-wording-10",
+     "summary": "Item 10: 'Before moving a constant. List every use of it and what each one measures'.",
+     "class": "within",
+     "why": "It carries 'list every use of a constant before moving it'. Adding 'what each one measures' serves the incident the proposal came from (T09 did not read what BUNDLE_PITCH measured) and asks no more than listing the uses already implies."
+    },
+    {
+     "id": "D95-wording-11",
+     "summary": "Item 11: 'Before fitting things into room. Write the capacity arithmetic (how many, how wide, against how much room) before rolling anything'.",
+     "class": "within",
+     "why": "It carries 'write the capacity arithmetic before running experiments'. In this project the experiments in question are rolls (T06's 20-minute run), so 'before rolling anything' is the same moment. The parenthesis spells out what capacity arithmetic is."
+    },
+    {
+     "id": "D95-na-10",
+     "summary": "Item 10 may be answered 'n/a' when no constant is moved.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged on its own. The GM's words carry this condition already: 'list every use of a constant before moving it' only applies when a constant is moved. Asking for the list when none is moved would have no object. The rule exists to stop a constant moving before anyone knows its uses, and an n/a on a task that moves nothing does not weaken that."
+    },
+    {
+     "id": "D95-na-11",
+     "summary": "Item 11 may be answered 'n/a' when nothing is being fitted into room.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged on its own. Capacity arithmetic can only be written where there is a capacity question, so for a task with none it is impossible, not merely awkward. The trigger 'fitting things into room' covers the motivating case exactly (T06: households x farmstead width against the margin's length), so the rule still reaches what it is for."
+    },
+    {
+     "id": "D95-open-tasks",
+     "summary": "An open task whose Approach predates the change must answer items 10 and 11 before its tick; ticked tasks are not reopened.",
+     "class": "within",
+     "why": "The request puts the items in the start-of-task Approach. The existing D8 gate makes any unticked task answer every numbered part A item, so this follows from enforcing what was asked and adds no carve-out. Finished tasks have no start left to ask at."
+    },
+    {
+     "id": "T76-test",
+     "summary": "tests/tooling/test_approach_gate.py shows an Approach answering items 1-9 alone is refused; red without items 10 and 11.",
+     "class": "within",
+     "why": "This is enforcement of the request. Delete the two items and the test has nothing left to check, so it serves the request rather than adding scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T77": {
+   "section_sha256": "828203b1fb224288fd3128a29ba8be77809b2b73765e2417722548b38ed4dbee",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T77-target",
+     "summary": "make where-time F=<n> [SINCE=<ISO>] prints the step-back's per-task table and agents table, implemented in scripts/measure/where_time.py promoted from the scratch script",
+     "class": "within",
+     "why": "This is the step-back report's change 8, verbatim 'make where-time produces the tables above', which the GM approved in amendment 8 ('I do like all of your other proposals'; he declined only change 2). The F= and SINCE= arguments and the script's location are implementation choices inside that target."
+    },
+    {
+     "id": "D96",
+     "summary": "Every gap from a session's Stop to its next UserPromptSubmit is booked as 'between turns', however many events fall inside, never as 'thinking'. Waiting on background work and idle time are not told apart in that column; the agents table and the background-run column say what ran.",
+     "class": "within",
+     "why": "The goal is that the tables' idle time is right. Item 4 measures the failure it fixes: about 80 minutes of the overnight stall were split by hook events and booked as thinking. Not telling background waits from idle inside this one column narrows nothing. FR-014's waiting bucket groups a subagent, a background run and the GM under one heading, and the subagents' own work still appears in the agents table. A woken turn fires UserPromptSubmit (measured, item 4), so its work goes to its task and not to between turns."
+    },
+    {
+     "id": "T77-gap-attribution",
+     "summary": "Each gap is booked to the task active at the gap's start, in feature_report.split_time's categories, with 'between turns' added",
+     "class": "within",
+     "why": "This reuses the existing categories so that where-time agrees with make feature-report (FR-005/FR-014). It adds one category and removes none."
+    },
+    {
+     "id": "T77-test",
+     "summary": "tests/tooling/test_where_time.py, red without the between-turns booking",
+     "class": "within",
+     "why": "Its only job is to enforce the approved target and its idle column. It verifies the request and adds no scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T75": {
+   "section_sha256": "7f46c7a8f7874f88d67722afd44f258de431ee3777d9c0e80647729e18557fd1",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D94",
+     "summary": "block_status skips a '### T<n> part B (...)' block only when it decides nothing, read from its own answers: item 4 'No', item 5 'Neither', and every D<n> it names defined elsewhere in plan.md or plan-done.md; a part B that changes a rule, tunes a number, moves an earlier placement or names a new D-id is owed a review as now.",
+     "class": "within",
+     "why": "Implements the GM-approved change 3 of the step-back report (amendment 8: 'I do like all of your other proposals'): 'A part B is checked mechanically; only one that adds a new decision gets a spec-fidelity review'. The check is mechanical (read from the block's own answers and D-ids), as asked. Changing a rule, tuning a number or moving an earlier placement is a decision whether or not it carries a D-id, so owing those a review is what 'only one that adds a new decision' means, not a carve-out from it; the earlier text (D-ids only) let an unlabeled decision skip, and this version closes that gap without reviewing any part B that decides nothing. Under FR-043 the skip removes a block's review only when it adds no decision."
+    },
+    {
+     "id": "T75-items-to-tick",
+     "summary": "A part B's items stay make tick's to check (approach_gate refusal of unanswered items), unchanged.",
+     "class": "within",
+     "why": "The 'checked mechanically' half of change 3; it keeps existing behavior the request relies on and adds nothing."
+    },
+    {
+     "id": "T75-done-test",
+     "summary": "tests/tooling/test_plan_gate.py red without the rule: a No/Neither part B naming no new D-id is not owed; one answering Changing/Tuning, Yes to item 4, or naming a new D-id is.",
+     "class": "within",
+     "why": "A test whose only effect is to enforce the requested rule (GM 2026-09-20: enforcement of what was asked is not unrequested scope)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T78": {
+   "section_sha256": "874ef402e9d860dad34bf1dd515cdc4ecaadd70028cf3147e607203687555342",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T78-warrant",
+     "summary": "The task's warrant is amendment 6 ('implement any obvious performance / tooling / process improvements along the way') applying CLAUDE.md's house style (American spellings, corrected rather than refused) to two writers the hook does not see; replaces the earlier block's quotation of a session reply that request.md does not carry.",
+     "class": "within",
+     "why": "Amendment 6 is in request.md verbatim and is dated 2026-10-18; the fix is measured (a gate red on `grey` copied by claims.py record from a reply) and only extends an existing GM rule to an unseen route, which is an obvious tooling improvement rather than new behavior the GM did not ask for."
+    },
+    {
+     "id": "T78-scope",
+     "summary": "Correct the two writers that copy agent words into tracked files: claims.py record (index notes) and apply_edits.py (EDIT new text).",
+     "class": "within",
+     "why": "Serves the stated goal (an agent's British spelling never reaches a tracked file through a tool) and nothing beyond it; no other writer or behavior is added."
+    },
+    {
+     "id": "D97-one-corrector",
+     "summary": "Extract the hook's plain-text correction into hm_house.americanize(text), called by the hook as before and by the two writers; PAIRS stays the one table.",
+     "class": "within",
+     "why": "Refactor that keeps one table and the hook's behavior unchanged; settles how, not what."
+    },
+    {
+     "id": "D97-notes-not-reply",
+     "summary": "claims.py record corrects each note parsed from a reply, not the whole reply, so a claim key or path with a British spelling still matches.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows 'American spellings everywhere' to the prose the tool writes. Literal application is physically impossible here: a key or path rewritten no longer identifies its claim or file, so the record would fail. A key or path names something already in the repository rather than bringing an agent's spelling in, so the goal (no new British spelling enters through the tool) and the gate it protects are untouched."
+    },
+    {
+     "id": "D97-old-text",
+     "summary": "apply_edits.py corrects an EDIT's new text only; the old text is matched as written.",
+     "class": "within",
+     "why": "The old text is a match anchor and is never written to the file, so the house style has nothing to correct in it."
+    },
+    {
+     "id": "D97-request-md",
+     "summary": "An EDIT on specs/*/request.md is not corrected, as the hook does not correct one.",
+     "class": "within",
+     "why": "Implied by the GM's own rule cited in constraint 2: the GM's own writing is never corrected."
+    },
+    {
+     "id": "T78-quotation",
+     "summary": "A quotation (blockquote, q, corner brackets, curly quotes) is held out of correction as the hook holds it.",
+     "class": "within",
+     "why": "The house style rule itself keeps a quotation of another's text."
+    },
+    {
+     "id": "T78-tests",
+     "summary": "test_claims_index.py and test_apply_edits.py red without the correction.",
+     "class": "within",
+     "why": "Enforcement of the requested behavior only; deleting the behavior leaves the tests nothing to check."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T80": {
+   "section_sha256": "67f19661afe4226d6f305abd9c98baab4f8755784b8fbea54c95a4c63dcb3f9f",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D99",
+     "summary": "task_current, where the section digest differs, compares earlier and current text with every part B that decides_nothing (D94) removed from both, by the existing typo rule; a part B that decides is left in and still owes the section's review.",
+     "class": "within",
+     "why": "Implements the GM's approved change 3 (2026-10-18): 'A part B is checked mechanically; only one that adds a new decision gets a spec-fidelity review.' Today a quiet part B, though itself skipped by D94, stales its task's section verdict and re-owes review of the section's other blocks - a review caused by a part B that adds no decision, which change 3 says should not happen. D99 removes exactly that cost and nothing more: the quiet/deciding test is D94's own, unchanged; a deciding part B stays in the comparison; any other edit to the section still changes the comparison and is owed as now (constraint 2). A part B that flips between quiet and deciding changes the stripped text and is owed, so the exemption cannot launder a decision."
+    },
+    {
+     "id": "T80 Approach 2/9 (scope and done)",
+     "summary": "Only quiet part Bs are taken out of the section comparison; every other change to the section is owed as now; a test in tests/tooling/test_plan_gate.py red without the change.",
+     "class": "within",
+     "why": "States the boundary of D99 at the GM's words (only a decision-adding part B is reviewed) and adds a test whose only effect is to enforce that the requested behavior happens - enforcement of the request, not new scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T79": {
+   "section_sha256": "0d50b1d6dc901f77acfedb9f11d5044018448b77ed560ad612fd4b23588c2320",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D98-record",
+     "summary": "land-tooling.sh appends {task, files, outcome, utc} to <git dir>/land-tooling.jsonl from an exit trap, so a run that dies early still leaves a row whose outcome is the step it stopped at; the task is the clone's active one from task-starts.jsonl",
+     "class": "within",
+     "why": "The arbiter's fix needs 'that task's last make land-tooling FILES' and whether 'that landing's log ends in a failure'; a per-run row of files and outcome is the record that makes both checkable. Moving the write into an exit trap only widens it to runs that die early, which are exactly the failed landings the fix is for (the T72 incident). Mechanism, not scope."
+    },
+    {
+     "id": "D98-note-match",
+     "summary": "the check fires when the NOTE matches \\blanded\\b case-insensitively (re.I), so 'Landed via make land-tooling' is caught",
+     "class": "within",
+     "why": "The fix scopes the refusal to a NOTE that 'says landed'; 'Landed' at a sentence start says the same thing, so matching in any case enforces the fix's own trigger rather than adding to it. A note that does not say landed is still not checked, as the fix states."
+    },
+    {
+     "id": "D98-refusals",
+     "summary": "a failed last outcome refuses naming the log; a landed one refuses where git diff --quiet origin/main -- <file> fails (after a fetch) for any file in its FILES, naming the file",
+     "class": "within",
+     "why": "These are the fix's two conditions verbatim ('any file ... still differs from origin/main, or ... that landing's log ends in a failure'), each refusal naming what the fix says to name for that condition (the differing file, the failed log). The fetch makes origin/main current so the comparison is against main as it stands."
+    },
+    {
+     "id": "D98-no-row",
+     "summary": "a task with no land-tooling row is not refused (it did not land through the tool, or lands with its feature)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the fix's own words: the refusal is defined over 'that task's last make land-tooling FILES' and 'that landing's log'; with no land-tooling run there is no FILES list and no log, so the condition has nothing to test. Refusing such ticks would be a new rule the arbiter did not give (and would block tasks that land with their feature through the ordinary push). It does not gut the fix's purpose: the incident it answers was a tick claiming a failed land-tooling run, which always leaves a row under D98-record."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T81": {
+   "section_sha256": "f37babd8f9fe1df5375723d9e96c7305efb85774ba5b82750b3478a28eb0d7f5",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T81-grouping",
+     "summary": "Pop-ups are grouped by the check agent they owe (modal-form, modal-depiction, modal-research), not by a shared template.",
+     "class": "within",
+     "why": "The approved step-back change 1 says 'pop-ups that share a template are checked once as a group'; amendment 1 item 2, also GM-approved, says 'one agent should judge all the pop-ups that cite a changed page, not one agent per pop-up'. Grouping every pop-up that owes the same check covers both readings and is no narrower than either; pop-ups that share a template owe the same check, so they are batched."
+    },
+    {
+     "id": "T81-threshold-two",
+     "summary": "A batch is named only where two or more unanswered pop-ups owe the same check.",
+     "class": "within",
+     "why": "A group of one is not a group; a single owed pop-up is already one agent reading one pop-up, which is what the request asks for."
+    },
+    {
+     "id": "D100-batched-line",
+     "summary": "record_owed.report prints one 'batched: make modal-bundle KIND=\"<kinds>\" FOR=<agent>' line per check and writes the batches to <git dir>/modal-batches.json with the time.",
+     "class": "within",
+     "why": "This carries the request: the measured cause (90 single-pop-up dispatches, every one following record-owed's one-KIND line) is fixed at the listing every session follows, on every run - the tool, not a reminder. It reuses T02's multi-KIND bundle (D12) rather than adding a new one."
+    },
+    {
+     "id": "D100-triage-carve-out",
+     "summary": "A triage-owed pop-up, which goes to make modal-triage first, is left out of the batched line.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the GM's own amendment 1 item 1 (FR-008): a re-owed pop-up is triaged against what the last check read before any check is spent, and triage may find it owes nothing. Batching it before triage would spend the full check FR-008 exists to save. The block's wording ('goes to make modal-triage first') is sequencing, not exclusion; the ruling rests on that premise - a pop-up still owed after triage is batched on the next record-owed listing like any other. Were triaged pop-ups instead left permanently to single dispatches, it would recreate the measured failure for exactly the pop-ups a page change re-owes and would be NOT LEGITIMATE."
+    },
+    {
+     "id": "D101-refusal",
+     "summary": "hm_checks.dispatch refuses a pop-up agent whose MANIFEST names one pop-up when that pop-up is in a current batch of two or more for the same agent, naming the batched command.",
+     "class": "within",
+     "why": "The GM's rule is a tool, never a reminder; a refusal whose only reach is the single-pop-up dispatch of a check the request says is checked once as a group enforces the request and nothing else. It covers the measured failure mode (single dispatches); a hand-built partial batch is not reached, which is within because the batched line D100 prints is the route sessions take to a multi-KIND command."
+    },
+    {
+     "id": "D101-window-fail-open",
+     "summary": "The guard reads only a modal-batches.json written in the last two hours; no file, or an older one, refuses nothing.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A refusal on a stale snapshot would refuse dispatches outside the request - batches already answered or changed by later page edits - so the rule cannot be applied without a current record. Computing the batch at dispatch would cost record-owed's 4.4 s / 3.3 s (labeled measurement) on every dispatch. The purpose survives: D100 makes the batched line appear on every record-owed run, which is where the 90 single dispatches came from; D101 is the backstop. The two-hour figure is an implementation knob, not a target."
+    },
+    {
+     "id": "D101-BATCH_OK",
+     "summary": "BATCH_OK=\"<reason>\" in the prompt lets a single dispatch through, recorded like the guard's other escapes.",
+     "class": "within",
+     "why": "Every guard in this project carries a recorded-reason escape; the request does not ask for an unescapable guard, and a recorded escape is a logged, auditable act rather than a silent departure. It also recovers from a false refusal where a batch member has since been answered."
+    },
+    {
+     "id": "T81-not-a-dispatch-hook-computation",
+     "summary": "Owed-ness is computed in record-owed and read from a file at dispatch, not recomputed by the hook.",
+     "class": "within",
+     "why": "Design choice inside the request, backed by the labeled 2026-10-19 timing; it changes no scope."
+    },
+    {
+     "id": "T81-done-and-tests",
+     "summary": "Done names one goal; tests/tooling/test_record_owed.py and tests/hooks/test-pair-hooks.sh are red without it; budget 60 min; order record_owed, then hm_checks, then tests.",
+     "class": "within",
+     "why": "The tests only fail when the requested batching or its refusal is absent - enforcement of the request (GM 2026-09-20), and one goal per task is amendment 4's own checklist item."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T82": {
+   "section_sha256": "91f260ada31ce31939ae1de26bf439249b8993bc61c4b7fbd6b40c44da0f8d79",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D102",
+     "summary": "task_current compares a task's section and its reviewed text with ARCHIVE_LINE taken out of both (as block_digest already does per block); digest match and typo rule otherwise unchanged",
+     "class": "within",
+     "why": "Feature 375 FR-044 says the archive's generated line owes no review; the per-task section comparison not stripping it made T79's reviewed blocks owed again after an auto-archive (amendment 8's 'run automatically' request). Stripping exactly that generated line from both texts carries out FR-044 for the section check, and nothing more: no other kind of edit stops counting, and no review is waived for authored text. Amendment 6 also approves fixing obvious tooling defects along the way."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T83": {
+   "section_sha256": "575fd60b84eea3637bb4fd881fd5d680469108f75d46072d5a5d55b80f9bc14d",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D103",
+     "summary": "A module-level dict-literal constant carrying its own claims is read as a section: one block per entry, each claim fingerprinted by its own line ('section-claim'), core stays the whole value's.",
+     "class": "within",
+     "why": "This is the step-back's change 4, 'Per-entry keying of a dictionary's claims', which the GM ordered worked as a task (amendment 8: 'instead of filing me per entry key ring feature, you should just work it. As a task on this existing feature'). It applies 375 FR-002's line-scoped rule to a dict, so an entry added re-opens only the claims it bears on, which is the purpose. Limiting it to module-level dict literals does not narrow the request: claims attach to claims-index units, the measured population of claimed dicts is 57 module-level dict constants (labeled with its date and method), and the motivating case, _OVERLAP_EXEMPT, is one of them."
+    },
+    {
+     "id": "D104",
+     "summary": "claims.py owed owes 'section triage' for any unit with blocks whose recorded core differs (sections and dicts alike); a claim line edited still owes that claim in full; backfill-sections re-keys a dict claim only when its row is current under the old whole-value fingerprint, records its core and block digests, leaves an owed row owed, and runs once.",
+     "class": "within",
+     "why": "This is how the per-entry keying gets carried out. The triage still reads every changed entry against every claim and sends the touched ones to impl-drift, so nothing the old fingerprint caught goes unchecked. It only stops an unrelated entry from re-owing every claim, which is the cost the step-back measured on _OVERLAP_EXEMPT. The backfill clears nothing that is owed: a row current under the stricter whole-value fingerprint is current under the line fingerprint too, and an owed row stays owed. That keeps the rule from settling claims that nobody reviewed."
+    },
+    {
+     "id": "Approach-9",
+     "summary": "Done is one goal, measured: an entry added owes a triage rather than 'code changed', a claim line edit owes in full, the backfill adds no owed dict claim it did not owe before, and two test files go red without it.",
+     "class": "within",
+     "why": "These tests only fail when the requested keying is missing, so they enforce what the GM asked for and are not added scope (GM 2026-09-20). One goal per task follows amendment 4."
     }
    ],
    "verdict": "CLEAR"

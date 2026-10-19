@@ -2002,3 +2002,302 @@ knob, so `dikepond_split` rolls all five water shares (0.6, 0.4, 0.7, 0.5, 0.3),
 pop-up, and 0018's drawing page names all five.
 
 <!-- plan-archive: T30 to T52 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-10-18 -->
+## T66 - a requirement cited from another feature is bundled from that feature (found by T65's plan review, 2026-10-18)
+
+### T66 Approach (checklist part A)
+
+1. **The goal, in the world.** A plan review reads the requirement a block cites, not a same-numbered requirement of another feature.
+2. **The constraints.** Feature 375 amendment 11 (FR-046): `spec-cited.md` holds every requirement the blocks name, in full. Tooling only; a test red without it.
+3. **Where each comes from.** Feature 375 (O); the defect is T65's plan review's finding (amendment 6, the GM's "obvious ... tooling ... improvements").
+4. **Do they describe the world here?** Yes - measured 2026-10-18: T65's blocks cite "Feature 375 FR-044" and "FR-005(b)"; the bundle's `spec-cited.md` carried 385's own FR-005 (the per-task time split), a different requirement, and nothing of 375's - `plan_bundle.build` reads the ids against the reviewed feature's `spec.md` alone. 385's plan names another feature's requirement in this form ("feature 375 FR-0..", "375 FR-0..", "feature 375, FR-0..") in 22 places (a grep of plan.md for the form, 385 itself left out).
+5. **The order.** The qualified reading in `build`, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 25 min.
+9. **Done, measured.** One goal: a block citing `375 FR-044` (or `feature 375 FR-044`, `feature 375's FR-044`, `feature 375, FR-044`) gets 375's FR-044 paragraph in `spec-cited.md`, headed with its feature, and the reviewed feature's same-numbered requirement only when the block also cites it unqualified; `tests/tooling/test_plan_blocks.py` red without it.
+
+### T66 Decisions
+
+**D85 - a qualified citation read from its own feature.** `plan_bundle.build` reads `(?:feature )?NNN(?:'s|,)? (FR|SC)-NNN` as a citation of feature NNN's requirement, resolved from that feature's `specs/NNN-*/spec.md` (the one directory; none or several, it is left out as an unknown id is now) and written to `spec-cited.md` under a `<!-- feature NNN -->` line; an unqualified id is the reviewed feature's, as before - so a block that cites another feature's requirement writes the feature beside every id it means (the reviewer reads what the block names, no guess at which feature a bare id meant). `spec-index.md` is unchanged.
+
+<!-- plan-archive: archived 2026-10-18 -->
+## T67 - land-tooling lints before it tests (found landing T65, 2026-10-18)
+
+### T67 Approach (checklist part A)
+
+1. **The goal, in the world.** A landing that will fail on lint fails in seconds, not after the tests.
+2. **The constraints.** Feature 385 T52: land-tooling lints the Python it lands; the guard suites and tooling tests still run in parallel; every check's failure is still reported. Tooling only; a test red without it.
+3. **Where each comes from.** T52 (O); the defect is measured landing T65 (amendment 6, the GM's "obvious ... tooling ... improvements").
+4. **Do they describe the world here?** Yes - measured 2026-10-18 (`.git/land-tooling.log`): T65's landing ran the tooling tests 60.24 s and the checks step 122.20 s, then failed on `ruff format --check` (one test file would be reformatted), a check that took 0.05 s; the three checks run in parallel and the step waits for all of them.
+5. **The order.** Lint alone first in `land-tooling.sh`, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: a landing whose lint fails stops before the guard suites and the tooling tests start, with the lint message and the `ruff format` command; `tests/hooks/test-land-tooling.sh` (the script's suite) red without it.
+
+### T67 Decisions
+
+**D86 - lint first, alone.** `land-tooling.sh` runs the `lint` check before the other two; a lint failure dies at once with its output and the `ruff format <files>` line it prints now, the guard suites and tooling tests not started; a passing lint goes on to the two in parallel as now.
+
+<!-- plan-archive: archived 2026-10-18 -->
+## T68 - make test-file formats the changed Python (found landing T65 and T66, 2026-10-18)
+
+### T68 Approach (checklist part A)
+
+1. **The goal, in the world.** Python a session changed is formatted before anything lints it, without anyone running `make format`.
+2. **The constraints.** The gate's and land-tooling's `ruff format --check` stay as they are (a check, never a rewrite at the push); only files the clone changed against its merge base with origin/main are touched; a test red without it.
+3. **Where each comes from.** Amendment 8, the GM: "make our tooling do the thing correctly automatically every time" (G); the checks are T52's and the gate's (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-18 (`.git/land-tooling.log`, this session's commands): two format slips in one evening, each found by a lint after the session's own test run had passed - T65's landing (after 122 s of checks) and T66's pre-landing check.
+5. **The order.** The format step in the `test-file` recipe, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 25 min.
+9. **Done, measured.** One goal: `make test-file` first runs `ruff format` on the `.py` files the clone changed against its merge base (committed or not) and says which it reformatted; `tests/tooling/test_test_file_format.py` (new) red without it.
+
+### T68 Decisions
+
+**D87 - formatted where it is tested.** The `test-file` recipe runs `python3 -m ruff format --force-exclude` over `git diff --name-only <merge-base> -- '*.py'` plus the untracked `.py` files, before pytest, printing `test-file: formatted <files>` when any changed; nothing to format, it is silent. The push's checks are unchanged.
+
+<!-- plan-archive: archived 2026-10-18 -->
+## T69 - a task filed mid-feature lands open (found landing T10, 2026-10-18)
+
+### T69 Approach (checklist part A)
+
+1. **The goal, in the world.** A task filed while a feature lands task by task never holds another task's landing.
+2. **The constraints.** Feature 375 plan D18: an open box holds the landing unless the reviewed plan's `**Lands open**:` line names it; the review of that line stays. A test red without it.
+3. **Where each comes from.** 375 (O); the defect is measured landing T10 (amendment 6).
+4. **Do they describe the world here?** Yes - measured 2026-10-18: T10's push was refused because T66 and T67, filed by `make task-add`, were open boxes the Lands open line did not name; adding them cost a plan edit and a block review before the landing could go.
+5. **The order.** `task-add.py` writes the mark and the line, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: where the plan has a `**Lands open**:` line, `make task-add` appends the new id to it and ends the box with `[lands-open]`; `tests/tooling/test_task_add.py` red without it.
+
+### T69 Decisions
+
+**D88 - the line kept by the tool that files the task.** `task-add.py`, when `plan.md` holds a `**Lands open**:` line, appends `, T<n>` to it and writes the box with ` [lands-open]`; a plan with no such line is left alone (its feature does not land task by task). The line's block still owes its review (`make plan-delta`), as any edit of it does.
+
+<!-- plan-archive: archived 2026-10-18 -->
+## T71 - a decision cited from another feature's plan is bundled from that plan (found by T69's plan review, 2026-10-19)
+
+### T71 Approach (checklist part A)
+
+1. **The goal, in the world.** A plan review reads the decision a block cites, not a same-numbered decision of this feature.
+2. **The constraints.** T66 (D85) for requirements; a decision's paragraph comes from that feature's `plan.md` and `plan-done.md`, as this feature's do now. A test red without it.
+3. **Where each comes from.** T66 (O); the defect is T69's plan review's finding (amendment 6).
+4. **Do they describe the world here?** Yes - measured 2026-10-19: T69's block cites "Feature 375 plan D18" and its bundle's `spec-cited.md` carried 385's own D18 (the pig sty's one predicate), a different decision; D85 reads `FR`/`SC` ids only.
+5. **The order.** The decision form in `plan_bundle`, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: a block citing `375 plan D18` (or `feature 375's D18`, `375 D18`) gets 375's D18 paragraph under `<!-- feature 375 -->`, and not 385's; `tests/tooling/test_plan_blocks.py` red without it.
+
+### T71 Decisions
+
+**D91 - D85 widened to decisions.** `_QUALIFIED` takes `(?:plan )?D<n>` beside `FR`/`SC`, an optional `plan ` between the feature and the id; a qualified decision resolves from that feature's `plan.md` + `plan-done.md` through the same paragraph reader as this feature's, under the same feature line; an unknown one is left out.
+
+<!-- plan-archive: archived 2026-10-18 -->
+## T70 - a feature is worked until it is set down (the GM 2026-10-18, step 3 of the approved order)
+
+### T70 Approach (checklist part A)
+
+1. **The goal, in the world.** A session working a feature never goes quiet with work left and nothing running, unless it said why.
+2. **The constraints.** The GM, 2026-10-18: "if we could have something that when a feature is begun ... checks every 10 minutes for whether or not the feature is either still in progress or has been correctly set down, then that would be really good"; the session's proposal he approved (amendment 8, quoted): a Stop guard (it fires at every turn's end, which a 10-minute check would only sample) with `make set-down`. It must not hold a turn that waits on running work. The proposal's second escape - a turn ending with a question - is dropped, a deliberate departure: the plan review (2026-10-19) showed it lets through exactly the quiet turn the guard exists for ("Shall I go on to the next task?" while the GM sleeps, or any rhetorical question in a summary); a turn that truly waits on the GM sets the feature down, `WHY="awaiting the GM on <what>"`, which is recorded; a set-down states a reason of two words or more and is recorded. A guard suite in `tests/hooks/`, red without it.
+3. **Where each comes from.** The GM's request (G); the escape and record rules are CLAUDE.md's "What is enforced" (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-18 (step-back-2026-10-18.md): T05's 464 minutes held 240 of idle, a turn that ended overnight with a refused dispatch never re-sent and nothing running; T22's guard covers that refused dispatch, not a turn that simply stops.
+5. **The order.** `hm_setdown.py` (the verdict), `set-down-hooks.sh stop` and its settings entry, `make set-down`, then the suite.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 60 min.
+9. **Done, measured.** One goal: a turn ending in a clone whose last `make task-start` names a feature with an open task is refused, naming the next open task and `make set-down`, unless a background command or agent started in the session has not reported back, or a set-down for that feature is recorded after that task-start; `tests/hooks/test-set-down-hooks.sh` red without it.
+
+### T70 Decisions
+
+**D89 - the turn end checked, the reasons to stop named.** `scripts/hooks/lib/hm_setdown.py` reads the clone's last `task-starts.jsonl` record. Its feature is IN PROGRESS when its `tasks.md` has an open box other than the GM-review box and its status line does not close it (`speckit-todo.py --closed-by-status`). The Stop payload's transcript gives what is RUNNING: each background command ("running in background with ID") and async agent ("agentId:") without a later task notification of that id. A SET-DOWN is a row of `<common git dir>/set-downs.jsonl` for the feature at or after the task-start, written by `make set-down F=<feature> WHY="<reason>"` (two words or more). The guard refuses only an in-progress feature with nothing running and no set-down; it is silent in a clone with no task-start, and on any read error (fail open, recorded): a Stop guard that fails closed can hold a session in a loop.
+
+**D90 - the refusal names the next step.** The refusal reads `BLOCKED: feature <f> has <n> open task(s) and nothing is running - start the next (<the first open box's id and title>), or set it down: make set-down F=<n> WHY="<why>"`, and each firing is recorded in the guard log.
+
+<!-- plan-archive: T71 to T69 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-10-18 -->
+## T74 - a task id added to the Lands open line owes no review (the round arbiter's fix on hour:385-approach-checklist@24)
+
+### T74 Approach (checklist part A)
+
+1. **The goal, in the world.** Filing a task never costs a plan review of the Landing block.
+2. **The constraints.** The arbiter's fix: "The plan gate behind `make plan-delta`/`make plan-verdict` should not ask for a spec-fidelity review when the only change to the plan's `**Lands open**:` line is a task id added by `make task-add` (or `task-add` should record that verdict itself), with a test showing such a delta is CLEAR without a dispatch"; any other change to the block, an id removed among them, is owed as now.
+3. **Where each comes from.** The fix is the arbiter's (G); the block review is 375 FR-043 (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the hour-24 bundle): two spec-fidelity dispatches that hour (23:48 and 00:11) reviewed only ids added to the line, each with its ledger row, and the T70 landing waited on one.
+5. **The order.** The rule in `plan_gate.block_status`, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 25 min.
+9. **Done, measured.** One goal: a block whose text differs from its reviewed text only by ids appended to its `**Lands open**:` line is not owed; one that drops an id, or changes anything else, is; `tests/tooling/test_plan_gate.py` red without it.
+
+### T74 Decisions
+
+**D93 - an appended id is no change.** `block_status` judges a block against its reviewed text with each `**Lands open**:` line read as its list of ids, in order: where the reviewed list is the current one's start (the current line is the reviewed ids, in their order, with ids appended) and the rest of the text is the same or typo-scale, the block is not owed. A reordering, or an id dropped or repeated, is owed; its test shows a reorder-only edit owed. Every block keeps its recorded digest; nothing is written for it.
+
+<!-- plan-archive: archived 2026-10-18 -->
+## T72 - a plan review's ledger row is written at landing (found landing T70, 2026-10-19)
+
+### T72 Approach (checklist part A)
+
+1. **The goal, in the world.** A landing is never refused for a plan review's ledger row, which the tooling can write itself.
+2. **The constraints.** Feature 385 FR-019: every check pass has its ledger row before a push; a row's acted-on cell names where the pass was recorded. Other checks' rows still need the session's word on what was acted on. The ledger is written at landing, never while a gate runs (a write under a gate is a tree move). A test red without it.
+3. **Where each comes from.** FR-019 (O); amendment 8, the GM: "make our tooling do the thing correctly automatically every time" (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the session's transcript, its tool calls): 81 hand-run `make ledger-owed WRITE=...` calls over 2026-10-18, nearly all naming the plan-verdict record; two landings refused for the row that evening (T60's, T70's). A plan review's verdict is recorded by `make plan-verdict` before the agent returns, so where it was recorded is always the same.
+5. **The order.** The plan-review writer in `ledger_owed.py`, its call in `land-tooling.sh` and `sync-with-main.sh` before their ledger checks, then the tests.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 40 min.
+9. **Done, measured.** One goal: `land-tooling` and `sync-with-main.sh done` write and commit the row of every owed pass whose subject is a `MODE 4: PLAN REVIEW`, its acted-on cell naming the plan-verdict record, before they check the ledger; any other owed pass still refuses as now; `tests/tooling/test_ledger_owed.py` (the module's test) red without it.
+
+### T72 part B (2026-10-19T00:24Z)
+
+Owed by the hour-24 step-back (hour:385-approach-checklist@24, `continue`).
+
+1. **What is refusing?** Nothing: the writer and both landings' calls are built; its first live run wrote T72's own review row.
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Changing: the plan reviews' rows are the landing's to write.
+6. **The one-sentence test.** "A landing writes a plan review's row" - true by its test and its live run.
+7. **The next step is a measurement.** The guard suites, then the landing.
+8. **Routes measured before asking?** n/a - no ask.
+9. **After a ruling.** `continue`; its tooling fix (the Lands open line) is T74.
+
+### T72 Decisions
+
+**D92 - the plan reviews' rows written by the landing.** `ledger_owed.py --write-plan-reviews` appends `filled_row` for each owed pass whose subject starts `MODE 4: PLAN REVIEW`, the where cell `the plan-verdict record (make plan-verdict)`, and prints how many. `land-tooling.sh` and `sync-with-main.sh done` run it first and, when it wrote any, commit `dev/review-ledger.md` as "the plan reviews' ledger rows, written at landing (feature 385 T72)"; the ledger check then runs as now on what remains.
+
+<!-- plan-archive: T74 to T74 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-10-18 -->
+## T76 - part A asks what a constant measures and for the capacity arithmetic first (the GM-approved proposal 7, 2026-10-18)
+
+### T76 Approach (checklist part A)
+
+1. **The goal, in the world.** A task that moves a constant knows what it measures, and one that fits things into room knows the arithmetic, before anything is rolled.
+2. **The constraints.** The GM, 2026-10-18 (amendment 8): "I do like all of your other proposals"; change 7 of the step-back report (amendment 8, quoted): "Two new checklist items in the start-of-task Approach: list every use of a constant before moving it, and write the capacity arithmetic before running experiments". The GM's rule (the step-back request): a checklist item or a tool, never a reminder. The two are numbered items, so the gate (`approach_gate.refusal`, D8: a part A item left unanswered refuses the tick) holds every later Approach to them - a sub-bullet under item 4 would pass an item 4 answered without either, a reminder the GM's rule forbids (the plan review, 2026-10-19). A test red without it.
+3. **Where each comes from.** The GM (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-18 (step-back-2026-10-18.md): T09 ran two experiments before reading what BUNDLE_PITCH measured (about 40 minutes and two cohort runs; the answer was a relabel); T06 ran a 20-minute experiment the arithmetic (households x farmstead width against the margin's length) answers in two.
+5. **The order.** Items 10 and 11 of `checklist.md` part A, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: part A holds the two questions as items 10 and 11, and `tests/tooling/test_approach_gate.py` shows an Approach answering items 1-9 alone refused (items 10 and 11 unanswered); red without them.
+10. **Before moving a constant.** n/a - none moved.
+11. **Before fitting things into room.** n/a - nothing fitted.
+
+### T76 Decisions
+
+**D95 - two numbered items, 10 and 11.** `checklist.md` part A gains item 10, "**Before moving a constant.** List every use of it and what each one measures - or n/a", and item 11, "**Before fitting things into room.** Write the capacity arithmetic (how many, how wide, against how much room) before rolling anything - or n/a". Items 1-9 keep their numbers (so no answer already written changes meaning); an open task whose Approach was written before answers 10 and 11 when it is next started, as the gate refuses its tick until it does.
+
+<!-- plan-archive: archived 2026-10-18 -->
+## T75 - a part B that names no new decision owes no review (the GM-approved proposal 3, 2026-10-18)
+
+### T75 Approach (checklist part A)
+
+1. **The goal, in the world.** A part B costs a review round only when it decides something new.
+2. **The constraints.** The GM, 2026-10-18 (amendment 8): "I do like all of your other proposals"; change 3 of the step-back report (amendment 8, quoted): "A part B is checked mechanically; only one that adds a new decision gets a spec-fidelity review". `make tick` already checks the items - measured 2026-10-19 (a read of `scripts/gates/approach_gate.py` and its test): `refusal` takes each owed trigger's part B through `_best(..., part_items(checklist, "B"), since)` and refuses "item(s) N unanswered" or "no block stamped after it", pinned by `tests/tooling/test_approach_gate.py` (a part B missing item 2 refused, one with both items ticked); a part B that names a new decision is reviewed as now. A test red without it.
+3. **Where each comes from.** The GM (G); the block review is 375 FR-043 (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (this session): the part B blocks of T10, T65 and T72 each went through a spec-fidelity round (202 s, 70 s and inside a 239 s seven-block round), each CLEAR, none naming a new decision.
+5. **The order.** The rule in `plan_gate.block_status`, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 25 min.
+9. **Done, measured.** One goal: a part B whose items 4 and 5 answer "No" and "Neither" and which names no new `D`-id is not owed a review; one answering "Changing" or "Tuning", "Yes" to item 4, or naming a new `D`-id is; `tests/tooling/test_plan_gate.py` red without it.
+10. **Before moving a constant.** n/a - no constant moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T75 Decisions
+
+**D94 - a part B reviewed whenever it decides.** `block_status` skips a `### T<n> part B (...)` block only when it decides nothing, read from its own answers: item 4 (moving something placed earlier) answered "No", item 5 (tuning or changing) answered "Neither", and every `D<n>` it names defined (`**D<n> - ...`) elsewhere in `plan.md` or `plan-done.md`. A part B that changes a rule, tunes a number, moves an earlier placement or names a new decision - labeled or not - is owed as now (the plan review, 2026-10-19: a decision need carry no D-id). Its items stay `make tick`'s to check.
+
+<!-- plan-archive: T76 to T76 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-10-18 -->
+## T77 - make where-time, the step-back's tables, with the time between turns counted as such (the GM-approved proposal 8, 2026-10-18)
+
+### T77 Approach (checklist part A)
+
+1. **The goal, in the world.** The next "where did the time go" is one command, and its idle column is right.
+2. **The constraints.** The GM, 2026-10-18 (amendment 8): "I do like all of your other proposals"; change 8 of the step-back report (amendment 8, quoted): "`make where-time` produces the tables above", FR-005 (the per-task table) and FR-014 (the session's own calls told from its subagents'). The rule for the time between turns is ours (O), the session's correction the same evening ("time from a turn's end to the next prompt will count as waiting, whatever events land in between"), approved only within the GM's approval of the proposals. The categories stay `feature_report.split_time`'s. A test red without it.
+3. **Where each comes from.** The target, the GM (G); the between-turns rule and the categories, ours (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-18: the scratch `where_time.py` booked T05 224 minutes, but about 80 of them were the 04:20-09:15 overnight stall, split into pieces under an hour by hook events and booked as "thinking"; T05's real work was about 2 h 25. And a background notification that wakes the session fires `UserPromptSubmit` - measured 2026-10-19 on this session: every task notification since the compaction was followed by the prompt hooks' lines ("UserPromptSubmit hook success: clone-sync") - so a woken turn's work is booked to its task, not to "between turns".
+5. **The order.** `scripts/measure/where_time.py` (from the scratch script), the target, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 40 min.
+9. **Done, measured.** One goal: `make where-time F=<n> [SINCE=<ISO>]` prints the per-task table and the agents table, every gap between a session's Stop and its next prompt booked as "between turns" (never "thinking"), however many events fall inside; `tests/tooling/test_where_time.py` red without it.
+10. **Before moving a constant.** n/a - no constant moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T77 Decisions
+
+**D96 - between turns is its own column.** `where_time.py` books each gap of a session to the task active at its start, by `split_time`'s category, except that from a `Stop` to the session's next `UserPromptSubmit` every gap is "between turns" - waiting on background work or idle, which the column does not try to tell apart (the agents table and the background-run column say what ran). The step-back checklist (step-back-2026-10-18.md, item 1) names the target.
+
+<!-- plan-archive: archived 2026-10-18 -->
+## T80 - a quiet part B leaves its task's section reviewed (found by T78's part B, 2026-10-19)
+
+### T80 Approach (checklist part A)
+
+1. **The goal, in the world.** A part B that decides nothing costs no review round, of itself or of its task's section.
+2. **The constraints.** T75 (D94, the GM's approved change 3): "only one that adds a new decision gets a spec-fidelity review". Any other change to the section is owed as now. A test red without it.
+3. **Where each comes from.** The GM (G); the section verdict is 375 FR-003a (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (`make plan-delta F=385` after T78's part B): the part B itself was not owed (T75), but the three other blocks of T78's section were - adding the part B changed the section's digest, its task verdict went stale, and its blocks fell back to block reviews.
+5. **The order.** `plan_gate.task_current` reads the section without its quiet part Bs, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: a CLEAR task section that gains only a part B deciding nothing (D94's test) stays current; one that gains anything else does not; `tests/tooling/test_plan_gate.py` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T80 Decisions
+
+**D99 - the section judged without its quiet part Bs.** `task_current`, where the digest differs, compares the earlier text with the current one with every part B block that `decides_nothing` taken out of both, by the same typo rule as now; a part B that decides is left in, so it still owes the section's review.
+
+<!-- plan-archive: archived 2026-10-18 -->
+## T81 - pop-ups owed one check are checked by one agent (the GM-approved proposal 1, 2026-10-18)
+
+### T81 Approach (checklist part A)
+
+1. **The goal, in the world.** When several pop-ups owe the same check, one agent reads them, not one agent each.
+2. **The constraints.** The GM, 2026-10-18 (amendment 8): "I do like all of your other proposals"; change 1 of the step-back report: "Pop-ups that share a template are checked once as a group (tooling)". The GM's rule: a tool, never a reminder. Each pop-up keeps its own bundle and its own answer (T02, plan D12 - `make modal-bundle KIND="a b c"` already builds one bundle of several). A test red without it.
+3. **Where each comes from.** The GM (G); the batched bundle is T02's (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the page sessions' transcripts, their Agent calls 17:00-21:30Z): T10's checks sent 90 pop-up agents, every one on a single pop-up's bundle (modal-form 38, modal-depiction 28, modal-research 24) - the batched form T02 built was never used, because `make record-owed` names one `make modal-bundle KIND=<one>` per unit. `make record-owed` takes 4.4 s and 3.3 s - measured 2026-10-19 (two warm runs in this clone, wall clock around the command, the second at a load of 4.62) - too slow for a hook that runs at every dispatch.
+5. **The order.** The batched line and its record in `record_owed.py`; the refusal in `hm_checks.dispatch`; then the tests.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 60 min.
+9. **Done, measured.** One goal: `make record-owed` names, for each pop-up check owed by two or more unanswered pop-ups, one `make modal-bundle KIND="<them all>" FOR=<check>`, and a dispatch of that check on one of those pop-ups' single bundle is refused, naming it; `tests/tooling/test_record_owed.py` and `tests/hooks/test-pair-hooks.sh` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T81 Decisions
+
+**D100 - the batch named and kept.** `record_owed.report` adds, after the units, one `batched: make modal-bundle KIND="<kinds>" FOR=<agent>` line per pop-up agent (modal-form, modal-depiction, modal-research) owed by two or more unanswered pop-ups (a triage-owed one, which goes to `make modal-triage` first, is left out), and writes those batches to `<git dir>/modal-batches.json` with the time.
+
+**D101 - a single pop-up's dispatch refused while its batch is owed.** `hm_checks.dispatch`, for a pop-up agent whose MANIFEST names one pop-up, reads `modal-batches.json`; where that pop-up is in a batch of two or more for the same agent, written within the last two hours, it refuses, naming the batched command. No file, or an older one, refuses nothing (fail open). The escape is `BATCH_OK="<reason>"` in the prompt, recorded like the guard's others.
+
+<!-- plan-archive: archived 2026-10-18 -->
+## T82 - an archive line in a task's section leaves it reviewed (found ticking T79, 2026-10-19)
+
+### T82 Approach (checklist part A)
+
+1. **The goal, in the world.** Archiving a finished section never makes a neighbor's review owed.
+2. **The constraints.** Feature 375 FR-044: the archive moves finished sections and voids nothing; its generated line is taken out of every block's digest already (`ARCHIVE_LINE`). A test red without it.
+3. **Where each comes from.** 375 (O); the defect is T63's auto-archive meeting the section check (amendment 6).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (`make plan-delta` diffed against its `earlier.md`): ticking T78 and T80 archived their sections and left `<!-- plan-archive: T80 to T78 moved ... -->` inside T79's section, after its Decisions; `task_current` compares the section raw, so T79's three reviewed blocks were owed again and its tick refused.
+5. **The order.** `task_current` takes the line out of both texts, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: a CLEAR task section that differs from its reviewed text only by archive lines stays current; `tests/tooling/test_plan_gate.py` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T82 Decisions
+
+**D102 - the archive line out of the section's comparison too.** `task_current` compares the section and its reviewed text with `ARCHIVE_LINE` taken out of both (as `block_digest` takes it out of a block), the digest match and the typo rule otherwise as now.
+

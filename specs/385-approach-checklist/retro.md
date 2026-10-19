@@ -628,3 +628,117 @@ of its 109 agent runs were five sibling pop-ups checked as five units, round aft
 removes. Its landing waited on three arbiter fixes (T60-T62), then a British spelling in a tool-written claims note and a stale
 Kuwabata manifest (the ink count) cost two gate runs. **The habit it changes:** none by memory - proposal 1 (grouped sibling
 pop-ups) and the house-style check on tool-written notes are the tools.
+
+## T67 - the retro row
+
+About 15 min. `land-tooling.sh` runs its lint alone first; a failure stops before the guard suites and tooling tests start, so a
+format slip costs seconds, not two minutes. **The habit it changes:** none needed - the order decides it.
+
+## T66 - the retro row
+
+About 20 min. `plan_bundle.build` reads "375 FR-044", "feature 375's FR-002" and the like as that feature's requirement, from its
+own spec, under a `<!-- feature 375 -->` line, and no longer hands the reviewed feature's same-numbered one for it. **The habit it
+changes:** none needed - the bundle reads the feature the block names.
+
+## T68 - the retro row
+
+About 20 min. `scripts/format-changed.sh` runs at the head of `make test-file`: the `.py` files the clone changed against its merge
+base (deleted ones left out, as the review noted) are formatted and named; nothing to format, it is silent. **The habit it
+changes:** `make format` is no longer a step to remember before a landing.
+
+## T69 - the retro row
+
+About 15 min. `make task-add` puts the new id on the plan's `**Lands open**:` line and marks its box, where the plan has the line,
+so a task filed mid-feature never holds another's landing. The line's edit still owes its block review. **The habit it changes:**
+none needed - the tool that files the task keeps the line.
+
+## T71 - the retro row
+
+About 10 min. D85's qualified reading takes a decision too ("375 plan D18"), read from that feature's plan and plan-done.
+**The habit it changes:** none needed.
+
+## T70 - the retro row
+
+About 50 min. `set-down-hooks.sh stop` refuses a turn's end while the clone's active feature has an open task, nothing the session
+launched is still running, and no `make set-down F= WHY=` is recorded since its task-start; the refusal names the next open task.
+The plan review struck the proposal's question escape (a "Shall I go on?" while the GM sleeps is the stop it exists for) and asked
+for the GM's words in the request. Two fixture slips in the suite (a start stamped ahead of the clock, a directory that is no
+read error). **The habit it changes:** stopping with work left is no longer a choice the session makes silently.
+
+## T72 - the retro row
+
+About 30 min. `ledger_owed.py --write-plan-reviews` writes the row of each owed plan review whose reply shows `make plan-verdict`
+recorded it (the review's point: no row naming a record that does not exist); `land-tooling` and `sync-with-main.sh done` run it
+first and commit the rows. Its first live run wrote T72's own review's row. **The habit it changes:** `make ledger-owed WRITE=`
+is left for the checks whose acted-on cell is the session's word.
+
+## T74 - the retro row
+
+About 20 min. `plan_gate.lands_open_appended` puts a `**Lands open**:` line back as reviewed where the only change is ids appended
+in order, so `make task-add`'s line edit owes no review; a reorder, a dropped or a repeated id still does. The first plan read the
+line as a set, which the review blocked (a reorder would have passed). The test runs on task-add's own output, as the review asked.
+**The habit it changes:** none needed.
+
+## T77 - the retro row
+
+About 35 min. `make where-time F= [SINCE=]` prints the step-back's two tables from the event log, booking every gap from a Stop to
+the session's next prompt as "between turns" - the column the overnight stall needed - however many hook events fall inside. The
+plan review asked for the rule's provenance (ours) and the wake premise measured (a notification fires the prompt hooks). One
+expectation in the test was my arithmetic, not the code. **The habit it changes:** a step-back's tables are one command.
+
+## T76 - the retro row
+
+About 25 min. Part A gains items 10 (before moving a constant, list its uses and what each measures) and 11 (the capacity arithmetic
+before rolling), numbered so the gate holds every later Approach to them. Three plan rounds: the first two reviews could not see the
+approved proposal (now quoted in the request), then blocked sub-bullets under item 4 as a reminder. **The habit it changes:** the
+two questions are the gate's, not the session's memory.
+
+## T75 - the retro row
+
+About 30 min. `plan_gate.decides_nothing` lets a part B pass without a review round when it answers item 4 "No" and item 5
+"Neither" and names no new decision; any part B that changes, tunes, moves or decides is reviewed as before. Three plan rounds:
+the request lacked the approved proposal list, then the review struck the D-id-only rule (a decision need carry no label).
+**The habit it changes:** none needed.
+T76's checklist lives in this feature's `specs/`, which `land-tooling` does not carry, and its test reads that file - so the two land
+with the feature's own directory at T11 (which moves the checklist to `docs/`). The gate in this clone already holds T76's items:
+`make tick` reads the clone's checklist.
+
+## T78 - the retro row
+
+About 30 min. The hook's plain-text correction is `hm_house.americanize` now; `claims.py record` runs each parsed note through it
+(never the key - the review's point) and `apply_edits.py` each EDIT's new text, quotations held out as the hook holds them. The
+first test fixture used the wrong reply form. **The habit it changes:** an agent's British spelling no longer reaches a tracked file.
+
+## T80 - the retro row
+
+About 15 min. `task_current` reads a section and its reviewed text without their quiet part Bs, so a part B that decides nothing
+no longer re-owes its task's blocks; on the live plan the owed delta fell from six blocks to three (T79's, under review). **The
+habit it changes:** none needed.
+
+## T79 - the retro row
+
+About 35 min. `land-tooling.sh` writes each run's `{task, files, outcome}` from an exit trap, and `make tick` refuses a NOTE saying
+"landed" (any case - the review's catch) while the task's last run failed or a file it named differs from main, the ledger left
+out as a rider. **The habit it changes:** a tick cannot claim a landing that did not happen.
+
+## T82 - the retro row
+
+About 10 min. `task_current` takes the archive's generated line out of a section and its reviewed text, as `block_digest` does for a
+block, so auto-archiving at a tick (T63) never re-owes a neighbor's review. **The habit it changes:** none needed.
+
+## T81 - the retro row
+
+About 50 min. `make record-owed` names one `make modal-bundle KIND="<all>" FOR=<agent>` per pop-up agent two or more unanswered
+pop-ups owe, and keeps the batches; the dispatch guard refuses that agent on a single pop-up of a batch while the record is fresh
+(BATCH_OK the escape). Measured first: T10's 90 pop-up agents were all single dispatches - T02's batched bundle existed and was
+never named. The plan named `test-pair-hooks.sh`, but `check-bundle-hooks.sh` runs `hm_checks` and its suite runs outside a
+repository, so the refusal's test is a unit test (`tests/tooling/test_batch_refusal.py`). **The habit it changes:** a session no
+longer chooses between one agent and ten.
+
+## T83 - the retro row
+
+About 70 min. A claimed module-level dict's entries are its blocks (`entry_blocks`), and `Unit.line_keyed` - a section, even an
+empty one, or such a dict - keys its claims by their own line; owed, the bundle, the triage and the backfill read that property.
+The backfill re-keyed 109 dict claims and owed nothing new; a probe entry added to `_OVERLAP_EXEMPT` owed its 17 claims a triage
+and none `code changed`. One red gate was mine: the first cut keyed on "has blocks", and an empty section has none. **The habit it
+changes:** a dict grown by an entry no longer costs a full impl-drift round over every claim on it.
