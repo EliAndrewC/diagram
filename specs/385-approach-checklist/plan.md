@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -314,6 +314,28 @@ Owed by the hour-25 step-back (hour:385-approach-checklist@25, `continue`).
 ### T82 Decisions
 
 **D102 - the archive line out of the section's comparison too.** `task_current` compares the section and its reviewed text with `ARCHIVE_LINE` taken out of both (as `block_digest` takes it out of a block), the digest match and the typo rule otherwise as now.
+
+## T83 - a dictionary's claims keyed per entry (the GM 2026-10-18, step 5 of the approved order)
+
+### T83 Approach (checklist part A)
+
+1. **The goal, in the world.** One entry added to a claimed dictionary re-opens only the claims that entry bears on.
+2. **The constraints.** The GM, 2026-10-18 (amendment 8): "instead of filing me per entry key ring feature, you should just work it. As a task on this existing feature", and earlier "I do want it, though, if it is helpful". Feature 375 FR-002's rule for a procedure section, applied to a dictionary: a claim's fingerprint is its own line; the body changing owes a TRIAGE of the changed blocks (`claims-triage`), which sends on to `impl-drift` only the claims a changed block touches; a one-time backfill re-keys the rows current under the old fingerprint, owing nothing. A claim's line changing still owes it in full. A test red without it.
+3. **Where each comes from.** The GM (G); the section rule is 375 FR-002 (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (an AST pass over every claims-index unit): 57 module-level dict constants carry 132 claims over 404 entries; `_OVERLAP_EXEMPT` alone carries 17 claims over 41 entries, and one entry added there at T08 owed all of them (step-back-2026-10-18.md: a 64-claim round, 372 s and 1.29M input tokens). A claim is labeled by topic, not by key ("annexes abut their house"), so no key-to-claim map can be read off the code; the triage is what reads the changed entry against each claim.
+5. **The order.** The engine's claims reader (`l7r/diagram/tools/claims.py`): a claimed dict's entries become its blocks and its claims' code their own line; `scripts/record/claims.py`: owed and the backfill take any unit with blocks, not only sections; the backfill run once; then the tests.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 90 min.
+9. **Done, measured.** One goal: an entry added to a claimed dict owes its claims a triage (`section triage`), not `code changed`; a claim line edited owes that claim in full; after the backfill `make claims-owed` owes no dict claim it did not owe before; `tests/tools/test_claims.py` and `tests/tooling/test_claims_index.py` red without it.
+10. **Before moving a constant.** n/a - no constant's value moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T83 Decisions
+
+**D103 - a dictionary is read as its section is.** In `all_units`, a module-level constant whose value is a dict literal and which carries its own claims gets `blocks` = one per entry (`key: value`, its source unparsed, whitespace folded); `Unit.code` fingerprints such a claim by its own line, as a section's (`"section-claim"`), and `core` stays the whole value's.
+
+**D104 - owed and backfilled as a section's.** `claims.py owed` owes `section triage` for a unit with blocks whose recorded `section` core differs (sections and dicts alike); `backfill-sections` re-keys a dict claim whose row is current under the old fingerprint (core plus line), recording its core and block digests, and leaves an owed one owed. The backfill runs once with this change, its count in the retro.
 
 ## T11 - the close
 

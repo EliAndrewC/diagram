@@ -234,6 +234,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T82 An archive line in a task's section leaves it reviewed (plan D102) [lands-open]
       research: rendering
+- [ ] T83 A dictionary's claims keyed per entry (step 5 of the GM's order, plan D103, D104) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
