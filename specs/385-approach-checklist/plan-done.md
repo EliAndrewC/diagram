@@ -2877,3 +2877,26 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@32 (continue),
 
 **D136 - the refusal names the batch.** `landed_refusal`'s message for engine work off main adds "or, with the next small fix, `make land-batch`".
 
+<!-- plan-archive: archived 2026-10-19 -->
+## T118 - a wording-only task owes no plan review (amendment 10, the GM 2026-10-19)
+
+### T118 Approach (checklist part A)
+
+1. **The goal, in the world.** A task that only rewords - a claim relabeled, a comment, a glossary entry - goes from its Approach to its tick without a spec-fidelity plan review, and a task that decides anything still gets one.
+2. **The constraints.** Amendment 10, the GM: "I would also like to implement all 3 of your suggestions" - the third, "skip the plan review for wording-only tasks that decide nothing new"; the task as filed (T118 in tasks.md): its section's decisions classed as wording by a rule the tick checks. Feature 243 / 375: a plan's decisions are reviewed before its tasks tick. T75 (D94): a part B that decides nothing owes no review, checked mechanically. The GM's rule: a tool, never a reminder. A test red without it.
+3. **Where each comes from.** The GM (G); 243, 375, T75 (O); the GM (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (`make where-time F=385 BY=tick`, its agents table): the wording-only tasks T31, T103, T105, T110 took 5-12 min tick to tick, each with one spec-fidelity plan review of 1-3 agent-minutes beside `make decide`, the dispatch and `make plan-verdict`; `plan_gate.decides_nothing` exempts a part B only, never a task's own section.
+5. **The order.** The section's declaration (`**Wording only.**` in place of decisions) exempted from the plan gate; the tick's check of the task's commits against it; `make decide`'s word for such a section; the tests.
+6. **The exits.** (c) - a declaration the tick checks against the diff; a classification by an agent was weighed and refused (it is the review this removes).
+7. **The search smell.** None.
+8. **The budget.** 60 min.
+9. **Done, measured.** One goal: a task section whose Decisions block is a single `**Wording only.**` line owes no plan review, and `make tick` refuses it when a commit since its `make task-start` changed a file other than `specs/`, `dev/`, a glossary entry, or a `.py` file in what runs (comments, docstrings and claims aside: `gate-stamp.semantic_bytes`); `tests/tooling/` red without it.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T118 Decisions
+
+**D137 - wording declared.** A task's Decisions block may hold, in place of decisions, one line `**Wording only.** <what is reworded>`. `plan_gate.block_status` skips such a section's blocks (as `decides_nothing` skips a quiet part B), so it owes no review; `make decide` on it prints that no review is owed and builds no bundle. A `**D<n> - ` line in the same block undoes the declaration: the section is reviewed as now.
+
+**D138 - the tick checks the words.** For a wording-only task, `make tick` reads the commits since the task's last `make task-start` (`task-starts.jsonl`; merges skipped) and refuses when one changed a file outside `specs/` and `dev/` that is not a glossary entry (`l7r/diagram/interactive/assets/glossary/*.json`) and is not a `.py` file whose `semantic_bytes` stand unchanged: "<task>'s section says wording only, but <file> changed in what runs - write its decision (`**D<n> - `) and `make decide`". A research page's block is a decision, not wording, and is refused the same way.
+

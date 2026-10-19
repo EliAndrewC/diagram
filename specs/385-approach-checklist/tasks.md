@@ -336,8 +336,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T117 The gate and the landing cohort batched across two or three small engine fixes: land them together under one green gate and one landing cohort, each task ticked at that landing (amendment 10) [lands-open]
       research: rendering
       verify: DONE. landed by land-tooling 2026-10-19; make land-batch (D135), refusal names it (D136); test red without it
-- [ ] T118 No plan review for a wording-only task that decides nothing new - a claim relabel, a comment, a glossary entry - its section's decisions classed as wording by a rule the tick checks (amendment 10) [lands-open]
+- [x] T118 No plan review for a wording-only task that decides nothing new - a claim relabel, a comment, a glossary entry - its section's decisions classed as wording by a rule the tick checks (amendment 10) [lands-open]
       research: rendering
+      verify: DONE. landed by land-tooling 2026-10-19; wording-only sections owe no plan review (D137), the tick checks their commits (D138); tests red without it
 - [ ] T119 Each tooling fix's yield measured: the time it was meant to save, read from the per-task time report (T115), so a fix that saves nothing is retired (amendment 10, the GM's change 3) [lands-open]
       research: rendering
 - [ ] T120 The track out's last resort never crosses a drawn channel (connector_dry_exit, UNCLAIMED, T102's round): claim it, or let it cross a ditch on a plank as 0084 gives (found working T102, 2026-10-19) [lands-open]
