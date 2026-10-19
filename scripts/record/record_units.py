@@ -286,10 +286,32 @@ def owed(now: Record, base: Record) -> list[Unit]:
     return [Unit(slug, why, fingerprint(now, slug), reading_of(now, slug)) for slug, why in sorted(out.items())]
 
 
+#: a sentence ends at . ! ? or 。, any closing quote or bracket, and the note marks right after it, where the next sentence opens
+#: with a capital, a quote or a bracket - so "p. 28" and "c. 1700" stay inside their sentence
+_SENTENCE_END = re.compile(r"[.!?。][\"”’)]*((?: \[\^[\w.-]+\])*)(?= [A-Z\"“(]|$)")
+
+
+def claims_of(block_words: str, note: str) -> list[str]:
+    """The sentences of a block that carry `[^note]` - what a quote-check of that note judges the quotation against."""
+    out, start = [], 0
+    for m in _SENTENCE_END.finditer(block_words):
+        sentence, start = block_words[start : m.end()].strip(), m.end()
+        if f"[^{note}]" in sentence:
+            out.append(sentence)
+    tail = block_words[start:].strip()
+    return out + ([tail] if f"[^{note}]" in tail else [])
+
+
 def reading_of(rec: Record, slug: str) -> str:
-    """A source-reader unit's `reading`; '' for every other check."""
+    """A unit's `reading`, the narrower words an answer still holds for under another fingerprint: a source-reader note's pages
+    and passages; a quote-check note's words and the SENTENCES carrying its mark (feature 395, the round arbiter on
+    ask:395-round3-all: 43 notes answered SUPPORTS were owed again because another note's sentence in their block was reworded,
+    though neither the quotation nor the claim it supports had changed). '' for every other check."""
     check, subject = slug.split(":", 1)
     stem, _, note = subject.partition("#")
+    if check == "quote-check" and note != "unfootnoted":
+        blocks = [b.words for b in rec.pages.get(stem, Page()).blocks if note in b.marks]
+        return digest(["quote-check", rec.notes.get(stem, {}).get(note, ""), *(c for w in blocks for c in claims_of(w, note))])
     return rec.readings.get(stem, {}).get(note, "") if check == "source-reader" else ""
 
 

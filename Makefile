@@ -807,10 +807,11 @@ check-bundle: ## [project] the files ONE check agent reads, copied out of the re
 ##  FEATURE 311 - a bundle for a check nothing owes is REFUSED (`make record-owed` lists what is owed); FOR=quote-check with no NOTES= holds only the owed notes
 ##  NOT_OWED_OK="<why>"  build it anyway (a backfill, an audit the GM asked for), recorded in the MANIFEST
 ##  NEW="<the claim>"    with KEY= WHOLE=1: a source-reader read for a claim not yet in the record
+##  IMAGES="<file|dir> ..."  with KEY=: a scanned source's page images, copied into images/ and listed by name (feature 395)
 ##  FOR=intro-check [QS="<n> <n> ..."]  the intro-check bundle, one question or a batch
 ##  KEYS="<k> <k> ..."  several sources in one source-applicability bundle (the uncited write-ups, feature 312)
 	@if [ -z "$(KEY)" ] && [ -z "$(KEYS)" ] && [ -z "$(Q)" ] && [ -z "$(QS)" ]; then printf 'make check-bundle: Q=<question number> (or KEY=<registry key>, KEYS="<k> <k>", or QS= with FOR=intro-check) is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/check_bundle.py" --root "$$(git rev-parse --show-toplevel)" $(if $(KEYS),--keys "$(KEYS)",) $(if $(KEY),--key "$(KEY)",$(if $(Q),"$(Q)",)) $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(EXTRA),--extra $(EXTRA),) $(if $(NO_QUOTES),--no-quotes,) $(if $(KIND),--kind "$(KIND)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(FOR),--for "$(FOR)",) $(if $(WHOLE),--whole,) $(if $(QUESTION),--question "$(QUESTION)",) $(if $(QS),--qs "$(QS)",) $(if $(NOT_OWED_OK),--not-owed-ok "$(NOT_OWED_OK)",) $(if $(NEW),--new "$(NEW)",)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/check_bundle.py" --root "$$(git rev-parse --show-toplevel)" $(if $(KEYS),--keys "$(KEYS)",) $(if $(KEY),--key "$(KEY)",$(if $(Q),"$(Q)",)) $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(EXTRA),--extra $(EXTRA),) $(if $(NO_QUOTES),--no-quotes,) $(if $(KIND),--kind "$(KIND)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(FOR),--for "$(FOR)",) $(if $(WHOLE),--whole,) $(if $(QUESTION),--question "$(QUESTION)",) $(if $(QS),--qs "$(QS)",) $(if $(NOT_OWED_OK),--not-owed-ok "$(NOT_OWED_OK)",) $(if $(NEW),--new "$(NEW)",) $(if $(IMAGES),--images $(IMAGES),)
 
 source-pages: ## [project] save the full visible text of the named pointers, with a manifest - run BEFORE source-reader, which greps the PAGE where a fetch gives an extract   OUT=<dir> URL=<u1>  (several: URLS="<u1> <u2>")
 ##  OUT=<dir>      where the pages and MANIFEST.txt go (a scratch directory)

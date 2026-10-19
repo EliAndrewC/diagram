@@ -531,13 +531,65 @@ def claims_read(root: pathlib.Path, units: list) -> str:
     return "\n".join(parts) + "\n"
 
 
-def key_bundle(root: pathlib.Path, key: str, out: pathlib.Path, whole: bool = False, question: str = "", owed: str = "", units: list | None = None) -> int:
+def images_section(out: pathlib.Path, images: list[str]) -> str:
+    """The page images a scanned source is read from, copied into `images/` and listed BY NAME (feature 395, the arbiter's
+    ask:395-source-reader-round3): a session copied them in by hand after the bundle was built, unlisted, and a source-reader
+    round reported "`images/` has no listing I could read" and guessed file names until one opened."""
+    files = [f for i in images for f in (sorted(pathlib.Path(i).iterdir()) if pathlib.Path(i).is_dir() else [pathlib.Path(i)]) if f.is_file()]
+    if not files:
+        return ""
+    (out / "images").mkdir(exist_ok=True)
+    for f in files:
+        shutil.copy2(f, out / "images" / f.name)
+    return "\n## The page images (read these for a scanned page)\n\n" + "".join(f"- `images/{f.name}`\n" for f in files)
+
+
+def since_last_round(root: pathlib.Path, units: list) -> str:
+    """Each owed source-reader note's words now against the last commit before its latest round (feature 395, the arbiter's
+    ask:395-source-reader-round3): a re-read after passages were added is scoped to what was added by the tool, not by a
+    prompt listing the additions by hand."""
+    import difflib  # noqa: PLC0415
+
+    import earlier_rounds as er  # noqa: PLC0415
+    import record_units as ru  # noqa: PLC0415
+
+    path = er.ab.hc.state_path(str(root))
+    state = er.ab.hc.load(path) if path is not None and path.is_file() else {}
+    from hm_record import fragments_for  # noqa: PLC0415
+
+    parts: list[str] = []
+    for u in units:
+        if u.check != "source-reader":
+            continue
+        stem, _, note = u.subject.partition("#")
+        q = stem.partition(".")[0]
+        last = max((v.get("t", 0) for v in state.get("dispatches", {}).values() if v.get("check") == "source-reader"
+                    and f"q:{q}" in v.get("subjects", []) and v.get("state") not in ("pending", "running")
+                    and (not v.get("notes") or note in v.get("notes", []))), default=0)
+        if not last:
+            continue
+        before = subprocess.run(["git", "-C", str(root), "rev-list", "-1", f"--before=@{int(last)}", "HEAD"], capture_output=True, text=True).stdout.strip()
+        for rel in [r for r in fragments_for(q, str(root)) if r.endswith(".notes.html")]:
+            was = subprocess.run(["git", "-C", str(root), "show", f"{before}:{rel}"], capture_output=True, text=True).stdout if before else ""
+            now = (root / rel).read_text(encoding="utf-8") if (root / rel).is_file() else ""
+            old, new = ru.read_notes(was).get(note, ""), ru.read_notes(now).get(note, "")
+            if new and old != new:
+                diff = difflib.unified_diff(str(old).splitlines(), str(new).splitlines(), "at the last round", "now", lineterm="", n=1)
+                parts += [f"### `{rel}` | {note}", "", "```diff", *diff, "```", ""]
+    if not parts:
+        return ""
+    return "\n## What each owed note changed since its last source-reader round (read the added lines first)\n\n" + "\n".join(parts)
+
+
+def key_bundle(root: pathlib.Path, key: str, out: pathlib.Path, whole: bool = False, question: str = "", owed: str = "", units: list | None = None,
+               images: list[str] | None = None) -> int:
     if registry_entry(root, key) is None:
         print(f"check-bundle: no registry entry for {key!r}", file=sys.stderr)
         return 2
     fresh(out)
     rows = key_rows(root, key, out, whole, question)
-    (out / MANIFEST).write_text(with_earlier(root, out, manifest(out, f"source {key}", rows) + owed + claims_read(root, units or [])), encoding="utf-8")
+    extra = images_section(out, images or []) + since_last_round(root, units or [])
+    (out / MANIFEST).write_text(with_earlier(root, out, manifest(out, f"source {key}", rows) + owed + claims_read(root, units or []) + extra), encoding="utf-8")
     print(f"check-bundle: {len(rows)} item(s) in {out} - hand the agent {out / MANIFEST}")
     return 0
 
@@ -587,6 +639,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--for", dest="for_", default="all", choices=sorted(PARTS), help="keep only what this check reads")
     ap.add_argument("--kind", default="", help="a modal class name, for entry-drift: its docstring is copied in")
     ap.add_argument("--no-quotes", action="store_true", help="skip the quote-verbatim report (it fetches every cited page)")
+    ap.add_argument("--images", nargs="*", default=[], help="with --key: page images (files or a directory) copied into images/ and listed by name")
     ap.add_argument("--root", default=".")
     ap.add_argument("--qs", default="", help="for intro-check: several questions in one bundle (the backfill's batches)")
     ap.add_argument("--not-owed-ok", default="", help="build it though nothing owes it: the reason, recorded in the MANIFEST (feature 311)")
@@ -602,7 +655,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"check-bundle: REFUSED - {refusal}", file=sys.stderr)
             return 3
         return key_bundle(root, args.key, pathlib.Path(args.out or DEFAULT_ROOT / f"key-{args.key}{'-whole' if args.whole else ''}"), args.whole, args.question,
-                          bo.manifest_lines(units, checks, escape), units)
+                          bo.manifest_lines(units, checks, escape), units, args.images)
     if args.for_ == "intro-check":
         return intro_bundle(root, (args.qs or args.q).split(), args.out, args.not_owed_ok)
     if not args.q:

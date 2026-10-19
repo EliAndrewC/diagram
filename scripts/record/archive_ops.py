@@ -72,6 +72,17 @@ def on_github(store: ar.Archive, rel: str) -> bool:
     return done.returncode == 0 and bool(done.stdout.strip())
 
 
+GITHUB_FILE_LIMIT = 100 * 1024 * 1024  # GitHub refuses a pushed file over 100 MB, and the archive is a GitHub repository
+
+
+def too_big(path: pathlib.Path) -> list[str]:
+    """The files under `path` (itself, or inside a directory) that GitHub would refuse, each with its size in MB. Checked
+    BEFORE anything is committed (feature 395's step-back, hour:395@1): download #31 (434 MB) was committed to the shared
+    archive and its push refused, which wedged every later archive push until the commit was undone by hand."""
+    files = [path] if path.is_file() else [f for f in path.rglob("*") if f.is_file()]
+    return [f"{f.name} ({f.stat().st_size // (1024 * 1024)} MB)" for f in files if f.stat().st_size > GITHUB_FILE_LIMIT]
+
+
 def process_inbox(
     root: pathlib.Path,
     store: ar.Archive,
@@ -105,8 +116,9 @@ def process_inbox(
         else []
     )
     placed: dict[str, str] = {}
-    waiting = [n for n in names if n not in table]
-    names = [n for n in names if n in table]
+    # an entry over GitHub's file limit WAITS even once matched: it never reaches a commit (main says LFS or a split)
+    waiting = [n for n in names if n not in table or too_big(inbox / n)]
+    names = [n for n in names if n not in waiting]
     if not names:
         return placed, waiting
     with store.locked():
@@ -469,6 +481,11 @@ def main(
     for name, dest in placed.items():
         print(f"  {name} -> {dest}")
     for name in waiting:
+        if big := too_big(ar.GM_DIR / name):
+            print(
+                f"  REFUSED {name}: over GitHub's 100 MB file limit ({', '.join(big)}), so it is not archived - split the PDF (e.g. `qpdf --split-pages=200`) and archive the parts, or put it to the GM as a Git LFS decision; it stays in the inbox"
+            )
+            continue
         print(
             f"  WAITING {name}: a new download - read its first page, find the source it copies, then `make archive-inbox MATCH='{name}=<key>'` - or MATCH='{name}=#<id>' for the download-list entry it answers (feature 313), or NONE='{name}' if it copies no cited source"
         )
