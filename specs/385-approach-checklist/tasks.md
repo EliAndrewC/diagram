@@ -341,6 +341,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T120 The track out's last resort never crosses a drawn channel (connector_dry_exit, UNCLAIMED, T102's round): claim it, or let it cross a ditch on a plank as 0084 gives (found working T102, 2026-10-19) [lands-open]
       research: rendering
+- [ ] T121 A guard file written by a python heredoc in a Bash command is not caught: T117's Makefile target was written by python open(p,'w') and make-only-hooks' shell-write guard let it through (found working T117) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

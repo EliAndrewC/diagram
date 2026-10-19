@@ -226,3 +226,39 @@ def test_a_note_saying_landed_is_refused_while_the_landing_is_not_on_main(tmp_pa
     assert tt.landed_refusal(tmp_path, "385-x", "T72", "landed") == "", "the ledger rides along and is not compared"
     differs.add("scripts/a.py")
     assert "scripts/a.py differs from origin/main" in tt.landed_refusal(tmp_path, "385-x", "T72", "LANDED")
+
+
+def test_a_batch_is_asked_every_tick_first_lands_once_and_ticks_each(tmp_path: pathlib.Path, monkeypatch, capsys) -> None:  # noqa: ANN001
+    """Feature 385 T117 (D135; amendment 10): a gated landing cost ~15 min, paid once per small engine fix; a batch pays it once."""
+    _lb = importlib.util.spec_from_file_location("land_batch", script("land-batch.py"))
+    assert _lb and _lb.loader
+    lb = importlib.util.module_from_spec(_lb)
+    _lb.loader.exec_module(lb)
+    d = tmp_path / "specs" / "188-alpha"
+    d.mkdir(parents=True)
+    (d / "tasks.md").write_text(TASKS, encoding="utf-8")
+    plan = b"# plan\n"
+    (d / "plan.md").write_bytes(plan)
+    (d / "plan-review.json").write_text(json.dumps({"plan_sha256": hashlib.sha256(plan).hexdigest(), "decisions": [], "verdict": "CLEAR"}), encoding="utf-8")
+    monkeypatch.setattr(tt, "repo_root", lambda start=None: tmp_path)
+    monkeypatch.setattr(tt, "landed_refusal", lambda *a: "")
+    monkeypatch.setattr(lb, "_tick_task", lambda: tt)
+    landings: list[pathlib.Path] = []
+    rc = [0]
+    monkeypatch.setattr(lb, "land", lambda root: landings.append(root) or rc[0])
+    monkeypatch.setenv("LAND_NOTE", "both fixes green")
+    assert lb.main(["188", "T02"]) == 2, "one task lands by the plain route"
+    assert lb.main(["188", "T01 T02"]) == 2 and landings == [], "T01 already ticked: refused before anything lands"
+    assert "T01: " in capsys.readouterr().err
+    rc[0] = 1
+    assert lb.main(["188", "T02 T03"]) == 1 and len(landings) == 1
+    assert "- [ ] T02" in (d / "tasks.md").read_text(encoding="utf-8"), "a failed landing ticks none"
+    rc[0] = 0
+    assert lb.main(["188", "T02 T03"]) == 0 and len(landings) == 2, "one landing for the batch"
+    text = (d / "tasks.md").read_text(encoding="utf-8")
+    assert "verify: DONE. landed in batch T02+T03: both fixes green" in text and "- [x] T03" in text
+    monkeypatch.setenv("LAND_NOTE", "")
+    assert lb.main(["188", "T02a T04"]) == 2, "an empty note"
+    monkeypatch.setattr(tt, "refusal", lambda *a, **k: ("tick: refused - the hour", ""))
+    monkeypatch.setenv("LAND_NOTE", "x")
+    assert lb.main(["188", "T02a T04"]) == 2 and len(landings) == 2 and "T02a: tick: refused - the hour" in capsys.readouterr().err

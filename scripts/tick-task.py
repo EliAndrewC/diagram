@@ -27,6 +27,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+
 #: A RESEARCH-BOX LINE IS MATCHED BY SHAPE, NEVER BY ITS TEXT (feature 229). This held the literal
 #: three-box line of constitution v2.12.0 - `research pass`, `source-reader confirmed`, `recorded and
 #: cited` - and the roster has been FIVE since features 194 and 211 added `quote-check confirmed` and
@@ -185,8 +186,8 @@ def landed_refusal(root: Path, feature: str, task: str, note: str) -> str:
         # origin/main may hold a file main already has (the plan review's aside)
         off = sorted({f for f in ahead if not f.startswith(("specs/", "dev/"))
                       and subprocess.run(["git", "-C", str(root), "diff", "--quiet", "origin/main", "--", f], capture_output=True).returncode})
-        return (f"the NOTE says landed, but {off[0]} is committed here and not on origin/main - land it (scripts/sync-with-main.sh done), then tick"
-                if off else "")
+        return (f"the NOTE says landed, but {off[0]} is committed here and not on origin/main - land it (scripts/sync-with-main.sh done,"
+                " or, with the next small fix, make land-batch F= T=\"T1 T2\" NOTE=), then tick" if off else "")
     last = every[mine[-1]]
     # a later run of the same files lands them, whichever task was active when it ran (T79's own reland was booked to T81)
     later = [r for r in every[mine[-1] + 1 :] if set(r.get("files") or []) >= set(last.get("files") or [])]
@@ -198,6 +199,26 @@ def landed_refusal(root: Path, feature: str, task: str, note: str) -> str:
         if f not in _RIDERS and subprocess.run(["git", "-C", str(root), "diff", "--quiet", "origin/main", "--", f], capture_output=True).returncode:
             return f"the NOTE says landed, but {f} differs from origin/main - land it (make land-tooling FILES=...), then tick"
     return ""
+
+
+def refusal(root: Path, d: Path, task: str, note: str, landed: bool = True) -> tuple[str, str]:
+    """(refusal, message) - every reason `make tick` refuses `task`, asked before anything is written; `landed=False` leaves out
+    the landed check, which `make land-batch` asks of each task before it lands them (feature 385 T117, D135)."""
+    sys.path.insert(0, str(Path(__file__).resolve().parent / "gates"))
+    import plan_gate as _plan_gate  # noqa: PLC0415
+
+    # A PLAN'S DECISIONS ARE REVIEWED BEFORE ITS TASKS ARE TICKED (feature 243). Asked before the task is
+    # even looked up, so a refused tick writes nothing; the push asks the same question of hand edits.
+    permitted, message = _plan_gate.tick_permitted(d, root, os.environ.get("PLAN_REVIEW_OK"))
+    if not permitted:
+        return message, ""
+    import approach_gate  # noqa: PLC0415 - feature 385 D8/D9: the task's Approach answered, and again after a trigger
+
+    why = (waits_or_marks(root, d) or _arbiter().fix_hold(d) or checkpoint_hold(root)  # 379: an open tooling fix; 383: the hour
+           or approach_gate.refusal(d, root, task))
+    if not why and landed:
+        why = landed_refusal(root, d.name, task, note)
+    return (f"tick: refused - {why}" if why else ""), message
 
 
 def main(argv: list[str]) -> int:
@@ -219,25 +240,13 @@ def main(argv: list[str]) -> int:
     if not path.is_file():
         print(f"tick: {path} does not exist", file=sys.stderr)
         return 2
-    # A PLAN'S DECISIONS ARE REVIEWED BEFORE ITS TASKS ARE TICKED (feature 243). Asked before the task is
-    # even looked up, so a refused tick writes nothing; the push asks the same question of hand edits.
-    sys.path.insert(0, str(Path(__file__).resolve().parent / "gates"))
-    import plan_gate as _plan_gate
-
-    permitted, message = _plan_gate.tick_permitted(d, root, os.environ.get("PLAN_REVIEW_OK"))
+    why, message = refusal(root, d, task, note)
     if message:
-        print(message, file=sys.stderr if not permitted else sys.stdout)
-    if not permitted:
+        print(message)
+    if why:
+        print(why, file=sys.stderr)
         return 2
-    import approach_gate  # noqa: PLC0415 - feature 385 D8/D9: the task's Approach answered, and again after a trigger
-
-    refusal = (waits_or_marks(root, d) or _arbiter().fix_hold(d) or checkpoint_hold(root)  # 379: an open tooling fix; 383: the hour
-               or approach_gate.refusal(d, root, task))
-
-    refusal = refusal or landed_refusal(root, d.name, task, note)
-    if refusal:
-        print(f"tick: refused - {refusal}", file=sys.stderr)
-        return 2
+    import plan_gate as _plan_gate  # noqa: PLC0415 - on the path since `refusal`
     try:
         new, line = tick(path.read_text(encoding="utf-8"), task, note, boxes)
     except ValueError as e:

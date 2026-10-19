@@ -7227,6 +7227,38 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T117": {
+   "section_sha256": "41df81fcca38ae661e179825d2192b72d53d64d1b4ff200b93a99dd377156e40",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D135",
+     "summary": "tick-task.py's refusals become one function refusal(root, d, task, note, landed=True); a new make land-batch F= T=\"T1 T2\" NOTE= asks it of every task (landed=False) and refuses before anything lands, runs scripts/sync-with-main.sh done once, and on exit 0 ticks each task with 'landed in batch T1+T2: <NOTE>' (the landed refusal then asked of each); a failed landing ticks none.",
+     "class": "within",
+     "why": "Amendment 10 approves 'batch the gate and the landing cohort across two or three small engine fixes'. One run of the gated route (make done, make cohort-landing, the claims gate) for several tasks is exactly that; every per-task tick refusal is kept, asked before landing and the landed refusal (D130) asked after, so nothing the request did not ask to relax is relaxed. The batch size is left to the caller rather than capped, which narrows nothing."
+    },
+    {
+     "id": "D136",
+     "summary": "landed_refusal's message for engine work off main adds 'or, with the next small fix, make land-batch'.",
+     "class": "within",
+     "why": "Points the existing refusal at the requested batching route; it changes no refusal's reach, only names the command that serves the request."
+    },
+    {
+     "id": "Approach-6 (exit c)",
+     "summary": "A command that lands and ticks a batch, not a CLAUDE.md practice.",
+     "class": "within",
+     "why": "Implements the requested lever as tooling; the alternative refused is weaker than the request, not part of it."
+    },
+    {
+     "id": "Approach-2 (the gated route stays the only way engine code lands)",
+     "summary": "Batching goes through scripts/sync-with-main.sh done, never around it.",
+     "class": "within",
+     "why": "The GM asked to batch the gate and the cohort, not to skip either; keeping the route is the request's own premise."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
