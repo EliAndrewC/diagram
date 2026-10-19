@@ -2925,3 +2925,24 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@32 (continue),
 
 **D141 - the step-back reads it.** The step-back bundle writes the table as `fix-yield.md`; the round arbiter's contract asks question 3 of it too: a fix that saves nothing is retired (removed, or simplified) as that hour's `tooling_fix`, or kept with the reason in `what`.
 
+<!-- plan-archive: archived 2026-10-19 -->
+## T114 - earlier.md says the verdict the text was judged at (found working T102, 2026-10-19)
+
+### T114 Approach (checklist part A)
+
+1. **The goal, in the world.** A plan reviewer reading a block's earlier text is told truly what that text was ruled.
+2. **The constraints.** Feature 375 amendment 11 (D64): a plan review reads each changed block beside its earlier text. Feature 243: a BLOCKED verdict's decision must be withdrawn or overruled before a CLEAR. A test red without it.
+3. **Where each comes from.** 375, 243 (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T102's round-2 bundle, then a read of `plan_bundle.build`): `earlier.md` is headed "Each changed block's text at its last CLEAR verdict" for whatever verdict the record held; T102's round-1 text, ruled BLOCKED, was shown under that heading.
+5. **The order.** The verdict passed beside each earlier text; the heading and each block's line naming it; the MANIFEST's sentence; the test.
+6. **The exits.** (c) - name the verdict; showing only CLEAR texts was weighed and refused (a round 2 needs what round 1 blocked).
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: `earlier.md` is headed "Each changed block's text when last judged, with that verdict" and each block's line carries its verdict (CLEAR, BLOCKED, or "no verdict recorded"); `tests/tooling/` red without it.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T114 Decisions
+
+**D142 - the earlier text, with its verdict.** `plan_bundle.build` takes each earlier text with the verdict the record holds for it (a task section's `tasks.<id>.verdict`, a block's `blocks.<key>.verdict`), writes `<!-- block "<key>" verdict BLOCKED -->` above it, heads the file "Each changed block's text when last judged, with that verdict", and the MANIFEST says `earlier.md` holds "what a changed block said when last judged, and the verdict it got".
+

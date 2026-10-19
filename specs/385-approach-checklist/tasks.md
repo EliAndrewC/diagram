@@ -326,8 +326,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T113 make tick refuses a 'landed' note while the last sync-with-main push was refused, as T79 refuses one after a failed land-tooling: T110 ticked 'landed' while its push stood refused by the green-gate guard (found working T110, 2026-10-19) [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 via land-tooling: a landed tick waits until the task's work is on main, by content; test red without
-- [ ] T114 A plan review's earlier.md says 'the text at its last CLEAR verdict' even when that verdict was BLOCKED: T102's round 2 bundle labeled its round-1 BLOCKED text CLEAR (found working T102, 2026-10-19) [lands-open]
+- [x] T114 A plan review's earlier.md says 'the text at its last CLEAR verdict' even when that verdict was BLOCKED: T102's round 2 bundle labeled its round-1 BLOCKED text CLEAR (found working T102, 2026-10-19) [lands-open]
       research: rendering
+      verify: DONE. landed by land-tooling 2026-10-19; earlier.md names each earlier text's verdict (D142); test red without it
 - [x] T115 A per-task time report from the event log: each task's span from its task-start to its tick, and where it went (claims rounds, gate, landing cohort, plan reviews) - the numbers the GM's speed question was answered with by hand (amendment 10) [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 via land-tooling: make where-time BY=tick; T97 53 min as the hand count; test red without
