@@ -242,6 +242,15 @@ def notes_of_manifest(text: str) -> set[str]:
     return {m.group(1) for m in _UNIT_NOTE.finditer(text)}
 
 
+def disjoint_wave(state: Mapping[str, Any], check: str, subject: str, notes: set[str], now: float) -> bool:
+    """A dispatch reading only notes that none of the check's dispatches in the subject's open round reads is ONE ROUND with them,
+    as a split bundle's batches are: neither a re-dispatch into a running round nor a round of its own (the round arbiter on
+    ask:400-round3, 2026-10-19: a second source's bundle of 0273, sent beside the first, was refused under FR-003c, and the
+    re-reads of ten sources sent together in round 2 were counted ten rounds, so q:0273 stood at round 12 after two)."""
+    flying = [d for d in open_round(state, subject, now) if d["check"] == check]
+    return bool(notes) and bool(flying) and all(d.get("notes") and not notes & set(d["notes"]) for d in flying)
+
+
 def fresh_reading(state: Mapping[str, Any], unit: str, notes: set[str]) -> bool:
     """A dispatch reading only notes no earlier round of the unit read is a FIRST reading, not a repeat round: three features
     adding their own notes to one page, one after another, are three first readings (the round arbiter on 0104, 2026-10-10:
@@ -306,6 +315,7 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
     # split is no re-dispatch into a running round, and no round of its own (0049's quote-check batch-2 was refused while batch-1 ran)
     root_of = batch_root(manifest)
     sibling = {s: bool(root_of) and any(d["check"] == check and batch_root(str(d.get("manifest") or "")) == root_of for d in open_round(state, s, now)) for s in subjects}
+    sibling = {s: sibling[s] or disjoint_wave(state, check, s, notes, now) for s in subjects}
     for s in subjects:
         same = [] if freeze_ok or sibling[s] else [d for d in open_round(state, s, now) if d["check"] == check and d.get("state") != "pending"]
         if same and [d for d in running(state, s, now) if d.get("state") == "running"]:  # launched, not a refused call's record
@@ -315,7 +325,7 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
             )
         n = state.setdefault("rounds", {}).get(f"{check}|{s}", 0)
         unit = f"{check}|{s}"
-        if root is not None and not arbiter_ok and not fresh_reading(state, unit, notes) and not first_look(state, unit, current.get(s, [])):
+        if root is not None and not arbiter_ok and not sibling[s] and not fresh_reading(state, unit, notes) and not first_look(state, unit, current.get(s, [])):
             shut = hm_arbiter.closed(root, f"round:{unit}@")
             moved = moved_since_answer(root, text, s) if shut else ""
             if shut and not moved:

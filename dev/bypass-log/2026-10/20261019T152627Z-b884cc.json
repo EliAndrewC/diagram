@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-19T15:26:27Z",
+  "target": "record-checked",
+  "commit": "3347459c6",
+  "why": "translation-check on translation-check:0272#boj-imes-edo-ichiryo: quote-check round 2's JOINED-WRONG fix added one space between two quoted spans after translation-check round 2 read them FAITHFUL; no translation or original moved"
+}

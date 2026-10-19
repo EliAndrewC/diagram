@@ -1,0 +1,8 @@
+{
+ "term": "dummy variable",
+ "def": "In a regression, a yes-or-no factor - here, whether a worker was skilled - whose estimated effect measures what that one difference adds to a wage.",
+ "variants": [
+  "dummy variable",
+  "dummy"
+ ]
+}

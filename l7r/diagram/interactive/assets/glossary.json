@@ -16956,5 +16956,131 @@
    "Gion festivals",
    "Gion"
   ]
+ },
+ "ramie": {
+  "def": "A cloth woven from the fiber of ramie, a nettle-like plant of East Asia; Chinese price lists count it with hemp cloth.",
+  "variants": [
+   "ramie"
+  ]
+ },
+ "pi": {
+  "def": "A Chinese count of cloth by the bolt, of no fixed length: an old saying put it at 4 zhang, but silks on the Ming list of 1615 ran 3 zhang 2 chi to 3 zhang 6 chi a pi.",
+  "variants": [
+   "pi"
+  ]
+ },
+ "Gongbu changku xuzhi": {
+  "def": "The Ming Board of Works' record of its workshops and storehouses and the prices of their goods, in 12 volumes, completed in 1615.",
+  "variants": [
+   "Gongbu changku xuzhi",
+   "Xuzhi"
+  ]
+ },
+ "ticket salt": {
+  "def": "Tao Shu's reform of the Huaibei salt trade from about 1831: any trader who paid the tax could buy a ticket for a fixed lot of salt and ship it, instead of the trade being held by licensed merchants.",
+  "variants": [
+   "ticket salt",
+   "ticket-salt",
+   "tickets"
+  ]
+ },
+ "salt censor": {
+  "def": "The official the Qing court sent to oversee a salt district's monopoly - its merchants, quotas and tax - and who reported to the emperor by memorial.",
+  "variants": [
+   "salt censor",
+   "salt censors"
+  ]
+ },
+ "Huaibei": {
+  "def": "The two halves of the Huai (Lianghuai) salt district: Huaibei north of the Huai River, Huainan south of it.",
+  "variants": [
+   "Huaibei",
+   "Huainan"
+  ]
+ },
+ "private salt": {
+  "def": "Salt made or sold outside the state monopoly, without the license and tax that official salt carried; smuggled salt.",
+  "variants": [
+   "private salt"
+  ]
+ },
+ "official salt": {
+  "def": "Salt sold under the Qing monopoly by licensed merchants, its tax paid; the opposite of private salt.",
+  "variants": [
+   "official salt"
+  ]
+ },
+ "Ako": {
+  "def": "A domain on the Inland Sea coast of Harima whose salt pans made the best-known salt of Edo-period Japan.",
+  "variants": [
+   "Ako",
+   "Ako salt"
+  ]
+ },
+ "Mexican dollar": {
+  "def": "The Mexican silver peso, the trade coin of the China coast in the 1800s and early 1900s; wages and prices there were often reckoned in its dollars and cents.",
+  "variants": [
+   "Mexican dollar",
+   "Mexican dollars",
+   "Mexican"
+  ]
+ },
+ "hao": {
+  "def": "A Chinese unit of account for silver, a ten-thousandth of a tael (a tenth of a li).",
+  "variants": [
+   "hao"
+  ]
+ },
+ "bun": {
+  "def": "A unit of silver by weight, one-tenth of a monme; a wage of 3 monme 1 bun is 3.1 monme.",
+  "variants": [
+   "bun"
+  ]
+ },
+ "limner": {
+  "def": "A painter of pictures and decoration, as distinct from a painter who coats woodwork with oil or lacquer; in the Zhili wage lists, the 畫 craftsman beside the 油 painter.",
+  "variants": [
+   "limner",
+   "limners"
+  ]
+ },
+ "regression": {
+  "def": "A statistical method that estimates, from many recorded cases at once, how much each factor - here a worker's skill - adds to a quantity such as a wage.",
+  "variants": [
+   "regression"
+  ]
+ },
+ "Ministry of Works": {
+  "def": "One of the six ministries of the Qing central government, in charge of public building and state manufacture; provinces settled the accounts of their building projects with it at fixed rates of prices and wages.",
+  "variants": [
+   "Ministry of Works",
+   "Ministry of Public Works",
+   "Ministry for Public Works"
+  ]
+ },
+ "Wuliao jiazhi zeli": {
+  "def": "The Qing regulations on the prices of materials, issued from 1769, which set district by district the prices and day wages a province could claim back from the Ministry of Works for public building.",
+  "variants": [
+   "Wuliao jiazhi zeli"
+  ]
+ },
+ "VOC": {
+  "def": "The Dutch East India Company (Vereenigde Oostindische Compagnie), whose accounts record wages it paid in China.",
+  "variants": [
+   "VOC"
+  ]
+ },
+ "dummy variable": {
+  "def": "In a regression, a yes-or-no factor - here, whether a worker was skilled - whose estimated effect measures what that one difference adds to a wage.",
+  "variants": [
+   "dummy variable",
+   "dummy"
+  ]
+ },
+ "Tama": {
+  "def": "A district of Musashi province west of Edo, a country of farming villages.",
+  "variants": [
+   "Tama"
+  ]
  }
 }
