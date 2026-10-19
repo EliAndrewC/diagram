@@ -6285,37 +6285,38 @@
    "verdict": "CLEAR"
   },
   "T87": {
-   "section_sha256": "4cef9837e0be044d84c587d9103f2c8624c4f568955a2fd60954eed6edecfb11",
+   "section_sha256": "f0af770860dbdaf99a4db45d837ae79ffd13df3a0f07c1966f7c59c70fc6c473",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "D108a",
-     "summary": "Ignore the re-rolled outputs in the tree comparison and print a note to commit them, rather than having the gate commit them itself",
-     "class": "within",
-     "why": "Proposal D, approved by the GM in amendment 9 ('build all 7 of those'), reads 'the gate commits (or ignores) the manifests it re-rolled itself'. It names ignoring as an option, and the note serves the commit."
-    },
-    {
-     "id": "D108b",
-     "summary": "The roll's outputs counted as json, png, svg, html and webp beside a .gen.py, not only the json manifest",
-     "class": "within",
-     "why": "The goal is 'a gate never fails for a pool map it re-rolled itself'. If a roll rewrites the images as well as the manifest, excluding only the json would leave the failure in place. This is within the request only while the files are the ones the gate's own roll wrote (see D108c)."
-    },
-    {
-     "id": "D108c",
-     "summary": "The exclusion is keyed on file class (every changed tracked map output under pool/), not on the maps the gate rolled this run. The plan argues no one else writes them because gate-write-hooks.sh refuses make map beside a running gate",
+     "id": "D108-keying",
+     "summary": "preflight.tree's tree-move check leaves out only the outputs of the maps the gate's own run log reports as 'ROLLED this run'; any other changed file, including another map's pool output, is still a tree move",
      "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The GM approved ignoring 'the manifests it re-rolled ITSELF'. The plan's own constraint (item 2) keeps 375 FR-004: 'a write by anyone else during the gate still voids it'. Excluding by class lets any non-gate write to a pool map output during the gate pass unrefused. Examples: an Edit or Write, a background make map started before the gate, a hand edit. That narrows FR-004 beyond what was asked. The class-equals-provenance premise is argued from one hook's refusal of one command, and item 4 does not measure it. Keying on provenance is not impossible: item 4 shows the gate already knows what it rolled ('ROLLED this run: its cache key moved'). So it fails all three tests. It is not physically impossible, it is not implied by the GM's words, and the literal reading does not defeat the purpose. Fix: exclude only the output files of the maps the gate reports as rolled this run, ideally only where the end hash is what the roll wrote. Add to item 9's test a write by something other than the gate's roll to a pool map output during the gate, which must still be refused."
+     "ruling": "LEGITIMATE",
+     "why": "It narrows 375 FR-004 (refuse green when any tracked file changed during the gate), but the GM's amendment 9 approves exactly this carve-out: proposal D, 'the gate commits (or ignores) the manifests it re-rolled itself instead of calling them a tree move'. Keying on the maps the gate itself rolled matches 'it re-rolled itself' word for word, and keeps FR-004's purpose (catch a write by anyone else) for every other file, other maps' pool outputs included. The earlier CLEAR text excused every pool map output whoever wrote it; this revision is closer to the request, not further from it."
     },
     {
-     "id": "item9-test",
-     "summary": "tests/tooling/test_preflight.py red without the change; a move of any other file still refuses",
+     "id": "D108-file-set",
+     "summary": "the excused files are all of a rolled map's outputs beside its .gen.py (json, png, svg, html, webp), not the json manifest alone",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Proposal D says 'manifests'. But its stated purpose is that the gate stops failing on its own re-roll ('a gate per stale manifest'; T87 goal: 'a gate never fails for a pool map it re-rolled itself'). A re-roll rewrites all of that map's tracked outputs, so excusing only the json would still fail the gate on the png/svg/html/webp from the same roll. Taken literally the rule would defeat the request's own purpose. The set is still limited to the rolled map's own outputs, so nothing outside the gate's own write is excused."
+    },
+    {
+     "id": "D108-ignore-and-print",
+     "summary": "of 'commits (or ignores)' the plan takes 'ignores': the files are left out of the comparison and printed as 're-rolled by the gate - commit them'",
      "class": "within",
-     "why": "Enforces the requested behavior and keeps FR-004 for other files (GM 2026-09-20: enforcing what was asked is in scope)."
+     "why": "The GM's approved proposal offers the two alternatives; picking one, and telling the session to commit what was left out, is inside it."
+    },
+    {
+     "id": "T87-test",
+     "summary": "tests/tooling/test_preflight.py red without it: a rolled map's outputs are not refused, a move of any other file (another map's pool output too) still refuses",
+     "class": "within",
+     "why": "A check that only fails when the requested behavior is missing, and that keeps 375 FR-004 for everything else. It enforces proposal D and is not new scope."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   },
   "T84": {
    "section_sha256": "98bdcd8dd559ca07ddbbaaa36d1109a500710b8ad6fedc8c6de427bccb485bef",
