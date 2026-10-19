@@ -480,7 +480,7 @@ Owed by the landing cohort of 07:15Z (cohort seed 22 newly failing) and the roun
 
 1. **The goal, in the world.** A plan section is held only while a review of it actually runs.
 2. **The constraints.** T85 (D106): a write that would change text a running plan review reads is refused; `PLAN_EDIT_OK` passes a dead hold only. The GM's rule: a guard that fires on correct work teaches a session to bypass every guard. A test red without it.
-3. **Where each comes from.** T85 (O); the GM (G, the root CLAUDE.md's "What is enforced").
+3. **Where each comes from.** T85 (O); the GM (G, the root CLAUDE.md's section on what is enforced).
 4. **Do they describe the world here?** Yes - measured 2026-10-19 (the guard's two refusals, then a read of `hm_checks` and `hm_planhold`): T98's first plan review was refused by the hourly step-back guard, so it never launched and never returned; the hold taken at its PreToolUse stayed `pending` and refused T98's section amendment about an hour after the re-sent review had returned, and later a `make ledger-owed` command that named the plan in its reason - each passed only with `PLAN_EDIT_OK`.
 5. **The order.** `hm_planhold.refusal` passes a hold still pending past `PENDING_S`; `hold` drops an earlier hold of the same task or blocks; then the test.
 6. **The exits.** (c) - a hold that never launched is no hold; (e) conform - the escape each time - refused: the guard would teach the escape.
