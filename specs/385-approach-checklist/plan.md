@@ -600,25 +600,25 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@34 (continue),
 <!-- plan-archive: T119 to T119 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
 <!-- plan-archive: T114 to T102 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
 <!-- plan-archive: T121 to T117 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
-## T122 - a landing leaves the clone merged with what it landed (found working T119, 2026-10-19)
+## T122 - a file the clone landed does not conflict with itself (found working T119, 2026-10-19)
 
 ### T122 Approach (checklist part A)
 
-1. **The goal, in the world.** A file landed by `make land-tooling` and then edited again in the clone lands again, and syncs, without a merge conflict.
-2. **The constraints.** Feature 379: `land-tooling` lands the named files as a new commit on main; the clone's history is never rewritten (no rebase, no amend); nothing is merged under a running gate (T30). Feature 385 T24 (D46): a stale base is merged, not refused. A test red without it.
-3. **Where each comes from.** 379, the root CLAUDE.md's session-clone rules, T30, T24 (O).
-4. **Do they describe the world here?** Yes - measured 2026-10-19 (T119's second landing, and earlier the same day T84-era landings kept by hand): `fix_yield.py` was new in the clone, landed as main's own commit, then edited in the clone; the clone's merge base with main still lacked the file, so the next landing's patch added it again, failed to apply, and the merge of main conflicted add/add - as did `sync-in` - though main held only what the clone had landed. The landing prints "its next sync-in merges them cleanly", which was not so.
-5. **The order.** After a landing succeeds, merge origin/main into the clone while the landed files still equal the clone's; refused under a running gate or a dirty overlap, left to `sync-in` as now; the message; the test.
-6. **The exits.** (c) - merge at once, when it is clean by construction; resolving a later add/add by "ours when main's side is the clone's own landing" was weighed and refused (it decides a conflict after the fact, where merging at once avoids it).
+1. **The goal, in the world.** A file landed by `make land-tooling` and then edited again in the clone lands again without a merge conflict.
+2. **The constraints.** Feature 379: `land-tooling` lands the named files as a new commit on main. Feature 385 D46: the clone merges origin/main only when the patch fails to apply - "not whenever the clone is behind" - and otherwise its history is left as it was (the suite's "the clone's history is untouched"); a merge that conflicts is aborted and refused. Never a rebase or an amend; never merged under a running gate (T30). A test red without it.
+3. **Where each comes from.** 379, D46, T30, the root CLAUDE.md's session-clone rules (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T119's second landing, and earlier the same day T84-era landings kept by hand): `fix_yield.py` was new in the clone, landed as main's own commit, then edited in the clone; the clone's merge base still lacked the file, so the next landing's patch added it again and failed to apply, and D46's merge of main conflicted add/add - though main's side was exactly what the clone had landed. Resolved by hand to the clone's side both times.
+5. **The order.** In D46's merge branch, a conflict on files whose main side the clone itself landed resolved to the clone's side; any other conflict aborted and refused as now; the suite case.
+6. **The exits.** (c) - resolve the self-landed conflict where D46 already merges; merging main back after every landing was weighed and refused (the plan review of round 1: it reverses D46's "not whenever the clone is behind" and its "history untouched" test).
 7. **The search smell.** None.
 8. **The budget.** 30 min.
-9. **Done, measured.** One goal: after a successful landing, `land-tooling` merges origin/main into the clone (a merge commit, never a rebase) unless a gate runs in the clone or the merge would touch an uncommitted file, and says which; a file landed, edited and landed again then applies cleanly; `tests/hooks/test-land-tooling.sh` red without it.
+9. **Done, measured.** One goal: when D46's merge conflicts and every conflicted file's main side is a version of that file in the clone's own history, `land-tooling` takes the clone's side for them, commits the merge and lands; any other conflict aborts and refuses as now; `tests/hooks/test-land-tooling.sh` red without it, its "history untouched" case unchanged.
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
 ### T122 Decisions
 
-**D144 - merged at once, clean by construction.** At the end of a successful `land-tooling`, the script fetches and runs `git merge --no-edit origin/main` in the clone: the landed files are byte for byte the clone's, so they merge cleanly. It skips the merge, saying so, when `gate_lock.py held` (T30) or when the merge refuses for local changes (git aborts it without touching the tree); a conflict from other sessions' work is aborted and left to `sync-in`, as now. The closing line becomes "landed ... on main, and merged main back into the clone" or names why it did not.
+**D144 - a self-landed conflict takes the clone's side.** A new `scripts/gates/self_landed.py`, run by `land-tooling` when D46's `git merge origin/main` fails with a merge in progress: for each conflicted file (`git diff --name-only --diff-filter=U`), the blob on main's side (`MERGE_HEAD:<file>`) must equal the file's blob at some commit of the clone's own history (`git rev-list HEAD -- <file>`); if every one does, it takes the clone's side (`git checkout --ours`), stages them and commits the merge, and the landing goes on as D46's clean merge does; if any does not, nothing is resolved, and the merge is aborted and refused as now.
 
 ## T11 - the close
 

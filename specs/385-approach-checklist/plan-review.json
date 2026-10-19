@@ -7381,6 +7381,57 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T122": {
+   "section_sha256": "0825d0ba184d0653a7e5faa77d1bf7a8ff5cf64d7b33648e2dfd9d3bfee2af96",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D144a",
+     "summary": "After every successful land-tooling, fetch and merge origin/main into the clone (a merge commit), even when the patch applied",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The accepted spec's D46 settles this exact case the other way: the merge happens 'Only then, not whenever the clone is behind: a patch that applies needs no merge, and the route's own rule (feature 379) is that the clone's history is left as it was - its test \"the clone's history is untouched\" stands.' D144 merges after every landing, which is the 'whenever' D46 rules out, so it narrows D46's guarantee that a landing whose patch applies leaves the clone's history untouched. The block does not label this. Approach item 2 cites D46 only as 'a stale base is merged, not refused' and restates 379's rule as 'never rewritten (no rebase, no amend)', which is weaker than D46's 'left as it was', and the block never mentions the standing test that D144 would turn red. The three grounds for an exception: the rule is not impossible to follow (it can be followed, it only conflicts when a file is landed a second time); request.md says nothing about clone history, feature 379 or land-tooling, and the general permissions in amendment 6 ('any obvious ... tooling ... improvements') and amendment 8 ('make our tooling do the thing correctly automatically') do not extend to reversing a recorded spec decision that has its own test; and the purpose it would defeat is D46's, not one the GM stated. The measured add/add incident is a good reason to change the rule. It is a reason to amend D46 in spec.md, reviewed on its own counter, and that amendment should say what happens to the test 'the clone's history is untouched'. A plan section cannot override it quietly."
+    },
+    {
+     "id": "D144b",
+     "summary": "The merge is skipped, saying so, while a gate runs in the clone (gate_lock.py held, T30)",
+     "class": "within",
+     "why": "Keeps the T30 constraint the block cites; adds no scope."
+    },
+    {
+     "id": "D144c",
+     "summary": "The merge is skipped, saying so, when git refuses it for local changes (git aborts without touching the tree)",
+     "class": "within",
+     "why": "Leaves the session's uncommitted work as it was; matches D46's care for the clone's state."
+    },
+    {
+     "id": "D144d",
+     "summary": "A merge that conflicts on other sessions' work is aborted and left to sync-in, as now",
+     "class": "within",
+     "why": "Matches D46's 'A merge that conflicts is aborted (the clone left as it was)' and naming sync-in."
+    },
+    {
+     "id": "D144e",
+     "summary": "The closing line says main was merged back into the clone, or says why it was not",
+     "class": "within",
+     "why": "A message that reports the behavior. It also corrects the current message, which the measured incident showed to be false."
+    },
+    {
+     "id": "A6-exit",
+     "summary": "Exit (c), merging at once, is chosen; resolving a later add/add as 'ours when main's side is the clone's own landing' is weighed and refused",
+     "class": "within",
+     "why": "A choice of design among the exits. It decides nothing the request or spec settles."
+    },
+    {
+     "id": "A9-test",
+     "summary": "tests/hooks/test-land-tooling.sh gains a test that is red without the change",
+     "class": "within",
+     "why": "Its only job is to enforce the task's own goal. Note: the block says nothing about D46's existing test 'the clone's history is untouched', which D144a would turn red (see D144a)."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }
