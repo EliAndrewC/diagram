@@ -83,6 +83,35 @@ def gm_waits(root: Path, feature: str, since: float, now: float) -> float:
     return waited
 
 
+#: a gap in the feature's own event log longer than this, with no Stop before it, is time the feature was not worked
+IDLE_S = 20 * 60
+
+
+def idle(root: Path, feature: str, since: float, now: float) -> float:
+    """Seconds between `since` and `now` the feature was not worked on: each gap between two of its own events longer than
+    IDLE_S, less IDLE_S, unless the gap opens with a Stop (a wait on the GM is `gm_waits`'; one on the session's own background
+    work is its time). The round arbiter's tooling fix on hour:397@1: a feature claimed overnight and first worked hours later
+    came due on its first touch, its hour counted from the claim. A tool call logs an event, so a worked hour has no such gap."""
+    from datetime import datetime  # noqa: PLC0415
+
+    g = ro._gitdir(root)  # noqa: SLF001 - the glyph clock's own reader
+    path = g / "l7r-events" / f"{feature}.jsonl" if g is not None else None
+    if path is None or not path.is_file():
+        return 0.0
+    gone, last, stopped = 0.0, None, False
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        try:
+            e = json.loads(raw)
+            t = datetime.fromisoformat(str(e["t"]).replace("Z", "+00:00")).timestamp()
+        except (ValueError, KeyError, TypeError):
+            continue
+        if last is not None and not stopped:
+            lo, hi = max(last, since), min(t, now)
+            gone += max(0.0, hi - lo - IDLE_S) if hi - lo > IDLE_S else 0.0
+        last, stopped = t, e.get("ev") == "Stop" or (stopped and e.get("ev") not in ("UserPromptSubmit", "PreToolUse", "SubagentStop"))
+    return gone
+
+
 def state(root: Path, now: float | None = None) -> dict:
     """{feature, due, since, hour, open: trigger or "", units, units_since}; `due` False with no feature or no event log."""
     now = time.time() if now is None else now
@@ -92,7 +121,7 @@ def state(root: Path, now: float | None = None) -> dict:
         return {"feature": feature, "due": False}
     mine = _clock(root)[1].get(feature) or {}
     since = max(start, float(mine.get("checkpoint_at") or 0))
-    return {"feature": feature, "due": now - since - gm_waits(root, feature, since, now) >= CHECKPOINT_S, "since": since, "hour": int(mine.get("checkpoints") or 0) + 1,
+    return {"feature": feature, "due": now - since - gm_waits(root, feature, since, now) - idle(root, feature, since, now) >= CHECKPOINT_S, "since": since, "hour": int(mine.get("checkpoints") or 0) + 1,
             "open": str(mine.get("checkpoint_trigger") or ""), "units": list(mine.get("checkpoint_units") or []),
             "units_since": float(mine.get("units_since") or 0)}
 
