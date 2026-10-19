@@ -73,6 +73,7 @@ anchor cultures	anchor culture
 animal unit	animal unit
 animal units	animal unit
 anjifang	anjifang
+ansei	Ansei
 anthropogenic	anthropogenic
 apron	apron
 aprons	apron
@@ -732,6 +733,7 @@ dead angle	dead angle
 dead angles	dead angle
 dead ground	dead ground
 dead space	dead ground
+deba	deba
 deep paddies	shitsuden
 deep percolation	deep percolation
 deep percolation losses	deep percolation
@@ -923,6 +925,7 @@ eel's-bed plot	eel's bed
 egress	egress
 egune	igune
 egune's	igune
+ei-sen	ei-sen
 eight trigrams	eight trigrams
 eighty-eighth night	eighty-eighth night
 eiro	eiro
@@ -1721,6 +1724,8 @@ ichi no torii	ichi-no-torii
 ichi-	ichi-no-torii
 ichi-no-ma	ni-no-ma
 ichi-no-torii	ichi-no-torii
+ichibu	ichibu
+ichibu gold piece	ichibu
 ichigami	ichigami
 ichimoji weir	ichimoji-zeki
 ichimoji-zeki	ichimoji-zeki
@@ -2151,6 +2156,7 @@ ko	kō
 ko-aza	koaza
 ko-shoin	Ko-shoin
 koaza	koaza
+koban	koban
 kobito	kobito
 kochi seiri	kochi seiri
 kochi-seiri	kochi seiri
@@ -4073,6 +4079,8 @@ tenmon	Tenbun
 tenna	Tenna
 tenon	mortise and tenon
 tenpo	Tenpo era
+tenpo coin	Tenpo coin
+tenpo coins	Tenpo coin
 tenpo era	Tenpo era
 tenpō	Tenpo era
 tenpō era	Tenpo era

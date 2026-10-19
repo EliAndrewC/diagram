@@ -17082,5 +17082,43 @@
   "variants": [
    "Tama"
   ]
+ },
+ "ei-sen": {
+  "def": "A money of account in copper coin that the Fukui domain used to reckon its taxes on goods; the record does not give its rate against ordinary copper cash.",
+  "variants": [
+   "ei-sen"
+  ]
+ },
+ "deba": {
+  "def": "A heavy, thick-backed Japanese kitchen knife for cutting fish, plainer and cheaper than the thin-bladed and sashimi knives; this record reads the third knife of Edo's 1851 price list as one.",
+  "variants": [
+   "deba"
+  ]
+ },
+ "Tenpo coin": {
+  "def": "coins the shogunate issued in the Tenpo era (1830-1844); put into circulation in great numbers, they drove down the price of copper coin until the shogunate changed its official rate in 1842.",
+  "variants": [
+   "Tenpo coin",
+   "Tenpo coins"
+  ]
+ },
+ "koban": {
+  "def": "the oval gold coin of Edo-period Japan, worth one ryo; with the ichibu gold piece, one of the standard gold coins, and the coin the Osaka floor quoted gold in until 1859.",
+  "variants": [
+   "koban"
+  ]
+ },
+ "ichibu": {
+  "def": "a rectangular gold piece worth one bu, a quarter of a ryo; with the koban, one of the standard gold coins of Edo-period Japan.",
+  "variants": [
+   "ichibu",
+   "ichibu gold piece"
+  ]
+ },
+ "Ansei": {
+  "def": "an era of Japan's calendar, 1854-1860.",
+  "variants": [
+   "Ansei"
+  ]
  }
 }
