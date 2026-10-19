@@ -30755,30 +30755,32 @@
   "triaged": "2026-10-18",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#brook not crossed": {
-  "body": "f482b9e4dd7b3de1",
-  "claim": "brook not crossed - villages-beside-their-stream-one-bank-or-both.drawing: no water line crossed",
-  "code": "98a2f8d510e227e3",
-  "core": "f0643632f542215e",
+ "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#brook crossed at its crossing places": {
+  "body": "4075e313abca307a",
+  "claim": "brook crossed at its crossing places - villages-beside-their-stream-one-bank-or-both.drawing: the fill keeps to its own bank unless crossing at a crossing place (`brook_fords`, gapped by `FORD_HALF`) finds a way it otherwise has not, or saves more than `BROOK_CROSSING_COST_FT` (150 ft) of walk; the crossing is then squared to the brook by the settle (`squaring.square_every_crossing`, the connector's too)",
+  "code": "71fa60e05b16f635",
+  "core": "fe8642b99367f8a3",
   "date": "2026-10-19",
-  "note": "the brook and the water lines are lines `dry_exit` may never cross, but 0035 has ways \"cross the brook squarely, on a plank bridge\" when crossing saves \"more than about 150 ft\". The connector should toll a crossing, or the claim should be a DEVIATION the drawing page records",
+  "note": "keeps to its own bank unless crossing finds a way or saves more than 150 ft (`BROOK_CROSSING_COST_FT`), crossing places every 160 ft on straight reaches (`FORD_SPACING`, `FORD_BEND_DEG`), crossing squared afterwards; all as the page records them, the 150 ft and 160 ft as GUESSes",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
   "research": "d47738a05844fe19",
   "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:3ad87e3e98ea5542",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#dry exit off the wet": {
-  "body": "f482b9e4dd7b3de1",
+  "body": "4075e313abca307a",
   "claim": "dry exit off the wet - village-lanes.drawing: walled by the marsh, the steadings and the field",
-  "code": "76b614dd3cca1698",
-  "core": "f0643632f542215e",
+  "code": "17bb33548eec4f09",
+  "core": "fe8642b99367f8a3",
   "date": "2026-10-19",
-  "note": "walled by the wet ground, the field and the steadings, it runs off the map",
+  "note": "walled by the wet ground, the steadings and the field, and runs off the canvas",
   "pages": {
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
   },
@@ -30792,40 +30794,41 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#grove band gap": {
-  "body": "f482b9e4dd7b3de1",
+  "body": "4075e313abca307a",
   "claim": "grove band gap - groves-of-trees-around-farmhouses-yashikirin.drawing: a lane keeps a footpath's clearance and some working room off the trees; `CONNECTOR_BAND_GAP_FT`, 0036's 9.5 ft working room plus the connector's half-width (12.5 ft), on a finer grid",
-  "code": "201cfd4c254d17a5",
-  "core": "f0643632f542215e",
+  "code": "6620aa7ae1ad8495",
+  "core": "fe8642b99367f8a3",
   "date": "2026-10-19",
-  "note": "9.5 ft working room plus the 6 ft track's half-width = 12.5 ft, §94's rule carried to the wider tread",
+  "note": "9.5 ft working room each side gives the page's ~22 ft opening for a 3 ft footpath; plus a 3 ft half-width that is 12.5 ft to the centerline",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
   "research": "45be621f47448e34",
   "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:06616d493b616366",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#pond berth": {
-  "body": "f482b9e4dd7b3de1",
+  "body": "4075e313abca307a",
   "claim": "pond berth - UNRESEARCHED: 80 ft past the pond's larger half-axis",
-  "code": "c04d925df5a32d0c",
-  "core": "f0643632f542215e",
+  "code": "1afeaac8e0cb1739",
+  "core": "fe8642b99367f8a3",
   "date": "2026-10-19",
-  "note": "the bundle is silent on an 80 ft pond berth",
+  "note": "none of the cited questions speaks to a pond berth; 80 ft is unresearched",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#the track off the steadings": {
-  "body": "f482b9e4dd7b3de1",
+  "body": "4075e313abca307a",
   "claim": "the track off the steadings - DEVIATION how-our-maps-lay-a-clustered-settlements-lanes.drawing, village-lanes.drawing: 7 ft off every steading (`TRACK_FABRIC_GAP`), a lane's middle off a garden fence",
-  "code": "53f63dc0e4916a56",
-  "core": "c60fd0ee2f01ede4",
+  "code": "497568fbbf507b89",
+  "core": "fe8642b99367f8a3",
   "date": "2026-10-19",
-  "note": "TRACK_FABRIC_GAP 7 ft from the middle; the page records the edge-side DEVIATION",
+  "note": "7 ft to the lane's middle off every steading (`TRACK_FABRIC_GAP` = `WEB_FABRIC_GAP` = 7.0) is the page's least gap, measured to the middle, which the page records as a DEVIATION; the 6 ft track's tread still clears a house wall by 4 ft, more than 0081's 3 ft",
   "pages": {
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
@@ -30833,28 +30836,38 @@
   "research": "bf7b3516b9fa8041",
   "rests": [
    "0081-village-lanes.drawing.html:417841cd16f112d9",
+   "0081-village-lanes.drawing.html:91a5765af6230403",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#the track off the wet": {
-  "body": "f482b9e4dd7b3de1",
+  "body": "4075e313abca307a",
   "claim": "the track off the wet - UNRESEARCHED: the wet ground grown 8 ft (`wet_grown_by_the_lane`)",
-  "code": "4729709dfe3e298f",
-  "core": "f0643632f542215e",
+  "code": "bd29db8b89a14add",
+  "core": "fe8642b99367f8a3",
   "date": "2026-10-19",
-  "note": "the page says a track keeps off wet ground but gives no margin, so the 8 ft growth is rightly unresearched",
+  "note": "0081 says only that the track keeps off wet ground; the 8 ft growth (3 ft half-width plus a pad) has no researched figure",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#track start out of the grove bands": {
-  "body": "f482b9e4dd7b3de1",
-  "claim": "track start out of the grove bands - groves-of-trees-around-farmhouses-yashikirin.drawing: walked out of grove bands by `CONNECTOR_BAND_GAP_FT` (0036's working room past the half-width) and the fill's cell slack, the wall the fill puts round each band",
-  "code": "e347abb1b20641fe",
-  "core": "f0643632f542215e",
+ "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#the track out never crosses a drawn channel (`waters`): water lines are opened only near the brook's crossing places, so it gets no plank crossing of a ditch": {
+  "code": "fe8642b99367f8a3",
+  "core": "fe8642b99367f8a3",
   "date": "2026-10-19",
-  "note": "the start is pushed past the band gap, so no track starts in a grove",
+  "note": "the track out never crosses a drawn channel (`waters`): water lines are opened only near the brook's crossing places, so it gets no plank crossing of a ditch",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#track start out of the grove bands": {
+  "body": "4075e313abca307a",
+  "claim": "track start out of the grove bands - groves-of-trees-around-farmhouses-yashikirin.drawing: walked out of grove bands by `CONNECTOR_BAND_GAP_FT` (0036's working room past the half-width) and the fill's cell slack, the wall the fill puts round each band",
+  "code": "07d13e4879a8596f",
+  "core": "fe8642b99367f8a3",
+  "date": "2026-10-19",
+  "note": "start pushed outside the grove by the 0036 lane clearance; the cell slack is plumbing",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },

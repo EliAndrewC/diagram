@@ -1,6 +1,6 @@
 ---
 name: claims-triage
-description: Pre-sorts the engine's research claims whose pages moved - for each claim, does any new, changed or removed block of its page bear on what the claim says the code does (TOUCHES it, or cleared) - run on the bundle `make claims-triage` writes; the claims it names go on to impl-drift.
+description: Pre-sorts the engine's research claims whose pages or code moved - for each claim, does any new, changed or removed block of its page, or any hunk of its unit's diff, bear on what the claim says the code does (TOUCHES it, or cleared) - run on the bundle `make claims-triage` writes; the claims it names go on to impl-drift.
 model: opus
 effort: medium
 tools: Read, Grep
@@ -23,11 +23,16 @@ MANIFEST has a section per page (or per procedure section of the docs) that chan
 Each lists ONLY that page's new and changed blocks and its REMOVED blocks, then the claims that cite it: each claim's KEY, its
 line, and its last verdict with that check's note.
 
+A section headed `<path>::<name> (a unit of code; its diff against origin/main)` shows instead the diff hunks of that unit of
+code since main, then its claims (feature 385 T116): there the question is whether the CHANGE to the code could change a claim's
+verdict - a figure, a test, an order or a branch the claim describes - not whether the code is right.
+
 ## How you decide
 
 For each claim, decide whether any of those blocks - a block added or reworded, or one taken away - could change its verdict: a
 figure, rule, form, order, exception or recorded deviation that bears on what the claim says the code does. A block about
-something else on the same page does not. A removed block that a claim's note leaned on does. When unsure, name it - a claim you
+something else on the same page does not. A removed block that a claim's note leaned on does. In a code section, a hunk that changes only what the claim does not
+describe (another branch, a name, plumbing) does not; one that alters what the claim describes does. When unsure, name it - a claim you
 clear is never re-checked, and a claim you name only costs one `impl-drift` run.
 
 ## Your reply

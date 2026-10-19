@@ -7092,6 +7092,64 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T113": {
+   "section_sha256": "161c4479a7d15d8652fc60fb90fc4ddd92e49b31d7f9843ed556593c90ae4724",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D130",
+     "summary": "In tick-task.landed_refusal, a task with no land-tooling run is refused when a commit ahead of origin/main touches a file outside specs/ and dev/.",
+     "class": "within",
+     "why": "It changes D98's last sentence (a task with no row is not refused) in the widening direction only: more enforcement, nothing the GM asked or the accepted spec settled is narrowed. It serves the GM's 'implement any obvious performance / tooling / process improvements along the way' (amendment 6) and 'make our tooling do the thing correctly automatically every time' (amendment 8), and FR-010's guard-not-reminder rule."
+    },
+    {
+     "id": "D130-exclusion",
+     "summary": "Files under specs/ and dev/ (the feature's own records, the landing's run logs) are not counted by the new refusal.",
+     "class": "within",
+     "why": "A carve-out from a refusal that did not exist before: D98 refused nothing for a task with no row, so excluding these directories narrows nothing the GM asked or the spec settled. It is what lets the guard run at all mid-feature, where every clone carries unlanded specs/ commits (the tick itself writes one)."
+    },
+    {
+     "id": "Approach-6 exit (c)",
+     "summary": "The work's presence on main decides the tick, not the landing route's own log; the log was weighed and refused.",
+     "class": "within",
+     "why": "A design choice about how the new check reads the world; it narrows no request or requirement, and the block records the alternative and why it was refused."
+    },
+    {
+     "id": "refusal-message",
+     "summary": "The refusal names the file and the one command that lands it (scripts/sync-with-main.sh done).",
+     "class": "within",
+     "why": "The same shape FR-019 and SC-009 set for this feature's refusals (each names its one command)."
+    },
+    {
+     "id": "test",
+     "summary": "A tests/tooling/ test red without the change.",
+     "class": "within",
+     "why": "Pure enforcement of D130: with D130 deleted the test has nothing left to check."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T102": {
+   "section_sha256": "06c23f157a87b9dc3327b0bd54ca3112c75c633df29ea4e33f214cb45fca3649",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D131",
+     "summary": "connector_dry_exit runs its fill twice (water lines as walls; and open within FORD_HALF of each brook_fords crossing place) and takes the crossing way only where the own-bank fill finds none or the own-bank way is longer by more than BROOK_CROSSING_COST_FT (0035's 150 ft); the claim cites 0035's crossing places and its keep-to-own-bank rule; no page edit.",
+     "class": "within",
+     "why": "A claim fix of the kind the GM pulled into this feature (Amendments 6-7, FR-020). The change since the last CLEAR verdict tightens the crossing to 0035's own stated rule (a way keeps to its own bank unless crossing saves about 150 ft), the same constant the track's own router already uses; it carves nothing out of the request, and the fill's ability to cross only at a crossing place is unchanged. The guess status of the 150 ft is recorded on 0035's page and the claim cites it, satisfying the request's guardrail that a rule's reason be recorded where the code changes."
+    },
+    {
+     "id": "T102 Approach exits",
+     "summary": "Exit (c), a new rule - the fill passes the brook at crossing places - chosen; (b) principled exception and (e) conform-as-claimed refused.",
+     "class": "within",
+     "why": "Unchanged from the CLEAR text; the checklist's three named exits are judged as the approved proposal asks, and the chosen exit brings the code toward the research page rather than away from it."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

@@ -1,0 +1,37 @@
+{
+  "utc": "2026-10-19T12:23:52Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 178,
+  "result": "failed: test-full",
+  "commit": "985e0f7f8",
+  "first_failure_s": 166.6,
+  "last_failure_s": 178.4,
+  "failed_names": [
+    "uncovered l7r/diagram/hamletgen/ways/track.py:957"
+  ],
+  "host": {
+    "load": [
+      8.47,
+      5.23
+    ],
+    "mem_avail_mb": [
+      7956,
+      8088
+    ],
+    "cpu_temp_c": [
+      68.0,
+      69.0
+    ],
+    "stall_s": {
+      "cpu": 1.5,
+      "io": 0.5,
+      "io_full": 0.5,
+      "memory": 0.2
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  }
+}

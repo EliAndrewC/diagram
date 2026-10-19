@@ -85,3 +85,28 @@ def test_the_grove_exit_grid_holds_the_connector_between_two_dispersed_farms() -
 
     assert 2 * track.CONNECTOR_BAND_GAP_FT + 2.41 * dry_exit.GROVE_EXIT_CELL_FT <= LANE_ROOM_FT
     assert track.CONNECTOR_BAND_GAP_FT + 0.71 * dry_exit.GROVE_EXIT_CELL_FT + 1.0 <= LANE_ROOM_FT / 2, "the start fits the gap"
+
+
+def test_the_last_resort_crosses_its_brook_only_where_0035_would(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 385 T102 (plan D131): a way keeps to its own bank unless crossing at a crossing place saves it more than about
+    150 ft of walking (0035) - the fill run own-bank and open at the crossing places, the crossing taken only where it pays."""
+    import types
+
+    from l7r.diagram.hamletgen.ways import track
+
+    brook = [(500.0, -100.0), (500.0, 1100.0)]
+    plan = types.SimpleNamespace(W=1000.0, H=1000.0, sink_pond=None, sink_brook=brook, brook=brook, envelope=[], grove_bands=[])
+    far = [(400.0, 500.0), (400.0, 2000.0)]  # own bank, a long way round
+    near = [(400.0, 500.0), (600.0, 500.0), (1100.0, 500.0)]  # across, about 700 ft
+    calls: list[list] = []
+
+    def fill(start, walls, lines, W, H, cell=10.0):  # type: ignore[no-untyped-def]
+        calls.append(list(lines))
+        return list(far) if len(calls) == 1 else list(near)
+
+    monkeypatch.setattr(track, "dry_exit", fill)
+    assert track.connector_dry_exit(plan, (400.0, 500.0), [], [], [], []) == near, "the crossing saves well over 150 ft"
+    calls.clear()
+    far[1] = (400.0, 1250.0)  # own bank about 750 ft, the crossing about 700: under 150 ft saved
+    assert track.connector_dry_exit(plan, (400.0, 500.0), [], [], [], []) == far, "it keeps to its own bank"
+    assert len(calls[1]) > len(calls[0]), "the second fill is the one open at the crossing places"

@@ -293,8 +293,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T101 Carried by the claims gate (FR-013): findings a page edit surfaced on code left unchanged - fix the code or the claim and re-check each: l7r/diagram/settlement/rolling/access.py::ACCESS_HALF_FT#corridor room [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 (direct, comment-only): ACCESS_HALF_FT's comment names the fence gap, MIN_WEB_GAP the room; claim IN-STEP
-- [ ] T102 The connector may cross its brook where crossing saves more than about 150 ft, as 0035 gives it, or the ban recorded as a DEVIATION (track.connector_dry_exit#brook not crossed - DRIFTED, found working T98) [lands-open]
+- [x] T102 The connector may cross its brook where crossing saves more than about 150 ft, as 0035 gives it, or the ban recorded as a DEVIATION (track.connector_dry_exit#brook not crossed - DRIFTED, found working T98) [lands-open]
       research: rendering
+      verify: DONE. landed 2026-10-19 (gated, 7c02121cf): the last-resort fill crosses its brook at a crossing place only where 0035's 150 ft is saved, squared by the settle; claims IN-STEP or filed (T120)
 - [x] T103 The measure guard sees a red preflight: a gate that stops at preflight writes no run-log record, so the guard refused the re-run as 'last gate GREEN 30 min ago' (found working T98, 2026-10-19) [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 via land-tooling: a red preflight marks the git dir; the measure guard lets the re-run through; hook suite 48/48, red without
@@ -321,7 +322,22 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T112 The track's fallbacks walled as its first route is: _thread_the_fabric's grove fallback, unrouted clip and swing wall only the fabric or the bands, so a track may cross row crops, the paddy or wet ground (DRIFTED) or a brook off its crossing places (CANNOT-TELL); and its five unclaimed decisions - the largest piece kept, a near end counted a junction, an end walked clear along its own leg, the water-crossing limit, the order of the three fallback routes (found working T109, 2026-10-19) [lands-open]
       research: rendering
-- [ ] T113 make tick refuses a 'landed' note while the last sync-with-main push was refused, as T79 refuses one after a failed land-tooling: T110 ticked 'landed' while its push stood refused by the green-gate guard (found working T110, 2026-10-19) [lands-open]
+- [x] T113 make tick refuses a 'landed' note while the last sync-with-main push was refused, as T79 refuses one after a failed land-tooling: T110 ticked 'landed' while its push stood refused by the green-gate guard (found working T110, 2026-10-19) [lands-open]
+      research: rendering
+      verify: DONE. landed 2026-10-19 via land-tooling: a landed tick waits until the task's work is on main, by content; test red without
+- [ ] T114 A plan review's earlier.md says 'the text at its last CLEAR verdict' even when that verdict was BLOCKED: T102's round 2 bundle labeled its round-1 BLOCKED text CLEAR (found working T102, 2026-10-19) [lands-open]
+      research: rendering
+- [ ] T115 A per-task time report from the event log: each task's span from its task-start to its tick, and where it went (claims rounds, gate, landing cohort, plan reviews) - the numbers the GM's speed question was answered with by hand (amendment 10) [lands-open]
+      research: rendering
+- [ ] T116 A change re-owes impl-drift only for the claim lines it touched, not every claim on the function: one edit to stage_web re-owed its 20 claims (amendment 10) [lands-open]
+      research: rendering
+- [ ] T117 The gate and the landing cohort batched across two or three small engine fixes: land them together under one green gate and one landing cohort, each task ticked at that landing (amendment 10) [lands-open]
+      research: rendering
+- [ ] T118 No plan review for a wording-only task that decides nothing new - a claim relabel, a comment, a glossary entry - its section's decisions classed as wording by a rule the tick checks (amendment 10) [lands-open]
+      research: rendering
+- [ ] T119 Each tooling fix's yield measured: the time it was meant to save, read from the per-task time report (T115), so a fix that saves nothing is retired (amendment 10, the GM's change 3) [lands-open]
+      research: rendering
+- [ ] T120 The track out's last resort never crosses a drawn channel (connector_dry_exit, UNCLAIMED, T102's round): claim it, or let it cross a ditch on a plank as 0084 gives (found working T102, 2026-10-19) [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering

@@ -926,7 +926,7 @@ def connector_dry_exit(plan: SitePlan, start: Pt, avoid: Sequence[Poly], wet: Se
         pond berth - UNRESEARCHED: 80 ft past the pond's larger half-axis
         grove band gap - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a lane keeps a footpath's clearance and some working room off the trees; `CONNECTOR_BAND_GAP_FT`, 0036's 9.5 ft working room plus the connector's half-width (12.5 ft), on a finer grid
         track start out of the grove bands - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: walked out of grove bands by `CONNECTOR_BAND_GAP_FT` (0036's working room past the half-width) and the fill's cell slack, the wall the fill puts round each band
-        brook not crossed - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: no water line crossed"""
+        brook crossed at its crossing places - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the fill keeps to its own bank unless crossing at a crossing place (`brook_fords`, gapped by `FORD_HALF`) finds a way it otherwise has not, or saves more than `BROOK_CROSSING_COST_FT` (150 ft) of walk; the crossing is then squared to the brook by the settle (`squaring.square_every_crossing`, the connector's too)"""
     # ...A FARM'S GROVE BAND AT A FOOTPATH'S GAP, over a grid fine enough to pass between two (feature 291 on 287): dispersed
     # farms stand a lane's room (32 ft) apart, and at the track's gap on the 20 ft grid every way between them was walled -
     # cohort seeds 5 and 16 had no dry exit at all
@@ -941,11 +941,20 @@ def connector_dry_exit(plan: SitePlan, start: Pt, avoid: Sequence[Poly], wet: Se
         r = max(rx, ry)
         walls.append(([(px + r * math.cos(k * math.pi / 8), py + r * math.sin(k * math.pi / 8)) for k in range(16)], 80.0))
     lines = [(plan.sink_brook[i], plan.sink_brook[i + 1]) for i in range(len(plan.sink_brook) - 1)] + list(waters)
+    # ...AND OVER THE BROOK AT ITS CROSSING PLACES (feature 385 T102, D131): a settlement whose every bearing out is wet is where a
+    # way crosses its brook, and 0035 sets a crossing place every 160 ft or so - the fill passes the water within `FORD_HALF` of one
+    opened = gap_segments(lines, brook_fords(getattr(plan, "brook", None) or [], FORD_SPACING, FORD_BEND_DEG), FORD_HALF)
     # ...FROM OUTSIDE ANY GROVE BAND: a dispersed seat's gateway can fall inside a farm's deep band, and the fill's start cell
     # alone is walkable there - every cell round it was band (cohort seed 5); a track may not start in a grove in any case
     if bands:
         start = clear_of_bands(start, [list(b) for b in bands], CONNECTOR_BAND_GAP_FT + 0.71 * GROVE_EXIT_CELL_FT + 1.0)
-    path = dry_exit(start, walls, lines, float(plan.W), float(plan.H), cell=GROVE_EXIT_CELL_FT if bands else EXIT_CELL_FT)
+    cell = GROVE_EXIT_CELL_FT if bands else EXIT_CELL_FT
+    path = dry_exit(start, walls, lines, float(plan.W), float(plan.H), cell=cell)
+    # ...CROSSING ONLY WHERE IT SAVES 0035'S WALK (T102, D131): the fill run again open at the crossing places, and taken where it
+    # finds a way the own-bank fill does not, or one shorter by more than `BROOK_CROSSING_COST_FT`
+    across = dry_exit(start, walls, opened, float(plan.W), float(plan.H), cell=cell) if opened != lines else None
+    if across is not None and (path is None or polyline_len(path) > polyline_len(across) + BROOK_CROSSING_COST_FT):
+        path = across
     if path is None:
         raise NoDryExit(f"no dry way out of the frame from the gateway at ({start[0]:.0f}, {start[1]:.0f})")
     return path

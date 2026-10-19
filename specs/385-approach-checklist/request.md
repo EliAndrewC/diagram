@@ -251,3 +251,25 @@ The seven ("all 7 of those"), as the session's report and `step-back-2026-10-18.
 > | E | a red gate | `make plan-verdict` passes the reviewer's text through `americanize`, as T78 does for notes | a gate each time |
 > | F | where-time misbooks tasks | `make decide`, `task-add`, `tick` and `land-tooling` move the active-task mark to the task they name (replacing proposal 6's refusal) | true per-task numbers |
 > | G | where-time cannot tell waiting from idle | fold the scratch split in: a between-turns window classed by what ended it | the analysis above, in one command |
+
+## Amendment 10 (2026-10-19) - throughput: measuring it, and three levers
+
+The GM, 2026-10-19, after the session's timing of the claim-fix tasks (wording-only 5-15 min; engine fixes 40-60 min, the
+claims rounds, the fixed landing cost and the plan reviews the main costs):
+
+> It sounds like we probably could use some tooling adjustments to help gather this kind of information.  I would also like to
+> implement all 3 of your suggestions.  Please file all of that as tasks and then work them as soon as you finish the current task.
+
+The three suggestions, as offered: re-check only the claim lines a change touched; batch the gate and the landing cohort across two
+or three small engine fixes; skip the plan review for wording-only tasks that decide nothing new. And the measurement: per-task time
+read from the event log (each tick now records its task, hour 33's fix) as a report, not rebuilt from git history by hand.
+
+The GM, 2026-10-19, on the hourly step-backs (49 of 60 had named a tooling fix):
+
+> I agree with making changes 1-2 right now, and then implement 3 as part of the next round of tooling fixes which we have coming
+> up next which includes the other stuff we just talked about.  I don't want to step back to every 2 hours, isnce that just seems
+> like masking the problem.
+
+Changes 1 and 2: a step-back's tooling fix needs a measured cost (10 minutes or more of session time this hour, or a defect that
+reached main), none being a good outcome; and removing or simplifying a misfiring guard comes before adding one. Change 3, measuring
+each fix's yield against the time it was meant to save, is a task of the next tooling round. The hourly cadence stays.

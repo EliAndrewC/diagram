@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92, T93, T94, T95, T96, T97, T98, T99, T100, T102, T103, T104, T105, T106, T107, T109, T110, T111, T112, T113
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92, T93, T94, T95, T96, T97, T98, T99, T100, T102, T103, T104, T105, T106, T107, T109, T110, T111, T112, T113, T114, T115, T116, T117, T118, T119, T120
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -516,6 +516,48 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@30 (continue),
 <!-- plan-archive: T107 to T101 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
 <!-- plan-archive: T109 to T107 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
 <!-- plan-archive: T110 to T107 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+<!-- plan-archive: T113 to T110 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+## T102 - the dry exit crosses at the crossing places (found working T98, 2026-10-19)
+
+### T102 Approach (checklist part A)
+
+1. **The goal, in the world.** Where every bearing out of a settlement is wet, the track out crosses its brook at a crossing place, as 0035 has a way do.
+2. **The constraints.** 0035's drawing page: the ways between the two banks cross the brook squarely, on a plank bridge; a way keeps to its own bank unless crossing saves it more than about 150 ft of walking (a GUESS there); the maps set a crossing place every 160 ft or so. The rule of the record: every rendering decision is labeled, and a deliberate deviation is recorded in `research/` and at the point of change. A claims check IN-STEP.
+3. **Where each comes from.** 0035's drawing page (O); the root CLAUDE.md's research rules (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T98's claims round, `track.connector_dry_exit#brook not crossed` DRIFTED, then a read of `track.py`): the track's own router crosses the brook only at a ford at 0035's 150 ft (`set_crossing`, `BROOK_CROSSING_COST_FT`); its last resort, the flood fill `connector_dry_exit` runs where every bearing of the sweep is wet, treats every water line as a wall, so it never crosses.
+5. **The order.** The fill's water lines gapped at the crossing places; its claim; the test; the cohort.
+6. **The exits.** (b) a principled exception - refused by the plan review (round 1): a crossing place exists when the fill runs, so the reason was the algorithm's order, not how a track forms; (c) a new rule - chosen: the fill passes the brook within `FORD_HALF` of a crossing place (`brook_fords`), as the track's own checks gap it; (e) conform as the claim stood - refused: the claim said no water is crossed as if 0035 said so.
+7. **The search smell.** None.
+8. **The budget.** 40 min with its checks.
+9. **Done, measured.** One goal: `connector_dry_exit` passes the brook within `FORD_HALF` of a crossing place and nowhere else; its claim cites 0035's crossing places and is IN-STEP; a test red without it; the cohort passes - measured 2026-10-19 (`make cohort` with it built: 16 of 16).
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T102 Decisions
+
+**D131 - the last resort crosses where 0035 would.** `connector_dry_exit` runs its fill twice: as it was, the water lines walls,
+and open within `FORD_HALF` of each crossing place `brook_fords` sets along the brook (every `FORD_SPACING`); it takes the open
+fill's way where the own-bank fill finds none, or where the own-bank way is longer by more than `BROOK_CROSSING_COST_FT` (0035's
+150 ft) - a way keeps to its own bank unless crossing saves it about 150 ft (measured 2026-10-19: T102's claims round found the
+open fill alone crossed for free, DRIFTED; built so, the cohort passes 16 of 16). The claim reads "brook crossed at its crossing
+places - <0035's drawing page>: the fill keeps to its own bank unless crossing at a crossing place finds a way it otherwise has
+not, or saves more than `BROOK_CROSSING_COST_FT` of walk". No page edit.
+
+
+
+### T102 part B (2026-10-19T12:35Z)
+
+Owed by the round arbiter's ruling on hour:385-approach-checklist@33 (continue), taken while T102 was the active task.
+
+1. **What is refusing?** Nothing: the crossing's charge was decided as D131, reviewed and built; the claims are IN-STEP.
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither in this part B: the change is D131's, decided and reviewed.
+6. **The one-sentence test.** "The last resort crosses its brook where 0035 would" - true by the claims check and the cohort.
+7. **The next step is a measurement.** The gate and the landing cohort, both run.
+8. **Every route measured before offering one?** No route is offered.
+9. **After a ruling: the step it names?** Yes - the ruling says carry on with T102, then T106, T108, T111, T112.
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).

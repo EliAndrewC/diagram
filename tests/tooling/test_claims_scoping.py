@@ -13,7 +13,7 @@ import pathlib
 
 import pytest
 
-from tests.tooling.test_claims_index import MOD, _commit, _repo, _tree, cx
+from tests.tooling.test_claims_index import MOD, Q, _commit, _repo, _tree, cx
 
 PAGE = '<h2 id="row-villages-resson">Row villages</h2>\n<p class="intro">Why asked.</p>\n<p>Farms face the street.</p>\n<p>Each lane is 5 ft.</p>\n'
 SHARE = "l7r/diagram/hamletgen/rows.py::SHARE#dry share"
@@ -386,3 +386,39 @@ def test_a_triage_reply_is_read_from_a_transcript_and_an_unread_one_clears_nothi
     assert cx.claims_triage.triage_reply(plain).strip() == line
     (tmp_path / "empty.output").write_text("")
     assert cx.claims_triage.triage_reply(tmp_path / "empty.output") == ""
+
+
+def test_a_code_change_owes_a_triage_of_its_hunks_and_clears_the_claims_it_does_not_touch(tmp_path: pathlib.Path) -> None:
+    """Feature 385 T116 (D133): one edit to `web.stage_web` re-owed its 20 claims in full, 17 of them unaffected. A code change
+    owes its claims a triage of the unit's diff against origin/main; a claim the triage does not name is cleared at its new
+    code; a claim whose own line was rewritten, or a unit with no hunk to show, is owed in full."""
+    root = _repo(tmp_path)
+    skill, index, store = _checked(root)
+    _commit(root, "as checked")
+    cx.claims_triage._git(root, "update-ref", "refs/remotes/origin/main", "HEAD")
+    (skill / "l7r/diagram/hamletgen/rows.py").write_text(MOD.replace("x * SHARE", "x * SHARE * 2"))
+    cur = cx.current(skill)
+    assert dict(cx.owed(cur, index, skill / QDIR, store)) == {FAR: cx.CODE_TRIAGE}
+    assert cx.judged(cx.owed(cur, index, skill / QDIR, store)) == []
+    manifest = cx.triage_bundle(cur, index, store, [FAR], skill / QDIR, tmp_path / "t").read_text()
+    assert "## l7r/diagram/hamletgen/rows.py::far_row (a unit of code" in manifest and "+    return x * SHARE * 2" in manifest
+    data = json.loads((tmp_path / "t" / "triage.json").read_text())
+    assert data["forced"] == [] and data["units"][FAR]["code"] == cur[FAR].code
+    cleared, _ = cx.record_triage(index, data["units"], "", "d2")
+    assert FAR not in dict(cx.owed(cur, cleared, skill / QDIR, store)), "cleared at its new code"
+    touched, _ = cx.record_triage(index, data["units"], f"TOUCHES {FAR} - the share doubled", "d2")
+    assert dict(cx.owed(cur, touched, skill / QDIR, store))[FAR] == "code changed", "a named claim goes on to impl-drift"
+    # the claim's own line rewritten with the code: known from the row's claim text, or else seen among the hunk's added lines
+    (skill / "l7r/diagram/hamletgen/rows.py").write_text(MOD.replace("x * SHARE", "x * SHARE * 2").replace(f"    Research: dry share - {Q}", "    Research: dry share - GUESS"))
+    cur = cx.current(skill)
+    assert dict(cx.owed(cur, index, skill / QDIR, store))[FAR] == "code changed", "its text is known rewritten"
+    bare = {k: {f: v for f, v in r.items() if f != "claim"} for k, r in index.items()}
+    assert dict(cx.owed(cur, bare, skill / QDIR, store))[FAR] == cx.CODE_TRIAGE
+    cx.triage_bundle(cur, bare, store, [FAR], skill / QDIR, tmp_path / "t")
+    assert json.loads((tmp_path / "t" / "triage.json").read_text())["forced"] == [FAR], "its line is among the added lines"
+    # landed before its check: no hunk to read, owed in full
+    (skill / "l7r/diagram/hamletgen/rows.py").write_text(MOD.replace("x * SHARE", "x * SHARE * 2"))
+    _commit(root, "landed")
+    cx.claims_triage._git(root, "update-ref", "refs/remotes/origin/main", "HEAD")
+    cx.triage_bundle(cx.current(skill), index, store, [FAR], skill / QDIR, tmp_path / "t")
+    assert json.loads((tmp_path / "t" / "triage.json").read_text())["forced"] == [FAR]
