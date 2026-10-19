@@ -600,25 +600,25 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@34 (continue),
 <!-- plan-archive: T119 to T119 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
 <!-- plan-archive: T114 to T102 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
 <!-- plan-archive: T121 to T117 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
-## T122 - a file the clone landed does not conflict with itself (found working T119, 2026-10-19)
+## T122 - a conflict with the clone's own landing is named, with its fix (found working T119, 2026-10-19)
 
 ### T122 Approach (checklist part A)
 
-1. **The goal, in the world.** A file landed by `make land-tooling` and then edited again in the clone lands again without a merge conflict.
-2. **The constraints.** Feature 379: `land-tooling` lands the named files as a new commit on main. Feature 385 D46: the clone merges origin/main only when the patch fails to apply - "not whenever the clone is behind" - and otherwise its history is left as it was (the suite's "the clone's history is untouched"); a merge that conflicts is aborted and refused. Never a rebase or an amend; never merged under a running gate (T30). A test red without it.
-3. **Where each comes from.** 379, D46, T30, the root CLAUDE.md's session-clone rules (O).
-4. **Do they describe the world here?** Yes - measured 2026-10-19 (T119's second landing, and earlier the same day T84-era landings kept by hand): `fix_yield.py` was new in the clone, landed as main's own commit, then edited in the clone; the clone's merge base still lacked the file, so the next landing's patch added it again and failed to apply, and D46's merge of main conflicted add/add - though main's side was exactly what the clone had landed. Resolved by hand to the clone's side both times.
-5. **The order.** In D46's merge branch, a conflict on files whose main side the clone itself landed resolved to the clone's side; any other conflict aborted and refused as now; the suite case.
-6. **The exits.** (c) - resolve the self-landed conflict where D46 already merges; merging main back after every landing was weighed and refused (the plan review of round 1: it reverses D46's "not whenever the clone is behind" and its "history untouched" test).
+1. **The goal, in the world.** When a landing refuses because main conflicts with what this clone itself landed, the refusal names those files and the one line that resolves them.
+2. **The constraints.** The round arbiter's ruling on hour:385-approach-checklist@35 (change-route): "T122 narrows to a message" - no resolver; name each conflicting file whose main-side commit is this clone's own land-tooling commit and print the line to keep the clone's side; the session resolves by hand, about a minute. Feature 385 D46: the clone merges main only when the patch fails to apply, and a conflicting merge is aborted and refused (unchanged). A test red without it.
+3. **Where each comes from.** The round arbiter (O, binding); D46 (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T119's second landing, 13:40-13:42): a new file landed, then edited, conflicted add/add with main's own land-tooling commit of it; the refusal said only "merging main into the clone conflicts - run scripts/sync-with-main.sh sync-in, resolve the conflict", and resolving it by hand took about 2 minutes.
+5. **The order.** Before the abort, the conflicted files read and each one's last main commit checked against this clone's land-tooling subject; the refusal names them and the line; the suite case.
+6. **The exits.** (c) - name and instruct; a resolver taking the clone's side was built and withdrawn (the arbiter: a rule around a sub-bar hazard, its reach the risk round 2 found).
 7. **The search smell.** None.
-8. **The budget.** 30 min.
-9. **Done, measured.** One goal: when D46's merge conflicts and every conflicted file's main side is a version of that file in one of the clone's own commits since its fork from main, `land-tooling` takes the clone's side for them, commits the merge and lands; any other conflict aborts and refuses as now; `tests/hooks/test-land-tooling.sh` red without it, its "history untouched" case unchanged.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: when D46's merge conflicts, the refusal lists each conflicted file whose last commit on origin/main is this clone's own `Tooling from <clone>, landed alone mid-feature` commit, with `git checkout --ours <files> && git add <files> && git commit --no-edit` after `scripts/sync-with-main.sh sync-in`; other conflicts are refused as now; `tests/hooks/test-land-tooling.sh` red without it.
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
 ### T122 Decisions
 
-**D144 - a self-landed conflict takes the clone's side.** A new `scripts/gates/self_landed.py`, run by `land-tooling` when D46's `git merge origin/main` fails with a merge in progress: for each conflicted file (`git diff --name-only --diff-filter=U`), the blob on main's side (`MERGE_HEAD:<file>`) must equal the file's blob at one of the clone's own commits since its fork from main (`git rev-list $(git merge-base HEAD MERGE_HEAD)..HEAD -- <file>`) - never the history the two share, where another session's revert to an older version would match; if every one does, it takes the clone's side (`git checkout --ours`), stages them and commits the merge, and the landing goes on as D46's clean merge does; if any does not, nothing is resolved, and the merge is aborted and refused as now.
+**D144 - the self-landed conflict named.** In `land-tooling.sh`'s D46 branch, before `git merge --abort`, the conflicted files (`git diff --name-only --diff-filter=U`) whose `git log -1 --format=%s origin/main -- <file>` begins `Tooling from <this clone's name>,` are named in the refusal: "<files> conflict only with this clone's own earlier landing - run scripts/sync-with-main.sh sync-in, then git checkout --ours <files> && git add <files> && git commit --no-edit, then land again". The merge is aborted and the landing refused as now; nothing is resolved by the tool.
 
 ## T11 - the close
 
