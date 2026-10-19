@@ -9,10 +9,12 @@ The questions are `research: physical` with their five boxes; the vocabulary, bu
 
 ## Tasks
 
-- [ ] T01 The vocabulary and the build check (D1, D2; FR-002, FR-004): kind `comparative`, works section, subject and contents section, europe/elsewhere explanations; `site.py` refuses a comparative source cited outside a comparative question; test
+- [x] T01 The vocabulary and the build check (D1, D2; FR-002, FR-004): kind `comparative`, works section, subject and contents section, europe/elsewhere explanations; `site.py` refuses a comparative source cited outside a comparative question; test
       research: rendering
-- [ ] T02 The guidelines and the contract (D3, D4; FR-001, FR-003): research/CLAUDE.md section, money-requests.md pointer, docs/research-record-rules.md full text, source-applicability paragraph, make source-tags-contract
+      verify: DONE. kind comparative, works-comparative, subject and section comparative (awaiting), europe/elsewhere explanations; site.py refuses a comparative source cited outside a comparative question; tests/interactive/test_comparative_sources.py 4 passed, red without site.py
+- [x] T02 The guidelines and the contract (D3, D4; FR-001, FR-003): research/CLAUDE.md section, money-requests.md pointer, docs/research-record-rules.md full text, source-applicability paragraph, make source-tags-contract
       research: rendering
+      verify: DONE. research/CLAUDE.md section, money-requests.md pointer, docs/research-record-rules.md with the GM words, source-applicability comparative paragraph, source-tags-contract rewritten
 - [ ] T03 The source archived and registered (D5; FR-005)
       research: physical
       - [ ] research pass
@@ -20,8 +22,9 @@ The questions are `research: physical` with their five boxes; the vocabulary, bu
       - [ ] recorded and cited
       - [ ] quote-check confirmed
       - [ ] source-applicability confirmed
-- [ ] T04 The extraction check of gm-assistant's 25 rows (D6; FR-005, SC-003)
+- [x] T04 The extraction check of gm-assistant's 25 rows (D6; FR-005, SC-003)
       research: rendering
+      verify: DONE. source-reader on 25 rows vs Gutenberg 69487: 21 READ, 1 WRONG-POST, 1 MISQUOTED; housekeeper and house steward wages found; gm-assistant fixed at 75d4ca91; extraction/check.md
 - [ ] T05 The three comparative questions (D7; FR-006)
       research: physical
       - [ ] research pass
