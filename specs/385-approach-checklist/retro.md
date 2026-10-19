@@ -982,3 +982,13 @@ A gated landing measured about 15 min from the transcripts, so a batch of three 
 round. Building it, the Makefile target was first written by a python heredoc that the shell-write guard did not catch: recorded
 under `make guard-edit` and filed as T121. **The habit it changes:** a small engine fix whose checks are done waits for the next
 one, and the two land by `make land-batch`.
+
+## T118 - the retro row
+
+About 35 min. A task whose Decisions block reads `**Wording only.** <what>` owes no plan review: the plan gate skips its blocks
+(not its part Bs), `make decide` says no review is owed, the checks do not wait on a verdict, and `make tick` reads its commits
+since `make task-start` and refuses any change beyond its feature's records, a glossary entry, or a `.py` file's comments,
+docstrings and claims (`gate-stamp.semantic_bytes`, the one definition of "changed in what runs"). Saves a review of 1-3
+agent-minutes plus its decide and verdict steps on a 5-12 min task. One review round, CLEAR; `make decide` first refused a quote
+of the task's title as the GM's words, rightly. **The habit it changes:** a relabel, a comment or a glossary entry is written
+`**Wording only.**` and goes straight from its Approach to its checks.
