@@ -106,7 +106,8 @@ def test_source_reader_reads_the_pages_and_passages_not_the_english() -> None:
     assert ru.reading("<a href='x'>no passage</a>", {}) == ""
     units = {u.slug: u for u in ru.owed(english, ru.Record({}, {}, {}, {}))}
     assert units["source-reader:0036#otsubo"].reading == base.readings["0036"]["otsubo"]
-    assert units["quote-check:0036#otsubo"].reading == "", "the reading is source-reader's alone"
+    # ...and quote-check's is its own, the note and its claim sentences (feature 395, ask:395-round3-all), never source-reader's
+    assert units["quote-check:0036#otsubo"].reading not in ("", units["source-reader:0036#otsubo"].reading)
 
 
 def test_a_read_note_reworded_in_english_stays_answered(tmp_path: pathlib.Path) -> None:
