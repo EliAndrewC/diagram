@@ -39,7 +39,16 @@ def next_id(d: Path) -> str:
     return f"T{max((int(n) for n in re.findall(r'\bT(\d+)[a-z]?\b', text)), default=0) + 1:02d}"
 
 
-def add_box(tasks: str, tid: str, title: str, physical: bool) -> str:
+LANDS_OPEN = re.compile(r"^(\*\*Lands open\*\*:.*?)[ \t]*$", re.M)
+
+
+def lands_open(plan: str, tid: str) -> str:
+    """The plan with `tid` on its `**Lands open**:` line (T69, plan D88), or unchanged where it has none."""
+    return LANDS_OPEN.sub(lambda m: f"{m.group(1)}, {tid}", plan, count=1)
+
+
+def add_box(tasks: str, tid: str, title: str, physical: bool, open_mark: bool = False) -> str:
+    title = f"{title} [lands-open]" if open_mark else title
     box = f"- [ ] {tid} {title}\n      research: {'physical' if physical else 'rendering'}\n" + (PHYSICAL if physical else "")
     gm = re.search(r"^- \[[ x]\] GM review\b", tasks, re.M)
     if gm:
@@ -76,10 +85,16 @@ def main(argv: list[str]) -> int:
         print(f"task-add: SECTION={section} is not a file", file=sys.stderr)
         return 2
     tid = next_id(d)
-    (d / "tasks.md").write_text(add_box((d / "tasks.md").read_text(encoding="utf-8"), tid, title, physical), encoding="utf-8")
+    # A TASK FILED MID-FEATURE LANDS OPEN (T69, plan D88): T10's push was refused for T66 and T67, open boxes the plan's
+    # `**Lands open**:` line did not name. Where the line exists, the new id joins it and the box carries the mark.
+    plan = (d / "plan.md").read_text(encoding="utf-8") if (d / "plan.md").is_file() else ""
+    marked = bool(LANDS_OPEN.search(plan))
+    (d / "tasks.md").write_text(add_box((d / "tasks.md").read_text(encoding="utf-8"), tid, title, physical, marked), encoding="utf-8")
+    plan = lands_open(plan, tid)
     if section:
-        plan = (d / "plan.md").read_text(encoding="utf-8") if (d / "plan.md").is_file() else ""
-        (d / "plan.md").write_text(add_section(plan, tid, Path(section).read_text(encoding="utf-8")), encoding="utf-8")
+        plan = add_section(plan, tid, Path(section).read_text(encoding="utf-8"))
+    if section or marked:
+        (d / "plan.md").write_text(plan, encoding="utf-8")
     print(f"task-add: {tid} filed in {(d / 'tasks.md').relative_to(root)}" + (f", its section in {(d / 'plan.md').relative_to(root)}" if section else ""))
     return 0
 
