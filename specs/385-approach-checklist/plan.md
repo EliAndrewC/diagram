@@ -214,77 +214,8 @@ Owed by the hour-20 step-back (hour:385-approach-checklist@20, `continue`), whic
 <!-- plan-archive: T67 to T65 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 <!-- plan-archive: T68 to T66 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 <!-- plan-archive: T69 to T10 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
-## T70 - a feature is worked until it is set down (the GM 2026-10-18, step 3 of the approved order)
-
-### T70 Approach (checklist part A)
-
-1. **The goal, in the world.** A session working a feature never goes quiet with work left and nothing running, unless it said why.
-2. **The constraints.** The GM, 2026-10-18: "if we could have something that when a feature is begun ... checks every 10 minutes for whether or not the feature is either still in progress or has been correctly set down, then that would be really good"; the session's proposal he approved (amendment 8, quoted): a Stop guard (it fires at every turn's end, which a 10-minute check would only sample) with `make set-down`. It must not hold a turn that waits on running work. The proposal's second escape - a turn ending with a question - is dropped, a deliberate departure: the plan review (2026-10-19) showed it lets through exactly the quiet turn the guard exists for ("Shall I go on to the next task?" while the GM sleeps, or any rhetorical question in a summary); a turn that truly waits on the GM sets the feature down, `WHY="awaiting the GM on <what>"`, which is recorded; a set-down states a reason of two words or more and is recorded. A guard suite in `tests/hooks/`, red without it.
-3. **Where each comes from.** The GM's request (G); the escape and record rules are CLAUDE.md's "What is enforced" (O).
-4. **Do they describe the world here?** Yes - measured 2026-10-18 (step-back-2026-10-18.md): T05's 464 minutes held 240 of idle, a turn that ended overnight with a refused dispatch never re-sent and nothing running; T22's guard covers that refused dispatch, not a turn that simply stops.
-5. **The order.** `hm_setdown.py` (the verdict), `set-down-hooks.sh stop` and its settings entry, `make set-down`, then the suite.
-6. **The exits.** (c).
-7. **The search smell.** None.
-8. **The budget.** 60 min.
-9. **Done, measured.** One goal: a turn ending in a clone whose last `make task-start` names a feature with an open task is refused, naming the next open task and `make set-down`, unless a background command or agent started in the session has not reported back, or a set-down for that feature is recorded after that task-start; `tests/hooks/test-set-down-hooks.sh` red without it.
-
-### T70 Decisions
-
-**D89 - the turn end checked, the reasons to stop named.** `scripts/hooks/lib/hm_setdown.py` reads the clone's last `task-starts.jsonl` record. Its feature is IN PROGRESS when its `tasks.md` has an open box other than the GM-review box and its status line does not close it (`speckit-todo.py --closed-by-status`). The Stop payload's transcript gives what is RUNNING: each background command ("running in background with ID") and async agent ("agentId:") without a later task notification of that id. A SET-DOWN is a row of `<common git dir>/set-downs.jsonl` for the feature at or after the task-start, written by `make set-down F=<feature> WHY="<reason>"` (two words or more). The guard refuses only an in-progress feature with nothing running and no set-down; it is silent in a clone with no task-start, and on any read error (fail open, recorded): a Stop guard that fails closed can hold a session in a loop.
-
-**D90 - the refusal names the next step.** The refusal reads `BLOCKED: feature <f> has <n> open task(s) and nothing is running - start the next (<the first open box's id and title>), or set it down: make set-down F=<n> WHY="<why>"`, and each firing is recorded in the guard log.
-
-<!-- plan-archive: T71 to T69 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
-## T72 - a plan review's ledger row is written at landing (found landing T70, 2026-10-19)
-
-### T72 Approach (checklist part A)
-
-1. **The goal, in the world.** A landing is never refused for a plan review's ledger row, which the tooling can write itself.
-2. **The constraints.** Feature 385 FR-019: every check pass has its ledger row before a push; a row's acted-on cell names where the pass was recorded. Other checks' rows still need the session's word on what was acted on. The ledger is written at landing, never while a gate runs (a write under a gate is a tree move). A test red without it.
-3. **Where each comes from.** FR-019 (O); amendment 8, the GM: "make our tooling do the thing correctly automatically every time" (G).
-4. **Do they describe the world here?** Yes - measured 2026-10-19 (the session's transcript, its tool calls): 81 hand-run `make ledger-owed WRITE=...` calls over 2026-10-18, nearly all naming the plan-verdict record; two landings refused for the row that evening (T60's, T70's). A plan review's verdict is recorded by `make plan-verdict` before the agent returns, so where it was recorded is always the same.
-5. **The order.** The plan-review writer in `ledger_owed.py`, its call in `land-tooling.sh` and `sync-with-main.sh` before their ledger checks, then the tests.
-6. **The exits.** (c).
-7. **The search smell.** None.
-8. **The budget.** 40 min.
-9. **Done, measured.** One goal: `land-tooling` and `sync-with-main.sh done` write and commit the row of every owed pass whose subject is a `MODE 4: PLAN REVIEW`, its acted-on cell naming the plan-verdict record, before they check the ledger; any other owed pass still refuses as now; `tests/tooling/test_ledger_owed.py` (the module's test) red without it.
-
-### T72 part B (2026-10-19T00:24Z)
-
-Owed by the hour-24 step-back (hour:385-approach-checklist@24, `continue`).
-
-1. **What is refusing?** Nothing: the writer and both landings' calls are built; its first live run wrote T72's own review row.
-2. **A3 again.** Unchanged.
-3. **A4 again.** Unchanged.
-4. **Moving something earlier for something later?** No.
-5. **Tuning or changing?** Changing: the plan reviews' rows are the landing's to write.
-6. **The one-sentence test.** "A landing writes a plan review's row" - true by its test and its live run.
-7. **The next step is a measurement.** The guard suites, then the landing.
-8. **Routes measured before asking?** n/a - no ask.
-9. **After a ruling.** `continue`; its tooling fix (the Lands open line) is T74.
-
-### T72 Decisions
-
-**D92 - the plan reviews' rows written by the landing.** `ledger_owed.py --write-plan-reviews` appends `filled_row` for each owed pass whose subject starts `MODE 4: PLAN REVIEW`, the where cell `the plan-verdict record (make plan-verdict)`, and prints how many. `land-tooling.sh` and `sync-with-main.sh done` run it first and, when it wrote any, commit `dev/review-ledger.md` as "the plan reviews' ledger rows, written at landing (feature 385 T72)"; the ledger check then runs as now on what remains.
-
-## T74 - a task id added to the Lands open line owes no review (the round arbiter's fix on hour:385-approach-checklist@24)
-
-### T74 Approach (checklist part A)
-
-1. **The goal, in the world.** Filing a task never costs a plan review of the Landing block.
-2. **The constraints.** The arbiter's fix: "The plan gate behind `make plan-delta`/`make plan-verdict` should not ask for a spec-fidelity review when the only change to the plan's `**Lands open**:` line is a task id added by `make task-add` (or `task-add` should record that verdict itself), with a test showing such a delta is CLEAR without a dispatch"; any other change to the block, an id removed among them, is owed as now.
-3. **Where each comes from.** The fix is the arbiter's (G); the block review is 375 FR-043 (O).
-4. **Do they describe the world here?** Yes - measured 2026-10-19 (the hour-24 bundle): two spec-fidelity dispatches that hour (23:48 and 00:11) reviewed only ids added to the line, each with its ledger row, and the T70 landing waited on one.
-5. **The order.** The rule in `plan_gate.block_status`, then its test.
-6. **The exits.** (c).
-7. **The search smell.** None.
-8. **The budget.** 25 min.
-9. **Done, measured.** One goal: a block whose text differs from its reviewed text only by ids appended to its `**Lands open**:` line is not owed; one that drops an id, or changes anything else, is; `tests/tooling/test_plan_gate.py` red without it.
-
-### T74 Decisions
-
-**D93 - an appended id is no change.** `block_status` judges a block against its reviewed text with each `**Lands open**:` line read as its list of ids, in order: where the reviewed list is the current one's start (the current line is the reviewed ids, in their order, with ids appended) and the rest of the text is the same or typo-scale, the block is not owed. A reordering, or an id dropped or repeated, is owed; its test shows a reorder-only edit owed. Every block keeps its recorded digest; nothing is written for it.
-
+<!-- plan-archive: T70 to T70 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
+<!-- plan-archive: T72 to T70 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).

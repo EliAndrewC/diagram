@@ -200,15 +200,18 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T69 A task filed mid-feature lands open (plan D88) [lands-open]
       research: rendering
       verify: DONE. task-add keeps the Lands open line; T70/T71 filed by it; landed
-- [ ] T70 A feature is worked until it is set down (plan D89, D90) [lands-open]
+- [x] T70 A feature is worked until it is set down (plan D89, D90) [lands-open]
       research: rendering
+      verify: DONE. set-down-hooks.sh stop refuses a quiet turn with tasks open; make set-down records a reason; suite 13/13; landed
 - [x] T71 A decision cited from another feature's plan is bundled from that plan (plan D91) [lands-open]
       research: rendering
       verify: DONE. qualified decisions read from their own plan; landed, test_plan_blocks green
-- [ ] T72 A plan review's ledger row is written at landing (plan D92) [lands-open]
+- [x] T72 A plan review's ledger row is written at landing (plan D92) [lands-open]
       research: rendering
-- [ ] T74 A task id added to the Lands open line owes no review (the arbiter's fix on hour:385-approach-checklist@24, plan D93) [lands-open]
+      verify: DONE. landings write and commit plan reviews' ledger rows (the reply names its make plan-verdict record); landed, test_ledger_owed green
+- [x] T74 A task id added to the Lands open line owes no review (the arbiter's fix on hour:385-approach-checklist@24, plan D93) [lands-open]
       research: rendering
+      verify: DONE. appended Lands open ids owe no review; landed, test_plan_gate green
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
