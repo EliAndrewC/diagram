@@ -25365,21 +25365,31 @@
  },
  "l7r/diagram/hamletgen/ways/law.py::fouls_fabric#foul margin": {
   "body": "741f548307e558b1",
-  "claim": "foul margin - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the line within 7 ft of another's yard or bed",
-  "code": "e55521d79049130a",
+  "claim": "foul margin - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the line within 7 ft of another household's garden",
+  "code": "e840a88f3c82a5b1",
   "core": "ef0504008aa1e3c3",
   "date": "2026-10-19",
-  "note": "the code holds 7 ft off \"threshing_yards\" as well as gardens; 0246 sets the gap only from \"another household's garden\". Split the claim: the garden part stays on 0246, the threshing yard becomes UNRESEARCHED, as span_walkable's sibling claim already labels it",
+  "note": "the lane's middle is kept 7 ft (WEB_FABRIC_GAP) off another household's garden, as the page sets it",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triaged": "2026-10-19",
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/law.py::fouls_fabric#foul margin off a yard": {
+  "body": "741f548307e558b1",
+  "claim": "foul margin off a yard - UNRESEARCHED: the garden fence's 7 ft (`WEB_FABRIC_GAP`) held off another household's threshing yard too; no page sets a gap from a yard",
+  "code": "8958748b5aa505ab",
+  "core": "ef0504008aa1e3c3",
+  "date": "2026-10-19",
+  "note": "the page sets a gap only from a garden fence; nothing on it gives a gap between a lane and a threshing yard",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::fouls_fabric#nothing built on a lane": {
   "body": "741f548307e558b1",
@@ -27883,23 +27893,33 @@
   "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/settle.py::fouled_segment#off another household's yard or garden": {
+ "l7r/diagram/hamletgen/ways/settle.py::fouled_segment#off another household's garden": {
   "body": "40a2439713db7932",
-  "claim": "off another household's yard or garden - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the line within `WEB_FABRIC_GAP`, 7 ft",
-  "code": "01e510cf66d66d5e",
+  "claim": "off another household's garden - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the line within `WEB_FABRIC_GAP`, 7 ft",
+  "code": "8324fe2c5dfdff45",
   "core": "0d6409c041f2bc32",
   "date": "2026-10-19",
-  "note": "holds WEB_FABRIC_GAP, 7 ft, off \"another household's yard or garden\"; 0246 sets the gap only from a garden fence. The yard part should be UNRESEARCHED, as span_walkable's claim already says",
+  "note": "the middle is kept 7 ft off the gardens `theirs` returns",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triaged": "2026-10-19",
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/settle.py::fouled_segment#off another household's yard": {
+  "body": "40a2439713db7932",
+  "claim": "off another household's yard - UNRESEARCHED: the garden fence's 7 ft (`WEB_FABRIC_GAP`) held off a yard too; no page sets a gap from a yard",
+  "code": "934c3a2da798b1b3",
+  "core": "0d6409c041f2bc32",
+  "date": "2026-10-19",
+  "note": "the page is silent on a gap from a yard, so UNRESEARCHED is the right label",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::fouled_segment#off the fixtures": {
   "body": "40a2439713db7932",

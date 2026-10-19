@@ -1044,3 +1044,9 @@ Inashiro's grove. So the bullet now says both, and the frame claim cites it: one
 pop-ups in one check-wave, all clean); the claims round IN-STEP. The page edit re-owed a triage of 286 claims, which sent 27 on,
 and that round found 15 things on code this task never changed - filed as T124-T133 per the GM's rule. **The habit it changes:**
 before changing code to match a page, read the page whole - a drift can be the page contradicting itself.
+
+## T108 - the retro row
+
+About 10 min, the first task through T118's wording-only route: no plan review, `make decide` said none was owed. Two claims split
+into a garden half on 0246 and a yard half UNRESEARCHED, as their sibling already read; the claims check 4 IN-STEP, its two
+asides on unchanged code filed (T134, T135). **The habit it changes:** a claim relabel is declared `**Wording only.**`.

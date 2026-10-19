@@ -376,6 +376,10 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T133 Stale words on the lane-end rules: _pull_back's 'ends the lane at the homestead'; WAY_END_REACH_FT's docstring naming the field at 60 ft; _lay_skeleton's span floor 100 ft vs the code's 50; sweeps _SERVE_FT 100 vs 0246's 60; 0246 §6 cited both plain and GUESS (impl-drift, T106's round) [lands-open]
       research: rendering
+- [ ] T134 settle.theirs drops the 7 ft gap for every steading within DOORSTEP_FT of a lane end, neighbors' gardens at a junction too - 0246 §16 keeps it off another household's garden: record a DEVIATION or narrow the exemption to the lane's own household (impl-drift, T108's round) [lands-open]
+      research: rendering
+- [ ] T135 law.fouls_fabric with own set drops its own garden from the check; 0246 §16 keeps an own way off the beds - confirm every caller with own also holds the beds, as fouled_segment does (impl-drift, T108's round) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
