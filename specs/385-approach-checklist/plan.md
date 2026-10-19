@@ -494,7 +494,11 @@ counted twice.
 
 ### T98 Decisions
 
-**D119 - the room off a grove counted once.** In `lay_door_paths` the grove bands are grown by `2 * (1.5 + GROVE_WORKING_ROOM_FT - FOOTPATH_FABRIC_GAP)` (never below zero), so the path routed at `FOOTPATH_FABRIC_GAP` keeps its middle 1.5 + 9.5 = 11 ft off the trees; in `connector_dry_exit` a grove band's gap is `GROVE_WORKING_ROOM_FT + CONNECTOR_WIDTH / 2` (12.5 ft). Both claims cite 0036's drawing page.
+**D119 - the room off a grove counted once.** In `lay_door_paths` the grove bands are grown by `2 * (1.5 + GROVE_WORKING_ROOM_FT - FOOTPATH_FABRIC_GAP)` (never below zero), so the path routed at `FOOTPATH_FABRIC_GAP` keeps its middle 1.5 + 9.5 = 11 ft off the trees; in `connector_dry_exit` a grove band's gap is `GROVE_WORKING_ROOM_FT + CONNECTOR_WIDTH / 2` (12.5 ft). Both claims cite 0036's drawing page. The connector's way out between two dispersed farms is found by the flood fill on its finer grid, which holds a gap G between two
+bands only when G >= 2 x the band gap + 2.41 x the cell (`dry_exit.GROVE_EXIT_CELL_FT`'s own rule); at 12.5 ft and the 32 ft
+between dispersed farms' bands (`dispersed.LANE_ROOM_FT`) that cell is at most 2.9 ft, so `GROVE_EXIT_CELL_FT` becomes 2.9 (from 7),
+with a test holding the inequality - measured 2026-10-19 (`make test-file` on `test_dry_exit.py`: the 32 ft case refused at 7 ft,
+passing at 2.9; `make cohort` 16 of 16). The fill runs only where no bearing of the sweep is clear.
 
 ## T11 - the close
 
