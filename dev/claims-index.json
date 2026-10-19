@@ -11984,13 +11984,14 @@
   "date": "2026-10-13",
   "note": "35-45 in 100",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "ad5072e51b00c129"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "0015ba6df3eb9faa"
   },
-  "research": "862d7c9fcd1644d6",
+  "research": "1a28ab4107f884e2",
   "rests": [
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:d4fc5b26b94cff85"
   ],
   "section": "874a656f427ca790",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::HOUSEHOLD_GRAVE_SHARE#hamlets with household graves": {
@@ -59985,10 +59986,10 @@
   "date": "2026-10-03",
   "note": "0043: the larger houses first",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "ad5072e51b00c129"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "0015ba6df3eb9faa"
   },
-  "research": "862d7c9fcd1644d6",
-  "triaged": "2026-10-08",
+  "research": "1a28ab4107f884e2",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/lot.py::HouseholdLots.fixtures_of#quota, record and registry plumbing": {
@@ -65053,22 +65054,6 @@
    "0014-bunds-between-the-paddies-aze.drawing.html:b09d82d6a024f0e7"
   ],
   "triaged": "2026-10-19",
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/waterfields/banks.py::_WELD_MIN_APEX#weld apex": {
-  "code": "41a49a4bdebb2035",
-  "core": "14aaee2fbe7c7694",
-  "date": "2026-10-09",
-  "note": "`_WELD_MIN_APEX = 18.0` lets a welded basin keep an 18-25 deg point, but 0005 says \"No basin narrows to a point sharper than 25 degrees\" and \"The maps refuse a point sharper than 25 degrees\". Record the allowance as a DEVIATION on 0005's drawing page, or hold welds to 25",
-  "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
-  },
-  "research": "18b908bbb50f7c1f",
-  "rests": [
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:c98636cac67c0c83"
-  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/banks.py::_nearest_segment#bank geometry": {
