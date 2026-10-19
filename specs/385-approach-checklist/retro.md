@@ -809,3 +809,17 @@ About 20 min. `make claims-triaged` reads its reply through `claims_triage.triag
 `make modal-triaged` reads one) and refuses a reply with no text instead of clearing the bundle unread; its first use recorded T31's
 triage from the agent's transcript - 6 of 281 sent on. The plan cited "375 FR-016" for the triage rule; that rule is feature 318's
 FR-016 (the review's note). **The habit it changes:** none needed.
+
+## T93 - the retro row
+
+About 20 min. `record_owed` reads the triage's touched marks (`modal_triage.touched`): a pop-up owed by a moved page that
+`make modal-triaged` sent on at its fingerprint names `make modal-bundle` and joins its check's batch; one not yet triaged still names
+`make modal-triage`. The test is red without it. Landed with T94 after one merge of T92's own landing (ours kept). **The habit it
+changes:** none needed - the batch is now listed without the hand-built bundle T31 needed.
+
+## T94 - the retro row
+
+About 15 min. `make claims-checked` reads its reply through `claims_triage.read_reply`, the one reader `make claims-triaged` now
+shares: a transcript's last reply is recorded, and a reply with no text is refused before anything is written. The shared helper kept
+`claims.py` at 999 lines. The test is red without it. **The habit it changes:** none needed - a reply file need not be extracted by
+hand.
