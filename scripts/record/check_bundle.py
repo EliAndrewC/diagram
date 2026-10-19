@@ -329,7 +329,8 @@ def with_earlier(root: pathlib.Path, out: pathlib.Path, text: str) -> str:
 
 
 def entry_bundle(root: pathlib.Path, q: str, out: pathlib.Path, extra: list[str], quotes: bool, kind: str = "",
-                 notes: frozenset[str] = frozenset(), for_: str = "all", owed: str = "", bare: bool = False) -> int:
+                 notes: frozenset[str] = frozenset(), for_: str = "all", owed: str = "", bare: bool = False,
+                 images: list[str] | None = None) -> int:
     sys.path.insert(0, str(HERE))
     from hm_record import fragments_for  # noqa: PLC0415
 
@@ -403,7 +404,7 @@ def entry_bundle(root: pathlib.Path, q: str, out: pathlib.Path, extra: list[str]
     for path in extra:
         src = (root / path) if not pathlib.Path(path).is_absolute() else pathlib.Path(path)
         rows.append((copy(src, out, f"extra/{src.name}"), str(path), "named by the dispatcher"))
-    text = manifest(out, f"question {q}" + ("" if for_ == "all" else f", for {for_}"), rows) + owed + changed_section(root, fragments)
+    text = manifest(out, f"question {q}" + ("" if for_ == "all" else f", for {for_}"), rows) + owed + changed_section(root, fragments) + images_section(out, images or [])
     (out / MANIFEST).write_text(with_earlier(root, out, text), encoding="utf-8")
     print(f"check-bundle: {len(rows)} file(s) in {out} - hand the agent {out / MANIFEST}")
     return 0
@@ -639,7 +640,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--for", dest="for_", default="all", choices=sorted(PARTS), help="keep only what this check reads")
     ap.add_argument("--kind", default="", help="a modal class name, for entry-drift: its docstring is copied in")
     ap.add_argument("--no-quotes", action="store_true", help="skip the quote-verbatim report (it fetches every cited page)")
-    ap.add_argument("--images", nargs="*", default=[], help="with --key: page images (files or a directory) copied into images/ and listed by name")
+    ap.add_argument("--images", nargs="*", default=[], help="page images (files or a directory) copied into images/ and listed by name: a source-reader's --key bundle or a question's quote-check")
     ap.add_argument("--root", default=".")
     ap.add_argument("--qs", default="", help="for intro-check: several questions in one bundle (the backfill's batches)")
     ap.add_argument("--not-owed-ok", default="", help="build it though nothing owes it: the reason, recorded in the MANIFEST (feature 311)")
@@ -692,12 +693,14 @@ def main(argv: list[str] | None = None) -> int:
         owed_in = [(i, b, bo.batch_units(units, frozenset(b), first=i == 1)) for i, b in enumerate(batches, start=1)]
         owed_in = [(i, b, us) for i, b, us in owed_in if us] or owed_in  # ...nothing owed at all: a deliberate check reads every batch
         codes = [entry_bundle(root, q, out / f"batch-{i}", args.extra, not args.no_quotes, args.kind, frozenset(b), args.for_,
-                              bo.manifest_lines(us, checks, args.not_owed_ok), bare and i == 1)
+                              bo.manifest_lines(us, checks, args.not_owed_ok), bare and i == 1, args.images)
                  for i, b, us in owed_in]
         print(batched_manifests(out, [i for i, _b, _us in owed_in]))
         return max(codes, default=0)
     # bare here too: NOTES=unfootnoted re-checked no block at all without it (feature 319 H9, 2026-10-05)
-    return entry_bundle(root, q, out, args.extra, not args.no_quotes, args.kind, wanted, args.for_, owed, bare)
+    # ...and the page images on a question's bundle too (feature 401: IMAGES= with Q= was dropped without a word, and --extra
+    # reads every copy as text, so a quote-check of a scanned source's notes had no way to carry its scans)
+    return entry_bundle(root, q, out, args.extra, not args.no_quotes, args.kind, wanted, args.for_, owed, bare, args.images)
 
 
 def batched_manifests(out: pathlib.Path, n: int | Sequence[int]) -> str:

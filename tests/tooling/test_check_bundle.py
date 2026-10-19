@@ -378,6 +378,20 @@ def test_an_entry_bundle_lists_its_residue_pages(tmp_path: pathlib.Path, monkeyp
     assert (out / "pages" / "01-example.org.txt").is_file()
 
 
+def test_a_question_bundle_carries_its_page_images(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 401: IMAGES= with Q= was dropped without a word (only --key passed it on), and --extra reads every copy as
+    text, so a quote-check on notes quoting a scanned source had no way to carry its scans. A question's bundle lists them."""
+    monkeypatch.setattr(cb, "run_script", lambda name, args, root: (0, "quote-verbatim: 0 footnotes"))
+    scans = tmp_path / "scans"
+    scans.mkdir()
+    (scans / "R0000054-left.jpg").write_bytes(b"\xff\xd8jpg")
+    out = tmp_path / "q"
+    args = ["0086-ferries-and-fords-watashi.html", "--for", "quote-check", "--out", str(out), "--root", str(REPO), "--images", str(scans)]
+    assert cb.main(args) == 0
+    assert "- `images/R0000054-left.jpg`" in (out / "MANIFEST.md").read_text(encoding="utf-8")
+    assert (out / "images" / "R0000054-left.jpg").read_bytes() == b"\xff\xd8jpg"
+
+
 def test_a_split_bundle_names_every_batch_and_leaves_no_stale_top_manifest(tmp_path: pathlib.Path) -> None:
     """Feature 374, round arbiter hour 4: an unsplit run's MANIFEST.md left beside the batches was handed to quote-check as
     current. The split's closing word removes it and names every batch's MANIFEST, not only the last."""

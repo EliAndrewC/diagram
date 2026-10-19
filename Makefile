@@ -821,7 +821,7 @@ check-bundle: ## [project] the files ONE check agent reads, copied out of the re
 ##  FEATURE 311 - a bundle for a check nothing owes is REFUSED (`make record-owed` lists what is owed); FOR=quote-check with no NOTES= holds only the owed notes
 ##  NOT_OWED_OK="<why>"  build it anyway (a backfill, an audit the GM asked for), recorded in the MANIFEST
 ##  NEW="<the claim>"    with KEY= WHOLE=1: a source-reader read for a claim not yet in the record
-##  IMAGES="<file|dir> ..."  with KEY=: a scanned source's page images, copied into images/ and listed by name (feature 395)
+##  IMAGES="<file|dir> ..."  with KEY= or Q=: a scanned source's page images, copied into images/ and listed by name (feature 395)
 ##  FOR=intro-check [QS="<n> <n> ..."]  the intro-check bundle, one question or a batch
 ##  KEYS="<k> <k> ..."  several sources in one source-applicability bundle (the uncited write-ups, feature 312)
 	@if [ -z "$(KEY)" ] && [ -z "$(KEYS)" ] && [ -z "$(Q)" ] && [ -z "$(QS)" ]; then printf 'make check-bundle: Q=<question number> (or KEY=<registry key>, KEYS="<k> <k>", or QS= with FOR=intro-check) is required\n' >&2; exit 2; fi
