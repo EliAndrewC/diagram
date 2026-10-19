@@ -321,6 +321,13 @@ def changed_section(root: pathlib.Path, fragments: list[str]) -> str:
             "a few words> | <the finding>` - and is filed as a row, not fixed in this change.\n\n" + body + "\n")
 
 
+def with_earlier(root: pathlib.Path, out: pathlib.Path, text: str) -> str:
+    """A MANIFEST with the earlier rounds of the checks it owes (feature 393): unchanged where none has one."""
+    import earlier_rounds  # noqa: PLC0415
+
+    return text + earlier_rounds.section(root, out, text)
+
+
 def entry_bundle(root: pathlib.Path, q: str, out: pathlib.Path, extra: list[str], quotes: bool, kind: str = "",
                  notes: frozenset[str] = frozenset(), for_: str = "all", owed: str = "", bare: bool = False) -> int:
     sys.path.insert(0, str(HERE))
@@ -396,8 +403,8 @@ def entry_bundle(root: pathlib.Path, q: str, out: pathlib.Path, extra: list[str]
     for path in extra:
         src = (root / path) if not pathlib.Path(path).is_absolute() else pathlib.Path(path)
         rows.append((copy(src, out, f"extra/{src.name}"), str(path), "named by the dispatcher"))
-    (out / MANIFEST).write_text(manifest(out, f"question {q}" + ("" if for_ == "all" else f", for {for_}"), rows) + owed
-                                + changed_section(root, fragments), encoding="utf-8")
+    text = manifest(out, f"question {q}" + ("" if for_ == "all" else f", for {for_}"), rows) + owed + changed_section(root, fragments)
+    (out / MANIFEST).write_text(with_earlier(root, out, text), encoding="utf-8")
     print(f"check-bundle: {len(rows)} file(s) in {out} - hand the agent {out / MANIFEST}")
     return 0
 
@@ -530,7 +537,7 @@ def key_bundle(root: pathlib.Path, key: str, out: pathlib.Path, whole: bool = Fa
         return 2
     fresh(out)
     rows = key_rows(root, key, out, whole, question)
-    (out / MANIFEST).write_text(manifest(out, f"source {key}", rows) + owed + claims_read(root, units or []), encoding="utf-8")
+    (out / MANIFEST).write_text(with_earlier(root, out, manifest(out, f"source {key}", rows) + owed + claims_read(root, units or [])), encoding="utf-8")
     print(f"check-bundle: {len(rows)} item(s) in {out} - hand the agent {out / MANIFEST}")
     return 0
 
@@ -704,7 +711,7 @@ def intro_bundle(root: pathlib.Path, questions: list[str], out_arg: str, not_owe
         (out / name).write_text(text, encoding="utf-8")
         rows.append((name, f"{bo.ru.QUESTIONS}/{bo.question_of(q)}-*.html", "for intro-check: the research page, its drawing page, the map elements written from it"))
     title = f"question {questions[0]}, for intro-check" if len(questions) == 1 else f"{len(questions)} questions, for intro-check"
-    (out / MANIFEST).write_text(manifest(out, title, rows) + bo.manifest_lines(units, "intro-check", not_owed_ok), encoding="utf-8")
+    (out / MANIFEST).write_text(with_earlier(root, out, manifest(out, title, rows) + bo.manifest_lines(units, "intro-check", not_owed_ok)), encoding="utf-8")
     print(f"check-bundle: {len(rows)} question(s) in {out} - hand the agent {out / MANIFEST}")
     return 0
 
