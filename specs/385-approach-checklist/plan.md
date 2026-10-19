@@ -581,6 +581,20 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@33 (continue),
 
 **D134 - the owed logic in its own module.** `owed`, `research_why`, `relabeled_only` and their helpers move from `claims.py` to `claims_owed.py`, re-exported by `claims.py`, so the bar holds.
 
+### T116 part B (2026-10-19T13:12Z)
+
+Owed by the round arbiter's ruling on hour:385-approach-checklist@34 (continue), taken while T116 was the active task.
+
+1. **What is refusing?** Nothing: D133 and D134 were decided, reviewed CLEAR in round 2 and built; the tooling landed.
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither in this part B: the change is D133's, decided and reviewed.
+6. **The one-sentence test.** "A code change re-checks only the claims its hunks bear on" - true by `tests/tooling/test_claims_scoping.py`, red without the code section.
+7. **The next step is a measurement.** The claims tests, run whole, and the landing.
+8. **Every route measured before offering one?** No route is offered.
+9. **After a ruling: the step it names?** Yes - the ruling says go on with the tooling round, T117 to T119.
+
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).
