@@ -581,7 +581,7 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@33 (continue),
 
 **D134 - the owed logic in its own module.** `owed`, `research_why`, `relabeled_only` and their helpers move from `claims.py` to `claims_owed.py`, re-exported by `claims.py`, so the bar holds.
 
-### T116 part B (2026-10-19T13:12Z)
+### T116 part B (2026-10-19T13:06Z)
 
 Owed by the round arbiter's ruling on hour:385-approach-checklist@34 (continue), taken while T116 was the active task.
 
