@@ -54,20 +54,6 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T34 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
       verify: DONE. landed in batch T34+T143: gate green (226 s), landing cohort 54/54; T34's record checks answered and claims IN-STEP (0043 records the shed's 9.5 ft and log-end band); T143's dead weld constants removed, rows retired (wave 168)
-- [ ] T35 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
-      research: rendering
-- [ ] T36 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
-      research: rendering
-- [ ] T37 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
-      research: rendering
-- [ ] T38 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
-      research: rendering
-- [ ] T39 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
-      research: rendering
-- [ ] T40 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
-      research: rendering
-- [ ] T12 Carried from T03 by the round arbiter (hour:385-approach-checklist@6, ask:t03-d17-route, ask:t03-seed57-residue): D17's side-by-side merge (saved; F1-F3 merged and seed 49 fixed, six seeds regressed - 7, 24, 37, 51, 52, 57 - because the later settle passes are blind to the junctions it makes), seed 49, seed 55 (lane_knots 1, as at HEAD), seed 57 (lanes 1/13, ends 21.6 ft apart, settle_knots' gather refused by needle_loops; 2 knots against HEAD's 1) and Inashiro F1-F3's glyph-check NEEDS-WORK; done when seed 57 PASSES. Its Approach first asks whether the merge needs a fixed reach at all (REACH 20 then 25 ft is ours), whether the refusals behind seed 49 (a field and farmhouses unreached) rest on research, and whether needle_loops' and needle_joins' rules are research or ours; only then the design that makes the later passes aware of the merge's junctions. Also carried at T03's landing (ask:t03-claims-at-landing): settle.py::theirs DRIFTED - take a lane's own household from fabric.owned_gardens instead of the 80 ft radius, measured on the cohort; Lawful.fault's doubled tail at 15 degrees against 0081's 20 - which number the research fixes, first; clearance.py::_clear_link re-checked once its bundle carries link_survives; its retro row [lands-open]
-      research: rendering
 - [x] T13 Amendment 3 (FR-013, the GM's option 3): the claims gate carries a finding a page edit surfaced on unchanged code instead of refusing it - `make claims-carry F=<n>` files it as an open task the open-task refusal honors; T03's three findings filed by it; its retro row
       research: rendering
       verify: DONE. claims gate carries a page edit's finding on unchanged code (D26-D28); make claims-carry files it into the active feature only; tests red without each rule (test_claims_index, test_lands_open, test-claims-gate.sh); SC-007 replayed on T03's landing: theirs and _clear_link carried, the doubled tail still introduced (T03 changed that code); retro row in retro.md
@@ -325,10 +311,6 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T110 0246's drawing page names Enoshima without saying what it is (record-format, OUTSIDE THE CHANGE, T107's round): a short gloss [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 (direct): Enoshima in the glossary from Morse's 1886 passage; no block edited
-- [ ] T111 0033's drawing page gives a door path only to a farm whose grove stands between it and its street, on the near row; the code lays one for every grove farm its street does not serve (impl-drift aside, T97's round) - settle which, and label it [lands-open]
-      research: rendering
-- [ ] T112 The track's fallbacks walled as its first route is: _thread_the_fabric's grove fallback, unrouted clip and swing wall only the fabric or the bands, so a track may cross row crops, the paddy or wet ground (DRIFTED) or a brook off its crossing places (CANNOT-TELL); and its five unclaimed decisions - the largest piece kept, a near end counted a junction, an end walked clear along its own leg, the water-crossing limit, the order of the three fallback routes (found working T109, 2026-10-19) [lands-open]
-      research: rendering
 - [x] T113 make tick refuses a 'landed' note while the last sync-with-main push was refused, as T79 refuses one after a failed land-tooling: T110 ticked 'landed' while its push stood refused by the green-gate guard (found working T110, 2026-10-19) [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 via land-tooling: a landed tick waits until the task's work is on main, by content; test red without
@@ -350,8 +332,6 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T119 Each tooling fix's yield measured: the time it was meant to save, read from the per-task time report (T115), so a fix that saves nothing is retired (amendment 10, the GM's change 3) [lands-open]
       research: rendering
       verify: DONE. landed by land-tooling 2026-10-19; fix measure required (D139), make fix-yield (D140), step-back fix-yield.md + arbiter contract (D141); tests red without it
-- [ ] T120 The track out's last resort never crosses a drawn channel (connector_dry_exit, UNCLAIMED, T102's round): claim it, or let it cross a ditch on a plank as 0084 gives (found working T102, 2026-10-19) [lands-open]
-      research: rendering
 - [x] T121 A guard file written by a python heredoc in a Bash command is not caught: T117's Makefile target was written by python open(p,'w') and make-only-hooks' shell-write guard let it through (found working T117) [lands-open]
       research: rendering
       verify: DONE. landed by land-tooling 2026-10-19; open() writes and string-bound names refused (D143); hooks suite 89/89, red without it (2 cases)
@@ -361,61 +341,27 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T123 The plan bundle resolves a decision cited as another feature's ('Feature 375 amendment 11 (D64)') against this feature's own D64, so spec-cited.md hands the reviewer the wrong decision (spec-fidelity aside, T114's review) [lands-open]
       research: rendering
       verify: DONE. landed by land-tooling 2026-10-19; _QUALIFIED reads a decision through its amendment (D145); test red without it
-- [ ] T124 web._web_cut_lines' _extent falls back to every house in the cluster when no house stands within WEB_REACH_FT of a cut, so such a lane runs the whole cluster serving none, against 0246 (along the houses it serves; a stretch joining nothing is not drawn) (impl-drift, T106's round) [lands-open]
-      research: rendering
 - [x] T125 web.stage_web's headman filter ends 'or True' and filters nothing - the comment or the code is stale; and _web_cut_lines' cross-lane tie running 30 ft (pad) past the outermost back lane is UNCLAIMED (impl-drift, T106's round) [lands-open]
       research: rendering
       verify: DONE. landed in batch T132+T125+T137: the batch's gate green (228 s), landing cohort 54/54, hooks-test green; claims IN-STEP after one DRIFTED and one MISLABELED fixed in their tasks; tests red without each
-- [ ] T126 geom._trim_to_service pops a whole last segment before its 4 ft walk, pulling an end back past the last house it serves (0246 §6) - DRIFTED (impl-drift, T106's round) [lands-open]
-      research: rendering
-- [ ] T127 settle.settle_street_ends cuts a street end to other lanes' ends only, never street_anchors, so a farm the street serves without a door path is cut off it (0246 §6) - DRIFTED (impl-drift, T106's round) [lands-open]
-      research: rendering
-- [ ] T128 sweeps._sweep_dangling_ends pulls an end back by whole vertices with no walk along the segment, past the last house it serves (0246 §6) - DRIFTED (impl-drift, T106's round) [lands-open]
-      research: rendering
-- [ ] T129 A lane that serves nothing: _pull_back leaves it whole, settle_dangling and tidy_lane_ends drop it, 0246 is silent - research pass, then one rule, claimed (three NEEDS-RESEARCH) (impl-drift, T106's round) [lands-open]
-      research: rendering
 - [x] T130 bund.RUN_ON_REACH_FT#run-on reach MISLABELED: no cited page records 60 ft for carrying an end on to the field - relabel GUESS or record it (impl-drift, T106's round) [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 by sync-with-main done; run-on reach relabeled GUESS, no page as source (wording only); IN-STEP; T136 filed
-- [ ] T131 Two UNCLAIMED rules: run_lanes_on_to_the_bund never carries a row street's ends on (skips street); dangling_lane_ends exempts the connector - claim each; and two more in run_lanes_on_to_the_bund (T33's round): how far an end may be carried on (RUN_ON_REACH_FT), and an end carried on to the dry hem's edge as well as the paddy's; and run_on_target's 60 ft carry-on reach (RUN_ON_REACH_FT) and its TIP_MARGIN_FT stop outside the worked ground (impl-drift, T106's round) [lands-open]
-      research: rendering
 - [x] T132 street.to_its_joints with exactly one joint returns two coincident points that trim_streets admits, cutting the street to nothing; its docstring says fewer than one joint (impl-drift, T106's round) [lands-open]
       research: rendering
       verify: DONE. landed in batch T132+T125+T137: the batch's gate green (228 s), landing cohort 54/54, hooks-test green; claims IN-STEP after one DRIFTED and one MISLABELED fixed in their tasks; tests red without each
-- [ ] T133 Stale words on the lane-end rules: _pull_back's 'ends the lane at the homestead'; WAY_END_REACH_FT's docstring naming the field at 60 ft; _lay_skeleton's span floor 100 ft vs the code's 50; sweeps _SERVE_FT 100 vs 0246's 60; 0246 §6 cited both plain and GUESS (impl-drift, T106's round) [lands-open]
-      research: rendering
-- [ ] T134 settle.theirs drops the 7 ft gap for every steading within DOORSTEP_FT of a lane end, neighbors' gardens at a junction too - 0246 §16 keeps it off another household's garden: record a DEVIATION or narrow the exemption to the lane's own household (impl-drift, T108's round) [lands-open]
-      research: rendering
-- [ ] T135 law.fouls_fabric with own set drops its own garden from the check; 0246 §16 keeps an own way off the beds - confirm every caller with own also holds the beds, as fouled_segment does (impl-drift, T108's round) [lands-open]
-      research: rendering
 - [x] T136 bund.py claim hygiene: RUN_ON_TURN_DEG's comment says map drawing convention while its claim cites 0081 as a finding - settle which; BRANCH_STEP_FT has no Research: claim (likely NONE, plumbing) (impl-drift, T130's round) [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 by sync-with-main done; turn limit CONVENTION, sampling step NONE, its comment corrected (wording only); IN-STEP
 - [x] T137 T136 landed a malformed claim (RUN_ON_TURN_DEG: CONVENTION takes no pointer) to main by the direct route, which never runs the claim-form test - fix the claim, and make the form check run before a direct landing (found by the T132+T125 gate) [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 in the T132+T125+T137 land-batch (gate green, cohort 54/54); RUN_ON_TURN_DEG's claim in the grammar; the claims gate refuses a malformed claim in a changed file (D149); arbiter fix hour 36 settled
-- [ ] T138 street.to_its_joints' touch (how close an end must come to count as a joint) arrives from its callers unclaimed - check each call site's value against 0246's reach to another way and claim it; and whether the callers pass field-path and bund ends as joints (0246 §6 lets a lane run on to them) (impl-drift, the T132 batch's round) [lands-open]
-      research: rendering
 - [x] T139 make tick refuses a task whose last land-tooling failed even after its files reached main by another route (T137: land-tooling failed, then land-batch landed it gated) - a failed landing whose every file now matches origin/main is landed (found at the T132 batch's landing) [lands-open]
       research: rendering
       verify: DONE. landed by land-tooling 2026-10-19; a failed landing whose files reached main another way is landed (D150); test red without it
-- [ ] T140 0014's drawing page says 'a sector's first and last rows' (valley fan) with no gloss or glossary term for sector - add the glossary entry or an inline gloss from the valley-fan page (record-format, T33's round) [lands-open]
-      research: rendering
-- [ ] T141 law.FIELD_REACH_FT counts a way within 60 ft as reaching the field, where 0014 now records the join at 6 ft (a GUESS): five claims DRIFTED on it (refuse_unreached, FIELD_REACH_FT x2, settle_field, settle_reach) - bring the bar to the 6 ft join, or record the 60 ft on 0014 as a DEVIATION with its reason - SPUR_REACH_FT and field_unreached too, so the law gate and the placer read one distance; and whether a dry plot's edge counts as arrived (trim_lane_stubs, field_unreached apply the 6 ft to dry plots; 0014 speaks of the paddy) (impl-drift, T33's rounds) [lands-open]
-      research: rendering
-- [ ] T142 bund.tip_onto_the_bund returns a spur tip more than 60 ft off, or one whose run-on turns back or is blocked, as it came - short in open ground, against 0014's 'never ends in open ground short of the bund': name the fallback in the claim or make the tip arrive (impl-drift, T33's round) [lands-open]
-      research: rendering
 - [x] T143 Dead weld constants removed and their ranking rows retired: _WELD_MIN_SOLIDITY (T32, wave 164) and _WELD_MIN_APEX are read by nothing since feature 302 retired the carve and its welder - mark both rows retired in 328's audit/waves.json with that reason (the T34 plan review: a dead row is not one of FR-020's ten) [lands-open]
       research: rendering
       verify: DONE. landed in batch T34+T143: gate green (226 s), landing cohort 54/54; T34's record checks answered and claims IN-STEP (0043 records the shed's 9.5 ft and log-end band); T143's dead weld constants removed, rows retired (wave 168)
-- [ ] T144 Amendment 7, FR-020: a ranking row in place of T32's, whose row turned out dead code (retired in T143) - a live row, chosen at its start; its retro row [lands-open]
-      research: rendering
-- [ ] T145 0043's drawing page, 'How many farmsteads have a wood shed?': 'the share chosen at random for each hamlet from its seed' - seed is the generator's word; reword for a reader (the glossary lists a `seed` variant: check its sense first) (record-format, T34's round) [lands-open]
-      research: rendering
-- [ ] T146 fixture_seats' wood shed: shed_off_a_wall tests the 9.5 ft only against the house (walls[:1]) while against_a_wall accepts the kura, so a seat can stand 3.5 ft off the kura; in_front lets a flank shed stand partly forward of the front wall; _wood_shed rolls its first seat with zero, unlike the coop and privy; the kura passed as 'N' though a scattered farmstead's kura stands west (0040); against_a_wall's 1.5 ft tolerance lets the shed stand up to ~11 ft out, unclaimed (impl-drift, T34's rounds) [lands-open]
-      research: rendering
-- [ ] T147 taxonomy._OVERLAP_EXEMPT['farm_fixtures'] says each fixture is 'seated against its own farmhouse' (the shed is 9.5 ft off, shrine and grave 14 ft, the privy up to 48 ft); its claim cites 0039 for the bed beside the house, which only 0038 backs; fixture_seats' CANOPY_PAD and SHADE_MARGIN_FT carry no claim; _seats' privy front step and stable seat unclaimed (impl-drift, T34's round 2) [lands-open]
-      research: rendering
 - [ ] T148 A check stopped by TaskStop and recorded by make dispatch-dropped stays 'running' in checks-open.json, so the round freeze refuses the page and every later check of its round until make check-closed AGENT= (T34: two stopped 0043 checks held the freeze) - dispatch-dropped should close it [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
