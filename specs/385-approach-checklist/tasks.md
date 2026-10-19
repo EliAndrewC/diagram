@@ -243,8 +243,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T84 `make decide` refuses a plan quoting the GM with words not in the request (proposal A, 2026-10-19) [lands-open]
       research: rendering
       verify: DONE. make decide refuses a GM quote not in request.md; landed, test_plan_blocks green
-- [ ] T85 an edit to a plan section is refused while its review runs (proposal B, 2026-10-19) [lands-open]
+- [x] T85 an edit to a plan section is refused while its review runs (proposal B, 2026-10-19) [lands-open]
       research: rendering
+      verify: DONE. landed by land-tooling 2026-10-19 (hm_planhold: a section or block under review is held, D106); its part B at 04:58Z said landed and green; the tick was missed then
 - [x] T86 `make decide` refuses a measured figure with no date and method (proposal C, 2026-10-19) [lands-open]
       research: rendering
       verify: DONE. make decide refuses an unlabeled item-4 figure; landed, test_plan_blocks green
@@ -339,8 +340,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T118 No plan review for a wording-only task that decides nothing new - a claim relabel, a comment, a glossary entry - its section's decisions classed as wording by a rule the tick checks (amendment 10) [lands-open]
       research: rendering
       verify: DONE. landed by land-tooling 2026-10-19; wording-only sections owe no plan review (D137), the tick checks their commits (D138); tests red without it
-- [ ] T119 Each tooling fix's yield measured: the time it was meant to save, read from the per-task time report (T115), so a fix that saves nothing is retired (amendment 10, the GM's change 3) [lands-open]
+- [x] T119 Each tooling fix's yield measured: the time it was meant to save, read from the per-task time report (T115), so a fix that saves nothing is retired (amendment 10, the GM's change 3) [lands-open]
       research: rendering
+      verify: DONE. landed by land-tooling 2026-10-19; fix measure required (D139), make fix-yield (D140), step-back fix-yield.md + arbiter contract (D141); tests red without it
 - [ ] T120 The track out's last resort never crosses a drawn channel (connector_dry_exit, UNCLAIMED, T102's round): claim it, or let it cross a ditch on a plank as 0084 gives (found working T102, 2026-10-19) [lands-open]
       research: rendering
 - [ ] T121 A guard file written by a python heredoc in a Bash command is not caught: T117's Makefile target was written by python open(p,'w') and make-only-hooks' shell-write guard let it through (found working T117) [lands-open]

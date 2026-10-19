@@ -2900,3 +2900,28 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@32 (continue),
 
 **D138 - the tick checks the words.** For a wording-only task, `make tick` reads the commits since the task's last `make task-start` (`task-starts.jsonl`; merges skipped) and refuses when one changed a file outside `specs/` and `dev/` that is not a glossary entry (`l7r/diagram/interactive/assets/glossary/*.json`) and is not a `.py` file whose `semantic_bytes` stand unchanged: "<task>'s section says wording only, but <file> changed in what runs - write its decision (`**D<n> - `) and `make decide`". A research page's block is a decision, not wording, and is refused the same way.
 
+<!-- plan-archive: archived 2026-10-19 -->
+## T119 - each tooling fix's yield measured (amendment 10, the GM's change 3)
+
+### T119 Approach (checklist part A)
+
+1. **The goal, in the world.** Each tooling fix the round arbiter names says what time it is meant to save, and the step-back shows whether it saved it, so a fix that saves nothing is retired.
+2. **The constraints.** Amendment 10, the GM: "implement 3 as part of the next round of tooling fixes" - change 3, measuring each fix's yield against the time it was meant to save; the task as filed (T119 in tasks.md) reads that time from the per-task time report (T115). Changes 1 and 2 (landed): a fix needs a measured cost of 10 minutes or more this hour, or a defect that reached main; removing or simplifying a misfiring guard comes before adding one. The hourly cadence stays. The GM's rule: a tool, never a reminder. A test red without it.
+3. **Where each comes from.** The GM (G); amendment 10 (O); the GM (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (`specs/385-approach-checklist/arbiter.jsonl` read by a script): 105 rulings, 46 of them naming a `tooling_fix`, each one free sentence with no field saying what it should cut; the step-back bundle's `time.md` already times each command from the transcripts (`stepback_bundle.tool_time`, by `command_key`) and counts each check's dispatches (`dispatches.md`).
+5. **The order.** The ruling's measure fields and their refusal; the yield script over the transcripts; its table in the step-back bundle; the arbiter's contract; the tests.
+6. **The exits.** (c) - a measure recorded with each fix and a yield report; judging yields by reading the fixes' sentences was weighed and refused (it is the free text that cannot be measured).
+7. **The search smell.** None.
+8. **The budget.** 75 min.
+9. **Done, measured.** One goal: a ruling naming a `tooling_fix` is refused without a `fix_measure` (a regex over the main session's Bash commands, or `agent:<kind>`) and `fix_minutes`; `make fix-yield F=<n>` prints, per fix settled done - the 45 made before T119 included, by their assigned measures - its measure's rate per session hour before its ruling and since its settling, and "saves nothing" where the later rate is not lower after 3 session hours; the step-back bundle carries the table as `fix-yield.md`; `tests/tooling/` red without it.
+10. **Before moving a constant.** `YIELD_MIN_HOURS` (3) and `YIELD_BEFORE_HOURS` (6) are new tooling windows, not research figures: 3 session hours is three step-backs, the fewest in which a rate is read over more than one task; 6 is the before-window the same, doubled, so a fix ruled early in a feature still has a rate to compare.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T119 Decisions
+
+**D139 - a fix names its measure.** `hm_arbiter.record` refuses a ruling (or a batch's fix) carrying `tooling_fix` without `fix_measure` - a regex that compiles, matched against the main session's Bash commands, or `agent:<kind>` counting that check's dispatches - and `fix_minutes`, the cost it measured this hour; both are kept on the row. The 45 fixes made before T119 take a measure from `specs/<feature>/fix-measures.json`, assigned from each fix's own sentence - the command it cuts, or the check whose rounds it cuts - with no `fix_minutes` (the cost was not measured then); the one declined fix is reported as declined. A fix meant to save editing, reading or the model's own time stands in by the command or check it shortens - the two forms the transcripts time.
+
+**D140 - the yield, per fix.** A new `scripts/measure/fix_yield.py` (`make fix-yield F=<n>`): for each fix settled done, the measure's minutes (or dispatches) per session hour (the model's time and the tools', `stepback_bundle.model_time` and `tool_time`) over the `YIELD_BEFORE_HOURS` of session time before its ruling, and since its settling; "saves nothing" when the later rate is not below the earlier after `YIELD_MIN_HOURS` session hours, "too early" before then, "saving" otherwise.
+
+**D141 - the step-back reads it.** The step-back bundle writes the table as `fix-yield.md`; the round arbiter's contract asks question 3 of it too: a fix that saves nothing is retired (removed, or simplified) as that hour's `tooling_fix`, or kept with the reason in `what`.
+
