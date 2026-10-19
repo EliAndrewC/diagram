@@ -10,8 +10,9 @@ the asker. No code, map or canon change.
 
 ## Technical Context
 
-- **Morisada.** 類聚近世風俗志 is read in NDL's viewer and full-text search (pids 991466, 991467); its IIIF and lab routes
-  refuse these pids.
+- **Morisada.** 類聚近世風俗志: full-text search for 上 (pid 991466) and the 1934 edition (pid 1444386); 下 (pid 991467)
+  page by page in NDL's viewer, or through 1444386 once shown whole; "unread lead" if 下 cannot be searched. Its IIIF and
+  lab routes refuse all three pids.
 - **The record.** `make page-session BRIEF="briefs/s1-write.md briefs/s1-check.md"`. The passes are leads: each passage is
   read on its page before it is cited. The NDL scans (諸問屋再興調 十之二, pid 2548694; 類聚近世風俗志 上, pid 991466; 読史備要,
   pid 1915733) are read on their page images, which go to source-reader with `IMAGES=`. Oishi's table (glim-re repository

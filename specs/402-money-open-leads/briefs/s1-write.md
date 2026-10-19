@@ -21,9 +21,10 @@ their page images (render them; NDL's OCR is checked against the image), and the
 
 ## Morisada, searched first
 
-類聚近世風俗志 (守貞謾稿) is public in NDL's viewer: 上 is pid 991466, 下 is pid 991467 (the 1934 one-volume edition, pid
-1444386). NDL's IIIF and lab full-text routes refuse these pids; the viewer and its full-text search (`POST
-https://dl.ndl.go.jp/api/fulltext/search`, as `passes/sharpener-inui.md` used it) work. Search it for: an Edo retail salt
+類聚近世風俗志 (守貞謾稿) is public in NDL's viewer: 上 is pid 991466 and 下 is pid 991467; a separate 1934 one-volume
+edition is pid 1444386. NDL's IIIF and lab full-text routes refuse all of them. The viewer's full-text search (`POST
+https://dl.ndl.go.jp/api/fulltext/search`, as `passes/sharpener-inui.md` used it) works for 991466 and 1444386 only; 991467
+is read page by page in the viewer. Search it for: an Edo retail salt
 price (塩), and an Edo carpenter's (大工 手間 / 作料) and day laborer's (日雇 / 日傭 / 手傳) wage. Read each hit on its page
 image (a headless-browser screenshot of the viewer, as the sharpener pass did). Full-text search worked for 上 (991466)
 and the 1934 edition (1444386); it refused 下 (991467), so search 下 page by page in the viewer (its contents pages first,

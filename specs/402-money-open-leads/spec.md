@@ -44,7 +44,7 @@ leads were searched and found nothing.
      on Inui stands.
 2. **0275, a skilled craftsman against a laborer:**
    - **An Edo pair:** "SILENT" stands only after 類聚近世風俗志 is searched for an Edo carpenter's and an Edo day laborer's
-     wage (the #5 answer named 朝倉編『守貞謾稿』 pp. 159-161 as the lead), by the same routes as the salt search above; a
+     wage (the #5 answer named 朝倉編『守貞謾稿』 pp. 159-161 as the lead), by the routes of the salt search in scenario 4 (0273); a
      pair found there is written into 0275 with its verdict, any ratio the project's arithmetic. If 下 cannot be searched,
      the verdict names it as an unread lead, not SILENT.
 3. **0277, copper coin in silver:**
@@ -111,3 +111,6 @@ readable and what is still open, so the skill can move its rows.
 - **spec-fidelity round 2 (2026-10-19, verify): CHANGES REQUIRED, 1 item.** 下's full-text routes refused in the salt
   pass, so the Morisada clauses name the route for 下 (viewer page by page, or 1444386 once shown whole) and fall back to
   "unread lead"; the Assumptions bullet matched and the unlabeled scan size dropped.
+- **spec-fidelity round 3 (2026-10-19, verify): CHANGES REQUIRED, 3 items + 1 lesser, all wording.** The write brief's
+  Morisada paragraph and the plan no longer call 991467 full-text searchable; the 0275 clause points at scenario 4; the
+  request's summary line matches the passes.

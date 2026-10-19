@@ -15,7 +15,7 @@ After features 400 and 401 landed, four search passes (2026-10-19, `passes/`) ra
 - Edo salt (0273, "Edo retail, Ako salt, the Edo wholesalers' bale price: SILENT") - FOUND: the Edo brokers' price of Ako salt, 1791;
 - a sharpener's fee (0276) and Inui's papers - SILENT (Morisada's 磨師 entry public, no fee; a sword-polishing tariff of Uwajima 1662 only; Inui not public).
 - leads named in those answers and closed by the passes as not publicly readable: Inui's two papers (Takefu 1980, Sakai 1972), 新保 1978 (not online), 新稿両替年代記関鍵 and 校註両替年代記 (NDL-restricted);
-- leads newly reachable: 類聚近世風俗志 (守貞謾稿) is public in NDL's viewer and full-text search (pids 991466, 991467), so the #5 answer's "守貞謾稿 for Edo salt" and "朝倉編『守貞謾稿』 pp. 159-161 may give an Edo carpenter" are searched in this feature, not called SILENT; 『藩法集1 岡山藩』's 賃銀雑事 chapter (a Mimasaka/Okayama wage) is read if public, or named unread.
+- leads newly reachable: 類聚近世風俗志 (守貞謾稿) is public in NDL's viewer (pids 991466, 991467), and its full-text search works for 991466 and the 1934 edition 1444386 (991467 only in the viewer), so the #5 answer's "守貞謾稿 for Edo salt" and "朝倉編『守貞謾稿』 pp. 159-161 may give an Edo carpenter" are searched in this feature, not called SILENT; 『藩法集1 岡山藩』's 賃銀雑事 chapter (a Mimasaka/Okayama wage) is read if public, or named unread.
 
 ## Outstanding under the same instruction, NOT covered by 402
 
