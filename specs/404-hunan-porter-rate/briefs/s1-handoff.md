@@ -18,5 +18,5 @@
 ## Checks
 
 - source-reader run in session 1: `hunan-wuliao-jiazhi-zeli` bundle 11 READ (page images pp. 1, 12, 24, 27, 38, 39); `bochum-zhili-wuliao-jiazhi` bundle 2 READ (the chapter 13 transport rows, read with xlrd, added to the bundle as `pages/ch13-transport-rows.txt`); both recorded.
-- Its remarks for session 2: the p. 12 decree runs on, 知道了准其議叙欽此 - the note quotes only to 知道了 (complete as quoted); 册 or 冊 in the notes cannot be told apart at the image resolution. Outside the change: the Bochum registry entry says "per li in the districts around it", exact for Jinghai, Cangzhou and Nanpi but Qingxian mixes the labels.
+- Its remarks for session 2: the p. 12 decree runs on, 知道了准其議叙欽此 - the note quotes only to 知道了 (complete as quoted); 册 or 冊: re-read at 400 dpi in this session, the print has two separate frames, 册, as the notes write it. The date: 乾隆三十三年十二月二十日 = 27 January 1769 by new moons computed with PyEphem (the grounds note `hunan-date-arithmetic` gives the working); the prose says "early 1769". Outside the change: the Bochum registry entry says "per li in the districts around it", exact for Jinghai, Cangzhou and Nanpi but Qingxian mixes the labels.
 - Still owed (session 2): quote-check, translation-check (three Hunan notes), record-format (0260), source-applicability (`hunan-wuliao-jiazhi-zeli`).
