@@ -7132,39 +7132,21 @@
    "verdict": "CLEAR"
   },
   "T102": {
-   "section_sha256": "67ae90676249c41844f36009dbedadf47bd0795d7f01a730ce4c369e4765ac53",
+   "section_sha256": "06c23f157a87b9dc3327b0bd54ca3112c75c633df29ea4e33f214cb45fca3649",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "D131",
-     "summary": "connector_dry_exit (the last-resort flood fill) gaps its water lines within FORD_HALF of each crossing place brook_fords sets, so the fill passes the brook there and nowhere else",
+     "summary": "connector_dry_exit runs its fill twice (water lines as walls; and open within FORD_HALF of each brook_fords crossing place) and takes the crossing way only where the own-bank fill finds none or the own-bank way is longer by more than BROOK_CROSSING_COST_FT (0035's 150 ft); the claim cites 0035's crossing places and its keep-to-own-bank rule; no page edit.",
      "class": "within",
-     "why": "Fixes a DRIFTED claim found working T98, a spin-off task (FR-015: a second goal found in a task becomes its own task), by making the code follow 0035's drawing page (ways between the banks cross at crossing places) rather than conforming the claim to the code. It is exit (c), 'add a rule', from the checklist the GM approved. Nothing the GM asked for is narrowed, and an earlier recorded DEVIATION is withdrawn rather than added."
+     "why": "A claim fix of the kind the GM pulled into this feature (Amendments 6-7, FR-020). The change since the last CLEAR verdict tightens the crossing to 0035's own stated rule (a way keeps to its own bank unless crossing saves about 150 ft), the same constant the track's own router already uses; it carves nothing out of the request, and the fill's ability to cross only at a crossing place is unchanged. The guess status of the 150 ft is recorded on 0035's page and the claim cites it, satisfying the request's guardrail that a rule's reason be recorded where the code changes."
     },
     {
-     "id": "T102-no-crossing-cost",
-     "summary": "the fill carries no crossing cost: once a crossing place is gapped, the fill may pass it whatever the crossing saves, while 0035's keep-to-its-bank-unless-about-150-ft rule stays carried by the router's BROOK_CROSSING_COST_FT alone",
+     "id": "T102 Approach exits",
+     "summary": "Exit (c), a new rule - the fill passes the brook at crossing places - chosen; (b) principled exception and (e) conform-as-claimed refused.",
      "class": "within",
-     "why": "This decision was not labeled in the plan. The fill runs only where no straight bearing is dry, and the decision narrows neither the request nor the spec. Whether it matches 0035 closely enough is a question of design and research accuracy, which this review does not judge."
-    },
-    {
-     "id": "T102-exit-choice",
-     "summary": "exit (c) chosen over (b) a recorded DEVIATION that the fill keeps to its bank, and (e) conforming to the claim as it stood",
-     "class": "within",
-     "why": "Choosing the exit that conforms code to research over a carve-out is what the GM's request asks the checklist to weigh ('does this conform to how these things actually developed?'). It removes an exception rather than writing one, so no MODE 1 ruling is owed."
-    },
-    {
-     "id": "T102-claim",
-     "summary": "the claim track.connector_dry_exit is rewritten to cite 0035's crossing places ('the fill crosses no water but at a crossing place'), IN-STEP, and no research page is edited",
-     "class": "within",
-     "why": "The claim now states what 0035 says and what the code will do; leaving the page alone is right because the change brings the code into line with the page and records no deviation. It answers the claim's drift (FR-020) and keeps to the record rule the plan cites."
-    },
-    {
-     "id": "T102-tolerance",
-     "summary": "the crossing tolerance reuses FORD_HALF and the brook_fords spacing (FORD_SPACING) the track's own checks use; no constant moves",
-     "class": "within",
-     "why": "This is an implementation choice inside the requested fix that reuses existing values and moves no constant (item 10, n/a). It does not touch the scope of anything the GM asked for."
+     "why": "Unchanged from the CLEAR text; the checklist's three named exits are judged as the approved proposal asks, and the chosen exit brings the code toward the research page rather than away from it."
     }
    ],
    "verdict": "CLEAR"
