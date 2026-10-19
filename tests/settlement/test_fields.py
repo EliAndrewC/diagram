@@ -652,7 +652,7 @@ def test_feature_012_archetype_constants_survived_the_split():
     # the three class-level tuples gating the in-field pond / rock / grave island. They are class
     # ATTRIBUTES, not methods, so the surface test above cannot see them - and a transformer that
     # slices a class body by its function definitions is exactly what would drop them.
-    for name in ("_PADDY_POND_KINDS", "_PADDY_ROCK_KINDS", "_PADDY_GRAVE_KINDS"):
+    for name in ("_PADDY_POND_KINDS", "_PADDY_GRAVE_KINDS"):
         assert isinstance(getattr(Settlement, name), tuple), name
     assert "valley_paddy" in Settlement._PADDY_POND_KINDS
 

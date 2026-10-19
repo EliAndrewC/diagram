@@ -495,30 +495,6 @@ def skeleton_layout(kind: str, cx: float, cy: float, ex: float, ey: float) -> di
 """Research: torii counts 1, 3 or 7 by tier - DEVIATION research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html: the GM's numerology, weighted to the tier"""
 
 
-MERCHANT_ESTATE_WEIGHTS: dict[str, tuple[tuple[int, float], ...]] = {
-    # CAPITAL (021, the counts table): 48 rich families against the provincial 12 - the
-    # walled-estate privilege lands on ~4-8 of them, weighted to the middle of that band
-    "capital": ((4, 0.15), (5, 0.25), (6, 0.3), (7, 0.2), (8, 0.1)),
-    # WALLED MERCHANT COMPOUND COUNT DISTRIBUTION (GM 2026-07-23). A gated compound is a PRIVILEGE
-    # that must be explicitly GRANTED to a merchant family, not a purchase: this mirrors the
-    # Edo-period system of individually granted merchant rights and privileges - an audience with
-    # the daimyo at the New Year's celebration, permission to carry a persistent surname across
-    # generations despite not being samurai (myoji gomen), and the like. So even most VERY rich
-    # merchants do not have one: they can afford the wall, but lack the legal standing to build it.
-    # A provincial city holds ~12 very-rich merchant families (budgets.md, 2% of ~3,000), of whom
-    # only 1-3 hold the grant - rolled 30% / 40% / 30% per city, seeded on the map seed (the same
-    # deterministic re-roll pattern as TORII_WEIGHTS above). "capital" is left to be added when
-    # capital maps exist, like the torii table did for its tiers.
-    "city": ((1, 0.30), (2, 0.40), (3, 0.30)),
-}
-"""Walled merchant compound counts.
-
-Research:
-    walled merchant compounds per city - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: one to three, 30/40/30
-    walled merchant compounds per capital - UNRESEARCHED: four to eight, weighted to the middle
-"""
-
-
 """Research: wall defense postures - research/questions/0148-towers-along-the-city-wall-mamian.html, research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: siege, garrison and peaceful arrow ranges and tower cover"""
 
 

@@ -69,7 +69,6 @@ from ._knobs import KNOBS as KNOBS
 from ._knobs import KOSATSUBA_MARKER_MIN_PX as KOSATSUBA_MARKER_MIN_PX
 from ._knobs import LANE_SKELETONS as LANE_SKELETONS
 from ._knobs import LANE_WEBS as LANE_WEBS
-from ._knobs import MERCHANT_ESTATE_WEIGHTS as MERCHANT_ESTATE_WEIGHTS
 from ._knobs import Knob as Knob
 from ._knobs import _centroid as _centroid
 from ._knobs import _sharp_corners as _sharp_corners
