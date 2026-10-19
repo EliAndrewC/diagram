@@ -250,3 +250,18 @@ def test_decide_refuses_a_section_quoting_the_gm_with_words_not_in_the_request(t
     assert plan_lint.refusal(d, ok + mention) == ""
     why = plan_lint.refusal(d, bad)
     assert "we either have or don't need tooling" in why and '"this"' not in why
+
+
+def test_decide_refuses_an_item_4_figure_whose_sentence_carries_no_measurement() -> None:
+    """Feature 385 T86 (plan D107): T81's "4.4 s (measured)" came back unreviewable, a round lost."""
+    sys.path.insert(0, str(script("plan_lint.py").parent))
+    import plan_lint  # noqa: PLC0415
+
+    head = "### T05 Approach (checklist part A)\n\n"
+    ok = head + "4. **World.** Yes - measured 2026-10-19 (two warm runs): it took `4.4 s`, round 2 of seed 45, at 01:30Z for T10.\n5. **x.** y\n"
+    assert plan_lint.unlabeled_figure(ok) == ""
+    assert plan_lint.unlabeled_figure(head + "4. **World.** See `make claims-owed F=385` and `dev/run-log/2026-10/x.json`.\n") == ""
+    bad = ok.replace("5. **x.**", "Then it took 2.5 h.\n5. **x.**")
+    assert plan_lint.unlabeled_figure(bad) == "Then it took 2.5 h.", "each sentence carries its own label"
+    assert plan_lint.unlabeled_figure(head + "4. **World.** It takes `4.4 s` (measured).\n") != "", "a value in a code span is read"
+    assert plan_lint.unlabeled_figure(head + "4. **World.** It takes 19 degrees, m:turn-angle.\n") == ""
