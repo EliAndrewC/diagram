@@ -47,6 +47,14 @@ def test_a_pair_is_read_with_its_original_put_back_and_the_inline_form_too() -> 
     assert to.pairs('<li data-note="e">"plain" (the source\'s own English)</li>', "") == []
 
 
+def test_an_original_of_two_runs_is_paired_whole() -> None:
+    """The round arbiter on ask:397-round3: 0266's 「...」「...」 originals reached translation-check as their first run alone, so a
+    translation of both read as unsupported (CANNOT-TELL)."""
+    held = '<li data-note="k">「a troupe ... nine days」 (translated; <span class="orig" data-orig="k#1"></span>); 「fifteen shows」 (translated; <span class="orig" data-orig="k#2"></span>)</li>'
+    stored = '<li data-orig="k#1">original: 「中津一座」「九日買切」</li>\n<li data-orig="k#2">original: 「十五芝居」</li>\n'
+    assert to.pairs(held, stored) == [("k", "", "a troupe ... nine days", "中津一座 ... 九日買切"), ("k", "", "fifteen shows", "十五芝居")]
+
+
 def test_only_a_new_or_changed_pair_is_owed_and_a_moved_one_is_not(tmp_path: pathlib.Path) -> None:
     d = tmp_path
     _git(d, "init", "-q", "-b", "main")
