@@ -781,3 +781,12 @@ About 30 min. `make where-time` books each gap to the task its tool call names (
 bundle, a section heading), carries it to the calls that name none, and falls back to the mark only before any is named; a footer
 says how many minutes each rule booked. No workflow command moves the mark (the plan review accepted the change of route). **The
 habit it changes:** per-task numbers no longer depend on `make task-start` being run at the right moment.
+
+## T85 - the retro row
+
+About 60 min. A running plan review now holds what its bundle names (`hm_planhold`): a task preflight its section, a block review
+its blocks; an Edit, a Write or a Bash write that would change held text is refused, naming the agent, and `PLAN_EDIT_OK` passes only
+a dead dispatch's hold. Three plan rounds (block reviews in scope, the Write tool, no escape for a live review). The Bash test had
+to be wider than the plan said: `hm_house.write_targets` does not see a Python heredoc's write - my usual route - so a write is the
+plan named with a write marker, and held text is the heading, a held line, or a quoted fragment of it. **The habit it changes:** a
+section under review can no longer be edited under it.
