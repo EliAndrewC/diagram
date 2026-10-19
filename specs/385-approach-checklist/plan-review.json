@@ -6237,6 +6237,85 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T90": {
+   "section_sha256": "9983d2874ff350291501daa404cd91e4644fdac345f7b1f77710952f80317d3f",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D111",
+     "summary": "Each between-turns window, from a Stop to the session's next UserPromptSubmit, is booked whole to one class chosen by the prompt that ends it: gm false (a notification) is waiting on work; gm true is the GM, or the GM away when the window passed an hour.",
+     "class": "within",
+     "why": "Proposal G, which the GM's 'build all 7 of those as 385 tasks' approves, is 'a between-turns window classed by what ended it' and 'fold the scratch split in'. Classing by the ending prompt is G's own wording. The one-hour line between the GM and the GM away is the scratch split's (Approach item 4 measured it with wt2.py, 103 vs 357 minutes), and G's stated cost, 'where-time cannot tell waiting from idle', needs exactly that line. Nothing the GM asked for is dropped."
+    },
+    {
+     "id": "T90-done",
+     "summary": "make where-time replaces the single 'between turns' column with three columns (waiting on work / the GM / the GM away) that add up to the old column, and tests/tooling/test_where_time.py is red without the split.",
+     "class": "within",
+     "why": "The three columns ARE G's split, and because they add up to T77's column nothing it reported is lost. The test only fails when the requested split is missing, so it enforces the request rather than adding scope (GM 2026-09-20)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T88": {
+   "section_sha256": "9b971bbb46347afcc6525626c768c0e9a8661be9284e3b5420fd6794c27eae1d",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D109",
+     "summary": "plan_gate.record and record_blocks pass every free-text string field of a decision (why, summary and the like) through hm_house.americanize; id, class, ruling and the digests are written as given",
+     "class": "within",
+     "why": "Proposal E, approved in amendment 9 ('build all 7 of those'), is 'make plan-verdict passes the reviewer's text through americanize'. Both record paths are make plan-verdict (the TASK=/whole-plan route and the BLOCKS=1 route), so covering both is what the proposal says, not a widening. Leaving id, class, ruling and the digests alone is not a carve-out from 'the reviewer's text': they are keys, enumerated values and hashes the gate matches on, not prose, and changing them would break the record the proposal is meant to keep green."
+    },
+    {
+     "id": "T88-constraint-quotations",
+     "summary": "text inside a quotation is held out of the correction, as the house-style hook holds it out",
+     "class": "within",
+     "why": "The GM's words fix the method: 'as T78 does for notes', i.e. the existing americanize with its existing behavior, which this block says holds quotations out the way the hook does. The purpose is that a reviewer's spelling never turns the gate red; a word the hook does not flag cannot turn it red, so holding out what the hook holds out leaves that purpose intact while keeping verbatim quotations verbatim. The measured incident in item 4 is a word the preflight DID flag, so it falls inside what the correction reaches, and item 9's done-test asserts exactly that case."
+    },
+    {
+     "id": "T88-order-and-test",
+     "summary": "the call is added in plan_gate.record and the block record, then a test in tests/tooling/test_plan_gate.py red without it",
+     "class": "within",
+     "why": "The test only fails when the requested correction is absent: it enforces proposal E rather than adding scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T87": {
+   "section_sha256": "4cef9837e0be044d84c587d9103f2c8624c4f568955a2fd60954eed6edecfb11",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D108a",
+     "summary": "Ignore the re-rolled outputs in the tree comparison and print a note to commit them, rather than having the gate commit them itself",
+     "class": "within",
+     "why": "Proposal D, approved by the GM in amendment 9 ('build all 7 of those'), reads 'the gate commits (or ignores) the manifests it re-rolled itself'. It names ignoring as an option, and the note serves the commit."
+    },
+    {
+     "id": "D108b",
+     "summary": "The roll's outputs counted as json, png, svg, html and webp beside a .gen.py, not only the json manifest",
+     "class": "within",
+     "why": "The goal is 'a gate never fails for a pool map it re-rolled itself'. If a roll rewrites the images as well as the manifest, excluding only the json would leave the failure in place. This is within the request only while the files are the ones the gate's own roll wrote (see D108c)."
+    },
+    {
+     "id": "D108c",
+     "summary": "The exclusion is keyed on file class (every changed tracked map output under pool/), not on the maps the gate rolled this run. The plan argues no one else writes them because gate-write-hooks.sh refuses make map beside a running gate",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM approved ignoring 'the manifests it re-rolled ITSELF'. The plan's own constraint (item 2) keeps 375 FR-004: 'a write by anyone else during the gate still voids it'. Excluding by class lets any non-gate write to a pool map output during the gate pass unrefused. Examples: an Edit or Write, a background make map started before the gate, a hand edit. That narrows FR-004 beyond what was asked. The class-equals-provenance premise is argued from one hook's refusal of one command, and item 4 does not measure it. Keying on provenance is not impossible: item 4 shows the gate already knows what it rolled ('ROLLED this run: its cache key moved'). So it fails all three tests. It is not physically impossible, it is not implied by the GM's words, and the literal reading does not defeat the purpose. Fix: exclude only the output files of the maps the gate reports as rolled this run, ideally only where the end hash is what the roll wrote. Add to item 9's test a write by something other than the gate's roll to a pool map output during the gate, which must still be refused."
+    },
+    {
+     "id": "item9-test",
+     "summary": "tests/tooling/test_preflight.py red without the change; a move of any other file still refuses",
+     "class": "within",
+     "why": "Enforces the requested behavior and keeps FR-004 for other files (GM 2026-09-20: enforcing what was asked is in scope)."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }
