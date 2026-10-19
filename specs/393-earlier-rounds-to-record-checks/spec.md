@@ -29,7 +29,7 @@ answered, or ask back for what an earlier round took out.
 
 These checks are where the rounds pile up: of the 106 round-arbiter rulings feature 385's audit counted
 (`specs/385-approach-checklist/audit.md`), 85 were on the three pop-up checks (modal-depiction 40, modal-form 23,
-modal-research 22) and 18 on record checks; about 100 of the 106 ruled that the next round would re-read text already passed.
+modal-research 22) and 19 on record checks (quote-check 8, record-format 7, source-reader 3, translation-check 1); about 100 of the 106 ruled that the next round would re-read text already passed.
 Only the arbiter, AFTER the cap, sees the earlier rounds; the round that re-raises never did.
 
 ## What "it" is, read literally
@@ -54,9 +54,12 @@ stands), and every round-arbiter ruling on the unit with its `why`.
   for a `continue`: what the next round must look at).
 - **FR-003 The contract says what to do with them.** Each of those checks' agent files gains ONE shared paragraph, the same
   words in each (a test holds them equal): read the Earlier rounds section before the artifact; a finding an earlier round
-  raised that is APPLIED is settled - confirm it holds, do not re-raise it; an item an earlier round passed is re-opened only
-  where THE CHANGE lists its block or note; a NOT APPLIED finding is re-raised only with a reason the earlier reply did not
-  give; a `continue` ruling's `what` bounds the round; to reverse an earlier round's verdict, say `REVERSES round <n>` with the
+  raised that is APPLIED is settled - confirm it holds, do not re-raise it; what an earlier round passed stays passed while
+  its text stands - where the MANIFEST carries THE CHANGE (the question bundle), only the blocks and notes it lists re-open,
+  and where it carries none (the key, intro and pop-up bundles), only text that differs from what the earlier reply quoted; a
+  NOT APPLIED finding (its EDIT's words absent - the session may have fixed it in other words, or not at all) is judged
+  against the text as it stands: settled if the defect is gone, else reported again, opened `REPEATS round <n>:`, with its
+  EDIT; a `continue` ruling's `what` bounds the round; to reverse an earlier round's verdict, say `REVERSES round <n>` with the
   reason. Nothing in it widens or narrows what the check judges.
 - **FR-004 One builder, every bundle.** The section is built by one function used by every MANIFEST write in
   `check_bundle.py` (the question, key, keys and intro bundles) and `modal_bundle.py` (the per-pop-up and the batched top
@@ -69,6 +72,11 @@ stands), and every round-arbiter ruling on the unit with its `why`.
 ## Out of scope
 
 - `spec-fidelity` and the map reviewers already have this (249, 240, 294); their mechanisms are not touched.
+- `impl-drift` and the claims triage: like `source-applicability`, the check state keeps no subject for them
+  (`hm_checks.CHECK_KINDS` adds `impl-drift` with no page or pop-up; its unit is a code claim, bundled by the claims bundle,
+  not by `check_bundle.py` or `modal_bundle.py`), and no round ruling on either exists - there is no earlier round to hand
+  them. Bringing them in would first need the state to key their rounds, a change to `hm_checks.py` this feature does not
+  make.
 - Round keying and counting (`hm_checks.dispatch`, `fresh_reading`, `first_look`): the Money session's planned fix (b), a
   source-reader on different new notes of one question counted as successive rounds, is theirs (agreed 2026-10-18).
 - Grouping pop-ups that share a template paragraph into one unit (feature 385's proposal 1, the Diagram backlog session): it
@@ -92,3 +100,12 @@ Agreed by message on 2026-10-18 with the Money session (features 389-391) and th
 feature owns `check_bundle.py`, `modal_bundle.py`, a new `scripts/record/earlier_rounds.py`, their tests and the shared
 contract paragraph; it does not edit `hm_checks.py`, `arbiter_bundle.py`, `page_session_runner.py`,
 `agent-prefix-hooks.sh`, `record_owed.py` or `source-applicability.md`. Both sessions are told when 393 lands.
+
+## Review history
+
+- **Round 1** (`spec-fidelity`, 2026-10-18): CHANGES REQUIRED, four items, all applied - (1) FR-003's "passed is re-opened
+  only where THE CHANGE lists it" had nothing to read on the key, intro and pop-up bundles (no change section): reworded to
+  "while its text stands", THE CHANGE where carried, else the text the earlier reply quoted; (2) "NOT APPLIED re-raised only
+  with a new reason" suppressed a valid unfixed finding (`last_edits` marks NOT APPLIED a fix made in other words too):
+  reworded to judge it against the text as it stands, settled if gone, else `REPEATS round <n>:`; (3) the record checks'
+  count corrected to 19 (85 + 19 + 2 = 106); (4) `impl-drift` and the claims triage named Out of scope, with the reason.

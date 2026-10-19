@@ -36,6 +36,7 @@ from typing import Any
 HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 sys.dont_write_bytecode = True
+import earlier_rounds  # noqa: E402
 import modal_owed as mo  # noqa: E402
 
 QUESTIONS = pathlib.Path("research/questions")
@@ -618,7 +619,8 @@ def bundle(root: pathlib.Path, kind: str, for_: str, out_arg: str, reason: str =
         manifest.append(f"## `{name}` - origin `{origin}`\n\n```\n{(out / name).read_text(encoding='utf-8').rstrip()}\n```\n")
     manifest.append("Reply with your report: the counts on the first line, then only what the session must act on (your contract gives the form).\n")
     escape = f"check-order-escape: {first}\n" if held else ""
-    (out / "MANIFEST.md").write_text("\n".join(manifest) + "\n" + owed_lines(root, m, for_, units) + escape, encoding="utf-8")
+    text = "\n".join(manifest) + "\n" + owed_lines(root, m, for_, units) + escape
+    (out / "MANIFEST.md").write_text(text + earlier_rounds.section(root, out, text), encoding="utf-8")  # feature 393
     print(f"modal-bundle: {len(rows)} file(s) in {out} - hand the {for_} agent {out / 'MANIFEST.md'}")
     return 0
 
@@ -647,6 +649,9 @@ def bundles(root: pathlib.Path, kinds: Sequence[str], for_: str, out_arg: str, r
         "its `unit:` line. The drawing pages repeat from bundle to bundle: read each page once.\n",
         *[f"- `{s / 'MANIFEST.md'}`" for s in subs],
         "",
+        # feature 393: the earlier rounds are in each pop-up's own MANIFEST, beside the replies it copied
+        *([f"Earlier rounds: {', '.join(f'`{s.name}`' for s in held)} - each MANIFEST's `{earlier_rounds.HEAD}` section.", ""]
+          if (held := [s for s in subs if earlier_rounds.HEAD in (s / "MANIFEST.md").read_text(encoding="utf-8")]) else []),
         *units,
     ]
     (out / "MANIFEST.md").write_text("\n".join(parts) + "\n", encoding="utf-8")
