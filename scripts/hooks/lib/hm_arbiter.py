@@ -50,6 +50,8 @@ def _checkpoint():  # noqa: ANN202 - scripts/reviews/checkpoint.py, imported by 
     import checkpoint  # noqa: PLC0415
 
     return checkpoint
+
+
 #: check dispatches per hand-written changed line past which a feature's checks are cascading (FR-010), and the fewest
 #: dispatches before the ratio means anything. Set from the SC-006 replay (specs/375-enforced-wave-process/measurements.json
 #: `cascade-threshold`): 372's wave 106 ran 0.13 and its looping wave 108 1.35.
@@ -79,7 +81,7 @@ def feature_dir(root: Path) -> Path | None:
         return root / "specs" / named  # session working 390 while feature.json named 391 had its hours charged to 391)
     try:
         fd = json.loads((root / ".specify" / "feature.json").read_text(encoding="utf-8")).get("feature_directory", "")
-    except (OSError, ValueError):
+    except OSError, ValueError:
         return None
     return (root / str(fd).rstrip("/")) if fd else None
 
@@ -87,7 +89,7 @@ def feature_dir(root: Path) -> Path | None:
 def _load(path: Path) -> dict[str, Any]:
     try:
         return json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, ValueError):
+    except OSError, ValueError:
         return {}
 
 
@@ -125,8 +127,7 @@ def trip(root: Path, trigger: str, kind: str, unit: str, detail: str, now: float
         # was swept into the next feature's batch (352's 0036 batch carried feature 368's three q:0047 triggers, 2026-10-11,
         # the arbiter's tooling fix) - `mine` keeps each feature to its own. GUARD_EDIT_OK: feature 352, the round arbiter's
         # tooling fix on round:quote-check|q:0036@3
-        state[trigger] = {"kind": kind, "unit": unit, "detail": detail, "t": time.time() if now is None else now,
-                          "feature": d.name if d else ""}
+        state[trigger] = {"kind": kind, "unit": unit, "detail": detail, "t": time.time() if now is None else now, "feature": d.name if d else ""}
         m = re.match(r"(\d+) check dispatches", detail)
         if m:
             state[trigger]["dispatches"] = int(m.group(1))
@@ -141,7 +142,7 @@ def rulings(root: Path) -> dict[str, dict[str, Any]]:
     d = feature_dir(root)
     out: dict[str, dict[str, Any]] = {}
     f = d / "arbiter.jsonl" if d else None
-    for line in (f.read_text(encoding="utf-8").splitlines() if f and f.is_file() else []):
+    for line in f.read_text(encoding="utf-8").splitlines() if f and f.is_file() else []:
         try:
             r = json.loads(line)
         except ValueError:
@@ -154,8 +155,7 @@ def rulings(root: Path) -> dict[str, dict[str, Any]]:
 def continues(root: Path, prefix: str, after: int = 0) -> int:
     """How many `continue` rulings the round triggers of one unit carry - each lifts its cap by one round; with `after`, only
     those past round `after` (a run counted afresh after a later change, feature 374 FR-005)."""
-    return sum(1 for t, r in rulings(root).items()
-               if t.startswith(prefix) and r.get("ruling") == "continue" and _round_no(t) > after)
+    return sum(1 for t, r in rulings(root).items() if t.startswith(prefix) and r.get("ruling") == "continue" and _round_no(t) > after)
 
 
 def _round_no(trigger: str) -> int:
@@ -190,17 +190,21 @@ def refusal(triggers: list[str], root: Path | None = None) -> str:
     t = triggers[0]
     batched = batch_triggers(root, triggers) if root is not None else []
     if len(batched) > 1 and t in batched:  # FR-017: a batch at the cap is ruled ONCE - the refusal names the batch, not the unit
-        return (f"{len(batched)} round triggers are owed together ({', '.join(batched)}; feature 375 FR-017): ONE ruling for the "
-                "batch - make arbiter-bundle BATCH=1, dispatch `round-arbiter` on the MANIFEST it prints, then make arbiter-ruled "
-                "BATCH=1 FILE=<its JSON> AS=round-arbiter. A round you mean to ask about ahead of its cap joins it with "
-                "TRIGGERS=\"<trigger> ...\". The feature goes on elsewhere meanwhile.")
-    return (f"a tripwire is owed its ruling first ({', '.join(triggers)}; feature 375 FR-010/FR-011): make arbiter-bundle "
-            f"TRIGGER=\"{t}\", dispatch `round-arbiter` on the MANIFEST it prints, then make arbiter-ruled TRIGGER=\"{t}\" "
-            "FILE=<its JSON> AS=round-arbiter. Several units at their cap together (a batch of pop-ups or pages)? `make "
-            "arbiter-bundle BATCH=1` puts every owed round trigger to ONE ruling (feature 375 amendment 2). "
-            "The feature goes on elsewhere meanwhile. (Claude Code picks up a new agent file "
-            "mid-session - this one did on 2026-10-10 - so only if `round-arbiter` is missing from the session's agent list: "
-            "restart it, or carry ARBITER_OK=\"<reason>\" on the gate or in the check's prompt - logged.)")
+        return (
+            f"{len(batched)} round triggers are owed together ({', '.join(batched)}; feature 375 FR-017): ONE ruling for the "
+            "batch - make arbiter-bundle BATCH=1, dispatch `round-arbiter` on the MANIFEST it prints, then make arbiter-ruled "
+            "BATCH=1 FILE=<its JSON> AS=round-arbiter. A round you mean to ask about ahead of its cap joins it with "
+            "TRIGGERS=\"<trigger> ...\". The feature goes on elsewhere meanwhile."
+        )
+    return (
+        f"a tripwire is owed its ruling first ({', '.join(triggers)}; feature 375 FR-010/FR-011): make arbiter-bundle "
+        f"TRIGGER=\"{t}\", dispatch `round-arbiter` on the MANIFEST it prints, then make arbiter-ruled TRIGGER=\"{t}\" "
+        "FILE=<its JSON> AS=round-arbiter. Several units at their cap together (a batch of pop-ups or pages)? `make "
+        "arbiter-bundle BATCH=1` puts every owed round trigger to ONE ruling (feature 375 amendment 2). "
+        "The feature goes on elsewhere meanwhile. (Claude Code picks up a new agent file "
+        "mid-session - this one did on 2026-10-10 - so only if `round-arbiter` is missing from the session's agent list: "
+        "restart it, or carry ARBITER_OK=\"<reason>\" on the gate or in the check's prompt - logged.)"
+    )
 
 
 def reversal(events: list[Mapping[str, Any]], path: str, old: str, new: str) -> bool:
@@ -282,7 +286,7 @@ def unit_of(trigger: str) -> str:
     asked about ahead of the cap was never recorded as owed, and its bundle and its ruling row lost the unit)."""
     if not trigger.startswith("round:") or "|" not in trigger:
         return ""
-    body = trigger[len("round:"):]
+    body = trigger[len("round:") :]
     return body.rpartition("@")[0] if "@" in body else body
 
 
@@ -294,19 +298,19 @@ def batch_triggers(root: Path, extra: Iterable[str] = ()) -> list[str]:
     return sorted(set(own) | {t for t in extra if t.startswith("round:") and not t.startswith("round:spec-fidelity|")})
 
 
-def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared: str, now: str | None = None,
-                  batch: bool = False) -> dict[str, Any]:
+def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared: str, now: str | None = None, batch: bool = False) -> dict[str, Any]:
     """Record the round arbiter's ruling: binding, one per trigger (FR-011). A round trigger owed together with others is
     ruled with them, as a batch (FR-017) - not alone."""
     if declared != "round-arbiter":
-        raise PermissionError("declined: only the `round-arbiter` subagent records a ruling (AS=round-arbiter) - a declaration, "
-                              "recorded, not a proof")
+        raise PermissionError("declined: only the `round-arbiter` subagent records a ruling (AS=round-arbiter) - a declaration, recorded, not a proof")
     if trigger in rulings(root):
         raise ValueError(f"{trigger} is already ruled - one ruling per trigger, binding; the session neither re-asks nor overrules")
     others = [t for t in batch_triggers(root) if t != trigger]
     if not batch and trigger in batch_triggers(root, [trigger]) and others:
-        raise ValueError(f"{len(others)} other round trigger(s) are owed with it - rule them together, ONE ruling: make "
-                         "arbiter-bundle BATCH=1, then make arbiter-ruled BATCH=1 FILE=<its JSON> AS=round-arbiter (FR-017)")
+        raise ValueError(
+            f"{len(others)} other round trigger(s) are owed with it - rule them together, ONE ruling: make "
+            "arbiter-bundle BATCH=1, then make arbiter-ruled BATCH=1 FILE=<its JSON> AS=round-arbiter (FR-017)"
+        )
     hour = trigger.startswith("hour:")  # GUARD_EDIT_OK: feature 383 FR-009/FR-010 - the hourly step-back's own two rulings
     if ruling.get("ruling") not in (HOUR_RULINGS if hour else RULINGS) or not str(ruling.get("why") or "").strip():
         raise ValueError(f"a ruling is one of {HOUR_RULINGS if hour else RULINGS} with a `why`")
@@ -321,21 +325,27 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
         raise ValueError("no active feature (.specify/feature.json) to record the ruling in")
     when = now or time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     trig = owed(root).get(trigger, {})
-    row = {"trigger": trigger, "kind": trig.get("kind", trigger.split(":", 1)[0]), "unit": trig.get("unit") or unit_of(trigger),
-           **({"dispatches": trig["dispatches"]} if "dispatches" in trig else {}),
-           # the question as it fired (a round's count, a reversal's text, an ask's WHY=), kept with its ruling: `make gm-review
-           # EXPLAIN=1` shows the GM what was asked, and the owed entry that held it is dropped below (GUARD_EDIT_OK: the GM
-           # 2026-10-12 could not tell what a row asked him to rule on; nothing loosened)
-           **({"asked": trig["detail"]} if trig.get("detail") else {}),
-           "ruling": ruling["ruling"], "why": ruling["why"], "what": ruling.get("what", ""), "utc": when,
-           **({"tooling_fix": fix, "fix": "open"} if fix else {}),
-           **({"tooling_fix_on": fix_on} if fix_on and not fix else {}),
-           # a spec review's ruling names the spec it ruled on: the review gate honors it only while the spec still reads so
-           **({"spec_sha": spec_body_sha(d)} if trigger.startswith("round:spec-fidelity|") else {}),
-           # a review unit's ruling names the sheet it ruled on, so the review gate honors an accept while the sheet still
-           # reads so (feature 374 batch 5: an accepted unit's last verdict was NEEDS-WORK at an older key, and the gate refused)
-           **({"content_key": ck} if trigger.startswith("round:") and not trigger.startswith("round:spec-fidelity|")
-              and (ck := unit_content_key(root, row_unit(trig, trigger))) else {})}
+    row = {
+        "trigger": trigger,
+        "kind": trig.get("kind", trigger.split(":", 1)[0]),
+        "unit": trig.get("unit") or unit_of(trigger),
+        **({"dispatches": trig["dispatches"]} if "dispatches" in trig else {}),
+        # the question as it fired (a round's count, a reversal's text, an ask's WHY=), kept with its ruling: `make gm-review
+        # EXPLAIN=1` shows the GM what was asked, and the owed entry that held it is dropped below (GUARD_EDIT_OK: the GM
+        # 2026-10-12 could not tell what a row asked him to rule on; nothing loosened)
+        **({"asked": trig["detail"]} if trig.get("detail") else {}),
+        "ruling": ruling["ruling"],
+        "why": ruling["why"],
+        "what": ruling.get("what", ""),
+        "utc": when,
+        **({"tooling_fix": fix, "fix": "open"} if fix else {}),
+        **({"tooling_fix_on": fix_on} if fix_on and not fix else {}),
+        # a spec review's ruling names the spec it ruled on: the review gate honors it only while the spec still reads so
+        **({"spec_sha": spec_body_sha(d)} if trigger.startswith("round:spec-fidelity|") else {}),
+        # a review unit's ruling names the sheet it ruled on, so the review gate honors an accept while the sheet still
+        # reads so (feature 374 batch 5: an accepted unit's last verdict was NEEDS-WORK at an older key, and the gate refused)
+        **({"content_key": ck} if trigger.startswith("round:") and not trigger.startswith("round:spec-fidelity|") and (ck := unit_content_key(root, row_unit(trig, trigger))) else {}),
+    }
     for_gm = str(ruling.get("for_gm") or "").strip() if hour else ""
     if for_gm:
         row["for_gm"] = for_gm
@@ -345,9 +355,20 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
     # GUARD_EDIT_OK: feature 383 FR-010 - an hour with nothing to change (`continue`, no fix, nothing for the GM) adds no row to
     # the GM's review: the one exception to "the GM reviews every ruling", stated in the arbiter's contract
     if not hour or row["ruling"] != "continue" or fix or for_gm:
-        _gm_row(d, {"kind": "arbiter", "trigger": trigger, "ruling": row["ruling"], "why": row["why"],
-                    **({"asked": row["asked"]} if "asked" in row else {}), **({"what": row["what"]} if row["what"] else {}),
-                    **({"tooling_fix": fix} if fix else {}), **({"for_gm": for_gm} if for_gm else {}), "utc": when})
+        _gm_row(
+            d,
+            {
+                "kind": "arbiter",
+                "trigger": trigger,
+                "ruling": row["ruling"],
+                "why": row["why"],
+                **({"asked": row["asked"]} if "asked" in row else {}),
+                **({"what": row["what"]} if row["what"] else {}),
+                **({"tooling_fix": fix} if fix else {}),
+                **({"for_gm": for_gm} if for_gm else {}),
+                "utc": when,
+            },
+        )
     if hour:  # the hour is answered: the checkpoint's clock restarts from when it opened (scripts/reviews/checkpoint.py)
         _checkpoint().close_checkpoint(root, trigger)
     if row["ruling"] == "accept" and row["kind"] == "round":
@@ -380,8 +401,7 @@ def record_batch(root: Path, ruling: Mapping[str, Any], declared: str, now: str 
     if stray:
         raise ValueError(f"an exception names a trigger the batch does not carry: {', '.join(stray)}")
     if declared != "round-arbiter":
-        raise PermissionError("declined: only the `round-arbiter` subagent records a ruling (AS=round-arbiter) - a declaration, "
-                              "recorded, not a proof")
+        raise PermissionError("declined: only the `round-arbiter` subagent records a ruling (AS=round-arbiter) - a declaration, recorded, not a proof")
     done = sorted(set(triggers) & set(rulings(root)))
     if done:
         raise ValueError(f"already ruled: {', '.join(done)} - one ruling per trigger, binding")
@@ -392,8 +412,7 @@ def record_batch(root: Path, ruling: Mapping[str, Any], declared: str, now: str 
     # exception carrying no fix of its own (plan review round 2); every exception with its own fix - the reply is ambiguous
     free = [t for t in triggers if t in exceptions and not str(exceptions[t].get("tooling_fix") or "").strip()]
     if fix and not under and not free:
-        raise ValueError("every trigger is an exception with its own `tooling_fix` - where does the batch's fix go? Fold it into "
-                         "one of them, or leave the batch's out")
+        raise ValueError("every trigger is an exception with its own `tooling_fix` - where does the batch's fix go? Fold it into one of them, or leave the batch's out")
     holder = (under or free)[0] if fix else ""
     plan: list[tuple[str, dict[str, Any]]] = []
     for t in triggers:
@@ -433,8 +452,7 @@ def spec_ruled(d: Path) -> str:
             r = json.loads(line)
         except ValueError:
             continue
-        if str(r.get("trigger", "")).startswith(f"round:spec-fidelity|{d.name}#") and r.get("ruling") in ("accept", "process-fault") \
-                and r.get("spec_sha") == sha:
+        if str(r.get("trigger", "")).startswith(f"round:spec-fidelity|{d.name}#") and r.get("ruling") in ("accept", "process-fault") and r.get("spec_sha") == sha:
             return str(r["trigger"])
     return ""
 
@@ -462,8 +480,7 @@ def unit_ruled(d: Path, unit: str, content: str) -> str:
             r = json.loads(line)
         except ValueError:
             continue
-        if r.get("unit") == unit and str(r.get("trigger", "")).startswith("round:") and r.get("ruling") in ("accept", "process-fault") \
-                and r.get("content_key") == content:
+        if r.get("unit") == unit and str(r.get("trigger", "")).startswith("round:") and r.get("ruling") in ("accept", "process-fault") and r.get("content_key") == content:
             return str(r["trigger"])
     return ""
 
@@ -480,7 +497,7 @@ def _gm_row(d: Path, row: Mapping[str, Any]) -> None:
             gm = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(gm)
             gm.ensure_box(d)
-    except (OSError, ImportError):  # pragma: no cover - a tree without the script records the row all the same
+    except OSError, ImportError:  # pragma: no cover - a tree without the script records the row all the same
         pass
 
 
@@ -506,15 +523,30 @@ def fix_hold(d: Path) -> str:
     fixes = open_fixes(d)
     if not fixes:
         return ""
-    return ("the round arbiter's tooling fix is open - make it, with its test, in this feature before going on (feature 379):\n"
-            + "\n".join(f"    {t}: {fix}" for t, fix in fixes)
-            + '\n  made:     make arbiter-fix-done ID="<trigger>" NOTE="<what was built>" TEST=<its test under tests/> LAND="<the fix\'s files>" F=<feature> TICK=<the task> (lands them, settles the fix, ticks the task)'
-            + '\n  overhaul: make arbiter-fix-declined ID="<trigger>" REASON="<why it overhauls a process>" (the GM reviews it after landing)')
+    return (
+        "the round arbiter's tooling fix is open - make it, with its test, in this feature before going on (feature 379):\n"
+        + "\n".join(f"    {t}: {fix}" for t, fix in fixes)
+        + '\n  made:     make arbiter-fix-done ID="<trigger>" NOTE="<what was built>" TEST=<its test under tests/> LAND="<the fix\'s files>" F=<feature> TICK=<the task> (lands them, settles the fix, ticks the task)'
+        + '\n  overhaul: make arbiter-fix-declined ID="<trigger>" REASON="<why it overhauls a process>" (the GM reviews it after landing)'
+    )
+
+
+def fix_home(root: Path, trigger: str) -> Path | None:
+    """The feature directory holding `trigger`'s open tooling fix: the active feature, else the feature the trigger names
+    (`hour:<feature>@n`), else any feature that holds it open (the round arbiter on hour:391@3, 2026-10-18: a ruling filed
+    under the feature the pointer named was refused when the session settled it from the feature it was about)."""
+    active = feature_dir(root)
+    named = re.match(r"^hour:([^@]+)@", trigger)
+    for d in [active, root / "specs" / named.group(1) if named else None, *sorted((root / "specs").glob("*/"))]:
+        if d is not None and d.is_dir() and trigger in dict(open_fixes(d)):
+            return d
+    return None
 
 
 def settle_fix(root: Path, trigger: str, status: str, note: str, test: str = "", now: str | None = None) -> dict[str, Any]:
-    """`make arbiter-fix-done` / `arbiter-fix-declined`: close an open tooling fix of the active feature, on the GM's review."""
-    d = feature_dir(root)
+    """`make arbiter-fix-done` / `arbiter-fix-declined`: close an open tooling fix, on the GM's review, in the feature that
+    holds it (`fix_home`)."""
+    d = fix_home(root, trigger) or feature_dir(root)
     if d is None:
         raise ValueError("no active feature (.specify/feature.json)")
     fix = dict(open_fixes(d)).get(trigger)
@@ -532,8 +564,10 @@ def settle_fix(root: Path, trigger: str, status: str, note: str, test: str = "",
         # the row says it lands with the feature; a tooling fix still lands first.
         if not on_main(root, test):  # amendment 1, FR-006: made in one clone is not done for the sessions on the mirror's hooks
             if not (os.environ.get("ARBITER_FIX_ENGINE") and committed_here(root, test)):
-                raise ValueError(f"{test} is not on main as it is here - land and settle it in one command: the same make arbiter-fix-done with LAND=\"<the fix's files>\" (it runs make land-tooling on them first)"
-                                 " (an ENGINE fix, which land-tooling refuses, lands with its feature: commit it and its test, then the same command with ENGINE=1)")
+                raise ValueError(
+                    f"{test} is not on main as it is here - land and settle it in one command: the same make arbiter-fix-done with LAND=\"<the fix's files>\" (it runs make land-tooling on them first)"
+                    " (an ENGINE fix, which land-tooling refuses, lands with its feature: commit it and its test, then the same command with ENGINE=1)"
+                )
             note += " (an engine fix: it lands with the feature)"
     elif status != "declined":
         raise ValueError("status is done or declined")
@@ -541,8 +575,7 @@ def settle_fix(root: Path, trigger: str, status: str, note: str, test: str = "",
     row = {"fix_of": trigger, "status": status, "note": note, **({"test": test} if status == "done" else {}), "utc": when}
     with (d / "arbiter.jsonl").open("a", encoding="utf-8") as fh:
         fh.write(json.dumps(row, ensure_ascii=False) + "\n")
-    _gm_row(d, {"kind": f"arbiter-fix-{status}", "trigger": trigger, "tooling_fix": fix, "note": note,
-                **({"test": test} if status == "done" else {}), "utc": when})
+    _gm_row(d, {"kind": f"arbiter-fix-{status}", "trigger": trigger, "tooling_fix": fix, "note": note, **({"test": test} if status == "done" else {}), "utc": when})
     return row
 
 
@@ -643,19 +676,22 @@ def main(argv: list[str]) -> int:
             print(f"arbiter-ask: {trigger} is already ruled - one ruling per trigger, binding; ask a new SUBJECT for a new question", file=sys.stderr)
             return 1
         trip(Path(".").resolve(), trigger, "ask", "", why)
-        print(f"arbiter-ask: {trigger} recorded - the round arbiter rules on it, not the GM, who reviews the ruling after landing;"
-              " dispatch `round-arbiter` with the MANIFEST below")
+        print(f"arbiter-ask: {trigger} recorded - the round arbiter rules on it, not the GM, who reviews the ruling after landing; dispatch `round-arbiter` with the MANIFEST below")
         return 0
     if argv[:1] == ["fix"] and len(argv) in (4, 5) and argv[1] in ("done", "declined"):
         # several fixes one change made settle together: ID="<trigger> <trigger> ..." (2026-10-11: 343 carried 36 open fixes,
         # many naming the same few bundle defects, one ruling each before the batch ruling existed)
         root, ids = Path(".").resolve(), argv[2].split()
         d = feature_dir(root)
-        known = dict(open_fixes(d)) if d else {}
-        unknown = [i for i in ids if i not in known]
+        unknown = [i for i in ids if fix_home(root, i) is None]
         if unknown or not ids:
-            print(f"arbiter-fix-{argv[1]}: refused - no open tooling fix: {', '.join(unknown) or '(no ID)'}; `make tick` names the open ones",
-                  file=sys.stderr)
+            found = [t for f in sorted((root / "specs").glob("*/")) for t, _ in open_fixes(f)]
+            print(
+                f"arbiter-fix-{argv[1]}: refused - no open tooling fix: {', '.join(unknown) or '(no ID)'}; searched the active "
+                f"feature ({d.name if d else 'none'}), the feature an hour trigger names, and every feature; open now: "
+                f"{', '.join(found) or 'none'}",
+                file=sys.stderr,
+            )
             return 1
         try:
             for i in ids:
