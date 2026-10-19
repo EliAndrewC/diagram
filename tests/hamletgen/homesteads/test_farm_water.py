@@ -65,6 +65,8 @@ def test_a_farm_with_no_yard_or_no_water_is_left_to_its_well_and_reported() -> N
     s, h = _farm_settlement(with_yard=False)
     assert fw.farm_channels(s, [h]) == [h], "no dooryard to lead it into"
     assert water_rules(s.M) == [("farm_without_its_channel", (400.0, 300.0))]
+    s.M["wells"] = [{"x": 450.0, "y": 300.0, "private": True}]  # feature 385 T99 (0031): the well a farm no channel reaches has instead
+    assert water_rules(s.M) == [], "a well of its own instead"
     s2, h2 = _farm_settlement()
     s2.M["field_ditches"] = []
     assert fw.farm_channels(s2, [h2]) == [h2], "no water to lead it off"

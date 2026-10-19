@@ -153,7 +153,7 @@ def water_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
     every well.
 
     Research:
-        a scattered farm's own water - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: its channel ends in its frame, or its own well in its frame off its way in
+        a scattered farm's own water - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: its channel ends in its frame, or, where no channel reaches it, its own well in its frame (a well off its way in on a `well` map)
         a row's water - research/questions/0033-row-villages-resson.drawing.html: own wells, or every farm within `WATER_REACH_FT` of a shared one
         well in the way in - UNRESEARCHED: a private well within 12 ft of the house-to-door line counts as in the way
     """
@@ -175,12 +175,12 @@ def water_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
                 out.append(("farm_beyond_a_shared_well", _key(c)))
             continue
         fr = _frame(h)
-        if channel:
+        mine = [(x, y) for x, y, p in wells if p and fr and abs(x - fr[0]) <= fr[2] / 2 and abs(y - fr[1]) <= fr[3] / 2]
+        if channel:  # ...its channel ends in its frame, or, where no channel reaches it, a well of its own (feature 385 T99, 0031)
             e = ends.get(_key(c))
-            if e is None or not fr or abs(float(e[0]) - fr[0]) > fr[2] / 2 or abs(float(e[1]) - fr[1]) > fr[3] / 2:
+            if (e is None or not fr or abs(float(e[0]) - fr[0]) > fr[2] / 2 or abs(float(e[1]) - fr[1]) > fr[3] / 2) and not mine:
                 out.append(("farm_without_its_channel", _key(c)))
             continue
-        mine = [(x, y) for x, y, p in wells if p and fr and abs(x - fr[0]) <= fr[2] / 2 and abs(y - fr[1]) <= fr[3] / 2]
         if not mine:
             out.append(("farm_without_its_well", _key(c)))
             continue
