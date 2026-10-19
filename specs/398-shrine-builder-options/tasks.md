@@ -8,36 +8,41 @@ The four questions are `research: physical` with their five boxes; the rest are 
 
 ## Tasks
 
-- [ ] T01 Sanctuaries, halls and finishes (D1; scenario 1)
+- [x] T01 Sanctuaries, halls and finishes (D1; scenario 1)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-- [ ] T02 Stonework (D1; scenario 2)
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. 0268 sanctuaries, halls and finishes: written from passes/, three check rounds (round 3 capped under ask:398-round3); make record-owed 0 unanswered; make record CHECK=1 builds
+- [x] T02 Stonework (D1; scenario 2)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-- [ ] T03 Metal furnishings (D1; scenario 3)
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. 0269 stonework: written from passes/, three check rounds (round 3 capped under ask:398-round3); make record-owed 0 unanswered; make record CHECK=1 builds
+- [x] T03 Metal furnishings (D1; scenario 3)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-- [ ] T04 Rites for the dead and dedication (D1; scenario 4)
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. 0270 metal furnishings: written from passes/, three check rounds (round 3 capped under ask:398-round3); make record-owed 0 unanswered; make record CHECK=1 builds
+- [x] T04 Rites for the dead and dedication (D1; scenario 4)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-- [ ] T05 Implementation check (D2; FR-003)
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. 0271 rites for the dead: written from passes/, three check rounds (round 3 capped under ask:398-round3); make record-owed 0 unanswered; make record CHECK=1 builds
+- [x] T05 Implementation check (D2; FR-003)
       research: rendering
+      verify: DONE. make impl-check F=398: nothing missing
 - [ ] T06 The answer on EliAndrewC/diagram#7 (D3; FR-004)
       research: rendering
 - [ ] T07 Close: report and land

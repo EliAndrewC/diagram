@@ -38,8 +38,8 @@ Each is new and tagged `subject=money`, with no drawing page. Its level is `coun
 
 | question | setting tag | what it covers |
 |---|---|---|
-| "What did fruit cost?" | `countryside,city` | the Kanto persimmon; Edo and castle-town silences; the Qing court's fruit prices, the Shengjing valuations, the Ming stolen-goods valuation |
-| "What did salt cost?" | `countryside,city` | Kashimo 1763-74 beside its laborer; Otsukawa 1842; the hearsay inland ladder; the Qing field, official and retail prices and the stated markups |
+| "What did fruit cost?" | `countryside,city` | the Kanto persimmon; Edo and castle-town prices for persimmons, pears and native apples, or their silence, each named; the Qing court's fruit prices, the Shengjing valuations, the Ming stolen-goods valuation |
+| "What did salt cost?" | `countryside,city` | Edo retail, or its silence, named; Kashimo 1763-74 beside its laborer; Otsukawa 1842; the hearsay inland ladder; the Qing field, official and retail prices and the stated markups |
 | "What did hemp cloth and a shrine's amulets cost?" | `countryside,city` | the Etchu hemp lot; Beijing 1736 and 1615 hemp and ramie beside cotton; the Ise oshi's 1813 takings; the silences |
 | "What did a skilled craftsman earn against a laborer?" | `city,countryside` | Osaka building trades; the Edo silence and the one-sided figures gathered; Saito's village pair; Zhili 1769 and the 1813 norm; tailors, smiths, fletchers |
 
@@ -53,8 +53,8 @@ with the search.
 
 ## D3 - the answer (FR-004)
 
-A comment on EliAndrewC/diagram#5 gives each question's fragment FILE, the checked verdict for every figure (or the page
-that covers it), and what is still open.
+A comment on EliAndrewC/diagram#5 gives each question's fragment FILE, the checked verdict for every figure (with the page
+that covers it, where another question gives it), and what is still open.
 
 ## T - the order
 
