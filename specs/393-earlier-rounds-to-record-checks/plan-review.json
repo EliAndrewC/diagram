@@ -1,0 +1,138 @@
+{
+ "feature": "393-earlier-rounds-to-record-checks",
+ "blocks": {
+  "preamble": {
+   "sha256": "975eb9c35ba9794e06fb0a9192a5a3e7baa3bdf9af2a5e3cff8a7323cb966883",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "a90abaf89755449578d24ab413465f09e4567433f5f7c257bfa89ae22c8ca94e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "9264bb6ab4a4dc240009193d4190413f9fa476c7a85dfcf67ffc14582f8d189e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "6ad3e2a73f6576e305a990e613f3f710b20d7c21d25307061de5662f76384afe",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "87a552dfcf42a9ef153b06e8638b9519b02557ef6772c343613557b3e74f9bf3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Decisions": {
+   "sha256": "1d8fee698bc6d7e2fd358efd5c0c88961384d7c2c71d3d3370bedc38fe55e738",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Tasks": {
+   "sha256": "4619a5471d1413b2c8c0df14842e472e7d2c6402649f1af3b308c09bca8880aa",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Summary",
+    "## Tasks",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary/Technical Context",
+     "summary": "One new read-only module scripts/record/earlier_rounds.py, appended by check_bundle.py and modal_bundle.py; tests under tests/tooling; route DIRECT, no engine code.",
+     "class": "within",
+     "why": "Implementation placement of exactly the requested change (give the check_bundle and modal_bundle bundles the earlier rounds' verdicts and reasons); decides nothing about what is delivered."
+    },
+    {
+     "id": "Performance bookends",
+     "summary": "No performance bookends taken; a first round reads nothing new.",
+     "class": "within",
+     "why": "Process decision for a tooling-only feature; the first-round cost statement restates FR-005/SC-002."
+    },
+    {
+     "id": "D1",
+     "summary": "One builder reading checks from the MANIFEST owed-checks line (PAGE_CHECKS) and subjects from unit: lines, reusing the arbiter bundle's readers (verdict_of, mark_rounds, last_edits, subject_files).",
+     "class": "within",
+     "why": "Carries FR-001/FR-004 (one builder, every bundle). Reusing the arbiter's readers delivers the same verdicts and reasons the arbiter sees; restricting to checks that have a subject in the state drops nothing, since a check with no subject has no earlier round to hand over."
+    },
+    {
+     "id": "D2",
+     "summary": "Only rounds of the ACTIVE feature are handed over (t at or after the first commit of the active feature's spec.md); unknown -> every round kept.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The state keeps dispatches across features, so this excludes some recorded dispatches on the same page. Legitimate: the request is about review LOOPS - repeated rounds of one review - and in this project the round counter resets per feature, so an earlier feature's dispatch is not an earlier round of this review; FR-002 (accepted spec) already scopes the arbiter rulings to the active feature's arbiter.jsonl, and D2 applies the same scope to the rounds. Handing over another feature's findings, which judged different text, under a contract (FR-003) that treats APPLIED findings as settled would defeat the request's purpose by suppressing findings on new text. The unknown case fails open (every round kept)."
+    },
+    {
+     "id": "D3",
+     "summary": "Only returned or answered rounds; pending/running dispatches are not earlier rounds.",
+     "class": "within",
+     "why": "A dispatch with no reply has no verdict and no reasons, which is all the request asks to hand over."
+    },
+    {
+     "id": "D4",
+     "summary": "When a dispatch records notes (the Money session's planned round-key field), a note-scoped bundle gets only rounds that read one of its notes or the whole page; without the field every round on the page is handed over.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Once the field exists it excludes rounds that read only other notes of the same page. Legitimate: a round that judged only note A did not judge any text in a note-B bundle, so it is not an earlier round of this review and its verdicts cannot settle or reverse anything the bundle holds - a loop needs the same text judged twice; every whole-page round and every round on the bundle's own notes is still handed over, and absent the field nothing is excluded (more than needed, never less). It also carries out the GM's second instruction to coordinate with the Money session rather than build a parallel round key."
+    },
+    {
+     "id": "D5",
+     "summary": "Whole replies copied beside the MANIFEST under earlier/; the MANIFEST holds the summary (verdict, marked findings, edit marks, rulings); fresh() clears earlier/.",
+     "class": "within",
+     "why": "Is FR-005's own wording: per-round summary in the section, whole replies beside the MANIFEST."
+    },
+    {
+     "id": "D6",
+     "summary": "Rulings from hm_arbiter.rulings filtered to round:<check>|<subject>@, in round order, with ruling, why and what.",
+     "class": "within",
+     "why": "Is FR-002 as written."
+    },
+    {
+     "id": "D7",
+     "summary": "Appended to the question, key and intro bundles (check_bundle) and every pop-up MANIFEST (modal_bundle), the batched top MANIFEST naming them; source-applicability's keys bundle left as it is.",
+     "class": "within",
+     "why": "Covers both bundlers the request names. source-applicability is not among the checks the request's answer lists (quote-check, record-format, source-reader, intro-check, translation-check, entry-drift, modal-form, modal-depiction, modal-research), has no subject, and the accepted spec already puts it out of scope; leaving it alone narrows nothing that was asked."
+    },
+    {
+     "id": "D8",
+     "summary": "One shared paragraph, identical in the ten receiving agent files, placed before their second section; a test holds them equal.",
+     "class": "within",
+     "why": "Is FR-003 and SC-003; placement so it is read before the artifact is FR-003's 'read the Earlier rounds section before the artifact'. The equality test enforces the requested contract."
+    },
+    {
+     "id": "Constitution Check",
+     "summary": "Principle statuses: N/A for I-IX, XI; PASS X, XII, XIII (via SC-002), XVI.",
+     "class": "within",
+     "why": "Restates spec scope; decides nothing the spec left open."
+    },
+    {
+     "id": "Tasks",
+     "summary": "T01 module and bundlers (D1-D7), T02 contract paragraph (D8), T03 tests, gate, landing.",
+     "class": "within",
+     "why": "Task split of the decisions above; adds and drops nothing."
+    }
+   ]
+  }
+ ]
+}

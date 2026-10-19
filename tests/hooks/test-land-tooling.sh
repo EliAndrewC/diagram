@@ -67,6 +67,9 @@ ok "a lint failure lands nothing and names ruff format" '[ "$rc" -ne 0 ] && grep
 LAND_TOOLING_LINT=true land scripts/c.py; rc=$?
 ok "a clean file lands" '[ "$rc" -eq 0 ] && [ "$(on_main scripts/c.py)" = "x = 1" ]'
 ok "the lint step is timed in the log" 'grep "^land-tooling: step lint [0-9.]* s$" "$C/.git/land-tooling.log" >/dev/null'
+printf 'y = 1\n' > "$C/scripts/e.py"; git -C "$C" add -A; git -C "$C" commit -qm "another script"
+LAND_TOOLING_LINT=false LAND_TOOLING_TOOLING="touch $T/tests-ran" LAND_TOOLING_GUARDS="touch $T/guards-ran" land scripts/e.py; rc=$?
+ok "a lint failure stops before the tests and the guard suites start (385 T67)" '[ "$rc" -ne 0 ] && [ ! -e "$T/tests-ran" ] && [ ! -e "$T/guards-ran" ]'
 setup
 
 echo "1e. the landing's lint keeps the gate's scope: an excluded file is not refused (385 T55)"

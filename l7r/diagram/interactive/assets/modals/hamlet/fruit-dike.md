@@ -1,25 +1,24 @@
-About: A fruit dike, guoji, "fruit dike", was the bank round a fish pond planted with fruit trees instead of mulberry, a
+About: A fruit dike (guoji) was the bank round a fish pond planted with fruit trees instead of mulberry, a
 field in its own right with the pond below it. It was the oldest planting of the dike-pond: fruit dikes arose first, in
 Nanhai and Shunde in the Pearl River delta in the middle of the Ming dynasty, and the mulberry dike took their place in
 the late Ming and early Qing. Late in the seventeenth century the villages of Guangzhou's large counties still often gave
 up good fields to make dikes planted with fruit trees.
 
-Lychee stood on those dikes most, tea and mulberry next, then mandarin and orange; longan grew mostly beside the houses,
+The bank itself was heaped from the pond's mud and raised again with the mud dredged up each time the pond was drained. Lychee stood on those dikes most, tea and mulberry next, then mandarin and orange; longan grew mostly beside the houses,
 but on the dikes as well, and Guangzhou's embankments, probably those of its rivers and polders, were all planted with
-lychee and longan. The bank itself was heaped from the pond's mud and raised again with the mud dredged up each time the
-pond was drained.
+lychee and longan.
 
 How closely the trees stood along a dike is not recorded. Turned to orchard, a field took twenty-odd lychee to the mu
 (about 7,200 sq ft), or twice as many longan, each on a mound of silt about 2 ft high against the floods: about one lychee
-to 300 sq ft. Modern pond dikes are about 20 to 33 ft (6 to 10 m) wide and stand 2 to 3 ft above the water; a dike's
+to 300 sq ft. Modern pond dikes in the Pearl River delta are usually about 20 to 33 ft (6 to 10 m) wide and stand 2 to 3 ft above the water; a dike's
 width before modern times is not recorded.
 
 Guesses:
 - The trees' spacing on the map, about 18 ft apart in a single line along the middle of the bank: no spacing along a
   dike was found, so it is reckoned from the orchard figure of one lychee to about 300 sq ft.
 - Each tree's crown, 8 to 10 ft across: no account gives the crown of a lychee, longan or orange tree on a dike.
-- The bank's width on the map, 23 ft: no pond dike's width from before modern times was found, so it is drawn inside the
-  modern 20 to 33 ft.
+- The bank's width on the map, as wide as the hamlet's split of water and dike leaves it, from about 15 ft to about 42 ft:
+  no pond dike's width from before modern times was found, and the widest banks are broader than the modern 20 to 33 ft.
 
 Depiction: The map draws the fruit dike as a single line of round-crowned trees along the middle of each bank, so a
 reader can tell it at a glance from the mulberry's rows of bushes and the tea's clipped hedges. Every dike of a hamlet

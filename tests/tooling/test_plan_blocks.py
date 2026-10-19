@@ -211,3 +211,26 @@ def test_the_blocks_a_whole_plan_blocked_left_are_owed_once_the_blocking_block_i
     finally:
         os.chdir(here)
     assert "no block of" not in out and "MODE 4" in out, "the BLOCKED blocks are owed their review"
+
+
+def test_a_requirement_cited_as_another_feature_s_is_bundled_from_that_feature(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 385 T66 (plan D85): T65's review was handed 385's own FR-005 for a block citing 375's."""
+    sys.path.insert(0, str(script("plan_bundle").parent))
+    import plan_bundle  # noqa: PLC0415
+
+    monkeypatch.setattr(plan_bundle, "OUT", tmp_path / "out")
+    d = feature(tmp_path)
+    other = d.parent / "375-enforced"
+    other.mkdir()
+    (other / "spec.md").write_text("## Requirements\n\n- **FR-002 The archive.** Archiving voids nothing.\n- **FR-044 The plan.** Finished sections move.\n")
+    body = "## T05 - x\n\nAs feature 375's FR-002 has it, and 375 FR-044, and feature 375, FR-099 (no such id); FR-001 is ours.\n"
+    manifest = plan_bundle.build(d, "t", [("## T05 - x", body)], {}, "how")
+    cited = (manifest.parent / "spec-cited.md").read_text()
+    assert "<!-- feature 375 -->\n- **FR-002 The archive.**" in cited and "FR-044 The plan." in cited
+    assert "FR-001 The sty." in cited, "an unqualified id is the reviewed feature's"
+    assert "FR-002 The well." not in cited, "385's same-numbered requirement is not handed for 375's"
+    (other / "plan.md").write_text("# Plan\n\n**D18 - lands open.** An open box holds the landing unless the line names it.\n")
+    (d / "plan.md").write_text(PLAN + "\n**D18 - the sty.** One predicate.\n")
+    manifest = plan_bundle.build(d, "t2", [("## T05 - x", "## T05 - x\n\nFeature 375 plan D18 says so.\n")], {}, "how")
+    cited = (manifest.parent / "spec-cited.md").read_text()
+    assert "D18 - lands open." in cited and "D18 - the sty." not in cited, "T71: a decision from its own feature's plan"

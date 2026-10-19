@@ -16885,31 +16885,33 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::_bank_seats#bank seats by distance": {
-  "code": "649359950cc97585",
-  "core": "9668ce940c99ef97",
-  "date": "2026-10-07",
-  "note": "every eighth of every edge in one ranking, nearest the houses first",
+  "body": "87fe9c97e593da88",
+  "claim": "bank seats by distance - pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing: ranked nearest the houses, every seat of the bank - its midpoints and its eighths - in one ranking",
+  "code": "b90616bb5fa09f26",
+  "core": "594333028697ea5b",
+  "date": "2026-10-18",
+  "note": "every seat on the bank in one ranking, nearest the houses first",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html": "a80ff0e81f8d433e"
   },
   "research": "1fcdf871b340e87e",
   "rests": [
-   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:8e78365da5853109",
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:d798fac79f63b146"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::_bank_seats#sty seat on the bank": {
-  "code": "4cf3849b5e61a1ce",
-  "core": "9668ce940c99ef97",
-  "date": "2026-10-07",
-  "note": "the seat is set in by BANK_INSET_FT = DIKEPOND_WATER_INSET/2 = 11.5 ft at 1 ft/px, which is half of the 23 ft drawn bank, on the parcel's own coordinates",
+  "body": "87fe9c97e593da88",
+  "claim": "sty seat on the bank - pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing: each bank seat set in from the parcel's edge by half the bank's width - the map's own inset since feature 385 T10 (`BANK_INSET_FT` the fallback) - so the sty stands on the bank and not out by the canal",
+  "code": "6d3e2c8bec84ed73",
+  "core": "594333028697ea5b",
+  "date": "2026-10-18",
+  "note": "seat set in by half the map's own inset",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html": "a80ff0e81f8d433e"
   },
   "research": "1fcdf871b340e87e",
   "rests": [
-   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:02c8bea0e76c8504",
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:3e1c51af898dc6ed"
   ],
   "verdict": "IN-STEP"
@@ -16923,10 +16925,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::reserve_sty_seat#nearest pond first": {
-  "code": "eff902a2e67e1024",
-  "core": "81bb3fa493816454",
-  "date": "2026-10-12",
-  "note": "nearest grow-out pond first",
+  "body": "cf51ed5504ca7096",
+  "claim": "nearest pond first - pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing: grow-out ponds walked nearest the seat",
+  "code": "744869daac5ae15d",
+  "core": "8ffca1232f595ac1",
+  "date": "2026-10-18",
+  "note": "grow-out ponds walked nearest the seat (the houses' place before they stand)",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html": "a80ff0e81f8d433e"
   },
@@ -16937,10 +16941,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::reserve_sty_seat#no seat in reach, no sty": {
-  "code": "e9fb73bada9b36e3",
-  "core": "81bb3fa493816454",
-  "date": "2026-10-12",
-  "note": "returns None",
+  "body": "cf51ed5504ca7096",
+  "claim": "no seat in reach, no sty - pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing: a household with no pond within that reach keeps none",
+  "code": "fd6394cd30e76fe5",
+  "core": "8ffca1232f595ac1",
+  "date": "2026-10-18",
+  "note": "returns None where no pond has a seat within reach",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html": "a80ff0e81f8d433e"
   },
@@ -16950,36 +16956,49 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/pondstock.py::reserve_sty_seat#nursery (fry) ponds offer no reserved sty seat": {
+  "code": "8ffca1232f595ac1",
+  "core": "8ffca1232f595ac1",
+  "date": "2026-10-18",
+  "note": "nursery (fry) ponds offer no reserved sty seat",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/hamletgen/pondstock.py::reserve_sty_seat#seat reserved before the houses": {
-  "code": "5e3eee8bd737ec57",
-  "core": "81bb3fa493816454",
-  "date": "2026-10-12",
-  "note": "placement order",
+  "body": "cf51ed5504ca7096",
+  "claim": "seat reserved before the houses - NONE: placement order, the sty's rules unchanged",
+  "code": "dbbdbe6aea16535e",
+  "core": "8ffca1232f595ac1",
+  "date": "2026-10-18",
+  "note": "placement order only",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::reserve_sty_seat#the reserved seat clear of the sluices": {
-  "code": "f6683874445fa1c0",
-  "core": "81bb3fa493816454",
-  "date": "2026-10-12",
-  "note": "the page says no sluice is drawn in a pond's own bank and that no page says a sty was kept from one or set beside one; it is silent on a sty beside a drawn sluice, so GUESS is the right label",
+  "body": "cf51ed5504ca7096",
+  "claim": "the reserved seat clear of the sluices - GUESS pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing: `pond_fixture_fits` keeps the sty off a drawn sluice only; the record is silent on a sluice beside a sty",
+  "code": "933db2da00783088",
+  "core": "8ffca1232f595ac1",
+  "date": "2026-10-18",
+  "note": "the page records that no sluice decides where a sty stands, and that the record is silent on it",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html": "a80ff0e81f8d433e"
   },
   "research": "1fcdf871b340e87e",
   "rests": [
-   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:34ba2202d649041d",
-   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:3e1c51af898dc6ed"
+   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:34ba2202d649041d"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::reserve_sty_seat#the reserved seat on the near half": {
-  "code": "8c1ce3d7ed4fa324",
-  "core": "81bb3fa493816454",
-  "date": "2026-10-12",
-  "note": "sty_on_near_half(..., 0.5) toward the seat, no farther than the pond's middle",
+  "body": "cf51ed5504ca7096",
+  "claim": "the reserved seat on the near half - pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing: on the half of its pond's bank facing the seat (`sty_on_near_half`)",
+  "code": "479b95a87360eebf",
+  "core": "8ffca1232f595ac1",
+  "date": "2026-10-18",
+  "note": "sty_on_near_half",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html": "a80ff0e81f8d433e"
   },
@@ -16990,10 +17009,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::reserve_sty_seat#the reserved seat's disc": {
-  "code": "746fc581f6514624",
-  "core": "81bb3fa493816454",
-  "date": "2026-10-12",
-  "note": "the 0025 pages say nothing on a keep-clear radius",
+  "body": "cf51ed5504ca7096",
+  "claim": "the reserved seat's disc - GUESS: no homestead within the sty's half-diagonal, 2 ft and `STY_RESERVE_REACH_FT` (24 ft) of it",
+  "code": "e08415747f1db24e",
+  "core": "8ffca1232f595ac1",
+  "date": "2026-10-18",
+  "note": "the 2 ft, the 24 ft and the half-diagonal are on no page",
   "pages": {},
   "research": "",
   "rests": [],
@@ -17010,34 +17031,40 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#at least one sty where one fits": {
-  "code": "991b7aa613a8b519",
-  "core": "20ea7f4d2c705f21",
-  "date": "2026-10-12",
-  "note": "the page's band says nothing of a floor",
+  "body": "5d1ca12ea20c5cc0",
+  "claim": "at least one sty where one fits - UNRESEARCHED: the share rounded up to one, the floor of one not on the page",
+  "code": "a6d05aeeba052b76",
+  "core": "657604a31ecff3b1",
+  "date": "2026-10-18",
+  "note": "§2 answers the count (\"a quarter to a half of households\"), and max(1, ...) gives a one-household hamlet a sty, 100%, outside that band; the claim should cite 0025 drawing §2, and the page should record the floor (or the code keep it inside the band)",
   "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#no duck pen": {
-  "code": "351753b8be523128",
-  "core": "20ea7f4d2c705f21",
-  "date": "2026-10-12",
-  "note": "no pen drawn",
+  "body": "5d1ca12ea20c5cc0",
+  "claim": "no duck pen - pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike: ducks herded in the rice, the pen modern",
+  "code": "1948e9197e33e2a4",
+  "core": "657604a31ecff3b1",
+  "date": "2026-10-18",
+  "note": "none drawn; ducks herded in the rice, the pen a modern form",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html": "ba8c07825c06383f"
   },
   "research": "c2db08a5a30de209",
   "rests": [
+   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html:4b6cf2ff140e679a",
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html:6ddbf6739a7e9ca2",
-   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html:a6a07bc74a09d3b8",
-   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html:c8fa4a578dd3f7fb"
+   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html:a6a07bc74a09d3b8"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#no seat in reach, no sty": {
-  "code": "860c651dd04d0153",
-  "core": "20ea7f4d2c705f21",
-  "date": "2026-10-12",
+  "body": "5d1ca12ea20c5cc0",
+  "claim": "no seat in reach, no sty - pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing: a household with no pond within that reach keeps none; the hamlet is drawn with none and says why (`meta.pond_stock.none_why`)",
+  "code": "3e68d3a42e29e1ea",
+  "core": "657604a31ecff3b1",
+  "date": "2026-10-18",
   "note": "none drawn, none_why recorded",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html": "a80ff0e81f8d433e"
@@ -17049,10 +17076,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#one sty per pond, nursery ponds none": {
-  "code": "e8291204cde63167",
-  "core": "20ea7f4d2c705f21",
-  "date": "2026-10-12",
-  "note": "fry ponds excluded, one sty per pond",
+  "body": "5d1ca12ea20c5cc0",
+  "claim": "one sty per pond, nursery ponds none - pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing: nearest the houses first",
+  "code": "e09a13be5c10fda7",
+  "core": "657604a31ecff3b1",
+  "date": "2026-10-18",
+  "note": "fry ponds excluded, the reserved pond taken out of the walk, nearest the houses first",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html": "a80ff0e81f8d433e"
   },
@@ -17063,10 +17092,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#privy over the sty": {
-  "code": "fc0a609afdeb5005",
-  "core": "20ea7f4d2c705f21",
-  "date": "2026-10-12",
-  "note": "0047 records \"a Chinese latrine was customarily built over the pigsty\", and no cited page records drawing the sty alone; the code's comment calls the fix HELD. Record a DEVIATION on a drawing page, or build the fix",
+  "body": "5d1ca12ea20c5cc0",
+  "claim": "privy over the sty - farm-privies-and-their-night-soil-benjo.drawing: the sty drawn alone, never with a privy built over it",
+  "code": "3217b7c7c4ce3173",
+  "core": "657604a31ecff3b1",
+  "date": "2026-10-18",
+  "note": "the page says no such thing as \"the sty drawn alone\"; its only sty block says a Chinese latrine \"was customarily built over the pigsty\", and the code's own comment calls that fix HELD. The claim should be a DEVIATION the page records, or the privy should go over the sty",
   "pages": {
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
@@ -17077,27 +17108,32 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#sties at the dike-pond only": {
-  "code": "7ae3bae48b25b211",
-  "core": "20ea7f4d2c705f21",
-  "date": "2026-10-13",
-  "note": "pond sty on dike-pond hamlets only",
+  "body": "5d1ca12ea20c5cc0",
+  "claim": "sties at the dike-pond only - pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike, pigs-and-ducks-in-south-china-rice-villages.drawing: the pig as the dike-pond district's animal; a sty AT A POND only on a dike-pond hamlet (a paddy hamlet's sties are its farmsteads', not the ponds')",
+  "code": "5cbcef0528bb9c66",
+  "core": "657604a31ecff3b1",
+  "date": "2026-10-18",
+  "note": "returns unless mulberry_dike_fishpond; the pig is the dike-pond district's animal, and a paddy hamlet's sties are at its farmsteads",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html": "ba8c07825c06383f",
    "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html": "1d379bbb81ad22fb"
   },
   "research": "83a6e18d0926272a",
   "rests": [
+   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html:851381b05828251d",
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html:c8fa4a578dd3f7fb",
+   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html:fc2e8e67969d621d",
    "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:70eb8aaba4159fcc"
   ],
-  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#sty count": {
-  "code": "68c0ed2e30fb8a20",
-  "core": "20ea7f4d2c705f21",
-  "date": "2026-10-12",
-  "note": "share rolled from 0.25 to 0.5 per hamlet",
+  "body": "5d1ca12ea20c5cc0",
+  "claim": "sty count - pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing: a quarter to a half of households",
+  "code": "3b70ee4f499d8135",
+  "core": "657604a31ecff3b1",
+  "date": "2026-10-18",
+  "note": "share rolled per hamlet from the seed, uniform in 0.25-0.5",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html": "a80ff0e81f8d433e"
   },
@@ -17108,10 +17144,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#sty on the near half": {
-  "code": "a3ec5aa0dba3e642",
-  "core": "20ea7f4d2c705f21",
-  "date": "2026-10-12",
-  "note": "near-half bound",
+  "body": "5d1ca12ea20c5cc0",
+  "claim": "sty on the near half - pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing",
+  "code": "1b0523e18d673107",
+  "core": "657604a31ecff3b1",
+  "date": "2026-10-18",
+  "note": "sty_on_near_half, the nearest seat with room",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html": "a80ff0e81f8d433e"
   },
@@ -17122,10 +17160,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#sty within reach": {
-  "code": "210f8e3e007cb33d",
-  "core": "20ea7f4d2c705f21",
-  "date": "2026-10-12",
-  "note": "320 ft",
+  "body": "5d1ca12ea20c5cc0",
+  "claim": "sty within reach - pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing: 320 ft of a farmhouse",
+  "code": "166fc2e2f33f7423",
+  "core": "657604a31ecff3b1",
+  "date": "2026-10-18",
+  "note": "sty_in_reach at STY_HOUSE_REACH_FT 320",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html": "a80ff0e81f8d433e"
   },
@@ -19647,13 +19687,14 @@
   "date": "2026-10-07",
   "note": "the edge always wanders and never comes out a rectangle, even at the lowest wander tried (0.12); the page records the curving outer face as a GUESS and says a rectangular polder is a modern form",
   "pages": {
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "12e062826b81046a"
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
-  "research": "aaf76ce9023b39a0",
+  "research": "9d4f4eee3c609249",
   "rests": [
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:041f79721f113fc6",
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:3d4d136052bc4a6e"
   ],
+  "triaged": "2026-10-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::_polder_candidate#parcel cleanup on the drawn block only": {
@@ -19700,10 +19741,10 @@
   "date": "2026-10-03",
   "note": "0027 drawing: band cut where a channel crosses",
   "pages": {
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "12e062826b81046a"
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
-  "research": "aaf76ce9023b39a0",
-  "triaged": "2026-10-05",
+  "research": "9d4f4eee3c609249",
+  "triaged": "2026-10-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::fit_polder#block aspect": {
@@ -19743,10 +19784,10 @@
   "date": "2026-10-03",
   "note": "0027 drawing; reaches are tolerances",
   "pages": {
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "12e062826b81046a"
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
-  "research": "aaf76ce9023b39a0",
-  "triaged": "2026-10-05",
+  "research": "9d4f4eee3c609249",
+  "triaged": "2026-10-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::inlet_to_rim#inlet reaches the reservoir": {
@@ -19886,12 +19927,13 @@
   "date": "2026-10-07",
   "note": "\"Where a channel crosses the dike, the band is cut\", and water runs through a gap, not over the dike's top",
   "pages": {
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "12e062826b81046a"
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
-  "research": "aaf76ce9023b39a0",
+  "research": "9d4f4eee3c609249",
   "rests": [
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:e8c05b8d91b4cafc"
   ],
+  "triaged": "2026-10-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::stage_polder#polder fabric": {
@@ -41216,13 +41258,14 @@
   "date": "2026-10-18",
   "note": "",
   "pages": {
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "12e062826b81046a"
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
-  "research": "aaf76ce9023b39a0",
+  "research": "9d4f4eee3c609249",
   "rests": [
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:232a60c6a51c5109",
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:e8c05b8d91b4cafc"
   ],
+  "triaged": "2026-10-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#stable yard round its stables": {
@@ -50733,16 +50776,31 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._rounded_pond#pond inset and rounded": {
-  "code": "42a7a47843307dcb",
+ "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._rounded_pond#corners eased": {
+  "body": "3f8e86692bad3142",
+  "claim": "corners eased - UNRESEARCHED: a fillet of the caller's reach, jittered 0.8 to 1.15, at every corner",
+  "code": "a84f65c7ab05983e",
   "core": "edb9c619ca0295e5",
-  "date": "2026-10-03",
-  "note": "as cited",
+  "date": "2026-10-18",
+  "note": "nothing on the page covers corner fillets; UNRESEARCHED is right",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._rounded_pond#pond inset and rounded": {
+  "body": "3f8e86692bad3142",
+  "claim": "pond inset and rounded - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: inset inside its bank, the parcel scaled about its centroid",
+  "code": "3934df36475a5b8c",
+  "core": "edb9c619ca0295e5",
+  "date": "2026-10-18",
+  "note": "the pond is set in from its parcel's edge by a homothety about the centroid, as the page says",
   "pages": {
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "50cb4a926984f7f9"
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
   },
-  "research": "088e8e3c8c54fcff",
-  "triaged": "2026-10-05",
+  "research": "dede4a3ae0c4c6d4",
+  "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:5d8136b689a7529e"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin.crescent_pond#half-moon pond": {
@@ -51166,24 +51224,49 @@
   "research": "8159982a6874674a",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/fields/landuse.py::DIKEPOND_WATER_INSET#pond bank width": {
-  "code": "e7d1a8d106f18ee7",
-  "core": "11f1c2b5137316bd",
-  "date": "2026-10-05",
-  "note": "the 23 ft bank fixes the water-heavy split on every map, but the page records the dike-heavy order and the 7:3 split too and says \"the split would be rolled village by village\"; roll the inset between the recorded splits, or claim it as DEVIATION",
+ "l7r/diagram/settlement/fields/landuse.py::DIKEPOND_SPLIT#dike-pond split odds": {
+  "body": "5ea7c59e0ba4c228",
+  "claim": "dike-pond split odds - GUESS: even odds (the record gives no share between them)",
+  "code": "a00a1a05388bafbd",
+  "core": "1cb7e2a2fefa06ae",
+  "date": "2026-10-18",
+  "note": "the page records even odds among the five splits as a GUESS",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/landuse.py::DIKEPOND_SPLIT#dike-pond split values": {
+  "body": "5ea7c59e0ba4c228",
+  "claim": "dike-pond split values - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: water six to four, dike six to four, water seven to three, one to one, and the gazetteer's three of water to seven of dike",
+  "code": "ceb7e18053068056",
+  "core": "1cb7e2a2fefa06ae",
+  "date": "2026-10-18",
+  "note": "the water shares 0.6, 0.4, 0.7, 0.5 and 0.3 are exactly the page's five recorded splits, rolled per village",
   "pages": {
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "50cb4a926984f7f9",
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html": "ff411e4bbbb6990f"
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
   },
-  "research": "411d05204fe31191",
+  "research": "dede4a3ae0c4c6d4",
   "rests": [
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:5dc016aaadb88e65",
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:a2ace49cbf202456",
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:d0fd0498e992da80",
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html:03c2e92a1fc9b267",
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html:1f8f465ac2ee7b9e"
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:21db06d77d82879b"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/landuse.py::DIKEPOND_WATER_INSET#pond bank width": {
+  "body": "6dc735a91c089cf1",
+  "claim": "pond bank width - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: 23 ft, the water-heavy split's inset on Kuwabata's parcels; since feature 385 T10 the inset is derived per map from the rolled split (`dikepond_inset`), and this the fallback where no parcel is known",
+  "code": "2951a152820f9a87",
+  "core": "11f1c2b5137316bd",
+  "date": "2026-10-18",
+  "note": "the fallback where no parcel is known; the rolled inset is derived per map",
+  "pages": {
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
+  },
+  "research": "dede4a3ae0c4c6d4",
+  "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:5d8136b689a7529e",
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:b6e1f2dff8a2b220"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/landuse.py::DIKE_CROP_CLASS#dike crops": {
   "code": "66994b3730c02088",
@@ -51227,55 +51310,70 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_draw_plot#bank as a ring": {
-  "code": "46262dd1b2730cdc",
-  "core": "4ca816e4d5c3bf94",
-  "date": "2026-10-03",
-  "note": "as cited",
+  "body": "5adee3f35aae8a9b",
+  "claim": "bank as a ring - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: the band between bank and water lit as the dike",
+  "code": "ddeee29fb5c3eb28",
+  "core": "737f52f51af88acd",
+  "date": "2026-10-18",
+  "note": "even-odd bank-minus-water path, a map drawing convention",
   "pages": {
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "50cb4a926984f7f9"
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
   },
-  "research": "088e8e3c8c54fcff",
-  "triaged": "2026-10-05",
+  "research": "dede4a3ae0c4c6d4",
+  "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:e636a667b77a7329"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_draw_plot#fry pond turbid": {
-  "code": "39c314280628764e",
-  "core": "4ca816e4d5c3bf94",
-  "date": "2026-10-03",
-  "note": "as cited",
+  "body": "5adee3f35aae8a9b",
+  "claim": "fry pond turbid - fish-fry-and-nursery-ponds-yumiao.drawing: FRY_WATER for a fry pond",
+  "code": "d57b1cfa29b1297e",
+  "core": "737f52f51af88acd",
+  "date": "2026-10-18",
+  "note": "FRY_WATER gray-turbid for fry ponds",
   "pages": {
    "0024-fish-fry-and-nursery-ponds-yumiao.drawing.html": "62bb3e51a7a5a1b1"
   },
   "research": "7c54d1e1ec4abfaa",
+  "rests": [
+   "0024-fish-fry-and-nursery-ponds-yumiao.drawing.html:a55235764553bafc"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_draw_plot#lotus field": {
-  "code": "9a1f8fa915c71211",
-  "core": "4ca816e4d5c3bf94",
-  "date": "2026-10-03",
-  "note": "as cited",
+  "body": "5adee3f35aae8a9b",
+  "claim": "lotus field - cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing: a teal plot with three blooms",
+  "code": "cd212732aee00403",
+  "core": "737f52f51af88acd",
+  "date": "2026-10-18",
+  "note": "teal plot on low ground, blooms a drawing mark",
   "pages": {
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
   },
   "research": "909bb100e23424ac",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:978ac8b95aac5453"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_draw_plot#pond unit": {
-  "code": "50ce82b41b961759",
-  "core": "4ca816e4d5c3bf94",
-  "date": "2026-10-05",
-  "note": "bank on the parcel line, water inset, dug back off a canal inside the line",
+  "body": "5adee3f35aae8a9b",
+  "claim": "pond unit - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: bank at the parcel line, water inset the map's own (`dikepond_inset`), dug back off a canal",
+  "code": "d12a7082f8b31ba8",
+  "core": "737f52f51af88acd",
+  "date": "2026-10-18",
+  "note": "the page says \"the bank stays on the true parcel line\" and that a canal \"may graze the edge of a bank, on purpose\", but the code shrinks the whole unit (`_s2 = max(0.7, 1.0 - (pen + 1.0) / _dm)`) whenever any canal sample falls inside the parcel; the page does not record this dig-back, so either record it on the page or drop it",
   "pages": {
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "50cb4a926984f7f9"
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
   },
-  "research": "088e8e3c8c54fcff",
+  "research": "dede4a3ae0c4c6d4",
   "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:5d8136b689a7529e",
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:8cb3b577416449af",
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:a2ace49cbf202456",
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:e0fac2d8fcb804e3"
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:e8fdf34d7bd0e81d"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_repaint_leftovers#leftovers as standing rice": {
   "code": "d82ba4a91ad23179",
@@ -51326,52 +51424,75 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._mulberry_rows#bank mottle": {
-  "code": "6306dbda1f80c956",
-  "core": "826630a7a8084e56",
-  "date": "2026-10-03",
-  "note": "as cited",
+  "body": "577fe014560f0802",
+  "claim": "bank mottle - CONVENTION: earth patches every 30 px",
+  "code": "e2da62501f3bfdf6",
+  "core": "5f0c1e578f694bb4",
+  "date": "2026-10-18",
+  "note": "the mottled earth bank is how the page shows the bank, so CONVENTION is the right label",
+  "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._mulberry_rows#fruit trees": {
-  "code": "0123b07d6534b595",
-  "core": "826630a7a8084e56",
-  "date": "2026-10-03",
-  "note": "as cited",
+  "body": "577fe014560f0802",
+  "claim": "fruit trees - mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing: one line along the bank at 18 ft, crowns r 4-5 px",
+  "code": "c4f6d1f473d31faa",
+  "core": "5f0c1e578f694bb4",
+  "date": "2026-10-18",
+  "note": "one line at the band's centerline at an 18 ft step, crowns r 4-5 px (8-10 ft across)",
   "pages": {
    "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html": "9dd5f2a5abf3954e"
   },
   "research": "5204a1fdda1ca89b",
+  "rests": [
+   "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html:4bba012c10bd394d",
+   "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html:60aee2690bd65df2"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._mulberry_rows#mulberry bushes": {
-  "code": "4bf705a4056df40e",
-  "core": "826630a7a8084e56",
-  "date": "2026-10-03",
-  "note": "as cited",
+  "body": "577fe014560f0802",
+  "claim": "mulberry bushes - mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing: crowns r 2.2-3.6 px at a 4.4 px pitch, none centered within 3.5 px of a canal",
+  "code": "976433ac6242291c",
+  "core": "5f0c1e578f694bb4",
+  "date": "2026-10-18",
+  "note": "`rng.uniform(2.2, 3.6)` draws crowns 4.4 to 7.2 ft across, but the page says \"4.4 to 7 ft across\"; the code should use r 3.5 or the page should say 7.2 ft. The 4.4 ft pitch, the rows per 5.5 ft and centers kept off the canal all match",
   "pages": {
    "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html": "9dd5f2a5abf3954e"
   },
   "research": "5204a1fdda1ca89b",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html:d1469e6daa9c666b"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._mulberry_rows#tea and fruit off the canal": {
-  "code": "3edca5216162acbb",
-  "core": "826630a7a8084e56",
-  "date": "2026-10-03",
-  "note": "nothing in the bundle answers it",
+  "body": "577fe014560f0802",
+  "claim": "tea and fruit off the canal - UNRESEARCHED: tea hedges kept 3.0 px and fruit trees 5.5 px off a canal centerline",
+  "code": "a6e2e34e245e132f",
+  "core": "5f0c1e578f694bb4",
+  "date": "2026-10-18",
+  "note": "the canal rule on the page covers mulberry bushes only; nothing gives a canal clearance for tea or fruit",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._mulberry_rows#tea hedges": {
-  "code": "9ddfb90f8207b9fa",
-  "core": "826630a7a8084e56",
-  "date": "2026-10-03",
-  "note": "as cited",
+  "body": "577fe014560f0802",
+  "claim": "tea hedges - mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing: two hedges 2.8 px wide, three steps drawn and two left open",
+  "code": "83c9d53e3838c376",
+  "core": "5f0c1e578f694bb4",
+  "date": "2026-10-18",
+  "note": "two hedges about 3 ft wide, drawn in 7.5 ft runs with breaks, recorded on the page as a GUESS",
   "pages": {
    "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html": "9dd5f2a5abf3954e"
   },
   "research": "5204a1fdda1ca89b",
+  "rests": [
+   "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html:27ddbd14d16bb415"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._pick_overlay_plots#dike-pond patches": {
@@ -51407,66 +51528,98 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin.apply_land_use#converted share": {
-  "code": "feff09071be629f1",
-  "core": "219d9b9b972c3f62",
-  "date": "2026-10-05",
-  "note": "a share of the eligible ground, never of the whole field",
+  "body": "cbf07a080223db6d",
+  "claim": "converted share - cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing: `fraction` of the eligible plots, at least two",
+  "code": "8fb40d7be17b40ff",
+  "core": "dbb7ab6fe10fdace",
+  "date": "2026-10-18",
+  "note": "fraction applied to the eligible set, not the whole field",
   "pages": {
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
   },
   "research": "909bb100e23424ac",
   "rests": [
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:4af6b4bf821b4dab",
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:a7c70511a8272fd4",
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:ac2f9b58c769b1bc"
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:a7c70511a8272fd4"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin.apply_land_use#eligible ground": {
-  "code": "c5df4aa7f4042464",
-  "core": "219d9b9b972c3f62",
-  "date": "2026-10-05",
-  "note": "the low plots, or every plot on a wholesale dike-pond block",
+  "body": "cbf07a080223db6d",
+  "claim": "eligible ground - cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing: the low plots, or every plot on a wholesale dike-pond block",
+  "code": "abe36986e0b35bb7",
+  "core": "dbb7ab6fe10fdace",
+  "date": "2026-10-18",
+  "note": "low plots (two lowest rows), or all plots on the wholesale archetype",
   "pages": {
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
   },
   "research": "909bb100e23424ac",
   "rests": [
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:12305d78f508ec8e",
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:978ac8b95aac5453",
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:c328ac52a81da7bd"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin.apply_land_use#no rape": {
-  "code": "fac2a2b3013957b7",
-  "core": "219d9b9b972c3f62",
-  "date": "2026-10-03",
-  "note": "as cited",
+  "body": "cbf07a080223db6d",
+  "claim": "no rape - the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing: never drawn beside the rice",
+  "code": "06c4f0c69aa07544",
+  "core": "dbb7ab6fe10fdace",
+  "date": "2026-10-18",
+  "note": "rape refused",
   "pages": {
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html": "077e104afe9ed4ee"
   },
   "research": "7b19741c5250f0fe",
+  "rests": [
+   "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:94818b7ca01289f3"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin.apply_land_use#overlay colors": {
-  "code": "5b571c9e74329fc2",
-  "core": "219d9b9b972c3f62",
-  "date": "2026-10-03",
-  "note": "as cited",
+  "body": "cbf07a080223db6d",
+  "claim": "overlay colors - CONVENTION: pond and lotus teals",
+  "code": "cd64abaa5517d342",
+  "core": "dbb7ab6fe10fdace",
+  "date": "2026-10-18",
+  "note": "fill colors only",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin.apply_land_use#patches for dike-ponds": {
-  "code": "2a5de41bb582325d",
-  "core": "219d9b9b972c3f62",
-  "date": "2026-10-03",
-  "note": "as cited",
+  "body": "cbf07a080223db6d",
+  "claim": "patches for dike-ponds - cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing: clustered on a partial dike-pond overlay",
+  "code": "964bd9483ebfe16b",
+  "core": "dbb7ab6fe10fdace",
+  "date": "2026-10-18",
+  "note": "clustered on a partial dike-pond overlay, unclustered on the wholesale block",
   "pages": {
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
   },
   "research": "909bb100e23424ac",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:4af6b4bf821b4dab",
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:ac2f9b58c769b1bc"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/landuse.py::LandUseMixin.apply_land_use#the village's split and its inset": {
+  "body": "cbf07a080223db6d",
+  "claim": "the village's split and its inset - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: the split rolled per village (`dikepond_split`) and the one inset every reader takes derived from it (`dikepond_inset`)",
+  "code": "c28295f20019f5ff",
+  "core": "dbb7ab6fe10fdace",
+  "date": "2026-10-18",
+  "note": "the split is rolled per village and one inset is taken from the median-area parcel and used by every reader",
+  "pages": {
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
+  },
+  "research": "dede4a3ae0c4c6d4",
+  "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:21db06d77d82879b",
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:5d8136b689a7529e"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/landuse.py::MULBERRY_ROW_FT#mulberry row spacing": {
@@ -51475,11 +51628,39 @@
   "date": "2026-10-03",
   "note": "as cited",
   "pages": {
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "50cb4a926984f7f9",
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b",
    "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html": "9dd5f2a5abf3954e"
   },
-  "research": "c2d58a5af989f415",
-  "triaged": "2026-10-05",
+  "research": "4a7d44325865b97a",
+  "triaged": "2026-10-18",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/landuse.py::dikepond_inset#one inset per map, on its median parcel": {
+  "body": "587282778c1d7db6",
+  "claim": "one inset per map, on its median parcel - GUESS: the share holds on the median parcel; a smaller parcel runs a little drier and a larger a little wetter",
+  "code": "c07163e0f45d902f",
+  "core": "a0367a29434ac05e",
+  "date": "2026-10-18",
+  "note": "the page records the one inset per village as a GUESS",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/landuse.py::dikepond_inset#the inset from the split": {
+  "body": "587282778c1d7db6",
+  "claim": "the inset from the split - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: a parcel drawn at the rolled share water, the planted bank the ring between",
+  "code": "70f01818ea58923a",
+  "core": "a0367a29434ac05e",
+  "date": "2026-10-18",
+  "note": "apothem*(1-sqrt(share)) gives the median parcel the rolled share",
+  "pages": {
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
+  },
+  "research": "dede4a3ae0c4c6d4",
+  "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:21db06d77d82879b",
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:5d8136b689a7529e"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/landuse.py::fry_pond_ids#fry ponds": {
@@ -51502,15 +51683,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/landuse.py::mulberry_row_ts#rows across the bank": {
+  "body": "6445f8df219b7df2",
+  "claim": "rows across the bank - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: one per MULBERRY_ROW_FT, at least two",
   "code": "baa6c27ea68e707e",
   "core": "c9b2d99af46492fa",
-  "date": "2026-10-03",
-  "note": "as cited",
+  "date": "2026-10-18",
+  "note": "one row per 5.5 ft of the bank's width",
   "pages": {
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "50cb4a926984f7f9"
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
   },
-  "research": "088e8e3c8c54fcff",
-  "triaged": "2026-10-05",
+  "research": "dede4a3ae0c4c6d4",
+  "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:0c906f5e26dcec83"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/landuse.py::row_cuts#plumbing": {
@@ -59332,24 +59517,26 @@
   "date": "2026-10-03",
   "note": "\"Where a channel crosses the dike, the band is cut\"",
   "pages": {
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "12e062826b81046a"
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
-  "research": "aaf76ce9023b39a0",
-  "triaged": "2026-10-05",
+  "research": "9d4f4eee3c609249",
+  "triaged": "2026-10-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DIKE_IRREGULARITY#hand-piled width": {
+  "body": "010bb2fb0dfd7ef8",
+  "claim": "hand-piled width - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: the widest stretch at least 1.4 times the narrowest",
   "code": "21c2219370781ba4",
   "core": "2ba5cf4fe49d9993",
-  "date": "2026-10-05",
-  "note": "never a uniform band; 1.4 a degree inside the 14-40 ft spread",
+  "date": "2026-10-18",
+  "note": "a calibrated degree of the attested swelling and pinching",
   "pages": {
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "12e062826b81046a"
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
-  "research": "aaf76ce9023b39a0",
+  "research": "9d4f4eee3c609249",
   "rests": [
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:2cc72ae0abe5dbce",
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:3d4d136052bc4a6e"
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:3d4d136052bc4a6e",
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:4d5302327cebd38f"
   ],
   "verdict": "IN-STEP"
  },
@@ -59512,20 +59699,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#dike width": {
+  "body": "4caa58bae16e8df6",
+  "claim": "dike width - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: the 14-40 ft band",
   "code": "8418a97891092463",
   "core": "2bf29f82ce4a5eb2",
-  "date": "2026-10-05",
-  "note": "14-40 band (both callers are 1 ft/px hamlets)",
+  "date": "2026-10-18",
+  "note": "it draws and records (w_min/w_max) the band dike_band makes, which runs 11-43 ft against \"14 to 40 ft across\" (see dike_band)",
   "pages": {
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "12e062826b81046a"
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
-  "research": "aaf76ce9023b39a0",
+  "research": "9d4f4eee3c609249",
   "rests": [
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:2cc72ae0abe5dbce",
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:3d4d136052bc4a6e",
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:4d5302327cebd38f"
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:46a44cd878ea07e4"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#earth mottle": {
   "code": "a4eb7c92b65421e3",
@@ -59541,10 +59728,10 @@
   "date": "2026-10-03",
   "note": "0.26 out, 4.4 apart, per 0027",
   "pages": {
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "12e062826b81046a"
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
-  "research": "aaf76ce9023b39a0",
-  "triaged": "2026-10-05",
+  "research": "9d4f4eee3c609249",
+  "triaged": "2026-10-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#no building on the dike": {
@@ -59565,10 +59752,10 @@
   "date": "2026-10-03",
   "note": "band and rows cut, per 0027",
   "pages": {
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "12e062826b81046a"
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
-  "research": "aaf76ce9023b39a0",
-  "triaged": "2026-10-05",
+  "research": "9d4f4eee3c609249",
+  "triaged": "2026-10-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#rows on the faces": {
@@ -59577,10 +59764,10 @@
   "date": "2026-10-03",
   "note": "0027 records the deviation",
   "pages": {
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "12e062826b81046a"
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
-  "research": "aaf76ce9023b39a0",
-  "triaged": "2026-10-05",
+  "research": "9d4f4eee3c609249",
+  "triaged": "2026-10-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#willow row": {
@@ -59589,10 +59776,10 @@
   "date": "2026-10-03",
   "note": "0.74 out, 8.5 apart, per 0027",
   "pages": {
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "12e062826b81046a"
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
-  "research": "aaf76ce9023b39a0",
-  "triaged": "2026-10-05",
+  "research": "9d4f4eee3c609249",
+  "triaged": "2026-10-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::GAP_REACH#plumbing": {
@@ -59636,19 +59823,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::dike_band#dike width": {
+  "body": "f65638a90c0d0b38",
+  "claim": "dike width - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: 14-40 ft, swelling and pinching along the ring",
   "code": "e59682a39c7313d7",
   "core": "7bf2c1d3d6e51066",
-  "date": "2026-10-05",
-  "note": "14-40, swelling and pinching along the ring",
+  "date": "2026-10-18",
+  "note": "w_seen is the clamped profile + R.uniform(-3, 3), so widths run 11-43 ft against \"drawn 14 to 40 ft across\", and hand_piled_widths returns an already-irregular profile unchanged, so the overshoot is drawn. The jitter should be applied before the clamp",
   "pages": {
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "12e062826b81046a"
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
-  "research": "aaf76ce9023b39a0",
+  "research": "9d4f4eee3c609249",
   "rests": [
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:2cc72ae0abe5dbce",
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:3d4d136052bc4a6e"
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:3d4d136052bc4a6e",
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:46a44cd878ea07e4"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/land/dikes.py::dike_band#faces": {
   "code": "99c7ebd7612985ba",
@@ -59656,10 +59845,10 @@
   "date": "2026-10-03",
   "note": "inner face on the parcels, curved outer face, per 0027",
   "pages": {
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "12e062826b81046a"
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
-  "research": "aaf76ce9023b39a0",
-  "triaged": "2026-10-05",
+  "research": "9d4f4eee3c609249",
+  "triaged": "2026-10-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::dike_crest#plumbing": {
@@ -59676,23 +59865,26 @@
   "date": "2026-10-05",
   "note": "the never-uniform rule as a predicate",
   "pages": {
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "12e062826b81046a"
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
-  "research": "aaf76ce9023b39a0",
+  "research": "9d4f4eee3c609249",
   "rests": [
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:3d4d136052bc4a6e"
   ],
+  "triaged": "2026-10-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::hand_piled_widths#hand-piled width": {
+  "body": "37f124a86c571136",
+  "claim": "hand-piled width - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: a flat profile stretched to read as heaped and repaired",
   "code": "3301e76b9295950a",
   "core": "ba1acc9909670b1e",
-  "date": "2026-10-05",
-  "note": "a flat profile stretched to vary",
+  "date": "2026-10-18",
+  "note": "a flat profile stretched to 1.42x inside the width range",
   "pages": {
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "12e062826b81046a"
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
-  "research": "aaf76ce9023b39a0",
+  "research": "9d4f4eee3c609249",
   "rests": [
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:3d4d136052bc4a6e"
   ],

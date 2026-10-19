@@ -24,10 +24,10 @@ none, and the title card says which this one is. In a fry village the smallest p
 to seven-tenths of the pond area, Jiujiang's share of its pond water read as a share of the ponds' area. A fry pond is
 drawn in grayer, muddier water than a grow-out pond, so a fry village reads as one at a glance; the exact shade is a map
 drawing convention. No small nursery pond is drawn beside a big one, that being an inland province's method, and a fry
-pond is whatever size its plot is.
+pond is the water its plot holds inside the bank, as large as the plot and the village's share of water and bank make it.
 
 Name: fry pond
 Covers: the dug water of a `dikeponds[]` parcel recorded `kind: fry` - a fry village's smallest ponds
 Sources: nongzheng-quanshu-41, guangdong-xinyu-22, cssn-sangyuanwei, pwsannong-zhusanjiao-nongyeshi, zhwiki-guangdong-xinyu, zhwiki-nongzheng-quanshu
 Entry: research/questions/0024-fish-fry-and-nursery-ponds-yumiao.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html
-Drawing: research/questions/0024-fish-fry-and-nursery-ponds-yumiao.drawing.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html
+Drawing: research/questions/0024-fish-fry-and-nursery-ponds-yumiao.drawing.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html

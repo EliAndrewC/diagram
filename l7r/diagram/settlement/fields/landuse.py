@@ -18,7 +18,7 @@ from .._geom import (
     point_in_poly,
     seg_dist,
 )
-from .._knobs import _centroid
+from .._knobs import Knob, _centroid, register_knob
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -32,7 +32,7 @@ DIKE_CROP_CLASS = {"mulberry": "mulberry dike", "fruit": "fruit dike", "tea": "t
 # water leaves about six parts in ten of a parcel water, the reading of Qu Dajun's figures for Jiujiang (1678) - the
 # oldest there are; every ratio written as a number is modern. It was 11 ft, which left 80%, wetter than any figure read.
 DIKEPOND_WATER_INSET = 23.0
-"""Research: pond bank width - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html: 23 ft, about six parts in ten of a parcel water on every map; the dike-heavy split the record also gives is never rolled"""
+"""Research: pond bank width - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: 23 ft, the water-heavy split's inset on Kuwabata's parcels; since feature 385 T10 the inset is derived per map from the rolled split (`dikepond_inset`), and this the fallback where no parcel is known"""
 
 # A FRY VILLAGE'S NURSERY SHARE (feature 280 M60, research/questions/0024-fish-fry-and-nursery-ponds-yumiao.drawing.html): Qu Dajun (1678) has seven parts in ten of the pond water at Jiujiang raising fry. Read as a share of the block's pond AREA - the record's reading, the smallest ponds first.
 FRY_VILLAGE_SHARE = 0.7
@@ -44,6 +44,36 @@ MULBERRY_ROW_FT = 5.5
 4.4 ft pitch along a row, gave the bush per ~23 sq ft the GM ruled (the premodern spacing, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html).
 
 Research: mulberry row spacing - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html, research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html: 5.5 ft between rows"""
+
+
+# A DIKE-POND VILLAGE'S SPLIT OF WATER AND DIKE (feature 385 T10, 0018): six parts water to four of dike, six of dike to four of
+# pond, seven of water to three of dike, one to one, or three of water to seven of dike - the water share of a parcel, rolled per village; the inset is derived from it
+# (`fields.landuse.dikepond_inset`).
+DIKEPOND_SPLIT = register_knob(Knob("dikepond_split", [0.6, 0.4, 0.7, 0.5, 0.3], default=0.6))
+"""Research:
+    dike-pond split values - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: water six to four, dike six to four, water seven to three, one to one, and the gazetteer's three of water to seven of dike
+    dike-pond split odds - GUESS: even odds (the record gives no share between them)"""
+
+
+def dikepond_inset(polys: Sequence[Sequence[Sequence[float]]], share: float) -> float:
+    """The water inset, in px, at which the map's MEDIAN parcel (by area) is `share` water: the pond is the parcel scaled about its
+    centroid by `1 - inset / apothem` (`_rounded_pond`), so its share is that scale squared, and the inset is
+    `apothem * (1 - sqrt(share))`. `DIKEPOND_WATER_INSET` where no parcel is known (feature 385 T10).
+
+    Research:
+        the inset from the split - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: a parcel drawn at the rolled share water, the planted bank the ring between
+        one inset per map, on its median parcel - GUESS: the share holds on the median parcel; a smaller parcel runs a little drier and a larger a little wetter"""
+    if not polys:
+        return DIKEPOND_WATER_INSET
+
+    def area(q: Sequence[Sequence[float]]) -> float:
+        return abs(sum(q[i][0] * q[(i + 1) % len(q)][1] - q[(i + 1) % len(q)][0] * q[i][1] for i in range(len(q)))) / 2
+
+    q = sorted(polys, key=area)[len(polys) // 2]
+    n = len(q)
+    cx, cy = sum(v[0] for v in q) / n, sum(v[1] for v in q) / n
+    apo = sum(math.hypot((q[i][0] + q[(i + 1) % n][0]) / 2 - cx, (q[i][1] + q[(i + 1) % n][1]) / 2 - cy) for i in range(n)) / n
+    return apo * (1.0 - math.sqrt(share))
 
 
 def mulberry_row_ts(band: float) -> list[float]:
@@ -180,6 +210,7 @@ class LandUseMixin:
             eligible ground - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: the low plots, or every plot on a wholesale dike-pond block
             converted share - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: `fraction` of the eligible plots, at least two
             patches for dike-ponds - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: clustered on a partial dike-pond overlay
+            the village's split and its inset - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: the split rolled per village (`dikepond_split`) and the one inset every reader takes derived from it (`dikepond_inset`)
             overlay colors - CONVENTION: pond and lotus teals
             no rape - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: never drawn beside the rice"""
         if overlay not in ("none", "mulberry_fishpond", "lotus", "tea_fringe"):
@@ -251,6 +282,12 @@ class LandUseMixin:
         fry_ids: set[int] = set()
         if overlay == "mulberry_fishpond":
             self.M["meta"]["fry_form"] = fry_form
+            # THE VILLAGE'S SPLIT (feature 385 T10): rolled, and the one inset every reader takes derived from it on the map's own
+            # parcels - the pond's water, the mulberry rows across the bank, the sties' bank seat (`hamletgen.pondstock`)
+            share = float(self.resolve("dikepond_split"))
+            self.dikepond_inset = dikepond_inset([p["poly"] for p in chosen], share)
+            self.M["meta"]["dikepond_split"] = share
+            self.M["meta"]["dikepond_inset"] = round(self.dikepond_inset, 1)
             if fry_form == "fry_village":
                 fry_ids = fry_pond_ids(chosen, _area, FRY_VILLAGE_SHARE)
         for p in chosen:
@@ -384,7 +421,7 @@ class LandUseMixin:
         `dikeponds` and `crown_q` are appended to in place - the caller needs both after the loop.
 
         Research:
-            pond unit - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: bank at the parcel line, water inset DIKEPOND_WATER_INSET, dug back off a canal
+            pond unit - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: bank at the parcel line, water inset the map's own (`dikepond_inset`), dug back off a canal
             bank as a ring - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: the band between bank and water lit as the dike
             fry pond turbid - research/questions/0024-fish-fry-and-nursery-ponds-yumiao.drawing.html: FRY_WATER for a fry pond
             lotus field - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: a teal plot with three blooms"""
@@ -432,7 +469,7 @@ class LandUseMixin:
                 _s2 = max(0.7, 1.0 - (pen + 1.0) / max(1.0, _dm))
                 qpoly = [(cx + (qx - cx) * _s2, cy + (qy - cy) * _s2) for qx, qy in qpoly]
             bd, bpoly = self._rounded_pond(qpoly, inset=0.0, reach=8.0, rng=rng)
-            wd, wpoly = self._rounded_pond(qpoly, inset=DIKEPOND_WATER_INSET, reach=16.0, rng=rng)
+            wd, wpoly = self._rounded_pond(qpoly, inset=getattr(self, "dikepond_inset", DIKEPOND_WATER_INSET), reach=16.0, rng=rng)
             # THE BANK IS A RING, NOT A DISK UNDER THE POND (feature 228, GM 2026-09-12, on Kuwabata's page: hovering
             # the mulberry dike "lights up not only the Mulberry Dyke itself, but the fish ponds Inside each Mulberry
             # dike ... basically the same behavior that we give to the perimeter dyke"). One path, the bank outline
@@ -470,7 +507,7 @@ class LandUseMixin:
         bushes with ~4-6 ft crowns in dense rows (~1 bush per 10-20 sq ft - hundreds per pond), so at
         1 px = 1 ft honest "actual trees" ARE a packed dot band; the crowns here are r 2.2-3.6 px at ~6 px
         in-row spacing (the loose end of the attested 3-5 ft, for pixel separation), never inflated glyphs.
-        Rows are homothetic loops between the water inset (`DIKEPOND_WATER_INSET`) and the bank edge (the true parcel line);
+        Rows are homothetic loops between the water inset (the map's `dikepond_inset`, `DIKEPOND_WATER_INSET` where none) and the bank edge (the true parcel line);
         everything clips to the bank path, so a crown may overhang the water edge (organic) but never
         spills onto the polder floor. BUSHES KEEP CLEAR OF THE CANALS (GM 2026-07-23, refined 2026-07-24):
         the bush TRUNK stays off the canal - any crown whose CENTER lies within 3.5 px of a channel
@@ -489,9 +526,10 @@ class LandUseMixin:
         n = len(poly)
         mids = [((poly[i][0] + poly[(i + 1) % n][0]) / 2, (poly[i][1] + poly[(i + 1) % n][1]) / 2) for i in range(n)]
         apo = sum(math.hypot(mx - cx, my - cy) for mx, my in mids) / n
-        if apo <= DIKEPOND_WATER_INSET + 1.0:
+        inset = getattr(self, "dikepond_inset", DIKEPOND_WATER_INSET)  # the map's own inset (feature 385 T10: the rows follow the bank's width)
+        if apo <= inset + 1.0:
             return  # a parcel too small to hold the water inset has no bank to plant
-        s_w = max(0.4, 1.0 - DIKEPOND_WATER_INSET / apo)  # the water-edge homothety (matches _rounded_pond's inset)
+        s_w = max(0.4, 1.0 - inset / apo)  # the water-edge homothety (matches _rounded_pond's inset)
         s_b = 1.0  # the bank edge is the TRUE parcel line (the canal at the toe bounds the bank)
         cid = self._cid("mb")
         g = [f'<clipPath id="{cid}"><path d="{bank_d}"/></clipPath>', f'<g clip-path="url(#{cid})">']
@@ -530,7 +568,7 @@ class LandUseMixin:
         # spacing along a dike, research/contents.json#field-archetypes 'Mulberry and other crops on pond dikes (sangji, guoji)') - labeled so in the class entries.
         fruit: dict[int, tuple[float, float, float]] = {}  # a fruit dike's trees by their piece's place in `g` (feature 310)
         if crop == "mulberry":
-            for t in mulberry_row_ts(DIKEPOND_WATER_INSET):  # the planted rows across the band
+            for t in mulberry_row_ts(getattr(self, "dikepond_inset", DIKEPOND_WATER_INSET)):  # the planted rows across the band
                 for x, y in walk(s_w + t * (s_b - s_w), 4.4):
                     jx, jy = x + rng.uniform(-1.3, 1.3), y + rng.uniform(-1.3, 1.3)
                     r = rng.uniform(2.2, 3.6)

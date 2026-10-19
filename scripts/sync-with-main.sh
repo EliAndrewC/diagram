@@ -273,6 +273,12 @@ clone_page_refresh() {
 push_cmd() {
   [ -z "$(git status --porcelain)" ] || die "uncommitted changes - commit first (the procedure never writes your commit for you)"
   git fetch -q origin 2>/dev/null && refuse_unrelated_history
+  # GUARD_EDIT_OK: feature 385 T72 (plan D92) - the plan reviews' ledger rows, which their agents' `make plan-verdict` recorded, are
+  # written and committed here as a record (as the cohort's and the gate's are); every other owed pass still refuses at the checks
+  python3 "$ROOT/scripts/reviews/ledger_owed.py" --write-plan-reviews --ledger "$ROOT/dev/review-ledger.md" >&2 || :
+  if ! git -C "$ROOT" diff --quiet -- dev/review-ledger.md 2>/dev/null; then
+    git -C "$ROOT" commit -q -m "the plan reviews' ledger rows, written at landing (feature 385 T72)" -- dev/review-ledger.md || die "the plan reviews' ledger rows could not be committed"
+  fi
   # GUARD_EDIT_OK: feature 383 FR-006 (the GM 2026-10-12: "Although I agree that the combining all the different checks into
   # one is lower impact, it does still seem worth doing") - THE PUSH'S PYTHON CHECKS RUN IN ONE PROCESS, in the order this
   # block ran them, each as it runs alone and each refusing with the line it refused with here: scripts/gates/push_checks.py
