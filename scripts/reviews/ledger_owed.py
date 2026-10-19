@@ -200,7 +200,9 @@ def filled_row(p: dict[str, str], where: str, root: Path = review_cost.DEFAULT_R
 
 #: A PLAN REVIEW RECORDS ITSELF (feature 385 T72, plan D92): its agent runs `make plan-verdict`, whose line its reply quotes
 PLAN_REVIEW = "MODE 4: PLAN REVIEW"
-PLAN_RECORDED = re.compile(r"\b(?:CLEAR|BLOCKED|NOT-REVIEWABLE) recorded for\b")
+#: ...the target's own line quoted, or the call the agent says it ran (T74's first review wrote "I recorded T74 as BLOCKED ... with
+#: `make plan-verdict F=385 ...`" and quoted no line)
+PLAN_RECORDED = re.compile(r"\b(?:CLEAR|BLOCKED|NOT-REVIEWABLE) recorded for\b|make plan-verdict F=\d+")
 PLAN_WHERE = "the plan-verdict record (make plan-verdict)"
 
 
