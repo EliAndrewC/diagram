@@ -226,6 +226,26 @@ def reviewed_blocks(review: dict) -> dict[str, dict]:
 REMOVED = "(removed) "
 
 
+_PART_B = re.compile(r"^### T\d+[a-z]?\s+part B \(")
+_DEFINED = re.compile(r"^\*\*(D\d+[a-z]?) - ", re.M)
+
+
+def decides_nothing(key: str, body: str, plan_text: str, done: str = "") -> bool:
+    """A part B block that decides nothing (feature 385 T75, plan D94; the GM's approved change 3 of the 2026-10-18 step-back:
+    "only one that adds a new decision gets a spec-fidelity review"): item 4 answered "No", item 5 "Neither", and every `D<n>` it
+    names defined elsewhere. A rule changed, a number tuned or an earlier placement moved is a decision, labeled or not."""
+    if not _PART_B.match(key):
+        return False
+
+    def answer(n: int) -> str:
+        m = re.search(rf"^{n}\.\s+\*\*[^*]*\*\*\s*(.*)$", body, re.M)
+        return m.group(1).strip().lower() if m else ""
+
+    if not re.match(r"no\b", answer(4)) or not re.match(r"neither\b", answer(5)):
+        return False
+    return set(re.findall(r"\bD\d+[a-z]?\b", body)) <= set(_DEFINED.findall(plan_text.replace(body, "") + done))
+
+
 _LANDS_OPEN = re.compile(r"^\*\*Lands open\*\*:.*$", re.M)
 
 
@@ -254,6 +274,8 @@ def block_status(review: dict, plan_text: str, ruled: set[str], history: History
         if any(lo <= at < hi for lo, hi in out_of if lo >= 0):
             continue
         if not ARCHIVE_LINE.sub("", body).strip() and key == "preamble":
+            continue
+        if decides_nothing(key, body, plan_text, done):  # T75: its items are make tick's to check
             continue
         entry = have.get(key) or {}
         if entry.get("sha256") != block_digest(body):
