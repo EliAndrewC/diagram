@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-19T09:27:01+00:00",
+ "final_url": "https://web.archive.org/web/20240917061148id_/https://toyo.repo.nii.ac.jp/record/6852/files/sportskenkokagaku11_055-077.pdf",
+ "first": "4b/4b510787735c/20261019T092658Z",
+ "gm_copies": [],
+ "keys": [
+  "tanigama-2014-edo-sumo"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "4b/4b510787735c/20261019T092658Z",
+ "reason": "HTTP 406",
+ "revision": "",
+ "sha256": "ab62c5eefff2c64d098ee238baa42c0060618565d630f4a50fe1c14968dc79e5",
+ "url": "https://toyo.repo.nii.ac.jp/record/6852/files/sportskenkokagaku11_055-077.pdf"
+}
