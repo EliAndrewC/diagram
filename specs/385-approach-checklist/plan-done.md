@@ -2172,3 +2172,24 @@ Owed by the hour-24 step-back (hour:385-approach-checklist@24, `continue`).
 **D92 - the plan reviews' rows written by the landing.** `ledger_owed.py --write-plan-reviews` appends `filled_row` for each owed pass whose subject starts `MODE 4: PLAN REVIEW`, the where cell `the plan-verdict record (make plan-verdict)`, and prints how many. `land-tooling.sh` and `sync-with-main.sh done` run it first and, when it wrote any, commit `dev/review-ledger.md` as "the plan reviews' ledger rows, written at landing (feature 385 T72)"; the ledger check then runs as now on what remains.
 
 <!-- plan-archive: T74 to T74 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-10-18 -->
+## T76 - part A asks what a constant measures and for the capacity arithmetic first (the GM-approved proposal 7, 2026-10-18)
+
+### T76 Approach (checklist part A)
+
+1. **The goal, in the world.** A task that moves a constant knows what it measures, and one that fits things into room knows the arithmetic, before anything is rolled.
+2. **The constraints.** The GM, 2026-10-18 (amendment 8): "I do like all of your other proposals"; change 7 of the step-back report (amendment 8, quoted): "Two new checklist items in the start-of-task Approach: list every use of a constant before moving it, and write the capacity arithmetic before running experiments". The GM's rule (the step-back request): a checklist item or a tool, never a reminder. The two are numbered items, so the gate (`approach_gate.refusal`, D8: a part A item left unanswered refuses the tick) holds every later Approach to them - a sub-bullet under item 4 would pass an item 4 answered without either, a reminder the GM's rule forbids (the plan review, 2026-10-19). A test red without it.
+3. **Where each comes from.** The GM (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-18 (step-back-2026-10-18.md): T09 ran two experiments before reading what BUNDLE_PITCH measured (about 40 minutes and two cohort runs; the answer was a relabel); T06 ran a 20-minute experiment the arithmetic (households x farmstead width against the margin's length) answers in two.
+5. **The order.** Items 10 and 11 of `checklist.md` part A, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: part A holds the two questions as items 10 and 11, and `tests/tooling/test_approach_gate.py` shows an Approach answering items 1-9 alone refused (items 10 and 11 unanswered); red without them.
+10. **Before moving a constant.** n/a - none moved.
+11. **Before fitting things into room.** n/a - nothing fitted.
+
+### T76 Decisions
+
+**D95 - two numbered items, 10 and 11.** `checklist.md` part A gains item 10, "**Before moving a constant.** List every use of it and what each one measures - or n/a", and item 11, "**Before fitting things into room.** Write the capacity arithmetic (how many, how wide, against how much room) before rolling anything - or n/a". Items 1-9 keep their numbers (so no answer already written changes meaning); an open task whose Approach was written before answers 10 and 11 when it is next started, as the gate refuses its tick until it does.
+

@@ -699,3 +699,6 @@ About 30 min. `plan_gate.decides_nothing` lets a part B pass without a review ro
 "Neither" and names no new decision; any part B that changes, tunes, moves or decides is reviewed as before. Three plan rounds:
 the request lacked the approved proposal list, then the review struck the D-id-only rule (a decision need carry no label).
 **The habit it changes:** none needed.
+T76's checklist lives in this feature's `specs/`, which `land-tooling` does not carry, and its test reads that file - so the two land
+with the feature's own directory at T11 (which moves the checklist to `docs/`). The gate in this clone already holds T76's items:
+`make tick` reads the clone's checklist.
