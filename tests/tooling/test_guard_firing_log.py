@@ -399,6 +399,11 @@ _ESCAPES = {
         "command",
         "feature 375 FR-010: matched on a `make done` command by hm_checks.escaped's anchored regex, reason floor and record, as FREEZE_OK",
     ),
+    "PLAN_EDIT_OK": (
+        "command",
+        "feature 385 T85 (plan D106): matched in an Edit's content or a Bash command by hm_checks.escaped's anchored regex, reason "
+        "floor and record, as FREEZE_OK - and it passes only a plan hold whose dispatch is dead (hm_planhold.dead)",
+    ),
     "BATCH_OK": (
         "command",
         "feature 385 T81 (plan D101): matched in a pop-up check dispatch's PROMPT by hm_checks.escaped's anchored regex, reason "
