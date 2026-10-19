@@ -259,14 +259,18 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T90 `make where-time` tells waiting on work from waiting on the GM (proposal G, 2026-10-19) [lands-open]
       research: rendering
       verify: DONE. where-time splits waiting on work from the GM; landed, test_where_time green
-- [ ] T91 A landing's lint runs in the foreground (the arbiter's fix on hour:385-approach-checklist@27, plan D112) [lands-open]
+- [x] T91 A landing's lint runs in the foreground (the arbiter's fix on hour:385-approach-checklist@27, plan D112) [lands-open]
       research: rendering
-- [ ] T92 make claims-triaged reads a transcript's reply and never clears on an unread one (plan D114) [lands-open]
+      verify: DONE. landed 2026-10-19 via make land-tooling; its test red without it, green with it
+- [x] T92 make claims-triaged reads a transcript's reply and never clears on an unread one (plan D114) [lands-open]
       research: rendering
-- [ ] T93 A pop-up the triage sent on joins its check's batch (plan D115) [lands-open]
+      verify: DONE. landed 2026-10-19 via make land-tooling; its test red without it, green with it
+- [x] T93 A pop-up the triage sent on joins its check's batch (plan D115) [lands-open]
       research: rendering
-- [ ] T94 make claims-checked reads a transcript's reply too (plan D116) [lands-open]
+      verify: DONE. landed 2026-10-19 via make land-tooling; its test red without it, green with it
+- [x] T94 make claims-checked reads a transcript's reply too (plan D116) [lands-open]
       research: rendering
+      verify: DONE. landed 2026-10-19 via make land-tooling; its test red without it, green with it
 - [ ] T95 A street's joining leg keeps the lane's 7 ft (row 841, found working T31; plan D117) [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]

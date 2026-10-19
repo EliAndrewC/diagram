@@ -351,26 +351,7 @@ Owed by the hour-27 step-back (hour:385-approach-checklist@27, `continue`).
 <!-- plan-archive: T88 to T88 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
 <!-- plan-archive: T89 to T89 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
 <!-- plan-archive: T90 to T90 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
-## T91 - a landing's lint runs in the foreground (the round arbiter's fix on hour:385-approach-checklist@27)
-
-### T91 Approach (checklist part A)
-
-1. **The goal, in the world.** A lint slip in the files a landing carries is known in seconds, before the landing starts.
-2. **The constraints.** The arbiter's fix: "make land-tooling should run its own lint stage (the same ruff check and format check the landing applies) in the foreground on the files it carries, and refuse before it goes to the background, so a lint failure shows in seconds rather than at the next tick or set-down". The landing's own lint (T52, T55, T67) stays. A test red without it.
-3. **Where each comes from.** The fix is the arbiter's (G); the landing's lint is T52's (O).
-4. **Do they describe the world here?** Yes - measured 2026-10-19 (the hour-27 bundle and the land-t85 logs): T85 was landed three times; two failures were lint (a format, a stray `f` prefix), each seen only when the backgrounded landing's log was read minutes later.
-5. **The order.** The lint as `land-tooling.sh`'s first step, in the clone; the same check in the make-only guard for each command that lands tooling; then the suite cases.
-6. **The exits.** (c).
-7. **The search smell.** None.
-8. **The budget.** 25 min.
-9. **Done, measured.** One goal: a landing of tooling whose Python files fail `ruff check --force-exclude` or `ruff format --check --force-exclude` stops before anything else runs, naming the files and the `ruff format` command - `land-tooling.sh` first, in seconds, for every caller, and the make-only guard before the command runs for `make land-tooling FILES=` and `make arbiter-fix-done LAND=`; `tests/hooks/test-land-tooling.sh` and `tests/hooks/test-make-only-hooks.sh` red without it.
-10. **Before moving a constant.** n/a - none moves.
-11. **Before fitting things into room.** n/a - nothing is fitted.
-
-### T91 Decisions
-
-**D112 - the landing's lint, first and before.** `land-tooling.sh` runs its lint (the `ruff check --force-exclude` and `ruff format --check --force-exclude` it already applies) on the `.py` files it was given, in the clone, as its first check - after the fetch (a second or so, so main's lint config is main's), before the merge and the worktree - and dies on a failure with ruff's first lines and `python3 -m ruff format <files>`; every caller (`make land-tooling`, `make arbiter-fix-done LAND=`) goes through it. The make-only guard runs the same lint on the files named by a command invoking `make land-tooling FILES=` or `make arbiter-fix-done ... LAND=` and refuses it before it runs. No `.py` file named, or ruff absent: nothing is refused.
-
+<!-- plan-archive: T91 to T91 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
 ## T31 - a footpath's 4 ft off a plot, recorded (ranking row 843, MISLABELED - a kind not yet tried)
 
 Chosen at its start (FR-020): of the open rows still open in the claims index, the first kind not yet tried in T05-T10 (four
@@ -413,6 +394,19 @@ the lane's 7 ft some settlements leave a farmhouse with no footpath to it (the s
 becomes a pointer to that page, and the comment above the constant records it. No value changes; row 841 (the street's joining leg,
 which reads this constant but is drawn as a lane) is its own task, T32 (FR-015, one goal).
 
+
+### T31 part B (2026-10-19T05:50Z)
+
+Owed by the cohort record of 05:04Z (seeds 3, 4, 903 and 904 newly failing) - that run was the trial of `FOOTPATH_FABRIC_GAP` at
+7 ft, not a landing.
+
+1. **What is refusing?** Nothing now: the trial at 7 ft failed those four seeds, so the value stayed 4 ft (D113).
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged - the four seeds are the measurement the decision rests on.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Changing: the 4 ft is recorded on 0246 as the footpath's own convention.
+6. **The one-sentence test.** "0246 records a footpath's 4 ft and the constant's claim cites it" - true; the claims check found it IN-STEP.
+7. **The next step is a measurement.** The landing cohort at 4 ft.
 ## T92 - `make claims-triaged` reads a transcript's reply and never clears on an unread one (found working T31, 2026-10-19)
 
 ### T92 Approach (checklist part A)
