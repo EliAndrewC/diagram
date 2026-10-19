@@ -326,13 +326,13 @@ def front_door(h: Mapping[str, Any], clear: float) -> Pt | None:
     return (gap_mid[0], door[1]) if abs(split[0][1] - split[1][1]) < 1e-6 else (door[0], gap_mid[1])
 
 
-DOOR_STEP_FT = 4.0
+DOOR_SHIFT_FT = 4.0
 """How far a door on a fixture is stepped along the front at a time (`door_off_fixtures`). A placement rule, not a drawing convention: no page gives the step, so it is UNRESEARCHED (feature 328 wave 90, impl-drift).
 
 Research: door step - UNRESEARCHED: 4 ft"""
 
 
-def door_off_fixtures(door: Pt, house: Pt, quads: Sequence[Poly], gap: float, step: float = DOOR_STEP_FT, tries: int = 8, arrives: Any = None) -> Pt | None:
+def door_off_fixtures(door: Pt, house: Pt, quads: Sequence[Poly], gap: float, step: float = DOOR_SHIFT_FT, tries: int = 8, arrives: Any = None) -> Pt | None:
     """`door` moved along the front - across the line from the house through it - to the nearest point `gap` clear of every
     quad in `quads` (the walls a route keeps off, the fixtures among them; feature 291 on 287: the yard persimmon stands at
     the middle of the yard's front, where the door is, and Kashikawa's door paths began inside its trunk); the door itself
@@ -342,7 +342,7 @@ def door_off_fixtures(door: Pt, house: Pt, quads: Sequence[Poly], gap: float, st
 
     Research:
         no path from inside a fixture - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the door stepped along the front
-        the door's steps - UNRESEARCHED: `DOOR_STEP_FT` (4 ft) at a time, up to `tries` (8) each way
+        the door's steps - UNRESEARCHED: `DOOR_SHIFT_FT` (4 ft) at a time, up to `tries` (8) each way
         a stepped door still arrives - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: taken only where a path's end there still reaches its farm (`arrives`)"""
     from l7r.diagram.settlement import edge_dist
 
