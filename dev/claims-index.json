@@ -30213,14 +30213,20 @@
  },
  "l7r/diagram/hamletgen/ways/touch.py::_one_network#routed orphan link off the fabric": {
   "body": "d153e33b4ca5dbd6",
-  "claim": "routed orphan link off the fabric - GUESS: routed at `WEB_FABRIC_GAP` (7 ft), the lane page's gap (`pad_mult` 2.0 sizes only its search box), a calibration",
-  "code": "e812297fda453aec",
+  "claim": "routed orphan link off the fabric - DEVIATION how-our-maps-lay-a-clustered-settlements-lanes.drawing: routed at `WEB_FABRIC_GAP` (7 ft to the middle, the page's gap; `pad_mult` 2.0 sizes only its search box)",
+  "code": "e26d75c764ef11d5",
   "core": "6e3f55ae255051b5",
   "date": "2026-10-19",
-  "note": "the 7 ft is not a guess: the lane page sets it (\"A lane's middle keeps at least 7 ft clear of a garden fence\", a convention, the 5.5 ft tread edge a DEVIATION), and pad_mult only sizes the search box; label it DEVIATION 0246.drawing, as `_route`'s own \"clear of the fabric\" claim does",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "the link is routed with its middle 7 ft off the fabric, and the page records the 5.5 ft tread edge as a DEVIATION",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
+  },
+  "research": "7843df0197c5f60e",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/touch.py::_one_network#streets never dropped": {
   "code": "2ced578f7c7fa417",
@@ -30238,6 +30244,14 @@
   ],
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/touch.py::_one_network#the network is the piece with the most lanes, the connector's piece winning only a tie, so the smaller pieces are the ones joined or dropped": {
+  "code": "6e3f55ae255051b5",
+  "core": "6e3f55ae255051b5",
+  "date": "2026-10-19",
+  "note": "the network is the piece with the most lanes, the connector's piece winning only a tie, so the smaller pieces are the ones joined or dropped",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#a foot beside its own lane's other end left": {
   "code": "258fd2eb589b07c5",
@@ -30282,6 +30296,14 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#an end already within `_TOUCH_GAP` (4 ft) of any way counts as a junction and is not extended": {
+  "code": "e79b9a70ee57bb0e",
+  "core": "e79b9a70ee57bb0e",
+  "date": "2026-10-19",
+  "note": "an end already within `_TOUCH_GAP` (4 ft) of any way counts as a junction and is not extended",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#end meets end": {
   "code": "dfe2d7991c345fac",
@@ -30347,14 +30369,22 @@
  },
  "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#routed junction link off the fabric": {
   "body": "c5d652cc160c71a2",
-  "claim": "routed junction link off the fabric - GUESS: routed at `WEB_FABRIC_GAP` (7 ft; `pad_mult` 2.0 sizes only its search box), with a retry on a 5 ft lattice for a gap within 25 ft, a calibration",
-  "code": "414334901cdee485",
+  "claim": "routed junction link off the fabric - DEVIATION how-our-maps-lay-a-clustered-settlements-lanes.drawing, village-lanes.drawing: routed at `WEB_FABRIC_GAP` (7 ft to the middle; `pad_mult` 2.0 sizes only its search box), with a retry on a 5 ft lattice for ends within 0081's 25 ft join reach",
+  "code": "5f0c9b56f79f95f0",
   "core": "e79b9a70ee57bb0e",
   "date": "2026-10-19",
-  "note": "the 7 ft comes from the lane page, not a guess; the 5 ft lattice cell is plumbing and the 25 ft is 0081's join reach (\"Ends within 25 ft of one another are joined\"); label it DEVIATION 0246.drawing (plus 0081 for the 25 ft)",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "routed at 7 ft to the middle (recorded DEVIATION); the 5 ft lattice retry runs only when d <= _LANE_JOIN_FT, 0081's 25 ft join reach",
+  "pages": {
+   "0081-village-lanes.drawing.html": "c6ac7410edabbd2d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
+  },
+  "research": "bf7b3516b9fa8041",
+  "rests": [
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#the track and the streets left whole": {
   "code": "acc527f0f0bb7f52",
@@ -30561,25 +30591,41 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#detour swing": {
-  "body": "ea5bff428bf2b15e",
-  "claim": "detour swing - UNRESEARCHED: the midpoint swung 40, 80, 140 then 220 px out from the cluster",
-  "code": "bc41ca69c3b74a3d",
-  "core": "bc80656e0de934f8",
+ "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#a grove-fallback route is taken only if it crosses no more water than the run it replaces": {
+  "code": "c0e3c862710141e3",
+  "core": "c0e3c862710141e3",
   "date": "2026-10-19",
-  "note": "the 40/80/140/220 ft swing ladder; no cited page says how far a track detours round a cluster",
+  "note": "a grove-fallback route is taken only if it crosses no more water than the run it replaces",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#a track end standing in the fabric is walked clear along its own first or last leg": {
+  "code": "c0e3c862710141e3",
+  "core": "c0e3c862710141e3",
+  "date": "2026-10-19",
+  "note": "a track end standing in the fabric is walked clear along its own first or last leg",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#detour swing": {
+  "body": "3ed00cc43aa37818",
+  "claim": "detour swing - UNRESEARCHED: the midpoint swung 40, 80, 140 then 220 px out from the cluster",
+  "code": "a98b50768f9f99d7",
+  "core": "c0e3c862710141e3",
+  "date": "2026-10-19",
+  "note": "no cited page says how far a track swings round a cluster",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#gap off a grove band": {
-  "body": "ea5bff428bf2b15e",
+  "body": "3ed00cc43aa37818",
   "claim": "gap off a grove band - groves-of-trees-around-farmhouses-yashikirin.drawing: the grove fallback's route and clip keep `CONNECTOR_BAND_GAP_FT` (0036's working room past the half-width, 12.5 ft) off the trees",
-  "code": "79aa20baeff4a235",
-  "core": "bc80656e0de934f8",
+  "code": "3006bfff534a86ee",
+  "core": "c0e3c862710141e3",
   "date": "2026-10-19",
-  "note": "the bands are grown by CONNECTOR_BAND_GAP_FT - FOOTPATH_FABRIC_GAP and routed or clipped at the footpath gap, so the line stays 12.5 ft off; this matches the lane clearance plus working room past the half-width that the page sizes the ring's opening by",
+  "note": "12.5 ft is the working room a 22 ft opening gives a footpath lane past its half-width, carried to the 6 ft track",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
@@ -30591,28 +30637,29 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#gap off the steadings": {
-  "body": "ea5bff428bf2b15e",
+  "body": "3ed00cc43aa37818",
   "claim": "gap off the steadings - how-our-maps-lay-a-clustered-settlements-lanes.drawing: `TRACK_FABRIC_GAP`, a lane's 7 ft from a garden fence, off every footprint",
-  "code": "ec9127a0e2b86bc6",
-  "core": "bc80656e0de934f8",
+  "code": "bafffe07820592d6",
+  "core": "c0e3c862710141e3",
   "date": "2026-10-19",
-  "note": "the first route and clip (`clip_to_clear(..., fabric, gap)`, `_crosses_fabric(out, fabric, gap)`) hold grove bands, which are fabric from `_homestead_polys`, at only TRACK_FABRIC_GAP 7 ft. The grove page keeps \"a footpath's clearance and some working room kept off the trees on each side\" (12.5 ft in this function's own fallback), so a track 7 ft off a band passes. Either hold the bands at CONNECTOR_BAND_GAP_FT here too, or have the claim name the bands' smaller gap",
+  "note": "the clip and the crossing test keep 7 ft (TRACK_FABRIC_GAP), the route 8 ft, both at least the page's 7 ft",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
   "research": "7843df0197c5f60e",
   "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#never across a grove": {
-  "body": "ea5bff428bf2b15e",
+  "body": "3ed00cc43aa37818",
   "claim": "never across a grove - groves-of-trees-around-farmhouses-yashikirin.drawing: routed round the bands, else only the part clear of them kept",
-  "code": "95913db85d2ae63f",
-  "core": "bc80656e0de934f8",
+  "code": "bb4d8e0ea32594c1",
+  "core": "c0e3c862710141e3",
   "date": "2026-10-19",
-  "note": "routed round the bands, else the far part clear of them kept, else nothing; no track through a farm's wood",
+  "note": "the track goes round the bands or keeps only the part clear of them; \"the way runs outside the grove\"",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
@@ -30623,13 +30670,21 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#the track kept off drawn water": {
-  "body": "ea5bff428bf2b15e",
-  "claim": "the track kept off drawn water - villages-beside-their-stream-one-bank-or-both.drawing: a way crosses water only at a crossing",
-  "code": "16c620b210e7bd34",
-  "core": "bc80656e0de934f8",
+ "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#the order of the three grove-fallback routes (bands and crop, bands alone, bands with no water), each one looser": {
+  "code": "c0e3c862710141e3",
+  "core": "c0e3c862710141e3",
   "date": "2026-10-19",
-  "note": "only the `_route` call honors the water lines. The fallback that clips the raw run to the fabric (taken whenever `_route` declines, which its own note says happens on every connector), the detour swing, and the `(roomy, [])` route, which is limited by crossing count and not by place, can all cross the brook anywhere. To decide I need to see whether the later ford pass puts a crossing where these runs cross",
+  "note": "the order of the three grove-fallback routes (bands and crop, bands alone, bands with no water), each one looser",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#the track kept off drawn water": {
+  "body": "3ed00cc43aa37818",
+  "claim": "the track kept off drawn water - villages-beside-their-stream-one-bank-or-both.drawing: a way crosses water only at a crossing",
+  "code": "f4e86edf0e768d2a",
+  "core": "c0e3c862710141e3",
+  "date": "2026-10-19",
+  "note": "only the `_route` branch walls the water. When the router declines (always for a connector, by `_route`'s own note), `clip_to_clear(... run, fabric, gap)` and the swing never test water, and the third grove route passes water=[]. Need the ford pass, to see whether it seats a square plank crossing wherever such a run crosses",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
@@ -30642,12 +30697,12 @@
   "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#the track's route walled": {
-  "body": "ea5bff428bf2b15e",
+  "body": "3ed00cc43aa37818",
   "claim": "the track's route walled - village-lanes.drawing: never across row crops or the flooded paddy, and off wet ground (the field, crop, toe band and wet ground walled)",
-  "code": "a5629225d4134b25",
-  "core": "bc80656e0de934f8",
+  "code": "cbe905dc99f21464",
+  "core": "c0e3c862710141e3",
   "date": "2026-10-19",
-  "note": "the grove fallback's routes `(roomy, lines)` and `(roomy, [])` wall only the grown bands, dropping the field envelope, crops, toe band and wet ground, and the run fallback is clipped against the fabric only. A returned track can therefore cross row crops, the paddy or wet ground, against \"A lane never crosses row crops\", \"A lane stops at the flooded paddy\" and \"A track keeps off wet ground\"; every fallback should keep crops, envelope and wet ground walled, or the claim should be narrowed to the first route",
+  "note": "only the first `_route` walls the envelope, crops, toe and marsh. The grove fallback routes `(roomy, lines)` and `(roomy, [])` wall only the bands, and even `[*roomy, *crops]` leaves out the field, toe and marsh. The accepted `around` is never tested against them, so the track can cross row crops, the paddy or wet ground, against \"A lane never crosses row crops\" and \"A track keeps off wet ground\". The same is true of the unrouted clip and the swing, which test only the fabric",
   "pages": {
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
   },
@@ -30660,19 +30715,19 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#track round the steadings": {
-  "body": "ea5bff428bf2b15e",
+  "body": "3ed00cc43aa37818",
   "claim": "track round the steadings - how-our-maps-lay-a-clustered-settlements-lanes.drawing: routed round, else clipped, else none",
-  "code": "73cd54b7e75d4eeb",
-  "core": "bc80656e0de934f8",
+  "code": "22a3ff7c19fc7f0c",
+  "core": "c0e3c862710141e3",
   "date": "2026-10-19",
-  "note": "routed, else clipped, else swung, else nothing; it never returns a run that crosses a steading",
+  "note": "routed, else clipped, else swung, else none; nothing built on a lane",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
   "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b"
   ],
   "verdict": "IN-STEP"
  },
