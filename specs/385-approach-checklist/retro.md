@@ -823,3 +823,15 @@ About 15 min. `make claims-checked` reads its reply through `claims_triage.read_
 shares: a transcript's last reply is recorded, and a reply with no text is refused before anything is written. The shared helper kept
 `claims.py` at 999 lines. The test is red without it. **The habit it changes:** none needed - a reply file need not be extracted by
 hand.
+
+## T31 - the retro row
+
+About 3 h with its checks. Row 843 (MISLABELED): `FOOTPATH_FABRIC_GAP`'s 4 ft had no page. Measured first: held to the lane's 7 ft,
+seeds 3, 4, 903 and 904 newly fail, so 0246's drawing page records the footpath's 4 ft as its own map drawing convention in a block of
+its own, and the constant's claim cites it - IN-STEP; no value changed. The claims round found row 841's leg drawn as a lane but
+routed as a footpath: filed as T95 (one goal). T31's plan text still names that task "T32" - the id it had before the review moved
+it; correcting the pointer would have owed T31 a third review (a tripwire), so T95's own heading carries the link. Lessons, each
+now a task: an edit to a heavily cited block owed 37 full checks, where a new block owed triages only; page edits after a triage
+re-owe it - finish every page edit first; `make claims-triaged` and `make claims-checked` read a transcript wrongly (T92, T94); the
+triage-touched pop-ups stayed out of their batch (T93). Row 843 marked wave 162. **The habit it changes:** a record change goes in a
+new block where the old one is heavily cited.

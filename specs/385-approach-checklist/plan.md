@@ -404,7 +404,7 @@ Owed by the cohort record of 05:04Z (seeds 3, 4, 903 and 904 newly failing) - th
 2. **A3 again.** Unchanged.
 3. **A4 again.** Unchanged - the four seeds are the measurement the decision rests on.
 4. **Moving something earlier for something later?** No.
-5. **Tuning or changing?** Changing: the 4 ft is recorded on 0246 as the footpath's own convention.
+5. **Tuning or changing?** Neither in this part B: the 4 ft recorded on 0246 is D113's change, decided and reviewed before it.
 6. **The one-sentence test.** "0246 records a footpath's 4 ft and the constant's claim cites it" - true; the claims check found it IN-STEP.
 7. **The next step is a measurement.** The landing cohort at 4 ft.
 ## T92 - `make claims-triaged` reads a transcript's reply and never clears on an unread one (found working T31, 2026-10-19)
