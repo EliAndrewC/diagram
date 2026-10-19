@@ -3114,3 +3114,24 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@32 (continue),
 
 **D155 - removed and retired.** `waterfields/banks.py` loses `_WELD_MIN_SOLIDITY` and `_WELD_MIN_APEX`, their claims and comment blocks; the jog comment cites `_TOE_MIN_APEX` (25 deg) above the gate's 15. Both rows in 328's `audit/waves.json` read "168 (retired: its code, the welder `_absorb`, was retired with the carve by feature 302; no live successor - the T34 plan review)", replacing T32's wave 164.
 
+<!-- plan-archive: archived 2026-10-19 -->
+## T148 - a check the session stops stops holding its round (found working T34, 2026-10-19)
+
+### T148 Approach (checklist part A)
+
+1. **The goal, in the world.** A record check the session stops (TaskStop) no longer freezes its page or blocks its round's next checks.
+2. **The constraints.** Feature 375 FR-003b/c: a page is frozen while its round's checks run, and a round's checks are sent together; `make check-closed AGENT=` closes "a check you stopped yourself" by hand. T104 (D121): a stopped review returns no reply, so TaskStop releases its plan holds. The GM's rule: a tool, never a reminder. A test red without it.
+3. **Where each comes from.** 375, T104 (O); the GM (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T34: two 0043 checks stopped with TaskStop and recorded by `make dispatch-dropped` stayed `running` in `checks-open.json`; the freeze refused the page edit and the round's next record-format until `make check-closed SUBJECT=q:0043 AGENT=<id>` for each; then a read of `hm_checks`' TaskStop branch, which releases plan holds only).
+5. **The order.** The TaskStop branch also closes the stopped agent's open check dispatches, as `check-closed AGENT=` does; the test.
+6. **The exits.** (c) - close at the stop, where the session's intent is known; closing on `dispatch-dropped` was weighed and refused (it names a refused dispatch, which never ran, not a stopped one).
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: after TaskStop on a running record check, its dispatch reads answered (closed "stopped by the session") and the page is no longer frozen by it; `tests/tooling/` red without it.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T148 Decisions
+
+**D156 - stopped is closed.** `hm_checks`' TaskStop branch, beside `hm_planhold.returned`, marks every dispatch whose `aid` is the stopped task and whose state is running or pending `answered`, with `closed` "stopped by the session (TaskStop)" - what `make check-closed AGENT=<id>` writes.
+

@@ -823,26 +823,29 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@37 (continue),
 
 <!-- plan-archive: T34 to T34 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
 <!-- plan-archive: T143 to T34 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
-## T148 - a check the session stops stops holding its round (found working T34, 2026-10-19)
-
-### T148 Approach (checklist part A)
-
-1. **The goal, in the world.** A record check the session stops (TaskStop) no longer freezes its page or blocks its round's next checks.
-2. **The constraints.** Feature 375 FR-003b/c: a page is frozen while its round's checks run, and a round's checks are sent together; `make check-closed AGENT=` closes "a check you stopped yourself" by hand. T104 (D121): a stopped review returns no reply, so TaskStop releases its plan holds. The GM's rule: a tool, never a reminder. A test red without it.
-3. **Where each comes from.** 375, T104 (O); the GM (G).
-4. **Do they describe the world here?** Yes - measured 2026-10-19 (T34: two 0043 checks stopped with TaskStop and recorded by `make dispatch-dropped` stayed `running` in `checks-open.json`; the freeze refused the page edit and the round's next record-format until `make check-closed SUBJECT=q:0043 AGENT=<id>` for each; then a read of `hm_checks`' TaskStop branch, which releases plan holds only).
-5. **The order.** The TaskStop branch also closes the stopped agent's open check dispatches, as `check-closed AGENT=` does; the test.
-6. **The exits.** (c) - close at the stop, where the session's intent is known; closing on `dispatch-dropped` was weighed and refused (it names a refused dispatch, which never ran, not a stopped one).
-7. **The search smell.** None.
-8. **The budget.** 20 min.
-9. **Done, measured.** One goal: after TaskStop on a running record check, its dispatch reads answered (closed "stopped by the session") and the page is no longer frozen by it; `tests/tooling/` red without it.
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
-### T148 Decisions
-
-**D156 - stopped is closed.** `hm_checks`' TaskStop branch, beside `hm_planhold.returned`, marks every dispatch whose `aid` is the stopped task and whose state is running or pending `answered`, with `closed` "stopped by the session (TaskStop)" - what `make check-closed AGENT=<id>` writes.
-
+<!-- plan-archive: T148 to T34 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).
+
+### T11 Approach (checklist part A)
+
+1. **The goal, in the world.** Every feature's tasks are worked under the approach checklist, not only 385's, and 385 closes with its report.
+2. **The constraints.** FR-001 and the task as filed: the checklist to `docs/`, its refusals (`approach_gate`, D8 and D9) extended to every feature's tasks. SC-001 and SC-002: the final report says whether each task's time fell and whether the checklist settled, or why not. The round arbiter's ruling on ask:t14-plan-round4: D30's wording brought to what the code does (rows 1-3, held by `test_a_transcript_named_call_is_its_run_s_anywhere_and_a_mixed_overlap_is_the_missing_run_s_estimate`). Amendment 11 (the GM, 2026-10-19): 385 keeps only its process tasks; the rest is feature 405.
+3. **Where each comes from.** FR-001, SC-001, SC-002 (G, amendments 1 and 2); the ruling (O); amendment 11 (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (`approach_gate.checklist` and `OPT_IN` read): the gate applies only to a plan carrying `**Approach checklist**: <path>`, and 385's is the only plan that does; the checklist stands at `specs/385-approach-checklist/checklist.md`; D30's text in `plan-done.md` lacks the three clauses the code holds.
+5. **The order.** The checklist moved to `docs/`; the gate's default; 385's opt-in line repointed; D30's three clauses; the report written; the test.
+6. **The exits.** (c) - the checklist is every plan's default, an opt-in line naming another still wins; requiring each plan to opt in was weighed and refused (a step to remember, the GM's rule).
+7. **The search smell.** None.
+8. **The budget.** 45 min.
+9. **Done, measured.** One goal: `docs/approach-checklist.md` holds the checklist and `make tick` on any feature's task asks it of a plan that names no other; D30 reads as the code runs; `make feature-report F=385 WRITE=1` written, answering SC-001 and SC-002; `tests/tooling/` red without the default.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T11 Decisions
+
+**D157 - every feature's checklist.** `specs/385-approach-checklist/checklist.md` moves (`git mv`) to `docs/approach-checklist.md`; `approach_gate.checklist` returns it for a plan with no `**Approach checklist**:` line, the line naming another path still winning; 385's line names the new path.
+
+**D158 - D30 as the code runs.** D30 in `plan-done.md` gains the ruling's three clauses: the outside-every-window clause carries its own condition (no `by`, no transcript names it), the overlap clause says the earliest-started run's attribution is still an estimate, and a call inside both a found and a missing run's window is the missing run's estimate.
+
+**D159 - the report.** `make feature-report F=385 WRITE=1` writes 385's report, which answers SC-001 (each task's time and its re-decides) and SC-002 (whether the checklist settled), or says why not.

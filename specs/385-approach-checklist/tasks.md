@@ -362,8 +362,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T143 Dead weld constants removed and their ranking rows retired: _WELD_MIN_SOLIDITY (T32, wave 164) and _WELD_MIN_APEX are read by nothing since feature 302 retired the carve and its welder - mark both rows retired in 328's audit/waves.json with that reason (the T34 plan review: a dead row is not one of FR-020's ten) [lands-open]
       research: rendering
       verify: DONE. landed in batch T34+T143: gate green (226 s), landing cohort 54/54; T34's record checks answered and claims IN-STEP (0043 records the shed's 9.5 ft and log-end band); T143's dead weld constants removed, rows retired (wave 168)
-- [ ] T148 A check stopped by TaskStop and recorded by make dispatch-dropped stays 'running' in checks-open.json, so the round freeze refuses the page and every later check of its round until make check-closed AGENT= (T34: two stopped 0043 checks held the freeze) - dispatch-dropped should close it [lands-open]
+- [x] T148 A check stopped by TaskStop and recorded by make dispatch-dropped stays 'running' in checks-open.json, so the round freeze refuses the page and every later check of its round until make check-closed AGENT= (T34: two stopped 0043 checks held the freeze) - dispatch-dropped should close it [lands-open]
       research: rendering
+      verify: DONE. landed by land-tooling 2026-10-19; TaskStop closes the stopped check's dispatches (D156); test red without it
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
