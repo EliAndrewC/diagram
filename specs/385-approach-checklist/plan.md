@@ -1,6 +1,5 @@
 # Implementation Plan: the approach checklist - the front of 384, one task at a time (feature 385)
 
-**Approach checklist**: specs/385-approach-checklist/checklist.md
 
 **Spec**: `spec.md` | **Request**: `request.md` | **Checklist**: `checklist.md` | **Audit**: `audit.md` | **Builds on**: the lane
 law (`l7r/diagram/hamletgen/ways/law.py`, `law_water.py`), its settle (`settle.py`, `last_resort.py`), 384's FR-000 and User

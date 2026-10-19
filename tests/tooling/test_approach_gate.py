@@ -48,7 +48,6 @@ CHECKLIST = """# Checklist
 """
 PLAN = """# Plan
 
-**Approach checklist**: `specs/999-x/checklist.md`
 
 ## T01 - the first
 
@@ -86,7 +85,8 @@ def feature(tmp: pathlib.Path, plan: str = PLAN, git: bool = False) -> tuple[pat
     d.mkdir(parents=True)
     if git:
         _git(root, "init", "-q")
-    (d / "checklist.md").write_text(CHECKLIST)
+    (root / "docs").mkdir()
+    (root / "docs" / "approach-checklist.md").write_text(CHECKLIST)  # every feature's checklist (feature 385 T11, D157)
     (d / "plan.md").write_text(plan)
     (d / "tasks.md").write_text(TASKS)
     (root / ".specify").mkdir()
@@ -108,10 +108,11 @@ def test_a_task_is_ticked_only_with_every_part_a_item_answered(tmp_path: pathlib
     assert "item(s) 2 unanswered" in str(ag.refusal(d, root, "T02"))
     why = str(ag.refusal(d, root, "T03"))
     assert "no `### T03 Approach` block" in why and "(1, 2, 3)" in why
-    (d / "plan.md").write_text(PLAN.replace("**Approach checklist**: `specs/999-x/checklist.md`", ""))
-    assert ag.refusal(d, root, "T03") is None, "a plan that does not opt in is not asked"
-    (d / "plan.md").write_text(PLAN.replace("999-x/checklist.md", "999-x/gone.md"))
-    assert "does not exist" in str(ag.refusal(d, root, "T01"))
+    # feature 385 T11 (D157): one checklist for every plan, with no line to name it - and only a tree without it is not asked
+    (d / "plan.md").write_text(PLAN + "\n**Approach checklist**: `specs/999-x/thin.md`\n")
+    assert "no `### T03 Approach` block" in str(ag.refusal(d, root, "T03")), "a line naming another file no longer counts"
+    (root / "docs" / "approach-checklist.md").unlink()
+    assert ag.refusal(d, root, "T03") is None, "a tree without the checklist is not asked"
 
 
 def test_make_tick_asks_the_approach_gate(tmp_path: pathlib.Path, monkeypatch, capsys) -> None:  # noqa: ANN001
@@ -147,8 +148,10 @@ def test_an_hour_or_red_gate_ruling_owes_the_active_task_part_b(tmp_path: pathli
     assert ag.ruled(root, "hour:999-x@3", now="2026-10-17T21:40:00Z") is not None
     assert ag.ruled(root, "red-gate@2", now="2026-10-17T21:41:00Z") is not None
     assert [r["task"] for r in ag.owed_entries(root)] == ["T01", "T01"], "the first open task of the active feature"
-    (d / "plan.md").write_text(PLAN.replace("**Approach checklist**", "**No checklist**"))
-    assert ag.ruled(root, "hour:999-x@4") is None, "a plan that does not opt in is not asked"
+    (d / "plan.md").write_text(PLAN.replace("T01", "T09"))  # feature 385 T11 (D157): a trigger asks every plan, no opt-in line
+    assert ag.ruled(root, "hour:999-x@4") is not None, "D9's part B reaches a plan that names no checklist"
+    (root / "docs" / "approach-checklist.md").unlink()
+    assert ag.ruled(root, "hour:999-x@5") is None, "a tree without the checklist is not asked"
 
 
 def _rec(utc: str, commit: str, verdicts: dict[int, str], households=None) -> dict:  # noqa: ANN001
@@ -269,7 +272,7 @@ def test_a_part_b_stamped_after_the_clock_is_refused() -> None:
 
 def test_part_a_holds_the_constant_and_the_arithmetic_items_and_an_approach_without_them_is_refused() -> None:
     """Feature 385 T76 (plan D95; the GM's approved change 7 of the 2026-10-18 step-back): numbered, so the gate holds them."""
-    text = (pathlib.Path(__file__).resolve().parents[2] / "specs" / "385-approach-checklist" / "checklist.md").read_text(encoding="utf-8")
+    text = (pathlib.Path(__file__).resolve().parents[2] / "docs" / "approach-checklist.md").read_text(encoding="utf-8")
     items = ag.part_items(text, "A")
     assert items == list(range(1, 12))
     assert "**Before moving a constant.**" in text and "**Before fitting things into room.**" in text

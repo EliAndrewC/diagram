@@ -7671,50 +7671,42 @@
    "verdict": "CLEAR"
   },
   "T11": {
-   "section_sha256": "a170dac43e8a8a840950c162f1296547816eb90a24074de00c9e78ef3005276a",
+   "section_sha256": "13a2666401aff4a2f3af66db986c991f5fd62c046004c4c9d03d3c4ca60218ba",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "D157a",
-     "summary": "The checklist moves (git mv) from specs/385-approach-checklist/checklist.md to docs/approach-checklist.md, and approach_gate.checklist returns it for a plan with no Approach checklist line (exit (c): a default, not a per-plan opt-in).",
+     "id": "D157",
+     "summary": "The checklist moves to docs/approach-checklist.md; approach_gate.checklist returns it for every plan; the opt-in line and OPT_IN are retired, 385's line removed - one checklist, no override.",
      "class": "within",
-     "why": "FR-001 asks for exactly this: once the feature closes the settled checklist moves to docs/ and the refusals of FR-003 and FR-004 extend to every feature's tasks. A default reaches every plan without a step to remember, so it reaches at least as far as requiring an opt-in line. One gap, not a ruling: item 2 says D8 AND D9 extend, but the mechanism names only approach_gate.checklist and item 9's done-measure checks only make tick asking for the Approach block (D8). That D9's triggers (approach-owed.json and its tick refusal) reach every feature is asserted here, not measured. The done-measure and the test should cover D9 too."
+     "why": "FR-001: once the feature closes the settled checklist moves to docs/ and the refusals of FR-003 and FR-004 extend from this feature's tasks to every feature's; D8 already says FR-001's close makes the opt-in every feature's. One checklist for every plan with no line to name another file IS that extension; round 1's NOT LEGITIMATE override (a line naming another path still winning) is gone. Item 9 extends both D8 (make tick's Approach refusal) and D9 (a trigger's part B), so FR-004's half is carried too."
     },
     {
-     "id": "D157b",
-     "summary": "An Approach checklist line naming another path still wins over the docs/ default.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "FR-001 says THE SETTLED checklist moves to docs/ and the refusals extend to every feature's tasks. Nothing in request.md or the accepted spec gives a plan the right to name a different checklist once that has happened. D8's <path> parameter existed because 385 was the only plan opted in while the feature ran, and nothing says it survives the close. The GM's 'whether it's the same one or a different one' is about the checklist asked when work resists (part B, in the same file), not about one checklist per plan. Against the purpose: the GM wanted the approach questions asked by tooling rather than left to memory or choice. A plan-authored pointer to any file is a choice, and a file with a thin part A satisfies the refusal while escaping the settled questions. Item 4's own measurement says no plan but 385 carries the line, and 385's line is repointed to the default, so after this task the override has no user at all. What it does is keep existing behavior the GM did not ask to keep. It is not impossible to drop, not implied by the GM's words, and literal application does not defeat the purpose. It should say: the gate uses docs/approach-checklist.md for every plan, and a line naming any other path is refused (or the line is removed and ignored)."
-    },
-    {
-     "id": "D157c",
-     "summary": "385's own Approach checklist line is repointed to docs/approach-checklist.md.",
+     "id": "Exits (item 6)",
+     "summary": "Requiring each plan to opt in, and letting a line name another file, both weighed and refused.",
      "class": "within",
-     "why": "This follows from the move FR-001 asks for. If D157b falls, the line becomes redundant and can be removed instead."
+     "why": "Both refusals keep the scope at FR-001's every-feature reach rather than narrowing it; neither carves a case out of the rule."
     },
     {
      "id": "D158",
-     "summary": "D30 in plan-done.md gains the arbiter's three clauses: outside-every-window carries its own condition (no by, no transcript names it), the earliest-started run's attribution on an overlap is still an estimate, and a call inside both a found and a missing run's window is the missing run's estimate.",
+     "summary": "D30 in plan-done.md gains the round arbiter's three clauses (ask:t14-plan-round4): the outside-every-window clause's own condition, the overlap attribution still an estimate, a call in both a found and a missing run's window is the missing run's estimate.",
      "class": "within",
-     "why": "The round arbiter's ruling on ask:t14-plan-round4 brings the recorded decision into line with the code that already runs and is tested. The third clause applies the GM's amendment 4 words ('otherwise use each agent's start and stop window'): a call that the found run's transcript does not name goes to the window that cannot be checked by transcript. The first two clauses only state conditions and estimate status that D30 already implies. This adds nothing the GM did not ask for."
+     "why": "A wording correction bringing D30 to the code the arbiter's ruling held, carrying the GM's amendment 4 words ('if the hook input carries that; otherwise use each agent's start and stop window') rather than narrowing them: each clause is a window-based estimate where neither transcript nor hook says. Round 1's FR-015 finding (a second goal found in the task) is answered by the block's citation of the arbiter's ruling filing it into T11, which per feature 379 stands where the GM was asked; it is part of the task as filed, not a goal the session found and bundled. Item 4 states the D30 gap as measured 2026-10-19."
     },
     {
      "id": "D159",
-     "summary": "make feature-report F=385 WRITE=1 writes 385's report, answering SC-001 (each task's time and re-decides) and SC-002 (whether the checklist settled), or saying why not.",
+     "summary": "make feature-report F=385 WRITE=1 writes 385's report answering SC-001 and SC-002, or why not.",
      "class": "within",
-     "why": "This mirrors SC-001 and SC-002, including their own 'or the report says why not' escape. It is not a new carve-out."
+     "why": "SC-001 and SC-002 verbatim, including their 'or the report says why not' clauses; nothing dropped."
     },
     {
-     "id": "item9-one-goal",
-     "summary": "Item 9 declares 'One goal' while T11 also carries D158 (D30's wording, from a T14 plan-round ruling), a goal unrelated to moving the checklist and closing the feature.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "FR-015 (the GM's amendment 4: 'a task's \"done\" names one goal, and a second goal becomes its own task') is the requirement the block should have named and did not. T11 as filed is the close: the checklist to docs/, the refusals extended, the final report. D158 comes from a ruling on T14's plan, and the block does not say the arbiter placed it in T11. Calling it one goal is an unstated exception to FR-015. Splitting it is not impossible (make task-add exists), the GM's words do not imply it, and it does not defeat any purpose. It should say: D158 becomes its own task, or the block cites where the ruling places the D30 fix in T11. Otherwise item 9 names only the close's goal."
+     "id": "Done test",
+     "summary": "tests/tooling/ red without the default.",
+     "class": "within",
+     "why": "A test whose only effect is to enforce FR-001's extension (SC-004's red-without-it); enforcement of the request, not scope."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   }
  }
 }

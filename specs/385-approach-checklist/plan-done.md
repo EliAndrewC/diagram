@@ -948,9 +948,10 @@ transcript of its session - `<projects dir>/<sid>/subagents/agent-<aid>.jsonl`, 
 log whose transcripts are gone still says it. WHERE NEITHER SAYS, decided per subagent RUN (spec-fidelity, T14 round 2): a
 call with no `by`, inside the start-to-stop window (`SubagentStart` to `SubagentStop`) of a run whose own transcript
 (`agent-<aid>.jsonl`) is not found, is that run's, counted as an ESTIMATE - never the session's own `Agent` call, which launches it; where the windows of several such runs overlap,
-the earliest-started's (the GM's "otherwise use each agent's start and stop window";
+the earliest-started's, still an estimate (the GM's "otherwise use each agent's start and stop window";
 spec-fidelity, T14 round 1). A call no transcript names, inside the window of a run whose transcript was found, is
-the session's; a call outside every window is the session's. `split_time` counts only the session's events; the subagents' calls are counted apart, and the line under "Where the
+the session's - unless it is inside a missing run's window too, when it is the missing run's estimate; a call with no `by` that
+no transcript names, outside every window, is the session's (the round arbiter's ruling on ask:t14-plan-round4, T11, D158). `split_time` counts only the session's events; the subagents' calls are counted apart, and the line under "Where the
 time went" says how many were attributed by transcript, by the hook and by window.
 
 **D31 - the session's time split three ways.** "Where the time went" gains a line naming how many tool calls were subagents'
