@@ -1,14 +1,15 @@
 {
- "captured": "2026-10-19T16:10:25+00:00",
+ "captured": "2026-10-19T16:37:14+00:00",
  "final_url": "https://www.rieb.kobe-u.ac.jp/project/kinsei-db/data/data_180301.xlsx",
  "first": "d2/d2aae944e8db/20261019T161020Z",
  "gm_copies": [],
  "keys": [
-  "rieb-kinsei-db"
+  "rieb-kinsei-db",
+  "rieb-kinsei-db-data"
  ],
  "notes": [],
  "outcome": "archived",
- "path": "d2/d2aae944e8db/20261019T161020Z",
+ "path": "d2/d2aae944e8db/20261019T163709Z",
  "reason": "",
  "revision": "",
  "sha256": "592ee2b311aaff794f786555ae9ae0077cad79b1515304257a790b449be6e6df",

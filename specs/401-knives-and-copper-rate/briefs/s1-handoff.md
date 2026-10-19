@@ -74,3 +74,4 @@ bassino-ma-2005, saito-1993-bakumatsu-wages, kawakami-1992-shrine-headman.
 - The hand fixes of the source-reader round are owed session 2's checks (`make record-owed`); the Ming bullet of 0276 gained Beijing and the gap after the round.
 - Inui Hiromi's papers on the Sakai tobacco-knife guild and the Takefu sickle smiths; 新保 1978's rate tables (Osaka
   before 1787); 校註両替年代記 (Edo rates) - not reached.
+- Continuation (C1): registry key rieb-kinsei-db-data added for the RIEB Excel file (data_180301.xlsx), and 0277's 1843-order note re-pointed to it (note id rieb-kinsei-db-3 renamed rieb-kinsei-db-data); source-reader 3 READ, its two write-up points fixed by hand; the new write-ups and the renamed note's other checks (quote-check, translation-check, source-applicability) fall to session 2 with the rest of make record-owed.
