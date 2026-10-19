@@ -3,55 +3,55 @@
  "blocks": {
   "preamble": {
    "sha256": "f9e08dbb96cfea8a458f822038cf4e88c0fbe6d1f906080d3b89fdac8c0985e6",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## Summary": {
    "sha256": "c26d036411582d5c7b21b379a253345901bddc52aae6424cdecd2a8282f44d6c",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## Technical Context": {
    "sha256": "e74421f7dda657a7ad1dee8c1b1f34b78d722cf66cb66a7f81b99a1a22d41aa4",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## Performance bookends": {
    "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## Constitution Check": {
    "sha256": "99fbdeccbfbd66edf40fe2ec6f1c5aadb8e5ec75d91b966d48c7b6412a810289",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## D1 - the four questions (FR-001, FR-002)": {
-   "sha256": "092e7c9aab5d354de8566ee86b534f05320be1dbf11a97fdaafa61b49a04e37c",
-   "verdict": "BLOCKED",
+   "sha256": "ed8004279442ece1d0d4998bc14c5b4ab334c3be943222a8022703e0d65f251b",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## D2 - the implementation check (FR-003)": {
    "sha256": "343179d36bb80d0f308d0f838d599754b275ba6a4073a64ee28603f3f9efb380",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## D3 - the answer (FR-004)": {
-   "sha256": "1c16acdabac05410f8995e9adb9939f4225f5103a329ad8650ffd27e0f844703",
-   "verdict": "BLOCKED",
+   "sha256": "a18a2ba5c1f01988a6a625b2a352a437437e95df53c17a4f74f1b013e2b6b637",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## T - the order": {
    "sha256": "a546546a20ff0dc1c925669cab981969374479f6904353bc5da8504b5579f722",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   }
@@ -163,6 +163,113 @@
      "summary": "Page sessions, implementation check, the answer, then report and land by the direct route.",
      "class": "within",
      "why": "Matches the request's 'I'll post the checked answer here' and FR-003/FR-004."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-19",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the four questions (FR-001, FR-002)",
+    "## D2 - the implementation check (FR-003)",
+    "## D3 - the answer (FR-004)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary-sessions",
+     "summary": "One write page session holding all four questions, one check-and-apply session, then the answer on #5; no code, map or canon change.",
+     "class": "within",
+     "why": "The diagram comment commits to 'four money questions in one write session'; FR-005 bars code/map/canon change."
+    },
+    {
+     "id": "TC-passes-are-leads",
+     "summary": "Search passes are leads; each passage read on its page before citing; image-only pages rendered and sent to source-reader with IMAGES=.",
+     "class": "within",
+     "why": "Process for producing checked figures (FR-002); narrows nothing the request asks."
+    },
+    {
+     "id": "TC-point-at-existing",
+     "summary": "Where 0250, 0255, 0256, 0261, 0262, 0263 already give a figure, the question points at it and states its limit rather than repeating it.",
+     "class": "within",
+     "why": "FR-001 verbatim; the diagram comment names these entries as what the wage question gathers."
+    },
+    {
+     "id": "TC-wages-beside",
+     "summary": "Each price beside the craftsman's and unskilled laborer's same place/period day wage; where none, SILENT plus nearest with class, place, unit and gap; craftsman's wage never shown as unskilled.",
+     "class": "within",
+     "why": "Implements the issue's 'each price beside the same place and period's unskilled day wage'; reporting silence with the nearest wage keeps rather than drops the comparison."
+    },
+    {
+     "id": "TC-no-coin-conversion",
+     "summary": "No price converted between coins unless its source converts it; project arithmetic labeled as such (D1).",
+     "class": "within",
+     "why": "Keeps figures as attested so the per-figure verdict the request asks for is checkable; prices per piece/sho/kg/tan and the ratio are still given, with computed figures labeled."
+    },
+    {
+     "id": "CC-research-physical",
+     "summary": "Each question task is research: physical with five boxes; record checks green.",
+     "class": "within",
+     "why": "Project process for FR-002; no narrowing of the request."
+    },
+    {
+     "id": "D1-shape",
+     "summary": "Four new questions, subject=money, no drawing page, level counts-and-measurements, setting tags countryside/city.",
+     "class": "within",
+     "why": "FR-001; the request is four price questions with figures, which counts-and-measurements carries."
+    },
+    {
+     "id": "D1-fruit",
+     "summary": "Kanto persimmon; Edo and castle-town prices for persimmons, pears and native apples, or each one's silence named; Qing court prices, Shengjing valuations, Ming stolen-goods valuation as comparison.",
+     "class": "within",
+     "why": "Covers the request's three fruits in Edo and castle towns, Japan first, China as comparison. Round 1's note is answered: the Edo prices are now sought and named or their silence stated, not presumed silent."
+    },
+    {
+     "id": "D1-salt",
+     "summary": "Edo retail or its silence named; Kashimo 1763-74 beside its laborer; Otsukawa 1842; the hearsay inland ladder; Qing field, official and retail prices and the stated markups.",
+     "class": "within",
+     "why": "Covers Edo retail, inland, and the Qing monopoly with its markup, as asked. Round 1's note answered: Edo retail is now named explicitly."
+    },
+    {
+     "id": "D1-hemp-amulets",
+     "summary": "Etchu hemp lot; Beijing 1736 and 1615 hemp and ramie beside cotton (0261 for Japanese cotton by the tan); Ise oshi 1813 takings; the silences.",
+     "class": "within",
+     "why": "Covers hemp against cotton and what shrines charged or expected for amulets; where no customary donation figure is found, the silence is reported rather than the question dropped."
+    },
+    {
+     "id": "D1-wages",
+     "summary": "Osaka building trades; the Edo silence and one-sided figures gathered; Saito's village pair; Zhili 1769 and the 1813 norm; tailors, smiths, fletchers.",
+     "class": "within",
+     "why": "Gives the skilled/unskilled ratio with figures across the named crafts, Japan first and China as comparison, and states the Edo pairing gap rather than hiding it; matches the diagram comment's plan for the question."
+    },
+    {
+     "id": "D1-acceptance",
+     "summary": "Every attested figure, every silence, each figure beside its wages; computed figures labeled as project arithmetic.",
+     "class": "within",
+     "why": "Serves the request's 'verdict per figure, and what is still open'."
+    },
+    {
+     "id": "D2",
+     "summary": "implementation-check.md: one 'no code implements it - consumed by gm-assistant's money skill' line per question, with the search.",
+     "class": "within",
+     "why": "FR-003 verbatim."
+    },
+    {
+     "id": "D3",
+     "summary": "Comment on #5 gives each question's fragment FILE, the checked verdict for every figure (with the page that covers it, where another question gives it), and what is still open.",
+     "class": "within",
+     "why": "Matches 'Per question: the fragment FILE, the verdict per figure, and what is still open' exactly. Round 1's block is cured: the verdict for every figure is now always given, and the page pointer is an addition beside it, not a substitute for it."
+    },
+    {
+     "id": "T-order",
+     "summary": "Page sessions, implementation check, answer, then report and land by the direct route.",
+     "class": "within",
+     "why": "Sequencing only; matches the comment's 'I'll post the checked answer here' after the checks."
     }
    ]
   }
