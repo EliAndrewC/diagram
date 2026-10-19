@@ -264,13 +264,13 @@ Owed by the hour-25 step-back (hour:385-approach-checklist@25, `continue`).
 6. **The exits.** (c).
 7. **The search smell.** None.
 8. **The budget.** 40 min.
-9. **Done, measured.** One goal: a tick whose NOTE says "landed" is refused while the task's last land-tooling run failed, or one of its FILES differs from origin/main, naming the file or the log; `tests/tooling/test_tick_task.py` red without it.
+9. **Done, measured.** One goal: a tick whose NOTE says "landed", in any case ("Landed" too), is refused while the task's last land-tooling run failed, or one of its FILES differs from origin/main, naming the file or the log; `tests/tooling/test_tick_task.py` red without it.
 10. **Before moving a constant.** n/a - none moves.
 11. **Before fitting things into room.** n/a - nothing is fitted.
 
 ### T79 Decisions
 
-**D98 - the landing's record read at the tick.** `land-tooling.sh` appends `{task, files, outcome, utc}` to `<git dir>/land-tooling.jsonl` at each run's end (the task is the clone's active one, from `task-starts.jsonl`; `outcome` is "landed" or the step that failed). `tick-task.py`, when the NOTE matches `\blanded\b`, takes the task's last such row: a failed outcome refuses, naming the log; a landed one refuses where `git diff --quiet origin/main -- <file>` fails for a file in it (after a fetch), naming the file. A task with no row is not refused (it did not land through the tool, or lands with its feature).
+**D98 - the landing's record read at the tick.** `land-tooling.sh` appends `{task, files, outcome, utc}` to `<git dir>/land-tooling.jsonl` from an exit trap, so a run that dies early still leaves its row (outcome: the step it stopped at) (the task is the clone's active one, from `task-starts.jsonl`; `outcome` is "landed" or the step that failed). `tick-task.py`, when the NOTE matches `\blanded\b` in any case (`re.I` - the plan review: "Landed via make land-tooling" is the same claim), takes the task's last such row: a failed outcome refuses, naming the log; a landed one refuses where `git diff --quiet origin/main -- <file>` fails for a file in it (after a fetch), naming the file. A task with no row is not refused (it did not land through the tool, or lands with its feature).
 
 ## T80 - a quiet part B leaves its task's section reviewed (found by T78's part B, 2026-10-19)
 
