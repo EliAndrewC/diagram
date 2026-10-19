@@ -71,7 +71,7 @@ This report took 0.7 s to build; its own runs are the `make feature-report` rows
   skipped now.
 - **"Few-word" is read as describing the case, not as a limit.** The operative test is "outside the quotation and its claim":
   quote-check judges only the link, the quoted passages and the claim sentences, so a fix of any length outside them gives
-  it nothing new to judge. Say if you want a word bound instead.
+  it nothing new to judge. **Settled by the GM, 2026-10-19:** *"I don't think we should have an explicit word limit."*
 - **A hand fix is declared.** source-reader words no EDIT blocks, so the Okayasu fix was made by hand. Such a fix is declared
   with `make record-checked CHECK=quote-check Q=<NNNN> NOTES=<k> FIXED_BY="<check>: <its finding>"`; the tool verifies the
   quotation and claim unchanged and refuses, naming the note, when either moved. Another check's EDIT blocks settle the same
