@@ -219,6 +219,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       verify: DONE. part A items 10 and 11 in checklist.md, the gate holds them; test green here; lands with the spec directory at T11 (land-tooling carries no specs/)
 - [ ] T77 make where-time, with the time between turns counted as such (proposal 8, plan D96) [lands-open]
       research: rendering
+- [ ] T78 The house style corrects what the tools write from an agent's reply (plan D97) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

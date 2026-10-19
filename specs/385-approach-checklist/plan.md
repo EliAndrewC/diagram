@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -256,6 +256,26 @@ Owed by the hour-20 step-back (hour:385-approach-checklist@20, `continue`), whic
 ### T77 Decisions
 
 **D96 - between turns is its own column.** `where_time.py` books each gap of a session to the task active at its start, by `split_time`'s category, except that from a `Stop` to the session's next `UserPromptSubmit` every gap is "between turns" - waiting on background work or idle, which the column does not try to tell apart (the agents table and the background-run column say what ran). The step-back checklist (step-back-2026-10-18.md, item 1) names the target.
+
+## T78 - the house style corrects what the tools write from an agent's reply (the GM-approved fix of 2026-10-18)
+
+### T78 Approach (checklist part A)
+
+1. **The goal, in the world.** An agent's British spelling never reaches a tracked file through a tool, so it never turns a gate red.
+2. **The constraints.** CLAUDE.md, house style: American spellings everywhere, corrected rather than refused, a quotation of another's text kept (`<blockquote>`, `<q>`, 「」, “”), the GM's own writing never corrected. The GM, 2026-10-18 (amendment 8): "I do like all of your other proposals", among them the session's reply that day: "notes the tools write into records should get the same house-style correction as edits do. I'll add that". The hook's word table (`hm_house.PAIRS`) is the one table. A test red without it.
+3. **Where each comes from.** CLAUDE.md (G); the table is 236's (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19: T10's gate preflight was red on `dev/claims-index.json:51334: 'grey'`, a note `claims.py record` copied from an impl-drift reply; two writers copy agents' words into tracked files without the hook seeing them - `claims.py record` (the index notes) and `apply_edits.py` (the record and pop-up text of EDIT blocks).
+5. **The order.** A module-level `americanize` in `hm_house.py`, its call in the two writers, then the tests.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: `claims.py record` writes `gray` where the reply's note said `grey`, and `apply_edits.py` writes an EDIT's new text with the table's corrections, a quotation held out as the hook holds it; `tests/tooling/test_claims_index.py` and `tests/tooling/test_apply_edits.py` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T78 Decisions
+
+**D97 - one corrector, three callers.** The hook's nested plain-text correction (`PAIRS` outside the held spans) becomes `hm_house.americanize(text) -> str`, which the hook calls as before; `claims.py record` passes each reply through it before its notes are parsed, and `apply_edits.py` passes each EDIT's new text through it before writing (the old text is matched as written). An EDIT on a file the GM wrote (`specs/*/request.md`) is not corrected, as the hook does not correct one.
 
 ## T11 - the close
 

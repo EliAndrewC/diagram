@@ -835,6 +835,42 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
+  },
+  "## T75 - a part B that names no new decision owes no review (the GM-approved proposal 3, 2026-10-18)": {
+   "sha256": "a59715b9dd5e9208d84fb4feed8a4b62570726c4ce1dff7740c5c2d59bc575ed",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T75 Approach (checklist part A)": {
+   "sha256": "42b08ccf9e25a27733a039530b5198d7cff92035cc0fffd70afb91a2ec136a49",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T75 Decisions": {
+   "sha256": "2af79c7e56d345fd06f4ce6fc21de50377a3004838943154bf05b4265f224dee",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T77 - make where-time, the step-back's tables, with the time between turns counted as such (the GM-approved proposal 8, 2026-10-18)": {
+   "sha256": "dac4ac4f49ff43a00d5ecd333e2f54011b954fd6d8cadfcf10423cf8f293f350",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T77 Approach (checklist part A)": {
+   "sha256": "eca806fd8fb01aa3e3918b24296958df01288b71b18ca4991a1ab006437a36e7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T77 Decisions": {
+   "sha256": "015282db9fee9f03ed4094de313540b346ffbfd898e133e0439d2f035da38f16",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
   }
  },
  "reviewed": "2026-10-17",
@@ -4683,6 +4719,44 @@
      "summary": "The step-back continues; its tooling fix, the Lands open line, is filed as T74.",
      "class": "within",
      "why": "This records a later task and decides nothing in these blocks' scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## T75 - a part B that names no new decision owes no review (the GM-approved proposal 3, 2026-10-18)",
+    "## T77 - make where-time, the step-back's tables, with the time between turns counted as such (the GM-approved proposal 8, 2026-10-18)",
+    "### T75 Approach (checklist part A)",
+    "### T75 Decisions",
+    "### T77 Approach (checklist part A)",
+    "### T77 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D94",
+     "summary": "plan_gate.block_status skips a part B block only when its own answers show it decides nothing (item 4 'No', item 5 'Neither', every D-id it names defined elsewhere); one that changes a rule, tunes a number, moves an earlier placement or names a new decision is owed a review as now; make tick keeps checking its items",
+     "class": "within",
+     "why": "Implements step-back change 3, which the GM approved in amendment 8 ('I do like all of your other proposals'): 'A part B is checked mechanically; only one that adds a new decision gets a spec-fidelity review'. The exemption it adds to 375 FR-043 is the GM's own approved change, not the plan's. Treating a rule change, a tuned number or a moved placement as a decision even without a D-id is a faithful reading of 'adds a new decision' and keeps the review where deciding happens, so it does not narrow the request."
+    },
+    {
+     "id": "T75-order",
+     "summary": "the rule lives in plan_gate.block_status with a test in tests/tooling/test_plan_gate.py, red without it",
+     "class": "within",
+     "why": "Change 3 is labeled tooling ('checked mechanically'); a test that fails only when the exemption is missing or too wide enforces the request."
+    },
+    {
+     "id": "D96",
+     "summary": "where_time.py books each gap to the task active at its start under split_time's categories, except that every gap from a Stop to the session's next UserPromptSubmit is 'between turns', with no attempt to tell background waiting from idle",
+     "class": "within",
+     "why": "Implements step-back change 8 ('make where-time produces the tables above'), approved in amendment 8. The between-turns rule is the session's own (labeled O) and fixes a measured defect: the overnight stall was booked as thinking. FR-014 already groups waiting on a subagent, a background run or the GM as one category, 'the session waiting', and the agents table and background-run column still report what ran. So the merged column drops nothing that was asked for. Ruled as an implementation rule of ours that serves the approved target's purpose (the idle column right), not as a carve-out."
+    },
+    {
+     "id": "T77-scope",
+     "summary": "make where-time F= [SINCE=] prints the per-task table and the agents table; the categories stay feature_report.split_time's; scratch script promoted to scripts/measure/where_time.py with tests/tooling/test_where_time.py",
+     "class": "within",
+     "why": "Change 8 asks for the step-back's tables as one command. FR-005 and FR-014 are cited as the shape the tables follow. Reusing the existing categories adds no new taxonomy. The step-back report's tables are not in the bundle, so the claim that these two tables are 'the tables above' was not checked against them."
     }
    ]
   }
