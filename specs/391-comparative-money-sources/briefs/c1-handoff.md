@@ -10,8 +10,8 @@ the 1825 first edition; the Gutenberg text carries none of its page numbers. Whe
 text) gives a page, it is named below as "index p. N"; every other figure is "no page in the Gutenberg text". A second
 key, `enwiki-guinea-coin`, gives the guinea as 21 shillings. Glossary: guinea, livery, board wages, perquisite.
 
-source-reader (2026-10-18): 64 READ, 0 CONTRADICTED, 0 NOT-FOUND; its 3 body overreaches and 5 minor notes are applied.
-Owed to session 2: quote-check, record-format, intro-check (3 questions), source-applicability (2 write-ups).
+source-reader (2026-10-18): adams-1825-complete-servant 64 READ, its 3 body overreaches and 5 minor notes applied; enwiki-guinea-coin 1 READ (re-read after adding its 1816-dated passage). The step-back hour:391@3 was ruled `continue` by round-arbiter.
+Owed to session 2: quote-check, record-format, intro-check (3 questions), source-applicability (2 write-ups: adams-1825-complete-servant and enwiki-guinea-coin). Not mine, left as found: `make archive-inbox` lists ruiju-kinsei-fuzokushi-ge-ndl991467.pdf WAITING.
 
 ## 0252 - servants' wages (all ATTESTED unless marked)
 
