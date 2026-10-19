@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -210,41 +210,106 @@ Owed by the hour-20 step-back (hour:385-approach-checklist@20, `continue`), whic
 <!-- plan-archive: T63 to T63 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 <!-- plan-archive: T64 to T64 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 <!-- plan-archive: T65 to T59 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
-## T66 - a requirement cited from another feature is bundled from that feature (found by T65's plan review, 2026-10-18)
+<!-- plan-archive: T66 to T65 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
+<!-- plan-archive: T67 to T65 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
+<!-- plan-archive: T68 to T66 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
+<!-- plan-archive: T69 to T10 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
+<!-- plan-archive: T70 to T70 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
+<!-- plan-archive: T72 to T70 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
+<!-- plan-archive: T75 to T75 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
+<!-- plan-archive: T77 to T77 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
+## T78 - the house style corrects what the tools write from an agent's reply (the GM-approved fix of 2026-10-18)
 
-### T66 Approach (checklist part A)
+### T78 Approach (checklist part A)
 
-1. **The goal, in the world.** A plan review reads the requirement a block cites, not a same-numbered requirement of another feature.
-2. **The constraints.** Feature 375 amendment 11 (FR-046): `spec-cited.md` holds every requirement the blocks name, in full. Tooling only; a test red without it.
-3. **Where each comes from.** Feature 375 (O); the defect is T65's plan review's finding (amendment 6, the GM's "obvious ... tooling ... improvements").
-4. **Do they describe the world here?** Yes - measured 2026-10-18: T65's blocks cite "Feature 375 FR-044" and "FR-005(b)"; the bundle's `spec-cited.md` carried 385's own FR-005 (the per-task time split), a different requirement, and nothing of 375's - `plan_bundle.build` reads the ids against the reviewed feature's `spec.md` alone. 385's plan names another feature's requirement in this form ("feature 375 FR-0..", "375 FR-0..", "feature 375, FR-0..") in 22 places (a grep of plan.md for the form, 385 itself left out).
-5. **The order.** The qualified reading in `build`, then its test.
+1. **The goal, in the world.** An agent's British spelling never reaches a tracked file through a tool, so it never turns a gate red.
+2. **The constraints.** CLAUDE.md, house style: American spellings everywhere, corrected rather than refused, a quotation of another's text kept (`<blockquote>`, `<q>`, 「」, “”), the GM's own writing never corrected. Amendment 6: "implement any obvious performance / tooling / process improvements along the way" - this applies the GM's own house-style rule on a route the hook does not see. The hook's word table (`hm_house.PAIRS`) is the one table. A test red without it.
+3. **Where each comes from.** CLAUDE.md (G); the table is 236's (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19: T10's gate preflight was red on `dev/claims-index.json:51334: 'grey'`, a note `claims.py record` copied from an impl-drift reply; two writers copy agents' words into tracked files without the hook seeing them - `claims.py record` (the index notes) and `apply_edits.py` (the record and pop-up text of EDIT blocks).
+5. **The order.** A module-level `americanize` in `hm_house.py`, its call in the two writers, then the tests.
 6. **The exits.** (c).
 7. **The search smell.** None.
-8. **The budget.** 25 min.
-9. **Done, measured.** One goal: a block citing `375 FR-044` (or `feature 375 FR-044`, `feature 375's FR-044`, `feature 375, FR-044`) gets 375's FR-044 paragraph in `spec-cited.md`, headed with its feature, and the reviewed feature's same-numbered requirement only when the block also cites it unqualified; `tests/tooling/test_plan_blocks.py` red without it.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: `claims.py record` writes `gray` where the reply's note said `grey`, and `apply_edits.py` writes an EDIT's new text with the table's corrections, a quotation held out as the hook holds it; `tests/tooling/test_claims_index.py` and `tests/tooling/test_apply_edits.py` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
 
-### T66 Decisions
+### T78 part B (2026-10-19T01:27Z)
 
-**D85 - a qualified citation read from its own feature.** `plan_bundle.build` reads `(?:feature )?NNN(?:'s|,)? (FR|SC)-NNN` as a citation of feature NNN's requirement, resolved from that feature's `specs/NNN-*/spec.md` (the one directory; none or several, it is left out as an unknown id is now) and written to `spec-cited.md` under a `<!-- feature NNN -->` line; an unqualified id is the reviewed feature's, as before - so a block that cites another feature's requirement writes the feature beside every id it means (the reviewer reads what the block names, no guess at which feature a bare id meant). `spec-index.md` is unchanged.
+Owed by the hour-25 step-back (hour:385-approach-checklist@25, `continue`).
 
-## T67 - land-tooling lints before it tests (found landing T65, 2026-10-18)
+1. **What is refusing?** Nothing: T78 is built and landed, both tests green.
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither - the change is landed.
+6. **The one-sentence test.** "A tool writes an agent's words in the house style" - true by its two tests.
+7. **The next step is a measurement.** None owed for T78.
+8. **Routes measured before asking?** n/a - no ask.
+9. **After a ruling.** `continue`; its tooling fix (a tick claiming "landed") is its own task.
 
-### T67 Approach (checklist part A)
+### T78 Decisions
 
-1. **The goal, in the world.** A landing that will fail on lint fails in seconds, not after the tests.
-2. **The constraints.** Feature 385 T52: land-tooling lints the Python it lands; the guard suites and tooling tests still run in parallel; every check's failure is still reported. Tooling only; a test red without it.
-3. **Where each comes from.** T52 (O); the defect is measured landing T65 (amendment 6, the GM's "obvious ... tooling ... improvements").
-4. **Do they describe the world here?** Yes - measured 2026-10-18 (`.git/land-tooling.log`): T65's landing ran the tooling tests 60.24 s and the checks step 122.20 s, then failed on `ruff format --check` (one test file would be reformatted), a check that took 0.05 s; the three checks run in parallel and the step waits for all of them.
-5. **The order.** Lint alone first in `land-tooling.sh`, then its test.
+**D97 - one corrector, three callers.** The hook's nested plain-text correction (`PAIRS` outside the held spans) becomes `hm_house.americanize(text) -> str`, which the hook calls as before; `claims.py record` passes each note it parsed from a reply through it (never the whole reply: a claim key or path carrying a British spelling must still match - the plan review's point, 2026-10-19), and `apply_edits.py` passes each EDIT's new text through it before writing (the old text is matched as written). An EDIT on a file the GM wrote (`specs/*/request.md`) is not corrected, as the hook does not correct one.
+
+## T79 - a tick saying "landed" is refused while the landing is not on main (the round arbiter's fix on hour:385-approach-checklist@25)
+
+### T79 Approach (checklist part A)
+
+1. **The goal, in the world.** A task's tick never claims a landing that did not happen.
+2. **The constraints.** The arbiter's fix: "`make tick` refuses a task whose NOTE says 'landed' while any file in that task's last `make land-tooling` FILES still differs from origin/main, or while that landing's log ends in a failure, naming the file and the log"; a note that does not say "landed" is not checked. A test red without it.
+3. **Where each comes from.** The fix is the arbiter's (G); `make tick` is 188's (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the hour-25 bundle): at 00:49 `make tick F=385 T=T72` ticked with the note "landed" while T72's latest `make land-tooling` had failed - a whole-string replace in its test missed a dict the formatter had split across lines.
+5. **The order.** `land-tooling.sh` records each run's FILES and outcome; `tick-task.py` reads the last record for the task; then the tests.
 6. **The exits.** (c).
 7. **The search smell.** None.
-8. **The budget.** 20 min.
-9. **Done, measured.** One goal: a landing whose lint fails stops before the guard suites and the tooling tests start, with the lint message and the `ruff format` command; `tests/hooks/test-land-tooling.sh` (the script's suite) red without it.
+8. **The budget.** 40 min.
+9. **Done, measured.** One goal: a tick whose NOTE says "landed", in any case ("Landed" too), is refused while the task's last land-tooling run failed, or one of its FILES differs from origin/main, naming the file or the log; `tests/tooling/test_tick_task.py` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
 
-### T67 Decisions
+### T79 Decisions
 
-**D86 - lint first, alone.** `land-tooling.sh` runs the `lint` check before the other two; a lint failure dies at once with its output and the `ruff format <files>` line it prints now, the guard suites and tooling tests not started; a passing lint goes on to the two in parallel as now.
+**D98 - the landing's record read at the tick.** `land-tooling.sh` appends `{task, files, outcome, utc}` to `<git dir>/land-tooling.jsonl` from an exit trap, so a run that dies early still leaves its row (outcome: the step it stopped at) (the task is the clone's active one, from `task-starts.jsonl`; `outcome` is "landed" or the step that failed). `tick-task.py`, when the NOTE matches `\blanded\b` in any case (`re.I` - the plan review: "Landed via make land-tooling" is the same claim), takes the task's last such row: a failed outcome refuses, naming the log; a landed one refuses where `git diff --quiet origin/main -- <file>` fails for a file in it (after a fetch), naming the file. A task with no row is not refused (it did not land through the tool, or lands with its feature).
+
+<!-- plan-archive: T80 to T78 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
+<!-- plan-archive: T81 to T81 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
+<!-- plan-archive: T82 to T79 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
+## T83 - a dictionary's claims keyed per entry (the GM 2026-10-18, step 5 of the approved order)
+
+### T83 Approach (checklist part A)
+
+1. **The goal, in the world.** One entry added to a claimed dictionary re-opens only the claims that entry bears on.
+2. **The constraints.** The GM, 2026-10-18 (amendment 8): "instead of filing me per entry key ring feature, you should just work it. As a task on this existing feature", and earlier "I do want it, though, if it is helpful". Feature 375 FR-002's rule for a procedure section, applied to a dictionary: a claim's fingerprint is its own line; the body changing owes a TRIAGE of the changed blocks (`claims-triage`), which sends on to `impl-drift` only the claims a changed block touches; a one-time backfill re-keys the rows current under the old fingerprint, owing nothing. A claim's line changing still owes it in full. A test red without it.
+3. **Where each comes from.** The GM (G); the section rule is 375 FR-002 (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (an AST pass over every claims-index unit): 57 module-level dict constants carry 132 claims over 404 entries; `_OVERLAP_EXEMPT` alone carries 17 claims over 41 entries, and one entry added there at T08 owed all of them (step-back-2026-10-18.md: a 64-claim round, 372 s and 1.29M input tokens). A claim is labeled by topic, not by key ("annexes abut their house"), so no key-to-claim map can be read off the code; the triage is what reads the changed entry against each claim.
+5. **The order.** The engine's claims reader (`l7r/diagram/tools/claims.py`): a claimed dict's entries become its blocks and its claims' code their own line; `scripts/record/claims.py`: owed and the backfill take any unit with blocks, not only sections; the backfill run once; then the tests.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 90 min.
+9. **Done, measured.** One goal: an entry added to a claimed dict owes its claims a triage (`section triage`), not `code changed`; a claim line edited owes that claim in full; after the backfill `make claims-owed` owes no dict claim it did not owe before; `tests/tools/test_claims.py` and `tests/tooling/test_claims_index.py` red without it.
+10. **Before moving a constant.** n/a - no constant's value moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T83 part B (2026-10-19T02:35Z)
+
+Owed by the hour-26 step-back (hour:385-approach-checklist@26, `continue`).
+
+1. **What is refusing?** Nothing: the gate is green and the landing cohort 54/54.
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither - landing what was checked.
+6. **The one-sentence test.** "An entry added to a dictionary owes its claims a triage, not a full check" - true by the probe and the tests.
+7. **The next step is a measurement.** The landing.
+8. **Routes measured before asking?** n/a - no ask.
+9. **After a ruling.** `continue`, no tooling fix.
+
+### T83 Decisions
+
+**D103 - a dictionary is read as its section is.** In `all_units`, a module-level constant whose value is a dict literal and which carries its own claims gets `blocks` = one per entry (`key: value`, its source unparsed, whitespace folded); `Unit.code` fingerprints such a claim by its own line, as a section's (`"section-claim"`), and `core` stays the whole value's.
+
+**D104 - owed and backfilled as a section's.** `claims.py owed` owes `section triage` for a unit with blocks whose recorded `section` core differs (sections and dicts alike); `backfill-sections` re-keys a dict claim whose row is current under the old fingerprint (core plus line), recording its core and block digests, and leaves an owed one owed. The backfill runs once with this change, its count in the retro.
 
 ## T11 - the close
 
