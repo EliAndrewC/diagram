@@ -612,13 +612,13 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@34 (continue),
 6. **The exits.** (c) - resolve the self-landed conflict where D46 already merges; merging main back after every landing was weighed and refused (the plan review of round 1: it reverses D46's "not whenever the clone is behind" and its "history untouched" test).
 7. **The search smell.** None.
 8. **The budget.** 30 min.
-9. **Done, measured.** One goal: when D46's merge conflicts and every conflicted file's main side is a version of that file in the clone's own history, `land-tooling` takes the clone's side for them, commits the merge and lands; any other conflict aborts and refuses as now; `tests/hooks/test-land-tooling.sh` red without it, its "history untouched" case unchanged.
+9. **Done, measured.** One goal: when D46's merge conflicts and every conflicted file's main side is a version of that file in one of the clone's own commits since its fork from main, `land-tooling` takes the clone's side for them, commits the merge and lands; any other conflict aborts and refuses as now; `tests/hooks/test-land-tooling.sh` red without it, its "history untouched" case unchanged.
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
 ### T122 Decisions
 
-**D144 - a self-landed conflict takes the clone's side.** A new `scripts/gates/self_landed.py`, run by `land-tooling` when D46's `git merge origin/main` fails with a merge in progress: for each conflicted file (`git diff --name-only --diff-filter=U`), the blob on main's side (`MERGE_HEAD:<file>`) must equal the file's blob at some commit of the clone's own history (`git rev-list HEAD -- <file>`); if every one does, it takes the clone's side (`git checkout --ours`), stages them and commits the merge, and the landing goes on as D46's clean merge does; if any does not, nothing is resolved, and the merge is aborted and refused as now.
+**D144 - a self-landed conflict takes the clone's side.** A new `scripts/gates/self_landed.py`, run by `land-tooling` when D46's `git merge origin/main` fails with a merge in progress: for each conflicted file (`git diff --name-only --diff-filter=U`), the blob on main's side (`MERGE_HEAD:<file>`) must equal the file's blob at one of the clone's own commits since its fork from main (`git rev-list $(git merge-base HEAD MERGE_HEAD)..HEAD -- <file>`) - never the history the two share, where another session's revert to an older version would match; if every one does, it takes the clone's side (`git checkout --ours`), stages them and commits the merge, and the landing goes on as D46's clean merge does; if any does not, nothing is resolved, and the merge is aborted and refused as now.
 
 ## T11 - the close
 

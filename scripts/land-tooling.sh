@@ -150,7 +150,8 @@ if ! git -C "$WT" apply --index "$patch" 2>/dev/null; then
   if [ -f "$ROOT/scripts/gates/gate_lock.py" ] && python3 "$ROOT/scripts/gates/gate_lock.py" held "$(git -C "$ROOT" rev-parse --absolute-git-dir)"; then
     die "FILES do not apply onto the latest main, and a gate is running in this clone - nothing is merged under it; run this again when it ends"
   fi
-  if ! git -C "$ROOT" merge -q --no-edit origin/main >/dev/null 2>&1; then
+  # GUARD_EDIT_OK: feature 385 T122 (D144) - a conflict on files the clone itself landed takes the clone's side (self_landed.py)
+  if ! git -C "$ROOT" merge -q --no-edit origin/main >/dev/null 2>&1 && ! python3 "$(dirname "${BASH_SOURCE[0]}")/gates/self_landed.py" "$ROOT"; then
     git -C "$ROOT" merge --abort 2>/dev/null
     die "FILES do not apply cleanly onto the latest main, and merging main into the clone conflicts - run scripts/sync-with-main.sh sync-in, resolve the conflict, commit, then run this again"
   fi

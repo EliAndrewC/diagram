@@ -7383,52 +7383,29 @@
    "verdict": "CLEAR"
   },
   "T122": {
-   "section_sha256": "0825d0ba184d0653a7e5faa77d1bf7a8ff5cf64d7b33648e2dfd9d3bfee2af96",
+   "section_sha256": "96a4cb447c6a100ddc4c8dac3088949e333e4e5bf58725c417354cfda5a6d19e",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity",
    "decisions": [
     {
+     "id": "T122 item 6 (exit c)",
+     "summary": "Resolve the conflict inside D46's existing merge branch; merging main back after every landing is refused.",
+     "class": "within",
+     "why": "This answers round 1's finding. The merge still happens only where D46 already merges (when the patch fails to apply), D46's 'not whenever the clone is behind' and the 'the clone's history is untouched' test both stand (item 9), and it is never a rebase and never under a running gate (T30)."
+    },
+    {
      "id": "D144a",
-     "summary": "After every successful land-tooling, fetch and merge origin/main into the clone (a merge commit), even when the patch applied",
+     "summary": "Inside D46's merge branch, a conflicted file whose main side is exactly what this clone landed through land-tooling is resolved to the clone's side, the merge is committed, and the landing goes on.",
      "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The accepted spec's D46 settles this exact case the other way: the merge happens 'Only then, not whenever the clone is behind: a patch that applies needs no merge, and the route's own rule (feature 379) is that the clone's history is left as it was - its test \"the clone's history is untouched\" stands.' D144 merges after every landing, which is the 'whenever' D46 rules out, so it narrows D46's guarantee that a landing whose patch applies leaves the clone's history untouched. The block does not label this. Approach item 2 cites D46 only as 'a stale base is merged, not refused' and restates 379's rule as 'never rewritten (no rebase, no amend)', which is weaker than D46's 'left as it was', and the block never mentions the standing test that D144 would turn red. The three grounds for an exception: the rule is not impossible to follow (it can be followed, it only conflicts when a file is landed a second time); request.md says nothing about clone history, feature 379 or land-tooling, and the general permissions in amendment 6 ('any obvious ... tooling ... improvements') and amendment 8 ('make our tooling do the thing correctly automatically') do not extend to reversing a recorded spec decision that has its own test; and the purpose it would defeat is D46's, not one the GM stated. The measured add/add incident is a good reason to change the rule. It is a reason to amend D46 in spec.md, reviewed on its own counter, and that amendment should say what happens to the test 'the clone's history is untouched'. A plan section cannot override it quietly."
+     "ruling": "LEGITIMATE",
+     "why": "This is an exception to D46's 'a merge that conflicts is aborted and refuses'. It passes the purpose test. D46 exists so a landing goes ahead when its patch no longer applies (T24: a stale base is merged, not refused). Feature 379 lands the files as a new commit on main, not the clone's own commit, so the clone's merge base never holds a file it landed. Its next landing of that file therefore fails to apply and conflicts add/add by construction, not by chance (item 4, measured 2026-10-19, T119 and the T84-era landings). Applied literally, D46 refuses the very case it was written to pass, and the route's own output creates the conflict. Main's side there is the clone's own content, so taking the clone's side discards nothing another session wrote. That fits the GM's amendment 6 ('implement any obvious ... tooling ... improvements along the way') and amendment 8 ('make our tooling do the thing correctly automatically every time')."
     },
     {
      "id": "D144b",
-     "summary": "The merge is skipped, saying so, while a gate runs in the clone (gate_lock.py held, T30)",
-     "class": "within",
-     "why": "Keeps the T30 constraint the block cites; adds no scope."
-    },
-    {
-     "id": "D144c",
-     "summary": "The merge is skipped, saying so, when git refuses it for local changes (git aborts without touching the tree)",
-     "class": "within",
-     "why": "Leaves the session's uncommitted work as it was; matches D46's care for the clone's state."
-    },
-    {
-     "id": "D144d",
-     "summary": "A merge that conflicts on other sessions' work is aborted and left to sync-in, as now",
-     "class": "within",
-     "why": "Matches D46's 'A merge that conflicts is aborted (the clone left as it was)' and naming sync-in."
-    },
-    {
-     "id": "D144e",
-     "summary": "The closing line says main was merged back into the clone, or says why it was not",
-     "class": "within",
-     "why": "A message that reports the behavior. It also corrects the current message, which the measured incident showed to be false."
-    },
-    {
-     "id": "A6-exit",
-     "summary": "Exit (c), merging at once, is chosen; resolving a later add/add as 'ours when main's side is the clone's own landing' is weighed and refused",
-     "class": "within",
-     "why": "A choice of design among the exits. It decides nothing the request or spec settles."
-    },
-    {
-     "id": "A9-test",
-     "summary": "tests/hooks/test-land-tooling.sh gains a test that is red without the change",
-     "class": "within",
-     "why": "Its only job is to enforce the task's own goal. Note: the block says nothing about D46's existing test 'the clone's history is untouched', which D144a would turn red (see D144a)."
+     "summary": "D144's actual test, main's blob equal to the file's blob at any commit of `git rev-list HEAD -- <file>`, also matches versions from history the clone shares with main from before the merge base.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This exception reaches past the class it is justified by. Items 5 and 9 and D144's title justify 'files whose main side the clone itself landed', but `git rev-list HEAD -- <file>` walks the clone's whole ancestry, including main's history before the merge base. Case: another session reverts a commit on main, so main's side of the file goes back to an earlier blob that HEAD's ancestry also contains, while the clone has edited the same lines. The test passes, `checkout --ours` silently undoes that session's revert, and the merge is committed. That is exactly the real conflict with other sessions' work that D46's abort-and-refuse exists to stop, and nothing in the request or spec carries it. Fix: restrict the match to commits the clone made since the fork, `git rev-list $(git merge-base HEAD MERGE_HEAD)..HEAD -- <file>`, or to the blobs this clone's own land-tooling commits put on main, and say which in D144 and item 9 so the stated class and the mechanism are the same set. Aside, not blocking: amendment 10's change 1 (a measured cost for a tooling fix) governs step-back fixes; this task was found while working T119, and item 4 dates and describes the incident."
     }
    ],
    "verdict": "BLOCKED"
