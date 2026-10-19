@@ -5833,6 +5833,87 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T76": {
+   "section_sha256": "9b634093c643811ca5931a6ea7239156e6bc58647df89b6028ba4acc8641facd",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D95a",
+     "summary": "The wording of the two questions: 'Before moving a constant: list every use of it and what each one measures' and 'Before fitting things into room: write the capacity arithmetic (how many, how wide, against how much room) before rolling anything'; and tests/tooling/test_approach_gate.py pins both, red without them.",
+     "class": "within",
+     "why": "Tracks change 7 of the step-back report the GM approved in amendment 8 ('I do like all of your other proposals'): 'list every use of a constant before moving it, and write the capacity arithmetic before running experiments'. 'What each one measures' and the 'before fitting things into room' condition come from the T09 (BUNDLE_PITCH) and T06 (households x farmstead width) incidents the proposal was drawn from. 'Before rolling anything' is 'before running experiments'. The test only fails when the requested questions are absent, so it enforces the request."
+    },
+    {
+     "id": "D95b",
+     "summary": "Placement: the two questions go in as sub-bullets inside part A item 4 ('Do they describe the world here?'); 'No item is added or renumbered', so the items still number 1-9, on the grounds that 'no part A already written is left unanswered'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM approved 'Two new checklist items in the start-of-task Approach'; D95 says 'No item is added'. That contradicts the approved words, so it needs a reason at the level of purpose, and there isn't one. The block's own reason for not renumbering ('so no part A already written is left unanswered') only makes sense if the Approach gate (FR-003, which the block should have named) checks part A item by item. If it does, a numbered item 10 or 11 would make every future Approach answer the question, even with N/A. A sub-bullet under item 4 would not: an item 4 answered 'Yes - ...' satisfies the gate without touching either question, and the block's own item 4 has that shape. The step-back rule the block quotes is 'a checklist item or a tool, never a reminder', and a question the gate never asks for is a reminder. The only reason given is to avoid changing Approach blocks already written. That keeps existing state the GM did not ask to keep and avoids the more literal option, which is not impossible. Fix (either one): (1) add the two as numbered part A items, with the gate accepting sections written before the change or those sections given N/A; or (2) keep them under item 4 but have the gate refuse an Approach whose item 4 does not answer both questions (N/A allowed), with a test that is red without that check."
+    }
+   ],
+   "verdict": "BLOCKED"
+  },
+  "T77": {
+   "section_sha256": "828203b1fb224288fd3128a29ba8be77809b2b73765e2417722548b38ed4dbee",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T77-target",
+     "summary": "make where-time F=<n> [SINCE=<ISO>] prints the step-back's per-task table and agents table, implemented in scripts/measure/where_time.py promoted from the scratch script",
+     "class": "within",
+     "why": "This is the step-back report's change 8, verbatim 'make where-time produces the tables above', which the GM approved in amendment 8 ('I do like all of your other proposals'; he declined only change 2). The F= and SINCE= arguments and the script's location are implementation choices inside that target."
+    },
+    {
+     "id": "D96",
+     "summary": "Every gap from a session's Stop to its next UserPromptSubmit is booked as 'between turns', however many events fall inside, never as 'thinking'. Waiting on background work and idle time are not told apart in that column; the agents table and the background-run column say what ran.",
+     "class": "within",
+     "why": "The goal is that the tables' idle time is right. Item 4 measures the failure it fixes: about 80 minutes of the overnight stall were split by hook events and booked as thinking. Not telling background waits from idle inside this one column narrows nothing. FR-014's waiting bucket groups a subagent, a background run and the GM under one heading, and the subagents' own work still appears in the agents table. A woken turn fires UserPromptSubmit (measured, item 4), so its work goes to its task and not to between turns."
+    },
+    {
+     "id": "T77-gap-attribution",
+     "summary": "Each gap is booked to the task active at the gap's start, in feature_report.split_time's categories, with 'between turns' added",
+     "class": "within",
+     "why": "This reuses the existing categories so that where-time agrees with make feature-report (FR-005/FR-014). It adds one category and removes none."
+    },
+    {
+     "id": "T77-test",
+     "summary": "tests/tooling/test_where_time.py, red without the between-turns booking",
+     "class": "within",
+     "why": "Its only job is to enforce the approved target and its idle column. It verifies the request and adds no scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T75": {
+   "section_sha256": "86795ea609e77ca45ec5b940b0d5a24a426bf8ab9a603fae60d0fe8858a8552d",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D94a",
+     "summary": "A part B block that makes no new decision owes no spec-fidelity review (an exception to 375 FR-043's 'a block added or changed owes a review').",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's own words carry it: amendment 8, step-back change 3, 'only one that adds a new decision gets a spec-fidelity review', approved by 'I do like all of your other proposals' (only change 2 declined). This is the GM-implied exit from the presumption."
+    },
+    {
+     "id": "D94b",
+     "summary": "A part B's items stay make tick's to check (approach_gate refusal on unanswered items / no stamped block).",
+     "class": "within",
+     "why": "The 'A part B is checked mechanically' half of change 3; item 2 records, with a date and method, that make tick already does this."
+    },
+    {
+     "id": "D94c",
+     "summary": "'Adds a new decision' is detected as 'names a D<n> defined nowhere else in plan.md or plan-done.md'; a part B naming no such id, including one naming no D-id at all, is skipped.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The approved words are 'adds a new decision', not 'coins a D-id'. Checklist v1 (request, the approved proposal) makes 'name at least three exits and judge each' the required content at both moments, and the block's own item 6 shows an exit choice recorded as a bare '(c)', with no D-id. A part B choosing '(b) add a principled exception' - the 'unless an obstruction forces it' case this feature exists to put in front of a reviewer - makes a new decision and names no D-id, so D94 skips it. That makes the author's labeling the only trigger, which is the failure the plan-stage gate exists for. None of the exits applies: it is not impossible otherwise (an exits answer other than conform/none is as machine-readable as a D-id, so '(tooling)' does not force this proxy); the GM's words say 'new decision'; and reviewing unlabeled decisions is the purpose, not a defeat of it. The T10/T65/T72 measurement only shows they named no new D-id, so it is the proxy checking itself. To clear: the trigger must also fire on a part B whose exits answer chooses anything other than conform/none (or whatever marks a choice in part B's format), or the plan must show, from the gate, that a part B's exit choice cannot be recorded without a D-id."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

@@ -239,18 +239,20 @@ Owed by the hour-20 step-back (hour:385-approach-checklist@20, `continue`), whic
 ### T76 Approach (checklist part A)
 
 1. **The goal, in the world.** A task that moves a constant knows what it measures, and one that fits things into room knows the arithmetic, before anything is rolled.
-2. **The constraints.** The GM, 2026-10-18 (amendment 8): "I do like all of your other proposals"; change 7 of the step-back report (amendment 8, quoted): "Two new checklist items in the start-of-task Approach: list every use of a constant before moving it, and write the capacity arithmetic before running experiments". The GM's rule (the step-back request): a checklist item or a tool, never a reminder. The item numbers stay as they are, so no part A already written is left unanswered. A test red without it.
+2. **The constraints.** The GM, 2026-10-18 (amendment 8): "I do like all of your other proposals"; change 7 of the step-back report (amendment 8, quoted): "Two new checklist items in the start-of-task Approach: list every use of a constant before moving it, and write the capacity arithmetic before running experiments". The GM's rule (the step-back request): a checklist item or a tool, never a reminder. The two are numbered items, so the gate (`approach_gate.refusal`, D8: a part A item left unanswered refuses the tick) holds every later Approach to them - a sub-bullet under item 4 would pass an item 4 answered without either, a reminder the GM's rule forbids (the plan review, 2026-10-19). A test red without it.
 3. **Where each comes from.** The GM (G).
 4. **Do they describe the world here?** Yes - measured 2026-10-18 (step-back-2026-10-18.md): T09 ran two experiments before reading what BUNDLE_PITCH measured (about 40 minutes and two cohort runs; the answer was a relabel); T06 ran a 20-minute experiment the arithmetic (households x farmstead width against the margin's length) answers in two.
-5. **The order.** The two questions under item 4 of `checklist.md`, then the test.
+5. **The order.** Items 10 and 11 of `checklist.md` part A, then the test.
 6. **The exits.** (c).
 7. **The search smell.** None.
 8. **The budget.** 15 min.
-9. **Done, measured.** One goal: item 4 of part A asks both questions, the items still number 1-9, and `tests/tooling/test_approach_gate.py` pins the two questions; red without them.
+9. **Done, measured.** One goal: part A holds the two questions as items 10 and 11, and `tests/tooling/test_approach_gate.py` shows an Approach answering items 1-9 alone refused (items 10 and 11 unanswered); red without them.
+10. **Before moving a constant.** n/a - none moved.
+11. **Before fitting things into room.** n/a - nothing fitted.
 
 ### T76 Decisions
 
-**D95 - two questions inside item 4.** `checklist.md` part A item 4 gains: "**Before moving a constant:** list every use of it and what each one measures" and "**Before fitting things into room:** write the capacity arithmetic (how many, how wide, against how much room) before rolling anything". No item is added or renumbered.
+**D95 - two numbered items, 10 and 11.** `checklist.md` part A gains item 10, "**Before moving a constant.** List every use of it and what each one measures - or n/a", and item 11, "**Before fitting things into room.** Write the capacity arithmetic (how many, how wide, against how much room) before rolling anything - or n/a". Items 1-9 keep their numbers (so no answer already written changes meaning); an open task whose Approach was written before answers 10 and 11 when it is next started, as the gate refuses its tick until it does.
 
 ## T77 - make where-time, the step-back's tables, with the time between turns counted as such (the GM-approved proposal 8, 2026-10-18)
 
