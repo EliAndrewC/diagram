@@ -1,0 +1,3 @@
+- 0263: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE '\b(fletcher|arrowheads?|war arrows?)\b' l7r pool (hits only describe drawn shapes as arrowhead-like)
+- 0264: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE '\b(hanshi|ink ?sticks?|paper (price|cost))\b' l7r pool (no hits)
+- 0265: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE '\b(tanachin|house rent|monthly rent|rent per)\b' l7r pool (hits only the yamori glossary term)
