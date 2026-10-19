@@ -6518,16 +6518,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::FOOTPATH_FABRIC_GAP#footpath off a plot": {
-  "code": "5f2b28dff6f1ed19",
+  "body": "d1280419303d0ebf",
+  "claim": "footpath off a plot - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a footpath, walked in single file, keeps its middle 4 ft off a garden fence, its own convention beside the lane's 7 ft",
+  "code": "726ad14f221cfece",
   "core": "eab5cc0df856d783",
-  "date": "2026-10-07",
-  "note": "0246 answers this: \"a lane's middle keeps at least 7 ft clear of a garden fence\", 3 ft footpath included; 4.0 departs from it, so the claim should be DEVIATION 0246, and 0246 must record the 4 ft (it does not) or the code is DRIFTED; the code comment's \"7 ft SINCE FEATURE 328\" is stale against `= 4.0`",
-  "pages": {},
-  "research": "",
+  "date": "2026-10-19",
+  "note": "4 ft footpath middle off a fence, recorded as a map drawing convention beside the lane's 7 ft",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bee043cb0138e737"
+  },
+  "research": "4b617eda2c031935",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:fea897a96ea52a1c"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::FRY_FORMS#fry form": {
   "code": "5ae8c54fea5de6ec",
@@ -6808,19 +6813,19 @@
   "claim": "least gap a lane threads - village-lanes.drawing, how-our-maps-lay-a-clustered-settlements-lanes.drawing: 7 ft clear of each garden fence and a 4 ft tread between, within the page's 3 ft footpath to 5 ft spine; the 2 ft parting is added by `growth.grow_gap`",
   "code": "e6baead2830204ea",
   "core": "e48285a80f248b98",
-  "date": "2026-10-17",
-  "note": "2 x 7 + 4 = 18 ft, the page's lane room; a 4 ft tread falls within 3-5 ft",
+  "date": "2026-10-19",
+  "note": "18 ft = 7 + 7 + 4 is the page's \"lane's room of 18 ft\"; a 4 ft tread sits between the 3 ft footpath and the 5 ft spine; the 2 ft parting is kept apart",
   "pages": {
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "34ad736386fe391e"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bee043cb0138e737"
   },
-  "research": "e55e79bc54a1ee1b",
+  "research": "999c04d7efb33cfa",
   "rests": [
    "0081-village-lanes.drawing.html:91a5765af6230403",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:81f9a92fe1d97af1"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::PLOT_SIZES#paddy plot size": {
@@ -20344,18 +20349,17 @@
   "claim": "off the steadings - how-our-maps-lay-a-clustered-settlements-lanes.drawing: nothing built on a lane, and the run-on's middle at least 7 ft (`FOOTPATH_FABRIC_GAP`) off the steadings' fabric, gardens included",
   "code": "975e5f9586c3f0ba",
   "core": "a9c0bfe46fd46be2",
-  "date": "2026-10-17",
-  "note": "`_crosses_fabric([start, b], self.fabric, FOOTPATH_FABRIC_GAP)` uses FOOTPATH_FABRIC_GAP=4.0, but the claim and the page say \"A lane's middle keeps at least 7 ft clear of a garden fence\"; use WEB_FABRIC_GAP or record a DEVIATION",
+  "date": "2026-10-19",
+  "note": "the claim and §16 (\"A lane's middle keeps at least 7 ft clear of a garden fence\") say 7 ft, but the code runs `_crosses_fabric([start, b], self.fabric, FOOTPATH_FABRIC_GAP)`, which is 4.0 ft. Either the run-on gets the lane's 7 ft (WEB_FABRIC_GAP), or, if the run-on is a footpath, the claim should say 4 ft under §17",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "34ad736386fe391e"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bee043cb0138e737"
   },
-  "research": "afaa58c6adaf26fe",
+  "research": "4b617eda2c031935",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:fea897a96ea52a1c"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the wet ground": {
@@ -28708,16 +28712,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/street.py::join_to#joining leg's berth": {
-  "code": "a6e561edbcd5273c",
+  "body": "0ad8a23533c4907f",
+  "claim": "joining leg's berth - how-our-maps-lay-a-clustered-settlements-lanes.drawing: routed a footpath's 4 ft (`FOOTPATH_FABRIC_GAP`) off the fabric",
+  "code": "e81ec19d3e22c5c2",
   "core": "9a4b80819091aad4",
-  "date": "2026-10-07",
-  "note": "FOOTPATH_FABRIC_GAP is 4.0, not the 7 ft the claim states, and the lanes page answers the berth (\"A lane's middle keeps at least 7 ft clear of a garden fence\"); cite 0246, with 4 ft recorded as a DEVIATION or raised to 7",
-  "pages": {},
-  "research": "",
+  "date": "2026-10-19",
+  "note": "the leg is routed at 4 ft, and §17 allows that only for a footpath. I would need to know whether the street the leg extends is drawn as a 3 ft footpath (then IN-STEP) or as a lane tread (then DRIFTED: a lane gets 7 ft under §16)",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bee043cb0138e737"
+  },
+  "research": "4b617eda2c031935",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:fea897a96ea52a1c"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/hamletgen/ways/street.py::join_to#street joined to the network": {
   "code": "37f659ef9194c7fe",
@@ -30317,18 +30326,16 @@
   "claim": "gap off the steadings - how-our-maps-lay-a-clustered-settlements-lanes.drawing: `TRACK_FABRIC_GAP`, a lane's 7 ft from a garden fence, off every footprint, a footpath's gap off a grove band",
   "code": "c2c92d62a8a7ffb3",
   "core": "7b3c192fb1a20f28",
-  "date": "2026-10-17",
-  "note": "the grove fallback accepts `around` and `far` where `not _crosses_fabric(..., fabric, FOOTPATH_FABRIC_GAP)`, i.e. the whole fabric at 4.0 ft, not TRACK_FABRIC_GAP 7 as claimed; under \"a lane's middle keeps at least 7 ft clear of a garden fence\"",
+  "date": "2026-10-19",
+  "note": "the grove fallback accepts a route with `not _crosses_fabric(around, fabric, FOOTPATH_FABRIC_GAP)`, and the `far` run with the same test, so the track out ends up only 4 ft off every garden and footprint, not just off a grove band. That breaks the claim's own \"a lane's 7 ft from a garden fence\", and §17's 4 ft covers footpaths, not the track. Those two whole-fabric checks should use `gap`/TRACK_FABRIC_GAP",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "34ad736386fe391e"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bee043cb0138e737"
   },
-  "research": "afaa58c6adaf26fe",
+  "research": "4b617eda2c031935",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:fea897a96ea52a1c"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#never across a grove": {
@@ -32280,20 +32287,19 @@
   "claim": "a cut's room - village-lanes.drawing, how-our-maps-lay-a-clustered-settlements-lanes.drawing: MIN_WEB_GAP, 7 ft clear of a garden fence on each side and a 4 ft tread, within the page's 3 ft footpath to 5 ft spine",
   "code": "4cd52867698b4c7c",
   "core": "60a01d72af988a64",
-  "date": "2026-10-17",
-  "note": "web_cuts spaced at MIN_WEB_GAP 18",
+  "date": "2026-10-19",
+  "note": "cuts are spaced by MIN_WEB_GAP, the page's 18 ft room, and a back lane needs a gap of at least 18 ft",
   "pages": {
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "34ad736386fe391e"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bee043cb0138e737"
   },
-  "research": "e55e79bc54a1ee1b",
+  "research": "999c04d7efb33cfa",
   "rests": [
    "0081-village-lanes.drawing.html:91a5765af6230403",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:81f9a92fe1d97af1"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_web_cut_lines#a web lane's span": {
@@ -56124,17 +56130,15 @@
   "claim": "corridor room - DEVIATION how-our-maps-lay-a-clustered-settlements-lanes.drawing: 7 ft either side of the way's line, so a 3 ft tread's edge may pass 5.5 ft off a fence",
   "code": "dd1ceacbb2633039",
   "core": "2c48ea6cfc2004e2",
-  "date": "2026-10-17",
-  "note": "7 ft half, a 5.5 ft edge; the page records the DEVIATION",
+  "date": "2026-10-19",
+  "note": "7 ft from the way's line, with the 3 ft tread's edge 5.5 ft off a fence, is recorded as a DEVIATION",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "34ad736386fe391e"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bee043cb0138e737"
   },
-  "research": "afaa58c6adaf26fe",
+  "research": "4b617eda2c031935",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/access.py::AccessTree#every house reached by a path": {
@@ -59042,17 +59046,15 @@
   "claim": "the half-width from the way's line - DEVIATION how-our-maps-lay-a-clustered-settlements-lanes.drawing: lane ground held 7 ft from the way's line, so a footpath's edge may pass 5.5 ft off a fence",
   "code": "d270e38c97eed08a",
   "core": "6df2847c6606618b",
-  "date": "2026-10-17",
-  "note": "half (7 ft) from the line, the page's DEVIATION",
+  "date": "2026-10-19",
+  "note": "each homestead box is grown by the corridor half-width `half`, which is the page's recorded DEVIATION; the 7 ft figure is passed in by the caller",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "34ad736386fe391e"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bee043cb0138e737"
   },
-  "research": "afaa58c6adaf26fe",
+  "research": "4b617eda2c031935",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/gap_ways.py::lay_the_ways#a household no way reaches is pinched across its nearest reached neighbor's yard": {
