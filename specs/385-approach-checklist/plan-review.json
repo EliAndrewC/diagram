@@ -6133,6 +6133,70 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T81": {
+   "section_sha256": "f37babd8f9fe1df5375723d9e96c7305efb85774ba5b82750b3478a28eb0d7f5",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T81-grouping",
+     "summary": "Pop-ups are grouped by the check agent they owe (modal-form, modal-depiction, modal-research), not by a shared template.",
+     "class": "within",
+     "why": "The approved step-back change 1 says 'pop-ups that share a template are checked once as a group'; amendment 1 item 2, also GM-approved, says 'one agent should judge all the pop-ups that cite a changed page, not one agent per pop-up'. Grouping every pop-up that owes the same check covers both readings and is no narrower than either; pop-ups that share a template owe the same check, so they are batched."
+    },
+    {
+     "id": "T81-threshold-two",
+     "summary": "A batch is named only where two or more unanswered pop-ups owe the same check.",
+     "class": "within",
+     "why": "A group of one is not a group; a single owed pop-up is already one agent reading one pop-up, which is what the request asks for."
+    },
+    {
+     "id": "D100-batched-line",
+     "summary": "record_owed.report prints one 'batched: make modal-bundle KIND=\"<kinds>\" FOR=<agent>' line per check and writes the batches to <git dir>/modal-batches.json with the time.",
+     "class": "within",
+     "why": "This carries the request: the measured cause (90 single-pop-up dispatches, every one following record-owed's one-KIND line) is fixed at the listing every session follows, on every run - the tool, not a reminder. It reuses T02's multi-KIND bundle (D12) rather than adding a new one."
+    },
+    {
+     "id": "D100-triage-carve-out",
+     "summary": "A triage-owed pop-up, which goes to make modal-triage first, is left out of the batched line.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the GM's own amendment 1 item 1 (FR-008): a re-owed pop-up is triaged against what the last check read before any check is spent, and triage may find it owes nothing. Batching it before triage would spend the full check FR-008 exists to save. The block's wording ('goes to make modal-triage first') is sequencing, not exclusion; the ruling rests on that premise - a pop-up still owed after triage is batched on the next record-owed listing like any other. Were triaged pop-ups instead left permanently to single dispatches, it would recreate the measured failure for exactly the pop-ups a page change re-owes and would be NOT LEGITIMATE."
+    },
+    {
+     "id": "D101-refusal",
+     "summary": "hm_checks.dispatch refuses a pop-up agent whose MANIFEST names one pop-up when that pop-up is in a current batch of two or more for the same agent, naming the batched command.",
+     "class": "within",
+     "why": "The GM's rule is a tool, never a reminder; a refusal whose only reach is the single-pop-up dispatch of a check the request says is checked once as a group enforces the request and nothing else. It covers the measured failure mode (single dispatches); a hand-built partial batch is not reached, which is within because the batched line D100 prints is the route sessions take to a multi-KIND command."
+    },
+    {
+     "id": "D101-window-fail-open",
+     "summary": "The guard reads only a modal-batches.json written in the last two hours; no file, or an older one, refuses nothing.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A refusal on a stale snapshot would refuse dispatches outside the request - batches already answered or changed by later page edits - so the rule cannot be applied without a current record. Computing the batch at dispatch would cost record-owed's 4.4 s / 3.3 s (labeled measurement) on every dispatch. The purpose survives: D100 makes the batched line appear on every record-owed run, which is where the 90 single dispatches came from; D101 is the backstop. The two-hour figure is an implementation knob, not a target."
+    },
+    {
+     "id": "D101-BATCH_OK",
+     "summary": "BATCH_OK=\"<reason>\" in the prompt lets a single dispatch through, recorded like the guard's other escapes.",
+     "class": "within",
+     "why": "Every guard in this project carries a recorded-reason escape; the request does not ask for an unescapable guard, and a recorded escape is a logged, auditable act rather than a silent departure. It also recovers from a false refusal where a batch member has since been answered."
+    },
+    {
+     "id": "T81-not-a-dispatch-hook-computation",
+     "summary": "Owed-ness is computed in record-owed and read from a file at dispatch, not recomputed by the hook.",
+     "class": "within",
+     "why": "Design choice inside the request, backed by the labeled 2026-10-19 timing; it changes no scope."
+    },
+    {
+     "id": "T81-done-and-tests",
+     "summary": "Done names one goal; tests/tooling/test_record_owed.py and tests/hooks/test-pair-hooks.sh are red without it; budget 60 min; order record_owed, then hm_checks, then tests.",
+     "class": "within",
+     "why": "The tests only fail when the requested batching or its refusal is absent - enforcement of the request (GM 2026-09-20), and one goal per task is amendment 4's own checklist item."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
