@@ -424,3 +424,9 @@ def test_joining_a_cjk_line_break_still_catches_a_changed_character_and_keeps_la
     assert qv.squeeze("上屋の構\n造は") == "上屋の構造は"
     assert qv.squeeze("the main\nhouse") == "the main house"
     assert qv.verdict("the mainhouse", "the main\nhouse")["quotation"] != "VERBATIM"
+
+
+def test_a_pdfs_kangxi_radical_reads_as_the_ideograph_it_stands_for() -> None:
+    # the MAFF report's text layer writes 米 as U+2F76 and 方 as U+2F45 (feature 390)
+    assert qv.squeeze("令和５年産⽶における農産物検査⽅法") == "令和５年産米における農産物検査方法"
+    assert qv.verdict("等級格付けされた水稲うるち玄米", "等級格付けされた⽔稲うるち⽞⽶の")["quotation"] == "VERBATIM"
