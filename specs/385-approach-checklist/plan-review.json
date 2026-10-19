@@ -7617,6 +7617,38 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T143": {
+   "section_sha256": "3dbd4847602aa0f4b9af104e752dc42c7b07d9583df579d4da70bf2c7ad8180f",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D155a",
+     "summary": "waterfields/banks.py loses _WELD_MIN_SOLIDITY and _WELD_MIN_APEX with their claims and comment blocks",
+     "class": "within",
+     "why": "The round arbiter's reading of FR-020 (ask:t33-ranking-pick) retires a row whose code was removed with no live successor; the welder _absorb these constants served went with feature 302's carve and item 4 records a measured search (2026-10-19, grep -rnw over l7r/ tests/ pool/ scripts/) finding no reader. Removing dead constants and their claims is the retirement path, not a carve-out from anything the GM asked."
+    },
+    {
+     "id": "D155b",
+     "summary": "the jog comment's example is reworded to cite _TOE_MIN_APEX (25 deg) above the gate's 15",
+     "class": "within",
+     "why": "A consequence of D155a: a comment may not cite a constant that no longer exists; the rewording changes no behavior and narrows nothing requested."
+    },
+    {
+     "id": "D155c",
+     "summary": "both rows in 328's audit/waves.json read retired (wave 168, reason: _absorb retired with the carve by feature 302, no live successor), replacing T32's wave 164",
+     "class": "within",
+     "why": "Exactly what spec-cited FR-020's arbiter reading prescribes: marked retired in audit/waves.json with its reason after a successor check. Replacing a 'fixed' wave with 'retired' makes the record true rather than counting a dead row as fixed."
+    },
+    {
+     "id": "D155d",
+     "summary": "a dead row is not counted as one of FR-020's ten claims (the T34 plan review)",
+     "class": "within",
+     "why": "Amendment 7 asks for 10 more claims fixed; not counting a retired dead row keeps the ten as ten real fixes on rows a live map runs (the arbiter's reading). It does not reduce the work the GM asked for, so it is not a narrowing."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

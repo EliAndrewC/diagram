@@ -1108,3 +1108,20 @@ sentence owed 5 record checks, a 70-claim triage and 23 claims judged: 3 claims 
 on the changed block); the bund pop-up's own depiction edits applied (polder crossings, a hedge, 0022 linked); and the finding that
 the law gate reads "reached the field" at 60 ft while the placer reads 6 ft went to T141, with T142 and T140 filed. **The habit it
 changes:** a page edit's cost is its triage width - a sentence on a hub page like 0014 re-owes every claim citing it.
+
+## T34 - the retro row
+
+About 90 min, a live E2 row picked by the arbiter's reading of FR-020 after round 1's dead row (`_WELD_MIN_APEX`) was sent to
+T143: `taxonomy._OVERLAP_EXEMPT#yard, garden and fixtures against the house`, wave 167. 0043's drawing page now records the shed
+a ken past the 3.5 ft wall gap, about 9.5 ft out, the gap a DEVIATION (at a ken, scaled rolls lost a farmhouse or field from the
+web, held in 328's waves 9 and 51), and where it stands a GUESS. The record checks added two right things - the gap said in plain
+words, and the shed's log-end band recorded as the map drawing convention it is in code - and removed one claim the record does
+not make ("open front"); eight seat claims relabeled GUESS. Stopping two checks to relabel left them "running" in the round state
+until `make check-closed` (filed T148); the pop-up's third round was accepted by the arbiter. **The habit it changes:** finish a
+page's wording before its record round, not between rounds - each edit re-owes the whole round.
+
+## T143 - the retro row
+
+About 15 min with T34's landing. `_WELD_MIN_SOLIDITY` and `_WELD_MIN_APEX`, read by nothing since feature 302 retired the carve
+and its welder, are gone with their claims and comments, and both ranking rows are retired in 328's waves.json (wave 168) - T32's
+count with them, which T144 replaces. **The habit it changes:** grep a ranking row's code for a live use before taking it.
