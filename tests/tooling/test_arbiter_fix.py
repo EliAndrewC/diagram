@@ -146,7 +146,9 @@ def test_the_record_reads_through_noise_and_needs_a_feature(root: pathlib.Path) 
     assert ha.open_fixes(root / "specs" / "nowhere") == []
     (root / ".specify" / "feature.json").write_text("not json")
     with pytest.raises(ValueError, match="no active feature"):
-        ha.settle_fix(root, TRIGGER, "declined", "it rebuilds every gate")
+        ha.settle_fix(root, "red-gate@nowhere", "declined", "it rebuilds every gate")
+    ha.settle_fix(root, TRIGGER, "declined", "it rebuilds every gate")  # held open in 900: settled there, pointer or not (hour:391@3)
+    assert ha.open_fixes(d) == []
 
 
 ab = _load("arbiter_bundle")
@@ -403,3 +405,20 @@ def test_one_command_lands_a_fix_and_settles_it(root: pathlib.Path) -> None:
     plain = subprocess.run(["make", "-n", "-C", str(repo), "arbiter-fix-done", "ID=x", "NOTE=a b c d", "TEST=tests/t.py"], capture_output=True, text=True, check=False, env=_clean_env()).stdout
     line = next(ln for ln in plain.splitlines() if "hm_arbiter.py fix done" in ln)
     assert "land-tooling.sh" not in line, "without LAND= it settles alone"
+
+
+def test_a_fix_filed_under_another_feature_is_found_and_a_refusal_names_what_it_searched(root: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys) -> None:  # noqa: ANN001
+    """The round arbiter on hour:391@3 (2026-10-18): hour:390@2's ruling was filed under 391 (the pointer's feature) and the
+    session, settling it from 390, was refused with no word on where it looked. A fix is settled where it is held open, and a
+    refusal names the features searched and the open fixes it did find."""
+    other = root / "specs" / "901-y"
+    other.mkdir(parents=True)
+    ha.record_ruling(root, TRIGGER, RULING_378, "round-arbiter")  # filed under the pointer's 900
+    monkeypatch.setenv("SPECIFY_FEATURE", "901-y")  # the session works 901
+    assert ha.fix_home(root, TRIGGER) == root / "specs" / "900-z"
+    monkeypatch.chdir(root)
+    assert ha.main(["fix", "declined", "hour:nowhere@1", "a reason of words"]) == 1
+    err = capsys.readouterr().err
+    assert "searched the active feature (901-y)" in err and TRIGGER in err, "the refusal names where it looked and what is open"
+    ha.settle_fix(root, TRIGGER, "declined", "it overhauls a decided process")
+    assert ha.open_fixes(root / "specs" / "900-z") == [], "settled in the feature that held it"
