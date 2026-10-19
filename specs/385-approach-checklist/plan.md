@@ -408,7 +408,7 @@ Owed by the cohort record of 05:04Z (seeds 3, 4, 903 and 904 newly failing) - th
 6. **The one-sentence test.** "0246 records a footpath's 4 ft and the constant's claim cites it" - true; the claims check found it IN-STEP.
 7. **The next step is a measurement.** The landing cohort at 4 ft.
 
-### T31 part B (2026-10-19T06:18Z)
+### T31 part B (2026-10-19T06:27Z)
 
 Owed by the round arbiter's ruling on hour:385-approach-checklist@28 (change-route) and by the probe cohorts of 06:17Z that rolled
 the four seeds at 7 ft again.
