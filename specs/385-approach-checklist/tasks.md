@@ -275,12 +275,14 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T95 A street's joining leg keeps the lane's 7 ft (row 841, found working T31; plan D117) [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 (gated, 3ff08b0a1 on main): join_to routes at WEB_FABRIC_GAP, claims IN-STEP, cohort-landing 54/54
-- [ ] T96 A footpath's 7 ft, room first (the round arbiter's ruling on hour:385-approach-checklist@28; worked with T43; plan D118) [lands-open]
+- [x] T96 A footpath's 7 ft, room first (the round arbiter's ruling on hour:385-approach-checklist@28; worked with T43; plan D118) [lands-open]
       research: rendering
+      verify: DONE. landed 2026-10-19 (gated, 4d58d3cec): FOOTPATH_FABRIC_GAP at 0246's 7 ft, the door's own DOOR_STEP_FT/DOOR_FIXTURE_CLEAR_FT, T31's 4 ft block out of 0246, no house moved; claims IN-STEP or filed (T97-T102); cohort-landing 54/54
 - [ ] T97 A farm's door reach measured from its house, as 0246 counts it, not from the door point (row_rules#door reach of a street, serve.lay_door_paths#every grove farm reached at its door, web.stage_web#door path distance - DRIFTED, found working T96) [lands-open]
       research: rendering
-- [ ] T98 Grove-band clearance as 0036 gives it, once: no fence gap on top of the grown band (serve.lay_door_paths#door path off a grove band), the connector's band gap (track.connector_dry_exit#grove band gap) - DRIFTED, found working T96 [lands-open]
+- [x] T98 Grove-band clearance as 0036 gives it, once: no fence gap on top of the grown band (serve.lay_door_paths#door path off a grove band), the connector's band gap (track.connector_dry_exit#grove band gap) - DRIFTED, found working T96 [lands-open]
       research: rendering
+      verify: DONE. landed 2026-10-19 (gated, 4d58d3cec): the room off a grove counted once - door path band_grow (11 ft) on every test, connector 12.5 ft, grove exit grid 2.9 ft; claims IN-STEP; seed 22 passes; cohort-landing 54/54
 - [ ] T99 A scattered farm no channel reaches passes with its own well (row_rules.water_rules#a scattered farm's own water - DRIFTED, found working T96) [lands-open]
       research: rendering
 - [ ] T100 Web lanes off the water cite 0035's drawing page (web.stage_web#web lanes off the water - MISLABELED, found working T96) [lands-open]

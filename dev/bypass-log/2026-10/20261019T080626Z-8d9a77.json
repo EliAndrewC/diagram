@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-19T08:06:26Z",
+  "target": "claims-gate",
+  "commit": "4d58d3cec",
+  "why": "CLAIMS_OK: five findings on behavior T96 only renamed constants in, each IN-STEP on main (2026-10-03..13) and judged afresh; filed as 385 T97 (door reach x3), T99 (a scattered farm's well), T100 (web lanes off the water), as feature 370 carried findings on moved code"
+}
