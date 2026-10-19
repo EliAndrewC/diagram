@@ -7590,6 +7590,65 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T34": {
+   "section_sha256": "0edce7d1f6ff704f4244c845ed95b6c61007f87ae2085e941151112c3d0cf1b3",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T34-row",
+     "summary": "T34 takes the live ranking row overlap/taxonomy.py _OVERLAP_EXEMPT#yard, garden and fixtures against the house (E2 DRIFTED) as the top-ranked live row of any kind, saying so in its Approach; round 1's dead row _WELD_MIN_APEX goes to T143's retirement.",
+     "class": "within",
+     "why": "FR-020 as the round arbiter read it (ask:t33-ranking-pick): rows come from open rows whose code a live map runs, a kind not yet tried where one is left, else the top-ranked live row of any kind, said so in the Approach. The block names the row live, states no untried kind is left among live rows, and says so - which cures round 1's BLOCKED finding, the dead row. Amendment 7 asks for ten more claims fixed; this is one."
+    },
+    {
+     "id": "D154",
+     "summary": "0043's drawing page records the wood shed a ken past the wall gap, about 9.5 ft off its wall, as a DEVIATION from the GUESSed 6 ft, with its reason (at a ken, larger settlements left a farmhouse or field off their lanes - 328 waves 9 and 51); the two claims cite 0043; WOODSHED_STEP_FT stays 6.0; conforming the placer to 6 ft is refused.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Choosing to keep the maps at 9.5 ft and record an exception, rather than conform them to the drawing page's 6 ft, is a carve-out from the page's figure, so it is ruled. It is implied by the GM's own words: his request is that a number not grounded in research is a knob, and that 'it makes sense to keep a rule ... and add an exception'; 0043 itself labels the 6 ft a GUESS ('no page we read says where on the plot a wood shed stood'). The finding offered 'fix the claim, or the placer'; the claim already states the maps (measured 2026-10-19 per item 4), so the fix lands where the disagreement sits, on the page that lacked the deviation, and the constraint 'every deviation recorded on the drawing page with its reason' is met. The reason is a measured one (three named seeds refused at a ken, held twice), not convenience, and the exception covers one item only, so there is no seam of unlike cases."
+    },
+    {
+     "id": "T34-wave",
+     "summary": "The row is marked with its wave in 328's audit/waves.json; record checks and claims check run; no engine token changes.",
+     "class": "within",
+     "why": "FR-020 requires each row marked with its wave; SC-010 counts it. The checks enforce the requested fix and add no behavior."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T143": {
+   "section_sha256": "3dbd4847602aa0f4b9af104e752dc42c7b07d9583df579d4da70bf2c7ad8180f",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D155a",
+     "summary": "waterfields/banks.py loses _WELD_MIN_SOLIDITY and _WELD_MIN_APEX with their claims and comment blocks",
+     "class": "within",
+     "why": "The round arbiter's reading of FR-020 (ask:t33-ranking-pick) retires a row whose code was removed with no live successor; the welder _absorb these constants served went with feature 302's carve and item 4 records a measured search (2026-10-19, grep -rnw over l7r/ tests/ pool/ scripts/) finding no reader. Removing dead constants and their claims is the retirement path, not a carve-out from anything the GM asked."
+    },
+    {
+     "id": "D155b",
+     "summary": "the jog comment's example is reworded to cite _TOE_MIN_APEX (25 deg) above the gate's 15",
+     "class": "within",
+     "why": "A consequence of D155a: a comment may not cite a constant that no longer exists; the rewording changes no behavior and narrows nothing requested."
+    },
+    {
+     "id": "D155c",
+     "summary": "both rows in 328's audit/waves.json read retired (wave 168, reason: _absorb retired with the carve by feature 302, no live successor), replacing T32's wave 164",
+     "class": "within",
+     "why": "Exactly what spec-cited FR-020's arbiter reading prescribes: marked retired in audit/waves.json with its reason after a successor check. Replacing a 'fixed' wave with 'retired' makes the record true rather than counting a dead row as fixed."
+    },
+    {
+     "id": "D155d",
+     "summary": "a dead row is not counted as one of FR-020's ten claims (the T34 plan review)",
+     "class": "within",
+     "why": "Amendment 7 asks for 10 more claims fixed; not counting a retired dead row keeps the ten as ten real fixes on rows a live map runs (the arbiter's reading). It does not reduce the work the GM asked for, so it is not a narrowing."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

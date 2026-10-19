@@ -51,8 +51,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T33 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 by sync-with-main done; 0014 records the 6 ft join as a GUESS, the claim cites it (D152); record checks answered, claims IN-STEP or filed (T140-T142); ranking row wave 166
-- [ ] T34 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
+- [x] T34 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
+      verify: DONE. landed in batch T34+T143: gate green (226 s), landing cohort 54/54; T34's record checks answered and claims IN-STEP (0043 records the shed's 9.5 ft and log-end band); T143's dead weld constants removed, rows retired (wave 168)
 - [ ] T35 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
 - [ ] T36 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
@@ -403,6 +404,19 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [ ] T141 law.FIELD_REACH_FT counts a way within 60 ft as reaching the field, where 0014 now records the join at 6 ft (a GUESS): five claims DRIFTED on it (refuse_unreached, FIELD_REACH_FT x2, settle_field, settle_reach) - bring the bar to the 6 ft join, or record the 60 ft on 0014 as a DEVIATION with its reason - SPUR_REACH_FT and field_unreached too, so the law gate and the placer read one distance; and whether a dry plot's edge counts as arrived (trim_lane_stubs, field_unreached apply the 6 ft to dry plots; 0014 speaks of the paddy) (impl-drift, T33's rounds) [lands-open]
       research: rendering
 - [ ] T142 bund.tip_onto_the_bund returns a spur tip more than 60 ft off, or one whose run-on turns back or is blocked, as it came - short in open ground, against 0014's 'never ends in open ground short of the bund': name the fallback in the claim or make the tip arrive (impl-drift, T33's round) [lands-open]
+      research: rendering
+- [x] T143 Dead weld constants removed and their ranking rows retired: _WELD_MIN_SOLIDITY (T32, wave 164) and _WELD_MIN_APEX are read by nothing since feature 302 retired the carve and its welder - mark both rows retired in 328's audit/waves.json with that reason (the T34 plan review: a dead row is not one of FR-020's ten) [lands-open]
+      research: rendering
+      verify: DONE. landed in batch T34+T143: gate green (226 s), landing cohort 54/54; T34's record checks answered and claims IN-STEP (0043 records the shed's 9.5 ft and log-end band); T143's dead weld constants removed, rows retired (wave 168)
+- [ ] T144 Amendment 7, FR-020: a ranking row in place of T32's, whose row turned out dead code (retired in T143) - a live row, chosen at its start; its retro row [lands-open]
+      research: rendering
+- [ ] T145 0043's drawing page, 'How many farmsteads have a wood shed?': 'the share chosen at random for each hamlet from its seed' - seed is the generator's word; reword for a reader (the glossary lists a `seed` variant: check its sense first) (record-format, T34's round) [lands-open]
+      research: rendering
+- [ ] T146 fixture_seats' wood shed: shed_off_a_wall tests the 9.5 ft only against the house (walls[:1]) while against_a_wall accepts the kura, so a seat can stand 3.5 ft off the kura; in_front lets a flank shed stand partly forward of the front wall; _wood_shed rolls its first seat with zero, unlike the coop and privy; the kura passed as 'N' though a scattered farmstead's kura stands west (0040); against_a_wall's 1.5 ft tolerance lets the shed stand up to ~11 ft out, unclaimed (impl-drift, T34's rounds) [lands-open]
+      research: rendering
+- [ ] T147 taxonomy._OVERLAP_EXEMPT['farm_fixtures'] says each fixture is 'seated against its own farmhouse' (the shed is 9.5 ft off, shrine and grave 14 ft, the privy up to 48 ft); its claim cites 0039 for the bed beside the house, which only 0038 backs; fixture_seats' CANOPY_PAD and SHADE_MARGIN_FT carry no claim; _seats' privy front step and stable seat unclaimed (impl-drift, T34's round 2) [lands-open]
+      research: rendering
+- [ ] T148 A check stopped by TaskStop and recorded by make dispatch-dropped stays 'running' in checks-open.json, so the round freeze refuses the page and every later check of its round until make check-closed AGENT= (T34: two stopped 0043 checks held the freeze) - dispatch-dropped should close it [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
