@@ -1,0 +1,12 @@
+1781 1789 min 4697 max 6560 mean of all 5879 mean low 5511 mean high 6246
+1790 1799 min 5030 max 6650 mean of all 5933 mean low 5686 mean high 6180
+1800 1809 min 6210 max 6815 mean of all 6617 mean low 6511 mean high 6722
+1810 1819 min 6210 max 7010 mean of all 6787 mean low 6673 mean high 6901
+1820 1829 min 6400 max 6820 mean of all 6613 mean low 6536 mean high 6690
+1830 1839 min 5850 max 6900 mean of all 6551 mean low 6418 mean high 6684
+1840 1842 min 6665 max 7015 mean of all 6912 mean low 6827 mean high 6997
+1791 5030 6002 mid 5516.0
+1802 6520 6692 mid 6606.0
+1803 6660 6760 mid 6710.0
+1804 6675 6760 mid 6717.5
+1842 6665 6995 mid 6830.0
