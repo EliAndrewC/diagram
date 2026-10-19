@@ -618,11 +618,18 @@ def short_fragments(M: Mapping[str, Any], ground: WorkedGround | None = None) ->
     20 households, the map byte-identical with one).
     Research:
         debris - UNRESEARCHED: a lane under 30 ft that earns no house, join, target or end
-        a household's own way never debris - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every other farmhouse is served by a lane of its own"""
+        a household's own way never debris - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every other farmhouse is served by a lane of its own, a household's way (`of`) or a farm's door path (`serves`)"""
     lanes = M.get("lanes") or []
     # ...NOR A HOUSEHOLD'S OWN WAY, however short (feature 318, FR-014): it is the lane its household is served by (`tree.owed`),
     # and dropped as earning nothing it was drawn again next round, until the settle refused the web (cohort seed 10)
-    short = [i for i, ln in enumerate(lanes) if not ln.get("connector") and not ln.get("spur") and not ln.get("of") and len(ln.get("pts") or []) >= 2 and polyline_len(lane_pts(ln)) < FRAGMENT_FT]
+    # ...NOR A FARM'S DOOR PATH (feature 385 T97, D125): it records `serves` where a household's way records `of`, and seed 904's
+    # four row farms lost theirs as earning nothing, the farms being within the 100 ft back-lane reach - but 0246 serves a farm
+    # by a lane of its own from its dooryard, not by that reach
+    short = [
+        i
+        for i, ln in enumerate(lanes)
+        if not (ln.get("connector") or ln.get("spur") or ln.get("of") or ln.get("serves")) and len(ln.get("pts") or []) >= 2 and polyline_len(lane_pts(ln)) < FRAGMENT_FT
+    ]
     if not short:
         return []
     reached, nets, targets, field = len(unreached_houses(M)), lane_networks(M), len(unreached_targets(M)), field_unreached(M)
