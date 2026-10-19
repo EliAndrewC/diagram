@@ -39,8 +39,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T09 A ranking row; its retro row [lands-open]
       research: rendering
       verify: DONE. BUNDLE_PITCH relabeled the along-row span (UNRESEARCHED); the rows stand _rank_step apart, 0038's sum; claims IN-STEP; no map changes; quick clean; retro row in retro.md
-- [ ] T10 A ranking row; its retro row [lands-open]
+- [x] T10 A ranking row; its retro row [lands-open]
       research: rendering
+      verify: DONE. dikepond_split knob over the five recorded splits, inset derived per map; Kuwabata 0.3 draws 0.700 water on its median parcel; cohort 54/54; gate green; findings carried to T43 by ask:t10-findings-at-landing
 - [ ] T31 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
 - [ ] T32 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
@@ -125,7 +126,7 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       verify: DONE. landed on main; its test green and red without it; the arbiter's fix settled
 - [ ] T11 The close: the checklist to `docs/`, the refusals extended to every feature (FR-001), the final report (SC-001, SC-002); and D30's wording, filed by the round arbiter's ruling on ask:t14-plan-round4 (T14's plan round 4, rows 1-3 - the code already does each, `test_a_transcript_named_call_is_its_run_s_anywhere_and_a_mixed_overlap_is_the_missing_run_s_estimate`): the outside-every-window clause carries its own condition (no `by`, no transcript names it), the overlap clause says "still an estimate", and a call inside both a found and a missing run's window is the missing run's estimate [lands-open]
       research: rendering
-- [ ] T43 Carried at T07's landing by the round arbiter (ask:t07-two-findings-at-landing): (1) `settlement/houses.py::HousesMixin._on_a_tread#a building's corners held to it` MISLABELED - should a building's corners be held to the attested 3 ft from a footpath's or spur's tread (0081, 0247), keeping 0246's 7 ft only where a garden fence stands, or the 7 ft recorded as a DEVIATION? Changing the rule is the first route to try; (2) `settlement/rolling/roll.py::RollVillageMixin._roll_cluster#lane width and clearance` DRIFTED - re-derive the legacy roll's clearance=40 from 0246's lane room and 0081's tread-to-wall figure, or retire the roll. And (3), by the round arbiter's ruling on ask:t07-span-walkable-cannot-tell: `hamletgen/ways/law.py::span_walkable#a walkable span` CANNOT-TELL - near_misses skips only a household way's DOOR end (`end == 0 and ln.get("of")`); the FAR end of a household's own lane reaches span_walkable (law.py:544), which holds the household's own garden and own threshing yard at 7 ft (`WEB_FABRIC_GAP`) with no owner exemption. Read 0246 to settle whether the household's own allowance covers its yard (fabric.py::_homestead_polys#a path leaves its own yard reads it as the dooryard) or its garden fence; then pass the owning household into span_walkable and exempt its own ground, or label the clause DEVIATION/UNRESEARCHED, and re-check it. Each fixed or re-checked clean before 385 closes (FR-013); 328 found-wave158; carried by the round arbiter's ruling ask:t07-two-findings-at-landing: l7r/diagram/settlement/houses.py::HousesMixin._on_a_tread#a building's corners held to it, l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_cluster#lane width and clearance; carried by the round arbiter's ruling ask:t07-span-walkable-cannot-tell: l7r/diagram/hamletgen/ways/law.py::span_walkable#a walkable span; carried by the round arbiter's ruling ask:t08-overlap-exempt-drifts: l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#built on what it serves, l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#inspection post on the gate, l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#merchant storehouses, l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#yard, garden and fixtures against the house (the log boom pairs with 328's `waterfront.py::WaterfrontMixin.log_boom#boom pen against the bank`, the wood shed with `fixture_seats.py::WOODSHED_STEP_FT#wood shed off its wall` - each pair worked together, no second row; the wood shed's first route more room, so it sits at 0043's ken); carried by the claims gate (FR-013): l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#reeds off the mounds [lands-open]
+- [ ] T43 Carried at T07's landing by the round arbiter (ask:t07-two-findings-at-landing): (1) `settlement/houses.py::HousesMixin._on_a_tread#a building's corners held to it` MISLABELED - should a building's corners be held to the attested 3 ft from a footpath's or spur's tread (0081, 0247), keeping 0246's 7 ft only where a garden fence stands, or the 7 ft recorded as a DEVIATION? Changing the rule is the first route to try; (2) `settlement/rolling/roll.py::RollVillageMixin._roll_cluster#lane width and clearance` DRIFTED - re-derive the legacy roll's clearance=40 from 0246's lane room and 0081's tread-to-wall figure, or retire the roll. And (3), by the round arbiter's ruling on ask:t07-span-walkable-cannot-tell: `hamletgen/ways/law.py::span_walkable#a walkable span` CANNOT-TELL - near_misses skips only a household way's DOOR end (`end == 0 and ln.get("of")`); the FAR end of a household's own lane reaches span_walkable (law.py:544), which holds the household's own garden and own threshing yard at 7 ft (`WEB_FABRIC_GAP`) with no owner exemption. Read 0246 to settle whether the household's own allowance covers its yard (fabric.py::_homestead_polys#a path leaves its own yard reads it as the dooryard) or its garden fence; then pass the owning household into span_walkable and exempt its own ground, or label the clause DEVIATION/UNRESEARCHED, and re-check it. Each fixed or re-checked clean before 385 closes (FR-013); 328 found-wave158; carried by the round arbiter's ruling ask:t07-two-findings-at-landing: l7r/diagram/settlement/houses.py::HousesMixin._on_a_tread#a building's corners held to it, l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_cluster#lane width and clearance; carried by the round arbiter's ruling ask:t07-span-walkable-cannot-tell: l7r/diagram/hamletgen/ways/law.py::span_walkable#a walkable span; carried by the round arbiter's ruling ask:t08-overlap-exempt-drifts: l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#built on what it serves, l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#inspection post on the gate, l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#merchant storehouses, l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#yard, garden and fixtures against the house (the log boom pairs with 328's `waterfront.py::WaterfrontMixin.log_boom#boom pen against the bank`, the wood shed with `fixture_seats.py::WOODSHED_STEP_FT#wood shed off its wall` - each pair worked together, no second row; the wood shed's first route more room, so it sits at 0043's ken); carried by the claims gate (FR-013): l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#reeds off the mounds; carried by the round arbiter's ruling ask:t10-findings-at-landing: l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#privy over the sty, l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#at least one sty where one fits, l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_draw_plot#pond unit, l7r/diagram/settlement/fields/landuse.py::LandUseMixin._mulberry_rows#mulberry bushes, l7r/diagram/settlement/land/dikes.py::dike_band#dike width, l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#dike width; and by ask:t10-findings-at-landing, three drawing pages still describing the fixed 23 ft dike-pond inset - 0022, 0024 and 0025 - to be brought to the rolled split; carried by the round arbiter's ruling ask:t10-findings-at-landing: l7r/diagram/hamletgen/pondstock.py::reserve_sty_seat#nursery (fry) ponds offer no reserved sty seat, l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#at least one sty where one fits, l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_draw_plot#pond unit, l7r/diagram/settlement/fields/landuse.py::LandUseMixin._mulberry_rows#mulberry bushes [lands-open]
       research: rendering
 - [x] T44 The step-back reads every session of the hour, not the busiest (the arbiter's fix on hour:385-approach-checklist@16, plan D58) [lands-open]
       research: rendering
@@ -157,6 +158,40 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T55 make land-tooling's lint keeps the gate's own scope (--force-exclude), so a script the gate never lints is not refused (a defect in T52, plan D72)
       research: rendering
       verify: DONE. landed on main; its test red without it; retro row in retro.md
+- [x] T56 A task's own heading wins its section over a heading that only mentions it (found by T47/T48 and T10's preflights, plan D75)
+      research: rendering
+      verify: DONE. landed on main; tests/tooling/test_plan_gate.py red without it; T10's preflight then reviewed its own section
+- [x] T57 A constant's claim docstring is no engine change: every bare string statement is stripped from the semantic id (the arbiter's fix on hour:385-approach-checklist@20, plan D76)
+      research: rendering
+      verify: DONE. landed on main; tests/tooling/ci/test_delta.py red without it (a claim docstring moved the key)
+- [x] T58 The wave guard names WAVE_OK as a headless session's route, which has no Workflow tool (the arbiter's fix on hour:385-approach-checklist@21, plan D77)
+      research: rendering
+      verify: DONE. landed on main; tests/hooks/test-agent-prefix-hooks.sh red without it
+- [x] T59 A dispatch another hook refused leaves no reading behind: its seen notes and fresh round are applied at launch (the arbiter's fix on round:modal-form|modal:choice/dikepond_split--0.7@3, plan D78)
+      research: rendering
+      verify: DONE. hm_checks applies a dispatch's marks at launch; landed, tests/hooks green
+- [x] T60 apply-edits applies a bare paragraph break and drops the line an emptied replacement leaves (the arbiter's fix on hour:385-approach-checklist@22, part 1, plan D79)
+      research: rendering
+      verify: DONE. apply-edits break and emptied-line rules; landed, test_apply_edits green
+- [x] T61 A make call that sets one variable twice is refused, naming the quoted-list form (the arbiter's fix on hour:385-approach-checklist@22, part 2, plan D80)
+      research: rendering
+      verify: DONE. make-only refuses a doubled make variable; landed, make-only suite green
+- [x] T62 A claimed constant whose value or claim changes names the drawing pages still stating its old figure (the arbiter's fix on ask:t10-findings-at-landing, plan D81)
+      research: rendering
+      verify: DONE. claims-owed names 0018/0022/0025/0027 on this clone; landed, test_claims_index green
+- [x] T63 make tick archives the plan's finished sections itself (the GM 2026-10-18: what can be forgotten runs automatically, plan D82)
+      research: rendering
+      verify: DONE. tick archives finished plan sections; landed, test_tick_task green
+- [x] T64 make task-add files a task box and its plan section with the next free id (the GM 2026-10-18, plan D83)
+      research: rendering
+      verify: DONE. make task-add filed T65-T67; landed, test_task_add green
+- [x] T65 An archived plan block edited by a typo after its review is not owed (plan D84)
+      research: rendering
+      verify: DONE. archived typo-edited blocks owe nothing; landed, test_plan_gate green
+- [ ] T66 A requirement cited from another feature is bundled from that feature (plan D85) [lands-open]
+      research: rendering
+- [ ] T67 land-tooling lints before it tests (plan D86) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

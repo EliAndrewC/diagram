@@ -518,6 +518,16 @@ page-check:     ## [tests] the interactive tests + the browser test, then the `p
 	  && printf '\n\033[1mpage-check green\033[0m (the page and browser stamps are written; an asset-only delta may push)\n' \
 	  && { root=$$(git rev-parse --show-toplevel); python3 "$$root/scripts/record/entry_owed.py" --root "$$root" --why; python3 "$$root/scripts/record/entry_owed.py" --root "$$root" | sed 's/^/  /'; true; }
 
+set-down: export SET_DOWN_WHY = $(WHY)
+set-down:       ## [project] set a feature's work down, so a turn may end with tasks open (feature 385 T70): F=385 WHY="awaiting the GM on the cohort trend"
+	@if [ -z "$(F)" ]; then printf 'make set-down: F=<feature> is required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/set-down.py" "$(F)"
+
+task-add: export TASK_TITLE = $(TITLE)
+task-add:       ## [project] file a task box (and its plan section) with the next free id: F=385 TITLE="..." [SECTION=<file with {T} for the id>] [RESEARCH=physical]
+	@if [ -z "$(F)" ]; then printf 'make task-add: F=<feature> is required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/task-add.py" "$(F)" $(if $(SECTION),--section "$(abspath $(SECTION))",) $(if $(filter physical,$(RESEARCH)),--physical,)
+
 tick: export TICK_NOTE = $(NOTE)
 tick: export PLAN_REVIEW_OK := $(PLAN_REVIEW_OK)
 tick:           ## [project] tick a task: F=188 T=T03 NOTE="what was verified" [BOXES=1 ticks the research boxes]
@@ -900,6 +910,7 @@ test-file:      ## [tests] run test files whole, or a targeted subset   FILE=tes
 ##  FILE=<paths>  the test file(s), a directory, or a node id (`tests/x/test_y.py::test_z`) to run
 ##  K=<expr>      a pytest `-k` expression - a SUBSET, which owes a whole-file run before the gate
 	@if [ -z "$(strip $(FILE))" ]; then echo "test-file: no FILE given - run \`make test-file FILE=tests/<path>\` (the variable is FILE, not F); \`make test-full\` runs every test" >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/format-changed.sh"
 	@L7R_TEST_DEPS=$${L7R_TEST_DEPS:-record} python3 -m pytest -p tests.tooling._test_deps -n $(XDIST_WORKERS) --dist worksteal -q --no-cov $(if $(K),-k "$(K)",) $(FILE) && $(STATE) green-local test-file
 
 dead-closure:   ## [diagnostics] what a deletion leaves dead and which deleted name a file still calls (frozen exhibits included), against BASE (feature 388)   [BASE=HEAD]
@@ -1033,7 +1044,7 @@ perf:            ## [performance] take a performance snapshot of the reference h
 census:           ## [performance] the overlap census: comparisons per call of every check the pool's rolls run, the ones over the flag named
 	@python3 -m l7r.diagram.tools.overlap_census
 
-.PHONY: review-yield cohort-seeds
+.PHONY: review-yield cohort-seeds task-add set-down
 review-yield:     ## [performance] each review check's passes, findings acted on / dismissed / deferred, author-missed, hours and tokens, from the ledger   [SINCE=2026-09-26]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/review_yield.py" $(if $(SINCE),--since $(SINCE),)
 

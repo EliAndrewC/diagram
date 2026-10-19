@@ -195,3 +195,23 @@ def test_the_refusal_names_the_command_that_writes_each_row(tmp_path: Path, caps
     repo = Path(__file__).resolve().parents[2]
     dry = subprocess.run(["make", "-n", "-C", str(repo), "ledger-owed", "WRITE=the plan records"], capture_output=True, text=True, check=False, env=_clean_env()).stdout
     assert '--write "the plan records"' in dry
+
+
+def test_a_plan_review_that_recorded_its_verdict_gets_its_row_and_others_do_not(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 385 T72 (plan D92): 81 plan reviews' rows were written by hand on 2026-10-18, each naming the plan-verdict record."""
+    replies = {
+        "a1": "plan-verdict: CLEAR recorded for 385-x T72 (3 decision(s))",
+        "a2": "I could not record it",
+        "a3": "BLOCKED recorded for 385-x",
+        "a4": "I recorded it as BLOCKED with `make plan-verdict F=385 TASK=T74`",
+        "a5": "**The verdict is CLEAR, and it is recorded.** `make plan-verdict` stored it",
+    }
+    monkeypatch.setattr(lo.review_cost, "transcript", lambda agent, root=None: tmp_path / agent)
+    sys.path.insert(0, str(script("ledger_owed.py").parent.parent / "hooks" / "lib"))
+    import hm_checks  # noqa: PLC0415
+
+    monkeypatch.setattr(hm_checks, "_reply_of", lambda path, default: replies[Path(path).name])
+    monkeypatch.setattr(lo, "filled_row", lambda p, where, root=None: f"| {p['agent']} | {where} |")
+    owed = [dict(_pass("spec-fidelity", subject="MODE 4: PLAN REVIEW of T72"), agent=a) for a in ("a1", "a2", "a3", "a4", "a5")]
+    owed.append(_pass("glyph-check"))  # another check's pass: still the session's to answer
+    assert lo.plan_review_rows(owed, tmp_path) == [f"| {a} | the plan-verdict record (make plan-verdict) |" for a in ("a1", "a3", "a4", "a5")]

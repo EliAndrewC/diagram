@@ -81,7 +81,7 @@ def build_polder(
     clean_parcels: bool = True,  # the parcel/channel cleanup runs on the block that is DRAWN; `fit_polder` bisects with up to 45 candidates and cleans only the winner (feature 151)
 ) -> dict[str, Any]:
     """POLDER GRID (圩田 wei-tian / reclaimed-marsh grid): a rectilinear block of paddies on flat reclaimed
-    low ground, an orthogonal ditch-grid module inside a perimeter dike. Returns build_comb-compatible keys
+    low ground, an orthogonal ditch-grid module inside a perimeter dike. Returns comb-compatible keys
     so `Settlement.draw_comb_field` draws it. China-first grounding (research.md D4): the wei-tian polder of
     the lower-Yangtze lake plains (Taihu / Dongting) is THE field archetype for LOW reclaimed ground -
     orthogonal, surveyed, big-block, the planned opposite of the old organic comb; water enters a corner, a

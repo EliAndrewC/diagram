@@ -116,7 +116,7 @@ GEN_TIME_BUDGETS = {
     # guard exists for, and the reason is inherent rather than a regression: `hamletgen.fit_field`
     # BISECTS a size multiplier against the drawn plot area, carving the whole comb several times per
     # map to land the paddy acreage the household count implies - so one map is several maps' worth of
-    # carve. Passing `build_comb` its principled `grain` of 2.0 (see waterfields.py) added a further
+    # carve. Passing the comb builder its principled `grain` of 2.0 (see waterfields.py) added a further
     # ~35% on top, measured on Sawada: 14.6s solo at 1.0, 19.8s at 2.0, from the wider ditches and the
     # extra footbridge arithmetic they need. Entries are ~4x the solo measurement, as above.
     #
@@ -158,7 +158,7 @@ GEN_TIME_BUDGETS = {
     # bisection at under a second: the lane router called `clear_runs` once PER LATTICE CELL (165,611
     # calls; 36 million `seg_dist`) and the connector compared every pair of water crossings (170 million
     # `hypot`). That was exactly the pathological shape this guard exists for, hiding under a budget that
-    # had been raised to fit it. On a COMB hamlet the bisection IS real - `fit_field` runs `build_comb` 7
+    # had been raised to fit it. On a COMB hamlet the bisection IS real - `fit_field` runs the comb builder 7
     # times, 16-22 s on a 10-household cohort seed - but it is not what made the polder slow, and its
     # solver is left alone because changing it moves the maps. After the fabric index and the crossing
     # sweep (`hamletgen/clearance.py`, `_geom/water_index.py`): the polder 110 -> ~30 s, the reference
@@ -284,7 +284,7 @@ def test_every_scripted_comb_fan_records_its_design_cell() -> None:
     """The size floor's declaration guard: no `cell`, no `paddy_basins_are_worth_their_bund`.
 
     That check measures each basin against the DESIGN CELL the placer carved to, recorded on the
-    field by `build_comb`, and it SKIPS a field that has none - which is correct, because the
+    field by the comb builder, and it SKIPS a field that has none - which is correct, because the
     terrace, ribbon and polder engines record none and are deliberately exempt from an area floor
     (hill rice is where the real micro-basins are). The cost of that design is that dropping the
     record would retire the floor on every comb map at once with the gate still green - "a check
@@ -315,7 +315,7 @@ def test_every_scripted_comb_fan_records_its_design_cell() -> None:
             assert fld.get("cell"), (
                 f"{os.path.basename(gen)}: comb fan {fld.get('name')!r} records no `cell`, so "
                 "paddy_basins_are_worth_their_bund silently skips it and the paddy size floor is "
-                "unguarded on this map (build_comb must return `cell`; see _TOE_MIN_AREA)"
+                "unguarded on this map (the comb builder must return `cell`; see _TOE_MIN_AREA)"
             )
     assert seen >= 4, f"the guard inspected only {seen} comb fans - it has stopped reaching the scripted pool and is no longer guarding anything"
 

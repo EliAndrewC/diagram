@@ -156,7 +156,7 @@ def worth_planking(w_px: float, w_tail_px: float, ftpx: float) -> bool:
 def chan_px(ft: float, grain: float) -> float:
     """A channel's DRAWN width in pixels, from its true width in feet.
 
-    `grain` is defined as `2 / ftpx` (see `build_comb`'s docstring and `hamletgen.consts.GRAIN`), so
+    `grain` is defined as `2 / ftpx` (see `carve_comb`'s docstring and `hamletgen.consts.GRAIN`), so
     `ft * grain / 2` is `ft / ftpx` - the true width in pixels at this map's scale. Written through
     grain rather than taking `ftpx` directly because grain is what every caller already threads
     down, and inventing a second scale parameter is how the two drift apart.
@@ -412,7 +412,7 @@ def _poly_perim(poly: Poly) -> float:
 def _signed_area(poly: Poly) -> float:
     """Shoelace WITH its sign - the sign is the diagnosis. Every basin the carve lays comes out
     positively wound; one that comes back negative has had its two boundaries cross, so what is
-    drawn is a bowtie, not a field. See the inverted-toe drop in `build_comb`."""
+    drawn is a bowtie, not a field. See the inverted-toe drop in `carve_comb`."""
     s = 0.0
     for i in range(len(poly)):
         x0, y0 = poly[i]

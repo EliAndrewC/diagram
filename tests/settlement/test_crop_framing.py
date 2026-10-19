@@ -6,7 +6,7 @@ one guarantee seen from three sides: the frame is the bounding box of the HARD f
 it is exactly as large as the settlement and its fields - and nothing soft, distant or incidental drags
 it wider.
 
-THE GM'S RULE (recorded in `crop_to_content` itself): the frame is tight to the real content - a
+THE GM'S RULE (recorded in `content_view` itself): the frame is tight to the real content - a
 graveyard, the pond - and NEVER held open by empty back-slope grazing. An earlier version extended the
 frame to preserve two thirds of a trailing commons, and that produced maps with a band of nothing down one
 side. So the BLEED features and the linear RUNNERS - streams, channels, lanes, the commons scrub - are
@@ -17,6 +17,7 @@ from __future__ import annotations
 
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement._knobs import crop_boxes
+from tests.settlement._builders import crop
 
 
 def _s() -> Settlement:
@@ -45,7 +46,7 @@ def test_the_frame_is_the_content_plus_the_margin() -> None:
     s = _s()
     _seat(s, 900.0, 900.0)
     _seat(s, 1100.0, 1100.0)
-    s.crop_to_content(margin=30)
+    crop(s, margin=30)
     v = _view(s)
     assert v, "the crop recorded a view"
     x0, y0, w, h = v
@@ -61,14 +62,14 @@ def test_a_trailing_runner_does_not_hold_the_frame_open() -> None:
     tight = _s()
     _seat(tight, 900.0, 900.0)
     _seat(tight, 1100.0, 1100.0)
-    tight.crop_to_content(margin=30)
+    crop(tight, margin=30)
     before = _view(tight)
 
     trailing = _s()
     _seat(trailing, 900.0, 900.0)
     _seat(trailing, 1100.0, 1100.0)
     trailing.lane([(1100.0, 1100.0), (1980.0, 1980.0)], width=12.0)  # a runner heading off-map
-    trailing.crop_to_content(margin=30)
+    crop(trailing, margin=30)
     after = _view(trailing)
 
     assert after[2] <= before[2] + 1 and after[3] <= before[3] + 1, f"the lane dragged the frame from {before[2]:.0f}x{before[3]:.0f} to {after[2]:.0f}x{after[3]:.0f}"
@@ -83,9 +84,9 @@ def test_a_set_apart_hard_feature_IS_included() -> None:
     _seat(s, 900.0, 900.0)
     near = _s()
     _seat(near, 900.0, 900.0)
-    near.crop_to_content(margin=30)
+    crop(near, margin=30)
     _seat(s, 1600.0, 1600.0)  # a set-apart steading, still HARD content
-    s.crop_to_content(margin=30)
+    crop(s, margin=30)
     assert _view(s)[2] > _view(near)[2], "a set-apart hard feature must widen the frame, not be cut off"
 
 

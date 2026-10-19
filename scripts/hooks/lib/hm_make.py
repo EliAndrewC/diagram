@@ -77,6 +77,24 @@ def targets(cmd: str) -> set[str]:
     """
     return {m.group(1) for m in _TARGET.finditer(_strip_quotes(_strip_heredocs(cmd)))}
 
+# ONE VARIABLE SET TWICE ON ONE MAKE CALL (feature 385 T61, the round arbiter on hour:385-approach-checklist@22): make keeps the
+# last silently, so `make quote-verbatim Q=0018 Q=0027` built 0027 alone and a check read a stale 0018 bundle. Read on the stripped
+# command, so `Q="0018 0027"` is one assignment; a prefix assignment (`X=1 make ...`) is the shell's, not make's, and is not read.
+_MAKE_ARGS = re.compile(_POS + r"(?:\$\(MAKE\)|make)\b([^\n;|&]*)")
+_ASSIGN = re.compile(r"(?<!\S)([A-Za-z_][A-Za-z0-9_]*)=")
+
+
+def doubled_var(cmd: str) -> str:
+    """The variable one make invocation assigns twice, else ''."""
+    for m in _MAKE_ARGS.finditer(_strip_quotes(_strip_heredocs(cmd))):
+        seen: set[str] = set()
+        for v in _ASSIGN.findall(m.group(1)):
+            if v in seen:
+                return v
+            seen.add(v)
+    return ""
+
+
 def classify(cmd: str) -> str:
     # The escape is checked FIRST and stays first (CLAUDE.md: a guard that cannot be repaired
     # through the channel it guards is a worse defect) - what changed in feature 169 is the MATCH.
@@ -105,6 +123,8 @@ def classify(cmd: str) -> str:
         return "engine-entry-point"
     if at(rf"(?:{_PY}\s+(?:-\S+\s+)*-m\s+)?pytest\b"):
         return "bare-pytest"
+    if v := doubled_var(cmd):
+        return f"make-dup-var:{v}"
     # AN OVERRIDE COUNTS WHEREVER IT SITS ON THE COMMAND. `REF_WHY=x make done` puts it in front;
     # `make done FULL=1 REF_WHY=x` passes it as a make argument. Both skip the prompt, so both are
     # tier 2 - the first cut only matched the leading form and the suite caught it immediately.

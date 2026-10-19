@@ -52,7 +52,7 @@ class TitleMixin:
         """Place the map title (the bold place name plus a scale bar under it) over BLANK space: scan the
         rendered window for a spot where the box clears every feature (buildings, fields, water, groves,
         the pond), scanning top-first so the title lands high when it can. Records the placed box in M['title']
-        so `title_clear_of_features` can verify it. Call AFTER crop_to_content, so the search runs over the
+        so `title_clear_of_features` can verify it. Call AFTER the crop, so the search runs over the
         framed window. Where the map is too full to find any gap, a corner that hides nothing but cover, and failing
         that a band grown on the sheet for it (`_title_band`) - over nothing, never over a feature (feature 287, L14).
 

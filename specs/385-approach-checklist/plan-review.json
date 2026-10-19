@@ -51,7 +51,7 @@
    "declared": "spec-fidelity"
   },
   "## Landing": {
-   "sha256": "50363d82d39667eef4c60287ef5db00067dec3ddb1a43bd709bbba79bab7b42e",
+   "sha256": "270fd005bb99f66b9811f393dbdbdfcb3809d7781409836690f93da20b6d7b45",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -674,18 +674,6 @@
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
   },
-  "### T49 Approach (checklist part A)": {
-   "sha256": "f1a89a51189c5c283afbf75f065d05247b4baae5114a4539c729b50470e755ce",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-18",
-   "declared": "spec-fidelity"
-  },
-  "### T49 Decisions": {
-   "sha256": "cae1c75c7bbcdcdd3b7cf8cd218772042a51ee07c869c1d91129b44b7930e3ee",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-18",
-   "declared": "spec-fidelity"
-  },
   "### T08 Approach (re-answered 2026-10-18T17:08Z)": {
    "sha256": "3e4a9ff5cbd1c5f0cd9b5311335570a784a2da390aa1975bd30ea09aa1a4267f",
    "verdict": "CLEAR",
@@ -718,6 +706,90 @@
   },
   "### T09 Decisions": {
    "sha256": "21d451e32c873f9995c1dd79b720ce0021d5cf631a1f3398b724393db0982d08",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T10 - a dike-pond village's water and dike split, rolled (the ranking row `settlement/fields/landuse.py::DIKEPOND_WATER_INSET#pond bank width`)": {
+   "sha256": "91bb618f9fb60d7e2de8d7d8b5ca068775758247343fb3b9c23c0c3df1712b76",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T10 Approach (checklist part A)": {
+   "sha256": "48dad0520828c228c4d55d31dc3986e8b30fba475a7ccc17f4070ce611564139",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T10 Decisions": {
+   "sha256": "b48cb957c7ac58f5901a253aa8c08abc2db32282b269c9a153cc158b51ac5e14",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T56 - a task's own heading wins its section (found by T47/T48 and T10's preflights)": {
+   "sha256": "4bda073dd8c5b053dfed502fbd44de3f8147ff7aa42da91730a3ba4211afa0b0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T56 Approach (checklist part A)": {
+   "sha256": "71b8e60c88ced4bf20193b1bea192a28d42fdd8f07fceb4ca0edbd0dc67cdac1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T56 part B (2026-10-18T19:04Z)": {
+   "sha256": "6cff88f2ad639ad39d65e68cf450657e8987a32f75d56acf1f8d8aae28407852",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T56 Decisions": {
+   "sha256": "98b41335558124c23c3ec52c0f94870fef70da5d1bf8f2b8fa743960f00b853e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T10 Approach (re-answered 2026-10-18T20:09Z)": {
+   "sha256": "0403bfd010b7667dd11d76a1f2948025efc1c0b13de0fd87252e5ff7fcbd451f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T10 part B (2026-10-18T20:09Z)": {
+   "sha256": "21213419b6a3540f1771e363856ab42db55f6a02d508b1a6cd86deef70969dda",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T10 part B (2026-10-18T23:21Z)": {
+   "sha256": "375d6fa7f5af1637648b8848eb5006148754fcf7bc7a723e3808324b2ec0cea5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T65 - an archived block edited by a typo after its review is not owed (found ticking T59, 2026-10-18)": {
+   "sha256": "21c78f7741161c3445caafebb9584fd95b8092d69738cebc818ba16cded0ad5d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T65 Approach (checklist part A)": {
+   "sha256": "c9b2e8aefb723f5c9f4365a1fbd9b32f8c8c2871898051e649daf1b47d0d342c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T65 part B (2026-10-18T23:26Z)": {
+   "sha256": "6f5a30ab6ac96953f03d7523e4af2ec69832d7dbb37fa17affb95d6e433395d4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T65 Decisions": {
+   "sha256": "0d04b047b5a151e55a42cd33b781ad3bc980ec58c0d02d05c91aba1e647fce7c",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -4224,6 +4296,230 @@
      "why": "The resistance checklist answered as FR-004 requires; it decides nothing beyond D73."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## T10 - a dike-pond village's water and dike split, rolled (the ranking row `settlement/fields/landuse.py::DIKEPOND_WATER_INSET#pond bank width`)",
+    "## T56 - a task's own heading wins its section (found by T47/T48 and T10's preflights)",
+    "### T10 Approach (checklist part A)",
+    "### T10 Decisions",
+    "### T56 Approach (checklist part A)",
+    "### T56 Decisions",
+    "### T56 part B (2026-10-18T19:04Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D74a",
+     "summary": "T10: the three recorded splits (water share 0.6, 0.4, 0.7) rolled per map from its seed as a settlement knob `dikepond_split`, even odds (GUESS), a hamlet spec may pin it.",
+     "class": "within",
+     "why": "Exactly the ranking row the task takes (roll the inset per village between the recorded splits: water-heavy, dike-heavy, 7:3), taken under FR-020 / amendment 7's ten more claims; the three values are 0018's splits as written; even odds is the labeled guess where the record gives no weights; a pinnable knob is the project's rolled-knob convention, not new scope."
+    },
+    {
+     "id": "D74b",
+     "summary": "T10: the inset derived once per map from the rolled share on the map's median parcel (the rectangle's law 4d^2 - Pd + (1-f)A = 0) and stored on the settlement.",
+     "class": "within",
+     "why": "The row asks the inset to follow the rolled split; one per-village value is what 'per village' asks. Deriving it from the parcel instead of pinning a new number per split is the derive-don't-pin practice. The done line measures the water share on the map's parcels, so the median-parcel shortcut is held to the request by measurement."
+    },
+    {
+     "id": "D74c",
+     "summary": "T10: every reader of the inset (pond water outline, mulberry rows, sties' bank seat `pondstock.BANK_INSET_FT` as half the inset) given the map's one value.",
+     "class": "within",
+     "why": "Approach item 2 records that all three read the same inset today; rolling the inset without carrying its readers would draw banks, rows and sties inconsistent with the rolled split, defeating the row. Consequence of the requested change, not added scope."
+    },
+    {
+     "id": "D74d",
+     "summary": "T10: `DIKEPOND_WATER_INSET` (23 ft) kept, labeled as the water-heavy split's value on Kuwabata, as the fallback where no parcel is known.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It is a carve-out from 'the inset follows the rolled split'. Legitimate because deriving a depth from a parcel's area and perimeter needs a parcel; where none is known the derivation is physically impossible, and ponds are drawn inside parcels, so a map with no known parcel draws no dike-pond for the fallback to mis-split. The purpose of the row (drawn ponds in the village's rolled split) is untouched. It would not be legitimate if the fallback were reached on a map that draws dike-pond parcels; the done line (every dike-pond map's parcels at its rolled split's share, all three splits across seeds) would catch that."
+    },
+    {
+     "id": "D74e",
+     "summary": "T10: the drawing page's known-gap sentence (0018) brought up to the knob, by a page session.",
+     "class": "within",
+     "why": "The page states the dike-heavy and 7:3 splits are a known gap of our maps; once they are drawn the sentence is false. Keeping the record true for the change made serves the row; it adds no behavior."
+    },
+    {
+     "id": "D75",
+     "summary": "T56: `task_sections` first takes, for each id, the first heading whose title begins with that id; only an id no heading begins with falls back to the first heading that mentions it, as before.",
+     "class": "within",
+     "why": "A tooling fix so a task's decision preflight reviews that task's own section (FR-003's per-task Approach and decide-first gate; the preflights of T47, T48 and T10 measured reviewing an umbrella heading instead). Within amendment 6 ('implement any obvious performance / tooling / process improvements along the way'). Keeping the mention fallback and the already-written headings narrows nothing the GM asked; it preserves existing coverage for ids with no own heading."
+    },
+    {
+     "id": "T56-B9",
+     "summary": "T56 part B: the hour-20 step-back ruled `continue`; the ruling's tooling fix split out as its own task (T57).",
+     "class": "within",
+     "why": "FR-015 (one goal a task): a second goal found in a task becomes its own task. No narrowing of what was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "### T10 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D74 (split rolled)",
+     "summary": "The dike-pond water share is rolled per map from the seed as a settlement knob (dikepond_split, pinnable by a hamlet spec), at even odds marked GUESS.",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict. A ranking-row claim fix (the original request's 'about five ranking rows', Amendment 7's ten more, FR-020) that makes several attested forms a knob instead of pinning one. That matches the research and narrows nothing the GM asked for."
+    },
+    {
+     "id": "D74 (inset derived)",
+     "summary": "The water inset is derived once per map from the rolled share on the median parcel (the rectangle's law) and stored on the settlement, so the pond outline, the mulberry rows and the sties' bank seat all read one value.",
+     "class": "within",
+     "why": "Unchanged. An implementation choice that derives the figure from the rolled share instead of pinning it. It keeps every use of the claim and excludes no case."
+    },
+    {
+     "id": "D74 (23 ft fallback)",
+     "summary": "DIKEPOND_WATER_INSET (23 ft) stays as the water-heavy split's value, labeled as such, and is used only where no parcel is known.",
+     "class": "within",
+     "why": "Unchanged. A labeled fallback for the no-parcel case. It does not narrow the roll wherever a parcel exists."
+    },
+    {
+     "id": "D74b (all five recorded splits)",
+     "summary": "dikepond_split rolls all five water shares the 0018 record carries (0.6, 0.4, 0.7, 0.5, 0.3). The gazetteer's three-to-seven is read in the order it names (three water to seven dike). Even odds (GUESS), a title-card pop-up for each, and 0018's drawing page names all five.",
+     "class": "within",
+     "why": "The new decision. It widens the roll from three forms to every form the record attests, which closes a gap left by the earlier three-form roll (the record check's own question). Matching the record is what a ranking-row claim fix is for, so this is in service of the request and is not a narrowing. Reading the gazetteer's ratio in the order it names follows the source and invents no exception. Pop-ups and the page naming the forms are how this project carries a claim."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "### T10 Approach (re-answered 2026-10-18T20:09Z)",
+    "### T10 Decisions",
+    "### T10 part B (2026-10-18T20:09Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D74",
+     "summary": "The recorded splits (now all five, per D74b) rolled per map from the seed as the settlement knob dikepond_split at even odds (GUESS); the inset derived once per map from the rolled share on the median parcel and stored on the settlement for the water outline, mulberry rows and sty bank seat; DIKEPOND_WATER_INSET (23 ft) kept as the labeled fallback.",
+     "class": "within",
+     "why": "The only edit since the last CLEAR verdict replaces the literal three-value tuple with 'three at first; all five since D74b', bringing D74 into line with D74b; the substance was already judged. Fixing a ranking-row claim so the drawn ponds follow the record is the work the GM asked for in amendment 7 ('pull in 10 more claims'), and rolling a knob over attested forms widens toward the record rather than narrowing anything."
+    },
+    {
+     "id": "D74b",
+     "summary": "dikepond_split rolls all five water shares 0018 records (0.6, 0.4, 0.7, 0.5, 0.3), not the ranking row's three; each gets a title-card pop-up and 0018's drawing page names all five.",
+     "class": "within",
+     "why": "Same text as when last judged CLEAR. It enlarges the rolled set to the full record, so it narrows nothing the request or the claim asks for."
+    },
+    {
+     "id": "Approach-3/4 one inset per village",
+     "summary": "One derived inset per village (GUESS), measured on Kuwabata at a rolled 0.7: the median parcel draws 0.700 water, individual parcels 0.56 to 0.80.",
+     "class": "within",
+     "why": "This is the D74 mechanism already judged CLEAR. It is labeled GUESS, and its effect on non-median parcels is measured and disclosed, not hidden. It is how the claim is implemented and does not carve a case out of what was asked."
+    },
+    {
+     "id": "Approach-5 / part B-1 order and scope",
+     "summary": "Add the two splits and their pop-ups; in a page session fix 0018's drawing page, the stale '23 ft' and 'six in ten' text elsewhere, and the bank-width finding from 0018 and 0027 (as the hour-21 ruling guides), before it reaches the GM; then claims, pool, cohort and gate.",
+     "class": "within",
+     "why": "Closing stale text the change makes false, and settling a finding the arbiter's ruling asked for, both serve the claim fix. Nothing the request or the ruling names is dropped."
+    },
+    {
+     "id": "part B-9 ruling's tooling fix as its own task",
+     "summary": "The hour-21 ruling's tooling fix is taken as its own task, not folded into T10.",
+     "class": "within",
+     "why": "FR-015 (one goal a task) requires a second goal to become its own task. The fix is moved, not dropped, so amendment 6's 'implement any obvious ... tooling ... improvements along the way' is still honored."
+    },
+    {
+     "id": "Approach-8 budget",
+     "summary": "2 more hours.",
+     "class": "within",
+     "why": "A working budget the checklist asks for. It is not a recorded threshold on the task's success, which is what amendment 2 declined, and it narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "### T10 part B (2026-10-18T23:21Z)",
+    "(removed) ### T49 Approach (checklist part A)",
+    "(removed) ### T49 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T10-B1 claims findings carried into T43",
+     "summary": "T10 ticks and lands with its four claims findings carried into T43 (CLAIMS_OK names them) rather than fixed before landing.",
+     "class": "within",
+     "why": "This is amendment 3 option 3 as the GM locked it in ('Never block on unchanged code; the gate files the finding as an open task instead ... must still be fixed before the feature closes'), carried by FR-013 (carried, not refused). The block should have cited FR-013. The class rests on the premise that CLAIMS_OK names findings FR-013's own test admits: findings on units whose code and claim are unchanged, filed into an open task (T43), so they are still fixed before the feature closes. If any of the four is on a unit T10 changed, parking it is outside option 3 and would be a NOT LEGITIMATE narrowing; the bundle carries no evidence either way and the repository was not read."
+    },
+    {
+     "id": "T10-B9 change-route",
+     "summary": "After the hour-23 step-back ruling, T10 lands before T66 and T67 are built.",
+     "class": "within",
+     "why": "An ordering choice. T66 and T67 are still built; nothing is dropped. Nothing in request.md places T66/T67 ahead of T10, and amendment 8's order approval covers the step-back's items one to four, not these. Items 2-8 of the block are status answers to the part-B checklist, not decisions."
+    },
+    {
+     "id": "T49 Approach (removed)",
+     "summary": "The T49 Approach block (red-gate tripwire ignores tree-moved aborts; bundle diffs between reds) deleted from plan.md.",
+     "class": "within",
+     "why": "Judged from earlier.md alone. T49 is an arbiter's tooling fix, not a clause of the GM's request, and deleting its plan text narrows no sentence of request.md nor rescinds 375's FR-004/FR-010 (a tree-moved run still never vouches for the tree). The class rests on the premise that this is the archiving of a finished section (amendment 8: plan archive should run automatically), not an abandonment of the fix; the bundle does not show T49's status."
+    },
+    {
+     "id": "T49 Decisions D66 (removed)",
+     "summary": "D66 (abort recorded as failed-gate tree-moved; red_gate_runs skips tree-moved runs and writes git diff --stat between listed reds) deleted from plan.md.",
+     "class": "within",
+     "why": "Same ground as the T49 Approach removal: D66 implemented an arbiter's fix, its own text kept FR-004's refusal intact ('nothing vouches for the moved tree'), and removing the plan text after the task is done narrows nothing the GM asked. Rests on the premise that D66 was built and the section archived, not reversed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## T65 - an archived block edited by a typo after its review is not owed (found ticking T59, 2026-10-18)",
+    "### T65 Approach (checklist part A)",
+    "### T65 Decisions",
+    "### T65 part B (2026-10-18T23:26Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T65 (the task)",
+     "summary": "Add a tooling task: an archived plan block whose text is only a typo-scale edit from its reviewed text is not owed a review.",
+     "class": "within",
+     "why": "Amendment 6 asks the overnight run to 'implement any obvious performance / tooling / process improvements along the way', and amendment 8 asks that plan archiving be done correctly by the tooling every time. A defect where archiving a finished section (feature 375 FR-044: the archive voids nothing) makes a review owed and refuses a tick is such a fix."
+    },
+    {
+     "id": "D84",
+     "summary": "block_status's removed-block loop skips a recorded key when plan-done.md holds a block of that key whose text is typo_only against the reviewed text (record text, else history at its digest); digest match still skips; anything more than a typo is owed as before.",
+     "class": "within",
+     "why": "It does not relax what review is owed: a live block already passes a typo-scale change (feature 375 FR-005(b)), and the same block becomes owed only because it was archived, which FR-044 says voids nothing. D84 applies the existing rule to the same text in its archived place; anything beyond a typo stays owed, so the plan gate's reach is unchanged."
+    },
+    {
+     "id": "A6-A9 (exit, budget, done)",
+     "summary": "Exit (c), 20 min budget, done = one goal with a test in tests/tooling/test_plan_gate.py red without it and T59's tick going through.",
+     "class": "within",
+     "why": "A test that is red only when the requested fix is absent enforces the request; one goal per task follows FR-015. Nothing here changes what was asked."
+    },
+    {
+     "id": "part B: change-route, T66/T67 wait for T10",
+     "summary": "The hour-23 step-back's change-route is taken with T65 as its first step; T66 and T67 are sequenced after T10.",
+     "class": "within",
+     "why": "Sequencing of tasks the feature already carries; no requested work is dropped or narrowed (FR-006 runs tasks one at a time)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing: T66 and T67 land open",
+     "summary": "The only change since the block's CLEAR verdict: T66 and T67 are appended to the 'Lands open' list, so each lands when it closes, with its retro row, while the tasks after it stay open - the same landing mode every other task of the feature already has.",
+     "class": "within",
+     "why": "FR-006 requires tasks run one at a time, each closing with its retro row before the next task-start; the GM's request is 'we do one task and then we measure ... and then we go on and do the next task', and amendment 8 has the step-back's fixes worked as tasks on this feature now ('just make it another task on this feature ... we should do it now'). Landing two more tasks per task, like the rest, narrows nothing the request or spec asks for and decides nothing the spec leaves open beyond applying FR-006 to them."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -4794,6 +5090,412 @@
      "summary": "BUNDLE_PITCH keeps 100 ft; its claim is conformed from 'row pitch - 0038' (MISLABELED) to 'the along-row span - UNRESEARCHED', naming stages._rank_step (envelope depth + max(lane room, SUN_CORRIDOR_FT 39 ft)) as the row-to-row step that carries 0038's 92 ft; comments calling it the row pitch or a homestead's ground are corrected; no map changes",
      "class": "within",
      "why": "The GM asked for ranking rows (claims) to be taken so the code matches the research (request: 'about five ranking rows', amendment 7 'pull in 10 more claims'). The research figure is 0038's rows 92 ft apart; the plan says the row-to-row step is already _rank_step (house + yard + 39 ft sun, about 93 ft per 0038's own words) and that BUNDLE_PITCH is the along-row and grid span, so the research is met and the defect is the label. The ranking row's '100 -> 92' prescription is the ranking's own suggested fix, not the GM's words; the plan's measurement (2026-10-18, BUNDLE_PITCH at 92: rows unchanged, cohort 52/54 with seeds 17 and 43 regressing) shows that prescription would not move the rows at all, so following it would not serve the purpose. Choosing 'conform the label' among named exits is what the GM-approved checklist asks for, and recording BUNDLE_PITCH honestly as UNRESEARCHED narrows nothing the GM asked. The ranking row's re-derive of HOMESTEAD_GROUND_FT and WEB_REACH_FT ties is consequential on a number move that does not happen; the plan still states each one's source (WEB_REACH_FT 0246, HOMESTEAD_GROUND_FT UNRESEARCHED)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T10": {
+   "section_sha256": "f2c1f9342376c88bcd991e27e0a7f25769b42c9ac5a25692e7745d2b0cc3ef11",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D74a",
+     "summary": "The three splits recorded as water shares (0.6, 0.4, 0.7) - 6:4 water, 6:4 dike, 7:3 water.",
+     "class": "within",
+     "why": "Exactly the three splits the ranking row names (water-heavy, dike-heavy, 7:3), sourced to 0018."
+    },
+    {
+     "id": "D74b",
+     "summary": "The split rolled per map from its seed as a settlement knob `dikepond_split`, pinnable by a hamlet spec.",
+     "class": "within",
+     "why": "The row asks for the inset rolled per village; a seed-rolled knob is the project's standing form for several attested forms. Per map is per village here (one village a map)."
+    },
+    {
+     "id": "D74c",
+     "summary": "Even odds between the three splits, labeled GUESS.",
+     "class": "within",
+     "why": "The row says roll between the splits and gives no weights; even odds labeled GUESS settles an open detail without excluding any split."
+    },
+    {
+     "id": "D74d",
+     "summary": "The inset derived once per map from the rolled share on the map's median parcel by the rectangle law, stored on the settlement.",
+     "class": "within",
+     "why": "Implements the inset as the rolled split's value on the map's own parcels; done is measured on all its parcels (within a few points), so no split or parcel is excused."
+    },
+    {
+     "id": "D74e",
+     "summary": "Every reader of the inset (pond water outline, mulberry rows, sties' bank seat at half the inset) reads the one stored value.",
+     "class": "within",
+     "why": "Keeps the readers consistent with the rolled split; without it the roll would reach only the water outline."
+    },
+    {
+     "id": "D74f",
+     "summary": "DIKEPOND_WATER_INSET (23 ft) kept, labeled as the water-heavy split's value on Kuwabata, as the fallback where no parcel is known.",
+     "class": "within",
+     "why": "A fallback for the no-parcel case only; every map with parcels takes the derived inset of its rolled split, so it narrows nothing the row asks."
+    },
+    {
+     "id": "D74g",
+     "summary": "0018's drawing page known-gap sentence rewritten to the knob, by a page session.",
+     "class": "within",
+     "why": "The gap the page names is the one this row closes; bringing the page up to the code keeps the record true."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T56": {
+   "section_sha256": "4f10c43f2c7d55a8b85217e629f14dd8fdd84471ea05fd6442174726688c85d3",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D75",
+     "summary": "task_sections first gives each id the first heading whose title BEGINS with that id (## T10 - ..., ### T10 Approach); only an id no heading begins with falls back to the first heading that mentions it, as before.",
+     "class": "within",
+     "why": "A tooling fix so a task's decision preflight reviews that task's own section rather than an umbrella heading that only names it - the per-task check the GM approved (request: the checklist asked at task start 'enforced by the existing decide/tick tooling', and amendment 6 'implement any obvious performance / tooling / process improvements along the way'). It removes a measured defect (T47/T48/T10 preflights reviewed the umbrella heading) without narrowing anything the request or spec asks; the fallback keeps every plan already written resolving as before."
+    },
+    {
+     "id": "T56-scope",
+     "summary": "Tooling only, plans already written keep their headings, one goal, a test in tests/tooling/test_plan_gate.py red without the rule.",
+     "class": "within",
+     "why": "One goal per task is FR-015 (amendment 4); the test only fails when the requested behavior is absent, so it is enforcement of the fix, not added scope; leaving existing plans' headings untouched narrows nothing the GM asked for."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T57": {
+   "section_sha256": "cc4ec861723f09068269441e010fa4099f0605eb396e8b99925c1b7579d583fe",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T57-goal",
+     "summary": "A comment- or docstring-only change to engine Python owes neither a full make done nor a landing cohort; the fix goes in the one definition (gate-stamp.py semantic_bytes, loaded by ci/delta.py) that both the green-gate guard and sync-with-main.sh's cohort requirement read.",
+     "class": "within",
+     "why": "It is the arbiter's fix restated (the arbiter stands where the GM was asked, feature 379), and it is the obvious tooling improvement that Amendment 6 asked for along the way. Putting it in the single shared definition reaches both mechanisms the fix names and nothing else. Nothing the fix covers is left out."
+    },
+    {
+     "id": "D76",
+     "summary": "semantic_bytes removes every bare string-constant statement from every statement list, not only a body's first statement; an emptied body dumps as an empty list.",
+     "class": "within",
+     "why": "The fix's purpose is that a change touching no code that runs owes no engine gate, and its named case is a constant's claim docstring, which Python does not treat as a docstring because it is not the first statement. Stripping only first statements would leave that exact case unfixed (the measured T09 incident). A bare Constant string is evaluated and thrown away, so the constraint that every token that runs still moves the key holds. f-strings are JoinedStr nodes, not bare constants, so they stay in the id. This widens what counts as non-engine only to strings that do not execute, which is what the fix is for. It does not narrow it."
+    },
+    {
+     "id": "D76-cache",
+     "summary": "The semantic-id cache file is renamed to semantic-id-cache-2.json, so every engine key moves once and each session's next gate re-runs once.",
+     "class": "within",
+     "why": "Implementation hygiene so that ids computed by the old rule are not reused. It is a one-time cost of applying the fix and drops nothing that was asked."
+    },
+    {
+     "id": "T57-test",
+     "summary": "Done is one goal: two module versions differing only in a constant's claim docstring and a comment share one semantic id and a changed value does not; tests/tooling/test_gate_stamp* is red without it.",
+     "class": "within",
+     "why": "The fix asks for a test that is red without it. This test only fails when the requested behavior is missing, so it enforces the fix. The changed-value half checks the fix's own constraint that code which runs still moves the key."
+    },
+    {
+     "id": "T57-process",
+     "summary": "Order (rule, cache name, test), exit (c), no search smell, 30-minute budget.",
+     "class": "within",
+     "why": "Process fields of the checklist (FR-003). They narrow nothing that was asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T58": {
+   "section_sha256": "8b37000f9de737f94f75874ec6d50f51793d78b9559ea130ddb77b0d94a856ef",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D77",
+     "summary": "In agent-prefix-hooks.sh's wave refusal, a session carrying L7R_DISPATCHER is told it has no Workflow tool and to put WAVE_OK: <reason> in each prompt of the batch, and is not shown the check-wave call; an interactive session's message is unchanged.",
+     "class": "within",
+     "why": "This is the arbiter's fix as worded (name WAVE_OK as the route when the session has no Workflow tool, instead of pointing a headless session at a tool it lacks). The arbiter stands where the GM was asked (feature 379), and the GM's amendment 6 asks for obvious tooling and process improvements along the way. Leaving the interactive message unchanged keeps the existing behavior the fix did not ask to change. Nothing is carved out."
+    },
+    {
+     "id": "T58-detect",
+     "summary": "'The session has no Workflow tool' is detected by L7R_DISPATCHER being set (queued headless page sessions carry it; interactive ones do not).",
+     "class": "within",
+     "why": "This is the mechanism for the fix's own condition, not a narrowing of it. The fix's stated object is a headless session pointed at a tool it lacks, and Approach item 4 records as measured (2026-10-18, page_session_runner.headless_env) that queued headless sessions carry the variable. The incident that prompted the fix was such a session (T10's check session at 19:48)."
+    },
+    {
+     "id": "T58-test",
+     "summary": "tests/hooks/test-agent-prefix-hooks.sh gains a case that is red without the branch: with L7R_DISPATCHER the refusal names WAVE_OK and no Workflow call; without it, the message is as before.",
+     "class": "within",
+     "why": "The test enforces exactly what was asked, and its only effect is that the requested refusal text happens and keeps happening. That is enforcement of the request, not unrequested scope. The fix itself names 'a test red without it' as part of the work."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T59": {
+   "section_sha256": "7479722acc05bed6ab0878cff77d0e8a5bdc6830a708b19924d075ef6b276c99",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D78",
+     "summary": "hm_checks keeps what a dispatch's reading would mark (seen sentences, notes read, the fresh round's edits reset) on its pending record and applies it only in launched(), when an agent id returns; a dispatch refused before launch changes nothing but its own pending record, which expires via _live and counts no round.",
+     "class": "within",
+     "why": "This is how the plan carries out the arbiter's fix (the arbiter stands where the GM was asked, feature 379; amendment 6 also asks for obvious tooling/process fixes along the way). It reaches the fix's stated purpose, that a refused dispatch cannot push a unit to its round cap, because the marks that made the next real dispatch count as a later round are never applied. It covers a refusal by any hook, not only the wave guard. That is wider than the fix names, not narrower, and adds no new refusing or blocking behavior. T41's reply rule is left unchanged, as the constraints require. The fix's 'or keep as a pending round' clause is met because the pending record counts no round, and the Done measure checks this: the next dispatch of the same unit must be a first look."
+    },
+    {
+     "id": "T59-done-test",
+     "summary": "tests/tooling/test_hm_checks.py: a recorded-but-never-launched dispatch leaves seen, notes_read and the round's edits unchanged, and the next dispatch of the unit is a first look; red without the fix.",
+     "class": "within",
+     "why": "Its only job is to enforce the arbiter's fix and the task's single goal. It is verification of the requested behavior, not added scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T60": {
+   "section_sha256": "907599b9ad7e72788213e12e5bd5fc3008eb5534991950819fb7788645b3d5da",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T60-scope",
+     "summary": "T60 is a tooling-only task: apply_edits.py takes an EDIT whose new text is a paragraph break, and drops a line an empty replacement empties, each with a test in tests/tooling/test_apply_edits.py red without it; every other EDIT applies as before.",
+     "class": "within",
+     "why": "The GM's amendment 6 (2026-10-18) asks the session to 'implement any obvious performance / tooling / process improvements along the way'; the task carries the arbiter's fix part 1 as quoted, no wider, and was measured (two hand finishes in T10's check session). The tests only fail when the requested behavior is absent, so they enforce the fix rather than add scope."
+    },
+    {
+     "id": "D79",
+     "summary": "A block whose new text is exactly one empty line replaces its old text with a paragraph break (\\n\\n inside a line, a blank line between lines); a block whose new text is empty and whose old text was the whole of its line removes the line and its newline; every other block applies as before.",
+     "class": "within",
+     "why": "This is the arbiter's fix stated as a parse rule: 'a bare paragraph break' read as a lone empty line between === and >>>, and 'the line an empty replacement empties' read as an empty replacement of a line's whole text. Neither reading excludes a case the fix names, and 'every other block applies as before' preserves only what the fix did not ask to change."
+    },
+    {
+     "id": "T60-order-budget",
+     "summary": "Order: the parse, the empty-line drop, then their tests; exit (c); budget 30 min; one goal.",
+     "class": "within",
+     "why": "Sequencing and a time budget inside the requested work; the one-goal 'done' follows FR-015 (amendment 4)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T61": {
+   "section_sha256": "92cc84cf7d2637b0604b6131329b8c30117aa60505419058a099b417b734318f",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D80",
+     "summary": "hm_make.classify returns make-dup-var when one make invocation assigns one variable name twice; make-only-hooks.sh refuses it, naming the variable and the two compliant forms (quoted list, or one call per value).",
+     "class": "within",
+     "why": "This is the arbiter's fix part 2 as quoted in the Approach (a Bash guard refusing a make call that assigns a variable twice, naming Q=\"a b\" or one call per value); feature 379 has the arbiter's ruling stand where the GM was asked, and amendment 6 directs obvious tooling/process improvements along the way. The refusal reaches exactly the case the fix names and no other command or agent type."
+    },
+    {
+     "id": "D80-strip",
+     "summary": "Quotes and heredocs are stripped before counting assignments, as the guard already strips them.",
+     "class": "within",
+     "why": "Implements the fix's own carve-in that a quoted list passes (Q=\"0018 0027\" is one assignment); reuses the guard's existing parse rather than adding a new scope."
+    },
+    {
+     "id": "D80-pass",
+     "summary": "make x Q=\"a b\" and make x Q=a R=b pass.",
+     "class": "within",
+     "why": "Both are stated by the arbiter's fix (the quoted-list form is the named compliant form; distinct variables are a different case from a doubled assignment)."
+    },
+    {
+     "id": "D80-escape",
+     "summary": "The escape is the guard's existing GUARD_EDIT_OK, recorded.",
+     "class": "within",
+     "why": "Not a carve-out of any case: no class of doubled assignment is exempted by rule, and the override is the existing, recorded escape every refusal in this guard already carries. It adds no new mechanism or default."
+    },
+    {
+     "id": "T61-test",
+     "summary": "tests/hooks/test-make-only-hooks.sh carries a test red without the refusal.",
+     "class": "within",
+     "why": "Enforcement of the requested refusal (the fix itself says a test red without it); if the refusal is deleted the test has nothing left to check."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T64": {
+   "section_sha256": "bc8be34a6d10bac709ab39f1688f92911d911516e47b47a18888409c5072a114",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T64-A (build the tool)",
+     "summary": "A task is added by one command, make task-add, that picks the id and places the box and plan section; tooling only, with a test that fails without it.",
+     "class": "within",
+     "why": "Amendment 8, verbatim: 'do we need some tooling around how to insert a task ... somewhere in the middle of the task list ... that sounds like something that could potentially eat up a lot of tokens if we are doing it by hand. And hence why it should get tooling.' The block now quotes these words exactly (the earlier text quoted only the first half). The test only fails when the requested tool is missing, so it enforces the request."
+    },
+    {
+     "id": "T64-A2 (placement)",
+     "summary": "The task box goes before the GM-review box (as claims-carry places its boxes). A plan section, if given, goes before the feature's close section, or at the end.",
+     "class": "within",
+     "why": "The GM asked for tooling to insert a task 'somewhere in the middle of the task list', not at the end. Putting it before the trailing GM-review and close sections is exactly that middle insertion. The request does not ask to insert at any chosen position, so this narrows nothing the GM asked for."
+    },
+    {
+     "id": "T64-A4 (the measured world)",
+     "summary": "Revised from 'about 30 tasks' to a dated count: T41-T64, 24 tasks, each added by a hand-written script of about 1-2k tokens, with two ids (T47, T48) that collided.",
+     "class": "within",
+     "why": "A dated, sourced measurement backing the GM's premise that hand insertion costs tokens. It corrects a figure and changes no scope."
+    },
+    {
+     "id": "D83",
+     "summary": "The next id is the highest T<n> across tasks.md and plan.md, plus one, so an id that appears only in a heading is never reused. The script writes the box with its research line, replaces {T} in the SECTION text and puts it before '## T11 - the close', then prints the id.",
+     "class": "within",
+     "why": "This is how the requested tool works: choosing the id by hand is what caused the T47/T48 collision. Unchanged since its last CLEAR verdict."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T63": {
+   "section_sha256": "94681040c6ac52e0ca5c608ebb1d2905d729ea9690384e43cfc1fca53abe5167",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D82-trigger",
+     "summary": "The archive runs automatically at the end of every successful tick that tick-task.py made, on the tick's feature, and prints the sections it moved.",
+     "class": "within",
+     "why": "Amendment 8: 'perhaps that should be something that is run automatically when certain actions are taken ... make our tooling do the thing correctly automatically every time'. The GM left the action open; the tick is the action that finishes a section's last task, so it is the point at which a section first becomes archivable. Printing what moved is the 'says so' the done line measures, not added scope."
+    },
+    {
+     "id": "D82-error",
+     "summary": "An archive error never refuses the tick (already written); the error is printed.",
+     "class": "within",
+     "why": "Refusing after the tick is written cannot make the archive happen and cannot unwrite the tick, so a refusal would not serve 'do the thing correctly automatically every time'; the error is surfaced, not swallowed, and the next tick re-runs the archive. No case is carved out of when the archive runs."
+    },
+    {
+     "id": "C-rule-unchanged",
+     "summary": "make plan-archive's rule stays as 375 FR-044 has it (every task of a section ticked, its review CLEAR); the archive never moves an open task's section.",
+     "class": "within",
+     "why": "The GM asked for the existing archive to run automatically, not for a different archive rule; preserving the rule is the request as written."
+    },
+    {
+     "id": "C-tooling-test",
+     "summary": "Tooling only; done is one goal, with a test in test_plan_gate.py or the tick's own test red without it.",
+     "class": "within",
+     "why": "The test only fails when the requested automatic archive is absent: enforcement of the request, not unrequested scope (GM 2026-09-20). One goal per task is FR-015."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T62": {
+   "section_sha256": "9ab2406f1e0231d20aeb4ddc014c442c3c5370bd247cada623da780e5ca44103",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D81-trigger",
+     "summary": "A claimed module-level constant counts as changed when its value or its claim line differs between the merge base and the head.",
+     "class": "within",
+     "why": "The arbiter's fix fires 'when a claimed constant's value or derivation changes'; the value compare carries the value, the claim line carries the derivation (DIKEPOND_WATER_INSET going from a literal 23 to a derived value changes both)."
+    },
+    {
+     "id": "D81-match",
+     "summary": "Pages are searched for the OLD value as a whole number, whatever unit follows it (changed from a fixed unit list ft/px/%/acres).",
+     "class": "within",
+     "why": "The arbiter asks for pages that 'still state the old figure'; no unit list is in the fix, so dropping the list moves the rule toward the arbiter's words, and not matching digits inside longer numbers only stops false matches."
+    },
+    {
+     "id": "D81-link-filter",
+     "summary": "Only pages that link a question the constant's claim cites are kept (four of the seven pages stating '23 ft').",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the arbiter's own words: the fix flags pages stating the old figure 'for that unit', so some way of tying a page's figure to the constant is required, and without one every page containing that number would be flagged. The plan's measurement (2026-10-18) puts the stale pages that state 23 ft (0022, 0025, plus 0027) inside the four linking pages, so on the case that prompted the fix the filter drops no stale page that states the figure. The purpose, catching stale figures at the edit, is kept. If a stale page stating the figure but not linking the cited question is ever found, this ruling's factual basis is gone."
+    },
+    {
+     "id": "D81-0024",
+     "summary": "0024, one of the arbiter's named examples, is not reached: it states the split as 'six in ten' and no figure; the claims rounds still read it.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The arbiter's mechanism is figure-based ('flag every research drawing page that still states the old figure'), and 0024 states no figure, so that mechanism cannot reach it. A link rule would not either: measured 2026-10-18, 0024 links no question the claim cites. Of the named examples, 0022 and 0025 state the figure and are caught; 0024 is a different kind of case and the arbiter's sentence does not cover it. The plan says so openly and leaves it to the existing claims rounds, so no case is quietly dropped."
+    },
+    {
+     "id": "D81-flag-surface",
+     "summary": "A flag only, never a refusal, printed by claims-owed from scripts/record/claims.py as 'stale figure: <page> states <figure> (<constant> was <old>)'; a test in test_claims_index.py red without it.",
+     "class": "within",
+     "why": "The arbiter says 'the claims check in scripts/record/claims.py should flag'; a flag in that check is what was asked, and a test that fails only when the flag is missing enforces it."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T65": {
+   "section_sha256": "a78d0f3570d0244173a09cd38aa188f4484aaf278f0ffc0b66b836aa21b9b14e",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T65-A (goal, constraints, exit c)",
+     "summary": "Tooling-only fix: archiving a finished plan section never makes a review owed; a test red without it; the exit taken is (c), a rule that removes the case.",
+     "class": "within",
+     "why": "Amendment 6 asks the overnight run to 'implement any obvious performance / tooling / process improvements along the way', and amendment 8 asks that the plan archive be run automatically and that the tooling 'do the thing correctly automatically every time'. An archive that turns an already-reviewed block into an owed review is a defect in exactly that automatic tooling; fixing it with a test serves those words and narrows nothing."
+    },
+    {
+     "id": "D84",
+     "summary": "block_status's removed-block loop skips a recorded key when plan-done.md holds a block of that key whose text is typo_only against the reviewed text (record's text, else history's at its digest), the same judgment a live block in plan.md already gets; digest match still skips, anything beyond a typo is still owed.",
+     "class": "within",
+     "why": "It does not loosen review: it applies to an archived block the same typo rule the live check already applies, so moving a section to plan-done.md changes nothing about whether a review is owed - which is what the archive is meant to guarantee (moving a finished section voids nothing). Changes beyond typo scale remain owed, so no reviewed-text guarantee is given up. No part of the GM's request is narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T67": {
+   "section_sha256": "67a3c844f8013b342bcda3c03b2515c15c3c2b8dda95e5dfd61d53d554074c1e",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D86",
+     "summary": "land-tooling.sh runs the lint check first and alone; a lint failure stops at once with its output and the ruff format line, before the guard suites and tooling tests start; a passing lint goes on to the other two in parallel as now.",
+     "class": "within",
+     "why": "A tooling performance fix, which amendment 6 asks for in the GM's words ('Please make sure to implement any obvious performance / tooling / process improvements along the way'), made on a defect measured on 2026-10-18 from .git/land-tooling.log (a 0.05 s lint failure reported only after a 122.20 s step). It takes nothing out of anything the GM asked for or anything the spec requires: no FR in spec-index.md governs land-tooling's order of checks (FR-017 to FR-019 are about the push, the arbiter fix command and the ledger). Every check still runs on a landing that passes lint. The Approach's constraint 'every check's failure is still reported' (T52) holds for the checks that run; the suites skipped after a lint failure have no result to report, and the landing fails either way. The constraint is a plan-internal one, not the request's, so this does not narrow anything."
+    },
+    {
+     "id": "T67-done",
+     "summary": "Done as one goal: a landing whose lint fails stops before the suites start, checked by tests/hooks/test-land-tooling.sh, which is red without the change.",
+     "class": "within",
+     "why": "A test whose only job is to enforce D86. Enforcing what was asked is not extra scope (GM 2026-09-20). It is one goal, as FR-015 requires."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T66": {
+   "section_sha256": "a1309ea6bd389c8f0ac832d913b631a866ca00b83687c770341811ddb92387b0",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T66 (the task)",
+     "summary": "Fix plan_bundle.build, feature 375's plan-review bundler, inside feature 385 as a tooling task, because T65's plan review was handed 385's FR-005 where the block meant 375's requirement.",
+     "class": "within",
+     "why": "Amendment 6 (the GM, verbatim): 'Please make sure to implement any obvious performance / tooling / process improvements along the way.' A bundle that gives the reviewer a different requirement from the one the block cites is a tooling defect found during this feature's own work. This bundle shows the defect too: its spec-cited.md carries 385's FR-005 and none of 375's FR-044/FR-046."
+    },
+    {
+     "id": "D85(a) - qualified forms",
+     "summary": "build reads '(?:feature )?NNN(?:'s|,)? (FR|SC)-NNN' as a citation of feature NNN's requirement and writes it to spec-cited.md under a '<!-- feature NNN -->' line.",
+     "class": "within",
+     "why": "This is the mechanism of the fix. It serves the goal that the reviewer reads the requirement the block names. The request does not settle this design detail."
+    },
+    {
+     "id": "D85(b) - unresolvable feature",
+     "summary": "When there are no specs/NNN-* directories, or more than one, the qualified id is left out, the same way an unknown id is left out today.",
+     "class": "within",
+     "why": "With no directory there is nothing to include. With several, which one is meant is undecidable. This repeats the bundler's existing unknown-id behavior and removes nothing the GM asked for."
+    },
+    {
+     "id": "D85(c) - bare ids stay the reviewed feature's",
+     "summary": "An unqualified id still resolves against the reviewed feature only. A block citing another feature writes that feature beside every id it means, and the tool does not guess.",
+     "class": "within",
+     "why": "This is a design choice inside a tooling improvement and narrows no request clause. The Done line covers both cases: the qualified form gets the other feature's paragraph, and the same-numbered local requirement is included only when the block also cites it bare."
+    },
+    {
+     "id": "D85(d) - spec-index unchanged",
+     "summary": "spec-index.md keeps indexing only the reviewed feature's requirements.",
+     "class": "within",
+     "why": "The goal is about cited requirements (spec-cited.md). Leaving the index alone keeps the change to what the defect needs."
+    },
+    {
+     "id": "Approach 9 - done, measured",
+     "summary": "One goal: the four qualified forms bundle 375's FR-044 headed with its feature. tests/tooling/test_plan_blocks.py is red without it.",
+     "class": "within",
+     "why": "The test exists only to enforce the requested fix (GM 2026-09-20). It is one goal, per FR-015."
     }
    ],
    "verdict": "CLEAR"

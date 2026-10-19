@@ -28,7 +28,7 @@ def poly_area(poly: Sequence[Pt]) -> float:
 def net_acres(net: Mapping[str, Any], ftpx: float) -> float:
     """The DRAWN paddy acreage of a comb net - the sum of the plot polygons actually carved.
 
-    Deliberately measured from the plots and not from `build_comb`'s own `acres` (which assumes the
+    Deliberately measured from the plots and not from the comb net's own `acres` (which assumes the
     village grain of 1 px = 2 ft and so over-reports 4x on a 1 ft/px hamlet) and not from the field
     envelope (which bows outside the plots and would count the bunds, the canals and the gaps as
     rice). The plots are what a farmer plants, so the plots are what gets counted."""
@@ -47,7 +47,7 @@ def unit(vx: float, vy: float) -> Pt:
 def crop_polys(s: Settlement) -> list[Poly]:
     """Every DRY crop plot recorded so far, read back from the manifest.
 
-    Read back rather than carried along from `build_comb`, because `draw_comb_field` DROPS hem plots
+    Read back rather than carried along from the comb builder, because `draw_comb_field` DROPS hem plots
     that landed on standing water or on another fan's rice - so the net's list and the map's list
     are not the same list, and the one that matters is what was drawn."""
     return [[(float(v[0]), float(v[1])) for v in d["poly"]] for d in s.M.get("dry_plots", [])]

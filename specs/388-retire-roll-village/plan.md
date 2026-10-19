@@ -42,7 +42,7 @@ legacy-hand-authored-pool`, every hit read):
 | `edge_seat`, `EdgeGround`, `ANGLES`, `rect_gap`, `rect_samples`, its own `convex_hull`, `STEP_FT` | `settlement/civic_grounds/edge_seat.py` | none (`hamletgen/burial.py` names it in prose; the live callers of `convex_hull` import `_geom/primitives`'s) | delete the module whole |
 | `cut_undeckable_lanes`, `CUT_GAP_FT` | `settlement/city/bridges.py` | none | delete |
 | `BUNDLE_PITCH_FT` | `settlement/_geom/village.py`, re-exported by `settlement/__init__.py` | none - found by the closure's re-run with re-exports not counted as uses | delete it, its re-export and its test (`test_a_rolled_cluster_band_is_sized_in_REAL_FEET_at_the_map_s_grain`, whose subject is the roller's band) |
-| `build_comb`, `crop_to_content`, `cremation_ground` (+ `ROOFED_SHARE`, `cremation_outline`), `PlacerMixin.headman` | `waterfields/comb.py`, `settlement/core.py`, `civic_grounds/funerary.py`, `rolling/place.py` | frozen exhibits that still run (FR-005): `build_comb` 13 scripts and `crop_to_content` 11 (Ikegami, Akagahara, Moritono, the villages, towns and cities among them), `cremation_ground` 7, `headman` 3 - Hikari-no-sato, Ueda and Hoshigaoka, none of them the three roller exhibits | KEEP (spec D1b, feature 174's precedent) |
+| `build_comb`, `crop_to_content`, `cremation_ground` (+ `ROOFED_SHARE`, `cremation_outline`), `PlacerMixin.headman` | `waterfields/comb.py`, `settlement/core.py`, `civic_grounds/funerary.py`, `rolling/place.py` | frozen exhibits that still run (FR-005): `build_comb` 13 scripts and `crop_to_content` 11 (Ikegami, Akagahara, Moritono, the villages, towns and cities among them), `cremation_ground` 7, `headman` 3 - Hikari-no-sato, Ueda and Hoshigaoka, none of them the three roller exhibits | KEPT as first landed (feature 174's precedent); deleted by T04 (amendment 1, spec D1b) |
 
 `Settlement` keeps a class-level annotation of `_nucleated` on `RollingMixin` (no runtime member): `roll.py` held the one
 assignment pyrefly read it by. The closure is run again after the deletion until it names nothing more; any further name
@@ -67,7 +67,7 @@ mentions in `hamletgen/__init__.py` (the comparison table's middle column become
 `settlement/rolling/__init__.py`, `hamletgen/burial.py` (the edge seat "the village's cremation ground still uses"),
 `tests/hamletgen/test_burial.py`'s docstring; the indexes `settlement/CLAUDE.md`, `settlement/rolling/CLAUDE.md`,
 `settlement/civic_grounds/CLAUDE.md` (the edge-seat row), `settlement/_geom/CLAUDE.md` (the band pitch), `tests/soak/CLAUDE.md`.
-The kept helpers' prose is untouched. The claims index is updated by its own targets (`make claims-owed`, impl-drift,
+The kept helpers' prose is untouched as first landed; T05 repoints it (amendment 1). The claims index is updated by its own targets (`make claims-owed`, impl-drift,
 `make claims-checked`). Feature 380's spec loses its "Carried: from 387" section, and its cremation-ground and burial-ground
 items name the code they cited (the roller's cremation seat, the edge seat) as deleted by 388 and readable from git at the
 commit before the deletion, their design and rulings unchanged (FR-004). The legacy pool is not touched (FR-005).
@@ -89,3 +89,37 @@ Touched: `l7r/diagram/settlement/{rolling,civic_grounds,city}/`, `settlement/{co
 ## Complexity Tracking
 
 None.
+
+## Amendment 1 (the GM, 2026-10-18): the four helpers go
+
+## T04 - the four helpers and their tests (FR-001, FR-002, amendment 1)
+
+Delete `build_comb` (`waterfields/comb.py`; its docstring - the comb layout and `grain` - moves onto `carve_comb`, its
+research claims with it), `crop_to_content` (`settlement/core.py`; its frame rule moves onto `content_view`'s docstring),
+`cremation_ground` with `ROOFED_SHARE` and `cremation_outline` (`civic_grounds/funerary.py`; its caption-path and surface
+entries go), and `PlacerMixin.headman` (`rolling/place.py`). Tests: `lay_comb` in `tests/waterfields/_builders.py`
+(`finish_comb(carve_comb(...))`) replaces `build_comb` in the comb tests, whose wrapper-equals-pair clause goes; a `crop`
+helper in `tests/settlement/_builders.py` (`crop_to_view(content_view(s._crop_boxes(city=False), extra, margin, W, H))`,
+`crop_to_content`'s body) replaces it in the frame tests; the `cremation_ground` tests (`tests/tier_city/settlement/
+test_civic_grounds.py`) and the `headman` method tests (`test_rolling.py`'s two refusals, and the headman lines of its
+nucleated-cluster test) go; `tests/waterfields/test_surface.py`'s and `tests/hamletgen/test_surface.py`'s censuses stop
+scanning `legacy-hand-authored-pool`, and their pinned lists drop the deleted names. The coverage floor then names any line
+only the deleted tests reached: deleted if nothing live reaches it, else a test is owed. `make dead-closure BASE=<before>`
+run before the first gate (SC-006).
+
+Verify: `make quick`; `make dead-closure`; `make done` green.
+
+## T05 - the prose (FR-003, amendment 1)
+
+Repoint every docstring, comment and index naming the four as live: `build_comb` -> the comb builder / `carve_comb`,
+`crop_to_content` -> the crop / `content_view` (the edits the first landing made and rolled back on 2026-10-18, saved then).
+`waterfields/CLAUDE.md` and `civic_grounds/CLAUDE.md`'s rows; the claims the moved docstrings carry are re-checked
+(`make claims-owed`, impl-drift).
+
+Verify: `grep -rnwE "build_comb|crop_to_content" l7r docs dev/*.md` names nothing live; claims none owed.
+
+## T06 - measure and land (FR-006, SC-002, SC-003, SC-006)
+
+`make maps` (pool unchanged), `make done`, `make cohort-landing`, the end bookend, the feature report's GM section updated,
+the gated push.
+

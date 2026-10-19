@@ -259,7 +259,7 @@ def floor_overhang(pts: Poly, dpts: Poly, down_deg: float) -> list[float]:
     drain into it and is never planted, so field floor there is dead ground wearing the field's
     color (Mizuguchi's SE needle, 2026-08-16: the raw envelope closed from the collector's thin
     head across ~350 ft of bare floor to the outer thread's tail). ONE predicate, shared by
-    `build_comb`'s envelope trim and by the gate (`comb_floor_ends_at_the_collector`), for the
+    the comb builder's envelope trim and by the gate (`comb_floor_ends_at_the_collector`), for the
     same reason `supply_bank_clearance` is: a trimmer and a checker that classify the same ground
     from two formulas drift into disagreeing about where the command area ends.
 
@@ -286,7 +286,7 @@ def hem_to_bank(ring: Poly, dpts: Poly, down_deg: float, w0: float, w1: float) -
     centerline - up-fall (at right angles, beside a drain running with the fall) onto the ditch's BANK. Returns a new ring; vertices already clear are
     returned untouched.
 
-    `build_comb` needs none of this: it hems onto the bank BY CONSTRUCTION (see `_drain_bank`). The
+    The comb builder needs none of this: it hems onto the bank BY CONSTRUCTION (see `_drain_bank`). The
     other three field engines lay their parcels against a drain they build afterwards, so they have
     no such handle, and the check that caught the comb's defect caught the same class in all three
     (2026-08-08). Each was a different flavor of the one error:

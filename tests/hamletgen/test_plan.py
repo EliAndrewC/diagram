@@ -44,7 +44,7 @@ def test_the_canvas_grows_with_the_field_it_has_to_hold() -> None:
     small = hg.canvas_for(13.0, 1.0)
     big = hg.canvas_for(26.0, 1.0)
     assert big[0] > small[0] and big[1] > small[1]
-    # ...and it is comfortably larger than the field, so `build_comb` never clamps the fan
+    # ...and it is comfortably larger than the field, so the comb builder never clamps the fan
     assert small[0] * small[1] > 13.0 * hg.SQ_FT_PER_ACRE * 2
 
 

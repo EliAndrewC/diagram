@@ -21,8 +21,7 @@ Guesses:
 
 Depiction: The map draws the dike as a band of heaped earth all the way round the polder, 14 to 40 ft across and changing
 in width along its length, mottled as mud patched year after year is. Its width follows the breadths of known dikes,
-its narrower stretches near the early Edo river dikes' 18 ft base and its broadest reaching the 33 ft and more of a 1930s Lake Tai village's margin, and it is kept broader than the banks round a dike-pond's fish ponds, so that the dike holding the water off the whole polder reads as
-the greater bank. Two rows of trees run along it, willow on the water side and
+its narrower stretches near the early Edo river dikes' 18 ft base and its broadest reaching the low end, about 33 ft, of a 1930s Lake Tai village's margin. Two rows of trees run along it, willow on the water side and
 mulberry on the field side; the maps set them on the bank's faces, where the willows of the great Ming river dikes stood on
 the ground off the dike's foot, so they read as the dike's own planting. The willows are spaced about 8.5 ft apart,
 looser than the roughly 5.5 ft spacing of the willows on a Qing border embankment, and the mulberry about 4.4 ft, so their

@@ -553,3 +553,78 @@ About 75 min. The ranking row asked to move `BUNDLE_PITCH` 100 -> 92 ft on 0038'
 rows already stand `_rank_step` apart, 0038's own sum of house, yard and 39 ft of sun. The fix was the label, not the number; no
 map moved. **The habit it changes:** before moving a constant to a researched figure, list what each use of it measures - one name
 can carry four quantities, and only one of them is the research's.
+
+## T56 - the retro row
+
+About 20 min. Three preflights - T47's, T48's and T10's - reviewed the umbrella heading "T04 to T10 - T48, T47's patch" instead of
+each task's own section, because the first heading naming an id took it; T47 and T48 were renumbered to get past it, which hid the
+bug for an hour. A heading that begins with the id now wins. **The habit it changes:** when a tool answers the wrong thing twice,
+fix the tool - renaming around it moves the cost to the next task.
+
+## T57 - the retro row
+
+About 30 min. T09 changed only comments and constants' claim docstrings and still owed a full gate and a landing cohort, because
+the semantic id stripped a docstring only where it is a body's first statement - and every claim on a constant is a bare string
+after its assignment. Every bare string statement is stripped now (the cache renamed with the rule). **The habit it changes:** a
+rule about "docstrings" is tested on the docstrings this project actually writes - the claims - not on Python's definition.
+
+## T58 - the retro row
+
+About 15 min. T10's headless check session was refused twice for a 4th same-kind launch and pointed at a Workflow call its
+`claude -p` session does not have. A session carrying `L7R_DISPATCHER` is now told `WAVE_OK` is its route. **The habit it changes:**
+a refusal names a route the refused session can take - test it from a headless session, not only from this one.
+
+## T59 - the retro row
+
+About 40 min. The pair hook records a dispatch at PreToolUse, beside the wave guard; when the guard refused T10's modal-form wave,
+the refused dispatch had already marked its notes read and opened a fresh round, so the next real dispatch was counted as a repeat.
+What a reading marks now waits on the pending record and is applied at launch. The first test asserted the wrong thing (a first
+reading IS round 1); probing the old and new code side by side found the real difference. **The habit it changes:** a hook that
+records an action at PreToolUse cannot assume the action happens - other hooks run beside it.
+
+## T60 - the retro row
+
+About 25 min. The EDIT pattern's optional newline before `>>>` let a lone empty line and no line at all parse alike, as no text,
+so a paragraph split was applied as a deletion; a lazy optional group now tells them apart, and an emptied whole line takes its
+newline. The first test packed two cases into a string trick and tested the wrong thing; written plainly it passed. **The habit it
+changes:** none needed - the parse decides it.
+
+## T61 - the retro row
+
+About 20 min. `hm_make.doubled_var` reads each make invocation on the stripped command (so a quoted list is one assignment and a
+mention in a message is none) and `make-only-hooks.sh` refuses a variable set twice, naming the quoted list or one call per
+value. **The habit it changes:** none needed - the guard refuses the form that dropped 0018's bundle.
+
+## T62 - the retro row
+
+About 35 min. `claims_stale.stale` compares each claimed module-level constant at the merge base and in the tree; for a changed
+one it looks for its old figures as whole numbers on the drawing pages that are, or link, a question its claim cites, and
+`claims-owed` prints each. On this clone (T10 not yet landed) it names 0018, 0022, 0025 and 0027 - the four the measurement
+found. The first plan matched a fixed list of units and the review blocked it (the GM's own figures say "feet" and "degree").
+**The habit it changes:** none needed - `claims-owed` prints the pages at the edit.
+
+## T63 - the retro row
+
+About 15 min. `tick-task.py` runs `plan_gate.archive` after every tick it wrote and prints what moved; an archive error is printed
+and the tick stands. **The habit it changes:** `make plan-archive` is no longer a step to remember.
+
+## T64 - the retro row
+
+About 25 min. `make task-add F= TITLE= [SECTION=] [RESEARCH=physical]` takes the next id past every `T<n>` the feature's three
+files name, puts the box before the GM-review box and the section before the close. **The habit it changes:** a task is filed
+with one command, never a hand-written insertion script.
+
+## T65 - the retro row
+
+About 20 min. Found at T63's first tick: the archived-block check matched digests only, so a block a typo away from its reviewed
+text (T49, renumbered) was owed once archived; it now takes the typo rule the live check takes. **The habit it changes:** none
+needed - the archive owes nothing by construction.
+
+## T10 - the retro row
+
+About 5 h across the day (the step-back's table books 211 min to it before the hour-22 fixes). The split became a knob over the
+five recorded splits, the inset derived per map on the median parcel by the apothem law (the rectangle law missed by 0.07). Most
+of its 109 agent runs were five sibling pop-ups checked as five units, round after round - the cost the approved proposal 1
+removes. Its landing waited on three arbiter fixes (T60-T62), then a British spelling in a tool-written claims note and a stale
+Kuwabata manifest (the ink count) cost two gate runs. **The habit it changes:** none by memory - proposal 1 (grouped sibling
+pop-ups) and the house-style check on tool-written notes are the tools.

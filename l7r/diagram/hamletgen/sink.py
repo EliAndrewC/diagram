@@ -203,7 +203,7 @@ def pond_setback(plan: SitePlan, out: Pt, prx: float, pry: float, step: float = 
 #: off the frame implies more beyond; a junction implies nothing.
 CROP_MARGIN_PX = 48.0
 """Research: crop margin - CONVENTION: 48 ft"""
-#: The margin `crop_to_content` adds around the hard content it crops to - so the field's box grown by it is a
+#: The margin the crop adds around the hard content it crops to - so the field's box grown by it is a
 #: box the finished picture cannot fail to show, which is what a junction needs to be judged against.
 
 BROOK_JOIN_TRUNK = 150.0

@@ -120,7 +120,7 @@ def frame_extras(s: Settlement, plan: SitePlan) -> list[tuple[float, float, floa
 
 def frame_for(s: Settlement, plan: SitePlan) -> tuple[float, float, float, float]:
     """THE VIEW, as the crop would frame the map as it stands now: the crop's frame-setting boxes (`_crop_boxes`, the
-    source `crop_to_content` reads), `frame_extras`, `CROP_MARGIN`, clamped to the canvas - `content_view`, the crop's own
+    source the crop (`content_view`) reads), `frame_extras`, `CROP_MARGIN`, clamped to the canvas - `content_view`, the crop's own
     body. Called ONCE into `plan.view` at the end of `stage_hinterland`'s seating, after the last frame-setting feature
     (the belt, whose inner face sets the frame - GM 2026-08-26), and `stage_frame` sets exactly that view (feature 287,
     M6). Before the decision it is also the frame a placer asks "will this be on the page" of (`frame_bounds`)."""
@@ -194,7 +194,7 @@ def frame_bounds(s: Settlement, plan: SitePlan) -> tuple[float, float, float, fl
 
 def scatter_frame(s: Settlement, plan: SitePlan) -> tuple[float, float, float, float]:
     """The frame the scatter predicts and throws within (feature 224, GM 2026-09-11: "the scatter still throws its
-    off-map blades"): the crop's own frame-setting boxes at this moment (`_crop_boxes`, the source `crop_to_content`
+    off-map blades"): the crop's own frame-setting boxes at this moment (`_crop_boxes`, the source `content_view`
     reads), the belt, the woodland patches and the bamboo seats already scanned, and the title pocket when one is
     reserved - grown by the crop's margin and `SCATTER_PAD`: a prediction, asked before the view is decided (the marsh's
     throw). Once the view is decided (`plan.view`, before the scrub is scattered) it is the decided view itself, with

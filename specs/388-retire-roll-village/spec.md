@@ -4,9 +4,11 @@
 
 **Created**: 2026-10-18
 
-**Status**: Done 2026-10-18 - T01-T03 ticked: make done green, make maps clean (pool unchanged), make soak 9 passed, cohort-landing 54/54, bookends 18.9 -> 18.8 s, claims none owed; spec FAITHFUL (round 6), plan CLEAR; the GM review lands open
+**Status**: Done 2026-10-18 - amendment 1 landed: T04-T06 ticked, make done green, make maps clean (pool unchanged), cohort-landing 54/54, claims none owed (two pre-existing drifts carried to 384). As first landed: Done 2026-10-18 - T01-T03 ticked: make done green, make maps clean (pool unchanged), make soak 9 passed, cohort-landing 54/54, bookends 18.9 -> 18.8 s, claims none owed; spec FAITHFUL (round 6), plan CLEAR; the GM review lands open
 
 **Approved**: the GM, 2026-10-18, "I think if nothing ships from it then we should just delete it now and not even move it into the 384 backlog."
+
+**Amendment 1 approved**: the GM, 2026-10-18, "I believe that the frozen maps do not need to stay runnable, and therefore the four helpers can go too."
 
 **Affects**: hamlet
 
@@ -31,11 +33,13 @@ holds; the instruction is to delete it now, and NOT to carry the failure anywher
    `water_source_anchor` (with `settlement/water_source.py` and its mixin), `civic_grounds/edge_seat.py` whole (`edge_seat`,
    `EdgeGround`, `ANGLES`, `rect_gap`, `rect_samples`, and - names the closure cannot see because they are also defined
    elsewhere - its own `convex_hull` and `STEP_FT`), `cut_undeckable_lanes` (with `CUT_GAP_FT`) and `BUNDLE_PITCH_FT`.
-   **Kept, because a frozen exhibit calls it** (the precedent of feature 174, `tests/waterfields/test_hill.py`: a legacy
-   exhibit's call keeps an engine builder): `build_comb` (13 exhibits), `crop_to_content` (11), `cremation_ground` (7, with
-   `ROOFED_SHARE` and `cremation_outline`) and `PlacerMixin.headman` (3). Deleting them would leave 17 more exhibit scripts unrunnable
-   to delete four small helpers; deleting `roll_village` itself leaves the 3 that call it (FR-005).
-3. **Its tests**: every test whose SUBJECT is (1) or (2) - deleted, not ported (FR-002).
+   **Amendment 1 - the four helpers only frozen exhibits call go too** (the GM: "the frozen maps do not need to stay
+   runnable"): `build_comb` (13 exhibit scripts), `crop_to_content` (11), `cremation_ground` (7, with `ROOFED_SHARE` and
+   `cremation_outline`) and `PlacerMixin.headman` (3). As first landed they were kept on feature 174's precedent (an
+   exhibit's call keeps a builder); the GM's ruling retires that precedent for these four. `make dead-closure` with the four
+   cut (2026-10-18) names nothing else newly dead.
+3. **Its tests**: every test whose SUBJECT is (1) or (2) - deleted, not ported; a test of shipping code that reached it
+   through a deleted one-call wrapper is repointed to the live pair (FR-002, amendment 1).
 
 ## Requirements
 
@@ -47,14 +51,23 @@ holds; the instruction is to delete it now, and NOT to carry the failure anywher
   through `_seat`), `test_convex_hull_of_few_points` (it tests `edge_seat.py`'s own hull) and the `_seat` helper go; only
   `test_a_hamlet_draws_no_ground_of_its_own_and_records_where_its_dead_lie` stays, and the docstring stops naming the edge
   seat as live. A test that mixes a deleted subject with a live one keeps the live part (the pool scan in
-  `test_rolling.py`'s no-cremation-ground test). The kept helpers' tests stay as they are. The `rolls_map` marker lists in
-  `tests/test_markers.py` drop `roll_village`.
+  `test_rolling.py`'s no-cremation-ground test). The `rolls_map` marker lists in `tests/test_markers.py` drop
+  `roll_village`. **Amendment 1**: the tests of `cremation_ground` and `headman` go (their subjects are deleted); a test of
+  SHIPPING code that reached it through a deleted one-call wrapper keeps its subject and calls the live pair the scripted
+  hamlet calls - the comb tests that laid a field with `build_comb` call `finish_comb(carve_comb(...))` through one test
+  helper, the frame tests that cropped with `crop_to_content` call `crop_to_view(content_view(...))` through one test
+  helper - and a test of a wrapper ITSELF (carve-then-finish equals the wrapper) loses that clause. The surface censuses that
+  scan the legacy pool for consumers (`tests/waterfields/test_surface.py`, `tests/hamletgen/test_surface.py`) stop scanning
+  it: a frozen exhibit is no longer a consumer the engine must resolve.
 - **FR-003**: Prose that describes `roll_village` or the closure's names as live is updated where it stands: the package indexes
   (`settlement/CLAUDE.md`, `settlement/rolling/CLAUDE.md`, `settlement/civic_grounds/CLAUDE.md`, `waterfields/CLAUDE.md`,
   `tests/soak/CLAUDE.md`), the module and function docstrings that cite them (`hamletgen/__init__.py`, `hamletgen/cluster.py`,
   `hamletgen/burial.py` - "which the village's cremation ground still uses" -, `hamletgen/water/fit.py`, `settlement/houses.py`,
   `settlement/_geom/village.py`, `settlement/city/bridges.py`, `settlement/structures/fixtures/siting.py`) and the research claims index entries for the deleted code (the claims tooling
   regenerates or drops them). Specs are history and keep their words - except feature 380's, a live placeholder (FR-004).
+  **Amendment 1**: the same for the four helpers - every docstring, comment and index naming `build_comb`, `crop_to_content`,
+  `cremation_ground` or `headman` (the method) as live is repointed: the comb builder's account moves onto `carve_comb`, the
+  crop's frame rule onto `content_view`, and the prose names those.
 - **FR-004**: The village soak failure is NOT carried: the "Carried: from 387" section of feature 380's spec is removed (the
   GM: "not even move it into the 384 backlog"). Feature 380's two items that cite deleted code are reworded where they stand:
   the cremation ground ("already drawn by the roller's village tier ... The village generator reuses it") and the burial
@@ -64,7 +77,8 @@ holds; the instruction is to delete it now, and NOT to carry the failure anywher
 - **FR-005**: The frozen legacy maps are NOT edited: the legacy pool is frozen, its maps exhibits that are never
   regenerated. The three drawn with `roll_village` (`legacy-hand-authored-pool/hamlets/honda`, `.../shimizu`,
   `legacy-hand-authored-pool/villages/kikuta`) keep their `.gen.py` words and simply no longer run; their manifests, renders
-  and pages are untouched. Every other exhibit still runs: no other name it calls is deleted ("What it is" (2), kept).
+  and pages are untouched. **Amendment 1**: the same holds for every exhibit that calls one of the four helpers - 18 scripts
+  in all stop running, and none is edited (D2).
 - **FR-006**: No shipping map changes: the deletion removes only code no shipping map runs.
 
 ## Success Criteria
@@ -79,15 +93,17 @@ holds; the instruction is to delete it now, and NOT to carry the failure anywher
 - **SC-005** (FR-004): Feature 380's spec has no "Carried: from 387" section, and its cremation-ground and burial-ground items name
   the deleted code as deleted by 388 with the commit that still holds it (FR-004).
 
+- **SC-006** (FR-001, FR-002, FR-003, amendment 1): no engine module defines or calls `build_comb`, `crop_to_content`,
+  `cremation_ground` or `PlacerMixin.headman`; `make dead-closure BASE=<the commit before the amendment>` names nothing NEWLY
+  DEAD and no PINNED test, and its STILL CALLED lines name only frozen exhibits.
+
 ## Decisions Recorded
 
 - **D1 - a test follows its subject**: a test of deleted code goes with it (FR-002); none is ported to the scripted
   hamlet, which draws none of it. Who chose: the GM ("just delete it").
-- **D1b - the exhibits' helpers stay** ("What it is" (2)): four helpers lost their last ENGINE caller with the roller but
-  are still called by frozen exhibits. Feature 174 ruled that such a call keeps a builder; deleting them would make 17 more
-  exhibit scripts unrunnable, which the GM did not ask for. Alternative priced: delete them too and repoint their tests
-  through test helpers (tried 2026-10-18 - 40-odd files of churn, and the waterfields surface census then failed on the
-  exhibits' imports). Who chose: the session, on that precedent; reported to the GM.
+- **D1b - the exhibits' helpers go (amendment 1)**: as first landed the four were kept on feature 174's precedent; the GM
+  ruled the frozen maps need not stay runnable ("especially if it streamlines our code base and reduces our support
+  surface"), so they go, their tests of shipping code repointed (FR-002). Who chose: the GM.
 - **D2 - the legacy `.gen.py` files stay as written** (FR-005): editing frozen exhibits is a hand-map edit; leaving a call to
   a deleted method in a file nothing runs costs nothing. Alternative priced: rewrite their headers to say the engine is gone -
   rejected as an edit to frozen files the GM has not asked for.

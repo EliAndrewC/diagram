@@ -50,7 +50,7 @@ def test_dry_fields_plants_nothing_on_ground_a_keepout_claims() -> None:
 
 
 def _comb(**over):
-    from l7r.diagram.waterfields import build_comb
+    from tests.waterfields._builders import lay_comb
 
     base = dict(
         W=1400.0,
@@ -70,7 +70,7 @@ def _comb(**over):
         canal_b_len=(420.0, 250.0),
     )
     base.update(over)
-    return build_comb(**base)
+    return lay_comb(**base)
 
 
 def test_a_closer_quad_that_would_run_off_the_sheet_is_dropped() -> None:
@@ -94,7 +94,7 @@ def test_a_hem_one_boundary_wide_has_no_shared_normal_and_says_so() -> None:
     """REGRESSION (feature 146). `_miter_normals` mitres each boundary point's two chords, and with a
     single boundary there is no chord at all - it built an empty list and then indexed it. Measured on a
     down_deg=210 fan sluiced at the west edge, where the dry band clips to one column: `IndexError`, from
-    a `build_comb` call with entirely legal arguments."""
+    a the comb builder call with entirely legal arguments."""
     from l7r.diagram.waterfields.frame import _Frame, _miter_normals
 
     assert _miter_normals([], _Frame(90.0)) == []

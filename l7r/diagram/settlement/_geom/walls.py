@@ -56,7 +56,7 @@ def torii_glyph_dims(ftpx: float, span_ft: float = 16.0) -> tuple[float, float, 
 
 def torii_halfbox(ftpx: float, span_ft: float = 16.0) -> tuple[float, float, float]:
     """True drawn half-extents (x half-width, y-up, y-down) of a `_torii` glyph at scale `ftpx`, plus a small
-    stroke pad - used to FRAME torii (crop_to_content) and to keep captions and neighbors off them. Follows
+    stroke pad - used to FRAME torii (`content_view`) and to keep captions and neighbors off them. Follows
     `torii_glyph_dims`: the beam spans +/-s2 and the glyph's depth is its post side, centered on the seat."""
     s2, _beam, post, _p2 = torii_glyph_dims(ftpx, span_ft)
     pad = 2.0  # stroke half-width + a hair, so the frame never clips the vermilion

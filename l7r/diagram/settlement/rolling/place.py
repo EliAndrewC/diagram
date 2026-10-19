@@ -18,38 +18,6 @@ if TYPE_CHECKING:
 
 
 class PlacerMixin:
-    def headman(self: Settlement, x: float, y: float, w: float = 92, h: float = 56) -> Any:  # type: ignore[misc]
-        """Seat the village headman's house: a larger plain farmhouse.
-
-        Research:
-            headman's house size - research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.drawing.html: 92 x 56 ft by default, four times a plain farmhouse
-            headman a plain farmstead enlarged - research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.drawing.html: seated through the bundle with its own yard and garden, no large-house wing
-            no headman in a hamlet - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html: refused on a hamlet-scale map
-        """
-        # `w`, `h` are in FEET (drawn at the map's ftpx, px(92) = 46px at 2 ft/px). A nanushi/shoya house is
-        # the grandest in the village but still a house - ~92x56 ft, clearly larger than a plain 46x28 ft
-        # farmhouse without the old fortress-sized 216x136 ft. headman_is_largest holds.
-        # ...AND NEVER ON A HAMLET (feature 287, homes H18): a hamlet has no headman of its own - it answers to its
-        # village's (research/contents.json#tiers) - so the one producer of the role refuses a hamlet-scale map outright.
-        if self.M["meta"].get("scale") == "hamlet":
-            raise ValueError("a hamlet has no headman of its own - the headman is a village's (homes H18)")
-        if self._toscale():
-            # the headman is just a LARGER PLAIN farmhouse - placed through the standard collision-checked
-            # bundle path with a tunable SIZE, so it gets its yard + garden and cannot overlap a neighbor.
-            # BOTH homestead styles route here (GM 2026-07-21, caught on Hikari no Sato): this guard used to
-            # test _nucleated, so a DISPERSED to-scale village's headman fell through to the legacy rec below,
-            # which _farmsteads_bundle draws as a LONE house (the abandoned-ruin path) - the grandest
-            # farmstead in the village with no threshing yard and no garden. In the dispersed style the
-            # bundle also brings the per-house grove when room allows; the solver drops it gracefully in a
-            # dense cluster (neighbor tree cover shelters the house), which is the wanted behavior.
-            # NO special reservation or "big"-glyph storeroom wing (that wing was drawn outside
-            # the reserved footprint and overlapped the north neighbor's yard).
-            return self.try_place(x, y, "plain", role="headman", size=(w, h))
-        # non-to-scale tiers have no headman (a hamlet falls under the district headman, towns are run by
-        # the magistrate - the *_has_no_headman checks), so the old legacy rec branch here was dead code
-        # once the Hikari fix routed every to-scale style through the bundle; removed 2026-07-21.
-        raise ValueError("headman() is a to-scale village feature - this map is not toscale")
-
     @staticmethod
     def _closest_on_seg(px: float, py: float, ax: float, ay: float, bx: float, by: float) -> Pt:
         dx, dy = bx - ax, by - ay

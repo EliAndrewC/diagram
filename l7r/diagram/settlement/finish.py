@@ -441,7 +441,7 @@ class FinishMixin:
         # survive `bead_drowned` over the final registry - FIRST, while the slots still index `self.out` as they did when
         # the beads were drawn (the flushes and splices below move them).
         self.settle_beads()
-        # BACKSTOP for the deferred canopy: crop_to_content / crop_city normally flush it, but a map
+        # BACKSTOP for the deferred canopy: crop_to_view / crop_city normally flush it, but a map
         # that frames to the bare canvas never calls either (Hoshizora), and a queued stand that is
         # never flushed is a wood with no trees. Idempotent, so the usual crop-time flush still wins.
         self.flush_tree_stands()

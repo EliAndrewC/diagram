@@ -549,7 +549,9 @@ class FieldFeaturesMixin:
         fillet of slightly irregular reach (erosion). Returns (svg path `d`, sampled water polygon) - the
         sample carries the rounding into the manifest so the checks can see the pond is inset + rounded.
 
-        Research: pond inset and rounded - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: inset inside its bank, every corner eased"""
+        Research:
+            pond inset and rounded - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: inset inside its bank, the parcel scaled about its centroid
+            corners eased - UNRESEARCHED: a fillet of the caller's reach, jittered 0.8 to 1.15, at every corner"""
         n = len(poly)
         cx = sum(q[0] for q in poly) / n
         cy = sum(q[1] for q in poly) / n

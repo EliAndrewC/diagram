@@ -402,7 +402,6 @@ _CIVIC_GROUNDS_SURFACE = frozenset(
         "cemetery",
         "_ward_fence_cap",
         "mausoleum",
-        "cremation_ground",
         "ossuary",
         # justice.py
         "punishment_spot",

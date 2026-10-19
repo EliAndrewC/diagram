@@ -79,12 +79,14 @@ This report took 0.8 s to build; its own runs are the `make feature-report` rows
 - **Deleted**: `roll_village` (the feature-005 knob engine) and what only it reached - the water-source anchor, the shared
   edge seat, the undeckable-lanes pass, the roller's band pitch - with their tests, the failing village soak test among them.
   Nothing is carried to 380 or 384.
-- **Kept, against the letter of "delete it"**: four helpers the roller shared with the frozen legacy exhibits -
-  `build_comb` (13 exhibit scripts), `crop_to_content` (11), `cremation_ground` (7), `headman` (3: Hikari-no-sato, Ueda,
-  Hoshigaoka). Deleting them would have left 17 more exhibit scripts unable to run; feature 174 ruled that an exhibit's call
-  keeps a builder. Which frozen exhibits must stay runnable is yours to say.
-- **Three exhibits no longer run**: Honda, Shimizu and Kikuta were drawn with `roll_village`; their maps, renders and pages
-  are untouched, but their `.gen.py` would now fail. They are frozen and never regenerated.
+- **Amendment 1 (the GM: "the frozen maps do not need to stay runnable")**: the four helpers the first landing kept for
+  the frozen exhibits went too - `build_comb`, `crop_to_content`, `cremation_ground`, `headman`. Their tests of live code now
+  call what the scripted hamlet calls (`carve_comb` + `finish_comb`; `content_view` + `crop_to_view`); the surface censuses no
+  longer count the legacy pool as a consumer. 18 exhibit scripts no longer run; none was edited.
+- **Found by the moved claims, carried to 384**: no jizo at a burial ground's entrance (0238), and canal A's deliveries leave it
+  at ~33-51 deg where 0053 has right angles. Both predate 388.
+- **Exhibits no longer run**: Honda, Shimizu and Kikuta (drawn with `roll_village`) and, after amendment 1, every exhibit
+  calling one of the four helpers; their maps, renders and pages are untouched. They are frozen and never regenerated.
 - **Maps**: no live map changed (`make maps` all cached); the landing cohort passed 54/54.
 - **Found on the way and fixed**: the gate's carried tooling coverage kept rows for a deleted file and failed its report
   (`ci/incremental.py`); a red run whose coverage report errored recorded no cause; `make dead-closure` added (what a deletion

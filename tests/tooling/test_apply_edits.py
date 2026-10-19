@@ -111,6 +111,22 @@ def test_the_report_is_the_last_reply_of_a_transcript(tmp_path, capsys) -> None:
     assert "no file" in capsys.readouterr().out
 
 
+def test_a_lone_empty_line_breaks_the_paragraph_and_no_line_deletes_its_line(tmp_path) -> None:
+    """Feature 385 T60, the round arbiter on hour:385-approach-checklist@22: T10's check session finished two pop-ups by hand."""
+    q = tmp_path / ae.RECORD / "m.md"
+    q.parent.mkdir(parents=True)
+    q.write_text("One. Two.\nstrayline\nold\nkeep\n", encoding="utf-8")
+    report = tmp_path / "r.md"
+    report.write_text(
+        f"EDIT {q}\n<<<\n \n===\n\n>>>\n"  # inside a line: a break
+        + f"EDIT {q}\n<<<\nstrayline\n===\n>>>\n"  # a whole line, emptied: gone, no blank left
+        + f"EDIT {q}\n<<<\nold\n===\n\n>>>\n",  # a whole line to a break: a blank line
+        encoding="utf-8",
+    )
+    assert ae.main([str(report), "--root", str(tmp_path)]) == 0
+    assert q.read_text(encoding="utf-8") == "One.\n\nTwo.\n\nkeep\n"
+
+
 def test_a_block_indented_under_a_numbered_finding_is_applied_without_its_indent(tmp_path) -> None:
     q = _tree(tmp_path)
     report = tmp_path / "r.md"

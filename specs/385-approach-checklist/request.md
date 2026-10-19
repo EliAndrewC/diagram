@@ -188,3 +188,11 @@ The GM, verbatim (after the session reported T01-T06 done and T07 under way):
 > How's it going?  If I recall correctly, we have 10 claims to fix in this feature.  How many of them have we managed so far?
 
 > Okay, I would like to amend the feature to pull in 10 more claims.  I'm leaving for Meeting for Worship, so I'll be gone for about 5 hours and want to make sure that there's enough work for you to keep working in my absence.
+
+## Amendment 8 (2026-10-18) - tooling the step-back found
+
+The GM, verbatim (after the step-back of 2026-10-18; the per-entry keying became a task, the task insertion became T64):
+
+> No, don't file the per entry keying as its own feature. Go ahead and just make it another task on this feature. Because I think we should do it now, along with these other fixes. So basically, I approve the order that you have proposed. For one, two, three, and four. But then for step number five, instead of filing me per entry key ring feature, you should just work it. As a task on this existing feature, and then We can talk more. With that being said, um, do we need some tooling around how to insert a task like this into a spec file? I ask because I think a long-running feature like the one that we are working now can result in files, like markdown files, getting quite large, and that in and of itself is token inefficient. And so we end up implementing a lot of tooling around things like ticking off tasks, but I want to make sure that we either have or don't need tooling for things like inserting a task somewhere in the middle of the task list. Because as of now, that sounds like something that could potentially eat up a lot of tokens if we are doing it by hand. And hence why it should get tooling.
+
+> If you could have run plan archive but then forgot to do it before, then perhaps that should be something that is run automatically when certain actions are taken. What do you think? Because again, anytime that you can just forget to do                                                    make our tooling do the thing correctly automatically every time.

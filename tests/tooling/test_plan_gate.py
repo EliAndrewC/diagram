@@ -376,3 +376,32 @@ def test_a_task_s_own_heading_wins_its_section_over_a_mention() -> None:
     assert sec["T10"].startswith("## T10 - the split") and "D74" in sec["T10"] and "umbrella" not in sec["T10"]
     assert sec["T04"].startswith("## T04 to T10"), "T04 has no heading of its own: the mention stands"
     assert sec["T48"].startswith("## T04 to T10") and sec["T11"].startswith("## T11")
+
+
+def test_an_archived_block_a_typo_from_its_reviewed_text_is_not_owed() -> None:
+    """Feature 385 T65 (plan D84): T49's two blocks, renumbered by a typo after their review, refused T59's tick once archived."""
+    body = "### T49 Decisions\n\n**D70 - the mark falls back.** When the mark names a ticked task.\n"
+    review = {"blocks": {"preamble": {"sha256": gate.block_digest("# Plan\n"), "verdict": "CLEAR"}, "### T49 Decisions": {"sha256": gate.block_digest(body), "verdict": "CLEAR", "text": body}}}
+    typo = body.replace("When the mark", "when the mark")
+    changed = body.replace("falls back", "is refused")
+    assert gate.block_status(review, "# Plan\n", set(), done=typo) == ([], [])
+    assert gate.block_status(review, "# Plan\n", set(), done=changed)[0] == ["(removed) ### T49 Decisions"]
+    assert gate.block_status(review, "# Plan\n", set(), done="")[0] == ["(removed) ### T49 Decisions"]
+
+
+def test_ids_appended_to_the_lands_open_line_owe_no_review_and_a_reorder_does(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 385 T74 (plan D93): two reviews in hour 24 of ids `make task-add` had added. Run on task-add's own output."""
+    body = "## Landing\n\n**Lands open**: T02, T03\n\nEach task lands when it closes.\n"
+    review = {"blocks": {"preamble": {"sha256": gate.block_digest("# Plan\n\n"), "verdict": "CLEAR"}, "## Landing": {"sha256": gate.block_digest(body), "verdict": "CLEAR", "text": body}}}
+    spec = importlib.util.spec_from_file_location("task_add_t74", REPO / "scripts/task-add.py")
+    assert spec and spec.loader
+    ta = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(ta)
+    added = "# Plan\n\n" + ta.lands_open(body, "T09")  # what task-add writes
+    assert gate.block_status(review, added, set())[0] == []
+    reordered = "# Plan\n\n" + body.replace("T02, T03", "T03, T02")
+    assert gate.block_status(review, reordered, set())[0] == ["## Landing"]
+    dropped = "# Plan\n\n" + body.replace("T02, T03", "T02, T09")
+    assert gate.block_status(review, dropped, set())[0] == ["## Landing"]
+    more = "# Plan\n\n" + ta.lands_open(body, "T09").replace("lands when it closes", "lands at once")
+    assert gate.block_status(review, more, set())[0] == ["## Landing"], "anything else changed is owed as now"

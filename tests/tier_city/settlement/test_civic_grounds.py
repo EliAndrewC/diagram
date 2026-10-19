@@ -2,12 +2,9 @@
 `tests/` minus the tier, gate and tooling trees, so these are neither imported nor collected while the scope is
 locked to another tier; the gate collects everything. Helpers stay in the source module and are imported."""
 
-import random
-
 import pytest
 
 from l7r.diagram.settlement import Settlement
-from l7r.diagram.settlement.civic_grounds.funerary import cremation_outline
 from tests.settlement._builders import _cap020, _crop_settlement
 
 
@@ -36,30 +33,6 @@ def test_granary_append_records_a_list_for_a_capital_with_two_granaries():
 # ---- feature 174: the two funerary works whose SIZE is a tier rule ---------------------------------
 # Branch-coverage tests (GM 2026-08-31's division of labor): the end-to-end suite draws these on real
 # maps, and these say what the tier branch is FOR. Both encode a recorded fixed-pixel defect.
-
-
-def test_a_cremation_ground_is_sized_by_TIER_not_by_a_fixed_pixel_glyph() -> None:
-    """GM 2026-07-19, anchors in research/contents.json#religion-and-the-dead, the funerary-size entry: a sanmai's cleared working core is 30-80 real ft for
-    a village or town and ~80-160 ft for a provincial city - even metropolitan Edo's Yoyogi crematory
-    was only ~180 ft square. The old glyph was FIXED-PIXEL (116x80 px) and silently TRIPLED at city
-    scale, which is the defect this branch exists to prevent.
-
-    So the branch is asserted by its consequence: a city's ground is drawn larger than a village's,
-    at the same ftpx.
-    """
-    village = Settlement(1000, 1000, seed=2)
-    village.meta(name="V", scale="village")
-    village.cremation_ground(500.0, 500.0)
-
-    city = Settlement(1000, 1000, seed=2)
-    city.meta(name="C", scale="city")
-    city.cremation_ground(500.0, 500.0)
-
-    assert village.M["cremation_grounds"] and city.M["cremation_grounds"]
-    v_w = village.M["cremation_grounds"][-1].get("w") or village.M["cremation_grounds"][-1].get("vw")
-    c_w = city.M["cremation_grounds"][-1].get("w") or city.M["cremation_grounds"][-1].get("vw")
-    assert c_w > v_w, f"a city crematory is bigger than a village's ({c_w} vs {v_w})"
-    assert not village._fits(500.0, 500.0, 8.0, 8.0), "and it blocks - death-pollution ground is not free ground"
 
 
 def test_a_pauper_ossuary_mound_stays_inside_its_researched_BAND_at_every_scale() -> None:
@@ -170,46 +143,3 @@ def test_a_cramped_burial_ground_may_put_its_label_ABOVE_or_slide_it_along() -> 
     slid.cemetery(600.0, 600.0, 200.0, 140.0, label="burial ground", label_xy=(680.0, 690.0))
     slid.place_labels()
     assert any("burial" in str(lb[5]) for lb in slid.M["labels"] if len(lb) > 5), "and label_xy slides it along the plot"
-
-
-def test_cremation_ground_is_drawn_ragged_with_its_fire_bed_off_center() -> None:
-    """Feature 272 (settlement-review 2026-09-27): a ruled ellipse with a centered dark center read as an eye.
-    The ground is a ragged polygon, the same one every time for the same seat, and its outline is not a circle."""
-    a = cremation_outline(0.0, 0.0, 10.0, 10.0, 12, 0.2, random.Random("s"))
-    b = cremation_outline(0.0, 0.0, 10.0, 10.0, 12, 0.2, random.Random("s"))
-    assert a == b, "seeded: the same seat draws the same ground"
-    radii = {round((float(x) ** 2 + float(y) ** 2) ** 0.5, 1) for x, y in (p.split(",") for p in a.split())}
-    assert len(radii) > 1 and max(radii) <= 12.0 and min(radii) >= 8.0, "ragged, inside the jitter band"
-
-    v = Settlement(1000, 1000, seed=2)
-    v.meta(name="V", scale="village")
-    v.cremation_ground(500.0, 500.0)
-    drawn = "".join(v.out)
-    assert "<ellipse" not in drawn and drawn.count("<polygon") == 3, "the ground, its burned ground and its ash bed are ragged polygons"
-
-
-def test_a_cremation_ground_draws_its_six_jizo_only_when_asked() -> None:
-    """Feature 280 M71 (research 700): six stone jizo stood at a burial ground's entrance; the glyph draws them when the
-    caller asks - a cremation ground beside a burial ground - and not by default."""
-    v = Settlement(1000, 1000, seed=2)
-    v.meta(name="V", scale="village")
-    v.cremation_ground(500.0, 500.0, jizo=True)
-    v.cremation_ground(300.0, 300.0)
-    with_j, without = v.M["cremation_grounds"]
-    assert len(with_j["jizo"]) == 6 and "jizo" not in without
-
-
-def test_a_cremation_ground_is_open_air_on_most_seats_and_draws_no_pyre_platform_or_hut() -> None:
-    """Feature 280 M70 (research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.html 'Cremation grounds and bone mounds (kasoba)'): most grounds were open-air to the end of Edo, a roof on four posts over the bed the
-    minority; no raised pyre platform or officiants' hut is attested, so neither is drawn."""
-    from l7r.diagram.settlement.civic_grounds.funerary import ROOFED_SHARE
-
-    v = Settlement(3000, 3000, seed=2)
-    v.meta(name="V", scale="village")
-    seats = [(200.0 + 130.0 * k, 200.0 + 110.0 * (k % 7)) for k in range(20)]
-    for x, y in seats:
-        v.cremation_ground(x, y, label="")
-    roofed = [g["roofed"] for g in v.M["cremation_grounds"]]
-    assert any(roofed) and not all(roofed) and sum(roofed) < len(roofed) / 2, f"the roof the minority ({ROOFED_SHARE}): {roofed}"
-    drawn = "".join(v.out)
-    assert "#CDB890" in drawn and drawn.count('fill="#8C8470"') == 0, "a roof's outline where rolled; no pyre platform"

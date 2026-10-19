@@ -460,6 +460,10 @@
             "type": "command",
             "command": "h=/diagram/scripts/hooks/event-log-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/event-log-hooks.sh\"; exec \"$h\"  # GUARD_EDIT_OK: feature 375 FR-008 - the event log",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/set-down-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/set-down-hooks.sh\"; exec \"$h\" stop  # GUARD_EDIT_OK: feature 385 T70 - a feature is worked until it is set down"
           }
         ]
       },

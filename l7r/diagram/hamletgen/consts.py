@@ -388,7 +388,7 @@ WEST_SUN_FT = 50.0
 # hamlets span five (`valley_paddy`, `polder_grid`, `mulberry_dike_fishpond`, `contour_terraces`,
 # `ribbon_valley`) and they are not variations on one shape - a comb fan is grown around a head-race
 # on sloping ground, a polder is a surveyed orthogonal grid diked out of standing water on flat
-# ground. They share `draw_comb_field` (build_polder deliberately returns build_comb-compatible
+# ground. They share `draw_comb_field` (build_polder deliberately returns comb-compatible
 # keys) and almost nothing else: different water entry, different drainage, a perimeter dike, and a
 # village that must sit on the LANDWARD side rather than the upslope one.
 #
@@ -640,9 +640,9 @@ Research:
 SEATING_GROUND_FT = 162.0
 """Research: seating ground per homestead - GUESS: 162 ft square, the mean envelope plus the least wood floor"""
 
-# `build_comb`'s GRAIN, and why this tier passes the PRINCIPLED value rather than the pool's.
+# `carve_comb`'s GRAIN, and why this tier passes the PRINCIPLED value rather than the pool's.
 #
-# `grain` scales the carve's real-feet thresholds AND the channel widths. `build_comb`'s docstring
+# `grain` scales the carve's real-feet thresholds AND the channel widths. `carve_comb`'s docstring
 # prescribes `2 / ftpx` so "too narrow to plant" means the same real size at every map scale - 2.0
 # for a 1 ft/px hamlet - while every hand-authored hamlet in the pool passes the default 1.0, which
 # at this scale means half the real size and half the ditch width. That gap was recorded as an open
@@ -659,7 +659,7 @@ SEATING_GROUND_FT = 162.0
 #
 # So this module runs at 2.0 and its cohorts gate clean there. The POOL's hamlets stay at 1.0 until
 # someone re-rolls them, which is a real job (every comb map re-rolls, each wants a
-# settlement-review) rather than an oversight - `build_comb`'s docstring carries the same account.
+# settlement-review) rather than an oversight - `carve_comb`'s docstring carries the same account.
 GRAIN = 2.0
 
 # THE HAMLET BAND (research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html): 10-20 households, 50-100 inhabitants. Below
@@ -668,7 +668,7 @@ GRAIN = 2.0
 HOUSEHOLD_BAND = (10, 20)
 """Research: hamlet household band - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html: 10 to 20"""
 
-# The reference fan, at Ikegami's 15 households: the `build_comb` lengths that produced it. Every
+# The reference fan, at Ikegami's 15 households: the comb builder's lengths that produced it. Every
 # other size is this fan scaled by a single multiplier (see `fit_field`), so the fan's ASPECT - the
 # thing that makes a comb read as a comb - is a constant of the tier and only its area varies.
 REF_HOUSEHOLDS = 15

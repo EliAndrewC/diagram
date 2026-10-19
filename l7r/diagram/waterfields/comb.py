@@ -1,4 +1,4 @@
-"""build_comb - the water-first comb field builder (pond sluice, head-race, supply canals, delivery-ditch threads, carved paddies).
+"""The comb - the water-first comb field builder (`carve_comb` + `finish_comb`) (pond sluice, head-race, supply canals, delivery-ditch threads, carved paddies).
 
 Research: comb plumbing - NONE: the carve/finish record, thread construction and stage hand-offs
 """
@@ -107,12 +107,60 @@ def carve_comb(
     head_len: float = 90.0,
     fan_middle: str = "cleared",
 ) -> CombCarve:
-    """The CARVE half of `build_comb` (feature 220): everything up to the planted plots and the
+    """The CARVE half of the comb builder (feature 220): everything up to the planted plots and the
     envelope, before the seams are closed - what `fit_field`'s search measures. Returns a
-    `CombCarve`; `finish_comb` turns it into the net `build_comb` returns. ONE body: `build_comb`
-    is `finish_comb(carve_comb(...))`, so every other caller is unchanged.
+    `CombCarve`; `finish_comb` turns it into the net - {"channels": [{pts, w, role}], "plots": [{poly, fill}], "threads",
+    "drain", "envelope", "acres"} - which the caller draws (px are map px; acres assume 1px = 2ft). There is no one-call wrapper: its last
+    caller went in feature 388, and its account of the layout is this docstring now.
+
+    The COMB layout (the historical default - Kishu school / Chinese canal doctrine):
+    the sluice's head-race forks at one division point into TWO supply canals hugging the
+    high margins (canal A runs across the slope at down-42 deg, canal B down the other margin at
+    down+58 deg), delivery ditches drop downhill off them (a couple splitting once), and one
+    drain collector (akusui) crosses the LOW side and leaves the map. Paddies are carved
+    between the ditch threads; water cascades plot-to-plot within each block (tagoshi).
+
+    `grain` scales the PLOT-GEOMETRY thresholds in the carve (minimum sector/row/plot sizes,
+    canal berms, drain set-backs, the gap-closer margins) AND the channel widths. They are
+    REAL-FEET quantities that were tuned at the village grain of 1px = 2ft; the principled
+    value is therefore grain = 2 / ftpx, so a "too narrow to plant" test means the same
+    real-world size on every map.
+
+    WHAT THE HAND-AUTHORED HAMLETS PASS is 1.0, not 2.0. That was recorded as a silent
+    inconsistency for a long time - at 1 ft/px it makes their "too narrow to plant" thresholds
+    mean half the real size they mean on a village sheet, and their irrigation ditches half the
+    width - and it has now been settled by testing rather than by preference (2026-08-12).
+
+    THE PRINCIPLED VALUE WORKS AT THIS TIER. Two obstacles used to stop it, and both are fixed.
+    The first was the bridge arithmetic: wider ditches produced planks and carried-way decks whose
+    abutments stood in the channel, because both paths sized a deck from a nominal width rather
+    than from the water actually beneath it. `channel_footbridges` now sizes a plank to the widest
+    course under it, junctions included, and `bridges()` grows a carried-way deck until its corners
+    clear the crossed polyline. The second was the communal WINDBREAK: at the coarser grain the
+    crop geometry shifts enough that a belt derived from the house cloud's EXTREMES could land off
+    the cluster altogether on a tall narrow settlement (measured: 9 surviving clumps, 350 px from
+    the nearest farmhouse). A belt sampled as a PROFILE across the wind instead of a box around the
+    extremes does not have that failure mode.
+
+    With both fixed, the scripted hamlet tier passes the principled 2.0 and a 36-map cohort gates
+    clean on it (`hamletgen.py`, `GRAIN`, which carries the same reasoning).
+
+    THE POOL'S HAND-AUTHORED HAMLETS ARE STILL AT 1.0, and moving them is a separate job rather
+    than a leftover: it re-rolls every comb map in the pool and each one needs a `settlement-review`
+    pass, since the change is visible (ditches at their true width, coarser minimum plots). So the
+    disagreement is no longer silent - the principled value is demonstrated, the cost of adopting
+    it pool-wide is named, and a hamlet gen passing 1.0 is doing so knowingly.
+
+    Left unscaled, a city's carve dropped
+    sectors, head plots, and closers that a village would have planted, leaving parchment
+    holes inside the fan - the white-spots bug the villages fixed once (canal-side closers,
+    the closing rank) and the cities then re-exposed at their coarser grain (2026-07-21).
+    The canal/thread/drain SKELETON is deliberately NOT scaled here: its lengths arrive
+    pre-scaled from the caller, and the map-edge margins (8px) are canvas facts, not feet.
 
     Research:
+        comb layout - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: a head race forking into two supply canals on the high margins, deliveries down the slope, one collector on the low line
+        water passes plot to plot - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: below each delivery's end the plots take their water over the bunds
         water first - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: the head race, canals, ditch threads and drain laid before any plot, the paddies cut between them
         bends swept before clearing - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: every continuation rounded before any ground is cleared against it
         default skeleton - UNRESEARCHED: canal A 1250-1450 px, canal B 680-800 px, offtakes at 0.22/0.45/0.68/0.88 and 0.45/0.8 of their canals
@@ -120,6 +168,8 @@ def carve_comb(
         default hem depth - UNRESEARCHED: the dry hem 70-132 px deep
         default bund-bean share - UNRESEARCHED: 0.28 of the bunds carry a bean row
         fan middle - UNRESEARCHED: the fan's middle takes the "cleared" form by default (`fan_middle`)
+        supply canal bank - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: the plots hem onto a bank beside each supply canal where the caller asks (`supply_banks`; the scripted hamlet always does), off by default for a caller that draws its own
+        default grain - NONE: 1.0 where a caller passes none; the scripted hamlet passes the principled 2 / ftpx (`hamletgen.consts.GRAIN`), as this docstring explains
     """
     R = random.Random(seed)
     F = _Frame(down_deg)
@@ -189,7 +239,7 @@ def carve_comb(
 
 
 def finish_comb(c: CombCarve) -> dict[str, Any]:
-    """The FINISH half of `build_comb` (feature 220): tile the planted region with plots, hold them to the ring rules, mark the
+    """The FINISH half of the comb builder (feature 220): tile the planted region with plots, hold them to the ring rules, mark the
     low ground and its tint, measure the acreage, lay the dry plots and the bund beans, and assemble the net. Consumes the
     carve's own random generator from where the carve left it - each build seeds its own `R`, so a carve kept during a search
     and finished later sees the state an inline finish would have seen.
@@ -256,108 +306,6 @@ def finish_comb(c: CombCarve) -> dict[str, Any]:
         "furrows_vary": furrow_spread >= 0.3,
         "fan_middle": c.fan_middle,
     }
-
-
-def build_comb(
-    W: float,
-    H: float,
-    sluice: Pt,
-    seed: int,
-    down_deg: float = 45,
-    canal_a_len: tuple[float, float] = (1250, 1450),
-    canal_b_len: tuple[float, float] = (680, 800),
-    offtakes_a: Sequence[float] = (0.22, 0.45, 0.68, 0.88),
-    offtakes_b: Sequence[float] = (0.45, 0.8),
-    plot_across: float = 48,
-    row_step: tuple[float, float] = (26, 36),
-    dry_keepout: Sequence[tuple[float, float, float]] = (),
-    dry_band: tuple[float, float] = (70, 132),
-    bean_frac: float = 0.28,
-    field_fall: float | None = None,
-    furrow_spread: float = 1.1,
-    grain_drift: float = 0.0,
-    grain: float = 1.0,
-    supply_banks: bool = False,
-) -> dict[str, Any]:
-    """The COMB layout (the historical default - Kishu school / Chinese canal doctrine):
-    the sluice's head-race forks at one division point into TWO supply canals hugging the
-    high margins (canal A runs cross-slope at down-37 deg, canal B down the other margin at
-    down+58 deg), delivery ditches drop downhill off them (a couple splitting once), and one
-    drain collector (akusui) crosses the LOW side and leaves the map. Paddies are carved
-    between the ditch threads; water cascades plot-to-plot within each block (tagoshi).
-
-    Returns {"channels": [{pts, w, role}], "plots": [{poly, fill}], "threads", "drain",
-    "envelope", "acres"} - the caller draws it (px are map px; acres assume 1px = 2ft).
-
-    `grain` scales the PLOT-GEOMETRY thresholds in the carve (minimum sector/row/plot sizes,
-    canal berms, drain set-backs, the gap-closer margins) AND the channel widths. They are
-    REAL-FEET quantities that were tuned at the village grain of 1px = 2ft; the principled
-    value is therefore grain = 2 / ftpx, so a "too narrow to plant" test means the same
-    real-world size on every map.
-
-    WHAT THE HAND-AUTHORED HAMLETS PASS is 1.0, not 2.0. That was recorded as a silent
-    inconsistency for a long time - at 1 ft/px it makes their "too narrow to plant" thresholds
-    mean half the real size they mean on a village sheet, and their irrigation ditches half the
-    width - and it has now been settled by testing rather than by preference (2026-08-12).
-
-    THE PRINCIPLED VALUE WORKS AT THIS TIER. Two obstacles used to stop it, and both are fixed.
-    The first was the bridge arithmetic: wider ditches produced planks and carried-way decks whose
-    abutments stood in the channel, because both paths sized a deck from a nominal width rather
-    than from the water actually beneath it. `channel_footbridges` now sizes a plank to the widest
-    course under it, junctions included, and `bridges()` grows a carried-way deck until its corners
-    clear the crossed polyline. The second was the communal WINDBREAK: at the coarser grain the
-    crop geometry shifts enough that a belt derived from the house cloud's EXTREMES could land off
-    the cluster altogether on a tall narrow settlement (measured: 9 surviving clumps, 350 px from
-    the nearest farmhouse). A belt sampled as a PROFILE across the wind instead of a box around the
-    extremes does not have that failure mode.
-
-    With both fixed, the scripted hamlet tier passes the principled 2.0 and a 36-map cohort gates
-    clean on it (`hamletgen.py`, `GRAIN`, which carries the same reasoning).
-
-    THE POOL'S HAND-AUTHORED HAMLETS ARE STILL AT 1.0, and moving them is a separate job rather
-    than a leftover: it re-rolls every comb map in the pool and each one needs a `settlement-review`
-    pass, since the change is visible (ditches at their true width, coarser minimum plots). So the
-    disagreement is no longer silent - the principled value is demonstrated, the cost of adopting
-    it pool-wide is named, and a hamlet gen passing 1.0 is doing so knowingly.
-
-    Left unscaled, a city's carve dropped
-    sectors, head plots, and closers that a village would have planted, leaving parchment
-    holes inside the fan - the white-spots bug the villages fixed once (canal-side closers,
-    the closing rank) and the cities then re-exposed at their coarser grain (2026-07-21).
-    The canal/thread/drain SKELETON is deliberately NOT scaled here: its lengths arrive
-    pre-scaled from the caller, and the map-edge margins (8px) are canvas facts, not feet.
-
-    Research:
-        comb layout - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: a head race forking into two supply canals on the high margins, deliveries down the slope, one collector on the low line
-        water passes plot to plot - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: below each delivery's end the plots take their water over the bunds
-        default skeleton - UNRESEARCHED: canal A 1250-1450 px, canal B 680-800 px, offtakes at 0.22/0.45/0.68/0.88 and 0.45/0.8 of their canals
-        default paddy grain - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: strips 48 px across, rows 26-36 px apart
-        default hem depth - UNRESEARCHED: the dry hem 70-132 px deep
-        default bund-bean share - UNRESEARCHED: 0.28 of the bunds carry a bean row
-    """
-    return finish_comb(
-        carve_comb(
-            W=W,
-            H=H,
-            sluice=sluice,
-            seed=seed,
-            down_deg=down_deg,
-            canal_a_len=canal_a_len,
-            canal_b_len=canal_b_len,
-            offtakes_a=offtakes_a,
-            offtakes_b=offtakes_b,
-            plot_across=plot_across,
-            row_step=row_step,
-            dry_keepout=dry_keepout,
-            dry_band=dry_band,
-            bean_frac=bean_frac,
-            field_fall=field_fall,
-            furrow_spread=furrow_spread,
-            grain_drift=grain_drift,
-            grain=grain,
-            supply_banks=supply_banks,
-        )
-    )
 
 
 def _canal_ft(tier: tuple[float, float], i: int, n: int) -> float:
