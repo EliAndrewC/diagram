@@ -424,7 +424,7 @@
     ],
     "PostToolUse": [
       {
-        "matcher": "Agent",
+        "matcher": "Agent|TaskStop",
         "hooks": [
           {
             "type": "command",

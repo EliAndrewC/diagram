@@ -82,7 +82,10 @@ def refusal(state: Mapping[str, Any], root: Path | None, tool: str, ti: Mapping[
     for h in (state.get("plan_holds") or {}).values():
         plan = root / "specs" / str(h.get("feature")) / "plan.md"
         texts = held(root, h)
-        if not texts or (escaped and dead(h, now)):
+        # A DISPATCH THAT NEVER LAUNCHED HOLDS NOTHING (feature 385 T104, D121): refused by another guard, it reads no text - T98's
+        # refused review left a hold that refused its section's amendment an hour after the re-sent review had returned
+        never = h.get("state") == "pending" and now - float(h.get("t", 0)) > PENDING_S
+        if not texts or never or (escaped and dead(h, now)):
             continue
         hit = False
         if tool in ("Edit", "Write", "MultiEdit") and Path(str(ti.get("file_path") or "")).resolve() == plan.resolve():
