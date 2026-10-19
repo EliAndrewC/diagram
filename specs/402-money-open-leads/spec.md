@@ -114,3 +114,4 @@ readable and what is still open, so the skill can move its rows.
 - **spec-fidelity round 3 (2026-10-19, verify): CHANGES REQUIRED, 3 items + 1 lesser, all wording.** The write brief's
   Morisada paragraph and the plan no longer call 991467 full-text searchable; the 0275 clause points at scenario 4; the
   request's summary line matches the passes.
+- **Accepted by the round arbiter (ask:402-spec-round4, 2026-10-19): FAITHFUL on this text, a waiver, not a check's verdict.** Round 3 found round 2's item resolved; its wording items were fixed in the next commit, and a grep confirmed no file still calls 991467 full-text searchable.
