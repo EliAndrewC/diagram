@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-19T12:05:25+00:00",
+ "final_url": "https://web.archive.org/web/20251027213322id_/https://www.xsyk021.com/fileXSYK/journal/article/xsyk/2025/8/PDF/xsyk-2025-8-160.pdf",
+ "first": "3a/3a6ec0fcc6a5/20261019T120523Z",
+ "gm_copies": [],
+ "keys": [
+  "tao-2025-runli"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "3a/3a6ec0fcc6a5/20261019T120523Z",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "5d04cd93218c4cb42d416e99cf85f76ce942aa3825909844362ba2e53fb3c166",
+ "url": "https://www.xsyk021.com/fileXSYK/journal/article/xsyk/2025/8/PDF/xsyk-2025-8-160.pdf"
+}
