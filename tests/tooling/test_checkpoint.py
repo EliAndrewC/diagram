@@ -330,6 +330,21 @@ def test_an_hour_spent_waiting_on_the_gm_opens_no_step_back(clone: Path) -> None
     assert cp.gm_waits(clone, "999-test", T0, T0 + 63 * 60) == 0.0 and cp.state(clone, T0 + 63 * 60)["due"]
 
 
+def test_a_feature_claimed_and_left_idle_is_not_due_on_its_first_touch(clone: Path) -> None:
+    """The round arbiter's tooling fix on hour:397@1: a feature claimed overnight came due on its first touch, its hour counted
+    from the claim. A gap of its own log past IDLE_S with no Stop before it is time it was not worked."""
+    ev = clone / ".git" / "l7r-events" / "999-test.jsonl"
+    rows = [{"t": _iso(T0), "ev": "PreToolUse", "sid": "s1"}, {"t": _iso(T0 + 4 * 3600), "ev": "PreToolUse", "sid": "s1"}]
+    ev.write_text("".join(json.dumps(r) + "\n" for r in rows))
+    assert cp.idle(clone, "999-test", T0, T0 + 4 * 3600 + 60) == 4 * 3600 - cp.IDLE_S
+    assert not cp.state(clone, T0 + 4 * 3600 + 60)["due"], "four idle hours are not the feature's"
+    assert cp.state(clone, T0 + 4 * 3600 + 3600)["due"], "an hour worked after it is"
+    rows.insert(1, {"t": _iso(T0 + 60), "ev": "Stop", "sid": "s1"})
+    rows[-1]["ev"] = "UserPromptSubmit"
+    ev.write_text("".join(json.dumps(r) + "\n" for r in rows))
+    assert cp.idle(clone, "999-test", T0, T0 + 4 * 3600 + 60) == 0.0, "a wait after a Stop is gm_waits' to judge, not idle"
+
+
 def test_the_hour_is_decided_once_per_message_and_its_refusals_reach_the_step_back(clone: Path, tmp_path: Path) -> None:
     """The round arbiter's tooling fix on hour:385-approach-checklist@10: the hour turned between the second and third of five
     dispatches in one message, so the batch was split and three were re-sent; and the step-back's refusals.md missed the pair
