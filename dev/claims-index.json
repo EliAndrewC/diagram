@@ -22469,11 +22469,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/dry_exit.py::GROVE_EXIT_CELL_FT#flood fill and rasterizing": {
-  "code": "05b11775ae651372",
-  "core": "2c48ea6cfc2004e2",
-  "date": "2026-10-03",
-  "note": "plumbing, no physical decision",
+  "body": "b2eadfe91bef7cb7",
+  "claim": "flood fill and rasterizing - NONE",
+  "code": "ccce92174746d136",
+  "core": "149ae98c2aa5da0d",
+  "date": "2026-10-19",
+  "note": "2.9 ft is the resolution of the flood-fill grid, which is plumbing; the physical figures it is sized against (the 12.5 ft band gap, the 32 ft lane room) belong to other constants.",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/dry_exit.py::_blocked_cells#flood fill and rasterizing": {
