@@ -88,12 +88,12 @@ stands), and every round-arbiter ruling on the unit with its `why`.
 
 ## Success criteria
 
-- **SC-001** A test builds a question bundle and a pop-up bundle over a fixture check state holding two earlier rounds (one
+- **SC-001** (FR-001, FR-002, FR-004) A test builds a question bundle and a pop-up bundle over a fixture check state holding two earlier rounds (one
   with an applied EDIT and one not, one arbiter `continue` ruling), and the MANIFEST lists both rounds, both edit marks, the
   ruling's `why` and `what`, and the copied replies.
-- **SC-002** The same bundles over a state with no earlier round are byte-identical to the bundles built without this feature.
-- **SC-003** A test holds the shared contract paragraph identical in every listed agent file.
-- **SC-004** `make quick` and `make hooks-test` green; the landing's route is DIRECT (no engine code).
+- **SC-002** (FR-004, FR-005) The same bundles over a state with no earlier round are byte-identical to the bundles built without this feature.
+- **SC-003** (FR-003) A test holds the shared contract paragraph identical in every listed agent file.
+- **SC-004** (spec-wide) `make quick` and `make hooks-test` green; the landing's route is DIRECT (no engine code).
 
 ## Coordination (the GM's instruction)
 
