@@ -6025,47 +6025,58 @@
    "verdict": "CLEAR"
   },
   "T78": {
-   "section_sha256": "f48281bf8e117bdcac8c9fafa6cd4a3bd7254e6f3095c514ce61498833b29527",
+   "section_sha256": "874ef402e9d860dad34bf1dd515cdc4ecaadd70028cf3147e607203687555342",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "T78-scope",
-     "summary": "A tooling task: text the tools copy from an agent's reply into tracked files gets the house-style (American spelling) correction the edit hook already applies.",
+     "id": "T78-warrant",
+     "summary": "The task's warrant is amendment 6 ('implement any obvious performance / tooling / process improvements along the way') applying CLAUDE.md's house style (American spellings, corrected rather than refused) to two writers the hook does not see; replaces the earlier block's quotation of a session reply that request.md does not carry.",
      "class": "within",
-     "why": "Enforces the GM's standing house-style rule (American spellings, corrected rather than refused) on a route it currently misses, and falls under amendment 6's 'Please make sure to implement any obvious performance / tooling / process improvements along the way'. Note: the session reply the block quotes ('notes the tools write into records should get the same house-style correction as edits do. I'll add that') is NOT in request.md; request.md ties 'I do like all of your other proposals' to the step-back's eight-item list, which does not contain it. The task stands on amendment 6 and the house style, not on that quotation."
+     "why": "Amendment 6 is in request.md verbatim and is dated 2026-10-18; the fix is measured (a gate red on 'grey' copied by claims.py record from a reply) and only extends an existing GM rule to an unseen route, which is an obvious tooling improvement rather than new behavior the GM did not ask for."
+    },
+    {
+     "id": "T78-scope",
+     "summary": "Correct the two writers that copy agent words into tracked files: claims.py record (index notes) and apply_edits.py (EDIT new text).",
+     "class": "within",
+     "why": "Serves the stated goal (an agent's British spelling never reaches a tracked file through a tool) and nothing beyond it; no other writer or behavior is added."
     },
     {
      "id": "D97-one-corrector",
-     "summary": "The hook's plain-text correction is lifted into hm_house.americanize(text) and shared by the hook, claims.py record and apply_edits.py; hm_house.PAIRS stays the one table.",
+     "summary": "Extract the hook's plain-text correction into hm_house.americanize(text), called by the hook as before and by the two writers; PAIRS stays the one table.",
      "class": "within",
-     "why": "A refactor that applies the existing rule unchanged; it narrows nothing the GM asked for."
+     "why": "Refactor that keeps one table and the hook's behavior unchanged; settles how, not what."
     },
     {
-     "id": "T78-two-writers",
-     "summary": "Only claims.py record (index notes) and apply_edits.py (EDIT record and pop-up text) are changed, the two writers found by measurement to copy agent words into tracked files past the hook.",
-     "class": "within",
-     "why": "The scope is set by a measured inventory (Approach item 4), not by excluding a known writer; nothing the GM asked for is left out."
-    },
-    {
-     "id": "D97-old-text-as-written",
-     "summary": "An EDIT's old text is matched as written; only its new text is corrected.",
-     "class": "within",
-     "why": "Mechanically necessary: the old text has to match the file as it stands, and it writes nothing."
-    },
-    {
-     "id": "T78-quotations-held-out",
-     "summary": "A quotation (blockquote, q, corner brackets, curly quotes) in the text is left uncorrected, as the hook leaves it.",
+     "id": "D97-notes-not-reply",
+     "summary": "claims.py record corrects each note parsed from a reply, not the whole reply, so a claim key or path with a British spelling still matches.",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "why": "The house style rule the task enforces itself keeps quotations of another's text; leaving them uncorrected follows the rule rather than carving out a case against it, and it matches the hook's existing behavior."
+     "why": "Narrows 'American spellings everywhere' to the prose the tool writes. Literal application is physically impossible here: a key or path rewritten no longer identifies its claim or file, so the record would fail. A key or path names something already in the repository rather than bringing an agent's spelling in, so the goal (no new British spelling enters through the tool) and the gate it protects are untouched."
     },
     {
-     "id": "D97-gm-request-not-corrected",
-     "summary": "An EDIT on specs/*/request.md (the GM's own writing) is not corrected.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "The house style says the GM's own writing is never corrected, and the hook does not correct request.md either. Correcting it would break the very rule the task applies, so the exception comes from the GM's own words."
+     "id": "D97-old-text",
+     "summary": "apply_edits.py corrects an EDIT's new text only; the old text is matched as written.",
+     "class": "within",
+     "why": "The old text is a match anchor and is never written to the file, so the house style has nothing to correct in it."
+    },
+    {
+     "id": "D97-request-md",
+     "summary": "An EDIT on specs/*/request.md is not corrected, as the hook does not correct one.",
+     "class": "within",
+     "why": "Implied by the GM's own rule cited in constraint 2: the GM's own writing is never corrected."
+    },
+    {
+     "id": "T78-quotation",
+     "summary": "A quotation (blockquote, q, corner brackets, curly quotes) is held out of correction as the hook holds it.",
+     "class": "within",
+     "why": "The house style rule itself keeps a quotation of another's text."
+    },
+    {
+     "id": "T78-tests",
+     "summary": "test_claims_index.py and test_apply_edits.py red without the correction.",
+     "class": "within",
+     "why": "Enforcement of the requested behavior only; deleting the behavior leaves the tests nothing to check."
     }
    ],
    "verdict": "CLEAR"
