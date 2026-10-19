@@ -518,6 +518,10 @@ page-check:     ## [tests] the interactive tests + the browser test, then the `p
 	  && printf '\n\033[1mpage-check green\033[0m (the page and browser stamps are written; an asset-only delta may push)\n' \
 	  && { root=$$(git rev-parse --show-toplevel); python3 "$$root/scripts/record/entry_owed.py" --root "$$root" --why; python3 "$$root/scripts/record/entry_owed.py" --root "$$root" | sed 's/^/  /'; true; }
 
+where-time:     ## [project] where a feature's time went, by task: the time by bucket and the agents by kind (feature 385 T77)   F=<feature> [SINCE=<ISO UTC>]
+	@if [ -z "$(F)" ]; then printf 'make where-time: F=<feature> is required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/where_time.py" "$(F)" $(if $(SINCE),--since "$(SINCE)",)
+
 set-down: export SET_DOWN_WHY = $(WHY)
 set-down:       ## [project] set a feature's work down, so a turn may end with tasks open (feature 385 T70): F=385 WHY="awaiting the GM on the cohort trend"
 	@if [ -z "$(F)" ]; then printf 'make set-down: F=<feature> is required\n' >&2; exit 2; fi
@@ -1044,7 +1048,7 @@ perf:            ## [performance] take a performance snapshot of the reference h
 census:           ## [performance] the overlap census: comparisons per call of every check the pool's rolls run, the ones over the flag named
 	@python3 -m l7r.diagram.tools.overlap_census
 
-.PHONY: review-yield cohort-seeds task-add set-down
+.PHONY: review-yield cohort-seeds task-add set-down where-time
 review-yield:     ## [performance] each review check's passes, findings acted on / dismissed / deferred, author-missed, hours and tokens, from the ledger   [SINCE=2026-09-26]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/review_yield.py" $(if $(SINCE),--since $(SINCE),)
 

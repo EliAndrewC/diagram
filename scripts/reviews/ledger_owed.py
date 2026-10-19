@@ -206,7 +206,24 @@ PLAN_RECORDED = re.compile(r"\b(?:CLEAR|BLOCKED|NOT-REVIEWABLE) recorded for\b|m
 PLAN_WHERE = "the plan-verdict record (make plan-verdict)"
 
 
-def plan_review_rows(owed: Sequence[dict[str, str]], root: Path = review_cost.DEFAULT_ROOT) -> list[str]:
+def in_the_record(p: dict[str, str], repo: Path) -> bool:
+    """The pass's feature's `plan-review.json` holds a verdict for its task (or, for a block review, a block) dated the pass's day -
+    the record itself, where the reply's words vary (T78's second review wrote only "I recorded it")."""
+    m = re.search(r"feature (\d{3}-[\w-]+)", p.get("subject", ""))
+    path = repo / "specs" / m.group(1) / "plan-review.json" if m else None
+    if path is None or not path.is_file():
+        return False
+    try:
+        rec = json.loads(path.read_text(encoding="utf-8"))
+    except ValueError:
+        return False
+    task = re.search(r"\btask (T\d+[a-z]?)\b", p.get("subject", ""))
+    if task:
+        return (rec.get("tasks") or {}).get(task.group(1), {}).get("reviewed") == p.get("date")
+    return any(isinstance(b, dict) and b.get("reviewed") == p.get("date") for b in (rec.get("blocks") or {}).values())
+
+
+def plan_review_rows(owed: Sequence[dict[str, str]], root: Path = review_cost.DEFAULT_ROOT, repo: Path | None = None) -> list[str]:
     """The row of each owed plan review whose reply shows `make plan-verdict` recorded it (81 hand-written on 2026-10-18; the
     plan review asked that a pass that recorded nothing get no row naming a record)."""
     for d in ("../hooks/lib",):
@@ -218,7 +235,7 @@ def plan_review_rows(owed: Sequence[dict[str, str]], root: Path = review_cost.DE
         if not p.get("subject", "").startswith(PLAN_REVIEW):
             continue
         path = review_cost.transcript(p["agent"], root) if p.get("agent") else None
-        if path and PLAN_RECORDED.search(hm_checks._reply_of(str(path), "")):
+        if (path and PLAN_RECORDED.search(hm_checks._reply_of(str(path), ""))) or (repo is not None and in_the_record(p, repo)):
             out.append(filled_row(p, PLAN_WHERE, root))
     return out
 
@@ -242,7 +259,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     passes = distinct(settled(load_passes(Path(args.log) if args.log else default_log()), Path(args.transcripts), _kept_file()))
     owed = unanswered(passes, ledger.read_text(encoding="utf-8") if ledger.is_file() else "")
     if args.write_plan_reviews:
-        rows = plan_review_rows(owed, Path(args.transcripts))
+        rows = plan_review_rows(owed, Path(args.transcripts), ledger.resolve().parent.parent)
         if rows:
             with ledger.open("a", encoding="utf-8") as fh:
                 fh.writelines(r + "\n" for r in rows)

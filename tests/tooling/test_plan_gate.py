@@ -405,3 +405,18 @@ def test_ids_appended_to_the_lands_open_line_owe_no_review_and_a_reorder_does(tm
     assert gate.block_status(review, dropped, set())[0] == ["## Landing"]
     more = "# Plan\n\n" + ta.lands_open(body, "T09").replace("lands when it closes", "lands at once")
     assert gate.block_status(review, more, set())[0] == ["## Landing"], "anything else changed is owed as now"
+
+
+def test_a_part_b_that_decides_nothing_owes_no_review_and_one_that_decides_does() -> None:
+    """Feature 385 T75 (plan D94): T10's, T65's and T72's part Bs each took a review round and each decided nothing."""
+    head = "### T05 part B (2026-10-19T00:30Z)"
+
+    def pb(four: str, five: str, extra: str = "") -> str:
+        return f"{head}\n\n1. **What is refusing?** Nothing.\n4. **Moving something earlier?** {four}\n5. **Tuning or changing?** {five}\n{extra}"
+
+    plan = "# Plan\n\n**D10 - a rule.** x\n\n"
+    review = {"blocks": {"preamble": {"sha256": gate.block_digest(plan), "verdict": "CLEAR"}}}
+    quiet = pb("No.", "Neither - landing what was checked.", "6. **Test.** D10 holds.\n")
+    assert gate.block_status(review, plan + quiet, set())[0] == []
+    for loud in (pb("No.", "Changing: the rule widens."), pb("Yes - the wells move.", "Neither."), pb("No.", "Neither.", "7. **Next.** D11 - a new rule.\n")):
+        assert gate.block_status(review, plan + loud, set())[0] == [head], loud
