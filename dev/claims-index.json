@@ -32782,11 +32782,11 @@
  },
  "l7r/diagram/hamletgen/ways/web.py::stage_web#a further row street's end": {
   "body": "7211c336ff08f58f",
-  "claim": "a further row street's end - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: it ends at its outermost joint or at its last farm's door (`trim_streets`, `_TOUCH_GAP` and the door's offset)",
-  "code": "e7810f97040d998d",
+  "claim": "a further row street's end - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: pulled back to the last house it serves - it ends at its outermost joint, or abreast the house of the last farm it serves without a path (`trim_streets` at `street_anchors`)",
+  "code": "4bc7749b6f5f21d2",
   "core": "777e9952ae445157",
   "date": "2026-10-19",
-  "note": "the claim's account is out of date: since T97, `trim_streets` is handed `street_anchors(s)`, the street's point nearest each house it serves, not the farm's door. The code matches the page (\"pulled back to the last house it serves\"); reword the claim to say it ends at its outermost joint or abreast its last served farm's house",
+  "note": "the page records \"a lane end that reaches nothing is pulled back to the last house it serves\" as a GUESS. The trim to the outermost joint, or to the point abreast the last house served without a path, is that rule. The row-village page is silent on where a further street ends; it says only that the first street runs off the map as the road.",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
   },
@@ -32794,18 +32794,18 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::stage_web#a row farm's door point": {
   "body": "7211c336ff08f58f",
-  "claim": "a row farm's door point - UNRESEARCHED: set 8 ft past its yard (`front_door` at `DOOR_STEP_FT`), where its street's trim and arrival are judged from",
-  "code": "4508b6ecfa40769e",
+  "claim": "a row farm's door point - UNRESEARCHED: set 8 ft past its yard (`front_door` at `DOOR_STEP_FT`); it picks the farm's own street (`own_street`) and starts its door path, while arrival and the trim are judged from the house",
+  "code": "56994e7b108777c7",
   "core": "777e9952ae445157",
   "date": "2026-10-19",
-  "note": "the 8 ft offset is UNRESEARCHED, which is right, but \"where its street's trim and arrival are judged from\" is out of date: `street_arrives` measures from the house (the `door` argument is unused) and the trim anchors at the house too. The door now only picks the farm's own street (`own_street`) and starts the door path; reword the claim",
+  "note": "the claim says UNRESEARCHED, but the row-village drawing page shows the place was looked for and not found: \"Where the gate of such a farm stood was not found, so the path is a GUESS\". Should be GUESS research/questions/0033-row-villages-resson.drawing.html. No page records the 8 ft `DOOR_STEP_FT` figure itself, so the claim should still call that figure a guess.",
   "pages": {},
   "research": "",
-  "verdict": "DRIFTED"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/web.py::stage_web#a row village laid without web cuts": {
   "body": "7211c336ff08f58f",
