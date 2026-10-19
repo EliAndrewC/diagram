@@ -841,7 +841,13 @@ def _handle(mode: str, payload: Mapping[str, Any], path: Path, now: float) -> st
         hm_planhold.launched(state, str(payload.get("tool_use_id") or ""), str(resp.get("agentId") or ""))
         launched(state, str(payload.get("tool_use_id") or ""), str(resp.get("agentId") or ""), resp.get("status") == "async_launched", response_text(resp), path.parent / "check-replies")
     elif mode == "launched" and payload.get("tool_name") == "TaskStop":  # feature 385 T104 (D121): a stopped review returns no reply
-        hm_planhold.returned(state, str(ti.get("task_id") or ti.get("shell_id") or ""))
+        stopped = str(ti.get("task_id") or ti.get("shell_id") or "")
+        hm_planhold.returned(state, stopped)
+        # ...AND ITS CHECK STOPS HOLDING ITS ROUND (feature 385 T148, D156): two stopped 0043 checks stayed `running`, freezing the
+        # page and refusing the round's next check until `make check-closed AGENT=` closed each by hand
+        for d in state.get("dispatches", {}).values():
+            if stopped and d.get("aid") == stopped and d.get("state") in ("running", "pending"):
+                d["state"], d["closed"] = "answered", "stopped by the session (TaskStop)"
     elif mode == "returned":
         hm_planhold.returned(state, str(payload.get("agent_id") or ""))
         pair_wave(state, str(payload.get("agent_id") or ""), str(payload.get("agent_transcript_path") or ""))

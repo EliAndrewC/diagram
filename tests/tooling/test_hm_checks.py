@@ -804,3 +804,23 @@ def test_flags_are_read_from_real_reply_lines() -> None:
     assert set(flagged) == {"0105#wigmore-2", "0105#akiyama-3", "0105#ohmi"}
     assert passed == {"0105#wigmore", "0105#ok"}, "akiyama is named only outside the change"
     assert fl.read_reply("quote-check: 3 PARTIAL wigmore\n", notes) == ({}, set()), "the counts line is not a verdict"
+
+
+def test_a_stopped_record_check_stops_holding_its_round(tmp_path: pathlib.Path) -> None:
+    """Feature 385 T148 (D156): two 0043 checks stopped with TaskStop stayed `running`, freezing the page and refusing the round's
+    next check until `make check-closed AGENT=` closed each by hand; the stop now closes them."""
+    (tmp_path / ".git").mkdir()
+    (tmp_path / ".specify").mkdir()
+    (tmp_path / ".specify" / "feature.json").write_text('{"feature_directory": "specs/385-x"}')
+    m = tmp_path / "MANIFEST.md"
+    m.write_text(MANIFEST)
+    cwd = str(tmp_path)
+    agent = {"cwd": cwd, "tool_name": "Agent", "tool_use_id": "t1", "tool_input": {"subagent_type": "quote-check", "prompt": f"read {m}"}}
+    hc.handle("dispatch", agent, 0)
+    hc.handle("launched", {**agent, "tool_response": {"status": "async_launched", "agentId": "ag1"}}, 1)
+    edit = {"cwd": cwd, "tool_name": "Edit", "tool_input": {"file_path": PAGE, "old_string": "a", "new_string": "b"}}
+    assert "frozen" in hc.handle("edit", edit, 2)
+    assert hc.handle("launched", {"cwd": cwd, "tool_name": "TaskStop", "tool_input": {"task_id": "ag1"}, "tool_response": {}}, 3) == ""
+    d = json.loads((tmp_path / ".git" / hc.STATE).read_text())["dispatches"]["t1"]
+    assert d["state"] == "answered" and d["closed"] == "stopped by the session (TaskStop)"
+    assert hc.handle("edit", edit, 4) == "", "the page is no longer frozen by it"
