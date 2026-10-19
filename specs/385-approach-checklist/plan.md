@@ -482,17 +482,37 @@ Owed by the landing cohort of 07:15Z (cohort seed 22 newly failing) and the roun
 2. **The constraints.** T85 (D106): a write that would change text a running plan review reads is refused; `PLAN_EDIT_OK` passes a dead hold only. The GM's rule: a guard that fires on correct work teaches a session to bypass every guard. A test red without it.
 3. **Where each comes from.** T85 (O); the GM (G, the root CLAUDE.md's section on what is enforced).
 4. **Do they describe the world here?** Yes - measured 2026-10-19 (the guard's two refusals, then a read of `hm_checks` and `hm_planhold`): T98's first plan review was refused by the hourly step-back guard, so it never launched and never returned; the hold taken at its PreToolUse stayed `pending` and refused T98's section amendment about an hour after the re-sent review had returned, and later a `make ledger-owed` command that named the plan in its reason - each passed only with `PLAN_EDIT_OK`.
-5. **The order.** `hm_planhold.refusal` passes a hold still pending past `PENDING_S`; `hold` drops an earlier hold of the same task or blocks; then the test.
+5. **The order.** `hm_planhold.refusal` passes a hold still pending past `PENDING_S`; a stopped review's agent releases its hold; then the test.
 6. **The exits.** (c) - a hold that never launched is no hold; (e) conform - the escape each time - refused: the guard would teach the escape.
 7. **The search smell.** None.
 8. **The budget.** 30 min.
-9. **Done, measured.** One goal: a hold whose dispatch was never launched past `PENDING_S` refuses nothing, and a new hold on the same task replaces the old; a launched review's hold still refuses; `tests/hooks/test-*.sh` for the plan hold red without it.
+9. **Done, measured.** One goal: a hold whose dispatch was never launched past `PENDING_S` refuses nothing, nor one whose agent was stopped; a launched review's hold still refuses, also when a later dispatch of the same task is refused; `tests/tooling/test_plan_edit_refusal.py` and `tests/tooling/test_hm_checks.py` red without it.
 10. **Before moving a constant.** n/a - none moves.
 11. **Before fitting things into room.** n/a - nothing is fitted.
 
 ### T104 Decisions
 
-**D121 - a hold is a running review.** In `hm_planhold.refusal` a hold still `pending` past `PENDING_S` (its dispatch refused or lost) is skipped without an escape - no review reads that text; a launched hold keeps T85's rule (its escape only once dead past `HOLD_MAX_S`). `hold` drops any earlier hold of the same feature and task (or the same blocks) before recording the new one.
+**D121 - a hold is a running review.** In `hm_planhold.refusal` a hold still `pending` past `PENDING_S` (its dispatch refused or lost) is skipped without an escape - no review reads that text; a launched hold keeps T85's rule (its escape only once dead past `HOLD_MAX_S`). A review's agent stopped with `TaskStop` releases its hold as a return does - the PostToolUse hook that pairs a dispatch with its agent also hears `TaskStop` (measured 2026-10-19, two T104 reviews stopped: each hold stood and refused the section's next edit for half an hour). No hold is dropped by another: a running review's hold stands until it returns, is stopped or dies, whatever later dispatch of the same task is refused.
+
+## T100 - web lanes off the water cite 0035's drawing page (found working T96, 2026-10-19)
+
+### T100 Approach (checklist part A)
+
+1. **The goal, in the world.** The claim on how the web keeps off the water names the page that sets it.
+2. **The constraints.** 0035's drawing page: "The ways between the two banks cross the brook squarely, on a plank bridge"; "A way keeps to its own bank unless crossing saves it more than about 150 ft of walking"; crossing places "every 160 ft or so along the brook". Feature 316: a claim cites the page that answers it. A claims check IN-STEP.
+3. **Where each comes from.** 0035's drawing page (O); 316 (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T96's impl-drift round on `web.stage_web#web lanes off the water`: MISLABELED, "UNRESEARCHED, but 0035's drawing page answers it", then a read of 0035): the web's cuts and joins are clipped at the watercourses and drawn channels, and a join crosses the brook only at a ford - 0035's crossing places (`FORD_SPACING`, 160 ft).
+5. **The order.** The claim's text, then its claims check.
+6. **The exits.** (e) conform - the code keeps 0035's rule; only its citation is wrong.
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: the claim cites 0035's drawing page and the claims check finds it IN-STEP; no code changes.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T100 Decisions
+
+**D122 - the web's water rule is 0035's.** `stage_web`'s claim reads "web lanes off the water - <0035's drawing page>: a way keeps to its own bank; web cuts and joins clipped at the watercourses and drawn channels, a join crossing the brook only at a ford, one of the crossing places".
 
 ## T11 - the close
 
