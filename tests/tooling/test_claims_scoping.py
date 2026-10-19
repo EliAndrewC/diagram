@@ -66,6 +66,17 @@ def test_an_edit_to_one_block_owes_in_full_only_the_claims_resting_on_it(tmp_pat
     assert dict(cx.owed(cx.current(skill), index))[SHARE] == "research changed", "no question directory: as before"
 
 
+def test_a_claim_that_newly_cites_a_page_is_owed_in_full(tmp_path: pathlib.Path) -> None:
+    """Feature 385 T105 (D123): T100's two UNRESEARCHED claims relabeled to cite 0035 and 0246 rested on nothing, so they were
+    listed `triage`, their triage bundle named no claim and `make claims-bundle OWED=1` refused them."""
+    skill, index, store = _checked(tmp_path)
+    cur = cx.current(skill)
+    was_unresearched = {**index, SHARE: {**index[SHARE], "pages": {}, "rests": [], "research": "before the relabel"}}
+    assert dict(cx.owed(cur, was_unresearched, skill / QDIR, store))[SHARE] == "research changed"
+    reworded = {**index, SHARE: {**index[SHARE], "research": "its words moved, its pages did not"}}
+    assert dict(cx.owed(cur, reworded, skill / QDIR, store))[SHARE] == "triage", "the pages it was checked at: the triage rule stands"
+
+
 def test_a_row_checked_before_the_rule_is_owed_in_full_and_one_with_no_rests_is_triaged(tmp_path: pathlib.Path) -> None:
     skill, index, store = _checked(tmp_path)
     _tree(tmp_path, MOD, PAGE.replace("5 ft", "6 ft"))

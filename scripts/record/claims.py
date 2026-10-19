@@ -241,9 +241,9 @@ def research_why(
     memo: dict[str, Any],
 ) -> str:
     """Why a claim whose cited research moved is owed (feature 318, FR-016): a full re-check when a block it rested on is gone
-    (`rests changed`) or its row predates the snapshots (`research changed`); else only the TRIAGE of what changed on its pages."""
+    (`rests changed`), its row predates the snapshots or it cites a page its check never read (T105) (`research changed`); else the TRIAGE."""
     pages = was.get("pages")
-    if not isinstance(pages, dict) or any(d not in store for d in pages.values()):
+    if not isinstance(pages, dict) or any(d not in store for d in pages.values()) or {p.rsplit("/", 1)[1] for p in row.claim.pointers} - set(pages):
         return "research changed"
     rests = was.get("rests")
     if isinstance(rests, list) and not set(rests) <= standing(row.claim.pointers, qdir, memo):
