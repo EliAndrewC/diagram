@@ -188,17 +188,24 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T65 An archived plan block edited by a typo after its review is not owed (plan D84)
       research: rendering
       verify: DONE. archived typo-edited blocks owe nothing; landed, test_plan_gate green
-- [ ] T66 A requirement cited from another feature is bundled from that feature (plan D85) [lands-open]
+- [x] T66 A requirement cited from another feature is bundled from that feature (plan D85) [lands-open]
       research: rendering
-- [ ] T67 land-tooling lints before it tests (plan D86) [lands-open]
+      verify: DONE. qualified FR/SC read from their own feature; landed, test_plan_blocks green
+- [x] T67 land-tooling lints before it tests (plan D86) [lands-open]
       research: rendering
-- [ ] T68 make test-file formats the changed Python (plan D87) [lands-open]
+      verify: DONE. lint runs first and alone; landed, land-tooling suite green
+- [x] T68 make test-file formats the changed Python (plan D87) [lands-open]
       research: rendering
-- [ ] T69 A task filed mid-feature lands open (plan D88) [lands-open]
+      verify: DONE. test-file formats the changed Python; landed, test_test_file_format green
+- [x] T69 A task filed mid-feature lands open (plan D88) [lands-open]
       research: rendering
+      verify: DONE. task-add keeps the Lands open line; T70/T71 filed by it; landed
 - [ ] T70 A feature is worked until it is set down (plan D89, D90) [lands-open]
       research: rendering
-- [ ] T71 A decision cited from another feature's plan is bundled from that plan (plan D91) [lands-open]
+- [x] T71 A decision cited from another feature's plan is bundled from that plan (plan D91) [lands-open]
+      research: rendering
+      verify: DONE. qualified decisions read from their own plan; landed, test_plan_blocks green
+- [ ] T72 A plan review's ledger row is written at landing (plan D92) [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering

@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -210,78 +210,10 @@ Owed by the hour-20 step-back (hour:385-approach-checklist@20, `continue`), whic
 <!-- plan-archive: T63 to T63 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 <!-- plan-archive: T64 to T64 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 <!-- plan-archive: T65 to T59 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
-## T66 - a requirement cited from another feature is bundled from that feature (found by T65's plan review, 2026-10-18)
-
-### T66 Approach (checklist part A)
-
-1. **The goal, in the world.** A plan review reads the requirement a block cites, not a same-numbered requirement of another feature.
-2. **The constraints.** Feature 375 amendment 11 (FR-046): `spec-cited.md` holds every requirement the blocks name, in full. Tooling only; a test red without it.
-3. **Where each comes from.** Feature 375 (O); the defect is T65's plan review's finding (amendment 6, the GM's "obvious ... tooling ... improvements").
-4. **Do they describe the world here?** Yes - measured 2026-10-18: T65's blocks cite "Feature 375 FR-044" and "FR-005(b)"; the bundle's `spec-cited.md` carried 385's own FR-005 (the per-task time split), a different requirement, and nothing of 375's - `plan_bundle.build` reads the ids against the reviewed feature's `spec.md` alone. 385's plan names another feature's requirement in this form ("feature 375 FR-0..", "375 FR-0..", "feature 375, FR-0..") in 22 places (a grep of plan.md for the form, 385 itself left out).
-5. **The order.** The qualified reading in `build`, then its test.
-6. **The exits.** (c).
-7. **The search smell.** None.
-8. **The budget.** 25 min.
-9. **Done, measured.** One goal: a block citing `375 FR-044` (or `feature 375 FR-044`, `feature 375's FR-044`, `feature 375, FR-044`) gets 375's FR-044 paragraph in `spec-cited.md`, headed with its feature, and the reviewed feature's same-numbered requirement only when the block also cites it unqualified; `tests/tooling/test_plan_blocks.py` red without it.
-
-### T66 Decisions
-
-**D85 - a qualified citation read from its own feature.** `plan_bundle.build` reads `(?:feature )?NNN(?:'s|,)? (FR|SC)-NNN` as a citation of feature NNN's requirement, resolved from that feature's `specs/NNN-*/spec.md` (the one directory; none or several, it is left out as an unknown id is now) and written to `spec-cited.md` under a `<!-- feature NNN -->` line; an unqualified id is the reviewed feature's, as before - so a block that cites another feature's requirement writes the feature beside every id it means (the reviewer reads what the block names, no guess at which feature a bare id meant). `spec-index.md` is unchanged.
-
-## T67 - land-tooling lints before it tests (found landing T65, 2026-10-18)
-
-### T67 Approach (checklist part A)
-
-1. **The goal, in the world.** A landing that will fail on lint fails in seconds, not after the tests.
-2. **The constraints.** Feature 385 T52: land-tooling lints the Python it lands; the guard suites and tooling tests still run in parallel; every check's failure is still reported. Tooling only; a test red without it.
-3. **Where each comes from.** T52 (O); the defect is measured landing T65 (amendment 6, the GM's "obvious ... tooling ... improvements").
-4. **Do they describe the world here?** Yes - measured 2026-10-18 (`.git/land-tooling.log`): T65's landing ran the tooling tests 60.24 s and the checks step 122.20 s, then failed on `ruff format --check` (one test file would be reformatted), a check that took 0.05 s; the three checks run in parallel and the step waits for all of them.
-5. **The order.** Lint alone first in `land-tooling.sh`, then its test.
-6. **The exits.** (c).
-7. **The search smell.** None.
-8. **The budget.** 20 min.
-9. **Done, measured.** One goal: a landing whose lint fails stops before the guard suites and the tooling tests start, with the lint message and the `ruff format` command; `tests/hooks/test-land-tooling.sh` (the script's suite) red without it.
-
-### T67 Decisions
-
-**D86 - lint first, alone.** `land-tooling.sh` runs the `lint` check before the other two; a lint failure dies at once with its output and the `ruff format <files>` line it prints now, the guard suites and tooling tests not started; a passing lint goes on to the two in parallel as now.
-
-## T68 - make test-file formats the changed Python (found landing T65 and T66, 2026-10-18)
-
-### T68 Approach (checklist part A)
-
-1. **The goal, in the world.** Python a session changed is formatted before anything lints it, without anyone running `make format`.
-2. **The constraints.** The gate's and land-tooling's `ruff format --check` stay as they are (a check, never a rewrite at the push); only files the clone changed against its merge base with origin/main are touched; a test red without it.
-3. **Where each comes from.** Amendment 8, the GM: "make our tooling do the thing correctly automatically every time" (G); the checks are T52's and the gate's (O).
-4. **Do they describe the world here?** Yes - measured 2026-10-18 (`.git/land-tooling.log`, this session's commands): two format slips in one evening, each found by a lint after the session's own test run had passed - T65's landing (after 122 s of checks) and T66's pre-landing check.
-5. **The order.** The format step in the `test-file` recipe, then its test.
-6. **The exits.** (c).
-7. **The search smell.** None.
-8. **The budget.** 25 min.
-9. **Done, measured.** One goal: `make test-file` first runs `ruff format` on the `.py` files the clone changed against its merge base (committed or not) and says which it reformatted; `tests/tooling/test_test_file_format.py` (new) red without it.
-
-### T68 Decisions
-
-**D87 - formatted where it is tested.** The `test-file` recipe runs `python3 -m ruff format --force-exclude` over `git diff --name-only <merge-base> -- '*.py'` plus the untracked `.py` files, before pytest, printing `test-file: formatted <files>` when any changed; nothing to format, it is silent. The push's checks are unchanged.
-
-## T69 - a task filed mid-feature lands open (found landing T10, 2026-10-18)
-
-### T69 Approach (checklist part A)
-
-1. **The goal, in the world.** A task filed while a feature lands task by task never holds another task's landing.
-2. **The constraints.** Feature 375 plan D18: an open box holds the landing unless the reviewed plan's `**Lands open**:` line names it; the review of that line stays. A test red without it.
-3. **Where each comes from.** 375 (O); the defect is measured landing T10 (amendment 6).
-4. **Do they describe the world here?** Yes - measured 2026-10-18: T10's push was refused because T66 and T67, filed by `make task-add`, were open boxes the Lands open line did not name; adding them cost a plan edit and a block review before the landing could go.
-5. **The order.** `task-add.py` writes the mark and the line, then its test.
-6. **The exits.** (c).
-7. **The search smell.** None.
-8. **The budget.** 20 min.
-9. **Done, measured.** One goal: where the plan has a `**Lands open**:` line, `make task-add` appends the new id to it and ends the box with `[lands-open]`; `tests/tooling/test_task_add.py` red without it.
-
-### T69 Decisions
-
-**D88 - the line kept by the tool that files the task.** `task-add.py`, when `plan.md` holds a `**Lands open**:` line, appends `, T<n>` to it and writes the box with ` [lands-open]`; a plan with no such line is left alone (its feature does not land task by task). The line's block still owes its review (`make plan-delta`), as any edit of it does.
-
+<!-- plan-archive: T66 to T65 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
+<!-- plan-archive: T67 to T65 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
+<!-- plan-archive: T68 to T66 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
+<!-- plan-archive: T69 to T10 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T70 - a feature is worked until it is set down (the GM 2026-10-18, step 3 of the approved order)
 
 ### T70 Approach (checklist part A)
@@ -302,23 +234,24 @@ Owed by the hour-20 step-back (hour:385-approach-checklist@20, `continue`), whic
 
 **D90 - the refusal names the next step.** The refusal reads `BLOCKED: feature <f> has <n> open task(s) and nothing is running - start the next (<the first open box's id and title>), or set it down: make set-down F=<n> WHY="<why>"`, and each firing is recorded in the guard log.
 
-## T71 - a decision cited from another feature's plan is bundled from that plan (found by T69's plan review, 2026-10-19)
+<!-- plan-archive: T71 to T69 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
+## T72 - a plan review's ledger row is written at landing (found landing T70, 2026-10-19)
 
-### T71 Approach (checklist part A)
+### T72 Approach (checklist part A)
 
-1. **The goal, in the world.** A plan review reads the decision a block cites, not a same-numbered decision of this feature.
-2. **The constraints.** T66 (D85) for requirements; a decision's paragraph comes from that feature's `plan.md` and `plan-done.md`, as this feature's do now. A test red without it.
-3. **Where each comes from.** T66 (O); the defect is T69's plan review's finding (amendment 6).
-4. **Do they describe the world here?** Yes - measured 2026-10-19: T69's block cites "Feature 375 plan D18" and its bundle's `spec-cited.md` carried 385's own D18 (the pig sty's one predicate), a different decision; D85 reads `FR`/`SC` ids only.
-5. **The order.** The decision form in `plan_bundle`, then its test.
+1. **The goal, in the world.** A landing is never refused for a plan review's ledger row, which the tooling can write itself.
+2. **The constraints.** Feature 385 FR-019: every check pass has its ledger row before a push; a row's acted-on cell names where the pass was recorded. Other checks' rows still need the session's word on what was acted on. The ledger is written at landing, never while a gate runs (a write under a gate is a tree move). A test red without it.
+3. **Where each comes from.** FR-019 (O); amendment 8, the GM: "make our tooling do the thing correctly automatically every time" (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the session's transcript, its tool calls): 81 hand-run `make ledger-owed WRITE=...` calls over 2026-10-18, nearly all naming the plan-verdict record; two landings refused for the row that evening (T60's, T70's). A plan review's verdict is recorded by `make plan-verdict` before the agent returns, so where it was recorded is always the same.
+5. **The order.** The plan-review writer in `ledger_owed.py`, its call in `land-tooling.sh` and `sync-with-main.sh` before their ledger checks, then the tests.
 6. **The exits.** (c).
 7. **The search smell.** None.
-8. **The budget.** 15 min.
-9. **Done, measured.** One goal: a block citing `375 plan D18` (or `feature 375's D18`, `375 D18`) gets 375's D18 paragraph under `<!-- feature 375 -->`, and not 385's; `tests/tooling/test_plan_blocks.py` red without it.
+8. **The budget.** 40 min.
+9. **Done, measured.** One goal: `land-tooling` and `sync-with-main.sh done` write and commit the row of every owed pass whose subject is a `MODE 4: PLAN REVIEW`, its acted-on cell naming the plan-verdict record, before they check the ledger; any other owed pass still refuses as now; `tests/tooling/test_ledger_owed.py` (the module's test) red without it.
 
-### T71 Decisions
+### T72 Decisions
 
-**D91 - D85 widened to decisions.** `_QUALIFIED` takes `(?:plan )?D<n>` beside `FR`/`SC`, an optional `plan ` between the feature and the id; a qualified decision resolves from that feature's `plan.md` + `plan-done.md` through the same paragraph reader as this feature's, under the same feature line; an unknown one is left out.
+**D92 - the plan reviews' rows written by the landing.** `ledger_owed.py --write-plan-reviews` appends `filled_row` for each owed pass whose subject starts `MODE 4: PLAN REVIEW`, the where cell `the plan-verdict record (make plan-verdict)`, and prints how many. `land-tooling.sh` and `sync-with-main.sh done` run it first and, when it wrote any, commit `dev/review-ledger.md` as "the plan reviews' ledger rows, written at landing (feature 385 T72)"; the ledger check then runs as now on what remains.
 
 ## T11 - the close
 
