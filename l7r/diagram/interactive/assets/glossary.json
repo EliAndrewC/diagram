@@ -16548,5 +16548,38 @@
   "variants": [
    "hiki"
   ]
+ },
+ "shu": {
+  "def": "The smallest unit of the Edo gold coinage: 4 shu made 1 bu and 16 shu made 1 ryo.",
+  "variants": [
+   "shu"
+  ]
+ },
+ "gable pendant": {
+  "def": "A carved board hung under the peak of a gable, where the two bargeboards meet; at Nogami in 1749 they were replaced together with the bargeboards during the copper re-roofing.",
+  "variants": [
+   "gable pendant",
+   "gable pendants"
+  ]
+ },
+ "persimmon tannin": {
+  "def": "The juice of unripe persimmons, fermented, brushed onto wood as a stain and preservative to finish it; no price for it from the Edo period was found.",
+  "variants": [
+   "persimmon tannin"
+  ]
+ },
+ "cypress bark": {
+  "def": "Bark of the hinoki cypress, laid in thin overlapping layers as a roof covering and fixed with special long nails; the Hagi rebuilding of 1772-1773 shipped 83,000 such nails of about 9 to 10.6 cm.",
+  "variants": [
+   "cypress bark",
+   "cypress-bark"
+  ]
+ },
+ "ridge-raising": {
+  "def": "The ceremony held when a building's ridge beam was set in place; at the Nogami sanctuary in 1749 it was paid for out of the job's accounts, together with the enshrinement and sundries.",
+  "variants": [
+   "ridge-raising",
+   "ridge raising"
+  ]
  }
 }
