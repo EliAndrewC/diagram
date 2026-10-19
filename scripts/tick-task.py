@@ -178,8 +178,15 @@ def landed_refusal(root: Path, feature: str, task: str, note: str) -> str:
         except ValueError:
             continue
     mine = [i for i, r in enumerate(every) if r.get("feature") == feature and r.get("task") == task]
-    if not mine:
-        return ""
+    if not mine:  # ...LANDED BY sync-with-main, then: nothing of it outside the feature's records may stand off main (T113, D130)
+        subprocess.run(["git", "-C", str(root), "fetch", "-q", "origin"], capture_output=True)
+        ahead = subprocess.run(["git", "-C", str(root), "log", "--name-only", "--format=", "origin/main..HEAD"], capture_output=True, text=True).stdout.split()
+        # ...compared by CONTENT, as T79 compares: `make land-tooling` lands a file as a new commit on main, so a commit ahead of
+        # origin/main may hold a file main already has (the plan review's aside)
+        off = sorted({f for f in ahead if not f.startswith(("specs/", "dev/"))
+                      and subprocess.run(["git", "-C", str(root), "diff", "--quiet", "origin/main", "--", f], capture_output=True).returncode})
+        return (f"the NOTE says landed, but {off[0]} is committed here and not on origin/main - land it (scripts/sync-with-main.sh done), then tick"
+                if off else "")
     last = every[mine[-1]]
     # a later run of the same files lands them, whichever task was active when it ran (T79's own reland was booked to T81)
     later = [r for r in every[mine[-1] + 1 :] if set(r.get("files") or []) >= set(last.get("files") or [])]
