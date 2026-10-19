@@ -518,9 +518,9 @@ page-check:     ## [tests] the interactive tests + the browser test, then the `p
 	  && printf '\n\033[1mpage-check green\033[0m (the page and browser stamps are written; an asset-only delta may push)\n' \
 	  && { root=$$(git rev-parse --show-toplevel); python3 "$$root/scripts/record/entry_owed.py" --root "$$root" --why; python3 "$$root/scripts/record/entry_owed.py" --root "$$root" | sed 's/^/  /'; true; }
 
-where-time:     ## [project] where a feature's time went, by task: the time by bucket and the agents by kind (feature 385 T77)   F=<feature> [SINCE=<ISO UTC>]
+where-time:     ## [project] where a feature's time went, by task: the time by bucket and the agents by kind (feature 385 T77); BY=tick books each tick-to-tick window (T115)   F=<feature> [SINCE=<ISO UTC>] [BY=tick]
 	@if [ -z "$(F)" ]; then printf 'make where-time: F=<feature> is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/where_time.py" "$(F)" $(if $(SINCE),--since "$(SINCE)",)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/where_time.py" "$(F)" $(if $(SINCE),--since "$(SINCE)",) $(if $(filter tick,$(BY)),--by-tick,)
 
 set-down: export SET_DOWN_WHY = $(WHY)
 set-down:       ## [project] set a feature's work down, so a turn may end with tasks open (feature 385 T70): F=385 WHY="awaiting the GM on the cohort trend"
