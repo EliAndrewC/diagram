@@ -421,6 +421,9 @@ the four seeds at 7 ft again.
 5. **Tuning or changing?** Neither in this part B: the room route is its own task, worked with T43 before T32.
 6. **The one-sentence test.** "T31's 4 ft is the record until the room task settles it" - true; the room task decides it.
 7. **The next step is a measurement.** The linear form's farm and door spacing at the four seeds, with the constant at 7 ft.
+8. **Every route measured before offering one?** Not yet, and none is offered here: the routes are T96's, which measures each on
+   the four seeds and the cohort before choosing.
+9. **After a ruling: the step it names?** Yes - the ruling names more room first, as its own task before T32; T96 is that task.
 ## T92 - `make claims-triaged` reads a transcript's reply and never clears on an unread one (found working T31, 2026-10-19)
 
 ### T92 Approach (checklist part A)
