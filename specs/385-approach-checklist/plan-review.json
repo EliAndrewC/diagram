@@ -7413,6 +7413,26 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T123": {
+   "section_sha256": "ebcbdfc2671fb3f2e29a73395222e2aca7395fac34deda28c0e232c58cec6daf",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D145",
+     "summary": "plan_bundle._QUALIFIED accepts an optional 'amendment <n>' (with its own optional comma) and an optional opening parenthesis between the feature number and the id, so 'Feature 375 amendment 11 (D64)' and '375 amendment 6, FR-002' resolve from feature 375.",
+     "class": "within",
+     "why": "Repairs a measured defect in D85/D91 (a qualified citation of another feature's decision read as this feature's same-numbered one, handing the reviewer the wrong text); it serves D85's own stated purpose that the reviewer reads what the block names. Tooling fix of the kind amendment 6 ('implement any obvious performance / tooling / process improvements along the way') asks for; it narrows nothing - an unqualified id stays the reviewed feature's, and the test only enforces the fix."
+    },
+    {
+     "id": "T123 Approach exit (c)",
+     "summary": "Exit chosen: widen the qualified form by the measured shape, rather than requiring blocks to rewrite citations into the existing forms.",
+     "class": "within",
+     "why": "A choice of mechanism for the fix; it removes no case the request or D85/D91 cover and adds no behavior beyond reading the citation the block wrote."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

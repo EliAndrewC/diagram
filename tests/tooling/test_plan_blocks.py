@@ -235,6 +235,10 @@ def test_a_requirement_cited_as_another_feature_s_is_bundled_from_that_feature(t
     manifest = plan_bundle.build(d, "t2", [("## T05 - x", "## T05 - x\n\nFeature 375 plan D18 says so.\n")], {}, "how")
     cited = (manifest.parent / "spec-cited.md").read_text()
     assert "D18 - lands open." in cited and "D18 - the sty." not in cited, "T71: a decision from its own feature's plan"
+    manifest = plan_bundle.build(d, "t3", [("## T05 - x", "## T05 - x\n\nFeature 375 amendment 11 (D18) holds; 375 amendment 6, FR-002 too.\n")], {}, "how")
+    cited = (manifest.parent / "spec-cited.md").read_text()
+    assert "D18 - lands open." in cited and "D18 - the sty." not in cited, "T123: through its amendment, still 375's"
+    assert "FR-002 The archive." in cited and "FR-002 The well." not in cited
 
 
 def test_decide_refuses_a_section_quoting_the_gm_with_words_not_in_the_request(tmp_path: pathlib.Path) -> None:
