@@ -634,25 +634,26 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@35 (change-rou
 
 **D144 - the self-landed conflict named.** In `land-tooling.sh`'s D46 branch, before `git merge --abort`, the conflicted files (`git diff --name-only --diff-filter=U`) whose `git log -1 --format=%s origin/main -- <file>` begins `Tooling from <this clone's name>,` are named in the refusal: "<files> conflict only with this clone's own earlier landing - run scripts/sync-with-main.sh sync-in, then git checkout --ours <files> && git add <files> && git commit --no-edit, then land again". The merge is aborted and the landing refused as now; nothing is resolved by the tool.
 
-## T123 - another feature's decision cited through its amendment (found working T114, 2026-10-19)
+<!-- plan-archive: T123 to T114 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+## T106 - a back lane's 30 ft is the room it is laid in, then trimmed like every end (found working T97, 2026-10-19)
 
-### T123 Approach (checklist part A)
+### T106 Approach (checklist part A)
 
-1. **The goal, in the world.** A plan reviewer citing another feature's decision by its amendment is handed that feature's decision, not this feature's same-numbered one.
-2. **The constraints.** T66 (D85) and T71 (D91): an id qualified by another feature number ("375 FR-044", "feature 375's D18", "375 plan D18") is read from that feature's spec or plans; an unqualified id is the reviewed feature's. A test red without it.
-3. **Where each comes from.** T66, T71 (O).
-4. **Do they describe the world here?** Yes - measured 2026-10-19 (T114's review aside, then the regex run on the line): "Feature 375 amendment 11 (D64)" matches no qualified form, so `_QUALIFIED` finds nothing and D64 is read as 385's own (land-tooling's make-docs check) - the reviewer was handed the wrong decision.
-5. **The order.** `_QUALIFIED` allows "amendment <n>" and an opening parenthesis between the feature number and the id; the test.
-6. **The exits.** (c) - widen the qualified form by the measured shape.
+1. **The goal, in the world.** 0246's drawing page and the code say the same thing about how far a lane runs past the last house it serves.
+2. **The constraints.** 0246's drawing page, its general rule: "a lane end that reaches nothing is pulled back to the last house it serves. No page we read says how far a lane ran past its last house ... so the rule is a GUESS"; its back-lane bullet: "each runs only along the houses it serves, and about 30 ft past the last of them". The 2026-09-27 tweak (commit 1aa98b076) that cut a house-served end at the house's closest approach after Inashiro's spine walked 45 ft past its last farmhouse into the grove - the GM's complaint, recorded in the commit only as "a road to nowhere" (paraphrased, so not cited as his ruling). Every rendering decision labeled. The record checks and the claims check.
+3. **Where each comes from.** 0246's drawing page (O); the 2026-09-27 tweak (O); the root CLAUDE.md's research rules (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T97's claims round, `web.stage_web#the web's frame` DRIFTED: "`tidy_lane_ends` -> `_trim_to_service` -> `_stop_at_closest_approach` cuts a house-served end back to its closest approach to the last house, about 0 ft past"; then a read of 0246's page and of `stage_web`): the back lane is laid with a 30 ft pad past its last house (`stage_web`'s pad 30, the comment on 0246's bullet), and the general trim then pulls each end back to the last house it serves - so the bullet describes the room the lane is laid in, and the page's own general rule, a GUESS, is what the map draws.
+5. **The order.** 0246's back-lane bullet reworded to the laying room and the trim; the frame claim cites the general rule; the record checks and the claims check.
+6. **The exits.** (a) refine an O number: n/a - no source gives the distance; (c) a new rule: overrun the trim by 30 ft - weighed and refused: the 30 ft is a GUESS the page's own general rule contradicts, and it would put back the 2026-09-27 lane into the grove; (e) conform the record to the code - chosen: the page says what the map draws, and its general GUESS stands.
 7. **The search smell.** None.
-8. **The budget.** 15 min.
-9. **Done, measured.** One goal: "Feature 375 amendment 11 (D64)" and "375 amendment 6, FR-002" are read from feature 375; `tests/tooling/test_plan_blocks.py` red without it.
+8. **The budget.** 30 min with its checks.
+9. **Done, measured.** One goal: 0246's back-lane bullet says a back lane is laid about 30 ft past the last house it serves and its end then pulled back to that house as every end reaching nothing is; `web.stage_web#the web's frame` cites that, IN-STEP; record checks and claims check pass; no engine token changes.
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
-### T123 Decisions
+### T106 Decisions
 
-**D145 - through its amendment.** `plan_bundle._QUALIFIED` takes, between the feature number (and its `'s` or comma) and the optional `plan`, an optional `amendment <n>` with its own comma, then an optional `(`: `(\d{3})(?:'s|,)?\s+(?:amendment\s+\d+,?\s+)?\(?(?:plan\s+)?(<id>)`.
+**D146 - laid 30 ft past, trimmed to the last house.** 0246's back-lane bullet "each runs only along the houses it serves, and about 30 ft past the last of them;" becomes "each is laid along the houses it serves and about 30 ft past the last of them - the room it is cut in - and its end is then pulled back to the last house it serves, as every lane end that reaches nothing is;". The claim `web.stage_web#the web's frame` reads "research/questions/0246-...drawing.html: a back lane is laid about 30 ft past the last house it serves and its end then pulled back to that house - the frame (`BUNDLE_PITCH` ...) is only the room the cuts are laid in, and the trims (`tidy_lane_ends`) bring each end back to the last house it serves".
 
 ## T11 - the close
 
