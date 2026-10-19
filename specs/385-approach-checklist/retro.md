@@ -932,3 +932,11 @@ claims say the 7 ft the link is routed at, labeled DEVIATION on 0246. The plan's
 D128 was widened to every test (the round-2 review's aside, left as text rather than a third round). The claims round's old findings
 on the fallbacks' walls, water and five unclaimed decisions are T112; its OUTSIDE rows were filed automatically (hour 32's fix, its
 first use: 9 rows). **The habit it changes:** none.
+
+## T110 - the retro row
+
+About 20 min. Enoshima, named on 0246 without a word of what it is, is a glossary entry from Morse's 1886 passage (0081's notes); no
+block edited, no check owed. The file's prefix is the one `make reserve` gave (24330), not D129's 9995, and a proper noun's file
+takes its capital (`24330-Enoshima.json`), as the glossary's own check refused the lowercase stub - both small corrections to the
+plan's filename, left as this note rather than a review round. "Island" rests on the name itself (-shima), not on Morse's passage
+(the review's aside). **The habit it changes:** a new glossary or registry file starts from `make reserve`.

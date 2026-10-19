@@ -311,10 +311,12 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       verify: DONE. landed 2026-10-19 (direct, record only): 0246's new block says the room counts its 7 ft to the tread's edge and the gap to the middle; record checks and pop-ups clean; 48 of 51 claims IN-STEP, the rest carried (T108)
 - [ ] T108 Carried by the claims gate (FR-013): findings a page edit surfaced on code left unchanged - fix the code or the claim and re-check each: l7r/diagram/hamletgen/ways/law.py::fouls_fabric#foul margin, l7r/diagram/hamletgen/ways/settle.py::fouled_segment#off another household's yard or garden [lands-open]
       research: rendering
-- [ ] T109 The track's grove-band gap as 0036 gives it: _thread_the_fabric holds bands at FOOTPATH_FABRIC_GAP (7 ft) citing 0246, where 0036 keeps about 11 ft off the trees (T98 fixed the door path and connector_dry_exit); and the two GUESS claims on touch._one_network / _touch_junctions that call the routed link 14 ft where it is routed at 7 (found working T107, 2026-10-19) [lands-open]
+- [x] T109 The track's grove-band gap as 0036 gives it: _thread_the_fabric holds bands at FOOTPATH_FABRIC_GAP (7 ft) citing 0246, where 0036 keeps about 11 ft off the trees (T98 fixed the door path and connector_dry_exit); and the two GUESS claims on touch._one_network / _touch_junctions that call the routed link 14 ft where it is routed at 7 (found working T107, 2026-10-19) [lands-open]
       research: rendering
-- [ ] T110 0246's drawing page names Enoshima without saying what it is (record-format, OUTSIDE THE CHANGE, T107's round): a short gloss [lands-open]
+      verify: DONE. landed 2026-10-19 (gated, 4f6bd9739): _thread_the_fabric holds grove bands at 0036's 12.5 ft on every test; touch claims say 7 ft (DEVIATION); claims IN-STEP or filed (T112)
+- [x] T110 0246's drawing page names Enoshima without saying what it is (record-format, OUTSIDE THE CHANGE, T107's round): a short gloss [lands-open]
       research: rendering
+      verify: DONE. landed 2026-10-19 (direct): Enoshima in the glossary from Morse's 1886 passage; no block edited
 - [ ] T111 0033's drawing page gives a door path only to a farm whose grove stands between it and its street, on the near row; the code lays one for every grove farm its street does not serve (impl-drift aside, T97's round) - settle which, and label it [lands-open]
       research: rendering
 - [ ] T112 The track's fallbacks walled as its first route is: _thread_the_fabric's grove fallback, unrouted clip and swing wall only the fabric or the bands, so a track may cross row crops, the paddy or wet ground (DRIFTED) or a brook off its crossing places (CANNOT-TELL); and its five unclaimed decisions - the largest piece kept, a near end counted a junction, an end walked clear along its own leg, the water-crossing limit, the order of the three fallback routes (found working T109, 2026-10-19) [lands-open]
