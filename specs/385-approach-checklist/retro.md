@@ -1004,3 +1004,10 @@ the caveat that a rate moves with the mix of work (impl-drift dispatches rose be
 working it: a batch's fix lost its measure on an exception's row (fixed), a pipe in a measure split its table cell (fixed), and
 land-tooling conflicting with its own earlier landing (filed). **The habit it changes:** a fix is named with the number it should
 move, and the step-back sees whether it moved.
+
+## T114 - the retro row
+
+About 15 min. `earlier.md` is headed "Each changed block's text when last judged, with that verdict" and each block carries the
+verdict it got, so a round 2 sees round 1's BLOCKED text named as blocked. One review round, CLEAR; its aside found the bundle
+resolving another feature's cited decision against this feature's own number (filed, T123). T85, landed at 04:58Z with its part
+B saying so, had never been ticked - ticked now. **The habit it changes:** none; a label told the truth.
