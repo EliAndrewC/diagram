@@ -1499,6 +1499,7 @@ high-loom	high loom
 high-volatile	volatiles
 hikae-no-ma	hikae-no-ma
 hikan	hikan
+hiki	hiki
 hikioi	hikioi
 hikiri-ichi	hikiri-ichi
 hikone	Hikone
