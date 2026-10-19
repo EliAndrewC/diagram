@@ -226,3 +226,28 @@ its list, verbatim (change 2 is "the arbiter tooling fix thing" he declined; cha
 > 7. Two new checklist items in the start-of-task Approach: list every use of a constant before moving it, and write the capacity arithmetic before running experiments.
 > 8. `make where-time` produces the tables above (tooling).
 
+## Amendment 9 (2026-10-19) - the second pass's seven tools
+
+The GM, verbatim (after the session reported steps 1-5 landed):
+
+> Okay, so can we use our new tooling to look at an in-depth breakdown of the tasks we worked today?  We did that before then realized that our measurements were wrong.  After taking more accurate measurements, we might spot more areas of tooling improvement before getting back to work on the feature.
+
+The GM, verbatim, on the second pass's report (2026-10-18 23:00 EDT), and his correction of its feature number:
+
+> Yes, but my weekly usage is at 99% so please set a timer for after midnight tonight when it resets, then build all 7 of those as 385 tasks, then after those 7 tooling improvements are made please restart work on rest of the 389 feature.
+
+> whoops yeah I did mean 385 thanks, that was just a typo not diction
+
+The seven ("all 7 of those"), as the session's report and `step-back-2026-10-18.md` gave them, verbatim:
+
+> **Proposals (none built):**
+>
+> | | the cost | the change | saving |
+> |---|---|---|---|
+> | A | 3 review rounds an evening | `make decide` refuses a section quoting "the GM" with words not in request.md, naming the words | ~3 rounds x 2 min, and a misquote caught (T64's was) |
+> | B | 2 rounds lost to stale digests | the plan-write path refuses an edit to a section whose review is running, naming the agent | ~2 rounds x 2 min |
+> | C | 1+ unreviewable round | `make decide` refuses an Approach item 4 figure with no "measured <date>" and method beside it | a round each time |
+> | D | a red gate and a 5 min re-run | the gate commits (or ignores) the manifests it re-rolled itself instead of calling them a tree move | a gate per stale manifest |
+> | E | a red gate | `make plan-verdict` passes the reviewer's text through `americanize`, as T78 does for notes | a gate each time |
+> | F | where-time misbooks tasks | `make decide`, `task-add`, `tick` and `land-tooling` move the active-task mark to the task they name (replacing proposal 6's refusal) | true per-task numbers |
+> | G | where-time cannot tell waiting from idle | fold the scratch split in: a between-turns window classed by what ended it | the analysis above, in one command |

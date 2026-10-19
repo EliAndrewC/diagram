@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -310,6 +310,146 @@ Owed by the hour-26 step-back (hour:385-approach-checklist@26, `continue`).
 **D103 - a dictionary is read as its section is.** In `all_units`, a module-level constant whose value is a dict literal and which carries its own claims gets `blocks` = one per entry (`key: value`, its source unparsed, whitespace folded); `Unit.code` fingerprints such a claim by its own line, as a section's (`"section-claim"`), and `core` stays the whole value's.
 
 **D104 - owed and backfilled as a section's.** `claims.py owed` owes `section triage` for a unit with blocks whose recorded `section` core differs (sections and dicts alike); `backfill-sections` re-keys a dict claim whose row is current under the old fingerprint (core plus line), recording its core and block digests, and leaves an owed one owed. The backfill runs once with this change, its count in the retro.
+
+## T84 - `make decide` refuses a plan quoting the GM with words not in the request (proposal A, 2026-10-19)
+
+### T84 Approach (checklist part A)
+
+1. **The goal, in the world.** A plan section never reaches its review quoting the GM with words the review cannot find.
+2. **The constraints.** The GM, 2026-10-18 23:00 EDT (amendment 9): "build all 7 of those as 385 tasks"; proposal A of step-back-2026-10-18.md's second pass: "`make decide` refuses a section quoting 'the GM' with words not in request.md, naming the words". A quotation is the double-quoted text after "The GM" in the section; the match ignores case, whitespace and the dictation's punctuation. The escape is `QUOTE_OK="<reason>"`, recorded. A test red without it.
+3. **Where each comes from.** The GM (G); the tools it changes are this feature's and 375's (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the second pass's table of the evening's 42 plan reviews): 3 rounds came back unreviewable because the GM's words were not in request.md (T70 once, T75 twice), and T64's first plan misquoted him ("we either have or don't need tooling" where he said more), caught by its review, not by the tool.
+5. **The order.** The check in `plan_bundle.task_prompt`'s caller (`make decide`), then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 25 min.
+9. **Done, measured.** One goal: `make decide` on a section quoting "The GM" with words not in `request.md` (whitespace and case aside) refuses, naming the words, and one whose quotes are all there builds its bundle as now; `tests/tooling/test_plan_blocks.py` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T84 Decisions
+
+**D105 - the GM's quotes found before the review.** `make decide` reads each double-quoted span that follows "The GM" (or "the GM's") within the same sentence of the task's section; a span of four or more words not found in `request.md` - both folded to lowercase words - refuses the decide, naming each, with "add the GM's words to request.md verbatim, or correct the quote". A shorter span is a phrase, not a quotation, and is not checked.
+
+## T85 - an edit to a plan section is refused while its review runs (proposal B, 2026-10-19)
+
+### T85 Approach (checklist part A)
+
+1. **The goal, in the world.** A plan review is never wasted on a section edited while it ran.
+2. **The constraints.** The GM, 2026-10-18 23:00 EDT (amendment 9): "build all 7 of those as 385 tasks"; proposal B: "the plan-write path refuses an edit to a section whose review is running, naming the agent". Edits to other sections, and to the plan's other files, go through; the escape is `PLAN_EDIT_OK="<reason>"`, recorded. A test red without it.
+3. **Where each comes from.** The GM (G); the tools it changes are this feature's and 375's (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the second pass): 2 of the evening's 42 plan reviews returned unrecorded - `plan-verdict` refused them, "section_sha256 does not match ... it changed while it was being reviewed" - after I edited T76's and T77's sections while their reviews ran.
+5. **The order.** The refusal in `hm_checks` (which knows each running dispatch and its bundle), wired to the Edit tool and to a Bash write naming the plan, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 40 min.
+9. **Done, measured.** One goal: an Edit of `specs/<f>/plan.md` whose old text lies in the section of a task with a plan review running, or a Bash command writing that plan and naming that task's section heading, is refused, naming the review; an edit elsewhere passes; `tests/tooling/test_plan_edit_refusal.py` (new) red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T85 Decisions
+
+**D106 - the section under review is held.** A dispatch of `spec-fidelity` whose bundle is a task preflight (`plan-<feature>-<T>`) holds that task's section while the agent runs. The Edit hook refuses an `Edit` of that plan whose `old_string` falls inside the held section; the Bash path refuses a command whose write targets (`hm_house.write_targets`) include that plan and whose text names the held section's heading (`## <T> - ` or `### <T> `). The refusal names the task and the running review; `PLAN_EDIT_OK` passes it, recorded. A block review (`plan-delta`) holds nothing: its blocks are many and short-lived.
+
+## T86 - `make decide` refuses a measured figure with no date and method (proposal C, 2026-10-19)
+
+### T86 Approach (checklist part A)
+
+1. **The goal, in the world.** A plan never goes to review with a figure the review cannot check.
+2. **The constraints.** The GM, 2026-10-18 23:00 EDT (amendment 9): "build all 7 of those as 385 tasks"; proposal C: "`make decide` refuses an Approach item 4 figure with no 'measured <date>' and method beside it". A figure is a number with a unit (ft, m, s, min, %, px, MB, GB, KB, tokens, agents, rounds, claims); item 4 passes when it carries `measured <YYYY-MM-DD>` with a parenthesized method, or an `m:<key>`. The escape is `FIGURE_OK="<reason>"`. A test red without it.
+3. **Where each comes from.** The GM (G); the tools it changes are this feature's and 375's (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the second pass): T81's first review returned NOT-REVIEWABLE for "4.4 s (measured)" with no date or method; the same rule had blocked T03 and T07 earlier in the feature.
+5. **The order.** The check beside proposal A's in `make decide`, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: `make decide` on a section whose Approach item 4 states a figure with a unit and no `measured <date> (<method>)` or `m:` key refuses, naming the figure; `tests/tooling/test_plan_blocks.py` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T86 Decisions
+
+**D107 - item 4's figures carry their measurement.** `make decide` reads Approach item 4 of the task's section; where it holds a number followed by a unit from the list above, it must also hold `measured 20\d\d-\d\d-\d\d` followed within the item by a parenthesized method, or an `m:<key>`; otherwise the decide refuses, naming the first such figure. Budgets (item 8) and other items are not checked: they are not measurements.
+
+## T87 - the gate does not call its own re-rolled map a tree move (proposal D, 2026-10-19)
+
+### T87 Approach (checklist part A)
+
+1. **The goal, in the world.** A gate never fails for a pool map it re-rolled itself.
+2. **The constraints.** The GM, 2026-10-18 23:00 EDT (amendment 9): "build all 7 of those as 385 tasks"; proposal D: "the gate commits (or ignores) the manifests it re-rolled itself instead of calling them a tree move". A write by anyone else during the gate still voids it (375 FR-004). A test red without it.
+3. **Where each comes from.** The GM (G); the tools it changes are this feature's and 375's (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (`dev/run-log/2026-10/20261018T234128167300-3310255.json`): T10's gate rolled Kuwabata ("ROLLED this run: its cache key moved") and then failed on `pool/hamlets/kuwabata/kuwabata.json` as a tree move - its own output; `GATE_WRITES` in `preflight.py` was measured empty at T23, before any committed manifest was stale.
+5. **The order.** The exclusion in `preflight.tree`, the note to commit, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: a gate whose own pool roll rewrote a tracked map output (`pool/**/<map>.{json,png,svg,html,webp}` beside its `.gen.py`) is not refused as a tree move and prints `the gate re-rolled <files> - commit them`; a move of any other file still refuses; `tests/tooling/test_preflight.py` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T87 Decisions
+
+**D108 - a pool map's outputs are the gate's to write.** `preflight.tree` leaves out of its comparison every changed tracked file under `pool/` that is a map output beside a `.gen.py` (json, png, svg, html, webp), and the tree check prints those it saw change as "re-rolled by the gate - commit them". The rolls are the gate's (`make map` is refused beside a running gate by `gate-write-hooks.sh`), so no one else writes them during a gate.
+
+## T88 - `make plan-verdict` writes the reviewer's words in the house style (proposal E, 2026-10-19)
+
+### T88 Approach (checklist part A)
+
+1. **The goal, in the world.** A reviewer's British spelling never turns a gate red through the plan record.
+2. **The constraints.** The GM, 2026-10-18 23:00 EDT (amendment 9): "build all 7 of those as 385 tasks"; proposal E: "`make plan-verdict` passes the reviewer's text through `americanize`, as T78 does for notes". The digests, ids and verdicts are written as given; quotations are held out as the hook holds them. A test red without it.
+3. **Where each comes from.** The GM (G); the tools it changes are this feature's and 375's (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T83's first gate, `dev/run-log` of 02:06Z): preflight red on `specs/385-approach-checklist/plan-review.json:6036: 'grey'`, a word quoted in a spec-fidelity verdict's reason that `plan-verdict` copied in.
+5. **The order.** The call in `plan_gate.record` (and the block record), then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: `make plan-verdict` writes `gray` where a decision's reason said `grey` outside a quotation, and the record's digests and ids unchanged; `tests/tooling/test_plan_gate.py` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T88 Decisions
+
+**D109 - every free-text field of a verdict corrected.** `plan_gate.record` and `record_blocks` pass each decision's `why` (and any other string field but `id`, `class`, `ruling` and the digests) through `hm_house.americanize` before writing.
+
+## T89 - `make where-time` books time to the task the work names (proposal F, 2026-10-19)
+
+### T89 Approach (checklist part A)
+
+1. **The goal, in the world.** The per-task table says how long each task took, even when several are worked at once.
+2. **The constraints.** The GM, 2026-10-18 23:00 EDT (amendment 9): "build all 7 of those as 385 tasks"; proposal F: "`make decide`, `task-add`, `tick` and `land-tooling` move the active-task mark to the task they name". Measured since: a moved mark misbooks the other way (deciding T76 while building T75 books T75's work to T76), so the attribution is made where it is read instead - a deliberate change of route, recorded here: `where-time` books each gap to the task its tool call names, falling back to the mark. No workflow command changes. A test red without it.
+3. **Where each comes from.** The GM (G); the tools it changes are this feature's and 375's (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the second pass's `wt3.py`, joining the event log to the transcript by tool id): booked by the mark, T10 shows 320 min and T62-T64 2-3 min each; booked by the task each command names (`T=T60`, "task T60", "385 T60:"), the evening's tasks take 5-20 min each and T10 its own work.
+5. **The order.** The join in `where_time.py`, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 40 min.
+9. **Done, measured.** One goal: `make where-time` books a gap to the one task its tool call's input names (a `T=`/`TASK=` argument, "task T<n>", a `385 T<n>:` commit, a `## T<n> - ` heading), else to the last task named, else to the mark, and says which rule booked how many minutes; `tests/tooling/test_where_time.py` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T89 Decisions
+
+**D110 - the task named by the work.** `where_time.tables` takes the session's transcript (the event log's `sid` names it under `~/.claude/projects/`), maps each tool-use id to its input, and books each gap from a `PreToolUse` to the task that input names when it names exactly one; a gap with no naming call carries the last named task; a session with no transcript falls back to the mark. A footer line gives the minutes booked by each rule.
+
+## T90 - `make where-time` tells waiting on work from waiting on the GM (proposal G, 2026-10-19)
+
+### T90 Approach (checklist part A)
+
+1. **The goal, in the world.** The time between turns says whether the session waited on its own work or on the GM.
+2. **The constraints.** The GM, 2026-10-18 23:00 EDT (amendment 9): "build all 7 of those as 385 tasks"; proposal G: "fold the scratch split in: a between-turns window classed by what ended it". T77's "between turns" stays the whole; G splits it. A test red without it.
+3. **Where each comes from.** The GM (G); the tools it changes are this feature's and 375's (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the second pass's `wt2.py`, the event log's `gm` flag on each prompt): of 779 between-turns minutes, 319 ended in a notification (153 waits, median 80 s), 103 in a GM prompt within the hour, 357 in a GM prompt after more than an hour (two windows).
+5. **The order.** The split in `where_time.py`, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 25 min.
+9. **Done, measured.** One goal: `make where-time` replaces the "between turns" column with "waiting on work" (the window ended by a notification), "the GM" (ended by a GM prompt within the hour) and "the GM away" (after more than an hour), their sum the old column; `tests/tooling/test_where_time.py` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T90 Decisions
+
+**D111 - a window classed by what ends it.** From a `Stop` to the session's next `UserPromptSubmit`, every gap is booked to one class, chosen by that prompt: `gm` false (a notification) - waiting on work; `gm` true - the GM, or the GM away when the window passed an hour.
 
 ## T11 - the close
 

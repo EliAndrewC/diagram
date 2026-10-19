@@ -239,6 +239,20 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T83 A dictionary's claims keyed per entry (step 5 of the GM's order, plan D103, D104) [lands-open]
       research: rendering
       verify: DONE. dict entries are blocks, claims keyed by their own line; backfill re-keyed 109 owing nothing; probe entry owed 17 triages, 0 code changed; gate green, cohort 54/54
+- [ ] T84 `make decide` refuses a plan quoting the GM with words not in the request (proposal A, 2026-10-19) [lands-open]
+      research: rendering
+- [ ] T85 an edit to a plan section is refused while its review runs (proposal B, 2026-10-19) [lands-open]
+      research: rendering
+- [ ] T86 `make decide` refuses a measured figure with no date and method (proposal C, 2026-10-19) [lands-open]
+      research: rendering
+- [ ] T87 the gate does not call its own re-rolled map a tree move (proposal D, 2026-10-19) [lands-open]
+      research: rendering
+- [ ] T88 `make plan-verdict` writes the reviewer's words in the house style (proposal E, 2026-10-19) [lands-open]
+      research: rendering
+- [ ] T89 `make where-time` books time to the task the work names (proposal F, 2026-10-19) [lands-open]
+      research: rendering
+- [ ] T90 `make where-time` tells waiting on work from waiting on the GM (proposal G, 2026-10-19) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
