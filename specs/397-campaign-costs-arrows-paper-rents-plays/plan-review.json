@@ -1,0 +1,188 @@
+{
+ "feature": "397-campaign-costs-arrows-paper-rents-plays",
+ "blocks": {
+  "preamble": {
+   "sha256": "6d18533d7beecc51c2b8129990fb6dfb6a7b5966a9ce7baa09dd49e7a5dc72b6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "2e2d15e5085a7086b95ea104a55a98212af18349d1842e97387212395d74fe60",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "a4d90e9444d57f16b42aabe8666962c3b4f6378719c4f5017ed3eb2017c71d40",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "99fbdeccbfbd66edf40fe2ec6f1c5aadb8e5ec75d91b966d48c7b6412a810289",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - the four money questions (FR-001)": {
+   "sha256": "85fd00a5586f0dc11612d0d638db23f977f930d86cd247073968e4ff8a0edae2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - the comparative question (FR-002)": {
+   "sha256": "477e3d04b57ab95601a2f34260849ca447d71bb402b94af6643e24f117c789ca",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - extending 0190 (FR-001)": {
+   "sha256": "3d89eec9d00a410748bd7ee5ed25d49b5e288fd2ab3c7080868970cab8f78efc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D4 - the implementation check (FR-004)": {
+   "sha256": "3a6d044b26bf96931ea3618aa054e26b5a63a7e09f441a8e5765efdf7e1491fa",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D5 - the answer and the download list (FR-005)": {
+   "sha256": "bfad35b6202b6e9b5c9123112fbf0637a8d3f3a5485e49ed8d8ef72a16394d2d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## T - the order": {
+   "sha256": "23ca7bd92b3271e0a197b5f7edea8f5be261cafc2c7f99163d32cf17122e9a1b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-19",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the four money questions (FR-001)",
+    "## D2 - the comparative question (FR-002)",
+    "## D3 - extending 0190 (FR-001)",
+    "## D4 - the implementation check (FR-004)",
+    "## D5 - the answer and the download list (FR-005)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary-split",
+     "summary": "Write the record in two write sessions and one check-and-apply session, then answer #4.",
+     "class": "within",
+     "why": "Session logistics; covers all four questions, the comparative footnote and 0190 as the request and FR-001/FR-002 ask."
+    },
+    {
+     "id": "Summary-downloads",
+     "summary": "Takeyasu 1966 and Uemura 1987 are treated as already on research/to-download.md as entries 312 and 313, each naming 0251, so the plan adds nothing there.",
+     "class": "within",
+     "why": "FR-005 and the GM's 2026-10-18 addition ask that both be on the list naming 0251; the plan states they are, and D5 names them in the answer. Nothing asked is dropped; the premise is a state to confirm at landing, not a narrowing."
+    },
+    {
+     "id": "TC-wages",
+     "summary": "Each figure beside the same place-and-period unskilled and craftsman day wage where a source gives one; where none does, mark the wage SILENT and name the nearest wage with class, place, unit and year gap; never show a craftsman's wage as the unskilled one.",
+     "class": "within",
+     "why": "Implements the issue's 'each price beside the same place and period's unskilled day wage'. Reporting a missing wage as SILENT with the nearest one labeled delivers the requested comparison where it exists and does not substitute another wage under its name. The craftsman wage serves the ledger guess beside Q1 (skilled day 20-40 sen)."
+    },
+    {
+     "id": "TC-units",
+     "summary": "No conversion between mon and silver, or between Qing cash and taels.",
+     "class": "within",
+     "why": "The request asks for each price beside its own place's wage, not a common currency; the comparison is made in the same unit as the price. Nothing asked is withheld."
+    },
+    {
+     "id": "TC-sources",
+     "summary": "Passes are leads read on the page before citation; Gao Shouxian registered here if 396 has not.",
+     "class": "within",
+     "why": "Method, not scope."
+    },
+    {
+     "id": "Perf-Constitution",
+     "summary": "Performance N/A (no generator change); Constitution XII/XIII/XVI as listed.",
+     "class": "within",
+     "why": "Consistent with FR-006 (no engine, map or canon change)."
+    },
+    {
+     "id": "D1-placement",
+     "summary": "Four new questions tagged subject=money, no drawing page, level counts-and-measurements, setting tags as tabled.",
+     "class": "within",
+     "why": "FR-001 settles money section, money tag first, no drawing pages; the level and setting tags are inside that."
+    },
+    {
+     "id": "D1-arrows",
+     "summary": "Ming and Qing price per arrow ordinary and fine; Japan, fletcher output and arrowheads SILENT (Kawato's guess labeled); recovery NOT ATTESTED with the Qing write-off.",
+     "class": "within",
+     "why": "Every clause of Q1 (prices Japan and China, ordinary and fine, fletcher output, heads, recovery) is addressed; the SILENT and NOT ATTESTED entries are research verdicts on clauses the question still carries, not clauses removed."
+    },
+    {
+     "id": "D1-paper",
+     "summary": "Qing Beijing 1736 paper by grade per sheet beside its wage; ink stick SILENT with ink per jin as nearest; Edo paper and ink SILENT, the two uncitable web figures not used.",
+     "class": "within",
+     "why": "Q2's paper-and-ink price clause is answered for each part asked (sheet by grade, ink stick, Japan-first then China); silences are reported, not scoped out."
+    },
+    {
+     "id": "D1-rents",
+     "summary": "Edo back-tenement rent; Qing government-house and shop-front rents; Li Ciming's house; rent-to-value ratios; Japanese silences listed (shop, small house, samurai residence, storehouse, castle towns, weekly).",
+     "class": "within",
+     "why": "Each type Q3 names (nagaya room, small house, merchant townhouse, samurai residence, kura by week or month, castle towns, rent-to-value) appears either answered or explicitly SILENT."
+    },
+    {
+     "id": "D1-plays",
+     "summary": "Edo kabuki seats 1803 and the 16-mon single act; kanjin-no; temple-fair shows SILENT; rural troupe hire; donations; troupe composition; Qing seats and street act.",
+     "class": "within",
+     "why": "Covers Q4's kabuki and noh seats by class, rural and temple-fair charges or collections, and troupe make-up, with China as comparison."
+    },
+    {
+     "id": "D2-comparative",
+     "summary": "English traveling players as a comparative question (subject comparative,money, comparative-money section, kind=comparative sources, category intro); door-gathering ATTESTED ONLY FOR the 1583 depositions and Platter 1599; mid-play hat NOT ATTESTED, Lawrence 1912 labeled a modern inference; no English wage, SILENT.",
+     "class": "within",
+     "why": "FR-002 and the GM's approval of the footnote; the question asked ('did they pass the hat before a play's end?') is answered. It asks no price, so the wage note narrows nothing asked."
+    },
+    {
+     "id": "D3-0190",
+     "summary": "0190 gains what an Edo notice was made of and who could post (attested only for Edo; village SILENT); what was posted is left to 0190's existing text and pointed to; drawing page unchanged.",
+     "class": "within",
+     "why": "FR-001 places material and who-could-post on 0190; the diagram comment and gm-assistant's reply (both in request.md) agreed to extend 0190 rather than duplicate, and gm-assistant said the skill needs the material and the paper and ink prices. Pointing to 0190 for 'what was posted' keeps that clause answered; village SILENT is a verdict, not a scope cut."
+    },
+    {
+     "id": "D4-impl-check",
+     "summary": "implementation-check.md: one line per new question (no code implements it, consumed by gm-assistant), and 0190's line checked against the notice-board drawing code with its grep.",
+     "class": "within",
+     "why": "FR-004 as written."
+    },
+    {
+     "id": "D5-answer",
+     "summary": "Comment on #4 with each fragment FILE (0190 included), the checked verdict per figure, what is still open per question, and download entries 312 and 313.",
+     "class": "within",
+     "why": "The issue's 'What the skill needs back' (file, verdict per figure, what is open) and FR-005."
+    },
+    {
+     "id": "T-order",
+     "summary": "Page sessions, implementation check, answer, report and land by the direct route.",
+     "class": "within",
+     "why": "Order only."
+    }
+   ]
+  }
+ ]
+}
