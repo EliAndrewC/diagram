@@ -8,7 +8,7 @@
 
 **Approved**: the GM, 2026-10-19, "Let's keep the current round of process tasks such that all open process tasks stay in 385 and everything else moves into a new feature.  Then we can finish and land our process tasks and then start the new feature after that ends up in main."
 
-**Affects**: hamlet, research record, waterfields
+**Affects**: hamlet, research record
 
 ## The request
 
