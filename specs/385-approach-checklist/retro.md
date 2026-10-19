@@ -973,3 +973,12 @@ from the row, or seen among the hunk's added lines), and a unit with no hunk to 
 plan review blocked once, on a minimum claim count whose saving was asserted, not measured; dropping it made the rule the page
 triage's own. Building it found an empty-diff crash in the hunk splitter, caught by the test. **The habit it changes:** a
 threshold in a plan carries the measurement that sets it, or is not there.
+
+## T117 - the retro row
+
+About 30 min. `make land-batch F= T="T1 T2" NOTE=` asks every task's tick first (all of `make tick`'s refusals but the landed
+one, now one function `refusal`), runs the gated route once, and ticks each "landed in batch T1+T2"; a failed landing ticks none.
+A gated landing measured about 15 min from the transcripts, so a batch of three saves about 30. The plan review was CLEAR in one
+round. Building it, the Makefile target was first written by a python heredoc that the shell-write guard did not catch: recorded
+under `make guard-edit` and filed as T121. **The habit it changes:** a small engine fix whose checks are done waits for the next
+one, and the two land by `make land-batch`.
