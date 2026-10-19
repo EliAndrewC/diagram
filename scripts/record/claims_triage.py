@@ -163,7 +163,7 @@ def triage_bundle(
     sections: dict[str, tuple[list[str], list[str], list[str]]] = {}  # "path::title" -> (fresh, gone, keys) - feature 375 FR-002
     for key in keys:
         unit = cur[key].unit
-        if unit.blocks and index[key].get("section") not in (None, unit.core):
+        if unit.line_keyed and index[key].get("section") not in (None, unit.core):
             before = set(store.get(index[key]["section"], []))
             fresh = [b for b in unit.blocks if ru.digest([b]) not in before]
             now = {ru.digest([b]) for b in unit.blocks}
@@ -229,12 +229,12 @@ def triage_bundle(
         k: {
             "research": cur[k].research,
             "pages": {ptr.rsplit("/", 1)[1]: page_blocks(ptr.rsplit("/", 1)[1], qdir, memo)[0] for ptr in cur[k].claim.pointers},
-            **({"section": cur[k].unit.core} if cur[k].unit.blocks else {}),
+            **({"section": cur[k].unit.core} if cur[k].unit.line_keyed else {}),
         }
         for k in keys
     }
     snaps = {fp: [d for d, _w in blocks] for fp, blocks in memo.values()}
-    snaps |= {cur[k].unit.core: [ru.digest([b]) for b in cur[k].unit.blocks] for k in keys if cur[k].unit.blocks}
+    snaps |= {cur[k].unit.core: [ru.digest([b]) for b in cur[k].unit.blocks] for k in keys if cur[k].unit.line_keyed}
     (out / "triage.json").write_text(
         json.dumps({"units": units, "snapshots": snaps, "forced": sorted(forced)}, indent=1, sort_keys=True) + "\n",
         encoding="utf-8",

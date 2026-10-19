@@ -209,6 +209,12 @@ class Unit:
     names: tuple[str, ...] = ()
     blocks: tuple[str, ...] = ()  # a procedure section's blocks, its claim markers out (feature 375, FR-002)
 
+    @property
+    def line_keyed(self) -> bool:
+        """Its claims fingerprinted by their own line, the rest owing a triage: a procedure section (feature 375, FR-002), even an
+        empty one, and a claimed dictionary, whose entries are its blocks (feature 385 T83)."""
+        return self.kind == "section" or bool(self.blocks)
+
     def key(self, claim: Claim) -> str:
         """The index key of one claim of this unit."""
         return f"{self.path}::{self.qualname}#{claim.label}"
@@ -219,7 +225,7 @@ class Unit:
         claim, so no position says which words a claim rests on, and fingerprinting the whole section re-owed every claim of
         it on any edit (372's wave 106: impl-drift over 73, 105 and 105 claims, nearly all IN-STEP). The rest of the section is
         `core`, and an edit there owes a TRIAGE of its changed blocks (`scripts/record/claims.py`)."""
-        if self.kind == "section" or self.blocks:  # ...and a claimed dictionary, whose entries are its blocks (feature 385 T83)
+        if self.line_keyed:  # ...and a claimed dictionary, whose entries are its blocks (feature 385 T83)
             return _sha("section-claim\x1f" + claim.normalized())
         return _sha(self.core + "\x1f" + claim.normalized())
 
