@@ -36,7 +36,7 @@ import subprocess
 import sys
 import time
 import urllib.parse
-from collections.abc import Collection, Sequence
+from collections.abc import Collection, Mapping, Sequence
 from typing import Any
 
 HERE = pathlib.Path(__file__).resolve().parent
@@ -395,6 +395,29 @@ def modal_classes(key: str, base: pathlib.Path = _KINDS) -> list[str]:
     return [f"{mod}.{cls}" if len(hits) > 1 else cls for mod, cls in hits]
 
 
+#: the batches `report` names, kept for the dispatch guard (feature 385 T81, plan D100/D101), in the clone's git directory
+BATCHES = "modal-batches.json"
+
+
+def modal_batches(rows: Sequence[ru.Unit], answered_slugs: Collection[str] = ()) -> dict[str, list[str]]:
+    """{pop-up agent: [kinds]} for each agent two or more unanswered pop-ups owe (feature 385 T81, plan D100; the GM's approved
+    change 1: T10's checks sent 90 single-pop-up agents because this listing named one `KIND=` per unit). A pop-up owed only by a
+    moved page goes to `make modal-triage` first and joins a batch on the next listing if a check is still owed."""
+    out: dict[str, list[str]] = {}
+    for u in rows:
+        if u.slug in answered_slugs or not u.check.startswith("modal-") or u.occasion.startswith("a page its "):
+            continue
+        agent = u.check if u.check in ("modal-form", "modal-depiction") else "modal-research"
+        if u.subject not in out.setdefault(agent, []):
+            out[agent].append(u.subject)
+    return {a: ks for a, ks in out.items() if len(ks) >= 2}
+
+
+def keep_batches(root: pathlib.Path, batches: Mapping[str, list[str]]) -> None:
+    gd = pathlib.Path(_git(root, "rev-parse", "--path-format=absolute", "--git-common-dir").strip() or root / ".git")
+    (gd / BATCHES).write_text(json.dumps({"utc": time.time(), "batches": dict(batches)}) + "\n", encoding="utf-8")
+
+
 def report(rows: Sequence[ru.Unit], now: ru.Record | None = None, answered_slugs: Collection[str] = ()) -> str:
     """The listing. With `answered_slugs` (the default listing), each unit already answered is marked so and the header says
     how many are still unanswered: T01 of feature 385 read the full listing as owed and went looking for three more quote-check
@@ -409,6 +432,8 @@ def report(rows: Sequence[ru.Unit], now: ru.Record | None = None, answered_slugs
             lines.append(f"  [answered] {u.slug}  - {u.occasion}")
         else:
             lines.append(f"  {u.slug}  - {u.occasion}\n      {command(u, now)}")
+    for agent, kinds in modal_batches(rows, answered_slugs).items():  # T81: one agent for the pop-ups one check owes
+        lines.append(f"  batched: make modal-bundle KIND=\"{' '.join(kinds)}\" FOR={agent}  - ONE {agent} agent for these {len(kinds)} pop-ups")
     lines.append("Answer each with `make record-checked CHECK=<check> BUNDLE=<its bundle> RESULT=\"<counts>\"` when its check returns.")
     lines.append("Apply a round's own EDITs with `make apply-edits FROM=<the agent's reply or its transcript>` - its unit then settles, owing no "
                  "round to re-read its own words - the same command settles an EDIT you already applied by hand, word for word (feature 385 T21).")
@@ -566,6 +591,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     else:
         done = set() if args.unanswered or args.between else {u.slug for u in rows} - {u.slug for u in unanswered(root)}
         print(report(rows, read_at(root, args.between[1] if args.between else None), done), end="")
+        if not args.between:
+            keep_batches(root, modal_batches(rows, done))
     return 0
 
 
