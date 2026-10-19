@@ -279,3 +279,9 @@ def test_a_depiction_edit_states_an_absence_in_the_pages_own_words() -> None:
     root = pathlib.Path(__file__).resolve().parents[2]
     depiction = " ".join((root / ".claude/agents/modal-depiction.md").read_text(encoding="utf-8").split())
     assert "quotes the cited page's own absence wording verbatim" in depiction and "never a paraphrase of it" in depiction
+
+
+def test_the_default_bundle_is_the_clones_own() -> None:
+    """The round arbiter on hour:397@3: two clones shared `/tmp/l7r-check/modal-triage`, and one overwrote the other's bundle."""
+    assert mt.default_out(pathlib.Path("/diagram/.clones/money")) != mt.default_out(pathlib.Path("/diagram/.clones/backlog"))
+    assert mt.default_out(pathlib.Path("/diagram/.clones/money")).name == "modal-triage-money"
