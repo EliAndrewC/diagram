@@ -1,0 +1,4 @@
+- 0268: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'kasuga-zukuri\|shinmei\|hokora.*ryo\|worship hall.*ryo\|thatch.*price\|shingle.*price\|vermilion\|lacquer.*price\|carving.*ryo' l7r pool
+- 0269: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'stone lantern\|komainu\|gorinto\|stele.*price\|mason.*wage\|stone torii.*ryo' l7r pool
+- 0270: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'waniguchi\|reliquary\|offering chest\|shrine mirror.*price\|copper.*monme\|kin of copper' l7r pool
+- 0271: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'eitai\|goryo\|enshrinement.*fee\|calligraph\|washing.*bones\|Koyasan' l7r pool
