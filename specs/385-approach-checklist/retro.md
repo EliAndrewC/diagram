@@ -639,3 +639,9 @@ format slip costs seconds, not two minutes. **The habit it changes:** none neede
 About 20 min. `plan_bundle.build` reads "375 FR-044", "feature 375's FR-002" and the like as that feature's requirement, from its
 own spec, under a `<!-- feature 375 -->` line, and no longer hands the reviewed feature's same-numbered one for it. **The habit it
 changes:** none needed - the bundle reads the feature the block names.
+
+## T68 - the retro row
+
+About 20 min. `scripts/format-changed.sh` runs at the head of `make test-file`: the `.py` files the clone changed against its merge
+base (deleted ones left out, as the review noted) are formatted and named; nothing to format, it is silent. **The habit it
+changes:** `make format` is no longer a step to remember before a landing.
