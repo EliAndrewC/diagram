@@ -634,6 +634,26 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@35 (change-rou
 
 **D144 - the self-landed conflict named.** In `land-tooling.sh`'s D46 branch, before `git merge --abort`, the conflicted files (`git diff --name-only --diff-filter=U`) whose `git log -1 --format=%s origin/main -- <file>` begins `Tooling from <this clone's name>,` are named in the refusal: "<files> conflict only with this clone's own earlier landing - run scripts/sync-with-main.sh sync-in, then git checkout --ours <files> && git add <files> && git commit --no-edit, then land again". The merge is aborted and the landing refused as now; nothing is resolved by the tool.
 
+## T123 - another feature's decision cited through its amendment (found working T114, 2026-10-19)
+
+### T123 Approach (checklist part A)
+
+1. **The goal, in the world.** A plan reviewer citing another feature's decision by its amendment is handed that feature's decision, not this feature's same-numbered one.
+2. **The constraints.** T66 (D85) and T71 (D91): an id qualified by another feature number ("375 FR-044", "feature 375's D18", "375 plan D18") is read from that feature's spec or plans; an unqualified id is the reviewed feature's. A test red without it.
+3. **Where each comes from.** T66, T71 (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T114's review aside, then the regex run on the line): "Feature 375 amendment 11 (D64)" matches no qualified form, so `_QUALIFIED` finds nothing and D64 is read as 385's own (land-tooling's make-docs check) - the reviewer was handed the wrong decision.
+5. **The order.** `_QUALIFIED` allows "amendment <n>" and an opening parenthesis between the feature number and the id; the test.
+6. **The exits.** (c) - widen the qualified form by the measured shape.
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: "Feature 375 amendment 11 (D64)" and "375 amendment 6, FR-002" are read from feature 375; `tests/tooling/test_plan_blocks.py` red without it.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T123 Decisions
+
+**D145 - through its amendment.** `plan_bundle._QUALIFIED` takes, between the feature number (and its `'s` or comma) and the optional `plan`, an optional `amendment <n>` with its own comma, then an optional `(`: `(\d{3})(?:'s|,)?\s+(?:amendment\s+\d+,?\s+)?\(?(?:plan\s+)?(<id>)`.
+
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).

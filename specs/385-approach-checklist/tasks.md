@@ -349,8 +349,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T121 A guard file written by a python heredoc in a Bash command is not caught: T117's Makefile target was written by python open(p,'w') and make-only-hooks' shell-write guard let it through (found working T117) [lands-open]
       research: rendering
       verify: DONE. landed by land-tooling 2026-10-19; open() writes and string-bound names refused (D143); hooks suite 89/89, red without it (2 cases)
-- [ ] T122 make land-tooling conflicts with its own earlier landing of the same files (add/add on main's land-tooling commit vs the clone's newer edit): resolve to the clone's side when main's side is content the clone itself landed (found working T119; also T84-era) [lands-open]
+- [x] T122 make land-tooling conflicts with its own earlier landing of the same files (add/add on main's land-tooling commit vs the clone's newer edit): resolve to the clone's side when main's side is content the clone itself landed (found working T119; also T84-era) [lands-open]
       research: rendering
+      verify: DONE. landed by land-tooling 2026-10-19; the self-landed conflict named with its fix (D144, the hour-35 change-route); suite 49/49, red without it
 - [ ] T123 The plan bundle resolves a decision cited as another feature's ('Feature 375 amendment 11 (D64)') against this feature's own D64, so spec-cited.md hands the reviewer the wrong decision (spec-fidelity aside, T114's review) [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
