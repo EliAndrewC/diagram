@@ -196,6 +196,10 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T69 A task filed mid-feature lands open (plan D88) [lands-open]
       research: rendering
+- [ ] T70 A feature is worked until it is set down (plan D89, D90) [lands-open]
+      research: rendering
+- [ ] T71 A decision cited from another feature's plan is bundled from that plan (plan D91) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -281,6 +281,44 @@ Owed by the hour-20 step-back (hour:385-approach-checklist@20, `continue`), whic
 ### T69 Decisions
 
 **D88 - the line kept by the tool that files the task.** `task-add.py`, when `plan.md` holds a `**Lands open**:` line, appends `, T<n>` to it and writes the box with ` [lands-open]`; a plan with no such line is left alone (its feature does not land task by task). The line's block still owes its review (`make plan-delta`), as any edit of it does.
+
+## T70 - a feature is worked until it is set down (the GM 2026-10-18, step 3 of the approved order)
+
+### T70 Approach (checklist part A)
+
+1. **The goal, in the world.** A session working a feature never goes quiet with work left and nothing running, unless it said why.
+2. **The constraints.** The GM, 2026-10-18: "if we could have something that when a feature is begun ... checks every 10 minutes for whether or not the feature is either still in progress or has been correctly set down, then that would be really good"; the session's proposal he approved: a Stop guard (it fires at every turn's end, which a 10-minute check would only sample) with `make set-down`. It must not hold a turn that waits on running work, or one that asks the GM a question; a set-down states a reason of two words or more and is recorded. A guard suite in `tests/hooks/`, red without it.
+3. **Where each comes from.** The GM's request (G); the escape and record rules are CLAUDE.md's "What is enforced" (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-18 (step-back-2026-10-18.md): T05's 464 minutes held 240 of idle, a turn that ended overnight with a refused dispatch never re-sent and nothing running; T22's guard covers that refused dispatch, not a turn that simply stops.
+5. **The order.** `hm_setdown.py` (the verdict), `set-down-hooks.sh stop` and its settings entry, `make set-down`, then the suite.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 60 min.
+9. **Done, measured.** One goal: a turn ending in a clone whose last `make task-start` names a feature with an open task is refused, naming the next open task and `make set-down`, unless a background command or agent started in the session has not reported back, the turn's last message asks a question, or a set-down for that feature is recorded after that task-start; `tests/hooks/test-set-down-hooks.sh` red without it.
+
+### T70 Decisions
+
+**D89 - the turn end checked, the reasons to stop named.** `scripts/hooks/lib/hm_setdown.py` reads the clone's last `task-starts.jsonl` record. Its feature is IN PROGRESS when its `tasks.md` has an open box other than the GM-review box and its status line does not close it (`speckit-todo.py --closed-by-status`). The Stop payload's transcript gives what is RUNNING: each background command ("running in background with ID") and async agent ("agentId:") without a later task notification of that id. The turn's last assistant text ASKS when a line of it ends in `?`. A SET-DOWN is a row of `<common git dir>/set-downs.jsonl` for the feature at or after the task-start, written by `make set-down F=<feature> WHY="<reason>"` (two words or more). The guard refuses only an in-progress feature with nothing running, no question and no set-down; it is silent in a clone with no task-start, and on any read error (fail open, recorded): a Stop guard that fails closed can hold a session in a loop.
+
+**D90 - the refusal names the next step.** The refusal reads `BLOCKED: feature <f> has <n> open task(s) and nothing is running - start the next (<the first open box's id and title>), or set it down: make set-down F=<n> WHY="<why>"`, and each firing is recorded in the guard log.
+
+## T71 - a decision cited from another feature's plan is bundled from that plan (found by T69's plan review, 2026-10-19)
+
+### T71 Approach (checklist part A)
+
+1. **The goal, in the world.** A plan review reads the decision a block cites, not a same-numbered decision of this feature.
+2. **The constraints.** T66 (D85) for requirements; a decision's paragraph comes from that feature's `plan.md` and `plan-done.md`, as this feature's do now. A test red without it.
+3. **Where each comes from.** T66 (O); the defect is T69's plan review's finding (amendment 6).
+4. **Do they describe the world here?** Yes - measured 2026-10-19: T69's block cites "Feature 375 plan D18" and its bundle's `spec-cited.md` carried 385's own D18 (the pig sty's one predicate), a different decision; D85 reads `FR`/`SC` ids only.
+5. **The order.** The decision form in `plan_bundle`, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: a block citing `375 plan D18` (or `feature 375's D18`, `375 D18`) gets 375's D18 paragraph under `<!-- feature 375 -->`, and not 385's; `tests/tooling/test_plan_blocks.py` red without it.
+
+### T71 Decisions
+
+**D91 - D85 widened to decisions.** `_QUALIFIED` takes `(?:plan )?D<n>` beside `FR`/`SC`, an optional `plan ` between the feature and the id; a qualified decision resolves from that feature's `plan.md` + `plan-done.md` through the same paragraph reader as this feature's, under the same feature line; an unknown one is left out.
 
 ## T11 - the close
 
