@@ -29259,20 +29259,20 @@
  },
  "l7r/diagram/hamletgen/ways/street.py::to_its_joints#street cut to its outermost joints": {
   "body": "dc77e3838079dc67",
-  "claim": "street cut to its outermost joints - how-our-maps-lay-a-clustered-settlements-lanes.drawing: an end reaching nothing is pulled back",
-  "code": "83b8bf680fa98413",
+  "claim": "street cut to its outermost joints - how-our-maps-lay-a-clustered-settlements-lanes.drawing: an end reaching nothing is pulled back - a street with one joint is left whole here, and its dangling end cut back to that joint by `settle.settle_street_ends` once the lane law calls it dangling",
+  "code": "704b3c0ef18cb55b",
   "core": "0f45c92b0982c2d2",
   "date": "2026-10-19",
-  "note": "when fewer than two joints stand on the street, `if len(at) < 2: return list(street)` leaves the whole street uncut, so an end past a single farm's path stays even though it reaches nothing. The page says \"a lane end that reaches nothing is pulled back to the last house it serves\" and gives no exception. Either the claim should record the one-joint case (D147) as a DEVIATION on the page, or the code should pull back the dangling end(s)",
+  "note": "the street is kept between its outermost joints, meaning door paths, the join and the road run on from it; a street with one joint is left whole, and settle_street_ends cuts its dangling end back; this matches \"a lane end that reaches nothing is pulled back to the last house it serves\"",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c90fc4f6fee86c66"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/street.py::trim_streets#a further street cut to its joints": {
   "body": "f2c4acf2bbadeac0",

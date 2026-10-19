@@ -387,7 +387,7 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       verify: DONE. landed 2026-10-19 by sync-with-main done; turn limit CONVENTION, sampling step NONE, its comment corrected (wording only); IN-STEP
 - [ ] T137 T136 landed a malformed claim (RUN_ON_TURN_DEG: CONVENTION takes no pointer) to main by the direct route, which never runs the claim-form test - fix the claim, and make the form check run before a direct landing (found by the T132+T125 gate) [lands-open]
       research: rendering
-- [ ] T138 street.to_its_joints' touch (how close an end must come to count as a joint) arrives from its callers unclaimed - check each call site's value against 0246's reach to another way and claim it (impl-drift, the T132 batch's round) [lands-open]
+- [ ] T138 street.to_its_joints' touch (how close an end must come to count as a joint) arrives from its callers unclaimed - check each call site's value against 0246's reach to another way and claim it; and whether the callers pass field-path and bund ends as joints (0246 §6 lets a lane run on to them) (impl-drift, the T132 batch's round) [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
