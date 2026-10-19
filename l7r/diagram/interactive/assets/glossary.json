@@ -16383,5 +16383,33 @@
    "Zhang Lüxiang",
    "Zhang Lü-xiang"
   ]
+ },
+ "guinea": {
+  "def": "An English gold coin, fixed at twenty-one shillings from 1717; after it ceased to be coined in 1816 it stayed in use as a sum of twenty-one shillings, in which wages were still quoted.",
+  "variants": [
+   "guinea",
+   "guineas"
+  ]
+ },
+ "livery": {
+  "def": "The suit of clothes in the household's own style that an English household gave a manservant - a footman, a coachman, a groom - as part of his pay.",
+  "variants": [
+   "liveries",
+   "livery"
+  ]
+ },
+ "board wages": {
+  "def": "Money an English household paid a servant each week in place of meals, when the family was away and no table was kept, or to an outdoor servant who fed himself.",
+  "variants": [
+   "board wages",
+   "board-wages"
+  ]
+ },
+ "perquisite": {
+  "def": "Something a servant took as of right on top of the wage: the master's cast-off clothes, the ends of the wax candles, a fee on each chicken killed.",
+  "variants": [
+   "perquisite",
+   "perquisites"
+  ]
  }
 }

@@ -240,7 +240,9 @@ blyxa	Blyxa
 bo	bo
 board feet	board foot
 board foot	board foot
+board wages	board wages
 board-clapper	clapper-board
+board-wages	board wages
 bobana	bobana
 bochi	bochi
 bodaiji	bodaiji
@@ -1346,6 +1348,8 @@ guard city	guard city
 guardian deities	thirty guardian deities
 guardian dog	lion-dog
 guardian dogs	lion-dog
+guinea	guinea
+guineas	guinea
 gulou	gulou
 gun bugyo	gun-bugyo
 gun-bugyo	gun-bugyo
@@ -2279,6 +2283,8 @@ liuchu	liuchu
 live sale	live sale
 live sales	live sale
 live-sale	live sale
+liveries	livery
+livery	livery
 living sale	live sale
 loess	loess
 log boom	boom
@@ -2893,6 +2899,8 @@ percolation	percolation
 periodic market	periodic market
 periodic markets	periodic market
 periodic-market	periodic market
+perquisite	perquisite
+perquisites	perquisite
 person-year	person-year
 person-years	person-year
 petuntse	petuntse
