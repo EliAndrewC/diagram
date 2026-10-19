@@ -215,3 +215,14 @@ def test_a_plan_review_that_recorded_its_verdict_gets_its_row_and_others_do_not(
     owed = [dict(_pass("spec-fidelity", subject="MODE 4: PLAN REVIEW of T72"), agent=a) for a in ("a1", "a2", "a3", "a4", "a5")]
     owed.append(_pass("glyph-check"))  # another check's pass: still the session's to answer
     assert lo.plan_review_rows(owed, tmp_path) == [f"| {a} | the plan-verdict record (make plan-verdict) |" for a in ("a1", "a3", "a4", "a5")]
+
+
+def test_a_plan_review_its_feature_s_record_holds_gets_its_row_whatever_its_reply_says(tmp_path: Path) -> None:
+    """T72: T78's second review wrote only "I recorded it"; the record itself says so, dated the pass's day."""
+    d = tmp_path / "specs" / "385-x"
+    d.mkdir(parents=True)
+    (d / "plan-review.json").write_text(json.dumps({"tasks": {"T78": {"reviewed": "2026-10-18", "verdict": "CLEAR"}}, "blocks": {"## L": {"reviewed": "2026-10-17"}}}))
+    task = dict(_pass("spec-fidelity", subject="MODE 4: PLAN REVIEW of one task's section - feature 385-x, task T78 (a decision"), date="2026-10-18")
+    other = dict(task, subject="MODE 4: PLAN REVIEW of one task's section - feature 385-x, task T79 (a decision")
+    blocks = dict(task, subject="MODE 4: PLAN REVIEW of 1 changed block(s) of feature 385-x's plan")
+    assert lo.in_the_record(task, tmp_path) and not lo.in_the_record(other, tmp_path) and not lo.in_the_record(blocks, tmp_path)
