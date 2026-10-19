@@ -6920,6 +6920,50 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T97": {
+   "section_sha256": "de35425882314a475f185ec29e042c2e2a67324b0182dbcc26eaf531f8b2b899",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D125",
+     "summary": "A farm counts as reached only where the way's point nearest its HOUSE serves it under end_serves (60 ft of the house or 12 ft of its built ground), replacing the door-within-60-ft test",
+     "class": "within",
+     "why": "Brings the code to the research page's (0246's) own reach as the block renders it; the carried 384 request is code that matches its research, and the found drift splitting into its own task is Amendment 4's one-goal rule. It narrows nothing the GM asked for."
+    },
+    {
+     "id": "D125-one-predicate",
+     "summary": "lay_door_paths (row and off-row) and row_rules' farm_not_on_its_street read the one predicate, unifying the row/off-row split stage_web passed as reach",
+     "class": "within",
+     "why": "Placement and its check reading the same source is the lane law's rule; the unification widens the row case to 0246's two reaches rather than narrowing anything. Rests on the block's rendering of 0246, which the bundle does not carry (spec-cited.md is empty)."
+    },
+    {
+     "id": "item-10",
+     "summary": "DOOR_REACH_FT, lay_door_paths' reach parameter and stage_web's argument retired, every use listed and measured 2026-10-19",
+     "class": "within",
+     "why": "Follows from D125; listing every use before moving a constant is the checklist item the GM approved in Amendment 8 (change 7)."
+    },
+    {
+     "id": "item-9-tests",
+     "summary": "test_doors.py's two door-distance asserts ask street_arrives instead; a test red without the fix; the three claims IN-STEP; cohort and landing cohort pass",
+     "class": "within",
+     "why": "Enforcement of the requested behavior: delete the fix and the test has nothing left to check."
+    },
+    {
+     "id": "D125-claim-label",
+     "summary": "The three claims keep 0246's GUESS label for the 60 ft, now measured from the house",
+     "class": "within",
+     "why": "Keeps the research page's own label; changes no research tag and adds no number of the session's own."
+    },
+    {
+     "id": "item-6",
+     "summary": "Exit (e) conform: the code takes 0246's reach as written; the door distance is retired as a stand-in",
+     "class": "within",
+     "why": "The work is not fighting a rule but correcting drift from research; conforming is the request's purpose, not a carve-out."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

@@ -532,7 +532,25 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@30 (continue),
 
 ### T97 Decisions
 
-**D125 - reached as 0246 counts it.** `serve.street_arrives` asks, on a row's street or off it, whether the way's point nearest the HOUSE serves the farm (`end_serves`: 60 ft of the house or 12 ft of its built ground); `lay_door_paths` skips a farm only on that answer, with no door-distance test; `row_rules`' `farm_not_on_its_street` asks the same predicate of the farm's own street. The three claims keep 0246's label for the 60 ft, a GUESS on its page, now measured from the house.
+**D125 - reached as 0246 counts it.** `serve.street_arrives` asks, on a row's street or off it, whether the way's point nearest the HOUSE serves the farm (`end_serves`: 60 ft of the house or 12 ft of its built ground); `lay_door_paths` skips a farm only on that answer, with no door-distance test; `row_rules`' `farm_not_on_its_street` asks the same predicate of the farm's own street. The three claims keep 0246's label for the 60 ft, a GUESS on its page, now measured from the house. And a farm's door path (a lane recording `serves`) is a household's own way, which `law.short_fragments` never drops,
+as it never drops one recording `of`: 0246, "Every other farmhouse is served by a lane of its own. Its way leaves its dooryard" -
+measured 2026-10-19 (cohort seed 904 under D125: four row farms' 9 ft door paths were laid and kept until `settle_fragments`
+dropped them as earning nothing, the farms being within the 100 ft back-lane reach; with door paths spared, seed 904 and the
+cohort pass, 16 of 16).
+
+### T97 part B (2026-10-19T09:52Z)
+
+Owed by the cohort record in which seed 904 newly failed (`row_rules`, four `farm_not_on_its_street`).
+
+1. **What is refusing?** Seed 904's four row farms - measured 2026-10-19 (scratch probes of `lay_door_paths`, the web passes and the settle's steps): each door path is laid, then `settle_fragments` drops it as a fragment that earns nothing.
+2. **A3 again.** 0246 counts two things apart: a household served by a lane of its own from its dooryard, and the 100 ft back-lane reach; the fragment rule asked only the second.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Changing: D125 gains the door path's exemption from the fragment rule, decided in the section above and reviewed with it.
+6. **The one-sentence test.** "A door path is a household's own way and is never dropped as a fragment" - true by the probe; seed 904 passes.
+7. **The next step is a measurement.** The landing cohort with the exemption built.
+8. **Every route measured before offering one?** Yes: the drop was traced to its step before the exemption was written.
+9. **After a ruling: the step it names?** No ruling is pending on T97.
 
 ## T11 - the close
 
