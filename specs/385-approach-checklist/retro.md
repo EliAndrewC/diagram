@@ -651,3 +651,8 @@ changes:** `make format` is no longer a step to remember before a landing.
 About 15 min. `make task-add` puts the new id on the plan's `**Lands open**:` line and marks its box, where the plan has the line,
 so a task filed mid-feature never holds another's landing. The line's edit still owes its block review. **The habit it changes:**
 none needed - the tool that files the task keeps the line.
+
+## T71 - the retro row
+
+About 10 min. D85's qualified reading takes a decision too ("375 plan D18"), read from that feature's plan and plan-done.
+**The habit it changes:** none needed.

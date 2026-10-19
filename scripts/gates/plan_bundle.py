@@ -35,7 +35,8 @@ OUT = pathlib.Path("/tmp/l7r-check")
 _IDS = re.compile(r"\b((?:FR|SC)-\d{3}[a-z]?|D\d+[a-z]?)\b")
 #: ANOTHER FEATURE'S REQUIREMENT, NAMED AS ITS OWN (feature 385 T66, plan D85): "375 FR-044", "feature 375 FR-044", "feature 375's
 #: FR-044", "feature 375, FR-044". T65's review was handed 385's own FR-005 for a block citing 375's - a different requirement.
-_QUALIFIED = re.compile(r"\b(?:[Ff]eature\s+)?(\d{3})(?:'s|,)?\s+((?:FR|SC)-\d{3}[a-z]?)\b")
+#: ...and a decision (T71, plan D91): "375 plan D18", "feature 375's D18", "375 D18" - read from that feature's plans
+_QUALIFIED = re.compile(r"\b(?:[Ff]eature\s+)?(\d{3})(?:'s|,)?\s+(?:plan\s+)?((?:FR|SC)-\d{3}[a-z]?|D\d+[a-z]?)\b")
 _ITEM = re.compile(r"^- \*\*((?:FR|SC)-\d{3}[a-z]?)\b", re.M)
 _DECISION = re.compile(r"^\*\*(D\d+[a-z]?) - ", re.M)
 #: the older specs' form, a requirement as its own heading (`### FR-001 - ...`, 12 specs among them 170): to the next heading
@@ -116,8 +117,14 @@ def foreign(spec_dir: pathlib.Path, others: list[tuple[str, str]]) -> list[str]:
     feature with no such directory, or several, or no such id, is left out as an unknown id is."""
     out: list[str] = []
     for no, rid in others:
-        hits = [d for d in spec_dir.parent.glob(f"{no}-*") if (d / "spec.md").is_file()]
-        text = requirements((hits[0] / "spec.md").read_text(encoding="utf-8")).get(rid) if len(hits) == 1 else None
+        hits = [d for d in spec_dir.parent.glob(f"{no}-*") if d.is_dir()]
+        if len(hits) != 1:
+            continue
+        if rid.startswith("D"):
+            plans = "".join((hits[0] / f).read_text(encoding="utf-8") for f in ("plan.md", "plan-done.md") if (hits[0] / f).is_file())
+            text = _paragraphs(plans, _DECISION).get(rid)
+        else:
+            text = requirements((hits[0] / "spec.md").read_text(encoding="utf-8")).get(rid) if (hits[0] / "spec.md").is_file() else None
         if text:
             out.append(f"<!-- feature {no} -->\n{text}")
     return out

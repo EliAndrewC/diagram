@@ -229,3 +229,8 @@ def test_a_requirement_cited_as_another_feature_s_is_bundled_from_that_feature(t
     assert "<!-- feature 375 -->\n- **FR-002 The archive.**" in cited and "FR-044 The plan." in cited
     assert "FR-001 The sty." in cited, "an unqualified id is the reviewed feature's"
     assert "FR-002 The well." not in cited, "385's same-numbered requirement is not handed for 375's"
+    (other / "plan.md").write_text("# Plan\n\n**D18 - lands open.** An open box holds the landing unless the line names it.\n")
+    (d / "plan.md").write_text(PLAN + "\n**D18 - the sty.** One predicate.\n")
+    manifest = plan_bundle.build(d, "t2", [("## T05 - x", "## T05 - x\n\nFeature 375 plan D18 says so.\n")], {}, "how")
+    cited = (manifest.parent / "spec-cited.md").read_text()
+    assert "D18 - lands open." in cited and "D18 - the sty." not in cited, "T71: a decision from its own feature's plan"
