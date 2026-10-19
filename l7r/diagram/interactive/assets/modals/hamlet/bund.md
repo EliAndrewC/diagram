@@ -22,10 +22,10 @@ Guesses:
   behaves, not found written down.
 
 Depiction: The map draws the bunds as one network of shared walls in a dark red-brown, the color of the fresh-plastered
-mud of spring. By high summer, the season the map shows, a real bund was grassed and planted and all but vanished into
+mud of spring. By high summer, the season the map shows, a real bund was grassed and planted and probably all but vanished into
 the green of the rice; the bunds are drawn anyway, because they carry the pattern of the plots. A bund between paddies
 is drawn at its real width, about 1.5 ft, and one along a canal about 3 ft, inside the widths of the one early dig.
-Earth is piled at each crossing, corners are rounded and lines wander, as a hand-piled bund's probably did. The openings that let
+Where paddies share a bund, earth is piled at each crossing; corners are rounded and lines wander, as a hand-piled bund's probably did. The openings that let
 the water in and out are too small to draw, so a bund runs unbroken along every channel; the water crossed it all the
 same. The path from the houses runs out onto the field's outer bund.
 
@@ -33,4 +33,4 @@ Name: bund
 Covers: the stroke of every paddy plot and the piled junctions between them
 Sources: kotobank-aze-sekai-daihyakka, aze-jawiki, nougyoudoboku-keihan, kotobank-keihan, kotobank-azebiki, kato-1999-ittanbu-kukaku, hattori-site-yayoiken, kubota-azenuri-kuwa, fukui-kenshi-noji, kigosai-azenuri, suido-ishizue-yayoi-suiden, satoyama-levee-grassland, bunds-between-the-paddies-aze, how-our-maps-draw-bunds-between-the-paddies-aze
 Entry: research/questions/0014-bunds-between-the-paddies-aze.html, research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.html
-Drawing: research/questions/0014-bunds-between-the-paddies-aze.drawing.html, research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html
+Drawing: research/questions/0014-bunds-between-the-paddies-aze.drawing.html, research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html, research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html
