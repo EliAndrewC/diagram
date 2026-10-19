@@ -1028,3 +1028,9 @@ match reached history shared with main, where it would have undone another sessi
 narrowed it to a message: a landing refused by a conflict with this clone's own earlier landing now names those files and the
 line that resolves them. **The habit it changes:** size a fix to the hazard's measured cost before designing it - a 2-minute hand
 step gets a message, not an automatic resolver.
+
+## T123 - the retro row
+
+About 10 min. A decision cited as "Feature 375 amendment 11 (D64)" is now read from feature 375, not taken as this feature's D64;
+the qualified form allows an amendment and a parenthesis between the feature number and the id. One review round, CLEAR; the
+test is red without it. **The habit it changes:** none; a reviewer is handed what the block names.
