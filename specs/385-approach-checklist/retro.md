@@ -992,3 +992,15 @@ docstrings and claims (`gate-stamp.semantic_bytes`, the one definition of "chang
 agent-minutes plus its decide and verdict steps on a 5-12 min task. One review round, CLEAR; `make decide` first refused a quote
 of the task's title as the GM's words, rightly. **The habit it changes:** a relabel, a comment or a glossary entry is written
 `**Wording only.**` and goes straight from its Approach to its checks.
+
+## T119 - the retro row
+
+About 60 min. A ruling that names a `tooling_fix` now carries `fix_measure` (a regex over the session's Bash commands, or
+`agent:<kind>`) and `fix_minutes`, refused without them; `make fix-yield F=<n>` compares each made fix's rate per session hour
+before its ruling and since it was made, and the hourly step-back reads the same table as `fix-yield.md`. The plan review blocked
+once, rightly: reporting the 45 earlier fixes "unmeasured" would have emptied the report on the question that prompted it, so each
+took a measure from its own sentence (`fix-measures.json`). Its first reading: 22 saving, 22 "saves nothing", 2 too early - with
+the caveat that a rate moves with the mix of work (impl-drift dispatches rose because the recent tasks were claim fixes). Found
+working it: a batch's fix lost its measure on an exception's row (fixed), a pipe in a measure split its table cell (fixed), and
+land-tooling conflicting with its own earlier landing (filed). **The habit it changes:** a fix is named with the number it should
+move, and the step-back sees whether it moved.

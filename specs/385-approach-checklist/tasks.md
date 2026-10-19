@@ -345,6 +345,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T121 A guard file written by a python heredoc in a Bash command is not caught: T117's Makefile target was written by python open(p,'w') and make-only-hooks' shell-write guard let it through (found working T117) [lands-open]
       research: rendering
+- [ ] T122 make land-tooling conflicts with its own earlier landing of the same files (add/add on main's land-tooling commit vs the clone's newer edit): resolve to the clone's side when main's side is content the clone itself landed (found working T119; also T84-era) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
