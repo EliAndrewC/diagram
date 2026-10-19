@@ -1034,3 +1034,13 @@ step gets a message, not an automatic resolver.
 About 10 min. A decision cited as "Feature 375 amendment 11 (D64)" is now read from feature 375, not taken as this feature's D64;
 the qualified form allows an amendment and a parenthesis between the feature number and the id. One review round, CLEAR; the
 test is red without it. **The habit it changes:** none; a reviewer is handed what the block names.
+
+## T106 - the retro row
+
+About 55 min, no engine token changed. The DRIFTED claim set 0246's back-lane bullet ("about 30 ft past the last of them")
+against the trims that pull every end back to its last house. The bullet described the room the web is laid in (pad 30), and the
+page's own general rule, a GUESS, is what the map draws - the rule the 2026-09-27 tweak had enforced after a lane walked into
+Inashiro's grove. So the bullet now says both, and the frame claim cites it: one plan review, CLEAR; the record checks clean (7
+pop-ups in one check-wave, all clean); the claims round IN-STEP. The page edit re-owed a triage of 286 claims, which sent 27 on,
+and that round found 15 things on code this task never changed - filed as T124-T133 per the GM's rule. **The habit it changes:**
+before changing code to match a page, read the page whole - a drift can be the page contradicting itself.

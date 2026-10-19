@@ -355,6 +355,26 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T123 The plan bundle resolves a decision cited as another feature's ('Feature 375 amendment 11 (D64)') against this feature's own D64, so spec-cited.md hands the reviewer the wrong decision (spec-fidelity aside, T114's review) [lands-open]
       research: rendering
       verify: DONE. landed by land-tooling 2026-10-19; _QUALIFIED reads a decision through its amendment (D145); test red without it
+- [ ] T124 web._web_cut_lines' _extent falls back to every house in the cluster when no house stands within WEB_REACH_FT of a cut, so such a lane runs the whole cluster serving none, against 0246 (along the houses it serves; a stretch joining nothing is not drawn) (impl-drift, T106's round) [lands-open]
+      research: rendering
+- [ ] T125 web.stage_web's headman filter ends 'or True' and filters nothing - the comment or the code is stale; and _web_cut_lines' cross-lane tie running 30 ft (pad) past the outermost back lane is UNCLAIMED (impl-drift, T106's round) [lands-open]
+      research: rendering
+- [ ] T126 geom._trim_to_service pops a whole last segment before its 4 ft walk, pulling an end back past the last house it serves (0246 §6) - DRIFTED (impl-drift, T106's round) [lands-open]
+      research: rendering
+- [ ] T127 settle.settle_street_ends cuts a street end to other lanes' ends only, never street_anchors, so a farm the street serves without a door path is cut off it (0246 §6) - DRIFTED (impl-drift, T106's round) [lands-open]
+      research: rendering
+- [ ] T128 sweeps._sweep_dangling_ends pulls an end back by whole vertices with no walk along the segment, past the last house it serves (0246 §6) - DRIFTED (impl-drift, T106's round) [lands-open]
+      research: rendering
+- [ ] T129 A lane that serves nothing: _pull_back leaves it whole, settle_dangling and tidy_lane_ends drop it, 0246 is silent - research pass, then one rule, claimed (three NEEDS-RESEARCH) (impl-drift, T106's round) [lands-open]
+      research: rendering
+- [ ] T130 bund.RUN_ON_REACH_FT#run-on reach MISLABELED: no cited page records 60 ft for carrying an end on to the field - relabel GUESS or record it (impl-drift, T106's round) [lands-open]
+      research: rendering
+- [ ] T131 Two UNCLAIMED rules: run_lanes_on_to_the_bund never carries a row street's ends on (skips street); dangling_lane_ends exempts the connector - claim each (impl-drift, T106's round) [lands-open]
+      research: rendering
+- [ ] T132 street.to_its_joints with exactly one joint returns two coincident points that trim_streets admits, cutting the street to nothing; its docstring says fewer than one joint (impl-drift, T106's round) [lands-open]
+      research: rendering
+- [ ] T133 Stale words on the lane-end rules: _pull_back's 'ends the lane at the homestead'; WAY_END_REACH_FT's docstring naming the field at 60 ft; _lay_skeleton's span floor 100 ft vs the code's 50; sweeps _SERVE_FT 100 vs 0246's 60; 0246 §6 cited both plain and GUESS (impl-drift, T106's round) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
