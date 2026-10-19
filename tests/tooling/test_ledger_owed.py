@@ -211,7 +211,7 @@ def test_a_plan_review_that_recorded_its_verdict_gets_its_row_and_others_do_not(
 
     monkeypatch.setattr(hm_checks, "_reply_of", lambda path, default: replies[Path(path).name])
     monkeypatch.setattr(lo, "filled_row", lambda p, where, root=None: f"| {p['agent']} | {where} |")
-    owed = [dict(_pass("spec-fidelity", subject="MODE 4: PLAN REVIEW of T72"), agent=a) for a in ("a1", "a2", "a3", "a4")]
+    owed = [dict(_pass("spec-fidelity", subject="MODE 4: PLAN REVIEW of T72"), agent=a) for a in ("a1", "a2", "a3", "a4", "a5")]
     owed.append(_pass("glyph-check"))  # another check's pass: still the session's to answer
     assert lo.plan_review_rows(owed, tmp_path) == [
         "| a1 | the plan-verdict record (make plan-verdict) |",
