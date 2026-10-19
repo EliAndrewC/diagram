@@ -595,27 +595,28 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@34 (continue),
 8. **Every route measured before offering one?** No route is offered.
 9. **After a ruling: the step it names?** Yes - the ruling says go on with the tooling round, T117 to T119.
 
-## T117 - small engine fixes land together (amendment 10, the GM 2026-10-19)
+<!-- plan-archive: T117 to T117 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+## T118 - a wording-only task owes no plan review (amendment 10, the GM 2026-10-19)
 
-### T117 Approach (checklist part A)
+### T118 Approach (checklist part A)
 
-1. **The goal, in the world.** Two or three small engine fixes pay one gate and one landing cohort between them, not one each.
-2. **The constraints.** Amendment 10, the GM: "I would also like to implement all 3 of your suggestions" - the second, "batch the gate and the landing cohort across two or three small engine fixes". The gated route (`scripts/sync-with-main.sh done`: a green `make done`, `make cohort-landing`, the claims gate) stays the only way engine code lands. T113 (D130): a NOTE saying landed is refused while the task's work is off main. Every refusal `make tick` makes today still holds for each task of a batch. A test red without it.
-3. **Where each comes from.** The GM (G); the root CLAUDE.md's session-clones rules (O); T113 (O).
-4. **Do they describe the world here?** Yes - measured 2026-10-19 (the session's transcripts, each landing command's duration): a gated landing costs about 15 min - `make done` 9.1 min (T102), `make cohort-landing` 4.1-5.8 min (T99, T109, T102), the push 2.8 min (T99) - paid once per engine task; `make tick` takes one task, and nothing names the batch: T96 and T98 landed together once (`where-time BY=tick` shows "T96+T98"), by hand.
-5. **The order.** `tick-task.py`'s refusals made a function a batch can ask before landing; a `make land-batch` that asks them of every task, runs the gated route once, then ticks each; the landed-refusal's message naming it; the test.
-6. **The exits.** (c) - a command that lands and ticks a batch; a practice written into CLAUDE.md alone was weighed and refused (the GM's rule: a tool, never a reminder).
+1. **The goal, in the world.** A task that only rewords - a claim relabeled, a comment, a glossary entry - goes from its Approach to its tick without a spec-fidelity plan review, and a task that decides anything still gets one.
+2. **The constraints.** Amendment 10, the GM: "I would also like to implement all 3 of your suggestions" - the third, "skip the plan review for wording-only tasks that decide nothing new"; the task as filed: "its section's decisions classed as wording by a rule the tick checks". Feature 243 / 375: a plan's decisions are reviewed before its tasks tick. T75 (D94): a part B that decides nothing owes no review, checked mechanically. The GM's rule: a tool, never a reminder. A test red without it.
+3. **Where each comes from.** The GM (G); 243, 375, T75 (O); the GM (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (`make where-time F=385 BY=tick`, its agents table): the wording-only tasks T31, T103, T105, T110 took 5-12 min tick to tick, each with one spec-fidelity plan review of 1-3 agent-minutes beside `make decide`, the dispatch and `make plan-verdict`; `plan_gate.decides_nothing` exempts a part B only, never a task's own section.
+5. **The order.** The section's declaration (`**Wording only.**` in place of decisions) exempted from the plan gate; the tick's check of the task's commits against it; `make decide`'s word for such a section; the tests.
+6. **The exits.** (c) - a declaration the tick checks against the diff; a classification by an agent was weighed and refused (it is the review this removes).
 7. **The search smell.** None.
 8. **The budget.** 60 min.
-9. **Done, measured.** One goal: `make land-batch F=<n> T="<ids>" NOTE=...` refuses before landing if any task's tick would be refused, otherwise runs `scripts/sync-with-main.sh done` once and, on its success, ticks every task with the NOTE; a failed landing ticks none; `tests/tooling/` red without it.
+9. **Done, measured.** One goal: a task section whose Decisions block is a single `**Wording only.**` line owes no plan review, and `make tick` refuses it when a commit since its `make task-start` changed a file other than `specs/`, `dev/`, a glossary entry, or a `.py` file in what runs (comments, docstrings and claims aside: `gate-stamp.semantic_bytes`); `tests/tooling/` red without it.
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
-### T117 Decisions
+### T118 Decisions
 
-**D135 - one landing, every tick.** `tick-task.py`'s refusals (plan review, waits and marks, the arbiter's fix, the hour's checkpoint, the task's Approach) become one function, `refusal(root, d, task, note, landed=True)`, that `make tick` calls as now. A new `scripts/land-batch.py` (`make land-batch F= T="T1 T2" NOTE=`) asks it of every task with `landed=False` and refuses, naming each task and its refusal, before anything lands; then runs `scripts/sync-with-main.sh done` once; on exit 0 ticks each task with `landed in batch T1+T2: <NOTE>` (the landed refusal then asked of each, as `make tick` asks it); on a failed landing ticks none and says so.
+**D137 - wording declared.** A task's Decisions block may hold, in place of decisions, one line `**Wording only.** <what is reworded>`. `plan_gate.block_status` skips such a section's blocks (as `decides_nothing` skips a quiet part B), so it owes no review; `make decide` on it prints that no review is owed and builds no bundle. A `**D<n> - ` line in the same block undoes the declaration: the section is reviewed as now.
 
-**D136 - the refusal names the batch.** `landed_refusal`'s message for engine work off main adds "or, with the next small fix, `make land-batch`".
+**D138 - the tick checks the words.** For a wording-only task, `make tick` reads the commits since the task's last `make task-start` (`task-starts.jsonl`; merges skipped) and refuses when one changed a file outside `specs/` and `dev/` that is not a glossary entry (`l7r/diagram/interactive/assets/glossary/*.json`) and is not a `.py` file whose `semantic_bytes` stand unchanged: "<task>'s section says wording only, but <file> changed in what runs - write its decision (`**D<n> - `) and `make decide`". A research page's block is a decision, not wording, and is refused the same way.
 
 ## T11 - the close
 

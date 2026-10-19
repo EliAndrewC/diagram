@@ -333,8 +333,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T116 A change re-owes impl-drift only for the claim lines it touched, not every claim on the function: one edit to stage_web re-owed its 20 claims (amendment 10) [lands-open]
       research: rendering
       verify: DONE. landed by land-tooling 2026-10-19; code triage before impl-drift (D133), owed logic in claims_owed.py (D134); test red without it
-- [ ] T117 The gate and the landing cohort batched across two or three small engine fixes: land them together under one green gate and one landing cohort, each task ticked at that landing (amendment 10) [lands-open]
+- [x] T117 The gate and the landing cohort batched across two or three small engine fixes: land them together under one green gate and one landing cohort, each task ticked at that landing (amendment 10) [lands-open]
       research: rendering
+      verify: DONE. landed by land-tooling 2026-10-19; make land-batch (D135), refusal names it (D136); test red without it
 - [ ] T118 No plan review for a wording-only task that decides nothing new - a claim relabel, a comment, a glossary entry - its section's decisions classed as wording by a rule the tick checks (amendment 10) [lands-open]
       research: rendering
 - [ ] T119 Each tooling fix's yield measured: the time it was meant to save, read from the per-task time report (T115), so a fix that saves nothing is retired (amendment 10, the GM's change 3) [lands-open]
