@@ -3,9 +3,9 @@
  "plan_sha256": "03b0781c7141967697b3c5c60be011943ef0fd498f818833a45fa4696d582703",
  "blocks": {
   "preamble": {
-   "sha256": "432906df1b4fca84f37932b2423164e9a248862c872db21582c2aa64dbf69f60",
+   "sha256": "53279508d672dce29d76fb849df9508ce6c915eb80259da4a59eb3e699ed8304",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-17",
+   "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## Summary": {
@@ -166,12 +166,6 @@
   },
   "### T14 Approach (checklist part A)": {
    "sha256": "1e03631da72cf3c5be055e4cc6c3d2a2fb678ae215e2a43b3fa0f14ba1de8b3f",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-17",
-   "declared": "spec-fidelity"
-  },
-  "### T14 Decisions": {
-   "sha256": "0a340b98498f0aa0388a0b62ef7fa4c635521a199b49faf88abf021bf99d930e",
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
@@ -4757,6 +4751,28 @@
      "summary": "make where-time F= [SINCE=] prints the per-task table and the agents table; the categories stay feature_report.split_time's; scratch script promoted to scripts/measure/where_time.py with tests/tooling/test_where_time.py",
      "class": "within",
      "why": "Change 8 asks for the step-back's tables as one command. FR-005 and FR-014 are cited as the shape the tables follow. Reusing the existing categories adds no new taxonomy. The step-back report's tables are not in the bundle, so the claim that these two tables are 'the tables above' was not checked against them."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-19",
+   "blocks": [
+    "(removed) ### T14 Decisions",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "preamble: opt-in line retired (D157 carried out)",
+     "summary": "The preamble drops its '**Approach checklist**: specs/385-approach-checklist/checklist.md' line, so the checklist no longer applies by a plan's opt-in but to every plan.",
+     "class": "within",
+     "why": "The approved proposal makes the checklist 'the required content' that make tick refuses without, and FR-003 says each task's plan section carries an Approach block answering it. Retiring a per-plan opt-in widens the checklist to every plan rather than carving any plan out of it; nothing the GM asked for is narrowed. The rest of the preamble is unchanged."
+    },
+    {
+     "id": "(removed) ### T14 Decisions",
+     "summary": "T14's decisions D30-D34 (subagent attribution by transcript, hook and window; the three-way time split; per-task phases; the decision-log skeleton; one goal a task) leave the active plan.",
+     "class": "within",
+     "why": "These implemented amendment 4, which the spec still carries as FR-014, FR-015 and FR-016 (present in spec-index.md). Taking a finished task's decisions out of the active plan withdraws no commitment the request made. Ruled on the REMOVAL alone: the dispatch says D158 adds the round arbiter's three clauses to D30, but no amended D30 is in this bundle's blocks, so this verdict does not cover D158's wording wherever it now lives."
     }
    ]
   }

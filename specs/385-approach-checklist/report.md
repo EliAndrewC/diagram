@@ -9,8 +9,8 @@ window, wall minutes). The first ranking rows took 75 min to 5 h each (T06 2 h 4
 T117 8, T118 10, T121 7); engine fixes landed in pairs by `make land-batch` (T125 with T132 37 min). The overnight batches of
 2026-10-19 morning ran 72-127 min for four to six tasks each. Two windows stand out and are not task time: T148's 353 min
 holds the set-down and the GM's routing answer (amendment 11), and T122's 34 min the resolver the hour-35 arbiter withdrew.
-Re-decides per task are in "Each task, split at its decision points" below; the plan reviews BLOCKED once on 9 of the last 30
-sections, each cleared on its next round, one (T122) on its third after the arbiter narrowed it.
+Re-decides per task are in "Each task, split at its decision points" below; of T106-T148's plan reviews, seven tasks were
+BLOCKED once (T116, T119, T139, T32, T34, T11; T122 twice, then narrowed by the hour-35 arbiter), each cleared on its next round.
 
 **SC-002 (the checklist settled): yes.** The checklist (`docs/approach-checklist.md`, moved there by T11) last changed in
 substance at T76 (2026-10-18, part A items 10 and 11); more than sixty retro rows since then, the last two (T34 and T148)
