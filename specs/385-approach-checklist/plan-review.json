@@ -6524,40 +6524,34 @@
    "verdict": "CLEAR"
   },
   "T91": {
-   "section_sha256": "7200c680b492fc2932ab9fb15c9381edf9621951f795afd077bc02ecdcedb402",
+   "section_sha256": "9768650abfda542db23623aeb9fb95e0d8f9c3dc894b00cda1bd44817b4bbdaa",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "D112a",
-     "summary": "land-tooling.sh runs the landing's own ruff check and ruff format --check (--force-exclude) on the .py files it was given, in the clone, as its first step - before the fetch, the merge and the worktree - and dies naming ruff's first lines and `python3 -m ruff format <files>`.",
+     "id": "D112 (land-tooling.sh order, the changed passage)",
+     "summary": "land-tooling.sh runs its existing ruff check / ruff format --check on the .py files it was given as its first check, after the fetch (so main's lint config is main's) and before the merge and the worktree, dying with ruff's first lines and the ruff format command; every caller goes through it.",
      "class": "within",
-     "why": "The arbiter's fix (G) is that make land-tooling run 'its own lint stage (the same ruff check and format check the landing applies) ... on the files it carries' and refuse 'so a lint failure shows in seconds rather than at the next tick or set-down'. Putting that lint first in the script makes the failure surface in seconds for every caller, and the landing's own later lint (T52, T55, T67) stays, as item 2 requires."
+     "why": "The arbiter's fix (hour:385-approach-checklist@27, standing where the GM was asked) asks for 'the same ruff check and format check the landing applies' run so a failure shows 'in seconds'. Moving the lint after the fetch costs about a second and makes the check use the config the landing actually applies, which serves the 'same check' clause rather than narrowing anything; the foreground refusal is carried by the make-only guard, unchanged from the block's last CLEAR text. The landing's own lint (T52, T55, T67) stays."
     },
     {
-     "id": "D112b",
-     "summary": "The make-only guard runs the same lint on the files named by a Bash command invoking `make land-tooling FILES=` and refuses the command before it runs.",
+     "id": "D112 (make-only guard)",
+     "summary": "The make-only guard runs the same lint on the files named by make land-tooling FILES= or make arbiter-fix-done ... LAND= and refuses the command before it runs.",
      "class": "within",
-     "why": "This is the 'refuse before it goes to the background' half of the arbiter's fix, word for word: the refusal comes at the hook, before any backgrounded process exists. It is the decision the earlier CLEAR version made, kept."
+     "why": "This is the arbiter's 'refuse before it goes to the background'. arbiter-fix-done LAND= lands tooling through land-tooling (FR-018), so covering it is the same landing, not a new reach."
     },
     {
-     "id": "D112c",
-     "summary": "The guard's refusal, and the script's first-step lint, also cover `make arbiter-fix-done ... LAND=` (FR-018), which lands tooling through land-tooling.",
+     "id": "D112 (no .py file named)",
+     "summary": "A landing naming no .py file is not refused.",
      "class": "within",
-     "why": "arbiter-fix-done LAND= is make land-tooling reached through FR-018's one-command wrapper: the same landing carrying the same files. The fix's purpose is that a lint slip in a landing's files is known in seconds. Covering only the bare command would leave that purpose unmet on the wrapper route. This widens no behavior beyond the landing the arbiter named, so it is not unrequested reach into an unrelated command."
+     "why": "The fix lints the Python files the landing carries; with none there is nothing to check."
     },
     {
-     "id": "D112d",
-     "summary": "No .py file named, or ruff absent: nothing is refused by the new foreground lint.",
+     "id": "D112 (ruff absent)",
+     "summary": "Where ruff is not installed, the early lint refuses nothing.",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "why": "The fix asks for 'the same ruff check and format check the landing applies'. Those checks have nothing to check when no .py file is named, and they cannot run without ruff, so applying the rule there is impossible rather than merely awkward. The landing's own lint is unchanged and still stands behind it, so the carve-out takes nothing away from what the landing already enforced. Ruled the same way at the earlier CLEAR verdict."
-    },
-    {
-     "id": "Approach-5/9",
-     "summary": "Order (script first, then the make-only guard, then suite cases) and done-measure: tests/hooks/test-land-tooling.sh and tests/hooks/test-make-only-hooks.sh red without the change; one goal; budget 25 min; exit (c).",
-     "class": "within",
-     "why": "The tests only enforce the fix ('A test red without it', item 2). The order, the budget and the exit are execution choices that narrow nothing."
+     "why": "The fix is to run ruff early; with ruff absent the early check can't run at all, so this case is physically impossible rather than a carve-out of convenience. The landing's own lint (T52) stays as it was, so the case loses no check it had before."
     }
    ],
    "verdict": "CLEAR"

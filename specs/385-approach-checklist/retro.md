@@ -793,3 +793,12 @@ section under review can no longer be edited under it.
 T72, found landing T85 (2026-10-19): the plan-review ledger commit ran `git diff` in a repository with no commits, where it errors,
 and read the error as a change - the sync-with-main suite failed on main. It now runs only where HEAD exists and the ledger's status
 shows a change.
+
+## T91 - the retro row
+
+About 50 min. A landing's lint runs first in `land-tooling.sh` (after the fetch, with main's `[tool.ruff]` written as a ruff.toml in
+the clone's root so its exclude paths resolve there), and the make-only guard runs it on `make land-tooling FILES=` and `make
+arbiter-fix-done LAND=` before the command does. Three plan rounds (the guard alone missed the arbiter-fix route; then the fetch's
+place). The suite found three of my own slips: main's config read before the fetch, a pyproject passed where ruff wants a
+ruff.toml, and exclude paths that resolve against the config's own directory. **The habit it changes:** a lint slip is refused in
+seconds, before the landing starts.
