@@ -708,3 +708,9 @@ with the feature's own directory at T11 (which moves the checklist to `docs/`). 
 About 30 min. The hook's plain-text correction is `hm_house.americanize` now; `claims.py record` runs each parsed note through it
 (never the key - the review's point) and `apply_edits.py` each EDIT's new text, quotations held out as the hook holds them. The
 first test fixture used the wrong reply form. **The habit it changes:** an agent's British spelling no longer reaches a tracked file.
+
+## T80 - the retro row
+
+About 15 min. `task_current` reads a section and its reviewed text without their quiet part Bs, so a part B that decides nothing
+no longer re-owes its task's blocks; on the live plan the owed delta fell from six blocks to three (T79's, under review). **The
+habit it changes:** none needed.
