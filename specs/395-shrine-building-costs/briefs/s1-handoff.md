@@ -83,3 +83,9 @@ Glossary: bu gains its money sense (it was land area only); hiki is new.
 - The archive inbox: ruiju-kinsei-fuzokushi-ge-ndl991467.pdf (類聚近世風俗志 下, 1908, NDL 991467, holding 第二十二編
   沐浴) answers download #31, but at 434 MB GitHub refused its push; the two unpushable archive commits were reset
   (the file is still in the inbox) and the match reverted. It needs LFS or a split before it can be matched.
+- `make ledger-owed WRITE=` wrote six rows to dev/review-ledger.md: four are this session's source-reader passes; the two
+  spec-fidelity passes of features 396 and 397 were written too, pointing at this handoff as where they were recorded -
+  their owner should correct that cell.
+- The glossary moved (bu, hiki): `make page-check` ran green on 2026-10-19 after the last edit.
+- After the fixes, `make record-owed` names 4 source-reader units again (the notes the fixes changed), for round 2.
+- In 0257 the Kitano note writes silver 分 as "fun", so the gold-coin sense of the bu tooltip does not land on it.
