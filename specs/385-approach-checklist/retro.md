@@ -671,3 +671,10 @@ About 30 min. `ledger_owed.py --write-plan-reviews` writes the row of each owed 
 recorded it (the review's point: no row naming a record that does not exist); `land-tooling` and `sync-with-main.sh done` run it
 first and commit the rows. Its first live run wrote T72's own review's row. **The habit it changes:** `make ledger-owed WRITE=`
 is left for the checks whose acted-on cell is the session's word.
+
+## T74 - the retro row
+
+About 20 min. `plan_gate.lands_open_appended` puts a `**Lands open**:` line back as reviewed where the only change is ids appended
+in order, so `make task-add`'s line edit owes no review; a reorder, a dropped or a repeated id still does. The first plan read the
+line as a set, which the review blocked (a reorder would have passed). The test runs on task-add's own output, as the review asked.
+**The habit it changes:** none needed.
