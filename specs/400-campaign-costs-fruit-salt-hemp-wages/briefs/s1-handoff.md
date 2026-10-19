@@ -39,3 +39,25 @@
 ## Checks run in this session
 - source-reader: every new note of 0272, 0274 and 0275 READ (14 bundles over two rounds; one CONTRADICTED on scope, Allen's weighted average, fixed and READ in round 2); each recorded with make record-checked
 - still owed for the check session: quote-check, record-format, intro-check, source-applicability on the 8 new write-ups, translation-check (make record-owed)
+- SECTION=0273/what-did-salt-cost
+## 0273 What did salt cost? (continuation session)
+- Japan, Kashimo (Mino, upland), Hikoshichi household (rinseishi-booklet-9-kashimo): 100 mon bought 6 sho (1763), 5 (1765), 5.5 (1768), 5.6 (1772), 3.2 / 3 / 3.1 (1773), 3.2 (1774): ATTESTED; about 17-20 mon a sho 1763-1772 and 31-33 in 1773-1774 (arithmetic). The booklet's 1771 for Meiwa 9 is its own slip (1772 taken, kashimo-years comment); the brief's '366 mon under a different year' is a different 1768 purchase that also came to 366 mon, and the table omits the second 1772 purchase
+- Beside it, the same household's farm hand 60 mon a day (1774): ATTESTED; a day bought about 1.9 sho at 1774's price, 3.6 at 1763's (arithmetic). Kashimo craftsman: SILENT; nearest the Kumehara (Musashi) carpenter 200 mon, 1818, 44+ years later (pointer to 0255)
+- Otsukawa (Chita district) 1842 (handa-museum-otsukawa-1842-prices): bought 45 1/2 bales of 9 sho per ryo (about 410 sho, arithmetic), sold 18 mon a sho: ATTESTED; no ryo-mon rate in the museum's excerpt (units-decision, not converted); the museum shows only the list's food prices, so its wages are SILENT, not known absent
+- Beside it: nearest unskilled the Nagata farm day laborer 132 mon, 1842, another village (pointer to 0262), about 7 sho (arithmetic); nearest craftsman the Kumehara carpenter 200 mon, 1818, 24 years earlier
+- Inland price ladder (5-6 mon on the Inland Sea to 300 in Ichinoseki): ATTESTED ONLY FOR a secondary, hearsay, undated account (saltstory-shio-no-keifu, citing Hiroyama Gyodo)
+- Edo retail, Ako salt, the Edo wholesalers' bale price: SILENT (edo-salt-absence)
+- China, Huai saltworks about 1830, 1-2 cash a jin (qingshigao-123-yanfa, Tao Shu): ATTESTED; Huaibei ticket rules 400 jin a yin, 0.64 tael (the salt at the cash price, ni-2005-tao-shu-piaoyan) and 1.88 with fees: ATTESTED; 0.0016 / 0.0047 tael a jin (arithmetic)
+- Changlu official price from 1688, 0.0104-0.0126 tael a jin; the 1728 memorial, 16 cash under Kangxi and 13-14 now; Jiaqing 1800, 1-2 cash a day per eater: ATTESTED
+- Beijing 1736 salt 0.012 tael a jin (Gao Table 1) beside 75 / 154 cash (Gao's 0.094 / 0.19 tael): ATTESTED; a laborer's day about 8 jin, a craftsman's about 16 (arithmetic). Not converted to cash (the pass's 9.6 cash is not Gao's). Ming 0.006-0.007 a jin from the Wanli kuaiji lu / Wanshu zaji (Gao Table 22): ATTESTED
+- Songjiang retail 1651-1688 (ye-mengzhu-yueshibian): up to 0.1 (1651) to 0.006-0.007 (1688) tael a jin: ATTESTED; a wage there, and of the Huai district about 1830: SILENT (china-wage-absence; nearest Beijing 1736)
+- Markups: before Tao Shu's reform a yin cost the merchants over 10 taels at the selling district (Ni): ATTESTED as a cost, no ratio (old yin weight unstated); Wu Haibo, a few cash at the field against 30-50, even 60-70 to the consumer, and Xu Hong via Wu, 1 cash against 60-70 at the selling district: ATTESTED, undated; King 1909, cost 1.5-4 cash a catty and retail 3/4-3 cents a pound, 12-15 times, no place; Sichuan cost 13-14 cash plus 9 tax, no retail; near Tianjin master mechanic 50 cents Mexican, journeyman 18: ATTESTED, not set against salt (King's cents unstated)
+- King: cited as king-1911-farmers-forty-centuries (both King entries carry the Gutenberg URL; this one's first URL is the HTML edition the archive holds, and it was READ by a source-reader)
+- Still open: 東京市史稿 産業篇54/55 (Edo survey of 1840, salt and wages, print), 廣山堯道『塩の日本史』 (the inland ladder at its source), 守貞謾稿 and the 1838 諸色相場付 for Edo retail (not searched directly); not added to the download list
+## New registry keys (6, continuation)
+- handa-museum-otsukawa-1842-prices, rinseishi-booklet-9-kashimo, saltstory-shio-no-keifu, qingshigao-123-yanfa, ni-2005-tao-shu-piaoyan, wu-haibo-qing-sishi
+- reused: gao-shouxian-jiuqing-wuliao, ye-mengzhu-yueshibian, king-1911-farmers-forty-centuries, miyashiro-kumehara-1698, oamishirasato-tenpo13-bukka (Used for lines of Gao, Ye and King extended)
+## Checks run in the continuation session
+- source-reader: every 0273 note READ (11 bundles; Handa and Rinseishi needed a second round), each recorded with make record-checked; hourly step-back ruled continue by round-arbiter
+- still owed for the check session: quote-check, record-format, intro-check on 0273, source-applicability on the 6 new write-ups and the 3 changed Used-for lines, translation-check (make record-owed)
+- for the GM (from the round-arbiter): make archive-inbox refuses the 433 MB ruiju-kinsei-fuzokushi-ge-ndl991467.pdf (over GitHub's 100 MB limit): split it or adopt Git LFS

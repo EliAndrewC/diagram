@@ -1,3 +1,4 @@
 - 0272: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'persimmon|kaki|fruit price|pingguo|huahong' l7r pool (only the yard persimmon tree of the farmyard drawing, a planting rule, not a price)
 - 0274: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'hemp cloth|asa-nuno|amulet|ofuda|omamori|talisman|oshi' l7r pool (only glossary definitions, no price)
 - 0275: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'skilled wage|craftsman wage|skill premium|tetsudai' l7r pool
+- 0273: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'salt price|price of salt|shio|salt_price' l7r pool (only source keys in modal Sources lines, such as yashio-kenchi and shiojiri; no salt price)
