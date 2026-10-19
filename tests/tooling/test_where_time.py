@@ -81,3 +81,27 @@ def test_a_gap_is_booked_to_the_task_its_call_names_else_the_last_named_else_the
     assert round(out["T60"]["gate/tests"] / 60) == 4, "named, then carried to the next call that names none"
     assert out["T10"] == wt.Counter({"model": 60.0}), "before any call names a task: the mark"
     assert round(rules["named"] / 60) == 2 and round(rules["the mark"] / 60) == 1
+
+
+def test_each_task_s_time_is_its_tick_window() -> None:
+    """Feature 385 T115 (plan D132): the GM's speed question was answered by a hand script over tasks.md's history - each task's
+    span from the tick before it to its own, a batch sharing one window."""
+    log = "\n".join(
+        [
+            "@@2026-10-19T05:00:00-04:00",
+            "+- [x] T96 a",
+            "+- [x] T98 b",
+            "@@2026-10-19T05:30:00-04:00",
+            "+- [ ] T99 not ticked",
+            "-- [ ] T97 c",
+            "+- [x] T97 c",
+            "@@2026-10-19T06:00:00-04:00",
+            "+- [x] T97 c (a reflow of the same tick)",
+        ]
+    )
+    ticks = wt.parse_ticks(log)
+    assert [k for _t, k in ticks] == ["T96", "T98", "T97"], "a box's first tick only; an open box is no tick"
+    t0 = ticks[0][0] - 600.0
+    wins = wt.tick_windows(ticks, t0)
+    assert [(k, round((e - s) / 60)) for s, e, k in wins] == [("T96+T98", 10), ("T97", 30)]
+    assert wt.tick_windows(ticks, ticks[0][0] + 1) == [(ticks[0][0] + 1, ticks[2][0], "T97")], "a tick before SINCE is outside"
