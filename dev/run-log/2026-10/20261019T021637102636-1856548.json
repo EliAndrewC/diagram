@@ -1,0 +1,38 @@
+{
+  "utc": "2026-10-19T02:16:37Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 248,
+  "result": "failed: test-full",
+  "commit": "5d66a8cf9",
+  "first_failure_s": 176.3,
+  "last_failure_s": 176.3,
+  "failed_tests": 1,
+  "failed_names": [
+    "tests/tooling/test_claims_scoping.py::test_a_triage_of_a_section_and_a_page_together_shows_both"
+  ],
+  "host": {
+    "load": [
+      10.39,
+      7.6
+    ],
+    "mem_avail_mb": [
+      6009,
+      8271
+    ],
+    "cpu_temp_c": [
+      74.0,
+      77.0
+    ],
+    "stall_s": {
+      "cpu": 2.9,
+      "io": 1.2,
+      "io_full": 1.0,
+      "memory": 0.1
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  }
+}
