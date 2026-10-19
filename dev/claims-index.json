@@ -26870,14 +26870,20 @@
  },
  "l7r/diagram/hamletgen/ways/serve.py::door_path#a door path off the fixtures": {
   "body": "992984e5400ec179",
-  "claim": "a door path off the fixtures - UNRESEARCHED: its line 3 ft off every fixture and off what the overlap matrix forbids (`over_a_fixture`, `forbidden_segment` at 3 ft)",
-  "code": "238b3e6d1e088663",
+  "claim": "a door path off the fixtures - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a household's way goes round its own garden beds and fixtures",
+  "code": "9062c79057f75dd6",
   "core": "6b52b3ec1649a835",
   "date": "2026-10-19",
-  "note": "0246 answers that a household's way goes \"round its own garden beds and fixtures\" (a map drawing convention), so the claim should cite 0246; only the 3 ft margin (`over_a_fixture`/`forbidden_segment` at 3.0) is unresearched",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "both the step test and the final path test refuse any line over a fixture (`over_a_fixture`) or across the hard ground, so the way leaves the dooryard round its own beds and fixtures, as §33 records as a map drawing convention; the 3 ft margin is claimed on its own",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+  },
+  "research": "60b94d3c15ae221a",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::door_path#a worn path takes the shortest way": {
   "body": "992984e5400ec179",
