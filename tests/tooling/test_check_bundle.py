@@ -399,3 +399,41 @@ def test_the_unfootnoted_unit_rides_the_first_batch_alone(tmp_path: pathlib.Path
     assert [u.slug for u in cb.bo.batch_units([aze, un], frozenset({"aze"}), first=False)] == [aze.slug]
     text = cb.batched_manifests(tmp_path, [1, 3])
     assert text.startswith("check-bundle: 2 batches") and "batch-1" in text and "batch-3" in text and "batch-2" not in text
+
+
+def test_a_source_reader_bundle_lists_its_page_images_and_each_note_s_change_since_its_last_round(tmp_path: pathlib.Path) -> None:
+    """Feature 395 (the arbiter's ask:395-source-reader-round3): page images copied in by hand went unlisted, so a round guessed
+    file names until one opened, and a round-3 re-read was scoped to the added passages by a hand-written prompt. The bundle now
+    lists each image by name and shows each owed note's diff since the last commit before its latest source-reader round."""
+    import json  # noqa: PLC0415
+    import subprocess  # noqa: PLC0415
+    import sys  # noqa: PLC0415
+    import time  # noqa: PLC0415
+
+    sys.path[:0] = script_dirs()
+    import record_units as ru  # noqa: PLC0415
+
+    scans = tmp_path / "scans"
+    scans.mkdir()
+    (scans / "p28.png").write_bytes(b"png")
+    out = tmp_path / "bundle"
+    out.mkdir()
+    assert cb.images_section(out, [str(scans)]) == "\n## The page images (read these for a scanned page)\n\n- `images/p28.png`\n"
+    assert (out / "images" / "p28.png").is_file() and cb.images_section(out, []) == ""
+
+    root = tmp_path / "repo"
+    notes = root / "research/questions/0257-x.notes.html"
+    notes.parent.mkdir(parents=True)
+    notes.write_text('<ol>\n<li data-note="kitano">Row 1: 10 monme.</li>\n</ol>\n', encoding="utf-8")
+    (root / "research/questions/0257-x.html").write_text("<p>The page.</p>\n", encoding="utf-8")
+    git = ["git", "-C", str(root), "-c", "user.email=t@t", "-c", "user.name=t"]
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+    subprocess.run([*git, "add", "-A"], check=True)
+    subprocess.run([*git, "commit", "-qm", "round 1 read this", "--date=@1000000000"], check=True, env={**__import__("os").environ, "GIT_COMMITTER_DATE": "@1000000000"})
+    dispatch = {"check": "source-reader", "subjects": ["q:0257"], "notes": ["kitano"], "t": time.time(), "state": "answered"}
+    (root / ".git" / "checks-open.json").write_text(json.dumps({"feature": "specs/395-x", "dispatches": {"d1": dispatch}}), encoding="utf-8")
+    units = [ru.Unit("source-reader:0257#kitano", "the note is new or changed")]
+    assert cb.since_last_round(root, units) == "", "nothing changed since the round"
+    notes.write_text('<ol>\n<li data-note="kitano">Row 1: 10 monme. Row 8: the leveled ground.</li>\n</ol>\n', encoding="utf-8")
+    text = cb.since_last_round(root, units)
+    assert "## What each owed note changed since its last source-reader round" in text and "+" in text and "Row 8" in text
