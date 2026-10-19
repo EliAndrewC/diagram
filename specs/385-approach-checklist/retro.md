@@ -898,3 +898,14 @@ needed - a relabeled claim is bundled by `OWED=1`.
 About 25 min. Under `farm_water` channel the check flagged every farm whose channel did not end in its frame, though 0031 gives a
 farm no channel can reach "a well of its own instead"; such a farm now passes with a private well in its frame. Its three claims
 IN-STEP. **The habit it changes:** none needed.
+
+## T97 - the retro row
+
+About 2 h 30 against a 60 min budget. A farm counts as reached as 0246 counts it - the way's point nearest its HOUSE within 60
+ft of it or 12 ft of its built ground (`street_arrives`) - read by `lay_door_paths`, `row_rules` and, since its claims round, the
+street trim (`street_anchors`); `DOOR_REACH_FT` is gone. Seed 904 then exposed a hidden defect: four row farms' 9 ft door paths
+were laid and dropped by `settle_fragments` as earning nothing, the old door-distance check having passed them; a door path
+(`serves`) is now a household's own way the fragment rule never drops. Traced by five scratch probes, each a step deeper (the
+door, the passes, the settle, its steps). The claims rounds converged 34 -> 20 -> 2 -> 1; the web's frame (lanes trimmed level
+with their last house, 0246 says ~30 ft past) is old behavior, filed as T106. **The habit it changes:** a check made stricter
+is run against the cohort before its claims round - it surfaces what the lax check hid.

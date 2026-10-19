@@ -18,11 +18,9 @@ from ..cluster import _arm_crossing_accidental
 from ..consts import (
     BUNDLE_PITCH,
     CLUSTER_SPAN_FACTOR,
-    DOOR_STEP_FT,
     LANE_CLEARANCE,
     LANE_SKELETONS_BY_WATER,
     MIN_WEB_GAP,
-    STEADING_ARRIVAL_FT,
     WATER_ALONG_FT,
     WATER_ALONG_SHARE,
     WEB_CROP_GAP,
@@ -42,7 +40,7 @@ from .geom import _TOUCH_GAP, _components, _trim_to_service, lane_houses, polyli
 from .joints import center_lane_ends, fold_the_connector_hairpin, meet_end_to_end, split_at_crossings, straighten_joints
 from .law_water import _brooks
 from .route import _route
-from .serve import _lay_web_lane, front_door, lay_door_paths, street_anchors
+from .serve import _lay_web_lane, lay_door_paths, street_anchors
 from .settle import settle_the_web
 from .smooth import _STUB_REACH_FT, _smooth_web
 from .street import lay_row_streets, trim_streets
