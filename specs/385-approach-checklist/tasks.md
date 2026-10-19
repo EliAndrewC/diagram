@@ -45,8 +45,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T31 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 (gated, 3ff08b0a1): 0246 records the footpath's 4 ft, FOOTPATH_FABRIC_GAP's claim IN-STEP, row 843 wave 162; the figure itself reopened as T96 (room first) by the hour-28 ruling
-- [ ] T32 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
+- [x] T32 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
+      verify: DONE. landed 2026-10-19 by sync-with-main done (gated: gate green 154 s, cohort 54/54); the dead weld-lump preference removed (D151); ranking row wave 164
 - [ ] T33 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
 - [ ] T34 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
