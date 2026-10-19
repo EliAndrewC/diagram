@@ -227,7 +227,6 @@
    "title": "Money and prices",
    "description": "<p><em>What things cost and what work earned: coinage, prices, wages, credit, land values and taxes reckoned in money. These questions are asked for the setting's money rules rather than for a map; no map draws a price.</em></p>",
    "drawing_description": "",
-   "awaiting": "declared by feature 389 before the first money request writes its first question (research/money-requests.md)",
    "takes": [
     {
      "primary": "money"

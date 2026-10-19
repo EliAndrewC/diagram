@@ -104,9 +104,13 @@ class _Visible(HTMLParser):
 #: CJK punctuation, kana, the ideographs (with their compatibility forms) and the fullwidth forms - script written without spaces
 _CJK = "　-〿぀-ヿ㐀-䶿一-鿿豈-﫿＀-￯"
 _CJK_GAP = re.compile(f"(?<=[{_CJK}]) (?=[{_CJK}])")
+#: the CJK radicals supplement and the Kangxi radicals: a PDF's text layer may write an ideograph as its radical's code point
+#: (the MAFF report's 米 as U+2F76 ⽶, 方 as U+2F45 ⽅, feature 390), which NFKC, not NFC, folds back to the ideograph
+_RADICAL = re.compile("[⺀-⻿⼀-⿟]")
 
 
 def squeeze(text: str) -> str:
+    text = _RADICAL.sub(lambda m: unicodedata.normalize("NFKC", m.group()), text)
     # NFC: a CJK compatibility ideograph (a page's 社 written as U+FA4C) is canonically the same character as the
     # unified one a quote carries, so it is not a difference (feature 268, three Sano quotes flagged NOT-ON-PAGE).
     # A space between two CJK characters is a LINE BREAK, never a word gap - Japanese and Chinese are written without
