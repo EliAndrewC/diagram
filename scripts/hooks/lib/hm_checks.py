@@ -757,6 +757,9 @@ def _handle(mode: str, payload: Mapping[str, Any], path: Path, now: float) -> st
     if mode in ("returned", "launched"):
         log_pass(path.parent, mode, payload, now)  # every check's pass, apart from the page-check state (feature 371)
     state = load(path)
+    if mode == "edit" and state.get("plan_holds"):  # hour 30's fix: what each live hold holds, before the call runs
+        hm_planhold.snapshot(state, _root(payload), str(payload.get("tool_use_id") or ""), now)
+        save(path, state)
     feature = _feature(path.parent.parent if path.parent.name == ".git" else Path(str(payload.get("cwd") or ".")))
     if state.get("feature") != feature:  # the round cap counts per feature (FR-010): a new feature starts its own count
         state = {"feature": feature, "dispatches": state.get("dispatches", {})}
@@ -813,6 +816,10 @@ def _handle(mode: str, payload: Mapping[str, Any], path: Path, now: float) -> st
         hm_planhold.returned(state, str(payload.get("agent_id") or ""))
         pair_wave(state, str(payload.get("agent_id") or ""), str(payload.get("agent_transcript_path") or ""))
         returned(state, str(payload.get("agent_id") or ""), _reply_of(str(payload.get("agent_transcript_path") or ""), str(payload.get("last_assistant_message") or "")), path.parent / "check-replies")
+    elif mode == "after":  # the round arbiter's fix on hour:385-approach-checklist@30: a held section changed however it was named
+        msg = hm_planhold.restore(state, _root(payload), str(payload.get("tool_use_id") or ""))
+        save(path, state)
+        return msg
     elif mode == "edit" and (held := hm_planhold.refusal(state, _root(payload), str(payload.get("tool_name") or ""), ti, now,
                                                         escaped("PLAN_EDIT_OK", " ".join(str(v) for v in ti.values())))):
         return held
