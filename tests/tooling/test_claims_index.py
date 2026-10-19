@@ -346,6 +346,27 @@ def test_the_gate_refuses_an_unfiled_carry_naming_the_command_and_lets_a_filed_o
     assert cx.main(["--root", str(root), "carry", "--feature", "900", "--task", "T02"]) == 0  # nothing unfiled
 
 
+def test_a_verdict_line_that_cannot_be_recorded_is_refused_aloud(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """The round arbiter's fix on hour:385-approach-checklist@29: a path missing `diagram/`, `UNRESEARCHED IN-STEP` and a note's
+    pointer to `0246-...lanes.html` (no `.drawing`) were each dropped with a quiet message, or found only by `make done`."""
+    (tmp_path / "research/questions").mkdir(parents=True)
+    (tmp_path / "research/questions/0246-x.drawing.html").write_text("")
+    units = {"l7r/a.py::f#a": {}, "l7r/a.py::f#b": {}, "l7r/a.py::f#c": {}}
+    reply = "\n".join(
+        [
+            "VERDICT l7r/a.py::f#a IN-STEP - ok, research/questions/0246-x.drawing.html",
+            "VERDICT a.py::f#a IN-STEP - its path missing",
+            "VERDICT l7r/a.py::f#b UNRESEARCHED IN-STEP - two tokens",
+            "VERDICT l7r/a.py::f#c DRIFTED - see research/questions/0246-x.html",
+            "UNCLAIMED l7r/a.py::f - kept",
+        ]
+    )
+    kept, bad = cx.claims_triage.vet(reply, units, tmp_path, cx._VERDICT)
+    assert kept.splitlines() == [reply.splitlines()[0], reply.splitlines()[-1]]
+    assert [b.split(":")[0] for b in bad] == ["not a claim of this bundle", "not a claim of this bundle", "no such question file"]
+    assert "REFUSED line" in capsys.readouterr().err
+
+
 def test_the_command_line(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
     root = _repo(tmp_path)
     assert cx.main(["--root", str(root), "owed"]) == 0 and "claims-owed: 5 claim(s) in 3 file(s)" in capsys.readouterr().out
@@ -361,6 +382,10 @@ def test_the_command_line(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[
     reply.write_text(json.dumps({"type": "assistant", "message": {"content": [{"type": "text", "text": text}]}}) + "\n")
     assert cx.main(["--root", str(root), "record", "--bundle", str(tmp_path / "b"), "--reply", str(reply)]) == 0
     assert "5 of 5 recorded" in capsys.readouterr().out
+    stranger = tmp_path / "stranger.txt"
+    stranger.write_text("VERDICT l7r/nope.py::f#x IN-STEP - a stranger\n")
+    assert cx.main(["--root", str(root), "record", "--bundle", str(tmp_path / "b"), "--reply", str(stranger)]) == 3, "a refused line"
+    assert "REFUSED line" in capsys.readouterr().err
     assert cx.main(["--root", str(root), "owed"]) == 0 and "no claim is owed" in capsys.readouterr().out
     assert cx.main(["--root", str(root), "bundle", "--module", "hamletgen/rows.py"]) == 3, "not owed, no reason"
     assert cx.main(["--root", str(root), "bundle", "--module", "hamletgen/rows.py", "--reason", "a deliberate recheck", "--out", str(tmp_path / "c")]) == 0
