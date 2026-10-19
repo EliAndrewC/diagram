@@ -32994,6 +32994,14 @@
   "rests": [],
   "verdict": "MISLABELED"
  },
+ "l7r/diagram/hamletgen/ways/web.py::stage_web#the web's frame reaches BUNDLE_PITCH (100 ft) past the outermost house along the seat axis (or CLUSTER_SPAN_FACTOR 1.6 x the seat band, whichever is wider), which sets how far a web cut may run beyond the houses before the trims": {
+  "code": "d1bd34ae9d840667",
+  "core": "d1bd34ae9d840667",
+  "date": "2026-10-19",
+  "note": "the web's frame reaches BUNDLE_PITCH (100 ft) past the outermost house along the seat axis (or CLUSTER_SPAN_FACTOR 1.6 x the seat band, whichever is wider), which sets how far a web cut may run beyond the houses before the trims",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/hamletgen/ways/web.py::stage_web#web lane margin off the hard ground": {
   "body": "907d26557912f733",
   "claim": "web lane margin off the hard ground - village-lanes.drawing: the page lets a lane touch a plot's boundary - a web lane kept a half-tread off the field and the crop (`WEB_CROP_GAP`), 8 ft off the toe and marsh (`WEB_HARD_GAP`, UNRESEARCHED)",
@@ -33033,14 +33041,21 @@
  },
  "l7r/diagram/hamletgen/ways/web.py::stage_web#web lanes off the water": {
   "body": "907d26557912f733",
-  "claim": "web lanes off the water - UNRESEARCHED: web cuts and joins clipped at the watercourses and drawn channels, no web lane crossing water but a join routed over the brook at a ford",
-  "code": "493acc46f6237b85",
+  "claim": "web lanes off the water - villages-beside-their-stream-one-bank-or-both.drawing: a way keeps to its own bank; web cuts and joins clipped at the watercourses and drawn channels, a join crossing the brook only at a ford, one of the crossing places",
+  "code": "8c13625076ab6eaa",
   "core": "d1bd34ae9d840667",
   "date": "2026-10-19",
-  "note": "UNRESEARCHED, but 0035's drawing page answers it: ways cross the brook squarely on a plank bridge, with a crossing charged as about 150 ft of walk (and 0084 gives a way's deck); should cite 0035.drawing",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "The web cuts are clipped against plan.watercourses plus drawn_water_segs (channels and streams). Every join, bridge, touch, smooth and door-path pass is handed the same water list. The brook segments (stream_segs) are gapped only at the fords, so a way crosses the brook only at a crossing place and near square. _join_orphan_ways refuses a link that goes out over the brook and back. This matches \"keeps to its own bank\", \"cross the brook squarely\" and \"a crossing place every 160 ft or so\".",
+  "pages": {
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
+  },
+  "research": "d47738a05844fe19",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::stage_web#web lanes routed round the households' reserved wood seats as fabric": {
   "body": "907d26557912f733",
