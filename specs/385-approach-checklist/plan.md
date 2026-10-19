@@ -624,7 +624,7 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@35 (change-rou
 2. **A3 again.** Changed: the arbiter's ruling is now the binding constraint, written into item 2.
 3. **A4 again.** Unchanged: the hand resolution measured about 2 minutes.
 4. **Moving something earlier for something later?** No.
-5. **Tuning or changing?** Changing, by the ruling: the route went from a resolver to a message - D144 as rewritten, reviewed CLEAR.
+5. **Tuning or changing?** Neither in this part B: the change is D144's as rewritten by the ruling, decided and reviewed CLEAR.
 6. **The one-sentence test.** "A conflict with the clone's own landing is named with the line that resolves it" - true by the suite's case 2a.
 7. **The next step is a measurement.** The suite, run whole: 49/49.
 8. **Every route measured before offering one?** No route is offered; the ruling's was taken.
