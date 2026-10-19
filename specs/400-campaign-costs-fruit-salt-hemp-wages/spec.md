@@ -112,3 +112,4 @@ The answer on EliAndrewC/diagram#5 names each question's fragment FILE, a verdic
   given with their verdicts and labels.
 - **spec-fidelity round 2 (2026-10-19, verify): CHANGES REQUIRED, 1 item.** King's 12-15 times is his general figure
   against a 1.5-4 cash manufacture cost, not Sichuan's; his Sichuan figure is a manufacture cost and tax only.
+- **spec-fidelity round 3 (2026-10-19, verify): FAITHFUL.** Round 2's item resolved; no contradiction introduced.
