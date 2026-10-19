@@ -209,7 +209,10 @@ def test_a_note_saying_landed_is_refused_while_the_landing_is_not_on_main(tmp_pa
     ahead[:] = ["specs/385-x/retro.md", "dev/review-ledger.md"]
     assert tt.landed_refusal(tmp_path, "385-x", "T72", "Landed on main") == "", "only the feature's records ahead of main"
     ahead.append("l7r/diagram/interactive/assets/glossary/24330-Enoshima.json")  # feature 385 T113: T110's push stood refused
+    assert tt.landed_refusal(tmp_path, "385-x", "T72", "landed") == "", "ahead, but its content is on main (land-tooling's own commit)"
+    differs.add("l7r/diagram/interactive/assets/glossary/24330-Enoshima.json")
     assert "24330-Enoshima.json is committed here and not on origin/main" in tt.landed_refusal(tmp_path, "385-x", "T72", "landed")
+    differs.clear()
     ahead.clear()
     rows.write_text(json.dumps({"feature": "385-x", "task": "T72", "files": ["scripts/a.py"], "outcome": "failed: the checks failed", "log": "L"}) + "\n")
     assert "ended 'failed: the checks failed' (L)" in tt.landed_refusal(tmp_path, "385-x", "T72", "Landed on main")

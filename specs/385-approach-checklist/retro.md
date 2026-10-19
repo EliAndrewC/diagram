@@ -940,3 +940,10 @@ block edited, no check owed. The file's prefix is the one `make reserve` gave (2
 takes its capital (`24330-Enoshima.json`), as the glossary's own check refused the lowercase stub - both small corrections to the
 plan's filename, left as this note rather than a review round. "Island" rests on the name itself (-shima), not on Morse's passage
 (the review's aside). **The habit it changes:** a new glossary or registry file starts from `make reserve`.
+
+## T113 - the retro row
+
+About 25 min. T110 was ticked "landed" while its push stood refused, because it had no land-tooling run and T79 asked nothing else.
+A "landed" NOTE now waits until no file outside `specs/` and `dev/` committed here differs from origin/main - compared by content,
+as the review's aside asked, since `make land-tooling` lands files as new commits and leaves the clone's own commits ahead.
+**The habit it changes:** none needed.

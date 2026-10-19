@@ -7092,6 +7092,44 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T113": {
+   "section_sha256": "161c4479a7d15d8652fc60fb90fc4ddd92e49b31d7f9843ed556593c90ae4724",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D130",
+     "summary": "In tick-task.landed_refusal, a task with no land-tooling run is refused when a commit ahead of origin/main touches a file outside specs/ and dev/.",
+     "class": "within",
+     "why": "It changes D98's last sentence (a task with no row is not refused) in the widening direction only: more enforcement, nothing the GM asked or the accepted spec settled is narrowed. It serves the GM's 'implement any obvious performance / tooling / process improvements along the way' (amendment 6) and 'make our tooling do the thing correctly automatically every time' (amendment 8), and FR-010's guard-not-reminder rule."
+    },
+    {
+     "id": "D130-exclusion",
+     "summary": "Files under specs/ and dev/ (the feature's own records, the landing's run logs) are not counted by the new refusal.",
+     "class": "within",
+     "why": "A carve-out from a refusal that did not exist before: D98 refused nothing for a task with no row, so excluding these directories narrows nothing the GM asked or the spec settled. It is what lets the guard run at all mid-feature, where every clone carries unlanded specs/ commits (the tick itself writes one)."
+    },
+    {
+     "id": "Approach-6 exit (c)",
+     "summary": "The work's presence on main decides the tick, not the landing route's own log; the log was weighed and refused.",
+     "class": "within",
+     "why": "A design choice about how the new check reads the world; it narrows no request or requirement, and the block records the alternative and why it was refused."
+    },
+    {
+     "id": "refusal-message",
+     "summary": "The refusal names the file and the one command that lands it (scripts/sync-with-main.sh done).",
+     "class": "within",
+     "why": "The same shape FR-019 and SC-009 set for this feature's refusals (each names its one command)."
+    },
+    {
+     "id": "test",
+     "summary": "A tests/tooling/ test red without the change.",
+     "class": "within",
+     "why": "Pure enforcement of D130: with D130 deleted the test has nothing left to check."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
