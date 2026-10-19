@@ -579,7 +579,9 @@ def main(argv: Sequence[str] | None = None) -> int:
             return 2
         done = answer(root, args.answer, args.result, args.bundle, args.q, args.notes, args.key, args.kind)
         if args.reply:
-            for row in file_outside(root, args.answer, pathlib.Path(args.reply).read_text(encoding="utf-8")):
+            import apply_edits  # noqa: PLC0415 - a transcript's last reply, as `make apply-edits` reads one (hour 32: an .output read raw filed nothing)
+
+            for row in file_outside(root, args.answer, apply_edits.reply_of(pathlib.Path(args.reply))):
                 print(f"record-checked: filed, not fixed - {row['file']} | {row['block']} | {row['finding']}")
         if done and not args.bundle and args.reason:
             bypass_log(root, "record-checked", f"{args.answer} on {' '.join(done)}: {args.reason}")

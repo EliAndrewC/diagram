@@ -422,3 +422,18 @@ def test_a_pop_up_the_triage_sent_on_joins_its_checks_batch() -> None:
     assert "make modal-bundle" in ro.command(a, None, touched) and "make modal-triage" in ro.command(c, None, touched)
     text = ro.report([a, b, c], None, (), touched)
     assert 'batched: make modal-bundle KIND="choice/lane--spine choice/lane--cross" FOR=modal-depiction' in text
+
+
+def test_outside_rows_parse_from_a_transcript_once_it_is_read_as_one(tmp_path: pathlib.Path) -> None:
+    """The round arbiter's fix on hour:385-approach-checklist@32: `make record-checked REPLY=<an .output>` read the transcript raw,
+    so its OUTSIDE THE CHANGE row ("Enoshima", 0246) was never filed; read through `apply_edits.reply_of` it is."""
+    import json as _json
+
+    sys.path.insert(0, str(pathlib.Path(ro.__file__).parent))
+    import apply_edits
+
+    text = "record-format: 0 findings\n\nOUTSIDE THE CHANGE\n- research/questions/0246-x.drawing.html | a block | Enoshima unexplained\n"
+    out = tmp_path / "agent.output"
+    out.write_text(_json.dumps({"type": "assistant", "message": {"content": [{"type": "text", "text": text}]}}) + "\n")
+    assert ro.outside(out.read_text()) == [], "read raw, the transcript's row is not seen"
+    assert ro.outside(apply_edits.reply_of(out)) == [("research/questions/0246-x.drawing.html", "a block", "Enoshima unexplained")]
