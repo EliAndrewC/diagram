@@ -214,6 +214,10 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       verify: DONE. appended Lands open ids owe no review; landed, test_plan_gate green
 - [ ] T75 A part B that names no new decision owes no review (proposal 3, plan D94) [lands-open]
       research: rendering
+- [ ] T76 Part A asks what a constant measures and for the capacity arithmetic first (proposal 7, plan D95) [lands-open]
+      research: rendering
+- [ ] T77 make where-time, with the time between turns counted as such (proposal 8, plan D96) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

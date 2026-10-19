@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -233,6 +233,42 @@ Owed by the hour-20 step-back (hour:385-approach-checklist@20, `continue`), whic
 ### T75 Decisions
 
 **D94 - a part B reviewed only for a new decision.** `block_status` skips a block whose heading is `### T<n> part B (...)` when every `D<n>` it names is defined (`**D<n> - ...`) elsewhere in `plan.md` or in `plan-done.md`; a part B naming an id defined nowhere else - a decision it makes - is owed as now. Its items stay `make tick`'s to check.
+
+## T76 - part A asks what a constant measures and for the capacity arithmetic first (the GM-approved proposal 7, 2026-10-18)
+
+### T76 Approach (checklist part A)
+
+1. **The goal, in the world.** A task that moves a constant knows what it measures, and one that fits things into room knows the arithmetic, before anything is rolled.
+2. **The constraints.** The GM, 2026-10-18 (amendment 8): "I do like all of your other proposals"; proposal 7: "Approach part A item 4 gains 'list every use of the constant you will move and what each one measures'" and proposal 8 of the table (numbered there as the arithmetic row): "write the capacity arithmetic before rolling anything". The GM's rule (the step-back request): a checklist item or a tool, never a reminder. The item numbers stay as they are, so no part A already written is left unanswered. A test red without it.
+3. **Where each comes from.** The GM (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-18 (step-back-2026-10-18.md): T09 ran two experiments before reading what BUNDLE_PITCH measured (about 40 minutes and two cohort runs; the answer was a relabel); T06 ran a 20-minute experiment the arithmetic (households x farmstead width against the margin's length) answers in two.
+5. **The order.** The two questions under item 4 of `checklist.md`, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: item 4 of part A asks both questions, the items still number 1-9, and `tests/tooling/test_approach_gate.py` pins the two questions; red without them.
+
+### T76 Decisions
+
+**D95 - two questions inside item 4.** `checklist.md` part A item 4 gains: "**Before moving a constant:** list every use of it and what each one measures" and "**Before fitting things into room:** write the capacity arithmetic (how many, how wide, against how much room) before rolling anything". No item is added or renumbered.
+
+## T77 - make where-time, the step-back's tables, with the time between turns counted as such (the GM-approved proposal 8, 2026-10-18)
+
+### T77 Approach (checklist part A)
+
+1. **The goal, in the world.** The next "where did the time go" is one command, and its idle column is right.
+2. **The constraints.** The GM, 2026-10-18 (amendment 8): "I do like all of your other proposals"; proposal 9 of the table, `make where-time F= [SINCE=]` printing both tables, and the session's correction the same evening: "time from a turn's end to the next prompt will count as waiting, whatever events land in between". The categories stay `feature_report.split_time`'s. A test red without it.
+3. **Where each comes from.** The GM (G); the categories are 375's (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-18: the scratch `where_time.py` booked T05 224 minutes, but about 80 of them were the 04:20-09:15 overnight stall, split into pieces under an hour by hook events and booked as "thinking"; T05's real work was about 2 h 25.
+5. **The order.** `scripts/measure/where_time.py` (from the scratch script), the target, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 40 min.
+9. **Done, measured.** One goal: `make where-time F=<n> [SINCE=<ISO>]` prints the per-task table and the agents table, every gap between a session's Stop and its next prompt booked as "between turns" (never "thinking"), however many events fall inside; `tests/tooling/test_where_time.py` red without it.
+
+### T77 Decisions
+
+**D96 - between turns is its own column.** `where_time.py` books each gap of a session to the task active at its start, by `split_time`'s category, except that from a `Stop` to the session's next `UserPromptSubmit` every gap is "between turns" - waiting on background work or idle, which the column does not try to tell apart (the agents table and the background-run column say what ran). The step-back checklist (step-back-2026-10-18.md, item 1) names the target.
 
 ## T11 - the close
 
