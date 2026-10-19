@@ -404,6 +404,10 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T142 bund.tip_onto_the_bund returns a spur tip more than 60 ft off, or one whose run-on turns back or is blocked, as it came - short in open ground, against 0014's 'never ends in open ground short of the bund': name the fallback in the claim or make the tip arrive (impl-drift, T33's round) [lands-open]
       research: rendering
+- [ ] T143 Dead weld constants removed and their ranking rows retired: _WELD_MIN_SOLIDITY (T32, wave 164) and _WELD_MIN_APEX are read by nothing since feature 302 retired the carve and its welder - mark both rows retired in 328's audit/waves.json with that reason (the T34 plan review: a dead row is not one of FR-020's ten) [lands-open]
+      research: rendering
+- [ ] T144 Amendment 7, FR-020: a ranking row in place of T32's, whose row turned out dead code (retired in T143) - a live row, chosen at its start; its retro row [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

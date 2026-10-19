@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92, T93, T94, T95, T96, T97, T98, T99, T100, T102, T103, T104, T105, T106, T107, T109, T110, T111, T112, T113, T114, T115, T116, T117, T118, T119, T120, T121, T122, T123, T124, T125, T126, T127, T128, T129, T130, T131, T132, T133, T134, T135, T136, T137, T138, T139, T140, T141, T142
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92, T93, T94, T95, T96, T97, T98, T99, T100, T102, T103, T104, T105, T106, T107, T109, T110, T111, T112, T113, T114, T115, T116, T117, T118, T119, T120, T121, T122, T123, T124, T125, T126, T127, T128, T129, T130, T131, T132, T133, T134, T135, T136, T137, T138, T139, T140, T141, T142, T143, T144
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -821,25 +821,25 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@37 (continue),
 
 **D152 - the joining reach, recorded.** 0014's rule paragraph gains, after "never passes through a gap in it, since no page we read tells of either.": "A lane end that stops within 6 ft of the paddy's edge is drawn as joining it, a GUESS at how near reads as touching at the map's scale." The claim `a_way_onto_the_bund#on the bund` reads "GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a lane end within 6 ft of the paddy's edge (`BUND_REACH_FT`) counts as joined to the bund". The row is marked in 328's `audit/waves.json`.
 
-## T34 - the weld's apex margin no code runs, removed (ranking row: waterfields/banks.py _WELD_MIN_APEX, E1 DRIFTED)
+## T34 - the wood shed held a ken past the wall gap, recorded (ranking row: overlap/taxonomy.py _OVERLAP_EXEMPT#yard, garden and fixtures against the house, E2 DRIFTED)
 
 ### T34 Approach (checklist part A)
 
-1. **The goal, in the world.** No claim describes a margin the maps do not use.
-2. **The constraints.** FR-020 as the round arbiter read it (ask:t33-ranking-pick): no kind is left untried among live rows (the one CANNOT-TELL, the rampart's ways, serves only frozen city maps), so this is the top-ranked live row of any kind - E1 DRIFTED, said so here. The finding: `_WELD_MIN_APEX = 18.0` "lets a welded basin keep an 18-25 deg point" against 0005's 25 deg - "record the allowance as a DEVIATION ... or hold welds to 25". A dead branch is removed, not described (constitution XIV). The landing cohort.
-3. **Where each comes from.** FR-020 and the ruling (G, O); the finding (O); the constitution (O).
-4. **Do they describe the world here?** No - measured 2026-10-19 (`grep -rnw _WELD_MIN_APEX l7r/ tests/ pool/ scripts/`, and every module constant of `banks.py` checked for a use): `_WELD_MIN_APEX` appears only at its definition and in one comment; its comment block describes `_absorb`, the welder feature 302 retired with the carve (`waterfields/CLAUDE.md`: "The plot carve that lived here was retired by feature 302"); it is `banks.py`'s one unused constant.
-5. **The order.** The constant, its claim and its comment block removed; the comment that names it as the example of a placer margin reworded to `_TOE_MIN_APEX`; the gate and the landing cohort (no map should move).
-6. **The exits.** (e) conform - remove the dead margin; recording an 18-25 deg allowance on 0005 was refused: no weld runs it.
+1. **The goal, in the world.** 0043's drawing page says where the maps stand the wood shed off its wall, and why, and the claims that state it agree with it.
+2. **The constraints.** FR-020 as the round arbiter read it (ask:t33-ranking-pick): a live row; no kind is left untried among live rows (the one CANNOT-TELL serves only frozen city maps), so this is a top-ranked live row of any kind - E2 DRIFTED, said so here (round 1 of this plan took a dead row, `_WELD_MIN_APEX`, which T143 retires). 0043's drawing page: the shed "stands about 6 ft (a ken) off a wall. This is a GUESS". The finding: the claim puts the shed "about 9.5 ft off a wall"; 0043 says 6 ft; "fix the claim, or the placer that owns the figure". The placer's own record: `WOODSHED_STEP_FT` 6.0 is "a ken past the wall gap" (`WALL_GAP_FT` 3.5), HELD in 328's waves 9 and 51 because "at a ken three scaling rolls of the reference refuse their web (20 households seed 39; 40 households seeds 4 and 25)". Every deviation recorded on the drawing page with its reason. Record checks and the claims check.
+3. **Where each comes from.** FR-020 and the ruling (G, O); 0043's drawing page (O); the finding (O); the placer's held figure and its measurement (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the claims index; `fixture_seats.WOODSHED_STEP_FT` and `WALL_GAP_FT` read; 0043's page read): the maps stand the shed's edge 6 + 3.5 = 9.5 ft off its wall, as the taxonomy claim says, and 0043 records 6 ft with no deviation.
+5. **The order.** The 9.5 ft and its reason recorded on 0043 as a DEVIATION; the taxonomy claim and the shed's own claim cite it; the record checks and the claims check.
+6. **The exits.** (a) refine an O number: n/a - the 6 ft is itself a GUESS; (b) a principled exception - chosen: at a ken, scaled rolls lose a farmhouse or field from the web, measured and held twice; (c) a new rule: n/a; (d) more room: this is more room - the shed set further out; (e) conform the placer to 6 ft - refused: 328 waves 9 and 51 measured that it breaks the web.
 7. **The search smell.** None.
-8. **The budget.** 25 min with its checks.
-9. **Done, measured.** One goal: `_WELD_MIN_APEX`, its claim and its comment block are gone and nothing references them; the gate green and the landing cohort refusing no seed against main; the row marked with its wave.
-10. **Before moving a constant.** Its uses, listed before removing it: none (item 4's grep).
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+8. **The budget.** 40 min with its checks.
+9. **Done, measured.** One goal: 0043's drawing page records the shed a ken past the wall gap, about 9.5 ft, as a DEVIATION with its reason; the claims cite it; record checks and claims check pass; no engine token changes; the row marked with its wave.
+10. **Before moving a constant.** n/a - `WOODSHED_STEP_FT` stays 6.0.
+11. **Before fitting things into room.** The arithmetic: shed edge = `WALL_GAP_FT` 3.5 + `WOODSHED_STEP_FT` 6.0 = 9.5 ft off its wall.
 
 ### T34 Decisions
 
-**D153 - the dead margin removed.** `waterfields/banks.py` loses `_WELD_MIN_APEX`, its claim and its comment block ("THE WELD GETS ITS OWN, TIGHTER MARGIN ... cannot slip a needle through."); the jog comment's example "the way `_WELD_MIN_APEX` sits above `_GATE_MIN_APEX`" becomes "the way `_TOE_MIN_APEX` (25 deg) sits above the gate's 15". The row is marked in 328's `audit/waves.json`.
+**D154 - a ken past the wall gap, recorded.** 0043's sentence "It stands about 6 ft (a ken) off a wall. This is a GUESS: no page we read says where on the plot a wood shed stood." becomes "It stands about a ken past the gap every fixture keeps off a wall, about 9.5 ft out. The ken is a GUESS - no page we read says where on the plot a wood shed stood - and the gap a DEVIATION from it: at a ken itself, larger settlements left a farmhouse or a field off their lanes." The two claims (`taxonomy._OVERLAP_EXEMPT#yard, garden and fixtures against the house` and `fixture_seats.WOODSHED_STEP_FT#wood shed off its wall`) cite 0043 as recording it. The row is marked in 328's `audit/waves.json`.
 
 ## T11 - the close
 

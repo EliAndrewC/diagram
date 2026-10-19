@@ -7590,6 +7590,27 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T34": {
+   "section_sha256": "60d2cf52958b6629ed1b2a0a598c618ba9e98d792ff4d0158314b434c2204662",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T34-row",
+     "summary": "T34 takes the waterfields/banks.py _WELD_MIN_APEX row (E1 DRIFTED) as one of FR-020's ten, calling it 'the top-ranked live row of any kind', and closes it as a worked row 'marked with its wave'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The round arbiter's reading of FR-020 (ask:t33-ranking-pick) takes the ten from open rows 'whose code a scripted (live) map runs', and says 'a row whose code was removed with no live successor is marked retired in 328's audit/waves.json with its reason'. The plan's own Approach item 4 measured that _WELD_MIN_APEX is read by nothing, and that its comment block describes _absorb, the welder feature 302 retired. Item 6 says 'no weld runs it', so it has no live successor. By the ruling's own test this row belongs with the retired rows, not the live ones, and counting it as worked leaves nine claim fixes where the GM asked for '10 more claims' (amendment 7). Nothing makes picking a live row impossible, and the GM's words do not imply that a dead-code leftover counts. Counting it defeats the reason the arbiter separated out retired rows: a row with no running code must not use up one of the ten. Fix: mark the row retired in audit/waves.json with its reason (code retired by 302, no live successor; checked by item 4's grep), as the ruling prescribes, and have T34 (or the next task) take another live row."
+    },
+    {
+     "id": "D153",
+     "summary": "_WELD_MIN_APEX, its claim and its comment block are removed from waterfields/banks.py; the jog comment's example is reworded to _TOE_MIN_APEX (25 deg) above the gate's 15; recording an 18-25 deg allowance on 0005 is refused.",
+     "class": "within",
+     "why": "Removing a dead constant and the claim that describes a margin no map uses makes the claim match the world (constitution XIV: a dead branch is removed, not described). Rewording one comment example to a live constant changes no behavior, and refusing to record an allowance that no code applies is correct. This decision stands whichever way the row is counted. It can go with the retirement above. Only how the row is counted is wrong."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

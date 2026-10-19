@@ -440,17 +440,6 @@ _TOE_MIN_THICKNESS = 0.16
 # `paddy_plots_are_workable_basins` fires at 15 - placer stricter than gate, as everywhere else.
 _TOE_MIN_APEX = 25.0
 """Research: no point sharper than 25 deg - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: the placer refuses a basin's apex under 25 deg"""
-# THE WELD GETS ITS OWN, TIGHTER MARGIN, because refusing is not free there. The carve and `_plant`
-# can refuse a needle at a generous 25 deg and lose nothing: the ground simply returns to the bare
-# pocket for `close_seams` to place another way. `_absorb` is the LAST resort - refuse there and the
-# scrap stays bare between two basins that each still draw their own wall, which is precisely the
-# doubled bund `paddy_plot_seams_shared` exists to prevent. Measured on the 24-seed cohort: a 25 deg
-# weld guard traded two needles for two doubled bunds (seeds 9 and 11) and took the cohort 22 -> 20.
-# Every weld it declined in the 15-25 band would have produced a basin the gate ACCEPTS, so the
-# generous margin was buying nothing and costing a real defect. This sits just above the gate's 15
-# with enough room that rounding cannot slip a needle through.
-_WELD_MIN_APEX = 18.0
-"""Research: weld apex - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a weld refused under 18 deg, so a welded basin may keep an 18-25 deg point"""
 # THE TINT DEMOTION ASKS A DIFFERENT QUESTION, so it measures a different ring - not a different
 # threshold. Two settlement-reviews shaped this, and the second corrected the first.
 #
@@ -838,7 +827,7 @@ def tapers_to_a_point(poly: Poly, end: float, min_deg: float, arm: float) -> boo
 # run resuming in the SAME DIRECTION a few feet over.
 #
 # THESE ARE THE PLACER'S NUMBERS, one notch stricter on every axis than the rule they answer to, the
-# way `_WELD_MIN_APEX` sits above `_GATE_MIN_APEX`: the rule fires at a 3 ft offset with 8 ft runs
+# way `_TOE_MIN_APEX` (25 deg) sits above the gate's 15: the rule fires at a 3 ft offset with 8 ft runs
 # and a 25 ft link, so a weld is refused here at 2 ft with 6 ft runs and a 30 ft link. Same
 # measurement, stricter threshold - never a second measurement bolted alongside it.
 #
