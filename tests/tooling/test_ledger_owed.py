@@ -204,6 +204,7 @@ def test_a_plan_review_that_recorded_its_verdict_gets_its_row_and_others_do_not(
         "a2": "I could not record it",
         "a3": "BLOCKED recorded for 385-x",
         "a4": "I recorded it as BLOCKED with `make plan-verdict F=385 TASK=T74`",
+        "a5": "**The verdict is CLEAR, and it is recorded.** `make plan-verdict` stored it",
     }
     monkeypatch.setattr(lo.review_cost, "transcript", lambda agent, root=None: tmp_path / agent)
     sys.path.insert(0, str(script("ledger_owed.py").parent.parent / "hooks" / "lib"))
