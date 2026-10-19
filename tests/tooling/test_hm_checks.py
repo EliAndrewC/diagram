@@ -660,3 +660,25 @@ def test_a_stopped_plan_review_releases_its_hold(tmp_path: pathlib.Path) -> None
     assert "is running" in hc.handle("edit", edit, 2)
     assert hc.handle("launched", {"cwd": cwd, "tool_name": "TaskStop", "tool_input": {"task_id": "ag9"}, "tool_response": {}}, 3) == ""
     assert hc.handle("edit", edit, 4) == ""
+
+
+def test_a_held_section_changed_however_the_file_was_named_is_written_back(tmp_path: pathlib.Path) -> None:
+    """The round arbiter's fix on hour:385-approach-checklist@30: the text match missed a write naming the plan as "pl" + "an.md";
+    each live hold's text is kept before the call and, if the call changed it, written back and the change refused."""
+    (tmp_path / ".git").mkdir()
+    plan = tmp_path / "specs" / "385-x" / "plan.md"
+    plan.parent.mkdir(parents=True)
+    plan.write_text("# Plan\n\n## T05 - five\n\n**D10 - a rule.** the held decision text\n\n## T06 - six\n\nfree\n")
+    cwd = str(tmp_path)
+    agent = {"cwd": cwd, "tool_name": "Agent", "tool_use_id": "t9", "tool_input": {"subagent_type": "spec-fidelity", "prompt": "read /tmp/l7r-check/plan-385-x-T05/MANIFEST.md"}}
+    hc.handle("dispatch", agent, 0)
+    hc.handle("launched", {**agent, "tool_response": {"status": "async_launched", "agentId": "ag9"}}, 1)
+    sneak = {"cwd": cwd, "tool_name": "Bash", "tool_use_id": "b1", "tool_input": {"command": 'python3 -c \'p="specs/385-x/" + "pl" + "an.md"; ...\''}}
+    assert hc.handle("edit", sneak, 2) == "", "the text match does not see it"
+    plan.write_text(plan.read_text().replace("the held decision text", "a sneaked change").replace("free", "freely"))
+    msg = hc.handle("after", sneak, 3)
+    assert "written back" in msg and "agent ag9" in msg
+    assert "the held decision text" in plan.read_text() and "freely" in plan.read_text(), "held text back; the free section kept"
+    touch = {**sneak, "tool_use_id": "b2"}
+    hc.handle("edit", touch, 4)
+    assert hc.handle("after", touch, 5) == "", "a call that changed nothing held passes"

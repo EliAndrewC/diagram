@@ -75,6 +75,51 @@ def held(root: Path, h: Mapping[str, Any]) -> list[str]:
     return [body for key, body, _at in plan_gate.blocks(text) if key in want]
 
 
+def live(h: Mapping[str, Any], now: float) -> bool:
+    """A hold whose review was launched and has not died (`dead`)."""
+    return h.get("state") == "running" and not dead(h, now)
+
+
+def snapshot(state: dict[str, Any], root: Path | None, tid: str, now: float) -> None:
+    """Before a write (the round arbiter's fix on hour:385-approach-checklist@30): the texts each live hold holds, kept under the
+    call's id, so `restore` sees a change however the call named the file - the text match below missed "pl" + "an.md"."""
+    if root is None:
+        return
+    snaps = {hid: held(root, h) for hid, h in (state.get("plan_holds") or {}).items() if live(h, now)}
+    if snaps:
+        state.setdefault("plan_snaps", {})[tid] = snaps
+
+
+def restore(state: dict[str, Any], root: Path | None, tid: str) -> str:
+    """After the write: any held text it changed is written back, and the change refused, naming the review; or ''."""
+    snaps = (state.get("plan_snaps") or {}).pop(tid, None)
+    if not state.get("plan_snaps"):
+        state.pop("plan_snaps", None)  # gone when empty: `checks-hooks.sh after` asks the state file for the key before Python
+    if root is None or not snaps:
+        return ""
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "gates"))
+    import plan_gate  # noqa: PLC0415
+
+    for hid, before in snaps.items():
+        h = (state.get("plan_holds") or {}).get(hid)
+        if h is None or held(root, h) == before:
+            continue
+        plan = root / "specs" / str(h.get("feature")) / "plan.md"
+        text = plan.read_text(encoding="utf-8")
+        if h.get("task"):
+            now_sec = plan_gate.task_sections(text).get(str(h["task"]))
+            text = text.replace(now_sec, before[0], 1) if now_sec and before else text
+        else:
+            now_blocks = {key: body for key, body, _at in plan_gate.blocks(text) if key in set(h.get("blocks") or [])}
+            for (key, body), old in zip(now_blocks.items(), before, strict=False):
+                text = text.replace(body, old, 1) if body != old else text
+        plan.write_text(text, encoding="utf-8")
+        what = f"{h.get('task')}'s section" if h.get("task") else f"{len(h.get('blocks') or [])} block(s)"
+        return (f"that call changed {what} of specs/{h.get('feature')}/plan.md while its plan review runs (agent {h.get('aid')}) - "
+                "the held text is written back; wait for the review to return (feature 385 T85, hour 30's fix)")
+    return ""
+
+
 def refusal(state: Mapping[str, Any], root: Path | None, tool: str, ti: Mapping[str, Any], now: float, escaped: bool) -> str:
     """Why this write is refused while a plan review holds what it would change, or ''."""
     if root is None:
