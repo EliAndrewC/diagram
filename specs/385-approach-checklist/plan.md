@@ -676,6 +676,26 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@35 (change-rou
 
 **Wording only.** `bund.RUN_ON_REACH_FT#run-on reach` reads "GUESS: an end within 60 ft of the field is carried on to it - the reach 0246 gives to a house or a way (`WAY_END_REACH_FT`), reused for the field; no page gives a distance to the field".
 
+## T136 - bund.py's turn limit labeled a convention, its sampling step claimed (impl-drift, T130's round)
+
+### T136 Approach (checklist part A)
+
+1. **The goal, in the world.** Two constants of `bund.py` say truly what they rest on.
+2. **The constraints.** 0081's drawing page: "A lane run on to a bund turns no more than 60 degrees anywhere" and "The limits above are drawing conventions ... chosen at the scale of a dozen paces, not measured". Every unit carries a claim; plumbing is claimed NONE. The claims check.
+3. **Where each comes from.** 0081's drawing page (O); feature 316 (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T130's claims round: `RUN_ON_TURN_DEG`'s comment calls it a map drawing convention while its claim reads as a finding; `BRANCH_STEP_FT` carries no claim; then a read of 0081's page).
+5. **The order.** The turn limit's claim labeled CONVENTION; the step claimed NONE; the claims check.
+6. **The exits.** (e) conform the labels to the page.
+7. **The search smell.** None.
+8. **The budget.** 10 min.
+9. **Done, measured.** One goal: `RUN_ON_TURN_DEG`'s claim reads CONVENTION citing 0081, `BRANCH_STEP_FT` carries a NONE claim; the claims check IN-STEP; no engine token changes.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T136 Decisions
+
+**Wording only.** `RUN_ON_TURN_DEG`'s claim becomes "run-on turn limit - CONVENTION research/questions/0081-village-lanes.drawing.html: a lane run on to a bund turns no more than 60 degrees anywhere - the page's turn limits are drawing conventions"; `BRANCH_STEP_FT` gains "Research: branch sampling step - NONE: how often the nearest lane is sampled for a field path's branch".
+
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).

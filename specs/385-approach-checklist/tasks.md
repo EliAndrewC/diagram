@@ -369,8 +369,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T129 A lane that serves nothing: _pull_back leaves it whole, settle_dangling and tidy_lane_ends drop it, 0246 is silent - research pass, then one rule, claimed (three NEEDS-RESEARCH) (impl-drift, T106's round) [lands-open]
       research: rendering
-- [ ] T130 bund.RUN_ON_REACH_FT#run-on reach MISLABELED: no cited page records 60 ft for carrying an end on to the field - relabel GUESS or record it (impl-drift, T106's round) [lands-open]
+- [x] T130 bund.RUN_ON_REACH_FT#run-on reach MISLABELED: no cited page records 60 ft for carrying an end on to the field - relabel GUESS or record it (impl-drift, T106's round) [lands-open]
       research: rendering
+      verify: DONE. landed 2026-10-19 by sync-with-main done; run-on reach relabeled GUESS, no page as source (wording only); IN-STEP; T136 filed
 - [ ] T131 Two UNCLAIMED rules: run_lanes_on_to_the_bund never carries a row street's ends on (skips street); dangling_lane_ends exempts the connector - claim each (impl-drift, T106's round) [lands-open]
       research: rendering
 - [ ] T132 street.to_its_joints with exactly one joint returns two coincident points that trim_streets admits, cutting the street to nothing; its docstring says fewer than one joint (impl-drift, T106's round) [lands-open]
