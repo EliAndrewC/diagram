@@ -313,6 +313,12 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T109 The track's grove-band gap as 0036 gives it: _thread_the_fabric holds bands at FOOTPATH_FABRIC_GAP (7 ft) citing 0246, where 0036 keeps about 11 ft off the trees (T98 fixed the door path and connector_dry_exit); and the two GUESS claims on touch._one_network / _touch_junctions that call the routed link 14 ft where it is routed at 7 (found working T107, 2026-10-19) [lands-open]
       research: rendering
+- [ ] T110 0246's drawing page names Enoshima without saying what it is (record-format, OUTSIDE THE CHANGE, T107's round): a short gloss [lands-open]
+      research: rendering
+- [ ] T111 0033's drawing page gives a door path only to a farm whose grove stands between it and its street, on the near row; the code lays one for every grove farm its street does not serve (impl-drift aside, T97's round) - settle which, and label it [lands-open]
+      research: rendering
+- [ ] T112 The track's fallbacks walled as its first route is: _thread_the_fabric's grove fallback, unrouted clip and swing wall only the fabric or the bands, so a track may cross row crops, the paddy or wet ground (DRIFTED) or a brook off its crossing places (CANNOT-TELL); and its five unclaimed decisions - the largest piece kept, a near end counted a junction, an end walked clear along its own leg, the water-crossing limit, the order of the three fallback routes (found working T109, 2026-10-19) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

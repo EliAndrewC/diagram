@@ -7022,6 +7022,44 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T109": {
+   "section_sha256": "08bd517389be8351244c59fcb502083482c443c4695ed81ba9e7eb7563835182",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T109-scope",
+     "summary": "T109 exists as its own task for a finding made while working T107 (the grove fallback's band gap and two GUESS touch claims)",
+     "class": "within",
+     "why": "FR-015 (a second goal becomes its own task) and amendment 3's option 3 (a finding becomes an open task the feature cannot close without); the change is unchanged since its last CLEAR verdict."
+    },
+    {
+     "id": "D128 (fallback)",
+     "summary": "In _thread_the_fabric the grove bands the fallback routes round and clips against are grown by CONNECTOR_BAND_GAP_FT - FOOTPATH_FABRIC_GAP (5.5 ft) a side, so the line keeps 12.5 ft off the trees; crops keep their own gap; the claim cites 0036",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict: it conforms the code to 0036's working room, counted once as T98's D119 did, with no constant's value moved."
+    },
+    {
+     "id": "D128 (first route, clip, checks)",
+     "summary": "The same band growth applies wherever the function tests the fabric - its first route, its clip and its checks - so no route keeps a band at 7 ft",
+     "class": "within",
+     "why": "Widens the fix to the rest of the function, and only toward the task's stated goal (Approach item 1, the track and spur keep 0036's room off a grove). It narrows nothing the GM asked for and carves out no case. It follows a measured DRIFTED finding on the first route (labeled measured 2026-10-19, the claims round, cohort 16 of 16)."
+    },
+    {
+     "id": "D128 (touch claims)",
+     "summary": "The two touch claims (touch._one_network, touch._touch_junctions) say the routed link keeps WEB_FABRIC_GAP (7 ft to the middle), labeled DEVIATION on 0246 as _route's own claim already is; the junction link's 25 ft is cited to 0081's join reach",
+     "class": "within",
+     "why": "The earlier CLEAR text already decided that these claims describe the gap the code routes at instead of changing the code. The DEVIATION label states that existing departure honestly, the same way _route's own claim does, and it neither moves behavior nor exempts anything new. The 0081 citation replaces a GUESS with a source."
+    },
+    {
+     "id": "Part B (11:05Z)",
+     "summary": "Part B owed by the arbiter's continue ruling: nothing refusing, no new decision beyond D128, the ruling's two asides filed as T110 and T111",
+     "class": "within",
+     "why": "It records the ruling's next step and adds no decision. Filing the asides as their own tasks is FR-015's rule, and those tasks are not decided here."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

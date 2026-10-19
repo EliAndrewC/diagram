@@ -138,7 +138,9 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
     Research:
         track round the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: routed round, else clipped, else none
         gap off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `TRACK_FABRIC_GAP`, a lane's 7 ft from a garden fence,
-            off every footprint, a footpath's gap off a grove band
+            off every footprint
+        gap off a grove band - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the grove fallback's route and clip keep
+            `CONNECTOR_BAND_GAP_FT` (0036's working room past the half-width, 12.5 ft) off the trees
         detour swing - UNRESEARCHED: the midpoint swung 40, 80, 140 then 220 px out from the cluster
         never across a grove - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: routed round
             the bands, else only the part clear of them kept
@@ -147,7 +149,9 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
     """
     if len(run) < 2:
         return run
-    fabric = [poly for poly, _owner, _kind in _homestead_polys(s)]
+    # ...A GROVE BAND HELD AT 0036'S ROOM (feature 385 T109, D128): grown so every test below at `gap` keeps the line
+    # `CONNECTOR_BAND_GAP_FT` (12.5 ft) off the trees, the other fabric at `gap` itself
+    fabric = [list(ring_offset(poly, CONNECTOR_BAND_GAP_FT - gap, 0.0)[: len(poly)]) if kind == "groves" else poly for poly, _owner, kind in _homestead_polys(s)]
     if not fabric:
         return run
     crops = crop_polys(s)
@@ -219,7 +223,10 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
         # stands on the bund, inside the crop's gap); round the bands with the water left to the ford pass (seed 11's spur
         # already crossed the channel) - the last taken only if it crosses no more water than the run it replaces
         ends = [_out_of_bands(run[0], bands, run[-1]), _out_of_bands(run[-1], bands, run[0])]
-        for hard, water in (([*bands, *crops], lines), (bands, lines), (bands, [])):
+        # ...AT 0036'S ROOM OFF THE TREES (feature 385 T109, D128): the bands grown so a route and a clip at the footpath's gap keep
+        # the line `CONNECTOR_BAND_GAP_FT` (12.5 ft) off them, the crops keeping their own gap in the same route
+        roomy = [list(ring_offset(b, CONNECTOR_BAND_GAP_FT - FOOTPATH_FABRIC_GAP, 0.0)[: len(b)]) for b in bands]
+        for hard, water in (([*roomy, *crops], lines), (roomy, lines), (roomy, [])):
             around = _route(ends[0], ends[1], hard, [], water, gap=FOOTPATH_FABRIC_GAP)
             if (
                 len(around) >= 2
@@ -231,7 +238,7 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
         # ...and where the run starts inside a band there is no route from it: keep its FAR part, from the field or the
         # map's edge back to where it would first enter a band, and the web joins the near end (seed 1's spur, which began
         # inside its own farm's north band)
-        far = clip_to_clear(kept[::-1], bands, FOOTPATH_FABRIC_GAP)[::-1]
+        far = clip_to_clear(kept[::-1], roomy, FOOTPATH_FABRIC_GAP)[::-1]
         if len(far) >= 2 and not _crosses_fabric(far, fabric, FOOTPATH_FABRIC_GAP):
             return far
     # AND NEVER THE OFFENDING RUN AT ALL (feature 287, ways W25, FR-005): this terminal handed back the clipped run whether or

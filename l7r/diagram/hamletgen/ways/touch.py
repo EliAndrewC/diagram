@@ -140,7 +140,7 @@ def _touch_junctions(
         a foot beside its own lane's other end left - UNRESEARCHED: a foot within 6 ft of the lane's other end is not joined
         a roundabout link refused - UNRESEARCHED: a junction link longer than `_LINK_DIRECTNESS` (4) times the gap it closes
         a straight link off the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off a garden fence, more for a lane wider than 10 ft (w/2 + 2 ft), as `_smooth_web`'s chord keeps (feature 328 wave 94: it kept 4 ft)
-        routed junction link off the fabric - GUESS: 14 ft (pad_mult 2.0), with a retry at 7 ft on a 5 ft lattice for a gap within 25 ft, a calibration
+        routed junction link off the fabric - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0081-village-lanes.drawing.html: routed at `WEB_FABRIC_GAP` (7 ft to the middle; `pad_mult` 2.0 sizes only its search box), with a retry on a 5 ft lattice for ends within 0081's 25 ft join reach
         a moved end's last stretch kept short - UNRESEARCHED: an end moved onto another's grows its last leg to at most twice its old length and 4 ft"""
     # A TOUCH MAY NOT PUSH A LANE INTO THE FABRIC IT WAS DRAWN CLEAR OF (feature 134 T50, 2026-08-29).
     # Every rung here tests the LINK it is about to draw, and none of them looks at the lane that comes
@@ -320,7 +320,7 @@ def _one_network(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: 
         orphan reach - UNRESEARCHED: a stranded piece linked back to the network from up to `_ORPHAN_REACH` (150 ft)
         a roundabout link refused - UNRESEARCHED: a junction link longer than `_LINK_DIRECTNESS` (4) times the gap it closes
         a straight link off the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off a garden fence, more for a lane wider than 10 ft (w/2 + 2 ft), as `_smooth_web`'s chord keeps (feature 328 wave 94: it kept 4 ft)
-        routed orphan link off the fabric - GUESS: 14 ft (WEB_FABRIC_GAP x 2), twice the lane page's 7 ft for a routed link, a calibration
+        routed orphan link off the fabric - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: routed at `WEB_FABRIC_GAP` (7 ft to the middle, the page's gap; `pad_mult` 2.0 sizes only its search box)
         a house served - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 60 ft of the house, or within 12 ft of the steading's built ground (`serves`)"""
     # ONE NETWORK OR NOTHING. Whatever still stands apart after the touches is joined to the main
     # network by a routed link from its nearest vertex (reach up to `_ORPHAN_REACH`), and a component

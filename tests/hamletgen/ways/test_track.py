@@ -148,6 +148,31 @@ def test_a_track_that_starts_in_a_grove_band_is_not_drawn_across_it() -> None:
     assert len(out) >= 2 and not _crosses_fabric(out, bands, 0.0), "what is handed back does not"
 
 
+def test_the_grove_fallback_s_route_round_the_band_is_taken(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """The grove fallback's own route (feature 291; feature 385 T109): where the threaded route finds nothing, a route round the
+    bands - held at 0036's room by the grown bands - is what comes back. Since T109 grew the bands in the first route too, no
+    roll reaches this return, so the test pins it: the threaded route refused, the fallback's route is taken as found."""
+    from l7r.diagram.hamletgen.ways import _crosses_fabric, _homestead_polys, track
+
+    plan = a_plan()
+    plan.seat = a_seat(plan)
+    s = _hamlet_for_ways()
+    s.M["houses"] = [{"x": 760.0, "y": 500.0 + dy, "w": 60.0, "h": 40.0, "rot": 0.0, "kind": "plain"} for dy in range(0, 401, 40)]
+    s.M["groves"] = [{"x": 700.0, "y": 700.0, "w": 40.0, "h": 80.0, "rot": 0.0, "of": [760.0, 700.0], "face": [-1, 0], "depth": "deep"}]
+    round_it = [(660.0, 700.0), (660.0, 620.0), (450.0, 620.0)]
+    calls: list[int] = []
+
+    def route(*a, **k):  # type: ignore[no-untyped-def]
+        calls.append(1)
+        return [] if len(calls) == 1 else list(round_it)
+
+    monkeypatch.setattr(track, "_route", route)
+    monkeypatch.setattr(track, "_out_of_bands", lambda p, bands, toward: round_it[0] if p == (700.0, 700.0) else p)
+    out = track._thread_the_fabric(s, plan, [(700.0, 700.0), (450.0, 620.0)])
+    bands = [poly for poly, _owner, kind in _homestead_polys(s) if kind == "groves"]
+    assert out == round_it and not _crosses_fabric(out, bands, 0.0), "the fallback's route, as found"
+
+
 def test_where_no_route_rounds_the_band_the_track_keeps_its_far_part(monkeypatch) -> None:  # type: ignore[no-untyped-def]
     """The grove fallback's last resort (feature 291): with no route at all, what is kept is the run's FAR part, from its
     far end back to where it would first enter a band - clear of every band - and the web joins the near end."""

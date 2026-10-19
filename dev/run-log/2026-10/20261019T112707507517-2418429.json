@@ -1,0 +1,35 @@
+{
+  "utc": "2026-10-19T11:27:07Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 175,
+  "result": "green",
+  "commit": "5891dfdb7",
+  "cache": "warm",
+  "mode": "full",
+  "selected": "",
+  "host": {
+    "load": [
+      12.27,
+      6.33
+    ],
+    "mem_avail_mb": [
+      7376,
+      7639
+    ],
+    "cpu_temp_c": [
+      75.0,
+      65.0
+    ],
+    "stall_s": {
+      "cpu": 2.1,
+      "io": 0.7,
+      "io_full": 0.6,
+      "memory": 0.1
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  }
+}
