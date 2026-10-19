@@ -241,9 +241,9 @@ def research_why(
     memo: dict[str, Any],
 ) -> str:
     """Why a claim whose cited research moved is owed (feature 318, FR-016): a full re-check when a block it rested on is gone
-    (`rests changed`) or its row predates the snapshots (`research changed`); else only the TRIAGE of what changed on its pages."""
+    (`rests changed`), its row predates the snapshots or it cites a page its check never read (T105) (`research changed`); else the TRIAGE."""
     pages = was.get("pages")
-    if not isinstance(pages, dict) or any(d not in store for d in pages.values()):
+    if not isinstance(pages, dict) or any(d not in store for d in pages.values()) or {p.rsplit("/", 1)[1] for p in row.claim.pointers} - set(pages):
         return "research changed"
     rests = was.get("rests")
     if isinstance(rests, list) and not set(rests) <= standing(row.claim.pointers, qdir, memo):
@@ -946,6 +946,13 @@ def main(argv: Sequence[str] | None = None) -> int:
             keys = sorted(k for k, row in cur.items() if row.unit.path == args.module or row.unit.path.endswith("/" + args.module))
         else:
             keys = split_keys(args.units, cur)
+        slug = re.sub(
+            r"[^a-z0-9]+",
+            "-",
+            (args.module or ("owed" if args.owed else (keys or ["none"])[0])).lower(),
+        ).strip("-")[-60:]
+        out = Path(args.out) if args.out else DEFAULT_OUT / f"claims-{slug}"
+        shutil.rmtree(out, ignore_errors=True)  # hour 31's fix: a refused build leaves no bundle a check sent beside it could read
         unknown = [k for k in keys if k not in cur]
         if unknown or not keys:
             print(
@@ -960,12 +967,6 @@ def main(argv: Sequence[str] | None = None) -> int:
                 file=sys.stderr,
             )
             return 3
-        slug = re.sub(
-            r"[^a-z0-9]+",
-            "-",
-            (args.module or ("owed" if args.owed else keys[0])).lower(),
-        ).strip("-")[-60:]
-        out = Path(args.out) if args.out else DEFAULT_OUT / f"claims-{slug}"
         print(bundle(root, cur, keys, out, [c for c in args.context.split(",") if c], [p for p in args.pages.split(",") if p]))
         if not_owed:
             print(f"claims-bundle: re-check of {len(not_owed)} claim(s) not owed, because: {args.reason}")

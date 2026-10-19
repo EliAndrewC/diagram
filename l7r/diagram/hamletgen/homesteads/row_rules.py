@@ -25,7 +25,8 @@ from typing import Any
 from l7r.diagram.settlement import seg_dist
 
 from ..consts import DOOR_STEP_FT, Pt
-from ..ways.serve import DOOR_REACH_FT, front_door
+from ..ways.geom import steading_footprints
+from ..ways.serve import front_door, street_arrives
 from .wells import WATER_REACH_FT
 
 
@@ -75,8 +76,8 @@ def row_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
         farms on their street - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: within a frame of a street, none more than half a frame behind another on its side
         street one continuous way - research/questions/0033-row-villages-resson.drawing.html: each planned street drawn unbroken
         far-row holding drawn - research/questions/0033-row-villages-resson.drawing.html: every reserved holding drawn behind its farm
-        way ends on its own street - research/questions/0033-row-villages-resson.drawing.html: the door within reach of its street, or a door path to it
-        door reach of a street - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a door within `DOOR_REACH_FT` (60 ft) of its street needs no door path
+        way ends on its own street - research/questions/0033-row-villages-resson.drawing.html: its street within 0246's reach of the house or its built ground (`street_arrives`), or a door path to it
+        door reach of a street - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a farm needs no door path where its street's point nearest the house stands within 60 ft of it or 12 ft of its built ground (`serve.street_arrives`)
     """
     meta = M.get("meta") or {}
     plans = M.get("row_street_plans") or []
@@ -136,12 +137,14 @@ def row_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
             out.append(("holding_not_drawn", _key(rec["of"])))
     # EVERY ROW FARM'S WAY ENDS ON ITS OWN STREET: its door within the door reach of that street, or a door path serving it
     served = {_key(ln["serves"]) for ln in lanes if ln.get("serves")}
+    steadings = steading_footprints(M)
     for h in houses:
         door = front_door(h, DOOR_STEP_FT)
         k = own.get(_key((h["x"], h["y"])))
         if door is None or k is None:
             continue
-        if _dist(door, drawn_st.get(k, [])) > DOOR_REACH_FT and _key((h["x"], h["y"])) not in served:
+        segs = drawn_st.get(k, [])
+        if (not segs or not street_arrives(h, door, segs, k, steadings)) and _key((h["x"], h["y"])) not in served:
             out.append(("farm_not_on_its_street", _key((h["x"], h["y"]))))
     return out
 
@@ -153,7 +156,7 @@ def water_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
     every well.
 
     Research:
-        a scattered farm's own water - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: its channel ends in its frame, or its own well in its frame off its way in
+        a scattered farm's own water - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: its channel ends in its frame, or, where no channel reaches it, its own well in its frame (a well off its way in on a `well` map)
         a row's water - research/questions/0033-row-villages-resson.drawing.html: own wells, or every farm within `WATER_REACH_FT` of a shared one
         well in the way in - UNRESEARCHED: a private well within 12 ft of the house-to-door line counts as in the way
     """
@@ -175,12 +178,12 @@ def water_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
                 out.append(("farm_beyond_a_shared_well", _key(c)))
             continue
         fr = _frame(h)
-        if channel:
+        mine = [(x, y) for x, y, p in wells if p and fr and abs(x - fr[0]) <= fr[2] / 2 and abs(y - fr[1]) <= fr[3] / 2]
+        if channel:  # ...its channel ends in its frame, or, where no channel reaches it, a well of its own (feature 385 T99, 0031)
             e = ends.get(_key(c))
-            if e is None or not fr or abs(float(e[0]) - fr[0]) > fr[2] / 2 or abs(float(e[1]) - fr[1]) > fr[3] / 2:
+            if (e is None or not fr or abs(float(e[0]) - fr[0]) > fr[2] / 2 or abs(float(e[1]) - fr[1]) > fr[3] / 2) and not mine:
                 out.append(("farm_without_its_channel", _key(c)))
             continue
-        mine = [(x, y) for x, y, p in wells if p and fr and abs(x - fr[0]) <= fr[2] / 2 and abs(y - fr[1]) <= fr[3] / 2]
         if not mine:
             out.append(("farm_without_its_well", _key(c)))
             continue

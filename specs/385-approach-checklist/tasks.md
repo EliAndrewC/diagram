@@ -275,23 +275,43 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T95 A street's joining leg keeps the lane's 7 ft (row 841, found working T31; plan D117) [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 (gated, 3ff08b0a1 on main): join_to routes at WEB_FABRIC_GAP, claims IN-STEP, cohort-landing 54/54
-- [ ] T96 A footpath's 7 ft, room first (the round arbiter's ruling on hour:385-approach-checklist@28; worked with T43; plan D118) [lands-open]
+- [x] T96 A footpath's 7 ft, room first (the round arbiter's ruling on hour:385-approach-checklist@28; worked with T43; plan D118) [lands-open]
       research: rendering
-- [ ] T97 A farm's door reach measured from its house, as 0246 counts it, not from the door point (row_rules#door reach of a street, serve.lay_door_paths#every grove farm reached at its door, web.stage_web#door path distance - DRIFTED, found working T96) [lands-open]
+      verify: DONE. landed 2026-10-19 (gated, 4d58d3cec): FOOTPATH_FABRIC_GAP at 0246's 7 ft, the door's own DOOR_STEP_FT/DOOR_FIXTURE_CLEAR_FT, T31's 4 ft block out of 0246, no house moved; claims IN-STEP or filed (T97-T102); cohort-landing 54/54
+- [x] T97 A farm's door reach measured from its house, as 0246 counts it, not from the door point (row_rules#door reach of a street, serve.lay_door_paths#every grove farm reached at its door, web.stage_web#door path distance - DRIFTED, found working T96) [lands-open]
       research: rendering
-- [ ] T98 Grove-band clearance as 0036 gives it, once: no fence gap on top of the grown band (serve.lay_door_paths#door path off a grove band), the connector's band gap (track.connector_dry_exit#grove band gap) - DRIFTED, found working T96 [lands-open]
+      verify: DONE. landed 2026-10-19 (gated, 312093a12): reached as 0246 counts it from the house (street_arrives) in lay_door_paths, row_rules and the street trim; door paths never dropped as fragments; claims IN-STEP or filed (T106); cohort-landing pass
+- [x] T98 Grove-band clearance as 0036 gives it, once: no fence gap on top of the grown band (serve.lay_door_paths#door path off a grove band), the connector's band gap (track.connector_dry_exit#grove band gap) - DRIFTED, found working T96 [lands-open]
       research: rendering
-- [ ] T99 A scattered farm no channel reaches passes with its own well (row_rules.water_rules#a scattered farm's own water - DRIFTED, found working T96) [lands-open]
+      verify: DONE. landed 2026-10-19 (gated, 4d58d3cec): the room off a grove counted once - door path band_grow (11 ft) on every test, connector 12.5 ft, grove exit grid 2.9 ft; claims IN-STEP; seed 22 passes; cohort-landing 54/54
+- [x] T99 A scattered farm no channel reaches passes with its own well (row_rules.water_rules#a scattered farm's own water - DRIFTED, found working T96) [lands-open]
       research: rendering
-- [ ] T100 Web lanes off the water cite 0035's drawing page (web.stage_web#web lanes off the water - MISLABELED, found working T96) [lands-open]
+      verify: DONE. landed 2026-10-19 (gated, e51fb76ac): a channel-map farm no channel reaches passes with its own well (0031); claims IN-STEP; cohort-landing pass, fresh 4%
+- [x] T100 Web lanes off the water cite 0035's drawing page (web.stage_web#web lanes off the water - MISLABELED, found working T96) [lands-open]
       research: rendering
-- [ ] T101 Carried by the claims gate (FR-013): findings a page edit surfaced on code left unchanged - fix the code or the claim and re-check each: l7r/diagram/settlement/rolling/access.py::ACCESS_HALF_FT#corridor room [lands-open]
+      verify: DONE. landed 2026-10-19 (gated, 15f3528d7): the web's water claim cites 0035's drawing page and its frame claim 0246's, both IN-STEP
+- [x] T101 Carried by the claims gate (FR-013): findings a page edit surfaced on code left unchanged - fix the code or the claim and re-check each: l7r/diagram/settlement/rolling/access.py::ACCESS_HALF_FT#corridor room [lands-open]
       research: rendering
+      verify: DONE. landed 2026-10-19 (direct, comment-only): ACCESS_HALF_FT's comment names the fence gap, MIN_WEB_GAP the room; claim IN-STEP
 - [ ] T102 The connector may cross its brook where crossing saves more than about 150 ft, as 0035 gives it, or the ban recorded as a DEVIATION (track.connector_dry_exit#brook not crossed - DRIFTED, found working T98) [lands-open]
       research: rendering
-- [ ] T103 The measure guard sees a red preflight: a gate that stops at preflight writes no run-log record, so the guard refused the re-run as 'last gate GREEN 30 min ago' (found working T98, 2026-10-19) [lands-open]
+- [x] T103 The measure guard sees a red preflight: a gate that stops at preflight writes no run-log record, so the guard refused the re-run as 'last gate GREEN 30 min ago' (found working T98, 2026-10-19) [lands-open]
       research: rendering
-- [ ] T104 A plan review the dispatch guard refused leaves no plan-section hold: T98's refused dispatch left a hold that blocked its own section's amendment an hour after its review returned (found working T98, 2026-10-19) [lands-open]
+      verify: DONE. landed 2026-10-19 via land-tooling: a red preflight marks the git dir; the measure guard lets the re-run through; hook suite 48/48, red without
+- [x] T104 A plan review the dispatch guard refused leaves no plan-section hold: T98's refused dispatch left a hold that blocked its own section's amendment an hour after its review returned (found working T98, 2026-10-19) [lands-open]
+      research: rendering
+      verify: DONE. hm_planhold.snapshot/restore: before each Bash/Write/Edit call every live plan hold's text is kept; after it, a changed held text is written back and the call refused, however the file was named (checks-hooks.sh after, PostToolUse); landed on main
+- [x] T105 A claim relabeled to cite a page is owed impl-drift, not a triage: T100's two re-cited claims were listed 'triage', whose bundle came out empty, and OWED=1 refused to bundle them (found working T100, 2026-10-19) [lands-open]
+      research: rendering
+      verify: DONE. landed 2026-10-19 via land-tooling: research_why owes a newly cited page's claim in full; test red without; live claims-owed unchanged
+- [ ] T106 A lane runs on about 30 ft past the last house it serves, as 0246 gives it: the trims end it level with its last house (web.stage_web#the web's frame - DRIFTED, found working T97, 2026-10-19) [lands-open]
+      research: rendering
+- [x] T107 0246's drawing page says the 7 ft both ways: its lane's room (3: 7 ft at each fence and a 4 ft tread, 18 ft - the edge) and its fence gap (16: to the middle) - settle which, and what the code reads (found working T101, 2026-10-19) [lands-open]
+      research: rendering
+      verify: DONE. landed 2026-10-19 (direct, record only): 0246's new block says the room counts its 7 ft to the tread's edge and the gap to the middle; record checks and pop-ups clean; 48 of 51 claims IN-STEP, the rest carried (T108)
+- [ ] T108 Carried by the claims gate (FR-013): findings a page edit surfaced on code left unchanged - fix the code or the claim and re-check each: l7r/diagram/hamletgen/ways/law.py::fouls_fabric#foul margin, l7r/diagram/hamletgen/ways/settle.py::fouled_segment#off another household's yard or garden [lands-open]
+      research: rendering
+- [ ] T109 The track's grove-band gap as 0036 gives it: _thread_the_fabric holds bands at FOOTPATH_FABRIC_GAP (7 ft) citing 0246, where 0036 keeps about 11 ft off the trees (T98 fixed the door path and connector_dry_exit); and the two GUESS claims on touch._one_network / _touch_junctions that call the routed link 14 ft where it is routed at 7 (found working T107, 2026-10-19) [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering

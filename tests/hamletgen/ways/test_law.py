@@ -326,6 +326,8 @@ def test_a_fragment_that_earns_nothing() -> None:
     M = {"lanes": [conn, main, stub, link, island], "houses": [_house(40.0, 480.0)], "meta": {"generated_by": "hamletgen"}}
     assert law.short_fragments(M) == [2], "the link earns its place (it joins the island), the stub does not"
     assert law.short_fragments({"lanes": [conn, main]}) == []
+    door = {**stub, "serves": [40.0, 150.0]}  # feature 385 T97: a farm's door path is a lane of its own, however short
+    assert law.short_fragments({**M, "lanes": [conn, main, door, link, island]}) == [], "a door path is never debris"
 
 
 def test_one_way_keeps_one_width() -> None:

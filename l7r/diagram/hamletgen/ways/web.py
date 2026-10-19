@@ -18,11 +18,9 @@ from ..cluster import _arm_crossing_accidental
 from ..consts import (
     BUNDLE_PITCH,
     CLUSTER_SPAN_FACTOR,
-    DOOR_STEP_FT,
     LANE_CLEARANCE,
     LANE_SKELETONS_BY_WATER,
     MIN_WEB_GAP,
-    STEADING_ARRIVAL_FT,
     WATER_ALONG_FT,
     WATER_ALONG_SHARE,
     WEB_CROP_GAP,
@@ -42,7 +40,7 @@ from .geom import _TOUCH_GAP, _components, _trim_to_service, lane_houses, polyli
 from .joints import center_lane_ends, fold_the_connector_hairpin, meet_end_to_end, split_at_crossings, straighten_joints
 from .law_water import _brooks
 from .route import _route
-from .serve import DOOR_REACH_FT, _lay_web_lane, front_door, lay_door_paths
+from .serve import _lay_web_lane, lay_door_paths, street_anchors
 from .settle import settle_the_web
 from .smooth import _STUB_REACH_FT, _smooth_web
 from .street import lay_row_streets, trim_streets
@@ -593,21 +591,22 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         lanes after the houses - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html
         belt crossed not followed - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a lane
             may cross a shelter belt, the planting resuming on both sides, but not run its length
-        door path reach - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: STEADING_ARRIVAL_FT 12 ft off the steading's built ground
-        door path distance - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: DOOR_REACH_FT 60 ft, the page's reach at which a way counts as reaching a farmhouse
+        door path reach - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a farm takes no door path where a way's point nearest its house stands within 60 ft of it or `STEADING_ARRIVAL_FT` (12 ft) of its built ground (`serve.street_arrives`)
         web lanes off the hard ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0081-village-lanes.drawing.html: a stretch that would cross the field, a crop or wet ground is cut out
         web lane margin off the hard ground - research/questions/0081-village-lanes.drawing.html: the page lets a lane touch a plot's boundary - a web lane kept a half-tread off the field and the crop (`WEB_CROP_GAP`), 8 ft off the toe and marsh (`WEB_HARD_GAP`, UNRESEARCHED)
         a web lane's middle off the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: WEB_FABRIC_GAP, 7 ft clear of a garden fence (`clear_runs`' tight margin)
         ground cover is not fabric - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a lane crosses a tree belt and the planting resumes on both sides
         scrub and commons crossed - UNRESEARCHED: a lane may cross grazing scrub and the commons
-        a further row street's end - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: it ends at its outermost joint or at its last farm's door (`trim_streets`, `_TOUCH_GAP` and the door's offset)
-        web lanes off the water - UNRESEARCHED: web cuts and joins clipped at the watercourses and drawn channels, no web lane crossing water but a join routed over the brook at a ford
+        a further row street's end - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back to the last house it serves - it ends at its outermost joint, or abreast the house of the last farm it serves without a path (`trim_streets` at `street_anchors`)
+        the web's frame - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane runs only along the houses it serves and about 30 ft past the last of them - the frame (`BUNDLE_PITCH`, 100 ft past the outermost house, or `CLUSTER_SPAN_FACTOR` times the seat band) is only the room the cuts are laid in, and the trims (`tidy_lane_ends`) bring each end back to the last house it serves
+        a row village laid without web cuts - research/questions/0033-row-villages-resson.drawing.html: its farms are strung along their street and reach it by a path where their grove is in the way - its ways are its streets and those paths; no back lane or alley is cut among its farms (a map drawing convention)
+        web lanes off the water - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way keeps to its own bank; web cuts and joins clipped at the watercourses and drawn channels, a join crossing the brook only at a ford, one of the crossing places
         orphan stub joined - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the lanes are one network, so a stranded stub is joined into it
         orphan stub's reach - research/questions/0081-village-lanes.drawing.html: within `_STUB_REACH_FT`, 25 ft, the page's join reach, a stub is joined into the network
         web lanes routed round the households' reserved wood seats as fabric - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: every pass clips and routes round each reserved wood seat by the copse's lane buffer, as it does a steading; no page read shows a lane through a household's grove
         row streets laid - research/questions/0033-row-villages-resson.drawing.html
         every farmhouse served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every farmhouse but the few reached across a neighbor's land, which `checks.unreached_houses` counts reached through their neighbor's chain
-        a row farm's door point - UNRESEARCHED: set 8 ft past its yard (`front_door` at `DOOR_STEP_FT`), where its street's trim and arrival are judged from
+        a row farm's door point - GUESS research/questions/0033-row-villages-resson.drawing.html: where such a farm's gate stood was not found; set 8 ft past its yard (`front_door` at `DOOR_STEP_FT`); it picks the farm's own street (`own_street`) and starts its door path, while arrival and the trim are judged from the house
     """
     _pass("cut")
     """STAGE 5b: the LANE WEB - the lanes that make every farmhouse reachable.
@@ -878,17 +877,16 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # 60 ft of a house center) and the settle trimmed it back farm by farm - Mizuguchi's east row, its doors 33-39 ft off the
     # street and so given no path at the 40 ft reach, ended 200-1,090 ft off any way. Each farm's own path meets its street,
     # as the seating's corridor meets the tree on a nucleated map, and the street's end then stands at a junction.
-    lay_door_paths(s, hard_built, walls, list(plan.watercourses) + drawn_water, reach=STEADING_ARRIVAL_FT if _rows else DOOR_REACH_FT)
+    lay_door_paths(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     if _rows:
         # ...and a door path laid beside a lane that was there first meets it rather than doubling it (Kashikawa: a
         # join-orphans lane ran on 64 ft beside the door path of the farm at (2299, 2724)) - the sweep that ran above,
         # before any door path existed
         _sweep_doubled_tails(s)
         tidy_lane_ends(s, list(plan.envelope), streets=True)
-        # ...and a further street ends at its outermost joint, not past its last farm's path - or its last farm's door, where
-        # that stood within the arrival reach and so took no path; the first runs on off the map at both ends as the road (0033)
-        _doors = [d for h in s.M.get("houses") or [] if (d := front_door(h, DOOR_STEP_FT)) is not None]
-        trim_streets(s, _TOUCH_GAP, _doors, STEADING_ARRIVAL_FT)
+        # ...and a further street ends at its outermost joint, not past its last farm's path - or the last farm it serves without
+        # one (`street_anchors`, T97: the street's point nearest each such house); the first runs on off the map as the road (0033)
+        trim_streets(s, _TOUCH_GAP, street_anchors(s), 1.0)
     s.M["meta"]["field_path"] = a_way_onto_the_bund(s)
     s.M["meta"]["lane_web"] = plan.lane_web
     # ...AND THE WEB SETTLES ITSELF, LAST (feature 287, M4): every rule of the lane law is asked of the web as it stands and

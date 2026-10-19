@@ -2532,3 +2532,223 @@ Found by T31's claims round (amendment 6, a defect fixed where found - not a ran
 
 **D117 - the leg routed as the lane it is.** `join_to`'s two `_route` calls take `gap=WEB_FABRIC_GAP`; its claim reads "joining leg's berth - <0246's drawing page>: routed the lane's 7 ft (`WEB_FABRIC_GAP`) off the fabric - the leg is drawn at the street's width, a lane, not a footpath".
 
+<!-- plan-archive: archived 2026-10-19 -->
+## T98 - grove-band clearance as 0036 gives it, once (found working T96, 2026-10-19; lands with T96)
+
+Found by T96's claims round (DRIFTED: `serve.lay_door_paths#door path off a grove band`, `track.connector_dry_exit#grove band gap`),
+and needed by T96's landing: with the footpath at 7 ft, cohort seed 22 newly fails because the door path's margin off a grove is
+counted twice.
+
+### T98 Approach (checklist part A)
+
+1. **The goal, in the world.** A path past a farm's grove keeps the working room 0036 gives off the trees - no more, no less.
+2. **The constraints.** 0036: a footpath's clearance and some working room kept off the trees on each side - `GROVE_WORKING_ROOM_FT` 9.5 ft off the 3 ft tread, a path's middle about 11 ft off the trees (about 22 ft of the opening). The GM, 2026-10-12: room before packing. A test red without it.
+3. **Where each comes from.** 0036's figure is O (its drawing page); the ruling is the GM's (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-19: the door path's bands are grown 11 ft a side (`2 * (1.5 + 9.5)`) and then routed at `FOOTPATH_FABRIC_GAP` on top, so the path's middle stands 18 ft off the trees at 7 ft (impl-drift, T96's round); `connector_dry_exit` keeps bands `FOOTPATH_FABRIC_GAP + CONNECTOR_WIDTH / 2` = 10 ft off, where 0036's room for a 6 ft track is 3 + 9.5 = 12.5 ft. With T96's 7 ft, cohort seed 22 is refused - measured 2026-10-19 (`make cohort-landing`, then a scratch probe logging `door_path`: linear, two farms whose doors stood but no door path was lawful). With the door path's middle held 11 ft off the trees and the connector 12.5 ft, seeds 22, 3, 4, 903 and 904 pass and the cohort passes 16 of 16 - measured 2026-10-19 (`make cohort N=1 SEED=<n>` and `make cohort`, probes reverted).
+5. **The order.** The door path's band grown so its middle stands 0036's 11 ft off the trees; the connector's band gap at 0036's room; the claims; the test; then T96 and T98 land together.
+6. **The exits.** (a) refine an O number: none - 0036 gives the figure; (b) an exception: none; (c) a new rule: none - the margin is counted once; (d) more room: not needed, the cohort passes; (e) conform - chosen: 0036's figure, counted once, at both sites.
+7. **The search smell.** None.
+8. **The budget.** 60 min.
+9. **Done, measured.** One goal: both sites keep 0036's room once - the door path's middle 11 ft off the trees, the connector 12.5 ft - their claims IN-STEP, a test red without it, and the landing cohort passing with T96.
+10. **Before moving a constant.** `dry_exit.GROVE_EXIT_CELL_FT` moves from 7 to 2.9 ft; its uses, measured 2026-10-19 (a grep of
+   `l7r` and `tests`): `track.py:940`, the connector's start pushed `CONNECTOR_BAND_GAP_FT + 0.71 x cell + 1` off a band - 15.6 ft at
+   2.9, inside the 16 ft half of a 32 ft gap (18.5 at 7 was not); `track.py:941`, the flood fill's cell where farms carry groves -
+   about 5.8 times the cells, paid only where no bearing of the sweep is clear; `serve.py:420`, `DOOR_FINE_CELL_FT`'s docstring,
+   which names the derivation only; `tests/hamletgen/ways/test_dry_exit_raster.py:61`, the raster test run at that cell. No other
+   constant's value moves: `lay_door_paths`' `grow` is computed from the gap it is routed at, and `connector_dry_exit`'s band gap
+   reads `GROVE_WORKING_ROOM_FT` (one site each).
+11. **Before fitting things into room.** Dispersed farms' bands stand 32 ft apart (`track.py`'s comment); a 6 ft connector at 12.5 ft a side needs 25 ft.
+
+### T98 Decisions
+
+**D119 - the room off a grove counted once.** In `lay_door_paths` the grove bands are grown by `2 * (1.5 + GROVE_WORKING_ROOM_FT - FOOTPATH_FABRIC_GAP)` (never below zero), so the path routed at `FOOTPATH_FABRIC_GAP` keeps its middle 1.5 + 9.5 = 11 ft off the trees; in `connector_dry_exit` a grove band's gap is `GROVE_WORKING_ROOM_FT + CONNECTOR_WIDTH / 2` (12.5 ft). Both claims cite 0036's drawing page. The connector's way out between two dispersed farms is found by the flood fill on its finer grid, which holds a gap G between two
+bands only when G >= 2 x the band gap + 2.41 x the cell (`dry_exit.GROVE_EXIT_CELL_FT`'s own rule); at 12.5 ft and the 32 ft
+between dispersed farms' bands (`dispersed.LANE_ROOM_FT`) that cell is at most 2.9 ft, so `GROVE_EXIT_CELL_FT` becomes 2.9 (from 7),
+with a test holding the inequality - measured 2026-10-19 (`make test-file` on `test_dry_exit.py`: the 32 ft case refused at 7 ft,
+passing at 2.9; `make cohort` 16 of 16). The fill runs only where no bearing of the sweep is clear.
+
+<!-- plan-archive: archived 2026-10-19 -->
+## T103 - the measure guard sees a red preflight (found working T98, 2026-10-19)
+
+### T103 Approach (checklist part A)
+
+1. **The goal, in the world.** A gate re-run after a red preflight goes through, as a re-run after any red gate does.
+2. **The constraints.** The measure guard's rule: "a run after a red goes through (that is fixing what the gate found)"; the GM's rule: a tool, never a reminder. A test red without it.
+3. **Where each comes from.** The guard's own rule (O); the GM (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T98's two gates, `make done` then the guard's refusal): the gate stopped at preflight (the file-size bar, then a failing quick test), wrote no `dev/run-log` record - the record is written only after preflight - and the guard refused the re-run as "this tree's last full gate was GREEN 30 min ago".
+5. **The order.** The preflight failure branch in the Makefile's `done` marks the git directory; the guard reads the mark; then the hook suite's test.
+6. **The exits.** (c) - the failure leaves a mark the guard reads; a run-log record is the other route, refused because those records are tracked files the landing sweeps (`commit-run-record.sh`).
+7. **The search smell.** None.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: after a preflight failure newer than the last green gate, `make done` is not refused by the measure guard; a preflight failure older than the last green gate changes nothing; `tests/hooks/test-measure-hooks.sh` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T103 Decisions
+
+**D120 - a red preflight leaves a mark.** `done`'s preflight failure branch touches `<git dir>/gate-preflight-red`; `measure-hooks.sh` lets the full measurement through, without refusing once, when that file is newer than the last green run-log record.
+
+<!-- plan-archive: archived 2026-10-19 -->
+## T104 - a dispatch that never launched holds nothing (found working T98, 2026-10-19)
+
+### T104 Approach (checklist part A)
+
+1. **The goal, in the world.** A plan section is held only while a review of it actually runs.
+2. **The constraints.** T85 (D106): a write that would change text a running plan review reads is refused; `PLAN_EDIT_OK` passes a dead hold only. The GM's rule: a guard that fires on correct work teaches a session to bypass every guard. A test red without it.
+3. **Where each comes from.** T85 (O); the GM (G, the root CLAUDE.md's section on what is enforced).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the guard's two refusals, then a read of `hm_checks` and `hm_planhold`): T98's first plan review was refused by the hourly step-back guard, so it never launched and never returned; the hold taken at its PreToolUse stayed `pending` and refused T98's section amendment about an hour after the re-sent review had returned, and later a `make ledger-owed` command that named the plan in its reason - each passed only with `PLAN_EDIT_OK`.
+5. **The order.** `hm_planhold.refusal` passes a hold still pending past `PENDING_S`; a stopped review's agent releases its hold; then the test.
+6. **The exits.** (c) - a hold that never launched is no hold; (e) conform - the escape each time - refused: the guard would teach the escape.
+7. **The search smell.** None.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: a hold whose dispatch was never launched past `PENDING_S` refuses nothing, nor one whose agent was stopped; a launched review's hold still refuses, also when a later dispatch of the same task is refused; `tests/tooling/test_plan_edit_refusal.py` and `tests/tooling/test_hm_checks.py` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T104 Decisions
+
+**D121 - a hold is a running review.** In `hm_planhold.refusal` a hold still `pending` past `PENDING_S` (its dispatch refused or lost) is skipped without an escape - no review reads that text; a launched hold keeps T85's rule (its escape only once dead past `HOLD_MAX_S`). A review's agent stopped with `TaskStop` releases its hold as a return does - the PostToolUse hook that pairs a dispatch with its agent also hears `TaskStop` (measured 2026-10-19, two T104 reviews stopped: each hold stood and refused the section's next edit for half an hour). No hold is dropped by another: a running review's hold stands until it returns, is stopped or dies, whatever later dispatch of the same task is refused.
+
+<!-- plan-archive: archived 2026-10-19 -->
+## T105 - a claim that newly cites a page is owed its check, not a triage (found working T100, 2026-10-19)
+
+### T105 Approach (checklist part A)
+
+1. **The goal, in the world.** A claim relabeled to cite a page is judged against that page.
+2. **The constraints.** Feature 318's FR-016: a claim whose cited research moved owes only the triage of the changed blocks, unless a block it rested on is gone. Feature 316: a claim's verdict is recorded at the fingerprints its bundle read. A test red without it.
+3. **Where each comes from.** 318 (O), 316 (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T100's two relabeled claims, `make claims-owed`, then a read of `claims.research_why`): an UNRESEARCHED claim relabeled to cite 0035, and another to cite 0246, were each listed `triage`; their triage bundle named no claim, and `make claims-bundle OWED=1` refused with "no such claim(s)". `research_why` sends a claim to triage when the blocks it rested on still stand, and a claim that rested on nothing always does.
+5. **The order.** `research_why` asks first whether the claim cites a page its last check did not read; then the test.
+6. **The exits.** (c) - a page the claim was never checked against is research changed; (e) conform - bundling such claims by name each time - refused: the tool would need remembering.
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: a claim whose pointers name a page absent from its row's `pages` is owed `research changed`, so `make claims-bundle OWED=1` bundles it; a claim citing only the pages it was checked against keeps the triage rule; `tests/tooling/test_claims_scoping.py` red without it.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T105 Decisions
+
+**D123 - a new page is new research.** `claims.research_why` returns `research changed` when any page the claim now cites is not among the pages its last check read (its row's `pages`), before the triage test; feature 318's triage rule stands for every other moved page.
+
+<!-- plan-archive: archived 2026-10-19 -->
+## T99 - a scattered farm no channel reaches passes with its own well (found working T96, 2026-10-19)
+
+### T99 Approach (checklist part A)
+
+1. **The goal, in the world.** On a map whose scattered farms draw channels, a farm the channel cannot reach is watered by a well of its own, and the check accepts it.
+2. **The constraints.** 0031's drawing page: "A farm no channel can reach has a well of its own instead. Where chance gives a scattered settlement channels, a farm the channel cannot be led to is given a well, so no farm goes without water." A claims check IN-STEP; a test red without it.
+3. **Where each comes from.** 0031's drawing page (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T96's impl-drift round on `row_rules.water_rules#a scattered farm's own water`: DRIFTED, then a read of `water_rules`): under `farm_water` channel the check flags every farm whose channel does not end in its frame (`farm_without_its_channel`), with no case for the well 0031 gives it instead.
+5. **The order.** `water_rules`' channel branch, its claim, the test, the cohort.
+6. **The exits.** (e) conform - the check takes 0031's rule as written.
+7. **The search smell.** None.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: under `farm_water` channel, a farm with a channel ending in its frame, or with a private well in its frame, passes; one with neither is `farm_without_its_channel`; its claim cites 0031's rule and is IN-STEP; `tests/hamletgen/homesteads/` red without it; the cohort passes.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T99 Decisions
+
+**D124 - the channel, or the well instead.** In `row_rules.water_rules`, a channel-map farm passes when its channel ends in its frame or a private well stands in its frame; the claim reads "a scattered farm's own water - <0031's drawing page>: its channel ends in its frame, or, where no channel reaches it, its own well in its frame (a well off its way in on a `well` map)".
+
+<!-- plan-archive: archived 2026-10-19 -->
+## T97 - a farm's way reaches it from its house, as 0246 counts it (found working T96, 2026-10-19)
+
+### T97 Approach (checklist part A)
+
+1. **The goal, in the world.** A farm counts as reached by a way only where 0246 counts it reached - the way near its house or its built ground, not near a point 8 ft past its yard.
+2. **The constraints.** 0246's drawing page: a farmhouse counts as reached within 60 ft of the house, or within 12 ft of the steading's built ground (`end_serves`, `WAY_END_REACH_FT`, `STEADING_ARRIVAL_FT`). The lane law's own rule: placement and its check read the same source. A claims check IN-STEP; a test red without it.
+3. **Where each comes from.** 0246's drawing page (O); the project's rule (O, `end_serves`'s docstring).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T96's impl-drift rounds on `row_rules#door reach of a street`, `serve.lay_door_paths#every grove farm reached at its door` and `web.stage_web#door path distance`: DRIFTED, then a read of `lay_door_paths`, `street_arrives` and `row_rules`): off a row `street_arrives` returns True, so a farm takes no door path whenever its DOOR point is within `DOOR_REACH_FT` (60 ft) of a way; `row_rules` passes a row farm whose door is within 60 ft of its street. The door stands `DOOR_STEP_FT` past the yard - measured 2026-10-19 (a read of `front_door`) - so a way that distance from it can stand well beyond both of 0246's reaches.
+5. **The order.** One predicate - does the way's point nearest the house serve the farm (`end_serves`) - read by `lay_door_paths` and `row_rules`; the three claims; the tests; the cohort.
+6. **The exits.** (e) conform - the code takes 0246's reach as written; the door's distance is retired as a stand-in.
+7. **The search smell.** None.
+8. **The budget.** 60 min.
+9. **Done, measured.** One goal: `lay_door_paths` lays no door path only where the way's point nearest the house serves the farm under `end_serves`, on a row's street or off it; `row_rules`' `farm_not_on_its_street` asks the same; the three claims IN-STEP; a test red without it; the cohort and the landing cohort pass.
+10. **Before moving a constant.** `DOOR_REACH_FT` (60 ft, `serve.py`) stops being read; its uses, measured 2026-10-19 (a grep of `l7r`
+   and `tests`): `serve.lay_door_paths`' `reach` default, `web.stage_web`'s call (`reach=STEADING_ARRIVAL_FT if _rows else
+   DOOR_REACH_FT`), `row_rules`' street test, and `tests/hamletgen/ways/test_doors.py`'s two door-distance asserts - the parameter,
+   the constant and the call's argument go, and the tests ask `street_arrives` instead.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T97 Decisions
+
+**D125 - reached as 0246 counts it.** `serve.street_arrives` asks, on a row's street or off it, whether the way's point nearest the HOUSE serves the farm (`end_serves`: 60 ft of the house or 12 ft of its built ground); `lay_door_paths` skips a farm only on that answer, with no door-distance test; `row_rules`' `farm_not_on_its_street` asks the same predicate of the farm's own street. The three claims keep 0246's label for the 60 ft, a GUESS on its page, now measured from the house. And a farm's door path (a lane recording `serves`) is a household's own way, which `law.short_fragments` never drops,
+as it never drops one recording `of`: 0246, "Every other farmhouse is served by a lane of its own. Its way leaves its dooryard" -
+measured 2026-10-19 (cohort seed 904 under D125: four row farms' 9 ft door paths were laid and kept until `settle_fragments`
+dropped them as earning nothing, the farms being within the 100 ft back-lane reach; with door paths spared, seed 904 and the
+cohort pass, 16 of 16). The trim of a further row street reads the same predicate: it is kept to the street's point nearest the house of each farm
+the street serves without a path (`serve.street_anchors`, at a reach of a foot), where it was kept to a door within 12 ft -
+measured 2026-10-19 (T97's claims round: `web.stage_web#a further row street's end` DRIFTED, the trim and `street_arrives` asking
+different reaches; built, the pinned rows 901-904 and the cohort pass, 16 of 16).
+
+### T97 part B (2026-10-19T09:52Z)
+
+Owed by the cohort record in which seed 904 newly failed (`row_rules`, four `farm_not_on_its_street`).
+
+1. **What is refusing?** Seed 904's four row farms - measured 2026-10-19 (scratch probes of `lay_door_paths`, the web passes and the settle's steps): each door path is laid, then `settle_fragments` drops it as a fragment that earns nothing.
+2. **A3 again.** 0246 counts two things apart: a household served by a lane of its own from its dooryard, and the 100 ft back-lane reach; the fragment rule asked only the second.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Changing: D125 gains the door path's exemption from the fragment rule, decided in the section above and reviewed with it.
+6. **The one-sentence test.** "A door path is a household's own way and is never dropped as a fragment" - true by the probe; seed 904 passes.
+7. **The next step is a measurement.** The landing cohort with the exemption built.
+8. **Every route measured before offering one?** Yes: the drop was traced to its step before the exemption was written.
+9. **After a ruling: the step it names?** No ruling is pending on T97.
+
+
+### T97 part B (2026-10-19T09:58Z)
+
+Owed by the round arbiter's ruling on hour:385-approach-checklist@31 (continue).
+
+1. **What is refusing?** Nothing now: the door path's exemption from the fragment rule is decided, reviewed CLEAR and built.
+2. **A3 again.** Unchanged since the part B above.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither in this part B: the change is D125's, decided and reviewed.
+6. **The one-sentence test.** "A farm is reached as 0246 counts it, and its door path stays" - true by seed 904 and the cohort.
+7. **The next step is a measurement.** The claims check, then the gate and the landing cohort.
+8. **Every route measured before offering one?** No route is offered.
+9. **After a ruling: the step it names?** Yes - the ruling says go on with T97's review, claims check, gate and landing.
+<!-- plan-archive: archived 2026-10-19 -->
+## T101 - the corridor's half-width says what it is (carried by T96's claims round)
+
+### T101 Approach (checklist part A)
+
+1. **The goal, in the world.** `ACCESS_HALF_FT`'s account names what the 7 ft is: a corridor line's gap off each garden fence, not the room between two steadings.
+2. **The constraints.** 0246's drawing page: a lane's middle keeps at least 7 ft clear of a garden fence (§16, recorded there as a DEVIATION), and a clustered settlement parts two homesteads by a lane's room of 18 ft - 7 ft at each fence and a 4 ft tread between (§3). A claims check IN-STEP.
+3. **Where each comes from.** 0246's drawing page (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T96's claims round, `access.py::ACCESS_HALF_FT#corridor room` DRIFTED and carried, then a read of `access.py`): the comment above the constant calls the 7 ft "a footpath's room between two steadings", where 0246 makes that room 18 ft (`MIN_WEB_GAP`, half of it 9 ft); the value itself is the fence-to-middle gap the claim cites.
+5. **The order.** The comment, then its claim's re-check.
+6. **The exits.** (e) conform - the value matches 0246's 7 ft; only the account is wrong.
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: the comment says the 7 ft is a corridor line's gap off each fence and names `MIN_WEB_GAP` as the room between two steadings; the claim's re-check finds it IN-STEP; no value changes.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T101 Decisions
+
+**D126 - the gap, not the room.** The comment above `ACCESS_HALF_FT` reads that the corridor's half-width is `WEB_FABRIC_GAP` (7 ft): its line kept that far off each garden fence, as the web's own fabric is - the room between two steadings being `MIN_WEB_GAP` (18 ft), 7 ft at each fence and the tread between.
+
+<!-- plan-archive: archived 2026-10-19 -->
+## T107 - 0246 says how its two 7 ft figures measure (found working T101, 2026-10-19)
+
+### T107 Approach (checklist part A)
+
+1. **The goal, in the world.** A reader of 0246's drawing page can tell the lane's room between two homesteads from the least gap a lane keeps off a fence.
+2. **The constraints.** 0246's block "Neighbors stand a lane's width apart": a lane's room of 18 ft - 7 ft at each garden fence and a 4 ft tread between. Its block "A lane's middle keeps at least 7 ft clear of a garden fence": measured to the middle, so a 3 ft footpath's edge may pass 5.5 ft off it. The code reads both: `MIN_WEB_GAP` = 2 x `WEB_FABRIC_GAP` + 4 (the room) and `WEB_FABRIC_GAP` (the gap). The lesson of T31: a new block owes the claims that cite the page a triage; an edit to a heavily cited block owes them their full check.
+3. **Where each comes from.** 0246's drawing page (O); T31's retro (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T101's claims check on `ACCESS_HALF_FT`, then a read of the two blocks and `consts.MIN_WEB_GAP`): the room measures its 7 ft to the tread's edge (7 + 4 + 7 = 18), the gap to the lane's middle; read as one figure they disagree by 4 ft.
+5. **The order.** A new block on the drawing page, then the record checks and triages it owes.
+6. **The exits.** (c) a new block that says each figure's measure - the two conventions kept, nothing renumbered; editing either block was weighed and refused (T31's lesson).
+7. **The search smell.** None.
+8. **The budget.** 40 min with its checks.
+9. **Done, measured.** One goal: 0246's drawing page holds a block saying the room's 7 ft is at the tread's edge and the gap's 7 ft at the lane's middle, so the 18 ft room leaves a lane's middle 9 ft off each fence; its record checks and the claims triage it owes pass; no code changes.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** The 18 ft room: a 4 ft tread with 7 ft clear at each edge; its middle stands 9 ft off each fence, 2 ft more than the least gap of 7.
+
+### T107 Decisions
+
+**D127 - two measures, said once.** A new block on 0246's drawing page, after the gap's block: "The room and the gap measure their 7 ft differently. The 18 ft room between two homesteads counts 7 ft from each fence to the tread's edge, so its lane's middle stands 9 ft off; the least gap counts 7 ft to the lane's middle. Both are map drawing conventions."
+

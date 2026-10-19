@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92, T93, T94, T95, T96, T97, T98, T99, T100, T102, T103, T104
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92, T93, T94, T95, T96, T97, T98, T99, T100, T102, T103, T104, T105, T106, T107, T109
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -472,40 +472,48 @@ Owed by the landing cohort of 07:15Z (cohort seed 22 newly failing) and the roun
 7. **The next step is a measurement.** The landing cohort with T96 and T98 together.
 8. **Every route measured before offering one?** Yes: the band margin was traced as the cause before T98 was written; room (d) waits if T98 does not settle it, as the ruling says.
 9. **After a ruling: the step it names?** Yes - the ruling says go on with T98's review and landing.
-## T98 - grove-band clearance as 0036 gives it, once (found working T96, 2026-10-19; lands with T96)
+<!-- plan-archive: T98 to T96 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+<!-- plan-archive: T103 to T98 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+<!-- plan-archive: T104 to T98 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+## T100 - web lanes off the water cite 0035's drawing page (found working T96, 2026-10-19)
 
-Found by T96's claims round (DRIFTED: `serve.lay_door_paths#door path off a grove band`, `track.connector_dry_exit#grove band gap`),
-and needed by T96's landing: with the footpath at 7 ft, cohort seed 22 newly fails because the door path's margin off a grove is
-counted twice.
+### T100 Approach (checklist part A)
 
-### T98 Approach (checklist part A)
-
-1. **The goal, in the world.** A path past a farm's grove keeps the working room 0036 gives off the trees - no more, no less.
-2. **The constraints.** 0036: a footpath's clearance and some working room kept off the trees on each side - `GROVE_WORKING_ROOM_FT` 9.5 ft off the 3 ft tread, a path's middle about 11 ft off the trees (about 22 ft of the opening). The GM, 2026-10-12: room before packing. A test red without it.
-3. **Where each comes from.** 0036's figure is O (its drawing page); the ruling is the GM's (G).
-4. **Do they describe the world here?** Yes - measured 2026-10-19: the door path's bands are grown 11 ft a side (`2 * (1.5 + 9.5)`) and then routed at `FOOTPATH_FABRIC_GAP` on top, so the path's middle stands 18 ft off the trees at 7 ft (impl-drift, T96's round); `connector_dry_exit` keeps bands `FOOTPATH_FABRIC_GAP + CONNECTOR_WIDTH / 2` = 10 ft off, where 0036's room for a 6 ft track is 3 + 9.5 = 12.5 ft. With T96's 7 ft, cohort seed 22 is refused - measured 2026-10-19 (`make cohort-landing`, then a scratch probe logging `door_path`: linear, two farms whose doors stood but no door path was lawful). With the door path's middle held 11 ft off the trees and the connector 12.5 ft, seeds 22, 3, 4, 903 and 904 pass and the cohort passes 16 of 16 - measured 2026-10-19 (`make cohort N=1 SEED=<n>` and `make cohort`, probes reverted).
-5. **The order.** The door path's band grown so its middle stands 0036's 11 ft off the trees; the connector's band gap at 0036's room; the claims; the test; then T96 and T98 land together.
-6. **The exits.** (a) refine an O number: none - 0036 gives the figure; (b) an exception: none; (c) a new rule: none - the margin is counted once; (d) more room: not needed, the cohort passes; (e) conform - chosen: 0036's figure, counted once, at both sites.
+1. **The goal, in the world.** The claim on how the web keeps off the water names the page that sets it.
+2. **The constraints.** 0035's drawing page: "The ways between the two banks cross the brook squarely, on a plank bridge"; "A way keeps to its own bank unless crossing saves it more than about 150 ft of walking"; crossing places "every 160 ft or so along the brook". Feature 316: a claim cites the page that answers it. A claims check IN-STEP.
+3. **Where each comes from.** 0035's drawing page (O); 316 (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T96's impl-drift round on `web.stage_web#web lanes off the water`: MISLABELED, "UNRESEARCHED, but 0035's drawing page answers it", then a read of 0035): the web's cuts and joins are clipped at the watercourses and drawn channels, and a join crosses the brook only at a ford - 0035's crossing places (`FORD_SPACING`, 160 ft).
+5. **The order.** The claim's text, then its claims check.
+6. **The exits.** (e) conform - the code keeps 0035's rule; only its citation is wrong.
 7. **The search smell.** None.
-8. **The budget.** 60 min.
-9. **Done, measured.** One goal: both sites keep 0036's room once - the door path's middle 11 ft off the trees, the connector 12.5 ft - their claims IN-STEP, a test red without it, and the landing cohort passing with T96.
-10. **Before moving a constant.** `dry_exit.GROVE_EXIT_CELL_FT` moves from 7 to 2.9 ft; its uses, measured 2026-10-19 (a grep of
-   `l7r` and `tests`): `track.py:940`, the connector's start pushed `CONNECTOR_BAND_GAP_FT + 0.71 x cell + 1` off a band - 15.6 ft at
-   2.9, inside the 16 ft half of a 32 ft gap (18.5 at 7 was not); `track.py:941`, the flood fill's cell where farms carry groves -
-   about 5.8 times the cells, paid only where no bearing of the sweep is clear; `serve.py:420`, `DOOR_FINE_CELL_FT`'s docstring,
-   which names the derivation only; `tests/hamletgen/ways/test_dry_exit_raster.py:61`, the raster test run at that cell. No other
-   constant's value moves: `lay_door_paths`' `grow` is computed from the gap it is routed at, and `connector_dry_exit`'s band gap
-   reads `GROVE_WORKING_ROOM_FT` (one site each).
-11. **Before fitting things into room.** Dispersed farms' bands stand 32 ft apart (`track.py`'s comment); a 6 ft connector at 12.5 ft a side needs 25 ft.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: the claim cites 0035's drawing page and the claims check finds it IN-STEP; no code changes.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
-### T98 Decisions
+### T100 Decisions
 
-**D119 - the room off a grove counted once.** In `lay_door_paths` the grove bands are grown by `2 * (1.5 + GROVE_WORKING_ROOM_FT - FOOTPATH_FABRIC_GAP)` (never below zero), so the path routed at `FOOTPATH_FABRIC_GAP` keeps its middle 1.5 + 9.5 = 11 ft off the trees; in `connector_dry_exit` a grove band's gap is `GROVE_WORKING_ROOM_FT + CONNECTOR_WIDTH / 2` (12.5 ft). Both claims cite 0036's drawing page. The connector's way out between two dispersed farms is found by the flood fill on its finer grid, which holds a gap G between two
-bands only when G >= 2 x the band gap + 2.41 x the cell (`dry_exit.GROVE_EXIT_CELL_FT`'s own rule); at 12.5 ft and the 32 ft
-between dispersed farms' bands (`dispersed.LANE_ROOM_FT`) that cell is at most 2.9 ft, so `GROVE_EXIT_CELL_FT` becomes 2.9 (from 7),
-with a test holding the inequality - measured 2026-10-19 (`make test-file` on `test_dry_exit.py`: the 32 ft case refused at 7 ft,
-passing at 2.9; `make cohort` 16 of 16). The fill runs only where no bearing of the sweep is clear.
+**D122 - the web's water rule is 0035's.** `stage_web`'s claim reads "web lanes off the water - <0035's drawing page>: a way keeps to its own bank; web cuts and joins clipped at the watercourses and drawn channels, a join crossing the brook only at a ford, one of the crossing places".
 
+
+### T100 part B (2026-10-19T09:02Z)
+
+Owed by the round arbiter's ruling on hour:385-approach-checklist@30 (continue), taken while T100 was the active task.
+
+1. **What is refusing?** Nothing in T100: its plan is CLEAR and its claim's triage is next.
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither.
+6. **The one-sentence test.** "The web's water claim cites 0035" - true once the claims check finds it IN-STEP.
+7. **The next step is a measurement.** The claim's triage, then its check.
+8. **Every route measured before offering one?** No route is offered.
+9. **After a ruling: the step it names?** Yes - the ruling says land T104, then do T100.
+<!-- plan-archive: T105 to T100 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+<!-- plan-archive: T99 to T96 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+<!-- plan-archive: T97 to T96 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+<!-- plan-archive: T101 to T96 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+<!-- plan-archive: T107 to T101 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).

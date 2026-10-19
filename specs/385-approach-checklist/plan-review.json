@@ -6776,6 +6776,252 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T103": {
+   "section_sha256": "16568f8ad8007104c9af00c610e5b780af4ee7711cacd29d51ab4d8b55bd0fc5",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T103 (the task itself)",
+     "summary": "A tooling fix found while working T98 is filed as its own task: a gate re-run after a red preflight is let through by the measure guard.",
+     "class": "within",
+     "why": "Amendment 6 (GM, verbatim): 'Please make sure to implement any obvious performance / tooling / process improvements along the way'; amendment 4's one-goal-per-task rule (FR-015) is why it is its own task rather than folded into T98. The fix makes the guard keep its own stated rule ('a run after a red goes through') in a case it was measured to miss on 2026-10-19; it adds no behavior beyond that rule."
+    },
+    {
+     "id": "D120",
+     "summary": "done's preflight failure branch touches <git dir>/gate-preflight-red; measure-hooks.sh lets the full measurement through, without refusing once, when that file is newer than the last green run-log record.",
+     "class": "within",
+     "why": "Mechanism for the guard's existing rule; it widens what the guard admits only to the case the rule already names (a red gate, here red at preflight). A tool rather than a reminder, as amendment 1 item 3 and amendment 8 ('make our tooling do the thing correctly automatically every time') ask. Narrows nothing the GM asked for."
+    },
+    {
+     "id": "Exit (c): an untracked mark rather than a run-log record",
+     "summary": "The red preflight is recorded as a mark in the git directory; writing a dev/run-log record is refused because those are tracked files the landing sweeps.",
+     "class": "within",
+     "why": "Implementation choice between two routes to the same goal; the request settles neither, and neither route drops any part of the goal."
+    },
+    {
+     "id": "Item 9: an older preflight failure changes nothing",
+     "summary": "A preflight red older than the last green gate does not lift the guard's refusal.",
+     "class": "within",
+     "why": "Not an exception to the request: the guard's rule lets through a run after a red, and a red that a later green superseded is not the last result. This keeps the guard's existing refusal for the case its rule already covers, and the GM asked for nothing in that case to change."
+    },
+    {
+     "id": "Item 9: the test in tests/hooks/test-measure-hooks.sh, red without the fix",
+     "summary": "A hook-suite test that fails without the mark.",
+     "class": "within",
+     "why": "Enforcement of the requested behavior only (a tool, never a reminder); it checks nothing beyond D120."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T104": {
+   "section_sha256": "816ca9a69527afe041114516fb2902b00c07519d10ee7e7152e37d40c0542bd8",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D121a",
+     "summary": "In hm_planhold.refusal a hold still pending past PENDING_S (its dispatch refused or lost, never launched) is skipped with no PLAN_EDIT_OK escape needed; a launched hold keeps T85's rule.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows D106, which refuses a dead dispatch's hold until PLAN_EDIT_OK is given. The request (amendment 9, proposal B) asks only that 'the plan-write path refuses an edit to a section whose review is running'. A dispatch that never launched has no review running and nothing reading the text, so the exception is implied by the GM's own words. Refusing there is a guard firing on correct work, which the purpose of the proposal (to prevent stale digests from edits under a live review) does not need. A live or launched review's hold is untouched, so the purpose survives."
+    },
+    {
+     "id": "D121b",
+     "summary": "A review agent stopped with TaskStop releases its hold as a return does; the PostToolUse hook that pairs dispatch and agent also hears TaskStop.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Against D106 this removes the escape-only path for a hold a stopped (dead) dispatch left. Proposal B's scope is a section 'whose review is running', and a stopped review is not running and reads nothing, so the exception follows from the request's words. The measurement given (two stopped T104 reviews holding for half an hour) is the guard refusing correct work."
+    },
+    {
+     "id": "D121c",
+     "summary": "No hold is dropped by another: a running review's hold stands until it returns, is stopped or dies, whatever later dispatch of the same task is refused. This replaces the earlier text's 'hold drops any earlier hold of the same task'.",
+     "class": "within",
+     "why": "It keeps D106 and proposal B at full reach: no running review's held text loses its protection because a later dispatch was refused. Dropping the earlier replacement rule removes a path by which a live review's hold could lapse, so this change widens nothing and narrows nothing that was asked."
+    },
+    {
+     "id": "A5-A9",
+     "summary": "Order (refusal change, TaskStop release, then tests); exit (c) chosen and 'conform with the escape each time' refused; done names one goal, with tests in tests/tooling/test_plan_edit_refusal.py and test_hm_checks.py red without it.",
+     "class": "within",
+     "why": "One goal per task (amendment 4). The tests only enforce the hold rule the request and D106 already ask for. Refusing the escape-each-time exit follows the GM's rule that a guard firing on correct work teaches bypass."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T100": {
+   "section_sha256": "e858b5f9eeab7b55b665d9a6a0eeb937d6c7c493be46fccb838980786552aeba",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T100-own-task",
+     "summary": "The mislabeled claim found by T96's impl-drift round is worked as its own task (T100) rather than inside T96.",
+     "class": "within",
+     "why": "Amendment 4 (the GM approved 'a second goal becomes its own task', FR-015) and amendment 3 option 3 (a claims finding becomes an open task the feature must fix before it closes). Nothing the GM asked for is dropped; the finding is fixed in this feature."
+    },
+    {
+     "id": "T100-exit-conform",
+     "summary": "Exit (e) conform: the code is left as it is and only the claim's citation changes; done is the claims check finding the claim IN-STEP.",
+     "class": "within",
+     "why": "The finding is MISLABELED (the claim says UNRESEARCHED where 0035's drawing page answers it), and the request's claim work (amendments 7 and 9, feature 316's cite-the-page rule) is to make a claim match its research. Changing only the citation, with the claims check as the measured done, is the narrowest fix that does what was asked. If the code did not in fact keep 0035's rule, the claims check fails and the stated goal is not met, so the decision cannot quietly pass a wrong claim. Whether the code keeps 0035's rule is the claims check's call, not a fidelity finding."
+    },
+    {
+     "id": "D122",
+     "summary": "stage_web's claim is reworded to cite 0035's drawing page: a way keeps to its own bank; cuts and joins clipped at watercourses and drawn channels; a join crosses the brook only at a ford, one of the crossing places.",
+     "class": "within",
+     "why": "It carries out T100's goal (cite the page that sets the rule, feature 316) and adds no behavior or scope. The wording's accuracy against 0035 (for example, its 'unless crossing saves more than about 150 ft' clause) is for the claims check and the research ladder to judge, not for this review."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T105": {
+   "section_sha256": "5763c324848e97363238c156e2debcda37c26f87d783546c7140fb6f7f324335",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D123",
+     "summary": "claims.research_why returns 'research changed' when the claim now cites a page absent from its row's recorded pages, ahead of the triage test; feature 318's triage rule stands for every other moved page",
+     "class": "within",
+     "why": "A tooling fix found while working a claim task, which amendment 6 authorizes ('implement any obvious performance / tooling / process improvements along the way'). It narrows nothing that was asked. Feature 318 FR-016 scopes the re-check owed 'after a page edit' to the blocks a claim rested on. A claim relabeled to a page it was never checked against rested on no block of that page, so FR-016's triage cannot reach it, and the measured result (the triage bundle named no claim, and claims-bundle refused it) shows the claim was owed nothing at all. D123 makes such a claim owed a full check and leaves FR-016 as written for every case it covers. That is consistent with this feature's FR-008: a re-check reads against what the last check read."
+    },
+    {
+     "id": "T105 Approach item 6 (exit chosen)",
+     "summary": "exit (c), treat an unread page as changed research; conform (bundling claims by name each time) refused because it relies on remembering",
+     "class": "within",
+     "why": "This is the same decision as D123, seen as the checklist exit. Refusing a remembered workaround in favour of tooling follows the GM's amendment 8 ('make our tooling do the thing correctly automatically every time')."
+    },
+    {
+     "id": "T105 Approach items 5, 8, 9 (order, budget, done)",
+     "summary": "research_why change first, then the test; 20 min; one goal with tests/tooling/test_claims_scoping.py red without it",
+     "class": "within",
+     "why": "Execution choices under FR-003 and FR-015 (one goal per task). Done names one goal and a test that enforces it, which is enforcement of the change rather than added scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T99": {
+   "section_sha256": "c344f827ffde116f1d64bdb6841d1c013fffc9732265c039a74171b9f690ccc0",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T99 Approach item 6 (exit)",
+     "summary": "Take exit (e) conform: the check is brought to 0031's drawing-page rule as written, rather than refining, excepting or re-scoping it.",
+     "class": "within",
+     "why": "Amendment 7 asks for ten more claims taken and the original request asks that rules be tested against the research; conforming a check to a research page (O) it currently contradicts is the plain reading of fixing a claim. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "D124",
+     "summary": "In row_rules.water_rules, a channel-map farm passes when its channel ends in its frame or a private well stands in its frame; the claim cites 0031's rule, with a parenthetical for the well-map case.",
+     "class": "within",
+     "why": "This widens what the check accepts so it matches 0031's text ('a farm the channel cannot be led to is given a well'). It does not carve anything out of the GM's request: no amendment asks the check to keep refusing a well-watered farm, and the research it conforms to is cited. The well-map parenthetical describes the existing branch and adds no behavior. Not a fidelity finding, but worth noting: the check as written accepts a well even where a channel could have reached the farm, while the claim says 'where no channel reaches it'. Whether that check-to-claim gap is IN-STEP is for the claims check to judge."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T97": {
+   "section_sha256": "d450369f043dc8a524f690285b15b4b4fe4b3ec5c040529060c6854b2dd36311",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D125-reach",
+     "summary": "street_arrives asks, on a row's street or off it, whether the way's point nearest the HOUSE serves the farm under end_serves (60 ft of the house or 12 ft of its built ground); lay_door_paths and row_rules' farm_not_on_its_street read that one predicate",
+     "class": "within",
+     "why": "Conforms the code to 0246's research as written and makes placement and its check read one source - the lane law (384 FR-000, moved here by FR-007) the request makes task 1; nothing the GM asked is narrowed and no house moves for a path."
+    },
+    {
+     "id": "D125-door-path-exemption",
+     "summary": "a door path (a lane recording serves) is a household's own way that law.short_fragments never drops, as it never drops one recording of",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict; grounded in 0246's 'Every other farmhouse is served by a lane of its own' and measured on seed 904; it widens no carve-out of the GM's request - it keeps a researched way the fragment rule was wrongly dropping."
+    },
+    {
+     "id": "D125-further-street-trim",
+     "summary": "NEW: a further row street's trim is kept to the street's point nearest the house of each farm it serves without a path (serve.street_anchors at a 1 ft reach), where it was kept to a door within 12 ft",
+     "class": "within",
+     "why": "The same predicate applied to the one remaining reader (the claims round found the trim and street_arrives asking different reaches); it carries out the request's lane-law work and the 'placement and check read one source' rule, moves no house, and excludes no case the GM asked to have covered."
+    },
+    {
+     "id": "A6-A10-conform-retire-DOOR_REACH_FT",
+     "summary": "exit (e) conform; DOOR_REACH_FT, lay_door_paths' reach parameter and stage_web's argument retired, tests ask street_arrives",
+     "class": "within",
+     "why": "Mechanical consequence of D125, unchanged since CLEAR; the reason for dropping the door-distance stand-in is recorded, as the checklist's guardrail requires."
+    },
+    {
+     "id": "partB-0958",
+     "summary": "the new part B after the arbiter's 'continue' ruling: no new route or change, next step the claims check, gate and landing",
+     "class": "within",
+     "why": "Decides nothing new; records that the change is D125's and follows the ruling's named step."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T101": {
+   "section_sha256": "441e03dd4b87d152975c6f6c39b3cfd3a49448806afafd31d88025d36207fa5c",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T101 task",
+     "summary": "A claims finding carried by T96's claims round (access.py::ACCESS_HALF_FT#corridor room, DRIFTED) becomes its own task instead of widening T96.",
+     "class": "within",
+     "why": "The request's claims work (Amendment 7, ten more claims) and FR-013/FR-015 (a carried finding is carried, not refused; a second goal found in a task becomes its own task) cover it; Amendment 6 asks that obvious improvements be made along the way. It adds no behavior."
+    },
+    {
+     "id": "exit (e) conform",
+     "summary": "The 7 ft value stays; only the comment's account of what the 7 ft is changes.",
+     "class": "within",
+     "why": "Item 4 records a measurement (dated 2026-10-19, method: the claims round and then a read of access.py) that the value already matches 0246's 7 ft fence-to-lane-middle gap, so only the account is out of step with the research. Bringing the comment into step and leaving the code alone narrows nothing that was asked."
+    },
+    {
+     "id": "D126",
+     "summary": "The comment calls the corridor's half-width WEB_FABRIC_GAP (7 ft, a line's gap off each garden fence) and names MIN_WEB_GAP (18 ft) as the room between two steadings.",
+     "class": "within",
+     "why": "This is the text the claim's re-check reads against 0246 sections 16 and 3. No constant moves (item 10) and no value changes (item 9)."
+    },
+    {
+     "id": "done, measured",
+     "summary": "One goal: the comment is corrected and the claim's re-check returns IN-STEP.",
+     "class": "within",
+     "why": "One goal per task (FR-015). The success test is the claims check that found the drift, not a new verification."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T107": {
+   "section_sha256": "1664da9ab2027fa2f8635106416cf235b41368ef8c2c96f8a35351773d696566",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T107 (the task itself)",
+     "summary": "A discrepancy found while working T101 (the two 7 ft figures on 0246's drawing page measure differently) is split off as its own task rather than folded into T101.",
+     "class": "within",
+     "why": "FR-015 (a second goal found in a task becomes its own task) and amendment 3's option 3 (a finding becomes an open task the feature cannot close without) carry it; the GM's request asks each task to keep one goal and be measured on its own."
+    },
+    {
+     "id": "D127",
+     "summary": "A new block on 0246's drawing page saying the room's 7 ft is counted to the tread's edge and the least gap's 7 ft to the lane's middle; both existing blocks kept as written, nothing renumbered.",
+     "class": "within",
+     "why": "The GM's request never speaks to these figures, and the block preserves no behavior he asked to change. Item 3 marks both figures as ours (O) and the block says so ('map drawing conventions'). Its arithmetic matches item 4's measured reading: 7 + 4 + 7 = 18, the middle at 7 + 2 = 9 ft, 2 ft above the least gap of 7."
+    },
+    {
+     "id": "Approach item 6 / item 9 (no code change)",
+     "summary": "Code is left alone: MIN_WEB_GAP = 2 x WEB_FABRIC_GAP + 4 already encodes the room's convention and WEB_FABRIC_GAP the gap's.",
+     "class": "within",
+     "why": "The code already agrees with the block D127 adds, so a page-only change is the whole of the goal; nothing the GM asked for goes undone."
+    },
+    {
+     "id": "Approach item 5 (the order)",
+     "summary": "The block is written first, then the record checks and claims triage it owes (T31's lesson).",
+     "class": "within",
+     "why": "Sequencing inside the task; it adds the checks the project already owes a new block and narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

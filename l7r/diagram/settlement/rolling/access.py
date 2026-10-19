@@ -26,8 +26,9 @@ from .._geom.primitives import chain_violated
 if TYPE_CHECKING:
     from ..core import Settlement
 
-#: Half the corridor's width, in feet: `WEB_FABRIC_GAP` (7 ft) either side of the tread's line - a footpath's room between
-#: two steadings, the gap the web's own fabric keeps (homes H16: "a footpath-width strip (WEB_FABRIC_GAP x 2)").
+#: Half the corridor's width, in feet: `WEB_FABRIC_GAP` (7 ft) either side of the tread's line - the gap its line keeps off each
+#: garden fence, as the web's own fabric is kept (homes H16: "a footpath-width strip (WEB_FABRIC_GAP x 2)"); the room between two
+#: steadings is `MIN_WEB_GAP` (18 ft), 7 ft at each fence and the tread between (0246; feature 385 T101).
 ACCESS_HALF_FT = 7.0
 """Research: corridor room - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft either side of the way's line, so a 3 ft tread's edge may pass 5.5 ft off a fence"""
 

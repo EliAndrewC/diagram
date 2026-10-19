@@ -297,6 +297,10 @@ def vet(reply: str, units: Mapping[str, Any], root: Path, pattern: re.Pattern[st
                 bad.append(f"{why}: {line[:160]}")
                 continue
         keep.append(raw)
+    import record_owed  # noqa: PLC0415 - the OUTSIDE THE CHANGE rows, filed as `make record-checked` files them (hour 32's fix)
+
+    for row in record_owed.file_outside(root, "impl-drift", reply):
+        print(f"claims-checked: filed, not fixed - {row['file']} | {row['block']} | {row['finding']}")
     for b in bad:
         print(f"claims-checked: REFUSED line - {b}", file=sys.stderr)
     if bad:
