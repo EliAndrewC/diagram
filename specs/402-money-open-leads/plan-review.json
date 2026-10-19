@@ -3,55 +3,55 @@
  "blocks": {
   "preamble": {
    "sha256": "041797a66c9aed8a80b4042582400d18358dd942479c641781b7771e81131e91",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## Summary": {
    "sha256": "6dd5d1a4ebf6c9ce3035c7afbd79fba32e768685d3fa00e3913ddb12bcf29e13",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## Technical Context": {
-   "sha256": "c63eeecb663b2304635bb3898d32fa8634445e5ede4e8c6fbe9818e2e727d6f3",
-   "verdict": "BLOCKED",
+   "sha256": "34fae476a13525114e6e35085c4a8a361a3db468aaceaaf9e10567d295eb2805",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## Performance bookends": {
    "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## Constitution Check": {
    "sha256": "99fbdeccbfbd66edf40fe2ec6f1c5aadb8e5ec75d91b966d48c7b6412a810289",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## D1 - the four questions (FR-001, FR-002)": {
-   "sha256": "1802d78baee68fb3a6e054bca13d0cd2d1b2c71d47c5bbab77f71b34114eeb60",
-   "verdict": "BLOCKED",
+   "sha256": "ba8f1eec6c0391447a35819c06e7f1d9b6b83864f5d47099b17fa664c7cba4ab",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## D2 - the implementation check (FR-003)": {
    "sha256": "2d77681bf99ff4f7c1dbcb6b304cd75d536378bdca07c7cf430aa6fe167d6ab7",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## D3 - the note to the asker (FR-004)": {
    "sha256": "c65a1b2de2838dc8319284bd2831186eb8b843357497fa092af0c4aefa71fa94",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## T - the order": {
    "sha256": "d9bec81178b5cd88e86a5854ea8a16d0063c88caa7bfca6a2445ad550fbdcdf3",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   }
@@ -175,6 +175,126 @@
      "summary": "Order: page sessions, implementation check, note, report and land by the direct route.",
      "class": "within",
      "why": "Sequencing only."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-19",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the four questions (FR-001, FR-002)",
+    "## D2 - the implementation check (FR-003)",
+    "## D3 - the note to the asker (FR-004)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary-sessions",
+     "summary": "One write page session, one check-and-apply session, then the note; no code, map or canon change.",
+     "class": "within",
+     "why": "Process shape for the four questions the request names; the no-code line is FR-005."
+    },
+    {
+     "id": "TC-Morisada-routes",
+     "summary": "Full-text search 上 (991466) and the 1934 edition (1444386); read 下 (991467) page by page in NDL's viewer, or via 1444386 once shown whole.",
+     "class": "within",
+     "why": "Exactly the routes request.md names: full-text for 991466 and 1444386, 991467 only in the viewer."
+    },
+    {
+     "id": "TC-Morisada-下-fallback",
+     "summary": "下 is an unread lead ONLY if NDL's viewer refuses 991467 (dated, as observed) and 1444386 is not shown to hold 下 whole.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Round 1's fallback triggered on 'cannot be searched', which the request had already said was true of 991467 (viewer only) and so let the viewer reading be skipped. The rewrite triggers only when both routes the request names are physically refused, recorded with date and observation; reading a book the server refuses is physically impossible, and naming it unread (not SILENT) keeps the request's 'not called SILENT'."
+    },
+    {
+     "id": "TC-record-reading",
+     "summary": "Passes are leads; each passage read on its page; NDL scans and Oishi's PDF read on page images, sent to source-reader with IMAGES=.",
+     "class": "within",
+     "why": "FR-001 'each from a passage read on its page'; method only."
+    },
+    {
+     "id": "TC-wages-beside",
+     "summary": "Each new figure sits beside the craftsman's and laborer's day wage of the same place and period, or the wage is SILENT naming the nearest with class, place, unit and gap.",
+     "class": "within",
+     "why": "Serves the request's first lead (a day wage beside the 1665 knife ceiling) and the money answers' standing form; adds no exclusion."
+    },
+    {
+     "id": "Perf-NA",
+     "summary": "No performance bookends: no generator change.",
+     "class": "within",
+     "why": "FR-005: no engine code changes."
+    },
+    {
+     "id": "Constitution",
+     "summary": "XII research: physical tasks; XIII record checks green; XVI built as the FRs.",
+     "class": "within",
+     "why": "Standing gates; narrows nothing."
+    },
+    {
+     "id": "D1-0276-wage",
+     "summary": "Kyoto carpenter 1653, 1656 bath account (arithmetic), Osaka laborers 1620s beside Mimasaka 1665.",
+     "class": "within",
+     "why": "The FOUND result of the request's first lead."
+    },
+    {
+     "id": "D1-0276-Mimasaka",
+     "summary": "藩法集 岡山藩 賃銀雑事: its wage beside 1665 if public and it gives one; SILENT naming it if it gives none; named unread if not public.",
+     "class": "within",
+     "why": "Round 1 fixed SILENT regardless of the chapter; the rewrite follows the request's 'read if public, or named unread' with the outcome decided by the reading."
+    },
+    {
+     "id": "D1-0276-Inui-sharpener",
+     "summary": "Inui named not readable; sharpener: Morisada's 磨師 entry (no fee), Uwajima 1662 (swords only).",
+     "class": "within",
+     "why": "The request records both as the passes' result (SILENT; Inui not public)."
+    },
+    {
+     "id": "D1-0275",
+     "summary": "An Edo craftsman/laborer pair from 類聚近世風俗志 searched in viewer and full-text, or SILENT naming the search.",
+     "class": "within",
+     "why": "The request: 'pp. 159-161 may give an Edo carpenter' is searched in this feature, not called SILENT; SILENT only after the search, named."
+    },
+    {
+     "id": "D1-0277",
+     "summary": "Oishi's yearly table 1781-1842 low/high mon per ryo, decade summaries as arithmetic, Edo-ness the record's reading; 1842-52 blank; 1850s SILENT; restricted 両替年代記 books and 新保 1978 named; 読史備要 1780s rows if read.",
+     "class": "within",
+     "why": "The FOUND result and the closed leads exactly as the request lists them; the 1850s were not found by any pass and the request names no further lead for them; 読史備要 is an extra, optional source, not a dropped one."
+    },
+    {
+     "id": "D1-0273",
+     "summary": "Ako salt brokers' 1791 price, 9-9.5 bales per ryo, bale measure as read, per-sho arithmetic; Edo retail and 1800-1850s from the Morisada search or SILENT naming it; commission if read.",
+     "class": "within",
+     "why": "The request's FOUND item plus 'Morisada for Edo salt' searched, not called SILENT; the commission is not in the request and is optional."
+    },
+    {
+     "id": "D1-scope-limit",
+     "summary": "Only 0277's anchor rows and the touched wage sections of 0273/0276 are revised; nothing else on those pages changes.",
+     "class": "within",
+     "why": "The request asks for these leads written in, nothing more; the limit trims nothing the request named."
+    },
+    {
+     "id": "D2",
+     "summary": "implementation-check.md: one 'no code implements it' line per changed question, with the search.",
+     "class": "within",
+     "why": "FR-003 as written."
+    },
+    {
+     "id": "D3",
+     "summary": "A new issue or a comment on #8 naming changed fragment files, changed verdicts, closed leads, and what is still open including 403's leads.",
+     "class": "within",
+     "why": "FR-004 as written; the still-open list is the request's own '403' section."
+    },
+    {
+     "id": "T-order",
+     "summary": "Page sessions, implementation check, note, report and land by the direct route.",
+     "class": "within",
+     "why": "Ordering only."
     }
    ]
   }
