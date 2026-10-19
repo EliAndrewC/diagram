@@ -516,6 +516,26 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@30 (continue),
 <!-- plan-archive: T107 to T101 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
 <!-- plan-archive: T109 to T107 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
 <!-- plan-archive: T110 to T107 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+## T113 - a "landed" tick waits for the landing (found working T110, 2026-10-19)
+
+### T113 Approach (checklist part A)
+
+1. **The goal, in the world.** A task is ticked "landed" only once its work is on main, whichever route it landed by.
+2. **The constraints.** T79 (D98): `make tick` refuses a NOTE saying landed while the task's last `make land-tooling` failed or a file it named differs from origin/main; a task with no land-tooling run is not refused. The GM's rule: a tool, never a reminder. A test red without it.
+3. **Where each comes from.** T79 (O); the GM (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T110's landing log, then a read of `tick-task.landed_refusal`): `scripts/sync-with-main.sh done` was refused by the green-gate guard (the page check owed), and `make tick ... NOTE="landed ..."` ticked T110 in the same command, because T110 had no land-tooling run; its glossary file stood committed in the clone and absent from origin/main.
+5. **The order.** `landed_refusal` asks, where the task has no land-tooling run, whether a commit not on origin/main touches a file outside `specs/` and `dev/`; then the test.
+6. **The exits.** (c) - the work not on main refuses the tick, whatever route was meant; the route's own log was weighed and refused (a refused push leaves no record the tick could read reliably).
+7. **The search smell.** None.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: `make tick` refuses a NOTE saying landed while a commit not on origin/main touches a file outside `specs/` and `dev/`, naming the file and `scripts/sync-with-main.sh done`; a task whose work is on main ticks as before; `tests/tooling/` red without it.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T113 Decisions
+
+**D130 - landed means on main.** In `tick-task.landed_refusal`, a task with no land-tooling run is refused when `git log origin/main..HEAD` names a file outside `specs/` and `dev/` (the feature's own records and the run logs a landing writes): "the NOTE says landed, but <file> is committed here and not on origin/main - land it (scripts/sync-with-main.sh done), then tick".
+
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).
