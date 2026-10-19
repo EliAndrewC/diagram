@@ -6557,27 +6557,39 @@
    "verdict": "CLEAR"
   },
   "T31": {
-   "section_sha256": "6f00cd7b7a5f219a0c6b8a02e4a559e932e392e81402028c9c08e93fa63b2a58",
+   "section_sha256": "d37b3d4590f35bd868dace373ce284c807b674c1cb2fb0de2cbe657df7b9f48f",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "T31-choice",
-     "summary": "Row 843 (MISLABELED, the first kind not yet tried, row 827 being IN-STEP since) is taken with row 841 as one fix, both reading FOOTPATH_FABRIC_GAP and 0246's page.",
+     "id": "T31-row",
+     "summary": "Row 843 (MISLABELED) is taken as T31: MISLABELED is the first kind not yet tried in T05-T10, and row 827, the first such row, is now IN-STEP.",
      "class": "within",
-     "why": "FR-020 (amendment 7's ten more claims): a row of a kind not yet tried, chosen at the task's start; pairing 841 adds a row from the same index on the same constant and page rather than narrowing anything. Unchanged since its CLEAR verdict."
+     "why": "FR-020 asks for a row of a kind not yet tried where one is left, chosen at the task's start. That is how this row was chosen, and it carries out amendment 7's ten more claims."
     },
     {
-     "id": "D113 (footpath)",
-     "summary": "The footpath's 4 ft off a garden fence is recorded on 0246's drawing page as its own map drawing convention, with the cohort measurement (7 ft leaves seeds 3, 4, 903, 904 unreached); FOOTPATH_FABRIC_GAP's claim points there; the stale 7 ft comment is corrected; the constant's value does not change.",
+     "id": "T31-split",
+     "summary": "Row 841 (the street's joining leg, which reads the same constant) becomes its own task, T32, and is not folded into T31.",
      "class": "within",
-     "why": "Row 843's own fix offers it: '0246 must record the 4 ft (it does not) or the code is DRIFTED'. Both numbers are O (0246 calls its 7 ft 'a map drawing convention, not a measured figure'), and the GM's request is exactly that an unresearched number is a knob, not a target to conform to by moving houses or packing. Exit (a) chosen, (d) weighed and declined on recorded arithmetic. Unchanged since its CLEAR verdict."
+     "why": "FR-015 says a second goal becomes its own task before work on it starts. Row 841 is still a ranking row worked under FR-020, so nothing is dropped."
     },
     {
-     "id": "D113 amendment (join_to)",
-     "summary": "Amended 2026-10-19 after the claims round: the joining leg is drawn at STREET_WIDTH (a lane), so its route moves from FOOTPATH_FABRIC_GAP (4 ft) to the lane's 7 ft (WEB_FABRIC_GAP) and its claim cites 0246's 7 ft; measured 16/16 on the cohort, fresh block 0 of 4 failed. Done (item 9) becomes 'join_to routes its leg at the lane's 7 ft, citing 0246 ... the landing cohort passes' in place of 'no map changes'.",
+     "id": "D113",
+     "summary": "Keep FOOTPATH_FABRIC_GAP at 4 ft. 0246's drawing page records a footpath's middle 4 ft off a garden fence as its own map drawing convention, beside the lane's 7 ft, with the reason (measured 2026-10-19, make cohort at 7.0: seeds 3, 4, 903 and 904 newly fail). The claim points at that page, the comment above the constant records it, and no value changes.",
      "class": "within",
-     "why": "This is row 841's fix verbatim ('the joining leg's berth at 0246's 7 ft off a garden fence ... the claim cites 0246'), so it widens toward the row rather than narrowing it; the earlier text, which had join_to cite 0246 at 4 ft, was the further departure. Dropping 'no map changes' follows from carrying that fix and is not a carve-out from anything the GM asked. Note for the session, not a ruling: the D113 paragraph is spliced - the amendment sits mid-sentence ('a footpath - walked in **Amended ...** single file -') and the original sentences that still say join_to's claim 'cites the same page at 4 ft' and 'No value changes', and item 10's 'No constant moves', now contradict the amendment; the amendment is plainly meant to supersede them and they should be struck or reworded so the implementer reads one instruction."
+     "why": "Both numbers are O. 0246 calls its 7 ft 'a map drawing convention, not a measured figure', and the 4 ft is feature 328's. The GM's request says an unresearched number is a knob to refine, and the approved checklist's guardrail asks that loosening a rule record its reason where the code changes. D113 records that reason on the page and at the constant. Row 843's own fix offers this route ('0246 must record the 4 ft ... or the code is DRIFTED'). No GM ruling or Research: claim is loosened, so this is not an exception to anything the GM asked."
+    },
+    {
+     "id": "T31-exit-d",
+     "summary": "Exit (d) is not chosen: seeds are not re-seated to give 17 ft of footpath room.",
+     "class": "within",
+     "why": "Re-seating farmhouses so a footpath can keep a margin would move houses for a path. The GM's request rejects exactly that ('Nobody in real life moves their house so that a footpath will join...'). Turning this exit down follows the request; it does not narrow it."
+    },
+    {
+     "id": "T31-order-done",
+     "summary": "Order: record first, then the two claims, then the stale comment. Done means the claims check finds it IN-STEP. Budget 60 min.",
+     "class": "within",
+     "why": "This is how the work is carried out, and it is the checklist's FR-003 Approach content. It settles nothing the request or spec left open in a narrower way."
     }
    ],
    "verdict": "CLEAR"
@@ -6610,6 +6622,73 @@
      "summary": "done measured by make claims-triaged on a transcript recording its TOUCHES lines, and a test in tests/tooling/test_claims_scoping.py red without the fix",
      "class": "within",
      "why": "A test whose only effect is to keep the fix in place: enforcement of the requested improvement, not new scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T32": {
+   "section_sha256": "3aafd40b933a6a6f99dc876d75d7128936193db3cdcf44e63b1f4fea2e859c77",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T32-row",
+     "summary": "Row 841 is chosen for T32, described as 'the same kind as T31's' (MISLABELED), because T31's claims round found it to be a real drift.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-020 says each row is 'a row of a kind not yet tried where one is left', and the proposal the GM approved gives the reason: 'about five ranking rows of different kinds, so the checklist is tested on more than lanes'. The block never says that no untried kind is left among the open rows. Its only reason is that T31 found this row, which is convenience: it is not impossible to pick another kind, the GM's words do not imply it (amendment 7 asks only for '10 more claims'), and taking a second MISLABELED row in a row works against the variety the rule exists for. To fix it, either state, measured with a date and method (a count of the open rows by kind), that no untried kind is left, which puts the pick within FR-020, or choose a row of a kind not yet tried."
+    },
+    {
+     "id": "D117",
+     "summary": "join_to's two _route calls take gap=WEB_FABRIC_GAP (the lane's 7 ft) and its claim cites 0246's 7 ft; no constant's value moves.",
+     "class": "within",
+     "why": "This is row 841's own fix ('the joining leg's berth at 0246's 7 ft off a garden fence'), applied to the leg the block measured as drawn at STREET_WIDTH, a lane."
+    },
+    {
+     "id": "T32-approach",
+     "summary": "Order (gap, claim, cohort), one exit (a), a 30 min budget, one measured done-goal.",
+     "class": "within",
+     "why": "The checklist answered as FR-003/FR-015 require. One exit is enough because no rule is being fought here: the leg read the wrong constant."
+    }
+   ],
+   "verdict": "BLOCKED"
+  },
+  "T93": {
+   "section_sha256": "3277408a83a0773eb0e4cca70fdd3c8a432424b305dd3c5d5ea7a5ce92adcf21",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D115",
+     "summary": "record_owed.modal_batches and command read modal_triage.touched(store): a pop-up owed only by a moved page that the triage marked touched is treated as an ordinary owed pop-up, so it joins its check's batch and names make modal-bundle. A pop-up not yet triaged keeps make modal-triage and stays out of the batch.",
+     "class": "within",
+     "why": "This widens batching rather than narrowing it. It carries out D100's own wording: the triage-owed pop-up goes to make modal-triage FIRST, then joins a batch. That is the condition T81's plan review set for the exclusion. It serves the GM's approved Amendment 1 item 2 ('one agent should judge all the pop-ups that cite a changed page, not one agent per pop-up') and Amendment 8 change 1 (pop-ups checked once as a group). An untriaged pop-up keeps going to triage first, as FR-008 requires, and D100's two-or-more threshold is untouched. Nothing the GM asked for is excepted."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T94": {
+   "section_sha256": "a18e82355d9793fb44ba27850a5e2c2fb3a74b101a939b13f1bbf3bf25489135",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D116",
+     "summary": "claims.py record reads --reply through claims_triage.triage_reply (T92's reader) before unelide, so a transcript's last reply is recorded whatever file carries it; a reply with no text is refused, naming the file, and nothing is written.",
+     "class": "within",
+     "why": "A fix to an existing tool's defect, measured working T31 (FR-020's claims): a transcript reply recorded 6 of 8 verdicts while the same text recorded 8 of 8. Amendment 6 asks the session to 'implement any obvious performance / tooling / process improvements along the way'. Reusing T92's reader extends a rule already settled for claims-triaged to its twin command. The refusal on an empty reply only stops an unread reply being recorded as read; it adds no behavior beyond the tool doing what it already claims. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "Approach-5/9",
+     "summary": "Order: reader, then empty-reply refusal, then a test in tests/tooling/test_claims_index.py that is red without the fix; one goal (FR-015).",
+     "class": "within",
+     "why": "The test only enforces the fix (feature 385's practice and SC-004/SC-009 style), and the single goal follows FR-015. Nothing is excluded."
+    },
+    {
+     "id": "Approach-6/8",
+     "summary": "Exit (c), add a rule that removes the case (one reader for both commands); budget 15 min.",
+     "class": "within",
+     "why": "A choice of mechanism and a time budget inside the task. The checklist names this exit, and no requirement or ruling is relaxed."
     }
    ],
    "verdict": "CLEAR"

@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92, T93, T94
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92, T93, T94, T95
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -473,12 +473,12 @@ which reads this constant but is drawn as a lane) is its own task, T32 (FR-015, 
 
 **D116 - one reader for both triage and record.** `claims.py record` reads `--reply` through `claims_triage.triage_reply` (T92's reader) before `unelide`; a reply with no text refuses, naming the file, and writes nothing.
 
-## T32 - a street's joining leg keeps the lane's 7 ft (ranking row 841, MISLABELED)
+## T95 - a street's joining leg keeps the lane's 7 ft (found working T31, 2026-10-19; ranking row 841)
 
-Chosen at its start (FR-020): row 841, the same kind as T31's, found by T31's claims round to be a real drift - the leg is drawn at
-`STREET_WIDTH`, a lane, and routed at the footpath's 4 ft.
+Found by T31's claims round (amendment 6, a defect fixed where found - not a ranking pick, so FR-020's kinds are untouched): row
+841's leg is drawn at `STREET_WIDTH`, a lane, and routed at the footpath's 4 ft.
 
-### T32 Approach (checklist part A)
+### T95 Approach (checklist part A)
 
 1. **The goal, in the world.** A street's joining leg keeps a lane's distance from the gardens it passes.
 2. **The constraints.** Row 841's fix: "the joining leg's berth at 0246's 7 ft off a garden fence (it reads FOOTPATH_FABRIC_GAP, held at 4 ft); the claim cites 0246". 0246: a lane's middle keeps at least 7 ft clear of a garden fence; a footpath keeps 4 ft (T31).
@@ -490,9 +490,9 @@ Chosen at its start (FR-020): row 841, the same kind as T31's, found by T31's cl
 8. **The budget.** 30 min.
 9. **Done, measured.** One goal: `join_to` routes its leg at `WEB_FABRIC_GAP` and its claim cites 0246's 7 ft; the claims check finds it IN-STEP and the landing cohort passes.
 10. **Before moving a constant.** No constant's value moves; one caller reads `WEB_FABRIC_GAP` instead of `FOOTPATH_FABRIC_GAP` (measured 2026-10-19, a grep: `street.py`'s two `_route` calls in `join_to` are its only uses there).
-11. **Before fitting things into room.** A lane's room past a fence: 7 ft to its middle, 2 ft more than a 3 ft footpath's 4 ft plus half its width.
+11. **Before fitting things into room.** A lane's room past a fence: 7 ft to its middle, 1.5 ft more than a 3 ft footpath's 4 ft plus half its width (5.5 ft).
 
-### T32 Decisions
+### T95 Decisions
 
 **D117 - the leg routed as the lane it is.** `join_to`'s two `_route` calls take `gap=WEB_FABRIC_GAP`; its claim reads "joining leg's berth - <0246's drawing page>: routed the lane's 7 ft (`WEB_FABRIC_GAP`) off the fabric - the leg is drawn at the street's width, a lane, not a footpath".
 

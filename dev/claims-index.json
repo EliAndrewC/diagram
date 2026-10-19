@@ -28712,12 +28712,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/street.py::join_to#joining leg's berth": {
-  "body": "0ad8a23533c4907f",
-  "claim": "joining leg's berth - how-our-maps-lay-a-clustered-settlements-lanes.drawing: routed a footpath's 4 ft (`FOOTPATH_FABRIC_GAP`) off the fabric",
-  "code": "e81ec19d3e22c5c2",
-  "core": "9a4b80819091aad4",
+  "body": "e32911802afede86",
+  "claim": "joining leg's berth - how-our-maps-lay-a-clustered-settlements-lanes.drawing: routed the lane's 7 ft (`WEB_FABRIC_GAP`) off the fabric - the leg is drawn at the street's width, a lane, not a footpath",
+  "code": "9007fc808e94b98e",
+  "core": "1c04255b932fe2b9",
   "date": "2026-10-19",
-  "note": "the leg is routed at 4 ft, and §17 allows that only for a footpath. I would need to know whether the street the leg extends is drawn as a 3 ft footpath (then IN-STEP) or as a lane tread (then DRIFTED: a lane gets 7 ft under §16)",
+  "note": "the leg is routed with gap=WEB_FABRIC_GAP (7.0), which matches the page's \"A lane's middle keeps at least 7 ft clear of a garden fence\", not the footpath's 4 ft; the leg is joined into the street's path, so it is drawn at the street's width",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bee043cb0138e737"
   },
@@ -28726,21 +28726,24 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:fea897a96ea52a1c"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/street.py::join_to#street joined to the network": {
-  "code": "37f659ef9194c7fe",
-  "core": "9a4b80819091aad4",
-  "date": "2026-10-05",
-  "note": "joined onto the network",
+  "body": "e32911802afede86",
+  "claim": "street joined to the network - how-our-maps-lay-a-clustered-settlements-lanes.drawing: one network",
+  "code": "1e8b002a4880b7bb",
+  "core": "1c04255b932fe2b9",
+  "date": "2026-10-19",
+  "note": "the nearer end is extended to the nearest point on the network, which matches \"the lanes are one network, joined where their treads meet\"",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bee043cb0138e737"
   },
   "research": "4b617eda2c031935",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
   ],
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/street.py::joints_along#street plumbing": {
