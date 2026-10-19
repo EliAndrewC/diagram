@@ -736,6 +736,8 @@ dead angles	dead angle
 dead ground	dead ground
 dead space	dead ground
 deba	deba
+debased	debasement
+debasement	debasement
 deep paddies	shitsuden
 deep percolation	deep percolation
 deep percolation losses	deep percolation
@@ -1107,6 +1109,7 @@ fit zoom	fit zoom
 fit-zoom	fit zoom
 five classics	Four Books and Five Classics
 five dynasties	Five Dynasties
+five festivals	five festivals
 five grains	five grains
 five highways	Five Highways
 five punishments	five-punishments
@@ -1339,6 +1342,7 @@ gongxiefang	gongxiefang
 gonin-gumi	five-household group
 gono	gōnō
 gorinto	five-ring pagoda
+gosekku	five festivals
 gosha	gōsha
 goshi	gōshi
 goten	goten
@@ -2646,6 +2650,8 @@ mori ogai	Mori Ogai
 morijio	morijio
 morisada manko	Morisada manko
 morisada mankō	Morisada manko
+morohaku	morohaku
+morohaku sake	morohaku
 mortise	mortise and tenon
 mortise and tenon	mortise and tenon
 moso	moso
@@ -2869,6 +2875,8 @@ oblique weirs	oblique weir
 obon	Bon
 ochiba	ochiba
 ocr	OCR
+odamaki	odamaki
+odamaki-mushi	odamaki
 odo	ōdo
 odoi	Odoi
 odoko	odoko
@@ -3519,6 +3527,7 @@ sekai daihyakka jiten	Sekai Daihyakka Jiten
 seki	Seki
 seki-juku	Seki
 sekisho	sekisho
+sekku-sen	sekku-sen
 self-watch house	jishinban
 sen	sen
 senba-koki	senbakoki
@@ -3653,6 +3662,7 @@ shinpen tsuika	Shinpen Tsuika
 shinsei	Shinsei
 shinshu	Jodo Shinshu
 shinshū	Jodo Shinshu
+shippoku	shippoku
 shirakashi	shirakashi
 shirasu	oshirasu
 shironameshi	shironameshi
@@ -4024,6 +4034,7 @@ tamonten	Bishamon
 tan	tan
 tan-bu	tan
 tanabata	Tanabata
+tanachin	tanachin
 tanada	tanada
 tanbu	tan
 tang	Tang dynasty
@@ -4038,6 +4049,7 @@ tani-ike	valley pond
 taper law	taper law
 tarama	Tarama
 tartary	Tartary
+tarudai	tarudai
 tatami	tatami
 tatara	tatara
 tateba	tateba
@@ -4173,6 +4185,10 @@ time bells	time bell
 tobacco knife	tobacco knife
 tobacco knives	tobacco knife
 tobacco-knife	tobacco knife
+tobi	tobi
+tobi laborer	tobi
+tobi laborers	tobi
+tobi's	tobi
 tobichi	detached territory
 tobiguchi	tobiguchi
 tobukuro	tobukuro
@@ -4342,6 +4358,7 @@ udatsu	udatsu
 udegi	udegi gate
 udegi gate	udegi gate
 udegimon	udegi gate
+udon	udon
 ujibito	ujibito
 ujidera	bodaiji
 ujigami	ujigami
