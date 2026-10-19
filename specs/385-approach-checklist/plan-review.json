@@ -7435,33 +7435,21 @@
    "verdict": "CLEAR"
   },
   "T106": {
-   "section_sha256": "77e1d72a3769d37542aafa9a2d6be0f072641e17ac2a81a9ab5cdcb41d2205ef",
+   "section_sha256": "697840ba5f720b0702ba135abf6ca2f98e434d3cd097b064bd302271cc91a51b",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "T106 task",
-     "summary": "The mismatch between 0246's back-lane bullet (about 30 ft past the last house) and the code (end trimmed to the last house), found while working T97's claim, is worked as its own task.",
-     "class": "within",
-     "why": "The GM's approved checklist makes a second goal found in a task its own task ('One goal per task', request Amendment 4; FR-015), and the claim work it comes out of is the feature's claim-fixing scope (Amendment 7, FR-020)."
-    },
-    {
      "id": "D146",
-     "summary": "0246's back-lane bullet is reworded to say a back lane is laid about 30 ft past its last house (the room it is cut in) and its end is then pulled back to that house like every lane end that reaches nothing; the claim web.stage_web#the web's frame cites that. Wording only, no engine token changes.",
+     "summary": "0246's back-lane bullet reworded: a back lane is laid about 30 ft past the last house it serves (the room it is cut in) and its end then pulled back to that house like every end reaching nothing; the frame claim cites that with the page path written out in full",
      "class": "within",
-     "why": "It makes the record say what the map draws and leaves both the code and the page's own general rule (labeled a GUESS) as they are. Nothing in the GM's request asks for a lane end to run any set distance past its last house, so changing the record to match the code takes away nothing that was asked for."
+     "why": "Conforms the record to what the code draws, an exit the request names (line 43, 'at least three exits besides conform', and the GM's point that arbitrary numbers should be inspected rather than obeyed). The 30 ft is the page's own GUESS, and its general rule already says ends are pulled back; no behavior, constant or requested scope is narrowed. The round-2 change only writes out the abbreviated page path; the decision is unchanged."
     },
     {
      "id": "T106 exit (c) refused",
-     "summary": "Refuses the alternative of a new rule that would make a back lane overrun the trim by 30 ft.",
+     "summary": "a new rule to overrun the trim by 30 ft is weighed and refused",
      "class": "within",
-     "why": "Leaves the engine's current behavior unchanged, and the GM never asked for that behavior to change. The 30 ft has no source (Approach item 3/6), and the checklist the GM approved treats a number that is ours as a knob, not a target to defend."
-    },
-    {
-     "id": "T106 2026-09-27 commit not cited as a ruling",
-     "summary": "The complaint recorded in commit 1aa98b076 (Inashiro's spine 45 ft into the grove) is cited as the 2026-09-27 tweak, with the complaint itself in the session's paraphrase, not as the GM's ruling.",
-     "class": "within",
-     "why": "Being careful about what counts as the GM's words takes away nothing he asked for. It is in line with the feature's misquote guard (Amendment 9, A)."
+     "why": "Keeps the current drawn behavior (the 2026-09-27 trim), exactly the kind of exit weighing the checklist asks for; it carves no case out of anything the GM asked for."
     }
    ],
    "verdict": "CLEAR"
