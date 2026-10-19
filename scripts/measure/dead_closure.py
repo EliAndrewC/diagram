@@ -32,6 +32,11 @@ a name count as one, and a local variable of a deleted name's spelling reads as 
 `hamletgen/ways/tails.py`, a local), so read every line it prints before acting on it.
 
     dead_closure.py [--base REF] [--fixpoint]          (default REF: HEAD)
+    dead_closure.py --callers NAME [NAME...]           each name's CALL SITES - `name(` and `.name(`, definitions not
+                                                       counted - in live code and in the frozen exhibits, from one pass
+                                                       (the round arbiter's fix on hour:392-retire-the-exhibit-only-engine@2:
+                                                       a name that is also a common attribute - `ring`, `river` - hides
+                                                       its callers from every name census)
 """
 
 from __future__ import annotations
@@ -259,6 +264,33 @@ def fixpoint(root: Path, base: dict[str, str], rounds: int = 20) -> list[str]:
     return log
 
 
+def call_sites(files: dict[str, str]) -> dict[str, list[str]]:
+    """Every CALL in `files` as {name: [path:line]}: a NAME token followed by `(`, bare or after `.`, not after `def`/`class`
+    - one tokenize pass over each file."""
+    out: dict[str, list[str]] = {}
+    for path, src in files.items():
+        try:
+            toks = [tk for tk in tokenize.generate_tokens(io.StringIO(src).readline) if tk.type not in (tokenize.NL, tokenize.NEWLINE, tokenize.COMMENT, tokenize.INDENT, tokenize.DEDENT)]
+        except (tokenize.TokenError, IndentationError, SyntaxError):
+            continue
+        for i, tk in enumerate(toks[:-1]):
+            if tk.type == tokenize.NAME and toks[i + 1].string == "(" and not (i and toks[i - 1].string in ("def", "class")):
+                out.setdefault(tk.string, []).append(f"{path}:{tk.start[0]}")
+    return out
+
+
+def callers(files: dict[str, str], names: list[str]) -> list[str]:
+    """`CALLERS name  live N: ...  frozen M: ...` per name - live is `l7r/` and `pool/`, frozen the legacy pool."""
+    sites = call_sites(files)
+    out = []
+    for n in names:
+        at = sites.get(n, [])
+        live = [a for a in at if a.startswith(DEFINING)]
+        frozen = [a for a in at if not a.startswith(DEFINING)]
+        out.append(f"CALLERS       {n}  live {len(live)}: {' '.join(live[:6])}  frozen {len(frozen)}: {' '.join(frozen[:3])}")
+    return out
+
+
 def _strings(src: str) -> list[tuple[int, str]]:
     """(line, text) of every string literal of a Python source; a shell script's whole lines."""
     try:
@@ -300,8 +332,12 @@ def main(argv: list[str] | None = None, root: Path | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--base", default="HEAD")
     ap.add_argument("--fixpoint", action="store_true", help="cut what is newly dead and run again until nothing is")
+    ap.add_argument("--callers", nargs="+", metavar="NAME", help="each name's call sites, live and frozen")
     args = ap.parse_args(argv)
     root = root or Path(subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True, check=True).stdout.strip())
+    if args.callers:
+        print("\n".join(callers(_tree_now(root), args.callers)))
+        return 0
     base = _tree_at(root, args.base)
     if args.fixpoint:
         print("\n".join(fixpoint(root, base)))

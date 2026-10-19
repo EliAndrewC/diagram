@@ -156,3 +156,23 @@ def test_the_fixpoint_holds_a_name_assigned_from_a_call(tmp_path: pathlib.Path) 
     k = (tmp_path / "l7r/e/k.py").read_text(encoding="utf-8")
     assert "KNOB = register" in k and "TABLE" not in k and "def roll" not in k, k
     assert any("HOLDS KNOB" in ln for ln in log), log
+
+
+def test_callers_counts_calls_bare_and_by_attribute_never_the_definition_or_a_plain_attribute(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """The round arbiter's tooling fix on hour:392-retire-the-exhibit-only-engine@2: `ring` and `river` hid their callers from
+    the name census because `.ring` is also a common attribute. Only a CALL counts - and a frozen exhibit's apart."""
+    dc = _load()
+    files = {
+        "l7r/e/s.py": "class S:\n    def ring(self):\n        return 1\n\n\ndef f(h):\n    return h.ring\n",
+        "l7r/e/u.py": "from .s import S\nS().ring()\n",
+        "legacy-hand-authored-pool/x/x.gen.py": "s.ring()\ns.ring()\n",
+    }
+    (line,) = dc.callers(files, ["ring"])
+    assert "live 1: l7r/e/u.py:2" in line and "frozen 2:" in line, line
+    for path, src in files.items():
+        (tmp_path / path).parent.mkdir(parents=True, exist_ok=True)
+        (tmp_path / path).write_text(src, encoding="utf-8")
+    assert dc.main(["--callers", "ring", "nothing"], tmp_path) == 0
+    out = capsys.readouterr().out
+    assert "CALLERS       nothing  live 0" in out
+    assert dc.call_sites({"l7r/bad.py": "x = (\n"}) == {}, "an unparseable file is skipped"
