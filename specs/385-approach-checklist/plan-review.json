@@ -7022,6 +7022,26 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T109": {
+   "section_sha256": "f4fc920a731b46ac2d60ccfdb77cfbb08de0157a3e8ed905bff301344a004ed0",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D128 (the grove fallback)",
+     "summary": "In _thread_the_fabric the grove bands the fallback routes round and clips against are grown by CONNECTOR_BAND_GAP_FT - FOOTPATH_FABRIC_GAP (5.5 ft) a side, so the track out and the field spur keep 12.5 ft off the trees, the same counted-once working room D119 gave the door path and the connector's dry exit; the crops keep their own gap; the claim cites 0036 instead of 0246.",
+     "class": "within",
+     "why": "A finding from T107's claims round filed as its own task, as amendment 3 (option three) asks for findings, and fixed by making the code conform to research (0036's drawing page) on the same terms D119 already applied. It drops no case and adds no exception: the grove room is applied to two more routes, and the crop gap is unchanged because the request never asked to change it. Growing the bands rather than widening the route's gap is a design choice, not a narrowing. The capacity arithmetic (25 ft needed, 32 ft between dispersed bands) is written down, as amendment 8 change 7 asks."
+    },
+    {
+     "id": "D128 (the two touch claims)",
+     "summary": "The GUESS claims on touch._one_network and touch._touch_junctions are corrected to say the routed link keeps WEB_FABRIC_GAP (7 ft), as the code routes it, not 14 ft.",
+     "class": "within",
+     "why": "Makes the claims say what the code does (feature 385's claims work, FR-020 and FR-013); no constant moves and no behavior changes, so nothing the request asked for is narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
