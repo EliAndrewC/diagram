@@ -264,8 +264,7 @@ def record_triage(
             msgs.append(f"touched: {key} - {touched[key]}")
         else:
             row.update(research=fp["research"], pages=dict(fp["pages"]), triaged=today)
-            if "section" in fp:
-                row["section"] = fp["section"]
+            row.update({k: fp[k] for k in ("section", "code", "core") if k in fp})  # a code triage clears at the code it read (T116)
             row.pop("triage", None)
         out[key] = row
     return out, msgs

@@ -571,13 +571,13 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@33 (continue),
 6. **The exits.** (c) - a code triage, as the page edit has, reusing the `claims-triage` agent; a static match of names in the diff against the claims was weighed and refused (a change can bear on a claim whose names it never touches).
 7. **The search smell.** None.
 8. **The budget.** 90 min.
-9. **Done, measured.** One goal: a code change to a unit carrying at least `CODE_TRIAGE_MIN` claims owes them a `code triage` - a bundle of the unit's diff hunks against origin/main and its claims - whose named claims go on to impl-drift and the rest are recorded at their new code; a unit with fewer claims, a new claim, or a unit with no diff to show goes to impl-drift as now; `tests/tooling/` red without it.
-10. **Before moving a constant.** `CODE_TRIAGE_MIN` is new (3, a tooling threshold - below it a triage costs as much as the check it saves).
+9. **Done, measured.** One goal: a code change to a unit owes its claims a `code triage` - a bundle of the unit's diff hunks against origin/main and its claims - whose named claims go on to impl-drift and the rest are recorded at their new code; a new claim, a claim the triage named, or a unit with no diff to show goes to impl-drift as now; `tests/tooling/` red without it.
+10. **Before moving a constant.** n/a - no constant moves or is added in this task (a minimum claim count was weighed and dropped: the plan review of round 1 found its cost claim unmeasured, and the page triage it copies has none).
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
 ### T116 Decisions
 
-**D133 - a code change triaged first.** `owed` marks a "code changed" claim of a unit carrying `CODE_TRIAGE_MIN` (3) or more claims "code triage", owed only a triage (`TRIAGED`); fewer, and it goes to impl-drift as now. The triage bundle shows, per such unit, the hunks of `git diff origin/main -- <file>` that overlap the unit's lines and its claims with their last verdicts; a unit with no hunk to show is owed in full (`forced`). `make claims-triaged` clears an untouched claim at its new code and core fingerprints, as it clears a page's at its new pages.
+**D133 - a code change triaged first.** `owed` marks a "code changed" claim "code triage", owed only a triage (`TRIAGED`), as a page edit's claims are - whatever the number of claims its unit carries; a claim the triage has named (`touched`) goes to impl-drift as now. The triage bundle shows, per such unit, the hunks of `git diff origin/main -- <file>` that overlap the unit's lines and its claims with their last verdicts; a unit with no hunk to show is owed in full (`forced`). `make claims-triaged` clears an untouched claim at its new code and core fingerprints, as it clears a page's at its new pages.
 
 **D134 - the owed logic in its own module.** `owed`, `research_why`, `relabeled_only` and their helpers move from `claims.py` to `claims_owed.py`, re-exported by `claims.py`, so the bar holds.
 
