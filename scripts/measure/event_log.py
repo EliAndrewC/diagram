@@ -178,6 +178,11 @@ def line(payload: Mapping[str, Any], t: str | None = None) -> dict[str, Any]:
             target = make_target(str(ti.get("command") or ""))
             if target:
                 out["make"] = target
+                # ...AND THE TASK a tick, a task-start or a decide names (the round arbiter's fix on hour:385-approach-checklist@33:
+                # per-task time was rebuilt from tasks.md's git history to answer the GM, the events naming no task)
+                task = re.search(r"\bT=(T\d+[a-z]?)\b", str(ti.get("command") or "")) if target in ("tick", "task-start", "decide") else None
+                if task:
+                    out["task"] = task.group(1)
         elif tool in EDIT_TOOLS:
             out["path"] = ti.get("file_path") or ti.get("notebook_path") or ""
             if tool == "Edit":
