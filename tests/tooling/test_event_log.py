@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import pathlib
 import subprocess
 import sys
 from pathlib import Path
@@ -583,3 +584,16 @@ def test_a_transcript_named_call_is_its_run_s_anywhere_and_a_mixed_overlap_is_th
     ]
     marked = tp.attribute(evs, {"late": "running"}, {"found", "running"})
     assert [(e.get("by"), e.get("how")) for e in marked if e.get("tool")] == [("missing", "window"), ("running", "transcript")]
+
+
+def test_the_exported_feature_names_the_log(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """As `hm_arbiter.feature_dir` (the round arbiter on hour:391@2): SPECIFY_FEATURE names the log when its directory exists."""
+    root = tmp_path / "c"
+    for d in ("specs/390-a", ".specify"):
+        (root / d).mkdir(parents=True)
+    (root / ".specify" / "feature.json").write_text('{"feature_directory": "specs/391-b"}')
+    monkeypatch.delenv("L7R_FEATURE_DIRECTORY", raising=False)
+    monkeypatch.setenv("SPECIFY_FEATURE", "390-a")
+    assert el.feature_of(root) == "390-a"
+    monkeypatch.setenv("SPECIFY_FEATURE", "999-gone")
+    assert el.feature_of(root) == "391-b"

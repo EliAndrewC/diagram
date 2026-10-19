@@ -69,11 +69,14 @@ def common_dir(root: Path) -> Path:
 
 def feature_dir(root: Path) -> Path | None:
     """The active feature: a page session's own (`L7R_FEATURE_DIRECTORY`, set by the page-session runner from its brief's
-    directory), else `.specify/feature.json`. Without the first, feature 343's page session filed its round ruling under
+    directory), else the session's exported `SPECIFY_FEATURE` when its directory exists, else `.specify/feature.json`. Without the first, feature 343's page session filed its round ruling under
     378, the feature the clone's main session had last worked (2026-10-10)."""
     own = os.environ.get("L7R_FEATURE_DIRECTORY", "").strip().rstrip("/")
     if own:
         return root / own
+    named = os.environ.get("SPECIFY_FEATURE", "").strip().strip("/")
+    if named and (root / "specs" / named).is_dir():  # the feature the session exported (the round arbiter on hour:391@2: a
+        return root / "specs" / named  # session working 390 while feature.json named 391 had its hours charged to 391)
     try:
         fd = json.loads((root / ".specify" / "feature.json").read_text(encoding="utf-8")).get("feature_directory", "")
     except (OSError, ValueError):
