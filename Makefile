@@ -596,6 +596,11 @@ arbiter-fix-declined:  ## [project] the round arbiter's tooling fix OVERHAULS a 
 	@if [ -z "$(ID)" ] || [ -z "$(REASON)" ]; then printf 'make arbiter-fix-declined: ID= and REASON= are required\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py fix declined "$(ID)" "$(REASON)"
 
+land-batch: export LAND_NOTE = $(NOTE)
+land-batch:     ## [project] land two or three small engine fixes under ONE gate and landing cohort, then tick each (feature 385 T117)   F=385 T="T106 T108" NOTE="what was verified"
+	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make land-batch: F=<feature> and T="<task ids>" are required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/land-batch.py" "$(F)" "$(T)"
+
 task-start:     ## [project] name the task you are starting, so its checks wait for its decisions' verdict (feature 375)   F=375 T=T13
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make task-start: F=<feature> and T=<task id> are required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/plan_gate.py" task-start "$(F)" "$(T)"
@@ -1054,7 +1059,7 @@ perf:            ## [performance] take a performance snapshot of the reference h
 census:           ## [performance] the overlap census: comparisons per call of every check the pool's rolls run, the ones over the flag named
 	@python3 -m l7r.diagram.tools.overlap_census
 
-.PHONY: review-yield cohort-seeds task-add set-down where-time
+.PHONY: review-yield cohort-seeds task-add set-down where-time land-batch
 review-yield:     ## [performance] each review check's passes, findings acted on / dismissed / deferred, author-missed, hours and tokens, from the ledger   [SINCE=2026-09-26]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/review_yield.py" $(if $(SINCE),--since $(SINCE),)
 
