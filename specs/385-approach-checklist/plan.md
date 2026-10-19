@@ -750,7 +750,7 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@36 (continue),
 
 ### T139 Decisions
 
-**D150 - on main is landed.** `landed_refusal` refuses a failed last run only while a file it named (riders aside) differs from origin/main; where every one matches, the work reached main by another route and the tick passes.
+**D150 - on main is landed.** `landed_refusal` refuses a failed last run only while a file it named differs from origin/main, or where it named no file at all; where every named file matches, the work reached main by another route and the tick passes. The one file left out of that comparison is the one D98's check already leaves out: `_RIDERS`, `dev/review-ledger.md` - the append-only ledger every landing carries beside its files, which moves on main by other sessions' rows.
 
 ## T11 - the close
 
