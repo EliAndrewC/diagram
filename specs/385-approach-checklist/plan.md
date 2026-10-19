@@ -291,6 +291,20 @@ Owed by the hour-25 step-back (hour:385-approach-checklist@25, `continue`).
 10. **Before moving a constant.** n/a - no constant's value moves.
 11. **Before fitting things into room.** n/a - nothing is fitted.
 
+### T83 part B (2026-10-19T02:35Z)
+
+Owed by the hour-26 step-back (hour:385-approach-checklist@26, `continue`).
+
+1. **What is refusing?** Nothing: the gate is green and the landing cohort 54/54.
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither - landing what was checked.
+6. **The one-sentence test.** "An entry added to a dictionary owes its claims a triage, not a full check" - true by the probe and the tests.
+7. **The next step is a measurement.** The landing.
+8. **Routes measured before asking?** n/a - no ask.
+9. **After a ruling.** `continue`, no tooling fix.
+
 ### T83 Decisions
 
 **D103 - a dictionary is read as its section is.** In `all_units`, a module-level constant whose value is a dict literal and which carries its own claims gets `blocks` = one per entry (`key: value`, its source unparsed, whitespace folded); `Unit.code` fingerprints such a claim by its own line, as a section's (`"section-claim"`), and `core` stays the whole value's.

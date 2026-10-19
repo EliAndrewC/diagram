@@ -236,8 +236,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T82 An archive line in a task's section leaves it reviewed (plan D102) [lands-open]
       research: rendering
       verify: DONE. archive lines leave a section reviewed; landed, test_plan_gate green
-- [ ] T83 A dictionary's claims keyed per entry (step 5 of the GM's order, plan D103, D104) [lands-open]
+- [x] T83 A dictionary's claims keyed per entry (step 5 of the GM's order, plan D103, D104) [lands-open]
       research: rendering
+      verify: DONE. dict entries are blocks, claims keyed by their own line; backfill re-keyed 109 owing nothing; probe entry owed 17 triages, 0 code changed; gate green, cohort 54/54
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
