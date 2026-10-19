@@ -35,7 +35,7 @@ def test_a_task_preflight_holds_its_section(tmp_path: pathlib.Path) -> None:
     assert ph.refusal(state, root, "Edit", {**edit, "old_string": "the free section text"}, 110.0, False) == "", "T06 is free"
     assert ph.refusal(state, root, "Write", {"file_path": str(plan), "content": PLAN.replace("held", "new")}, 110.0, False)
     assert ph.refusal(state, root, "Write", {"file_path": str(plan), "content": PLAN + "\nmore\n"}, 110.0, False) == ""
-    py = f'python3 - <<EOF\np="specs/385-x/plan.md"; t=open(p).read().replace("the held decision text", "y"); open(p,"w").write(t)\nEOF'
+    py = 'python3 - <<EOF\np="specs/385-x/plan.md"; t=open(p).read().replace("the held decision text", "y"); open(p,"w").write(t)\nEOF'
     assert ph.refusal(state, root, "Bash", {"command": py}, 110.0, False), "a held line in a Bash write"
     assert ph.refusal(state, root, "Bash", {"command": "sed -i 's/## T05 - five/## T05 - 5/' specs/385-x/plan.md"}, 110.0, False)
     assert ph.refusal(state, root, "Bash", {"command": "grep -n 'the held decision text' specs/385-x/plan.md"}, 110.0, False) == "", "a read"
