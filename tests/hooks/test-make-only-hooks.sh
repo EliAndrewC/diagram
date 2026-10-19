@@ -54,6 +54,13 @@ check "tier 1: pytest run in-process via -c"   blocked "python3 -c 'import pytes
 check "tier 2: the documented override"        blocked "make done FULL=1 REF_WHY=pre-push verification"
 check "tier 2: the reference-gate override"    blocked "REF_OK=1 make maps"
 check "tier 2: the -k gate override"           blocked "GATE_OK=1 make done"
+# feature 385 T91 (plan D112): a landing of tooling is linted before it runs
+LT="$(mktemp -d)"; printf 'x  =  1\n' > "$LT/bad.py"; printf 'x = 1\n' > "$LT/good.py"
+lint_case() { printf '{"tool_name":"Bash","cwd":"%s","tool_input":{"command":"%s"}}' "$LT" "$2" | "$HOOK" pretool >/dev/null 2>"$HOOK_ERR"; [ "$?" "$1" 0 ]; }
+if lint_case -ne 'make land-tooling FILES=bad.py'; then echo "  ok      a landing whose file fails the lint is refused before it runs"; PASS=$((PASS+1)); else echo "  FAIL    landing lint (bad)"; FAIL=$((FAIL+1)); fi
+if lint_case -ne 'make arbiter-fix-done ID=x NOTE=y TEST=t LAND=bad.py'; then echo "  ok      ...and arbiter-fix-done LAND= too"; PASS=$((PASS+1)); else echo "  FAIL    landing lint (arbiter)"; FAIL=$((FAIL+1)); fi
+if lint_case -eq 'make land-tooling FILES=good.py'; then echo "  ok      ...a clean file passes"; PASS=$((PASS+1)); else echo "  FAIL    landing lint (good)"; FAIL=$((FAIL+1)); fi
+rm -rf "$LT"
 # feature 385 T61 (plan D80): make keeps the last of two assignments of one variable, silently
 check "one variable set twice on a make call"   blocked "make quote-verbatim Q=0018 Q=0027"
 check "...the quoted list passes"               ok      'make quote-verbatim Q="0018 0027"'

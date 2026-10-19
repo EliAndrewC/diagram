@@ -369,7 +369,50 @@ Owed by the hour-27 step-back (hour:385-approach-checklist@27, `continue`).
 
 ### T91 Decisions
 
-**D112 - the landing's lint, first and before.** `land-tooling.sh` runs its lint (the `ruff check --force-exclude` and `ruff format --check --force-exclude` it already applies) on the `.py` files it was given, in the clone, as its first step - before the fetch, the merge and the worktree - and dies on a failure with ruff's first lines and `python3 -m ruff format <files>`; every caller (`make land-tooling`, `make arbiter-fix-done LAND=`) goes through it. The make-only guard runs the same lint on the files named by a command invoking `make land-tooling FILES=` or `make arbiter-fix-done ... LAND=` and refuses it before it runs. No `.py` file named, or ruff absent: nothing is refused.
+**D112 - the landing's lint, first and before.** `land-tooling.sh` runs its lint (the `ruff check --force-exclude` and `ruff format --check --force-exclude` it already applies) on the `.py` files it was given, in the clone, as its first check - after the fetch (a second or so, so main's lint config is main's), before the merge and the worktree - and dies on a failure with ruff's first lines and `python3 -m ruff format <files>`; every caller (`make land-tooling`, `make arbiter-fix-done LAND=`) goes through it. The make-only guard runs the same lint on the files named by a command invoking `make land-tooling FILES=` or `make arbiter-fix-done ... LAND=` and refuses it before it runs. No `.py` file named, or ruff absent: nothing is refused.
+
+## T31 - a footpath's 4 ft off a plot, recorded (ranking rows 843 and 841, MISLABELED - a kind not yet tried)
+
+Chosen at its start (FR-020): of the open rows still open in the claims index, the first kind not yet tried in T05-T10 (four
+DRIFTED, one NEEDS-RESEARCH) is MISLABELED; row 827 (the first) is IN-STEP since, so row 843 is taken, with row 841 - the joining
+leg's berth, which reads the same constant and the same page - as one fix.
+
+### T31 Approach (checklist part A)
+
+1. **The goal, in the world.** A footpath, walked in single file, runs closer to a garden fence than a lane does; the map says so
+   and the record says why.
+2. **The constraints.** Row 843's fix: "0246 answers this: 'a lane's middle keeps at least 7 ft clear of a garden fence', 3 ft
+   footpath included; 4.0 departs from it, so the claim should be DEVIATION 0246, and 0246 must record the 4 ft (it does not) or
+   the code is DRIFTED". Row 841's: "the joining leg's berth at 0246's 7 ft off a garden fence (it reads FOOTPATH_FABRIC_GAP, held at
+   4 ft); the claim cites 0246". Room before packing (GM 2026-10-12).
+3. **Where each comes from.** 0246's 7 ft is O: the page itself calls it "a map drawing convention, not a measured figure". The
+   4 ft is O (feature 328 wave 4). Room before packing is G.
+4. **Do they describe the world here?** Measured 2026-10-19 (`make cohort` with `FOOTPATH_FABRIC_GAP` at 7.0, then put back):
+   4 seeds newly fail - 3, 4 and 903 refused by the web (`WebRefused`), 904 by a row rule - so a footpath held to the lane's 7 ft
+   cannot reach farmhouses the cohort places today. Since the lane's margin is a convention, not research, room before packing
+   does not bind it: an unresearched number is a knob to move, never a target to defend.
+5. **The order.** The record first (0246's drawing page states the footpath's own convention and why), then the two claims point
+   at it, then the stale comment.
+6. **The exits.** (a) refine an O number - chosen: the footpath's 4 ft becomes 0246's own recorded convention; (d) more room - not
+   chosen: re-seating to give four seeds 17 ft of footpath room (2 x 7 + 3) changes every hamlet's spacing for a convention, where
+   the 4 ft asks 11 ft; (b), (c), (e) - none fits a margin that is a convention both ways.
+7. **The search smell.** None - no search changes.
+8. **The budget.** 60 min.
+9. **Done, measured.** One goal: 0246's drawing page records a footpath's middle 4 ft off a garden fence as a map drawing
+   convention, with the cohort measurement; `FOOTPATH_FABRIC_GAP`'s claim and `join_to`'s claim cite it; the claims check finds
+   both IN-STEP; no map changes (`git diff` on the pool manifests empty).
+10. **Before moving a constant.** No constant moves. Its uses (measured 2026-10-19, a grep of `l7r/`): the footpath's clearance off
+   a plot in `bund.py`, `street.py` (the joining leg), `track.py` (a footpath's clip and its `+ 1.0` and `+ CONNECTOR_WIDTH / 2`
+   uses), and the door offsets `FOOTPATH_FABRIC_GAP + 4.0` in `serve.py`, `web.py` and `row_rules.py`.
+11. **Before fitting things into room.** Footpath room between two plots: 2 x 4 + 3 = 11 ft at 4 ft, 2 x 7 + 3 = 17 ft at 7 ft.
+
+### T31 Decisions
+
+**D113 - the footpath's margin is 0246's own convention.** 0246's drawing page gains, beside the lane's 7 ft: a footpath - walked in
+single file - keeps its middle 4 ft off a garden fence, a map drawing convention, because at the lane's 7 ft four of the cohort's
+seeds (3, 4, 903, 904) leave a farmhouse unreached (measured 2026-10-19). `FOOTPATH_FABRIC_GAP`'s claim becomes a pointer to that
+page; `join_to`'s claim, which says "(7 ft)", cites the same page at 4 ft; the comment above the constant that still says 7 ft is
+corrected. No value changes.
 
 ## T11 - the close
 

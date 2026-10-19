@@ -6561,6 +6561,38 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T31": {
+   "section_sha256": "eff4f61c3db98e1bc58f57783c8b8422df394bb79fa459c596e31010a4a31df0",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T31-choice",
+     "summary": "Of the open ranking rows, the first kind not yet tried in T05-T10 is MISLABELED; row 827 is IN-STEP since, so row 843 is taken, with row 841 (the joining leg's berth, same constant, same page) as one fix.",
+     "class": "within",
+     "why": "FR-020 asks each of T31-T40 to take an open row of a kind not yet tried, chosen at the task's start; this does that and records why 827 was passed over. Folding 841 in adds a second row that shares 843's constant and page, so it serves the GM's amendment 7 ('pull in 10 more claims') rather than narrowing it, and the done still names one goal (FR-015)."
+    },
+    {
+     "id": "D113",
+     "summary": "0246's drawing page records, beside the lane's 7 ft, a footpath's middle 4 ft off a garden fence as a map drawing convention, with the cohort measurement; FOOTPATH_FABRIC_GAP's and join_to's claims cite it; the stale 7 ft comment is corrected; no value or map changes.",
+     "class": "within",
+     "why": "The 7 ft is ours (0246 calls it 'a map drawing convention, not a measured figure'), and the GM's request is that an unresearched number is a knob to examine rather than a target to fight; the 4 ft is kept on a measured reason (2026-10-19, make cohort at 7.0: seeds 3, 4, 903, 904 fail) and that reason is recorded where the rule lives, which is the approved proposal's guardrail. No rule is loosened beyond what the record states, and no map changes."
+    },
+    {
+     "id": "T31-label",
+     "summary": "Row 843's fix prescribes the claim become DEVIATION 0246 with 0246 recording the 4 ft; the plan instead adds the footpath's 4 ft to 0246 as its own convention, so both claims come out IN-STEP rather than DEVIATION.",
+     "class": "within",
+     "why": "The row's suggested label is the session's own 328 audit, not the GM's words; FR-020 asks that rows be taken and worked, not that each row's suggested label be kept. Because 0246's 7 ft is a convention of ours, recording a footpath convention beside it amends our convention rather than bending research to fit code, and the measured reason sits on the page - so IN-STEP describes the record truthfully, and the request's guardrail (a loosening carries its reason where it is made) is met."
+    },
+    {
+     "id": "T31-exit-d-not-chosen",
+     "summary": "Exit (d), more room (re-seating plots to give 17 ft of footpath room), not chosen.",
+     "class": "within",
+     "why": "Room before packing (GM 2026-10-12) tells a session to give room rather than pack against a constraint; here nothing is packed - the constraint itself is an unresearched convention that the checklist's exit (a) refines. Declining to re-seat every hamlet for a convention honors the request's purpose (houses do not move for paths) rather than narrowing it."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

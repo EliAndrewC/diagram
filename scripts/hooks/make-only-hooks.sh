@@ -87,6 +87,11 @@ block() { # reason, then the make target to use instead
   exit 2
 }
 
+# GUARD_EDIT_OK: feature 385 T91 (plan D112) - a landing of tooling is linted before it runs, background or not
+if [ "$VERDICT" = ok ] && case "$INPUT" in *land-tooling*|*arbiter-fix-done*) true ;; *) false ;; esac; then
+  LINT=$(printf '%s' "$INPUT" | "$HERE/lib/hm_make.py" landing-lint 2>/dev/null || true)
+  [ -n "$LINT" ] && { VERDICT=landing-lint; block "$LINT" "python3 -m ruff format <the files>, then the same landing"; }
+fi
 case "$VERDICT" in
   guard-edit-ok)
     # GUARD_EDIT_OK: feature 170 - THE LAST SILENT PERMIT IN THIS GUARD. The escape used to return a
