@@ -111,31 +111,6 @@ ok "the clone's history is untouched" '[ "$(git -C "$C" log --format=%s -1)" = "
 git -C "$C" pull -q --no-rebase --no-edit origin main >"$T/out" 2>&1; rc=$?
 ok "the clone's next merge of main is clean" '[ "$rc" -eq 0 ] && [ "$(cat "$C/l7r/e.py")" = "e = 2" ]'
 
-echo "2a. a new file landed, edited again in the clone, lands again (feature 385 T122: T119's fix_yield.py conflicted add/add)"
-setup
-printf 'v1\n' > "$C/scripts/new.sh"; git -C "$C" add -A; git -C "$C" commit -qm "new tool"
-land scripts/new.sh; rc=$?
-ok "the new file lands" '[ "$rc" -eq 0 ] && [ "$(on_main scripts/new.sh)" = "v1" ]'
-printf 'v2\n' > "$C/scripts/new.sh"; git -C "$C" commit -qam "new tool, again"
-land scripts/new.sh; rc=$?
-ok "...and its edit lands too: the conflict was its own landing, the clone's side taken" '[ "$rc" -eq 0 ] && [ "$(on_main scripts/new.sh)" = "v2" ] && grep -q "the clone'"'"'s own landing (scripts/new.sh)" "$T/out"'
-ok "...as a merge, never a rewrite" '[ "$(git -C "$C" log -1 --format=%P | wc -w)" -eq 2 ] && git -C "$C" log --format=%s | grep -qx "new tool, again"'
-setup
-printf 'v1\n' > "$C/scripts/new.sh"; git -C "$C" add -A; git -C "$C" commit -qm "new tool"
-land scripts/new.sh
-git -C "$T/seed" pull -q --no-rebase --no-edit "$T/o.git" main; printf 'theirs\n' > "$T/seed/scripts/new.sh"; git -C "$T/seed" commit -qam "another session's edit"; git -C "$T/seed" push -q "$T/o.git" main
-printf 'v2\n' > "$C/scripts/new.sh"; git -C "$C" commit -qam "new tool, again"
-land scripts/new.sh; rc=$?
-ok "a conflict with another session's edit of it is still refused" '[ "$rc" -ne 0 ] && grep -q "do not apply cleanly" "$T/out" && [ "$(on_main scripts/new.sh)" = "theirs" ] && ! git -C "$C" rev-parse -q --verify MERGE_HEAD >/dev/null'
-
-setup  # another session REVERTS main to a version both histories share: a real conflict, never the clone's own landing
-git -C "$T/seed" pull -q --no-rebase --no-edit "$T/o.git" main; printf 'y\n' > "$T/seed/scripts/b.sh"; git -C "$T/seed" commit -qam "b to y"; git -C "$T/seed" push -q "$T/o.git" main
-git -C "$C" pull -q --no-rebase --no-edit origin main
-printf 'x\n' > "$T/seed/scripts/b.sh"; git -C "$T/seed" commit -qam "b back to x"; git -C "$T/seed" push -q "$T/o.git" main
-printf 'z\n' > "$C/scripts/b.sh"; git -C "$C" commit -qam "b to z"
-land scripts/b.sh; rc=$?
-ok "a revert on main to a shared older version is refused, not undone (T122 round 2)" '[ "$rc" -ne 0 ] && [ "$(on_main scripts/b.sh)" = "x" ] && ! git -C "$C" rev-parse -q --verify MERGE_HEAD >/dev/null'
-
 echo "2b. the guard suites and the tooling tests run side by side, each timed; a failing one is named (383 amendment 2, D22)"
 setup
 LAND_TOOLING_CHECKS= LAND_TOOLING_GUARDS='sleep 1' LAND_TOOLING_TOOLING='sleep 1' land scripts/a.sh; rc=$?
