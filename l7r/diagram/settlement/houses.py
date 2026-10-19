@@ -270,7 +270,7 @@ class HousesMixin:
         rot: float | None = None,
         top: float = 88.0,
     ) -> bool:
-        """Research: building spacing - UNRESEARCHED: 4 px between collision circles (exact boxes where both are declared), a dense row's mates edge to edge"""
+        """Research: building spacing - UNRESEARCHED: 4 px between collision circles (exact boxes where both are declared)"""
         if x < 55 or x > self.W - 55 or y < top or y > self.H - 26:
             return False
         if self.bound and not point_in_poly(x, y, self.bound):  # stay inside a bounding ring (city wall)
@@ -291,14 +291,6 @@ class HousesMixin:
         # garden and farm shed. What makes it safe now is `Indexed`, which was built for that
         # lesson: the registry versions ITSELF and carries its own index, so a rebind cannot be
         # missed - the filtered copies below are Indexed too, and each starts with an empty cache.
-        # ROW MATES ARE MEASURED EDGE TO EDGE (GM 2026-08-11). The circumscribed circle is
-        # rotation-safe and load-bearing everywhere else (this skill's CLAUDE.md, "CENTER vs
-        # FOOTPRINT", item 2), but it forces a 48x32 shopfront 62px from its neighbor where the
-        # true touching distance is 48 - so a frontage asking for a 22px pitch placed every third
-        # seat and a market row drew at a third of its density. A shop row is the one case where
-        # the exception is safe: the buildings are AXIS-ALIGNED to the way they front and sit in a
-        # straight line, so an axis-aligned edge gap is exact, not an approximation. Only the
-        # row's own previously-placed seats are measured this way; everything else keeps the circle.
         # A WELLHEAD IS A DISC, so its own reach is its RADIUS, not the half-diagonal of the
         # probe box around it (2026-08-11). The circumscribed circle is the documented
         # over-restriction in this skill's CLAUDE.md ("CENTER vs FOOTPRINT" item 2); for a round

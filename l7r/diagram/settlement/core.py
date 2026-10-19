@@ -136,8 +136,6 @@ class Settlement(
         self.top: list[str] = []  # deferred TOP layer (gate furniture, torii, kido) - over roads/buildings
         self.toplabels: list[str] = []  # deferred LABEL layer - the very last thing drawn, so TEXT is never
         #                           covered by anything (a label must always be fully readable)
-        self.frontage_rot: float = 0.0  # the LAST frontage() row's street axis in degrees (see frontage)
-        self.frontage_box: tuple[float, float, float, float] | None = None  # extent of the LAST frontage() row,
         #                           for place_caption (see frontage's note)
         self._captions: list[tuple[Any, ...]] = []  # deferred place_caption() seats - flushed in finish()
         self._label_index: Any = None  # the one placer's obstacle index, built once per label phase (feature 266, FR-009)
@@ -225,11 +223,10 @@ class Settlement(
         # SCATTER (commons scrub + marsh reeds) ONLY, not for building placement and not for the grove.
         # A shrine precinct, the ground under a torii and along its sando, and the collar tended around
         # graves were kept clear of wild scrub in reality (raked gravel precinct; the tomb-swept grave
-        # collar); the surrounding waste stays scrubby. So this clears a small verge around each, while a
-        # shrine's deliberate fengshui/chinju-no-mori grove (a separate feature) is left untouched. See
-        # research/questions/0224-ground-swept-clear-around-shrines-and-graves.html.
+        # collar); the surrounding waste stays scrubby. The scatters read this registry; nothing registers a clearing now
+        # (0224's drawing page claims no swept ground beyond the feature itself, and the town and city drawing that once
+        # registered one went with feature 392), so it stays empty.
         self.clearings: list[Any] = []
-        self._verge_centers: list[tuple[float, float]] = []  # one (x, y) per clearings entry - _clear_ground's same-center dedupe key
         self._cover_n = 0  # ground-cover scatter ordinal (commons + marsh draws). Each cover entry and each
         #                    swept clearing records it, so the scatter_respects_swept_clearings check can see
         #                    ORDER: a scatter only skips clearings that exist when it runs, so a cover whose

@@ -25,7 +25,7 @@ def test_place_caption_defers_to_finish_and_records_its_subject_box_for_the_gate
 
 
 def test_place_caption_refuses_an_empty_subject():
-    # s.frontage_box is None when the row placed nothing - captioning it is a gen-script bug
+    # a None box means the subject placed nothing - captioning it is a gen-script bug
     s = _ladder_map()
     with pytest.raises(ValueError, match="no subject box"):
         s.place_caption("market", None, 10)

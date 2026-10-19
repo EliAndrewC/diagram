@@ -128,6 +128,10 @@ fixed, not escaped).
   - `waterfields/comb.carve_comb#comb layout` DRIFTED: 0053's drawing page has the deliveries leave the supply canals at right
     angles; canal A is dug at down-42 deg and its deliveries head down the fall, so they leave it at ~33-51 deg (`_comb_threads`'
     "delivery takeoff" claim would read the same). Lay canal A across the slope, or read 0053 for a sloped fan and record it.
+- **Carried from 392 (impl-drift, 2026-10-18; 392 only removed a mixin around it)**: `homestead_parts/groves.GrovesMixin#which
+  faces for each wind` DRIFTED - `_GROVE_ARMS` draws one band for a cardinal wind key, a one-sided grove no block attests, and
+  fixes the side count by wind where 0071 records it differing by region (two sides at Sendai, three at Tonami, four at Izumo);
+  the side count should be a seeded roll among the attested forms (feature 291's farm-grove knob may already cover the hamlet).
 - **The GM's open question from 374**: whether the three hand-drawn magistracy sheets can be redrawn as smaller compounds
   around a 49-67 tsubo residence (the session's recommendation: yes).
 

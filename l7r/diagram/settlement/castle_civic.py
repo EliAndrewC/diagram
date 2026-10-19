@@ -43,8 +43,8 @@ class CastleCivicMixin:
         Use this instead of a hand-picked `s.label(x, y, ...)` whenever the caption names a specific feature. Records the
         subject box on the label so `label_hugs_its_referent` can measure the finished gap.
 
-        `box` accepts None so `s.frontage_box` can be passed straight through; a None means the row placed nothing, and
-        captioning an empty row is a gen-script bug, not something to draw.
+        `box` accepts None: a None means the subject placed nothing, and captioning it is a gen-script bug, not something
+        to draw.
 
         DEFERRED to the label phase: seating a caption at call time judges it against half a map (Tango's north gate
         market caption took the flank that later filled with the execution ground).
