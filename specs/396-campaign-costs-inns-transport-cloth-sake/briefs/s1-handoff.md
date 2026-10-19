@@ -103,3 +103,22 @@ kichinyado-kotobank, tokaido-qa-mlit-hatago, michie-siberian-overland, ye-mengzh
   Kinsei chingin bukka shi shiryo pp. 229-234; Suzuki Atsuko's paper on silk and cotton pricing (needs OCR); Gamble's
   "Daily wages of unskilled Chinese laborers" for a Qing wage in cash; the 物料价值则例 (1769) and 大清会典事例 for official
   fares.
+## 0262, written by the continuation session (2026-10-19)
+- SECTION=0262/what-did-sake-cost-by-the-shop-and-by-the-cup
+0262 is now written (no longer empty). source-reader ran on all its notes (7 bundles, 47 items: 46 READ, 1 CONTRADICTED - the popular page's laborer figure was not its only one); the fixes had a second round (9 READ) and are recorded, with their ledger rows. Every other check (quote-check, record-format, intro-check, translation-check, source-applicability on the four new and two changed write-ups) is session 2's.
+### 0262 - sake by the shop and by the cup
+- Edo shop, Bunsei era (1818-1829), the shopping guide Edo kaimono hitori annai via a popular article: headline brands 260-332 mon a sho, cheapest (Takasago) 180; nine-year sake 10 monme of silver - ATTESTED. A food guide of the same years: most clear sake 3 monme, measure not stated - ATTESTED (measure SILENT). About 18-33 mon a go - arithmetic. The guide's other lines (7.5-20 monme) are priced in silver.
+- Edo tavern, Bunsei era: good (kudari) sake 20-24 mon a go, cheap local 8-10, snacks 8 mon a dish, two or three go with dishes about 100 mon - ATTESTED ONLY FOR a popular page whose record is unnamed.
+- Edo soba shop, Morisada manko (1830-1853): good sake 40 mon a go, plain soba 16 - ATTESTED (the noodle association's transcription).
+- By the cup: Toshimaya, 1750s, a cup with dengaku 2 mon; Asakusa teahouses 28-32 mon, no measure - ATTESTED ONLY FOR Ito Maya quoted on a popular page.
+- Edo markup shop to tavern - SILENT (absence note; ranges overlap across different sources and grades, no ratio computed).
+- Village, 1842 (Nagata, now Oamishirasato; official prices under the Tenpo reforms): local sake 100 mon a sho, Itami 180; farm day laborer man 132, woman 100 in the same list - ATTESTED (the one same-document pairing). 10 and 18 mon a go; a sho of local 0.76 of a man's day, Itami 1.36, a go of local about 1/13 - arithmetic. Six of Nagata's sixteen side-trade households kept taverns that mostly sold their own brew - ATTESTED.
+- Edo wage: dated unskilled wage in mon - SILENT. A popular page's undated 'about 200 mon' laborer's day and 320-540 mon for carpenters, plasterers and navvies together; Bunsei carpenter (craftsman) 3-5 monme of silver - ATTESTED ONLY FOR that page. Nearest unskilled: Kyoto (Mitsui) 2.74-4.17 g of silver 1818-1829, 2.80-3.61 g 1830-1853 (Edo level with Kyoto from 1818, 0250). Not converted (units-decision).
+- China: bought wine twice home-brewed, Zhang Lüxiang, Tongxiang 1658 - ATTESTED. Spirit from lees 2 fen of silver a jin retail, 1.6 in bulk (Mr. Shen, late-Ming Huzhou) - ATTESTED; retail 25% over bulk - arithmetic. Field hands' shop wine 30 ladles a dou of rice, ladle volume SILENT, 12 liang of home brew stands in for a ladle - ATTESTED. Year-hand 5 taels a year besides rice (0248), firewood and wine 1.2 taels a year - ATTESTED. Qing tavern by the pot or bowl - SILENT.
+- Left out: the eonet late-Edo print's 800 mon a sho and 80 mon a go (undated, from a Meiji-titled satirical print); the Bai Shouyi Zhongguo tongshi Qing wine 30-60 wen a jin (not needed for the brief's items); the 1657 Meireki rise (Wikipedia, untraced).
+### New registry keys (four)
+oamishirasato-tenpo13-bukka, saketimes-edo-sake-prices, muraoka-edo-izakaya, nichimen-soba-shinagaki. Uncited entry now cited: muraoka-edo-nagaya-life. Reused with its Money 'Used for:' extended: ihns-bunongshu. Reused: bassino-ma-2005.
+### Still open (0262)
+- The 1842 Nagata list also gives an inn price, 旅宿代 1宿1人前 164 mon, beside the same 132-mon wage: a lead for 0259 (a same-document inn price and wage).
+- The 433 MB Morisada manko PDF in the GM's inbox is the original behind the soba shop's 40 mon, and may hold its own sake and tavern entries.
+- Leads not followed: the Edo kaimono hitori annai original (1824); Oishi Shinzaburo on the 1842 Edo 'bukka kakiage' (an Edo price-and-wage pairing); the J-STAGE paper on Edo wholesale sake (unreadable to the tool; a wholesale-to-retail markup); Qing criminal case records for a tavern price.
