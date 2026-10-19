@@ -3996,6 +3996,7 @@ takasebune	takasebune
 take-well	take-well
 take-wells	take-well
 take-yabu	take-yabu
+takefu	Takefu
 takeyabu	take-yabu
 tako-beya	tako-beya
 tale of the heike	Heike monogatari
