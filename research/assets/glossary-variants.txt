@@ -1657,6 +1657,7 @@ hucheng he	hucheng he
 hudou	hudou
 hui	hui
 hui (huizhou) style	Hui style
+hui ink	Hui ink
 hui style	Hui style
 hui-style	Hui style
 huiguan	huiguan
