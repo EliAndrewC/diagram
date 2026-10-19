@@ -408,7 +408,7 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T144 Amendment 7, FR-020: a ranking row in place of T32's, whose row turned out dead code (retired in T143) - a live row, chosen at its start; its retro row [lands-open]
       research: rendering
-- [ ] T145 0043's drawing page, 'How many farmsteads have a wood shed?': 'the share chosen at random for each hamlet from its seed' - seed is the generator's word; reword for a reader (record-format, T34's round) [lands-open]
+- [ ] T145 0043's drawing page, 'How many farmsteads have a wood shed?': 'the share chosen at random for each hamlet from its seed' - seed is the generator's word; reword for a reader (the glossary lists a `seed` variant: check its sense first) (record-format, T34's round) [lands-open]
       research: rendering
 - [ ] T146 fixture_seats' wood shed: shed_off_a_wall tests the 9.5 ft only against the house (walls[:1]) while against_a_wall accepts the kura, so a seat can stand 3.5 ft off the kura; in_front lets a flank shed stand partly forward of the front wall; _wood_shed rolls its first seat with zero, unlike the coop and privy; the kura passed as 'N' though a scattered farmstead's kura stands west (0040); against_a_wall's 1.5 ft tolerance lets the shed stand up to ~11 ft out, unclaimed (impl-drift, T34's rounds) [lands-open]
       research: rendering
