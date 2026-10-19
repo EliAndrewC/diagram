@@ -535,7 +535,13 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@30 (continue),
 
 ### T102 Decisions
 
-**D131 - the last resort crosses at a crossing place.** `connector_dry_exit` gaps its water lines within `FORD_HALF` of each crossing place `brook_fords` sets along the brook (every `FORD_SPACING`), so the fill passes the brook there and nowhere else; the claim reads "brook crossed at its crossing places - <0035's drawing page>: the fill crosses no water but at a crossing place". No page edit.
+**D131 - the last resort crosses where 0035 would.** `connector_dry_exit` runs its fill twice: as it was, the water lines walls,
+and open within `FORD_HALF` of each crossing place `brook_fords` sets along the brook (every `FORD_SPACING`); it takes the open
+fill's way where the own-bank fill finds none, or where the own-bank way is longer by more than `BROOK_CROSSING_COST_FT` (0035's
+150 ft) - a way keeps to its own bank unless crossing saves it about 150 ft (measured 2026-10-19: T102's claims round found the
+open fill alone crossed for free, DRIFTED; built so, the cohort passes 16 of 16). The claim reads "brook crossed at its crossing
+places - <0035's drawing page>: the fill keeps to its own bank unless crossing at a crossing place finds a way it otherwise has
+not, or saves more than `BROOK_CROSSING_COST_FT` of walk". No page edit.
 
 
 ## T11 - the close
