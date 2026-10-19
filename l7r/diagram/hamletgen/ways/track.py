@@ -149,7 +149,9 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
     """
     if len(run) < 2:
         return run
-    fabric = [poly for poly, _owner, _kind in _homestead_polys(s)]
+    # ...A GROVE BAND HELD AT 0036'S ROOM (feature 385 T109, D128): grown so every test below at `gap` keeps the line
+    # `CONNECTOR_BAND_GAP_FT` (12.5 ft) off the trees, the other fabric at `gap` itself
+    fabric = [list(ring_offset(poly, CONNECTOR_BAND_GAP_FT - gap, 0.0)[: len(poly)]) if kind == "groves" else poly for poly, _owner, kind in _homestead_polys(s)]
     if not fabric:
         return run
     crops = crop_polys(s)
