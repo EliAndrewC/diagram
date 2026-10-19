@@ -631,7 +631,11 @@ def door_path(
         a worn path takes the shortest way - research/questions/0081-village-lanes.drawing.html: straight where clear,
             else routed and pulled taut
         no sliver with the ways it meets - research/questions/0081-village-lanes.drawing.html: lanes meet as a T, so a door path closing a sliver (`closes_a_needle`) is refused
-        a door path off the fixtures - UNRESEARCHED: its line 3 ft off every fixture and off what the overlap matrix forbids (`over_a_fixture`, `forbidden_segment` at 3 ft)"""
+        a door path off the fixtures - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a household's way goes round its own garden beds and fixtures
+        its margin off the fixtures - UNRESEARCHED: its line 3 ft off every fixture and off what the overlap matrix forbids (`over_a_fixture`, `forbidden_segment` at 3 ft)
+        off the grove bands on every test - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the bands (grown by `band_grow`) held `FOOTPATH_FABRIC_GAP` off by the step, the pull and the kept path, 0036's 11 ft
+        the fallback at the law's gap - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: routed again at `WEB_FABRIC_GAP` (7 ft off a garden fence) and stepped only on lawful ground
+        water on the way - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a straight step crosses no water, and a routed path is squared where it crosses (`square_run`)"""
     from l7r.diagram.overlap.registry import forbidden_segment
 
     from .law import over_a_fixture

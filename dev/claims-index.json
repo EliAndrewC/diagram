@@ -26869,23 +26869,31 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::door_path#a door path off the fixtures": {
-  "body": "efa1e504b011c27e",
+  "body": "992984e5400ec179",
   "claim": "a door path off the fixtures - UNRESEARCHED: its line 3 ft off every fixture and off what the overlap matrix forbids (`over_a_fixture`, `forbidden_segment` at 3 ft)",
-  "code": "3311db8c722693b8",
-  "core": "ed37ed7f1d224400",
-  "date": "2026-10-18",
-  "note": "the page says the way goes round its fixtures but gives no distance, so the 3 ft is unresearched",
+  "code": "238b3e6d1e088663",
+  "core": "6b52b3ec1649a835",
+  "date": "2026-10-19",
+  "note": "0246 answers that a household's way goes \"round its own garden beds and fixtures\" (a map drawing convention), so the claim should cite 0246; only the 3 ft margin (`over_a_fixture`/`forbidden_segment` at 3.0) is unresearched",
   "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
+ },
+ "l7r/diagram/hamletgen/ways/serve.py::door_path#a straight step crosses no water; a routed path is squared where it crosses water (square_run)": {
+  "code": "6b52b3ec1649a835",
+  "core": "6b52b3ec1649a835",
+  "date": "2026-10-19",
+  "note": "a straight step crosses no water; a routed path is squared where it crosses water (square_run)",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/serve.py::door_path#a worn path takes the shortest way": {
-  "body": "efa1e504b011c27e",
+  "body": "992984e5400ec179",
   "claim": "a worn path takes the shortest way - village-lanes.drawing: straight where clear, else routed and pulled taut",
-  "code": "ddb64d60aed72771",
-  "core": "ed37ed7f1d224400",
-  "date": "2026-10-18",
-  "note": "the straight step where it is clear, else routed and pulled taut",
+  "code": "80cdc0226ac77a70",
+  "core": "6b52b3ec1649a835",
+  "date": "2026-10-19",
+  "note": "straight step where clear, else routed and string-pulled",
   "pages": {
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
   },
@@ -26896,19 +26904,37 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/serve.py::door_path#fallback route at the law's 7 ft fence gap (WEB_FABRIC_GAP, lawful_step), 0246's 7 ft off a garden fence": {
+  "code": "6b52b3ec1649a835",
+  "core": "6b52b3ec1649a835",
+  "date": "2026-10-19",
+  "note": "fallback route at the law's 7 ft fence gap (WEB_FABRIC_GAP, lawful_step), 0246's 7 ft off a garden fence",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/ways/serve.py::door_path#grove bands held 7 ft off (FOOTPATH_FABRIC_GAP) by every step and pull test, 0036's 11 ft": {
+  "code": "6b52b3ec1649a835",
+  "core": "6b52b3ec1649a835",
+  "date": "2026-10-19",
+  "note": "grove bands held 7 ft off (FOOTPATH_FABRIC_GAP) by every step and pull test, 0036's 11 ft",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/hamletgen/ways/serve.py::door_path#no sliver with the ways it meets": {
-  "code": "1cf7aca6d8bea298",
-  "core": "ed37ed7f1d224400",
-  "date": "2026-10-17",
-  "note": "refuses a sliver",
+  "body": "992984e5400ec179",
+  "claim": "no sliver with the ways it meets - village-lanes.drawing: lanes meet as a T, so a door path closing a sliver (`closes_a_needle`) is refused",
+  "code": "333ae0b6aff0486b",
+  "core": "6b52b3ec1649a835",
+  "date": "2026-10-19",
+  "note": "a path closing a needle is refused, so it meets its way as a T",
   "pages": {
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
   },
   "research": "324b10775c9108ef",
   "rests": [
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
    "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
   ],
-  "triaged": "2026-10-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::flank_doors#a flank door as fallback": {
@@ -26997,31 +27023,36 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#a flank door only where the front has none": {
-  "body": "616f219196122b6e",
+  "body": "6385f7709e34106d",
   "claim": "a flank door only where the front has none - UNRESEARCHED: a door path leaves from a flank of the dooryard only where no lawful path leaves the front",
-  "code": "3505714a411697d8",
-  "core": "a7a94248c4f16b5f",
+  "code": "2b07536e8a5461a6",
+  "core": "0e79ecc4a64e61e9",
   "date": "2026-10-19",
-  "note": "the pages put the way in at the front and say nothing about a flank fallback",
+  "note": "the bundle is silent on flank doors; front tried first",
   "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#a flank door only with open yard (no house or grove band) between it and the front door (`front_to_flank_open`)": {
-  "code": "a7a94248c4f16b5f",
-  "core": "a7a94248c4f16b5f",
+ "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#a flank door with open yard to the front": {
+  "body": "6385f7709e34106d",
+  "claim": "a flank door with open yard to the front - UNRESEARCHED: only a flank with open ground - no house, no grove band - between it and the front door (`front_to_flank_open`)",
+  "code": "13711176ee3248ed",
+  "core": "0e79ecc4a64e61e9",
   "date": "2026-10-19",
-  "note": "a flank door only with open yard (no house or grove band) between it and the front door (`front_to_flank_open`)",
+  "note": "silent in the bundle; `front_to_flank_open` checks house and grove boxes",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#door path off a grove band": {
-  "body": "616f219196122b6e",
+  "body": "6385f7709e34106d",
   "claim": "door path off a grove band - groves-of-trees-around-farmhouses-yashikirin.drawing: a footpath's clearance and some working room kept off the trees on each side, `GROVE_WORKING_ROOM_FT` 9.5 ft off the 3 ft tread (about 22 ft of the opening), counted once: the band grown by `band_grow` and the path routed at its gap keep its middle 11 ft off the trees",
-  "code": "b9b58b9f62895ba8",
-  "core": "a7a94248c4f16b5f",
+  "code": "c5761cfe27235a64",
+  "core": "0e79ecc4a64e61e9",
   "date": "2026-10-19",
-  "note": "only the routed leg keeps 11 ft; the straight step (`ok(door, q)`), the string-pull and `kept` test the grown bands at `_crosses_fabric(..., walls, 0.0)`, so a door path's middle may pass 4 ft off the trees, against \"some working room kept off the trees on each side, about 22 ft of the opening\"; test the bands at the router's gap, or grow them by the full 11 ft for those tests",
+  "note": "band_grow(7)=8 (4 a side) plus the 7 ft route gap = 11 ft = 1.5 + 9.5, which is §94's ~22 ft opening",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
@@ -27029,26 +27060,26 @@
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#door path off the house and the fixtures": {
-  "body": "616f219196122b6e",
+  "body": "6385f7709e34106d",
   "claim": "door path off the house and the fixtures - UNRESEARCHED: it starts 8 ft past its yard (`DOOR_STEP_FT`) and keeps 5 ft clear of the fixtures (`DOOR_FIXTURE_CLEAR_FT`)",
-  "code": "ba633a43f3ab4e19",
-  "core": "a7a94248c4f16b5f",
+  "code": "df775e23195bf220",
+  "core": "0e79ecc4a64e61e9",
   "date": "2026-10-19",
-  "note": "no page gives an 8 ft door step or a 5 ft fixture clearance",
+  "note": "no page gives the 8 ft step or the 5 ft fixture clearance; going round fixtures is covered by this unit's 0246 claim",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#every grove farm reached at its door": {
-  "body": "616f219196122b6e",
+  "body": "6385f7709e34106d",
   "claim": "every grove farm reached at its door - how-our-maps-lay-a-clustered-settlements-lanes.drawing, village-lanes.drawing: a 3 ft footpath where the door stands past the 60 ft reach",
-  "code": "f066b89905be1daf",
-  "core": "a7a94248c4f16b5f",
+  "code": "cff523da09253a13",
+  "core": "0e79ecc4a64e61e9",
   "date": "2026-10-19",
-  "note": "a lane of its own for every farmhouse, 60 ft counts as reached, a 3 ft footpath tread",
+  "note": "off the network (k None) `street_arrives` returns True, so a path is skipped whenever the DOOR is within 60 ft of a way. 0246 counts a farmhouse reached \"within 60 ft of the house, or within 12 ft of the steading's built ground\", but the door stands 8 ft past the yard, so a way 60 ft from the door can be well beyond both reaches. Measure from the house or built ground (`end_serves`), as the own-street branch does. The 3 ft width is in step",
   "pages": {
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
@@ -27059,15 +27090,15 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#no path to a household reached across a yard": {
-  "body": "616f219196122b6e",
+  "body": "6385f7709e34106d",
   "claim": "no path to a household reached across a yard - how-our-maps-lay-a-clustered-settlements-lanes.drawing: it shows no lane of its own",
-  "code": "ecc03ab6c8486e4b",
-  "core": "a7a94248c4f16b5f",
+  "code": "99fc304a9b4afb27",
+  "core": "0e79ecc4a64e61e9",
   "date": "2026-10-19",
-  "note": "`reached_across` farms are skipped: \"it shows no lane of its own\"",
+  "note": "`reached_across` households are skipped; \"it shows no lane of its own\"",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
   },
@@ -27078,12 +27109,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#off the fixtures and grove bands": {
-  "body": "616f219196122b6e",
+  "body": "6385f7709e34106d",
   "claim": "off the fixtures and grove bands - how-our-maps-lay-a-clustered-settlements-lanes.drawing, groves-of-trees-around-farmhouses-yashikirin.drawing: walls to the path",
-  "code": "aa4b7266e84d94f7",
-  "core": "a7a94248c4f16b5f",
+  "code": "a2184d54667c87a5",
+  "core": "0e79ecc4a64e61e9",
   "date": "2026-10-19",
-  "note": "routed round its own beds and fixtures, and through no farm's wood",
+  "note": "quads and bands are added to the walls; the way goes round the fixtures and no lane runs through the farm's own wood",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
@@ -27096,12 +27127,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#round the grove to the street": {
-  "body": "616f219196122b6e",
+  "body": "6385f7709e34106d",
   "claim": "round the grove to the street - row-villages-resson.drawing: a path round the grove, a GUESS there",
-  "code": "1c2d333220877bbe",
-  "core": "a7a94248c4f16b5f",
+  "code": "63d9273184710c4d",
+  "core": "0e79ecc4a64e61e9",
   "date": "2026-10-19",
-  "note": "a path round the grove to its own street, a GUESS on the page",
+  "note": "routed to its own street round the grove bands; a GUESS on the page",
   "pages": {
    "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
@@ -30581,12 +30612,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#brook not crossed": {
-  "body": "ec28cb12c5815d08",
+  "body": "f482b9e4dd7b3de1",
   "claim": "brook not crossed - villages-beside-their-stream-one-bank-or-both.drawing: no water line crossed",
-  "code": "d560c9824d24e5a5",
-  "core": "af3601c26f3a00aa",
+  "code": "98a2f8d510e227e3",
+  "core": "f0643632f542215e",
   "date": "2026-10-19",
-  "note": "the fill treats `sink_brook` and `waters` as lines never crossed, so the track can never cross, even where crossing saves a long way round (or `NoDryExit` is raised); the page says \"A way keeps to its own bank unless crossing saves it more than about 150 ft\" on a plank bridge; record the ban as a DEVIATION or charge a crossing",
+  "note": "the brook and the water lines are lines `dry_exit` may never cross, but 0035 has ways \"cross the brook squarely, on a plank bridge\" when crossing saves \"more than about 150 ft\". The connector should toll a crossing, or the claim should be a DEVIATION the drawing page records",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
@@ -30598,12 +30629,12 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#dry exit off the wet": {
-  "body": "ec28cb12c5815d08",
+  "body": "f482b9e4dd7b3de1",
   "claim": "dry exit off the wet - village-lanes.drawing: walled by the marsh, the steadings and the field",
-  "code": "a504fe1e395b27f5",
-  "core": "af3601c26f3a00aa",
+  "code": "76b614dd3cca1698",
+  "core": "f0643632f542215e",
   "date": "2026-10-19",
-  "note": "walled by the wet ground, the steadings, the field and the envelope, and it runs off the map",
+  "note": "walled by the wet ground, the field and the steadings, it runs off the map",
   "pages": {
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
   },
@@ -30611,63 +30642,66 @@
   "rests": [
    "0081-village-lanes.drawing.html:16df95fc169329f7",
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
-   "0081-village-lanes.drawing.html:7237abd9ead63ebe",
+   "0081-village-lanes.drawing.html:bd66b84c6bda826f",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#grove band gap": {
-  "body": "ec28cb12c5815d08",
+  "body": "f482b9e4dd7b3de1",
   "claim": "grove band gap - groves-of-trees-around-farmhouses-yashikirin.drawing: a lane keeps a footpath's clearance and some working room off the trees; `CONNECTOR_BAND_GAP_FT`, 0036's 9.5 ft working room plus the connector's half-width (12.5 ft), on a finer grid",
-  "code": "0348dfa9dbec76ea",
-  "core": "af3601c26f3a00aa",
+  "code": "201cfd4c254d17a5",
+  "core": "f0643632f542215e",
   "date": "2026-10-19",
-  "note": "bands walled at `CONNECTOR_BAND_GAP_FT` (12.5 ft), 0036's 9.5 ft room past the half-width",
+  "note": "9.5 ft working room plus the 6 ft track's half-width = 12.5 ft, §94's rule carried to the wider tread",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
   "research": "45be621f47448e34",
   "rests": [
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:06616d493b616366",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#pond berth": {
-  "body": "ec28cb12c5815d08",
+  "body": "f482b9e4dd7b3de1",
   "claim": "pond berth - UNRESEARCHED: 80 ft past the pond's larger half-axis",
-  "code": "14b358d21a0b9cd4",
-  "core": "af3601c26f3a00aa",
+  "code": "c04d925df5a32d0c",
+  "core": "f0643632f542215e",
   "date": "2026-10-19",
-  "note": "no cited page gives a pond berth",
+  "note": "the bundle is silent on an 80 ft pond berth",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#the track kept 7 ft off every steading (`TRACK_FABRIC_GAP`) and 8 ft off wet ground (`wet_grown_by_the_lane`)": {
-  "code": "af3601c26f3a00aa",
-  "core": "af3601c26f3a00aa",
+ "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#the track's room off the steadings and the wet": {
+  "body": "f482b9e4dd7b3de1",
+  "claim": "the track's room off the steadings and the wet - UNRESEARCHED: 7 ft off every steading (`TRACK_FABRIC_GAP`) and the wet ground grown 8 ft (`wet_grown_by_the_lane`)",
+  "code": "e6c6a4c8cbe5ad0e",
+  "core": "f0643632f542215e",
   "date": "2026-10-19",
-  "note": "the track kept 7 ft off every steading (`TRACK_FABRIC_GAP`) and 8 ft off wet ground (`wet_grown_by_the_lane`)",
+  "note": "the 7 ft off steadings (`TRACK_FABRIC_GAP`) is answered by 0246 (\"A lane's middle keeps at least 7 ft clear of a garden fence\") and 0081 (a tread 3 ft off a farmhouse wall); cite those, and leave only the 8 ft wet growth as UNRESEARCHED",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#track start out of the grove bands": {
-  "body": "ec28cb12c5815d08",
-  "claim": "track start out of the grove bands - groves-of-trees-around-farmhouses-yashikirin.drawing: walked out of grove bands by a footpath gap plus half the tread, the lane's clearance off the trees",
-  "code": "82512c33db650c2c",
-  "core": "af3601c26f3a00aa",
+  "body": "f482b9e4dd7b3de1",
+  "claim": "track start out of the grove bands - groves-of-trees-around-farmhouses-yashikirin.drawing: walked out of grove bands by `CONNECTOR_BAND_GAP_FT` (0036's working room past the half-width) and the fill's cell slack, the wall the fill puts round each band",
+  "code": "e347abb1b20641fe",
+  "core": "f0643632f542215e",
   "date": "2026-10-19",
-  "note": "the start is pushed `FOOTPATH_FABRIC_GAP + CONNECTOR_WIDTH/2` (7 + 3 ft, plus cell slack), the 7 ft footpath gap and not 0036's 9.5 ft working room, so it falls short of the 12.5 ft wall the same fill puts round each band; build it on `CONNECTOR_BAND_GAP_FT`, or cite the 7 ft to its own source",
+  "note": "the start is pushed past the band gap, so no track starts in a grove",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
   "research": "45be621f47448e34",
   "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_keeps_the_law#bends like a path": {
   "code": "2d3acfeb042823a6",

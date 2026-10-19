@@ -914,7 +914,8 @@ def connector_dry_exit(plan: SitePlan, start: Pt, avoid: Sequence[Poly], wet: Se
 
     Research:
         dry exit off the wet - research/questions/0081-village-lanes.drawing.html: walled by the marsh, the steadings and the field
-        the track's room off the steadings and the wet - UNRESEARCHED: 7 ft off every steading (`TRACK_FABRIC_GAP`) and the wet ground grown 8 ft (`wet_grown_by_the_lane`)
+        the track off the steadings - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0081-village-lanes.drawing.html: 7 ft off every steading (`TRACK_FABRIC_GAP`), a lane's middle off a garden fence
+        the track off the wet - UNRESEARCHED: the wet ground grown 8 ft (`wet_grown_by_the_lane`)
         pond berth - UNRESEARCHED: 80 ft past the pond's larger half-axis
         grove band gap - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a lane keeps a footpath's clearance and some working room off the trees; `CONNECTOR_BAND_GAP_FT`, 0036's 9.5 ft working room plus the connector's half-width (12.5 ft), on a finer grid
         track start out of the grove bands - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: walked out of grove bands by `CONNECTOR_BAND_GAP_FT` (0036's working room past the half-width) and the fill's cell slack, the wall the fill puts round each band
