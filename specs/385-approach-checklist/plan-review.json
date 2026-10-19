@@ -5551,6 +5551,26 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T71": {
+   "section_sha256": "aecf7d907479b7bac848727e1c23ce8f1fa587144749bd2e506967cddf506300",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T71 (the task)",
+     "summary": "A tooling task: a plan-review bundle must carry the decision a block cites from another feature, not this feature's same-numbered decision.",
+     "class": "within",
+     "why": "Amendment 6 asks the overnight run to 'implement any obvious performance / tooling / process improvements along the way'; a review bundle that hands the reviewer the wrong D18 (385's sty predicate for 375's) is a defect in the plan-stage review tooling this feature runs on, and fixing it is exactly such an improvement. It adds no behavior beyond reading the cited text."
+    },
+    {
+     "id": "D91",
+     "summary": "D85's qualified-citation reader widened from FR/SC to decisions: (?:plan )?D<n> after a feature number resolves from that feature's plan.md + plan-done.md through the same paragraph reader, under the same <!-- feature NNN --> line; an unknown id is left out.",
+     "class": "within",
+     "why": "It extends D85's existing rule to the one id kind it missed, using the same sources this feature's own decisions are read from and the same unknown-id handling D85 already sets; it narrows nothing the request or spec asks for, and its done-test (red without it) only enforces the fix."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
