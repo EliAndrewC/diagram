@@ -126,8 +126,19 @@ def refusal(brief: pathlib.Path, text: str, record: pathlib.Path) -> str:
         return (f"it assigns {n} questions ({', '.join(detail)}); a write session takes at most {CAP} (feature 274: a write "
                 f"session's cost grows with the square of its length). Split it into {len(parts)} briefs of at most {CAP} - "
                 f"{', '.join(parts)} - each with its own handoff, and queue them one after another; or, for a deliberate larger "
-                "load, set WRITE_CAP_OK='<reason>'")
+                "load, set WRITE_CAP_OK='<reason>'" + _parts_tip(detail))
     return ""
+
+
+def _parts_tip(detail: list[str]) -> str:
+    """The tip when the count fell back to a line's first word: those lines named no question and led with no item id,
+    so each was counted one question - which is right for a new question but wrong for the parts of one (feature 404's
+    brief: five bold bullets of 0260 counted five)."""
+    words = [d for d in detail if not d.isdigit() and not re.fullmatch(r"[A-Z]{1,2}\d+", d)]
+    if not words:
+        return ""
+    return (f". The lines counted as {', '.join(words)} name no question and lead with no item id; if they are the parts of"
+            " one question, nest them as indented sub-bullets under one `- B1 ...` line naming it (`NNNN` in backticks)")
 
 
 def main(argv: list[str]) -> int:
