@@ -947,3 +947,11 @@ About 25 min. T110 was ticked "landed" while its push stood refused, because it 
 A "landed" NOTE now waits until no file outside `specs/` and `dev/` committed here differs from origin/main - compared by content,
 as the review's aside asked, since `make land-tooling` lands files as new commits and leaves the clone's own commits ahead.
 **The habit it changes:** none needed.
+
+## T102 - the retro row
+
+About 1 h 20. The track out's last-resort fill crosses the brook as 0035 has a way do: at a crossing place, only where it finds a way
+the own-bank fill does not or saves more than 150 ft of walk, squared after by the settle. The first plan, recording the keep-to-
+its-bank as a DEVIATION, was blocked - its reason was the algorithm's order, not how a track forms - and two claims rounds moved the
+code to the page (a free crossing, then the squareness named). Items 6 and 9 still describe the first gapping only (round 3's aside).
+The unclaimed channel rule is T120. **The habit it changes:** a deviation's reason must be about the world, not the code's order.

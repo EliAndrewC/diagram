@@ -30757,21 +30757,22 @@
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#brook crossed at its crossing places": {
   "body": "4075e313abca307a",
-  "claim": "brook crossed at its crossing places - villages-beside-their-stream-one-bank-or-both.drawing: the fill keeps to its own bank unless crossing at a crossing place (`brook_fords`, gapped by `FORD_HALF`) finds a way it otherwise has not, or saves more than `BROOK_CROSSING_COST_FT` (150 ft) of walk",
-  "code": "17911ddc3e519700",
+  "claim": "brook crossed at its crossing places - villages-beside-their-stream-one-bank-or-both.drawing: the fill keeps to its own bank unless crossing at a crossing place (`brook_fords`, gapped by `FORD_HALF`) finds a way it otherwise has not, or saves more than `BROOK_CROSSING_COST_FT` (150 ft) of walk; the crossing is then squared to the brook by the settle (`squaring.square_every_crossing`, the connector's too)",
+  "code": "71fa60e05b16f635",
   "core": "fe8642b99367f8a3",
   "date": "2026-10-19",
-  "note": "The 150 ft charge (`polyline_len(path) > polyline_len(across) + BROOK_CROSSING_COST_FT`) and the 160 ft spacing on straight reaches match the page. But `gap_segments(lines, ..., FORD_HALF)` opens a 60 ft window at each crossing place, and the fill and string-pull may cross anywhere in it at any angle. The page says ways \"cross the brook squarely, on a plank bridge\". The code should hold the crossing square to the brook at the ford point, or the claim should record a DEVIATION.",
+  "note": "keeps to its own bank unless crossing finds a way or saves more than 150 ft (`BROOK_CROSSING_COST_FT`), crossing places every 160 ft on straight reaches (`FORD_SPACING`, `FORD_BEND_DEG`), crossing squared afterwards; all as the page records them, the 150 ft and 160 ft as GUESSes",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
   "research": "d47738a05844fe19",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:3ad87e3e98ea5542",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#dry exit off the wet": {
   "body": "4075e313abca307a",
@@ -30827,7 +30828,7 @@
   "code": "497568fbbf507b89",
   "core": "fe8642b99367f8a3",
   "date": "2026-10-19",
-  "note": "the page records 7 ft to the lane's middle as a convention with a recorded DEVIATION, but the bundle gives `TRACK_FABRIC_GAP = WEB_FABRIC_GAP` without `WEB_FABRIC_GAP`'s value; need that constant to confirm 7 ft (and, with the 6 ft track, a tread edge 4 ft off the fence, still above 0081's 3 ft off a house wall)",
+  "note": "7 ft to the lane's middle off every steading (`TRACK_FABRIC_GAP` = `WEB_FABRIC_GAP` = 7.0) is the page's least gap, measured to the middle, which the page records as a DEVIATION; the 6 ft track's tread still clears a house wall by 4 ft, more than 0081's 3 ft",
   "pages": {
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
@@ -30835,10 +30836,11 @@
   "research": "bf7b3516b9fa8041",
   "rests": [
    "0081-village-lanes.drawing.html:417841cd16f112d9",
+   "0081-village-lanes.drawing.html:91a5765af6230403",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#the track off the wet": {
   "body": "4075e313abca307a",
@@ -30850,6 +30852,14 @@
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#the track out never crosses a drawn channel (`waters`): water lines are opened only near the brook's crossing places, so it gets no plank crossing of a ditch": {
+  "code": "fe8642b99367f8a3",
+  "core": "fe8642b99367f8a3",
+  "date": "2026-10-19",
+  "note": "the track out never crosses a drawn channel (`waters`): water lines are opened only near the brook's crossing places, so it gets no plank crossing of a ditch",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#track start out of the grove bands": {
   "body": "4075e313abca307a",

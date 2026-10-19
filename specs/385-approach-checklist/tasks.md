@@ -336,6 +336,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T119 Each tooling fix's yield measured: the time it was meant to save, read from the per-task time report (T115), so a fix that saves nothing is retired (amendment 10, the GM's change 3) [lands-open]
       research: rendering
+- [ ] T120 The track out's last resort never crosses a drawn channel (connector_dry_exit, UNCLAIMED, T102's round): claim it, or let it cross a ditch on a plank as 0084 gives (found working T102, 2026-10-19) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
