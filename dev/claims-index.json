@@ -20297,10 +20297,10 @@
   "date": "2026-10-03",
   "note": "calibrated within ends on the bund",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::RUN_ON_REACH_FT#run-on reach": {
@@ -20583,16 +20583,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#nearest lane runs on": {
+  "body": "e21f0f50a13f41af",
+  "claim": "nearest lane runs on - bunds-between-the-paddies-aze.drawing: the end nearest the paddy",
   "code": "8d70a0d983c512a6",
   "core": "9051ac4b2c4b6b02",
-  "date": "2026-10-08",
-  "note": "the lane end nearest the paddy runs on to the bund",
+  "date": "2026-10-19",
+  "note": "the free lane ends, nearest the paddy first, are carried on to the bund",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947"
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
   ],
   "verdict": "IN-STEP"
  },
@@ -20608,19 +20610,22 @@
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947"
   ],
+  "triage": "touched",
   "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#some way joins the bund": {
+  "body": "e21f0f50a13f41af",
+  "claim": "some way joins the bund - bunds-between-the-paddies-aze.drawing: joined, run on, or a field path branched off the nearest lane",
   "code": "2cb806243c7a7cc5",
   "core": "9051ac4b2c4b6b02",
-  "date": "2026-10-08",
-  "note": "joined, run on, or a field path to the bund",
+  "date": "2026-10-19",
+  "note": "joined within the 6 ft guess, else run on, else a field path branched at the nearest point",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947"
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
   ],
   "verdict": "IN-STEP"
  },
@@ -20770,10 +20775,10 @@
   "date": "2026-10-03",
   "note": "0014: ends on the bund",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::paddy_ground#the paddy's outer bund": {
@@ -20782,10 +20787,10 @@
   "date": "2026-10-03",
   "note": "0014: path joins the paddy's outer bund",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::pulled_out_of_the_ground#no lane into the crop": {
@@ -20794,18 +20799,18 @@
   "date": "2026-10-03",
   "note": "lane stops at the paddy; path ends on the bund",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54",
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea",
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
   },
-  "research": "5cb702ad72681b35",
-  "triaged": "2026-10-18",
+  "research": "b475278aaeccf671",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/bund.py::run_lanes_on_to_the_bund#a row street's ends are never carried on to the bund (skips `street`)": {
+ "l7r/diagram/hamletgen/ways/bund.py::run_lanes_on_to_the_bund#an end carried on to the dry hem's edge as well as the paddy's (the worked ground, not `paddy_ground`); 0014 §21 speaks only of the paddy's outer bund": {
   "code": "93ad02fc31023339",
   "core": "93ad02fc31023339",
   "date": "2026-10-19",
-  "note": "a row street's ends are never carried on to the bund (skips `street`)",
+  "note": "an end carried on to the dry hem's edge as well as the paddy's (the worked ground, not `paddy_ground`); 0014 §21 speaks only of the paddy's outer bund",
   "research": "",
   "verdict": "UNCLAIMED"
  },
@@ -20821,20 +20826,28 @@
   "triaged": "2026-10-18",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/bund.py::run_lanes_on_to_the_bund#how far an end may be carried on to the field (`RUN_ON_REACH_FT`)": {
+  "code": "93ad02fc31023339",
+  "core": "93ad02fc31023339",
+  "date": "2026-10-19",
+  "note": "how far an end may be carried on to the field (`RUN_ON_REACH_FT`)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/hamletgen/ways/bund.py::run_lanes_on_to_the_bund#lane end runs on to the bund": {
   "body": "1c7500963f702c3d",
   "claim": "lane end runs on to the bund - how-our-maps-lay-a-clustered-settlements-lanes.drawing, bunds-between-the-paddies-aze.drawing: an end reaching nothing carried onto the field",
   "code": "28c7f074fdb7635c",
   "core": "93ad02fc31023339",
   "date": "2026-10-19",
-  "note": "an end that reaches nothing is carried on to the bund, as §6's \"runs on to ... a bund\" and 0014's \"the hamlet's nearest lane runs on to the bund\" say",
+  "note": "an end that reaches nothing is carried on to the ground's edge, and an end inside the ground is pulled back out",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54",
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
-  "research": "9ce91ad05a45b4a3",
+  "research": "3bfeed340077cefd",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947",
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
   "verdict": "IN-STEP"
@@ -20848,6 +20861,7 @@
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
   "research": "9c5292e27312fca8",
+  "triage": "touched",
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
@@ -20871,6 +20885,7 @@
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
   "research": "9c5292e27312fca8",
+  "triage": "touched",
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
@@ -22039,15 +22054,14 @@
   "claim": "field path to the bund - bunds-between-the-paddies-aze.drawing: from the network on to the paddy's edge",
   "code": "0eb27f7ea123eeb3",
   "core": "75543877ab3159d7",
-  "date": "2026-10-18",
-  "note": "the run goes from the network point to the paddy's edge, found with unlimited reach, so it never ends short of the bund; this matches \"runs from the hamlet to the paddy's outer bund and joins it\"",
+  "date": "2026-10-19",
+  "note": "runs straight to the nearest point of the edge, stopped on the bund",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947",
-   "0014-bunds-between-the-paddies-aze.drawing.html:af5d565ccf760fa8"
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
   ],
   "verdict": "IN-STEP"
  },
@@ -22279,14 +22293,14 @@
   "claim": "field path to the bund - bunds-between-the-paddies-aze.drawing: from the network on to the paddy's edge, shortest first",
   "code": "aa1eb0515e6f0657",
   "core": "20bb914d44544a06",
-  "date": "2026-10-18",
-  "note": "a run from the network on to the paddy's outer bund, nearest first; joining at the nearest point is the page's GUESS; SPUR_TRIES is a candidate count.",
+  "date": "2026-10-19",
+  "note": "shortest first, which matches the guess that the path joins at the point nearest the hamlet",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947"
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
   ],
   "verdict": "IN-STEP"
  },
@@ -22383,16 +22397,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::routed_field_runs#field path to the bund": {
+  "body": "35eb3e3c34d7edd5",
+  "claim": "field path to the bund - bunds-between-the-paddies-aze.drawing: threaded round the steadings when no straight run keeps the law",
   "code": "1287b8e78d58a9cd",
   "core": "7c508ad148726b01",
-  "date": "2026-10-05",
-  "note": "routed to the bund where a straight run cannot keep the law",
+  "date": "2026-10-19",
+  "note": "each routed leg ends at the ground's run-on target, on the bund",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947"
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
   ],
   "verdict": "IN-STEP"
  },
@@ -23180,10 +23196,10 @@
   "date": "2026-10-03",
   "note": "field path onto the bund",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/geom.py::WorkedGround.__init__#geometry": {
@@ -23471,6 +23487,7 @@
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
   "research": "9c5292e27312fca8",
+  "triage": "touched",
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
@@ -24821,16 +24838,16 @@
   "claim": "the field reached - bunds-between-the-paddies-aze.drawing: some way joins the bund",
   "code": "62e86e697fb9ffb4",
   "core": "b409230f282257f1",
-  "date": "2026-10-17",
-  "note": "refuses a field no way reaches",
+  "date": "2026-10-19",
+  "note": "the refusal fires only when `law.field_unreached` is true, which accepts a way within FIELD_REACH_FT (60 ft) and asks only on a brook map; the page says the path \"joins it ... never ends in open ground short of the bund\", with joining at 6 ft. The bar should be the 6 ft join, or the claim should say what it actually enforces",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947"
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/law.py::AIM_DEG#making for a way": {
   "code": "c1f3d0f238ff6f42",
@@ -24919,30 +24936,30 @@
   "claim": "a way reaches the field - bunds-between-the-paddies-aze.drawing: a way runs from the hamlet to the field's outer bund",
   "code": "24b238fd36fa8bf9",
   "core": "c0101826cceee8b7",
-  "date": "2026-10-17",
-  "note": "the rule the law asks is that some way runs to the field (the figure is judged on \"the reach\")",
+  "date": "2026-10-19",
+  "note": "60 ft counts as reaching the field, but the page has the path join the outer bund and \"never ends in open ground short of the bund\", reading a join as within 6 ft (a GUESS)",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947"
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/law.py::FIELD_REACH_FT#the reach": {
   "body": "e0c94f3897f9cdb4",
   "claim": "the reach - bunds-between-the-paddies-aze.drawing: the path joins the bund and never ends short of it; this law accepts a way within 60 ft of the field - a known gap (no 0014 page states 60 ft, searched 2026-10-17), carried to feature 385 T12 with the field refusals it bears on",
   "code": "abfeba57b1febb88",
   "core": "c0101826cceee8b7",
-  "date": "2026-10-17",
-  "note": "FIELD_REACH_FT=60.0 accepts a way that stops up to 60 ft short of the field, but the page says the field path \"joins it ... it never ends in open ground short of the bund\"; the law should require the way to reach the outer bund, or the page should record the 60 ft as a DEVIATION",
+  "date": "2026-10-19",
+  "note": "the claim itself admits 60 ft is on no page, and no 0014 block records it as a deviation; the figure should be BUND_REACH_FT's 6 ft, or the page should record the 60 ft as a DEVIATION",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947"
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
   ],
   "verdict": "DRIFTED"
  },
@@ -25313,6 +25330,7 @@
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
   "research": "9c5292e27312fca8",
+  "triage": "touched",
   "triaged": "2026-10-05",
   "verdict": "DRIFTED"
  },
@@ -26385,16 +26403,16 @@
   "claim": "the field reached - bunds-between-the-paddies-aze.drawing: a way runs from the network to the field's bund",
   "code": "8b2b38e7c01a6a09",
   "core": "2a295f8f3ed9672b",
-  "date": "2026-10-17",
-  "note": "a run from the network on to the bund",
+  "date": "2026-10-19",
+  "note": "a field way is drawn only when `law.field_unreached` holds (the 60 ft bar, brook maps only), so a way ending up to 60 ft short of the bund gets no field way, against \"never ends in open ground short of the bund\"",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947"
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/reach.py::settle_targets#a path runs to the graves": {
   "code": "7c89f84558820334",
@@ -27859,10 +27877,10 @@
   "date": "2026-10-03",
   "note": "matches the claim",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::fouled_segment#no long leg through a building": {
@@ -28228,18 +28246,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::settle_reach#the field reached": {
+  "body": "cf067fa4c635a2f3",
+  "claim": "the field reached - bunds-between-the-paddies-aze.drawing: a way runs to the field's bund",
   "code": "61dc3b5e227a460e",
   "core": "366116f92aca794b",
-  "date": "2026-10-05",
-  "note": "a way runs to the field's bund",
+  "date": "2026-10-19",
+  "note": "it calls the field step only when `law.field_unreached` holds, the same 60 ft gate, which accepts a way that stops short of the bund",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947"
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/settle.py::settle_shadows#no doubled band": {
   "code": "cbc55d048f1236ea",
@@ -30591,6 +30611,7 @@
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
   "research": "9c5292e27312fca8",
+  "triage": "touched",
   "triaged": "2026-10-05",
   "verdict": "DRIFTED"
  },
@@ -31294,16 +31315,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#field spur tip on the bund": {
+  "body": "7387cedc8d9d7edc",
+  "claim": "field spur tip on the bund - bunds-between-the-paddies-aze.drawing: set on the worked ground's edge, again after threading",
   "code": "82e692cf6544cdc1",
   "core": "84c8b5e51e347be7",
-  "date": "2026-10-09",
-  "note": "tip_onto_the_bund runs before threading and again on the drawn spur; the path joins the outer bund",
+  "date": "2026-10-19",
+  "note": "`tip_onto_the_bund` runs before threading and again on the drawn spur",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947"
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
   ],
   "verdict": "IN-STEP"
  },
@@ -31437,16 +31460,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#spur kept however short": {
+  "body": "7387cedc8d9d7edc",
+  "claim": "spur kept however short - bunds-between-the-paddies-aze.drawing: drawn down to its 5 ft tread",
   "code": "3bf2045d6d9d9832",
   "core": "84c8b5e51e347be7",
-  "date": "2026-10-09",
-  "note": "the floor is SPUR_WIDTH, 5 ft, matching the page's \"however short that leaves the path\"",
+  "date": "2026-10-19",
+  "note": "the only floor is the 5 ft tread (`_spur_ft >= SPUR_WIDTH`), under the 6 ft join reach",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947"
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
   ],
   "verdict": "IN-STEP"
  },
@@ -33366,16 +33391,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::tidy_lane_ends#end carried on to the bund": {
+  "body": "e044c086d159df58",
+  "claim": "end carried on to the bund - bunds-between-the-paddies-aze.drawing",
   "code": "8cd051030ca220c3",
   "core": "9071f8c7dae2e70e",
-  "date": "2026-10-07",
-  "note": "an end making for the field runs on to its bund",
+  "date": "2026-10-19",
+  "note": "calls `run_lanes_on_to_the_bund` before the trim",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947"
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
   ],
   "verdict": "IN-STEP"
  },
@@ -41643,11 +41670,11 @@
   "date": "2026-10-03",
   "note": "0014 one shared bund",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "section": "871c4f61762631b7",
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_SAME_PARENT_OK#ditch along its resting plot": {
@@ -46405,10 +46432,10 @@
   "date": "2026-10-03",
   "note": "as cited",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_ditches#ditch net over the paddies": {
@@ -46740,10 +46767,10 @@
   "date": "2026-10-03",
   "note": "as cited",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_record_ditches#plumbing": {
@@ -46860,10 +46887,10 @@
   "date": "2026-10-03",
   "note": "as cited",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin.bund_junctions#pile by quadrant": {
@@ -46872,10 +46899,10 @@
   "date": "2026-10-03",
   "note": "as cited",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin.comb_base_fill#field floor": {
@@ -46900,10 +46927,10 @@
   "date": "2026-10-03",
   "note": "as cited",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::WetLines#plumbing": {
@@ -46936,10 +46963,10 @@
   "date": "2026-10-03",
   "note": "as cited",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::channel_end_on_stream#mouth reaches the water": {
@@ -48523,14 +48550,15 @@
   "date": "2026-10-10",
   "note": "each column line has its own phase, bends without stepping, meets rows at T-junctions",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:0a5c813bdbc4ad64",
    "0014-bunds-between-the-paddies-aze.drawing.html:9b9af18ba1394922",
    "0014-bunds-between-the-paddies-aze.drawing.html:af5d565ccf760fa8"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#dry where water fails": {
@@ -48617,14 +48645,15 @@
   "date": "2026-10-10",
   "note": "the page says \"No bund on our maps is ruled straight\" and \"each row and column line ... takes its own gentle bow\". The code draws row bunds as straight segments of constant f",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:59cd42eeeea80de5",
    "0014-bunds-between-the-paddies-aze.drawing.html:9b9af18ba1394922",
    "0014-bunds-between-the-paddies-aze.drawing.html:af5d565ccf760fa8"
   ],
+  "triaged": "2026-10-19",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#row bunds staggered": {
@@ -63821,6 +63850,7 @@
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
   "research": "9c5292e27312fca8",
+  "triage": "touched",
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
@@ -64306,16 +64336,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#arrival at the bund": {
+  "body": "0c4614530572c84e",
+  "claim": "arrival at the bund - GUESS bunds-between-the-paddies-aze.drawing: within 6 ft of a field's or dry plot's edge, at the map's scale (the page gives no figure)",
   "code": "7997f7c93d6febc8",
   "core": "430adfad460cfc83",
-  "date": "2026-10-09",
-  "note": "the page has the path join the outer bund but gives no reach, so `px(BUND_REACH_FT)` (6 ft at the map's scale) is honestly a GUESS",
+  "date": "2026-10-19",
+  "note": "6 ft is the page's recorded GUESS, and the claim calls the dry-plot reach a guess too",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947"
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
   ],
   "verdict": "IN-STEP"
  },
@@ -64853,10 +64885,10 @@
   "date": "2026-10-03",
   "note": "separates a step from a bend, as 0014 \"may bend, but it never hops sideways\"",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_JOG_LINK_FT#step or L-shape": {
@@ -64865,10 +64897,10 @@
   "date": "2026-10-03",
   "note": "0014: \"Past about 30 ft the offset is a limb of the plot\"",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_JOG_OFF_FT#step offset": {
@@ -64877,10 +64909,10 @@
   "date": "2026-10-03",
   "note": "within 0014's \"steps a few feet sideways\"",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_JOG_PARALLEL_DEG#the run resumes": {
@@ -64889,10 +64921,10 @@
   "date": "2026-10-03",
   "note": "calibrated reading of 0014's \"carries on parallel to itself\"",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_JOG_RUN_FT#step runs": {
@@ -64901,10 +64933,10 @@
   "date": "2026-10-03",
   "note": "calibrated reading of 0014's \"a wall that runs\"",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_PAST_EPS#bank geometry": {
@@ -64976,15 +65008,15 @@
   "note": "the placer refuses a basin under 0.16 plot widths thick, but the paddy page says \"the maps set no least width for a basin\" and neither page states 0.16 (the bund page's \"same least width as the narrow toe\" is a GUESS with no figure); reconcile the pages and state the figure, or drop the rule",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28",
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "20234e9ed57bafef",
+  "research": "3e6c3a15363796a1",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:acd4531bf6255fb2",
    "0014-bunds-between-the-paddies-aze.drawing.html:b09d82d6a024f0e7"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-19",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/banks.py::_WELD_MIN_APEX#weld apex": {
@@ -65001,18 +65033,6 @@
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:c98636cac67c0c83"
   ],
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/waterfields/banks.py::_WELD_MIN_SOLIDITY#weld lump": {
-  "code": "664d354c4de6959c",
-  "core": "13a60bd68a444539",
-  "date": "2026-10-03",
-  "note": "0014 drawing records only \"It goes to the paddy it shares the most bund with\"; the 0.85-solidity exception is not recorded there as a deviation - record it on the page or drop DEVIATION",
-  "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
-  },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/banks.py::_nearest_segment#bank geometry": {
@@ -65185,10 +65205,10 @@
   "date": "2026-10-03",
   "note": "counts 0014 steps",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::jog_vertices#a bund never steps sideways": {
@@ -65197,10 +65217,10 @@
   "date": "2026-10-03",
   "note": "0014: a run, a hop across, the run resuming parallel",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::off_with_the_fall#off at right angles": {
@@ -65345,10 +65365,10 @@
   "date": "2026-10-03",
   "note": "0014: \"at least two beads\"",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_bnd#sector bounds": {
@@ -65377,10 +65397,10 @@
   "date": "2026-10-03",
   "note": "0014: \"Some bunds carry a row of soybeans\", a single row",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_bund_beans#buried beads dropped": {
@@ -65397,13 +65417,13 @@
   "date": "2026-10-05",
   "note": "a beaded stretch shows at least two beads",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22"
   ],
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_dry_fields#behind a bare bank": {
@@ -65604,10 +65624,10 @@
   "date": "2026-10-03",
   "note": "enforces 0014's two-bead rule by removal",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::crop_stream#crops off the geometry stream": {
@@ -66286,10 +66306,10 @@
   "date": "2026-10-03",
   "note": "shared bunds, no bare strip (0014)",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/frame.py::BANK_MARGIN#bund and ditch abut": {
@@ -66928,13 +66948,14 @@
   "date": "2026-10-09",
   "note": "beans beaded along a bean_frac share of the paddy bunds",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:af5d565ccf760fa8",
    "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#dry acreage scale": {
@@ -67115,10 +67136,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/palette.py::AZE_FT#dividing bund width": {
@@ -67127,13 +67148,14 @@
   "date": "2026-10-05",
   "note": "1.5 ft, the bund's real width",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:38716644055adc49",
    "0014-bunds-between-the-paddies-aze.drawing.html:af5d565ccf760fa8"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/palette.py::BEAN_GREEN#bean bead color": {
@@ -67142,10 +67164,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/palette.py::BUND#bare-earth tan": {
@@ -67154,10 +67176,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/palette.py::DRY_CROPS#four dry crops at their ripest color": {
@@ -67236,10 +67258,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/palette.py::organic_parcel#corners rounded": {
@@ -67248,10 +67270,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/palette.py::organic_parcel#edges wander": {
@@ -67260,15 +67282,16 @@
   "date": "2026-10-05",
   "note": "each run wanders by eye, capped at a tenth of its length",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54",
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
   },
-  "research": "76e2410fc0332af2",
+  "research": "03a715c593ea031b",
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:59cd42eeeea80de5",
    "0014-bunds-between-the-paddies-aze.drawing.html:9b9af18ba1394922",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/palette.py::paddy_grain#basin area": {
@@ -67316,12 +67339,13 @@
   "date": "2026-10-05",
   "note": "0.3 plot widths is not the toe's least width the bund page says a thin strip shares (the toe rule is 0.16), and the paddy page sets no least width; neither page states 0.3",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:b09d82d6a024f0e7"
   ],
+  "triaged": "2026-10-19",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/partition.py::HUG_ROW#no strip too thin for a paddy": {
@@ -67330,12 +67354,13 @@
   "date": "2026-10-05",
   "note": "half a row step is not the toe's least width the bund page says a thin strip shares (the toe rule is 0.16 plot widths), and the paddy page sets no least width; neither page states 0.5",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:b09d82d6a024f0e7"
   ],
+  "triaged": "2026-10-19",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/partition.py::MIN_ROW#narrow tip left one basin": {
@@ -67432,10 +67457,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::Sectors.grid_lines#lattice, not patchwork": {
@@ -67489,10 +67514,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::Sectors.grid_lines#tip row dropped": {
@@ -67539,10 +67564,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::_extend#partition plumbing": {
@@ -67589,10 +67614,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::inside#partition plumbing": {
@@ -67609,12 +67634,13 @@
   "date": "2026-10-05",
   "note": "no bund is cut that would wall off a strip too thin to be its own paddy",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:b09d82d6a024f0e7"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::keep_rows#ditch-side strips keep their rows": {
@@ -67623,10 +67649,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::planted_region#planted ground": {
@@ -67961,12 +67987,13 @@
   "date": "2026-10-05",
   "note": "each interior line bows on its own, up to a tenth of a module, tapered at both ends, boundary lines kept straight",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:9b9af18ba1394922"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_polder_lattice#edge wander": {
@@ -68033,10 +68060,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_polder_parcels#low rows wet": {
@@ -68182,13 +68209,14 @@
   "date": "2026-10-09",
   "note": "polder plot corners rounded, from all but square to a broad sweep",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:8dc325794a232600",
    "0014-bunds-between-the-paddies-aze.drawing.html:de5f537983379a58"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::build_polder#lattice unbent by default": {
@@ -68229,12 +68257,13 @@
   "date": "2026-10-09",
   "note": "`line_wander` 0.10 of the module, kept off the boundary lines",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:9b9af18ba1394922"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::build_polder#module size": {
@@ -68469,14 +68498,15 @@
   "date": "2026-10-07",
   "note": "0, as \"never step sideways\"",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:0a5c813bdbc4ad64",
    "0014-bunds-between-the-paddies-aze.drawing.html:af5d565ccf760fa8",
    "0014-bunds-between-the-paddies-aze.drawing.html:d7ca85f575a7671c"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::NEEDLE_DEG#no basin tapers to a point": {
@@ -68499,10 +68529,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::RingContext#ring plumbing": {
@@ -68711,11 +68741,11 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54",
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea",
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
   },
-  "research": "5e03fc69453793dc",
-  "triaged": "2026-10-05",
+  "research": "eafe7c508fc4ccaf",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::ring_violations#in-field features": {
@@ -68767,13 +68797,14 @@
   "date": "2026-10-07",
   "note": "more than MAX_STEPS (0) jogs is a staircase",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:0a5c813bdbc4ad64",
    "0014-bunds-between-the-paddies-aze.drawing.html:d7ca85f575a7671c"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::supply_intrusions#bund abuts the supply stroke": {
@@ -68866,10 +68897,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/close.py::_load_shapely#re-hold plumbing": {
@@ -68886,13 +68917,14 @@
   "date": "2026-10-07",
   "note": "it cuts until no part steps, preferring whole basins to scraps",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:0a5c813bdbc4ad64",
    "0014-bunds-between-the-paddies-aze.drawing.html:b09d82d6a024f0e7"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/close.py::_weld_within_rules#weld host": {
@@ -68901,12 +68933,13 @@
   "date": "2026-10-09",
   "note": "takes the neighbor sharing the most bund among those whose union passes held_faults, and leaves the scrap bare when none does; the 0.4/0.02/0.05 px reach, growth and simplify tolerances and the 1 sq px PINHOLE are plumbing",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:b09d82d6a024f0e7"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/close.py::blunt_points#a point cut off": {
@@ -69023,14 +69056,15 @@
   "note": "into the basin it shares the most bund with, per both pages",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28",
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "20234e9ed57bafef",
+  "research": "3e6c3a15363796a1",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:c98636cac67c0c83",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:f973e5271a750221",
    "0014-bunds-between-the-paddies-aze.drawing.html:b09d82d6a024f0e7"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/close.py::hold_ring_rules#staircase split on its hop": {
@@ -69039,14 +69073,15 @@
   "date": "2026-10-09",
   "note": "the step is carried straight across; a bund never hops sideways and carries on",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:0a5c813bdbc4ad64",
    "0014-bunds-between-the-paddies-aze.drawing.html:21b87f2594b3ec18",
    "0014-bunds-between-the-paddies-aze.drawing.html:d7ca85f575a7671c"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/geoms.py::GeomTree#geometry index": {
@@ -69254,10 +69289,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding or label",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::Fabric.neighbors#neighbors by the shared bund": {
@@ -69290,10 +69325,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding or label",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::GRID#settle plumbing": {
@@ -69345,15 +69380,16 @@
   "note": "small, thin or pointed cells grow by merging and are kept only once lawful",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28",
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "dbb210ac3e4187e8",
+  "research": "2e094d0693051fa6",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:a5467bc2b3076539",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:c98636cac67c0c83",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:f973e5271a750221",
    "0014-bunds-between-the-paddies-aze.drawing.html:b09d82d6a024f0e7"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::opened_union#settle plumbing": {
@@ -69423,10 +69459,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding or label",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::valid#settle plumbing": {
@@ -69444,10 +69480,10 @@
   "note": "matches the cited finding or label",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28",
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "dbb210ac3e4187e8",
-  "triaged": "2026-10-09",
+  "research": "2e094d0693051fa6",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::verdict#toe discipline": {
@@ -69457,9 +69493,9 @@
   "note": "thin strip at the toe's least width (0014 §38), quarter-cell floor, 25 deg point, arrowhead, all attested; that 0005 §16 sets no least width while 0014 §38 gives the toe one is a disagreement between the two pages, not drift in this code",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28",
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "dbb210ac3e4187e8",
+  "research": "2e094d0693051fa6",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
@@ -69469,7 +69505,7 @@
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:acd4531bf6255fb2",
    "0014-bunds-between-the-paddies-aze.drawing.html:b09d82d6a024f0e7"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::welded#welded union": {
