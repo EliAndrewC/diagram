@@ -1,0 +1,38 @@
+{
+  "utc": "2026-10-19T02:07:26Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 299,
+  "result": "failed: test-full",
+  "commit": "31bea05bc",
+  "first_failure_s": 252.9,
+  "last_failure_s": 252.9,
+  "failed_tests": 1,
+  "failed_names": [
+    "tests/tooling/test_preflight.py::test_modules_tested_outside_the_quick_tier_are_left_to_the_gate"
+  ],
+  "host": {
+    "load": [
+      12.39,
+      10.11
+    ],
+    "mem_avail_mb": [
+      8181,
+      8323
+    ],
+    "cpu_temp_c": [
+      75.0,
+      69.0
+    ],
+    "stall_s": {
+      "cpu": 8.1,
+      "io": 3.6,
+      "io_full": 3.1,
+      "memory": 0.3
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  }
+}
