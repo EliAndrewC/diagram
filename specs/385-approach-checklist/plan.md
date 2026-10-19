@@ -228,11 +228,11 @@ Owed by the hour-20 step-back (hour:385-approach-checklist@20, `continue`), whic
 6. **The exits.** (c).
 7. **The search smell.** None.
 8. **The budget.** 25 min.
-9. **Done, measured.** One goal: a `### T<n> part B (...)` block that names no `D`-id defined nowhere else in the plan or plan-done is not owed a review; one that does is; `tests/tooling/test_plan_gate.py` red without it.
+9. **Done, measured.** One goal: a part B whose items 4 and 5 answer "No" and "Neither" and which names no new `D`-id is not owed a review; one answering "Changing" or "Tuning", "Yes" to item 4, or naming a new `D`-id is; `tests/tooling/test_plan_gate.py` red without it.
 
 ### T75 Decisions
 
-**D94 - a part B reviewed only for a new decision.** `block_status` skips a block whose heading is `### T<n> part B (...)` when every `D<n>` it names is defined (`**D<n> - ...`) elsewhere in `plan.md` or in `plan-done.md`; a part B naming an id defined nowhere else - a decision it makes - is owed as now. Its items stay `make tick`'s to check.
+**D94 - a part B reviewed whenever it decides.** `block_status` skips a `### T<n> part B (...)` block only when it decides nothing, read from its own answers: item 4 (moving something placed earlier) answered "No", item 5 (tuning or changing) answered "Neither", and every `D<n>` it names defined (`**D<n> - ...`) elsewhere in `plan.md` or `plan-done.md`. A part B that changes a rule, tunes a number, moves an earlier placement or names a new decision - labeled or not - is owed as now (the plan review, 2026-10-19: a decision need carry no D-id). Its items stay `make tick`'s to check.
 
 ## T76 - part A asks what a constant measures and for the capacity arithmetic first (the GM-approved proposal 7, 2026-10-18)
 
