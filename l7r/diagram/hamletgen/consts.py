@@ -199,17 +199,10 @@ WEB_FABRIC_GAP = 7.0
 TRACK_FABRIC_GAP = WEB_FABRIC_GAP
 """Research: track off a steading - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft from the track's middle to a garden fence, as every lane"""
 
-# A FOOTPATH'S CLEARANCE: the path from an outlying steading's door to the nearest way - the thing the sources describe as
-# "colonized as semi private space by the adjoining house", the residual room between two plots, walked in single file.
-# 0246's 7 ft SINCE feature 385 T96 (the round arbiter's ruling on hour:385-approach-checklist@28: room first). A lane's
-# middle, a 3 ft footpath's included, keeps at least 7 ft clear of a garden fence. Held at 4 ft from feature 328 wave 4 to
-# T96 because at 7 the linear form's farms went unreached - measured 2026-10-19, that was never the footpath's room: a row
-# farm's DOOR read this constant (`front_door` at it + 4, `door_off_fixtures` at it + 1), so at 7 ft the door had to stand
-# 8 ft clear of its own farm's fixtures and grove bands, found no spot, and the farm got no path at all (cohort seeds 3, 4,
-# 903 and 904). The door's numbers are its own now (`DOOR_STEP_FT`, `DOOR_FIXTURE_CLEAR_FT`) and the fence gap is 0246's.
-# The same door is the likeliest cause of the two earlier failed tries at 7 ft (wave 96, 2026-10-10: Kashikawa and cohort
-# seeds 03, 23, 40, 903 refused, farmhouses off the network; m:wave96-footpath-7ft in specs/328) - a likely cause, not
-# measured on those maps: T96's cohort and the pool decide it.
+# A FOOTPATH'S CLEARANCE: the path from an outlying steading's door to the nearest way, the residual room between two plots ("colonized as semi private space by the adjoining house").
+# 0246's 7 ft SINCE feature 385 T96 (the round arbiter's hour-28 ruling: room first). Held at 4 ft from feature 328 wave 4 because at 7 the linear form's farms went unreached - measured 2026-10-19,
+# that was never the footpath's room: a row farm's DOOR read this constant (`front_door` at it + 4, `door_off_fixtures` at it + 1), so the door could not stand clear of its own fixtures (seeds 3, 4,
+# 903, 904); the door's numbers are its own now (`DOOR_STEP_FT`, `DOOR_FIXTURE_CLEAR_FT`). Likely the cause of wave 96's failed try too (m:wave96-footpath-7ft in specs/328), not measured on its maps.
 FOOTPATH_FABRIC_GAP = 7.0
 """Research: footpath off a plot - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle, a 3 ft footpath's included, keeps at least 7 ft clear of a garden fence"""
 
