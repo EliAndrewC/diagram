@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-19T12:32:37Z",
+  "target": "claims-gate",
+  "commit": "7c1688583",
+  "why": "CLAIMS_OK: one unclaimed decision on old behavior (the track out never crosses a drawn channel), filed as 385 T120"
+}

@@ -544,6 +544,20 @@ places - <0035's drawing page>: the fill keeps to its own bank unless crossing a
 not, or saves more than `BROOK_CROSSING_COST_FT` of walk". No page edit.
 
 
+
+### T102 part B (2026-10-19T12:35Z)
+
+Owed by the round arbiter's ruling on hour:385-approach-checklist@33 (continue), taken while T102 was the active task.
+
+1. **What is refusing?** Nothing: the crossing's charge was decided as D131, reviewed and built; the claims are IN-STEP.
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither in this part B: the change is D131's, decided and reviewed.
+6. **The one-sentence test.** "The last resort crosses its brook where 0035 would" - true by the claims check and the cohort.
+7. **The next step is a measurement.** The gate and the landing cohort, both run.
+8. **Every route measured before offering one?** No route is offered.
+9. **After a ruling: the step it names?** Yes - the ruling says carry on with T102, then T106, T108, T111, T112.
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).
