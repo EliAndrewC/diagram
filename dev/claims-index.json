@@ -43598,15 +43598,16 @@
   "note": "the four attested village sites are rolled per settlement; entrance, frontage and bridgehead are gated on an approach, a drawn headman's house and a bridge, as the page conditions them; shrine and assembly place (GUESS only) left out",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b",
-   "0190-notice-boards-kosatsuba.html": "689da91bbb8319d6"
+   "0190-notice-boards-kosatsuba.html": "ad5a4db1fa8b0087"
   },
-  "research": "23f082e78a3489bc",
+  "research": "bcf93666e0ae9a0b",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:90ee84eca3eec3ca",
    "0190-notice-boards-kosatsuba.html:72aef0ef49d26ff1",
    "0190-notice-boards-kosatsuba.html:b465c07b81f6c576",
    "0190-notice-boards-kosatsuba.html:ebb781f8589560e1"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#land_use_overlay forms": {
@@ -43717,9 +43718,9 @@
    "0021-terraced-and-valley-paddies-tanada-yachida.html": "02b1c9d592a5d1cc",
    "0031-clustered-and-scattered-villages-shuson-sanson.html": "117bdeff72353321",
    "0048-draft-oxen-and-horses-and-their-byres-umaya.html": "bba86415b4203d3d",
-   "0190-notice-boards-kosatsuba.html": "689da91bbb8319d6"
+   "0190-notice-boards-kosatsuba.html": "ad5a4db1fa8b0087"
   },
-  "research": "88efb15ba12f706b",
+  "research": "cb4295e4bd67d18d",
   "rests": [
    "0021-terraced-and-valley-paddies-tanada-yachida.html:1a87e4f0b3b02f81",
    "0031-clustered-and-scattered-villages-shuson-sanson.html:b2bce5b9232e539f",
@@ -43728,6 +43729,7 @@
    "0190-notice-boards-kosatsuba.html:72aef0ef49d26ff1",
    "0190-notice-boards-kosatsuba.html:aeb5e9860f97b764"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#settlement_form forms": {
@@ -43974,16 +43976,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::_kosatsuba_seat_ok#a board at a bridgehead": {
+  "body": "b38f52d721815048",
+  "claim": "a board at a bridgehead - notice-boards-kosatsuba: \"as well as bridge ends\", with no size given, where the settlement records a bridge",
   "code": "dff40b9cd5bcdff0",
   "core": "607ab7a34ec3c548",
-  "date": "2026-10-11",
-  "note": "offered only where the map has a bridge, \"as well as bridge ends\"",
+  "date": "2026-10-19",
+  "note": "\"bridge ends\" is an attested village board site and no size is given; the code offers it only when has_bridge is set, so the seat appears only where a bridge exists. Which bridge gets the board is decided in bridgehead_anchor, not in this unit.",
   "pages": {
-   "0190-notice-boards-kosatsuba.html": "689da91bbb8319d6"
+   "0190-notice-boards-kosatsuba.html": "ad5a4db1fa8b0087"
   },
-  "research": "6f8da4bbe606a612",
+  "research": "050d52f3667c3d19",
   "rests": [
-   "0190-notice-boards-kosatsuba.html:72aef0ef49d26ff1"
+   "0190-notice-boards-kosatsuba.html:72aef0ef49d26ff1",
+   "0190-notice-boards-kosatsuba.html:b465c07b81f6c576",
+   "0190-notice-boards-kosatsuba.html:cd8d9ce0b74bb55f"
   ],
   "verdict": "IN-STEP"
  },
@@ -43993,12 +43999,13 @@
   "date": "2026-10-11",
   "note": "center always; entrance needs an approach; frontage needs a headman's house",
   "pages": {
-   "0190-notice-boards-kosatsuba.html": "689da91bbb8319d6"
+   "0190-notice-boards-kosatsuba.html": "ad5a4db1fa8b0087"
   },
-  "research": "6f8da4bbe606a612",
+  "research": "050d52f3667c3d19",
   "rests": [
    "0190-notice-boards-kosatsuba.html:72aef0ef49d26ff1"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::_kosatsuba_seat_ok#shrine precinct withheld": {
@@ -44007,12 +44014,13 @@
   "date": "2026-10-11",
   "note": "the page calls the precinct its GUESS; the docstring's quote listing \"the shrine precinct\" as attested is stale",
   "pages": {
-   "0190-notice-boards-kosatsuba.html": "689da91bbb8319d6"
+   "0190-notice-boards-kosatsuba.html": "ad5a4db1fa8b0087"
   },
-  "research": "6f8da4bbe606a612",
+  "research": "050d52f3667c3d19",
   "rests": [
    "0190-notice-boards-kosatsuba.html:72aef0ef49d26ff1"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::_land_use_ok#overlays are permanent uses, tea on hills": {
@@ -62044,13 +62052,14 @@
   "date": "2026-10-11",
   "note": "\"as well as bridge ends\"",
   "pages": {
-   "0190-notice-boards-kosatsuba.html": "689da91bbb8319d6"
+   "0190-notice-boards-kosatsuba.html": "ad5a4db1fa8b0087"
   },
-  "research": "6f8da4bbe606a612",
+  "research": "050d52f3667c3d19",
   "rests": [
    "0190-notice-boards-kosatsuba.html:72aef0ef49d26ff1",
    "0190-notice-boards-kosatsuba.html:b465c07b81f6c576"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/_helpers.py::bridgehead_anchor#which bridge": {
@@ -62068,13 +62077,14 @@
   "date": "2026-10-11",
   "note": "every named site is on a road or street, including the foot of a bridge",
   "pages": {
-   "0190-notice-boards-kosatsuba.html": "689da91bbb8319d6"
+   "0190-notice-boards-kosatsuba.html": "ad5a4db1fa8b0087"
   },
-  "research": "6f8da4bbe606a612",
+  "research": "050d52f3667c3d19",
   "rests": [
    "0190-notice-boards-kosatsuba.html:72aef0ef49d26ff1",
    "0190-notice-boards-kosatsuba.html:c1b40e481f7a5b1c"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/_helpers.py::bridges_on_a_way#within the board's band": {
@@ -62118,12 +62128,13 @@
   "date": "2026-10-11",
   "note": "entrance, officials' gate, and a bridge end a way reaches, a field ditch's plank included",
   "pages": {
-   "0190-notice-boards-kosatsuba.html": "689da91bbb8319d6"
+   "0190-notice-boards-kosatsuba.html": "ad5a4db1fa8b0087"
   },
-  "research": "6f8da4bbe606a612",
+  "research": "050d52f3667c3d19",
   "rests": [
    "0190-notice-boards-kosatsuba.html:72aef0ef49d26ff1"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#a bridgehead anchored at its bridge": {
@@ -62156,13 +62167,14 @@
   "date": "2026-10-11",
   "note": "center, entrance, the officials' gate",
   "pages": {
-   "0190-notice-boards-kosatsuba.html": "689da91bbb8319d6"
+   "0190-notice-boards-kosatsuba.html": "ad5a4db1fa8b0087"
   },
-  "research": "6f8da4bbe606a612",
+  "research": "050d52f3667c3d19",
   "rests": [
    "0190-notice-boards-kosatsuba.html:72aef0ef49d26ff1",
    "0190-notice-boards-kosatsuba.html:ebb781f8589560e1"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#entrance anchor": {
@@ -62171,14 +62183,15 @@
   "date": "2026-10-11",
   "note": "entrances are attested sites, and the handover / first-reach point is a reading of \"entrance\"",
   "pages": {
-   "0190-notice-boards-kosatsuba.html": "689da91bbb8319d6"
+   "0190-notice-boards-kosatsuba.html": "ad5a4db1fa8b0087"
   },
-  "research": "6f8da4bbe606a612",
+  "research": "050d52f3667c3d19",
   "rests": [
    "0190-notice-boards-kosatsuba.html:71d64edbc2411ed0",
    "0190-notice-boards-kosatsuba.html:72aef0ef49d26ff1",
    "0190-notice-boards-kosatsuba.html:ebb781f8589560e1"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#reaching the houses": {
@@ -62202,13 +62215,14 @@
   "date": "2026-10-11",
   "note": "the board goes at the junction nearest the houses, the attested center, entrance or crossroads",
   "pages": {
-   "0190-notice-boards-kosatsuba.html": "689da91bbb8319d6"
+   "0190-notice-boards-kosatsuba.html": "ad5a4db1fa8b0087"
   },
-  "research": "6f8da4bbe606a612",
+  "research": "050d52f3667c3d19",
   "rests": [
    "0190-notice-boards-kosatsuba.html:72aef0ef49d26ff1",
    "0190-notice-boards-kosatsuba.html:aeb5e9860f97b764"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_handover#entrance is the handover": {
@@ -62217,12 +62231,13 @@
   "date": "2026-10-11",
   "note": "the entrance is read as the last join on the way out",
   "pages": {
-   "0190-notice-boards-kosatsuba.html": "689da91bbb8319d6"
+   "0190-notice-boards-kosatsuba.html": "ad5a4db1fa8b0087"
   },
-  "research": "6f8da4bbe606a612",
+  "research": "050d52f3667c3d19",
   "rests": [
    "0190-notice-boards-kosatsuba.html:72aef0ef49d26ff1"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/_helpers.py::nearest_of#plumbing": {
@@ -62474,12 +62489,13 @@
   "date": "2026-10-11",
   "note": "rolled over the attested placements this map can site",
   "pages": {
-   "0190-notice-boards-kosatsuba.html": "689da91bbb8319d6"
+   "0190-notice-boards-kosatsuba.html": "ad5a4db1fa8b0087"
   },
-  "research": "6f8da4bbe606a612",
+  "research": "050d52f3667c3d19",
   "rests": [
    "0190-notice-boards-kosatsuba.html:72aef0ef49d26ff1"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/board_seat.py::site_board#clean caption preferred": {
@@ -62794,13 +62810,14 @@
   "date": "2026-10-11",
   "note": "the anchored placements choose the ground, center follows the traffic",
   "pages": {
-   "0190-notice-boards-kosatsuba.html": "689da91bbb8319d6"
+   "0190-notice-boards-kosatsuba.html": "ad5a4db1fa8b0087"
   },
-  "research": "6f8da4bbe606a612",
+  "research": "050d52f3667c3d19",
   "rests": [
    "0190-notice-boards-kosatsuba.html:72aef0ef49d26ff1",
    "0190-notice-boards-kosatsuba.html:aeb5e9860f97b764"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#roadside first": {
@@ -63166,13 +63183,14 @@
   "date": "2026-10-11",
   "note": "towns and cities are fixed to \"center\" (`else [\"center\"]`), but 0190 attests town boards \"at its entrances, at the foot of bridges\" and Ogose's \"at the town's southern entrance\", and no page records a deviation; roll at the town tier or record the deviation",
   "pages": {
-   "0190-notice-boards-kosatsuba.html": "689da91bbb8319d6"
+   "0190-notice-boards-kosatsuba.html": "ad5a4db1fa8b0087"
   },
-  "research": "6f8da4bbe606a612",
+  "research": "050d52f3667c3d19",
   "rests": [
    "0190-notice-boards-kosatsuba.html:71d64edbc2411ed0",
    "0190-notice-boards-kosatsuba.html:b465c07b81f6c576"
   ],
+  "triaged": "2026-10-19",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#probe size": {
