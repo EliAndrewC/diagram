@@ -2710,3 +2710,24 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@31 (continue).
 7. **The next step is a measurement.** The claims check, then the gate and the landing cohort.
 8. **Every route measured before offering one?** No route is offered.
 9. **After a ruling: the step it names?** Yes - the ruling says go on with T97's review, claims check, gate and landing.
+<!-- plan-archive: archived 2026-10-19 -->
+## T101 - the corridor's half-width says what it is (carried by T96's claims round)
+
+### T101 Approach (checklist part A)
+
+1. **The goal, in the world.** `ACCESS_HALF_FT`'s account names what the 7 ft is: a corridor line's gap off each garden fence, not the room between two steadings.
+2. **The constraints.** 0246's drawing page: a lane's middle keeps at least 7 ft clear of a garden fence (§16, recorded there as a DEVIATION), and a clustered settlement parts two homesteads by a lane's room of 18 ft - 7 ft at each fence and a 4 ft tread between (§3). A claims check IN-STEP.
+3. **Where each comes from.** 0246's drawing page (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T96's claims round, `access.py::ACCESS_HALF_FT#corridor room` DRIFTED and carried, then a read of `access.py`): the comment above the constant calls the 7 ft "a footpath's room between two steadings", where 0246 makes that room 18 ft (`MIN_WEB_GAP`, half of it 9 ft); the value itself is the fence-to-middle gap the claim cites.
+5. **The order.** The comment, then its claim's re-check.
+6. **The exits.** (e) conform - the value matches 0246's 7 ft; only the account is wrong.
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: the comment says the 7 ft is a corridor line's gap off each fence and names `MIN_WEB_GAP` as the room between two steadings; the claim's re-check finds it IN-STEP; no value changes.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T101 Decisions
+
+**D126 - the gap, not the room.** The comment above `ACCESS_HALF_FT` reads that the corridor's half-width is `WEB_FABRIC_GAP` (7 ft): its line kept that far off each garden fence, as the web's own fabric is - the room between two steadings being `MIN_WEB_GAP` (18 ft), 7 ft at each fence and the tread between.
+

@@ -512,25 +512,26 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@30 (continue),
 <!-- plan-archive: T105 to T100 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
 <!-- plan-archive: T99 to T96 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
 <!-- plan-archive: T97 to T96 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
-## T101 - the corridor's half-width says what it is (carried by T96's claims round)
+<!-- plan-archive: T101 to T96 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+## T107 - 0246 says how its two 7 ft figures measure (found working T101, 2026-10-19)
 
-### T101 Approach (checklist part A)
+### T107 Approach (checklist part A)
 
-1. **The goal, in the world.** `ACCESS_HALF_FT`'s account names what the 7 ft is: a corridor line's gap off each garden fence, not the room between two steadings.
-2. **The constraints.** 0246's drawing page: a lane's middle keeps at least 7 ft clear of a garden fence (§16, recorded there as a DEVIATION), and a clustered settlement parts two homesteads by a lane's room of 18 ft - 7 ft at each fence and a 4 ft tread between (§3). A claims check IN-STEP.
-3. **Where each comes from.** 0246's drawing page (O).
-4. **Do they describe the world here?** Yes - measured 2026-10-19 (T96's claims round, `access.py::ACCESS_HALF_FT#corridor room` DRIFTED and carried, then a read of `access.py`): the comment above the constant calls the 7 ft "a footpath's room between two steadings", where 0246 makes that room 18 ft (`MIN_WEB_GAP`, half of it 9 ft); the value itself is the fence-to-middle gap the claim cites.
-5. **The order.** The comment, then its claim's re-check.
-6. **The exits.** (e) conform - the value matches 0246's 7 ft; only the account is wrong.
+1. **The goal, in the world.** A reader of 0246's drawing page can tell the lane's room between two homesteads from the least gap a lane keeps off a fence.
+2. **The constraints.** 0246's block "Neighbors stand a lane's width apart": a lane's room of 18 ft - 7 ft at each garden fence and a 4 ft tread between. Its block "A lane's middle keeps at least 7 ft clear of a garden fence": measured to the middle, so a 3 ft footpath's edge may pass 5.5 ft off it. The code reads both: `MIN_WEB_GAP` = 2 x `WEB_FABRIC_GAP` + 4 (the room) and `WEB_FABRIC_GAP` (the gap). The lesson of T31: a new block owes the claims that cite the page a triage; an edit to a heavily cited block owes them their full check.
+3. **Where each comes from.** 0246's drawing page (O); T31's retro (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T101's claims check on `ACCESS_HALF_FT`, then a read of the two blocks and `consts.MIN_WEB_GAP`): the room measures its 7 ft to the tread's edge (7 + 4 + 7 = 18), the gap to the lane's middle; read as one figure they disagree by 4 ft.
+5. **The order.** A new block on the drawing page, then the record checks and triages it owes.
+6. **The exits.** (c) a new block that says each figure's measure - the two conventions kept, nothing renumbered; editing either block was weighed and refused (T31's lesson).
 7. **The search smell.** None.
-8. **The budget.** 15 min.
-9. **Done, measured.** One goal: the comment says the 7 ft is a corridor line's gap off each fence and names `MIN_WEB_GAP` as the room between two steadings; the claim's re-check finds it IN-STEP; no value changes.
+8. **The budget.** 40 min with its checks.
+9. **Done, measured.** One goal: 0246's drawing page holds a block saying the room's 7 ft is at the tread's edge and the gap's 7 ft at the lane's middle, so the 18 ft room leaves a lane's middle 9 ft off each fence; its record checks and the claims triage it owes pass; no code changes.
 10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+11. **Before fitting things into room.** The 18 ft room: a 4 ft tread with 7 ft clear at each edge; its middle stands 9 ft off each fence, 2 ft more than the least gap of 7.
 
-### T101 Decisions
+### T107 Decisions
 
-**D126 - the gap, not the room.** The comment above `ACCESS_HALF_FT` reads that the corridor's half-width is `WEB_FABRIC_GAP` (7 ft): its line kept that far off each garden fence, as the web's own fabric is - the room between two steadings being `MIN_WEB_GAP` (18 ft), 7 ft at each fence and the tread between.
+**D127 - two measures, said once.** A new block on 0246's drawing page, after the gap's block: "The room and the gap measure their 7 ft differently. The 18 ft room between two homesteads counts 7 ft from each fence to the tread's edge, so its lane's middle stands 9 ft off; the least gap counts 7 ft to the lane's middle. Both are map drawing conventions."
 
 ## T11 - the close
 
