@@ -6,7 +6,8 @@ research record's `CLAUDE.md` above all, along with `research/money-requests.md`
 
 **What is asked.** 0260 "What did hiring a horse or a porter cost?" has Zhili cart rates but no Qing porter rate: the
 Bochum transcription of the Zhili edition labels its porter, pack-animal and boat figures per li and per 100 li
-inconsistently, and no public scan of the Zhili original exists. The public Hunan edition of the same 1769 compilation
+inconsistently, and no public scan of the Zhili original was found (Tsinghua's copy is the one cited; searched in NLC,
+Internet Archive, Commons and the National Archives of Japan). The public Hunan edition of the same 1769 compilation
 states the unit in each row. The lead is `specs/404-hunan-porter-rate/passes/zhili-ch13.md` (a lead, not a citation:
 read each row on its page image). Research only: edit no code, modal, sheet or canon. Change only the 0260 sections this
 touches.

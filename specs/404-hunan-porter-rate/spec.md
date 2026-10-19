@@ -71,3 +71,4 @@ A note on EliAndrewC/diagram#9 names 0260, the changed verdict, and what is stil
 - **spec-fidelity round 1 (2026-10-19): CHANGES REQUIRED, 3 items.** The pack animal's verdict stated; the Bochum ch.13
   rows quoted in the rewritten note (403's owed item); Moll-Murata and HathiTrust retried or named with the failure and
   dates, and "not public" narrowed to "no public scan found" with the places searched.
+- **spec-fidelity round 2 (2026-10-19, verify): CHANGES REQUIRED, 1 item.** The s1 brief's opening (and request.md's summary) said "no public scan exists"; now "was found", with the places searched.
