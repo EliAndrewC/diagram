@@ -80,7 +80,9 @@ def spur_cut_at_the_fold(pts: Poly, envelope: Poly) -> tuple[Poly, str | None]:
 def _out_of_bands(p: Pt, bands: Sequence[Poly], toward: Pt) -> Pt:
     """`p` set outside the grove bands it stands in (feature 291): walked out toward `toward`, the run's other end, or put
     a footpath's gap past the nearest edge, whichever lands nearer `toward` - so a spur that began in a band leaves it by
-    the side it was heading for rather than into the yard behind (seed 11). A point already clear comes back untouched."""
+    the side it was heading for rather than into the yard behind (seed 11). A point already clear comes back untouched.
+
+    Research: a track's end out of the grove bands - UNRESEARCHED: set 8 ft (`FOOTPATH_FABRIC_GAP` + 1) clear of a grove band"""
     if not any(point_in_poly(p[0], p[1], band) for band in bands):
         return p
     # walked in 2 px steps, asking containment as well as the gap: `push_clear_of_fabric` asks only the distance to the

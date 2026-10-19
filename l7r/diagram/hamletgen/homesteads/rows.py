@@ -272,7 +272,9 @@ def holding_clear(quad: Sequence[Pt], hard: Any, boxes: Sequence[tuple[float, fl
 FOOTPATH_DOOR_OUT_FT = DOOR_STEP_FT + 4.0
 """How far past the yard's far edge a farm's front door stands (`ways/serve.front_door`: the door's step, `DOOR_STEP_FT`,
 and the 4 ft this figure held over it before feature 385 T96 derived it, less the fraction of a foot the frame's pad
-differs by) - the door `door_clear` tests."""
+differs by) - the door `door_clear` tests.
+
+Research: door point past the yard's front - UNRESEARCHED: 12 ft past the yard's front edge (`DOOR_STEP_FT` and 4 ft)"""
 
 DOOR_ROOM_FT = 16.0
 """The room a farm's front door needs off the hard ground for a way to start from: the door's own standing room and most

@@ -455,7 +455,7 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
             a GUESS there
         off the fixtures and grove bands - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: walls to the path
         no path to a household reached across a yard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: it shows no lane of its own
-        door path off the house and the fixtures - UNRESEARCHED: it starts 8 ft out from the house and keeps 5 ft clear of the fixtures
+        door path off the house and the fixtures - UNRESEARCHED: it starts 8 ft past its yard (`DOOR_STEP_FT`) and keeps 5 ft clear of the fixtures (`DOOR_FIXTURE_CLEAR_FT`)
         door path off a grove band - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a footpath's clearance and some working room kept off the trees on each side, `GROVE_WORKING_ROOM_FT` 9.5 ft off the 3 ft tread (about 22 ft of the opening)
         a flank door only where the front has none - UNRESEARCHED: a door path leaves from a flank of the dooryard only where no lawful path leaves the front"""
     from .checks import served_network  # local: checks sits above serve in this package's layers
@@ -581,7 +581,11 @@ def route_from_door(door: Pt, q: Pt, hard: list[Poly], walls: Sequence[Poly], wa
     clear (`ok`), the door put back at its head. The router plans its cells at the gap and most of a cell more, so a door
     close against its house wall and its own fixture was boxed in: Kashikawa's farm at (2473, 2937) under feature 302 found
     no route to any of its six targets, where a step of 6-11 px found one (the Diagram performance session, 2026-10-01).
-    The law still judges the whole path (`door_path`)."""
+    The law still judges the whole path (`door_path`).
+
+    Research:
+        door path off the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: routed `gap` (`FOOTPATH_FABRIC_GAP`, 7 ft) off the fabric, a footpath's middle 7 ft clear of a garden fence
+        a first leg out of the door's cell - UNRESEARCHED: one or two router cells (10-20 ft) stepped out of a boxed-in door before routing"""
     path = _route(door, q, hard, walls, water, gap=gap)
     if len(path) >= 2:
         return path

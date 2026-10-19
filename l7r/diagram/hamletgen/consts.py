@@ -199,12 +199,8 @@ WEB_FABRIC_GAP = 7.0
 TRACK_FABRIC_GAP = WEB_FABRIC_GAP
 """Research: track off a steading - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft from the track's middle to a garden fence, as every lane"""
 
-# A FOOTPATH IS NOT A LANE, and it may squeeze where a lane may not. This is the clearance for the
-# path from an outlying steading's door to the nearest way - the thing the sources describe as
-# "colonized as semi private space by the adjoining house", i.e. the residual room between two
-# plots, walked in single file. It still clears the overlap matrix's 3 ft half-tread with room over,
-# but it lets a path thread a gap a back lane could not, which is the difference between a house
-# being reached and a house being 296 ft from anything with no route at all.
+# A FOOTPATH'S CLEARANCE: the path from an outlying steading's door to the nearest way - the thing the sources describe as
+# "colonized as semi private space by the adjoining house", the residual room between two plots, walked in single file.
 # 0246's 7 ft SINCE feature 385 T96 (the round arbiter's ruling on hour:385-approach-checklist@28: room first). A lane's
 # middle, a 3 ft footpath's included, keeps at least 7 ft clear of a garden fence. Held at 4 ft from feature 328 wave 4 to
 # T96 because at 7 the linear form's farms went unreached - measured 2026-10-19, that was never the footpath's room: a row
