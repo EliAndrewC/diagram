@@ -1562,6 +1562,7 @@ hill-style	tsukiyama
 hillshade	hillshade
 hinin	hinin
 hinoe-inu	sexagenary year
+hinoe-saru	hinoe-saru
 hinoki	hinoki
 hinomi-yagura	hinomi-yagura
 hip roof	hip roof
