@@ -5657,6 +5657,32 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T74": {
+   "section_sha256": "483c60fe95f40df1c9233908bb4bba1993c1acba573c66fa7ef60152052024bb",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T74-approach",
+     "summary": "Goal, constraints, order, exits and Done line (unchanged from the text last judged CLEAR): a block differing from its reviewed text only by ids appended to its Lands open line is not owed; any other change, an id removed among them, is owed.",
+     "class": "within",
+     "why": "Byte-identical to the CLEAR text in earlier.md; it carries the round arbiter's fix as the block quotes it (the arbiter stands where the GM was asked, feature 379; request.md itself carries no arbiter ruling, so the authority for this block is the plan's quotation of it) and keeps FR-043's default for every other change."
+    },
+    {
+     "id": "D93a",
+     "summary": "A reordering, or an id dropped or repeated, on the Lands open line is owed, with a test showing a reorder-only edit owed.",
+     "class": "within",
+     "why": "This is the arbiter's own 'any other change to the block, an id removed among them, is owed as now' and FR-043's default that a changed block owes its review. It removes an over-exemption the earlier subset wording carried (a reorder, or a reorder plus an addition, would have passed as a superset); it brings the rule closer to FR-043, not further from it."
+    },
+    {
+     "id": "D93b",
+     "summary": "The Lands open line is read as an ordered list: the block is not owed only where the reviewed ids are the current line's start (ids appended), not where they are merely a subset.",
+     "class": "within",
+     "why": "It brings the mechanism into line with the Done line already judged CLEAR ('only by ids appended'). It matches the arbiter's 'a task id added by make task-add' exactly if task-add writes the new id at the end of the line. That premise is not settled by the bundle, and the arbiter's required test ('a test showing such a delta is CLEAR without a dispatch') is what settles it: that test must be driven by make task-add's real output, not a hand-appended id, so that a mid-line insertion by task-add would turn it red. That test enforces the arbiter's fix; it is not new scope."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

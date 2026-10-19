@@ -283,7 +283,7 @@ Owed by the hour-24 step-back (hour:385-approach-checklist@24, `continue`).
 
 ### T74 Decisions
 
-**D93 - an appended id is no change.** `block_status` judges a block against its reviewed text with each `**Lands open**:` line read as its set of ids: where the reviewed set is a subset of the current one and the rest of the text is the same or typo-scale, the block is not owed. Every block keeps its recorded digest; nothing is written for it.
+**D93 - an appended id is no change.** `block_status` judges a block against its reviewed text with each `**Lands open**:` line read as its list of ids, in order: where the reviewed list is the current one's start (the current line is the reviewed ids, in their order, with ids appended) and the rest of the text is the same or typo-scale, the block is not owed. A reordering, or an id dropped or repeated, is owed; its test shows a reorder-only edit owed. Every block keeps its recorded digest; nothing is written for it.
 
 ## T11 - the close
 
