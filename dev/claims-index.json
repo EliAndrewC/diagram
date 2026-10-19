@@ -27130,7 +27130,7 @@
   "code": "d356fb6d5af74682",
   "core": "b06143eb4467cb5b",
   "date": "2026-10-19",
-  "note": "the code does keep the middle 7 ft off the fence, but the page says the 7 ft to the middle (tread edge 5.5 ft) is \"a DEVIATION\". Relabel as `DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.html`, as the same gap is labeled in `_route`, `_clear_link` and ACCESS_HALF_FT",
+  "note": "the code does keep the middle 7 ft off the fence, but the page says the 7 ft to the middle (tread edge 5.5 ft) is \"a DEVIATION\". Relabel as `DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html`, as the same gap is labeled in `_route`, `_clear_link` and ACCESS_HALF_FT",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
   },
