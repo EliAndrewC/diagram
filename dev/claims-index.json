@@ -13587,12 +13587,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/row_rules.py::water_rules#a row's water": {
-  "body": "34b0e74ea828563d",
+  "body": "1d6523fc4281551e",
   "claim": "a row's water - row-villages-resson.drawing: own wells, or every farm within `WATER_REACH_FT` of a shared one",
-  "code": "1af811e4d82afdfd",
-  "core": "8c33af857a4602fd",
+  "code": "7a14ecd6c9aabede",
+  "core": "2de4f845643ff6b7",
   "date": "2026-10-19",
-  "note": "own wells or shared, with the 760 ft reach",
+  "note": "checks a private well in the frame under `own` and every farm within WATER_REACH_FT=760 of a well under `shared`, the two forms 0033 rolls and its 760 ft reach",
   "pages": {
    "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
@@ -13604,31 +13604,32 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/row_rules.py::water_rules#a scattered farm's own water": {
-  "body": "34b0e74ea828563d",
-  "claim": "a scattered farm's own water - clustered-and-scattered-villages-shuson-sanson.drawing: its channel ends in its frame, or its own well in its frame off its way in",
-  "code": "36c19023c57ed49d",
-  "core": "8c33af857a4602fd",
+  "body": "1d6523fc4281551e",
+  "claim": "a scattered farm's own water - clustered-and-scattered-villages-shuson-sanson.drawing: its channel ends in its frame, or, where no channel reaches it, its own well in its frame (a well off its way in on a `well` map)",
+  "code": "27fec7b5c6a05dd4",
+  "core": "2de4f845643ff6b7",
   "date": "2026-10-19",
-  "note": "on a `channel` map the check flags every farm with no channel end (`farm_without_its_channel`), but the page gives a farm no channel can reach \"a well of its own instead\"; such a farm's private well should pass",
+  "note": "checks that a channel ends in the farm's frame or that a private well stands there as a fallback, and under `well` that a private well stands in the frame off its way in, as 0031 has it",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
   "research": "4e7ba7479292ad40",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:164954258b520a6f",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:2872c3eaba51aa4d",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:8938b2e21d1d2d33",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b326e625eaeec6d4",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:f1b6bb70334abd0d"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/row_rules.py::water_rules#well in the way in": {
-  "body": "34b0e74ea828563d",
+  "body": "1d6523fc4281551e",
   "claim": "well in the way in - UNRESEARCHED: a private well within 12 ft of the house-to-door line counts as in the way",
-  "code": "a9d0645ec96f618b",
-  "core": "8c33af857a4602fd",
+  "code": "340853c820669275",
+  "core": "2de4f845643ff6b7",
   "date": "2026-10-19",
-  "note": "the page says \"off its way in\" but gives no distance; 12 ft is unresearched",
+  "note": "0031 asks for the well \"off its way in\" and calls its place a guess, but no page gives the 12 ft threshold, so UNRESEARCHED stands",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"

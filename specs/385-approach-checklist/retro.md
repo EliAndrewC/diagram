@@ -892,3 +892,9 @@ About 20 min. A claim relabeled to cite a page rested on nothing at its last che
 could never name it; `make claims-bundle OWED=1` then refused it. A claim citing a page its last check never read is now owed
 `research changed`; the triage rule stands for pages it was checked at. Live: no claim newly owed. **The habit it changes:** none
 needed - a relabeled claim is bundled by `OWED=1`.
+
+## T99 - the retro row
+
+About 25 min. Under `farm_water` channel the check flagged every farm whose channel did not end in its frame, though 0031 gives a
+farm no channel can reach "a well of its own instead"; such a farm now passes with a private well in its frame. Its three claims
+IN-STEP. **The habit it changes:** none needed.
