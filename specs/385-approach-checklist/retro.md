@@ -742,3 +742,9 @@ empty one, or such a dict - keys its claims by their own line; owed, the bundle,
 The backfill re-keyed 109 dict claims and owed nothing new; a probe entry added to `_OVERLAP_EXEMPT` owed its 17 claims a triage
 and none `code changed`. One red gate was mine: the first cut keyed on "has blocks", and an empty section has none. **The habit it
 changes:** a dict grown by an entry no longer costs a full impl-drift round over every claim on it.
+
+## T90 - the retro row
+
+About 20 min. `make where-time` splits the between-turns time by the prompt that ends each window: waiting on work (a
+notification), the GM, the GM away (past an hour). The first cut's one-line edit missed the formatter-split bucket map; an assert on
+every replacement found it. **The habit it changes:** none needed.

@@ -6316,6 +6316,166 @@
     }
    ],
    "verdict": "BLOCKED"
+  },
+  "T84": {
+   "section_sha256": "98bdcd8dd559ca07ddbbaaa36d1109a500710b8ad6fedc8c6de427bccb485bef",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D105-trigger",
+     "summary": "A quotation is attributed to the GM only when its double-quoted span follows \"The GM\" or \"the GM's\" in the same sentence",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "A check that finds quotes automatically needs some rule for what counts as quoting the GM, so having a same-sentence trigger is within. But the trigger forms D105 lists are \"The GM\" and \"the GM's\", and proposal A's own words are lowercase 'the GM'. As written, a bare lowercase mid-sentence attribution (the GM said \"...\", the GM, verbatim: \"...\") is not checked. Approach item 2's 'ignores case' covers matching words against request.md, not the trigger. Nothing makes the lowercase form impossible to check, nothing in the request implies leaving it out, and leaving it out lets exactly the unfindable quote proposal A targets reach a review. To fix: match the trigger 'the GM' regardless of case, possessive or not."
+    },
+    {
+     "id": "D105-threshold",
+     "summary": "Only spans of four or more words are checked; a shorter span 'is a phrase, not a quotation, and is not checked'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Proposal A, which the GM approved verbatim ('build all 7 of those'): '`make decide` refuses a section quoting \"the GM\" with words not in request.md'. It sets no length floor, and neither does this section: Approach item 2 defines a quotation as 'the double-quoted text after \"The GM\"' and item 9's done-condition has no threshold. So D105 also narrows the section's own stated constraint. 'A phrase, not a quotation' is a definitional preference, not an impossibility. A short span with no match in request.md is still words attributed to the GM that a review cannot find, and the goal in item 1 ('never reaches its review quoting the GM with words the review cannot find') fails for it. Checking short spans is no harder than checking long ones, and a short genuine quote is the likeliest to be found by chance, so the floor does not protect against wrong refusals either. To fix: remove the four-word floor."
+    },
+    {
+     "id": "Approach-2-escape",
+     "summary": "The refusal can be overridden with QUOTE_OK=\"<reason>\", recorded",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Proposal A says `make decide` 'refuses'. It names no override, and Approach item 3 credits the constraints in item 2 to the GM (G) when this one is not his. Every use of the escape sends a section to review with GM-attributed words the review cannot find, which is exactly what item 1 says never happens, so the override guts the stated purpose. A wrong refusal (a double-quoted term near 'the GM' that is not his words) can always be cleared without an override: reword the span, or add his words to request.md as the refusal message already says. So refusing with no override is neither impossible nor self-defeating. That other guards in the project have escapes is a consistency argument, which does not make an exception legitimate. To fix: drop QUOTE_OK, or bring it to the GM as a question for his ruling."
+    },
+    {
+     "id": "D105-folding",
+     "summary": "The span and request.md are both folded to lowercase words, so case, whitespace and punctuation are ignored, and the span must appear in request.md",
+     "class": "within",
+     "why": "This serves finding the GM's words despite dictation punctuation and line wrapping. It is how 'words not in request.md' gets measured, and it narrows nothing."
+    },
+    {
+     "id": "D105-message",
+     "summary": "The refusal names each unfound span, with 'add the GM's words to request.md verbatim, or correct the quote'",
+     "class": "within",
+     "why": "Proposal A asks for 'naming the words'. The added guidance only says how to clear the refusal."
+    },
+    {
+     "id": "Approach-5-9-place-and-test",
+     "summary": "The check goes in `make decide` (the caller of plan_bundle.task_prompt), then a test in tests/tooling/test_plan_blocks.py that fails without it; budget 25 min",
+     "class": "within",
+     "why": "Proposal A names `make decide` as the command that refuses. The test only fails when the requested refusal is missing, so it enforces the request (GM 2026-09-20) rather than adding scope. A time budget decides nothing about scope."
+    }
+   ],
+   "verdict": "BLOCKED"
+  },
+  "T86": {
+   "section_sha256": "c28a2c7600bc1befe6f76ab22520b341b45164d346c79c7caae584d959aabba7",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D107-units",
+     "summary": "A 'figure' is a number followed by a unit from a closed list: ft, m, s, min, %, px, MB, GB, KB, tokens, agents, rounds, claims; a figure in any other unit is not checked.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Proposal C, approved verbatim in amendment 9, refuses 'an Approach item 4 figure' with no measured date and method; it does not limit which figures. The closed list lets through units this project states its figures in, including the request's own: '25.5 h', '3 hours and 22 minutes', '2 hours and 25 minutes', '19 degree', '700 feet', '26,000 words', '216 messages'. Hours are missing from a feature whose whole purpose is measuring time per task. A figure like '2.5 h (measured)' would reach review unlabeled and return NOT-REVIEWABLE, which is the 'unreviewable round' proposal C exists to stop. Some definition is needed, but leaving out these units is neither impossible nor implied by the GM. Fix: the unit set must cover at least hours (h, hours), minutes in full, degrees (deg, degree(s)), feet in full, words, messages, calls, lines and dispatches; better, the same definition of a figure with a unit that the reviewer's FIGURES rule and spec-lint check 5 apply, so the decide refuses what the review would refuse."
+    },
+    {
+     "id": "D107-mkey",
+     "summary": "Item 4 also passes when the figure carries an m:<key> pointer into measurements.json instead of 'measured <date> (<method>)'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "By the words this is an alternative to 'measured <date>' and a method. By the purpose (a plan never goes to review with a figure the review cannot check), an m:<key> is the one form the review re-runs instead of reading: its entry stores the command, and 'make figures' re-runs it. Refusing it would refuse the most checkable record of a measurement and push the session toward a weaker label, which defeats the request's purpose."
+    },
+    {
+     "id": "D107-escape",
+     "summary": "FIGURE_OK=\"<reason>\" lets a section through the decide with an unlabeled item 4 figure.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM approved 'refuses' with no escape. The block does not say the reason reaches anything the reviewer reads, and the reviewer's FIGURES rule returns NOT-REVIEWABLE for any unit-bearing figure with no date-and-method label, m: key or round label. So an escaped figure is not exempted. Its refusal moves to the review and costs exactly the round proposal C was meant to save. That a matcher can misfire on a number that is not a measurement is a real concern, but this escape does not solve it. Other tools in the project having escapes is not a fidelity argument. Fix: drop the escape, or define it so the escaped figure carries a form the review accepts (for example the reason recorded beside the figure as its label, which the FIGURES rule then recognises)."
+    },
+    {
+     "id": "D107-format",
+     "summary": "The method is a parenthesized text within the same item after 'measured YYYY-MM-DD'.",
+     "class": "within",
+     "why": "A concrete form of 'measured <date> and method beside it'; it is stricter than the request, not narrower."
+    },
+    {
+     "id": "D107-names",
+     "summary": "The refusal names the first offending figure.",
+     "class": "within",
+     "why": "How the refusal reports itself; it does not reduce what is refused."
+    },
+    {
+     "id": "D107-scope",
+     "summary": "Only Approach item 4 is checked; budgets (item 8) and other items are not.",
+     "class": "within",
+     "why": "Proposal C names 'an Approach item 4 figure'; this restates the request's own scope."
+    },
+    {
+     "id": "T86-order-test",
+     "summary": "The check sits beside proposal A's in make decide; tests/tooling/test_plan_blocks.py is red without it.",
+     "class": "within",
+     "why": "Placement is design. The test only enforces the requested refusal, so it serves the request."
+    }
+   ],
+   "verdict": "BLOCKED"
+  },
+  "T85": {
+   "section_sha256": "bb3abcf91cd5240efb627f67668afc6961aa6af8fdc0d6aeabd616232a225b71",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D106-scope",
+     "summary": "Only a spec-fidelity dispatch of a task preflight (plan-<feature>-<T>) holds a section; a block review (plan-delta) holds nothing because 'its blocks are many and short-lived'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Proposal B as the GM approved it (amendment 9) covers any 'section whose review is running', and doesn't name a kind of review. The plan's own item 1 says 'A plan review is never wasted'. A plan-delta review records a digest per block, so editing a block while it runs loses that block's verdict the same way. 'Many and short-lived' is an implementation-cost argument: if the holds are short-lived, so is the inconvenience. Fix: every running plan review holds each section or block its bundle names, whether make decide or make plan-delta dispatched it."
+    },
+    {
+     "id": "D106-bash-heading",
+     "summary": "The Bash path refuses a write to the plan only when the command text names the held section's heading ('## <T> - ' or '### <T> ').",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM asked for a refusal of 'an edit to a section'. A section is its body, not just its heading line. A sed -i or python replace that quotes a body line edits the held section without naming its heading, so it passes this test. You can't know an arbitrary command's effect before it runs, which justifies some heuristic, but not one that misses the ordinary case. Fix: refuse when the command's write targets include the plan and its text contains the heading OR any line of the held section, the same test the Edit path applies to old_string."
+    },
+    {
+     "id": "write-tool-omitted",
+     "summary": "Item 5 wires the refusal to the Edit tool and Bash writes only; a Write of plan.md is not covered.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Write is also a 'plan-write path' in the GM's words. Its whole content is known before it runs, so checking whether the held section's text changes is fully possible. The plan doesn't label this omission. Fix: the Write tool on that plan is refused when the held section's text in the new content differs from the text under review."
+    },
+    {
+     "id": "PLAN_EDIT_OK",
+     "summary": "The refusal can be passed with PLAN_EDIT_OK=\"<reason>\", and the pass is recorded.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows 'refuses'. It passes the purpose test: the cost the GM named is a round lost without anyone choosing to lose it. A refusal that stops the accidental edit and passes a deliberate, recorded one still loses no rounds by accident. It also covers a hold left behind by a dead dispatch, where literally refusing would block an edit to a section no review is reading. Two conditions: the test must be red when the refusal is missing, not green because of the escape; and the escape must not become the usual way to edit plan-delta blocks, which is why D106-scope must be fixed rather than worked around with the escape."
+    },
+    {
+     "id": "other-sections-pass",
+     "summary": "Edits to other sections and to the plan's other files go through.",
+     "class": "within",
+     "why": "The GM's own 'a section whose review is running' limits the refusal to that section."
+    },
+    {
+     "id": "refusal-message",
+     "summary": "The refusal names the task and the running review.",
+     "class": "within",
+     "why": "The GM said 'naming the agent'. The message must name the running dispatch (the agent), not only the task."
+    },
+    {
+     "id": "edit-old-string",
+     "summary": "The Edit path refuses when old_string falls inside the held section.",
+     "class": "within",
+     "why": "This is the requested refusal for the Edit tool. Note: an old_string that starts just after the section's end (for example the next heading) can add text into the held section. The exact test, which can be computed for Edit, is whether applying the edit changes the held section's text."
+    },
+    {
+     "id": "mechanics",
+     "summary": "The refusal lives in hm_checks; tests/tooling/test_plan_edit_refusal.py is red without it; budget 40 min; exit (c).",
+     "class": "within",
+     "why": "Mechanism, enforcement of the request, and cost, not scope."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

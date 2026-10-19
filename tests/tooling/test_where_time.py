@@ -42,7 +42,21 @@ def test_the_stall_between_turns_is_its_own_column_and_never_thinking() -> None:
     ]
     out, _agents, _secs = wt.tables(events, starts)
     c = out["T05"]
-    assert round(c[wt.BETWEEN] / 60) == 290, "10 -> 300: between turns, every piece of it"
+    assert round(c[wt.GM_AWAY] / 60) == 290, "10 -> 300: one window, ended by the GM after an hour, every piece of it"
     assert round(c["model"] / 60) == 7 and round(c["gate/tests"] / 60) == 5 and round(c["tools"] / 60) == 3, "the turns' own work keeps its buckets"
     table = wt.render(out, _agents, _secs, ["T05"])
-    assert "| T05 | 305 |" in table and wt.BETWEEN in table.splitlines()[0]
+    assert "| T05 | 305 |" in table and wt.GM_AWAY in table.splitlines()[0]
+
+
+def test_a_window_is_classed_by_the_prompt_that_ends_it() -> None:
+    """T90 (plan D111): a notification - waiting on work; the GM within the hour - the GM; past it - the GM away."""
+    starts = [(wt.fr.parse_t(_t(0)), "T05")]
+    events = [
+        ev("UserPromptSubmit", 0),
+        ev("Stop", 1),
+        ev("UserPromptSubmit", 4, gm=False),  # a background notification
+        ev("Stop", 5),
+        ev("UserPromptSubmit", 25, gm=True),  # the GM, twenty minutes on
+    ]
+    c = wt.tables(events, starts)[0]["T05"]
+    assert round(c[wt.WAIT_WORK] / 60) == 3 and round(c[wt.WAIT_GM] / 60) == 20 and c[wt.GM_AWAY] == 0
