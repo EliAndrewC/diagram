@@ -410,6 +410,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T145 0043's drawing page, 'How many farmsteads have a wood shed?': 'the share chosen at random for each hamlet from its seed' - seed is the generator's word; reword for a reader (record-format, T34's round) [lands-open]
       research: rendering
+- [ ] T146 fixture_seats' wood shed: shed_off_a_wall tests the 9.5 ft only against the house (walls[:1]) while against_a_wall accepts the kura, so a seat can stand 3.5 ft off the kura; in_front lets a flank shed stand partly forward of the front wall; _wood_shed rolls its first seat with zero, unlike the coop and privy (impl-drift, T34's round) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

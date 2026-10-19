@@ -64,7 +64,7 @@ PRIVY_SUN_MAX_FT = 48.0
 PRIVY_SUNNY_SHARE = 0.727  # Wang & Ochiai 2022: 72.7% of outhouses SE to S (the GM, 2026-08-29: used literally)
 """Research: privies on the sunny side - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: 72.7%"""
 WOODSHED_STEP_FT = 6.0  # HELD (feature 328 wave 9, re-measured wave 51): the wood shed a ken past the wall gap - its edge a ken plus the gap off its wall
-"""Research: wood shed off its wall - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: held at a ken plus the wall gap, past the page's ken - at a ken three scaling rolls of the reference refuse their web (20 households seed 39; 40 households seeds 4 and 25: farmhouses or the field left off the network; seed 39 re-measured 2026-10-08 with the shed off the house's own walls); the found row hamletgen/ways/last_resort.py::refuse_unreached#every household reached at 20 and 40 households"""
+"""Research: wood shed off its wall - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: held at a ken plus the wall gap, the gap the page's DEVIATION - at a ken three scaling rolls of the reference refuse their web (20 households seed 39; 40 households seeds 4 and 25: farmhouses or the field left off the network; seed 39 re-measured 2026-10-08 with the shed off the house's own walls); the found row hamletgen/ways/last_resort.py::refuse_unreached#every household reached at 20 and 40 households"""
 # THE PRIVY'S SIZE (feature 280, research/questions/0047-farm-privies-and-their-night-soil-benjo.html): each homestead's privy is one of the sixteen of the Kakimochi table
 # (Meiji 18, read back to the last years of the shogunate), frontage by depth in feet at 6 ft to the ken - each as likely as
 # the next. A calibration against one village's table; the old 6 x 6 ft one-ken module was a GUESS.
@@ -377,7 +377,7 @@ def lay_fixtures(
         seating order - UNRESEARCHED: FIXTURE_ORDER (retirement house, bath, wood shed, privy, manure, coop, shrine, grave, persimmon) is the order the fixtures take seats
         stepped outward - UNRESEARCHED: a fixture with no recorded seat free is offered the same seats a pace further out
         the privy's reach - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: never stepped past 48 ft from its house; a farmstead with no seat within it refuses its privy by name
-        wood shed's walls - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: the house's walls, a short
+        wood shed's walls - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: the house's walls, a short
             step off the house - never the byre's or the retirement house's
         the kura's walls too - GUESS: the house's storehouse annex counts as a wall of the house for the shed
         persimmon front or behind - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: in front of the house or behind it, rolled per house at `forms.persimmon_front`
@@ -466,16 +466,16 @@ def shed_off_a_wall(seat: Rect, walls: Sequence[Rect], g: float, px: Callable[[f
     the placer and its test read.
 
     Research:
-        wood shed a ken off a wall - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: never out across
+        wood shed a ken off a wall - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: never out across
             the dooryard
-        the ken past the wall gap - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: held at the gap plus `WOODSHED_STEP_FT`, about 9.5 ft, past the page's ken behind the found row refuse_unreached#every household reached (the reason at the constant)"""
+        the ken past the wall gap - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: held at the gap plus `WOODSHED_STEP_FT`, about 9.5 ft as the page records it, behind the found row refuse_unreached#every household reached (the reason at the constant)"""
     return clears(seat, walls[:1], g + px(WOODSHED_STEP_FT) - 1e-6) and against_a_wall(seat, walls, g + px(WOODSHED_STEP_FT) + 1e-6) and not in_front(seat, walls[0][3] / 2)
 
 
 def in_front(seat: Rect, hh: float) -> bool:
     """Does `seat` (in the house's frame, the front wall at +`hh`, the half-depth) stand wholly past the front wall - in the dooryard?
 
-    Research: the front yard - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: never the front yard"""
+    Research: the front yard - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: never the front yard"""
     return seat[1] - seat[3] / 2 >= hh - 1e-6
 
 
@@ -495,9 +495,9 @@ def _wood_shed(hw: float, hh: float, w: float, d: float, g: float, walls: Sequen
     clears the parts laid and keeps `shed_off_a_wall`.
 
     Research:
-        wood shed seats - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: behind or beside the house,
+        wood shed seats - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: behind or beside the house,
             never the front yard
-        wall places a ken out - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: offered a ken beyond the wall gap, held past the page's ken (`WOODSHED_STEP_FT`)"""
+        wall places a ken out - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: offered a ken beyond the wall gap, the gap the page's DEVIATION (`WOODSHED_STEP_FT`)"""
     seats = _seats("woodpile", hw, hh, w, d, g, None, None, lambda _salt: 0.0, 0.0, FixtureForms(), px)
     offered = chain(seats, (q for q in wall_places(walls, w, d, g + px(WOODSHED_STEP_FT), px(WALL_SLIDE_FT)) if not in_front(q, hh / 2)))
     found = _first((q for q in offered if shed_off_a_wall(q, walls, g, px)), taken, g)
@@ -675,7 +675,7 @@ def _seats(
         retirement house - UNRESEARCHED: off the back wall or a flank, the side rolled
         coop seats - research/questions/0045-chickens-and-chicken-coops.drawing.html: the east flank, the back wall or the
             west flank, rolled
-        wood shed seats - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: off the back wall and
+        wood shed seats - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: off the back wall and
             the flanks
         shrine corner - research/questions/0219-household-shrines-yashikigami.drawing.html: NW, NE or SW of the house
         household grave corner - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html: SE or NW of the house, then the other two corners
