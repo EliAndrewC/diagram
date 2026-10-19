@@ -1,0 +1,147 @@
+{
+ "feature": "404-hunan-porter-rate",
+ "blocks": {
+  "preamble": {
+   "sha256": "96c121b4758122364bafcb94a5dabca01b8f2669cf29dc93d804dc4af3f39f1a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "ab88aa1a120a54901b493c8b7e1226775f1dc29856854fc4975c3a44a4172998",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "da0b50cfed857b50a15541751c4944e4b616eef59b277280f39117e3f8c323b1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "af234ff75909927c87c1c6e621ff48b312f58df74bed7075dff7989537c08417",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - 0260 (FR-001, FR-002)": {
+   "sha256": "93cee9d388c0a36f3f8d8be04bbb55a732e9294b9b5e9e50a9f7dfe2e7721921",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - the implementation check (FR-003)": {
+   "sha256": "d18d4bf6501cdcef13e49b67501a1abb362a7aead611ee69f65fde5d7a7b2815",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - the note (FR-004)": {
+   "sha256": "cc82e7c17979bfb69fbc4a688d4ca313b2fb7e46129a69b160972313087105d6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## T - the order": {
+   "sha256": "3d592ac4bf956ef4011ad716dd3ebf3b7c75110404264179fdd43f048e116ae4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-19",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - 0260 (FR-001, FR-002)",
+    "## D2 - the implementation check (FR-003)",
+    "## D3 - the note (FR-004)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary/T-sessions",
+     "summary": "One write page session, one check-and-apply session, an impl-check line, a note on #9, then report and land; no code, map or canon change.",
+     "class": "within",
+     "why": "The workflow the money-request contract and FR-001..FR-005 already set; it narrows nothing the GM asked."
+    },
+    {
+     "id": "TC-scan",
+     "summary": "The Hunan 卷1 scan on Commons (no text layer) is downloaded, rendered with pdftoppm, each row read on the image and passed to source-reader with IMAGES=; the wage rows sought on the 長沙/善化 pages around pp. 38-39.",
+     "class": "within",
+     "why": "Method for FR-001's 'each read on its page image'; adds no scope and drops none."
+    },
+    {
+     "id": "Perf/Constitution",
+     "summary": "Performance bookends N/A (no generator change); XII research:physical task, XIII record checks green, XVI built as the FRs.",
+     "class": "within",
+     "why": "Follows from FR-005 (no engine or map change) and FR-002; no narrowing."
+    },
+    {
+     "id": "D1-hunan-rows",
+     "summary": "0260 carries the Hunan 長沙/善化 porter (80 jin, per li, 0.003 tael) and boat (100 jin, per 10 li, 0.002 tael) rows with their note, verdict ATTESTED ONLY FOR official building-work reimbursement in Hunan, dated as the edition states.",
+     "class": "within",
+     "why": "This is the research the request's porter question (#3) is answered by; ATTESTED ONLY FOR is one of the money contract's verdicts and states the scope the source attests rather than shrinking what the GM asked."
+    },
+    {
+     "id": "D1-wages-beside",
+     "summary": "The same volume's craftsman's and laborer's day wages for those districts placed beside the rates if the scan gives them, otherwise SILENT with the nearest named.",
+     "class": "within",
+     "why": "The spec's User Story 1 item 2 and the money skill's standing wage-beside rule; it is part of answering the question properly, not new scope. The SILENT fallback is the contract's verdict for a figure the source does not give, not a carve-out."
+    },
+    {
+     "id": "D1-porter-days",
+     "summary": "A porter's 100 li expressed in days, labeled as the project's arithmetic.",
+     "class": "within",
+     "why": "Serves #3 (what hiring a porter cost) directly, and is labeled as derived, not attested."
+    },
+    {
+     "id": "D1-zhili-out",
+     "summary": "The Zhili rows stay out; the absence note says no public scan of the original was found (and where searched), quotes the Bochum ch.13 rows (青縣 28b vs 29a), says the Hunan original writes its unit row by row, and chooses no unit for Zhili.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Leaves undone part of an outstanding task (the Zhili rates 403 left out), so judged as an exception. It holds on impossibility: the unit cannot be read on an original no public scan of which was found after the named searches, and the Hunan edition shows the unit varies row by row, so taking Hunan's unit for Zhili would be inventing a figure, not finishing research. The retry of Moll-Murata/Song/Vogel 2005 and HathiTrust (settling Zhili only if they reproduce the original's rows) keeps the task open to finishing rather than abandoning it."
+    },
+    {
+     "id": "D1-pack-animal",
+     "summary": "The pack animal stays without an official rate: Hunan 卷1's 長沙/善化 transport rows are two items only (porter, boat) and Zhili's are left out; said so in the note.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Impossible from the sources in hand: the Hunan page states its transport rows are two items (以上貳欵, per the accepted spec, read on the page) and the only other source is the unreadable Zhili one. The purpose of #3 (what hiring a porter cost) is met by the porter row, and the gap is reported, not hidden."
+    },
+    {
+     "id": "D1-leads-open",
+     "summary": "Moll-Murata/Song/Vogel 2005 and the HathiTrust search retried or named with failure and both dates; the Jiangsu edition and Hunan 卷2-8 named as open leads.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM asked for the outstanding money research to be finished. The question that is outstanding, #3's porter cost, is answered on the original, and 403's blocked lookups are retried, not dropped. Jiangsu and Hunan 卷2-8 are further editions and districts: no filed task or question requires them, and the money contract requires an answer to name what is still open. Naming them does not hollow out the request. If either one were the only route to the requested figure, this ruling would be wrong; on this plan it is not."
+    },
+    {
+     "id": "D2",
+     "summary": "One 'no code implements it' line for 0260.",
+     "class": "within",
+     "why": "FR-003 verbatim."
+    },
+    {
+     "id": "D3",
+     "summary": "A comment on EliAndrewC/diagram#9.",
+     "class": "within",
+     "why": "FR-004 verbatim; the asker closes the issue per the contract."
+    }
+   ]
+  }
+ ]
+}
