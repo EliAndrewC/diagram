@@ -455,6 +455,23 @@ names the door's step, not the footpath's gap. T31's 4 ft block comes out of 024
 7 ft. No house moves: route (d) is not needed, and (e) is not reached. T43's item 3 (`span_walkable` and a household's own garden)
 stays T43's.
 
+
+### T96 part B (2026-10-19T07:32Z)
+
+Owed by the landing cohort of 07:15Z (cohort seed 22 newly failing) and the round arbiter's ruling on hour:385-approach-checklist@29
+(continue).
+
+1. **What is refusing?** At 7 ft, cohort seed 22 (linear) leaves two farms unreached: their doors stand, but no door path is lawful
+   - measured 2026-10-19 (a scratch probe logging `door_path`).
+2. **A3 again.** Unchanged.
+3. **A4 again.** The trace names the cause: the door path's room off a grove is counted twice (bands grown 11 ft, then routed at the
+   gap on top), a drift T96's claims round had already found.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither in this part B: the fix is T98's, decided and reviewed, and lands with T96.
+6. **The one-sentence test.** "Seed 22 fails because 0036's room is counted twice" - true by the trace; with it counted once seed 22 passes.
+7. **The next step is a measurement.** The landing cohort with T96 and T98 together.
+8. **Every route measured before offering one?** Yes: the band margin was traced as the cause before T98 was written; room (d) waits if T98 does not settle it, as the ruling says.
+9. **After a ruling: the step it names?** Yes - the ruling says go on with T98's review and landing.
 ## T98 - grove-band clearance as 0036 gives it, once (found working T96, 2026-10-19; lands with T96)
 
 Found by T96's claims round (DRIFTED: `serve.lay_door_paths#door path off a grove band`, `track.connector_dry_exit#grove band gap`),

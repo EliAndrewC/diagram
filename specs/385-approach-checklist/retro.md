@@ -843,3 +843,20 @@ it now routes at `WEB_FABRIC_GAP` (0246's 7 ft), and both its claims are IN-STEP
 8 of 48 (17%, the pooled rate). First filed as T32, which the review blocked: a defect found inside a task is not a ranking pick
 (FR-020's kinds), so it became found work. Row 841 marked wave 163. **The habit it changes:** a drift a claims round finds is filed
 as found work, never as the next ranking row.
+
+## T96 - the retro row
+
+About 3 h with its checks. The round arbiter's hour-28 ruling: room first for the footpath's 7 ft. Probes ruled out the door's
+room numbers and the grove margin for seeds 3, 4, 903 and 904; a trace then found the cause in two minutes: the row farm's DOOR
+read the fence gap (`front_door` at it + 4, `door_off_fixtures` at it + 1), so at 7 ft the door had to stand 8 ft clear of its own
+fixtures and found no spot. The door's numbers became its own (`DOOR_STEP_FT`, `DOOR_FIXTURE_CLEAR_FT`, UNRESEARCHED) and the fence
+gap became 0246's 7 ft - no house moved, T31's 4 ft block came out of 0246. A name collision cost a cohort: serve.py already had a
+`DOOR_STEP_FT` (a 4 ft step), which shadowed the import - renamed `DOOR_SHIFT_FT`. The claims round surfaced six old drifts and a
+mislabel on code only renamed: filed as T97-T100, ACCESS_HALF_FT carried as T101; T98 lands with T96 because seed 22 needed it.
+**The habit it changes:** trace the refused unit first - two guessing probes found nothing a two-minute trace did.
+
+## T98 - the retro row
+
+About 1 h. The room off a grove was counted twice at the door path (bands grown 0036's 11 ft, then routed at the footpath's gap on
+top: 18 ft at 7) and too little at the connector (10 ft against 0036's 12.5). `band_grow` and `CONNECTOR_BAND_GAP_FT` count it once;
+seed 22 and the cohort pass. **The habit it changes:** none needed.
