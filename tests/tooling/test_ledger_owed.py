@@ -226,3 +226,34 @@ def test_a_plan_review_its_feature_s_record_holds_gets_its_row_whatever_its_repl
     other = dict(task, subject="MODE 4: PLAN REVIEW of one task's section - feature 385-x, task T79 (a decision")
     blocks = dict(task, subject="MODE 4: PLAN REVIEW of 1 changed block(s) of feature 385-x's plan")
     assert lo.in_the_record(task, tmp_path) and not lo.in_the_record(other, tmp_path) and not lo.in_the_record(blocks, tmp_path)
+
+
+def test_a_write_naming_a_feature_writes_only_the_passes_traced_to_it(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 395's step-back (hour:395@1): the main session's `--write specs/395-.../checks.md` wrote rows for 396's and 397's
+    spec reviews too, each claiming 395's checks file. Now a pass is written only when its subject names the feature, one of its
+    questions (the claims sheet, its implementation check), or a key bundle of a source those questions cite."""
+    repo = tmp_path / "repo"
+    (repo / "dev").mkdir(parents=True)
+    (repo / "specs/395-shrine").mkdir(parents=True)
+    (repo / "specs/395-shrine/implementation-check.md").write_text("- 0256: no code implements it\n")
+    (repo / "research/questions").mkdir(parents=True)
+    (repo / "research/questions/0256-roofs.notes.html").write_text('<li id="kawakami-1991">kawakami-1991-shrine-funding</li>')
+    sheet = tmp_path / "claims.md"
+    sheet.write_text("money | 395 | Q=0255 | in progress | 2026-10-19\nother | 396 | Q=0259 | in progress | 2026-10-19\n")
+    monkeypatch.setenv("L7R_CLAIMS_SHEET", str(sheet))
+    subjects = {
+        "a1": "MODE 2 (spec review). Feature: specs/395-shrine/ - spec",
+        "a2": "Run quote-check on /tmp/l7r-check/q-0255-quote-check/MANIFEST.md.",
+        "a3": "Run source-reader on /tmp/l7r-check/key-kawakami-1991-shrine-funding-whole/MANIFEST.md",
+        "a4": "MODE 2 (spec review). Feature: specs/396-inns/ - spec",
+        "a5": "Run quote-check on /tmp/l7r-check/q-0259-quote-check/MANIFEST.md.",
+    }
+    log = tmp_path / "passes.jsonl"
+    log.write_text("".join(json.dumps({**_pass(subject=s, wall=f"{n} s"), "agent": a}) + "\n" for n, (a, s) in enumerate(subjects.items())))
+    ledger = repo / "dev/review-ledger.md"
+    ledger.write_text(HEAD)
+    assert lo.main(["--log", str(log), "--ledger", str(ledger), "--transcripts", str(tmp_path / "none"), "--write", "specs/395-shrine/checks.md"]) == 0
+    written = ledger.read_text()
+    assert "q-0255-quote-check" in written and "key-kawakami-1991-shrine-funding-whole" in written and "specs/395-shrine" in written
+    assert "396" not in written and "q-0259" not in written, "396's passes stay owed for 396"
+    assert len(lo.unanswered(lo.distinct(lo.load_passes(log)), written)) == 2
