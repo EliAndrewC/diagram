@@ -2676,6 +2676,8 @@ natural levee	natural levee
 natural levees	natural levee
 natural village	natural village
 natural villages	natural village
+navvies	navvy
+navvy	navvy
 nawabari	nawabari
 nawate	nawate
 naya	naya
