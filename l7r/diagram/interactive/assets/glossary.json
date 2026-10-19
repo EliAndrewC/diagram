@@ -4270,7 +4270,8 @@
   "def": "A Chinese length of about 3.3 meters, ten chi.",
   "variants": [
    "zhang"
-  ]
+  ],
+  "cased": true
  },
  "zokibayashi": {
   "def": "A worked scrub wood of mixed broadleaf trees regrowing from the stump and cut for fuel; on a new-field household's strip, the wood at its far end kept for that household's own fuel.",
@@ -12694,7 +12695,8 @@
   "def": "In the Rites of Zhou's ladder of field channels, the grade above the xu and below the chuan: a crosswise channel laid on the south side for every ten xu, and nine of them make a chuan.",
   "variants": [
    "hui"
-  ]
+  ],
+  "cased": true
  },
  "feedlot": {
   "def": "A modern pen where beef cattle are kept close together and fed to put on weight before slaughter, with water supplied at troughs. The record takes its figures for how fast cattle drink from feedlot studies, as a stand-in for a working ox.",
@@ -16716,6 +16718,89 @@
   "variants": [
    "navvy",
    "navvies"
+  ]
+ },
+ "recoinage": {
+  "def": "A reissue of a country's coins at a new weight or fineness of metal, which could move prices sharply; the record meets Japan's of 1714 (Shotoku 4).",
+  "variants": [
+   "recoinage",
+   "recoinages"
+  ]
+ },
+ "Boxer upheaval": {
+  "def": "The armed rising against foreigners in north China in 1899-1901, which brought foreign troops into Beijing in 1900.",
+  "variants": [
+   "Boxer upheaval",
+   "Boxer Rebellion",
+   "Boxer Uprising"
+  ]
+ },
+ "clapper opera": {
+  "def": "A Chinese regional opera kept in time by beating wooden clappers; the record meets it as Kaifeng's local opera, whose troupes played village festivals for the gods.",
+  "variants": [
+   "clapper opera",
+   "clapper operas"
+  ]
+ },
+ "geza": {
+  "def": "The offstage music of a kabuki theater, played from a corner by the stage by musicians belonging to the theater.",
+  "variants": [
+   "geza"
+  ]
+ },
+ "nagauta": {
+  "def": "The \"long song\" style of singing to the shamisen that accompanies kabuki dance and its offstage music.",
+  "variants": [
+   "nagauta"
+  ]
+ },
+ "groundling": {
+  "def": "A playgoer in an English theater of Shakespeare's time who paid a penny to stand on the level ground before the stage, rather than pay more to sit in the galleries.",
+  "variants": [
+   "groundling",
+   "groundlings"
+  ]
+ },
+ "raper": {
+  "def": "A period spelling of rapier, a long, slender sword worn by a gentleman.",
+  "variants": [
+   "raper"
+  ]
+ },
+ "journeyman": {
+  "def": "A skilled craftsman who has completed his apprenticeship and works for a day's wage.",
+  "variants": [
+   "journeyman",
+   "journeymen"
+  ]
+ },
+ "fletcher": {
+  "def": "A maker of arrows, who fits the shaft with its feathers and its head; an arrow \"fletched with\" a bird's feathers carries that bird's feathers.",
+  "variants": [
+   "fletcher",
+   "fletchers",
+   "fletched",
+   "fletching"
+  ]
+ },
+ "sesame eagle": {
+  "def": "A bird of prey named in the Qing arrow rulings; arrows fletched with its feathers were the ones called war arrows, fixed in 1727 at 8 taels of silver the hundred.",
+  "variants": [
+   "sesame eagle",
+   "sesame-eagle"
+  ]
+ },
+ "diao": {
+  "def": "A string of copper cash, the larger unit Qing Beijing counted cash in above the single wen: a rent of \"1 diao 600 wen\" is one string and 600 cash more.",
+  "variants": [
+   "diao"
+  ]
+ },
+ "Imperial Household Department": {
+  "def": "The Qing office that ran the emperor's own household and property; in Beijing it owned houses and shops and let them, its dwelling houses only to Han Chinese officials serving in the capital.",
+  "variants": [
+   "Imperial Household Department",
+   "Neiwufu"
   ]
  }
 }

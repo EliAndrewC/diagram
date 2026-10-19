@@ -267,6 +267,9 @@ boundary post	bojikui
 boundary posts	bojikui
 box coat	box coat
 box coats	box coat
+boxer rebellion	Boxer upheaval
+boxer upheaval	Boxer upheaval
+boxer uprising	Boxer upheaval
 braced frame	braced frame
 braced frames	braced frame
 braced-frame	braced frame
@@ -498,6 +501,8 @@ citang	ancestral hall
 city god	City God
 city gods	City God
 city grain	city grain
+clapper opera	clapper opera
+clapper operas	clapper opera
 clapper-board	clapper-board
 clapper-boards	clapper-board
 clay hulling mill	clay mill
@@ -750,6 +755,7 @@ dharma hall	dharma hall
 dharma halls	dharma hall
 diameter at breast height	DBH
 dian	dian
+diao	diao
 digital daijisen	Digital Daijisen
 dike-pond	dike-pond
 dike-ponds	dike-pond
@@ -1085,6 +1091,10 @@ five-ring pagoda	five-ring pagoda
 five-ring pagodas	five-ring pagoda
 fixed rate	fixed-rate
 fixed-rate	fixed-rate
+fletched	fletcher
+fletcher	fletcher
+fletchers	fletcher
+fletching	fletcher
 floating-leaf	floating-leaf plant
 floating-leaf plant	floating-leaf plant
 floating-leaf plants	floating-leaf plant
@@ -1267,6 +1277,7 @@ geomantic	geomancy
 geostrophic	geostrophic
 geshunin	geshunin
 geta	geta
+geza	geza
 ghusl	ghusl
 ginmisho	ginmisho
 girder	girder
@@ -1344,6 +1355,8 @@ ground tenancies	ground tenant
 ground tenancy	ground tenant
 ground tenant	ground tenant
 ground tenants	ground tenant
+groundling	groundling
+groundlings	groundling
 group quarter	kumi-yashiki
 group quarters	kumi-yashiki
 group-residence	kumi-yashiki
@@ -1708,6 +1721,7 @@ ima	ima
 imado ware	Imado ware
 imado-yaki	Imado ware
 imidas	imidas
+imperial household department	Imperial Household Department
 imperial magistrate	Imperial Magistrate
 imperial magistrate's	Imperial Magistrate
 imperial magistrates	Imperial Magistrate
@@ -1894,6 +1908,8 @@ joruri	joruri
 josui	josui
 josui ido	josui-ido
 josui-ido	josui-ido
+journeyman	journeyman
+journeymen	journeyman
 jowa	Jowa
 jozabangai-seki	jozabangai-seki
 jsidre	JSIDRE
@@ -2634,6 +2650,7 @@ nagachi-gata	nagachi
 nagare-style	Nagare-style
 nagare-zukuri	nagare-zukuri
 nagarezukuri	nagare-zukuri
+nagauta	nagauta
 nagaya	nagaya
 nagaya-mon	nagayamon
 nagayamon	nagayamon
@@ -2687,6 +2704,7 @@ negi	negi
 nehan	Nehan gate
 nehan gate	Nehan gate
 neige	neige
+neiwufu	Imperial Household Department
 nembutsu	nenbutsu
 nenbutsu	nenbutsu
 nengu	nengu
@@ -3115,6 +3133,7 @@ rank 5	rank
 rank 9	rank
 raozhou	Raozhou
 rape	rape
+raper	raper
 rapeseed	rape
 rapeseed cake	rapeseed cake
 rapeseed cakes	rapeseed cake
@@ -3131,6 +3150,8 @@ recension	recension
 recensions	recension
 recharge	recharge
 recharges	recharge
+recoinage	recoinage
+recoinages	recoinage
 red chinquapin	chinquapin
 red pine	red pine
 red pine wood	red pine
@@ -3455,6 +3476,8 @@ sericulture	sericulture
 servitude	servitude
 servitudes	servitude
 ses	SES
+sesame eagle	sesame eagle
+sesame-eagle	sesame eagle
 sess	SES
 sessha	subsidiary shrine
 setchin	kawaya
