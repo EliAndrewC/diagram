@@ -134,6 +134,17 @@ def excerpt(text: str, quotes: list[str], head: int = HEAD, window: int = WINDOW
     return note + "".join(pieces)
 
 
+_BLOB = re.compile(r"^https?://github\.com/([^/]+)/([^/]+)/blob/(.+)$")
+
+
+def fetch_url(url: str) -> str:
+    """The URL actually fetched for a pointer: a github.com BLOB page is a JavaScript shell (its cached copy read empty, menus
+    only - feature 390's l7r-money reader), so its raw file is fetched instead; the pointer the record cites is unchanged
+    (the round arbiter's fix on round:source-reader|q:0248@7)."""
+    m = _BLOB.match(url)
+    return f"https://raw.githubusercontent.com/{m.group(1)}/{m.group(2)}/{m.group(3)}" if m else url
+
+
 def saved_rows(out: pathlib.Path) -> list[dict]:
     """The rows an earlier save into `out` listed - kept, so a second save ADDS to the directory.
 
@@ -178,7 +189,7 @@ def save(urls: list[str], out: pathlib.Path, pages, quotes: list[str] | None = N
                 print(src.show(r))
             if ledger.get("sought"):
                 print("\n".join(attempts.report(ledger["root"], url=url)))
-        got = pages.get(url)
+        got = pages.get(fetch_url(url))
         if ledger is not None and ledger.get("sought") and not got.get("blocked"):
             q = next(iter(ledger["questions"]), "unknown")
             attempts.add(ledger["root"], url, q, ledger["sought"], route="source-pages")

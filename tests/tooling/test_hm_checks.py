@@ -156,6 +156,29 @@ def test_a_first_reading_of_new_notes_is_not_a_repeat_round(tmp_path: pathlib.Pa
     assert st2["rounds"]["quote-check|q:0105"] == 2
 
 
+def test_a_new_source_s_bundle_is_a_first_reading_of_its_notes(tmp_path: pathlib.Path) -> None:
+    """The round arbiter on round:source-reader|q:0248@7 (2026-10-18): a new question citing seven new sources got one
+    source-reader bundle per source (`make check-bundle KEY=`), each counted as a whole-page re-read, so the seventh tripped the
+    cap on first readings. A source's bundle reads the notes its `unit:` lines name; a dispatch records them as `notes`."""
+    root = _clone(tmp_path)
+    src = lambda key, *ns: (
+        f"# Check bundle - source {key}\n\nowed-checks: source-reader\n"
+        + "".join(  # noqa: E731
+            f"unit: source-reader:0105#{n} f{i}\n" for i, n in enumerate(ns)
+        )
+    )
+    assert hc.notes_of_manifest(src("k", "k", "k-2")) == {"k", "k-2"}
+    assert hc.notes_of_manifest(MANIFEST) == set(), "a whole-page bundle names no notes"
+    st: dict = {}
+    for i, key in enumerate(("a", "b", "c", "d")):
+        assert hc.dispatch(st, f"s{i}", "source-reader", "/m", src(key, key, f"{key}-2"), i, root) == "", key
+        assert st["dispatches"][f"s{i}"]["notes"] == [key, f"{key}-2"]
+        _read(st, f"s{i}")
+        hc.answered(st, "source-reader", ["q:0105"])
+    assert st["rounds"]["source-reader|q:0105"] == 1, "four sources' first reads are one round, not four"
+    assert hc.dispatch(st, "w", "source-reader", "/m", MANIFEST, 9, root) == "" and st["dispatches"]["w"]["notes"] == []
+
+
 def test_a_dispatch_another_guard_refused_never_freezes_the_page() -> None:
     st: dict = {}
     hc.dispatch(st, "t1", "quote-check", "/m", MANIFEST, 0)

@@ -67,6 +67,9 @@ _PAGE = re.compile(r"research/questions/(\d{4})-[^/]*\.html$")
 #: a bundle scoped to named notes (`check_bundle.py`: "ONLY the notes a, b and the blocks that carry them")
 _NOTES = re.compile(r"ONLY the notes (.+?) and the blocks that carry them")
 _MODAL = re.compile(r"interactive/assets/modals/((?:sheet|hamlet|choice)/[^/]+)\.md$")
+#: a source's bundle (`check_bundle.key_bundle`) and the notes its owed units name (`unit: source-reader:0248#koku-enwiki-2 <fp>`)
+_SOURCE_BUNDLE = re.compile(r"^# Check bundle - source \S+", re.M)
+_UNIT_NOTE = re.compile(r"^unit: [\w-]+:\d{4}(?:\.drawing)?#(\S+) \S+$", re.M)
 
 
 def subject_of_unit(slug_tail: str) -> str:
@@ -228,8 +231,13 @@ def open_round(state: Mapping[str, Any], subject: str, now: float | None = None)
 
 
 def notes_of_manifest(text: str) -> set[str]:
-    """The notes a note-scoped bundle reads; empty for a bundle of the whole page."""
-    return {n.strip() for m in _NOTES.findall(text) for n in m.split(",") if n.strip()}
+    """The notes a note-scoped bundle reads; empty for a bundle of the whole page. A SOURCE's bundle (`make check-bundle KEY=`)
+    reads the notes its `unit:` lines name, not the page (the round arbiter on round:source-reader|q:0248@7, 2026-10-18: one
+    bundle per newly cited source was counted as a whole-page re-read each, and a new question's first reads hit round 7)."""
+    named = {n.strip() for m in _NOTES.findall(text) for n in m.split(",") if n.strip()}
+    if named or not _SOURCE_BUNDLE.search(text):
+        return named
+    return {m.group(1) for m in _UNIT_NOTE.finditer(text)}
 
 
 def fresh_reading(state: Mapping[str, Any], unit: str, notes: set[str]) -> bool:
@@ -329,7 +337,8 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
             marks["seen"][unit] = sorted({_sentence_key(x) for x in current[s]})
         marks["read"][unit] = sorted(notes or {"*"})  # "*": a whole-page reading, every note read
     state.setdefault("dispatches", {})[tid] = {"check": check, "subjects": subjects, "manifest": manifest, "t": now, "state": "pending", "counted": counted,
-                                                "marks": marks, "owed": re.findall(r"^owed: (.+)$", text, re.M)}  # why each unit was due (374)
+                                                "marks": marks, "owed": re.findall(r"^owed: (.+)$", text, re.M),  # why each unit was due (374)
+                                                "notes": sorted(notes)}  # the notes the bundle read, [] for the whole page (feature 393's earlier rounds)
     return ""
 
 
