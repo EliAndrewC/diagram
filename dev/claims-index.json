@@ -11984,9 +11984,9 @@
   "date": "2026-10-13",
   "note": "35-45 in 100",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "0015ba6df3eb9faa"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "dd953ca0bec86ce6"
   },
-  "research": "1a28ab4107f884e2",
+  "research": "fef27bee08b31be3",
   "rests": [
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:d4fc5b26b94cff85"
   ],
@@ -42092,23 +42092,23 @@
   "code": "8429dc6f01913441",
   "core": "9a4b534519efc747",
   "date": "2026-10-19",
-  "note": "the exemption only lets these touch their house; each item in the account matches its page (yard beside the house, bed on the SE/SW/E/W, bath room joined to the house, the shed about 9.5 ft off, the sty against a wall)",
+  "note": "every adjacency the claim names matches its page: the yard beside the house, the bed's flanks, the bath room joined, the shed about 9.5 ft out and the sty against the house or an outbuilding",
   "pages": {
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "b5fc46ab116a4b72",
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03",
    "0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html": "bef5d458385c0006",
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "0015ba6df3eb9faa",
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "dd953ca0bec86ce6",
    "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396",
    "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html": "1d379bbb81ad22fb"
   },
-  "research": "17422ed55c2dd32e",
+  "research": "a4e71ca730de8c29",
   "rests": [
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:03bd5cc33e2068a4",
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:0b02f5e3492a4ce2",
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:57e17cedabbc7ead",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:b4f6885af6bd959a",
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:5c8978229b054d69",
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18",
    "0044-baths-on-the-farm-furo.drawing.html:78f622a8252b9b53",
    "0044-baths-on-the-farm-furo.drawing.html:f4b4951f028d4a66",
    "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:b533db817cf2560b",
@@ -50081,19 +50081,19 @@
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::WOODSHED_STEP_FT#wood shed off its wall": {
   "body": "f48056815de203f4",
-  "claim": "wood shed off its wall - firewood-stacks-and-sheds-kigoya.drawing: held at a ken plus the wall gap, past the page's ken - at a ken three scaling rolls of the reference refuse their web (20 households seed 39; 40 households seeds 4 and 25: farmhouses or the field left off the network; seed 39 re-measured 2026-10-08 with the shed off the house's own walls); the found row hamletgen/ways/last_resort.py::refuse_unreached#every household reached at 20 and 40 households",
-  "code": "b6e5a37ca82a5d81",
+  "claim": "wood shed off its wall - GUESS firewood-stacks-and-sheds-kigoya.drawing: held at a ken plus the wall gap, the gap the page's DEVIATION - at a ken three scaling rolls of the reference refuse their web (20 households seed 39; 40 households seeds 4 and 25: farmhouses or the field left off the network; seed 39 re-measured 2026-10-08 with the shed off the house's own walls); the found row hamletgen/ways/last_resort.py::refuse_unreached#every household reached at 20 and 40 households",
+  "code": "e1808d9f590c04ba",
   "core": "5efeb905b7d48b3f",
   "date": "2026-10-19",
-  "note": "6 ft plus the 3.5 ft gap matches the page's 9.5 ft, but §133 records \"The ken is a GUESS\" and the gap a DEVIATION; should be GUESS 0043.drawing, and drop the stale \"past the page's ken\"",
+  "note": "6 ft is the ken, which with the 3.5 ft gap makes the page's \"about 9.5 ft out\"; the page records the ken as a GUESS and the added gap as a DEVIATION",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "0015ba6df3eb9faa"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "dd953ca0bec86ce6"
   },
-  "research": "1a28ab4107f884e2",
+  "research": "fef27bee08b31be3",
   "rests": [
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:5c8978229b054d69"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_first#plumbing": {
   "code": "0b6b6918fb22210e",
@@ -50302,22 +50302,29 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#wood shed seats": {
-  "body": "5aa6ad5698f453ba",
-  "claim": "wood shed seats - firewood-stacks-and-sheds-kigoya.drawing: off the back wall and the flanks",
-  "code": "f0869e5a7262f3c9",
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#the privy's front seat stands PRIVY_FRONT_STEP_FT past the wall gap, its edge 8 ft off the front wall, and the stable seat stands at the gap alone; no claim of _seats names either distance (the constant may carry its own claim, which the bundle does not show)": {
+  "code": "35c562e9417fd7f0",
   "core": "35c562e9417fd7f0",
   "date": "2026-10-19",
-  "note": "seats off the back wall and flanks match the page's \"behind or beside the house\", but §133 says \"no page we read says where on the plot a wood shed stood\"; should be GUESS 0043.drawing",
+  "note": "the privy's front seat stands PRIVY_FRONT_STEP_FT past the wall gap, its edge 8 ft off the front wall, and the stable seat stands at the gap alone; no claim of _seats names either distance (the constant may carry its own claim, which the bundle does not show)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#wood shed seats": {
+  "body": "5aa6ad5698f453ba",
+  "claim": "wood shed seats - GUESS firewood-stacks-and-sheds-kigoya.drawing: off the back wall and the flanks",
+  "code": "e1d19fc097d1e70d",
+  "core": "35c562e9417fd7f0",
+  "date": "2026-10-19",
+  "note": "the back and flank seats are \"behind or beside the house\", a GUESS the page records",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "0015ba6df3eb9faa"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "dd953ca0bec86ce6"
   },
-  "research": "1a28ab4107f884e2",
+  "research": "fef27bee08b31be3",
   "rests": [
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:5c8978229b054d69",
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:93fa63f17d70422d"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_sun_sector#sunny-side sector": {
   "code": "d774b6df80942db3",
@@ -50357,35 +50364,35 @@
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wall places a ken out": {
   "body": "31d670702dec42c1",
-  "claim": "wall places a ken out - firewood-stacks-and-sheds-kigoya.drawing: offered a ken beyond the wall gap, held past the page's ken (`WOODSHED_STEP_FT`)",
-  "code": "6b27e67a2cf68e46",
+  "claim": "wall places a ken out - GUESS firewood-stacks-and-sheds-kigoya.drawing: offered a ken beyond the wall gap, the gap the page's DEVIATION (`WOODSHED_STEP_FT`)",
+  "code": "e2bc0b2349516784",
   "core": "2835514bd703c516",
   "date": "2026-10-19",
-  "note": "offset of the gap plus 6 ft matches §133, but the page records the ken as a GUESS and the gap as a DEVIATION; should be GUESS 0043.drawing, and drop the stale \"past the page's ken\"",
+  "note": "the wall places are offered at gap + WOODSHED_STEP_FT, which is 9.5 ft, as the page records",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "0015ba6df3eb9faa"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "dd953ca0bec86ce6"
   },
-  "research": "1a28ab4107f884e2",
+  "research": "fef27bee08b31be3",
   "rests": [
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:5c8978229b054d69"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed seats": {
   "body": "31d670702dec42c1",
-  "claim": "wood shed seats - firewood-stacks-and-sheds-kigoya.drawing: behind or beside the house, never the front yard",
-  "code": "04caec43d865aff6",
+  "claim": "wood shed seats - GUESS firewood-stacks-and-sheds-kigoya.drawing: behind or beside the house, never the front yard",
+  "code": "167579ebc3abfa0c",
   "core": "2835514bd703c516",
   "date": "2026-10-19",
-  "note": "front-wall places are filtered out as the page's rule says, but §133 has no source for where the shed stood; should be GUESS 0043.drawing",
+  "note": "the front-wall places are filtered out by in_front, so the shed is \"never in the front yard\"",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "0015ba6df3eb9faa"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "dd953ca0bec86ce6"
   },
-  "research": "1a28ab4107f884e2",
+  "research": "fef27bee08b31be3",
   "rests": [
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:5c8978229b054d69"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::against_a_part#against the farmhouse or one of its outbuildings": {
   "code": "f604bf3dca89c4c0",
@@ -50722,19 +50729,19 @@
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::in_front#the front yard": {
   "body": "f52d6981a650c5cf",
-  "claim": "the front yard - firewood-stacks-and-sheds-kigoya.drawing: never the front yard",
-  "code": "9129c077f013cd5f",
+  "claim": "the front yard - GUESS firewood-stacks-and-sheds-kigoya.drawing: never the front yard",
+  "code": "b6ccb8da8ab7ceb6",
   "core": "49197633a66343d0",
   "date": "2026-10-19",
-  "note": "\"never the front yard\" is the drawing page's own choice and §133 gives no source for the shed's place; should be GUESS 0043.drawing",
+  "note": "the test for a seat wholly past the front wall carries out the page's \"never in the front yard\", a GUESS",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "0015ba6df3eb9faa"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "dd953ca0bec86ce6"
   },
-  "research": "1a28ab4107f884e2",
+  "research": "fef27bee08b31be3",
   "rests": [
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:5c8978229b054d69"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::joined_to_house#bath room of the house": {
   "code": "cb4d45a92895d511",
@@ -50908,20 +50915,20 @@
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#wood shed's walls": {
   "body": "2e6053a878457bd0",
-  "claim": "wood shed's walls - firewood-stacks-and-sheds-kigoya.drawing: the house's walls, a short step off the house - never the byre's or the retirement house's",
-  "code": "3b28aa3b12dab0ff",
+  "claim": "wood shed's walls - GUESS firewood-stacks-and-sheds-kigoya.drawing: the house's walls, a short step off the house - never the byre's or the retirement house's",
+  "code": "7fdbeb17a6c6bef2",
   "core": "ad39d64e14bca2aa",
   "date": "2026-10-19",
-  "note": "house walls only (no byre, no retirement house) matches \"a short step off the house\", but §133 has no source for the shed's place; should be GUESS 0043.drawing",
+  "note": "the walls are the house's own walls (plus the kura annex), not the byre's or the retirement house's, matching \"a short step off the house\"",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "0015ba6df3eb9faa"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "dd953ca0bec86ce6"
   },
-  "research": "1a28ab4107f884e2",
+  "research": "fef27bee08b31be3",
   "rests": [
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:5c8978229b054d69",
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18",
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:93fa63f17d70422d"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::outward#plumbing": {
   "code": "bd995c0ec71c8ea3",
@@ -50984,35 +50991,35 @@
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#the ken past the wall gap": {
   "body": "40bbc7b50b58defd",
-  "claim": "the ken past the wall gap - firewood-stacks-and-sheds-kigoya.drawing: held at the gap plus `WOODSHED_STEP_FT`, about 9.5 ft, past the page's ken behind the found row refuse_unreached#every household reached (the reason at the constant)",
-  "code": "2495be78c56b9fe3",
+  "claim": "the ken past the wall gap - GUESS firewood-stacks-and-sheds-kigoya.drawing: held at the gap plus `WOODSHED_STEP_FT`, about 9.5 ft as the page records it, behind the found row refuse_unreached#every household reached (the reason at the constant)",
+  "code": "065e505d6a548937",
   "core": "c164a0c90a58ff1f",
   "date": "2026-10-19",
-  "note": "the 9.5 ft clearance matches §133, but the page records the ken as a GUESS and the gap as a DEVIATION; should be GUESS 0043.drawing, and the account's \"past the page's ken\" is stale",
+  "note": "the shed must clear the house by g + 6 ft, which is 9.5 ft, as the page records",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "0015ba6df3eb9faa"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "dd953ca0bec86ce6"
   },
-  "research": "1a28ab4107f884e2",
+  "research": "fef27bee08b31be3",
   "rests": [
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:5c8978229b054d69"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#wood shed a ken off a wall": {
   "body": "40bbc7b50b58defd",
-  "claim": "wood shed a ken off a wall - firewood-stacks-and-sheds-kigoya.drawing: never out across the dooryard",
-  "code": "812d15d03d3e7f7b",
+  "claim": "wood shed a ken off a wall - GUESS firewood-stacks-and-sheds-kigoya.drawing: never out across the dooryard",
+  "code": "3d36e1f27abf47e0",
   "core": "c164a0c90a58ff1f",
   "date": "2026-10-19",
-  "note": "the rule against crossing the dooryard matches the page, but §133 has no source for the shed's place; should be GUESS 0043.drawing",
+  "note": "the shed must stand against a wall and not in_front, so it is never out across the dooryard",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "0015ba6df3eb9faa"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "dd953ca0bec86ce6"
   },
-  "research": "1a28ab4107f884e2",
+  "research": "fef27bee08b31be3",
   "rests": [
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:5c8978229b054d69"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::steading_rects#storehouse annex": {
   "code": "d6e99436cf6b7d22",
@@ -60006,9 +60013,9 @@
   "date": "2026-10-03",
   "note": "0043: the larger houses first",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "0015ba6df3eb9faa"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "dd953ca0bec86ce6"
   },
-  "research": "1a28ab4107f884e2",
+  "research": "fef27bee08b31be3",
   "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
