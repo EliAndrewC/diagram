@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92, T93, T94, T95
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92, T93, T94, T95, T96
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -407,6 +407,20 @@ Owed by the cohort record of 05:04Z (seeds 3, 4, 903 and 904 newly failing) - th
 5. **Tuning or changing?** Neither in this part B: the 4 ft recorded on 0246 is D113's change, decided and reviewed before it.
 6. **The one-sentence test.** "0246 records a footpath's 4 ft and the constant's claim cites it" - true; the claims check found it IN-STEP.
 7. **The next step is a measurement.** The landing cohort at 4 ft.
+
+### T31 part B (2026-10-19T06:18Z)
+
+Owed by the round arbiter's ruling on hour:385-approach-checklist@28 (change-route) and by the probe cohorts of 06:17Z that rolled
+the four seeds at 7 ft again.
+
+1. **What is refusing?** At 7 ft, cohort seeds 3, 4, 903 and 904 - all four the linear form - leave a farmhouse off the network
+   (904 also a farm off its street), measured 2026-10-19 (`make cohort N=1 SEED=<n>` with the constant at 7.0, reverted).
+2. **A3 again.** The 4 ft's reason as written is fit, not research - the arbiter's finding; the room route was named and not tried.
+3. **A4 again.** Unchanged: 0246's 7 ft holds for a lane; the footpath's figure is open until room is tried.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither in this part B: the room route is its own task, worked with T43 before T32.
+6. **The one-sentence test.** "T31's 4 ft is the record until the room task settles it" - true; the room task decides it.
+7. **The next step is a measurement.** The linear form's farm and door spacing at the four seeds, with the constant at 7 ft.
 ## T92 - `make claims-triaged` reads a transcript's reply and never clears on an unread one (found working T31, 2026-10-19)
 
 ### T92 Approach (checklist part A)
@@ -489,6 +503,29 @@ Found by T31's claims round (amendment 6, a defect fixed where found - not a ran
 ### T95 Decisions
 
 **D117 - the leg routed as the lane it is.** `join_to`'s two `_route` calls take `gap=WEB_FABRIC_GAP`; its claim reads "joining leg's berth - <0246's drawing page>: routed the lane's 7 ft (`WEB_FABRIC_GAP`) off the fabric - the leg is drawn at the street's width, a lane, not a footpath".
+
+## T96 - a footpath's 7 ft, room first (the round arbiter's ruling on hour:385-approach-checklist@28; worked with T43)
+
+Opened by the ruling's `what`: before T32's ranking row, a task for `FOOTPATH_FABRIC_GAP` (4 ft, recorded on 0246 by T31) whose first
+route is more room; the footpath's tread-to-wall figure open in T43 is worked with it, not as a second row.
+
+### T96 Approach (checklist part A)
+
+1. **The goal, in the world.** A footpath keeps a lane's distance from the gardens it passes, and every farmhouse is still reached.
+2. **The constraints.** 0246: a lane's middle, a 3 ft footpath's included, keeps at least 7 ft clear of a garden fence, and a household's own way may run beside its own fence (T43 item 3). 0081 and 0247: a tread keeps 3 ft off a farmhouse wall (T43 item 1). The GM, 2026-10-12: room before packing. The GM, 2026-10-02: homesteads before lanes, never lanes first. The ruling: the 4 ft stays only labeled UNRESEARCHED with the trial as its trail.
+3. **Where each comes from.** 0246's 7 ft is O, a map drawing convention; the own-fence allowance is 0246's (O); 3 ft is 0081's and 0247's (O); the two rulings are the GM's (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (`make cohort N=1 SEED=<n>` with the constant at 7.0, reverted): cohort seeds 3, 4, 903 and 904 all the linear form, each leaving a farmhouse off the network (904 also breaks `undeckable`); with `DOOR_ROOM_FT` and `FOOTPATH_DOOR_OUT_FT` derived from the 7 ft (19 and 15 ft) the same farmhouses stay unreached at the same seats; seed 4's (1404, 3220) stands about 130 ft from the nearest way, its own threshing yard and garden beside its door (the refused manifest).
+5. **The order.** Why seed 4's way from its door is refused at 7 ft (the refused route's own reason), then the route that answers it, then the four seeds and the cohort at 7 ft.
+6. **The exits.** (a) refine an O number: T43 item 1's 3 ft is a tread-to-wall figure, not a fence figure - weighed there; (b) an exception: none named - nothing obstructs yet; (c) a new rule: the own-fence allowance 0246 attests - a household's own way held 7 ft off others' fences only; (d) more room: wider spacing between the linear form's farms, where (c) leaves a seed failing; (e) conform: the 4 ft kept, labeled UNRESEARCHED with this trial, only where (c) and (d) both fail.
+7. **The search smell.** None - a cause found, then one route.
+8. **The budget.** 3 h.
+9. **Done, measured.** One goal: `FOOTPATH_FABRIC_GAP` at 7 ft with the four seeds and the cohort passing, T31's 4 ft block taken out of 0246, and the claims checked IN-STEP; or, failing (c) and (d), the 4 ft relabeled UNRESEARCHED with both trials as its trail.
+10. **Before moving a constant.** `FOOTPATH_FABRIC_GAP` is read in `ways/track.py`, `ways/web.py`, `ways/bund.py`, `ways/serve.py` and `homesteads/row_rules.py` (measured 2026-10-19, a grep); `DOOR_ROOM_FT` and `FOOTPATH_DOOR_OUT_FT` are written from it by hand and move with it.
+11. **Before fitting things into room.** A footpath past others' fences: 7 + 1.5 + 1.5 + 7 = 17 ft between two fences; the nucleated form's growth gap is `MIN_WEB_GAP` (18 ft) already.
+
+### T96 Decisions
+
+**D118 - the routes in their order.** First (c): the household's own ground is exempt from its own way's fence gap, as 0246 attests (T43 item 3, which this decides with it); then (d) wider spacing in the linear form where a seed still fails; (e) only if both fail. `DOOR_ROOM_FT` and `FOOTPATH_DOOR_OUT_FT` are derived from the gap whichever route stands (derive, never pin).
 
 ## T11 - the close
 

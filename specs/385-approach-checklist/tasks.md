@@ -271,7 +271,10 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T94 make claims-checked reads a transcript's reply too (plan D116) [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 via make land-tooling; its test red without it, green with it
-- [ ] T95 A street's joining leg keeps the lane's 7 ft (row 841, found working T31; plan D117) [lands-open]
+- [x] T95 A street's joining leg keeps the lane's 7 ft (row 841, found working T31; plan D117) [lands-open]
+      research: rendering
+      verify: DONE. landed 2026-10-19 (gated, 3ff08b0a1 on main): join_to routes at WEB_FABRIC_GAP, claims IN-STEP, cohort-landing 54/54
+- [ ] T96 A footpath's 7 ft, room first (the round arbiter's ruling on hour:385-approach-checklist@28; worked with T43; plan D118) [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
