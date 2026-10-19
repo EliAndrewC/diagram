@@ -664,3 +664,10 @@ launched is still running, and no `make set-down F= WHY=` is recorded since its 
 The plan review struck the proposal's question escape (a "Shall I go on?" while the GM sleeps is the stop it exists for) and asked
 for the GM's words in the request. Two fixture slips in the suite (a start stamped ahead of the clock, a directory that is no
 read error). **The habit it changes:** stopping with work left is no longer a choice the session makes silently.
+
+## T72 - the retro row
+
+About 30 min. `ledger_owed.py --write-plan-reviews` writes the row of each owed plan review whose reply shows `make plan-verdict`
+recorded it (the review's point: no row naming a record that does not exist); `land-tooling` and `sync-with-main.sh done` run it
+first and commit the rows. Its first live run wrote T72's own review's row. **The habit it changes:** `make ledger-owed WRITE=`
+is left for the checks whose acted-on cell is the session's word.
