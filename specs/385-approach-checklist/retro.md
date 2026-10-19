@@ -1083,3 +1083,10 @@ About 35 min. T136 landed a claim the grammar cannot read ("CONVENTION <page>") 
 batch's first gate went red on it. The claim now cites its drawing page plainly, and the push's claims gate refuses a form problem
 in any changed file, reusing `form_problems` - which `claims-owed` already printed first, and which my truncated reading of that
 output had hidden. **The habit it changes:** read `claims-owed`'s head, not only its tail.
+
+## T139 - the retro row
+
+About 20 min. `make tick`'s landed check refused T137, whose files stood on main by the gated batch, because its earlier
+`land-tooling` run had failed; a failed run whose every named file now matches origin/main is landed, one that named none is
+still refused. Two review rounds: the first rightly blocked an undefined "riders" - now named, the review ledger alone.
+**The habit it changes:** none; a guard that misfired now judges by what is on main.

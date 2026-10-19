@@ -7533,26 +7533,32 @@
    "verdict": "CLEAR"
   },
   "T139": {
-   "section_sha256": "339517d848f7d14b6f27d21e83603e0fffe7a67db5c23d57ebe3a9397bf0e84a",
+   "section_sha256": "f6eafab7e05b2430d8cb68e8ad6b07d0531fa1cbf2f7222517d9f9abe52090a2",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "D150",
-     "summary": "landed_refusal no longer refuses a landed NOTE for a task whose last land-tooling run failed when every file that run named matches origin/main; it still refuses while any named file differs (Approach items 5, 6 and 9 state the same choice).",
+     "id": "D150a",
+     "summary": "landed_refusal no longer refuses a failed last land-tooling run when every file that run named matches origin/main; the tick passes.",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "why": "It writes an exception into accepted D98 ('a failed outcome refuses'), so it narrows. It is legitimate because applying D98 literally defeats its own purpose, which accepted D130 states as 'landed means on main'. Item 4 records a dated, measured case (2026-10-19, the T132+T125+T137 land-batch): T137's files all matched origin/main and the tick still refused. The exception keeps the refusal wherever a named file is off main, so the guard still does its job. It is also inside the GM's amendment 6 instruction to 'implement any obvious performance / tooling / process improvements along the way'."
+     "why": "This relaxes the accepted spec's D98 ('a failed outcome refuses'), so it is a narrowing of the spec's refusal, judged against the request. The guard's purpose (D98, D130 'landed means on main') is that a landed NOTE be true. Item 4's case, measured 2026-10-19, is one where the NOTE was true: every file was on origin/main, and the tick still refused. Applied literally, the rule refuses a true claim, which defeats its own purpose. The GM's own words also point this way: Amendment 10 says 'removing or simplifying a misfiring guard comes before adding one', and Amendment 8 says 'make our tooling do the thing correctly automatically every time'. The comparison against origin/main that carries the purpose is kept whole, and a file off main still refuses (item 9)."
     },
     {
-     "id": "D150-riders",
-     "summary": "D150's '(riders aside)': files the failed run named that count as 'riders' are left out of the on-main match, so a rider that is off main does not keep the refusal.",
+     "id": "D150b",
+     "summary": "A failed last run that named no file is still refused.",
+     "class": "within",
+     "why": "This keeps D98's refusal where there is nothing to compare against main. It removes the vacuous 'every named file matches' pass on an empty list, which was round 1's concern, and narrows nothing."
+    },
+    {
+     "id": "D150c",
+     "summary": "dev/review-ledger.md (D98's _RIDERS) is left out of the file comparison, as the block says D98's check already does.",
      "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "D98 as accepted checks every file in the run's row and excludes none. 'Riders' is defined nowhere in the block, the cited spec, the spec index or the request, and the block gives no reason for leaving them out. That makes it a second carve-out riding on the first one's justification, with nothing to show it is needed. If 'riders' means only the specs/ and dev/ records that D130 already exempts, D150 must say so; I will not fill in that meaning for the author. Fix: define the term in D150 by reference to D130's exclusion, or drop the clause."
+     "ruling": "LEGITIMATE",
+     "why": "This is one named file, now defined, which answers round 1's BLOCKED on the undefined 'riders aside'. The ledger is append-only and other sessions' rows move it on main, so comparing the task's copy with origin/main would refuse almost every landing whatever the task's work was. Applied literally, the comparison defeats the 'on main is landed' purpose. Leaving it out matches D130, which already leaves dev/ out of its 'landed means on main' check because it holds the run records a landing writes. Note: the bundle's D98 text does not mention _RIDERS, so the premise that D98's check already leaves the ledger out cannot be confirmed from the bundle. The ruling does not rest on it: on D130's precedent and the ledger's append-only nature it stands either way."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   }
  }
 }
