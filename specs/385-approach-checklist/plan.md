@@ -595,6 +595,28 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@34 (continue),
 8. **Every route measured before offering one?** No route is offered.
 9. **After a ruling: the step it names?** Yes - the ruling says go on with the tooling round, T117 to T119.
 
+## T117 - small engine fixes land together (amendment 10, the GM 2026-10-19)
+
+### T117 Approach (checklist part A)
+
+1. **The goal, in the world.** Two or three small engine fixes pay one gate and one landing cohort between them, not one each.
+2. **The constraints.** Amendment 10, the GM: "I would also like to implement all 3 of your suggestions" - the second, "batch the gate and the landing cohort across two or three small engine fixes". The gated route (`scripts/sync-with-main.sh done`: a green `make done`, `make cohort-landing`, the claims gate) stays the only way engine code lands. T113 (D130): a NOTE saying landed is refused while the task's work is off main. Every refusal `make tick` makes today still holds for each task of a batch. A test red without it.
+3. **Where each comes from.** The GM (G); the root CLAUDE.md's session-clones rules (O); T113 (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the session's transcripts, each landing command's duration): a gated landing costs about 15 min - `make done` 9.1 min (T102), `make cohort-landing` 4.1-5.8 min (T99, T109, T102), the push 2.8 min (T99) - paid once per engine task; `make tick` takes one task, and nothing names the batch: T96 and T98 landed together once (`where-time BY=tick` shows "T96+T98"), by hand.
+5. **The order.** `tick-task.py`'s refusals made a function a batch can ask before landing; a `make land-batch` that asks them of every task, runs the gated route once, then ticks each; the landed-refusal's message naming it; the test.
+6. **The exits.** (c) - a command that lands and ticks a batch; a practice written into CLAUDE.md alone was weighed and refused (the GM's rule: a tool, never a reminder).
+7. **The search smell.** None.
+8. **The budget.** 60 min.
+9. **Done, measured.** One goal: `make land-batch F=<n> T="<ids>" NOTE=...` refuses before landing if any task's tick would be refused, otherwise runs `scripts/sync-with-main.sh done` once and, on its success, ticks every task with the NOTE; a failed landing ticks none; `tests/tooling/` red without it.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T117 Decisions
+
+**D135 - one landing, every tick.** `tick-task.py`'s refusals (plan review, waits and marks, the arbiter's fix, the hour's checkpoint, the task's Approach) become one function, `refusal(root, d, task, note, landed=True)`, that `make tick` calls as now. A new `scripts/land-batch.py` (`make land-batch F= T="T1 T2" NOTE=`) asks it of every task with `landed=False` and refuses, naming each task and its refusal, before anything lands; then runs `scripts/sync-with-main.sh done` once; on exit 0 ticks each task with `landed in batch T1+T2: <NOTE>` (the landed refusal then asked of each, as `make tick` asks it); on a failed landing ticks none and says so.
+
+**D136 - the refusal names the batch.** `landed_refusal`'s message for engine work off main adds "or, with the next small fix, `make land-batch`".
+
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).

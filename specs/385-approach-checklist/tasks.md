@@ -330,8 +330,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T115 A per-task time report from the event log: each task's span from its task-start to its tick, and where it went (claims rounds, gate, landing cohort, plan reviews) - the numbers the GM's speed question was answered with by hand (amendment 10) [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 via land-tooling: make where-time BY=tick; T97 53 min as the hand count; test red without
-- [ ] T116 A change re-owes impl-drift only for the claim lines it touched, not every claim on the function: one edit to stage_web re-owed its 20 claims (amendment 10) [lands-open]
+- [x] T116 A change re-owes impl-drift only for the claim lines it touched, not every claim on the function: one edit to stage_web re-owed its 20 claims (amendment 10) [lands-open]
       research: rendering
+      verify: DONE. landed by land-tooling 2026-10-19; code triage before impl-drift (D133), owed logic in claims_owed.py (D134); test red without it
 - [ ] T117 The gate and the landing cohort batched across two or three small engine fixes: land them together under one green gate and one landing cohort, each task ticked at that landing (amendment 10) [lands-open]
       research: rendering
 - [ ] T118 No plan review for a wording-only task that decides nothing new - a claim relabel, a comment, a glossary entry - its section's decisions classed as wording by a rule the tick checks (amendment 10) [lands-open]
