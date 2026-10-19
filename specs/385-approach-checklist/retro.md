@@ -885,3 +885,10 @@ past the last house it serves; the 100 ft frame is only room before the trims) -
 listed as owing a triage, not a check, and its triage bundle came out empty: filed as T105. Twice an impl-drift went out beside the
 bundle step it needed, which had failed, and read a stale bundle. **The habit it changes:** never send a check in the same message
 as the step that builds its bundle.
+
+## T105 - the retro row
+
+About 20 min. A claim relabeled to cite a page rested on nothing at its last check, so `research_why` sent it to a triage that
+could never name it; `make claims-bundle OWED=1` then refused it. A claim citing a page its last check never read is now owed
+`research changed`; the triage rule stands for pages it was checked at. Live: no claim newly owed. **The habit it changes:** none
+needed - a relabeled claim is bundled by `OWED=1`.
