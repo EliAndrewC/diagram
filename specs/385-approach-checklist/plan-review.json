@@ -6694,21 +6694,21 @@
    "verdict": "CLEAR"
   },
   "T95": {
-   "section_sha256": "d16e4d3b9fdee84e187251bc8ff1149173d1721459e229520a450fd10ad70ab5",
+   "section_sha256": "797c4c69f0fe09a3b310aa9dc54ebbd8c2e1b5eb87d2b7ac782e156cbcbb6e02",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "T95 (task)",
-     "summary": "Row 841's defect, found by T31's claims round, is worked as its own task T95 and not counted as one of FR-020's ten ranking picks.",
+     "id": "D117",
+     "summary": "join_to's two _route calls take gap=WEB_FABRIC_GAP (the lane's 7 ft, 0246) instead of FOOTPATH_FABRIC_GAP (4 ft); the leg's claim cites 0246's 7 ft and states the leg is drawn at the street's width, a lane.",
      "class": "within",
-     "why": "FR-015 makes a second goal found inside a task into its own task. Amendment 7 asks for ten more claims fixed, and fixing this row outside the count leaves all ten (T31-T40) still owed, so nothing the GM asked for is reduced."
+     "why": "Applies an existing rule (0246: a lane keeps 7 ft off a garden fence) to a leg drawn at STREET_WIDTH, i.e. a lane. Nothing is relaxed or excepted; it is the conform exit, the ranking row's own stated fix, taken as a defect fixed where found under the ranking work FR-020 carries (amendment 7, 'pull in 10 more claims'). No constant's value moves."
     },
     {
-     "id": "D117",
-     "summary": "join_to's two _route calls take gap=WEB_FABRIC_GAP (7 ft, a lane) in place of FOOTPATH_FABRIC_GAP (4 ft), and its claim cites 0246's 7 ft and says the leg is drawn at the street's width, a lane.",
+     "id": "T95-exits (Approach item 6, the changed text)",
+     "summary": "Each of the checklist's exits judged in turn - refine an O number, an exception, a new rule, more room - and none taken; conform chosen because the leg is a lane and nothing obstructs the lane's 7 ft (cohort 16 of 16, fresh block 0 of 4 failed, measured 2026-10-19).",
      "class": "within",
-     "why": "This is row 841's fix as the block quotes it (the joining leg's berth at 0246's 7 ft off a garden fence, the claim citing 0246), with no carve-out. It changes one caller and moves no constant's value. Item 4 records how the drawn width and the cohort result were measured."
+     "why": "The change from the CLEAR text only answers the approved checklist more fully (the GM-approved proposal: 'Name at least three exits besides conform, and judge each'). Choosing conform with a measured reason narrows nothing the GM asked; it carves no exception, drops no rule, and preserves no behavior the request asked to change."
     }
    ],
    "verdict": "CLEAR"
