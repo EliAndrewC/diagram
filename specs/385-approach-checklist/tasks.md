@@ -305,6 +305,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       verify: DONE. landed 2026-10-19 via land-tooling: research_why owes a newly cited page's claim in full; test red without; live claims-owed unchanged
 - [ ] T106 A lane runs on about 30 ft past the last house it serves, as 0246 gives it: the trims end it level with its last house (web.stage_web#the web's frame - DRIFTED, found working T97, 2026-10-19) [lands-open]
       research: rendering
+- [ ] T107 0246's drawing page says the 7 ft both ways: its lane's room (3: 7 ft at each fence and a 4 ft tread, 18 ft - the edge) and its fence gap (16: to the middle) - settle which, and what the code reads (found working T101, 2026-10-19) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

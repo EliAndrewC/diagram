@@ -909,3 +909,9 @@ were laid and dropped by `settle_fragments` as earning nothing, the old door-dis
 door, the passes, the settle, its steps). The claims rounds converged 34 -> 20 -> 2 -> 1; the web's frame (lanes trimmed level
 with their last house, 0246 says ~30 ft past) is old behavior, filed as T106. **The habit it changes:** a check made stricter
 is run against the cohort before its claims round - it surfaces what the lax check hid.
+
+## T101 - the retro row
+
+About 15 min. `ACCESS_HALF_FT`'s comment called its 7 ft "a footpath's room between two steadings"; it is the corridor line's gap off
+each garden fence, the room between two steadings being `MIN_WEB_GAP` (18 ft). The claim re-checked IN-STEP. Its check noticed 0246
+measuring the 7 ft to the tread's edge in one block and to the middle in another: filed as T107. **The habit it changes:** none.

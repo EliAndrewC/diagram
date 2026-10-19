@@ -56458,12 +56458,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/access.py::ACCESS_HALF_FT#corridor room": {
-  "body": "85c773537ba34543",
+  "body": "7ebbf89af3f58436",
   "claim": "corridor room - DEVIATION how-our-maps-lay-a-clustered-settlements-lanes.drawing: 7 ft either side of the way's line, so a 3 ft tread's edge may pass 5.5 ft off a fence",
   "code": "dd1ceacbb2633039",
   "core": "2c48ea6cfc2004e2",
   "date": "2026-10-19",
-  "note": "matches §16's 7 ft to the middle, but the code comment calls the corridor \"a footpath's room between two steadings\", and §3 makes that room \"18 ft - 7 ft at each garden fence and a 4 ft tread between\" (half 18 = 9 ft, not 7). Either make the corridor 9 ft a side, or narrow the claim to say it is only the fence-to-middle gap and not the room between steadings. The page itself also disagrees on the tread: §3 says 4 ft, §16 says 3 ft",
+  "note": "7.0 ft from the line to each fence; the drawing page records this as a DEVIATION: \"measured from the fence to the middle of the lane, so the edge of a 3 ft footpath may pass 5.5 ft from the fence\"",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
   },
@@ -56472,7 +56472,7 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/access.py::AccessTree#every house reached by a path": {
   "code": "289bdf4c4a8d2980",
