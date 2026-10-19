@@ -131,3 +131,15 @@ def test_a_field_name_is_drawn_as_its_own_letter_spaced_markup() -> None:
     s.field_name_label("Upper Paddies", (200.0, 200.0, 500.0, 400.0))
     s.place_labels()
     assert any('letter-spacing="1.5"' in o and "Upper Paddies" in o for o in s.toplabels), "the field name in its own markup"
+
+
+def test_a_caption_seated_away_from_its_subject_draws_and_records_its_leader() -> None:
+    """Feature 392: the town and city captions that took a leader went with their code; a placement carrying one still draws
+    the line and records it (`caption_leaders`)."""
+    from l7r.diagram.labels.placer import Placement, Subject
+
+    s = _town()
+    p = Placement(300.0, 200.0, 0.0, ("Old Mill",), ((280.0, 195.0), (320.0, 195.0), (320.0, 205.0), (280.0, 205.0)), 2, 0, "S", 1.0, ((300.0, 205.0), (300.0, 260.0)))
+    s._draw_placement("Old Mill", Subject("point", ((300.0, 270.0),)), p, 9, False, "normal", "#33301E", None)
+    assert s.M["caption_leaders"] == [[300.0, 205.0, 300.0, 260.0, "Old Mill"]]
+    assert any("<line" in o for o in s.toplabels)
