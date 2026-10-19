@@ -509,25 +509,26 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@30 (continue),
 7. **The next step is a measurement.** The claim's triage, then its check.
 8. **Every route measured before offering one?** No route is offered.
 9. **After a ruling: the step it names?** Yes - the ruling says land T104, then do T100.
-## T105 - a claim that newly cites a page is owed its check, not a triage (found working T100, 2026-10-19)
+<!-- plan-archive: T105 to T100 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+## T99 - a scattered farm no channel reaches passes with its own well (found working T96, 2026-10-19)
 
-### T105 Approach (checklist part A)
+### T99 Approach (checklist part A)
 
-1. **The goal, in the world.** A claim relabeled to cite a page is judged against that page.
-2. **The constraints.** Feature 318's FR-016: a claim whose cited research moved owes only the triage of the changed blocks, unless a block it rested on is gone. Feature 316: a claim's verdict is recorded at the fingerprints its bundle read. A test red without it.
-3. **Where each comes from.** 318 (O), 316 (O).
-4. **Do they describe the world here?** Yes - measured 2026-10-19 (T100's two relabeled claims, `make claims-owed`, then a read of `claims.research_why`): an UNRESEARCHED claim relabeled to cite 0035, and another to cite 0246, were each listed `triage`; their triage bundle named no claim, and `make claims-bundle OWED=1` refused with "no such claim(s)". `research_why` sends a claim to triage when the blocks it rested on still stand, and a claim that rested on nothing always does.
-5. **The order.** `research_why` asks first whether the claim cites a page its last check did not read; then the test.
-6. **The exits.** (c) - a page the claim was never checked against is research changed; (e) conform - bundling such claims by name each time - refused: the tool would need remembering.
+1. **The goal, in the world.** On a map whose scattered farms draw channels, a farm the channel cannot reach is watered by a well of its own, and the check accepts it.
+2. **The constraints.** 0031's drawing page: "A farm no channel can reach has a well of its own instead. Where chance gives a scattered settlement channels, a farm the channel cannot be led to is given a well, so no farm goes without water." A claims check IN-STEP; a test red without it.
+3. **Where each comes from.** 0031's drawing page (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T96's impl-drift round on `row_rules.water_rules#a scattered farm's own water`: DRIFTED, then a read of `water_rules`): under `farm_water` channel the check flags every farm whose channel does not end in its frame (`farm_without_its_channel`), with no case for the well 0031 gives it instead.
+5. **The order.** `water_rules`' channel branch, its claim, the test, the cohort.
+6. **The exits.** (e) conform - the check takes 0031's rule as written.
 7. **The search smell.** None.
-8. **The budget.** 20 min.
-9. **Done, measured.** One goal: a claim whose pointers name a page absent from its row's `pages` is owed `research changed`, so `make claims-bundle OWED=1` bundles it; a claim citing only the pages it was checked against keeps the triage rule; `tests/tooling/test_claims_scoping.py` red without it.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: under `farm_water` channel, a farm with a channel ending in its frame, or with a private well in its frame, passes; one with neither is `farm_without_its_channel`; its claim cites 0031's rule and is IN-STEP; `tests/hamletgen/homesteads/` red without it; the cohort passes.
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
-### T105 Decisions
+### T99 Decisions
 
-**D123 - a new page is new research.** `claims.research_why` returns `research changed` when any page the claim now cites is not among the pages its last check read (its row's `pages`), before the triage test; feature 318's triage rule stands for every other moved page.
+**D124 - the channel, or the well instead.** In `row_rules.water_rules`, a channel-map farm passes when its channel ends in its frame or a private well stands in its frame; the claim reads "a scattered farm's own water - <0031's drawing page>: its channel ends in its frame, or, where no channel reaches it, its own well in its frame (a well off its way in on a `well` map)".
 
 ## T11 - the close
 

@@ -298,8 +298,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T104 A plan review the dispatch guard refused leaves no plan-section hold: T98's refused dispatch left a hold that blocked its own section's amendment an hour after its review returned (found working T98, 2026-10-19) [lands-open]
       research: rendering
       verify: DONE. hm_planhold.snapshot/restore: before each Bash/Write/Edit call every live plan hold's text is kept; after it, a changed held text is written back and the call refused, however the file was named (checks-hooks.sh after, PostToolUse); landed on main
-- [ ] T105 A claim relabeled to cite a page is owed impl-drift, not a triage: T100's two re-cited claims were listed 'triage', whose bundle came out empty, and OWED=1 refused to bundle them (found working T100, 2026-10-19) [lands-open]
+- [x] T105 A claim relabeled to cite a page is owed impl-drift, not a triage: T100's two re-cited claims were listed 'triage', whose bundle came out empty, and OWED=1 refused to bundle them (found working T100, 2026-10-19) [lands-open]
       research: rendering
+      verify: DONE. landed 2026-10-19 via land-tooling: research_why owes a newly cited page's claim in full; test red without; live claims-owed unchanged
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
