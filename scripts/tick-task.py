@@ -20,6 +20,7 @@ the ticked line and how many tasks remain open.
 
 from __future__ import annotations
 
+import json
 import os
 import re
 import subprocess
@@ -158,6 +159,38 @@ def checkpoint_hold(root: Path) -> str:
     return checkpoint.hold(root)
 
 
+#: what lands beside every run and moves on its own (append-only rows), so it is never compared with main
+_RIDERS = {"dev/review-ledger.md"}
+
+
+def landed_refusal(root: Path, feature: str, task: str, note: str) -> str:
+    """A NOTE saying "landed" (any case) while the task's last `make land-tooling` failed, or a file it named differs from
+    origin/main (feature 385 T79, plan D98; the round arbiter on hour:385-approach-checklist@25: T72 was ticked "landed" at 00:49
+    over a failed landing). A task with no run is not refused: it did not land through the tool, or lands with its feature."""
+    if not re.search(r"\blanded\b", note, re.I):
+        return ""
+    gd = subprocess.run(["git", "-C", str(root), "rev-parse", "--path-format=absolute", "--git-common-dir"], capture_output=True, text=True).stdout.strip()
+    log = Path(gd) / "land-tooling.jsonl" if gd else None
+    rows = []
+    for line in (log.read_text(encoding="utf-8").splitlines() if log and log.is_file() else []):
+        try:
+            r = json.loads(line)
+        except ValueError:
+            continue
+        if r.get("feature") == feature and r.get("task") == task:
+            rows.append(r)
+    if not rows:
+        return ""
+    last = rows[-1]
+    if last.get("outcome") != "landed":
+        return f"the NOTE says landed, but {task}'s last make land-tooling ended '{last.get('outcome')}' ({last.get('log')}) - land it, then tick"
+    subprocess.run(["git", "-C", str(root), "fetch", "-q", "origin"], capture_output=True)
+    for f in last.get("files") or []:
+        if f not in _RIDERS and subprocess.run(["git", "-C", str(root), "diff", "--quiet", "origin/main", "--", f], capture_output=True).returncode:
+            return f"the NOTE says landed, but {f} differs from origin/main - land it (make land-tooling FILES=...), then tick"
+    return ""
+
+
 def main(argv: list[str]) -> int:
     boxes = "--boxes" in argv
     from_env = "--note-from-env" in argv
@@ -192,6 +225,7 @@ def main(argv: list[str]) -> int:
     refusal = (waits_or_marks(root, d) or _arbiter().fix_hold(d) or checkpoint_hold(root)  # 379: an open tooling fix; 383: the hour
                or approach_gate.refusal(d, root, task))
 
+    refusal = refusal or landed_refusal(root, d.name, task, note)
     if refusal:
         print(f"tick: refused - {refusal}", file=sys.stderr)
         return 2

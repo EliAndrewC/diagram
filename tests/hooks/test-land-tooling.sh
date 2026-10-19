@@ -70,6 +70,9 @@ ok "the lint step is timed in the log" 'grep "^land-tooling: step lint [0-9.]* s
 printf 'y = 1\n' > "$C/scripts/e.py"; git -C "$C" add -A; git -C "$C" commit -qm "another script"
 LAND_TOOLING_LINT=false LAND_TOOLING_TOOLING="touch $T/tests-ran" LAND_TOOLING_GUARDS="touch $T/guards-ran" land scripts/e.py; rc=$?
 ok "a lint failure stops before the tests and the guard suites start (385 T67)" '[ "$rc" -ne 0 ] && [ ! -e "$T/tests-ran" ] && [ ! -e "$T/guards-ran" ]'
+ok "...and the run leaves its record, failed, for make tick (385 T79)" 'tail -1 "$C/.git/land-tooling.jsonl" | grep -q "\"outcome\": \"failed: " && tail -1 "$C/.git/land-tooling.jsonl" | grep -q "scripts/e.py"'
+LAND_TOOLING_LINT=true land scripts/e.py; rc=$?
+ok "...and a landed run records landed" '[ "$rc" -eq 0 ] && tail -1 "$C/.git/land-tooling.jsonl" | grep -q "\"outcome\": \"landed\""'
 setup
 
 echo "1e. the landing's lint keeps the gate's scope: an excluded file is not refused (385 T55)"
