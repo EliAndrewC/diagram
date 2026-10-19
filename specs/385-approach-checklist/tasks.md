@@ -302,6 +302,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T105 A claim relabeled to cite a page is owed impl-drift, not a triage: T100's two re-cited claims were listed 'triage', whose bundle came out empty, and OWED=1 refused to bundle them (found working T100, 2026-10-19) [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 via land-tooling: research_why owes a newly cited page's claim in full; test red without; live claims-owed unchanged
+- [ ] T106 A lane runs on about 30 ft past the last house it serves, as 0246 gives it: the trims end it level with its last house (web.stage_web#the web's frame - DRIFTED, found working T97, 2026-10-19) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

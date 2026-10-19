@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92, T93, T94, T95, T96, T97, T98, T99, T100, T102, T103, T104, T105
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92, T93, T94, T95, T96, T97, T98, T99, T100, T102, T103, T104, T105, T106
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -536,7 +536,10 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@30 (continue),
 as it never drops one recording `of`: 0246, "Every other farmhouse is served by a lane of its own. Its way leaves its dooryard" -
 measured 2026-10-19 (cohort seed 904 under D125: four row farms' 9 ft door paths were laid and kept until `settle_fragments`
 dropped them as earning nothing, the farms being within the 100 ft back-lane reach; with door paths spared, seed 904 and the
-cohort pass, 16 of 16).
+cohort pass, 16 of 16). The trim of a further row street reads the same predicate: it is kept to the street's point nearest the house of each farm
+the street serves without a path (`serve.street_anchors`, at a reach of a foot), where it was kept to a door within 12 ft -
+measured 2026-10-19 (T97's claims round: `web.stage_web#a further row street's end` DRIFTED, the trim and `street_arrives` asking
+different reaches; built, the pinned rows 901-904 and the cohort pass, 16 of 16).
 
 ### T97 part B (2026-10-19T09:52Z)
 
