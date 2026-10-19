@@ -8,7 +8,9 @@
 
 **Affects**: research record
 
-**Approved**: the GM, 2026-10-18, "you should treat features that I have asked to be filed as automatic approval, and therefore you should not ask in the future." (gm-assistant filed #6 at the GM's request, and announced it on #3 as pre-approved because the GM asked for it.)
+**Approved**: the GM, 2026-10-18, "you should treat features that I have asked to be filed as automatic approval, and therefore you should not ask in the future."
+
+gm-assistant filed #6 at the GM's request, and announced it on #3 as pre-approved because the GM asked for it.
 
 **Input**: `request.md` (EliAndrewC/diagram#6 and its comments, verbatim)
 
