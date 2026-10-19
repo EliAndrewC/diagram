@@ -273,48 +273,8 @@ Owed by the hour-25 step-back (hour:385-approach-checklist@25, `continue`).
 **D98 - the landing's record read at the tick.** `land-tooling.sh` appends `{task, files, outcome, utc}` to `<git dir>/land-tooling.jsonl` from an exit trap, so a run that dies early still leaves its row (outcome: the step it stopped at) (the task is the clone's active one, from `task-starts.jsonl`; `outcome` is "landed" or the step that failed). `tick-task.py`, when the NOTE matches `\blanded\b` in any case (`re.I` - the plan review: "Landed via make land-tooling" is the same claim), takes the task's last such row: a failed outcome refuses, naming the log; a landed one refuses where `git diff --quiet origin/main -- <file>` fails for a file in it (after a fetch), naming the file. A task with no row is not refused (it did not land through the tool, or lands with its feature).
 
 <!-- plan-archive: T80 to T78 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
-## T81 - pop-ups owed one check are checked by one agent (the GM-approved proposal 1, 2026-10-18)
-
-### T81 Approach (checklist part A)
-
-1. **The goal, in the world.** When several pop-ups owe the same check, one agent reads them, not one agent each.
-2. **The constraints.** The GM, 2026-10-18 (amendment 8): "I do like all of your other proposals"; change 1 of the step-back report: "Pop-ups that share a template are checked once as a group (tooling)". The GM's rule: a tool, never a reminder. Each pop-up keeps its own bundle and its own answer (T02, plan D12 - `make modal-bundle KIND="a b c"` already builds one bundle of several). A test red without it.
-3. **Where each comes from.** The GM (G); the batched bundle is T02's (O).
-4. **Do they describe the world here?** Yes - measured 2026-10-19 (the page sessions' transcripts, their Agent calls 17:00-21:30Z): T10's checks sent 90 pop-up agents, every one on a single pop-up's bundle (modal-form 38, modal-depiction 28, modal-research 24) - the batched form T02 built was never used, because `make record-owed` names one `make modal-bundle KIND=<one>` per unit. `make record-owed` takes 4.4 s and 3.3 s - measured 2026-10-19 (two warm runs in this clone, wall clock around the command, the second at a load of 4.62) - too slow for a hook that runs at every dispatch.
-5. **The order.** The batched line and its record in `record_owed.py`; the refusal in `hm_checks.dispatch`; then the tests.
-6. **The exits.** (c).
-7. **The search smell.** None.
-8. **The budget.** 60 min.
-9. **Done, measured.** One goal: `make record-owed` names, for each pop-up check owed by two or more unanswered pop-ups, one `make modal-bundle KIND="<them all>" FOR=<check>`, and a dispatch of that check on one of those pop-ups' single bundle is refused, naming it; `tests/tooling/test_record_owed.py` and `tests/hooks/test-pair-hooks.sh` red without it.
-10. **Before moving a constant.** n/a - none moves.
-11. **Before fitting things into room.** n/a - nothing is fitted.
-
-### T81 Decisions
-
-**D100 - the batch named and kept.** `record_owed.report` adds, after the units, one `batched: make modal-bundle KIND="<kinds>" FOR=<agent>` line per pop-up agent (modal-form, modal-depiction, modal-research) owed by two or more unanswered pop-ups (a triage-owed one, which goes to `make modal-triage` first, is left out), and writes those batches to `<git dir>/modal-batches.json` with the time.
-
-**D101 - a single pop-up's dispatch refused while its batch is owed.** `hm_checks.dispatch`, for a pop-up agent whose MANIFEST names one pop-up, reads `modal-batches.json`; where that pop-up is in a batch of two or more for the same agent, written within the last two hours, it refuses, naming the batched command. No file, or an older one, refuses nothing (fail open). The escape is `BATCH_OK="<reason>"` in the prompt, recorded like the guard's others.
-
-## T82 - an archive line in a task's section leaves it reviewed (found ticking T79, 2026-10-19)
-
-### T82 Approach (checklist part A)
-
-1. **The goal, in the world.** Archiving a finished section never makes a neighbor's review owed.
-2. **The constraints.** Feature 375 FR-044: the archive moves finished sections and voids nothing; its generated line is taken out of every block's digest already (`ARCHIVE_LINE`). A test red without it.
-3. **Where each comes from.** 375 (O); the defect is T63's auto-archive meeting the section check (amendment 6).
-4. **Do they describe the world here?** Yes - measured 2026-10-19 (`make plan-delta` diffed against its `earlier.md`): ticking T78 and T80 archived their sections and left `<!-- plan-archive: T80 to T78 moved ... -->` inside T79's section, after its Decisions; `task_current` compares the section raw, so T79's three reviewed blocks were owed again and its tick refused.
-5. **The order.** `task_current` takes the line out of both texts, then the test.
-6. **The exits.** (c).
-7. **The search smell.** None.
-8. **The budget.** 15 min.
-9. **Done, measured.** One goal: a CLEAR task section that differs from its reviewed text only by archive lines stays current; `tests/tooling/test_plan_gate.py` red without it.
-10. **Before moving a constant.** n/a - none moves.
-11. **Before fitting things into room.** n/a - nothing is fitted.
-
-### T82 Decisions
-
-**D102 - the archive line out of the section's comparison too.** `task_current` compares the section and its reviewed text with `ARCHIVE_LINE` taken out of both (as `block_digest` takes it out of a block), the digest match and the typo rule otherwise as now.
-
+<!-- plan-archive: T81 to T81 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
+<!-- plan-archive: T82 to T79 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T83 - a dictionary's claims keyed per entry (the GM 2026-10-18, step 5 of the approved order)
 
 ### T83 Approach (checklist part A)

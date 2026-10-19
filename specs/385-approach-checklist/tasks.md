@@ -230,10 +230,12 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T80 A quiet part B leaves its task's section reviewed (plan D99) [lands-open]
       research: rendering
       verify: DONE. quiet part Bs leave a section reviewed; landed, test_plan_gate green
-- [ ] T81 Pop-ups owed one check are checked by one agent (proposal 1, plan D100, D101) [lands-open]
+- [x] T81 Pop-ups owed one check are checked by one agent (proposal 1, plan D100, D101) [lands-open]
       research: rendering
-- [ ] T82 An archive line in a task's section leaves it reviewed (plan D102) [lands-open]
+      verify: DONE. record-owed names one batched bundle per pop-up check; the guard refuses a single dispatch of a batch; landed, tests green
+- [x] T82 An archive line in a task's section leaves it reviewed (plan D102) [lands-open]
       research: rendering
+      verify: DONE. archive lines leave a section reviewed; landed, test_plan_gate green
 - [ ] T83 A dictionary's claims keyed per entry (step 5 of the GM's order, plan D103, D104) [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
