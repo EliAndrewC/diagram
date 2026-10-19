@@ -725,3 +725,12 @@ out as a rider. **The habit it changes:** a tick cannot claim a landing that did
 
 About 10 min. `task_current` takes the archive's generated line out of a section and its reviewed text, as `block_digest` does for a
 block, so auto-archiving at a tick (T63) never re-owes a neighbor's review. **The habit it changes:** none needed.
+
+## T81 - the retro row
+
+About 50 min. `make record-owed` names one `make modal-bundle KIND="<all>" FOR=<agent>` per pop-up agent two or more unanswered
+pop-ups owe, and keeps the batches; the dispatch guard refuses that agent on a single pop-up of a batch while the record is fresh
+(BATCH_OK the escape). Measured first: T10's 90 pop-up agents were all single dispatches - T02's batched bundle existed and was
+never named. The plan named `test-pair-hooks.sh`, but `check-bundle-hooks.sh` runs `hm_checks` and its suite runs outside a
+repository, so the refusal's test is a unit test (`tests/tooling/test_batch_refusal.py`). **The habit it changes:** a session no
+longer chooses between one agent and ten.
