@@ -635,25 +635,26 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@35 (change-rou
 **D144 - the self-landed conflict named.** In `land-tooling.sh`'s D46 branch, before `git merge --abort`, the conflicted files (`git diff --name-only --diff-filter=U`) whose `git log -1 --format=%s origin/main -- <file>` begins `Tooling from <this clone's name>,` are named in the refusal: "<files> conflict only with this clone's own earlier landing - run scripts/sync-with-main.sh sync-in, then git checkout --ours <files> && git add <files> && git commit --no-edit, then land again". The merge is aborted and the landing refused as now; nothing is resolved by the tool.
 
 <!-- plan-archive: T123 to T114 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
-## T106 - a back lane's 30 ft is the room it is laid in, then trimmed like every end (found working T97, 2026-10-19)
+<!-- plan-archive: T106 to T97 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+## T108 - the yard's 7 ft claimed apart from the garden's (carried by the claims gate, FR-013)
 
-### T106 Approach (checklist part A)
+### T108 Approach (checklist part A)
 
-1. **The goal, in the world.** 0246's drawing page and the code say the same thing about how far a lane runs past the last house it serves.
-2. **The constraints.** 0246's drawing page, its general rule: "a lane end that reaches nothing is pulled back to the last house it serves. No page we read says how far a lane ran past its last house ... so the rule is a GUESS"; its back-lane bullet: "each runs only along the houses it serves, and about 30 ft past the last of them". The 2026-09-27 tweak (commit 1aa98b076) that cut a house-served end at the house's closest approach after Inashiro's spine walked 45 ft past its last farmhouse into the grove - the GM's complaint, recorded in the commit only in the session's paraphrase (a road to nowhere), so not cited as his ruling. Every rendering decision labeled. The record checks and the claims check.
-3. **Where each comes from.** 0246's drawing page (O); the 2026-09-27 tweak (O); the root CLAUDE.md's research rules (O).
-4. **Do they describe the world here?** Yes - measured 2026-10-19 (T97's claims round, `web.stage_web#the web's frame` DRIFTED: "`tidy_lane_ends` -> `_trim_to_service` -> `_stop_at_closest_approach` cuts a house-served end back to its closest approach to the last house, about 0 ft past"; then a read of 0246's page and of `stage_web`): the back lane is laid with a 30 ft pad past its last house (`stage_web`'s pad 30, the comment on 0246's bullet), and the general trim then pulls each end back to the last house it serves - so the bullet describes the room the lane is laid in, and the page's own general rule, a GUESS, is what the map draws.
-5. **The order.** 0246's back-lane bullet reworded to the laying room and the trim; the frame claim cites the general rule; the record checks and the claims check.
-6. **The exits.** (a) refine an O number: n/a - no source gives the distance; (c) a new rule: overrun the trim by 30 ft - weighed and refused: the 30 ft is a GUESS the page's own general rule contradicts, and it would put back the 2026-09-27 lane into the grove; (e) conform the record to the code - chosen: the page says what the map draws, and its general GUESS stands.
+1. **The goal, in the world.** The two claims of the 7 ft foul margin say which half 0246 sets and which half no page sets.
+2. **The constraints.** 0246's drawing page sets the 7 ft gap only from another household's garden fence; `law.span_walkable#a span off a threshing yard` already labels the yard's 7 ft UNRESEARCHED ("no page sets a gap from a yard"). Every rendering decision labeled. The claims check.
+3. **Where each comes from.** 0246's drawing page (O); the sibling claim (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the claims index: `law.fouls_fabric#foul margin` and `settle.fouled_segment#off another household's yard or garden` NEEDS-RESEARCH, each "the yard part should be UNRESEARCHED, as span_walkable's claim already says").
+5. **The order.** Each claim split in two, its garden half on 0246, its yard half UNRESEARCHED; the claims check.
+6. **The exits.** (e) conform the claims to the page and to their sibling; a research pass for a yard gap was weighed and refused here (the sibling has stood UNRESEARCHED; a pass is the open-questions list's to run).
 7. **The search smell.** None.
-8. **The budget.** 30 min with its checks.
-9. **Done, measured.** One goal: 0246's back-lane bullet says a back lane is laid about 30 ft past the last house it serves and its end then pulled back to that house as every end reaching nothing is; `web.stage_web#the web's frame` cites that, IN-STEP; record checks and claims check pass; no engine token changes.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: the two claims each split into a garden half citing 0246 and a yard half UNRESEARCHED; the claims check IN-STEP; no engine token changes.
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
-### T106 Decisions
+### T108 Decisions
 
-**D146 - laid 30 ft past, trimmed to the last house.** 0246's back-lane bullet "each runs only along the houses it serves, and about 30 ft past the last of them;" becomes "each is laid along the houses it serves and about 30 ft past the last of them - the room it is cut in - and its end is then pulled back to the last house it serves, as every lane end that reaches nothing is;". The claim `web.stage_web#the web's frame` reads "research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a back lane is laid about 30 ft past the last house it serves and its end then pulled back to that house - the frame (`BUNDLE_PITCH` ...) is only the room the cuts are laid in, and the trims (`tidy_lane_ends`) bring each end back to the last house it serves".
+**Wording only.** Two claims split by what their pages set: `law.fouls_fabric#foul margin` and `settle.fouled_segment#off another household's yard or garden` each keep their garden half on 0246 and gain a yard half labeled UNRESEARCHED, in the sibling's words.
 
 ## T11 - the close
 

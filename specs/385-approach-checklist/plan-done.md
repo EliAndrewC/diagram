@@ -2988,3 +2988,24 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@32 (continue),
 
 **D145 - through its amendment.** `plan_bundle._QUALIFIED` takes, between the feature number (and its `'s` or comma) and the optional `plan`, an optional `amendment <n>` with its own comma, then an optional `(`: `(\d{3})(?:'s|,)?\s+(?:amendment\s+\d+,?\s+)?\(?(?:plan\s+)?(<id>)`.
 
+<!-- plan-archive: archived 2026-10-19 -->
+## T106 - a back lane's 30 ft is the room it is laid in, then trimmed like every end (found working T97, 2026-10-19)
+
+### T106 Approach (checklist part A)
+
+1. **The goal, in the world.** 0246's drawing page and the code say the same thing about how far a lane runs past the last house it serves.
+2. **The constraints.** 0246's drawing page, its general rule: "a lane end that reaches nothing is pulled back to the last house it serves. No page we read says how far a lane ran past its last house ... so the rule is a GUESS"; its back-lane bullet: "each runs only along the houses it serves, and about 30 ft past the last of them". The 2026-09-27 tweak (commit 1aa98b076) that cut a house-served end at the house's closest approach after Inashiro's spine walked 45 ft past its last farmhouse into the grove - the GM's complaint, recorded in the commit only in the session's paraphrase (a road to nowhere), so not cited as his ruling. Every rendering decision labeled. The record checks and the claims check.
+3. **Where each comes from.** 0246's drawing page (O); the 2026-09-27 tweak (O); the root CLAUDE.md's research rules (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T97's claims round, `web.stage_web#the web's frame` DRIFTED: "`tidy_lane_ends` -> `_trim_to_service` -> `_stop_at_closest_approach` cuts a house-served end back to its closest approach to the last house, about 0 ft past"; then a read of 0246's page and of `stage_web`): the back lane is laid with a 30 ft pad past its last house (`stage_web`'s pad 30, the comment on 0246's bullet), and the general trim then pulls each end back to the last house it serves - so the bullet describes the room the lane is laid in, and the page's own general rule, a GUESS, is what the map draws.
+5. **The order.** 0246's back-lane bullet reworded to the laying room and the trim; the frame claim cites the general rule; the record checks and the claims check.
+6. **The exits.** (a) refine an O number: n/a - no source gives the distance; (c) a new rule: overrun the trim by 30 ft - weighed and refused: the 30 ft is a GUESS the page's own general rule contradicts, and it would put back the 2026-09-27 lane into the grove; (e) conform the record to the code - chosen: the page says what the map draws, and its general GUESS stands.
+7. **The search smell.** None.
+8. **The budget.** 30 min with its checks.
+9. **Done, measured.** One goal: 0246's back-lane bullet says a back lane is laid about 30 ft past the last house it serves and its end then pulled back to that house as every end reaching nothing is; `web.stage_web#the web's frame` cites that, IN-STEP; record checks and claims check pass; no engine token changes.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T106 Decisions
+
+**D146 - laid 30 ft past, trimmed to the last house.** 0246's back-lane bullet "each runs only along the houses it serves, and about 30 ft past the last of them;" becomes "each is laid along the houses it serves and about 30 ft past the last of them - the room it is cut in - and its end is then pulled back to the last house it serves, as every lane end that reaches nothing is;". The claim `web.stage_web#the web's frame` reads "research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a back lane is laid about 30 ft past the last house it serves and its end then pulled back to that house - the frame (`BUNDLE_PITCH` ...) is only the room the cuts are laid in, and the trims (`tidy_lane_ends`) bring each end back to the last house it serves".
+

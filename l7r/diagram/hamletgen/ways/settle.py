@@ -159,7 +159,8 @@ def fouled_segment(
 
     Research:
         no tread on a farmhouse - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html
-        off another household's yard or garden - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the line within `WEB_FABRIC_GAP`, 7 ft
+        off another household's garden - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the line within `WEB_FABRIC_GAP`, 7 ft
+        off another household's yard - UNRESEARCHED: the garden fence's 7 ft (`WEB_FABRIC_GAP`) held off a yard too; no page sets a gap from a yard
         no long leg through a building - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `law.breaks_through`
         off the fixtures - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its own household's too
         what the overlap matrix forbids - NONE: each pair is claimed in the matrix"""

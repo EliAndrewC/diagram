@@ -306,8 +306,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T105 A claim relabeled to cite a page is owed impl-drift, not a triage: T100's two re-cited claims were listed 'triage', whose bundle came out empty, and OWED=1 refused to bundle them (found working T100, 2026-10-19) [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 via land-tooling: research_why owes a newly cited page's claim in full; test red without; live claims-owed unchanged
-- [ ] T106 A lane runs on about 30 ft past the last house it serves, as 0246 gives it: the trims end it level with its last house (web.stage_web#the web's frame - DRIFTED, found working T97, 2026-10-19) [lands-open]
+- [x] T106 A lane runs on about 30 ft past the last house it serves, as 0246 gives it: the trims end it level with its last house (web.stage_web#the web's frame - DRIFTED, found working T97, 2026-10-19) [lands-open]
       research: rendering
+      verify: DONE. landed 2026-10-19 by sync-with-main done (DIRECT, no engine token); 0246's back-lane bullet and the frame claim say laid 30 ft past then trimmed to the last house (D146); record checks clean, claims IN-STEP; T124-T133 filed
 - [x] T107 0246's drawing page says the 7 ft both ways: its lane's room (3: 7 ft at each fence and a 4 ft tread, 18 ft - the edge) and its fence gap (16: to the middle) - settle which, and what the code reads (found working T101, 2026-10-19) [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 (direct, record only): 0246's new block says the room counts its 7 ft to the tread's edge and the gap to the middle; record checks and pop-ups clean; 48 of 51 claims IN-STEP, the rest carried (T108)

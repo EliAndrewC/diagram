@@ -885,7 +885,8 @@ def fouls_fabric(pts: Poly, width: float, houses: Sequence[Mapping[str, Any]], f
     threshing yard or garden (`_crosses_fabric`)? `fabric`: `_homestead_polys`'; a door path is exempt from its OWN (`own`).
     Research:
         nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no tread on another household's yard or bed
-        foul margin - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the line within 7 ft of another's yard or bed"""
+        foul margin - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the line within 7 ft of another household's garden
+        foul margin off a yard - UNRESEARCHED: the garden fence's 7 ft (`WEB_FABRIC_GAP`) held off another household's threshing yard too; no page sets a gap from a yard"""
     if house_hit(pts, width, houses):
         return True
     theirs = [poly for poly, owner, kind in fabric if kind in ("threshing_yards", "gardens") and (own is None or owner != own)]
