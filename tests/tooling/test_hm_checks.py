@@ -178,6 +178,26 @@ def test_a_new_source_s_bundle_is_a_first_reading_of_its_notes(tmp_path: pathlib
     assert hc.dispatch(st, "w", "source-reader", "/m", MANIFEST, 9, root) == "" and st["dispatches"]["w"]["notes"] == []
 
 
+def test_new_sources_sent_together_are_first_readings_not_rounds(tmp_path: pathlib.Path) -> None:
+    """The round arbiter on round:source-reader|q:0260@8: eight source bundles sent at once each found no reading recorded (marks
+    apply at launch), so each first read was counted a round. Notes of the unit's dispatches still in flight count as read."""
+    root = _clone(tmp_path)
+
+    def src(key: str) -> str:
+        return f"# Check bundle - source {key}\n\nowed-checks: source-reader\nunit: source-reader:0105#{key} f\n"
+
+    st: dict = {}
+    for i, key in enumerate("abcdefgh"):
+        assert hc.dispatch(st, f"p{i}", "source-reader", "/m", src(key), i, root) == "", key
+    for i in range(8):
+        _read(st, f"p{i}")
+    hc.answered(st, "source-reader", ["q:0105"])
+    assert st["rounds"].get("source-reader|q:0105", 0) == 1, "eight first reads sent together are one round"
+    assert hc.dispatch(st, "again", "source-reader", "/m", src("a"), 9, root) == ""
+    _read(st, "again")
+    assert st["rounds"]["source-reader|q:0105"] == 2, "re-reading a note already read is a round"
+
+
 def test_a_dispatch_another_guard_refused_never_freezes_the_page() -> None:
     st: dict = {}
     hc.dispatch(st, "t1", "quote-check", "/m", MANIFEST, 0)

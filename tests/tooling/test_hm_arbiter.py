@@ -503,6 +503,18 @@ def test_a_capped_round_names_what_owes_it(tmp_path: pathlib.Path, monkeypatch: 
     assert "names moved - NO changed line in `owes-round.diff` names `choice/x`" in lines, "each owe says whether the diff shows its cause"
 
 
+def test_the_owes_round_diff_starts_at_each_owing_keys_own_last_read() -> None:
+    """The round arbiter on round:source-reader|q:0262@8: the diff began at the unit's last dispatch (a read of another key) and
+    hid a change made to the owing key after its own clean round."""
+    import types
+
+    rounds = [{"t": 100.0, "notes": ["nagaya"]}, {"t": 200.0, "notes": ["izakaya"]}]
+    owing = [types.SimpleNamespace(subject="0262#nagaya")]
+    assert ab.key_since(rounds, owing, 200.0) == 100.0, "from nagaya's own read, not izakaya's"
+    assert ab.key_since(rounds + [{"t": 300.0, "notes": []}], owing, 300.0) == 300.0, "a whole-page round read every key"
+    assert ab.key_since(rounds, [types.SimpleNamespace(subject="0262")], 200.0) == 200.0, "a page unit keeps the unit's start"
+
+
 def test_each_owe_says_whether_the_rounds_diff_shows_its_cause() -> None:
     """The round arbiter's tooling fix on 0219 (feature 374 wave 122): translation-check was owed on a note the diff held only
     as context, and the bundle did not say so - every owed unit now carries whether a changed line names it."""
