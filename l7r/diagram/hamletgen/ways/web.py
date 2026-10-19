@@ -18,7 +18,7 @@ from ..cluster import _arm_crossing_accidental
 from ..consts import (
     BUNDLE_PITCH,
     CLUSTER_SPAN_FACTOR,
-    FOOTPATH_FABRIC_GAP,
+    DOOR_STEP_FT,
     LANE_CLEARANCE,
     LANE_SKELETONS_BY_WATER,
     MIN_WEB_GAP,
@@ -607,7 +607,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         web lanes routed round the households' reserved wood seats as fabric - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: every pass clips and routes round each reserved wood seat by the copse's lane buffer, as it does a steading; no page read shows a lane through a household's grove
         row streets laid - research/questions/0033-row-villages-resson.drawing.html
         every farmhouse served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every farmhouse but the few reached across a neighbor's land, which `checks.unreached_houses` counts reached through their neighbor's chain
-        a row farm's door point - UNRESEARCHED: set 8 ft past its yard (`front_door` at FOOTPATH_FABRIC_GAP + 4), where its street's trim and arrival are judged from
+        a row farm's door point - UNRESEARCHED: set 8 ft past its yard (`front_door` at `DOOR_STEP_FT`), where its street's trim and arrival are judged from
     """
     _pass("cut")
     """STAGE 5b: the LANE WEB - the lanes that make every farmhouse reachable.
@@ -887,7 +887,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         tidy_lane_ends(s, list(plan.envelope), streets=True)
         # ...and a further street ends at its outermost joint, not past its last farm's path - or its last farm's door, where
         # that stood within the arrival reach and so took no path; the first runs on off the map at both ends as the road (0033)
-        _doors = [d for h in s.M.get("houses") or [] if (d := front_door(h, FOOTPATH_FABRIC_GAP + 4.0)) is not None]
+        _doors = [d for h in s.M.get("houses") or [] if (d := front_door(h, DOOR_STEP_FT)) is not None]
         trim_streets(s, _TOUCH_GAP, _doors, STEADING_ARRIVAL_FT)
     s.M["meta"]["field_path"] = a_way_onto_the_bund(s)
     s.M["meta"]["lane_web"] = plan.lane_web

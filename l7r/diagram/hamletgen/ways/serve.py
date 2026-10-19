@@ -18,6 +18,8 @@ from l7r.diagram.settlement._geom.primitives import seg_dists
 
 from ..consts import (
     BUNDLE_PITCH,
+    DOOR_FIXTURE_CLEAR_FT,
+    DOOR_STEP_FT,
     FOOTPATH_FABRIC_GAP,
     WEB_FABRIC_GAP,
     WEB_HARD_GAP,
@@ -436,7 +438,7 @@ def own_street(h: Mapping[str, Any], streets: Sequence[Sequence[tuple[Pt, Pt]]])
     Research: a row farm fronts its street - research/questions/0033-row-villages-resson.drawing.html: the nearest to its door"""
     if not streets:
         return None
-    hx, hy = front_door(h, FOOTPATH_FABRIC_GAP + 4.0) or (float(h["x"]), float(h["y"]))
+    hx, hy = front_door(h, DOOR_STEP_FT) or (float(h["x"]), float(h["y"]))
     return min(range(len(streets)), key=lambda k: min((seg_dist(hx, hy, a, b) for a, b in streets[k]), default=float("inf")))
 
 
@@ -483,11 +485,11 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
     for h in list(s.M.get("houses", [])):
         if h.get("reached_across"):
             continue  # reached across its neighbor's yard: a household with no way of its own (feature 317, `rolling/passage.py`)
-        door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
+        door = front_door(h, DOOR_STEP_FT)
         if door is not None:
             # ...clear of everything the router keeps off, not the fixtures alone: stepped toward its own well, a door stood in
             # the router's gap off the wellhead and no route left it (Mizuguchi, three farms)
-            door = door_off_fixtures(door, (float(h["x"]), float(h["y"])), [*walls, *hard], FOOTPATH_FABRIC_GAP + 1.0, arrives=_arrives_at(h, steadings))
+            door = door_off_fixtures(door, (float(h["x"]), float(h["y"])), [*walls, *hard], DOOR_FIXTURE_CLEAR_FT, arrives=_arrives_at(h, steadings))
         streets = [
             [(tuple(a), tuple(b)) for a, b in zip(ln["pts"], ln["pts"][1:], strict=False)] for ln in s.M.get("lanes") or [] if ln.get("street") and ln.get("street_index") is not None
         ]  # a row's own street, not a join
@@ -498,7 +500,7 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
         # ...FROM THE FRONT DOOR, ELSE A FLANK OF THE DOORYARD (`access.doors_of`, the corridors' own doors): a far-row farm
         # fronts its holding, away from its street, and with its grove on the street's side the front had no way round it
         # the law would keep (cohort seed 904: two farms left unreached)
-        doors = [door, *(door_off_fixtures(d, (float(h["x"]), float(h["y"])), [*walls, *hard], FOOTPATH_FABRIC_GAP + 1.0, arrives=_arrives_at(h, steadings)) for d in flank_doors(h))]
+        doors = [door, *(door_off_fixtures(d, (float(h["x"]), float(h["y"])), [*walls, *hard], DOOR_FIXTURE_CLEAR_FT, arrives=_arrives_at(h, steadings)) for d in flank_doors(h))]
         # A FLANK ONLY AS THE FALLBACK (amendment 8; since amendment 9 a preference, FR-019's door clause dropped): the front first;
         # a flank facing no band of the farm's own grove, with open ground between it and the front door, only where no
         # lawful path leaves the front - recorded on the lane (`from_flank`) and on the map (`meta.door_flanks`)

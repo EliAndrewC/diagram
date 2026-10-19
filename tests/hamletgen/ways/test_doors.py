@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from l7r.diagram.hamletgen.consts import FOOTPATH_FABRIC_GAP
+from l7r.diagram.hamletgen.consts import DOOR_STEP_FT, FOOTPATH_FABRIC_GAP
 from l7r.diagram.hamletgen.ways.serve import DOOR_REACH_FT, front_door, lay_door_paths
 from l7r.diagram.settlement import Settlement, seg_dist
 from l7r.diagram.settlement.homestead_parts.grove_sides import bundle_turn
@@ -16,7 +16,7 @@ def _farm(x: float, y: float, sides: int = 2) -> dict:
 
 def test_the_front_door_is_past_the_yard_on_the_open_side() -> None:
     h = _farm(500.0, 400.0)
-    door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
+    door = front_door(h, DOOR_STEP_FT)
     assert door is not None and door[1] > h["geom"]["yard"][1] + h["geom"]["yard"][3] / 2, "south of the yard, the lee front"
     assert front_door({"x": 0.0, "y": 0.0, "geom": {}}, 8.0) is None, "a farm with no grove of its own has no front door here"
 
@@ -34,7 +34,7 @@ def test_a_slanted_front_takes_its_door_just_past_the_yard_edge() -> None:
 
 def test_a_ring_s_door_lines_up_with_its_way_in() -> None:
     h = _farm(500.0, 400.0, sides=4)
-    door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
+    door = front_door(h, DOOR_STEP_FT)
     halves = [r for r, (f, _d) in zip(h["geom"]["groves"], h["geom"]["grove_faces"], strict=True) if tuple(f) == (0, 1)]
     assert door is not None and len(halves) == 2
     lo, hi = sorted(halves)
@@ -47,7 +47,7 @@ def test_a_door_far_from_the_lanes_gets_a_footpath_to_them() -> None:
     h = _farm(700.0, 400.0)
     s.M["houses"] = [h]
     s.M["lanes"] = [{"pts": [[100.0, 700.0], [1300.0, 700.0]], "w": 6, "connector": True}]
-    door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
+    door = front_door(h, DOOR_STEP_FT)
     assert door is not None and seg_dist(door[0], door[1], (100.0, 700.0), (1300.0, 700.0)) > DOOR_REACH_FT
     assert lay_door_paths(s, [], [], []) == 1
     segs = [(a, b) for ln in s.M["lanes"] for a, b in zip(ln["pts"], ln["pts"][1:], strict=False)]

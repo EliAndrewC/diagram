@@ -26,7 +26,7 @@ from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.homestead_parts.grove_sides import grove_faces
 from l7r.diagram.settlement.rolling.dispersed import LANE_ROOM_FT
 
-from ..consts import WIND_VECTORS, Poly, Pt
+from ..consts import DOOR_STEP_FT, WIND_VECTORS, Poly, Pt
 from ..plan import SitePlan
 
 FIELD_KEEP_FT = 24.0
@@ -269,13 +269,15 @@ def holding_clear(quad: Sequence[Pt], hard: Any, boxes: Sequence[tuple[float, fl
     return largest_ring(clipped)
 
 
-FOOTPATH_DOOR_OUT_FT = 12.0
-"""How far past the yard's far edge a farm's front door stands (`ways/serve.front_door`: a footpath's gap plus 4 ft, less
-the fraction of a foot the frame's pad differs by) - the door `door_clear` tests."""
+FOOTPATH_DOOR_OUT_FT = DOOR_STEP_FT + 4.0
+"""How far past the yard's far edge a farm's front door stands (`ways/serve.front_door`: the door's step, `DOOR_STEP_FT`,
+and the 4 ft this figure held over it before feature 385 T96 derived it, less the fraction of a foot the frame's pad
+differs by) - the door `door_clear` tests."""
 
 DOOR_ROOM_FT = 16.0
-"""The room a farm's front door needs off the hard ground for a way to start from: a footpath's fabric gap and most of the
-router's cell (`WAY_IN_FT`'s measurement) - a map drawing convention.
+"""The room a farm's front door needs off the hard ground for a way to start from: the door's own standing room and most
+of the router's cell (`WAY_IN_FT`'s measurement) - a map drawing convention. The door it starts from is set by `DOOR_STEP_FT`
+and kept `DOOR_FIXTURE_CLEAR_FT` off the farm's own fixtures (feature 385 T96), not by the footpath's fence gap.
 
 Research: door room - NONE: 16 ft, a routing tolerance a way needs to start (called a map drawing convention above)
 """
