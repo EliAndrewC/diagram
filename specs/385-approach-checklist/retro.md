@@ -678,3 +678,10 @@ About 20 min. `plan_gate.lands_open_appended` puts a `**Lands open**:` line back
 in order, so `make task-add`'s line edit owes no review; a reorder, a dropped or a repeated id still does. The first plan read the
 line as a set, which the review blocked (a reorder would have passed). The test runs on task-add's own output, as the review asked.
 **The habit it changes:** none needed.
+
+## T77 - the retro row
+
+About 35 min. `make where-time F= [SINCE=]` prints the step-back's two tables from the event log, booking every gap from a Stop to
+the session's next prompt as "between turns" - the column the overnight stall needed - however many hook events fall inside. The
+plan review asked for the rule's provenance (ours) and the wake premise measured (a notification fires the prompt hooks). One
+expectation in the test was my arithmetic, not the code. **The habit it changes:** a step-back's tables are one command.
