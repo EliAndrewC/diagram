@@ -78,4 +78,21 @@ ehime-kenshi-joka-shokunin, kawakami-1992-shrine-headman.
   ftInterval 400); the search index is the viewer koma minus one for 下 and equal to it for 上.
 - The GM's download `ruiju-kinsei-fuzokushi-ge-ndl991467.pdf` (433 MB) is still in academic-sources: `make archive-inbox`
   refuses it as over GitHub's 100 MB limit. It was read for 下's salt and wage hits; it needs splitting or an LFS decision.
-- No source-reader or quote-check has run yet: session 2's brief (s1-check.md) owns the checks.
+## Checks run in session 1
+
+- The brief (s1-check.md) names three questions; this session revised four - 0275 is added (its Edo pair came from the
+  Morisada search).
+- source-reader ran on all four new sources, from bundles with the page images, and is recorded (`make record-checked`).
+  Its findings were applied: 0275's Jinrin kinmo zui passage keeps its "or"; 0276's polisher no longer says "the three
+  cities" or "itinerant", and 蓋 is "Indeed"; 0273 and the 十之二 entry say "an official inquiry", not the city
+  magistrate, "brokers" and "their buyers", not "shops", and drop the 1851 frame; 0276 dates Hirai's wage "the Joo era
+  (1652-1655)" with note 5 quoted, and the 1656 carpenters at 1.7-1.8 a man-day; 0277 says "nearly all" rows have months.
+- Oishi's reader could not see the 1820-1834 rows (p. 73's top half was not in its bundle); this session read them
+  (6,400-6,820, inside the stated range). A re-check needs `OI-05-h0`, regenerated with
+  `pdftoppm -f 5 -l 5 -r 220 -png <the PDF> OI && convert OI-05.png -crop 100%x50% +repage OI-05-h%d.png`.
+- Page images were not committed (Oishi and Hirai are in copyright). The scripts that make them are in
+  `specs/402-money-open-leads/measure/`: `ft.sh` (NDL full-text search, `ft.sh <pid> <bundle id> <term>`), `shot.py`
+  (a viewer screenshot per koma), `shot2.py` (koma 88's four double-resolution clips), run with `/usr/bin/python3`
+  (playwright). Bundle ids: 991466 `45a5a644-ed77-472c-b3c1-fa0c40e9023f`, 991467 `a095a11b-e2e7-49cc-9c01-0005f73e7d02`.
+- Still owed for session 2: quote-check, record-format, intro-check (0273, 0277 intros), source-applicability on the four
+  write-ups, translation-check on the pairs `make record-owed` lists.
