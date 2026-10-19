@@ -35,6 +35,7 @@ import hashlib
 import json
 import os
 import re
+import subprocess
 import sys
 import time
 from collections.abc import Iterator, Mapping
@@ -763,6 +764,8 @@ def _handle(mode: str, payload: Mapping[str, Any], path: Path, now: float) -> st
                     back = oscillation(vs)
                     if back:
                         hm_arbiter.trip(root, f"reversal:{s}@{len(vs)}", "reversal", s, f"{s}: a block dropped earlier is back - \"{back}...\"", now)
+        if not escaped("BATCH_OK", prompt) and (held := batch_refusal(root, check, text, now)):
+            return held
         tid = str(payload.get("tool_use_id") or now)
         out = dispatch(state, tid, check, manifest, text, now, root, freeze_ok, arbiter_ok)
         if not out and tid.startswith("wave:"):  # a check-wave unit: paired at its return by its prompt (plan D48)
@@ -829,10 +832,37 @@ def _close(path: Path | None, state: dict[str, Any], subject: str, reason: str, 
     return 0
 
 
+#: what `make record-owed` keeps of its batched lines (feature 385 T81, plan D100), and how long it is trusted
+BATCHES, BATCHES_FRESH_S = "modal-batches.json", 7200
+_POPUP_AGENTS = ("modal-form", "modal-depiction", "modal-research")
+
+
+def batch_refusal(root: Path | None, check: str, text: str, now: float) -> str:
+    """A pop-up agent sent on ONE pop-up while `make record-owed` names that pop-up in a batch of two or more for the same agent
+    (feature 385 T81, plan D101; the GM's approved change 1: T10's checks sent 90 single-pop-up agents). No record, or one older
+    than two hours, refuses nothing."""
+    if root is None or check not in _POPUP_AGENTS:
+        return ""
+    uids = {ln.split()[1].split(":", 1)[1] for ln in text.splitlines() if ln.startswith("unit: ") and ":" in ln.split()[1]}
+    if len(uids) != 1:
+        return ""
+    gd = subprocess.run(["git", "-C", str(root), "rev-parse", "--path-format=absolute", "--git-common-dir"], capture_output=True, text=True).stdout.strip()
+    try:
+        rec = json.loads((Path(gd) / BATCHES).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return ""
+    kinds = (rec.get("batches") or {}).get(check) or []
+    (uid,) = uids
+    if now - float(rec.get("utc") or 0) > BATCHES_FRESH_S or len(kinds) < 2 or not any(uid == k or uid.endswith(k) or k.endswith(uid) for k in kinds):
+        return ""
+    return (f"{len(kinds)} pop-ups owe {check} together - send ONE agent on them all: make modal-bundle KIND=\"{' '.join(kinds)}\" "
+            f"FOR={check} (feature 385 T81), batched")
+
+
 def escape_for(msg: str) -> str:
     """The escape that reaches the rule which refused: the arbiter's holds take ARBITER_OK, never FREEZE_OK (feature 374: the
     tip named FREEZE_OK on a closed unit, and FREEZE_OK does not reach that rule)."""
-    return "ARBITER_OK" if "arbiter" in msg else "FREEZE_OK"
+    return "BATCH_OK" if msg.endswith(", batched") else "ARBITER_OK" if "arbiter" in msg else "FREEZE_OK"
 
 
 def main(argv: list[str]) -> int:

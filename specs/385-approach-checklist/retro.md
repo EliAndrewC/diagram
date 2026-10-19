@@ -720,3 +720,8 @@ habit it changes:** none needed.
 About 35 min. `land-tooling.sh` writes each run's `{task, files, outcome}` from an exit trap, and `make tick` refuses a NOTE saying
 "landed" (any case - the review's catch) while the task's last run failed or a file it named differs from main, the ledger left
 out as a rider. **The habit it changes:** a tick cannot claim a landing that did not happen.
+
+## T82 - the retro row
+
+About 10 min. `task_current` takes the archive's generated line out of a section and its reviewed text, as `block_digest` does for a
+block, so auto-archiving at a tick (T63) never re-owes a neighbor's review. **The habit it changes:** none needed.

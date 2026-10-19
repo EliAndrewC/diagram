@@ -6197,6 +6197,20 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T82": {
+   "section_sha256": "91f260ada31ce31939ae1de26bf439249b8993bc61c4b7fbd6b40c44da0f8d79",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D102",
+     "summary": "task_current compares a task's section and its reviewed text with ARCHIVE_LINE taken out of both (as block_digest already does per block); digest match and typo rule otherwise unchanged",
+     "class": "within",
+     "why": "Feature 375 FR-044 says the archive's generated line owes no review; the per-task section comparison not stripping it made T79's reviewed blocks owed again after an auto-archive (amendment 8's 'run automatically' request). Stripping exactly that generated line from both texts carries out FR-044 for the section check, and nothing more: no other kind of edit stops counting, and no review is waived for authored text. Amendment 6 also approves fixing obvious tooling defects along the way."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
