@@ -73,6 +73,9 @@ ok "a lint failure stops before the tests and the guard suites start (385 T67)" 
 ok "...and the run leaves its record, failed, for make tick (385 T79)" 'tail -1 "$C/.git/land-tooling.jsonl" | grep -q "\"outcome\": \"failed: " && tail -1 "$C/.git/land-tooling.jsonl" | grep -q "scripts/e.py"'
 LAND_TOOLING_LINT=true land scripts/e.py; rc=$?
 ok "...and a landed run records landed" '[ "$rc" -eq 0 ] && tail -1 "$C/.git/land-tooling.jsonl" | grep -q "\"outcome\": \"landed\""'
+printf 'z  =  1\n' > "$C/scripts/f.py"; git -C "$C" add -A; git -C "$C" commit -qm "a badly formatted script"
+( cd "$C" && env -u LAND_TOOLING_LINT LAND_TOOLING_TOOLING="touch $T/t91-tests" "$LAND" scripts/f.py ) >"$T/out" 2>&1; rc=$?
+ok "the lint runs first, in the clone, before anything else (385 T91)" '[ "$rc" -ne 0 ] && grep -q "feature 385 T91" "$T/out" && [ ! -e "$T/t91-tests" ] && [ -z "$(on_main scripts/f.py)" ]'
 setup
 
 echo "1e. the landing's lint keeps the gate's scope: an excluded file is not refused (385 T55)"

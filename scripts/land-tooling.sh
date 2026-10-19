@@ -54,6 +54,30 @@ steps_done() { # <outcome>
   printf '{"at": "%s", "outcome": "%s", "load": "%s", "steps": {%s}}\n' "$(date -u +%FT%TZ)" "$1" "$(cut -d' ' -f1 /proc/loadavg 2>/dev/null)" "$steps_json" >> "$ROOT/.git/land-tooling-steps.jsonl"
 }
 git -C "$ROOT" fetch -q origin 2>/dev/null || true
+# GUARD_EDIT_OK: feature 385 T91 (plan D112; the round arbiter on hour:385-approach-checklist@27) - THE LINT FIRST, IN THE CLONE: T85
+# was landed three times, two of them lint slips seen minutes later in a backgrounded landing's log. The same ruff the worktree
+# applies, on the .py files given, before the fetch, the merge and the worktree - so every caller learns it in seconds.
+first_pys=""; for f in "$@"; do case "$f" in *.py) [ -f "$ROOT/$f" ] && first_pys="$first_pys $f" ;; esac; done
+if [ -n "$first_pys" ] && [ -z "${LAND_TOOLING_LINT:-}" ] && ( cd "$ROOT" && python3 -m ruff --version ) >/dev/null 2>&1; then
+  # main's lint config, as the worktree's lint reads it (a clone's own may lag): `--config` from origin/main's pyproject.toml
+  # (in the clone's root: ruff resolves a config's exclude paths against the config file's own directory)
+  # (and as a ruff.toml: its `[tool.ruff...]` sections, the prefix dropped - `--config` reads a ruff.toml's form)
+  cfg="$ROOT/.land-tooling-lint-$$.toml"
+  git -C "$ROOT" show origin/main:pyproject.toml 2>/dev/null | python3 -c 'import re,sys
+keep=False
+for line in sys.stdin:
+    m=re.match(r"\s*\[(tool\.ruff(?:\.[^\]]+)?)\]\s*$", line)
+    if re.match(r"\s*\[", line): keep=bool(m)
+    if keep: print(("[" + m.group(1)[len("tool.ruff."):] + "]") if m and m.group(1) != "tool.ruff" else ("" if m else line.rstrip("\n")))' > "$cfg" || : > "$cfg"
+  cfgarg=""; [ -s "$cfg" ] && cfgarg="--config $cfg"
+  # shellcheck disable=SC2086 # one word per file
+  if ! lint_out=$( cd "$ROOT" && python3 -m ruff check $cfgarg --force-exclude $first_pys 2>&1 && python3 -m ruff format --check $cfgarg --force-exclude $first_pys 2>&1 ); then
+    rm -f "$cfg"
+    printf '%s\n' "$lint_out" | head -12 >&2
+    die "the checks failed in the clone (lint, before anything else ran) on$first_pys - python3 -m ruff format$first_pys, fix what ruff names, commit, and land again (feature 385 T91)"
+  fi
+  rm -f "$cfg"
+fi
 base=$(git -C "$ROOT" merge-base HEAD origin/main) || die "no merge base with origin/main"
 
 if [ "$#" -eq 0 ]; then
@@ -67,7 +91,7 @@ fi
 # plan-verdict`, so where it was recorded is known; 81 such rows were written by hand on 2026-10-18 and two landings refused for one.
 # Any other owed pass still refuses below, as before.
 ( cd "$ROOT" && eval "${LAND_TOOLING_PLAN_ROWS:-python3 scripts/reviews/ledger_owed.py --write-plan-reviews --ledger dev/review-ledger.md}" ) >&2 || :
-if ! git -C "$ROOT" diff --quiet -- dev/review-ledger.md 2>/dev/null; then
+if git -C "$ROOT" rev-parse -q --verify HEAD >/dev/null && [ -n "$(git -C "$ROOT" status --porcelain -- dev/review-ledger.md 2>/dev/null)" ]; then  # T72: a fresh repo has no HEAD to diff
   git -C "$ROOT" commit -q -m "the plan reviews' ledger rows, written at landing (feature 385 T72)" -- dev/review-ledger.md || die "the plan reviews' ledger rows could not be committed"
 fi
 # GUARD_EDIT_OK: feature 383, the GM 2026-10-13 ("those are on disk, so it definitely can see them, right?") - THE LEDGER COMES

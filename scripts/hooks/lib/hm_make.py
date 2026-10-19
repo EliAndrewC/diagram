@@ -9,6 +9,7 @@ refuse) live here."""
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 
@@ -93,6 +94,30 @@ def doubled_var(cmd: str) -> str:
                 return v
             seen.add(v)
     return ""
+
+
+_LANDING = re.compile(r"\bmake\s+(?:-\S+\s+)*(?:land-tooling\b[^\n;&|]*?\bFILES|arbiter-fix-done\b[^\n;&|]*?\bLAND)=(\"[^\"]*\"|'[^']*'|\S+)")
+
+
+def landing_lint(cmd: str, cwd: str) -> str:
+    """The landing's own lint on the .py files a `make land-tooling FILES=` or `make arbiter-fix-done LAND=` names, run before
+    the command does (feature 385 T91, plan D112): a refusal naming ruff's first lines, or ''. No .py file, or no ruff: ''."""
+    import subprocess  # noqa: PLC0415
+
+    m = _LANDING.search(_strip_heredocs(cmd))
+    files = [f for f in (m.group(1).strip("\"'").split() if m else []) if f.endswith(".py") and os.path.isfile(os.path.join(cwd, f))]
+    if not files:
+        return ""
+    try:
+        runs = [subprocess.run([sys.executable, "-m", "ruff", *args, "--force-exclude", *files], cwd=cwd, capture_output=True, text=True, timeout=60)
+                for args in (["check"], ["format", "--check"])]
+    except (OSError, subprocess.TimeoutExpired):
+        return ""
+    bad = [r for r in runs if r.returncode not in (0,) and "No module named ruff" not in r.stderr]
+    if not bad:
+        return ""
+    first = "\n".join((bad[0].stdout + bad[0].stderr).strip().splitlines()[:8])
+    return f"the landing's lint fails on {' '.join(files)}:\n{first}\nRun python3 -m ruff format {' '.join(files)}, fix what ruff names, commit, then land (feature 385 T91)"
 
 
 def classify(cmd: str) -> str:
@@ -679,6 +704,14 @@ if __name__ == "__main__":
                 print(out)
         else:
             print(why_not_wrapped_target(CMD, _cwd))
+    elif mode == "landing-lint":
+        try:
+            _cwd = json.loads(RAW).get("cwd", "") or os.getcwd()
+        except Exception:
+            _cwd = os.getcwd()
+        out = landing_lint(CMD, _cwd)
+        if out:
+            print(out)
     elif mode == "as-paired":
         out = as_paired(CMD)
         if out:
