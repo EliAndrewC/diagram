@@ -6990,6 +6990,38 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T107": {
+   "section_sha256": "1664da9ab2027fa2f8635106416cf235b41368ef8c2c96f8a35351773d696566",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T107 (the task itself)",
+     "summary": "A discrepancy found while working T101 (the two 7 ft figures on 0246's drawing page measure differently) is split off as its own task rather than folded into T101.",
+     "class": "within",
+     "why": "FR-015 (a second goal found in a task becomes its own task) and amendment 3's option 3 (a finding becomes an open task the feature cannot close without) carry it; the GM's request asks each task to keep one goal and be measured on its own."
+    },
+    {
+     "id": "D127",
+     "summary": "A new block on 0246's drawing page saying the room's 7 ft is counted to the tread's edge and the least gap's 7 ft to the lane's middle; both existing blocks kept as written, nothing renumbered.",
+     "class": "within",
+     "why": "The GM's request never speaks to these figures, and the block preserves no behavior he asked to change. Item 3 marks both figures as ours (O) and the block says so ('map drawing conventions'). Its arithmetic matches item 4's measured reading: 7 + 4 + 7 = 18, the middle at 7 + 2 = 9 ft, 2 ft above the least gap of 7."
+    },
+    {
+     "id": "Approach item 6 / item 9 (no code change)",
+     "summary": "Code is left alone: MIN_WEB_GAP = 2 x WEB_FABRIC_GAP + 4 already encodes the room's convention and WEB_FABRIC_GAP the gap's.",
+     "class": "within",
+     "why": "The code already agrees with the block D127 adds, so a page-only change is the whole of the goal; nothing the GM asked for goes undone."
+    },
+    {
+     "id": "Approach item 5 (the order)",
+     "summary": "The block is written first, then the record checks and claims triage it owes (T31's lesson).",
+     "class": "within",
+     "why": "Sequencing inside the task; it adds the checks the project already owes a new block and narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
