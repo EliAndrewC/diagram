@@ -3953,3 +3953,19 @@ New items go here, newest at the bottom, so you can always resume from wherever 
 - Fallback: [Google: 本郷ふじやま公園 古民家ミニ博物館 潜り戸](https://www.google.com/search?q=%E6%9C%AC%E9%83%B7%E3%81%B5%E3%81%98%E3%82%84%E3%81%BE%E5%85%AC%E5%9C%92+%E5%8F%A4%E6%B0%91%E5%AE%B6%E3%83%9F%E3%83%8B%E5%8D%9A%E7%89%A9%E9%A4%A8+%E6%BD%9C%E3%82%8A%E6%88%B8)
 - **Rests on it:** `research/questions/0117-doorways-and-doors-to.html` and its drawing page `research/questions/0117-doorways-and-doors-to.drawing.html` (diagram feature 335): the notes `hongofuji-koiwai` and `hongofuji-koiwai-2`, a farmhouse's one-ken main door with a wicket. Save the article texts that open from the page's index, the 潜り戸 and 土間 articles above all, so the quoted passages (通常土間の出入口は一間巾の片引きの大戸(潜り戸付)を建て... and 頭を下げなければ通れないような...潜り戸と云います) can be checked word for word, and note each article's own URL if it has one.
 - Blocked by: the host refuses the container with HTTP 403 (quote-verbatim and a quote-check, feature 335, 2026-10-11); the archive's capture of 2026-10-02 holds only the page's index of article titles, not the articles.
+
+### 311. Raymond W. Goldsmith, *Premodern Financial Systems: A Historical Comparative Study* (Cambridge University Press, 1987), the chapter on Tokugawa Japan
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- **[The book's library record (CiNii)](https://ci.nii.ac.jp/ncid/BA01134709)**
+- The GM owns this book in print: photograph or scan the Tokugawa Japan chapter's pages on interest rates, land prices and the yield of land (and any table of them).
+- Fallback: [Google: Goldsmith Premodern Financial Systems Tokugawa interest rate land](https://www.google.com/search?q=Goldsmith+%22Premodern+Financial+Systems%22+Tokugawa+interest+rate+land)
+- **Rests on it:** research/questions/0251-what-did-farmland-sell-for-against-its-yield.html (diagram feature 390) - what Edo-period farmland sold for in years of its net yield, which no page read gives (note japan-multiple-absence), and the rates of interest beside it. The GM's money folder digest cites Goldsmith for interest of 12-20% a year in Tokugawa Japan; that figure is to be read in the book, not taken from the digest.
+- Blocked by: a print book the GM owns; no public full text found.
