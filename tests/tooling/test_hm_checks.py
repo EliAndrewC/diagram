@@ -773,7 +773,7 @@ def test_flags_are_read_from_real_reply_lines() -> None:
         "- fn-9 - ok - READABLE - VERBATIM - SUPPORTS\n"
         "| PARTIAL | 1 citation (ohmi) |\n"
         "| SUPPORTS / PARTIAL / DOES-NOT-SUPPORT | 2 / 3 / 0 |\n"
-        "\n## OUTSIDE THE CHANGE\n- research/x.html | the post | akiyama PARTIAL, pre-existing\n"
+        "\n## OUTSIDE THE CHANGE\n- research/questions/0105-baths-furo.drawing.html | the post | akiyama PARTIAL, pre-existing\n"
     )
     flagged, passed = fl.read_reply(reply, notes)
     assert set(flagged) == {"0105#wigmore-2", "0105#akiyama-3", "0105#ohmi"}
