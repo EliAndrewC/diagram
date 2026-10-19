@@ -768,7 +768,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(f"claims-owed: {len(full)} claim(s) in {len(mods)} file(s) owe impl-drift; bundle per file with `make claims-bundle MODULE=<path>`, or OWED=1 for all")
         if len(due) > len(full):
             print(
-                f"claims-owed: {len(due) - len(full)} claim(s) owe only a TRIAGE of the blocks that changed on their pages - `make claims-triage` first; it sends on only the claims a change bears on"
+                f"claims-owed: {len(due) - len(full)} claim(s) owe only a TRIAGE of what changed on their pages or in their code - `make claims-triage` first; it sends on only the claims a change bears on"
             )
         return 0
     if args.cmd == "backfill-sections":
