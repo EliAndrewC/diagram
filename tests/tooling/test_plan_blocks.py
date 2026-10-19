@@ -234,3 +234,19 @@ def test_a_requirement_cited_as_another_feature_s_is_bundled_from_that_feature(t
     manifest = plan_bundle.build(d, "t2", [("## T05 - x", "## T05 - x\n\nFeature 375 plan D18 says so.\n")], {}, "how")
     cited = (manifest.parent / "spec-cited.md").read_text()
     assert "D18 - lands open." in cited and "D18 - the sty." not in cited, "T71: a decision from its own feature's plan"
+
+
+def test_decide_refuses_a_section_quoting_the_gm_with_words_not_in_the_request(tmp_path: pathlib.Path) -> None:
+    """Feature 385 T84 (plan D105): three of the evening's review rounds were lost to the GM's words missing from request.md."""
+    sys.path.insert(0, str(script("plan_lint.py").parent))
+    import plan_lint  # noqa: PLC0415
+
+    d = tmp_path / "specs" / "385-x"
+    d.mkdir(parents=True)
+    (d / "request.md").write_text("> Please make sure to implement any obvious performance / tooling / process improvements along the way.\n")
+    ok = 'The GM, 2026-10-18: "implement any obvious ... tooling ... improvements"; done.\n'
+    bad = 'As the GM\'s words have it: "we either have or don\'t need tooling". And "this" is no attribution.\n'
+    mention = 'a `"the GM"` mention, and WHY="awaiting the GM on it" - no quote of his.\n'
+    assert plan_lint.refusal(d, ok + mention) == ""
+    why = plan_lint.refusal(d, bad)
+    assert "we either have or don't need tooling" in why and '"this"' not in why

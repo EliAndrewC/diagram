@@ -748,3 +748,11 @@ changes:** a dict grown by an entry no longer costs a full impl-drift round over
 About 20 min. `make where-time` splits the between-turns time by the prompt that ends each window: waiting on work (a
 notification), the GM, the GM away (past an hour). The first cut's one-line edit missed the formatter-split bucket map; an assert on
 every replacement found it. **The habit it changes:** none needed.
+
+## T84 - the retro row
+
+About 35 min. `make decide` refuses a section quoting the GM with words `request.md` does not hold (`plan_lint.gm_quotes_missing`,
+any case, every length, no escape, as the plan review required). Run over all 77 sections first: the parser's artifacts - "the GM"
+inside a quote or a code span, elided quotes - were fixed before the check went in; what it still names is real, e.g. T83's "I do
+want it, though, if it is helpful", the GM's words that never reached the request. **The habit it changes:** a quote of the GM is
+checked against the request before any review reads it.

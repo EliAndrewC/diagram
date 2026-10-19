@@ -6363,54 +6363,60 @@
    "verdict": "CLEAR"
   },
   "T86": {
-   "section_sha256": "c28a2c7600bc1befe6f76ab22520b341b45164d346c79c7caae584d959aabba7",
+   "section_sha256": "58950934e373d6bf2e4e7fd7e9d70e18e3806e56e0311a5eb8aeeeb84c43d3ed",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "D107-units",
-     "summary": "A 'figure' is a number followed by a unit from a closed list: ft, m, s, min, %, px, MB, GB, KB, tokens, agents, rounds, claims; a figure in any other unit is not checked.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "Proposal C, approved verbatim in amendment 9, refuses 'an Approach item 4 figure' with no measured date and method; it does not limit which figures. The closed list lets through units this project states its figures in, including the request's own: '25.5 h', '3 hours and 22 minutes', '2 hours and 25 minutes', '19 degree', '700 feet', '26,000 words', '216 messages'. Hours are missing from a feature whose whole purpose is measuring time per task. A figure like '2.5 h (measured)' would reach review unlabeled and return NOT-REVIEWABLE, which is the 'unreviewable round' proposal C exists to stop. Some definition is needed, but leaving out these units is neither impossible nor implied by the GM. Fix: the unit set must cover at least hours (h, hours), minutes in full, degrees (deg, degree(s)), feet in full, words, messages, calls, lines and dispatches; better, the same definition of a figure with a unit that the reviewer's FIGURES rule and spec-lint check 5 apply, so the decide refuses what the review would refuse."
-    },
-    {
-     "id": "D107-mkey",
-     "summary": "Item 4 also passes when the figure carries an m:<key> pointer into measurements.json instead of 'measured <date> (<method>)'.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "By the words this is an alternative to 'measured <date>' and a method. By the purpose (a plan never goes to review with a figure the review cannot check), an m:<key> is the one form the review re-runs instead of reading: its entry stores the command, and 'make figures' re-runs it. Refusing it would refuse the most checkable record of a measurement and push the session toward a weaker label, which defeats the request's purpose."
-    },
-    {
-     "id": "D107-escape",
-     "summary": "FIGURE_OK=\"<reason>\" lets a section through the decide with an unlabeled item 4 figure.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The GM approved 'refuses' with no escape. The block does not say the reason reaches anything the reviewer reads, and the reviewer's FIGURES rule returns NOT-REVIEWABLE for any unit-bearing figure with no date-and-method label, m: key or round label. So an escaped figure is not exempted. Its refusal moves to the review and costs exactly the round proposal C was meant to save. That a matcher can misfire on a number that is not a measurement is a real concern, but this escape does not solve it. Other tools in the project having escapes is not a fidelity argument. Fix: drop the escape, or define it so the escaped figure carries a form the review accepts (for example the reason recorded beside the figure as its label, which the FIGURES rule then recognises)."
-    },
-    {
-     "id": "D107-format",
-     "summary": "The method is a parenthesized text within the same item after 'measured YYYY-MM-DD'.",
-     "class": "within",
-     "why": "A concrete form of 'measured <date> and method beside it'; it is stricter than the request, not narrower."
-    },
-    {
-     "id": "D107-names",
-     "summary": "The refusal names the first offending figure.",
-     "class": "within",
-     "why": "How the refusal reports itself; it does not reduce what is refused."
-    },
-    {
      "id": "D107-scope",
      "summary": "Only Approach item 4 is checked; budgets (item 8) and other items are not.",
      "class": "within",
-     "why": "Proposal C names 'an Approach item 4 figure'; this restates the request's own scope."
+     "why": "Proposal C names 'an Approach item 4 figure'; checking item 4 alone is the request as written."
     },
     {
-     "id": "T86-order-test",
-     "summary": "The check sits beside proposal A's in make decide; tests/tooling/test_plan_blocks.py is red without it.",
+     "id": "D107-figure",
+     "summary": "A figure is any number item 4 states once dates, clock times and ids (T10, D84, FR-005, 0018) are set aside, replacing the earlier unit list.",
      "class": "within",
-     "why": "Placement is design. The test only enforces the requested refusal, so it serves the request."
+     "why": "Widening from a unit list to any number moves toward 'an Approach item 4 figure', not away from it. Dates, clock times and ids are not figures, so leaving them out narrows nothing."
+    },
+    {
+     "id": "D107-code-spans",
+     "summary": "Every number inside a code span is exempt from the check, whatever it holds.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The exemption goes by where the number sits, not what it is. A measured figure written in backticks (`4.4 s`, `700 ft`) passes make decide, yet the review's figure rule still returns NOT-REVIEWABLE for it, which is the round proposal C exists to save ('1+ unreviewable round'). The literal rule is not impossible: paths, keys and commands can be set aside by what they are (an id or path pattern, a number with no unit after it) without exempting a figure that has a unit. That the literal check would flag digits in filenames is an implementation cost, not a reason for the carve-out."
+    },
+    {
+     "id": "D107-m-key",
+     "summary": "An m:<key> into measurements.json passes in place of 'measured <date> (<method>)'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The words say 'measured <date>' and method, but the purpose is a figure the review can check. The project's figure contract (feature 239) and the review both accept an m:<key>, and its entry carries the date and the command that measured it. Refusing it would refuse figures that can be reviewed, which defeats the request's own purpose."
+    },
+    {
+     "id": "D107-label-scope",
+     "summary": "One 'measured <date>' label (or one m:<key>) anywhere in item 4 satisfies every number in the item.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The approved words are 'refuses an Approach item 4 figure with no \"measured <date>\" and method beside it', which is per figure. Under D107's mechanism ('where ... it still holds a number, it must also hold measured 20dd-dd-dd ... or an m:<key>'), an item with one labeled figure and one remembered figure passes make decide. The review checks each figure, returns NOT-REVIEWABLE, and the round C was meant to save is lost. The carve-out matches the words loosely but defeats their purpose. Requiring each figure to have a label beside it is not physically impossible to check: the label can be required in the same sentence or clause, or before the figure within the clause, and one label can still introduce several figures from the same run. Being harder to implement does not make it legitimate."
+    },
+    {
+     "id": "no-escape",
+     "summary": "The FIGURE_OK escape is removed; there is no override.",
+     "class": "within",
+     "why": "The GM asked for a refusal and named no escape. The escape would have been the narrowing, so removing it restores the request."
+    },
+    {
+     "id": "D107-names",
+     "summary": "The refusal names the first such figure.",
+     "class": "within",
+     "why": "This is how the refusal is reported. It neither widens nor narrows what is refused."
+    },
+    {
+     "id": "test",
+     "summary": "tests/tooling/test_plan_blocks.py is red without the check.",
+     "class": "within",
+     "why": "The test only enforces the requested refusal (GM 2026-09-20). Take the refusal away and the test has nothing left to check."
     }
    ],
    "verdict": "BLOCKED"
@@ -6476,56 +6482,56 @@
    "verdict": "BLOCKED"
   },
   "T89": {
-   "section_sha256": "0e542dd484157e5f5ff4021a08a04d9e7b4f3950d29bddbbc375f4db7f90076e",
+   "section_sha256": "c1f57441ca5520a2a76f15bbf7febf441c9ae47013b6dc0dfcd1b50ecdb929b1",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "D110-route",
-     "summary": "where-time books each gap to the task its tool call's input names (else the last task named, else the mark), instead of make decide / task-add / tick / land-tooling moving the active-task mark as proposal F says",
+     "id": "T89-route",
+     "summary": "Proposal F's per-task attribution is made where it is read: where-time books each gap to the task its tool call names, falling back to the mark; no workflow command moves the mark (item 2, D110)",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "why": "The GM approved proposal F's change ('move the active-task mark to the task they name') for its stated saving, 'true per-task numbers', against the cost 'where-time misbooks tasks'. The plan's route keeps that purpose and subsumes F's attribution: each of the four commands F names carries its task in its input, so the gaps it opens are booked to that task exactly as a moved mark would book them, and 'the last task named' reproduces a moved mark for the calls that name none, with more naming sources besides. Ground: subsumption, not the claim that a moved mark misbooks the other way. That claim (deciding T76 while building T75) is reasoned, not shown by the labeled wt3.py run in item 4, which compares the existing mark with named-task booking. The plan's own last-named fallback has the same failure for unnamed T75 calls after a T76 decide, so 'more accurate' cannot carry the ruling. Condition the revision must meet: item 9's naming rule (T=/TASK=, 'task T<n>', a '385 T<n>:' commit, a '## T<n> - ' heading) has to cover how each of decide, task-add, tick and land-tooling is actually invoked. A command among them that names no task in its input would be booked to the last task named or the mark, short of F, and the plan has to name it and say how it is booked. Context: spec-cited.md is empty and spec-index.md carries no FR for amendment 9's seven tools, so request.md is the only anchor."
+     "why": "Proposal F (amendment 9) names its own purpose: 'where-time misbooks tasks' -> 'true per-task numbers'. Followed literally, the mark move defeats that purpose, and the block shows how: deciding T76 while building T75 moves the mark to T76, so T75's later work is booked to T76. The misbooking follows from the mechanism itself and is not an unmeasured premise. The new route reaches the stated purpose: item 4 measured it on 2026-10-19 by the wt3.py join (T10 drops from 320 min to its own work; the evening's tasks come to 5-20 min each). This is the same text that was judged CLEAR before (earlier.md) and it is unchanged."
     },
     {
-     "id": "D110-no-workflow-change",
-     "summary": "'No workflow command changes': the plan leaves untouched the part of proposal F that replaces proposal 6's refusal (the dispatch guard refusing a check for a task that is not the active one)",
+     "id": "T89-no-refusal",
+     "summary": "Nothing is retired: proposal 6's refusal (a check refused for a task other than the active one), which F says it replaces, was never built (measured 2026-10-19 by a grep of scripts/hooks/)",
+     "class": "within",
+     "why": "F says it replaces proposal 6, so not building proposal 6 follows from F's own words, and with nothing built there is nothing to remove. The premise is a measurement that states its method. Its reach is scripts/hooks/ only; a dispatch guard kept anywhere else would not be seen by that grep."
+    },
+    {
+     "id": "T89-decide-tick",
+     "summary": "make decide F= T= and make tick F= T= are booked to the task their T= names",
+     "class": "within",
+     "why": "This is F's 'the task they name', applied at read time through the route ruled above."
+    },
+    {
+     "id": "T89-land-tooling",
+     "summary": "make land-tooling FILES= names no task, so its gap goes to the last named task",
+     "class": "within",
+     "why": "F moves the mark to 'the task they name'. land-tooling's input names no task, so under F's own words there is no task to move to, and booking to the last named task leaves the attribution where it already was."
+    },
+    {
+     "id": "T89-task-add",
+     "summary": "make task-add's new id appears only in its output, so its gap, and any gap after it with no naming call, goes to the last named task rather than to the new task",
      "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "Proposal F as the GM approved it ('build all 7 of those') reads '... move the active-task mark to the task they name (replacing proposal 6's refusal)'. Replacing that refusal is part of the approved change. The plan drops the mark-move and says nothing about the refusal, so by its own words ('No workflow command changes') the refusal stands: a check dispatched for T76 while T75 is the active task is still refused, which is the friction F was approved to remove. The refusal's stated reason in amendment 8 ('so the time accounting stays true') stops applying once booking follows the named task, and the plan gives no argument for keeping it. Exceptions are presumed wrong, and this one is unlabeled and unargued. Fix: the plan states that proposal 6's refusal is removed or replaced, as F's row says, with a test red without that, or it records a measurement that the refusal was never built or cannot fire. The bundle does not show whether the refusal exists in the tree; this ruling is on what the plan says, which is nothing."
+     "ruling": "LEGITIMATE",
+     "why": "Judged separately from the other three commands, because F, read literally, would move the mark to the task task-add creates. The concrete failure that justifies the route applies here too. A task is usually added while another task is being worked (FR-015: a second goal found in a task becomes its own task). Moving the mark to the new task would book the rest of the current task's work to a task nobody has started. The new task gets its time as soon as a call names it (its decide or tick T=, its heading, its commit). That serves 'true per-task numbers' better than the literal mark move."
     },
     {
-     "id": "naming-rule",
-     "summary": "a gap is booked to a task only when its tool input names exactly one; the patterns are T=/TASK=, 'task T<n>', a '385 T<n>:' commit, a '## T<n> - ' heading",
+     "id": "D110",
+     "summary": "where_time.tables joins the session transcript (located by the event log's sid) to the events by tool-use id, books a gap to the task its input names when it names exactly one, otherwise to the last named task, otherwise to the mark; a footer gives the minutes booked by each rule",
      "class": "within",
-     "why": "How the named task is read is an implementation detail of F's 'the task they name'."
+     "why": "This is the mechanism for the route ruled above. The footer reports which rule booked each minute, which only verifies that the per-task numbers F asks for are true, and adds no new behavior."
     },
     {
-     "id": "transcript-source",
-     "summary": "the session transcript is located from the event log's sid under ~/.claude/projects/ and joined by tool-use id; a session with no transcript falls back to the mark",
+     "id": "T89-test-order-budget",
+     "summary": "The join, then tests/tooling/test_where_time.py red without it; budget 40 min; exits (c); items 10-11 n/a",
      "class": "within",
-     "why": "This is the data source for the attribution. The fallback keeps today's behavior only where the named-task data is absent."
-    },
-    {
-     "id": "rule-footer",
-     "summary": "where-time prints the minutes each booking rule booked",
-     "class": "within",
-     "why": "It reports the source of the per-task numbers F's saving promises. It is verification, not new behavior."
-    },
-    {
-     "id": "test-red-without",
-     "summary": "tests/tooling/test_where_time.py is red without the join",
-     "class": "within",
-     "why": "It enforces the requested behavior (GM 2026-09-20): delete the attribution and the test has nothing to check."
-    },
-    {
-     "id": "order-budget-exits",
-     "summary": "order (the join, then its test), a 40 min budget, exit (c), items 10-11 n/a",
-     "class": "within",
-     "why": "Process fields. The 40 min is a budget, not a measured figure. The figures in item 4 carry a date and a method (2026-10-19, wt3.py joining the event log to the transcript by tool id)."
+     "why": "The test only enforces the requested attribution. Order and budget decide nothing about scope."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   }
  }
 }
