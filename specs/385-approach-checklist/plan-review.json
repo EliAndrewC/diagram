@@ -6319,51 +6319,48 @@
    "verdict": "CLEAR"
   },
   "T84": {
-   "section_sha256": "98bdcd8dd559ca07ddbbaaa36d1109a500710b8ad6fedc8c6de427bccb485bef",
+   "section_sha256": "c37014965c1fd1715fab3c19435c89a3d277842653e1178d8116c8b27606e34e",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "D105-trigger",
-     "summary": "A quotation is attributed to the GM only when its double-quoted span follows \"The GM\" or \"the GM's\" in the same sentence",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "A check that finds quotes automatically needs some rule for what counts as quoting the GM, so having a same-sentence trigger is within. But the trigger forms D105 lists are \"The GM\" and \"the GM's\", and proposal A's own words are lowercase 'the GM'. As written, a bare lowercase mid-sentence attribution (the GM said \"...\", the GM, verbatim: \"...\") is not checked. Approach item 2's 'ignores case' covers matching words against request.md, not the trigger. Nothing makes the lowercase form impossible to check, nothing in the request implies leaving it out, and leaving it out lets exactly the unfindable quote proposal A targets reach a review. To fix: match the trigger 'the GM' regardless of case, possessive or not."
-    },
-    {
-     "id": "D105-threshold",
-     "summary": "Only spans of four or more words are checked; a shorter span 'is a phrase, not a quotation, and is not checked'",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "Proposal A, which the GM approved verbatim ('build all 7 of those'): '`make decide` refuses a section quoting \"the GM\" with words not in request.md'. It sets no length floor, and neither does this section: Approach item 2 defines a quotation as 'the double-quoted text after \"The GM\"' and item 9's done-condition has no threshold. So D105 also narrows the section's own stated constraint. 'A phrase, not a quotation' is a definitional preference, not an impossibility. A short span with no match in request.md is still words attributed to the GM that a review cannot find, and the goal in item 1 ('never reaches its review quoting the GM with words the review cannot find') fails for it. Checking short spans is no harder than checking long ones, and a short genuine quote is the likeliest to be found by chance, so the floor does not protect against wrong refusals either. To fix: remove the four-word floor."
-    },
-    {
-     "id": "Approach-2-escape",
-     "summary": "The refusal can be overridden with QUOTE_OK=\"<reason>\", recorded",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "Proposal A says `make decide` 'refuses'. It names no override, and Approach item 3 credits the constraints in item 2 to the GM (G) when this one is not his. Every use of the escape sends a section to review with GM-attributed words the review cannot find, which is exactly what item 1 says never happens, so the override guts the stated purpose. A wrong refusal (a double-quoted term near 'the GM' that is not his words) can always be cleared without an override: reword the span, or add his words to request.md as the refusal message already says. So refusing with no override is neither impossible nor self-defeating. That other guards in the project have escapes is a consistency argument, which does not make an exception legitimate. To fix: drop QUOTE_OK, or bring it to the GM as a question for his ruling."
-    },
-    {
-     "id": "D105-folding",
-     "summary": "The span and request.md are both folded to lowercase words, so case, whitespace and punctuation are ignored, and the span must appear in request.md",
+     "summary": "A quotation is each double-quoted span following the literal 'the GM' (any case, with or without the possessive) within the same sentence of the task's section.",
      "class": "within",
-     "why": "This serves finding the GM's words despite dictation punctuation and line wrapping. It is how 'words not in request.md' gets measured, and it narrows nothing."
+     "why": "Proposal A (amendment 9, the seven the GM said to build) names its trigger as a section quoting \"the GM\", putting the literal string in quotes; anchoring the check on that string and the double-quoted span after it is the proposal's own wording put into operation, not a carve-out. Widening from the earlier 'The GM' / 'the GM's' to any case and either form broadens the check toward the proposal."
     },
     {
-     "id": "D105-message",
-     "summary": "The refusal names each unfound span, with 'add the GM's words to request.md verbatim, or correct the quote'",
+     "id": "D105-match",
+     "summary": "A span passes when its words, lowercased with punctuation removed, appear as a contiguous run in request.md folded the same way.",
      "class": "within",
-     "why": "Proposal A asks for 'naming the words'. The added guidance only says how to clear the refusal."
+     "why": "Proposal A refuses 'words not in request.md'. Folding case and punctuation (which come from dictation and typography, not from the GM's words) keeps the test about words; requiring the run rather than scattered single words is the only reading under which the check can catch a misquote like T64's, so it is no narrower than the proposal."
     },
     {
-     "id": "Approach-5-9-place-and-test",
-     "summary": "The check goes in `make decide` (the caller of plan_bundle.task_prompt), then a test in tests/tooling/test_plan_blocks.py that fails without it; budget 25 min",
+     "id": "D105-every-length",
+     "summary": "Every quoted span is checked whatever its length (the earlier four-word floor is gone).",
      "class": "within",
-     "why": "Proposal A names `make decide` as the command that refuses. The test only fails when the requested refusal is missing, so it enforces the request (GM 2026-09-20) rather than adding scope. A time budget decides nothing about scope."
+     "why": "Proposal A sets no length floor; the earlier block's 'a shorter span is a phrase, not a quotation, and is not checked' was the narrowing, and removing it brings the check back to the proposal as written."
+    },
+    {
+     "id": "D105-no-escape",
+     "summary": "No override: a wrong refusal is cleared by rewording the span or adding the GM's words to request.md verbatim.",
+     "class": "within",
+     "why": "Proposal A carries no escape; the earlier QUOTE_OK escape was an addition the proposal did not ask for, and dropping it matches the request. The two ways to clear a refusal are what the refusal message itself names."
+    },
+    {
+     "id": "D105-refusal",
+     "summary": "make decide refuses, naming each failing span, with 'add the GM's words to request.md verbatim, or correct the quote'.",
+     "class": "within",
+     "why": "Proposal A: '`make decide` refuses ... naming the words'. Placed in make decide (plan_bundle.task_prompt's caller), as the proposal names it."
+    },
+    {
+     "id": "T84-test",
+     "summary": "tests/tooling/test_plan_blocks.py red without the check; a section whose quotes are all present builds its bundle as now.",
+     "class": "within",
+     "why": "A test that fails only when the requested refusal is absent enforces proposal A (GM 2026-09-20: enforcing what was asked is not unrequested scope); the passing case only confirms the check does not change bundles it should leave alone."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   },
   "T86": {
    "section_sha256": "c28a2c7600bc1befe6f76ab22520b341b45164d346c79c7caae584d959aabba7",
