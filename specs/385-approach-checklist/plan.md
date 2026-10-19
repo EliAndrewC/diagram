@@ -517,25 +517,26 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@30 (continue),
 <!-- plan-archive: T109 to T107 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
 <!-- plan-archive: T110 to T107 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
 <!-- plan-archive: T113 to T110 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
-## T102 - the dry exit keeps to its bank, recorded (found working T98, 2026-10-19)
+## T102 - the dry exit crosses at the crossing places (found working T98, 2026-10-19)
 
 ### T102 Approach (checklist part A)
 
-1. **The goal, in the world.** The track out's last-resort search says truly how it treats the brook, and 0035 records it.
+1. **The goal, in the world.** Where every bearing out of a settlement is wet, the track out crosses its brook at a crossing place, as 0035 has a way do.
 2. **The constraints.** 0035's drawing page: the ways between the two banks cross the brook squarely, on a plank bridge; a way keeps to its own bank unless crossing saves it more than about 150 ft of walking (a GUESS there); the maps set a crossing place every 160 ft or so. The rule of the record: every rendering decision is labeled, and a deliberate deviation is recorded in `research/` and at the point of change. A claims check IN-STEP.
 3. **Where each comes from.** 0035's drawing page (O); the root CLAUDE.md's research rules (O).
 4. **Do they describe the world here?** Yes - measured 2026-10-19 (T98's claims round, `track.connector_dry_exit#brook not crossed` DRIFTED, then a read of `track.py`): the track's own router crosses the brook only at a ford at 0035's 150 ft (`set_crossing`, `BROOK_CROSSING_COST_FT`); its last resort, the flood fill `connector_dry_exit` runs where every bearing of the sweep is wet, treats every water line as a wall, so it never crosses.
-5. **The order.** A new block on 0035's drawing page; the claim relabeled DEVIATION; the record checks and the claims check.
-6. **The exits.** (a) refine an O number: none - the 150 ft stands for the router; (b) a principled exception - chosen: the last resort runs only where no dry bearing exists, and a crossing there would need a crossing place the fill cannot seat (fords are set along the brook before the track, at their own spacing); (c) a new rule: a crossing cost inside the fill - weighed and refused for now, a search change for a fallback the cohort reaches rarely; (d) more room: n/a; (e) conform as the claim stood - refused: the claim says "no water line crossed" as if 0035 said so.
+5. **The order.** The fill's water lines gapped at the crossing places; its claim; the test; the cohort.
+6. **The exits.** (b) a principled exception - refused by the plan review (round 1): a crossing place exists when the fill runs, so the reason was the algorithm's order, not how a track forms; (c) a new rule - chosen: the fill passes the brook within `FORD_HALF` of a crossing place (`brook_fords`), as the track's own checks gap it; (e) conform as the claim stood - refused: the claim said no water is crossed as if 0035 said so.
 7. **The search smell.** None.
 8. **The budget.** 40 min with its checks.
-9. **Done, measured.** One goal: 0035's drawing page holds a block recording the last-resort search's keep-to-its-bank as a DEVIATION with its reason; the claim cites it as DEVIATION; record checks and claims check pass; no code changes.
+9. **Done, measured.** One goal: `connector_dry_exit` passes the brook within `FORD_HALF` of a crossing place and nowhere else; its claim cites 0035's crossing places and is IN-STEP; a test red without it; the cohort passes - measured 2026-10-19 (`make cohort` with it built: 16 of 16).
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
 ### T102 Decisions
 
-**D131 - the last resort keeps to its bank.** A new block on 0035's drawing page after the crossing-place block: "The track out's last resort keeps to its own bank. Where no straight bearing out of the settlement is dry, the maps search the ground for a dry way off the map and treat the brook there as a wall - a DEVIATION: a crossing needs a crossing place, and the search runs after the crossing places are set." The claim `track.connector_dry_exit#brook not crossed` reads "DEVIATION <0035's drawing page>: the last-resort fill crosses no water line; the track's router crosses only at a ford, at 0035's 150 ft".
+**D131 - the last resort crosses at a crossing place.** `connector_dry_exit` gaps its water lines within `FORD_HALF` of each crossing place `brook_fords` sets along the brook (every `FORD_SPACING`), so the fill passes the brook there and nowhere else; the claim reads "brook crossed at its crossing places - <0035's drawing page>: the fill crosses no water but at a crossing place". No page edit.
+
 
 ## T11 - the close
 
