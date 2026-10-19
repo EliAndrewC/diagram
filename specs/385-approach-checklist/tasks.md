@@ -225,6 +225,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T79 A tick saying landed is refused while the landing is not on main (the arbiter's fix on hour:385-approach-checklist@25, plan D98) [lands-open]
       research: rendering
+- [ ] T80 A quiet part B leaves its task's section reviewed (plan D99) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

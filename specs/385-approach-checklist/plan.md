@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -271,6 +271,26 @@ Owed by the hour-25 step-back (hour:385-approach-checklist@25, `continue`).
 ### T79 Decisions
 
 **D98 - the landing's record read at the tick.** `land-tooling.sh` appends `{task, files, outcome, utc}` to `<git dir>/land-tooling.jsonl` at each run's end (the task is the clone's active one, from `task-starts.jsonl`; `outcome` is "landed" or the step that failed). `tick-task.py`, when the NOTE matches `\blanded\b`, takes the task's last such row: a failed outcome refuses, naming the log; a landed one refuses where `git diff --quiet origin/main -- <file>` fails for a file in it (after a fetch), naming the file. A task with no row is not refused (it did not land through the tool, or lands with its feature).
+
+## T80 - a quiet part B leaves its task's section reviewed (found by T78's part B, 2026-10-19)
+
+### T80 Approach (checklist part A)
+
+1. **The goal, in the world.** A part B that decides nothing costs no review round, of itself or of its task's section.
+2. **The constraints.** T75 (D94, the GM's approved change 3): "only one that adds a new decision gets a spec-fidelity review". Any other change to the section is owed as now. A test red without it.
+3. **Where each comes from.** The GM (G); the section verdict is 375 FR-003a (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (`make plan-delta F=385` after T78's part B): the part B itself was not owed (T75), but the three other blocks of T78's section were - adding the part B changed the section's digest, its task verdict went stale, and its blocks fell back to block reviews.
+5. **The order.** `plan_gate.task_current` reads the section without its quiet part Bs, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: a CLEAR task section that gains only a part B deciding nothing (D94's test) stays current; one that gains anything else does not; `tests/tooling/test_plan_gate.py` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T80 Decisions
+
+**D99 - the section judged without its quiet part Bs.** `task_current`, where the digest differs, compares the earlier text with the current one with every part B block that `decides_nothing` taken out of both, by the same typo rule as now; a part B that decides is left in, so it still owes the section's review.
 
 ## T11 - the close
 
