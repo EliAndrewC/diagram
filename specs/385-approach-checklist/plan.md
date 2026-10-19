@@ -489,7 +489,13 @@ counted twice.
 7. **The search smell.** None.
 8. **The budget.** 60 min.
 9. **Done, measured.** One goal: both sites keep 0036's room once - the door path's middle 11 ft off the trees, the connector 12.5 ft - their claims IN-STEP, a test red without it, and the landing cohort passing with T96.
-10. **Before moving a constant.** No constant's value moves: `lay_door_paths`' `grow` is computed from the gap it is routed at, and `connector_dry_exit`'s band gap reads `GROVE_WORKING_ROOM_FT` (measured 2026-10-19, a grep: one site each).
+10. **Before moving a constant.** `dry_exit.GROVE_EXIT_CELL_FT` moves from 7 to 2.9 ft; its uses, measured 2026-10-19 (a grep of
+   `l7r` and `tests`): `track.py:940`, the connector's start pushed `CONNECTOR_BAND_GAP_FT + 0.71 x cell + 1` off a band - 15.6 ft at
+   2.9, inside the 16 ft half of a 32 ft gap (18.5 at 7 was not); `track.py:941`, the flood fill's cell where farms carry groves -
+   about 5.8 times the cells, paid only where no bearing of the sweep is clear; `serve.py:420`, `DOOR_FINE_CELL_FT`'s docstring,
+   which names the derivation only; `tests/hamletgen/ways/test_dry_exit_raster.py:61`, the raster test run at that cell. No other
+   constant's value moves: `lay_door_paths`' `grow` is computed from the gap it is routed at, and `connector_dry_exit`'s band gap
+   reads `GROVE_WORKING_ROOM_FT` (one site each).
 11. **Before fitting things into room.** Dispersed farms' bands stand 32 ft apart (`track.py`'s comment); a 6 ft connector at 12.5 ft a side needs 25 ft.
 
 ### T98 Decisions
