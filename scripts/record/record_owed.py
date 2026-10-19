@@ -478,7 +478,7 @@ def answer(root: pathlib.Path, check: str, result: str, bundle: str = "", q: str
     that check's dispatches on those subjects in the clone's check state (feature 375, FR-003: an answered check no longer
     freezes its page)."""
     done = _answer(root, check, result, bundle, q, notes, key, kind)
-    if check == "source-reader" and done:  # the reading is the tree's now - a bundle's MANIFEST carries no reading
+    if check in ("source-reader", "quote-check") and done:  # the reading is the tree's now - a bundle's MANIFEST carries no reading
         s, now = store(root), {u.slug: u.reading for u in units(root) if u.check == check}
         for slug in done:
             keep_reading(s, slug, now.get(slug, ""))

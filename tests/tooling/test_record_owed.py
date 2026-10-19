@@ -252,6 +252,23 @@ def test_a_note_read_at_its_words_is_netted_and_an_absence_note_owes_no_reading(
     assert "source-reader:0094#kyakhta" not in [u.slug for u in ro.unanswered(d)], "READ at its words: netted"
 
 
+def test_a_quote_check_answered_stands_when_only_another_note_s_sentence_in_its_block_changes(tmp_path: pathlib.Path) -> None:
+    """Feature 395 (the round arbiter on ask:395-round3-all): 43 notes answered SUPPORTS were owed quote-check again because
+    another note's sentence in the same block was reworded. An answer now also holds the note's words and the sentences
+    carrying its mark, so a change elsewhere in the block owes nothing, and a change to its own claim sentence still does."""
+    two = PAGE.replace("The Russians built theirs at the border.", "The Russians built theirs at the border. The Qing post faced it.")
+    two = two.replace('<sup class="fn" data-note="kyakhta"></sup></li>', '<sup class="fn" data-note="kyakhta"></sup> It was small.<sup class="fn" data-note="absence"></sup></li>')
+    d = _repo(tmp_path)
+    (d / Q / "0094-rooms.html").write_text(two, encoding="utf-8")
+    _git(d, "commit", "-qam", "page")
+    assert ro.answer(d, "quote-check", "SUPPORTS", q="0094", notes="kyakhta") == ["quote-check:0094#kyakhta"]
+    (d / Q / "0094-rooms.html").write_text(two.replace("It was small.", "It was very small."), encoding="utf-8")
+    assert "quote-check:0094#kyakhta" not in [u.slug for u in ro.unanswered(d)], "another note's sentence changed: still answered"
+    (d / Q / "0094-rooms.html").write_text(two.replace("The Qing post faced it.", "The Qing post faced it squarely."), encoding="utf-8")
+    assert "quote-check:0094#kyakhta" in [u.slug for u in ro.unanswered(d)], "its own claim sentence changed: owed again"
+    assert ru.claims_of("At p. 28 the wall was 3 ft. high. [^a] B rose. [^b]", "a") == ["At p. 28 the wall was 3 ft. high. [^a]"]
+
+
 def test_the_command_replays_a_commit_pair(tmp_path: pathlib.Path) -> None:
     d = _repo(tmp_path)
     (d / Q / "0094-rooms.notes.html").write_text(NOTES.replace("quickly built", "built"), encoding="utf-8")
