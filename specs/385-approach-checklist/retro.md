@@ -1050,3 +1050,9 @@ before changing code to match a page, read the page whole - a drift can be the p
 About 10 min, the first task through T118's wording-only route: no plan review, `make decide` said none was owed. Two claims split
 into a garden half on 0246 and a yard half UNRESEARCHED, as their sibling already read; the claims check 4 IN-STEP, its two
 asides on unchanged code filed (T134, T135). **The habit it changes:** a claim relabel is declared `**Wording only.**`.
+
+## T130 - the retro row
+
+About 8 min, wording only. The run-on reach's claim cited 0246 for a 60 ft to the field no page gives; it now reads GUESS,
+naming 0246's 60 ft to a house or way as the figure it reuses. Claims check IN-STEP; its two asides filed together (T136).
+**The habit it changes:** none.

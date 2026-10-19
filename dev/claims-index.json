@@ -20301,19 +20301,15 @@
  },
  "l7r/diagram/hamletgen/ways/bund.py::RUN_ON_REACH_FT#run-on reach": {
   "body": "5354bfb6082a1524",
-  "claim": "run-on reach - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: an end within 60 ft of the field is carried on",
-  "code": "a46f4d91e029a4a3",
+  "claim": "run-on reach - GUESS: an end within 60 ft of the field is carried on to it - the reach 0246 gives to a house or a way (`WAY_END_REACH_FT`), reused for the field; no page gives a distance to the field",
+  "code": "972a8c7d68a6779c",
   "core": "8efb7e17f36e5eeb",
   "date": "2026-10-19",
-  "note": "neither cited page records a 60 ft reach for carrying an end on to the field: 0246 gives 60 ft only to a house or another way, and 0014 says only that the nearest lane \"runs on to the bund\", with no distance. The label should be GUESS with no page named, or the page should record the figure",
-  "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
-  },
-  "research": "92410dbfeea7511e",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
-  ],
-  "verdict": "MISLABELED"
+  "note": "the bundle cites no question about how far from a field a path end is carried on to it; the 60 ft is just WAY_END_REACH_FT reused, as the GUESS says",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::RUN_ON_TURN_DEG#run-on turn limit": {
   "code": "ef3ef0fb0e9d6ae6",

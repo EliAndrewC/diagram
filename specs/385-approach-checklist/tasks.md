@@ -381,6 +381,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T135 law.fouls_fabric with own set drops its own garden from the check; 0246 §16 keeps an own way off the beds - confirm every caller with own also holds the beds, as fouled_segment does (impl-drift, T108's round) [lands-open]
       research: rendering
+- [ ] T136 bund.py claim hygiene: RUN_ON_TURN_DEG's comment says map drawing convention while its claim cites 0081 as a finding - settle which; BRANCH_STEP_FT has no Research: claim (likely NONE, plumbing) (impl-drift, T130's round) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
