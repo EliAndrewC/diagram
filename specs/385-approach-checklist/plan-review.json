@@ -7150,6 +7150,56 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T115": {
+   "section_sha256": "f8d50e16a52914efc2c7359635b7a7e8041b309bfb57f7d40886ee74c15f9ab2",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D132-window",
+     "summary": "A task's time is its tick window: from the tick before to its own tick, booked to the task(s) ticked at its end; the table gains the window's wall-clock minutes.",
+     "class": "within",
+     "why": "Amendment 10: the GM asked for tooling to gather 'this kind of information' - the per-task timing he had just been answered with, which was tick-to-tick spans. Reporting that span by one command is the request."
+    },
+    {
+     "id": "D132-source",
+     "summary": "Tick times are read by the tool from tasks.md's git history (the commit that turned a box [x]) rather than from the event log's tick records.",
+     "class": "within",
+     "why": "This departs from the measurement as recorded in request.md ('read from the event log (each tick now records its task, hour 33's fix) as a report, not rebuilt from git history by hand'): the plan rebuilds from git history, by tool, and does not use the event log's tick records. Within because the GM's own words name no source, the recorded objection is to the HAND rebuild and this is one command, and both sources deliver the information asked for - which one is design. Noted: the plan's step 4 measured the lagging active mark, not the hour-33 tick records, so the named source was set aside unmeasured (git history does reach ticks from before that fix)."
+    },
+    {
+     "id": "D132-batch",
+     "summary": "Tasks ticked in one commit share one window, reported as e.g. 'T96+T98'.",
+     "class": "within",
+     "why": "The measure the GM was answered with already reported T96 with T98 jointly (1 h 34). The joint window follows from D132-source's choice of git history, not from a physical limit - per-task tick records could separate a batch - but it reports every task, truthfully, and drops none."
+    },
+    {
+     "id": "D132-buckets",
+     "summary": "Gaps inside each window are bucketed by where_time.tables (T89/T90's buckets) as now, with no name-based booking.",
+     "class": "within",
+     "why": "'Where did its time go' is the other half of the information the GM was given (claims rounds, landing cost, plan reviews); existing buckets are reused, and dropping name-based booking removes only the lagging attribution step 4 measured wrong."
+    },
+    {
+     "id": "exit-c",
+     "summary": "A new BY=tick mode of where-time rather than mending the active mark.",
+     "class": "within",
+     "why": "The request asks for the information gathered by tooling, not for the mark to be repaired; the mechanism inside that is design, not scope."
+    },
+    {
+     "id": "home-of-report",
+     "summary": "Per-task time is printed by make where-time BY=tick, not by make feature-report's per-task table (FR-005, SC-001), which the blocks do not name.",
+     "class": "within",
+     "why": "The GM's words ask for 'tooling adjustments' and name no command; a where-time mode adds a report beside FR-005's table and removes nothing FR-005 or SC-001 require. Not a narrowing of the accepted spec, though the plan would read better naming FR-005."
+    },
+    {
+     "id": "done",
+     "summary": "Done: make where-time F=385 BY=tick [SINCE=] prints each task's span and bucket minutes, T97 within a minute of the hand count's 53, with a tests/tooling test red without it.",
+     "class": "within",
+     "why": "A check that the requested report gives the right number and keeps doing so enforces the request (GM 2026-09-20); nothing beyond the report is verified."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

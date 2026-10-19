@@ -955,3 +955,11 @@ the own-bank fill does not or saves more than 150 ft of walk, squared after by t
 its-bank as a DEVIATION, was blocked - its reason was the algorithm's order, not how a track forms - and two claims rounds moved the
 code to the page (a free crossing, then the squareness named). Items 6 and 9 still describe the first gapping only (round 3's aside).
 The unclaimed channel rule is T120. **The habit it changes:** a deviation's reason must be about the world, not the code's order.
+
+## T115 - the retro row
+
+About 25 min. `make where-time F=<n> BY=tick` books each tick-to-tick window to the task or batch ticked at its end, with its
+minutes by bucket and its wall-clock span - T97 53, T109 40, T102 49, as the hand count found. The ticks are read from tasks.md's
+history, not the event log's tick records, because those exist only since hour 33's fix and the history holds every tick (the
+review's aside). Its first reading: "tools" is the largest bucket, 85 of 218 minutes over eleven tasks - the foreground cohorts
+and landings, next to split by command. **The habit it changes:** a speed question is answered by `make where-time BY=tick`.
