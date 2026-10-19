@@ -509,6 +509,26 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@30 (continue),
 7. **The next step is a measurement.** The claim's triage, then its check.
 8. **Every route measured before offering one?** No route is offered.
 9. **After a ruling: the step it names?** Yes - the ruling says land T104, then do T100.
+## T105 - a claim that newly cites a page is owed its check, not a triage (found working T100, 2026-10-19)
+
+### T105 Approach (checklist part A)
+
+1. **The goal, in the world.** A claim relabeled to cite a page is judged against that page.
+2. **The constraints.** Feature 318's FR-016: a claim whose cited research moved owes only the triage of the changed blocks, unless a block it rested on is gone. Feature 316: a claim's verdict is recorded at the fingerprints its bundle read. A test red without it.
+3. **Where each comes from.** 318 (O), 316 (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T100's two relabeled claims, `make claims-owed`, then a read of `claims.research_why`): an UNRESEARCHED claim relabeled to cite 0035, and another to cite 0246, were each listed `triage`; their triage bundle named no claim, and `make claims-bundle OWED=1` refused with "no such claim(s)". `research_why` sends a claim to triage when the blocks it rested on still stand, and a claim that rested on nothing always does.
+5. **The order.** `research_why` asks first whether the claim cites a page its last check did not read; then the test.
+6. **The exits.** (c) - a page the claim was never checked against is research changed; (e) conform - bundling such claims by name each time - refused: the tool would need remembering.
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: a claim whose pointers name a page absent from its row's `pages` is owed `research changed`, so `make claims-bundle OWED=1` bundles it; a claim citing only the pages it was checked against keeps the triage rule; `tests/tooling/test_claims_scoping.py` red without it.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T105 Decisions
+
+**D123 - a new page is new research.** `claims.research_why` returns `research changed` when any page the claim now cites is not among the pages its last check read (its row's `pages`), before the triage test; feature 318's triage rule stands for every other moved page.
+
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).
