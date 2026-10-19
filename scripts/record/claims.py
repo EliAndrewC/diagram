@@ -946,6 +946,13 @@ def main(argv: Sequence[str] | None = None) -> int:
             keys = sorted(k for k, row in cur.items() if row.unit.path == args.module or row.unit.path.endswith("/" + args.module))
         else:
             keys = split_keys(args.units, cur)
+        slug = re.sub(
+            r"[^a-z0-9]+",
+            "-",
+            (args.module or ("owed" if args.owed else (keys or ["none"])[0])).lower(),
+        ).strip("-")[-60:]
+        out = Path(args.out) if args.out else DEFAULT_OUT / f"claims-{slug}"
+        shutil.rmtree(out, ignore_errors=True)  # hour 31's fix: a refused build leaves no bundle a check sent beside it could read
         unknown = [k for k in keys if k not in cur]
         if unknown or not keys:
             print(
@@ -960,12 +967,6 @@ def main(argv: Sequence[str] | None = None) -> int:
                 file=sys.stderr,
             )
             return 3
-        slug = re.sub(
-            r"[^a-z0-9]+",
-            "-",
-            (args.module or ("owed" if args.owed else keys[0])).lower(),
-        ).strip("-")[-60:]
-        out = Path(args.out) if args.out else DEFAULT_OUT / f"claims-{slug}"
         print(bundle(root, cur, keys, out, [c for c in args.context.split(",") if c], [p for p in args.pages.split(",") if p]))
         if not_owed:
             print(f"claims-bundle: re-check of {len(not_owed)} claim(s) not owed, because: {args.reason}")
