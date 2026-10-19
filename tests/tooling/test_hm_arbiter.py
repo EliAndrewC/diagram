@@ -389,6 +389,12 @@ def test_the_cascade_counts_only_the_dispatches_since_the_last_landing(tmp_path:
     hc = _load("hm_checks")
     state = {"dispatches": {"a": {"t": 10.0}, "b": {"t": 20.0}, "c": {"t": 30.0}, "d": {}}}
     assert hc.dispatches_since(state, 15.0) == 2 and hc.dispatches_since(state, 0.0) == 4
+    state["dispatches"]["e"] = {"t": 40.0, "prewrite": True}
+    assert hc.dispatches_since(state, 0.0) == 4, "feature 398's cascade@1: a pre-write source-reader read is not counted"
+    rec: dict = {}
+    hc.dispatch(rec, "n", "source-reader", "m", "owed-checks: source-reader\n", 1.0)
+    hc.dispatch(rec, "u", "source-reader", "m", "owed-checks: source-reader\nunit: source-reader:0270#k abc\n", 1.0)
+    assert rec["dispatches"]["n"]["prewrite"] and not rec["dispatches"]["u"]["prewrite"]
     assert hc.window_start(tmp_path) == 0.0, "no repository: the window is the whole state"
     root = tmp_path / "c"
     root.mkdir()
