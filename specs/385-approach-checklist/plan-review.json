@@ -793,6 +793,48 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
+  },
+  "## T70 - a feature is worked until it is set down (the GM 2026-10-18, step 3 of the approved order)": {
+   "sha256": "f562c7298e99ff252c63234c182ace5e3548515b42aaddaf83936422b83b0843",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T70 Approach (checklist part A)": {
+   "sha256": "b81293b487651b08cef022f31824d233aea70ae29135674620a25a635508b658",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T70 Decisions": {
+   "sha256": "f2604eec6f2869a95e785e2368416905d18acd1307a0f4ecfa06cd527f4721f8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T72 - a plan review's ledger row is written at landing (found landing T70, 2026-10-19)": {
+   "sha256": "2193af9b3276f0fc46de9698b9d5cd256e2ccb69578dea42d7159bab2bcab791",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T72 Approach (checklist part A)": {
+   "sha256": "24525992bc8984819e9289dd568ddce4123c222e794434e9c52814f56b685f65",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T72 part B (2026-10-19T00:24Z)": {
+   "sha256": "21705faa65eed0e7d8a2037c490e789944ebb6bf48cc247f9de61fbfdb5bf517",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "### T72 Decisions": {
+   "sha256": "154d20d8462f70c2e4aec7874280d68cbad7ac4a9cf0bfe9d469741673a49f09",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
   }
  },
  "reviewed": "2026-10-17",
@@ -4533,6 +4575,114 @@
      "summary": "The only change since the block's CLEAR verdict: T68, T69, T70 and T71 are added to the 'Lands open' list, so each of these newly inserted tasks lands on main when it closes, with its retro row, while the later tasks stay open - the same rule the block already applies to every other task.",
      "class": "within",
      "why": "This applies FR-006's existing one-task-then-retro landing to tasks added since. It is what the GM asked for in the original request ('we do one task and then we measure ... and then we go on and do the next task') and in Amendment 8 ('just make it another task on this feature ... we should do it now'). The rule's wording is unchanged and no task is taken out of the list, so nothing that was asked is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## T70 - a feature is worked until it is set down (the GM 2026-10-18, step 3 of the approved order)",
+    "## T72 - a plan review's ledger row is written at landing (found landing T70, 2026-10-19)",
+    "### T70 Approach (checklist part A)",
+    "### T70 Decisions",
+    "### T72 Approach (checklist part A)",
+    "### T72 Decisions",
+    "### T72 part B (2026-10-19T00:24Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T70-A2 Stop guard, not a cron",
+     "summary": "The check fires at every turn's end (Stop hook) instead of a 10-minute cron.",
+     "class": "within",
+     "why": "The GM's 22:35Z request asked for a 10-minute cron; the session's step 3 proposed the Stop hook in its place, and the GM approved that order ('For one, two, three, and four'). This is the approved shape."
+    },
+    {
+     "id": "T70-A2 question escape dropped",
+     "summary": "Of the approved proposal's three escapes, the second (a turn ending with a question to the GM) is dropped; a turn that really waits on the GM must set the feature down with WHY=\"awaiting the GM on <what>\".",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This departs from the proposal the GM approved, so it gets a ruling. It meets two of the tests. (1) It is implied by the GM's own words: the request names exactly two acceptable states, 'either still in progress or has been correctly set down', and a turn ending in a question is neither. (2) Keeping the escape would defeat the request's stated purpose, 'stopping with tasks partially done is a constant problem'. The motivating case is the overnight run of amendment 6, where a turn ending 'Shall I go on to the next task?' while the GM sleeps is exactly the stall the guard exists to stop, and nothing in a Stop hook can tell a rhetorical question from a real one. Nothing the GM relies on is taken away: a turn that really waits on him stays reachable through a recorded set-down that names what it waits for (Approach step 2), which makes it more visible to him, not less."
+    },
+    {
+     "id": "T70-A2 running work not held",
+     "summary": "The guard never holds a turn while a background command or agent started in the session has not reported back.",
+     "class": "within",
+     "why": "This is the approved proposal's first escape ('something is still running that will wake the session (a background gate, an agent)'). The proposal's safety net for a hung job is the existing 90-minute ceiling, which is unchanged."
+    },
+    {
+     "id": "T70-A2 set-down reason of two words or more, recorded",
+     "summary": "make set-down F= WHY= requires a reason of at least two words and writes a row to set-downs.jsonl.",
+     "class": "within",
+     "why": "This enforces the GM's 'correctly set down' and the approved third escape ('explicitly set down with a new make set-down F= WHY= record'). A check whose only effect is to make the requested set-down a real one serves the request."
+    },
+    {
+     "id": "T70 D89 in-progress from the clone's last task-start",
+     "summary": "The feature checked is the one named by the clone's last task-starts.jsonl record; the guard is silent in a clone with no task-start.",
+     "class": "within",
+     "why": "The GM asked for this 'when a feature is begun'. task-start is the moment a feature's work begins, and a clone with no task-start has no feature begun."
+    },
+    {
+     "id": "T70 D89 GM-review box excluded from 'open task'",
+     "summary": "A feature counts as in progress when its tasks.md has an open box other than the GM-review box and its status line does not close it.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows what counts as 'in progress'. Applied literally, the rule would defeat its own purpose. The GM-review box is the GM's own step, not one the session can work. If that box is the only one open, the feature has nothing left for the session to do, so it is not 'still in progress' in the sense of the GM's words. Holding the turn would demand work that does not exist and would make the session invent work or set the feature down without cause. A feature whose status line closes it is likewise not in progress. Each other open task is still caught."
+    },
+    {
+     "id": "T70 D89 running work read from the transcript",
+     "summary": "RUNNING is a background command ('running in background with ID') or an async agent ('agentId:') with no later task notification of that id.",
+     "class": "within",
+     "why": "This is how the approved first escape is implemented. It decides nothing the request left open."
+    },
+    {
+     "id": "T70 D89 fail open on read error, recorded",
+     "summary": "On any error reading its inputs the guard lets the turn end and records that it failed open.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a carve-out the GM never mentioned: the guard is silent exactly when it cannot decide. It is legitimate because failing closed would defeat the purpose and could leave no reachable exit. If the guard cannot read task-starts.jsonl, tasks.md or set-downs.jsonl, then make set-down, the only escape it offers, may itself fail to satisfy it. A Stop hook that refuses every turn end in that state holds the session in a loop that neither the GM's 'in progress' nor his 'set down' describes. Each fail-open is recorded in the guard log, so the GM can see every silent turn. It is not a quiet exemption."
+    },
+    {
+     "id": "T70 D90 refusal names the next step and is logged",
+     "summary": "The refusal names the open-task count, the first open box's id and title, and the make set-down command; each firing is recorded.",
+     "class": "within",
+     "why": "This is the refusal's wording and its record. It serves the GM's request that the session either keep working or set the feature down, and adds no behavior beyond it."
+    },
+    {
+     "id": "T70-A9 guard suite red without it",
+     "summary": "tests/hooks/test-set-down-hooks.sh, red without the guard.",
+     "class": "within",
+     "why": "Its only effect is to keep the requested guard in place, so it enforces the request."
+    },
+    {
+     "id": "T72-A2 plan-review rows written by the tooling, others unchanged",
+     "summary": "land-tooling and sync-with-main.sh done write and commit the ledger row of every owed pass whose subject is MODE 4: PLAN REVIEW; every other owed pass still refuses, under FR-019's make ledger-owed WRITE=.",
+     "class": "within",
+     "why": "Amendment 5 item 3 is specifically the plan reviews' ledger rows ('could be pre-filled from the recorded plan verdict'), and the GM asked for amendment 5 to be filed for it. Automating that row also answers amendment 8's 'make our tooling do the thing correctly automatically every time'. Leaving the other checks under FR-019's existing command keeps FR-019 as written. Nothing asked for every row to be auto-written, so leaving the others out narrows nothing."
+    },
+    {
+     "id": "T72 D92 acted-on cell names the plan-verdict record",
+     "summary": "The where cell of an auto-written plan-review row reads 'the plan-verdict record (make plan-verdict)'.",
+     "class": "within",
+     "why": "The GM's words were 'verdict and findings cells could be pre-filled', and this also fills the where cell. That is still within: FR-019 says the cell names where the pass was recorded, and a plan review is always recorded by make plan-verdict before the agent returns (Approach step 4). So the cell's content is fixed and true for every such pass."
+    },
+    {
+     "id": "T72-A2 written at landing, never under a gate; committed",
+     "summary": "The writer runs inside land-tooling.sh and sync-with-main.sh done, before their ledger checks, and commits dev/review-ledger.md when it wrote any rows.",
+     "class": "within",
+     "why": "This applies FR-010's constraint against tree writes while a gate runs, and places the write where the refusal would otherwise come. It decides nothing the request left open."
+    },
+    {
+     "id": "T72-A9 module test red without it",
+     "summary": "tests/tooling/test_ledger_owed.py, red without the writer.",
+     "class": "within",
+     "why": "It enforces only the requested writer."
+    },
+    {
+     "id": "T72 part B T74 for the Lands open line",
+     "summary": "The step-back continues; its tooling fix, the Lands open line, is filed as T74.",
+     "class": "within",
+     "why": "This records a later task and decides nothing in these blocks' scope."
     }
    ]
   }
