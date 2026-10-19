@@ -22,3 +22,6 @@ Every task deletes code no live map runs, or repoints prose to what does: nothin
 - [ ] T04 Measure and land (plan T04; FR-006, SC-001 - SC-004): `make maps`, `make done`, `make cohort-landing`, the bookends, the report, the push
       research: rendering
       verify:
+- [ ] GM review (make gm-reviewed F=392) [lands-open]
+      research: rendering
+      verify: the GM reviewed every row (make gm-review lists them)
