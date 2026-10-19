@@ -287,6 +287,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T101 Carried by the claims gate (FR-013): findings a page edit surfaced on code left unchanged - fix the code or the claim and re-check each: l7r/diagram/settlement/rolling/access.py::ACCESS_HALF_FT#corridor room [lands-open]
       research: rendering
+- [ ] T102 The connector may cross its brook where crossing saves more than about 150 ft, as 0035 gives it, or the ban recorded as a DEVIATION (track.connector_dry_exit#brook not crossed - DRIFTED, found working T98) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
