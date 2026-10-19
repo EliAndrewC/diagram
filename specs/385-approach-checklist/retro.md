@@ -1090,3 +1090,11 @@ About 20 min. `make tick`'s landed check refused T137, whose files stood on main
 `land-tooling` run had failed; a failed run whose every named file now matches origin/main is landed, one that named none is
 still refused. Two review rounds: the first rightly blocked an undefined "riders" - now named, the review ledger alone.
 **The habit it changes:** none; a guard that misfired now judges by what is on main.
+
+## T32 - the retro row
+
+About 40 min, the first ranking row of the E2 kind (one rule): `waterfields/banks.py::_WELD_MIN_SOLIDITY#weld lump`, wave 164.
+The first plan would have recorded the 0.85-solidity host preference on 0014 as a DEVIATION; its review blocked a fallback I had
+not measured, and measuring it found the preference runs nowhere - the welder its comment describes (`_absorb`) is gone from
+the tree. So the constant, its comment block and its claim were removed; no map moves, the gate green. **The habit it changes:**
+before recording a rule as a deviation, grep that anything runs it.
