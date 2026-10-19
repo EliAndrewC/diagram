@@ -734,3 +734,11 @@ pop-ups owe, and keeps the batches; the dispatch guard refuses that agent on a s
 never named. The plan named `test-pair-hooks.sh`, but `check-bundle-hooks.sh` runs `hm_checks` and its suite runs outside a
 repository, so the refusal's test is a unit test (`tests/tooling/test_batch_refusal.py`). **The habit it changes:** a session no
 longer chooses between one agent and ten.
+
+## T83 - the retro row
+
+About 70 min. A claimed module-level dict's entries are its blocks (`entry_blocks`), and `Unit.line_keyed` - a section, even an
+empty one, or such a dict - keys its claims by their own line; owed, the bundle, the triage and the backfill read that property.
+The backfill re-keyed 109 dict claims and owed nothing new; a probe entry added to `_OVERLAP_EXEMPT` owed its 17 claims a triage
+and none `code changed`. One red gate was mine: the first cut keyed on "has blocks", and an empty section has none. **The habit it
+changes:** a dict grown by an entry no longer costs a full impl-drift round over every claim on it.
