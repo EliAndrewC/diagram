@@ -63874,20 +63874,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/_helpers.py::BUND_REACH_FT#arrival at the bund": {
-  "body": "d8fe80650d464cd4",
-  "claim": "arrival at the bund - bunds-between-the-paddies-aze.drawing: an end within 6 ft of the worked ground's edge has arrived",
-  "code": "4cabb068a64243aa",
+  "body": "d9503a4d4fe8eee5",
+  "claim": "arrival at the bund - GUESS bunds-between-the-paddies-aze.drawing: an end within 6 ft of the worked ground's edge has arrived",
+  "code": "85a501fcfdbbc07f",
   "core": "5efeb905b7d48b3f",
   "date": "2026-10-19",
-  "note": "the page records the 6 ft as a GUESS, not a finding, and the constant's own comment calls it \"A map drawing convention\"; the claim should read GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html",
+  "note": "BUND_REACH_FT = 6.0 matches the drawing page, which records \"within 6 ft of the paddy's edge is drawn as joining it\" as a GUESS. The comment's 1.5 ft bund width matches the dividing bund's width.",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
   "research": "cb222e5372134180",
   "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:38716644055adc49",
    "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/_helpers.py::DOORYARD_REACH_FT#dooryard reach": {
   "code": "7f49757ecc4431a7",

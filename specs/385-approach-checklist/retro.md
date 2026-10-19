@@ -1098,3 +1098,13 @@ The first plan would have recorded the 0.85-solidity host preference on 0014 as 
 not measured, and measuring it found the preference runs nowhere - the welder its comment describes (`_absorb`) is gone from
 the tree. So the constant, its comment block and its claim were removed; no map moves, the gate green. **The habit it changes:**
 before recording a rule as a deviation, grep that anything runs it.
+
+## T33 - the retro row
+
+About 70 min, the first E3 NEEDS-RESEARCH ranking row picked by the round arbiter's reading of FR-020 (ask:t33-ranking-pick,
+which also retired 133 dead rows, each checked for a successor first): `bund.a_way_onto_the_bund#on the bund`, wave 166. 0014's
+drawing page now records that a lane end within 6 ft of the paddy counts as joining it, a GUESS, and the claim cites it. One page
+sentence owed 5 record checks, a 70-claim triage and 23 claims judged: 3 claims relabeled GUESS and a comment fixed here (they rest
+on the changed block); the bund pop-up's own depiction edits applied (polder crossings, a hedge, 0022 linked); and the finding that
+the law gate reads "reached the field" at 60 ft while the placer reads 6 ft went to T141, with T142 and T140 filed. **The habit it
+changes:** a page edit's cost is its triage width - a sentence on a hub page like 0014 re-owes every claim citing it.
