@@ -76,7 +76,7 @@ dispatch s4 quote-check "Read /tmp/l7r-check/q4/MANIFEST.md and rule on it." 1
 [ "$(rc)" -eq 2 ] && grep -q 'name: "check-wave"' "$T/err" && grep -q 'agentType: "quote-check"' "$T/err" && ok "the 4th is refused, naming the check-wave call for its type" || no "the 4th went" "(rc=$(rc)) $(head -3 "$T/err")"
 logged wave && ok "...recorded" || no "the wave refusal is not recorded"
 for n in 1 2 3 4; do L7R_DISPATCHER=d1 dispatch s7 quote-check "Read /tmp/l7r-check/h$n/MANIFEST.md and rule on it." 1; done
-[ "$(rc)" -eq 2 ] && grep -q "has no Workflow tool (a headless page session): put WAVE_OK" "$T/err" && ! grep -q 'name: "check-wave"' "$T/err" && ok "a headless session is told WAVE_OK, not a Workflow call it lacks (385 T58)" || no "the headless session was pointed at Workflow" "(rc=$(rc)) $(head -4 "$T/err")"
+[ "$(rc)" -eq 0 ] && logged "headless page session's quote-check wave" && ok "a headless session's 4th same-check launch passes, logged (390)" || no "the headless session's wave was refused" "(rc=$(rc)) $(head -4 "$T/err")"
 for n in 1 2 3 4; do dispatch s5 spec-fidelity "Review round $n of feature 9$n." 1; done
 [ "$(rc)" -eq 2 ] && grep -q "not one of check-wave's authorized jobs" "$T/err" && ! grep -q 'name: "check-wave"' "$T/err" && ok "a type check-wave will not take is told WAVE_OK is its way, not check-wave" || no "the refusal offered a closed route" "(rc=$(rc)) $(head -4 "$T/err")"
 dispatch s4 record-format "Read /tmp/l7r-check/r1/MANIFEST.md and rule on it." 1

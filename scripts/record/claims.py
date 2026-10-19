@@ -484,14 +484,17 @@ def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path, cont
 
 def parse_reply(text: str) -> tuple[dict[str, tuple[str, str]], list[tuple[str, str]]]:
     """({key: (verdict, note)}, [(uid, decision)]) from a check's reply."""
+    sys.path.insert(0, str(HERE.parent / "hooks" / "lib"))
+    from hm_house import americanize  # noqa: PLC0415 - feature 385 T78: a note's words in the house style, its key as written
+
     verdicts: dict[str, tuple[str, str]] = {}
     unclaimed: list[tuple[str, str]] = []
     for raw in text.split("\n"):
         line = raw.strip().strip("`")
         if m := _VERDICT.match(line):
-            verdicts[m.group(1).strip("`")] = (m.group(2), m.group(3).strip())
+            verdicts[m.group(1).strip("`")] = (m.group(2), americanize(m.group(3).strip()))
         elif m := _UNCLAIMED.match(line):
-            unclaimed.append((m.group(1).strip("`"), m.group(2).strip()))
+            unclaimed.append((m.group(1).strip("`"), americanize(m.group(2).strip())))
     return verdicts, unclaimed
 
 

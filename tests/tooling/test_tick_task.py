@@ -183,3 +183,35 @@ def test_a_tick_archives_the_plan_s_finished_sections_and_an_archive_error_never
     monkeypatch.setattr(plan_gate, "archive", broken)
     assert tt.main(["188", "T03", "done"]) == 0  # the tick stands
     assert "not archived (disk full)" in capsys.readouterr().out and "- [x] T03" in (d / "tasks.md").read_text(encoding="utf-8")
+
+
+def test_a_note_saying_landed_is_refused_while_the_landing_is_not_on_main(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 385 T79 (plan D98; the round arbiter on hour:385-approach-checklist@25): T72 was ticked "landed" over a failed landing."""
+    import subprocess as sp  # noqa: PLC0415
+
+    gd = tmp_path / "git"
+    gd.mkdir()
+    rows = gd / "land-tooling.jsonl"
+    differs: set[str] = set()
+
+    def fake_run(cmd, **kw):  # noqa: ANN001, ANN003, ANN202
+        out = "" if "diff" not in cmd else ""
+        if "--git-common-dir" in cmd:
+            out = str(gd)
+        rc = 1 if "diff" in cmd and cmd[-1] in differs else 0
+        return sp.CompletedProcess(cmd, rc, out, "")
+
+    monkeypatch.setattr(tt.subprocess, "run", fake_run)
+    assert tt.landed_refusal(tmp_path, "385-x", "T72", "Landed on main") == "", "no run recorded: not refused"
+    rows.write_text(json.dumps({"feature": "385-x", "task": "T72", "files": ["scripts/a.py"], "outcome": "failed: the checks failed", "log": "L"}) + "\n")
+    assert "ended 'failed: the checks failed' (L)" in tt.landed_refusal(tmp_path, "385-x", "T72", "Landed on main")
+    assert tt.landed_refusal(tmp_path, "385-x", "T72", "built, tests green") == "", "a note not claiming a landing is not checked"
+    with rows.open("a") as fh:  # the reland ran while another task was active: the same files, landed, count
+        fh.write(json.dumps({"feature": "385-x", "task": "T73", "files": ["scripts/a.py", "dev/review-ledger.md"], "outcome": "landed", "log": "L"}) + "\n")
+    assert tt.landed_refusal(tmp_path, "385-x", "T72", "Landed on main") == ""
+    rows.write_text(rows.read_text().rsplit("\n", 2)[0] + "\n")
+    rows.write_text(rows.read_text() + json.dumps({"feature": "385-x", "task": "T72", "files": ["scripts/a.py", "dev/review-ledger.md"], "outcome": "landed", "log": "L"}) + "\n")
+    differs.update({"dev/review-ledger.md"})
+    assert tt.landed_refusal(tmp_path, "385-x", "T72", "landed") == "", "the ledger rides along and is not compared"
+    differs.add("scripts/a.py")
+    assert "scripts/a.py differs from origin/main" in tt.landed_refusal(tmp_path, "385-x", "T72", "LANDED")

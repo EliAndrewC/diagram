@@ -3269,7 +3269,8 @@
  "ryo": {
   "def": "The gold coin of Edo Japan, the largest unit of its money, far above the copper mon.",
   "variants": [
-   "ryo"
+   "ryo",
+   "ryō"
   ]
  },
  "ryobosei": {
@@ -6939,7 +6940,8 @@
  "sho": {
   "def": "A Japanese measure of volume, a tenth of a to. The shogunate's rice bale held 3 to and 5 sho.",
   "variants": [
-   "sho"
+   "sho",
+   "shō"
   ]
  },
  "steelyard": {
@@ -12018,7 +12020,7 @@
   ]
  },
  "dou": {
-  "def": "In the Pearl River delta, a sluice through a polder's dike, through which the polder's land and ponds were watered and drained.",
+  "def": "Two Chinese words written alike in English: a measure of grain volume, a tenth of a shi, ten sheng making one dou; and, in the Pearl River delta, a sluice through a polder's dike, through which the polder's land and ponds were watered and drained.",
   "variants": [
    "dou"
   ]
@@ -16255,6 +16257,131 @@
   "def": "Neighborhood, and in law the rights and duties neighbors owe one another; Wigmore's section of that name collects the Japanese customs on how near a house may be built to a road or to a neighbor's land, and where its rain may fall.",
   "variants": [
    "vicinage"
+  ]
+ },
+ "troy ounce": {
+  "def": "The ounce used to weigh silver and gold, about 31.1 g. It is heavier than the everyday ounce of about 28.3 g.",
+  "variants": [
+   "troy ounce",
+   "troy oz",
+   "troy ounces"
+  ]
+ },
+ "real wage": {
+  "def": "A wage measured by what it buys rather than in coin. Bassino and Ma's figure is a day's wage divided by the year's cost of the consumption basket, so 2.82 g against 326 g is 0.009.",
+  "variants": [
+   "real wage",
+   "real wages"
+  ]
+ },
+ "miso": {
+  "def": "A salty paste of fermented soybeans, used in soup and as a seasoning.",
+  "variants": [
+   "miso"
+  ]
+ },
+ "deflate": {
+  "def": "Of a money sum: divided by a price, or by the cost of a basket of goods, to measure it in goods rather than coin.",
+  "variants": [
+   "deflate",
+   "deflated",
+   "deflating"
+  ]
+ },
+ "tael": {
+  "def": "A Chinese unit of silver counted by weight, in which Qing wages and prices were reckoned.",
+  "variants": [
+   "tael",
+   "taels"
+  ]
+ },
+ "qian": {
+  "def": "A Chinese weight of silver, a tenth of a tael. Prices in silver were given in taels and qian.",
+  "variants": [
+   "qian"
+  ]
+ },
+ "wen": {
+  "def": "A copper coin of Qing China, the \"cash\", counted singly and by the string.",
+  "variants": [
+   "wen"
+  ]
+ },
+ "live sale": {
+  "def": "In Qing China, a sale of land that the seller kept the right to buy back, at a price below an outright sale (usually 60-80% of it). At Shicang it was the same thing as a pledge.",
+  "variants": [
+   "live sale",
+   "live sales",
+   "live-sale",
+   "living sale"
+  ]
+ },
+ "subsoil owner": {
+  "def": "In southern Fujian, where a field's ownership was split in two, the holder of the underlying title, who was paid the \"large rent\" by the topsoil owner.",
+  "variants": [
+   "subsoil owner",
+   "subsoil owners",
+   "large rent"
+  ]
+ },
+ "topsoil owner": {
+  "def": "In southern Fujian, the holder of the right to a field's surface, who paid the \"large rent\" to the subsoil owner and collected a \"small rent\" from the farmer who worked it.",
+  "variants": [
+   "topsoil owner",
+   "topsoil owners",
+   "small rent"
+  ]
+ },
+ "gengshen": {
+  "def": "The 57th year of the sixty-year cycle by which Chinese years were named. Kangxi 19, 1680, was a gengshen year.",
+  "variants": [
+   "gengshen"
+  ]
+ },
+ "xinyou": {
+  "def": "The 58th year of the sixty-year cycle by which Chinese years were named. Kangxi 20, 1681, was a xinyou year.",
+  "variants": [
+   "xinyou"
+  ]
+ },
+ "ground tenant": {
+  "def": "In an Edo town, a tenant who rented a plot of ground from its owner and put up their own building on it, paying a ground rent.",
+  "variants": [
+   "ground tenant",
+   "ground tenants",
+   "ground tenancy",
+   "ground tenancies"
+  ]
+ },
+ "capitalize": {
+  "def": "To value land or another asset as the sum that would earn its yearly net income as interest at a given rate: a net income capitalized at 5% is worth twenty times that income.",
+  "variants": [
+   "capitalize",
+   "capitalized",
+   "capitalizing",
+   "capitalization"
+  ]
+ },
+ "Suruga": {
+  "def": "A province of Japan on the Pacific coast west of Edo, around today's Shizuoka, on the Tokaido road.",
+  "variants": [
+   "Suruga",
+   "Suruga province"
+  ]
+ },
+ "Kyōmasu": {
+  "def": "The Kyoto grain measure, the square wooden box that held one shō, which the shogunate made Japan's standard in 1669; a koku was a hundred of them, about 180 liters.",
+  "variants": [
+   "Kyōmasu",
+   "kyomasu",
+   "Kyoto masu"
+  ]
+ },
+ "Zhang Lüxiang": {
+  "def": "The scholar, courtesy name Kaofu, who passed on Mr. Shen's late-Ming farm manual of Huzhou with his own supplement, the Bu nongshu, and wrote the postscript that closes Mr. Shen's part.",
+  "variants": [
+   "Zhang Lüxiang",
+   "Zhang Lü-xiang"
   ]
  }
 }

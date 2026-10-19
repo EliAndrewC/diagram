@@ -377,3 +377,19 @@ def test_a_depiction_answer_under_amendment_1s_formula_survives_an_about_edit(tm
     commit("a pit, dug by hand.", "research/questions/0006-dry-fields.html", "2026-01-04T00:00:00Z")
     assert not ro.amendment1_depiction_answered(root, store, slug), "an Entry: edit since: owed again"
     assert not ro.amendment1_depiction_answered(root, tmp_path / "empty", slug), "no answer recorded"
+
+
+def test_pop_ups_one_check_owes_are_named_as_one_batch_and_kept_for_the_guard() -> None:
+    """Feature 385 T81 (plan D100; the GM's approved change 1): T10's checks sent 90 agents, each on a single pop-up."""
+    u = ru.Unit
+    rows = [
+        u("modal-form:choice/split--0.6", "its words changed"),
+        u("modal-form:choice/split--0.4", "its words changed"),
+        u("modal-depiction:choice/split--0.6", "its words changed"),
+        u("modal-research-accuracy:choice/split--0.6", "its words changed"),
+        u("modal-research-gaps:choice/split--0.4", "its words changed"),
+        u("modal-form:choice/split--0.7", "a page its References name moved (0018-x.html)"),  # triage first
+    ]
+    assert ro.modal_batches(rows) == {"modal-form": ["choice/split--0.6", "choice/split--0.4"], "modal-research": ["choice/split--0.6", "choice/split--0.4"]}
+    assert ro.modal_batches(rows, {"modal-form:choice/split--0.4"}) == {"modal-research": ["choice/split--0.6", "choice/split--0.4"]}, "an answered one leaves"
+    assert 'batched: make modal-bundle KIND="choice/split--0.6 choice/split--0.4" FOR=modal-form' in ro.report(rows)

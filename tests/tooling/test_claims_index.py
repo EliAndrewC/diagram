@@ -518,3 +518,13 @@ def test_a_changed_constant_names_the_drawing_pages_still_stating_its_old_figure
     assert [ln.split()[2] for ln in found] == ["research/questions/0018-ponds.drawing.html", "research/questions/0022-bunds.drawing.html"]
     assert "INSET was 23.0 in l7r/rows.py" in found[0]
     assert st.figures(ast.parse("x = (0, 1, 2.5, 30.0)").body[0].value) == ["2.5", "30"]  # type: ignore[attr-defined]
+
+
+def test_a_reply_s_notes_are_written_in_the_house_style_and_its_keys_as_given() -> None:
+    """Feature 385 T78 (plan D97): T10's gate went red on an index note's British spelling, copied from an impl-drift reply."""
+    brit = "gr" + "ey"
+    reply = f"VERDICT l7r/x.py::{brit}_band#a {brit} edge DRIFTED - the {brit} band is wider\nUNCLAIMED l7r/x.py::f - a {brit} stone"
+    verdicts, unclaimed = cx.parse_reply(reply)
+    key = f"l7r/x.py::{brit}_band#a {brit} edge"
+    assert key in verdicts, "the key is matched as written"
+    assert verdicts[key] == ("DRIFTED", "the gray band is wider") and unclaimed == [("l7r/x.py::f", "a gray stone")]

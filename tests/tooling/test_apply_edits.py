@@ -127,6 +127,17 @@ def test_a_lone_empty_line_breaks_the_paragraph_and_no_line_deletes_its_line(tmp
     assert q.read_text(encoding="utf-8") == "One.\n\nTwo.\n\nkeep\n"
 
 
+def test_an_edit_s_new_text_is_written_in_the_house_style_its_quotations_kept(tmp_path) -> None:
+    """Feature 385 T78 (plan D97): an agent's words reach the record through this script, which the house-style hook never sees."""
+    brit = "col" + "our"
+    q = tmp_path / ae.RECORD / "m.html"
+    q.parent.mkdir(parents=True)
+    q.write_text("<p>old text</p>\n", encoding="utf-8")
+    (tmp_path / "r.md").write_text(f"EDIT {q}\n<<<\nold text\n===\nits {brit}, <q>a {brit} quoted</q>\n>>>\n", encoding="utf-8")
+    assert ae.main([str(tmp_path / "r.md"), "--root", str(tmp_path)]) == 0
+    assert q.read_text(encoding="utf-8") == f"<p>its color, <q>a {brit} quoted</q></p>\n"
+
+
 def test_a_block_indented_under_a_numbered_finding_is_applied_without_its_indent(tmp_path) -> None:
     q = _tree(tmp_path)
     report = tmp_path / "r.md"

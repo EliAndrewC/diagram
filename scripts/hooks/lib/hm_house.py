@@ -259,6 +259,49 @@ BRIT = ("colour","colours","centre","centres","centred","behaviour","behaviours"
         "catalogue","honour","honours","grey")
 
 
+def _cased(src: str, dst: str) -> str:
+    if src.isupper():
+        return dst.upper()
+    if src[:1].isupper():
+        return dst[:1].upper() + dst[1:]
+    return dst
+
+
+def americanize_plain(text: str) -> tuple[str, list[str]]:
+    """The house style's mechanical corrections on text with no span held out: a dash to a hyphen, `PAIRS`, case kept."""
+    notes = []
+    for dash, name in (("\u2014", "em-dash"), ("\u2013", "en-dash")):
+        if dash in text:
+            text = re.sub(r"\s*%s\s*" % dash, " - ", text)
+            notes.append(name + " -> hyphen")
+    for brit, amer in PAIRS.items():
+        pat = re.compile(r"\b%s\b" % brit, re.I)
+        if pat.search(text):
+            text = pat.sub(lambda m: _cased(m.group(0), amer), text)
+            notes.append(brit + " -> " + amer)
+    return text, notes
+
+
+#: what `americanize` holds out, as the hook holds it in a prose file: a code span, and a quotation (someone else's text)
+_HELD = re.compile(
+    "\x60{3}.*?\x60{3}|\x60[^\x60]*\x60|「[^」]*」|『[^』]*』|“[^”]*”|<q\\b[^>]*>.*?</q>|<blockquote\\b[^>]*>.*?</blockquote>|\x22[^\x22\n]*\x22",
+    re.S,
+)
+
+
+def americanize(text: str) -> str:
+    """Text a TOOL writes from an agent's reply, in the house style (feature 385 T78, plan D97): `claims.py record`'s notes and
+    `apply_edits.py`'s EDIT text reach tracked files without this hook seeing them - T10's gate went red on an index note's
+    British spelling. Spans and quotations are held out exactly as the hook holds them."""
+    out, last = [], 0
+    for m in _HELD.finditer(text):
+        out.append(americanize_plain(text[last : m.start()])[0])
+        out.append(m.group(0))
+        last = m.end()
+    out.append(americanize_plain(text[last:])[0])
+    return "".join(out)
+
+
 def report(d: dict) -> str:
     inp = d.get("tool_input", {}) or {}
     path = inp.get("file_path", "") or ""
@@ -386,17 +429,7 @@ def report(d: dict) -> str:
 
     
     def _correct_plain(text):
-        notes = []
-        for dash, name in (("—", "em-dash"), ("–", "en-dash")):
-            if dash in text:
-                text = re.sub(r"\s*%s\s*" % dash, " - ", text)
-                notes.append(name + " -> hyphen")
-        for brit, amer in PAIRS.items():
-            pat = re.compile(r"\b%s\b" % brit, re.I)
-            if pat.search(text):
-                text = pat.sub(lambda m: _match_case(m.group(0), amer), text)
-                notes.append(brit + " -> " + amer)
-        return text, notes
+        return americanize_plain(text)  # feature 385 T78: the one correction, at module level for the tools too
 
     
     # what a session can actually see, with the spans held out
