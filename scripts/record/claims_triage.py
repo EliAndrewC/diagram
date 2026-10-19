@@ -268,3 +268,11 @@ def record_triage(
             row.pop("triage", None)
         out[key] = row
     return out, msgs
+
+
+def triage_reply(path: Path) -> str:
+    """A triage reply's text: a transcript's (`.jsonl`, `.output`) last reply, as `make modal-triaged` reads one (feature 385 T92:
+    T31's triage read raw cleared all 281 claims, the 18 it named TOUCHES among them)."""
+    import apply_edits  # noqa: PLC0415
+
+    return apply_edits.reply_of(path)
