@@ -679,3 +679,20 @@ def test_a_red_gate_bundle_skips_a_tree_moved_abort_and_shows_the_diff_between_r
     assert "t2" not in runs, "the tree-moved abort is no red gate"
     assert f"between {c1} and {c2}:" in runs and "-x = 1" in runs and "+x = 2" in runs and "f.py | 2 +-" in runs, "the diff, its stat first"
     assert "the same commit; uncommitted edits between them are not recorded" in runs, "t3 and t4 share a commit"
+
+
+def test_the_exported_feature_outranks_the_pointer(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """The round arbiter on hour:391-comparative-money-sources@2 (2026-10-18): a session working 390 with SPECIFY_FEATURE
+    exported, while `.specify/feature.json` named 391 (its last claim), had every hour charged to 391. The exported feature wins
+    when its directory exists; a page session's own directory still outranks both; an unknown name falls back to the pointer."""
+    root = tmp_path / "c"
+    for d in ("specs/390-a", "specs/391-b", "specs/368-x", ".specify"):
+        (root / d).mkdir(parents=True)
+    (root / ".specify" / "feature.json").write_text('{"feature_directory": "specs/391-b"}')
+    monkeypatch.delenv("L7R_FEATURE_DIRECTORY", raising=False)
+    monkeypatch.setenv("SPECIFY_FEATURE", "390-a")
+    assert ha.feature_dir(root) == root / "specs" / "390-a"
+    monkeypatch.setenv("SPECIFY_FEATURE", "999-gone")
+    assert ha.feature_dir(root) == root / "specs" / "391-b", "a name with no directory falls back to the pointer"
+    monkeypatch.setenv("L7R_FEATURE_DIRECTORY", "specs/368-x")
+    assert ha.feature_dir(root) == root / "specs" / "368-x", "a page session's own directory outranks both"

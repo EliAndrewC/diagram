@@ -244,6 +244,9 @@ def feature_of(root: Path) -> str:
     own = Path(os.environ.get("L7R_FEATURE_DIRECTORY", "").strip().rstrip("/")).name
     if own:
         return own
+    named = os.environ.get("SPECIFY_FEATURE", "").strip().strip("/")
+    if named and (root / "specs" / named).is_dir():  # as `hm_arbiter.feature_dir`: the exported feature before the pointer
+        return named
     try:
         data = json.loads((root / ".specify" / "feature.json").read_text(encoding="utf-8"))
     except (OSError, ValueError):
