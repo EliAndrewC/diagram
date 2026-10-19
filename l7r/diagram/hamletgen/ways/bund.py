@@ -56,7 +56,7 @@ def run_on_target(q: Pt, ground: WorkedGround, half_tread: float, reach: float =
     `reach` from it. The open segment to a set's nearest point meets nothing of the set, so the run-on cannot cross a plot.
 
     Research:
-        joins at the nearest point - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: straight to
+        joins at the nearest point - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: straight to
             the worked ground's nearest edge point, stopped on the bund"""
     if ground.inside(q):
         return None

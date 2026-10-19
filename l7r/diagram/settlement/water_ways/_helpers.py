@@ -51,9 +51,9 @@ HOUSE_SERVE_FT = 60.0
 # ...OR RUNS ON TO THE BUND (269 B04/B17, research/questions/0014-bunds-between-the-paddies-aze.drawing.html - "the field path runs from the hamlet to the paddy's outer
 # bund and joins it ... it never ends in open ground short of the bund"). An end has arrived when its centerline stops
 # within a bund's width (~1.5 ft) and the widest lane's half-tread (3 ft) of the worked ground's edge, with a foot and a
-# half of drawing margin: the cap of the tread then lies on the bund line. A map drawing convention.
+# half of drawing margin: the cap of the tread then lies on the bund line. 0014 records the 6 ft as a GUESS.
 BUND_REACH_FT = 6.0
-"""Research: arrival at the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: an end within 6 ft of the worked ground's edge has arrived"""
+"""Research: arrival at the bund - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: an end within 6 ft of the worked ground's edge has arrived"""
 
 
 def dooryard_dist(house: Any, q: Pt) -> float:

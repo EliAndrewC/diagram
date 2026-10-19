@@ -20599,19 +20599,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#on the bund": {
-  "code": "998920bf8d1e7e15",
+  "body": "e21f0f50a13f41af",
+  "claim": "on the bund - GUESS bunds-between-the-paddies-aze.drawing: a lane end within 6 ft of the paddy's edge (`BUND_REACH_FT`) counts as joined to the bund",
+  "code": "11d0f8275662df9c",
   "core": "9051ac4b2c4b6b02",
-  "date": "2026-10-08",
-  "note": "the page gives no reach figure and says the path \"never ends in open ground short of the bund\"; BUND_REACH_FT=6 counts an end up to 6 ft short as joined, so label it GUESS/UNRESEARCHED or record the tolerance on the page",
+  "date": "2026-10-19",
+  "note": "6 ft from the paddy's edge counts as joined; the page records this as a GUESS, measured against the paddy alone",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
+  "research": "cb222e5372134180",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947"
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
   ],
-  "triage": "touched",
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#some way joins the bund": {
   "body": "e21f0f50a13f41af",
@@ -20852,18 +20853,37 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/bund.py::run_on_target#a lane end is carried on to the bund only from within 60 ft (`RUN_ON_REACH_FT`)": {
+  "code": "a164ccc915fcf7b4",
+  "core": "a164ccc915fcf7b4",
+  "date": "2026-10-19",
+  "note": "a lane end is carried on to the bund only from within 60 ft (`RUN_ON_REACH_FT`)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/hamletgen/ways/bund.py::run_on_target#joins at the nearest point": {
+  "body": "2426e633bd6205a8",
+  "claim": "joins at the nearest point - bunds-between-the-paddies-aze.drawing: straight to the worked ground's nearest edge point, stopped on the bund",
   "code": "5cf016f53a002421",
   "core": "a164ccc915fcf7b4",
-  "date": "2026-10-03",
-  "note": "0014: joins at the nearest point (GUESS)",
+  "date": "2026-10-19",
+  "note": "the page records \"joins the bund at its point nearest the hamlet\" as a GUESS; the claim should read GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triage": "touched",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
+  "research": "cb222e5372134180",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
+  ],
+  "verdict": "MISLABELED"
+ },
+ "l7r/diagram/hamletgen/ways/bund.py::run_on_target#the run-on stops half a tread plus 1 ft (`TIP_MARGIN_FT`) outside the worked ground's edge": {
+  "code": "a164ccc915fcf7b4",
+  "core": "a164ccc915fcf7b4",
+  "date": "2026-10-19",
+  "note": "the run-on stops half a tread plus 1 ft (`TIP_MARGIN_FT`) outside the worked ground's edge",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/bund.py::squared_step#square crossing": {
   "code": "aec7f8f489ae4ae9",
@@ -20877,17 +20897,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::tip_onto_the_bund#spur tip on the bund": {
+  "body": "6075f3a988125a48",
+  "claim": "spur tip on the bund - bunds-between-the-paddies-aze.drawing: never short of it, never in it",
   "code": "4229b31c43b790c8",
   "core": "db2524b52d5fdc65",
-  "date": "2026-10-03",
-  "note": "0014: never short of the bund, never through it",
+  "date": "2026-10-19",
+  "note": "\"never short of it\" is not what the code does: an end more than 60 ft off (`RUN_ON_REACH_FT`), or one whose run-on turns back or is blocked, is returned \"as it came\", short in open ground, against \"it never ends in open ground short of the bund\"; either the claim names the fallback or the code makes sure the tip arrives",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triage": "touched",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
+  "research": "cb222e5372134180",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/bund.py::turns_back#no hook onto the bund": {
   "code": "419d3fafa1c19390",
@@ -23479,17 +23502,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/geom.py::end_serves#reached on the bund": {
+  "body": "493cd6f87043de5a",
+  "claim": "reached on the bund - bunds-between-the-paddies-aze.drawing: within 6 ft of its edge",
   "code": "87c8866a2f21ae8e",
   "core": "b327dfcd3d7c859c",
-  "date": "2026-10-03",
-  "note": "joins the bund; 6 ft within a bund's width",
+  "date": "2026-10-19",
+  "note": "the 6 ft figure is right, but the page records it as a GUESS (\"a GUESS at how near reads as touching\"); the claim should read GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triage": "touched",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
+  "research": "cb222e5372134180",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
+  ],
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/geom.py::ends_touch#plumbing": {
   "code": "beef2c685ca82ff4",
@@ -25322,16 +25348,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::field_unreached#a way reaches the field": {
+  "body": "5d1cff4617012bae",
+  "claim": "a way reaches the field - bunds-between-the-paddies-aze.drawing: on brook maps",
   "code": "a102a89457df4d35",
   "core": "3fdabf4a4c605fac",
-  "date": "2026-10-03",
-  "note": "0014 drawing: the path joins the outer bund (on every map); code asks only on brook maps and accepts any way within 60 ft of paddy or dry hem",
+  "date": "2026-10-19",
+  "note": "the check passes a way within `FIELD_REACH_FT`=60 ft of any field or dry plot, but the page has the path join the paddy's outer bund (within 6 ft) and \"never ends in open ground short of the bund\"; the page also never limits this to brook maps",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triage": "touched",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
+  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/law.py::fixture_quads#under the crown, not the trunk": {
@@ -30603,16 +30632,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::SPUR_REACH_FT#spur reaches the field": {
+  "body": "1ea30c782ac0b4c3",
+  "claim": "spur reaches the field - bunds-between-the-paddies-aze.drawing: within 60 ft of its edge",
   "code": "4c8c6194c20bd500",
   "core": "c0101826cceee8b7",
-  "date": "2026-10-03",
-  "note": "0014 says the field path \"never ends in open ground short of the bund\", and the 60 ft is on no page, yet SPUR_REACH_FT counts an arm ending 60 ft short as reaching the field. The claim should say GUESS for the 60 ft, or the reach should be the bund itself",
+  "date": "2026-10-19",
+  "note": "`SPUR_REACH_FT = 60.0` counts a spur ending 60 ft from the field as arrived, but the page's arrival distance is 6 ft and the path \"never ends in open ground short of the bund\"",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triage": "touched",
-  "triaged": "2026-10-05",
+  "research": "cb222e5372134180",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
+  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/track.py::SPUR_WIDTH#field spur width": {
@@ -63842,17 +63874,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/_helpers.py::BUND_REACH_FT#arrival at the bund": {
+  "body": "d8fe80650d464cd4",
+  "claim": "arrival at the bund - bunds-between-the-paddies-aze.drawing: an end within 6 ft of the worked ground's edge has arrived",
   "code": "4cabb068a64243aa",
   "core": "5efeb905b7d48b3f",
-  "date": "2026-10-03",
-  "note": "path joins the outer bund per 0014 drawing",
+  "date": "2026-10-19",
+  "note": "the page records the 6 ft as a GUESS, not a finding, and the constant's own comment calls it \"A map drawing convention\"; the claim should read GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
-  "research": "9c5292e27312fca8",
-  "triage": "touched",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
+  "research": "cb222e5372134180",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
+  ],
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/settlement/water_ways/_helpers.py::DOORYARD_REACH_FT#dooryard reach": {
   "code": "7f49757ecc4431a7",
@@ -64337,11 +64372,11 @@
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#arrival at the bund": {
   "body": "0c4614530572c84e",
-  "claim": "arrival at the bund - GUESS bunds-between-the-paddies-aze.drawing: within 6 ft of a field's or dry plot's edge, at the map's scale (the page gives no figure)",
-  "code": "7997f7c93d6febc8",
+  "claim": "arrival at the bund - GUESS bunds-between-the-paddies-aze.drawing: within 6 ft of a field's or dry plot's edge, at the map's scale - the page records the 6 ft as a GUESS",
+  "code": "87e5de8a31387179",
   "core": "430adfad460cfc83",
   "date": "2026-10-19",
-  "note": "6 ft is the page's recorded GUESS, and the claim calls the dry-plot reach a guess too",
+  "note": "the page records the 6 ft guess for the paddy's edge only, but `_reaches` also counts a dry plot's edge (`fields += ... dry_plots`); the dry-plot half should cite research/questions/0081-village-lanes.drawing.html (a lane runs along the hem of the dry fields) or be marked UNRESEARCHED",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
@@ -64349,7 +64384,7 @@
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#meeting another way": {
   "code": "413f04bdc8a909cf",

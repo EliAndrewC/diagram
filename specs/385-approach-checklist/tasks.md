@@ -375,7 +375,7 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T130 bund.RUN_ON_REACH_FT#run-on reach MISLABELED: no cited page records 60 ft for carrying an end on to the field - relabel GUESS or record it (impl-drift, T106's round) [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 by sync-with-main done; run-on reach relabeled GUESS, no page as source (wording only); IN-STEP; T136 filed
-- [ ] T131 Two UNCLAIMED rules: run_lanes_on_to_the_bund never carries a row street's ends on (skips street); dangling_lane_ends exempts the connector - claim each; and two more in run_lanes_on_to_the_bund (T33's round): how far an end may be carried on (RUN_ON_REACH_FT), and an end carried on to the dry hem's edge as well as the paddy's (impl-drift, T106's round) [lands-open]
+- [ ] T131 Two UNCLAIMED rules: run_lanes_on_to_the_bund never carries a row street's ends on (skips street); dangling_lane_ends exempts the connector - claim each; and two more in run_lanes_on_to_the_bund (T33's round): how far an end may be carried on (RUN_ON_REACH_FT), and an end carried on to the dry hem's edge as well as the paddy's; and run_on_target's 60 ft carry-on reach (RUN_ON_REACH_FT) and its TIP_MARGIN_FT stop outside the worked ground (impl-drift, T106's round) [lands-open]
       research: rendering
 - [x] T132 street.to_its_joints with exactly one joint returns two coincident points that trim_streets admits, cutting the street to nothing; its docstring says fewer than one joint (impl-drift, T106's round) [lands-open]
       research: rendering
@@ -399,7 +399,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       verify: DONE. landed by land-tooling 2026-10-19; a failed landing whose files reached main another way is landed (D150); test red without it
 - [ ] T140 0014's drawing page says 'a sector's first and last rows' (valley fan) with no gloss or glossary term for sector - add the glossary entry or an inline gloss from the valley-fan page (record-format, T33's round) [lands-open]
       research: rendering
-- [ ] T141 law.FIELD_REACH_FT counts a way within 60 ft as reaching the field, where 0014 now records the join at 6 ft (a GUESS): five claims DRIFTED on it (refuse_unreached, FIELD_REACH_FT x2, settle_field, settle_reach) - bring the bar to the 6 ft join, or record the 60 ft on 0014 as a DEVIATION with its reason (impl-drift, T33's round) [lands-open]
+- [ ] T141 law.FIELD_REACH_FT counts a way within 60 ft as reaching the field, where 0014 now records the join at 6 ft (a GUESS): five claims DRIFTED on it (refuse_unreached, FIELD_REACH_FT x2, settle_field, settle_reach) - bring the bar to the 6 ft join, or record the 60 ft on 0014 as a DEVIATION with its reason - SPUR_REACH_FT and field_unreached too, so the law gate and the placer read one distance; and whether a dry plot's edge counts as arrived (trim_lane_stubs, field_unreached apply the 6 ft to dry plots; 0014 speaks of the paddy) (impl-drift, T33's rounds) [lands-open]
+      research: rendering
+- [ ] T142 bund.tip_onto_the_bund returns a spur tip more than 60 ft off, or one whose run-on turns back or is blocked, as it came - short in open ground, against 0014's 'never ends in open ground short of the bund': name the fallback in the claim or make the tip arrive (impl-drift, T33's round) [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering

@@ -483,7 +483,7 @@ def end_serves(
 
     Research:
         an end reaches something seen - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a way or farmhouse within 60 ft
-        reached on the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: within 6 ft of its edge
+        reached on the bund - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: within 6 ft of its edge
         arrived at a steading - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 12 ft of its built ground, how close counts as serving"""
     if any(seg_dist(q[0], q[1], a, b) <= WAY_END_REACH_FT for a, b in segs):
         return True
