@@ -13646,6 +13646,18 @@
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/homesteads/rows.py::FOOTPATH_DOOR_OUT_FT#door point past the yard's front": {
+  "body": "58460d6567f00bf7",
+  "claim": "door point past the yard's front - UNRESEARCHED: 12 ft past the yard's front edge (`DOOR_STEP_FT` and 4 ft)",
+  "code": "c92fc6274e0bda4f",
+  "core": "e5d373cf76a65b43",
+  "date": "2026-10-19",
+  "note": "physical distance, correctly UNRESEARCHED; code is DOOR_STEP_FT (8) + 4 = 12 ft, as claimed; no question cited",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/homesteads/rows.py::HOLDING_CELL_FT#holding plot depth": {
   "code": "e6998f3cacda5961",
   "core": "d9e8735159ac6ec8",
@@ -30396,13 +30408,17 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/track.py::_out_of_bands#which side a track end leaves a grove band by: walked toward the run's other end, or pushed out the nearest edge, whichever lands nearer the other end": {
-  "code": "f30173f234823f5d",
+ "l7r/diagram/hamletgen/ways/track.py::_out_of_bands#which side it leaves by": {
+  "body": "03c75bdb6ceee97d",
+  "claim": "which side it leaves by - UNRESEARCHED: walked toward the run's other end, or pushed out the nearest edge, whichever lands nearer it",
+  "code": "ce54a775da4ba6be",
   "core": "f30173f234823f5d",
   "date": "2026-10-19",
-  "note": "which side a track end leaves a grove band by: walked toward the run's other end, or pushed out the nearest edge, whichever lands nearer the other end",
+  "note": "placement rule, correctly UNRESEARCHED; code walks toward `toward`, also pushes out the nearest edge, and keeps whichever result lies nearer `toward`, as claimed",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#detour swing": {
   "body": "d740236e302ec3fc",
