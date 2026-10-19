@@ -935,6 +935,7 @@ engawa	engawa
 engishiki	Engishiki
 enoki	enoki
 enokida	Enokida
+enoshima	Enoshima
 enpo	Enpo era
 enpo era	Enpo era
 enpō	Enpo era
