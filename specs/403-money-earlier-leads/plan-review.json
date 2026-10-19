@@ -3,55 +3,55 @@
  "blocks": {
   "preamble": {
    "sha256": "22c63880469dcb79f567e7c3e1bdcef16b4efba3c7b8ade4a7b352bd2ad4164c",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## Summary": {
    "sha256": "e12b5532b2e4e370b0cc85f92fce26c9a3999b5f4ce3ccac6fac1be034c1eb7a",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## Technical Context": {
    "sha256": "0fb16280e8a2b6686c020b8da9e42e4c5f587151c842fb1382cb025250ec15d6",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## Performance bookends": {
    "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## Constitution Check": {
    "sha256": "99fbdeccbfbd66edf40fe2ec6f1c5aadb8e5ec75d91b966d48c7b6412a810289",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## D1 - the questions, by write session (FR-001, FR-002)": {
-   "sha256": "cf4679228bd654bc8ea3f17017ae361a4351f2b54fbec1f6fb2b028f9a081c6a",
-   "verdict": "BLOCKED",
+   "sha256": "5a6602b58a09ee5292094a781aec27dba716daa8caec3d2ccdaace6bb527b6e0",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## D2 - the implementation check (FR-003)": {
    "sha256": "35f5a159f5d674ee8ac9edfea7d9d2a56ea7ece53b289a44f645f4b289100523",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## D3 - the note (FR-004)": {
    "sha256": "44a85ebb07c96a6a252a1d6b1c57c46bf92c351ad9e8060ea7d8d61606407004",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## T - the order": {
    "sha256": "bf3a908ac05f0dc12f0fc156aa45c02df85bf80bbe6dd33c9e213fe43ef8f73c",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   }
@@ -202,6 +202,101 @@
      "summary": "Page sessions, implementation check, note, then report and land by the direct route.",
      "class": "within",
      "why": "Sequencing only."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-19",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the questions, by write session (FR-001, FR-002)",
+    "## D2 - the implementation check (FR-003)",
+    "## D3 - the note (FR-004)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1-coverage",
+     "summary": "Thirteen questions in four write sessions (s1 0259/0262/0264/0265; s2 0250/0260/0261/0266; s3 0256/0257/0268/0269; s4 0270), every lead of request.md placed in a row",
+     "class": "within",
+     "why": "The union is exactly FR-001's thirteen ids. Request walk: Morisada hatago -> s1 0259; soba, sake -> s1 0262; sewing and used clothing -> s2 0261; paper/ink -> s1 0264; rents -> s1 0265; 宿村大概帳 -> s1 0259 and s2 0260; Mitsui cotton and Koyaizu -> s2 0261; Gamble's Qing wages -> s2 0250/0266/0265 wage line; 1769 fares -> s2 Zhili freight (Bochum label); #6 temple-repair estimates -> s3; mirror and Takaoka donor -> s4 0270. Nothing dropped."
+    },
+    {
+     "id": "宿村大概帳",
+     "summary": "The Tokaido tariffs lead closed as not publicly readable (print edition NDL in-library only, manuscript the sole copy, no digitized copy), named in 0259's and 0260's absence notes; the tariffs already cited stand",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Reading the source from here is physically impossible on the stated, dated ground (passes/other-leads.md, 2026-10-19), and FR-004 itself names 'the leads closed as not publicly readable' as a class the asker is told of. The lead is closed by being searched and named, which finishes the task rather than skipping it."
+    },
+    {
+     "id": "cotton",
+     "summary": "Mitsui Bunko's Osaka cotton series: nothing written; the 1757 Mitsui series is soybeans, and the books holding any cotton series are login or in-library only; closed and named in 0261's note",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Two grounds, judged separately: the series the lead pointed at is not a cotton series (the requested thing is not where the lead said), and the books that could hold one are not publicly readable (physical impossibility). Neither is a preference."
+    },
+    {
+     "id": "cotton-no-soybeans",
+     "summary": "No soybean figure is written from the Mitsui series",
+     "class": "within",
+     "why": "The GM asked for cotton; declining to add an unrequested soybean series keeps scope inside the request."
+    },
+    {
+     "id": "Koyaizu",
+     "summary": "『近世賃金物価史史料』 closed as not publicly readable (NDL pid 14107062 in-library only), named in 0261's note, cited at second hand",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically unreadable from here on a stated, dated ground; the lead is searched, named and closed in the manner FR-004 anticipates."
+    },
+    {
+     "id": "Okamoto",
+     "summary": "The Takaoka donor's records (岡本家文書): s4 searches once more and reads a public copy if found, otherwise names them as not found online, dated",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The closure is conditional on there being no public copy after a further search, so it applies only where reading is impossible; the work the request asks for is still done."
+    },
+    {
+     "id": "s3-conditionals",
+     "summary": "#6: absence notes name the search; Hasegawa 1987 and 「近江の石工たち」 retried; 湯浅隆, 御再建場所日記, KAKEN 19K15191 read if public, else named",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same structure as Okamoto: the condition for not reading is public availability itself, so the carve-out reaches only the physically impossible case; an absence note recording a completed search is the finished research, not a skipped one."
+    },
+    {
+     "id": "高岡史料-fallback",
+     "summary": "高岡史料 関野神社 section and p. 590 read by IIIF, else the viewer, else recorded as an unread lead, dated",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The last step fires only when both access routes refuse, i.e. when reading is impossible; it is dated as the figures contract asks."
+    },
+    {
+     "id": "SILENT-results",
+     "summary": "0261 sewing and used kimono, 0264 paper and ink, 0270 mirror recorded SILENT with Morisada's search named",
+     "class": "within",
+     "why": "The request asked for Morisada to be searched for these; recording a negative search result with its method is the search finished."
+    },
+    {
+     "id": "wage-beside",
+     "summary": "Each new figure sits beside same-place, same-period craftsman and laborer day wages, or names the wage SILENT and the nearest with class, place, unit and gap; the 1921 survey's gild wages where a Beijing craftsman's wage is needed",
+     "class": "within",
+     "why": "The money skill's standing rule (research/money-requests.md), applied to the requested figures; it enforces how the requested answers are written rather than adding new work."
+    },
+    {
+     "id": "Zhili-label",
+     "summary": "Zhili freight written after the Bochum per-li label is settled from the spreadsheets and the scanned original",
+     "class": "within",
+     "why": "This is the 1769 物料价值则例 fares lead; settling the unit before citing is part of reading it."
+    },
+    {
+     "id": "ordering-and-process",
+     "summary": "s2 edits 0265's wage line after s1; s5 check-and-apply; page-session cap of four; passes read on the page before citing; Morisada via NDL full-text and screenshots; implementation-check line per question (D2); note on #9 (D3); order and direct landing (T); constitution check; performance N/A; nothing else in these pages changes",
+     "class": "within",
+     "why": "Process and method inside FR-002..FR-005; no scope added or removed."
     }
    ]
   }

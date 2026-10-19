@@ -38,7 +38,7 @@ N/A: no generator change.
 | session | questions | what changes |
 |---|---|---|
 | s1 | 0259, 0262, 0264, 0265 | Morisada: inns; sake and soba (the koma 228 handbill transcribed or named); paper and ink SILENT with the search; rent's system and fees |
-| s2 | 0250, 0260, 0261, 0266 | Gamble's Beijing series (0250, 0266, and 0265's wage line, which s2 edits after s1); the 1921 survey's gild wages where a craftsman's Beijing wage is needed; Zhili freight after the label is settled; 0261's sewing and used kimono SILENT with Morisada's search, the cotton series soybeans, Koyaizu NDL-only |
+| s2 | 0250, 0260, 0261, 0266 | Gamble's Beijing series (0250, 0266, and 0265's wage line, which s2 edits after s1); the 1921 survey's gild wages where a craftsman's Beijing wage is needed; Zhili freight after the label is settled; 0261's sewing and used kimono SILENT with Morisada's search, the cotton series closed (the 1757 series is soybeans; no soybean figure written), Koyaizu NDL-only |
 | s3 | 0256, 0257, 0268, 0269 | #6's absence notes name the search; Hasegawa 1987 and 「近江の石工たち」 retried; 湯浅隆, 御再建場所日記, KAKEN 19K15191 read if public or named |
 | s4 | 0270 | 高岡史料's 関野神社 section and p. 590; Okamoto papers named; the mirror SILENT in Morisada |
 
