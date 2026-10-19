@@ -123,7 +123,24 @@ def task_current(review: dict, plan_text: str, task: str, history: History | Non
     earlier = entry.get("section_text") or (history.section(task, str(entry.get("section_sha256"))) if history else None)
     # A QUIET PART B LEAVES THE SECTION REVIEWED (feature 385 T80, plan D99): T75 skips the part B itself, but adding it moved the
     # section's digest and T78's other three blocks fell back to block reviews. Both texts are read without their quiet part Bs.
-    return earlier is not None and typo_only(_quiet_out(ARCHIVE_LINE.sub("", str(earlier)), plan_text), _quiet_out(section, plan_text))
+    if earlier is None:
+        return False
+    was, now = _quiet_out(ARCHIVE_LINE.sub("", str(earlier)), plan_text), _quiet_out(section, plan_text)
+    return typo_only(was, now) or typo_only(repointed(was, now, task, plan_text), now)
+
+
+def repointed(old: str, new: str, task: str, plan_text: str) -> str:
+    """`old` with one task id renamed to the task a recorded split moved its work to, where that rename is the whole edit (the
+    round arbiter's fix on hour:385-approach-checklist@28: T31 said "row 841 is T32" after the review moved the row to T95, and
+    correcting the pointer would have owed T31 a third review). A split is RECORDED when the new id's own heading says it was
+    "found working <task>" (`make task-add`'s found work); any other rename is returned unchanged, so it still owes a review."""
+    splits = [t for t, sec in task_sections(plan_text).items() if t != task and re.search(rf"found working {re.escape(task)}\b", sec.split("\n", 1)[0])]
+    for b in splits:
+        for a in sorted(set(_TASK_ID.findall(old)) - {b, task}):
+            cand = re.sub(rf"\b{re.escape(a)}\b", b, old)
+            if typo_only(cand, new):
+                return cand
+    return old
 
 
 def _quiet_out(section: str, plan_text: str) -> str:

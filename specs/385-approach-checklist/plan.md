@@ -356,7 +356,7 @@ Owed by the hour-27 step-back (hour:385-approach-checklist@27, `continue`).
 
 Chosen at its start (FR-020): of the open rows still open in the claims index, the first kind not yet tried in T05-T10 (four
 DRIFTED, one NEEDS-RESEARCH) is MISLABELED; row 827 (the first) is IN-STEP since, so row 843 is taken; row 841, which reads
-the same constant, is T32.
+the same constant, is T95.
 
 ### T31 Approach (checklist part A)
 
@@ -392,7 +392,7 @@ the same constant, is T32.
 footpath is narrower than a lane's tread, so it keeps its middle 4 ft off a garden fence, a map drawing convention, because held to
 the lane's 7 ft some settlements leave a farmhouse with no footpath to it (the seeds in a comment). `FOOTPATH_FABRIC_GAP`'s claim
 becomes a pointer to that page, and the comment above the constant records it. No value changes; row 841 (the street's joining leg,
-which reads this constant but is drawn as a lane) is its own task, T32 (FR-015, one goal).
+which reads this constant but is drawn as a lane) is its own task, T95 (FR-015, one goal).
 
 
 ### T31 part B (2026-10-19T05:50Z)
