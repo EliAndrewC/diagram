@@ -3072,3 +3072,45 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@32 (continue),
 
 **D150 - on main is landed.** `landed_refusal` refuses a failed last run only while a file it named differs from origin/main, or where it named no file at all; where every named file matches, the work reached main by another route and the tick passes. The one file left out of that comparison is the one D98's check already leaves out: `_RIDERS`, `dev/review-ledger.md` - the append-only ledger every landing carries beside its files, which moves on main by other sessions' rows.
 
+<!-- plan-archive: archived 2026-10-19 -->
+## T34 - the wood shed held a ken past the wall gap, recorded (ranking row: overlap/taxonomy.py _OVERLAP_EXEMPT#yard, garden and fixtures against the house, E2 DRIFTED)
+
+### T34 Approach (checklist part A)
+
+1. **The goal, in the world.** 0043's drawing page says where the maps stand the wood shed off its wall, and why, and the claims that state it agree with it.
+2. **The constraints.** FR-020 as the round arbiter read it (ask:t33-ranking-pick): a live row; no kind is left untried among live rows (the one CANNOT-TELL serves only frozen city maps), so this is a top-ranked live row of any kind - E2 DRIFTED, said so here (round 1 of this plan took a dead row, `_WELD_MIN_APEX`, which T143 retires). 0043's drawing page: the shed "stands about 6 ft (a ken) off a wall. This is a GUESS". The finding: the claim puts the shed "about 9.5 ft off a wall"; 0043 says 6 ft; "fix the claim, or the placer that owns the figure". The placer's own record: `WOODSHED_STEP_FT` 6.0 is "a ken past the wall gap" (`WALL_GAP_FT` 3.5), HELD in 328's waves 9 and 51 because "at a ken three scaling rolls of the reference refuse their web (20 households seed 39; 40 households seeds 4 and 25)". Every deviation recorded on the drawing page with its reason. Record checks and the claims check.
+3. **Where each comes from.** FR-020 and the ruling (G, O); 0043's drawing page (O); the finding (O); the placer's held figure and its measurement (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the claims index; `fixture_seats.WOODSHED_STEP_FT` and `WALL_GAP_FT` read; 0043's page read): the maps stand the shed's edge 6 + 3.5 = 9.5 ft off its wall, as the taxonomy claim says, and 0043 records 6 ft with no deviation.
+5. **The order.** The 9.5 ft and its reason recorded on 0043 as a DEVIATION; the taxonomy claim and the shed's own claim cite it; the record checks and the claims check.
+6. **The exits.** (a) refine an O number: n/a - the 6 ft is itself a GUESS; (b) a principled exception - chosen: at a ken, scaled rolls lose a farmhouse or field from the web, measured and held twice; (c) a new rule: n/a; (d) more room: this is more room - the shed set further out; (e) conform the placer to 6 ft - refused: 328 waves 9 and 51 measured that it breaks the web.
+7. **The search smell.** None.
+8. **The budget.** 40 min with its checks.
+9. **Done, measured.** One goal: 0043's drawing page records the shed a ken past the wall gap, about 9.5 ft, as a DEVIATION with its reason; the claims cite it; record checks and claims check pass; no engine token changes; the row marked with its wave.
+10. **Before moving a constant.** n/a - `WOODSHED_STEP_FT` stays 6.0.
+11. **Before fitting things into room.** The arithmetic: shed edge = `WALL_GAP_FT` 3.5 + `WOODSHED_STEP_FT` 6.0 = 9.5 ft off its wall.
+
+### T34 Decisions
+
+**D154 - a ken past the wall gap, recorded.** 0043's sentence "It stands about 6 ft (a ken) off a wall. This is a GUESS: no page we read says where on the plot a wood shed stood." becomes "It stands about a ken past the gap every fixture keeps off a wall, about 9.5 ft out. The ken is a GUESS - no page we read says where on the plot a wood shed stood - and the gap a DEVIATION from it: at a ken itself, larger settlements left a farmhouse or a field off their lanes." The two claims (`taxonomy._OVERLAP_EXEMPT#yard, garden and fixtures against the house` and `fixture_seats.WOODSHED_STEP_FT#wood shed off its wall`) cite 0043 as recording it. The row is marked in 328's `audit/waves.json`.
+
+<!-- plan-archive: archived 2026-10-19 -->
+## T143 - the dead weld constants removed, their ranking rows retired (the T34 plan review, 2026-10-19)
+
+### T143 Approach (checklist part A)
+
+1. **The goal, in the world.** Two constants no code reads are gone, with their claims and comment blocks, and their ranking rows are retired rather than counted as fixed.
+2. **The constraints.** The round arbiter's ruling on ask:t33-ranking-pick: a row whose code was removed with no live successor is marked retired in 328's `audit/waves.json` with its reason; the T34 plan review: a dead row is not one of FR-020's ten. Constitution XIV: a dead branch is removed, not described. The gate and the landing cohort.
+3. **Where each comes from.** The ruling and the review (O); the constitution (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (`grep -rnw` over `l7r/ tests/ pool/ scripts/` for each, and every module constant of `banks.py` checked for a use): `_WELD_MIN_SOLIDITY` and `_WELD_MIN_APEX` are read nowhere; the welder their comments describe, `_absorb`, went with the carve feature 302 retired (`waterfields/CLAUDE.md`).
+5. **The order.** Both constants, their claims and comment blocks removed (T32's and T34's round 1 work, kept); the jog comment's example reworded to `_TOE_MIN_APEX`; both rows marked retired; the gate and the landing cohort.
+6. **The exits.** (e) conform - remove what no code runs.
+7. **The search smell.** None.
+8. **The budget.** 20 min with the landing.
+9. **Done, measured.** One goal: neither constant nor its claim remains and nothing references them; both rows read retired in `audit/waves.json` with their reason (T32's wave 164 replaced); the gate green and the landing cohort refusing no seed against main.
+10. **Before moving a constant.** Their uses, listed before removing them: none (item 4).
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T143 Decisions
+
+**D155 - removed and retired.** `waterfields/banks.py` loses `_WELD_MIN_SOLIDITY` and `_WELD_MIN_APEX`, their claims and comment blocks; the jog comment cites `_TOE_MIN_APEX` (25 deg) above the gate's 15. Both rows in 328's `audit/waves.json` read "168 (retired: its code, the welder `_absorb`, was retired with the carve by feature 302; no live successor - the T34 plan review)", replacing T32's wave 164.
+

@@ -51,8 +51,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T33 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 by sync-with-main done; 0014 records the 6 ft join as a GUESS, the claim cites it (D152); record checks answered, claims IN-STEP or filed (T140-T142); ranking row wave 166
-- [ ] T34 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
+- [x] T34 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
+      verify: DONE. landed in batch T34+T143: gate green (226 s), landing cohort 54/54; T34's record checks answered and claims IN-STEP (0043 records the shed's 9.5 ft and log-end band); T143's dead weld constants removed, rows retired (wave 168)
 - [ ] T35 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
 - [ ] T36 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
@@ -404,8 +405,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T142 bund.tip_onto_the_bund returns a spur tip more than 60 ft off, or one whose run-on turns back or is blocked, as it came - short in open ground, against 0014's 'never ends in open ground short of the bund': name the fallback in the claim or make the tip arrive (impl-drift, T33's round) [lands-open]
       research: rendering
-- [ ] T143 Dead weld constants removed and their ranking rows retired: _WELD_MIN_SOLIDITY (T32, wave 164) and _WELD_MIN_APEX are read by nothing since feature 302 retired the carve and its welder - mark both rows retired in 328's audit/waves.json with that reason (the T34 plan review: a dead row is not one of FR-020's ten) [lands-open]
+- [x] T143 Dead weld constants removed and their ranking rows retired: _WELD_MIN_SOLIDITY (T32, wave 164) and _WELD_MIN_APEX are read by nothing since feature 302 retired the carve and its welder - mark both rows retired in 328's audit/waves.json with that reason (the T34 plan review: a dead row is not one of FR-020's ten) [lands-open]
       research: rendering
+      verify: DONE. landed in batch T34+T143: gate green (226 s), landing cohort 54/54; T34's record checks answered and claims IN-STEP (0043 records the shed's 9.5 ft and log-end band); T143's dead weld constants removed, rows retired (wave 168)
 - [ ] T144 Amendment 7, FR-020: a ranking row in place of T32's, whose row turned out dead code (retired in T143) - a live row, chosen at its start; its retro row [lands-open]
       research: rendering
 - [ ] T145 0043's drawing page, 'How many farmsteads have a wood shed?': 'the share chosen at random for each hamlet from its seed' - seed is the generator's word; reword for a reader (the glossary lists a `seed` variant: check its sense first) (record-format, T34's round) [lands-open]
