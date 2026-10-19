@@ -315,6 +315,22 @@ def reading_of(rec: Record, slug: str) -> str:
     return rec.readings.get(stem, {}).get(note, "") if check == "source-reader" else ""
 
 
+_QUOTED = re.compile(r"「([^「」]+)」|\"([^\"]+)\"|“([^”]+)”")
+
+
+def quotation_key(rec: Record, slug: str) -> str:
+    """A quote-check note's QUOTATION AND ITS CLAIM, and nothing else (feature 399, the GM 2026-10-19: *"a kind-C pass should be
+    skipped when the only change is another check's few word-fix outside the quotation and its claim"*): the keys the note
+    links, every quoted run of its words (the stored originals restored as 「...」 runs, each English rendering quoted), and
+    the sentences carrying its mark (`claims_of`). Its locator, its "(translated; ...)" framing and a gloss outside the
+    quotes are left out - what quote-check judges is READABLE, VERBATIM and SUPPORTS, none of which reads them."""
+    stem, _, note = slug.split(":", 1)[1].partition("#")
+    w = rec.notes.get(stem, {}).get(note, "")
+    runs = [next(g for g in m.groups() if g is not None) for m in _QUOTED.finditer(w)]
+    blocks = [b.words for b in rec.pages.get(stem, Page()).blocks if note in b.marks]
+    return digest(["quotation", *rec.cites.get(stem, {}).get(note, ()), "\x1e", *runs, "\x1e", *(c for b in blocks for c in claims_of(b, note))])
+
+
 def fingerprint(rec: Record, slug: str) -> str:
     """A hash of exactly the words the unit's check reads (plan D1)."""
     check, subject = slug.split(":", 1)

@@ -1,0 +1,120 @@
+{
+ "feature": "399-record-check-rounds-by-kind-of-edit",
+ "blocks": {
+  "preamble": {
+   "sha256": "eb29b01c3cc7b463fb501683170bac896525786b904d88895fb5ba11caf6c158",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "edbf3ff6cf7fa1c77ed315ce6cb2f37fc7e2bfea8c9f328624618904af37cbef",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "0328e526fdad53f0bcd40e71151d8b2ecc5cec8b6df4a2021c99624fdf98cb68",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "bfc7689810edd072b4554f58dd58cd13b533b02c8d9586d97ad1c24e794345e0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "0ced3d342c80377a95b519ded6b9fd026431a956c236c28a151f731fdda4f732",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Decisions": {
+   "sha256": "4b43cefcf97b18471972901565c60627d79592722fec95ffed42af26963649f1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Project Structure": {
+   "sha256": "a752aecd8a498f861d785f540ab33befc3eb01b8e6a6dbb7989267b62ea940bf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Complexity Tracking": {
+   "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-19",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Quotation key = cited keys + every quoted run (originals and English renderings) + claims_of the marked blocks; locator, '(translated; ...)' framing and unquoted gloss excluded.",
+     "class": "within",
+     "why": "This is the GM's test 'outside the quotation and its claim' made concrete. Leaving the locator out is implied by the GM's own words: the kind-C case the GM ruled on was another check's locator fix (the -4 change, SC-001), and the GM said that pass should be skipped. Counting the cited keys in the key is stricter than the rule, not looser: a change of source is not outside the quotation. The plan, like FR-001, puts no size limit on the fix. That is not a narrowing: the GM's operative condition is that the quotation and claim are unchanged, and 'few-word' describes the cases observed."
+    },
+    {
+     "id": "D2",
+     "summary": "Kind C settled automatically in apply_edits.Round for a reply of a check other than quote-check: a note whose fingerprint moved but whose key did not is settled where its answer stood at the words before, or answered fresh where it was not owed; any other note stays owed.",
+     "class": "within",
+     "why": "This is FR-001(a) as written, including 'those blocks alone moved', which is carried by requiring that the answer stood at the words before the edit. Knowing that the edit came from another check's reply is what makes it 'another check's fix'. The plan settles nothing beyond what the GM's rule skips."
+    },
+    {
+     "id": "D2b",
+     "summary": "A declared hand fix (FIXED_BY) answers a named note only when its key is among its unit's recorded qkeys, or equals its key at the merge base; any other note is refused, named. An answer recorded before this feature has no qkeys, so such a note is refused, never guessed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's rule skips the pass only when 'the only change is' a fix outside the quotation and its claim, so that premise has to be established, and FR-001b requires matching 'an answer quote-check already gave'. An older answer stores a fingerprint, and a fingerprint cannot be turned back into the quotation it was taken from, so for those answers the condition cannot be checked at all, which is different from being awkward to check. A refusal costs one fresh check, which is the behavior before this feature. The narrowing is temporary: it covers only hand fixes against answers recorded before this feature. The automatic path (D2) still settles those notes, because it compares the words before and after the edit in the same round."
+    },
+    {
+     "id": "D3",
+     "summary": "Flag count kept in the check state per quote-check note: a non-pass verdict line naming the note counts +1 when the fingerprint moved since its last flag, stays the same at the same fingerprint, and resets to 0 when the note is named and not flagged. The state is per feature, is the clone's, and is not reset by a landing.",
+     "class": "within",
+     "why": "This carries FR-002, FR-003 (a passed note is never held), FR-004 (the count survives sessions and landings within one feature) and FR-006 (a flag with nothing tried is not a failed fix). 'Fails twice in a row, changed in between' is the GM's 'a fix keeps failing'. A new feature resetting the counts is outside what FR-004 promises and does not contradict it."
+    },
+    {
+     "id": "D4",
+     "summary": "Trip: a quote-check dispatch carrying a note with count >= 2 whose fingerprint changed again raises round:quote-check|q:NNNN@M (M a fresh round number, at least 3) and is refused until the arbiter rules. 'continue' drops the count to 1, so one more round goes through. 'accept' and 'process-fault' close the unit by the existing rule. ARBITER_OK works as it does for the cap.",
+     "class": "within",
+     "why": "This is FR-002 and the GM's 'that should be a loop the arbiter should judge'. The continue semantics match the spec word for word. The other rulings and ARBITER_OK reuse the arbiter's existing machinery and add no route around it."
+    },
+    {
+     "id": "D5",
+     "summary": "A note read NOT-READABLE every round at the same fingerprint is never held; one that is re-linked and still NOT-READABLE counts.",
+     "class": "within",
+     "why": "FR-006 as written. A re-link is a fix that was tried, so counting it is the GM's 'fix keeps failing'."
+    },
+    {
+     "id": "CC-XIV",
+     "summary": "The counter's existing leaks (first_look on a hand fix, new_cause on a landing) are left as they are; FR-002 sits beside them.",
+     "class": "within",
+     "why": "The GM asked for kind B and kind C changes and said kind A needs no tweak. Leaving the other counters alone is what was asked, and FR-006 says the other record checks' rounds are unchanged."
+    },
+    {
+     "id": "TC/PERF/STRUCT",
+     "summary": "Tooling only, direct landing route, no performance bookends, files touched as listed (including the docs/guards.md row).",
+     "class": "within",
+     "why": "Procedural decisions that follow from the request being tooling-only. They narrow nothing that was asked."
+    }
+   ]
+  }
+ ]
+}

@@ -738,8 +738,9 @@ record-checked: ## [project] record that a record check returned on the units it
 ##  BUNDLE=<dir>    the bundle the check read: its units, at the content it read
 ##  Q= NOTES= KEY= KIND=  the units the tree owes on that subject, at today's content - source-reader on named notes, or any check with REASON= (written to dev/bypass-log/)
 ##  REPLY=<file>    the check's reply: its OUTSIDE THE CHANGE findings are filed as open rows of the feature (feature 375)
-	@if [ -z "$(CHECK)" ] || [ -z "$(RESULT)" ]; then printf 'make record-checked: CHECK=<check> and RESULT="<its counts>" are required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/record_owed.py" --root "$$(git rev-parse --show-toplevel)" --answer "$(CHECK)" --result "$(RESULT)" $(if $(BUNDLE),--bundle "$(abspath $(BUNDLE))",) $(if $(Q),--q "$(Q)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(KEY),--key "$(KEY)",) $(if $(KIND),--kind "$(KIND)",) $(if $(REASON),--reason "$(REASON)",) $(if $(REPLY),--reply "$(abspath $(REPLY))",)
+##  FIXED_BY="<check>: <its finding>"  CHECK=quote-check Q= NOTES=: a fix made by hand for ANOTHER check's finding, outside the quotation and its claim - the tool verifies both unchanged, else refuses (feature 399); no RESULT needed
+	@if [ -z "$(CHECK)" ] || { [ -z "$(RESULT)" ] && [ -z "$(FIXED_BY)" ]; }; then printf 'make record-checked: CHECK=<check> and RESULT="<its counts>" are required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/record_owed.py" --root "$$(git rev-parse --show-toplevel)" --answer "$(CHECK)" --result "$(RESULT)" $(if $(FIXED_BY),--fixed-by "$(FIXED_BY)",) $(if $(BUNDLE),--bundle "$(abspath $(BUNDLE))",) $(if $(Q),--q "$(Q)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(KEY),--key "$(KEY)",) $(if $(KIND),--kind "$(KIND)",) $(if $(REASON),--reason "$(REASON)",) $(if $(REPLY),--reply "$(abspath $(REPLY))",)
 
 style-prepass: ## [project] the style guide's mechanical half for one question - metric figures with no feet, and every lead line to rule on - run BEFORE record-style   Q=0412
 ##  Q=<NNNN>       the question, by number (both pages) or a page's file name

@@ -21,6 +21,10 @@ trap 'rm -rf "$GUARD_LOG_ROOT" "$HOOK_ERR"' EXIT
 
 ROOT="$(cd "$HERE/../.." && pwd)"
 PASS=0; FAIL=0
+# GUARD_EDIT_OK: feature 399 - sections 1-7 run against this clone's own Makefile, so a live `make guard-edit` permit the
+# session holds (an hour) let the edit through and failed the suite on correct work (2026-10-19). Its clock is set past
+# any live permit; section 8, which tests permits, sets its own clock on each call.
+export L7R_PERMIT_NOW=$(( $(date +%s) + 7200 ))
 
 ev() { python3 -c 'import json,sys; print(json.dumps({"session_id":"g","tool_name":sys.argv[3],"tool_input":{"file_path":sys.argv[1],"new_string":sys.argv[2]}}))' "$1" "$2" "${3:-Edit}"; }
 run() { ev "$1" "${2:-x}" "${3:-Edit}" | "$HOOK" pretool >/dev/null 2>"$HOOK_ERR"; echo $?; }
