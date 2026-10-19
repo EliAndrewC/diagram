@@ -196,3 +196,20 @@ The GM, verbatim (after the step-back of 2026-10-18; the per-entry keying became
 > No, don't file the per entry keying as its own feature. Go ahead and just make it another task on this feature. Because I think we should do it now, along with these other fixes. So basically, I approve the order that you have proposed. For one, two, three, and four. But then for step number five, instead of filing me per entry key ring feature, you should just work it. As a task on this existing feature, and then We can talk more. With that being said, um, do we need some tooling around how to insert a task like this into a spec file? I ask because I think a long-running feature like the one that we are working now can result in files, like markdown files, getting quite large, and that in and of itself is token inefficient. And so we end up implementing a lot of tooling around things like ticking off tasks, but I want to make sure that we either have or don't need tooling for things like inserting a task somewhere in the middle of the task list. Because as of now, that sounds like something that could potentially eat up a lot of tokens if we are doing it by hand. And hence why it should get tooling.
 
 > If you could have run plan archive but then forgot to do it before, then perhaps that should be something that is run automatically when certain actions are taken. What do you think? Because again, anytime that you can just forget to do                                                    make our tooling do the thing correctly automatically every time.
+
+The GM, verbatim, earlier the same evening (2026-10-18T22:35Z, on the step-back's proposals; its first paragraph is step 3's
+request, its fourth the approval of the other proposals):
+
+> The four-hour overnight idle can be mitigated by having me use the goal skill more often. I did not do that here because it was late and I was tired. But I usually do specifically because stopping with tasks partially done is a constant problem with the Opus line of models. However, if we could have something that when a feature is begun, like, I don't know, creates a cron that checks every 10 minutes for whether or not the feature is either still in progress or has been correctly set down, then that would be really good. That would essentially be like a goal skill that automatically invokes, um, you know, just like any time that we start a feature.
+
+> So yeah, uh, other than the arbiter tooling fix thing, which I think I don't agree with, I do like all of your other proposals.
+
+The session's reply (22:38Z), whose order "For one, two, three, and four" the message above approves - its step 3, verbatim:
+
+> **The auto-goal on feature start: yes, and it fits the existing hooks without a cron.** A Stop hook already fires every time the session tries to end its turn. The change: whenever a feature has an open task in progress, the hook refuses to end the turn unless one of three things holds:
+> - something is still running that will wake the session (a background gate, an agent);
+> - the turn ends with a question to you;
+> - the work is explicitly set down with a new `make set-down F= WHY=` record.
+>
+> That catches the T05 stall, where nothing was running and nothing was asked. For a background job that hangs without exiting, the 90-minute ceiling the background waits already carry gives the safety net your 10-minute cron would. I'd build it as the next tooling task.
+

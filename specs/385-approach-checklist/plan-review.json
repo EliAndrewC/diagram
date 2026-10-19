@@ -5571,6 +5571,66 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T70": {
+   "section_sha256": "620770e29a1e5173a924999540f841c9351b6f81126c45f86d6c10a9bc302912",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T70-mechanism",
+     "summary": "A Stop guard at every turn end with make set-down, in place of the check every 10 minutes the plan quotes the GM asking for, filed as step 3 of the approved order",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is a gap in the record, not a ruling on the design. The plan quotes the GM on 2026-10-18 ('checks every 10 minutes for whether or not the feature is either still in progress or has been correctly set down') and says he approved the session's Stop-guard proposal. Neither the quote nor the approval is in request.md. Amendment 8 approves 'the order that you have proposed. For one, two, three, and four', but unlike every earlier amendment it does not quote the proposal, so nothing shows that step 3 is this guard. A GM quote that exists only inside the plan under review cannot be checked against the request. The fix: append the GM's 2026-10-18 message or messages and the proposal he approved to request.md, verbatim, and re-bundle. If the approval says what the plan says, this becomes within."
+    },
+    {
+     "id": "D89-question-escape",
+     "summary": "The guard lets a turn end when any line of its last assistant text ends in '?'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The plan sources this escape to CLAUDE.md (O), our own rule, not to the GM. It defeats the purpose of the guard. Amendments 6 and 7 are the GM asking the session to keep working while he is away ('keep working in my absence', 'enough work for you to keep working'). A turn that ends 'Shall I go on to the next task?' while the GM is asleep is exactly the quiet turn the guard is meant to catch, and this escape lets it through. Any rhetorical question in a summary does the same. Applying the rule as written is neither impossible nor self-defeating: a session that really needs the GM runs make set-down F=.. WHY=\"awaiting the GM on X\", which is recorded and gives a reason, which is what the plan says 'correctly set down' means. The fix: drop the escape, or require the recorded set-down on a question turn too, which makes the escape redundant."
+    },
+    {
+     "id": "D89-running-escape",
+     "summary": "The guard does not hold a turn while a background command or agent started in the session has not reported back",
+     "class": "within",
+     "why": "This is the GM's own 'still in progress': work is running and the session will be called back when it reports."
+    },
+    {
+     "id": "D89-gm-review-box",
+     "summary": "The GM-review box does not count as an open task, and a status line that closes the feature closes it",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "As written, the rule is physically impossible to meet: the session cannot tick the GM's own review box, so a feature whose own work is all done would never be allowed to stop. The exception covers only that box and the closing status line."
+    },
+    {
+     "id": "D89-fail-open",
+     "summary": "On a read error the guard lets the turn end, and records that it did",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A Stop guard that refuses on an unreadable task-starts or set-downs file would trap the session in a loop that even make set-down could not break, which defeats the request. This ruling holds only because D89 commits each fail-open to the guard log ('fail open, recorded'). An unrecorded fail-open would not be legitimate."
+    },
+    {
+     "id": "D89-scope",
+     "summary": "The feature is the clone's last task-start record; the guard is silent in a clone with no task-start; a set-down counts at or after that task-start; a reason must be two words or more and is written to set-downs.jsonl",
+     "class": "within",
+     "why": "'When a feature is begun' is the task-start. The set-down being recorded with a reason is the 'correctly set down' the plan says was asked for."
+    },
+    {
+     "id": "D90-refusal",
+     "summary": "The refusal names the open count, the first open task and the make set-down command, and every firing goes to the guard log",
+     "class": "within",
+     "why": "This is the wording and logging of the guard itself. It adds no behavior."
+    },
+    {
+     "id": "T70-approach",
+     "summary": "Order (verdict lib, hook and its settings entry, make target, suite); exit (c); 60-minute budget; a test suite in tests/hooks that is red without the guard",
+     "class": "within",
+     "why": "The test suite enforces the requested guard. The order and budget are execution choices and decide nothing about scope."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }
