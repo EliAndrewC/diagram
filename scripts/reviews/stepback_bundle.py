@@ -120,6 +120,7 @@ def words(records: list[dict], since: float, until: float, cap: int = WORDS_CAP)
     """The sessions' own words in the window, in order: replies, commands, edits - never a tool's output. The newest kept. A
     record tagged `_sid` (`build`, more than one session in the hour) is labeled with its session's first 8 characters."""
     parts: list[str] = []
+    refused = refused_calls(records)
     for d in records:
         if d.get("isSidechain") or "timestamp" not in d or d.get("type") != "assistant":
             continue
@@ -135,13 +136,16 @@ def words(records: list[dict], since: float, until: float, cap: int = WORDS_CAP)
             elif b.get("type") == "tool_use":
                 inp = b.get("input") or {}
                 name = b.get("name")
+                # A CALL A GUARD REFUSED never ran: five refused edits and ten refused dispatches read as an oscillation and as
+                # checks that never happened (the round arbiter's tooling fix on hour:397@2)
+                verb = "REFUSED " if b.get("id") in refused else ""
                 if name == "Bash":
-                    parts.append(f"[{stamp}] RAN: {str(inp.get('command') or '')[:300]}")
+                    parts.append(f"[{stamp}] {verb}RAN: {str(inp.get('command') or '')[:300]}")
                 elif name in ("Edit", "Write"):
                     old, new = str(inp.get("old_string") or "")[:200], str(inp.get("new_string") or inp.get("content") or "")[:200]
-                    parts.append(f"[{stamp}] {name.upper()} {inp.get('file_path')}: {old!r} -> {new!r}")
+                    parts.append(f"[{stamp}] {verb}{name.upper()} {inp.get('file_path')}: {old!r} -> {new!r}")
                 elif name == "Agent":
-                    parts.append(f"[{stamp}] DISPATCHED {inp.get('subagent_type') or 'agent'}: {inp.get('description') or ''}")
+                    parts.append(f"[{stamp}] {verb + 'DISPATCH' if verb else 'DISPATCHED'} {inp.get('subagent_type') or 'agent'}: {inp.get('description') or ''}")
     text = "\n".join(parts)
     if len(text) <= cap:
         return text
@@ -151,6 +155,19 @@ def words(records: list[dict], since: float, until: float, cap: int = WORDS_CAP)
     parts = [p if p.split("] ", 1)[-1].startswith(("SAID", "DISPATCHED")) else p.split("\n", 1)[0][:200] for p in parts]
     text = "\n".join(parts)
     return text if len(text) <= cap else "[... the hour's earlier words cut to the cap ...]\n" + text[-cap:]
+
+
+def refused_calls(records: list[dict]) -> set[str]:
+    """The ids of the tool calls a hook refused: their result is an error that opens with the hook's own words."""
+    out = set()
+    for d in records:
+        for b in (d.get("message") or {}).get("content") or [] if d.get("type") == "user" else []:
+            if isinstance(b, dict) and b.get("type") == "tool_result" and b.get("is_error"):
+                c = b.get("content")
+                text = c if isinstance(c, str) else " ".join(str(x.get("text") or "") for x in c or [] if isinstance(x, dict))
+                if text.lstrip().startswith(("PreToolUse:", "<tool_use_error>PreToolUse:")) or "hook error:" in text[:200]:
+                    out.add(str(b.get("tool_use_id")))
+    return out
 
 
 def dispatches(events: list[dict], since: float, until: float) -> list[str]:

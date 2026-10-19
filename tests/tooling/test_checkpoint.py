@@ -284,6 +284,27 @@ def test_over_the_cap_commands_shrink_before_any_reply_is_dropped() -> None:
     assert "RAN: python3 - <<'EOF'" in out and "x = 1" not in out, "each command cut to its first line"
 
 
+def test_a_call_a_guard_refused_reads_refused_not_ran() -> None:
+    """The round arbiter's tooling fix on hour:397@2: refused edits and dispatches read as EDIT and DISPATCHED, as if they had run."""
+    t1 = T0 + 3600
+    calls = [
+        ("e", "Edit", {"file_path": "a.html", "old_string": "x", "new_string": "y"}),
+        ("d", "Agent", {"subagent_type": "quote-check", "description": "qc"}),
+        ("b", "Bash", {"command": "make record"}),
+    ]
+    recs = [{"type": "assistant", "timestamp": _iso(t1 + i), "message": {"content": [{"type": "tool_use", "id": c, "name": n, "input": inp}]}} for i, (c, n, inp) in enumerate(calls)]
+    recs.append(
+        {
+            "type": "user",
+            "timestamp": _iso(t1 + 5),
+            "message": {"content": [{"type": "tool_result", "tool_use_id": c, "is_error": True, "content": "PreToolUse:Edit hook error: BLOCKED"} for c in ("e", "d")]},
+        }
+    )
+    out = sb.words(recs, t1, t1 + 3600)
+    assert "REFUSED EDIT a.html" in out and "REFUSED DISPATCH quote-check" in out, out
+    assert "] RAN: make record" in out, "a call that ran stays as it was"
+
+
 def test_past_the_hour_a_gate_or_a_dispatch_is_refused_until_the_step_back_opens(clone: Path) -> None:
     assert cp.due(clone, "Bash", now=T0 + 3599) == "", "under the hour: nothing"
     assert "make step-back" in cp.due(clone, "Bash", now=T0 + 3600)
