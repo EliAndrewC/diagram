@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-19T06:59:29Z",
+  "target": "record-checked",
+  "commit": "3a76dba1f",
+  "why": "record-format on record-format:0256: the round arbiter on ask:395-round3-all: a round-3 finding is fixed and not sent back for another round; this unit changed only by that fix (logged in specs/395-shrine-building-costs/briefs/s1-checks.md)"
+}

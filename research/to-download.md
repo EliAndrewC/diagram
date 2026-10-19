@@ -3969,3 +3969,51 @@ New items go here, newest at the bottom, so you can always resume from wherever 
 - Fallback: [Google: Goldsmith Premodern Financial Systems Tokugawa interest rate land](https://www.google.com/search?q=Goldsmith+%22Premodern+Financial+Systems%22+Tokugawa+interest+rate+land)
 - **Rests on it:** research/questions/0251-what-did-farmland-sell-for-against-its-yield.html (diagram feature 390) - what Edo-period farmland sold for in years of its net yield, which no page read gives (note japan-multiple-absence), and the rates of interest beside it. The GM's money folder digest cites Goldsmith for interest of 12-20% a year in Tokugawa Japan; that figure is to be read in the book, not taken from the digest.
 - Blocked by: a print book the GM owns; no public full text found.
+
+### 312. 竹安繁治 (Takeyasu Shigeji), the 1966 book Washizaki 2007 cites on farmland priced at its capitalized net yield, pp. 171-178
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- **[CiNii search: 竹安繁治](https://ci.nii.ac.jp/search?q=%E7%AB%B9%E5%AE%89%E7%B9%81%E6%B2%BB)**
+- Pages 171-178: Kinai farm-household records showing that a field's price equaled its net yield (作徳) capitalized at the rate of interest. Photograph or scan those pages and any table of prices, yields and rates.
+- Fallback: [Google: 竹安繁治 1966 作徳 資本還元 地価](https://www.google.com/search?q=%E7%AB%B9%E5%AE%89%E7%B9%81%E6%B2%BB+1966+%E4%BD%9C%E5%BE%B3+%E5%9C%B0%E4%BE%A1)
+- **Rests on it:** research/questions/0251-what-did-farmland-sell-for-against-its-yield.html (diagram feature 390; listed by feature 397 at the GM's request, EliAndrewC/diagram#4) - what Edo-period farmland sold for in years of its net yield, which no page read gives (note japan-multiple-absence). The GM is "not married to" the canon's 50-koku farm and will revisit it when a land multiple turns up.
+- Blocked by: a print book; Takeyasu's Kyoto dissertation PDFs were unreadable.
+
+### 313. 植村正治 (Uemura Shōji), the 1987 book Washizaki 2007 cites on Sanuki farmland priced at its capitalized net yield, pp. 319-329
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- **[CiNii search: 植村正治](https://ci.nii.ac.jp/search?q=%E6%A4%8D%E6%9D%91%E6%AD%A3%E6%B2%BB)**
+- Pages 319-329: Sanuki farm-household records on the same equality of land price and capitalized net yield. Photograph or scan those pages and any table.
+- Fallback: [Google: 植村正治 1987 讃岐 作徳 地価 利子率](https://www.google.com/search?q=%E6%A4%8D%E6%9D%91%E6%AD%A3%E6%B2%BB+1987+%E8%AE%83%E5%B2%90+%E4%BD%9C%E5%BE%B3+%E5%9C%B0%E4%BE%A1)
+- **Rests on it:** research/questions/0251-what-did-farmland-sell-for-against-its-yield.html (diagram feature 390; listed by feature 397 at the GM's request, EliAndrewC/diagram#4) - the years-of-yield multiple for Edo farmland (note japan-multiple-absence).
+- Blocked by: a print book; no public full text found.
+
+### 314. 『鈴木平九郎 公私日記』 (Tachikawa City Board of Education, 23 vols., 1972-83), the volumes for Tenpō 8-12 (1837-1841)
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- **[CiNii search: 公私日記 鈴木平九郎](https://ci.nii.ac.jp/search?q=%E5%85%AC%E7%A7%81%E6%97%A5%E8%A8%98+%E9%88%B4%E6%9C%A8%E5%B9%B3%E4%B9%9D%E9%83%8E)**
+- The diary of the Shibasaki headman during the rebuilding of the village's Hachiman shrine: the payments to the carpenter, masons and laborers, and any day count or day rate for the new sanctuary. Photograph or scan the entries on the 八幡宮 rebuilding.
+- Fallback: [Google: 鈴木平九郎 公私日記 八幡宮 建立](https://www.google.com/search?q=%E9%88%B4%E6%9C%A8%E5%B9%B3%E4%B9%9D%E9%83%8E+%E5%85%AC%E7%A7%81%E6%97%A5%E8%A8%98+%E5%85%AB%E5%B9%A1%E5%AE%AE)
+- **Rests on it:** research/questions/0255-what-did-a-small-shrine-sanctuary-cost-to-build.html (diagram feature 395; asked for by gm-assistant on EliAndrewC/diagram#6) - the carpenter-days of building a new small sanctuary, which no source read gives (the record has only the winning bid of about 30 ryo).
+- Blocked by: a print edition held by libraries; no public full text found.
+
+### 315. 鈴木家文書 「八幡宮拝殿其外建立勘定帳」 (Shibasaki village, Tama district; cited by Kawakami 1992 as [N47])
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- **[Kawakami 1992, AIJ No. 435, which cites it](https://www.jstage.jst.go.jp/article/aijax/435/0/435_KJ00004076856/_pdf)**
+- The account book of building the Hachiman shrine's worship hall and other buildings: the costs, the materials and the labor by line. Any published transcription or photograph.
+- Fallback: [Google: 八幡宮拝殿其外建立勘定帳](https://www.google.com/search?q=%E5%85%AB%E5%B9%A1%E5%AE%AE%E6%8B%9D%E6%AE%BF%E5%85%B6%E5%A4%96%E5%BB%BA%E7%AB%8B%E5%8B%98%E5%AE%9A%E5%B8%B3)
+- **Rests on it:** research/questions/0255-what-did-a-small-shrine-sanctuary-cost-to-build.html (diagram feature 395; EliAndrewC/diagram#6) - the labor and costs of the 1841 Shibasaki shrine beyond the carpenter's bid.
+- Blocked by: an unpublished family document; the Tachikawa city archive may hold it.

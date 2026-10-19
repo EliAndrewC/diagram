@@ -30,6 +30,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -96,10 +97,27 @@ def state(root: Path, now: float | None = None) -> dict:
             "units_since": float(mine.get("units_since") or 0)}
 
 
+def misaligned(root: Path) -> str:
+    """Why the hour cannot be opened: the session exported one feature and `.specify/feature.json` names another, so the hooks
+    keep the other's clock (the round arbiter's tooling fix on hour:396@1: feature.json named 397 from a claim while 395 was
+    worked, the step-back guard kept refusing 395's checks, and 396's hour ran from its claim). '' when they agree."""
+    named = os.environ.get("SPECIFY_FEATURE", "").strip().strip("/")
+    try:
+        fd = json.loads((root / ".specify" / "feature.json").read_text(encoding="utf-8")).get("feature_directory", "")
+    except (OSError, ValueError):
+        return ""
+    held = Path(str(fd)).name
+    if named and (root / "specs" / named).is_dir() and held and held != named:
+        return f".specify/feature.json names {held} but this session works {named}: run `make use-feature F={named.split('-', 1)[0]}` first"
+    return ""
+
+
 def open_checkpoint(root: Path, now: float | None = None) -> str:
     """`make step-back`: the hour's trigger, opened once - its time and the units owed at that moment kept with it. Refused
     (ValueError) before the hour is up."""
     now = time.time() if now is None else now
+    if why := misaligned(root):
+        raise ValueError(why)
     st = state(root, now)
     if st.get("open"):
         return st["open"]

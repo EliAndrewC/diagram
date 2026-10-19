@@ -326,3 +326,18 @@ def test_the_hour_is_decided_once_per_message_and_its_refusals_reach_the_step_ba
     (log / "20261018T031600Z-b.json").write_text(json.dumps({"event": "escaped", "guard": "pair", "sid": "s1"}))
     got = sb.refusals(["s1"], cp.time.mktime((2026, 10, 18, 3, 0, 0, 0, 0, 0)) - cp.time.timezone, 2e9, log)
     assert got == ["- 03:15 pair: step-back-due - Agent quote-check"]
+
+
+def test_the_step_back_refuses_while_feature_json_names_another_feature(clone: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The round arbiter's tooling fix on hour:396@1: feature.json named 397 from a claim while the session worked 395, so the
+    hooks kept 397's clock. Opening an hour now refuses, naming `make use-feature`, while the two disagree."""
+    (clone / "specs" / "998-other").mkdir(parents=True, exist_ok=True)
+    (clone / ".specify").mkdir(exist_ok=True)
+    (clone / ".specify" / "feature.json").write_text(json.dumps({"feature_directory": "specs/998-other"}))
+    monkeypatch.setenv("SPECIFY_FEATURE", "999-test")
+    (clone / "specs" / "999-test").mkdir(parents=True, exist_ok=True)
+    assert "make use-feature F=999" in cp.misaligned(clone)
+    with pytest.raises(ValueError, match="use-feature"):
+        cp.open_checkpoint(clone)
+    monkeypatch.setenv("SPECIFY_FEATURE", "998-other")
+    assert cp.misaligned(clone) == ""

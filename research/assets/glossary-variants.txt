@@ -656,6 +656,8 @@ cyanobacteria	cyanobacterium
 cyanobacterium	cyanobacterium
 cylinder divider	cylinder divider
 cylinder dividers	cylinder divider
+cypress bark	cypress bark
+cypress-bark	cypress bark
 dachedian	wagon inn
 dacheng gate	Dacheng gate
 dacheng hall	Dacheng Hall
@@ -1192,6 +1194,8 @@ gabion	gabion
 gabions	gabion
 gable end	gable end
 gable ends	gable end
+gable pendant	gable pendant
+gable pendants	gable pendant
 gable roof	gabled roof
 gable-entered	gable-entered
 gable-entry	gable end
@@ -1499,6 +1503,7 @@ high-loom	high loom
 high-volatile	volatiles
 hikae-no-ma	hikae-no-ma
 hikan	hikan
+hiki	hiki
 hikioi	hikioi
 hikiri-ichi	hikiri-ichi
 hikone	Hikone
@@ -2917,6 +2922,7 @@ periodic markets	periodic market
 periodic-market	periodic market
 perquisite	perquisite
 perquisites	perquisite
+persimmon tannin	persimmon tannin
 person-year	person-year
 person-years	person-year
 petuntse	petuntse
@@ -3179,11 +3185,13 @@ rice-transit towns	rice-transit town
 rick	rick
 ricks	rick
 ridge culture	ridge culture
+ridge raising	ridge-raising
 ridge span	ridge span
 ridge tag	ridge tag
 ridge tags	ridge tag
 ridge-divided	ridge-divided nagaya
 ridge-divided nagaya	ridge-divided nagaya
+ridge-raising	ridge-raising
 riffle	riffle
 riffles	riffle
 rikuzen	Rikuzen
@@ -3556,6 +3564,7 @@ shotoku era	Shotoku era
 shoucheng lu	Shoucheng Lu
 showa	Showa
 shoya	shoya
+shu	shu
 shubiki	shubiki
 shugen	shugen
 shugendō	shugen

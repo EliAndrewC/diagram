@@ -774,7 +774,7 @@
   ]
  },
  "bu": {
-  "def": "A unit of land area the size of a tsubo, about 3.3 square meters; the cadastres give homestead lots in bu. Written after another unit, as in 57 tsubo 2 bu 5 rin, it means a tenth of that unit.",
+  "def": "A unit of land area the size of a tsubo, about 3.3 square meters; the cadastres give homestead lots in bu. Written after another unit, as in 57 tsubo 2 bu 5 rin, it means a tenth of that unit. In money it is a gold coin, a quarter of a ryo, as in 11 ryo 2 bu.",
   "variants": [
    "bu"
   ]
@@ -16541,6 +16541,45 @@
   "variants": [
    "viz.",
    "viz"
+  ]
+ },
+ "hiki": {
+  "def": "A count of money used for fees and gifts in Edo Japan. The Fushimi Inari shrine's fee lists from before and after 1864 match 100 hiki to 1 bu of gold, a quarter of a ryo.",
+  "variants": [
+   "hiki"
+  ]
+ },
+ "shu": {
+  "def": "The smallest unit of the Edo gold coinage: 4 shu made 1 bu and 16 shu made 1 ryo.",
+  "variants": [
+   "shu"
+  ]
+ },
+ "gable pendant": {
+  "def": "A carved board hung under the peak of a gable, where the two bargeboards meet; at Nogami in 1749 they were replaced together with the bargeboards during the copper re-roofing.",
+  "variants": [
+   "gable pendant",
+   "gable pendants"
+  ]
+ },
+ "persimmon tannin": {
+  "def": "The juice of unripe persimmons, fermented, brushed onto wood as a stain and preservative to finish it; no price for it from the Edo period was found.",
+  "variants": [
+   "persimmon tannin"
+  ]
+ },
+ "cypress bark": {
+  "def": "Bark of the hinoki cypress, laid in thin overlapping layers as a roof covering and fixed with special long nails; the Hagi rebuilding of 1772-1773 shipped 83,000 such nails of about 9 to 10.6 cm.",
+  "variants": [
+   "cypress bark",
+   "cypress-bark"
+  ]
+ },
+ "ridge-raising": {
+  "def": "The ceremony held when a building's ridge beam was set in place; at the Nogami sanctuary in 1749 it was paid for out of the job's accounts, together with the enshrinement and sundries.",
+  "variants": [
+   "ridge-raising",
+   "ridge raising"
   ]
  }
 }
