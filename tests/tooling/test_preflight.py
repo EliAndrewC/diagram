@@ -63,7 +63,9 @@ def test_a_tree_that_moves_while_the_gate_runs_is_named(tmp_path: Path, capsys) 
 def test_modules_tested_outside_the_quick_tier_are_left_to_the_gate() -> None:
     root = Path(__file__).resolve().parents[2]
     out = pf.outside_quick(root)
-    assert "l7r/diagram/citybudget.py" in out, "tests/tier_city/test_citybudget.py reaches lines quick does not"
+    # ANY settlement module, not one pinned by path: a pinned example broke twice in feature 392 (citybudget.py, then
+    # city/walls.py) when a deletion took it (the round arbiter's fix on red-gate@2026-10-19T01:59:22Z)
+    assert any(f.startswith("l7r/diagram/settlement/") for f in out), "some module the gate trees reach and quick does not"
     assert any(f.startswith("l7r/diagram/tools/cohort_audit") for f in out), "a tooling-marked audit test"
     assert "l7r/diagram/tools/claims.py" not in out, "its tests run in the quick tier"
 
