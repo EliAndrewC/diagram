@@ -736,7 +736,7 @@
   "l7r/diagram/settlement/fields/landuse.py::DIKEPOND_WATER_INSET#pond bank width": "161",
   "l7r/diagram/hamletgen/consts.py::FOOTPATH_FABRIC_GAP#footpath off a plot": "162",
   "l7r/diagram/hamletgen/ways/street.py::join_to#joining leg's berth": "163",
-  "l7r/diagram/waterfields/banks.py::_WELD_MIN_SOLIDITY#weld lump": "164",
+  "l7r/diagram/waterfields/banks.py::_WELD_MIN_SOLIDITY#weld lump": "168 (retired: its code, the welder `_absorb`, was retired with the carve by feature 302; no live successor - the T34 plan review)",
   "l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.precinct_interior#parish plot's seat": "165 (retired: its code was removed by commit ec9196b54, '392: the last rings - the town and city drawing API only frozen maps called (road, street,', with no live successor - ask:t33-ranking-pick)",
   "l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.terrace#frontage and depth": "165 (retired: its code was removed by commit ec9196b54, '392: the last rings - the town and city drawing API only frozen maps called (road, street,', with no live successor - ask:t33-ranking-pick)",
   "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#stupa height 13 px and its seats (rear corners of a ruled plot, interior of an organic one)": "165 (retired: its code was removed by commit eb9b519b0, '392: delete the engine code only frozen exhibits called, and what only it reached; its tes', with no live successor - ask:t33-ranking-pick)",
@@ -871,5 +871,6 @@
   "l7r/diagram/settlement/trades.py::TradesMixin.kiln#open drying ground of three ware racks between the shed and the pit": "165 (retired: its code was removed by commit eb9b519b0, '392: delete the engine code only frozen exhibits called, and what only it reached; its tes', with no live successor - ask:t33-ranking-pick)",
   "l7r/diagram/settlement/trades.py::TradesMixin.kiln#works layout: kiln and fuel at the back edge, cottages along the front edge, shed and pit on the flanks": "165 (retired: its code was removed by commit eb9b519b0, '392: delete the engine code only frozen exhibits called, and what only it reached; its tes', with no live successor - ask:t33-ranking-pick)",
   "l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#on the bund": "166",
-  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#yard, garden and fixtures against the house": "167"
+  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#yard, garden and fixtures against the house": "167",
+  "l7r/diagram/waterfields/banks.py::_WELD_MIN_APEX#weld apex": "168 (retired: its code, the welder `_absorb`, was retired with the carve by feature 302; no live successor - the T34 plan review)"
 }

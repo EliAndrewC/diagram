@@ -841,6 +841,26 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@37 (continue),
 
 **D154 - a ken past the wall gap, recorded.** 0043's sentence "It stands about 6 ft (a ken) off a wall. This is a GUESS: no page we read says where on the plot a wood shed stood." becomes "It stands about a ken past the gap every fixture keeps off a wall, about 9.5 ft out. The ken is a GUESS - no page we read says where on the plot a wood shed stood - and the gap a DEVIATION from it: at a ken itself, larger settlements left a farmhouse or a field off their lanes." The two claims (`taxonomy._OVERLAP_EXEMPT#yard, garden and fixtures against the house` and `fixture_seats.WOODSHED_STEP_FT#wood shed off its wall`) cite 0043 as recording it. The row is marked in 328's `audit/waves.json`.
 
+## T143 - the dead weld constants removed, their ranking rows retired (the T34 plan review, 2026-10-19)
+
+### T143 Approach (checklist part A)
+
+1. **The goal, in the world.** Two constants no code reads are gone, with their claims and comment blocks, and their ranking rows are retired rather than counted as fixed.
+2. **The constraints.** The round arbiter's ruling on ask:t33-ranking-pick: a row whose code was removed with no live successor is marked retired in 328's `audit/waves.json` with its reason; the T34 plan review: a dead row is not one of FR-020's ten. Constitution XIV: a dead branch is removed, not described. The gate and the landing cohort.
+3. **Where each comes from.** The ruling and the review (O); the constitution (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (`grep -rnw` over `l7r/ tests/ pool/ scripts/` for each, and every module constant of `banks.py` checked for a use): `_WELD_MIN_SOLIDITY` and `_WELD_MIN_APEX` are read nowhere; the welder their comments describe, `_absorb`, went with the carve feature 302 retired (`waterfields/CLAUDE.md`).
+5. **The order.** Both constants, their claims and comment blocks removed (T32's and T34's round 1 work, kept); the jog comment's example reworded to `_TOE_MIN_APEX`; both rows marked retired; the gate and the landing cohort.
+6. **The exits.** (e) conform - remove what no code runs.
+7. **The search smell.** None.
+8. **The budget.** 20 min with the landing.
+9. **Done, measured.** One goal: neither constant nor its claim remains and nothing references them; both rows read retired in `audit/waves.json` with their reason (T32's wave 164 replaced); the gate green and the landing cohort refusing no seed against main.
+10. **Before moving a constant.** Their uses, listed before removing them: none (item 4).
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T143 Decisions
+
+**D155 - removed and retired.** `waterfields/banks.py` loses `_WELD_MIN_SOLIDITY` and `_WELD_MIN_APEX`, their claims and comment blocks; the jog comment cites `_TOE_MIN_APEX` (25 deg) above the gate's 15. Both rows in 328's `audit/waves.json` read "168 (retired: its code, the welder `_absorb`, was retired with the carve by feature 302; no live successor - the T34 plan review)", replacing T32's wave 164.
+
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).
