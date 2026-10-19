@@ -1056,3 +1056,10 @@ asides on unchanged code filed (T134, T135). **The habit it changes:** a claim r
 About 8 min, wording only. The run-on reach's claim cited 0246 for a 60 ft to the field no page gives; it now reads GUESS,
 naming 0246's 60 ft to a house or way as the figure it reuses. Claims check IN-STEP; its two asides filed together (T136).
 **The habit it changes:** none.
+
+## T136 - the retro row
+
+About 8 min, wording only. `RUN_ON_TURN_DEG`'s claim labeled CONVENTION (0081 says its turn limits are drawing conventions),
+`BRANCH_STEP_FT` claimed NONE, and the step's comment no longer calls plumbing a convention - that last from the claims check's
+own aside, fixed here rather than filed, since it sat beside the claimed line. **The habit it changes:** an aside on the lines a
+task already touches is fixed in the task, not filed.

@@ -20267,12 +20267,16 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/bund.py::BRANCH_STEP_FT#plumbing": {
-  "code": "92253612773b8406",
+ "l7r/diagram/hamletgen/ways/bund.py::BRANCH_STEP_FT#branch sampling step": {
+  "body": "e6f9146d484b05aa",
+  "claim": "branch sampling step - NONE: how often the nearest lane is sampled for a field path's branch",
+  "code": "2d248b31eccfcbc6",
   "core": "232d3ac8ac8b4b8c",
-  "date": "2026-10-03",
-  "note": "sample pitch",
+  "date": "2026-10-19",
+  "note": "how finely the lane is sampled to find a branch point, which is plumbing; NONE is right",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::BRANCH_WIDTH#field path width": {
@@ -20309,21 +20313,6 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/bund.py::RUN_ON_TURN_DEG#run-on turn limit": {
-  "code": "ef3ef0fb0e9d6ae6",
-  "core": "c0101826cceee8b7",
-  "date": "2026-10-17",
-  "note": "60 deg run-on limit",
-  "pages": {
-   "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
-  },
-  "research": "324b10775c9108ef",
-  "rests": [
-   "0081-village-lanes.drawing.html:a857325132f8d4ee"
-  ],
-  "triaged": "2026-10-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks#plumbing": {
