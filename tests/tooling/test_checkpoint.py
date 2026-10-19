@@ -242,6 +242,28 @@ def test_the_bundle_reads_every_session_of_the_hour_and_names_one_it_left_out(cl
     assert "cut to the cap" in (out / "words.md").read_text().split("\n\n")[1], "a cut is named at the top"
 
 
+def test_the_bundle_reads_a_session_logged_under_another_feature_and_names_minutes_with_no_words(clone: Path, tmp_path: Path) -> None:
+    """The round arbiter's tooling fix on hour:395-shrine-building-costs@2: the main session's events went to 397's log while
+    `.specify/feature.json` named 397, so its last 16 minutes of 395's work were in no session the bundle read. Sessions come
+    from every feature log of the clone now, and a stretch of the window with no words is named in `words.md`."""
+    t1 = T0 + 3600
+
+    def said(text: str, at: float) -> dict:
+        return {"type": "assistant", "timestamp": _iso(at), "message": {"content": [{"type": "text", "text": text}]}}
+
+    projects = tmp_path / "projects"
+    (projects / "p").mkdir(parents=True)
+    (projects / "p" / "page0000-s.jsonl").write_text(json.dumps(said("page session applies round 2", t1 + 30)) + "\n")
+    (projects / "p" / "main0000-m.jsonl").write_text(json.dumps(said("the tooling fixes landed", t1 + 3000)) + "\n")
+    (clone / ".git" / "l7r-events" / "999-test.jsonl").write_text(json.dumps({"t": _iso(t1 + 30), "ev": "", "sid": "page0000-s"}) + "\n")
+    (clone / ".git" / "l7r-events" / "998-other.jsonl").write_text(json.dumps({"t": _iso(t1 + 3000), "ev": "", "sid": "main0000-m"}) + "\n")
+    out = tmp_path / "bundle"
+    sb.build("hour:999-test@1", clone, out, t1, t1 + 3600, None, projects=projects)
+    words = (out / "words.md").read_text()
+    assert "the tooling fixes landed" in words, "a session logged under another feature of the clone is read"
+    assert "NO WORDS FOUND for" in words and sb.silent_minutes([said("x", t1 + 30)], t1, t1 + 600) == [f"{_iso(t1 + 30)[11:16]}-{_iso(t1 + 600)[11:16]}"]
+
+
 def test_over_the_cap_commands_shrink_before_any_reply_is_dropped() -> None:
     """The round arbiter's tooling fix on hour:383@1: long heredoc commands filled the cap and the hour's first replies were
     cut. Now each command keeps its first line and every reply stays, while they fit."""
