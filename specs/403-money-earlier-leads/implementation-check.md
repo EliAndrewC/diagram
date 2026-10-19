@@ -1,0 +1,4 @@
+- 0259: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'hatago|kichin|inn_price|gure' l7r pool (only the glossary's hatago and kichin-yado entries)
+- 0262: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'sake|soba|morohaku|nihachi' l7r pool (glossary entries, a buckwheat modal and code comments using "for its own sake"; no price or rule)
+- 0264: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'hanshi|paper_price|ink_stick' l7r pool (no price or rule)
+- 0265: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniwE 'rent|rents|tanachin|tarudai|sekku|yanushi' l7r pool (glossary entries only - yamori, ground tenant, rent bursary and the like; no price or rule)
