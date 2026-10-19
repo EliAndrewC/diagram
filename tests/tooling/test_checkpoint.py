@@ -117,7 +117,7 @@ def test_on_the_hour_the_tick_is_held_until_the_step_back_is_ruled(clone: Path) 
 
 def test_a_ruling_s_tooling_fix_opens_an_item_that_holds_the_next_tick(clone: Path) -> None:
     trigger = cp.open_checkpoint(clone, T0 + 3600)
-    _rule(clone, trigger, {"ruling": "continue", "why": "progress, but one probe ran ten times", "tooling_fix": "make probe keeps its rolls"})
+    _rule(clone, trigger, {"ruling": "continue", "why": "progress, but one probe ran ten times", "tooling_fix": "make probe keeps its rolls", "fix_measure": "x", "fix_minutes": 10})
     assert cp.hold(clone, T0 + 3700) == ""
     assert "make probe keeps its rolls" in arb.fix_hold(clone / "specs" / "999-test"), "the 379 hold names the fix"
     assert [r.get("tooling_fix") for r in _gm_rows(clone)] == ["make probe keeps its rolls"]

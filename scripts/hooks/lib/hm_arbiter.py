@@ -177,9 +177,7 @@ def blocking(root: Path, unit: str = "", gate: bool = False) -> list[str]:
         if not mine(root, v):
             continue
         kind = v.get("kind")
-        if gate and kind == "red-gate":
-            out.append(t)
-        elif not gate and (kind in ("reversal", "cascade") or (kind == "round" and v.get("unit") == unit)):
+        if gate and kind == "red-gate" or not gate and (kind in ("reversal", "cascade") or (kind == "round" and v.get("unit") == unit)):
             out.append(t)
     return sorted(out)
 
@@ -320,6 +318,7 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
     fix_on = str(ruling.get("tooling_fix_on") or "") if batch else ""  # a batch's one fix, held by another of its rows (375 a2)
     if ruling["ruling"] == "process-fault" and not fix and not fix_on:  # feature 379 FR-001: the fault IS the fix, made and held
         raise ValueError("a `process-fault` ruling names its fault as `tooling_fix` - one sentence: the tool and the change")
+    measure = fix_measure_of(ruling) if fix else {}
     d = feature_dir(root)
     if d is None:
         raise ValueError("no active feature (.specify/feature.json) to record the ruling in")
@@ -338,7 +337,7 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
         "why": ruling["why"],
         "what": ruling.get("what", ""),
         "utc": when,
-        **({"tooling_fix": fix, "fix": "open"} if fix else {}),
+        **({"tooling_fix": fix, "fix": "open", **measure} if fix else {}),
         **({"tooling_fix_on": fix_on} if fix_on and not fix else {}),
         # a spec review's ruling names the spec it ruled on: the review gate honors it only while the spec still reads so
         **({"spec_sha": spec_body_sha(d)} if trigger.startswith("round:spec-fidelity|") else {}),
@@ -417,8 +416,8 @@ def record_batch(root: Path, ruling: Mapping[str, Any], declared: str, now: str 
     plan: list[tuple[str, dict[str, Any]]] = []
     for t in triggers:
         one = dict(exceptions[t]) if t in exceptions else dict(base)
-        if t == holder:
-            one["tooling_fix"] = fix
+        if t == holder:  # the batch's fix with its own measure (feature 385 T119, D139), on an exception's row too
+            one.update({"tooling_fix": fix, **{k: ruling[k] for k in ("fix_measure", "fix_minutes") if k in ruling}})
         elif fix and t in under:
             one["tooling_fix_on"] = holder
         plan.append((t, one))
@@ -428,6 +427,31 @@ def record_batch(root: Path, ruling: Mapping[str, Any], declared: str, now: str 
         if one["ruling"] == "process-fault" and not (str(one.get("tooling_fix") or "").strip() or one.get("tooling_fix_on")):
             raise ValueError(f"{t}: a `process-fault` ruling names its fault as `tooling_fix` (the batch's, or its own)")
     return [record_ruling(root, t, one, declared, now, batch=True) for t, one in plan]
+
+
+def fix_measure_of(ruling: Mapping[str, Any]) -> dict[str, Any]:
+    """A tooling fix's `fix_measure` and `fix_minutes`, checked (feature 385 T119, D139; the GM's change 3 of 2026-10-19: each
+    fix's yield measured against the time it was meant to save) - `make fix-yield` reads them; 46 fixes ruled without them could
+    not be measured. The measure is a regex over the main session's Bash commands, or `agent:<kind>` for a check's dispatches."""
+    m = str(ruling.get("fix_measure") or "").strip()
+    how = (
+        "a `tooling_fix` names `fix_measure` - a regex over the session's Bash commands whose time it should cut, or "
+        "`agent:<kind>` for a check's dispatches - and `fix_minutes`, the cost it measured this hour (feature 385 T119)"
+    )
+    if not m or (m.startswith("agent:") and not m[6:].strip()):
+        raise ValueError(how)
+    if not m.startswith("agent:"):
+        try:
+            re.compile(m)
+        except re.error as e:
+            raise ValueError(f"`fix_measure` {m!r} is not a regex ({e}) - {how}") from None
+    try:
+        minutes = float(ruling.get("fix_minutes"))  # type: ignore[arg-type]
+    except TypeError, ValueError:
+        raise ValueError(how) from None
+    if minutes < 0:
+        raise ValueError(how)
+    return {"fix_measure": m, "fix_minutes": minutes}
 
 
 def spec_body_sha(d: Path) -> str:
