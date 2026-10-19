@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-18
 
-**Status**: Draft
+**Status**: Done 2026-10-18 - T01-T03 ticked: spec FAITHFUL (round 3), plan CLEAR, make quick clean, make hooks-test green; route DIRECT (no engine code)
 
 **Approved**: the GM, 2026-10-18, "Yes, please file the feature and then work it"
 
