@@ -623,3 +623,20 @@ def test_a_dispatch_never_launched_leaves_no_reading_behind(tmp_path: pathlib.Pa
     assert st["notes_read"]["quote-check|q:0105"] == ["a"], "launched: its reading is marked, once"
     hc.launched(st, "t2", "ag2", True)
     assert st["notes_read"]["quote-check|q:0105"] == ["a"]
+
+
+def test_a_stopped_plan_review_releases_its_hold(tmp_path: pathlib.Path) -> None:
+    """Feature 385 T104 (D121): two T104 plan reviews stopped with TaskStop returned no reply, and each hold refused the
+    section's next edit for half an hour; a TaskStop naming the agent releases it as a return does."""
+    (tmp_path / ".git").mkdir()
+    plan = tmp_path / "specs" / "385-x" / "plan.md"
+    plan.parent.mkdir(parents=True)
+    plan.write_text("# Plan\n\n## T05 - five\n\n**D10 - a rule.** the held decision text\n")
+    cwd = str(tmp_path)
+    agent = {"cwd": cwd, "tool_name": "Agent", "tool_use_id": "t9", "tool_input": {"subagent_type": "spec-fidelity", "prompt": "read /tmp/l7r-check/plan-385-x-T05/MANIFEST.md"}}
+    hc.handle("dispatch", agent, 0)
+    hc.handle("launched", {**agent, "tool_response": {"status": "async_launched", "agentId": "ag9"}}, 1)
+    edit = {"cwd": cwd, "tool_name": "Edit", "tool_input": {"file_path": str(plan), "old_string": "the held decision text", "new_string": "x"}}
+    assert "is running" in hc.handle("edit", edit, 2)
+    assert hc.handle("launched", {"cwd": cwd, "tool_name": "TaskStop", "tool_input": {"task_id": "ag9"}, "tool_response": {}}, 3) == ""
+    assert hc.handle("edit", edit, 4) == ""
