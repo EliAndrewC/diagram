@@ -308,6 +308,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T107 0246's drawing page says the 7 ft both ways: its lane's room (3: 7 ft at each fence and a 4 ft tread, 18 ft - the edge) and its fence gap (16: to the middle) - settle which, and what the code reads (found working T101, 2026-10-19) [lands-open]
       research: rendering
+- [ ] T108 Carried by the claims gate (FR-013): findings a page edit surfaced on code left unchanged - fix the code or the claim and re-check each: l7r/diagram/hamletgen/ways/law.py::fouls_fabric#foul margin, l7r/diagram/hamletgen/ways/settle.py::fouled_segment#off another household's yard or garden [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

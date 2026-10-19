@@ -6540,21 +6540,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::FOOTPATH_FABRIC_GAP#footpath off a plot": {
-  "body": "5539734673130035",
+  "body": "663d24cb0d04a80f",
   "claim": "footpath off a plot - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane's middle, a 3 ft footpath's included, keeps at least 7 ft clear of a garden fence",
   "code": "44b81a2296d4ec59",
   "core": "2c48ea6cfc2004e2",
   "date": "2026-10-19",
-  "note": "7 ft is the page's garden-fence gap",
+  "note": "7 ft from the line to the fence, as the page sets it",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::FRY_FORMS#fry form": {
@@ -6706,18 +6704,17 @@
   "claim": "fronting lane's corridor - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane's middle 7 ft clear of a garden fence, the footprint held to it at its corners (`houses._on_a_tread`)",
   "code": "8fb51c47bdc66708",
   "core": "2c48ea6cfc2004e2",
-  "date": "2026-10-17",
-  "note": "7.0, a lane's middle 7 ft off the fence, with the corners held by `_on_a_tread`",
+  "date": "2026-10-19",
+  "note": "7 ft from the middle, the page's least gap",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::LANE_FRONTAGE_STANDOFF#farmsteads front a lane": {
@@ -6854,18 +6851,17 @@
   "code": "e6baead2830204ea",
   "core": "e48285a80f248b98",
   "date": "2026-10-19",
-  "note": "2x7+4 = 18 ft, the lane's room",
+  "note": "2 x 7 + 4 = 18 ft, the page's room; tread within 0081's widths",
   "pages": {
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "eb340109f5785558",
+  "research": "ad1c2ebf6253e871",
   "rests": [
    "0081-village-lanes.drawing.html:91a5765af6230403",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:81f9a92fe1d97af1"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::PLOT_SIZES#paddy plot size": {
@@ -7184,17 +7180,15 @@
   "claim": "track off a steading - how-our-maps-lay-a-clustered-settlements-lanes.drawing: 7 ft from the track's middle to a garden fence, as every lane",
   "code": "babc6261018bc32e",
   "core": "cf0bf9180f1386da",
-  "date": "2026-10-17",
-  "note": "equals WEB_FABRIC_GAP, 7 ft",
+  "date": "2026-10-19",
+  "note": "7 ft, the page's figure",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::WATERWARD_DEPTH#wild water outside the dike": {
@@ -7253,17 +7247,16 @@
   "claim": "web lane's no-build corridor - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane's room of 18 ft, 7 ft at each garden fence and a 4 ft tread between - 9 ft each side of the middle",
   "code": "7548e539a0fc7ea4",
   "core": "0be511d9fcea119b",
-  "date": "2026-10-17",
-  "note": "9 ft half-width, the 18 ft room",
+  "date": "2026-10-19",
+  "note": "9 ft each side of the middle, half of the 18 ft room",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::WEB_CROP_GAP#web lane against the crop": {
@@ -7290,13 +7283,12 @@
   "date": "2026-10-19",
   "note": "the page records the 5.5 ft edge as a DEVIATION",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::WEB_HARD_GAP#web lane off the toe and marsh": {
@@ -12593,17 +12585,15 @@
   "claim": "a lane's room between homesteads - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane 7 ft clear of a garden fence on each side and its tread, the web's threading gap, and the 2 ft the growth leaves between neighbors",
   "code": "05eaa83928371b1c",
   "core": "f3cd671cf60e77bc",
-  "date": "2026-10-17",
-  "note": "MIN_WEB_GAP 18 + 2 ft parting = 20 ft in all",
+  "date": "2026-10-19",
+  "note": "18 ft room + 2 ft parting = 20 ft",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/growth.py::grow_jitter#direction jitter": {
@@ -12646,22 +12636,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#cluster grown house by house": {
+  "body": "aad35cec343cda75",
+  "claim": "cluster grown house by house - clustered-and-scattered-villages-shuson-sanson, how-our-maps-lay-a-clustered-settlements-lanes.drawing: an irregular cluster, each next house where two footprints part by a lane's room",
   "code": "1c044b339cde1ede",
   "core": "67c6c1de77b9c72a",
-  "date": "2026-10-07",
-  "note": "irregular lump, each next house set off by the growth gap",
+  "date": "2026-10-19",
+  "note": "an irregular lump, each seat parted from its neighbor by grow_gap",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.html": "117bdeff72353321",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "ad30ac975b5e942f",
+  "research": "f62caf76503fa68a",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.html:2afa77b5b6a4c810",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#first house against the field": {
@@ -12759,20 +12748,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/growth.py::keeps_every_gap#every two homesteads a lane's gap apart": {
+  "body": "bc6f8491502a1a4e",
+  "claim": "every two homesteads a lane's gap apart - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the threading gap between any two steadings; a household reached across its neighbor's yard stands against that one neighbor",
   "code": "9804837c336d66df",
   "core": "f50ee597ea7f6142",
-  "date": "2026-10-05",
-  "note": "the threading gap pairwise, the parting only against the one neighbor",
+  "date": "2026-10-19",
+  "note": "the room between every pair; 2 ft only from the one tight neighbor",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/growth.py::keeps_its_distance#growth search": {
@@ -14437,15 +14426,14 @@
   "code": "005ae0cbfa8008d6",
   "core": "2f53f23e661ea9d4",
   "date": "2026-10-19",
-  "note": "7x2+6 = 20 ft, the lane's room plus the parting",
+  "note": "7 x 2 + 6 = 20 ft, the page's room and parting",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::_ground_push#front row across the brook": {
@@ -20430,16 +20418,15 @@
   "code": "2a7c1c8061455bce",
   "core": "c26b9513b7ff28b3",
   "date": "2026-10-19",
-  "note": "nothing built on the lane, at least 7 ft off the fabric",
+  "note": "FOOTPATH_FABRIC_GAP, 7 ft, off the fabric; nothing built on the tread",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the wet ground": {
@@ -20567,18 +20554,16 @@
   "claim": "field path's corridor - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the no-build corridor `LANE_CLEARANCE`, 7 ft from the lane's middle, a footprint held to it at its corners",
   "code": "75aa44cb28cf69ca",
   "core": "9051ac4b2c4b6b02",
-  "date": "2026-10-17",
-  "note": "the branch is registered at LANE_CLEARANCE 7",
+  "date": "2026-10-19",
+  "note": "LANE_CLEARANCE, 7 ft",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#nearest lane runs on": {
@@ -20674,18 +20659,16 @@
   "claim": "stepped spur's corridor - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the no-build corridor `LANE_CLEARANCE`, 7 ft from the lane's middle, a footprint held to it at its corners",
   "code": "a49b65100ad6dae8",
   "core": "3d32bf7b6eca4e14",
-  "date": "2026-10-17",
-  "note": "the step is drawn at LANE_CLEARANCE 7",
+  "date": "2026-10-19",
+  "note": "LANE_CLEARANCE, 7 ft",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::cut_past_the_junction#no stub past a junction": {
@@ -21410,15 +21393,14 @@
   "code": "3a2c06b001a3cfa0",
   "core": "2aa24e454372abbd",
   "date": "2026-10-19",
-  "note": "7 ft from the line, a DEVIATION the page records",
+  "note": "7 ft from the line, the edge DEVIATION the page records",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::_clear_link#link clear of the wet ground and the water": {
@@ -21435,17 +21417,15 @@
   "claim": "junction link margin - how-our-maps-lay-a-clustered-settlements-lanes.drawing: 7 ft (`WEB_FABRIC_GAP`) off the fabric, or the caller's",
   "code": "a128a70597e56c6a",
   "core": "91c5a875ceedf229",
-  "date": "2026-10-17",
-  "note": "default gap 7 ft, the caller's to raise, whole chord within 0.5 ft",
+  "date": "2026-10-19",
+  "note": "defaults to 7 ft; callers only raise it",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::bowtie_cut#no stub past a crossing": {
@@ -21507,17 +21487,15 @@
   "claim": "threads between steadings - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off the fabric by default",
   "code": "7140d4cdc8472172",
   "core": "6f81a1160265d943",
-  "date": "2026-10-17",
-  "note": "tight_margin defaults to WEB_FABRIC_GAP 7",
+  "date": "2026-10-19",
+  "note": "tight_margin defaults to 7 ft",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::clip_to_clear#an arm stops at the crop": {
@@ -21624,17 +21602,15 @@
   "claim": "no nearer the fabric - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off the fabric, or no nearer than it already was",
   "code": "66644d4c68670e08",
   "core": "f68217c1786d9683",
-  "date": "2026-10-17",
-  "note": "bar = 7, no nearer than min(old, 7)",
+  "date": "2026-10-19",
+  "note": "bar of 7 ft, or no nearer than the lane already was",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::may_write#no new bad bend": {
@@ -21817,17 +21793,15 @@
   "claim": "field way off the steadings - how-our-maps-lay-a-clustered-settlements-lanes.drawing: 7 ft from the way's middle to a garden fence",
   "code": "0f16488402531e5a",
   "core": "cf0bf9180f1386da",
-  "date": "2026-10-17",
-  "note": "equals WEB_FABRIC_GAP, 7 ft",
+  "date": "2026-10-19",
+  "note": "7 ft from the middle",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::FORD_LANDING_FT#ford landing": {
@@ -22144,17 +22118,15 @@
   "claim": "field way off the steadings - how-our-maps-lay-a-clustered-settlements-lanes.drawing: 7 ft (FIELD_ROUTE_GAP_FT = WEB_FABRIC_GAP) off their built ground, the page's lane-to-fence 7 ft",
   "code": "7600f11b28cbcdfa",
   "core": "49fc625267d822da",
-  "date": "2026-10-17",
-  "note": "`_route(..., gap=FIELD_ROUTE_GAP_FT)`, 7 ft",
+  "date": "2026-10-19",
+  "note": "routed at 7 ft",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#its own dooryard": {
@@ -22693,17 +22665,16 @@
   "claim": "web lane's no-build corridor - how-our-maps-lay-a-clustered-settlements-lanes.drawing: `WEB_CLEARANCE`, the lane's 18 ft room (9 ft each side of its middle), recorded beside the lane",
   "code": "71135cd9ed30b9ae",
   "core": "e2b2e89944e10f01",
-  "date": "2026-10-17",
-  "note": "clearance=WEB_CLEARANCE 9",
+  "date": "2026-10-19",
+  "note": "WEB_CLEARANCE 9 ft, half the room",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/fabric.py::_draw_web#web lanes seat no house": {
@@ -22962,16 +22933,15 @@
   "code": "2d0fe1cc063f631f",
   "core": "812ae6dec598d6d7",
   "date": "2026-10-19",
-  "note": "the page records the own-garden exemption as a DEVIATION",
+  "note": "the page records the way beside its own fence as a DEVIATION",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/fabric.py::poly_box#plumbing and geometry": {
@@ -23529,17 +23499,16 @@
   "claim": "gateway clearance - how-our-maps-lay-a-clustered-settlements-lanes.drawing: 7 ft (`TRACK_FABRIC_GAP`) by default, a lane's middle off a garden fence",
   "code": "7121e316d786d164",
   "core": "6c0d33e828bd7578",
-  "date": "2026-10-17",
-  "note": "default gap TRACK_FABRIC_GAP 7",
+  "date": "2026-10-19",
+  "note": "defaults to 7 ft",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/geom.py::push_clear_of_fabric#track gateway off the fabric": {
@@ -24133,22 +24102,29 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/joints.py::split_at_crossings#a crossing within _TOUCH_GAP (4 ft) of any lane end is already a junction and is not cut": {
+  "code": "4daf1389a9f73072",
+  "core": "4daf1389a9f73072",
+  "date": "2026-10-19",
+  "note": "a crossing within _TOUCH_GAP (4 ft) of any lane end is already a junction and is not cut",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/hamletgen/ways/joints.py::split_at_crossings#a cut tail's room": {
   "body": "7a5a4e519dcc8719",
   "claim": "a cut tail's room - how-our-maps-lay-a-clustered-settlements-lanes.drawing: `WEB_CLEARANCE`, the 18 ft lane room (9 ft each side of its middle), whatever its source kept",
   "code": "2aa95ac6a7ab1712",
   "core": "4daf1389a9f73072",
-  "date": "2026-10-17",
-  "note": "tail at clearance=WEB_CLEARANCE 9",
+  "date": "2026-10-19",
+  "note": "WEB_CLEARANCE 9 ft",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::split_at_crossings#a cut tail's width": {
@@ -25345,18 +25321,17 @@
   "claim": "foul margin - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the line within 7 ft of another's yard or bed",
   "code": "e55521d79049130a",
   "core": "ef0504008aa1e3c3",
-  "date": "2026-10-17",
-  "note": "`_crosses_fabric(..., WEB_FABRIC_GAP)` 7 ft from others' yards and gardens",
+  "date": "2026-10-19",
+  "note": "the code holds 7 ft off \"threshing_yards\" as well as gardens; 0246 sets the gap only from \"another household's garden\". Split the claim: the garden part stays on 0246, the threshing yard becomes UNRESEARCHED, as span_walkable's sibling claim already labels it",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
-  "verdict": "IN-STEP"
+  "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/ways/law.py::fouls_fabric#nothing built on a lane": {
   "body": "741f548307e558b1",
@@ -25833,19 +25808,18 @@
   "code": "cd0a57f983fcd137",
   "core": "7110f6e804bd8675",
   "date": "2026-10-19",
-  "note": "off water, crop, paddy, marsh and houses, 7 ft off the gardens",
+  "note": "the line 7 ft off a garden fence, and off crop, water and houses",
   "pages": {
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "eb340109f5785558",
+  "research": "ad1c2ebf6253e871",
   "rests": [
-   "0081-village-lanes.drawing.html:43b635b1ca75125b",
-   "0081-village-lanes.drawing.html:bd66b84c6bda826f",
+   "0081-village-lanes.drawing.html:417841cd16f112d9",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::span_walkable#no span along another way": {
@@ -26271,17 +26245,16 @@
   "claim": "a tree lane's no-build corridor - how-our-maps-lay-a-clustered-settlements-lanes.drawing: `WEB_CLEARANCE`, the lane's 18 ft room (9 ft each side of its middle), as a web lane's",
   "code": "89f8225715c2bab5",
   "core": "a8c68469c6069c64",
-  "date": "2026-10-17",
-  "note": "clearance=WEB_CLEARANCE 9",
+  "date": "2026-10-19",
+  "note": "WEB_CLEARANCE 9 ft",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/reach.py::_draw_tree_lane#worn look": {
@@ -26484,15 +26457,14 @@
   "code": "950ef82ea9ebbcc0",
   "core": "27338db6085f1637",
   "date": "2026-10-19",
-  "note": "7 ft by default, a DEVIATION the page records",
+  "note": "7 ft from the line by default, the edge DEVIATION the page records",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/route.py::_route#clear of the toe and marsh": {
@@ -26732,17 +26704,15 @@
   "claim": "link off walls - how-our-maps-lay-a-clustered-settlements-lanes.drawing: 7 ft off a wall (`WEB_FABRIC_GAP`), a garden fence's 7 ft to a lane's middle",
   "code": "1a152cbef17dffe2",
   "core": "ad673e9ba8b0dace",
-  "date": "2026-10-17",
-  "note": "tight_margin=WEB_FABRIC_GAP 7, and `_clear_link` at its default 7",
+  "date": "2026-10-19",
+  "note": "clear_runs tight_margin=WEB_FABRIC_GAP, 7 ft",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#link reach": {
@@ -26983,16 +26953,14 @@
   "code": "16591cff06a36646",
   "core": "6b52b3ec1649a835",
   "date": "2026-10-19",
-  "note": "7 ft from the fence to a lane's middle is recorded as a DEVIATION on the drawing page",
+  "note": "re-routed at 7 ft from the line, the page's recorded DEVIATION",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::door_path#water on the way": {
@@ -27060,17 +27028,15 @@
   "claim": "a detour link's margins - how-our-maps-lay-a-clustered-settlements-lanes.drawing: 7 ft off a wall (`WEB_FABRIC_GAP`); the hard ground at its own gap - the crop at a half-tread (`WEB_CROP_GAP`, 0081), the toe and marsh 8 ft (`WEB_HARD_GAP`, UNRESEARCHED)",
   "code": "bb4860acd4ec1e6e",
   "core": "0b650974e20acfd8",
-  "date": "2026-10-17",
-  "note": "walls at 7, hard ground at WEB_HARD_GAP 8, which the claim flags as unresearched",
+  "date": "2026-10-19",
+  "note": "7 ft off the walls; the hard-ground gaps as stated",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::joined_link#a detour link's reach": {
@@ -27257,20 +27223,19 @@
  },
  "l7r/diagram/hamletgen/ways/serve.py::route_from_door#door path off the fabric": {
   "body": "18a70d538c11f2b1",
-  "claim": "door path off the fabric - how-our-maps-lay-a-clustered-settlements-lanes.drawing: routed `gap` (`FOOTPATH_FABRIC_GAP`, 7 ft) off the fabric, a footpath's middle 7 ft clear of a garden fence",
-  "code": "d356fb6d5af74682",
+  "claim": "door path off the fabric - DEVIATION how-our-maps-lay-a-clustered-settlements-lanes.drawing: routed `gap` (`FOOTPATH_FABRIC_GAP`, 7 ft) off the fabric, a footpath's middle 7 ft clear of a garden fence",
+  "code": "4ac0a9c2233e983b",
   "core": "b06143eb4467cb5b",
   "date": "2026-10-19",
-  "note": "the code does keep the middle 7 ft off the fence, but the page says the 7 ft to the middle (tread edge 5.5 ft) is \"a DEVIATION\". Relabel as `DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html`, as the same gap is labeled in `_route`, `_clear_link` and ACCESS_HALF_FT",
+  "note": "routed at 7 ft from the line, the page's recorded DEVIATION",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::runs_beside#no way drawn twice": {
   "code": "df5670104836d0af",
@@ -27777,17 +27742,16 @@
   "claim": "split piece's room - how-our-maps-lay-a-clustered-settlements-lanes.drawing: each split piece keeps WEB_CLEARANCE, the 18 ft lane room (9 ft each side of its middle), whatever its source kept",
   "code": "842b5a7f943eb6c3",
   "core": "bd813577fd9fe4df",
-  "date": "2026-10-17",
-  "note": "pieces at clearance=WEB_CLEARANCE 9",
+  "date": "2026-10-19",
+  "note": "WEB_CLEARANCE 9 ft",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::apply_pieces#split piece's width": {
@@ -27870,18 +27834,17 @@
   "claim": "off another household's yard or garden - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the line within `WEB_FABRIC_GAP`, 7 ft",
   "code": "01e510cf66d66d5e",
   "core": "0d6409c041f2bc32",
-  "date": "2026-10-17",
-  "note": "`_crosses_fabric(..., WEB_FABRIC_GAP)` against `theirs`",
+  "date": "2026-10-19",
+  "note": "holds WEB_FABRIC_GAP, 7 ft, off \"another household's yard or garden\"; 0246 sets the gap only from a garden fence. The yard part should be UNRESEARCHED, as span_walkable's claim already says",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
-  "verdict": "IN-STEP"
+  "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/ways/settle.py::fouled_segment#off the fixtures": {
   "body": "40a2439713db7932",
@@ -28528,17 +28491,15 @@
   "claim": "the string-pull chord's keep-out - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a chord at this lane's own margin keeps its middle at least 7 ft (`WEB_FABRIC_GAP`) off footprints, walls and water, more for a lane wider than 10 ft (w/2 + 2 ft)",
   "code": "23262c8d6a3369e7",
   "core": "b169fd810bd7b252",
-  "date": "2026-10-17",
-  "note": "max(WEB_FABRIC_GAP, w/2 + 2)",
+  "date": "2026-10-19",
+  "note": "max(7, w/2 + 2)",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#the track out and the streets left whole": {
@@ -28962,16 +28923,14 @@
   "code": "9007fc808e94b98e",
   "core": "1c04255b932fe2b9",
   "date": "2026-10-19",
-  "note": "routed at 7 ft into the one network",
+  "note": "routed at 7 ft",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/street.py::join_to#street joined to the network": {
@@ -29475,17 +29434,15 @@
   "claim": "bridge clearance fallback - how-our-maps-lay-a-clustered-settlements-lanes.drawing: none - the bridge's line keeps 7 ft (`WEB_FABRIC_GAP`) off the fabric or is not drawn",
   "code": "e8b0a50f7f6316f9",
   "core": "55096ee863b47413",
-  "date": "2026-10-17",
-  "note": "routed at gap=WEB_FABRIC_GAP 7 only, no fallback",
+  "date": "2026-10-19",
+  "note": "routed only at 7 ft, no lower retry",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_bridge_collinear_breaks#bridge width": {
@@ -29499,6 +29456,14 @@
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/sweeps.py::_bridge_collinear_breaks#no break of _TREAD_TOUCH_FT (6 ft) or less is bridged": {
+  "code": "55096ee863b47413",
+  "core": "55096ee863b47413",
+  "date": "2026-10-19",
+  "note": "no break of _TREAD_TOUCH_FT (6 ft) or less is bridged",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_bridge_collinear_breaks#no loop closed": {
   "code": "808a8b58fc30dc25",
@@ -30191,17 +30156,15 @@
   "claim": "a straight link off the fabric - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off a garden fence, more for a lane wider than 10 ft (w/2 + 2 ft), as `_smooth_web`'s chord keeps (feature 328 wave 94: it kept 4 ft)",
   "code": "25237b96d1662835",
   "core": "6e3f55ae255051b5",
-  "date": "2026-10-17",
-  "note": "`_clear_touch` at max(7, w/2 + 2)",
+  "date": "2026-10-19",
+  "note": "max(7, w/2 + 2)",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/touch.py::_one_network#connector never dropped": {
@@ -30307,17 +30270,15 @@
   "claim": "a straight link off the fabric - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off a garden fence, more for a lane wider than 10 ft (w/2 + 2 ft), as `_smooth_web`'s chord keeps (feature 328 wave 94: it kept 4 ft)",
   "code": "79c3bc4eff4d5d03",
   "core": "e79b9a70ee57bb0e",
-  "date": "2026-10-17",
-  "note": "`_clear_touch` at max(7, w/2 + 2)",
+  "date": "2026-10-19",
+  "note": "max(7, w/2 + 2)",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#end meets end": {
@@ -30614,16 +30575,15 @@
   "code": "8f3737fc016d5005",
   "core": "3df55713d468cba4",
   "date": "2026-10-19",
-  "note": "grove bands are cleared at 7 ft (TRACK_FABRIC_GAP, and FOOTPATH_FABRIC_GAP in the fallback), but 0036 keeps \"a footpath's clearance and some working room\" off the trees (about 11 ft a side); 0246, the page cited, says nothing of groves",
+  "note": "the \"footpath's gap off a grove band\" clause cites 0246, which is silent on groves. The page is 0036 §243 (\"a footpath's clearance and some working room\", about 11 ft from a lane's middle). The code routes and clips bands at FOOTPATH_FABRIC_GAP, 7 ft, under both that figure and the 12.5 ft connector_dry_exit holds the same connector to (unless the bands are band_grown upstream, which the bundle does not show). Cite 0036 for the band gap and re-judge the 7 ft against it",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "verdict": "DRIFTED"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#never across a grove": {
   "body": "d740236e302ec3fc",
@@ -30785,21 +30745,19 @@
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#the track off the steadings": {
   "body": "f482b9e4dd7b3de1",
   "claim": "the track off the steadings - DEVIATION how-our-maps-lay-a-clustered-settlements-lanes.drawing, village-lanes.drawing: 7 ft off every steading (`TRACK_FABRIC_GAP`), a lane's middle off a garden fence",
-  "code": "902f1f02a2e5d47a",
-  "core": "f0643632f542215e",
+  "code": "53f63dc0e4916a56",
+  "core": "c60fd0ee2f01ede4",
   "date": "2026-10-19",
-  "note": "7 ft to a lane's middle is the recorded DEVIATION; the 6 ft track's edge still keeps more than §19's 3 ft off a house wall",
+  "note": "TRACK_FABRIC_GAP 7 ft from the middle; the page records the edge-side DEVIATION",
   "pages": {
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "5f7d877470ab7081",
+  "research": "bf7b3516b9fa8041",
   "rests": [
    "0081-village-lanes.drawing.html:417841cd16f112d9",
-   "0081-village-lanes.drawing.html:91a5765af6230403",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#the track off the wet": {
@@ -30975,18 +30933,16 @@
   "claim": "track off the steadings - how-our-maps-lay-a-clustered-settlements-lanes.drawing: kept `TRACK_FABRIC_GAP` (7 ft) off the steadings",
   "code": "8052306586e016ca",
   "core": "8c18acae0e41368f",
-  "date": "2026-10-17",
-  "note": "bearings scored by fabric_hits_boxed at TRACK_FABRIC_GAP 7",
+  "date": "2026-10-19",
+  "note": "steadings scored at TRACK_FABRIC_GAP, 7 ft",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_track#track out off the wet": {
@@ -31185,18 +31141,16 @@
   "claim": "lane clearance - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane's middle keeps 7 ft clear of a garden fence; the connector and spur keep `LANE_CLEARANCE`, 7 ft from the lane's middle, a footprint held to it at its corners",
   "code": "62c3087324867e77",
   "core": "84c8b5e51e347be7",
-  "date": "2026-10-17",
-  "note": "connector, row road and spur at LANE_CLEARANCE 7",
+  "date": "2026-10-19",
+  "note": "connector and spur registered at LANE_CLEARANCE, 7 ft",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#lanes after the farmhouses": {
@@ -31950,17 +31904,16 @@
   "claim": "tree lane's room - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a no-build corridor of WEB_CLEARANCE, 9 ft each side of the middle (the 18 ft room)",
   "code": "e9dbeb9f0f27458f",
   "core": "a8ce65fedb8893a4",
-  "date": "2026-10-17",
-  "note": "clearance=WEB_CLEARANCE 9",
+  "date": "2026-10-19",
+  "note": "WEB_CLEARANCE 9 ft",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::square_run_of#access tree plumbing": {
@@ -32416,18 +32369,16 @@
   "claim": "skeleton arm clipped WEB_FABRIC_GAP (7 ft) off the steadings and trimmed back to the last point serving a house - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane's middle keeps at least 7 ft clear of a garden fence, and a lane end that reaches nothing is pulled back to the last house it serves",
   "code": "a1e9abc891121a47",
   "core": "64c275f80ee2c620",
-  "date": "2026-10-17",
-  "note": "clip_to_clear at 7, then served_arm",
+  "date": "2026-10-19",
+  "note": "clip_to_clear at 7 ft, then served_arm",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm off the ditches": {
@@ -32461,18 +32412,16 @@
   "claim": "skeleton arm's corridor - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane's middle 7 ft clear of a garden fence; each arm registers `LANE_CLEARANCE`, 7 ft from its middle, a footprint held to it at its corners",
   "code": "913346b48012ab78",
   "core": "64c275f80ee2c620",
-  "date": "2026-10-17",
-  "note": "arms at clearance=LANE_CLEARANCE 7",
+  "date": "2026-10-19",
+  "note": "LANE_CLEARANCE 7 ft",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton drawn worn": {
@@ -32625,18 +32574,17 @@
   "code": "4cd52867698b4c7c",
   "core": "60a01d72af988a64",
   "date": "2026-10-19",
-  "note": "cuts need the 18 ft MIN_WEB_GAP",
+  "note": "cuts spaced by MIN_WEB_GAP, 18 ft",
   "pages": {
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "eb340109f5785558",
+  "research": "ad1c2ebf6253e871",
   "rests": [
    "0081-village-lanes.drawing.html:91a5765af6230403",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:81f9a92fe1d97af1"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_web_cut_lines#a web lane's span": {
@@ -32895,15 +32843,14 @@
   "code": "9cbbd5af884031b1",
   "core": "777e9952ae445157",
   "date": "2026-10-19",
-  "note": "WEB_FABRIC_GAP 7 ft is the `clear_runs` tight margin, as the page sets it",
+  "note": "clear_runs tight_margin=WEB_FABRIC_GAP, 7 ft",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::stage_web#belt crossed not followed": {
@@ -54317,21 +54264,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/houses.py::HousesMixin._on_a_tread#the lane middle's 7 ft": {
-  "body": "9c4fc97fe19801c5",
+  "body": "9937159a2c044f18",
   "claim": "the lane middle's 7 ft - how-our-maps-lay-a-clustered-settlements-lanes.drawing: `LANE_MIDDLE_CLEAR_FT`, the 7 ft a lane's middle keeps off a garden fence",
   "code": "d32014e1ed72b27a",
   "core": "f287f677ebcdede9",
-  "date": "2026-10-18",
-  "note": "`LANE_MIDDLE_CLEAR_FT`=7.0 is the page's \"a lane's middle keeps at least 7 ft clear of a garden fence\"; using it for a building is the extension the GUESS claim records",
+  "date": "2026-10-19",
+  "note": "max(half + hair, LANE_MIDDLE_CLEAR_FT), at least 7 ft",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/houses.py::HousesMixin._quad#hand-laid plot outlines": {
@@ -56530,16 +56475,15 @@
   "code": "dd1ceacbb2633039",
   "core": "2c48ea6cfc2004e2",
   "date": "2026-10-19",
-  "note": "7.0 ft from the line to each fence; the drawing page records this as a DEVIATION: \"measured from the fence to the middle of the lane, so the edge of a 3 ft footpath may pass 5.5 ft from the fence\"",
+  "note": "7 ft from the line, the least gap; the page records the 5.5 ft edge DEVIATION",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/access.py::AccessTree#every house reached by a path": {
@@ -56647,17 +56591,15 @@
   "claim": "a lane's middle off the fence - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane's middle keeps at least 7 ft clear of a garden fence",
   "code": "87f581fb100d7b8d",
   "core": "2c48ea6cfc2004e2",
-  "date": "2026-10-17",
-  "note": "7.0",
+  "date": "2026-10-19",
+  "note": "7 ft",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/access.py::PART_MARGIN_FT#corridor geometry, memo and search plumbing": {
@@ -59449,15 +59391,15 @@
   "code": "d270e38c97eed08a",
   "core": "6df2847c6606618b",
   "date": "2026-10-19",
-  "note": "homesteads grown by the corridor half-width, a DEVIATION the page records",
+  "note": "homestead boxes grown by the caller's half-width (the 7 ft corridor); the page records the edge DEVIATION",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "dbf0ba0d6c0fff1a"
   },
-  "research": "60b94d3c15ae221a",
+  "research": "7843df0197c5f60e",
   "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/gap_ways.py::lay_the_ways#a household no way reaches is pinched across its nearest reached neighbor's yard": {

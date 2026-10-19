@@ -915,3 +915,11 @@ is run against the cohort before its claims round - it surfaces what the lax che
 About 15 min. `ACCESS_HALF_FT`'s comment called its 7 ft "a footpath's room between two steadings"; it is the corridor line's gap off
 each garden fence, the room between two steadings being `MIN_WEB_GAP` (18 ft). The claim re-checked IN-STEP. Its check noticed 0246
 measuring the 7 ft to the tread's edge in one block and to the middle in another: filed as T107. **The habit it changes:** none.
+
+## T107 - the retro row
+
+About 50 min with its checks. 0246 gives its 7 ft two measures: the 18 ft room counts it to the tread's edge, the least gap to the
+lane's middle. A new block says so - no block edited (T31's lesson), no code changed. Its triages sent on 51 of 287 claims and all 8
+lane pop-ups; 48 claims IN-STEP, the pop-ups clean, 0246's record checks clean. The rest - the 7 ft held off threshing yards and
+other households' yards where 0246 names gardens, the track's grove gap citing 0246 for 0036's figure, two small tolerances
+unclaimed - is old code a page edit re-judged, carried as a task. **The habit it changes:** none.
