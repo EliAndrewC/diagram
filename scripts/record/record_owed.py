@@ -28,6 +28,7 @@ round's answer instead of owing the unit again (`settle`; feature 335's round ar
 from __future__ import annotations
 
 import argparse
+import html
 import json
 import os
 import pathlib
@@ -223,6 +224,9 @@ def write_answer(store_dir: pathlib.Path, slug: str, fp: str, result: str, pages
         rec["pages"] = pages
     if settles:
         rec["settles"] = settles
+    for k in ("readings", "passages", "hrefs", "reply_quotes"):  # what a source-reader answer read stays: an answer adds to it
+        if old.get(k):
+            rec[k] = old[k]
     _file(store_dir, slug).write_text(json.dumps(rec, indent=1) + "\n", encoding="utf-8")
 
 
@@ -291,8 +295,59 @@ def answered(store_dir: pathlib.Path, slug: str, fp: str, reading: str = "") -> 
 
 def unanswered(root: pathlib.Path) -> list[ru.Unit]:
     s = store(root)
-    return [u for u in units(root) if not answered(s, u.slug, u.fingerprint, u.reading) and not legacy_depiction_answered(root, s, u.slug)
+    owed = [u for u in units(root) if not answered(s, u.slug, u.fingerprint, u.reading) and not legacy_depiction_answered(root, s, u.slug)
             and not amendment1_depiction_answered(root, s, u.slug)]
+    quote_owed = {u.subject for u in owed if u.check == "quote-check"}
+    return [u for u in owed if not (u.check == "source-reader" and u.subject not in quote_owed and readers_own(root, s, u.slug))]
+
+
+_RUN = re.compile(r"「([^「」]+)」")
+
+
+def _runs(text: str) -> list[str]:
+    """The 「...」 runs of a text, whitespace dropped; the text itself where it has none."""
+    return ["".join(r.split()) for r in _RUN.findall(text)] or ["".join(text.split())]
+
+
+def note_parts(root: pathlib.Path, subject: str) -> tuple[list[str], list[str]]:
+    """(the pages, the passages' runs) a source-reader reads of one note in the tree now; ([], []) for a note not found."""
+    stem, _, note = subject.partition("#")
+    if "." in stem:
+        return [], []
+    for f in sorted((root / "research" / "questions").glob(f"{stem}-*.notes.html")):
+        originals = f.with_name(f.name[: -len(".notes.html")] + ".originals.html")
+        table = dict(ru._ORIG_STORED.findall(originals.read_text(encoding="utf-8"))) if originals.is_file() else {}
+        for key, body in ru._NOTE.findall(f.read_text(encoding="utf-8")):
+            if key == note:
+                origs = [table.get(i, "") for i in ru._ORIG_TOKEN.findall(body)]
+                passages = origs or [a or b for a, b in ru._PASSAGE.findall(html.unescape(ru._TAG.sub("", ru._ORIG_TOKEN.sub("", body))))]
+                return ru._HREF.findall(body), [r for p in passages for r in _runs(p)]
+    return [], []
+
+
+def keep_parts(store_dir: pathlib.Path, slug: str, root: pathlib.Path, reply: str = "") -> None:
+    """Add what a source-reader answer read - its pages and passages - and the passages its reply quoted, for `readers_own`."""
+    rec = _read(store_dir, slug)
+    if not rec:
+        return
+    hrefs, runs = note_parts(root, slug.split(":", 1)[1])
+    rec["hrefs"] = sorted({*rec.get("hrefs", []), *hrefs})
+    rec["passages"] = sorted({*rec.get("passages", []), *runs})
+    if reply:
+        rec["reply_quotes"] = sorted({*rec.get("reply_quotes", []), *(r for r in _runs(reply) if len(r) > 1)})
+    _file(store_dir, slug).write_text(json.dumps(rec, indent=1) + "\n", encoding="utf-8")
+
+
+def readers_own(root: pathlib.Path, store_dir: pathlib.Path, slug: str) -> bool:
+    """A source-reader note changed by NOTHING but passages its last reader quoted itself, on the pages it read: not owed again
+    (the round arbiter on round:source-reader|q:0263@3 - applying the reader's findings added the passages it quoted, and the
+    note was owed a third read of the same saved pages). The caller holds it to quote-check having answered the note."""
+    rec = _read(store_dir, slug)
+    if not rec.get("passages"):
+        return False
+    hrefs, runs = note_parts(root, slug.split(":", 1)[1])
+    known, quoted = set(rec["passages"]), rec.get("reply_quotes", [])
+    return bool(runs) and set(hrefs) <= set(rec.get("hrefs", [])) and any(r in known for r in runs) and all(r in known or any(r in q for q in quoted) for r in runs)
 
 
 def keep_reading(store_dir: pathlib.Path, slug: str, reading: str) -> None:
@@ -473,7 +528,7 @@ def bundle_less_refusal(check: str, notes: str, reason: str) -> str:
             "it read, or REASON=\"<why>\" (written to dev/bypass-log/). A fix that applies a check's findings is owed its second round.")
 
 
-def answer(root: pathlib.Path, check: str, result: str, bundle: str = "", q: str = "", notes: str = "", key: str = "", kind: str = "") -> list[str]:
+def answer(root: pathlib.Path, check: str, result: str, bundle: str = "", q: str = "", notes: str = "", key: str = "", kind: str = "", reply: str = "") -> list[str]:
     """Record the answer for every unit of `check` the bundle carried, or that the tree owes on the named subject - and close
     that check's dispatches on those subjects in the clone's check state (feature 375, FR-003: an answered check no longer
     freezes its page)."""
@@ -482,6 +537,8 @@ def answer(root: pathlib.Path, check: str, result: str, bundle: str = "", q: str
         s, now = store(root), {u.slug: u.reading for u in units(root) if u.check == check}
         for slug in done:
             keep_reading(s, slug, now.get(slug, ""))
+            if check == "source-reader":
+                keep_parts(s, slug, root, reply)
     if done:
         import hm_checks  # noqa: PLC0415
 
@@ -578,11 +635,14 @@ def main(argv: Sequence[str] | None = None) -> int:
         if refusal:
             print(f"record-checked: REFUSED - {refusal}", file=sys.stderr)
             return 2
-        done = answer(root, args.answer, args.result, args.bundle, args.q, args.notes, args.key, args.kind)
+        reply = ""
         if args.reply:
             import apply_edits  # noqa: PLC0415 - a transcript's last reply, as `make apply-edits` reads one (hour 32: an .output read raw filed nothing)
 
-            for row in file_outside(root, args.answer, apply_edits.reply_of(pathlib.Path(args.reply))):
+            reply = apply_edits.reply_of(pathlib.Path(args.reply))
+        done = answer(root, args.answer, args.result, args.bundle, args.q, args.notes, args.key, args.kind, reply)
+        if reply:
+            for row in file_outside(root, args.answer, reply):
                 print(f"record-checked: filed, not fixed - {row['file']} | {row['block']} | {row['finding']}")
         if done and not args.bundle and args.reason:
             bypass_log(root, "record-checked", f"{args.answer} on {' '.join(done)}: {args.reason}")
