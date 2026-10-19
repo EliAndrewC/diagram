@@ -17155,5 +17155,11 @@
    "tobacco knives",
    "tobacco-knife"
   ]
+ },
+ "hinoe-saru": {
+  "def": "The name of a year in the sixty-year cycle of the Chinese calendar, \"fire, elder - monkey\", used alongside the era year in a date. Tenpo 7 (1836) was a hinoe-saru year.",
+  "variants": [
+   "hinoe-saru"
+  ]
  }
 }

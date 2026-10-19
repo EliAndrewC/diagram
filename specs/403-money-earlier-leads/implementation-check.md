@@ -10,3 +10,4 @@
 - 0257: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'torii_cost|stepping.stone|burial.mound|porterage|stone_carr' l7r pool (magistracy map notes, a garden modal and compound parts drawing stepping stones; no price or rule)
 - 0268: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'hokora|ranma|bengara|heiden|kasuga.zukuri' l7r pool (glossary entries, hamlet notes, farm fixtures and a kami-altar modal; no price or rule)
 - 0269: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'stone.lantern|komainu|gorinto|mason_wage|stele' l7r pool (glossary entries, lantern and garden modals, map SVGs; no price or rule)
+- 0270: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'shinkyo|sacred.mirror|shrine_mirror|waniguchi|mirror_price|reliquary' l7r pool (a reliquary glossary entry and the sanctuary modal; no price or rule)
