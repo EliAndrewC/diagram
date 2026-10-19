@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import argparse
 import collections
+import itertools
 import json
 import re
 import sys
@@ -250,11 +251,26 @@ def _records(sids: list[str], transcript: Path | None, projects: Path) -> tuple[
     return records, read, missing
 
 
+def silent_minutes(records: list[dict], since: float, until: float, gap: float = 300.0) -> list[str]:
+    """The stretches of the window, five minutes or longer, in which no record read has a timestamp - named in `words.md`
+    so the arbiter does not judge an hour it saw only part of (the round arbiter's tooling fix on hour:395@2)."""
+    ts = sorted(t for d in records if "timestamp" in d and since <= (t := _ts(d["timestamp"])) <= until)
+    marks, out = [since, *ts, until], []
+    for a, b in itertools.pairwise(marks):
+        if b - a >= gap:
+            out.append(f"{_iso(a)[11:16]}-{_iso(b)[11:16]}")
+    return out
+
+
 def build(trigger: str, root: Path, out: Path, since: float, until: float, transcript: Path | None, sids: Sequence[str] = (), projects: Path = PROJECTS) -> Path:
     feature = trigger.split(":", 1)[-1].rsplit("@", 1)[0]
     g = ro._gitdir(root)  # noqa: SLF001
     events = _lines(g / "l7r-events" / f"{feature}.jsonl") if g is not None else []
-    sids = list(sids) or sessions_of(events, since, until)
+    # EVERY SESSION OF THE CLONE IN THE WINDOW (the round arbiter's tooling fix on hour:395-shrine-building-costs@2): the main
+    # session's events went to 397's log while `.specify/feature.json` named 397, so its 16 minutes of 395's work (four tooling
+    # fixes landed, round-3 bundles built) were in no session this read. Sessions come from every feature's log in the clone.
+    clone_events = [e for f in sorted((g / "l7r-events").glob("*.jsonl")) for e in _lines(f)] if g is not None and (g / "l7r-events").is_dir() else events
+    sids = list(sids) or sessions_of(clone_events, since, until)
     records, read, missing = _records(sids, transcript, projects)
     out.mkdir(parents=True, exist_ok=True)
     tools, spent, count, longest = tool_time(records, since, until)
@@ -276,6 +292,8 @@ def build(trigger: str, root: Path, out: Path, since: float, until: float, trans
     head = f"sessions read: {', '.join(s[:8] for s in read) or 'none'}" + (f"; left out (no transcript found): {', '.join(s[:8] for s in missing)}" if missing else "")
     if said.startswith("[... the hour's earlier words cut"):
         head += "; cut to the cap: the hour's earliest words"
+    if gaps := silent_minutes(records, since, until):
+        head += f"; NO WORDS FOUND for {', '.join(gaps)} of the window - judge those minutes as unseen, not as idle"
     (out / "words.md").write_text("# The sessions' own words\n\n" + head + "\n\n" + (said or "(no transcript found)") + "\n", encoding="utf-8")
     (out / "MANIFEST.md").write_text(MANIFEST.format(trigger=trigger, feature=feature, since=_iso(since), until=_iso(until)), encoding="utf-8")
     return out / "MANIFEST.md"
