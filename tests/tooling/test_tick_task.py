@@ -215,7 +215,9 @@ def test_a_note_saying_landed_is_refused_while_the_landing_is_not_on_main(tmp_pa
     differs.clear()
     ahead.clear()
     rows.write_text(json.dumps({"feature": "385-x", "task": "T72", "files": ["scripts/a.py"], "outcome": "failed: the checks failed", "log": "L"}) + "\n")
+    differs.add("scripts/a.py")  # a failed landing leaves its file off main (T139: one whose files stand on main is landed)
     assert "ended 'failed: the checks failed' (L)" in tt.landed_refusal(tmp_path, "385-x", "T72", "Landed on main")
+    differs.discard("scripts/a.py")
     assert tt.landed_refusal(tmp_path, "385-x", "T72", "built, tests green") == "", "a note not claiming a landing is not checked"
     with rows.open("a") as fh:  # the reland ran while another task was active: the same files, landed, count
         fh.write(json.dumps({"feature": "385-x", "task": "T73", "files": ["scripts/a.py", "dev/review-ledger.md"], "outcome": "landed", "log": "L"}) + "\n")
@@ -226,6 +228,12 @@ def test_a_note_saying_landed_is_refused_while_the_landing_is_not_on_main(tmp_pa
     assert tt.landed_refusal(tmp_path, "385-x", "T72", "landed") == "", "the ledger rides along and is not compared"
     differs.add("scripts/a.py")
     assert "scripts/a.py differs from origin/main" in tt.landed_refusal(tmp_path, "385-x", "T72", "LANDED")
+    # feature 385 T139 (D150): a failed land-tooling whose files reached main by another route (the gated batch) is landed
+    rows.write_text(json.dumps({"feature": "385-x", "task": "T137", "files": ["scripts/b.py"], "outcome": "failed: the checks failed", "log": "L"}) + "\n")
+    differs.discard("scripts/b.py")
+    assert tt.landed_refusal(tmp_path, "385-x", "T137", "landed") == "", "its files stand on main: landed"
+    differs.add("scripts/b.py")
+    assert "ended 'failed: the checks failed'" in tt.landed_refusal(tmp_path, "385-x", "T137", "landed"), "off main: refused as before"
 
 
 def test_a_batch_is_asked_every_tick_first_lands_once_and_ticks_each(tmp_path: pathlib.Path, monkeypatch, capsys) -> None:  # noqa: ANN001

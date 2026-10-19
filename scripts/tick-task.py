@@ -192,13 +192,14 @@ def landed_refusal(root: Path, feature: str, task: str, note: str) -> str:
     # a later run of the same files lands them, whichever task was active when it ran (T79's own reland was booked to T81)
     later = [r for r in every[mine[-1] + 1 :] if set(r.get("files") or []) >= set(last.get("files") or [])]
     last = later[-1] if later else last
-    if last.get("outcome") != "landed":
-        return f"the NOTE says landed, but {task}'s last make land-tooling ended '{last.get('outcome')}' ({last.get('log')}) - land it, then tick"
     subprocess.run(["git", "-C", str(root), "fetch", "-q", "origin"], capture_output=True)
-    for f in last.get("files") or []:
-        if f not in _RIDERS and subprocess.run(["git", "-C", str(root), "diff", "--quiet", "origin/main", "--", f], capture_output=True).returncode:
-            return f"the NOTE says landed, but {f} differs from origin/main - land it (make land-tooling FILES=...), then tick"
-    return ""
+    # ...UNLESS ITS FILES REACHED MAIN ANOTHER WAY (feature 385 T139, D150): T137's land-tooling failed, then the gated batch
+    # landed the same files, and the tick refused work that stood on main
+    off = [f for f in last.get("files") or [] if f not in _RIDERS
+           and subprocess.run(["git", "-C", str(root), "diff", "--quiet", "origin/main", "--", f], capture_output=True).returncode]
+    if last.get("outcome") != "landed" and (off or not last.get("files")):
+        return f"the NOTE says landed, but {task}'s last make land-tooling ended '{last.get('outcome')}' ({last.get('log')}) - land it, then tick"
+    return f"the NOTE says landed, but {off[0]} differs from origin/main - land it (make land-tooling FILES=...), then tick" if off else ""
 
 
 def refusal(root: Path, d: Path, task: str, note: str, landed: bool = True) -> tuple[str, str]:
