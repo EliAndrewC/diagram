@@ -362,6 +362,9 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
         "owed": re.findall(r"^owed: (.+)$", text, re.M),  # why each unit was due (374)
         "notes": sorted(notes),
         "quote_notes": hm_fixloop.notes_of(text) if check == "quote-check" else {},  # what each footnote read (feature 399)
+        # a source-reader read before its note exists (a NEW= bundle owes no unit): the reading the lines are written FROM, not
+        # a check of written lines, so the cascade does not count it (feature 398, the round arbiter's cascade@1 tooling fix)
+        "prewrite": check == "source-reader" and not re.search(r"^unit: ", text, re.M),
     }  # the notes the bundle read, [] for the whole page (feature 393's earlier rounds)
     return ""
 
@@ -658,8 +661,9 @@ def window_start(root: Path) -> float:
 
 
 def dispatches_since(state: Mapping[str, Any], since: float) -> int:
-    """The check dispatches made at or after `since` (a dispatch's `t`) - the cascade's count inside its window."""
-    return sum(1 for d in (state.get("dispatches") or {}).values() if float(d.get("t") or 0.0) >= since)
+    """The check dispatches made at or after `since` (a dispatch's `t`) - the cascade's count inside its window. A pre-write
+    source-reader read is not counted: feature 398's ten reads before any page was written fired cascade@1 over 1 line."""
+    return sum(1 for d in (state.get("dispatches") or {}).values() if float(d.get("t") or 0.0) >= since and not d.get("prewrite"))
 
 
 def changed_lines(root: Path) -> int:
