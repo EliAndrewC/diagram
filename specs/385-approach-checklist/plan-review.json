@@ -6100,6 +6100,52 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T79": {
+   "section_sha256": "cfa5b0b011e88de2da8e35d9f0536d443b3591db6904e9c478d66152dac280a0",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T79 (the task)",
+     "summary": "Take the round arbiter's fix on hour:385-approach-checklist@25: make tick refuses a 'landed' tick while the task's last land-tooling landing is not on main.",
+     "class": "within",
+     "why": "The arbiter stands where the GM was asked (feature 379), and the fix is quoted verbatim in Approach item 2. It is a tooling improvement of the kind amendment 6 asks for ('implement any obvious performance / tooling / process improvements along the way'). The plan is judged against the arbiter's sentence, not against Approach item 1's goal, which is broader."
+    },
+    {
+     "id": "D98a (NOTE match)",
+     "summary": "tick-task.py checks a tick only when its NOTE matches \\blanded\\b.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The fix says a NOTE that 'says landed'. As written, the regex has no flag, so it is case-sensitive. A note that begins 'Landed ...' (how a note naturally starts) is never checked, so the tick the arbiter's sentence refuses goes through, for no reason except capitalization. None of the grounds applies: matching any case is possible, the fix's words do not imply the restriction, and it works against the fix's purpose. Change D98 and Done item 9 to say the NOTE matches 'landed' as a whole word in any case (e.g. re.IGNORECASE), and have the red test include a capitalized 'Landed' note."
+    },
+    {
+     "id": "D98b (no row is not refused)",
+     "summary": "A task with no land-tooling.jsonl row is not refused, (i) because it did not land through the tool, or (ii) because it lands with its feature.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The two cases, judged separately. (i) Did not land through the tool: the fix is defined over 'that task's last make land-tooling FILES' and 'that landing's log'. With no run there are no FILES and no log, so the condition the arbiter wrote cannot be met. The arbiter's own words imply this carve-out. (ii) Lands with its feature: the same reasoning, since there is no land-tooling run to check. That landing goes through the feature's push, which the fix does not cover. Both cases are outside the fix's subject, so neither narrows it."
+    },
+    {
+     "id": "D98c (the record)",
+     "summary": "land-tooling.sh appends {task, files, outcome, utc} to <git dir>/land-tooling.jsonl at each run's end. The task is the clone's active one from task-starts.jsonl, and outcome is 'landed' or the step that failed. The tick reads the task's last row.",
+     "class": "within",
+     "why": "This is mechanism for the fix's 'that task's last make land-tooling' and 'that landing's log ends in a failure'. Recording the step that failed shows a failed run is meant to append too. A caution for the implementer, not a ruling: a run killed before 'its end' would leave the previous row as the last one, so the tick would pass even though the latest landing failed. Append under an exit trap, or check the row against the newest log, so the check stays on the last run as the fix requires."
+    },
+    {
+     "id": "D98d (the diff check)",
+     "summary": "For a landed row, fetch, then refuse where git diff --quiet origin/main -- <file> fails for a file in the row.",
+     "class": "within",
+     "why": "This puts the arbiter's own words into practice: 'any file in that task's last make land-tooling FILES still differs from origin/main'. Fetching first keeps origin/main current, so the comparison is against what is actually on main."
+    },
+    {
+     "id": "D98e (what the refusal names)",
+     "summary": "A failed outcome names the log. A differing file names the file. Done item 9 says 'naming the file or the log'.",
+     "class": "within",
+     "why": "The fix says 'naming the file and the log'. Read distributively, which fits its two conditions, the differing-file refusal names the file and the failed-landing refusal names the log. The plan does exactly that, so it is within on that reading. It is recorded here so the reading is on the record rather than assumed."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

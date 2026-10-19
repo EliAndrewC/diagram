@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -291,6 +291,28 @@ Owed by the hour-25 step-back (hour:385-approach-checklist@25, `continue`).
 ### T80 Decisions
 
 **D99 - the section judged without its quiet part Bs.** `task_current`, where the digest differs, compares the earlier text with the current one with every part B block that `decides_nothing` taken out of both, by the same typo rule as now; a part B that decides is left in, so it still owes the section's review.
+
+## T81 - pop-ups owed one check are checked by one agent (the GM-approved proposal 1, 2026-10-18)
+
+### T81 Approach (checklist part A)
+
+1. **The goal, in the world.** When several pop-ups owe the same check, one agent reads them, not one agent each.
+2. **The constraints.** The GM, 2026-10-18 (amendment 8): "I do like all of your other proposals"; change 1 of the step-back report: "Pop-ups that share a template are checked once as a group (tooling)". The GM's rule: a tool, never a reminder. Each pop-up keeps its own bundle and its own answer (T02, plan D12 - `make modal-bundle KIND="a b c"` already builds one bundle of several). A test red without it.
+3. **Where each comes from.** The GM (G); the batched bundle is T02's (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the page sessions' transcripts, their Agent calls 17:00-21:30Z): T10's checks sent 90 pop-up agents, every one on a single pop-up's bundle (modal-form 38, modal-depiction 28, modal-research 24) - the batched form T02 built was never used, because `make record-owed` names one `make modal-bundle KIND=<one>` per unit. `make record-owed` takes 4.4 s (measured), too slow for a dispatch hook to run.
+5. **The order.** The batched line and its record in `record_owed.py`; the refusal in `hm_checks.dispatch`; then the tests.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 60 min.
+9. **Done, measured.** One goal: `make record-owed` names, for each pop-up check owed by two or more unanswered pop-ups, one `make modal-bundle KIND="<them all>" FOR=<check>`, and a dispatch of that check on one of those pop-ups' single bundle is refused, naming it; `tests/tooling/test_record_owed.py` and `tests/hooks/test-pair-hooks.sh` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T81 Decisions
+
+**D100 - the batch named and kept.** `record_owed.report` adds, after the units, one `batched: make modal-bundle KIND="<kinds>" FOR=<agent>` line per pop-up agent (modal-form, modal-depiction, modal-research) owed by two or more unanswered pop-ups (a triage-owed one, which goes to `make modal-triage` first, is left out), and writes those batches to `<git dir>/modal-batches.json` with the time.
+
+**D101 - a single pop-up's dispatch refused while its batch is owed.** `hm_checks.dispatch`, for a pop-up agent whose MANIFEST names one pop-up, reads `modal-batches.json`; where that pop-up is in a batch of two or more for the same agent, written within the last two hours, it refuses, naming the batched command. No file, or an older one, refuses nothing (fail open). The escape is `BATCH_OK="<reason>"` in the prompt, recorded like the guard's others.
 
 ## T11 - the close
 

@@ -227,6 +227,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T80 A quiet part B leaves its task's section reviewed (plan D99) [lands-open]
       research: rendering
+- [ ] T81 Pop-ups owed one check are checked by one agent (proposal 1, plan D100, D101) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
