@@ -699,6 +699,9 @@ deep-water irrigation	deep-water irrigation
 deep-water lotus	deep-water lotus
 deep-water lotus field	deep-water lotus
 deep-water lotus fields	deep-water lotus
+deflate	deflate
+deflated	deflate
+deflating	deflate
 degawari	degawari
 dejima	Dejima
 delivery ditch	delivery ditch
@@ -1222,6 +1225,7 @@ genan	degawari
 genba	genba
 genba-oke	genba
 genbun	Genbun
+gengshen	gengshen
 genin	genin
 genji	Genji
 genkan	genkan
@@ -1311,6 +1315,10 @@ groins	groyne
 gross-up	gross-up
 gross-ups	gross-up
 ground mulberry	root-cut
+ground tenancies	ground tenant
+ground tenancy	ground tenant
+ground tenant	ground tenant
+ground tenants	ground tenant
 group quarter	kumi-yashiki
 group quarters	kumi-yashiki
 group-residence	kumi-yashiki
@@ -2198,6 +2206,7 @@ land-readjustment	kochi seiri
 land-sharing system	warichi
 landrace	landrace
 landraces	landrace
+large rent	subsoil owner
 later hojo	Later Hojo
 later wei	Later Wei
 lateral	lateral
@@ -2260,6 +2269,10 @@ litters	litter
 littoral	littoral
 liubu	liubu
 liuchu	liuchu
+live sale	live sale
+live sales	live sale
+live-sale	live sale
+living sale	live sale
 loess	loess
 log boom	boom
 lognormal	lognormal
@@ -2452,6 +2465,7 @@ mirin	mirin
 miscanthus	susuki
 mise	mise
 mishima	Mishima
+miso	miso
 mitochigai	mitochigai
 mitsuba	mitsuba
 mitsuke	mitsuke
@@ -2983,6 +2997,7 @@ purveyor merchant	purveyor merchant
 purveyor merchants	purveyor merchant
 px	px
 qi	qi
+qian	qian
 qiandao	qiandao
 qianlong	Qianlong
 qiaolou	gulou
@@ -3040,6 +3055,8 @@ reaches	reach
 reaction	reaction
 reactions	reaction
 readjustment	kochi seiri
+real wage	real wage
+real wages	real wage
 recension	recension
 recensions	recension
 recharge	recharge
@@ -3550,6 +3567,7 @@ sluice	sluice
 sluice share	sluice share
 sluice shares	sluice share
 sluices	sluice
+small rent	topsoil owner
 snow-viewing lantern	yukimi
 so village	so village
 so villages	so village
@@ -3679,6 +3697,8 @@ sub-temples	sub-temple
 subgrade	subgrade
 subsidiary shrine	subsidiary shrine
 subsidiary shrines	subsidiary shrine
+subsoil owner	subsoil owner
+subsoil owners	subsoil owner
 substructure	substructure
 substructures	substructure
 subuta	Blyxa
@@ -3757,6 +3777,8 @@ tabune	field boat
 tabunoki	tabu
 tachimuba	tachimuba
 tadaaki	Matsudaira Tadaaki
+tael	tael
+taels	tael
 tagoshi	tagoshi kangai
 tagoshi kangai	tagoshi kangai
 taiho	Taiho code
@@ -3974,6 +3996,8 @@ toons	toon
 top-dress	top-dressing
 top-dressed	top-dressing
 top-dressing	top-dressing
+topsoil owner	topsoil owner
+topsoil owners	topsoil owner
 tori-niwa	toriniwa
 torii	torii
 toriimoto	Toriimoto
@@ -4033,6 +4057,9 @@ trifoliate orange	trifoliate orange
 trifoliate oranges	trifoliate orange
 trigram	eight trigrams
 trigrams	eight trigrams
+troy ounce	troy ounce
+troy ounces	troy ounce
+troy oz	troy ounce
 true duty	water duty
 trunk streets	trunk street
 tsinan	Tsinan
@@ -4289,6 +4316,7 @@ well-houses	well-house
 well-sweep	well-sweep
 wellhead	curb
 wellheads	curb
+wen	wen
 weng cheng	wengcheng
 wengcheng	wengcheng
 wenmiao	wenmiao
@@ -4338,6 +4366,7 @@ xiang seven, li three	Lingqu
 xiang-gan	Xiang-Gan
 xiangcang	shecang
 xingqing	Western Xia
+xinyou	xinyou
 xu	xu
 xu tan	Xu Tan
 xuande	Xuande
