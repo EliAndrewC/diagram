@@ -126,14 +126,17 @@ def task_current(review: dict, plan_text: str, task: str, history: History | Non
     if earlier is None:
         return False
     was, now = _quiet_out(ARCHIVE_LINE.sub("", str(earlier)), plan_text), _quiet_out(section, plan_text)
-    return typo_only(was, now) or typo_only(repointed(was, now, task, plan_text), now)
+    archive = history.path.parent / "plan-done.md" if history and history.path else None
+    done = archive.read_text(encoding="utf-8") if archive and archive.is_file() else ""
+    return typo_only(was, now) or typo_only(repointed(was, now, task, plan_text + done), now)
 
 
 def repointed(old: str, new: str, task: str, plan_text: str) -> str:
     """`old` with one task id renamed to the task a recorded split moved its work to, where that rename is the whole edit (the
     round arbiter's fix on hour:385-approach-checklist@28: T31 said "row 841 is T32" after the review moved the row to T95, and
     correcting the pointer would have owed T31 a third review). A split is RECORDED when the new id's own heading says it was
-    "found working <task>" (`make task-add`'s found work); any other rename is returned unchanged, so it still owes a review."""
+    "found working <task>" (`make task-add`'s found work), in the plan or its archive (`plan_text` with plan-done.md after it: a
+    ticked split is archived); any other rename is returned unchanged, so it still owes a review."""
     splits = [t for t, sec in task_sections(plan_text).items() if t != task and re.search(rf"found working {re.escape(task)}\b", sec.split("\n", 1)[0])]
     for b in splits:
         for a in sorted(set(_TASK_ID.findall(old)) - {b, task}):
@@ -308,7 +311,9 @@ def block_status(review: dict, plan_text: str, ruled: set[str], history: History
         entry = have.get(key) or {}
         if entry.get("sha256") != block_digest(body):
             earlier = entry.get("text") or (history.block(key, str(entry.get("sha256"))) if history and entry.get("sha256") else None)
-            if earlier is None or not typo_only(ARCHIVE_LINE.sub("", earlier), ARCHIVE_LINE.sub("", lands_open_appended(earlier, body))):
+            was, now_ = ARCHIVE_LINE.sub("", earlier or ""), ARCHIVE_LINE.sub("", lands_open_appended(earlier or "", body))
+            own = _TASK_ID.match(_HEAD.sub(r"\2", key).strip())  # a ticked task's blocks are judged here: the repoint rule too
+            if earlier is None or not (typo_only(was, now_) or (own and typo_only(repointed(was, now_, own.group(0), plan_text + done), now_))):
                 owed.append(key)
                 continue
         if entry.get("verdict") == "BLOCKED":
