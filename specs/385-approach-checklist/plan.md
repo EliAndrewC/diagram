@@ -653,7 +653,7 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@35 (change-rou
 
 ### T106 Decisions
 
-**D146 - laid 30 ft past, trimmed to the last house.** 0246's back-lane bullet "each runs only along the houses it serves, and about 30 ft past the last of them;" becomes "each is laid along the houses it serves and about 30 ft past the last of them - the room it is cut in - and its end is then pulled back to the last house it serves, as every lane end that reaches nothing is;". The claim `web.stage_web#the web's frame` reads "research/questions/0246-...drawing.html: a back lane is laid about 30 ft past the last house it serves and its end then pulled back to that house - the frame (`BUNDLE_PITCH` ...) is only the room the cuts are laid in, and the trims (`tidy_lane_ends`) bring each end back to the last house it serves".
+**D146 - laid 30 ft past, trimmed to the last house.** 0246's back-lane bullet "each runs only along the houses it serves, and about 30 ft past the last of them;" becomes "each is laid along the houses it serves and about 30 ft past the last of them - the room it is cut in - and its end is then pulled back to the last house it serves, as every lane end that reaches nothing is;". The claim `web.stage_web#the web's frame` reads "research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a back lane is laid about 30 ft past the last house it serves and its end then pulled back to that house - the frame (`BUNDLE_PITCH` ...) is only the room the cuts are laid in, and the trims (`tidy_lane_ends`) bring each end back to the last house it serves".
 
 ## T11 - the close
 
