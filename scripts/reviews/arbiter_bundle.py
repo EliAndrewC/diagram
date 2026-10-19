@@ -315,7 +315,22 @@ def modal_changed_keys(name: str, lines: list[str]) -> list[str]:
     return keys
 
 
-def capped_round_cause(root: Path, out: Path, check: str, subject: str, files: list[str], since: float) -> list[str]:
+def key_since(rounds: list[dict], owing: list, since: float) -> float:
+    """The earliest of each owing note's OWN last read (the round arbiter's tooling fix on round:source-reader|q:0262@8): the
+    diff began at the unit's last dispatch, a read of another key, and hid the change to muraoka-edo-nagaya-life#2 made after
+    that key's own clean round. A round that read the whole page (no `notes`) read every key."""
+    starts = []
+    for u in owing:
+        key = u.subject.partition("#")[2]
+        if not key:
+            continue
+        mine = [float(r.get("t") or 0.0) for r in rounds if not r.get("notes") or key in (r.get("notes") or [])]
+        if mine:
+            starts.append(max(mine))
+    return min([since, *starts]) if since else since
+
+
+def capped_round_cause(root: Path, out: Path, check: str, subject: str, files: list[str], since: float, rounds: list[dict] | None = None) -> list[str]:
     """What owes the CAPPED round itself (feature 374 wave 120, the arbiter on the seat pop-ups: the round-3 cause - one word
     on 0190's drawing page, and for one unit its round 2's own fix - was named nowhere in the MANIFEST and had to be dug out
     of edits.diff): the record's owed reason for the unit now, and the commits on the unit's files since the last round's
@@ -330,6 +345,7 @@ def capped_round_cause(root: Path, out: Path, check: str, subject: str, files: l
         owing = [u for u in record_owed.unanswered(root) if u.check in checks and u.subject.split("#")[0] in (name, f"{name}.drawing")]
     except Exception as e:  # noqa: BLE001 - a record that cannot be read leaves the cause to the diff, said so
         owing, owed = [], [f"- (the record's owed list could not be read: {e})"]
+    since = key_since(rounds or [], owing, since)
     log = _git(root, "log", f"--since=@{int(since)}", "--format=%h %ad %s", "--date=iso", "--", *files) if since and files else ""
     hunks = _git(root, "log", f"--since=@{int(since)}", "-p", "--format=--- %h %ad %s", "--date=iso", "--", *files) if log.strip() else ""
     diff = hunks + _git(root, "diff", "--", *files)
@@ -601,7 +617,7 @@ def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "", evidenc
         if last:
             parts.append("## The last answered round's EDITs, against the files now\n\n" + ("\n".join(last_edits(root, last, files)) or "- (it proposed none)") + "\n")
         if trigger.startswith("round:") and rounds:
-            parts += capped_round_cause(root, out, check, subject, files, float(rounds[-1].get("t") or 0.0))
+            parts += capped_round_cause(root, out, check, subject, files, float(rounds[-1].get("t") or 0.0), rounds)
     if trigger.startswith("round:") and unit:
         parts += round_counter(root, unit)
     if trigger.startswith("red-gate@"):
