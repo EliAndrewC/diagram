@@ -103,6 +103,11 @@ def test_categories_and_make_targets() -> None:
     assert nb["path"] == "/n" and "new" not in nb
     odd = el.line({"hook_event_name": "PreToolUse", "tool_name": "Bash", "tool_input": "not a mapping"})
     assert odd["cat"] == "other tool"
+    # the round arbiter's fix on hour:385-approach-checklist@33: a tick, a task-start and a decide name their task
+    tick = el.line({"hook_event_name": "PreToolUse", "tool_name": "Bash", "tool_input": {"command": 'make tick F=385 T=T97 NOTE="landed"'}})
+    assert tick["make"] == "tick" and tick["task"] == "T97"
+    other = el.line({"hook_event_name": "PreToolUse", "tool_name": "Bash", "tool_input": {"command": "make quick T=T97"}})
+    assert "task" not in other, "only the task's own commands"
 
 
 def test_a_worktree_logs_to_its_clones_git_dir(tmp_path: Path) -> None:
