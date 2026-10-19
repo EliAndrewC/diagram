@@ -73,6 +73,7 @@ anchor cultures	anchor culture
 animal unit	animal unit
 animal units	animal unit
 anjifang	anjifang
+anpei	anpei
 ansei	Ansei
 anthropogenic	anthropogenic
 apron	apron
