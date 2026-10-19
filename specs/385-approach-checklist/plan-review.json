@@ -6958,6 +6958,38 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T101": {
+   "section_sha256": "441e03dd4b87d152975c6f6c39b3cfd3a49448806afafd31d88025d36207fa5c",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T101 task",
+     "summary": "A claims finding carried by T96's claims round (access.py::ACCESS_HALF_FT#corridor room, DRIFTED) becomes its own task instead of widening T96.",
+     "class": "within",
+     "why": "The request's claims work (Amendment 7, ten more claims) and FR-013/FR-015 (a carried finding is carried, not refused; a second goal found in a task becomes its own task) cover it; Amendment 6 asks that obvious improvements be made along the way. It adds no behavior."
+    },
+    {
+     "id": "exit (e) conform",
+     "summary": "The 7 ft value stays; only the comment's account of what the 7 ft is changes.",
+     "class": "within",
+     "why": "Item 4 records a measurement (dated 2026-10-19, method: the claims round and then a read of access.py) that the value already matches 0246's 7 ft fence-to-lane-middle gap, so only the account is out of step with the research. Bringing the comment into step and leaving the code alone narrows nothing that was asked."
+    },
+    {
+     "id": "D126",
+     "summary": "The comment calls the corridor's half-width WEB_FABRIC_GAP (7 ft, a line's gap off each garden fence) and names MIN_WEB_GAP (18 ft) as the room between two steadings.",
+     "class": "within",
+     "why": "This is the text the claim's re-check reads against 0246 sections 16 and 3. No constant moves (item 10) and no value changes (item 9)."
+    },
+    {
+     "id": "done, measured",
+     "summary": "One goal: the comment is corrected and the claim's re-check returns IN-STEP.",
+     "class": "within",
+     "why": "One goal per task (FR-015). The success test is the claims check that found the drift, not a new verification."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
