@@ -4169,6 +4169,9 @@ tillering	tillering
 tillers	tillering
 time bell	time bell
 time bells	time bell
+tobacco knife	tobacco knife
+tobacco knives	tobacco knife
+tobacco-knife	tobacco knife
 tobichi	detached territory
 tobiguchi	tobiguchi
 tobukuro	tobukuro
