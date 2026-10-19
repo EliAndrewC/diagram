@@ -1,0 +1,4 @@
+- 0273: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'salt|Ako|shio' l7r pool (glossary terms and map salt pans only, no price)
+- 0275: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'craftsman|tobi|carpenter.*wage|skill premium' l7r pool (glossary terms only)
+- 0276: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'kitchen knife|sharpen|hocho' l7r pool (the deba glossary term, a pool note, and an unrelated "sharpened" in waterfields/banks.py)
+- 0277: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'copper rate|mon a ryo|zeni|kanmon' l7r pool (the kanmon glossary term only)
