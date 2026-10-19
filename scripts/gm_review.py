@@ -13,6 +13,9 @@ GM's review still open, and this lists, by feature, what waits on him:
 A feature with a row of either kind carries ONE box, `- [ ] GM review (make gm-reviewed F=NNN) [lands-open]`, which this
 adds; `make speckit-todo` reads such a feature `Done - GM review pending`; `make gm-reviewed F=NNN` marks its rows reviewed
 and ticks the box, and `OVERTURN=<row> TO=<feature>` turns a ruling the GM overturns into an open row of that feature.
+`ROW=<n>` marks that one row reviewed and leaves the rest waiting (the GM, 2026-10-19, of a declined fix another feature had
+since built: *"since the declined fix is already built then please mark it as no longer waiting on me"* - before it, the
+only ways to clear one row were to sign off the whole feature or to overturn the row into another).
 
 A row the GM DISCUSSED with a session and agreed needs no more action is reviewed: the session runs `make gm-reviewed F=NNN
 WORDS="<his words, verbatim>"` in that turn, and the words are kept on each row it marks (the GM, 2026-10-10: *"if we have a
@@ -24,6 +27,7 @@ reviewing it"* - 370's one row sat pending after exactly that discussion).
     gm_review.py explain [F [ROW]]                      what needs the GM; with F, each of its rows (or ROW) in full
     gm_review.py accept F FINDING REASON                a finding accepted with a reason: a to-review row
     gm_review.py reviewed F [ROW G]                     the GM has reviewed F's rows (GM_WORDS= in the environment: his words)
+    gm_review.py reviewed-row F ROW                     the GM has reviewed row ROW of F alone
 """
 
 from __future__ import annotations
@@ -399,6 +403,18 @@ def reviewed(root: Path, d: Path, overturn: int | None = None, to: Path | None =
     return msgs
 
 
+def reviewed_row(d: Path, row: int, words: str = "") -> str:
+    """Row `row` of `d` alone is reviewed; the feature's other rows still wait on the GM, and its box stays open while they do."""
+    if words and len(words.split()) < 2:
+        raise ValueError("WORDS are the GM's own, two words or more")
+    rs = rows(d)
+    if not 0 <= row < len(rs):
+        raise ValueError(f"ROW={row}: {d.name} has rows 0-{len(rs) - 1}")
+    rs[row] = {**rs[row], "reviewed": time.strftime("%Y-%m-%d", time.gmtime()), **({"gm_words": words} if words else {})}
+    (d / ROWS).write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rs), encoding="utf-8")
+    return f"row {row} of {d.name} reviewed; {sum('reviewed' not in r for r in rs)} still wait on the GM"
+
+
 def _feature(root: Path, f: str) -> Path:
     hits = sorted((root / "specs").glob(f"{int(f):03d}-*")) if f.isdigit() else [root / "specs" / f]
     if not hits or not hits[0].is_dir():
@@ -421,6 +437,8 @@ def main(argv: list[str]) -> int:
             to = _feature(root, argv[3]) if len(argv) == 4 else None
             for m in reviewed(root, _feature(root, argv[1]), ov, to, os.environ.get("GM_WORDS", "").strip()):
                 print(f"gm-reviewed: {m}")
+        elif argv[:1] == ["reviewed-row"] and len(argv) == 3:
+            print(f"gm-reviewed: {reviewed_row(_feature(root, argv[1]), int(argv[2]), os.environ.get('GM_WORDS', '').strip())}")
         else:
             print(__doc__.split("\n\n")[-1], file=sys.stderr)
             return 2

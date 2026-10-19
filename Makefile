@@ -650,9 +650,9 @@ accept:         ## [project] accept a finding with a reason - the work goes on, 
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/gm_review.py accept "$(F)" "$(FINDING)" "$(REASON)"
 
 gm-reviewed: export GM_WORDS = $(WORDS)
-gm-reviewed:    ## [project] the GM has reviewed a feature's rows; OVERTURN=<row> TO=<feature> turns one into an open row there (feature 375); WORDS= his words when a session marks a row he discussed   F=375 [OVERTURN=<n> TO=<NNN>] [WORDS="<the GM's words>"]
+gm-reviewed:    ## [project] the GM has reviewed a feature's rows; OVERTURN=<row> TO=<feature> turns one into an open row there (feature 375); ROW=<n> marks that one row alone; WORDS= his words when a session marks a row he discussed   F=375 [OVERTURN=<n> TO=<NNN> | ROW=<n>] [WORDS="<the GM's words>"]
 	@if [ -z "$(F)" ]; then printf 'make gm-reviewed: F=<feature> is required\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/gm_review.py reviewed "$(F)" $(if $(OVERTURN),"$(OVERTURN)" "$(TO)",)
+	@cd "$$(git rev-parse --show-toplevel)" && $(if $(ROW),python3 scripts/gm_review.py reviewed-row "$(F)" "$(ROW)",python3 scripts/gm_review.py reviewed "$(F)" $(if $(OVERTURN),"$(OVERTURN)" "$(TO)",))
 
 feature-report: ## [project] where a feature's time and dispatches went, as a table, from the event log, the run log and git   F=375 [TRANSCRIPT="<jsonl> ..."] [SINCE=<ISO>] [UNTIL=<ISO>] [WRITE=1]
 ##  F=<NNN>            the feature
