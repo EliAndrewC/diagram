@@ -821,6 +821,26 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@37 (continue),
 
 **D152 - the joining reach, recorded.** 0014's rule paragraph gains, after "never passes through a gap in it, since no page we read tells of either.": "A lane end that stops within 6 ft of the paddy's edge is drawn as joining it, a GUESS at how near reads as touching at the map's scale." The claim `a_way_onto_the_bund#on the bund` reads "GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a lane end within 6 ft of the paddy's edge (`BUND_REACH_FT`) counts as joined to the bund". The row is marked in 328's `audit/waves.json`.
 
+## T34 - the weld's apex margin no code runs, removed (ranking row: waterfields/banks.py _WELD_MIN_APEX, E1 DRIFTED)
+
+### T34 Approach (checklist part A)
+
+1. **The goal, in the world.** No claim describes a margin the maps do not use.
+2. **The constraints.** FR-020 as the round arbiter read it (ask:t33-ranking-pick): no kind is left untried among live rows (the one CANNOT-TELL, the rampart's ways, serves only frozen city maps), so this is the top-ranked live row of any kind - E1 DRIFTED, said so here. The finding: `_WELD_MIN_APEX = 18.0` "lets a welded basin keep an 18-25 deg point" against 0005's 25 deg - "record the allowance as a DEVIATION ... or hold welds to 25". A dead branch is removed, not described (constitution XIV). The landing cohort.
+3. **Where each comes from.** FR-020 and the ruling (G, O); the finding (O); the constitution (O).
+4. **Do they describe the world here?** No - measured 2026-10-19 (`grep -rnw _WELD_MIN_APEX l7r/ tests/ pool/ scripts/`, and every module constant of `banks.py` checked for a use): `_WELD_MIN_APEX` appears only at its definition and in one comment; its comment block describes `_absorb`, the welder feature 302 retired with the carve (`waterfields/CLAUDE.md`: "The plot carve that lived here was retired by feature 302"); it is `banks.py`'s one unused constant.
+5. **The order.** The constant, its claim and its comment block removed; the comment that names it as the example of a placer margin reworded to `_TOE_MIN_APEX`; the gate and the landing cohort (no map should move).
+6. **The exits.** (e) conform - remove the dead margin; recording an 18-25 deg allowance on 0005 was refused: no weld runs it.
+7. **The search smell.** None.
+8. **The budget.** 25 min with its checks.
+9. **Done, measured.** One goal: `_WELD_MIN_APEX`, its claim and its comment block are gone and nothing references them; the gate green and the landing cohort refusing no seed against main; the row marked with its wave.
+10. **Before moving a constant.** Its uses, listed before removing it: none (item 4's grep).
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T34 Decisions
+
+**D153 - the dead margin removed.** `waterfields/banks.py` loses `_WELD_MIN_APEX`, its claim and its comment block ("THE WELD GETS ITS OWN, TIGHTER MARGIN ... cannot slip a needle through."); the jog comment's example "the way `_WELD_MIN_APEX` sits above `_GATE_MIN_APEX`" becomes "the way `_TOE_MIN_APEX` (25 deg) sits above the gate's 15". The row is marked in 328's `audit/waves.json`.
+
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).
