@@ -31,14 +31,11 @@ import arbiter_bundle as ab  # noqa: E402
 
 HEAD = "## Earlier rounds (feature 393)"
 DIR = "earlier"
-#: the contract paragraph's rule, said once more where the agent meets the rounds (the paragraph itself is in each agent file)
+#: a pointer, not the rule: the rule lives once, in each agent file's paragraph - a second wording paid on every dispatch could
+#: drift from it (feature 383 R16: what every dispatch shares lives in the agent file)
 INTRO = (
-    "Earlier rounds of this check on this subject in this feature, oldest first, and the round arbiter's rulings on them. Read "
-    "them before the artifact: an APPLIED finding is settled (confirm it holds, do not re-raise it); what an earlier round "
-    "passed stays passed while its text stands (THE CHANGE, where listed, says which text moved); a NOT APPLIED finding is "
-    "judged against the text as it stands - settled if the defect is gone, else reported again as `REPEATS round <n>:`; a "
-    "`continue` ruling's `what` bounds this round; to reverse an earlier verdict, say `REVERSES round <n>` and why. Each "
-    "round's whole reply is the file named under it."
+    "Earlier rounds of this check on this subject in this feature, oldest first, with the round arbiter's rulings; each round's "
+    "whole reply is the file named under it. What to do with them is your contract's **Earlier rounds (feature 393)** paragraph."
 )
 _OWED = re.compile(r"^owed-checks: (.+)$", re.M)
 

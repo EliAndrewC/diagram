@@ -56,13 +56,14 @@ stands), and every round-arbiter ruling on the unit with its `why`.
   words in each (a test holds them equal): read the Earlier rounds section before the artifact; a finding an earlier round
   raised that is APPLIED is settled - confirm it holds, do not re-raise it; what an earlier round passed stays passed while
   its text stands - where the MANIFEST carries THE CHANGE (the question bundle), only the blocks and notes it lists re-open,
-  and where it carries none (the key, intro and pop-up bundles), only text that differs from what the earlier reply quoted; a
+  and where it carries none (the key, intro and pop-up bundles), an earlier pass settles only the text that reply quoted
+  and that still stands word for word, and all other text is judged as in a first round; a
   NOT APPLIED finding (its EDIT's words absent - the session may have fixed it in other words, or not at all) is judged
   against the text as it stands: settled if the defect is gone, else reported again, opened `REPEATS round <n>:`, with its
   EDIT; a `continue` ruling's `what` bounds the round; to reverse an earlier round's verdict, say `REVERSES round <n>` with the
   reason. Nothing in it widens or narrows what the check judges.
 - **FR-004 One builder, every bundle.** The section is built by one function used by every MANIFEST write in
-  `check_bundle.py` (the question, key, keys and intro bundles) and `modal_bundle.py` (the per-pop-up and the batched top
+  `check_bundle.py` (the question, key and intro bundles; the keys bundle is `source-applicability`'s, out of scope) and `modal_bundle.py` (the per-pop-up and the batched top
   MANIFEST, which points to each pop-up's own section), reading the check state READ-ONLY. It does not change how a round is
   keyed, counted or capped (`hm_checks.py`; the Money session's round-key fix is theirs).
 - **FR-005 Cheap where nothing happened.** A first round's bundle costs no extra read: no state file, or no earlier dispatch,
@@ -109,3 +110,7 @@ contract paragraph; it does not edit `hm_checks.py`, `arbiter_bundle.py`, `page_
   with a new reason" suppressed a valid unfixed finding (`last_edits` marks NOT APPLIED a fix made in other words too):
   reworded to judge it against the text as it stands, settled if gone, else `REPEATS round <n>:`; (3) the record checks'
   count corrected to 19 (85 + 19 + 2 = 106); (4) `impl-drift` and the claims triage named Out of scope, with the reason.
+- **Round 2** (`spec-fidelity-verify`, 2026-10-18): CHANGES REQUIRED, one item - items 2-4 resolved; item 1's rewording had
+  inverted round 1's default (re-opening only quoted text that changed, so text passed unquoted never re-opened). FR-003 and
+  the ten agent paragraphs now say an earlier pass settles only the text its reply quoted that still stands word for word,
+  all other text judged as in a first round. Its aside applied too: FR-004 no longer lists the keys bundle (out of scope).
