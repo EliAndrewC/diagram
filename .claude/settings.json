@@ -451,6 +451,15 @@
             "timeout": 10
           }
         ]
+      },
+      {
+        "matcher": "Bash|Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/checks-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/checks-hooks.sh\"; exec \"$h\" after  # GUARD_EDIT_OK: feature 385 hour 30 - a held plan section written back after any call that changed it"
+          }
+        ]
       }
     ],
     "Stop": [
