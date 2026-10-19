@@ -3,5 +3,6 @@
  "def": "A Chinese length of about 3.3 meters, ten chi.",
  "variants": [
   "zhang"
- ]
+ ],
+ "cased": true
 }

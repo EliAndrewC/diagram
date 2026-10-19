@@ -84,7 +84,7 @@ UNRESEARCHED, a GUESS, a CONVENTION or a convenience (the claims and the session
   routes. More room is not free license: a size or spacing the research does fix stays where the research puts it.
 - If the bundle shows the session defending such a number as though it were a requirement (refusing maps, filing rows, adding
   rounds to hold it), say so in `why`.
-- A pattern a tool could catch earlier is your `tooling_fix`.
+- A pattern a tool could catch earlier is your `tooling_fix` - when it clears question 3's bar.
 
 ## A batch: one ruling for units that reached the cap together
 
@@ -97,8 +97,8 @@ BATCH=1 FILE=<that file> AS=round-arbiter`. A batch `tooling_fix` is one fix for
 
 ## A tooling fix is a field, never prose
 
-Any tooling change you recommend - under any ruling, whether or not it caused the loop you judged - goes in `tooling_fix`: one
-sentence naming the tool and the change (a guard that let a known hazard through, a command that misled, a bundle that hid
+Any tooling change you recommend - under any ruling, whether or not it caused the loop you judged, and only past question 3's
+bar - goes in `tooling_fix`: one sentence naming the tool, the change and the cost it measured (a guard that let a known hazard through, a command that misled, a bundle that hid
 what it needed). Never leave one only in `why` or `what`: a fix written there was lost (feature 379). The session MAKES it,
 with its test, before its next tick; one that would overhaul a process goes to the GM's review instead. Nobody files it.
 
@@ -116,16 +116,19 @@ questions of it:
 2. **Is it packing?** Rounds, routes or probes fitting map features into ground a number fixes - a homestead size, a spacing, a
    reach, a band - where that number is UNRESEARCHED, a GUESS, a CONVENTION or a convenience figure, and more room would
    settle it while the map stays within the research (the section above). Name the number.
-3. **Is a step slow, or a guard misfiring,** enough to be worth a tooling fix: a command taking minutes the hour repeated, a
-   guard refusing correct work, a bundle hiding what the session needed? Name the tool and the change.
+3. **Is a step slow, or a guard misfiring,** enough to be worth a tooling fix? The bar (the GM, 2026-10-19): a cost MEASURED
+   this hour - 10 minutes or more of session time, timed from the bundle - or a defect that reached main. Below it the answer is
+   none, and none is a good outcome: 49 of the first 60 hourly step-backs named a fix, many of them repairs to an earlier fix's
+   guard, which says the machinery grows faster than it helps. When a guard misfired, ask FIRST whether it should exist at all or
+   be simplified; a fix that removes or narrows is preferred to one that adds a rule around it. Name the tool, the change and the
+   measured cost.
 4. **Is anything too big for the session** - an overhaul, a question of what to build - which the GM should see?
 
 Rule one of two: **`continue`** - nothing to change; or **`change-route`** - binding: `what` names the loop or the number and
 the route the session takes now (more room first, where the answer to 2 is yes). Question 3's answer is a `tooling_fix` (made
 with its test before the next tick, or declined as an overhaul - the section below); question 4's is `for_gm`, one sentence for
-the GM's review. An hour ruled `continue` with no `tooling_fix` and no `for_gm` adds nothing to the GM's review - the one
-ruling the GM does not see, because there is nothing in it to see. Do not invent a finding to fill an hour: a quiet hour is
-`continue`.
+the GM's review. An hour ruled `continue` with no `tooling_fix` and no `for_gm` is the expected ruling for an hour that went
+well - never invent a finding, and never name a fix under the bar in question 3, to fill an hour.
 
     {"ruling": "continue|change-route", "why": "<two or three sentences>", "what": "<the route to take, for change-route>", "tooling_fix": "<or omit>", "for_gm": "<or omit>"}
 

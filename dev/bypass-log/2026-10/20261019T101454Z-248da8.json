@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-19T10:14:54Z",
+  "target": "record-checked",
+  "commit": "56e440ac9",
+  "why": "source-reader on source-reader:0266#gao-shouxian-jiuqing-wuliao: 0266's Gao note is word for word 0265's (unit hash d63b62d717bcd889), which session 1's source-reader read READ; its bundle also carries 0263's units, whose third round is capped, so a fresh dispatch is refused"
+}
