@@ -26879,14 +26879,6 @@
   "research": "",
   "verdict": "MISLABELED"
  },
- "l7r/diagram/hamletgen/ways/serve.py::door_path#a straight step crosses no water; a routed path is squared where it crosses water (square_run)": {
-  "code": "6b52b3ec1649a835",
-  "core": "6b52b3ec1649a835",
-  "date": "2026-10-19",
-  "note": "a straight step crosses no water; a routed path is squared where it crosses water (square_run)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/hamletgen/ways/serve.py::door_path#a worn path takes the shortest way": {
   "body": "992984e5400ec179",
   "claim": "a worn path takes the shortest way - village-lanes.drawing: straight where clear, else routed and pulled taut",
@@ -26904,21 +26896,16 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/serve.py::door_path#fallback route at the law's 7 ft fence gap (WEB_FABRIC_GAP, lawful_step), 0246's 7 ft off a garden fence": {
-  "code": "6b52b3ec1649a835",
+ "l7r/diagram/hamletgen/ways/serve.py::door_path#its margin off the fixtures": {
+  "body": "992984e5400ec179",
+  "claim": "its margin off the fixtures - UNRESEARCHED: its line 3 ft off every fixture and off what the overlap matrix forbids (`over_a_fixture`, `forbidden_segment` at 3 ft)",
+  "code": "eab10ecb53b019a4",
   "core": "6b52b3ec1649a835",
   "date": "2026-10-19",
-  "note": "fallback route at the law's 7 ft fence gap (WEB_FABRIC_GAP, lawful_step), 0246's 7 ft off a garden fence",
+  "note": "the cited pages set no margin off fixtures: §33 says only \"round its own garden beds and fixtures\", and §19's 3 ft is for a farmhouse wall",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/hamletgen/ways/serve.py::door_path#grove bands held 7 ft off (FOOTPATH_FABRIC_GAP) by every step and pull test, 0036's 11 ft": {
-  "code": "6b52b3ec1649a835",
-  "core": "6b52b3ec1649a835",
-  "date": "2026-10-19",
-  "note": "grove bands held 7 ft off (FOOTPATH_FABRIC_GAP) by every step and pull test, 0036's 11 ft",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::door_path#no sliver with the ways it meets": {
   "body": "992984e5400ec179",
@@ -26934,6 +26921,57 @@
   "rests": [
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
    "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/serve.py::door_path#off the grove bands on every test": {
+  "body": "992984e5400ec179",
+  "claim": "off the grove bands on every test - groves-of-trees-around-farmhouses-yashikirin.drawing: the bands (grown by `band_grow`) held `FOOTPATH_FABRIC_GAP` off by the step, the pull and the kept path, 0036's 11 ft",
+  "code": "3b3f1d1aa6fc3bed",
+  "core": "6b52b3ec1649a835",
+  "date": "2026-10-19",
+  "note": "the page's 11 ft is half of \"about 22 ft of the opening\", but the code holds the path's middle only FOOTPATH_FABRIC_GAP=7 ft off the bands; it keeps 11 ft only if band_grow grows each band by 4 ft. Need band_grow's growth amount (and GROVE_WORKING_ROOM_FT) to judge",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
+  },
+  "research": "45be621f47448e34",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:06616d493b616366",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
+  ],
+  "verdict": "CANNOT-TELL"
+ },
+ "l7r/diagram/hamletgen/ways/serve.py::door_path#the fallback at the law's gap": {
+  "body": "992984e5400ec179",
+  "claim": "the fallback at the law's gap - DEVIATION how-our-maps-lay-a-clustered-settlements-lanes.drawing: routed again at `WEB_FABRIC_GAP` (7 ft off a garden fence) and stepped only on lawful ground",
+  "code": "16591cff06a36646",
+  "core": "6b52b3ec1649a835",
+  "date": "2026-10-19",
+  "note": "7 ft from the fence to a lane's middle is recorded as a DEVIATION on the drawing page",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+  },
+  "research": "60b94d3c15ae221a",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/serve.py::door_path#water on the way": {
+  "body": "992984e5400ec179",
+  "claim": "water on the way - villages-beside-their-stream-one-bank-or-both.drawing: a straight step crosses no water, and a routed path is squared where it crosses (`square_run`)",
+  "code": "53a4fc9297ba9dcf",
+  "core": "6b52b3ec1649a835",
+  "date": "2026-10-19",
+  "note": "the straight step crosses no water, and a routed crossing is squared (\"cross the brook squarely\") and tolled",
+  "pages": {
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
+  },
+  "research": "d47738a05844fe19",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
   "verdict": "IN-STEP"
  },
@@ -30675,16 +30713,35 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#the track's room off the steadings and the wet": {
+ "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#the track off the steadings": {
   "body": "f482b9e4dd7b3de1",
-  "claim": "the track's room off the steadings and the wet - UNRESEARCHED: 7 ft off every steading (`TRACK_FABRIC_GAP`) and the wet ground grown 8 ft (`wet_grown_by_the_lane`)",
-  "code": "e6c6a4c8cbe5ad0e",
+  "claim": "the track off the steadings - DEVIATION how-our-maps-lay-a-clustered-settlements-lanes.drawing, village-lanes.drawing: 7 ft off every steading (`TRACK_FABRIC_GAP`), a lane's middle off a garden fence",
+  "code": "902f1f02a2e5d47a",
   "core": "f0643632f542215e",
   "date": "2026-10-19",
-  "note": "the 7 ft off steadings (`TRACK_FABRIC_GAP`) is answered by 0246 (\"A lane's middle keeps at least 7 ft clear of a garden fence\") and 0081 (a tread 3 ft off a farmhouse wall); cite those, and leave only the 8 ft wet growth as UNRESEARCHED",
+  "note": "7 ft to a lane's middle is the recorded DEVIATION; the 6 ft track's edge still keeps more than §19's 3 ft off a house wall",
+  "pages": {
+   "0081-village-lanes.drawing.html": "c6ac7410edabbd2d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+  },
+  "research": "5f7d877470ab7081",
+  "rests": [
+   "0081-village-lanes.drawing.html:417841cd16f112d9",
+   "0081-village-lanes.drawing.html:91a5765af6230403",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#the track off the wet": {
+  "body": "f482b9e4dd7b3de1",
+  "claim": "the track off the wet - UNRESEARCHED: the wet ground grown 8 ft (`wet_grown_by_the_lane`)",
+  "code": "4729709dfe3e298f",
+  "core": "f0643632f542215e",
+  "date": "2026-10-19",
+  "note": "the page says a track keeps off wet ground but gives no margin, so the 8 ft growth is rightly unresearched",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#track start out of the grove bands": {
   "body": "f482b9e4dd7b3de1",
