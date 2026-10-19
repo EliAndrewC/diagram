@@ -1,0 +1,39 @@
+{
+  "utc": "2026-10-19T00:41:51Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 431,
+  "result": "failed: test-full",
+  "commit": "ca63bd8ff",
+  "first_failure_s": 300.4,
+  "last_failure_s": 313.1,
+  "failed_tests": 2,
+  "failed_names": [
+    "tests/labels/test_caption_paths.py::test_no_caption_is_hand_seated_outside_the_named_exceptions",
+    "tests/settlement/test_fields.py::test_feature_012_archetype_constants_survived_the_split"
+  ],
+  "host": {
+    "load": [
+      13.09,
+      11.8
+    ],
+    "mem_avail_mb": [
+      7057,
+      7511
+    ],
+    "cpu_temp_c": [
+      76.0,
+      75.0
+    ],
+    "stall_s": {
+      "cpu": 34.3,
+      "io": 7.3,
+      "io_full": 2.8,
+      "memory": 1.4
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  }
+}
