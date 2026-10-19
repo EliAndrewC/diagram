@@ -265,3 +265,13 @@ def test_a_part_b_stamped_after_the_clock_is_refused() -> None:
     assert why is not None and "16:31Z" in why and "T08 part B (2026-10-18T16:40Z)" in why
     assert ag.future_refusal(plan, now="2026-10-18T16:40:00Z") is None, "at the minute it was stamped"
     assert ag.future_refusal("### T08 Approach (checklist part A)\n", now="2026-10-18T16:31:00Z") is None, "an unstamped part A"
+
+
+def test_part_a_holds_the_constant_and_the_arithmetic_items_and_an_approach_without_them_is_refused() -> None:
+    """Feature 385 T76 (plan D95; the GM's approved change 7 of the 2026-10-18 step-back): numbered, so the gate holds them."""
+    text = (pathlib.Path(__file__).resolve().parents[2] / "specs" / "385-approach-checklist" / "checklist.md").read_text(encoding="utf-8")
+    items = ag.part_items(text, "A")
+    assert items == list(range(1, 12))
+    assert "**Before moving a constant.**" in text and "**Before fitting things into room.**" in text
+    old_answer = "\n".join(f"{n}. **x.** answered" for n in range(1, 10))
+    assert ag.unanswered(old_answer, items) == [10, 11]

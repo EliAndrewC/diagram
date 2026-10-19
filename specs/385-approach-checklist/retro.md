@@ -685,3 +685,10 @@ About 35 min. `make where-time F= [SINCE=]` prints the step-back's two tables fr
 the session's next prompt as "between turns" - the column the overnight stall needed - however many hook events fall inside. The
 plan review asked for the rule's provenance (ours) and the wake premise measured (a notification fires the prompt hooks). One
 expectation in the test was my arithmetic, not the code. **The habit it changes:** a step-back's tables are one command.
+
+## T76 - the retro row
+
+About 25 min. Part A gains items 10 (before moving a constant, list its uses and what each measures) and 11 (the capacity arithmetic
+before rolling), numbered so the gate holds every later Approach to them. Three plan rounds: the first two reviews could not see the
+approved proposal (now quoted in the request), then blocked sub-bullets under item 4 as a reminder. **The habit it changes:** the
+two questions are the gate's, not the session's memory.

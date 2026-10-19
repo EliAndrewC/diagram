@@ -51,6 +51,11 @@ Answer each in writing in the task's plan section. One line each is enough where
    **One goal.** It names ONE goal; a second goal found in the task becomes its own task (a new box, or a carried row) before
    any work on it starts (amendment 4, FR-015: T03's merge was a second goal - 21 min, failed, and it pulled the seeds' landing
    into arbiter rulings).
+10. **Before moving a constant.** List every use of it and what each one measures - or n/a. (*T09 moved BUNDLE_PITCH twice
+   before reading what it measured: about 40 minutes and two cohort runs for what was a relabel* - step-back, 2026-10-18.)
+11. **Before fitting things into room.** Write the capacity arithmetic - how many, how wide, against how much room - before
+   rolling anything - or n/a. (*T06's 20-minute experiment was households x farmstead width against the margin's length,
+   two minutes on paper* - step-back, 2026-10-18.)
 
 ## B. When the work resists
 
