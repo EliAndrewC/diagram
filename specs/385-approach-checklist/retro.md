@@ -835,3 +835,11 @@ now a task: an edit to a heavily cited block owed 37 full checks, where a new bl
 re-owe it - finish every page edit first; `make claims-triaged` and `make claims-checked` read a transcript wrongly (T92, T94); the
 triage-touched pop-ups stayed out of their batch (T93). Row 843 marked wave 162. **The habit it changes:** a record change goes in a
 new block where the old one is heavily cited.
+
+## T95 - the retro row
+
+About 40 min with its reviews. Row 841: `join_to`'s leg is drawn at `STREET_WIDTH`, a lane, but was routed at the footpath's 4 ft;
+it now routes at `WEB_FABRIC_GAP` (0246's 7 ft), and both its claims are IN-STEP. Cohort 16/16, landing cohort 54/54, fresh block
+8 of 48 (17%, the pooled rate). First filed as T32, which the review blocked: a defect found inside a task is not a ranking pick
+(FR-020's kinds), so it became found work. Row 841 marked wave 163. **The habit it changes:** a drift a claims round finds is filed
+as found work, never as the next ranking row.
