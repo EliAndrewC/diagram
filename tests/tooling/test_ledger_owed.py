@@ -204,6 +204,7 @@ def test_a_plan_review_that_recorded_its_verdict_gets_its_row_and_others_do_not(
         "a2": "I could not record it",
         "a3": "BLOCKED recorded for 385-x",
         "a4": "I recorded it as BLOCKED with `make plan-verdict F=385 TASK=T74`",
+        "a5": "**The verdict is CLEAR, and it is recorded.** `make plan-verdict` stored it",
     }
     monkeypatch.setattr(lo.review_cost, "transcript", lambda agent, root=None: tmp_path / agent)
     sys.path.insert(0, str(script("ledger_owed.py").parent.parent / "hooks" / "lib"))
@@ -211,10 +212,6 @@ def test_a_plan_review_that_recorded_its_verdict_gets_its_row_and_others_do_not(
 
     monkeypatch.setattr(hm_checks, "_reply_of", lambda path, default: replies[Path(path).name])
     monkeypatch.setattr(lo, "filled_row", lambda p, where, root=None: f"| {p['agent']} | {where} |")
-    owed = [dict(_pass("spec-fidelity", subject="MODE 4: PLAN REVIEW of T72"), agent=a) for a in ("a1", "a2", "a3", "a4")]
+    owed = [dict(_pass("spec-fidelity", subject="MODE 4: PLAN REVIEW of T72"), agent=a) for a in ("a1", "a2", "a3", "a4", "a5")]
     owed.append(_pass("glyph-check"))  # another check's pass: still the session's to answer
-    assert lo.plan_review_rows(owed, tmp_path) == [
-        "| a1 | the plan-verdict record (make plan-verdict) |",
-        "| a3 | the plan-verdict record (make plan-verdict) |",
-        "| a4 | the plan-verdict record (make plan-verdict) |",
-    ]
+    assert lo.plan_review_rows(owed, tmp_path) == [f"| {a} | the plan-verdict record (make plan-verdict) |" for a in ("a1", "a3", "a4", "a5")]
