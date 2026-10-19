@@ -108,3 +108,6 @@ covered by), and what is still open.
 - **spec-fidelity round 1 (2026-10-19): CHANGES REQUIRED, 3 items.** Relief panels and carved beam ends given one line
   each; the small stone torii SILENT with 0257's great torii an upper bound, and the cover-shed's bundling stated; the
   mountain temple SILENT as searched (Koyasan).
+- **spec-fidelity round 2 (2026-10-19, verify): FAITHFUL.** All three items resolved; no contradiction introduced. Aside
+  carried to the write: the Kawagoe Hikawa line should say what it bounds (a whole large sanctuary, 1,369 ryo without the
+  roof).
