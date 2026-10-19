@@ -44902,59 +44902,60 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement.__init__#a threshing yard at every farmstead": {
-  "body": "2b3b67c5a65be234",
+  "body": "6ae4a633a7367778",
   "claim": "a threshing yard at every farmstead - threshing-and-drying-yards-at-farmhouses-niwa.drawing: on unless the generator declares no grain grown",
-  "code": "178971b52f074b85",
-  "core": "1c958ee8b26322a1",
+  "code": "923f67ca91874c72",
+  "core": "fcc7c67e1ddc85b5",
   "date": "2026-10-18",
-  "note": "_work_yards = True by default, matching every farm's yard; the shared-floor choice is the generator's knob",
+  "note": "`_work_yards = True` unless the generator declares no grain; a dry-field farm keeps its yard, as the page says. Whether the south-China shared floor is rolled is decided outside this unit.",
   "pages": {
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "b5fc46ab116a4b72"
   },
   "research": "4cd9ea0eb987d90e",
   "rests": [
+   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:3610a4b606e49804",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:c05a3154668a9f38"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement.__init__#no house racks by default": {
-  "body": "2b3b67c5a65be234",
+  "body": "6ae4a633a7367778",
   "claim": "no house racks by default - rice-drying-racks-hasa-hasagi.drawing: settled harvest weather where none is stated, so no rack by each house's yard",
-  "code": "7277b0d6ac5fd594",
-  "core": "1c958ee8b26322a1",
+  "code": "2e9da54a0a599b05",
+  "core": "fcc7c67e1ddc85b5",
   "date": "2026-10-18",
-  "note": "_house_racks = False matches \"drawn with settled weather\" where none is stated",
+  "note": "`_house_racks = False` matches \"a settlement whose description gives no harvest weather is drawn with settled weather\" and no rack at the house.",
   "pages": {
    "0016-rice-drying-racks-hasa-hasagi.drawing.html": "63977fd38b35883b"
   },
   "research": "f94cd7cea915d311",
   "rests": [
    "0016-rice-drying-racks-hasa-hasagi.drawing.html:329b76a32a9e4883",
-   "0016-rice-drying-racks-hasa-hasagi.drawing.html:6af92987eeb511b9",
+   "0016-rice-drying-racks-hasa-hasagi.drawing.html:b40ba5f33af2c94c",
    "0016-rice-drying-racks-hasa-hasagi.drawing.html:cd323d78a44a7ec9"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement.__init__#registries and record streams": {
-  "body": "2b3b67c5a65be234",
+  "body": "6ae4a633a7367778",
   "claim": "registries and record streams - NONE",
-  "code": "22f086a7e07031df",
-  "core": "1c958ee8b26322a1",
+  "code": "03952d28030b2713",
+  "core": "fcc7c67e1ddc85b5",
   "date": "2026-10-18",
-  "note": "registries, streams and caches only",
+  "note": "empty registries, record streams, caches and canvas or scale defaults are plumbing; every physical default here has its own claim.",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement.__init__#swept ground kept clear of scatter": {
-  "body": "2b3b67c5a65be234",
+  "body": "6ae4a633a7367778",
   "claim": "swept ground kept clear of scatter - ground-swept-clear-around-shrines-and-graves.drawing: the clearings registry, which stays empty: its registrars (a shrine's and a grave plot's swept ground) were retired with the town and city drawing code by feature 392",
-  "code": "70cbf6524f9eae32",
-  "core": "1c958ee8b26322a1",
+  "code": "99729c4fd28b35f4",
+  "core": "fcc7c67e1ddc85b5",
   "date": "2026-10-18",
-  "note": "self.clearings starts empty with no registrar, matching \"Our maps claim no swept ground\"",
+  "note": "`clearings` stays empty, matching \"Our maps claim no swept ground\" beyond the ground the shrine or grave plot itself takes up.",
   "pages": {
    "0224-ground-swept-clear-around-shrines-and-graves.drawing.html": "719a904d62879cf8"
   },
@@ -44962,7 +44963,6 @@
   "rests": [
    "0224-ground-swept-clear-around-shrines-and-graves.drawing.html:355a0ec5f78852a0",
    "0224-ground-swept-clear-around-shrines-and-graves.drawing.html:3f924a063cb2e3bc",
-   "0224-ground-swept-clear-around-shrines-and-graves.drawing.html:42116f3adab8dabf",
    "0224-ground-swept-clear-around-shrines-and-graves.drawing.html:98b6299154322c59",
    "0224-ground-swept-clear-around-shrines-and-graves.drawing.html:a8ac24f814d8ec20"
   ],
@@ -53744,16 +53744,16 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/houses.py::HousesMixin._fits#building spacing": {
-  "body": "3494da17d9eb9ab9",
-  "claim": "building spacing - UNRESEARCHED: 4 px between collision circles (exact boxes where both are declared), a dense row's mates edge to edge",
-  "code": "daa5f270ad6192bc",
+  "body": "6a966e2f87bfd36d",
+  "claim": "building spacing - UNRESEARCHED: 4 px between collision circles (exact boxes where both are declared)",
+  "code": "69412b74bf78aa9e",
   "core": "5d14909a7141acf6",
   "date": "2026-10-18",
-  "note": "the claim's \"a dense row's mates edge to edge\" describes the dense-frontage branch feature 392 deleted, and the code has no such branch; it should read \"UNRESEARCHED: 4 px between collision circles, exact drawn boxes where both are declared\"",
+  "note": "the code keeps 4 px between collision circles (exact boxes where both sides declare their drawn extent), the same 4 px off grove arms, and a radius-only reach for a disc. None of the cited pages covers the gap between buildings.",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/houses.py::HousesMixin._hjit#placement, index and corridor plumbing": {
   "code": "50343fccab443989",
