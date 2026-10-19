@@ -6237,6 +6237,481 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T90": {
+   "section_sha256": "9983d2874ff350291501daa404cd91e4644fdac345f7b1f77710952f80317d3f",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D111",
+     "summary": "Each between-turns window, from a Stop to the session's next UserPromptSubmit, is booked whole to one class chosen by the prompt that ends it: gm false (a notification) is waiting on work; gm true is the GM, or the GM away when the window passed an hour.",
+     "class": "within",
+     "why": "Proposal G, which the GM's 'build all 7 of those as 385 tasks' approves, is 'a between-turns window classed by what ended it' and 'fold the scratch split in'. Classing by the ending prompt is G's own wording. The one-hour line between the GM and the GM away is the scratch split's (Approach item 4 measured it with wt2.py, 103 vs 357 minutes), and G's stated cost, 'where-time cannot tell waiting from idle', needs exactly that line. Nothing the GM asked for is dropped."
+    },
+    {
+     "id": "T90-done",
+     "summary": "make where-time replaces the single 'between turns' column with three columns (waiting on work / the GM / the GM away) that add up to the old column, and tests/tooling/test_where_time.py is red without the split.",
+     "class": "within",
+     "why": "The three columns ARE G's split, and because they add up to T77's column nothing it reported is lost. The test only fails when the requested split is missing, so it enforces the request rather than adding scope (GM 2026-09-20)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T88": {
+   "section_sha256": "9b971bbb46347afcc6525626c768c0e9a8661be9284e3b5420fd6794c27eae1d",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D109",
+     "summary": "plan_gate.record and record_blocks pass every free-text string field of a decision (why, summary and the like) through hm_house.americanize; id, class, ruling and the digests are written as given",
+     "class": "within",
+     "why": "Proposal E, approved in amendment 9 ('build all 7 of those'), is 'make plan-verdict passes the reviewer's text through americanize'. Both record paths are make plan-verdict (the TASK=/whole-plan route and the BLOCKS=1 route), so covering both is what the proposal says, not a widening. Leaving id, class, ruling and the digests alone is not a carve-out from 'the reviewer's text': they are keys, enumerated values and hashes the gate matches on, not prose, and changing them would break the record the proposal is meant to keep green."
+    },
+    {
+     "id": "T88-constraint-quotations",
+     "summary": "text inside a quotation is held out of the correction, as the house-style hook holds it out",
+     "class": "within",
+     "why": "The GM's words fix the method: 'as T78 does for notes', i.e. the existing americanize with its existing behavior, which this block says holds quotations out the way the hook does. The purpose is that a reviewer's spelling never turns the gate red; a word the hook does not flag cannot turn it red, so holding out what the hook holds out leaves that purpose intact while keeping verbatim quotations verbatim. The measured incident in item 4 is a word the preflight DID flag, so it falls inside what the correction reaches, and item 9's done-test asserts exactly that case."
+    },
+    {
+     "id": "T88-order-and-test",
+     "summary": "the call is added in plan_gate.record and the block record, then a test in tests/tooling/test_plan_gate.py red without it",
+     "class": "within",
+     "why": "The test only fails when the requested correction is absent: it enforces proposal E rather than adding scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T87": {
+   "section_sha256": "f0af770860dbdaf99a4db45d837ae79ffd13df3a0f07c1966f7c59c70fc6c473",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D108-keying",
+     "summary": "preflight.tree's tree-move check leaves out only the outputs of the maps the gate's own run log reports as 'ROLLED this run'; any other changed file, including another map's pool output, is still a tree move",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows 375 FR-004 (refuse green when any tracked file changed during the gate), but the GM's amendment 9 approves exactly this carve-out: proposal D, 'the gate commits (or ignores) the manifests it re-rolled itself instead of calling them a tree move'. Keying on the maps the gate itself rolled matches 'it re-rolled itself' word for word, and keeps FR-004's purpose (catch a write by anyone else) for every other file, other maps' pool outputs included. The earlier CLEAR text excused every pool map output whoever wrote it; this revision is closer to the request, not further from it."
+    },
+    {
+     "id": "D108-file-set",
+     "summary": "the excused files are all of a rolled map's outputs beside its .gen.py (json, png, svg, html, webp), not the json manifest alone",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Proposal D says 'manifests'. But its stated purpose is that the gate stops failing on its own re-roll ('a gate per stale manifest'; T87 goal: 'a gate never fails for a pool map it re-rolled itself'). A re-roll rewrites all of that map's tracked outputs, so excusing only the json would still fail the gate on the png/svg/html/webp from the same roll. Taken literally the rule would defeat the request's own purpose. The set is still limited to the rolled map's own outputs, so nothing outside the gate's own write is excused."
+    },
+    {
+     "id": "D108-ignore-and-print",
+     "summary": "of 'commits (or ignores)' the plan takes 'ignores': the files are left out of the comparison and printed as 're-rolled by the gate - commit them'",
+     "class": "within",
+     "why": "The GM's approved proposal offers the two alternatives; picking one, and telling the session to commit what was left out, is inside it."
+    },
+    {
+     "id": "T87-test",
+     "summary": "tests/tooling/test_preflight.py red without it: a rolled map's outputs are not refused, a move of any other file (another map's pool output too) still refuses",
+     "class": "within",
+     "why": "A check that only fails when the requested behavior is missing, and that keeps 375 FR-004 for everything else. It enforces proposal D and is not new scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T84": {
+   "section_sha256": "c37014965c1fd1715fab3c19435c89a3d277842653e1178d8116c8b27606e34e",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D105-trigger",
+     "summary": "A quotation is each double-quoted span following the literal 'the GM' (any case, with or without the possessive) within the same sentence of the task's section.",
+     "class": "within",
+     "why": "Proposal A (amendment 9, the seven the GM said to build) names its trigger as a section quoting \"the GM\", putting the literal string in quotes; anchoring the check on that string and the double-quoted span after it is the proposal's own wording put into operation, not a carve-out. Widening from the earlier 'The GM' / 'the GM's' to any case and either form broadens the check toward the proposal."
+    },
+    {
+     "id": "D105-match",
+     "summary": "A span passes when its words, lowercased with punctuation removed, appear as a contiguous run in request.md folded the same way.",
+     "class": "within",
+     "why": "Proposal A refuses 'words not in request.md'. Folding case and punctuation (which come from dictation and typography, not from the GM's words) keeps the test about words; requiring the run rather than scattered single words is the only reading under which the check can catch a misquote like T64's, so it is no narrower than the proposal."
+    },
+    {
+     "id": "D105-every-length",
+     "summary": "Every quoted span is checked whatever its length (the earlier four-word floor is gone).",
+     "class": "within",
+     "why": "Proposal A sets no length floor; the earlier block's 'a shorter span is a phrase, not a quotation, and is not checked' was the narrowing, and removing it brings the check back to the proposal as written."
+    },
+    {
+     "id": "D105-no-escape",
+     "summary": "No override: a wrong refusal is cleared by rewording the span or adding the GM's words to request.md verbatim.",
+     "class": "within",
+     "why": "Proposal A carries no escape; the earlier QUOTE_OK escape was an addition the proposal did not ask for, and dropping it matches the request. The two ways to clear a refusal are what the refusal message itself names."
+    },
+    {
+     "id": "D105-refusal",
+     "summary": "make decide refuses, naming each failing span, with 'add the GM's words to request.md verbatim, or correct the quote'.",
+     "class": "within",
+     "why": "Proposal A: '`make decide` refuses ... naming the words'. Placed in make decide (plan_bundle.task_prompt's caller), as the proposal names it."
+    },
+    {
+     "id": "T84-test",
+     "summary": "tests/tooling/test_plan_blocks.py red without the check; a section whose quotes are all present builds its bundle as now.",
+     "class": "within",
+     "why": "A test that fails only when the requested refusal is absent enforces proposal A (GM 2026-09-20: enforcing what was asked is not unrequested scope); the passing case only confirms the check does not change bundles it should leave alone."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T86": {
+   "section_sha256": "f521dafb575d041cd10103052781076a9461ed3567065de3dfa08d741cc5c3be",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D107-sentence",
+     "summary": "The check works one sentence at a time: each sentence of Approach item 4 that holds a figure must carry its own label, and one label covers only the figures in its own sentence (this replaces the earlier text, where one label anywhere in item 4 covered the whole item).",
+     "class": "within",
+     "why": "Proposal C, which the GM approved verbatim ('build all 7 of those', amendment 9), asks for a refusal when a figure has no measured date and method 'beside it'. A label in the figure's own sentence is a closer reading of 'beside it' than a label anywhere in the item. The change moves toward the request and refuses more, not less."
+    },
+    {
+     "id": "D107-setasides",
+     "summary": "Dates, clock times and ids (T10, D84, FR-005, a question's 0018) are not counted as figures.",
+     "class": "within",
+     "why": "The GM's rule is about measured figures. The label he names, 'measured <date>', itself contains a date, so his own words already treat dates as not being figures. Ids and clock times name things or moments, not quantities."
+    },
+    {
+     "id": "D107-codespans",
+     "summary": "Code spans that hold a path, key or command (marked by '/', '::', '=' or 'make ') are set aside. A code span holding a measured value (for example 4.4 s) is read like prose. This narrows the earlier text, which set aside every code span.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Each trigger judged separately. '/', '::' and 'make ' mark paths, dictionary keys and commands. None of them is a measured quantity, so setting them aside narrows nothing the GM asked for. '=' marks an argument or assignment such as F=385. Counting its number as a figure would refuse a plan that holds no unreviewable figure, and nothing could fix that, because a feature number cannot be labeled as measured. That false refusal would cost the review round proposal C exists to save ('a round each time'). The residue: a measured value written as key=value inside a code span would slip past the check. This is an edge of the detector, not a carve-out of the rule. The block's own rule still reads every measured value written as a value, which is how the triggering incident stated its figure ('4.4 s (measured)'). The plan review is the backstop for the rest. Compared with the earlier CLEAR text, this decision makes the check reach further."
+    },
+    {
+     "id": "D107-mkey",
+     "summary": "A figure with an m:<key> pointer into measurements.json passes, as an alternative to 'measured YYYY-MM-DD' followed by a method in parentheses.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Taken literally, the GM's words ask for 'measured <date>' and a method beside the figure, and a key is neither. But the request's purpose, which the block states, is that no figure reaches review in a form the review cannot check. An m:<key> entry carries its command, the method in its strongest form, and is the form the review re-runs (make figures). Refusing it would refuse the one label that can be checked mechanically, which defeats the purpose. Accepting it carries out the GM's 'method beside it' by pointer."
+    },
+    {
+     "id": "D107-label-form",
+     "summary": "The date label must match measured 20\\d\\d-\\d\\d-\\d\\d and be followed by a method in parentheses.",
+     "class": "within",
+     "why": "This is the GM's 'measured <date>' and 'method', made concrete."
+    },
+    {
+     "id": "D107-scope-item4",
+     "summary": "Only Approach item 4 is read. The budget (item 8) and the other items are not checked.",
+     "class": "within",
+     "why": "Proposal C names 'an Approach item 4 figure'. Item 8 is a budget, not a measurement."
+    },
+    {
+     "id": "D107-refusal",
+     "summary": "make decide refuses and names the first figure without a label. No escape.",
+     "class": "within",
+     "why": "This is the refusal proposal C asks for. Having no escape means nothing is excepted."
+    },
+    {
+     "id": "T86-test-order",
+     "summary": "Item 5 builds the check next to proposal A's in make decide, then its test. Item 9 makes tests/tooling/test_plan_blocks.py fail without the check.",
+     "class": "within",
+     "why": "Order and placement are inside the task. The test only enforces the requested refusal: take the refusal out and the test has nothing left to check."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T85": {
+   "section_sha256": "82d4b307e3634e579179bad40438e7fe958954c50ee4f790dc84ff83a2482d9a",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D106-hold",
+     "summary": "Every running spec-fidelity plan review holds what its bundle names: a task preflight's section, a plan-delta review's blocks.",
+     "class": "within",
+     "why": "Proposal B (amendment 9) refuses 'an edit to a section whose review is running'. A block under a plan-delta review is the unit that review digests, so it is a section under review. Only spec-fidelity records plan verdicts (AS=spec-fidelity), so its digest is the one that goes stale (the incident in Approach item 4). Limiting the hold to spec-fidelity therefore drops no review the request covers."
+    },
+    {
+     "id": "D106-refusal-names",
+     "summary": "The refusal names the running review's agent and its task or blocks.",
+     "class": "within",
+     "why": "The GM's proposal says 'naming the agent'. Naming the task or blocks as well adds no behavior; it only identifies the hold."
+    },
+    {
+     "id": "D106-edit-write-paths",
+     "summary": "An Edit whose old_string lies in held text, or whose new_string lands in it, is refused. So is a Write whose new content differs from the plan in held text.",
+     "class": "within",
+     "why": "These are the plan-write path the proposal names, and the test fires exactly when held text would change. Edits elsewhere pass, as 'an edit to a section whose review is running' implies."
+    },
+    {
+     "id": "D106-bash-textual-test",
+     "summary": "A Bash write is refused when its write targets include the plan and its command text contains the held heading or any held line. A shell edit that names neither (for example by line number) is not caught.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This leaves a gap in what the request covers: some Bash writes to held text pass. Before a shell command runs, a hook cannot decide in general what text it will change, so an exact test is impossible here. The only exact alternative is refusing every Bash write of the plan while any review runs, which would refuse edits to other sections that the GM's words leave allowed. The text test is the same one the Edit path applies. The gap does not defeat the purpose ('a plan review is never wasted'): plan-verdict's digest check still refuses a stale review, so an edit that slips through costs a round but is never recorded as a wrong verdict."
+    },
+    {
+     "id": "D106-escape-dead-only",
+     "summary": "PLAN_EDIT_OK=\"<reason>\" passes, and is recorded, only for a hold a dead dispatch left (no agent of that review still running, by the pair state).",
+     "class": "within",
+     "why": "The GM's rule covers a section 'whose review is running'. A hold left by a dead dispatch is a review that is not running, so the request already implies letting that edit through. Recording the reason adds no reach."
+    },
+    {
+     "id": "D106-no-live-escape",
+     "summary": "A live review's held text has no escape; the session waits for the review to return. The earlier text allowed PLAN_EDIT_OK for any deliberate edit.",
+     "class": "within",
+     "why": "This brings the refusal closer to the request, which gives an edit under a running review no escape. Dropping the 'deliberate edit' escape removes a carve-out the GM never asked for, so nothing he asked for is narrowed."
+    },
+    {
+     "id": "D106-suite",
+     "summary": "The suite shows the refusal red without the hook and never green by the escape, and covers a held line as well as the heading.",
+     "class": "within",
+     "why": "This enforces the requested refusal and nothing else; with the refusal removed it would have nothing to check."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T89": {
+   "section_sha256": "c1f57441ca5520a2a76f15bbf7febf441c9ae47013b6dc0dfcd1b50ecdb929b1",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T89-route",
+     "summary": "Proposal F's per-task attribution is made where it is read: where-time books each gap to the task its tool call names, falling back to the mark; no workflow command moves the mark (item 2, D110)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Proposal F (amendment 9) names its own purpose: 'where-time misbooks tasks' -> 'true per-task numbers'. Followed literally, the mark move defeats that purpose, and the block shows how: deciding T76 while building T75 moves the mark to T76, so T75's later work is booked to T76. The misbooking follows from the mechanism itself and is not an unmeasured premise. The new route reaches the stated purpose: item 4 measured it on 2026-10-19 by the wt3.py join (T10 drops from 320 min to its own work; the evening's tasks come to 5-20 min each). This is the same text that was judged CLEAR before (earlier.md) and it is unchanged."
+    },
+    {
+     "id": "T89-no-refusal",
+     "summary": "Nothing is retired: proposal 6's refusal (a check refused for a task other than the active one), which F says it replaces, was never built (measured 2026-10-19 by a grep of scripts/hooks/)",
+     "class": "within",
+     "why": "F says it replaces proposal 6, so not building proposal 6 follows from F's own words, and with nothing built there is nothing to remove. The premise is a measurement that states its method. Its reach is scripts/hooks/ only; a dispatch guard kept anywhere else would not be seen by that grep."
+    },
+    {
+     "id": "T89-decide-tick",
+     "summary": "make decide F= T= and make tick F= T= are booked to the task their T= names",
+     "class": "within",
+     "why": "This is F's 'the task they name', applied at read time through the route ruled above."
+    },
+    {
+     "id": "T89-land-tooling",
+     "summary": "make land-tooling FILES= names no task, so its gap goes to the last named task",
+     "class": "within",
+     "why": "F moves the mark to 'the task they name'. land-tooling's input names no task, so under F's own words there is no task to move to, and booking to the last named task leaves the attribution where it already was."
+    },
+    {
+     "id": "T89-task-add",
+     "summary": "make task-add's new id appears only in its output, so its gap, and any gap after it with no naming call, goes to the last named task rather than to the new task",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged separately from the other three commands, because F, read literally, would move the mark to the task task-add creates. The concrete failure that justifies the route applies here too. A task is usually added while another task is being worked (FR-015: a second goal found in a task becomes its own task). Moving the mark to the new task would book the rest of the current task's work to a task nobody has started. The new task gets its time as soon as a call names it (its decide or tick T=, its heading, its commit). That serves 'true per-task numbers' better than the literal mark move."
+    },
+    {
+     "id": "D110",
+     "summary": "where_time.tables joins the session transcript (located by the event log's sid) to the events by tool-use id, books a gap to the task its input names when it names exactly one, otherwise to the last named task, otherwise to the mark; a footer gives the minutes booked by each rule",
+     "class": "within",
+     "why": "This is the mechanism for the route ruled above. The footer reports which rule booked each minute, which only verifies that the per-task numbers F asks for are true, and adds no new behavior."
+    },
+    {
+     "id": "T89-test-order-budget",
+     "summary": "The join, then tests/tooling/test_where_time.py red without it; budget 40 min; exits (c); items 10-11 n/a",
+     "class": "within",
+     "why": "The test only enforces the requested attribution. Order and budget decide nothing about scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T91": {
+   "section_sha256": "9768650abfda542db23623aeb9fb95e0d8f9c3dc894b00cda1bd44817b4bbdaa",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D112 (land-tooling.sh order, the changed passage)",
+     "summary": "land-tooling.sh runs its existing ruff check / ruff format --check on the .py files it was given as its first check, after the fetch (so main's lint config is main's) and before the merge and the worktree, dying with ruff's first lines and the ruff format command; every caller goes through it.",
+     "class": "within",
+     "why": "The arbiter's fix (hour:385-approach-checklist@27, standing where the GM was asked) asks for 'the same ruff check and format check the landing applies' run so a failure shows 'in seconds'. Moving the lint after the fetch costs about a second and makes the check use the config the landing actually applies, which serves the 'same check' clause rather than narrowing anything; the foreground refusal is carried by the make-only guard, unchanged from the block's last CLEAR text. The landing's own lint (T52, T55, T67) stays."
+    },
+    {
+     "id": "D112 (make-only guard)",
+     "summary": "The make-only guard runs the same lint on the files named by make land-tooling FILES= or make arbiter-fix-done ... LAND= and refuses the command before it runs.",
+     "class": "within",
+     "why": "This is the arbiter's 'refuse before it goes to the background'. arbiter-fix-done LAND= lands tooling through land-tooling (FR-018), so covering it is the same landing, not a new reach."
+    },
+    {
+     "id": "D112 (no .py file named)",
+     "summary": "A landing naming no .py file is not refused.",
+     "class": "within",
+     "why": "The fix lints the Python files the landing carries; with none there is nothing to check."
+    },
+    {
+     "id": "D112 (ruff absent)",
+     "summary": "Where ruff is not installed, the early lint refuses nothing.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The fix is to run ruff early; with ruff absent the early check can't run at all, so this case is physically impossible rather than a carve-out of convenience. The landing's own lint (T52) stays as it was, so the case loses no check it had before."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T31": {
+   "section_sha256": "d37b3d4590f35bd868dace373ce284c807b674c1cb2fb0de2cbe657df7b9f48f",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T31-row",
+     "summary": "Row 843 (MISLABELED) is taken as T31: MISLABELED is the first kind not yet tried in T05-T10, and row 827, the first such row, is now IN-STEP.",
+     "class": "within",
+     "why": "FR-020 asks for a row of a kind not yet tried where one is left, chosen at the task's start. That is how this row was chosen, and it carries out amendment 7's ten more claims."
+    },
+    {
+     "id": "T31-split",
+     "summary": "Row 841 (the street's joining leg, which reads the same constant) becomes its own task, T32, and is not folded into T31.",
+     "class": "within",
+     "why": "FR-015 says a second goal becomes its own task before work on it starts. Row 841 is still a ranking row worked under FR-020, so nothing is dropped."
+    },
+    {
+     "id": "D113",
+     "summary": "Keep FOOTPATH_FABRIC_GAP at 4 ft. 0246's drawing page records a footpath's middle 4 ft off a garden fence as its own map drawing convention, beside the lane's 7 ft, with the reason (measured 2026-10-19, make cohort at 7.0: seeds 3, 4, 903 and 904 newly fail). The claim points at that page, the comment above the constant records it, and no value changes.",
+     "class": "within",
+     "why": "Both numbers are O. 0246 calls its 7 ft 'a map drawing convention, not a measured figure', and the 4 ft is feature 328's. The GM's request says an unresearched number is a knob to refine, and the approved checklist's guardrail asks that loosening a rule record its reason where the code changes. D113 records that reason on the page and at the constant. Row 843's own fix offers this route ('0246 must record the 4 ft ... or the code is DRIFTED'). No GM ruling or Research: claim is loosened, so this is not an exception to anything the GM asked."
+    },
+    {
+     "id": "T31-exit-d",
+     "summary": "Exit (d) is not chosen: seeds are not re-seated to give 17 ft of footpath room.",
+     "class": "within",
+     "why": "Re-seating farmhouses so a footpath can keep a margin would move houses for a path. The GM's request rejects exactly that ('Nobody in real life moves their house so that a footpath will join...'). Turning this exit down follows the request; it does not narrow it."
+    },
+    {
+     "id": "T31-order-done",
+     "summary": "Order: record first, then the two claims, then the stale comment. Done means the claims check finds it IN-STEP. Budget 60 min.",
+     "class": "within",
+     "why": "This is how the work is carried out, and it is the checklist's FR-003 Approach content. It settles nothing the request or spec left open in a narrower way."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T92": {
+   "section_sha256": "e55c630fe341fe4e2b9dea167a98434c55f6b7513f75befa6eca3bc45ad26305",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D114a",
+     "summary": "claims.py triaged reads --reply through apply_edits.reply_of (a .jsonl/.output transcript's last assistant reply, else the file as text), as make modal-triaged already does",
+     "class": "within",
+     "why": "A tooling defect measured while working T31 (amendment 7's claims): a transcript's reply was read raw and its 18 TOUCHES lines cleared unread. Amendment 6 asks the session to 'implement any obvious performance / tooling / process improvements along the way'; reusing the existing reader narrows nothing the GM asked."
+    },
+    {
+     "id": "D114b",
+     "summary": "a reply with no readable text is refused, naming the file, and clears nothing",
+     "class": "within",
+     "why": "The refusal reaches only the defect's own case (an unread reply that would otherwise clear every claim); it guards the claim triage the feature already carries, not another command or agent, and widens no scope beyond the fix amendment 6 authorizes."
+    },
+    {
+     "id": "D114c",
+     "summary": "a readable reply with no TOUCHES line clears the bundle as now",
+     "class": "within",
+     "why": "Preserves the existing triage rule unchanged rather than excepting any case from what was asked; the GM asked nothing about this rule, so keeping it is not a narrowing."
+    },
+    {
+     "id": "T92-done",
+     "summary": "done measured by make claims-triaged on a transcript recording its TOUCHES lines, and a test in tests/tooling/test_claims_scoping.py red without the fix",
+     "class": "within",
+     "why": "A test whose only effect is to keep the fix in place: enforcement of the requested improvement, not new scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T32": {
+   "section_sha256": "3aafd40b933a6a6f99dc876d75d7128936193db3cdcf44e63b1f4fea2e859c77",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T32-row",
+     "summary": "Row 841 is chosen for T32, described as 'the same kind as T31's' (MISLABELED), because T31's claims round found it to be a real drift.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-020 says each row is 'a row of a kind not yet tried where one is left', and the proposal the GM approved gives the reason: 'about five ranking rows of different kinds, so the checklist is tested on more than lanes'. The block never says that no untried kind is left among the open rows. Its only reason is that T31 found this row, which is convenience: it is not impossible to pick another kind, the GM's words do not imply it (amendment 7 asks only for '10 more claims'), and taking a second MISLABELED row in a row works against the variety the rule exists for. To fix it, either state, measured with a date and method (a count of the open rows by kind), that no untried kind is left, which puts the pick within FR-020, or choose a row of a kind not yet tried."
+    },
+    {
+     "id": "D117",
+     "summary": "join_to's two _route calls take gap=WEB_FABRIC_GAP (the lane's 7 ft) and its claim cites 0246's 7 ft; no constant's value moves.",
+     "class": "within",
+     "why": "This is row 841's own fix ('the joining leg's berth at 0246's 7 ft off a garden fence'), applied to the leg the block measured as drawn at STREET_WIDTH, a lane."
+    },
+    {
+     "id": "T32-approach",
+     "summary": "Order (gap, claim, cohort), one exit (a), a 30 min budget, one measured done-goal.",
+     "class": "within",
+     "why": "The checklist answered as FR-003/FR-015 require. One exit is enough because no rule is being fought here: the leg read the wrong constant."
+    }
+   ],
+   "verdict": "BLOCKED"
+  },
+  "T93": {
+   "section_sha256": "3277408a83a0773eb0e4cca70fdd3c8a432424b305dd3c5d5ea7a5ce92adcf21",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D115",
+     "summary": "record_owed.modal_batches and command read modal_triage.touched(store): a pop-up owed only by a moved page that the triage marked touched is treated as an ordinary owed pop-up, so it joins its check's batch and names make modal-bundle. A pop-up not yet triaged keeps make modal-triage and stays out of the batch.",
+     "class": "within",
+     "why": "This widens batching rather than narrowing it. It carries out D100's own wording: the triage-owed pop-up goes to make modal-triage FIRST, then joins a batch. That is the condition T81's plan review set for the exclusion. It serves the GM's approved Amendment 1 item 2 ('one agent should judge all the pop-ups that cite a changed page, not one agent per pop-up') and Amendment 8 change 1 (pop-ups checked once as a group). An untriaged pop-up keeps going to triage first, as FR-008 requires, and D100's two-or-more threshold is untouched. Nothing the GM asked for is excepted."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T94": {
+   "section_sha256": "a18e82355d9793fb44ba27850a5e2c2fb3a74b101a939b13f1bbf3bf25489135",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D116",
+     "summary": "claims.py record reads --reply through claims_triage.triage_reply (T92's reader) before unelide, so a transcript's last reply is recorded whatever file carries it; a reply with no text is refused, naming the file, and nothing is written.",
+     "class": "within",
+     "why": "A fix to an existing tool's defect, measured working T31 (FR-020's claims): a transcript reply recorded 6 of 8 verdicts while the same text recorded 8 of 8. Amendment 6 asks the session to 'implement any obvious performance / tooling / process improvements along the way'. Reusing T92's reader extends a rule already settled for claims-triaged to its twin command. The refusal on an empty reply only stops an unread reply being recorded as read; it adds no behavior beyond the tool doing what it already claims. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "Approach-5/9",
+     "summary": "Order: reader, then empty-reply refusal, then a test in tests/tooling/test_claims_index.py that is red without the fix; one goal (FR-015).",
+     "class": "within",
+     "why": "The test only enforces the fix (feature 385's practice and SC-004/SC-009 style), and the single goal follows FR-015. Nothing is excluded."
+    },
+    {
+     "id": "Approach-6/8",
+     "summary": "Exit (c), add a rule that removes the case (one reader for both commands); budget 15 min.",
+     "class": "within",
+     "why": "A choice of mechanism and a time budget inside the task. The checklist names this exit, and no requirement or ruling is relaxed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T95": {
+   "section_sha256": "797c4c69f0fe09a3b310aa9dc54ebbd8c2e1b5eb87d2b7ac782e156cbcbb6e02",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D117",
+     "summary": "join_to's two _route calls take gap=WEB_FABRIC_GAP (the lane's 7 ft, 0246) instead of FOOTPATH_FABRIC_GAP (4 ft); the leg's claim cites 0246's 7 ft and states the leg is drawn at the street's width, a lane.",
+     "class": "within",
+     "why": "Applies an existing rule (0246: a lane keeps 7 ft off a garden fence) to a leg drawn at STREET_WIDTH, i.e. a lane. Nothing is relaxed or excepted; it is the conform exit, the ranking row's own stated fix, taken as a defect fixed where found under the ranking work FR-020 carries (amendment 7, 'pull in 10 more claims'). No constant's value moves."
+    },
+    {
+     "id": "T95-exits (Approach item 6, the changed text)",
+     "summary": "Each of the checklist's exits judged in turn - refine an O number, an exception, a new rule, more room - and none taken; conform chosen because the leg is a lane and nothing obstructs the lane's 7 ft (cohort 16 of 16, fresh block 0 of 4 failed, measured 2026-10-19).",
+     "class": "within",
+     "why": "The change from the CLEAR text only answers the approved checklist more fully (the GM-approved proposal: 'Name at least three exits besides conform, and judge each'). Choosing conform with a measured reason narrows nothing the GM asked; it carves no exception, drops no rule, and preserves no behavior the request asked to change."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

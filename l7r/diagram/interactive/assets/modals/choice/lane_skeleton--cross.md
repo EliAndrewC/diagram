@@ -17,7 +17,7 @@ Guesses:
 
 Depiction: The map seats the houses first and lays the crossroads after, fitted to where they stand: two lanes crossing in
 the cluster; the households' own ways join them. Each lane is drawn as a track of bare earth a little wider than a footpath -
-a width of the map's choosing, since no lane in a wet-rice village was measured - pulled as straight as the plots allow.
+a width of the map's choosing, since how wide a lane ran in a wet-rice village is not recorded - pulled as straight as the plots allow.
 
 Name: A crossroads
 Covers: `meta.lane_skeleton = cross`

@@ -207,7 +207,8 @@ TRACK_FABRIC_GAP = WEB_FABRIC_GAP
 # being reached and a house being 296 ft from anything with no route at all.
 # HELD AT 4 ft by feature 328 wave 4: the lane page's own figure is 7 ft (a lane's middle, a 3 ft footpath's included,
 # keeps at least 7 ft clear of a garden fence - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html),
-# but at 7 ft Kashikawa's footpaths cannot thread to two farmhouses; the row waits for a found row that lets them.
+# but at 7 ft Kashikawa's footpaths cannot thread to two farmhouses. RECORDED on that page by feature 385 T31: a footpath's own
+# convention, measured 2026-10-19 - at 7 ft cohort seeds 3, 4, 903 and 904 newly fail.
 # A FIX THAT FAILED, re-tried at wave 96 (2026-10-10) after the web's hardening: still Kashikawa refused and cohort seeds
 # 03, 23, 40, 903 newly refused (farmhouses off the network; m:wave96-footpath-7ft in specs/328). Why
 # 4 ft, kept: the number was doing real work at the margin. The overlap matrix sizes every lane at 6 ft
@@ -217,7 +218,7 @@ TRACK_FABRIC_GAP = WEB_FABRIC_GAP
 # its neighbors' plots were simply narrower than a lane-and-two-margins. A footpath is the one way on
 # the map that is walked in single file, and this is the width that says so.
 FOOTPATH_FABRIC_GAP = 4.0
-"""Research: footpath off a plot - UNRESEARCHED: 4 ft, held below 0246's 7 ft (a lane's middle 7 ft from a garden fence): at 7 ft Kashikawa's footpaths cannot thread to two farmhouses (feature 328 wave 4, `WebRefused`); it waits for the found row that lets a footpath reach every farmhouse 7 ft off a plot"""
+"""Research: footpath off a plot - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a footpath, walked in single file, keeps its middle 4 ft off a garden fence, its own convention beside the lane's 7 ft"""
 
 # HOW FAR A WEB LANE STAYS OFF THE CROP, THE TOE AND THE MARSH, in feet.
 #

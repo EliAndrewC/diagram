@@ -15,7 +15,7 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, seg_closest, seg_dist
 
-from ..consts import FOOTPATH_FABRIC_GAP, Poly, Pt
+from ..consts import WEB_FABRIC_GAP, Poly, Pt
 from . import law
 from .corridors import FORD_LANDING_FT
 from .fabric import _crosses_fabric, _draw_web
@@ -235,7 +235,7 @@ def join_to(path: list[Pt], network: Sequence[tuple[Pt, Pt]], hard: list[Poly], 
 
     Research:
         street joined to the network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network
-        joining leg's berth - UNRESEARCHED: routed `FOOTPATH_FABRIC_GAP` (7 ft) off the fabric"""
+        joining leg's berth - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: routed the lane's 7 ft (`WEB_FABRIC_GAP`) off the fabric - the leg is drawn at the street's width, a lane, not a footpath"""
     if len(path) < 2 or not network:
         return path
 
@@ -246,9 +246,9 @@ def join_to(path: list[Pt], network: Sequence[tuple[Pt, Pt]], hard: list[Poly], 
     if min(d0, d1) < 1.0:
         return path
     if d0 <= d1:
-        leg = _route(q0, path[0], hard, walls, water, gap=FOOTPATH_FABRIC_GAP)
+        leg = _route(q0, path[0], hard, walls, water, gap=WEB_FABRIC_GAP)
         return (leg[:-1] + path) if len(leg) >= 2 else path
-    leg = _route(path[-1], q1, hard, walls, water, gap=FOOTPATH_FABRIC_GAP)
+    leg = _route(path[-1], q1, hard, walls, water, gap=WEB_FABRIC_GAP)
     return (path + leg[1:]) if len(leg) >= 2 else path
 
 

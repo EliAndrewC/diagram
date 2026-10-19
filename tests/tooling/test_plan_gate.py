@@ -434,6 +434,21 @@ def test_a_quiet_part_b_leaves_its_task_s_section_reviewed() -> None:
         assert gate.task_current(review, text, "T05") is current, part_b
 
 
+def test_a_pointer_repointed_to_a_recorded_split_leaves_the_section_reviewed() -> None:
+    """The round arbiter's fix on hour:385-approach-checklist@28: T31 said "row 841 is T32" after the review moved that row to
+    T95 (found working T31), and correcting the pointer owed T31 a third review."""
+    sec = "## T31 - x\n\n### T31 Decisions\n\n**D113 - a rule.** Row 841 is its own task, T32 (FR-015).\n\n"
+    review = {"tasks": {"T31": {"verdict": "CLEAR", "section_sha256": gate.digest(sec.encode()), "section_text": sec}}}
+    split = "## T95 - the leg (found working T31, 2026-10-19; ranking row 841)\n\n**D117 - y.** z\n\n"
+    other = "## T95 - the leg (ranking row 841)\n\n**D117 - y.** z\n\n"
+    moved = sec.replace("T32", "T95")
+    assert gate.task_current(review, "# Plan\n\n" + moved + split, "T31")
+    assert not gate.task_current(review, "# Plan\n\n" + moved + other, "T31"), "no recorded split: owed"
+    assert not gate.task_current(review, "# Plan\n\n" + sec.replace("T32", "T96") + split, "T31"), "another id: owed"
+    loud = moved.replace("its own task", "a later task")
+    assert not gate.task_current(review, "# Plan\n\n" + loud + split, "T31"), "a repoint with another change: owed"
+
+
 def test_an_archive_line_inside_a_task_s_section_leaves_it_reviewed() -> None:
     """Feature 385 T82 (plan D102): ticking T78 and T80 left their archive line inside T79's section, and T79 was owed again."""
     sec = "## T05 - x\n\n### T05 Decisions\n\n**D10 - a rule.** z\n\n"

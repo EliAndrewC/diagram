@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92, T93, T94, T95
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -310,6 +310,185 @@ Owed by the hour-26 step-back (hour:385-approach-checklist@26, `continue`).
 **D103 - a dictionary is read as its section is.** In `all_units`, a module-level constant whose value is a dict literal and which carries its own claims gets `blocks` = one per entry (`key: value`, its source unparsed, whitespace folded); `Unit.code` fingerprints such a claim by its own line, as a section's (`"section-claim"`), and `core` stays the whole value's.
 
 **D104 - owed and backfilled as a section's.** `claims.py owed` owes `section triage` for a unit with blocks whose recorded `section` core differs (sections and dicts alike); `backfill-sections` re-keys a dict claim whose row is current under the old fingerprint (core plus line), recording its core and block digests, and leaves an owed one owed. The backfill runs once with this change, its count in the retro.
+
+<!-- plan-archive: T84 to T84 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+## T85 - an edit to a plan section is refused while its review runs (proposal B, 2026-10-19)
+
+### T85 Approach (checklist part A)
+
+1. **The goal, in the world.** A plan review is never wasted on a section edited while it ran.
+2. **The constraints.** The GM, 2026-10-18 23:00 EDT (amendment 9): "build all 7 of those as 385 tasks"; proposal B: "the plan-write path refuses an edit to a section whose review is running, naming the agent". Edits to other sections, and to the plan's other files, go through; the escape is `PLAN_EDIT_OK="<reason>"`, recorded, for a dead dispatch's hold only. A test red without it.
+3. **Where each comes from.** The GM (G); the tools it changes are this feature's and 375's (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the second pass): 2 of the evening's 42 plan reviews returned unrecorded - `plan-verdict` refused them, "section_sha256 does not match ... it changed while it was being reviewed" - after I edited T76's and T77's sections while their reviews ran.
+5. **The order.** The refusal in `hm_checks` (which knows each running dispatch and its bundle), wired to the Edit and Write tools and to a Bash write of the plan, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 40 min.
+9. **Done, measured.** One goal: an Edit of `specs/<f>/plan.md` whose old text lies in the section of a task with a plan review running, or a Bash command writing that plan and naming that task's section heading, is refused, naming the running review's agent; a block under a running `plan-delta` review is held the same way; an edit elsewhere passes; `tests/tooling/test_plan_edit_refusal.py` (new) red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T85 part B (2026-10-19T04:58Z)
+
+Owed by the hour-27 step-back (hour:385-approach-checklist@27, `continue`).
+
+1. **What is refusing?** Nothing: T85 is landed and its suites green.
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither - landed as reviewed.
+6. **The one-sentence test.** "A section under review cannot be edited under it" - true by its two tests.
+7. **The next step is a measurement.** None owed for T85.
+8. **Routes measured before asking?** n/a - no ask.
+9. **After a ruling.** `continue`; its tooling fix (the foreground lint) is its own task.
+
+### T85 Decisions
+
+**D106 - the section or block under review is held.** Every running `spec-fidelity` plan review holds what its bundle names: a task preflight (`plan-<feature>-<T>`) that task's section, a block review (`make plan-delta`) each block in its `blocks.md`. A write that would change held text is refused, naming the running review's agent and its task or blocks: an `Edit` of the plan whose `old_string` lies in, or whose `new_string` lands in, held text; a `Write` of the plan whose new content differs from the plan in held text; a Bash command whose write targets (`hm_house.write_targets`) include the plan and whose text contains the held heading or any line of held text (the same test the Edit path applies). `PLAN_EDIT_OK="<reason>"` passes it, recorded, only for a hold a dead dispatch left (no agent of that review still running, by the pair state); a live review's held text has no escape - the session waits for it to return (the plan review, 2026-10-19). The suite shows the refusal red without the hook, never green by the escape, and covers the held-line case as well as the heading.
+
+<!-- plan-archive: T86 to T86 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+<!-- plan-archive: T87 to T87 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+<!-- plan-archive: T88 to T88 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+<!-- plan-archive: T89 to T89 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+<!-- plan-archive: T90 to T90 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+<!-- plan-archive: T91 to T91 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+## T31 - a footpath's 4 ft off a plot, recorded (ranking row 843, MISLABELED - a kind not yet tried)
+
+Chosen at its start (FR-020): of the open rows still open in the claims index, the first kind not yet tried in T05-T10 (four
+DRIFTED, one NEEDS-RESEARCH) is MISLABELED; row 827 (the first) is IN-STEP since, so row 843 is taken; row 841, which reads
+the same constant, is T32.
+
+### T31 Approach (checklist part A)
+
+1. **The goal, in the world.** A footpath, walked in single file, runs closer to a garden fence than a lane does; the map says so
+   and the record says why.
+2. **The constraints.** Row 843's fix: "0246 answers this: 'a lane's middle keeps at least 7 ft clear of a garden fence', 3 ft
+   footpath included; 4.0 departs from it, so the claim should be DEVIATION 0246, and 0246 must record the 4 ft (it does not) or
+   the code is DRIFTED". Row 841's: "the joining leg's berth at 0246's 7 ft off a garden fence (it reads FOOTPATH_FABRIC_GAP, held at
+   4 ft); the claim cites 0246". Room before packing (GM 2026-10-12).
+3. **Where each comes from.** 0246's 7 ft is O: the page itself calls it "a map drawing convention, not a measured figure". The
+   4 ft is O (feature 328 wave 4). Room before packing is G.
+4. **Do they describe the world here?** Measured 2026-10-19 (`make cohort` with `FOOTPATH_FABRIC_GAP` at 7.0, then put back):
+   4 seeds newly fail - 3, 4 and 903 refused by the web (`WebRefused`), 904 by a row rule - so a footpath held to the lane's 7 ft
+   cannot reach farmhouses the cohort places today. Since the lane's margin is a convention, not research, room before packing
+   does not bind it: an unresearched number is a knob to move, never a target to defend.
+5. **The order.** The record first (0246's drawing page states the footpath's own convention and why), then the two claims point
+   at it, then the stale comment.
+6. **The exits.** (a) refine an O number - chosen: the footpath's 4 ft becomes 0246's own recorded convention; (d) more room - not
+   chosen: re-seating to give four seeds 17 ft of footpath room (2 x 7 + 3) changes every hamlet's spacing for a convention, where
+   the 4 ft asks 11 ft; (b), (c), (e) - none fits a margin that is a convention both ways.
+7. **The search smell.** None - no search changes.
+8. **The budget.** 60 min.
+9. **Done, measured.** One goal: 0246's drawing page records a footpath's middle 4 ft off a garden fence as a map drawing
+   convention, `FOOTPATH_FABRIC_GAP`'s claim cites it, and the claims check finds it IN-STEP; no value changes.
+10. **Before moving a constant.** No constant's value moves. Its uses (measured 2026-10-19, a grep of `l7r/`): the footpath's clearance off
+   a plot in `bund.py`, `street.py` (the joining leg), `track.py` (a footpath's clip and its `+ 1.0` and `+ CONNECTOR_WIDTH / 2`
+   uses), and the door offsets `FOOTPATH_FABRIC_GAP + 4.0` in `serve.py`, `web.py` and `row_rules.py`.
+11. **Before fitting things into room.** Footpath room between two plots: 2 x 4 + 3 = 11 ft at 4 ft, 2 x 7 + 3 = 17 ft at 7 ft.
+
+### T31 Decisions
+
+**D113 - the footpath's margin is 0246's own convention.** 0246's drawing page gains a block of its own beside the lane's 7 ft: a
+footpath is narrower than a lane's tread, so it keeps its middle 4 ft off a garden fence, a map drawing convention, because held to
+the lane's 7 ft some settlements leave a farmhouse with no footpath to it (the seeds in a comment). `FOOTPATH_FABRIC_GAP`'s claim
+becomes a pointer to that page, and the comment above the constant records it. No value changes; row 841 (the street's joining leg,
+which reads this constant but is drawn as a lane) is its own task, T32 (FR-015, one goal).
+
+
+### T31 part B (2026-10-19T05:50Z)
+
+Owed by the cohort record of 05:04Z (seeds 3, 4, 903 and 904 newly failing) - that run was the trial of `FOOTPATH_FABRIC_GAP` at
+7 ft, not a landing.
+
+1. **What is refusing?** Nothing now: the trial at 7 ft failed those four seeds, so the value stayed 4 ft (D113).
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged - the four seeds are the measurement the decision rests on.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither in this part B: the 4 ft recorded on 0246 is D113's change, decided and reviewed before it.
+6. **The one-sentence test.** "0246 records a footpath's 4 ft and the constant's claim cites it" - true; the claims check found it IN-STEP.
+7. **The next step is a measurement.** The landing cohort at 4 ft.
+## T92 - `make claims-triaged` reads a transcript's reply and never clears on an unread one (found working T31, 2026-10-19)
+
+### T92 Approach (checklist part A)
+
+1. **The goal, in the world.** A claims triage's verdicts are never lost by the form of the file that carries them.
+2. **The constraints.** Feature 375 FR-016: a claim the triage names TOUCHES is owed impl-drift and every other claim of the bundle is cleared. `make modal-triaged` already reads a transcript (`.jsonl`, `.output`) for its last reply (feature 385 T07); `make claims-triaged` reads the file raw. A test red without it.
+3. **Where each comes from.** 375 (O); the defect is measured working T31 (amendment 6).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T31's `make claims-triaged` on the agent's `.output` transcript): it printed "0 of 281 sent on to impl-drift (0 named by the reply); the rest cleared" while the reply named 18 claims TOUCHES - every one cleared unread.
+5. **The order.** The reply read through `apply_edits.reply_of`, the refusal on an empty one, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: `make claims-triaged REPLY=<a transcript>` records the TOUCHES lines of the transcript's last reply, and a reply it can read no text from is refused before anything is cleared; `tests/tooling/test_claims_scoping.py` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T92 Decisions
+
+**D114 - the reply read as modal-triaged reads it.** `claims.py triaged` reads `--reply` through `apply_edits.reply_of` (a `.jsonl` or `.output` transcript's last assistant reply, else the file as text); a reply with no text refuses, naming the file, and clears nothing. A readable reply with no TOUCHES line clears the bundle as now.
+
+## T93 - a pop-up the triage sent on joins its check's batch (found working T31, 2026-10-19)
+
+### T93 Approach (checklist part A)
+
+1. **The goal, in the world.** Pop-ups a page change re-owed are checked by one agent per check, as T81 made the rest.
+2. **The constraints.** T81 (D100): a pop-up owed only by a moved page goes to `make modal-triage` first "and joins a batch on the next listing if a check is still owed" - the plan review's premise that made the exclusion legitimate, which asked for a test. A test red without it.
+3. **Where each comes from.** T81 (O), its review's condition (G, through the GM's approved change 1).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T31's `make record-owed` after `make modal-triaged` sent 6 of 8 pop-ups on): no batched line was printed, and each touched pop-up still named `make modal-triage` as its command - the exclusion never released them, so the batch was built by hand.
+5. **The order.** `record_owed`'s listing reads the triage's touched marks, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: a pop-up owed by a moved page that `make modal-triaged` marked touched is in its check's batch and names `make modal-bundle`, one not yet triaged still names `make modal-triage`; `tests/tooling/test_record_owed.py` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T93 Decisions
+
+**D115 - triaged and touched is owed like any other.** `record_owed.modal_batches` and `command` take the triage's touched marks (`modal_triage.touched(store)`): a unit owed by a moved page whose slug is marked touched is treated as an ordinary owed pop-up - batched with its check, its command `make modal-bundle`; an untriaged one keeps `make modal-triage` and stays out of the batch.
+
+## T94 - `make claims-checked` reads a transcript's reply too (found working T31, 2026-10-19)
+
+### T94 Approach (checklist part A)
+
+1. **The goal, in the world.** An impl-drift reply is recorded whatever file carries it, and a reply that cannot be read is never recorded as read.
+2. **The constraints.** T92's rule for `make claims-triaged` (a transcript's last reply, an unread one refused); feature 316: a claim's verdict is recorded at the fingerprints its bundle read. A test red without it.
+3. **Where each comes from.** T92 (O), 316 (O); the defect is measured working T31 (amendment 6).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T31's `make claims-checked` on the impl-drift agent's `.output` transcript): it printed "6 of 8 recorded" and the claims index was unchanged (`git status` clean); the same reply as text recorded 8 of 8.
+5. **The order.** The reply read through `claims_triage.triage_reply`, the refusal on an empty one, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: `make claims-checked REPLY=<a transcript>` records the VERDICT lines of the transcript's last reply, and a reply with no text is refused before anything is written; `tests/tooling/test_claims_index.py` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T94 Decisions
+
+**D116 - one reader for both triage and record.** `claims.py record` reads `--reply` through `claims_triage.triage_reply` (T92's reader) before `unelide`; a reply with no text refuses, naming the file, and writes nothing.
+
+## T95 - a street's joining leg keeps the lane's 7 ft (found working T31, 2026-10-19; ranking row 841)
+
+Found by T31's claims round (amendment 6, a defect fixed where found - not a ranking pick, so FR-020's kinds are untouched): row
+841's leg is drawn at `STREET_WIDTH`, a lane, and routed at the footpath's 4 ft.
+
+### T95 Approach (checklist part A)
+
+1. **The goal, in the world.** A street's joining leg keeps a lane's distance from the gardens it passes.
+2. **The constraints.** Row 841's fix: "the joining leg's berth at 0246's 7 ft off a garden fence (it reads FOOTPATH_FABRIC_GAP, held at 4 ft); the claim cites 0246". 0246: a lane's middle keeps at least 7 ft clear of a garden fence; a footpath keeps 4 ft (T31).
+3. **Where each comes from.** 0246's 7 ft is O, a map drawing convention; row 841's fix is the ranking's (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T31's impl-drift round, then a read of `street.py`): the leg is drawn at `STREET_WIDTH` by `_draw_web`, a lane; measured 2026-10-19 (`make cohort` with the leg at `WEB_FABRIC_GAP`): 16 of 16 pass, the fresh block 0 of 4 failed.
+5. **The order.** The leg's routing gap, its claim, then the landing cohort.
+6. **The exits.** (a) refine an O number: none to refine - the leg read the footpath's number, not a wrong lane number; (b) an exception: none - nothing obstructs the lane's 7 ft (the cohort passes); (c) a new rule: none needed; (d) more room: none needed, nothing fails; (e) conform - chosen: the leg is a lane, so it keeps the lane's 7 ft as the rule stands.
+7. **The search smell.** None.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: `join_to` routes its leg at `WEB_FABRIC_GAP` and its claim cites 0246's 7 ft; the claims check finds it IN-STEP and the landing cohort passes.
+10. **Before moving a constant.** No constant's value moves; one caller reads `WEB_FABRIC_GAP` instead of `FOOTPATH_FABRIC_GAP` (measured 2026-10-19, a grep: `street.py`'s two `_route` calls in `join_to` are its only uses there).
+11. **Before fitting things into room.** A lane's room past a fence: 7 ft to its middle, 1.5 ft more than a 3 ft footpath's 4 ft plus half its width (5.5 ft).
+
+### T95 Decisions
+
+**D117 - the leg routed as the lane it is.** `join_to`'s two `_route` calls take `gap=WEB_FABRIC_GAP`; its claim reads "joining leg's berth - <0246's drawing page>: routed the lane's 7 ft (`WEB_FABRIC_GAP`) off the fabric - the leg is drawn at the street's width, a lane, not a footpath".
 
 ## T11 - the close
 

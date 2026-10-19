@@ -742,3 +742,96 @@ empty one, or such a dict - keys its claims by their own line; owed, the bundle,
 The backfill re-keyed 109 dict claims and owed nothing new; a probe entry added to `_OVERLAP_EXEMPT` owed its 17 claims a triage
 and none `code changed`. One red gate was mine: the first cut keyed on "has blocks", and an empty section has none. **The habit it
 changes:** a dict grown by an entry no longer costs a full impl-drift round over every claim on it.
+
+## T90 - the retro row
+
+About 20 min. `make where-time` splits the between-turns time by the prompt that ends each window: waiting on work (a
+notification), the GM, the GM away (past an hour). The first cut's one-line edit missed the formatter-split bucket map; an assert on
+every replacement found it. **The habit it changes:** none needed.
+
+## T84 - the retro row
+
+About 35 min. `make decide` refuses a section quoting the GM with words `request.md` does not hold (`plan_lint.gm_quotes_missing`,
+any case, every length, no escape, as the plan review required). Run over all 77 sections first: the parser's artifacts - "the GM"
+inside a quote or a code span, elided quotes - were fixed before the check went in; what it still names is real, e.g. T83's "I do
+want it, though, if it is helpful", the GM's words that never reached the request. **The habit it changes:** a quote of the GM is
+checked against the request before any review reads it.
+
+## T88 - the retro row
+
+About 10 min. `plan_gate.house_style` passes each decision's free text through `americanize` in all three verdict writers (the
+task, the plan and the block records); ids, classes, rulings and digests are written as given. **The habit it changes:** none needed.
+
+## T87 - the retro row
+
+About 25 min. The tree check reads the gate's own roll census and leaves out only the outputs of the maps it rolled, printing them
+to commit; any other change - another map's output among them - is still a tree move (the plan review's keying). The census
+already named each roll's generator, so no engine change was needed. **The habit it changes:** none needed.
+
+## T86 - the retro row
+
+About 40 min. `make decide` refuses an Approach item 4 sentence stating a figure without `measured`, a date and a parenthesized
+method (or an `m:` key) - per sentence, code spans holding a path or command set aside, numbers that name a thing ("round 2",
+"seed 45") no figures. Three plan rounds: a fixed unit list, then one label per item, then clear. Run over all 77 sections first;
+what it still names lacks a date or a method. **The habit it changes:** a figure is labeled before any review reads it.
+
+## T89 - the retro row
+
+About 30 min. `make where-time` books each gap to the task its tool call names (`T=`, "task T60", a `385 T60:` commit, a plan
+bundle, a section heading), carries it to the calls that name none, and falls back to the mark only before any is named; a footer
+says how many minutes each rule booked. No workflow command moves the mark (the plan review accepted the change of route). **The
+habit it changes:** per-task numbers no longer depend on `make task-start` being run at the right moment.
+
+## T85 - the retro row
+
+About 60 min. A running plan review now holds what its bundle names (`hm_planhold`): a task preflight its section, a block review
+its blocks; an Edit, a Write or a Bash write that would change held text is refused, naming the agent, and `PLAN_EDIT_OK` passes only
+a dead dispatch's hold. Three plan rounds (block reviews in scope, the Write tool, no escape for a live review). The Bash test had
+to be wider than the plan said: `hm_house.write_targets` does not see a Python heredoc's write - my usual route - so a write is the
+plan named with a write marker, and held text is the heading, a held line, or a quoted fragment of it. **The habit it changes:** a
+section under review can no longer be edited under it.
+T72, found landing T85 (2026-10-19): the plan-review ledger commit ran `git diff` in a repository with no commits, where it errors,
+and read the error as a change - the sync-with-main suite failed on main. It now runs only where HEAD exists and the ledger's status
+shows a change.
+
+## T91 - the retro row
+
+About 50 min. A landing's lint runs first in `land-tooling.sh` (after the fetch, with main's `[tool.ruff]` written as a ruff.toml in
+the clone's root so its exclude paths resolve there), and the make-only guard runs it on `make land-tooling FILES=` and `make
+arbiter-fix-done LAND=` before the command does. Three plan rounds (the guard alone missed the arbiter-fix route; then the fetch's
+place). The suite found three of my own slips: main's config read before the fetch, a pyproject passed where ruff wants a
+ruff.toml, and exclude paths that resolve against the config's own directory. **The habit it changes:** a lint slip is refused in
+seconds, before the landing starts.
+
+## T92 - the retro row
+
+About 20 min. `make claims-triaged` reads its reply through `claims_triage.triage_reply` (a transcript's last reply, as
+`make modal-triaged` reads one) and refuses a reply with no text instead of clearing the bundle unread; its first use recorded T31's
+triage from the agent's transcript - 6 of 281 sent on. The plan cited "375 FR-016" for the triage rule; that rule is feature 318's
+FR-016 (the review's note). **The habit it changes:** none needed.
+
+## T93 - the retro row
+
+About 20 min. `record_owed` reads the triage's touched marks (`modal_triage.touched`): a pop-up owed by a moved page that
+`make modal-triaged` sent on at its fingerprint names `make modal-bundle` and joins its check's batch; one not yet triaged still names
+`make modal-triage`. The test is red without it. Landed with T94 after one merge of T92's own landing (ours kept). **The habit it
+changes:** none needed - the batch is now listed without the hand-built bundle T31 needed.
+
+## T94 - the retro row
+
+About 15 min. `make claims-checked` reads its reply through `claims_triage.read_reply`, the one reader `make claims-triaged` now
+shares: a transcript's last reply is recorded, and a reply with no text is refused before anything is written. The shared helper kept
+`claims.py` at 999 lines. The test is red without it. **The habit it changes:** none needed - a reply file need not be extracted by
+hand.
+
+## T31 - the retro row
+
+About 3 h with its checks. Row 843 (MISLABELED): `FOOTPATH_FABRIC_GAP`'s 4 ft had no page. Measured first: held to the lane's 7 ft,
+seeds 3, 4, 903 and 904 newly fail, so 0246's drawing page records the footpath's 4 ft as its own map drawing convention in a block of
+its own, and the constant's claim cites it - IN-STEP; no value changed. The claims round found row 841's leg drawn as a lane but
+routed as a footpath: filed as T95 (one goal). T31's plan text still names that task "T32" - the id it had before the review moved
+it; correcting the pointer would have owed T31 a third review (a tripwire), so T95's own heading carries the link. Lessons, each
+now a task: an edit to a heavily cited block owed 37 full checks, where a new block owed triages only; page edits after a triage
+re-owe it - finish every page edit first; `make claims-triaged` and `make claims-checked` read a transcript wrongly (T92, T94); the
+triage-touched pop-ups stayed out of their batch (T93). Row 843 marked wave 162. **The habit it changes:** a record change goes in a
+new block where the old one is heavily cited.

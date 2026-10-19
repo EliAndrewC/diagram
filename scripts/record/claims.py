@@ -62,6 +62,7 @@ sys.dont_write_bytecode = True  # the push runs this in fixture trees whose `git
 import claims_carry  # noqa: E402
 import claims_context  # noqa: E402
 import claims_stale  # noqa: E402
+import claims_triage  # noqa: E402
 import record_cache as rc  # noqa: E402
 import record_units as ru  # noqa: E402
 from claims_triage import (  # noqa: E402,F401 - the triage half, split out (feature 375 T09); re-exported
@@ -911,10 +912,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0
     if args.cmd == "triaged":
         data = json.loads((Path(args.bundle) / "triage.json").read_text(encoding="utf-8"))
+        if not (reply := claims_triage.read_reply(args.reply, "claims-triaged", "nothing cleared")).strip():  # feature 385 T92
+            return 2
         new, msgs = record_triage(
             index,
             data["units"],
-            Path(args.reply).read_text(encoding="utf-8"),
+            reply,
             datetime.date.today().isoformat(),
             data.get("forced", []),
         )
@@ -969,7 +972,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0
     units = json.loads((Path(args.bundle) / "units.json").read_text(encoding="utf-8"))
     stems = sorted({p.name.split(".")[0] for p in (root / QUESTIONS).glob("[0-9][0-9][0-9][0-9]-*.html")})
-    reply = unelide(Path(args.reply).read_text(encoding="utf-8"), stems)
+    if not (reply := claims_triage.read_reply(args.reply, "claims-checked", "nothing recorded")).strip():  # feature 385 T94
+        return 2
+    reply = unelide(reply, stems)
     blocks_file = Path(args.bundle) / "blocks.json"
     blocks = json.loads(blocks_file.read_text(encoding="utf-8")) if blocks_file.is_file() else {"numbered": {}, "snapshots": {}}
     new, msgs = record(index, units, reply, datetime.date.today().isoformat(), blocks["numbered"])

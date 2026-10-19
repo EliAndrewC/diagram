@@ -239,6 +239,40 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T83 A dictionary's claims keyed per entry (step 5 of the GM's order, plan D103, D104) [lands-open]
       research: rendering
       verify: DONE. dict entries are blocks, claims keyed by their own line; backfill re-keyed 109 owing nothing; probe entry owed 17 triages, 0 code changed; gate green, cohort 54/54
+- [x] T84 `make decide` refuses a plan quoting the GM with words not in the request (proposal A, 2026-10-19) [lands-open]
+      research: rendering
+      verify: DONE. make decide refuses a GM quote not in request.md; landed, test_plan_blocks green
+- [ ] T85 an edit to a plan section is refused while its review runs (proposal B, 2026-10-19) [lands-open]
+      research: rendering
+- [x] T86 `make decide` refuses a measured figure with no date and method (proposal C, 2026-10-19) [lands-open]
+      research: rendering
+      verify: DONE. make decide refuses an unlabeled item-4 figure; landed, test_plan_blocks green
+- [x] T87 the gate does not call its own re-rolled map a tree move (proposal D, 2026-10-19) [lands-open]
+      research: rendering
+      verify: DONE. the gate's own re-rolled map is no tree move; landed, test_preflight green
+- [x] T88 `make plan-verdict` writes the reviewer's words in the house style (proposal E, 2026-10-19) [lands-open]
+      research: rendering
+      verify: DONE. plan-verdict writes the reviewer's words in the house style; landed, test_plan_gate green
+- [x] T89 `make where-time` books time to the task the work names (proposal F, 2026-10-19) [lands-open]
+      research: rendering
+      verify: DONE. where-time books time to the task the work names; landed, test_where_time green
+- [x] T90 `make where-time` tells waiting on work from waiting on the GM (proposal G, 2026-10-19) [lands-open]
+      research: rendering
+      verify: DONE. where-time splits waiting on work from the GM; landed, test_where_time green
+- [x] T91 A landing's lint runs in the foreground (the arbiter's fix on hour:385-approach-checklist@27, plan D112) [lands-open]
+      research: rendering
+      verify: DONE. landed 2026-10-19 via make land-tooling; its test red without it, green with it
+- [x] T92 make claims-triaged reads a transcript's reply and never clears on an unread one (plan D114) [lands-open]
+      research: rendering
+      verify: DONE. landed 2026-10-19 via make land-tooling; its test red without it, green with it
+- [x] T93 A pop-up the triage sent on joins its check's batch (plan D115) [lands-open]
+      research: rendering
+      verify: DONE. landed 2026-10-19 via make land-tooling; its test red without it, green with it
+- [x] T94 make claims-checked reads a transcript's reply too (plan D116) [lands-open]
+      research: rendering
+      verify: DONE. landed 2026-10-19 via make land-tooling; its test red without it, green with it
+- [ ] T95 A street's joining leg keeps the lane's 7 ft (row 841, found working T31; plan D117) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
