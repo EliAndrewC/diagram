@@ -42,7 +42,11 @@ _GUARD_WRITE_SHELL = (
     rf"tee\s+(?:-a\s+)?{_GUARD}(?:\s|$)",          # tee Makefile
 )
 
-_GUARD_WRITE_PY = (rf"{_GUARD}[\"\']\s*\)?\s*\)?\s*\.write_text",)  # Path("...Makefile").write_text(
+_GUARD_WRITE_PY = (
+    rf"{_GUARD}[\"\']\s*\)?\s*\)?\s*\.write_text",  # Path("...Makefile").write_text(
+    # ...AND open() (feature 385 T121, D143): T117's `open("Makefile", "w")` shape added a target past this guard
+    rf"open\(\s*[\"'][^\"']*{_GUARD}[\"']\s*,\s*(?:mode\s*=\s*)?[\"'][wax]",
+)
 
 # GUARD_EDIT_OK: feature 164 - THE VARIABLE ROUTE, found by walking through it. The patterns above
 # need the guard filename ADJACENT to the write, so the ordinary two-line python shape slips past:
@@ -55,10 +59,15 @@ _GUARD_WRITE_PY = (rf"{_GUARD}[\"\']\s*\)?\s*\)?\s*\.write_text",)  # Path("...M
 # the two halves are tied by the VARIABLE NAME: a name bound to a guard path, and that same name
 # writing. `_guard_write_via_name` is separate from the tuple above because it needs two matches.
 _GUARD_BIND = re.compile(rf"(\w+)\s*=\s*(?:pathlib\.)?Path\(\s*[\"'][^\"']*{_GUARD}[\"']\s*\)")
+# ...AND A NAME BOUND TO A PLAIN STRING, WRITTEN THROUGH open() (feature 385 T121, D143): T117's `p="Makefile"; ...
+# open(p,"w").write(t)` added the `land-batch` target with no refusal. A read - `open(p)`, `open(p, "r")` - stays legal.
+_GUARD_BIND_STR = re.compile(rf"(\w+)\s*=\s*[\"'][^\"']*{_GUARD}[\"']")
+
 
 def _guard_write_via_name(raw: str) -> bool:
-    for m in _GUARD_BIND.finditer(raw):
-        if re.search(rf"\b{re.escape(m.group(1))}\.write_text\s*\(", raw):
+    for m in [*_GUARD_BIND.finditer(raw), *_GUARD_BIND_STR.finditer(raw)]:
+        name = re.escape(m.group(1))
+        if re.search(rf"\b{name}\.write_text\s*\(", raw) or re.search(rf"\bopen\(\s*{name}\s*,\s*(?:mode\s*=\s*)?[\"'][wax]", raw):
             return True
     return False
 

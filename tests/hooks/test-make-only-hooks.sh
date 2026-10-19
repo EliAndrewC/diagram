@@ -102,6 +102,17 @@ echo "2b. TIER 5 VIA BASH - a guard file written by shell rather than the Edit t
 check "heredoc python writing the Makefile"   blocked "python3 - <<PY
 import pathlib; pathlib.Path('Makefile').write_text(x)
 PY"
+# feature 385 T121 (D143): T117's shape - a name bound to a plain string, written through open() - added a Makefile target unseen
+check "open() writing the Makefile by name"   blocked "python3 - <<'EOF'
+p=\"Makefile\"
+t=open(p).read()
+open(p,\"w\").write(t)
+EOF"
+check "open() writing a hook by literal"      blocked "python3 -c 'open(\"scripts/hooks/gate-hooks.sh\", \"a\").write(\"x\")'"
+check "open() only reading the Makefile"      ok      "python3 - <<'EOF'
+p=\"Makefile\"
+print(open(p).read().count(\"tick\"), open(p, \"r\").read()[:10])
+EOF"
 check "sed -i on a hook script"               blocked "sed -i 's/foo/bar/' scripts/hooks/gate-hooks.sh"
 check "redirect over settings.json"           blocked "cat > .claude/settings.json"
 check "append to a hook script"               blocked "echo x >> scripts/hooks/no-poll-hooks.sh"

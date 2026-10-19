@@ -26,6 +26,8 @@ RULING_378 = {
     "why": "The second trigger is the same event, since two gates ran at once in one clone.",
     "what": "Run exactly one make done, alone, in the foreground.",
     "tooling_fix": "the gate refuses to start while another make done is running in the same clone",
+    "fix_measure": "x",
+    "fix_minutes": 10,
 }
 TRIGGER = "red-gate@2026-10-10T22:25:57Z"
 
@@ -79,7 +81,9 @@ def test_a_process_fault_names_its_fault_as_the_fix_and_files_nothing(root: path
     d = root / "specs" / "900-z"
     with pytest.raises(ValueError, match="tooling_fix"):
         ha.record_ruling(root, "reversal:/a.md", {"ruling": "process-fault", "why": "an oscillation"}, "round-arbiter")
-    ha.record_ruling(root, "reversal:/a.md", {"ruling": "process-fault", "why": "an oscillation", "tooling_fix": "the bundle keeps each round's reply"}, "round-arbiter")
+    ha.record_ruling(
+        root, "reversal:/a.md", {"ruling": "process-fault", "why": "an oscillation", "tooling_fix": "the bundle keeps each round's reply", "fix_measure": "x", "fix_minutes": 10}, "round-arbiter"
+    )
     assert ha.open_fixes(d) == [("reversal:/a.md", "the bundle keeps each round's reply")]
     assert not (d / "found.jsonl").exists(), "the open item replaces the found row nothing enforced"
 
@@ -308,6 +312,8 @@ def test_a_batch_tooling_fix_is_one_fix_held_by_one_row(root: pathlib.Path, tmp_
         "ruling": "process-fault",
         "why": "the form rounds reverse each other",
         "tooling_fix": "the form check reads the drawing",
+        "fix_measure": "x",
+        "fix_minutes": 10,
         "triggers": trig,
         "exceptions": {trig[0]: {"ruling": "accept", "why": "settled"}},
     }
@@ -332,8 +338,13 @@ def test_a_batch_reply_is_refused_whole_and_never_drops_a_fix(root: pathlib.Path
         "ruling": "accept",
         "why": "w",
         "tooling_fix": "F",
+        "fix_measure": "x",
+        "fix_minutes": 10,
         "triggers": [a, b],
-        "exceptions": {a: {"ruling": "process-fault", "why": "x", "tooling_fix": "G"}, b: {"ruling": "process-fault", "why": "y", "tooling_fix": "H"}},
+        "exceptions": {
+            a: {"ruling": "process-fault", "why": "x", "tooling_fix": "G", "fix_measure": "x", "fix_minutes": 10},
+            b: {"ruling": "process-fault", "why": "y", "tooling_fix": "H", "fix_measure": "x", "fix_minutes": 10},
+        },
     }
     with pytest.raises(ValueError, match="where does the batch's fix go"):
         ha.record_batch(root, both, "round-arbiter")
@@ -350,7 +361,7 @@ def test_several_fixes_one_change_made_settle_together(root: pathlib.Path, monke
     a, b = "reversal:/a.md", "reversal:/b.md"
     for t in (a, b):
         ha.trip(root, t, "reversal", t, "A -> B -> A")
-        ha.record_ruling(root, t, {"ruling": "process-fault", "why": "the bundle hid its rounds", "tooling_fix": f"bundle fix for {t}"}, "round-arbiter")
+        ha.record_ruling(root, t, {"ruling": "process-fault", "why": "the bundle hid its rounds", "tooling_fix": f"bundle fix for {t}", "fix_measure": "x", "fix_minutes": 10}, "round-arbiter")
     git = ["git", "-C", str(root), "-c", "user.name=t", "-c", "user.email=t@t"]
     subprocess.run([*git, "add", "tests"], check=True)
     subprocess.run([*git, "commit", "-qm", "the test"], check=True)

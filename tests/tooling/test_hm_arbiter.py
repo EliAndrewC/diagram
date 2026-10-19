@@ -43,7 +43,13 @@ def test_a_ruling_is_binding_once_and_reaches_the_gm(tmp_path: pathlib.Path) -> 
         ha.record_ruling(root, "reversal:/a.md", {"ruling": "accept", "why": "x"}, "main")
     with pytest.raises(ValueError, match="one of"):
         ha.record_ruling(root, "reversal:/a.md", {"ruling": "maybe", "why": "x"}, "round-arbiter")
-    row = ha.record_ruling(root, "reversal:/a.md", {"ruling": "process-fault", "why": "an oscillation over the bath bullet", "tooling_fix": "x"}, "round-arbiter", "2026-10-10T00:00:00Z")
+    row = ha.record_ruling(
+        root,
+        "reversal:/a.md",
+        {"ruling": "process-fault", "why": "an oscillation over the bath bullet", "tooling_fix": "x", "fix_measure": "x", "fix_minutes": 10},
+        "round-arbiter",
+        "2026-10-10T00:00:00Z",
+    )
     assert row["kind"] == "reversal" and ha.owed(root) == {}
     d = root / "specs" / "375-x"
     assert json.loads((d / "gm-review.jsonl").read_text())["ruling"] == "process-fault"

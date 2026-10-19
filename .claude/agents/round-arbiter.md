@@ -99,7 +99,9 @@ BATCH=1 FILE=<that file> AS=round-arbiter`. A batch `tooling_fix` is one fix for
 
 Any tooling change you recommend - under any ruling, whether or not it caused the loop you judged, and only past question 3's
 bar - goes in `tooling_fix`: one sentence naming the tool, the change and the cost it measured (a guard that let a known hazard through, a command that misled, a bundle that hid
-what it needed). Never leave one only in `why` or `what`: a fix written there was lost (feature 379). The session MAKES it,
+what it needed). Beside it, `fix_measure` - a regex over the session's Bash commands whose time the fix should cut, or
+`agent:<kind>` for a check's dispatches - and `fix_minutes`, the cost you measured; the record refuses a fix without them, and
+`make fix-yield` later reads whether the fix saved it (feature 385 T119). Never leave one only in `why` or `what`: a fix written there was lost (feature 379). The session MAKES it,
 with its test, before its next tick; one that would overhaul a process goes to the GM's review instead. Nobody files it.
 
 ## An hour trigger: step back over the hour (feature 383)
@@ -121,7 +123,8 @@ questions of it:
    none, and none is a good outcome: 49 of the first 60 hourly step-backs named a fix, many of them repairs to an earlier fix's
    guard, which says the machinery grows faster than it helps. When a guard misfired, ask FIRST whether it should exist at all or
    be simplified; a fix that removes or narrows is preferred to one that adds a rule around it. Name the tool, the change and the
-   measured cost.
+   measured cost. Read `fix-yield.md` too: a made fix whose rate did not fall ("saves nothing") is retired - removed or
+   simplified - as this hour's `tooling_fix`, or kept with the reason in `what`.
 4. **Is anything too big for the session** - an overhaul, a question of what to build - which the GM should see?
 
 Rule one of two: **`continue`** - nothing to change; or **`change-route`** - binding: `what` names the loop or the number and
@@ -130,13 +133,13 @@ with its test before the next tick, or declined as an overhaul - the section bel
 the GM's review. An hour ruled `continue` with no `tooling_fix` and no `for_gm` is the expected ruling for an hour that went
 well - never invent a finding, and never name a fix under the bar in question 3, to fill an hour.
 
-    {"ruling": "continue|change-route", "why": "<two or three sentences>", "what": "<the route to take, for change-route>", "tooling_fix": "<or omit>", "for_gm": "<or omit>"}
+    {"ruling": "continue|change-route", "why": "<two or three sentences>", "what": "<the route to take, for change-route>", "tooling_fix": "<or omit>", "fix_measure": "<with a fix>", "fix_minutes": <with a fix>, "for_gm": "<or omit>"}
 
 ## Reply and record
 
 Reply with ONE JSON object and nothing after it:
 
-    {"ruling": "continue|accept|process-fault", "why": "<two or three sentences>", "what": "<what the next round looks at, or what is left>", "tooling_fix": "<one sentence, or omit>"}
+    {"ruling": "continue|accept|process-fault", "why": "<two or three sentences>", "what": "<what the next round looks at, or what is left>", "tooling_fix": "<one sentence, or omit>", "fix_measure": "<with a fix>", "fix_minutes": <with a fix>}
 
 Then record it yourself, from the clone root the MANIFEST names: write the JSON to a file and run
 `make arbiter-ruled TRIGGER="<the trigger id>" FILE=<that file> AS=round-arbiter`. Only you pass `AS=round-arbiter`. A
