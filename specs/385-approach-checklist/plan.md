@@ -787,6 +787,26 @@ Owed by cohort@20261019T064540Z: seeds 3, 4, 901, 902 and 904 newly failing at 0
 
 **D151 - the dead preference removed.** `waterfields/banks.py` loses `_WELD_MIN_SOLIDITY`, its claim and the comment block above it ("A WELD MUST NOT MAKE A LUMP ... no host is clean."); `ring_solidity` stays, used by the chevron guard. The row is marked in 328's `audit/waves.json` with this wave.
 
+## T33 - a lane end within 6 ft of the paddy counts as joined, recorded as the guess it is (ranking row: hamletgen/ways/bund.py a_way_onto_the_bund#on the bund, E3 NEEDS-RESEARCH)
+
+### T33 Approach (checklist part A)
+
+1. **The goal, in the world.** 0014's drawing page says how near the paddy a lane end must come to count as joining its bund, and the claim cites that.
+2. **The constraints.** FR-020 as the round arbiter read it (ask:t33-ranking-pick): a live row of a kind not yet tried - E3 NEEDS-RESEARCH (T07 was E4 research, T32 E2, T31 E0). 0014's drawing page: the path joins the outer bund, "it never ends in open ground short of the bund ... since no page we read tells of either". The finding: "the page gives no reach figure ... BUND_REACH_FT=6 counts an end up to 6 ft short as joined, so label it GUESS/UNRESEARCHED or record the tolerance on the page". T130's lesson: a GUESS cites a page only where that page records the figure. Every rendering decision labeled. Record checks and the claims check.
+3. **Where each comes from.** FR-020 and the ruling (G, O); 0014's drawing page (O); the finding (O); T130 (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the claims index: `bund.a_way_onto_the_bund#on the bund` NEEDS-RESEARCH, its note above; `BUND_REACH_FT = 6.0` in `settlement/water_ways/_helpers.py`; 0014's rule paragraph read): no page gives how near counts, and the page does not record the 6 ft.
+5. **The order.** The 6 ft recorded in 0014's rule paragraph as a GUESS; the claim relabeled GUESS citing it; the record checks and the claims check.
+6. **The exits.** (a) refine an O number: n/a - none exists; (b) an exception: n/a; (c) a new rule: n/a; (d) more room: n/a; (e) conform - record what the map draws, labeled; a research pass for a joining tolerance was weighed and refused (a 6 ft gap at the map's scale is a drawing tolerance no source would state).
+7. **The search smell.** None.
+8. **The budget.** 40 min with its checks.
+9. **Done, measured.** One goal: 0014's rule paragraph records the 6 ft as a GUESS; the claim reads GUESS citing it; record checks and claims check pass; no engine token changes; the row marked with its wave.
+10. **Before moving a constant.** n/a - `BUND_REACH_FT` stays 6 ft.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T33 Decisions
+
+**D152 - the joining reach, recorded.** 0014's rule paragraph gains, after "never passes through a gap in it, since no page we read tells of either.": "A lane end that stops within 6 ft of the paddy's edge is drawn as joining it, a GUESS at how near reads as touching at the map's scale." The claim `a_way_onto_the_bund#on the bund` reads "GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a lane end within 6 ft of the paddy's edge (`BUND_REACH_FT`) counts as joined to the bund". The row is marked in 328's `audit/waves.json`.
+
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).
