@@ -2193,3 +2193,46 @@ Owed by the hour-24 step-back (hour:385-approach-checklist@24, `continue`).
 
 **D95 - two numbered items, 10 and 11.** `checklist.md` part A gains item 10, "**Before moving a constant.** List every use of it and what each one measures - or n/a", and item 11, "**Before fitting things into room.** Write the capacity arithmetic (how many, how wide, against how much room) before rolling anything - or n/a". Items 1-9 keep their numbers (so no answer already written changes meaning); an open task whose Approach was written before answers 10 and 11 when it is next started, as the gate refuses its tick until it does.
 
+<!-- plan-archive: archived 2026-10-18 -->
+## T75 - a part B that names no new decision owes no review (the GM-approved proposal 3, 2026-10-18)
+
+### T75 Approach (checklist part A)
+
+1. **The goal, in the world.** A part B costs a review round only when it decides something new.
+2. **The constraints.** The GM, 2026-10-18 (amendment 8): "I do like all of your other proposals"; change 3 of the step-back report (amendment 8, quoted): "A part B is checked mechanically; only one that adds a new decision gets a spec-fidelity review". `make tick` already checks the items - measured 2026-10-19 (a read of `scripts/gates/approach_gate.py` and its test): `refusal` takes each owed trigger's part B through `_best(..., part_items(checklist, "B"), since)` and refuses "item(s) N unanswered" or "no block stamped after it", pinned by `tests/tooling/test_approach_gate.py` (a part B missing item 2 refused, one with both items ticked); a part B that names a new decision is reviewed as now. A test red without it.
+3. **Where each comes from.** The GM (G); the block review is 375 FR-043 (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (this session): the part B blocks of T10, T65 and T72 each went through a spec-fidelity round (202 s, 70 s and inside a 239 s seven-block round), each CLEAR, none naming a new decision.
+5. **The order.** The rule in `plan_gate.block_status`, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 25 min.
+9. **Done, measured.** One goal: a part B whose items 4 and 5 answer "No" and "Neither" and which names no new `D`-id is not owed a review; one answering "Changing" or "Tuning", "Yes" to item 4, or naming a new `D`-id is; `tests/tooling/test_plan_gate.py` red without it.
+10. **Before moving a constant.** n/a - no constant moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T75 Decisions
+
+**D94 - a part B reviewed whenever it decides.** `block_status` skips a `### T<n> part B (...)` block only when it decides nothing, read from its own answers: item 4 (moving something placed earlier) answered "No", item 5 (tuning or changing) answered "Neither", and every `D<n>` it names defined (`**D<n> - ...`) elsewhere in `plan.md` or `plan-done.md`. A part B that changes a rule, tunes a number, moves an earlier placement or names a new decision - labeled or not - is owed as now (the plan review, 2026-10-19: a decision need carry no D-id). Its items stay `make tick`'s to check.
+
+<!-- plan-archive: T76 to T76 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-10-18 -->
+## T77 - make where-time, the step-back's tables, with the time between turns counted as such (the GM-approved proposal 8, 2026-10-18)
+
+### T77 Approach (checklist part A)
+
+1. **The goal, in the world.** The next "where did the time go" is one command, and its idle column is right.
+2. **The constraints.** The GM, 2026-10-18 (amendment 8): "I do like all of your other proposals"; change 8 of the step-back report (amendment 8, quoted): "`make where-time` produces the tables above", FR-005 (the per-task table) and FR-014 (the session's own calls told from its subagents'). The rule for the time between turns is ours (O), the session's correction the same evening ("time from a turn's end to the next prompt will count as waiting, whatever events land in between"), approved only within the GM's approval of the proposals. The categories stay `feature_report.split_time`'s. A test red without it.
+3. **Where each comes from.** The target, the GM (G); the between-turns rule and the categories, ours (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-18: the scratch `where_time.py` booked T05 224 minutes, but about 80 of them were the 04:20-09:15 overnight stall, split into pieces under an hour by hook events and booked as "thinking"; T05's real work was about 2 h 25. And a background notification that wakes the session fires `UserPromptSubmit` - measured 2026-10-19 on this session: every task notification since the compaction was followed by the prompt hooks' lines ("UserPromptSubmit hook success: clone-sync") - so a woken turn's work is booked to its task, not to "between turns".
+5. **The order.** `scripts/measure/where_time.py` (from the scratch script), the target, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 40 min.
+9. **Done, measured.** One goal: `make where-time F=<n> [SINCE=<ISO>]` prints the per-task table and the agents table, every gap between a session's Stop and its next prompt booked as "between turns" (never "thinking"), however many events fall inside; `tests/tooling/test_where_time.py` red without it.
+10. **Before moving a constant.** n/a - no constant moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T77 Decisions
+
+**D96 - between turns is its own column.** `where_time.py` books each gap of a session to the task active at its start, by `split_time`'s category, except that from a `Stop` to the session's next `UserPromptSubmit` every gap is "between turns" - waiting on background work or idle, which the column does not try to tell apart (the agents table and the background-run column say what ran). The step-back checklist (step-back-2026-10-18.md, item 1) names the target.
+

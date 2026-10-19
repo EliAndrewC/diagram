@@ -156,7 +156,10 @@ def apply_edit(root: pathlib.Path, b: dict, dry: bool, form: bool = False) -> st
     if count != 1:
         return f"REFUSED - the old text occurs {count} times in {target.name}, not once"
     if not dry:
-        target.write_text(replaced(text, b), encoding="utf-8")
+        sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent / "hooks" / "lib"))
+        from hm_house import americanize  # noqa: PLC0415 - feature 385 T78: an agent's new text in the house style
+
+        target.write_text(replaced(text, {**b, "new": americanize(b["new"])}), encoding="utf-8")
     return f"applied to {target.name}"
 
 

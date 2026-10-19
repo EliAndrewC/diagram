@@ -212,13 +212,15 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T74 A task id added to the Lands open line owes no review (the arbiter's fix on hour:385-approach-checklist@24, plan D93) [lands-open]
       research: rendering
       verify: DONE. appended Lands open ids owe no review; landed, test_plan_gate green
-- [ ] T75 A part B that names no new decision owes no review (proposal 3, plan D94) [lands-open]
+- [x] T75 A part B that names no new decision owes no review (proposal 3, plan D94) [lands-open]
       research: rendering
+      verify: DONE. a part B deciding nothing passes without review; landed, test_plan_gate green
 - [x] T76 Part A asks what a constant measures and for the capacity arithmetic first (proposal 7, plan D95) [lands-open]
       research: rendering
       verify: DONE. part A items 10 and 11 in checklist.md, the gate holds them; test green here; lands with the spec directory at T11 (land-tooling carries no specs/)
-- [ ] T77 make where-time, with the time between turns counted as such (proposal 8, plan D96) [lands-open]
+- [x] T77 make where-time, with the time between turns counted as such (proposal 8, plan D96) [lands-open]
       research: rendering
+      verify: DONE. make where-time prints both tables, between turns its own column; landed, test_where_time green
 - [ ] T78 The house style corrects what the tools write from an agent's reply (plan D97) [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
