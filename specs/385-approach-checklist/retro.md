@@ -767,3 +767,10 @@ task, the plan and the block records); ids, classes, rulings and digests are wri
 About 25 min. The tree check reads the gate's own roll census and leaves out only the outputs of the maps it rolled, printing them
 to commit; any other change - another map's output among them - is still a tree move (the plan review's keying). The census
 already named each roll's generator, so no engine change was needed. **The habit it changes:** none needed.
+
+## T86 - the retro row
+
+About 40 min. `make decide` refuses an Approach item 4 sentence stating a figure without `measured`, a date and a parenthesized
+method (or an `m:` key) - per sentence, code spans holding a path or command set aside, numbers that name a thing ("round 2",
+"seed 45") no figures. Three plan rounds: a fixed unit list, then one label per item, then clear. Run over all 77 sections first;
+what it still names lacks a date or a method. **The habit it changes:** a figure is labeled before any review reads it.

@@ -49,10 +49,39 @@ def gm_quotes_missing(section: str, request: str) -> list[str]:
     return [q for q in gm_quotes(section) if _folded(q).strip() and not found(q)]
 
 
+_ITEM4 = re.compile(r"^4\. \*\*.*?(?=^\d+\. \*\*|^#|\Z)", re.M | re.S)
+_SPAN = re.compile(r"`([^`\n]*)`")
+_NOT_A_FIGURE = re.compile(
+    r"\b\d{4}-\d\d-\d\d(?:T\d\d:\d\d(?::\d\d)?Z?)?\b|\b\d\d:\d\d(?::\d\d)?Z?\b|\b(?:FR|SC)-\d+[a-z]?\b|\b[TDA]\d+[a-z]?\b|\b0\d{3}\b"
+)
+#: a number that names a thing rather than measures it: "round 1", "seed 45", "hour 22", "amendment 6", "item 4"
+_NAMED = re.compile(r"(?i)\b(?:round|rounds|seed|seeds|hour|amendment|item|items|change|wave|batch|step|task|feature|proposal|part|tier|version|line|group)\s+\d+(?:\s*(?:-|and|to)\s*\d+)?\b")
+_LABEL = re.compile(r"(?is)(?=.*\bmeasured\b)(?=.*\b20\d\d-\d\d-\d\d\b)(?=.*\()|\bm:[\w.-]+")
+
+
+def unlabeled_figure(section: str) -> str:
+    """The first figure Approach item 4 states whose own sentence carries no `measured <date> (<method>)` or `m:<key>`, or ''
+    (feature 385 T86, plan D107; T81's "4.4 s (measured)" came back unreviewable). A code span holding a path, a key or a command
+    is set aside; one holding a value is read as prose; dates, clock times and ids are no figures."""
+    m = _ITEM4.search(section)
+    if not m:
+        return ""
+    item = _SPAN.sub(lambda s: " " if re.search(r"/|::|=|\bmake ", s.group(1)) else s.group(1), m.group(0))
+    for sentence in re.split(r"(?<=\.)\s+|\n(?=\S)", item):
+        bare = _NOT_A_FIGURE.sub(" ", re.sub(r"^\s*4\.", " ", sentence))
+        bare = _NAMED.sub(" ", bare)
+        if re.search(r"(?<![\w-])\d[\d,.]*(?![\w-])", bare) and not _LABEL.search(sentence):
+            return sentence.strip()[:160]
+    return ""
+
+
 def refusal(spec_dir: pathlib.Path, section: str) -> str:
     """Why `make decide` refuses this section, or ''."""
     req = (spec_dir / "request.md").read_text(encoding="utf-8") if (spec_dir / "request.md").is_file() else ""
     if missing := gm_quotes_missing(section, req):
         return ("the section quotes the GM with words request.md does not hold - add the GM's words to request.md verbatim, or "
                 "correct the quote (feature 385 T84):\n  " + "\n  ".join(f'"{q.strip()[:160]}"' for q in missing))
+    if fig := unlabeled_figure(section):
+        return ("Approach item 4 states a figure whose sentence carries no `measured <YYYY-MM-DD> (<method>)` or `m:<key>` - label "
+                f"it where it stands (feature 385 T86):\n  {fig}")
     return ""
