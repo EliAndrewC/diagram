@@ -25,8 +25,11 @@ their page images (render them; NDL's OCR is checked against the image), and the
 1444386). NDL's IIIF and lab full-text routes refuse these pids; the viewer and its full-text search (`POST
 https://dl.ndl.go.jp/api/fulltext/search`, as `passes/sharpener-inui.md` used it) work. Search it for: an Edo retail salt
 price (塩), and an Edo carpenter's (大工 手間 / 作料) and day laborer's (日雇 / 日傭 / 手傳) wage. Read each hit on its page
-image (a headless-browser screenshot of the viewer, as the sharpener pass did). What you find is cited as below; what you
-do not find makes the verdict SILENT, with the search named in the absence note.
+image (a headless-browser screenshot of the viewer, as the sharpener pass did). Full-text search worked for 上 (991466)
+and the 1934 edition (1444386); it refused 下 (991467), so search 下 page by page in the viewer (its contents pages first,
+for the sections on salt, food and wages), or use 1444386 once its NDL record or contents show it holds the whole text.
+What you find is cited as below; what you do not find after searching both volumes makes the verdict SILENT, with the
+search named in the absence note. If 下 cannot be searched, the verdict names it as an unread lead, not SILENT.
 
 ## Your items (four questions revised)
 

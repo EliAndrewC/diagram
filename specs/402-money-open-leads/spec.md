@@ -44,8 +44,9 @@ leads were searched and found nothing.
      on Inui stands.
 2. **0275, a skilled craftsman against a laborer:**
    - **An Edo pair:** "SILENT" stands only after 類聚近世風俗志 is searched for an Edo carpenter's and an Edo day laborer's
-     wage (the #5 answer named 朝倉編『守貞謾稿』 pp. 159-161 as the lead); a pair found there is written into 0275 with
-     its verdict, any ratio the project's arithmetic.
+     wage (the #5 answer named 朝倉編『守貞謾稿』 pp. 159-161 as the lead), by the same routes as the salt search above; a
+     pair found there is written into 0275 with its verdict, any ratio the project's arithmetic. If 下 cannot be searched,
+     the verdict names it as an unread lead, not SILENT.
 3. **0277, copper coin in silver:**
    - **The Edo market rate:** "SILENT" becomes ATTESTED ONLY FOR 1781-1842, Oishi's printed yearly table (low and high mon
      per ryo, from Mitsui's table "centered on Edo"); that it is Edo's rate is the record's reading of his method, said so.
@@ -57,8 +58,11 @@ leads were searched and found nothing.
    - **Edo, Ako salt:** "SILENT" becomes ATTESTED ONLY FOR the Edo brokers' (下り塩仲買) selling price of 1791, 9 to 9.5
      bales per ryo, a bale of 35 sho nominal and about 32 actual as the page reads (3斗5升, 3斗2升); per sho is the
      project's arithmetic. The bale's actual measure (3斗2升) is given only if read on the page image.
-   - **Edo retail by the sho, and an Edo salt price of 1800-1850s:** SILENT only after 類聚近世風俗志 (both volumes,
-     public in NDL's viewer and full-text search) is searched for them; a figure found there is cited with its verdict. The wholesalers'
+   - **Edo retail by the sho, and an Edo salt price of 1800-1850s:** SILENT only after 類聚近世風俗志 is searched for them:
+     上 (pid 991466) and the 1934 one-volume edition (pid 1444386) by NDL's full-text search, which worked for them; 下
+     (pid 991467), whose full-text routes refused, page by page in NDL's viewer, or by 1444386 once its NDL record or a
+     read of its contents shows it holds the whole text. A figure found is cited with its verdict; if 下 cannot be
+     searched, the verdict names it as an unread lead, not SILENT. The wholesalers'
      commission (3 monme a ryo, of which 1 to the brokers) may be given if read on the page image.
 
 Each new figure sits beside the craftsman's and the unskilled laborer's day wage of the same place and period where a
@@ -95,7 +99,8 @@ readable and what is still open, so the skill can move its rows.
 
 - The edits fit one write session (four questions, a few new keys).
 - The verdicts above are the search passes'. The write may narrow them; it may not widen them without a source.
-- The 433 MB scan of 類聚近世風俗志 下 is not needed: the 磨師 entry is in 上 (NDL pid 991466), public online.
+- The 磨師 entry is in 類聚近世風俗志 上 (NDL pid 991466), public online, so the sharpener needs no scan. The salt and wage
+  searches cover 下 as well, by the routes in User Story 1.
 
 ## Review history
 
@@ -103,3 +108,6 @@ readable and what is still open, so the skill can move its rows.
   books) written in; Morisada searched for Edo salt retail and an Edo wage pair (0275 added) before SILENT, and the Okayama
   藩法集 read or named; the note names the closed leads and what is still open; request.md and the approval paragraph say
   402 covers #5 and #8 only, the other answers' leads listed as outstanding. Aside taken: 3斗2升 only if read on the image.
+- **spec-fidelity round 2 (2026-10-19, verify): CHANGES REQUIRED, 1 item.** 下's full-text routes refused in the salt
+  pass, so the Morisada clauses name the route for 下 (viewer page by page, or 1444386 once shown whole) and fall back to
+  "unread lead"; the Assumptions bullet matched and the unlabeled scan size dropped.
