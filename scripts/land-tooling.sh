@@ -51,6 +51,13 @@ if [ "$#" -eq 0 ]; then
   printf 'The tooling this clone changed:\n  make land-tooling FILES="%s"\n' "${eligible% }" >&2
   exit 2
 fi
+# GUARD_EDIT_OK: feature 385 T72 (plan D92) - A PLAN REVIEW'S ROW IS WRITTEN HERE: its agent recorded the verdict with `make
+# plan-verdict`, so where it was recorded is known; 81 such rows were written by hand on 2026-10-18 and two landings refused for one.
+# Any other owed pass still refuses below, as before.
+( cd "$ROOT" && eval "${LAND_TOOLING_PLAN_ROWS:-python3 scripts/reviews/ledger_owed.py --write-plan-reviews --ledger dev/review-ledger.md}" ) >&2 || :
+if ! git -C "$ROOT" diff --quiet -- dev/review-ledger.md 2>/dev/null; then
+  git -C "$ROOT" commit -q -m "the plan reviews' ledger rows, written at landing (feature 385 T72)" -- dev/review-ledger.md || die "the plan reviews' ledger rows could not be committed"
+fi
 # GUARD_EDIT_OK: feature 383, the GM 2026-10-13 ("those are on disk, so it definitely can see them, right?") - THE LEDGER COMES
 # WITH ITS PASSES, unasked: a session that named only its scripts had the push refuse its own review passes against main's
 # ledger, and then escaped it with LEDGER_ROWS_OK. When the clone's commits change the ledger, it lands beside FILES.
