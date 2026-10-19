@@ -769,6 +769,20 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@36 (continue),
 10. **Before moving a constant.** Its uses, listed before removing it: none (item 4's grep).
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
+### T32 part B (2026-10-19T16:18Z)
+
+Owed by cohort@20261019T064540Z: seeds 3, 4, 901, 902 and 904 newly failing at 06:45Z, booked to T32.
+
+1. **What is refusing?** Nothing of T32's: that cohort was T31's probe of `FOOTPATH_FABRIC_GAP` at 7 ft, reverted the same hour (T31's part B, 06:27Z, names seeds 3, 4, 903 and 904 at 7 ft), and T96 settled the footpath's room; T32's own landing cohort passed 54/54.
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither in this part B: the change is D151's, decided and reviewed.
+6. **The one-sentence test.** "No map runs the weld-lump preference" - true by item 4's grep and the green gate.
+7. **The next step is a measurement.** Done: the gate green (154 s) and the landing cohort 54/54.
+8. **Every route measured before offering one?** No route is offered.
+9. **After a ruling: the step it names?** n/a - no ruling owes this part B.
+
 ### T32 Decisions
 
 **D151 - the dead preference removed.** `waterfields/banks.py` loses `_WELD_MIN_SOLIDITY`, its claim and the comment block above it ("A WELD MUST NOT MAKE A LUMP ... no host is clean."); `ring_solidity` stays, used by the chevron guard. The row is marked in 328's `audit/waves.json` with this wave.
