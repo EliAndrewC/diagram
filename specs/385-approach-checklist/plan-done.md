@@ -2946,3 +2946,24 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@32 (continue),
 
 **D142 - the earlier text, with its verdict.** `plan_bundle.build` takes each earlier text with the verdict the record holds for it (a task section's `tasks.<id>.verdict`, a block's `blocks.<key>.verdict`), writes `<!-- block "<key>" verdict BLOCKED -->` above it, heads the file "Each changed block's text when last judged, with that verdict", and the MANIFEST says `earlier.md` holds "what a changed block said when last judged, and the verdict it got".
 
+<!-- plan-archive: archived 2026-10-19 -->
+## T121 - a guard file written through open() is caught (found working T117, 2026-10-19)
+
+### T121 Approach (checklist part A)
+
+1. **The goal, in the world.** A guard file written from a Bash command is refused whichever python write it uses, so its edit is recorded under `make guard-edit` as every other is.
+2. **The constraints.** Feature 127 / 164: a guard file is edited deliberately, the reason recorded; a guard filename's mere presence (a docstring, a grep) is never a write - proximity is the signal. The escape `GUARD_EDIT_OK` as a trailing comment. Every guard has a suite case (`make hooks-test`). A test red without it.
+3. **Where each comes from.** 127, 164 (O); the root CLAUDE.md's guard rules (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T117: a python heredoc `p="Makefile"; t=open(p).read(); ... open(p,"w").write(t)` added the `land-batch` target with no refusal; then a read of `hm_make.classify`): the python routes matched are `Path("<guard>").write_text(` and a name bound to `Path("<guard>")` writing through `.write_text(`; a name bound to a plain string, and `open(<name or literal>, "w")`, match nothing.
+5. **The order.** The two shapes added to the python-write match; their suite cases, and one that a mention stays legal; the hooks suite run.
+6. **The exits.** (c) - widen the match by the shapes measured; refusing any python heredoc naming a guard file was weighed and refused (presence is not a write - feature 164).
+7. **The search smell.** None.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: `make-only-hooks.sh` refuses a Bash command writing a guard file by `open("<guard>", "w"|"a")`, or by a name bound to a plain `"<guard>"` string then `open(<name>, "w"|"a")` or `<name>.write_text(`; a command that only reads it, or names it in prose, passes; `make hooks-test` green, red without it.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T121 Decisions
+
+**D143 - open() writes and string-bound names.** `hm_make` gains `open\(\s*["'][^"']*<guard>["']\s*,\s*["'][wax]` among the raw python-write patterns, and `_GUARD_BIND` also binds a name to a plain string literal naming a guard path; a bound name then counts as a write through `open(<name>, "w"|"a"|"x")` as well as `.write_text(`. A read (`open(p)`, `open(p, "r")`) stays legal.
+
