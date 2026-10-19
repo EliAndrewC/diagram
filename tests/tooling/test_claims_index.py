@@ -367,6 +367,16 @@ def test_a_verdict_line_that_cannot_be_recorded_is_refused_aloud(tmp_path: pathl
     assert "REFUSED line" in capsys.readouterr().err
 
 
+def test_a_refused_bundle_build_leaves_no_bundle_behind(tmp_path: pathlib.Path) -> None:
+    """The round arbiter's fix on hour:385-approach-checklist@31: twice an impl-drift sent beside a refused `make claims-bundle`
+    read the bundle the step before had left in the same directory, and judged claims nobody had asked about."""
+    root = _repo(tmp_path)
+    out = tmp_path / "b"
+    assert cx.main(["--root", str(root), "bundle", "--owed", "--out", str(out)]) == 0 and (out / "MANIFEST.md").is_file()
+    assert cx.main(["--root", str(root), "bundle", "--units", "nope", "--out", str(out)]) == 2
+    assert not (out / "MANIFEST.md").exists(), "the refused build cleared the directory a check would read"
+
+
 def test_the_command_line(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
     root = _repo(tmp_path)
     assert cx.main(["--root", str(root), "owed"]) == 0 and "claims-owed: 5 claim(s) in 3 file(s)" in capsys.readouterr().out
