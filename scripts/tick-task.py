@@ -171,17 +171,19 @@ def landed_refusal(root: Path, feature: str, task: str, note: str) -> str:
         return ""
     gd = subprocess.run(["git", "-C", str(root), "rev-parse", "--path-format=absolute", "--git-common-dir"], capture_output=True, text=True).stdout.strip()
     log = Path(gd) / "land-tooling.jsonl" if gd else None
-    rows = []
+    every = []
     for line in (log.read_text(encoding="utf-8").splitlines() if log and log.is_file() else []):
         try:
-            r = json.loads(line)
+            every.append(json.loads(line))
         except ValueError:
             continue
-        if r.get("feature") == feature and r.get("task") == task:
-            rows.append(r)
-    if not rows:
+    mine = [i for i, r in enumerate(every) if r.get("feature") == feature and r.get("task") == task]
+    if not mine:
         return ""
-    last = rows[-1]
+    last = every[mine[-1]]
+    # a later run of the same files lands them, whichever task was active when it ran (T79's own reland was booked to T81)
+    later = [r for r in every[mine[-1] + 1 :] if set(r.get("files") or []) >= set(last.get("files") or [])]
+    last = later[-1] if later else last
     if last.get("outcome") != "landed":
         return f"the NOTE says landed, but {task}'s last make land-tooling ended '{last.get('outcome')}' ({last.get('log')}) - land it, then tick"
     subprocess.run(["git", "-C", str(root), "fetch", "-q", "origin"], capture_output=True)
