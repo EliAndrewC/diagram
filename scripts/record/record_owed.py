@@ -491,19 +491,20 @@ def answer(root: pathlib.Path, check: str, result: str, bundle: str = "", q: str
 
 def _answer(root: pathlib.Path, check: str, result: str, bundle: str = "", q: str = "", notes: str = "", key: str = "", kind: str = "") -> list[str]:
     s, done = store(root), []
+    checks = _AGENT_CHECKS.get(check, (check,))  # CHECK=modal-research answers its three units (the round arbiter on hour:397@3)
     if bundle:
         manifest = pathlib.Path(bundle) / "MANIFEST.md"
         text = manifest.read_text(encoding="utf-8") if manifest.is_file() else ""
         pages = dict(re.findall(r"^page: (\S+) ([0-9a-f]{40})$", text, re.M))
         # the slug may hold a space - an entry-drift modal key such as "cart yard" - so the fingerprint is the LAST token
         for m in re.finditer(r"^unit: (.+) (\S+)$", text, re.M):
-            if m.group(1).split(":", 1)[0] == check:
+            if m.group(1).split(":", 1)[0] in checks:
                 write_answer(s, m.group(1), m.group(2), result, pages)
                 done.append(m.group(1))
         return done
     wanted = {k for k in notes.split(",") if k}
     for u in units(root):
-        if u.check != check:
+        if u.check not in checks:
             continue
         subject_note = u.subject.partition("#")[2]
         if (q and ru.question(u.subject) == q.zfill(4) and (not wanted or subject_note in wanted)) or (key and u.subject == key) or (kind and u.subject in kind.split(",")):
