@@ -1,0 +1,46 @@
+# Pass: Edo market zeni rate (mon per gold ryo; silver monme), 1780s-1850s
+
+## 1. Oishi Shinzaburo, "〈資料紹介〉天保13年8月"銭相場公定に伴う物価引下げ令"による「物価書上」について" (Gakushuin repository, keizai 2-2, pp.69-128), 第1表, pp.70-73
+URL: https://glim-re.repo.nii.ac.jp/record/202/files/keizai_2_2_69_128.pdf  (PUBLIC, free PDF; the text layer of the table is garbled, so read from the page images, pp.70-73 = PDF pp.2-5)
+Evidence date: 1751 (宝暦元) - 1842 (天保13年5月). Market rates (Edo-centred 年表), printed by year, from Mitsui Takasumi's 1933 compilation.
+
+Method (p.70, verbatim): 「さて，ここでまず実際の銭相場の動向がどうであったかを三井高維編述『新稿両替年代記関鍵』巻二考証篇第八鍵「江戸を中心としたる三都の金銀銭相場の年表」から宝暦元年（1751）より天保13年までの銭相場を表示，それに天保13年8月5日の公定銭相場6,500文を当該銭相場で割ったもの（銭相場高低指数──1.00以上は銭相場が高い事を示し，1.00以下は銭相場が低い事を示す）および若干の銭に対する註記を付した。」
+(translation) "To see how the actual zeni rate moved, I tabulate the zeni rate from 1751 to Tenpo 13 from Mitsui Takasumi's 『新稿両替年代記関鍵』 vol. 2, 考証篇 key 8, 'Chronological table of gold, silver and zeni rates of the three cities, centred on Edo', and add 6,500 mon (the official rate of Tenpo 13/8/5) divided by each rate (an index: above 1.00 means zeni dear, below 1.00 zeni cheap), with some notes."
+「なお原表では，たとえば文化14年5月の銭相場が6,850～6,870といったような部分があるが，本表では，このような場合すべて6,860といったように平均値をとり，文以下の端数があった場合は切り捨てた。また年表には天保13年令は5月の銭相場までで「8月6日江戸町触銭相場下値に付金壱両に付銭6貫500文替に公定」と註記があり，嘉永5年まで空白となっている。この間は公定故相場がたたなかったのであろう。」
+(translation) "Where the original gives a range (e.g. Bunka 14/5: 6,850-6,870) I take the mean (6,860) and drop fractions. The 年表 stops at the 5th month of Tenpo 13 with the note '8/6, Edo town order: zeni rate low, fixed at 6 kan 500 mon per gold ryo', and is blank until Kaei 5 (1852); presumably no market rate was quoted while the official rate held."
+Unit: the column is 「銭相場(A)」 with 6,500/A beside it, i.e. mon per 1 gold ryo (the Edo quotation form, 金一両＝銭○貫文). Each year has two figures (the year's low and high, mon per ryo), from 天明元年 on with the month of each.
+
+The figures, 1781-1842 (year: month low / month high, mon per ryo), transcribed from the printed table:
+天明元(1781) 正月 6,292 / 11 6,510 | 2(1782) 8 5,510 / 2 6,535 | 3(1783) 8 5,297 / 正 5,915 | 4(1784) 正 5,465 / 12 6,225 | 5(1785) 正 6,097 / 11 6,560 | 6(1786) 12 5,165 / 6,535 | 7(1787) 6 4,697 / 4 6,055 | 8(1788) 正 5,620 / 10 5,980
+寛政元(1789) 正 5,460 / 5,902 | 2 3 5,850 / 10 6,010 | 3 3 5,030 / 正 6,002 | 4 正 5,210 / 9 5,680 | 5 4 5,055 / 10 5,860 | 6 閏11 5,450 / 11 6,002 | 7 10 6,010 / 正 6,650 | 8 4 5,630 / 10 6,150 | 9 3 6,092 / 12 6,392 | 10 4 6,288 / 5 6,455 | 11 6 6,240 / 10 6,602 | 12(1800) 2 6,240 / 10 6,620
+享和元(1801) 11 6,680 / 4 6,320 [sic, as printed] | 2 7 6,520 / 10 6,692 | 3 4 6,660 / 6 6,760
+文化元(1804) 12 6,675 / 11 6,760 | 2 12 6,660 / 正 6,760 | 3 3 6,210 / 正 6,745 | 4 12 6,560 / 正 6,660 | 5 4 6,575 / 10 6,730 | 6 3 6,692 / 12 6,815 | 7 正 6,815 / 10 6,892 | 8 閏2 6,745 / 10 6,975 | 9 3 6,860 / 11 6,992 | 10 10 6,210 / 9 7,010 | 11 9 6,630 / 5 6,845 | 12 3 6,360 / 9 6,810 | 13 3 6,760 / 10 6,860 | 14 4 6,810 / 5 6,860
+文政元(1818) 6 6,792 / 8 6,860 | 2 11 6,750 / 5 6,905 | 3 12 6,720 / 7 6,800 | 4 12 6,555 / 正 6,820 | 5 12 6,565 / 正 6,765 | 6 12 6,470 / 正 6,705 | 7 12 6,520 / 5 6,720 | 8 12 6,535 / 5 6,650 | 9 12 6,535 / 5 6,635 | 10 11 6,530 / 正 6,605 | 11 11 6,535 / 正 6,600 | 12 12 6,400 / 正 6,600
+天保元(1830) 正 6,500 / 8 6,600 | 2 12 6,535 / 5 6,600 | 3 12 6,620 / 2 6,535 [as printed] | 4 11 6,420 / 7 6,620 | 5 12 6,535 / 5 6,620 | 6 正 6,570 / 9 6,680 | 7 12 5,850 / 11 6,735 | 8 正 5,850 / 5 6,735 | 9 正 6,650 / 5 6,735 | 10 正 6,735 / 12 6,900 | 11 正 6,850 / 12 6,980 | 12 正 6,965 / 12 7,015 | 13(1842) 正 6,665 / 5 6,995
+(Earlier, for context: 宝暦元(1751) 4貫320文 / 4,470; 明和6(1769) 4,420 / 5,002; 安永7(1778) 5,710 / 6,050.)
+Notes printed in the table: 寛政8 「銭相場年々下値にて日用諸色高値になり，下々難儀に付御救のため当春以来度々銭御買上あり（両替年代記関鍵巻2）」 (translation) "zeni rate lower every year, daily goods dear, the poor distressed; as relief the bakufu has bought up zeni repeatedly since this spring"; 文政6 「銭相場高値のため払銭を行なう（天保撰要類集・金銀銭之部）」 (translation) "zeni dear, so the bakufu sold zeni".
+Oishi's summary (p.73): 「明和6年(1769)に一度4貫文代を割って5貫文代におちこみ以後急速に5貫文代を下落して安永7年(1778)には6貫文代におちこみ，天明時代はこの6貫文代を中心に上下している。…それが寛政改革期に入ると一時5貫文代に相場は回復している。しかし傾向的低落はまぬがれていない。さて寛政期に大体天保13年の6貫500文より高値を維持していた銭相場は，享和・文化と6貫500文の線を割ったまま天保改革をむかえることが分かるのである。」
+(translation) "In 1769 the rate fell once through 4 kanmon into 5 kanmon, fell quickly through 5 kanmon to reach 6 kanmon in 1778, and through Tenmei moved up and down around 6 kanmon ... In the Kansei reform it recovered for a time to 5 kanmon, but the downward trend was not escaped. Having stayed mostly dearer than Tenpo 13's 6,500 through Kansei, from Kyowa and Bunka the zeni rate stayed below the 6,500 line until the Tenpo reform."
+
+## 2. Underlying source: 三井高維『新稿両替年代記関鍵』巻2 考証篇 (岩波書店 1933; repr. 柏書房 1971, 岩波 1995)
+NDL Digital: https://dl.ndl.go.jp/pid/1902060 (1933) and https://dl.ndl.go.jp/pid/13106886 (1995). NOT PUBLIC: both are 'ooc' - 国立国会図書館内限定 / 図書館・個人送信 only (Mitsui d.1978). Its contents list (NDL metadata) includes 「江戸を中心としたる三都の金銀銭相場の年表」 and 「江戸を中心としたる二都の金銀銭相場の研究図表」. 『校註両替年代記 原編』 (pid 13106888, 1995 repr.) likewise ooc. Not read directly; Oishi's table is a public printed transcription of it.
+
+## 3. 東京帝国大学史料編纂所『読史備要』 (1935/1938), 「金銀米銭相場一覧」 pp.743-774
+NDL Digital https://dl.ndl.go.jp/pid/1915733 (1938 ed., PUBLIC - internet), frames 404-406 read as images.
+Evidence date: rows for 天明元 - 文化8 seen (1781-1811). Ledgered: make source-pages URL=https://dl.ndl.go.jp/pid/1915733 (images read from the IIIF frames 404-406). Columns 米(升)/銭(文)/金(両)/銀(匁)/備考; place is not stated in the columns.
+Edo gold-zeni: only one row in the 1780s: 天明7 (1787), 5th month: 銭 「五、三〇〇」 / 金 「一」, 備考 「五、蜘蛛の糸巻」 (translation) "5,300 mon = 1 ryo; source: 蜘蛛の糸巻" (an Edo essay). "5th month" is my reading of the 「五、」 prefix, by analogy with 「一一、三貨圖彙」.
+Frame 404 (天明1-4, read in the pass): 天明元 銭「1,000」= 銀「九・七〇〇」-「九・八〇〇」 (三貨圖彙); 天明2 銭「1,000」= 銀「九・五〇〇前後」 (「一二、三貨圖彙」); 天明4 one row 銭「五、七五〇」/ 金「一」 and one row 銭「1,4??」/ 金「一歩」 with 「三、六 塵塚談」 (塵塚談 is an Edo essay) and a row 銭「1,000」= 銀「九・五〇〇前後」 (「六、三貨圖彙」). The small type and the 備考 alignment of the 天明4 rows are uncertain; check the image before citing.
+Silver per kanmon zeni, yearly (mostly 11th month), source 三貨図彙. The table does not state the place; 'Kamigata' is my inference from Kusama Naokata being an Osaka money-changer: row form 銭 「一、〇〇〇」 / 銀 X匁; e.g. 天明7 「八・九二〇」-「八・九三〇」 (6th month); 寛政元 9.500-9.600 (as read); 寛政3 9.400-9.900; 寛政4 9.400-9.700; 寛政5 9.700-9.800 (approx., small type); 寛政11 9.300-9.600; 文化4 9.300-9.?; 文化8 9.200-9.400. Gold-silver rows in the same years: about 53-63 monme per ryo. Read from small type; check against the image before citing any single figure.
+
+## Verdict
+ATTESTED ONLY FOR 1781 - Tenpo 13/5 (1842): a printed, public, year-by-year Edo series of the market zeni rate in mon per gold ryo (each year's low and high, with months), in Oishi's 第1表, transcribed (means of ranges, fractions dropped) from Mitsui Takasumi's 1933 「江戸を中心としたる三都の金銀銭相場の年表」 (what Mitsui compiled it from was not read; the book has an 引用資料目録). Oishi does not write 「江戸の銭相場」. That it is the Edo rate is my inference, on four grounds: (a) the mon-per-ryo form is the Edo quotation (Osaka quoted silver per kanmon, per jawiki 御定相場 and the RIEB page); (b) the 年表 is 'centred on Edo'; (c) its 1842 note is an Edo town order, after which it is blank; (d) the Kansei 8 note on bakufu zeni purchases. Levels: about 5,200-6,500 in the 1780s (low 4,697 in 6/1787); 5,000-6,650 in Kansei (1789-1800); 6,200-7,010 in 1801-1817; 6,400-6,900 in the 1820s; 6,400-7,015 in the 1830s (with a dip to 5,850 in 1836-37). 1842-1852: NOT a market series. The table records only the official 6,500 (Edo town order of 1842/8/5-6), and the source table is blank to Kaei 5. 1852-1850s: SILENT in what I could read publicly. Mitsui's table goes on from Kaei 5 but is not public. The archived BOJ sheet has only 「※幕末の実勢相場は1両が8,000文を上回る状況でした。」 for the late Edo period, no year. Silver monme per kanmon: only for the 三貨図彙 place (probably Kamigata) via 読史備要, 1781-1811, ~8.9-9.9 monme and Osaka 1787- (Kobe RIEB/Mitsui DB, archived, rates per kanmon in silver; see its about-page). Not for Edo.
+
+## Searched / not bearing
+Archive: 銭相場, 両替年代記, 新保博, 岩橋勝, Iwahashi, Shimbo, 金相場, 読史備要, 三貨図彙, 相場表, 貫文 (hits: jawiki 御定相場 and 三貨制度, BOJ 1ryou.pdf, RIEB kinsei-db about page, Hosei Yamamoto paper - official rates or Osaka only; Yamamoto gives a single Hodogaya-post account conversion 「但一両に付七貫文替」 for an undated 卯年, not used).
+Web pages read and rejected: Kusano 2010 (Kobe, 京都金相場 - gold-silver, charts only); Uranagase (Kobe, 銭匁 conversions); Hitotsubashi 1985 review of Iwahashi; Ofuchi 2023 (Nihon U., no figures); Suga (OUC, 1859-60 gold/silver/yogin); shiruporuto kurashijuku sheet (no year figures).
+NDL: 校註両替年代記 and 新稿両替年代記関鍵 - all copies restricted (ooc). 新保博 1978 and 岩橋勝 books - not online; no Iwahashi paper with a printed Edo ryo-mon table found on J-STAGE/repositories in this pass.
+
+## Leads not followed
+- 新稿両替年代記関鍵 巻2 via NDL 個人送信 (needs a registered user) - the source for 1852-1860s Edo rates.
+- 三井文庫『近世後期における主要物価の動態』 (1952/1989) - may carry an Edo zeni series to 1867; not online.
+- Oishi's printed table also carries 1751-1780 if the record wants the longer run.
