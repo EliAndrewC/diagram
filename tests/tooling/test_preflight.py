@@ -96,3 +96,24 @@ def test_a_probe_test_left_in_the_tree_stops_the_gate(tmp_path: Path, capsys) ->
     (tmp_path / "tests" / "tooling" / "test_zz_probe_old.cpython-314.pyc").write_text("", encoding="utf-8")
     assert pf.stray_probes(tmp_path) == ["tests/tooling/test_zz_probe_a05.py"], "a stale .pyc is no probe"
     assert pf.main(["--root", str(tmp_path)]) == 1 and "test_zz_probe_a05.py" in capsys.readouterr().out
+
+
+def test_a_pool_map_the_gate_rolled_itself_is_no_tree_move_and_another_map_s_still_is(tmp_path: Path, capsys) -> None:  # noqa: ANN001
+    """Feature 385 T87 (plan D108): T10's gate rolled Kuwabata, then failed on its own kuwabata.json as a tree move."""
+    root = _repo(tmp_path)
+    for m in ("kuwa", "other"):
+        d = root / "pool" / "hamlets" / m
+        d.mkdir(parents=True)
+        (d / f"{m}.gen.py").write_text("x = 1\n")
+        (d / f"{m}.json").write_text("{}\n")
+    subprocess.run(["git", "-C", str(root), "add", "-A"], check=True, env=ENV)
+    subprocess.run(["git", "-C", str(root), "commit", "-qm", "maps"], check=True, env=ENV)
+    snap, census = tmp_path / "snap.json", tmp_path / "census.jsonl"
+    assert pf.main(["--root", str(root), "--tree-snap", str(snap)]) == 0
+    census.write_text(json.dumps({"kind": "roll", "gen": str(root / "pool/hamlets/kuwa/kuwa.gen.py")}) + "\n")
+    (root / "pool/hamlets/kuwa/kuwa.json").write_text('{"rolled": 1}\n')  # the gate's own re-roll
+    assert pf.main(["--root", str(root), "--tree-check", str(snap), "--census", str(census)]) == 0
+    assert "re-rolled by the gate - commit them" in capsys.readouterr().out
+    (root / "pool/hamlets/other/other.json").write_text('{"hand": 1}\n')  # a map the gate did not roll
+    assert pf.main(["--root", str(root), "--tree-check", str(snap), "--census", str(census)]) == 1
+    assert "pool/hamlets/other/other.json" in capsys.readouterr().out
