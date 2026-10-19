@@ -442,7 +442,7 @@ def record_task(spec_dir: pathlib.Path, task: str, review: dict, declared: str, 
     review = {**review, "section_sha256": review.get("section_sha256") or review.get("plan_sha256")}
     if review.get("section_sha256") != digest(section.encode()):
         raise ValueError(f"section_sha256 does not match {task}'s section - it changed while it was being reviewed")
-    decisions = review.get("decisions")
+    decisions = house_style(review.get("decisions"))
     if not isinstance(decisions, list):
         raise ValueError("decisions must be a list")
     verdict = derive_verdict(decisions)
@@ -512,6 +512,21 @@ def decision_refusal(root: pathlib.Path) -> str:
                                        f"not current and CLEAR ({verdict[0]}) - decide first (feature 375 FR-003a): {verdict[1]}")
 
 
+#: a verdict's fields written as given: what the gate matches on, never prose
+_KEPT = {"id", "class", "ruling", "sha256", "section_sha256", "plan_sha256", "verdict"}
+
+
+def house_style(decisions: object) -> object:
+    """Each decision's free text in the house style (feature 385 T88, plan D109): T83's first gate went red on a reviewer's
+    `'grey'` copied into plan-review.json. Its keys, classes, rulings and digests are written as given."""
+    if not isinstance(decisions, list):
+        return decisions
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent / "hooks" / "lib"))
+    from hm_house import americanize  # noqa: PLC0415
+
+    return [{k: americanize(v) if isinstance(v, str) and k not in _KEPT else v for k, v in d.items()} if isinstance(d, dict) else d for d in decisions]
+
+
 def record(spec_dir: pathlib.Path, review: dict, declared: str, today: str | None = None) -> dict:
     if declared != REVIEWER:
         raise PermissionError(f"declined: only the `{REVIEWER}` subagent records a plan review (AS={REVIEWER}). "
@@ -522,7 +537,7 @@ def record(spec_dir: pathlib.Path, review: dict, declared: str, today: str | Non
     if review.get("plan_sha256") != digest(plan.read_bytes()):
         raise ValueError("plan_sha256 does not match plan.md - the plan changed while it was being reviewed "
                          "(P1), so this review is of a plan that no longer exists; review it again")
-    decisions = review.get("decisions")
+    decisions = house_style(review.get("decisions"))
     if not isinstance(decisions, list):
         raise ValueError("decisions must be a list (empty when the spec settles everything the plan decides)")
     verdict = derive_verdict(decisions)
@@ -570,7 +585,7 @@ def record_blocks(spec_dir: pathlib.Path, review: dict, declared: str, today: st
             raise ValueError(f"plan.md has no block {key!r}")
         if now[key] != sha:
             raise ValueError(f"{key!r} changed while it was being reviewed - its digest is not {sha[:12]}")
-    decisions = review.get("decisions")
+    decisions = house_style(review.get("decisions"))
     if not isinstance(decisions, list):
         raise ValueError("decisions must be a list (empty when the blocks decide nothing)")
     verdict = derive_verdict(decisions)
