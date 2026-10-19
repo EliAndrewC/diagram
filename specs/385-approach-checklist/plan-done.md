@@ -2651,3 +2651,62 @@ passing at 2.9; `make cohort` 16 of 16). The fill runs only where no bearing of 
 
 **D124 - the channel, or the well instead.** In `row_rules.water_rules`, a channel-map farm passes when its channel ends in its frame or a private well stands in its frame; the claim reads "a scattered farm's own water - <0031's drawing page>: its channel ends in its frame, or, where no channel reaches it, its own well in its frame (a well off its way in on a `well` map)".
 
+<!-- plan-archive: archived 2026-10-19 -->
+## T97 - a farm's way reaches it from its house, as 0246 counts it (found working T96, 2026-10-19)
+
+### T97 Approach (checklist part A)
+
+1. **The goal, in the world.** A farm counts as reached by a way only where 0246 counts it reached - the way near its house or its built ground, not near a point 8 ft past its yard.
+2. **The constraints.** 0246's drawing page: a farmhouse counts as reached within 60 ft of the house, or within 12 ft of the steading's built ground (`end_serves`, `WAY_END_REACH_FT`, `STEADING_ARRIVAL_FT`). The lane law's own rule: placement and its check read the same source. A claims check IN-STEP; a test red without it.
+3. **Where each comes from.** 0246's drawing page (O); the project's rule (O, `end_serves`'s docstring).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T96's impl-drift rounds on `row_rules#door reach of a street`, `serve.lay_door_paths#every grove farm reached at its door` and `web.stage_web#door path distance`: DRIFTED, then a read of `lay_door_paths`, `street_arrives` and `row_rules`): off a row `street_arrives` returns True, so a farm takes no door path whenever its DOOR point is within `DOOR_REACH_FT` (60 ft) of a way; `row_rules` passes a row farm whose door is within 60 ft of its street. The door stands `DOOR_STEP_FT` past the yard - measured 2026-10-19 (a read of `front_door`) - so a way that distance from it can stand well beyond both of 0246's reaches.
+5. **The order.** One predicate - does the way's point nearest the house serve the farm (`end_serves`) - read by `lay_door_paths` and `row_rules`; the three claims; the tests; the cohort.
+6. **The exits.** (e) conform - the code takes 0246's reach as written; the door's distance is retired as a stand-in.
+7. **The search smell.** None.
+8. **The budget.** 60 min.
+9. **Done, measured.** One goal: `lay_door_paths` lays no door path only where the way's point nearest the house serves the farm under `end_serves`, on a row's street or off it; `row_rules`' `farm_not_on_its_street` asks the same; the three claims IN-STEP; a test red without it; the cohort and the landing cohort pass.
+10. **Before moving a constant.** `DOOR_REACH_FT` (60 ft, `serve.py`) stops being read; its uses, measured 2026-10-19 (a grep of `l7r`
+   and `tests`): `serve.lay_door_paths`' `reach` default, `web.stage_web`'s call (`reach=STEADING_ARRIVAL_FT if _rows else
+   DOOR_REACH_FT`), `row_rules`' street test, and `tests/hamletgen/ways/test_doors.py`'s two door-distance asserts - the parameter,
+   the constant and the call's argument go, and the tests ask `street_arrives` instead.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T97 Decisions
+
+**D125 - reached as 0246 counts it.** `serve.street_arrives` asks, on a row's street or off it, whether the way's point nearest the HOUSE serves the farm (`end_serves`: 60 ft of the house or 12 ft of its built ground); `lay_door_paths` skips a farm only on that answer, with no door-distance test; `row_rules`' `farm_not_on_its_street` asks the same predicate of the farm's own street. The three claims keep 0246's label for the 60 ft, a GUESS on its page, now measured from the house. And a farm's door path (a lane recording `serves`) is a household's own way, which `law.short_fragments` never drops,
+as it never drops one recording `of`: 0246, "Every other farmhouse is served by a lane of its own. Its way leaves its dooryard" -
+measured 2026-10-19 (cohort seed 904 under D125: four row farms' 9 ft door paths were laid and kept until `settle_fragments`
+dropped them as earning nothing, the farms being within the 100 ft back-lane reach; with door paths spared, seed 904 and the
+cohort pass, 16 of 16). The trim of a further row street reads the same predicate: it is kept to the street's point nearest the house of each farm
+the street serves without a path (`serve.street_anchors`, at a reach of a foot), where it was kept to a door within 12 ft -
+measured 2026-10-19 (T97's claims round: `web.stage_web#a further row street's end` DRIFTED, the trim and `street_arrives` asking
+different reaches; built, the pinned rows 901-904 and the cohort pass, 16 of 16).
+
+### T97 part B (2026-10-19T09:52Z)
+
+Owed by the cohort record in which seed 904 newly failed (`row_rules`, four `farm_not_on_its_street`).
+
+1. **What is refusing?** Seed 904's four row farms - measured 2026-10-19 (scratch probes of `lay_door_paths`, the web passes and the settle's steps): each door path is laid, then `settle_fragments` drops it as a fragment that earns nothing.
+2. **A3 again.** 0246 counts two things apart: a household served by a lane of its own from its dooryard, and the 100 ft back-lane reach; the fragment rule asked only the second.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Changing: D125 gains the door path's exemption from the fragment rule, decided in the section above and reviewed with it.
+6. **The one-sentence test.** "A door path is a household's own way and is never dropped as a fragment" - true by the probe; seed 904 passes.
+7. **The next step is a measurement.** The landing cohort with the exemption built.
+8. **Every route measured before offering one?** Yes: the drop was traced to its step before the exemption was written.
+9. **After a ruling: the step it names?** No ruling is pending on T97.
+
+
+### T97 part B (2026-10-19T09:58Z)
+
+Owed by the round arbiter's ruling on hour:385-approach-checklist@31 (continue).
+
+1. **What is refusing?** Nothing now: the door path's exemption from the fragment rule is decided, reviewed CLEAR and built.
+2. **A3 again.** Unchanged since the part B above.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither in this part B: the change is D125's, decided and reviewed.
+6. **The one-sentence test.** "A farm is reached as 0246 counts it, and its door path stays" - true by seed 904 and the cohort.
+7. **The next step is a measurement.** The claims check, then the gate and the landing cohort.
+8. **Every route measured before offering one?** No route is offered.
+9. **After a ruling: the step it names?** Yes - the ruling says go on with T97's review, claims check, gate and landing.
