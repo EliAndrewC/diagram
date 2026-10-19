@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92, T93, T94
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -371,11 +371,11 @@ Owed by the hour-27 step-back (hour:385-approach-checklist@27, `continue`).
 
 **D112 - the landing's lint, first and before.** `land-tooling.sh` runs its lint (the `ruff check --force-exclude` and `ruff format --check --force-exclude` it already applies) on the `.py` files it was given, in the clone, as its first check - after the fetch (a second or so, so main's lint config is main's), before the merge and the worktree - and dies on a failure with ruff's first lines and `python3 -m ruff format <files>`; every caller (`make land-tooling`, `make arbiter-fix-done LAND=`) goes through it. The make-only guard runs the same lint on the files named by a command invoking `make land-tooling FILES=` or `make arbiter-fix-done ... LAND=` and refuses it before it runs. No `.py` file named, or ruff absent: nothing is refused.
 
-## T31 - a footpath's 4 ft off a plot, recorded (ranking rows 843 and 841, MISLABELED - a kind not yet tried)
+## T31 - a footpath's 4 ft off a plot, recorded (ranking row 843, MISLABELED - a kind not yet tried)
 
 Chosen at its start (FR-020): of the open rows still open in the claims index, the first kind not yet tried in T05-T10 (four
-DRIFTED, one NEEDS-RESEARCH) is MISLABELED; row 827 (the first) is IN-STEP since, so row 843 is taken, with row 841 - the joining
-leg's berth, which reads the same constant and the same page - as one fix.
+DRIFTED, one NEEDS-RESEARCH) is MISLABELED; row 827 (the first) is IN-STEP since, so row 843 is taken; row 841, which reads
+the same constant, is T32.
 
 ### T31 Approach (checklist part A)
 
@@ -399,20 +399,19 @@ leg's berth, which reads the same constant and the same page - as one fix.
 7. **The search smell.** None - no search changes.
 8. **The budget.** 60 min.
 9. **Done, measured.** One goal: 0246's drawing page records a footpath's middle 4 ft off a garden fence as a map drawing
-   convention, with the cohort measurement; `FOOTPATH_FABRIC_GAP`'s claim and `join_to`'s claim cite it; the claims check finds
-   both IN-STEP; no map changes (`git diff` on the pool manifests empty).
-10. **Before moving a constant.** No constant moves. Its uses (measured 2026-10-19, a grep of `l7r/`): the footpath's clearance off
+   convention, `FOOTPATH_FABRIC_GAP`'s claim cites it, and the claims check finds it IN-STEP; no value changes.
+10. **Before moving a constant.** No constant's value moves. Its uses (measured 2026-10-19, a grep of `l7r/`): the footpath's clearance off
    a plot in `bund.py`, `street.py` (the joining leg), `track.py` (a footpath's clip and its `+ 1.0` and `+ CONNECTOR_WIDTH / 2`
    uses), and the door offsets `FOOTPATH_FABRIC_GAP + 4.0` in `serve.py`, `web.py` and `row_rules.py`.
 11. **Before fitting things into room.** Footpath room between two plots: 2 x 4 + 3 = 11 ft at 4 ft, 2 x 7 + 3 = 17 ft at 7 ft.
 
 ### T31 Decisions
 
-**D113 - the footpath's margin is 0246's own convention.** 0246's drawing page gains, beside the lane's 7 ft: a footpath - walked in
-single file - keeps its middle 4 ft off a garden fence, a map drawing convention, because at the lane's 7 ft four of the cohort's
-seeds (3, 4, 903, 904) leave a farmhouse unreached (measured 2026-10-19). `FOOTPATH_FABRIC_GAP`'s claim becomes a pointer to that
-page; `join_to`'s claim, which says "(7 ft)", cites the same page at 4 ft; the comment above the constant that still says 7 ft is
-corrected. No value changes.
+**D113 - the footpath's margin is 0246's own convention.** 0246's drawing page gains a block of its own beside the lane's 7 ft: a
+footpath is narrower than a lane's tread, so it keeps its middle 4 ft off a garden fence, a map drawing convention, because held to
+the lane's 7 ft some settlements leave a farmhouse with no footpath to it (the seeds in a comment). `FOOTPATH_FABRIC_GAP`'s claim
+becomes a pointer to that page, and the comment above the constant records it. No value changes; row 841 (the street's joining leg,
+which reads this constant but is drawn as a lane) is its own task, T32 (FR-015, one goal).
 
 ## T92 - `make claims-triaged` reads a transcript's reply and never clears on an unread one (found working T31, 2026-10-19)
 
@@ -433,6 +432,69 @@ corrected. No value changes.
 ### T92 Decisions
 
 **D114 - the reply read as modal-triaged reads it.** `claims.py triaged` reads `--reply` through `apply_edits.reply_of` (a `.jsonl` or `.output` transcript's last assistant reply, else the file as text); a reply with no text refuses, naming the file, and clears nothing. A readable reply with no TOUCHES line clears the bundle as now.
+
+## T93 - a pop-up the triage sent on joins its check's batch (found working T31, 2026-10-19)
+
+### T93 Approach (checklist part A)
+
+1. **The goal, in the world.** Pop-ups a page change re-owed are checked by one agent per check, as T81 made the rest.
+2. **The constraints.** T81 (D100): a pop-up owed only by a moved page goes to `make modal-triage` first "and joins a batch on the next listing if a check is still owed" - the plan review's premise that made the exclusion legitimate, which asked for a test. A test red without it.
+3. **Where each comes from.** T81 (O), its review's condition (G, through the GM's approved change 1).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T31's `make record-owed` after `make modal-triaged` sent 6 of 8 pop-ups on): no batched line was printed, and each touched pop-up still named `make modal-triage` as its command - the exclusion never released them, so the batch was built by hand.
+5. **The order.** `record_owed`'s listing reads the triage's touched marks, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: a pop-up owed by a moved page that `make modal-triaged` marked touched is in its check's batch and names `make modal-bundle`, one not yet triaged still names `make modal-triage`; `tests/tooling/test_record_owed.py` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T93 Decisions
+
+**D115 - triaged and touched is owed like any other.** `record_owed.modal_batches` and `command` take the triage's touched marks (`modal_triage.touched(store)`): a unit owed by a moved page whose slug is marked touched is treated as an ordinary owed pop-up - batched with its check, its command `make modal-bundle`; an untriaged one keeps `make modal-triage` and stays out of the batch.
+
+## T94 - `make claims-checked` reads a transcript's reply too (found working T31, 2026-10-19)
+
+### T94 Approach (checklist part A)
+
+1. **The goal, in the world.** An impl-drift reply is recorded whatever file carries it, and a reply that cannot be read is never recorded as read.
+2. **The constraints.** T92's rule for `make claims-triaged` (a transcript's last reply, an unread one refused); feature 316: a claim's verdict is recorded at the fingerprints its bundle read. A test red without it.
+3. **Where each comes from.** T92 (O), 316 (O); the defect is measured working T31 (amendment 6).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T31's `make claims-checked` on the impl-drift agent's `.output` transcript): it printed "6 of 8 recorded" and the claims index was unchanged (`git status` clean); the same reply as text recorded 8 of 8.
+5. **The order.** The reply read through `claims_triage.triage_reply`, the refusal on an empty one, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: `make claims-checked REPLY=<a transcript>` records the VERDICT lines of the transcript's last reply, and a reply with no text is refused before anything is written; `tests/tooling/test_claims_index.py` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T94 Decisions
+
+**D116 - one reader for both triage and record.** `claims.py record` reads `--reply` through `claims_triage.triage_reply` (T92's reader) before `unelide`; a reply with no text refuses, naming the file, and writes nothing.
+
+## T32 - a street's joining leg keeps the lane's 7 ft (ranking row 841, MISLABELED)
+
+Chosen at its start (FR-020): row 841, the same kind as T31's, found by T31's claims round to be a real drift - the leg is drawn at
+`STREET_WIDTH`, a lane, and routed at the footpath's 4 ft.
+
+### T32 Approach (checklist part A)
+
+1. **The goal, in the world.** A street's joining leg keeps a lane's distance from the gardens it passes.
+2. **The constraints.** Row 841's fix: "the joining leg's berth at 0246's 7 ft off a garden fence (it reads FOOTPATH_FABRIC_GAP, held at 4 ft); the claim cites 0246". 0246: a lane's middle keeps at least 7 ft clear of a garden fence; a footpath keeps 4 ft (T31).
+3. **Where each comes from.** 0246's 7 ft is O, a map drawing convention; row 841's fix is the ranking's (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T31's impl-drift round, then a read of `street.py`): the leg is drawn at `STREET_WIDTH` by `_draw_web`, a lane; measured 2026-10-19 (`make cohort` with the leg at `WEB_FABRIC_GAP`): 16 of 16 pass, the fresh block 0 of 4 failed.
+5. **The order.** The leg's routing gap, its claim, then the landing cohort.
+6. **The exits.** (a) - the leg takes the lane's own number; none other needed, the cohort passes.
+7. **The search smell.** None.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: `join_to` routes its leg at `WEB_FABRIC_GAP` and its claim cites 0246's 7 ft; the claims check finds it IN-STEP and the landing cohort passes.
+10. **Before moving a constant.** No constant's value moves; one caller reads `WEB_FABRIC_GAP` instead of `FOOTPATH_FABRIC_GAP` (measured 2026-10-19, a grep: `street.py`'s two `_route` calls in `join_to` are its only uses there).
+11. **Before fitting things into room.** A lane's room past a fence: 7 ft to its middle, 2 ft more than a 3 ft footpath's 4 ft plus half its width.
+
+### T32 Decisions
+
+**D117 - the leg routed as the lane it is.** `join_to`'s two `_route` calls take `gap=WEB_FABRIC_GAP`; its claim reads "joining leg's berth - <0246's drawing page>: routed the lane's 7 ft (`WEB_FABRIC_GAP`) off the fabric - the leg is drawn at the street's width, a lane, not a footpath".
 
 ## T11 - the close
 

@@ -263,6 +263,10 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T92 make claims-triaged reads a transcript's reply and never clears on an unread one (plan D114) [lands-open]
       research: rendering
+- [ ] T93 A pop-up the triage sent on joins its check's batch (plan D115) [lands-open]
+      research: rendering
+- [ ] T94 make claims-checked reads a transcript's reply too (plan D116) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

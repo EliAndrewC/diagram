@@ -6557,33 +6557,27 @@
    "verdict": "CLEAR"
   },
   "T31": {
-   "section_sha256": "eff4f61c3db98e1bc58f57783c8b8422df394bb79fa459c596e31010a4a31df0",
+   "section_sha256": "6f00cd7b7a5f219a0c6b8a02e4a559e932e392e81402028c9c08e93fa63b2a58",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "T31-choice",
-     "summary": "Of the open ranking rows, the first kind not yet tried in T05-T10 is MISLABELED; row 827 is IN-STEP since, so row 843 is taken, with row 841 (the joining leg's berth, same constant, same page) as one fix.",
+     "summary": "Row 843 (MISLABELED, the first kind not yet tried, row 827 being IN-STEP since) is taken with row 841 as one fix, both reading FOOTPATH_FABRIC_GAP and 0246's page.",
      "class": "within",
-     "why": "FR-020 asks each of T31-T40 to take an open row of a kind not yet tried, chosen at the task's start; this does that and records why 827 was passed over. Folding 841 in adds a second row that shares 843's constant and page, so it serves the GM's amendment 7 ('pull in 10 more claims') rather than narrowing it, and the done still names one goal (FR-015)."
+     "why": "FR-020 (amendment 7's ten more claims): a row of a kind not yet tried, chosen at the task's start; pairing 841 adds a row from the same index on the same constant and page rather than narrowing anything. Unchanged since its CLEAR verdict."
     },
     {
-     "id": "D113",
-     "summary": "0246's drawing page records, beside the lane's 7 ft, a footpath's middle 4 ft off a garden fence as a map drawing convention, with the cohort measurement; FOOTPATH_FABRIC_GAP's and join_to's claims cite it; the stale 7 ft comment is corrected; no value or map changes.",
+     "id": "D113 (footpath)",
+     "summary": "The footpath's 4 ft off a garden fence is recorded on 0246's drawing page as its own map drawing convention, with the cohort measurement (7 ft leaves seeds 3, 4, 903, 904 unreached); FOOTPATH_FABRIC_GAP's claim points there; the stale 7 ft comment is corrected; the constant's value does not change.",
      "class": "within",
-     "why": "The 7 ft is ours (0246 calls it 'a map drawing convention, not a measured figure'), and the GM's request is that an unresearched number is a knob to examine rather than a target to fight; the 4 ft is kept on a measured reason (2026-10-19, make cohort at 7.0: seeds 3, 4, 903, 904 fail) and that reason is recorded where the rule lives, which is the approved proposal's guardrail. No rule is loosened beyond what the record states, and no map changes."
+     "why": "Row 843's own fix offers it: '0246 must record the 4 ft (it does not) or the code is DRIFTED'. Both numbers are O (0246 calls its 7 ft 'a map drawing convention, not a measured figure'), and the GM's request is exactly that an unresearched number is a knob, not a target to conform to by moving houses or packing. Exit (a) chosen, (d) weighed and declined on recorded arithmetic. Unchanged since its CLEAR verdict."
     },
     {
-     "id": "T31-label",
-     "summary": "Row 843's fix prescribes the claim become DEVIATION 0246 with 0246 recording the 4 ft; the plan instead adds the footpath's 4 ft to 0246 as its own convention, so both claims come out IN-STEP rather than DEVIATION.",
+     "id": "D113 amendment (join_to)",
+     "summary": "Amended 2026-10-19 after the claims round: the joining leg is drawn at STREET_WIDTH (a lane), so its route moves from FOOTPATH_FABRIC_GAP (4 ft) to the lane's 7 ft (WEB_FABRIC_GAP) and its claim cites 0246's 7 ft; measured 16/16 on the cohort, fresh block 0 of 4 failed. Done (item 9) becomes 'join_to routes its leg at the lane's 7 ft, citing 0246 ... the landing cohort passes' in place of 'no map changes'.",
      "class": "within",
-     "why": "The row's suggested label is the session's own 328 audit, not the GM's words; FR-020 asks that rows be taken and worked, not that each row's suggested label be kept. Because 0246's 7 ft is a convention of ours, recording a footpath convention beside it amends our convention rather than bending research to fit code, and the measured reason sits on the page - so IN-STEP describes the record truthfully, and the request's guardrail (a loosening carries its reason where it is made) is met."
-    },
-    {
-     "id": "T31-exit-d-not-chosen",
-     "summary": "Exit (d), more room (re-seating plots to give 17 ft of footpath room), not chosen.",
-     "class": "within",
-     "why": "Room before packing (GM 2026-10-12) tells a session to give room rather than pack against a constraint; here nothing is packed - the constraint itself is an unresearched convention that the checklist's exit (a) refines. Declining to re-seat every hamlet for a convention honors the request's purpose (houses do not move for paths) rather than narrowing it."
+     "why": "This is row 841's fix verbatim ('the joining leg's berth at 0246's 7 ft off a garden fence ... the claim cites 0246'), so it widens toward the row rather than narrowing it; the earlier text, which had join_to cite 0246 at 4 ft, was the further departure. Dropping 'no map changes' follows from carrying that fix and is not a carve-out from anything the GM asked. Note for the session, not a ruling: the D113 paragraph is spliced - the amendment sits mid-sentence ('a footpath - walked in **Amended ...** single file -') and the original sentences that still say join_to's claim 'cites the same page at 4 ft' and 'No value changes', and item 10's 'No constant moves', now contradict the amendment; the amendment is plainly meant to supersede them and they should be struck or reworded so the implementer reads one instruction."
     }
    ],
    "verdict": "CLEAR"
