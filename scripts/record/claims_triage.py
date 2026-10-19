@@ -15,6 +15,7 @@ import json
 import re
 import shutil
 import subprocess
+import sys
 from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -276,3 +277,12 @@ def triage_reply(path: Path) -> str:
     import apply_edits  # noqa: PLC0415
 
     return apply_edits.reply_of(path)
+
+
+def read_reply(path: str, cmd: str, nothing: str) -> str:
+    """The reply `make <cmd>` is given, read by `triage_reply`; with no text, the refusal is printed and "" returned, so nothing
+    is written (feature 385 T94: `make claims-checked` read T31's impl-drift transcript raw and recorded 6 of 8)."""
+    reply = triage_reply(Path(path))
+    if not reply.strip():
+        print(f"{cmd}: refused - no reply text in {path}; {nothing}", file=sys.stderr)
+    return reply

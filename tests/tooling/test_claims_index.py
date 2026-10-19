@@ -351,9 +351,14 @@ def test_the_command_line(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[
     assert cx.main(["--root", str(root), "owed"]) == 0 and "claims-owed: 5 claim(s) in 3 file(s)" in capsys.readouterr().out
     assert cx.main(["--root", str(root), "bundle", "--units", "nope"]) == 2
     assert cx.main(["--root", str(root), "bundle", "--owed", "--out", str(tmp_path / "b")]) == 0
-    reply = tmp_path / "reply.txt"
     units = json.loads((tmp_path / "b" / "units.json").read_text())
-    reply.write_text("".join(f"VERDICT {k} IN-STEP - ok\n" for k in units))
+    # feature 385 T94: a transcript's last reply is what is recorded; an empty one is refused and writes nothing
+    reply = tmp_path / "agent.output"
+    reply.write_text("")
+    assert cx.main(["--root", str(root), "record", "--bundle", str(tmp_path / "b"), "--reply", str(reply)]) == 2
+    assert "claims-checked: refused - no reply text" in capsys.readouterr().err
+    text = "".join(f"VERDICT {k} IN-STEP - ok\n" for k in units)
+    reply.write_text(json.dumps({"type": "assistant", "message": {"content": [{"type": "text", "text": text}]}}) + "\n")
     assert cx.main(["--root", str(root), "record", "--bundle", str(tmp_path / "b"), "--reply", str(reply)]) == 0
     assert "5 of 5 recorded" in capsys.readouterr().out
     assert cx.main(["--root", str(root), "owed"]) == 0 and "no claim is owed" in capsys.readouterr().out

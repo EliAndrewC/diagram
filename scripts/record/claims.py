@@ -912,9 +912,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0
     if args.cmd == "triaged":
         data = json.loads((Path(args.bundle) / "triage.json").read_text(encoding="utf-8"))
-        reply = claims_triage.triage_reply(Path(args.reply))  # feature 385 T92: a transcript's last reply, never an unread file
-        if not reply.strip():
-            print(f"claims-triaged: refused - no reply text in {args.reply}; nothing cleared", file=sys.stderr)
+        if not (reply := claims_triage.read_reply(args.reply, "claims-triaged", "nothing cleared")).strip():  # feature 385 T92
             return 2
         new, msgs = record_triage(
             index,
@@ -974,7 +972,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0
     units = json.loads((Path(args.bundle) / "units.json").read_text(encoding="utf-8"))
     stems = sorted({p.name.split(".")[0] for p in (root / QUESTIONS).glob("[0-9][0-9][0-9][0-9]-*.html")})
-    reply = unelide(Path(args.reply).read_text(encoding="utf-8"), stems)
+    if not (reply := claims_triage.read_reply(args.reply, "claims-checked", "nothing recorded")).strip():  # feature 385 T94
+        return 2
+    reply = unelide(reply, stems)
     blocks_file = Path(args.bundle) / "blocks.json"
     blocks = json.loads(blocks_file.read_text(encoding="utf-8")) if blocks_file.is_file() else {"numbered": {}, "snapshots": {}}
     new, msgs = record(index, units, reply, datetime.date.today().isoformat(), blocks["numbered"])

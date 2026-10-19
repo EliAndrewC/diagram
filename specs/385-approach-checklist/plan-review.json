@@ -6692,6 +6692,26 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T95": {
+   "section_sha256": "d16e4d3b9fdee84e187251bc8ff1149173d1721459e229520a450fd10ad70ab5",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T95 (task)",
+     "summary": "Row 841's defect, found by T31's claims round, is worked as its own task T95 and not counted as one of FR-020's ten ranking picks.",
+     "class": "within",
+     "why": "FR-015 makes a second goal found inside a task into its own task. Amendment 7 asks for ten more claims fixed, and fixing this row outside the count leaves all ten (T31-T40) still owed, so nothing the GM asked for is reduced."
+    },
+    {
+     "id": "D117",
+     "summary": "join_to's two _route calls take gap=WEB_FABRIC_GAP (7 ft, a lane) in place of FOOTPATH_FABRIC_GAP (4 ft), and its claim cites 0246's 7 ft and says the leg is drawn at the street's width, a lane.",
+     "class": "within",
+     "why": "This is row 841's fix as the block quotes it (the joining leg's berth at 0246's 7 ft off a garden fence, the claim citing 0246), with no carve-out. It changes one caller and moves no constant's value. Item 4 records how the drawn width and the cohort result were measured."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
