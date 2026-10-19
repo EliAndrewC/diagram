@@ -86,7 +86,10 @@ Spec-driven under `.specify/memory/constitution.md`. One line each here; the ful
 - A number comes from `make claim SLUG=<slug>`; export both lines it prints; commit and push the spec directory as soon as
   `spec.md` exists; no branches - commit on `main` in the clone.
 - **A feature is filed only with the GM's approval** (GM 2026-10-10), proposed in the turn's FINAL message; its `spec.md`
-  carries `**Approved**: the GM, YYYY-MM-DD, "<their words, verbatim>"`. `make speckit-todo` lists what is open. Each spec carries an `**Affects**:` line; its stage is derived from it
+  carries `**Approved**: the GM, YYYY-MM-DD, "<their words, verbatim>"`. A feature the GM asked to be filed - including a
+  money research request gm-assistant opens for him - is approved by asking; file it without an approval round, its
+  `**Approved**:` line quoting *"you should treat features that I have asked to be filed as automatic approval, and
+  therefore you should not ask in the future"* (GM 2026-10-18). `make speckit-todo` lists what is open. Each spec carries an `**Affects**:` line; its stage is derived from it
   (`make speckit-todo BY=affects`, `CHECK=1` at the push). An item owed at a tier goes into that tier's placeholder (380 village,
   381 town, 382 provincial city), never filed alone. A feature closes when every task is ticked, or when its status line opens
   `Done`, `Superseded by NNN` or `Withdrawn` with the evidence beside it.
