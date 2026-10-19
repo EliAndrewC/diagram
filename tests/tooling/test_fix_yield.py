@@ -68,6 +68,7 @@ def test_an_agent_measure_counts_that_check_s_dispatches_and_a_fix_unmade_or_unm
     assert fy.verdict({k: v for k, v in fix.items() if k != "fix_measure"}, recs)["verdict"].startswith("unmeasured")
     table = fy.table([row])
     assert "| t | `agent:impl-drift` | - |" in table and "saving" in table
+    assert "`make (done\\|cohort)` |" in fy.table([{**row, "measure": "make (done|cohort)"}]), "a pipe in a measure keeps its cell"
 
 
 def test_fixes_pairs_each_ruling_with_its_settling_and_an_assigned_measure() -> None:
