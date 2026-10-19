@@ -82,7 +82,9 @@ def _out_of_bands(p: Pt, bands: Sequence[Poly], toward: Pt) -> Pt:
     a footpath's gap past the nearest edge, whichever lands nearer `toward` - so a spur that began in a band leaves it by
     the side it was heading for rather than into the yard behind (seed 11). A point already clear comes back untouched.
 
-    Research: a track's end out of the grove bands - UNRESEARCHED: set 8 ft (`FOOTPATH_FABRIC_GAP` + 1) clear of a grove band"""
+    Research:
+        a track's end out of the grove bands - UNRESEARCHED: set 8 ft (`FOOTPATH_FABRIC_GAP` + 1) clear of a grove band
+        which side it leaves by - UNRESEARCHED: walked toward the run's other end, or pushed out the nearest edge, whichever lands nearer it"""
     if not any(point_in_poly(p[0], p[1], band) for band in bands):
         return p
     # walked in 2 px steps, asking containment as well as the gap: `push_clear_of_fabric` asks only the distance to the

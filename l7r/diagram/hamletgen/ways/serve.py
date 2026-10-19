@@ -584,7 +584,7 @@ def route_from_door(door: Pt, q: Pt, hard: list[Poly], walls: Sequence[Poly], wa
     The law still judges the whole path (`door_path`).
 
     Research:
-        door path off the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: routed `gap` (`FOOTPATH_FABRIC_GAP`, 7 ft) off the fabric, a footpath's middle 7 ft clear of a garden fence
+        door path off the fabric - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: routed `gap` (`FOOTPATH_FABRIC_GAP`, 7 ft) off the fabric, a footpath's middle 7 ft clear of a garden fence
         a first leg out of the door's cell - UNRESEARCHED: one or two router cells (10-20 ft) stepped out of a boxed-in door before routing"""
     path = _route(door, q, hard, walls, water, gap=gap)
     if len(path) >= 2:

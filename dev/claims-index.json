@@ -13646,26 +13646,6 @@
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/homesteads/rows.py::FOOTPATH_DOOR_OUT_FT#row geometry": {
-  "body": "7014e9c330f596a8",
-  "claim": "row geometry - NONE: lines, offsets, clipping and seat arithmetic; the units that decide carry their own claims",
-  "code": "69dfa85a215b1a37",
-  "core": "e5d373cf76a65b43",
-  "date": "2026-10-19",
-  "note": "NONE on a placement figure: the door point stands 12 ft past the yard's front edge; should be UNRESEARCHED, as `door_clear`'s claim already says",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "MISLABELED"
- },
- "l7r/diagram/hamletgen/homesteads/rows.py::FOOTPATH_DOOR_OUT_FT#the door point 12 ft past the yard's front edge": {
-  "code": "e5d373cf76a65b43",
-  "core": "e5d373cf76a65b43",
-  "date": "2026-10-19",
-  "note": "the door point 12 ft past the yard's front edge",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/hamletgen/homesteads/rows.py::HOLDING_CELL_FT#holding plot depth": {
   "code": "e6998f3cacda5961",
   "core": "d9e8735159ac6ec8",
@@ -27121,23 +27101,31 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/serve.py::route_from_door#door path held 7 ft (FOOTPATH_FABRIC_GAP) off the fabric, with a 10-20 ft first leg out of the door's cell": {
-  "code": "b06143eb4467cb5b",
+ "l7r/diagram/hamletgen/ways/serve.py::route_from_door#a first leg out of the door's cell": {
+  "body": "18a70d538c11f2b1",
+  "claim": "a first leg out of the door's cell - UNRESEARCHED: one or two router cells (10-20 ft) stepped out of a boxed-in door before routing",
+  "code": "b1e5e6beb14f1675",
   "core": "b06143eb4467cb5b",
   "date": "2026-10-19",
-  "note": "door path held 7 ft (FOOTPATH_FABRIC_GAP) off the fabric, with a 10-20 ft first leg out of the door's cell",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/hamletgen/ways/serve.py::route_from_door#plumbing": {
-  "body": "5067ef606d1e101f",
-  "claim": "plumbing - NONE",
-  "code": "6a2822aecaab7fc6",
-  "core": "b06143eb4467cb5b",
-  "date": "2026-10-19",
-  "note": "NONE on code that sets the door path's clearance (FOOTPATH_FABRIC_GAP, 7 ft off the fabric, which the page gives) and draws a 10-20 ft first leg out of the door's cell; should cite 0246's 7 ft",
+  "note": "the 10 or 20 ft step (ROUTE_CELL, 2x) in one of 8 directions is unattested; 0246 covers only going round the household's own beds and fixtures, not a step out",
   "pages": {},
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/serve.py::route_from_door#door path off the fabric": {
+  "body": "18a70d538c11f2b1",
+  "claim": "door path off the fabric - how-our-maps-lay-a-clustered-settlements-lanes.drawing: routed `gap` (`FOOTPATH_FABRIC_GAP`, 7 ft) off the fabric, a footpath's middle 7 ft clear of a garden fence",
+  "code": "d356fb6d5af74682",
+  "core": "b06143eb4467cb5b",
+  "date": "2026-10-19",
+  "note": "the code does keep the middle 7 ft off the fence, but the page says the 7 ft to the middle (tread edge 5.5 ft) is \"a DEVIATION\". Relabel as `DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.html`, as the same gap is labeled in `_route`, `_clear_link` and ACCESS_HALF_FT",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+  },
+  "research": "60b94d3c15ae221a",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
+  ],
   "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/serve.py::runs_beside#no way drawn twice": {
@@ -30397,24 +30385,24 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/track.py::_out_of_bands#the track's end set 8 ft clear of a grove band": {
+ "l7r/diagram/hamletgen/ways/track.py::_out_of_bands#a track's end out of the grove bands": {
+  "body": "03c75bdb6ceee97d",
+  "claim": "a track's end out of the grove bands - UNRESEARCHED: set 8 ft (`FOOTPATH_FABRIC_GAP` + 1) clear of a grove band",
+  "code": "b50626b06595e202",
+  "core": "f30173f234823f5d",
+  "date": "2026-10-19",
+  "note": "the 8 ft (FOOTPATH_FABRIC_GAP + 1) clearance from a grove band is unattested; 0246's 7 ft is from a garden fence, not a grove",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/track.py::_out_of_bands#which side a track end leaves a grove band by: walked toward the run's other end, or pushed out the nearest edge, whichever lands nearer the other end": {
   "code": "f30173f234823f5d",
   "core": "f30173f234823f5d",
   "date": "2026-10-19",
-  "note": "the track's end set 8 ft clear of a grove band",
+  "note": "which side a track end leaves a grove band by: walked toward the run's other end, or pushed out the nearest edge, whichever lands nearer the other end",
   "research": "",
   "verdict": "UNCLAIMED"
- },
- "l7r/diagram/hamletgen/ways/track.py::_out_of_bands#track plumbing": {
-  "body": "24c1ccfd0606dfd0",
-  "claim": "track plumbing - NONE",
-  "code": "885dee733299821d",
-  "core": "f30173f234823f5d",
-  "date": "2026-10-19",
-  "note": "NONE on a placement rule: the track's end is set 8 ft (FOOTPATH_FABRIC_GAP + 1) clear of a grove band; should cite 0036 or be UNRESEARCHED",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#detour swing": {
   "body": "d740236e302ec3fc",
@@ -56267,16 +56255,16 @@
   "code": "dd1ceacbb2633039",
   "core": "2c48ea6cfc2004e2",
   "date": "2026-10-19",
-  "note": "7 ft from the way's line, with the 3 ft tread's edge 5.5 ft off a fence, is recorded as a DEVIATION",
+  "note": "matches §16's 7 ft to the middle, but the code comment calls the corridor \"a footpath's room between two steadings\", and §3 makes that room \"18 ft - 7 ft at each garden fence and a 4 ft tread between\" (half 18 = 9 ft, not 7). Either make the corridor 9 ft a side, or narrow the claim to say it is only the fence-to-middle gap and not the room between steadings. The page itself also disagrees on the tread: §3 says 4 ft, §16 says 3 ft",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bee043cb0138e737"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
   },
-  "research": "4b617eda2c031935",
+  "research": "60b94d3c15ae221a",
   "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/rolling/access.py::AccessTree#every house reached by a path": {
   "code": "289bdf4c4a8d2980",
