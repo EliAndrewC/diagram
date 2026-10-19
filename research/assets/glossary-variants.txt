@@ -44,6 +44,8 @@ aizu	Aizu
 ake-mutsu	ake-mutsu
 aki monto	monto
 akiba	Akiba
+ako	Ako
+ako salt	Ako
 akusui	akusui
 akusuiro	akusui
 alexandrian laurel	Alexandrian laurel
@@ -303,6 +305,7 @@ bukechi	buke-chi
 bukeyashiki	buke-yashiki
 bulbil	bulbil
 bulbils	bulbil
+bun	bun
 bund	bund
 bund tea	keihan-cha
 bunded	bund
@@ -880,6 +883,8 @@ ds/m	dS/m
 duck landing	duck landing
 duck landings	duck landing
 dujiangyan	Dujiangyan
+dummy	dummy variable
+dummy variable	dummy variable
 dunhuang	Dunhuang
 duty of water	water duty
 dwarf bamboo	sasa
@@ -1324,6 +1329,7 @@ gokenin	gokenin
 gokumon	gokumon
 gokura	gogura
 gold paper	gold paper
+gongbu changku xuzhi	Gongbu changku xuzhi
 gongxiefang	gongxiefang
 gonin-gumi	five-household group
 gono	gōnō
@@ -1468,6 +1474,7 @@ hanori-gata	hanori
 hansho	hansho
 hanshō	hansho
 hantei	Hantei
+hao	hao
 haori	half-fold
 harakata	harakata-shu
 harakata-shu	harakata-shu
@@ -1670,6 +1677,8 @@ houseman	gokenin
 housemen	gokenin
 houzhaofang	houzhaofang
 hsien	hsien
+huaibei	Huaibei
+huainan	Huaibei
 huanghuali	huanghuali
 huc	Huc
 hucheng he	hucheng he
@@ -2336,6 +2345,8 @@ lifang	lifang
 light bamboo	light bamboo
 lijia	lijia
 lijin	lijin
+limner	limner
+limners	limner
 lineage	lineage
 lineage chancellor	chancellor
 lineage chancellors	chancellor
@@ -2514,6 +2525,9 @@ meso scale	meso scale
 meso-scale	meso scale
 metamorphosis fengshui	metamorphosis fengshui
 metropolitan examination	military examination
+mexican	Mexican dollar
+mexican dollar	Mexican dollar
+mexican dollars	Mexican dollar
 mi	material index
 miaohui	miaohui
 michikiri	michikiri
@@ -2551,7 +2565,10 @@ ming-dynasty	Ming dynasty
 ming-qing	Qing dynasty
 minglun hall	Minglun hall
 minglun halls	Minglun hall
+ministry for public works	Ministry of Works
+ministry of public works	Ministry of Works
 ministry of rites	Ministry of Rites
+ministry of works	Ministry of Works
 minka	minka
 mino	Mino
 minote-zeki	minote-zeki
@@ -2844,6 +2861,7 @@ odoi	Odoi
 odoko	odoko
 oei	Oei
 offering hall	offering hall
+official salt	official salt
 offtake	offtake
 offtakes	offtake
 ofumi	Ofumi
@@ -3009,6 +3027,7 @@ phoenix clan	Phoenix Clan
 phragmites	Phragmites
 phragmites australis	Phragmites
 phytoplankton	phytoplankton
+pi	pi
 picket line	picket line
 picket lines	picket line
 pig iron	pig iron
@@ -3091,6 +3110,7 @@ principal images	principal image
 principal shrine	principal shrine
 principal shrines	principal shrine
 prison god	jail-god
+private salt	private salt
 program item	program item
 program items	program item
 proportional flume	division flume
@@ -3156,6 +3176,7 @@ rakugai-zu screen	Rakugai-zu
 rakugai-zu screen painting	Rakugai-zu
 rakugai-zu screens	Rakugai-zu
 rakugo	rakugo
+ramie	ramie
 rammed earth	rammed earth
 rammed-earth	rammed earth
 rampart	rampart
@@ -3208,6 +3229,7 @@ regime equation	regime equation
 regime power laws	regime equation
 regime theory	regime equation
 registered tangible cultural property	Tangible Cultural Property
+regression	regression
 regulator	regulator
 regulators	regulator
 rehe	Jehol
@@ -3378,6 +3400,8 @@ sally port	sally port
 sally ports	sally port
 sallying	sortie
 sallyport	sally port
+salt censor	salt censor
+salt censors	salt censor
 salt road	Salt Road
 salvage excavation	salvage excavation
 samurai ground	buke-chi
@@ -4116,6 +4140,9 @@ throwing	throwing
 tian'geng	bund
 tiangeng	bund
 tiangong kaiwu	Tiangong kaiwu
+ticket salt	ticket salt
+ticket-salt	ticket salt
+tickets	ticket salt
 tie-rail	tie-rail
 tie-rails	tie-rail
 tier	tier
@@ -4384,6 +4411,7 @@ visiting grave	visiting grave
 visiting graves	visiting grave
 viz	viz.
 viz.	viz.
+voc	VOC
 volatile	volatiles
 volatiles	volatiles
 votive plaque	votive plaque
@@ -4537,6 +4565,7 @@ wu ding	Wu Ding
 wubei zhi	Wubei Zhi
 wudu	wudu
 wujing zongyao	Wujing Zongyao
+wuliao jiazhi zeli	Wuliao jiazhi zeli
 wusong	Wusong
 xianfeng	Xianfeng
 xiang	xiang
@@ -4554,6 +4583,7 @@ xuanhua arch	memorial arch
 xun	xun
 xunfu	grand coordinator
 xunjiansi	xunjiansi
+xuzhi	Gongbu changku xuzhi
 yaba	yaba
 yabusame	yabusame
 yacheng	yacheng
