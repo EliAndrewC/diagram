@@ -4498,6 +4498,8 @@ zennoh	Zennoh
 zhalan	zhalan
 zhalou	zhalou
 zhang	zhang
+zhang lü-xiang	Zhang Lüxiang
+zhang lüxiang	Zhang Lüxiang
 zhen	zhen
 zhengde	Zhengde
 zhengguo canal	Zhengguo canal
