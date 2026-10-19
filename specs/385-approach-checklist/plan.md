@@ -532,7 +532,25 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@30 (continue),
 
 ### T109 Decisions
 
-**D128 - the grove fallback at 0036's room.** In `_thread_the_fabric` the grove bands the fallback routes round and clips against are grown by `CONNECTOR_BAND_GAP_FT - FOOTPATH_FABRIC_GAP` (5.5 ft) a side, so the route and the clip at `FOOTPATH_FABRIC_GAP` keep the line 12.5 ft off the trees; the crops keep their gap. Its claim cites 0036 for the band gap. The two touch claims say the routed link keeps `WEB_FABRIC_GAP` (7 ft).
+**D128 - the grove fallback at 0036's room.** In `_thread_the_fabric` the grove bands the fallback routes round and clips against are grown by `CONNECTOR_BAND_GAP_FT - FOOTPATH_FABRIC_GAP` (5.5 ft) a side, so the route and the clip at `FOOTPATH_FABRIC_GAP` keep the line 12.5 ft off the trees; the crops keep their gap. Its claim cites 0036 for the band gap. The same growth holds the bands wherever the function tests the fabric - its first route, its clip and its checks build
+the fabric with the grove bands grown by `CONNECTOR_BAND_GAP_FT - gap`, so no route keeps a band at 7 ft (measured 2026-10-19:
+T109's claims round, `gap off the steadings` DRIFTED for the first route; built, the cohort passes 16 of 16). The two touch
+claims say the routed link keeps `WEB_FABRIC_GAP` (7 ft to the middle), labeled DEVIATION on 0246 as `_route`'s own claim is, the
+junction link's 25 ft cited to 0081's join reach.
+
+### T109 part B (2026-10-19T11:05Z)
+
+Owed by the round arbiter's ruling on hour:385-approach-checklist@32 (continue), taken while T109 was the active task.
+
+1. **What is refusing?** Nothing: the claims round named the first route's band gap, now built as D128 above.
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither in this part B: the change is D128's, decided above and reviewed with it.
+6. **The one-sentence test.** "A track keeps 0036's room off every grove band" - true by the build and the cohort.
+7. **The next step is a measurement.** The claims round on the changed function, then the gate.
+8. **Every route measured before offering one?** No route is offered.
+9. **After a ruling: the step it names?** Yes - the ruling says go on with T109; its two asides are filed as T110 and T111.
 
 ## T11 - the close
 
