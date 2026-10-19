@@ -1,6 +1,5 @@
 # Implementation Plan: the approach checklist - the front of 384, one task at a time (feature 385)
 
-**Approach checklist**: specs/385-approach-checklist/checklist.md
 
 **Spec**: `spec.md` | **Request**: `request.md` | **Checklist**: `checklist.md` | **Audit**: `audit.md` | **Builds on**: the lane
 law (`l7r/diagram/hamletgen/ways/law.py`, `law_water.py`), its settle (`settle.py`, `last_resort.py`), 384's FR-000 and User
@@ -823,6 +822,29 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@37 (continue),
 
 <!-- plan-archive: T34 to T34 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
 <!-- plan-archive: T143 to T34 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+<!-- plan-archive: T148 to T34 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).
+
+### T11 Approach (checklist part A)
+
+1. **The goal, in the world.** Every feature's tasks are worked under the approach checklist, not only 385's, and 385 closes with its report.
+2. **The constraints.** FR-001 and the task as filed: the checklist to `docs/`, its refusals (`approach_gate`, D8 and D9) extended to every feature's tasks. SC-001 and SC-002: the final report says whether each task's time fell and whether the checklist settled, or why not. The round arbiter's ruling on ask:t14-plan-round4: D30's wording brought to what the code does (rows 1-3, held by `test_a_transcript_named_call_is_its_run_s_anywhere_and_a_mixed_overlap_is_the_missing_run_s_estimate`). Amendment 11 (the GM, 2026-10-19): 385 keeps only its process tasks; the rest is feature 405.
+3. **Where each comes from.** FR-001, SC-001, SC-002 (G, amendments 1 and 2); the ruling (O); amendment 11 (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (`approach_gate.checklist` and `OPT_IN` read): the gate applies only to a plan carrying `**Approach checklist**: <path>`, and 385's is the only plan that does; the checklist stands at `specs/385-approach-checklist/checklist.md`; D30's text in `plan-done.md` lacks the three clauses the code holds.
+5. **The order.** The checklist moved to `docs/`; the gate's default; 385's opt-in line repointed; D30's three clauses; the report written; the test.
+6. **The exits.** (c) - one checklist for every plan, the opt-in line retired; requiring each plan to opt in was weighed and refused (a step to remember, the GM's rule), and so was letting a line name another file (round 1 of this plan's review: a thin file would pass the refusal and skip the settled questions).
+7. **The search smell.** None.
+8. **The budget.** 45 min.
+9. **Done, measured.** One goal, the close as filed - D30's wording is part of it because the round arbiter's ruling on ask:t14-plan-round4 filed it into T11 (the task's own text): `docs/approach-checklist.md` holds the checklist, and every feature's tasks are asked it - `make tick`'s Approach refusal (D8) and a trigger's part B (D9) alike - with no line to name it; D30 reads as the code runs; `make feature-report F=385 WRITE=1` written, answering SC-001 and SC-002; `tests/tooling/` red without the default.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T11 Decisions
+
+**D157 - every feature's checklist.** `specs/385-approach-checklist/checklist.md` moves (`git mv`) to `docs/approach-checklist.md`; `approach_gate.checklist` returns it for every plan, wherever it exists, and the `**Approach checklist**:` opt-in line is retired (`OPT_IN` removed; 385's line removed) - one checklist, no override.
+
+**D158 - D30 as the code runs.** D30 in `plan-done.md` gains the ruling's three clauses: the outside-every-window clause carries its own condition (no `by`, no transcript names it), the overlap clause says the earliest-started run's attribution is still an estimate, and a call inside both a found and a missing run's window is the missing run's estimate.
+
+**D159 - the report.** `make feature-report F=385 WRITE=1` writes 385's report, which answers SC-001 (each task's time and its re-decides) and SC-002 (whether the checklist settled), or says why not.

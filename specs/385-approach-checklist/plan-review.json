@@ -3,9 +3,9 @@
  "plan_sha256": "03b0781c7141967697b3c5c60be011943ef0fd498f818833a45fa4696d582703",
  "blocks": {
   "preamble": {
-   "sha256": "432906df1b4fca84f37932b2423164e9a248862c872db21582c2aa64dbf69f60",
+   "sha256": "53279508d672dce29d76fb849df9508ce6c915eb80259da4a59eb3e699ed8304",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-17",
+   "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## Summary": {
@@ -166,12 +166,6 @@
   },
   "### T14 Approach (checklist part A)": {
    "sha256": "1e03631da72cf3c5be055e4cc6c3d2a2fb678ae215e2a43b3fa0f14ba1de8b3f",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-17",
-   "declared": "spec-fidelity"
-  },
-  "### T14 Decisions": {
-   "sha256": "0a340b98498f0aa0388a0b62ef7fa4c635521a199b49faf88abf021bf99d930e",
    "verdict": "CLEAR",
    "reviewed": "2026-10-17",
    "declared": "spec-fidelity"
@@ -4759,6 +4753,28 @@
      "why": "Change 8 asks for the step-back's tables as one command. FR-005 and FR-014 are cited as the shape the tables follow. Reusing the existing categories adds no new taxonomy. The step-back report's tables are not in the bundle, so the claim that these two tables are 'the tables above' was not checked against them."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-19",
+   "blocks": [
+    "(removed) ### T14 Decisions",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "preamble: opt-in line retired (D157 carried out)",
+     "summary": "The preamble drops its '**Approach checklist**: specs/385-approach-checklist/checklist.md' line, so the checklist no longer applies by a plan's opt-in but to every plan.",
+     "class": "within",
+     "why": "The approved proposal makes the checklist 'the required content' that make tick refuses without, and FR-003 says each task's plan section carries an Approach block answering it. Retiring a per-plan opt-in widens the checklist to every plan rather than carving any plan out of it; nothing the GM asked for is narrowed. The rest of the preamble is unchanged."
+    },
+    {
+     "id": "(removed) ### T14 Decisions",
+     "summary": "T14's decisions D30-D34 (subagent attribution by transcript, hook and window; the three-way time split; per-task phases; the decision-log skeleton; one goal a task) leave the active plan.",
+     "class": "within",
+     "why": "These implemented amendment 4, which the spec still carries as FR-014, FR-015 and FR-016 (present in spec-index.md). Taking a finished task's decisions out of the active plan withdraws no commitment the request made. Ruled on the REMOVAL alone: the dispatch says D158 adds the round arbiter's three clauses to D30, but no amended D30 is in this bundle's blocks, so this verdict does not cover D158's wording wherever it now lives."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -7646,6 +7662,64 @@
      "summary": "a dead row is not counted as one of FR-020's ten claims (the T34 plan review)",
      "class": "within",
      "why": "Amendment 7 asks for 10 more claims fixed; not counting a retired dead row keeps the ten as ten real fixes on rows a live map runs (the arbiter's reading). It does not reduce the work the GM asked for, so it is not a narrowing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T148": {
+   "section_sha256": "e423f8c5cc56f4fd561994fe556e183d11e5a46f304f4bfa451feb57da6ec12e",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D156",
+     "summary": "hm_checks' TaskStop branch, beside hm_planhold.returned, marks every running or pending dispatch whose aid is the stopped task answered, closed 'stopped by the session (TaskStop)' - the record make check-closed AGENT= already writes by hand",
+     "class": "within",
+     "why": "Amendment 11 keeps T148 in 385 as an open tooling task (the GM: 'all open process tasks stay in 385'); amendment 6 asks for obvious tooling/process fixes along the way; amendment 1 item 3 and FR-010 set the GM's rule of a tool rather than a reminder. D156 automates an existing hand step (check-closed AGENT=, 'a check you stopped yourself') and mirrors D121's TaskStop release of plan holds. The freeze's purpose (no page edit while a check reads it) is untouched: a stopped agent reads nothing and returns no reply. No check a session did not stop is closed, and nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "Approach item 6 - exit (c)",
+     "summary": "close at the TaskStop, where the session's intent is known; closing on make dispatch-dropped weighed and refused because it names a refused dispatch that never ran",
+     "class": "within",
+     "why": "A choice of where the fix lives, inside the defect's own scope. Refusing the dispatch-dropped route keeps the close from reaching dispatches that were never stopped; it excludes nothing the request asked for."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T11": {
+   "section_sha256": "13a2666401aff4a2f3af66db986c991f5fd62c046004c4c9d03d3c4ca60218ba",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D157",
+     "summary": "The checklist moves to docs/approach-checklist.md; approach_gate.checklist returns it for every plan; the opt-in line and OPT_IN are retired, 385's line removed - one checklist, no override.",
+     "class": "within",
+     "why": "FR-001: once the feature closes the settled checklist moves to docs/ and the refusals of FR-003 and FR-004 extend from this feature's tasks to every feature's; D8 already says FR-001's close makes the opt-in every feature's. One checklist for every plan with no line to name another file IS that extension; round 1's NOT LEGITIMATE override (a line naming another path still winning) is gone. Item 9 extends both D8 (make tick's Approach refusal) and D9 (a trigger's part B), so FR-004's half is carried too."
+    },
+    {
+     "id": "Exits (item 6)",
+     "summary": "Requiring each plan to opt in, and letting a line name another file, both weighed and refused.",
+     "class": "within",
+     "why": "Both refusals keep the scope at FR-001's every-feature reach rather than narrowing it; neither carves a case out of the rule."
+    },
+    {
+     "id": "D158",
+     "summary": "D30 in plan-done.md gains the round arbiter's three clauses (ask:t14-plan-round4): the outside-every-window clause's own condition, the overlap attribution still an estimate, a call in both a found and a missing run's window is the missing run's estimate.",
+     "class": "within",
+     "why": "A wording correction bringing D30 to the code the arbiter's ruling held, carrying the GM's amendment 4 words ('if the hook input carries that; otherwise use each agent's start and stop window') rather than narrowing them: each clause is a window-based estimate where neither transcript nor hook says. Round 1's FR-015 finding (a second goal found in the task) is answered by the block's citation of the arbiter's ruling filing it into T11, which per feature 379 stands where the GM was asked; it is part of the task as filed, not a goal the session found and bundled. Item 4 states the D30 gap as measured 2026-10-19."
+    },
+    {
+     "id": "D159",
+     "summary": "make feature-report F=385 WRITE=1 writes 385's report answering SC-001 and SC-002, or why not.",
+     "class": "within",
+     "why": "SC-001 and SC-002 verbatim, including their 'or the report says why not' clauses; nothing dropped."
+    },
+    {
+     "id": "Done test",
+     "summary": "tests/tooling/ red without the default.",
+     "class": "within",
+     "why": "A test whose only effect is to enforce FR-001's extension (SC-004's red-without-it); enforcement of the request, not scope."
     }
    ],
    "verdict": "CLEAR"

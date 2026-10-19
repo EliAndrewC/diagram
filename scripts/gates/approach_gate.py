@@ -32,7 +32,9 @@ import subprocess
 import sys
 import time
 
-OPT_IN = re.compile(r"^\*\*Approach checklist\*\*:\s*`?([^\s`]+)`?", re.M)
+#: EVERY FEATURE'S CHECKLIST (feature 385 T11, D157): FR-001's refusals extended to every feature's tasks. A plan opted in by a
+#: `**Approach checklist**: <path>` line until 385 closed; the line is retired, so no plan can forget it or name a thinner file
+DEFAULT = "docs/approach-checklist.md"
 STAMP = re.compile(r"(\d{4}-\d\d-\d\dT\d\d:\d\d)(?::(\d\d))?Z")
 _ITEM = re.compile(r"^(\d+)\.\s+\S", re.M)
 OWED = "approach-owed.json"
@@ -52,10 +54,9 @@ def now_utc() -> str:
     return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
 
 
-def checklist(root: pathlib.Path, plan_text: str) -> pathlib.Path | None:
-    """The checklist a plan opts in to (None when it does not)."""
-    m = OPT_IN.search(plan_text)
-    return root / m.group(1) if m else None
+def checklist(root: pathlib.Path, plan_text: str = "") -> pathlib.Path | None:  # noqa: ARG001 - kept for its callers
+    """The checklist every plan's tasks are worked under, `docs/approach-checklist.md`; None in a tree without it."""
+    return root / DEFAULT if (root / DEFAULT).is_file() else None
 
 
 def part_items(checklist_text: str, part: str) -> list[int]:
@@ -138,8 +139,6 @@ def refusal(spec_dir: pathlib.Path, root: pathlib.Path, task: str) -> str | None
     path = checklist(root, text)
     if path is None:
         return None
-    if not path.is_file():
-        return f"the plan opts in to the approach checklist at {path.relative_to(root)}, which does not exist"
     if ahead := future_refusal(text):
         return ahead
     lines = path.read_text(encoding="utf-8")

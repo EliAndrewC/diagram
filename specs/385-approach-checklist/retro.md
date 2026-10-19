@@ -1125,3 +1125,19 @@ page's wording before its record round, not between rounds - each edit re-owes t
 About 15 min with T34's landing. `_WELD_MIN_SOLIDITY` and `_WELD_MIN_APEX`, read by nothing since feature 302 retired the carve
 and its welder, are gone with their claims and comments, and both ranking rows are retired in 328's waves.json (wave 168) - T32's
 count with them, which T144 replaces. **The habit it changes:** grep a ranking row's code for a live use before taking it.
+
+## T148 - the retro row
+
+About 20 min. A record check the session stops with TaskStop now closes its dispatch, as `make check-closed AGENT=` did by hand,
+so its page is no longer frozen and its round's next check is not refused (T34 had two such checks holding 0043). The TaskStop
+branch had released plan holds since T104 but not check dispatches. **The habit it changes:** none; a stop now means stopped.
+
+## T11 - the retro row
+
+About 60 min, the close. The approach checklist moved to `docs/approach-checklist.md` and is now every feature's: `make tick`'s
+Approach refusal and a trigger's part B ask it of every plan, and the opt-in line is retired, so no plan can forget it or name a
+thinner file (round 1 of the review rightly blocked keeping that override). D30 gained the round arbiter's three clauses, worded
+as T11's reviewed section stated them (the block review that followed saw only D30's earlier text, a limit it recorded). The final
+report answers SC-001 (task times fell by kind: ranking rows from 75 min-5 h to 19-36 min, wording fixes to 5-7 min) and SC-002 (the
+checklist has not changed since T76). The engine and record work 385 found moved to feature 405, filed and not started, by the GM's
+amendment 11. **The habit it changes:** every feature's tasks start from the checklist, with no opt-in to remember.
