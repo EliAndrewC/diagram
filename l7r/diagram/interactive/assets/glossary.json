@@ -16581,5 +16581,133 @@
    "ridge-raising",
    "ridge raising"
   ]
+ },
+ "Ise": {
+  "def": "The great shrines at Ise, which travelers from all over Edo-period Japan visited as pilgrims; from around Edo the journey took about 15 nights, and Tsu lay on the road to them.",
+  "variants": [
+   "Ise",
+   "Ise shrines",
+   "Ise road"
+  ]
+ },
+ "Mitsui": {
+  "def": "A merchant house of Kyoto and Edo. Its surviving accounts give an unskilled day laborer's wage, in silver, for most years from 1741 to 1867.",
+  "variants": [
+   "Mitsui",
+   "Mitsui house",
+   "Mitsui Bunko"
+  ]
+ },
+ "Shingon": {
+  "def": "A school of esoteric Buddhism brought from China in the early 9th century, with many temples across Japan.",
+  "variants": [
+   "Shingon",
+   "Shingon sect"
+  ]
+ },
+ "honma": {
+  "def": "A post station's pack horse in Edo-period Japan, carrying a full horse-load of goods (at first 30 kan, later 40) at the full fare for the stage.",
+  "variants": [
+   "honma"
+  ]
+ },
+ "karajiri": {
+  "def": "A post station's light horse in Edo-period Japan, carrying one rider and up to 5 kan of hand baggage, at about two-thirds of a pack horse's fare.",
+  "variants": [
+   "karajiri"
+  ]
+ },
+ "ninsoku": {
+  "def": "A porter or hired laborer, especially one supplied by a post station on Edo-period Japan's highways, who carried up to 5 kan of goods a man and more at a surcharge.",
+  "variants": [
+   "ninsoku"
+  ]
+ },
+ "whale-foot measure": {
+  "def": "The shaku used to measure cloth in Edo-period Japan, about 37.9 cm (~15 in), longer than the ordinary shaku.",
+  "variants": [
+   "whale-foot measure",
+   "whale-foot",
+   "kujira-jaku",
+   "kujira shaku"
+  ]
+ },
+ "kosode": {
+  "def": "The short-sleeved robe of Edo-period Japan, the ancestor of the modern kimono, worn by townspeople and samurai alike; a tan was the cloth for one.",
+  "variants": [
+   "kosode"
+  ]
+ },
+ "habutae": {
+  "def": "A smooth, light, plain-woven Japanese silk cloth.",
+  "variants": [
+   "habutae"
+  ]
+ },
+ "pongee": {
+  "def": "A coarser silk cloth woven from spun rather than reeled thread, often from waste or wild-silkworm cocoons; Japan's tsumugi and China's Shandong pongee are both kinds.",
+  "variants": [
+   "pongee",
+   "tsumugi"
+  ]
+ },
+ "Yotsuho silver": {
+  "def": "A silver coin first minted in 1711, the most debased of the Edo period, so a price in it ran higher than the same price in better silver.",
+  "variants": [
+   "Yotsuho silver",
+   "Yotsuho"
+  ]
+ },
+ "copper cash": {
+  "def": "China's round bronze coin with a square hole, the wen; the Beijing list of 1736 counts 800 to a tael of silver.",
+  "variants": [
+   "copper cash"
+  ]
+ },
+ "ukiyo-zoshi": {
+  "def": "The popular fiction of townspeople's lives in Japan from the late 1600s through the 1700s, begun by Ihara Saikaku.",
+  "variants": [
+   "ukiyo-zoshi",
+   "ukiyozoshi"
+  ]
+ },
+ "calenderer": {
+  "def": "A worker who finishes cloth by pressing it under heavy rollers or stones to give it a smooth, glossy face.",
+  "variants": [
+   "calenderer",
+   "calenderers"
+  ]
+ },
+ "dengaku": {
+  "def": "tofu grilled and sold cheaply with sake; the Toshimaya, a sake shop in Edo that served it, is said to have begun the Edo tavern.",
+  "variants": [
+   "dengaku"
+  ]
+ },
+ "Kamakura quay": {
+  "def": "a landing on the Kanda River in Edo; the Toshimaya, a sake shop there, is said to have begun the Edo tavern.",
+  "variants": [
+   "Kamakura quay"
+  ]
+ },
+ "shochu": {
+  "def": "a distilled spirit of Japan, priced in Edo's food guides beside clear sake and fruit wine.",
+  "variants": [
+   "shochu"
+  ]
+ },
+ "Itami": {
+  "def": "a brewing town west of Osaka whose sake was shipped down to Edo; an 1842 list of official prices in Kazusa set it at 180 mon a sho against 100 for local sake.",
+  "variants": [
+   "Itami",
+   "Itami sake"
+  ]
+ },
+ "lees": {
+  "def": "the solids left when wine is brewed; in late-Ming Huzhou they were bought by the jin and distilled into spirit, about 20 jin of spirit to 100 jin of lees.",
+  "variants": [
+   "lees",
+   "wine lees"
+  ]
  }
 }
