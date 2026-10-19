@@ -246,6 +246,16 @@ def fresh_reading(state: Mapping[str, Any], unit: str, notes: set[str]) -> bool:
     adding their own notes to one page, one after another, are three first readings (the round arbiter on 0104, 2026-10-10:
     "the cap fired because the round counter counts one page across features, not because a check repeated")."""
     read = state.get("notes_read", {}).get(unit)
+    # ...AND THE NOTES OF ITS DISPATCHES STILL IN FLIGHT (the round arbiter on round:source-reader|q:0260@8): a session sends one
+    # bundle per new source at once, and a reading's notes are marked only when it launches, so every bundle of the batch found
+    # no reading recorded and each first read was counted a round - q:0260 reached round 8 on first reads of eight sources
+    check, _, subject = unit.partition("|")
+    flying = [n for d in state.get("dispatches", {}).values() if d.get("check") == check and subject in d.get("subjects", [])
+              and d.get("state") in ("pending", "running") for n in (d.get("notes") or ["*"])]
+    if read is None and flying:
+        read = flying
+    elif read is not None:
+        read = [*read, *flying]
     return bool(notes) and read is not None and "*" not in read and not notes & set(read)
 
 
