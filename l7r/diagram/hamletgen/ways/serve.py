@@ -460,7 +460,8 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
         no path to a household reached across a yard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: it shows no lane of its own
         door path off the house and the fixtures - UNRESEARCHED: it starts 8 ft past its yard (`DOOR_STEP_FT`) and keeps 5 ft clear of the fixtures (`DOOR_FIXTURE_CLEAR_FT`)
         door path off a grove band - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a footpath's clearance and some working room kept off the trees on each side, `GROVE_WORKING_ROOM_FT` 9.5 ft off the 3 ft tread (about 22 ft of the opening), counted once: the band grown by `band_grow` and the path routed at its gap keep its middle 11 ft off the trees
-        a flank door only where the front has none - UNRESEARCHED: a door path leaves from a flank of the dooryard only where no lawful path leaves the front"""
+        a flank door only where the front has none - UNRESEARCHED: a door path leaves from a flank of the dooryard only where no lawful path leaves the front
+        a flank door with open yard to the front - UNRESEARCHED: only a flank with open ground - no house, no grove band - between it and the front door (`front_to_flank_open`)"""
     from .checks import served_network  # local: checks sits above serve in this package's layers
     from .law import fixture_quads  # local: the law sits above serve too
     from .settle import Lawful  # local: the settle sits above serve too
@@ -510,7 +511,7 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
         for k, d in enumerate(doors):
             if d is None or (k > 0 and not front_to_flank_open(door, d, h)):
                 continue
-            path = door_path(s, d, segs, hard, walls, water, quads, lawful)  # type: ignore[arg-type]
+            path = door_path(s, d, segs, hard, walls, water, quads, lawful, bands)  # type: ignore[arg-type]
             if path is not None and _draw_web(s, path, 3, houses=[(float(h["x"]), float(h["y"]))], joins=True):
                 s.M["lanes"][-1]["serves"] = [float(h["x"]), float(h["y"])]
                 if k > 0:
@@ -614,13 +615,17 @@ def closes_a_needle(lanes: Sequence[Mapping[str, Any]], path: Sequence[Pt]) -> b
     return len(needle_loops({"lanes": [*lanes, {"pts": list(path)}]})) > len(needle_loops({"lanes": list(lanes)}))
 
 
-def door_path(s: Settlement, door: Pt, segs: Sequence[tuple[Pt, Pt]], hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], quads: Sequence[Poly], lawful: Any) -> list[Pt] | None:
+def door_path(
+    s: Settlement, door: Pt, segs: Sequence[tuple[Pt, Pt]], hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], quads: Sequence[Poly], lawful: Any, bands: Sequence[Poly] = ()
+) -> list[Pt] | None:
     """The door path from `door` to its way (`segs`) the law keeps, trying the way's six nearest points, nearest first: the
     straight step where it is clear (the router plans on a lattice and refused doors whose every neighboring cell stood in
     its gap of the yard, the well or a trunk - three Mizuguchi doors 35 ft from their street), else the routed way,
     string-pulled (the lattice's few-foot jogs are kinks to the law, cohort seed 904); ended square on the way at its first
     arrival (`to_first_arrival`); squared where it crosses water (`settle.square_run`, as the settle squares every lane
     first); and kept only where it crosses no wall and no fixture and the law would keep it as a tree lane (`lawful`).
+    The grove `bands` (grown by `band_grow`) are held `FOOTPATH_FABRIC_GAP` off by every test - the step and the pull as the
+    router holds them - so 0036's 11 ft is kept whichever way the path was found (feature 385 T98's claims round).
 
     Research:
         a worn path takes the shortest way - research/questions/0081-village-lanes.drawing.html: straight where clear,
@@ -637,6 +642,7 @@ def door_path(s: Settlement, door: Pt, segs: Sequence[tuple[Pt, Pt]], hard: list
         # on - what the law asks of the finished path: at a bare zero gap, cohort seed 23's straight steps skimmed a privy
         return (
             not _crosses_fabric([a, b], walls, 0.0)
+            and not _crosses_fabric([a, b], bands, FOOTPATH_FABRIC_GAP)
             and not _crosses_fabric([a, b], hard, 0.0)
             and not any(segments_cross(a, b, c, d) for c, d in water)
             and over_a_fixture([a, b], 3.0, quads) is None
@@ -646,7 +652,8 @@ def door_path(s: Settlement, door: Pt, segs: Sequence[tuple[Pt, Pt]], hard: list
     def kept(path: list[Pt], clear: Any) -> list[Pt] | None:
         path = to_first_arrival(path, segs, _TOUCH_GAP, clear)
         path = square_run(s.M, path) if len(path) >= 2 else path
-        ok_ = len(path) >= 2 and not _crosses_fabric(path, walls, 0.0) and over_a_fixture(path, 3.0, quads) is None and lawful(path, 3.0)
+        ok_ = len(path) >= 2 and not _crosses_fabric(path, walls, 0.0) and not _crosses_fabric(path, bands, FOOTPATH_FABRIC_GAP)
+        ok_ = ok_ and over_a_fixture(path, 3.0, quads) is None and lawful(path, 3.0)
         # ...AND CLOSES NO NEEDLE WITH THE WAYS IT MEETS (feature 374 wave 146): a door path is a tree lane no settle may cut, so
         # one laid up beside its street to meet it left a sliver the web was refused for (dike-pond seed 3, polder seed 4)
         return path if ok_ and not closes_a_needle(s.M.get("lanes") or [], path) else None

@@ -914,9 +914,10 @@ def connector_dry_exit(plan: SitePlan, start: Pt, avoid: Sequence[Poly], wet: Se
 
     Research:
         dry exit off the wet - research/questions/0081-village-lanes.drawing.html: walled by the marsh, the steadings and the field
+        the track's room off the steadings and the wet - UNRESEARCHED: 7 ft off every steading (`TRACK_FABRIC_GAP`) and the wet ground grown 8 ft (`wet_grown_by_the_lane`)
         pond berth - UNRESEARCHED: 80 ft past the pond's larger half-axis
         grove band gap - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a lane keeps a footpath's clearance and some working room off the trees; `CONNECTOR_BAND_GAP_FT`, 0036's 9.5 ft working room plus the connector's half-width (12.5 ft), on a finer grid
-        track start out of the grove bands - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: walked out of grove bands by a footpath gap plus half the tread, the lane's clearance off the trees
+        track start out of the grove bands - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: walked out of grove bands by `CONNECTOR_BAND_GAP_FT` (0036's working room past the half-width) and the fill's cell slack, the wall the fill puts round each band
         brook not crossed - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: no water line crossed"""
     # ...A FARM'S GROVE BAND AT A FOOTPATH'S GAP, over a grid fine enough to pass between two (feature 291 on 287): dispersed
     # farms stand a lane's room (32 ft) apart, and at the track's gap on the 20 ft grid every way between them was walled -
@@ -935,7 +936,7 @@ def connector_dry_exit(plan: SitePlan, start: Pt, avoid: Sequence[Poly], wet: Se
     # ...FROM OUTSIDE ANY GROVE BAND: a dispersed seat's gateway can fall inside a farm's deep band, and the fill's start cell
     # alone is walkable there - every cell round it was band (cohort seed 5); a track may not start in a grove in any case
     if bands:
-        start = clear_of_bands(start, [list(b) for b in bands], FOOTPATH_FABRIC_GAP + CONNECTOR_WIDTH / 2.0 + 0.71 * GROVE_EXIT_CELL_FT + 1.0)
+        start = clear_of_bands(start, [list(b) for b in bands], CONNECTOR_BAND_GAP_FT + 0.71 * GROVE_EXIT_CELL_FT + 1.0)
     path = dry_exit(start, walls, lines, float(plan.W), float(plan.H), cell=GROVE_EXIT_CELL_FT if bands else EXIT_CELL_FT)
     if path is None:
         raise NoDryExit(f"no dry way out of the frame from the gateway at ({start[0]:.0f}, {start[1]:.0f})")

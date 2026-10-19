@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import pytest
+
 from l7r.diagram.hamletgen.consts import DOOR_STEP_FT, FOOTPATH_FABRIC_GAP
 from l7r.diagram.hamletgen.ways.serve import DOOR_REACH_FT, front_door, lay_door_paths
 from l7r.diagram.settlement import Settlement, seg_dist
@@ -152,3 +154,31 @@ def test_the_room_off_a_grove_is_counted_once() -> None:
     assert serve.band_grow(12.0) == 0.0, "a gap past 0036's room grows nothing"
     assert track.CONNECTOR_BAND_GAP_FT == GROVE_WORKING_ROOM_FT + track.CONNECTOR_WIDTH / 2 == 12.5
     assert 2 * track.CONNECTOR_BAND_GAP_FT <= 32.0, "dispersed farms' bands stand 32 ft apart"
+
+
+def test_a_door_path_keeps_the_room_off_a_grove_however_it_was_found(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 385 T98's claims round: with the band grown less (`band_grow`), only the routed leg kept 0036's 11 ft - the
+    straight step and the pull tested the bands at no gap, so a path's middle could pass 4 ft off the trees."""
+    from types import SimpleNamespace
+
+    from l7r.diagram.hamletgen.ways import serve, settle
+
+    detour = [(0.0, 0.0), (0.0, -40.0), (100.0, -40.0), (100.0, 0.0)]
+    monkeypatch.setattr(serve, "route_from_door", lambda door, q, hard, walls, water, ok, gap=FOOTPATH_FABRIC_GAP: list(detour))
+    monkeypatch.setattr(serve, "pulled", lambda p, ok: list(p))
+    monkeypatch.setattr(serve, "door_unhooked", lambda p, ok: list(p))
+    monkeypatch.setattr(serve, "to_first_arrival", lambda p, segs, gap, ok: list(p))
+    monkeypatch.setattr(settle, "square_run", lambda M, p: list(p))
+
+    class _Law:
+        def __call__(self, path, width):
+            return True
+
+        def on_lawful_ground(self, run, width):
+            return True
+
+    band = [(40.0, 5.0), (60.0, 5.0), (60.0, 20.0), (40.0, 20.0)]  # 5 ft off the straight step: inside the footpath's gap
+    s = SimpleNamespace(M={"lanes": []})
+    args = (s, (0.0, 0.0), [((100.0, -50.0), (100.0, 50.0))], [], [band], [], [], _Law())
+    assert serve.door_path(*args) == [(0.0, 0.0), (100.0, 0.0)], "the band only as a wall: crossing it is all that is asked"
+    assert serve.door_path(*args, [band]) == detour, "held off the band by the footpath's gap, the step goes round"
