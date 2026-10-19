@@ -340,8 +340,6 @@ def test_a_batch_reply_is_refused_whole_and_never_drops_a_fix(root: pathlib.Path
         "tooling_fix": "F",
         "fix_measure": "x",
         "fix_minutes": 10,
-        "fix_measure": "x",
-        "fix_minutes": 10,
         "triggers": [a, b],
         "exceptions": {
             a: {"ruling": "process-fault", "why": "x", "tooling_fix": "G", "fix_measure": "x", "fix_minutes": 10},

@@ -197,7 +197,7 @@ def refusals(sids: Sequence[str], since: float, until: float, log: Path = GUARD_
             continue
         try:
             r = json.loads(f.read_text(encoding="utf-8"))
-        except (OSError, ValueError):
+        except OSError, ValueError:
             continue
         # `refused` too: the pair guard's hour refusal logs so, and the hour-10 step-back's list missed it (the round arbiter's
         # tooling fix on hour:385-approach-checklist@10)
@@ -304,7 +304,9 @@ def build(trigger: str, root: Path, out: Path, since: float, until: float, trans
         + (f"summed over {len(read)} sessions, which may run side by side and so sum past the hour\n\n" if len(read) > 1 else "")
         + f"wall {wall / 60:.0f} min; the model {model / 60:.1f} min; tools "
         f"{tools / 60:.1f} min; the rest (waiting on background work, subagents or the GM) {max(wall - model - tools, 0) / 60:.1f} min\n\n"
-        "## Tools by command\n\n" + ("\n".join(rows) or "(no tool call in the window)") + "\n", encoding="utf-8")
+        "## Tools by command\n\n" + ("\n".join(rows) or "(no tool call in the window)") + "\n",
+        encoding="utf-8",
+    )
     (out / "dispatches.md").write_text("# Subagents dispatched\n\n" + ("\n".join(dispatches(events, since, until)) or "(none)") + "\n", encoding="utf-8")
     (out / "refusals.md").write_text("# Guard refusals\n\n" + ("\n".join(refusals(sids, since, until)) or "(none)") + "\n", encoding="utf-8")
     tasks = root / "specs" / feature / "tasks.md"
@@ -317,10 +319,11 @@ def build(trigger: str, root: Path, out: Path, since: float, until: float, trans
     if gaps := silent_minutes(records, since, until):
         head += f"; NO WORDS FOUND for {', '.join(gaps)} of the window - judge those minutes as unseen, not as idle"
     (out / "words.md").write_text("# The sessions' own words\n\n" + head + "\n\n" + (said or "(no transcript found)") + "\n", encoding="utf-8")
-    # EACH FIX'S YIELD (feature 385 T119, D141; the GM's change 3 of 2026-10-19): a fix that saves nothing is retired
+    # EACH FIX'S YIELD (feature 385 T119, D141; the GM's change 3 of 2026-10-19): a fix that saves nothing is retired. Read over
+    # every session of the clone, never this hour's alone: a fix's before and after span many hours (`make fix-yield` reads the same)
     import fix_yield  # noqa: PLC0415 - scripts/measure, on the path above
 
-    (out / "fix-yield.md").write_text("# Each tooling fix's yield\n\n" + fix_yield.report(root, root / "specs" / feature, sids, projects), encoding="utf-8")
+    (out / "fix-yield.md").write_text("# Each tooling fix's yield\n\n" + fix_yield.report(root, root / "specs" / feature, None, projects), encoding="utf-8")
     (out / "MANIFEST.md").write_text(MANIFEST.format(trigger=trigger, feature=feature, since=_iso(since), until=_iso(until)), encoding="utf-8")
     return out / "MANIFEST.md"
 

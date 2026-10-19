@@ -177,9 +177,7 @@ def blocking(root: Path, unit: str = "", gate: bool = False) -> list[str]:
         if not mine(root, v):
             continue
         kind = v.get("kind")
-        if gate and kind == "red-gate":
-            out.append(t)
-        elif not gate and (kind in ("reversal", "cascade") or (kind == "round" and v.get("unit") == unit)):
+        if gate and kind == "red-gate" or not gate and (kind in ("reversal", "cascade") or (kind == "round" and v.get("unit") == unit)):
             out.append(t)
     return sorted(out)
 
@@ -436,8 +434,10 @@ def fix_measure_of(ruling: Mapping[str, Any]) -> dict[str, Any]:
     fix's yield measured against the time it was meant to save) - `make fix-yield` reads them; 46 fixes ruled without them could
     not be measured. The measure is a regex over the main session's Bash commands, or `agent:<kind>` for a check's dispatches."""
     m = str(ruling.get("fix_measure") or "").strip()
-    how = ("a `tooling_fix` names `fix_measure` - a regex over the session's Bash commands whose time it should cut, or "
-           "`agent:<kind>` for a check's dispatches - and `fix_minutes`, the cost it measured this hour (feature 385 T119)")
+    how = (
+        "a `tooling_fix` names `fix_measure` - a regex over the session's Bash commands whose time it should cut, or "
+        "`agent:<kind>` for a check's dispatches - and `fix_minutes`, the cost it measured this hour (feature 385 T119)"
+    )
     if not m or (m.startswith("agent:") and not m[6:].strip()):
         raise ValueError(how)
     if not m.startswith("agent:"):
@@ -447,7 +447,7 @@ def fix_measure_of(ruling: Mapping[str, Any]) -> dict[str, Any]:
             raise ValueError(f"`fix_measure` {m!r} is not a regex ({e}) - {how}") from None
     try:
         minutes = float(ruling.get("fix_minutes"))  # type: ignore[arg-type]
-    except (TypeError, ValueError):
+    except TypeError, ValueError:
         raise ValueError(how) from None
     if minutes < 0:
         raise ValueError(how)

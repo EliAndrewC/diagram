@@ -518,6 +518,10 @@ page-check:     ## [tests] the interactive tests + the browser test, then the `p
 	  && printf '\n\033[1mpage-check green\033[0m (the page and browser stamps are written; an asset-only delta may push)\n' \
 	  && { root=$$(git rev-parse --show-toplevel); python3 "$$root/scripts/record/entry_owed.py" --root "$$root" --why; python3 "$$root/scripts/record/entry_owed.py" --root "$$root" | sed 's/^/  /'; true; }
 
+fix-yield:      ## [project] did each tooling fix save what it was meant to: its measure's rate before its ruling and since it was made (feature 385 T119)   F=<feature>
+	@if [ -z "$(F)" ]; then printf 'make fix-yield: F=<feature> is required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/fix_yield.py" "$(F)" --root "$$(git rev-parse --show-toplevel)"
+
 where-time:     ## [project] where a feature's time went, by task: the time by bucket and the agents by kind (feature 385 T77); BY=tick books each tick-to-tick window (T115)   F=<feature> [SINCE=<ISO UTC>] [BY=tick]
 	@if [ -z "$(F)" ]; then printf 'make where-time: F=<feature> is required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/where_time.py" "$(F)" $(if $(SINCE),--since "$(SINCE)",) $(if $(filter tick,$(BY)),--by-tick,)
@@ -1059,7 +1063,7 @@ perf:            ## [performance] take a performance snapshot of the reference h
 census:           ## [performance] the overlap census: comparisons per call of every check the pool's rolls run, the ones over the flag named
 	@python3 -m l7r.diagram.tools.overlap_census
 
-.PHONY: review-yield cohort-seeds task-add set-down where-time land-batch
+.PHONY: review-yield cohort-seeds task-add set-down where-time land-batch fix-yield
 review-yield:     ## [performance] each review check's passes, findings acted on / dismissed / deferred, author-missed, hours and tokens, from the ledger   [SINCE=2026-09-26]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/review_yield.py" $(if $(SINCE),--since $(SINCE),)
 

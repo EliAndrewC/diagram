@@ -124,7 +124,10 @@ def table(rows: Sequence[Mapping[str, Any]]) -> str:
             f"| {r['trigger']} | `{r['measure']}` | {r.get('fix_minutes') if r.get('fix_minutes') is not None else '-'} | "
             f"{r.get('before', '-')} | {r.get('after', '-')} | {r.get('after_hours', '-')} | {r['verdict']} |"
         )
-    return "\n".join(lines) + "\n\n(per hour of session time: minutes of matching commands, or dispatches for `agent:<kind>`; a rate moves with the mix of work too - a run of claim fixes raises impl-drift's - so weigh "saves nothing" against what the hours held)\n"
+    return (
+        "\n".join(lines)
+        + "\n\n(per hour of session time: minutes of matching commands, or dispatches for `agent:<kind>`; a rate moves with the mix of work too - a run of claim fixes raises impl-drift's - so weigh 'saves nothing' against what the hours held)\n"
+    )
 
 
 def report(root: Path, feature_dir: Path, sids: Sequence[str] | None = None, projects: Path = sb.PROJECTS) -> str:
@@ -159,4 +162,3 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-
