@@ -4270,6 +4270,7 @@ tung	tung
 tung tree	tung
 tung trees	tung
 tutelary shrine	chinju
+tutelary shrines	chinju
 twelve-mat	tatami
 two-grave	two-grave
 two-grave settlements	two-grave
