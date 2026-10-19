@@ -7297,6 +7297,63 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T119": {
+   "section_sha256": "07076c52d1643adbb87f92bed600c90bc9a7542a0e5c304a11686db11f9b9f4d",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D139-refusal",
+     "summary": "hm_arbiter.record refuses a ruling (or batch fix) carrying tooling_fix without fix_measure and fix_minutes; both kept on the row",
+     "class": "within",
+     "why": "Change 3 measures each fix's yield 'against the time it was meant to save'; recording which time that is, as a field, is what makes it measurable, and the GM's standing rule (a tool, never a reminder) covers the refusal form. fix_minutes is change 1's 'measured cost ... this hour', already required. Note for the GM: the content of change 3 exists in request.md only as the session's summary (amendment 10's last paragraph); the GM's own words are 'implement 3'."
+    },
+    {
+     "id": "D139-measure-vocabulary",
+     "summary": "fix_measure is a compiling regex over the main session's Bash commands, or agent:<kind> counting that check's dispatches",
+     "class": "within",
+     "why": "Approach item 4 measured that the step-back bundle's two existing instruments are tool_time by command_key and dispatches.md; the measure names one of them. A fix whose intended saving lies elsewhere (Edit/Read churn, model thinking) has to name a proxy - a design limit of the instrument, not a carve-out of which fixes are measured."
+    },
+    {
+     "id": "D139-46-prior-unmeasured",
+     "summary": "the 46 fixes ruled before T119 carry no fix_measure and are reported 'unmeasured' - no yield is computed for any of them",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Change 3 is 'measuring each fix's yield', and the plan's own goal (Approach item 1) says 'each tooling fix the round arbiter names'; nothing in amendment 10 limits it to fixes ruled from now on. The GM's message is prompted by '49 of 60' step-backs having named a fix - those existing fixes are the population whose payoff is in question, and change 2 ('removing or simplifying a misfiring guard comes before adding one') points at them too. Excluding them leaves the report empty on exactly the question that prompted it. Not impossible: D140's yield is the before/after rate of fix_measure and does not use fix_minutes at all, and the transcripts and time.md cover the windows around those rulings, so a past fix needs only a measure assigned to become measurable. Exit (c) refused judging yield by reading the fixes' sentences; assigning a regex or agent:<kind> to each past fix is a different act and is laborious, not impossible. Laborious is not a ground. Fix: backfill fix_measure for the prior fixes (at least those settled done, which are the ones D140 reports), fix_minutes optional for rows that predate change 1; report 'unmeasured' only for a fix for which no measure can be named, each with its reason - or put the forward-only reading to the GM."
+    },
+    {
+     "id": "D140-yield",
+     "summary": "scripts/measure/fix_yield.py (make fix-yield F=<n>): per fix settled done, the measure's minutes or dispatches per session hour over YIELD_BEFORE_HOURS before its ruling vs since its settling; 'saves nothing' / 'too early' / 'saving'",
+     "class": "within",
+     "why": "This is change 3 itself: the rate of the named cost before the fix against after it. Restricting to fixes settled done is not a narrowing - an unsettled fix has no after-window."
+    },
+    {
+     "id": "D140-windows",
+     "summary": "YIELD_MIN_HOURS = 3 and YIELD_BEFORE_HOURS = 6 as new tooling windows",
+     "class": "within",
+     "why": "Approach item 10 states their origin (three step-backs; the same doubled) and declares them knobs, not research figures; the request sets no window."
+    },
+    {
+     "id": "D141-bundle-table",
+     "summary": "the step-back bundle writes the yield table as fix-yield.md",
+     "class": "within",
+     "why": "Change 3 is a task of the step-back's tooling round; putting the measurement where the step-back reads it is how the measurement is used."
+    },
+    {
+     "id": "D141-arbiter-question",
+     "summary": "the round arbiter's contract asks question 3 of fix-yield.md: a fix that saves nothing is retired (removed or simplified) as that hour's tooling_fix, or kept with the reason in what",
+     "class": "within",
+     "why": "New arbiter behavior, but it narrows nothing: it is change 2's 'removing or simplifying a misfiring guard comes before adding one' applied to change 3's measurement, and 'kept with the reason' leaves the arbiter free."
+    },
+    {
+     "id": "exit-c-no-reading",
+     "summary": "judging yields by reading the fixes' free-text sentences weighed and refused in favour of a recorded measure",
+     "class": "within",
+     "why": "Choice of instrument for the requested measurement; it removes nothing from what is measured."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

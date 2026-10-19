@@ -233,20 +233,25 @@ feature {feature}, {since} to {until}. Read the files beside this MANIFEST and n
 | `refusals.md` | the guards that refused the session |
 | `task.md` | the feature's open tasks |
 | `words.md` | the session's own words: replies, commands, edits (no tool output), the newest kept |
+| `fix-yield.md` | each tooling fix of the feature: the rate of what it was meant to cut, before its ruling and since it was made |
 
 Answer four questions:
 1. Is the session going in circles, or oscillating between approaches (the same edit made and unmade, a route tried again)?
 2. Is it packing features against a number nobody researched - an UNRESEARCHED, GUESS, CONVENTION or convenience size, spacing,
    reach or band - where more room would settle it while the map stays within the research ("Room before packing")? Name the
    number.
-3. Is a step slow, or a guard misfiring, enough to be worth a tooling fix? Name the tool and the change.
+3. Is a step slow, or a guard misfiring, enough to be worth a tooling fix? Name the tool and the change. And in `fix-yield.md`,
+   does a made fix save nothing? Then retire it (remove or simplify) as this hour's `tooling_fix`, or keep it with the reason
+   in `what`.
 4. Is anything too big for the session, which the GM should see?
 
 Rule `continue` (nothing to change) or `change-route` (binding: `what` names the loop or the number, and the route to take -
 more room first). Add `tooling_fix` for question 3 (it opens an item the session makes, with its test, or declines as an
 overhaul) and `for_gm` for question 4. A `continue` with neither adds nothing to the GM's review.
 
-Record it: write the JSON `{{"ruling": ..., "why": ..., "what": ..., "tooling_fix": ..., "for_gm": ...}}` to a file and run
+Record it: write the JSON `{{"ruling": ..., "why": ..., "what": ..., "tooling_fix": ..., "fix_measure": ..., "fix_minutes": ...,
+"for_gm": ...}}` to a file (a `tooling_fix` carries `fix_measure` - a regex over the session's Bash commands it should cut, or
+`agent:<kind>` - and `fix_minutes`, the cost it measured) and run
 `make arbiter-ruled TRIGGER={trigger} FILE=<that file> AS=round-arbiter`.
 """
 
@@ -312,6 +317,10 @@ def build(trigger: str, root: Path, out: Path, since: float, until: float, trans
     if gaps := silent_minutes(records, since, until):
         head += f"; NO WORDS FOUND for {', '.join(gaps)} of the window - judge those minutes as unseen, not as idle"
     (out / "words.md").write_text("# The sessions' own words\n\n" + head + "\n\n" + (said or "(no transcript found)") + "\n", encoding="utf-8")
+    # EACH FIX'S YIELD (feature 385 T119, D141; the GM's change 3 of 2026-10-19): a fix that saves nothing is retired
+    import fix_yield  # noqa: PLC0415 - scripts/measure, on the path above
+
+    (out / "fix-yield.md").write_text("# Each tooling fix's yield\n\n" + fix_yield.report(root, root / "specs" / feature, sids, projects), encoding="utf-8")
     (out / "MANIFEST.md").write_text(MANIFEST.format(trigger=trigger, feature=feature, since=_iso(since), until=_iso(until)), encoding="utf-8")
     return out / "MANIFEST.md"
 

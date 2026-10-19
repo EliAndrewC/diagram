@@ -1,0 +1,182 @@
+{
+ "ask:t01-claim-labels": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "agent:impl-drift"
+ },
+ "ask:t03-claims-at-landing": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "agent:impl-drift"
+ },
+ "ask:t03-d17-route": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "make cohort\\b"
+ },
+ "ask:t03-popups-round3": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "agent:modal-depiction"
+ },
+ "ask:t03-seed57-residue": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "make cohort\\b"
+ },
+ "ask:t05-lane-popup-round3": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "agent:modal-depiction"
+ },
+ "ask:t05-old-drifts-at-landing": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "agent:impl-drift"
+ },
+ "ask:t06-scattered-single-file": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "agent:round-arbiter"
+ },
+ "ask:t10-findings-at-landing": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "agent:impl-drift"
+ },
+ "ask:t14-plan-round4": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "make cohort\\b"
+ },
+ "hour:385-approach-checklist@10": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "agent:round-arbiter"
+ },
+ "hour:385-approach-checklist@11": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "make check-bundle"
+ },
+ "hour:385-approach-checklist@12": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "agent:glyph-check"
+ },
+ "hour:385-approach-checklist@13": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "make plan-delta"
+ },
+ "hour:385-approach-checklist@16": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "agent:round-arbiter"
+ },
+ "hour:385-approach-checklist@17": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "make (land-tooling|docs)\\b"
+ },
+ "hour:385-approach-checklist@18": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "agent:spec-fidelity"
+ },
+ "hour:385-approach-checklist@19": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "make land-tooling"
+ },
+ "hour:385-approach-checklist@2": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "make cohort\\b"
+ },
+ "hour:385-approach-checklist@20": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "make (done|cohort-landing)\\b"
+ },
+ "hour:385-approach-checklist@21": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "agent:modal-form"
+ },
+ "hour:385-approach-checklist@22": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "make apply-edits"
+ },
+ "hour:385-approach-checklist@24": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "agent:spec-fidelity"
+ },
+ "hour:385-approach-checklist@25": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "make land-tooling|sync-with-main\\.sh done"
+ },
+ "hour:385-approach-checklist@27": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "make land-tooling"
+ },
+ "hour:385-approach-checklist@28": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "agent:spec-fidelity"
+ },
+ "hour:385-approach-checklist@29": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "make claims-checked"
+ },
+ "hour:385-approach-checklist@3": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "make verify\\b"
+ },
+ "hour:385-approach-checklist@30": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "agent:spec-fidelity"
+ },
+ "hour:385-approach-checklist@31": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "agent:impl-drift"
+ },
+ "hour:385-approach-checklist@32": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "make (claims|record)-checked"
+ },
+ "hour:385-approach-checklist@33": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "make where-time|git (-C \\S+ )?log -p"
+ },
+ "hour:385-approach-checklist@4": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "agent:round-arbiter"
+ },
+ "hour:385-approach-checklist@6": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "make cohort\\b"
+ },
+ "hour:385-approach-checklist@7": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "agent:round-arbiter"
+ },
+ "hour:385-approach-checklist@9": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "agent:spec-fidelity"
+ },
+ "red-gate@2026-10-17T17:21:08Z": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "make arbiter-bundle"
+ },
+ "red-gate@2026-10-18T12:27:25Z": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "make arbiter-bundle"
+ },
+ "red-gate@2026-10-18T12:36:36Z": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "make done\\b"
+ },
+ "red-gate@2026-10-18T16:44:54Z": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "make done\\b"
+ },
+ "red-gate@2026-10-18T16:45:47Z": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "make done\\b"
+ },
+ "round:modal-form|modal:choice/dikepond_split--0.7@3": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "agent:modal-form"
+ },
+ "round:source-reader|q:0081@3": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "agent:source-reader"
+ },
+ "round:source-reader|q:0081@5": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "agent:source-reader"
+ },
+ "round:spec-fidelity|plan:385-approach-checklist#T17@3": {
+  "by": "feature 385 T119: assigned from the fix's own sentence - the command it cuts, or the check whose rounds it cuts",
+  "fix_measure": "agent:round-arbiter"
+ }
+}

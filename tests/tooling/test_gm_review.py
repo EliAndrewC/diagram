@@ -164,11 +164,14 @@ def test_explain_says_what_fired_what_was_ruled_and_what_the_gm_is_asked(root: p
         (root / "research" / "questions" / name).write_text("")
     ha.trip(root, "round:modal-form|modal:sheet/kitchen@3", "round", "modal-form|modal:sheet/kitchen", "three rounds on the kitchen", 1)
     ha.record_ruling(
-        root, "round:modal-form|modal:sheet/kitchen@3", {"ruling": "accept", "why": "the rounds converged", "what": "nothing is left", "tooling_fix": "count only own rounds"}, "round-arbiter"
+        root,
+        "round:modal-form|modal:sheet/kitchen@3",
+        {"ruling": "accept", "why": "the rounds converged", "what": "nothing is left", "tooling_fix": "count only own rounds", "fix_measure": "x", "fix_minutes": 10},
+        "round-arbiter",
     )
     assert gm.rows(d)[0]["asked"] == "three rounds on the kitchen" and gm.rows(d)[0]["what"] == "nothing is left", "the question kept"
     ha.trip(root, "round:quote-check|q:0047@3", "round", "quote-check|q:0047", "", 1)
-    ha.record_ruling(root, "round:quote-check|q:0047@3", {"ruling": "continue", "why": "one new note", "tooling_fix": "keep replies"}, "round-arbiter")
+    ha.record_ruling(root, "round:quote-check|q:0047@3", {"ruling": "continue", "why": "one new note", "tooling_fix": "keep replies", "fix_measure": "x", "fix_minutes": 10}, "round-arbiter")
     ha.settle_fix(root, "round:quote-check|q:0047@3", "declined", "it contradicts FR-015")
     _rows(
         d,
