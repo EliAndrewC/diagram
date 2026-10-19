@@ -5631,6 +5631,32 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T72": {
+   "section_sha256": "85c245edff58effaacdfeb6d76875e4754e159444cde6877ced9e7b94e7f33ee",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D92",
+     "summary": "ledger_owed.py --write-plan-reviews appends the filled row of every owed pass whose subject starts 'MODE 4: PLAN REVIEW', its where cell 'the plan-verdict record (make plan-verdict)'; land-tooling.sh and sync-with-main.sh done run it before their ledger check and commit dev/review-ledger.md when it wrote any",
+     "class": "within",
+     "why": "Amendment 5 item 3 (the session: plan reviews' ledger rows filled by hand, 'could be pre-filled from the recorded plan verdict'), approved by the GM ('file amendment 5 for the 3 tooling fixes'); amendment 8 ('make our tooling do the thing correctly automatically every time') and amendment 6 ('implement any obvious ... tooling ... improvements'). FR-019's rule that the acted-on cell names where the pass was recorded is kept: a plan review is recorded by make plan-verdict. Widens automation; narrows nothing asked."
+    },
+    {
+     "id": "T72-scope-plan-reviews-only",
+     "summary": "only MODE 4 plan-review passes are written automatically; every other owed pass still refuses as now and keeps FR-019's make ledger-owed WRITE= route",
+     "class": "within",
+     "why": "Amendment 5 item 3 names plan reviews only; FR-019 (write each other row from the agent's reply with the session's word on what was acted on) is left whole for other checks. Not a carve-out from anything requested."
+    },
+    {
+     "id": "T72-timing-at-landing",
+     "summary": "the rows are written and committed at landing (land-tooling, sync-with-main.sh done), before the ledger check, never while a gate runs",
+     "class": "within",
+     "why": "FR-019 requires the row before a push; FR-010 refuses a tree write under the session's own gate. Writing at landing satisfies both."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
