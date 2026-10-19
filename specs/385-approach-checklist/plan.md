@@ -272,26 +272,7 @@ Owed by the hour-25 step-back (hour:385-approach-checklist@25, `continue`).
 
 **D98 - the landing's record read at the tick.** `land-tooling.sh` appends `{task, files, outcome, utc}` to `<git dir>/land-tooling.jsonl` from an exit trap, so a run that dies early still leaves its row (outcome: the step it stopped at) (the task is the clone's active one, from `task-starts.jsonl`; `outcome` is "landed" or the step that failed). `tick-task.py`, when the NOTE matches `\blanded\b` in any case (`re.I` - the plan review: "Landed via make land-tooling" is the same claim), takes the task's last such row: a failed outcome refuses, naming the log; a landed one refuses where `git diff --quiet origin/main -- <file>` fails for a file in it (after a fetch), naming the file. A task with no row is not refused (it did not land through the tool, or lands with its feature).
 
-## T80 - a quiet part B leaves its task's section reviewed (found by T78's part B, 2026-10-19)
-
-### T80 Approach (checklist part A)
-
-1. **The goal, in the world.** A part B that decides nothing costs no review round, of itself or of its task's section.
-2. **The constraints.** T75 (D94, the GM's approved change 3): "only one that adds a new decision gets a spec-fidelity review". Any other change to the section is owed as now. A test red without it.
-3. **Where each comes from.** The GM (G); the section verdict is 375 FR-003a (O).
-4. **Do they describe the world here?** Yes - measured 2026-10-19 (`make plan-delta F=385` after T78's part B): the part B itself was not owed (T75), but the three other blocks of T78's section were - adding the part B changed the section's digest, its task verdict went stale, and its blocks fell back to block reviews.
-5. **The order.** `plan_gate.task_current` reads the section without its quiet part Bs, then the test.
-6. **The exits.** (c).
-7. **The search smell.** None.
-8. **The budget.** 20 min.
-9. **Done, measured.** One goal: a CLEAR task section that gains only a part B deciding nothing (D94's test) stays current; one that gains anything else does not; `tests/tooling/test_plan_gate.py` red without it.
-10. **Before moving a constant.** n/a - none moves.
-11. **Before fitting things into room.** n/a - nothing is fitted.
-
-### T80 Decisions
-
-**D99 - the section judged without its quiet part Bs.** `task_current`, where the digest differs, compares the earlier text with the current one with every part B block that `decides_nothing` taken out of both, by the same typo rule as now; a part B that decides is left in, so it still owes the section's review.
-
+<!-- plan-archive: T80 to T78 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T81 - pop-ups owed one check are checked by one agent (the GM-approved proposal 1, 2026-10-18)
 
 ### T81 Approach (checklist part A)

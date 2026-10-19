@@ -206,6 +206,10 @@ def test_a_note_saying_landed_is_refused_while_the_landing_is_not_on_main(tmp_pa
     rows.write_text(json.dumps({"feature": "385-x", "task": "T72", "files": ["scripts/a.py"], "outcome": "failed: the checks failed", "log": "L"}) + "\n")
     assert "ended 'failed: the checks failed' (L)" in tt.landed_refusal(tmp_path, "385-x", "T72", "Landed on main")
     assert tt.landed_refusal(tmp_path, "385-x", "T72", "built, tests green") == "", "a note not claiming a landing is not checked"
+    with rows.open("a") as fh:  # the reland ran while another task was active: the same files, landed, count
+        fh.write(json.dumps({"feature": "385-x", "task": "T73", "files": ["scripts/a.py", "dev/review-ledger.md"], "outcome": "landed", "log": "L"}) + "\n")
+    assert tt.landed_refusal(tmp_path, "385-x", "T72", "Landed on main") == ""
+    rows.write_text(rows.read_text().rsplit("\n", 2)[0] + "\n")
     rows.write_text(rows.read_text() + json.dumps({"feature": "385-x", "task": "T72", "files": ["scripts/a.py", "dev/review-ledger.md"], "outcome": "landed", "log": "L"}) + "\n")
     differs.update({"dev/review-ledger.md"})
     assert tt.landed_refusal(tmp_path, "385-x", "T72", "landed") == "", "the ledger rides along and is not compared"
