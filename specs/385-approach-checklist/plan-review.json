@@ -6712,6 +6712,51 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T96": {
+   "section_sha256": "e59590b00a1f0bbb9e1eaf9643ab71688639fd3e2c5472f1e091d469ef2896af",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T96-placement",
+     "summary": "T96 opened before T32's ranking row; the footpath's tread-to-wall figure and T43 item 3 are worked with it, not as a second row.",
+     "class": "within",
+     "why": "The arbiter's ruling directs the order, and it serves FR-020 (the ten more ranking rows). Item 9's Done still names one goal (FOOTPATH_FABRIC_GAP at 7 ft), so FR-015 holds: T43 item 3 is route (c) itself, and T43 item 1's 3 ft is weighed in T43 (exit a), not here."
+    },
+    {
+     "id": "D118-c",
+     "summary": "First route (c): a household's own way may run beside its own fence, held 7 ft off other households' fences only.",
+     "class": "within",
+     "why": "The allowance is in 0246, the record the row is being matched to, so it carries out the research rather than carving out a case of ours. The GM's own words (amendment 1: 'Are we sure that household paths don't cut through neighbors' yards? I thought that our research findings were that they did') put (c) on the strict side of what he believes the research says, so it loosens nothing he asked to keep. Approved checklist: 'Add a rule that removes the case.'"
+    },
+    {
+     "id": "D118-d",
+     "summary": "Second route (d): wider spacing between the linear form's farms where (c) leaves a seed failing.",
+     "class": "within",
+     "why": "Within ONLY as a layout constant of the linear form, moved before any lane is routed: the approved checklist's 'Give it more room', the GM's 2026-10-12 'room before packing', and his 700 ft example (turn an unresearched knob). It is NOT within as re-placing homesteads on a seed after a lane is refused there. That is the 'move the house so the path fits' the GM called 'a fundamental misunderstanding of what we are doing and why', and it breaks his 2026-10-02 ruling 'homesteads before lanes, never lanes first'. The plain reading (a spacing between farms, item 11's capacity arithmetic) is the constant, and this verdict covers that reading alone. Item 11's MIN_WEB_GAP (18 ft) has no measurement label. It is a named constant, and the linear-only scope rests on item 4's measured fact that all four failing seeds are the linear form, so it does not block. The implementer should read the constant before relying on it."
+    },
+    {
+     "id": "D118-e",
+     "summary": "Last route (e): the 4 ft kept, labeled UNRESEARCHED with both trials as its trail, only where (c) and (d) both fail.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A narrowing because it can leave the ranking row unmatched against 0246's 7 ft. Legitimate only as gated, and the legitimacy is of the gated fallback, not of 4 ft: it comes after every exit the GM approved, it fires only on two MEASURED failures, and it records its reason with the trials (the GM's guardrail in the approved proposal: 'dropping or loosening a rule needs its reason recorded'). The round arbiter, which stands where the GM was asked (feature 379), ruled exactly this shape: 'the 4 ft stays only labeled UNRESEARCHED with the trial as its trail'. If (e) is reached with (d) untried, or as a plain reading of 'conform', it is NOT legitimate. Naming: the approved checklist's 'conform' means conforming to the rule being fought (7 ft). Item 6(e) gives that name to keeping the 4 ft, which is the opposite exit, and the retro should say so."
+    },
+    {
+     "id": "D118-derive",
+     "summary": "DOOR_ROOM_FT and FOOTPATH_DOOR_OUT_FT derived from the gap whichever route stands.",
+     "class": "within",
+     "why": "'derive don't pin' is one of the lesson memories in the GM-approved proposal, and item 10 lists every use of the constant before moving it (amendment 8, proposal 7)."
+    },
+    {
+     "id": "T96-exits-a-b-budget",
+     "summary": "Exit (a) deferred to T43; exit (b) none named; budget 3 h.",
+     "class": "within",
+     "why": "Process and scheduling inside the checklist's own shape. They narrow nothing the GM asked for."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
