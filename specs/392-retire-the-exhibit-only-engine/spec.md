@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-18
 
-**Status**: Draft
+**Status**: Done 2026-10-19 - T01-T04 ticked: ~10,800 engine lines and 26 modules deleted; make done green; make maps byte-identical; cohort-landing 54/54; bookends 19.8 -> 18.9 s; claims none owed; spec FAITHFUL, plan CLEAR; the GM review lands open
 
 **Approved**: the GM, 2026-10-18, "Yes please file that feature and then execute it."
 
