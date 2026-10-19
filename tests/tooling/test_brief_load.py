@@ -102,3 +102,16 @@ def test_split_names_and_the_command_line(capsys) -> None:
     assert bl.main([str(RECORD), str(FIX / "g1-check-a.md")]) == 0
     assert bl.main([str(RECORD), str(FIX / "v2-write.md")]) == 1 and "REFUSED" in capsys.readouterr().out
     assert bl.main([]) == 2
+
+
+def test_the_parts_of_one_question_written_as_bullets_get_the_nesting_tip(tmp_path: pathlib.Path) -> None:
+    """Feature 404's write brief gave 0260's five parts as five bold bullets: the count read five questions (right to err
+    high), and the refusal now says how to write the parts of one question so they count once."""
+    bl = _load()
+    flat = "## Your items\n\n" + "".join(f"- **Part {i}.** text\n" for i in range(5))
+    why = bl.refusal(tmp_path / "s1-write.md", flat, RECORD)
+    assert "5 questions" in why and "nest them as indented sub-bullets" in why
+    nested = "## Your items\n\n- B1 **the question**\n" + "".join(f"  - **Part {i}.** text\n" for i in range(5))
+    assert bl.refusal(tmp_path / "s1-write.md", nested, RECORD) == ""
+    over = "## Your items\n\n" + "".join(f"- B{i} **q**\n" for i in range(1, 6))
+    assert "nest them" not in bl.refusal(tmp_path / "s1-write.md", over, RECORD), "item ids are questions: no tip"
