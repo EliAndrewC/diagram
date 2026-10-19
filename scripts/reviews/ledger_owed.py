@@ -271,8 +271,32 @@ def feature_questions(num: str, repo: Path) -> set[str]:
     return found
 
 
-def belongs(p: dict[str, str], num: str, questions: set[str], repo: Path) -> bool:
+def _unit_prompt(p: dict[str, str], transcripts: Path) -> str:
+    """A check-wave unit's own prompt: its logged subject is the workflow's framing ("[Workflow harness - computed task] ..."),
+    so the prompt naming its bundle is read from the agent's transcript (its first user message)."""
+    # a wave's agents are kept under `subagents/workflows/<run>/`, one level below where `review_cost.transcript` looks
+    hits = sorted(transcripts.glob(f"*/*/subagents/**/agent-{p['agent']}.jsonl")) if p.get("agent") else []
+    for d in _lines_of(hits[-1] if hits else None):
+        content = (d.get("message") or {}).get("content") if d.get("type") == "user" else None
+        if content:
+            return content if isinstance(content, str) else " ".join(c.get("text", "") for c in content if isinstance(c, dict))
+    return ""
+
+
+def _lines_of(path: Path | None) -> list[dict]:
+    out = []
+    for line in path.read_text(encoding="utf-8").splitlines()[:5] if path is not None and path.is_file() else []:
+        try:
+            out.append(json.loads(line))
+        except json.JSONDecodeError:
+            continue
+    return out
+
+
+def belongs(p: dict[str, str], num: str, questions: set[str], repo: Path, transcripts: Path = review_cost.DEFAULT_ROOT) -> bool:
     subject = p.get("subject", "")
+    if subject.startswith("[Workflow harness"):
+        subject = _unit_prompt(p, transcripts) or subject
     if re.search(rf"(?:feature |specs/|\b){num}-|feature {num}\b", subject):
         return True
     if questions & set(re.findall(r"(?<![\d.])(\d{4})(?!\d)", subject)):
@@ -307,7 +331,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         if feat and not args.session:  # a page session's own passes are its feature's already
             repo = ledger.resolve().parent.parent
             questions = feature_questions(feat.group(1), repo)
-            mine = [p for p in mine if belongs(p, feat.group(1), questions, repo)]
+            mine = [p for p in mine if belongs(p, feat.group(1), questions, repo, Path(args.transcripts))]
         with ledger.open("a", encoding="utf-8") as fh:
             fh.writelines(filled_row(p, args.write, Path(args.transcripts)) + "\n" for p in mine)
         left = len(owed) - len(mine)

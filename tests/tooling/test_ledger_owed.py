@@ -257,3 +257,10 @@ def test_a_write_naming_a_feature_writes_only_the_passes_traced_to_it(tmp_path: 
     assert "q-0255-quote-check" in written and "key-kawakami-1991-shrine-funding-whole" in written and "specs/395-shrine" in written
     assert "396" not in written and "q-0259" not in written, "396's passes stay owed for 396"
     assert len(lo.unanswered(lo.distinct(lo.load_passes(log)), written)) == 2
+    # a check-wave unit's logged subject is the workflow's framing: its own prompt is read from its transcript
+    sub = tmp_path / "proj" / "p" / "s1" / "subagents" / "workflows" / "wf_1"
+    sub.mkdir(parents=True)
+    first = {"type": "user", "message": {"role": "user", "content": "[Workflow harness] Run record-format on /tmp/l7r-check/q-0255-record-format/MANIFEST.md."}}
+    (sub / "agent-w1.jsonl").write_text(json.dumps(first) + "\n")
+    wave = {**_pass(subject="[Workflow harness — computed task] The task text below was computed at runtime"), "agent": "w1"}
+    assert lo.belongs(wave, "395", {"0255"}, repo, tmp_path / "proj") and not lo.belongs(wave, "396", {"0259"}, repo, tmp_path / "proj")
