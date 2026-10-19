@@ -198,6 +198,31 @@ def filled_row(p: dict[str, str], where: str, root: Path = review_cost.DEFAULT_R
     return "| " + " | ".join(_norm(c).replace("|", "/") for c in cells) + " |"
 
 
+#: A PLAN REVIEW RECORDS ITSELF (feature 385 T72, plan D92): its agent runs `make plan-verdict`, whose line its reply quotes
+PLAN_REVIEW = "MODE 4: PLAN REVIEW"
+#: ...the target's own line quoted, or the call the agent says it ran (T74's first review wrote "I recorded T74 as BLOCKED ... with
+#: `make plan-verdict F=385 ...`" and quoted no line)
+PLAN_RECORDED = re.compile(r"\b(?:CLEAR|BLOCKED|NOT-REVIEWABLE) recorded for\b|make plan-verdict F=\d+")
+PLAN_WHERE = "the plan-verdict record (make plan-verdict)"
+
+
+def plan_review_rows(owed: Sequence[dict[str, str]], root: Path = review_cost.DEFAULT_ROOT) -> list[str]:
+    """The row of each owed plan review whose reply shows `make plan-verdict` recorded it (81 hand-written on 2026-10-18; the
+    plan review asked that a pass that recorded nothing get no row naming a record)."""
+    for d in ("../hooks/lib",):
+        sys.path.insert(0, str((Path(__file__).resolve().parent / d).resolve()))
+    import hm_checks  # noqa: PLC0415
+
+    out = []
+    for p in owed:
+        if not p.get("subject", "").startswith(PLAN_REVIEW):
+            continue
+        path = review_cost.transcript(p["agent"], root) if p.get("agent") else None
+        if path and PLAN_RECORDED.search(hm_checks._reply_of(str(path), "")):
+            out.append(filled_row(p, PLAN_WHERE, root))
+    return out
+
+
 def default_log() -> Path:
     out = subprocess.run(["git", "rev-parse", "--git-common-dir"], capture_output=True, text=True, check=False).stdout.strip()
     return Path(out or ".git").resolve() / LOG
@@ -211,10 +236,18 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--transcripts", default=str(review_cost.DEFAULT_ROOT), help="the projects directory holding the agents' transcripts")
     ap.add_argument("--write", default="", help="append each owed pass's row, its acted-on cell naming this record")
     ap.add_argument("--session", default="", help="with --write: only the passes of this session's agents")
+    ap.add_argument("--write-plan-reviews", action="store_true", help="append the row of each owed plan review that recorded its verdict (385 T72)")
     args = ap.parse_args(argv)
     ledger = Path(args.ledger)
     passes = distinct(settled(load_passes(Path(args.log) if args.log else default_log()), Path(args.transcripts), _kept_file()))
     owed = unanswered(passes, ledger.read_text(encoding="utf-8") if ledger.is_file() else "")
+    if args.write_plan_reviews:
+        rows = plan_review_rows(owed, Path(args.transcripts))
+        if rows:
+            with ledger.open("a", encoding="utf-8") as fh:
+                fh.writelines(r + "\n" for r in rows)
+        print(f"ledger-owed: {len(rows)} plan review row(s) written")
+        return 0
     if args.write:
         mine = [p for p in owed if not args.session or _session_of(p, Path(args.transcripts)) == args.session]
         with ledger.open("a", encoding="utf-8") as fh:
