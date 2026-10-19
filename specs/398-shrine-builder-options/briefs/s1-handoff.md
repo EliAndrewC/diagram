@@ -44,4 +44,5 @@ tanashi-shrine-honden, kawagoe-hikawa-honden-note, kotobank-douza, takaoka-sekin
 source-reader on every cited note (all READ; fixes applied, recorded with make record-checked). round-arbiter ruled cascade@1 "continue" (pre-write reads, a false positive). Owed to the check session: quote-check, translation-check, record-format, intro-check, source-applicability on the seven new write-ups.
 
 ## Still open
+Tooling (from the round-arbiter's cascade@1 ruling): the cascade trigger behind `make arbiter-bundle TRIGGER=cascade@N` should count lines written after a source-reader dispatch, or exempt a write brief's pre-write source-reader reads; ten such reads fired it here as a false positive.
 To read: the Shibasaki diary itself (『公私日記』, Tachikawa 1972-83); the Tanashi estimate books in 『田無神社（2）』; the 1749 roofing ledger [G.30]; 『江戸物価事典』 for timber, lacquer, pigment and stone prices; 『高岡鋳物史話』 for the 1833 mirror's price.
