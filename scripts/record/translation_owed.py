@@ -55,7 +55,7 @@ def pairs(notes: str, originals: str) -> list[tuple[str, str, str, str]]:
     for key, body in _NOTE.findall(restore(notes, originals)):
         for p in qv.passages(qv._strip(body)):
             if p.get("original"):
-                out.append((key, p.get("language", ""), p["quote"], p["original"]))
+                out.append((key, p.get("language", ""), p["quote"], " ... ".join([p["original"], *p.get("more", [])])))
     return out
 
 
