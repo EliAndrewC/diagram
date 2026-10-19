@@ -151,7 +151,14 @@ if ! git -C "$WT" apply --index "$patch" 2>/dev/null; then
     die "FILES do not apply onto the latest main, and a gate is running in this clone - nothing is merged under it; run this again when it ends"
   fi
   if ! git -C "$ROOT" merge -q --no-edit origin/main >/dev/null 2>&1; then
+    # GUARD_EDIT_OK: feature 385 T122 (D144; the round arbiter's change-route on hour:385-approach-checklist@35) - a conflict with
+    # this clone's OWN earlier landing (a file new here, landed, then edited again) is named with its one-line fix, never resolved
+    own=""
+    for f in $(git -C "$ROOT" diff --name-only --diff-filter=U); do
+      case "$(git -C "$ROOT" log -1 --format=%s origin/main -- "$f")" in "Tooling from $(basename "$ROOT"),"*) own="$own $f" ;; esac
+    done
     git -C "$ROOT" merge --abort 2>/dev/null
+    [ -z "$own" ] || die "FILES do not apply cleanly onto the latest main:$own conflict only with this clone's own earlier landing (main's last commit to them is it; for a file that was not new, git log origin/main --$own first, so no other session's change is lost) - run scripts/sync-with-main.sh sync-in, then git checkout --ours$own && git add$own && git commit --no-edit, then land again"
     die "FILES do not apply cleanly onto the latest main, and merging main into the clone conflicts - run scripts/sync-with-main.sh sync-in, resolve the conflict, commit, then run this again"
   fi
   printf 'land-tooling: main had moved under FILES - merged origin/main into the clone and took the patch again\n' >&2
