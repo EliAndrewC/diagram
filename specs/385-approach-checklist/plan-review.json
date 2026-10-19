@@ -6587,6 +6587,38 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T92": {
+   "section_sha256": "e55c630fe341fe4e2b9dea167a98434c55f6b7513f75befa6eca3bc45ad26305",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D114a",
+     "summary": "claims.py triaged reads --reply through apply_edits.reply_of (a .jsonl/.output transcript's last assistant reply, else the file as text), as make modal-triaged already does",
+     "class": "within",
+     "why": "A tooling defect measured while working T31 (amendment 7's claims): a transcript's reply was read raw and its 18 TOUCHES lines cleared unread. Amendment 6 asks the session to 'implement any obvious performance / tooling / process improvements along the way'; reusing the existing reader narrows nothing the GM asked."
+    },
+    {
+     "id": "D114b",
+     "summary": "a reply with no readable text is refused, naming the file, and clears nothing",
+     "class": "within",
+     "why": "The refusal reaches only the defect's own case (an unread reply that would otherwise clear every claim); it guards the claim triage the feature already carries, not another command or agent, and widens no scope beyond the fix amendment 6 authorizes."
+    },
+    {
+     "id": "D114c",
+     "summary": "a readable reply with no TOUCHES line clears the bundle as now",
+     "class": "within",
+     "why": "Preserves the existing triage rule unchanged rather than excepting any case from what was asked; the GM asked nothing about this rule, so keeping it is not a narrowing."
+    },
+    {
+     "id": "T92-done",
+     "summary": "done measured by make claims-triaged on a transcript recording its TOUCHES lines, and a test in tests/tooling/test_claims_scoping.py red without the fix",
+     "class": "within",
+     "why": "A test whose only effect is to keep the fix in place: enforcement of the requested improvement, not new scope."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
