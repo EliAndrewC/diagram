@@ -860,3 +860,10 @@ mislabel on code only renamed: filed as T97-T100, ACCESS_HALF_FT carried as T101
 About 1 h. The room off a grove was counted twice at the door path (bands grown 0036's 11 ft, then routed at the footpath's gap on
 top: 18 ft at 7) and too little at the connector (10 ft against 0036's 12.5). `band_grow` and `CONNECTOR_BAND_GAP_FT` count it once;
 seed 22 and the cohort pass. **The habit it changes:** none needed.
+
+## T103 - the retro row
+
+About 25 min. A gate that stops at preflight writes no run-log record, so the measure guard read the last green gate and refused
+the re-run that fixes the red one (T98's file-size bar, 2026-10-19). `done`'s preflight failure now touches
+`<git dir>/gate-preflight-red`, and the guard lets the run through when that mark is newer than the last green record; the hook
+suite holds both cases, red without the fix. **The habit it changes:** none needed.
