@@ -46,11 +46,11 @@ with its search, in the question that says it):
    Kyoto-Osaka's chit for 1-2 sho of sake; festival payments; a Tenpo order banning both. ATTESTED ONLY FOR the system; a
    monthly amount SILENT in Morisada, the search named.
 4. **Gamble's Beijing day wages, 1807-1902** (LSE working paper 123, archived; his fuel-store series): ATTESTED ONLY FOR
-   one fuel store's hands, food extra, the cash units changing around 1860, its authors using it for its trend. Written
+   one fuel store's hands, food extra, the cash units changing around 1860, and any caveat wp123 itself states. Written
    into 0250 (the unskilled wage), 0265 (whose "no Beijing day wage for Daoguang or the 1870s" it answers) and 0266 (whose
    note names Gamble's 1870-1900 wages unreached). The 1921 *Peking: A Social Survey* gild wages (public, p. 431) are
-   written in where a question needs a Beijing craftsman's wage, ATTESTED ONLY FOR what gilds recalled in 1918-19, in
-   dollars, the monthly reading the record's; otherwise named as found and not written.
+   written in where a question needs a Beijing craftsman's wage, ATTESTED ONLY FOR what gilds recalled in 1918-19, each
+   wage in its unit as printed, the monthly reading the record's; otherwise named as found and not written.
 5. **0260, a horse or a porter:** the Zhili official freight rates (Bochum chapters 1 and 13), ATTESTED ONLY FOR official
    building work, dated in the source's own words ("Qianlong reign") unless 1769 is read on the cited page; written in only
    after the per-li / per-100-li label is settled on the scanned original, otherwise left out and named. Chapters 2-12 and
@@ -117,3 +117,4 @@ what is still open.
   too, the 1921 survey's gild wages written or named; the 高岡史料 route and its unread fallback; Zhili dated in the
   source's words, its unscanned chapters named; Morisada's wording as printed. Aside taken: the nearest wage with its
   class, place, unit and gap in years.
+- **spec-fidelity round 2 (2026-10-19, verify): FAITHFUL.** All six items resolved; its three notes for the write taken (wp123's caveats as it states them, units as printed, p. 590 possibly in 899934).
