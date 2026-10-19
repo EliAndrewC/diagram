@@ -435,7 +435,7 @@ route is more room; the footpath's tread-to-wall figure open in T43 is worked wi
 1. **The goal, in the world.** A footpath keeps a lane's distance from the gardens it passes, and every farmhouse is still reached.
 2. **The constraints.** 0246: a lane's middle, a 3 ft footpath's included, keeps at least 7 ft clear of a garden fence, and a household's own way may run beside its own fence (T43 item 3). 0081 and 0247: a tread keeps 3 ft off a farmhouse wall (T43 item 1). The GM, 2026-10-12: room before packing. The GM, 2026-10-02: homesteads before lanes, never lanes first. The ruling: the 4 ft stays only labeled UNRESEARCHED with the trial as its trail.
 3. **Where each comes from.** 0246's 7 ft is O, a map drawing convention; the own-fence allowance is 0246's (O); 3 ft is 0081's and 0247's (O); the two rulings are the GM's (G).
-4. **Do they describe the world here?** Yes - measured 2026-10-19 (`make cohort N=1 SEED=<n>` with the constant at 7.0, reverted): cohort seeds 3, 4, 903 and 904 all the linear form, each leaving a farmhouse off the network (904 also breaks `undeckable`); with `DOOR_ROOM_FT` and `FOOTPATH_DOOR_OUT_FT` derived from the 7 ft (19 and 15 ft) the same farmhouses stay unreached at the same seats; seed 4's (1404, 3220) stands about 130 ft from the nearest way, its own threshing yard and garden beside its door (the refused manifest).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (`make cohort N=1 SEED=<n>` with the constant at 7.0, reverted): cohort seeds 3, 4, 903 and 904 all the linear form, each leaving a farmhouse off the network (904 also breaks `undeckable`); with `DOOR_ROOM_FT` and `FOOTPATH_DOOR_OUT_FT` derived from the 7 ft (19 and 15 ft) the same farmhouses stay unreached at the same seats; seed 4's (1404, 3220) stands about 130 ft from the nearest way, its own threshing yard and garden beside its door (the refused manifest). The cause, measured 2026-10-19 (a scratch probe of seed 4 at 7 ft, logging `front_door` and `door_path`, then `make cohort N=1 SEED=<n>` and `make cohort`, each reverted): the door is found 11 ft out, but `door_off_fixtures` must stand it `FOOTPATH_FABRIC_GAP + 1` = 8 ft clear of the farm's own fixtures and grove bands, finds no spot, and the farm gets no path at all; with the door's step (8 ft) and its clearance off its own fixtures (5 ft) held at their own values and the fence gap at 7 ft, seeds 3, 4, 903 and 904 pass and the cohort passes 16 of 16.
 5. **The order.** Why seed 4's way from its door is refused at 7 ft (the refused route's own reason), then the route that answers it, then the four seeds and the cohort at 7 ft.
 6. **The exits.** (a) refine an O number: T43 item 1's 3 ft is a tread-to-wall figure, not a fence figure - weighed there; (b) an exception: none named - nothing obstructs yet; (c) a new rule: the own-fence allowance 0246 attests - a household's own way held 7 ft off others' fences only; (d) more room: wider spacing between the linear form's farms, where (c) leaves a seed failing; (e) conform: the 4 ft kept, labeled UNRESEARCHED with this trial, only where (c) and (d) both fail.
 7. **The search smell.** None - a cause found, then one route.
@@ -446,7 +446,14 @@ route is more room; the footpath's tread-to-wall figure open in T43 is worked wi
 
 ### T96 Decisions
 
-**D118 - the routes in their order.** First (c): the household's own ground is exempt from its own way's fence gap, as 0246 attests (T43 item 3, which this decides with it); then (d) wider spacing in the linear form where a seed still fails; (e) only if both fail. `DOOR_ROOM_FT` and `FOOTPATH_DOOR_OUT_FT` are derived from the gap whichever route stands (derive, never pin).
+**D118 - the household's own ground, not the fence gap (route (c), measured).** `FOOTPATH_FABRIC_GAP` becomes 0246's 7 ft. The
+door's numbers, which only ever measured the household's own dooryard, stop reading the fence gap: a new `DOOR_STEP_FT` (8 ft, the
+door's step past its yard, `front_door`'s offset) and `DOOR_FIXTURE_CLEAR_FT` (5 ft, the door kept off the farm's own fixtures and
+grove bands, `door_off_fixtures`) - both UNRESEARCHED, as the claim on `lay_door_paths` already labels them - in `serve.py`, `web.py`
+and `row_rules.py`; `rows.FOOTPATH_DOOR_OUT_FT` is derived from `DOOR_STEP_FT` (derive, never pin) and `DOOR_ROOM_FT`'s docstring
+names the door's step, not the footpath's gap. T31's 4 ft block comes out of 0246, and `FOOTPATH_FABRIC_GAP`'s claim cites 0246's
+7 ft. No house moves: route (d) is not needed, and (e) is not reached. T43's item 3 (`span_walkable` and a household's own garden)
+stays T43's.
 
 ## T11 - the close
 
