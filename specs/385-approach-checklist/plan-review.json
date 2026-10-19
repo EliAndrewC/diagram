@@ -6816,31 +6816,64 @@
    "verdict": "CLEAR"
   },
   "T104": {
-   "section_sha256": "5aec5f25486a18b01deb8b32f2edf40c67f7422666ec7796bab32bc988a02eb0",
+   "section_sha256": "816ca9a69527afe041114516fb2902b00c07519d10ee7e7152e37d40c0542bd8",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "D121a",
-     "summary": "hm_planhold.refusal skips, without an escape, a hold still pending past PENDING_S (its dispatch never launched); a launched hold keeps T85's rule (escape only once dead past HOLD_MAX_S)",
-     "class": "within",
-     "why": "Amendment 9 proposal B refuses an edit to a section whose review is RUNNING, and D106 holds for every RUNNING plan review; a dispatch refused at PreToolUse never became a review, so nothing is carved out of D106's escape rule. The class rests on 'pending' meaning never launched: the Approach's 'or lost' must not cover a review that did launch but whose launch mark went missing, and done-item 9's test (a launched review's hold still refuses) is what holds that line - an enforcement-correctness matter, not a fidelity ruling."
+     "summary": "In hm_planhold.refusal a hold still pending past PENDING_S (its dispatch refused or lost, never launched) is skipped with no PLAN_EDIT_OK escape needed; a launched hold keeps T85's rule.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows D106, which refuses a dead dispatch's hold until PLAN_EDIT_OK is given. The request (amendment 9, proposal B) asks only that 'the plan-write path refuses an edit to a section whose review is running'. A dispatch that never launched has no review running and nothing reading the text, so the exception is implied by the GM's own words. Refusing there is a guard firing on correct work, which the purpose of the proposal (to prevent stale digests from edits under a live review) does not need. A live or launched review's hold is untouched, so the purpose survives."
     },
     {
      "id": "D121b",
-     "summary": "hold drops an earlier hold of the same feature and task (or the same blocks) that is pending past PENDING_S or dead by the pair state before recording the new one",
-     "class": "within",
-     "why": "No running review loses its protection: a stale pending hold has no review behind it, and a dead one already has D106's escape. Serves proposal B's 'running' and Amendment 6's standing tooling mandate."
+     "summary": "A review agent stopped with TaskStop releases its hold as a return does; the PostToolUse hook that pairs dispatch and agent also hears TaskStop.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Against D106 this removes the escape-only path for a hold a stopped (dead) dispatch left. Proposal B's scope is a section 'whose review is running', and a stopped review is not running and reads nothing, so the exception follows from the request's words. The measurement given (two stopped T104 reviews holding for half an hour) is the guard refusing correct work."
     },
     {
      "id": "D121c",
-     "summary": "hold drops ANY earlier hold of the same task or blocks, including one whose review launched and is still running",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "As written ('drops any earlier hold') the drop reaches a live hold. Sequence: review 1 launched and running; a second dispatch of the same task takes its hold at PreToolUse, dropping review 1's; that dispatch is then refused (e.g. by the step-back guard, the very incident T104 answers); after PENDING_S the new hold is skipped and review 1's section is editable with no escape and no record - exactly the edit proposal B says must be refused while a review runs. None of the legitimacy tests holds: keeping the live hold is not impossible, the GM's words do not imply dropping it, and keeping it does not defeat B's purpose (it fires on an edit under a running review, which is not correct work, so the guard-on-correct-work rule does not reach it). Nothing in the bundle measures that concurrent same-task dispatches are prevented, so the gap is not ruled away on that assumption. The plan's own done-item 9 ('a new hold on the same task replaces the old') states the narrower intent the decision's 'any' outruns. Fix: the drop reaches only an earlier hold that is pending past PENDING_S or dead by the pair state; a launched, live earlier hold stays until its review returns or dies; done-item 9 gains a test of that case."
+     "summary": "No hold is dropped by another: a running review's hold stands until it returns, is stopped or dies, whatever later dispatch of the same task is refused. This replaces the earlier text's 'hold drops any earlier hold of the same task'.",
+     "class": "within",
+     "why": "It keeps D106 and proposal B at full reach: no running review's held text loses its protection because a later dispatch was refused. Dropping the earlier replacement rule removes a path by which a live review's hold could lapse, so this change widens nothing and narrows nothing that was asked."
+    },
+    {
+     "id": "A5-A9",
+     "summary": "Order (refusal change, TaskStop release, then tests); exit (c) chosen and 'conform with the escape each time' refused; done names one goal, with tests in tests/tooling/test_plan_edit_refusal.py and test_hm_checks.py red without it.",
+     "class": "within",
+     "why": "One goal per task (amendment 4). The tests only enforce the hold rule the request and D106 already ask for. Refusing the escape-each-time exit follows the GM's rule that a guard firing on correct work teaches bypass."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
+  },
+  "T100": {
+   "section_sha256": "e858b5f9eeab7b55b665d9a6a0eeb937d6c7c493be46fccb838980786552aeba",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T100-own-task",
+     "summary": "The mislabeled claim found by T96's impl-drift round is worked as its own task (T100) rather than inside T96.",
+     "class": "within",
+     "why": "Amendment 4 (the GM approved 'a second goal becomes its own task', FR-015) and amendment 3 option 3 (a claims finding becomes an open task the feature must fix before it closes). Nothing the GM asked for is dropped; the finding is fixed in this feature."
+    },
+    {
+     "id": "T100-exit-conform",
+     "summary": "Exit (e) conform: the code is left as it is and only the claim's citation changes; done is the claims check finding the claim IN-STEP.",
+     "class": "within",
+     "why": "The finding is MISLABELED (the claim says UNRESEARCHED where 0035's drawing page answers it), and the request's claim work (amendments 7 and 9, feature 316's cite-the-page rule) is to make a claim match its research. Changing only the citation, with the claims check as the measured done, is the narrowest fix that does what was asked. If the code did not in fact keep 0035's rule, the claims check fails and the stated goal is not met, so the decision cannot quietly pass a wrong claim. Whether the code keeps 0035's rule is the claims check's call, not a fidelity finding."
+    },
+    {
+     "id": "D122",
+     "summary": "stage_web's claim is reworded to cite 0035's drawing page: a way keeps to its own bank; cuts and joins clipped at watercourses and drawn channels; a join crosses the brook only at a ford, one of the crossing places.",
+     "class": "within",
+     "why": "It carries out T100's goal (cite the page that sets the rule, feature 316) and adds no behavior or scope. The wording's accuracy against 0035 (for example, its 'unless crossing saves more than about 150 ft' clause) is for the claims check and the research ladder to judge, not for this review."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
