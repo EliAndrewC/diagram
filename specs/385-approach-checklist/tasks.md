@@ -294,8 +294,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T103 The measure guard sees a red preflight: a gate that stops at preflight writes no run-log record, so the guard refused the re-run as 'last gate GREEN 30 min ago' (found working T98, 2026-10-19) [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 via land-tooling: a red preflight marks the git dir; the measure guard lets the re-run through; hook suite 48/48, red without
-- [ ] T104 A plan review the dispatch guard refused leaves no plan-section hold: T98's refused dispatch left a hold that blocked its own section's amendment an hour after its review returned (found working T98, 2026-10-19) [lands-open]
+- [x] T104 A plan review the dispatch guard refused leaves no plan-section hold: T98's refused dispatch left a hold that blocked its own section's amendment an hour after its review returned (found working T98, 2026-10-19) [lands-open]
       research: rendering
+      verify: DONE. hm_planhold.snapshot/restore: before each Bash/Write/Edit call every live plan hold's text is kept; after it, a changed held text is written back and the call refused, however the file was named (checks-hooks.sh after, PostToolUse); landed on main
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

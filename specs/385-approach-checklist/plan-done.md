@@ -2588,3 +2588,24 @@ passing at 2.9; `make cohort` 16 of 16). The fill runs only where no bearing of 
 
 **D120 - a red preflight leaves a mark.** `done`'s preflight failure branch touches `<git dir>/gate-preflight-red`; `measure-hooks.sh` lets the full measurement through, without refusing once, when that file is newer than the last green run-log record.
 
+<!-- plan-archive: archived 2026-10-19 -->
+## T104 - a dispatch that never launched holds nothing (found working T98, 2026-10-19)
+
+### T104 Approach (checklist part A)
+
+1. **The goal, in the world.** A plan section is held only while a review of it actually runs.
+2. **The constraints.** T85 (D106): a write that would change text a running plan review reads is refused; `PLAN_EDIT_OK` passes a dead hold only. The GM's rule: a guard that fires on correct work teaches a session to bypass every guard. A test red without it.
+3. **Where each comes from.** T85 (O); the GM (G, the root CLAUDE.md's section on what is enforced).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the guard's two refusals, then a read of `hm_checks` and `hm_planhold`): T98's first plan review was refused by the hourly step-back guard, so it never launched and never returned; the hold taken at its PreToolUse stayed `pending` and refused T98's section amendment about an hour after the re-sent review had returned, and later a `make ledger-owed` command that named the plan in its reason - each passed only with `PLAN_EDIT_OK`.
+5. **The order.** `hm_planhold.refusal` passes a hold still pending past `PENDING_S`; a stopped review's agent releases its hold; then the test.
+6. **The exits.** (c) - a hold that never launched is no hold; (e) conform - the escape each time - refused: the guard would teach the escape.
+7. **The search smell.** None.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: a hold whose dispatch was never launched past `PENDING_S` refuses nothing, nor one whose agent was stopped; a launched review's hold still refuses, also when a later dispatch of the same task is refused; `tests/tooling/test_plan_edit_refusal.py` and `tests/tooling/test_hm_checks.py` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T104 Decisions
+
+**D121 - a hold is a running review.** In `hm_planhold.refusal` a hold still `pending` past `PENDING_S` (its dispatch refused or lost) is skipped without an escape - no review reads that text; a launched hold keeps T85's rule (its escape only once dead past `HOLD_MAX_S`). A review's agent stopped with `TaskStop` releases its hold as a return does - the PostToolUse hook that pairs a dispatch with its agent also hears `TaskStop` (measured 2026-10-19, two T104 reviews stopped: each hold stood and refused the section's next edit for half an hour). No hold is dropped by another: a running review's hold stands until it returns, is stopped or dies, whatever later dispatch of the same task is refused.
+

@@ -474,26 +474,7 @@ Owed by the landing cohort of 07:15Z (cohort seed 22 newly failing) and the roun
 9. **After a ruling: the step it names?** Yes - the ruling says go on with T98's review and landing.
 <!-- plan-archive: T98 to T96 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
 <!-- plan-archive: T103 to T98 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
-## T104 - a dispatch that never launched holds nothing (found working T98, 2026-10-19)
-
-### T104 Approach (checklist part A)
-
-1. **The goal, in the world.** A plan section is held only while a review of it actually runs.
-2. **The constraints.** T85 (D106): a write that would change text a running plan review reads is refused; `PLAN_EDIT_OK` passes a dead hold only. The GM's rule: a guard that fires on correct work teaches a session to bypass every guard. A test red without it.
-3. **Where each comes from.** T85 (O); the GM (G, the root CLAUDE.md's section on what is enforced).
-4. **Do they describe the world here?** Yes - measured 2026-10-19 (the guard's two refusals, then a read of `hm_checks` and `hm_planhold`): T98's first plan review was refused by the hourly step-back guard, so it never launched and never returned; the hold taken at its PreToolUse stayed `pending` and refused T98's section amendment about an hour after the re-sent review had returned, and later a `make ledger-owed` command that named the plan in its reason - each passed only with `PLAN_EDIT_OK`.
-5. **The order.** `hm_planhold.refusal` passes a hold still pending past `PENDING_S`; a stopped review's agent releases its hold; then the test.
-6. **The exits.** (c) - a hold that never launched is no hold; (e) conform - the escape each time - refused: the guard would teach the escape.
-7. **The search smell.** None.
-8. **The budget.** 30 min.
-9. **Done, measured.** One goal: a hold whose dispatch was never launched past `PENDING_S` refuses nothing, nor one whose agent was stopped; a launched review's hold still refuses, also when a later dispatch of the same task is refused; `tests/tooling/test_plan_edit_refusal.py` and `tests/tooling/test_hm_checks.py` red without it.
-10. **Before moving a constant.** n/a - none moves.
-11. **Before fitting things into room.** n/a - nothing is fitted.
-
-### T104 Decisions
-
-**D121 - a hold is a running review.** In `hm_planhold.refusal` a hold still `pending` past `PENDING_S` (its dispatch refused or lost) is skipped without an escape - no review reads that text; a launched hold keeps T85's rule (its escape only once dead past `HOLD_MAX_S`). A review's agent stopped with `TaskStop` releases its hold as a return does - the PostToolUse hook that pairs a dispatch with its agent also hears `TaskStop` (measured 2026-10-19, two T104 reviews stopped: each hold stood and refused the section's next edit for half an hour). No hold is dropped by another: a running review's hold stands until it returns, is stopped or dies, whatever later dispatch of the same task is refused.
-
+<!-- plan-archive: T104 to T98 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
 ## T100 - web lanes off the water cite 0035's drawing page (found working T96, 2026-10-19)
 
 ### T100 Approach (checklist part A)
@@ -514,6 +495,20 @@ Owed by the landing cohort of 07:15Z (cohort seed 22 newly failing) and the roun
 
 **D122 - the web's water rule is 0035's.** `stage_web`'s claim reads "web lanes off the water - <0035's drawing page>: a way keeps to its own bank; web cuts and joins clipped at the watercourses and drawn channels, a join crossing the brook only at a ford, one of the crossing places".
 
+
+### T100 part B (2026-10-19T09:02Z)
+
+Owed by the round arbiter's ruling on hour:385-approach-checklist@30 (continue), taken while T100 was the active task.
+
+1. **What is refusing?** Nothing in T100: its plan is CLEAR and its claim's triage is next.
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither.
+6. **The one-sentence test.** "The web's water claim cites 0035" - true once the claims check finds it IN-STEP.
+7. **The next step is a measurement.** The claim's triage, then its check.
+8. **Every route measured before offering one?** No route is offered.
+9. **After a ruling: the step it names?** Yes - the ruling says land T104, then do T100.
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).
