@@ -774,3 +774,10 @@ About 40 min. `make decide` refuses an Approach item 4 sentence stating a figure
 method (or an `m:` key) - per sentence, code spans holding a path or command set aside, numbers that name a thing ("round 2",
 "seed 45") no figures. Three plan rounds: a fixed unit list, then one label per item, then clear. Run over all 77 sections first;
 what it still names lacks a date or a method. **The habit it changes:** a figure is labeled before any review reads it.
+
+## T89 - the retro row
+
+About 30 min. `make where-time` books each gap to the task its tool call names (`T=`, "task T60", a `385 T60:` commit, a plan
+bundle, a section heading), carries it to the calls that name none, and falls back to the mark only before any is named; a footer
+says how many minutes each rule booked. No workflow command moves the mark (the plan review accepted the change of route). **The
+habit it changes:** per-task numbers no longer depend on `make task-start` being run at the right moment.
