@@ -12,7 +12,7 @@ states the unit in each row. The lead is `specs/404-hunan-porter-rate/passes/zhi
 read each row on its page image). Research only: edit no code, modal, sheet or canon. Change only the 0260 sections this
 touches.
 
-## Your item
+## Your items
 
 - **The Hunan rows.** Wikimedia Commons, `https://commons.wikimedia.org/wiki/File:SSID-11354707_欽定物料價值則例_第1卷.pdf`
   (public domain; no text layer): download it, render PDF pp. 38-39 (`pdftoppm`), and read on the images the 長沙/善化
