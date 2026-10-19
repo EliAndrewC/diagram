@@ -802,6 +802,12 @@ def main(argv: list[str]) -> int:
         if d is None or section is None:
             print(f"{argv[0]}: no plan section names {argv[2]} in specs/{argv[1]}* - put the task's decisions under a heading that names it", file=sys.stderr)
             return 2
+        if argv[0] == "decide":
+            import plan_lint  # noqa: PLC0415 - feature 385 T84: what a script can see before a review spends a round on it
+
+            if why := plan_lint.refusal(d, section):
+                print(f"decide: refused - {why}", file=sys.stderr)
+                return 2
         print(digest(section.encode()) if argv[0] == "section-sha" else decide_prompt(d, argv[2]))
         return 0
     if argv[:1] == ["task-start"] and len(argv) == 3:
