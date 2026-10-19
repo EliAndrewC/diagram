@@ -127,7 +127,9 @@ def test_the_page_area_is_the_assets_and_the_registry_and_the_gate_s_area_holds_
     # ...AND ONE FILE PER MODAL since feature 319 (plan D12): `assets/modals/<hamlet|sheet>/<kind>.md`, a modal's text - an
     # edit to one changes what a modal says, which owes `make page-check` exactly as a term file does
     modals = sorted(f for f in page if "/assets/modals/" in f)
-    assets = [a for a in assets if not any(a in t for t in terms) and not any(a in m for m in modals)]
+    # ...BY PATH, NOT BY NAME: a term named for a word that contains an asset's name ("equipage.json" holds "page.js",
+    # feature 391) made the name test drop page.js itself. Only the files directly in `assets/` are the assets.
+    assets = sorted(f.rsplit("/", 1)[1] for f in page if "/assets/" in f and f not in terms and f not in modals and "/" not in f.split("/assets/", 1)[1])
     assert assets == ["choices.json", "glossary.json", "page-text.json", "page.css", "page.js", "place.json", "siblings.json"], (
         assets
     )  # feature 207: the content files are assets; feature 319 plan D10: the title card's choices table
