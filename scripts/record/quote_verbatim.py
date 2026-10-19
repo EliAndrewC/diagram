@@ -225,6 +225,13 @@ def passages(note_text: str) -> list[dict]:
                 nxt = spans[k + 1]
                 entry["original"] = note_text[nxt[0] + 1 : nxt[1] - 1]
                 entry["language"] = squeeze(between.group(1) or "")
+                # AN ORIGINAL OF SEVERAL RUNS (「...」「...」, its translation joined by "..."): the runs after the first sit
+                # inside the parentheses, so they are never passages of their own; `more` carries them for the translation
+                # check, which was shown the first run alone and answered CANNOT-TELL (the round arbiter on ask:397-round3)
+                j = k + 2
+                while j < len(spans) and not note_text[spans[j - 1][1] : spans[j][0]].strip():
+                    entry.setdefault("more", []).append(note_text[spans[j][0] + 1 : spans[j][1] - 1])
+                    j += 1
                 k += 1
         found.append(entry)
         k += 1
