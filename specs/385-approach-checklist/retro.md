@@ -923,3 +923,12 @@ lane's middle. A new block says so - no block edited (T31's lesson), no code cha
 lane pop-ups; 48 claims IN-STEP, the pop-ups clean, 0246's record checks clean. The rest - the 7 ft held off threshing yards and
 other households' yards where 0246 names gardens, the track's grove gap citing 0246 for 0036's figure, two small tolerances
 unclaimed - is old code a page edit re-judged, carried as a task. **The habit it changes:** none.
+
+## T109 - the retro row
+
+About 1 h 15. The track's grove gap at 0036's room, as T98 set the door path and the connector: the bands grown so every test in
+`_thread_the_fabric` - its first route, clip and checks, and its grove fallback - keeps the line 12.5 ft off the trees; two touch
+claims say the 7 ft the link is routed at, labeled DEVIATION on 0246. The plan's items 9-10 still name only the fallback, though
+D128 was widened to every test (the round-2 review's aside, left as text rather than a third round). The claims round's old findings
+on the fallbacks' walls, water and five unclaimed decisions are T112; its OUTSIDE rows were filed automatically (hour 32's fix, its
+first use: 9 rows). **The habit it changes:** none.
