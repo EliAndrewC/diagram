@@ -321,6 +321,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T112 The track's fallbacks walled as its first route is: _thread_the_fabric's grove fallback, unrouted clip and swing wall only the fabric or the bands, so a track may cross row crops, the paddy or wet ground (DRIFTED) or a brook off its crossing places (CANNOT-TELL); and its five unclaimed decisions - the largest piece kept, a near end counted a junction, an end walked clear along its own leg, the water-crossing limit, the order of the three fallback routes (found working T109, 2026-10-19) [lands-open]
       research: rendering
+- [ ] T113 make tick refuses a 'landed' note while the last sync-with-main push was refused, as T79 refuses one after a failed land-tooling: T110 ticked 'landed' while its push stood refused by the green-gate guard (found working T110, 2026-10-19) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
