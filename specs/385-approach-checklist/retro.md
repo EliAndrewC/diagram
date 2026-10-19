@@ -790,3 +790,6 @@ a dead dispatch's hold. Three plan rounds (block reviews in scope, the Write too
 to be wider than the plan said: `hm_house.write_targets` does not see a Python heredoc's write - my usual route - so a write is the
 plan named with a write marker, and held text is the heading, a held line, or a quoted fragment of it. **The habit it changes:** a
 section under review can no longer be edited under it.
+T72, found landing T85 (2026-10-19): the plan-review ledger commit ran `git diff` in a repository with no commits, where it errors,
+and read the error as a change - the sync-with-main suite failed on main. It now runs only where HEAD exists and the ledger's status
+shows a change.

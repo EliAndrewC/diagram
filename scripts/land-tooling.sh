@@ -67,7 +67,7 @@ fi
 # plan-verdict`, so where it was recorded is known; 81 such rows were written by hand on 2026-10-18 and two landings refused for one.
 # Any other owed pass still refuses below, as before.
 ( cd "$ROOT" && eval "${LAND_TOOLING_PLAN_ROWS:-python3 scripts/reviews/ledger_owed.py --write-plan-reviews --ledger dev/review-ledger.md}" ) >&2 || :
-if ! git -C "$ROOT" diff --quiet -- dev/review-ledger.md 2>/dev/null; then
+if git -C "$ROOT" rev-parse -q --verify HEAD >/dev/null && [ -n "$(git -C "$ROOT" status --porcelain -- dev/review-ledger.md 2>/dev/null)" ]; then  # T72: a fresh repo has no HEAD to diff
   git -C "$ROOT" commit -q -m "the plan reviews' ledger rows, written at landing (feature 385 T72)" -- dev/review-ledger.md || die "the plan reviews' ledger rows could not be committed"
 fi
 # GUARD_EDIT_OK: feature 383, the GM 2026-10-13 ("those are on disk, so it definitely can see them, right?") - THE LEDGER COMES
