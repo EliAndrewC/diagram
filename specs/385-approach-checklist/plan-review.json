@@ -6211,6 +6211,32 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T83": {
+   "section_sha256": "575fd60b84eea3637bb4fd881fd5d680469108f75d46072d5a5d55b80f9bc14d",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D103",
+     "summary": "A module-level dict-literal constant carrying its own claims is read as a section: one block per entry, each claim fingerprinted by its own line ('section-claim'), core stays the whole value's.",
+     "class": "within",
+     "why": "This is the step-back's change 4, 'Per-entry keying of a dictionary's claims', which the GM ordered worked as a task (amendment 8: 'instead of filing me per entry key ring feature, you should just work it. As a task on this existing feature'). It applies 375 FR-002's line-scoped rule to a dict, so an entry added re-opens only the claims it bears on, which is the purpose. Limiting it to module-level dict literals does not narrow the request: claims attach to claims-index units, the measured population of claimed dicts is 57 module-level dict constants (labeled with its date and method), and the motivating case, _OVERLAP_EXEMPT, is one of them."
+    },
+    {
+     "id": "D104",
+     "summary": "claims.py owed owes 'section triage' for any unit with blocks whose recorded core differs (sections and dicts alike); a claim line edited still owes that claim in full; backfill-sections re-keys a dict claim only when its row is current under the old whole-value fingerprint, records its core and block digests, leaves an owed row owed, and runs once.",
+     "class": "within",
+     "why": "This is how the per-entry keying gets carried out. The triage still reads every changed entry against every claim and sends the touched ones to impl-drift, so nothing the old fingerprint caught goes unchecked. It only stops an unrelated entry from re-owing every claim, which is the cost the step-back measured on _OVERLAP_EXEMPT. The backfill clears nothing that is owed: a row current under the stricter whole-value fingerprint is current under the line fingerprint too, and an owed row stays owed. That keeps the rule from settling claims that nobody reviewed."
+    },
+    {
+     "id": "Approach-9",
+     "summary": "Done is one goal, measured: an entry added owes a triage rather than 'code changed', a claim line edit owes in full, the backfill adds no owed dict claim it did not owe before, and two test files go red without it.",
+     "class": "within",
+     "why": "These tests only fail when the requested keying is missing, so they enforce what the GM asked for and are not added scope (GM 2026-09-20). One goal per task follows amendment 4."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
