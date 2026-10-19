@@ -656,3 +656,11 @@ none needed - the tool that files the task keeps the line.
 
 About 10 min. D85's qualified reading takes a decision too ("375 plan D18"), read from that feature's plan and plan-done.
 **The habit it changes:** none needed.
+
+## T70 - the retro row
+
+About 50 min. `set-down-hooks.sh stop` refuses a turn's end while the clone's active feature has an open task, nothing the session
+launched is still running, and no `make set-down F= WHY=` is recorded since its task-start; the refusal names the next open task.
+The plan review struck the proposal's question escape (a "Shall I go on?" while the GM sleeps is the stop it exists for) and asked
+for the GM's words in the request. Two fixture slips in the suite (a start stamped ahead of the clock, a directory that is no
+read error). **The habit it changes:** stopping with work left is no longer a choice the session makes silently.

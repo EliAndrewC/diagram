@@ -51,7 +51,7 @@
    "declared": "spec-fidelity"
   },
   "## Landing": {
-   "sha256": "270fd005bb99f66b9811f393dbdbdfcb3809d7781409836690f93da20b6d7b45",
+   "sha256": "48d066e932c746d1c5170fa25b736cdf12c9ade8dc6ac8f5340721a548156844",
    "verdict": "CLEAR",
    "reviewed": "2026-10-18",
    "declared": "spec-fidelity"
@@ -4518,6 +4518,21 @@
      "summary": "The only change since the block's CLEAR verdict: T66 and T67 are appended to the 'Lands open' list, so each lands when it closes, with its retro row, while the tasks after it stay open - the same landing mode every other task of the feature already has.",
      "class": "within",
      "why": "FR-006 requires tasks run one at a time, each closing with its retro row before the next task-start; the GM's request is 'we do one task and then we measure ... and then we go on and do the next task', and amendment 8 has the step-back's fixes worked as tasks on this feature now ('just make it another task on this feature ... we should do it now'). Landing two more tasks per task, like the rest, narrows nothing the request or spec asks for and decides nothing the spec leaves open beyond applying FR-006 to them."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Landing"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Landing: T68-T71 land open",
+     "summary": "The only change since the block's CLEAR verdict: T68, T69, T70 and T71 are added to the 'Lands open' list, so each of these newly inserted tasks lands on main when it closes, with its retro row, while the later tasks stay open - the same rule the block already applies to every other task.",
+     "class": "within",
+     "why": "This applies FR-006's existing one-task-then-retro landing to tasks added since. It is what the GM asked for in the original request ('we do one task and then we measure ... and then we go on and do the next task') and in Amendment 8 ('just make it another task on this feature ... we should do it now'). The rule's wording is unchanged and no task is taken out of the list, so nothing that was asked is narrowed."
     }
    ]
   }
