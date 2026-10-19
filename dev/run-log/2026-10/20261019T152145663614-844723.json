@@ -1,0 +1,38 @@
+{
+  "utc": "2026-10-19T15:21:45Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 181,
+  "result": "failed: test-full",
+  "commit": "0117374a4",
+  "first_failure_s": 123.7,
+  "last_failure_s": 123.7,
+  "failed_tests": 1,
+  "failed_names": [
+    "tests/tooling/test_claims_coverage.py::test_every_unit_in_scope_carries_a_claim"
+  ],
+  "host": {
+    "load": [
+      4.92,
+      5.11
+    ],
+    "mem_avail_mb": [
+      9075,
+      9286
+    ],
+    "cpu_temp_c": [
+      62.0,
+      65.0
+    ],
+    "stall_s": {
+      "cpu": 1.3,
+      "io": 0.4,
+      "io_full": 0.3,
+      "memory": 0.2
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  }
+}

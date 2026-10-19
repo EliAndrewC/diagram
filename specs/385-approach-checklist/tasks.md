@@ -382,7 +382,12 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T135 law.fouls_fabric with own set drops its own garden from the check; 0246 §16 keeps an own way off the beds - confirm every caller with own also holds the beds, as fouled_segment does (impl-drift, T108's round) [lands-open]
       research: rendering
-- [ ] T136 bund.py claim hygiene: RUN_ON_TURN_DEG's comment says map drawing convention while its claim cites 0081 as a finding - settle which; BRANCH_STEP_FT has no Research: claim (likely NONE, plumbing) (impl-drift, T130's round) [lands-open]
+- [x] T136 bund.py claim hygiene: RUN_ON_TURN_DEG's comment says map drawing convention while its claim cites 0081 as a finding - settle which; BRANCH_STEP_FT has no Research: claim (likely NONE, plumbing) (impl-drift, T130's round) [lands-open]
+      research: rendering
+      verify: DONE. landed 2026-10-19 by sync-with-main done; turn limit CONVENTION, sampling step NONE, its comment corrected (wording only); IN-STEP
+- [ ] T137 T136 landed a malformed claim (RUN_ON_TURN_DEG: CONVENTION takes no pointer) to main by the direct route, which never runs the claim-form test - fix the claim, and make the form check run before a direct landing (found by the T132+T125 gate) [lands-open]
+      research: rendering
+- [ ] T138 street.to_its_joints' touch (how close an end must come to count as a joint) arrives from its callers unclaimed - check each call site's value against 0246's reach to another way and claim it; and whether the callers pass field-path and bund ends as joints (0246 §6 lets a lane run on to them) (impl-drift, the T132 batch's round) [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering

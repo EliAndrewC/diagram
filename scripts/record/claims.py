@@ -675,8 +675,19 @@ def split_keys(text: str, known: Mapping[str, Any]) -> list[str]:
 
 
 def gate(root: Path) -> tuple[list[str], list[str]]:
-    """(refusals, warnings) for the push (`claims_carry.gate`)."""
-    return claims_carry.gate(sys.modules[__name__], root)
+    """(refusals, warnings) for the push (`claims_carry.gate`), and every claim in a file the delta changed that the claims
+    grammar cannot read (feature 385 T137, D149: T136 landed "CONVENTION <page>" by the direct route, which runs no gate)."""
+    refuse, warn = claims_carry.gate(sys.modules[__name__], root)
+    return refuse + delta_form_problems(root), warn
+
+
+def delta_form_problems(root: Path, base: str = "origin/main") -> list[str]:
+    """Each `form_problems` problem whose file changed since `base` - a form is fixed, never carried, so there is no escape."""
+    changed = set((_git(root, "diff", "--name-only", f"{base}...HEAD") or "").split())
+    if not changed:
+        return []
+    cl = engine(root)
+    return [f"{x} - the claims grammar: {cl.GRAMMAR}" for x in form_problems(root, cl) if x.split(":", 1)[0] in changed]
 
 
 def _parser() -> argparse.ArgumentParser:

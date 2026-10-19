@@ -1063,3 +1063,23 @@ About 8 min, wording only. `RUN_ON_TURN_DEG`'s claim labeled CONVENTION (0081 sa
 `BRANCH_STEP_FT` claimed NONE, and the step's comment no longer calls plumbing a convention - that last from the claims check's
 own aside, fixed here rather than filed, since it sat beside the claimed line. **The habit it changes:** an aside on the lines a
 task already touches is fixed in the task, not filed.
+
+## T132 - the retro row
+
+About 30 min, in the first `make land-batch` with T125 and T137. A street with exactly one joint was cut to two coincident points
+the overlap matrix admits; it is now left whole, and its claim names `settle_street_ends` as the pass that cuts its dangling end
+- the impl-drift round's DRIFTED, and the plan review's aside, answered in the claim. **The habit it changes:** none.
+
+## T125 - the retro row
+
+About 20 min, in the same batch. The web's `or True` headman filter, which filtered nothing, is written as what it does - every
+house - and the tie's 30 ft run past the back lanes is claimed a bare GUESS (MISLABELED once, citing a page that gives no
+distance, the T130 pattern again). The edit to `stage_web` was the first through T116's code triage: 19 of 20 claims cleared,
+one sent on. **The habit it changes:** a GUESS no page gives names no page.
+
+## T137 - the retro row
+
+About 35 min. T136 landed a claim the grammar cannot read ("CONVENTION <page>") by the direct route, which runs no gate, and the
+batch's first gate went red on it. The claim now cites its drawing page plainly, and the push's claims gate refuses a form problem
+in any changed file, reusing `form_problems` - which `claims-owed` already printed first, and which my truncated reading of that
+output had hidden. **The habit it changes:** read `claims-owed`'s head, not only its tail.

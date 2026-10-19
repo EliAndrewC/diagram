@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92, T93, T94, T95, T96, T97, T98, T99, T100, T102, T103, T104, T105, T106, T107, T109, T110, T111, T112, T113, T114, T115, T116, T117, T118, T119, T120, T121, T122, T123, T124, T125, T126, T127, T128, T129, T130, T131, T132, T133, T134, T135, T136
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92, T93, T94, T95, T96, T97, T98, T99, T100, T102, T103, T104, T105, T106, T107, T109, T110, T111, T112, T113, T114, T115, T116, T117, T118, T119, T120, T121, T122, T123, T124, T125, T126, T127, T128, T129, T130, T131, T132, T133, T134, T135, T136, T137, T138
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -695,6 +695,80 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@35 (change-rou
 ### T136 Decisions
 
 **Wording only.** `RUN_ON_TURN_DEG`'s claim becomes "run-on turn limit - CONVENTION research/questions/0081-village-lanes.drawing.html: a lane run on to a bund turns no more than 60 degrees anywhere - the page's turn limits are drawing conventions"; `BRANCH_STEP_FT` gains "Research: branch sampling step - NONE: how often the nearest lane is sampled for a field path's branch".
+
+## T132 - a street with one joint is left whole, not cut to a point (impl-drift, T106's round)
+
+### T132 Approach (checklist part A)
+
+1. **The goal, in the world.** A further street that meets only one other way keeps its length, instead of being cut to nothing.
+2. **The constraints.** 0246's drawing page: a lane end that reaches nothing is pulled back to the last house it serves - the streets' own trim at `street_anchors` and the door anchors does that. `to_its_joints`' docstring: a street is cut to the stretch between its outermost joints, "or as it is where fewer than one joint stands on it". A test red without it; the landing cohort.
+3. **Where each comes from.** 0246's drawing page (O); the function's own contract (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T106's claims round, then a read of `to_its_joints`, `cut_between` and `reshape_lane`): with exactly one joint `lo == hi`, `cut_between` returns two coincident points, `trim_streets` admits them (`len(cut) >= 2`), and `reshape_lane` writes them - a point overlaps nothing the matrix refuses - so the street is cut to a point.
+5. **The order.** `to_its_joints` returns the street as it is where fewer than two joints stand; the docstring says two; the unit test; the landing cohort.
+6. **The exits.** (c) - a stretch needs two ends; cutting a one-joint street to its joint and the farther door was weighed and refused here (`trim_streets` passes the door anchors among the ends, so a served farm already counts as a joint).
+7. **The search smell.** None.
+8. **The budget.** 30 min, landing with T125 by `make land-batch`.
+9. **Done, measured.** One goal: `to_its_joints` with one joint returns the street unchanged; `tests/hamletgen/ways/` red without it; the landing cohort refuses no seed against main.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T132 Decisions
+
+**D147 - two joints make a stretch.** `to_its_joints` returns `list(street)` where fewer than two joints stand on it (`len(at) < 2`), and its docstring reads "fewer than two joints".
+
+## T125 - the web's dead headman filter removed, its cross-lane tie claimed (impl-drift, T106's round)
+
+### T125 Approach (checklist part A)
+
+1. **The goal, in the world.** `stage_web` says plainly which houses its web serves, and the 30 ft its cross-lane ties run past the outermost back lane is claimed.
+2. **The constraints.** `stage_web` reads `[h for h in ... if h.get("role") != "headman" or True]` - every house, the headman's included, since the `or True` makes the test always pass; 0246's drawing page: every farmhouse is served. Every rendering decision labeled; 0246 records the back lanes' 30 ft pad and its cross lanes about one to every 300 ft, but no distance a tie runs past the outermost back lane. A test red without it; the landing cohort.
+3. **Where each comes from.** The code (O); 0246's drawing page (O); the root CLAUDE.md's research rules (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T106's claims round: the `or True` filters nothing; `_web_cut_lines`' tie runs `pad`, 30 ft, past the outermost back lane, UNCLAIMED).
+5. **The order.** The filter written as what it does, every house; the tie's claim; the claims check; the landing cohort.
+6. **The exits.** (c) - write the filter as it runs; excluding the headman's house was weighed and refused (0246 serves every farmhouse, and the maps have drawn it served).
+7. **The search smell.** None.
+8. **The budget.** 20 min, landing with T132 by `make land-batch`.
+9. **Done, measured.** One goal: `stage_web` takes every house with no headman test, its behavior unchanged; `_web_cut_lines` carries a claim for the tie's 30 ft; the claims check IN-STEP; the landing cohort refuses no seed against main.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T125 Decisions
+
+**D148 - every house, said so.** `stage_web`'s house list is `list(s.M.get("houses", []))`, the dead headman test gone; `_web_cut_lines` gains the claim "a tie's run past the back lanes - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a cross lane runs the back lanes' own 30 ft pad past the outermost of them; the page gives no distance".
+
+## T137 - a malformed claim never lands by either route (found by the T132+T125 gate, 2026-10-19)
+
+### T137 Approach (checklist part A)
+
+1. **The goal, in the world.** A claim written in a form the claims tooling cannot read is refused before it lands, whichever route lands it.
+2. **The constraints.** Feature 316: every unit in scope carries a claim in the claims grammar (`tools/claims.GRAMMAR`, `coverage`), held by `tests/tooling/test_claims_coverage.py` at the gate; the claims gate (`scripts/gates/claims-gate.sh`, `claims.py gate`) runs on both routes. The round arbiter's fix bar (amendment 10): a defect that reached main. A test red without it.
+3. **Where each comes from.** 316 (O); the root CLAUDE.md's session-clone rules (O); the GM (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the T132+T125 gate, red in test-full on `test_every_unit_in_scope_carries_a_claim`): T136 landed `RUN_ON_TURN_DEG`'s claim as "CONVENTION <page>" - "`CONVENTION` takes no pointer" - by `sync-with-main.sh done`'s direct route (a docstring-only change, no gate), and the claims check had judged it IN-STEP, owing no form check.
+5. **The order.** The claim corrected to a plain citation of the drawing page; `claims.py gate` refusing a `coverage` problem in a file the delta changed; the test.
+6. **The exits.** (c) - the form check where both routes already pass; running the whole coverage test on the direct route was weighed and refused (the gate's own test does that; the push needs only the delta's files).
+7. **The search smell.** None.
+8. **The budget.** 30 min, landing with T132 and T125 by `make land-batch`.
+9. **Done, measured.** One goal: `make claims-gate` refuses when a file changed since origin/main carries a claim `coverage` reports, naming it and the grammar; the corrected claim passes; `tests/tooling/` red without it.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T137 part B (2026-10-19T15:28Z)
+
+Owed by the round arbiter's ruling on hour:385-approach-checklist@36 (continue), taken while T137 was the active task.
+
+1. **What is refusing?** Nothing now: the gate's red was the malformed claim, corrected.
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither in this part B: the change is D149's, decided and reviewed; the ruling's fix - reuse `form_problems`, no second check - is how D149 was built.
+6. **The one-sentence test.** "A malformed claim in a changed file is refused at the push" - true by `test_the_gate_refuses_a_claim_the_grammar_cannot_read_in_a_changed_file`.
+7. **The next step is a measurement.** The claims check, the gate and the landing cohort of the batch.
+8. **Every route measured before offering one?** No route is offered.
+9. **After a ruling: the step it names?** Yes - T137, then the T132+T125 batch.
+
+### T137 Decisions
+
+**D149 - the form refused at the push.** `RUN_ON_TURN_DEG`'s claim cites 0081's drawing page plainly ("... - the page records its turn limits as drawing conventions"). `claims.py gate` adds to its refusals each `coverage` problem whose file is in `git diff --name-only origin/main...HEAD`: "<problem> - the claims grammar: <GRAMMAR>". No escape: a form is fixed, never carried.
 
 ## T11 - the close
 

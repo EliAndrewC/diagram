@@ -401,13 +401,13 @@ def join_leg(path: Sequence[Pt], joined: Sequence[Pt]) -> list[Pt]:
 
 def to_its_joints(street: Sequence[Pt], ends: Sequence[Pt], touch: float) -> list[Pt]:
     """A street cut back to the stretch between its outermost joints - the points on it nearest each other lane end within
-    `touch` of it (a farm's door path, the join, the road run on from it) - or as it is where fewer than one joint stands on
+    `touch` of it (a farm's door path, the join, the road run on from it) - or as it is where fewer than two joints stand on
     it. Past its last farm's path a street serves nothing the lane law counts (`end_serves`: a farmhouse stands most of a
     frame off its street), and the settle refuses a tree lane with a dangling end (feature 291 on 287, Mizuguchi).
 
-    Research: street cut to its outermost joints - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end reaching nothing is pulled back"""
+    Research: street cut to its outermost joints - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end reaching nothing is pulled back - a street with one joint is left whole here, and its dangling end cut back to that joint by `settle.settle_street_ends` once the lane law calls it dangling"""
     arc, at = joints_along(street, ends, touch)
-    if not at:
+    if len(at) < 2:  # ...ONE JOINT IS NO STRETCH (feature 385 T132, D147): cut at it, the street became a point the matrix admits
         return list(street)
     lo, hi = min(at), max(at)
     return cut_between(street, arc, lo, hi)

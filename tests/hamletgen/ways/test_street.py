@@ -122,6 +122,8 @@ def test_a_street_is_cut_to_its_outermost_joints() -> None:
     street = [(0.0, 0.0), (100.0, 0.0), (200.0, 0.0), (300.0, 0.0)]
     assert to_its_joints(street, [(50.0, 2.0), (250.0, -3.0), (150.0, 90.0)], 4.0) == [(50.0, 0.0), (100.0, 0.0), (200.0, 0.0), (250.0, 0.0)]
     assert to_its_joints(street, [(150.0, 90.0)], 4.0) == street, "no joint on it: as it is"
+    # feature 385 T132 (D147): ONE joint is no stretch - cut at it, the street became two coincident points the matrix admits
+    assert to_its_joints(street, [(150.0, 2.0)], 4.0) == street, "one joint: as it is"
     assert cut_between(street, [0.0, 100.0, 200.0, 300.0], 0.0, 300.0) == street
     assert nearest_on(street, (120.0, 30.0)) == (120.0, 0.0) and nearest_on(street[:1], (0.0, 0.0)) is None
     s = Settlement(400, 200, seed=1)
