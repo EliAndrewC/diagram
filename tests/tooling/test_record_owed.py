@@ -449,3 +449,28 @@ def test_outside_rows_parse_from_a_transcript_once_it_is_read_as_one(tmp_path: p
     out.write_text(_json.dumps({"type": "assistant", "message": {"content": [{"type": "text", "text": text}]}}) + "\n")
     assert ro.outside(out.read_text()) == [], "read raw, the transcript's row is not seen"
     assert ro.outside(apply_edits.reply_of(out)) == [("research/questions/0246-x.drawing.html", "a block", "Enoshima unexplained")]
+
+
+def test_a_note_grown_only_by_its_readers_own_passages_is_not_owed_again(tmp_path: pathlib.Path) -> None:
+    """The round arbiter on round:source-reader|q:0263@3: applying a source-reader's findings added the passages it had
+    quoted, and the note was owed a third read of the same saved pages."""
+    q = tmp_path / "research/questions"
+    q.mkdir(parents=True)
+    note = '<li data-note="k"><a href="https://p/1"><code>k</code></a> - 「a」 (translated; <span class="orig" data-orig="k#1"></span>){more}</li>\n'
+    stored = '<li data-orig="k#1">original: 「弓箭一千」</li>\n<li data-orig="k#2">original: 「造册呈詳」</li>\n'
+    (q / "0263-arrows.originals.html").write_text(stored, encoding="utf-8")
+    notes = q / "0263-arrows.notes.html"
+    notes.write_text(note.format(more=""), encoding="utf-8")
+    store = tmp_path / "store"
+    ro.write_answer(store, "source-reader:0263#k", "fp1", "1 READ")
+    ro.keep_parts(store, "source-reader:0263#k", tmp_path, "READ: the page has 「…以上共工料銀造册呈詳到臣具題間」 in the costing")
+    grown = note.format(more='; 「b」 (translated; <span class="orig" data-orig="k#2"></span>)')
+    notes.write_text(grown, encoding="utf-8")
+    assert ro.readers_own(tmp_path, store, "source-reader:0263#k"), "the added passage is one the reader quoted"
+    notes.write_text(grown.replace("k#2", "k#3"), encoding="utf-8")
+    (q / "0263-arrows.originals.html").write_text(stored + '<li data-orig="k#3">original: 「新しい」</li>\n', encoding="utf-8")
+    assert not ro.readers_own(tmp_path, store, "source-reader:0263#k"), "a passage the reader never quoted is read again"
+    notes.write_text(grown.replace("https://p/1", "https://p/2"), encoding="utf-8")
+    assert not ro.readers_own(tmp_path, store, "source-reader:0263#k"), "a page it never read is read again"
+    ro.write_answer(store, "source-reader:0263#k", "fp2", "1 READ")
+    assert ro._read(store, "source-reader:0263#k")["passages"], "a later answer keeps what the earlier one read"
