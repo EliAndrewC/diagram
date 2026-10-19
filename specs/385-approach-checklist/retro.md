@@ -963,3 +963,13 @@ minutes by bucket and its wall-clock span - T97 53, T109 40, T102 49, as the han
 history, not the event log's tick records, because those exist only since hour 33's fix and the history holds every tick (the
 review's aside). Its first reading: "tools" is the largest bucket, 85 of 218 minutes over eleven tasks - the foreground cohorts
 and landings, next to split by command. **The habit it changes:** a speed question is answered by `make where-time BY=tick`.
+
+## T116 - the retro row
+
+About 75 min. A code change now owes its claims a `code triage` first: the triage bundle shows the unit's diff hunks against
+origin/main beside its claims, and the claims the agent does not name are cleared at their new code, as a page edit's are since
+318. Owed in full as before: a claim the triage names, a procedure section's own line, a claim whose own text was rewritten (known
+from the row, or seen among the hunk's added lines), and a unit with no hunk to show (the change landed before the check). The
+plan review blocked once, on a minimum claim count whose saving was asserted, not measured; dropping it made the rule the page
+triage's own. Building it found an empty-diff crash in the hunk splitter, caught by the test. **The habit it changes:** a
+threshold in a plan carries the measurement that sets it, or is not there.
