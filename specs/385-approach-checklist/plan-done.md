@@ -2567,3 +2567,24 @@ between dispersed farms' bands (`dispersed.LANE_ROOM_FT`) that cell is at most 2
 with a test holding the inequality - measured 2026-10-19 (`make test-file` on `test_dry_exit.py`: the 32 ft case refused at 7 ft,
 passing at 2.9; `make cohort` 16 of 16). The fill runs only where no bearing of the sweep is clear.
 
+<!-- plan-archive: archived 2026-10-19 -->
+## T103 - the measure guard sees a red preflight (found working T98, 2026-10-19)
+
+### T103 Approach (checklist part A)
+
+1. **The goal, in the world.** A gate re-run after a red preflight goes through, as a re-run after any red gate does.
+2. **The constraints.** The measure guard's rule: "a run after a red goes through (that is fixing what the gate found)"; the GM's rule: a tool, never a reminder. A test red without it.
+3. **Where each comes from.** The guard's own rule (O); the GM (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T98's two gates, `make done` then the guard's refusal): the gate stopped at preflight (the file-size bar, then a failing quick test), wrote no `dev/run-log` record - the record is written only after preflight - and the guard refused the re-run as "this tree's last full gate was GREEN 30 min ago".
+5. **The order.** The preflight failure branch in the Makefile's `done` marks the git directory; the guard reads the mark; then the hook suite's test.
+6. **The exits.** (c) - the failure leaves a mark the guard reads; a run-log record is the other route, refused because those records are tracked files the landing sweeps (`commit-run-record.sh`).
+7. **The search smell.** None.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: after a preflight failure newer than the last green gate, `make done` is not refused by the measure guard; a preflight failure older than the last green gate changes nothing; `tests/hooks/test-measure-hooks.sh` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T103 Decisions
+
+**D120 - a red preflight leaves a mark.** `done`'s preflight failure branch touches `<git dir>/gate-preflight-red`; `measure-hooks.sh` lets the full measurement through, without refusing once, when that file is newer than the last green run-log record.
+
