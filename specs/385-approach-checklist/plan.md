@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92, T93, T94, T95, T96, T97, T98, T99, T100, T102, T103, T104, T105, T106, T107, T109, T110, T111, T112, T113, T114, T115, T116, T117, T118, T119, T120, T121, T122, T123, T124, T125, T126, T127, T128, T129, T130, T131, T132, T133, T134, T135, T136, T137, T138
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92, T93, T94, T95, T96, T97, T98, T99, T100, T102, T103, T104, T105, T106, T107, T109, T110, T111, T112, T113, T114, T115, T116, T117, T118, T119, T120, T121, T122, T123, T124, T125, T126, T127, T128, T129, T130, T131, T132, T133, T134, T135, T136, T137, T138, T139, T140, T141, T142
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -696,46 +696,8 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@35 (change-rou
 
 **Wording only.** `RUN_ON_TURN_DEG`'s claim becomes "run-on turn limit - CONVENTION research/questions/0081-village-lanes.drawing.html: a lane run on to a bund turns no more than 60 degrees anywhere - the page's turn limits are drawing conventions"; `BRANCH_STEP_FT` gains "Research: branch sampling step - NONE: how often the nearest lane is sampled for a field path's branch".
 
-## T132 - a street with one joint is left whole, not cut to a point (impl-drift, T106's round)
-
-### T132 Approach (checklist part A)
-
-1. **The goal, in the world.** A further street that meets only one other way keeps its length, instead of being cut to nothing.
-2. **The constraints.** 0246's drawing page: a lane end that reaches nothing is pulled back to the last house it serves - the streets' own trim at `street_anchors` and the door anchors does that. `to_its_joints`' docstring: a street is cut to the stretch between its outermost joints, "or as it is where fewer than one joint stands on it". A test red without it; the landing cohort.
-3. **Where each comes from.** 0246's drawing page (O); the function's own contract (O).
-4. **Do they describe the world here?** Yes - measured 2026-10-19 (T106's claims round, then a read of `to_its_joints`, `cut_between` and `reshape_lane`): with exactly one joint `lo == hi`, `cut_between` returns two coincident points, `trim_streets` admits them (`len(cut) >= 2`), and `reshape_lane` writes them - a point overlaps nothing the matrix refuses - so the street is cut to a point.
-5. **The order.** `to_its_joints` returns the street as it is where fewer than two joints stand; the docstring says two; the unit test; the landing cohort.
-6. **The exits.** (c) - a stretch needs two ends; cutting a one-joint street to its joint and the farther door was weighed and refused here (`trim_streets` passes the door anchors among the ends, so a served farm already counts as a joint).
-7. **The search smell.** None.
-8. **The budget.** 30 min, landing with T125 by `make land-batch`.
-9. **Done, measured.** One goal: `to_its_joints` with one joint returns the street unchanged; `tests/hamletgen/ways/` red without it; the landing cohort refuses no seed against main.
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
-### T132 Decisions
-
-**D147 - two joints make a stretch.** `to_its_joints` returns `list(street)` where fewer than two joints stand on it (`len(at) < 2`), and its docstring reads "fewer than two joints".
-
-## T125 - the web's dead headman filter removed, its cross-lane tie claimed (impl-drift, T106's round)
-
-### T125 Approach (checklist part A)
-
-1. **The goal, in the world.** `stage_web` says plainly which houses its web serves, and the 30 ft its cross-lane ties run past the outermost back lane is claimed.
-2. **The constraints.** `stage_web` reads `[h for h in ... if h.get("role") != "headman" or True]` - every house, the headman's included, since the `or True` makes the test always pass; 0246's drawing page: every farmhouse is served. Every rendering decision labeled; 0246 records the back lanes' 30 ft pad and its cross lanes about one to every 300 ft, but no distance a tie runs past the outermost back lane. A test red without it; the landing cohort.
-3. **Where each comes from.** The code (O); 0246's drawing page (O); the root CLAUDE.md's research rules (O).
-4. **Do they describe the world here?** Yes - measured 2026-10-19 (T106's claims round: the `or True` filters nothing; `_web_cut_lines`' tie runs `pad`, 30 ft, past the outermost back lane, UNCLAIMED).
-5. **The order.** The filter written as what it does, every house; the tie's claim; the claims check; the landing cohort.
-6. **The exits.** (c) - write the filter as it runs; excluding the headman's house was weighed and refused (0246 serves every farmhouse, and the maps have drawn it served).
-7. **The search smell.** None.
-8. **The budget.** 20 min, landing with T132 by `make land-batch`.
-9. **Done, measured.** One goal: `stage_web` takes every house with no headman test, its behavior unchanged; `_web_cut_lines` carries a claim for the tie's 30 ft; the claims check IN-STEP; the landing cohort refuses no seed against main.
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
-### T125 Decisions
-
-**D148 - every house, said so.** `stage_web`'s house list is `list(s.M.get("houses", []))`, the dead headman test gone; `_web_cut_lines` gains the claim "a tie's run past the back lanes - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a cross lane runs the back lanes' own 30 ft pad past the outermost of them; the page gives no distance".
-
+<!-- plan-archive: T132 to T106 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+<!-- plan-archive: T125 to T106 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
 ## T137 - a malformed claim never lands by either route (found by the T132+T125 gate, 2026-10-19)
 
 ### T137 Approach (checklist part A)
@@ -769,6 +731,95 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@36 (continue),
 ### T137 Decisions
 
 **D149 - the form refused at the push.** `RUN_ON_TURN_DEG`'s claim cites 0081's drawing page plainly ("... - the page records its turn limits as drawing conventions"). `claims.py gate` adds to its refusals each `coverage` problem whose file is in `git diff --name-only origin/main...HEAD`: "<problem> - the claims grammar: <GRAMMAR>". No escape: a form is fixed, never carried.
+
+<!-- plan-archive: T139 to T132 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+## T43 - three findings carried at T07's landing, settled since (the round arbiter, ask:t07-two-findings-at-landing)
+
+### T43 Approach (checklist part A)
+
+1. **The goal, in the world.** The three findings carried at T07's landing are each fixed or re-checked clean before 385 closes (FR-013).
+2. **The constraints.** FR-013: a carried finding is fixed or re-checked clean. The round arbiter's rulings on ask:t07-two-findings-at-landing and ask:t07-span-walkable-cannot-tell.
+3. **Where each comes from.** FR-013, the rulings (O).
+4. **Do they describe the world here?** No longer - measured 2026-10-19 (the claims index and the tree): (1) `houses._on_a_tread#a building's corners held to it` IN-STEP since 2026-10-18 (T96 and T101's work on the footpath's and the lane's room); (2) `settlement/rolling/roll.py` no longer exists - feature 388 retired `roll_village`, `_roll_cluster` with it; (3) `law.span_walkable#a walkable span` IN-STEP since 2026-10-19.
+5. **The order.** Each finding read against the index and the tree; nothing to change.
+6. **The exits.** (e) conform: the record already says what each now is.
+7. **The search smell.** None.
+8. **The budget.** 5 min.
+9. **Done, measured.** One goal: each of the three stands IN-STEP or retired, read from the claims index and the tree; no file changes but this section.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T43 Decisions
+
+**Wording only.** Nothing changes: the three carried findings were settled by T96, T101 and feature 388, each re-checked clean or removed.
+
+## T32 - the weld-lump preference no code runs, removed (ranking row: waterfields/banks.py _WELD_MIN_SOLIDITY, E2 DRIFTED)
+
+### T32 Approach (checklist part A)
+
+1. **The goal, in the world.** No claim describes a rule the maps do not run.
+2. **The constraints.** FR-020: a ranking row of a kind not yet tried, marked with its wave in 328's `audit/waves.json` - E2, one rule (T06 a form, T07 research, T08 and T10 knobs, T09 a value, T31 a mislabel). The finding (impl-drift): "the 0.85-solidity exception is not recorded there as a deviation - record it on the page or drop DEVIATION"; the ranking's fix: "drop the 0.85-solidity host preference". Every claim says what its code does. A dead branch is removed, not described (constitution XIV: fix defects where you find them). The landing cohort.
+3. **Where each comes from.** FR-020 (G, amendment 7); the finding and the ranking (O); the constitution (O).
+4. **Do they describe the world here?** No - measured 2026-10-19 (`grep -rn "WELD_MIN_SOLIDITY\|_absorb(" l7r/ tests/ pool/ scripts/`, after round 1 of this plan's review asked what the code does when no host is clean): `_WELD_MIN_SOLIDITY` appears only at its own definition, and `_absorb`, the welder its comment describes, exists nowhere in the tree; the preference runs nowhere, so the claim, its DEVIATION label and the comment block above it describe a rule the maps do not have.
+5. **The order.** The constant, its comment block and its claim removed; the claims check of what remains; the gate and the landing cohort (no map should move).
+6. **The exits.** (e) conform - remove the dead rule, which is the ranking's fix in effect; recording a deviation on 0014 (round 1's route) was refused: no code runs it.
+7. **The search smell.** None.
+8. **The budget.** 30 min with its checks, landing by `make land-batch` with the next engine fix, or alone.
+9. **Done, measured.** One goal: `_WELD_MIN_SOLIDITY`, its comment block and its claim are gone; nothing references them; the gate green and the landing cohort refusing no seed against main; the row marked with its wave in `audit/waves.json`.
+10. **Before moving a constant.** Its uses, listed before removing it: none (item 4's grep).
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T32 part B (2026-10-19T16:18Z)
+
+Owed by cohort@20261019T064540Z: seeds 3, 4, 901, 902 and 904 newly failing at 06:45Z, booked to T32.
+
+1. **What is refusing?** Nothing of T32's: that cohort was T31's probe of `FOOTPATH_FABRIC_GAP` at 7 ft, reverted the same hour (T31's part B, 06:27Z, names seeds 3, 4, 903 and 904 at 7 ft), and T96 settled the footpath's room; T32's own landing cohort passed 54/54.
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither in this part B: the change is D151's, decided and reviewed.
+6. **The one-sentence test.** "No map runs the weld-lump preference" - true by item 4's grep and the green gate.
+7. **The next step is a measurement.** Done: the gate green (154 s) and the landing cohort 54/54.
+8. **Every route measured before offering one?** No route is offered.
+9. **After a ruling: the step it names?** n/a - no ruling owes this part B.
+
+### T32 Decisions
+
+**D151 - the dead preference removed.** `waterfields/banks.py` loses `_WELD_MIN_SOLIDITY`, its claim and the comment block above it ("A WELD MUST NOT MAKE A LUMP ... no host is clean."); `ring_solidity` stays, used by the chevron guard. The row is marked in 328's `audit/waves.json` with this wave.
+
+## T33 - a lane end within 6 ft of the paddy counts as joined, recorded as the guess it is (ranking row: hamletgen/ways/bund.py a_way_onto_the_bund#on the bund, E3 NEEDS-RESEARCH)
+
+### T33 Approach (checklist part A)
+
+1. **The goal, in the world.** 0014's drawing page says how near the paddy a lane end must come to count as joining its bund, and the claim cites that.
+2. **The constraints.** FR-020 as the round arbiter read it (ask:t33-ranking-pick): a live row of a kind not yet tried - E3 NEEDS-RESEARCH (T07 was E4 research, T32 E2, T31 E0). 0014's drawing page: the path joins the outer bund, "it never ends in open ground short of the bund ... since no page we read tells of either". The finding: "the page gives no reach figure ... BUND_REACH_FT=6 counts an end up to 6 ft short as joined, so label it GUESS/UNRESEARCHED or record the tolerance on the page". T130's lesson: a GUESS cites a page only where that page records the figure. Every rendering decision labeled. Record checks and the claims check.
+3. **Where each comes from.** FR-020 and the ruling (G, O); 0014's drawing page (O); the finding (O); T130 (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the claims index: `bund.a_way_onto_the_bund#on the bund` NEEDS-RESEARCH, its note above; `BUND_REACH_FT = 6.0` in `settlement/water_ways/_helpers.py`; 0014's rule paragraph read): no page gives how near counts, and the page does not record the 6 ft.
+5. **The order.** The 6 ft recorded in 0014's rule paragraph as a GUESS; the claim relabeled GUESS citing it; the record checks and the claims check.
+6. **The exits.** (a) refine an O number: n/a - none exists; (b) an exception: n/a; (c) a new rule: n/a; (d) more room: n/a; (e) conform - record what the map draws, labeled; a research pass for a joining tolerance was weighed and refused (a 6 ft gap at the map's scale is a drawing tolerance no source would state).
+7. **The search smell.** None.
+8. **The budget.** 40 min with its checks.
+9. **Done, measured.** One goal: 0014's rule paragraph records the 6 ft as a GUESS; the claim reads GUESS citing it; record checks and claims check pass; no engine token changes; the row marked with its wave.
+10. **Before moving a constant.** n/a - `BUND_REACH_FT` stays 6 ft.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T33 part B (2026-10-19T16:38Z)
+
+Owed by the round arbiter's ruling on hour:385-approach-checklist@37 (continue), taken while T33 was the active task.
+
+1. **What is refusing?** Nothing: D152 built, its record checks answered and its claims IN-STEP or filed.
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither in this part B: the change is D152's, decided and reviewed; the relabels made after it rest on its block.
+6. **The one-sentence test.** "0014 says how near a lane end must come to join the bund" - true by the record checks.
+7. **The next step is a measurement.** Done: the record checks and the claims rounds.
+8. **Every route measured before offering one?** No route is offered.
+9. **After a ruling: the step it names?** Yes - T33's checks, then T34-T40 from live code.
+
+### T33 Decisions
+
+**D152 - the joining reach, recorded.** 0014's rule paragraph gains, after "never passes through a gap in it, since no page we read tells of either.": "A lane end that stops within 6 ft of the paddy's edge is drawn as joining it, a GUESS at how near reads as touching at the map's scale." The claim `a_way_onto_the_bund#on the bund` reads "GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a lane end within 6 ft of the paddy's edge (`BUND_REACH_FT`) counts as joined to the bund". The row is marked in 328's `audit/waves.json`.
 
 ## T11 - the close
 

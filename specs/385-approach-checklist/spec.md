@@ -223,6 +223,11 @@ change is made: the lever is fewer rework round trips, two of which FR-017 and F
   T40, each chosen at its task's start - a row of a kind not yet tried where one is left, the checklist answered for it, and
   marked with its wave - and worked one task at a time under FR-006 (its retro row) and 384's FR-002, as T06-T10 are. They run
   after T07-T10 and before T12 and T11, the close, which stays last.
+  *Read so by the round arbiter's ruling on ask:t33-ranking-pick (2026-10-19):* the rows are taken from open rows whose code a
+  scripted (live) map runs - a kind not yet tried where one is left, else the top-ranked live row of any kind, said so in the task's
+  Approach; a row whose code was removed with no live successor is marked retired in 328's `audit/waves.json` with its reason
+  (133 so marked, wave 165, each checked for a successor first); `settlement/` rows that serve only frozen exhibit maps stay open
+  and are skipped.
 
 ## Success Criteria *(mandatory)*
 

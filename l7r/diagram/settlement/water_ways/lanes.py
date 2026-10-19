@@ -237,7 +237,7 @@ class LanesMixin:
         Research:
             an end reaching nothing is pulled back - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: to the last house, way or bund it serves
             served at the dooryard - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 12 ft of the steading's built ground or 60 ft of the house's drawn footprint, on any side, at the map's scale
-            arrival at the bund - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: within 6 ft of a field's or dry plot's edge, at the map's scale (the page gives no figure)
+            arrival at the bund - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: within 6 ft of a field's or dry plot's edge, at the map's scale - the page records the 6 ft as a GUESS
             meeting another way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 60 ft of it, at 20 degrees or more
             one end per house and bearing - UNRESEARCHED: a second end within 60 ft and 25 degrees of another fronting the same house is trimmed
             short lanes dropped - UNRESEARCHED: an internal lane under 71 ft

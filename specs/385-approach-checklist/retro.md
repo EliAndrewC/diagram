@@ -1083,3 +1083,28 @@ About 35 min. T136 landed a claim the grammar cannot read ("CONVENTION <page>") 
 batch's first gate went red on it. The claim now cites its drawing page plainly, and the push's claims gate refuses a form problem
 in any changed file, reusing `form_problems` - which `claims-owed` already printed first, and which my truncated reading of that
 output had hidden. **The habit it changes:** read `claims-owed`'s head, not only its tail.
+
+## T139 - the retro row
+
+About 20 min. `make tick`'s landed check refused T137, whose files stood on main by the gated batch, because its earlier
+`land-tooling` run had failed; a failed run whose every named file now matches origin/main is landed, one that named none is
+still refused. Two review rounds: the first rightly blocked an undefined "riders" - now named, the review ledger alone.
+**The habit it changes:** none; a guard that misfired now judges by what is on main.
+
+## T32 - the retro row
+
+About 40 min, the first ranking row of the E2 kind (one rule): `waterfields/banks.py::_WELD_MIN_SOLIDITY#weld lump`, wave 164.
+The first plan would have recorded the 0.85-solidity host preference on 0014 as a DEVIATION; its review blocked a fallback I had
+not measured, and measuring it found the preference runs nowhere - the welder its comment describes (`_absorb`) is gone from
+the tree. So the constant, its comment block and its claim were removed; no map moves, the gate green. **The habit it changes:**
+before recording a rule as a deviation, grep that anything runs it.
+
+## T33 - the retro row
+
+About 70 min, the first E3 NEEDS-RESEARCH ranking row picked by the round arbiter's reading of FR-020 (ask:t33-ranking-pick,
+which also retired 133 dead rows, each checked for a successor first): `bund.a_way_onto_the_bund#on the bund`, wave 166. 0014's
+drawing page now records that a lane end within 6 ft of the paddy counts as joining it, a GUESS, and the claim cites it. One page
+sentence owed 5 record checks, a 70-claim triage and 23 claims judged: 3 claims relabeled GUESS and a comment fixed here (they rest
+on the changed block); the bund pop-up's own depiction edits applied (polder crossings, a hedge, 0022 linked); and the finding that
+the law gate reads "reached the field" at 60 ft while the placer reads 6 ft went to T141, with T142 and T140 filed. **The habit it
+changes:** a page edit's cost is its triage width - a sentence on a hub page like 0014 re-owes every claim citing it.

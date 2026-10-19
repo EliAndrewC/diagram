@@ -6627,31 +6627,30 @@
    "verdict": "CLEAR"
   },
   "T32": {
-   "section_sha256": "3aafd40b933a6a6f99dc876d75d7128936193db3cdcf44e63b1f4fea2e859c77",
+   "section_sha256": "9a40ca2fa3088a8c16c0707dd5d576414f9c7a9b3a906acbcf7207be1c136873",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "T32-row",
-     "summary": "Row 841 is chosen for T32, described as 'the same kind as T31's' (MISLABELED), because T31's claims round found it to be a real drift.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "FR-020 says each row is 'a row of a kind not yet tried where one is left', and the proposal the GM approved gives the reason: 'about five ranking rows of different kinds, so the checklist is tested on more than lanes'. The block never says that no untried kind is left among the open rows. Its only reason is that T31 found this row, which is convenience: it is not impossible to pick another kind, the GM's words do not imply it (amendment 7 asks only for '10 more claims'), and taking a second MISLABELED row in a row works against the variety the rule exists for. To fix it, either state, measured with a date and method (a count of the open rows by kind), that no untried kind is left, which puts the pick within FR-020, or choose a row of a kind not yet tried."
+     "id": "D151",
+     "summary": "Remove waterfields/banks.py _WELD_MIN_SOLIDITY, the comment block above it and its claim; keep ring_solidity (used by the chevron guard).",
+     "class": "within",
+     "why": "FR-020 (amendment 7: 'pull in 10 more claims') asks for a ranking row to be taken and worked. This decision applies the ranking's own fix ('drop the 0.85-solidity host preference') and is one of the two routes the finding offers ('record it on the page or drop DEVIATION'). Item 4 measured on 2026-10-19 by a named grep that the constant has no uses and the _absorb welder it describes does not exist, so no rule the maps run is dropped and no map is expected to move (item 9 checks this with the landing cohort). That means the request's guardrail against throwing out inconvenient rules does not apply. Keeping ring_solidity changes nothing."
     },
     {
-     "id": "D117",
-     "summary": "join_to's two _route calls take gap=WEB_FABRIC_GAP (the lane's 7 ft) and its claim cites 0246's 7 ft; no constant's value moves.",
+     "id": "exit-e",
+     "summary": "Exit (e), conform and remove the dead rule, chosen. Round 1's route (record a DEVIATION on 0014) refused because no code runs the rule.",
      "class": "within",
-     "why": "This is row 841's own fix ('the joining leg's berth at 0246's 7 ft off a garden fence'), applied to the leg the block measured as drawn at STREET_WIDTH, a lane."
+     "why": "Recording a deviation for a rule the code does not run would make the claim describe something the maps do not do. Conforming to the ranking's fix narrows nothing the GM asked for. It replaces round 1's blocked route, which rested on an unmeasured premise, with a measured one."
     },
     {
-     "id": "T32-approach",
-     "summary": "Order (gap, claim, cohort), one exit (a), a 30 min budget, one measured done-goal.",
+     "id": "landing",
+     "summary": "Land through make land-batch with the next engine fix, or alone; mark the row with its wave in 328's audit/waves.json.",
      "class": "within",
-     "why": "The checklist answered as FR-003/FR-015 require. One exit is enough because no rule is being fought here: the leg read the wrong constant."
+     "why": "Batching the gate and the landing cohort across small engine fixes is the GM's amendment 10 lever ('implement all 3 of your suggestions'). FR-020 and SC-010 require marking the row with its wave."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   },
   "T93": {
    "section_sha256": "3277408a83a0773eb0e4cca70fdd3c8a432424b305dd3c5d5ea7a5ce92adcf21",
@@ -7528,6 +7527,66 @@
      "summary": "Lands with T132 and T125 by make land-batch, budget 30 min",
      "class": "within",
      "why": "Amendment 10's second lever: batch the gate and landing across small engine fixes."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T139": {
+   "section_sha256": "f6eafab7e05b2430d8cb68e8ad6b07d0531fa1cbf2f7222517d9f9abe52090a2",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D150a",
+     "summary": "landed_refusal no longer refuses a failed last land-tooling run when every file that run named matches origin/main; the tick passes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This relaxes the accepted spec's D98 ('a failed outcome refuses'), so it is a narrowing of the spec's refusal, judged against the request. The guard's purpose (D98, D130 'landed means on main') is that a landed NOTE be true. Item 4's case, measured 2026-10-19, is one where the NOTE was true: every file was on origin/main, and the tick still refused. Applied literally, the rule refuses a true claim, which defeats its own purpose. The GM's own words also point this way: Amendment 10 says 'removing or simplifying a misfiring guard comes before adding one', and Amendment 8 says 'make our tooling do the thing correctly automatically every time'. The comparison against origin/main that carries the purpose is kept whole, and a file off main still refuses (item 9)."
+    },
+    {
+     "id": "D150b",
+     "summary": "A failed last run that named no file is still refused.",
+     "class": "within",
+     "why": "This keeps D98's refusal where there is nothing to compare against main. It removes the vacuous 'every named file matches' pass on an empty list, which was round 1's concern, and narrows nothing."
+    },
+    {
+     "id": "D150c",
+     "summary": "dev/review-ledger.md (D98's _RIDERS) is left out of the file comparison, as the block says D98's check already does.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is one named file, now defined, which answers round 1's BLOCKED on the undefined 'riders aside'. The ledger is append-only and other sessions' rows move it on main, so comparing the task's copy with origin/main would refuse almost every landing whatever the task's work was. Applied literally, the comparison defeats the 'on main is landed' purpose. Leaving it out matches D130, which already leaves dev/ out of its 'landed means on main' check because it holds the run records a landing writes. Note: the bundle's D98 text does not mention _RIDERS, so the premise that D98's check already leaves the ledger out cannot be confirmed from the bundle. The ruling does not rest on it: on D130's precedent and the ledger's append-only nature it stands either way."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T33": {
+   "section_sha256": "fadd9ce7af0c15c65f928bb20d19c263ce9c213202cd47713101d57784f0f162",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T33 row pick",
+     "summary": "Take the live ranking row hamletgen/ways/bund.py a_way_onto_the_bund#on the bund, kind E3 NEEDS-RESEARCH, as a kind not yet tried (T07 E4, T32 E2, T31 E0).",
+     "class": "within",
+     "why": "FR-020 as the round arbiter read it on ask:t33-ranking-pick: a live row of a kind not yet tried where one is left, said so in the Approach. Item 2 says so. Amendment 7 asked for ten more claims to be fixed; this is one of them."
+    },
+    {
+     "id": "D152 (record the reach)",
+     "summary": "Add a sentence to 0014's drawing-page rule paragraph saying a lane end within 6 ft of the paddy's edge is drawn as joining it, labeled a GUESS at map-scale touching. Relabel the claim from NEEDS-RESEARCH to GUESS, citing that page.",
+     "class": "within",
+     "why": "This fixes the claim (amendment 7), using the remedy the finding itself gave: 'label it GUESS/UNRESEARCHED or record the tolerance on the page'. It does both, so the GUESS cites a page that records the figure (T130's lesson). The new sentence states it is a guess and does not dress the figure up as research."
+    },
+    {
+     "id": "Exit (e) conform; research pass refused",
+     "summary": "Keep BUND_REACH_FT at 6 ft with no engine token change. Weigh a research pass for a joining tolerance and refuse it, because a 6 ft drawing tolerance is not a figure a source would state.",
+     "class": "within",
+     "why": "The request does not ask for the reach to change or be researched. It asks for the claim to be fixed, and labeling an implementation tolerance honestly as ours is the checklist's own first question answered ('if it's ours, it's a knob'). No requested behavior is narrowed."
+    },
+    {
+     "id": "Wave mark",
+     "summary": "Mark the row with its wave in 328's audit/waves.json.",
+     "class": "within",
+     "why": "FR-020 and SC-010 require each row to be marked with its wave."
     }
    ],
    "verdict": "CLEAR"
