@@ -756,3 +756,8 @@ any case, every length, no escape, as the plan review required). Run over all 77
 inside a quote or a code span, elided quotes - were fixed before the check went in; what it still names is real, e.g. T83's "I do
 want it, though, if it is helpful", the GM's words that never reached the request. **The habit it changes:** a quote of the GM is
 checked against the request before any review reads it.
+
+## T88 - the retro row
+
+About 10 min. `plan_gate.house_style` passes each decision's free text through `americanize` in all three verdict writers (the
+task, the plan and the block records); ids, classes, rulings and digests are written as given. **The habit it changes:** none needed.
