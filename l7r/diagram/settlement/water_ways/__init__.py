@@ -11,7 +11,6 @@ from .clipping import WaterClipMixin
 from .focal import FocalMixin
 from .kido import KidoMixin
 from .lanes import LanesMixin
-from .wards import WardsMixin
 from .water import WaterBodiesMixin
 
 
@@ -21,6 +20,5 @@ class WaterWaysMixin(
     WaterClipMixin,
     LanesMixin,
     KidoMixin,
-    WardsMixin,
 ):
     """The composed surface. No members of its own - see this package's CLAUDE.md."""

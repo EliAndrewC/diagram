@@ -8,11 +8,9 @@
 _STRUCTURES_SURFACE = frozenset(
     {
         # public entry points, called from pool gens, wip/, other engine modules and tests
-        "building",
         # "drum_tower" moved to structures/urban_fixtures.py (UrbanFixturesMixin) under feature 145 - still on Settlement
         "kosatsuba",
         "place_kosatsuba",
-        "road",
         # "theater_stage" moved to structures/urban_fixtures.py (UrbanFixturesMixin) under feature 145 - still on Settlement
         # private helpers, reached through self. Several have no consumer outside the class at
         # all - they stay in the surface precisely because a name nothing else calls is the kind a
@@ -22,7 +20,6 @@ _STRUCTURES_SURFACE = frozenset(
         # counted callables only; this one admits any non-dunder class-body name, so one assertion
         # covers all 33 members. A class attribute is as easy to lose in a split as a method and
         # much easier to overlook.
-        "URBAN",
     }
 )
 

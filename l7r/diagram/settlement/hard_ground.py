@@ -59,7 +59,7 @@ class HardGroundMixin:
         """Is this footprint clear of HARD no-build ground (crop, pond, bog, a field's own ditches)?
 
         Factored out of `_fits` because placement is not the only moment that needs it:
-        `_solve_homestead` NUDGES a farmstead after it has already passed `_fits`, to make room for
+        the house-first solver (retired by feature 392) NUDGED a farmstead after it had already passed `_fits`, to make room for
         its yard, garden and grove - and nothing re-tested the moved position, so a steading that
         genuinely cleared every keep-out where it was placed could be shifted onto a ditch or a hem
         plot afterwards. That was the last root cause behind the overlap matrix's residue.

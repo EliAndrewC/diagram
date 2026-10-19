@@ -265,8 +265,8 @@ def fixpoint(root: Path, base: dict[str, str], rounds: int = 20) -> list[str]:
 
 
 def call_sites(files: dict[str, str]) -> dict[str, list[str]]:
-    """Every CALL in `files` as {name: [path:line]}: a NAME token followed by `(`, bare or after `.`, not after `def`/`class`
-    - one tokenize pass over each file."""
+    """Every USE in `files` as {name: [path:line]}: a NAME token followed by `(`, bare or after `.`, or read as `.name` (a
+    value passed or tested), not after `def`/`class` and not an assignment target - one tokenize pass over each file."""
     out: dict[str, list[str]] = {}
     for path, src in files.items():
         try:
@@ -274,7 +274,12 @@ def call_sites(files: dict[str, str]) -> dict[str, list[str]]:
         except (tokenize.TokenError, IndentationError, SyntaxError):
             continue
         for i, tk in enumerate(toks[:-1]):
-            if tk.type == tokenize.NAME and toks[i + 1].string == "(" and not (i and toks[i - 1].string in ("def", "class")):
+            if tk.type != tokenize.NAME or (i and toks[i - 1].string in ("def", "class")):
+                continue
+            nxt = toks[i + 1].string
+            # a CALL, or a reference passed as a value after a dot (`self._slide(..., self._nearest_field_point)`, `blocks.exact_clear
+            # if exact else ...`) - 392 cut both as frozen-only because only `(` counted. An assignment target is neither.
+            if nxt == "(" or (i and toks[i - 1].string == "." and nxt not in ("=",) and not nxt.endswith("=")):
                 out.setdefault(tk.string, []).append(f"{path}:{tk.start[0]}")
     return out
 

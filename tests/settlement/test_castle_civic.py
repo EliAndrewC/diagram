@@ -8,12 +8,6 @@ import pytest
 from tests.settlement._builders import _ladder_map, _town
 
 
-def test_wall_with_a_label():
-    s = _town()
-    s.wall([(100, 100), (200, 300), (150, 500)], label="rampart")
-    assert s.M["wall"]
-
-
 def test_place_caption_defers_to_finish_and_records_its_subject_box_for_the_gate():
     # DEFERRED on purpose: a caption seated at call time is judged against half a map (see
     # place_caption's note - Tango's north market caption landed on an execution ground that did

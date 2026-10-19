@@ -24,22 +24,6 @@ def _settlement() -> Settlement:
     return Settlement(400, 400, seed=3)
 
 
-def test_add_tags_each_stream_and_the_explicit_class_wins_over_the_scope() -> None:
-    s = _settlement()
-    n0 = len(s.out)
-    s.add(RECT)
-    with s.feature("farmhouse"):
-        s.add(RECT)
-        s.add(RECT, cls="byre")
-        with s.feature("garden"):
-            s.add_top(RECT)
-        s.add_label("<text>x</text>")
-    s.add_wall(RECT, cls="-")
-    assert s.out_cls[n0:] == [None, "farmhouse", "byre"]
-    assert s.top_cls == ["garden"] and s.toplabels_cls == ["farmhouse"] and s.walls_cls == ["-"]
-    assert s._cls is None, "the scope is restored on exit"
-
-
 def test_add_parts_joins_byte_identically_and_keeps_the_pieces() -> None:
     s = _settlement()
     parts = [(None, "<g>"), ("storage shed", RECT), ("farmhouse", RECT), (None, "</g>")]

@@ -527,24 +527,6 @@ def test_no_trunk_a_copse_draws_stands_on_a_footpath_beside_it() -> None:
     assert trunks and not any(trunk_on_tread(x, y, s.M["lanes"]) for x, y in trunks)
 
 
-def test_a_wood_draws_no_trunk_on_a_lane_through_it() -> None:
-    """Woods W21 for a tree stand (`_draw_stand`, at crop time): a lane runs through a forest patch; no crown's trunk stands
-    on its tread, and a stand no lane reaches asks nothing."""
-    from l7r.diagram.settlement.shrines_wells.woods import trees_off_the_treads
-
-    s = _hamlet()
-    s.lane([(100.0, 400.0), (900.0, 400.0)], width=6, clearance=4, worn=True)
-    s._tree_stand([(200.0, 300.0), (800.0, 300.0), (800.0, 500.0), (200.0, 500.0)], seed=3, outliers=False)
-    s.flush_tree_stands()
-    flat = s.M["tree_crowns"]
-    trunks = [(flat[i], flat[i + 1]) for i in range(0, len(flat), 3)]
-    assert trunks and not any(trunk_on_tread(x, y, s.M["lanes"]) for x, y in trunks)
-    far = [{"pts": [[0.0, 0.0], [10.0, 0.0]], "w": 6}]
-    trees = [(500.0, 500.0, 8.0, "broadleaf")]
-    assert trees_off_the_treads(trees, far) == trees and trees_off_the_treads([], far) == []
-    assert trees_off_the_treads(trees, [{"pts": [[400.0, 500.0], [600.0, 500.0]], "w": 6}]) == []
-
-
 def test_a_reserved_seats_re_seat_is_asked_again_at_the_records_grain_and_dropped_where_it_fails(monkeypatch) -> None:
     """Feature 297 (R16): a household's reserved seat is asked of the exact families; where its re-seat clears unrounded and fails
     at the record's 0.1 px grain, it is not planted."""

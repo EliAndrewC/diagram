@@ -18,15 +18,6 @@ if TYPE_CHECKING:
 
 
 class PlacerMixin:
-    @staticmethod
-    def _closest_on_seg(px: float, py: float, ax: float, ay: float, bx: float, by: float) -> Pt:
-        dx, dy = bx - ax, by - ay
-        L2 = dx * dx + dy * dy
-        if L2 == 0:
-            return ax, ay
-        t = max(0.0, min(1.0, ((px - ax) * dx + (py - ay) * dy) / L2))
-        return ax + t * dx, ay + t * dy
-
     def _nearest_field_point(self: Settlement, cx: float, cy: float) -> Pt | None:  # type: ignore[misc]
         """The closest point on any paddy outline to (cx, cy) - the bund the grove will hug."""
         best: Pt | None = None
@@ -39,6 +30,15 @@ class PlacerMixin:
                 if d < bd:
                     bd, best = d, (qx, qy)
         return best
+
+    @staticmethod
+    def _closest_on_seg(px: float, py: float, ax: float, ay: float, bx: float, by: float) -> Pt:
+        dx, dy = bx - ax, by - ay
+        L2 = dx * dx + dy * dy
+        if L2 == 0:
+            return ax, ay
+        t = max(0.0, min(1.0, ((px - ax) * dx + (py - ay) * dy) / L2))
+        return ax + t * dx, ay + t * dy
 
     def _nearest_placed_point(self: Settlement, cx: float, cy: float) -> Pt | None:  # type: ignore[misc]
         """The center of the nearest already-placed homestead/house - the neighbor to pack against."""

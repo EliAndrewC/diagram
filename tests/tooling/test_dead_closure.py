@@ -158,9 +158,10 @@ def test_the_fixpoint_holds_a_name_assigned_from_a_call(tmp_path: pathlib.Path) 
     assert any("HOLDS KNOB" in ln for ln in log), log
 
 
-def test_callers_counts_calls_bare_and_by_attribute_never_the_definition_or_a_plain_attribute(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
+def test_callers_counts_calls_bare_and_by_attribute_never_the_definition(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
     """The round arbiter's tooling fix on hour:392-retire-the-exhibit-only-engine@2: `ring` and `river` hid their callers from
-    the name census because `.ring` is also a common attribute. Only a CALL counts - and a frozen exhibit's apart."""
+    the name census because `.ring` is also a common attribute. A use is a call or a `.name` read (never the definition), and a
+    frozen exhibit's are counted apart; over-counting a read only keeps code, never cuts it."""
     dc = _load()
     files = {
         "l7r/e/s.py": "class S:\n    def ring(self):\n        return 1\n\n\ndef f(h):\n    return h.ring\n",
@@ -168,7 +169,7 @@ def test_callers_counts_calls_bare_and_by_attribute_never_the_definition_or_a_pl
         "legacy-hand-authored-pool/x/x.gen.py": "s.ring()\ns.ring()\n",
     }
     (line,) = dc.callers(files, ["ring"])
-    assert "live 1: l7r/e/u.py:2" in line and "frozen 2:" in line, line
+    assert "live 2: l7r/e/s.py:7 l7r/e/u.py:2" in line and "frozen 2:" in line, line  # `h.ring` read counts: the safe side
     for path, src in files.items():
         (tmp_path / path).parent.mkdir(parents=True, exist_ok=True)
         (tmp_path / path).write_text(src, encoding="utf-8")
@@ -176,3 +177,12 @@ def test_callers_counts_calls_bare_and_by_attribute_never_the_definition_or_a_pl
     out = capsys.readouterr().out
     assert "CALLERS       nothing  live 0" in out
     assert dc.call_sites({"l7r/bad.py": "x = (\n"}) == {}, "an unparseable file is skipped"
+
+
+def test_callers_counts_a_method_passed_as_a_value() -> None:
+    """392 cut `_nearest_field_point` and `exact_clear` as frozen-only: live code passes them as values, never calls them."""
+    dc = _load()
+    files = {"l7r/e/s.py": "def go(s, b, x):\n    s._slide(1, s._nearest)\n    return (b.exact if x else b.static)(1)\n", "l7r/e/t.py": "def f(o):\n    o.attr = 1\n"}
+    sites = dc.call_sites(files)
+    assert "_nearest" in sites and "exact" in sites, sites
+    assert "attr" not in sites, "an assignment target is not a use"

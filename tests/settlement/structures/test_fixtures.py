@@ -467,18 +467,6 @@ def test_a_notice_board_stands_on_a_fenced_footing_and_claims_only_that_ground()
     assert (min(xs), max(xs), min(ys), max(ys)) == (490.0, 510.0, 495.0, 505.0), "the no-build ground is the footing alone"
 
 
-def test_a_board_route_takes_each_roads_recorded_width() -> None:
-    """Feature 328 wave 64 (`_board_routes#nominal widths`): every road was taken at 18 px whatever it was drawn at, so a
-    board's 6 ft from the road's edge was measured from the wrong edge on any road not 18 px wide."""
-    from l7r.diagram.settlement import Settlement
-
-    s = Settlement(1000, 1000, seed=1)
-    s.road([(0, 500), (1000, 500)], width=30.0)
-    s.road([(500, 0), (500, 1000)], width=12.0)
-    widths = [rw for _pts, rw, _approach in s._board_routes(None, "center", False, 1.0)]
-    assert widths[:2] == [30.0, 12.0], widths
-
-
 def test_a_board_route_with_no_recorded_width_takes_the_ways_drawn_default() -> None:
     """Feature 328 wave 64 (impl-drift): a road or main street with no recorded width fell back to 18 PIXELS, a width in
     feet that moved with the scale and stood below every width the record attests; it takes the 30 ft road and the 24 ft

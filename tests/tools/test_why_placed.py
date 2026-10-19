@@ -21,8 +21,8 @@ GEN = """
 from l7r.diagram import settlement
 s = settlement.Settlement(600, 500, seed=1)
 s.meta(name="T", scale="town", ftpx=1)
-s.building(300, 300, 20, 12, "shop")
-s._fits(300, 300, 20, 12)                # refused: it lands on the one just placed
+s.well_at(300, 300)
+s._fits(300, 300, 20, 12)                # refused: it lands on the well just placed
 s.M.setdefault("late_key", []).append({"x": 302.0, "y": 301.0, "w": 3.0, "h": 3.0, "kind": "late"})
 """
 
@@ -78,11 +78,11 @@ def test_watching_names_the_gen_line_and_the_engine_method(tmp_path):
     with W.watching(300.0, 300.0, 8.0) as hits:
         W.run_gen(_gen(tmp_path))
     keys = {h.key for h in hits}
-    assert "buildings" in keys
-    b = next(h for h in hits if h.key == "buildings")
+    assert "wells" in keys
+    b = next(h for h in hits if h.key == "wells")
     files = [f[0] for f in b.frames]
     assert "synthetic.gen.py" in files  # the call site to go and look at
-    assert "urban.py" in files  # ...and the engine method that chose the spot (settlement/structures/urban.py holds building() since the 114 package split; it was structures.py from 025 until then)
+    assert "wells.py" in files  # ...and the engine method that chose the spot (`well_at`, settlement/shrines_wells/wells.py; the urban building this used before went with feature 392)
 
 
 def test_watching_sees_a_key_created_later_by_setdefault(tmp_path):
@@ -153,7 +153,7 @@ def test_report_hits_renders_a_record(tmp_path):
 def test_main_runs_both_modes(tmp_path, capsys):
     g = _gen(tmp_path)
     assert W.main([g, "--at", "300,300"]) == 0
-    assert "buildings" in capsys.readouterr().out
+    assert "wells" in capsys.readouterr().out
     assert W.main([g, "--refused", "300,300"]) == 0
     assert "candidate" in capsys.readouterr().out
 

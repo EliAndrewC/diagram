@@ -8,7 +8,7 @@ import pytest
 
 from l7r.diagram.settlement import Settlement
 from tests._scope import full_or
-from tests.settlement._builders import _crop_settlement, _nuc_village, _town, _village, _zoned_city
+from tests.settlement._builders import _crop_settlement, _nuc_village, _town, _village
 
 
 def test_kido_records_ward_gates_in_both_orientations():
@@ -177,85 +177,6 @@ def test_bridges_solves_the_oblique_span_and_lands_every_corner():
     s2.M["field_ditches"] = [{"poly": [[300, 150], [300, 450]], "w": 5}]
     assert s2.bridges() == 1
     assert abs(s2.M["bridges"][0]["span"] - 25.0) < 0.1  # perpendicular: water + two 10 ft landings, nothing more
-
-
-def test_ftpx_scale_derives_bscale_and_ft_defaults():
-    # The GM's scale ladder (hamlet/town 1 ft/px, village 2, city 3): meta(ftpx=N) derives the
-    # urban grain bscale = 1/ftpx, px()/lw() convert real feet, and the 4px linework floor
-    # rescues thin features (a 5 ft roji at 3 ft/px would be an invisible 1.7px). A street's
-    # default width is the real 24 ft converted at the map's scale.
-    s = Settlement(1000, 1000, seed=1)
-    s.meta(name="C", scale="city", ftpx=3)
-    assert s.bscale == 1 / 3 and s.px(66) == 22 and s.lw(5) == 4
-    s.street([(100, 100), (400, 100)])
-    assert s.M["town_streets"][-1]["w"] == 8  # lw(24) at 3 ft/px
-    # VILLAGE maps keep bscale = 1.0: their placement constants were hand-pre-scaled to
-    # 2 ft/px before ftpx existed (re-deriving would perturb every tuned village map).
-    v = Settlement(1000, 1000, seed=1)
-    v.meta(name="V", scale="village", ftpx=2)
-    assert v.ftpx == 2 and v.bscale == 1.0
-
-
-def test_quarter_records_zone_without_drawing_for_non_reserve():
-    s = _zoned_city()
-    poly = [(100, 100), (400, 100), (400, 400), (100, 400)]
-    before = len(s.out)
-    s.quarter(poly, "residential")
-    q = s.M["quarters"][-1]
-    assert q["zone"] == "residential" and q["kind"] is None
-    assert q["poly"][0] == [100.0, 100.0]
-    assert len(s.out) == before  # residential/civic/mixed draw nothing (declarative only)
-
-
-def test_quarter_label_is_drawn_at_the_centroid():
-    s = _zoned_city()
-    s.quarter([(0, 0), (200, 0), (200, 200), (0, 200)], "civic", label="yamen precinct")
-    assert s.M["quarters"][-1]["name"] == "yamen precinct"
-    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
-    assert any("yamen precinct" in frag for frag in s.toplabels)
-
-
-def test_quarter_reserve_kinds_render_their_ground():
-    poly = [(100, 100), (500, 100), (500, 500), (100, 500)]
-    # drill_ground and garden paint a visible ground surface...
-    for kind in ("drill_ground", "garden"):
-        s = _zoned_city()
-        before = len(s.out)
-        s.quarter(poly, "reserve", kind=kind, label=kind)
-        assert s.M["quarters"][-1]["kind"] == kind
-        assert len(s.out) > before  # a drawn reserve renders its ground feature
-    # ...but an agricultural_district draws NOTHING (GM 2026-07-22 - its combs/farmhouses/label are
-    # the rendering; the old faint dashed boundary was a stray dotted line), yet is still recorded
-    s = _zoned_city()
-    before = len(s.out)
-    s.quarter(poly, "reserve", kind="agricultural_district", label="ag")
-    assert s.M["quarters"][-1]["kind"] == "agricultural_district"
-    assert len(s.out) == before  # no boundary line: the fields carry the whole visual
-
-
-def test_quarter_rejects_bad_zone_and_kind_misuse():
-    s = _zoned_city()
-    poly = [(0, 0), (100, 0), (100, 100), (0, 100)]
-    try:
-        s.quarter(poly, "industrial")
-        raise AssertionError("bad zone should raise")
-    except ValueError:
-        pass
-    try:
-        s.quarter(poly, "reserve")  # reserve needs a kind
-        raise AssertionError("reserve without kind should raise")
-    except ValueError:
-        pass
-    try:
-        s.quarter(poly, "reserve", kind="parade")  # unknown reserve kind
-        raise AssertionError("unknown reserve kind should raise")
-    except ValueError:
-        pass
-    try:
-        s.quarter(poly, "residential", kind="garden")  # only reserve may carry a kind
-        raise AssertionError("non-reserve with kind should raise")
-    except ValueError:
-        pass
 
 
 # ---- lane: the UNWORN (paved/dashed) branch ------------------------------------------------
@@ -477,16 +398,6 @@ def test_fan_rival_spots_a_second_stub_fanning_to_the_same_house() -> None:
 
 # ---- THE TOWN AND WARD ARMS NO HAMLET ROLLS (feature 146: the hamlet floor covers the whole
 # module, and these three are the branches the scripted hamlets never enter) -------------------
-
-
-def test_a_labeled_town_street_carries_its_caption_beside_the_midpoint():
-    """`street(label=...)` is the only way an avenue gets a name on the sheet; every scripted map
-    calls it without one, so the caption arm went unentered."""
-    s = _town()
-    s.street([(100, 500), (500, 500), (900, 500)], label="Gate Road")
-    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
-    assert any("Gate Road" in frag for frag in s.toplabels), "the street's name is inked"
-    assert s.M["town_streets"][-1]["pts"][0] == [100, 500]
 
 
 def test_trim_lane_stubs_steps_over_a_lane_record_with_one_point():

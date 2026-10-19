@@ -10,18 +10,16 @@ sub-mixins back into one `CityMixin` in the `class Settlement(...)` base list.
 | file | look here when |
 |---|---|
 | `__init__.py` | you need the composition or the re-export mechanism; never add logic here |
-| `walls.py` | the defensive shell: `_gapped_ring`, the SVG path of a wall with a genuine opening at each gate and water gate |
-| `moat.py` | the wet defense and the openings through it: `moat`, `sluice_gate`, `inwall_drain_outfall` |
-| `canals.py` | water carried for transport and irrigation rather than defense: `canal` |
+| `moat.py` | the openings through the wet defense: `sluice_gate`, `inwall_drain_outfall` |
 | `bridges.py` | crossings, from a single span to the footbridge net over a channel system: `bridge`, `bridges`, `channel_footbridges` and the predicates it delegates to (`_widen_for_confluence`, `_deck_clears_its_water`, `_plank_reaches_useful_ground`), plus the module-level plank geometry `_at_arc` / `_deck_quad` / `_quads_overlap` |
-| `knobs.py` | the city knob helpers - the machi mouths and the swept moat tap (`machi_mouths`, `moat_swept_tap`; feature 145 moved them out of `_knobs.py`) |
+| `knobs.py` | the city knob helper - the machi mouths (`machi_mouths`; feature 145 moved it out of `_knobs.py`) |
 
-Feature 392 retired the code only the frozen legacy maps called (the waterfront, the governor's mansion, the city crop
-and most of the wall, moat and canal programs); the commit before it holds it.
+Feature 392 retired the code only the frozen legacy maps called (the waterfront, the governor's mansion, the city crop,
+the wall and its gapped ring, the canals, the moat itself and the swept moat tap); the commit before it holds it.
 
 ## The composition mechanism
 
-`CityMixin` is `class CityMixin(WallsMixin, MoatMixin, CanalsMixin, BridgesMixin)` with no members of its own.
+`CityMixin` is `class CityMixin(MoatMixin, BridgesMixin)` with no members of its own.
 Sub-mixin methods reach each other through `self.` on the composed `Settlement`, so a cross-submodule call needs no
 import and the partition can be re-cut later without touching a call site - leave such a call reaching through
 `self.`; do not "helpfully" add an import, which would turn a free re-partition into a breaking one.
@@ -39,13 +37,5 @@ or the line points at a module that does not exist and fails only at draw time.
 
 ## Verifying a change in here
 
-The members here are reached from outside the package (`castle_civic.py`'s `wall` -> `_gapped_ring`, `land/dikes.py`
--> `sluice_gate`, `fields/comb.py` -> `inwall_drain_outfall`, the hamlet ways and water -> the bridges) and held by the
+The members here are reached from outside the package (`land/dikes.py` -> `sluice_gate`, `fields/comb.py` -> `inwall_drain_outfall`, the hamlet ways and water -> the bridges) and held by the
 unit tests that hold every module here at 100%.
-
-## Long methods left whole, on purpose
-
-`moat` LOOKS long but is short in statements (constitution clause 12 measures statements, "never raw lines"); much of
-its raw length is the researched docstring the record-the-why rule requires. **Do not "finish the job" by decomposing
-it** - splitting the code under that prose would duplicate the why across helpers or let it drift
-(`specs/113-city-package/research.md` R10).

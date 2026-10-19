@@ -24,12 +24,10 @@ Research: plumbing - NONE: the composed mixin surface
 from .captions import CaptionProbesMixin
 from .fixtures import PublicFixturesMixin
 from .ground import GroundMixin
-from .urban import UrbanBuildingMixin
 
 
 class StructuresMixin(
     GroundMixin,
-    UrbanBuildingMixin,
     CaptionProbesMixin,
     PublicFixturesMixin,
 ):

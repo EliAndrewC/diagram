@@ -4,28 +4,7 @@ import math
 
 from l7r.diagram import settlement
 from l7r.diagram.settlement import Settlement, seg_dist
-from tests.settlement._builders import _crop_settlement, _inwall_settlement, _plank_bed, _town
-
-
-def test_gapped_ring_merges_when_first_vertex_is_not_a_gate():
-    # a closed wall ring whose FIRST vertex is not a gate: the run after the last gap must merge back
-    # into the first, leaving one continuous subpath (not a spurious break at the start point)
-    s = Settlement(1000, 1000, seed=1)
-    ring = [(100, 100), (300, 100), (300, 300), (100, 300), (100, 100)]  # closed square
-    d = s._gapped_ring(ring, [(300, 100)], gap=20, closed=True)  # one gate, at a NON-first vertex
-    assert d.count("M") == 1
-
-
-def test_moat_closes_into_a_ring_without_a_river():
-    # the moat(river=None) branch: with no river to join, the moat closes on itself into a ring (the
-    # else arm), so the recorded polyline's first and last points coincide. The river-open-arc arm is
-    # covered by test_river_canal_dock_jetty_water_gate_defaults.
-    import math as m
-
-    s = _crop_settlement()
-    pts = [(round(1000 + 300 * m.cos(2 * m.pi * i / 12)), round(700 + 300 * m.sin(2 * m.pi * i / 12))) for i in range(12)]
-    s.moat(pts)  # no river -> CLOSED ring
-    assert s.M["moat"][0] == s.M["moat"][-1]
+from tests.settlement._builders import _crop_settlement, _inwall_settlement, _plank_bed
 
 
 def test_bridges_carries_the_ring_road_over_the_cargo_canal_but_not_over_a_buried_conduit():
@@ -145,13 +124,6 @@ def test_inwall_drain_outfall_trims_gates_and_records_the_conduit():
     assert c["poly"][0] == [round(cut[0], 1), round(cut[1], 1)]  # the conduit starts at the cut
 
 
-def test_navigable_canal_is_level_and_carries_no_bearing():
-    s = _town()
-    s.canal([(100, 100), (400, 100)])
-    rec = s.M["canals"][0]
-    assert rec["flow"] == "level" and rec["flow_deg"] is None
-
-
 def test_a_footplank_is_never_laid_on_a_bend_its_deck_cannot_clear():
     """THE RATCHET for the corner test. `bridges_span_their_water` requires every deck CORNER to
     stand clear of the crossed water; a deck perpendicular to a STRAIGHT ditch clears by
@@ -178,16 +150,13 @@ _CITY_SURFACE = frozenset(
         # public entry points, called from pool gens, wip/, hamletgen, other engine modules and checks
         "bridge",
         "bridges",
-        "canal",
         "channel_footbridges",
         "inwall_drain_outfall",
-        "moat",
         "sluice_gate",
         # private helpers, reached through self. Two of these (_tower,
         # _plank_reaches_useful_ground) have no external consumer at all - they stay in the
         # surface precisely because a name nothing calls is the kind a careless partition drops
         # without any other test noticing.
-        "_gapped_ring",
         "_plank_reaches_useful_ground",
     }
 )

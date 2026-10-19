@@ -17,12 +17,8 @@ COMPOUND = SKILL / "l7r" / "diagram" / "compound.py"
 
 D8_HAND_SEATS = frozenset(
     {
-        ("castle_civic.py", "wall"),
         ("city/moat.py", "sluice_gate"),
         ("land/dikes.py", "perimeter_dike"),
-        ("shrines_wells/forest.py", "forest"),
-        ("water_ways/lanes.py", "street"),
-        ("water_ways/wards.py", "quarter"),
     }
 )
 """Spec D8: the 33 functions whose 47 hand-seated calls stay until their tier is scripted. It only ever shrinks."""

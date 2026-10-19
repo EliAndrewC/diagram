@@ -1,4 +1,4 @@
-"""City knob helpers - the machi mouths and the swept moat tap (feature 145: moved out of _knobs.py, whose knob engine every map executes).
+"""City knob helpers - the machi mouths (feature 145: moved out of _knobs.py, whose knob engine every map executes).
 
 Research: plumbing - NONE
 """

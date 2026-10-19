@@ -14,15 +14,14 @@ cluster that no task cuts.
 | file | look here when |
 |---|---|
 | `__init__.py` | you need the composition itself; never add logic here |
-| `ground.py` | `road` (a bordered roadbed + its no-build corridor, `ROAD_W_FT`) and `_finish_road_label`. A member that does NOT belong to this subsystem at all - see "Two placements you will want to fix" below |
-| `urban.py` | the generic urban BUILDING: the `URBAN` palette (fill/edge/footprint by caste and role) and `building` itself - the one seat every frontage and top-up funnels through, and where the samurai-ward refusal lives |
+| `ground.py` | the trunk road's real width (`ROAD_W_FT`) and `_finish_road_label`, which seats and draws the Imperial road's caption in the label phase |
 | `captions.py` | **the LABEL PHASE** (`place_labels`, feature 157 - the last phase of every settlement's generation, its drain order, its one-row dispatch table, and `discard_queued_label` for a feature that is placed and then withdrawn), the ONE placer's settlement adaptor (`_draw_seated_caption`, `label_obstacles`, feature 266), and the boxes a caption must miss (`label_blocker_quads`, `tree_crown_discs`) |
 | [`fixtures/`](fixtures/CLAUDE.md) | public street furniture: the kosatsuba notice board, its water and lane clearance probes, and its placement pass (`place_kosatsuba`). Read its index, then load one file |
 
 ## Composition, and why it is in `__init__.py`
 
 `StructuresMixin` is
-`class StructuresMixin(GroundMixin, UrbanBuildingMixin, CaptionProbesMixin, PublicFixturesMixin)`
+`class StructuresMixin(GroundMixin, CaptionProbesMixin, PublicFixturesMixin)`
 with no members of its own. It exists ONLY so `core.py` keeps its single import and `StructuresMixin`
 keeps its position in the `class Settlement(...)` base list - which means the partition here can be
 re-cut later without touching `core.py`.
@@ -35,19 +34,10 @@ re-cut later without touching `core.py`.
 | `fixtures/siting.py` | `captions.py` | `place_kosatsuba` -> `label_obstacles`, `tree_crown_discs` (its caption proved by the one placer, feature 287) |
 
 Feature 392 retired the code only the frozen legacy maps called (the compounds, the packing engines, the servant ranges,
-the city fixtures and the caption siting probes); the commit before it holds it.
+the city fixtures, the caption siting probes, the urban building and the road's own drawing); the commit before it
+holds it.
 
-## Two placements you will want to "fix" - each is deliberate
-
-### `road` is in a module of its own because it does not belong HERE
-
-`road` belongs with `water_ways/`'s ways (lanes, streets, alleys, kido). It is in this package only because feature
-025's cut put it here. Moving it is a separate change of its own (a member moved between parent-level mixins); isolating
-it makes the eventual move a one-file change plus one row of this table.
-
-What the module legitimately IS, so it is not merely a leftovers drawer: `road` draws an unbuilt GROUND SURFACE that
-reserves placement rather than a structure that occupies it - it appends a corridor and records no footprint the overlap
-matrix treats as solid.
+## A placement you will want to "fix" - it is deliberate
 
 ### `captions.py` and `place_caption` - DECIDED by feature 266
 

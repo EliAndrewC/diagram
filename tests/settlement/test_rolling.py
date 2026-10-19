@@ -163,11 +163,6 @@ def test_garden_beds_clear_rejects_a_bed_on_a_neighbor():
     assert s._garden_beds_clear([(100, 100, 20, 14)], others=[(300, 300, 20, 14)]) is True
 
 
-def test_closest_on_seg_degenerate_segment():
-    # a zero-length segment returns its own endpoint (no division by zero)
-    assert Settlement._closest_on_seg(0, 0, 5, 5, 5, 5) == (5, 5)
-
-
 def test_bundle_fits_rejects_a_bundle_spilling_outside_the_bound():
     # a homestead bundle whose grove/garden corner falls outside the settlement bound is rejected
     s = _village()
@@ -303,14 +298,12 @@ _ROLLING_SURFACE = frozenset(
         "_bundle_fits",
         "_bundle_geom",
         "_bundle_side_fits",
-        "_closest_on_seg",
         "_east_trees",
         "_farmsteads_bundle",
         "_garden_beds",
         "_garden_beds_clear",
         "_garden_shaded",
         "_gardens_sun_ok",
-        "_nearest_field_point",
         "_nearest_placed_point",
         "_place_bundle",
         "_place_bundle_nucleated",
@@ -728,3 +721,8 @@ def test_the_parts_refuse_a_house_too_near_a_neighbor(monkeypatch) -> None:
     assert s._parts_fit(geom) is True, "the case: every part rule admits this layout"
     monkeypatch.setattr(s, "_house_too_near_a_neighbor", lambda house: True)
     assert s._parts_fit(geom) is False, "...and the eave gap alone refuses it"
+
+
+def test_closest_on_seg_degenerate_segment():
+    # a zero-length segment returns its own endpoint (no division by zero)
+    assert Settlement._closest_on_seg(0, 0, 5, 5, 5, 5) == (5, 5)

@@ -7,7 +7,7 @@ subsystem MIXIN classes composed in `core.py`, so class-level monkeypatching and
 
 Two invariants the split does NOT touch:
 
-- **DRAW ORDER is a runtime contract.** Features are layered by the record streams (`add` / `add_top` / `add_wall`, in
+- **DRAW ORDER is a runtime contract.** Features are layered by the record streams (`add` / `add_top`, in
   `core.py`) and assembled by `finish()` (in `finish.py`); the DRAW ORDER map is
   [`dev/placement.md`](../../../dev/placement.md). The mixin grouping changes where a method's TEXT lives, never when it
   runs.
@@ -22,19 +22,18 @@ Each subpackage carries its own `CLAUDE.md` index: read it, then load one module
 |---|---|
 | `__init__.py` | you need the re-export list or the import-time main-tree guard; never add logic here |
 | [`_geom/`](_geom/CLAUDE.md) | geometry and spatial predicates: primitives, overlap and gap tests, the spatial indexes, captions' standoff, ways, walls, extents, curves |
-| `_knobs.py` | the knob engine (`Knob`, `register_knob`, `resolve_knob`, `scope_seed`, `knob_rng`, layout validators, `skeleton_layout`) and roll/size helpers (`roll_torii_count`, wall/bridge/moat/crop helpers) |
-| `core.py` | `class Settlement(...)` itself: `__init__`, the record streams (`add`/`add_top`/`add_wall`/`add_label`, each with a `cls=` feature class for the interactive page - feature 134 - plus `add_parts` and the `feature()` scope), meta/header, knob resolve + rng scoping, viewport/crop |
+| `_knobs.py` | the knob engine (`Knob`, `register_knob`, `resolve_knob`, `scope_seed`, `knob_rng`, layout validators, `skeleton_layout`) and the bridge, windbreak and crop helpers (`bridge_carried_ways`, `bridge_crossed_waters`, `windbreak_faces`, `crop_boxes`) |
+| `core.py` | `class Settlement(...)` itself: `__init__`, the record streams (`add`/`add_top`/`add_label`, each with a `cls=` feature class for the interactive page - feature 134 - plus `add_parts` and the `feature()` scope), meta/header, knob resolve + rng scoping, viewport/crop |
 | [`fields/`](fields/CLAUDE.md) | the fields: paddy and dry field bodies, the comb builder, land-use overlays, in-field features |
-| [`water_ways/`](water_ways/CLAUDE.md) | focal features, water and its clipping, lanes, streets, kido, wards |
+| [`water_ways/`](water_ways/CLAUDE.md) | focal features, water and its clipping, lanes, kido |
 | `town_ways.py` | the TOWN-tier focal features - `market`, `ancestral_hall`, `water_mouth` (`TownWaysMixin`) |
-| [`shrines_wells/`](shrines_wells/CLAUDE.md) | the shrine glyph, torii, wells and the ground that may take one, `open_seat`, byres, tree stands and the forest |
-| [`structures/`](structures/CLAUDE.md) | roads, the urban building, caption plumbing, the notice board |
+| [`shrines_wells/`](shrines_wells/CLAUDE.md) | the shrine glyph, torii, wells and the ground that may take one, `open_seat`, byres and tree stands |
+| [`structures/`](structures/CLAUDE.md) | the road's width and caption, caption plumbing, the notice board |
 | [`homestead_parts/`](homestead_parts/CLAUDE.md) | threshing yards, gardens, groves, stands and keepouts |
 | `farm_fixtures.py` | the small things on a farmstead: privy, wood shed, manure heap, bath room, chicken coop, the household shrine, the persimmon (feature 133), each at true size |
 | [`land/`](land/CLAUDE.md) | the land surface: the polder dike, marsh and wet ground, the commons and hinterland scatter, the cover tiles |
-| [`civic_grounds/`](civic_grounds/CLAUDE.md) | the named-region overlay (`district`) |
-| [`city/`](city/CLAUDE.md) | the provincial city: the gapped wall path, moat, canals, bridges and its knobs |
-| `castle_civic.py` | the caption request (`place_caption`, queued into the one placer) and freestanding walls (`wall`) |
+| [`city/`](city/CLAUDE.md) | the provincial city: the openings through the moat (sluice gate, in-wall drain outfall), bridges and its knobs |
+| `castle_civic.py` | the caption request (`place_caption`, queued into the one placer) |
 | `houses.py` | house drawing + placement machinery (corridors, keepouts, treads, `_fits`), `try_place`, cluster seeds, plot texture |
 | `hard_ground.py` | the hard no-build ground (`_hard_ground`: crop, pond, bog, a field's own ditches, read from the manifest) and the footprint test against it (`_hard_clear`, from `_hard_index`'s box grid) (`HardGroundMixin`) |
 | [`rolling/`](rolling/CLAUDE.md) | the homestead-solver CHAIN: the settlement-form seeds, the bundle, fit, place and the deferred flush |
@@ -43,7 +42,7 @@ Each subpackage carries its own `CLAUDE.md` index: read it, then load one module
 | `title.py` | the title placard: its size (`placard_size`, `placard_height` - the one formula the hamlet's title pocket and band allowance derive from), its seat, the band grown for it, the blank-spot search and the title-clearance test |
 
 **Other-tier code does not live where a hamlet roll runs** (feature 145): a function only a town or city runs goes in a
-module a hamlet roll does not execute (`town_ways.py`, `city/knobs.py`, `shrines_wells/forest.py`), so the hamlet floor
+module a hamlet roll does not execute (`town_ways.py`, `city/knobs.py`), so the hamlet floor
 judges only what a hamlet draws.
 
 ## Mixins and type checking (every mixin package under `settlement/`)

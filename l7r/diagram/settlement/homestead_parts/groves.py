@@ -124,7 +124,7 @@ def bamboo_patch(cx: float, cy: float, w: float, h: float, face: tuple[float, fl
 # farmstead's grove. `mixed_broadleaf` is the Chinese village fengshui wood - ~47 kinds a patch, measuring as evergreen
 # broadleaf forest - drawn as an irregular wood of rounded crowns like the woods around it. The clipped pine wall of Izumo is
 # one house's, not a village's, and is not drawn. The roll is even: no source says which was commoner. The homestead
-# yashikirin (`_find_grove_arms`) and the water-mouth grove keep the `windbreak` mix; the knob is the village belt's.
+# yashikirin and the water-mouth grove keep the `windbreak` mix; the knob is the village belt's.
 WINDBREAK_BELT_FORMS = ("conifer_led", "mixed_broadleaf")
 """Research: belt planting forms - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: two forms, even odds"""
 register_knob(Knob("windbreak_belt", list(WINDBREAK_BELT_FORMS), default="conifer_led"))
@@ -579,7 +579,7 @@ class GrovesMixin:
 
     def _grove_room_depth(self: Settlement, kind: str) -> float:  # type: ignore[misc]
         """The depth of the least arm a face may take - what `_grove_room` reserves a seat for, and the last rung of
-        `_find_grove_arms`' ladder: 13 ft for the windward stand (one to two crowns), one tree for a thin band.
+        the arm ladder: 13 ft for the windward stand (one to two crowns), one tree for a thin band.
 
         Research:
             least windward arm - UNRESEARCHED: 13 bscale units

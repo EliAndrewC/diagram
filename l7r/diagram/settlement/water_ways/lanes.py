@@ -347,32 +347,3 @@ class LanesMixin:
             self.M["lanes"] = [ln for k, ln in enumerate(lanes) if k not in _drop]
             self._lane_ink = [z for k, z in enumerate(self._lane_ink) if k not in _drop]
         return trimmed
-
-    def street(self: Settlement, pts: Any, width: float | None = None, label: Any = None, main: bool = False) -> None:  # type: ignore[misc]
-        """A town street (packed earth): the gate-to-yamen main avenue (main=True) or a
-        cross lane off it. Buildings front it; a no-build corridor runs down its center.
-        Default real width 24 ft (converted at the map's ftpx, linework-floored).
-
-        Research:
-            street width - research/questions/0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html: 24 ft by default
-            buildings front the street - research/questions/0119-how-a-town-is-zoned-shops-on-the-street-housing-behind.html: a no-build corridor of the half-width plus max(32 x bscale, 17) px
-            street strokes - CONVENTION: an earth edge and a lighter bed
-        """
-        if width is None:
-            width = self.lw(STREET_W_FT)
-        dd = 'M' + ' L'.join(f'{x},{y}' for x, y in pts)
-        self.corridors.append(
-            (pts, width / 2 + max(32 * self.bscale, 17))
-        )  # buildings front the street but their corners stay off the bed (margin at the map's grain, floored at the largest dwelling's half-diagonal)
-        st = {"main": main, "w": width, "pts": [[x, y] for x, y in pts], "z": None}
-        self.M.setdefault("town_streets", []).append(st)
-        self._ground(
-            width,
-            st,
-            "z",
-            edge=f'<path d="{dd}" fill="none" stroke="#B49A66" stroke-width="{width}" opacity="0.9" stroke-linejoin="round" stroke-linecap="round"/>',
-            bed=f'<path d="{dd}" fill="none" stroke="#D9C8A0" stroke-width="{width - 7}" opacity="1" stroke-linejoin="round" stroke-linecap="round"/>',
-        )
-        if label:
-            mid = pts[len(pts) // 2]
-            self.label(mid[0] + 38, mid[1], label, 11, italic=True, color="#5A4326", ref=(min(p[0] for p in pts), min(p[1] for p in pts), max(p[0] for p in pts), max(p[1] for p in pts)))

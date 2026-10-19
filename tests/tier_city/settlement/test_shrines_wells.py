@@ -51,17 +51,6 @@ def test_open_seat_disc_uses_the_true_radius_of_a_round_candidate():
 # Each is a direct drawing call, and each carries a REAL rule worth pinning rather than a line count.
 
 
-def test_the_hill_records_its_own_footprint_and_its_summit_separately() -> None:
-    """The keep-outs downstream code reads: `M['hill']` is the whole mound (the not-hill predicate
-    inflates it), `M['summit']` the crown a shrine may stand on. They are different ellipses, and
-    the hill is also pushed onto `ellipses`, which is what makes it block placement."""
-    s = Settlement(1200, 1200, seed=3)
-    s.hill(600.0, 600.0, 200.0, 150.0)
-    assert s.M["hill"] == [600.0, 628.0, 200.0, 150.0], "the base ring, offset south of the center"
-    assert s.M["summit"][2] < s.M["hill"][2], "the summit is the small crown, not the mound"
-    assert (600.0, 628.0, 200.0, 150.0) in s.ellipses, "and the mound blocks placement"
-
-
 def test_a_village_shrine_is_drawn_in_REAL_FEET_not_pixels() -> None:
     """GM 2026-07-21. The old signature took fixed PIXELS with a 104x68 default - a latent footgun
     that would have drawn a 208x136 ft monastery-sized hall on any village taking the default
@@ -76,72 +65,3 @@ def test_a_village_shrine_is_drawn_in_REAL_FEET_not_pixels() -> None:
     one.shrine(500.0, 500.0)
     two.shrine(500.0, 500.0)
     assert one.out and two.out, "and both draw their hall"
-
-
-def test_a_canvas_filling_forest_records_its_TREE_LINE_apart_from_its_polygon() -> None:
-    """The two are recorded separately because the frame reveals only a shallow band of wood past
-    the tree line - deeper in it is undifferentiated canopy, i.e. wasted image (`content_view`,
-    and `forest_reveal_x` is the shared rule).
-
-    Also asserted: the litter floor is pushed a crown's width BACK from the tree line, so its
-    straight edge lies UNDER the canopy and the trees alone make the wood's edge - without that, a
-    ruler-straight litter line gives the wood a drawn border no forest has.
-    """
-    s = Settlement(1400, 1400, seed=12)
-    s.meta(name="C", scale="city")
-    edge = [(800.0, 100.0), (820.0, 500.0), (790.0, 900.0), (810.0, 1300.0)]
-    before = len(s.block_polys)
-    s.forest(edge)
-
-    assert s.M["forest_edge"] == [[round(x, 1), round(y, 1)] for x, y in edge], "the tree line, as given"
-    assert s.M["forest"] != s.M["forest_edge"], "and the filled polygon, which runs on to the canvas"
-    assert max(p[0] for p in s.M["forest"]) > 1400.0, "the wood is drawn PAST the canvas edge"
-    assert len(s.block_polys) == before + 1, "and it blocks houses"
-
-
-def test_a_forest_is_DETERMINISTIC_so_it_never_perturbs_house_placement() -> None:
-    """Its RNG is saved and restored, which is what lets a wood be drawn mid-map without moving
-    everything placed after it. Asserted by drawing the same wood twice and by checking the stream
-    that follows is unchanged - the property a saved/restored RNG actually buys."""
-    edge = [(800.0, 100.0), (820.0, 700.0), (810.0, 1300.0)]
-    a = Settlement(1400, 1400, seed=12)
-    a.meta(name="C", scale="city")
-    a.forest(edge)
-
-    b = Settlement(1400, 1400, seed=12)
-    b.meta(name="C", scale="city")
-    b.forest(edge)
-    assert a.M["forest"] == b.M["forest"], "the same wood twice, identically"
-
-
-def test_a_STEEP_hill_draws_emphasized_downslope_hachures() -> None:
-    """ "closely-spaced, longer ticks read as a steep, undefendable-on-foot slope" - the flag exists
-    so a hill that a map's story says cannot be climbed reads that way at a glance, rather than
-    being told to the reader in prose."""
-    gentle = Settlement(1200, 1200, seed=3)
-    gentle.hill(600.0, 600.0, 200.0, 150.0)
-
-    steep = Settlement(1200, 1200, seed=3)
-    steep.hill(600.0, 600.0, 200.0, 150.0, steep=True)
-    assert len(steep.out) > len(gentle.out), "the steep hill carries its extra hachures"
-    assert steep.M["hill"] == gentle.M["hill"], "and is the same mound - only its shading differs"
-
-
-def test_a_LABELLED_forest_captions_itself_at_the_middle_of_the_wood() -> None:
-    """The wood's own caption, sited by default at the middle of the ground it fills - and slid by
-    `label_xy` where a gen wants it elsewhere. Both, because the default is a computation and the
-    override is the escape from it."""
-    s = Settlement(1400, 1400, seed=12)
-    s.meta(name="C", scale="city")
-    edge = [(800.0, 100.0), (820.0, 700.0), (810.0, 1300.0)]
-    s.forest(edge, label="the Kitsune Mori")
-    s.place_labels()
-    got = [lb for lb in s.M["labels"] if len(lb) > 5 and "Kitsune" in str(lb[5])]
-    assert got, "the wood is named"
-
-    placed = Settlement(1400, 1400, seed=12)
-    placed.meta(name="C", scale="city")
-    placed.forest(edge, label="the Kitsune Mori", label_xy=(1100.0, 300.0))
-    placed.place_labels()
-    put = [lb for lb in placed.M["labels"] if len(lb) > 5 and "Kitsune" in str(lb[5])]
-    assert put and put[0][:2] != got[0][:2], "and label_xy puts the caption where the gen asked"

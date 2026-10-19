@@ -7,7 +7,6 @@ from collections.abc import Iterator
 from typing import TYPE_CHECKING, Any, cast
 
 from ._geom import PointGrid, Pt, boxed_polys, drawn_extent, edge_dist, indexed_grid, point_in_poly, poly_seg_dist, rot_rect, seg_dist
-from ._knobs import skeleton_layout
 from .rolling.access import LANE_MIDDLE_CLEAR_FT, TREAD_WALL_FT
 from .rolling.bearing import house_rot
 from .rolling.lot import FARMHOUSE_MAX_ASPECT, KURA_SHARE, household_parts, kura_rect, record_parts, seat_parts_done
@@ -519,19 +518,6 @@ class HousesMixin:
         self.M["houses"].append(rec)
         self._pending_farmsteads.append(rec)
         return True
-
-    def lane_skeleton(self: Settlement, kind: str, cx: float, cy: float, ex: float, ey: float, width: float = 5, clearance: float = 18, worn: bool = True) -> dict[str, Any]:  # type: ignore[misc]
-        """Lay a nucleated cluster's internal lanes for the given skeleton and record the skeleton kind on
-        the manifest (meta.lane_skeleton, read by the twin-detector). Returns the DERIVED focal points -
-        `headman` (place the headman house there) and `gateway` (the downslope exit; anchor the connector
-        track and the tutelary shrine off it). The lanes lay their no-build corridors BEFORE the houses,
-        so the homesteads front them (same as a hand-placed lane).
-        Research: lane skeleton - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: one of five shapes of our own choosing, laid before the houses"""
-        layout = skeleton_layout(kind, cx, cy, ex, ey)
-        for pts in layout["lanes"]:
-            self.lane(pts, width=width, clearance=clearance, worn=worn)
-        self.M["meta"]["lane_skeleton"] = kind
-        return layout
 
     def cluster_seeds(self: Settlement, shape: str, cx: float, cy: float, ex: float, ey: float, n: int, rng: random.Random, record: bool = True) -> list[Pt]:  # type: ignore[misc]
         """Generate `n` house-seed positions for a nucleated cluster of the given SHAPE (feature 005

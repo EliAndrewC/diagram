@@ -48,9 +48,6 @@ only the frozen legacy maps called; the commit before it holds it.
 import: both are on the composed `Settlement`, which is what lets this partition be re-cut later
 without touching `core.py`.
 
-The farmstead helpers (`_attach_grove`, `_find_appurtenances`, `_farmstead_nudges`) are farmstead plumbing, not land
-surfaces: they live in [`../homestead_parts/farmstead.py`](../homestead_parts/farmstead.py).
-
 The mixin and monkeypatching rules are [`../CLAUDE.md`](../CLAUDE.md)'s: the two-dot `from ..core import Settlement`
 here, a new submodule's mixin added to `LandMixin`'s bases and a row to the table above, and a module-level name
 patched where it is defined (`settlement.land.wet.surface_water_dist`, not `settlement.land.surface_water_dist`).

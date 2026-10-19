@@ -12,7 +12,6 @@ from l7r.diagram.overlap.registry import refuse_unadmitted
 
 from .._geom import (
     Pt,
-    seg_closest,
     seg_dist,
 )
 
@@ -21,131 +20,6 @@ if TYPE_CHECKING:
 
 
 class MoatMixin:
-    def moat(  # type: ignore[misc]
-        self: Settlement,
-        ring: Any,
-        gap: float = 42,
-        width: float | None = None,
-        river: Any = None,
-        river_cut: float = 150,
-        river_inlet_tilt: float = 0.0,
-        river_outlet_tilt: float = 0.0,
-    ) -> list[Pt]:
-        """A water moat encircling the city wall - the wall RING pushed outward from its centroid
-        by `gap`. Records M['moat']. Feed it from off-map with a stream (AS WIDE as the moat, by
-        conservation of flow) and tap it for irrigation channels to the outside fields. A no-build
-        corridor. Width ~26 px: a provincial-city defensive moat is the heaviest watercourse on the
-        map (Himeji-tier ~20-35 m real, ~70x a field ditch); see the research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html.
-        `river=<pts>` makes it an OPEN moat for a river-bank city: the arc facing the river (moat
-        vertices within `river_cut` of the river centerline) is dropped and both open ends extend
-        ONTO the river, which closes the water ring itself - inlet upstream, outlet downstream,
-        so the current flushes the moat (the historical norm; see research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html).
-        CONVENTION: `river` pts run UPSTREAM-FIRST (source before mouth) - the junction tilts and
-        the city_moat_junction_angles check both key on it. Both ends meet the river SQUARE by default
-        (research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: every reason found for tilting them is modern
-        engineering; feature 328 wave 5 - they were tilted 10 and 22 degrees); a caller may still pass
-        `river_inlet_tilt` (the INLET shifted upstream) and `river_outlet_tilt` (the OUTLET swept downstream).
-
-        Research:
-            moat width - research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html, research/questions/0151-city-moats-how-wide-and-deep-and-whether-they-ring-the-wall-hori-chenghe.drawing.html: 66 ft
-            ring pushed out from the wall - research/questions/0151-city-moats-how-wide-and-deep-and-whether-they-ring-the-wall-hori-chenghe.html: the caller's gap, default 42 px
-            open moat on a river bank - research/questions/0151-city-moats-how-wide-and-deep-and-whether-they-ring-the-wall-hori-chenghe.drawing.html: the arc within river_cut of the river dropped, both ends onto it
-            junction tilts - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: both ends meet the river square by default (a tilt is the caller's)
-            inlet and outlet recorded - research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html
-            solid water with a sheen - research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html: no dashed centerline
-            no-build corridor - UNRESEARCHED: 28 px either side
-        """
-        if width is None:
-            width = self.px(
-                66
-            )  # a provincial-seat moat ~66 ft across (26px at the old 2.55 ft/px grain; research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html)
-        cx = sum(p[0] for p in ring) / len(ring)
-        cy = sum(p[1] for p in ring) / len(ring)
-        mo: list[Pt] = []
-        for x, y in ring:
-            dx, dy = x - cx, y - cy
-            d = math.hypot(dx, dy) or 1.0
-            mo.append((x + dx / d * gap, y + dy / d * gap))
-        inlet: list[float] | None = None  # the open-moat branch below sets both; read under the same `river` test, which a checker cannot correlate
-        outlet: list[float] | None = None
-        if river:
-
-            def rdist(q: Any) -> float:
-                return min(seg_dist(q[0], q[1], river[i], river[i + 1]) for i in range(len(river) - 1))
-
-            def rfoot(q: Any) -> Pt:
-                k = min(range(len(river) - 1), key=lambda i: seg_dist(q[0], q[1], river[i], river[i + 1]))
-                return seg_closest(q[0], q[1], river[k], river[k + 1])
-
-            keep = [q for q in mo if rdist(q) >= river_cut]
-            # rotate so the kept arc is CONTIGUOUS (the cut can straddle the list seam)
-            n0 = len(mo)
-            start = next(i for i in range(n0) if rdist(mo[i]) < river_cut and rdist(mo[(i + 1) % n0]) >= river_cut)
-            keep = []
-            i = (start + 1) % n0
-            while rdist(mo[i]) >= river_cut:
-                keep.append(mo[i])
-                i = (i + 1) % n0
-            # THE JUNCTION FEET TILT WITH THE CURRENT (GM 2026-07-24 hydrology review; see
-            # research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html). The perpendicular
-            # rfoot projection gave both arms identical square tees - an algorithm artifact, not a
-            # decision. Real waterworks are ASYMMETRIC: the OUTLET sweeps visibly downstream
-            # (confluence hydraulics - a square tee drives the exit jet across the river; natural
-            # tributaries and drainage returns join pointing downstream) while the INLET stays
-            # near-square with only a slight upstream tilt, never smoothly flow-aligned (an offtake
-            # aligned with the current drinks the river's bedload and silts the ring - classical
-            # headworks kept intakes near-square under a sluice). Shift = arm length * tan(tilt),
-            # so each end sits exactly its tilt off square regardless of arm length.
-            cum = [0.0]
-            for i2 in range(len(river) - 1):
-                cum.append(cum[-1] + math.hypot(river[i2 + 1][0] - river[i2][0], river[i2 + 1][1] - river[i2][1]))
-
-            def r_arc(q: Any) -> float:
-                k2 = min(range(len(river) - 1), key=lambda i3: seg_dist(q[0], q[1], river[i3], river[i3 + 1]))
-                fx, fy = seg_closest(q[0], q[1], river[k2], river[k2 + 1])
-                return cum[k2] + math.hypot(fx - river[k2][0], fy - river[k2][1])
-
-            def r_at(sa: float) -> Pt:
-                sa = max(0.0, min(cum[-1], sa))
-                k3 = next(i4 for i4 in range(len(river) - 1) if cum[i4 + 1] >= sa)
-                t = (sa - cum[k3]) / ((cum[k3 + 1] - cum[k3]) or 1.0)
-                return (river[k3][0] + (river[k3 + 1][0] - river[k3][0]) * t, river[k3][1] + (river[k3 + 1][1] - river[k3][1]) * t)
-
-            arc_a, arc_b = r_arc(keep[0]), r_arc(keep[-1])
-            arm_a = math.hypot(keep[0][0] - rfoot(keep[0])[0], keep[0][1] - rfoot(keep[0])[1])
-            arm_b = math.hypot(keep[-1][0] - rfoot(keep[-1])[0], keep[-1][1] - rfoot(keep[-1])[1])
-            t_in, t_out = math.tan(math.radians(river_inlet_tilt)), math.tan(math.radians(river_outlet_tilt))
-            if arc_a <= arc_b:  # keep[0]'s end is the upstream INLET (river pts run upstream-first)
-                end_a, end_b = r_at(arc_a - arm_a * t_in), r_at(arc_b + arm_b * t_out)
-                in_pt, out_pt = end_a, end_b
-            else:
-                end_a, end_b = r_at(arc_a + arm_a * t_out), r_at(arc_b - arm_b * t_in)
-                in_pt, out_pt = end_b, end_a
-            mo = [end_a] + keep + [end_b]  # both open ends join the river centerline, tilted with the current
-            # an OPEN moat knows its own flow: the two junction feet ARE the inlet and outlet, and
-            # which is which already fell out of the upstream-first river convention above.
-            inlet, outlet = [round(in_pt[0], 1), round(in_pt[1], 1)], [round(out_pt[0], 1), round(out_pt[1], 1)]
-        else:
-            mo.append(mo[0])
-        dd = 'M' + ' L'.join(f'{x:.0f},{y:.0f}' for x, y in mo)
-        self.M["moat"] = [[round(x, 1), round(y, 1)] for x, y in mo]
-        self.M["moat_width"] = width
-        # WHICH WAY THE MOAT FLUSHES (GM 2026-07-24). A moat is a ring, so it has no upstream end -
-        # its water enters at one point and leaves at another, running BOTH ways around the circuit.
-        # Recording the two points is what lets a check ask "is this feature downstream?" of a moated
-        # city at all; a closed moat's gen passes them (it dug the feeder and the outfall itself).
-        if river is not None:
-            self.M["moat_flow"] = {"inlet": inlet, "outlet": outlet}
-        ml: dict[str, Any] = {}  # records the moat's bed/sheen draw positions
-        self.M["moat_layer"] = ml
-        self._water(  # routed through the shared water groups so a feeder stream merges into it cleanly
-            f'<path d="{dd}" fill="none" stroke="#9CB4C8" stroke-width="{width}" stroke-linejoin="round" stroke-linecap="round"/>',
-            ml,
-            sheen=f'<path d="{dd}" fill="none" stroke="#B6CAD8" stroke-width="{width * 0.4:.0f}" stroke-linejoin="round" stroke-linecap="round"/>',
-        )  # lighter mid-water sheen (NOT a dashed lane line)
-        self.corridors.append(([(x, y) for x, y in mo], 28))
-        return [(round(x, 1), round(y, 1)) for x, y in mo]
-
     def sluice_gate(self: Settlement, x: float, y: float, rot: float = 0.0, label: str | None = None, label_xy: Pt | None = None, span: float | None = None) -> int:  # type: ignore[misc]
         """A field-channel SLUICE GATE (the intake/outfall control board the comb doctrine's "sluice-fed
         head-race" always implied but no map drew - GM 2026-07-23, the mouths-are-confluences pass): two

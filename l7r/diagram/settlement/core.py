@@ -14,7 +14,6 @@ from ._geom import LAND, Indexed, Manifest, PointGrid, Poly
 from ._knobs import crop_boxes, resolve_knob, scope_seed
 from .castle_civic import CastleCivicMixin
 from .city import CityMixin
-from .civic_grounds import CivicGroundsMixin
 from .farm_fixtures import FarmFixturesMixin, PondStockMixin
 from .fields import FieldsMixin
 from .finish import FinishMixin
@@ -24,7 +23,6 @@ from .houses import HousesMixin
 from .land import LandMixin
 from .rolling import RollingMixin
 from .shrines_wells import ShrinesWellsMixin
-from .shrines_wells.forest import ForestMixin
 from .structures import StructuresMixin
 from .title import TitleMixin
 from .town_ways import TownWaysMixin
@@ -36,11 +34,9 @@ class Settlement(
     WaterWaysMixin,
     TownWaysMixin,  # feature 145: the town-tier ways, out of the hamlet path's module
     ShrinesWellsMixin,
-    ForestMixin,  # feature 145: the town/city forest
     StructuresMixin,
     HomesteadPartsMixin,
     LandMixin,
-    CivicGroundsMixin,
     CityMixin,
     CastleCivicMixin,
     HousesMixin,
@@ -330,7 +326,6 @@ class Settlement(
     # huge offset so they always render above the base (roads must pass UNDER them)
     TOPZ = 10_000_000
     LABELZ = 20_000_000  # the LABEL layer renders above even the TOP layer - text is never covered
-    WALLZ = 1_000_000  # the WALL layer renders above every ground lane and building (which sit in
     #                          self.out, z < len(out)), below the TOP layer - so lanes pass UNDER walls
 
     def admits(self: Settlement, key: str, rec: Any, ignore: Any = None) -> bool:
@@ -366,12 +361,6 @@ class Settlement(
         z = len(self.out)
         self.out.append("".join(s for _c, s in tagged))
         self.out_cls.append(tagged)
-        return z
-
-    def add_wall(self: Settlement, s: str, cls: ClsTag = None) -> int:
-        z = self.WALLZ + len(self.walls)
-        self.walls.append(s)
-        self.walls_cls.append(self._tag(cls))
         return z
 
     def add_label(self: Settlement, s: str, cls: ClsTag = None) -> int:
@@ -554,7 +543,7 @@ class Settlement(
         farm shed on a garden 700 px from the nearest thing that had changed. Debugging a map you did
         not touch is the expensive kind of work; this makes the blast radius the thing you edited.
 
-        It is a SEEDED generalization of an idiom already in this file: `forest()` and a dozen others
+        It is a SEEDED generalization of an idiom already in this engine: a dozen methods
         already save and restore the stream so their decorative draws do not shift later placement.
         Save/restore alone protects everything AFTER the block; re-seeding on entry protects the
         block itself from everything BEFORE it. Both halves are needed for a scope to be isolated.
@@ -666,7 +655,6 @@ class Settlement(
     # other woods keep the two figures above (0080 and 070) until they are researched in their own right.
     COMMONS_SPACING_FT = 8.0  # centers near 8 ft: 1,700 stems/ha (vegetation/230)
     COMMONS_CROWN_R_FT = (4.0, 4.5)  # an 8-9 ft crown, the radius rolled per crown (vegetation/230; a GUESS)
-    FOREST_FLOOR = "#5C7042"  # shaded litter/understory between the crowns, not a terrain wash
     # How deep a canvas-filling wood is REVEALED by the crop: ~8 ranks of trees past the tree line.
     # That is enough for the canopy to close and read as a wood running off the frame; beyond it the
     # image is undifferentiated crowns (GM 2026-07-25: "only enough to make it clear the forest is

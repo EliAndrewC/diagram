@@ -2,18 +2,7 @@
 `tests/` minus the tier, gate and tooling trees, so these are neither imported nor collected while the scope is
 locked to another tier; the gate collects everything. Helpers stay in the source module and are imported."""
 
-import pytest
-
 from tests.settlement._builders import _town
-
-
-@pytest.mark.tiers("town")
-def test_street_default_width_falls_back_to_the_ft_scale():
-    # street() with no explicit width uses a real 24 ft, converted at the map's ftpx and linework-floored
-    s = _town()
-    s.street([(100, 200), (900, 200)])  # no width -> the lw(24) default branch
-    assert s.M["town_streets"][0]["w"] == s.lw(24)
-
 
 # ---- feature 174: the four TOWN-tier ways and focal features --------------------------------------
 # `town_ways.py` was 21% covered (30 of 38 statements) because feature 145 moved these OUT of the

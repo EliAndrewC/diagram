@@ -14,14 +14,13 @@ comes here to change**, not by theme, and are deliberately uneven in size.
 | file | look here when |
 |---|---|
 | `__init__.py` | you need the composition itself; never add logic here |
-| `shrines.py` | a shrine's GLYPH: `shrine` (the simple glyph) and `hill` (the terraced landform a shrine may stand on) |
+| `shrines.py` | a shrine's GLYPH: `shrine` (the simple glyph) |
 | `torii.py` | the torii arches: `_torii` (one true-scale arch), `torii_path` / `torii_even` (hand-placed ascents), and the module-level `torii_plan_svg` |
 | `wellground.py` | **whether a patch of ground may take a wellhead at all**, and the cost of asking: `_well_ground_clear` (the predicate), `_build_well_index` / `_well_index` (the three `PointGrid`s), `frozen_terrain` (the per-pass freeze that asserts its own invariant), `_terrain_fingerprint`, `_wet_toe_keepout` (the reed toe, derived before the reeds are drawn), `_in_scrub_cover` (the grazed-waste refusal). **The hub - read the perf notes here before touching any of it** |
 | `wells.py` | the wellhead GLYPH and how many wells a map gets and where: `well`, `_well_vr` (the drawn extent placement must predict), `well_at` (place one if the spot is clear), `place_wells` / `_place_wells` (the neighborhood grid + coverage pass) |
 | `seats.py` | the general "where can a `w` x `h` feature stand?" API: `open_seat` (asks the real `_fits` at the moment of placement) and `_footprint_clear` (the whole-footprint test against the BOUND only, deliberately). Nothing to do with shrines or wells - see "Three placements you will want to fix" below |
 | `byres.py` | the draft-animal byre: `_draw_byre` (the open-fronted stall glyph) and `draft_byres` (the house-driven pass: since 269 B16 the beast lives with its household - the inner stable's arm against the farmhouse or the outer stable's own shed in the yard, on about half the households; the old shared shed on the commons is the rare `detached_commons` roll, a labeled guess) |
-| `woods.py` | how a wood is DRAWN - a stand of individual trees, never a terrain wash: `_tree_stand` (queues it; carries the canopy-density research), `flush_tree_stands` / `_draw_stand` (the deferred canopy, drawn at crop time against the complete map), `_stand_fringe` (thicket-masked advance growth on the cut-over margin), `_crowns`, `_fringe_blocked` |
-| `forest.py` | the canvas-filling `forest` of a town or city (`ForestMixin`; feature 145 moved it out of `woods.py`, whose tree stands the hamlet path executes) |
+| `woods.py` | how a wood is DRAWN - a stand of individual trees, never a terrain wash: `flush_tree_stands` / `_draw_stand` (the deferred canopy, drawn at crop time against the complete map), `_stand_fringe` (thicket-masked advance growth on the cut-over margin), `_crowns`, `_fringe_blocked` |
 
 ## Composition, and why it is in `__init__.py`
 
@@ -45,8 +44,8 @@ other six call into it and it calls out to none of them:
 | `wells.py` | `wellground.py` | `well_at` -> `_in_scrub_cover`, `_well_ground_clear`; `_place_wells` -> both; `place_wells` -> `frozen_terrain` |
 | `seats.py` | `wellground.py` | `open_seat(well=True)` -> `_in_scrub_cover` |
 
-Feature 392 retired the code only the frozen legacy maps called (the shrine halls and the small shrine, the torii
-avenue, the farm and shrine wells); the commit before it holds it.
+Feature 392 retired the code only the frozen legacy maps called (the shrine halls and the small shrine, the hill, the torii
+avenue, the farm and shrine wells, the tree-stand queue and the canvas-filling forest); the commit before it holds it.
 
 ## One placement you will want to "fix" - it is deliberate
 
@@ -60,9 +59,6 @@ one-file change.
 
 ## If a module grows: the seams, decided in advance
 
-- **`shrines.py`**: `hill` is scenery, not a shrine; it is here because a village shrine stands
-  on one. If a second landform arrives, `hill` LEAVES for a landform module rather than `shrines.py`
-  being cut in half.
 - **`woods.py`**: the crown primitives (`_crowns`, `_fringe_blocked`) are the reusable half, the
   stand policy the rest. No reason to cut today.
 

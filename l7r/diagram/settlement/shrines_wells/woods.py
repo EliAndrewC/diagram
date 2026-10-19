@@ -43,57 +43,6 @@ def trees_off_the_treads(trees: Sequence[tuple[float, float, float, str]], lanes
 
 
 class TreeStandsMixin:
-    def _tree_stand(self: Settlement, poly: Poly, seed: int, floor: Poly | None = None, outliers: bool = True, cls: str | None = None) -> None:  # type: ignore[misc]
-        """Fill `poly` with INDIVIDUAL TREES - the ONE way this engine draws a wood (GM 2026-07-25).
-
-        A forest is NOT a terrain type here. It used to be drawn as a flat pale wash under a widely-
-        spaced grid of identical dots, which read as patterned ground rather than as trees, and did
-        not match how every other piece of vegetation on these maps is already drawn (the
-        yashikirin, the fengshui belt, the dooryard copse - all real crowns, via _draw_grove). So a
-        wood is now a STAND: every canopy tree is one drawn crown at true size and true spacing, and
-        the polygon survives only as DATA (what it blocks, what it frames, where the brook comes
-        from) - never as a shape you can see the outline of.
-
-        DENSITY / SIZE - the why (research 2026-07-25; China-first per the setting's geography note,
-        cross-checked against Japanese satoyama hill wood):
-          - A closed premodern hill wood - the mixed broadleaf/conifer cover of a settled valley's
-            back slope, cut over for fuel and timber on a rotation - carries roughly 500-800 CANOPY
-            stems per hectare. 1 ha = 107,639 sq ft, so ~600 stems/ha is one canopy tree per ~180
-            sq ft: a mean spacing near 13 ft. That is CANOPY_SPACING_FT.
-          - Canopy crowns in such a stand run ~5-8 m across (16-26 ft), with occasional emergents
-            wider. CANOPY_R_FT = 8.5 is the mean radius; each crown is jittered 0.75-1.4x, so drawn
-            diameters land inside the real band, a few emergents over many smaller crowns.
-          - Crowns of ~17 ft mean diameter on 13 ft centers OVERLAP, and that is the point: closure
-            is what makes a wood a wood. Same finding as the mulberry rows (see _mulberry_rows) -
-            at a to-scale grain the honest drawing of real planted density IS a packed mass of
-            crowns, not sparse symbols spaced for the eye.
-          - NOTHING is inflated for legibility. At 1 ft/px a crown is r ~6-12 px; at a coarser grain
-            it shrinks with the map, exactly like the buildings do.
-        The stand's EDGE is made by the trees themselves - there is no boundary stroke and the
-        crowns are NOT clipped, so they break the outline the way a real wood does (a clipped stand
-        reads as a ruled terrain boundary, which is the exact defect this replaced). `floor` is
-        therefore drawn INSET from `poly` - its hard edge has to sit under the canopy - and
-        `outliers` scatters a thinning fringe of advance growth on the cut-over margin outside.
-
-        The FLOOR is drawn here; the CROWNS are QUEUED and drawn at crop time (flush_tree_stands),
-        the same deferral the stable yards use. A wood is usually drawn EARLY - it is terrain, and
-        the settlement is sited against it - but "no crown on a roof" can only be honored against
-        buildings that already exist, and half the map is placed after the wood. Deferring the
-        canopy alone (the litter floor stays down where it belongs, under everything) lets the
-        filter see the COMPLETE map. Labels are unaffected: they live in the topmost layer.
-
-        Research:
-            a wood drawn as individual crowns - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html
-            floor inset under the canopy, no edge stroke - CONVENTION
-            canopy deferred to crop time - NONE
-        """
-        # the FLOOR: shaded leaf litter and understory glimpsed between the crowns. Not a terrain
-        # wash - under a closed canopy hardly any of it shows, and its outline is buried under the
-        # trees whose centers stand inside it.
-        d = 'M' + ' L'.join(f'{x:.0f},{y:.0f}' for x, y in (floor or poly)) + ' Z'
-        self.add(f'<path d="{d}" fill="{self.FOREST_FLOOR}"/>', cls=cls)
-        self._pending_stands.append((list(poly), seed, outliers, cls))  # the class rides to the deferred canopy (feature 134)
-
     def flush_tree_stands(self: Settlement) -> None:  # type: ignore[misc]
         """Draw the canopy of every queued tree stand (see _tree_stand). Runs at CROP time, so each
         crown is tested against the COMPLETE map - every building and wellhead, not just the ones

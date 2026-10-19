@@ -209,16 +209,6 @@ def test_try_place_abandoned_rejects_a_ruin_off_the_canvas_edge():
     assert not [h for h in s.M["houses"] if h["kind"] == "abandoned"]
 
 
-def test_lane_skeleton_method_draws_lanes_and_records_axis():
-    s = Settlement(1200, 1400, seed=3)
-    s.meta(name="Sk", scale="village")
-    before = len(s.M.get("lanes", []))  # 'lanes' is created lazily on the first lane() call
-    lay = s.lane_skeleton("T", 400, 700, 120, 210)
-    assert s.M["meta"]["lane_skeleton"] == "T"  # recorded for the twin-detector
-    assert len(s.M["lanes"]) == before + 2  # a T lays two lanes (spine + crossbar)
-    assert lay["headman"] == (400, 700 - 210 * 0.4)  # derived focal point returned
-
-
 # ---- cluster_shape knob: shape-aware seed generation (feature 005, US1) -------------------------
 
 
