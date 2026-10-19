@@ -6756,6 +6756,44 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T98": {
+   "section_sha256": "ad2ab8343cf176b2fa949470257c30b59b6f0be65cf8099fc26f4324e7d89e2e",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D119a (door path)",
+     "summary": "lay_door_paths grows grove bands by 2*(1.5 + GROVE_WORKING_ROOM_FT - FOOTPATH_FABRIC_GAP) so the path routed at FOOTPATH_FABRIC_GAP keeps its middle 11 ft off the trees (0036's figure), down from the 18 ft the code gave",
+     "class": "within",
+     "why": "Conforms the code to the source's own figure (0036, an O figure), which is the conform exit of the checklist the request built, not a loosening of a rule to make a seed pass. It is a correction rather than room shrunk for packing on two facts the block records: the claims round had already returned DRIFTED on this unit (serve.lay_door_paths#door path off a grove band) before the fix was framed, and the measured 2026-10-19 derivation shows the room added twice (bands grown 11 ft a side, then routed at the fabric gap on top), so 18 ft was never a chosen figure. Arithmetic checks: (1.5 + 9.5 - GAP) + GAP = 11 for any GAP below 11."
+    },
+    {
+     "id": "D119b (connector)",
+     "summary": "connector_dry_exit's grove band gap becomes GROVE_WORKING_ROOM_FT + CONNECTOR_WIDTH/2 = 12.5 ft, up from FOOTPATH_FABRIC_GAP + CONNECTOR_WIDTH/2 = 10 ft",
+     "class": "within",
+     "why": "Judged separately from D119a because it is the opposite defect: the code was short of 0036's room (3 + 9.5 = 12.5 ft for a 6 ft track), and the change widens it to the source's figure. It restores room the research gives and narrows nothing; its claim (track.connector_dry_exit#grove band gap) was DRIFTED. The capacity it needs (25 ft) is backed by the dated 16-of-16 cohort run."
+    },
+    {
+     "id": "D119 clamp",
+     "summary": "the grow term is never below zero",
+     "class": "within",
+     "why": "Only acts if the fabric gap exceeds 11 ft, and then yields more room than 0036, never less; an implementation guard that cannot narrow."
+    },
+    {
+     "id": "Approach 5 / title (lands with T96)",
+     "summary": "T98 and T96 land together",
+     "class": "within",
+     "why": "Landing mechanics forced by T98 being the prerequisite of T96's landing (seed 22 refused at 7 ft). T98 keeps its own section, one goal, budget and retro, so the per-task measurement the request asks for (FR-006, FR-015) is not merged."
+    },
+    {
+     "id": "Approach 6 (exit chosen)",
+     "summary": "exit (e) conform to 0036's figure, counted once, at both sites; no exception, no new rule, no added room",
+     "class": "within",
+     "why": "The checklist's exits weighed and the research figure adopted; nothing the GM asked for is excepted or reduced."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

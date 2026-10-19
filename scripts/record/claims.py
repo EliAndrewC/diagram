@@ -974,7 +974,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     stems = sorted({p.name.split(".")[0] for p in (root / QUESTIONS).glob("[0-9][0-9][0-9][0-9]-*.html")})
     if not (reply := claims_triage.read_reply(args.reply, "claims-checked", "nothing recorded")).strip():  # feature 385 T94
         return 2
-    reply = unelide(reply, stems)
+    reply, bad = claims_triage.vet(unelide(reply, stems), units, root, _VERDICT)  # the arbiter's fix on hour 29
     blocks_file = Path(args.bundle) / "blocks.json"
     blocks = json.loads(blocks_file.read_text(encoding="utf-8")) if blocks_file.is_file() else {"numbered": {}, "snapshots": {}}
     new, msgs = record(index, units, reply, datetime.date.today().isoformat(), blocks["numbered"])
@@ -984,7 +984,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     for m in msgs:
         print(f"claims-checked: {m}")
     print(f"claims-checked: {sum(1 for k in units if k in new and new[k].get('code') == units[k]['code'])} of {len(units)} recorded")
-    return 0
+    return 3 if bad else 0
 
 
 if __name__ == "__main__":
