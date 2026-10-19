@@ -84,12 +84,12 @@ keeps failing slip under the cap.
 
 ## Success criteria
 
-- **SC-001**: replaying the `-4` locator change as it was made - by hand, after source-reader's CONTRADICTED finding - and
+- **SC-001** (FR-001): replaying the `-4` locator change as it was made - by hand, after source-reader's CONTRADICTED finding - and
   declaring it (`FIXED_BY="source-reader: ..."`) answers `quote-check:0251#miyashiro-kumehara-1698-4`; the same change
   as another check's applied EDIT block settles it at `make apply-edits`; the 去辰 change, either way, leaves
   `quote-check:0251#miyashiro-kumehara-1698` owed (refused, named, when declared).
-- **SC-002**: a seeded loop - one footnote PARTIAL in two quote-check replies, changed before each, then a third dispatch
+- **SC-002** (FR-002, FR-004, FR-005, FR-006): a seeded loop - one footnote PARTIAL in two quote-check replies, changed before each, then a third dispatch
   on it changed again - is refused with the round trigger, also when `origin/main` moved between the rounds; on the code
   before this feature it is let through. The same two flags with no change between them (NOT-READABLE on a canon note) are
   let through.
-- **SC-003**: a new footnote added after two flagged rounds on another footnote is dispatched without a hold.
+- **SC-003** (FR-003): a new footnote added after two flagged rounds on another footnote is dispatched without a hold.
