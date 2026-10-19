@@ -6080,6 +6080,26 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T80": {
+   "section_sha256": "67f19661afe4226d6f305abd9c98baab4f8755784b8fbea54c95a4c63dcb3f9f",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D99",
+     "summary": "task_current, where the section digest differs, compares earlier and current text with every part B that decides_nothing (D94) removed from both, by the existing typo rule; a part B that decides is left in and still owes the section's review.",
+     "class": "within",
+     "why": "Implements the GM's approved change 3 (2026-10-18): 'A part B is checked mechanically; only one that adds a new decision gets a spec-fidelity review.' Today a quiet part B, though itself skipped by D94, stales its task's section verdict and re-owes review of the section's other blocks - a review caused by a part B that adds no decision, which change 3 says should not happen. D99 removes exactly that cost and nothing more: the quiet/deciding test is D94's own, unchanged; a deciding part B stays in the comparison; any other edit to the section still changes the comparison and is owed as now (constraint 2). A part B that flips between quiet and deciding changes the stripped text and is owed, so the exemption cannot launder a decision."
+    },
+    {
+     "id": "T80 Approach 2/9 (scope and done)",
+     "summary": "Only quiet part Bs are taken out of the section comparison; every other change to the section is owed as now; a test in tests/tooling/test_plan_gate.py red without the change.",
+     "class": "within",
+     "why": "States the boundary of D99 at the GM's words (only a decision-adding part B is reviewed) and adds a test whose only effect is to enforce that the requested behavior happens - enforcement of the request, not new scope."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
