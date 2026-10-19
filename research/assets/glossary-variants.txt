@@ -3997,6 +3997,7 @@ talisman	talisman
 talismans	talisman
 tallies	tally
 tally	tally
+tama	Tama
 tamagaki	tamagaki
 tamagawa	Tamagawa aqueduct
 tamagawa aqueduct	Tamagawa aqueduct
