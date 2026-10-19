@@ -18,11 +18,9 @@ Research:
 
 from .bridges import BridgesMixin
 from .canals import CanalsMixin
-from .civic import CityCivicMixin
 from .moat import MoatMixin
 from .walls import WallsMixin
-from .waterfront import WaterfrontMixin
 
 
-class CityMixin(WallsMixin, MoatMixin, CanalsMixin, WaterfrontMixin, BridgesMixin, CityCivicMixin):
+class CityMixin(WallsMixin, MoatMixin, CanalsMixin, BridgesMixin):
     """The composed city surface. No members of its own by design - see the module docstring."""

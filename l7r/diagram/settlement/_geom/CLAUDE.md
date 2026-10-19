@@ -13,13 +13,13 @@ and `from settlement._geom import ...` resolve exactly as before the split.
 | `__init__.py` | you need the re-export surface; never add logic here |
 | `base.py` | the `Pt` / `Poly` / `Manifest` aliases, the import-time main-tree guard, or the land/crop palette (`LAND`, `PADDY_SHADES`, `FLOODED_SHADES`, `RIPE_SHADES`, `RICE_GREENS`) |
 | `primitives.py` | plain coordinate math with no map vocabulary: `point_in_poly`, `seg_closest`, `seg_dist`, `edge_dist`, `segments_cross`, `seg_intersect`, `ring_touches`, `ring_meets_ellipse`, `_signed_area` |
-| `overlap.py` | a footprint's corner ring, or whether two regions meet: `rot_rect` / `_rect_ring` (corners), `stroke_quads` (a polyline as polygons), `sat_overlap` / `rects_overlap`, `poly_gap` / `_aabb_gap` / `box_gap` (the three gap MEASURES - know which one your rule is entitled to), `region_blocked` / `quad_hits_poly` / `quad_hits_seg` / `point_quad_dist` (cell-region tests), `_union_area` |
+| `overlap.py` | a footprint's corner ring, or whether two regions meet: `rot_rect` / `_rect_ring` (corners), `stroke_quads` (a polyline as polygons), `sat_overlap` / `rects_overlap`, `poly_gap` / `_aabb_gap` (the gap MEASURES - know which one your rule is entitled to), `quad_hits_poly` / `quad_hits_seg` / `point_quad_dist` (cell-region tests), `_union_area` |
 | `indexes.py` | a per-candidate scan is eating a gen: the `boxed_*` bbox prefilters, `PointGrid` (uniform grid, and its `_MAX_SPAN` clamp), `Indexed` (the registry that versions ITSELF rather than being fingerprinted), `indexed_grid`, `boxed_grid`. **Read the two staleness post-mortems here before adding any cache** |
-| `seatmemo.py` | `SeatMemo` - the refusal memo behind a dwelling top-up, its measured 64.6%-re-visit rationale, and the `sync()` invariant it ASSERTS instead of assuming. Also read it before wiring the memo into a new gen: below ~a third re-visits it is a pessimization |
+| `seatmemo.py` | nothing but its module docstring: feature 392 retired the refusal memo it held, which only the frozen legacy maps called; the commit before it holds it |
 | `labels.py` | caption typography: the standoff ladder (`LABEL_MIN_AIR`, `LABEL_AIR_STEP`, `LABEL_AIR_RINGS`, `LABEL_AIR_CAP`), the two caption sizes (`HALL_CAPTION_FS`, `GOVERNOR_CAPTION_FS`), and tilt/box geometry (`label_tilt` the FOLD, `linear_tilt` the CLAMP, `linear_tilt_full`, `label_quad`, `label_aabb`, `tilt_caption_seat`) |
 | `ways.py` | what someone could walk or cart along, read off a manifest: `lane_runs`, `way_beds` (the AVOIDANCE list - it carries the village lane network `lane_runs` does not), `lane_through_gate` + `kido_bar_deg` (a kido squares to the WAY, not to the fence), and the crossing constants `PLANK_*` / `LANDING_FT` / `CARRIED_LANDING_FLOOR_FT` |
 | `walls.py` | every wall on the map (`wall_runs`, `_box_hits_run`), what closes a ward against one (`ward_interior`, `WARD_BARRED_KINDS`), and the arches that must stand clear of one (`torii_halfbox`, `torii_seat_on_wall`, `torii_wall_conflicts`, `TORII_PITCH_FT`, `TORII_PITCH_MAX_SPANS`) |
-| `extents.py` | the DRAWN extent of a recorded feature, read back off the manifest: `paddy_wet_rings` (the water a wellhead may not stand in), `forest_reveal_x` / `forest_frame_span` (what a canvas-filling wood contributes to the crop), and the stable-yard glyph quads `wellhead_quad` / `trough_quad` / `tower_quad` / `rail_quad` (+ `YARD_GLYPH_SLACK`) |
+| `extents.py` | the DRAWN extent of a recorded feature, read back off the manifest: `paddy_wet_rings` (the water a wellhead may not stand in), `forest_reveal_x` / `forest_frame_span` (what a canvas-filling wood contributes to the crop), and `tower_quad` (a wall tower's drawn footprint) |
 | `curves.py` | making a line or ring look hand-made: `fillet_polyline` (the swept-bend research), `smooth_closed` / `smooth_points` (Catmull-Rom, and why the manifest records the SAMPLED curve), `organic_bbox`, `organic_poly`, `winding` |
 | `region.py` | THE REGION (feature 297): the ground a thing may not take, painted ONCE, then read per candidate as array lookups |
 | `water_index.py` | a grid over every watercourse segment with each segment's keep-out half-width (feature 138), cached on the settlement and rebuilt when a source list changes length |
@@ -42,7 +42,7 @@ that block the first time it ran, on a package that imported cleanly and passed 
 `tests/settlement/test_geom.py` holds them, and both were proven red before they were trusted
 (`specs/117-geom-package/contracts/surface.md`):
 
-- **The surface census** - all 89 pre-split names still resolve on `settlement._geom`, as a SUBSET
+- **The surface census** - the pre-split names still live resolve on `settlement._geom`, as a SUBSET
   assertion so a later helper needs no bookkeeping. A dropped member gives a package that imports
   cleanly, type-checks cleanly, and fails only when whichever caller needs it happens to run.
 - **The shadowing guard** - no name is defined in two submodules. This one is specific to a
@@ -79,8 +79,8 @@ import in `__init__.py` reaches this one, so there is no import path that bypass
 
 At THIS level an arch has exactly one geometric rule - it may not stand in a wall - and both
 predicates are computed from `wall_runs()`. Filing them with the arches would put them in a module
-that cannot see the walls they are about. The arch GLYPH, the avenue count, the stride, the threshold
-and the wall-dodging are all `settlement/shrines_wells/torii.py` and were not touched.
+that cannot see the walls they are about. The arch GLYPH and the hand-placed ascents are
+`settlement/shrines_wells/torii.py`.
 
 ### `village.py` is a module of its own
 
@@ -89,10 +89,10 @@ they sit isolated in one module (read by `rolling/`, `homestead_parts/`, `shrine
 move is a one-file change. **Moving them is a separate change with its own verification** - do not fold it into
 something else.
 
-### `seatmemo.py` is one class in one file
+### `seatmemo.py` holds no code
 
-Not a size decision. `SeatMemo` is its own subject (it remembers ANSWERS, not geometry) with a long
-measured rationale attached, and a session working on the indexes next door almost never touches it.
+Feature 392 retired the code only the frozen legacy maps called, the refusal memo this module held among it; the commit
+before it holds it.
 
 ## If a module grows: the seams, decided in advance
 

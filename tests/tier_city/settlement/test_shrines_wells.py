@@ -8,48 +8,6 @@ import pytest
 
 from l7r.diagram import settlement
 from l7r.diagram.settlement import Settlement
-from tests.settlement._builders import _caption_size
-
-
-@pytest.mark.tiers("city")
-def test_avenue_at_threshold_leaves_a_degenerate_avenue_alone():
-    # nothing to seat, and an arch drawn ON the hall is torii_clear_of_shrine's defect to report -
-    # this method translates a sando, it does not paper over a broken one
-    s = Settlement(600, 600, seed=1)
-    s.meta(name="T", scale="city", ftpx=3, down_deg=90)
-    assert s._avenue_at_threshold(300, 300, 40, 30, []) == []
-    on_the_hall = [(300.0, 300.0), (300.0, 320.0)]
-    assert s._avenue_at_threshold(300, 300, 40, 30, on_the_hall) == on_the_hall
-
-
-@pytest.mark.tiers("city")
-def test_a_hall_caption_is_the_same_size_as_a_ministry_caption():
-    # GM 2026-08-08: a caption is sized by its GLYPH, not by the institution's rank. A city temple
-    # hall and a ministry office are the same size class of building (96-140 ft against 114-140),
-    # so their captions match; the temple's greater standing shows in red and bold, not in points.
-    s = Settlement(1400, 1400, seed=5)
-    s.meta(name="C", scale="city", ftpx=3)
-    s.shrine_hall(400, 400, "Temple of Benten", w=s.px(130), h=s.px(84), kind="temple")
-    s.ministry(900, 400, "Ministry of Rites")
-    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
-    temple = next(lb for lb in s.M["labels"] if lb[5] == "Temple of Benten")
-    ministry = next(lb for lb in s.M["labels"] if lb[5] == "Ministry of Rites")
-    assert _caption_size(temple) == _caption_size(ministry) == settlement.HALL_CAPTION_FS
-    # per CHARACTER the two now advance identically - the defect was a temple caption ~44% wider
-    # per character than the ministry caption standing 500px away from it
-    assert (temple[2] - temple[0]) / len(temple[5]) == pytest.approx((ministry[2] - ministry[0]) / len(ministry[5]), abs=0.01)
-
-
-@pytest.mark.tiers("city")
-def test_shrine_hall_guard_refuses_unscaled_pixels_at_coarse_scales():
-    # the latent-footgun guard (2026-07-21): four city temples shipped as fixed 100x64 px = 300x192 real ft.
-    # At any ftpx > 1, raw-pixel dims implying an impossible hall must raise; s.px(real_ft) passes.
-    s = Settlement(2000, 2000, seed=1)
-    s.meta(name="G", scale="city", ftpx=3, toscale=True, households=600)
-    with pytest.raises(ValueError, match="pass s.px"):
-        s.shrine_hall(500, 500, "Temple", w=100, h=64, kind="temple")
-    s.shrine_hall(500, 500, "Temple", w=s.px(130), h=s.px(84), kind="temple")
-    assert any(r["kind"] == "temple" for r in s.M["religious"])
 
 
 @pytest.mark.tiers("city")
@@ -120,50 +78,6 @@ def test_a_village_shrine_is_drawn_in_REAL_FEET_not_pixels() -> None:
     assert one.out and two.out, "and both draw their hall"
 
 
-def test_a_small_shrine_is_recorded_as_RELIGIOUS_and_not_as_a_dwelling() -> None:
-    """A wayside shrine is non-residential: it goes to `M['religious']` as kind `small_shrine`, so
-    it is neither housing nor a full temple owed a torii avenue."""
-    s = Settlement(1000, 1000, seed=5)
-    s.small_shrine(400.0, 400.0)
-    rec = s.M["religious"][-1]
-    assert rec["kind"] == "small_shrine"
-    assert (rec["w"], rec["h"]) == (s.px(32), s.px(24)), "~32x24 ft, converted at the map's ftpx"
-    assert not s.M.get("houses"), "and it is not counted as a dwelling"
-
-
-def test_a_halls_caption_is_kept_out_of_its_OWN_sando() -> None:
-    """GM 2026-07-27: an arch must "never be covered by the 'temple of X' label".
-
-    A hall's caption and its approach both want the ground at the hall's face, so they collided -
-    three times in the shipped pool before this rung existed (Minami's 'Temple of Bishamon' and
-    Hoshizora's 'Monastery of Bishamon' each sat on their own arch, Kikuta's 'Shrine to Benten' on
-    its sando).
-
-    THREE candidate baselines in a STRICT ORDER, and each rung is asserted separately, because a
-    ladder tested only at its top is a ladder with one rung:
-      1. the side the gen asked for, when nothing is there;
-      2. that same side pushed clear PAST the far end of the avenue;
-      3. the opposite side.
-    And when all three are fouled the REQUESTED side stands - the engine does not get to hide a map
-    that has no room for both.
-    """
-    s = Settlement(1200, 1200, seed=6)
-    s.meta(name="C", scale="city")
-    x, y, w, h = 600.0, 600.0, 120.0, 82.0
-
-    free = s._hall_caption_y(x, y, w, h, "Temple of Bishamon", label_below=False, seats=[])
-    assert free < y, "rung 1: with no avenue at all, the gen's own side stands"
-
-    # an avenue marching AWAY below the hall: the requested side (above) is clear, so it still wins
-    below_seats = [(x, y + 120.0), (x, y + 180.0), (x, y + 240.0)]
-    assert s._hall_caption_y(x, y, w, h, "Temple of Bishamon", label_below=False, seats=below_seats) == free
-
-    # ...and when the gen asks for the side the arches are ON, the caption must move off them
-    moved = s._hall_caption_y(x, y, w, h, "Temple of Bishamon", label_below=True, seats=below_seats)
-    fouls = [ty for _, ty in below_seats]
-    assert not (min(fouls) - 30 < moved < max(fouls) + 30), f"the caption cleared the sando ({moved})"
-
-
 def test_a_canvas_filling_forest_records_its_TREE_LINE_apart_from_its_polygon() -> None:
     """The two are recorded separately because the frame reveals only a shallow band of wood past
     the tree line - deeper in it is undifferentiated canopy, i.e. wasted image (`content_view`,
@@ -211,23 +125,6 @@ def test_a_STEEP_hill_draws_emphasized_downslope_hachures() -> None:
     steep.hill(600.0, 600.0, 200.0, 150.0, steep=True)
     assert len(steep.out) > len(gentle.out), "the steep hill carries its extra hachures"
     assert steep.M["hill"] == gentle.M["hill"], "and is the same mound - only its shading differs"
-
-
-def test_a_PRIMARY_hall_is_recorded_as_the_settlements_own_shrine() -> None:
-    """`M["shrine"]` is what the torii checks key on, so exactly one hall per settlement claims it -
-    a secondary monastery must not overwrite the tutelary shrine's entry."""
-    s = Settlement(1400, 1400, seed=3)
-    s.meta(name="C", scale="city")
-    s.shrine_hall(400.0, 400.0, "Monastery of Jurojin")
-    assert not s.M.get("shrine"), "an ordinary hall claims nothing (the key is present but empty)"
-
-    s.shrine_hall(900.0, 900.0, "Temple of Benten", primary=True, sublabel="the county's tutelary")
-    assert s.M["shrine"], "the primary hall records the settlement's shrine box"
-    assert abs(s.M["shrine"][0] - (900.0 - s.M["religious"][-1]["w"] / 2)) < 1.0, "as its own footprint"
-    # captions are QUEUED and drawn in the label phase (feature 157), so the phase is run before the
-    # manifest is read - a test that reads M["labels"] straight after the call finds nothing
-    s.place_labels()
-    assert any("tutelary" in str(lb) for lb in s.M["labels"]), "and its sublabel is drawn beneath it"
 
 
 def test_a_LABELLED_forest_captions_itself_at_the_middle_of_the_wood() -> None:

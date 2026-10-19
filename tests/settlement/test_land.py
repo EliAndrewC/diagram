@@ -9,7 +9,7 @@ import pytest
 from l7r.diagram import overlap, settlement
 from l7r.diagram.settlement import Settlement
 from tests._scope import full_or
-from tests.settlement._builders import _city, _crop_settlement, _hamlet_with_field, _nuc_village, _town
+from tests.settlement._builders import _crop_settlement, _hamlet_with_field, _nuc_village
 
 
 def test_marsh_draws_wet_scatter_and_records_it():
@@ -134,7 +134,7 @@ def test_commons_glyph_variants_draw_and_record_each_role():
     # given a non-empty `avoid` keep-out so the avoid-skip is exercised too. A marsh keep-out is checked as well.
     poly = full_or([(200, 200), (500, 200), (500, 500), (200, 500)], [(200, 200), (800, 200), (800, 800), (200, 800)])  # quick: a 300 px square; gate: 600
     keepout = [full_or([(300, 300), (400, 300), (400, 400), (300, 400)], [(400, 400), (600, 400), (600, 600), (400, 600)])]  # a central keep-out the scatter stays out of
-    for role in ("woodland", "pasture", "commons", "grazing"):
+    for role in ("woodland", "commons", "grazing"):
         s = Settlement(1000, 1000, seed=3)
         s.meta(name="C", scale="hamlet")
         s.commons(poly, role=role, avoid=keepout)
@@ -267,38 +267,6 @@ def test_village_grove_skips_the_dike_bank():
     assert clumps and not any(pip(cx, cy, dike) for cx, cy in clumps)  # some clumps, none on the dike
 
 
-def test_clear_ground_is_deterministic_and_preserves_the_rng_stream():
-    """The organic verge is seeded from its own footprint: identical args -> identical blob (render-sync
-    determinism), and the map's global RNG stream is untouched (saved/restored), so adding or reshaping
-    a collar can never shift any other feature's random draws."""
-    s = Settlement(1200, 1200, seed=1)
-    s.meta(name="D", scale="village", ftpx=1, down_deg=90)
-    random.seed(99)
-    expect = random.random()
-    random.seed(99)
-    s._clear_ground(600, 600, 40, 30, 58)
-    assert random.random() == expect  # the stream is exactly where it was
-    s2 = Settlement(1200, 1200, seed=7)  # different map seed, same collar args
-    s2.meta(name="D2", scale="village", ftpx=1, down_deg=90)
-    s2._clear_ground(600, 600, 40, 30, 58)
-    assert s.M["clearings"][0]["poly"] == s2.M["clearings"][0]["poly"]
-
-
-def test_clear_ground_dedupes_same_center_registrations():
-    """The reserve_clearing-then-feature pattern registers the same collar twice (the feature's own call
-    lands within a few px of the reserve, sometimes with a different footprint/extra). The duplicate
-    REUSES the first blob verbatim - guard and late collar can never disagree about the swept outline -
-    while a genuinely different center gets its own blob."""
-    s = Settlement(1200, 1200, seed=1)
-    s.meta(name="E", scale="village", ftpx=1, down_deg=90)
-    s._clear_ground(600, 600, 60, 46, 30)  # the gen's reserve
-    s._clear_ground(600, 602, 40, 30, 58)  # the feature's own late registration: 2px off, different size
-    assert len(s.clearings) == 2 and s.clearings[0] == s.clearings[1]
-    assert s.M["clearings"][0]["poly"] == s.M["clearings"][1]["poly"]
-    s._clear_ground(900, 900, 40, 30, 58)  # a different feature elsewhere: its own blob
-    assert len(s.clearings) == 3 and s.clearings[2] != s.clearings[1]
-
-
 def test_perimeter_dike_gap_off_band_still_draws_full_loop():
     # GM 2026-07-22 (issue 1): perimeter_dike NOTCHES the earthwork at each sluice-crossing gap. A gap point
     # placed FAR from the band keeps every dense point, so the band draws as one full loop (the defensive
@@ -316,98 +284,6 @@ def test_perimeter_dike_notches_the_band_at_a_gap_on_it():
     env = [(200, 200), (800, 200), (800, 800), (200, 800)]
     s.perimeter_dike(env, seed=3, gaps=[(500, 200), (500, 800)])
     assert s.M["dikes"] and len(s.M["dikes"][0]["gaps"]) == 2
-
-
-# ---- near_ring_cropland (feature 013): channel-free dry/garden tiler that packs the flat near ring.
-def test_near_ring_cropland_rejects_an_unknown_density():
-    s = _town()
-    with pytest.raises(ValueError, match="near_ring_density"):
-        s.near_ring_cropland((0, 0, 600, 600), density="lush")
-
-
-def test_near_ring_cropland_returns_zero_for_a_degenerate_bbox():
-    s = _town()
-    assert s.near_ring_cropland((100, 100, 105, 900), density="dense") == 0
-
-
-def test_near_ring_cropland_fills_clear_ground_and_records_dry_plots():
-    s = _town()
-    n = s.near_ring_cropland((0, 0, 600, 600), density="dense", seed=3)
-    assert n > 0
-    assert len(s.M["dry_plots"]) == n
-    assert len(s.dry_polys) == n  # recorded as no-build cropland
-    # every plot carries the dry-plot shape the checks read
-    assert all(set(p) >= {"poly", "crop", "theta"} for p in s.M["dry_plots"])
-
-
-def test_near_ring_cropland_density_tiers_are_monotonic():
-    def count(tier):
-        s = _town()
-        return s.near_ring_cropland((0, 0, 600, 600), density=tier, seed=7)
-
-    assert count("dense") > count("medium") > count("thin") > 0
-
-
-def test_near_ring_cropland_reads_meta_near_ring_density_when_density_is_none():
-    s = _town()
-    s.meta(near_ring_density="thin")
-    thin = s.near_ring_cropland((0, 0, 600, 600), density=None, seed=2)
-    s2 = _town()
-    dense = s2.near_ring_cropland((0, 0, 600, 600), density="dense", seed=2)
-    assert thin < dense  # the meta default ('thin') fills less than an explicit 'dense'
-
-
-def test_near_ring_cropland_can_be_all_garden_or_all_grain():
-    s = _town()
-    s.near_ring_cropland((0, 0, 600, 600), density="dense", seed=1, garden_frac=1.0)
-    assert s.M["dry_plots"] and all(p["crop"] == "garden" for p in s.M["dry_plots"])
-    s2 = _town()
-    s2.near_ring_cropland((0, 0, 600, 600), density="dense", seed=1, garden_frac=0.0)
-    assert s2.M["dry_plots"] and all(p["crop"] != "garden" for p in s2.M["dry_plots"])
-
-
-def test_near_ring_cropland_skips_fields_structures_hill_and_groves():
-    s = _town()
-    s.M["hill"] = [500, 200, 180, 120]  # a hill in the north
-    s.field_polys.append([(0, 700), (400, 700), (400, 1000), (0, 1000)])  # a paddy block, SW
-    s.M["houses"] = [{"x": 800, "y": 800, "w": 40, "h": 30, "rot": 0}]  # a dwelling, SE
-    s.M["village_groves"] = [{"poly": [[600, 600], [760, 600], [760, 760], [600, 760]], "role": "copse", "clumps": [[680, 680]]}]
-    s.near_ring_cropland((0, 0, 600, 600), density="dense", seed=5)
-    from l7r.diagram.settlement import point_in_poly
-
-    for p in s.M["dry_plots"]:
-        cx = sum(v[0] for v in p["poly"]) / 4
-        cy = sum(v[1] for v in p["poly"]) / 4
-        assert not (((cx - 500) / (180 * 1.35)) ** 2 + ((cy - 200) / (120 * 1.35)) ** 2 <= 1.0)  # off the hill
-        assert not point_in_poly(cx, cy, [(0, 700), (400, 700), (400, 1000), (0, 1000)])  # off the paddy
-        assert not (760 >= cx >= 600 and 760 >= cy >= 600)  # off the grove belt
-        assert not (780 >= cx >= 620 and 780 >= cy >= 620)  # not covering the grove clump
-
-
-def test_near_ring_cropland_skips_a_grove_clump_outside_its_belt_poly():
-    # a clump can sit just past its loose belt poly; the per-plot clump-bbox guard (not the belt-poly
-    # test) is what keeps a plot off it, so no dry plot may cover the stray clump
-    s = _town()
-    s.M["village_groves"] = [{"poly": [], "clumps": [[500, 500]]}]  # empty belt poly -> only the clump guard applies
-    s.near_ring_cropland((0, 0, 600, 600), density="dense", seed=6)
-    for p in s.M["dry_plots"]:
-        qx0, qy0 = min(v[0] for v in p["poly"]), min(v[1] for v in p["poly"])
-        qx1, qy1 = max(v[0] for v in p["poly"]), max(v[1] for v in p["poly"])
-        assert not (qx0 - 12 <= 500 <= qx1 + 12 and qy0 - 12 <= 500 <= qy1 + 12)
-
-
-# ---- near_ring_paddy (feature 014): moat/stream/edge-watered paddy basins, the dominant near-ring crop.
-def test_near_ring_paddy_returns_zero_for_a_degenerate_bbox():
-    s = _town()
-    assert s.near_ring_paddy((100, 100, 105, 900)) == 0
-
-
-def test_near_ring_paddy_places_off_edge_basins_recorded_as_paddy_fields():
-    s = _town()
-    n = s.near_ring_paddy((0, 0, 1000, 1000), seed=2, cell_ft=180)
-    assert n > 0
-    made = [fld for fld in s.M["fields"] if fld["name"].startswith("nrp_")]
-    assert len(made) == n and all(fld["kind"] == "paddy" for fld in made)
 
 
 def test_dike_top_houses_seats_a_single_file_on_the_crest():
@@ -525,15 +401,11 @@ _LAND_SURFACE = frozenset(
         "dike_top_houses",
         "hinterland",
         "marsh",
-        "near_ring_cropland",
-        "near_ring_paddy",
         "perimeter_dike",
-        "reserve_clearing",
         "toe_band",
         "trim_off_marsh",
         # private - reached through self., including from OUTSIDE the package
         "_attach_grove",
-        "_clear_ground",
         "_farmstead_nudges",
         "_find_appurtenances",
     }
@@ -633,21 +505,6 @@ def test_commons_keeps_scrub_off_every_recorded_marsh():
     assert grass.intersection(recorded.buffer(-FRINGE_FT / 2 - 1.0)).area < 1.0, "no grass in the marsh past its mixed fringe (feature 299)"
 
 
-def test_reserve_clearing_registers_swept_ground_before_the_scatter_runs() -> None:
-    """Feature 146: a precinct drawn LATE must reserve its ground first, or the hinterland scatter covers it.
-    `reserve_clearing` is the pre-registration, and the scatter only skips clearings that already exist."""
-    from l7r.diagram.settlement import Settlement
-
-    s = Settlement(1000, 1000, seed=1)
-    assert not s.clearings
-    s.reserve_clearing(500, 500, 80, 60, extra=6)
-    assert len(s.clearings) == 1
-    poly = s.clearings[0]
-    xs = [p[0] for p in poly]
-    ys = [p[1] for p in poly]
-    assert min(xs) <= 460 and max(xs) >= 540 and min(ys) <= 470 and max(ys) >= 530
-
-
 def test_a_dike_cut_with_no_watercourse_in_reach_seats_its_gate_on_the_cut_itself() -> None:
     """A sluice gate is SNAPPED onto the recorded watercourse the gate checks measure against, because
     drawing it from the dike alone put the inlet gate 8.9 px off its stream. But a perimeter dike has
@@ -677,50 +534,6 @@ def test_a_dike_cut_with_no_watercourse_in_reach_seats_its_gate_on_the_cut_itsel
     wide.M["dikes"] = [{"crest": crest, "gaps": [(500.0, 200.0)], "outline": crest}]
     wide.M["canals"] = [{"poly": [(495.0, 100.0), (495.0, 300.0)], "w": 30.0}]
     assert wide.dike_gates() == 1 and wide.M["sluice_gates"][-1]["span"] == 34.0
-
-
-def test_near_ring_cropland_leaves_a_GROVE_CLUMP_uncovered() -> None:
-    """A homestead grove's clumps are drawn canopy, so a dry plot laid over one buries it
-    (`groves_clear_of_dry_plots`). The cell is rejected on the clump's own point with a 12 px hem,
-    not on the grove's belt outline - a belt is mostly air, and rejecting the whole belt would leave
-    a bare ring around every homestead."""
-    s = _town()
-    clear = s.near_ring_cropland((0, 0, 600, 600), density="dense", seed=3)
-
-    g = _town()
-    g.M["village_groves"] = [{"clumps": [(x, y) for x in range(120, 520, 60) for y in range(120, 520, 60)]}]
-    grown_over = g.near_ring_cropland((0, 0, 600, 600), density="dense", seed=3)
-    assert grown_over < clear, f"the clumps cost the tiler cells: {grown_over} of {clear}"
-    for p in g.M["dry_plots"]:
-        xs = [q[0] for q in p["poly"]]
-        ys = [q[1] for q in p["poly"]]
-        box = (min(xs) - 12, min(ys) - 12, max(xs) + 12, max(ys) + 12)
-        assert not any(box[0] <= cx <= box[2] and box[1] <= cy <= box[3] for cx, cy in ((x, y) for x in range(120, 520, 60) for y in range(120, 520, 60))), p["crop"]
-
-
-def test_a_paddy_basin_sets_BACK_from_funerary_ground_in_BOTH_of_its_recorded_shapes() -> None:
-    """Funerary ground is recorded two ways - a cremation ground as a box with `x`/`w`/`h`, a cemetery
-    as a `poly` - and `funerary_set_back_from_water` holds for both. Only the box form was exercised,
-    so a cemetery drawn as a polygon set a paddy back from nothing at all."""
-
-    def _seeded(**funerary):
-        s = _city()
-        s.M["streams"] = [{"poly": [[0.0, 300.0], [1200.0, 300.0]], "w": 8.0}]
-        s.M.update(funerary)
-        return s, s.near_ring_paddy((0, 0, 600, 600), seed=4)
-
-    _clear, n_clear = _seeded()
-    assert n_clear > 0, "the ground carries basins to begin with"
-
-    poly_form, n_poly = _seeded(cemeteries=[{"poly": [(100.0, 0.0), (400.0, 0.0), (400.0, 300.0), (100.0, 300.0)]}])
-    assert n_poly < n_clear, f"a POLY graveyard costs the basins ground: {n_poly} of {n_clear}"
-    for f in [f for f in poly_form.M.get("fields", []) if f.get("kind") == "paddy"]:
-        xs = [q[0] for q in f["outline"]]
-        ys = [q[1] for q in f["outline"]]
-        assert max(xs) < 40.0 or min(xs) > 460.0 or min(ys) > 360.0, f"60 px of set-back from the graves: {(min(xs), min(ys), max(xs), max(ys))}"
-
-    _box_form, n_box = _seeded(cremation_grounds=[{"x": 250.0, "y": 150.0, "w": 300.0, "h": 300.0}])
-    assert n_box < n_clear, f"and so does the BOX form: {n_box} of {n_clear}"
 
 
 def test_row_cuts_meet_a_convex_plot_twice_miss_it_cleanly_and_refuse_a_concave_one():

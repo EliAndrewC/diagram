@@ -8,7 +8,6 @@ import random
 
 from l7r.diagram.settlement._geom import seg_dist, segments_cross
 from l7r.diagram.settlement.rolling import fit
-from l7r.diagram.settlement.structures import captions
 from l7r.diagram.settlement.structures.fixtures import _helpers as fx
 
 Pt = tuple[float, float]
@@ -97,16 +96,3 @@ def _old_lanes_clear(b, lanes):
             if seg_dist(cx, cy, (float(a[0]), float(a[1])), (float(b2[0]), float(b2[1]))) < half + max(b[2] - b[0], b[3] - b[1]) / 2:
                 return False
     return True
-
-
-def test_the_caption_probe_from_its_lane_index_is_the_old_probe() -> None:
-    """FR-006: a caption box clear of the lanes by the index is clear by the scan - boxes of every size, lanes of every
-    width, and a box whose reach ends exactly on a tread."""
-    rng = random.Random(2818)
-    lanes = [{"pts": [list(p) for p in _walk(rng, rng.randint(2, 9))], "w": rng.choice((4.0, 5.0, 8.0))} for _ in range(12)] + [{"pts": []}, {"pts": [[1.0, 1.0]]}]
-    idx = captions.lane_seat_index(lanes)
-    for _ in range(3000):
-        cx, cy, tw, sz = rng.uniform(-50, 650), rng.uniform(-50, 650), rng.uniform(5, 60), rng.choice((8.0, 9.0, 12.0))
-        b = (cx - tw, cy - sz * 0.8, cx + tw, cy + sz * 0.25)
-        assert captions.clear_of_lanes(b, idx) == _old_lanes_clear(b, lanes)
-    assert captions.clear_of_lanes((0.0, 0.0, 1.0, 1.0), captions.lane_seat_index([])) is True

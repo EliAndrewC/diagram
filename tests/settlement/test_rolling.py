@@ -5,7 +5,7 @@ import math
 import pytest
 
 from l7r.diagram.settlement import Settlement
-from tests.settlement._builders import _crop_settlement, _nuc_village, _town, _village
+from tests.settlement._builders import _crop_settlement, _nuc_village, _village
 
 
 def test_nucleated_cluster_is_grove_less_with_yards_and_gardens():
@@ -198,37 +198,6 @@ def test_kura_side_flips_to_the_north_wall_when_the_west_is_taken():
     assert s._kura_side(rec, 44.0, 29.0) == "W"
 
 
-def test_legacy_dispersed_farmstead_path_still_covered():
-    # every POOL map is now to-scale, so keep the legacy (non-to-scale) DISPERSED path covered here: an old-style
-    # hamlet (scale!=village, no toscale -> _toscale() False) rings its field with houses and draws farmsteads
-    # via _try_place_legacy + _farmsteads_legacy (the pre-bundle path Moritono used before it was redone).
-    s = Settlement(1200, 900, seed=3)
-    s.meta(name="L", scale="hamlet")
-    fld = (300, 300, 620, 560)
-    s.paddy_field(fld, "", "f", amp=20)
-    s.ring(fld, 12, 24, ["plain"])  # 8-16 px seated houses inside the paddy set-back once the field edge became chords pushed out by 3 px (feature 140)
-    n = s.farmsteads()
-    assert n > 0
-
-
-@pytest.mark.parametrize("sides", (2, 3, 4))
-def test_the_legacy_path_plants_every_rolled_side_on_every_grove_farm(sides: int) -> None:
-    """Feature 291, plan D8: a house-first farm with a grove is seated only where the whole rolled grove fits, and then
-    plants a band on every face - none dropped for want of room (`meta.grove_faces_unplanted` stays unset)."""
-    s = Settlement(1200, 900, seed=3)
-    s.meta(name="L", scale="hamlet", grove_sides=sides, grove_flank=-1)
-    fld = (300, 300, 620, 560)
-    s.paddy_field(fld, "", "f", amp=20)
-    s.ring(fld, 12, 24, ["plain"])
-    assert s.farmsteads() > 0
-    faces: dict = {}
-    for g in s.M["groves"]:
-        faces.setdefault(tuple(g["of"]), set()).add((tuple(g["face"]), g["depth"]))
-    assert faces, "the ring's farms carry groves - the rule was not vacuous"
-    assert all(len({f for f, _d in fs}) == sides for fs in faces.values()), faces
-    assert "grove_faces_unplanted" not in s.M["meta"]
-
-
 def test_a_legacy_grove_farm_with_no_room_for_its_whole_grove_is_not_seated() -> None:
     """Feature 291, plan D8: the old fallback to a yard-and-garden-only spot is gone for a farm that has a grove."""
     s = Settlement(1200, 900, seed=3)
@@ -359,18 +328,6 @@ def test_scatter_seeds_spreads_over_area_and_records_dispersed():
     s2.meta(name="S2", scale="village")
     s2.scatter_seeds(500, 500, 100, 100, 5, _r.Random(1), record=False)
     assert "settlement_form" not in s2.M["meta"]
-
-
-def test_ring_drops_candidates_severed_from_their_field_by_a_road():
-    # a road along the fan's south flank: ring candidates ACROSS it can never reach the field
-    # (hoshizora's south-of-road farmhouse), so they are dropped rather than seated
-    s = _town()
-    s.road([(-50, 620), (1050, 620)])
-    s.paddy_field((200, 200, 600, 600), "", "f", amp=20)
-    s.ring(("poly", s.field_polys[0]), 40, 60, ["plain"])
-    s.farmsteads()
-    assert s.M["houses"]  # the near side seats normally
-    assert all(h["y"] < 620 for h in s.M["houses"])
 
 
 # ---- feature 118: the composed RollingMixin surface ----------------------------------------------

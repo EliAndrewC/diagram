@@ -30,7 +30,6 @@ march; slope as a knob) lives in the `__init__.py` docstring and `research/quest
 | `seams/` | what is left of the seam pass after feature 302 - a PACKAGE with its own [`CLAUDE.md`](seams/CLAUDE.md): `pockets.py` (`_water`, `_outside_command` - the planted region is cut from them), `close.py` (`hold_ring_rules`, the re-hold after a grave cut, and `_split_steps`), `geoms.py` |
 | `twins.py` | TWO WATERCOURSES DO NOT RUN SIDE BY SIDE (feature 294 B4): a delivery that would run parallel to another watercourse is dropped (`drop_twin_deliveries`, called by `comb.py`) |
 | `polder.py` | `build_polder` (dike-and-drain reclamation) |
-| `hill.py` | `build_terraces` (contour terraces) and `build_ribbon` (valley ribbon paddies), the hill-rice engines - out of `polder.py` (feature 145) because `FIELD_ARCHETYPES` deliberately holds neither, so the hamlet floor (100% on every module a hamlet roll executes) judges only what a hamlet draws |
 
 No module imports one that imports it: `frame` is the leaf, `comb` composes the rest. The former mega-functions
 (`carve_comb`/`finish_comb`, `build_polder`, `_carve`) are named sequential stage functions - each stage takes its state as parameters

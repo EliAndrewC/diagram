@@ -406,52 +406,7 @@ def test_the_alder_count_is_taken_again_over_the_clumps_on_the_page() -> None:
 # ---- W10 (the cull half): no cover inside a clearing swept after it -----------------------------------------------------
 
 
-def test_a_clearing_swept_after_the_scrub_leaves_its_ground_bare() -> None:
-    """Woods W10, the violating case: the scrub is laid over a square, then a household shrine's clearing is swept inside
-    it. The grass tile's shape leaves the clearing out (feature 298), and the scrub round it stays."""
-    s = _hamlet()
-    s.commons([(100.0, 100.0), (700.0, 100.0), (700.0, 700.0), (100.0, 700.0)], role="grazing")
-    assert [c.kind for c in s._covers] == ["grass"], "non-vacuity: the scrub recorded its cover"
-    s.reserve_clearing(400.0, 400.0, 60.0, 60.0)
-    s.flush_covers()
-    cover = s.M["commons"][-1]["cover"]
-    from shapely.geometry import Point, Polygon
-
-    shape = Polygon(cover[0], cover[1:]) if len(cover) > 1 else Polygon(cover[0])
-    assert not shape.contains(Point(400.0, 400.0)), "the swept clearing is bare"
-    assert shape.contains(Point(150.0, 650.0)), "the scrub round it stays"
-
-
 # ---- W08 (the record half): a clearing swept after the marsh shrinks the marsh's record ------------------------------
-
-
-def test_a_clearing_swept_in_the_marsh_after_it_is_laid_leaves_the_marsh_record() -> None:
-    """Woods W08, the violating case: a toe marsh is laid, then a household shrine's clearing is swept inside it. The reeds
-    there are culled, and the marsh's record, its no-build block and its drawn-wet ring all give the clearing's ground back
-    - the block the same list in `marsh_blocks`, as the scrub reads it by identity; a clearing taking a marsh whole drops it."""
-    from l7r.diagram.settlement._geom import RingIndex
-
-    s = _hamlet()
-    s.marsh([(100.0, 100.0), (700.0, 100.0), (700.0, 700.0), (100.0, 700.0)], role="toe")
-    rec, blk = s.M["marshes"][-1], s.marsh_blocks[-1]
-    before = len(rec["poly"])
-    s.reserve_clearing(400.0, 400.0, 60.0, 60.0)
-    clear = s.clearings[-1]
-    ring = RingIndex([(float(q[0]), float(q[1])) for q in rec["poly"]])
-    assert len(rec["poly"]) > before, "the record was cut"
-    assert not any(ring.inside(float(q[0]), float(q[1])) for q in _interior(clear)), "no swept ground left in the record"
-    assert ring.inside(150.0, 150.0), "the marsh away from the clearing stays"
-    assert blk is s.marsh_blocks[-1] and any(b is blk for b in s.block_polys) and [list(q) for q in blk] == rec["poly"]
-    assert s.wet_polys[-1] == [tuple(q) for q in rec["poly"]] and s._hard_cache_key is None
-    cut = [list(q) for q in rec["poly"]]
-    s.reserve_clearing(150.0, 950.0, 40.0, 40.0)  # a clearing nowhere near the marsh changes nothing
-    s.reserve_clearing(400.0, 400.0, 60.0, 60.0)  # ...nor the same clearing again, whose ground the record no longer holds
-    assert rec["poly"] == cut
-    t = _hamlet()
-    t.marsh([(380.0, 380.0), (420.0, 380.0), (420.0, 420.0), (380.0, 420.0)], role="toe")
-    t.reserve_clearing(400.0, 400.0, 120.0, 120.0)
-    assert t.M["marshes"] == [] and t.marsh_blocks == [] and t.wet_polys == []
-    assert t.M["meta"]["marsh_dropped"][-1] == {"role": "toe", "why": "swept clear"}
 
 
 def _interior(poly: list[tuple[float, float]]) -> list[tuple[float, float]]:

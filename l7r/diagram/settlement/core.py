@@ -14,7 +14,6 @@ from ._geom import LAND, Indexed, Manifest, PointGrid, Poly
 from ._knobs import crop_boxes, resolve_knob, scope_seed
 from .castle_civic import CastleCivicMixin
 from .city import CityMixin
-from .city.crop import CityCropMixin
 from .civic_grounds import CivicGroundsMixin
 from .farm_fixtures import FarmFixturesMixin, PondStockMixin
 from .fields import FieldsMixin
@@ -27,10 +26,8 @@ from .rolling import RollingMixin
 from .shrines_wells import ShrinesWellsMixin
 from .shrines_wells.forest import ForestMixin
 from .structures import StructuresMixin
-from .structures.urban_fixtures import UrbanFixturesMixin
 from .title import TitleMixin
 from .town_ways import TownWaysMixin
-from .trades import TradesMixin
 from .water_ways import WaterWaysMixin
 
 
@@ -41,9 +38,6 @@ class Settlement(
     ShrinesWellsMixin,
     ForestMixin,  # feature 145: the town/city forest
     StructuresMixin,
-    UrbanFixturesMixin,  # feature 145: the theater stage and the drum tower
-    CityCropMixin,  # feature 145: crop_city
-    TradesMixin,
     HomesteadPartsMixin,
     LandMixin,
     CivicGroundsMixin,
@@ -75,7 +69,7 @@ class Settlement(
 
         Research:
             a threshing yard at every farmstead - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: on unless the generator declares no grain grown
-            swept ground kept clear of scatter - research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html: the clearings registry, empty until a shrine or grave plot registers the ground it occupies (the verge `_clear_ground` grows round it is that unit's, a ranked row)
+            swept ground kept clear of scatter - research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html: the clearings registry, which stays empty: its registrars (a shrine's and a grave plot's swept ground) were retired with the town and city drawing code by feature 392
             no house racks by default - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: settled harvest weather where none is stated, so no rack by each house's yard
             registries and record streams - NONE
         """

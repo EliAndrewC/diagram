@@ -4,9 +4,8 @@ import math
 
 import pytest
 
-from l7r.diagram.settlement import TORII_PITCH_FT, Settlement, torii_halfbox
-from l7r.diagram.settlement._geom import torii_glyph_dims
-from tests.settlement._builders import _byre_village, _crop_settlement, _ground_points, _nuc_village, _town, _village, _walled_city
+from l7r.diagram.settlement import Settlement
+from tests.settlement._builders import _byre_village, _crop_settlement, _ground_points, _town, _village
 
 
 def test_a_wellhead_is_refused_in_the_paddy_water_and_allowed_on_the_rim():
@@ -45,37 +44,6 @@ def test_torii_even_takes_a_single_arch():
     assert len(s.M["torii"]) == 1
 
 
-def test_tree_stand_canopy_is_deferred_and_never_drawn_over_a_building_or_well():
-    # the canopy is QUEUED at forest_patch() time and drawn at flush, so it is filtered against the
-    # COMPLETE map: a building and a well placed AFTER the wood still end up with clear roofs.
-    s = _town()
-    s.forest_patch([(300, 300), (900, 300), (900, 900), (300, 900)])
-    assert not s.M["tree_crowns"]  # nothing drawn yet - only the litter floor is down
-    s.building(600, 600, 60, 40, "merchant", 0)
-    s.well(500, 500)
-    s.flush_tree_stands()
-    crowns = s.M["tree_crowns"]
-    assert crowns  # the stand itself did draw
-    b = s.M["buildings"][-1]
-    wl = s.M["wells"][-1]
-    for i in range(0, len(crowns), 3):
-        x, y, r = crowns[i], crowns[i + 1], crowns[i + 2]
-        # CIRCLE vs RECT, the same rounded-corner measure `_crown_covers` and the gate's
-        # structures_clear_of_trees use - NOT the naive AABB this line used to carry. The AABB
-        # includes the four CORNER squares a circle cannot reach, so it called a crown sitting
-        # diagonally off a corner an overlap: (562.5, 573.7) r=8.7 against a 60x40 building at
-        # (600, 600) is 7.5 x 6.3 px clear of the nearest corner, i.e. 9.8 px away from a crown
-        # that reaches 8.7. It only ever passed because no crown had landed in a corner diagonal
-        # before the 2026-08-08 re-roll put one there (test geometry stricter than the rule it
-        # guards is a false alarm waiting for a re-roll).
-        dx, dy = max(abs(x - b["x"]) - b["w"] / 2, 0.0), max(abs(y - b["y"]) - b["h"] / 2, 0.0)
-        assert dx * dx + dy * dy >= r * r
-        assert math.hypot(x - wl["x"], y - wl["y"]) >= r + wl.get("vr", wl["r"])
-    n = len(crowns)
-    s.flush_tree_stands()  # idempotent - the queue is drained
-    assert len(s.M["tree_crowns"]) == n
-
-
 def test_fringe_trees_keep_off_the_crop():
     # the wood's advance-growth fringe seeds on waste ground, never in a worked field
     s = _town()
@@ -93,30 +61,6 @@ def test_commons_clears_the_wellhead_apron():
     lim = s.M["wells"][0]["vr"] + 20 * s.bscale - 0.06  # 0.1-rounding slack, as in the halo test
     pts = _ground_points(s, before)
     assert pts and all((px - 300) ** 2 + (py - 300) ** 2 > lim * lim for px, py in pts)
-
-
-def test_commons_keeps_scrub_off_a_shrine_and_torii():
-    # a commons that OVERLAPS the shrine must not scatter scrub over the hall or its torii arch (both are
-    # block_polys); the skip is per-tuft, so the plot is still recorded
-    s = _nuc_village()
-    s.shrine_hall(320, 400, "", w=60, h=48, kind="shrine", torii=[(320, 330)], graveyard=False)
-    s.commons([(220, 150), (420, 150), (420, 650), (220, 650)])  # straddles the shrine + torii blocks
-    assert len(s.M["commons"]) == 1
-
-
-def test_marsh_keeps_reeds_off_a_building():
-    s = _crop_settlement()
-    s.shrine_hall(300, 300, "", w=60, h=48, kind="shrine", graveyard=False)  # a block_poly inside the marsh
-    s.marsh([(150, 150), (500, 150), (500, 450), (150, 450)])  # reeds on the hall are skipped
-    assert len(s.M["marshes"]) == 1
-
-
-def test_torii_refuses_a_seat_standing_in_a_wall():
-    # a torii is a freestanding gateway; an arch set INTO a barrier is impossible construction, so
-    # the primitive refuses it outright (the hand-placed path - an avenue shortens itself instead)
-    s = _walled_city()
-    with pytest.raises(ValueError, match="would stand in the samurai ward fence"):
-        s.torii_path([(600, 600), (600, 700), (600, 800)])
 
 
 def test_draft_byres_scatters_shared_sheds_among_the_houses():
@@ -146,25 +90,6 @@ def test_draft_byres_keeps_off_the_paddy():
     s.field_polys.append([(330, 200), (600, 200), (600, 500), (330, 500)])  # paddy on the E half of the ring
     placed = s.draft_byres(fraction=1.0)
     assert len(placed) == 1 and placed[0][0] < 330  # the byre lands on the dry (W) side, off the paddy
-
-
-def test_shrine_well_places_a_well_beside_the_hall():
-    s = _crop_settlement()
-    s.M["religious"] = [{"x": 400, "y": 400, "w": 30, "h": 24, "kind": "shrine"}]
-    spot = s.shrine_well(400, 400)
-    assert spot is not None
-    import math as _m
-
-    assert _m.hypot(spot[0] - 400, spot[1] - 400) <= 115 and len(s.M["wells"]) == 1  # close beside the hall
-
-
-def test_shrine_well_returns_none_when_boxed_in():
-    s = _crop_settlement()
-    for a in range(0, 360, 15):  # wall off every ring position around the hall
-        rad = math.radians(a)
-        for rr in (54, 66, 80, 96, 112):
-            s.placed.append((400 + rr * math.cos(rad), 400 + rr * math.sin(rad), 40, 40))
-    assert s.shrine_well(400, 400) is None and not s.M["wells"]
 
 
 # ---- shrine: the primary Shinto hall glyph -------------------------------------------------
@@ -218,7 +143,6 @@ _SHRINES_WELLS_SURFACE = frozenset(
     {
         # public entry points, called from pool gens, wip/, other engine modules and tests
         "draft_byres",
-        "farm_wells",
         "flush_tree_stands",
         # "forest" moved to shrines_wells/forest.py (ForestMixin) under feature 145 - still on Settlement, off the hamlet path module
         "frozen_terrain",
@@ -226,9 +150,6 @@ _SHRINES_WELLS_SURFACE = frozenset(
         "open_seat",
         "place_wells",
         "shrine",
-        "shrine_hall",
-        "shrine_well",
-        "small_shrine",
         "torii_even",
         "torii_path",
         "well",
@@ -239,18 +160,12 @@ _SHRINES_WELLS_SURFACE = frozenset(
         # thirteen have no consumer outside the class at all - they stay in the surface precisely
         # because a name nothing else calls is the kind a careless partition drops without any other
         # test noticing.
-        "_assert_walls_clear_of_torii",
-        "_avenue_at_threshold",
-        "_avenue_pitch",
-        "_avenue_short_of_walls",
         "_build_well_index",
         "_crowns",
         "_draw_byre",
         "_draw_stand",
-        "_farm_wells",
         "_footprint_clear",
         "_fringe_blocked",
-        "_hall_caption_y",
         "_in_scrub_cover",
         "_place_wells",
         "_stand_fringe",
@@ -325,20 +240,6 @@ def test_frozen_terrain_is_still_a_context_manager():
     with s.frozen_terrain():
         assert s._frozen_wells is not None, "the freeze must actually build the index inside the scope"
     assert s._frozen_wells is None, "and release it on the way out"
-
-
-def test_farm_wells_seats_a_wellhead_in_a_steading_dooryard() -> None:
-    """Feature 146: the ring seating in `_farm_wells` - the fallback path for a farm belt, where the
-    cluster's open ground is mostly crop and the wellhead goes in a dooryard rather than at the centroid."""
-    s = Settlement(1200, 1200, seed=1)
-    s.meta(name="F", scale="hamlet", ftpx=1)
-    for i in range(4):  # a tight cluster of steadings on open ground, nothing else placed
-        s.M["houses"].append({"x": 500.0 + i * 70.0, "y": 600.0, "w": 50.0, "h": 30.0, "rot": 0})
-        s.placed.append((500.0 + i * 70.0, 600.0, 50.0, 30.0))
-    seated = s._farm_wells(220.0, 40.0)
-    assert seated >= 1, "a wellhead must seat in one of the dooryards"
-    assert s.M["wells"], "and be recorded"
-    assert any(min(abs(w["x"] - h["x"]) + abs(w["y"] - h["y"]) for h in s.M["houses"]) < 200 for w in s.M["wells"])
 
 
 def test_byre_clear_of_all_but_refuses_the_paddy_and_a_neighbour_s_yard() -> None:
@@ -424,212 +325,6 @@ def test_a_fringe_tree_is_refused_ground_already_spoken_for():
 # `_avenue_pitch` and `_avenue_short_of_walls` are the two corrections the engine makes to a gen's
 # authored torii line. Both were untested: the gen authors the LINE, the engine owns the STRIDE, and
 # neither half of that division of labor had an assertion on it.
-
-
-def test_an_over_wide_avenue_is_RE_LAID_at_the_pitch_keeping_its_line() -> None:
-    """ "the gen authors the avenue's LINE; the engine owns its stride". An avenue is resampled by arc
-    length ALONG the authored line - so it keeps its direction and its curve, and the innermost arch
-    keeps the seat the gen chose at the threshold.
-
-    Asserted on all three: the stride is the pitch, the first arch does not move, and the run stays on
-    the authored line.
-    """
-    s = Settlement(2000, 2000, seed=3)
-    wide = [(100.0, 100.0), (400.0, 100.0), (700.0, 100.0)]  # 300 px apart
-    fitted = s._avenue_pitch(wide)
-    assert fitted[0] == wide[0], "the innermost arch keeps the gen's own seat"
-    new_gap = math.hypot(fitted[1][0] - fitted[0][0], fitted[1][1] - fitted[0][1])
-    assert new_gap == pytest.approx(s.px(TORII_PITCH_FT)), f"the stride is the pitch ({new_gap:.1f} px)"
-    assert all(abs(p[1] - 100.0) < 1e-6 for p in fitted), "and every arch stays on the authored line"
-
-
-def test_EVERY_avenue_is_laid_at_the_pitch_the_old_30_ft_village_one_included() -> None:
-    """Feature 268 (GM 2026-09-27: "All maps, ~10-13 ft"): the cap-and-band rule that left an avenue
-    inside the band alone is retired, so a 30 ft run closes to the pitch like any other. The pitch is
-    inside the GM's band."""
-    assert 10.0 <= TORII_PITCH_FT <= 13.0
-    s = Settlement(2000, 2000, seed=3)
-    village = [(100.0, 100.0), (130.0, 100.0), (160.0, 100.0)]  # 30 ft apart at 1 ft/px
-    fitted = s._avenue_pitch(village)
-    assert [round(x - 100.0, 6) for x, _y in fitted] == [0.0, s.px(TORII_PITCH_FT), 2 * s.px(TORII_PITCH_FT)]
-    assert s._avenue_pitch([(5.0, 5.0)]) == [(5.0, 5.0)], "and one arch is no avenue to re-lay"
-
-
-@pytest.mark.parametrize("ftpx", [1.0, 2.0, 3.0])
-def test_plan_view_arches_at_the_pitch_never_touch(ftpx: float) -> None:
-    """D3: the arch is drawn in plan (a beam and two post marks), so its drawn depth - the post side -
-    leaves a gap to its neighbor at the pitch at every map scale; the box that frames it is centered."""
-    _s2, beam, post, p2 = torii_glyph_dims(ftpx)
-    pitch_px = TORII_PITCH_FT / ftpx
-    assert post < pitch_px - 1.0, f"at {ftpx} ft/px the post side {post:.1f} px leaves a gap under the {pitch_px:.1f} px pitch"
-    assert beam >= 1.9 and post > beam and 0 < p2 < _s2
-    _hw, up, down = torii_halfbox(ftpx)
-    assert up == down
-
-
-def test_a_village_hall_lays_its_avenue_at_the_pitch_one_pitch_off_its_face() -> None:
-    """The threshold rule (GM 2026-07-27) holds at the new pitch: at 2 ft/px, 6 px between arches and
-    6 px from the hall's face to the innermost - whatever stride the gen authored."""
-    s = Settlement(1400, 1400, seed=9)
-    s.meta(name="V", scale="village", ftpx=2, toscale=True)
-    s.shrine_hall(700.0, 400.0, "", w=30, h=24, kind="shrine", torii=[(700.0, 422.0 + 15 * i) for i in range(3)], torii_count=3, graveyard=False)
-    ys = [t[1] for t in s.M["torii"]]
-    assert ys == pytest.approx([418.0, 424.0, 430.0], abs=0.11), ys
-
-
-def test_the_wayside_shrine_draws_its_small_arch_in_plan() -> None:
-    """One map, one arch vocabulary (D3): the wayside shrine's 9 ft arch is the plan-view glyph."""
-    from l7r.diagram.settlement.shrines_wells.torii import torii_plan_svg
-
-    s = Settlement(800, 800, seed=1)
-    s.meta(name="T", scale="town", ftpx=1, toscale=True)
-    s.small_shrine(400.0, 400.0)
-    assert torii_plan_svg(400.0, 400.0 + 12 + 8, 1.0, 9.0) in s.out
-
-
-def test_an_avenue_is_pulled_BACK_whole_rather_than_having_one_arch_shoved_aside() -> None:
-    """A sando is a single approach and cannot continue on the far side of a barrier, so an avenue
-    reaching a wall is SHORTENED - "scale every seat's offset from the first arch by the largest
-    factor that keeps the run clear - rather than shove one arch out of step with its neighbors
-    (which would just straddle the wall)".
-
-    Two invariants, both asserted, because they are what distinguishes a pull-back from a nudge:
-    the first arch never moves, and the run stays collinear.
-    """
-    s = Settlement(1200, 1200, seed=8)
-    s.meta(name="C", scale="city")
-    s.manor(600.0, 300.0, 200.0, 140.0, "a manor")  # a walled compound the avenue would otherwise march into
-    seats = [(600.0, 700.0), (600.0, 600.0), (600.0, 500.0), (600.0, 420.0)]
-    out = s._avenue_short_of_walls(list(seats))
-
-    assert out[0] == seats[0], "the innermost arch, nearest its hall, never moves"
-    assert all(abs(p[0] - 600.0) < 1e-6 for p in out), "and the run stays on its own line - a pull-back, not a shove"
-
-
-def test_an_avenue_with_no_walls_drawn_yet_is_left_exactly_as_it_was() -> None:
-    """ "Only walls ALREADY DRAWN are visible here" - the draw-order rule. A wall laid LATER across
-    an arch is caught by the wall methods' own assertion, not by this pass, so this one must not
-    invent a correction when there is nothing to correct."""
-    s = Settlement(1200, 1200, seed=8)
-    s.meta(name="C", scale="city")
-    seats = [(600.0, 700.0), (600.0, 600.0), (600.0, 500.0)]
-    assert s._avenue_short_of_walls(list(seats)) == seats
-
-
-def test_an_avenue_that_CANNOT_be_shortened_clear_of_a_wall_RAISES() -> None:
-    """The search floors out once the stride would close to the arch's drawn depth plus one px
-    (feature 268, D4), since arches that touch are no avenue at all - and then it refuses rather than
-    drawing arches inside a wall."""
-    s = Settlement(1400, 1400, seed=9)
-    s.meta(name="C", scale="city")
-    s.manor(700.0, 700.0, 600.0, 600.0, "a manor")  # its walls run x,y = 400..1000
-
-    # THE FIRST ARCH NEVER MOVES - that is the pull-back's own rule - so an avenue whose innermost
-    # seat sits ON a wall cannot be rescued by any scale factor, and the engine says so rather than
-    # drawing an arch inside a wall. (Seats merely INSIDE the walls violate nothing and come back
-    # unchanged, which is how this test was first written and why it did not raise.)
-    with pytest.raises(ValueError, match="cannot be shortened"):
-        s._avenue_short_of_walls([(700.0, 400.0), (700.0, 500.0), (700.0, 600.0)])
-
-
-def test_a_hall_EXTENDS_a_short_torii_list_along_its_own_line() -> None:
-    """A gen may author fewer arch seats than the rolled count wants; the engine continues the run
-    at the authored stride rather than refusing or stopping short.
-
-    Two branches, both asserted: with two or more seats the stride is the LAST authored gap, and
-    with only ONE the direction is taken from the hall itself at the standard pitch.
-    """
-    two = Settlement(1400, 1400, seed=9)
-    two.meta(name="C", scale="city")
-    two.shrine_hall(700.0, 400.0, "Temple of Bishamon", torii=[(700.0, 520.0), (700.0, 590.0)], torii_count=4)
-    assert len(two.M["torii"]) == 4, "the run is extended to the count the roll asked for"
-
-    one = Settlement(1400, 1400, seed=9)
-    one.meta(name="C", scale="city")
-    one.shrine_hall(700.0, 400.0, "Temple of Bishamon", torii=[(700.0, 520.0)], torii_count=3)
-    assert len(one.M["torii"]) == 3, "and a single authored seat still gives the run its direction"
-
-
-def test_drawing_a_wall_THROUGH_an_existing_arch_is_refused() -> None:
-    """The draw-order half of the torii/wall rule. `_avenue_short_of_walls` handles a wall already
-    drawn; this handles the reverse - a wall laid LATER across an arch that is already standing.
-
-    "a wall is a continuous barrier and a torii is a freestanding gateway, so an arch never stands in
-    one (a way through a wall is a GATE: the city gate, a ward kido)". The engine refuses rather than
-    drawing the contradiction, exactly as the merchant-estate wall does when its slide fan runs out.
-    """
-    s = Settlement(1400, 1400, seed=10)
-    s.meta(name="C", scale="city")
-    s.manor(700.0, 700.0, 300.0, 200.0, "a manor")  # its wall runs x = 550..850 at y = 600
-    s.M["torii"] = [(700.0, 600.0)]  # an arch standing squarely in that wall
-    with pytest.raises(ValueError, match="runs through torii"):
-        s._assert_walls_clear_of_torii("a test wall")
-
-    clear = Settlement(1400, 1400, seed=10)
-    clear.meta(name="C", scale="city")
-    clear.manor(700.0, 700.0, 300.0, 200.0, "a manor")
-    clear.M["torii"] = [(200.0, 200.0)]
-    clear._assert_walls_clear_of_torii("a test wall")  # an arch well clear raises nothing
-
-
-def test_an_avenue_at_the_threshold_handles_a_single_arch_and_an_empty_run() -> None:
-    """`_avenue_at_threshold` sets the innermost arch's standoff from the hall's FRONT - the nearest
-    point of its footprint, not its centre. Two degenerate inputs it must survive: no seats at all
-    (nothing to place) and ONE seat (no authored pitch to read, so the standard pitch stands in).
-    """
-    s = Settlement(1400, 1400, seed=10)
-    s.meta(name="C", scale="city")
-    assert s._avenue_at_threshold(700.0, 400.0, 120.0, 82.0, []) == [], "no arches, nothing to move"
-    one = s._avenue_at_threshold(700.0, 400.0, 120.0, 82.0, [(700.0, 560.0)])
-    assert len(one) == 1, "a single arch is still seated, at the standard pitch"
-
-
-def test_avenue_along_walks_PAST_a_whole_segment_to_reach_a_far_point() -> None:
-    """Resampling by arc length is what lets an over-wide avenue be re-laid at the standard stride
-    while keeping the gen's direction and curve. The step that carries the remainder into the next
-    segment is the whole of that: an avenue bent at a corner must resample AROUND the bend, not fly
-    across it. Asserted on a right-angle line, where a straight-line reading is visibly wrong."""
-    from l7r.diagram.settlement.shrines_wells.torii import avenue_along
-
-    seats = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0)]
-    gaps = [100.0, 100.0]
-    assert avenue_along(seats, gaps, 0.0) == (0.0, 0.0), "the innermost arch keeps its authored seat"
-    assert avenue_along(seats, gaps, 40.0) == pytest.approx((40.0, 0.0)), "inside the first leg"
-    assert avenue_along(seats, gaps, 150.0) == pytest.approx((100.0, 50.0)), "and past it, AROUND the corner"
-    assert avenue_along(seats, gaps, 260.0) == pytest.approx((100.0, 160.0)), "a run past the authored line continues on the last leg's bearing"
-    assert avenue_along([(0.0, 0.0), (0.0, 0.0)], [0.0], 5.0) == (0.0, 0.0), "a zero-length gap divides by nothing"
-
-
-def test_an_avenue_is_PULLED_BACK_so_its_walk_stops_short_of_a_wall() -> None:
-    """A sando is a single approach and cannot continue on the far side of a barrier, so an avenue
-    marching at a wall is shortened rather than left straddling it. The honest correction is to pull
-    the whole run BACK - scale every seat's offset from the first arch - rather than shove one arch
-    out of step with its neighbors, which would just straddle the wall with a kink in it.
-
-    Two separate holds, and only the first had a test: no ARCH may stand in a wall, and the WALK the
-    arches stand on must stay on one side of every wall. The second is what catches a run whose seats
-    all clear the wall while the line between two of them crosses it."""
-    s = Settlement(1400, 1400, seed=9)
-    s.meta(name="C", scale="city")
-    s.manor(700.0, 700.0, 600.0, 600.0, "a manor")  # its walls run x, y = 400..1000
-
-    seats = [(700.0, 300.0), (700.0, 380.0), (700.0, 460.0)]  # the last arch stands inside the manor
-    out = s._avenue_short_of_walls(list(seats))
-    assert out[0] == seats[0], "the arch nearest the hall never moves - that is the pull-back's own rule"
-    assert max(y for _x, y in out) < 400.0, f"and the whole run, walk included, stops short of the wall: {out}"
-    assert len(out) == len(seats), "no arch is dropped; the stride tightens instead"
-    strides = [out[i + 1][1] - out[i][1] for i in range(len(out) - 1)]
-    assert max(strides) - min(strides) < 1e-6, f"and it tightens EVENLY, not one arch out of step: {strides}"
-
-
-def test_avenue_along_answers_the_LAST_seat_when_there_is_no_segment_to_walk() -> None:
-    """An avenue of fewer than two seats has no segment, so the walk's loop never runs and the
-    function answers the only seat there is. `_avenue_pitch` guards this before calling, which is why
-    the terminal was excluded from coverage - but the function is public to its module and its own
-    domain reaches it in one call, and a terminal nothing exercises is one nobody knows still holds."""
-    from l7r.diagram.settlement.shrines_wells.torii import avenue_along
-
-    assert avenue_along([(7.0, 9.0)], [], 100.0) == (7.0, 9.0)
 
 
 def test_courtyard_annex_span_and_a_house_with_neither_side_wall_free():

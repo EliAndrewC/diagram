@@ -19,8 +19,8 @@ block. tests/settlement/test_geom.py guards the two properties this design rests
 pre-split surface still resolves, and no public name is bound in two submodules (a star-import
 collision is silent - no MRO to catch it, and neither ruff nor mypy reports one).
 
-Layering, so the package stays acyclic: base <- primitives <- overlap <- everything else; seatmemo
-and village import nothing from the package. Respect it when adding a member.
+Layering, so the package stays acyclic: base <- primitives <- overlap <- everything else; village
+imports nothing from the package. Respect it when adding a member.
 
 Research: plumbing - NONE: the package's re-exported surface
 """
@@ -32,12 +32,10 @@ from .extents import *
 from .indexes import *
 from .labels import *
 from .overlap import *
-from .overlap import _aabb_gap as _aabb_gap
 from .overlap import _rect_ring as _rect_ring
 from .overlap import _union_area as _union_area
 from .primitives import *
 from .primitives import _signed_area as _signed_area
-from .seatmemo import *
 from .village import *
 from .village import _VILLAGE_POP_DIST as _VILLAGE_POP_DIST
 from .walls import *

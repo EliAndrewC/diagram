@@ -5,17 +5,9 @@ Split from settlement/structures.py by feature 114 - see settlement/structures/C
 Research: ground surface glyphs and captions - CONVENTION
 """
 
-import random
 from typing import TYPE_CHECKING, Any
 
 from ...labels import Subject
-from .._geom import (
-    organic_bbox,
-    organic_poly,
-    point_in_poly,
-    smooth_closed,
-    smooth_points,
-)
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -69,50 +61,6 @@ class GroundMixin:
             # built around it, and at road-draw time the map is still empty (GM label doctrine:
             # a label that can sit in empty ground, should; otherwise cover as little as possible)
             self._road_label: Any = (label, lx, ly)
-
-    def pasture(self: Settlement, shape: Any, label: Any = None, amp: float = 40, label_xy: Any = None) -> None:  # type: ignore[misc]
-        """Hayfield / grazing land (pastureland, around the barns) - open grass with
-        the odd hay bale, distinct from the cultivated paddy fields. Blocks placement.
-
-        Research:
-            hay bales in the grass - UNRESEARCHED: about one mark in ten a bale
-            grass and bale glyphs - CONVENTION
-            organic outline - CONVENTION: the shape is the caller's"""
-        # SCOPED (2026-08-08): the pasture OUTLINE is stream-drawn (organic_bbox), and the fill
-        # block below re-seeds only itself - so an upstream change reshaped the paddock, which
-        # moved which sample points land inside it, which changed the draw sequence for
-        # everything after. It was the FIRST divergence in a town, at draw #70 of 24,615.
-        # Keyed on the shape, so a pasture re-rolls when the GM moves it and never otherwise.
-        with self.rng_scope("pasture", *(shape if len(shape) == 4 and all(isinstance(v, (int, float)) for v in shape) else (len(shape), shape[0][0], shape[0][1]))):
-            outline = organic_bbox(shape, amp) if len(shape) == 4 and all(isinstance(v, (int, float)) for v in shape) else organic_poly(shape, amp)
-            sm = smooth_points(outline)
-            d = smooth_closed(outline)
-            cid = self._cid('past')
-            self.add(f'<clipPath id="{cid}"><path d="{d}"/></clipPath>')
-            self.add(f'<path d="{d}" fill="#C8CF92" stroke="#9CA86A" stroke-width="2" stroke-dasharray="7,5"/>')
-            xs, ys = [p[0] for p in sm], [p[1] for p in sm]
-            st = random.getstate()
-            random.seed(15)
-            self.add(f'<g clip-path="url(#{cid})">')
-            yy = min(ys) + 14
-            while yy < max(ys):
-                xx = min(xs) + 14
-                while xx < max(xs):
-                    tx, ty = xx + random.uniform(-7, 7), yy + random.uniform(-7, 7)
-                    if point_in_poly(tx, ty, sm):
-                        if random.random() < 0.10:
-                            self.add(f'<rect x="{tx - 6:.0f}" y="{ty - 4:.0f}" width="12" height="8" rx="3" fill="#D8C47E" stroke="#A98E54" stroke-width="0.7"/>')
-                        else:
-                            self.add(f'<path d="M{tx - 3:.0f},{ty + 2:.0f} L{tx:.0f},{ty - 4:.0f} L{tx + 3:.0f},{ty + 2:.0f}" fill="none" stroke="#8FA05E" stroke-width="0.8"/>')
-                    xx += 26
-                yy += 24
-            self.add('</g>')
-            random.setstate(st)
-            self.block_polys.append(sm)
-            self.M.setdefault("pastures", []).append([[round(p[0], 1), round(p[1], 1)] for p in sm])
-            if label:
-                lx, ly = label_xy if label_xy else ((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2)
-                self.label(lx, ly, label, 12, italic=True, color="#5C6B3A", ref=(min(xs), min(ys), max(xs), max(ys)))
 
     def _finish_road_label(self: Settlement) -> None:  # type: ignore[misc]
         """Seat and draw the Imperial road's caption in the label phase, by the ONE placer (feature 266): a LINE

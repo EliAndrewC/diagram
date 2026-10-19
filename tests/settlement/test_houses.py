@@ -9,21 +9,7 @@ import pytest
 from l7r.diagram import settlement
 from l7r.diagram.settlement import Settlement
 from tests._scope import full_or
-from tests.settlement._builders import _crop_settlement, _ladder_map, _nuc_village, _pos_where, _town, _village
-
-
-def test_frontage_runs_out_of_items_mid_row():
-    # rows=2 but a single item: the first row places it, the second row hits the `break` when
-    # `items` is already empty (a multi-row frontage stub with an odd remainder).
-    s = _town()
-    s.frontage([(100, 500), (900, 500)], ["merchant"], rows=2)
-    assert sum(1 for b in s.M["buildings"] if b["kind"] == "merchant") == 1
-
-
-def test_frontage_shortfall_is_reported(capsys):
-    s = _town()
-    s.frontage([(100, 500), (160, 500)], ["merchant"] * 8)  # a 60px street cannot host 8
-    assert "FRONTAGE SHORTFALL" in capsys.readouterr().out
+from tests.settlement._builders import _crop_settlement, _nuc_village, _pos_where, _town, _village
 
 
 # --- farmsteads(): the deferred draw giving EVERY farmhouse a yard (nudge / drop / bound branches) -----
@@ -353,16 +339,6 @@ def test_cluster_seeds_record_false_and_bad_shape():
         s.cluster_seeds("spiral", 500, 500, 100, 100, 5, _r.Random(1))
 
 
-def test_frontage_records_the_row_extent_for_place_caption():
-    s = _ladder_map()
-    s.street([(200, 500), (800, 500)], width=30)
-    s.frontage([(200, 500), (800, 500)], ["shop"] * 6, width=30, spacing=60, setback=20, fill=True)
-    box = s.frontage_box
-    assert box is not None and box[2] > box[0] and box[3] > box[1]
-    s.frontage([(200, 500), (800, 500)], [], width=30, spacing=60, setback=20, fill=True)
-    assert s.frontage_box is None  # a row that placed nothing leaves no stale box behind
-
-
 def test_hard_polys_footprint_test_refuses_what_the_center_test_allowed():
     """The split that fixes center-vs-footprint: `hard_polys` (crop, pond, bog, a field's own
     ditches) is tested against the WHOLE footprint, while `block_polys` keeps the center test its
@@ -374,23 +350,6 @@ def test_hard_polys_footprint_test_refuses_what_the_center_test_allowed():
     s.hard_polys.append(plot)
     assert not s._fits(490, 550, 46, 28)  # ...but the footprint runs to 513, well inside it
     assert s._fits(300, 300, 46, 28)  # well clear, still fine
-
-
-def test_frontage_records_the_row_axis_for_a_caption_that_names_the_run():
-    # `s.frontage_rot` is the street's own tangent, so a gen captions the run with
-    # `rot=s.frontage_rot, linear=True` instead of hand-copying the angle (which is how a caption
-    # drifts off its subject when the row is later re-laid - the same reason frontage_box exists)
-    s = _town()
-    s.frontage([(100, 700), (700, 400)], (["merchant"] * 3 + ["shop"]) * 3, spacing=48)
-    assert s.frontage_rot == pytest.approx(-26.565, abs=0.01)
-
-
-def test_frontage_rot_clears_when_the_row_places_nothing():
-    s = _town()
-    s.frontage([(100, 700), (700, 400)], ["merchant"] * 4, spacing=48)
-    assert s.frontage_rot != 0.0
-    s.frontage([(10, 10), (12, 10)], ["merchant"], fill=True)  # a 2px street hosts nothing
-    assert s.frontage_box is None and s.frontage_rot == 0.0  # ...so a stale axis can never be read
 
 
 def test_the_way_a_row_FRONTS_does_not_refuse_it_its_own_tread():
@@ -481,15 +440,6 @@ def test_fits_measures_the_exact_box_when_both_sides_declare_what_they_draw():
     s.placed.append((500.0, 500.0, 40.0, 26.0, 40.0, 26.0))  # a standing feature that knows its rake
     assert not s._fits(510.0, 505.0, 40.0, 26.0, rot=0.0), "the boxes lap"
     assert s._fits(700.0, 700.0, 40.0, 26.0, rot=0.0), "and well clear is clear"
-
-
-def test_frontage_walks_past_the_first_leg_of_a_bent_street():
-    """`at(d)` accumulates segment lengths until it finds the one the seat falls in. Every scripted map
-    fronts a straight two-point way, so the accumulation step past the first leg had never run."""
-    s = Settlement(1000, 1000, seed=1)
-    s.meta(name="T", scale="town", ftpx=1, toscale=True)
-    assert s.frontage([(100.0, 500.0), (300.0, 500.0), (700.0, 500.0)], ["merchant"] * 6, spacing=58) == 6
-    assert any(b["x"] > 300 for b in s.M["buildings"]), "seats were taken on the SECOND leg"
 
 
 def test_hard_clear_from_its_box_index_equals_the_scan():

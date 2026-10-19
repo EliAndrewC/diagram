@@ -223,11 +223,6 @@ def test_skeleton_layout_rejects_unknown_kind():
         settlement.skeleton_layout("spiral", 0, 0, 10, 10)
 
 
-def test_wall_tower_spacing_px_unknown_tier_falls_back_to_garrison():
-    ppf = 1.0 / 3.0
-    assert settlement.wall_tower_spacing_px(ppf, "nonsense") == settlement.wall_tower_spacing_px(ppf, "garrison")
-
-
 def test_moat_current_and_swept_tap_degenerate_rings():
     # a "ring" of two points is not a ring: both helpers bail rather than index past the ends
     assert settlement.moat_current_at([(0, 0), (10, 0)], (0, 0), (10, 0), (5, 5)) is None
@@ -334,13 +329,3 @@ def test_a_weighted_knob_rolls_by_its_weights_and_an_unweighted_one_is_unchanged
     assert [plain.roll(seed, {}) for seed in range(8)] == [["a", "b", "c"][settlement.knob_rng(seed, "t_plain").randrange(3)] for seed in range(8)]
     both = settlement.Knob("t_both", ["x", "y"], default="x", weights={"x": 0.5, "y": 0.5})
     assert {both.roll(seed, {}) for seed in range(60)} == {"x", "y"}
-
-
-def test_an_execution_ground_is_sized_by_its_tier():
-    """0191: about 200 x 65 ft at a capital (the page's 150-250 x 50-80 ft), 100 x 60 ft at a provincial city, 60 x 60 ft
-    below it (feature 328 wave 5)."""
-    from l7r.diagram.settlement._knobs import execution_ground_ft
-
-    assert execution_ground_ft("capital") == (200.0, 65.0)
-    assert execution_ground_ft("city") == (100.0, 60.0)
-    assert execution_ground_ft("town") == (60.0, 60.0)

@@ -11,24 +11,12 @@ Split from settlement/_geom.py by feature 117 - see settlement/_geom/CLAUDE.md f
 Research: wall geometry - NONE: wall runs, ward closure and box-against-run tests
 """
 
-import math
 from typing import Any
 
-from .base import Manifest, Poly, Pt
+from .base import Manifest, Poly
 from .overlap import _rect_ring
 from .primitives import seg_dist, segments_cross
 
-# TORII AVENUE PITCH (GM 2026-09-27, feature 268: "All maps, ~10-13 ft", after a research pass - see
-# research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html). Donated arches stand close: a donation row's arches
-# stand about 10 cm apart, and the one small rural row whose pitch can be estimated works out at about
-# 3-4 m (this project's arithmetic on a walking time, on no page). Nothing supports the old ~20-30 ft.
-# 12 ft is the middle of the GM's band and two ken, the building module the record already uses - a
-# GUESS inside the ruled band. EVERY avenue is laid at it, at every scale (the old cap-and-band rule,
-# which left the ~30 ft village avenues alone, is retired); the designated donation-row sites (the GM
-# 2026-07-25: Shinden Togashi, the Temple of Amaterasu, the Ki Rin Shrine and their like) stay the
-# explicit outliers they are, denser than the pitch. The threshold rule (the innermost arch one pitch
-# off its hall, GM 2026-07-27) holds at the new pitch.
-TORII_PITCH_FT = 12.0  # the stride of every avenue, and the gap from the innermost arch to its hall
 """Research: torii avenue pitch - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: 12 ft stride and threshold"""
 
 
@@ -73,69 +61,6 @@ def torii_halfbox(ftpx: float, span_ft: float = 16.0) -> tuple[float, float, flo
 # research/questions/0161-the-samurai-quarter-where-a-citys-samurai-live-and-how-many-bukechi.drawing.html.
 WARD_BARRED_KINDS = frozenset({"laborer", "laborer_large", "merchant", "merchant_house", "merchant_large", "burakumin", "shop", "inn"})
 """Research: samurai ward keeps commoners out - research/questions/0161-the-samurai-quarter-where-a-citys-samurai-live-and-how-many-bukechi.drawing.html: laborers, merchants, shops, inns, burakumin barred"""
-
-
-def ward_interior(fence: Poly, wall: Poly) -> Poly | None:
-    """Close a ward FENCE polyline against the city wall ring: the ward's interior polygon.
-
-    The fence's two ends abut the rampart (city_ward_fence_meets_wall holds that), so the fence
-    plus the wall arc between its ends encloses the ward. Two arcs qualify; the ward is the
-    SMALLER enclosed region - a ward is a quarter carved off the city, never the larger half
-    (all three pool cities measure 21-25% of the walled area). Returns None when there is
-    nothing to close (no wall ring / a degenerate fence) - callers skip rather than guess.
-    check_village re-derives this independently for city_samurai_ward_residents_only: the check
-    must not trust the engine's arithmetic.
-
-    Research: ward is the smaller piece - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: the smaller of the two closures
-    """
-    if len(wall) < 3 or len(fence) < 2:
-        return None
-    # ARC-LENGTH closure, not nearest-VERTEX closure: a fence end abuts the rampart mid-EDGE, so
-    # walking vertex indices from "the nearest vertex" can skip (or wrongly include) the vertex on
-    # the far side of the junction, and the resulting polygon self-intersects - a bowtie, whose
-    # shoelace area under-measures by cancellation and steals the smaller-area vote (caught by the
-    # square-wall unit test). Projecting each end onto the ring and collecting the vertices whose
-    # arc position lies strictly between the two junctions, in traversal order, yields a SIMPLE
-    # polygon for both candidate closures, so the smaller-area rule is sound.
-    ring = list(wall) + [wall[0]]
-    arcs = [0.0]
-    for i in range(len(ring) - 1):
-        arcs.append(arcs[-1] + math.hypot(ring[i + 1][0] - ring[i][0], ring[i + 1][1] - ring[i][1]))
-    perim = arcs[-1]
-    if perim <= 0:
-        return None
-
-    def project(p: Pt) -> float:
-        best: tuple[float, float] | None = None
-        for i in range(len(ring) - 1):
-            ax, ay = ring[i]
-            bx, by = ring[i + 1]
-            dx, dy = bx - ax, by - ay
-            length2 = dx * dx + dy * dy
-            t = 0.0 if length2 == 0 else max(0.0, min(1.0, ((p[0] - ax) * dx + (p[1] - ay) * dy) / length2))
-            qx, qy = ax + t * dx, ay + t * dy
-            d = (p[0] - qx) ** 2 + (p[1] - qy) ** 2
-            if best is None or d < best[0]:
-                best = (d, arcs[i] + t * math.sqrt(length2))
-        return 0.0 if best is None else best[1]
-
-    def area(poly: Poly) -> float:
-        a = 0.0
-        for i in range(len(poly)):
-            x1, y1 = poly[i]
-            x2, y2 = poly[(i + 1) % len(poly)]
-            a += x1 * y2 - x2 * y1
-        return abs(a) / 2
-
-    t0, t1 = project(fence[-1]), project(fence[0])
-    fwd_span = (t1 - t0) % perim
-    fwd = sorted(((arcs[i] - t0) % perim, wall[i]) for i in range(len(wall)))
-    arc_fwd = [v for o, v in fwd if 1e-6 < o < fwd_span - 1e-6]
-    back = sorted(((t0 - arcs[i]) % perim, wall[i]) for i in range(len(wall)))
-    arc_back = [v for o, v in back if 1e-6 < o < (perim - fwd_span) - 1e-6]
-    pa = list(fence) + arc_fwd
-    pb = list(fence) + arc_back
-    return pa if area(pa) <= area(pb) else pb
 
 
 def wall_runs(M: Manifest) -> list[tuple[str, Poly, float]]:
@@ -209,18 +134,3 @@ def torii_seat_on_wall(M: Manifest, tx: float, ty: float, ftpx: float, runs: lis
         if _box_hits_run((tx - txh, ty - tyu, tx + txh, ty + tyd), pts, half):
             return lbl
     return None
-
-
-def torii_wall_conflicts(M: Manifest) -> list[tuple[float, float, str]]:
-    """Every recorded arch standing in a wall, as [(x, y, wall label), ...] - the whole-manifest
-    form of torii_seat_on_wall, shared by the engine's post-draw guards and by check_village.
-
-    Research: torii stands clear of every wall - UNRESEARCHED: every recorded arch tested against the wall runs"""
-    ftpx = float(M.get("meta", {}).get("ftpx", 1) or 1)
-    runs = wall_runs(M)
-    bad = []
-    for t in M.get("torii") or []:
-        lbl = torii_seat_on_wall(M, float(t[0]), float(t[1]), ftpx, runs)
-        if lbl:
-            bad.append((round(float(t[0]), 1), round(float(t[1]), 1), lbl))
-    return bad

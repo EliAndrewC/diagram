@@ -173,17 +173,6 @@ CANOPY_STRUCT_KEYS = (
 )
 """Research: no crown on a roof - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: a clump stands against a building, never on it"""
 
-# Martial training in a provincial city (GM 2026-07-25). The first two mirror
-# settlement.DOJO_SAMURAI_FRAC / DOJO_PER_SAMURAI - keep in sync, they are the roll the gate holds
-# the map to. RANGE_FT is the kyudo standard 28 m shot (92 ft), rounded down to the ~90 ft clear
-# lane the Mode A azuchi already uses. QUARTER_PX is "in or against the samurai neighborhood" at the
-# city rung (3 ft/px -> ~780 real ft, about a quarter's width), not a precise siting rule.
-DOJO_SAMURAI_FRAC = 0.10
-"""Research: dojo samurai share - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: 0.10, mirrored from the settlement"""
-
-DOJO_PER_SAMURAI = 200
-"""Research: private dojo count - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: one for every 200 resident samurai"""
-
 DOJO_QUARTER_PX = 260.0
 """Research: dojo near the samurai quarter - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: within 260 px, about 780 ft at the city rung"""
 

@@ -4,8 +4,8 @@
 grass, or a spaced coppice canopy, by `role`. `hinterland` is the COMPOSER: it decides which frame
 sides carry scrub, which side is the downhill toe, and fills the interior voids an irregular field
 leaves inside its own bbox; it asks wet.py for the toe band and hands it to `commons` as a keep-out
-so the two never overlap. `_clear_ground` / `reserve_clearing` reserve the swept ground around a
-sacred or funerary feature.
+so the two never overlap. (The swept ground around a sacred or funerary feature was reserved by the town and city
+drawing code feature 392 retired.)
 
 The verge belongs in THIS module rather than with the features it protects, because the scatters are
 what must skip it: `clearings` is a keep-out registry this module both writes and reads, and a
@@ -30,7 +30,7 @@ from typing import TYPE_CHECKING, Any
 # SVGs once merged (features 222-225 merged and culled them) - are the grass tile (`land.tiles`), filling each zone less the
 # ground its throws were kept off (`Cover`, `Settlement.flush_covers`). The scraggly pines and the woodland's crowns stay
 # individual: the GM, 2026-10-01, drawing individual trees "serves a useful purpose".
-from .._geom import CrownIndex, KeepoutGrid, Poly, RingIndex, convex_hull
+from .._geom import CrownIndex, KeepoutGrid, RingIndex, convex_hull
 from ..land.wet import MARSH_FEATHER_BS, marsh_ground
 from .tiles import Cover
 
@@ -906,95 +906,3 @@ class GroundCoverMixin:
             # genuinely ground below the ditch that is still crop-height on every map; the band now shows that
             # consistently instead of hiding it on two maps out of three.
             self.marsh(toe_poly, role=marsh_role, avoid=avoid)  # reed wetland: the low, undrained downhill toe
-
-    def _clear_ground(self: Settlement, x: float, y: float, w: float, h: float, extra: float) -> None:  # type: ignore[misc]
-        """Reserve a swept verge around a sacred/funerary feature: the w x h footprint grown by `extra`,
-        added to `self.clearings` so the loose hinterland scatter (commons scrub, marsh reeds) skips it.
-        Scaled by the map grain (bscale), so the cleared collar reads at the same real size on any scale.
-        The verge's OUTLINE is ORGANIC (irregular bays carved into the padded rectangle), never the
-        rectangle itself (GM 2026-07-23): swept ground is PRODUCED by tending - brooms, feet, the sando's
-        traffic - radiating from the feature, and its edge sits wherever the tending peters out into the
-        scrub; a surveyed straight line belongs to walls and paddy bunds, never to clearage (research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html). The bays are INWARD-ONLY, so the blob always
-        stays INSIDE the old padded rect: a collar is a maintenance CLAIM, and making it irregular means
-        the sweeping falls short of the surveyed ideal - it never annexes ground (an outward lobe could
-        newly overlap a cover that legitimately predates the clearing and flip
-        scatter_respects_swept_clearings on a previously-clean map). A bay cuts at most ~55% of the collar,
-        so the verge still generously CONTAINS its feature. The blob is seeded from the footprint (the
-        saved RNG state keeps the map's stream untouched, so only collar shapes changed pool-wide), and a
-        SAME-CENTER duplicate registration (within 4px: the reserve_clearing-then-feature pattern) REUSES
-        the first blob verbatim, so guard and late collar can never disagree. Also recorded in
-        M['clearings'] with the current cover ordinal, so the checks can verify ORDER: a scatter only
-        skips clearings that exist when it runs (scatter_respects_swept_clearings).
-
-        Research:
-            swept verge - research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html: a collar of `extra` round a sacred or funerary feature kept clear of scrub
-            ragged edge - research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html: inward-only bays up to 0.55 of the collar"""
-
-        def record(poly: Poly) -> None:
-            self.M.setdefault("clearings", []).append({"poly": [[round(px, 1), round(py, 1)] for px, py in poly], "seq": self._cover_n})
-            self._cull_cover_in(poly)
-
-        for (ocx, ocy), opoly in zip(self._verge_centers, self.clearings, strict=True):
-            if abs(ocx - x) <= 4 and abs(ocy - y) <= 4:  # the documented duplicate-registration pattern: reuse the reserved blob
-                self.clearings.append(opoly)
-                self._verge_centers.append((x, y))
-                record(opoly)
-                return
-        e = extra * self.bscale
-        st = random.getstate()
-        random.seed(int(abs(x) * 3 + abs(y) * 7 + w * 11 + h * 13 + e))
-        x0, y0, x1, y1 = x - w / 2 - e, y - h / 2 - e, x + w / 2 + e, y + h / 2 + e
-        amp = 0.55 * e
-        edges = [((x0, y0), (x1, y0), (0, 1)), ((x1, y0), (x1, y1), (-1, 0)), ((x1, y1), (x0, y1), (0, -1)), ((x0, y1), (x0, y0), (1, 0))]  # normals point INWARD
-        verge = []
-        for sa, sb, (nx, ny) in edges:
-            for i in range(4):
-                t = i / 4
-                bx, by = sa[0] + (sb[0] - sa[0]) * t, sa[1] + (sb[1] - sa[1]) * t
-                off = random.uniform(0.05, 1.0) * amp * (0.35 if i == 0 else 1.0)  # inward-only bay; damped at the corner so the collar keeps its reach there
-                jt = random.uniform(-0.18, 0.18) * amp  # tangential jitter (along the edge)
-                vx, vy = bx + nx * off + jt * (1 - abs(nx)), by + ny * off + jt * (1 - abs(ny))
-                verge.append(
-                    (min(max(vx, x0), x1), min(max(vy, y0), y1))
-                )  # clamp: corner-sample jitter must not poke past the padded rect (the blob-is-a-subset guarantee is what makes this pool-safe)
-        random.setstate(st)
-        self.clearings.append(verge)
-        self._verge_centers.append((x, y))
-        record(verge)
-
-    def _cull_cover_in(self: Settlement, ring: Poly) -> None:  # type: ignore[misc]
-        """Take out of every cover still waiting for the finish (`_covers`) the swept clearing `ring` - its tile leaves the
-        ground bare (feature 298) - and out of every scatter (`_mark_groups`) each pine stroke whose extent's middle lies
-        inside it (feature 287, woods W10). The scatter skips the clearings that exist when it runs; a clearing swept after it - a household
-        shrine seated after the scrub - was dotted over. Its marks are deferred to the finish, so the ground is cleared
-        here, where the clearing is made, and the order the two were placed in cannot matter. The clearing is bare, which
-        is what it is; no feature moves."""
-        xs, ys = [float(q[0]) for q in ring], [float(q[1]) for q in ring]
-        x0, y0, x1, y1 = min(xs), min(ys), max(xs), max(ys)
-        idx = RingIndex(ring)
-
-        def swept(px: float, py: float) -> bool:
-            return x0 <= px <= x1 and y0 <= py <= y1 and idx.inside(px, py)
-
-        if len(ring) >= 3:
-            from shapely.geometry import Polygon  # bound here, not at import (feature 237)
-
-            swept_ground = Polygon(ring).buffer(0)
-            for cover in self._covers:
-                cover.bare.append(swept_ground)
-        for k, (z, marks) in enumerate(self._mark_groups):
-            left = [mk for mk in marks if not swept((mk[0] + mk[2]) / 2.0, (mk[1] + mk[3]) / 2.0)]
-            if len(left) != len(marks):
-                self._mark_groups[k] = (z, left)
-        self.shrink_marshes_off(ring)  # ...and a marsh's reeds culled here leave its record too (woods W08)
-
-    def reserve_clearing(self: Settlement, x: float, y: float, w: float, h: float, extra: float = 46) -> None:  # type: ignore[misc]
-        """Pre-register a swept-ground clearing for a sacred/funerary feature a gen draws LATER (e.g. a
-        precinct dropped in after the crop, or placed after the hinterland scatter). The scrub/marsh
-        scatter only skips clearings that already exist when it runs, so a late precinct must reserve its
-        ground FIRST or the scrub covers it. The later shrine_hall/cemetery registers its own clearing too;
-        the overlap is harmless. Pass roughly the footprint you will draw (a slightly generous `extra` is
-        fine - over-clearing by a few px reads the same).
-
-        Research: cleared collar - research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html: 46 ft cleared round the footprint by default"""
-        self._clear_ground(x, y, w, h, extra)

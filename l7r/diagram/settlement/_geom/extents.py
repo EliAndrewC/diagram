@@ -61,8 +61,8 @@ def paddy_wet_rings(M: Manifest) -> list[Poly]:
     PREFER THE DRAWN PLOTS. `plot_polys` holds the individual bunded basins as they are drawn, so it
     is the ink a reader sees, and reading it leaves the fan's unplanted RIM SLACK available - which
     matters, because the smoothed `outline` is an ENVELOPE claiming more ground than the crop fills,
-    and that margin is exactly where `farm_wells` seats the well of a steading boxed in by crop (see
-    its fallback, and the two tests that pin it). Treating the envelope as water refuses legitimate
+    and that margin was exactly where the town tier's farm wells (retired by feature 392) seated the well of a steading
+    boxed in by crop. Treating the envelope as water refuses legitimate
     margin, and on Tango's east fan it left a steading with no legal seat anywhere.
 
     FALL BACK TO THE OUTLINE where a field records no plots, rather than skipping that field. Only
@@ -86,36 +86,6 @@ def paddy_wet_rings(M: Manifest) -> list[Poly]:
     return rings
 
 
-# --- STABLE-YARD GLYPH EXTENTS: wells, trough clusters, hitching rails ------------------------
-# These three MUST NOT OVERLAP ONE ANOTHER (GM 2026-07-25). The motivating defect was Nagahara's
-# flophouse yard, which drew a hitching rail straight ACROSS a wellhead and then stacked the trough
-# cluster on both: three glyphs piled on one spot, where the reader can no longer tell which is
-# which, and the layout it implies is nonsense - you cannot draw water through a rail, and no yard
-# ties its animals across its own draw-point. They collide because they are placed at three
-# different moments (wells long before the yard, then the rails, then the cluster), so each stage
-# has to test the DRAWN extent of everything already on the map.
-#
-# The builders below are the ONE definition of each glyph's drawn extent, shared by the placement
-# in `_stable_yard` and by the `wells_troughs_rails_clear_of_each_other` check that gates it - the
-# placement-and-check-read-the-same-data doctrine (see research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html): change what
-# gets drawn and both sides move together instead of drifting into disagreement. `grow` inflates a
-# quad by the placement's slack; the CHECK always passes 0, so a map that only just satisfies the
-# check was in fact placed with room to spare.
-YARD_GLYPH_SLACK = 2.0  # px (~6 real ft at city scale) of placement slack over the check's strict no-overlap floor
-
-
-def wellhead_quad(w: Mapping[str, Any], grow: float = 0.0) -> Poly:
-    """A wellhead's drawn extent: the well-house ROOF square (the curb and shaft draw inside it)."""
-    e = w.get("vr", 4.0) + grow
-    return [(w["x"] - e, w["y"] - e), (w["x"] + e, w["y"] - e), (w["x"] + e, w["y"] + e), (w["x"] - e, w["y"] + e)]
-
-
-def trough_quad(box: Sequence[float], grow: float = 0.0) -> Poly:
-    """A watering point's drawn extent: the stacked trough rects' full envelope - a stable-yard
-    record's `troughs_box`, not one trough."""
-    return [(box[0] - grow, box[1] - grow), (box[2] + grow, box[1] - grow), (box[2] + grow, box[3] + grow), (box[0] - grow, box[3] + grow)]
-
-
 def tower_quad(t: Mapping[str, Any], grow: float = 0.0) -> Poly:
     """A wall tower's drawn footprint: its `w` x `h` mamian rect turned onto the wall's local
     tangent (`rot`). The default 38 x 38 is the pre-to-scale mamian, for a legacy record."""
@@ -123,11 +93,3 @@ def tower_quad(t: Mapping[str, Any], grow: float = 0.0) -> Poly:
     a = math.radians(t.get("rot", 0))
     ca, sa = math.cos(a), math.sin(a)
     return [(t["x"] + dx * ca - dy * sa, t["y"] + dx * sa + dy * ca) for dx, dy in ((-hw_, -hh_), (hw_, -hh_), (hw_, hh_), (-hw_, hh_))]
-
-
-def rail_quad(rl: Mapping[str, Any], grow: float = 0.0) -> Poly:
-    """A hitching rail's drawn extent: its `len` along the tangent by the posts' `reach` to either
-    side. The POSTS are the glyph's real width - the bare rail line is a hairline nobody reads."""
-    h, e = rl["len"] / 2 + grow, rl.get("reach", 2.4) + grow
-    tx, ty = rl["tx"], rl["ty"]
-    return [(rl["x"] + tx * sh * h - ty * se * e, rl["y"] + ty * sh * h + tx * se * e) for sh, se in ((-1, -1), (1, -1), (1, 1), (-1, 1))]

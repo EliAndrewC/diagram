@@ -146,39 +146,6 @@ class MoatMixin:
         self.corridors.append(([(x, y) for x, y in mo], 28))
         return [(round(x, 1), round(y, 1)) for x, y in mo]
 
-    def water_gate(self: Settlement, x: float, y: float, rot: float = 0.0) -> int:  # type: ignore[misc]
-        """A WATER GATE (shuimen) - the masonry arch where a cargo canal passes the rampart (the
-        Suzhou Pan Gate pattern: a paired land-and-water city, the water passage under a grated
-        arch with a sluice). Drawn in the TOP layer so the canal flows visibly beneath it; the
-        wall itself must be drawn with a matching gap (city_wall(water_gates=[...])). Records
-        M['water_gates'] and reserves a small no-build block.
-
-        Research:
-            arch on two piers with a grille - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html
-            glyph size - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: a 60 ft clear opening between piers about 12 ft wide, 84 ft across, in feet
-            no-build block - UNRESEARCHED: 16 px round the glyph
-            pier depth - UNRESEARCHED: the piers 30 ft deep through the wall
-            one opening - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: the passage as wide as its canal, a river given a row of arched openings; the code draws one 60 ft opening whatever the canal
-        """
-        wc = '#3A352C'
-        u = self.px(1.0)  # the glyph in feet (0147): a 60 ft clear opening between two piers about 12 ft wide, 84 ft across
-        ho, pw, hd = 30.0 * u, 12.0 * u, 15.0 * u  # half the opening, a pier's width, half the piers' depth
-        g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f})">']
-        for px0 in (-ho - pw, ho):
-            g.append(f'<rect x="{px0:.1f}" y="{-hd:.1f}" width="{pw:.1f}" height="{2 * hd:.1f}" fill="#9C8A66" stroke="{wc}" stroke-width="1.6"/>')  # piers
-        g.append(
-            f'<path d="M{-ho - pw / 4:.1f},{-hd:.1f} C{-ho / 2:.1f},{-hd - ho * 0.55:.1f} {ho / 2:.1f},{-hd - ho * 0.55:.1f} {ho + pw / 4:.1f},{-hd:.1f}" fill="none" stroke="{wc}" stroke-width="3.4"/>'
-        )  # the arch
-        for gx_ in (-ho * 0.5, 0.0, ho * 0.5):
-            g.append(f'<line x1="{gx_:.1f}" y1="{-hd + u:.1f}" x2="{gx_:.1f}" y2="{hd * 0.66:.1f}" stroke="{wc}" stroke-width="1.1" opacity="0.7"/>')  # the grate/sluice bars
-        g.append('</g>')
-        z = self.add_top(''.join(g))
-        hx, hy = ho + pw, hd + ho * 0.4
-        self.M.setdefault("water_gates", []).append({"x": round(x, 1), "y": round(y, 1), "w": round(2 * hx, 1), "h": round(2 * hy, 1), "rot": round(rot, 1), "z": z})
-        bm = 16
-        self.block_polys.append([(x - hx - bm, y - hy - bm), (x + hx + bm, y - hy - bm), (x + hx + bm, y + hy + bm), (x - hx - bm, y + hy + bm)])
-        return z
-
     def sluice_gate(self: Settlement, x: float, y: float, rot: float = 0.0, label: str | None = None, label_xy: Pt | None = None, span: float | None = None) -> int:  # type: ignore[misc]
         """A field-channel SLUICE GATE (the intake/outfall control board the comb doctrine's "sluice-fed
         head-race" always implied but no map drew - GM 2026-07-23, the mouths-are-confluences pass): two
@@ -297,16 +264,3 @@ class MoatMixin:
             self.M["channels"].append({"poly": poly, "frm": _frm, "to": {"kind": "moat"}, "w": 2.5, "drawn": False})
             self.corridors.append(([(p[0], p[1]) for p in poly], 33))
         return pts[::-1] if rev else pts
-
-    def moat_flow(self: Settlement, inlet: Pt, outlet: Pt) -> None:  # type: ignore[misc]
-        """Declare a CLOSED moat's circulation: where its water enters the ring and where it leaves.
-
-        An open (river-cut) moat derives this itself - its two junction feet ARE the inlet and
-        outlet. A closed moat cannot: the ring is dug first and its feeder and outfall are drawn
-        afterward, so the gen names the two points. Water runs BOTH ways around the circuit from
-        inlet to outlet, which is why a moated city has no single "downstream" side and a rule
-        about downstream siting has to reason from these two points.
-
-        Research: declared inlet and outlet - research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html
-        """
-        self.M["moat_flow"] = {"inlet": [round(inlet[0], 1), round(inlet[1], 1)], "outlet": [round(outlet[0], 1), round(outlet[1], 1)]}

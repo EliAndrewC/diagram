@@ -63,7 +63,6 @@ _assert_not_main_tree()
 
 LAND = '#EFE3C2'
 """Research: land fill - CONVENTION"""
-PADDY_SHADES = ['#A7C49C', '#9FBE93', '#AECBA1', '#9BBA8F', '#B4CCA6']  # rice mid-growth (green)
 """Research: mid-growth rice fills - CONVENTION"""
 FLOODED_SHADES = ['#93B0A2', '#8AAB9A', '#9DBAAB', '#88A99A', '#9AB6A8']  # just-transplanted paddy (water+shoots, blue-green)
 """Research: flooded paddy fills - CONVENTION"""

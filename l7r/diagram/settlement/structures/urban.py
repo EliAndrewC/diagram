@@ -5,14 +5,12 @@ Split from settlement/structures.py by feature 114 - see settlement/structures/C
 Research: plumbing - NONE
 """
 
-import math
 from typing import TYPE_CHECKING, Any
 
 from .._geom import (
     WARD_BARRED_KINDS,
     drawn_extent,
     point_in_poly,
-    seg_closest,
 )
 
 if TYPE_CHECKING:
@@ -133,85 +131,3 @@ class UrbanBuildingMixin:
         # unchanged, because the reach-box prefilter is still built from them.
         self.placed.append((cx, cy, w, h, *drawn_extent(w, h, rot)))
         return True
-
-    def _dims(self: Settlement, kind: str) -> tuple[float, float]:  # type: ignore[misc]
-        """A building kind's default footprint from `URBAN`, at the map's building grain.
-
-        Research:
-            shop footprint - research/questions/0135-the-towns-street-front-shop-widths-how-close-the-houses-stood-stories-and-roofs-machinami.drawing.html: 48 x 32
-            laborer footprints - research/questions/0126-laborers-housing-back-lot-tenements-uradana-and-the-master-laborers-house.drawing.html: 34 x 24 and the master's 50 x 34
-            merchant footprints - research/questions/0135-the-towns-street-front-shop-widths-how-close-the-houses-stood-stories-and-roofs-machinami.drawing.html: 54 x 36 storefront, 50 x 34 home, 86 x 60 large
-            samurai footprints - UNRESEARCHED: 56 x 40 junior, 82 x 58 senior
-            servant footprint - UNRESEARCHED: 30 x 22
-            monk house footprint - UNRESEARCHED: the laborer's 34 x 24
-            civic footprint - UNRESEARCHED: 66 x 46
-            barn footprint - UNRESEARCHED: 84 x 56
-            burakumin footprint - UNRESEARCHED: 38 x 26
-            scaled by the building grain - NONE: times bscale"""
-        w, h = self.URBAN.get(kind, self.URBAN["shop"])[2:]
-        return w * self.bscale, h * self.bscale
-
-    def try_building(self: Settlement, cx: float, cy: float, kind: str, rot: float = 0) -> bool:  # type: ignore[misc]
-        w, h = self._dims(kind)
-        if self._fits(cx, cy, w, h):
-            return self.building(cx, cy, w, h, kind, rot)
-        return False
-
-    def _face_street_rot(self: Settlement, x: float, y: float) -> tuple[float | None, float]:  # type: ignore[misc]
-        """Rotation that turns a building's frontage toward the nearest street/road, and
-        the distance to it. (None, inf) if there are no streets.
-
-        Research: building fronts its street - research/questions/0119-how-a-town-is-zoned-shops-on-the-street-housing-behind.html: turned toward the nearest street or road"""
-        lines = [st["pts"] for st in self.M.get("town_streets", [])]
-        if self.M.get("road"):
-            lines.append(self.M["road"])
-        best: Any = None
-        bd = 1e18
-        for sp in lines:
-            for k in range(len(sp) - 1):
-                cx, cy = seg_closest(x, y, sp[k], sp[k + 1])
-                d = math.hypot(cx - x, cy - y)
-                if d < bd:
-                    bd, best = d, (cx, cy)
-        if best is None:
-            return None, 1e18
-        dx, dy = best[0] - x, best[1] - y
-        dl = math.hypot(dx, dy) or 1
-        return math.degrees(math.atan2(-dx / dl, dy / dl)), bd
-
-    def open_face_rot(self: Settlement, cx: float, cy: float, w: float, h: float, clear_ft: float = 8.0, prefer: Any = (0, 180, 270, 90)) -> float | None:  # type: ignore[misc]
-        """The rotation whose DOOR side (the local +h/2 face) opens onto clear ground - or None
-        if every cardinal is walled in. GM doctrine (2026-07-18): a farmhouse always faces SOUTH
-        (its garden and threshing ground need the sun), but a CITY house has no sun constraint
-        and must instead have an UNBLOCKED entrance - the door faces open space (street, roji,
-        court), never the back of another building an eave-gap away. Tries `prefer` in order and
-        returns the first whose door-front band (`clear_ft` real feet deep) contains no placed
-        footprint; conservative AABB test against self.placed (rotated neighbors are close
-        enough to axis-aligned at row scales for a placement-time choice - the gate check does
-        the exact geometry).
-
-        Research:
-            city door onto open ground - research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.drawing.html: the first cardinal whose door band is clear
-            door band depth - research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.drawing.html: 8 ft default"""
-        clear = self.px(clear_ft)
-        for rot in prefer:
-            th = math.radians(rot)
-            ux, uy = -math.sin(th), math.cos(th)
-            fx, fy = cx + ux * h / 2, cy + uy * h / 2
-            ok = True
-            for ox, oy, ow, oh, *_ in self.placed:
-                if abs(ox - cx) > (w + ow) / 2 + clear + 2 or abs(oy - cy) > (h + oh) / 2 + clear + 2:
-                    continue
-                for d in (1.0, clear * 0.55, clear):
-                    for t in (-0.3 * w, 0.0, 0.3 * w):
-                        px_, py_ = fx + ux * d - uy * t, fy + uy * d + ux * t
-                        if abs(px_ - ox) < ow / 2 and abs(py_ - oy) < oh / 2:
-                            ok = False
-                            break
-                    if not ok:
-                        break
-                if not ok:
-                    break
-            if ok:
-                return float(rot)
-        return None

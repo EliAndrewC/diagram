@@ -11,8 +11,8 @@ import pytest
 from l7r.diagram import settlement
 from l7r.diagram.settlement import Settlement, seg_dist
 from l7r.diagram.settlement._geom.primitives import convex_hull, edge_dist, point_in_poly
-from l7r.diagram.settlement._geom.walls import _box_hits_run, torii_wall_conflicts, wall_runs
-from tests.settlement._builders import _IDX_POLY, _cap020, _max_turn_deg, _memo_city, _ward_city_with_samurai
+from l7r.diagram.settlement._geom.walls import _box_hits_run, wall_runs
+from tests.settlement._builders import _IDX_POLY, _max_turn_deg
 
 
 def test_stroke_quads_makes_one_quad_per_segment():
@@ -213,24 +213,6 @@ def test_fillet_polyline_leaves_gentle_bends_and_degenerate_input_alone():
     assert settlement.fillet_polyline(dup, 25.0)[0] == (0.0, 0.0)
 
 
-def test_region_blocked_catches_a_keepout_against_a_cell_EDGE():
-    """The bug this exists to stop: a keep-out sitting against the middle of a cell EDGE touches
-    neither the center nor any corner, so center-plus-corner sampling passes it. That is how a
-    wellhead ended up 1 px inside a hatake plot with every sample point clear."""
-    cell = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
-    assert not settlement.region_blocked(cell, [], [], [], [])
-    # a small circle hugging the middle of the LEFT edge - no corner is near it, the center is 50 away
-    assert settlement.region_blocked(cell, [], [(-4.0, 50.0, 6.0)], [], [])
-    assert not settlement.region_blocked(cell, [], [(-40.0, 50.0, 6.0)], [], [])
-    assert settlement.region_blocked(cell, [(-4.0, 50.0, 6.0)], [], [], [])  # same, as a pond
-    # a ditch threading across the cell's middle, touching no corner
-    assert settlement.region_blocked(cell, [], [], [([(-20.0, 50.0), (120.0, 50.0)], 1.0)], [])
-    assert not settlement.region_blocked(cell, [], [], [([(-20.0, 300.0), (120.0, 300.0)], 1.0)], [])
-    # a polygon overlapping a corner
-    assert settlement.region_blocked(cell, [], [], [], [[(90.0, 90.0), (150.0, 90.0), (150.0, 150.0), (90.0, 150.0)]])
-    assert not settlement.region_blocked(cell, [], [], [], [[(300.0, 300.0), (350.0, 300.0), (350.0, 350.0), (300.0, 350.0)]])
-
-
 def test_quad_hits_seg_covers_all_three_ways_a_line_can_meet_a_cell():
     """A stroked line meets a cell in three distinct ways, and each needs its own test: an ENDPOINT
     lying in (or near) the cell, the line CROSSING an edge, and the line merely GRAZING a corner
@@ -247,11 +229,6 @@ def test_point_quad_dist_is_zero_inside_and_grows_outside():
     cell = [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0)]
     assert settlement.point_quad_dist(5, 5, cell) == 0.0
     assert 2.9 < settlement.point_quad_dist(-3, 5, cell) < 3.1
-
-
-def test_ward_interior_returns_none_on_a_zero_perimeter_wall():
-    # a "ring" of coincident points has zero perimeter - nothing to walk an arc along
-    assert settlement.ward_interior([(400, 945), (400, 400)], [(7, 7), (7, 7), (7, 7)]) is None
 
 
 # ---- angled-building captions (GM 2026-08-02): a label tilts with the feature it names ----------
@@ -293,26 +270,6 @@ def test_label_quad_and_aabb_rotate_the_record_about_its_center():
     assert a[3] - a[1] > 10 and a[2] - a[0] < 100  # taller and narrower, as a tilted run must be
 
 
-def test_tilt_caption_seat_picks_the_perpendicular_half_extent_by_fold_family():
-    a = math.radians(-30.0)
-    # rot=150 folds to -30 with the footprint's LOCAL h perpendicular to the baseline
-    assert settlement.tilt_caption_seat(0, 0, 150, -30.0, 50, 10, 11) == pytest.approx((-math.sin(a) * 21, math.cos(a) * 21))
-    # rot=102 folds to 12: the other family - the local w lies perpendicular
-    b = math.radians(12.0)
-    assert settlement.tilt_caption_seat(0, 0, 102, 12.0, 50, 10, 11) == pytest.approx((-math.sin(b) * 61, math.cos(b) * 61))
-    # above=True mirrors the seat to the upper edge
-    assert settlement.tilt_caption_seat(0, 0, 150, -30.0, 50, 10, 11, above=True) == pytest.approx((math.sin(a) * 21, -math.cos(a) * 21))
-
-
-def test_servant_ranges_keeps_every_range_inside_the_fence():
-    # a house hard against the ward fence must not be ranged out through it
-    s = _ward_city_with_samurai((412, 600, "samurai", 0.0))
-    s.servant_ranges()
-    for r in [b for b in s.M["buildings"] if b["kind"] == "servant"]:
-        assert settlement.point_in_poly(r["x"], r["y"], s._samurai_ward_interiors[0])
-        assert min(settlement.seg_dist(r["x"], r["y"], (400, 795), (400, 400)), settlement.seg_dist(r["x"], r["y"], (400, 400), (795, 400))) > s._WARD_STROKE
-
-
 def test_poly_gap_measures_true_clearance_and_zero_on_overlap():
     # the exact vertex-to-edge minimum, and 0.0 the moment two quads intersect - the measurement
     # servant_ranges uses to refuse a seat that touches a non-host more closely than its own host
@@ -320,36 +277,6 @@ def test_poly_gap_measures_true_clearance_and_zero_on_overlap():
     assert settlement.poly_gap(a, settlement.rot_rect(20, 0, 10, 10, 0)) == pytest.approx(10.0)
     assert settlement.poly_gap(a, settlement.rot_rect(10, 0, 10, 10, 0)) == pytest.approx(0.0)  # touching
     assert settlement.poly_gap(a, settlement.rot_rect(5, 0, 10, 10, 0)) == 0.0  # overlapping
-
-
-def test_seat_memo_forgets_when_a_registry_is_rebound_or_truncated():
-    # `placed` is rebound to a filtered copy in two places in this engine, and that is precisely
-    # what defeated the previous attempt at an incremental index over it
-    s, memo = _memo_city()
-    memo.level("laborer", 10, 6, 7).add((100.0, 200.0))
-    s.placed = settlement.Indexed()
-    memo.sync()
-    assert (100.0, 200.0) not in memo.level("laborer", 10, 6, 7)
-
-    s2, memo2 = _memo_city()
-    s2.M["buildings"].append({"x": 1, "y": 2, "w": 3, "h": 4, "kind": "laborer"})
-    memo2.sync()
-    memo2.level("laborer", 10, 6, 7).add((100.0, 200.0))
-    s2.M["buildings"].clear()  # a plain list has only identity + length as a witness; length is enough here
-    memo2.sync()
-    assert (100.0, 200.0) not in memo2.level("laborer", 10, 6, 7)
-
-
-def test_full_tilt_lays_a_row_caption_along_the_row():
-    """GM 2026-08-09: linear subjects may carry the FULL tilt (linear_tilt_full), past the
-    45-degree go-level clamp the road captions keep - a -54 deg granary row's caption lies
-    along the row, and a bearing and its reverse caption identically."""
-    assert settlement.linear_tilt_full(-54) == -54.0
-    assert settlement.linear_tilt_full(126) == -54.0
-    assert settlement.linear_tilt_full(0) == 0.0
-    s = _cap020()
-    s.granary(700, 700, n=3, w=20, h=12, gap=8, label="domain granaries", append=True, rot=-54)
-    assert "rotate(-54" in "".join(s.out)  # the caption carries the row's own angle
 
 
 # ---- THE PACKAGE SURFACE (feature 117) --------------------------------------------------------
@@ -376,15 +303,15 @@ def test_full_tilt_lays_a_row_caption_along_the_row():
 # pond's inset core, replaced by `ring_meets_ellipse` when the pond's placer and its test were made to read one
 # predicate on the full rim (feature 287, FR-003).
 _PRE_SPLIT_GEOM_SURFACE = (
-    'CARRIED_LANDING_FLOOR_FT', 'FLOODED_SHADES', 'GOVERNOR_CAPTION_FS', 'HALL_CAPTION_FS', 'Indexed', 'LABEL_AIR_CAP', 'LABEL_AIR_RINGS', 'LABEL_AIR_STEP', 'LABEL_MIN_AIR',
-    'LAND', 'LANDING_FT', 'LANE_CROSSES_MIN_DEG', 'LANE_THROUGH_TOL', 'Manifest', 'PADDY_SHADES', 'PLANK_ABUTMENT', 'PLANK_BANK_REACH', 'PLANK_VILLAGE_REACH', 'PointGrid', 'Poly', 'Pt',
-    'RICE_GREENS', 'RIPE_SHADES', 'SeatMemo', 'TORII_PITCH_FT', 'WARD_BARRED_KINDS', 'YARD_GLYPH_SLACK', '_VILLAGE_POP_DIST', '_aabb_gap', '_assert_not_main_tree',
+    'CARRIED_LANDING_FLOOR_FT', 'FLOODED_SHADES', 'Indexed', 'LABEL_AIR_CAP', 'LABEL_AIR_RINGS', 'LABEL_AIR_STEP', 'LABEL_MIN_AIR',
+    'LAND', 'LANDING_FT', 'Manifest', 'PLANK_ABUTMENT', 'PLANK_BANK_REACH', 'PLANK_VILLAGE_REACH', 'PointGrid', 'Poly', 'Pt',
+    'RICE_GREENS', 'RIPE_SHADES', 'WARD_BARRED_KINDS', '_VILLAGE_POP_DIST', '_assert_not_main_tree',
     '_box_hits_run', '_rect_ring', '_signed_area', '_union_area', 'boxed_grid', 'boxed_hit', 'boxed_polys', 'boxed_seg_hit', 'boxed_segs', 'edge_dist', 'fillet_polyline',
-    'forest_frame_span', 'forest_reveal_x', 'indexed_grid', 'kido_bar_deg', 'label_aabb', 'label_quad', 'label_tilt', 'lane_runs', 'lane_through_gate', 'linear_tilt', 'linear_tilt_full',
-    'organic_bbox', 'organic_poly', 'paddy_wet_rings', 'point_in_poly', 'point_quad_dist', 'poly_gap', 'quad_hits_poly', 'quad_hits_seg', 'rail_quad', 'rects_overlap', 'region_blocked',
+    'forest_frame_span', 'forest_reveal_x', 'indexed_grid', 'label_aabb', 'label_quad', 'label_tilt', 'lane_runs', 'linear_tilt', 'linear_tilt_full',
+    'organic_bbox', 'organic_poly', 'paddy_wet_rings', 'point_in_poly', 'point_quad_dist', 'poly_gap', 'quad_hits_poly', 'quad_hits_seg', 'rects_overlap',
     'ring_touches', 'rot_rect', 'sat_overlap', 'seg_closest', 'seg_dist', 'seg_intersect', 'segments_cross', 'smooth_closed', 'smooth_points', 'stroke_quads',
-    'tilt_caption_seat', 'torii_halfbox', 'torii_seat_on_wall', 'torii_wall_conflicts', 'tower_quad', 'trough_quad', 'village_population', 'wall_runs', 'ward_interior', 'way_beds',
-    'wellhead_quad', 'winding'
+    'torii_halfbox', 'torii_seat_on_wall', 'tower_quad', 'village_population', 'wall_runs', 'way_beds',
+    'winding'
 )  # fmt: skip
 
 
@@ -526,31 +453,6 @@ def test_chain_violated_many_answers_as_chain_violated_does() -> None:
         assert any(many) and not all(many)
 
 
-def test_aabb_gap_forest_reveal_organic_bbox_flat_edge() -> None:
-    from l7r.diagram.settlement._geom.curves import organic_bbox
-    from l7r.diagram.settlement._geom.extents import forest_reveal_x
-    from l7r.diagram.settlement._geom.overlap import _aabb_gap
-
-    assert _aabb_gap([(0, 0), (10, 0), (10, 10), (0, 10)], [(13, 14), (20, 14), (20, 20), (13, 20)]) == 5.0
-    assert forest_reveal_x([(0, 0), (500, 0)], w=400, edge=[(-5, 0), (380, 0)], reveal=30) == [0, 380, 30, 400]
-    pts = organic_bbox((0.0, 0.0, 100.0, 50.0), 6.0, flat_edges=(0,))
-    assert [p for p in pts[:4]] == [(0.0, 0.0), (25.0, 0.0), (50.0, 0.0), (75.0, 0.0)]  # the flat top edge is exact
-
-
-def test_water_index_wide_fixture_wall_runs_skip_and_lane_alongside_a_fence() -> None:
-    from l7r.diagram.settlement._geom.walls import wall_runs
-    from l7r.diagram.settlement._geom.water_index import SLACK, WaterIndex
-    from l7r.diagram.settlement._geom.ways import lane_through_gate
-
-    M = {"streams": [{"pts": [[0, 100], [400, 100]], "w": 8}]}
-    idx = WaterIndex(M)
-    assert idx.clear(200.0, 300.0, SLACK + 10.0) is True and idx.clear(200.0, 110.0, SLACK + 10.0) is False
-    runs = wall_runs({"manors": [{"name": "a fixture compound with no footprint"}]})
-    assert runs == []
-    alongside = {"lanes": [{"pts": [[0, 0], [100, 0]], "w": 6}]}
-    assert lane_through_gate(alongside, 50.0, 2.0, fence_deg=0.0) is None  # parallel to the fence, not through it
-
-
 def test_lane_runs_includes_the_ring_road_and_the_alleys() -> None:
     """Feature 146: `lane_runs` gathers every trodden run a gate rule measures against, the city's included."""
     from l7r.diagram.settlement._geom.ways import lane_runs
@@ -558,22 +460,6 @@ def test_lane_runs_includes_the_ring_road_and_the_alleys() -> None:
     M = {"lanes": [{"pts": [[0, 0], [10, 0]], "w": 5}], "alleys": [{"pts": [[0, 20], [10, 20]], "w": 6}], "ring_road": [[0, 40], [10, 40]], "ring_road_width": 20}
     halves = sorted(round(h, 1) for _pts, h in lane_runs(M))
     assert 3.0 in halves and 10.0 in halves, halves  # the alley at w 6 and the ring road at w 20
-
-
-def test_lane_through_gate_skips_a_far_lane_and_one_running_alongside_the_fence() -> None:
-    """Feature 146: two of the gate probe's skips - a lane too far to be the crossing, and one running ALONG
-    the fence, which the gate deliberately does not bar (only a lane THROUGH the gate counts)."""
-    from l7r.diagram.settlement._geom.ways import lane_through_gate
-
-    # `lane_runs` gathers the TRAVELED ways - roads, town streets, alleys, the ring road - so the probe is
-    # fed a street here; a hamlet's `lanes` are not among them, which is itself worth pinning.
-    far = {"town_streets": [{"pts": [[0, 400], [200, 400]], "w": 6}]}
-    assert lane_through_gate(far, 100.0, 0.0, fence_deg=0.0) is None, "400 px away is not this gate's way"
-    alongside = {"town_streets": [{"pts": [[0, 2], [200, 2]], "w": 6}]}
-    assert lane_through_gate(alongside, 100.0, 0.0, fence_deg=0.0) is None, "parallel to the fence"
-    across = {"town_streets": [{"pts": [[100, -60], [100, 60]], "w": 6}]}
-    assert lane_through_gate(across, 100.0, 0.0, fence_deg=0.0) is not None, "square through the gate"
-    assert lane_through_gate({"lanes": [{"pts": [[100, -60], [100, 60]], "w": 6}]}, 100.0, 0.0, fence_deg=0.0) is None
 
 
 def test_facing_chains_returns_one_run_when_every_chord_faces_the_seat() -> None:
@@ -667,16 +553,6 @@ def test_box_hits_run_catches_a_run_that_ENDS_inside_the_box_crossing_no_edge() 
     box = (0.0, 0.0, 10.0, 10.0)
     assert _box_hits_run(box, [(5.0, 5.0), (50.0, 50.0)], 0.5), "the first vertex sits inside the box"
     assert not _box_hits_run(box, [(50.0, 50.0), (60.0, 60.0)], 0.5), "a run wholly outside is not a hit"
-
-
-def test_torii_wall_conflicts_names_the_wall_an_arch_is_standing_in() -> None:
-    """The whole-manifest form. Its empty answer is exercised by every clean map; the branch that
-    REPORTS one is not, so the conflict is built on purpose - a manor wall with an arch on it."""
-    M = {"meta": {"ftpx": 1}, "manors": [{"x": 100.0, "y": 100.0, "w": 60.0, "h": 40.0}], "torii": [(70.0, 100.0)]}
-    bad = torii_wall_conflicts(M)
-    assert bad and bad[0][0] == 70.0 and bad[0][1] == 100.0, "the arch's own coordinates, rounded"
-    assert "manor" in bad[0][2], "and the label of the wall it stands in"
-    assert torii_wall_conflicts({"meta": {"ftpx": 1}, "manors": M["manors"], "torii": [(400.0, 400.0)]}) == [], "an arch clear of every wall is not a conflict"
 
 
 def test_water_index_refuses_a_narrow_fixture_from_its_grid_cell() -> None:

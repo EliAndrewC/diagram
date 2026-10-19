@@ -11,9 +11,8 @@ session comes here to CHANGE, and they are deliberately uneven in size.
 `CivicGroundsMixin` exists ONLY to preserve settlement/core.py's single import and its position in
 the `class Settlement(...)` base list - the split is meant to be invisible above this line. Sub-mixin
 methods reach each other through `self.` on the composed Settlement, so a cross-submodule call needs
-no import and the partition can be re-cut later without touching core.py. Two such calls exist by
-design: civic.precinct_interior -> funerary.cemetery, and lodging.flush_stable_yards ->
-stable_yard._stable_yard.
+no import and the partition can be re-cut later without touching core.py. Feature 392 retired the funerary,
+judicial and lodging grounds and the stable yard, which only the frozen legacy maps called; `civic.py` is what is left.
 
 The base order below is source order and is behaviorally irrelevant - no name is defined twice, which
 is what the composed-surface guard's second assertion exists to keep true.
@@ -22,17 +21,9 @@ Research: mixin composition - NONE: the base list of the composed civic-grounds 
 """
 
 from .civic import CivicWorksMixin
-from .funerary import FuneraryGroundsMixin
-from .justice import JusticeGroundsMixin
-from .lodging import LodgingMixin
-from .stable_yard import StableYardMixin
 
 
 class CivicGroundsMixin(
-    FuneraryGroundsMixin,
-    JusticeGroundsMixin,
     CivicWorksMixin,
-    LodgingMixin,
-    StableYardMixin,
 ):
     """The composed surface. Holds no members of its own - see the module docstring."""

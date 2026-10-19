@@ -5,13 +5,11 @@ Research: ward-gate plumbing - NONE
 
 import math
 from collections.abc import Callable, Sequence
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from .._geom import (
     Poly,
-    kido_bar_deg,
     lane_runs,
-    lane_through_gate,
     sat_overlap,
     seg_dist,
     stroke_quads,
@@ -95,45 +93,6 @@ class KidoMixin:
             guard,
             to_corners,
         )  # pragma: no cover - nowhere clear within 36px of the opening on either flank; keep the traditional seat [174: KEPT, not deletable - a terminal return of the four values the caller unpacks]
-
-    def kido_seat(self: Settlement, x: float, y: float, boundary: Any) -> tuple[float, int]:  # type: ignore[misc]
-        """The (bar angle, guard flank) a kido seated at (x, y) on the ward fence `boundary` will
-        take: square to the lane running through it, else along the local fence tangent, with the
-        guard box on the ward-interior side. s.ward calls this for every gate it draws; a gen calls
-        it (via kido_reservation) to reserve that ground BEFORE the packs run.
-
-        Research:
-            gate square to its lane - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: else along the local fence tangent
-            guard on the ward side - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: the flank toward the ward interior
-        """
-        i = min(range(len(boundary) - 1), key=lambda j: seg_dist(x, y, boundary[j], boundary[j + 1]))
-        fence = math.degrees(math.atan2(boundary[i + 1][1] - boundary[i][1], boundary[i + 1][0] - boundary[i][0]))
-        lane = lane_through_gate(self.M, x, y, fence)
-        rot = kido_bar_deg(lane[0], fence) if lane else fence
-        nx, ny = -math.sin(math.radians(rot)), math.cos(math.radians(rot))  # the local +y flank, in map coords
-        icx = sum(p[0] for p in boundary) / len(boundary)  # the fence polyline's centroid sits toward the ward interior
-        icy = sum(p[1] for p in boundary) / len(boundary)
-        return rot, (1 if (icx - x) * nx + (icy - y) * ny >= 0 else -1)
-
-    def kido_reservation(self: Settlement, x: float, y: float, boundary: Any, margin: float = 17.0) -> Poly:  # type: ignore[misc]
-        """The no-build rect a gen should `block_polys.append(...)` for a ward gate at (x, y), sized
-        to the glyph that will actually be drawn there. THE ORDERING TRAP this solves (it is why the
-        helper exists rather than a hand-written rect in each gen): s.ward runs near the END of a
-        city gen, long after the packs, so the gates' ground must be reserved up front - but the
-        glyph's extent is NOT symmetric (it reaches ~36px on the guard-box flank and ~10px on the
-        other) and its angle now depends on the lane it bars, so a hand-tuned rect goes stale the
-        moment a fence or a road moves, and a square big enough to be safe at any angle costs real
-        housing (Tango lost its merchant band and a well to one). `margin` inflates the rect by a
-        large dwelling's half-diagonal, since block_polys are CENTER-tested for urban packs.
-        Call it AFTER the lanes through the gates are drawn, so kido_seat sees them."""
-        rot, side = self.kido_seat(x, y, boundary)
-        # the fence goes in explicitly: at reservation time s.ward has not run, so M['wards'] is
-        # still empty and the drawn call's wall_runs lookup would find nothing to agree with
-        roof, posts, guard, to_corners = self._kido_rects(x, y, rot, side, self.lw(18) / 2 + 5, fences=[[(float(p[0]), float(p[1])) for p in boundary]])
-        cs = [c for rect in (roof, *posts, guard) for c in to_corners(rect)]
-        x0, y0 = min(c[0] for c in cs) - margin, min(c[1] for c in cs) - margin
-        x1, y1 = max(c[0] for c in cs) + margin, max(c[1] for c in cs) + margin
-        return [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
 
     def kido_mesh(self: Settlement) -> int:  # type: ignore[misc]
         """Bar every machi mouth with a kido (research 021 item 6: the ward MESH - Edo's
