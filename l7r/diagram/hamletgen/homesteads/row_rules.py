@@ -76,7 +76,7 @@ def row_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
         farms on their street - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: within a frame of a street, none more than half a frame behind another on its side
         street one continuous way - research/questions/0033-row-villages-resson.drawing.html: each planned street drawn unbroken
         far-row holding drawn - research/questions/0033-row-villages-resson.drawing.html: every reserved holding drawn behind its farm
-        way ends on its own street - research/questions/0033-row-villages-resson.drawing.html: the door within reach of its street, or a door path to it
+        way ends on its own street - research/questions/0033-row-villages-resson.drawing.html: its street within 0246's reach of the house or its built ground (`street_arrives`), or a door path to it
         door reach of a street - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a farm needs no door path where its street's point nearest the house stands within 60 ft of it or 12 ft of its built ground (`serve.street_arrives`)
     """
     meta = M.get("meta") or {}
