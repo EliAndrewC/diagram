@@ -574,27 +574,6 @@ _TOE_MIN_AREA = 0.25
 # Kashikawa, 4 on Mizuguchi and 6 on Sawada; two of those are frozen in pool/regressions/.
 _GATE_MIN_AREA = 0.20
 """Research: area floor at the rule - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: the rule fires under 0.20 of the cell"""
-# A WELD MUST NOT MAKE A LUMP OUT OF THE BASIN THAT TAKES THE SCRAP, which is the size rule's own
-# second-order defect and was found by settlement-review on the first pass (Sawada and Mizuguchi,
-# 2026-08-17). `_absorb` ranks candidate hosts by SHARED BUND LENGTH, which is the right first
-# preference and is blind to the shape it produces: on Mizuguchi it handed a 306 sq ft fragment to
-# the single lumpiest basin on the sheet and made it worse - 26 vertices, eight reflex corners, and
-# four out-and-back prongs whose tips are 5-11 ft wide, each of which draws as a bund with a FREE
-# END sticking into the paddy. That is the GM's "rendering artifact" complaint transplanted from
-# area to outline, and it is a real construction error either way: a wall that goes out eleven feet
-# and comes straight back retains water on neither side and costs a full share of azenuri.
-#
-# SOLIDITY (area / convex-hull area) is the measure, because the defect is CONCAVITY and the two
-# guards already in the ladder both measure an APEX - `pointed_ring` cannot see a lobe whose every
-# corner is blunt. Measured over the 20 absorbed basins of the first Sawada pass: eighteen scored
-# >= 0.90 and the two the reviewer picked out by eye scored 0.731 and 0.78. 0.85 is the gap between
-# those populations, and it is wide - nothing sits between 0.78 and 0.90.
-#
-# IT IS A PREFERENCE, NOT A VETO, for the reason the apex guard learned the hard way: refusing
-# outright trades a lump for a doubled bund, which is worse. A lumpy weld is remembered and the
-# next-best host tried; the best of the lumpy candidates is taken only if no host is clean.
-_WELD_MIN_SOLIDITY = 0.85
-"""Research: weld lump - DEVIATION research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a scrap goes to the basin it shares the most bund with unless that leaves the host under 0.85 solidity and a clean host exists"""
 
 
 # A CHEVRON IS POINTED **AND** NOTCHED - neither measure alone can see one, and that is the whole

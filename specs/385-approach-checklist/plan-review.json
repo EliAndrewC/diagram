@@ -6627,38 +6627,30 @@
    "verdict": "CLEAR"
   },
   "T32": {
-   "section_sha256": "7190d0481a94a8e1c55d1d080f566e8a486e0b0191f4aa1edd75fda82915bb3f",
+   "section_sha256": "9a40ca2fa3088a8c16c0707dd5d576414f9c7a9b3a906acbcf7207be1c136873",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "T32-row",
-     "summary": "T32 takes the ranking row waterfields/banks.py _WELD_MIN_SOLIDITY (E2 DRIFTED, one rule) in place of row 841 (MISLABELED), which its earlier text took and was BLOCKED on",
+     "id": "D151",
+     "summary": "Remove waterfields/banks.py _WELD_MIN_SOLIDITY, the comment block above it and its claim; keep ring_solidity (used by the chevron guard).",
      "class": "within",
-     "why": "FR-020 asks for a row of a kind not yet tried where one is left; the block lists the kinds taken (a form, research, knobs, a value, a mislabel) and a rule is not among them, while row 841 was the same kind as T31's. The swap is on record here; row 841's real drift is no longer addressed by T32, which is a matter for the ranking, not a narrowing of the request."
+     "why": "FR-020 (amendment 7: 'pull in 10 more claims') asks for a ranking row to be taken and worked. This decision applies the ranking's own fix ('drop the 0.85-solidity host preference') and is one of the two routes the finding offers ('record it on the page or drop DEVIATION'). Item 4 measured on 2026-10-19 by a named grep that the constant has no uses and the _absorb welder it describes does not exist, so no rule the maps run is dropped and no map is expected to move (item 9 checks this with the landing cohort). That means the request's guardrail against throwing out inconvenient rules does not apply. Keeping ring_solidity changes nothing."
     },
     {
-     "id": "T32-exit-e-refused",
-     "summary": "The ranking's fix (drop the 0.85-solidity host preference) is refused; _WELD_MIN_SOLIDITY stays 0.85 and no engine token changes",
+     "id": "exit-e",
+     "summary": "Exit (e), conform and remove the dead rule, chosen. Round 1's route (record a DEVIATION on 0014) refused because no code runs the rule.",
      "class": "within",
-     "why": "FR-020 does not adopt each row's fix text, and the GM's approved proposal names conform as one exit among several (refine, principled exception, new rule, more room). The finding itself offers recording the exception on the page as a fix. The refusal carries a measured reason (settlement-review 2026-08-17: free-ended prongs 5-11 ft wide)."
+     "why": "Recording a deviation for a rule the code does not run would make the claim describe something the maps do not do. Conforming to the ranking's fix narrows nothing the GM asked for. It replaces round 1's blocked route, which rested on an unmeasured premise, with a measured one."
     },
     {
-     "id": "D151-i",
-     "summary": "0014's drawing page records, as a DEVIATION with its reason, that a scrap whose best-sharing host would fall under 0.85 solidity goes to a clean neighbor instead when one exists; the claim cites it",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "An exception to 0014's rule (the scrap goes to the paddy it shares most bund with). It is implied by the GM's own words: the approved proposal and the original request name 'keep a rule and add an exception' as an exit, with the guardrail that the reason is recorded, which this does. Purpose test passes: 0014's rule exists so the two walls become one, and a weld that leaves a wall run out eleven feet and straight back holds water on neither side, defeating that purpose; the next clean host keeps the walls joined. Item 4 measured this branch (2026-10-19, the claims index and the code's comment read) and the claim text states exactly it."
-    },
-    {
-     "id": "D151-ii",
-     "summary": "The same page text adds a second case: where every neighbor would be left lumpy the scrap goes to the least lumpy, and otherwise to 'the next neighbor it shares bund with'",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "A second exception to 0014's rule, bundled under D151-i's justification but unlike it: the 0.85 reason covers only the case where a clean host exists, and nothing in the block measures what the code does when none does. D151's own claim text contradicts the page text - 'unless that leaves the host under 0.85 solidity and a clean host exists' means that with no clean host 0014's rule applies (most bund), not least lumpy - and the code's record calls the preference 'never a veto', which reads the same way. The 'next neighbor it shares bund with' ordering is likewise unmeasured (next-most-bund clean host vs. cleanest host). The row is DRIFTED because page and code disagree; writing an unmeasured fallback onto the page records a deviation the code may not run. Remedy: measure the no-clean-host branch and the order among clean hosts, and make the page sentence and the claim sentence state the same measured rule."
+     "id": "landing",
+     "summary": "Land through make land-batch with the next engine fix, or alone; mark the row with its wave in 328's audit/waves.json.",
+     "class": "within",
+     "why": "Batching the gate and the landing cohort across small engine fixes is the GM's amendment 10 lever ('implement all 3 of your suggestions'). FR-020 and SC-010 require marking the row with its wave."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   },
   "T93": {
    "section_sha256": "3277408a83a0773eb0e4cca70fdd3c8a432424b305dd3c5d5ea7a5ce92adcf21",
