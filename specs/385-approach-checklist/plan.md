@@ -732,25 +732,26 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@36 (continue),
 
 **D149 - the form refused at the push.** `RUN_ON_TURN_DEG`'s claim cites 0081's drawing page plainly ("... - the page records its turn limits as drawing conventions"). `claims.py gate` adds to its refusals each `coverage` problem whose file is in `git diff --name-only origin/main...HEAD`: "<problem> - the claims grammar: <GRAMMAR>". No escape: a form is fixed, never carried.
 
-## T139 - a failed landing whose files reached main another way is landed (found at the T132 batch's landing, 2026-10-19)
+<!-- plan-archive: T139 to T132 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+## T43 - three findings carried at T07's landing, settled since (the round arbiter, ask:t07-two-findings-at-landing)
 
-### T139 Approach (checklist part A)
+### T43 Approach (checklist part A)
 
-1. **The goal, in the world.** A task whose work is on main ticks "landed", whichever route put it there.
-2. **The constraints.** T79 (D98): `make tick` refuses a NOTE saying landed while the task's last `make land-tooling` failed, or a file it named differs from origin/main. T113 (D130): landed means on main. A test red without it.
-3. **Where each comes from.** T79, T113 (O).
-4. **Do they describe the world here?** Yes - measured 2026-10-19 (the T132+T125+T137 `make land-batch`): T137's `make arbiter-fix-done LAND=` ran `land-tooling`, which failed in its worktree (main still carried T136's malformed claim); the batch then landed T137's files by the gated route, and the tick refused - "T137's last make land-tooling ended 'failed: ...'" - though every one of its files matched origin/main.
-5. **The order.** In `landed_refusal`, a last run that failed is no refusal when every file it named matches origin/main; the test.
-6. **The exits.** (c) - judge by what is on main, as T113 does.
+1. **The goal, in the world.** The three findings carried at T07's landing are each fixed or re-checked clean before 385 closes (FR-013).
+2. **The constraints.** FR-013: a carried finding is fixed or re-checked clean. The round arbiter's rulings on ask:t07-two-findings-at-landing and ask:t07-span-walkable-cannot-tell.
+3. **Where each comes from.** FR-013, the rulings (O).
+4. **Do they describe the world here?** No longer - measured 2026-10-19 (the claims index and the tree): (1) `houses._on_a_tread#a building's corners held to it` IN-STEP since 2026-10-18 (T96 and T101's work on the footpath's and the lane's room); (2) `settlement/rolling/roll.py` no longer exists - feature 388 retired `roll_village`, `_roll_cluster` with it; (3) `law.span_walkable#a walkable span` IN-STEP since 2026-10-19.
+5. **The order.** Each finding read against the index and the tree; nothing to change.
+6. **The exits.** (e) conform: the record already says what each now is.
 7. **The search smell.** None.
-8. **The budget.** 15 min.
-9. **Done, measured.** One goal: `make tick` passes a landed NOTE for a task whose last `land-tooling` failed but whose every named file now matches origin/main, and still refuses one with a file off main; `tests/tooling/` red without it.
+8. **The budget.** 5 min.
+9. **Done, measured.** One goal: each of the three stands IN-STEP or retired, read from the claims index and the tree; no file changes but this section.
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
-### T139 Decisions
+### T43 Decisions
 
-**D150 - on main is landed.** `landed_refusal` refuses a failed last run only while a file it named differs from origin/main, or where it named no file at all; where every named file matches, the work reached main by another route and the tick passes. The one file left out of that comparison is the one D98's check already leaves out: `_RIDERS`, `dev/review-ledger.md` - the append-only ledger every landing carries beside its files, which moves on main by other sessions' rows.
+**Wording only.** Nothing changes: the three carried findings were settled by T96, T101 and feature 388, each re-checked clean or removed.
 
 ## T11 - the close
 

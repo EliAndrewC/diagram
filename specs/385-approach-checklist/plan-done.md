@@ -3051,3 +3051,24 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@32 (continue),
 
 **D148 - every house, said so.** `stage_web`'s house list is `list(s.M.get("houses", []))`, the dead headman test gone; `_web_cut_lines` gains the claim "a tie's run past the back lanes - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a cross lane runs the back lanes' own 30 ft pad past the outermost of them; the page gives no distance".
 
+<!-- plan-archive: archived 2026-10-19 -->
+## T139 - a failed landing whose files reached main another way is landed (found at the T132 batch's landing, 2026-10-19)
+
+### T139 Approach (checklist part A)
+
+1. **The goal, in the world.** A task whose work is on main ticks "landed", whichever route put it there.
+2. **The constraints.** T79 (D98): `make tick` refuses a NOTE saying landed while the task's last `make land-tooling` failed, or a file it named differs from origin/main. T113 (D130): landed means on main. A test red without it.
+3. **Where each comes from.** T79, T113 (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the T132+T125+T137 `make land-batch`): T137's `make arbiter-fix-done LAND=` ran `land-tooling`, which failed in its worktree (main still carried T136's malformed claim); the batch then landed T137's files by the gated route, and the tick refused - "T137's last make land-tooling ended 'failed: ...'" - though every one of its files matched origin/main.
+5. **The order.** In `landed_refusal`, a last run that failed is no refusal when every file it named matches origin/main; the test.
+6. **The exits.** (c) - judge by what is on main, as T113 does.
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: `make tick` passes a landed NOTE for a task whose last `land-tooling` failed but whose every named file now matches origin/main, and still refuses one with a file off main; `tests/tooling/` red without it.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T139 Decisions
+
+**D150 - on main is landed.** `landed_refusal` refuses a failed last run only while a file it named differs from origin/main, or where it named no file at all; where every named file matches, the work reached main by another route and the tick passes. The one file left out of that comparison is the one D98's check already leaves out: `_RIDERS`, `dev/review-ledger.md` - the append-only ledger every landing carries beside its files, which moves on main by other sessions' rows.
+
