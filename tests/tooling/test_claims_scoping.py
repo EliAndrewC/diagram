@@ -152,7 +152,7 @@ def test_the_command_line_triage_triaged_and_backfill(tmp_path: pathlib.Path, ca
     assert cx.main(["--root", str(root), "bundle", "--owed", "--out", str(tmp_path / "c")]) == 0
     assert list(json.loads((tmp_path / "c" / "units.json").read_text())) == [FAR], "the triage claim is not judged"
     assert cx.main(["--root", str(root), "triage", "--out", str(tmp_path / "t")]) == 0
-    (tmp_path / "t.txt").write_text("")
+    (tmp_path / "t.txt").write_text("No claim is touched.\n")  # T92: an empty reply is unread, and refused
     assert cx.main(["--root", str(root), "triaged", "--bundle", str(tmp_path / "t"), "--reply", str(tmp_path / "t.txt")]) == 0
     assert "0 of 1 sent on to impl-drift" in capsys.readouterr().out
     assert [k for k, _w in cx.owed(cx.current(skill), cx.load_index(root / cx.INDEX), skill / cx.QUESTIONS.split("/", 3)[-1], cx.load_store(root / cx.STORE))] == [FAR]
@@ -361,3 +361,17 @@ def test_a_claim_the_triage_has_nothing_to_show_is_owed_in_full(tmp_path: pathli
     cur = cx.current(skill)
     cx.triage_bundle(cur, index, store, [SHARE], skill / QDIR, tmp_path / "t")
     assert json.loads((tmp_path / "t" / "triage.json").read_text())["forced"] == [SHARE]
+
+
+def test_a_triage_reply_is_read_from_a_transcript_and_an_unread_one_clears_nothing(tmp_path: pathlib.Path) -> None:
+    """Feature 385 T92: T31's `make claims-triaged` on an agent's `.output` cleared all 281 claims, 18 of them TOUCHES."""
+    line = "TOUCHES l7r/x.py::f#a - its block moved"
+    rec = {"type": "assistant", "message": {"content": [{"type": "text", "text": line}]}}
+    out = tmp_path / "agent.output"
+    out.write_text(json.dumps({"type": "user", "message": {"content": "go"}}) + "\n" + json.dumps(rec) + "\n")
+    assert cx.claims_triage.triage_reply(out) == line
+    plain = tmp_path / "reply.md"
+    plain.write_text(line + "\n")
+    assert cx.claims_triage.triage_reply(plain).strip() == line
+    (tmp_path / "empty.output").write_text("")
+    assert cx.claims_triage.triage_reply(tmp_path / "empty.output") == ""

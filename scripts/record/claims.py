@@ -62,6 +62,7 @@ sys.dont_write_bytecode = True  # the push runs this in fixture trees whose `git
 import claims_carry  # noqa: E402
 import claims_context  # noqa: E402
 import claims_stale  # noqa: E402
+import claims_triage  # noqa: E402
 import record_cache as rc  # noqa: E402
 import record_units as ru  # noqa: E402
 from claims_triage import (  # noqa: E402,F401 - the triage half, split out (feature 375 T09); re-exported
@@ -911,10 +912,14 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0
     if args.cmd == "triaged":
         data = json.loads((Path(args.bundle) / "triage.json").read_text(encoding="utf-8"))
+        reply = claims_triage.triage_reply(Path(args.reply))  # feature 385 T92: a transcript's last reply, never an unread file
+        if not reply.strip():
+            print(f"claims-triaged: refused - no reply text in {args.reply}; nothing cleared", file=sys.stderr)
+            return 2
         new, msgs = record_triage(
             index,
             data["units"],
-            Path(args.reply).read_text(encoding="utf-8"),
+            reply,
             datetime.date.today().isoformat(),
             data.get("forced", []),
         )

@@ -802,3 +802,10 @@ arbiter-fix-done LAND=` before the command does. Three plan rounds (the guard al
 place). The suite found three of my own slips: main's config read before the fetch, a pyproject passed where ruff wants a
 ruff.toml, and exclude paths that resolve against the config's own directory. **The habit it changes:** a lint slip is refused in
 seconds, before the landing starts.
+
+## T92 - the retro row
+
+About 20 min. `make claims-triaged` reads its reply through `claims_triage.triage_reply` (a transcript's last reply, as
+`make modal-triaged` reads one) and refuses a reply with no text instead of clearing the bundle unread; its first use recorded T31's
+triage from the agent's transcript - 6 of 281 sent on. The plan cited "375 FR-016" for the triage rule; that rule is feature 318's
+FR-016 (the review's note). **The habit it changes:** none needed.
