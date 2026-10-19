@@ -38,7 +38,13 @@ import modal_owed as mo  # noqa: E402
 import record_owed as ro  # noqa: E402
 import record_units as ru  # noqa: E402
 
-DEFAULT_OUT = pathlib.Path("/tmp/l7r-check/modal-triage")
+DEFAULT_OUT = pathlib.Path("/tmp/l7r-check")
+
+
+def default_out(root: pathlib.Path) -> pathlib.Path:
+    """One bundle directory per clone: a shared `/tmp/l7r-check/modal-triage` was rewritten by another session between this
+    one's bundle and its dispatch, so two triages read the other clone's pop-ups (the round arbiter on hour:397@3)."""
+    return DEFAULT_OUT / f"modal-triage-{root.resolve().name}"
 #: in the record-checks store: {slug: fingerprint} of the units a triage named, owed the full check at that fingerprint
 TOUCHED = "modal-triage-touched.json"
 #: `TOUCHES <uid> [@ <page file name>] - <block>` (feature 375 amendment 1, FR-015: the page scopes which of the pop-up's checks
@@ -227,7 +233,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     a = ap.parse_args(argv)
     root = pathlib.Path(a.root).resolve()
     if a.cmd == "bundle":
-        manifest, n = bundle(root, pathlib.Path(a.out) if a.out else DEFAULT_OUT)
+        manifest, n = bundle(root, pathlib.Path(a.out) if a.out else default_out(root))
         if manifest is None:
             print("modal-triage: no pop-up is owed a triage")
             return 0

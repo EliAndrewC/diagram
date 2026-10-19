@@ -199,6 +199,18 @@ def test_a_bundle_answers_a_modal_key_with_a_space(tmp_path: pathlib.Path) -> No
     assert ro.answered(ro.store(tmp_path), "entry-drift:cart yard", "fp1")
 
 
+def test_check_modal_research_answers_its_three_units(tmp_path: pathlib.Path) -> None:
+    """The round arbiter on hour:397@3: one modal-research reply answers modal-accuracy, -references and -gaps, and
+    `CHECK=modal-research` matched none of them, so the units stayed owed."""
+    bundle = tmp_path / "b"
+    bundle.mkdir()
+    (bundle / "MANIFEST.md").write_text(
+        "unit: modal-accuracy:hamlet/a fp1\nunit: modal-references:hamlet/a fp2\nunit: modal-gaps:hamlet/a fp3\nunit: modal-form:hamlet/a fp4\n",
+        encoding="utf-8",
+    )
+    assert ro.answer(tmp_path, "modal-research", "clean", bundle=str(bundle)) == ["modal-accuracy:hamlet/a", "modal-references:hamlet/a", "modal-gaps:hamlet/a"]
+
+
 # --- the whole command, on a real repository ------------------------------------------------------------------------------
 
 
