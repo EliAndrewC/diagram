@@ -645,3 +645,9 @@ changes:** none needed - the bundle reads the feature the block names.
 About 20 min. `scripts/format-changed.sh` runs at the head of `make test-file`: the `.py` files the clone changed against its merge
 base (deleted ones left out, as the review noted) are formatted and named; nothing to format, it is silent. **The habit it
 changes:** `make format` is no longer a step to remember before a landing.
+
+## T69 - the retro row
+
+About 15 min. `make task-add` puts the new id on the plan's `**Lands open**:` line and marks its box, where the plan has the line,
+so a task filed mid-feature never holds another's landing. The line's edit still owes its block review. **The habit it changes:**
+none needed - the tool that files the task keeps the line.

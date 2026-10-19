@@ -63,3 +63,14 @@ def test_with_no_gm_box_or_close_both_go_at_the_end_and_bad_calls_refuse(tmp_pat
     monkeypatch.setenv("TASK_TITLE", "x")
     assert ta.main(["999"]) == 2 and ta.main(["385", "--section", str(tmp_path / "missing.md")]) == 2
     assert "is not a file" in capsys.readouterr().err
+
+
+def test_where_the_plan_lands_tasks_open_the_new_one_joins_its_line(tmp_path, monkeypatch) -> None:  # noqa: ANN001
+    """T69 (plan D88): T10's push was refused for two filed tasks the Lands open line did not name."""
+    d = _feature(tmp_path, monkeypatch)
+    (d / "plan.md").write_text("# Plan\n\n**Lands open**: T09, T12\n\n## T11 - the close\n", encoding="utf-8")
+    monkeypatch.setenv("TASK_TITLE", "a fix")
+    assert ta.main(["385"]) == 0
+    assert "**Lands open**: T09, T12, T15\n" in (d / "plan.md").read_text(encoding="utf-8")
+    assert "- [ ] T15 a fix [lands-open]\n" in (d / "tasks.md").read_text(encoding="utf-8")
+    assert ta.lands_open("# Plan\n", "T02") == "# Plan\n", "a plan with no such line is left alone"
