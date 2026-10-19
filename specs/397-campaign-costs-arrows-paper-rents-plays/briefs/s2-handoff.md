@@ -5,7 +5,10 @@
 
 Every new source went through a source-reader from its bundle BEFORE its notes existed, on a declared NEW claim (all
 READ, 0 CONTRADICTED); `make record-checked` matched no owed unit then, so those passes are on the review ledger only
-(8 rows, `make ledger-owed`). Their wording findings are applied in the write commit. The per-note source-reader units
+(8 rows, `make ledger-owed`). Their wording findings are applied in the write commit. One exception: the
+`kotobank-kosatsu` pass checked that entry's existing write-up (5 READ) and NOT its NEW claim, so 0190's three new
+kotobank notes (`kotobank-kosatsu-3`, `-4`, `-5`) rest so far only on this session's grep of the archived page; they
+await session 3's per-note round. The `kosatsu-jawiki` pass did confirm its NEW claim (re-inking, kosatsu-ban, jibun kosatsu). The per-note source-reader units
 that `make record-owed` now names are session 3's, with quote-check, source-applicability, record-format, intro-check
 (0267) and translation-check (0190's new Japanese notes). 0190 moving also re-owes its seven notice-board modals'
 triage (`make modal-triage`).
