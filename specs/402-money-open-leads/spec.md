@@ -91,6 +91,7 @@ readable and what is still open, so the skill can move its rows.
 
 - **SC-001** (FR-001, FR-002): The four questions build, and `make record-owed` names no unanswered check.
 - **SC-002** (FR-003): `make impl-check` reports nothing missing.
+- **SC-004** (FR-005): `git diff` of the feature touches no file under `l7r/`, `pool/` or the GM's canon.
 - **SC-003** (FR-004): The note names the changed fragment files, each changed verdict, the closed leads and what is
   still open.
 
