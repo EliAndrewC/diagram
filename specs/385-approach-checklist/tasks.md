@@ -293,8 +293,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T101 Carried by the claims gate (FR-013): findings a page edit surfaced on code left unchanged - fix the code or the claim and re-check each: l7r/diagram/settlement/rolling/access.py::ACCESS_HALF_FT#corridor room [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 (direct, comment-only): ACCESS_HALF_FT's comment names the fence gap, MIN_WEB_GAP the room; claim IN-STEP
-- [ ] T102 The connector may cross its brook where crossing saves more than about 150 ft, as 0035 gives it, or the ban recorded as a DEVIATION (track.connector_dry_exit#brook not crossed - DRIFTED, found working T98) [lands-open]
+- [x] T102 The connector may cross its brook where crossing saves more than about 150 ft, as 0035 gives it, or the ban recorded as a DEVIATION (track.connector_dry_exit#brook not crossed - DRIFTED, found working T98) [lands-open]
       research: rendering
+      verify: DONE. landed 2026-10-19 (gated, 7c02121cf): the last-resort fill crosses its brook at a crossing place only where 0035's 150 ft is saved, squared by the settle; claims IN-STEP or filed (T120)
 - [x] T103 The measure guard sees a red preflight: a gate that stops at preflight writes no run-log record, so the guard refused the re-run as 'last gate GREEN 30 min ago' (found working T98, 2026-10-19) [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 via land-tooling: a red preflight marks the git dir; the measure guard lets the re-run through; hook suite 48/48, red without
