@@ -227,11 +227,9 @@ class Settlement(
         # (0224's drawing page claims no swept ground beyond the feature itself, and the town and city drawing that once
         # registered one went with feature 392), so it stays empty.
         self.clearings: list[Any] = []
-        self._cover_n = 0  # ground-cover scatter ordinal (commons + marsh draws). Each cover entry and each
-        #                    swept clearing records it, so the scatter_respects_swept_clearings check can see
-        #                    ORDER: a scatter only skips clearings that exist when it runs, so a cover whose
-        #                    seq <= a clearing's seq drew before the clearing was registered and may have
-        #                    dotted scrub/reeds over the swept ground (fix: s.reserve_clearing FIRST).
+        self._cover_n = 0  # ground-cover scatter ordinal (commons + marsh draws): each cover entry records its draw
+        #                    order as `seq`. (Its other reader, the order against swept clearings, has nothing to read:
+        #                    nothing registers a clearing since feature 392.)
         self._frozen_wells: tuple[tuple[PointGrid, PointGrid, PointGrid], Any] | None = None  # the well index while a frozen_terrain scope is open
         self._frozen_depth = 0
         self.dry_polys: list[Any] = Indexed()  # dry crop plots (comb hems, vegetable tracts): FOOTPRINT-aware no-build (Indexed: _in_blocked)
