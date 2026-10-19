@@ -7060,6 +7060,38 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T110": {
+   "section_sha256": "25ac8dc8f55aefbc11741d6d5066ba1eeb5c1009d09efd122c726a4f2c670c58",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T110 goal (Approach item 1, item 9)",
+     "summary": "One goal: a reader of 0246's drawing page meeting 'Enoshima' can learn what it is where they meet it; done when the glossary holds Enoshima, the built record shows its tooltip on 0246, record-format finds the word ruled, and no block is edited.",
+     "class": "within",
+     "why": "A second goal found while working T107 (an FR-020 ranking row, amendment 7's 'ten more claims') split into its own task, as FR-015 (amendment 4's 'one goal per task', approved verbatim) requires. It finishes a finding of the requested work and adds no scope beyond it."
+    },
+    {
+     "id": "T110 exit (c) (Approach item 6)",
+     "summary": "A glossary tooltip, leaving 0246's block untouched; a gloss written inside the block was weighed and refused because the block's claims would then owe full checks.",
+     "class": "within",
+     "why": "This picks how to meet the goal and narrows nothing the GM asked for. research/CLAUDE.md, quoted as the constraint, already makes a glossary tooltip the place for a term the reader would not know. The request says nothing about rewording 0246's block, so leaving it alone excludes nothing he asked for. The reason given, avoiding re-checks the change would not need, serves the request's stated aim of cutting the time a task takes."
+    },
+    {
+     "id": "D129",
+     "summary": "Glossary file l7r/diagram/interactive/assets/glossary/9995-enoshima.json, worded from Morse's 1886 description quoted in 0081's notes.",
+     "class": "within",
+     "why": "This carries out exit (c): one file per term in the one shared glossary, as the quoted constraint requires. Whether the wording is accurate (for example 'small island town', which is not in the quoted Morse passage) is a matter for the record checks this task's order runs, not a fidelity finding."
+    },
+    {
+     "id": "T110 order and budget (Approach items 5, 8)",
+     "summary": "Glossary file, then make glossary, then the record checks it owes; budget 20 minutes.",
+     "class": "within",
+     "why": "This sequences and budgets the one goal and decides nothing the request or spec left open in a way that narrows them. Items 10 and 11 are n/a and decide nothing."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
