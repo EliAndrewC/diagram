@@ -510,25 +510,29 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@30 (continue),
 8. **Every route measured before offering one?** No route is offered.
 9. **After a ruling: the step it names?** Yes - the ruling says land T104, then do T100.
 <!-- plan-archive: T105 to T100 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
-## T99 - a scattered farm no channel reaches passes with its own well (found working T96, 2026-10-19)
+<!-- plan-archive: T99 to T96 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+## T97 - a farm's way reaches it from its house, as 0246 counts it (found working T96, 2026-10-19)
 
-### T99 Approach (checklist part A)
+### T97 Approach (checklist part A)
 
-1. **The goal, in the world.** On a map whose scattered farms draw channels, a farm the channel cannot reach is watered by a well of its own, and the check accepts it.
-2. **The constraints.** 0031's drawing page: "A farm no channel can reach has a well of its own instead. Where chance gives a scattered settlement channels, a farm the channel cannot be led to is given a well, so no farm goes without water." A claims check IN-STEP; a test red without it.
-3. **Where each comes from.** 0031's drawing page (O).
-4. **Do they describe the world here?** Yes - measured 2026-10-19 (T96's impl-drift round on `row_rules.water_rules#a scattered farm's own water`: DRIFTED, then a read of `water_rules`): under `farm_water` channel the check flags every farm whose channel does not end in its frame (`farm_without_its_channel`), with no case for the well 0031 gives it instead.
-5. **The order.** `water_rules`' channel branch, its claim, the test, the cohort.
-6. **The exits.** (e) conform - the check takes 0031's rule as written.
+1. **The goal, in the world.** A farm counts as reached by a way only where 0246 counts it reached - the way near its house or its built ground, not near a point 8 ft past its yard.
+2. **The constraints.** 0246's drawing page: a farmhouse counts as reached within 60 ft of the house, or within 12 ft of the steading's built ground (`end_serves`, `WAY_END_REACH_FT`, `STEADING_ARRIVAL_FT`). The lane law's own rule: placement and its check read the same source. A claims check IN-STEP; a test red without it.
+3. **Where each comes from.** 0246's drawing page (O); the project's rule (O, `end_serves`'s docstring).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T96's impl-drift rounds on `row_rules#door reach of a street`, `serve.lay_door_paths#every grove farm reached at its door` and `web.stage_web#door path distance`: DRIFTED, then a read of `lay_door_paths`, `street_arrives` and `row_rules`): off a row `street_arrives` returns True, so a farm takes no door path whenever its DOOR point is within `DOOR_REACH_FT` (60 ft) of a way; `row_rules` passes a row farm whose door is within 60 ft of its street. The door stands 8 ft past the yard, so a way 60 ft from it can stand well beyond both of 0246's reaches.
+5. **The order.** One predicate - does the way's point nearest the house serve the farm (`end_serves`) - read by `lay_door_paths` and `row_rules`; the three claims; the tests; the cohort.
+6. **The exits.** (e) conform - the code takes 0246's reach as written; the door's distance is retired as a stand-in.
 7. **The search smell.** None.
-8. **The budget.** 30 min.
-9. **Done, measured.** One goal: under `farm_water` channel, a farm with a channel ending in its frame, or with a private well in its frame, passes; one with neither is `farm_without_its_channel`; its claim cites 0031's rule and is IN-STEP; `tests/hamletgen/homesteads/` red without it; the cohort passes.
-10. **Before moving a constant.** n/a - no constant moves in this task.
+8. **The budget.** 60 min.
+9. **Done, measured.** One goal: `lay_door_paths` lays no door path only where the way's point nearest the house serves the farm under `end_serves`, on a row's street or off it; `row_rules`' `farm_not_on_its_street` asks the same; the three claims IN-STEP; a test red without it; the cohort and the landing cohort pass.
+10. **Before moving a constant.** `DOOR_REACH_FT` (60 ft, `serve.py`) stops being read; its uses, measured 2026-10-19 (a grep of `l7r`
+   and `tests`): `serve.lay_door_paths`' `reach` default, `web.stage_web`'s call (`reach=STEADING_ARRIVAL_FT if _rows else
+   DOOR_REACH_FT`), `row_rules`' street test, and `tests/hamletgen/ways/test_doors.py`'s two door-distance asserts - the parameter,
+   the constant and the call's argument go, and the tests ask `street_arrives` instead.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
-### T99 Decisions
+### T97 Decisions
 
-**D124 - the channel, or the well instead.** In `row_rules.water_rules`, a channel-map farm passes when its channel ends in its frame or a private well stands in its frame; the claim reads "a scattered farm's own water - <0031's drawing page>: its channel ends in its frame, or, where no channel reaches it, its own well in its frame (a well off its way in on a `well` map)".
+**D125 - reached as 0246 counts it.** `serve.street_arrives` asks, on a row's street or off it, whether the way's point nearest the HOUSE serves the farm (`end_serves`: 60 ft of the house or 12 ft of its built ground); `lay_door_paths` skips a farm only on that answer, with no door-distance test; `row_rules`' `farm_not_on_its_street` asks the same predicate of the farm's own street. The three claims keep 0246's label for the 60 ft, a GUESS on its page, now measured from the house.
 
 ## T11 - the close
 

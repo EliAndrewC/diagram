@@ -2630,3 +2630,24 @@ passing at 2.9; `make cohort` 16 of 16). The fill runs only where no bearing of 
 
 **D123 - a new page is new research.** `claims.research_why` returns `research changed` when any page the claim now cites is not among the pages its last check read (its row's `pages`), before the triage test; feature 318's triage rule stands for every other moved page.
 
+<!-- plan-archive: archived 2026-10-19 -->
+## T99 - a scattered farm no channel reaches passes with its own well (found working T96, 2026-10-19)
+
+### T99 Approach (checklist part A)
+
+1. **The goal, in the world.** On a map whose scattered farms draw channels, a farm the channel cannot reach is watered by a well of its own, and the check accepts it.
+2. **The constraints.** 0031's drawing page: "A farm no channel can reach has a well of its own instead. Where chance gives a scattered settlement channels, a farm the channel cannot be led to is given a well, so no farm goes without water." A claims check IN-STEP; a test red without it.
+3. **Where each comes from.** 0031's drawing page (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T96's impl-drift round on `row_rules.water_rules#a scattered farm's own water`: DRIFTED, then a read of `water_rules`): under `farm_water` channel the check flags every farm whose channel does not end in its frame (`farm_without_its_channel`), with no case for the well 0031 gives it instead.
+5. **The order.** `water_rules`' channel branch, its claim, the test, the cohort.
+6. **The exits.** (e) conform - the check takes 0031's rule as written.
+7. **The search smell.** None.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: under `farm_water` channel, a farm with a channel ending in its frame, or with a private well in its frame, passes; one with neither is `farm_without_its_channel`; its claim cites 0031's rule and is IN-STEP; `tests/hamletgen/homesteads/` red without it; the cohort passes.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T99 Decisions
+
+**D124 - the channel, or the well instead.** In `row_rules.water_rules`, a channel-map farm passes when its channel ends in its frame or a private well stands in its frame; the claim reads "a scattered farm's own water - <0031's drawing page>: its channel ends in its frame, or, where no channel reaches it, its own well in its frame (a well off its way in on a `well` map)".
+
