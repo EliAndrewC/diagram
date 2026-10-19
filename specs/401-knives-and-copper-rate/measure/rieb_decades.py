@@ -13,8 +13,8 @@ The method, which the question states beside the table:
 - a decade's mean is the mean of every day's value in it, all days weighted alike (not a mean of yearly means);
 - mon per monme is 1,000 divided by the decade's mean monme per kanmon; mon per ryo is 1,000 times the decade's mean
   monme per ryo divided by its mean monme per kanmon - both this project's arithmetic;
-- the days from 1843-04-28 (the first at 10.00 after the order of 1843-04-12 forbade trading copper under 10 monme a
-  kanmon) to the end of 1850's second month (the last run at 10.00) are an administered floor, printed apart and left
+- the days from 1843-04-13 (the day after the order of 1843-04-12 forbade trading copper under 10 monme a kanmon,
+  which the diary records that day) to the end of 1850's second month (the last run at 10.00) are an administered floor, printed apart and left
   out of the 1840s and 1850s market means (months and days are the diary's own, in the Japanese calendar);
 - gold from 1859-06-01 on is left out: from that day the database quotes gold in the subsidiary coins in circulation
   rather than in koban, so no mon-per-ryo figure is given past it. The table stops at 1859.
@@ -33,7 +33,7 @@ from collections import defaultdict
 
 import openpyxl
 
-FLOOR = ((1843, 4, 28), (1850, 3, 1))  # from the first day at the floor to the end of the last run at it
+FLOOR = ((1843, 4, 13), (1850, 3, 1))  # from the day after the order to the end of the last run at 10.00
 LAST_YEAR = 1859
 GOLD_CUTOFF = (1859, 6)  # gold quoted in subsidiary coins from 1859-06-01
 
@@ -121,7 +121,7 @@ def main(path: str) -> None:
     block("1787-1789", [1787, 1788, 1789])
     for d in range(1790, 1860, 10):
         block(f"{d}s" + (" (floor days left out)" if d in (1840, 1850) else ""), list(range(d, d + 10)))
-    block("1843-04-28 to 1850-02 (administered floor)", list(range(1843, 1851)), fz, fg)
+    block("1843-04-13 to 1850-02 (administered floor)", list(range(1843, 1851)), fz, fg)
     block("1850-1854 (floor days left out)", list(range(1850, 1855)))
     block("1855-1859", list(range(1855, 1860)))
     block("1804 (anchor for 1802-04)", [1804])

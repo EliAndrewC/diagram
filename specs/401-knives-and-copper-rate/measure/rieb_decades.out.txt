@@ -83,9 +83,9 @@ decade | years | copper days | monme per kanmon | mon per monme | gold days | mo
 1810s | years 1810-1817, 7 with rates | 2447 days | 9.14 monme/kanmon | 109.4 mon/monme | 2448 days | 64.56 monme/ryo | 7,063 mon/ryo
 1820s | years 1820-1828, 7 with rates | 2369 days | 9.21 monme/kanmon | 108.6 mon/monme | 2369 days | 63.37 monme/ryo | 6,879 mon/ryo
 1830s | years 1830-1838, 5 with rates | 1768 days | 9.10 monme/kanmon | 109.9 mon/monme | 1769 days | 61.82 monme/ryo | 6,794 mon/ryo
-1840s (floor days left out) | years 1840-1843, 4 with rates | 1145 days | 9.26 monme/kanmon | 108.0 mon/monme | 1145 days | 62.79 monme/ryo | 6,781 mon/ryo
+1840s (floor days left out) | years 1840-1843, 4 with rates | 1130 days | 9.25 monme/kanmon | 108.1 mon/monme | 1130 days | 62.77 monme/ryo | 6,786 mon/ryo
 1850s (floor days left out) | years 1850-1859, 10 with rates | 3369 days | 10.05 monme/kanmon | 99.5 mon/monme | 3171 days | 67.36 monme/ryo | 6,704 mon/ryo
-1843-04-28 to 1850-02 (administered floor) | years 1843-1850, 8 with rates | 2358 days | 10.00 monme/kanmon | 100.0 mon/monme | 2357 days | 63.99 monme/ryo | 6,399 mon/ryo
+1843-04-13 to 1850-02 (administered floor) | years 1843-1850, 8 with rates | 2373 days | 10.00 monme/kanmon | 100.0 mon/monme | 2372 days | 63.99 monme/ryo | 6,399 mon/ryo
 1850-1854 (floor days left out) | years 1850-1854, 5 with rates | 1666 days | 9.56 monme/kanmon | 104.6 mon/monme | 1664 days | 64.13 monme/ryo | 6,709 mon/ryo
 1855-1859 | years 1855-1859, 5 with rates | 1703 days | 10.53 monme/kanmon | 95.0 mon/monme | 1507 days | 70.92 monme/ryo | 6,737 mon/ryo
 1804 (anchor for 1802-04) | years 1804-1804, 1 with rates | 337 days | 9.22 monme/kanmon | 108.4 mon/monme | 337 days | 63.91 monme/ryo | 6,930 mon/ryo
