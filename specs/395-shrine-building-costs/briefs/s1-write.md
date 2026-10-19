@@ -5,7 +5,8 @@ feature's spec or plan. Work in this clone (`/diagram/.clones/money`). The proje
 research record's `CLAUDE.md` above all, along with `research/money-requests.md`.
 
 **What is asked.** EliAndrewC/diagram#6 (gm-assistant, for the GM's session on 2026-10-19): what a small forest shrine
-cost to build, Japan first, each figure beside the craftsman's and laborer's day wage of the same place and period. The
+cost to build, Japan first, each figure beside the craftsman's AND the unskilled laborer's day wage of the same place and period;
+where no source gives one of them, say that wage is SILENT and name the nearest, with its place and gap in years. The
 request is verbatim in `specs/395-shrine-building-costs/request.md`. This is research only: edit no code, modal, sheet or
 canon.
 
@@ -34,7 +35,7 @@ Reserve each with `make reserve KIND=question KEY=<heading id>`. Tag each `subje
     66.3%).
   - The day wages: Tama 1749; Kumehara 1818 and 1830, with the 1830 notice board at 50 carpenter-days.
   - Small hokora: silent (an absence note).
-- S2 **"What did a shrine roof cost, in copper, bark or shingle?"** (`setting=countryside`)
+- S2 **"What did a shrine roof and its finish cost?"** (`setting=countryside`)
   - The 1749 copper re-roofing: 43 ryō 1 bu in all, materials 53.1%, wages 14.6%, a 7 shaku 8 sun bay. The 1772-73 copper
     tiles: 11,000 for just under 30 kan of silver.
   - The carpenter wages the pass found (the 1751 shogunate standard; Edo 1804-30 and 1853-56).

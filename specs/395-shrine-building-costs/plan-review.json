@@ -1,0 +1,237 @@
+{
+ "feature": "395-shrine-building-costs",
+ "blocks": {
+  "preamble": {
+   "sha256": "bbc5a6c8adcd18890b836e53f81f4157276210b389bbbcb7bb3d326fe3588158",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "e1d184cbb6d3438d46300e2f824d2156167cd43ec13a650fdf33d8c0dc591125",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "0262d0ee4ba688cf18a4e3afe6133a44b8a919ad5b1e459a13cb9a69c7baa059",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "99fbdeccbfbd66edf40fe2ec6f1c5aadb8e5ec75d91b966d48c7b6412a810289",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - the four questions (FR-001, FR-002)": {
+   "sha256": "f5b85b257dc2aa4e356b1482f7fc74a39631d0a4737d8dd45ea6994b97c13176",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - the implementation check (FR-003)": {
+   "sha256": "a3c3099e1c74658e1e7f0cd3379ba4b2aa6838ce0251a6df3e91d04dc34da5af",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - the answer (FR-004)": {
+   "sha256": "c6800eb42a70cf5cbff9e24cb0b86d0eb46931dc8eaf47dec9464d1ff8ca21f8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## T - the order": {
+   "sha256": "a546546a20ff0dc1c925669cab981969374479f6904353bc5da8504b5579f722",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-19",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the four questions (FR-001, FR-002)",
+    "## D2 - the implementation check (FR-003)",
+    "## D3 - the answer (FR-004)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary-shape",
+     "summary": "Four new money questions from the four passes; one write page session (four questions), one check-and-apply session, then the answer on #6; no code, map or canon change.",
+     "class": "within",
+     "why": "Four questions match the request's four sections; the answer on #6 is what the asker asked for; no code/map/canon change is FR-005 and nothing in the request asks for one."
+    },
+    {
+     "id": "TC-method",
+     "summary": "Passes are leads; each passage read on its page before citing; scanned PDFs (the two AIJ papers) read by OCR with quotes checked against the page image.",
+     "class": "within",
+     "why": "A method for producing checked fragments, which is what 'the verdict per figure' and 'I verify and close' need. Removes nothing asked."
+    },
+    {
+     "id": "TC-kasuga-pointer",
+     "summary": "The AIJ No. 420 Kasuga figures serve the sanctuary and roof questions; one question holds them, the other points at it.",
+     "class": "within",
+     "why": "A record-format choice against duplication. Passes on the condition that the pointing question still gives its own verdict for each figure it relies on: the asker wants 'per question: the fragment FILE, the verdict per figure', so the verdict must sit in each question, even if the figures are not repeated."
+    },
+    {
+     "id": "TC-wages",
+     "summary": "Each question sets its figures beside 'the day wage of the same district and period where a source gives one' (Tama 1749; Kumehara 1818, 1830; Osaka 1620s; Edo 1853-56; Kyoto 1802-4 from 0250), and says so where none matches.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The request says 'each figure beside the craftsman's AND unskilled laborer's day wage of the same place and period'. The block uses one singular wage, and its anchor list mixes craftsman-only entries (Tama 1749, Edo 1853-56) with unskilled-only ones (Osaka 1620s), so a session can satisfy it with one wage of the two. Nothing makes the pair impossible: the request already handles absence ('says so'), and nothing in the asker's words drops the unskilled wage; the comparison against both is what the asker is grading prices with. Fix: 'beside the craftsman's and the unskilled laborer's day wage of the same district and period, where a source gives each, saying so separately for each where none matches'."
+    },
+    {
+     "id": "Perf-NA",
+     "summary": "Performance bookends N/A: no generator change.",
+     "class": "within",
+     "why": "Follows from a record-only feature."
+    },
+    {
+     "id": "Constitution",
+     "summary": "XII research: physical with five boxes; XIII record CHECK and tests green; XVI built as the spec's FRs.",
+     "class": "within",
+     "why": "Process conformance; narrows nothing asked."
+    },
+    {
+     "id": "D1-tags",
+     "summary": "Each question new, subject=money, no drawing page, level counts-and-measurements; settings countryside for sanctuary and roof, countryside,city for torii/stone and rites.",
+     "class": "within",
+     "why": "FR-001's terms (bundle carried FR-001/FR-002 only as first lines in spec-index.md, not in full, though D1 cites them; judged against the request directly). Tagging choices narrow nothing asked."
+    },
+    {
+     "id": "D1-Q2-title",
+     "summary": "Question 2 is 'What did a shrine roof cost, in copper, bark or shingle?'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The request's section 2 is 'Roof and finish' and asks explicitly 'what did a persimmon-tannin finish cost?'. None of the four planned questions holds the finish: the roof question names only copper, bark and shingle, and the other three are sanctuary, torii/stone/earth and rites/furnishings. 'Every attested figure, every silence' then has no home for the tannin verdict (the Q2 pass returned SILENT for it, which is itself a verdict the asker asked for). Not impossible, not implied by the asker, and it drops a figure the asker named. Fix: the roof question covers the persimmon-tannin finish (e.g. 'What did a shrine roof and its finish cost: copper, bark, shingle, persimmon tannin?'). The other titles' compressions (hokora under the sanctuary; porterage per ri under stonework; the temple deposit under rites) fit and are not ruled narrowings."
+    },
+    {
+     "id": "D1-content",
+     "summary": "Each question answers with every attested figure, every silence, each figure beside its wage; the passes' computed figures (per-day equivalents, the 600-1,100 craftsman-day reading of the 30-ryo contract) labeled as the project's arithmetic.",
+     "class": "within",
+     "why": "Matches the request's 'figure needed' clauses and the passes' own labeling of derivations; subject to the wage fix under TC-wages ('its wage' must be both wages)."
+    },
+    {
+     "id": "D2-impl-check",
+     "summary": "implementation-check.md, one line per question: no code implements it - consumed by gm-assistant's money skill, with the search.",
+     "class": "within",
+     "why": "FR-003 as cited; the asker is gm-assistant's skill, so no diagram code is owed."
+    },
+    {
+     "id": "D3-delta-answer",
+     "summary": "The answer on #6 carries the fragment files, the verdicts and what is still open, but 'the interim findings stand; the answer says only what changed in checking'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The asker's deliverable is 'Per question: the fragment FILE, the verdict per figure, what is still open'; the interim comments were asked for IN ADDITION ('and, given the deadline, a short interim comment'), and each was posted as 'not yet written into the record or checked'. 'Says only what changed' leaves the unchecked interim text as the operative statement of every unchanged verdict and has gm-assistant merge five comments to 'verify and close', which works against the purpose of the final answer; it also contradicts SC-003 ('a verdict for every figure'). 'The interim findings stand' presumes the check's outcome before the check runs. Restating is not impossible and nothing in the asker's words allows a delta. Fix: the answer gives, per question, its fragment file, the checked verdict for every figure, and what is still open, marking which verdicts changed from the interim if the session likes."
+    },
+    {
+     "id": "T-order",
+     "summary": "Page sessions, implementation check, answer, report and land by the direct route.",
+     "class": "within",
+     "why": "Sequencing; narrows nothing asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-19",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the four questions (FR-001, FR-002)",
+    "## D2 - the implementation check (FR-003)",
+    "## D3 - the answer (FR-004)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary-sessions",
+     "summary": "Four new money questions from the four passes; one write page session (four questions, the cap), one check-and-apply session, then the answer on #6; no code, map or canon change.",
+     "class": "within",
+     "why": "The request asks four numbered questions; four record questions, checked, then answered on the issue is the request's shape. No-code matches FR-005."
+    },
+    {
+     "id": "TC-record",
+     "summary": "Passes are leads; every passage read on its page before citing; scanned AIJ PDFs read by OCR with quotes checked against page images; the AIJ 420 Kasuga figures held in one question (sanctuary or roof) and pointed at from the other.",
+     "class": "within",
+     "why": "Method and record organization. The shared-figure pointer does not drop any figure from either question's answer: D3 requires the pointing question to give its own verdict for each figure it relies on."
+    },
+    {
+     "id": "TC-wages-both",
+     "summary": "Each figure set beside BOTH the craftsman's and the unskilled laborer's day wage of the same place and period, where a source gives each.",
+     "class": "within",
+     "why": "Restates the asker's words verbatim: 'each figure beside the craftsman's and unskilled laborer's day wage of the same place and period'. This is the round-1 item, now fixed: the earlier text said 'the day wage' (one)."
+    },
+    {
+     "id": "TC-wages-silent",
+     "summary": "Where no source gives a matching craftsman or unskilled wage for a figure's place and period, the question says SILENT for that wage and names the nearest wage with its place and gap in years.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Setting a figure beside a same-place, same-period wage that no source records is physically impossible; the request's own 'verdict per figure' vocabulary (SILENT, used in every interim comment) is how that gap is reported, and naming the nearest wage with its gap gives the asker more than a bare silence. The plan does not restrict the search to the sources 'in hand' - its operative words are 'where a source gives each' - so it does not stop short of what sources exist."
+    },
+    {
+     "id": "Perf-NA",
+     "summary": "Performance bookends N/A: no generator change.",
+     "class": "within",
+     "why": "No generator is touched (FR-005)."
+    },
+    {
+     "id": "Constitution",
+     "summary": "XII research: physical with five boxes per question task; XIII record checks green; XVI built as the FRs.",
+     "class": "within",
+     "why": "Project process applied to the requested record work; adds no scope beyond FR-002."
+    },
+    {
+     "id": "D1-questions",
+     "summary": "Four new questions, subject=money, no drawing page, level counts-and-measurements: sanctuary (countryside); roof and its finish - copper, cypress bark, shingle, persimmon tannin (countryside); torii, stonework, earthwork (countryside,city); rites and furnishings (countryside,city).",
+     "class": "within",
+     "why": "One question per numbered request section. The roof question now names the persimmon-tannin finish the asker's Q2 asks for (the round-1 item, fixed). Each must answer every attested figure and every silence, which carries the sub-asks not named in the titles (hokora, roof area, porterage per ri, jichinsai, bunkotsu/nokotsu, bell, plaque, table)."
+    },
+    {
+     "id": "D1-arithmetic",
+     "summary": "Pass-computed figures (per-day equivalents, the 600-1,100 craftsman-day reading of the 30-ryo contract) labeled as the project's arithmetic.",
+     "class": "within",
+     "why": "Keeps derived figures distinguished from attested ones, which the asker's 'verdict per figure' depends on; drops nothing."
+    },
+    {
+     "id": "D2-implcheck",
+     "summary": "implementation-check.md, one 'no code implements it - consumed by gm-assistant's money skill' line per question with the search.",
+     "class": "within",
+     "why": "FR-003 verbatim; the asker states gm-assistant consumes and closes."
+    },
+    {
+     "id": "D3-answer",
+     "summary": "Comment on #6: per question its fragment FILE, the checked verdict for every figure, what is still open; supersedes the unchecked interim comments; changed verdicts may be marked; a question pointing at another for shared Kasuga figures still gives its own verdict for each.",
+     "class": "within",
+     "why": "Matches 'Per question: the fragment FILE, the verdict per figure, what is still open' and SC-003's 'a verdict for every figure'. The round-1 item (answer giving only what changed, interim standing unchecked) is fixed: every figure now gets a checked verdict."
+    },
+    {
+     "id": "T-order",
+     "summary": "Page sessions, implementation check, answer, report and land by the direct route.",
+     "class": "within",
+     "why": "Sequencing only."
+    }
+   ]
+  }
+ ]
+}

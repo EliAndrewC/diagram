@@ -14,9 +14,10 @@ check-and-apply session, then the answer on the issue. No code, map or canon cha
   read on its page before it is cited. A scanned PDF with no text layer (the two AIJ papers) is read by OCR, its quotes
   checked against the page image. The AIJ No. 420 paper's Kasuga figures serve two questions (sanctuary and roof): one
   question holds them, and the other points at it rather than repeating them.
-- **The wages.** Each question sets its figures beside the day wage of the same district and period where a source gives
-  one (Tama 1749; Kumehara 1818 and 1830; Osaka 1620s; Edo 1853-56; Kyoto 1802-4 from 0250), and says so where none
-  matches.
+- **The wages.** Each figure is set beside the craftsman's AND the unskilled laborer's day wage of the same place and period,
+  where a source gives each, and for each one that no source matches the question says it is SILENT and names the nearest
+  with its place and gap in years. Sources in hand: Tama 1749 (craftsman); Kumehara 1818 and 1830 (craftsman, sawyer,
+  carter); Osaka 1620s (unskilled); Edo 1853-56 (craftsman); Kyoto 1802-4 (unskilled and craftsman, from 0250).
 
 ## Performance bookends
 
@@ -33,7 +34,8 @@ N/A: no generator change.
 
 Each is new, tagged `subject=money`, with no drawing page, and its level is `counts-and-measurements`.
 - "What did a small shrine sanctuary cost to build?" (`setting=countryside`)
-- "What did a shrine roof cost, in copper, bark or shingle?" (`setting=countryside`)
+- "What did a shrine roof and its finish cost?" (`setting=countryside`): copper, cypress bark, shingle, and the
+  persimmon-tannin finish
 - "What did a torii, stonework and earthwork cost?" (`setting=countryside,city`)
 - "What did a shrine's rites and furnishings cost?" (`setting=countryside,city`)
 
@@ -48,8 +50,9 @@ with the search.
 
 ## D3 - the answer (FR-004)
 
-A comment on EliAndrewC/diagram#6 with the fragment files, the verdicts, and what is still open. The interim findings
-stand; the answer says only what changed in checking.
+A comment on EliAndrewC/diagram#6: per question its fragment FILE, the checked verdict for every figure, and what is still
+open (the interim comments were posted unchecked; this answer supersedes them; changed verdicts may be marked). A question
+that points at another for shared figures (the Kasuga accounts) still gives its own verdict for each figure it relies on.
 
 ## T - the order
 
