@@ -53,5 +53,17 @@ def test_a_block_review_holds_its_blocks_and_a_dead_dispatch_yields_to_the_escap
     ph.hold(state, "t2", f"read {bundle}/MANIFEST.md and the files beside it", 100.0)
     edit = {"file_path": str(plan), "old_string": "the free section text", "new_string": "x"}
     assert "1 block(s)" in ph.refusal(state, root, "Edit", edit, 101.0, False)
-    late = 100.0 + ph.PENDING_S + 1  # never launched: dead
-    assert ph.refusal(state, root, "Edit", edit, late, False) and ph.refusal(state, root, "Edit", edit, late, True) == ""
+    late = 100.0 + ph.PENDING_S + 1  # never launched: it holds nothing (feature 385 T104, D121), escaped or not
+    assert ph.refusal(state, root, "Edit", edit, late, False) == "" and ph.refusal(state, root, "Edit", edit, late, True) == ""
+
+
+def test_a_running_review_keeps_its_hold_when_a_later_dispatch_of_its_task_is_refused(tmp_path: pathlib.Path) -> None:
+    """Feature 385 T104 (D121, the plan review's block): no hold drops another - a later dispatch of the same task, refused by
+    another guard, leaves the running review's hold standing."""
+    root, plan = _root(tmp_path)
+    state: dict = {}
+    ph.hold(state, "t1", "read /tmp/l7r-check/plan-385-x-T05/MANIFEST.md", 100.0)
+    ph.launched(state, "t1", "agent9")
+    ph.hold(state, "t2", "read /tmp/l7r-check/plan-385-x-T05/MANIFEST.md", 110.0)  # refused: never launched
+    edit = {"file_path": str(plan), "old_string": "the held decision text", "new_string": "x"}
+    assert "agent agent9" in ph.refusal(state, root, "Edit", edit, 110.0 + ph.PENDING_S + 1, False)
