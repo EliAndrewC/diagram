@@ -111,3 +111,4 @@ Uemura 1987 are on `research/to-download.md`, each naming 0251 as what rests on 
   - SC-003 now carries "what is still open".
 - **spec-fidelity round 2 (2026-10-19): CHANGES REQUIRED, 1 item.** The Qing rents now read ATTESTED ONLY FOR, and the
   Li Ciming house has its own verdict.
+- **spec-fidelity round 3 (2026-10-19): verdict FAITHFUL.** The round-2 item is resolved word for word.
