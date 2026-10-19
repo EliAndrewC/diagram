@@ -1,0 +1,182 @@
+{
+ "feature": "402-money-open-leads",
+ "blocks": {
+  "preamble": {
+   "sha256": "041797a66c9aed8a80b4042582400d18358dd942479c641781b7771e81131e91",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "6dd5d1a4ebf6c9ce3035c7afbd79fba32e768685d3fa00e3913ddb12bcf29e13",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "c63eeecb663b2304635bb3898d32fa8634445e5ede4e8c6fbe9818e2e727d6f3",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "99fbdeccbfbd66edf40fe2ec6f1c5aadb8e5ec75d91b966d48c7b6412a810289",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - the four questions (FR-001, FR-002)": {
+   "sha256": "1802d78baee68fb3a6e054bca13d0cd2d1b2c71d47c5bbab77f71b34114eeb60",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - the implementation check (FR-003)": {
+   "sha256": "2d77681bf99ff4f7c1dbcb6b304cd75d536378bdca07c7cf430aa6fe167d6ab7",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - the note to the asker (FR-004)": {
+   "sha256": "c65a1b2de2838dc8319284bd2831186eb8b843357497fa092af0c4aefa71fa94",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## T - the order": {
+   "sha256": "d9bec81178b5cd88e86a5854ea8a16d0063c88caa7bfca6a2445ad550fbdcdf3",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-19",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the four questions (FR-001, FR-002)",
+    "## D2 - the implementation check (FR-003)",
+    "## D3 - the note to the asker (FR-004)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary: two page sessions then the note",
+     "summary": "One write page session, one check-and-apply session, then a note to the asker; no code, map or canon change.",
+     "class": "within",
+     "why": "The request's work (the four questions' leads) and FR-004/FR-005 as written; how sessions are split decides nothing the request set."
+    },
+    {
+     "id": "TC-Morisada-routes",
+     "summary": "類聚近世風俗志 上 (991466) and the 1934 edition (1444386) by full-text search; 下 (991467) page by page in NDL's viewer or through 1444386 once shown whole.",
+     "class": "within",
+     "why": "Exactly the routes the request names: full-text for 991466 and 1444386, 991467 'only in the viewer'."
+    },
+    {
+     "id": "TC-Morisada-fallback",
+     "summary": "'unread lead' if 下 (991467) cannot be searched.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The request already states 991467 cannot be full-text searched and is readable in the viewer, and that the 守貞謾稿 leads 'are searched in this feature, not called SILENT'. A fallback triggered by 'cannot be searched' is triggered by a condition the request says is already true, so read literally it lets 下 end as an unread lead on day one, which guts the clause. Only physical impossibility of the route the request names is legitimate: reword to 'unread lead only if NDL's viewer refuses 991467 (dated, as observed) and 1444386 is not shown to hold 下 whole'."
+    },
+    {
+     "id": "TC-record",
+     "summary": "page-session briefs; the passes are leads, each passage read on its page; NDL scans and Oishi's PDF read on rendered page images sent to source-reader with IMAGES=.",
+     "class": "within",
+     "why": "Method for carrying the found figures (FR-001, FR-002 'from a passage read on its page'); narrows nothing asked."
+    },
+    {
+     "id": "TC-wages",
+     "summary": "Each new figure set beside the same place-and-period craftsman and laborer day wage, or that wage SILENT with the nearest named (class, place, unit, gap).",
+     "class": "within",
+     "why": "Adds rigor to the figures the request asks for; does not drop any lead or verdict."
+    },
+    {
+     "id": "Performance bookends N/A",
+     "summary": "No generator change, so no bookends.",
+     "class": "within",
+     "why": "FR-005: no engine or map change."
+    },
+    {
+     "id": "Constitution Check",
+     "summary": "XII research: physical per question task; XIII record checks green; XVI built as the spec's FRs.",
+     "class": "within",
+     "why": "Restates gates; decides nothing the spec left open."
+    },
+    {
+     "id": "D1-0276-wage",
+     "summary": "Kyoto carpenter 1653 (Hirai 2007), the 1656 bath account as arithmetic, Osaka laborers 1620s (Kitano) beside Mimasaka 1665.",
+     "class": "within",
+     "why": "The request's FOUND line for 0276."
+    },
+    {
+     "id": "D1-0276-Mimasaka-SILENT",
+     "summary": "'Mimasaka SILENT after 藩法集 岡山藩 is read or named.'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The request names the 賃銀雑事 chapter as 'a Mimasaka/Okayama wage' to be read if public, i.e. the wage sought for that slot. The row writes the verdict SILENT whatever the chapter says, deciding the outcome before the reading on an unmeasured premise (that an Okayama figure cannot serve); 'Okayama is not Mimasaka' is an accuracy argument, which does not legitimate a carve-out. Reword: 'Mimasaka/Okayama: the 賃銀雑事 chapter's wage beside 1665 if it is public and gives one; SILENT naming it if it gives none; named unread if not public.'"
+    },
+    {
+     "id": "D1-0276-Inui-sharpener",
+     "summary": "Inui named not readable; sharpener: Morisada's 磨師 entry (trade, no fee) and Uwajima 1662 (swords only).",
+     "class": "within",
+     "why": "The request's SILENT line for the sharpener's fee and its closed-lead list for Inui."
+    },
+    {
+     "id": "D1-0275",
+     "summary": "An Edo craftsman/laborer pair from 類聚近世風俗志, searched in NDL's viewer and full-text search, or SILENT naming the search.",
+     "class": "within",
+     "why": "The request's 'pp. 159-161 may give an Edo carpenter' lead, searched by the routes it names; SILENT only after the search, which the request permits."
+    },
+    {
+     "id": "D1-0277",
+     "summary": "Oishi's yearly table 1781-1842 (low and high mon per ryo), decade summaries as arithmetic, Edo-ness the record's reading; 1842-52 blank; 1850s SILENT; restricted 両替年代記 books and 新保 1978 named; 読史備要 1780s rows if read.",
+     "class": "within",
+     "why": "The request's FOUND line and closed-lead list for 0277; the blank and SILENT spans are the honest edges of the table the request names; 読史備要 is optional extra, cutting nothing asked."
+    },
+    {
+     "id": "D1-0273",
+     "summary": "Edo Ako salt brokers' 1791 price with the bale's measure as read, per-sho arithmetic; Edo retail and 1800-1850s from the Morisada search or SILENT naming it; wholesalers' commission if read.",
+     "class": "within",
+     "why": "The request's FOUND line for 0273 and its 'Morisada for Edo salt ... searched, not called SILENT'."
+    },
+    {
+     "id": "D1-scope-limit",
+     "summary": "Only the anchor rows of 0277 and the wage sections of 0273 and 0276 the new figures touch are revised; nothing else in the three pages changes.",
+     "class": "within",
+     "why": "Confines edits to what the leads change; the request asks for nothing else on those pages."
+    },
+    {
+     "id": "D2",
+     "summary": "implementation-check.md: one 'no code implements it - consumed by gm-assistant's money skill' line per changed question, with the search.",
+     "class": "within",
+     "why": "FR-003 as written."
+    },
+    {
+     "id": "D3",
+     "summary": "A new issue on EliAndrewC/diagram or a comment on #8, naming changed fragment files, each verdict changed from the #5 and #8 answers, the closed leads, and what is still open including feature 403's leads.",
+     "class": "within",
+     "why": "FR-004 says 'on GitHub' and lists the content; the note covers #5's changed verdicts as well as #8's."
+    },
+    {
+     "id": "T",
+     "summary": "Order: page sessions, implementation check, note, report and land by the direct route.",
+     "class": "within",
+     "why": "Sequencing only."
+    }
+   ]
+  }
+ ]
+}

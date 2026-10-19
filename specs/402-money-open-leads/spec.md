@@ -35,18 +35,17 @@ leads were searched and found nothing.
      silver coinage: a Kyoto carpenter at 1.8 monme with rice (1653, Myoshinji's account via Hirai 2007; reading it as a
      day's rate is the record's reading, the page having no 一日), the 1656 bath account's carpenters and day laborers (a
      per-day rate from its totals is the project's arithmetic), and Osaka's day laborers of the 1620s (Kitano). A wage of
-     Mimasaka or Okayama stays SILENT. The knife beside them in days is the project's arithmetic.
+     Mimasaka or Okayama: below. The knife beside them in days is the project's arithmetic.
    - **A sharpener's fee:** stays SILENT for a kitchen knife or razor, now with Morisada's 磨師 entry cited for the trade
      (it sharpened kitchen knives; no fee) and Uwajima's 1662 sword-polishing tariff given as ATTESTED ONLY FOR swords.
-   - **A wage of Mimasaka or Okayama:** SILENT only after 『藩法集1 岡山藩』's 賃銀雑事 chapter is read, if public; if it
-     cannot be read, the verdict names it as an unread lead.
+   - **A wage of Mimasaka or Okayama:** the 賃銀雑事 chapter of 『藩法集1 岡山藩』 gives it beside 1665 if it is public and
+     gives one; SILENT naming the chapter if it gives none; named as an unread lead if it is not public.
    - **Inui's papers** (Takefu 1980, Sakai 1972): not publicly readable, said so in the absence notes; Kawashima's one line
      on Inui stands.
 2. **0275, a skilled craftsman against a laborer:**
    - **An Edo pair:** "SILENT" stands only after 類聚近世風俗志 is searched for an Edo carpenter's and an Edo day laborer's
      wage (the #5 answer named 朝倉編『守貞謾稿』 pp. 159-161 as the lead), by the routes of the salt search in scenario 4 (0273); a
-     pair found there is written into 0275 with its verdict, any ratio the project's arithmetic. If 下 cannot be searched,
-     the verdict names it as an unread lead, not SILENT.
+     pair found there is written into 0275 with its verdict, any ratio the project's arithmetic. 下 is an unread lead only if NDL's viewer refuses 991467 (dated, as observed) and 1444386 is not shown to hold 下 whole.
 3. **0277, copper coin in silver:**
    - **The Edo market rate:** "SILENT" becomes ATTESTED ONLY FOR 1781-1842, Oishi's printed yearly table (low and high mon
      per ryo, from Mitsui's table "centered on Edo"); that it is Edo's rate is the record's reading of his method, said so.
@@ -61,8 +60,8 @@ leads were searched and found nothing.
    - **Edo retail by the sho, and an Edo salt price of 1800-1850s:** SILENT only after 類聚近世風俗志 is searched for them:
      上 (pid 991466) and the 1934 one-volume edition (pid 1444386) by NDL's full-text search, which worked for them; 下
      (pid 991467), whose full-text routes refused, page by page in NDL's viewer, or by 1444386 once its NDL record or a
-     read of its contents shows it holds the whole text. A figure found is cited with its verdict; if 下 cannot be
-     searched, the verdict names it as an unread lead, not SILENT. The wholesalers'
+     read of its contents shows it holds the whole text. A figure found is cited with its verdict; 下 is
+     an unread lead only if NDL's viewer refuses 991467 (dated, as observed) and 1444386 is not shown to hold 下 whole; otherwise SILENT naming the search. The wholesalers'
      commission (3 monme a ryo, of which 1 to the brokers) may be given if read on the page image.
 
 Each new figure sits beside the craftsman's and the unskilled laborer's day wage of the same place and period where a
@@ -115,3 +114,6 @@ readable and what is still open, so the skill can move its rows.
   Morisada paragraph and the plan no longer call 991467 full-text searchable; the 0275 clause points at scenario 4; the
   request's summary line matches the passes.
 - **Accepted by the round arbiter (ask:402-spec-round4, 2026-10-19): FAITHFUL on this text, a waiver, not a check's verdict.** Round 3 found round 2's item resolved; its wording items were fixed in the next commit, and a grep confirmed no file still calls 991467 full-text searchable.
+- **Plan review (2026-10-19): BLOCKED, 2 narrowings.** The 下 fallback now fires only if the viewer refuses 991467
+  (dated) and 1444386 is not shown whole; the Okayama chapter's wage, if it gives one, stands beside 1665 (spec, plan and
+  brief changed together).

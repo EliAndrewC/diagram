@@ -30,7 +30,8 @@ image (a headless-browser screenshot of the viewer, as the sharpener pass did). 
 and the 1934 edition (1444386); it refused 下 (991467), so search 下 page by page in the viewer (its contents pages first,
 for the sections on salt, food and wages), or use 1444386 once its NDL record or contents show it holds the whole text.
 What you find is cited as below; what you do not find after searching both volumes makes the verdict SILENT, with the
-search named in the absence note. If 下 cannot be searched, the verdict names it as an unread lead, not SILENT.
+search named in the absence note. 下 is an unread lead only if NDL's viewer refuses 991467 (dated, as observed) and 1444386 is not shown to hold 下 whole; say in the
+absence note what you observed and when.
 
 ## Your items (four questions revised)
 
@@ -41,13 +42,14 @@ search named in the absence note. If 下 cannot be searched, the verdict names i
     project's arithmetic (only if the table reads cleanly on the page; otherwise leave it out); Osaka day laborers, 1620-21
     (Kitano, TUAD bulletin 33, note 26) and 1628 (Kitano, R7 bulletin, Table 1). All in Keicho silver, the coin of 1665;
     state that from a source (ja.wikipedia 三貨制度 is archived) or leave it unsaid. A wage of Mimasaka or Okayama:
-    SILENT. Revise the knife-in-days arithmetic to the nearest same-period wage, labeled.
+    see the Okayama bullet below. Revise the knife-in-days arithmetic to the nearest same-period wage, labeled.
   - The sharpener (now "a sharpener's fee SILENT"): Morisada's 磨師 entry (類聚近世風俗志 上, NDL pid 991466, koma 94;
     the pass's transcription is to be checked on the image) shows the trade sharpened kitchen knives and small knives, with
     no fee: the fee stays SILENT. Uwajima 1662's sword-polishing rate (愛媛県史 近世下, archived) is ATTESTED ONLY FOR
     swords; its 分 unread as to coin, so give it as the page gives it.
   - The Okayama wage: 『藩法集1 岡山藩』's 賃銀雑事 chapter, if a public scan exists (search NDL); read it for a day wage
-    of the 1600s. If it cannot be read, the Mimasaka/Okayama verdict stays SILENT and its absence note names it unread.
+    of the 1600s. If it gives one, set it beside 1665 with its verdict and gap; if it gives none, SILENT naming it; if it
+    is not public, the verdict names it as an unread lead.
   - Inui's papers (Takefu 1980, 大阪教育大学紀要; Sakai 1972, 歴史学研究 385): not publicly readable (repository abstract
     only; NDL in-library only), said so in the absence notes; Kawashima's one line on Inui stands.
 - B4 **0275 "What did a skilled craftsman earn against a laborer?"**

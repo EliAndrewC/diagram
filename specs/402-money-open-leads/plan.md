@@ -11,7 +11,7 @@ the asker. No code, map or canon change.
 ## Technical Context
 
 - **Morisada.** 類聚近世風俗志: full-text search for 上 (pid 991466) and the 1934 edition (pid 1444386); 下 (pid 991467)
-  page by page in NDL's viewer, or through 1444386 once shown whole; "unread lead" if 下 cannot be searched. Its IIIF and
+  page by page in NDL's viewer, or through 1444386 once shown whole; 下 is an unread lead only if NDL's viewer refuses 991467 (dated, as observed) and 1444386 is not shown to hold 下 whole. Its IIIF and
   lab routes refuse all three pids.
 - **The record.** `make page-session BRIEF="briefs/s1-write.md briefs/s1-check.md"`. The passes are leads: each passage is
   read on its page before it is cited. The NDL scans (諸問屋再興調 十之二, pid 2548694; 類聚近世風俗志 上, pid 991466; 読史備要,
@@ -36,7 +36,7 @@ N/A: no generator change.
 
 | question | what changes |
 |---|---|
-| 0276 "What did a kitchen knife cost?" | the wage beside Mimasaka 1665: Kyoto carpenter 1653 (Hirai 2007), the 1656 bath account (arithmetic), Osaka laborers 1620s (Kitano); Mimasaka SILENT after 藩法集 岡山藩 is read or named; Inui named not readable; the sharpener: Morisada's 磨師 entry (the trade, no fee) and Uwajima 1662 (swords only) |
+| 0276 "What did a kitchen knife cost?" | the wage beside Mimasaka 1665: Kyoto carpenter 1653 (Hirai 2007), the 1656 bath account (arithmetic), Osaka laborers 1620s (Kitano); Mimasaka/Okayama: the 藩法集 岡山藩 賃銀雑事 chapter's wage beside 1665 if public and it gives one, SILENT naming it if it gives none, named unread if not public; Inui named not readable; the sharpener: Morisada's 磨師 entry (the trade, no fee) and Uwajima 1662 (swords only) |
 | 0275 "What did a skilled craftsman earn against a laborer?" | an Edo pair from 類聚近世風俗志 (searched in NDL's viewer and full-text search), or SILENT naming the search |
 | 0277 "What was copper coin worth in silver?" | the Edo rate: Oishi's yearly table 1781-1842 (low and high mon per ryo), decade summaries as arithmetic, Edo-ness the record's reading; 1842-52 blank; the 1850s SILENT; the restricted 両替年代記 books and 新保 1978 named; 読史備要's scattered 1780s rows if read |
 | 0273 "What did salt cost?" | Edo, Ako salt: the brokers' 1791 price, 9-9.5 bales per ryo, the bale's measure as the page reads; per sho arithmetic; Edo retail and 1800-1850s from the Morisada search or SILENT naming it; the wholesalers' commission if read on the image |
