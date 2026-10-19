@@ -161,12 +161,11 @@ def test_a_new_source_s_bundle_is_a_first_reading_of_its_notes(tmp_path: pathlib
     source-reader bundle per source (`make check-bundle KEY=`), each counted as a whole-page re-read, so the seventh tripped the
     cap on first readings. A source's bundle reads the notes its `unit:` lines name; a dispatch records them as `notes`."""
     root = _clone(tmp_path)
-    src = lambda key, *ns: (
-        f"# Check bundle - source {key}\n\nowed-checks: source-reader\n"
-        + "".join(  # noqa: E731
-            f"unit: source-reader:0105#{n} f{i}\n" for i, n in enumerate(ns)
-        )
-    )
+
+    def src(key: str, *ns: str) -> str:
+        units = "".join(f"unit: source-reader:0105#{n} f{i}\n" for i, n in enumerate(ns))
+        return f"# Check bundle - source {key}\n\nowed-checks: source-reader\n" + units
+
     assert hc.notes_of_manifest(src("k", "k", "k-2")) == {"k", "k-2"}
     assert hc.notes_of_manifest(MANIFEST) == set(), "a whole-page bundle names no notes"
     st: dict = {}

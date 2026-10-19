@@ -89,8 +89,7 @@ def moved_since_answer(root: Path, text: str, subject: str) -> str:
     import record_owed  # noqa: PLC0415
 
     store = record_owed.store(root)
-    return next((fp for slug, fp in _UNIT_FP.findall(text)
-                 if subject_of_unit(slug.partition(":")[2]) == subject and not record_owed.answered(store, slug, fp)), "")
+    return next((fp for slug, fp in _UNIT_FP.findall(text) if subject_of_unit(slug.partition(":")[2]) == subject and not record_owed.answered(store, slug, fp)), "")
 
 
 def batch_of(root: Path | None) -> str:
@@ -178,8 +177,8 @@ def _task_texts(transcript: str) -> list[str]:
         return out
     for raw in lines:
         try:
-            msg = (json.loads(raw).get("message") or {})
-        except (ValueError, AttributeError):
+            msg = json.loads(raw).get("message") or {}
+        except ValueError, AttributeError:
             continue
         if not isinstance(msg, dict) or msg.get("role") != "user":
             continue
@@ -336,9 +335,17 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
         if s in current:  # what this check will have read of the subject, for the next dispatch's first-look test
             marks["seen"][unit] = sorted({_sentence_key(x) for x in current[s]})
         marks["read"][unit] = sorted(notes or {"*"})  # "*": a whole-page reading, every note read
-    state.setdefault("dispatches", {})[tid] = {"check": check, "subjects": subjects, "manifest": manifest, "t": now, "state": "pending", "counted": counted,
-                                                "marks": marks, "owed": re.findall(r"^owed: (.+)$", text, re.M),  # why each unit was due (374)
-                                                "notes": sorted(notes)}  # the notes the bundle read, [] for the whole page (feature 393's earlier rounds)
+    state.setdefault("dispatches", {})[tid] = {
+        "check": check,
+        "subjects": subjects,
+        "manifest": manifest,
+        "t": now,
+        "state": "pending",
+        "counted": counted,
+        "marks": marks,
+        "owed": re.findall(r"^owed: (.+)$", text, re.M),  # why each unit was due (374)
+        "notes": sorted(notes),
+    }  # the notes the bundle read, [] for the whole page (feature 393's earlier rounds)
     return ""
 
 
@@ -714,8 +721,15 @@ def log_pass(git_dir: Path, mode: str, payload: Mapping[str, Any], now: float | 
         # these stand only where that transcript is gone.
         parts = review_cost.segments(lines)
         wall, tokens = review_cost.cells(review_cost.cost(parts[-1])).split(" | ", 1)
-        rec = {"date": time.strftime("%Y-%m-%d", time.localtime(now or time.time())), "check": check, "subject": _first_prompt(lines), "agent": aid,
-               "segment": len(parts) - 1, "wall": wall, "tokens": tokens}
+        rec = {
+            "date": time.strftime("%Y-%m-%d", time.localtime(now or time.time())),
+            "check": check,
+            "subject": _first_prompt(lines),
+            "agent": aid,
+            "segment": len(parts) - 1,
+            "wall": wall,
+            "tokens": tokens,
+        }
         log = git_dir / PASS_LOG
         prior = [json.loads(ln) for ln in log.read_text(encoding="utf-8").splitlines() if ln.strip()] if log.is_file() else []
         if any(r.get("agent") == aid and r.get("segment") == len(parts) - 1 for r in prior):
@@ -826,8 +840,11 @@ def _close(path: Path | None, state: dict[str, Any], subject: str, reason: str, 
     if not escaped("CHECK_CLOSED", f'CHECK_CLOSED="{reason}"'):
         print("check-closed: REASON needs two words and eight characters - it is what a later audit reads", file=sys.stderr)
         return 2
-    silent = [d for d in state.get("dispatches", {}).values() if subject in d.get("subjects", [])
-              and ((d.get("state") == "running" and now - float(d.get("t", 0)) > STALE_S) or (agent and d.get("aid") == agent and d.get("state") != "answered"))]
+    silent = [
+        d
+        for d in state.get("dispatches", {}).values()
+        if subject in d.get("subjects", []) and ((d.get("state") == "running" and now - float(d.get("t", 0)) > STALE_S) or (agent and d.get("aid") == agent and d.get("state") != "answered"))
+    ]
     for d in silent:
         d["state"] = "answered"
         d["closed"] = reason
