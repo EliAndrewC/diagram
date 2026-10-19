@@ -43,8 +43,10 @@ The four questions are `research: physical` with their five boxes; the rest are 
 - [x] T05 Implementation check (D2; FR-003)
       research: rendering
       verify: DONE. make impl-check F=398: nothing missing
-- [ ] T06 The answer on EliAndrewC/diagram#7 (D3; FR-004)
+- [x] T06 The answer on EliAndrewC/diagram#7 (D3; FR-004)
       research: rendering
-- [ ] T07 Close: report and land
+      verify: DONE. checked answer posted on EliAndrewC/diagram#7 (issuecomment-6268426363): four fragment files, a verdict per figure, corrections to the interim, still open
+- [x] T07 Close: report and land
       research: rendering
+      verify: DONE. report written; landing by the direct route
 - [ ] GM review (make gm-reviewed F=398) [lands-open]
