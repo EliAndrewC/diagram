@@ -584,3 +584,16 @@ def test_an_entry_added_to_a_claimed_dict_owes_its_claims_a_triage_and_an_edited
     assert sorted(w for _k, w in cx.owed(cx.current(root), index)) == [cx.SECTION_TRIAGE, cx.SECTION_TRIAGE]
     (root / "l7r" / "diagram" / "hamletgen" / "rows.py").write_text(mod.replace("band b - ", "band b, wider - "))
     assert [w for _k, w in cx.owed(cx.current(root), index)] == ["new"], "an edited claim line is a new claim, checked in full"
+
+
+def test_an_aside_outside_the_change_is_filed_when_the_reply_is_recorded(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The round arbiter's fix on hour:385-approach-checklist@32: two checker asides lived only in replies - one in an .output
+    transcript `make record-checked` read raw, one in prose - and neither reached a filed row."""
+    import record_owed
+
+    filed: list[tuple[str, str]] = []
+    monkeypatch.setattr(record_owed, "file_outside", lambda root, check, reply: filed.append((check, reply)) or [{"file": "f", "block": "b", "finding": "x"}])
+    reply = "VERDICT l7r/a.py::f#a IN-STEP - ok\n\nOUTSIDE THE CHANGE\n- research/questions/0246-x.drawing.html | a block | a gloss owed\n"
+    cx.claims_triage.vet(reply, {"l7r/a.py::f#a": {}}, tmp_path, cx._VERDICT)
+    assert filed and filed[0][0] == "impl-drift" and "OUTSIDE THE CHANGE" in filed[0][1]
+    assert record_owed.outside.__call__ and len(record_owed.outside(reply)) == 1, "the row shape the agent file now asks for parses"

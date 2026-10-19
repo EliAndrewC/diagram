@@ -106,6 +106,9 @@ each on its own line, with no backticks needed:
   changes (feature 318), so name every block your verdict reads - a block you leave out is a change you will not be shown.
 - One VERDICT line for EVERY key in the bundle - a key with no line stays owed. An IN-STEP note is a few words; a finding's note
   says what is wrong and what the claim or the code should be, in one line.
+- Anything you notice OUTSIDE the owed keys - another claim's wording, a page's own gap, code the bundle shows beside the claim -
+  goes under an `OUTSIDE THE CHANGE` heading as `- <file> | <unit or block> | <finding>` lines, never in a closing paragraph: the
+  session files each line as an open row when it records your reply, and a note in prose is lost (the round arbiter on hour 32).
 - Nothing else is needed: no restated code, no reasoning for a pass. Every character stays in the session's context.
 
 Send the reads and greps you already know you need in ONE message.
