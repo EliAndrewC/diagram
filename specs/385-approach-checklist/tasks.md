@@ -207,6 +207,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       verify: DONE. qualified decisions read from their own plan; landed, test_plan_blocks green
 - [ ] T72 A plan review's ledger row is written at landing (plan D92) [lands-open]
       research: rendering
+- [ ] T74 A task id added to the Lands open line owes no review (the arbiter's fix on hour:385-approach-checklist@24, plan D93) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

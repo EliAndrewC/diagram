@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -249,9 +249,41 @@ Owed by the hour-20 step-back (hour:385-approach-checklist@20, `continue`), whic
 8. **The budget.** 40 min.
 9. **Done, measured.** One goal: `land-tooling` and `sync-with-main.sh done` write and commit the row of every owed pass whose subject is a `MODE 4: PLAN REVIEW`, its acted-on cell naming the plan-verdict record, before they check the ledger; any other owed pass still refuses as now; `tests/tooling/test_ledger_owed.py` (the module's test) red without it.
 
+### T72 part B (2026-10-19T00:24Z)
+
+Owed by the hour-24 step-back (hour:385-approach-checklist@24, `continue`).
+
+1. **What is refusing?** Nothing: the writer and both landings' calls are built; its first live run wrote T72's own review row.
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Changing: the plan reviews' rows are the landing's to write.
+6. **The one-sentence test.** "A landing writes a plan review's row" - true by its test and its live run.
+7. **The next step is a measurement.** The guard suites, then the landing.
+8. **Routes measured before asking?** n/a - no ask.
+9. **After a ruling.** `continue`; its tooling fix (the Lands open line) is T74.
+
 ### T72 Decisions
 
 **D92 - the plan reviews' rows written by the landing.** `ledger_owed.py --write-plan-reviews` appends `filled_row` for each owed pass whose subject starts `MODE 4: PLAN REVIEW`, the where cell `the plan-verdict record (make plan-verdict)`, and prints how many. `land-tooling.sh` and `sync-with-main.sh done` run it first and, when it wrote any, commit `dev/review-ledger.md` as "the plan reviews' ledger rows, written at landing (feature 385 T72)"; the ledger check then runs as now on what remains.
+
+## T74 - a task id added to the Lands open line owes no review (the round arbiter's fix on hour:385-approach-checklist@24)
+
+### T74 Approach (checklist part A)
+
+1. **The goal, in the world.** Filing a task never costs a plan review of the Landing block.
+2. **The constraints.** The arbiter's fix: "The plan gate behind `make plan-delta`/`make plan-verdict` should not ask for a spec-fidelity review when the only change to the plan's `**Lands open**:` line is a task id added by `make task-add` (or `task-add` should record that verdict itself), with a test showing such a delta is CLEAR without a dispatch"; any other change to the block, an id removed among them, is owed as now.
+3. **Where each comes from.** The fix is the arbiter's (G); the block review is 375 FR-043 (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the hour-24 bundle): two spec-fidelity dispatches that hour (23:48 and 00:11) reviewed only ids added to the line, each with its ledger row, and the T70 landing waited on one.
+5. **The order.** The rule in `plan_gate.block_status`, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 25 min.
+9. **Done, measured.** One goal: a block whose text differs from its reviewed text only by ids appended to its `**Lands open**:` line is not owed; one that drops an id, or changes anything else, is; `tests/tooling/test_plan_gate.py` red without it.
+
+### T74 Decisions
+
+**D93 - an appended id is no change.** `block_status` judges a block against its reviewed text with each `**Lands open**:` line read as its set of ids: where the reviewed set is a subset of the current one and the rest of the text is the same or typo-scale, the block is not owed. Every block keeps its recorded digest; nothing is written for it.
 
 ## T11 - the close
 
