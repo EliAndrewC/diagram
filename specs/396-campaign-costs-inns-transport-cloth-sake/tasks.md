@@ -8,38 +8,45 @@ The four questions are `research: physical` with their five boxes; the rest are 
 
 ## Tasks
 
-- [ ] T01 A night at an inn (D1; scenario 1)
+- [x] T01 A night at an inn (D1; scenario 1)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-- [ ] T02 Hiring a horse or a porter (D1; scenario 2)
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. 0259 written from the four passes (passes/), source-reader READ, quote-check SUPPORTS and source-applicability on every source over three rounds (s1-checks.md); make record-owed names nothing unanswered
+- [x] T02 Hiring a horse or a porter (D1; scenario 2)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-- [ ] T03 Cloth and clothing (D1; scenario 3)
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. 0260 written from the four passes (passes/), source-reader READ, quote-check SUPPORTS and source-applicability on every source over three rounds (s1-checks.md); make record-owed names nothing unanswered
+- [x] T03 Cloth and clothing (D1; scenario 3)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-- [ ] T04 Sake by the shop and the cup (D1; scenario 4)
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. 0261 written from the four passes (passes/), source-reader READ, quote-check SUPPORTS and source-applicability on every source over three rounds (s1-checks.md); make record-owed names nothing unanswered
+- [x] T04 Sake by the shop and the cup (D1; scenario 4)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-- [ ] T05 Implementation check (D2; FR-003)
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. 0262 written from the four passes (passes/), source-reader READ, quote-check SUPPORTS and source-applicability on every source over three rounds (s1-checks.md); make record-owed names nothing unanswered
+- [x] T05 Implementation check (D2; FR-003)
       research: rendering
-- [ ] T06 The answer on EliAndrewC/diagram#3 (D3; FR-004)
+      verify: DONE. make impl-check F=396: nothing missing - one 'no code implements it' line per question 0259-0262, each with its grep
+- [x] T06 The answer on EliAndrewC/diagram#3 (D3; FR-004)
       research: rendering
-- [ ] T07 Close: report and land
+      verify: DONE. checked answer posted on EliAndrewC/diagram#3 (issuecomment-6263619820): four fragment files, a verdict per figure, the units rule, and what is still open (the copper-to-silver rate first)
+- [x] T07 Close: report and land
       research: rendering
+      verify: DONE. feature-report written (specs/396-campaign-costs-inns-transport-cloth-sake/report.md); landing by sync-with-main done, the direct route
 - [ ] GM review (make gm-reviewed F=396) [lands-open]
