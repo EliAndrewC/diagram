@@ -2752,3 +2752,63 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@31 (continue).
 
 **D127 - two measures, said once.** A new block on 0246's drawing page, after the gap's block: "The room and the gap measure their 7 ft differently. The 18 ft room between two homesteads counts 7 ft from each fence to the tread's edge, so its lane's middle stands 9 ft off; the least gap counts 7 ft to the lane's middle. Both are map drawing conventions."
 
+<!-- plan-archive: archived 2026-10-19 -->
+## T109 - the track's grove gap as 0036 gives it (found working T107, 2026-10-19)
+
+### T109 Approach (checklist part A)
+
+1. **The goal, in the world.** The track out and the field spur keep 0036's working room off a farm's grove where they go round it, as T98 made the door path and the connector's dry exit keep it; and two claims say the routed link's gap as the code routes it.
+2. **The constraints.** 0036's drawing page: a footpath's clearance and some working room off the trees each side - `GROVE_WORKING_ROOM_FT` 9.5 ft past the tread's half-width (`track.CONNECTOR_BAND_GAP_FT`, 12.5 ft for the 6 ft connector, T98). The GM, 2026-10-12: room before packing. A claims check IN-STEP; a test red without it.
+3. **Where each comes from.** 0036's drawing page (O); T98's D119 (O); the GM (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T107's impl-drift round: `track._thread_the_fabric#gap off the steadings` MISLABELED, then a read of `_thread_the_fabric`): its grove fallback routes the spur and the connector round the bands at `FOOTPATH_FABRIC_GAP` (7 ft) and clips at it, citing 0246 for the band gap; the same round found the GUESS claims on `touch._one_network` and `touch._touch_junctions` calling the routed link 14 ft where it is routed at `WEB_FABRIC_GAP`, 7 ft (`pad_mult` sizes only the search box).
+5. **The order.** The fallback's bands grown so the route and the clip keep `CONNECTOR_BAND_GAP_FT` off the trees; the claims; the test; the cohort.
+6. **The exits.** (e) conform - 0036's room, counted once, as T98; the crops keep their own gap in the same route, so the bands are grown rather than the route's gap widened.
+7. **The search smell.** None.
+8. **The budget.** 45 min.
+9. **Done, measured.** One goal: `_thread_the_fabric`'s grove fallback holds a route 12.5 ft off the trees and its claim cites 0036; the two touch claims say 7 ft; the claims IN-STEP; a test red without it; the cohort passes.
+10. **Before moving a constant.** No constant's value moves; `_thread_the_fabric` reads `CONNECTOR_BAND_GAP_FT` (measured 2026-10-19, a grep: three uses of `FOOTPATH_FABRIC_GAP` in the fallback - the route, the clip and the fabric test - of which the route and the clip are against the bands).
+11. **Before fitting things into room.** Dispersed farms' bands stand 32 ft apart (T98's measure); a 6 ft track at 12.5 ft a side needs 25 ft.
+
+### T109 Decisions
+
+**D128 - the grove fallback at 0036's room.** In `_thread_the_fabric` the grove bands the fallback routes round and clips against are grown by `CONNECTOR_BAND_GAP_FT - FOOTPATH_FABRIC_GAP` (5.5 ft) a side, so the route and the clip at `FOOTPATH_FABRIC_GAP` keep the line 12.5 ft off the trees; the crops keep their gap. Its claim cites 0036 for the band gap. The same growth holds the bands wherever the function tests the fabric - its first route, its clip and its checks build
+the fabric with the grove bands grown by `CONNECTOR_BAND_GAP_FT - gap`, so no route keeps a band at 7 ft (measured 2026-10-19:
+T109's claims round, `gap off the steadings` DRIFTED for the first route; built, the cohort passes 16 of 16). The two touch
+claims say the routed link keeps `WEB_FABRIC_GAP` (7 ft to the middle), labeled DEVIATION on 0246 as `_route`'s own claim is, the
+junction link's 25 ft cited to 0081's join reach.
+
+### T109 part B (2026-10-19T11:05Z)
+
+Owed by the round arbiter's ruling on hour:385-approach-checklist@32 (continue), taken while T109 was the active task.
+
+1. **What is refusing?** Nothing: the claims round named the first route's band gap, now built as D128 above.
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither in this part B: the change is D128's, decided above and reviewed with it.
+6. **The one-sentence test.** "A track keeps 0036's room off every grove band" - true by the build and the cohort.
+7. **The next step is a measurement.** The claims round on the changed function, then the gate.
+8. **Every route measured before offering one?** No route is offered.
+9. **After a ruling: the step it names?** Yes - the ruling says go on with T109; its two asides are filed as T110 and T111.
+
+<!-- plan-archive: archived 2026-10-19 -->
+## T110 - Enoshima glossed (found working T107, 2026-10-19)
+
+### T110 Approach (checklist part A)
+
+1. **The goal, in the world.** A reader of 0246's drawing page meeting "Enoshima" can learn what it is where they meet it.
+2. **The constraints.** research/CLAUDE.md: a term the reader would not know is a glossary tooltip, one glossary for the map and the record, one file per term. 0081's notes quote what Enoshima was: Edward Morse, 1886 - "This street is flanked on both sides by hills; and the ravine, of which the street forms the central axis, is densely crowded with houses, the narrowest of alley-ways leading to the houses in the rear." T31's lesson: editing a heavily cited block owes its claims their full check.
+3. **Where each comes from.** research/CLAUDE.md (O); 0081's notes (O, a quoted source); T31's retro (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T107's record-format round, OUTSIDE THE CHANGE, then a grep of the glossary and the record): 0246's block "A few farmhouses may be reached across a neighbor's land" names Enoshima and the glossary holds no entry for it; 0081 is the only page that says what it was.
+5. **The order.** A glossary file for Enoshima; `make glossary`; the record checks it owes.
+6. **The exits.** (c) a glossary tooltip - the page's own block untouched; a gloss inside the block was weighed and refused (its claims would owe full checks).
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: the glossary holds Enoshima and the built record shows its tooltip on 0246; record-format finds the word ruled; no block edited.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T110 Decisions
+
+**D129 - a tooltip, from Morse.** A glossary file `l7r/diagram/interactive/assets/glossary/9995-enoshima.json`: "Enoshima - a small island town Edward Morse described in 1886: one street up a ravine between hills, densely crowded with houses, the narrowest of alleys leading to the houses behind it."
+
