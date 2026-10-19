@@ -3,55 +3,55 @@
  "blocks": {
   "preamble": {
    "sha256": "f7506d3313822338e025e646c339477be6f34f96bba235645615b441b0eef774",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## Summary": {
    "sha256": "23b1105cd3fcd866df51c11af4562624453d34673856c2b44425a345aad51d1a",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## Technical Context": {
-   "sha256": "0012003396591f3432dbf5ffb151e194b6ff40b6dc795a663e716e366d151305",
-   "verdict": "BLOCKED",
+   "sha256": "a9b60355ded21224ed8c701752bffbfea5224f72a7f3c6373aa30cffb9b67bf9",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## Performance bookends": {
    "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## Constitution Check": {
    "sha256": "99fbdeccbfbd66edf40fe2ec6f1c5aadb8e5ec75d91b966d48c7b6412a810289",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## D1 - the four questions (FR-001, FR-002)": {
    "sha256": "623b0df57d9bbf26fdfcf718c68a25e090521da651b81e1215f1c7bfdee6dda1",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## D2 - the implementation check (FR-003)": {
    "sha256": "343179d36bb80d0f308d0f838d599754b275ba6a4073a64ee28603f3f9efb380",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## D3 - the answer (FR-004)": {
    "sha256": "9abd7d21d908eb2d74e712351e1fbfa70f5c70b1c80d6bcdd3b701642c5fa8a0",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   },
   "## T - the order": {
    "sha256": "a546546a20ff0dc1c925669cab981969374479f6904353bc5da8504b5579f722",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
   }
@@ -145,6 +145,85 @@
      "summary": "Page sessions, implementation check, answer, report and land by the direct route.",
      "class": "within",
      "why": "Sequencing of the requested work."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-19",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the four questions (FR-001, FR-002)",
+    "## D2 - the implementation check (FR-003)",
+    "## D3 - the answer (FR-004)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary: one write session, one check-and-apply session, then the answer",
+     "summary": "Four questions written in one write page session from the four passes, checked and applied, then answered on #3; no code, map or canon change.",
+     "class": "within",
+     "why": "The request is four research questions answered on #3; the diagram comment calls it one write session; FR-005 bars code/map/canon change."
+    },
+    {
+     "id": "Technical Context: passes are leads, read on the page before citing",
+     "summary": "Each pass passage is read on its page before it is cited.",
+     "class": "within",
+     "why": "Serves the request's cited figures and the ATTESTED verdicts; FR-002's record checks."
+    },
+    {
+     "id": "Technical Context: wage beside each figure; SILENT fallback to the nearest wage with class, place, unit and gap; craftsman's wage only where no unskilled exists, always named as a craftsman's and never shown as the unskilled wage",
+     "summary": "Each price sits beside the same place and period's unskilled day wage where a source gives one; where none does the wage is reported SILENT and the nearest wage is named with its class, place, unit and gap in years.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The request asks for the unskilled day wage of the same place and period. Where no source gives that wage, meeting the rule is physically impossible, and the request's own verdict vocabulary includes SILENT. The fallback adds a labeled nearest wage; it does not replace the requested one. The changed text strengthens fidelity: a craftsman's wage is named by its class and is never presented as the unskilled wage the skill converts by, so the request's purpose (laborer-day conversion) is not corrupted."
+    },
+    {
+     "id": "Technical Context: copper-to-silver rate left open",
+     "summary": "Mon prices beside silver-monme wages state both units; the exchange rate is not written and the answer lists it as still open.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The figures the request asks for (price in mon, with the same period's wage) are still delivered, both units stated. The request's 'what is still open' clause provides for the missing rate, and the skill does the conversion. No figure is withheld and no conversion is invented."
+    },
+    {
+     "id": "Performance bookends N/A",
+     "summary": "No generator change, so no bookends.",
+     "class": "within",
+     "why": "Research-only feature (FR-005)."
+    },
+    {
+     "id": "Constitution Check",
+     "summary": "XII research:physical tasks, XIII record checks green, XVI built as the FRs.",
+     "class": "within",
+     "why": "Process conformance; decides nothing the request constrains."
+    },
+    {
+     "id": "D1: four new money questions, tags, level, coverage",
+     "summary": "Four new questions tagged subject=money with settings, level counts-and-measurements, covering inns/stabling, transport (stage rates, return, day hire), cloth (tan, cotton, silk, ratio, pongee, kimono, Bassino and Ma beside), sake (shop, tavern, markups), with Qing comparisons and silences; project arithmetic labeled.",
+     "class": "within",
+     "why": "Maps clause by clause onto the four questions of the request, Japan-first with China as comparison; silences carry the SILENT verdict the request names; labeling project arithmetic keeps ATTESTED honest."
+    },
+    {
+     "id": "D2: implementation-check line per question",
+     "summary": "One 'no code implements it - consumed by gm-assistant's money skill' line per question, with the search.",
+     "class": "within",
+     "why": "FR-003 as written."
+    },
+    {
+     "id": "D3: the answer on #3",
+     "summary": "Fragment FILE per question, checked verdict per figure, what is still open (the copper-to-silver rate; the unchecked Kobe/Mitsui lead named as unchecked).",
+     "class": "within",
+     "why": "Exactly the request's 'What the skill needs back' and FR-004."
+    },
+    {
+     "id": "T: the order",
+     "summary": "Page sessions, implementation check, answer, report and land by the direct route.",
+     "class": "within",
+     "why": "Sequencing only."
     }
    ]
   }
