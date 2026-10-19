@@ -17,7 +17,19 @@
 # LAND_TOOLING_PUSH replace the checks, the landed tests' runner and the push.
 set -uo pipefail
 
-die() { printf 'land-tooling: %s\n' "$*" >&2; exit "${2:-1}"; }
+die() { LT_OUTCOME="failed: ${1:0:160}"; printf 'land-tooling: %s\n' "$*" >&2; exit "${2:-1}"; }
+# GUARD_EDIT_OK: feature 385 T79 (plan D98; the round arbiter on hour:385-approach-checklist@25) - EACH RUN LEAVES ITS RECORD, from
+# the exit trap so a run that dies early leaves one too: `make tick` refuses a NOTE saying "landed" while the task's last run failed
+# or a file it named still differs from main (T72 was ticked "landed" at 00:49 over a failed landing).
+LT_OUTCOME="died"; LT_FILES="$*"
+lt_record() {
+  local gd task
+  gd=$(git -C "${ROOT:-.}" rev-parse --path-format=absolute --git-common-dir 2>/dev/null) || return 0
+  task=$(tail -1 "$gd/task-starts.jsonl" 2>/dev/null | python3 -c 'import json,sys; r=json.loads(sys.stdin.read() or "{}"); print(r.get("feature","") + " " + r.get("task",""))' 2>/dev/null)
+  python3 -c 'import json,sys,datetime; f,t=sys.argv[2].split(" ",1) if " " in sys.argv[2] else ("",""); print(json.dumps({"feature": f, "task": t, "files": sys.argv[3].split(), "outcome": sys.argv[4], "log": sys.argv[5], "utc": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")}))' \
+    "$gd" "$task" "$LT_FILES" "$LT_OUTCOME" "$gd/land-tooling.log" >> "$gd/land-tooling.jsonl" 2>/dev/null || :
+}
+trap lt_record EXIT
 # FR-005: the proposal's scripts/, tests/ and agent instruction files, plus the wiring a scripts/ fix needs to take effect.
 # GUARD_EDIT_OK: fixing a route that refused correct work - the review ledger too: the push checks every logged check pass
 # against the LEDGER it lands, and the pass log is the clone's, so a session that had run checks could never land tooling
@@ -102,7 +114,8 @@ step prepare
 git -C "$ROOT" worktree add -q --detach "$WT" origin/main || die "cannot add the worktree at $WT"
 step worktree
 cleanup() { git -C "$ROOT" worktree remove --force "$WT" 2>/dev/null; rm -f "$patch"; }
-trap cleanup EXIT
+LT_FILES="$*"
+trap 'cleanup; lt_record' EXIT
 
 # GUARD_EDIT_OK: feature 385 T24 (plan D46) - A STALE BASE IS MERGED, NOT REFUSED: measured 2026-10-18, three of three tooling
 # landings were refused here because the ledger and the make-targets page moved on main, and each landed unchanged after a
@@ -195,4 +208,5 @@ step push; steps_done "push-exit-$rc"
 # a refusal's reason is above the push's last lines: six lines showed the backup notice and hid the ledger's refusal
 if [ "$rc" -eq 0 ] || [ "$rc" -eq 3 ]; then tail -6 "$log"; else tail -25 "$log" >&2; fi
 [ "$rc" -eq 0 ] || [ "$rc" -eq 3 ] || die "the push failed (exit $rc; log: $log) - nothing landed"
+LT_OUTCOME="landed"
 printf 'land-tooling: landed %s on main. The clone keeps its own commits; its next sync-in merges them cleanly.\n' "$*"

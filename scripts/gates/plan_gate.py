@@ -120,7 +120,17 @@ def task_current(review: dict, plan_text: str, task: str, history: History | Non
     if entry.get("section_sha256") == digest(section.encode()):
         return True
     earlier = entry.get("section_text") or (history.section(task, str(entry.get("section_sha256"))) if history else None)
-    return earlier is not None and typo_only(str(earlier), section)
+    # A QUIET PART B LEAVES THE SECTION REVIEWED (feature 385 T80, plan D99): T75 skips the part B itself, but adding it moved the
+    # section's digest and T78's other three blocks fell back to block reviews. Both texts are read without their quiet part Bs.
+    return earlier is not None and typo_only(_quiet_out(str(earlier), plan_text), _quiet_out(section, plan_text))
+
+
+def _quiet_out(section: str, plan_text: str) -> str:
+    """The section without its part B blocks that decide nothing (`decides_nothing`)."""
+    for key, body, _at in blocks(section):
+        if decides_nothing(key, body, plan_text):
+            section = section.replace(body, "")
+    return section
 
 
 def _without(plan_text: str, ids: set[str]) -> str:
