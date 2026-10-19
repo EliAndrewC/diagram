@@ -473,6 +473,26 @@ Owed by the landing cohort of 07:15Z (cohort seed 22 newly failing) and the roun
 8. **Every route measured before offering one?** Yes: the band margin was traced as the cause before T98 was written; room (d) waits if T98 does not settle it, as the ruling says.
 9. **After a ruling: the step it names?** Yes - the ruling says go on with T98's review and landing.
 <!-- plan-archive: T98 to T96 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+## T103 - the measure guard sees a red preflight (found working T98, 2026-10-19)
+
+### T103 Approach (checklist part A)
+
+1. **The goal, in the world.** A gate re-run after a red preflight goes through, as a re-run after any red gate does.
+2. **The constraints.** The measure guard's rule: "a run after a red goes through (that is fixing what the gate found)"; the GM's rule: a tool, never a reminder. A test red without it.
+3. **Where each comes from.** The guard's own rule (O); the GM (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T98's two gates, `make done` then the guard's refusal): the gate stopped at preflight (the file-size bar, then a failing quick test), wrote no `dev/run-log` record - the record is written only after preflight - and the guard refused the re-run as "this tree's last full gate was GREEN 30 min ago".
+5. **The order.** The preflight failure branch in the Makefile's `done` marks the git directory; the guard reads the mark; then the hook suite's test.
+6. **The exits.** (c) - the failure leaves a mark the guard reads; a run-log record is the other route, refused because those records are tracked files the landing sweeps (`commit-run-record.sh`).
+7. **The search smell.** None.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: after a preflight failure newer than the last green gate, `make done` is not refused by the measure guard; a preflight failure older than the last green gate changes nothing; `tests/hooks/test-measure-hooks.sh` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T103 Decisions
+
+**D120 - a red preflight leaves a mark.** `done`'s preflight failure branch touches `<git dir>/gate-preflight-red`; `measure-hooks.sh` lets the full measurement through, without refusing once, when that file is newer than the last green run-log record.
+
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).
