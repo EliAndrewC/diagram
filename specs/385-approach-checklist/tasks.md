@@ -285,6 +285,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T100 Web lanes off the water cite 0035's drawing page (web.stage_web#web lanes off the water - MISLABELED, found working T96) [lands-open]
       research: rendering
+- [ ] T101 Carried by the claims gate (FR-013): findings a page edit surfaced on code left unchanged - fix the code or the claim and re-check each: l7r/diagram/settlement/rolling/access.py::ACCESS_HALF_FT#corridor room [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
