@@ -94,6 +94,19 @@ def test_an_overturned_row_becomes_an_open_row_of_another_feature(root: pathlib.
     assert last["finding"] == "overturned by the GM: re-owe less - FR-015 says", "a declined fix carries the fix and why it was declined"
 
 
+def test_one_row_is_reviewed_alone(root: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys) -> None:  # noqa: ANN001
+    d = root / "specs" / "375-x"
+    gm.accept(d, "the bath at 18 by 12 ft", "the resident's particular allows it")
+    gm.accept(d, "the bath door on the yard", "the yard is the service side")
+    assert gm.reviewed_row(d, 1, "already built elsewhere") == "row 1 of 375-x reviewed; 1 still wait on the GM"
+    assert "reviewed" not in gm.rows(d)[0] and gm.rows(d)[1]["gm_words"] == "already built elsewhere"
+    assert "- [ ] GM review" in (d / "tasks.md").read_text(), "one row reviewed leaves the feature's box open"
+    with pytest.raises(ValueError, match="ROW=2"):
+        gm.reviewed_row(d, 2)
+    monkeypatch.chdir(root)
+    assert gm.main(["reviewed-row", "375", "0"]) == 0 and "0 still wait" in capsys.readouterr().out
+
+
 def test_the_held_rows_and_the_command_line(root: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys) -> None:  # noqa: ANN001
     held = root / gm.HELD
     held.parent.mkdir(parents=True)
