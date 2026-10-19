@@ -6023,6 +6023,52 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T78": {
+   "section_sha256": "f48281bf8e117bdcac8c9fafa6cd4a3bd7254e6f3095c514ce61498833b29527",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T78-scope",
+     "summary": "A tooling task: text the tools copy from an agent's reply into tracked files gets the house-style (American spelling) correction the edit hook already applies.",
+     "class": "within",
+     "why": "Enforces the GM's standing house-style rule (American spellings, corrected rather than refused) on a route it currently misses, and falls under amendment 6's 'Please make sure to implement any obvious performance / tooling / process improvements along the way'. Note: the session reply the block quotes ('notes the tools write into records should get the same house-style correction as edits do. I'll add that') is NOT in request.md; request.md ties 'I do like all of your other proposals' to the step-back's eight-item list, which does not contain it. The task stands on amendment 6 and the house style, not on that quotation."
+    },
+    {
+     "id": "D97-one-corrector",
+     "summary": "The hook's plain-text correction is lifted into hm_house.americanize(text) and shared by the hook, claims.py record and apply_edits.py; hm_house.PAIRS stays the one table.",
+     "class": "within",
+     "why": "A refactor that applies the existing rule unchanged; it narrows nothing the GM asked for."
+    },
+    {
+     "id": "T78-two-writers",
+     "summary": "Only claims.py record (index notes) and apply_edits.py (EDIT record and pop-up text) are changed, the two writers found by measurement to copy agent words into tracked files past the hook.",
+     "class": "within",
+     "why": "The scope is set by a measured inventory (Approach item 4), not by excluding a known writer; nothing the GM asked for is left out."
+    },
+    {
+     "id": "D97-old-text-as-written",
+     "summary": "An EDIT's old text is matched as written; only its new text is corrected.",
+     "class": "within",
+     "why": "Mechanically necessary: the old text has to match the file as it stands, and it writes nothing."
+    },
+    {
+     "id": "T78-quotations-held-out",
+     "summary": "A quotation (blockquote, q, corner brackets, curly quotes) in the text is left uncorrected, as the hook leaves it.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The house style rule the task enforces itself keeps quotations of another's text; leaving them uncorrected follows the rule rather than carving out a case against it, and it matches the hook's existing behavior."
+    },
+    {
+     "id": "D97-gm-request-not-corrected",
+     "summary": "An EDIT on specs/*/request.md (the GM's own writing) is not corrected.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The house style says the GM's own writing is never corrected, and the hook does not correct request.md either. Correcting it would break the very rule the task applies, so the exception comes from the GM's own words."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

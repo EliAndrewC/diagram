@@ -262,7 +262,7 @@ Owed by the hour-20 step-back (hour:385-approach-checklist@20, `continue`), whic
 ### T78 Approach (checklist part A)
 
 1. **The goal, in the world.** An agent's British spelling never reaches a tracked file through a tool, so it never turns a gate red.
-2. **The constraints.** CLAUDE.md, house style: American spellings everywhere, corrected rather than refused, a quotation of another's text kept (`<blockquote>`, `<q>`, 「」, “”), the GM's own writing never corrected. The GM, 2026-10-18 (amendment 8): "I do like all of your other proposals", among them the session's reply that day: "notes the tools write into records should get the same house-style correction as edits do. I'll add that". The hook's word table (`hm_house.PAIRS`) is the one table. A test red without it.
+2. **The constraints.** CLAUDE.md, house style: American spellings everywhere, corrected rather than refused, a quotation of another's text kept (`<blockquote>`, `<q>`, 「」, “”), the GM's own writing never corrected. Amendment 6: "implement any obvious performance / tooling / process improvements along the way" - this applies the GM's own house-style rule on a route the hook does not see. The hook's word table (`hm_house.PAIRS`) is the one table. A test red without it.
 3. **Where each comes from.** CLAUDE.md (G); the table is 236's (O).
 4. **Do they describe the world here?** Yes - measured 2026-10-19: T10's gate preflight was red on `dev/claims-index.json:51334: 'grey'`, a note `claims.py record` copied from an impl-drift reply; two writers copy agents' words into tracked files without the hook seeing them - `claims.py record` (the index notes) and `apply_edits.py` (the record and pop-up text of EDIT blocks).
 5. **The order.** A module-level `americanize` in `hm_house.py`, its call in the two writers, then the tests.
@@ -275,7 +275,7 @@ Owed by the hour-20 step-back (hour:385-approach-checklist@20, `continue`), whic
 
 ### T78 Decisions
 
-**D97 - one corrector, three callers.** The hook's nested plain-text correction (`PAIRS` outside the held spans) becomes `hm_house.americanize(text) -> str`, which the hook calls as before; `claims.py record` passes each reply through it before its notes are parsed, and `apply_edits.py` passes each EDIT's new text through it before writing (the old text is matched as written). An EDIT on a file the GM wrote (`specs/*/request.md`) is not corrected, as the hook does not correct one.
+**D97 - one corrector, three callers.** The hook's nested plain-text correction (`PAIRS` outside the held spans) becomes `hm_house.americanize(text) -> str`, which the hook calls as before; `claims.py record` passes each note it parsed from a reply through it (never the whole reply: a claim key or path carrying a British spelling must still match - the plan review's point, 2026-10-19), and `apply_edits.py` passes each EDIT's new text through it before writing (the old text is matched as written). An EDIT on a file the GM wrote (`specs/*/request.md`) is not corrected, as the hook does not correct one.
 
 ## T11 - the close
 
