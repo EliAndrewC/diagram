@@ -1,0 +1,2 @@
+- 0276: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'kitchen.?knife|hocho|deba|cleaver' l7r pool (hits only in l7r/diagram/interactive/record/site.py and site_pages.py, the word "sidebar")
+- 0277: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'kanmon|monme|mon_per|copper.?rate|zeni' l7r pool (no hits)
