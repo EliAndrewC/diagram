@@ -33,6 +33,9 @@ import re
 import subprocess
 import sys
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import wording  # noqa: E402 - the module beside this one (feature 385 T118)
+
 RECORD = "plan-review.json"
 REVIEWER = "spec-fidelity"
 CLASSES = ("within", "narrowing")
@@ -299,10 +302,15 @@ def block_status(review: dict, plan_text: str, ruled: set[str], history: History
     block that plan.md no longer has is owed too, as `(removed) <key>`, unless `plan-done.md` (`done`) holds it - the archive
     moved it (the plan review: a decision deleted by hand is a change like any other)."""
     out_of = [(plan_text.find(sec), plan_text.find(sec) + len(sec)) for t, sec in task_sections(plan_text).items() if t in ruled]
+    # ...AND A WORDING-ONLY SECTION BUT ITS PART Bs (feature 385 T118, D137): its Decisions block declares nothing decided; `make
+    # tick` checks its commits against that (`wording.refusal`), and a part B that decides goes on to review as any other
+    words = [(plan_text.find(sec), plan_text.find(sec) + len(sec)) for _t, sec in task_sections(plan_text).items() if wording.wording_only(sec)]
     have = reviewed_blocks(review)
     owed, blocked = [], []
     for key, body, at in blocks(plan_text):
         if any(lo <= at < hi for lo, hi in out_of if lo >= 0):
+            continue
+        if not _PART_B.match(key) and any(lo <= at < hi for lo, hi in words if lo >= 0):
             continue
         if not ARCHIVE_LINE.sub("", body).strip() and key == "preamble":
             continue
@@ -523,6 +531,8 @@ def decision_refusal(root: pathlib.Path) -> str:
     except (OSError, ValueError):
         review = {}
     if task in task_sections(text):
+        if wording.wording_only(task_sections(text)[task]):  # T118, D137: nothing decided, nothing to wait for
+            return ""
         # a plan reviewed CLEAR as a whole, still current, covers its task sections too: the reviewer read them; only a section
         # added or changed since needs its own preflight (the advisor's note before batch 3 landed)
         if task_current(review, text, task, History(plan)) or (owed(d) is None and _section_clear(review, task_sections(text)[task])):
@@ -807,6 +817,8 @@ def decide_prompt(spec_dir: pathlib.Path, task: str) -> str:
     sys.path.insert(0, str(HERE))
     import plan_bundle  # noqa: PLC0415
 
+    if wording.wording_only(task_sections((spec_dir / "plan.md").read_text(encoding="utf-8")).get(task, "")):  # T118, D137
+        return f"decide: {task}'s section is wording only - no plan review is owed and no bundle is built; `make tick` checks its commits against it"
     return plan_bundle.task_prompt(spec_dir, task)
 
 

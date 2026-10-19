@@ -213,9 +213,12 @@ def refusal(root: Path, d: Path, task: str, note: str, landed: bool = True) -> t
     if not permitted:
         return message, ""
     import approach_gate  # noqa: PLC0415 - feature 385 D8/D9: the task's Approach answered, and again after a trigger
+    import wording  # noqa: PLC0415 - feature 385 T118 (D138): a wording-only task's commits checked against its declaration
 
+    plan = d / "plan.md"
+    section = _plan_gate.task_sections(plan.read_text(encoding="utf-8")).get(task) if plan.is_file() else None
     why = (waits_or_marks(root, d) or _arbiter().fix_hold(d) or checkpoint_hold(root)  # 379: an open tooling fix; 383: the hour
-           or approach_gate.refusal(d, root, task))
+           or approach_gate.refusal(d, root, task) or wording.refusal(root, d, task, section))
     if not why and landed:
         why = landed_refusal(root, d.name, task, note)
     return (f"tick: refused - {why}" if why else ""), message

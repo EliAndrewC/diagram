@@ -11,6 +11,7 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import json
+import os
 import pathlib
 import subprocess
 import sys
@@ -476,3 +477,45 @@ def test_a_verdict_s_free_text_is_written_in_the_house_style_its_keys_as_given()
     got = gate.house_style([{"id": f"D1-{brit}", "class": "within", "why": f"a {brit} band, <q>a {brit} quoted</q>"}])
     assert got == [{"id": f"D1-{brit}", "class": "within", "why": f"a gray band, <q>a {brit} quoted</q>"}]
     assert gate.house_style(None) is None
+
+
+def test_a_wording_only_section_owes_no_review_but_a_decision_or_a_deciding_part_b_does() -> None:
+    """Feature 385 T118 (D137; amendment 10): T31, T103, T105 and T110 reworded only, and each paid a plan review."""
+    sec = "## T05 - x\n\n### T05 Approach (checklist part A)\n\n1. **G.** y\n\n### T05 Decisions\n\n**Wording only.** a claim relabeled.\n\n"
+    plan = "# Plan\n\n" + sec
+    review = {"blocks": {"preamble": {"sha256": gate.block_digest("# Plan\n\n"), "verdict": "CLEAR"}}}
+    assert gate.wording.wording_only(sec) and gate.block_status(review, plan, set())[0] == []
+    decided = plan.replace("a claim relabeled.\n", "a claim relabeled.\n\n**D10 - a rule.** z\n")
+    assert not gate.wording.wording_only(decided) and gate.block_status(review, decided, set())[0] != []
+    loud = "### T05 part B (2026-10-19T01:30Z)\n\n4. **Moving?** No.\n5. **Tuning or changing?** Changing: wider.\n\n"
+    assert gate.block_status(review, plan + loud, set())[0] == ["### T05 part B (2026-10-19T01:30Z)"]
+    assert not gate.wording.wording_only("## T05 - x\n\n**Wording only.** not under a Decisions heading\n")
+
+
+def test_a_wording_only_tick_is_refused_when_a_commit_changed_what_runs(tmp_path: pathlib.Path) -> None:
+    """Feature 385 T118 (D138): the declaration is checked against the task's own commits since its `make task-start`."""
+    w = gate.wording
+
+    def git(*a: str, when: str | None = None) -> None:
+        env = {**os.environ, **({"GIT_COMMITTER_DATE": when, "GIT_AUTHOR_DATE": when} if when else {})}
+        subprocess.run(["git", "-C", str(tmp_path), "-c", "user.name=t", "-c", "user.email=t@t", *a], check=True, capture_output=True, env=env)
+
+    git("init", "-q", "-b", "main")
+    (tmp_path / "m.py").write_text("X = 1\n")
+    git("add", "-A")
+    git("commit", "-qm", "base", when="2026-01-01T00:00:00Z")
+    sec = "## T05 - x\n\n### T05 Decisions\n\n**Wording only.** a comment.\n"
+    d = tmp_path / "specs" / "385-x"
+    assert "no `make task-start`" in w.refusal(tmp_path, d, "T05", sec)
+    (tmp_path / ".git" / "task-starts.jsonl").write_text(json.dumps({"feature": "385-x", "task": "T05", "utc": "2026-01-02T00:00:00Z"}) + "\n")
+    (tmp_path / "m.py").write_text('X = 1\n"""Research: x - GUESS"""  # a comment\n')
+    glossary = tmp_path / "l7r/diagram/interactive/assets/glossary"
+    glossary.mkdir(parents=True)
+    (glossary / "1-Word.json").write_text("{}\n")
+    git("add", "-A")
+    git("commit", "-qm", "words")
+    assert w.refusal(tmp_path, d, "T05", sec) == "", "a claim, a comment and a glossary entry are wording"
+    assert w.refusal(tmp_path, d, "T05", sec.replace("**Wording only.**", "**D10 - a rule.**")) == "", "not declared: not checked"
+    (tmp_path / "m.py").write_text('X = 2\n"""Research: x - GUESS"""  # a comment\n')
+    git("commit", "-qam", "a number")
+    assert "m.py changed in what runs" in w.refusal(tmp_path, d, "T05", sec)
