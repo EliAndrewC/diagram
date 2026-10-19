@@ -606,10 +606,10 @@ def test_the_gate_refuses_a_claim_the_grammar_cannot_read_in_a_changed_file(tmp_
     cx.save_index(root / cx.INDEX, _all_in_step(root))
     _commit(root, "base")
     cx._git(root, "update-ref", "refs/remotes/origin/main", "HEAD")
-    assert cx.form_problems(root) == []
+    assert cx.delta_form_problems(root) == []
     bad = MOD.replace("Research: plumbing - NONE", f"Research: plumbing - CONVENTION {Q}")
     (root / "l7r" / "diagram" / "hamletgen" / "rows.py").write_text(bad)
     _commit(root, "a malformed claim")
-    probs = cx.form_problems(root)
+    probs = cx.delta_form_problems(root)
     assert len(probs) == 1 and probs[0].startswith("l7r/diagram/hamletgen/rows.py") and "the claims grammar:" in probs[0]
     assert any(r == probs[0] for r in cx.gate(root)[0]), "refused at the push"
