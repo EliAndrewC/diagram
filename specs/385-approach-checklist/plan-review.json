@@ -7130,6 +7130,45 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T102": {
+   "section_sha256": "4e065beff254e6bca5a9f7431d68bd034d43ecdbf222df230000d25062b08850",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D131 / exit (b)",
+     "summary": "The last-resort flood fill (connector_dry_exit) keeps to its own bank, treating the brook as a wall; recorded as a DEVIATION on 0035's drawing page and the claim relabeled DEVIATION; no code changes.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "0035 says a way keeps to its bank unless crossing saves more than about 150 ft; the fill never crosses, so this exempts a case from the rule rather than matching the research (the carried 384 purpose), and it closes a DRIFTED finding that amendment 3 says must be fixed by relabeling it. The GM approved 'a principled exception' as an exit, but his example is grounded in the world (an obstruction forces the angle) and the checklist asks whether the thing 'describes how the thing actually came about, or is tidiness of ours'. D131's reason is about the algorithm's order, not the world, and the block contradicts itself: item 6(b) and D131 both say the fords are set BEFORE the fill runs, so a crossing place exists for the fill to pass at. That shows crossing is possible, not impossible. In the world, a settlement whose every straight bearing is wet is the very case where a way crosses the brook, so the exception guts the rule where it matters most. Exit (c) was refused as 'a search change for a fallback the cohort reaches rarely': that is implementation cost plus an unmeasured premise ('rarely', no count) deciding scope, and neither is a legitimate ground. The guardrail 'reason recorded where the code changes' is necessary for any loosening, but the GM's next words are that it 'is not permission to throw out inconvenient rules'. What would make it legitimate: a cohort measurement showing the fill's dry exit never walks more than about 150 ft beyond a route crossing at a set ford (then it conforms and is no deviation, and the claim should say so), or a showing that the fill genuinely cannot reach a set ford. Otherwise take exit (c): let the fill pass at the set fords."
+    },
+    {
+     "id": "exit (a) refused",
+     "summary": "The 150 ft O number is not refined; it stands for the router.",
+     "class": "within",
+     "why": "Moves nothing; leaves the research page's figure as it is."
+    },
+    {
+     "id": "exit (e) refused",
+     "summary": "The claim is not left reading 'no water line crossed' as if 0035 said so.",
+     "class": "within",
+     "why": "The record rule requires a claim not to misattribute to its source; correcting the attribution is owed regardless of how the deviation is ruled."
+    },
+    {
+     "id": "order and placement",
+     "summary": "New block placed on 0035's drawing page after the crossing-place block; record checks and claims check run in-step; one goal, no constant moved, nothing fitted.",
+     "class": "within",
+     "why": "Mechanics of recording; decides nothing the request leaves open."
+    },
+    {
+     "id": "claim text, router half",
+     "summary": "The claim states the track's router crosses only at a ford, at 0035's 150 ft.",
+     "class": "within",
+     "why": "Describes measured behavior (item 4, measured 2026-10-19 by T98's claims round and a read of track.py) that matches 0035."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }
