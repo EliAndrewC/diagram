@@ -353,8 +353,9 @@ def amendment1_depiction_answered(root: pathlib.Path, store_dir: pathlib.Path, s
     )
 
 
-def command(u: ru.Unit, now: ru.Record | None = None) -> str:
-    """What builds the bundle for a unit - named in every report and refusal, so a session never has to work it out."""
+def command(u: ru.Unit, now: ru.Record | None = None, triaged: Mapping[str, str] | None = None) -> str:
+    """What builds the bundle for a unit - named in every report and refusal, so a session never has to work it out. `triaged`
+    is the triage's touched marks ({slug: fingerprint}): a pop-up a triage sent on is bundled like any other (feature 385 T93)."""
     q, check = ru.question(u.subject), u.check
     if check == "source-applicability":
         return f"make check-bundle KEY={u.subject}"
@@ -363,7 +364,7 @@ def command(u: ru.Unit, now: ru.Record | None = None) -> str:
         keys = list(now.cites.get(stem, {}).get(note, ())) if now else []
         keys = keys or ["<the note's key>"]
         return " ; ".join(f"make check-bundle KEY={k} WHOLE=1" for k in dict.fromkeys(keys)) + f"  then  make record-checked CHECK=source-reader Q={q} NOTES={note}"
-    if check.startswith("modal-") and u.occasion.startswith("a page its "):  # feature 375 FR-001: owed only by a moved page
+    if check.startswith("modal-") and triage_first(u, triaged):  # feature 375 FR-001: owed only by a moved page, not yet triaged
         return "make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)"
     if check.startswith("modal-"):  # feature 319: a modal's units; the three research units are one modal-research dispatch
         agent = check if check in ("modal-form", "modal-depiction") else "modal-research"
@@ -399,13 +400,19 @@ def modal_classes(key: str, base: pathlib.Path = _KINDS) -> list[str]:
 BATCHES = "modal-batches.json"
 
 
-def modal_batches(rows: Sequence[ru.Unit], answered_slugs: Collection[str] = ()) -> dict[str, list[str]]:
+def triage_first(u: ru.Unit, triaged: Mapping[str, str] | None = None) -> bool:
+    """Owed only by a moved page and not yet marked touched by `make modal-triaged` at its fingerprint (feature 385 T93, D115:
+    T31's six pop-ups the triage sent on kept naming `make modal-triage` and stayed out of their batch)."""
+    return u.occasion.startswith("a page its ") and (triaged or {}).get(u.slug) != u.fingerprint
+
+
+def modal_batches(rows: Sequence[ru.Unit], answered_slugs: Collection[str] = (), triaged: Mapping[str, str] | None = None) -> dict[str, list[str]]:
     """{pop-up agent: [kinds]} for each agent two or more unanswered pop-ups owe (feature 385 T81, plan D100; the GM's approved
     change 1: T10's checks sent 90 single-pop-up agents because this listing named one `KIND=` per unit). A pop-up owed only by a
-    moved page goes to `make modal-triage` first and joins a batch on the next listing if a check is still owed."""
+    moved page goes to `make modal-triage` first and joins a batch once the triage marks it touched (`triaged`, T93)."""
     out: dict[str, list[str]] = {}
     for u in rows:
-        if u.slug in answered_slugs or not u.check.startswith("modal-") or u.occasion.startswith("a page its "):
+        if u.slug in answered_slugs or not u.check.startswith("modal-") or triage_first(u, triaged):
             continue
         agent = u.check if u.check in ("modal-form", "modal-depiction") else "modal-research"
         if u.subject not in out.setdefault(agent, []):
@@ -418,7 +425,7 @@ def keep_batches(root: pathlib.Path, batches: Mapping[str, list[str]]) -> None:
     (gd / BATCHES).write_text(json.dumps({"utc": time.time(), "batches": dict(batches)}) + "\n", encoding="utf-8")
 
 
-def report(rows: Sequence[ru.Unit], now: ru.Record | None = None, answered_slugs: Collection[str] = ()) -> str:
+def report(rows: Sequence[ru.Unit], now: ru.Record | None = None, answered_slugs: Collection[str] = (), triaged: Mapping[str, str] | None = None) -> str:
     """The listing. With `answered_slugs` (the default listing), each unit already answered is marked so and the header says
     how many are still unanswered: T01 of feature 385 read the full listing as owed and went looking for three more quote-check
     batches after one had answered (plan D12)."""
@@ -431,8 +438,8 @@ def report(rows: Sequence[ru.Unit], now: ru.Record | None = None, answered_slugs
         if u.slug in answered_slugs:
             lines.append(f"  [answered] {u.slug}  - {u.occasion}")
         else:
-            lines.append(f"  {u.slug}  - {u.occasion}\n      {command(u, now)}")
-    for agent, kinds in modal_batches(rows, answered_slugs).items():  # T81: one agent for the pop-ups one check owes
+            lines.append(f"  {u.slug}  - {u.occasion}\n      {command(u, now, triaged)}")
+    for agent, kinds in modal_batches(rows, answered_slugs, triaged).items():  # T81: one agent for the pop-ups one check owes
         lines.append(f"  batched: make modal-bundle KIND=\"{' '.join(kinds)}\" FOR={agent}  - ONE {agent} agent for these {len(kinds)} pop-ups")
     lines.append("Answer each with `make record-checked CHECK=<check> BUNDLE=<its bundle> RESULT=\"<counts>\"` when its check returns.")
     lines.append("Apply a round's own EDITs with `make apply-edits FROM=<the agent's reply or its transcript>` - its unit then settles, owing no "
@@ -590,9 +597,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         print("".join(u.slug + "\n" for u in rows), end="")
     else:
         done = set() if args.unanswered or args.between else {u.slug for u in rows} - {u.slug for u in unanswered(root)}
-        print(report(rows, read_at(root, args.between[1] if args.between else None), done), end="")
+        import modal_triage  # noqa: PLC0415 - it imports this module
+
+        named = modal_triage.touched(store(root))
+        print(report(rows, read_at(root, args.between[1] if args.between else None), done, named), end="")
         if not args.between:
-            keep_batches(root, modal_batches(rows, done))
+            keep_batches(root, modal_batches(rows, done, named))
     return 0
 
 

@@ -393,3 +393,15 @@ def test_pop_ups_one_check_owes_are_named_as_one_batch_and_kept_for_the_guard() 
     assert ro.modal_batches(rows) == {"modal-form": ["choice/split--0.6", "choice/split--0.4"], "modal-research": ["choice/split--0.6", "choice/split--0.4"]}
     assert ro.modal_batches(rows, {"modal-form:choice/split--0.4"}) == {"modal-research": ["choice/split--0.6", "choice/split--0.4"]}, "an answered one leaves"
     assert 'batched: make modal-bundle KIND="choice/split--0.6 choice/split--0.4" FOR=modal-form' in ro.report(rows)
+
+
+def test_a_pop_up_the_triage_sent_on_joins_its_checks_batch() -> None:
+    """Feature 385 T93 (plan D115): T31's six pop-ups the triage marked touched kept naming `make modal-triage`, out of the batch."""
+    why = "a page its References name moved (0246-x.html)"
+    a, b, c = (ru.Unit(f"modal-depiction:choice/lane--{k}", why, "fp") for k in ("spine", "cross", "loop"))
+    touched = {a.slug: "fp", b.slug: "fp", c.slug: "an older fingerprint"}
+    assert ro.modal_batches([a, b, c]) == {}, "untriaged: triage first"
+    assert ro.modal_batches([a, b, c], (), touched) == {"modal-depiction": ["choice/lane--spine", "choice/lane--cross"]}
+    assert "make modal-bundle" in ro.command(a, None, touched) and "make modal-triage" in ro.command(c, None, touched)
+    text = ro.report([a, b, c], None, (), touched)
+    assert 'batched: make modal-bundle KIND="choice/lane--spine choice/lane--cross" FOR=modal-depiction' in text
