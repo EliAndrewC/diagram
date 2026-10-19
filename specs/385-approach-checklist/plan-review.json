@@ -6476,6 +6476,58 @@
     }
    ],
    "verdict": "BLOCKED"
+  },
+  "T89": {
+   "section_sha256": "0e542dd484157e5f5ff4021a08a04d9e7b4f3950d29bddbbc375f4db7f90076e",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D110-route",
+     "summary": "where-time books each gap to the task its tool call's input names (else the last task named, else the mark), instead of make decide / task-add / tick / land-tooling moving the active-task mark as proposal F says",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM approved proposal F's change ('move the active-task mark to the task they name') for its stated saving, 'true per-task numbers', against the cost 'where-time misbooks tasks'. The plan's route keeps that purpose and subsumes F's attribution: each of the four commands F names carries its task in its input, so the gaps it opens are booked to that task exactly as a moved mark would book them, and 'the last task named' reproduces a moved mark for the calls that name none, with more naming sources besides. Ground: subsumption, not the claim that a moved mark misbooks the other way. That claim (deciding T76 while building T75) is reasoned, not shown by the labeled wt3.py run in item 4, which compares the existing mark with named-task booking. The plan's own last-named fallback has the same failure for unnamed T75 calls after a T76 decide, so 'more accurate' cannot carry the ruling. Condition the revision must meet: item 9's naming rule (T=/TASK=, 'task T<n>', a '385 T<n>:' commit, a '## T<n> - ' heading) has to cover how each of decide, task-add, tick and land-tooling is actually invoked. A command among them that names no task in its input would be booked to the last task named or the mark, short of F, and the plan has to name it and say how it is booked. Context: spec-cited.md is empty and spec-index.md carries no FR for amendment 9's seven tools, so request.md is the only anchor."
+    },
+    {
+     "id": "D110-no-workflow-change",
+     "summary": "'No workflow command changes': the plan leaves untouched the part of proposal F that replaces proposal 6's refusal (the dispatch guard refusing a check for a task that is not the active one)",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Proposal F as the GM approved it ('build all 7 of those') reads '... move the active-task mark to the task they name (replacing proposal 6's refusal)'. Replacing that refusal is part of the approved change. The plan drops the mark-move and says nothing about the refusal, so by its own words ('No workflow command changes') the refusal stands: a check dispatched for T76 while T75 is the active task is still refused, which is the friction F was approved to remove. The refusal's stated reason in amendment 8 ('so the time accounting stays true') stops applying once booking follows the named task, and the plan gives no argument for keeping it. Exceptions are presumed wrong, and this one is unlabeled and unargued. Fix: the plan states that proposal 6's refusal is removed or replaced, as F's row says, with a test red without that, or it records a measurement that the refusal was never built or cannot fire. The bundle does not show whether the refusal exists in the tree; this ruling is on what the plan says, which is nothing."
+    },
+    {
+     "id": "naming-rule",
+     "summary": "a gap is booked to a task only when its tool input names exactly one; the patterns are T=/TASK=, 'task T<n>', a '385 T<n>:' commit, a '## T<n> - ' heading",
+     "class": "within",
+     "why": "How the named task is read is an implementation detail of F's 'the task they name'."
+    },
+    {
+     "id": "transcript-source",
+     "summary": "the session transcript is located from the event log's sid under ~/.claude/projects/ and joined by tool-use id; a session with no transcript falls back to the mark",
+     "class": "within",
+     "why": "This is the data source for the attribution. The fallback keeps today's behavior only where the named-task data is absent."
+    },
+    {
+     "id": "rule-footer",
+     "summary": "where-time prints the minutes each booking rule booked",
+     "class": "within",
+     "why": "It reports the source of the per-task numbers F's saving promises. It is verification, not new behavior."
+    },
+    {
+     "id": "test-red-without",
+     "summary": "tests/tooling/test_where_time.py is red without the join",
+     "class": "within",
+     "why": "It enforces the requested behavior (GM 2026-09-20): delete the attribution and the test has nothing to check."
+    },
+    {
+     "id": "order-budget-exits",
+     "summary": "order (the join, then its test), a 40 min budget, exit (c), items 10-11 n/a",
+     "class": "within",
+     "why": "Process fields. The 40 min is a budget, not a measured figure. The figures in item 4 carry a date and a method (2026-10-19, wt3.py joining the event log to the transcript by tool id)."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

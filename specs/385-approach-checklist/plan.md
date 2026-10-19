@@ -316,7 +316,7 @@ Owed by the hour-26 step-back (hour:385-approach-checklist@26, `continue`).
 ### T84 Approach (checklist part A)
 
 1. **The goal, in the world.** A plan section never reaches its review quoting the GM with words the review cannot find.
-2. **The constraints.** The GM, 2026-10-18 23:00 EDT (amendment 9): "build all 7 of those as 385 tasks"; proposal A of step-back-2026-10-18.md's second pass: "`make decide` refuses a section quoting 'the GM' with words not in request.md, naming the words". A quotation is the double-quoted text after "The GM" in the section; the match ignores case, whitespace and the dictation's punctuation. The escape is `QUOTE_OK="<reason>"`, recorded. A test red without it.
+2. **The constraints.** The GM, 2026-10-18 23:00 EDT (amendment 9): "build all 7 of those as 385 tasks"; proposal A of step-back-2026-10-18.md's second pass: "`make decide` refuses a section quoting 'the GM' with words not in request.md, naming the words". A quotation is the double-quoted text after "the GM" (any case, with or without a possessive) in the section; the match ignores case, whitespace and punctuation. No escape: a wrong refusal is cleared by rewording the span or adding the GM's words to request.md (the plan review, 2026-10-19). A test red without it.
 3. **Where each comes from.** The GM (G); the tools it changes are this feature's and 375's (O).
 4. **Do they describe the world here?** Yes - measured 2026-10-19 (the second pass's table of the evening's 42 plan reviews): 3 rounds came back unreviewable because the GM's words were not in request.md (T70 once, T75 twice), and T64's first plan misquoted him ("we either have or don't need tooling" where he said more), caught by its review, not by the tool.
 5. **The order.** The check in `plan_bundle.task_prompt`'s caller (`make decide`), then its test.
@@ -329,7 +329,7 @@ Owed by the hour-26 step-back (hour:385-approach-checklist@26, `continue`).
 
 ### T84 Decisions
 
-**D105 - the GM's quotes found before the review.** `make decide` reads each double-quoted span that follows "The GM" (or "the GM's") within the same sentence of the task's section; a span of four or more words not found in `request.md` - both folded to lowercase words - refuses the decide, naming each, with "add the GM's words to request.md verbatim, or correct the quote". A shorter span is a phrase, not a quotation, and is not checked.
+**D105 - the GM's quotes found before the review.** `make decide` reads each double-quoted span that follows "the GM" - any case, with or without "'s" - within the same sentence of the task's section; a span whose words, folded to lowercase with punctuation out, are not found as a run in `request.md` folded the same way refuses the decide, naming each, with "add the GM's words to request.md verbatim, or correct the quote". Every length is checked; there is no escape.
 
 ## T85 - an edit to a plan section is refused while its review runs (proposal B, 2026-10-19)
 
@@ -356,20 +356,20 @@ Owed by the hour-26 step-back (hour:385-approach-checklist@26, `continue`).
 ### T86 Approach (checklist part A)
 
 1. **The goal, in the world.** A plan never goes to review with a figure the review cannot check.
-2. **The constraints.** The GM, 2026-10-18 23:00 EDT (amendment 9): "build all 7 of those as 385 tasks"; proposal C: "`make decide` refuses an Approach item 4 figure with no 'measured <date>' and method beside it". A figure is a number with a unit (ft, m, s, min, %, px, MB, GB, KB, tokens, agents, rounds, claims); item 4 passes when it carries `measured <YYYY-MM-DD>` with a parenthesized method, or an `m:<key>`. The escape is `FIGURE_OK="<reason>"`. A test red without it.
+2. **The constraints.** The GM, 2026-10-18 23:00 EDT (amendment 9): "build all 7 of those as 385 tasks"; proposal C: "`make decide` refuses an Approach item 4 figure with no 'measured <date>' and method beside it". A figure is any number item 4 states, whatever follows it ("2.5 h", "19 degrees", "216 messages" alike), once dates, clock times, ids (`T10`, `D84`, `FR-005`, a question's `0018`) and code spans are set aside; item 4 passes when it carries `measured <YYYY-MM-DD>` with a parenthesized method, or an `m:<key>`. No escape: an unlabeled figure would be unreviewable at the review anyway (the plan review, 2026-10-19). A test red without it.
 3. **Where each comes from.** The GM (G); the tools it changes are this feature's and 375's (O).
 4. **Do they describe the world here?** Yes - measured 2026-10-19 (the second pass): T81's first review returned NOT-REVIEWABLE for "4.4 s (measured)" with no date or method; the same rule had blocked T03 and T07 earlier in the feature.
 5. **The order.** The check beside proposal A's in `make decide`, then its test.
 6. **The exits.** (c).
 7. **The search smell.** None.
 8. **The budget.** 20 min.
-9. **Done, measured.** One goal: `make decide` on a section whose Approach item 4 states a figure with a unit and no `measured <date> (<method>)` or `m:` key refuses, naming the figure; `tests/tooling/test_plan_blocks.py` red without it.
+9. **Done, measured.** One goal: `make decide` on a section whose Approach item 4 states a figure and no `measured <date> (<method>)` or `m:` key refuses, naming the figure; `tests/tooling/test_plan_blocks.py` red without it.
 10. **Before moving a constant.** n/a - none moves.
 11. **Before fitting things into room.** n/a - nothing is fitted.
 
 ### T86 Decisions
 
-**D107 - item 4's figures carry their measurement.** `make decide` reads Approach item 4 of the task's section; where it holds a number followed by a unit from the list above, it must also hold `measured 20\d\d-\d\d-\d\d` followed within the item by a parenthesized method, or an `m:<key>`; otherwise the decide refuses, naming the first such figure. Budgets (item 8) and other items are not checked: they are not measurements.
+**D107 - item 4's figures carry their measurement.** `make decide` reads Approach item 4 of the task's section; where, with its dates, clock times, ids and code spans taken out, it still holds a number, it must also hold `measured 20\d\d-\d\d-\d\d` followed within the item by a parenthesized method, or an `m:<key>`; otherwise the decide refuses, naming the first such figure. Budgets (item 8) and other items are not checked: they are not measurements.
 
 ## T87 - the gate does not call its own re-rolled map a tree move (proposal D, 2026-10-19)
 
@@ -383,13 +383,13 @@ Owed by the hour-26 step-back (hour:385-approach-checklist@26, `continue`).
 6. **The exits.** (c).
 7. **The search smell.** None.
 8. **The budget.** 30 min.
-9. **Done, measured.** One goal: a gate whose own pool roll rewrote a tracked map output (`pool/**/<map>.{json,png,svg,html,webp}` beside its `.gen.py`) is not refused as a tree move and prints `the gate re-rolled <files> - commit them`; a move of any other file still refuses; `tests/tooling/test_preflight.py` red without it.
+9. **Done, measured.** One goal: a gate whose own pool roll rewrote a tracked map output (`pool/**/<map>.{json,png,svg,html,webp}` beside its `.gen.py`) is not refused as a tree move and prints `the gate re-rolled <files> - commit them`; a move of any other file, including another map's pool output, still refuses; `tests/tooling/test_preflight.py` red without it.
 10. **Before moving a constant.** n/a - none moves.
 11. **Before fitting things into room.** n/a - nothing is fitted.
 
 ### T87 Decisions
 
-**D108 - a pool map's outputs are the gate's to write.** `preflight.tree` leaves out of its comparison every changed tracked file under `pool/` that is a map output beside a `.gen.py` (json, png, svg, html, webp), and the tree check prints those it saw change as "re-rolled by the gate - commit them". The rolls are the gate's (`make map` is refused beside a running gate by `gate-write-hooks.sh`), so no one else writes them during a gate.
+**D108 - a pool map's outputs are the gate's to write.** `preflight.tree`'s check leaves out only the outputs (json, png, svg, html, webp beside the `.gen.py`) of the maps the gate's own run log reports as rolled this run ("pool gen: <Map> ... ROLLED this run"), and prints them as "re-rolled by the gate - commit them"; any other changed file, a pool output of a map the gate did not roll among them, is still a tree move (the plan review, 2026-10-19: keyed on the maps rolled, not on the kind of file).
 
 ## T88 - `make plan-verdict` writes the reviewer's words in the house style (proposal E, 2026-10-19)
 
