@@ -11881,7 +11881,8 @@
   "variants": [
    "Ouchi",
    "Ōuchi"
-  ]
+  ],
+  "cased": true
  },
  "three-worlds-myriad-spirits": {
   "def": "A stone or small tower inscribed to the spirits of all beings in the three Buddhist realms (desire, form and formlessness), set up at the entrance of a graveyard or temple as a memorial for all the dead - the known and the unknown alike - and one of the Edo-period graveyard's representative stone monuments, beside the six jizo.",
@@ -16801,6 +16802,13 @@
   "variants": [
    "Imperial Household Department",
    "Neiwufu"
+  ]
+ },
+ "oban": {
+  "def": "The large gold coin of Edo-period Japan; the record meets one as the price of a box at a fund-raising noh.",
+  "variants": [
+   "oban",
+   "obans"
   ]
  }
 }

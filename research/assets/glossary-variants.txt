@@ -2802,6 +2802,8 @@ nursery ponds	nursery pond
 o-aza	ō-aza
 o-zashiki	o-zashiki
 oaza	ō-aza
+oban	oban
+obans	oban
 oblique weir	oblique weir
 oblique weirs	oblique weir
 obon	Bon
