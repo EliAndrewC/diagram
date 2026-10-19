@@ -273,3 +273,15 @@ The GM, 2026-10-19, on the hourly step-backs (49 of 60 had named a tooling fix):
 Changes 1 and 2: a step-back's tooling fix needs a measured cost (10 minutes or more of session time this hour, or a defect that
 reached main), none being a good outcome; and removing or simplifying a misfiring guard comes before adding one. Change 3, measuring
 each fix's yield against the time it was meant to save, is a task of the next tooling round. The hourly cadence stays.
+
+## Amendment 11 (2026-10-19) - the process work stays, the rest moves
+
+The GM, verbatim (after the session set 385 down on the inflow of found work, 25 open tasks becoming 30):
+
+> Let's keep the current round of process tasks such that all open process tasks stay in 385 and everything else moves into a new feature.  Then we can finish and land our process tasks and then start the new feature after that ends up in main.
+
+> But don't you start the new feature, just file it.
+
+So 385 keeps T11 (the close), T148 (a tooling defect) and its GM review; the ranking rows T35-T40 and T144, T12 and the found
+engine and record tasks T111-T147 moved to feature 405, filed and not started.
+

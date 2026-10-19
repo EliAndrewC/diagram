@@ -228,6 +228,8 @@ change is made: the lever is fewer rework round trips, two of which FR-017 and F
   Approach; a row whose code was removed with no live successor is marked retired in 328's `audit/waves.json` with its reason
   (133 so marked, wave 165, each checked for a successor first); `settlement/` rows that serve only frozen exhibit maps stay open
   and are skipped.
+  *Moved by amendment 11 (the GM, 2026-10-19):* the rows not yet worked (T35-T40, and T144 in place of T32's dead row) moved to
+  feature 405 with the rest of 385's non-process tasks; T31-T34 stand as 385's.
 
 ## Success Criteria *(mandatory)*
 
