@@ -6714,46 +6714,45 @@
    "verdict": "CLEAR"
   },
   "T96": {
-   "section_sha256": "e59590b00a1f0bbb9e1eaf9643ab71688639fd3e2c5472f1e091d469ef2896af",
+   "section_sha256": "765c2cbb9c4dfc8e9d486ff1f61007a27432da74f3cd21ddbbb08780334768f3",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "T96-placement",
-     "summary": "T96 opened before T32's ranking row; the footpath's tread-to-wall figure and T43 item 3 are worked with it, not as a second row.",
+     "id": "D118-a",
+     "summary": "FOOTPATH_FABRIC_GAP becomes 0246's 7 ft.",
      "class": "within",
-     "why": "The arbiter's ruling directs the order, and it serves FR-020 (the ten more ranking rows). Item 9's Done still names one goal (FOOTPATH_FABRIC_GAP at 7 ft), so FR-015 holds: T43 item 3 is route (c) itself, and T43 item 1's 3 ft is weighed in T43 (exit a), not here."
+     "why": "This is the claim being fixed (FR-020's ranking rows): the code is brought to the attested figure rather than the recorded 4 ft. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "D118-b",
+     "summary": "The door's numbers stop reading the fence gap: new DOOR_STEP_FT (8 ft, front_door's offset) and DOOR_FIXTURE_CLEAR_FT (5 ft, door_off_fixtures' clearance off the farm's own fixtures and grove bands), both held at their pre-change values and labeled UNRESEARCHED, in serve.py, web.py and row_rules.py.",
+     "class": "within",
+     "why": "The block states door_off_fixtures keeps the door off the farm's OWN fixtures and grove bands; the bundle forbids reading the code, so that description is taken at its word. On it, 0246's rule (a lane's middle 7 ft off a garden fence, a household's own way allowed beside its own fence) never governed the door's clearance from its own dooryard: the FOOTPATH_FABRIC_GAP + 1 coupling was ours, which is exactly the GM's 'an arbitrary figure ... we could just change that'. The fence gap itself is applied at 7 ft wherever it reads, the two knobs carry their UNRESEARCHED labels (the request's guardrail: a loosening's reason recorded where the code changes), and the cause was measured before the route was chosen. It would be a narrowing, and a purpose-fatal one, only if door_off_fixtures also kept the door off neighbors' fences, so that a path started inside others' 7 ft band; the block says own ground only."
     },
     {
      "id": "D118-c",
-     "summary": "First route (c): a household's own way may run beside its own fence, held 7 ft off other households' fences only.",
+     "summary": "rows.FOOTPATH_DOOR_OUT_FT derived from DOOR_STEP_FT; DOOR_ROOM_FT's docstring names the door's step, not the footpath's gap.",
      "class": "within",
-     "why": "The allowance is in 0246, the record the row is being matched to, so it carries out the research rather than carving out a case of ours. The GM's own words (amendment 1: 'Are we sure that household paths don't cut through neighbors' yards? I thought that our research findings were that they did') put (c) on the strict side of what he believes the research says, so it loosens nothing he asked to keep. Approved checklist: 'Add a rule that removes the case.'"
+     "why": "Derive, never pin, is one of the lesson memories the approved proposal names; the derivation follows the decoupling in D118-b and narrows nothing."
     },
     {
      "id": "D118-d",
-     "summary": "Second route (d): wider spacing between the linear form's farms where (c) leaves a seed failing.",
+     "summary": "T31's 4 ft block comes out of 0246, and FOOTPATH_FABRIC_GAP's claim cites 0246's 7 ft.",
      "class": "within",
-     "why": "Within ONLY as a layout constant of the linear form, moved before any lane is routed: the approved checklist's 'Give it more room', the GM's 2026-10-12 'room before packing', and his 700 ft example (turn an unresearched knob). It is NOT within as re-placing homesteads on a seed after a lane is refused there. That is the 'move the house so the path fits' the GM called 'a fundamental misunderstanding of what we are doing and why', and it breaks his 2026-10-02 ruling 'homesteads before lanes, never lanes first'. The plain reading (a spacing between farms, item 11's capacity arithmetic) is the constant, and this verdict covers that reading alone. Item 11's MIN_WEB_GAP (18 ft) has no measurement label. It is a named constant, and the linear-only scope rests on item 4's measured fact that all four failing seeds are the linear form, so it does not block. The implementer should read the constant before relying on it."
+     "why": "Completes the claim fix: the record is brought into step with the code and the research."
     },
     {
      "id": "D118-e",
-     "summary": "Last route (e): the 4 ft kept, labeled UNRESEARCHED with both trials as its trail, only where (c) and (d) both fail.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "A narrowing because it can leave the ranking row unmatched against 0246's 7 ft. Legitimate only as gated, and the legitimacy is of the gated fallback, not of 4 ft: it comes after every exit the GM approved, it fires only on two MEASURED failures, and it records its reason with the trials (the GM's guardrail in the approved proposal: 'dropping or loosening a rule needs its reason recorded'). The round arbiter, which stands where the GM was asked (feature 379), ruled exactly this shape: 'the 4 ft stays only labeled UNRESEARCHED with the trial as its trail'. If (e) is reached with (d) untried, or as a plain reading of 'conform', it is NOT legitimate. Naming: the approved checklist's 'conform' means conforming to the rule being fought (7 ft). Item 6(e) gives that name to keeping the 4 ft, which is the opposite exit, and the retro should say so."
+     "summary": "No house moves; route (d) (wider spacing) is not needed and route (e) (the 4 ft kept UNRESEARCHED) is not reached.",
+     "class": "within",
+     "why": "Consistent with the GM's 'nobody in real life moves their house so that a footpath will join' and homesteads before lanes; the measured route (c) passes seeds 3, 4, 903, 904 and the cohort, so no fallback is taken."
     },
     {
-     "id": "D118-derive",
-     "summary": "DOOR_ROOM_FT and FOOTPATH_DOOR_OUT_FT derived from the gap whichever route stands.",
+     "id": "D118-f",
+     "summary": "T43's item 3 (span_walkable and a household's own garden) stays T43's, where the earlier CLEAR text decided it with T96.",
      "class": "within",
-     "why": "'derive don't pin' is one of the lesson memories in the GM-approved proposal, and item 10 lists every use of the constant before moving it (amendment 8, proposal 7)."
-    },
-    {
-     "id": "T96-exits-a-b-budget",
-     "summary": "Exit (a) deferred to T43; exit (b) none named; budget 3 h.",
-     "class": "within",
-     "why": "Process and scheduling inside the checklist's own shape. They narrow nothing the GM asked for."
+     "why": "Work moved between tasks, not dropped: T43 still owns it, and FR-015's one goal a task favours it. The ruling's 'worked with it' named the tread-to-wall figure (T43 item 1), which exit (a) still carries."
     }
    ],
    "verdict": "CLEAR"
