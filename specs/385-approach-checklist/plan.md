@@ -753,6 +753,26 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@36 (continue),
 
 **Wording only.** Nothing changes: the three carried findings were settled by T96, T101 and feature 388, each re-checked clean or removed.
 
+## T32 - a weld that would leave a lump goes to the next host, recorded (ranking row: waterfields/banks.py _WELD_MIN_SOLIDITY, E2 DRIFTED)
+
+### T32 Approach (checklist part A)
+
+1. **The goal, in the world.** 0014's drawing page says where a paddy scrap too thin to stand alone is welded, including the case where the neighbor it shares most bund with would be left lumpy, and the claim cites that.
+2. **The constraints.** FR-020: a ranking row of a kind not yet tried - E2, one rule (T06 a form, T07 research, T08 and T10 knobs, T09 a value, T31 a mislabel). 0014's drawing page: "It goes to the paddy it shares the most bund with, so the two walls become one." The ranking's fix: "drop the 0.85-solidity host preference". The finding (impl-drift): "the 0.85-solidity exception is not recorded there as a deviation - record it on the page or drop DEVIATION". The code's own record: the preference answers a defect settlement-review found on Sawada and Mizuguchi (2026-08-17) - a scrap handed to the lumpiest basin made bund prongs 5-11 ft wide with a free end, "a wall that goes out eleven feet and comes straight back retains water on neither side and costs a full share of azenuri"; 0.85 is the gap between the 18 clean welds (>= 0.90) and the two lumps (0.731, 0.78); it is a preference, never a veto. Every deviation recorded on the drawing page with its reason. Record checks and the claims check.
+3. **Where each comes from.** FR-020 (G, amendment 7); 0014's drawing page (O); the ranking (O); the reviewer's finding and its measurement (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the claims index: `banks._WELD_MIN_SOLIDITY#weld lump` DRIFTED, its note as above; the code's comment block and 0014's page read): the rule the code runs is 0014's except where the best-sharing host would fall under 0.85 solidity and a clean host exists, and 0014 does not record that exception.
+5. **The order.** The exception recorded on 0014's drawing page as a DEVIATION with its reason; the claim cites it; the record checks and the claims check.
+6. **The exits.** (a) refine an O number: n/a - 0014 gives no number to refine; (b) a principled exception - chosen: a weld that makes a free-ended prong is a construction error 0014's own purpose (two walls become one) does not intend; the next-best host keeps the walls joined; (c) a new rule: n/a; (d) more room: n/a - nothing is packed; (e) conform as the ranking's fix says - refused: dropping the preference restores the free-ended prongs settlement-review found.
+7. **The search smell.** None.
+8. **The budget.** 40 min with its checks.
+9. **Done, measured.** One goal: 0014's drawing page records the exception as a DEVIATION with its reason; the claim cites it; record checks and claims check pass; no engine token changes.
+10. **Before moving a constant.** n/a - `_WELD_MIN_SOLIDITY` stays 0.85, its measurement on record in the code.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T32 Decisions
+
+**D151 - the next host where the best would lump.** 0014's drawing page gains, after its weld block: "<li><strong>A strip is not joined where it would leave its neighbor lumpy.</strong><br>Where the paddy it shares the most bund with would be left with a lobe - a wall run out and straight back, which holds water on neither side - it goes to the next neighbor it shares bund with instead, and only where every neighbor would be left so does it go to the least lumpy. A DEVIATION from the rule above: a wall that holds no water is a construction error, and the two walls still become one.</li>". The claim reads "weld lump - DEVIATION research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a scrap goes to the basin it shares the most bund with unless that leaves the host under 0.85 solidity and a clean host exists".
+
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).
