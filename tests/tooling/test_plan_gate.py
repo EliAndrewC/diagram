@@ -449,6 +449,18 @@ def test_a_pointer_repointed_to_a_recorded_split_leaves_the_section_reviewed() -
     assert not gate.task_current(review, "# Plan\n\n" + loud + split, "T31"), "a repoint with another change: owed"
 
 
+def test_a_repoint_to_a_split_already_archived_leaves_the_section_reviewed(tmp_path: pathlib.Path) -> None:
+    """The same fix, once T95 was ticked: its "found working T31" heading had moved to plan-done.md, and T31 was owed again."""
+    sec = "## T31 - x\n\nRow 841 is T32.\n\n"
+    review = {"tasks": {"T31": {"verdict": "CLEAR", "section_sha256": gate.digest(sec.encode()), "section_text": sec}}}
+    (tmp_path / "plan.md").write_text("# Plan\n\n" + sec.replace("T32", "T95"))
+    (tmp_path / "plan-done.md").write_text("## T95 - the leg (found working T31)\n\nz\n")
+    history = gate.History(tmp_path / "plan.md")
+    assert gate.task_current(review, (tmp_path / "plan.md").read_text(), "T31", history)
+    (tmp_path / "plan-done.md").write_text("## T95 - the leg\n\nz\n")
+    assert not gate.task_current(review, (tmp_path / "plan.md").read_text(), "T31", history), "no split recorded: owed"
+
+
 def test_an_archive_line_inside_a_task_s_section_leaves_it_reviewed() -> None:
     """Feature 385 T82 (plan D102): ticking T78 and T80 left their archive line inside T79's section, and T79 was owed again."""
     sec = "## T05 - x\n\n### T05 Decisions\n\n**D10 - a rule.** z\n\n"
