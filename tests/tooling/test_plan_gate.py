@@ -441,3 +441,11 @@ def test_an_archive_line_inside_a_task_s_section_leaves_it_reviewed() -> None:
     line = "<!-- plan-archive: T06 to T07 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->\n"
     assert gate.task_current(review, "# Plan\n\n" + sec + line, "T05")
     assert not gate.task_current(review, "# Plan\n\n" + sec + "A new decision.\n", "T05")
+
+
+def test_a_verdict_s_free_text_is_written_in_the_house_style_its_keys_as_given() -> None:
+    """Feature 385 T88 (plan D109): T83's first gate went red on a reviewer's British word copied into plan-review.json."""
+    brit = "gr" + "ey"
+    got = gate.house_style([{"id": f"D1-{brit}", "class": "within", "why": f"a {brit} band, <q>a {brit} quoted</q>"}])
+    assert got == [{"id": f"D1-{brit}", "class": "within", "why": f"a gray band, <q>a {brit} quoted</q>"}]
+    assert gate.house_style(None) is None
