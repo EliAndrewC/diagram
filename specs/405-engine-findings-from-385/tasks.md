@@ -2,17 +2,17 @@
 
 Spec: [`spec.md`](spec.md). Each task keeps its 385 id in its title; the boxes moved verbatim on 2026-10-19 (385 amendment 11).
 
-- [ ] T01 (385 T35) Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row
+- [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row
       research: rendering
-- [ ] T02 (385 T36) Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row
+- [ ] T02 (385 T36) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row
       research: rendering
-- [ ] T03 (385 T37) Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row
+- [ ] T03 (385 T37) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row
       research: rendering
-- [ ] T04 (385 T38) Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row
+- [ ] T04 (385 T38) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row
       research: rendering
-- [ ] T05 (385 T39) Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row
+- [ ] T05 (385 T39) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row
       research: rendering
-- [ ] T06 (385 T40) Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row
+- [ ] T06 (385 T40) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row
       research: rendering
 - [ ] T07 (385 T12) Carried from T03 by the round arbiter (hour:385-approach-checklist@6, ask:t03-d17-route, ask:t03-seed57-residue): D17's side-by-side merge (saved; F1-F3 merged and seed 49 fixed, six seeds regressed - 7, 24, 37, 51, 52, 57 - because the later settle passes are blind to the junctions it makes), seed 49, seed 55 (lane_knots 1, as at HEAD), seed 57 (lanes 1/13, ends 21.6 ft apart, settle_knots' gather refused by needle_loops; 2 knots against HEAD's 1) and Inashiro F1-F3's glyph-check NEEDS-WORK; done when seed 57 PASSES. Its Approach first asks whether the merge needs a fixed reach at all (REACH 20 then 25 ft is ours), whether the refusals behind seed 49 (a field and farmhouses unreached) rest on research, and whether needle_loops' and needle_joins' rules are research or ours; only then the design that makes the later passes aware of the merge's junctions. Also carried at T03's landing (ask:t03-claims-at-landing): settle.py::theirs DRIFTED - take a lane's own household from fabric.owned_gardens instead of the 80 ft radius, measured on the cohort; Lawful.fault's doubled tail at 15 degrees against 0081's 20 - which number the research fixes, first; clearance.py::_clear_link re-checked once its bundle carries link_survives; its retro row
       research: rendering
@@ -48,7 +48,7 @@ Spec: [`spec.md`](spec.md). Each task keeps its 385 id in its title; the boxes m
       research: rendering
 - [ ] T23 (385 T142) bund.tip_onto_the_bund returns a spur tip more than 60 ft off, or one whose run-on turns back or is blocked, as it came - short in open ground, against 0014's 'never ends in open ground short of the bund': name the fallback in the claim or make the tip arrive (impl-drift, T33's round)
       research: rendering
-- [ ] T24 (385 T144) Amendment 7, FR-020: a ranking row in place of T32's, whose row turned out dead code (retired in T143) - a live row, chosen at its start; its retro row
+- [ ] T24 (385 T144) FR-003: a ranking row in place of T32's, whose row turned out dead code (retired in T143) - a live row, chosen at its start; its retro row
       research: rendering
 - [ ] T25 (385 T145) 0043's drawing page, 'How many farmsteads have a wood shed?': 'the share chosen at random for each hamlet from its seed' - seed is the generator's word; reword for a reader (the glossary lists a `seed` variant: check its sense first) (record-format, T34's round)
       research: rendering

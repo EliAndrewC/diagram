@@ -36,6 +36,11 @@ Every open task of feature 385 that was not process work, moved verbatim to `tas
   feature (the GM, 2026-10-19, on 385: "Yes we should keep findings on code a task didn't change as new tasks in 385." - carried
   here with the work it governed).
 
+- **FR-003 (the ranking rows)**: the seven ranking rows (385 T35-T40, T144) are taken from 328's ranking as the round arbiter
+  read 385's amendment 7 on ask:t33-ranking-pick - live rows only, a kind not yet tried where one is left, else the top-ranked
+  live row, said so in the task's Approach - each marked with its wave in 328's `audit/waves.json`.
+
 ## Success Criteria
 
-- **SC-001**: every task in `tasks.md` ticked with its retro row, and the GM's review box.
+- **SC-001** (FR-001, FR-002, FR-003): every task in `tasks.md` ticked with its retro row, each finding its checks raised on
+  unchanged code filed here, each ranking row marked with its wave, and the GM's review box.
