@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -245,6 +245,42 @@ Owed by the hour-20 step-back (hour:385-approach-checklist@20, `continue`), whic
 ### T67 Decisions
 
 **D86 - lint first, alone.** `land-tooling.sh` runs the `lint` check before the other two; a lint failure dies at once with its output and the `ruff format <files>` line it prints now, the guard suites and tooling tests not started; a passing lint goes on to the two in parallel as now.
+
+## T68 - make test-file formats the changed Python (found landing T65 and T66, 2026-10-18)
+
+### T68 Approach (checklist part A)
+
+1. **The goal, in the world.** Python a session changed is formatted before anything lints it, without anyone running `make format`.
+2. **The constraints.** The gate's and land-tooling's `ruff format --check` stay as they are (a check, never a rewrite at the push); only files the clone changed against its merge base with origin/main are touched; a test red without it.
+3. **Where each comes from.** Amendment 8, the GM: "make our tooling do the thing correctly automatically every time" (G); the checks are T52's and the gate's (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-18 (`.git/land-tooling.log`, this session's commands): two format slips in one evening, each found by a lint after the session's own test run had passed - T65's landing (after 122 s of checks) and T66's pre-landing check.
+5. **The order.** The format step in the `test-file` recipe, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 25 min.
+9. **Done, measured.** One goal: `make test-file` first runs `ruff format` on the `.py` files the clone changed against its merge base (committed or not) and says which it reformatted; `tests/tooling/test_test_file_format.py` (new) red without it.
+
+### T68 Decisions
+
+**D87 - formatted where it is tested.** The `test-file` recipe runs `python3 -m ruff format --force-exclude` over `git diff --name-only <merge-base> -- '*.py'` plus the untracked `.py` files, before pytest, printing `test-file: formatted <files>` when any changed; nothing to format, it is silent. The push's checks are unchanged.
+
+## T69 - a task filed mid-feature lands open (found landing T10, 2026-10-18)
+
+### T69 Approach (checklist part A)
+
+1. **The goal, in the world.** A task filed while a feature lands task by task never holds another task's landing.
+2. **The constraints.** Feature 375 plan D18: an open box holds the landing unless the reviewed plan's `**Lands open**:` line names it; the review of that line stays. A test red without it.
+3. **Where each comes from.** 375 (O); the defect is measured landing T10 (amendment 6).
+4. **Do they describe the world here?** Yes - measured 2026-10-18: T10's push was refused because T66 and T67, filed by `make task-add`, were open boxes the Lands open line did not name; adding them cost a plan edit and a block review before the landing could go.
+5. **The order.** `task-add.py` writes the mark and the line, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: where the plan has a `**Lands open**:` line, `make task-add` appends the new id to it and ends the box with `[lands-open]`; `tests/tooling/test_task_add.py` red without it.
+
+### T69 Decisions
+
+**D88 - the line kept by the tool that files the task.** `task-add.py`, when `plan.md` holds a `**Lands open**:` line, appends `, T<n>` to it and writes the box with ` [lands-open]`; a plan with no such line is left alone (its feature does not land task by task). The line's block still owes its review (`make plan-delta`), as any edit of it does.
 
 ## T11 - the close
 

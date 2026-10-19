@@ -192,6 +192,10 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
       research: rendering
 - [ ] T67 land-tooling lints before it tests (plan D86) [lands-open]
       research: rendering
+- [ ] T68 make test-file formats the changed Python (plan D87) [lands-open]
+      research: rendering
+- [ ] T69 A task filed mid-feature lands open (plan D88) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

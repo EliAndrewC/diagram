@@ -5499,6 +5499,58 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T69": {
+   "section_sha256": "4a6ce7a11daa31a18742c43265bcd3179feefbcbe3811cdf82efcc38cb1e515c",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D88",
+     "summary": "make task-add, when plan.md holds a **Lands open**: line, appends the new task id to it and writes the box with [lands-open]; the line's block still owes its review (make plan-delta).",
+     "class": "within",
+     "why": "Amendment 6 asks for obvious tooling/process improvements along the way, amendment 8 asks for task-insertion tooling and that the tooling do the thing correctly automatically every time rather than rely on remembering. The defect is measured (T10's push refused over T66/T67). The guard it touches is kept: the line's edit still owes its block review, so the reviewed-plan condition of the landing rule is not bypassed."
+    },
+    {
+     "id": "D88-no-line",
+     "summary": "A plan with no **Lands open**: line is left untouched by task-add.",
+     "class": "within",
+     "why": "Leaves existing behavior for features that do not land task by task; narrows nothing the GM asked for, since the request concerns the task-by-task landing that tripped."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T68": {
+   "section_sha256": "53ec11da396934fe6ebd160d1a348179717a051eade15dd4734ffa7c8e0d2ca1",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D87",
+     "summary": "make test-file runs ruff format --force-exclude over the .py files changed against the merge base with origin/main (committed, uncommitted and untracked) before pytest, printing 'test-file: formatted <files>' when any changed and staying silent otherwise.",
+     "class": "within",
+     "why": "Amendment 8 (the GM): 'anytime that you can just forget to do ... make our tooling do the thing correctly automatically every time', and 'something that is run automatically when certain actions are taken'; amendment 6 asks for 'any obvious performance / tooling / process improvements along the way'. Running the formatter in the step a session already runs before every landing, so a forgotten make format can no longer reach a lint, is that request carried out directly. Printing what it reformatted reports the automatic action; it adds no behavior."
+    },
+    {
+     "id": "T68-A2-push-unchanged",
+     "summary": "The gate's and land-tooling's ruff format --check stay check-only (no rewrite at the push).",
+     "class": "within",
+     "why": "The request asks for automation where a step can be forgotten; it never asks for the push to rewrite files. Leaving the existing checks as they are keeps behavior the GM did not ask to change, and the checks stay as the backstop for a session that skips test-file. Nothing asked for is dropped."
+    },
+    {
+     "id": "T68-A2-scope",
+     "summary": "Only .py files the clone changed against its merge base with origin/main are formatted.",
+     "class": "within",
+     "why": "This limits the automatic rewrite to the session's own work. It removes nothing the request covers: the forgotten step being automated is formatting the Python the session changed. Formatting files the session did not touch would be a change nobody asked for."
+    },
+    {
+     "id": "T68-A9-test",
+     "summary": "New tests/tooling/test_test_file_format.py, red without the format step.",
+     "class": "within",
+     "why": "Enforcement of the requested automation: delete the format step and the test has nothing left to check (GM 2026-09-20)."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
