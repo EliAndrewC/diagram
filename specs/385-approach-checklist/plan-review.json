@@ -6363,127 +6363,113 @@
    "verdict": "CLEAR"
   },
   "T86": {
-   "section_sha256": "58950934e373d6bf2e4e7fd7e9d70e18e3806e56e0311a5eb8aeeeb84c43d3ed",
+   "section_sha256": "f521dafb575d041cd10103052781076a9461ed3567065de3dfa08d741cc5c3be",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "D107-scope",
-     "summary": "Only Approach item 4 is checked; budgets (item 8) and other items are not.",
+     "id": "D107-sentence",
+     "summary": "The check works one sentence at a time: each sentence of Approach item 4 that holds a figure must carry its own label, and one label covers only the figures in its own sentence (this replaces the earlier text, where one label anywhere in item 4 covered the whole item).",
      "class": "within",
-     "why": "Proposal C names 'an Approach item 4 figure'; checking item 4 alone is the request as written."
+     "why": "Proposal C, which the GM approved verbatim ('build all 7 of those', amendment 9), asks for a refusal when a figure has no measured date and method 'beside it'. A label in the figure's own sentence is a closer reading of 'beside it' than a label anywhere in the item. The change moves toward the request and refuses more, not less."
     },
     {
-     "id": "D107-figure",
-     "summary": "A figure is any number item 4 states once dates, clock times and ids (T10, D84, FR-005, 0018) are set aside, replacing the earlier unit list.",
+     "id": "D107-setasides",
+     "summary": "Dates, clock times and ids (T10, D84, FR-005, a question's 0018) are not counted as figures.",
      "class": "within",
-     "why": "Widening from a unit list to any number moves toward 'an Approach item 4 figure', not away from it. Dates, clock times and ids are not figures, so leaving them out narrows nothing."
+     "why": "The GM's rule is about measured figures. The label he names, 'measured <date>', itself contains a date, so his own words already treat dates as not being figures. Ids and clock times name things or moments, not quantities."
     },
     {
-     "id": "D107-code-spans",
-     "summary": "Every number inside a code span is exempt from the check, whatever it holds.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The exemption goes by where the number sits, not what it is. A measured figure written in backticks (`4.4 s`, `700 ft`) passes make decide, yet the review's figure rule still returns NOT-REVIEWABLE for it, which is the round proposal C exists to save ('1+ unreviewable round'). The literal rule is not impossible: paths, keys and commands can be set aside by what they are (an id or path pattern, a number with no unit after it) without exempting a figure that has a unit. That the literal check would flag digits in filenames is an implementation cost, not a reason for the carve-out."
-    },
-    {
-     "id": "D107-m-key",
-     "summary": "An m:<key> into measurements.json passes in place of 'measured <date> (<method>)'.",
+     "id": "D107-codespans",
+     "summary": "Code spans that hold a path, key or command (marked by '/', '::', '=' or 'make ') are set aside. A code span holding a measured value (for example 4.4 s) is read like prose. This narrows the earlier text, which set aside every code span.",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "why": "The words say 'measured <date>' and method, but the purpose is a figure the review can check. The project's figure contract (feature 239) and the review both accept an m:<key>, and its entry carries the date and the command that measured it. Refusing it would refuse figures that can be reviewed, which defeats the request's own purpose."
+     "why": "Each trigger judged separately. '/', '::' and 'make ' mark paths, dictionary keys and commands. None of them is a measured quantity, so setting them aside narrows nothing the GM asked for. '=' marks an argument or assignment such as F=385. Counting its number as a figure would refuse a plan that holds no unreviewable figure, and nothing could fix that, because a feature number cannot be labeled as measured. That false refusal would cost the review round proposal C exists to save ('a round each time'). The residue: a measured value written as key=value inside a code span would slip past the check. This is an edge of the detector, not a carve-out of the rule. The block's own rule still reads every measured value written as a value, which is how the triggering incident stated its figure ('4.4 s (measured)'). The plan review is the backstop for the rest. Compared with the earlier CLEAR text, this decision makes the check reach further."
     },
     {
-     "id": "D107-label-scope",
-     "summary": "One 'measured <date>' label (or one m:<key>) anywhere in item 4 satisfies every number in the item.",
+     "id": "D107-mkey",
+     "summary": "A figure with an m:<key> pointer into measurements.json passes, as an alternative to 'measured YYYY-MM-DD' followed by a method in parentheses.",
      "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The approved words are 'refuses an Approach item 4 figure with no \"measured <date>\" and method beside it', which is per figure. Under D107's mechanism ('where ... it still holds a number, it must also hold measured 20dd-dd-dd ... or an m:<key>'), an item with one labeled figure and one remembered figure passes make decide. The review checks each figure, returns NOT-REVIEWABLE, and the round C was meant to save is lost. The carve-out matches the words loosely but defeats their purpose. Requiring each figure to have a label beside it is not physically impossible to check: the label can be required in the same sentence or clause, or before the figure within the clause, and one label can still introduce several figures from the same run. Being harder to implement does not make it legitimate."
+     "ruling": "LEGITIMATE",
+     "why": "Taken literally, the GM's words ask for 'measured <date>' and a method beside the figure, and a key is neither. But the request's purpose, which the block states, is that no figure reaches review in a form the review cannot check. An m:<key> entry carries its command, the method in its strongest form, and is the form the review re-runs (make figures). Refusing it would refuse the one label that can be checked mechanically, which defeats the purpose. Accepting it carries out the GM's 'method beside it' by pointer."
     },
     {
-     "id": "no-escape",
-     "summary": "The FIGURE_OK escape is removed; there is no override.",
+     "id": "D107-label-form",
+     "summary": "The date label must match measured 20\\d\\d-\\d\\d-\\d\\d and be followed by a method in parentheses.",
      "class": "within",
-     "why": "The GM asked for a refusal and named no escape. The escape would have been the narrowing, so removing it restores the request."
+     "why": "This is the GM's 'measured <date>' and 'method', made concrete."
     },
     {
-     "id": "D107-names",
-     "summary": "The refusal names the first such figure.",
+     "id": "D107-scope-item4",
+     "summary": "Only Approach item 4 is read. The budget (item 8) and the other items are not checked.",
      "class": "within",
-     "why": "This is how the refusal is reported. It neither widens nor narrows what is refused."
+     "why": "Proposal C names 'an Approach item 4 figure'. Item 8 is a budget, not a measurement."
     },
     {
-     "id": "test",
-     "summary": "tests/tooling/test_plan_blocks.py is red without the check.",
+     "id": "D107-refusal",
+     "summary": "make decide refuses and names the first figure without a label. No escape.",
      "class": "within",
-     "why": "The test only enforces the requested refusal (GM 2026-09-20). Take the refusal away and the test has nothing left to check."
+     "why": "This is the refusal proposal C asks for. Having no escape means nothing is excepted."
+    },
+    {
+     "id": "T86-test-order",
+     "summary": "Item 5 builds the check next to proposal A's in make decide, then its test. Item 9 makes tests/tooling/test_plan_blocks.py fail without the check.",
+     "class": "within",
+     "why": "Order and placement are inside the task. The test only enforces the requested refusal: take the refusal out and the test has nothing left to check."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   },
   "T85": {
-   "section_sha256": "486803722216ff1e14b13dbd7a3037ed775d0ac7da9af185b8d99406d1c8cecf",
+   "section_sha256": "82d4b307e3634e579179bad40438e7fe958954c50ee4f790dc84ff83a2482d9a",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "D106-scope",
-     "summary": "Every running spec-fidelity plan review holds what its bundle names: a task preflight holds that task's section, a plan-delta block review holds each block in its blocks.md.",
+     "id": "D106-hold",
+     "summary": "Every running spec-fidelity plan review holds what its bundle names: a task preflight's section, a plan-delta review's blocks.",
      "class": "within",
-     "why": "Proposal B (amendment 9): 'refuses an edit to a section whose review is running'. A block under a plan-delta review is a section whose review is running. This removes the narrowing the earlier text carried ('a block review holds nothing')."
+     "why": "Proposal B (amendment 9) refuses 'an edit to a section whose review is running'. A block under a plan-delta review is the unit that review digests, so it is a section under review. Only spec-fidelity records plan verdicts (AS=spec-fidelity), so its digest is the one that goes stale (the incident in Approach item 4). Limiting the hold to spec-fidelity therefore drops no review the request covers."
     },
     {
-     "id": "D106-edit",
-     "summary": "An Edit of the plan is refused when its old_string lies in held text or its new_string lands in it.",
-     "class": "within",
-     "why": "This is how proposal B's refusal works on the Edit tool. It carves nothing out."
-    },
-    {
-     "id": "D106-write",
-     "summary": "A Write of the plan is refused when the new content differs from the plan in held text.",
-     "class": "within",
-     "why": "Proposal B's refusal on the Write tool. It widens the earlier text, which covered Edit only."
-    },
-    {
-     "id": "D106-bash",
-     "summary": "A Bash command is refused when its write targets (hm_house.write_targets) include the plan and its text contains the held heading or any line of held text.",
-     "class": "within",
-     "why": "A detection mechanism for proposal B's refusal. The plan exempts nothing in words. Two notes for the caller. (a) Item 9's measured Done tests only 'naming that task's section heading', while D106 promises heading-or-any-line, so the widening has no measure as the block is written. (b) A Bash write that changes held text without quoting any of it passes this test. The GM said 'the plan-write path', which may mean a make target that writes a section by its task id (make decide, task-add, plan-archive). This bundle cannot show whether such a route exists, so it is not ruled a narrowing here, but the caller should check it."
-    },
-    {
-     "id": "D106-names",
+     "id": "D106-refusal-names",
      "summary": "The refusal names the running review's agent and its task or blocks.",
      "class": "within",
-     "why": "'naming the agent' is the GM's own wording (proposal B)."
+     "why": "The GM's proposal says 'naming the agent'. Naming the task or blocks as well adds no behavior; it only identifies the hold."
     },
     {
-     "id": "D106-elsewhere",
-     "summary": "Edits to other sections, and to the plan's other files, go through.",
+     "id": "D106-edit-write-paths",
+     "summary": "An Edit whose old_string lies in held text, or whose new_string lands in it, is refused. So is a Write whose new content differs from the plan in held text.",
      "class": "within",
-     "why": "The other half of 'a section whose review is running'. Proposal B refuses only the section under review."
+     "why": "These are the plan-write path the proposal names, and the test fires exactly when held text would change. Edits elsewhere pass, as 'an edit to a section whose review is running' implies."
     },
     {
-     "id": "D106-escape-dead-hold",
-     "summary": "PLAN_EDIT_OK=\"<reason>\", recorded, passes a hold that a dead dispatch left.",
+     "id": "D106-bash-textual-test",
+     "summary": "A Bash write is refused when its write targets include the plan and its command text contains the held heading or any held line. A shell edit that names neither (for example by line number) is not caught.",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "why": "Once the dispatch is dead, no review is running for the hold to protect. Applied literally, the rule would block that section with no end, which defeats the request's stated purpose (a plan review is never wasted on a section edited while it ran) and is outside its words ('whose review is running')."
+     "why": "This leaves a gap in what the request covers: some Bash writes to held text pass. Before a shell command runs, a hook cannot decide in general what text it will change, so an exact test is impossible here. The only exact alternative is refusing every Bash write of the plan while any review runs, which would refuse edits to other sections that the GM's words leave allowed. The text test is the same one the Edit path applies. The gap does not defeat the purpose ('a plan review is never wasted'): plan-verdict's digest check still refuses a stale review, so an edit that slips through costs a round but is never recorded as a wrong verdict."
     },
     {
-     "id": "D106-escape-deliberate",
-     "summary": "PLAN_EDIT_OK=\"<reason>\", recorded, also passes 'a deliberate edit' of a section while its live review runs.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "Exceptions start out presumed wrong, and none of the three grounds holds. It is not physically impossible to obey: the literal path is to wait the few minutes until the review returns. Nothing in request.md implies it: proposal B is 'the plan-write path refuses an edit to a section whose review is running', with no override. Obeying the rule literally does not defeat its purpose, which is that no running review is wasted. The escape excepts exactly the case the rule exists for, a live review whose section changes under it. The fact that other guards in this project carry recorded escapes is not a ground. The earlier CLEAR does not cover this: that text allowed PLAN_EDIT_OK but did not name a deliberate edit of a live review's section as a sanctioned use."
-    },
-    {
-     "id": "D106-test",
-     "summary": "tests/tooling/test_plan_edit_refusal.py is red without the hook and never green by the escape.",
+     "id": "D106-escape-dead-only",
+     "summary": "PLAN_EDIT_OK=\"<reason>\" passes, and is recorded, only for a hold a dead dispatch left (no agent of that review still running, by the pair state).",
      "class": "within",
-     "why": "Enforces the requested refusal (proposal B, 'A test red without it' in the constraints). It serves the request."
+     "why": "The GM's rule covers a section 'whose review is running'. A hold left by a dead dispatch is a review that is not running, so the request already implies letting that edit through. Recording the reason adds no reach."
+    },
+    {
+     "id": "D106-no-live-escape",
+     "summary": "A live review's held text has no escape; the session waits for the review to return. The earlier text allowed PLAN_EDIT_OK for any deliberate edit.",
+     "class": "within",
+     "why": "This brings the refusal closer to the request, which gives an edit under a running review no escape. Dropping the 'deliberate edit' escape removes a carve-out the GM never asked for, so nothing he asked for is narrowed."
+    },
+    {
+     "id": "D106-suite",
+     "summary": "The suite shows the refusal red without the hook and never green by the escape, and covers a held line as well as the heading.",
+     "class": "within",
+     "why": "This enforces the requested refusal and nothing else; with the refusal removed it would have nothing to check."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   },
   "T89": {
    "section_sha256": "c1f57441ca5520a2a76f15bbf7febf441c9ae47013b6dc0dfcd1b50ecdb929b1",

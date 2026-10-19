@@ -150,6 +150,35 @@ def tree_moved(before: dict[str, str], after: dict[str, str]) -> list[str]:
     return sorted(k for k in set(before) | set(after) if before.get(k) != after.get(k))
 
 
+#: what a pool map's roll writes beside its generator (feature 385 T87, plan D108)
+_MAP_OUTPUTS = (".json", ".png", ".svg", ".html", ".webp")
+
+
+def rolled_outputs(root: Path, census: Path) -> set[str]:
+    """The map outputs (beside each `.gen.py`) of every pool map the gate's own run rolled, by its roll census (feature 385 T87,
+    plan D108; T10's gate rolled Kuwabata and then failed on its own `kuwabata.json` as a tree move)."""
+    out: set[str] = set()
+    try:
+        lines = census.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return out
+    for line in lines:
+        try:
+            r = json.loads(line)
+        except ValueError:
+            continue
+        gen = Path(str(r.get("gen") or "")) if r.get("kind") == "roll" and r.get("gen") else None
+        if gen is None or not gen.name.endswith(".gen.py"):
+            continue
+        stem = gen.name[: -len(".gen.py")]
+        try:
+            rel = gen.resolve().parent.relative_to(root.resolve())
+        except ValueError:
+            continue
+        out |= {f"{rel.as_posix()}/{stem}{ext}" for ext in _MAP_OUTPUTS}
+    return out
+
+
 def stray_probes(root: Path) -> list[str]:
     """Probe test files a diagnosis left in the tree (`tests/**/test_zz_probe*.py`): each runs in the full suite and can turn it
     red on its own, and the round arbiter found four in pytest's failure list on red-gate@2026-10-17T17:21:08Z (feature 385,
@@ -164,6 +193,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--workers", default=os.environ.get("XDIST_WORKERS", "4"))
     ap.add_argument("--tree-snap", default="")
     ap.add_argument("--tree-check", default="")
+    ap.add_argument("--census", default="", help="the roll census the gate wrote (default <root>/.git/roll-census.jsonl)")
     a = ap.parse_args(argv)
     root = Path(a.root).resolve()
     if a.tree_snap:
@@ -175,6 +205,10 @@ def main(argv: list[str] | None = None) -> int:
         except (OSError, ValueError):
             return 0
         moved = tree_moved(before, tree(root))
+        rerolled = sorted(set(moved) & rolled_outputs(root, Path(a.census) if a.census else root / ".git" / "roll-census.jsonl"))
+        moved = [m for m in moved if m not in rerolled]
+        if rerolled:
+            print("preflight: re-rolled by the gate - commit them (feature 385 T87):\n  " + "\n  ".join(rerolled))
         if moved:
             print("GATE NOT GREEN: the tree moved while the gate ran - it vouches for none of it (feature 375 FR-004):\n  "
                   + "\n  ".join("HEAD (a commit or a checkout)" if m == "HEAD" else m for m in moved))

@@ -761,3 +761,9 @@ checked against the request before any review reads it.
 
 About 10 min. `plan_gate.house_style` passes each decision's free text through `americanize` in all three verdict writers (the
 task, the plan and the block records); ids, classes, rulings and digests are written as given. **The habit it changes:** none needed.
+
+## T87 - the retro row
+
+About 25 min. The tree check reads the gate's own roll census and leaves out only the outputs of the maps it rolled, printing them
+to commit; any other change - another map's output among them - is still a tree move (the plan review's keying). The census
+already named each roll's generator, so no engine change was needed. **The habit it changes:** none needed.
