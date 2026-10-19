@@ -455,6 +455,30 @@ names the door's step, not the footpath's gap. T31's 4 ft block comes out of 024
 7 ft. No house moves: route (d) is not needed, and (e) is not reached. T43's item 3 (`span_walkable` and a household's own garden)
 stays T43's.
 
+## T98 - grove-band clearance as 0036 gives it, once (found working T96, 2026-10-19; lands with T96)
+
+Found by T96's claims round (DRIFTED: `serve.lay_door_paths#door path off a grove band`, `track.connector_dry_exit#grove band gap`),
+and needed by T96's landing: with the footpath at 7 ft, cohort seed 22 newly fails because the door path's margin off a grove is
+counted twice.
+
+### T98 Approach (checklist part A)
+
+1. **The goal, in the world.** A path past a farm's grove keeps the working room 0036 gives off the trees - no more, no less.
+2. **The constraints.** 0036: a footpath's clearance and some working room kept off the trees on each side - `GROVE_WORKING_ROOM_FT` 9.5 ft off the 3 ft tread, a path's middle about 11 ft off the trees (about 22 ft of the opening). The GM, 2026-10-12: room before packing. A test red without it.
+3. **Where each comes from.** 0036's figure is O (its drawing page); the ruling is the GM's (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-19: the door path's bands are grown 11 ft a side (`2 * (1.5 + 9.5)`) and then routed at `FOOTPATH_FABRIC_GAP` on top, so the path's middle stands 18 ft off the trees at 7 ft (impl-drift, T96's round); `connector_dry_exit` keeps bands `FOOTPATH_FABRIC_GAP + CONNECTOR_WIDTH / 2` = 10 ft off, where 0036's room for a 6 ft track is 3 + 9.5 = 12.5 ft. With T96's 7 ft, `make cohort-landing` refused cohort seed 22 (linear, two farms whose doors stood but no door path was lawful - a scratch probe logging `door_path`); with the door path's middle held 11 ft off the trees and the connector 12.5 ft, seeds 22, 3, 4, 903 and 904 pass and `make cohort` passes 16 of 16 (probes, reverted).
+5. **The order.** The door path's band grown so its middle stands 0036's 11 ft off the trees; the connector's band gap at 0036's room; the claims; the test; then T96 and T98 land together.
+6. **The exits.** (a) refine an O number: none - 0036 gives the figure; (b) an exception: none; (c) a new rule: none - the margin is counted once; (d) more room: not needed, the cohort passes; (e) conform - chosen: 0036's figure, counted once, at both sites.
+7. **The search smell.** None.
+8. **The budget.** 60 min.
+9. **Done, measured.** One goal: both sites keep 0036's room once - the door path's middle 11 ft off the trees, the connector 12.5 ft - their claims IN-STEP, a test red without it, and the landing cohort passing with T96.
+10. **Before moving a constant.** No constant's value moves: `lay_door_paths`' `grow` is computed from the gap it is routed at, and `connector_dry_exit`'s band gap reads `GROVE_WORKING_ROOM_FT` (measured 2026-10-19, a grep: one site each).
+11. **Before fitting things into room.** Dispersed farms' bands stand 32 ft apart (`track.py`'s comment); a 6 ft connector at 12.5 ft a side needs 25 ft.
+
+### T98 Decisions
+
+**D119 - the room off a grove counted once.** In `lay_door_paths` the grove bands are grown by `2 * (1.5 + GROVE_WORKING_ROOM_FT - FOOTPATH_FABRIC_GAP)` (never below zero), so the path routed at `FOOTPATH_FABRIC_GAP` keeps its middle 1.5 + 9.5 = 11 ft off the trees; in `connector_dry_exit` a grove band's gap is `GROVE_WORKING_ROOM_FT + CONNECTOR_WIDTH / 2` (12.5 ft). Both claims cite 0036's drawing page.
+
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).
