@@ -97,3 +97,4 @@ Under "still open" it lists the copper-to-silver rate wherever a mon price stand
   - the town and city hatago and the new plain kimono given verdicts;
   - the return, pongee and the silk-to-cotton ratio made to follow the passes;
   - the craftsman's wage kept only as the nearest wage where no unskilled wage exists.
+- **spec-fidelity round 2 (2026-10-19): verdict FAITHFUL.** All four items resolved; the reviewer's aside (label the pongee "Shandong pongee, priced in Songjiang") goes to the write brief.

@@ -46,7 +46,7 @@ equivalent) as the project's arithmetic.
   - A tan's length; cotton per tan (1781-91, Ako and Edo); plain silk (one 1692 figure, from Saikaku's fiction, so
     labeled); the silk-to-cotton ratio, a weak Japanese pairing of about 6:1 (1692 silk against 1716 cotton, marked weak)
     and Qing Beijing's official prices (1736).
-  - Pongee: silent in Japan; Shandong pongee priced in Songjiang, 0.03-0.1 tael a chi (1680s-90s).
+  - Pongee: silent in Japan; ATTESTED ONLY FOR Shandong pongee as priced in Songjiang (the 閱世編), 0.03-0.1 tael a chi (1680s-90s).
   - A new plain kimono: silent in Japan; the Qing ready-made garments of Beijing 1736 are the nearest.
   - Silent: used kimono, sewing, silk bedding.
   - Bassino and Ma's cotton linen at 5.83 g silver a meter, set beside the recorded cotton prices (point at 0249).
