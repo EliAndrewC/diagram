@@ -259,6 +259,8 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T90 `make where-time` tells waiting on work from waiting on the GM (proposal G, 2026-10-19) [lands-open]
       research: rendering
       verify: DONE. where-time splits waiting on work from the GM; landed, test_where_time green
+- [ ] T91 A landing's lint runs in the foreground (the arbiter's fix on hour:385-approach-checklist@27, plan D112) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

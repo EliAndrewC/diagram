@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -328,6 +328,20 @@ Owed by the hour-26 step-back (hour:385-approach-checklist@26, `continue`).
 10. **Before moving a constant.** n/a - none moves.
 11. **Before fitting things into room.** n/a - nothing is fitted.
 
+### T85 part B (2026-10-19T04:58Z)
+
+Owed by the hour-27 step-back (hour:385-approach-checklist@27, `continue`).
+
+1. **What is refusing?** Nothing: T85 is landed and its suites green.
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither - landed as reviewed.
+6. **The one-sentence test.** "A section under review cannot be edited under it" - true by its two tests.
+7. **The next step is a measurement.** None owed for T85.
+8. **Routes measured before asking?** n/a - no ask.
+9. **After a ruling.** `continue`; its tooling fix (the foreground lint) is its own task.
+
 ### T85 Decisions
 
 **D106 - the section or block under review is held.** Every running `spec-fidelity` plan review holds what its bundle names: a task preflight (`plan-<feature>-<T>`) that task's section, a block review (`make plan-delta`) each block in its `blocks.md`. A write that would change held text is refused, naming the running review's agent and its task or blocks: an `Edit` of the plan whose `old_string` lies in, or whose `new_string` lands in, held text; a `Write` of the plan whose new content differs from the plan in held text; a Bash command whose write targets (`hm_house.write_targets`) include the plan and whose text contains the held heading or any line of held text (the same test the Edit path applies). `PLAN_EDIT_OK="<reason>"` passes it, recorded, only for a hold a dead dispatch left (no agent of that review still running, by the pair state); a live review's held text has no escape - the session waits for it to return (the plan review, 2026-10-19). The suite shows the refusal red without the hook, never green by the escape, and covers the held-line case as well as the heading.
@@ -337,6 +351,26 @@ Owed by the hour-26 step-back (hour:385-approach-checklist@26, `continue`).
 <!-- plan-archive: T88 to T88 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
 <!-- plan-archive: T89 to T89 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
 <!-- plan-archive: T90 to T90 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+## T91 - a landing's lint runs in the foreground (the round arbiter's fix on hour:385-approach-checklist@27)
+
+### T91 Approach (checklist part A)
+
+1. **The goal, in the world.** A lint slip in the files a landing carries is known in seconds, before the landing starts.
+2. **The constraints.** The arbiter's fix: "make land-tooling should run its own lint stage (the same ruff check and format check the landing applies) in the foreground on the files it carries, and refuse before it goes to the background, so a lint failure shows in seconds rather than at the next tick or set-down". The landing's own lint (T52, T55, T67) stays. A test red without it.
+3. **Where each comes from.** The fix is the arbiter's (G); the landing's lint is T52's (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the hour-27 bundle and the land-t85 logs): T85 was landed three times; two failures were lint (a format, a stray `f` prefix), each seen only when the backgrounded landing's log was read minutes later.
+5. **The order.** The check in the make-only guard's Bash path (it already reads `make` commands), then its suite case.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 25 min.
+9. **Done, measured.** One goal: a `make land-tooling FILES="..."` command whose Python files fail `ruff check --force-exclude` or `ruff format --check --force-exclude` is refused before it runs, naming the files and the `ruff format` command, whether or not it is run in the background; `tests/hooks/test-make-only-hooks.sh` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T91 Decisions
+
+**D112 - the landing's lint, before the landing.** `make-only-hooks.sh`, for a Bash command invoking `make land-tooling` with `FILES=`, runs the landing's own lint (`ruff check --force-exclude` and `ruff format --check --force-exclude`, in the command's working tree) on the `.py` files named; a failure refuses the command with ruff's first lines and `python3 -m ruff format <files>`. No `.py` file named, or ruff absent: nothing is refused.
+
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).
