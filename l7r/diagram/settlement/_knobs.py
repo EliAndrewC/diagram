@@ -31,7 +31,7 @@ import random
 from collections.abc import Callable, Mapping, Sequence
 from typing import TYPE_CHECKING, Any
 
-from ._geom import Poly, Pt, forest_frame_span, forest_reveal_x, label_aabb, point_in_poly, torii_halfbox
+from ._geom import Pt, forest_frame_span, forest_reveal_x, label_aabb, point_in_poly, torii_halfbox
 
 if TYPE_CHECKING:
     pass
@@ -492,88 +492,9 @@ def skeleton_layout(kind: str, cx: float, cy: float, ex: float, ey: float) -> di
     raise ValueError(f"unknown lane_skeleton {kind!r}; expected one of {LANE_SKELETONS}")
 
 
-TORII_WEIGHTS = {
-    # TORII COUNT DISTRIBUTIONS (GM 2026-07-21): counts are NUMEROLOGICAL - 1, 3, or 7 only (7 is even
-    # more potent in Rokugan than in the real world). Weights per settlement tier; the richer the tier,
-    # the deeper the accumulated patronage (torii are DONATED votive gates - see research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html
-    # for the historical grounding and the deliberate Rokugan liberties). "capital" is recorded ahead of
-    # need - no capital-city maps exist yet. A row of arches at an ordinary shrine is a DELIBERATE DEVIATION
-    # (GM 2026-09-29; research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html).
-    "village": ((1, 0.60), (3, 0.30), (7, 0.10)),
-    "town": ((1, 0.30), (3, 0.60), (7, 0.10)),
-    "city": ((1, 0.30), (3, 0.40), (7, 0.30)),
-    "capital": ((1, 0.10), (3, 0.60), (7, 0.30)),
-}
 """Research: torii counts 1, 3 or 7 by tier - DEVIATION research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html: the GM's numerology, weighted to the tier"""
 
 
-def roll_torii_count(scale: str, rng: random.Random) -> int:
-    """Roll a hall's torii count for the tier: always 1, 3, or 7 (torii_count_canonical gates it),
-    weighted by TORII_WEIGHTS. Unknown scales roll the village column (the conservative tier).
-    Research: torii count - DEVIATION research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html: 1, 3 or 7, the village column by default"""
-    weights = TORII_WEIGHTS.get(scale, TORII_WEIGHTS["village"])
-    x = rng.random()
-    acc = 0.0
-    for count, wt in weights:
-        acc += wt
-        if x < acc:
-            return count
-    return weights[-1][0]
-
-
-MERCHANT_ESTATE_WEIGHTS: dict[str, tuple[tuple[int, float], ...]] = {
-    # CAPITAL (021, the counts table): 48 rich families against the provincial 12 - the
-    # walled-estate privilege lands on ~4-8 of them, weighted to the middle of that band
-    "capital": ((4, 0.15), (5, 0.25), (6, 0.3), (7, 0.2), (8, 0.1)),
-    # WALLED MERCHANT COMPOUND COUNT DISTRIBUTION (GM 2026-07-23). A gated compound is a PRIVILEGE
-    # that must be explicitly GRANTED to a merchant family, not a purchase: this mirrors the
-    # Edo-period system of individually granted merchant rights and privileges - an audience with
-    # the daimyo at the New Year's celebration, permission to carry a persistent surname across
-    # generations despite not being samurai (myoji gomen), and the like. So even most VERY rich
-    # merchants do not have one: they can afford the wall, but lack the legal standing to build it.
-    # A provincial city holds ~12 very-rich merchant families (budgets.md, 2% of ~3,000), of whom
-    # only 1-3 hold the grant - rolled 30% / 40% / 30% per city, seeded on the map seed (the same
-    # deterministic re-roll pattern as TORII_WEIGHTS above). "capital" is left to be added when
-    # capital maps exist, like the torii table did for its tiers.
-    "city": ((1, 0.30), (2, 0.40), (3, 0.30)),
-}
-"""Walled merchant compound counts.
-
-Research:
-    walled merchant compounds per city - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: one to three, 30/40/30
-    walled merchant compounds per capital - UNRESEARCHED: four to eight, weighted to the middle
-"""
-
-
-def roll_merchant_estate_count(scale: str, rng: random.Random) -> int:
-    """Roll how many walled merchant compounds a settlement carries, weighted by
-    MERCHANT_ESTATE_WEIGHTS - see that table for the granted-privilege reasoning. Scales without
-    a column (villages, towns today) do not roll; callers hand-place there.
-    Research: walled merchant compound count - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: rolled from the tier's weights"""
-    weights = MERCHANT_ESTATE_WEIGHTS[scale]
-    x = rng.random()
-    acc = 0.0
-    for count, wt in weights:
-        acc += wt
-        if x < acc:
-            return count
-    return weights[-1][0]
-
-
-# WALL DEFENSE POSTURE (GM 2026-07-22): a walled city's guard-tower coverage is TUNABLE per city
-# (meta wall_defense=), because how heavily a wall is towered reflects its history and threat exposure -
-# a border city that has repelled sieges packs its towers to the aimed-lethal-bowshot spacing so every
-# stretch of the wall base is under crossfire from >=2 towers; a city that has known centuries of peace
-# runs the sparser Xi'an spacing. Each tier maps to (effective arrow range in FEET, minimum towers that
-# must cover every wall point within that range). The historical grounding (侧射 flanking fire; Shen Kuo's
-# 11th-c. 矢石相及; Xi'an 120 m / Pingyao ~55 m mamian spacing at a ~60 m aimed-lethal bowshot) is in
-# research/questions/0148-towers-along-the-city-wall-mamian.html and research/questions/0148-towers-along-the-city-wall-mamian.drawing.html. Once gated by city_wall_tower_coverage; used to set the mural-tower spacing in city_wall.
-WALL_DEFENSE = {
-    # tier          (arrow_range_ft, min_towers)  placement spacing = range if min==2 else 2*range
-    "siege": (197.0, 2),  # border / besieged city: aimed-lethal bowshot (60 m), >=2 towers EVERYWHERE (Pingyao-dense)
-    "garrison": (328.0, 2),  # garrisoned interior city: full war-bow reach (100 m), >=2 towers everywhere
-    "peaceful": (197.0, 1),  # long-peaceful city: Xi'an crossfire - spacing <= 2x60 m, so >=1 flanking tower within aimed-lethal range everywhere (midpoints get 2)
-}
 """Research: wall defense postures - research/questions/0148-towers-along-the-city-wall-mamian.html, research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: siege, garrison and peaceful arrow ranges and tower cover"""
 
 
@@ -586,9 +507,7 @@ KOSATSUBA_MARKER_MIN_PX = 11.0
 # the city wellhead glyph (~8 px), which is the smallest thing on a city map that reliably reads.
 
 
-PUNISHMENT_SPOT_FT = (30.0, 12.0)  # the cangue frame + post + kneeling stone, true size at every tier
 """Research: punishment ground size - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html: 30 x 12 ft at every tier"""
-BOUNDARY_MARKER_FT = 4.0  # a real roadside dosojin stone, drawn at its true size
 """Research: boundary stone size - research/questions/0217-wayside-shrines-and-stone-figures-dosojin-jizo.drawing.html: 4 ft"""
 
 
@@ -601,19 +520,6 @@ BOUNDARY_MARKER_FT = 4.0  # a real roadside dosojin stone, drawn at its true siz
 #: duplicating it would fork the drawing vocabulary.
 CITY_TIER_SCALES = ("city", "capital")
 """Research: a capital draws as a bigger city - research/questions/0138-how-a-capital-differs-from-a-provincial-city-what-multiplies-what-changes-form-and-what-only-a-capital-has.html"""
-
-
-def execution_ground_ft(scale: str) -> tuple[float, float]:
-    """Tier footprint of an execution ground in REAL FEET, scaled down from the Suzugamori anchor
-    (74 x 16.2 m serving Edo) by execution volume - see research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html.
-
-    SHARED DATA, deliberately: Settlement.execution_ground draws from this, and site_justice.py
-    sizes its trial placements from it, so a tool proposing a seat can never disagree with the
-    engine about how big the thing it is seating actually is.
-    Research: execution ground size - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html: about 200 x 65 ft at a capital (the page's 150-250 x 50-80 ft), 100 x 60 ft at a provincial city, else 60 x 60 ft"""
-    if scale == "capital":
-        return (200.0, 65.0)
-    return (100.0, 60.0) if scale in CITY_TIER_SCALES else (60.0, 60.0)
 
 
 # NO DRAWN FLOOR FOR THE BOUNDARY STONE (feature 328 wave 7): it was drawn at a 7 px floor, about 21 ft at the city grain,
@@ -660,7 +566,6 @@ EXECUTION_GROUND_DEAD_CLEAR_FT = 400.0
 # looking at the artifact could show that.
 # WHY (full): research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html.
 
-KIDO_TOWER_KEEPCLEAR = 62.0
 """Research: no tower at a ward-fence junction - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: the drawing page's GUESS, 62 px (186 ft at 3 ft/px) of rampart kept tower-free"""
 # px of rampart kept tower-free around a `tower_skip` spot - where a ward FENCE meets the city wall
 # (its kido ward-gate stands there; a mamian's footprint would collide the junction). Placement
@@ -669,15 +574,6 @@ KIDO_TOWER_KEEPCLEAR = 62.0
 # water-gate exemption): the junction is a manned chokepoint, not open curtain - and demanding
 # 2-tower coverage of it forced the remediation pass to seat a DOUBLED tower right outside the
 # band (the Tango/Nagahara adjacent-tower artifacts, GM 2026-07-23, wall_towers_evenly_spaced).
-
-
-def wall_tower_spacing_px(scale_px_per_ft: float, tier: str) -> float:
-    """Max mural-tower spacing (px) that satisfies a wall_defense tier: the arrow range for a >=2 tier
-    (so a point at any tower has a neighbor within range), or twice it for the >=1 Xi'an tier. Unknown
-    tiers fall back to 'garrison' (the moderate middle). `scale_px_per_ft` is 1/ftpx.
-    Research: tower spacing - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: the arrow range, or twice it for single cover"""
-    rng_ft, mincov = WALL_DEFENSE.get(tier, WALL_DEFENSE["garrison"])
-    return (rng_ft if mincov == 2 else 2 * rng_ft) * scale_px_per_ft
 
 
 def bridge_carried_ways(M: Any) -> list[tuple[Any, float]]:
@@ -735,70 +631,6 @@ def bridge_crossed_waters(M: Any) -> list[tuple[Any, float]]:
     for aq in M.get("aqueducts", []):  # an open supply cut is a seam on the ground like any channel
         waters.append((aq["poly"], aq.get("w", 8)))
     return waters
-
-
-def moat_current_at(ring: Any, inlet: Pt, outlet: Pt, pt: Pt) -> tuple[float, float] | None:
-    """The moat's flow direction at `pt`: the ring tangent pointing the way water travels toward the
-    outlet along the arc `pt` sits on.
-
-    A ring has NO single downstream side - water entering the inlet runs BOTH ways round to the
-    outlet - so "the moat's current" is only ever a local quantity. SHARED between the generators
-    (which sweep an offtake throat and land a drain culvert with it) and check_village's
-    `moat_junctions_swept_with_the_current` (which judges the result), because a check that
-    re-derives what the generator computed drifts from it.
-
-    The tangent is the chord between the vertex's two NEIGHBORS, not the forward segment: taking the
-    forward segment alone tilts every reading by about half the vertex's turn angle, consistently
-    enough (~8-9 deg on these rings) to misclassify a square tap as upstream-facing.
-    Research: a fed ring runs both ways to its outlet - research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html"""
-    n = len(ring)
-    if n < 3:
-        return None
-
-    def ix(q: Pt) -> int:
-        return min(range(n), key=lambda k: math.hypot(ring[k][0] - q[0], ring[k][1] - q[1]))
-
-    i_in, i_out, it = ix(inlet), ix(outlet), ix(pt)
-    step = 1 if (it - i_in) % n <= (i_out - i_in) % n else -1
-    a, b = ring[(it - step) % n], ring[(it + step) % n]
-    vx, vy = b[0] - a[0], b[1] - a[1]
-    L = math.hypot(vx, vy)
-    return None if L == 0 else (vx / L, vy / L)
-
-
-def _below_drain(x: float, y: float, drain: Any, fx: float, fy: float, berth: float = 26.0) -> bool:
-    """Is (x, y) downslope of the drain COLLECTOR? Measured to the NEAREST POINT on the drain
-    polyline and projected along the fall - which is what the check does. A global cut along the
-    fall axis is not the same thing and lets a farmstead sit in the toe where the drain bends.
-    Research: below the drain - NONE: projected on the fall from the nearest drain point, a 26 px berth"""
-    best = (float("inf"), drain[0])
-    for k in range(len(drain) - 1):
-        ax, ay = drain[k]
-        bx, by = drain[k + 1]
-        dx, dy = bx - ax, by - ay
-        ll = dx * dx + dy * dy or 1.0
-        t = max(0.0, min(1.0, ((x - ax) * dx + (y - ay) * dy) / ll))
-        px_, py_ = ax + t * dx, ay + t * dy
-        d = math.hypot(x - px_, y - py_)
-        if d < best[0]:
-            best = (d, (px_, py_))
-    nx, ny = best[1]
-    return bool((x - nx) * fx + (y - ny) * fy > -berth)
-
-
-def _seg_point(pt: Pt, a: Pt, b: Pt) -> Pt:
-    """The point on segment a-b nearest `pt` - so a tap is DERIVED from the watercourse rather than
-    eyeballed beside it (every hand-picked tap in the capital's first ring stood on dry ground).
-    Research: geometry - NONE"""
-    dx, dy = b[0] - a[0], b[1] - a[1]
-    ll = dx * dx + dy * dy or 1.0
-    t = max(0.0, min(1.0, ((pt[0] - a[0]) * dx + (pt[1] - a[1]) * dy) / ll))
-    return (a[0] + t * dx, a[1] + t * dy)
-
-
-def _poly_centroid(poly: Poly) -> Pt:
-    """Research: geometry - NONE"""
-    return (sum(q[0] for q in poly) / len(poly), sum(q[1] for q in poly) / len(poly))
 
 
 def windbreak_face(clumps: Sequence[Sequence[float]], r: float, houses: Sequence[Mapping[str, Any]]) -> tuple[int, int, float] | None:
@@ -879,7 +711,7 @@ def windbreak_faces(clumps: Sequence[Sequence[float]], r: float, houses: Sequenc
 def crop_boxes(M: Any, city: bool, ftpx: float, W: float, H: float) -> list[tuple[float, float, float, float, str]]:
     """Every feature that SETS the render frame, as labeled boxes (x0, x1, y0, y1, what).
 
-    SINGLE SOURCE OF TRUTH, shared by `content_view` / `crop_city` - which reduce it to a
+    SINGLE SOURCE OF TRUTH, shared by `content_view` - which reduces it to a
     bounding box - and by check_village's `crop_not_held_open_by_one_feature`, which asks the
     opposite question: WHICH feature is setting each edge, and is it out there on its own?
     Keeping one list is what stops the crop and the check that gates it from drifting apart

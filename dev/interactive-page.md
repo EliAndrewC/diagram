@@ -69,7 +69,7 @@ be true under both**:
 | engine | rule |
 |---|---|
 | comb (`waterfields/tint.py`, feature 302) | a random 45% (`FLOOD_SAMPLE`) of the plots ON the drain collector, less those the re-judgment sends back to rice green because they would not read as a basin |
-| terrace and polder (`waterfields/hill.py`, `waterfields/polder.py`) | every `low` plot, no sample (the lowest steps or rows) |
+| polder (`waterfields/polder.py`) | every `low` plot, no sample (the lowest rows) |
 
 At feature 159 the comb maps showed 0-3 blue plots of about 20, and Kuwabata (the one live terrace or polder map) 5 of
 5; the legacy exhibits never re-roll.

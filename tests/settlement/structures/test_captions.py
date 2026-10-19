@@ -4,41 +4,6 @@ directory's CLAUDE.md for the index. Tests for `settlement/structures/captions.p
 from tests.settlement._builders import _town
 
 
-def test_clear_label_seat_walks_out_and_gives_up_when_nothing_is_clear():
-    # a verge-hugging feature puts its DEFAULT below-label on the frontage it hugs, so the seat is
-    # probed: below, above, then left/right, walking outward. On a frontage packed solid there is
-    # no clear box at all, and the siter must be told so rather than handed a seat on a shopfront.
-    s = _town()
-    assert s.clear_label_seat(500, 500, 30, 12, "notice board") == (500, 517)  # the default below-seat, when it is clear
-    s.M["buildings"] = [{"x": 500, "y": 500, "w": 2000, "h": 2000, "rot": 0, "kind": "merchant"}]
-    assert s.clear_label_seat(500, 500, 30, 12, "notice board") is None
-    assert not s.label_seat_clear(500, 517, 26.0)
-
-
-def test_compound_and_marker_captions_tilt_with_their_glyphs():
-    s = _town()
-    s.manor(500, 300, 120, 90, "Manor", sublabel="the bench", rot=-30)
-    s.place_labels()  # feature 157: every caption is queued and drawn in the LABEL PHASE
-    recs = {L[5]: L for L in s.M["labels"]}
-    assert recs["Manor"][7] == -30.0 and recs["the bench"][7] == -30.0
-    s._labels_pending = True  # the phase above drained; re-open it for the second feature
-    s.kosatsuba(200, 700, rot=-29)
-    s.place_labels()
-    assert s.M["labels"][-1][7] == -29.0
-    s.fire_tower(800, 700, rot=150)
-    assert s.M["labels"][-1][7] == -30.0
-    s.boundary_marker(850, 200, rot=-16)
-    assert s.M["labels"][-1][7] == -16.0
-
-
-def test_label_seat_clear_probes_the_tilted_reach():
-    s = _town()
-    s.M["houses"].append({"x": 300, "y": 262, "w": 40, "h": 24})
-    tw = s.label_caption_hw("a long caption here", 9)
-    assert s.label_seat_clear(300, 300, tw, 9)  # the level box clears under the house
-    assert not s.label_seat_clear(300, 300, tw, 9, tilt=-30.0)  # the tilted reach swings up into it
-
-
 def test_the_label_phase_defers_every_caption_and_drains_once():
     """THE LABEL PHASE (feature 157, GM 2026-08-29): *"after the final map feature is added ... a final
     phase in which we add labels for whatever map features get labels."* Nothing draws a caption before
@@ -157,3 +122,24 @@ def test_a_caption_with_no_seat_goes_down_where_it_covers_the_least():
     s.place_labels()
     assert "caption_key" not in s.M and "key_band" not in s.M["meta"], "no key"
     assert any("warehouse" in str(lb[5]) for lb in s.M["labels"]), "the caption's own words are drawn"
+
+
+def test_a_field_name_is_drawn_as_its_own_letter_spaced_markup() -> None:
+    """Feature 392: a field-name caption is queued, seated by the one placer, and drawn as the exact markup (letter-spaced,
+    haloed) the field drawers used to emit inline."""
+    s = _town()
+    s.field_name_label("Upper Paddies", (200.0, 200.0, 500.0, 400.0))
+    s.place_labels()
+    assert any('letter-spacing="1.5"' in o and "Upper Paddies" in o for o in s.toplabels), "the field name in its own markup"
+
+
+def test_a_caption_seated_away_from_its_subject_draws_and_records_its_leader() -> None:
+    """Feature 392: the town and city captions that took a leader went with their code; a placement carrying one still draws
+    the line and records it (`caption_leaders`)."""
+    from l7r.diagram.labels.placer import Placement, Subject
+
+    s = _town()
+    p = Placement(300.0, 200.0, 0.0, ("Old Mill",), ((280.0, 195.0), (320.0, 195.0), (320.0, 205.0), (280.0, 205.0)), 2, 0, "S", 1.0, ((300.0, 205.0), (300.0, 260.0)))
+    s._draw_placement("Old Mill", Subject("point", ((300.0, 270.0),)), p, 9, False, "normal", "#33301E", None)
+    assert s.M["caption_leaders"] == [[300.0, 205.0, 300.0, 260.0, "Old Mill"]]
+    assert any("<line" in o for o in s.toplabels)

@@ -8,47 +8,18 @@
 _STRUCTURES_SURFACE = frozenset(
     {
         # public entry points, called from pool gens, wip/, other engine modules and tests
-        "building",
-        "clear_label_seat",
         # "drum_tower" moved to structures/urban_fixtures.py (UrbanFixturesMixin) under feature 145 - still on Settlement
-        "fire_tower",
         "kosatsuba",
-        "label_blockers",
-        "label_caption_hw",
-        "label_seat_clear",
-        "manor",
-        "merchant_estate",
-        "merchant_estates",
-        "open_face_rot",
-        "pack",
-        "pasture",
         "place_kosatsuba",
-        "place_punishment_spot",
-        "road",
-        "rowpack",
-        "servant_ranges",
         # "theater_stage" moved to structures/urban_fixtures.py (UrbanFixturesMixin) under feature 145 - still on Settlement
-        "try_building",
         # private helpers, reached through self. Several have no consumer outside the class at
         # all - they stay in the surface precisely because a name nothing else calls is the kind a
         # careless partition drops without any other test noticing.
-        "_blocks_any_door",
-        "_dims",
-        "_door_is_clear",
-        "_estate_wall_clear",
-        "_face_street_rot",
-        "_office_records",
-        "_shortfall",
-        "_solid_records",
-        "_under_a_caption",
         # class-level ATTRIBUTES - the half a methods-only census cannot see. Feature 112 needed a
         # separate test (test_feature_012_archetype_constants_survived_the_split) because its guard
         # counted callables only; this one admits any non-dunder class-body name, so one assertion
         # covers all 33 members. A class attribute is as easy to lose in a split as a method and
         # much easier to overlook.
-        "URBAN",
-        "SERVANT_RANGE_DEPTH_FT",
-        "_OFFICE_STANDOFF",
     }
 )
 
@@ -67,6 +38,6 @@ def _structures_submixins():
 
 def _own_members(cls):
     # Any non-dunder name the class body itself defines: methods AND data attributes. Deliberately
-    # NOT `callable(v)` - that is what makes URBAN, SERVANT_RANGE_DEPTH_FT and _OFFICE_STANDOFF
+    # NOT `callable(v)` - that is what makes URBAN
     # visible here rather than needing a second test of their own.
     return {k for k in vars(cls) if not k.startswith("__")}

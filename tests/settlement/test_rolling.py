@@ -5,7 +5,7 @@ import math
 import pytest
 
 from l7r.diagram.settlement import Settlement
-from tests.settlement._builders import _crop_settlement, _nuc_village, _town, _village
+from tests.settlement._builders import _crop_settlement, _nuc_village, _village
 
 
 def test_nucleated_cluster_is_grove_less_with_yards_and_gardens():
@@ -163,11 +163,6 @@ def test_garden_beds_clear_rejects_a_bed_on_a_neighbor():
     assert s._garden_beds_clear([(100, 100, 20, 14)], others=[(300, 300, 20, 14)]) is True
 
 
-def test_closest_on_seg_degenerate_segment():
-    # a zero-length segment returns its own endpoint (no division by zero)
-    assert Settlement._closest_on_seg(0, 0, 5, 5, 5, 5) == (5, 5)
-
-
 def test_bundle_fits_rejects_a_bundle_spilling_outside_the_bound():
     # a homestead bundle whose grove/garden corner falls outside the settlement bound is rejected
     s = _village()
@@ -180,74 +175,6 @@ def test_slide_stops_on_no_target_and_on_arrival():
     s = _village()
     assert s._slide(200, 200, 40, 26, lambda x, y: None, True) == (200, 200)
     assert s._slide(200, 200, 40, 26, lambda x, y: (x, y), True) == (200, 200)
-
-
-def test_kura_side_flips_to_the_north_wall_when_the_west_is_taken():
-    # A legacy farmstead reserves its base rect but DRAWS its west kura past it, so the side is
-    # chosen at flush time against the neighbors actually on the ground (Minami 2026-08-08, a farm
-    # shed drawn on a garden). West by default, north when the west is taken - and when BOTH are
-    # taken the west stands, so the overlap matrix reports a homestead with no room for its kura
-    # rather than the engine hiding it.
-    s = Settlement(600, 600, seed=1)
-    s.meta(name="V", scale="village", ftpx=2)
-    rec = {"x": 300.0, "y": 300.0, "w": 44.0, "h": 29.0, "rot": 0.0, "shed": True}
-    assert s._kura_side(rec, 44.0, 29.0) == "W"
-    s.M["gardens"].append({"x": 300 - 0.64 * 44, "y": 300.0, "w": 10.0, "h": 10.0})  # a neighbor's bed on the west wall
-    assert s._kura_side(rec, 44.0, 29.0) == "N"
-    s.M["gardens"].append({"x": 300.0, "y": 300 - 0.60 * 29, "w": 10.0, "h": 10.0})  # ...and one on the back wall too
-    assert s._kura_side(rec, 44.0, 29.0) == "W"
-
-
-def test_legacy_dispersed_farmstead_path_still_covered():
-    # every POOL map is now to-scale, so keep the legacy (non-to-scale) DISPERSED path covered here: an old-style
-    # hamlet (scale!=village, no toscale -> _toscale() False) rings its field with houses and draws farmsteads
-    # via _try_place_legacy + _farmsteads_legacy (the pre-bundle path Moritono used before it was redone).
-    s = Settlement(1200, 900, seed=3)
-    s.meta(name="L", scale="hamlet")
-    fld = (300, 300, 620, 560)
-    s.paddy_field(fld, "", "f", amp=20)
-    s.ring(fld, 12, 24, ["plain"])  # 8-16 px seated houses inside the paddy set-back once the field edge became chords pushed out by 3 px (feature 140)
-    n = s.farmsteads()
-    assert n > 0
-
-
-@pytest.mark.parametrize("sides", (2, 3, 4))
-def test_the_legacy_path_plants_every_rolled_side_on_every_grove_farm(sides: int) -> None:
-    """Feature 291, plan D8: a house-first farm with a grove is seated only where the whole rolled grove fits, and then
-    plants a band on every face - none dropped for want of room (`meta.grove_faces_unplanted` stays unset)."""
-    s = Settlement(1200, 900, seed=3)
-    s.meta(name="L", scale="hamlet", grove_sides=sides, grove_flank=-1)
-    fld = (300, 300, 620, 560)
-    s.paddy_field(fld, "", "f", amp=20)
-    s.ring(fld, 12, 24, ["plain"])
-    assert s.farmsteads() > 0
-    faces: dict = {}
-    for g in s.M["groves"]:
-        faces.setdefault(tuple(g["of"]), set()).add((tuple(g["face"]), g["depth"]))
-    assert faces, "the ring's farms carry groves - the rule was not vacuous"
-    assert all(len({f for f, _d in fs}) == sides for fs in faces.values()), faces
-    assert "grove_faces_unplanted" not in s.M["meta"]
-
-
-def test_a_legacy_grove_farm_with_no_room_for_its_whole_grove_is_not_seated() -> None:
-    """Feature 291, plan D8: the old fallback to a yard-and-garden-only spot is gone for a farm that has a grove."""
-    s = Settlement(1200, 900, seed=3)
-    s.meta(name="L", scale="hamlet", grove_sides=4, grove_flank=-1)
-    s._grove_reserve = lambda *a: None  # type: ignore[method-assign]  # no seat anywhere holds the whole grove
-    rec = {"x": 600.0, "y": 450.0, "w": 23.0, "h": 14.0, "rot": 0.0, "kind": "plain", "shed": False, "wealth": 1.0}
-    s.placed.append((600.0, 450.0, 23.0, 14.0))
-    assert s._solve_homestead(rec) is None
-    s._wants_grove = lambda *a: False  # type: ignore[method-assign]  # a farm with no grove keeps its yard-and-garden seat
-    assert s._solve_homestead(dict(rec)) is not None
-
-
-def test_a_farm_inside_a_city_wall_wants_no_grove() -> None:
-    s = Settlement(800, 800, seed=1)
-    s.meta(name="C", scale="city")
-    s.M["wall"] = [(100, 100), (700, 100), (700, 700), (100, 700), (100, 100)]
-    assert not s._wants_grove(400, 400)
-    s.M["meta"]["inwall_groves"] = True
-    assert s._wants_grove(400, 400)
 
 
 def test_relax_gardens_south_skips_a_bundle_without_gardens():
@@ -294,18 +221,6 @@ def test_bundle_side_fits_rejects_a_bbox_running_off_the_canvas():
 def test_garden_beds_clear_rejects_a_bed_on_a_paddy():
     s = _nuc_village()  # field_polys carries a paddy over the east half (x >= 640)
     assert s._garden_beds_clear([(880, 400, 30, 20)], []) is False  # bed sits in the paddy
-
-
-# ---- ring: a BIG house whose placement FAILS is un-counted ---------------------------------
-def test_ring_decrements_the_big_count_when_a_placement_fails():
-    # every candidate lands on paddy (whole map is a field), so try_place fails; each 'big' that was
-    # counted up must be counted back down, leaving the tally at zero.
-    s = _nuc_village()
-    s.field_polys.append([(0, 0), (1200, 0), (1200, 900), (0, 900)])  # the entire canvas is flooded paddy
-    s._nbig = 0
-    s.ring((100, 100, 500, 500), 8, 30, ["big"], max_big=10)
-    assert s._nbig == 0  # each big incremented then decremented on its failed placement
-    assert not s.M["houses"]  # nothing could be placed
 
 
 def test_waterfront_seeds_line_both_banks_of_a_canal():
@@ -361,18 +276,6 @@ def test_scatter_seeds_spreads_over_area_and_records_dispersed():
     assert "settlement_form" not in s2.M["meta"]
 
 
-def test_ring_drops_candidates_severed_from_their_field_by_a_road():
-    # a road along the fan's south flank: ring candidates ACROSS it can never reach the field
-    # (hoshizora's south-of-road farmhouse), so they are dropped rather than seated
-    s = _town()
-    s.road([(-50, 620), (1050, 620)])
-    s.paddy_field((200, 200, 600, 600), "", "f", amp=20)
-    s.ring(("poly", s.field_polys[0]), 40, 60, ["plain"])
-    s.farmsteads()
-    assert s.M["houses"]  # the near side seats normally
-    assert all(h["y"] < 620 for h in s.M["houses"])
-
-
 # ---- feature 118: the composed RollingMixin surface ----------------------------------------------
 # The one thing a package split can break SILENTLY. A member dropped by the transformer yields a
 # package that imports cleanly, type-checks cleanly under mypy --strict, and draws nothing - it
@@ -385,7 +288,6 @@ _ROLLING_SURFACE = frozenset(
         # public - called from pool gens, wip/, other engine modules and tests
         "farmsteads",
         "line_seeds",
-        "ring",
         "scatter_seeds",
         "sun_corridor",
         "waterfront_seeds",
@@ -396,20 +298,13 @@ _ROLLING_SURFACE = frozenset(
         "_bundle_fits",
         "_bundle_geom",
         "_bundle_side_fits",
-        "_closest_on_seg",
         "_east_trees",
         "_farmsteads_bundle",
-        "_farmsteads_legacy",
-        "_field_adjacent",
         "_garden_beds",
         "_garden_beds_clear",
         "_garden_shaded",
         "_gardens_sun_ok",
-        "_kura_side",
-        "_nearest_field_point",
         "_nearest_placed_point",
-        "_perim_bbox",
-        "_perim_poly",
         "_place_bundle",
         "_place_bundle_nucleated",
         "_poly_bboxes",
@@ -419,7 +314,6 @@ _ROLLING_SURFACE = frozenset(
         "_rect_on_water",
         "_relax_gardens_south",
         "_slide",
-        "_solve_homestead",
         "_sun_corridor_ok",
         "_water_obstacles",
         "_yard_sun_conflict",
@@ -827,3 +721,8 @@ def test_the_parts_refuse_a_house_too_near_a_neighbor(monkeypatch) -> None:
     assert s._parts_fit(geom) is True, "the case: every part rule admits this layout"
     monkeypatch.setattr(s, "_house_too_near_a_neighbor", lambda house: True)
     assert s._parts_fit(geom) is False, "...and the eave gap alone refuses it"
+
+
+def test_closest_on_seg_degenerate_segment():
+    # a zero-length segment returns its own endpoint (no division by zero)
+    assert Settlement._closest_on_seg(0, 0, 5, 5, 5, 5) == (5, 5)

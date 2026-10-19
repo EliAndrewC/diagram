@@ -1,0 +1,44 @@
+{
+  "utc": "2026-10-19T02:13:46Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 227,
+  "result": "failed: test-full",
+  "commit": "88e6d6f7f",
+  "first_failure_s": 216.2,
+  "last_failure_s": 227.8,
+  "failed_names": [
+    "uncovered l7r/diagram/settlement/_geom/ways.py:61",
+    "uncovered l7r/diagram/settlement/homestead_parts/groves.py:282, 456-458, 474, 484-487, 500-502, 519-528, 538-544, 552-564, 573-578, 588, 594",
+    "uncovered l7r/diagram/settlement/houses.py:277",
+    "uncovered l7r/diagram/settlement/shrines_wells/wells.py:123",
+    "uncovered l7r/diagram/settlement/shrines_wells/woods.py:33, 38-41, 56",
+    "uncovered l7r/diagram/settlement/structures/captions.py:215-217",
+    "uncovered l7r/diagram/settlement/water_ways/kido.py:108-124",
+    "uncovered l7r/diagram/settlement/water_ways/water.py:97-99"
+  ],
+  "host": {
+    "load": [
+      5.93,
+      11.93
+    ],
+    "mem_avail_mb": [
+      8011,
+      5925
+    ],
+    "cpu_temp_c": [
+      71.0,
+      82.0
+    ],
+    "stall_s": {
+      "cpu": 3.3,
+      "io": 1.6,
+      "io_full": 1.3,
+      "memory": 0.4
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  }
+}

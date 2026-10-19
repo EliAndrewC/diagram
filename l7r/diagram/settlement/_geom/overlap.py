@@ -17,21 +17,6 @@ from .base import Poly, Pt
 from .primitives import point_in_poly, seg_dist, segments_cross
 
 
-def stroke_quads(pts: Sequence[Any], hw: float) -> list[Poly]:
-    """One quad per segment of a polyline at half-width `hw` - a linear feature as real polygons, so
-    a caller can SAT-test against it instead of measuring to sample points (a corner-distance test
-    misses a line passing through the MIDDLE of a box, which is exactly the ward-fence-through-the-
-    guard-box case it was hiding)."""
-    quads: list[Poly] = []
-    for i in range(len(pts) - 1):
-        ax, ay = float(pts[i][0]), float(pts[i][1])
-        bx, by = float(pts[i + 1][0]), float(pts[i + 1][1])
-        ln = math.hypot(bx - ax, by - ay) or 1.0
-        nx, ny = -(by - ay) / ln * hw, (bx - ax) / ln * hw
-        quads.append([(ax + nx, ay + ny), (bx + nx, by + ny), (bx - nx, by - ny), (ax - nx, ay - ny)])
-    return quads
-
-
 def _rect_ring(x: float, y: float, w: float, h: float, rot: float = 0.0) -> Poly:
     """The closed corner ring of a (possibly rotated) w x h rect centered at (x, y)."""
     c, s = math.cos(math.radians(rot)), math.sin(math.radians(rot))
@@ -70,46 +55,6 @@ def sat_overlap(p: Sequence[Sequence[float]], q: Sequence[Sequence[float]]) -> b
             if max(pa) < min(qa) or max(qa) < min(pa):
                 return False
     return True
-
-
-def _union_area(rects: Any) -> float:
-    """Total area covered by a set of axis-aligned rects (x0, y0, x1, y1), counting overlap ONCE. The grove's
-    belt arms abut at the windward corner, so summing their areas double-counts it; the honest grove footprint
-    is the union. Few small rects, so a coordinate-compression sweep is ample."""
-    rects = [r for r in rects if r[2] > r[0] and r[3] > r[1]]
-    if not rects:
-        return 0.0
-    xs = sorted({r[0] for r in rects} | {r[2] for r in rects})
-    area = 0.0
-    for i in range(len(xs) - 1):
-        x0, x1 = xs[i], xs[i + 1]
-        spans = sorted((r[1], r[3]) for r in rects if r[0] <= x0 and r[2] >= x1)
-        cy = -1e18
-        covered = 0.0
-        for y0, y1 in spans:
-            if y1 <= cy:
-                continue
-            covered += y1 - max(y0, cy)
-            cy = y1
-        area += (x1 - x0) * covered
-    return area
-
-
-def region_blocked(quad: Poly, circles: Sequence[tuple[float, float, float]], halo: Sequence[tuple[float, float, float]], lines: Sequence[tuple[Any, float]], polys: Sequence[Poly]) -> bool:
-    """Does a cell REGION meet any keep-out? Circles by distance-to-region, stroked lines by
-    segment-to-region, polygons by containment-or-crossing.
-
-    Factored out of near_ring_cropland so it can be tested directly: the bug it exists to stop is a
-    keep-out that sits against the middle of a cell EDGE, touching neither the cell's center nor any
-    of its corners, which is how a wellhead ended up 1 px inside a hatake plot with every sample
-    point clear."""
-    if any(point_quad_dist(cx, cy, quad) < r for cx, cy, r in circles):
-        return True
-    if any(point_quad_dist(cx, cy, quad) < r for cx, cy, r in halo):
-        return True
-    if any(quad_hits_seg(quad, pl[i], pl[i + 1], hw) for pl, hw in lines for i in range(len(pl) - 1)):
-        return True
-    return any(quad_hits_poly(quad, gp) for gp in polys)
 
 
 def quad_hits_poly(quad: Poly, poly: Poly) -> bool:
@@ -194,17 +139,6 @@ def eave_gap(a: Any, b: Any) -> float:
     qa = rot_rect(float(a["x"]), float(a["y"]), float(a["w"]), float(a["h"]), float(a.get("rot") or 0.0))
     qb = rot_rect(float(b["x"]), float(b["y"]), float(b["w"]), float(b["h"]), float(b.get("rot") or 0.0))
     return poly_gap(qa, qb)
-
-
-def _aabb_gap(p: Poly, q: Poly) -> float:
-    """The gap between two quads' AXIS-ALIGNED bounds - 0 where the bounds meet or overlap.
-
-    Deliberately the coarse measure, because it is the one `city_government_offices_dont_abut`
-    uses: that check reads AABBs, so a placement probe that guards the same standoff has to read
-    AABBs too or the two disagree exactly where a feature is drawn at an angle."""
-    ax0, ay0, ax1, ay1 = min(x for x, _ in p), min(y for _, y in p), max(x for x, _ in p), max(y for _, y in p)
-    bx0, by0, bx1, by1 = min(x for x, _ in q), min(y for _, y in q), max(x for x, _ in q), max(y for _, y in q)
-    return math.hypot(max(0.0, ax0 - bx1, bx0 - ax1), max(0.0, ay0 - by1, by0 - ay1))
 
 
 def rects_overlap(p: Poly, q: Poly) -> bool:

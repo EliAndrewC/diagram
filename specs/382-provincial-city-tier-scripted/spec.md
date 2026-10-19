@@ -12,6 +12,12 @@ Rewriting this into a full spec, a plan and tasks is the work of whoever scripts
 
 ## Carried items
 
+- **The drawing code the frozen maps used is retired** (feature 392, the GM 2026-10-18: "the frozen maps do not need to stay
+  runnable"): the provincial city's drawing API that only the legacy exhibits called - its buildings, walls, wards, streets, moat and canals,
+  civic and funerary grounds, trades, the not-to-scale farmstead path - was deleted. It is readable from git at `8c31f6d01`
+  (the commit before the deletion); the scripted tier builds what it needs anew or recovers it from there. A pointer, not an
+  owed item.
+
 Each was a filed feature of its own until 2026-10-10 and now reads `Superseded by 382`; its text is kept here as filed, headings demoted two levels.
 
 ### 331 - Fold settlement/city/civic.py into castle_civic.py (feature 113, 2026-08-16)

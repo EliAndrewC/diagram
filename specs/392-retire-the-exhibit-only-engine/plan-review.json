@@ -1,0 +1,146 @@
+{
+ "feature": "392-retire-the-exhibit-only-engine",
+ "blocks": {
+  "preamble": {
+   "sha256": "2f397bd53b56c73ea60bab1c9df2cc66ef55ec3756dc7bf5eec4cf8fd4306690",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "f7510d07166dad33451895575e6f9b62632e086f3a8737eae0a27a037fc54efc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "08c37288a008afbd03713683a8800ba91d1ebe2379dde202c77c12bc2f5b5f2e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "2ef82d1eaab9e02c4614b519e63e07cfacc81e8ca1e6b2652dd393bc00362271",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "3bc725edd5f6f73504caa612a52998bfb41cd88812d7de8372b5b30a8df34b5e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T01 - the deletion (FR-001)": {
+   "sha256": "56c0d355c8b011848dd77da20a903c4990a758c34b13b7f6ac2e1876ad406162",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T02 - the tests (FR-002)": {
+   "sha256": "d15bce5354c8ea69fa375f4aa5a85680a9a899d4c8c7b6e263941b7449f94677",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T03 - the prose and the placeholders (FR-003, FR-004)": {
+   "sha256": "e1d9e59b7736d79628da6daebfeb2e343edc2e0e670b81d593b1a856a5cc3240",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## T04 - measure and land (FR-006, SC-001 - SC-004)": {
+   "sha256": "a3240c7cca589b3ba312dfb5594ce7132966016ab165a658d6fe081680b0986c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Project Structure": {
+   "sha256": "77c32a57f091ba0f0fa46a1a7185fa41f9aac23e8bd02377a9c7ebd456b227ce",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  },
+  "## Complexity Tracking": {
+   "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-18",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-18",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## T01 - the deletion (FR-001)",
+    "## T02 - the tests (FR-002)",
+    "## T03 - the prose and the placeholders (FR-003, FR-004)",
+    "## T04 - measure and land (FR-006, SC-001 - SC-004)",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary/T01-closure",
+     "summary": "Delete the 71 exhibit-only names plus their transitive closure (166 names), to a fixpoint, and the twelve modules that empty",
+     "class": "within",
+     "why": "The request is to delete code only frozen maps reach, to cut the support surface; a name reached only by the 71 is likewise reached only by frozen maps, and FR-001 names (1) and (2) as the list. The fixpoint deletes nothing a live reference reaches."
+    },
+    {
+     "id": "T01-string-reached-kept",
+     "summary": "A name reached through a string (getattr, dispatch/caption table, roster) is KEPT if live code reaches it, the row recorded in the plan",
+     "class": "within",
+     "why": "FR-001 states this carve-out itself; a name live code reaches is outside the request's 'called only by frozen maps' set, so keeping it narrows nothing."
+    },
+    {
+     "id": "T01-mechanics",
+     "summary": "Mixin modules deleted with their base and import dropped from the package composition; unused imports and re-exports removed; duplicate-spelled names checked by hand",
+     "class": "within",
+     "why": "Mechanics of FR-001 ('a module left with no member goes whole, with its mixin from its composition')."
+    },
+    {
+     "id": "T01-dead-closure-acceptance",
+     "summary": "make dead-closure must show nothing NEWLY DEAD, no PINNED, STILL CALLED only frozen exhibits or a recorded false alarm",
+     "class": "within",
+     "why": "Restates SC-002; the false-alarm allowance is for same-spelled locals, which are not the deleted names."
+    },
+    {
+     "id": "T02-tests",
+     "summary": "Tests whose subject is deleted go; mixed tests keep the live part; emptied directories and their Makefile references (QUICK_TREE, gate trees) go; lines only deleted tests covered are deleted if nothing live reaches them, else a test is owed",
+     "class": "within",
+     "why": "FR-002 verbatim in substance; the coverage-floor rule deletes only code no live path reaches (the request's own target) and otherwise adds a test that enforces the live behavior."
+    },
+    {
+     "id": "T03-prose-claims-placeholders",
+     "summary": "Repoint CLAUDE.md indexes, docstrings, docs/ and dev/ (incl. migration-plan rows); claims index updated by its targets; 380/381/382 each gain one pointer line to the commit before the deletion",
+     "class": "within",
+     "why": "FR-003 and FR-004 as written; the request's own cost statement is that 381/382 'recover them from git', which the pointer line serves."
+    },
+    {
+     "id": "TechContext/ConstitutionVI-verification",
+     "summary": "No single-artifact target; make maps over the whole live pool and the landing cohort stand in for reference-then-pool since nothing is meant to move",
+     "class": "within",
+     "why": "FR-006/SC-003 set exactly this proof; the plan widens rather than narrows verification of 'no live map changes'."
+    },
+    {
+     "id": "Bookends/T04-landing",
+     "summary": "Start/end performance bookends, make maps, make done, cohort-landing, feature report, gated push",
+     "class": "within",
+     "why": "Process for landing; the GM asked to file and execute the feature."
+    },
+    {
+     "id": "ProjectStructure",
+     "summary": "Touched set: settlement/**, waterfields/hill.py, citybudget.py, tests/**, docs/, dev/, specs 380-382, claims index; nothing under the legacy pool",
+     "class": "within",
+     "why": "Matches FR-001 to FR-005; the frozen legacy maps (FR-005) are not in the touched set."
+    }
+   ]
+  }
+ ]
+}

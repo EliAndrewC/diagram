@@ -1,0 +1,37 @@
+{
+  "utc": "2026-10-19T02:31:38Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 369,
+  "result": "failed: test-full",
+  "commit": "a7acd7e89",
+  "first_failure_s": 359.0,
+  "last_failure_s": 368.4,
+  "failed_names": [
+    "uncovered l7r/diagram/settlement/structures/captions.py:215-217"
+  ],
+  "host": {
+    "load": [
+      11.51,
+      11.28
+    ],
+    "mem_avail_mb": [
+      7538,
+      7286
+    ],
+    "cpu_temp_c": [
+      66.0,
+      77.0
+    ],
+    "stall_s": {
+      "cpu": 6.7,
+      "io": 1.6,
+      "io_full": 1.2,
+      "memory": 0.3
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  }
+}

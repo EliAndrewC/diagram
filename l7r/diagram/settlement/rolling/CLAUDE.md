@@ -4,8 +4,8 @@ Split from one `settlement/rolling.py` by feature 118 (constitution Principle X 
 context-window tokens). **Load only the file the task calls for**; this index is the map.
 `from .rolling import RollingMixin` still resolves.
 
-**This package is a CHAIN, and that shapes everything below.** `structures/` and `civic_grounds/`
-were residue buckets - unrelated subsystems feature 025 happened to leave in one file - so their
+**This package is a CHAIN, and that shapes everything below.** `structures/` was a residue
+bucket - unrelated subsystems feature 025 happened to leave in one file - so its
 submodules are grouped by "what a session comes here to change" and are deliberately uneven.
 `rolling.py` was never a bucket: it is one cohesive pipeline, from *a seat's candidates* down to *does this rectangle
 touch a ditch*. So its core modules are its LINKS, in order:
@@ -24,18 +24,18 @@ is only worth its churn if tasks stop straddling files:
 | add a settlement FORM (a new `*_seeds` generator) | `seeds.py` alone |
 | the standing "placer must test the ROTATED footprint it draws" debt ([`dev/placement.md`](../../../../dev/placement.md), CENTER vs FOOTPRINT item 3) | `fit.py` alone - `_bundle_common_fits` is the named three-line landing site |
 | the collision-circle swap (item 2) | `fit.py` + `place.py` |
-| change what the flush DRAWS (the kura side, the garden relaxation) | `farmsteads.py` alone |
+| change what the flush DRAWS (the garden relaxation) | `farmsteads.py` alone |
 
 ## Look here when
 
 | file | look here when |
 |---|---|
 | `__init__.py` | you need the composition itself; never add logic here |
-| `seeds.py` | you are adding or changing a settlement FORM - the shape houses are strung in before any is placed: `line_seeds` (linear ribbon), `scatter_seeds` (dispersed), `waterfront_seeds` (water town), and the perimeter ring (`_perim_bbox`, `_perim_poly`, `ring`) |
+| `seeds.py` | you are adding or changing a settlement FORM - the shape houses are strung in before any is placed: `line_seeds` (linear ribbon), `scatter_seeds` (dispersed), and `waterfront_seeds` (water town) |
 | `bundle.py` | you are changing what a homestead BUNDLE is - the dimensions: `_bundle_geom` (the whole metric layout, nucleated and dispersed), `_garden_beds` (the 1-or-2 bed dooryard garden and its three split forms), `_bbox_of`. **Pure geometry** - it places nothing, draws nothing, and calls nothing outside itself |
 | `dispersed.py` | you are changing the DISPERSED farmstead's layout (feature 291): the canonical frame (wind from the NW, deep bands N and W, yard S, garden E), the thin bands on the other rolled sides and the way in through a ring (`canonical_farmstead`), and the carry to the map's wind (`dispersed_layout`). Pure geometry, a leaf `bundle.py` calls |
-| `fit.py` | you are changing whether a bundle may STAND somewhere: `_rect_blocked` (the composite), `_rect_hits` / `_rect_on_water` / `_field_adjacent` (the primitives), `_bundle_fits` and its common/side halves, `_fits_any_side` (the four-side fast path), `_sun_corridor_ok` + `sun_corridor` (the opt-in threshing-yard sun rule), `_yard_sun_conflict`, `_garden_shaded`, and the two caches - `_poly_bboxes` and `_water_obstacles` |
-| `place.py` | you are changing how a bundle FINDS its spot: `_place_bundle` / `_place_bundle_nucleated` (the two spiral searches), `_slide` / `_slide_nuc` (the compaction steps, and `keep_field`'s tangential constraint), `_nearest_field_point` / `_nearest_placed_point`, `_solve_homestead` (the legacy per-house solver), `headman`, and `_NUC_SIDES` |
+| `fit.py` | you are changing whether a bundle may STAND somewhere: `_rect_blocked` (the composite), `_rect_hits` / `_rect_on_water` (the primitives), `_bundle_fits` and its common/side halves, `_sun_corridor_ok` + `sun_corridor` (the opt-in threshing-yard sun rule), `_yard_sun_conflict`, `_garden_shaded`, and the two caches - `_poly_bboxes` and `_water_obstacles` |
+| `place.py` | you are changing how a bundle FINDS its spot: `_place_bundle` with `_place_bundle_dispersed` / `_place_bundle_nucleated`, `_slide` (the compaction step), `_nearest_field_point` / `_nearest_placed_point`, the refusal tests (`_seat_refused`, `_bundle_refused`, `_house_box_refused`) and `_house_box` |
 | `bearing.py` | you are changing which way a farmhouse FACES (269 B18, research/homesteads/240): the common bearing, the lane's turn (`MarginBearing`), the by-eye spread within 30 degrees, the quarter-turned tenth (`house_rot`, read by `Settlement._house_rot`), and the turned boxes the fit rules clear (`turned_box`, `turned_reach`). Pure geometry, a leaf like `bundle.py` |
 | `access.py` | the access-corridor tree reserved at seating (feature 287): a door's straight or round-the-gable corridor to the tree, the tests it passes, and what it reserves |
 | `route.py` | a door's path ROUTED round what stands where no straight corridor clears (feature 308): A* on the open ground, pulled taut through `access.py`'s own leg tests; only on a tree marked `routed` (the nucleated seating's) |
@@ -43,10 +43,13 @@ is only worth its churn if tasks stop straddling files:
 | `lot.py` | a household's parts are the household's (feature 287): ONE LOT PER HOUSEHOLD, keyed on seat order - the farmhouse's size, its kura or beast, kept per household |
 | `gap_ways.py` | THE WAYS LAID IN THE GAPS (feature 318): the households' ways laid in the minimum gaps between homesteads, and the gathered foot (`gathered_foot`) the hamlet's knots read |
 | `passage.py` | a household reached across a neighbor's yard (feature 317): passage over a neighbor's land for land with no road access of its own |
-| `farmsteads.py` | you are changing what the deferred flush DRAWS or the ORDER it draws in - this is the module the DRAW ORDER contract ([`dev/placement.md`](../../../../dev/placement.md)) is about: `farmsteads` (the entry point and its one `rng_scope`), `_farmsteads_bundle` (to-scale: groves recorded, south-nudge, yards/gardens/houses, arms LAST), `_farmsteads_legacy`, `_relax_gardens_south`, `_kura_side`, `_east_trees`, `_garden_beds_clear` |
+| `farmsteads.py` | you are changing what the deferred flush DRAWS or the ORDER it draws in - this is the module the DRAW ORDER contract ([`dev/placement.md`](../../../../dev/placement.md)) is about: `farmsteads` (the entry point and its one `rng_scope`), `_farmsteads_bundle` (to-scale: groves recorded, south-nudge, yards/gardens/houses, arms LAST), `_relax_gardens_south`, `_east_trees`, `_garden_beds_clear` |
 
 **`bundle.py` is a pure leaf** - the property that makes it the right place for the researched dimension numbers: a
 change there cannot ripple sideways within the package. `place.py` is the hub the flush reaches.
+
+Feature 392 retired the code only the frozen legacy maps called (the perimeter ring, the legacy per-house solver and
+the not-to-scale farmstead flush, so `farmsteads` always takes the to-scale bundle path); the commit before it holds it.
 
 ## Composition, and why it is in `__init__.py`
 

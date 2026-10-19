@@ -6,82 +6,9 @@ import tempfile
 
 import pytest
 
-from l7r.diagram import settlement
 from l7r.diagram.settlement import Settlement
 from tests._scope import full_or
-from tests.settlement._builders import _crop_settlement, _nuc_village, _town, _village, _walled, _zoned_city
-
-
-def test_kido_records_ward_gates_in_both_orientations():
-    s = Settlement(1000, 1000, seed=1)
-    s.kido(500, 300, horizontal=True)  # E-W street gate
-    s.kido(300, 500, horizontal=False)  # N-S street gate
-    assert len(s.M["kido"]) == 2
-    assert s.M["kido"][0]["horizontal"] and not s.M["kido"][1]["horizontal"]
-    assert s.M["kido"][0]["rot"] == 90.0 and s.M["kido"][1]["rot"] == 0.0  # legacy flags map to the axis angles
-
-
-def test_ward_kido_aligns_to_fence_tangent_and_guards_the_interior():
-    # GM 2026-07-24: the kido is a gap IN the fence - a slanted fence run gets a slanted gate
-    # (rot = the local fence tangent; a 30deg fence means a 30deg gate, never an axis-aligned
-    # stamp), and the guard box hangs on the ward-interior flank (the ward's own gate watch).
-    s = Settlement(1000, 1000, seed=1)
-    s.ward("slant", [(100, 100), (400, 400), (700, 400)], gates=[(250, 250), (550, 400, True)])  # legacy 3-tuple accepted, flag ignored
-    k45, k0 = s.M["kido"][-2], s.M["kido"][-1]
-    assert abs(k45["rot"] - 45.0) < 0.5  # the 45deg run gets a 45deg gate
-    assert abs(k0["rot"] - 0.0) < 0.5  # the flat run stays flat (the ignored legacy flag did NOT force 90)
-    # the fence centroid (400, 300) sits NORTH of the flat run at y400, so the guard box hangs
-    # north of the bar: the glyph's bbox reaches well north of the fence line and stays snug south
-    assert k0["bbox"][1] < 400 - 25 and k0["bbox"][3] < 400 + 25
-
-
-def test_kido_reservation_covers_the_glyph_the_ward_will_actually_draw():
-    # the gen must reserve a ward gate's ground before the packs run, but s.ward draws it near the
-    # END - so the reservation has to predict the glyph. It does that by asking the engine for the
-    # same seat s.ward will take, which is why it is a method and not a rect in the gen.
-    s = Settlement(1000, 1000, seed=1)
-    s.street([(100, 450), (900, 450)])
-    fence = [(300, 300), (600, 600)]
-    res = s.kido_reservation(450, 450, fence, margin=0.0)
-    s.ward("slant", fence, gates=[(450, 450)])
-    k = s.M["kido"][-1]
-    x0, y0 = min(p[0] for p in res), min(p[1] for p in res)
-    x1, y1 = max(p[0] for p in res), max(p[1] for p in res)
-    assert (x0, y0, x1, y1) == pytest.approx(tuple(k["bbox"]), abs=0.2)  # a zero-margin reservation IS the drawn glyph's extent
-    assert min(p[0] for p in s.kido_reservation(450, 450, fence)) < x0  # ...and the default margin inflates it
-
-
-def test_kido_guard_box_takes_the_far_flank_when_the_near_one_is_blocked():
-    # the box yields, never the gate: where the near side of the opening is taken (here by a wall
-    # tower standing at the rampart, the Nagahara case), it seats on the other side of its own
-    # gateway rather than overlapping (which no generic overlap pass would catch - kido are exempt)
-    s = Settlement(1000, 1000, seed=1)
-    s.street([(100, 450), (900, 450)])
-    s.M["wall_towers"] = [{"x": 430, "y": 436, "w": 26, "h": 26, "rot": 0}]  # stands on the near flank of the opening (the rampart side), where the box would sit
-    s.ward("slant", [(300, 300), (600, 600)], gates=[(450, 450)])
-    k = s.M["kido"][-1]
-    assert not settlement.sat_overlap([(c[0], c[1]) for c in k["guard"]], settlement.tower_quad(s.M["wall_towers"][0]))
-    assert sum(c[1] for c in k["guard"]) / 4 > 450  # it crossed to the other side of its own gateway (local +x, which the 90deg bar puts SOUTH)
-
-
-def test_kido_guard_box_stands_clear_of_its_own_ward_fence():
-    # GM 2026-07-27: "ward gates seem to sometimes overlap with neighborhood walls". The GATEWAY
-    # stands on the fence - it IS the opening - but the guard box is a building on the verge, and
-    # an oblique crossing used to cut straight through it (2 of the pool's 14 gates). SAT against
-    # the stroked fence, not corner distances: a line through a 15x16 box's middle leaves every
-    # corner ~8px clear, so the corner test the lane beds use reported it clear.
-    fence = [(300, 300), (600, 600)]
-    s = Settlement(1000, 1000, seed=1)
-    s.street([(100, 450), (900, 450)])
-    s.ward("slant", fence, gates=[(450, 450)])
-    box = [(c[0], c[1]) for c in s.M["kido"][-1]["guard"]]
-    assert not any(settlement.sat_overlap(box, q) for q in settlement.stroke_quads(fence, 4.0))
-    # and the RESERVATION agrees with the drawn glyph, which is why the fence goes in explicitly:
-    # at reservation time s.ward has not run, so M['wards'] is still empty
-    s2 = Settlement(1000, 1000, seed=1)
-    s2.street([(100, 450), (900, 450)])
-    res = s2.kido_reservation(450, 450, fence, margin=0.0)
-    assert (min(p[0] for p in res), min(p[1] for p in res)) == pytest.approx(tuple(s.M["kido"][-1]["bbox"][:2]), abs=0.2)
+from tests.settlement._builders import _crop_settlement, _nuc_village, _town, _village
 
 
 def test_place_kosatsuba_sites_on_the_lane_verge_at_the_busiest_node():
@@ -243,85 +170,6 @@ def test_bridges_solves_the_oblique_span_and_lands_every_corner():
     assert abs(s2.M["bridges"][0]["span"] - 25.0) < 0.1  # perpendicular: water + two 10 ft landings, nothing more
 
 
-def test_ftpx_scale_derives_bscale_and_ft_defaults():
-    # The GM's scale ladder (hamlet/town 1 ft/px, village 2, city 3): meta(ftpx=N) derives the
-    # urban grain bscale = 1/ftpx, px()/lw() convert real feet, and the 4px linework floor
-    # rescues thin features (a 5 ft roji at 3 ft/px would be an invisible 1.7px). A street's
-    # default width is the real 24 ft converted at the map's scale.
-    s = Settlement(1000, 1000, seed=1)
-    s.meta(name="C", scale="city", ftpx=3)
-    assert s.bscale == 1 / 3 and s.px(66) == 22 and s.lw(5) == 4
-    s.street([(100, 100), (400, 100)])
-    assert s.M["town_streets"][-1]["w"] == 8  # lw(24) at 3 ft/px
-    # VILLAGE maps keep bscale = 1.0: their placement constants were hand-pre-scaled to
-    # 2 ft/px before ftpx existed (re-deriving would perturb every tuned village map).
-    v = Settlement(1000, 1000, seed=1)
-    v.meta(name="V", scale="village", ftpx=2)
-    assert v.ftpx == 2 and v.bscale == 1.0
-
-
-def test_quarter_records_zone_without_drawing_for_non_reserve():
-    s = _zoned_city()
-    poly = [(100, 100), (400, 100), (400, 400), (100, 400)]
-    before = len(s.out)
-    s.quarter(poly, "residential")
-    q = s.M["quarters"][-1]
-    assert q["zone"] == "residential" and q["kind"] is None
-    assert q["poly"][0] == [100.0, 100.0]
-    assert len(s.out) == before  # residential/civic/mixed draw nothing (declarative only)
-
-
-def test_quarter_label_is_drawn_at_the_centroid():
-    s = _zoned_city()
-    s.quarter([(0, 0), (200, 0), (200, 200), (0, 200)], "civic", label="yamen precinct")
-    assert s.M["quarters"][-1]["name"] == "yamen precinct"
-    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
-    assert any("yamen precinct" in frag for frag in s.toplabels)
-
-
-def test_quarter_reserve_kinds_render_their_ground():
-    poly = [(100, 100), (500, 100), (500, 500), (100, 500)]
-    # drill_ground and garden paint a visible ground surface...
-    for kind in ("drill_ground", "garden"):
-        s = _zoned_city()
-        before = len(s.out)
-        s.quarter(poly, "reserve", kind=kind, label=kind)
-        assert s.M["quarters"][-1]["kind"] == kind
-        assert len(s.out) > before  # a drawn reserve renders its ground feature
-    # ...but an agricultural_district draws NOTHING (GM 2026-07-22 - its combs/farmhouses/label are
-    # the rendering; the old faint dashed boundary was a stray dotted line), yet is still recorded
-    s = _zoned_city()
-    before = len(s.out)
-    s.quarter(poly, "reserve", kind="agricultural_district", label="ag")
-    assert s.M["quarters"][-1]["kind"] == "agricultural_district"
-    assert len(s.out) == before  # no boundary line: the fields carry the whole visual
-
-
-def test_quarter_rejects_bad_zone_and_kind_misuse():
-    s = _zoned_city()
-    poly = [(0, 0), (100, 0), (100, 100), (0, 100)]
-    try:
-        s.quarter(poly, "industrial")
-        raise AssertionError("bad zone should raise")
-    except ValueError:
-        pass
-    try:
-        s.quarter(poly, "reserve")  # reserve needs a kind
-        raise AssertionError("reserve without kind should raise")
-    except ValueError:
-        pass
-    try:
-        s.quarter(poly, "reserve", kind="parade")  # unknown reserve kind
-        raise AssertionError("unknown reserve kind should raise")
-    except ValueError:
-        pass
-    try:
-        s.quarter(poly, "residential", kind="garden")  # only reserve may carry a kind
-        raise AssertionError("non-reserve with kind should raise")
-    except ValueError:
-        pass
-
-
 # ---- lane: the UNWORN (paved/dashed) branch ------------------------------------------------
 def test_lane_unworn_draws_a_dashed_causeway():
     s = _village()
@@ -465,27 +313,6 @@ def test_clip_to_river_walks_a_multi_point_run_out_of_the_bed():
     assert 12.0 <= d <= 21.0
 
 
-def test_intake_reach_ignores_water_that_is_parallel_behind_or_beside_the_ray():
-    # The three rejections, each of which would otherwise hand back a bogus length: a reach the ray
-    # runs ALONG (no crossing), one BEHIND the yard (t < 0 - the yard's back, not its water side),
-    # and one whose infinite line the ray meets but whose SEGMENT it misses (s outside [0, 1]).
-    s = _town()
-    s.field_channel([(300, 340), (500, 340)], "#9CB4C8", 2.0, 2.0)  # crossed: the honest answer
-    s.field_channel([(300, 500), (500, 500)], "#9CB4C8", 2.0, 2.0)  # behind the yard (its water side faces -y)
-    s.field_channel([(600, 200), (700, 200)], "#9CB4C8", 2.0, 2.0)  # off to the side: the ray misses the span
-    s.field_channel([(400, 100), (400, 300)], "#9CB4C8", 2.0, 2.0)  # parallel to the ray, dead ahead, never crossed
-    assert s._intake_reach(400, 400, 0.0, 20.5) == pytest.approx(39.5)  # the first CROSSING, none of the rest
-
-
-def test_intake_cut_refuses_a_reach_outside_the_sane_band():
-    # Clamp, not stretch: water 300px out is not this yard's water, and a cut drawn to it would be a
-    # 300px blue spear across the map. Out-of-band falls back to the stock length like the None case.
-    s = _town()
-    s.field_channel([(300, 90), (500, 90)], "#9CB4C8", 2.0, 2.0)  # ~290px ahead, far past the px(40) ceiling
-    s.tanning_yard(400, 400, rot=0, pits=4, water="ditch")
-    assert 'height="11.0"' in "".join(s.out)
-
-
 def test_flow_record_tags_direction_and_derives_the_bearing():
     s = _town()
     s.stream([(100, 100), (100, 400)])  # authored upstream-first: runs due south
@@ -499,32 +326,6 @@ def test_flow_record_rejects_an_unknown_direction():
     s = _town()
     with pytest.raises(ValueError, match="forward"):
         s.stream([(0, 0), (10, 10)], flow="downhill-ish")
-
-
-def test_ward_fence_end_parallel_to_the_wall_falls_back_to_the_nearest_point():
-    # a terminal segment running ALONG the rampart never crosses it, so there is no axis to extend
-    # down - the honest answer is the foot of the perpendicular
-    s = _walled()
-    s.ward("samurai", [(400, 206), (600, 206)], gates=[])
-    bnd = s.M["wards"][-1]["boundary"]
-    assert bnd[0] == pytest.approx([400.0, 200.0], abs=0.1)
-    assert bnd[-1] == pytest.approx([600.0, 200.0], abs=0.1)
-
-
-def test_ward_fence_without_a_city_wall_is_left_alone():
-    s = Settlement(1000, 1000, seed=1)
-    s.ward("samurai", [(500, 700), (500, 400)], gates=[])
-    assert s.M["wards"][-1]["boundary"] == [[500.0, 700.0], [500.0, 400.0]]
-
-
-def test_ward_fails_loudly_on_a_commoner_already_inside():
-    # the ordering guard: a commoner standing inside when the fence goes up means the gen ran a
-    # commoner pack before s.ward - fail at gen time, not at the gate
-    s = Settlement(1000, 1000, seed=1)
-    s.M["wall"] = [[200, 200], [800, 200], [800, 800], [200, 800]]
-    s.building(600, 600, 16, 11, "merchant")
-    with pytest.raises(ValueError, match="already inside the samurai ward"):
-        s.ward("samurai", [(400, 795), (400, 400), (795, 400)], gates=[])
 
 
 def test_no_stale_single_lane_record_is_written():
@@ -588,41 +389,6 @@ def test_fan_rival_spots_a_second_stub_fanning_to_the_same_house() -> None:
 
 # ---- THE TOWN AND WARD ARMS NO HAMLET ROLLS (feature 146: the hamlet floor covers the whole
 # module, and these three are the branches the scripted hamlets never enter) -------------------
-
-
-def test_a_labeled_town_street_carries_its_caption_beside_the_midpoint():
-    """`street(label=...)` is the only way an avenue gets a name on the sheet; every scripted map
-    calls it without one, so the caption arm went unentered."""
-    s = _town()
-    s.street([(100, 500), (500, 500), (900, 500)], label="Gate Road")
-    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
-    assert any("Gate Road" in frag for frag in s.toplabels), "the street's name is inked"
-    assert s.M["town_streets"][-1]["pts"][0] == [100, 500]
-
-
-def test_a_ward_fence_end_far_from_the_wall_is_left_exactly_as_placed():
-    """The end is snapped to the rampart only when it is already ABUTTING it. An end 200 px out is a
-    fence that fails to reach the wall - `city_ward_fence_meets_wall`'s defect to report - and
-    dragging it there silently would hide exactly that."""
-    s = Settlement(1200, 1200, seed=9)
-    s.meta(name="T", scale="city", ftpx=3, down_deg=90)
-    s.M["wall"] = [(100, 100), (1100, 100), (1100, 1100), (100, 1100)]
-    boundary = [(600.0, 400.0), (600.0, 800.0)]  # both ends hundreds of px inside the ring
-    assert s._ward_ends_on_wall(list(boundary)) == boundary, "left exactly as placed"
-
-
-def test_a_ward_cap_at_a_wall_corner_bends_with_the_rampart():
-    """The cap over a fence end FOLLOWS the wall for +/-16 px of arc, folding in any wall VERTEX inside
-    that span. A straight tangent at a corner juts past the bend and reads as a second wall section
-    (Nagahara SW, GM 2026-07) - so an end seated near a corner must produce a cap with a bend in it."""
-    s = Settlement(1200, 1200, seed=9)
-    s.meta(name="T", scale="city", ftpx=3, down_deg=90)
-    s.M["wall"] = [(100, 100), (1100, 100), (1100, 1100), (100, 1100)]
-    s.ward("samurai", [(1098.0, 104.0), (600.0, 400.0)], gates=[])  # first end 4 px off the NE corner
-    caps = s.M["wards"][-1].get("wall_caps") or []
-    assert caps, "an abutting end is capped"
-    bent = [c for c in caps if len(c["pts"]) >= 3 and any(abs(p[0] - 1100) < 2 and abs(p[1] - 100) < 2 for p in c["pts"])]
-    assert bent, "the cap span folded in the wall's own corner vertex, so the cap turns where the rampart turns"
 
 
 def test_trim_lane_stubs_steps_over_a_lane_record_with_one_point():
@@ -927,3 +693,15 @@ def test_pull_back_stops_at_the_last_house_where_reach_zones_chain() -> None:
     run = [(0.0, 0.0), (200.0, 0.0)]
     out = _pull_back(run, lambda q: "A" if 150.0 <= q[0] <= 190.0 else ("B" if 90.0 <= q[0] < 150.0 else None))
     assert 150.0 <= out[-1][0] <= 158.0, out
+
+
+def test_a_level_watercourse_records_no_bearing() -> None:
+    """Feature 392: a navigable cut is dug level and declares no downstream bearing; the canal that used it went with the city
+    code, and a `level` stream records the same."""
+    s = Settlement(800, 800, seed=1)
+    s.meta(name="L", scale="hamlet", ftpx=1, toscale=True)
+    s.stream([(100, 400), (700, 400)], flow="level")
+    rec = s.M["streams"][-1]
+    assert rec["flow"] == "level" and rec["flow_deg"] is None
+    with pytest.raises(ValueError, match="flow must be"):
+        s.stream([(100, 400), (700, 400)], flow="sideways")

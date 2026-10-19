@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from .core import Settlement
 
 import math
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 
 class TownWaysMixin:
@@ -79,38 +79,3 @@ class TownWaysMixin:
         self.M.setdefault("markets", []).append({"x": round(x, 1), "y": round(y, 1), "w": pw, "h": ph, "rot": 0})
         self.note_focal("market")
         self._focal_block(x, y, pw, ph)
-
-    def alley(self: Settlement, pts: Any, width: float | None = None) -> None:  # type: ignore[misc]
-        """An UNPAVED interior lane (a roji) that threads the packed block cores: the poor reach their
-        jammed interior housing by alleys, not the paved street frontage. Thinner than a street, with a
-        NARROW no-build corridor so the dense core leaves a gap for it. Real width ~10 ft (a generous
-        roji is 3-6 ft; ours carries the access for a whole block core) - at city scale that lands on
-        the 4px linework floor, which is the doctrine: a roji is drawn at the minimum visible width,
-        never to (invisible) true scale.
-
-        Surface (research/contents.json#urban-fabric, "How our maps zone a city's lots"): a line of drain
-        boards down the middle over a small ditch - HISTORICALLY ACCURATE, drawn as a dark center line of
-        board-length dashes; the ground either side of the boards is read nowhere - a GUESS, drawn as
-        plain beaten earth (the hamlet lane's tread color), no longer the gravel the maps once gave it.
-
-        Research:
-            alley width - research/questions/0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html: 10 ft, floored at the 4 px linework minimum
-            drain-board line - research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.html, research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.drawing.html: boards down the middle over a ditch
-            ground beside the boards - GUESS: plain beaten earth
-            board dashes - CONVENTION: long dashes with a hairline gap at each joint
-            alley setback - UNRESEARCHED: buildings keep the half-width plus 11 px off the alley
-        """
-        if width is None:
-            width = self.lw(10)
-        dd = 'M' + ' L'.join(f'{x},{y}' for x, y in pts)
-        self.corridors.append((pts, width / 2 + 11))  # setback keeps building CORNERS off the lane, not just centers
-        al = {"pts": [[x, y] for x, y in pts], "w": width, "z": None}
-        self.M.setdefault("alleys", []).append(al)
-        self._ground(
-            width,
-            al,
-            "z",  # an unpaved earth lane: its surface IS the bed (no curb/edge), plus the drain-board line (fabric/160)
-            bed=f'<path d="{dd}" fill="none" stroke="#C9AE79" stroke-width="{width}" opacity="0.85" stroke-linejoin="round" stroke-linecap="round"/>',
-            # the boards: butted planks over the ditch, so long dashes with a hairline gap at each joint (a map convention)
-            top=f'<path d="{dd}" fill="none" stroke="#6B4F2A" stroke-width="1.6" stroke-dasharray="7,1.2" opacity="0.8"/>',
-        )

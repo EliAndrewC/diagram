@@ -5,7 +5,7 @@ import math
 from l7r.diagram import overlap
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement._geom import turn_about
-from tests.settlement._builders import _crop_settlement, _ground_points, _nuc_village, _town
+from tests.settlement._builders import _ground_points, _nuc_village, _town
 
 
 def test_village_grove_fills_an_irregular_polygon_and_records_it():
@@ -185,14 +185,6 @@ def test_village_grove_keeps_every_clump_and_set_view_decides_which_are_on_the_p
     assert len(g["clumps"]) == n and g["clumps_offpage"] == []
 
 
-def test_grove_fits_rejects_a_belt_over_a_dry_strip():
-    # the windbreak's canopy stays out of the barley exactly as it stays out of the paddy
-    s = _crop_settlement()
-    s.dry_polys.append([(300, 300), (500, 300), (500, 380), (300, 380)])
-    assert not s._grove_fits(400, 340, 60, 30, own=[])
-    assert s._grove_fits(400, 500, 60, 30, own=[])
-
-
 def test_commons_keeps_scrub_off_dry_plots_and_the_crop_margin():
     # GM 2026-08-15: scrub scattered over dry hatake plots and right up against crop edges. The
     # scatter must skip DRY PLOTS (read from dry_polys, which every dry-crop path registers) as
@@ -345,33 +337,6 @@ def test_the_yard_edge_facing_its_house_runs_parallel_to_the_house():
     assert s._quad(500.0, 500.0, 30.0, 20.0, 0.1, 41.0, level="S")[2][1] == s._quad(500.0, 500.0, 30.0, 20.0, 0.1, 41.0, level="S")[3][1]
 
 
-def test_garden_fits_rejects_a_spot_outside_the_bound():
-    s = Settlement(1000, 1000, seed=1)
-    s.bound = [(0, 0), (600, 0), (600, 1000), (0, 1000)]  # only x < 600 is inside
-    yard = (500, 540, 32, 20)
-    assert s._garden_fits(700, 500, 24, 16, 500, 500, yard) is False  # x=700 is outside the bound
-
-
-def test_yard_fits_skips_own_house_and_rejects_a_neighbor():
-    s = Settlement(1000, 1000, seed=1)
-    s.placed.append((500, 500, 40, 28))  # the OWN house footprint -> the loop skips it
-    s.placed.append((520, 540, 40, 28))  # a neighbor where the yard would land -> rejected
-    assert s._yard_fits(520, 540, 32, 20, 500, 500) is False
-
-
-def test_garden_fits_skips_own_house_and_rejects_a_neighbor():
-    s = Settlement(1000, 1000, seed=1)
-    s.placed.append((500, 500, 40, 28))  # the OWN house footprint -> the loop skips it
-    s.placed.append((545, 500, 40, 28))  # a neighbor where the garden would land -> rejected
-    assert s._garden_fits(545, 500, 24, 16, 500, 500, (500, 560, 32, 20)) is False
-
-
-def test_grove_fits_rejects_a_spot_outside_the_bound():
-    s = Settlement(1000, 1000, seed=1)
-    s.bound = [(0, 0), (600, 0), (600, 1000), (0, 1000)]  # only x < 600 is inside (a city-style bound)
-    assert s._grove_fits(700, 500, 30, 24, [(500, 500)]) is False  # x=700 is outside the bound
-
-
 def test_on_watercourse_detects_stream_and_channel_beds():
     s = Settlement(600, 600, seed=1)
     s.M["streams"] = [{"poly": [[100, 100], [400, 100]], "w": 8}]
@@ -396,29 +361,6 @@ def test_village_grove_keeps_copse_out_of_a_garden_east_sun_lane():
     without = lane_clumps([])
     with_garden = lane_clumps([{"x": 300, "y": 300, "w": 20, "h": 18, "rot": 0, "of": [280, 300]}])
     assert without and not with_garden
-
-
-def test_yard_fits_rejects_dry_crop_plots():
-    # the threshing yard is footprint-checked against dry_polys exactly like the house in _fits:
-    # a hem strip is cropland, and a yard straddling it (center off, footprint on) must be
-    # rejected (the Tango-hems class of defect, extended to yards via the town comb conversion)
-    s = Settlement(W=1000, H=1000, seed=1)
-    s.meta(name="Yd", scale="town", ftpx=1)
-    assert s._yard_fits(500, 500, 40, 26, 460, 460)  # open ground: fits
-    s.dry_polys.append([(490, 480), (620, 480), (620, 560), (490, 560)])
-    # center 14px OUTSIDE the hem (so the center-based _in_blocked test passes it) but the 40px
-    # footprint still laps the plot - only the rect test can catch this one
-    assert not s._yard_fits(476, 500, 40, 26, 440, 500)
-
-
-def test_fit_helpers_reject_out_of_bounds_spots():
-    # the shared 55/88px canvas-margin early-outs of the appurtenance fit helpers (previously
-    # exercised by the towns' legacy farmstead pass; the towns now run the bundle path)
-    s = Settlement(W=1000, H=1000, seed=1)
-    s.meta(name="Eb", scale="town", ftpx=1)
-    assert not s._yard_fits(20, 500, 40, 26, 60, 500)
-    assert not s._garden_fits(20, 500, 30, 22, 60, 500, (60, 540, 40, 26))
-    assert not s._grove_fits(20, 500, 60, 30, [(60, 500)])
 
 
 def test_village_grove_copse_skips_dry_crop_plots():
@@ -461,42 +403,6 @@ def test_reclist_reads_a_singleton_record_as_well_as_a_list():
 # ---- feature 145: the refusal branches on the hamlet path that no roll happened to take -----------
 
 
-def test_yard_fits_rejects_a_basin_VERTEX_inside_the_yard() -> None:
-    """The other direction of the two-source paddy test (`_yard_fits`, 2026-08-18): no yard CORNER is
-    inside the basin, but a basin vertex is inside the yard - which is what the check tests too."""
-    s = Settlement(1000, 1000, seed=1)
-    s.M["fields"] = [{"kind": "paddy", "outline": [[495, 495], [505, 495], [505, 505], [495, 505]]}]  # wholly inside the yard
-    assert s._yard_fits(500, 500, 60, 40, 500, 440) is False
-    s.M["fields"] = [{"kind": "paddy", "outline": [[900, 900], [960, 900], [960, 960], [900, 960]]}]  # far away
-    assert s._yard_fits(500, 500, 60, 40, 500, 440) is True
-
-
-def test_garden_fits_rejects_a_spot_on_its_own_threshing_yard() -> None:
-    s = Settlement(1000, 1000, seed=1)
-    yard = (500, 560, 32, 20)
-    assert s._garden_fits(500, 560, 24, 16, 500, 500, yard) is False  # centered ON the yard
-
-
-def test_grove_fits_rejects_a_belt_over_the_flooded_paddy() -> None:
-    s = Settlement(1000, 1000, seed=1)
-    s.field_polys.append([(300, 300), (700, 300), (700, 700), (300, 700)])
-    assert s._grove_fits(500, 500, 60, 30, own=[]) is False  # the whole grove inside the basin
-    assert s._grove_fits(120, 120, 60, 30, own=[]) is True
-
-
-def test_grove_fits_keeps_the_two_sanctioned_abutments() -> None:
-    """Feature 121 T017 (contracts/placement.md C5): two things may TOUCH and must stay allowed when a verdict tightens - a
-    grove hugging the paddy bund (it may abut a field, never overlap it) and neighboring groves abutting into one shared
-    windbreak (a grove is not tested against another farm's grove). A tightening that forbids either breaks a feature."""
-    s = Settlement(1000, 1000, seed=1)
-    s.field_polys.append([(300, 300), (700, 300), (700, 700), (300, 700)])
-    assert s._grove_fits(269.9, 500, 60, 30, own=[]) is True  # its east edge a tenth off the bund at x=300: hugs the paddy
-    assert s._grove_fits(271, 500, 60, 30, own=[]) is False  # one unit further in overlaps the paddy
-    s.grove_rects.append((200, 200, 60, 30))  # a neighbor's grove...
-    assert s._grove_fits(260, 200, 60, 30, own=[]) is True  # ...and this one flush against it: one windbreak
-    assert s._grove_fits(250, 200, 60, 30, own=[]) is True  # even lapping it - the belts merge, nothing refuses
-
-
 def test_bamboo_stand_that_draws_nothing_records_nothing() -> None:
     s = Settlement(1000, 1000, seed=1)
     assert s.bamboo_stand([(500, 500), (500, 500), (500, 500)]) == 0  # zero area: no culm lands, so nothing is drawn
@@ -524,33 +430,6 @@ def test_corridor_buffers_reads_the_alleys_the_ring_road_and_the_road() -> None:
 # ---- feature 146: one test per refusal reason the rolls have not happened to hit ----------------------
 
 
-def test_yard_fits_rejects_a_yard_whose_corner_is_inside_a_basin() -> None:
-    """The FIRST direction of the two-source paddy test (the second is covered above): a yard CORNER inside a
-    drawn basin outline, which is what `harvest_yards_clear_of_paddies` measures."""
-    s = Settlement(1000, 1000, seed=1)
-    s.M["fields"] = [{"kind": "paddy", "outline": [[520, 480], [900, 480], [900, 900], [520, 900]]}]
-    assert s._yard_fits(500, 500, 60, 40, 500, 440) is False  # the yard's east corners reach into the basin
-    assert s._yard_fits(200, 200, 60, 40, 200, 140) is True
-
-
-def test_garden_fits_rejects_a_bed_on_the_paddy_and_near_its_edge() -> None:
-    """A kitchen garden is DRY ground: inside a paddy, or within its own radius of one's edge, is refused."""
-    s = Settlement(1000, 1000, seed=1)
-    s.field_polys.append([(400, 400), (700, 400), (700, 700), (400, 700)])
-    yard = (200, 260, 32, 20)
-    assert s._garden_fits(550, 550, 24, 16, 200, 200, yard) is False  # in the basin
-    assert s._garden_fits(390, 550, 24, 16, 200, 200, yard) is False  # off it, but inside the radius + 4
-    assert s._garden_fits(200, 200, 24, 16, 200, 200, yard) is True
-
-
-def test_grove_fits_rejects_a_belt_on_a_lane_tread() -> None:
-    """A grove may stand at the paddy's edge (the field set-back is for buildings) but never on a trodden way."""
-    s = Settlement(1000, 1000, seed=1)
-    s.corridors.append(([(100.0, 500.0), (900.0, 500.0)], 20.0))  # a lane's cleared band, as the placer registers it
-    assert s._grove_fits(500, 500, 60, 30, own=[]) is False  # centered on the tread
-    assert s._grove_fits(500, 300, 60, 30, own=[]) is True
-
-
 def test_draw_grove_draws_a_mixed_stand_at_its_seat() -> None:
     """Feature 146: the clump draws conifer and broadleaf crowns at its own seat. The old per-crown culm (#BBD06A) is
     gone; the bamboo 269 B29 put back is the stand's culm mark, low in the gaps (tests/settlement/test_homestead_woods.py)."""
@@ -561,18 +440,6 @@ def test_draw_grove_draws_a_mixed_stand_at_its_seat() -> None:
     ink = "".join(str(o) for o in s.out[before:])
     assert "<circle" in ink and "translate(300.0,300.0)" in ink
     assert "#BBD06A" not in ink, "no culm: the bamboo arm was unreachable and was removed"
-
-
-def test_a_kitchen_garden_is_refused_a_seat_on_the_paddy():
-    """A garden is DRY ground. The refusal is by footprint plus a 4 px hair, so a seat whose center
-    stands clear but whose corner laps the bund is refused too."""
-    s = Settlement(1000, 1000, seed=1)
-    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
-    s.field_polys.append([(100.0, 100.0), (400.0, 100.0), (400.0, 400.0), (100.0, 400.0)])
-    # 18 px OUT from the field edge: past `_in_blocked`'s own 14 px setback, which answers first for
-    # anything nearer and would leave the garden's own rule (its half-diagonal plus 4) untested.
-    assert not s._garden_fits(418, 250, 22, 24, 900, 900, (900, 900, 30, 20)), "its corner laps the bund"
-    assert s._garden_fits(700, 700, 22, 24, 900, 900, (900, 900, 30, 20)), "and dry ground is fine"
 
 
 def test_a_windbreak_reseating_round_a_house_stays_inside_the_within_box():
@@ -618,25 +485,6 @@ def test_the_allotted_yard_knob_issues_every_household_the_same_yard() -> None:
 
     # ...and the allotted figure is the median itself, neither tilted by the house nor jittered
     assert abs(issued.pop() - allotted.YARD_MEDIAN_TSUBO * allotted.TSUBO_FT2) < 1e-3
-
-
-def test_a_garden_is_refused_on_a_no_build_corridor() -> None:
-    """THE PLACER'S GUARANTEE that the retired `gardens_clear_of_channels` check used to re-measure on
-    the finished map (feature 166).
-
-    A raised-bed saien sits on dry ground, never in a running feeder channel, field ditch or stream. The
-    placer already refuses it: every watercourse registers a no-build CORRIDOR, and `_garden_fits`
-    consults `_near_corridor` before anything else about the ground. Asserting it here is the same rule
-    measured where it is made."""
-    from l7r.diagram.settlement import Settlement
-
-    s = Settlement(1000, 1000, seed=1)
-    s.meta(name="G", scale="hamlet", ftpx=1, down_deg=90)
-    yard = (900.0, 900.0, 30.0, 20.0)  # far away, so only the corridor can refuse
-    assert s._garden_fits(500.0, 500.0, 22.0, 24.0, 480.0, 480.0, yard), "open dry ground takes a garden"
-
-    s.corridors.append(([(400.0, 500.0), (600.0, 500.0)], 33.0))  # a watercourse runs through it
-    assert not s._garden_fits(500.0, 500.0, 22.0, 24.0, 480.0, 480.0, yard), "and a garden in the channel is refused"
 
 
 def test_a_watercourse_registers_the_corridor_the_garden_consults() -> None:

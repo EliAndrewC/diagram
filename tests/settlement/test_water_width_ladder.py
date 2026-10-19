@@ -34,14 +34,3 @@ def test_an_irrigation_channel_is_drawn_at_the_hairline_floor() -> None:
     got = _widths(s, "channels") or _widths(s, "drawn_channels")
     assert got, "the channel recorded a width"
     assert max(got) <= 3.0, f"a dug feeder is a hairline, drawn {max(got)}"
-
-
-def test_a_natural_watercourse_is_drawn_wider_than_a_dug_one() -> None:
-    """`watercourses_wider_than_ditches`: the ORDER of the ladder, which is what a reader actually uses.
-    Absolute widths are a map drawing convention; their ordering is not negotiable."""
-    s = _s()
-    s.channel((200.0, 300.0), (900.0, 300.0), frm={"kind": "stream"}, to={"kind": "field", "name": "f"})
-    s.river([(100.0, 600.0), (1100.0, 600.0)], width=20.0)
-    ditch = max(_widths(s, "channels") or _widths(s, "drawn_channels") or [0.0])
-    stream = max(_widths(s, "streams") or [0.0])
-    assert stream > ditch, f"a stream ({stream}) must outweigh a dug feeder ({ditch})"

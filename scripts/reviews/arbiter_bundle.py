@@ -428,6 +428,11 @@ def red_gate_runs(root: Path, keep: int = 4) -> list[str]:
         # test-full never ran - a `make done --dry-run` recorded one after 2 s and owed a second red-gate trigger
         if r.get("target") == "done" and str(r.get("result", "")).startswith("failed") and r.get("result") != "failed: tree moved":
             runs.append(r)
+    line = _own_line(root)
+    if line is not None:  # THIS FEATURE'S LINE ONLY (the round arbiter's fixes on red-gate@2026-10-19T00:59:47Z and 02:31:38Z,
+        # feature 392): the run log is shared and merges in from main, so another session's gate (a land-tooling run on main's tree,
+        # 5d66a8cf9) counted as a red here and its diff swung the whole feature out and back in, 4 MB of it
+        runs = [r for r in runs if any(str(r.get("commit") or "-").startswith(c[: len(str(r.get("commit") or "-"))]) for c in line) or not r.get("commit")]
     lines = []
     shown = runs[-keep:]
     for k, r in enumerate(shown):
@@ -436,6 +441,16 @@ def red_gate_runs(root: Path, keep: int = 4) -> list[str]:
         lines.append(f"- {r.get('utc', '?')} at {r.get('commit', '?')}: {r.get('result')}, {r.get('failed_tests', '?')} test(s) failed")
         lines += [f"  - {n}" for n in r.get("failed_names") or []]
     return ["## The red gates counted, each with its own failed tests\n\n" + ("\n".join(lines) or "- (no red make done in the run log)") + "\n"]
+
+
+#: a diff between two reds past this many lines is shown by its stat alone (the round arbiter's fix on red-gate@2026-10-19T02:31:38Z)
+BETWEEN_DIFF_LINES = 1500
+
+
+def _own_line(root: Path) -> set[str] | None:
+    """The commits on HEAD's first-parent line - this clone's own work, not the main merged into it - or None outside a repository."""
+    run = subprocess.run(["git", "-C", str(root), "rev-list", "--first-parent", "HEAD"], capture_output=True, text=True)
+    return set(run.stdout.split()) if run.returncode == 0 else None
 
 
 def _between(root: Path, a: dict, b: dict) -> list[str]:
@@ -450,6 +465,8 @@ def _between(root: Path, a: dict, b: dict) -> list[str]:
     diff = subprocess.run(["git", "-C", str(root), "diff", ca, cb], capture_output=True, text=True).stdout.rstrip()
     if not stat and not diff:
         return [f"  (between these two: no diff from {ca} to {cb} - a commit is not in this clone, or nothing changed)"]
+    if diff.count("\n") > BETWEEN_DIFF_LINES:
+        return [f"  between {ca} and {cb} (the diff runs past {BETWEEN_DIFF_LINES} lines - its stat alone):", "", "```", stat, "```", ""]
     return [f"  between {ca} and {cb}:", "", "```", stat, "", diff, "```", ""]
 
 

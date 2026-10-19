@@ -86,41 +86,6 @@ def _ground_points(s, before, step=3.0):
     return pts
 
 
-def _yard_glyphs(s, yards=None):
-    """Every drawn well / trough cluster / hitching rail on the map as (label, quad) - built with
-    the SAME shared builders the placement and the check both use (settlement.wellhead_quad etc.),
-    so these tests measure the drawn extents rather than a test-local guess at them."""
-    out = [(f"well@{w['x']:.0f},{w['y']:.0f}", settlement.wellhead_quad(w)) for w in s.M.get("wells", [])]
-    for i, yd in enumerate(yards if yards is not None else s.M.get("stable_yards", [])):
-        if yd.get("troughs_box"):
-            out.append((f"troughs@yard{i}", settlement.trough_quad(yd["troughs_box"])))
-        for rl in yd.get("rails", []) or []:
-            out.append((f"rail@{rl['x']:.0f},{rl['y']:.0f}", settlement.rail_quad(rl)))
-    return out
-
-
-def _assert_no_glyph_overlaps(s, yards=None):
-    g = _yard_glyphs(s, yards)
-    for i in range(len(g)):
-        for j in range(i + 1, len(g)):
-            assert not settlement.sat_overlap(g[i][1], g[j][1]), f"{g[i][0]} overlaps {g[j][0]}"
-
-
-def _torii_city(**kw):
-    s = Settlement(1200, 1200, seed=9)
-    s.meta(name="T", scale="city", ftpx=3, down_deg=90)
-    s.shrine_hall(600, 500, "Temple of Ebisu", w=s.px(130), h=s.px(84), kind="temple", torii=[(600, 560)], **kw)
-    return s
-
-
-def _walled_city(fence=((300, 700), (900, 700))):
-    # a city with ONE wall already drawn (a ward fence), so the torii placement can see it
-    s = Settlement(1200, 1200, seed=9)
-    s.meta(name="T", scale="city", ftpx=3, down_deg=90)
-    s.ward("samurai", list(fence), gates=[])
-    return s
-
-
 def _byre_village():
     s = _crop_settlement()
     hs = [{"x": 300 + i * 170, "y": 350, "w": 40, "h": 28, "kind": "plain", "rot": 0, "wealth": 1.6 - 0.1 * i} for i in range(5)]
@@ -217,23 +182,6 @@ def _ladder_map():
     return s
 
 
-# --- a neighborhood wall JOINS the city wall (GM 2026-07-27, Minami) ----------------------------
-def _walled(gates=()):
-    s = Settlement(1000, 1000, seed=1)
-    s.city_wall([(200, 200), (800, 200), (800, 800), (200, 800)], gates=gates)
-    return s
-
-
-def _ward_city_with_samurai(*houses):
-    s = Settlement(1000, 1000, seed=1)
-    s.meta(name="W", scale="city", ftpx=3)
-    s.M["wall"] = [[200, 200], [800, 200], [800, 800], [200, 800]]
-    for x, y, kind, rot in houses:
-        s.building(x, y, *s._dims(kind), kind, rot)
-    s.ward("samurai", [(400, 795), (400, 400), (795, 400)], gates=[])
-    return s
-
-
 # ---------------------------------------------------------------- SeatMemo (the top-up refusal memo)
 # Its whole value rests on ONE property: a seat refused once stays refused, because the registries
 # the scan reads only ever grow. These tests hold both halves - that it remembers while the map
@@ -242,23 +190,10 @@ def _ward_city_with_samurai(*houses):
 # twice (see the Indexed docstring), so each way the invariant can break gets its own case.
 
 
-def _memo_city():
-    s = _town()
-    s.M.setdefault("buildings", [])
-    return s, settlement.SeatMemo(s)
-
-
 # ---- THE DAIMYO'S CASTLE (feature 019) -------------------------------------------------------
 #
 # The castle is drawn WALLS-ONLY with a deliberately empty court, so the tests that matter most
 # are the negative ones: nothing may be recorded as a building inside it, ever.
-
-
-def _castle_map(**kw):
-    s = settlement.Settlement(3200, 2700, seed=3)
-    s.meta(name="Cap", scale="capital", ftpx=3, walled=True)
-    rec = s.castle(1600, 1300, 850, 700, **kw)
-    return s, rec
 
 
 # ---- feature 020: the capital's ground-reserving layer ----------------------------------------

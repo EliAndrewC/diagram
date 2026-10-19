@@ -12,13 +12,12 @@ from ..._geom import (
     Manifest,
     PointGrid,
     Pt,
-    point_in_poly,
     seg_dist,
     seg_reach_index,
     street_runs,
     way_beds,
 )
-from ..._knobs import KNOBS, PUNISHMENT_SPOT_FT
+from ..._knobs import KNOBS
 from ...water_ways.lanes import STREET_W_FT
 from ..captions import tree_crown_discs
 from ..ground import ROAD_W_FT
@@ -467,105 +466,6 @@ class FixtureSitingMixin:
             cands = [c for c in cands if math.hypot(c.x - hand[0], c.y - hand[1]) <= hnear + KOSATSUBA_HANDOVER_BAND_FT / ftpx]
         floor = 0.0 if anchor is not None else 0.6 * max(c.busy for c in cands)
         return choose_board([c for c in cands if c.busy >= floor], proof) or choose_board(cands, proof)
-
-    def place_punishment_spot(self: Settlement, label: str | None = "punishment ground", label_xy: Pt | None = None) -> Pt | None:  # type: ignore[misc]
-        """AUTO-SITE the punishment ground on a street verge at the busiest clear node - the notice
-        board's sibling, and for the same reason: both institutions are sited by FOOT TRAFFIC, so
-        both want the same probe rather than a hand-picked rect. (Hand rects were tried first on
-        three maps and all three failed `punishment_spot_by_the_traffic` the same way: `open_seat`
-        ties toward the rect's CENTER, which is the open ground behind the frontage, precisely where
-        this feature must not be.) Deterministic - draws no RNG.
-
-        Reads the SAME manifest route fields the validator reads (the dev-loop same-source doctrine),
-        including `town_streets`, which the board's village-tier probe does not need. Keeps the spot
-        inside the rampart where there is one - the display faces the town, not the road out; that is
-        the execution ground's job. No-op under meta(punishment_spot=False). Returns the spot, or
-        None when no verge fits (the presence check then fires - place by hand).
-
-        Research:
-            sited by foot traffic - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html: buildings within 260 px counted
-            within 60 ft of a street - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html
-            inside the rampart - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html
-            ground size - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html: PUNISHMENT_SPOT_FT
-            nearness tie-break - UNRESEARCHED: score less a third of the offset
-            least offset off the tread - UNRESEARCHED: 4 px past the tread edge
-            way widths - research/questions/0088-highways-and-what-lines-them-kaido.drawing.html, research/questions/0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html: each way at its recorded width; a road with none at 30 ft, a street at 24 ft
-            lane fallback width - UNRESEARCHED: a lane with no recorded width at 8 px
-            turned to its way - UNRESEARCHED: the ground's long side along the way's bearing
-            out from under captions - CONVENTION: a preference, the busiest seat where none is clear
-            ground off the way - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html: never in the roadbed, kept h/2 off every way's bed
-            margin off the bed - UNRESEARCHED: a further 3 px past the bed's edge
-            ground inside a lane's setback - UNRESEARCHED: the ground may stand inside a lane's house-setback corridor
-            caption seat - CONVENTION"""
-        if not self.M["meta"].get("punishment_spot", True):
-            return None
-        ftpx = float(self.M["meta"].get("ftpx") or 1)
-        lim = 60.0 / ftpx  # punishment_spot_by_the_traffic: ~60 REAL feet from a street
-        w, h = self.px(PUNISHMENT_SPOT_FT[0]), self.px(PUNISHMENT_SPOT_FT[1])
-        routes: list[tuple[list[Pt], float]] = []
-        if self.M.get("road"):
-            routes.append(([(p[0], p[1]) for p in self.M["road"]], float(self.M.get("road_width") or self.lw(ROAD_W_FT))))
-        routes.extend(([(p[0], p[1]) for p in st["pts"]], float(st.get("w") or self.lw(STREET_W_FT))) for st in self.M.get("town_streets") or [])
-        routes.extend(([(p[0], p[1]) for p in ln["pts"]], float(ln.get("w", 8))) for ln in self.M.get("lanes") or [])
-        if not routes:
-            return None
-        wall = self.M.get("wall")
-        spots = [(b["x"], b["y"]) for b in self.M["houses"]] + [(b["x"], b["y"]) for b in self.M["buildings"]]
-        beds = way_beds(self.M)  # see way_beds: EVERY bed, including the alleys and the ring road
-        # this list does not sample candidates from - a display bypasses the lane CORRIDOR
-        # deliberately (it is a house setback), never the roadbed itself
-
-        def off_every_bed(x: float, y: float) -> bool:
-            # FROM AN INDEX OF THE BEDS' SEGMENTS (feature 278, FR-009): every segment of every way was measured per
-            # candidate. Each segment is filed by its box widened by its own refusal distance, so a segment whose widened
-            # box misses the point stands farther than that distance and cannot refuse it.
-            return all(seg_dist(x, y, a, b) >= reach for a, b, reach, _x0, _y0, _x1, _y1 in _bed_segs.near(x, y) if _x0 <= x <= _x1 and _y0 <= y <= _y1)
-
-        _bed_segs = bed_segment_index(beds, h / 2 + 3)
-
-        best: tuple[float, float, float, float] | None = None  # (score, x, y, rot)
-        # ...and the best seat that is ALSO out from under the captions already on the map. A
-        # PREFERENCE, not a filter (2026-08-08): landing under someone else's caption is a real
-        # defect - Minami's ground auto-sited onto the burakumin quarter's label when a reflow moved
-        # the busiest node 24px north - but it is the caption's problem to solve, and refusing the
-        # seat outright would let a densely-captioned quarter drive the whole probe to None, i.e.
-        # turn "the label wants moving" into "the city has no punishment ground at all". So: take a
-        # clear seat when one exists at any score, and fall back to the busiest seat when none does.
-        best_clear: tuple[float, float, float, float] | None = None
-        for pts, _rw in routes:
-            for i in range(len(pts) - 1):
-                (ax, ay), (bx, by) = pts[i], pts[i + 1]
-                seg = math.hypot(bx - ax, by - ay)
-                if not seg:
-                    continue
-                ux, uy = -(by - ay) / seg, (bx - ax) / seg
-                rot = math.degrees(math.atan2(by - ay, bx - ax))
-                for t in range(int(seg // 12) + 1):
-                    f = t * 12 / seg
-                    mx, my = ax + (bx - ax) * f, ay + (by - ay) * f
-                    for side in (1.0, -1.0):
-                        off = _rw / 2 + h / 2 + 4
-                        while off <= lim:
-                            x, y = mx + ux * off * side, my + uy * off * side
-                            if (not wall or len(wall) < 3 or point_in_poly(x, y, wall)) and off_every_bed(x, y) and self._fits(x, y, w, h, corridors=False):
-                                busy = sum(1 for sx, sy in spots if math.hypot(x - sx, y - sy) < 260)
-                                score = busy * 10 - off / 3
-                                if best is None or score > best[0]:
-                                    best = (score, x, y, rot)
-                                if not self._under_a_caption(x, y, w, h, rot) and (best_clear is None or score > best_clear[0]):
-                                    best_clear = (score, x, y, rot)
-                            off += 5.0
-        best = best_clear or best
-        if best is None:
-            return None
-        _, x, y, rot = best
-        if label and label_xy is None:
-            # A verge-hugging feature's DEFAULT below-label lands on the frontage it hugs - that is
-            # not bad luck, it is what "hugging the frontage" means, and it fired on all three maps.
-            # So probe the label too: below, above, then left/right, first clear box wins.
-            label_xy = self.clear_label_seat(x, y, w, h, label, skip_key="punishment_spots")
-        self.punishment_spot(x, y, rot, label=label, label_xy=label_xy)
-        return (x, y)
 
 
 bed_segment_index = seg_reach_index  # the verge probes' name for it (feature 278; defined with the other indexes)

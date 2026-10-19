@@ -681,6 +681,42 @@ def test_a_red_gate_bundle_skips_a_tree_moved_abort_and_shows_the_diff_between_r
     assert "the same commit; uncommitted edits between them are not recorded" in runs, "t3 and t4 share a commit"
 
 
+def test_a_red_gate_bundle_counts_only_its_own_lines_runs_and_caps_a_huge_diff(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 392 (the round arbiter's fixes on red-gate@2026-10-19T00:59:47Z and 02:31:38Z): the shared run log carried another
+    session's red (a land-tooling gate on main's tree) into this feature's bundle, with a 4 MB diff. Only runs on HEAD's
+    first-parent line are counted, and a diff past the cap is shown by its stat."""
+
+    def git(*a: str) -> str:
+        return subprocess.run(["git", "-C", str(tmp_path), *a], capture_output=True, text=True, check=True).stdout.strip()
+
+    git("init", "-q", "-b", "main")
+    git("config", "user.email", "t@t")
+    git("config", "user.name", "t")
+    (tmp_path / "f.py").write_text("x = 1\n")
+    git("add", "-A")
+    git("commit", "-qm", "one")
+    c1 = git("rev-parse", "HEAD")
+    git("checkout", "-qb", "side")
+    (tmp_path / "g.py").write_text("y = 1\n")
+    git("add", "-A")
+    git("commit", "-qm", "side")
+    other = git("rev-parse", "HEAD")
+    git("checkout", "-q", "main")
+    (tmp_path / "f.py").write_text("x = 2\n" * 40)
+    git("commit", "-qam", "two")
+    git("merge", "-q", "--no-edit", "side")
+    c2 = git("rev-parse", "HEAD")
+    log = tmp_path / "dev" / "run-log" / "2026-10"
+    log.mkdir(parents=True)
+    for name, utc, commit in (("a", "t1", c1), ("b", "t2", other[:9]), ("c", "t3", c2)):
+        (log / f"{name}.json").write_text(json.dumps({"utc": utc, "target": "done", "result": "failed: test-full", "commit": commit}), encoding="utf-8")
+    monkeypatch.setattr(ab, "BETWEEN_DIFF_LINES", 10)
+    (runs,) = ab.red_gate_runs(tmp_path)
+    assert "t2" not in runs, "a red on another line (the merged side branch) is not this feature's"
+    assert "t1" in runs and "t3" in runs
+    assert "its stat alone" in runs and "+x = 2" not in runs, "the long diff is cut to its stat"
+
+
 def test_the_exported_feature_outranks_the_pointer(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
     """The round arbiter on hour:391-comparative-money-sources@2 (2026-10-18): a session working 390 with SPECIFY_FEATURE
     exported, while `.specify/feature.json` named 391 (its last claim), had every hour charged to 391. The exported feature wins

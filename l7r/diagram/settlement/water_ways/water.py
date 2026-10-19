@@ -189,24 +189,6 @@ class WaterBodiesMixin:
                 if entry.get("clip"):
                     entry["clip"]["pts"] = out
 
-    def river(self: Settlement, pts: Any, width: float | None = None, flow: str = "forward") -> float:  # type: ignore[misc]
-        """A RIVER - the trunk waterway a river-bank city sits on (most provincial cities do;
-        the moat taps it upstream and returns downstream, and the river itself serves as the
-        water defense on its flank - Xiangyang/Pingyao/Okayama pattern, see research/questions/0175-cities-on-rivers.html).
-        Drawn as a wide stream (off-map to off-map) and recorded in M['river'] so the checks
-        that compare watercourse weights know this one legitimately outweighs the dug moat.
-
-        Research:
-            a city on its river - research/questions/0175-cities-on-rivers.html: drawn off-map to off-map
-            river width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html: the page's GUESS of about 20 m (~66 ft) for a town river; the code draws 120 ft across by default
-        """
-        if width is None:
-            width = self.px(120)  # a serious provincial river ~120 ft across
-        self.stream(pts, frm={"kind": "offmap"}, to={"kind": "offmap"}, width=width, flow=flow)
-        self.M["river"] = {"pts": [[x, y] for x, y in pts], "w": width}
-        self._flow_record(self.M["river"], pts, flow)  # the trunk river's own record carries it too
-        return width
-
     def channel(self: Settlement, start: Any, end: Any, frm: Any, to: Any, amp: float = 15, width: float = 2.5, pts: Any = None) -> None:  # type: ignore[misc]
         """frm/to are anchor dicts: {'kind':'pond'|'offmap'|'field','name':...}. `width` is the drawn
         bed: a field-level irrigation ditch is the THINNEST line on the map (in reality ~0.3 m, ~1/300

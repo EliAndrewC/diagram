@@ -4,7 +4,7 @@
 WHY THIS EXISTS (GM 2026-08-08). "Which call put this building here?" is not answerable from the
 manifest: a record carries its geometry and nothing about its provenance, and the engine has ~200
 methods that can append one. A profiled session spent roughly ten sequential greps through
-the `settlement/` package and the gen chasing a single servant house - reading `top_up`, then `servant_ranges`,
+the `settlement/` package and the gen chasing a single servant house - reading `top_up`, then the servant ranges,
 then the apron block polys, then `_fits` - and none of them answered it. What DID answer it, first
 try and in one run, was eight lines of throwaway monkeypatch that wrapped `M["buildings"]` and
 printed a stack trace on append. This is that, made permanent and given the second half of the

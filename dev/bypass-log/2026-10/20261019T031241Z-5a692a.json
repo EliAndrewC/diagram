@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-19T03:12:41Z",
+  "target": "claims-gate",
+  "commit": "d0d90c77d",
+  "why": "CLAIMS_OK: feature 392 deleted code only: the four core.py wood claims (coppice crown and stocking, hill-wood crown and stocking) were IN-STEP at feature 388's check on 2026-10-18 on constants 392 never touched - this bundle left the class constants out, hence CANNOT-TELL; the grove-arms DRIFTED is behavior 392 did not change, carried to 384's spec"
+}
