@@ -32,7 +32,7 @@ wages unconverted because no copper-to-silver rate is written. Three search pass
      grade. Reading the unit as per ten is the record's reading of the page layout, and is said so. A price a knife is the
      project's arithmetic.
    - **A castle town:** ATTESTED ONLY FOR the Tsuyama 1665 ceiling on sword smiths' work: a kitchen knife 8 monme.
-   - **A noted maker (Sakai, Seki, Takefu, Tosa):** the price by maker is SILENT. What the record finds of each trade
+   - **A noted maker (Sakai, Seki, Takefu, Tosa):** the price by maker is SILENT, each of the four named. What the record finds of each trade
      (Sakai's guild, its 1730 stamp and its levy, Takefu's smithies and its sickle-and-knife sales) is given with its
      verdict.
    - **A smith's output a day:** ATTESTED ONLY FOR Sakai's tobacco-knife guild rule of 1761 (21, 27 or 30 a day by size,
@@ -46,9 +46,10 @@ wages unconverted because no copper-to-silver rate is written. Three search pass
    - **The official rate:** 1 ryo = 60 monme = 4,000 mon from 1700, and the 1842 Edo change to 6,500 mon: ATTESTED, as law,
      not as the market.
    - **The Osaka market rate, 1787-1850s:** copper in silver monme per kanmon, and gold in silver monme per ryo, from the
-     Osaka exchange-office diary (Kobe RIEB / Mitsui): ATTESTED ONLY FOR Osaka. Decade or year means are the project's
-     arithmetic from the daily series, labeled so, with the method stated: which days, which value of each day, the years
-     missing. 1844-49 is shown as an administered floor, never as a market rate.
+     Osaka exchange-office diary (Kobe RIEB / Mitsui): ATTESTED ONLY FOR Osaka. Decade means of mon per monme and of mon
+     per ryo MUST be given, beside the source's own units (monme per kanmon, monme per ryo), labeled as the project's
+     arithmetic from the daily series, with the method stated: which days, which value of each day, the years missing.
+     Year means may be added. 1844-49 is shown as an administered floor, never as a market rate.
    - **The Edo rate:** ATTESTED only where a source prints a figure. A figure read off a chart is labeled the project's
      reading of the chart; where no printed figure exists the question says SILENT and names the nearest printed one, with
      its place and its gap in years.
@@ -64,8 +65,8 @@ serves.
 ### User Story 2 - The asker gets its answer on the issue (Priority: P1)
 
 The answer on EliAndrewC/diagram#8 names each question's fragment FILE, a verdict per figure, and what is still open. It
-says whether the checked rate supports gm-assistant's laborer-day conversion (132-200 mon a day), without adopting that
-conversion as the record's.
+says whether the checked rate supports gm-assistant's laborer-day conversion (Kazusa 1842, a man's day 132 mon, 0262),
+without adopting that conversion as the record's.
 
 ## Requirements
 
@@ -94,3 +95,9 @@ conversion as the record's.
 - The verdicts above are the search passes'. The write may narrow them; it may not widen them without a source.
 - The Qing cash-to-silver rate is not asked for and is out of scope; a Qing price stays in silver beside a copper wage,
   unconverted, unless the source itself converts it.
+
+## Review history
+
+- **spec-fidelity round 1 (2026-10-19): CHANGES REQUIRED, 2 items.** Decade means of mon per monme and mon per ryo made
+  required beside the source's units; the cross-check names the request's conversion (Kazusa 1842, 132 mon, 0262), not a
+  132-200 range. The aside (name Seki and Tosa under SILENT) taken.

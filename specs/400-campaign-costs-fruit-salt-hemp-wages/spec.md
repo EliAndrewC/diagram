@@ -37,8 +37,11 @@ from guesses. Four search passes ran on 2026-10-19 (`passes/`).
      year of each Kashimo entry is settled from the booklet before it is cited. Edo retail, Ako salt and the Edo
      wholesalers' bale price: SILENT. The inland price ladder is ATTESTED ONLY FOR a secondary, hearsay account, labeled so.
    - **Qing monopoly markup:** ATTESTED for the field price (1-2 cash a jin, Lianghuai about 1830), the official Changlu
-     price (1688, 1728) and Beijing's 1736 official price beside its wages. A markup computed from them is the project's
-     arithmetic.
+     price (1688, 1728) and Beijing's 1736 official price beside its wages; a markup computed from them is the project's
+     arithmetic. Where a source states the markup, it is given with its verdict and its label: Lianghuai, a yin costing
+     over 10 taels in the selling district against 0.64 at the field (a modern paper on Tao Shu's reform); a few cash at the
+     field against 30-70 to the consumer (a secondary paper, quoted from OCR); Sichuan retail 12-15 times the cost of
+     making it (King, 1909, late Qing); and Songjiang's local retail of official salt, 1651-88 (Ye Mengzhu).
 3. **Hemp cloth and amulets.**
    - **Hemp in Japan:** ATTESTED ONLY FOR one early-1600s lot of Etchu hemp cloth by the roll, the roll's length unknown.
      A price by the tan, and a cotton price beside it: SILENT.
@@ -51,11 +54,19 @@ from guesses. Four search passes ran on 2026-10-19 (`passes/`).
      the 1801 carpenter estimate, and Morisada's carpenter-and-helper pair (different metals, carpenter without meals). Any
      ratio is the project's arithmetic. Where it conflicts with Saito's 4.7 times (0250), the question says so and does not
      resolve it beyond what the sources say.
-   - **Edo and castle towns:** the pairs the record already holds (0250, 0255, 0256, 0262) are gathered; a new Edo or
-     castle-town pair: SILENT.
+   - **Edo and castle towns:** a same-place, same-period skilled and unskilled pair is SILENT. The record's figures that
+     each give one side only (0250, 0255, 0256, 0262) are gathered with their places, years and gaps; any Edo ratio built
+     from them is the project's arithmetic across places and decades. Saito's 2.6 times village pair (0250) is the only one
+     from a single place, and it is a village.
    - **Qing:** ATTESTED for the Zhili 1769 official norms (craftsmen against laborers by county) and the 1813 Board of Works
      norm, labeled as government reimbursement rates; Allen et al.'s regression premium labeled as an estimate.
-   - **Tailors' piece rates and smiths' day wages:** SILENT.
+   - **Tailors:** Japan SILENT; Qing ATTESTED ONLY FOR the 1769 Zhili norm at Jinzhou and Gaocheng, where tailors share a
+     grouped craftsmen's rate (0.08 tael against a laborer's 0.06), a government reimbursement rate that does not price
+     tailors on their own. Tailors' piece rates: SILENT.
+   - **Smiths:** Japan SILENT; China ATTESTED ONLY FOR a Ming military manual's forge smiths (0.03 tael a day, no place or
+     year, no unskilled wage beside it), pointed at in 0263.
+   - **Fletchers:** SILENT, in Japan and China; 0263 found no fletcher's wage or day's output, and the question points at
+     it.
 
 Each price sits beside the craftsman's and the unskilled laborer's day wage of the same place and period where a source
 gives them; where none does, the question says that wage is SILENT and names the nearest, with its class, its place, its
@@ -91,3 +102,10 @@ The answer on EliAndrewC/diagram#5 names each question's fragment FILE, a verdic
 - Four questions fit one write session.
 - The verdicts above are the search passes'. The write may narrow them; it may not widen them without a source.
 - Canon (`setting/l7r.md`, the Imperial salt monopoly) is the asker's to apply; the record gives the historical figures.
+
+## Review history
+
+- **spec-fidelity round 1 (2026-10-19): CHANGES REQUIRED, 5 items.** Fletchers added (SILENT, pointing at 0263); smiths
+  ATTESTED ONLY FOR the Ming manual's forge smiths in 0263; tailors' day wage from the Zhili 1769 grouped norm, piece
+  rates SILENT apart; the Edo pair stated as SILENT, the one-sided figures gathered as arithmetic; the stated salt markups
+  given with their verdicts and labels.
