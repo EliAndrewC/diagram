@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-18
 
-**Status**: Draft
+**Status**: Done - every task ticked but the GM review (lands open); answer on EliAndrewC/diagram#2; impl-check nothing missing; make done green
 
 **Affects**: research record, research process
 

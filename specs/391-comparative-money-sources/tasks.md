@@ -40,8 +40,9 @@ The questions are `research: physical` with their five boxes; the vocabulary, bu
 - [x] T07 The answer on EliAndrewC/diagram#2 (D8; FR-007)
       research: rendering
       verify: DONE. answer posted on EliAndrewC/diagram#2 with edition and page per figure
-- [ ] T08 Close: report, make done, land
+- [x] T08 Close: report, make done, land
       research: rendering
+      verify: DONE. make done green (284 s); report written; lands with sync-with-main.sh done
 - [ ] GM review (make gm-reviewed F=391) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
