@@ -7259,6 +7259,44 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T118": {
+   "section_sha256": "d6c0df42d83424f5be7b80a58404b297e8718a4cf623c260559faa7e14564586",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T118-goal",
+     "summary": "Approach items 1/9: a task that only rewords (a claim relabeled, a comment, a glossary entry) goes from Approach to tick without a spec-fidelity plan review; a task that decides anything still gets one.",
+     "class": "within",
+     "why": "Amendment 10's third suggestion, approved by the GM ('implement all 3 of your suggestions'), verbatim: 'skip the plan review for wording-only tasks that decide nothing new'. The suggestion was offered against the wording-only claim-fix tasks timed at 5-15 min, which is the class item 4 names (T31, T103, T105, T110). Keeping the review for any task that decides keeps the 'decide nothing new' half of the clause."
+    },
+    {
+     "id": "D137",
+     "summary": "A Decisions block of one '**Wording only.** <what>' line makes plan_gate.block_status skip the section, and make decide says no review is owed and builds no bundle; any '**D<n> - ' line in the same block undoes the declaration.",
+     "class": "within",
+     "why": "This is the skip itself, mechanized in the existing plan gate the way D94's quiet part B already is. The undo rule narrows the exemption to sections that decide nothing, which is the request's own condition, not a carve-out from it."
+    },
+    {
+     "id": "D138",
+     "summary": "make tick refuses a wording-only task when a non-merge commit since its last make task-start changed a file outside specs/ and dev/ that is neither a glossary JSON entry nor a .py file with unchanged semantic_bytes; a research page's block counts as a decision and is refused the same way.",
+     "class": "within",
+     "why": "Its only effect is to make 'wording-only ... decide nothing new' true of every task that skips the review: it refuses work that changed what runs under a wording declaration. That is enforcement of the requested condition (the GM 2026-09-20 rule on checks that make the asked-for thing happen), and the GM's standing rule 'a tool, never a reminder' that the Approach cites. It reaches no other agent, command or default beyond the tick of a task that declared itself wording-only. Its allowlist (specs/, dev/, glossary JSON, .py with unchanged semantic_bytes) is the mechanical boundary of 'wording only': anything outside it, including prose files elsewhere, stays reviewed. That errs toward keeping review, matching the claim-fix class (claims, comments, glossary) the suggestion was offered against, so it is not a narrowing of the skip the GM approved."
+    },
+    {
+     "id": "T118-exit",
+     "summary": "Approach item 6: a declaration checked by the tick against the diff, chosen over an agent classifying the section.",
+     "class": "within",
+     "why": "An agent classification would be the very review the GM asked to skip for these tasks; choosing the mechanical check is a means, not a change of what was asked."
+    },
+    {
+     "id": "T118-tests",
+     "summary": "Approach items 5/9: tests in tests/tooling/ red without the exemption and the tick check.",
+     "class": "within",
+     "why": "Verification of the requested behavior only; nothing beyond the request is measured or proven."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
