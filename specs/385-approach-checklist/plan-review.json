@@ -6033,7 +6033,7 @@
      "id": "T78-warrant",
      "summary": "The task's warrant is amendment 6 ('implement any obvious performance / tooling / process improvements along the way') applying CLAUDE.md's house style (American spellings, corrected rather than refused) to two writers the hook does not see; replaces the earlier block's quotation of a session reply that request.md does not carry.",
      "class": "within",
-     "why": "Amendment 6 is in request.md verbatim and is dated 2026-10-18; the fix is measured (a gate red on 'grey' copied by claims.py record from a reply) and only extends an existing GM rule to an unseen route, which is an obvious tooling improvement rather than new behavior the GM did not ask for."
+     "why": "Amendment 6 is in request.md verbatim and is dated 2026-10-18; the fix is measured (a gate red on `grey` copied by claims.py record from a reply) and only extends an existing GM rule to an unseen route, which is an obvious tooling improvement rather than new behavior the GM did not ask for."
     },
     {
      "id": "T78-scope",
