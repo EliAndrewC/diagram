@@ -312,8 +312,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T107 0246's drawing page says the 7 ft both ways: its lane's room (3: 7 ft at each fence and a 4 ft tread, 18 ft - the edge) and its fence gap (16: to the middle) - settle which, and what the code reads (found working T101, 2026-10-19) [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 (direct, record only): 0246's new block says the room counts its 7 ft to the tread's edge and the gap to the middle; record checks and pop-ups clean; 48 of 51 claims IN-STEP, the rest carried (T108)
-- [ ] T108 Carried by the claims gate (FR-013): findings a page edit surfaced on code left unchanged - fix the code or the claim and re-check each: l7r/diagram/hamletgen/ways/law.py::fouls_fabric#foul margin, l7r/diagram/hamletgen/ways/settle.py::fouled_segment#off another household's yard or garden [lands-open]
+- [x] T108 Carried by the claims gate (FR-013): findings a page edit surfaced on code left unchanged - fix the code or the claim and re-check each: l7r/diagram/hamletgen/ways/law.py::fouls_fabric#foul margin, l7r/diagram/hamletgen/ways/settle.py::fouled_segment#off another household's yard or garden [lands-open]
       research: rendering
+      verify: DONE. landed 2026-10-19 by sync-with-main done; two claims split, garden half on 0246, yard half UNRESEARCHED (wording only, T118's route); 4 IN-STEP; T134-T135 filed
 - [x] T109 The track's grove-band gap as 0036 gives it: _thread_the_fabric holds bands at FOOTPATH_FABRIC_GAP (7 ft) citing 0246, where 0036 keeps about 11 ft off the trees (T98 fixed the door path and connector_dry_exit); and the two GUESS claims on touch._one_network / _touch_junctions that call the routed link 14 ft where it is routed at 7 (found working T107, 2026-10-19) [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 (gated, 4f6bd9739): _thread_the_fabric holds grove bands at 0036's 12.5 ft on every test; touch claims say 7 ft (DEVIATION); claims IN-STEP or filed (T112)

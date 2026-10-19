@@ -656,6 +656,26 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@35 (change-rou
 
 **Wording only.** Two claims split by what their pages set: `law.fouls_fabric#foul margin` and `settle.fouled_segment#off another household's yard or garden` each keep their garden half on 0246 and gain a yard half labeled UNRESEARCHED, in the sibling's words.
 
+## T130 - the run-on reach labeled as the guess it is (impl-drift, T106's round)
+
+### T130 Approach (checklist part A)
+
+1. **The goal, in the world.** The run-on reach's claim cites no page for a figure no page gives.
+2. **The constraints.** 0246's drawing page gives 60 ft only as the reach to a house or another way; 0014 says the nearest lane "runs on to the bund", with no distance. Every rendering decision labeled; a GUESS names its source only where one exists. The claims check.
+3. **Where each comes from.** 0246, 0014 (O); the root CLAUDE.md's research rules (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T106's claims round: `bund.RUN_ON_REACH_FT#run-on reach` MISLABELED, "The label should be GUESS with no page named").
+5. **The order.** The claim relabeled; the claims check.
+6. **The exits.** (e) conform the label to the pages.
+7. **The search smell.** None.
+8. **The budget.** 10 min.
+9. **Done, measured.** One goal: the claim reads GUESS, naming 0246's 60 ft as the reach it reuses and no page as its source; the claims check IN-STEP; no engine token changes.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T130 Decisions
+
+**Wording only.** `bund.RUN_ON_REACH_FT#run-on reach` reads "GUESS: an end within 60 ft of the field is carried on to it - the reach 0246 gives to a house or a way (`WAY_END_REACH_FT`), reused for the field; no page gives a distance to the field".
+
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).
