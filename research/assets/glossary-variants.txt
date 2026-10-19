@@ -4271,6 +4271,8 @@ village district	village district
 vinaya	Vinaya
 visiting grave	visiting grave
 visiting graves	visiting grave
+viz	viz.
+viz.	viz.
 volatile	volatiles
 volatiles	volatiles
 votive plaque	votive plaque
@@ -4393,6 +4395,8 @@ wet tint	wet-tint haze
 wet-tint	wet-tint haze
 wet-tint haze	wet-tint haze
 wetted perimeter	wetted perimeter
+whipper-in	whipper-in
+whippers-in	whipper-in
 white charcoal	white charcoal
 white oak	shirakashi
 white-charcoal	white charcoal
