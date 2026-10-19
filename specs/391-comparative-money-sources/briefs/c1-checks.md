@@ -1,0 +1,7 @@
+quote-check (2026-10-18): 0252 r1 40 SUPPORTS 1 PARTIAL + 1 unfootnoted, 5 EDITs applied; r2 41 SUPPORTS, 1 EDIT ("most often a sum a year"). 0253 r1 7 SUPPORTS 1 PARTIAL + UNLINKED-NAME, 2 EDITs + title-page/preface passages added by hand; r2 clean. 0254 r1 13 SUPPORTS 3 PARTIAL, 4 EDITs + new note -17 (meat seasons); r2 2 note EDITs; r3 17 SUPPORTS, clean.
+record-format (2026-10-18): 0252 r1 13 VOCABULARY (7 EDITs, 8 glossary terms), r2-r3 clean. 0253 r1 8 VOCABULARY (1 EDIT, 3 terms; 3 duplicates of 0252's declined), r2 whipper-in and viz. added. 0254 r1 8 VOCABULARY (2 EDITs, 4 terms), r2 pennyweight declined, r3 clean. 17 new glossary terms in all.
+intro-check (2026-10-18): 0252, 0253, 0254 INTRO-OK.
+source-applicability (2026-10-18): adams-1825-complete-servant APPLICABLE, limits MISSING one (wages are cash over board, lodging, livery and perquisites; no London-vs-country split) - EDIT applied; enwiki-guinea-coin APPLICABLE-WITH-LIMITS, HONEST, nothing to act on.
+source-reader (2026-10-18, on the notes changed in session 2): 0252 1 note READ; 0253 1 note READ; 0254 -1, -4, -16, -17 READ, then -4 and -6 READ. Finding acted on: the bread table's "dwts." column works only at 16 to the ounce (drams), so the page now says the quartern loaf weighed "a little over 4 pounds 5 ounces".
+translation-check: none owed (0 translated quotations).
+STILL OWED: nothing - make record-owed: 154 units owed, 0 unanswered. No round-arbiter trigger fired. Not pushed. Left as found: archive-inbox's ruiju-kinsei-fuzokushi-ge-ndl991467.pdf WAITING (not this feature's).

@@ -1,0 +1,38 @@
+{
+  "utc": "2026-10-19T04:13:34Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 224,
+  "result": "failed: test-full",
+  "commit": "5a730a669",
+  "first_failure_s": 169.7,
+  "last_failure_s": 169.7,
+  "failed_tests": 1,
+  "failed_names": [
+    "tests/tooling/test_measured_surface.py::test_the_page_area_is_the_assets_and_the_registry_and_the_gate_s_area_holds_no_asset"
+  ],
+  "host": {
+    "load": [
+      6.96,
+      10.66
+    ],
+    "mem_avail_mb": [
+      7019,
+      6643
+    ],
+    "cpu_temp_c": [
+      69.0,
+      66.0
+    ],
+    "stall_s": {
+      "cpu": 5.0,
+      "io": 1.1,
+      "io_full": 0.8,
+      "memory": 0.4
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  }
+}

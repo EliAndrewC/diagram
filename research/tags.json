@@ -100,6 +100,10 @@
    "name": "Markets",
    "description": "Questions about markets, shops and trade."
   },
+  "comparative": {
+   "name": "Comparative money",
+   "description": "Another society's wages, prices and household budgets, set beside Rokugan's as a yardstick for players - never the setting's own figures (feature 391)."
+  },
   "money": {
    "name": "Money and prices",
    "description": "Coinage, prices, wages, credit, land values and taxes reckoned in money - asked for by gm-assistant's money skill (feature 389)."

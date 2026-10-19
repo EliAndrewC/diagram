@@ -59,6 +59,21 @@ verdict (`make claims-owed`, `claims-bundle`, `claims-checked`). Where no code i
 in `make claims-report`; the code is fixed only where the feature's spec asks. `make impl-check F=<n>` lists what is
 owed, and no feature of this type closes until it reports nothing missing.
 
+## Comparative money sources (GM 2026-10-18, feature 391)
+
+The record's sources serve a premodern East Asian setting, and a European source never shapes a map. MONEY is the one
+exception: players know shillings from Austen and Dickens, so another society's wages and prices, converted by the same
+purchasing-power method as a koku, give them a yardstick. The GM: *"not because we will use it to establish the actual
+value of a koku, but because ... that can serve as a useful way for our real-life players to get a sense of what these
+wages were like."*
+- **What it is**: a SOURCE on another society's money (its wages, prices, household budgets) - not a cross-cultural method.
+- **Its limits**: money questions only; never a koku's value, a Rokugani price or wage, or anything on a map; never cited
+  for how a place was built, farmed or lived in; not sought out unless the GM asks for it or approves it.
+- **How it is marked**: the source carries the kind `comparative` (`research/source-tags.json`); a question citing it is
+  tagged `subject=comparative,money` and lives in the "Comparative money" section. `make record` refuses a comparative
+  source cited by any other question; `source-applicability` judges it on its own society's terms.
+- Why, in the GM's words: [`docs/research-record-rules.md`](../docs/research-record-rules.md), under the same heading.
+
 ## A question has a size (feature 250 D14, GM 2026-09-26)
 
 A question's PROSE stays under 20,000 bytes (`scripts/gates/check-question-size.py`; `make quick` fails on one a

@@ -141,6 +141,8 @@ backwaters	backwater
 baidu baike	Baidu Baike
 bailey	bailey
 baileys	bailey
+bailiff	bailiff
+bailiffs	bailiff
 bakufu	bakufu
 bakuhan	bakuhan
 bakumatsu	bakumatsu
@@ -240,7 +242,9 @@ blyxa	Blyxa
 bo	bo
 board feet	board foot
 board foot	board foot
+board wages	board wages
 board-clapper	clapper-board
+board-wages	board wages
 bobana	bobana
 bochi	bochi
 bodaiji	bodaiji
@@ -261,6 +265,8 @@ borrowed-scenery	borrowed scenery
 boubana	bobana
 boundary post	bojikui
 boundary posts	bojikui
+box coat	box coat
+box coats	box coat
 braced frame	braced frame
 braced frames	braced frame
 braced-frame	braced frame
@@ -316,6 +322,8 @@ burial grave	burial grave
 burial graves	burial grave
 bursaries	rent bursary
 bursary	rent bursary
+bushel	bushel
+bushels	bushel
 bushi	bushi
 bushu	Musashi
 bushū	Musashi
@@ -351,6 +359,8 @@ capitalization	capitalize
 capitalize	capitalize
 capitalized	capitalize
 capitalizing	capitalize
+carat	carat
+carats	carat
 caravan ground	caravan ground
 caravan grounds	caravan ground
 caravan inn	caravan inn
@@ -464,6 +474,8 @@ chotojiba	chotojiba
 chotsuke	chōtsuke
 choyo	Double Ninth
 choyo festival	Double Ninth
+christmas box	Christmas box
+christmas boxes	Christmas box
 chronosequence	chronosequence
 chuan	chuan
 chubu	Chubu
@@ -921,6 +933,7 @@ enpo	Enpo era
 enpo era	Enpo era
 enpō	Enpo era
 enpō era	Enpo era
+equipage	equipage
 eta	eta
 etchu	Etchu
 etchu's	Etchu
@@ -1346,6 +1359,8 @@ guard city	guard city
 guardian deities	thirty guardian deities
 guardian dog	lion-dog
 guardian dogs	lion-dog
+guinea	guinea
+guineas	guinea
 gulou	gulou
 gun bugyo	gun-bugyo
 gun-bugyo	gun-bugyo
@@ -1604,6 +1619,8 @@ house manager	yamori
 house manager's	yamori
 house pad	house pad
 house pads	house pad
+house steward	steward
+house-steward	steward
 household-register district	household-register district
 household-register districts	household-register district
 houseman	gokenin
@@ -2206,11 +2223,14 @@ land classes	land class
 land consolidation	kochi seiri
 land fall	land fall
 land readjustment	kochi seiri
+land steward	steward
+land stewards	steward
 land survey	cadastre
 land surveys	cadastre
 land's fall	land fall
 land-readjustment	kochi seiri
 land-sharing system	warichi
+land-stewards	steward
 landrace	landrace
 landraces	landrace
 large rent	subsoil owner
@@ -2279,6 +2299,8 @@ liuchu	liuchu
 live sale	live sale
 live sales	live sale
 live-sale	live sale
+liveries	livery
+livery	livery
 living sale	live sale
 loess	loess
 log boom	boom
@@ -2893,6 +2915,8 @@ percolation	percolation
 periodic market	periodic market
 periodic markets	periodic market
 periodic-market	periodic market
+perquisite	perquisite
+perquisites	perquisite
 person-year	person-year
 person-years	person-year
 petuntse	petuntse
@@ -2952,11 +2976,17 @@ post station	shukuba
 post stations	shukuba
 post town	shukuba
 post towns	shukuba
+post-chaise	post-chaise
+post-chaises	post-chaise
 post-horse	post-horse system
 post-horse system	post-horse system
 post-station	shukuba
 post-stations	shukuba
 postern	postern
+postilion	postillion
+postilions	postillion
+postillion	postillion
+postillions	postillion
 preceptor	preceptor
 preceptor's	preceptor
 preceptors	preceptor
@@ -3021,6 +3051,9 @@ qiu	qiu
 qu dajun	Qu Dajun
 qu dajun's	Qu Dajun
 quan	quan
+quartern	quartern loaf
+quartern loaf	quartern loaf
+quartern loaves	quartern loaf
 quay	quay
 quays	quay
 quercus acutissima	kunugi
@@ -3321,6 +3354,10 @@ screen hill	screen hill
 screen hills	screen hill
 screen wall	screen wall
 screen walls	screen wall
+scullery maid	scullion
+scullery-maid	scullion
+scullion	scullion
+scullions	scullion
 se	se
 se-machi	se-machi
 seam	seam
@@ -3459,6 +3496,8 @@ shijing	Book of Songs
 shiki-dai	shikidai
 shikidai	shikidai
 shikoku	Shikoku
+shilling	shilling
+shillings	shilling
 shima	Shima
 shimabatake	island field
 shimazu	Shimazu
@@ -3661,6 +3700,12 @@ stele	stele
 steles	stele
 stem density	stem density
 stem family	stem family
+steward	steward
+stewards	steward
+still room	still-room
+still-room	still-room
+still-room maid	still-room
+still-room maids	still-room
 stilling pool	stilling pool
 stoke mouth	stoke mouth
 stoke mouths	stoke mouth
@@ -3783,6 +3828,8 @@ sōchinju	sōchinju
 sōja	soja
 sōtō	Sōtō
 sōzu	sōzu
+table beer	table beer
+table-beer	table beer
 tabu	tabu
 tabune	field boat
 tabunoki	tabu
@@ -4164,6 +4211,9 @@ underground flow	underflow
 undersluice	undersluice
 undersluices	undersluice
 understory	understory
+undress	undress
+undress suit	undress
+undress suits	undress
 unhair	unhair
 unhaired	unhair
 unhairing	unhair
@@ -4221,6 +4271,8 @@ village district	village district
 vinaya	Vinaya
 visiting grave	visiting grave
 visiting graves	visiting grave
+viz	viz.
+viz.	viz.
 volatile	volatiles
 volatiles	volatiles
 votive plaque	votive plaque
@@ -4343,6 +4395,8 @@ wet tint	wet-tint haze
 wet-tint	wet-tint haze
 wet-tint haze	wet-tint haze
 wetted perimeter	wetted perimeter
+whipper-in	whipper-in
+whippers-in	whipper-in
 white charcoal	white charcoal
 white oak	shirakashi
 white-charcoal	white charcoal

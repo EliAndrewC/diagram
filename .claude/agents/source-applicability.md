@@ -100,6 +100,15 @@ degree its ERA, PLACE, SCALE and METHOD bear on how such a place was built, farm
 lived in. The GM's own campaign notes (`l7r.md`, `budgets.md`) are canon, not evidence, and are APPLICABLE by
 definition.
 
+**A COMPARATIVE source is judged on its own terms** (feature 391, the GM 2026-10-18). A work that carries the kind
+`comparative` in ANY position of its tags - another society's wages, prices or household budgets, such as *The Complete
+Servant* (London, 1825) - is not judged on whether it fits East Asia. It is judged on two things: is it a sound record of
+ITS OWN society's money (a source of the time, or scholarship on it), and does its write-up state the comparative limits
+(a yardstick for players who know shillings from Austen and Dickens; never a koku's value, a Rokugani price or wage, or
+anything on a map; never cited for how a place was built, farmed or lived in)? A missing limit is MISSING. It is
+NOT-APPLICABLE only when it is cited outside a comparative money question or used as the basis of a Rokugani figure. A
+European or other non-East-Asian source WITHOUT the comparative kind is judged as before.
+
 ## Input
 
 Either (a) one or more REGISTRY KEYS with their `research/sources/` entries - the citation line, the two
@@ -165,8 +174,8 @@ carry none. Every value and the explanation its label shows, derived from `resea
 - `region=china` - **China**: China, the other model for Rokugan, especially its walled cities, counties and imperial government. China is vast: the dry wheat and millet north and the wet rice south farm and build very differently. A source about one region speaks for that region first.
 - `region=korea` - **Korea**: Korea, a close analog: East Asian rice farming, village groves and Confucian institutions shared with China and Japan, but with its own building traditions, such as heated floors and its own house plans. The record uses it where the practice is shared, often where no Japanese or Chinese source could be read.
 - `region=east-asia-other` - **Other East Asia**: The wider region: the Ryukyu Islands, Taiwan, Vietnam and the borderlands. These are analogs that share rice farming and many practices with China and Japan, under their own climates and traditions. The record uses them where the practice is shared.
-- `region=europe` - **Europe**: Europe. It has different crops (wheat and the heavy plow rather than rice and the hoe), different building traditions and different law, so it says little about how an East Asian place looked. The record uses it only for constraints that cross cultures: how a moat holds water, how large a tannery's pits are, how far a bell carries.
-- `region=elsewhere` - **Elsewhere**: Outside East Asia and Europe: South and Southeast Asia beyond Vietnam, the Middle East, Africa, the Americas. Like Europe, it is used only for constraints that cross cultures, and its forms are not the setting's.
+- `region=europe` - **Europe**: Europe. It has different crops (wheat and the heavy plow rather than rice and the hoe), different building traditions and different law, so it says little about how an East Asian place looked. The record uses it only for constraints that cross cultures: how a moat holds water, how large a tannery's pits are, how far a bell carries. For money alone it may also be a comparative yardstick (the Comparative kind), never the setting's own figures.
+- `region=elsewhere` - **Elsewhere**: Outside East Asia and Europe: South and Southeast Asia beyond Vietnam, the Middle East, Africa, the Americas. Like Europe, it is used only for constraints that cross cultures, and its forms are not the setting's. For money alone it may also be a comparative yardstick (the Comparative kind), never the setting's own figures.
 - `region=general` - **General**: Not about one place: botany, hydraulics, materials, or comparisons across many regions. It applies wherever its facts hold, and any regional limit is stated in the write-up.
 - `region=rokugan` - **Rokugan (published)**: The game's own empire as published - not a real place. It stands beside the GM's campaign notes as the setting's background, and the notes govern wherever they speak.
 - `kind=primary` - **Primary**: A document of the time itself: a gazetteer, a register, a land survey, a treatise, a period map or picture. It is the closest the record gets to the facts. But it was written for its own purposes (a tax count, an official's report, an ideal), so it can idealize, under-count or follow conventions of its own. It is often read in translation.
@@ -174,6 +183,7 @@ carry none. Every value and the explanation its label shows, derived from `resea
 - `kind=reference` - **Reference**: An encyclopedia or dictionary, including Wikipedia. It is broad, summarized and usually right about what a thing is. But it is secondhand: Wikipedia is edited by its community and can change, and a figure it gives is only as good as the reference behind it. The record relies on it for what a thing is, and for a number only where its own source carries the number.
 - `kind=institutional` - **Institutional**: A museum, a government office, a preservation society or a university's public page. It is generally careful and often first-hand about its own site or collection. But it is written for visitors, so it can simplify, rarely cites its evidence, and may describe a restoration rather than the original.
 - `kind=popular` - **Popular**: A blog, a tourism board, a travel account or a news story. It is readable, often first-hand, and often has photographs of what it describes. But it rarely cites a study, a promotional page shows its subject at its best, and its numbers are usually round.
+- `kind=comparative` - **Comparative (money)**: A source on ANOTHER society's money - its wages, prices and household budgets - cited only by a comparative money question. It is read only as a yardstick players know from fiction (Austen, Dickens): it never sets a koku's value, a Rokugani price or wage, or anything on a map, is never cited for how a place was built, farmed or lived in, and is sought out only when the GM asks for it or approves it.
 - (no marker) - **L7R setting notes**: The GM's own campaign notes. They are facts of the setting, not evidence about the real world, so they govern wherever they speak, and no applicability judgment applies to them.
 <!-- /source-tags -->
 

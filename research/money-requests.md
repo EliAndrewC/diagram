@@ -38,6 +38,8 @@ answer on the issue; the ASKER closes it once it has verified the answer. Never 
 - `make impl-check F=<n>` closes on a line in the feature's `implementation-check.md`, since no code here decides a
   price:
   `- NNNN: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn '<the question's terms>' l7r pool`
+- **A source on another society's money** (a Regency household's wages, a Dickensian price) is a COMPARATIVE source:
+  `research/CLAUDE.md`, "Comparative money sources", for what it may be used for and how it is marked.
 - A source the GM owns in print (Goldsmith's *Premodern Financial Systems*, McClain and Wakita's *Osaka*) goes on the
   download list (`make download-add`). The GM's group's old emails and spreadsheets (`/host-l7r-repo/money/`, digested in
   its `digest.md`) are LEADS: a figure from them is cited from the work it came from, never from the email.

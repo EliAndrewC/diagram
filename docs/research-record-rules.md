@@ -608,3 +608,22 @@ GM's name for the building-plan section - Trades and services, Religion and the 
 stands. Every pointer by old path, old page or old number was rewritten (*"use the correct new number"*), with no
 redirect (*"Nothing is bookmarked"*); `research/moved-303.json` keeps the mapping so the pointer check names the new
 form to a late pointer. The measurements, the tag table and the decisions are in `specs/303-research-organization/`.
+
+## Comparative money sources (GM 2026-10-18, feature 391)
+
+The rule, in one line each, is `research/CLAUDE.md`'s section of the same name. Why it exists, in the GM's words
+(dictated; "imperative sources" was dictation for "comparative sources"):
+
+> I do actually like the idea of having [comparative] sources. Um, and while I think that in general we should not target sources like The Complete Servant, because one of my players has read this book and done a little work on it, then I think that it is worth including as a openly comparative question, as you say, along the lines of, what did a Regency English household pay its servants? In particular, we have largely avoided using European sources for things like farms and farm yield because European farming communities were just so different. That we don't want to use them as sources for the maps that we create in this project. However, these kinds of comparative sources are much more helpful when talking about money specifically, because one of the things that we are trying to accomplish with our money research is how to convey to players how much things cost, and players have read things like Charles Dickens and Jane Austen, and are familiar with shillings. And whatnot. And so this kind of comparative source can be useful not because we will use it to establish the actual value of a koku, but because if we are able to make monetary comparisons using things like purchasing power parity calculations, then that can serve as a useful way for our real-life players to get a sense of what these wages were like relative to the wages of, for example, characters in stories that they have read, like Jane Austen novels and Charles Dickens novels, etc. So we should not only do this, but we should update our research guidelines to indicate what this category is and why it exists, and also what the limits are to how we are using it, because, as I said, we would not be using sources such as the complete servant for actually determining what the value of a koku is or what things cost in our fictional setting.
+
+What follows from it:
+- **It is a source, not a method.** The purchasing-power method that converts a koku is cross-cultural method, not a
+  comparative source; the category covers another society's own figures.
+- **Not sought out.** A research pass does not go looking for European prices; a comparative source enters when the GM
+  asks for it or approves it (*The Complete Servant* because a player read it; the English traveling players because the
+  GM raised them).
+- **Enforced where it can be.** The `comparative` kind marks the source and its label shows the reader the limits;
+  `make record` refuses it cited by a question that is not tagged `comparative` (`site.py`, `_comparative_misuse`);
+  `source-applicability` judges it on its own society's terms and calls its use outside a comparative question
+  NOT-APPLICABLE.
+
