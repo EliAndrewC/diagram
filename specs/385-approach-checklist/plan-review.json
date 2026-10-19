@@ -6758,37 +6758,24 @@
    "verdict": "CLEAR"
   },
   "T98": {
-   "section_sha256": "5b4e28727c7bf6e9a4fa1de6941977c3db7f10c71af70c1736c19a66cd4ed2d6",
+   "section_sha256": "00731bd741d33d252324d5924257b9a7ab1126044386da088780e8df74ac7bf5",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "D119a",
-     "summary": "Door path: grove bands grown by 2*(1.5 + GROVE_WORKING_ROOM_FT - FOOTPATH_FABRIC_GAP), never below zero, so the path's middle stands 0036's 11 ft off the trees, counted once.",
+     "id": "D119 (room off a grove counted once)",
+     "summary": "lay_door_paths grows grove bands by 2*(1.5 + GROVE_WORKING_ROOM_FT - FOOTPATH_FABRIC_GAP), floored at zero, so the path's middle stands 11 ft off the trees; connector_dry_exit's grove band gap is GROVE_WORKING_ROOM_FT + CONNECTOR_WIDTH/2 = 12.5 ft; both claims cite 0036's drawing page",
      "class": "within",
-     "why": "Conforms to 0036's figure (O) and removes a double count; the checklist's conform exit is chosen with the other exits judged. Unchanged since the last CLEAR."
+     "why": "Conforms both sites to the research figure (0036, an O source) instead of a margin counted twice; the request asks that research-backed rules be kept and arbitrary implementation figures be questioned, and this removes an arbitrary double-count while keeping the researched room. Nothing the GM asked for is narrowed; the block is unchanged since its last CLEAR."
     },
     {
-     "id": "D119b",
-     "summary": "Connector: a grove band's gap is GROVE_WORKING_ROOM_FT + CONNECTOR_WIDTH/2 = 12.5 ft, claims citing 0036's drawing page.",
+     "id": "Item 10 / D119 (GROVE_EXIT_CELL_FT 7 -> 2.9 ft)",
+     "summary": "The flood fill's cell moves from 7 to 2.9 ft so a 32 ft gap between dispersed farms' bands holds a way out at a 12.5 ft band gap (2 x 12.5 + 2.41 x 2.9 = 31.99 <= 32); item 10 now lists every use of the constant (track.py:940 start offset 15.6 ft vs the 16 ft half-gap, track.py:941 fill cost about 5.8x cells only where no sweep bearing is clear, serve.py:420 docstring, the raster test) - arithmetic re-derived here and it holds",
      "class": "within",
-     "why": "0036's room applied at the second site; unchanged since the last CLEAR."
-    },
-    {
-     "id": "D119c",
-     "summary": "dry_exit.GROVE_EXIT_CELL_FT moved from 7 to 2.9 so the flood fill finds the way out between dispersed farms' bands 32 ft apart at a 12.5 ft band gap, with a test holding G >= 2 x gap + 2.41 x cell.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The substance is a refinement of an implementation knob (the arithmetic checks: (32 - 25)/2.41 = 2.90) and would be within. But the block moves a constant while its own Approach item 10 still says 'No constant's value moves' and lists the uses of no constant but the two it reads. The GM approved step-back proposal 7 ('list every use of a constant before moving it', approved by 'I do like all of your other proposals'), and FR-003 requires each task's Approach to answer the checklist. Moving GROVE_EXIT_CELL_FT without listing its uses exempts this constant from that rule: it is not impossible (a grep), nothing in the request implies the exemption, and it defeats the rule's purpose, which is to catch a moved constant's other consumers before the move. Lifted by rewriting item 10 to state that GROVE_EXIT_CELL_FT moves (7 to 2.9), list every use of it with the grep that found them, and say what each use does at 2.9."
-    },
-    {
-     "id": "tests-and-landing",
-     "summary": "A test red without the single count; the landing cohort passing; T96 and T98 landing together.",
-     "class": "within",
-     "why": "Enforcement of what was asked (a test red without it) and sequencing; nothing narrowed."
+     "why": "An unresearched grid resolution derived from its own stated rule, moved to fit the room the research gives rather than shrinking that room - the refine-an-arbitrary-number exit the GM's request names. Listing every use before moving it is the checklist item the GM approved in Amendment 8 (proposal 7). The change corrects item 10's earlier 'no constant moves', which contradicted D119; it narrows nothing asked."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   }
  }
 }
