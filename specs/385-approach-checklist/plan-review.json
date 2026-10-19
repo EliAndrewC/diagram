@@ -6922,27 +6922,39 @@
    "verdict": "CLEAR"
   },
   "T97": {
-   "section_sha256": "71836c16cdd50fdc073c4b542dda15849c7b206cb8f20a4cba4b70afe236b836",
+   "section_sha256": "d450369f043dc8a524f690285b15b4b4fe4b3ec5c040529060c6854b2dd36311",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "D125 (reach)",
-     "summary": "street_arrives asks, on a row's street or off it, whether the way's point nearest the HOUSE serves the farm under end_serves (60 ft of the house or 12 ft of its built ground); lay_door_paths skips a farm only on that answer; row_rules' farm_not_on_its_street asks the same predicate; the three claims keep 0246's label.",
+     "id": "D125-reach",
+     "summary": "street_arrives asks, on a row's street or off it, whether the way's point nearest the HOUSE serves the farm under end_serves (60 ft of the house or 12 ft of its built ground); lay_door_paths and row_rules' farm_not_on_its_street read that one predicate",
      "class": "within",
-     "why": "Unchanged from the text last judged CLEAR. It conforms the code to the research's own reach and has placement and its check read one predicate. The request asks for exactly this: find where a rule comes from and follow the research rather than a stand-in. Nothing the GM asked for is narrowed."
+     "why": "Conforms the code to 0246's research as written and makes placement and its check read one source - the lane law (384 FR-000, moved here by FR-007) the request makes task 1; nothing the GM asked is narrowed and no house moves for a path."
     },
     {
-     "id": "Approach item 10 (DOOR_REACH_FT retired)",
-     "summary": "DOOR_REACH_FT, lay_door_paths' reach parameter and stage_web's argument are removed; test_doors' door-distance asserts ask street_arrives instead.",
+     "id": "D125-door-path-exemption",
+     "summary": "a door path (a lane recording serves) is a household's own way that law.short_fragments never drops, as it never drops one recording of",
      "class": "within",
-     "why": "Unchanged from the text last judged CLEAR. It follows from D125 and lists every use before the constant is moved, as the approved Approach item 'list every use of a constant before moving it' (amendment 8, proposal 7) requires."
+     "why": "Unchanged since its CLEAR verdict; grounded in 0246's 'Every other farmhouse is served by a lane of its own' and measured on seed 904; it widens no carve-out of the GM's request - it keeps a researched way the fragment rule was wrongly dropping."
     },
     {
-     "id": "D125 (door-path exemption from the fragment rule)",
-     "summary": "A farm's door path (a lane recording `serves`) is a household's own way, which law.short_fragments never drops, as it already never drops one recording `of`; grounded in 0246 ('Every other farmhouse is served by a lane of its own. Its way leaves its dooryard') and measured on cohort seed 904 (2026-10-19).",
+     "id": "D125-further-street-trim",
+     "summary": "NEW: a further row street's trim is kept to the street's point nearest the house of each farm it serves without a path (serve.street_anchors at a 1 ft reach), where it was kept to a door within 12 ft",
      "class": "within",
-     "why": "Neither the request nor the spec names the fragment rule. FR-007's lane law as the GM described it covers the needle angle made obstruction-aware and the merging of near-parallel lanes, so an exception to the fragment rule cannot narrow what was asked. The request names this exit itself: 'it makes sense to keep a rule but then refine a number, or to keep a rule and add an exception'. The approved checklist lists 'Add a principled exception' with the guardrail that its reason be recorded, and the block records both the research source and the measurement (seed 904's four 9 ft door paths dropped, then 16 of 16 with them spared). The exemption's reach is taken as the block defines a door path, a lane recording `serves`. Part B adds no decision of its own: its item 5 points back to this one."
+     "why": "The same predicate applied to the one remaining reader (the claims round found the trim and street_arrives asking different reaches); it carries out the request's lane-law work and the 'placement and check read one source' rule, moves no house, and excludes no case the GM asked to have covered."
+    },
+    {
+     "id": "A6-A10-conform-retire-DOOR_REACH_FT",
+     "summary": "exit (e) conform; DOOR_REACH_FT, lay_door_paths' reach parameter and stage_web's argument retired, tests ask street_arrives",
+     "class": "within",
+     "why": "Mechanical consequence of D125, unchanged since CLEAR; the reason for dropping the door-distance stand-in is recorded, as the checklist's guardrail requires."
+    },
+    {
+     "id": "partB-0958",
+     "summary": "the new part B after the arbiter's 'continue' ruling: no new route or change, next step the claims check, gate and landing",
+     "class": "within",
+     "why": "Decides nothing new; records that the change is D125's and follows the ruling's named step."
     }
    ],
    "verdict": "CLEAR"
