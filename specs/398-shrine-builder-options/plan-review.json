@@ -1,0 +1,175 @@
+{
+ "feature": "398-shrine-builder-options",
+ "blocks": {
+  "preamble": {
+   "sha256": "be40d22e5dec46446748230a87818fc636f2c445db153eb722241dc41df2e1a3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "7256107343356e4fdb6923e41b707676af03d4a91973a87b9e6afe90b54047a8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "887738ef1ec92b6ffecbca897c0b03f0d0a81e7c95d3403e36ef7959b64f8d23",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "99fbdeccbfbd66edf40fe2ec6f1c5aadb8e5ec75d91b966d48c7b6412a810289",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - the four questions (FR-001, FR-002)": {
+   "sha256": "a79a90c9c29c284638d8724bd6985f74ee8351a0a6d873af2eb180c1e4660e6b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - the implementation check (FR-003)": {
+   "sha256": "343179d36bb80d0f308d0f838d599754b275ba6a4073a64ee28603f3f9efb380",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - the answer (FR-004)": {
+   "sha256": "67bc9b32f61b55c3477166042b496bc0de1208be009175c237bee8fc70ee2f42",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## T - the order": {
+   "sha256": "a546546a20ff0dc1c925669cab981969374479f6904353bc5da8504b5579f722",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-19",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the four questions (FR-001, FR-002)",
+    "## D2 - the implementation check (FR-003)",
+    "## D3 - the answer (FR-004)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary/sessions",
+     "summary": "One write page session of four questions, one check-and-apply session, then the answer on #7; no code, map or canon change.",
+     "class": "within",
+     "why": "Process for producing the four answers the request asks for; the no-code scope matches a research request and FR-005."
+    },
+    {
+     "id": "TC/record-route",
+     "summary": "Passes are leads only; every passage read on its page before citing; the Kawakami scanned notes read on page images via source-reader IMAGES=.",
+     "class": "within",
+     "why": "Method of verifying sources; the request asks for checked verdicts per figure ('I verify and close'), and this serves that."
+    },
+    {
+     "id": "TC/covered-by-6",
+     "summary": "Where 0255-0258 give an item (relief panels, cover-shed in the Mitake repair, worship hall, copper roof, great stone torii, enshrinement cost share) the question points at the page and states its limit rather than repeating it.",
+     "class": "within",
+     "why": "The request says verbatim: 'Where #6's answer already covers an item ..., say so rather than repeating it.' Stating the limit adds nothing beyond saying so honestly; every such item still sits in a question (D1 table lists relief panels, cover-shed, torii, enshrinement)."
+    },
+    {
+     "id": "TC/wages-nearest",
+     "summary": "Each figure sits beside the same place-and-period craftsman and unskilled wage where a source gives them; where none does, the wage is stated SILENT and the nearest wage named with its class, place, unit and gap in years; a craftsman wage is never shown as unskilled.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The request asks for 'each figure beside the craftsman's and laborer's day wage of the same place and period'. Showing an unattested same-place wage is impossible, not merely awkward (the passes found no new wage). The fallback keeps the rule's purpose - letting gm-assistant grade each figure against labor - by naming the nearest wage with its gap, and marks the silence rather than hiding it. The bar on passing a craftsman wage off as unskilled protects the request's two-wage distinction."
+    },
+    {
+     "id": "TC/wages-in-hand",
+     "summary": "Wages in hand: Kumehara 1830 carpenter, Tama 1749, Edo carpenter 1804-60, Kyoto 1802-04 unskilled, Jiangsu 1769 norms.",
+     "class": "within",
+     "why": "An inventory of the wage sources the request's 'beside it' rule draws on; Jiangsu serves the China fallback figures only, consistent with Japan-first."
+    },
+    {
+     "id": "ConstitutionCheck",
+     "summary": "I-XI N/A; XII research: physical with five boxes; XIII record checks green; XVI built as the FRs.",
+     "class": "within",
+     "why": "Process conformance; no scope change."
+    },
+    {
+     "id": "PerfBookends",
+     "summary": "N/A: no generator change.",
+     "class": "within",
+     "why": "Follows from the no-code scope."
+    },
+    {
+     "id": "D1/four-questions",
+     "summary": "Four new money questions, one per request section, tagged subject=money, no drawing page, level counts-and-measurements, with setting tags countryside / countryside,city.",
+     "class": "within",
+     "why": "The request has four numbered questions and asks 'per question: the fragment FILE'. Tags and level are record metadata."
+    },
+    {
+     "id": "D1/coverage-q1",
+     "summary": "Q1 covers kasuga and shinmei, hokora, cover-shed, pavilion and offering hall, timber, thatch and shingle, paint and lacquer, relief panels, beam-end carving, transoms (copper roof via the covered-by rule).",
+     "class": "within",
+     "why": "Every item of request section 1 is carried; the copper roof is carried by TC/covered-by-6 (0256) and D3's 'or the page that covers it'. The offering hall is a related silence reported, not a scope change."
+    },
+    {
+     "id": "D1/coverage-q2",
+     "summary": "Q2 covers the small torii (great torii via 0257 as upper bound), lanterns, mason's day, stairway and plinth, komainu and foxes, basin, stele, gorinto, coffer.",
+     "class": "within",
+     "why": "Every item of section 2 including 'in stone and mason-days' is carried. 'Small torii' is not a narrowing: the great torii is still pointed at through the covered-by rule, and the builder's option is a small shrine's torii."
+    },
+    {
+     "id": "D1/coverage-q3",
+     "summary": "Q3 covers mirror, gong, hanging lanterns, reliquary, offering chest and lock, lacquered chest, plus the copper floor and Qing copper ware.",
+     "class": "within",
+     "why": "All six request items carried; the copper floor and the China fallback are the nearest evidence for silent items, consistent with 'Japan-first'."
+    },
+    {
+     "id": "D1/coverage-q4",
+     "summary": "Q4 covers night enshrinement, goryo festival, eitai kuyo, portion to a mountain temple, washing bones, calligrapher's plaque fee.",
+     "class": "within",
+     "why": "All six request items carried."
+    },
+    {
+     "id": "D1/answer-shape",
+     "summary": "Each question gives every figure, every silence, each covered-by with its limit, each figure beside its wages; project-computed figures labeled as the project's arithmetic.",
+     "class": "within",
+     "why": "Matches 'the verdict per figure' and the beside-wages rule; labeling arithmetic keeps verdicts honest."
+    },
+    {
+     "id": "D2/impl-check",
+     "summary": "implementation-check.md: one 'no code implements it - consumed by gm-assistant's money skill' line per question, with the search.",
+     "class": "within",
+     "why": "Carries FR-003; the consumer named is the request's own author."
+    },
+    {
+     "id": "D3/answer",
+     "summary": "Comment on #7 gives each question's fragment FILE, the checked verdict per figure or the covering page, and what is still open; supersedes the interim comment.",
+     "class": "within",
+     "why": "Is the request's 'What the skill needs back' clause item by item; superseding the interim is what the interim comment itself promised."
+    },
+    {
+     "id": "T/order",
+     "summary": "Page sessions, implementation check, answer, report and land by the direct route.",
+     "class": "within",
+     "why": "Sequencing only."
+    }
+   ]
+  }
+ ]
+}
