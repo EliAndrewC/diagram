@@ -16411,5 +16411,136 @@
    "perquisite",
    "perquisites"
   ]
+ },
+ "shilling": {
+  "def": "A British coin and unit of account worth twelve pence: twenty shillings made a pound and twenty-one a guinea. Written \"s.\" after a figure, as in 10s. 6d. (ten shillings and sixpence).",
+  "variants": [
+   "shilling",
+   "shillings"
+  ]
+ },
+ "scullion": {
+  "def": "The lowest maid of the kitchen, who scoured the pots, pans and dishes in the scullery; The Complete Servant also calls her the scullery-maid.",
+  "variants": [
+   "scullion",
+   "scullions",
+   "scullery-maid",
+   "scullery maid"
+  ]
+ },
+ "still-room": {
+  "def": "The room of a large house where the preserves, cordials, cakes, tea and coffee were made and kept, under the housekeeper; its maid was the still-room maid.",
+  "variants": [
+   "still-room",
+   "still-room maid",
+   "still-room maids",
+   "still room"
+  ]
+ },
+ "postillion": {
+  "def": "A servant who rode one of the horses pulling a carriage and guided the team from the saddle, instead of a coachman driving from the box.",
+  "variants": [
+   "postillion",
+   "postillions",
+   "postilion",
+   "postilions"
+  ]
+ },
+ "box coat": {
+  "def": "A heavy overcoat with short capes at the shoulders, worn by a coachman sitting on the box of a carriage.",
+  "variants": [
+   "box coat",
+   "box coats"
+  ]
+ },
+ "undress": {
+  "def": "Of a servant's clothes: plain everyday working dress, as opposed to the livery worn on duty in front of the family and guests.",
+  "variants": [
+   "undress",
+   "undress suits",
+   "undress suit"
+  ]
+ },
+ "Christmas box": {
+  "def": "A gift of money at Christmas. Here, the tip a tradesman gave the butler of a house whose custom he had.",
+  "variants": [
+   "Christmas box",
+   "Christmas boxes"
+  ]
+ },
+ "table beer": {
+  "def": "Weak, cheap beer drunk with meals, which servants had besides their daily allowance of stronger ale.",
+  "variants": [
+   "table beer",
+   "table-beer"
+  ]
+ },
+ "equipage": {
+  "def": "A household's carriages, with the horses and the liveried servants that go with them; The Complete Servant (1825) counts them together as \"Servants and Equipage including Horses, Carriages, and Liveries\".",
+  "variants": [
+   "equipage"
+  ]
+ },
+ "bailiff": {
+  "def": "On an English landed estate, the man who managed its farming and laborers for the owner - not the court officer of the same name.",
+  "variants": [
+   "bailiff",
+   "bailiffs"
+  ]
+ },
+ "steward": {
+  "def": "A senior servant who managed for the owner: a house steward ran a great house and its servants, a land steward the estate, its rents and its tenants.",
+  "variants": [
+   "steward",
+   "stewards",
+   "land steward",
+   "land stewards",
+   "Land-Stewards",
+   "house steward",
+   "House-Steward"
+  ]
+ },
+ "quartern loaf": {
+  "def": "An English loaf of a set weight, which The Complete Servant (1825) gives as a little over 4 pounds 5 ounces; an earlier law tied its price in pence to the price of the best wheat in shillings.",
+  "variants": [
+   "quartern loaf",
+   "quartern loaves",
+   "quartern"
+  ]
+ },
+ "bushel": {
+  "def": "An English measure of volume for grain, coal and other dry goods; the new imperial bushel was about a thirty-second, a quart, larger than the old Winchester bushel it replaced.",
+  "variants": [
+   "bushel",
+   "bushels"
+  ]
+ },
+ "post-chaise": {
+  "def": "A closed carriage hired with its horses for travel by the mile; in 1825 a post-chaise and a pair of horses cost a shilling to two shillings a mile.",
+  "variants": [
+   "post-chaise",
+   "post-chaises"
+  ]
+ },
+ "carat": {
+  "def": "A measure of how pure gold is, out of 24 parts: gold of 22 carats is 22 parts pure gold to 2 of alloy.",
+  "variants": [
+   "carat",
+   "carats"
+  ]
+ },
+ "whipper-in": {
+  "def": "A huntsman's assistant, who kept the pack of hounds together with a whip.",
+  "variants": [
+   "whipper-in",
+   "whippers-in"
+  ]
+ },
+ "viz.": {
+  "def": "Namely - short for the Latin videlicet; it introduces a list or an example.",
+  "variants": [
+   "viz.",
+   "viz"
+  ]
  }
 }
