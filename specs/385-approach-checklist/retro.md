@@ -1011,3 +1011,11 @@ About 15 min. `earlier.md` is headed "Each changed block's text when last judged
 verdict it got, so a round 2 sees round 1's BLOCKED text named as blocked. One review round, CLEAR; its aside found the bundle
 resolving another feature's cited decision against this feature's own number (filed, T123). T85, landed at 04:58Z with its part
 B saying so, had never been ticked - ticked now. **The habit it changes:** none; a label told the truth.
+
+## T121 - the retro row
+
+About 20 min. The shell-write guard now refuses a guard file written by `open("<guard>", "w"|"a"|"x")`, or by a name bound to a
+plain string then written through `open()` - T117's shape; a read stays legal. The suite gained three cases, two red without the
+change. One review round, CLEAR; its aside lists shapes still unmatched (`Path(...).open("w")`, `"r+"`, `shutil`, `os.replace`) -
+left unmatched by choice: none has been seen, and the guard widens by measured shapes, not imagined ones. **The habit it
+changes:** none; a guard I walked past by accident now stops the walk.
