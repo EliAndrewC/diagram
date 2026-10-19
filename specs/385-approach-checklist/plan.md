@@ -257,9 +257,9 @@ Owed by the hour-20 step-back (hour:385-approach-checklist@20, `continue`), whic
 ### T77 Approach (checklist part A)
 
 1. **The goal, in the world.** The next "where did the time go" is one command, and its idle column is right.
-2. **The constraints.** The GM, 2026-10-18 (amendment 8): "I do like all of your other proposals"; change 8 of the step-back report (amendment 8, quoted): "`make where-time` produces the tables above", and the session's correction the same evening: "time from a turn's end to the next prompt will count as waiting, whatever events land in between". The categories stay `feature_report.split_time`'s. A test red without it.
-3. **Where each comes from.** The GM (G); the categories are 375's (O).
-4. **Do they describe the world here?** Yes - measured 2026-10-18: the scratch `where_time.py` booked T05 224 minutes, but about 80 of them were the 04:20-09:15 overnight stall, split into pieces under an hour by hook events and booked as "thinking"; T05's real work was about 2 h 25.
+2. **The constraints.** The GM, 2026-10-18 (amendment 8): "I do like all of your other proposals"; change 8 of the step-back report (amendment 8, quoted): "`make where-time` produces the tables above", FR-005 (the per-task table) and FR-014 (the session's own calls told from its subagents'). The rule for the time between turns is ours (O), the session's correction the same evening ("time from a turn's end to the next prompt will count as waiting, whatever events land in between"), approved only within the GM's approval of the proposals. The categories stay `feature_report.split_time`'s. A test red without it.
+3. **Where each comes from.** The target, the GM (G); the between-turns rule and the categories, ours (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-18: the scratch `where_time.py` booked T05 224 minutes, but about 80 of them were the 04:20-09:15 overnight stall, split into pieces under an hour by hook events and booked as "thinking"; T05's real work was about 2 h 25. And a background notification that wakes the session fires `UserPromptSubmit` - measured 2026-10-19 on this session: every task notification since the compaction was followed by the prompt hooks' lines ("UserPromptSubmit hook success: clone-sync") - so a woken turn's work is booked to its task, not to "between turns".
 5. **The order.** `scripts/measure/where_time.py` (from the scratch script), the target, then the test.
 6. **The exits.** (c).
 7. **The search smell.** None.
