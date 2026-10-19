@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -413,6 +413,26 @@ single file - keeps its middle 4 ft off a garden fence, a map drawing convention
 seeds (3, 4, 903, 904) leave a farmhouse unreached (measured 2026-10-19). `FOOTPATH_FABRIC_GAP`'s claim becomes a pointer to that
 page; `join_to`'s claim, which says "(7 ft)", cites the same page at 4 ft; the comment above the constant that still says 7 ft is
 corrected. No value changes.
+
+## T92 - `make claims-triaged` reads a transcript's reply and never clears on an unread one (found working T31, 2026-10-19)
+
+### T92 Approach (checklist part A)
+
+1. **The goal, in the world.** A claims triage's verdicts are never lost by the form of the file that carries them.
+2. **The constraints.** Feature 375 FR-016: a claim the triage names TOUCHES is owed impl-drift and every other claim of the bundle is cleared. `make modal-triaged` already reads a transcript (`.jsonl`, `.output`) for its last reply (feature 385 T07); `make claims-triaged` reads the file raw. A test red without it.
+3. **Where each comes from.** 375 (O); the defect is measured working T31 (amendment 6).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T31's `make claims-triaged` on the agent's `.output` transcript): it printed "0 of 281 sent on to impl-drift (0 named by the reply); the rest cleared" while the reply named 18 claims TOUCHES - every one cleared unread.
+5. **The order.** The reply read through `apply_edits.reply_of`, the refusal on an empty one, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: `make claims-triaged REPLY=<a transcript>` records the TOUCHES lines of the transcript's last reply, and a reply it can read no text from is refused before anything is cleared; `tests/tooling/test_claims_scoping.py` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T92 Decisions
+
+**D114 - the reply read as modal-triaged reads it.** `claims.py triaged` reads `--reply` through `apply_edits.reply_of` (a `.jsonl` or `.output` transcript's last assistant reply, else the file as text); a reply with no text refuses, naming the file, and clears nothing. A readable reply with no TOUCHES line clears the bundle as now.
 
 ## T11 - the close
 
