@@ -33,24 +33,33 @@ SILENT):
      under 0.033 within a set; 1650, 0.04; 1727 Beijing, war arrows 0.05-0.08 and fine arrows 0.12-0.36.
    - **Japan:** SILENT.
    - **Fletcher output per day:** SILENT.
-   - **Recovery after battle:** NOT ATTESTED. The Qing code writes battle losses off.
+   - **Arrowheads:** SILENT in Japan and China. Kawato's remark that heads traded at about a spearhead's value is a
+     historian's guess, labeled as one.
+   - **Recovery of arrows or heads after battle:** NOT ATTESTED. The Qing code writes battle losses off.
 2. **Notice boards and paper.**
-   - **What a notice was made of and who could post:** ATTESTED for Edo. Official notices were wooden plaques in ink;
-     pasted paper went only on structures the magistrate permitted. This goes on 0190, the existing notice-board
-     question.
-   - **Paper and ink prices:** ATTESTED ONLY FOR Qing Beijing (1736), per sheet by grade and ink per jin, beside the wage.
+   - **What was posted:** answered already by 0190, which the answer points to.
+   - **What a notice was made of and who could post:** ATTESTED ONLY FOR Edo. Official notices were wooden plaques in
+     ink; pasted paper went only on structures the magistrate permitted. The village case is SILENT. This goes on 0190.
+   - **Paper prices:** ATTESTED ONLY FOR Qing Beijing (1736), per sheet by grade, beside the wage.
+   - **An ink stick:** SILENT. The nearest figure is Qing Beijing's ink per jin.
    - **Edo paper and ink:** SILENT. The two web figures disagree and neither is a citable source.
 3. **Rents.**
-   - **A back-tenement room:** ATTESTED ONLY FOR one Bunsei-era carpenter's rent (10 monme a month).
-   - **The rent-to-value ratio:** ATTESTED for Edo lots (3-5% net, 4.8% gross by Mitsui's rule) and for Qing government
-     houses (about 4-6%).
-   - **A street-front shop, a small house, a samurai residence and a storehouse by the month:** SILENT.
+   - **A back-tenement room:** ATTESTED ONLY FOR one Bunsei-era Edo carpenter's rent (10 monme a month).
+   - **Qing rents by the month:** ATTESTED for government houses per bay (the 1727 schedule) and for shop-front rooms
+     (Daoguang-era contracts; the 1871-1911 government file). An official's 15-16-bay house (Li Ciming, 1871) is the
+     nearest to a modest residence.
+   - **The rent-to-value ratio:** ATTESTED ONLY FOR the value of an Edo lot with its houses (3-5% net; 4.8% gross by
+     Mitsui's 1811 rule) and for Qing administrative prices per bay (about 4-6%). Against the building alone: SILENT.
+   - **SILENT in Japan:** a street-front shop, a small house, a samurai residence and a storehouse by the month;
+     castle-town rents; any rent by the week.
 4. **Plays and entertainers.**
    - **Edo kabuki seats by class:** ATTESTED (1803, pit 132 mon to boxes of 25-35 monme for seven). The single-act view
      at 16 mon is ATTESTED ONLY FOR the oikomi.
    - **Noh:** ATTESTED ONLY FOR fund-raising performances.
    - **Temple-fair shows:** SILENT.
-   - **Rural troupes:** ATTESTED at troupe-hire level.
+   - **Rural troupes:** ATTESTED ONLY FOR troupe hire, not per seat.
+   - **Donations:** a Japanese street performer's collection is SILENT; village gifts (hana, shūgi) are SILENT; a Qing
+     street act of the 1720s asking 3 cash is ATTESTED ONLY FOR that case.
    - **Troupe composition:** ATTESTED.
    - **Qing seats:** ATTESTED.
    - **The English traveling players:** ATTESTED ONLY FOR gathering at the door. Passing a hat mid-play is NOT ATTESTED by
@@ -83,10 +92,20 @@ Uemura 1987 are on `research/to-download.md`, each naming 0251 as what rests on 
 
 - **SC-001** (FR-001, FR-002, FR-003): The questions build, and `make record-owed` names no unanswered check.
 - **SC-002** (FR-004): `make impl-check` reports nothing missing.
-- **SC-003** (FR-005, FR-006): The issue's answer names every fragment file and a verdict for every figure, and the
-  download list carries both books.
+- **SC-003** (FR-005, FR-006): The issue's answer names every fragment file, a verdict for every figure and what is still
+  open for each question, and the download list carries both books.
 
 ## Assumptions
 
 - Four new money questions, one comparative question and one extended question exceed one write's cap, so the write runs
   as two sessions.
+
+## Review history
+
+- **spec-fidelity round 1 (2026-10-19): CHANGES REQUIRED, 6 items.** The following were added or narrowed:
+  - arrowheads added;
+  - the notice board narrowed to Edo, with the village case and the ink stick SILENT;
+  - the Qing rents added, the Japanese silences narrowed, and castle-town and weekly rents SILENT;
+  - the rent ratio narrowed to lot-with-houses and administrative prices;
+  - donations added and rural troupes narrowed;
+  - SC-003 now carries "what is still open".
