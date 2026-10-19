@@ -70,5 +70,7 @@ bassino-ma-2005, saito-1993-bakumatsu-wages, kawakami-1992-shrine-headman.
 - `rieb-kinsei-db-data` (the continuation brief).
 - The 磨師 entry of 守貞謾稿 (a sharpener's fee): the GM's download 類聚近世風俗志 下 (433 MB) waits in the inbox, over
   the archive's size limit and not yet split.
+- A pass for a seventeenth-century day wage (beside Mimasaka 1665) was not run; the nearest named are of 1741 and 1749.
+- The hand fixes of the source-reader round are owed session 2's checks (`make record-owed`); the Ming bullet of 0276 gained Beijing and the gap after the round.
 - Inui Hiromi's papers on the Sakai tobacco-knife guild and the Takefu sickle smiths; 新保 1978's rate tables (Osaka
   before 1787); 校註両替年代記 (Edo rates) - not reached.
