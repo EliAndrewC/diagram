@@ -263,3 +263,13 @@ claims rounds, the fixed landing cost and the plan reviews the main costs):
 The three suggestions, as offered: re-check only the claim lines a change touched; batch the gate and the landing cohort across two
 or three small engine fixes; skip the plan review for wording-only tasks that decide nothing new. And the measurement: per-task time
 read from the event log (each tick now records its task, hour 33's fix) as a report, not rebuilt from git history by hand.
+
+The GM, 2026-10-19, on the hourly step-backs (49 of 60 had named a tooling fix):
+
+> I agree with making changes 1-2 right now, and then implement 3 as part of the next round of tooling fixes which we have coming
+> up next which includes the other stuff we just talked about.  I don't want to step back to every 2 hours, isnce that just seems
+> like masking the problem.
+
+Changes 1 and 2: a step-back's tooling fix needs a measured cost (10 minutes or more of session time this hour, or a defect that
+reached main), none being a good outcome; and removing or simplifying a misfiring guard comes before adding one. Change 3, measuring
+each fix's yield against the time it was meant to save, is a task of the next tooling round. The hourly cadence stays.
