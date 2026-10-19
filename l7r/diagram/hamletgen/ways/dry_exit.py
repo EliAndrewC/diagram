@@ -201,8 +201,9 @@ def clear_of_bands(p: Pt, bands: Sequence[Poly], clear: float, tries: int = 4) -
     return p
 
 
-GROVE_EXIT_CELL_FT = 7.0
-"""The dry exit's grid where farms carry their own groves (feature 291): a cell center stands clear when it is a band's
-footpath gap and the track's half-width (7 ft) plus 0.71 of a cell from each band, so a gap G between two bands is sure to
-hold one when G >= 14 + 2.41 x cell - for the 32 ft lane's room (`dispersed.LANE_ROOM_FT`), a cell of at most 7.4 ft. Only a
-connector no bearing clears is found so, so the finer grid is paid where it is needed."""
+GROVE_EXIT_CELL_FT = 2.9
+"""The dry exit's grid where farms carry their own groves (feature 291): a cell center stands clear when it is the connector's
+band gap (`track.CONNECTOR_BAND_GAP_FT`, 0036's working room past the half-width, 12.5 ft) plus 0.71 of a cell from each band,
+so a gap G between two bands is sure to hold one when G >= 25 + 2.41 x cell - for the 32 ft lane's room
+(`dispersed.LANE_ROOM_FT`), a cell of at most 2.9 ft (feature 385 T98; it was 7 at a 7 ft band gap, which T96's 10 ft and
+T98's 12.5 outgrew). Only a connector no bearing clears is found so, so the finer grid is paid where it is needed."""

@@ -24,7 +24,7 @@ from typing import Any
 
 from l7r.diagram.settlement import seg_dist
 
-from ..consts import FOOTPATH_FABRIC_GAP, Pt
+from ..consts import DOOR_STEP_FT, Pt
 from ..ways.serve import DOOR_REACH_FT, front_door
 from .wells import WATER_REACH_FT
 
@@ -95,7 +95,7 @@ def row_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
         fr = _frame(h)
         size = max(fr[2], fr[3]) if fr else 240.0  # the house may stand at its frame's far side from the street
         d = [_dist(c, s) for s in streets]
-        door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0) or c
+        door = front_door(h, DOOR_STEP_FT) or c
         own[_key(c)] = min(range(len(streets)), key=lambda i: _dist(door, drawn_st.get(i) or streets[i]))  # the street its door faces, as drawn (`serve.own_street`)
         if min(d) > size:
             out.append(("farm_off_its_street", _key(c)))
@@ -137,7 +137,7 @@ def row_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
     # EVERY ROW FARM'S WAY ENDS ON ITS OWN STREET: its door within the door reach of that street, or a door path serving it
     served = {_key(ln["serves"]) for ln in lanes if ln.get("serves")}
     for h in houses:
-        door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
+        door = front_door(h, DOOR_STEP_FT)
         k = own.get(_key((h["x"], h["y"])))
         if door is None or k is None:
             continue
@@ -184,7 +184,7 @@ def water_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
         if not mine:
             out.append(("farm_without_its_well", _key(c)))
             continue
-        door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
+        door = front_door(h, DOOR_STEP_FT)
         if door is not None and all(seg_dist(x, y, c, door) < 12.0 for x, y in mine):
             out.append(("well_in_the_way_in", _key(c)))
     return out

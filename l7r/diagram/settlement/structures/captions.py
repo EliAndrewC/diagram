@@ -32,7 +32,7 @@ CAPTION_FEATURE_GAP = 4.0
 """How much bare ground a CAPTION owes any solid feature it is not naming, in px.
 
 Four feet, the figure every other "these two inked things must read as separate" rule on these maps uses
-(`_TOUCH_GAP` for a lane against a plot boundary, `FOOTPATH_FABRIC_GAP` for a tread against a fence). It is
+(`_TOUCH_GAP` for a lane against a plot boundary). It is
 not a structural clearance - nothing collides - it is a READING distance: two inked things a hair apart are
 one object to a reader, and a caption that touches a roof names the roof.
 

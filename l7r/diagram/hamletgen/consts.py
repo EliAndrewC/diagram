@@ -199,26 +199,33 @@ WEB_FABRIC_GAP = 7.0
 TRACK_FABRIC_GAP = WEB_FABRIC_GAP
 """Research: track off a steading - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft from the track's middle to a garden fence, as every lane"""
 
-# A FOOTPATH IS NOT A LANE, and it may squeeze where a lane may not. This is the clearance for the
-# path from an outlying steading's door to the nearest way - the thing the sources describe as
-# "colonized as semi private space by the adjoining house", i.e. the residual room between two
-# plots, walked in single file. It still clears the overlap matrix's 3 ft half-tread with room over,
-# but it lets a path thread a gap a back lane could not, which is the difference between a house
-# being reached and a house being 296 ft from anything with no route at all.
-# HELD AT 4 ft by feature 328 wave 4: the lane page's own figure is 7 ft (a lane's middle, a 3 ft footpath's included,
-# keeps at least 7 ft clear of a garden fence - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html),
-# but at 7 ft Kashikawa's footpaths cannot thread to two farmhouses. RECORDED on that page by feature 385 T31: a footpath's own
-# convention, measured 2026-10-19 - at 7 ft cohort seeds 3, 4, 903 and 904 newly fail.
-# A FIX THAT FAILED, re-tried at wave 96 (2026-10-10) after the web's hardening: still Kashikawa refused and cohort seeds
-# 03, 23, 40, 903 newly refused (farmhouses off the network; m:wave96-footpath-7ft in specs/328). Why
-# 4 ft, kept: the number was doing real work at the margin. The overlap matrix sizes every lane at 6 ft
-# wide whatever its record says, so 3 ft is the hard floor and this is 3 plus a hand's breadth; the
-# drawn tread is 3 px, so the ink clears a wall by better than two of its own widths. At 5 a hemmed-in
-# farmstead on cohort seed 41 had no route to the network at all, at any target - the gaps between
-# its neighbors' plots were simply narrower than a lane-and-two-margins. A footpath is the one way on
-# the map that is walked in single file, and this is the width that says so.
-FOOTPATH_FABRIC_GAP = 4.0
-"""Research: footpath off a plot - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a footpath, walked in single file, keeps its middle 4 ft off a garden fence, its own convention beside the lane's 7 ft"""
+# A FOOTPATH'S CLEARANCE: the path from an outlying steading's door to the nearest way, the residual room between two plots ("colonized as semi private space by the adjoining house").
+# 0246's 7 ft SINCE feature 385 T96 (the round arbiter's hour-28 ruling: room first). Held at 4 ft from feature 328 wave 4 because at 7 the linear form's farms went unreached - measured 2026-10-19,
+# that was never the footpath's room: a row farm's DOOR read this constant (`front_door` at it + 4, `door_off_fixtures` at it + 1), so the door could not stand clear of its own fixtures (seeds 3, 4,
+# 903, 904); the door's numbers are its own now (`DOOR_STEP_FT`, `DOOR_FIXTURE_CLEAR_FT`). Likely the cause of wave 96's failed try too (m:wave96-footpath-7ft in specs/328), not measured on its maps.
+FOOTPATH_FABRIC_GAP = 7.0
+"""Research: footpath off a plot - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle, a 3 ft footpath's included, keeps at least 7 ft clear of a garden fence"""
+
+GROVE_WORKING_ROOM_FT = 9.5
+"""How far a door path's tread keeps off the trees of a grove band (feature 374 wave 119; moved here from `ways/serve.py` by feature 385 T98, so the track reads it too): 0036 lays a lane through a band
+"with a footpath's clearance and some working room kept off the trees on each side, about 22 ft of the opening" - a 3 ft
+tread and 9.5 ft each side. A band's rect bounds its trunks (crowns are thrown inside it less 2 px), so the room is off them.
+
+Research: working room off the trees - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: about 22 ft of the opening, a 3 ft tread and 9.5 ft each side"""
+
+DOOR_STEP_FT = 8.0
+"""How far past the far edge of its yard a grove farm's front door point stands (`ways/serve.front_door`'s `clear`) - the
+household's own dooryard, not a fence gap: 0246 lets a household's own way run beside its own fence. The value the door held
+as `FOOTPATH_FABRIC_GAP` + 4 before feature 385 T96.
+
+Research: door step - UNRESEARCHED: 8 ft past the yard, in the household's own dooryard"""
+
+DOOR_FIXTURE_CLEAR_FT = 5.0
+"""How far the door point is kept off the farm's own fixtures and the grove bands round it (`ways/serve.door_off_fixtures`)
+- the point a door path starts from; the path from it keeps `FOOTPATH_FABRIC_GAP` off every garden fence. The value it held
+as `FOOTPATH_FABRIC_GAP` + 1 before feature 385 T96.
+
+Research: door point off the fixtures - UNRESEARCHED: 5 ft clear of the fixtures and grove bands, in the household's own dooryard"""
 
 # HOW FAR A WEB LANE STAYS OFF THE CROP, THE TOE AND THE MARSH, in feet.
 #
@@ -295,8 +302,8 @@ rule everywhere else by most of a house: measured the same afternoon, it let thr
 56-60 ft from the nearest wall, which IS a tread stopping in open ground. So arrival is its own clause at its own
 distance, and the three 60 ft clauses are untouched.
 
-12 ft is DERIVED from the clip, not chosen. A tread is cut `WEB_FABRIC_GAP` (7 ft) clear of a plot it runs beside, or
-`FOOTPATH_FABRIC_GAP` (4 ft, held below 0246's 7 by feature 328 wave 4) for a footpath, and `clear_runs` walks its candidate in 4 ft steps - so a path that genuinely
+12 ft is DERIVED from the clip, not chosen. A tread is cut `WEB_FABRIC_GAP` (7 ft) clear of a plot it runs beside -
+`FOOTPATH_FABRIC_GAP`, the same 7 ft, for a footpath - and `clear_runs` walks its candidate in 4 ft steps - so a path that genuinely
 reaches a boundary records its last point 7-11 ft off it and cannot record it nearer. Measured: the two straggler ends
 at 7.8 and 6.9 ft from the garden they stop at, Inashiro's byre arm at 8.4, against the next-nearest built ground on any
 of those three maps at 24 ft. Anything past 12 is a tread that stopped somewhere else.

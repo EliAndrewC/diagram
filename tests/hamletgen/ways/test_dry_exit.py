@@ -75,3 +75,13 @@ def test_the_connector_leaves_between_two_farms_groves_by_the_finer_grid() -> No
     plan.grove_bands = [west, east]
     path = connector_dry_exit(plan, (500.0, 590.0), [south], [], [], [west, east])  # type: ignore[arg-type]
     assert path[-1][1] < 0.0, "out of the frame to the north"
+
+
+def test_the_grove_exit_grid_holds_the_connector_between_two_dispersed_farms() -> None:
+    """Feature 385 T98 (plan D119): at 0036's 12.5 ft band gap the 7 ft grid could not be sure of a cell in the 32 ft between two
+    dispersed farms' bands - the fill's own rule, G >= 2 x gap + 2.41 x cell, derives the cell from the gap."""
+    from l7r.diagram.hamletgen.ways import dry_exit, track
+    from l7r.diagram.settlement.rolling.dispersed import LANE_ROOM_FT
+
+    assert 2 * track.CONNECTOR_BAND_GAP_FT + 2.41 * dry_exit.GROVE_EXIT_CELL_FT <= LANE_ROOM_FT
+    assert track.CONNECTOR_BAND_GAP_FT + 0.71 * dry_exit.GROVE_EXIT_CELL_FT + 1.0 <= LANE_ROOM_FT / 2, "the start fits the gap"

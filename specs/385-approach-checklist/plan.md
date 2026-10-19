@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92, T93, T94, T95
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92, T93, T94, T95, T96, T97, T98, T99, T100, T102, T103, T104
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -356,7 +356,7 @@ Owed by the hour-27 step-back (hour:385-approach-checklist@27, `continue`).
 
 Chosen at its start (FR-020): of the open rows still open in the claims index, the first kind not yet tried in T05-T10 (four
 DRIFTED, one NEEDS-RESEARCH) is MISLABELED; row 827 (the first) is IN-STEP since, so row 843 is taken; row 841, which reads
-the same constant, is T32.
+the same constant, is T95.
 
 ### T31 Approach (checklist part A)
 
@@ -392,7 +392,7 @@ the same constant, is T32.
 footpath is narrower than a lane's tread, so it keeps its middle 4 ft off a garden fence, a map drawing convention, because held to
 the lane's 7 ft some settlements leave a farmhouse with no footpath to it (the seeds in a comment). `FOOTPATH_FABRIC_GAP`'s claim
 becomes a pointer to that page, and the comment above the constant records it. No value changes; row 841 (the street's joining leg,
-which reads this constant but is drawn as a lane) is its own task, T32 (FR-015, one goal).
+which reads this constant but is drawn as a lane) is its own task, T95 (FR-015, one goal).
 
 
 ### T31 part B (2026-10-19T05:50Z)
@@ -407,88 +407,104 @@ Owed by the cohort record of 05:04Z (seeds 3, 4, 903 and 904 newly failing) - th
 5. **Tuning or changing?** Neither in this part B: the 4 ft recorded on 0246 is D113's change, decided and reviewed before it.
 6. **The one-sentence test.** "0246 records a footpath's 4 ft and the constant's claim cites it" - true; the claims check found it IN-STEP.
 7. **The next step is a measurement.** The landing cohort at 4 ft.
-## T92 - `make claims-triaged` reads a transcript's reply and never clears on an unread one (found working T31, 2026-10-19)
 
-### T92 Approach (checklist part A)
+### T31 part B (2026-10-19T06:27Z)
 
-1. **The goal, in the world.** A claims triage's verdicts are never lost by the form of the file that carries them.
-2. **The constraints.** Feature 375 FR-016: a claim the triage names TOUCHES is owed impl-drift and every other claim of the bundle is cleared. `make modal-triaged` already reads a transcript (`.jsonl`, `.output`) for its last reply (feature 385 T07); `make claims-triaged` reads the file raw. A test red without it.
-3. **Where each comes from.** 375 (O); the defect is measured working T31 (amendment 6).
-4. **Do they describe the world here?** Yes - measured 2026-10-19 (T31's `make claims-triaged` on the agent's `.output` transcript): it printed "0 of 281 sent on to impl-drift (0 named by the reply); the rest cleared" while the reply named 18 claims TOUCHES - every one cleared unread.
-5. **The order.** The reply read through `apply_edits.reply_of`, the refusal on an empty one, then the test.
-6. **The exits.** (c).
+Owed by the round arbiter's ruling on hour:385-approach-checklist@28 (change-route) and by the probe cohorts of 06:17Z that rolled
+the four seeds at 7 ft again.
+
+1. **What is refusing?** At 7 ft, cohort seeds 3, 4, 903 and 904 - all four the linear form - leave a farmhouse off the network
+   (904 also a farm off its street), measured 2026-10-19 (`make cohort N=1 SEED=<n>` with the constant at 7.0, reverted).
+2. **A3 again.** The 4 ft's reason as written is fit, not research - the arbiter's finding; the room route was named and not tried.
+3. **A4 again.** Unchanged: 0246's 7 ft holds for a lane; the footpath's figure is open until room is tried.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither in this part B: the room route is its own task, worked with T43 before T32.
+6. **The one-sentence test.** "T31's 4 ft is the record until the room task settles it" - true; the room task decides it.
+7. **The next step is a measurement.** The linear form's farm and door spacing at the four seeds, with the constant at 7 ft.
+8. **Every route measured before offering one?** Not yet, and none is offered here: the routes are T96's, which measures each on
+   the four seeds and the cohort before choosing.
+9. **After a ruling: the step it names?** Yes - the ruling names more room first, as its own task before T32; T96 is that task.
+<!-- plan-archive: T92 to T31 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+## T96 - a footpath's 7 ft, room first (the round arbiter's ruling on hour:385-approach-checklist@28; worked with T43)
+
+Opened by the ruling's `what`: before T32's ranking row, a task for `FOOTPATH_FABRIC_GAP` (4 ft, recorded on 0246 by T31) whose first
+route is more room; the footpath's tread-to-wall figure open in T43 is worked with it, not as a second row.
+
+### T96 Approach (checklist part A)
+
+1. **The goal, in the world.** A footpath keeps a lane's distance from the gardens it passes, and every farmhouse is still reached.
+2. **The constraints.** 0246: a lane's middle, a 3 ft footpath's included, keeps at least 7 ft clear of a garden fence, and a household's own way may run beside its own fence (T43 item 3). 0081 and 0247: a tread keeps 3 ft off a farmhouse wall (T43 item 1). The GM, 2026-10-12: room before packing. The GM, 2026-10-02: homesteads before lanes, never lanes first. The ruling: the 4 ft stays only labeled UNRESEARCHED with the trial as its trail.
+3. **Where each comes from.** 0246's 7 ft is O, a map drawing convention; the own-fence allowance is 0246's (O); 3 ft is 0081's and 0247's (O); the two rulings are the GM's (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (`make cohort N=1 SEED=<n>` with the constant at 7.0, reverted): cohort seeds 3, 4, 903 and 904 all the linear form, each leaving a farmhouse off the network (904 also breaks `undeckable`); with `DOOR_ROOM_FT` and `FOOTPATH_DOOR_OUT_FT` derived from the 7 ft (19 and 15 ft) the same farmhouses stay unreached at the same seats; seed 4's (1404, 3220) stands about 130 ft from the nearest way, its own threshing yard and garden beside its door (the refused manifest). The cause, measured 2026-10-19 (a scratch probe of seed 4 at 7 ft, logging `front_door` and `door_path`, then `make cohort N=1 SEED=<n>` and `make cohort`, each reverted): the door is found 11 ft out, but `door_off_fixtures` must stand it `FOOTPATH_FABRIC_GAP + 1` = 8 ft clear of the farm's own fixtures and grove bands, finds no spot, and the farm gets no path at all; with the door's step (8 ft) and its clearance off its own fixtures (5 ft) held at their own values and the fence gap at 7 ft, seeds 3, 4, 903 and 904 pass and the cohort passes 16 of 16.
+5. **The order.** Why seed 4's way from its door is refused at 7 ft (the refused route's own reason), then the route that answers it, then the four seeds and the cohort at 7 ft.
+6. **The exits.** (a) refine an O number: T43 item 1's 3 ft is a tread-to-wall figure, not a fence figure - weighed there; (b) an exception: none named - nothing obstructs yet; (c) a new rule: the own-fence allowance 0246 attests - a household's own way held 7 ft off others' fences only; (d) more room: wider spacing between the linear form's farms, where (c) leaves a seed failing; (e) conform: the 4 ft kept, labeled UNRESEARCHED with this trial, only where (c) and (d) both fail.
+7. **The search smell.** None - a cause found, then one route.
+8. **The budget.** 3 h.
+9. **Done, measured.** One goal: `FOOTPATH_FABRIC_GAP` at 7 ft with the four seeds and the cohort passing, T31's 4 ft block taken out of 0246, and the claims checked IN-STEP; or, failing (c) and (d), the 4 ft relabeled UNRESEARCHED with both trials as its trail.
+10. **Before moving a constant.** `FOOTPATH_FABRIC_GAP` is read in `ways/track.py`, `ways/web.py`, `ways/bund.py`, `ways/serve.py` and `homesteads/row_rules.py` (measured 2026-10-19, a grep); `DOOR_ROOM_FT` and `FOOTPATH_DOOR_OUT_FT` are written from it by hand and move with it.
+11. **Before fitting things into room.** A footpath past others' fences: 7 + 1.5 + 1.5 + 7 = 17 ft between two fences; the nucleated form's growth gap is `MIN_WEB_GAP` (18 ft) already.
+
+### T96 Decisions
+
+**D118 - the household's own ground, not the fence gap (route (c), measured).** `FOOTPATH_FABRIC_GAP` becomes 0246's 7 ft. The
+door's numbers, which only ever measured the household's own dooryard, stop reading the fence gap: a new `DOOR_STEP_FT` (8 ft, the
+door's step past its yard, `front_door`'s offset) and `DOOR_FIXTURE_CLEAR_FT` (5 ft, the door kept off the farm's own fixtures and
+grove bands, `door_off_fixtures`) - both UNRESEARCHED, as the claim on `lay_door_paths` already labels them - in `serve.py`, `web.py`
+and `row_rules.py`; `rows.FOOTPATH_DOOR_OUT_FT` is derived from `DOOR_STEP_FT` (derive, never pin) and `DOOR_ROOM_FT`'s docstring
+names the door's step, not the footpath's gap. T31's 4 ft block comes out of 0246, and `FOOTPATH_FABRIC_GAP`'s claim cites 0246's
+7 ft. No house moves: route (d) is not needed, and (e) is not reached. T43's item 3 (`span_walkable` and a household's own garden)
+stays T43's.
+
+
+### T96 part B (2026-10-19T07:32Z)
+
+Owed by the landing cohort of 07:15Z (cohort seed 22 newly failing) and the round arbiter's ruling on hour:385-approach-checklist@29
+(continue).
+
+1. **What is refusing?** At 7 ft, cohort seed 22 (linear) leaves two farms unreached: their doors stand, but no door path is lawful
+   - measured 2026-10-19 (a scratch probe logging `door_path`).
+2. **A3 again.** Unchanged.
+3. **A4 again.** The trace names the cause: the door path's room off a grove is counted twice (bands grown 11 ft, then routed at the
+   gap on top), a drift T96's claims round had already found.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither in this part B: the fix is T98's, decided and reviewed, and lands with T96.
+6. **The one-sentence test.** "Seed 22 fails because 0036's room is counted twice" - true by the trace; with it counted once seed 22 passes.
+7. **The next step is a measurement.** The landing cohort with T96 and T98 together.
+8. **Every route measured before offering one?** Yes: the band margin was traced as the cause before T98 was written; room (d) waits if T98 does not settle it, as the ruling says.
+9. **After a ruling: the step it names?** Yes - the ruling says go on with T98's review and landing.
+## T98 - grove-band clearance as 0036 gives it, once (found working T96, 2026-10-19; lands with T96)
+
+Found by T96's claims round (DRIFTED: `serve.lay_door_paths#door path off a grove band`, `track.connector_dry_exit#grove band gap`),
+and needed by T96's landing: with the footpath at 7 ft, cohort seed 22 newly fails because the door path's margin off a grove is
+counted twice.
+
+### T98 Approach (checklist part A)
+
+1. **The goal, in the world.** A path past a farm's grove keeps the working room 0036 gives off the trees - no more, no less.
+2. **The constraints.** 0036: a footpath's clearance and some working room kept off the trees on each side - `GROVE_WORKING_ROOM_FT` 9.5 ft off the 3 ft tread, a path's middle about 11 ft off the trees (about 22 ft of the opening). The GM, 2026-10-12: room before packing. A test red without it.
+3. **Where each comes from.** 0036's figure is O (its drawing page); the ruling is the GM's (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-19: the door path's bands are grown 11 ft a side (`2 * (1.5 + 9.5)`) and then routed at `FOOTPATH_FABRIC_GAP` on top, so the path's middle stands 18 ft off the trees at 7 ft (impl-drift, T96's round); `connector_dry_exit` keeps bands `FOOTPATH_FABRIC_GAP + CONNECTOR_WIDTH / 2` = 10 ft off, where 0036's room for a 6 ft track is 3 + 9.5 = 12.5 ft. With T96's 7 ft, cohort seed 22 is refused - measured 2026-10-19 (`make cohort-landing`, then a scratch probe logging `door_path`: linear, two farms whose doors stood but no door path was lawful). With the door path's middle held 11 ft off the trees and the connector 12.5 ft, seeds 22, 3, 4, 903 and 904 pass and the cohort passes 16 of 16 - measured 2026-10-19 (`make cohort N=1 SEED=<n>` and `make cohort`, probes reverted).
+5. **The order.** The door path's band grown so its middle stands 0036's 11 ft off the trees; the connector's band gap at 0036's room; the claims; the test; then T96 and T98 land together.
+6. **The exits.** (a) refine an O number: none - 0036 gives the figure; (b) an exception: none; (c) a new rule: none - the margin is counted once; (d) more room: not needed, the cohort passes; (e) conform - chosen: 0036's figure, counted once, at both sites.
 7. **The search smell.** None.
-8. **The budget.** 20 min.
-9. **Done, measured.** One goal: `make claims-triaged REPLY=<a transcript>` records the TOUCHES lines of the transcript's last reply, and a reply it can read no text from is refused before anything is cleared; `tests/tooling/test_claims_scoping.py` red without it.
-10. **Before moving a constant.** n/a - none moves.
-11. **Before fitting things into room.** n/a - nothing is fitted.
+8. **The budget.** 60 min.
+9. **Done, measured.** One goal: both sites keep 0036's room once - the door path's middle 11 ft off the trees, the connector 12.5 ft - their claims IN-STEP, a test red without it, and the landing cohort passing with T96.
+10. **Before moving a constant.** `dry_exit.GROVE_EXIT_CELL_FT` moves from 7 to 2.9 ft; its uses, measured 2026-10-19 (a grep of
+   `l7r` and `tests`): `track.py:940`, the connector's start pushed `CONNECTOR_BAND_GAP_FT + 0.71 x cell + 1` off a band - 15.6 ft at
+   2.9, inside the 16 ft half of a 32 ft gap (18.5 at 7 was not); `track.py:941`, the flood fill's cell where farms carry groves -
+   about 5.8 times the cells, paid only where no bearing of the sweep is clear; `serve.py:420`, `DOOR_FINE_CELL_FT`'s docstring,
+   which names the derivation only; `tests/hamletgen/ways/test_dry_exit_raster.py:61`, the raster test run at that cell. No other
+   constant's value moves: `lay_door_paths`' `grow` is computed from the gap it is routed at, and `connector_dry_exit`'s band gap
+   reads `GROVE_WORKING_ROOM_FT` (one site each).
+11. **Before fitting things into room.** Dispersed farms' bands stand 32 ft apart (`track.py`'s comment); a 6 ft connector at 12.5 ft a side needs 25 ft.
 
-### T92 Decisions
+### T98 Decisions
 
-**D114 - the reply read as modal-triaged reads it.** `claims.py triaged` reads `--reply` through `apply_edits.reply_of` (a `.jsonl` or `.output` transcript's last assistant reply, else the file as text); a reply with no text refuses, naming the file, and clears nothing. A readable reply with no TOUCHES line clears the bundle as now.
-
-## T93 - a pop-up the triage sent on joins its check's batch (found working T31, 2026-10-19)
-
-### T93 Approach (checklist part A)
-
-1. **The goal, in the world.** Pop-ups a page change re-owed are checked by one agent per check, as T81 made the rest.
-2. **The constraints.** T81 (D100): a pop-up owed only by a moved page goes to `make modal-triage` first "and joins a batch on the next listing if a check is still owed" - the plan review's premise that made the exclusion legitimate, which asked for a test. A test red without it.
-3. **Where each comes from.** T81 (O), its review's condition (G, through the GM's approved change 1).
-4. **Do they describe the world here?** Yes - measured 2026-10-19 (T31's `make record-owed` after `make modal-triaged` sent 6 of 8 pop-ups on): no batched line was printed, and each touched pop-up still named `make modal-triage` as its command - the exclusion never released them, so the batch was built by hand.
-5. **The order.** `record_owed`'s listing reads the triage's touched marks, then the test.
-6. **The exits.** (c).
-7. **The search smell.** None.
-8. **The budget.** 20 min.
-9. **Done, measured.** One goal: a pop-up owed by a moved page that `make modal-triaged` marked touched is in its check's batch and names `make modal-bundle`, one not yet triaged still names `make modal-triage`; `tests/tooling/test_record_owed.py` red without it.
-10. **Before moving a constant.** n/a - none moves.
-11. **Before fitting things into room.** n/a - nothing is fitted.
-
-### T93 Decisions
-
-**D115 - triaged and touched is owed like any other.** `record_owed.modal_batches` and `command` take the triage's touched marks (`modal_triage.touched(store)`): a unit owed by a moved page whose slug is marked touched is treated as an ordinary owed pop-up - batched with its check, its command `make modal-bundle`; an untriaged one keeps `make modal-triage` and stays out of the batch.
-
-## T94 - `make claims-checked` reads a transcript's reply too (found working T31, 2026-10-19)
-
-### T94 Approach (checklist part A)
-
-1. **The goal, in the world.** An impl-drift reply is recorded whatever file carries it, and a reply that cannot be read is never recorded as read.
-2. **The constraints.** T92's rule for `make claims-triaged` (a transcript's last reply, an unread one refused); feature 316: a claim's verdict is recorded at the fingerprints its bundle read. A test red without it.
-3. **Where each comes from.** T92 (O), 316 (O); the defect is measured working T31 (amendment 6).
-4. **Do they describe the world here?** Yes - measured 2026-10-19 (T31's `make claims-checked` on the impl-drift agent's `.output` transcript): it printed "6 of 8 recorded" and the claims index was unchanged (`git status` clean); the same reply as text recorded 8 of 8.
-5. **The order.** The reply read through `claims_triage.triage_reply`, the refusal on an empty one, then the test.
-6. **The exits.** (c).
-7. **The search smell.** None.
-8. **The budget.** 15 min.
-9. **Done, measured.** One goal: `make claims-checked REPLY=<a transcript>` records the VERDICT lines of the transcript's last reply, and a reply with no text is refused before anything is written; `tests/tooling/test_claims_index.py` red without it.
-10. **Before moving a constant.** n/a - none moves.
-11. **Before fitting things into room.** n/a - nothing is fitted.
-
-### T94 Decisions
-
-**D116 - one reader for both triage and record.** `claims.py record` reads `--reply` through `claims_triage.triage_reply` (T92's reader) before `unelide`; a reply with no text refuses, naming the file, and writes nothing.
-
-## T95 - a street's joining leg keeps the lane's 7 ft (found working T31, 2026-10-19; ranking row 841)
-
-Found by T31's claims round (amendment 6, a defect fixed where found - not a ranking pick, so FR-020's kinds are untouched): row
-841's leg is drawn at `STREET_WIDTH`, a lane, and routed at the footpath's 4 ft.
-
-### T95 Approach (checklist part A)
-
-1. **The goal, in the world.** A street's joining leg keeps a lane's distance from the gardens it passes.
-2. **The constraints.** Row 841's fix: "the joining leg's berth at 0246's 7 ft off a garden fence (it reads FOOTPATH_FABRIC_GAP, held at 4 ft); the claim cites 0246". 0246: a lane's middle keeps at least 7 ft clear of a garden fence; a footpath keeps 4 ft (T31).
-3. **Where each comes from.** 0246's 7 ft is O, a map drawing convention; row 841's fix is the ranking's (O).
-4. **Do they describe the world here?** Yes - measured 2026-10-19 (T31's impl-drift round, then a read of `street.py`): the leg is drawn at `STREET_WIDTH` by `_draw_web`, a lane; measured 2026-10-19 (`make cohort` with the leg at `WEB_FABRIC_GAP`): 16 of 16 pass, the fresh block 0 of 4 failed.
-5. **The order.** The leg's routing gap, its claim, then the landing cohort.
-6. **The exits.** (a) refine an O number: none to refine - the leg read the footpath's number, not a wrong lane number; (b) an exception: none - nothing obstructs the lane's 7 ft (the cohort passes); (c) a new rule: none needed; (d) more room: none needed, nothing fails; (e) conform - chosen: the leg is a lane, so it keeps the lane's 7 ft as the rule stands.
-7. **The search smell.** None.
-8. **The budget.** 30 min.
-9. **Done, measured.** One goal: `join_to` routes its leg at `WEB_FABRIC_GAP` and its claim cites 0246's 7 ft; the claims check finds it IN-STEP and the landing cohort passes.
-10. **Before moving a constant.** No constant's value moves; one caller reads `WEB_FABRIC_GAP` instead of `FOOTPATH_FABRIC_GAP` (measured 2026-10-19, a grep: `street.py`'s two `_route` calls in `join_to` are its only uses there).
-11. **Before fitting things into room.** A lane's room past a fence: 7 ft to its middle, 1.5 ft more than a 3 ft footpath's 4 ft plus half its width (5.5 ft).
-
-### T95 Decisions
-
-**D117 - the leg routed as the lane it is.** `join_to`'s two `_route` calls take `gap=WEB_FABRIC_GAP`; its claim reads "joining leg's berth - <0246's drawing page>: routed the lane's 7 ft (`WEB_FABRIC_GAP`) off the fabric - the leg is drawn at the street's width, a lane, not a footpath".
+**D119 - the room off a grove counted once.** In `lay_door_paths` the grove bands are grown by `2 * (1.5 + GROVE_WORKING_ROOM_FT - FOOTPATH_FABRIC_GAP)` (never below zero), so the path routed at `FOOTPATH_FABRIC_GAP` keeps its middle 1.5 + 9.5 = 11 ft off the trees; in `connector_dry_exit` a grove band's gap is `GROVE_WORKING_ROOM_FT + CONNECTOR_WIDTH / 2` (12.5 ft). Both claims cite 0036's drawing page. The connector's way out between two dispersed farms is found by the flood fill on its finer grid, which holds a gap G between two
+bands only when G >= 2 x the band gap + 2.41 x the cell (`dry_exit.GROVE_EXIT_CELL_FT`'s own rule); at 12.5 ft and the 32 ft
+between dispersed farms' bands (`dispersed.LANE_ROOM_FT`) that cell is at most 2.9 ft, so `GROVE_EXIT_CELL_FT` becomes 2.9 (from 7),
+with a test holding the inequality - measured 2026-10-19 (`make test-file` on `test_dry_exit.py`: the 32 ft case refused at 7 ft,
+passing at 2.9; `make cohort` 16 of 16). The fill runs only where no bearing of the sweep is clear.
 
 ## T11 - the close
 

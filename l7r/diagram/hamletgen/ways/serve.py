@@ -18,7 +18,10 @@ from l7r.diagram.settlement._geom.primitives import seg_dists
 
 from ..consts import (
     BUNDLE_PITCH,
+    DOOR_FIXTURE_CLEAR_FT,
+    DOOR_STEP_FT,
     FOOTPATH_FABRIC_GAP,
+    GROVE_WORKING_ROOM_FT,
     WEB_FABRIC_GAP,
     WEB_HARD_GAP,
     WEB_REACH_FT,
@@ -324,13 +327,13 @@ def front_door(h: Mapping[str, Any], clear: float) -> Pt | None:
     return (gap_mid[0], door[1]) if abs(split[0][1] - split[1][1]) < 1e-6 else (door[0], gap_mid[1])
 
 
-DOOR_STEP_FT = 4.0
+DOOR_SHIFT_FT = 4.0
 """How far a door on a fixture is stepped along the front at a time (`door_off_fixtures`). A placement rule, not a drawing convention: no page gives the step, so it is UNRESEARCHED (feature 328 wave 90, impl-drift).
 
 Research: door step - UNRESEARCHED: 4 ft"""
 
 
-def door_off_fixtures(door: Pt, house: Pt, quads: Sequence[Poly], gap: float, step: float = DOOR_STEP_FT, tries: int = 8, arrives: Any = None) -> Pt | None:
+def door_off_fixtures(door: Pt, house: Pt, quads: Sequence[Poly], gap: float, step: float = DOOR_SHIFT_FT, tries: int = 8, arrives: Any = None) -> Pt | None:
     """`door` moved along the front - across the line from the house through it - to the nearest point `gap` clear of every
     quad in `quads` (the walls a route keeps off, the fixtures among them; feature 291 on 287: the yard persimmon stands at
     the middle of the yard's front, where the door is, and Kashikawa's door paths began inside its trunk); the door itself
@@ -340,7 +343,7 @@ def door_off_fixtures(door: Pt, house: Pt, quads: Sequence[Poly], gap: float, st
 
     Research:
         no path from inside a fixture - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the door stepped along the front
-        the door's steps - UNRESEARCHED: `DOOR_STEP_FT` (4 ft) at a time, up to `tries` (8) each way
+        the door's steps - UNRESEARCHED: `DOOR_SHIFT_FT` (4 ft) at a time, up to `tries` (8) each way
         a stepped door still arrives - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: taken only where a path's end there still reaches its farm (`arrives`)"""
     from l7r.diagram.settlement import edge_dist
 
@@ -402,12 +405,14 @@ def to_first_arrival(path: Sequence[Pt], segs: Sequence[tuple[Pt, Pt]], touch: f
     return pts
 
 
-GROVE_WORKING_ROOM_FT = 9.5
-"""How far a door path's tread keeps off the trees of a grove band (feature 374 wave 119): 0036 lays a lane through a band
-"with a footpath's clearance and some working room kept off the trees on each side, about 22 ft of the opening" - a 3 ft
-tread and 9.5 ft each side. A band's rect bounds its trunks (crowns are thrown inside it less 2 px), so the room is off them.
+def band_grow(gap: float) -> float:
+    """How much a grove band is grown for a door path routed `gap` off it, so the path's middle stands 0036's 1.5 + 9.5 = 11 ft
+    off the trees, the room counted once (feature 385 T98: grown by the whole 11 ft a side and then routed at the footpath's
+    gap on top, the middle stood 18 ft off at 7 ft, and cohort seed 22's two linear farms had no lawful door path).
 
-Research: working room off the trees - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: about 22 ft of the opening, a 3 ft tread and 9.5 ft each side"""
+    Research: the room off a grove counted once - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a 3 ft tread and 9.5 ft each side, the grow and the router's gap summing to it"""
+    return max(0.0, 2.0 * (1.5 + GROVE_WORKING_ROOM_FT - gap))
+
 
 DOOR_FINE_CELL_FT = 4.0
 """The door router's finer lattice, taken only where its own `ROUTE_CELL` (10 ft) finds no way (feature 374 wave 119): a cell
@@ -436,7 +441,7 @@ def own_street(h: Mapping[str, Any], streets: Sequence[Sequence[tuple[Pt, Pt]]])
     Research: a row farm fronts its street - research/questions/0033-row-villages-resson.drawing.html: the nearest to its door"""
     if not streets:
         return None
-    hx, hy = front_door(h, FOOTPATH_FABRIC_GAP + 4.0) or (float(h["x"]), float(h["y"]))
+    hx, hy = front_door(h, DOOR_STEP_FT) or (float(h["x"]), float(h["y"]))
     return min(range(len(streets)), key=lambda k: min((seg_dist(hx, hy, a, b) for a, b in streets[k]), default=float("inf")))
 
 
@@ -453,9 +458,10 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
             a GUESS there
         off the fixtures and grove bands - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: walls to the path
         no path to a household reached across a yard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: it shows no lane of its own
-        door path off the house and the fixtures - UNRESEARCHED: it starts 8 ft out from the house and keeps 5 ft clear of the fixtures
-        door path off a grove band - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a footpath's clearance and some working room kept off the trees on each side, `GROVE_WORKING_ROOM_FT` 9.5 ft off the 3 ft tread (about 22 ft of the opening)
-        a flank door only where the front has none - UNRESEARCHED: a door path leaves from a flank of the dooryard only where no lawful path leaves the front"""
+        door path off the house and the fixtures - UNRESEARCHED: it starts 8 ft past its yard (`DOOR_STEP_FT`) and keeps 5 ft clear of the fixtures (`DOOR_FIXTURE_CLEAR_FT`)
+        door path off a grove band - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a footpath's clearance and some working room kept off the trees on each side, `GROVE_WORKING_ROOM_FT` 9.5 ft off the 3 ft tread (about 22 ft of the opening), counted once: the band grown by `band_grow` and the path routed at its gap keep its middle 11 ft off the trees
+        a flank door only where the front has none - UNRESEARCHED: a door path leaves from a flank of the dooryard only where no lawful path leaves the front
+        a flank door with open yard to the front - UNRESEARCHED: only a flank with open ground - no house, no grove band - between it and the front door (`front_to_flank_open`)"""
     from .checks import served_network  # local: checks sits above serve in this package's layers
     from .law import fixture_quads  # local: the law sits above serve too
     from .settle import Lawful  # local: the settle sits above serve too
@@ -473,7 +479,7 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
     # step to the street ran off through the band's other half (cohort seed 901, `grove_rules.groves_crossed_by_lanes`)
     # - grown by a door path's half-tread and the working room 0036 keeps off the trees each side, since the rule strokes the
     # tread, not the centerline (feature 374 wave 119: the half foot it kept before was no figure the page gives)
-    grow = 2.0 * (1.5 + GROVE_WORKING_ROOM_FT)
+    grow = band_grow(FOOTPATH_FABRIC_GAP)
     bands = [
         rot_rect(float(g["x"]), float(g["y"]), float(g["w"]) + grow, float(g["h"]) + grow, float(g.get("rot") or 0.0)) for g in s.M.get("groves") or () if all(k in g for k in ("x", "y", "w", "h"))
     ]
@@ -483,11 +489,11 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
     for h in list(s.M.get("houses", [])):
         if h.get("reached_across"):
             continue  # reached across its neighbor's yard: a household with no way of its own (feature 317, `rolling/passage.py`)
-        door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
+        door = front_door(h, DOOR_STEP_FT)
         if door is not None:
             # ...clear of everything the router keeps off, not the fixtures alone: stepped toward its own well, a door stood in
             # the router's gap off the wellhead and no route left it (Mizuguchi, three farms)
-            door = door_off_fixtures(door, (float(h["x"]), float(h["y"])), [*walls, *hard], FOOTPATH_FABRIC_GAP + 1.0, arrives=_arrives_at(h, steadings))
+            door = door_off_fixtures(door, (float(h["x"]), float(h["y"])), [*walls, *hard], DOOR_FIXTURE_CLEAR_FT, arrives=_arrives_at(h, steadings))
         streets = [
             [(tuple(a), tuple(b)) for a, b in zip(ln["pts"], ln["pts"][1:], strict=False)] for ln in s.M.get("lanes") or [] if ln.get("street") and ln.get("street_index") is not None
         ]  # a row's own street, not a join
@@ -498,14 +504,14 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
         # ...FROM THE FRONT DOOR, ELSE A FLANK OF THE DOORYARD (`access.doors_of`, the corridors' own doors): a far-row farm
         # fronts its holding, away from its street, and with its grove on the street's side the front had no way round it
         # the law would keep (cohort seed 904: two farms left unreached)
-        doors = [door, *(door_off_fixtures(d, (float(h["x"]), float(h["y"])), [*walls, *hard], FOOTPATH_FABRIC_GAP + 1.0, arrives=_arrives_at(h, steadings)) for d in flank_doors(h))]
+        doors = [door, *(door_off_fixtures(d, (float(h["x"]), float(h["y"])), [*walls, *hard], DOOR_FIXTURE_CLEAR_FT, arrives=_arrives_at(h, steadings)) for d in flank_doors(h))]
         # A FLANK ONLY AS THE FALLBACK (amendment 8; since amendment 9 a preference, FR-019's door clause dropped): the front first;
         # a flank facing no band of the farm's own grove, with open ground between it and the front door, only where no
         # lawful path leaves the front - recorded on the lane (`from_flank`) and on the map (`meta.door_flanks`)
         for k, d in enumerate(doors):
             if d is None or (k > 0 and not front_to_flank_open(door, d, h)):
                 continue
-            path = door_path(s, d, segs, hard, walls, water, quads, lawful)  # type: ignore[arg-type]
+            path = door_path(s, d, segs, hard, walls, water, quads, lawful, bands)  # type: ignore[arg-type]
             if path is not None and _draw_web(s, path, 3, houses=[(float(h["x"]), float(h["y"]))], joins=True):
                 s.M["lanes"][-1]["serves"] = [float(h["x"]), float(h["y"])]
                 if k > 0:
@@ -579,7 +585,11 @@ def route_from_door(door: Pt, q: Pt, hard: list[Poly], walls: Sequence[Poly], wa
     clear (`ok`), the door put back at its head. The router plans its cells at the gap and most of a cell more, so a door
     close against its house wall and its own fixture was boxed in: Kashikawa's farm at (2473, 2937) under feature 302 found
     no route to any of its six targets, where a step of 6-11 px found one (the Diagram performance session, 2026-10-01).
-    The law still judges the whole path (`door_path`)."""
+    The law still judges the whole path (`door_path`).
+
+    Research:
+        door path off the fabric - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: routed `gap` (`FOOTPATH_FABRIC_GAP`, 7 ft) off the fabric, a footpath's middle 7 ft clear of a garden fence
+        a first leg out of the door's cell - UNRESEARCHED: one or two router cells (10-20 ft) stepped out of a boxed-in door before routing"""
     path = _route(door, q, hard, walls, water, gap=gap)
     if len(path) >= 2:
         return path
@@ -605,19 +615,27 @@ def closes_a_needle(lanes: Sequence[Mapping[str, Any]], path: Sequence[Pt]) -> b
     return len(needle_loops({"lanes": [*lanes, {"pts": list(path)}]})) > len(needle_loops({"lanes": list(lanes)}))
 
 
-def door_path(s: Settlement, door: Pt, segs: Sequence[tuple[Pt, Pt]], hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], quads: Sequence[Poly], lawful: Any) -> list[Pt] | None:
+def door_path(
+    s: Settlement, door: Pt, segs: Sequence[tuple[Pt, Pt]], hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], quads: Sequence[Poly], lawful: Any, bands: Sequence[Poly] = ()
+) -> list[Pt] | None:
     """The door path from `door` to its way (`segs`) the law keeps, trying the way's six nearest points, nearest first: the
     straight step where it is clear (the router plans on a lattice and refused doors whose every neighboring cell stood in
     its gap of the yard, the well or a trunk - three Mizuguchi doors 35 ft from their street), else the routed way,
     string-pulled (the lattice's few-foot jogs are kinks to the law, cohort seed 904); ended square on the way at its first
     arrival (`to_first_arrival`); squared where it crosses water (`settle.square_run`, as the settle squares every lane
     first); and kept only where it crosses no wall and no fixture and the law would keep it as a tree lane (`lawful`).
+    The grove `bands` (grown by `band_grow`) are held `FOOTPATH_FABRIC_GAP` off by every test - the step and the pull as the
+    router holds them - so 0036's 11 ft is kept whichever way the path was found (feature 385 T98's claims round).
 
     Research:
         a worn path takes the shortest way - research/questions/0081-village-lanes.drawing.html: straight where clear,
             else routed and pulled taut
         no sliver with the ways it meets - research/questions/0081-village-lanes.drawing.html: lanes meet as a T, so a door path closing a sliver (`closes_a_needle`) is refused
-        a door path off the fixtures - UNRESEARCHED: its line 3 ft off every fixture and off what the overlap matrix forbids (`over_a_fixture`, `forbidden_segment` at 3 ft)"""
+        a door path off the fixtures - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a household's way goes round its own garden beds and fixtures
+        its margin off the fixtures - UNRESEARCHED: its line 3 ft off every fixture and off what the overlap matrix forbids (`over_a_fixture`, `forbidden_segment` at 3 ft)
+        off the grove bands on every test - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the bands (grown by `band_grow`) held `FOOTPATH_FABRIC_GAP` off by the step, the pull and the kept path, 0036's 11 ft
+        the fallback at the law's gap - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: routed again at `WEB_FABRIC_GAP` (7 ft off a garden fence) and stepped only on lawful ground
+        water on the way - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a straight step crosses no water, and a routed path is squared where it crosses (`square_run`)"""
     from l7r.diagram.overlap.registry import forbidden_segment
 
     from .law import over_a_fixture
@@ -628,6 +646,7 @@ def door_path(s: Settlement, door: Pt, segs: Sequence[tuple[Pt, Pt]], hard: list
         # on - what the law asks of the finished path: at a bare zero gap, cohort seed 23's straight steps skimmed a privy
         return (
             not _crosses_fabric([a, b], walls, 0.0)
+            and not _crosses_fabric([a, b], bands, FOOTPATH_FABRIC_GAP)
             and not _crosses_fabric([a, b], hard, 0.0)
             and not any(segments_cross(a, b, c, d) for c, d in water)
             and over_a_fixture([a, b], 3.0, quads) is None
@@ -637,7 +656,8 @@ def door_path(s: Settlement, door: Pt, segs: Sequence[tuple[Pt, Pt]], hard: list
     def kept(path: list[Pt], clear: Any) -> list[Pt] | None:
         path = to_first_arrival(path, segs, _TOUCH_GAP, clear)
         path = square_run(s.M, path) if len(path) >= 2 else path
-        ok_ = len(path) >= 2 and not _crosses_fabric(path, walls, 0.0) and over_a_fixture(path, 3.0, quads) is None and lawful(path, 3.0)
+        ok_ = len(path) >= 2 and not _crosses_fabric(path, walls, 0.0) and not _crosses_fabric(path, bands, FOOTPATH_FABRIC_GAP)
+        ok_ = ok_ and over_a_fixture(path, 3.0, quads) is None and lawful(path, 3.0)
         # ...AND CLOSES NO NEEDLE WITH THE WAYS IT MEETS (feature 374 wave 146): a door path is a tree lane no settle may cut, so
         # one laid up beside its street to meet it left a sliver the web was refused for (dike-pond seed 3, polder seed 4)
         return path if ok_ and not closes_a_needle(s.M.get("lanes") or [], path) else None

@@ -42,8 +42,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T10 A ranking row; its retro row [lands-open]
       research: rendering
       verify: DONE. dikepond_split knob over the five recorded splits, inset derived per map; Kuwabata 0.3 draws 0.700 water on its median parcel; cohort 54/54; gate green; findings carried to T43 by ask:t10-findings-at-landing
-- [ ] T31 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
+- [x] T31 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
+      verify: DONE. landed 2026-10-19 (gated, 3ff08b0a1): 0246 records the footpath's 4 ft, FOOTPATH_FABRIC_GAP's claim IN-STEP, row 843 wave 162; the figure itself reopened as T96 (room first) by the hour-28 ruling
 - [ ] T32 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
 - [ ] T33 Amendment 7, FR-020: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
@@ -271,7 +272,26 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T94 make claims-checked reads a transcript's reply too (plan D116) [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 via make land-tooling; its test red without it, green with it
-- [ ] T95 A street's joining leg keeps the lane's 7 ft (row 841, found working T31; plan D117) [lands-open]
+- [x] T95 A street's joining leg keeps the lane's 7 ft (row 841, found working T31; plan D117) [lands-open]
+      research: rendering
+      verify: DONE. landed 2026-10-19 (gated, 3ff08b0a1 on main): join_to routes at WEB_FABRIC_GAP, claims IN-STEP, cohort-landing 54/54
+- [ ] T96 A footpath's 7 ft, room first (the round arbiter's ruling on hour:385-approach-checklist@28; worked with T43; plan D118) [lands-open]
+      research: rendering
+- [ ] T97 A farm's door reach measured from its house, as 0246 counts it, not from the door point (row_rules#door reach of a street, serve.lay_door_paths#every grove farm reached at its door, web.stage_web#door path distance - DRIFTED, found working T96) [lands-open]
+      research: rendering
+- [ ] T98 Grove-band clearance as 0036 gives it, once: no fence gap on top of the grown band (serve.lay_door_paths#door path off a grove band), the connector's band gap (track.connector_dry_exit#grove band gap) - DRIFTED, found working T96 [lands-open]
+      research: rendering
+- [ ] T99 A scattered farm no channel reaches passes with its own well (row_rules.water_rules#a scattered farm's own water - DRIFTED, found working T96) [lands-open]
+      research: rendering
+- [ ] T100 Web lanes off the water cite 0035's drawing page (web.stage_web#web lanes off the water - MISLABELED, found working T96) [lands-open]
+      research: rendering
+- [ ] T101 Carried by the claims gate (FR-013): findings a page edit surfaced on code left unchanged - fix the code or the claim and re-check each: l7r/diagram/settlement/rolling/access.py::ACCESS_HALF_FT#corridor room [lands-open]
+      research: rendering
+- [ ] T102 The connector may cross its brook where crossing saves more than about 150 ft, as 0035 gives it, or the ban recorded as a DEVIATION (track.connector_dry_exit#brook not crossed - DRIFTED, found working T98) [lands-open]
+      research: rendering
+- [ ] T103 The measure guard sees a red preflight: a gate that stops at preflight writes no run-log record, so the guard refused the re-run as 'last gate GREEN 30 min ago' (found working T98, 2026-10-19) [lands-open]
+      research: rendering
+- [ ] T104 A plan review the dispatch guard refused leaves no plan-section hold: T98's refused dispatch left a hold that blocked its own section's amendment an hour after its review returned (found working T98, 2026-10-19) [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering

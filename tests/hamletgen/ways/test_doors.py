@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from l7r.diagram.hamletgen.consts import FOOTPATH_FABRIC_GAP
+import pytest
+
+from l7r.diagram.hamletgen.consts import DOOR_STEP_FT, FOOTPATH_FABRIC_GAP
 from l7r.diagram.hamletgen.ways.serve import DOOR_REACH_FT, front_door, lay_door_paths
 from l7r.diagram.settlement import Settlement, seg_dist
 from l7r.diagram.settlement.homestead_parts.grove_sides import bundle_turn
@@ -16,7 +18,7 @@ def _farm(x: float, y: float, sides: int = 2) -> dict:
 
 def test_the_front_door_is_past_the_yard_on_the_open_side() -> None:
     h = _farm(500.0, 400.0)
-    door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
+    door = front_door(h, DOOR_STEP_FT)
     assert door is not None and door[1] > h["geom"]["yard"][1] + h["geom"]["yard"][3] / 2, "south of the yard, the lee front"
     assert front_door({"x": 0.0, "y": 0.0, "geom": {}}, 8.0) is None, "a farm with no grove of its own has no front door here"
 
@@ -34,7 +36,7 @@ def test_a_slanted_front_takes_its_door_just_past_the_yard_edge() -> None:
 
 def test_a_ring_s_door_lines_up_with_its_way_in() -> None:
     h = _farm(500.0, 400.0, sides=4)
-    door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
+    door = front_door(h, DOOR_STEP_FT)
     halves = [r for r, (f, _d) in zip(h["geom"]["groves"], h["geom"]["grove_faces"], strict=True) if tuple(f) == (0, 1)]
     assert door is not None and len(halves) == 2
     lo, hi = sorted(halves)
@@ -47,7 +49,7 @@ def test_a_door_far_from_the_lanes_gets_a_footpath_to_them() -> None:
     h = _farm(700.0, 400.0)
     s.M["houses"] = [h]
     s.M["lanes"] = [{"pts": [[100.0, 700.0], [1300.0, 700.0]], "w": 6, "connector": True}]
-    door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
+    door = front_door(h, DOOR_STEP_FT)
     assert door is not None and seg_dist(door[0], door[1], (100.0, 700.0), (1300.0, 700.0)) > DOOR_REACH_FT
     assert lay_door_paths(s, [], [], []) == 1
     segs = [(a, b) for ln in s.M["lanes"] for a, b in zip(ln["pts"], ln["pts"][1:], strict=False)]
@@ -140,3 +142,43 @@ def test_closes_a_needle_refuses_a_door_path_that_makes_a_sliver() -> None:
     lanes = [{"pts": [(0.0, 0.0), (100.0, 0.0)]}]
     assert closes_a_needle(lanes, [(0.0, 0.0), (50.0, 3.0), (100.0, 0.0)])
     assert not closes_a_needle(lanes, [(50.0, 0.0), (50.0, 80.0)]), "a T"
+
+
+def test_the_room_off_a_grove_is_counted_once() -> None:
+    """Feature 385 T98 (plan D119): the door path's band grown 11 ft a side and then routed at the footpath's gap stood its
+    middle 18 ft off the trees, and cohort seed 22's two linear farms had no lawful door path; the connector kept 10 ft."""
+    from l7r.diagram.hamletgen.consts import GROVE_WORKING_ROOM_FT
+    from l7r.diagram.hamletgen.ways import serve, track
+
+    assert serve.band_grow(FOOTPATH_FABRIC_GAP) / 2 + FOOTPATH_FABRIC_GAP == 1.5 + GROVE_WORKING_ROOM_FT == 11.0
+    assert serve.band_grow(12.0) == 0.0, "a gap past 0036's room grows nothing"
+    assert track.CONNECTOR_BAND_GAP_FT == GROVE_WORKING_ROOM_FT + track.CONNECTOR_WIDTH / 2 == 12.5
+    assert 2 * track.CONNECTOR_BAND_GAP_FT <= 32.0, "dispersed farms' bands stand 32 ft apart"
+
+
+def test_a_door_path_keeps_the_room_off_a_grove_however_it_was_found(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 385 T98's claims round: with the band grown less (`band_grow`), only the routed leg kept 0036's 11 ft - the
+    straight step and the pull tested the bands at no gap, so a path's middle could pass 4 ft off the trees."""
+    from types import SimpleNamespace
+
+    from l7r.diagram.hamletgen.ways import serve, settle
+
+    detour = [(0.0, 0.0), (0.0, -40.0), (100.0, -40.0), (100.0, 0.0)]
+    monkeypatch.setattr(serve, "route_from_door", lambda door, q, hard, walls, water, ok, gap=FOOTPATH_FABRIC_GAP: list(detour))
+    monkeypatch.setattr(serve, "pulled", lambda p, ok: list(p))
+    monkeypatch.setattr(serve, "door_unhooked", lambda p, ok: list(p))
+    monkeypatch.setattr(serve, "to_first_arrival", lambda p, segs, gap, ok: list(p))
+    monkeypatch.setattr(settle, "square_run", lambda M, p: list(p))
+
+    class _Law:
+        def __call__(self, path, width):
+            return True
+
+        def on_lawful_ground(self, run, width):
+            return True
+
+    band = [(40.0, 5.0), (60.0, 5.0), (60.0, 20.0), (40.0, 20.0)]  # 5 ft off the straight step: inside the footpath's gap
+    s = SimpleNamespace(M={"lanes": []})
+    args = (s, (0.0, 0.0), [((100.0, -50.0), (100.0, 50.0))], [], [band], [], [], _Law())
+    assert serve.door_path(*args) == [(0.0, 0.0), (100.0, 0.0)], "the band only as a wall: crossing it is all that is asked"
+    assert serve.door_path(*args, [band]) == detour, "held off the band by the footpath's gap, the step goes round"

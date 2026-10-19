@@ -6712,6 +6712,70 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T96": {
+   "section_sha256": "765c2cbb9c4dfc8e9d486ff1f61007a27432da74f3cd21ddbbb08780334768f3",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D118-a",
+     "summary": "FOOTPATH_FABRIC_GAP becomes 0246's 7 ft.",
+     "class": "within",
+     "why": "This is the claim being fixed (FR-020's ranking rows): the code is brought to the attested figure rather than the recorded 4 ft. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "D118-b",
+     "summary": "The door's numbers stop reading the fence gap: new DOOR_STEP_FT (8 ft, front_door's offset) and DOOR_FIXTURE_CLEAR_FT (5 ft, door_off_fixtures' clearance off the farm's own fixtures and grove bands), both held at their pre-change values and labeled UNRESEARCHED, in serve.py, web.py and row_rules.py.",
+     "class": "within",
+     "why": "The block states door_off_fixtures keeps the door off the farm's OWN fixtures and grove bands; the bundle forbids reading the code, so that description is taken at its word. On it, 0246's rule (a lane's middle 7 ft off a garden fence, a household's own way allowed beside its own fence) never governed the door's clearance from its own dooryard: the FOOTPATH_FABRIC_GAP + 1 coupling was ours, which is exactly the GM's 'an arbitrary figure ... we could just change that'. The fence gap itself is applied at 7 ft wherever it reads, the two knobs carry their UNRESEARCHED labels (the request's guardrail: a loosening's reason recorded where the code changes), and the cause was measured before the route was chosen. It would be a narrowing, and a purpose-fatal one, only if door_off_fixtures also kept the door off neighbors' fences, so that a path started inside others' 7 ft band; the block says own ground only."
+    },
+    {
+     "id": "D118-c",
+     "summary": "rows.FOOTPATH_DOOR_OUT_FT derived from DOOR_STEP_FT; DOOR_ROOM_FT's docstring names the door's step, not the footpath's gap.",
+     "class": "within",
+     "why": "Derive, never pin, is one of the lesson memories the approved proposal names; the derivation follows the decoupling in D118-b and narrows nothing."
+    },
+    {
+     "id": "D118-d",
+     "summary": "T31's 4 ft block comes out of 0246, and FOOTPATH_FABRIC_GAP's claim cites 0246's 7 ft.",
+     "class": "within",
+     "why": "Completes the claim fix: the record is brought into step with the code and the research."
+    },
+    {
+     "id": "D118-e",
+     "summary": "No house moves; route (d) (wider spacing) is not needed and route (e) (the 4 ft kept UNRESEARCHED) is not reached.",
+     "class": "within",
+     "why": "Consistent with the GM's 'nobody in real life moves their house so that a footpath will join' and homesteads before lanes; the measured route (c) passes seeds 3, 4, 903, 904 and the cohort, so no fallback is taken."
+    },
+    {
+     "id": "D118-f",
+     "summary": "T43's item 3 (span_walkable and a household's own garden) stays T43's, where the earlier CLEAR text decided it with T96.",
+     "class": "within",
+     "why": "Work moved between tasks, not dropped: T43 still owns it, and FR-015's one goal a task favours it. The ruling's 'worked with it' named the tread-to-wall figure (T43 item 1), which exit (a) still carries."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T98": {
+   "section_sha256": "00731bd741d33d252324d5924257b9a7ab1126044386da088780e8df74ac7bf5",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D119 (room off a grove counted once)",
+     "summary": "lay_door_paths grows grove bands by 2*(1.5 + GROVE_WORKING_ROOM_FT - FOOTPATH_FABRIC_GAP), floored at zero, so the path's middle stands 11 ft off the trees; connector_dry_exit's grove band gap is GROVE_WORKING_ROOM_FT + CONNECTOR_WIDTH/2 = 12.5 ft; both claims cite 0036's drawing page",
+     "class": "within",
+     "why": "Conforms both sites to the research figure (0036, an O source) instead of a margin counted twice; the request asks that research-backed rules be kept and arbitrary implementation figures be questioned, and this removes an arbitrary double-count while keeping the researched room. Nothing the GM asked for is narrowed; the block is unchanged since its last CLEAR."
+    },
+    {
+     "id": "Item 10 / D119 (GROVE_EXIT_CELL_FT 7 -> 2.9 ft)",
+     "summary": "The flood fill's cell moves from 7 to 2.9 ft so a 32 ft gap between dispersed farms' bands holds a way out at a 12.5 ft band gap (2 x 12.5 + 2.41 x 2.9 = 31.99 <= 32); item 10 now lists every use of the constant (track.py:940 start offset 15.6 ft vs the 16 ft half-gap, track.py:941 fill cost about 5.8x cells only where no sweep bearing is clear, serve.py:420 docstring, the raster test) - arithmetic re-derived here and it holds",
+     "class": "within",
+     "why": "An unresearched grid resolution derived from its own stated rule, moved to fit the room the research gives rather than shrinking that room - the refine-an-arbitrary-number exit the GM's request names. Listing every use before moving it is the checklist item the GM approved in Amendment 8 (proposal 7). The change corrects item 10's earlier 'no constant moves', which contradicted D119; it narrows nothing asked."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
