@@ -162,10 +162,17 @@ nakabayashi-2020-kyoho-land-law, washizaki-2007-edo-land-market. Cited for the f
 Widened: l7r-money (Merchant Families; What does this imply about rent and taxes?), miyashiro-kumehara-1698 (the pledge
 deeds), wigmore-1892-servitudes (chapter I).
 
-Checks: source-reader on all ten cited sources, 28 units, 2 CONTRADICTED (the land-vs-lending answer; "4 to 8 sho"
-misread as a range), both fixed, with the READs' scope notes applied. The fixed notes owe their second source-reader
-round, and 0251's quote-check, record-format, intro-check, translation-check and source-applicability are the check
-session's. Two findings outside 0251: the l7r-money reader found the cached GitHub page of l7r.md empty (menus only;
+Checks: source-reader on all ten cited sources, 26 units of 0251 (plus 0248's two l7r-money units), 2 CONTRADICTED
+(the land-vs-lending answer; "4 to 8 sho" misread as a range), both fixed, with the READs' scope notes applied.
+Owed now (`make record-owed`, after the fixes): source-reader on cao-2019-dian-minnan-4, -5, -7 (-7 a new note, never
+read), kotobank-shichichi-2, l7r-money-2, miyashiro-kumehara-1698, miyashiro-kumehara-1698-3,
+washizaki-2007-edo-land-market; quote-check on all 38 notes and the unfootnoted reading; translation-check on 22
+translated notes; record-format; intro-check; source-applicability on the six new entries and the widened ones.
+VOCABULARY for record-format: "qian" (a tenth of a tael) has no glossary term and no gloss; "pledged land" takes the
+existing term (8800), whose definition fits.
+Archive: the hit-u PDF (nakabayashi-2020-kyoho-land-law) is archived as an HTTP 406 page in both captures - the
+repository serves it to plain curl but refuses `make archive`'s fetch, and `make archive` has no local-file option; a
+quote-check should download it (curl, pdftotext). The archiver recording a 406 as a capture is a tooling bug. Two findings outside 0251: the l7r-money reader found the cached GitHub page of l7r.md empty (menus only;
 read the raw file), and said 0248's "rice is not all of a person's needs" drops the canon's second reason (costs other
 than food).
 
