@@ -50,12 +50,12 @@
   {
    "id": "europe",
    "name": "Europe",
-   "description": "Europe. It has different crops (wheat and the heavy plow rather than rice and the hoe), different building traditions and different law, so it says little about how an East Asian place looked. The record uses it only for constraints that cross cultures: how a moat holds water, how large a tannery's pits are, how far a bell carries."
+   "description": "Europe. It has different crops (wheat and the heavy plow rather than rice and the hoe), different building traditions and different law, so it says little about how an East Asian place looked. The record uses it only for constraints that cross cultures: how a moat holds water, how large a tannery's pits are, how far a bell carries. For money alone it may also be a comparative yardstick (the Comparative kind), never the setting's own figures."
   },
   {
    "id": "elsewhere",
    "name": "Elsewhere",
-   "description": "Outside East Asia and Europe: South and Southeast Asia beyond Vietnam, the Middle East, Africa, the Americas. Like Europe, it is used only for constraints that cross cultures, and its forms are not the setting's."
+   "description": "Outside East Asia and Europe: South and Southeast Asia beyond Vietnam, the Middle East, Africa, the Americas. Like Europe, it is used only for constraints that cross cultures, and its forms are not the setting's. For money alone it may also be a comparative yardstick (the Comparative kind), never the setting's own figures."
   },
   {
    "id": "general",
@@ -93,6 +93,11 @@
    "id": "popular",
    "name": "Popular",
    "description": "A blog, a tourism board, a travel account or a news story. It is readable, often first-hand, and often has photographs of what it describes. But it rarely cites a study, a promotional page shows its subject at its best, and its numbers are usually round."
+  },
+  {
+   "id": "comparative",
+   "name": "Comparative (money)",
+   "description": "A source on ANOTHER society's money - its wages, prices and household budgets - cited only by a comparative money question. It is read only as a yardstick players know from fiction (Austen, Dickens): it never sets a koku's value, a Rokugani price or wage, or anything on a map, is never cited for how a place was built, farmed or lived in, and is sought out only when the GM asks for it or approves it."
   }
  ],
  "canon": {

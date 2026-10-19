@@ -98,6 +98,16 @@
    ]
   },
   {
+   "id": "works-comparative",
+   "title": "Comparative money sources",
+   "description": "Another society's wages, prices and household budgets, read only as a yardstick for players (feature 391): never the setting's own figures.",
+   "takes": [
+    {
+     "kind": "comparative"
+    }
+   ]
+  },
+  {
    "id": "works-beyond-east-asia",
    "title": "Beyond East Asia, and general works",
    "description": "Europe, the rest of the world, and works about no one place: used for constraints that cross cultures.",

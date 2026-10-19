@@ -235,6 +235,19 @@
    "sections": []
   },
   {
+   "id": "comparative-money",
+   "title": "Comparative money: other societies",
+   "description": "<p><em>What another society paid and charged - a Regency English household's servants, its budget, its provisions - set beside Rokugan's money as a yardstick for players who know shillings from Austen and Dickens. These questions never set a koku's value or a Rokugani price, and no map draws from them.</em></p>",
+   "drawing_description": "",
+   "awaiting": "declared by feature 391 before its first comparative question is written (research/CLAUDE.md, Comparative money sources)",
+   "takes": [
+    {
+     "primary": "comparative"
+    }
+   ],
+   "sections": []
+  },
+  {
    "id": "religion-and-the-dead",
    "title": "Religion and the dead",
    "description": "<p><em>The findings behind the shrines, torii, monasteries and burial grounds on these maps, the decisions they drove, and - where no generator draws the feature yet - the rules a map follows.</em></p>",

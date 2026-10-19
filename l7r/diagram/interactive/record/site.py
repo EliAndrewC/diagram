@@ -306,6 +306,18 @@ class Build:
         ]
         return self.rewrite(block, None, here, where)
 
+    def _comparative_misuse(self, placed: list[Placed], tags: ct.Tags, where: str) -> list[str]:
+        """A COMPARATIVE source (kind `comparative`, in any position) cited by a question that is not a comparative money question
+        (subject `comparative`) - feature 391, the GM 2026-10-18: such a source is "not because we will use it to establish the
+        actual value of a koku", so it is cited only where the record says it is a yardstick from another society."""
+        if ("subject", "comparative") in tags.all():
+            return []
+        from l7r.diagram.interactive.citations import cited_keys  # noqa: PLC0415 - citations imports the record
+
+        keys = cited_keys([(str(p.number), p.body) for p in placed])
+        bad = [k for k in keys if (t := self.catalog.tags.get(k)) is not None and "comparative" in t.values("kind")]
+        return [f"{where}: cites `{k}`, a comparative source - only a comparative money question (subject `comparative`) may cite it (research/CLAUDE.md, Comparative money sources)" for k in bad]
+
     def _question(self, item: sp.Item, half: str, section: ct.Section, run: list[sp.Item], at: int) -> None:
         """A question's small page. Links are resolved while every `href` is still the record's, then the references
         are numbered, then the notes' keys turned to the works at the foot."""
@@ -326,6 +338,7 @@ class Build:
         foot = sn.foot(placed, self._works(placed, here, where) if placed else "")
         tags = self.record.question_of(page).tags
         assert tags is not None
+        self.errors += self._comparative_misuse(placed, tags, where)
         content = sp.crumbs(here, [(sp.half_title(half), f"index.html#{half}"), *sp.section_trail(half, section)])
         content += _as_title(body) + sp.tags_line(tags, self.record.vocab, here) + foot + sp.pager(run, at, here, links.QUESTION_DIR)
         self.files[here] = sp.shell(f"{item.title} - {section.title}", here, sp.open_keys(half, section), content)
