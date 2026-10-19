@@ -11,15 +11,6 @@ from tests._scope import full_or
 from tests.settlement._builders import _crop_settlement, _nuc_village, _town, _village
 
 
-def test_kido_records_ward_gates_in_both_orientations():
-    s = Settlement(1000, 1000, seed=1)
-    s.kido(500, 300, horizontal=True)  # E-W street gate
-    s.kido(300, 500, horizontal=False)  # N-S street gate
-    assert len(s.M["kido"]) == 2
-    assert s.M["kido"][0]["horizontal"] and not s.M["kido"][1]["horizontal"]
-    assert s.M["kido"][0]["rot"] == 90.0 and s.M["kido"][1]["rot"] == 0.0  # legacy flags map to the axis angles
-
-
 def test_place_kosatsuba_sites_on_the_lane_verge_at_the_busiest_node():
     # the village/hamlet auto-placer (GM 2026-07-24): the board lands inside the validator's
     # ~60-real-ft siting band, off the tread, clear of structures - and at the BUSY end of
@@ -702,3 +693,15 @@ def test_pull_back_stops_at_the_last_house_where_reach_zones_chain() -> None:
     run = [(0.0, 0.0), (200.0, 0.0)]
     out = _pull_back(run, lambda q: "A" if 150.0 <= q[0] <= 190.0 else ("B" if 90.0 <= q[0] < 150.0 else None))
     assert 150.0 <= out[-1][0] <= 158.0, out
+
+
+def test_a_level_watercourse_records_no_bearing() -> None:
+    """Feature 392: a navigable cut is dug level and declares no downstream bearing; the canal that used it went with the city
+    code, and a `level` stream records the same."""
+    s = Settlement(800, 800, seed=1)
+    s.meta(name="L", scale="hamlet", ftpx=1, toscale=True)
+    s.stream([(100, 400), (700, 400)], flow="level")
+    rec = s.M["streams"][-1]
+    assert rec["flow"] == "level" and rec["flow_deg"] is None
+    with pytest.raises(ValueError, match="flow must be"):
+        s.stream([(100, 400), (700, 400)], flow="sideways")

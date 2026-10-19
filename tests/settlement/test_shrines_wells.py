@@ -491,3 +491,27 @@ def test_well_at_refuses_ground_already_taken_by_a_well() -> None:
     s.meta(name="W", scale="hamlet", ftpx=1, toscale=True)
     assert s.well_at(400, 400), "the case: open ground takes a well"
     assert not s.well_at(400, 400), "...and the same spot again does not"
+
+
+def test_well_at_refuses_ground_the_scrub_covers(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    s = Settlement(800, 800, seed=1)
+    s.meta(name="W", scale="hamlet", ftpx=1, toscale=True)
+    monkeypatch.setattr(s, "_in_scrub_cover", lambda x, y: True)
+    assert not s.well_at(400, 400) and not s.M["wells"]
+
+
+def test_a_queued_stand_draws_its_canopy_off_the_lanes_at_the_flush() -> None:
+    """Feature 392: the forest that queued stands went with the town and city code; a queued stand still draws at the flush,
+    and no trunk stands on a lane's tread (`trees_off_the_treads`)."""
+    from l7r.diagram.settlement.shrines_wells.woods import trees_off_the_treads
+
+    s = Settlement(800, 800, seed=1)
+    s.meta(name="F", scale="hamlet", ftpx=1, toscale=True)
+    s.M["lanes"] = [{"pts": [[100, 300], [700, 300]], "w": 12}]
+    s._pending_stands = [([(100.0, 100.0), (700.0, 100.0), (700.0, 500.0), (100.0, 500.0)], 7, False, None)]
+    s.flush_tree_stands()
+    assert s.M.get("tree_crowns"), "the stand drew its crowns"
+    assert s._pending_stands == [], "and the queue is spent"
+    assert trees_off_the_treads([], s.M["lanes"]) == []
+    kept = trees_off_the_treads([(400.0, 300.0, 5.0, "c"), (400.0, 450.0, 5.0, "c")], [{"pts": [[100, 300], [700, 300]], "w": 12}])
+    assert kept == [(400.0, 450.0, 5.0, "c")], "the trunk on the tread is dropped"

@@ -9,7 +9,6 @@ from ._helpers import fan_rival as fan_rival
 from ._helpers import junction_floor as junction_floor
 from .clipping import WaterClipMixin
 from .focal import FocalMixin
-from .kido import KidoMixin
 from .lanes import LanesMixin
 from .water import WaterBodiesMixin
 
@@ -19,6 +18,5 @@ class WaterWaysMixin(
     WaterBodiesMixin,
     WaterClipMixin,
     LanesMixin,
-    KidoMixin,
 ):
     """The composed surface. No members of its own - see this package's CLAUDE.md."""

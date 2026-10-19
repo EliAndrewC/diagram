@@ -57,9 +57,7 @@ from ._geom import seg_dist as seg_dist
 from ._geom import seg_intersect as seg_intersect
 from ._geom import segments_cross as segments_cross
 from ._geom import street_runs as street_runs
-from ._geom import stroke_quads as stroke_quads
 from ._geom import torii_halfbox as torii_halfbox
-from ._geom import tower_quad as tower_quad
 from ._geom import village_population as village_population
 from ._geom import way_beds as way_beds
 from ._knobs import BOUNDARY_STONE_CLEAR_FT as BOUNDARY_STONE_CLEAR_FT

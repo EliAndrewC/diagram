@@ -17,21 +17,6 @@ from .base import Poly, Pt
 from .primitives import point_in_poly, seg_dist, segments_cross
 
 
-def stroke_quads(pts: Sequence[Any], hw: float) -> list[Poly]:
-    """One quad per segment of a polyline at half-width `hw` - a linear feature as real polygons, so
-    a caller can SAT-test against it instead of measuring to sample points (a corner-distance test
-    misses a line passing through the MIDDLE of a box, which is exactly the ward-fence-through-the-
-    guard-box case it was hiding)."""
-    quads: list[Poly] = []
-    for i in range(len(pts) - 1):
-        ax, ay = float(pts[i][0]), float(pts[i][1])
-        bx, by = float(pts[i + 1][0]), float(pts[i + 1][1])
-        ln = math.hypot(bx - ax, by - ay) or 1.0
-        nx, ny = -(by - ay) / ln * hw, (bx - ax) / ln * hw
-        quads.append([(ax + nx, ay + ny), (bx + nx, by + ny), (bx - nx, by - ny), (ax - nx, ay - ny)])
-    return quads
-
-
 def _rect_ring(x: float, y: float, w: float, h: float, rot: float = 0.0) -> Poly:
     """The closed corner ring of a (possibly rotated) w x h rect centered at (x, y)."""
     c, s = math.cos(math.radians(rot)), math.sin(math.radians(rot))

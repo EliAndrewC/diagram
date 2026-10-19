@@ -15,13 +15,6 @@ from l7r.diagram.settlement._geom.walls import _box_hits_run, wall_runs
 from tests.settlement._builders import _IDX_POLY, _max_turn_deg
 
 
-def test_stroke_quads_makes_one_quad_per_segment():
-    qs = settlement.stroke_quads([(0, 0), (100, 0), (100, 100)], 5.0)
-    assert len(qs) == 2 and all(len(q) == 4 for q in qs)
-    assert settlement.stroke_quads([(0, 0)], 5.0) == []
-    assert settlement.stroke_quads([(7, 7), (7, 7)], 5.0)  # a degenerate segment still yields a quad rather than dividing by zero
-
-
 def test_way_beds_carries_the_lane_network_lane_runs_does_not():
     # the AVOIDANCE list for a verge-hugging feature: lane_runs' roads/streets/alleys/ring road
     # PLUS the village lane network. Each siter used to build its own partial list, which is how a
@@ -301,8 +294,8 @@ _PRE_SPLIT_GEOM_SURFACE = (
     '_box_hits_run', '_rect_ring', '_signed_area', 'boxed_grid', 'boxed_hit', 'boxed_polys', 'boxed_seg_hit', 'boxed_segs', 'edge_dist', 'fillet_polyline',
     'forest_frame_span', 'forest_reveal_x', 'indexed_grid', 'label_aabb', 'label_quad', 'label_tilt', 'lane_runs', 'linear_tilt', 'linear_tilt_full',
     'organic_bbox', 'organic_poly', 'paddy_wet_rings', 'point_in_poly', 'point_quad_dist', 'poly_gap', 'quad_hits_poly', 'quad_hits_seg', 'rects_overlap',
-    'ring_touches', 'rot_rect', 'sat_overlap', 'seg_closest', 'seg_dist', 'seg_intersect', 'segments_cross', 'smooth_closed', 'smooth_points', 'stroke_quads',
-    'torii_halfbox', 'torii_seat_on_wall', 'tower_quad', 'village_population', 'wall_runs', 'way_beds',
+    'ring_touches', 'rot_rect', 'sat_overlap', 'seg_closest', 'seg_dist', 'seg_intersect', 'segments_cross', 'smooth_closed', 'smooth_points',
+    'torii_halfbox', 'torii_seat_on_wall', 'village_population', 'wall_runs', 'way_beds',
     'winding'
 )  # fmt: skip
 
@@ -825,15 +818,6 @@ def test_a_forest_reveals_its_tree_line_plus_the_reveal_band_when_one_is_recorde
     assert forest_reveal_x(forest, [(100.0, 0.0), (480.0, 50.0)], 40.0, 500.0) == [100.0, 480.0, 140.0, 500.0], "the line plus the band, clamped"
 
 
-def test_a_wall_tower_quad_turns_with_its_wall_and_grows_on_request() -> None:
-    from l7r.diagram.settlement._geom.extents import tower_quad
-
-    flat = tower_quad({"x": 10.0, "y": 20.0})
-    assert flat == [(-9.0, 1.0), (29.0, 1.0), (29.0, 39.0), (-9.0, 39.0)], "the legacy 38 x 38 default"
-    turned = tower_quad({"x": 0.0, "y": 0.0, "w": 10, "h": 4, "rot": 90}, grow=1.0)
-    assert max(abs(p[0]) for p in turned) == pytest.approx(3.0) and max(abs(p[1]) for p in turned) == pytest.approx(6.0)
-
-
 def test_wall_runs_reads_a_ward_fence_and_its_wall_caps() -> None:
     runs = wall_runs({"wards": [{"name": "samurai", "boundary": [[0, 0], [100, 0]], "wall_caps": [{"pts": [[100, 0], [110, 0]]}]}]})
     assert ("the samurai ward fence", [(0.0, 0.0), (100.0, 0.0)], 2.5) in runs
@@ -851,3 +835,10 @@ def test_the_water_index_answers_a_fixture_wider_than_its_slack_by_walking_every
     idx = WaterIndex({"streams": [{"pts": [[0, 100], [400, 100]], "w": 6}]})
     assert not idx.clear(200.0, 100.0 + SLACK, SLACK + 10.0), "a broad fixture reaching the stream"
     assert idx.clear(200.0, 100.0 + 4 * SLACK, SLACK + 10.0)
+
+
+def test_lane_runs_reads_a_towns_streets_at_their_width() -> None:
+    from l7r.diagram.settlement._geom.ways import lane_runs
+
+    runs = lane_runs({"town_streets": [{"pts": [[0, 0], [100, 0]], "w": 20}]})
+    assert ([(0.0, 0.0), (100.0, 0.0)], 10.0) in runs

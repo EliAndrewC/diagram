@@ -13,7 +13,7 @@ def machi_mouths(M: Any) -> list[tuple[float, float]]:
     """Every point where a town street ENTERS a machi-kind district - the ward mouths the kido
     mesh bars at night (research 021 item 6: Edo's machi-kido, Qing's zhalan; ward_style
     "mesh" has NO ward walls - the block's own gate closes its mouth). THE SINGLE SOURCE for
-    both the placer (Settlement.kido_mesh) and the validator (kido_close_the_machi_mouths),
+    the validator (kido_close_the_machi_mouths),
     same doctrine as bridge_carried_ways. Out-wall suburb districts are skipped: the gate
     wards live outside the curfew mesh (their bar is the city gate itself). Mouths within
     40px collapse to one (a street grazing a district corner is one entry, not two).

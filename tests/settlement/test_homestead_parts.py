@@ -5,7 +5,7 @@ import math
 from l7r.diagram import overlap
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement._geom import turn_about
-from tests.settlement._builders import _crop_settlement, _ground_points, _nuc_village, _town
+from tests.settlement._builders import _ground_points, _nuc_village, _town
 
 
 def test_village_grove_fills_an_irregular_polygon_and_records_it():
@@ -185,14 +185,6 @@ def test_village_grove_keeps_every_clump_and_set_view_decides_which_are_on_the_p
     assert len(g["clumps"]) == n and g["clumps_offpage"] == []
 
 
-def test_grove_fits_rejects_a_belt_over_a_dry_strip():
-    # the windbreak's canopy stays out of the barley exactly as it stays out of the paddy
-    s = _crop_settlement()
-    s.dry_polys.append([(300, 300), (500, 300), (500, 380), (300, 380)])
-    assert not s._grove_fits(400, 340, 60, 30, own=[])
-    assert s._grove_fits(400, 500, 60, 30, own=[])
-
-
 def test_commons_keeps_scrub_off_dry_plots_and_the_crop_margin():
     # GM 2026-08-15: scrub scattered over dry hatake plots and right up against crop edges. The
     # scatter must skip DRY PLOTS (read from dry_polys, which every dry-crop path registers) as
@@ -345,12 +337,6 @@ def test_the_yard_edge_facing_its_house_runs_parallel_to_the_house():
     assert s._quad(500.0, 500.0, 30.0, 20.0, 0.1, 41.0, level="S")[2][1] == s._quad(500.0, 500.0, 30.0, 20.0, 0.1, 41.0, level="S")[3][1]
 
 
-def test_grove_fits_rejects_a_spot_outside_the_bound():
-    s = Settlement(1000, 1000, seed=1)
-    s.bound = [(0, 0), (600, 0), (600, 1000), (0, 1000)]  # only x < 600 is inside (a city-style bound)
-    assert s._grove_fits(700, 500, 30, 24, [(500, 500)]) is False  # x=700 is outside the bound
-
-
 def test_on_watercourse_detects_stream_and_channel_beds():
     s = Settlement(600, 600, seed=1)
     s.M["streams"] = [{"poly": [[100, 100], [400, 100]], "w": 8}]
@@ -417,26 +403,6 @@ def test_reclist_reads_a_singleton_record_as_well_as_a_list():
 # ---- feature 145: the refusal branches on the hamlet path that no roll happened to take -----------
 
 
-def test_grove_fits_rejects_a_belt_over_the_flooded_paddy() -> None:
-    s = Settlement(1000, 1000, seed=1)
-    s.field_polys.append([(300, 300), (700, 300), (700, 700), (300, 700)])
-    assert s._grove_fits(500, 500, 60, 30, own=[]) is False  # the whole grove inside the basin
-    assert s._grove_fits(120, 120, 60, 30, own=[]) is True
-
-
-def test_grove_fits_keeps_the_two_sanctioned_abutments() -> None:
-    """Feature 121 T017 (contracts/placement.md C5): two things may TOUCH and must stay allowed when a verdict tightens - a
-    grove hugging the paddy bund (it may abut a field, never overlap it) and neighboring groves abutting into one shared
-    windbreak (a grove is not tested against another farm's grove). A tightening that forbids either breaks a feature."""
-    s = Settlement(1000, 1000, seed=1)
-    s.field_polys.append([(300, 300), (700, 300), (700, 700), (300, 700)])
-    assert s._grove_fits(269.9, 500, 60, 30, own=[]) is True  # its east edge a tenth off the bund at x=300: hugs the paddy
-    assert s._grove_fits(271, 500, 60, 30, own=[]) is False  # one unit further in overlaps the paddy
-    s.grove_rects.append((200, 200, 60, 30))  # a neighbor's grove...
-    assert s._grove_fits(260, 200, 60, 30, own=[]) is True  # ...and this one flush against it: one windbreak
-    assert s._grove_fits(250, 200, 60, 30, own=[]) is True  # even lapping it - the belts merge, nothing refuses
-
-
 def test_bamboo_stand_that_draws_nothing_records_nothing() -> None:
     s = Settlement(1000, 1000, seed=1)
     assert s.bamboo_stand([(500, 500), (500, 500), (500, 500)]) == 0  # zero area: no culm lands, so nothing is drawn
@@ -462,14 +428,6 @@ def test_corridor_buffers_reads_the_alleys_the_ring_road_and_the_road() -> None:
 
 
 # ---- feature 146: one test per refusal reason the rolls have not happened to hit ----------------------
-
-
-def test_grove_fits_rejects_a_belt_on_a_lane_tread() -> None:
-    """A grove may stand at the paddy's edge (the field set-back is for buildings) but never on a trodden way."""
-    s = Settlement(1000, 1000, seed=1)
-    s.corridors.append(([(100.0, 500.0), (900.0, 500.0)], 20.0))  # a lane's cleared band, as the placer registers it
-    assert s._grove_fits(500, 500, 60, 30, own=[]) is False  # centered on the tread
-    assert s._grove_fits(500, 300, 60, 30, own=[]) is True
 
 
 def test_draw_grove_draws_a_mixed_stand_at_its_seat() -> None:

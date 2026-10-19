@@ -9,9 +9,7 @@ Split from settlement/_geom.py by feature 117 - see settlement/_geom/CLAUDE.md f
 Research: drawn-extent readers - NONE: read a recorded feature's ink back off the manifest
 """
 
-import math
-from collections.abc import Mapping, Sequence
-from typing import Any
+from collections.abc import Sequence
 
 from .base import Manifest, Poly
 
@@ -84,12 +82,3 @@ def paddy_wet_rings(M: Manifest) -> list[Poly]:
         if len(ring) > 2:
             rings.append(ring)
     return rings
-
-
-def tower_quad(t: Mapping[str, Any], grow: float = 0.0) -> Poly:
-    """A wall tower's drawn footprint: its `w` x `h` mamian rect turned onto the wall's local
-    tangent (`rot`). The default 38 x 38 is the pre-to-scale mamian, for a legacy record."""
-    hw_, hh_ = t.get("w", 38) / 2 + grow, t.get("h", 38) / 2 + grow
-    a = math.radians(t.get("rot", 0))
-    ca, sa = math.cos(a), math.sin(a)
-    return [(t["x"] + dx * ca - dy * sa, t["y"] + dx * sa + dy * ca) for dx, dy in ((-hw_, -hh_), (hw_, -hh_), (hw_, hh_), (-hw_, hh_))]

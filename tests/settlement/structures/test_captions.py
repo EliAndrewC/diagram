@@ -122,3 +122,12 @@ def test_a_caption_with_no_seat_goes_down_where_it_covers_the_least():
     s.place_labels()
     assert "caption_key" not in s.M and "key_band" not in s.M["meta"], "no key"
     assert any("warehouse" in str(lb[5]) for lb in s.M["labels"]), "the caption's own words are drawn"
+
+
+def test_a_field_name_is_drawn_as_its_own_letter_spaced_markup() -> None:
+    """Feature 392: a field-name caption is queued, seated by the one placer, and drawn as the exact markup (letter-spaced,
+    haloed) the field drawers used to emit inline."""
+    s = _town()
+    s.field_name_label("Upper Paddies", (200.0, 200.0, 500.0, 400.0))
+    s.place_labels()
+    assert any('letter-spacing="1.5"' in o and "Upper Paddies" in o for o in s.toplabels), "the field name in its own markup"

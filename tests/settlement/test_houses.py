@@ -487,3 +487,14 @@ def test_each_wall_is_measured_whole_not_its_corners_alone():
     s.lane([[710.0, 500.0], [710.0, 900.0]], width=3, clearance=7)
     assert s._on_a_tread(700.0, 700.0, 40.0, 20.0), "a path square across a 40 ft house 10 ft off its center is refused"
     assert not s._on_a_tread(682.0, 700.0, 40.0, 20.0), "the same path 8 ft off the house's end wall is clear"
+
+
+def test_fits_keeps_a_seat_inside_the_bounding_ring() -> None:
+    """Feature 392: the city wall that set `bound` went with the town and city code; the ring still refuses a seat outside it."""
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(800, 800, seed=1)
+    s.meta(name="B", scale="hamlet", ftpx=1, toscale=True)
+    assert s._fits(400, 400, 20, 12), "the case: open ground"
+    s.bound = [(100.0, 100.0), (300.0, 100.0), (300.0, 300.0), (100.0, 300.0)]
+    assert not s._fits(400, 400, 20, 12), "...outside the ring is refused"
