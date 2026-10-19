@@ -735,5 +735,6 @@
   "l7r/diagram/hamletgen/water/polder.py::stage_polder#pond layout": "139",
   "l7r/diagram/settlement/fields/landuse.py::DIKEPOND_WATER_INSET#pond bank width": "161",
   "l7r/diagram/hamletgen/consts.py::FOOTPATH_FABRIC_GAP#footpath off a plot": "162",
-  "l7r/diagram/hamletgen/ways/street.py::join_to#joining leg's berth": "163"
+  "l7r/diagram/hamletgen/ways/street.py::join_to#joining leg's berth": "163",
+  "l7r/diagram/waterfields/banks.py::_WELD_MIN_SOLIDITY#weld lump": "164"
 }
