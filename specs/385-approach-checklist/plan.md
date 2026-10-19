@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -294,6 +294,26 @@ Owed by the hour-25 step-back (hour:385-approach-checklist@25, `continue`).
 **D100 - the batch named and kept.** `record_owed.report` adds, after the units, one `batched: make modal-bundle KIND="<kinds>" FOR=<agent>` line per pop-up agent (modal-form, modal-depiction, modal-research) owed by two or more unanswered pop-ups (a triage-owed one, which goes to `make modal-triage` first, is left out), and writes those batches to `<git dir>/modal-batches.json` with the time.
 
 **D101 - a single pop-up's dispatch refused while its batch is owed.** `hm_checks.dispatch`, for a pop-up agent whose MANIFEST names one pop-up, reads `modal-batches.json`; where that pop-up is in a batch of two or more for the same agent, written within the last two hours, it refuses, naming the batched command. No file, or an older one, refuses nothing (fail open). The escape is `BATCH_OK="<reason>"` in the prompt, recorded like the guard's others.
+
+## T82 - an archive line in a task's section leaves it reviewed (found ticking T79, 2026-10-19)
+
+### T82 Approach (checklist part A)
+
+1. **The goal, in the world.** Archiving a finished section never makes a neighbor's review owed.
+2. **The constraints.** Feature 375 FR-044: the archive moves finished sections and voids nothing; its generated line is taken out of every block's digest already (`ARCHIVE_LINE`). A test red without it.
+3. **Where each comes from.** 375 (O); the defect is T63's auto-archive meeting the section check (amendment 6).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (`make plan-delta` diffed against its `earlier.md`): ticking T78 and T80 archived their sections and left `<!-- plan-archive: T80 to T78 moved ... -->` inside T79's section, after its Decisions; `task_current` compares the section raw, so T79's three reviewed blocks were owed again and its tick refused.
+5. **The order.** `task_current` takes the line out of both texts, then the test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: a CLEAR task section that differs from its reviewed text only by archive lines stays current; `tests/tooling/test_plan_gate.py` red without it.
+10. **Before moving a constant.** n/a - none moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T82 Decisions
+
+**D102 - the archive line out of the section's comparison too.** `task_current` compares the section and its reviewed text with `ARCHIVE_LINE` taken out of both (as `block_digest` takes it out of a block), the digest match and the typo rule otherwise as now.
 
 ## T11 - the close
 
