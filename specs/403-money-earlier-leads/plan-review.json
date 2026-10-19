@@ -32,7 +32,7 @@
    "declared": "spec-fidelity"
   },
   "## D1 - the questions, by write session (FR-001, FR-002)": {
-   "sha256": "5a6602b58a09ee5292094a781aec27dba716daa8caec3d2ccdaace6bb527b6e0",
+   "sha256": "e11930e9f253e82d32239a39ed8ee0c07ca2bba04d2150834a79ff109d472324",
    "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
@@ -297,6 +297,68 @@
      "summary": "s2 edits 0265's wage line after s1; s5 check-and-apply; page-session cap of four; passes read on the page before citing; Morisada via NDL full-text and screenshots; implementation-check line per question (D2); note on #9 (D3); order and direct landing (T); constitution check; performance N/A; nothing else in these pages changes",
      "class": "within",
      "why": "Process and method inside FR-002..FR-005; no scope added or removed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-19",
+   "blocks": [
+    "## D1 - the questions, by write session (FR-001, FR-002)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1-sessions",
+     "summary": "The 13 questions FR-001 names are split over four write sessions (s1-s4), with 0265's wage line edited by s2 after s1.",
+     "class": "within",
+     "why": "Ordering of work across sessions; every lead of #3, #6, #7 and the 0264/0265 Morisada searches the request lists is assigned to a session. Nothing asked is dropped."
+    },
+    {
+     "id": "D1-s2-cotton-wording",
+     "summary": "The changed passage: s2's row now says the Mitsui cotton series is closed (the 1757 series is soybeans; no soybean figure written) instead of 'the cotton series soybeans'.",
+     "class": "within",
+     "why": "Brings the table into line with the block's own cotton bullet, which was already judged CLEAR. Declining to write an unrequested soybean figure keeps scope to the lead the request names (cotton); it removes nothing the GM asked for."
+    },
+    {
+     "id": "D1-shukuson-closed",
+     "summary": "The 宿村大概帳 Tokaido tariffs lead is closed as not publicly readable (print edition NDL in-library only; manuscript the only copy, not digitized), named in 0259's and 0260's absence notes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Reading an in-library-only or undigitized source is physically impossible for this session; the search is done and its result recorded, which is how a research lead is finished. The request's purpose (finish the outstanding research) is served, not gutted."
+    },
+    {
+     "id": "D1-mitsui-cotton-closed",
+     "summary": "The Mitsui Bunko Osaka cotton series lead is closed: the 1757 series is soybeans, and the books holding any cotton series are login-only or NDL in-library; named in 0261's note.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same ground: the sources are not publicly readable, so the lead cannot be read; the closure is recorded with its ground rather than silently dropped."
+    },
+    {
+     "id": "D1-koyaizu-closed",
+     "summary": "Koyaizu's 近世賃金物価史史料 is closed as NDL in-library only and cited at second hand in 0261's note.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically unreadable by the session; the absence is named and the second-hand citation labeled as such."
+    },
+    {
+     "id": "D1-okamoto-conditional",
+     "summary": "The Takaoka donor's records (岡本家文書) are read if a public copy is found after one more search, otherwise named as not found online, dated.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The plan still searches; the fallback applies only if no public copy exists, which is impossibility rather than preference."
+    },
+    {
+     "id": "D1-s3-read-if-public",
+     "summary": "s3's #6 sources (湯浅隆, 御再建場所日記, KAKEN 19K15191) are read if public, otherwise named; Hasegawa 1987 and 近江の石工たち retried.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The condition is public availability only; where a source can be read it is read, matching the request to finish the research."
+    },
+    {
+     "id": "D1-nothing-else",
+     "summary": "Nothing else in these pages changes.",
+     "class": "within",
+     "why": "Keeps scope to the leads the request lists; FR-005 likewise."
     }
    ]
   }
