@@ -61,3 +61,4 @@
 - source-reader: every 0273 note READ (11 bundles; Handa and Rinseishi needed a second round), each recorded with make record-checked; hourly step-back ruled continue by round-arbiter
 - still owed for the check session: quote-check, record-format, intro-check on 0273, source-applicability on the 6 new write-ups and the 3 changed Used-for lines, translation-check (make record-owed)
 - for the GM (from the round-arbiter): make archive-inbox refuses the 433 MB ruiju-kinsei-fuzokushi-ge-ndl991467.pdf (over GitHub's 100 MB limit): split it or adopt Git LFS
+- note: the Gao and miyashiro make record-checked calls (KEY bundles, WHOLE) also answered 0272/0274/0275's units of those keys, re-owed by the Used-for edit; their note text is unchanged from the first session's READ. No source-reader unit is left open (make record-owed). Releasing 0273 closed the whole claim row (0272-0275); re-claim for the check session if it needs one
