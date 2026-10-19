@@ -350,12 +350,13 @@ def readers_own(root: pathlib.Path, store_dir: pathlib.Path, slug: str) -> bool:
     return bool(runs) and set(hrefs) <= set(rec.get("hrefs", [])) and any(r in known for r in runs) and all(r in known or any(r in q for q in quoted) for r in runs)
 
 
-def keep_reading(store_dir: pathlib.Path, slug: str, reading: str) -> None:
-    """Add a source-reader answer's `reading` to its record (`answered` matches on it)."""
+def keep_reading(store_dir: pathlib.Path, slug: str, reading: str, field: str = "readings") -> None:
+    """Add a source-reader or quote-check answer's `reading` to its record (`answered` matches on it); with `field="qkeys"`, a
+    quote-check answer's quotation key (feature 399: what a declared fix of another check's finding is verified against)."""
     rec = _read(store_dir, slug)
-    if not reading or not rec or reading in rec.get("readings", []):
+    if not reading or not rec or reading in rec.get(field, []):
         return
-    rec["readings"] = [*rec.get("readings", []), reading]
+    rec[field] = [*rec.get(field, []), reading]
     _file(store_dir, slug).write_text(json.dumps(rec, indent=1) + "\n", encoding="utf-8")
 
 
@@ -513,6 +514,36 @@ def bypass_log(root: pathlib.Path, target: str, why: str) -> None:
     (bl / f"{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}-{secrets.token_hex(3)}.json").write_text(json.dumps(rec, indent=2) + "\n", encoding="utf-8")
 
 
+def quotation_keys(root: pathlib.Path, rev: str | None, slugs: Collection[str]) -> dict[str, str]:
+    """{slug: `record_units.quotation_key`} of quote-check note units at `rev` (None: the working tree); no write-up is read."""
+    rec = read_at(root, rev, set())
+    return {s: ru.quotation_key(rec, s) for s in slugs if s.startswith("quote-check:") and not s.endswith("#unfootnoted")}
+
+
+#: what a quote-check answer settled by another check's fix records as its result (feature 399)
+FIXED = "settled - another check's fix outside the quotation and its claim"
+
+
+def fixed_answer(root: pathlib.Path, q: str, notes: str, fixed_by: str) -> tuple[list[str], list[str]]:
+    """A fix the session made BY HAND for another check's finding (a check that words no EDIT blocks - source-reader, whose
+    CONTRADICTED attribution gave 0251's Okayasu locator fix), declared: each named note's owed quote-check unit is answered
+    at today's words when its quotation and claim are those of an answer quote-check already gave (`qkeys`), or of the merge
+    base where it was not owed (feature 399 FR-001b; the GM 2026-10-19). Returns (answered, refused): any refusal writes
+    nothing, so a declaration is all or none."""
+    wanted = {k for k in notes.split(",") if k}
+    s = store(root)
+    owed = [u for u in unanswered(root) if u.check == "quote-check" and ru.question(u.subject) == q.zfill(4) and u.subject.partition("#")[2] in wanted]
+    now = quotation_keys(root, None, [u.slug for u in owed])
+    base = quotation_keys(root, merge_base(root), [u.slug for u in owed]) if merge_base(root) else {}
+    refused = [u.slug for u in owed if now[u.slug] not in _read(s, u.slug).get("qkeys", []) and now[u.slug] != base.get(u.slug)]
+    if refused:
+        return [], refused
+    for u in owed:
+        write_answer(s, u.slug, u.fingerprint, f"{FIXED}: {fixed_by}", _read(s, u.slug).get("pages"))
+        keep_reading(s, u.slug, now[u.slug], "qkeys")
+    return [u.slug for u in owed], []
+
+
 def bundle_less_refusal(check: str, notes: str, reason: str) -> str:
     """Why a record without a bundle is refused, or "" (plan D6): it records today's content, which no check may have read -
     so only `source-reader` on named notes (it reads before the note exists, so no bundle can carry it) or a stated reason."""
@@ -535,8 +566,10 @@ def answer(root: pathlib.Path, check: str, result: str, bundle: str = "", q: str
     done = _answer(root, check, result, bundle, q, notes, key, kind)
     if check in ("source-reader", "quote-check") and done:  # the reading is the tree's now - a bundle's MANIFEST carries no reading
         s, now = store(root), {u.slug: u.reading for u in units(root) if u.check == check}
+        qk = quotation_keys(root, None, done) if check == "quote-check" else {}
         for slug in done:
             keep_reading(s, slug, now.get(slug, ""))
+            keep_reading(s, slug, qk.get(slug, ""), "qkeys")
             if check == "source-reader":
                 keep_parts(s, slug, root, reply)
     if done:
@@ -621,12 +654,27 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--kind", default="")
     ap.add_argument("--reason", default="", help="with --answer and no --bundle: why today's content may be recorded (bypass log)")
     ap.add_argument("--reply", default="", help="with --answer: the check's reply, whose OUTSIDE THE CHANGE findings are filed (feature 375)")
+    ap.add_argument("--fixed-by", default="", help="with --answer quote-check --q --notes: \"<check>: <its finding>\" - a hand fix of another check's finding (feature 399)")
     args = ap.parse_args(argv)
     top = _git(pathlib.Path(args.root), "rev-parse", "--show-toplevel").strip()
     if not top:
         print(f"_record_owed: {args.root} is not a git repository", file=sys.stderr)
         return 1
     root = pathlib.Path(top)
+    if args.answer and args.fixed_by:
+        if args.answer != "quote-check" or not args.q or not args.notes:
+            print("record-checked: FIXED_BY= declares a fix of another check's finding on quote-check notes: CHECK=quote-check Q=<NNNN> NOTES=<k,k> FIXED_BY=\"<check>: <its finding>\"", file=sys.stderr)
+            return 2
+        done, refused = fixed_answer(root, args.q, args.notes, args.fixed_by)
+        if refused:
+            print("record-checked: REFUSED - the quotation or its claim changed, so quote-check is owed (feature 399): " + " ".join(refused)
+                  + f" - check it: make check-bundle Q={args.q.zfill(4)} FOR=quote-check NOTES={args.notes}", file=sys.stderr)
+            return 2
+        if not done:
+            print(f"_record_owed: no owed quote-check unit on {args.notes} - nothing recorded", file=sys.stderr)
+            return 3
+        print(f"record-checked: {len(done)} unit(s) answered as another check's fix - " + " ".join(done))
+        return 0
     if args.answer:
         if not args.result:
             print("_record_owed: --answer needs --result \"<the check's counts>\"", file=sys.stderr)

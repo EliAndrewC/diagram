@@ -376,3 +376,112 @@ def test_a_hand_edit_that_departs_from_the_edit_still_owes(tmp_path) -> None:
     r.write_text(REPLY + _report(str(page.relative_to(d)), "The Russians built theirs at the border.", "The Russians built theirs."), encoding="utf-8")
     assert ae.main([str(r), "--root", str(d)]) == 1, "its old text is gone and its new text is not there: refused"
     assert "record-format:0094" in _owed(d)
+
+
+# --- kind C: another check's fix outside the quotation and its claim (feature 399, the GM 2026-10-19) ---------------------
+# 0251's last two quote-check passes were owed only by other checks' fixes: the Okayasu locator (outside the quotation, made
+# by hand after source-reader's CONTRADICTED attribution) and the 去辰 rendering (inside the translated quotation).
+
+Q_PAGE = (
+    '<h2 id="pledge">What were fields pledged for?</h2>\n<ul>\n<li><strong>Pledges.</strong><br>The Okayasu papers include '
+    'three pledge deeds.<sup class="fn" data-note="deed-4"></sup> In 1700 a holding went for 70 ryo.<sup class="fn" '
+    'data-note="deed"></sup></li>\n</ul>\n'
+)
+Q_NOTES = (
+    '<ol>\n<li data-note="deed-4"><a href="https://e.org/okayasu.pdf"><code>deed-4</code></a> - 「East Kumehara village, '
+    'Okayasu Koemon」 (translated) (from the collection\'s back cover)</li>\n<li data-note="deed"><a href="https://e.org/'
+    'okayasu.pdf"><code>deed</code></a> - 「70 ryo truly borrowed; the term from the eleventh month of last year」 '
+    '(translated)</li>\n</ol>\n'
+)
+LOCATOR = ("the collection's back cover", "the back cover of document 102")
+RENDERING = ("of last year」", "of last year, the dragon year [1700]」")
+SR_REPLY = "source-reader: 2 claims - 1 READ, 1 CONTRADICTED\n"
+
+
+def _qrepo(tmp_path: pathlib.Path, on_main: bool = False) -> tuple[pathlib.Path, pathlib.Path]:
+    """A clone holding question 0251 - new since main (owed, as a page under check is), or `on_main` unchanged since it."""
+    d = tmp_path / "r"
+    qdir = d / ae.RECORD / "questions"
+    qdir.mkdir(parents=True)
+    _git(d, "init", "-q", "-b", "main")
+    _git(d, "config", "user.email", "t@t")
+    _git(d, "config", "user.name", "t")
+    (qdir / "keep.txt").write_text("x", encoding="utf-8")
+    if on_main:
+        (qdir / "0251-pledges.html").write_text(Q_PAGE, encoding="utf-8")
+        (qdir / "0251-pledges.notes.html").write_text(Q_NOTES, encoding="utf-8")
+    _git(d, "add", "-A")
+    _git(d, "commit", "-qm", "base")
+    _git(d, "update-ref", "refs/remotes/origin/main", "HEAD")
+    (qdir / "0251-pledges.html").write_text(Q_PAGE, encoding="utf-8")
+    (qdir / "0251-pledges.notes.html").write_text(Q_NOTES, encoding="utf-8")
+    return d, qdir / "0251-pledges.notes.html"
+
+
+def _answer_quotes(d: pathlib.Path) -> None:
+    ro = ae._sibling("record_owed")
+    fps = ro.fingerprints(d, ("quote-check",))
+    for slug in ("quote-check:0251#deed-4", "quote-check:0251#deed"):
+        ro.write_answer(ro.store(d), slug, fps[slug], "2 notes - 2 SUPPORTS")
+    for slug, key in ro.quotation_keys(d, None, list(fps)).items():
+        ro.keep_reading(ro.store(d), slug, key, "qkeys")
+
+
+def test_another_checks_fix_outside_the_quotation_settles_quote_check_and_inside_it_does_not(tmp_path, capsys) -> None:
+    d, notes = _qrepo(tmp_path)
+    _answer_quotes(d)
+    assert not [s for s in _owed(d) if s.startswith("quote-check:")]
+    _apply(d, notes, *LOCATOR, reply=SR_REPLY)
+    assert "quote-check:0251#deed-4" not in _owed(d), "the locator is outside the quotation and its claim"
+    assert "quote-check:0251#deed-4: settled - another check's fix" in capsys.readouterr().out
+    _apply(d, notes, *RENDERING, reply="translation-check: 1 pair - 1 WRONG\n")
+    assert "quote-check:0251#deed" in _owed(d), "the rendering is inside the quotation: quote-check is owed"
+    assert "quote-check:0251#deed: still owed - its quotation or its claim changed" in capsys.readouterr().out
+
+
+def test_another_checks_fix_on_a_note_unchanged_since_main_settles_it(tmp_path) -> None:
+    d, notes = _qrepo(tmp_path, on_main=True)
+    assert not [s for s in _owed(d) if s.startswith("quote-check:")], "unchanged since main: nothing owed"
+    _apply(d, notes, *LOCATOR, reply=SR_REPLY)
+    assert "quote-check:0251#deed-4" not in _owed(d)
+
+
+def test_quote_checks_own_round_settles_as_before_not_as_another_checks_fix(tmp_path) -> None:
+    d, notes = _qrepo(tmp_path)
+    _answer_quotes(d)
+    _apply(d, notes, *RENDERING, reply="quote-check: 1 note - 1 PARTIAL\n")
+    assert "quote-check:0251#deed" not in _owed(d), "its own round's EDIT, applied verbatim (feature 335)"
+
+
+def test_a_hand_fix_declared_as_another_checks_settles_only_outside_the_quotation(tmp_path, capsys) -> None:
+    d, notes = _qrepo(tmp_path)
+    _answer_quotes(d)
+    ro = ae._sibling("record_owed")
+    notes.write_text(notes.read_text(encoding="utf-8").replace(*LOCATOR), encoding="utf-8")
+    assert "quote-check:0251#deed-4" in _owed(d), "a hand edit owes the unit until it is declared"
+    by = "source-reader: CONTRADICTED - the back cover is document 102's"
+    assert ro.main(["--root", str(d), "--answer", "quote-check", "--q", "251", "--notes", "deed-4", "--fixed-by", by]) == 0
+    assert "quote-check:0251#deed-4" not in _owed(d)
+    assert ro._read(ro.store(d), "quote-check:0251#deed-4")["result"] == f"{ro.FIXED}: {by}"
+    notes.write_text(notes.read_text(encoding="utf-8").replace(*RENDERING), encoding="utf-8")
+    capsys.readouterr()
+    assert ro.main(["--root", str(d), "--answer", "quote-check", "--q", "251", "--notes", "deed", "--fixed-by", "translation-check: WRONG"]) == 2
+    err = capsys.readouterr().err
+    assert "REFUSED - the quotation or its claim changed" in err and "quote-check:0251#deed" in err
+    assert "make check-bundle Q=0251 FOR=quote-check NOTES=deed" in err
+    assert "quote-check:0251#deed" in _owed(d)
+    assert ro.main(["--root", str(d), "--answer", "record-format", "--q", "251", "--notes", "deed", "--fixed-by", "x: y"]) == 2
+
+
+def test_a_quotation_key_reads_the_quotation_and_its_claim_and_nothing_else() -> None:
+    ru = ae._sibling("record_owed").ru
+    rec = ru.Record.of({"0251-pledges.html": Q_PAGE, "0251-pledges.notes.html": Q_NOTES}, {})
+    key = ru.quotation_key(rec, "quote-check:0251#deed-4")
+    moved = ru.Record.of({"0251-pledges.html": Q_PAGE, "0251-pledges.notes.html": Q_NOTES.replace(*LOCATOR)}, {})
+    assert ru.quotation_key(moved, "quote-check:0251#deed-4") == key, "the locator is outside"
+    quoted = ru.Record.of({"0251-pledges.html": Q_PAGE, "0251-pledges.notes.html": Q_NOTES.replace("Okayasu Koemon", "Okayasu Kozaemon")}, {})
+    assert ru.quotation_key(quoted, "quote-check:0251#deed-4") != key, "a quoted word is inside"
+    claim = ru.Record.of({"0251-pledges.html": Q_PAGE.replace("three pledge", "four pledge"), "0251-pledges.notes.html": Q_NOTES}, {})
+    assert ru.quotation_key(claim, "quote-check:0251#deed-4") != key, "the claim is inside"
+    other = ru.Record.of({"0251-pledges.html": Q_PAGE.replace("70 ryo", "80 ryo"), "0251-pledges.notes.html": Q_NOTES}, {})
+    assert ru.quotation_key(other, "quote-check:0251#deed-4") == key, "another note's claim sentence is not this note's claim"
