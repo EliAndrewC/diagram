@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92, T93, T94, T95, T96, T97, T98, T99, T100, T102, T103, T104, T105, T106, T107, T109, T110, T111, T112, T113, T114, T115, T116, T117, T118, T119, T120
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92, T93, T94, T95, T96, T97, T98, T99, T100, T102, T103, T104, T105, T106, T107, T109, T110, T111, T112, T113, T114, T115, T116, T117, T118, T119, T120, T121, T122, T123, T124, T125, T126, T127, T128, T129, T130, T131, T132, T133, T134, T135, T136
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -558,6 +558,144 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@33 (continue),
 7. **The next step is a measurement.** The gate and the landing cohort, both run.
 8. **Every route measured before offering one?** No route is offered.
 9. **After a ruling: the step it names?** Yes - the ruling says carry on with T102, then T106, T108, T111, T112.
+<!-- plan-archive: T115 to T115 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+## T116 - a code change owes a triage first (amendment 10, the GM 2026-10-19)
+
+### T116 Approach (checklist part A)
+
+1. **The goal, in the world.** A change to a function sends to impl-drift only the claims it bears on, not every claim the function carries.
+2. **The constraints.** Amendment 10, the GM: "I would also like to implement all 3 of your suggestions" - the first, "re-check only the claim lines a change touched". Feature 318's FR-016 and its triage (a page edit owes its claims a triage of the changed blocks; only the claims it names go on). Feature 316: a verdict is recorded at the fingerprints its bundle read. The 1,000-line bar. A test red without it.
+3. **Where each comes from.** The GM (G); 318, 316 (O); the bar (G, 2026-08-31).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T97's claims rounds: an edit to `web.stage_web` re-owed its 20 claims, 17 of them IN-STEP and unaffected; `make where-time F=385 BY=tick`: T97 53 min, 4 claims rounds among them; `claims.owed` names every claim of a unit whose code fingerprint moved "code changed"); `claims.py` stands at 1,000 lines.
+5. **The order.** The owed logic moved to its own module (the bar); `owed` sending a many-claim unit's code change to a triage; the triage bundle showing the unit's diff against origin/main; the record clearing the untouched claims at their new code; the tests.
+6. **The exits.** (c) - a code triage, as the page edit has, reusing the `claims-triage` agent; a static match of names in the diff against the claims was weighed and refused (a change can bear on a claim whose names it never touches).
+7. **The search smell.** None.
+8. **The budget.** 90 min.
+9. **Done, measured.** One goal: a code change to a unit owes its claims a `code triage` - a bundle of the unit's diff hunks against origin/main and its claims - whose named claims go on to impl-drift and the rest are recorded at their new code; a new claim, a claim the triage named, or a unit with no diff to show goes to impl-drift as now; `tests/tooling/` red without it.
+10. **Before moving a constant.** n/a - no constant moves or is added in this task (a minimum claim count was weighed and dropped: the plan review of round 1 found its cost claim unmeasured, and the page triage it copies has none).
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T116 Decisions
+
+**D133 - a code change triaged first.** `owed` marks a "code changed" claim "code triage", owed only a triage (`TRIAGED`), as a page edit's claims are - whatever the number of claims its unit carries; a claim the triage has named (`touched`) goes to impl-drift as now. The triage bundle shows, per such unit, the hunks of `git diff origin/main -- <file>` that overlap the unit's lines and its claims with their last verdicts; a unit with no hunk to show is owed in full (`forced`). `make claims-triaged` clears an untouched claim at its new code and core fingerprints, as it clears a page's at its new pages.
+
+**D134 - the owed logic in its own module.** `owed`, `research_why`, `relabeled_only` and their helpers move from `claims.py` to `claims_owed.py`, re-exported by `claims.py`, so the bar holds.
+
+### T116 part B (2026-10-19T13:06Z)
+
+Owed by the round arbiter's ruling on hour:385-approach-checklist@34 (continue), taken while T116 was the active task.
+
+1. **What is refusing?** Nothing: D133 and D134 were decided, reviewed CLEAR in round 2 and built; the tooling landed.
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither in this part B: the change is D133's, decided and reviewed.
+6. **The one-sentence test.** "A code change re-checks only the claims its hunks bear on" - true by `tests/tooling/test_claims_scoping.py`, red without the code section.
+7. **The next step is a measurement.** The claims tests, run whole, and the landing.
+8. **Every route measured before offering one?** No route is offered.
+9. **After a ruling: the step it names?** Yes - the ruling says go on with the tooling round, T117 to T119.
+
+<!-- plan-archive: T117 to T117 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+<!-- plan-archive: T118 to T118 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+<!-- plan-archive: T119 to T119 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+<!-- plan-archive: T114 to T102 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+<!-- plan-archive: T121 to T117 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+## T122 - a conflict with the clone's own landing is named, with its fix (found working T119, 2026-10-19)
+
+### T122 Approach (checklist part A)
+
+1. **The goal, in the world.** When a landing refuses because main conflicts with what this clone itself landed, the refusal names those files and the one line that resolves them.
+2. **The constraints.** The round arbiter's ruling on hour:385-approach-checklist@35 (change-route): "T122 narrows to a message" - no resolver; name each conflicting file whose main-side commit is this clone's own land-tooling commit and print the line to keep the clone's side; the session resolves by hand, about a minute. Feature 385 D46: the clone merges main only when the patch fails to apply, and a conflicting merge is aborted and refused (unchanged). A test red without it.
+3. **Where each comes from.** The round arbiter (O, binding); D46 (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T119's second landing, 13:40-13:42): a new file landed, then edited, conflicted add/add with main's own land-tooling commit of it; the refusal said only "merging main into the clone conflicts - run scripts/sync-with-main.sh sync-in, resolve the conflict", and resolving it by hand took about 2 minutes.
+5. **The order.** Before the abort, the conflicted files read and each one's last main commit checked against this clone's land-tooling subject; the refusal names them and the line; the suite case.
+6. **The exits.** (c) - name and instruct; a resolver taking the clone's side was built and withdrawn (the arbiter: a rule around a sub-bar hazard, its reach the risk round 2 found).
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: when D46's merge conflicts, the refusal lists each conflicted file whose last commit on origin/main is this clone's own `Tooling from <clone>, landed alone mid-feature` commit, with `git checkout --ours <files> && git add <files> && git commit --no-edit` after `scripts/sync-with-main.sh sync-in`; other conflicts are refused as now; `tests/hooks/test-land-tooling.sh` red without it.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T122 part B (2026-10-19T14:30Z)
+
+Owed by the round arbiter's ruling on hour:385-approach-checklist@35 (change-route), taken while T122 was the active task.
+
+1. **What is refusing?** Nothing now: the ruling narrowed T122 to a refusal message; the resolver was withdrawn and round 3 stopped.
+2. **A3 again.** Changed: the arbiter's ruling is now the binding constraint, written into item 2.
+3. **A4 again.** Unchanged: the hand resolution measured about 2 minutes.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither in this part B: the change is D144's as rewritten by the ruling, decided and reviewed CLEAR.
+6. **The one-sentence test.** "A conflict with the clone's own landing is named with the line that resolves it" - true by the suite's case 2a.
+7. **The next step is a measurement.** The suite, run whole: 49/49.
+8. **Every route measured before offering one?** No route is offered; the ruling's was taken.
+9. **After a ruling: the step it names?** Yes - narrowed to a message, one plan review, the resolver discarded.
+
+### T122 Decisions
+
+**D144 - the self-landed conflict named.** In `land-tooling.sh`'s D46 branch, before `git merge --abort`, the conflicted files (`git diff --name-only --diff-filter=U`) whose `git log -1 --format=%s origin/main -- <file>` begins `Tooling from <this clone's name>,` are named in the refusal: "<files> conflict only with this clone's own earlier landing - run scripts/sync-with-main.sh sync-in, then git checkout --ours <files> && git add <files> && git commit --no-edit, then land again". The merge is aborted and the landing refused as now; nothing is resolved by the tool.
+
+<!-- plan-archive: T123 to T114 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+<!-- plan-archive: T106 to T97 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+## T108 - the yard's 7 ft claimed apart from the garden's (carried by the claims gate, FR-013)
+
+### T108 Approach (checklist part A)
+
+1. **The goal, in the world.** The two claims of the 7 ft foul margin say which half 0246 sets and which half no page sets.
+2. **The constraints.** 0246's drawing page sets the 7 ft gap only from another household's garden fence; `law.span_walkable#a span off a threshing yard` already labels the yard's 7 ft UNRESEARCHED ("no page sets a gap from a yard"). Every rendering decision labeled. The claims check.
+3. **Where each comes from.** 0246's drawing page (O); the sibling claim (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the claims index: `law.fouls_fabric#foul margin` and `settle.fouled_segment#off another household's yard or garden` NEEDS-RESEARCH, each "the yard part should be UNRESEARCHED, as span_walkable's claim already says").
+5. **The order.** Each claim split in two, its garden half on 0246, its yard half UNRESEARCHED; the claims check.
+6. **The exits.** (e) conform the claims to the page and to their sibling; a research pass for a yard gap was weighed and refused here (the sibling has stood UNRESEARCHED; a pass is the open-questions list's to run).
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: the two claims each split into a garden half citing 0246 and a yard half UNRESEARCHED; the claims check IN-STEP; no engine token changes.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T108 Decisions
+
+**Wording only.** Two claims split by what their pages set: `law.fouls_fabric#foul margin` and `settle.fouled_segment#off another household's yard or garden` each keep their garden half on 0246 and gain a yard half labeled UNRESEARCHED, in the sibling's words.
+
+## T130 - the run-on reach labeled as the guess it is (impl-drift, T106's round)
+
+### T130 Approach (checklist part A)
+
+1. **The goal, in the world.** The run-on reach's claim cites no page for a figure no page gives.
+2. **The constraints.** 0246's drawing page gives 60 ft only as the reach to a house or another way; 0014 says the nearest lane "runs on to the bund", with no distance. Every rendering decision labeled; a GUESS names its source only where one exists. The claims check.
+3. **Where each comes from.** 0246, 0014 (O); the root CLAUDE.md's research rules (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T106's claims round: `bund.RUN_ON_REACH_FT#run-on reach` MISLABELED, "The label should be GUESS with no page named").
+5. **The order.** The claim relabeled; the claims check.
+6. **The exits.** (e) conform the label to the pages.
+7. **The search smell.** None.
+8. **The budget.** 10 min.
+9. **Done, measured.** One goal: the claim reads GUESS, naming 0246's 60 ft as the reach it reuses and no page as its source; the claims check IN-STEP; no engine token changes.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T130 Decisions
+
+**Wording only.** `bund.RUN_ON_REACH_FT#run-on reach` reads "GUESS: an end within 60 ft of the field is carried on to it - the reach 0246 gives to a house or a way (`WAY_END_REACH_FT`), reused for the field; no page gives a distance to the field".
+
+## T136 - bund.py's turn limit labeled a convention, its sampling step claimed (impl-drift, T130's round)
+
+### T136 Approach (checklist part A)
+
+1. **The goal, in the world.** Two constants of `bund.py` say truly what they rest on.
+2. **The constraints.** 0081's drawing page: "A lane run on to a bund turns no more than 60 degrees anywhere" and "The limits above are drawing conventions ... chosen at the scale of a dozen paces, not measured". Every unit carries a claim; plumbing is claimed NONE. The claims check.
+3. **Where each comes from.** 0081's drawing page (O); feature 316 (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T130's claims round: `RUN_ON_TURN_DEG`'s comment calls it a map drawing convention while its claim reads as a finding; `BRANCH_STEP_FT` carries no claim; then a read of 0081's page).
+5. **The order.** The turn limit's claim labeled CONVENTION; the step claimed NONE; the claims check.
+6. **The exits.** (e) conform the labels to the page.
+7. **The search smell.** None.
+8. **The budget.** 10 min.
+9. **Done, measured.** One goal: `RUN_ON_TURN_DEG`'s claim reads CONVENTION citing 0081, `BRANCH_STEP_FT` carries a NONE claim; the claims check IN-STEP; no engine token changes.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T136 Decisions
+
+**Wording only.** `RUN_ON_TURN_DEG`'s claim becomes "run-on turn limit - CONVENTION research/questions/0081-village-lanes.drawing.html: a lane run on to a bund turns no more than 60 degrees anywhere - the page's turn limits are drawing conventions"; `BRANCH_STEP_FT` gains "Research: branch sampling step - NONE: how often the nearest lane is sampled for a field path's branch".
+
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).

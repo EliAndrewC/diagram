@@ -37,13 +37,14 @@ TIP_MARGIN_FT = 1.0
 # How far an end that reaches nothing may be carried on to the bund: the gate's own reach to another way, the distance at
 # which the old rule counted the field as reached - so an end the old rule passed as "near the field" is carried onto it.
 RUN_ON_REACH_FT = WAY_END_REACH_FT
-"""Research: run-on reach - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end within 60 ft of the field is carried on"""
+"""Research: run-on reach - GUESS: an end within 60 ft of the field is carried on to it - the reach 0246 gives to a house or a way (`WAY_END_REACH_FT`), reused for the field; no page gives a distance to the field"""
 # A run-on may turn the path this far off the way it was walking, and no further: a path bends as it is walked, and a bund
 # behind the end is not one it runs on to (a map drawing convention, well inside the 90 degree hook `joints.py` removes).
 RUN_ON_TURN_DEG = 60.0
-"""Research: run-on turn limit - research/questions/0081-village-lanes.drawing.html: a lane run on to a bund turns no more than 60 degrees anywhere"""
-# The nearest lane is sampled every this many feet when a field path must branch off it (a map drawing convention).
+"""Research: run-on turn limit - CONVENTION research/questions/0081-village-lanes.drawing.html: a lane run on to a bund turns no more than 60 degrees anywhere - the page's turn limits are drawing conventions"""
+# The nearest lane is sampled every this many feet when a field path must branch off it.
 BRANCH_STEP_FT = 8.0
+"""Research: branch sampling step - NONE: how often the nearest lane is sampled for a field path's branch"""
 # The branch is drawn at the field spur's own tread (`stage_track`: width 5, worn).
 BRANCH_WIDTH = 5
 """Research: field path width - research/questions/0081-village-lanes.drawing.html: 5 ft, the field spur's tread"""

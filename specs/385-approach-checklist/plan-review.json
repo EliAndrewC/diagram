@@ -7150,6 +7150,309 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T115": {
+   "section_sha256": "f8d50e16a52914efc2c7359635b7a7e8041b309bfb57f7d40886ee74c15f9ab2",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D132-window",
+     "summary": "A task's time is its tick window: from the tick before to its own tick, booked to the task(s) ticked at its end; the table gains the window's wall-clock minutes.",
+     "class": "within",
+     "why": "Amendment 10: the GM asked for tooling to gather 'this kind of information' - the per-task timing he had just been answered with, which was tick-to-tick spans. Reporting that span by one command is the request."
+    },
+    {
+     "id": "D132-source",
+     "summary": "Tick times are read by the tool from tasks.md's git history (the commit that turned a box [x]) rather than from the event log's tick records.",
+     "class": "within",
+     "why": "This departs from the measurement as recorded in request.md ('read from the event log (each tick now records its task, hour 33's fix) as a report, not rebuilt from git history by hand'): the plan rebuilds from git history, by tool, and does not use the event log's tick records. Within because the GM's own words name no source, the recorded objection is to the HAND rebuild and this is one command, and both sources deliver the information asked for - which one is design. Noted: the plan's step 4 measured the lagging active mark, not the hour-33 tick records, so the named source was set aside unmeasured (git history does reach ticks from before that fix)."
+    },
+    {
+     "id": "D132-batch",
+     "summary": "Tasks ticked in one commit share one window, reported as e.g. 'T96+T98'.",
+     "class": "within",
+     "why": "The measure the GM was answered with already reported T96 with T98 jointly (1 h 34). The joint window follows from D132-source's choice of git history, not from a physical limit - per-task tick records could separate a batch - but it reports every task, truthfully, and drops none."
+    },
+    {
+     "id": "D132-buckets",
+     "summary": "Gaps inside each window are bucketed by where_time.tables (T89/T90's buckets) as now, with no name-based booking.",
+     "class": "within",
+     "why": "'Where did its time go' is the other half of the information the GM was given (claims rounds, landing cost, plan reviews); existing buckets are reused, and dropping name-based booking removes only the lagging attribution step 4 measured wrong."
+    },
+    {
+     "id": "exit-c",
+     "summary": "A new BY=tick mode of where-time rather than mending the active mark.",
+     "class": "within",
+     "why": "The request asks for the information gathered by tooling, not for the mark to be repaired; the mechanism inside that is design, not scope."
+    },
+    {
+     "id": "home-of-report",
+     "summary": "Per-task time is printed by make where-time BY=tick, not by make feature-report's per-task table (FR-005, SC-001), which the blocks do not name.",
+     "class": "within",
+     "why": "The GM's words ask for 'tooling adjustments' and name no command; a where-time mode adds a report beside FR-005's table and removes nothing FR-005 or SC-001 require. Not a narrowing of the accepted spec, though the plan would read better naming FR-005."
+    },
+    {
+     "id": "done",
+     "summary": "Done: make where-time F=385 BY=tick [SINCE=] prints each task's span and bucket minutes, T97 within a minute of the hand count's 53, with a tests/tooling test red without it.",
+     "class": "within",
+     "why": "A check that the requested report gives the right number and keeps doing so enforces the request (GM 2026-09-20); nothing beyond the report is verified."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T116": {
+   "section_sha256": "287ba0f886dee154e1b2b192de89bc22f26c49e2ee0537b40f393c6de39edd14",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D133",
+     "summary": "Every 'code changed' claim not already named touched is owed only a code triage (diff hunks of the unit vs origin/main plus its claims); named claims go to impl-drift, the rest cleared at new code/core fingerprints; no claim-count threshold.",
+     "class": "within",
+     "why": "Amendment 10's first lever verbatim: 're-check only the claim lines a change touched'. The triage is how 'touched' is decided, copying 318 FR-016's page triage; round 1's unmeasured CODE_TRIAGE_MIN carve-out is gone ('whatever the number of claims its unit carries'). Refusing a static name match re-checks more than a literal reading would, which is conservative and serves the lever's purpose rather than narrowing it. A new claim going to impl-drift is not a re-check at all."
+    },
+    {
+     "id": "D133-forced",
+     "summary": "A unit whose fingerprint moved but has no diff hunk against origin/main to show is owed in full (forced).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Without a hunk there is nothing to read to tell which claims a change touched, so the lever cannot be applied to that unit. Owing in full is the existing behavior for the case where the rule cannot run, not a carve-out from a case where it could."
+    },
+    {
+     "id": "D134",
+     "summary": "owed, research_why, relabeled_only and helpers move from claims.py to claims_owed.py, re-exported, to hold the 1,000-line bar.",
+     "class": "within",
+     "why": "A structural move to keep the GM's standing 1,000-line bar (2026-08-31). It changes nothing in what was asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T117": {
+   "section_sha256": "41df81fcca38ae661e179825d2192b72d53d64d1b4ff200b93a99dd377156e40",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D135",
+     "summary": "tick-task.py's refusals become one function refusal(root, d, task, note, landed=True); a new make land-batch F= T=\"T1 T2\" NOTE= asks it of every task (landed=False) and refuses before anything lands, runs scripts/sync-with-main.sh done once, and on exit 0 ticks each task with 'landed in batch T1+T2: <NOTE>' (the landed refusal then asked of each); a failed landing ticks none.",
+     "class": "within",
+     "why": "Amendment 10 approves 'batch the gate and the landing cohort across two or three small engine fixes'. One run of the gated route (make done, make cohort-landing, the claims gate) for several tasks is exactly that; every per-task tick refusal is kept, asked before landing and the landed refusal (D130) asked after, so nothing the request did not ask to relax is relaxed. The batch size is left to the caller rather than capped, which narrows nothing."
+    },
+    {
+     "id": "D136",
+     "summary": "landed_refusal's message for engine work off main adds 'or, with the next small fix, make land-batch'.",
+     "class": "within",
+     "why": "Points the existing refusal at the requested batching route; it changes no refusal's reach, only names the command that serves the request."
+    },
+    {
+     "id": "Approach-6 (exit c)",
+     "summary": "A command that lands and ticks a batch, not a CLAUDE.md practice.",
+     "class": "within",
+     "why": "Implements the requested lever as tooling; the alternative refused is weaker than the request, not part of it."
+    },
+    {
+     "id": "Approach-2 (the gated route stays the only way engine code lands)",
+     "summary": "Batching goes through scripts/sync-with-main.sh done, never around it.",
+     "class": "within",
+     "why": "The GM asked to batch the gate and the cohort, not to skip either; keeping the route is the request's own premise."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T118": {
+   "section_sha256": "d6c0df42d83424f5be7b80a58404b297e8718a4cf623c260559faa7e14564586",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T118-goal",
+     "summary": "Approach items 1/9: a task that only rewords (a claim relabeled, a comment, a glossary entry) goes from Approach to tick without a spec-fidelity plan review; a task that decides anything still gets one.",
+     "class": "within",
+     "why": "Amendment 10's third suggestion, approved by the GM ('implement all 3 of your suggestions'), verbatim: 'skip the plan review for wording-only tasks that decide nothing new'. The suggestion was offered against the wording-only claim-fix tasks timed at 5-15 min, which is the class item 4 names (T31, T103, T105, T110). Keeping the review for any task that decides keeps the 'decide nothing new' half of the clause."
+    },
+    {
+     "id": "D137",
+     "summary": "A Decisions block of one '**Wording only.** <what>' line makes plan_gate.block_status skip the section, and make decide says no review is owed and builds no bundle; any '**D<n> - ' line in the same block undoes the declaration.",
+     "class": "within",
+     "why": "This is the skip itself, mechanized in the existing plan gate the way D94's quiet part B already is. The undo rule narrows the exemption to sections that decide nothing, which is the request's own condition, not a carve-out from it."
+    },
+    {
+     "id": "D138",
+     "summary": "make tick refuses a wording-only task when a non-merge commit since its last make task-start changed a file outside specs/ and dev/ that is neither a glossary JSON entry nor a .py file with unchanged semantic_bytes; a research page's block counts as a decision and is refused the same way.",
+     "class": "within",
+     "why": "Its only effect is to make 'wording-only ... decide nothing new' true of every task that skips the review: it refuses work that changed what runs under a wording declaration. That is enforcement of the requested condition (the GM 2026-09-20 rule on checks that make the asked-for thing happen), and the GM's standing rule 'a tool, never a reminder' that the Approach cites. It reaches no other agent, command or default beyond the tick of a task that declared itself wording-only. Its allowlist (specs/, dev/, glossary JSON, .py with unchanged semantic_bytes) is the mechanical boundary of 'wording only': anything outside it, including prose files elsewhere, stays reviewed. That errs toward keeping review, matching the claim-fix class (claims, comments, glossary) the suggestion was offered against, so it is not a narrowing of the skip the GM approved."
+    },
+    {
+     "id": "T118-exit",
+     "summary": "Approach item 6: a declaration checked by the tick against the diff, chosen over an agent classifying the section.",
+     "class": "within",
+     "why": "An agent classification would be the very review the GM asked to skip for these tasks; choosing the mechanical check is a means, not a change of what was asked."
+    },
+    {
+     "id": "T118-tests",
+     "summary": "Approach items 5/9: tests in tests/tooling/ red without the exemption and the tick check.",
+     "class": "within",
+     "why": "Verification of the requested behavior only; nothing beyond the request is measured or proven."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T119": {
+   "section_sha256": "0956ee3ed24ccba04f47ed6525e44f46013d967a520e59380bee166c5d96a374",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D139",
+     "summary": "A ruling carrying tooling_fix is refused without fix_measure (compiling regex over main-session Bash commands, or agent:<kind>) and fix_minutes; the 45 fixes made before T119 get a measure assigned from their own sentence in specs/<feature>/fix-measures.json (no fix_minutes, as their cost was never measured); the one declined fix is reported declined; a fix meant to save editing/reading/model time is measured through the command or check it shortens.",
+     "class": "within",
+     "why": "Change 3 asks that each fix's yield be measured against the time it was meant to save. Round 1's narrowing (46 earlier fixes reported 'unmeasured', i.e. excluded) is gone: every fix that was made now has a measure and enters the yield report (item 9 confirms 'the 45 made before T119 included'). Reading a sentence to choose WHAT to measure is not the refused exit of item 6 (judging the yield from the text); the yield itself is still computed from the transcripts. The declined fix was never made, so there is no yield to measure - not a carve-out from 'each fix'. Leaving fix_minutes empty on the old rows removes nothing from the yield, which D140 computes from before/after rates, not from fix_minutes. The proxy sentence is a measurement method that still measures every fix, not an exclusion."
+    },
+    {
+     "id": "D140",
+     "summary": "scripts/measure/fix_yield.py (make fix-yield F=<n>): per fix settled done, the measure's rate per session hour over YIELD_BEFORE_HOURS before its ruling and since its settling; 'saves nothing' / 'too early' / 'saving'.",
+     "class": "within",
+     "why": "This is change 3 itself - each fix's yield against the time it was meant to save, measured by a tool rather than estimated."
+    },
+    {
+     "id": "D141",
+     "summary": "The step-back bundle carries the table as fix-yield.md; the arbiter's contract asks of it: a fix that saves nothing is retired as that hour's tooling_fix, or kept with the reason recorded.",
+     "class": "within",
+     "why": "Puts the measurement where the hourly step-back reads it (cadence unchanged, as the GM required); retiring a fix that saves nothing is change 2's 'removing or simplifying comes before adding' applied to the yield. It narrows nothing asked."
+    },
+    {
+     "id": "constants",
+     "summary": "YIELD_MIN_HOURS = 3 and YIELD_BEFORE_HOURS = 6 as new tooling windows.",
+     "class": "within",
+     "why": "Window choices for a measurement the GM asked for; they exclude no fix and do not touch the hourly cadence."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T114": {
+   "section_sha256": "d5bcfa840b18cb40a08a5a1908bfb255ce88741b9bf0573f5f136ee0793f9d3b",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D142",
+     "summary": "plan_bundle.build passes each earlier text with the verdict the record holds for it (tasks.<id>.verdict or blocks.<key>.verdict), marks it <!-- block \"<key>\" verdict X --> (CLEAR, BLOCKED or 'no verdict recorded'), heads earlier.md 'Each changed block's text when last judged, with that verdict', and the MANIFEST sentence says the same; the alternative of showing only CLEAR texts is refused.",
+     "class": "within",
+     "why": "A tooling correctness fix: the bundle's heading claims every earlier text was ruled CLEAR while it can show a BLOCKED one (the premise is visible in this very bundle's earlier.md heading, 'at its last CLEAR verdict'). Labeling the truth removes nothing a reviewer was given and narrows no clause of the request; it serves amendment 6's 'implement any obvious performance / tooling / process improvements along the way' and amendment 8's 'make our tooling do the thing correctly automatically every time'. Refusing the CLEAR-only option keeps the round-1 BLOCKED text in front of the round-2 reviewer, which preserves rather than narrows what plan review reads."
+    },
+    {
+     "id": "T114-test",
+     "summary": "a test under tests/tooling/ red without the verdict heading and per-block verdict line",
+     "class": "within",
+     "why": "Enforcement of D142 only: delete D142 and the test has nothing to check (GM 2026-09-20)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T121": {
+   "section_sha256": "4386ba285bfea50096659bf30a7e33f079a25e232d59209870efcbb4d546ee1e",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T121 (the task)",
+     "summary": "A guard-file bypass found working T117 (a python heredoc wrote the Makefile through open(p, \"w\") with no refusal) is fixed as its own task.",
+     "class": "within",
+     "why": "The GM asked that obvious tooling improvements be made along the way (amendment 6) and that a tooling fix carry a measured cost or a defect that reached main (amendment 10, change 1); this is a measured defect (2026-10-19, T117's heredoc wrote a guard file unrefused) in a guard on main. It is split from T117 per the one-goal rule the GM approved (amendment 4). It adds no GM-facing behavior: it makes an existing rule (guard files edited only through make guard-edit) hold for a write route it missed."
+    },
+    {
+     "id": "D143 (open() literal)",
+     "summary": "hm_make's raw python-write patterns gain open(\"<guard>\", \"w\"|\"a\"|\"x\").",
+     "class": "within",
+     "why": "Closes a measured gap in an existing guard rule; refuses only what the rule already forbids. Amendment 10 change 2 (simplify a misfiring guard before adding one) is not engaged: no new guard is added, and the existing one under-fires rather than misfires."
+    },
+    {
+     "id": "D143 (string-bound names)",
+     "summary": "_GUARD_BIND also binds a name to a plain string literal naming a guard path; that name then counts as a write through open(<name>, \"w\"|\"a\"|\"x\") or .write_text(.",
+     "class": "within",
+     "why": "This is exactly the T117 shape (p=\"Makefile\"; open(p,\"w\").write(...)); same rule, same reach."
+    },
+    {
+     "id": "Exit (c) / reads and mentions stay legal",
+     "summary": "The match is widened by the measured shapes only; refusing any python heredoc that names a guard file was weighed and refused; open(p) and open(p, \"r\") stay legal.",
+     "class": "within",
+     "why": "Keeps feature 164's standing rule (a guard filename's presence is never a write). Nothing the GM asked for is narrowed: the request asks for no guard reach here, and this choice keeps the guard from refusing work it does not concern."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T122": {
+   "section_sha256": "9d2ad1c1dbeba6b0332ab17d45188eec19272c286743f7e687804dc233794b5d",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D144",
+     "summary": "In land-tooling.sh's D46 conflict branch, before git merge --abort, the conflicted files whose last origin/main commit is this clone's own 'Tooling from <clone>,' landing are named in the refusal with the line that keeps the clone's side (sync-in, then git checkout --ours, git add, git commit --no-edit, land again); the merge is still aborted and the landing still refused; the tool resolves nothing.",
+     "class": "within",
+     "why": "D46's behavior (a conflicting merge aborted, the clone left as it was, the refusal naming sync-in to resolve by hand) is unchanged; D144 only adds information to that refusal. It is an obvious tooling improvement found while working (amendment 6: 'implement any obvious performance / tooling / process improvements along the way') and it is exactly the binding change-route of the round arbiter on hour:385-approach-checklist@35 ('T122 narrows to a message'). Amendment 10 change 1's 10-minute measured-cost bar governs step-back tooling fixes; T122 was found working T119, and the arbiter, which named the hazard sub-bar, bound this narrower route anyway - that is the arbiter's call, reviewed by the GM after landing (feature 379), not a decision of this plan."
+    },
+    {
+     "id": "Exit (c): resolver withdrawn",
+     "summary": "The earlier resolver (scripts/gates/self_landed.py taking the clone's side and committing the merge) is withdrawn; T122 only names and instructs.",
+     "class": "within",
+     "why": "The GM never asked for a resolver, so withdrawing it narrows nothing he asked for; it returns T122 to D46 as written (a conflicting merge is aborted and refused, resolved by hand), which the earlier BLOCKED version had departed from."
+    },
+    {
+     "id": "Detection criterion",
+     "summary": "A conflicted file counts as self-landed when git log -1 --format=%s origin/main -- <file> begins 'Tooling from <this clone's name>,'.",
+     "class": "within",
+     "why": "A design detail of D144 that implements the arbiter's words 'each conflicting file whose main-side commit is this clone's own land-tooling commit' literally; it changes no behavior beyond the refusal's text."
+    },
+    {
+     "id": "Done (item 9): other conflicts refused as now; test red without it",
+     "summary": "Any other conflict is refused exactly as today; tests/hooks/test-land-tooling.sh gains a case red without D144.",
+     "class": "within",
+     "why": "The first keeps D46 unchanged; the second is a test that only fails when the requested refusal text is absent - enforcement of what was asked, not new scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T123": {
+   "section_sha256": "ebcbdfc2671fb3f2e29a73395222e2aca7395fac34deda28c0e232c58cec6daf",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D145",
+     "summary": "plan_bundle._QUALIFIED accepts an optional 'amendment <n>' (with its own optional comma) and an optional opening parenthesis between the feature number and the id, so 'Feature 375 amendment 11 (D64)' and '375 amendment 6, FR-002' resolve from feature 375.",
+     "class": "within",
+     "why": "Repairs a measured defect in D85/D91 (a qualified citation of another feature's decision read as this feature's same-numbered one, handing the reviewer the wrong text); it serves D85's own stated purpose that the reviewer reads what the block names. Tooling fix of the kind amendment 6 ('implement any obvious performance / tooling / process improvements along the way') asks for; it narrows nothing - an unqualified id stays the reviewed feature's, and the test only enforces the fix."
+    },
+    {
+     "id": "T123 Approach exit (c)",
+     "summary": "Exit chosen: widen the qualified form by the measured shape, rather than requiring blocks to rewrite citations into the existing forms.",
+     "class": "within",
+     "why": "A choice of mechanism for the fix; it removes no case the request or D85/D91 cover and adds no behavior beyond reading the citation the block wrote."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T106": {
+   "section_sha256": "697840ba5f720b0702ba135abf6ca2f98e434d3cd097b064bd302271cc91a51b",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D146",
+     "summary": "0246's back-lane bullet reworded: a back lane is laid about 30 ft past the last house it serves (the room it is cut in) and its end then pulled back to that house like every end reaching nothing; the frame claim cites that with the page path written out in full",
+     "class": "within",
+     "why": "Conforms the record to what the code draws, an exit the request names (line 43, 'at least three exits besides conform', and the GM's point that arbitrary numbers should be inspected rather than obeyed). The 30 ft is the page's own GUESS, and its general rule already says ends are pulled back; no behavior, constant or requested scope is narrowed. The round-2 change only writes out the abbreviated page path; the decision is unchanged."
+    },
+    {
+     "id": "T106 exit (c) refused",
+     "summary": "a new rule to overrun the trim by 30 ft is weighed and refused",
+     "class": "within",
+     "why": "Keeps the current drawn behavior (the 2026-09-27 trim), exactly the kind of exit weighing the checklist asks for; it carves no case out of anything the GM asked for."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

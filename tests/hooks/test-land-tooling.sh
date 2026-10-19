@@ -111,6 +111,14 @@ ok "the clone's history is untouched" '[ "$(git -C "$C" log --format=%s -1)" = "
 git -C "$C" pull -q --no-rebase --no-edit origin main >"$T/out" 2>&1; rc=$?
 ok "the clone's next merge of main is clean" '[ "$rc" -eq 0 ] && [ "$(cat "$C/l7r/e.py")" = "e = 2" ]'
 
+echo "2a. a new file landed, then edited, names its conflict with the clone's own landing and the fix (feature 385 T122)"
+setup
+printf 'v1\n' > "$C/scripts/new.sh"; git -C "$C" add -A; git -C "$C" commit -qm "new tool"
+land scripts/new.sh
+printf 'v2\n' > "$C/scripts/new.sh"; git -C "$C" commit -qam "new tool, again"
+land scripts/new.sh; rc=$?
+ok "refused, naming the file as the clone's own landing and the line that resolves it" '[ "$rc" -ne 0 ] && grep -q "scripts/new.sh conflict only with this clone'"'"'s own earlier landing" "$T/out" && grep -q "git checkout --ours scripts/new.sh" "$T/out" && ! git -C "$C" rev-parse -q --verify MERGE_HEAD >/dev/null'
+
 echo "2b. the guard suites and the tooling tests run side by side, each timed; a failing one is named (383 amendment 2, D22)"
 setup
 LAND_TOOLING_CHECKS= LAND_TOOLING_GUARDS='sleep 1' LAND_TOOLING_TOOLING='sleep 1' land scripts/a.sh; rc=$?

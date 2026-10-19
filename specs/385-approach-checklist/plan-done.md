@@ -2833,3 +2833,179 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@32 (continue),
 
 **D130 - landed means on main.** In `tick-task.landed_refusal`, a task with no land-tooling run is refused when `git log origin/main..HEAD` names a file outside `specs/` and `dev/` (the feature's own records and the run logs a landing writes): "the NOTE says landed, but <file> is committed here and not on origin/main - land it (scripts/sync-with-main.sh done), then tick".
 
+<!-- plan-archive: archived 2026-10-19 -->
+## T115 - per-task time by tick (amendment 10, the GM 2026-10-19)
+
+### T115 Approach (checklist part A)
+
+1. **The goal, in the world.** "How long did each task take, and where did its time go?" is one command, not an hour of reading git history by hand.
+2. **The constraints.** Amendment 10, the GM: "It sounds like we probably could use some tooling adjustments to help gather this kind of information." The measure the GM was answered with: a task's span from the tick before it to its own tick, worked one task at a time. T89/T90's buckets (`where_time.tables`). A test red without it.
+3. **Where each comes from.** The GM (G); `where_time` (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the GM's speed question at 11:55Z, then `make where-time F=385 SINCE=2026-10-19T00:00:00Z` against the ticks read from `tasks.md`'s git history): `where-time` books a gap to the task its call names or the active mark, and the mark lagged - T96 and T97 showed about an hour each where their tick-to-tick spans were 1 h 34 (with T98) and 53 min; the spans had to be rebuilt by a hand script over `git log -p tasks.md`.
+5. **The order.** The tick times read from `tasks.md`'s history (the box turned `[x]`), the windows built from them, `tables` booking each window to the task(s) ticked at its end, a span column, the make target, the test.
+6. **The exits.** (c) - a mode of `where-time` that books by tick windows; mending the active mark was weighed and refused (a window is what the GM was answered with, and it needs no mark kept true).
+7. **The search smell.** None.
+8. **The budget.** 45 min.
+9. **Done, measured.** One goal: `make where-time F=385 BY=tick [SINCE=]` prints each task's (or each batch's) tick-to-tick span and its minutes by bucket, its numbers for T97 within a minute of the hand count's 53; `tests/tooling/` red without it.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T115 Decisions
+
+**D132 - a task's time is its tick window.** `where_time` gains `--by-tick` (`make where-time ... BY=tick`): the ticks are read from `tasks.md`'s git history (the commit that turned a box `[x]`), each window from the tick before to a tick is booked to the task or tasks ticked at its end (a batch shares its window, named "T96+T98"), the gaps inside are bucketed by `tables` as now with no name-based booking, and the table gains the window's wall-clock minutes.
+
+<!-- plan-archive: archived 2026-10-19 -->
+## T117 - small engine fixes land together (amendment 10, the GM 2026-10-19)
+
+### T117 Approach (checklist part A)
+
+1. **The goal, in the world.** Two or three small engine fixes pay one gate and one landing cohort between them, not one each.
+2. **The constraints.** Amendment 10, the GM: "I would also like to implement all 3 of your suggestions" - the second, "batch the gate and the landing cohort across two or three small engine fixes". The gated route (`scripts/sync-with-main.sh done`: a green `make done`, `make cohort-landing`, the claims gate) stays the only way engine code lands. T113 (D130): a NOTE saying landed is refused while the task's work is off main. Every refusal `make tick` makes today still holds for each task of a batch. A test red without it.
+3. **Where each comes from.** The GM (G); the root CLAUDE.md's session-clones rules (O); T113 (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the session's transcripts, each landing command's duration): a gated landing costs about 15 min - `make done` 9.1 min (T102), `make cohort-landing` 4.1-5.8 min (T99, T109, T102), the push 2.8 min (T99) - paid once per engine task; `make tick` takes one task, and nothing names the batch: T96 and T98 landed together once (`where-time BY=tick` shows "T96+T98"), by hand.
+5. **The order.** `tick-task.py`'s refusals made a function a batch can ask before landing; a `make land-batch` that asks them of every task, runs the gated route once, then ticks each; the landed-refusal's message naming it; the test.
+6. **The exits.** (c) - a command that lands and ticks a batch; a practice written into CLAUDE.md alone was weighed and refused (the GM's rule: a tool, never a reminder).
+7. **The search smell.** None.
+8. **The budget.** 60 min.
+9. **Done, measured.** One goal: `make land-batch F=<n> T="<ids>" NOTE=...` refuses before landing if any task's tick would be refused, otherwise runs `scripts/sync-with-main.sh done` once and, on its success, ticks every task with the NOTE; a failed landing ticks none; `tests/tooling/` red without it.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T117 Decisions
+
+**D135 - one landing, every tick.** `tick-task.py`'s refusals (plan review, waits and marks, the arbiter's fix, the hour's checkpoint, the task's Approach) become one function, `refusal(root, d, task, note, landed=True)`, that `make tick` calls as now. A new `scripts/land-batch.py` (`make land-batch F= T="T1 T2" NOTE=`) asks it of every task with `landed=False` and refuses, naming each task and its refusal, before anything lands; then runs `scripts/sync-with-main.sh done` once; on exit 0 ticks each task with `landed in batch T1+T2: <NOTE>` (the landed refusal then asked of each, as `make tick` asks it); on a failed landing ticks none and says so.
+
+**D136 - the refusal names the batch.** `landed_refusal`'s message for engine work off main adds "or, with the next small fix, `make land-batch`".
+
+<!-- plan-archive: archived 2026-10-19 -->
+## T118 - a wording-only task owes no plan review (amendment 10, the GM 2026-10-19)
+
+### T118 Approach (checklist part A)
+
+1. **The goal, in the world.** A task that only rewords - a claim relabeled, a comment, a glossary entry - goes from its Approach to its tick without a spec-fidelity plan review, and a task that decides anything still gets one.
+2. **The constraints.** Amendment 10, the GM: "I would also like to implement all 3 of your suggestions" - the third, "skip the plan review for wording-only tasks that decide nothing new"; the task as filed (T118 in tasks.md): its section's decisions classed as wording by a rule the tick checks. Feature 243 / 375: a plan's decisions are reviewed before its tasks tick. T75 (D94): a part B that decides nothing owes no review, checked mechanically. The GM's rule: a tool, never a reminder. A test red without it.
+3. **Where each comes from.** The GM (G); 243, 375, T75 (O); the GM (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (`make where-time F=385 BY=tick`, its agents table): the wording-only tasks T31, T103, T105, T110 took 5-12 min tick to tick, each with one spec-fidelity plan review of 1-3 agent-minutes beside `make decide`, the dispatch and `make plan-verdict`; `plan_gate.decides_nothing` exempts a part B only, never a task's own section.
+5. **The order.** The section's declaration (`**Wording only.**` in place of decisions) exempted from the plan gate; the tick's check of the task's commits against it; `make decide`'s word for such a section; the tests.
+6. **The exits.** (c) - a declaration the tick checks against the diff; a classification by an agent was weighed and refused (it is the review this removes).
+7. **The search smell.** None.
+8. **The budget.** 60 min.
+9. **Done, measured.** One goal: a task section whose Decisions block is a single `**Wording only.**` line owes no plan review, and `make tick` refuses it when a commit since its `make task-start` changed a file other than `specs/`, `dev/`, a glossary entry, or a `.py` file in what runs (comments, docstrings and claims aside: `gate-stamp.semantic_bytes`); `tests/tooling/` red without it.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T118 Decisions
+
+**D137 - wording declared.** A task's Decisions block may hold, in place of decisions, one line `**Wording only.** <what is reworded>`. `plan_gate.block_status` skips such a section's blocks (as `decides_nothing` skips a quiet part B), so it owes no review; `make decide` on it prints that no review is owed and builds no bundle. A `**D<n> - ` line in the same block undoes the declaration: the section is reviewed as now.
+
+**D138 - the tick checks the words.** For a wording-only task, `make tick` reads the commits since the task's last `make task-start` (`task-starts.jsonl`; merges skipped) and refuses when one changed a file outside `specs/` and `dev/` that is not a glossary entry (`l7r/diagram/interactive/assets/glossary/*.json`) and is not a `.py` file whose `semantic_bytes` stand unchanged: "<task>'s section says wording only, but <file> changed in what runs - write its decision (`**D<n> - `) and `make decide`". A research page's block is a decision, not wording, and is refused the same way.
+
+<!-- plan-archive: archived 2026-10-19 -->
+## T119 - each tooling fix's yield measured (amendment 10, the GM's change 3)
+
+### T119 Approach (checklist part A)
+
+1. **The goal, in the world.** Each tooling fix the round arbiter names says what time it is meant to save, and the step-back shows whether it saved it, so a fix that saves nothing is retired.
+2. **The constraints.** Amendment 10, the GM: "implement 3 as part of the next round of tooling fixes" - change 3, measuring each fix's yield against the time it was meant to save; the task as filed (T119 in tasks.md) reads that time from the per-task time report (T115). Changes 1 and 2 (landed): a fix needs a measured cost of 10 minutes or more this hour, or a defect that reached main; removing or simplifying a misfiring guard comes before adding one. The hourly cadence stays. The GM's rule: a tool, never a reminder. A test red without it.
+3. **Where each comes from.** The GM (G); amendment 10 (O); the GM (G).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (`specs/385-approach-checklist/arbiter.jsonl` read by a script): 105 rulings, 46 of them naming a `tooling_fix`, each one free sentence with no field saying what it should cut; the step-back bundle's `time.md` already times each command from the transcripts (`stepback_bundle.tool_time`, by `command_key`) and counts each check's dispatches (`dispatches.md`).
+5. **The order.** The ruling's measure fields and their refusal; the yield script over the transcripts; its table in the step-back bundle; the arbiter's contract; the tests.
+6. **The exits.** (c) - a measure recorded with each fix and a yield report; judging yields by reading the fixes' sentences was weighed and refused (it is the free text that cannot be measured).
+7. **The search smell.** None.
+8. **The budget.** 75 min.
+9. **Done, measured.** One goal: a ruling naming a `tooling_fix` is refused without a `fix_measure` (a regex over the main session's Bash commands, or `agent:<kind>`) and `fix_minutes`; `make fix-yield F=<n>` prints, per fix settled done - the 45 made before T119 included, by their assigned measures - its measure's rate per session hour before its ruling and since its settling, and "saves nothing" where the later rate is not lower after 3 session hours; the step-back bundle carries the table as `fix-yield.md`; `tests/tooling/` red without it.
+10. **Before moving a constant.** `YIELD_MIN_HOURS` (3) and `YIELD_BEFORE_HOURS` (6) are new tooling windows, not research figures: 3 session hours is three step-backs, the fewest in which a rate is read over more than one task; 6 is the before-window the same, doubled, so a fix ruled early in a feature still has a rate to compare.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T119 Decisions
+
+**D139 - a fix names its measure.** `hm_arbiter.record` refuses a ruling (or a batch's fix) carrying `tooling_fix` without `fix_measure` - a regex that compiles, matched against the main session's Bash commands, or `agent:<kind>` counting that check's dispatches - and `fix_minutes`, the cost it measured this hour; both are kept on the row. The 45 fixes made before T119 take a measure from `specs/<feature>/fix-measures.json`, assigned from each fix's own sentence - the command it cuts, or the check whose rounds it cuts - with no `fix_minutes` (the cost was not measured then); the one declined fix is reported as declined. A fix meant to save editing, reading or the model's own time stands in by the command or check it shortens - the two forms the transcripts time.
+
+**D140 - the yield, per fix.** A new `scripts/measure/fix_yield.py` (`make fix-yield F=<n>`): for each fix settled done, the measure's minutes (or dispatches) per session hour (the model's time and the tools', `stepback_bundle.model_time` and `tool_time`) over the `YIELD_BEFORE_HOURS` of session time before its ruling, and since its settling; "saves nothing" when the later rate is not below the earlier after `YIELD_MIN_HOURS` session hours, "too early" before then, "saving" otherwise.
+
+**D141 - the step-back reads it.** The step-back bundle writes the table as `fix-yield.md`; the round arbiter's contract asks question 3 of it too: a fix that saves nothing is retired (removed, or simplified) as that hour's `tooling_fix`, or kept with the reason in `what`.
+
+<!-- plan-archive: archived 2026-10-19 -->
+## T114 - earlier.md says the verdict the text was judged at (found working T102, 2026-10-19)
+
+### T114 Approach (checklist part A)
+
+1. **The goal, in the world.** A plan reviewer reading a block's earlier text is told truly what that text was ruled.
+2. **The constraints.** Feature 375 amendment 11 (D64): a plan review reads each changed block beside its earlier text. Feature 243: a BLOCKED verdict's decision must be withdrawn or overruled before a CLEAR. A test red without it.
+3. **Where each comes from.** 375, 243 (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T102's round-2 bundle, then a read of `plan_bundle.build`): `earlier.md` is headed "Each changed block's text at its last CLEAR verdict" for whatever verdict the record held; T102's round-1 text, ruled BLOCKED, was shown under that heading.
+5. **The order.** The verdict passed beside each earlier text; the heading and each block's line naming it; the MANIFEST's sentence; the test.
+6. **The exits.** (c) - name the verdict; showing only CLEAR texts was weighed and refused (a round 2 needs what round 1 blocked).
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: `earlier.md` is headed "Each changed block's text when last judged, with that verdict" and each block's line carries its verdict (CLEAR, BLOCKED, or "no verdict recorded"); `tests/tooling/` red without it.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T114 Decisions
+
+**D142 - the earlier text, with its verdict.** `plan_bundle.build` takes each earlier text with the verdict the record holds for it (a task section's `tasks.<id>.verdict`, a block's `blocks.<key>.verdict`), writes `<!-- block "<key>" verdict BLOCKED -->` above it, heads the file "Each changed block's text when last judged, with that verdict", and the MANIFEST says `earlier.md` holds "what a changed block said when last judged, and the verdict it got".
+
+<!-- plan-archive: archived 2026-10-19 -->
+## T121 - a guard file written through open() is caught (found working T117, 2026-10-19)
+
+### T121 Approach (checklist part A)
+
+1. **The goal, in the world.** A guard file written from a Bash command is refused whichever python write it uses, so its edit is recorded under `make guard-edit` as every other is.
+2. **The constraints.** Feature 127 / 164: a guard file is edited deliberately, the reason recorded; a guard filename's mere presence (a docstring, a grep) is never a write - proximity is the signal. The escape `GUARD_EDIT_OK` as a trailing comment. Every guard has a suite case (`make hooks-test`). A test red without it.
+3. **Where each comes from.** 127, 164 (O); the root CLAUDE.md's guard rules (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T117: a python heredoc `p="Makefile"; t=open(p).read(); ... open(p,"w").write(t)` added the `land-batch` target with no refusal; then a read of `hm_make.classify`): the python routes matched are `Path("<guard>").write_text(` and a name bound to `Path("<guard>")` writing through `.write_text(`; a name bound to a plain string, and `open(<name or literal>, "w")`, match nothing.
+5. **The order.** The two shapes added to the python-write match; their suite cases, and one that a mention stays legal; the hooks suite run.
+6. **The exits.** (c) - widen the match by the shapes measured; refusing any python heredoc naming a guard file was weighed and refused (presence is not a write - feature 164).
+7. **The search smell.** None.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: `make-only-hooks.sh` refuses a Bash command writing a guard file by `open("<guard>", "w"|"a")`, or by a name bound to a plain `"<guard>"` string then `open(<name>, "w"|"a")` or `<name>.write_text(`; a command that only reads it, or names it in prose, passes; `make hooks-test` green, red without it.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T121 Decisions
+
+**D143 - open() writes and string-bound names.** `hm_make` gains `open\(\s*["'][^"']*<guard>["']\s*,\s*["'][wax]` among the raw python-write patterns, and `_GUARD_BIND` also binds a name to a plain string literal naming a guard path; a bound name then counts as a write through `open(<name>, "w"|"a"|"x")` as well as `.write_text(`. A read (`open(p)`, `open(p, "r")`) stays legal.
+
+<!-- plan-archive: archived 2026-10-19 -->
+## T123 - another feature's decision cited through its amendment (found working T114, 2026-10-19)
+
+### T123 Approach (checklist part A)
+
+1. **The goal, in the world.** A plan reviewer citing another feature's decision by its amendment is handed that feature's decision, not this feature's same-numbered one.
+2. **The constraints.** T66 (D85) and T71 (D91): an id qualified by another feature number ("375 FR-044", "feature 375's D18", "375 plan D18") is read from that feature's spec or plans; an unqualified id is the reviewed feature's. A test red without it.
+3. **Where each comes from.** T66, T71 (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T114's review aside, then the regex run on the line): "Feature 375 amendment 11 (D64)" matches no qualified form, so `_QUALIFIED` finds nothing and D64 is read as 385's own (land-tooling's make-docs check) - the reviewer was handed the wrong decision.
+5. **The order.** `_QUALIFIED` allows "amendment <n>" and an opening parenthesis between the feature number and the id; the test.
+6. **The exits.** (c) - widen the qualified form by the measured shape.
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: "Feature 375 amendment 11 (D64)" and "375 amendment 6, FR-002" are read from feature 375; `tests/tooling/test_plan_blocks.py` red without it.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T123 Decisions
+
+**D145 - through its amendment.** `plan_bundle._QUALIFIED` takes, between the feature number (and its `'s` or comma) and the optional `plan`, an optional `amendment <n>` with its own comma, then an optional `(`: `(\d{3})(?:'s|,)?\s+(?:amendment\s+\d+,?\s+)?\(?(?:plan\s+)?(<id>)`.
+
+<!-- plan-archive: archived 2026-10-19 -->
+## T106 - a back lane's 30 ft is the room it is laid in, then trimmed like every end (found working T97, 2026-10-19)
+
+### T106 Approach (checklist part A)
+
+1. **The goal, in the world.** 0246's drawing page and the code say the same thing about how far a lane runs past the last house it serves.
+2. **The constraints.** 0246's drawing page, its general rule: "a lane end that reaches nothing is pulled back to the last house it serves. No page we read says how far a lane ran past its last house ... so the rule is a GUESS"; its back-lane bullet: "each runs only along the houses it serves, and about 30 ft past the last of them". The 2026-09-27 tweak (commit 1aa98b076) that cut a house-served end at the house's closest approach after Inashiro's spine walked 45 ft past its last farmhouse into the grove - the GM's complaint, recorded in the commit only in the session's paraphrase (a road to nowhere), so not cited as his ruling. Every rendering decision labeled. The record checks and the claims check.
+3. **Where each comes from.** 0246's drawing page (O); the 2026-09-27 tweak (O); the root CLAUDE.md's research rules (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T97's claims round, `web.stage_web#the web's frame` DRIFTED: "`tidy_lane_ends` -> `_trim_to_service` -> `_stop_at_closest_approach` cuts a house-served end back to its closest approach to the last house, about 0 ft past"; then a read of 0246's page and of `stage_web`): the back lane is laid with a 30 ft pad past its last house (`stage_web`'s pad 30, the comment on 0246's bullet), and the general trim then pulls each end back to the last house it serves - so the bullet describes the room the lane is laid in, and the page's own general rule, a GUESS, is what the map draws.
+5. **The order.** 0246's back-lane bullet reworded to the laying room and the trim; the frame claim cites the general rule; the record checks and the claims check.
+6. **The exits.** (a) refine an O number: n/a - no source gives the distance; (c) a new rule: overrun the trim by 30 ft - weighed and refused: the 30 ft is a GUESS the page's own general rule contradicts, and it would put back the 2026-09-27 lane into the grove; (e) conform the record to the code - chosen: the page says what the map draws, and its general GUESS stands.
+7. **The search smell.** None.
+8. **The budget.** 30 min with its checks.
+9. **Done, measured.** One goal: 0246's back-lane bullet says a back lane is laid about 30 ft past the last house it serves and its end then pulled back to that house as every end reaching nothing is; `web.stage_web#the web's frame` cites that, IN-STEP; record checks and claims check pass; no engine token changes.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T106 Decisions
+
+**D146 - laid 30 ft past, trimmed to the last house.** 0246's back-lane bullet "each runs only along the houses it serves, and about 30 ft past the last of them;" becomes "each is laid along the houses it serves and about 30 ft past the last of them - the room it is cut in - and its end is then pulled back to the last house it serves, as every lane end that reaches nothing is;". The claim `web.stage_web#the web's frame` reads "research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a back lane is laid about 30 ft past the last house it serves and its end then pulled back to that house - the frame (`BUNDLE_PITCH` ...) is only the room the cuts are laid in, and the trims (`tidy_lane_ends`) bring each end back to the last house it serves".
+

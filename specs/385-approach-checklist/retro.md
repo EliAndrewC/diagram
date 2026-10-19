@@ -955,3 +955,111 @@ the own-bank fill does not or saves more than 150 ft of walk, squared after by t
 its-bank as a DEVIATION, was blocked - its reason was the algorithm's order, not how a track forms - and two claims rounds moved the
 code to the page (a free crossing, then the squareness named). Items 6 and 9 still describe the first gapping only (round 3's aside).
 The unclaimed channel rule is T120. **The habit it changes:** a deviation's reason must be about the world, not the code's order.
+
+## T115 - the retro row
+
+About 25 min. `make where-time F=<n> BY=tick` books each tick-to-tick window to the task or batch ticked at its end, with its
+minutes by bucket and its wall-clock span - T97 53, T109 40, T102 49, as the hand count found. The ticks are read from tasks.md's
+history, not the event log's tick records, because those exist only since hour 33's fix and the history holds every tick (the
+review's aside). Its first reading: "tools" is the largest bucket, 85 of 218 minutes over eleven tasks - the foreground cohorts
+and landings, next to split by command. **The habit it changes:** a speed question is answered by `make where-time BY=tick`.
+
+## T116 - the retro row
+
+About 75 min. A code change now owes its claims a `code triage` first: the triage bundle shows the unit's diff hunks against
+origin/main beside its claims, and the claims the agent does not name are cleared at their new code, as a page edit's are since
+318. Owed in full as before: a claim the triage names, a procedure section's own line, a claim whose own text was rewritten (known
+from the row, or seen among the hunk's added lines), and a unit with no hunk to show (the change landed before the check). The
+plan review blocked once, on a minimum claim count whose saving was asserted, not measured; dropping it made the rule the page
+triage's own. Building it found an empty-diff crash in the hunk splitter, caught by the test. **The habit it changes:** a
+threshold in a plan carries the measurement that sets it, or is not there.
+
+## T117 - the retro row
+
+About 30 min. `make land-batch F= T="T1 T2" NOTE=` asks every task's tick first (all of `make tick`'s refusals but the landed
+one, now one function `refusal`), runs the gated route once, and ticks each "landed in batch T1+T2"; a failed landing ticks none.
+A gated landing measured about 15 min from the transcripts, so a batch of three saves about 30. The plan review was CLEAR in one
+round. Building it, the Makefile target was first written by a python heredoc that the shell-write guard did not catch: recorded
+under `make guard-edit` and filed as T121. **The habit it changes:** a small engine fix whose checks are done waits for the next
+one, and the two land by `make land-batch`.
+
+## T118 - the retro row
+
+About 35 min. A task whose Decisions block reads `**Wording only.** <what>` owes no plan review: the plan gate skips its blocks
+(not its part Bs), `make decide` says no review is owed, the checks do not wait on a verdict, and `make tick` reads its commits
+since `make task-start` and refuses any change beyond its feature's records, a glossary entry, or a `.py` file's comments,
+docstrings and claims (`gate-stamp.semantic_bytes`, the one definition of "changed in what runs"). Saves a review of 1-3
+agent-minutes plus its decide and verdict steps on a 5-12 min task. One review round, CLEAR; `make decide` first refused a quote
+of the task's title as the GM's words, rightly. **The habit it changes:** a relabel, a comment or a glossary entry is written
+`**Wording only.**` and goes straight from its Approach to its checks.
+
+## T119 - the retro row
+
+About 60 min. A ruling that names a `tooling_fix` now carries `fix_measure` (a regex over the session's Bash commands, or
+`agent:<kind>`) and `fix_minutes`, refused without them; `make fix-yield F=<n>` compares each made fix's rate per session hour
+before its ruling and since it was made, and the hourly step-back reads the same table as `fix-yield.md`. The plan review blocked
+once, rightly: reporting the 45 earlier fixes "unmeasured" would have emptied the report on the question that prompted it, so each
+took a measure from its own sentence (`fix-measures.json`). Its first reading: 22 saving, 22 "saves nothing", 2 too early - with
+the caveat that a rate moves with the mix of work (impl-drift dispatches rose because the recent tasks were claim fixes). Found
+working it: a batch's fix lost its measure on an exception's row (fixed), a pipe in a measure split its table cell (fixed), and
+land-tooling conflicting with its own earlier landing (filed). **The habit it changes:** a fix is named with the number it should
+move, and the step-back sees whether it moved.
+
+## T114 - the retro row
+
+About 15 min. `earlier.md` is headed "Each changed block's text when last judged, with that verdict" and each block carries the
+verdict it got, so a round 2 sees round 1's BLOCKED text named as blocked. One review round, CLEAR; its aside found the bundle
+resolving another feature's cited decision against this feature's own number (filed, T123). T85, landed at 04:58Z with its part
+B saying so, had never been ticked - ticked now. **The habit it changes:** none; a label told the truth.
+
+## T121 - the retro row
+
+About 20 min. The shell-write guard now refuses a guard file written by `open("<guard>", "w"|"a"|"x")`, or by a name bound to a
+plain string then written through `open()` - T117's shape; a read stays legal. The suite gained three cases, two red without the
+change. One review round, CLEAR; its aside lists shapes still unmatched (`Path(...).open("w")`, `"r+"`, `shutil`, `os.replace`) -
+left unmatched by choice: none has been seen, and the guard widens by measured shapes, not imagined ones. **The habit it
+changes:** none; a guard I walked past by accident now stops the walk.
+
+## T122 - the retro row
+
+About 50 min against a 30 min budget, for a hazard that costs about 2 minutes by hand - the hour-35 step-back's point, and a fair
+one. A resolver taking the clone's side was built first; two plan reviews blocked it (it reversed D46, then its "self-landed"
+match reached history shared with main, where it would have undone another session's revert), and the arbiter's change-route
+narrowed it to a message: a landing refused by a conflict with this clone's own earlier landing now names those files and the
+line that resolves them. **The habit it changes:** size a fix to the hazard's measured cost before designing it - a 2-minute hand
+step gets a message, not an automatic resolver.
+
+## T123 - the retro row
+
+About 10 min. A decision cited as "Feature 375 amendment 11 (D64)" is now read from feature 375, not taken as this feature's D64;
+the qualified form allows an amendment and a parenthesis between the feature number and the id. One review round, CLEAR; the
+test is red without it. **The habit it changes:** none; a reviewer is handed what the block names.
+
+## T106 - the retro row
+
+About 55 min, no engine token changed. The DRIFTED claim set 0246's back-lane bullet ("about 30 ft past the last of them")
+against the trims that pull every end back to its last house. The bullet described the room the web is laid in (pad 30), and the
+page's own general rule, a GUESS, is what the map draws - the rule the 2026-09-27 tweak had enforced after a lane walked into
+Inashiro's grove. So the bullet now says both, and the frame claim cites it: one plan review, CLEAR; the record checks clean (7
+pop-ups in one check-wave, all clean); the claims round IN-STEP. The page edit re-owed a triage of 286 claims, which sent 27 on,
+and that round found 15 things on code this task never changed - filed as T124-T133 per the GM's rule. **The habit it changes:**
+before changing code to match a page, read the page whole - a drift can be the page contradicting itself.
+
+## T108 - the retro row
+
+About 10 min, the first task through T118's wording-only route: no plan review, `make decide` said none was owed. Two claims split
+into a garden half on 0246 and a yard half UNRESEARCHED, as their sibling already read; the claims check 4 IN-STEP, its two
+asides on unchanged code filed (T134, T135). **The habit it changes:** a claim relabel is declared `**Wording only.**`.
+
+## T130 - the retro row
+
+About 8 min, wording only. The run-on reach's claim cited 0246 for a 60 ft to the field no page gives; it now reads GUESS,
+naming 0246's 60 ft to a house or way as the figure it reuses. Claims check IN-STEP; its two asides filed together (T136).
+**The habit it changes:** none.
+
+## T136 - the retro row
+
+About 8 min, wording only. `RUN_ON_TURN_DEG`'s claim labeled CONVENTION (0081 says its turn limits are drawing conventions),
+`BRANCH_STEP_FT` claimed NONE, and the step's comment no longer calls plumbing a convention - that last from the claims check's
+own aside, fixed here rather than filed, since it sat beside the claimed line. **The habit it changes:** an aside on the lines a
+task already touches is fixed in the task, not filed.

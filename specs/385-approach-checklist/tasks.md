@@ -243,8 +243,9 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T84 `make decide` refuses a plan quoting the GM with words not in the request (proposal A, 2026-10-19) [lands-open]
       research: rendering
       verify: DONE. make decide refuses a GM quote not in request.md; landed, test_plan_blocks green
-- [ ] T85 an edit to a plan section is refused while its review runs (proposal B, 2026-10-19) [lands-open]
+- [x] T85 an edit to a plan section is refused while its review runs (proposal B, 2026-10-19) [lands-open]
       research: rendering
+      verify: DONE. landed by land-tooling 2026-10-19 (hm_planhold: a section or block under review is held, D106); its part B at 04:58Z said landed and green; the tick was missed then
 - [x] T86 `make decide` refuses a measured figure with no date and method (proposal C, 2026-10-19) [lands-open]
       research: rendering
       verify: DONE. make decide refuses an unlabeled item-4 figure; landed, test_plan_blocks green
@@ -305,13 +306,15 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T105 A claim relabeled to cite a page is owed impl-drift, not a triage: T100's two re-cited claims were listed 'triage', whose bundle came out empty, and OWED=1 refused to bundle them (found working T100, 2026-10-19) [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 via land-tooling: research_why owes a newly cited page's claim in full; test red without; live claims-owed unchanged
-- [ ] T106 A lane runs on about 30 ft past the last house it serves, as 0246 gives it: the trims end it level with its last house (web.stage_web#the web's frame - DRIFTED, found working T97, 2026-10-19) [lands-open]
+- [x] T106 A lane runs on about 30 ft past the last house it serves, as 0246 gives it: the trims end it level with its last house (web.stage_web#the web's frame - DRIFTED, found working T97, 2026-10-19) [lands-open]
       research: rendering
+      verify: DONE. landed 2026-10-19 by sync-with-main done (DIRECT, no engine token); 0246's back-lane bullet and the frame claim say laid 30 ft past then trimmed to the last house (D146); record checks clean, claims IN-STEP; T124-T133 filed
 - [x] T107 0246's drawing page says the 7 ft both ways: its lane's room (3: 7 ft at each fence and a 4 ft tread, 18 ft - the edge) and its fence gap (16: to the middle) - settle which, and what the code reads (found working T101, 2026-10-19) [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 (direct, record only): 0246's new block says the room counts its 7 ft to the tread's edge and the gap to the middle; record checks and pop-ups clean; 48 of 51 claims IN-STEP, the rest carried (T108)
-- [ ] T108 Carried by the claims gate (FR-013): findings a page edit surfaced on code left unchanged - fix the code or the claim and re-check each: l7r/diagram/hamletgen/ways/law.py::fouls_fabric#foul margin, l7r/diagram/hamletgen/ways/settle.py::fouled_segment#off another household's yard or garden [lands-open]
+- [x] T108 Carried by the claims gate (FR-013): findings a page edit surfaced on code left unchanged - fix the code or the claim and re-check each: l7r/diagram/hamletgen/ways/law.py::fouls_fabric#foul margin, l7r/diagram/hamletgen/ways/settle.py::fouled_segment#off another household's yard or garden [lands-open]
       research: rendering
+      verify: DONE. landed 2026-10-19 by sync-with-main done; two claims split, garden half on 0246, yard half UNRESEARCHED (wording only, T118's route); 4 IN-STEP; T134-T135 filed
 - [x] T109 The track's grove-band gap as 0036 gives it: _thread_the_fabric holds bands at FOOTPATH_FABRIC_GAP (7 ft) citing 0246, where 0036 keeps about 11 ft off the trees (T98 fixed the door path and connector_dry_exit); and the two GUESS claims on touch._one_network / _touch_junctions that call the routed link 14 ft where it is routed at 7 (found working T107, 2026-10-19) [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 (gated, 4f6bd9739): _thread_the_fabric holds grove bands at 0036's 12.5 ft on every test; touch claims say 7 ft (DEVIATION); claims IN-STEP or filed (T112)
@@ -325,19 +328,61 @@ what the hamlet maps draw (their lanes); its decisions are the GM's ruling and 0
 - [x] T113 make tick refuses a 'landed' note while the last sync-with-main push was refused, as T79 refuses one after a failed land-tooling: T110 ticked 'landed' while its push stood refused by the green-gate guard (found working T110, 2026-10-19) [lands-open]
       research: rendering
       verify: DONE. landed 2026-10-19 via land-tooling: a landed tick waits until the task's work is on main, by content; test red without
-- [ ] T114 A plan review's earlier.md says 'the text at its last CLEAR verdict' even when that verdict was BLOCKED: T102's round 2 bundle labeled its round-1 BLOCKED text CLEAR (found working T102, 2026-10-19) [lands-open]
+- [x] T114 A plan review's earlier.md says 'the text at its last CLEAR verdict' even when that verdict was BLOCKED: T102's round 2 bundle labeled its round-1 BLOCKED text CLEAR (found working T102, 2026-10-19) [lands-open]
       research: rendering
-- [ ] T115 A per-task time report from the event log: each task's span from its task-start to its tick, and where it went (claims rounds, gate, landing cohort, plan reviews) - the numbers the GM's speed question was answered with by hand (amendment 10) [lands-open]
+      verify: DONE. landed by land-tooling 2026-10-19; earlier.md names each earlier text's verdict (D142); test red without it
+- [x] T115 A per-task time report from the event log: each task's span from its task-start to its tick, and where it went (claims rounds, gate, landing cohort, plan reviews) - the numbers the GM's speed question was answered with by hand (amendment 10) [lands-open]
       research: rendering
-- [ ] T116 A change re-owes impl-drift only for the claim lines it touched, not every claim on the function: one edit to stage_web re-owed its 20 claims (amendment 10) [lands-open]
+      verify: DONE. landed 2026-10-19 via land-tooling: make where-time BY=tick; T97 53 min as the hand count; test red without
+- [x] T116 A change re-owes impl-drift only for the claim lines it touched, not every claim on the function: one edit to stage_web re-owed its 20 claims (amendment 10) [lands-open]
       research: rendering
-- [ ] T117 The gate and the landing cohort batched across two or three small engine fixes: land them together under one green gate and one landing cohort, each task ticked at that landing (amendment 10) [lands-open]
+      verify: DONE. landed by land-tooling 2026-10-19; code triage before impl-drift (D133), owed logic in claims_owed.py (D134); test red without it
+- [x] T117 The gate and the landing cohort batched across two or three small engine fixes: land them together under one green gate and one landing cohort, each task ticked at that landing (amendment 10) [lands-open]
       research: rendering
-- [ ] T118 No plan review for a wording-only task that decides nothing new - a claim relabel, a comment, a glossary entry - its section's decisions classed as wording by a rule the tick checks (amendment 10) [lands-open]
+      verify: DONE. landed by land-tooling 2026-10-19; make land-batch (D135), refusal names it (D136); test red without it
+- [x] T118 No plan review for a wording-only task that decides nothing new - a claim relabel, a comment, a glossary entry - its section's decisions classed as wording by a rule the tick checks (amendment 10) [lands-open]
       research: rendering
-- [ ] T119 Each tooling fix's yield measured: the time it was meant to save, read from the per-task time report (T115), so a fix that saves nothing is retired (amendment 10, the GM's change 3) [lands-open]
+      verify: DONE. landed by land-tooling 2026-10-19; wording-only sections owe no plan review (D137), the tick checks their commits (D138); tests red without it
+- [x] T119 Each tooling fix's yield measured: the time it was meant to save, read from the per-task time report (T115), so a fix that saves nothing is retired (amendment 10, the GM's change 3) [lands-open]
       research: rendering
+      verify: DONE. landed by land-tooling 2026-10-19; fix measure required (D139), make fix-yield (D140), step-back fix-yield.md + arbiter contract (D141); tests red without it
 - [ ] T120 The track out's last resort never crosses a drawn channel (connector_dry_exit, UNCLAIMED, T102's round): claim it, or let it cross a ditch on a plank as 0084 gives (found working T102, 2026-10-19) [lands-open]
+      research: rendering
+- [x] T121 A guard file written by a python heredoc in a Bash command is not caught: T117's Makefile target was written by python open(p,'w') and make-only-hooks' shell-write guard let it through (found working T117) [lands-open]
+      research: rendering
+      verify: DONE. landed by land-tooling 2026-10-19; open() writes and string-bound names refused (D143); hooks suite 89/89, red without it (2 cases)
+- [x] T122 make land-tooling conflicts with its own earlier landing of the same files (add/add on main's land-tooling commit vs the clone's newer edit): resolve to the clone's side when main's side is content the clone itself landed (found working T119; also T84-era) [lands-open]
+      research: rendering
+      verify: DONE. landed by land-tooling 2026-10-19; the self-landed conflict named with its fix (D144, the hour-35 change-route); suite 49/49, red without it
+- [x] T123 The plan bundle resolves a decision cited as another feature's ('Feature 375 amendment 11 (D64)') against this feature's own D64, so spec-cited.md hands the reviewer the wrong decision (spec-fidelity aside, T114's review) [lands-open]
+      research: rendering
+      verify: DONE. landed by land-tooling 2026-10-19; _QUALIFIED reads a decision through its amendment (D145); test red without it
+- [ ] T124 web._web_cut_lines' _extent falls back to every house in the cluster when no house stands within WEB_REACH_FT of a cut, so such a lane runs the whole cluster serving none, against 0246 (along the houses it serves; a stretch joining nothing is not drawn) (impl-drift, T106's round) [lands-open]
+      research: rendering
+- [ ] T125 web.stage_web's headman filter ends 'or True' and filters nothing - the comment or the code is stale; and _web_cut_lines' cross-lane tie running 30 ft (pad) past the outermost back lane is UNCLAIMED (impl-drift, T106's round) [lands-open]
+      research: rendering
+- [ ] T126 geom._trim_to_service pops a whole last segment before its 4 ft walk, pulling an end back past the last house it serves (0246 §6) - DRIFTED (impl-drift, T106's round) [lands-open]
+      research: rendering
+- [ ] T127 settle.settle_street_ends cuts a street end to other lanes' ends only, never street_anchors, so a farm the street serves without a door path is cut off it (0246 §6) - DRIFTED (impl-drift, T106's round) [lands-open]
+      research: rendering
+- [ ] T128 sweeps._sweep_dangling_ends pulls an end back by whole vertices with no walk along the segment, past the last house it serves (0246 §6) - DRIFTED (impl-drift, T106's round) [lands-open]
+      research: rendering
+- [ ] T129 A lane that serves nothing: _pull_back leaves it whole, settle_dangling and tidy_lane_ends drop it, 0246 is silent - research pass, then one rule, claimed (three NEEDS-RESEARCH) (impl-drift, T106's round) [lands-open]
+      research: rendering
+- [x] T130 bund.RUN_ON_REACH_FT#run-on reach MISLABELED: no cited page records 60 ft for carrying an end on to the field - relabel GUESS or record it (impl-drift, T106's round) [lands-open]
+      research: rendering
+      verify: DONE. landed 2026-10-19 by sync-with-main done; run-on reach relabeled GUESS, no page as source (wording only); IN-STEP; T136 filed
+- [ ] T131 Two UNCLAIMED rules: run_lanes_on_to_the_bund never carries a row street's ends on (skips street); dangling_lane_ends exempts the connector - claim each (impl-drift, T106's round) [lands-open]
+      research: rendering
+- [ ] T132 street.to_its_joints with exactly one joint returns two coincident points that trim_streets admits, cutting the street to nothing; its docstring says fewer than one joint (impl-drift, T106's round) [lands-open]
+      research: rendering
+- [ ] T133 Stale words on the lane-end rules: _pull_back's 'ends the lane at the homestead'; WAY_END_REACH_FT's docstring naming the field at 60 ft; _lay_skeleton's span floor 100 ft vs the code's 50; sweeps _SERVE_FT 100 vs 0246's 60; 0246 §6 cited both plain and GUESS (impl-drift, T106's round) [lands-open]
+      research: rendering
+- [ ] T134 settle.theirs drops the 7 ft gap for every steading within DOORSTEP_FT of a lane end, neighbors' gardens at a junction too - 0246 §16 keeps it off another household's garden: record a DEVIATION or narrow the exemption to the lane's own household (impl-drift, T108's round) [lands-open]
+      research: rendering
+- [ ] T135 law.fouls_fabric with own set drops its own garden from the check; 0246 §16 keeps an own way off the beds - confirm every caller with own also holds the beds, as fouled_segment does (impl-drift, T108's round) [lands-open]
+      research: rendering
+- [ ] T136 bund.py claim hygiene: RUN_ON_TURN_DEG's comment says map drawing convention while its claim cites 0081 as a finding - settle which; BRANCH_STEP_FT has no Research: claim (likely NONE, plumbing) (impl-drift, T130's round) [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=385) [lands-open]
       research: rendering

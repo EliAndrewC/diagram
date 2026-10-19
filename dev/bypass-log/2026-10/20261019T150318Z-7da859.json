@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-19T15:03:18Z",
+  "target": "claims-gate",
+  "commit": "4f18f0e58",
+  "why": "CLAIMS_OK: asides on unchanged bund.py constants filed as 385 T136"
+}
