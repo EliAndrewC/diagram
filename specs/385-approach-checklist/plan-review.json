@@ -7202,56 +7202,31 @@
    "verdict": "CLEAR"
   },
   "T116": {
-   "section_sha256": "5ab99e40fbfb71fd7f1e44735def2c73dfe282f63b1e5af54113eb119dfdada5",
+   "section_sha256": "287ba0f886dee154e1b2b192de89bc22f26c49e2ee0537b40f393c6de39edd14",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "D133a",
-     "summary": "CODE_TRIAGE_MIN = 3: a code change to a unit with fewer than 3 claims sends every claim to impl-drift as now; only units with 3 or more get the triage",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The GM approved the suggestion 're-check only the claim lines a change touched' (amendment 10) with no threshold, and the page analogue the block cites (318 FR-016) triages every edit with no minimum. The only justification, 'below it a triage costs as much as the check it saves', is a cost premise with no figure, date or method anywhere in the bundle; a scope set by an unmeasured premise does not implement what was approved, and the GM's own request names 'an arbitrary figure ... put there as an implementation detail' as the failure. The one measurement the block carries cuts the other way: T97 cleared 17 of 20 claims untouched, so at that rate a triage pays off even for a 1- or 2-claim unit unless a triage dispatch costs close to a per-claim impl-drift check, which nothing measures. Nor is the share of code-changed units carrying 1-2 claims measured, so the carve-out may exclude most of the cases the lever was for. Fix: drop the threshold (triage every code-changed unit that has existing claims, as FR-016 does for pages), or measure triage cost per dispatch against impl-drift cost per claim and the distribution of claims per unit, and set CODE_TRIAGE_MIN from that with an m: key."
+     "id": "D133",
+     "summary": "Every 'code changed' claim not already named touched is owed only a code triage (diff hunks of the unit vs origin/main plus its claims); named claims go to impl-drift, the rest cleared at new code/core fingerprints; no claim-count threshold.",
+     "class": "within",
+     "why": "Amendment 10's first lever verbatim: 're-check only the claim lines a change touched'. The triage is how 'touched' is decided, copying 318 FR-016's page triage; round 1's unmeasured CODE_TRIAGE_MIN carve-out is gone ('whatever the number of claims its unit carries'). Refusing a static name match re-checks more than a literal reading would, which is conservative and serves the lever's purpose rather than narrowing it. A new claim going to impl-drift is not a re-check at all."
     },
     {
-     "id": "D133b",
-     "summary": "a unit whose code fingerprint moved but with no hunk of git diff origin/main -- <file> overlapping its lines is owed in full (forced)",
+     "id": "D133-forced",
+     "summary": "A unit whose fingerprint moved but has no diff hunk against origin/main to show is owed in full (forced).",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "why": "The triage judges claims against the change; with no change shown it has nothing to judge, so deciding which claims the change touched is impossible in this case, and clearing them would mean clearing claims nobody checked. Seam for the author: 'no overlapping hunk' is also the case where the change is in a dependency or core code (the fingerprint moved for a reason) that the bundle could show and does not; the forced path may fire on that common case and recover little of the saving. Legitimate as written, but worth watching."
-    },
-    {
-     "id": "D133c",
-     "summary": "a new claim goes to impl-drift",
-     "class": "within",
-     "why": "A new claim has never been checked; nothing is being re-checked, so the lever does not apply."
-    },
-    {
-     "id": "Exit-c",
-     "summary": "the claims-triage agent judges which claims a code diff bears on; a static match of names in the diff against claims was refused",
-     "class": "within",
-     "why": "A choice of mechanism that mirrors 318 FR-016's page triage; it sends on the claims a change bears on and excludes nothing the GM asked to have re-checked."
-    },
-    {
-     "id": "D133d",
-     "summary": "make claims-triaged records an untouched claim as cleared at its new code and core fingerprints",
-     "class": "within",
-     "why": "This is the lever itself: a claim the change does not bear on is not re-checked."
+     "why": "Without a hunk there is nothing to read to tell which claims a change touched, so the lever cannot be applied to that unit. Owing in full is the existing behavior for the case where the rule cannot run, not a carve-out from a case where it could."
     },
     {
      "id": "D134",
-     "summary": "owed, research_why, relabeled_only and helpers move from claims.py to claims_owed.py, re-exported, to hold the 1,000-line bar",
+     "summary": "owed, research_why, relabeled_only and helpers move from claims.py to claims_owed.py, re-exported, to hold the 1,000-line bar.",
      "class": "within",
-     "why": "Applies a standing project rule; no scope decision about the request."
-    },
-    {
-     "id": "Tests",
-     "summary": "tests/tooling/ red without the triage",
-     "class": "within",
-     "why": "Only enforces the requested behavior."
+     "why": "A structural move to keep the GM's standing 1,000-line bar (2026-08-31). It changes nothing in what was asked."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   }
  }
 }

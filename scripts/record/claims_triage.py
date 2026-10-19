@@ -139,6 +139,25 @@ def section_words(root: Path, path: str, title: str, digests: set[str], depth: i
     return found
 
 
+_HUNK = re.compile(r"^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@", re.M)
+
+
+def code_hunks(root: Path, path: str, lo: int, hi: int) -> list[str]:
+    """The hunks of `git diff origin/main -- path` whose new lines overlap [lo, hi] - what a code triage reads (feature 385
+    T116, D133). None to show (no diff, or the change landed before the claim's check) leaves the claim owed in full."""
+    diff = _git(root, "diff", "-U3", "origin/main", "--", path) or ""
+    starts = [m.start() for m in _HUNK.finditer(diff)]
+    out = []
+    for a, b in zip(starts, [*starts[1:], len(diff)][: len(starts)], strict=True):
+        m = _HUNK.match(diff, a)
+        assert m is not None
+        first = int(m.group(1))
+        last = first + max(int(m.group(2) or 1), 1) - 1
+        if first <= hi and last >= lo:
+            out.append(diff[a:b].rstrip("\n"))
+    return out
+
+
 def triage_bundle(
     cur: dict[str, Row],
     index: Mapping[str, Mapping[str, Any]],
@@ -162,8 +181,18 @@ def triage_bundle(
     lost: dict[tuple[str, str], bool] = {}
     forced: set[str] = set()
     sections: dict[str, tuple[list[str], list[str], list[str]]] = {}  # "path::title" -> (fresh, gone, keys) - feature 375 FR-002
+    codes: dict[str, tuple[list[str], list[str]]] = {}  # "path::qualname" -> (hunks, keys) - feature 385 T116, D133
+    root = qdir.parents[1]
     for key in keys:
         unit = cur[key].unit
+        if index[key].get("code") != cur[key].code:
+            if cur[key].uid not in codes:
+                codes[cur[key].uid] = (code_hunks(root, unit.path, unit.lineno, unit.end_lineno), [])
+            codes[cur[key].uid][1].append(key)
+            line = cur[key].claim.line.strip()
+            added = (x[1:].strip() for h in codes[cur[key].uid][0] for x in h.split("\n") if x.startswith("+"))
+            if not codes[cur[key].uid][0] or any(line and line in x for x in added):
+                forced.add(key)  # no diff to read, or the claim's own line rewritten: owed in full (D133)
         if unit.line_keyed and index[key].get("section") not in (None, unit.core):
             before = set(store.get(index[key]["section"], []))
             fresh = [b for b in unit.blocks if ru.digest([b]) not in before]
@@ -197,6 +226,7 @@ def triage_bundle(
     # ...AND A CLAIM THE TRIAGE HAS NOTHING TO SHOW IS OWED IN FULL (feature 385 T03): a claim relabeled to cite a page its
     # last check never read had no changed block to show, so the bundle listed nothing and the agent could clear nothing
     shown = {k for ks in by_page.values() for k in ks} | {k for _f, _l, ks in sections.values() for k in ks}
+    shown |= {k for hunks, ks in codes.values() if hunks for k in ks}
     forced |= {k for k in keys if k not in shown}
     parts = [
         "# Triage of claim re-checks (feature 318)\n",
@@ -211,6 +241,14 @@ def triage_bundle(
         if lost:
             parts.append("Removed blocks (no longer in the section):\n")
             parts += [f"> {w}\n" for w in lost]
+        parts.append("Claims in it:\n")
+        for k in sorted(ks):
+            parts.append(f"- KEY `{k}`: `{cur[k].claim.line}` - last verdict {index[k].get('verdict')}: {index[k].get('note', '')}")
+        parts.append("")
+    for uid, (hunks, ks) in sorted(codes.items()):
+        if not hunks:
+            continue
+        parts.append(f"## {uid} (a unit of code; its diff against origin/main)\n\n```diff\n" + "\n".join(hunks) + "\n```\n")
         parts.append("Claims in it:\n")
         for k in sorted(ks):
             parts.append(f"- KEY `{k}`: `{cur[k].claim.line}` - last verdict {index[k].get('verdict')}: {index[k].get('note', '')}")
@@ -231,6 +269,7 @@ def triage_bundle(
             "research": cur[k].research,
             "pages": {ptr.rsplit("/", 1)[1]: page_blocks(ptr.rsplit("/", 1)[1], qdir, memo)[0] for ptr in cur[k].claim.pointers},
             **({"section": cur[k].unit.core} if cur[k].unit.line_keyed else {}),
+            **({"code": cur[k].code, "core": cur[k].unit.core} if index[k].get("code") != cur[k].code else {}),
         }
         for k in keys
     }
@@ -290,8 +329,7 @@ def vet(reply: str, units: Mapping[str, Any], root: Path, pattern: re.Pattern[st
         if line.startswith("VERDICT "):
             m = pattern.match(line)
             gone = [p for p in re.findall(r"research/questions/[\w.-]+?\.html", line) if not (root / p).is_file()]
-            why = ("no verdict it can read" if not m else "not a claim of this bundle" if m.group(1).strip("`") not in units
-                   else f"no such question file: {', '.join(gone)}" if gone else "")
+            why = "no verdict it can read" if not m else "not a claim of this bundle" if m.group(1).strip("`") not in units else f"no such question file: {', '.join(gone)}" if gone else ""
             if why:
                 bad.append(f"{why}: {line[:160]}")
                 continue
@@ -303,9 +341,12 @@ def vet(reply: str, units: Mapping[str, Any], root: Path, pattern: re.Pattern[st
     for b in bad:
         print(f"claims-checked: REFUSED line - {b}", file=sys.stderr)
     if bad:
-        print("claims-checked: correct each refused line in the reply file (the claim's path as the bundle names it; a verdict of "
-              "IN-STEP, DRIFTED, NEEDS-RESEARCH, MISLABELED or CANNOT-TELL; a pointer to a question file that exists) and run it "
-              "again - the lines it recorded stay recorded", file=sys.stderr)
+        print(
+            "claims-checked: correct each refused line in the reply file (the claim's path as the bundle names it; a verdict of "
+            "IN-STEP, DRIFTED, NEEDS-RESEARCH, MISLABELED or CANNOT-TELL; a pointer to a question file that exists) and run it "
+            "again - the lines it recorded stay recorded",
+            file=sys.stderr,
+        )
     return "\n".join(keep), bad
 
 

@@ -114,7 +114,7 @@ def test_owed_says_new_code_changed_and_research_changed_and_nothing_for_prose_o
     _tree(tmp_path, page=PAGE.replace("Why asked.", "Why it is asked."))
     assert cx.owed(cx.current(skill), index) == [], "the intro is not a finding"
     _tree(tmp_path, MOD.replace("x * SHARE", "x * SHARE * 2"))
-    assert cx.owed(cx.current(skill), index) == [("l7r/diagram/hamletgen/rows.py::far_row#dry share", "code changed")]
+    assert cx.owed(cx.current(skill), index) == [("l7r/diagram/hamletgen/rows.py::far_row#dry share", cx.CODE_TRIAGE)]
     _tree(tmp_path, MOD.replace("SHARE = 0.5", "SHARE = 0.4"))
     assert sorted(k.rsplit("::", 1)[1] for k, _w in cx.owed(cx.current(skill), index)) == ["SHARE#dry share", "far_row#dry share"]
     _tree(tmp_path, page=PAGE.replace("face the street", "face south"))

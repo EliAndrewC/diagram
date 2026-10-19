@@ -81,7 +81,7 @@ INDEX = "dev/claims-index.json"
 DEFERRED = "dev/claims-deferred.json"
 STORE = "dev/claims-pages.json"  # the page snapshots each row's pages name (feature 318, FR-016), and each section's (375)
 #: what a claim owed only a triage is owed for: a page it cites changed (feature 318), or its section did and its line did not (375)
-from claims_owed import SECTION_TRIAGE, TRIAGED  # noqa: E402,F401 - moved with the owed logic (T116); re-exported
+from claims_owed import CODE_TRIAGE, SECTION_TRIAGE, TRIAGED  # noqa: E402,F401 - moved with the owed logic (T116); re-exported
 
 QUESTIONS = "research/questions"
 FINDINGS = ("DRIFTED", "NEEDS-RESEARCH", "MISLABELED", "UNCLAIMED", "CANNOT-TELL")

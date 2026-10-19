@@ -19,7 +19,6 @@ CODE_TRIAGE = "code triage"
 TRIAGED = ("triage", SECTION_TRIAGE, CODE_TRIAGE)
 
 
-
 def standing(pointers: Sequence[str], qdir: Path, memo: dict[str, Any]) -> set[str]:
     """`page:digest` for every block now standing on the questions `pointers` cite."""
     out: set[str] = set()
@@ -62,9 +61,12 @@ def owed(
         if was is None:
             out.append((key, "new"))
         elif was.get("code") != row.code and not (qdir is not None and relabeled_only(was, row, qdir.parent.parent)):
-            # ...TRIAGED FIRST (feature 385 T116, D133): one edit to `stage_web` re-owed its 20 claims, 17 of them unaffected; a claim
-            # the triage has named (`touched`) goes to impl-drift as before
-            out.append((key, "code changed" if was.get("triage") == "touched" else CODE_TRIAGE))
+            # ...TRIAGED FIRST (feature 385 T116, D133): one edit to `stage_web` re-owed its 20 claims, 17 of them unaffected. Owed in
+            # full as before: a claim the triage has named (`touched`), a procedure section's own line (a doc, not code), and a
+            # claim whose own text was rewritten (the change is the claim itself)
+            text = row.claim.normalized() if row.claim is not None else ""
+            full = was.get("triage") == "touched" or row.unit.line_keyed or was.get("claim") not in (None, text)
+            out.append((key, "code changed" if full else CODE_TRIAGE))
         elif was.get("triage") == "touched":
             out.append((key, "triage touched"))
         elif row.unit.line_keyed and "section" in was and was["section"] != row.unit.core:
