@@ -1019,3 +1019,12 @@ plain string then written through `open()` - T117's shape; a read stays legal. T
 change. One review round, CLEAR; its aside lists shapes still unmatched (`Path(...).open("w")`, `"r+"`, `shutil`, `os.replace`) -
 left unmatched by choice: none has been seen, and the guard widens by measured shapes, not imagined ones. **The habit it
 changes:** none; a guard I walked past by accident now stops the walk.
+
+## T122 - the retro row
+
+About 50 min against a 30 min budget, for a hazard that costs about 2 minutes by hand - the hour-35 step-back's point, and a fair
+one. A resolver taking the clone's side was built first; two plan reviews blocked it (it reversed D46, then its "self-landed"
+match reached history shared with main, where it would have undone another session's revert), and the arbiter's change-route
+narrowed it to a message: a landing refused by a conflict with this clone's own earlier landing now names those files and the
+line that resolves them. **The habit it changes:** size a fix to the hazard's measured cost before designing it - a 2-minute hand
+step gets a message, not an automatic resolver.

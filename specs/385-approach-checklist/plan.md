@@ -616,6 +616,20 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@34 (continue),
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
+### T122 part B (2026-10-19T14:30Z)
+
+Owed by the round arbiter's ruling on hour:385-approach-checklist@35 (change-route), taken while T122 was the active task.
+
+1. **What is refusing?** Nothing now: the ruling narrowed T122 to a refusal message; the resolver was withdrawn and round 3 stopped.
+2. **A3 again.** Changed: the arbiter's ruling is now the binding constraint, written into item 2.
+3. **A4 again.** Unchanged: the hand resolution measured about 2 minutes.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Changing, by the ruling: the route went from a resolver to a message - D144 as rewritten, reviewed CLEAR.
+6. **The one-sentence test.** "A conflict with the clone's own landing is named with the line that resolves it" - true by the suite's case 2a.
+7. **The next step is a measurement.** The suite, run whole: 49/49.
+8. **Every route measured before offering one?** No route is offered; the ruling's was taken.
+9. **After a ruling: the step it names?** Yes - narrowed to a message, one plan review, the resolver discarded.
+
 ### T122 Decisions
 
 **D144 - the self-landed conflict named.** In `land-tooling.sh`'s D46 branch, before `git merge --abort`, the conflicted files (`git diff --name-only --diff-filter=U`) whose `git log -1 --format=%s origin/main -- <file>` begins `Tooling from <this clone's name>,` are named in the refusal: "<files> conflict only with this clone's own earlier landing - run scripts/sync-with-main.sh sync-in, then git checkout --ours <files> && git add <files> && git commit --no-edit, then land again". The merge is aborted and the landing refused as now; nothing is resolved by the tool.
