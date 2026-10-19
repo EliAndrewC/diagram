@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import subprocess
 import sys
@@ -245,6 +246,41 @@ def default_log() -> Path:
     return Path(out or ".git").resolve() / LOG
 
 
+#: ONE FEATURE'S ROWS (feature 395's step-back, hour:395@1): `--write specs/395-.../checks.md` from the main session wrote rows for
+#: every owed pass in the clone - 396's and 397's spec reviews among them - each claiming 395's checks file as where it was acted
+#: on. A write that names a feature's specs directory now writes only the passes that feature's work can be traced to: a subject
+#: naming the feature, one of its questions (the claims sheet, its implementation check, its briefs' SECTION= lines), or a
+#: `key-<key>` bundle of a source those questions cite. The rest stay owed for the feature that ran them.
+FEATURE_DIR = re.compile(r"specs/(\d{3})-")
+
+
+def feature_questions(num: str, repo: Path) -> set[str]:
+    """The question numbers feature `num` worked: its claims on the sheet and the numbers its own files name."""
+    found: set[str] = set()
+    sheet = Path(os.environ.get("L7R_CLAIMS_SHEET", "/diagram/.clones/RESEARCH-CLAIMS.md"))
+    if sheet.is_file():
+        for line in sheet.read_text(encoding="utf-8").splitlines():
+            parts = [c.strip() for c in line.split("|")]
+            if len(parts) > 2 and re.search(rf"\b{num}\b", parts[1]):
+                found |= set(re.findall(r"(?<![\d.])(\d{4})(?!\d)", parts[2]))
+    for d in repo.glob(f"specs/{num}-*"):
+        for f in [d / "implementation-check.md", *d.glob("briefs/*.md")]:
+            if f.is_file():
+                text = f.read_text(encoding="utf-8")
+                found |= set(re.findall(r"^- (\d{4}):", text, re.M)) | set(re.findall(r"SECTION=(\d{4})", text))
+    return found
+
+
+def belongs(p: dict[str, str], num: str, questions: set[str], repo: Path) -> bool:
+    subject = p.get("subject", "")
+    if re.search(rf"(?:feature |specs/|\b){num}-|feature {num}\b", subject):
+        return True
+    if questions & set(re.findall(r"(?<![\d.])(\d{4})(?!\d)", subject)):
+        return True
+    key = re.search(r"/key-([\w-]+?)(?:-whole)?/", subject)
+    return bool(key) and any(key.group(1) in f.read_text(encoding="utf-8") for q in questions for f in repo.glob(f"research/questions/{q}-*.html"))
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
     ap.add_argument("--log", default="", help="the pass log (default: <git common dir>/check-passes.jsonl)")
@@ -267,9 +303,16 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0
     if args.write:
         mine = [p for p in owed if not args.session or _session_of(p, Path(args.transcripts)) == args.session]
+        feat = FEATURE_DIR.search(args.write)
+        if feat and not args.session:  # a page session's own passes are its feature's already
+            repo = ledger.resolve().parent.parent
+            questions = feature_questions(feat.group(1), repo)
+            mine = [p for p in mine if belongs(p, feat.group(1), questions, repo)]
         with ledger.open("a", encoding="utf-8") as fh:
             fh.writelines(filled_row(p, args.write, Path(args.transcripts)) + "\n" for p in mine)
-        print(f"ledger-owed: {len(mine)} row(s) written for {args.session or 'every session'}")
+        left = len(owed) - len(mine)
+        print(f"ledger-owed: {len(mine)} row(s) written for {args.session or (f'feature {feat.group(1)}' if feat else 'every session')}"
+              + (f"; {left} pass(es) not traced to it stay owed for the feature that ran them" if left else ""))
         return 0
     if not owed:
         return 0

@@ -87,6 +87,20 @@ def test_a_failed_push_deletes_nothing_from_the_inbox(tmp_path: pathlib.Path, mo
     assert ops.process_inbox(root, store, tmp_path / "no-inbox") == ({}, [])
 
 
+def test_a_file_over_githubs_limit_is_refused_before_any_commit(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 395's step-back (hour:395@1): a 434 MB download was committed and its push refused, wedging the archive.
+    An entry over the limit waits in the inbox even once matched, and the store never sees it."""
+    root, store, inbox = _world(tmp_path, monkeypatch)
+    monkeypatch.setattr(ops, "GITHUB_FILE_LIMIT", 10)
+    (inbox / "a.pdf").write_bytes(b"%PDF far more than ten bytes")
+    (inbox / "scans").mkdir()
+    (inbox / "scans" / "p1.png").write_bytes(b"x" * 11)
+    placed, waiting = ops.process_inbox(root, store, inbox, match={"scans": ["beta"]})
+    assert placed == {} and waiting == ["a.pdf", "scans"], "matched or not, an oversize entry waits"
+    assert ops.too_big(inbox / "scans") == ["p1.png (0 MB)"] and (inbox / "a.pdf").is_file()
+    assert not (tmp_path / "home").exists() or not ops.on_github(store, "gm-copies/a.pdf"), "nothing committed or pushed"
+
+
 def test_a_page_read_again_is_not_captured_again(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
     root, _store, _inbox = _world(tmp_path, monkeypatch)
     ar.write_row(root, "https://a.org/p", {"url": "https://a.org/p", "outcome": "archived"})
