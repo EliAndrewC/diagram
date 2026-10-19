@@ -101,3 +101,4 @@ without adopting that conversion as the record's.
 - **spec-fidelity round 1 (2026-10-19): CHANGES REQUIRED, 2 items.** Decade means of mon per monme and mon per ryo made
   required beside the source's units; the cross-check names the request's conversion (Kazusa 1842, 132 mon, 0262), not a
   132-200 range. The aside (name Seki and Tosa under SILENT) taken.
+- **spec-fidelity round 2 (2026-10-19, verify): FAITHFUL.** Both items resolved; no contradiction introduced.

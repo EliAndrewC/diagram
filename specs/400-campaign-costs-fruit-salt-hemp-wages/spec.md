@@ -40,8 +40,9 @@ from guesses. Four search passes ran on 2026-10-19 (`passes/`).
      price (1688, 1728) and Beijing's 1736 official price beside its wages; a markup computed from them is the project's
      arithmetic. Where a source states the markup, it is given with its verdict and its label: Lianghuai, a yin costing
      over 10 taels in the selling district against 0.64 at the field (a modern paper on Tao Shu's reform); a few cash at the
-     field against 30-70 to the consumer (a secondary paper, quoted from OCR); Sichuan retail 12-15 times the cost of
-     making it (King, 1909, late Qing); and Songjiang's local retail of official salt, 1651-88 (Ye Mengzhu).
+     field against 30-70 to the consumer (a secondary paper, quoted from OCR); retail 12-15 times a manufacture cost he
+     gives generally as 1.5-4 cash a catty, not tied to a place (King, 1909, late Qing; his Sichuan figure is a manufacture
+     cost of 13-14 cash plus 9 cash tax, with no Sichuan retail beside it); and Songjiang's local retail of official salt, 1651-88 (Ye Mengzhu).
 3. **Hemp cloth and amulets.**
    - **Hemp in Japan:** ATTESTED ONLY FOR one early-1600s lot of Etchu hemp cloth by the roll, the roll's length unknown.
      A price by the tan, and a cotton price beside it: SILENT.
@@ -109,3 +110,5 @@ The answer on EliAndrewC/diagram#5 names each question's fragment FILE, a verdic
   ATTESTED ONLY FOR the Ming manual's forge smiths in 0263; tailors' day wage from the Zhili 1769 grouped norm, piece
   rates SILENT apart; the Edo pair stated as SILENT, the one-sided figures gathered as arithmetic; the stated salt markups
   given with their verdicts and labels.
+- **spec-fidelity round 2 (2026-10-19, verify): CHANGES REQUIRED, 1 item.** King's 12-15 times is his general figure
+  against a 1.5-4 cash manufacture cost, not Sichuan's; his Sichuan figure is a manufacture cost and tax only.
