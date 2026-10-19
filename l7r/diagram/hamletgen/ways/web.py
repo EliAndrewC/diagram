@@ -599,7 +599,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         a web lane's middle off the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: WEB_FABRIC_GAP, 7 ft clear of a garden fence (`clear_runs`' tight margin)
         ground cover is not fabric - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a lane crosses a tree belt and the planting resumes on both sides
         scrub and commons crossed - UNRESEARCHED: a lane may cross grazing scrub and the commons
-        a further row street's end - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: it ends at its outermost joint or at its last farm's door (`trim_streets`, `_TOUCH_GAP` and the door's offset)
+        a further row street's end - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back to the last house it serves - it ends at its outermost joint, or abreast the house of the last farm it serves without a path (`trim_streets` at `street_anchors`)
         the web's frame - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane runs only along the houses it serves and about 30 ft past the last of them - the frame (`BUNDLE_PITCH`, 100 ft past the outermost house, or `CLUSTER_SPAN_FACTOR` times the seat band) is only the room the cuts are laid in, and the trims (`tidy_lane_ends`) bring each end back to the last house it serves
         a row village laid without web cuts - research/questions/0033-row-villages-resson.drawing.html: its farms are strung along their street and reach it by a path where their grove is in the way - its ways are its streets and those paths; no back lane or alley is cut among its farms (a map drawing convention)
         web lanes off the water - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way keeps to its own bank; web cuts and joins clipped at the watercourses and drawn channels, a join crossing the brook only at a ford, one of the crossing places
@@ -608,7 +608,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         web lanes routed round the households' reserved wood seats as fabric - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: every pass clips and routes round each reserved wood seat by the copse's lane buffer, as it does a steading; no page read shows a lane through a household's grove
         row streets laid - research/questions/0033-row-villages-resson.drawing.html
         every farmhouse served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every farmhouse but the few reached across a neighbor's land, which `checks.unreached_houses` counts reached through their neighbor's chain
-        a row farm's door point - UNRESEARCHED: set 8 ft past its yard (`front_door` at `DOOR_STEP_FT`), where its street's trim and arrival are judged from
+        a row farm's door point - UNRESEARCHED: set 8 ft past its yard (`front_door` at `DOOR_STEP_FT`); it picks the farm's own street (`own_street`) and starts its door path, while arrival and the trim are judged from the house
     """
     _pass("cut")
     """STAGE 5b: the LANE WEB - the lanes that make every farmhouse reachable.
