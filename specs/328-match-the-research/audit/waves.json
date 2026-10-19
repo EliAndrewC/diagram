@@ -870,5 +870,6 @@
   "l7r/diagram/settlement/trades.py::TradesMixin.farrier#clinker heap beside the shed": "165 (retired: its code was removed by commit eb9b519b0, '392: delete the engine code only frozen exhibits called, and what only it reached; its tes', with no live successor - ask:t33-ranking-pick)",
   "l7r/diagram/settlement/trades.py::TradesMixin.kiln#open drying ground of three ware racks between the shed and the pit": "165 (retired: its code was removed by commit eb9b519b0, '392: delete the engine code only frozen exhibits called, and what only it reached; its tes', with no live successor - ask:t33-ranking-pick)",
   "l7r/diagram/settlement/trades.py::TradesMixin.kiln#works layout: kiln and fuel at the back edge, cottages along the front edge, shed and pit on the flanks": "165 (retired: its code was removed by commit eb9b519b0, '392: delete the engine code only frozen exhibits called, and what only it reached; its tes', with no live successor - ask:t33-ranking-pick)",
-  "l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#on the bund": "166"
+  "l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#on the bund": "166",
+  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#yard, garden and fixtures against the house": "167"
 }

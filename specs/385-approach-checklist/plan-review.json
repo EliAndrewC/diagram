@@ -7592,25 +7592,31 @@
    "verdict": "CLEAR"
   },
   "T34": {
-   "section_sha256": "60d2cf52958b6629ed1b2a0a598c618ba9e98d792ff4d0158314b434c2204662",
+   "section_sha256": "0edce7d1f6ff704f4244c845ed95b6c61007f87ae2085e941151112c3d0cf1b3",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "T34-row",
-     "summary": "T34 takes the waterfields/banks.py _WELD_MIN_APEX row (E1 DRIFTED) as one of FR-020's ten, calling it 'the top-ranked live row of any kind', and closes it as a worked row 'marked with its wave'.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The round arbiter's reading of FR-020 (ask:t33-ranking-pick) takes the ten from open rows 'whose code a scripted (live) map runs', and says 'a row whose code was removed with no live successor is marked retired in 328's audit/waves.json with its reason'. The plan's own Approach item 4 measured that _WELD_MIN_APEX is read by nothing, and that its comment block describes _absorb, the welder feature 302 retired. Item 6 says 'no weld runs it', so it has no live successor. By the ruling's own test this row belongs with the retired rows, not the live ones, and counting it as worked leaves nine claim fixes where the GM asked for '10 more claims' (amendment 7). Nothing makes picking a live row impossible, and the GM's words do not imply that a dead-code leftover counts. Counting it defeats the reason the arbiter separated out retired rows: a row with no running code must not use up one of the ten. Fix: mark the row retired in audit/waves.json with its reason (code retired by 302, no live successor; checked by item 4's grep), as the ruling prescribes, and have T34 (or the next task) take another live row."
+     "summary": "T34 takes the live ranking row overlap/taxonomy.py _OVERLAP_EXEMPT#yard, garden and fixtures against the house (E2 DRIFTED) as the top-ranked live row of any kind, saying so in its Approach; round 1's dead row _WELD_MIN_APEX goes to T143's retirement.",
+     "class": "within",
+     "why": "FR-020 as the round arbiter read it (ask:t33-ranking-pick): rows come from open rows whose code a live map runs, a kind not yet tried where one is left, else the top-ranked live row of any kind, said so in the Approach. The block names the row live, states no untried kind is left among live rows, and says so - which cures round 1's BLOCKED finding, the dead row. Amendment 7 asks for ten more claims fixed; this is one."
     },
     {
-     "id": "D153",
-     "summary": "_WELD_MIN_APEX, its claim and its comment block are removed from waterfields/banks.py; the jog comment's example is reworded to _TOE_MIN_APEX (25 deg) above the gate's 15; recording an 18-25 deg allowance on 0005 is refused.",
+     "id": "D154",
+     "summary": "0043's drawing page records the wood shed a ken past the wall gap, about 9.5 ft off its wall, as a DEVIATION from the GUESSed 6 ft, with its reason (at a ken, larger settlements left a farmhouse or field off their lanes - 328 waves 9 and 51); the two claims cite 0043; WOODSHED_STEP_FT stays 6.0; conforming the placer to 6 ft is refused.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Choosing to keep the maps at 9.5 ft and record an exception, rather than conform them to the drawing page's 6 ft, is a carve-out from the page's figure, so it is ruled. It is implied by the GM's own words: his request is that a number not grounded in research is a knob, and that 'it makes sense to keep a rule ... and add an exception'; 0043 itself labels the 6 ft a GUESS ('no page we read says where on the plot a wood shed stood'). The finding offered 'fix the claim, or the placer'; the claim already states the maps (measured 2026-10-19 per item 4), so the fix lands where the disagreement sits, on the page that lacked the deviation, and the constraint 'every deviation recorded on the drawing page with its reason' is met. The reason is a measured one (three named seeds refused at a ken, held twice), not convenience, and the exception covers one item only, so there is no seam of unlike cases."
+    },
+    {
+     "id": "T34-wave",
+     "summary": "The row is marked with its wave in 328's audit/waves.json; record checks and claims check run; no engine token changes.",
      "class": "within",
-     "why": "Removing a dead constant and the claim that describes a margin no map uses makes the claim match the world (constitution XIV: a dead branch is removed, not described). Rewording one comment example to a live constant changes no behavior, and refusing to record an allowance that no code applies is correct. This decision stands whichever way the row is counted. It can go with the retirement above. Only how the row is counted is wrong."
+     "why": "FR-020 requires each row marked with its wave; SC-010 counts it. The checks enforce the requested fix and add no behavior."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   }
  }
 }
