@@ -558,25 +558,28 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@33 (continue),
 7. **The next step is a measurement.** The gate and the landing cohort, both run.
 8. **Every route measured before offering one?** No route is offered.
 9. **After a ruling: the step it names?** Yes - the ruling says carry on with T102, then T106, T108, T111, T112.
-## T115 - per-task time by tick (amendment 10, the GM 2026-10-19)
+<!-- plan-archive: T115 to T115 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->
+## T116 - a code change owes a triage first (amendment 10, the GM 2026-10-19)
 
-### T115 Approach (checklist part A)
+### T116 Approach (checklist part A)
 
-1. **The goal, in the world.** "How long did each task take, and where did its time go?" is one command, not an hour of reading git history by hand.
-2. **The constraints.** Amendment 10, the GM: "It sounds like we probably could use some tooling adjustments to help gather this kind of information." The measure the GM was answered with: a task's span from the tick before it to its own tick, worked one task at a time. T89/T90's buckets (`where_time.tables`). A test red without it.
-3. **Where each comes from.** The GM (G); `where_time` (O).
-4. **Do they describe the world here?** Yes - measured 2026-10-19 (the GM's speed question at 11:55Z, then `make where-time F=385 SINCE=2026-10-19T00:00:00Z` against the ticks read from `tasks.md`'s git history): `where-time` books a gap to the task its call names or the active mark, and the mark lagged - T96 and T97 showed about an hour each where their tick-to-tick spans were 1 h 34 (with T98) and 53 min; the spans had to be rebuilt by a hand script over `git log -p tasks.md`.
-5. **The order.** The tick times read from `tasks.md`'s history (the box turned `[x]`), the windows built from them, `tables` booking each window to the task(s) ticked at its end, a span column, the make target, the test.
-6. **The exits.** (c) - a mode of `where-time` that books by tick windows; mending the active mark was weighed and refused (a window is what the GM was answered with, and it needs no mark kept true).
+1. **The goal, in the world.** A change to a function sends to impl-drift only the claims it bears on, not every claim the function carries.
+2. **The constraints.** Amendment 10, the GM: "I would also like to implement all 3 of your suggestions" - the first, "re-check only the claim lines a change touched". Feature 318's FR-016 and its triage (a page edit owes its claims a triage of the changed blocks; only the claims it names go on). Feature 316: a verdict is recorded at the fingerprints its bundle read. The 1,000-line bar. A test red without it.
+3. **Where each comes from.** The GM (G); 318, 316 (O); the bar (G, 2026-08-31).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T97's claims rounds: an edit to `web.stage_web` re-owed its 20 claims, 17 of them IN-STEP and unaffected; `make where-time F=385 BY=tick`: T97 53 min, 4 claims rounds among them; `claims.owed` names every claim of a unit whose code fingerprint moved "code changed"); `claims.py` stands at 1,000 lines.
+5. **The order.** The owed logic moved to its own module (the bar); `owed` sending a many-claim unit's code change to a triage; the triage bundle showing the unit's diff against origin/main; the record clearing the untouched claims at their new code; the tests.
+6. **The exits.** (c) - a code triage, as the page edit has, reusing the `claims-triage` agent; a static match of names in the diff against the claims was weighed and refused (a change can bear on a claim whose names it never touches).
 7. **The search smell.** None.
-8. **The budget.** 45 min.
-9. **Done, measured.** One goal: `make where-time F=385 BY=tick [SINCE=]` prints each task's (or each batch's) tick-to-tick span and its minutes by bucket, its numbers for T97 within a minute of the hand count's 53; `tests/tooling/` red without it.
-10. **Before moving a constant.** n/a - no constant moves in this task.
+8. **The budget.** 90 min.
+9. **Done, measured.** One goal: a code change to a unit carrying at least `CODE_TRIAGE_MIN` claims owes them a `code triage` - a bundle of the unit's diff hunks against origin/main and its claims - whose named claims go on to impl-drift and the rest are recorded at their new code; a unit with fewer claims, a new claim, or a unit with no diff to show goes to impl-drift as now; `tests/tooling/` red without it.
+10. **Before moving a constant.** `CODE_TRIAGE_MIN` is new (3, a tooling threshold - below it a triage costs as much as the check it saves).
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
-### T115 Decisions
+### T116 Decisions
 
-**D132 - a task's time is its tick window.** `where_time` gains `--by-tick` (`make where-time ... BY=tick`): the ticks are read from `tasks.md`'s git history (the commit that turned a box `[x]`), each window from the tick before to a tick is booked to the task or tasks ticked at its end (a batch shares its window, named "T96+T98"), the gaps inside are bucketed by `tables` as now with no name-based booking, and the table gains the window's wall-clock minutes.
+**D133 - a code change triaged first.** `owed` marks a "code changed" claim of a unit carrying `CODE_TRIAGE_MIN` (3) or more claims "code triage", owed only a triage (`TRIAGED`); fewer, and it goes to impl-drift as now. The triage bundle shows, per such unit, the hunks of `git diff origin/main -- <file>` that overlap the unit's lines and its claims with their last verdicts; a unit with no hunk to show is owed in full (`forced`). `make claims-triaged` clears an untouched claim at its new code and core fingerprints, as it clears a page's at its new pages.
+
+**D134 - the owed logic in its own module.** `owed`, `research_why`, `relabeled_only` and their helpers move from `claims.py` to `claims_owed.py`, re-exported by `claims.py`, so the bar holds.
 
 ## T11 - the close
 

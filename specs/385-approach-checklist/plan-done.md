@@ -2833,3 +2833,24 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@32 (continue),
 
 **D130 - landed means on main.** In `tick-task.landed_refusal`, a task with no land-tooling run is refused when `git log origin/main..HEAD` names a file outside `specs/` and `dev/` (the feature's own records and the run logs a landing writes): "the NOTE says landed, but <file> is committed here and not on origin/main - land it (scripts/sync-with-main.sh done), then tick".
 
+<!-- plan-archive: archived 2026-10-19 -->
+## T115 - per-task time by tick (amendment 10, the GM 2026-10-19)
+
+### T115 Approach (checklist part A)
+
+1. **The goal, in the world.** "How long did each task take, and where did its time go?" is one command, not an hour of reading git history by hand.
+2. **The constraints.** Amendment 10, the GM: "It sounds like we probably could use some tooling adjustments to help gather this kind of information." The measure the GM was answered with: a task's span from the tick before it to its own tick, worked one task at a time. T89/T90's buckets (`where_time.tables`). A test red without it.
+3. **Where each comes from.** The GM (G); `where_time` (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (the GM's speed question at 11:55Z, then `make where-time F=385 SINCE=2026-10-19T00:00:00Z` against the ticks read from `tasks.md`'s git history): `where-time` books a gap to the task its call names or the active mark, and the mark lagged - T96 and T97 showed about an hour each where their tick-to-tick spans were 1 h 34 (with T98) and 53 min; the spans had to be rebuilt by a hand script over `git log -p tasks.md`.
+5. **The order.** The tick times read from `tasks.md`'s history (the box turned `[x]`), the windows built from them, `tables` booking each window to the task(s) ticked at its end, a span column, the make target, the test.
+6. **The exits.** (c) - a mode of `where-time` that books by tick windows; mending the active mark was weighed and refused (a window is what the GM was answered with, and it needs no mark kept true).
+7. **The search smell.** None.
+8. **The budget.** 45 min.
+9. **Done, measured.** One goal: `make where-time F=385 BY=tick [SINCE=]` prints each task's (or each batch's) tick-to-tick span and its minutes by bucket, its numbers for T97 within a minute of the hand count's 53; `tests/tooling/` red without it.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T115 Decisions
+
+**D132 - a task's time is its tick window.** `where_time` gains `--by-tick` (`make where-time ... BY=tick`): the ticks are read from `tasks.md`'s git history (the commit that turned a box `[x]`), each window from the tick before to a tick is booked to the task or tasks ticked at its end (a batch shares its window, named "T96+T98"), the gaps inside are bucketed by `tables` as now with no name-based booking, and the table gains the window's wall-clock minutes.
+
