@@ -7499,6 +7499,38 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T137": {
+   "section_sha256": "a1d38ba52af7927baa284e3977df12483133b2fb60dc591c312b8a4476eb034a",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D149a",
+     "summary": "RUN_ON_TURN_DEG's malformed claim (\"CONVENTION <page>\") is corrected to a plain citation of 0081's drawing page",
+     "class": "within",
+     "why": "Repairs a defect that reached main (T136's claim, red in test-full on test_every_unit_in_scope_carries_a_claim, measured 2026-10-19). Which well-formed claim the constant carries is claim content, not a narrowing of anything the GM asked; the request does not speak to it."
+    },
+    {
+     "id": "D149b",
+     "summary": "claims.py gate refuses each coverage problem in a file changed since origin/main, naming it and the grammar; no carry/escape",
+     "class": "within",
+     "why": "A tooling improvement under amendment 6 ('implement any obvious performance / tooling / process improvements along the way') that meets amendment 10's bar for a fix (a defect that reached main). It narrows nothing the GM asked. 'No escape' does not cut into amendment 3 / FR-013's carry: a form problem lies in the claim's own text, and the whole-repo coverage test already refuses any such problem at the gate, so a malformed claim that stood at the merge base would already have turned main red. The guard enforces only the existing grammar rule, on the route that skipped it."
+    },
+    {
+     "id": "D149c",
+     "summary": "Exit (c): the form check runs on the delta's files where both routes already pass; running the whole coverage test on the direct route was weighed and refused",
+     "class": "within",
+     "why": "The goal is that no malformed claim lands by either route. A claim can land only in a changed file, so a check limited to the delta meets the goal. Choosing how to implement it is a design decision, not a narrowing."
+    },
+    {
+     "id": "D149d",
+     "summary": "Lands with T132 and T125 by make land-batch, budget 30 min",
+     "class": "within",
+     "why": "Amendment 10's second lever: batch the gate and landing across small engine fixes."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

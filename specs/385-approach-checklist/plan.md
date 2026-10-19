@@ -752,6 +752,20 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@35 (change-rou
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
+### T137 part B (2026-10-19T15:28Z)
+
+Owed by the round arbiter's ruling on hour:385-approach-checklist@36 (continue), taken while T137 was the active task.
+
+1. **What is refusing?** Nothing now: the gate's red was the malformed claim, corrected.
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither in this part B: the change is D149's, decided and reviewed; the ruling's fix - reuse `form_problems`, no second check - is how D149 was built.
+6. **The one-sentence test.** "A malformed claim in a changed file is refused at the push" - true by `test_the_gate_refuses_a_claim_the_grammar_cannot_read_in_a_changed_file`.
+7. **The next step is a measurement.** The claims check, the gate and the landing cohort of the batch.
+8. **Every route measured before offering one?** No route is offered.
+9. **After a ruling: the step it names?** Yes - T137, then the T132+T125 batch.
+
 ### T137 Decisions
 
 **D149 - the form refused at the push.** `RUN_ON_TURN_DEG`'s claim cites 0081's drawing page plainly ("... - the page records its turn limits as drawing conventions"). `claims.py gate` adds to its refusals each `coverage` problem whose file is in `git diff --name-only origin/main...HEAD`: "<problem> - the claims grammar: <GRAMMAR>". No escape: a form is fixed, never carried.
