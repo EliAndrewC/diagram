@@ -198,6 +198,31 @@ def test_new_sources_sent_together_are_first_readings_not_rounds(tmp_path: pathl
     assert st["rounds"]["source-reader|q:0105"] == 2, "re-reading a note already read is a round"
 
 
+def test_re_reads_of_sources_sent_together_are_one_round(tmp_path: pathlib.Path) -> None:
+    """The round arbiter on ask:400-round3: round 2's re-reads of ten sources of 0273, sent together, were counted ten rounds,
+    and a second source's bundle sent beside the first was refused as a re-dispatch into a running round (FR-003c). Bundles of
+    disjoint notes in flight together are one round, as a split bundle's batches are."""
+    root = _clone(tmp_path)
+
+    def src(key: str) -> str:
+        return f"# Check bundle - source {key}\n\nowed-checks: source-reader\nunit: source-reader:0105#{key} f\n"
+
+    st: dict = {}
+    for i, key in enumerate("abcd"):
+        assert hc.dispatch(st, f"p{i}", "source-reader", "/m", src(key), i, root) == "", key
+    for i in range(4):
+        _read(st, f"p{i}")
+    hc.answered(st, "source-reader", ["q:0105"])
+    for i, key in enumerate("abcd"):
+        assert hc.dispatch(st, f"r{i}", "source-reader", "/m", src(key), 10 + i, root) == "", f"{key}: a sibling, not a re-dispatch"
+        hc.launched(st, f"r{i}", f"ag-r{i}", True)
+    assert "already in q:0105's round" in hc.dispatch(st, "x", "source-reader", "/m", src("a"), 15, root), "the same note again is"
+    for i in range(4):
+        hc.returned(st, f"ag-r{i}", "a reading")
+    hc.answered(st, "source-reader", ["q:0105"])
+    assert st["rounds"]["source-reader|q:0105"] == 2, "four re-reads sent together are one round, not four"
+
+
 def test_a_dispatch_another_guard_refused_never_freezes_the_page() -> None:
     st: dict = {}
     hc.dispatch(st, "t1", "quote-check", "/m", MANIFEST, 0)
