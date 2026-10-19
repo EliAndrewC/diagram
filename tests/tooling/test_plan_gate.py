@@ -432,3 +432,12 @@ def test_a_quiet_part_b_leaves_its_task_s_section_reviewed() -> None:
     for part_b, current in ((quiet, True), (loud, False)):
         text = plan.replace("### T05 Decisions", part_b + "### T05 Decisions")
         assert gate.task_current(review, text, "T05") is current, part_b
+
+
+def test_an_archive_line_inside_a_task_s_section_leaves_it_reviewed() -> None:
+    """Feature 385 T82 (plan D102): ticking T78 and T80 left their archive line inside T79's section, and T79 was owed again."""
+    sec = "## T05 - x\n\n### T05 Decisions\n\n**D10 - a rule.** z\n\n"
+    review = {"tasks": {"T05": {"verdict": "CLEAR", "section_sha256": gate.digest(sec.encode()), "section_text": sec}}}
+    line = "<!-- plan-archive: T06 to T07 moved to plan-done.md, 2026-10-19 (feature 375 FR-044) -->\n"
+    assert gate.task_current(review, "# Plan\n\n" + sec + line, "T05")
+    assert not gate.task_current(review, "# Plan\n\n" + sec + "A new decision.\n", "T05")
