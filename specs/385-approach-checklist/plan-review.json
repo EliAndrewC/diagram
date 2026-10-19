@@ -6874,6 +6874,32 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T105": {
+   "section_sha256": "5763c324848e97363238c156e2debcda37c26f87d783546c7140fb6f7f324335",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D123",
+     "summary": "claims.research_why returns 'research changed' when the claim now cites a page absent from its row's recorded pages, ahead of the triage test; feature 318's triage rule stands for every other moved page",
+     "class": "within",
+     "why": "A tooling fix found while working a claim task, which amendment 6 authorizes ('implement any obvious performance / tooling / process improvements along the way'). It narrows nothing that was asked. Feature 318 FR-016 scopes the re-check owed 'after a page edit' to the blocks a claim rested on. A claim relabeled to a page it was never checked against rested on no block of that page, so FR-016's triage cannot reach it, and the measured result (the triage bundle named no claim, and claims-bundle refused it) shows the claim was owed nothing at all. D123 makes such a claim owed a full check and leaves FR-016 as written for every case it covers. That is consistent with this feature's FR-008: a re-check reads against what the last check read."
+    },
+    {
+     "id": "T105 Approach item 6 (exit chosen)",
+     "summary": "exit (c), treat an unread page as changed research; conform (bundling claims by name each time) refused because it relies on remembering",
+     "class": "within",
+     "why": "This is the same decision as D123, seen as the checklist exit. Refusing a remembered workaround in favour of tooling follows the GM's amendment 8 ('make our tooling do the thing correctly automatically every time')."
+    },
+    {
+     "id": "T105 Approach items 5, 8, 9 (order, budget, done)",
+     "summary": "research_why change first, then the test; 20 min; one goal with tests/tooling/test_claims_scoping.py red without it",
+     "class": "within",
+     "why": "Execution choices under FR-003 and FR-015 (one goal per task). Done names one goal and a test that enforces it, which is enforcement of the change rather than added scope."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
