@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-19
 
-**Status**: In progress
+**Status**: Done 2026-10-19 - T01-T03 ticked: spec FAITHFUL (round 2), plan CLEAR, kind C and kind B tests red on HEAD and green, make quick and make hooks-test green; route DIRECT (no engine code)
 
 **Approved**: the GM, 2026-10-19, "Let's go with the first option: a kind-C pass should be skipped wen the only change is another check's few word-fix outside the quotation and its claim.  An then also, it sounds like we need a kind-B tweak, where if a fix keeps failed then that should be a loop the arbitur should judge.  It sounds like kind A needs no tweak."
 
