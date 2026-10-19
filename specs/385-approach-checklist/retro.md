@@ -702,3 +702,9 @@ the request lacked the approved proposal list, then the review struck the D-id-o
 T76's checklist lives in this feature's `specs/`, which `land-tooling` does not carry, and its test reads that file - so the two land
 with the feature's own directory at T11 (which moves the checklist to `docs/`). The gate in this clone already holds T76's items:
 `make tick` reads the clone's checklist.
+
+## T78 - the retro row
+
+About 30 min. The hook's plain-text correction is `hm_house.americanize` now; `claims.py record` runs each parsed note through it
+(never the key - the review's point) and `apply_edits.py` each EDIT's new text, quotations held out as the hook holds them. The
+first test fixture used the wrong reply form. **The habit it changes:** an agent's British spelling no longer reaches a tracked file.
