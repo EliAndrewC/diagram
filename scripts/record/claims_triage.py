@@ -279,6 +279,33 @@ def triage_reply(path: Path) -> str:
     return apply_edits.reply_of(path)
 
 
+def vet(reply: str, units: Mapping[str, Any], root: Path, pattern: re.Pattern[str]) -> tuple[str, list[str]]:
+    """The reply without its VERDICT lines that cannot be recorded as written, and those lines, each refused aloud (the round
+    arbiter's fix on hour:385-approach-checklist@29): a line `pattern` cannot read, or whose claim is not a unit of the bundle
+    (06:57, a path missing `diagram/`; 07:01, `UNRESEARCHED IN-STEP`), or whose note points at a question file that does not
+    exist (07:03, `0246-...lanes.html` without `.drawing`, found only by `make done`'s preflight). Each was reported once as a
+    message and the command went on to say "recorded"; a refused line now makes `make claims-checked` exit non-zero."""
+    keep, bad = [], []
+    for raw in reply.split("\n"):
+        line = raw.strip().strip("`")
+        if line.startswith("VERDICT "):
+            m = pattern.match(line)
+            gone = [p for p in re.findall(r"research/questions/[\w.-]+?\.html", line) if not (root / p).is_file()]
+            why = ("no verdict it can read" if not m else "not a claim of this bundle" if m.group(1).strip("`") not in units
+                   else f"no such question file: {', '.join(gone)}" if gone else "")
+            if why:
+                bad.append(f"{why}: {line[:160]}")
+                continue
+        keep.append(raw)
+    for b in bad:
+        print(f"claims-checked: REFUSED line - {b}", file=sys.stderr)
+    if bad:
+        print("claims-checked: correct each refused line in the reply file (the claim's path as the bundle names it; a verdict of "
+              "IN-STEP, DRIFTED, NEEDS-RESEARCH, MISLABELED or CANNOT-TELL; a pointer to a question file that exists) and run it "
+              "again - the lines it recorded stay recorded", file=sys.stderr)
+    return "\n".join(keep), bad
+
+
 def read_reply(path: str, cmd: str, nothing: str) -> str:
     """The reply `make <cmd>` is given, read by `triage_reply`; with no text, the refusal is printed and "" returned, so nothing
     is written (feature 385 T94: `make claims-checked` read T31's impl-drift transcript raw and recorded 6 of 8)."""
