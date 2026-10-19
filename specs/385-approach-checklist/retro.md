@@ -714,3 +714,9 @@ first test fixture used the wrong reply form. **The habit it changes:** an agent
 About 15 min. `task_current` reads a section and its reviewed text without their quiet part Bs, so a part B that decides nothing
 no longer re-owes its task's blocks; on the live plan the owed delta fell from six blocks to three (T79's, under review). **The
 habit it changes:** none needed.
+
+## T79 - the retro row
+
+About 35 min. `land-tooling.sh` writes each run's `{task, files, outcome}` from an exit trap, and `make tick` refuses a NOTE saying
+"landed" (any case - the review's catch) while the task's last run failed or a file it named differs from main, the ledger left
+out as a rider. **The habit it changes:** a tick cannot claim a landing that did not happen.
