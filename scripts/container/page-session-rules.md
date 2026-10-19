@@ -81,6 +81,10 @@ on. The research record's own `CLAUDE.md` still loads when you touch `research/`
   and `make check-bundle` refuses a bundle for a check nothing owes. When a check returns, record it -
   `make record-checked CHECK=<check> BUNDLE=<dir> RESULT="<counts>"` - or the push refuses the unit. A source-reader
   read before its note exists is declared on its bundle: `NEW="<the claim>"`.
+- A fix you make BY HAND for another check's finding (source-reader words no EDIT blocks) that leaves a note's link, quoted
+  passages and claim sentences as they were owes no quote-check pass: declare it, `make record-checked CHECK=quote-check
+  Q=<NNNN> NOTES=<k> FIXED_BY="<check>: <its finding>"` - refused, naming the note, if the quotation or claim moved (feature
+  399). Another check's EDIT blocks settle the same way at `make apply-edits`, without a word.
 - A pop-up's checks run in order - `modal-form`, then `modal-research`, then `modal-depiction` - each round's EDITs applied
   (`make apply-edits`) before the next check is bundled; `make modal-bundle` refuses a check while one before it is owed,
   naming it. A round's applied EDITs settle the checks before it, so form is not owed again by research's fixes (feature 375

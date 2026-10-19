@@ -272,6 +272,38 @@ class Round:
         self.before = self.ro.fingerprints(root, (*self.checks, *self.earlier)) if self.checks else {}
         rf = "record-format" in self.checks
         self.words = {q: prepass_words(root, q) for q in touched_questions(found)} if rf else {}
+        # feature 399 (the GM 2026-10-19): ANOTHER check's blocks settle a quote-check note they moved only outside its
+        # quotation and its claim - kind C. Read before the blocks: each note's words, quotation key, and whether it was owed
+        self.quotes = self.quote_notes(touched_questions(found)) if self.checks and "quote-check" not in self.checks else {}
+        self.quote_owed = set(self.ro.fingerprints(root, ("quote-check",))) if self.quotes else set()
+
+    def quote_notes(self, questions: set[str]) -> dict[str, tuple[str, str]]:
+        """{quote-check slug: (fingerprint, quotation key)} of every note of `questions`, in the working tree now."""
+        ru = self.ro.ru
+        rec = self.ro.read_at(self.root, None, set())
+        slugs = [f"quote-check:{stem}#{k}" for stem, notes in rec.notes.items() if ru.question(stem) in questions for k in notes]
+        return {s: (ru.fingerprint(rec, s), ru.quotation_key(rec, s)) for s in slugs}
+
+    def settle_quotes(self) -> list[str]:
+        """Each quote-check note this run's blocks moved: settled where its quotation and claim stand as before and its answer
+        stood at the words before (or it was not owed then, its words main's); else said to be owed, with why."""
+        out, store = [], self.ro.store(self.root)
+        after = self.quote_notes({self.ro.ru.question(s.split(":", 1)[1]) for s in self.quotes})
+        why = f"{self.ro.FIXED}: the {'/'.join(self.checks)} round's EDIT blocks"
+        for slug, (fp, key) in sorted(self.quotes.items()):
+            fp2, key2 = after.get(slug, ("", ""))
+            if not fp2 or fp2 == fp:
+                continue
+            if key2 != key:
+                out.append(f"  {slug}: still owed - its quotation or its claim changed")
+            elif slug in self.quote_owed and not self.ro.answered(store, slug, fp):
+                out.append(f"  {slug}: still owed - not answered at the words before these blocks")
+            else:
+                was = self.ro._read(store, slug)
+                self.ro.write_answer(store, slug, fp2, f"{why}; was: {was.get('result', 'unchanged since main')}", was.get("pages"))
+                self.ro.keep_reading(store, slug, key2, "qkeys")
+                out.append(f"  {slug}: settled - another check's fix, outside its quotation and its claim")
+        return out
 
     def settle(self) -> list[str]:
         """Each owed unit of the reply's checks whose content moved by this run's blocks alone: answered where the round's
@@ -299,7 +331,7 @@ class Round:
                 continue
             said = self.ro.settle(store, slug, before, fp)
             out.append(f"  {slug}: {'settled with its answered round' if said == 'answered' else 'settles when `make record-checked` records this round'}")
-        return out
+        return out + (self.settle_quotes() if self.quotes else [])
 
 
 def settle_round(root: pathlib.Path, report: str, found: list[dict], apply) -> int:  # noqa: ANN001
