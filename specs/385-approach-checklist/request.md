@@ -251,3 +251,15 @@ The seven ("all 7 of those"), as the session's report and `step-back-2026-10-18.
 > | E | a red gate | `make plan-verdict` passes the reviewer's text through `americanize`, as T78 does for notes | a gate each time |
 > | F | where-time misbooks tasks | `make decide`, `task-add`, `tick` and `land-tooling` move the active-task mark to the task they name (replacing proposal 6's refusal) | true per-task numbers |
 > | G | where-time cannot tell waiting from idle | fold the scratch split in: a between-turns window classed by what ended it | the analysis above, in one command |
+
+## Amendment 10 (2026-10-19) - throughput: measuring it, and three levers
+
+The GM, 2026-10-19, after the session's timing of the claim-fix tasks (wording-only 5-15 min; engine fixes 40-60 min, the
+claims rounds, the fixed landing cost and the plan reviews the main costs):
+
+> It sounds like we probably could use some tooling adjustments to help gather this kind of information.  I would also like to
+> implement all 3 of your suggestions.  Please file all of that as tasks and then work them as soon as you finish the current task.
+
+The three suggestions, as offered: re-check only the claim lines a change touched; batch the gate and the landing cohort across two
+or three small engine fixes; skip the plan review for wording-only tasks that decide nothing new. And the measurement: per-task time
+read from the event log (each tick now records its task, hour 33's fix) as a report, not rebuilt from git history by hand.
