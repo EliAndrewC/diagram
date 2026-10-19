@@ -26930,16 +26930,17 @@
   "code": "3b3f1d1aa6fc3bed",
   "core": "6b52b3ec1649a835",
   "date": "2026-10-19",
-  "note": "the page's 11 ft is half of \"about 22 ft of the opening\", but the code holds the path's middle only FOOTPATH_FABRIC_GAP=7 ft off the bands; it keeps 11 ft only if band_grow grows each band by 4 ft. Need band_grow's growth amount (and GROVE_WORKING_ROOM_FT) to judge",
+  "note": "the bands are held FOOTPATH_FABRIC_GAP off in `ok` (the step, the pull, the square leg) and `kept` (the finished path); the lawful-step fallback also goes through `ok`; the lane's middle 11 ft off each side matches 0036's \"about 22 ft of the opening\", which the page marks a GUESS; no lane runs through a farm's own wood",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
   "research": "45be621f47448e34",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:06616d493b616366",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::door_path#the fallback at the law's gap": {
   "body": "992984e5400ec179",
