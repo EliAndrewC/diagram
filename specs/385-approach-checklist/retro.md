@@ -1125,3 +1125,9 @@ page's wording before its record round, not between rounds - each edit re-owes t
 About 15 min with T34's landing. `_WELD_MIN_SOLIDITY` and `_WELD_MIN_APEX`, read by nothing since feature 302 retired the carve
 and its welder, are gone with their claims and comments, and both ranking rows are retired in 328's waves.json (wave 168) - T32's
 count with them, which T144 replaces. **The habit it changes:** grep a ranking row's code for a live use before taking it.
+
+## T148 - the retro row
+
+About 20 min. A record check the session stops with TaskStop now closes its dispatch, as `make check-closed AGENT=` did by hand,
+so its page is no longer frozen and its round's next check is not refused (T34 had two such checks holding 0043). The TaskStop
+branch had released plan holds since T104 but not check dispatches. **The habit it changes:** none; a stop now means stopped.
