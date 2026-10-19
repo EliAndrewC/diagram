@@ -180,6 +180,13 @@ gate_rec 240 green
 run "$(bash_ev 'make done')"; check "a gate past the window goes through" ok $?
 teardown
 setup
+gate_rec 30 green
+mkdir -p "$EV_CWD/.git"; touch "$EV_CWD/.git/gate-preflight-red"
+run "$(bash_ev 'make done')"; check "a gate after a RED PREFLIGHT goes through (feature 385 T103: it writes no run-log record)" ok $?
+touch -d '2 hours ago' "$EV_CWD/.git/gate-preflight-red"
+run "$(bash_ev 'make done')"; check "a red preflight older than the last green gate changes nothing" blocked $?
+teardown
+setup
 gate_rec 10 green
 run "$(bash_ev 'MEASURE_OK="the batch close" make done')"; check "MEASURE_OK escapes it" ok $?
 run "$(bash_ev 'make -n done')"; check "a dry run is not a measurement" ok $?
