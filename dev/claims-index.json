@@ -32798,14 +32798,19 @@
  },
  "l7r/diagram/hamletgen/ways/web.py::stage_web#a row farm's door point": {
   "body": "7211c336ff08f58f",
-  "claim": "a row farm's door point - UNRESEARCHED: set 8 ft past its yard (`front_door` at `DOOR_STEP_FT`); it picks the farm's own street (`own_street`) and starts its door path, while arrival and the trim are judged from the house",
-  "code": "56994e7b108777c7",
+  "claim": "a row farm's door point - GUESS row-villages-resson.drawing: where such a farm's gate stood was not found; set 8 ft past its yard (`front_door` at `DOOR_STEP_FT`); it picks the farm's own street (`own_street`) and starts its door path, while arrival and the trim are judged from the house",
+  "code": "4b4458e8f130ef26",
   "core": "777e9952ae445157",
   "date": "2026-10-19",
-  "note": "the claim says UNRESEARCHED, but the row-village drawing page shows the place was looked for and not found: \"Where the gate of such a farm stood was not found, so the path is a GUESS\". Should be GUESS research/questions/0033-row-villages-resson.drawing.html. No page records the 8 ft `DOOR_STEP_FT` figure itself, so the claim should still call that figure a guess.",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "the drawing page records that where such a farm's gate stood \"was not found, so the path is a GUESS\"; a door point 8 ft past the yard is a guess within that silence",
+  "pages": {
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
+  },
+  "research": "37ada2a33aa587d2",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:dbb4842be0eda9a1"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::stage_web#a row village laid without web cuts": {
   "body": "7211c336ff08f58f",
