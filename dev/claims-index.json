@@ -32994,13 +32994,16 @@
   "rests": [],
   "verdict": "MISLABELED"
  },
- "l7r/diagram/hamletgen/ways/web.py::stage_web#the web's frame reaches BUNDLE_PITCH (100 ft) past the outermost house along the seat axis (or CLUSTER_SPAN_FACTOR 1.6 x the seat band, whichever is wider), which sets how far a web cut may run beyond the houses before the trims": {
-  "code": "d1bd34ae9d840667",
+ "l7r/diagram/hamletgen/ways/web.py::stage_web#the web's frame": {
+  "body": "907d26557912f733",
+  "claim": "the web's frame - UNRESEARCHED: a web cut may run `BUNDLE_PITCH` (100 ft) past the outermost house along the seat axis, or `CLUSTER_SPAN_FACTOR` (1.6) times the seat band where that is wider, before the trims",
+  "code": "3d335bec84630bcd",
   "core": "d1bd34ae9d840667",
   "date": "2026-10-19",
-  "note": "the web's frame reaches BUNDLE_PITCH (100 ft) past the outermost house along the seat axis (or CLUSTER_SPAN_FACTOR 1.6 x the seat band, whichever is wider), which sets how far a web cut may run beyond the houses before the trims",
+  "note": "this is not UNRESEARCHED: 0246's drawing page says how far a lane runs past its last house (\"each runs only along the houses it serves, and about 30 ft past the last of them\"), and says an end reaching nothing \"is pulled back to the last house it serves\". The claim should cite research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html. Its account should say the frame (`_reach_along + BUNDLE_PITCH`, 100 ft past the outermost house, or `seat[\"lat\"] * CLUSTER_SPAN_FACTOR`) is only the room the cuts are laid in before the trims. The ~30 ft end and its 60 ft serving reach are set by the trims after it. If no trim brings a cut back to about 30 ft, the 100 ft is a drift",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/web.py::stage_web#web lane margin off the hard ground": {
   "body": "907d26557912f733",
