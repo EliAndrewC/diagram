@@ -7558,6 +7558,38 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T33": {
+   "section_sha256": "fadd9ce7af0c15c65f928bb20d19c263ce9c213202cd47713101d57784f0f162",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T33 row pick",
+     "summary": "Take the live ranking row hamletgen/ways/bund.py a_way_onto_the_bund#on the bund, kind E3 NEEDS-RESEARCH, as a kind not yet tried (T07 E4, T32 E2, T31 E0).",
+     "class": "within",
+     "why": "FR-020 as the round arbiter read it on ask:t33-ranking-pick: a live row of a kind not yet tried where one is left, said so in the Approach. Item 2 says so. Amendment 7 asked for ten more claims to be fixed; this is one of them."
+    },
+    {
+     "id": "D152 (record the reach)",
+     "summary": "Add a sentence to 0014's drawing-page rule paragraph saying a lane end within 6 ft of the paddy's edge is drawn as joining it, labeled a GUESS at map-scale touching. Relabel the claim from NEEDS-RESEARCH to GUESS, citing that page.",
+     "class": "within",
+     "why": "This fixes the claim (amendment 7), using the remedy the finding itself gave: 'label it GUESS/UNRESEARCHED or record the tolerance on the page'. It does both, so the GUESS cites a page that records the figure (T130's lesson). The new sentence states it is a guess and does not dress the figure up as research."
+    },
+    {
+     "id": "Exit (e) conform; research pass refused",
+     "summary": "Keep BUND_REACH_FT at 6 ft with no engine token change. Weigh a research pass for a joining tolerance and refuse it, because a 6 ft drawing tolerance is not a figure a source would state.",
+     "class": "within",
+     "why": "The request does not ask for the reach to change or be researched. It asks for the claim to be fixed, and labeling an implementation tolerance honestly as ours is the checklist's own first question answered ('if it's ours, it's a knob'). No requested behavior is narrowed."
+    },
+    {
+     "id": "Wave mark",
+     "summary": "Mark the row with its wave in 328's audit/waves.json.",
+     "class": "within",
+     "why": "FR-020 and SC-010 require each row to be marked with its wave."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
