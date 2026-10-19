@@ -359,17 +359,17 @@ Owed by the hour-27 step-back (hour:385-approach-checklist@27, `continue`).
 2. **The constraints.** The arbiter's fix: "make land-tooling should run its own lint stage (the same ruff check and format check the landing applies) in the foreground on the files it carries, and refuse before it goes to the background, so a lint failure shows in seconds rather than at the next tick or set-down". The landing's own lint (T52, T55, T67) stays. A test red without it.
 3. **Where each comes from.** The fix is the arbiter's (G); the landing's lint is T52's (O).
 4. **Do they describe the world here?** Yes - measured 2026-10-19 (the hour-27 bundle and the land-t85 logs): T85 was landed three times; two failures were lint (a format, a stray `f` prefix), each seen only when the backgrounded landing's log was read minutes later.
-5. **The order.** The check in the make-only guard's Bash path (it already reads `make` commands), then its suite case.
+5. **The order.** The lint as `land-tooling.sh`'s first step, in the clone; the same check in the make-only guard for each command that lands tooling; then the suite cases.
 6. **The exits.** (c).
 7. **The search smell.** None.
 8. **The budget.** 25 min.
-9. **Done, measured.** One goal: a `make land-tooling FILES="..."` command whose Python files fail `ruff check --force-exclude` or `ruff format --check --force-exclude` is refused before it runs, naming the files and the `ruff format` command, whether or not it is run in the background; `tests/hooks/test-make-only-hooks.sh` red without it.
+9. **Done, measured.** One goal: a landing of tooling whose Python files fail `ruff check --force-exclude` or `ruff format --check --force-exclude` stops before anything else runs, naming the files and the `ruff format` command - `land-tooling.sh` first, in seconds, for every caller, and the make-only guard before the command runs for `make land-tooling FILES=` and `make arbiter-fix-done LAND=`; `tests/hooks/test-land-tooling.sh` and `tests/hooks/test-make-only-hooks.sh` red without it.
 10. **Before moving a constant.** n/a - none moves.
 11. **Before fitting things into room.** n/a - nothing is fitted.
 
 ### T91 Decisions
 
-**D112 - the landing's lint, before the landing.** `make-only-hooks.sh`, for a Bash command invoking `make land-tooling` with `FILES=`, runs the landing's own lint (`ruff check --force-exclude` and `ruff format --check --force-exclude`, in the command's working tree) on the `.py` files named; a failure refuses the command with ruff's first lines and `python3 -m ruff format <files>`. No `.py` file named, or ruff absent: nothing is refused.
+**D112 - the landing's lint, first and before.** `land-tooling.sh` runs its lint (the `ruff check --force-exclude` and `ruff format --check --force-exclude` it already applies) on the `.py` files it was given, in the clone, as its first step - before the fetch, the merge and the worktree - and dies on a failure with ruff's first lines and `python3 -m ruff format <files>`; every caller (`make land-tooling`, `make arbiter-fix-done LAND=`) goes through it. The make-only guard runs the same lint on the files named by a command invoking `make land-tooling FILES=` or `make arbiter-fix-done ... LAND=` and refuses it before it runs. No `.py` file named, or ruff absent: nothing is refused.
 
 ## T11 - the close
 

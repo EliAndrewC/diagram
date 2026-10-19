@@ -6522,6 +6522,52 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T91": {
+   "section_sha256": "ca454e877668804a6e089259884e220d6345fd80fe69e7d84b7d12cf08c8a5cf",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D112-where",
+     "summary": "The foreground lint is placed in make-only-hooks.sh, matching a Bash command whose text invokes `make land-tooling` with FILES=, not as a stage of the land-tooling target itself (Approach item 5: 'it already reads make commands').",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The arbiter's fix, quoted in item 2, says 'make land-tooling should run its own lint stage ... on the files it carries, and refuse before it goes to the background'. A stage in the target covers every route that lands tooling; a hook on the literal command text covers only a session's Bash call spelled `make land-tooling`. The request names another route that lands the same files: amendment 5 item 2 ('land the tooling, mark the fix done, then tick ... One command could do all three') became FR-018, `make arbiter-fix-done` takes the fix's files and lands them. That command does not match the hook, and T91 is itself an arbiter's fix, the kind of task that lands that way. Nothing makes the target-level stage impossible: a lint stage run first exits nonzero within seconds, and that wakes the session even under run_in_background. The arbiter did not imply a hook-only check; it said the opposite ('its own lint stage'). The block's reason is implementation convenience, which does not qualify. Purpose: the fix exists so that 'a lint failure shows in seconds rather than at the next tick or set-down'. A landing route that skips the check repeats the T85 failure. Required change: run the lint as the first, foreground stage of `make land-tooling` itself, so every caller (arbiter-fix-done included) refuses in seconds. A hook may also catch the command before it runs. Alternatively, the hook must also match every command that lands tooling (`make arbiter-fix-done` at minimum), and its suite case must cover that route."
+    },
+    {
+     "id": "D112-scope",
+     "summary": "Only the .py files named in FILES= are linted; with no .py file named, nothing is refused.",
+     "class": "within",
+     "why": "The arbiter's fix is 'on the files it carries' with 'the same ruff check and format check the landing applies'. ruff lints only Python, so a landing with no .py file has nothing to check. This is not a carve-out."
+    },
+    {
+     "id": "D112-ruff-absent",
+     "summary": "If ruff is absent, the pre-check refuses nothing.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Without ruff the check cannot be run, so the rule is physically impossible in this case. Item 2 keeps the landing's own lint (T52, T55, T67), so nothing the arbiter asked for is lost beyond what cannot be run."
+    },
+    {
+     "id": "D112-refusal",
+     "summary": "The refusal shows ruff's first lines and names `python3 -m ruff format <files>`.",
+     "class": "within",
+     "why": "'refuse' in the arbiter's fix, and it names the one command that fixes the failure, as the request's other refusals do (FR-019, SC-009)."
+    },
+    {
+     "id": "T91-test",
+     "summary": "A case in tests/hooks/test-make-only-hooks.sh that fails without the check (item 9).",
+     "class": "within",
+     "why": "The test only enforces the arbiter's fix ('A test red without it' in item 2). It is enforcement of the request, not added scope. Its route must follow D112-where's correction."
+    },
+    {
+     "id": "T91-budget-exit",
+     "summary": "Exit (c), a 25 min budget, one goal (items 6, 8, 9).",
+     "class": "within",
+     "why": "Process fields of the Approach, FR-003/FR-015. They decide nothing the request left open."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }
