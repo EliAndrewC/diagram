@@ -1,0 +1,1 @@
+- 0260: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn -i -E 'porter|hunan|wuliao|夫運|tael' l7r pool (only modal prose naming porters, a lane comment and a notice-board docstring; no code prices a porter, a boat or a day wage)
