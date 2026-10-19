@@ -26,6 +26,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import feature_report as fr  # noqa: E402
 
 BETWEEN = "between turns"
+#: what a between-turns window waited on, read from the prompt that ends it (feature 385 T90, plan D111): a notification - the
+#: session's own background work; a GM prompt - the GM, or the GM away when the window ran past an hour
+WAIT_WORK, WAIT_GM, GM_AWAY = "waiting on work", "the GM", "the GM away"
 BUCKET = {
     "thinking": "model",
     "writing the spec": "model",
@@ -44,10 +47,12 @@ BUCKET = {
     "waiting: a background run": "background run",
     "waiting: the GM": "the GM",
     "idle (over an hour)": "idle",
-    BETWEEN: BETWEEN,
+    WAIT_WORK: WAIT_WORK,
+    WAIT_GM: WAIT_GM,
+    GM_AWAY: GM_AWAY,
 }
 RECORD = ("quote-check", "record-format", "source-reader", "source-applicability", "translation-check", "intro-check", "modal-", "entry-drift", "research-pass")
-COLUMNS = ["model", "tools", "gate/tests", "background run", "plan review", "claims check", "record/modal checks", "glyph check", "arbiter", "other subagent", "the GM", BETWEEN, "idle"]
+COLUMNS = ["model", "tools", "gate/tests", "background run", "plan review", "claims check", "record/modal checks", "glyph check", "arbiter", "other subagent", WAIT_WORK, WAIT_GM, GM_AWAY, "idle"]
 
 
 def bucket(cat: str) -> str:
@@ -69,6 +74,16 @@ def task_at(starts: Sequence[tuple[float, str]], t: float) -> str:
     return cur
 
 
+def window_class(evs: Sequence[Mapping[str, Any]], i: int) -> str:
+    """The class of the between-turns window that opens at the `Stop` `evs[i]` (D111), by the prompt that ends it."""
+    for e in evs[i + 1 :]:
+        if e["ev"] == "UserPromptSubmit":
+            if not e.get("gm", True):
+                return WAIT_WORK
+            return GM_AWAY if fr.parse_t(e["t"]) - fr.parse_t(evs[i]["t"]) > fr.IDLE_CAP_S else WAIT_GM
+    return WAIT_WORK  # no prompt yet: the window is still open, on work in the background
+
+
 def tables(events: Sequence[Mapping[str, Any]], starts: Sequence[tuple[float, str]]) -> tuple[dict[str, Counter], dict[str, Counter], dict[str, Counter]]:
     """(seconds by task and bucket, agents by task and kind, agent seconds by task and kind)."""
     out: dict[str, Counter] = defaultdict(Counter)
@@ -78,14 +93,17 @@ def tables(events: Sequence[Mapping[str, Any]], starts: Sequence[tuple[float, st
     fg = fr.tp.foreground_spans(events)
     for evs in by_sid.values():
         between = False
-        for a, b in zip(evs, evs[1:], strict=False):
+        window = ""
+        for i, (a, b) in enumerate(zip(evs, evs[1:], strict=False)):
+            if a["ev"] == "Stop" and not between:
+                window = window_class(evs, i)
             between = (between or a["ev"] == "Stop") and a["ev"] != "UserPromptSubmit"
             gap = fr.parse_t(b["t"]) - fr.parse_t(a["t"])
             if gap <= 0:
                 continue
             t0 = fr.parse_t(a["t"])
             if between:
-                cat = BETWEEN
+                cat = window
             elif gap > fr.IDLE_CAP_S:
                 cat = "idle (over an hour)"
             elif run := fr.tp.in_span(t0, fg):
