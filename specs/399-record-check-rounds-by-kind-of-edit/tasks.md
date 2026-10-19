@@ -9,9 +9,9 @@ Every task changes review tooling; nothing physical is decided, so each is `rese
 
 ## Tasks
 
-- [ ] T01 Kind C (plan D1, D2, D2b; FR-001, SC-001): `record_units.quotation_key`; quote-check answers keep `qkeys`; `apply_edits.Round` settles another check's blocks outside the quotation and claim; `make record-checked FIXED_BY=`; red-first tests replaying 0251's `-4` (settles) and 去辰 (owed) both ways
+- [x] T01 Kind C (plan D1, D2, D2b; FR-001, SC-001): `record_units.quotation_key`; quote-check answers keep `qkeys`; `apply_edits.Round` settles another check's blocks outside the quotation and claim; `make record-checked FIXED_BY=`; red-first tests replaying 0251's `-4` (settles) and 去辰 (owed) both ways
       research: rendering
-      verify: tests/tooling/test_apply_edits.py and test_record_owed.py, red on HEAD for the new cases, green after
+      verify: DONE. DONE. test_apply_edits 26 passed (5 new: red on HEAD's scripts, green now - the 0251 locator settles both ways, the 去辰 rendering stays owed and its declaration is refused); test_record_owed 35 passed
 - [ ] T02 Kind B (plan D3-D5; FR-002 - FR-004, FR-006, SC-002, SC-003): the flag count in the check state at `returned`, the trip in `dispatch`, `continue` lets one more round; red-first seeded loop, also across a moved `origin/main`; the no-change NOT-READABLE repeat let through; a new footnote not held
       research: rendering
       verify: tests/tooling/test_hm_checks.py new cases red on HEAD, green after; make hooks-test

@@ -682,3 +682,100 @@ def test_a_held_section_changed_however_the_file_was_named_is_written_back(tmp_p
     touch = {**sneak, "tool_use_id": "b2"}
     hc.handle("edit", touch, 4)
     assert hc.handle("after", touch, 5) == "", "a call that changed nothing held passes"
+
+
+# --- kind B: a fix that keeps failing goes to the arbiter (feature 399, the GM 2026-10-19) --------------------------------
+# 0251's quote-check passes in feature 390 never reached the cap: a landing on main between rounds restarted the per-question
+# count (`new_cause`), as a hand fix of the check's own PARTIAL does (`first_look`). The hold counts per footnote instead.
+
+fl = _load("hm_fixloop")
+
+
+def _qc(fp: str, note: str = "well") -> str:
+    return f"owed-checks: quote-check\nunit: quote-check:0105#{note} {fp}\n"
+
+
+def _round(st: dict, tid: str, manifest: str, reply: str, root: pathlib.Path, t: float) -> str:
+    msg = hc.dispatch(st, tid, "quote-check", "/m", manifest, t, root)
+    if not msg:
+        hc.launched(st, tid, f"ag-{tid}", True)
+        hc.returned(st, f"ag-{tid}", reply)
+        hc.answered(st, "quote-check", ["q:0105"])
+    return msg
+
+
+PARTIAL = "quote-check: 1 note - 1 PARTIAL\n\n- **fn-1 well** - READABLE - VERBATIM - **PARTIAL.** The quote grants less.\n"
+SUPPORTS = "quote-check: 1 note - 1 SUPPORTS\n\n- fn-1 well - READABLE - VERBATIM - SUPPORTS\n"
+
+
+@pytest.fixture
+def moving_main(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Every round sees a new `origin/main`, as when other sessions land between rounds: the page counter restarts each time."""
+    tick = iter(range(1000))
+    monkeypatch.setattr(hc, "batch_of", lambda _root: f"main-{next(tick)}")
+
+
+def test_a_footnote_whose_fix_keeps_failing_is_held_for_the_arbiter_though_main_moved(tmp_path, moving_main) -> None:
+    root = _clone(tmp_path)
+    ha = _load("hm_arbiter")
+    st: dict = {}
+    assert _round(st, "t1", _qc("a"), PARTIAL, root, 1) == ""
+    assert _round(st, "t2", _qc("b"), PARTIAL, root, 2) == "", "one failed fix: a confirming round goes"
+    assert st["flags"]["0105#well"]["n"] == 2
+    msg = hc.dispatch(st, "t3", "quote-check", "/m", _qc("c"), 3, root)
+    assert "make arbiter-bundle" in msg and "round:quote-check|q:0105@3" in msg
+    owed = ha.owed(root)["round:quote-check|q:0105@3"]
+    assert owed["unit"] == "quote-check|q:0105" and "footnote 0105#well flagged by quote-check in 2 rounds in a row" in owed["detail"]
+    assert "The quote grants less" in owed["detail"], "the arbiter is shown the findings that repeated"
+    assert "make arbiter-bundle" in hc.dispatch(st, "t3", "quote-check", "/m", _qc("c"), 3, root), "held until ruled"
+    ha.record_ruling(root, "round:quote-check|q:0105@3", {"ruling": "continue", "why": "a new finding each round", "what": "the deed"}, "round-arbiter")
+    assert _round(st, "t3", _qc("c"), PARTIAL, root, 4) == "", "continue: one more round"
+    assert "round:quote-check|q:0105@4" in hc.dispatch(st, "t4", "quote-check", "/m", _qc("d"), 5, root), "failed again: held again"
+
+
+def test_a_footnote_that_passes_starts_clean(tmp_path, moving_main) -> None:
+    root = _clone(tmp_path)
+    st: dict = {}
+    _round(st, "t1", _qc("a"), PARTIAL, root, 1)
+    _round(st, "t2", _qc("b"), SUPPORTS, root, 2)
+    assert "0105#well" not in st["flags"]
+    _round(st, "t3", _qc("c"), PARTIAL, root, 3)
+    assert _round(st, "t4", _qc("d"), PARTIAL, root, 4) == "" and st["flags"]["0105#well"]["n"] == 2
+
+
+def test_a_repeat_with_nothing_tried_is_no_failed_fix(tmp_path, moving_main) -> None:
+    """FR-006: a canon note reads NOT-READABLE every round at the same words - nothing was tried, so it is never held."""
+    root = _clone(tmp_path)
+    st: dict = {}
+    unread = "quote-check: 1 note - 1 NOT-READABLE\n\n- fn-1 well - NOT-READABLE (the GM's own notes)\n"
+    for i in range(4):
+        assert _round(st, f"t{i}", _qc("a"), unread, root, i) == ""
+    assert st["flags"]["0105#well"]["n"] == 1
+    assert _round(st, "t9", _qc("b"), unread, root, 9) == "" and st["flags"]["0105#well"]["n"] == 2, "re-linked, still unread: counts"
+
+
+def test_a_new_footnote_is_not_held_by_another_footnotes_loop(tmp_path, moving_main) -> None:
+    root = _clone(tmp_path)
+    st: dict = {}
+    _round(st, "t1", _qc("a"), PARTIAL, root, 1)
+    _round(st, "t2", _qc("b"), PARTIAL, root, 2)
+    assert hc.dispatch(st, "t3", "quote-check", "/m", _qc("n1", note="deed"), 3, root) == "", "kind A: new material, no hold"
+
+
+def test_flags_are_read_from_real_reply_lines() -> None:
+    """The forms quote-check replies actually took (kept replies, 2026-10): a bold id, a dashed id, a bold line, a table row."""
+    notes = {"0105#wigmore-2": "f", "0105#wigmore": "f", "0105#ohmi": "f", "0105#akiyama-3": "f", "0105#akiyama": "f", "0105#ok": "f"}
+    reply = (
+        "quote-check: 6 notes - 2 SUPPORTS, 3 PARTIAL, 0 DOES-NOT-SUPPORT\n\n"
+        "- **fn-3 wigmore-2** - READABLE - VERBATIM (locator: see above) - **PARTIAL in the opening paragraph.**\n"
+        "- **fn-4 wigmore** - READABLE - VERBATIM - SUPPORTS\n"
+        "**akiyama-3 - Readability \"-\" (PDF) - Quotation NOT-CHECKED - PARTIAL**\n"
+        "- fn-9 - ok - READABLE - VERBATIM - SUPPORTS\n"
+        "| PARTIAL | 1 citation (ohmi) |\n"
+        "| SUPPORTS / PARTIAL / DOES-NOT-SUPPORT | 2 / 3 / 0 |\n"
+        "\n## OUTSIDE THE CHANGE\n- research/x.html | the post | akiyama PARTIAL, pre-existing\n"
+    )
+    flagged, passed = fl.read_reply(reply, notes)
+    assert set(flagged) == {"0105#wigmore-2", "0105#akiyama-3", "0105#ohmi"}
+    assert passed == {"0105#wigmore", "0105#ok"}, "akiyama is named only outside the change"
+    assert fl.read_reply("quote-check: 3 PARTIAL wigmore\n", notes) == ({}, set()), "the counts line is not a verdict"

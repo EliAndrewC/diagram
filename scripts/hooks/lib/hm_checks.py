@@ -44,6 +44,7 @@ from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import hm_arbiter  # noqa: E402
+import hm_fixloop  # noqa: E402
 import hm_planhold  # noqa: E402
 
 STATE = "checks-open.json"
@@ -297,6 +298,9 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
         held = hm_arbiter.blocking(root, "")
         if held:
             return hm_arbiter.refusal(held)
+        loop = hm_fixloop.hold(state, root, check, text, now)  # feature 399: a footnote's fix that keeps failing
+        if loop:
+            return loop
     current = {s: sentences(subject_blocks(root, s)) for s in subjects} if root is not None else {}
     # GUARD_EDIT_OK: feature 374 wave 151 - A SPLIT BUNDLE'S BATCHES ARE ONE ROUND: the second batch of a bundle `make check-bundle`
     # split is no re-dispatch into a running round, and no round of its own (0049's quote-check batch-2 was refused while batch-1 ran)
@@ -357,6 +361,7 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
         "marks": marks,
         "owed": re.findall(r"^owed: (.+)$", text, re.M),  # why each unit was due (374)
         "notes": sorted(notes),
+        "quote_notes": hm_fixloop.notes_of(text) if check == "quote-check" else {},  # what each footnote read (feature 399)
     }  # the notes the bundle read, [] for the whole page (feature 393's earlier rounds)
     return ""
 
@@ -410,6 +415,7 @@ def returned(state: dict[str, Any], agent_id: str, reply: str, keep: Path | None
         if d.get("aid") == agent_id and reply.strip() and not d.get("rounded"):  # a reading: its rounds count now, once (T41)
             for unit in d.get("counted") or []:
                 state.setdefault("rounds", {})[unit] = state.get("rounds", {}).get(unit, 0) + 1
+            hm_fixloop.returned(state, d, reply)
             d["rounded"] = True
         if d.get("aid") == agent_id and d.get("state") == "running":
             d["state"] = "returned"
