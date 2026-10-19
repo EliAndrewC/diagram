@@ -399,6 +399,11 @@ _ESCAPES = {
         "command",
         "feature 375 FR-010: matched on a `make done` command by hm_checks.escaped's anchored regex, reason floor and record, as FREEZE_OK",
     ),
+    "BATCH_OK": (
+        "command",
+        "feature 385 T81 (plan D101): matched in a pop-up check dispatch's PROMPT by hm_checks.escaped's anchored regex, reason "
+        "floor and record, as FREEZE_OK - a single pop-up sent on purpose while its batch is owed",
+    ),
     "CHECK_ORDER_OK": (
         "environment",
         "feature 375 amendment 3 FR-019: read from os.environ by scripts/record/modal_bundle.py (a make command-line variable reaches it the same way), which a mention cannot set; two words or more, and the bundle's MANIFEST records it",
