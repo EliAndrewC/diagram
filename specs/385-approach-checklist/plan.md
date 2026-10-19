@@ -33,7 +33,7 @@ Each task lands when it closes, with its retro row, while the tasks after it sta
 design (FR-006), and each task's change - T01's lane law first - reaches main before the next starts, so the next task's
 measurements are taken on it.
 
-**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74
+**Lands open**: T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T46, T66, T67, T68, T69, T70, T71, T72, T74, T75
 
 <!-- plan-archive: T03 to T05 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 ## T04 to T10 - T48, T47's patch, five ranking rows
@@ -216,6 +216,24 @@ Owed by the hour-20 step-back (hour:385-approach-checklist@20, `continue`), whic
 <!-- plan-archive: T69 to T10 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 <!-- plan-archive: T70 to T70 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
 <!-- plan-archive: T72 to T70 moved to plan-done.md, 2026-10-18 (feature 375 FR-044) -->
+## T75 - a part B that names no new decision owes no review (the GM-approved proposal 3, 2026-10-18)
+
+### T75 Approach (checklist part A)
+
+1. **The goal, in the world.** A part B costs a review round only when it decides something new.
+2. **The constraints.** The GM, 2026-10-18 (amendment 8): "I do like all of your other proposals"; proposal 3 of `step-back-2026-10-18.md`: "`make tick` checks part B's items mechanically (answered, stamped after its trigger); only a part B that names a new decision (a `D`-id) goes to spec-fidelity". `make tick` already checks the items (`approach_gate.refusal`, D8/D9); a part B that names a new decision is reviewed as now. A test red without it.
+3. **Where each comes from.** The GM (G); the block review is 375 FR-043 (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (this session): the part B blocks of T10, T65 and T72 each went through a spec-fidelity round (202 s, 70 s and inside a 239 s seven-block round), each CLEAR, none naming a new decision.
+5. **The order.** The rule in `plan_gate.block_status`, then its test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 25 min.
+9. **Done, measured.** One goal: a `### T<n> part B (...)` block that names no `D`-id defined nowhere else in the plan or plan-done is not owed a review; one that does is; `tests/tooling/test_plan_gate.py` red without it.
+
+### T75 Decisions
+
+**D94 - a part B reviewed only for a new decision.** `block_status` skips a block whose heading is `### T<n> part B (...)` when every `D<n>` it names is defined (`**D<n> - ...`) elsewhere in `plan.md` or in `plan-done.md`; a part B naming an id defined nowhere else - a decision it makes - is owed as now. Its items stay `make tick`'s to check.
+
 ## T11 - the close
 
 The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001), the final report (SC-001, SC-002).
