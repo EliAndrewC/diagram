@@ -1,0 +1,53 @@
+{
+  "utc": "2026-10-19T00:59:47Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 287,
+  "result": "failed: test-full",
+  "commit": "a41ce7d31",
+  "first_failure_s": 277.8,
+  "last_failure_s": 287.5,
+  "failed_names": [
+    "uncovered l7r/diagram/overlap/taxonomy.py:750",
+    "uncovered l7r/diagram/settlement/_geom/curves.py:118-119",
+    "uncovered l7r/diagram/settlement/_geom/extents.py:30-31, 92-95",
+    "uncovered l7r/diagram/settlement/_geom/walls.py:78-80, 103",
+    "uncovered l7r/diagram/settlement/_geom/water_index.py:47",
+    "uncovered l7r/diagram/settlement/_knobs.py:670-682",
+    "uncovered l7r/diagram/settlement/city/knobs.py:114",
+    "uncovered l7r/diagram/settlement/homestead_parts/gardens.py:89",
+    "uncovered l7r/diagram/settlement/homestead_parts/groves.py:521, 568, 570, 585, 632, 644-650, 661-665",
+    "uncovered l7r/diagram/settlement/homestead_parts/yards.py:539, 544-545",
+    "uncovered l7r/diagram/settlement/houses.py:177-206, 381-386",
+    "uncovered l7r/diagram/settlement/rolling/fit.py:171",
+    "uncovered l7r/diagram/settlement/rolling/seeds.py:112-132, 157-158, 171, 174",
+    "uncovered l7r/diagram/settlement/shrines_wells/torii.py:56",
+    "uncovered l7r/diagram/settlement/shrines_wells/wells.py:123",
+    "uncovered l7r/diagram/settlement/structures/urban.py:64-72, 124",
+    "uncovered l7r/diagram/settlement/water_ways/water.py:204"
+  ],
+  "host": {
+    "load": [
+      5.34,
+      5.34
+    ],
+    "mem_avail_mb": [
+      7714,
+      8281
+    ],
+    "cpu_temp_c": [
+      72.0,
+      62.0
+    ],
+    "stall_s": {
+      "cpu": 3.0,
+      "io": 0.7,
+      "io_full": 0.6,
+      "memory": 0.2
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  }
+}
