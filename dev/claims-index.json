@@ -11984,9 +11984,9 @@
   "date": "2026-10-13",
   "note": "35-45 in 100",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "dd953ca0bec86ce6"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "3365a0be9b55bba9"
   },
-  "research": "fef27bee08b31be3",
+  "research": "97b1a79f0ce9be76",
   "rests": [
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:d4fc5b26b94cff85"
   ],
@@ -42098,11 +42098,11 @@
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "b5fc46ab116a4b72",
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03",
    "0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html": "bef5d458385c0006",
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "dd953ca0bec86ce6",
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "3365a0be9b55bba9",
    "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396",
    "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html": "1d379bbb81ad22fb"
   },
-  "research": "a4e71ca730de8c29",
+  "research": "b198d0eb9224000c",
   "rests": [
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:03bd5cc33e2068a4",
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:57e17cedabbc7ead",
@@ -42115,6 +42115,7 @@
    "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:b9f3c80b07059d82"
   ],
   "section": "9a4b534519efc747",
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_LINEAR#ground kept clear": {
@@ -50087,12 +50088,13 @@
   "date": "2026-10-19",
   "note": "6 ft is the ken, which with the 3.5 ft gap makes the page's \"about 9.5 ft out\"; the page records the ken as a GUESS and the added gap as a DEVIATION",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "dd953ca0bec86ce6"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "3365a0be9b55bba9"
   },
-  "research": "fef27bee08b31be3",
+  "research": "97b1a79f0ce9be76",
   "rests": [
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_first#plumbing": {
@@ -50318,12 +50320,13 @@
   "date": "2026-10-19",
   "note": "the back and flank seats are \"behind or beside the house\", a GUESS the page records",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "dd953ca0bec86ce6"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "3365a0be9b55bba9"
   },
-  "research": "fef27bee08b31be3",
+  "research": "97b1a79f0ce9be76",
   "rests": [
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_sun_sector#sunny-side sector": {
@@ -50370,12 +50373,13 @@
   "date": "2026-10-19",
   "note": "the wall places are offered at gap + WOODSHED_STEP_FT, which is 9.5 ft, as the page records",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "dd953ca0bec86ce6"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "3365a0be9b55bba9"
   },
-  "research": "fef27bee08b31be3",
+  "research": "97b1a79f0ce9be76",
   "rests": [
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed seats": {
@@ -50386,12 +50390,13 @@
   "date": "2026-10-19",
   "note": "the front-wall places are filtered out by in_front, so the shed is \"never in the front yard\"",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "dd953ca0bec86ce6"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "3365a0be9b55bba9"
   },
-  "research": "fef27bee08b31be3",
+  "research": "97b1a79f0ce9be76",
   "rests": [
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::against_a_part#against the farmhouse or one of its outbuildings": {
@@ -50735,12 +50740,13 @@
   "date": "2026-10-19",
   "note": "the test for a seat wholly past the front wall carries out the page's \"never in the front yard\", a GUESS",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "dd953ca0bec86ce6"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "3365a0be9b55bba9"
   },
-  "research": "fef27bee08b31be3",
+  "research": "97b1a79f0ce9be76",
   "rests": [
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::joined_to_house#bath room of the house": {
@@ -50921,13 +50927,14 @@
   "date": "2026-10-19",
   "note": "the walls are the house's own walls (plus the kura annex), not the byre's or the retirement house's, matching \"a short step off the house\"",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "dd953ca0bec86ce6"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "3365a0be9b55bba9"
   },
-  "research": "fef27bee08b31be3",
+  "research": "97b1a79f0ce9be76",
   "rests": [
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18",
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:93fa63f17d70422d"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::outward#plumbing": {
@@ -50997,12 +51004,13 @@
   "date": "2026-10-19",
   "note": "the shed must clear the house by g + 6 ft, which is 9.5 ft, as the page records",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "dd953ca0bec86ce6"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "3365a0be9b55bba9"
   },
-  "research": "fef27bee08b31be3",
+  "research": "97b1a79f0ce9be76",
   "rests": [
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#wood shed a ken off a wall": {
@@ -51013,12 +51021,13 @@
   "date": "2026-10-19",
   "note": "the shed must stand against a wall and not in_front, so it is never out across the dooryard",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "dd953ca0bec86ce6"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "3365a0be9b55bba9"
   },
-  "research": "fef27bee08b31be3",
+  "research": "97b1a79f0ce9be76",
   "rests": [
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18"
   ],
+  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::steading_rects#storehouse annex": {
@@ -60013,9 +60022,9 @@
   "date": "2026-10-03",
   "note": "0043: the larger houses first",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "dd953ca0bec86ce6"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "3365a0be9b55bba9"
   },
-  "research": "fef27bee08b31be3",
+  "research": "97b1a79f0ce9be76",
   "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
