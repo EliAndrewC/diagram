@@ -221,7 +221,7 @@ Owed by the hour-20 step-back (hour:385-approach-checklist@20, `continue`), whic
 ### T75 Approach (checklist part A)
 
 1. **The goal, in the world.** A part B costs a review round only when it decides something new.
-2. **The constraints.** The GM, 2026-10-18 (amendment 8): "I do like all of your other proposals"; proposal 3 of `step-back-2026-10-18.md`: "`make tick` checks part B's items mechanically (answered, stamped after its trigger); only a part B that names a new decision (a `D`-id) goes to spec-fidelity". `make tick` already checks the items (`approach_gate.refusal`, D8/D9); a part B that names a new decision is reviewed as now. A test red without it.
+2. **The constraints.** The GM, 2026-10-18 (amendment 8): "I do like all of your other proposals"; change 3 of the step-back report (amendment 8, quoted): "A part B is checked mechanically; only one that adds a new decision gets a spec-fidelity review". `make tick` already checks the items - measured 2026-10-19 (a read of `scripts/gates/approach_gate.py` and its test): `refusal` takes each owed trigger's part B through `_best(..., part_items(checklist, "B"), since)` and refuses "item(s) N unanswered" or "no block stamped after it", pinned by `tests/tooling/test_approach_gate.py` (a part B missing item 2 refused, one with both items ticked); a part B that names a new decision is reviewed as now. A test red without it.
 3. **Where each comes from.** The GM (G); the block review is 375 FR-043 (O).
 4. **Do they describe the world here?** Yes - measured 2026-10-19 (this session): the part B blocks of T10, T65 and T72 each went through a spec-fidelity round (202 s, 70 s and inside a 239 s seven-block round), each CLEAR, none naming a new decision.
 5. **The order.** The rule in `plan_gate.block_status`, then its test.
@@ -239,7 +239,7 @@ Owed by the hour-20 step-back (hour:385-approach-checklist@20, `continue`), whic
 ### T76 Approach (checklist part A)
 
 1. **The goal, in the world.** A task that moves a constant knows what it measures, and one that fits things into room knows the arithmetic, before anything is rolled.
-2. **The constraints.** The GM, 2026-10-18 (amendment 8): "I do like all of your other proposals"; proposal 7: "Approach part A item 4 gains 'list every use of the constant you will move and what each one measures'" and proposal 8 of the table (numbered there as the arithmetic row): "write the capacity arithmetic before rolling anything". The GM's rule (the step-back request): a checklist item or a tool, never a reminder. The item numbers stay as they are, so no part A already written is left unanswered. A test red without it.
+2. **The constraints.** The GM, 2026-10-18 (amendment 8): "I do like all of your other proposals"; change 7 of the step-back report (amendment 8, quoted): "Two new checklist items in the start-of-task Approach: list every use of a constant before moving it, and write the capacity arithmetic before running experiments". The GM's rule (the step-back request): a checklist item or a tool, never a reminder. The item numbers stay as they are, so no part A already written is left unanswered. A test red without it.
 3. **Where each comes from.** The GM (G).
 4. **Do they describe the world here?** Yes - measured 2026-10-18 (step-back-2026-10-18.md): T09 ran two experiments before reading what BUNDLE_PITCH measured (about 40 minutes and two cohort runs; the answer was a relabel); T06 ran a 20-minute experiment the arithmetic (households x farmstead width against the margin's length) answers in two.
 5. **The order.** The two questions under item 4 of `checklist.md`, then the test.
@@ -257,7 +257,7 @@ Owed by the hour-20 step-back (hour:385-approach-checklist@20, `continue`), whic
 ### T77 Approach (checklist part A)
 
 1. **The goal, in the world.** The next "where did the time go" is one command, and its idle column is right.
-2. **The constraints.** The GM, 2026-10-18 (amendment 8): "I do like all of your other proposals"; proposal 9 of the table, `make where-time F= [SINCE=]` printing both tables, and the session's correction the same evening: "time from a turn's end to the next prompt will count as waiting, whatever events land in between". The categories stay `feature_report.split_time`'s. A test red without it.
+2. **The constraints.** The GM, 2026-10-18 (amendment 8): "I do like all of your other proposals"; change 8 of the step-back report (amendment 8, quoted): "`make where-time` produces the tables above", and the session's correction the same evening: "time from a turn's end to the next prompt will count as waiting, whatever events land in between". The categories stay `feature_report.split_time`'s. A test red without it.
 3. **Where each comes from.** The GM (G); the categories are 375's (O).
 4. **Do they describe the world here?** Yes - measured 2026-10-18: the scratch `where_time.py` booked T05 224 minutes, but about 80 of them were the 04:20-09:15 overnight stall, split into pieces under an hour by hook events and booked as "thinking"; T05's real work was about 2 h 25.
 5. **The order.** `scripts/measure/where_time.py` (from the scratch script), the target, then the test.

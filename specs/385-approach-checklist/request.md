@@ -213,3 +213,16 @@ The session's reply (22:38Z), whose order "For one, two, three, and four" the me
 >
 > That catches the T05 stall, where nothing was running and nothing was asked. For a background job that hangs without exiting, the 90-minute ceiling the background waits already carry gives the safety net your 10-minute cron would. I'd build it as the next tooling task.
 
+The session's step-back report (2026-10-18T21:34Z), the proposals the GM's "I do like all of your other proposals" approves -
+its list, verbatim (change 2 is "the arbiter tooling fix thing" he declined; change 4 he asked be worked as a task):
+
+> **Proposed changes**, each one either enforced by tooling or a checklist item, none relying on anyone remembering:
+> 1. Pop-ups that share a template are checked once as a group (tooling).
+> 2. **Your decision:** arbiter tooling fixes become open tasks the feature can't close without, instead of holding every tick.
+> 3. A part B is checked mechanically; only one that adds a new decision gets a spec-fidelity review (tooling).
+> 4. Per-entry keying of a dictionary's claims (a feature, for your approval).
+> 5. `make quick` runs the two cheap checks that caused today's avoidable reds (tooling).
+> 6. The dispatch guard refuses a check for a task that isn't the active one, so the time accounting stays true (tooling).
+> 7. Two new checklist items in the start-of-task Approach: list every use of a constant before moving it, and write the capacity arithmetic before running experiments.
+> 8. `make where-time` produces the tables above (tooling).
+
