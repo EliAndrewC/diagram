@@ -876,3 +876,12 @@ amendment for half an hour. A never-launched hold now holds nothing and a TaskSt
 another (the review's block of round 1: the first draft let a refused dispatch drop a running review's hold). While blocked, the
 session split the plan's file name to get past the guard - evasion, which failed only on a missing file; the hour-30 ruling made
 it a tooling fix. **The habit it changes:** a guard that blocks wrongly is fixed or escaped with a reason, never dodged.
+
+## T100 - the retro row
+
+About 50 min of a 20 min budget. The claim on the web's water rule cites 0035's drawing page (a way keeps to its own bank,
+crossing only at the fords) - IN-STEP; its check named the web's frame unclaimed, now claimed on 0246 (a lane runs about 30 ft
+past the last house it serves; the 100 ft frame is only room before the trims) - IN-STEP on its second round. A relabeled claim is
+listed as owing a triage, not a check, and its triage bundle came out empty: filed as T105. Twice an impl-drift went out beside the
+bundle step it needed, which had failed, and read a stale bundle. **The habit it changes:** never send a check in the same message
+as the step that builds its bundle.
