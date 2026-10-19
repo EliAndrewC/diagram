@@ -226,6 +226,22 @@ def reviewed_blocks(review: dict) -> dict[str, dict]:
 REMOVED = "(removed) "
 
 
+_LANDS_OPEN = re.compile(r"^\*\*Lands open\*\*:.*$", re.M)
+
+
+def lands_open_appended(earlier: str, body: str) -> str:
+    """`body` with its `**Lands open**:` line put back as `earlier` had it, where the only change to the line is ids appended in
+    order (feature 385 T74, plan D93; the round arbiter on hour:385-approach-checklist@24: two reviews in one hour of ids that
+    `make task-add` had added); else `body` unchanged. A reorder, a dropped or a repeated id is a change."""
+    was, now = _LANDS_OPEN.search(earlier), _LANDS_OPEN.search(body)
+    if not was or not now:
+        return body
+    a, b = re.findall(r"\bT\d+[a-z]?\b", was.group(0)), re.findall(r"\bT\d+[a-z]?\b", now.group(0))
+    if b[: len(a)] != a or len(set(b)) != len(b):
+        return body
+    return body[: now.start()] + was.group(0) + body[now.end() :]
+
+
 def block_status(review: dict, plan_text: str, ruled: set[str], history: History | None = None, done: str = "") -> tuple[list[str], list[str]]:
     """(the blocks owed a review, the blocks BLOCKED): every block outside a task section with its own current verdict, judged
     against the record's verdict at its digest, a typo-scale change (FR-005(b)) from its text at that digest aside. A recorded
@@ -242,7 +258,7 @@ def block_status(review: dict, plan_text: str, ruled: set[str], history: History
         entry = have.get(key) or {}
         if entry.get("sha256") != block_digest(body):
             earlier = entry.get("text") or (history.block(key, str(entry.get("sha256"))) if history and entry.get("sha256") else None)
-            if earlier is None or not typo_only(ARCHIVE_LINE.sub("", earlier), ARCHIVE_LINE.sub("", body)):
+            if earlier is None or not typo_only(ARCHIVE_LINE.sub("", earlier), ARCHIVE_LINE.sub("", lands_open_appended(earlier, body))):
                 owed.append(key)
                 continue
         if entry.get("verdict") == "BLOCKED":
