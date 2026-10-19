@@ -22,6 +22,7 @@ from ..consts import (
     FORD_BEND_DEG,
     FORD_HALF,
     FORD_SPACING,
+    GROVE_WORKING_ROOM_FT,
     LANE_CLEARANCE,
     POLDER_ARCHETYPES,
     SPUR_SETBACK,
@@ -873,6 +874,13 @@ CONNECTOR_WIDTH = 6.0
 
 Research: connector width - research/questions/0081-village-lanes.drawing.html: 6 ft"""
 
+CONNECTOR_BAND_GAP_FT = GROVE_WORKING_ROOM_FT + CONNECTOR_WIDTH / 2.0
+"""How far the connector's line keeps off a farm's grove band (`connector_dry_exit`): 0036's working room off the trees and the
+connector's half-width, 12.5 ft (feature 385 T98: it was a footpath's gap and the half-width, 7 ft at the 4 ft footpath, 10 at
+7, never 0036's room). Dispersed farms' bands stand 32 ft apart (feature 291's measure), so the 25 ft it asks still passes.
+
+Research: the connector off a grove band - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: some working room off the trees each side of the tread, 9.5 ft beyond the 6 ft connector's half-width"""
+
 
 def connector_keeps_the_law(M: Mapping[str, Any], run: Poly) -> bool:
     """May `run` be drawn as the connector? It bends like a path (`law.bends_badly`, feature 328 wave 46); its legs run through no building (`law.breaks_through` over `law.solid_boxes`,
@@ -907,7 +915,7 @@ def connector_dry_exit(plan: SitePlan, start: Pt, avoid: Sequence[Poly], wet: Se
     Research:
         dry exit off the wet - research/questions/0081-village-lanes.drawing.html: walled by the marsh, the steadings and the field
         pond berth - UNRESEARCHED: 80 ft past the pond's larger half-axis
-        grove band gap - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a lane keeps a footpath's clearance and some working room off the trees; a footpath's gap plus half the tread, on a finer grid, its calibration
+        grove band gap - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a lane keeps a footpath's clearance and some working room off the trees; `CONNECTOR_BAND_GAP_FT`, 0036's 9.5 ft working room plus the connector's half-width (12.5 ft), on a finer grid
         track start out of the grove bands - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: walked out of grove bands by a footpath gap plus half the tread, the lane's clearance off the trees
         brook not crossed - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: no water line crossed"""
     # ...A FARM'S GROVE BAND AT A FOOTPATH'S GAP, over a grid fine enough to pass between two (feature 291 on 287): dispersed
@@ -916,7 +924,7 @@ def connector_dry_exit(plan: SitePlan, start: Pt, avoid: Sequence[Poly], wet: Se
     bands = {tuple(map(tuple, b)) for b in getattr(plan, "grove_bands", None) or ()}
     walls = (
         [(wet_grown_by_the_lane(w), 0.0) for w in wet if len(w) >= 3]
-        + [(list(f), FOOTPATH_FABRIC_GAP + CONNECTOR_WIDTH / 2.0 if tuple(map(tuple, f)) in bands else TRACK_FABRIC_GAP) for f in fabric]
+        + [(list(f), CONNECTOR_BAND_GAP_FT if tuple(map(tuple, f)) in bands else TRACK_FABRIC_GAP) for f in fabric]
         + [(list(a), 0.0) for a in (avoid or [plan.envelope])]
     )
     if plan.sink_pond:

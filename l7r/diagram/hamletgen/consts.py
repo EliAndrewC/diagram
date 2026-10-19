@@ -213,6 +213,13 @@ TRACK_FABRIC_GAP = WEB_FABRIC_GAP
 FOOTPATH_FABRIC_GAP = 7.0
 """Research: footpath off a plot - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle, a 3 ft footpath's included, keeps at least 7 ft clear of a garden fence"""
 
+GROVE_WORKING_ROOM_FT = 9.5
+"""How far a door path's tread keeps off the trees of a grove band (feature 374 wave 119; moved here from `ways/serve.py` by feature 385 T98, so the track reads it too): 0036 lays a lane through a band
+"with a footpath's clearance and some working room kept off the trees on each side, about 22 ft of the opening" - a 3 ft
+tread and 9.5 ft each side. A band's rect bounds its trunks (crowns are thrown inside it less 2 px), so the room is off them.
+
+Research: working room off the trees - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: about 22 ft of the opening, a 3 ft tread and 9.5 ft each side"""
+
 DOOR_STEP_FT = 8.0
 """How far past the far edge of its yard a grove farm's front door point stands (`ways/serve.front_door`'s `clear`) - the
 household's own dooryard, not a fence gap: 0246 lets a household's own way run beside its own fence. The value the door held

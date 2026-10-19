@@ -21,6 +21,7 @@ from ..consts import (
     DOOR_FIXTURE_CLEAR_FT,
     DOOR_STEP_FT,
     FOOTPATH_FABRIC_GAP,
+    GROVE_WORKING_ROOM_FT,
     WEB_FABRIC_GAP,
     WEB_HARD_GAP,
     WEB_REACH_FT,
@@ -404,12 +405,14 @@ def to_first_arrival(path: Sequence[Pt], segs: Sequence[tuple[Pt, Pt]], touch: f
     return pts
 
 
-GROVE_WORKING_ROOM_FT = 9.5
-"""How far a door path's tread keeps off the trees of a grove band (feature 374 wave 119): 0036 lays a lane through a band
-"with a footpath's clearance and some working room kept off the trees on each side, about 22 ft of the opening" - a 3 ft
-tread and 9.5 ft each side. A band's rect bounds its trunks (crowns are thrown inside it less 2 px), so the room is off them.
+def band_grow(gap: float) -> float:
+    """How much a grove band is grown for a door path routed `gap` off it, so the path's middle stands 0036's 1.5 + 9.5 = 11 ft
+    off the trees, the room counted once (feature 385 T98: grown by the whole 11 ft a side and then routed at the footpath's
+    gap on top, the middle stood 18 ft off at 7 ft, and cohort seed 22's two linear farms had no lawful door path).
 
-Research: working room off the trees - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: about 22 ft of the opening, a 3 ft tread and 9.5 ft each side"""
+    Research: the room off a grove counted once - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a 3 ft tread and 9.5 ft each side, the grow and the router's gap summing to it"""
+    return max(0.0, 2.0 * (1.5 + GROVE_WORKING_ROOM_FT - gap))
+
 
 DOOR_FINE_CELL_FT = 4.0
 """The door router's finer lattice, taken only where its own `ROUTE_CELL` (10 ft) finds no way (feature 374 wave 119): a cell
@@ -456,7 +459,7 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
         off the fixtures and grove bands - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: walls to the path
         no path to a household reached across a yard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: it shows no lane of its own
         door path off the house and the fixtures - UNRESEARCHED: it starts 8 ft past its yard (`DOOR_STEP_FT`) and keeps 5 ft clear of the fixtures (`DOOR_FIXTURE_CLEAR_FT`)
-        door path off a grove band - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a footpath's clearance and some working room kept off the trees on each side, `GROVE_WORKING_ROOM_FT` 9.5 ft off the 3 ft tread (about 22 ft of the opening)
+        door path off a grove band - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a footpath's clearance and some working room kept off the trees on each side, `GROVE_WORKING_ROOM_FT` 9.5 ft off the 3 ft tread (about 22 ft of the opening), counted once: the band grown by `band_grow` and the path routed at its gap keep its middle 11 ft off the trees
         a flank door only where the front has none - UNRESEARCHED: a door path leaves from a flank of the dooryard only where no lawful path leaves the front"""
     from .checks import served_network  # local: checks sits above serve in this package's layers
     from .law import fixture_quads  # local: the law sits above serve too
@@ -475,7 +478,7 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
     # step to the street ran off through the band's other half (cohort seed 901, `grove_rules.groves_crossed_by_lanes`)
     # - grown by a door path's half-tread and the working room 0036 keeps off the trees each side, since the rule strokes the
     # tread, not the centerline (feature 374 wave 119: the half foot it kept before was no figure the page gives)
-    grow = 2.0 * (1.5 + GROVE_WORKING_ROOM_FT)
+    grow = band_grow(FOOTPATH_FABRIC_GAP)
     bands = [
         rot_rect(float(g["x"]), float(g["y"]), float(g["w"]) + grow, float(g["h"]) + grow, float(g.get("rot") or 0.0)) for g in s.M.get("groves") or () if all(k in g for k in ("x", "y", "w", "h"))
     ]

@@ -140,3 +140,15 @@ def test_closes_a_needle_refuses_a_door_path_that_makes_a_sliver() -> None:
     lanes = [{"pts": [(0.0, 0.0), (100.0, 0.0)]}]
     assert closes_a_needle(lanes, [(0.0, 0.0), (50.0, 3.0), (100.0, 0.0)])
     assert not closes_a_needle(lanes, [(50.0, 0.0), (50.0, 80.0)]), "a T"
+
+
+def test_the_room_off_a_grove_is_counted_once() -> None:
+    """Feature 385 T98 (plan D119): the door path's band grown 11 ft a side and then routed at the footpath's gap stood its
+    middle 18 ft off the trees, and cohort seed 22's two linear farms had no lawful door path; the connector kept 10 ft."""
+    from l7r.diagram.hamletgen.consts import GROVE_WORKING_ROOM_FT
+    from l7r.diagram.hamletgen.ways import serve, track
+
+    assert serve.band_grow(FOOTPATH_FABRIC_GAP) / 2 + FOOTPATH_FABRIC_GAP == 1.5 + GROVE_WORKING_ROOM_FT == 11.0
+    assert serve.band_grow(12.0) == 0.0, "a gap past 0036's room grows nothing"
+    assert track.CONNECTOR_BAND_GAP_FT == GROVE_WORKING_ROOM_FT + track.CONNECTOR_WIDTH / 2 == 12.5
+    assert 2 * track.CONNECTOR_BAND_GAP_FT <= 32.0, "dispersed farms' bands stand 32 ft apart"
