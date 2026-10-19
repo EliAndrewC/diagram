@@ -6627,28 +6627,35 @@
    "verdict": "CLEAR"
   },
   "T32": {
-   "section_sha256": "3aafd40b933a6a6f99dc876d75d7128936193db3cdcf44e63b1f4fea2e859c77",
+   "section_sha256": "7190d0481a94a8e1c55d1d080f566e8a486e0b0191f4aa1edd75fda82915bb3f",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "T32-row",
-     "summary": "Row 841 is chosen for T32, described as 'the same kind as T31's' (MISLABELED), because T31's claims round found it to be a real drift.",
+     "summary": "T32 takes the ranking row waterfields/banks.py _WELD_MIN_SOLIDITY (E2 DRIFTED, one rule) in place of row 841 (MISLABELED), which its earlier text took and was BLOCKED on",
+     "class": "within",
+     "why": "FR-020 asks for a row of a kind not yet tried where one is left; the block lists the kinds taken (a form, research, knobs, a value, a mislabel) and a rule is not among them, while row 841 was the same kind as T31's. The swap is on record here; row 841's real drift is no longer addressed by T32, which is a matter for the ranking, not a narrowing of the request."
+    },
+    {
+     "id": "T32-exit-e-refused",
+     "summary": "The ranking's fix (drop the 0.85-solidity host preference) is refused; _WELD_MIN_SOLIDITY stays 0.85 and no engine token changes",
+     "class": "within",
+     "why": "FR-020 does not adopt each row's fix text, and the GM's approved proposal names conform as one exit among several (refine, principled exception, new rule, more room). The finding itself offers recording the exception on the page as a fix. The refusal carries a measured reason (settlement-review 2026-08-17: free-ended prongs 5-11 ft wide)."
+    },
+    {
+     "id": "D151-i",
+     "summary": "0014's drawing page records, as a DEVIATION with its reason, that a scrap whose best-sharing host would fall under 0.85 solidity goes to a clean neighbor instead when one exists; the claim cites it",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "An exception to 0014's rule (the scrap goes to the paddy it shares most bund with). It is implied by the GM's own words: the approved proposal and the original request name 'keep a rule and add an exception' as an exit, with the guardrail that the reason is recorded, which this does. Purpose test passes: 0014's rule exists so the two walls become one, and a weld that leaves a wall run out eleven feet and straight back holds water on neither side, defeating that purpose; the next clean host keeps the walls joined. Item 4 measured this branch (2026-10-19, the claims index and the code's comment read) and the claim text states exactly it."
+    },
+    {
+     "id": "D151-ii",
+     "summary": "The same page text adds a second case: where every neighbor would be left lumpy the scrap goes to the least lumpy, and otherwise to 'the next neighbor it shares bund with'",
      "class": "narrowing",
      "ruling": "NOT LEGITIMATE",
-     "why": "FR-020 says each row is 'a row of a kind not yet tried where one is left', and the proposal the GM approved gives the reason: 'about five ranking rows of different kinds, so the checklist is tested on more than lanes'. The block never says that no untried kind is left among the open rows. Its only reason is that T31 found this row, which is convenience: it is not impossible to pick another kind, the GM's words do not imply it (amendment 7 asks only for '10 more claims'), and taking a second MISLABELED row in a row works against the variety the rule exists for. To fix it, either state, measured with a date and method (a count of the open rows by kind), that no untried kind is left, which puts the pick within FR-020, or choose a row of a kind not yet tried."
-    },
-    {
-     "id": "D117",
-     "summary": "join_to's two _route calls take gap=WEB_FABRIC_GAP (the lane's 7 ft) and its claim cites 0246's 7 ft; no constant's value moves.",
-     "class": "within",
-     "why": "This is row 841's own fix ('the joining leg's berth at 0246's 7 ft off a garden fence'), applied to the leg the block measured as drawn at STREET_WIDTH, a lane."
-    },
-    {
-     "id": "T32-approach",
-     "summary": "Order (gap, claim, cohort), one exit (a), a 30 min budget, one measured done-goal.",
-     "class": "within",
-     "why": "The checklist answered as FR-003/FR-015 require. One exit is enough because no rule is being fought here: the leg read the wrong constant."
+     "why": "A second exception to 0014's rule, bundled under D151-i's justification but unlike it: the 0.85 reason covers only the case where a clean host exists, and nothing in the block measures what the code does when none does. D151's own claim text contradicts the page text - 'unless that leaves the host under 0.85 solidity and a clean host exists' means that with no clean host 0014's rule applies (most bund), not least lumpy - and the code's record calls the preference 'never a veto', which reads the same way. The 'next neighbor it shares bund with' ordering is likewise unmeasured (next-most-bund clean host vs. cleanest host). The row is DRIFTED because page and code disagree; writing an unmeasured fallback onto the page records a deviation the code may not run. Remedy: measure the no-clean-host branch and the order among clean hosts, and make the page sentence and the claim sentence state the same measured rule."
     }
    ],
    "verdict": "BLOCKED"
