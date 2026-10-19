@@ -7,6 +7,7 @@ appends Q1's section here.
 - SECTION=0248/how-much-rice-was-a-koku
 - SECTION=0249/what-did-a-kyoto-laborers-year-of-goods-cost
 - SECTION=0250/what-did-an-unskilled-laborer-earn
+- SECTION=0251/what-did-farmland-sell-for-against-its-yield
 
 ## Q3 - 0248, how much rice was a koku
 
@@ -107,8 +108,72 @@ Widened: l7r-budgets ("Historical units", "Yield reference"), kokudaka-jawiki, t
   specs/390-money-foundation-research/arbiter.jsonl.
 - Still owed for session 2: quote-check, intro-check, record-format, source-applicability, translation-check.
 
+## Q1 - 0251, what farmland sold for against what it yielded (session 1, continued)
+
+Verdicts:
+- Years-of-net-yield multiple for Japanese farmland: SILENT. Washizaki 2007 reports that Takeyasu (1966, pp. 171-178)
+  and Uemura (1987, pp. 319-329) showed Kinai and Sanuki farmland priced at its capitalized sakutoku, with no rate in
+  the passage; neither book was read.
+- Years-of-net-yield multiple for Qing farmland bought outright: SILENT. ATTESTED ONLY FOR rent rights pledged or sold
+  in Yongchun, coastal southern Fujian (Cao 2019, 36 cases, 1740s-1904): 6.5-37.2% a year, mean 12.6% = ~8 years of the
+  rent (2.7-15 across the range; our arithmetic). Net of tax in one contract (tax passed with the rent); the rest not
+  said. The study treats a rent pledge as a LOAN, so 12.6% is a village lending rate, "overturning" the belief in 20-30%.
+  1746 case 17.7%; 1792 a "nominal" 7% (~14 years), resting on an assumed second rent.
+- Pledge (= live sale) price against an outright sale: ATTESTED - about two-thirds at Shicang (Zhejiang); 60-80%
+  "usually" (Pomeranz, citing McAleavy, Buoye, Macauley).
+- Village credit: ATTESTED - Shicang land-pledge rates fell from the mid-Jiaqing to the late Guangxu reign, cash 30% ->
+  20%, grain 20% -> 10% (Cao's earlier paper); Pomeranz takes 12% as "far below the rates usually quoted", 36% "often used".
+  The pass's "village credit at 12%" was a misreading: 12% is Pomeranz's hypothetical rate.
+- Songjiang price-and-rent pairs (閱世編): ATTESTED as figures; the multiples are OUR ARITHMETIC on gross rent, rent's
+  form (husked or not) and the owner's tax not stated: early 1660s under 1 year of rent (tax and labor service); 1680 at
+  2 taels a shi, ~1.4 years (Shanghai) and ~2.3-2.9 (Huating and Lou). All at moments of crisis. The pass's 6-9 years
+  (1680 prices at 1678 rice) was dropped: it mixes years.
+- Jiangnan price series (履園叢話): ATTESTED, prices only (mid-Ming 50-100 taels a mu; 1-2 at the Ming's fall; 2-3 early
+  Shunzhi; 4-5 Kangxi; back under Yongzheng; 7-8, best 10+, ~1760s; 50+ fifty years on). The entry names no place.
+- Japan's pledged land: ATTESTED - the 1643 sale ban; pledges as the general form; the lender holds the land and applies
+  its yield to principal and interest, so the principal bears no interest (kotobank 質地); the lender pays the tax
+  (rainō illegal from 1687; the leaseback 直小作, Nakabayashi 2020); forfeiture 1695 / 1722 ban / 1723 withdrawn / 1744.
+- Kumehara pledges (岡安家文書): ATTESTED - 1700, ~1.15 cho mixed land, 70 ryo, 2 years (the pledger of Suka village; where
+  the land lay is not stated); 1720, ~4.1 tan, 24 ryo, 2 years; 1726, ~1.07 tan lower paddy, 3 ryo, 3 years, forfeit on
+  lapse; the lender pays the tax in each. ~6.1, 5.8, 2.8 ryo a tan (our arithmetic). Loan sums, not prices; no yield given.
+- Wigmore (Meiji survey): ATTESTED - Uwonuma (Echigo) mortgage up to 10 years, sale forbidden; Suruga villages
+  nominally no sale, a mortgage used.
+- Edo town lot at 20x net (5%): ATTESTED ONLY FOR one valuation by the Edo town office of a central town lot let wholly
+  to ground tenants, a valuation standing in for an out-of-date sale price. Town lots, not farmland.
+- Irrigated against dry land: ATTESTED ONLY FOR the tax form - Kumehara 1698, upper paddy 0.48 koku of rice a tan (4 to
+  8 sho, after a flood-loss deduction), middle dry field 90 mon in ei (1698 only; 85 mon in 1699-1702). No price for
+  either. China: price "depended on fertility" (Qian Yong) and on the rent borne (Ye).
+- Near-city against remote: SILENT in both countries. Songjiang's one premium (25-50%) is for the plot beside one's own.
+
+Against the canon (for the GM):
+- The setting's ~50-koku farm read against the landlord's 2.5 koku is 20 years of net, a 5% return: the same as the
+  central Edo town lot, and 2.5x the ~8 years of rent Fujian's buyers paid on average. The canon gives the 50 koku
+  ("previous adventures", "enormous variation") beside the FREEHOLDER's farm, the exception, not the tenant plot; the
+  20x pairing is the asker's.
+- The asker's interest canon (15-20% cities, ~25% countryside) is NOT in the setting notes (`make canon` on "per cent|
+  percent|lend|loan|interest|15-20%|25%|moneylend|usur|rate of"); it is the GM's 2013 email, in the money folder digest.
+  Beside history: Fujian's rent pledges averaged 12.6% (the study's point is that rural rates were lower than the 20-30%
+  usually believed); Shicang's land pledges ran 30% -> 20% (cash) and 20% -> 10% (grain) over the 1800s; 36% is "often
+  used" for Qing village credit. A Rokugani farm at 20 years of net (5%) beside 15-25% interest would pay a fifth to a
+  third as much as lending (5/25 to 5/15); the Qing evidence has land and lending as one market at one rate. The GM decides.
+
+New registry keys (6): cao-2019-dian-minnan, ye-mengzhu-yueshibian, qian-yong-lvyuan-conghua, kotobank-shichichi,
+nakabayashi-2020-kyoho-land-law, washizaki-2007-edo-land-market. Cited for the first time: pomeranz-land-markets-lse.
+Widened: l7r-money (Merchant Families; What does this imply about rent and taxes?), miyashiro-kumehara-1698 (the pledge
+deeds), wigmore-1892-servitudes (chapter I).
+
+Checks: source-reader on all ten cited sources, 28 units, 2 CONTRADICTED (the land-vs-lending answer; "4 to 8 sho"
+misread as a range), both fixed, with the READs' scope notes applied. The fixed notes owe their second source-reader
+round, and 0251's quote-check, record-format, intro-check, translation-check and source-applicability are the check
+session's. Two findings outside 0251: the l7r-money reader found the cached GitHub page of l7r.md empty (menus only;
+read the raw file), and said 0248's "rice is not all of a person's needs" drops the canon's second reason (costs other
+than food).
+
 ## Still open
 
-- Q1, continued in its own session.
+- Q1 leads not read: 竹安繁治『近世封建制の土地構造』(1966) pp. 171-178 and 植村正治『近世農村における市場経済の展開』
+  (1987) pp. 319-329 (Japanese farmland as capitalized net yield); kotobank 地租改正 (the Meiji land valuation, 7% / 5%
+  caps, Meiji not premodern); 陶煦《租核》; 章有义 on Huizhou; 龍登高 on dian; Saito on Kōnoike lending rates.
+  Goldsmith, *Premodern Financial Systems*, is on the download list (311), the GM owning it in print.
 - Leads not read: 天野清「京枡と江戸枡」(1979), 水鳥川 2012 (domain measures); 郭松义 1985 (Qing shi); Thomas C. Smith 1986
   (rest days); Saito 1978 (the city-village gap before the 1750s).

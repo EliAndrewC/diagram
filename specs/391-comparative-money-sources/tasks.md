@@ -35,3 +35,6 @@ The questions are `research: physical` with their five boxes; the vocabulary, bu
       research: rendering
 - [ ] T08 Close: report, make done, land
       research: rendering
+- [ ] GM review (make gm-reviewed F=391) [lands-open]
+      research: rendering
+      verify: the GM reviewed every row (make gm-review lists them)
