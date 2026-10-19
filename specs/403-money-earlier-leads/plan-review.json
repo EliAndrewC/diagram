@@ -1,0 +1,209 @@
+{
+ "feature": "403-money-earlier-leads",
+ "blocks": {
+  "preamble": {
+   "sha256": "22c63880469dcb79f567e7c3e1bdcef16b4efba3c7b8ade4a7b352bd2ad4164c",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "e12b5532b2e4e370b0cc85f92fce26c9a3999b5f4ce3ccac6fac1be034c1eb7a",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "0fb16280e8a2b6686c020b8da9e42e4c5f587151c842fb1382cb025250ec15d6",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "99fbdeccbfbd66edf40fe2ec6f1c5aadb8e5ec75d91b966d48c7b6412a810289",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - the questions, by write session (FR-001, FR-002)": {
+   "sha256": "cf4679228bd654bc8ea3f17017ae361a4351f2b54fbec1f6fb2b028f9a081c6a",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - the implementation check (FR-003)": {
+   "sha256": "35f5a159f5d674ee8ac9edfea7d9d2a56ea7ece53b289a44f645f4b289100523",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - the note (FR-004)": {
+   "sha256": "44a85ebb07c96a6a252a1d6b1c57c46bf92c351ad9e8060ea7d8d61606407004",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## T - the order": {
+   "sha256": "bf3a908ac05f0dc12f0fc156aa45c02df85bf80bbe6dd33c9e213fe43ef8f73c",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-19",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the questions, by write session (FR-001, FR-002)",
+    "## D2 - the implementation check (FR-003)",
+    "## D3 - the note (FR-004)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary/sessions",
+     "summary": "Four write page sessions of at most four questions each, one check-and-apply session, then the #9 note; no code, map or canon change.",
+     "class": "within",
+     "why": "Mechanics of carrying out FR-001..FR-005; narrows nothing the request asked."
+    },
+    {
+     "id": "TC/record-and-passes",
+     "summary": "make page-session with five briefs; the passes are leads and each passage is read on its page before it is cited.",
+     "class": "within",
+     "why": "How the research is done; strengthens rather than narrows."
+    },
+    {
+     "id": "TC/morisada-method",
+     "summary": "Morisada searched by NDL full-text with the viewer's request body for pids 991466/991467, each hit read on a screenshot; 402's tools reused.",
+     "class": "within",
+     "why": "Method for the Morisada leads the request lists (#3, #4, #7); covers both volumes."
+    },
+    {
+     "id": "TC/takaoka-fallback",
+     "summary": "高岡史料 (pid 899935) read by IIIF frames, else the viewer; if both refuse, recorded as an unread lead, dated.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Contingent narrowing whose only trigger is NDL physically refusing both routes; reading is impossible in that case, and FR-004 already anticipates leads closed as not publicly readable."
+    },
+    {
+     "id": "TC/bochum-label",
+     "summary": "Bochum chapter spreadsheets and the scanned original consulted to settle the per-li label before Zhili freight is written.",
+     "class": "within",
+     "why": "Serves the request's 1769 物料价值则例 fares lead."
+    },
+    {
+     "id": "TC/wage-context",
+     "summary": "Each new figure sits beside the craftsman's and unskilled laborer's day wage of the same place and period, or the wage is marked SILENT with the nearest named (class, place, unit, gap).",
+     "class": "within",
+     "why": "An addition of context to the research being finished, not a narrowing of any lead."
+    },
+    {
+     "id": "Perf/NA",
+     "summary": "No performance bookends: no generator change.",
+     "class": "within",
+     "why": "Follows from FR-005."
+    },
+    {
+     "id": "Constitution",
+     "summary": "XII research:physical tasks, XIII record checks green, XVI built as the FRs.",
+     "class": "within",
+     "why": "Restates standing rules; narrows nothing."
+    },
+    {
+     "id": "D1/s1-morisada",
+     "summary": "0259/0262/0264/0265: Morisada inns, sake and soba (koma 228 handbill transcribed or named), paper and ink SILENT with the search, rent's system and fees.",
+     "class": "within",
+     "why": "Carries the request's Morisada hatago, soba, sake, paper-and-ink and rents leads; a SILENT result is written with the dated search that found nothing, which is finishing the lead, not dropping it."
+    },
+    {
+     "id": "D1/s2-gamble-zhili",
+     "summary": "Gamble's Beijing series into 0250, 0266 and 0265's wage line; the 1921 survey's gild wages where a craftsman's Beijing wage is needed; Zhili freight after the label is settled.",
+     "class": "within",
+     "why": "Carries Gamble's Qing cash wages and the 1769 fares leads; the 1921 survey is an added source serving the wage context."
+    },
+    {
+     "id": "D1/s2-sewing-used-kimono",
+     "summary": "0261's sewing and used kimono marked SILENT with Morisada's search named.",
+     "class": "within",
+     "why": "Carries the Morisada sewing and used-clothing leads; ground (a named search that found nothing) is stated. Treated consistently with the other SILENT entries."
+    },
+    {
+     "id": "D1/s2-cotton-series-soybeans",
+     "summary": "'the cotton series soybeans' - Mitsui Bunko's Osaka cotton series lead is answered with soybean figures.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The request lists Mitsui Bunko's Osaka COTTON series. On the plain reading the plan writes soybeans from it and says nothing of cotton, with no ground stated (not public, not in the series, misidentified lead). One label is stretched over two commodities. Fix: one sentence saying what is written for the cotton figures themselves, or on what ground (with the pass that found it) the cotton lead is closed and why soybeans stand in."
+    },
+    {
+     "id": "D1/s2-koyaizu-ndl-only",
+     "summary": "'Koyaizu NDL-only' for 『近世賃金物価史史料』.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Narrows the lead either way - restricts where it is searched, or closes it as in-library-only - and the plan does not say which or why. If the ground is that the book is readable only inside NDL, that is physical impossibility and FR-004's 'closed as not publicly readable' category, and would be LEGITIMATE; as a bare label there is nothing to find legitimate. Fix: state that it is closed as not publicly readable (with the evidence: NDL access status, date), or that it will be read and where."
+    },
+    {
+     "id": "D1/s3-temple-repair",
+     "summary": "0256/0257/0268/0269: #6's absence notes name the search; Hasegawa 1987 and 「近江の石工たち」 retried; 湯浅隆, 御再建場所日記, KAKEN 19K15191 read if public or named.",
+     "class": "within",
+     "why": "Carries the #6 修理見積 leads (roof finishes, roofer-days, mason wages, porterage); the 'read if public or named' rule states its ground (public readability) and matches FR-004's closed-as-not-publicly-readable category."
+    },
+    {
+     "id": "D1/s4-takaoka-mirror",
+     "summary": "0270: 高岡史料's 関野神社 section and p. 590 read; the mirror SILENT in Morisada.",
+     "class": "within",
+     "why": "Carries #7's Morisada mirror lead (SILENT with search) and reads the published Takaoka source."
+    },
+    {
+     "id": "D1/s4-okamoto-papers-named",
+     "summary": "'Okamoto papers named' - the Takaoka donor's own records are named rather than read.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The request's lead is 'the Takaoka donor's own records'. The plan names them instead of reading them with no ground stated, unlike s3's explicit 'read if public or named'. Fix: same as Koyaizu - state that they are read if publicly readable, or closed as not publicly readable with the evidence and date."
+    },
+    {
+     "id": "D1/omits-shukuson-taigaicho",
+     "summary": "The 宿村大概帳 Tokaido tariffs lead appears in no session row, and the block closes with 'Nothing else in these pages changes.'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The request names the 宿村大概帳 Tokaido tariffs among #3's leads. The s1 cell is 'Morisada: inns...' and 宿村大概帳 is not Morisada; no other row names it, and the closing sentence makes the omission operative. A lead dropped by omission with no ground is the failure this review exists for. Fix: name the question it goes into and what happens to it - tariffs read and written, SILENT with the search named, or closed as not publicly readable with the evidence."
+    },
+    {
+     "id": "D1/nothing-else-changes",
+     "summary": "Nothing else in the thirteen pages changes.",
+     "class": "within",
+     "why": "Scope limit consistent with FR-001/FR-005, apart from the 宿村大概帳 omission it makes operative (ruled separately)."
+    },
+    {
+     "id": "D2",
+     "summary": "implementation-check.md holds one line per changed question.",
+     "class": "within",
+     "why": "Carries FR-003."
+    },
+    {
+     "id": "D3",
+     "summary": "Comment on EliAndrewC/diagram#9 naming changed files, changed verdicts, closed leads and what is still open.",
+     "class": "within",
+     "why": "Carries FR-004 word for word."
+    },
+    {
+     "id": "T/order",
+     "summary": "Page sessions, implementation check, note, then report and land by the direct route.",
+     "class": "within",
+     "why": "Sequencing only."
+    }
+   ]
+  }
+ ]
+}

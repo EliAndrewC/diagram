@@ -28,7 +28,8 @@ screenshot per koma), run with `/usr/bin/python3`. Read every quotation on the p
   meal (if 三條以下 can be read two ways, say which reading is the record's); Osaka's low-grade inns about 200 mon; Edo
   about 248 mon with two meals; Osaka's beggars' lodging (ぐれ宿) 36 mon, no bedding; the Tokaido 200 mon and Nakasendo
   148 before Ansei, 700-800 by Keio. ATTESTED, each with its city and the date Morisada gives (1837-53 unless the text
-  says otherwise). Name the 宿村大概帳 print edition (『近世交通史料集』, NDL-only) in the absence note it touches.
+  says otherwise). Name the 宿村大概帳 print edition (『近世交通史料集』 vols 4-6, NDL pids 12064602, 12061440, 12065414, NDL in-library only;
+  the manuscript the only copy, per the Postal Museum's 2020 note) in the absence note it touches, as not publicly readable.
 - **0262 "What did sake cost, by the shop and by the cup?"** - Morisada 下 koma 229 (the best sake a sho: Osaka 164 mon and
   Edo 200-248 in his childhood, born 1810; from about Tenpo 「三百五十八十錢或は四百錢」, given as printed, 350-380 or
   400); 上 koma 137 (Edo good morohaku about 250 "thirty years ago", now 350-400; dating it to about the 1810s-20s is the

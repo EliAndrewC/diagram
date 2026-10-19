@@ -27,8 +27,8 @@ screenshot per koma), run with `/usr/bin/python3`. Read every quotation on the p
   from about IIIF frame R0000523 on (`https://dl.ndl.go.jp/api/iiif/899935/R0000523/full/full/0/default.jpg`) to the
   関野神社 section, and 第四章 工業 (p. 590; in 上, pid 899934, if it is not in 899935) for the caster 甚右衛門, for the 1833 mirrors' cost. A sum found is cited,
   beside the wages as above; if the frames are read and give none, SILENT naming them; if NDL refuses the frames (and the
-  viewer), an unread lead, dated as observed. The donor's letters (岡本家文書, quoted on the Yamagen page already cited)
-  were not found online: named. A hand mirror's retail price: SILENT in Morisada (its 鏡 hits are the mirror-polisher, no
+  viewer), an unread lead, dated as observed. The donor's letters (岡本家文書, quoted on the Yamagen page already cited):
+  search once more for a public copy and read it if found; otherwise name them as not found online, dated. A hand mirror's retail price: SILENT in Morisada (its 鏡 hits are the mirror-polisher, no
   fee), named.
 
 Keep each question under the 20,000-byte cap.

@@ -42,6 +42,21 @@ N/A: no generator change.
 | s3 | 0256, 0257, 0268, 0269 | #6's absence notes name the search; Hasegawa 1987 and 「近江の石工たち」 retried; 湯浅隆, 御再建場所日記, KAKEN 19K15191 read if public or named |
 | s4 | 0270 | 高岡史料's 関野神社 section and p. 590; Okamoto papers named; the mirror SILENT in Morisada |
 
+How each listed lead is closed, and on what ground (`passes/other-leads.md`, checked 2026-10-19):
+
+- **宿村大概帳 Tokaido tariffs** (s1, 0259; s2, 0260): closed as not publicly readable - the print edition (『近世交通史料集』
+  vols 4-6, NDL pids 12064602, 12061440, 12065414) is NDL in-library only, and the Postal Museum's 2020 note says the
+  manuscript is the only copy, with no digitized copy found; named in both questions' absence notes. The tariffs the
+  record already cites (Yamamoto 1969, Tachibana) stand.
+- **Mitsui Bunko's Osaka cotton series** (s2, 0261): nothing is written from it. The pass found that the Mitsui series
+  that starts in 1757 is soybeans, not cotton (Bassino and Ma, archived), and that the books holding any cotton series
+  (Mitsui 1952, login; 1989, NDL in-library; Miyamoto 1963, login) are not publicly readable: the cotton lead is closed on
+  that ground, named in 0261's note. No soybean figure is written.
+- **Koyaizu's 『近世賃金物価史史料』** (s2, 0261): closed as not publicly readable - NDL pid 14107062 is NDL in-library only;
+  named in 0261's note, which cites it at second hand.
+- **The Takaoka donor's records (岡本家文書)** (s4, 0270): read if a public copy is found (the session searches once more);
+  the pass found none online, only the Yamagen page's quotation - then named as not found online, dated.
+
 Nothing else in these pages changes.
 
 ## D2 - the implementation check (FR-003)
