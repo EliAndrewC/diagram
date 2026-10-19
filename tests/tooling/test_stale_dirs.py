@@ -42,25 +42,29 @@ def _plant(tmp_path: Path) -> Path:
     return tmp_path
 
 
-def test_it_FIRES_on_a_directory_holding_only_bytecode(tmp_path: Path) -> None:
+def test_it_REMOVES_a_directory_holding_only_bytecode(tmp_path: Path) -> None:
+    """The GM, 2026-10-19: "Why would we not delete leftover bytecode-only directories automatically?" - the bytecode is
+    untracked and regenerated, so a directory of nothing else is removed and reported, and the check passes."""
     root = _plant(tmp_path)
     dead = root / "l7r" / "diagram" / "gone" / "__pycache__"
     dead.mkdir(parents=True)
     (dead / "m.cpython-314.pyc").write_bytes(b"\x00")
     r = _run(str(root))
-    assert r.returncode == 1, "a stale directory must fail the check"
-    assert "gone" in r.stdout and "rm -rf" in r.stdout, "the refusal must name it and print the command"
-    assert "namespace package" in r.stdout.lower(), "and say WHY it matters, not just that it is untidy"
+    assert r.returncode == 0, r.stdout
+    assert not dead.parent.exists() and "removed l7r/diagram/gone" in r.stdout
 
 
-def test_it_does_NOT_delete_anything(tmp_path: Path) -> None:
-    """Removing a directory is irreversible for anything untracked inside it, so a person runs it."""
+def test_it_REFUSES_a_stale_directory_holding_anything_but_bytecode(tmp_path: Path) -> None:
+    """A cache holding something else is not removed: the guard names it and prints the command for a person."""
     root = _plant(tmp_path)
     dead = root / "l7r" / "diagram" / "gone" / "__pycache__"
     dead.mkdir(parents=True)
     (dead / "m.pyc").write_bytes(b"\x00")
-    _run(str(root))
-    assert dead.exists(), "the guard REFUSES; it must never delete"
+    (dead / "notes.txt").write_text("keep me", encoding="utf-8")
+    r = _run(str(root))
+    assert r.returncode == 1, "a stale directory that holds more than bytecode must fail the check"
+    assert "gone" in r.stdout and "rm -rf" in r.stdout and "namespace package" in r.stdout.lower()
+    assert (dead / "notes.txt").exists(), "and nothing is deleted"
 
 
 def test_a_real_package_is_left_alone(tmp_path: Path) -> None:

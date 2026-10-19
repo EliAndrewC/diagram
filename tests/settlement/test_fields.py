@@ -13,7 +13,7 @@ from l7r.diagram.pipeline import rollcache
 from l7r.diagram.settlement import Settlement, _centroid
 from l7r.diagram.waterfields import hem_on_paddy
 from tests._scope import full_or
-from tests.settlement._builders import _inwall_settlement, _town, _village
+from tests.settlement._builders import _inwall_settlement, _village
 
 
 def _comb(*args, **kw):
@@ -41,13 +41,6 @@ def _comb(*args, **kw):
     return copy.deepcopy(rollcache.obtain(key, lambda: lay_comb(*args, **kw))[0])
 
 
-def test_ring_big_falls_back_to_plain_when_capped():
-    s = _town()
-    s.paddy_field((200, 200, 600, 600), "", "f", amp=20)
-    s.ring(("poly", s.field_polys[0]), 20, 30, ["big"], max_big=2)  # >2 'big' requests -> the rest become 'plain'
-    assert sum(1 for h in s.M["houses"] if h["kind"] == "big") <= 2
-
-
 def test_taxfree_plots_with_no_interior_cells():
     # no interior plots -> _taxfree_plots is a no-op (a field whose cells all fell outside the outline)
     s = _village()
@@ -63,30 +56,6 @@ def test_water_field_accepts_a_polygon_shape():
     s.water_field([(150, 150), (360, 150), (360, 360), (150, 360)], "", "f", (150, 150), (360, 360), amp=10, plot=34)
     assert any(f["name"] == "f" and f["kind"] == "paddy" for f in s.M["fields"])
     assert any(d["field"] == "f" for d in s.M["field_ditches"])
-
-
-# ---- paddy_field: the tax-free plots + resting plots + field label branches ----------------
-def test_paddy_field_marks_taxfree_plots_rests_whole_plots_and_labels():
-    # label + taxfree marks scattered vermilion tax-free plots; an UNSETTLED paddy (269 B01) rests a few whole rice
-    # basins as grass, none of them a tax-free plot; the label renders and is recorded.
-    s = _village()
-    s.pin_knob("paddy_rest", "unsettled")
-    s.paddy_field((150, 150, 870, 870), "Rice", "f", taxfree=2)
-    assert s.M["taxfree"]  # tax-free plots recorded -> _taxfree_plots did real work
-    rested = s.M["fallow_patches"]
-    assert rested and all(r["form"] == "rested_basin" for r in rested)
-    assert s.M["meta"]["paddy_rest"] == "unsettled" and s.M["meta"]["paddy_rested"] == len(rested)
-    rest_cents = {tuple(round(sum(p[i] for p in r["outline"]) / len(r["outline"])) for i in (0, 1)) for r in rested}
-    assert not rest_cents & {tuple(round(v) for v in t) for t in s.M["taxfree"]}, "a resting plot is no tax-free holding"
-    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
-    assert any(lab[5] == "Rice" for lab in s.M["labels"])  # field name labeled
-
-
-def test_a_settled_paddy_rests_nothing():
-    s = _village()
-    s.pin_knob("paddy_rest", "settled")
-    s.paddy_field((150, 150, 470, 470), None, "f")
-    assert s.M["meta"]["paddy_rest"] == "settled" and not s.M["fallow_patches"]
 
 
 def test_rest_plots_takes_whole_scattered_basins_toward_the_far_end_of_the_fall():
@@ -145,23 +114,6 @@ def test_water_field_skips_a_lateral_column_too_short_for_a_ditch():
     s.water_field((150, 150, 400, 320), "P", "f", (150, 150), (400, 320), amp=10, plot=100)
     assert any(fd["name"] == "f" for fd in s.M["fields"])
     assert any(d["role"] == "main" for d in s.M["field_ditches"])  # the main/drain still run
-
-
-def test_crescent_pond_records_footprint_focal_feature_and_keepout():
-    s = Settlement(1200, 1400, seed=3)
-    s.meta(name="Cp", scale="village")
-    ne_before = len(s.ellipses)
-    s.crescent_pond(400, 900, 50, facing_deg=270)
-    cp = s.M["crescent_ponds"]
-    assert len(cp) == 1 and cp[0]["r"] == 50 and len(cp[0]["poly"]) == 27  # n+1 boundary points
-    assert s.M["meta"]["focal_features"] == ["crescent_pond"]  # recorded as a focal feature
-    assert len(s.ellipses) == ne_before + 1  # a placement keep-out was reserved
-    # the half-disk bulges AWAY from the village (flat edge faces up/N): its lowest point is well below cy
-    assert max(p[1] for p in cp[0]["poly"]) > 900
-    # calling again does not duplicate the focal-feature tag (the "already present" branch)
-    s.crescent_pond(600, 900, 40, facing_deg=90)
-    assert s.M["meta"]["focal_features"] == ["crescent_pond"]
-    assert len(s.M["crescent_ponds"]) == 2
 
 
 def test_bund_junctions_pile_earth_only_where_bunds_actually_cross():
@@ -410,16 +362,6 @@ def test_draw_comb_field_existing_stream_and_cascade_sources():
     assert len(s.M["channels"]) == n_chan  # no hairline appended
 
 
-def test_paddy_field_polygon_shape_records_the_field():
-    # the legacy paddy_field's POLYGON branch: kept exercised here now that no pool map draws a
-    # legacy quilt anymore (the towns moved to the comb builder; only ad-hoc callers use this path)
-    s = Settlement(W=1200, H=1200, seed=3)
-    s.meta(name="Pf", scale="town", ftpx=1)
-    s.paddy_field([(200, 200), (500, 220), (520, 500), (240, 520)], "", "poly-paddy", amp=14, plot=58)
-    f = [f for f in s.M["fields"] if f["name"] == "poly-paddy"]
-    assert f and len(f[0]["outline"]) >= 4
-
-
 def test_pond_fill_relocates_to_the_late_block_when_a_late_channel_joins():
     """The Tango in-wall tank (GM 2026-07-23): a comb head-race joins the pond from the LATE
     block, which draws after the whole shared water block - so an early fill can never cover the
@@ -643,10 +585,8 @@ _FIELDS_SURFACE = frozenset(
         "apply_land_use",
         "bund_junctions",
         "comb_base_fill",
-        "crescent_pond",
         "draw_comb_field",
         "fallow_field",
-        "paddy_field",
         "pond",
         "water_field",
         # private helpers, reached through self. (several also called on an instance from tests
@@ -656,7 +596,6 @@ _FIELDS_SURFACE = frozenset(
         # basin (`rest_basin`), never a patch within one - a deliberate removal, not a member lost in a move.
         "_mulberry_rows",
         "_paddy_features",
-        "_paddy_plots",
         "_paddy_surface",
         "_pick_overlay_plots",
         "_plot_center_span",
@@ -665,7 +604,6 @@ _FIELDS_SURFACE = frozenset(
         "_plot_rock",
         "_rounded_pond",
         "_rows",
-        "_split_convex",
         "_taxfree_plots",
     }
 )
@@ -714,7 +652,7 @@ def test_feature_012_archetype_constants_survived_the_split():
     # the three class-level tuples gating the in-field pond / rock / grave island. They are class
     # ATTRIBUTES, not methods, so the surface test above cannot see them - and a transformer that
     # slices a class body by its function definitions is exactly what would drop them.
-    for name in ("_PADDY_POND_KINDS", "_PADDY_ROCK_KINDS", "_PADDY_GRAVE_KINDS"):
+    for name in ("_PADDY_POND_KINDS", "_PADDY_GRAVE_KINDS"):
         assert isinstance(getattr(Settlement, name), tuple), name
     assert "valley_paddy" in Settlement._PADDY_POND_KINDS
 

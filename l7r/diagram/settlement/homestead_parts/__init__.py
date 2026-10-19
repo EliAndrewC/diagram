@@ -3,7 +3,6 @@
 Research: plumbing - NONE: the composed mixin; its parts carry their own claims
 """
 
-from .farmstead import FarmsteadMixin
 from .gardens import GardensMixin
 from .groves import GrovesMixin
 from .keepouts import KeepoutsMixin
@@ -17,6 +16,5 @@ class HomesteadPartsMixin(
     GrovesMixin,
     StandsMixin,
     KeepoutsMixin,
-    FarmsteadMixin,
 ):
     """The composed surface. No members of its own - see this package's CLAUDE.md."""

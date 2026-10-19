@@ -249,7 +249,6 @@ class FieldFeaturesMixin:
     # knolls are already the village burial ground + back-grove (the research warns a standalone knoll usually
     # IS the back-grove), so they are not redrawn here. Seeded from self.seed so it never ripples other RNG.
     _PADDY_POND_KINDS = ("valley_paddy", "contour_terraces", "polder_grid", "ribbon_valley")
-    _PADDY_ROCK_KINDS = ("contour_terraces", "ribbon_valley")  # bedrock ground; alluvial valley/polder + delta dike-pond have none
     _PADDY_GRAVE_KINDS = ("valley_paddy", "contour_terraces", "ribbon_valley")
 
     def _field_feature_ink(self: Settlement, ink: list[tuple[str, str]] | None, svg: str, cls: str) -> None:  # type: ignore[misc]
@@ -580,57 +579,3 @@ class FieldFeaturesMixin:
             mid = (0.25 * a_in[j][0] + 0.5 * ins[j][0] + 0.25 * b_out[j][0], 0.25 * a_in[j][1] + 0.5 * ins[j][1] + 0.25 * b_out[j][1])
             sample += [a_in[j], mid, b_out[j]]
         return d + "Z", sample
-
-    def crescent_pond(self: Settlement, cx: float, cy: float, r: float, facing_deg: float = 270.0) -> None:  # type: ignore[misc]
-        """A fengshui CRESCENT / half-moon pond (半月塘), a focal feature of Huizhou / Hakka single-lineage
-        villages (feature 005): a half-disk of water IN FRONT of the cluster, its flat diameter facing the
-        houses and the arc bulging away, DISTINCT from the irrigation pond.
-
-        WHAT IT IS (GM asked, 2026-07-21 - labeled "geomantic pond" at his direction): GEOMANTIC, not
-        religious - no deity, no rites; cosmological engineering, the same category as orienting a house
-        south. The village wants "mountain behind, water in front" (背山面水): the back half is the hill +
-        fengshui grove (the windbreak belt these maps already draw), and where no river obliges, the village
-        DIGS the front half. Still water gathers and holds qi/wealth where flowing water carries it away;
-        the HALF shape leaves the lineage room to grow (a full circle is complete, and what is complete can
-        only wane). Grove-arc behind + water-arc in front cradle the village as ONE system. It also earns
-        its keep practically - drawn UNCONNECTED to the irrigation network, a recorded DEVIATION (the one page
-        read feeds it by a channel of field water: rendering/homesteads.html#how-our-maps-draw-and-label-the-half-moon-pond-banyuechi),
-        fire water beside thatch, fish/ducks/washing, and the flat-side bank doubles
-        as the open threshing/ceremony forecourt. The shrine is where religion happens; this is just how a
-        well-sited village should be shaped.
-
-        `facing_deg` is the screen direction the FLAT edge faces (toward the village); default 270 = up / N.
-        Draws through the shared water block (so it composites cleanly), records the footprint + the
-        `crescent_pond` focal feature on the manifest, and reserves a placement keep-out - so call it BEFORE
-        `farmsteads()` and the cluster packs around it.
-
-        Research:
-            half-moon pond - research/questions/0041-half-moon-ponds-before-southern-chinese-villages-banyuechi.drawing.html: a half-disk, its flat bank toward the houses, labeled geomantic pond
-            no inlet - DEVIATION research/questions/0041-half-moon-ponds-before-southern-chinese-villages-banyuechi.drawing.html
-            placement keep-out - research/questions/0041-half-moon-ponds-before-southern-chinese-villages-banyuechi.drawing.html: only the bulge kept out, 0.45 r off center at radius 0.95 r"""
-        fa = math.radians(facing_deg)
-        fx, fy = math.cos(fa), math.sin(fa)  # unit vector toward the village (the flat side)
-        perp = (-fy, fx)  # along the flat diameter
-        n = 26
-        pts = []
-        for i in range(n + 1):
-            t = math.pi * i / n  # sweep the arc across the diameter, bulging AWAY from the village
-            px = cx + r * (math.cos(t) * perp[0] - math.sin(t) * fx)
-            py = cy + r * (math.cos(t) * perp[1] - math.sin(t) * fy)
-            pts.append((round(px, 1), round(py, 1)))
-        poly = " ".join(f"{x},{y}" for x, y in pts)
-        self._water(
-            f'<polygon points="{poly}" fill="#9CB4C8"/>',
-            {},
-            sheen=f'<polygon points="{poly}" fill="none" stroke="#B6CAD8" stroke-width="1" opacity="0.6"/>',
-            edge=f'<polygon points="{poly}" fill="none" stroke="#5C7488" stroke-width="2.4"/>',
-            pond_fill=True,
-        )
-        self.M.setdefault("crescent_ponds", []).append({"cx": cx, "cy": cy, "r": r, "facing": facing_deg, "poly": [[x, y] for x, y in pts]})
-        self.note_focal("crescent_pond")
-        # keep-out over the bulge half-disk (its centroid sits ~0.42r off center, away from the village)
-        self.ellipses.append((cx - fx * r * 0.45, cy - fy * r * 0.45, r * 0.95, r * 0.95))
-        # LABELED (GM 2026-07-21): the pond is a culturally specific feature that does not read by
-        # itself (the GM asked "what is that?" of an unlabeled one - the don't-label-the-obvious rule cuts the
-        # OTHER way here). Placed off the arc side, away from the village (crescent_pond_labeled gates it).
-        self.label(cx - fx * (r + 16), cy - fy * (r + 16) + 4, "geomantic pond", 11, italic=True, color="#4C6478", ref=(cx - r, cy - r, cx + r, cy + r))

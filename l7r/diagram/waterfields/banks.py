@@ -557,8 +557,8 @@ _GATE_MIN_APEX = 15.0
 # that key off it are the same") is exactly the one that fails. It is also how the cohort seed-41
 # well regression happened: a well moved, not a paddy.
 #
-# DELIBERATELY COMB-ONLY. `build_terraces` and `build_ribbon` are the hill-rice engines, and hill
-# rice is exactly where the Senmaida micro-basins above are real; `build_polder`'s parcels are
+# DELIBERATELY COMB-ONLY. The hill-rice engines (terraces and ribbons, retired by feature 392) were where the
+# Senmaida micro-basins above are real; `build_polder`'s parcels are
 # grounded true-scale on Buck's ~1 mu figure and are not cascade basins at all. Only the valley-floor
 # fan carries this floor, because only there is the aze a pure, unshared cost.
 _TOE_MIN_AREA = 0.25

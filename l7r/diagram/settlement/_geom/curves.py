@@ -99,24 +99,19 @@ def smooth_points(pts: Poly, steps: int = 10) -> Poly:
     return out
 
 
-def organic_bbox(bbox: Any, amp: float, flat_edges: tuple[int, ...] = ()) -> Poly:
+def organic_bbox(bbox: Any, amp: float) -> Poly:
     """Semi-rectangular core with lobes (outgrowths) and bays (indentations).
-    Edges listed in flat_edges (0=N, 1=E, 2=S, 3=W) are kept straight - e.g. a field
-    that must run flush against a town wall flattens the abutting edge.
 
     Research: organic outline - CONVENTION: lobes and bays so a drawn parcel reads hand-made"""
     x0, y0, x1, y1 = bbox
     edges = [((x0, y0), (x1, y0), (0, -1)), ((x1, y0), (x1, y1), (1, 0)), ((x1, y1), (x0, y1), (0, 1)), ((x0, y1), (x0, y0), (-1, 0))]
     pts = []
-    for ei, (sa, sb, (nx, ny)) in enumerate(edges):
+    for sa, sb, (nx, ny) in edges:
         for i in range(4):
             t = i / 4
             bx, by = sa[0] + (sb[0] - sa[0]) * t, sa[1] + (sb[1] - sa[1]) * t
             off = random.uniform(-amp * 0.5, amp)
-            jt = random.uniform(-amp * 0.18, amp * 0.18)  # consume RNG even when flat, to keep placement aligned
-            if ei in flat_edges:
-                pts.append((bx, by))
-                continue
+            jt = random.uniform(-amp * 0.18, amp * 0.18)
             if i == 0:
                 off *= 0.35
             pts.append((bx + nx * off + jt, by + ny * off + jt))

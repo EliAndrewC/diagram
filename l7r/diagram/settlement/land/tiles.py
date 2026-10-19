@@ -44,7 +44,7 @@ _SEED = {"grass": 2981, "reed": 2982, "bamboo": 2983, "grass-clumps": 2991, "ree
 class Cover:
     """One zone a tile fills (`Settlement._covers`, drawn by `flush_covers`): its `kind` (a key of `TILES`), the class its shape
     is ruled under on the page (`cls`, the zone's), its `ring`, and the ground its scatter kept bare as shapely geometries
-    (`bare` - a clearing swept later is added here, `_cull_cover_in`). `rec` is the zone's manifest record, which is given the
+    (`bare`). `rec` is the zone's manifest record, which is given the
     drawn shape (`cover`) for the page's hit region.
 
     Research: cover record - NONE: a zone and its bare ground"""

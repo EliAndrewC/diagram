@@ -14,8 +14,6 @@ from ._geom import LAND, Indexed, Manifest, PointGrid, Poly
 from ._knobs import crop_boxes, resolve_knob, scope_seed
 from .castle_civic import CastleCivicMixin
 from .city import CityMixin
-from .city.crop import CityCropMixin
-from .civic_grounds import CivicGroundsMixin
 from .farm_fixtures import FarmFixturesMixin, PondStockMixin
 from .fields import FieldsMixin
 from .finish import FinishMixin
@@ -25,12 +23,9 @@ from .houses import HousesMixin
 from .land import LandMixin
 from .rolling import RollingMixin
 from .shrines_wells import ShrinesWellsMixin
-from .shrines_wells.forest import ForestMixin
 from .structures import StructuresMixin
-from .structures.urban_fixtures import UrbanFixturesMixin
 from .title import TitleMixin
 from .town_ways import TownWaysMixin
-from .trades import TradesMixin
 from .water_ways import WaterWaysMixin
 
 
@@ -39,14 +34,9 @@ class Settlement(
     WaterWaysMixin,
     TownWaysMixin,  # feature 145: the town-tier ways, out of the hamlet path's module
     ShrinesWellsMixin,
-    ForestMixin,  # feature 145: the town/city forest
     StructuresMixin,
-    UrbanFixturesMixin,  # feature 145: the theater stage and the drum tower
-    CityCropMixin,  # feature 145: crop_city
-    TradesMixin,
     HomesteadPartsMixin,
     LandMixin,
-    CivicGroundsMixin,
     CityMixin,
     CastleCivicMixin,
     HousesMixin,
@@ -75,7 +65,7 @@ class Settlement(
 
         Research:
             a threshing yard at every farmstead - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: on unless the generator declares no grain grown
-            swept ground kept clear of scatter - research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html: the clearings registry, empty until a shrine or grave plot registers the ground it occupies (the verge `_clear_ground` grows round it is that unit's, a ranked row)
+            swept ground kept clear of scatter - research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html: the clearings registry, which stays empty: its registrars (a shrine's and a grave plot's swept ground) were retired with the town and city drawing code by feature 392
             no house racks by default - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: settled harvest weather where none is stated, so no rack by each house's yard
             registries and record streams - NONE
         """
@@ -146,8 +136,6 @@ class Settlement(
         self.top: list[str] = []  # deferred TOP layer (gate furniture, torii, kido) - over roads/buildings
         self.toplabels: list[str] = []  # deferred LABEL layer - the very last thing drawn, so TEXT is never
         #                           covered by anything (a label must always be fully readable)
-        self.frontage_rot: float = 0.0  # the LAST frontage() row's street axis in degrees (see frontage)
-        self.frontage_box: tuple[float, float, float, float] | None = None  # extent of the LAST frontage() row,
         #                           for place_caption (see frontage's note)
         self._captions: list[tuple[Any, ...]] = []  # deferred place_caption() seats - flushed in finish()
         self._label_index: Any = None  # the one placer's obstacle index, built once per label phase (feature 266, FR-009)
@@ -205,7 +193,6 @@ class Settlement(
         # The tread is the hard thing - the surface a cart runs on - and a building's FOOTPRINT may
         # not overlap it at any angle. See `_fits`, which tests them differently on purpose.
         self.treads: list[Any] = []
-        self._samurai_ward_interiors: list[Poly] = []  # closed samurai-ward region(s), cached by s.ward - s.building refuses WARD_BARRED_KINDS inside them
         self.bound: Any = None  # optional bounding polygon: placement stays inside it (city wall)
         self.view: Any = None  # optional (ox,oy,w,h) viewBox crop - render/checks treat it as the map edge
         self.field_polys: Indexed = Indexed()  # smoothed outlines used for blocking (Indexed: _in_blocked keeps a spatial index on it)
@@ -236,16 +223,13 @@ class Settlement(
         # SCATTER (commons scrub + marsh reeds) ONLY, not for building placement and not for the grove.
         # A shrine precinct, the ground under a torii and along its sando, and the collar tended around
         # graves were kept clear of wild scrub in reality (raked gravel precinct; the tomb-swept grave
-        # collar); the surrounding waste stays scrubby. So this clears a small verge around each, while a
-        # shrine's deliberate fengshui/chinju-no-mori grove (a separate feature) is left untouched. See
-        # research/questions/0224-ground-swept-clear-around-shrines-and-graves.html.
+        # collar); the surrounding waste stays scrubby. The scatters read this registry; nothing registers a clearing now
+        # (0224's drawing page claims no swept ground beyond the feature itself, and the town and city drawing that once
+        # registered one went with feature 392), so it stays empty.
         self.clearings: list[Any] = []
-        self._verge_centers: list[tuple[float, float]] = []  # one (x, y) per clearings entry - _clear_ground's same-center dedupe key
-        self._cover_n = 0  # ground-cover scatter ordinal (commons + marsh draws). Each cover entry and each
-        #                    swept clearing records it, so the scatter_respects_swept_clearings check can see
-        #                    ORDER: a scatter only skips clearings that exist when it runs, so a cover whose
-        #                    seq <= a clearing's seq drew before the clearing was registered and may have
-        #                    dotted scrub/reeds over the swept ground (fix: s.reserve_clearing FIRST).
+        self._cover_n = 0  # ground-cover scatter ordinal (commons + marsh draws): each cover entry records its draw
+        #                    order as `seq`. (Its other reader, the order against swept clearings, has nothing to read:
+        #                    nothing registers a clearing since feature 392.)
         self._frozen_wells: tuple[tuple[PointGrid, PointGrid, PointGrid], Any] | None = None  # the well index while a frozen_terrain scope is open
         self._frozen_depth = 0
         self.dry_polys: list[Any] = Indexed()  # dry crop plots (comb hems, vegetable tracts): FOOTPRINT-aware no-build (Indexed: _in_blocked)
@@ -337,7 +321,6 @@ class Settlement(
     # huge offset so they always render above the base (roads must pass UNDER them)
     TOPZ = 10_000_000
     LABELZ = 20_000_000  # the LABEL layer renders above even the TOP layer - text is never covered
-    WALLZ = 1_000_000  # the WALL layer renders above every ground lane and building (which sit in
     #                          self.out, z < len(out)), below the TOP layer - so lanes pass UNDER walls
 
     def admits(self: Settlement, key: str, rec: Any, ignore: Any = None) -> bool:
@@ -373,12 +356,6 @@ class Settlement(
         z = len(self.out)
         self.out.append("".join(s for _c, s in tagged))
         self.out_cls.append(tagged)
-        return z
-
-    def add_wall(self: Settlement, s: str, cls: ClsTag = None) -> int:
-        z = self.WALLZ + len(self.walls)
-        self.walls.append(s)
-        self.walls_cls.append(self._tag(cls))
         return z
 
     def add_label(self: Settlement, s: str, cls: ClsTag = None) -> int:
@@ -561,7 +538,7 @@ class Settlement(
         farm shed on a garden 700 px from the nearest thing that had changed. Debugging a map you did
         not touch is the expensive kind of work; this makes the blast radius the thing you edited.
 
-        It is a SEEDED generalization of an idiom already in this file: `forest()` and a dozen others
+        It is a SEEDED generalization of an idiom already in this engine: a dozen methods
         already save and restore the stream so their decorative draws do not shift later placement.
         Save/restore alone protects everything AFTER the block; re-seeding on entry protects the
         block itself from everything BEFORE it. Both halves are needed for a scope to be isolated.
@@ -673,7 +650,6 @@ class Settlement(
     # other woods keep the two figures above (0080 and 070) until they are researched in their own right.
     COMMONS_SPACING_FT = 8.0  # centers near 8 ft: 1,700 stems/ha (vegetation/230)
     COMMONS_CROWN_R_FT = (4.0, 4.5)  # an 8-9 ft crown, the radius rolled per crown (vegetation/230; a GUESS)
-    FOREST_FLOOR = "#5C7042"  # shaded litter/understory between the crowns, not a terrain wash
     # How deep a canvas-filling wood is REVEALED by the crop: ~8 ranks of trees past the tree line.
     # That is enough for the canopy to close and read as a wood running off the frame; beyond it the
     # image is undifferentiated crowns (GM 2026-07-25: "only enough to make it clear the forest is

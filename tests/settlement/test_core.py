@@ -7,10 +7,10 @@ import tempfile
 
 import pytest
 
-from l7r.diagram.settlement import Settlement, roll_torii_count, surface_water_dist, village_population
+from l7r.diagram.settlement import Settlement, surface_water_dist, village_population
 from l7r.diagram.waterfields import dedup_ring, floor_overhang, pointed_ring, polyline_cum, supply_bank_clearance
 from tests._scope import full_or
-from tests.settlement._builders import _cap020, _castle_map, _crop_settlement, _max_turn_deg, _memo_city, _town, crop
+from tests.settlement._builders import _cap020, _crop_settlement, _max_turn_deg, _town, crop
 
 
 @pytest.mark.renders  # a test OF rendering (feature 213): it clears the suite's skip-render default for its first half
@@ -104,27 +104,6 @@ def test_rects_overlap_detects_overlap_and_separation():
     assert rects_overlap(a, [(5, 5), (15, 5), (15, 15), (5, 15)]) is True  # corner-overlapping
     assert rects_overlap(a, [(20, 0), (30, 0), (30, 10), (20, 10)]) is False  # separated on x
     assert rects_overlap(a, [(0, 20), (10, 20), (10, 30), (0, 30)]) is False  # separated on y
-
-
-def test_roll_torii_count_distributions():
-    # the GM's tier weights (2026-07-21): 1/3/7 only, village 60/30/10, town 30/60/10,
-    # city 30/40/30, capital 10/60/30; unknown scales roll the conservative village column
-    import collections
-    import random as _random
-
-    for scale, want in [("village", {1: 0.6, 3: 0.3, 7: 0.1}), ("town", {1: 0.3, 3: 0.6, 7: 0.1}), ("city", {1: 0.3, 3: 0.4, 7: 0.3}), ("capital", {1: 0.1, 3: 0.6, 7: 0.3})]:
-        rng = _random.Random(11)
-        c = collections.Counter(roll_torii_count(scale, rng) for _ in range(4000))
-        assert set(c) <= {1, 3, 7}
-        for k, p in want.items():
-            assert abs(c[k] / 4000 - p) < 0.03, (scale, k)
-    assert roll_torii_count("hamlet", _random.Random(1)) in (1, 3, 7)  # fallback column
-
-    class _One:  # rng.random() lives in [0,1) so the exhaustion return is defensively dead - prove it anyway
-        def random(self):
-            return 1.0
-
-    assert roll_torii_count("village", _One()) == 7  # exhaustion falls to the last (rarest) bucket
 
 
 def test_rng_scope_is_isolated_from_before_and_restores_after():
@@ -354,14 +333,6 @@ def test_build_polder_mosaic_knob():
     assert mean_skew(mos) > mean_skew(grid) * 1.15  # the mosaic parcels run visibly more to trapezoids
 
 
-def test_near_ring_paddy_skips_cells_over_the_orientation_cap():
-    # ~300px+ cells exceed the 80000px bbox cap and are skipped by the size guard; coarser cells therefore
-    # place fewer basins than fine ones (the oversized ones drop out)
-    coarse = _town().near_ring_paddy((0, 0, 1000, 1000), seed=8, cell_ft=320)
-    fine = _town().near_ring_paddy((0, 0, 1000, 1000), seed=8, cell_ft=150)
-    assert isinstance(coarse, int) and fine > coarse
-
-
 def test_settlement_form_dike_top_is_low_ground_gated():
     # dike_top stands ON a polder's perimeter dike, so the form needs the polder terrain (low reclaimed
     # ground); anywhere else the typing rule rejects it (research/contents.json#field-archetypes 'Polder waterward fringe + dike-top housing').
@@ -407,159 +378,6 @@ def test_round_channel_joints_leaves_offtakes_and_gentle_seams_alone():
     g = {"pts": [(200.0, 0.0), (200.0, 0.0), (200.0, 200.0)], "w": 6.0, "role": "main"}
     round_channel_joints([e, g, {"pts": [(9.0, 9.0)], "w": 1.0, "role": "main"}])
     assert e["pts"] == [(0.0, 0.0), (200.0, 0.0)]
-
-
-def test_kiln_rotation_carries_the_body_and_the_quarters_with_it():
-    """`rot` lays the kiln's upslope axis along local +x, so a rotated works must report rotated
-    world coordinates for both - a body recorded in the unrotated frame would be measured against
-    neighbors it does not actually stand near."""
-    a, b = _town(), _town()
-    a.kiln(500, 500)
-    b.kiln(500, 500, rot=90)
-    ka, kb = a.M["kilns"][0], b.M["kilns"][0]
-    assert ka["body"][1] < 500 and abs(ka["body"][0] - 500) < 40  # unrotated: the kiln sits ABOVE center
-    assert kb["body"][0] > 500 and abs(kb["body"][1] - 500) < 40  # rotated 90: it swings to the RIGHT
-    assert kb["body"][4] == 90.0
-
-
-def test_seat_memo_remembers_a_refusal_across_syncs_while_the_map_only_grows():
-    s, memo = _memo_city()
-    memo.level("laborer", 10, 6, 7).add((100.0, 200.0))
-    s.placed.append((1.0, 2.0, 3.0, 4.0))  # an append is exactly what a top-up does between calls
-    s.M["buildings"].append({"x": 1, "y": 2, "w": 3, "h": 4, "kind": "laborer"})
-    memo.sync()
-    assert (100.0, 200.0) in memo.level("laborer", 10, 6, 7)
-
-
-def test_seat_memo_keys_the_refusal_to_the_kind_footprint_and_tightness():
-    # a refusal at one padding says nothing about a looser pass, and a refusal for one kind says
-    # nothing about a smaller one - conflating them would silently under-populate a later caste
-    _s, memo = _memo_city()
-    memo.level("laborer", 10, 6, 7).add((100.0, 200.0))
-    assert (100.0, 200.0) not in memo.level("laborer", 10, 6, 4)
-    assert (100.0, 200.0) not in memo.level("servant", 10, 6, 7)
-    assert (100.0, 200.0) not in memo.level("laborer", 8, 6, 7)  # same kind, re-dimensioned
-
-
-def test_seat_memo_forgets_when_an_indexed_registry_changes_by_anything_but_an_append():
-    # the case the Indexed docstring exists for: a same-length in-place replacement changes CONTENT
-    # while identity and length say nothing happened. `version` moving further than `appends` is
-    # what catches it.
-    s, memo = _memo_city()
-    s.block_polys.append([(0.0, 0.0), (1.0, 0.0), (1.0, 1.0)])
-    memo.sync()
-    memo.level("laborer", 10, 6, 7).add((100.0, 200.0))
-    s.block_polys[0] = [(5.0, 5.0), (6.0, 5.0), (6.0, 6.0)]
-    memo.sync()
-    assert (100.0, 200.0) not in memo.level("laborer", 10, 6, 7)
-
-
-def test_seat_memo_forgets_when_a_registry_disappears_altogether():
-    s, memo = _memo_city()
-    s.M["scratch"] = []
-    memo.sync()
-    memo.level("laborer", 10, 6, 7).add((100.0, 200.0))
-    del s.M["scratch"]
-    memo.sync()
-    assert (100.0, 200.0) not in memo.level("laborer", 10, 6, 7)
-
-
-def test_seat_memo_tolerates_bound_being_SET_but_not_unset():
-    # None -> a ring only ADDS a constraint (Minami restores s.bound mid-top-up, which must not
-    # cost the memo); the reverse frees every seat outside the ring and must clear it
-    s, memo = _memo_city()
-    memo.level("laborer", 10, 6, 7).add((100.0, 200.0))
-    s.bound = [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0)]
-    memo.sync()
-    assert (100.0, 200.0) in memo.level("laborer", 10, 6, 7)
-    s.bound = None
-    memo.sync()
-    assert (100.0, 200.0) not in memo.level("laborer", 10, 6, 7)
-
-
-@pytest.mark.parametrize("gate_dir", ["south", "north", "east", "west"])
-def test_the_castle_records_its_works_and_puts_its_gate_on_the_named_side(gate_dir):
-    s, rec = _castle_map(gate_dir=gate_dir)
-    assert s.M["castles"][0] is rec
-    assert rec["gate_dir"] == gate_dir
-    gx, gy = rec["gate"]
-    if gate_dir in ("north", "south"):
-        assert gx == pytest.approx(1600)
-        assert gy == pytest.approx(1300 + (350 if gate_dir == "south" else -350))
-    else:
-        assert gy == pytest.approx(1300)
-        assert gx == pytest.approx(1600 + (425 if gate_dir == "east" else -425))
-    assert len(rec["moat"]) == 4 and rec["moat_width"] > 0
-
-
-@pytest.mark.parametrize("gate_dir", ["south", "north", "east", "west"])
-def test_NOTHING_is_ever_recorded_inside_the_castle(gate_dir):
-    """The rule that is not a knob. The court is the subject of a separate Mode A sheet, and any
-    building drawn here would become a constraint that sheet must silently match."""
-    s, _ = _castle_map(gate_dir=gate_dir, baileys=True)
-    for key in ("buildings", "houses", "manors", "religious", "ministries"):
-        assert not s.M.get(key), f"the castle put something in M[{key!r}] - the court must stay empty"
-
-
-def test_the_castle_reserves_its_ground_in_BOTH_registries():
-    """block_polys is CENTER-tested by the urban packs; placed is distance-tested. An enclosure
-    this size has to stop a wide building hanging half its roof over the rampart, and only the
-    second registry does that - so the castle registers in both (CLAUDE.md, CENTER vs FOOTPRINT)."""
-    s, rec = _castle_map()
-    assert len(s.block_polys) == 1
-    assert len(s.placed) == 1
-    px, py, pw, ph = s.placed[0]
-    assert pw > rec["w"] and ph > rec["h"]  # the reservation covers the moat, not just the wall
-    xs = [p[0] for p in s.block_polys[0]]
-    assert min(xs) < rec["x"] - rec["w"] / 2 and max(xs) > rec["x"] + rec["w"] / 2
-
-
-def test_without_baileys_the_castle_is_one_enclosure():
-    _, rec = _castle_map(baileys=False)
-    assert rec["baileys"] == []
-    assert len(rec["gates"]) == 1
-
-
-@pytest.mark.parametrize("gate_dir", ["south", "north", "east", "west"])
-def test_the_baileys_are_OFFSET_and_their_gates_dogleg(gate_dir):
-    """The provisional internal works (default OFF - see the glyph's docstring for the verdict).
-    Two properties matter if they are ever switched back on: the wards are NOT concentric, and
-    each ward's gate turns off its parent's, so the route in bends at every wall."""
-    _, rec = _castle_map(gate_dir=gate_dir, baileys=True)
-    assert len(rec["baileys"]) == 2
-    assert len(rec["gates"]) == 3
-    for ring in rec["baileys"]:
-        cx = sum(p[0] for p in ring) / 4
-        cy = sum(p[1] for p in ring) / 4
-        assert (abs(cx - rec["x"]) > 1.0) or (abs(cy - rec["y"]) > 1.0), "a ward sits concentric - that reads as a bullseye"
-    # each successive gate lies on a different axis from the one before it
-    for a, b in zip(rec["gates"], rec["gates"][1:], strict=False):
-        assert not (abs(a[0] - b[0]) < 1.0 and abs(a[1] - b[1]) < 1.0)
-
-
-def test_castle_karamete_records_a_rear_gate_and_second_tower():
-    """The ote-mon / karamete-mon pair is the standard castle gate program (GM 2026-08-09,
-    researched - rear gate opposite the front, the sortie gate); karamete_dir opens it, a size
-    down in tower, and the record carries it only when asked - every existing castle is
-    byte-identical."""
-    s_one, rec_one = _castle_map()
-    assert "karamete" not in rec_one
-    assert sum(1 for t in s_one.M["castle_towers"] if t["kind"] == "gate_tower") == 1
-    s_two, rec_two = _castle_map(karamete_dir="north")
-    assert rec_two["karamete_dir"] == "north"
-    assert rec_two["karamete"][1] < rec_two["y"]  # the rear gate opens on the north wall
-    assert sum(1 for t in s_two.M["castle_towers"] if t["kind"] == "gate_tower") == 2
-    s_east, rec_east = _castle_map(karamete_dir="east")
-    east_tower = s_east.M["castle_towers"][-1]
-    assert east_tower["w"] < east_tower["h"]  # the rear tower turns with its wall on an east/west gate
-
-
-def test_a_castle_caption_is_placed_only_when_a_label_is_given():
-    s_none, _ = _castle_map(label="")
-    s_lab, _ = _castle_map(label="Keep")
-    s_lab.place_labels()  # feature 157: the LABEL PHASE
-    s_none.place_labels()
-    assert len(s_lab.M.get("labels", [])) == len(s_none.M.get("labels", [])) + 1
 
 
 def test_sluice_gate_label_names_the_black_bar():

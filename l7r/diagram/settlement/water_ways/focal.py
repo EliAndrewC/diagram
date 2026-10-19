@@ -14,8 +14,8 @@ class FocalMixin:
     def note_focal(self: Settlement, kind: str) -> None:  # type: ignore[misc]
         """Record an optional FOCAL feature (feature 005 catalog) on the manifest so the twin-detector reads
         it as a distinctiveness axis (meta.focal_features). Call it for a focus DRAWN via an existing method -
-        a secondary shrine via `shrine_hall(primary=False)`, an ancestral hall, a market clearing - as well as
-        from the dedicated focal methods (`crescent_pond`, `mill`). Idempotent per kind."""
+        a secondary shrine, an ancestral hall, a market clearing - as well as
+        from the dedicated focal methods (`mill`). Idempotent per kind."""
         foc = self.M["meta"].setdefault("focal_features", [])
         if kind not in foc:
             foc.append(kind)

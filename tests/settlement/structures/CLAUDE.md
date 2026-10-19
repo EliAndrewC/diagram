@@ -6,8 +6,8 @@ exactly as it covers source - v1.6.1, GM 2026-08-16). The subject has been a PAC
 114; the suite had stayed one file, and the coverage work of feature 174 pushed it over the bar.
 
 **One file per submodule of the subject**, and the mapping is DERIVED rather than chosen: each test
-went to the submodule that defines the majority of the package names it exercises (`rowpack` ->
-`packing.py`, `servant_ranges` -> `servants.py`, `_estate_wall_clear` -> `compounds.py`). A test that
+went to the submodule that defines the majority of the package names it exercises (`place_labels` ->
+`captions.py`, `place_kosatsuba` -> `fixtures/`). A test that
 names nothing from the package follows the test above it, which keeps a banner's run together. So the
 way to find a test is to name the thing it tests, and a new test goes beside the ones for its subject.
 
@@ -19,12 +19,9 @@ under `tests/settlement/` is selected exactly as the flat file was.
 | file | look here when |
 |---|---|
 | `_builders.py` | a fixture factory or stub shared across these files |
-| `test_captions.py` | a caption's seat on a structure - the label ladder's clear-seat probes |
-| `test_compounds.py` | a walled compound: its wall's clearance of water, the street net and the watch's tower |
+| `test_captions.py` | the label phase and the one placer's index: deferred and withdrawn captions, a field name's caption, the index's families, the fallback where no seat is clear |
 | `test_fixtures.py` | the mounted fixtures - notice boards, their anchors and their seats (`fixtures/`) |
 | `test_board_seat.py` | the notice board's one siter and its rules' predicates (`fixtures/board_seat.py`, feature 287) |
-| `test_ground.py` | open ground drawn under structures - pastures and their captions |
-| `test_packing.py` | the multi-building placers, their row cadence and their shortfall bookkeeping |
-| `test_servants.py` | servant ranges: the ward fence, the neighbor closer than the host, a doorway |
-| `test_urban.py` | the urban packs - merchant residences, flophouses, the town works |
-| `test_urban_fixtures.py` | the fixtures only a town or city draws |
+| `test_packing.py` | no tests: its subject was retired by feature 392 |
+| `test_urban.py` | the urban halo `commons` and `marsh` clear around buildings, and a tilted board caption's fallback ladder |
+| `test_urban_fixtures.py` | the composed-surface guard: no pre-split member lost, no two sub-mixins defining one name, every member resolving on `Settlement` |

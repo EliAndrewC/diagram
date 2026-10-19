@@ -9,10 +9,10 @@ import random
 from collections.abc import Callable, Sequence
 from typing import TYPE_CHECKING, Any
 
-from .._geom import CrownIndex, PointGrid, _union_area, boxed_grid, boxed_polys, boxes_meeting, nearest_seg_dist, point_in_poly, seg_dist, seg_reach_index
-from .._knobs import CITY_TIER_SCALES, Knob, knob_rng, register_knob
+from .._geom import CrownIndex, PointGrid, boxed_grid, boxed_polys, boxes_meeting, nearest_seg_dist, point_in_poly, seg_reach_index
+from .._knobs import Knob, knob_rng, register_knob
 from ._helpers import _belt_axis
-from .grove_sides import GROVE_FLANKS, GROVE_SIDES, GROVE_SIDES_FLOOD, THIN_BAND_FT, grove_faces
+from .grove_sides import GROVE_FLANKS, GROVE_SIDES, GROVE_SIDES_FLOOD
 from .tree_shade import BAMBOO_SHADE_FT
 
 #: The grain a grove's clump is rendered at, relative to the town grain the glyphs were calibrated at (`_draw_grove`'s `bs`).
@@ -124,7 +124,7 @@ def bamboo_patch(cx: float, cy: float, w: float, h: float, face: tuple[float, fl
 # farmstead's grove. `mixed_broadleaf` is the Chinese village fengshui wood - ~47 kinds a patch, measuring as evergreen
 # broadleaf forest - drawn as an irregular wood of rounded crowns like the woods around it. The clipped pine wall of Izumo is
 # one house's, not a village's, and is not drawn. The roll is even: no source says which was commoner. The homestead
-# yashikirin (`_find_grove_arms`) and the water-mouth grove keep the `windbreak` mix; the knob is the village belt's.
+# yashikirin and the water-mouth grove keep the `windbreak` mix; the knob is the village belt's.
 WINDBREAK_BELT_FORMS = ("conifer_led", "mixed_broadleaf")
 """Research: belt planting forms - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: two forms, even odds"""
 register_knob(Knob("windbreak_belt", list(WINDBREAK_BELT_FORMS), default="conifer_led"))
@@ -275,11 +275,6 @@ def over_a_conifer(x: float, y: float, r: float, conifers: Sequence[tuple[float,
     Research: conifer reads on top - CONVENTION: a lesser crown painted over a conifer is not drawn
     """
     return any((x - cx) ** 2 + (y - cy) ** 2 < (CROWN_OVER_SHARE * (r + cr) + slack) ** 2 for cx, cy, cr in conifers)
-
-
-def _boxes_meet(a: Any, b: Any) -> bool:
-    """Whether two (cx, cy, w, h) boxes overlap."""
-    return bool(abs(a[0] - b[0]) < (a[2] + b[2]) / 2 and abs(a[1] - b[1]) < (a[3] + b[3]) / 2)
 
 
 #: A bamboo stand's culms and leaves (a map drawing convention): the cool jade green of living culms, which no grass, reed or
@@ -438,279 +433,6 @@ class GrovesMixin:
         if meta.get("grove_flank") is None:
             meta["grove_flank"] = GROVE_FLANKS[knob_rng(self.seed, "grove_flank").randrange(len(GROVE_FLANKS))]
         return int(meta["grove_flank"])
-
-    def _windward_x(self: Settlement) -> int:  # type: ignore[misc]
-        """The horizontal sign of the windward direction: -1 if the wind is from the W (NW/W/SW), +1 if from
-        the E (NE/E/SE), 0 for a due N/S wind. Used to keep the garden off the windward wall (the grove's side)."""
-        wk = self._windward()
-        return -1 if "W" in wk else (1 if "E" in wk else 0)
-
-    def _grove_candidate(self: Settlement, hx: float, hy: float) -> bool:  # type: ignore[misc]
-        """Whether this farmhouse is a grove candidate. UNIVERSAL by default (the yashikirin ringed every
-        dispersed farmstead, so a grove is drawn wherever there is windward room); meta(grove_prevalence=N<1)
-        dials it down for an atypical/sheltered microclimate. Deterministic in the house position (stable
-        across regenerations, RNG-independent).
-
-        Research:
-            every farm a grove - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: universal
-                unless the map dials it down
-        """
-        rate = float(self.M["meta"].get("grove_prevalence", 1.0))
-        return rate >= 1.0 or int(abs(hx) * 31 + abs(hy) * 17) % 100 < rate * 100
-
-    def _grove_arm_rect(self: Settlement, hx: float, hy: float, hw: float, hh: float, fdx: float, fdy: float, perp: float, d: float, gap: float, lf: float = 1.0) -> tuple[float, float, float, float]:  # type: ignore[misc]
-        """One belt ARM's footprint (cx, cy, w, h), depth `d`, just outside the house wall it shelters. An
-        N/S arm runs E-W as wide as the house plus `d` (extending `perp` toward the windward corner so the
-        two arms wrap it); an E/W arm runs N-S as tall as the house. The depth `d` is how many trees deep the
-        stand is - sized so the whole grove is the LARGEST homestead appurtenance (bigger than the house);
-        `lf` shortens the arm's run to slip a partial belt past a close neighbor. See research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html ('How deep is
-        the stand?').
-
-        Research:
-            arm wraps the windward corner - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:
-                an N or S arm the house's width plus its depth
-            arm off the wall - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the gap
-                the caller gives
-        """
-        if fdy:  # N or S arm (runs E-W); wraps `perp` toward the windward corner
-            return hx + perp * d / 2, hy + fdy * (hh / 2 + d / 2 + gap), (hw + d) * lf, d
-        return hx + fdx * (hw / 2 + d / 2 + gap), hy, d, hh * lf  # E or W arm (runs N-S)
-
-    def _grove_fits(self: Settlement, x: float, y: float, w: float, h: float, own: Any) -> bool:  # type: ignore[misc]
-        """A grove fits where it is in-bounds, on DRY ground (trees do not grow IN a flooded paddy - but a real
-        homestead grove HUGS the paddy bund, so the footprint may abut a field, it just may not overlap it),
-        off any lane, and clear of every placed footprint EXCEPT its OWN house. Axis-aligned, so an exact AABB
-        test serves - not the conservative half-diagonal circle, which would over-reject the elongated bands.
-
-        Research:
-            grove off the crops - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: may abut a paddy or dry plot, never overlap it
-            grove off the lanes - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: off every lane corridor (the drawing names the main road)
-            grove off the town wall - UNRESEARCHED: every corner 12 px off the rampart
-            off a yard's south strip - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a 22 px strip
-                south of every threshing yard
-        """
-        if x < 55 or x > self.W - 55 or y < 88 or y > self.H - 26:
-            return False
-        if self.bound and not point_in_poly(x, y, self.bound):
-            return False
-        if self._near_corridor(x, y):  # NOT `_in_blocked`: a grove may sit right at the
-            return False  # paddy edge (the 14px field set-back is for buildings, not the windbreak)
-        if self._rect_hits((x, y, w, h), self.field_polys):  # the whole grove stays OUT of the flooded paddy
-            return False  # (same corner/vertex/edge test, with the bbox pre-filter)
-        if self._rect_hits((x, y, w, h), self.dry_polys):  # ...and out of the dry crop strips (hems / garden
-            return False  # tracts): trees do not grow in the barley either
-        for px, py, pw, ph, *_ in self.placed:  # clear of every footprint but its OWN homestead
-            if any(abs(px - ox) < 1.5 and abs(py - oy) < 1.5 for ox, oy in own):
-                continue
-            if abs(x - px) < (w + pw) / 2 + 2 and abs(y - py) < (h + ph) / 2 + 2:
-                return False
-        # the town RAMPART blocks a belt arm at the FOOTPRINT level: the corridor test above is
-        # center-only, so a wide arm centered clear of the wall could still lap the stroke
-        # (first hit: a Hirameki farm's west arm crossing the east face, 2026-07)
-        wallp = self.M.get("wall")
-        if wallp and any(
-            seg_dist(gx, gy, wallp[k], wallp[k + 1]) < 12 for gx, gy in ((x - w / 2, y - h / 2), (x + w / 2, y - h / 2), (x + w / 2, y + h / 2), (x - w / 2, y + h / 2)) for k in range(len(wallp) - 1)
-        ):
-            return False
-        # a threshing yard needs clear sky to its SOUTH (the drying sun); a grove squarely in that sun-corridor
-        # would shade it, so keep the grove out of the narrow strip directly south of any yard. (Its OWN grove
-        # is N/W, far from its own yard's southern corridor, so this only steers it off a NEIGHBOR's yard.)
-        for yd in self.M.get("threshing_yards", []):
-            cyx, cyy = yd["x"], yd["y"] + yd["h"] / 2 + 11  # corridor center: a ~22px-deep strip south of the yard
-            if abs(x - cyx) < (w + yd["w"]) / 2 and abs(y - cyy) < (h + 22) / 2:
-                return False
-        return True
-
-    GROVE_RATIO = 6.0  # target grove footprint as a multiple of the house (~6:1 - see research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html)
-
-    def _find_grove_arms(self: Settlement, hx: float, hy: float, hw: float, hh: float, reserve: Any = None, avoid: Any = ()) -> list[Any]:  # type: ignore[misc]
-        """The windward grove's belt arms, AREA-TARGETED to ~GROVE_RATIO x the house footprint (the historical
-        ~6:1). Each windward face (N + W for an NW wind) is grown to the deepest belt that fits; if the total
-        still falls short of target - because a paddy or neighbor blocks one face - the OTHER, open arm is
-        deepened to compensate, so a typical farm's grove still reaches the full ~6:1 and reads as ~40 trees.
-        A farm boxed in on BOTH windward faces gets only what fits (a small grove - the genuinely cramped
-        minority). Arms are NOT in `placed`, so adjacent groves abut into one continuous windbreak. Returns a
-        list of (cx, cy, w, h, face, depth).
-
-        EVERY FACE THE SETTLEMENT ROLLED IS PLANTED (feature 291, FR-010): the windward pair as the deep stand, the others
-        as a thin band one tree deep (`_grove_arm_specs`), clear of `avoid` (the farm's own yard and garden). Each face's
-        ladder ends on `reserve` - the least grove `_grove_reserve` held for this farm when it was seated, in the same
-        face order - so a farm seated with room plants every face; a face with neither (a farm no seat search reserved
-        for) is counted in `meta.grove_faces_unplanted`, never dropped unseen.
-
-        Research:
-            grove area - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: about 6 times
-                the house, held within 6,000-28,000 sq ft
-            windward depth - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: 1.4 house
-                depths, deepened to 3.6 to cover a blocked face
-            narrow run - UNRESEARCHED: an arm shortened to 0.55 or 0.5 of its run where a neighbor is close
-            every rolled face planted - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:
-                the windward pair deep, the rest one tree
-            windward ladder floor - UNRESEARCHED: no shallower than 12 bscale units
-            windward stand off the wall - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: seated 1.5 px off the house wall, against a ~24 ft service strip
-        """
-        # ...HELD INSIDE THE REGISTER'S RANGE (269 B26; research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html): a homestead's own wood is ~6,000-28,000 sq
-        # ft, and a lone yashikirin is all the wood its homestead has, so the ~6:1 target never asks for less or more
-        _lo, _hi = (self.px(1.0) ** 2 * v for v in HOMESTEAD_WOOD_FT2)
-        target = min(_hi, max(_lo, self.GROVE_RATIO * hw * hh))
-        own = [(hx, hy)]
-        d0 = 1.4 * hh  # base belt depth; the loop deepens to hit the area target
-        dcap = 3.6 * hh  # an open arm may deepen this far to cover a blocked one
-        dmin = 12 * self.bscale
-        step = max(2.0, 0.16 * hh)
-        depths: list[Any] = []  # the windward stand: [[(fdx,fdy), perp, depth, run, "deep"], ...]
-        thin_arms: list[Any] = []  # the thin bands, seated once: (cx, cy, w, h, face, "thin")
-        for i, ((fdx, fdy), perp, kind) in enumerate(self._grove_arm_specs()):
-            held = reserve[i] if reserve else None
-            if kind == "thin":
-                seat = self._thin_arm_seat(hx, hy, hw, hh, fdx, fdy, own, avoid)
-                if seat is not None:
-                    thin_arms.append((*self._grove_arm_rect(hx, hy, hw, hh, fdx, fdy, 0, self._grove_room_depth("thin"), seat[0], seat[1]), (fdx, fdy), "thin"))
-                elif held is not None:
-                    thin_arms.append((*held, (fdx, fdy), "thin"))
-                else:
-                    self.M["meta"]["grove_faces_unplanted"] = int(self.M["meta"].get("grove_faces_unplanted", 0)) + 1
-                continue
-            last = self._grove_room_depth(kind)
-            ladder = [(d0 - k * step, 1.0) for k in range(int((d0 - dmin) // step) + 1)]
-            ladder += [(d, 0.55) for d, _ in ladder]  # tight face: a NARROW clump still reads as a windbreak
-            ladder.append((last, 0.5))  # ...and last, the footprint `_grove_reserve` held the seat for
-            for d, run in ladder:
-                cx, cy, w, h = self._grove_arm_rect(hx, hy, hw, hh, fdx, fdy, perp, d, 1.5, run)
-                if self._grove_fits(cx, cy, w, h, own) and not any(_boxes_meet((cx, cy, w, h), a) for a in avoid):
-                    depths.append([(fdx, fdy), perp, d, run, kind])
-                    break
-            else:
-                if held is not None:  # the held ground IS the last rung; nothing seated after this farm could take it
-                    depths.append([(fdx, fdy), perp, last, 0.5, kind])
-                else:
-                    self.M["meta"]["grove_faces_unplanted"] = int(self.M["meta"].get("grove_faces_unplanted", 0)) + 1
-
-        def total_area() -> float:
-            rects = [self._grove_arm_rect(hx, hy, hw, hh, fdx, fdy, perp, d, 1.5, lf) for (fdx, fdy), perp, d, lf, _k in depths]
-            return _union_area([(cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2) for cx, cy, w, h in rects])
-
-        guard = 0
-        while depths and total_area() < target and guard < 300:  # compensate: deepen the open arm(s)
-            grew = False
-            for arm in depths:
-                if arm[4] != "deep" or arm[2] >= dcap:  # only the windward stand deepens; a thin band stays one tree
-                    continue
-                nd = min(dcap, arm[2] + step)
-                cx, cy, w, h = self._grove_arm_rect(hx, hy, hw, hh, arm[0][0], arm[0][1], arm[1], nd, 1.5, arm[3])
-                if self._grove_fits(cx, cy, w, h, own):
-                    arm[2] = nd
-                    grew = True
-                    if total_area() >= target:
-                        break
-            if not grew:
-                break
-            guard += 1
-        return [(*self._grove_arm_rect(hx, hy, hw, hh, fdx, fdy, perp, d, 1.5, lf), (fdx, fdy), kind) for (fdx, fdy), perp, d, lf, kind in depths] + thin_arms
-
-    def _thin_arm_seat(self: Settlement, hx: float, hy: float, hw: float, hh: float, fdx: int, fdy: int, own: Any, avoid: Any = ()) -> tuple[float, float] | None:  # type: ignore[misc]
-        """Where a THIN band stands off its house on the house-first path, as (gap, run), or None. The windward stand hugs
-        the wall; a thin band stands on the lee, where the yard and the garden are, so it steps outward from the wall
-        until it clears them - `avoid`, the farm's own yard and garden before they are drawn - and until no garden loses
-        its morning sun to it (the reach `_east_trees` reads), its run shortened as the deep ladder's is where a neighbor
-        is close. Out to two house spans: past that the band is no longer this farm's.
-
-        Research:
-            thin band off the plots - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:
-                stepped out past the yard and garden
-            band leaves the morning sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html
-            band within two house spans - UNRESEARCHED
-            thin band halved - UNRESEARCHED: a thin band's run is halved where the full run does not fit
-        """
-        t = self._grove_room_depth("thin")
-        step = max(2.0, 0.16 * hh)
-        gap = 1.5
-        while gap <= 2 * max(hw, hh):
-            for run in (1.0, 0.5):
-                r = self._grove_arm_rect(hx, hy, hw, hh, fdx, fdy, 0, t, gap, run)
-                if self._grove_fits(*r, own) and not any(_boxes_meet(r, a) for a in avoid) and not self._shades_a_garden(r, avoid):
-                    return gap, run
-            gap += step
-        return None
-
-    def _shades_a_garden(self: Settlement, rect: tuple[float, float, float, float], extra: Any = ()) -> bool:  # type: ignore[misc]
-        """Whether a grove band at `rect` stands hard against a garden's EAST across its height - within the reach
-        `_east_trees` reads - and so takes its morning sun: every drawn garden, and `extra` (x, y, w, h) boxes.
-
-        Research:
-            garden's morning sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a band within 22
-                bscale units east of a garden
-        """
-        cx, cy, w, h = rect
-        west, reach = cx - w / 2, 22 * self.bscale
-        for gx, gy, gw, gh in [(g["x"], g["y"], g["w"], g["h"]) for g in self.M.get("gardens") or ()] + list(extra):
-            gx1 = gx + gw / 2
-            if gx1 - 2 <= west < gx1 + reach and cy - h / 2 < gy + gh / 2 and gy - gh / 2 < cy + h / 2:
-                return True
-        return False
-
-    def _grove_reserve(self: Settlement, hx: float, hy: float, hw: float, hh: float, avoid: Any = ()) -> list[tuple[float, float, float, float]] | None:  # type: ignore[misc]
-        """The LEAST grove on every face the settlement rolled, as the rects to hold for it while its neighbors are seated
-        (feature 291, plan D8), or None where a face has no room. The house-first path plants its groves in a second pass,
-        after every farm is seated, so a grove never takes a neighbor's mandatory yard - and so, unreserved, the room a
-        farm was seated for could be taken by a neighbor seated after it (measured: the legacy fixture left 1 to 6 faces
-        unplanted). Held in `placed` until the farm's own grove is planted; the second pass's ladders end on these rects."""
-        out = []
-        for (fdx, fdy), perp, kind in self._grove_arm_specs():
-            if kind == "thin":
-                seat = self._thin_arm_seat(hx, hy, hw, hh, fdx, fdy, [(hx, hy)], avoid)
-                if seat is None:
-                    return None
-                out.append(self._grove_arm_rect(hx, hy, hw, hh, fdx, fdy, 0, self._grove_room_depth("thin"), seat[0], seat[1]))
-                continue
-            r = self._grove_arm_rect(hx, hy, hw, hh, fdx, fdy, perp, self._grove_room_depth(kind), 1.5, 0.5)
-            if not self._grove_fits(*r, [(hx, hy)]) or any(_boxes_meet(r, a) for a in avoid):
-                return None
-            out.append(r)
-        return out
-
-    def _grove_arm_specs(self: Settlement) -> list[tuple[tuple[int, int], int, str]]:  # type: ignore[misc]
-        """The arms of this map's farmstead grove on the house-first path, as ((fdx, fdy), perp, "deep" | "thin"): the faces
-        `grove_faces` names for the map's wind and rolled side count (feature 291). A deep north or south arm wraps the
-        corner toward the other deep face (`perp`, as `_GROVE_ARMS` always did); a thin band runs the wall alone.
-
-        Research: deep pair and thin bands - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html
-        """
-        deep, thin, _front = grove_faces(self._windward(), self._grove_sides(), self._grove_flank())
-        out: list[tuple[tuple[int, int], int, str]] = []
-        for face in deep:
-            other = deep[1] if face == deep[0] else deep[0]
-            out.append((face, other[0] if face[1] else 0, "deep"))
-        return out + [(face, 0, "thin") for face in thin]
-
-    def _grove_room_depth(self: Settlement, kind: str) -> float:  # type: ignore[misc]
-        """The depth of the least arm a face may take - what `_grove_room` reserves a seat for, and the last rung of
-        `_find_grove_arms`' ladder: 13 ft for the windward stand (one to two crowns), one tree for a thin band.
-
-        Research:
-            least windward arm - UNRESEARCHED: 13 bscale units
-            least thin band - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: one tree, 17 ft
-        """
-        return 13 * self.bscale if kind == "deep" else self.px(THIN_BAND_FT)
-
-    def _grove_room(self: Settlement, hx: float, hy: float, hw: float, hh: float, avoid: Any = ()) -> bool:  # type: ignore[misc]
-        """Whether the LEAST grove fits on EVERY face the settlement rolled (feature 291), clear of `avoid` (the farm's
-        own yard and garden) - the homestead solver seats a grove farm only where it does and holds that ground
-        (`_grove_reserve`); the actual, possibly larger, grove is placed in the second pass."""
-        return self._grove_reserve(hx, hy, hw, hh, avoid) is not None
-
-    def _wants_grove(self: Settlement, x: float, y: float) -> bool:  # type: ignore[misc]
-        """Whether a house-first farm at (x, y) has a grove at all: none inside a CITY wall (an intramural plot is
-        sheltered by the urban fabric and too precious for a tree belt; `meta.inwall_groves` overrides), else
-        `_grove_candidate`. How many sides it takes is the settlement's roll, never the farm's.
-
-        Research: no grove inside a city wall - UNRESEARCHED: unless the map overrides
-        """
-        meta = self.M["meta"]
-        wall: Any = self.M.get("wall")
-        if wall and meta.get("scale") in CITY_TIER_SCALES and not meta.get("inwall_groves", False) and point_in_poly(x, y, wall):
-            return False
-        return self._grove_candidate(x, y)
 
     def _draw_grove(  # type: ignore[misc]
         self: Settlement,

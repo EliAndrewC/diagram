@@ -21,7 +21,7 @@ from .._geom.indexes import indexed_grid
 # of the candidate, so a grid of each record's EXTENT - its house's circumscribed box and every part's box - asked for
 # that reach box returns every record the rule could flag; the rule's own comparison then decides, unchanged. An
 # `Indexed` house list carries its own version, so the grid is rebuilt on any change but an append, which extends it.
-# THE ONE IN-PLACE MOVE of a record (`_solve_homestead`) bumps that version itself; a record's `geom` is complete when it
+# AN IN-PLACE MOVE of a record bumps that version itself (`Indexed.touch()`); a record's `geom` is complete when it
 # is appended and never edited after.
 
 

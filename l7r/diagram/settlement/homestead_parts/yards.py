@@ -520,52 +520,6 @@ class ThreshingYardsMixin:
         self.add(''.join(g), cls="threshing yard")
         return out
 
-    def _yard_fits(self: Settlement, x: float, y: float, w: float, h: float, hx: float, hy: float) -> bool:  # type: ignore[misc]
-        """A threshing yard fits where it is in-bounds, on DRY ground (clear of paddies / blocks),
-        off any lane, and clear of every placed footprint EXCEPT its own farmhouse (it abuts that).
-
-        Research:
-            yard on dry ground - UNRESEARCHED: off every paddy and dry plot, corner and vertex tested
-            yard abuts its own house - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:
-                clear of every other footprint
-            yard off every lane - GUESS: refused
-                near any lane corridor (`_near_corridor`); no page says whether a lane ever crossed a yard
-        """
-        if x < 55 or x > self.W - 55 or y < 88 or y > self.H - 26:
-            return False
-        if self.bound and not point_in_poly(x, y, self.bound):
-            return False
-        if self._in_blocked(x, y) or self._near_corridor(x, y):
-            return False
-        if self._rect_hits((x, y, w, h), self.dry_polys):  # hem strips / garden tracts are cropland too -
-            return False  # the yard footprint stays off them, same as the house test in _fits (GM, Tango hems)
-        r = math.hypot(w, h) / 2
-        for poly in self.field_polys:  # keep the whole DRY footprint out of every paddy
-            if point_in_poly(x, y, poly) or edge_dist(x, y, poly) < r + 4:
-                return False
-        # ...AND ASK THE QUESTION THE CHECK ASKS, OF THE SOURCE THE CHECK READS (cohort seed 31,
-        # 2026-08-18). The loop above is a CENTRE-and-circle test against `field_polys`, which holds
-        # the smoothed ENVELOPE; `harvest_yards_clear_of_paddies` is a CORNER test against each
-        # paddy's own recorded `outline`. Two sources and two geometries, so they can disagree - and
-        # on seed 31 they did: a yard cleared the envelope by its circle and still put a corner at
-        # (2024, 1908) inside a drawn basin. This is the same defect shape as the woodland scan
-        # mirroring its check's formula but not its window, fixed earlier the same day; the standing
-        # rule is that placement and its check read ONE source.
-        _fo = [f["outline"] for f in self.M.get("fields", []) if f.get("kind") == "paddy" and f.get("outline")]
-        if _fo:
-            _cn = [(x + sx * w / 2, y + sy * h / 2) for sx in (-1.0, 1.0) for sy in (-1.0, 1.0)]
-            for _ol in _fo:
-                if any(point_in_poly(_px, _py, _ol) for _px, _py in _cn):
-                    return False
-                if any(-w / 2 <= _vx - x <= w / 2 and -h / 2 <= _vy - y <= h / 2 for _vx, _vy in _ol):
-                    return False  # ...and the other direction: a basin vertex inside the yard, which the check also tests
-        for px, py, pw, ph, *_ in self.placed:
-            if px == hx and py == hy:  # the yard abuts its OWN farmhouse - allowed
-                continue
-            if math.hypot(x - px, y - py) < r + math.hypot(pw, ph) / 2 + 2:
-                return False
-        return True
-
     # THE WORK YARD IS ROLLED FROM A LOGNORMAL, CORRELATED WITH THE HOUSEHOLD (GM 2026-08-28, feature
     # 134 T49; research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.html).
     #
@@ -654,25 +608,6 @@ class ThreshingYardsMixin:
         area_px = self._yard_area_ft2(hx, hy, hw, hh) / (self.ftpx * self.ftpx)  # sq ft -> sq px
         depth = _m.sqrt(area_px / self.YARD_ASPECT)
         return depth * self.YARD_ASPECT, depth
-
-    def _find_yard_spot(self: Settlement, hx: float, hy: float, hw: float, hh: float) -> tuple[float, float, float, float] | None:  # type: ignore[misc]
-        """The first fitting threshing-yard position for a farmhouse: the sunny SOUTH/front side (+y) is
-        the maeniwa; fall back to the E/W sides if the paddy blocks due-south, but NEVER the shady north
-        back. Returns (ox, oy, yw, yh) or None if the farmstead is boxed in on all three sides.
-
-        Research:
-            yard before the house - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.html, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: south front
-                first, then east or west, never the north back
-            yard tucked under its house's wall - CONVENTION: the yard
-                set 2 px into its house's wall (`hw / 2 + yw / 2 - 2`), the house drawn over the seam
-        """
-        yw, yh = self._yard_dims(hw, hh, hx, hy)
-        for dx, dy in ((0, 1), (1, 0), (-1, 0)):
-            ox = hx + dx * (hw / 2 + yw / 2 - 2)
-            oy = hy + dy * (hh / 2 + yh / 2 - 2)
-            if self._yard_fits(ox, oy, yw, yh, hx, hy):
-                return ox, oy, yw, yh
-        return None
 
     def _attach_yard(self: Settlement, hx: float, hy: float, spot: Any, rot: float = 0.0) -> None:  # type: ignore[misc]
         """Draw a farmstead's threshing/drying yard (it is drawn BEFORE its house, so the house renders on

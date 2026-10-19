@@ -44,15 +44,6 @@ PLANK_VILLAGE_REACH = 55.0  # a bank within this of a dwelling reaches the VILLA
 """Research: footplank reaches the village - UNRESEARCHED: a bank within 55 px of a dwelling counts as worth crossing to"""
 
 
-# ---- the traveled ways, and the gate that bars one ------------------------------------------
-# A kido is a gate ACROSS A WAY, so what it squares to is the way, not the fence it hangs in (GM
-# 2026-07-26). These helpers are the single definition of "a road runs through here", shared by
-# s.ward/s.kido (which place the gate) and check_village (which grades it), so placer and checker
-# cannot drift - the same discipline as torii_wall_conflicts in walls.py.
-LANE_THROUGH_TOL = 12.0  # a lane whose centerline passes within this of a gate seat runs THROUGH the gate (the kido's roofed bar is ~16px long, so a lane this near is one the bar spans)
-LANE_CROSSES_MIN_DEG = (
-    25.0  # ...and it must actually CROSS the fence rather than run ALONGSIDE it: a street laid parallel to the ward fence never passes through the gate, so it must not be what the gate squares to
-)
 """Research: lane alongside the fence not barred - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: within 25 degrees of the fence"""
 
 
@@ -146,37 +137,6 @@ def nearest_way_bearing(M: Manifest, x: float, y: float) -> float | None:
             if best is None or d < best[0]:  # STRICT: a tie keeps the earlier segment (see above)
                 best = (d, math.degrees(math.atan2(b[1] - a[1], b[0] - a[0])))
     return None if best is None else best[1]
-
-
-def lane_through_gate(M: Manifest, x: float, y: float, fence_deg: float) -> tuple[float, float] | None:
-    """The traveled way a ward gate seated at (x, y) BARS, as (tangent degrees, bed half-width), or
-    None if the gate stands in open fence with no lane through it. `fence_deg` is the local fence
-    tangent, used only to reject a lane running ALONGSIDE the fence (which the gate does not bar).
-    The nearest true crossing wins where several lanes are close.
-
-    Research: which way a ward gate bars - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: a lane within 25 degrees of the fence rejected, the nearest crossing wins
-    """
-    best: tuple[float, float, float] | None = None
-    for pts, half in lane_runs(M):
-        for i in range(len(pts) - 1):
-            d = seg_dist(x, y, pts[i], pts[i + 1])
-            if d > LANE_THROUGH_TOL:
-                continue
-            a = math.degrees(math.atan2(pts[i + 1][1] - pts[i][1], pts[i + 1][0] - pts[i][0]))
-            if abs(((a - fence_deg + 90.0) % 180.0) - 90.0) < LANE_CROSSES_MIN_DEG:
-                continue  # runs alongside the fence, not through the gate
-            if best is None or d < best[0]:
-                best = (d, a, half)
-    return None if best is None else (best[1], best[2])
-
-
-def kido_bar_deg(lane_deg: float, fence_deg: float) -> float:
-    """The angle a ward gate's roofed bar takes: SQUARE TO THE LANE it bars. Returned as the
-    representative nearest the fence direction, so the guard box's ward-interior flank (which s.ward
-    resolves against the bar's local +y) keeps the same sense whichever way the fence was drawn.
-
-    Research: ward gate across its way - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: the bar squared to the lane it bars"""
-    return fence_deg + (((lane_deg + 90.0) - fence_deg + 90.0) % 180.0 - 90.0)
 
 
 # How far a CARRIED-WAY deck's corner must stand back from the water it spans, in real feet - the

@@ -26,7 +26,6 @@ Research: package composition - NONE: the land mixins composed
 
 from .cover import GroundCoverMixin
 from .dikes import DikeMixin
-from .nearring import NearRingMixin
 from .wet import WetGroundMixin
 from .wet import surface_water_dist as surface_water_dist
 
@@ -35,6 +34,5 @@ class LandMixin(
     DikeMixin,
     WetGroundMixin,
     GroundCoverMixin,
-    NearRingMixin,
 ):
     """The composed land surface. No members of its own by design - see the module docstring."""

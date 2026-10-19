@@ -29,8 +29,8 @@ def caption_record_box(text: str, lines: Sequence[str], x: float, y: float, size
     that arithmetic (feature 157).
 
     LIFTED OUT because a caller can now need the box before the caption exists. Captions are drawn in
-    the LABEL PHASE, so `shrine_hall` - which reserves the ground under its own caption, and must do
-    so while features are still being placed - can no longer read the record back out of
+    the LABEL PHASE, so a feature that reserves the ground under its own caption (the shrine hall did, until feature 392
+    retired it) while features are still being placed can no longer read the record back out of
     `M["labels"][-1]`. It computes the box here instead, from the same expression `label()` uses, so
     the reservation and the record cannot drift (this engine's oldest rule).
 
@@ -305,7 +305,7 @@ class FinishMixin:
         letters otherwise"*). Three lines are tried only after two, and only for three words or more.
 
         WHAT COUNTS AS OVERLAP: the caption's block, rotated about its center by `tilt` exactly as
-        the SVG is, against `label_blockers()` - every recorded footprint (rotation-aware AABBs) and
+        the SVG is, against `label_blocker_quads()` - every recorded footprint (rotation-aware AABBs) and
         every caption already on the sheet - with the separating-axis test, so a tilted block is
         judged by its true quad rather than by a bounding box that would wrap for nothing."""
         words = text.split()

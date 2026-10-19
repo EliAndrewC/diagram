@@ -72,8 +72,6 @@ CONSUMED_PUBLIC = [
     "aze_w",
     "bead_runs",
     "build_polder",
-    "build_ribbon",
-    "build_terraces",
     "carve_comb",
     "chan_px",
     "clean_polder_parcels",  # feature 150 T55: hamletgen.fit_polder cleans the WINNING block, not the 45 candidates its bisection tries",

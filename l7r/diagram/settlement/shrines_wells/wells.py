@@ -5,14 +5,11 @@ Split from settlement/shrines_wells.py by feature 116 - see settlement/shrines_w
 Research: plumbing - NONE
 """
 
-import math
 from collections.abc import Mapping, Sequence
 from typing import TYPE_CHECKING, Any
 
 from .._geom import (
-    Indexed,
     Pt,
-    point_in_poly,
     point_quad_dist,
     rot_rect,
 )
@@ -105,122 +102,6 @@ class WellsMixin:
         self.placed.append((x, y, 2 * vroof, 2 * vroof))
         bm = 8
         self.block_polys.append([(x - vroof - bm, y - vroof - bm), (x + vroof + bm, y - vroof - bm), (x + vroof + bm, y + vroof + bm), (x - vroof - bm, y + vroof + bm)])
-
-    def farm_wells(self: Settlement, reach_ft: float = 500.0, edge_ft: float = 150.0) -> int:  # type: ignore[misc]
-        """Shared wells for the FARM BELT (town/city scale): the farmsteads outside the urban
-        core drink daily too, and Rokugan's unusually well-run domains sink wells liberally
-        (the same liberty behind the literal urban idobata count) - so no farmhouse stands
-        more than ~500 real ft from a well. Call AFTER farmsteads(). Farmhouses within
-        ~150 real ft of the view edge are exempt (their well is presumed just off the map,
-        like the fields that run off-edge). Deterministic - no RNG draws, so a map whose
-        farm belt is already covered (Hoshizora) is byte-identical with or without the call.
-        Greedy cluster cover: seat a well near the densest uncovered cluster's centroid via
-        well_at's clear-spot test, repeat. Gated by farm_wells_within_reach.
-
-        Research: scoped farm-well pass - NONE: delegates to _farm_wells
-        """
-        # SCOPED (2026-08-08): the rural well pass, keyed as one phase like farmsteads().
-        with self.rng_scope("farm_wells", "belt"), self.frozen_terrain():  # as place_wells: the farm belt does not move rivers while it sinks wells
-            return self._farm_wells(reach_ft, edge_ft)
-
-    def _farm_wells(self: Settlement, reach_ft: float, edge_ft: float) -> int:  # type: ignore[misc]
-        """The farm-belt well pass itself.
-
-        Research:
-            every farmhouse within reach of a well - research/questions/0196-communal-wells-ido.drawing.html: 500 ft
-            edge farmhouses exempt - UNRESEARCHED: within 150 ft of the view edge
-            seated in a steading's dooryard - research/questions/0196-communal-wells-ido.drawing.html: rings of 20 to 150 px round the densest cluster's houses
-            fallback on field-rim ground off the crop - research/questions/0196-communal-wells-ido.drawing.html: a dwelling within about 95 ft on hamlet and town maps; a 6 px grid out to 156 px
-            cluster radius - NONE: 0.9 of the reach
-            fallback seat off the house - GUESS: no fallback seat nearer than 18 px to the house center; no page gives it
-        """
-        reach = self.px(reach_ft)
-        edge = self.px(edge_ft)
-        vx, vy, vw, vh = self.view if self.view else (0, 0, self.W, self.H)
-        houses = [h for h in self.M["houses"] if min(h["x"] - vx, h["y"] - vy, vx + vw - h["x"], vy + vh - h["y"]) >= edge]
-
-        def covered(h: Mapping[str, Any]) -> bool:
-            return any((h["x"] - w["x"]) ** 2 + (h["y"] - w["y"]) ** 2 <= reach * reach for w in self.M["wells"])
-
-        placed = 0
-        for _ in range(60):
-            todo = [h for h in houses if not covered(h)]
-            if not todo:
-                break
-            best = max(todo, key=lambda h: sum(1 for o in todo if (h["x"] - o["x"]) ** 2 + (h["y"] - o["y"]) ** 2 <= (0.9 * reach) ** 2))
-            cl = [o for o in todo if (best["x"] - o["x"]) ** 2 + (best["y"] - o["y"]) ** 2 <= (0.9 * reach) ** 2]
-            # seat the well in a STEADING'S DOORYARD, not at the cluster centroid: a farm belt's
-            # open ground is mostly CROP (where well_at rightly refuses to stand a wellhead), and
-            # historically the rural well sat in a farmstead's own yard anyway - so walk the
-            # cluster's members densest-first and ring each until a clear dooryard spot takes
-            cl.sort(key=lambda h: -sum(1 for o in todo if (h["x"] - o["x"]) ** 2 + (h["y"] - o["y"]) ** 2 <= (0.9 * reach) ** 2))
-            seated = False
-            for h in cl:
-                for r_, n_ in (
-                    (20.0, 8),
-                    (30.0, 12),
-                    (42.0, 12),
-                    (60.0, 16),
-                    (80.0, 16),
-                    (100.0, 20),
-                    (125.0, 24),
-                    (150.0, 24),
-                ):  # rings widen to ~240 ft at city grain: a steading's inner yard is dense with its own appurtenances and the crop starts right past them, so the clear spot is often the open margin ground BETWEEN steadings
-                    for k in range(n_):
-                        a = 2 * math.pi * k / n_
-                        if self.well_at(h["x"] + r_ * math.cos(a), h["y"] + r_ * math.sin(a)):
-                            seated = True
-                            placed += 1
-                            break
-                    if seated:
-                        break
-                if seated:
-                    break
-            if not seated:
-                # FALLBACK: the cluster's open ground may all be field-ENVELOPE rim slack - the
-                # smoothed outline claims more than the crop fills, and _fits rightly refuses the
-                # envelope. A farm well standing on unplanted rim ground is fine (that IS the
-                # steading's margin); standing on CROP is not. So retry with the envelope blocks
-                # suspended and an explicit test against the DRAWN plots instead.
-                crop: list[list[tuple[float, float]]] = [list(dp2) for dp2 in self.dry_polys]
-                for frec in self.M.get("fields", []):
-                    crop += [[(q[0], q[1]) for q in p2] for p2 in frec.get("plot_polys", [])]
-
-                # Each plot's bbox (14 ft margin baked in) computed ONCE. PREFILTER family: the box
-                # prunes, point_in_poly still decides, so verdicts are unchanged - proven by the
-                # pool regenerating byte-identical. It used to be inline in the loop below, so every
-                # candidate seat re-derived all ~1,000 plots' boxes from their vertices: 22.5M min()
-                # + 17.2M max() calls, ~40% of Tango's gen (profiled 2026-08-03). Same disease as
-                # the 45-minute well bug - static geometry re-scanned per candidate.
-                crop_boxed: list[tuple[list[tuple[float, float]], float, float, float, float]] = [
-                    (cp2, min(q[0] for q in cp2) - 14.0, min(q[1] for q in cp2) - 14.0, max(q[0] for q in cp2) + 14.0, max(q[1] for q in cp2) + 14.0) for cp2 in crop
-                ]
-
-                def on_crop(
-                    x2: float, y2: float, boxed: list[tuple[list[tuple[float, float]], float, float, float, float]] = crop_boxed
-                ) -> bool:  # bound as a default: the closure lives one loop iteration (B023)
-                    return any(bx0 <= x2 <= bx1 and by0 <= y2 <= by1 and point_in_poly(x2, y2, cp2) for cp2, bx0, by0, bx1, by1 in boxed)
-
-                save = self.field_polys
-                self.field_polys = Indexed()  # Indexed, not [] - so the suspended pass keeps its own index (and the ORIGINAL object, restored below, keeps the one it already built)
-                try:
-                    for h in cl:
-                        # a nearest-first GRID scan, not rings: the clear ground here is pinholes
-                        # between steading footprints, and sparse ring angles walk right past them
-                        cands = [(h["x"] + dx, h["y"] + dy) for dx in range(-156, 157, 6) for dy in range(-156, 157, 6) if 18 * 18 <= dx * dx + dy * dy <= 156 * 156]
-                        cands.sort(key=lambda c: (c[0] - h["x"]) ** 2 + (c[1] - h["y"]) ** 2)
-                        for wx2, wy2 in cands:
-                            if not on_crop(wx2, wy2) and self.well_at(wx2, wy2):
-                                seated = True
-                                placed += 1
-                                break
-                        if seated:
-                            break
-                finally:
-                    self.field_polys = save
-            if not seated:
-                houses = [h2 for h2 in houses if h2 is not best]  # nothing seats anywhere in this cluster - skip it rather than spin
-        return placed
 
     def well_at(self: Settlement, x: float, y: float, r: float = 8, shrine: bool = False) -> bool:  # type: ignore[misc]
         """Place ONE well at (x, y), but only if the spot is clear (a block interior off lanes,
@@ -356,21 +237,3 @@ class WellsMixin:
                             out.append((cx, cy))
                             break
         return out
-
-    def shrine_well(self: Settlement, cx: float, cy: float, r: float = 8) -> Pt | None:  # type: ignore[misc]
-        """Place a set-apart shrine's OWN ablution well (temizu) close beside the hall at (cx, cy): try
-        positions on widening rings until one fits clear of the hall, torii, graveyard, lanes, and any other
-        placed footprint (`well_at`'s test). A larger hall pushes its well onto an outer ring. Call AFTER the
-        hall, houses, and village wells are placed. Returns the placed (x, y), or None if it is walled in.
-        For a remote shrine that cannot use the village's shared wells (`remote_shrine_has_own_well`).
-
-        Research:
-            a set-apart shrine keeps its own well - research/questions/0196-communal-wells-ido.drawing.html
-            rings round the hall - UNRESEARCHED: 54 to 112 px, every 30 deg
-        """
-        for rr in (54, 66, 80, 96, 112):
-            for a in range(0, 360, 30):
-                x, y = cx + rr * math.cos(math.radians(a)), cy + rr * math.sin(math.radians(a))
-                if self.well_at(x, y, r, shrine=True):
-                    return (x, y)
-        return None

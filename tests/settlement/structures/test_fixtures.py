@@ -5,7 +5,7 @@ import pytest
 
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.structures.fixtures._helpers import kosatsuba_anchor
-from tests.settlement._builders import _crop_settlement, _town
+from tests.settlement._builders import _town
 
 
 def test_place_kosatsuba_reads_road_and_lane_routes_and_skips_degenerate_segments():
@@ -17,37 +17,6 @@ def test_place_kosatsuba_reads_road_and_lane_routes_and_skips_degenerate_segment
     s.M["lane"] = [[100, 700], [900, 700]]
     assert s.place_kosatsuba() is not None
     assert len(s.M["kosatsuba"]) == 1
-
-
-def test_place_punishment_spot_probes_for_a_clear_caption_seat():
-    """The display board's caption gets its own probe, because a verge-hugging feature's default
-    below-label lands on the frontage it hugs - which is what 'hugging the frontage' means."""
-    s = _crop_settlement()
-    s.street([(200, 300), (800, 300)], width=10)
-    # a shopfront row along the south verge, so the caption's DEFAULT seat below the board is taken
-    # and the probe has to walk outward to a clear one
-    for _bx in range(210, 800, 30):
-        s.building(_bx, 322, 26, 16, "shop")
-    # ...and existing CAPTIONS strung along the verge bands, so the probe also has to reject seats
-    # that are clear of every building but would bury another label
-    for _ly in range(240, 390, 9):
-        for _lx in range(210, 820, 55):
-            s.label(_lx, _ly, "riverside quarter", 9, ref=(_lx - 20, _ly - 4, _lx + 20, _ly + 4))
-    spot = s.place_punishment_spot()
-    assert spot is not None and s.M["punishment_spots"]
-    s.place_labels()  # feature 157: the LABEL PHASE draws the queued caption
-    cap = next(lb for lb in s.M["labels"] if len(lb) > 5 and lb[5] == "punishment ground")
-    # the real property: wherever the probe put it, the caption sits on NO shopfront
-    for b in s.M["buildings"]:
-        bx0, by0 = b["x"] - b["w"] / 2, b["y"] - b["h"] / 2
-        bx1, by1 = b["x"] + b["w"] / 2, b["y"] + b["h"] / 2
-        assert not (cap[0] < bx1 and bx0 < cap[2] and cap[1] < by1 and by0 < cap[3]), f"caption on {b['kind']} at ({b['x']}, {b['y']})"
-
-
-def test_place_punishment_spot_skips_a_degenerate_route_segment():
-    s = _town()
-    s.M["road"] = [[100, 500], [100, 500], [900, 500]]  # a repeated point: zero-length segment
-    assert s.place_punishment_spot() is not None
 
 
 def test_a_notice_board_with_no_caption_is_sitable_anywhere():
@@ -496,18 +465,6 @@ def test_a_notice_board_stands_on_a_fenced_footing_and_claims_only_that_ground()
     xs = [p[0] for p in s.block_polys[-1]]
     ys = [p[1] for p in s.block_polys[-1]]
     assert (min(xs), max(xs), min(ys), max(ys)) == (490.0, 510.0, 495.0, 505.0), "the no-build ground is the footing alone"
-
-
-def test_a_board_route_takes_each_roads_recorded_width() -> None:
-    """Feature 328 wave 64 (`_board_routes#nominal widths`): every road was taken at 18 px whatever it was drawn at, so a
-    board's 6 ft from the road's edge was measured from the wrong edge on any road not 18 px wide."""
-    from l7r.diagram.settlement import Settlement
-
-    s = Settlement(1000, 1000, seed=1)
-    s.road([(0, 500), (1000, 500)], width=30.0)
-    s.road([(500, 0), (500, 1000)], width=12.0)
-    widths = [rw for _pts, rw, _approach in s._board_routes(None, "center", False, 1.0)]
-    assert widths[:2] == [30.0, 12.0], widths
 
 
 def test_a_board_route_with_no_recorded_width_takes_the_ways_drawn_default() -> None:

@@ -16,7 +16,7 @@ import math
 from collections.abc import Sequence
 from typing import Any
 
-from .base import Poly, Pt
+from .base import Poly
 
 # ---- LABEL STANDOFF LADDER (GM 2026-07-26) ----------------------------------------------------
 # The label doctrine was "empty ground wins" (see research/contents.json#map-conventions), scored by
@@ -52,21 +52,6 @@ LABEL_AIR_CAP = 3.0  # x font size - how far a placed caption may END UP from it
 #                      north roadway is flanked by market stalls the whole length of the segment,
 #                      so 29px IS the nearest clear ground, and a cap that failed it would be
 #                      demanding a placement no map can make).
-
-# A CAPTION IS SIZED BY ITS GLYPH, NOT BY THE INSTITUTION'S IMPORTANCE (GM 2026-08-08). Both of
-# these used to be set by rank - a temple and a governor outrank a ministry office, so their
-# captions were bigger - and on the rendered maps that read as a mistake rather than a hierarchy:
-# a city temple hall is 96-140 real ft and a ministry office is 114-140, the same size class, yet
-# "Temple of Benten" at 13pt was set 44% larger per character than "Ministry of Rites" standing a
-# few hundred px away - so the temple neighborhood read as shouting rather than as ranked. The rank
-# still shows, in COLOR (temple red, ministry violet) and in weight, which is where it belongs.
-HALL_CAPTION_FS = 9.0  # every religious hall's caption - city temple, town monastery, village
-#                        shrine - at the ministry's size. The village case has the same defect and
-#                        the same cure: Kikuta's 88x60 ft "Shrine to Benten" was set at the same
-#                        13pt beside 9-11pt neighbors on a map whose other glyphs are half the
-#                        size. Read by `_hall_caption_y` too, which must measure the box
-#                        `shrine_hall` will actually draw.
-GOVERNOR_CAPTION_FS = 11.0  # the yamen's caption, ~20% down from the manor default of 14 so it
 
 
 def label_tilt(rot: float) -> float:
@@ -168,28 +153,3 @@ def label_aabb(L: Sequence[Any]) -> tuple[float, float, float, float]:
     q = label_quad(L)
     xs, ys = [p[0] for p in q], [p[1] for p in q]
     return (min(xs), min(ys), max(xs), max(ys))
-
-
-def tilt_caption_seat(x: float, y: float, rot: float, tilt: float, half_w: float, half_h: float, gap: float, above: bool = False, lateral: float = 0.0) -> Pt:
-    """Where a caption hangs off a TILTED footprint: the standard 'centered under the lower edge'
-    seat every glyph uses, computed in the footprint's own frame and rotated with it (`above`
-    flips to the upper edge). Which local half-extent lies perpendicular to the caption's
-    baseline depends on which edge family `label_tilt` folded onto - a rot=150 works reads along
-    its LONG side (half_h below the baseline) where a rot=102 yard reads along its SHORT one
-    (half_w) - so both halves are passed and the fold decides.
-
-    `lateral` SLIDES THE SEAT ALONG THE BASELINE, and it is only useful IN COMBINATION with `gap`
-    (2026-08-19, third time this axis was considered - the history matters). Alone at a fixed gap it
-    is a measured no-op for a kosatsuba: `kosatsuba_faces_the_road` makes the board's baseline
-    PARALLEL to its lane, so sliding along it holds the perpendicular distance exactly constant. What
-    the two axes give TOGETHER is a 2D search - at a large gap the caption is beside a different
-    stretch of frontage, so the slide is no longer along the same lane. A tilted caption searching
-    only `gap` searches one line, and a board whose perpendicular line runs between two lanes has no
-    seat on it; five cohort seeds are in exactly that position (gate 0617).
-
-    DEFAULTS TO 0.0, so every other caller is byte-identical - an opt-in axis, not a change to how
-    tilted captions are seated."""
-    perp = half_h if round((rot - tilt) / 90.0) % 2 == 0 else half_w
-    a = math.radians(tilt)
-    d = (perp + gap) * (-1.0 if above else 1.0)
-    return (x - math.sin(a) * d + math.cos(a) * lateral, y + math.cos(a) * d + math.sin(a) * lateral)

@@ -102,15 +102,6 @@ def test_a_copse_with_an_area_goal_stops_at_it_and_fills_toward_it():
     assert s_none.village_grove(poly, role="copse", dense=False, area=0.0) == 0
 
 
-def test_a_lone_yashikirin_is_held_inside_the_register_s_range():
-    """B26: the ~6:1 target is clamped to 6,000-28,000 sq ft. A 10 x 10 ft house asks 600 sq ft at 6:1, which its base
-    arms (14 ft deep) already cover; held to 6,000, the open arms deepen to their cap (36 ft) and still fall short."""
-    s = _hamlet()
-    arms = s._find_grove_arms(500.0, 500.0, 10.0, 10.0)
-    assert arms, "an open site grows its arms"
-    assert max(min(w, h) for _cx, _cy, w, h, _face, _depth in arms) >= 35.0
-
-
 def test_the_roll_is_taken_within_what_the_ground_can_hold() -> None:
     """Feature 294 B9: the attainable band - no less than the belt and the groves give, no more than the ground holds, inside
     the register's range; a ground giving more than the register's largest wood is one value."""

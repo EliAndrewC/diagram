@@ -78,9 +78,9 @@ class Indexed(list):  # type: ignore[type-arg]
     changes, and every mutator bumps.
 
     The cache lives on the list too (`cache`), keyed by consumer, so an index physically cannot be
-    read against a different list than it was built from. That covers the one non-append pattern in
-    the engine: `farm_wells` swaps `field_polys` for an empty list and swaps the ORIGINAL OBJECT
-    back, which an identity- or length-keyed cache gets wrong and this cannot.
+    read against a different list than it was built from. That covers the one non-append pattern the
+    engine had (the town tier's farm wells, retired by feature 392: `field_polys` swapped for an empty list and the ORIGINAL
+    OBJECT swapped back), which an identity- or length-keyed cache gets wrong and this cannot.
 
     `test_indexed_overrides_every_mutating_list_method` is the ratchet: it enumerates `list`'s
     mutators by introspection and fails if one is not overridden here, so a Python version adding a

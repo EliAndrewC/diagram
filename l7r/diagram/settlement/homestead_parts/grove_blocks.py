@@ -180,16 +180,16 @@ class GroveBlocks:
             return "local"
         return "lane" if self.lane(x, y) else None
 
-    def exact_clear(self, x: float, y: float) -> bool:
-        """Clear of every static family, asked exactly (`exact_taken_by`) - a reserved seat's test."""
-        return self.exact_taken_by(x, y) is None
-
     def static_clear(self, x: float, y: float) -> bool:
         """Clear of every static family, read off the fill's regions (feature 297, plan B3), remembered per point (feature 281)."""
         hit = self._clear.get((x, y))
         if hit is None:
             hit = self._clear[(x, y)] = self.taken_by(x, y) is None
         return hit
+
+    def exact_clear(self, x: float, y: float) -> bool:
+        """Clear of every static family, asked exactly (`exact_taken_by`) - a reserved seat's test."""
+        return self.exact_taken_by(x, y) is None
 
     def rim_within(self, x: float, y: float, limit: float) -> bool:
         """`edge_dist(x, y, outline) <= limit`, exactly: `edge_within` answers strictly-under, so the

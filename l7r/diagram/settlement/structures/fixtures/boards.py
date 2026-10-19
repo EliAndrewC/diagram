@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING, Any
 
 from ....labels import Placement, Subject
 from ....labels.geom import rect
-from ..._geom import label_tilt, tilt_caption_seat
 from ..._knobs import KOSATSUBA_MARKER_MIN_PX
 
 KOSATSUBA_FOOTING_FT = 2.0
@@ -18,43 +17,6 @@ if TYPE_CHECKING:
 
 
 class BoardsMixin:
-    def fire_tower(self: Settlement, x: float, y: float, tw: float | None = None, rot: float = 0.0, label: str = "fire tower") -> int:  # type: ignore[misc]
-        """A HINOMI-YAGURA (fire-watch tower): a tall, slender braced-timber tower with a lookout
-        platform and an alarm bell (hansho), standing in the dense COMMONER quarter of a walled
-        town or city where packed wooden rooftops make fire catastrophic. It is a CIVILIAN interior
-        structure - the magistrate's fire-watch - distinct from a wall guard tower (military, on the
-        rampart): drawn as an OPEN braced frame (not the guard tower's solid block) with a red bell.
-        The watchman strikes the bell in a cadence that tells the town how near the fire is. Records
-        M['fire_towers'] (an overlap-checked struct: it must stand clear of the wall, roads, and
-        buildings) and reserves a small no-build block (it needs clear sightlines). Place it among the
-        laborer/merchant blocks. The history is research/questions/0203-fire-watch-towers-and-firefighting-gear-hinomi-yagura.html; the rules are research/questions/0203-fire-watch-towers-and-firefighting-gear-hinomi-yagura.drawing.html.
-
-        Research:
-            tower footprint - research/questions/0203-fire-watch-towers-and-firefighting-gear-hinomi-yagura.drawing.html: ~26 ft square
-            open braced frame with a bell - research/questions/0203-fire-watch-towers-and-firefighting-gear-hinomi-yagura.drawing.html
-            open ground around the tower - research/questions/0203-fire-watch-towers-and-firefighting-gear-hinomi-yagura.drawing.html: a 16 px no-build margin
-            colors, cap and caption - CONVENTION"""
-        if tw is None:
-            tw = self.px(26)  # ~26 ft square, a town-calibrated glyph: no tower's footprint is on any page read (convention)
-        h = tw / 2
-        g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f})">']
-        g.append(f'<rect x="{-h - 2:.0f}" y="{-h - 5:.0f}" width="{tw + 4}" height="5" rx="1" fill="#7A5A30"/>')  # the little roof cap over the lookout platform
-        g.append(f'<rect x="{-h:.0f}" y="{-h:.0f}" width="{tw}" height="{tw}" fill="#EFE6CC" fill-opacity="0.45" stroke="#7A5A30" stroke-width="2"/>')  # the open braced-timber frame
-        g.append(f'<line x1="{-h:.0f}" y1="{-h:.0f}" x2="{h:.0f}" y2="{h:.0f}" stroke="#7A5A30" stroke-width="1.1"/>')  # cross-braces (an X)
-        g.append(f'<line x1="{h:.0f}" y1="{-h:.0f}" x2="{-h:.0f}" y2="{h:.0f}" stroke="#7A5A30" stroke-width="1.1"/>')
-        g.append(f'<circle cx="0" cy="0" r="{tw * 0.2:.1f}" fill="#B0462F" stroke="#5A3F1E" stroke-width="0.8"/>')  # the alarm bell (hansho)
-        g.append('</g>')
-        z = self.add_top(''.join(g))
-        self.M["fire_towers"].append({"x": round(x, 1), "y": round(y, 1), "w": tw, "h": tw, "rot": round(rot, 1), "z": z, "label": label})
-        self.placed.append((x, y, tw, tw))
-        bm = 16
-        self.block_polys.append([(x - h - bm, y - h - bm), (x + h + bm, y - h - bm), (x + h + bm, y + h + bm), (x - h - bm, y + h + bm)])
-        if label:
-            _t = label_tilt(rot)
-            _lx, _ly = tilt_caption_seat(x, y, rot, _t, h, h, 14) if _t else (x, y + h + 14)
-            self.label(_lx, _ly, label, 9, italic=True, color="#7A5A30", ref=(x - h, y - h, x + h, y + h), rot=_t)
-        return z
-
     def board_record(self: Settlement, x: float, y: float, rot: float) -> dict[str, Any]:  # type: ignore[misc]
         """The `kosatsuba` record a board at (x, y) turned `rot` is written as - its TRUE w/h and its drawn marker box vw/vh
         (see `kosatsuba`) - which the siter asks the registry of what stands about before it offers the seat (feature 287,

@@ -328,7 +328,7 @@ class DraftByresMixin:
         the first cut had to stand the byre off in the open.
 
         THE OWNER IS A BUNDLE, NOT A POINT, and getting that wrong is why the first version of this
-        method never returned a seat. `_garden_fits` exempts the owner by matching `px == hx and
+        method never returned a seat. The house-first garden test (retired by feature 392) exempted the owner by matching `px == hx and
         py == hy`, so I mirrored it - but the garden runs DURING `farmsteads()`, when the house is
         its own entry in `placed`, while byres run after, when `placed` holds one merged HOMESTEAD
         BUNDLE per farm (house + yard + garden, e.g. 100 x 52 px centered off the house). Measured:
@@ -339,7 +339,7 @@ class DraftByresMixin:
         Inside the bundle it must still keep off the things it shares the yard with, so the
         appurtenance records are tested individually: its own house is exempt (the arm joins that
         wall), everything else is not. Those tests are AABB rather than the center-distance circles
-        `_garden_fits` uses, because a circle round a 100 x 52 bundle reserves ground the bundle does
+        that test used, because a circle round a 100 x 52 bundle reserves ground the bundle does
         not occupy, and this engine's standing rule is that gap verdicts read footprints.
 
         Research:

@@ -73,7 +73,7 @@ SEEDED = {
     "duplicate-defs": ({"l7r/a.py": "def f():\n    return 1\n\n\ndef f():\n    return 2\n"}, "gates/check-duplicate-defs.py", ["."]),
     "conflict": ({"a.md": "<" * 7 + " ours\nx\n" + "=" * 7 + "\ny\n" + ">" * 7 + " theirs\n"}, "hooks/lib/hm_conflict.py", ["--tracked", "."]),
     "function-cap": ({"l7r/a.py": "def f():  # noqa: PLR0915\n    return 1\n"}, "gates/check-function-cap.py", ["."]),
-    "stale-dirs": ({"l7r/gone/__pycache__/x.pyc": ""}, "gates/check-stale-dirs.py", ["."]),
+    "stale-dirs": ({"l7r/gone/__pycache__/x.pyc": "", "l7r/gone/__pycache__/notes.txt": ""}, "gates/check-stale-dirs.py", ["."]),  # more than bytecode: refused, not removed
 }
 
 

@@ -7,7 +7,6 @@ from collections.abc import Iterator
 from typing import TYPE_CHECKING, Any, cast
 
 from ._geom import PointGrid, Pt, boxed_polys, drawn_extent, edge_dist, indexed_grid, point_in_poly, poly_seg_dist, rot_rect, seg_dist
-from ._knobs import skeleton_layout
 from .rolling.access import LANE_MIDDLE_CLEAR_FT, TREAD_WALL_FT
 from .rolling.bearing import house_rot
 from .rolling.lot import FARMHOUSE_MAX_ASPECT, KURA_SHARE, household_parts, kura_rect, record_parts, seat_parts_done
@@ -150,60 +149,10 @@ class HousesMixin:
         # which segments are worth testing, and each segment's box already carries its clearance,
         # so a zero-pad query is exact. `skip` still works: the index carries each segment's parent
         # polyline, so a frontage row can sit against the street it fronts.
-        # `skip` matches GEOMETRICALLY, not by identity (GM 2026-08-11). Identity worked only when
-        # a frontage was handed the very list object the corridor was registered with - and a
-        # frontage on a SUB-STRETCH of a road or street is written as a fresh two-point list, so
-        # the parent way's own cleared band then refused the shops meant to line it. That silently
-        # cost the pool two thirds of its commercial frontage (90 of 274 requested seats on the
-        # capital; 10 of 80 on Tango's main commercial street) with a green gate, because the
-        # docstring's "pass skip=<registered poly>" is a footgun nobody could see they had trodden
-        # on. A corridor segment is skipped when it lies ALONG the stretch being fronted: both of
-        # its ends sit within a hair of the skip polyline, so the two describe the same ground.
-        # `skip` is one polyline OR several (2026-08-11): a shop row lines a street AND may cross
-        # a road, and it must be excused from both cleared bands or the crossing way refuses the
-        # seats either side of the junction. Nesting is detected by shape - a polyline's first
-        # element is a POINT (two numbers), a list-of-polylines' first element is a polyline.
-        # LEGACY PATH, verbatim, for any caller that has not opted into a dense row: `skip` is one
-        # object, matched by identity-or-along exactly as before. Normalizing it to a list changed
-        # the answer for a caller that passes a list of STRETCHES (Tango's twin south streets),
-        # which is a shipped map - so the new shape is reached only from a dense row.
-        if not getattr(self, "_dense_row", False):
-            # IDENTITY match, as it always was: a corridor is skipped only when the caller passed
-            # the very polyline object it was registered with. That is the footgun the dense row
-            # fixes, and it is left standing here on purpose - every shipped map's fabric was drawn
-            # against it, and re-rolling those is a deliberate per-map job with its own review,
-            # not a side effect of the capital's gate markets.
-            return any(poly is not skip and seg_dist(x, y, a, b) < clearance for poly, a, b, clearance, *_ in self._corridor_index().near(x, y))
-        skips = [] if skip is None else ([skip] if (len(skip) and isinstance(skip[0], (list, tuple)) and len(skip[0]) == 2 and all(isinstance(v, (int, float)) for v in skip[0])) else list(skip))
-        skips = [q for q in skips if q is not None and len(q) >= 2]
-
-        def _along(a: Pt, b: Pt) -> bool:
-            # SYMMETRIC containment (2026-08-11). Testing only "the fronted stretch lies on this
-            # segment" covers a short row on a long straight road and nothing else: a road that
-            # BENDS inside the fronted stretch, or a stretch spanning two segments, matched no
-            # single segment and so the way's own cleared band refused the shops meant to line
-            # it - 325 refusals on the capital's Imperial road alone. A segment counts as running
-            # ALONG the stretch if either contains the other: both stretch ends near the segment,
-            # or the segment's own midpoint near the stretch AND the two pointing the same way
-            # (a crossing street passes the midpoint test and must still refuse).
-            for poly in skips:
-                if all(seg_dist(q[0], q[1], a, b) <= 3.0 for q in poly):
-                    return True
-                mx, my = (a[0] + b[0]) / 2.0, (a[1] + b[1]) / 2.0
-                if min(seg_dist(mx, my, poly[k], poly[k + 1]) for k in range(len(poly) - 1)) > 3.0:
-                    continue
-                sl = math.hypot(b[0] - a[0], b[1] - a[1]) or 1.0
-                ux, uy = (b[0] - a[0]) / sl, (b[1] - a[1]) / sl
-                for k in range(len(poly) - 1):
-                    px_, py_ = poly[k + 1][0] - poly[k][0], poly[k + 1][1] - poly[k][1]
-                    pl = math.hypot(px_, py_) or 1.0
-                    if abs(ux * px_ / pl + uy * py_ / pl) >= 0.990:  # within ~8 degrees, either sense
-                        return True
-            return False
-
-        # no `if skips:` branch: a dense row always carries at least the street it fronts, and
-        # _along answers False for an empty skip list anyway, so the guard was unreachable.
-        return any(all(poly is not q for q in skips) and not _along(a, b) and seg_dist(x, y, a, b) < clearance for poly, a, b, clearance, *_ in self._corridor_index().near(x, y))
+        # `skip` is matched by IDENTITY: a corridor is skipped only when the caller passes the very polyline object it was
+        # registered with. (The geometric match the dense frontage rows needed went with the town and city drawing code,
+        # feature 392.)
+        return any(poly is not skip and seg_dist(x, y, a, b) < clearance for poly, a, b, clearance, *_ in self._corridor_index().near(x, y))
 
     def _corridor_index(self: Settlement) -> PointGrid:  # type: ignore[misc]
         def build(lst: Any) -> PointGrid:
@@ -317,13 +266,11 @@ class HousesMixin:
         h: float,
         skip: Any = None,
         corridors: bool = True,
-        row_mates: Any = None,
-        row_axis: Any = None,
         disc: bool = False,
         rot: float | None = None,
         top: float = 88.0,
     ) -> bool:
-        """Research: building spacing - UNRESEARCHED: 4 px between collision circles (exact boxes where both are declared), a dense row's mates edge to edge"""
+        """Research: building spacing - UNRESEARCHED: 4 px between collision circles (exact boxes where both are declared)"""
         if x < 55 or x > self.W - 55 or y < top or y > self.H - 26:
             return False
         if self.bound and not point_in_poly(x, y, self.bound):  # stay inside a bounding ring (city wall)
@@ -344,14 +291,6 @@ class HousesMixin:
         # garden and farm shed. What makes it safe now is `Indexed`, which was built for that
         # lesson: the registry versions ITSELF and carries its own index, so a rebind cannot be
         # missed - the filtered copies below are Indexed too, and each starts with an empty cache.
-        # ROW MATES ARE MEASURED EDGE TO EDGE (GM 2026-08-11). The circumscribed circle is
-        # rotation-safe and load-bearing everywhere else (this skill's CLAUDE.md, "CENTER vs
-        # FOOTPRINT", item 2), but it forces a 48x32 shopfront 62px from its neighbor where the
-        # true touching distance is 48 - so a frontage asking for a 22px pitch placed every third
-        # seat and a market row drew at a third of its density. A shop row is the one case where
-        # the exception is safe: the buildings are AXIS-ALIGNED to the way they front and sit in a
-        # straight line, so an axis-aligned edge gap is exact, not an approximation. Only the
-        # row's own previously-placed seats are measured this way; everything else keeps the circle.
         # A WELLHEAD IS A DISC, so its own reach is its RADIUS, not the half-diagonal of the
         # probe box around it (2026-08-11). The circumscribed circle is the documented
         # over-restriction in this skill's CLAUDE.md ("CENTER vs FOOTPRINT" item 2); for a round
@@ -365,25 +304,7 @@ class HousesMixin:
         # means UNKNOWN, not "zero": a caller that does not say keeps the circumscribed circle,
         # because assuming axis-aligned for a candidate the map draws raked would under-state it.
         _cw, _ch = drawn_extent(w, h, rot) if rot is not None and not disc else (None, None)
-        _mates = {(round(m[0], 2), round(m[1], 2)) for m in (row_mates or ())}
-        _ax = row_axis or (1.0, 0.0)
-        # the angle that matters is the seat's rotation RELATIVE TO THE ROW's bearing, not its
-        # absolute rot: a shop fronting a north-south sando is drawn at -90 deg, and measuring
-        # its reach with the absolute angle returns its depth where the row needs its width
-        _rel = math.radians(getattr(self, "_row_rot", 0.0)) - math.atan2(_ax[1], _ax[0])
-        _along = abs(w * math.cos(_rel)) + abs(h * math.sin(_rel))  # the seat's reach ALONG the row
         for px, py, pw, ph, _pw_drawn, _ph_drawn, *_ in self._reach_index(self.placed, "placed_reach").near(x, y, r):
-            if (round(px, 2), round(py, 2)) in _mates:
-                # SAME FILE ONLY. A both=True row alternates sides of the street, so a seat's
-                # immediate mate is often its twin ACROSS the way - zero distance along the row and
-                # no business constraining it. Compare only mates on this side (the across-row
-                # offset is within a footprint depth); anything further across is a different file.
-                _d_along = abs((x - px) * _ax[0] + (y - py) * _ax[1])
-                _d_across = abs((x - px) * -_ax[1] + (y - py) * _ax[0])
-                _mate_along = abs(pw * math.cos(_rel)) + abs(ph * math.sin(_rel))
-                if _d_across < (max(w, h) + max(pw, ph)) / 2 and _d_along < (_along + _mate_along) / 2 + 1.5:
-                    return False
-                continue
             # EXACT BOX when BOTH sides have declared what they draw; the circumscribed circle
             # otherwise. The circle refuses seats nothing occupies - measured on a provincial city,
             # 38.7% of all refusals - but it is rotation-invariant, and that invariance is what has
@@ -431,174 +352,6 @@ class HousesMixin:
             grid.extend(self._reach_boxed(tail))
 
         return indexed_grid(registry, key, build, add)
-
-    def frontage(  # type: ignore[misc]
-        self: Settlement,
-        street: Any,
-        items: Any,
-        width: float = 24,
-        setback: float = 10,
-        spacing: float = 58,
-        both: bool = True,
-        rows: int = 1,
-        rowgap: float = 9,
-        jitter: float = 4,
-        skip: Any = None,
-        fill: bool = False,
-        dense: bool = False,
-    ) -> int:
-        """Place buildings in row(s) along a street, each rotated so its FRONTAGE faces the
-        street (shophouses lining the road). rows=2 stacks a second row BACK-TO-BACK behind the
-        front one, facing AWAY from the street (GM doctrine 2026-07-18: a door opens onto open
-        ground, never into the back row ahead of it - the rear row fronts the back lane/block
-        interior, the real ura-dana pattern). Sits against the fronted street (skips that
-        street's own corridor - pass skip=<registered poly> when fronting a sub-stretch of a
-        longer road) but respects walls, other streets, fields, and collisions.
-        Research:
-            shops face the street - research/questions/0152-the-citys-street-front-continuous-rows-of-shophouses-machiya.drawing.html, research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.drawing.html: rows rotated to front the way, a dense row a continuous street wall
-            rear row back to back - research/questions/0152-the-citys-street-front-continuous-rows-of-shophouses-machiya.drawing.html: a second row turned away, `rowgap` (9 px) behind the first
-            road shoulder setback - UNRESEARCHED: a row on a road stands off half its width plus 18 px, a row on a street at the curb, `setback` 10 px by default
-            default 58 px spacing between shops - DEVIATION research/questions/0152-the-citys-street-front-continuous-rows-of-shophouses-machiya.drawing.html: `spacing` 58 px, a joint drawn where real shops touched
-            each building's rake jittered up to 4 degrees off the street's normal - UNRESEARCHED: `jitter` 4 degrees, scoped to the street run"""
-        # SCOPED (2026-08-08): the per-building rot jitter below was the LAST root cause of a town
-        # re-rolling. Its seats were already stable once pack was scoped, but a different rake gives a
-        # different footprint, which changes what fits beside it - and the cascade ran through every
-        # house, well, garden and crown on the map. Keyed on the street run it fronts.
-        with self.rng_scope("frontage", len(street), street[0][0], street[0][1], street[-1][0], street[-1][1]):
-            # the fronted street is ALWAYS skipped, and a caller's skip is ADDED to it, never
-            # substituted for it (2026-08-11): `skip=ROAD` used to REPLACE the street, so a row
-            # lining a street that crosses the Imperial road was excused from the road's band and
-            # then refused by the band of the very street it was fronting.
-            # DENSE (2026-08-11, GM: "is that the correct amount of space between gate market
-            # buildings?"): a machiya row is a CONTINUOUS street wall - shops share party walls and
-            # the row reads as one frontage, not a dotted line of freestanding boxes. Three things
-            # change together, and all three are opt-in because each one re-rolls any map that
-            # takes it: row mates are measured edge-to-edge along the row's own axis instead of by
-            # the rotation-invariant collision circle (which forces a 46x28 shop 57.8 px from its
-            # neighbor where the true touching distance is 28); the fronted street is skipped
-            # ALONGSIDE the caller's skip rather than replaced by it; and a corridor segment counts
-            # as running along the stretch if EITHER contains the other, so a bending road no
-            # longer refuses the shops meant to line it. Default off keeps every shipped map
-            # byte-identical - the same bargain footpaths=0 struck.
-            self._dense_row = dense
-            skip = ([street] if skip is None else [street, skip]) if dense else (skip if skip is not None else street)
-            items = list(items)
-            seg = [math.hypot(street[i + 1][0] - street[i][0], street[i + 1][1] - street[i][1]) for i in range(len(street) - 1)]
-            total = sum(seg)
-            sh = width / 2
-            if dense:
-                # DERIVE the standoff from the way's OWN registered band, do not trust the caller's
-                # `width` (GM 2026-08-11: "the gate market buildings are a surprising distance from
-                # the road... they look to be dozens of feet back"). Every gen passed width=8 while
-                # the ways it fronted were two and three times that, so `setback` had to absorb the
-                # difference by eye - which is why the same setback number put one row on the verge
-                # and another in the roadbed, and why the markets sat 45-63 ft back. Measured from
-                # the band, a setback means what it says: the width of the verge.
-                # the way's DRAWN width, not its cleared band: the band is a keep-out for everything
-                # ELSE, and the row lining the way is precisely what it does not apply to (that is
-                # what the skip is for). Measuring the verge from the band put the markets 60 ft
-                # back - the same defect one step further out.
-                # test EVERY vertex of the stretch, not its midpoint: a row lining a road that
-                # bends is written as a chord, whose midpoint can sit 26 px off the roadway even
-                # though both ends are on it - which is how the north gate market derived nothing.
-                _probe = [(float(q[0]), float(q[1])) for q in street]
-                _mid = _probe[len(_probe) // 2]
-                # a ROAD carries a SHOULDER the street does not: a highway's verge is the drained
-                # strip carts pull onto, and a shopfront built to the paved edge of one stands in
-                # the traffic. So a row fronting a road stands off by half its width PLUS the
-                # shoulder; a row fronting a street sits at the curb, which is the machiya norm.
-                # the PRIMARY road is recorded under its own key as a bare polyline, not in
-                # M["roads"] - so a row fronting it derived nothing and sat in the roadbed (the
-                # north gate market, 2026-08-11). Fold it in with its own width.
-                _prim = self.M.get("road") or []
-                if len(_prim) >= 2 and any(seg_dist(q[0], q[1], _prim[k], _prim[k + 1]) <= 8.0 for q in _probe for k in range(len(_prim) - 1)):
-                    sh = max(sh, float(self.M.get("road_width", self.px(26))) / 2.0 + self.px(18))
-                _wide = [
-                    float(r.get("w") or r.get("width") or 0) + (self.px(18) if key == "roads" else 0.0)
-                    for key in ("roads", "streets", "town_streets", "lanes", "alleys")
-                    for r in (self.M.get(key) or [])
-                    if isinstance(r, dict) and r.get("pts") and any(seg_dist(q[0], q[1], r["pts"][k], r["pts"][k + 1]) <= 8.0 for q in _probe for k in range(len(r["pts"]) - 1))
-                ]
-                if _wide:
-                    sh = max(sh, max(_wide) / 2.0)
-
-            def at(d: float) -> tuple[float, float, float, float]:
-                acc: float = 0
-                for i, sl in enumerate(seg):
-                    if sl and acc + sl >= d:
-                        f = (d - acc) / sl
-                        return (
-                            street[i][0] + (street[i + 1][0] - street[i][0]) * f,
-                            street[i][1] + (street[i + 1][1] - street[i][1]) * f,
-                            (street[i + 1][0] - street[i][0]) / sl,
-                            (street[i + 1][1] - street[i][1]) / sl,
-                        )
-                    acc += sl
-                i = (
-                    len(seg) - 1
-                )  # pragma: no cover - defensive: the while-guard keeps d < total, so a segment always matches [174: KEPT, not deletable - a terminal return; the signature promises a 4-tuple]
-                sl = seg[i] or 1  # pragma: no cover - as above [174: KEPT, not deletable - as above]
-                return (  # pragma: no cover - as above [174: KEPT, not deletable - as above]
-                    street[-1][0],
-                    street[-1][1],
-                    (street[-1][0] - street[-2][0]) / sl,
-                    (street[-1][1] - street[-2][1]) / sl,
-                )  # defensive: while-guard keeps d < total, so a segment always matches
-
-            placed = 0
-            row: list[tuple[float, float, float, float]] = []
-            mates: list[tuple[float, float]] = []  # this row's own seats - measured edge to edge, not by circle
-            d = spacing * 0.55
-            sides = [1, -1] if both else [1]
-            while d < total and items:
-                x, y, tx, ty = at(d)
-                for s in sides:
-                    nx, ny = -ty * s, tx * s  # outward normal (street -> building)
-                    base_rot = math.degrees(math.atan2(nx, -ny))  # frontage faces the street
-                    depth = sh + setback
-                    for ri in range(rows):
-                        if not items:
-                            break
-                        kind = items[0]
-                        w, h = self._dims(kind)
-                        off = depth + h / 2
-                        bx, by = x + nx * off, y + ny * off
-                        # rear rows flip 180: back-to-back with the row ahead, door onto the
-                        # back lane - never into the front row's rear wall. building() may REFUSE
-                        # the seat (a commoner unit inside a samurai ward); the station then ends
-                        # its rows there, exactly as an unfit seat does.
-                        self._row_rot = base_rot
-                        if self._fits(bx, by, w, h, skip=skip, row_mates=(mates if dense else None), row_axis=(tx, ty)) and self.building(
-                            bx, by, w, h, kind, base_rot + (180 if ri % 2 else 0) + random.uniform(-jitter, jitter)
-                        ):
-                            row.append((bx - w / 2, by - h / 2, bx + w / 2, by + h / 2))
-                            mates.append((bx, by))
-                            items.pop(0)
-                            placed += 1
-                            depth = off + h / 2 + rowgap  # next row sits behind this one
-                        else:
-                            break
-                d += spacing
-            # the row's own extent, for `place_caption` - a market row is captioned as ONE feature, and
-            # asking the gen script to hand-copy the bounding numbers is how a caption drifts off its
-            # subject when the row is later re-laid (which is exactly what happened to Tango's two
-            # "gate market" captions). Cleared when nothing was placed, so a stale box can never be read.
-            self.frontage_box = (min(b[0] for b in row), min(b[1] for b in row), max(b[2] for b in row), max(b[3] for b in row)) if row else None
-            # ...and the row's AXIS, for a caption that names the RUN rather than one shopfront
-            # (`s.label(..., rot=s.frontage_rot, linear=True)`; GM 2026-08-08, "merchant houses &
-            # shops" set level over storefronts that each tilt to a -27deg road). A frontage row has no
-            # rotation of its own - it IS the street it fronts - so the axis is the street's tangent at
-            # the run's arc-length midpoint, read from the street rather than hand-copied off it, which
-            # is the same reason `frontage_box` exists. `linear`, because a row of shopfronts is a LINE.
-            if row:
-                tan_ = at(total / 2)
-                self.frontage_rot = math.degrees(math.atan2(tan_[3], tan_[2]))
-            else:
-                self.frontage_rot = 0.0
-            if not fill:
-                self._shortfall("frontage", (street[0], street[-1]), placed, items)
-            self._dense_row = False  # never let a later placer inherit this run's relaxation
-            return placed
 
     @staticmethod
     def _hjit(x: float, y: float, salt: float) -> float:
@@ -660,13 +413,10 @@ class HousesMixin:
         return cast(bool, m.get("toscale", m.get("scale") == "village"))
 
     def try_place(self: Settlement, x: float, y: float, kind: str, role: Any = None, size: Any = None) -> bool:  # type: ignore[misc]
-        """Place one farmhouse. VILLAGES + HAMLETS + TOWNS use the to-scale HOMESTEAD BUNDLE (house + grove/
-        garden + yard, reserved and packed as ONE unit; towns run the NUCLEATED form). CITIES keep the
-        shipped house-first path until their own to-scale conversion. `size=(w,h)` overrides the kind's default footprint (base FEET) so
-        farmhouses can be individually sized - e.g. a headman is just a LARGER plain farmhouse."""
-        if self._toscale():
-            return self._try_place_bundle(x, y, kind, role, size)
-        return self._try_place_legacy(x, y, kind, role)
+        """Place one farmhouse as a to-scale HOMESTEAD BUNDLE (house + grove/garden + yard, reserved and packed as ONE unit).
+        `size=(w,h)` overrides the kind's default footprint (base FEET) so farmhouses can be individually sized. (The house-first
+        path a map not drawn to scale took went with the frozen maps' code, feature 392.)"""
+        return self._try_place_bundle(x, y, kind, role, size)
 
     def _try_place_bundle(self: Settlement, x: float, y: float, kind: str, role: Any = None, size: Any = None) -> bool:  # type: ignore[misc]
         """Seat one to-scale homestead bundle.
@@ -760,48 +510,6 @@ class HousesMixin:
         self.M["houses"].append(rec)
         self._pending_farmsteads.append(rec)
         return True
-
-    def _try_place_legacy(self: Settlement, x: float, y: float, kind: str, role: Any = None) -> bool:  # type: ignore[misc]
-        """Seat one farmhouse on the legacy house-first path.
-        Research:
-            legacy farmhouse size - research/questions/0029-farmhouses-minka.drawing.html: 44 x 29 (big 60 x 40) at `bscale`, wealth 0.9 / 1.0 / 1.12 by position
-            legacy farmhouse rake +-5 degrees by position - research/questions/0029-farmhouses-minka.drawing.html: each house turned up to 5 degrees either way, seeded by its seat
-            legacy storehouse share - research/questions/0040-farm-storehouses-kura.drawing.html: about three farms in ten, by position"""
-        # a farmhouse shares the MAP'S building grain (bscale): at hamlet scale bscale is 1.0 (full size), but
-        # a town/city compresses its urban buildings, and a peasant farmhouse must not render LARGER than the
-        # samurai and merchant houses inside the walls - so it scales down by the same factor.
-        bw, bh = (60, 40) if kind == "big" else (44, 29)
-        wf = 1.0
-        if kind == "plain":
-            t = int(abs(x) * 53 + abs(y) * 29) % 100
-            wf = 0.9 if t < 30 else (1.12 if t >= 80 else 1.0)
-        w, h = bw * self.bscale, bh * self.bscale
-        if not self._fits(x, y, w, h):
-            return False
-        # BOTH position-seeded (2026-08-08). The bundle path already rolled its kura off _hjit at
-        # the same 3.0 salt; this path drew from the stream, so an upstream change that consumed one
-        # extra random number silently re-rolled every legacy farmhouse's rake AND which of them had
-        # a storehouse - measured as the entire manifest drift of a hamlet (2 keys of 63).
-        rot = self._hjit(x, y, 11.0) * 10.0 - 5.0
-        shed = self._hjit(x, y, 3.0) < 0.3
-        self.placed.append((x, y, w, h))
-        rec = {"x": x, "y": y, "w": w, "h": h, "kind": kind, "rot": rot, "role": role, "shed": shed, "wealth": wf}
-        self.M["houses"].append(rec)
-        self._pending_farmsteads.append(rec)
-        return True
-
-    def lane_skeleton(self: Settlement, kind: str, cx: float, cy: float, ex: float, ey: float, width: float = 5, clearance: float = 18, worn: bool = True) -> dict[str, Any]:  # type: ignore[misc]
-        """Lay a nucleated cluster's internal lanes for the given skeleton and record the skeleton kind on
-        the manifest (meta.lane_skeleton, read by the twin-detector). Returns the DERIVED focal points -
-        `headman` (place the headman house there) and `gateway` (the downslope exit; anchor the connector
-        track and the tutelary shrine off it). The lanes lay their no-build corridors BEFORE the houses,
-        so the homesteads front them (same as a hand-placed lane).
-        Research: lane skeleton - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: one of five shapes of our own choosing, laid before the houses"""
-        layout = skeleton_layout(kind, cx, cy, ex, ey)
-        for pts in layout["lanes"]:
-            self.lane(pts, width=width, clearance=clearance, worn=worn)
-        self.M["meta"]["lane_skeleton"] = kind
-        return layout
 
     def cluster_seeds(self: Settlement, shape: str, cx: float, cy: float, ex: float, ey: float, n: int, rng: random.Random, record: bool = True) -> list[Pt]:  # type: ignore[misc]
         """Generate `n` house-seed positions for a nucleated cluster of the given SHAPE (feature 005
