@@ -32932,6 +32932,14 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/web.py::stage_web#no web lanes at all when fewer than two houses stand (`len(houses) < 2`), a rule claimed on `_lay_skeleton` but not here": {
+  "code": "d1bd34ae9d840667",
+  "core": "d1bd34ae9d840667",
+  "date": "2026-10-19",
+  "note": "no web lanes at all when fewer than two houses stand (`len(houses) < 2`), a rule claimed on `_lay_skeleton` but not here",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/hamletgen/ways/web.py::stage_web#orphan stub joined": {
   "body": "907d26557912f733",
   "claim": "orphan stub joined - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the lanes are one network, so a stranded stub is joined into it",
@@ -32996,14 +33004,21 @@
  },
  "l7r/diagram/hamletgen/ways/web.py::stage_web#the web's frame": {
   "body": "907d26557912f733",
-  "claim": "the web's frame - UNRESEARCHED: a web cut may run `BUNDLE_PITCH` (100 ft) past the outermost house along the seat axis, or `CLUSTER_SPAN_FACTOR` (1.6) times the seat band where that is wider, before the trims",
-  "code": "3d335bec84630bcd",
+  "claim": "the web's frame - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane runs only along the houses it serves and about 30 ft past the last of them - the frame (`BUNDLE_PITCH`, 100 ft past the outermost house, or `CLUSTER_SPAN_FACTOR` times the seat band) is only the room the cuts are laid in, and the trims (`tidy_lane_ends`) bring each end back to the last house it serves",
+  "code": "a3d235c08b795796",
   "core": "d1bd34ae9d840667",
   "date": "2026-10-19",
-  "note": "this is not UNRESEARCHED: 0246's drawing page says how far a lane runs past its last house (\"each runs only along the houses it serves, and about 30 ft past the last of them\"), and says an end reaching nothing \"is pulled back to the last house it serves\". The claim should cite research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html. Its account should say the frame (`_reach_along + BUNDLE_PITCH`, 100 ft past the outermost house, or `seat[\"lat\"] * CLUSTER_SPAN_FACTOR`) is only the room the cuts are laid in before the trims. The ~30 ft end and its 60 ft serving reach are set by the trims after it. If no trim brings a cut back to about 30 ft, the 100 ft is a drift",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "the frame (max of seat band x1.6 and the outermost house's reach + 100 ft) is only the room the cuts are laid in and is wider than the page's ~30 ft run past the last house; the trims bring each end back to the last house it serves",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "806877952dea60e0"
+  },
+  "research": "60b94d3c15ae221a",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:98954044baf5b50b"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::stage_web#web lane margin off the hard ground": {
   "body": "907d26557912f733",
