@@ -67,6 +67,9 @@ _PAGE = re.compile(r"research/questions/(\d{4})-[^/]*\.html$")
 #: a bundle scoped to named notes (`check_bundle.py`: "ONLY the notes a, b and the blocks that carry them")
 _NOTES = re.compile(r"ONLY the notes (.+?) and the blocks that carry them")
 _MODAL = re.compile(r"interactive/assets/modals/((?:sheet|hamlet|choice)/[^/]+)\.md$")
+#: a source's bundle (`check_bundle.key_bundle`) and the notes its owed units name (`unit: source-reader:0248#koku-enwiki-2 <fp>`)
+_SOURCE_BUNDLE = re.compile(r"^# Check bundle - source \S+", re.M)
+_UNIT_NOTE = re.compile(r"^unit: [\w-]+:\d{4}(?:\.drawing)?#(\S+) \S+$", re.M)
 
 
 def subject_of_unit(slug_tail: str) -> str:
@@ -86,8 +89,7 @@ def moved_since_answer(root: Path, text: str, subject: str) -> str:
     import record_owed  # noqa: PLC0415
 
     store = record_owed.store(root)
-    return next((fp for slug, fp in _UNIT_FP.findall(text)
-                 if subject_of_unit(slug.partition(":")[2]) == subject and not record_owed.answered(store, slug, fp)), "")
+    return next((fp for slug, fp in _UNIT_FP.findall(text) if subject_of_unit(slug.partition(":")[2]) == subject and not record_owed.answered(store, slug, fp)), "")
 
 
 def batch_of(root: Path | None) -> str:
@@ -175,8 +177,8 @@ def _task_texts(transcript: str) -> list[str]:
         return out
     for raw in lines:
         try:
-            msg = (json.loads(raw).get("message") or {})
-        except (ValueError, AttributeError):
+            msg = json.loads(raw).get("message") or {}
+        except ValueError, AttributeError:
             continue
         if not isinstance(msg, dict) or msg.get("role") != "user":
             continue
@@ -228,8 +230,13 @@ def open_round(state: Mapping[str, Any], subject: str, now: float | None = None)
 
 
 def notes_of_manifest(text: str) -> set[str]:
-    """The notes a note-scoped bundle reads; empty for a bundle of the whole page."""
-    return {n.strip() for m in _NOTES.findall(text) for n in m.split(",") if n.strip()}
+    """The notes a note-scoped bundle reads; empty for a bundle of the whole page. A SOURCE's bundle (`make check-bundle KEY=`)
+    reads the notes its `unit:` lines name, not the page (the round arbiter on round:source-reader|q:0248@7, 2026-10-18: one
+    bundle per newly cited source was counted as a whole-page re-read each, and a new question's first reads hit round 7)."""
+    named = {n.strip() for m in _NOTES.findall(text) for n in m.split(",") if n.strip()}
+    if named or not _SOURCE_BUNDLE.search(text):
+        return named
+    return {m.group(1) for m in _UNIT_NOTE.finditer(text)}
 
 
 def fresh_reading(state: Mapping[str, Any], unit: str, notes: set[str]) -> bool:
@@ -328,8 +335,17 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
         if s in current:  # what this check will have read of the subject, for the next dispatch's first-look test
             marks["seen"][unit] = sorted({_sentence_key(x) for x in current[s]})
         marks["read"][unit] = sorted(notes or {"*"})  # "*": a whole-page reading, every note read
-    state.setdefault("dispatches", {})[tid] = {"check": check, "subjects": subjects, "manifest": manifest, "t": now, "state": "pending", "counted": counted,
-                                                "marks": marks, "owed": re.findall(r"^owed: (.+)$", text, re.M)}  # why each unit was due (374)
+    state.setdefault("dispatches", {})[tid] = {
+        "check": check,
+        "subjects": subjects,
+        "manifest": manifest,
+        "t": now,
+        "state": "pending",
+        "counted": counted,
+        "marks": marks,
+        "owed": re.findall(r"^owed: (.+)$", text, re.M),  # why each unit was due (374)
+        "notes": sorted(notes),
+    }  # the notes the bundle read, [] for the whole page (feature 393's earlier rounds)
     return ""
 
 
@@ -705,8 +721,15 @@ def log_pass(git_dir: Path, mode: str, payload: Mapping[str, Any], now: float | 
         # these stand only where that transcript is gone.
         parts = review_cost.segments(lines)
         wall, tokens = review_cost.cells(review_cost.cost(parts[-1])).split(" | ", 1)
-        rec = {"date": time.strftime("%Y-%m-%d", time.localtime(now or time.time())), "check": check, "subject": _first_prompt(lines), "agent": aid,
-               "segment": len(parts) - 1, "wall": wall, "tokens": tokens}
+        rec = {
+            "date": time.strftime("%Y-%m-%d", time.localtime(now or time.time())),
+            "check": check,
+            "subject": _first_prompt(lines),
+            "agent": aid,
+            "segment": len(parts) - 1,
+            "wall": wall,
+            "tokens": tokens,
+        }
         log = git_dir / PASS_LOG
         prior = [json.loads(ln) for ln in log.read_text(encoding="utf-8").splitlines() if ln.strip()] if log.is_file() else []
         if any(r.get("agent") == aid and r.get("segment") == len(parts) - 1 for r in prior):
@@ -817,8 +840,11 @@ def _close(path: Path | None, state: dict[str, Any], subject: str, reason: str, 
     if not escaped("CHECK_CLOSED", f'CHECK_CLOSED="{reason}"'):
         print("check-closed: REASON needs two words and eight characters - it is what a later audit reads", file=sys.stderr)
         return 2
-    silent = [d for d in state.get("dispatches", {}).values() if subject in d.get("subjects", [])
-              and ((d.get("state") == "running" and now - float(d.get("t", 0)) > STALE_S) or (agent and d.get("aid") == agent and d.get("state") != "answered"))]
+    silent = [
+        d
+        for d in state.get("dispatches", {}).values()
+        if subject in d.get("subjects", []) and ((d.get("state") == "running" and now - float(d.get("t", 0)) > STALE_S) or (agent and d.get("aid") == agent and d.get("state") != "answered"))
+    ]
     for d in silent:
         d["state"] = "answered"
         d["closed"] = reason

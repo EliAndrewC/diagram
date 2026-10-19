@@ -91,9 +91,9 @@ def file_for(index: int, url: str) -> str:
 # The saved form - one sentence to a line, a long page in parts - is the cache's as well (feature 288), so it lives in
 # `_sources` and is named here for every caller that knew it as `_source_pages.wrapped` / `.parts` / `.PART`.
 wrapped, parts, PART = src.wrapped, src.parts, src.PART
-LIMIT = 30_000    # a page longer than this, saved for a check that names its quotes, is saved as an EXCERPT (D19)
-HEAD = 6_000      # an excerpt keeps the page's front: title, author, date, contents - what a source is judged by
-WINDOW = 1_500    # and this much either side of each passage the record quotes from it
+LIMIT = 30_000  # a page longer than this, saved for a check that names its quotes, is saved as an EXCERPT (D19)
+HEAD = 6_000  # an excerpt keeps the page's front: title, author, date, contents - what a source is judged by
+WINDOW = 1_500  # and this much either side of each passage the record quotes from it
 
 
 def excerpt(text: str, quotes: list[str], head: int = HEAD, window: int = WINDOW, limit: int = LIMIT) -> str:
@@ -132,6 +132,17 @@ def excerpt(text: str, quotes: list[str], head: int = HEAD, window: int = WINDOW
         pieces.append(f"\n[... {len(flat) - last:,} characters not copied ...]\n")
     note = f"[EXCERPT of a {len(flat):,}-character page: its first {head:,} characters and {window:,} either side of the {found} of {len(quotes)} quoted passage(s) found in it]\n"
     return note + "".join(pieces)
+
+
+_BLOB = re.compile(r"^https?://github\.com/([^/]+)/([^/]+)/blob/(.+)$")
+
+
+def fetch_url(url: str) -> str:
+    """The URL actually fetched for a pointer: a github.com BLOB page is a JavaScript shell (its cached copy read empty, menus
+    only - feature 390's l7r-money reader), so its raw file is fetched instead; the pointer the record cites is unchanged
+    (the round arbiter's fix on round:source-reader|q:0248@7)."""
+    m = _BLOB.match(url)
+    return f"https://raw.githubusercontent.com/{m.group(1)}/{m.group(2)}/{m.group(3)}" if m else url
 
 
 def saved_rows(out: pathlib.Path) -> list[dict]:
@@ -178,7 +189,7 @@ def save(urls: list[str], out: pathlib.Path, pages, quotes: list[str] | None = N
                 print(src.show(r))
             if ledger.get("sought"):
                 print("\n".join(attempts.report(ledger["root"], url=url)))
-        got = pages.get(url)
+        got = pages.get(fetch_url(url))
         if ledger is not None and ledger.get("sought") and not got.get("blocked"):
             q = next(iter(ledger["questions"]), "unknown")
             attempts.add(ledger["root"], url, q, ledger["sought"], route="source-pages")
@@ -226,15 +237,17 @@ def main(argv: list[str] | None = None, pages=None) -> int:  # noqa: ANN001
         if closed:
             for u, x in closed:
                 print(f"source-pages: {u} was already read for question {args.question} on {x.get('date')}: {x.get('outcome')} - {x.get('sought')}", file=sys.stderr)
-            print('source-pages: a page already judged for this question is read again only with a reason:\n'
-                  '    make source-pages ... REREAD="<what changed, or what you look for now that was not looked for then>"', file=sys.stderr)
+            print(
+                'source-pages: a page already judged for this question is read again only with a reason:\n'
+                '    make source-pages ... REREAD="<what changed, or what you look for now that was not looked for then>"',
+                file=sys.stderr,
+            )
             return 2
     out = pathlib.Path(args.out)
     quotes = json.loads(pathlib.Path(args.quotes).read_text(encoding="utf-8")) if args.quotes else None
     where = src.home()
     questions = [] if args.question.lower() in ("", "none") else [args.question]
-    ledger = None if args.no_ledger else {"where": where, "ctx": src.context(src.repo_root()), "questions": questions,
-                                          "root": src.repo_root(), "sought": args.sought.strip()}
+    ledger = None if args.no_ledger else {"where": where, "ctx": src.context(src.repo_root()), "questions": questions, "root": src.repo_root(), "sought": args.sought.strip()}
     rows = save(args.urls, out, pages or src.CachedPages(qv.Pages(), where, refresh=src.refresh_wanted()), quotes, ledger)
     print((out / "MANIFEST.txt").read_text(encoding="utf-8"), end="")
     print(f"  saved {sum(r['state'] == 'FETCHED' for r in rows)} of {len(rows)} to {out} - hand source-reader the manifest")

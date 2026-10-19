@@ -163,6 +163,23 @@ def test_a_long_page_is_saved_in_parts_and_a_quoted_one_as_an_excerpt(tmp_path: 
     assert "saved as an excerpt" in rows[0]["why"]
 
 
+def test_a_github_blob_pointer_is_fetched_as_its_raw_file(tmp_path: pathlib.Path) -> None:
+    """The round arbiter on round:source-reader|q:0248@7: a github.com blob page read empty (menus only), so the raw file is
+    fetched in its place; the pointer, the file name and the manifest row keep the cited URL."""
+    blob = "https://github.com/EliAndrewC/l7r/blob/master/setting/l7r.md"
+    asked: list[str] = []
+
+    class _Pages:
+        @staticmethod
+        def get(url: str) -> dict:
+            asked.append(url)
+            return {"state": "FETCHED", "text": "1 koku is worth 10 bu"}
+
+    rows = sp.save([blob, "https://example.org/p"], tmp_path / "o", _Pages())
+    assert asked == ["https://raw.githubusercontent.com/EliAndrewC/l7r/master/setting/l7r.md", "https://example.org/p"]
+    assert rows[0]["pointer"] == blob and rows[0]["state"] == "FETCHED"
+
+
 # ---- feature 288: the sources-consulted ledger and the page cache ----
 
 
