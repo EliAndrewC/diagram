@@ -2791,3 +2791,24 @@ Owed by the round arbiter's ruling on hour:385-approach-checklist@32 (continue),
 8. **Every route measured before offering one?** No route is offered.
 9. **After a ruling: the step it names?** Yes - the ruling says go on with T109; its two asides are filed as T110 and T111.
 
+<!-- plan-archive: archived 2026-10-19 -->
+## T110 - Enoshima glossed (found working T107, 2026-10-19)
+
+### T110 Approach (checklist part A)
+
+1. **The goal, in the world.** A reader of 0246's drawing page meeting "Enoshima" can learn what it is where they meet it.
+2. **The constraints.** research/CLAUDE.md: a term the reader would not know is a glossary tooltip, one glossary for the map and the record, one file per term. 0081's notes quote what Enoshima was: Edward Morse, 1886 - "This street is flanked on both sides by hills; and the ravine, of which the street forms the central axis, is densely crowded with houses, the narrowest of alley-ways leading to the houses in the rear." T31's lesson: editing a heavily cited block owes its claims their full check.
+3. **Where each comes from.** research/CLAUDE.md (O); 0081's notes (O, a quoted source); T31's retro (O).
+4. **Do they describe the world here?** Yes - measured 2026-10-19 (T107's record-format round, OUTSIDE THE CHANGE, then a grep of the glossary and the record): 0246's block "A few farmhouses may be reached across a neighbor's land" names Enoshima and the glossary holds no entry for it; 0081 is the only page that says what it was.
+5. **The order.** A glossary file for Enoshima; `make glossary`; the record checks it owes.
+6. **The exits.** (c) a glossary tooltip - the page's own block untouched; a gloss inside the block was weighed and refused (its claims would owe full checks).
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: the glossary holds Enoshima and the built record shows its tooltip on 0246; record-format finds the word ruled; no block edited.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T110 Decisions
+
+**D129 - a tooltip, from Morse.** A glossary file `l7r/diagram/interactive/assets/glossary/9995-enoshima.json`: "Enoshima - a small island town Edward Morse described in 1886: one street up a ravine between hills, densely crowded with houses, the narrowest of alleys leading to the houses behind it."
+
