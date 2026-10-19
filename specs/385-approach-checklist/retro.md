@@ -692,3 +692,10 @@ About 25 min. Part A gains items 10 (before moving a constant, list its uses and
 before rolling), numbered so the gate holds every later Approach to them. Three plan rounds: the first two reviews could not see the
 approved proposal (now quoted in the request), then blocked sub-bullets under item 4 as a reminder. **The habit it changes:** the
 two questions are the gate's, not the session's memory.
+
+## T75 - the retro row
+
+About 30 min. `plan_gate.decides_nothing` lets a part B pass without a review round when it answers item 4 "No" and item 5
+"Neither" and names no new decision; any part B that changes, tunes, moves or decides is reviewed as before. Three plan rounds:
+the request lacked the approved proposal list, then the review struck the D-id-only rule (a decision need carry no label).
+**The habit it changes:** none needed.
