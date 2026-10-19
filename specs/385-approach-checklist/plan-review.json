@@ -7383,32 +7383,36 @@
    "verdict": "CLEAR"
   },
   "T122": {
-   "section_sha256": "96a4cb447c6a100ddc4c8dac3088949e333e4e5bf58725c417354cfda5a6d19e",
+   "section_sha256": "9d2ad1c1dbeba6b0332ab17d45188eec19272c286743f7e687804dc233794b5d",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "T122 item 6 (exit c)",
-     "summary": "Resolve the conflict inside D46's existing merge branch; merging main back after every landing is refused.",
+     "id": "D144",
+     "summary": "In land-tooling.sh's D46 conflict branch, before git merge --abort, the conflicted files whose last origin/main commit is this clone's own 'Tooling from <clone>,' landing are named in the refusal with the line that keeps the clone's side (sync-in, then git checkout --ours, git add, git commit --no-edit, land again); the merge is still aborted and the landing still refused; the tool resolves nothing.",
      "class": "within",
-     "why": "This answers round 1's finding. The merge still happens only where D46 already merges (when the patch fails to apply), D46's 'not whenever the clone is behind' and the 'the clone's history is untouched' test both stand (item 9), and it is never a rebase and never under a running gate (T30)."
+     "why": "D46's behavior (a conflicting merge aborted, the clone left as it was, the refusal naming sync-in to resolve by hand) is unchanged; D144 only adds information to that refusal. It is an obvious tooling improvement found while working (amendment 6: 'implement any obvious performance / tooling / process improvements along the way') and it is exactly the binding change-route of the round arbiter on hour:385-approach-checklist@35 ('T122 narrows to a message'). Amendment 10 change 1's 10-minute measured-cost bar governs step-back tooling fixes; T122 was found working T119, and the arbiter, which named the hazard sub-bar, bound this narrower route anyway - that is the arbiter's call, reviewed by the GM after landing (feature 379), not a decision of this plan."
     },
     {
-     "id": "D144a",
-     "summary": "Inside D46's merge branch, a conflicted file whose main side is exactly what this clone landed through land-tooling is resolved to the clone's side, the merge is committed, and the landing goes on.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "This is an exception to D46's 'a merge that conflicts is aborted and refuses'. It passes the purpose test. D46 exists so a landing goes ahead when its patch no longer applies (T24: a stale base is merged, not refused). Feature 379 lands the files as a new commit on main, not the clone's own commit, so the clone's merge base never holds a file it landed. Its next landing of that file therefore fails to apply and conflicts add/add by construction, not by chance (item 4, measured 2026-10-19, T119 and the T84-era landings). Applied literally, D46 refuses the very case it was written to pass, and the route's own output creates the conflict. Main's side there is the clone's own content, so taking the clone's side discards nothing another session wrote. That fits the GM's amendment 6 ('implement any obvious ... tooling ... improvements along the way') and amendment 8 ('make our tooling do the thing correctly automatically every time')."
+     "id": "Exit (c): resolver withdrawn",
+     "summary": "The earlier resolver (scripts/gates/self_landed.py taking the clone's side and committing the merge) is withdrawn; T122 only names and instructs.",
+     "class": "within",
+     "why": "The GM never asked for a resolver, so withdrawing it narrows nothing he asked for; it returns T122 to D46 as written (a conflicting merge is aborted and refused, resolved by hand), which the earlier BLOCKED version had departed from."
     },
     {
-     "id": "D144b",
-     "summary": "D144's actual test, main's blob equal to the file's blob at any commit of `git rev-list HEAD -- <file>`, also matches versions from history the clone shares with main from before the merge base.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "This exception reaches past the class it is justified by. Items 5 and 9 and D144's title justify 'files whose main side the clone itself landed', but `git rev-list HEAD -- <file>` walks the clone's whole ancestry, including main's history before the merge base. Case: another session reverts a commit on main, so main's side of the file goes back to an earlier blob that HEAD's ancestry also contains, while the clone has edited the same lines. The test passes, `checkout --ours` silently undoes that session's revert, and the merge is committed. That is exactly the real conflict with other sessions' work that D46's abort-and-refuse exists to stop, and nothing in the request or spec carries it. Fix: restrict the match to commits the clone made since the fork, `git rev-list $(git merge-base HEAD MERGE_HEAD)..HEAD -- <file>`, or to the blobs this clone's own land-tooling commits put on main, and say which in D144 and item 9 so the stated class and the mechanism are the same set. Aside, not blocking: amendment 10's change 1 (a measured cost for a tooling fix) governs step-back fixes; this task was found while working T119, and item 4 dates and describes the incident."
+     "id": "Detection criterion",
+     "summary": "A conflicted file counts as self-landed when git log -1 --format=%s origin/main -- <file> begins 'Tooling from <this clone's name>,'.",
+     "class": "within",
+     "why": "A design detail of D144 that implements the arbiter's words 'each conflicting file whose main-side commit is this clone's own land-tooling commit' literally; it changes no behavior beyond the refusal's text."
+    },
+    {
+     "id": "Done (item 9): other conflicts refused as now; test red without it",
+     "summary": "Any other conflict is refused exactly as today; tests/hooks/test-land-tooling.sh gains a case red without D144.",
+     "class": "within",
+     "why": "The first keeps D46 unchanged; the second is a test that only fails when the requested refusal text is absent - enforcement of what was asked, not new scope."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   }
  }
 }
