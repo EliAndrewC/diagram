@@ -59,7 +59,8 @@ of the 22 carries a recorded judgment - doing something, doing nothing, or too n
     step records that, else "no outcome record".
 - **FR-002 (no trace, no tool)**: every automatic step that changes an outcome without a guard's firing or a target's run of its
   own, and every refusing check that logs no firing, records each run through one shared usage-log helper
-  (`<git common dir>/tool-usage.jsonl`: utc, tool, kind, outcome), and the steps are listed in one registry with what each does.
+  (`<git common dir>/tool-usage.jsonl`: utc, tool, kind, outcome), and every tool that records through the helper - each automatic
+  step and each refusing check - is listed in one registry with what it does.
 - **FR-003 (target outcomes)**: a make target's run records its outcome: the event log records a failed tool call (the hook
   event a failure fires) beside a succeeded one, so every target run in a session reads succeeded or failed; runs the event log
   cannot see - a target run by a timer outside any session (`make idle-tests`) or from inside another script - record through
@@ -77,7 +78,7 @@ of the 22 carries a recorded judgment - doing something, doing nothing, or too n
 - **SC-001** (FR-001, FR-003): `make tool-yield` lists every wired hook, refusing check, make target, review check and logged
   step, with numbers, "too new" or "no outcome record", and a test red without each kind's reading; a target's failed run reads
   failed.
-- **SC-002** (FR-002, FR-004): the rule's check fails on a hook or check that records nothing and on an unregistered step, with
+- **SC-002** (FR-002, FR-004): the rule's check fails on a hook or check that records nothing and on an unregistered tool, with
   tests red without it; every hook and check the inventory finds recording nothing either records or names its record.
 - **SC-003** (FR-005): each of the 22 fixes carries a judgment citing its tools' numbers since it was made, in a file the GM's
   review reads.
