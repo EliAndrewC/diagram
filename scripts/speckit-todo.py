@@ -42,10 +42,10 @@ and `--holding` says why, so the mark cannot become an escape nobody logged.
 from __future__ import annotations
 
 import argparse
+import dataclasses
 import json
 import re
 import sys
-import dataclasses
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -209,7 +209,9 @@ def holding(d: Path) -> list[str]:
             ids = (lands_open_ids(d) | carried_ids(d)) if ids is None else ids
             if body.split(" ", 1)[0] in ids:
                 continue
-            out.append(f"{body.strip()}  <- {_LANDS_OPEN} honored only on the GM-review box of a feature with rows for the GM, or a task the reviewed plan's **Lands open**: line or the claims gate's carry record names")
+            out.append(
+                f"{body.strip()}  <- {_LANDS_OPEN} honored only on the GM-review box of a feature with rows for the GM, or a task the reviewed plan's **Lands open**: line or the claims gate's carry record names"
+            )
         else:
             out.append(body.strip())
     return out
@@ -379,10 +381,7 @@ def off_placeholder(specs: Path, vocab: Vocabulary, listed: list[Feature] | None
     """The open features owed at a tier not yet scripted that are not that tier's placeholder (the GM, 2026-10-10: *"all of
     the things that are owed when we implement villages should be consolidated into a single spec kit feature"*, and the
     same for each later tier)."""
-    return [
-        f for f in (features(specs) if listed is None else listed)
-        if f.state != "closed" and f.owed in STAGES[1:] and f.name != vocab.placeholders.get(f.owed)
-    ]
+    return [f for f in (features(specs) if listed is None else listed) if f.state != "closed" and f.owed in STAGES[1:] and f.name != vocab.placeholders.get(f.owed)]
 
 
 def placeholder_message(off: list[Feature], vocab: Vocabulary) -> str:
@@ -447,4 +446,8 @@ def main(argv: list[str]) -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1:]))
+    sys.path.insert(0, str(Path(__file__).resolve().parent / "hooks" / "lib"))
+    sys.dont_write_bytecode = True  # a record leaves no __pycache__ in the worktree (feature 406)
+    import usage_log  # noqa: E402 - feature 406 (D162): the landing's holding check records its run
+
+    sys.exit(usage_log.exited("speckit-todo", main(sys.argv[1:])))

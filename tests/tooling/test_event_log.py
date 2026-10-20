@@ -602,3 +602,15 @@ def test_the_exported_feature_names_the_log(tmp_path: pathlib.Path, monkeypatch)
     assert el.feature_of(root) == "390-a"
     monkeypatch.setenv("SPECIFY_FEATURE", "999-gone")
     assert el.feature_of(root) == "391-b"
+
+
+def test_a_failed_call_is_recorded_beside_a_succeeded_one() -> None:
+    """Feature 406 T02 (D161): a make target's run reads succeeded or failed - the failure event is logged with its target."""
+    el = _load("event_log")
+    ok = el.line({"hook_event_name": "PostToolUse", "session_id": "s", "tool_name": "Bash", "tool_use_id": "u1", "tool_input": {"command": "make quick"}})
+    bad = el.line({"hook_event_name": "PostToolUseFailure", "session_id": "s", "tool_name": "Bash", "tool_use_id": "u2", "tool_input": {"command": "make quick"}})
+    assert ok["ev"] == "PostToolUse" and ok["make"] == "quick"
+    assert bad["ev"] == "PostToolUseFailure" and bad["make"] == "quick" and bad["id"] == "u2"
+    settings = json.loads((Path(__file__).resolve().parents[2] / ".claude" / "settings.json").read_text())
+    wired = [h["command"] for m in settings["hooks"].get("PostToolUseFailure", []) for h in m["hooks"]]
+    assert any("event-log-hooks.sh" in c for c in wired), "the event-log hook is wired on a failure"

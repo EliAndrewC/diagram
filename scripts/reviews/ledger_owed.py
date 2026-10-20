@@ -305,6 +305,15 @@ def belongs(p: dict[str, str], num: str, questions: set[str], repo: Path, transc
     return bool(key) and any(key.group(1) in f.read_text(encoding="utf-8") for q in questions for f in repo.glob(f"research/questions/{q}-*.html"))
 
 
+
+def _usage(outcome: str) -> None:
+    """The ledger write recorded as an automatic step (feature 406 T03, D162): landings and `make ledger-owed` write rows unasked."""
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "hooks" / "lib"))
+    sys.dont_write_bytecode = True  # a record leaves no __pycache__ in the worktree (feature 406)
+    import usage_log  # noqa: PLC0415
+
+    usage_log.record(Path(__file__).resolve().parents[2], "ledger-owed-write", "step", outcome)
+
 def main(argv: Sequence[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
     ap.add_argument("--log", default="", help="the pass log (default: <git common dir>/check-passes.jsonl)")
@@ -324,6 +333,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             with ledger.open("a", encoding="utf-8") as fh:
                 fh.writelines(r + "\n" for r in rows)
         print(f"ledger-owed: {len(rows)} plan review row(s) written")
+        _usage("changed" if rows else "unchanged")
         return 0
     if args.write:
         mine = [p for p in owed if not args.session or _session_of(p, Path(args.transcripts)) == args.session]
@@ -335,6 +345,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         with ledger.open("a", encoding="utf-8") as fh:
             fh.writelines(filled_row(p, args.write, Path(args.transcripts)) + "\n" for p in mine)
         left = len(owed) - len(mine)
+        _usage("changed" if mine else "unchanged")
         print(f"ledger-owed: {len(mine)} row(s) written for {args.session or (f'feature {feat.group(1)}' if feat else 'every session')}"
               + (f"; {left} pass(es) not traced to it stay owed for the feature that ran them" if left else ""))
         return 0

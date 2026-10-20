@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# TOOL_RECORD: it only arms and starts make idle-tests, which records each run (idle-tests in tool-usage.jsonl) (feature 406 T03, D162)
 # idle-tests-hooks.sh - an idle session runs the expensive tests in the background (feature 136).
 # (GUARD_EDIT_OK: a NEW guard, feature 136 - the GM's request, verbatim in specs/136-idle-background-tests/gm-request.md)
 #

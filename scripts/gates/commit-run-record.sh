@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# TOOL_RECORD: it writes the run record itself - dev/run-log/ is where its runs are seen (feature 406 T03, D162)
 # commit-run-record.sh <result> [pointer] - a run commits its OWN record (feature 375 amendment 7, FR-033; FR-029 for the cohort).
 #
 # WHY. Every `make done` writes a record under dev/run-log/, a tracked file, and `sync-with-main.sh done` refuses an

@@ -281,11 +281,11 @@ fragment-move:  ## [docs] rename or renumber a question - every file of its stem
 hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each guard still has a companion
 	@root=$$(git rev-parse --show-toplevel); gitdir=$$(git rev-parse --path-format=absolute --git-common-dir); fail=""; n=0; skipped=0; \
 	work=$$(mktemp -d); trap 'rm -rf "$$work"' EXIT; \
-	roster=$$(for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/gate-stamp.py $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh; do basename $$h; done); \
+	roster=$$(for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/gate-stamp.py $$root/scripts/gates/check-tool-signals.py $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh; do basename $$h; done); \
 	traced=" $$(if [ -z "$(HOOKS_ALL)" ]; then python3 "$$root/tests/hooks/hooktrace.py" fresh "$$gitdir" "$$root" $$roster 2>/dev/null; fi | tr '\n' ' ') "; \
 	export HOOKS_SHIM="$$(python3 "$$root/tests/hooks/hooktrace.py" shim "$$gitdir" 2>/dev/null)" HOOKS_ROOT="$$root"; \
 	keys=$$(python3 "$$root/tests/hooks/hookdeps.py" --keys $$roster); \
-	for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/gate-stamp.py $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh; do \
+	for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/gate-stamp.py $$root/scripts/gates/check-tool-signals.py $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh; do \
 	  b=$$(basename $$h); case $$b in test-*) continue ;; esac; \
 	  t=test-$${b%.py}; case $$t in *.sh) ;; *) t=$$t.sh ;; esac; \
 	  if [ ! -f "$$root/tests/hooks/$$t" ]; then \
@@ -330,6 +330,7 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	    else printf '\n\033[1mHOOK TESTS FAILED: the pytest files that test scripts/\033[0m\n'; tail -40 "$$work/pytest-scripts.log" | sed 's/^/  /'; fail="$$fail pytest-scripts"; fi; \
 	  else skipped=$$((skipped+1)); fi; \
 	fi; \
+	if ! python3 "$$root/scripts/gates/check-tool-signals.py"; then fail="$$fail check-tool-signals"; fi; \
 	if [ -n "$$fail" ]; then printf '\n\033[1mhooks-test FAILED:%s\033[0m\n\n' "$$fail"; exit 1; fi; \
 	python3 "$$root/scripts/gates/gate-stamp.py" --write hooks; \
 	printf 'hooks-test: %s guard suites green, %s unchanged since they last went green (hooks area stamped)\n' "$$n" "$$skipped"; \
@@ -521,6 +522,9 @@ page-check:     ## [tests] the interactive tests + the browser test, then the `p
 fix-yield:      ## [project] did each tooling fix save what it was meant to: its measure's rate before its ruling and since it was made (feature 385 T119)   F=<feature>
 	@if [ -z "$(F)" ]; then printf 'make fix-yield: F=<feature> is required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/fix_yield.py" "$(F)" --root "$$(git rev-parse --show-toplevel)"
+
+tool-yield:     ## [project] every tool measured: how often it runs, how often it changed something, its misfires and what the record cannot see yet (feature 406)   [KIND=guard|target|check|step|review]
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/tool_yield.py" --root "$$(git rev-parse --show-toplevel)" $(if $(KIND),--kind $(KIND))
 
 where-time:     ## [project] where a feature's time went, by task: the time by bucket and the agents by kind (feature 385 T77); BY=tick books each tick-to-tick window (T115)   F=<feature> [SINCE=<ISO UTC>] [BY=tick]
 	@if [ -z "$(F)" ]; then printf 'make where-time: F=<feature> is required\n' >&2; exit 2; fi
@@ -1048,7 +1052,9 @@ _reference:
 IDLE_CTX = $(eval IDLE_CTX := $(shell $(SWITCH) idle 2>/dev/null || echo unreadable))$(IDLE_CTX)
 DONE_NAME = $(if $(filter 0,$(IDLE_CTX)),done,idle-done)
 idle-tests:     ## [tests] {inactive: arming is disabled - the GM turned it off 2026-09-06; the target still runs by hand} what an idle session runs unattended (feature 136): the whole gate, never FULL, recorded as `idle-done`
-	@PAIR_OK="idle run: no session attached to dispatch a review" $(MAKE) --no-print-directory done INCREMENTAL=0
+	@PAIR_OK="idle run: no session attached to dispatch a review" $(MAKE) --no-print-directory done INCREMENTAL=0; rc=$$?; \
+	  python3 "$$(git rev-parse --show-toplevel)/scripts/hooks/lib/usage_log.py" record --tool idle-tests --kind target --outcome "$$( [ $$rc -eq 0 ] && echo passed || echo failed )"; \
+	  exit $$rc
 
 maps:            ## [maps] regenerate and check the pool, picking its own scope from how the last run went   SCOPE=reference|all
 ##  SCOPE=reference|all  override the scope; by default it picks its own - the reference hamlet alone after a failed run, the whole tier after a clean one
@@ -1186,3 +1192,12 @@ ROLL_CENSUS = $(shell git rev-parse --absolute-git-dir 2>/dev/null)/roll-census.
 TOOLING_GATE_ARGS = $(if $(COV_FLOORS),$(if $(INCR_FORCE),,-p tests.tooling._test_deps),)
 INCR_ARGS = $(if $(COV_FLOORS),--cov-context=test -p l7r.diagram.ci.gate_plugin -p l7r.diagram.ci.rollcensus $(TOOLING_GATE_ARGS),)
 INCR_ENV = $(if $(COV_FLOORS),L7R_GATE_SELECT="$(shell python3 -m l7r.diagram.ci incremental where 2>/dev/null)" L7R_ROLL_CENSUS="$(ROLL_CENSUS)" $(if $(TOOLING_GATE_ARGS),L7R_TEST_DEPS=gate,),)
+
+# EVERY MAKE INVOCATION RECORDS ITS RUN (feature 406 T02, D161; the GM 2026-10-19: "it is notionally possible for us to see how
+# often a tool is used"). The event log sees a target only when a session's Bash call runs it; one run from another target's
+# recipe, from a script or from the idle timer left no trace. Each parse records its goals `ran` in <git dir>/tool-usage.jsonl
+# (the default goal's name when none is given); `make -n` and `make -q` run nothing and record nothing. `make tool-yield` counts
+# a target's runs from these lines alone and reads their outcomes from the event log.
+ifeq (,$(findstring n,$(filter-out --%,$(firstword $(MAKEFLAGS))))$(findstring q,$(filter-out --%,$(firstword $(MAKEFLAGS)))))
+_TOOL_YIELD_RAN := $(shell python3 "$(dir $(abspath $(firstword $(MAKEFILE_LIST))))scripts/hooks/lib/usage_log.py" goals $(or $(MAKECMDGOALS),$(.DEFAULT_GOAL)) >/dev/null 2>&1)
+endif

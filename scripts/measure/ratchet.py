@@ -37,6 +37,7 @@ from __future__ import annotations
 import sys
 from dataclasses import dataclass
 
+
 # `HARD_AT_OR_BELOW` is the baseline at which the GM's ceiling becomes the fixed rule for that target.
 # For `quick` the GM stated 15 s against today's 11 s, so it binds NOW. For `done` they stated 45 s
 # against a 35 s baseline that does not exist yet, so it binds when somebody pins 35 - which is the
@@ -44,11 +45,11 @@ from dataclasses import dataclass
 @dataclass(frozen=True)
 class Ratchet:
     target: str
-    baseline: int          # PINNED. Moves only by a committed edit, and never without `reason`.
-    reason: str            # FR-010: why the baseline is what it is. Empty is a test failure.
-    hard_ceiling: int | None = None      # the GM's stated number, where they stated one
+    baseline: int  # PINNED. Moves only by a committed edit, and never without `reason`.
+    reason: str  # FR-010: why the baseline is what it is. Empty is a test failure.
+    hard_ceiling: int | None = None  # the GM's stated number, where they stated one
     hard_at_or_below: int | None = None  # ...which becomes the fixed rule at or below this baseline
-    compare: str = "run"   # "run" or "median" - what is measured against the ceiling
+    compare: str = "run"  # "run" or "median" - what is measured against the ceiling
     armed: bool = True
     # FEATURE 196: the cost of `done` is BIMODAL on roll-cache state, so one baseline described
     # neither regime. `baseline` is the WARM figure and KEEPS ITS NAME - `scripts/gates/check-run-plausible.py`
@@ -56,8 +57,8 @@ class Ratchet:
     # value as "no floor", so renaming it would silently switch off the guard that stopped a
     # `make -n done` minting a push credential on 2026-09-05. `baseline_cold` is ADDITIVE.
     baseline_cold: int | None = None
-    reason_cold: str = ""      # its OWN written reason (171 FR-010) - the per-ROW check cannot see this
-    min_class_runs: int = 5    # below this many same-class runs, the RUN is judged, never waved through
+    reason_cold: str = ""  # its OWN written reason (171 FR-010) - the per-ROW check cannot see this
+    min_class_runs: int = 5  # below this many same-class runs, the RUN is judged, never waved through
 
 
 # THE TABLE. One row per target; adding a target is a row.
@@ -65,79 +66,77 @@ RATCHETS = {
     "quick": Ratchet(
         target="quick",
         baseline=11,
-        reason="measured 2026-08-29 after feature 158 took quick from 41 s to 10.5 s; the GM stated "
-               "15 s against this figure",
+        reason="measured 2026-08-29 after feature 158 took quick from 41 s to 10.5 s; the GM stated 15 s against this figure",
         hard_ceiling=15,
-        hard_at_or_below=11,   # binds now
+        hard_at_or_below=11,  # binds now
         compare="run",
     ),
     "done": Ratchet(
         target="done",
         baseline=400,
         reason="GUARD_EDIT_OK: RE-PINNED TO 400 s BY FEATURE 192 (2026-09-06), on the GM's explicit "
-               "authorization and with the cause of the drift KNOWN rather than guessed. Both halves "
-               "of that sentence matter, because THIS SESSION ALREADY RE-PINNED THIS ROW ONCE TODAY "
-               "AND REVERTED IT: e5283ca9 moved it 310 -> 385 from a fresh median, the very next gate "
-               "blew past even the widened ceiling, and 07bcdfa2 put it back - a baseline moved to "
-               "chase a measurement is the failure this whole mechanism exists to prevent. What is "
-               "different now is a diagnosis: `specs/191-.../research.md` R7 found the gate BIMODAL on "
-               "roll-cache state - warm ~400 s, cold ~800 s - because the floor phase re-rolled maps "
-               "the suite had already rolled (a measured 401.6 s gap, instrumented). Feature 192 fixes "
-               "that. 400 s is the WARM cost, which is the number the GM named in their own "
-               "authorization (*'re-pin to the measured warm cost (~400 s)'*) - it is not a fresh "
-               "measurement this session chose, and a materially different one goes back to them. "
-               "MEASURED CONSEQUENCE, stated so nobody expects magic: this yields a 520 s ceiling "
-               "against a median of 543 s at the time of pinning, so the re-pin does NOT by itself "
-               "clear the block - one further run under ~520 s has to land and pull the median down. "
-               "If that does not happen the block is unresolved and goes back to the GM rather than "
-               "being re-pinned a second time. The GM's 45 s hard ceiling and its 35 s trigger are "
-               "untouched and take over unchanged if the efficiency work ever gets the gate there. "
-               "--- the previous reason, kept verbatim --- "
-               "RE-PINNED BY FEATURE 174 (2026-08-31), which is the condition the GM "
-               "attached to D1 when they ratified it on 2026-08-30 - re-pin once real runs exist. "
-               "Two things had to happen together and both have: the first post-172 full-gate "
-               "measurement was taken (310 s, `dev/run-log/`), and feature 174 CHANGED WHAT `done` "
-               "DOES, so the 155 s it replaces no longer measures the same target at all. On the GM's "
-               "own request the gate's test phase is now `test-full` on both branches, because the "
-               "100% floor cannot be held over a partial suite. The 403 s ceiling derives; the GM's "
-               "45 s and its 35 s trigger are untouched, and take over unchanged if the efficiency "
-               "work ever brings the gate back down. TWO NUMBERS WERE MEASURED AND BOTH WERE "
-               "CONTENDED, which is stated rather than averaged away: 310 s (the run that did all "
-               "the work and then failed at the floor) and 622 s (green), each sharing the box with "
-               "foreground `make test-file` runs from the same session. 310 is pinned as the cleaner "
-               "of the two; RE-PIN FROM AN IDLE RUN when one exists - `make idle-tests` produces "
-               "exactly that. KNOWN AND ACCEPTED meanwhile: the median is taken over recent green "
-               "runs, most of which are still cheap pre-174 ones, so the bar will not bite until "
-               "they age out - loose for a while beats unarmed, which is how the 4x slowdown went "
-               "unnoticed in the first place, and the median is also what absorbs one noisy run",
+        "authorization and with the cause of the drift KNOWN rather than guessed. Both halves "
+        "of that sentence matter, because THIS SESSION ALREADY RE-PINNED THIS ROW ONCE TODAY "
+        "AND REVERTED IT: e5283ca9 moved it 310 -> 385 from a fresh median, the very next gate "
+        "blew past even the widened ceiling, and 07bcdfa2 put it back - a baseline moved to "
+        "chase a measurement is the failure this whole mechanism exists to prevent. What is "
+        "different now is a diagnosis: `specs/191-.../research.md` R7 found the gate BIMODAL on "
+        "roll-cache state - warm ~400 s, cold ~800 s - because the floor phase re-rolled maps "
+        "the suite had already rolled (a measured 401.6 s gap, instrumented). Feature 192 fixes "
+        "that. 400 s is the WARM cost, which is the number the GM named in their own "
+        "authorization (*'re-pin to the measured warm cost (~400 s)'*) - it is not a fresh "
+        "measurement this session chose, and a materially different one goes back to them. "
+        "MEASURED CONSEQUENCE, stated so nobody expects magic: this yields a 520 s ceiling "
+        "against a median of 543 s at the time of pinning, so the re-pin does NOT by itself "
+        "clear the block - one further run under ~520 s has to land and pull the median down. "
+        "If that does not happen the block is unresolved and goes back to the GM rather than "
+        "being re-pinned a second time. The GM's 45 s hard ceiling and its 35 s trigger are "
+        "untouched and take over unchanged if the efficiency work ever gets the gate there. "
+        "--- the previous reason, kept verbatim --- "
+        "RE-PINNED BY FEATURE 174 (2026-08-31), which is the condition the GM "
+        "attached to D1 when they ratified it on 2026-08-30 - re-pin once real runs exist. "
+        "Two things had to happen together and both have: the first post-172 full-gate "
+        "measurement was taken (310 s, `dev/run-log/`), and feature 174 CHANGED WHAT `done` "
+        "DOES, so the 155 s it replaces no longer measures the same target at all. On the GM's "
+        "own request the gate's test phase is now `test-full` on both branches, because the "
+        "100% floor cannot be held over a partial suite. The 403 s ceiling derives; the GM's "
+        "45 s and its 35 s trigger are untouched, and take over unchanged if the efficiency "
+        "work ever brings the gate back down. TWO NUMBERS WERE MEASURED AND BOTH WERE "
+        "CONTENDED, which is stated rather than averaged away: 310 s (the run that did all "
+        "the work and then failed at the floor) and 622 s (green), each sharing the box with "
+        "foreground `make test-file` runs from the same session. 310 is pinned as the cleaner "
+        "of the two; RE-PIN FROM AN IDLE RUN when one exists - `make idle-tests` produces "
+        "exactly that. KNOWN AND ACCEPTED meanwhile: the median is taken over recent green "
+        "runs, most of which are still cheap pre-174 ones, so the bar will not bite until "
+        "they age out - loose for a while beats unarmed, which is how the 4x slowdown went "
+        "unnoticed in the first place, and the median is also what absorbs one noisy run",
         baseline_cold=549,
         reason_cold="GUARD_EDIT_OK: PINNED BY FEATURE 196 (2026-09-06). The GM: *\"separate medians "
-                    "for warm and cold seem like the correct solution\"*. 549 is the median of the five "
-                    "cold (roll-cache MISS) runs this session can account for - 522, 544, 549, 610, 651 - "
-                    "of which FOUR are evidenced by an instrumented `[MISS]` line and ONE (the 549 itself) "
-                    "is INFERRED: it sits between a cold 610 and a warm 379 on the same commit and was "
-                    "taken while hamlet_floor/scatter_audit were being edited, which invalidates the roll "
-                    "cache by construction. The inference TIGHTENS the bar (549/713) rather than loosening "
-                    "it (577/750 without), which is the opposite direction from every error this feature "
-                    "made on the way here - its population was corrected twice, both times permissive. "
-                    "THIS IS A SESSION-PINNED NUMBER, not one the GM ratified: 400 is theirs and is "
-                    "untouched. If a fuller sample moves 549 materially it goes back to them. Ceiling 713.",
+        "for warm and cold seem like the correct solution\"*. 549 is the median of the five "
+        "cold (roll-cache MISS) runs this session can account for - 522, 544, 549, 610, 651 - "
+        "of which FOUR are evidenced by an instrumented `[MISS]` line and ONE (the 549 itself) "
+        "is INFERRED: it sits between a cold 610 and a warm 379 on the same commit and was "
+        "taken while hamlet_floor/scatter_audit were being edited, which invalidates the roll "
+        "cache by construction. The inference TIGHTENS the bar (549/713) rather than loosening "
+        "it (577/750 without), which is the opposite direction from every error this feature "
+        "made on the way here - its population was corrected twice, both times permissive. "
+        "THIS IS A SESSION-PINNED NUMBER, not one the GM ratified: 400 is theirs and is "
+        "untouched. If a fuller sample moves 549 materially it goes back to them. Ceiling 713.",
         hard_ceiling=45,
-        hard_at_or_below=35,   # not yet - the pinned baseline (400 warm, 549 cold) is far above it
-        compare="median",      # D2, RATIFIED BY THE GM 2026-08-30, and BOUNDED TO THIS REGIME: while
-                               # the baseline is above 35 s the median of recent green same-scope runs
-                               # is judged, because 7 of the last 25 sit at or above the 201 s ceiling
-                               # and a per-run bar would fire on 28% of NORMAL runs. At 35 s the GM's
-                               # own per-run reading takes over (`ceiling_for`), which is what their
-                               # worked example says. See the module docstring, point 3.
+        hard_at_or_below=35,  # not yet - the pinned baseline (400 warm, 549 cold) is far above it
+        compare="median",  # D2, RATIFIED BY THE GM 2026-08-30, and BOUNDED TO THIS REGIME: while
+        # the baseline is above 35 s the median of recent green same-scope runs
+        # is judged, because 7 of the last 25 sit at or above the 201 s ceiling
+        # and a per-run bar would fire on 28% of NORMAL runs. At 35 s the GM's
+        # own per-run reading takes over (`ceiling_for`), which is what their
+        # worked example says. See the module docstring, point 3.
     ),
     # FR-006: wired, and OFF. One row away from working, and that row off - the GM has said they do
     # not want the lengthy AWS runs happening at all right now.
     "test-full": Ratchet(
         target="test-full",
         baseline=0,
-        reason="not armed - the GM: 'I am not interested in running the lengthy tests at this time, "
-               "especially given that they run on AWS'. Pin a measured baseline before arming",
+        reason="not armed - the GM: 'I am not interested in running the lengthy tests at this time, especially given that they run on AWS'. Pin a measured baseline before arming",
         armed=False,
     ),
 }
@@ -191,8 +190,7 @@ def ceiling_for_class(r: Ratchet, cache: str | None) -> tuple[int, str]:
     return ceiling_for(r)
 
 
-def verdict(target: str, seconds: int | None, median: int | None = None,
-            cache: str | None = None, scope: str | None = None, class_runs: int | None = None) -> tuple[bool, str]:
+def verdict(target: str, seconds: int | None, median: int | None = None, cache: str | None = None, scope: str | None = None, class_runs: int | None = None) -> tuple[bool, str]:
     """(ok, message). `seconds` is this run; `median` the recent same-scope, same-class median.
 
     THE BELOW-SAMPLE RULE (feature 196): when a class holds fewer than `min_class_runs` green runs
@@ -210,10 +208,10 @@ def verdict(target: str, seconds: int | None, median: int | None = None,
     ceiling, mode = ceiling_for_class(r, cache)
     below_sample = class_runs is not None and class_runs < r.min_class_runs
     if below_sample and scope == "reference":
-        mode = "run"          # judge THIS run - never "pass for lack of evidence"
+        mode = "run"  # judge THIS run - never "pass for lack of evidence"
     measured = seconds if mode == "run" else median
     if measured is None:
-        return True, ""   # nothing to judge on - never fail a target for lack of evidence
+        return True, ""  # nothing to judge on - never fail a target for lack of evidence
     if measured < ceiling:
         return True, ""
     what = "this run" if mode == "run" else "the median of recent green runs"
@@ -242,6 +240,11 @@ if __name__ == "__main__":
     _sc = sys.argv[5] if len(sys.argv) > 5 and sys.argv[5] else None
     _n = int(sys.argv[6]) if len(sys.argv) > 6 and sys.argv[6].isdigit() else None
     _ok, _msg = verdict(_t, _s, _m, _c, _sc, _n)
+    sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parents[1] / "hooks" / "lib"))
+    sys.dont_write_bytecode = True  # a record leaves no __pycache__ in the worktree (feature 406)
+    import usage_log  # feature 406 (D163): the gate's time ratchet records its run
+
+    usage_log.exited("ratchet", 0 if _ok else 1)
     if not _ok:
         print(_msg, file=sys.stderr)
         sys.exit(1)

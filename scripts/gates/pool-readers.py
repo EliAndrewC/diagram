@@ -72,4 +72,8 @@ def main(argv: list[str]) -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv))
+    sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parents[1] / "hooks" / "lib"))
+    sys.dont_write_bytecode = True  # a record leaves no __pycache__ in the worktree (feature 406)
+    import usage_log  # noqa: E402 - feature 406 T03 (D162): every refusing check records its run
+
+    sys.exit(usage_log.exited("pool-readers", main(sys.argv)))

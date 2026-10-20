@@ -855,6 +855,11 @@ def _handle(mode: str, payload: Mapping[str, Any], path: Path, now: float) -> st
     elif mode == "after":  # the round arbiter's fix on hour:385-approach-checklist@30: a held section changed however it was named
         msg = hm_planhold.restore(state, _root(payload), str(payload.get("tool_use_id") or ""))
         save(path, state)
+        if msg:  # feature 406 T03 (D162): the write-back is an automatic step - it records each time it acts
+            sys.dont_write_bytecode = True  # a record leaves no __pycache__ in the worktree (feature 406)
+            import usage_log  # noqa: PLC0415 - the module beside this one
+
+            usage_log.record(_root(payload), "planhold-restore", "step", "changed")
         return msg
     elif mode == "edit" and (held := hm_planhold.refusal(state, _root(payload), str(payload.get("tool_name") or ""), ti, now,
                                                         escaped("PLAN_EDIT_OK", " ".join(str(v) for v in ti.values())))):

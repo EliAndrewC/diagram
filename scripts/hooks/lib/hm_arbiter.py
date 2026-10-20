@@ -417,7 +417,7 @@ def record_batch(root: Path, ruling: Mapping[str, Any], declared: str, now: str 
     for t in triggers:
         one = dict(exceptions[t]) if t in exceptions else dict(base)
         if t == holder:  # the batch's fix with its own measure (feature 385 T119, D139), on an exception's row too
-            one.update({"tooling_fix": fix, **{k: ruling[k] for k in ("fix_measure", "fix_minutes") if k in ruling}})
+            one.update({"tooling_fix": fix, **{k: ruling[k] for k in ("fix_minutes",) if k in ruling}})
         elif fix and t in under:
             one["tooling_fix_on"] = holder
         plan.append((t, one))
@@ -430,28 +430,17 @@ def record_batch(root: Path, ruling: Mapping[str, Any], declared: str, now: str 
 
 
 def fix_measure_of(ruling: Mapping[str, Any]) -> dict[str, Any]:
-    """A tooling fix's `fix_measure` and `fix_minutes`, checked (feature 385 T119, D139; the GM's change 3 of 2026-10-19: each
-    fix's yield measured against the time it was meant to save) - `make fix-yield` reads them; 46 fixes ruled without them could
-    not be measured. The measure is a regex over the main session's Bash commands, or `agent:<kind>` for a check's dispatches."""
-    m = str(ruling.get("fix_measure") or "").strip()
-    how = (
-        "a `tooling_fix` names `fix_measure` - a regex over the session's Bash commands whose time it should cut, or "
-        "`agent:<kind>` for a check's dispatches - and `fix_minutes`, the cost it measured this hour (feature 385 T119)"
-    )
-    if not m or (m.startswith("agent:") and not m[6:].strip()):
-        raise ValueError(how)
-    if not m.startswith("agent:"):
-        try:
-            re.compile(m)
-        except re.error as e:
-            raise ValueError(f"`fix_measure` {m!r} is not a regex ({e}) - {how}") from None
+    """A tooling fix's `fix_minutes`, checked: the cost it measured, which `make fix-yield` shows beside the fix's tools' numbers
+    (feature 385 T119, D139). Its `fix_measure` - a regex over the session's commands - was retired with the command-rate
+    reading by feature 406 (D165): a fix is now read by what its tools did since it was made, found from its settling commit."""
+    how = "a `tooling_fix` names `fix_minutes`, the cost it measured this hour (feature 385 T119)"
     try:
         minutes = float(ruling.get("fix_minutes"))  # type: ignore[arg-type]
     except TypeError, ValueError:
         raise ValueError(how) from None
     if minutes < 0:
         raise ValueError(how)
-    return {"fix_measure": m, "fix_minutes": minutes}
+    return {"fix_minutes": minutes}
 
 
 def spec_body_sha(d: Path) -> str:

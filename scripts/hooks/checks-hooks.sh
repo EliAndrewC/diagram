@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# TOOL_RECORD: its launched/returned modes keep book in checks-open.json (the round state make tool-yield does not need); its one refusal, the plan hold's write-back, records as planhold-restore in tool-usage.jsonl (feature 406 T03, D162)
 # checks-hooks.sh - the record checks in flight: each launch and each return (feature 375, FR-003(b)(c), plan D4).
 # (GUARD_EDIT_OK: a NEW hook - it records the state that the freeze in record-edit-hooks.sh and the round rule in
 # check-bundle-hooks.sh read; it never refuses.)

@@ -1,7 +1,8 @@
-"""`scripts/measure/fix_yield.py` and `hm_arbiter.fix_measure_of` - each tooling fix's yield (feature 385 T119, D139-D141).
+"""`scripts/measure/fix_yield.py` and `hm_arbiter.fix_measure_of` - each tooling fix's yield (feature 385 T119; feature 406 D165).
 
-The GM, 2026-10-19 (amendment 10, change 3): each fix's yield measured against the time it was meant to save, so a fix that
-saves nothing is retired. 49 of the first 60 hourly step-backs had named a fix, and nothing said whether any saved its time.
+The GM, 2026-10-19 (amendment 10, change 3): each fix's yield measured, so a fix that saves nothing is retired; then (feature
+406): "Whether or not it's doing something for us should be a measurable question" - each fix read by its tools' numbers since
+it was made (D165), in D166's order.
 """
 
 from __future__ import annotations
@@ -9,6 +10,7 @@ from __future__ import annotations
 import datetime
 import json
 import pathlib
+import subprocess
 import sys
 
 import pytest
@@ -19,6 +21,7 @@ sys.path.insert(0, str(REPO / "scripts" / "reviews"))
 sys.path.insert(0, str(REPO / "scripts" / "hooks" / "lib"))
 import fix_yield as fy  # noqa: E402
 import hm_arbiter as ha  # noqa: E402
+import tool_yield as ty  # noqa: E402
 
 T0 = datetime.datetime(2026, 10, 19, tzinfo=datetime.UTC).timestamp()
 
@@ -27,76 +30,131 @@ def _iso(t: float) -> str:
     return datetime.datetime.fromtimestamp(t, datetime.UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
-def _session(hours: float, start: float, every: float, cmd: str, secs: float, agent: str = "") -> list[dict]:
-    """A main session `hours` long with a record each minute, and every `every` seconds a Bash call of `cmd` lasting `secs`
-    (or an Agent dispatch of `agent`)."""
-    out, t, n = [], start, 0
-    while t < start + hours * 3600:
-        out.append({"timestamp": _iso(t), "message": {"content": [{"type": "text", "text": "x"}]}})
-        if t - start >= n * every:
-            if agent:
-                use = {"type": "tool_use", "id": f"a{t}", "name": "Agent", "input": {"subagent_type": agent}}
-                out.append({"timestamp": _iso(t), "message": {"content": [use]}})
-            else:
-                use = {"type": "tool_use", "id": f"b{t}", "name": "Bash", "input": {"command": cmd}}
-                out.append({"timestamp": _iso(t), "message": {"content": [use]}})
-                out.append({"timestamp": _iso(t + secs), "message": {"content": [{"type": "tool_result", "tool_use_id": f"b{t}"}]}})
-            n += 1
-        t += 60
-    return out
+def _tool(kind: str, name: str, first: float, uses: tuple = (), hits: tuple = (), misses: tuple = (), recorded: bool = True) -> ty.Tally:
+    t = ty.Tally(kind, name, outcome_record=recorded)
+    for u in uses:
+        t.use(u)
+    t.first = first
+    for h in hits:
+        t.hit(h)
+    for m in misses:
+        t.miss(m)
+    return t
 
 
-def test_a_fix_whose_rate_fell_is_saving_and_one_whose_rate_held_saves_nothing() -> None:
-    before = _session(6, T0, 600, "make cohort", 300)  # 5 min of cohort every 10 min
-    fix = {"trigger": "hour:x@1", "tooling_fix": "f", "fix_measure": r"make cohort\b", "fix_minutes": 12, "utc": _iso(T0 + 6 * 3600), "status": "done", "settled": _iso(T0 + 6 * 3600)}
-    fell = fy.verdict(fix, before + _session(4, T0 + 7 * 3600, 1200, "make cohort", 60))
-    assert fell["verdict"] == "saving" and fell["after"] < fell["before"] and fell["after_hours"] >= fy.YIELD_MIN_HOURS
-    held = fy.verdict(fix, before + _session(4, T0 + 7 * 3600, 600, "make cohort", 300))
-    assert held["verdict"].startswith("saves nothing")
-    early = fy.verdict(fix, before + _session(1, T0 + 7 * 3600, 1200, "make cohort", 60))
-    assert early["verdict"] == "too early"
-    other = fy.verdict({**fix, "fix_measure": "make quick"}, before + _session(4, T0 + 7 * 3600, 600, "make cohort", 300))
-    assert other["before"] == 0 and other["after"] == 0 and other["verdict"].startswith("saves nothing"), "nothing to cut, nothing cut"
+DONE = {"trigger": "hour:x@1", "tooling_fix": "f", "fix_minutes": 12, "status": "done", "settled": _iso(T0)}
+NOW = T0 + 30 * 86400
 
 
-def test_an_agent_measure_counts_that_check_s_dispatches_and_a_fix_unmade_or_unmeasured_is_named() -> None:
-    recs = _session(6, T0, 1800, "", 0, agent="impl-drift") + _session(4, T0 + 7 * 3600, 3600, "", 0, agent="impl-drift")
-    fix = {"trigger": "t", "tooling_fix": "f", "fix_measure": "agent:impl-drift", "utc": _iso(T0 + 6 * 3600), "status": "done", "settled": _iso(T0 + 6.5 * 3600)}
-    row = fy.verdict(fix, recs)
-    assert row["verdict"] == "saving" and row["before"] == pytest.approx(2, abs=0.2) and row["after"] == pytest.approx(1, abs=0.2)
-    assert fy.verdict({**fix, "status": "declined"}, recs)["verdict"] == "not made (declined)"
-    assert fy.verdict({k: v for k, v in fix.items() if k != "fix_measure"}, recs)["verdict"].startswith("unmeasured")
-    table = fy.table([row])
-    assert "| t | `agent:impl-drift` | - |" in table and "saving" in table
-    assert "`make (done\\|cohort)` |" in fy.table([{**row, "measure": "make (done|cohort)"}]), "a pipe in a measure keeps its cell"
+def test_each_reading_in_d166_s_order() -> None:
+    """D166: too new to say, doing something, no outcome record, record too new, doing nothing - the first that holds."""
+    old = T0 - 20 * 86400
+    busy = _tool("guard", "g", old, uses=(T0 + 10,), hits=(T0 + 10,))
+    idle = _tool("guard", "h", old, uses=(T0 + 10,))
+    before = _tool("guard", "b", old, uses=(T0 - 10,), hits=(T0 - 10,))  # interventions before the fix do not count
+    misfire = _tool("review", "r", old, uses=(T0 + 10,), hits=(T0 + 10,), misses=(T0 + 20,))
+    blind = _tool("check", "c", 0.0, recorded=False)
+    fresh = _tool("check", "n", NOW - 86400, uses=(NOW - 86400,))
+    assert fy.verdict(DONE, {("guard", "g"): busy}, T0 + 86400)["reading"] == "too new to say"
+    assert fy.verdict(DONE, {("guard", "g"): busy, ("check", "c"): blind}, NOW)["reading"] == "doing something"
+    assert fy.verdict(DONE, {("guard", "h"): idle, ("check", "c"): blind}, NOW)["reading"] == "no outcome record"
+    assert fy.verdict(DONE, {}, NOW)["reading"].startswith("no outcome record (no tool found")
+    assert fy.verdict(DONE, {("guard", "h"): idle, ("check", "n"): fresh}, NOW)["reading"] == "record too new"
+    assert fy.verdict(DONE, {("guard", "h"): idle, ("guard", "b"): before}, NOW)["reading"] == "doing nothing"
+    assert fy.verdict(DONE, {("review", "r"): misfire}, NOW)["reading"] == "doing nothing", "an intervention net of its misfire is none"
+    assert fy.verdict({**DONE, "status": "declined"}, {}, NOW)["reading"] == "not made (declined)"
 
 
-def test_fixes_pairs_each_ruling_with_its_settling_and_an_assigned_measure() -> None:
+def test_the_table_cites_each_tool_s_numbers_since_the_fix() -> None:
+    tools = {
+        ("guard", "g"): _tool("guard", "g", T0 - 86400, uses=(T0 - 5, T0 + 5, T0 + 6), hits=(T0 + 5,)),
+        ("check", "c"): _tool("check", "c", 0.0, recorded=False),
+    }
+    out = fy.table([fy.verdict(DONE, tools, NOW)])
+    assert "| hour:x@1 | 2026-10-19 | 12 | doing something |" in out
+    assert "guard g (first seen 2026-10-18): 2 / 1 / 0" in out and "check c (first seen -): no outcome record" in out
+
+
+def test_fixes_pairs_each_ruling_with_its_settling() -> None:
     rows = [
         {"trigger": "a", "tooling_fix": "fa", "utc": "u1"},
-        {"trigger": "b", "tooling_fix": "fb", "fix_measure": "own", "fix_minutes": 3, "utc": "u2"},
+        {"trigger": "b", "tooling_fix": "fb", "fix_minutes": 3, "utc": "u2"},
         {"trigger": "c", "ruling": "continue"},
-        {"fix_of": "a", "status": "done", "utc": "u3"},
+        {"fix_of": "a", "status": "done", "utc": "u3", "note": "abc1234: made"},
     ]
-    got = {f["trigger"]: f for f in fy.fixes(rows, {"a": {"fix_measure": "make x", "by": "T119"}, "b": {"fix_measure": "not this"}})}
+    got = {f["trigger"]: f for f in fy.fixes(rows)}
     assert set(got) == {"a", "b"}
-    assert got["a"]["fix_measure"] == "make x" and got["a"]["status"] == "done" and got["a"]["settled"] == "u3" and "by" not in got["a"]
-    assert got["b"]["fix_measure"] == "own" and got["b"]["status"] == "open", "a ruling's own measure wins"
+    assert got["a"]["status"] == "done" and got["a"]["settled"] == "u3" and got["a"]["note"] == "abc1234: made"
+    assert got["b"]["status"] == "open"
 
 
-def test_a_ruling_naming_a_fix_is_refused_without_a_measure() -> None:
-    """D139: 46 fixes were ruled as free sentences, and none could be measured afterwards."""
-    for bad in ({}, {"fix_measure": "make x"}, {"fix_minutes": 10}, {"fix_measure": "agent:", "fix_minutes": 1}, {"fix_measure": "make (", "fix_minutes": 1}, {"fix_measure": "x", "fix_minutes": -1}):
-        with pytest.raises(ValueError, match="fix_measure"):
-            ha.fix_measure_of(bad)
-    assert ha.fix_measure_of({"fix_measure": "agent:impl-drift", "fix_minutes": "12"}) == {"fix_measure": "agent:impl-drift", "fix_minutes": 12.0}
+def test_a_fix_s_tools_come_from_its_settling_commit(tmp_path: pathlib.Path) -> None:
+    root = tmp_path
+    (root / ".claude").mkdir()
+    hook = "scripts/hooks/" + "foo-hooks.sh"
+    (root / ".claude" / "settings.json").write_text(json.dumps({"hooks": {"PreToolUse": [{"hooks": [{"command": hook + " pretool"}]}]}}))
+    (root / "scripts" / "hooks").mkdir(parents=True)
+    (root / "scripts" / "gates").mkdir()
+    (root / "Makefile").write_text("done:\n\t@true\nquick:\n\t@true\ntick:\n\t@true\nthing:\n\t@python3 scripts/gates/x.py\n")
+    git = ["git", "-C", str(root), "-c", "user.name=t", "-c", "user.email=t@t"]
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+    subprocess.run([*git, "add", "-A"], check=True)
+    subprocess.run([*git, "commit", "-qm", "base"], check=True)
+    (root / hook).write_text("guard_log foo blocked\n")
+    (root / "scripts" / "gates" / "x.py").write_text('if __name__ == "__main__":\n    pass\n')
+    subprocess.run([*git, "add", "-A"], check=True)
+    subprocess.run([*git, "commit", "-qm", "the fix for hour:x@1"], check=True)
+    sha = subprocess.run(["git", "-C", str(root), "rev-parse", "--short", "HEAD"], capture_output=True, text=True).stdout.strip()
+    want = {("guard", "foo"), ("check", "x"), ("target", "thing")}
+    assert fy.tools_of_fix(root, {"trigger": "hour:x@1", "note": ""}) == want, "found by the commit naming its trigger"
+    assert fy.tools_of_fix(root, {"trigger": "other", "note": f"{sha}: made"}) == want, "found by the note's leading hash"
+    assert fy.tools_of_fix(root, {"trigger": "nowhere", "note": "no hash"}) == set()
+    # a landing carrying it and other files, and a later fix whose trigger starts the same, are not its commit
+    (root / "scripts" / "gates" / "y.py").write_text('if __name__ == "__main__":\n    pass\n')
+    subprocess.run([*git, "add", "-A"], check=True)
+    subprocess.run([*git, "commit", "-qm", "Tooling from clone, landed alone\n\nhour:x@1 and more"], check=True)
+    (root / "scripts" / "gates" / "z.py").write_text('if __name__ == "__main__":\n    pass\n')
+    subprocess.run([*git, "add", "-A"], check=True)
+    subprocess.run([*git, "commit", "-qm", "the fix for hour:x@10"], check=True)
+    assert fy.tools_of_fix(root, {"trigger": "hour:x@1", "note": ""}) == want, "not @10, and the clone's commit before its landing"
+    assert fy.tools_of_fix(root, {"trigger": "hour:x@10", "note": ""}) == {("check", "z")}
+    assert fy.tools_of_fix(root, {"trigger": "hour:x@1", "note": "", "settled": "2000-01-01T00:00:00Z"}) == set(), "nothing after its settling"
+    by_test = {"trigger": "unnamed", "note": "", "test": "scripts/gates/z.py", "utc": "2000-01-01T00:00:00Z"}
+    assert fy.tools_of_fix(root, by_test) == {("check", "z")}, "by its test file, between its ruling and its settling"
+    assert fy.tools_of_fix(root, {**by_test, "utc": _iso(datetime.datetime.now(datetime.UTC).timestamp() + 3600)}) == set(), "a test's commits before the ruling made other things"
+    (root / "specs").mkdir()
+    (root / "specs" / "record.md").write_text("ruled\n")
+    subprocess.run([*git, "add", "-A"], check=True)
+    subprocess.run([*git, "commit", "-qm", "the record of hour:x@10"], check=True)
+    assert fy.tools_of_fix(root, {"trigger": "hour:x@10", "note": ""}) == {("check", "z")}, "a commit holding only its record is passed over"
+    (root / "engine.py").write_text("x = 1\n")
+    subprocess.run([*git, "add", "-A"], check=True)
+    subprocess.run([*git, "commit", "-qm", "an engine fix for hour:x@10"], check=True)
+    assert fy.tools_of_fix(root, {"trigger": "hour:x@10", "note": ""}) == set(), "code that is no tool's is no tool found, not an older commit's tools"
 
 
-def test_the_report_reads_the_feature_s_record_and_its_assigned_measures(tmp_path: pathlib.Path) -> None:
+def test_the_report_reads_the_feature_s_record(tmp_path: pathlib.Path) -> None:
     d = tmp_path / "specs" / "385-x"
     d.mkdir(parents=True)
-    assert fy.report(tmp_path, d, []) == "(no tooling fix ruled)\n"
-    (d / "arbiter.jsonl").write_text(json.dumps({"trigger": "a", "tooling_fix": "fa", "utc": _iso(T0)}) + "\n")
-    (d / "fix-measures.json").write_text(json.dumps({"a": {"fix_measure": "make x"}}))
-    out = fy.report(tmp_path, d, [])
-    assert "| a | `make x` | - |" in out and "not made (open)" in out
+    assert fy.report(tmp_path, d) == "(no tooling fix ruled)\n"
+
+
+def test_a_ruling_naming_a_fix_is_refused_without_its_cost() -> None:
+    """D139 kept by D165: the cost a fix was ruled for stands beside its tools' numbers; the retired measure is not asked."""
+    for bad in ({}, {"fix_measure": "make x"}, {"fix_minutes": "ten"}, {"fix_minutes": -1}):
+        with pytest.raises(ValueError, match="fix_minutes"):
+            ha.fix_measure_of(bad)
+    assert ha.fix_measure_of({"fix_minutes": "12"}) == {"fix_minutes": 12.0}
+
+
+def test_with_no_commit_found_the_note_names_its_files_and_targets(tmp_path: pathlib.Path) -> None:
+    root = tmp_path
+    (root / ".claude").mkdir()
+    (root / ".claude" / "settings.json").write_text("{}")
+    (root / "scripts" / "reviews").mkdir(parents=True)
+    (root / "scripts" / "reviews" / "arbiter_bundle.py").write_text("x = 1\n")
+    make = "done:\n\t@true\nquick:\n\t@true\ntick:\n\t@true\narbiter-bundle:\n\t@python3 scripts/reviews/arbiter_bundle.py\nland-tooling:\n\t@true\n"
+    (root / "Makefile").write_text(make)
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+    note = "arbiter_bundle.pool_unstated asks a roll only on a map change; make land-tooling records each run; make nothing-here"
+    assert fy.tools_of_fix(root, {"trigger": "t", "note": note}) == {("target", "arbiter-bundle"), ("target", "land-tooling")}
