@@ -100,6 +100,20 @@ Owed by the round arbiter's ruling on hour:405-engine-findings-from-385@1 (conti
 
 **D4 - the active task holds, nothing else.** `speckit-todo.holding(d)` returns the open box of the clone's active task (`plan_gate.active_task`) when it is this feature's and its id is not in `L7R_LAND_TICKS` (space-separated ids `make land` sets after the task's tick checks pass); no other open box holds - the GM-review box, a carried task and an unstarted task alike. The `**Lands open**:` line is no longer read and task-add no longer writes it or a `[lands-open]` mark; the tick's refusal of a "mark the tooling did not put here" goes with it (no mark is honored or refused - it is text). The push's refusal names the active task and the command that lands it (`make land F=<n> T=<id>`).
 
+### T32 part B (2026-10-20T14:05Z)
+
+Owed by the round arbiter's ruling on hour:405-engine-findings-from-385@2 (continue), taken while T32 was the active task.
+
+1. **What is refusing?** Nothing in the code: tests/tooling (2076), the push suite and hooks-test green. `make land` refused on the hour's step-back, once per task (now printed once).
+2. **A3 again.** Unchanged: the GM's "no Lands open line" (G).
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: D4 as reviewed, plus a box nested under the active task holding (feature 330's indented rule kept).
+6. **The one-sentence test.** "Only the task being worked holds a landing" - true by the suites.
+7. **The next step is a measurement.** `make land` on T30-T35.
+8. **Every route measured before offering one?** No route is offered.
+9. **After a ruling: the step it names?** Yes - land T30-T35 with make land; the repeated line is tidied.
+
 ## T33 - `make land`: one command, every cheap refusal first (landing-analysis.md)
 
 ### T33 Approach (checklist part A)
