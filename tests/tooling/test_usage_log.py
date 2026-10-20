@@ -28,3 +28,15 @@ def test_a_record_never_fails_its_tool(tmp_path: pathlib.Path) -> None:
     ul.record(tmp_path / "not-a-repo", "x", "step", "changed")  # no git: nothing written, nothing raised
     assert ul.exited("x", 1, tmp_path / "not-a-repo") == 1
     assert json.loads((REPO / "scripts" / "tool-registry.json").read_text())["tools"] is not None
+
+
+def test_a_wrapped_check_records_its_exit(tmp_path: pathlib.Path) -> None:
+    """Feature 406 T03 (D162): a refusing check under scripts/gates/ records each run through the helper, passed or refused."""
+    subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
+    script = REPO / "scripts" / "gates" / "check-stale-dirs.py"
+    run = subprocess.run([sys.executable, str(script)], cwd=tmp_path, capture_output=True, text=True)
+    rows = [json.loads(x) for x in (tmp_path / ".git" / ul.USAGE).read_text().splitlines()]
+    assert rows and rows[-1]["tool"] == "check-stale-dirs" and rows[-1]["kind"] == "check"
+    assert rows[-1]["outcome"] == ("passed" if run.returncode == 0 else "refused")
+    registry = json.loads((REPO / "scripts" / "tool-registry.json").read_text())["tools"]
+    assert {"check-stale-dirs", "one-gate", "idle-tests", "tick-archive", "planhold-restore", "clone-sync-merge"} <= set(registry)

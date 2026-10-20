@@ -78,5 +78,6 @@ def main(argv: list[str]) -> int:
     return 2
 
 
+# TOOL_RECORD: a query (is a gate running in this clone?), not a refusal - its callers record what they refuse
 if __name__ == "__main__":
     raise SystemExit(main(sys.argv[1:]))

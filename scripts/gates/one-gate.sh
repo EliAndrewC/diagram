@@ -8,6 +8,6 @@ set -uo pipefail
 own="$(dirname "${BASH_SOURCE[0]}")/../hooks/lib/own-make.sh"
 if "$own" --no-print-directory done || "$own" done; then
   printf '\n\033[1mA GATE IS ALREADY RUNNING IN THIS TREE\033[0m - not starting another. Wait on its log (.git/verify-gate.log links to it): `make verify-wait`, run_in_background\n'
-  exit 1
+  python3 "$(dirname "${BASH_SOURCE[0]}")/../hooks/lib/usage_log.py" record --tool one-gate --kind check --outcome refused 2>/dev/null; exit 1  # feature 406 T03 (D162)
 fi
-exit 0
+python3 "$(dirname "${BASH_SOURCE[0]}")/../hooks/lib/usage_log.py" record --tool one-gate --kind check --outcome passed 2>/dev/null; exit 0  # feature 406 T03 (D162)

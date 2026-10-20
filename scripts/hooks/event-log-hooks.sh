@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# TOOL_RECORD: it is the event log - every hook event it records is the record (feature 406 T03, D162)
 # event-log-hooks.sh - one line per hook event into the feature's event log (feature 375, FR-008, plan D7).
 # (GUARD_EDIT_OK: a NEW hook - it records, it never refuses.)
 #

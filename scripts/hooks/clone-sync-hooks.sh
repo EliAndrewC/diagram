@@ -526,6 +526,7 @@ case $MODE in
     fi
     if out=$(cd "$clone" && scripts/sync-with-main.sh sync-in --background-render 2>&1); then  # GUARD_EDIT_OK: 2026-10-02 bounded wait and detached render, as above
       echo "clone-sync: auto-synced $clone with main (git)"
+      python3 "$(dirname "${BASH_SOURCE[0]}")/lib/usage_log.py" record --root "$clone" --tool clone-sync-merge --kind step --outcome changed 2>/dev/null || true  # feature 406 T03 (D162)
       # GUARD_EDIT_OK: feature 329 - the clone's own sync script may predate the move, so the carry runs from HERE, the mirror's copy.
       "$(dirname "${BASH_SOURCE[0]}")/../reviews/layout_carry.sh" "$clone" 2>&1 || true
       printf '%s\n' "$out" | grep -E '^sync-with-main: (NOTE|WARNING)' || true

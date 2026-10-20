@@ -110,6 +110,7 @@ if printf '%s\n' "$@" | grep -qx 'Makefile'; then
   if ! printf '%s\n' "$@" | grep -qx 'docs/make-targets.html' && ! git -C "$ROOT" diff --quiet "$base" HEAD -- docs/make-targets.html 2>/dev/null; then
     set -- "$@" docs/make-targets.html
     printf 'land-tooling: docs/make-targets.html lands too - the page generated from the Makefile\n' >&2
+  python3 "$(dirname "${BASH_SOURCE[0]}")/hooks/lib/usage_log.py" record --tool land-tooling-docs --kind step --outcome changed 2>/dev/null || true  # feature 406 T03 (D162)
   fi
 fi
 for f in "$@"; do
@@ -162,6 +163,7 @@ if ! git -C "$WT" apply --index "$patch" 2>/dev/null; then
     die "FILES do not apply cleanly onto the latest main, and merging main into the clone conflicts - run scripts/sync-with-main.sh sync-in, resolve the conflict, commit, then run this again"
   fi
   printf 'land-tooling: main had moved under FILES - merged origin/main into the clone and took the patch again\n' >&2
+  python3 "$(dirname "${BASH_SOURCE[0]}")/hooks/lib/usage_log.py" record --tool land-tooling-merge --kind step --outcome changed 2>/dev/null || true  # feature 406 T03 (D162)
   base=$(git -C "$ROOT" merge-base HEAD origin/main) || die "no merge base with origin/main"
   git -C "$ROOT" diff --binary "$base" HEAD -- "$@" > "$patch"
   [ -s "$patch" ] || die "FILES carry no change since main - nothing to land (main already has them)"

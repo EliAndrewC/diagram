@@ -1,4 +1,109 @@
 {
   "_doc": "Every tool that records through scripts/hooks/lib/usage_log.py, with its kind and what it does (feature 406 FR-002). scripts/gates/check-tool-signals.py refuses a helper call naming a tool not listed here, and an entry no code calls.",
-  "tools": {}
+  "tools": {
+    "approach_gate": {
+      "kind": "check",
+      "what": "scripts/gates/approach_gate.py - a refusing check; each run recorded passed or refused"
+    },
+    "check-duplicate-defs": {
+      "kind": "check",
+      "what": "scripts/gates/check-duplicate-defs.py - a refusing check; each run recorded passed or refused"
+    },
+    "check-entry-headings": {
+      "kind": "check",
+      "what": "scripts/gates/check-entry-headings.py - a refusing check; each run recorded passed or refused"
+    },
+    "check-file-scale": {
+      "kind": "check",
+      "what": "scripts/gates/check-file-scale.py - a refusing check; each run recorded passed or refused"
+    },
+    "check-function-cap": {
+      "kind": "check",
+      "what": "scripts/gates/check-function-cap.py - a refusing check; each run recorded passed or refused"
+    },
+    "check-house-style-delta": {
+      "kind": "check",
+      "what": "scripts/gates/check-house-style-delta.py - a refusing check; each run recorded passed or refused"
+    },
+    "check-partial-citations": {
+      "kind": "check",
+      "what": "scripts/gates/check-partial-citations.py - a refusing check; each run recorded passed or refused"
+    },
+    "check-question-size": {
+      "kind": "check",
+      "what": "scripts/gates/check-question-size.py - a refusing check; each run recorded passed or refused"
+    },
+    "check-research-pointers": {
+      "kind": "check",
+      "what": "scripts/gates/check-research-pointers.py - a refusing check; each run recorded passed or refused"
+    },
+    "check-run-plausible": {
+      "kind": "check",
+      "what": "scripts/gates/check-run-plausible.py - a refusing check; each run recorded passed or refused"
+    },
+    "check-stale-dirs": {
+      "kind": "check",
+      "what": "scripts/gates/check-stale-dirs.py - a refusing check; each run recorded passed or refused"
+    },
+    "clone-sync-merge": {
+      "kind": "step",
+      "what": "clone-sync-hooks.sh - a clean clone behind main merged with it at a prompt"
+    },
+    "close_check": {
+      "kind": "check",
+      "what": "scripts/gates/close_check.py - a refusing check; each run recorded passed or refused"
+    },
+    "cohort_gate": {
+      "kind": "check",
+      "what": "scripts/gates/cohort_gate.py - a refusing check; each run recorded passed or refused"
+    },
+    "gate-stamp": {
+      "kind": "check",
+      "what": "scripts/gates/gate-stamp.py - a refusing check; each run recorded passed or refused"
+    },
+    "idle-tests": {
+      "kind": "target",
+      "what": "make idle-tests - the whole gate run by the idle timer outside any session, its outcome recorded"
+    },
+    "land-tooling-docs": {
+      "kind": "step",
+      "what": "make land-tooling - docs/make-targets.html landed beside a changed Makefile"
+    },
+    "land-tooling-merge": {
+      "kind": "step",
+      "what": "make land-tooling - origin/main merged into the clone when FILES no longer apply"
+    },
+    "ledger-owed-write": {
+      "kind": "step",
+      "what": "ledger_owed.py - review ledger rows written for check passes that had none"
+    },
+    "memo_check": {
+      "kind": "check",
+      "what": "scripts/gates/memo_check.py - a refusing check; each run recorded passed or refused"
+    },
+    "one-gate": {
+      "kind": "check",
+      "what": "scripts/gates/one-gate.sh - refuses a second make done in the same tree"
+    },
+    "planhold-restore": {
+      "kind": "step",
+      "what": "hm_checks (checks-hooks after) - a held plan section changed under a running review is written back"
+    },
+    "pool-readers": {
+      "kind": "check",
+      "what": "scripts/gates/pool-readers.py - a refusing check; each run recorded passed or refused"
+    },
+    "preflight": {
+      "kind": "check",
+      "what": "scripts/gates/preflight.py - a refusing check; each run recorded passed or refused"
+    },
+    "spec-lint": {
+      "kind": "check",
+      "what": "scripts/gates/spec-lint.py - a refusing check; each run recorded passed or refused"
+    },
+    "tick-archive": {
+      "kind": "step",
+      "what": "make tick - the plan's finished sections archived to plan-done.md at a tick"
+    }
+  }
 }

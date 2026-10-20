@@ -8,7 +8,7 @@
    "declared": "spec-fidelity"
   },
   "## Summary": {
-   "sha256": "00cf93e6d29226664f975a2142c1c4a350fbbba8815c9389ae7ae7f5db7e7c7a",
+   "sha256": "7fc8934076e918ab97e31090f71538e5699896ec81bb2bf6af0be13fc2413beb",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-20",
    "declared": "spec-fidelity"
@@ -50,13 +50,13 @@
    "declared": "spec-fidelity"
   },
   "### T02 Approach (checklist part A)": {
-   "sha256": "748e609d303b2a637f2362a1f2279d95c35735672339e99a4b948f0ee15a50bf",
+   "sha256": "b7bfb43ca06b3fa9d0336369707d3b3c2a8dc9f956942bfd114a377ec34a1dce",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-20",
    "declared": "spec-fidelity"
   },
   "### T02 Decisions": {
-   "sha256": "7d79bb81e3de6fb6034de22ca47a0384f57231c7003e7e4609c24be717ea788e",
+   "sha256": "8876e6fdf053411a6203b49d9266bdc036e936195770ff825daf612ca65d3871",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-20",
    "declared": "spec-fidelity"
@@ -74,7 +74,7 @@
    "declared": "spec-fidelity"
   },
   "### T03 Decisions": {
-   "sha256": "3e5e29951464bdebf36e8fc7b80edfbcc09467c01f36935aa580e6abb084e97e",
+   "sha256": "a8ef3b7489a2b58db3003ba881b0c79b9041e4a1f69223bf4f52e1b699cc6b8b",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-20",
    "declared": "spec-fidelity"
@@ -92,7 +92,7 @@
    "declared": "spec-fidelity"
   },
   "### T04 Decisions": {
-   "sha256": "3607d64922299d7bc0624aefd5ad71c89fe6ff0f80dc3b799315c658e51d01ab",
+   "sha256": "34b4364e1b4afeb0d86e5349139cb43b7fc5b1f10ff18168115bf7aa6d29d4ec",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-20",
    "declared": "spec-fidelity"
@@ -110,7 +110,7 @@
    "declared": "spec-fidelity"
   },
   "### T05 Decisions": {
-   "sha256": "0477be4470c6c1c4a1fbd204f44397d28a9c3c63e8aa7c583586117740e8b5c3",
+   "sha256": "9e02d9546f719ab56fbcb50deca69e0b3ece3518cf3f1014988c2644ca29af75",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-20",
    "declared": "spec-fidelity"
@@ -122,13 +122,13 @@
    "declared": "spec-fidelity"
   },
   "### T06 Approach (checklist part A)": {
-   "sha256": "e9d202e7a14fd7023c84aa7776a3de1b1e653762783806d66109375ffcc86822",
+   "sha256": "97bd0bc81660801045d684df996b316877b4bfac9a1423ae792410722a98b925",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-20",
    "declared": "spec-fidelity"
   },
   "### T06 Decisions": {
-   "sha256": "b193d21e08a1acd33a801a9fcad5662bc085dbd3046f3e01063290b10f5bcf8d",
+   "sha256": "1c614b7b5bb2097cc56a992df5f1cad10ef1fe254dbfb550dd8d41bbd6962fc3",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-20",
    "declared": "spec-fidelity"
@@ -146,7 +146,7 @@
    "declared": "spec-fidelity"
   },
   "### T07 Decisions": {
-   "sha256": "46f5102eb7d7768d3aab9483c4a6a8b8642c64c0b269aa60fc341a80cf3b7ad4",
+   "sha256": "900660e4e57e22ce8ddda6e09b75217217c30e4a79dd9989a6eb9d1f7a36e283",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-20",
    "declared": "spec-fidelity"
@@ -252,6 +252,85 @@
      "summary": "No fix is retired here; the judgment informs and the GM decides.",
      "class": "within",
      "why": "FR-005 asks for a judgment delivered to the GM, not for retirement."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-20",
+   "blocks": [
+    "## Constitution Check",
+    "## Measured before planning (2026-10-19)",
+    "## Summary",
+    "## T01 - the usage-log helper and the tool registry",
+    "## T02 - a make target's outcome recorded",
+    "## T03 - the silent tools record",
+    "## T04 - `make tool-yield`",
+    "## T05 - the rule",
+    "## T06 - `make fix-yield` on the new numbers",
+    "## T07 - the 22 fixes judged",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions",
+    "### T02 Approach (checklist part A)",
+    "### T02 Decisions",
+    "### T03 Approach (checklist part A)",
+    "### T03 Decisions",
+    "### T04 Approach (checklist part A)",
+    "### T04 Decisions",
+    "### T05 Approach (checklist part A)",
+    "### T05 Decisions",
+    "### T06 Approach (checklist part A)",
+    "### T06 Decisions",
+    "### T07 Approach (checklist part A)",
+    "### T07 Decisions",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D160",
+     "summary": "One usage-log helper (utc, tool, kind, outcome, session) at <git common dir>/tool-usage.jsonl, never failing its caller; exited(tool, code) for checks; one registry scripts/tool-registry.json of kind and what.",
+     "class": "within",
+     "why": "FR-002 as written; the extra session field narrows nothing."
+    },
+    {
+     "id": "D161",
+     "summary": "Failed calls recorded as PostToolUseFailure event lines; make idle-tests records through the helper; a target run from another target's recipe or from a script is NOT recorded, only its callers named in tool-yield ('session runs; also run unseen by <callers>').",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-003 names two cases the event log cannot see - the timer and 'from inside another script' - and says both 'record through FR-002's helper, and the report names any it still cannot see'. The plan records the timer case and moves the whole second class into the 'still cannot see' residue. Its reason (a recipe or script run is not a tool call, so the event log cannot see it) is the premise FR-003 already concedes; it gives no reason the HELPER cannot record such a run, and it is not impossible (the target can record itself when run below top level / outside a tool call, or the calling script can record around its make call). Naming callers gives no count of the sub-target's runs, so the GM's 'notionally possible for us to see how often a tool is used' is not met for these targets. Fix: record recipe- and script-run targets through the helper; name in the report only what remains unseen after that, and why."
+    },
+    {
+     "id": "D162",
+     "summary": "Each refusing check exits through usage_log.exited; hm_checks records its refusals; idle-tests-hooks records each run; six named automatic steps record changed/unchanged; all registered; a later automatic step that records nothing is invisible to FR-004's check, stated in tool-yield's footer.",
+     "class": "within",
+     "why": "FR-002 for the inventoried steps; FR-004 as accepted reaches hooks and refusing gate/check scripts, not automatic steps, so stating that limit is honest disclosure of the spec's own scope, not a narrowing. (Which refusing checks are covered is decided by D163/D164's scope, ruled there.)"
+    },
+    {
+     "id": "D163",
+     "summary": "tool_yield lists tools from settings.json, the refusing checks under scripts/gates/ ONLY (.py with __main__ or .sh), the Makefile, the registry and .claude/agents/, and reads the guard log, event logs, review ledger and usage log per kind.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The per-kind readers match FR-001, but the refusing-check inventory was narrowed this round: the earlier Summary and D164 read 'scripts/gates/ and scripts/'; the Summary, D163 and D164 now read scripts/gates/ alone, with no label as an exception. FR-001 defines the class as 'every gate or check script that can refuse work (what make done, make quick, the push and make tick run, scripts/gates/ and the scripts/ checks among them)' - it names the scripts/ checks explicitly. The request asks for 'basically every tool'. The premise that every refusing check lives in scripts/gates/ is unmeasured (the Measured section counts only scripts/gates/). Fix: enumerate refusing checks from what make done, make quick, the push and make tick run, plus scripts/gates/ and the scripts/ checks, and say how that set is found. Gaps the spec still binds on (not the ground of this ruling): no source named for a review check's dispatch count when it has no ledger rows, and no reader for an automatic step's misfires ('runs undone afterward where the step records that, else no outcome record')."
+    },
+    {
+     "id": "D164",
+     "summary": "check-tool-signals.py (run by make hooks-test) requires every wired hook and every .py with __main__ / .sh under scripts/gates/ ONLY to call guard_log or the helper or carry # TOOL_RECORD; every helper tool name registered and every registry entry called.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-004 refuses 'a refusing gate or check script that records nothing', and FR-001 places 'the scripts/ checks' in that class; the earlier D164 read 'under scripts/gates/ or scripts/'. Limiting the rule's reach to scripts/gates/ lets a refusing check under scripts/ land recording nothing, which is the case the rule exists to stop ('the answer exists from the day a tool lands'). The 'two languages' reasoning justifies .py/.sh, not the directory. Fix: the check reads the same refusing-check set D163 lists (scripts/gates/ and the scripts/ checks the four entry points run)."
+    },
+    {
+     "id": "D165",
+     "summary": "A fix's tools are the guards, checks, targets and registered steps in its settling commit, mapped by tool_yield's inventory; fix-yield reports each tool's first seen, uses, interventions, likely misfires, 'no outcome record' and 'too new' since the settling; fix-measures.json and the command rate retired; the step-back reads the same.",
+     "class": "within",
+     "why": "FR-005 as written; round 1's gap (misfires and 'no outcome record' missing) is closed."
+    },
+    {
+     "id": "D166",
+     "summary": "Judgment rules: doing something = interventions net of likely misfires; doing nothing = 7+ days of outcome records and no net intervention; too new = under 7 days; a tool with no outcome record is never judged doing nothing - the line says the record is missing.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The 'record missing' line is a fourth state beyond FR-005's three. It is legitimate: the GM called the 'saves nothing' reading 'a weak assertion at best' and accepted 'too new to have gathered measurements'; judging 'doing nothing' on no record is exactly the weak assertion the request exists to replace, so the literal three-way reading would defeat the purpose. Gap to close in implementation (not the ground of a ruling): 'too new' keys on the fix's age while 'doing nothing' needs 7 days of records, so a fix older than 7 days whose tools' records began at this landing fits no category - it should read too new (or record missing), never fall through."
     }
    ]
   }

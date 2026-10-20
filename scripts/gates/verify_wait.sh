@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# TOOL_RECORD: it reads and prints the gate's own run log - that log, and make verify's run in the event log, are where its runs are seen (feature 406 T03, D162)
 # verify_wait.sh - wait for the gate `make verify` started to end, reading ITS OWN log, and print its verdict.
 #
 # `make verify` starts its gate detached, so the harness tracks no run and nothing wakes the session when it ends. Its log

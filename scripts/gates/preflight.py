@@ -263,4 +263,7 @@ def main(argv: list[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parents[1] / "hooks" / "lib"))
+    import usage_log  # noqa: E402 - feature 406 T03 (D162): every refusing check records its run
+
+    raise SystemExit(usage_log.exited("preflight", main()))
