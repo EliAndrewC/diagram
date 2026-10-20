@@ -3,153 +3,153 @@
  "blocks": {
   "preamble": {
    "sha256": "3d141030521444cb11f77f9968fb4199b1f4791c1ebced36be3bfc1da1e41f12",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## Summary": {
    "sha256": "881de009bfcd20f944703414acc148c559ef84eb07f6b3cd70c5ab583bb7111d",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## Measured before planning (2026-10-19)": {
    "sha256": "a118d78a2420ee889a73654380c27be9fe8e9f6b5636e1157a2e5d217b3613a8",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## Constitution Check": {
    "sha256": "1425184db6ba22867a1ecfd9237f7782c94a5e53b1c000c3f625528be20fbbc9",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## T01 - the usage-log helper and the tool registry": {
    "sha256": "a2ff570b4b84b4071a0fa675c0dc175e10e7049271a9ba46f90ec3ca1ec4d158",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T01 Approach (checklist part A)": {
    "sha256": "15d12fdadcf7ab4cb8d634d1d765c12fd4c31781db4015c1a8f296b876528aea",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T01 Decisions": {
    "sha256": "74dad573b5e251590c474abc2923b4817a72326a92a383ce3120f332f8417259",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## T02 - a make target's outcome recorded": {
    "sha256": "0dbe14018f13d8f206fbfe5d5e24fba177523035b18cdf5be89684f55b2b57eb",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T02 Approach (checklist part A)": {
    "sha256": "30bcbed05a36f21c705f11d6be3b9f86ed2c05b748951cc6f6ee39b8a2cf4535",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T02 Decisions": {
-   "sha256": "151e7091ed48a5c06e9e055a4246e911ad3c3bfda0f0a19b8fcccb72723dec64",
-   "verdict": "BLOCKED",
+   "sha256": "ba2353b786838e3cc6ffacff0b26c7226e091eae687003819e7555cd98e5845c",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## T03 - the silent tools record": {
    "sha256": "fa4b6107a7a1570a9a87a622ca51cf07ae3ff3dad0f45aa850c66c9866384718",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T03 Approach (checklist part A)": {
    "sha256": "42428a966cb168207db1daa7e13c36d362ebbb2b6063fbe154da41316f39ee13",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T03 Decisions": {
    "sha256": "a8ef3b7489a2b58db3003ba881b0c79b9041e4a1f69223bf4f52e1b699cc6b8b",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## T04 - `make tool-yield`": {
    "sha256": "1fe2f80ba863e3b614b519f3dd57ca47024416dff96503abf715fe9e392edc63",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T04 Approach (checklist part A)": {
    "sha256": "9b3c24c4d38b6ad3acbc13ae6aca34ccdbcdf224ec597d59358261bdcd63a79f",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T04 Decisions": {
-   "sha256": "602c348d4b1a44c7674731dbbc3c5f709cf387e86a77e938c12e76832310f047",
-   "verdict": "BLOCKED",
+   "sha256": "0a7bf3f70e4f08b13440405ce9766c6e95f88856d3b07c02ceb05a10c7d67114",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## T05 - the rule": {
    "sha256": "0fb65971dc8842d8c91f51c6baad767608c0f51f873052b4ae1ed4ed4c76d16b",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T05 Approach (checklist part A)": {
    "sha256": "b73908c89b6ca569d1934d54e6eaf11f4278672b8e573eec73915529b79c281e",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T05 Decisions": {
-   "sha256": "b20db7b32d31484f5749ec3a7d151ecf7ea8bbd39fc533ddf4aae2a8a52ac91e",
-   "verdict": "BLOCKED",
+   "sha256": "1beecbccb843f1e31c03416b08f32dc61432e055cae2eb25cb9c7596634b4eaf",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## T06 - `make fix-yield` on the new numbers": {
    "sha256": "91d40d21db6cff34385093c4b8656e211ef6b02253e9c28c315915521e3f1da8",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T06 Approach (checklist part A)": {
    "sha256": "97bd0bc81660801045d684df996b316877b4bfac9a1423ae792410722a98b925",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T06 Decisions": {
    "sha256": "1c614b7b5bb2097cc56a992df5f1cad10ef1fe254dbfb550dd8d41bbd6962fc3",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## T07 - the 22 fixes judged": {
    "sha256": "02537d766da27c214103ebb2352c58b756ce11031ab63d6401630fdeb54790f2",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T07 Approach (checklist part A)": {
    "sha256": "19da52b35eb84bc6807a67fd7eeffcf0b89f838184d2e8d474caba709407eadd",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T07 Decisions": {
-   "sha256": "f02b359086725ede10f87020058b4d699ba388909d7cc14dfd011932c2d4fdb2",
-   "verdict": "BLOCKED",
+   "sha256": "06c7314f9c46cc950182044f80d599ad4a5152ffc84daf57cb03d243194ed848",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -447,6 +447,45 @@
      "class": "narrowing",
      "ruling": "NOT LEGITIMATE",
      "why": "Read 'no outcome record' and 'record too new' with either condition. If the condition is 'any tool of the fix': a fix with one intervening tool and one tool without an outcome record (an automatic step, whose misfires are always 'no outcome record' under D163; a review check with no ledger rows), or with one tool on a fresh record, reads 'no outcome record' or 'record too new'. The evidence that it is doing something exists and is hidden, so the GM's question goes unanswered where the numbers answer it. If the condition is 'all tools': a mixed fix satisfies none of the five, because doing nothing needs all tools recorded 7+ days, and the fix falls through, contrary to the block's own claim. Combined with D161's 'usage log alone', every fix that touched a Makefile target would read 'record too new'. The exhaustive order that hides nothing: too new to say (the fix under 7 days old); doing something (any tool with interventions net of its likely misfires); no outcome record (any remaining tool without one); record too new (any remaining tool's record under 7 days); doing nothing (all tools recorded 7+ days, no net intervention). Must state that order and the any/all condition of each."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-20",
+   "blocks": [
+    "## Constitution Check",
+    "## Measured before planning (2026-10-19)",
+    "## Summary",
+    "## T01 - the usage-log helper and the tool registry",
+    "## T02 - a make target's outcome recorded",
+    "## T03 - the silent tools record",
+    "## T04 - `make tool-yield`",
+    "## T05 - the rule",
+    "## T06 - `make fix-yield` on the new numbers",
+    "## T07 - the 22 fixes judged",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions",
+    "### T02 Approach (checklist part A)",
+    "### T02 Decisions",
+    "### T03 Approach (checklist part A)",
+    "### T03 Decisions",
+    "### T04 Approach (checklist part A)",
+    "### T04 Decisions",
+    "### T05 Approach (checklist part A)",
+    "### T05 Decisions",
+    "### T06 Approach (checklist part A)",
+    "### T06 Decisions",
+    "### T07 Approach (checklist part A)",
+    "### T07 Decisions",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:406-every-tool-measured#T01@4",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
   }

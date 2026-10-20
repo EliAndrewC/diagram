@@ -180,7 +180,7 @@ def registry(root: Path) -> dict[str, dict]:
 
 def tools_of(root: Path, files: Iterable[str], make_diff: str = "") -> set[tuple[str, str]]:
     """The tools a change's files belong to (feature 406 D165: a fix is read by its tools): a hook and the guards whose hook
-    names a changed helper of `scripts/hooks/lib/`, a refusing check, a review's agent file, a registered step by its file, a
+    names a changed helper (a `scripts/` file by its name, a `scripts/hooks/lib/` module by its stem), a refusing check, a review's agent file, a registered step by its file, a
     target whose recipe names a changed script, and each Makefile target a hunk of `make_diff` (`git show -U0 -- Makefile`)
     changed."""
     out: set[tuple[str, str]] = set()
@@ -193,9 +193,9 @@ def tools_of(root: Path, files: Iterable[str], make_diff: str = "") -> set[tuple
     for f in files:
         if m := re.fullmatch(r"scripts/hooks/([\w-]+)-hooks\.sh", f):
             out.add(("guard", m.group(1)))
-        elif f.startswith("scripts/hooks/lib/"):
-            stem = Path(f).stem
-            out |= {("guard", g) for g, text in hook_text.items() if re.search(rf"\b{re.escape(stem)}\b", text)}
+        elif f.startswith("scripts/"):  # a helper a hook runs or imports: by its file name, or a lib module's stem
+            stem, lib = Path(f).stem, f.startswith("scripts/hooks/lib/")
+            out |= {("guard", g) for g, text in hook_text.items() if Path(f).name in text or (lib and re.search(rf"\b{re.escape(stem)}\b", text))}
         if f in check_rel:
             out.add(("check", check_rel[f]))
         if m := re.fullmatch(r"\.claude/agents/([\w-]+)\.md", f):

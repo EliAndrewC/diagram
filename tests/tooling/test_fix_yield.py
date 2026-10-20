@@ -119,7 +119,18 @@ def test_a_fix_s_tools_come_from_its_settling_commit(tmp_path: pathlib.Path) -> 
     assert fy.tools_of_fix(root, {"trigger": "hour:x@1", "note": ""}) == want, "not @10, and the clone's commit before its landing"
     assert fy.tools_of_fix(root, {"trigger": "hour:x@10", "note": ""}) == {("check", "z")}
     assert fy.tools_of_fix(root, {"trigger": "hour:x@1", "note": "", "settled": "2000-01-01T00:00:00Z"}) == set(), "nothing after its settling"
-    assert fy.tools_of_fix(root, {"trigger": "unnamed", "note": "", "test": "scripts/gates/z.py"}) == {("check", "z")}, "by its test file"
+    by_test = {"trigger": "unnamed", "note": "", "test": "scripts/gates/z.py", "utc": "2000-01-01T00:00:00Z"}
+    assert fy.tools_of_fix(root, by_test) == {("check", "z")}, "by its test file, between its ruling and its settling"
+    assert fy.tools_of_fix(root, {**by_test, "utc": _iso(datetime.datetime.now(datetime.UTC).timestamp() + 3600)}) == set(), "a test's commits before the ruling made other things"
+    (root / "specs").mkdir()
+    (root / "specs" / "record.md").write_text("ruled\n")
+    subprocess.run([*git, "add", "-A"], check=True)
+    subprocess.run([*git, "commit", "-qm", "the record of hour:x@10"], check=True)
+    assert fy.tools_of_fix(root, {"trigger": "hour:x@10", "note": ""}) == {("check", "z")}, "a commit holding only its record is passed over"
+    (root / "engine.py").write_text("x = 1\n")
+    subprocess.run([*git, "add", "-A"], check=True)
+    subprocess.run([*git, "commit", "-qm", "an engine fix for hour:x@10"], check=True)
+    assert fy.tools_of_fix(root, {"trigger": "hour:x@10", "note": ""}) == set(), "code that is no tool's is no tool found, not an older commit's tools"
 
 
 def test_the_report_reads_the_feature_s_record(tmp_path: pathlib.Path) -> None:
@@ -134,3 +145,16 @@ def test_a_ruling_naming_a_fix_is_refused_without_its_cost() -> None:
         with pytest.raises(ValueError, match="fix_minutes"):
             ha.fix_measure_of(bad)
     assert ha.fix_measure_of({"fix_minutes": "12"}) == {"fix_minutes": 12.0}
+
+
+def test_with_no_commit_found_the_note_names_its_files_and_targets(tmp_path: pathlib.Path) -> None:
+    root = tmp_path
+    (root / ".claude").mkdir()
+    (root / ".claude" / "settings.json").write_text("{}")
+    (root / "scripts" / "reviews").mkdir(parents=True)
+    (root / "scripts" / "reviews" / "arbiter_bundle.py").write_text("x = 1\n")
+    make = "done:\n\t@true\nquick:\n\t@true\ntick:\n\t@true\narbiter-bundle:\n\t@python3 scripts/reviews/arbiter_bundle.py\nland-tooling:\n\t@true\n"
+    (root / "Makefile").write_text(make)
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+    note = "arbiter_bundle.pool_unstated asks a roll only on a map change; make land-tooling records each run; make nothing-here"
+    assert fy.tools_of_fix(root, {"trigger": "t", "note": note}) == {("target", "arbiter-bundle"), ("target", "land-tooling")}

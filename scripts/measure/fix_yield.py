@@ -32,6 +32,7 @@ import stepback_bundle as sb  # noqa: E402
 import tool_yield as ty  # noqa: E402
 
 DAY = 86400.0
+RECORDS = ("specs/", "dev/", "docs/", "research/", "tests/")  # a commit touching only these made no tool change
 
 
 def fixes(rows: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
@@ -50,29 +51,41 @@ def _git(root: Path, *args: str) -> str:
     return out.stdout if out.returncode == 0 else ""
 
 
-def settling_commit(root: Path, fix: Mapping[str, Any]) -> str:
-    """The commit that made the fix: the hash its settling note opens with; else the newest commit up to its settling that names
-    its trigger exactly (`@2` is not `@29`); else the newest one up to then that touched the test its settling names."""
+def candidates(root: Path, fix: Mapping[str, Any]) -> list[str]:
+    """The commits that may have made the fix, best first: the hash its settling note opens with; the commits up to its settling
+    that name its trigger exactly (`@2` is not `@29`), the clone's own before a landing's (which carries every file landed with
+    it, `make land-tooling`, feature 379); the commits up to then that touched the test its settling names."""
+    out = []
     m = re.match(r"\s*([0-9a-f]{7,40})\b", str(fix.get("note") or ""))
     if m and subprocess.run(["git", "-C", str(root), "cat-file", "-e", m.group(1) + "^{commit}"], capture_output=True).returncode == 0:
-        return m.group(1)
+        out.append(m.group(1))
     until = [f"--until={fix['settled']}"] if fix.get("settled") else []
     trigger = "".join(c if c.isalnum() or c in "-:@/#_ ,=" else "\\^" if c == "^" else f"[{c}]" for c in str(fix.get("trigger") or ""))
-    # the clone's own commit before a landing's, which carries every file landed with it (`make land-tooling`, feature 379)
     found = _git(root, "log", "-20", "--format=%h %s", *until, "-E", f"--grep={trigger}([^0-9]|$)", "HEAD").splitlines() if trigger else []
-    own = [line.split(" ", 1)[0] for line in found if not line.split(" ", 1)[-1].startswith("Tooling from ")]
-    sha = (own or [line.split(" ", 1)[0] for line in found] or [""])[0]
-    if not sha and fix.get("test"):
-        sha = _git(root, "log", "-1", "--format=%h", *until, "HEAD", "--", str(fix["test"])).strip()
-    return sha
+    out += [line.split(" ", 1)[0] for line in found if not line.split(" ", 1)[-1].startswith("Tooling from ")]
+    out += [line.split(" ", 1)[0] for line in found if line.split(" ", 1)[-1].startswith("Tooling from ")]
+    if fix.get("test") and fix.get("utc"):  # between its ruling and its settling only: a test's older commits made other things
+        out += _git(root, "log", "-5", "--format=%h", f"--since={fix['utc']}", *until, "HEAD", "--", str(fix["test"])).split()
+    return list(dict.fromkeys(out))
 
 
 def tools_of_fix(root: Path, fix: Mapping[str, Any]) -> set[tuple[str, str]]:
-    sha = settling_commit(root, fix)
-    if not sha:
-        return set()
-    files = _git(root, "show", "--name-only", "--format=", sha).split()
-    return ty.tools_of(root, files, _git(root, "show", "-U0", "--format=", sha, "--", "Makefile"))
+    """The tools of the first candidate commit that changed code; one holding only records (specs, the ledger, docs, tests) is
+    passed over, and code that is no tool's (an engine module) reads as no tool found, never as the next commit's tools. With no
+    commit found, the `scripts/` files and `make` targets its settling note names."""
+    for sha in candidates(root, fix):
+        files = _git(root, "show", "--name-only", "--format=", sha).split()
+        if any(not f.startswith(RECORDS) for f in files):
+            return ty.tools_of(root, files, _git(root, "show", "-U0", "--format=", sha, "--", "Makefile"))
+    note = str(fix.get("note") or "")
+    made = {("target", t) for t in re.findall(r"\bmake ([a-z][\w-]+)", note) if t in ty.targets(root)}
+    return ty.tools_of(root, named_files(root, note)) | made
+
+
+def named_files(root: Path, note: str) -> list[str]:
+    """The `scripts/` files a settling note names, when no commit is found: `module.function`, `name.py` or `name.sh`."""
+    words = set(re.findall(r"\b([\w-]+)\.(?:py|sh)\b", note)) | set(re.findall(r"\b([a-z]\w+)\.[a-z_]\w*\(?", note))
+    return sorted(str(p.relative_to(root)) for p in (root / "scripts").rglob("*") if p.suffix in (".py", ".sh") and p.stem in words and "__pycache__" not in p.parts)
 
 
 def verdict(fix: Mapping[str, Any], tools: Mapping[tuple[str, str], ty.Tally], now: float) -> dict[str, Any]:
