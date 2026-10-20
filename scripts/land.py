@@ -152,6 +152,14 @@ def main(argv: list[str]) -> int:
     if failed:
         print(f"land: landed, but {', '.join(failed)} refused its tick (above) - answer it, then make tick", file=sys.stderr)
         return 2
+    # THE TICKS LAND TOO: written after the push, they would wait in the clone for the next landing - committed and pushed here,
+    # the feature's own records alone, so the direct route takes them
+    if run(root, ["git", "status", "--porcelain", "--", str(d.relative_to(root))])[1].strip():
+        run(root, ["git", "add", "--", str(d.relative_to(root))])
+        run(root, ["git", "commit", "-q", "-m", f"{d.name}: {' '.join(tasks)} ticked (make land)"])
+        if rc := push(root, tasks):
+            print(f"land: landed and ticked, but the ticks' own push failed (exit {rc}) - run scripts/sync-with-main.sh done", file=sys.stderr)
+            return rc
     print(f"land: {' '.join(tasks)} landed and ticked")
     return 0
 

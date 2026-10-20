@@ -270,7 +270,12 @@ def test_one_task_or_several_every_tick_asked_first_landed_once_and_ticked(tmp_p
     assert lb.main(["188", "T02 T03"]) == 1 and len(landings) == 1
     assert "- [ ] T02" in (d / "tasks.md").read_text(encoding="utf-8"), "a failed landing ticks none"
     rc[0] = 0
+    dirty = {"on": True}
+    monkeypatch.setattr(lb, "run", lambda root, cmd, env=None, quiet=True: (0, " M specs/188-alpha/tasks.md\n" if dirty["on"] and "--porcelain" in cmd and "specs/188-alpha" in cmd else ""))
+    before = len(landings)
     assert lb.main(["188", "T02 T03"]) == 0 and landings[-1] == ["T02", "T03"], "one landing for the batch"
+    assert len(landings) == before + 2, "...and one more push for its ticks (feature 405 T33)"
+    dirty["on"] = False
     text = (d / "tasks.md").read_text(encoding="utf-8")
     assert "verify: DONE. landed in batch T02+T03: both fixes green" in text and "- [x] T03" in text
     assert lb.main(["188", "T02a"]) == 0 and landings[-1] == ["T02a"], "one task lands alone"
