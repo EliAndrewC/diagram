@@ -58,6 +58,11 @@ def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str) -> list[str
         why, _msg = tt.refusal(root, d, task, note, landed=False)
         if why:
             stops.append(f"{task}: {why}")
+    # the plan reviews' ledger rows are the push's to write (385 T72): written and committed first, as the push does, so they are
+    # not named as owed
+    run(root, [sys.executable, str(HERE / "reviews" / "ledger_owed.py"), "--write-plan-reviews", "--ledger", str(root / "dev" / "review-ledger.md")])
+    if run(root, ["git", "status", "--porcelain", "--", "dev/review-ledger.md"])[1].strip():
+        run(root, ["git", "commit", "-q", "-m", "the plan reviews' ledger rows, written at landing (feature 385 T72)", "--", "dev/review-ledger.md"])
     if run(root, ["git", "status", "--porcelain"])[1].strip():
         stops.append("uncommitted changes - commit them first")
     _rc, owed = run(root, [sys.executable, str(HERE / "reviews" / "ledger_owed.py"), "--ledger", str(root / "dev" / "review-ledger.md")])
