@@ -24,22 +24,22 @@ tool", with "a way that it is notionally possible for us to see how often a tool
 The GM, or a step-back, runs one command and sees, for every tool of the project, its uses per week, its interventions (the times
 it changed what happened), its likely misfires, and when it was first seen - or that it is too new to say.
 
-**Independent Test**: `make tool-yield` prints every guard, make target, review check and logged automatic step, each with those
-columns, read from the records the project keeps.
+**Independent Test**: `make tool-yield` prints every wired hook, refusing check, make target, review check and logged automatic
+step, listed from the code - a tool that never fired reads 0 - each with those columns or "no outcome record".
 
 ## User Story 2 - no tool without a signal (P1)
 
 A tool added later is measurable from the day it lands, because the tooling refuses one that records nothing.
 
-**Independent Test**: a hook script that logs no firing, or a usage-log step the registry does not list, fails the check that
-`make hooks-test` (or the gate) runs.
+**Independent Test**: a wired hook or a refusing check that records nothing (unless it names the record that sees it), or a
+usage-log call the registry does not list, fails the check `make hooks-test` runs.
 
 ## User Story 3 - the 22 fixes judged on evidence (P2)
 
 The tooling fixes `fix-yield` read as "saves nothing" are judged on what their tools did since they landed.
 
-**Independent Test**: `make fix-yield` reports, per made fix, the tools it changed and their uses and interventions since it
-was made, and the GM's review gets the list.
+**Independent Test**: `make fix-yield` reports, per made fix, the tools it changed and their numbers since it was made, and each
+of the 22 carries a recorded judgment - doing something, doing nothing, or too new to say - in a file the GM's review reads.
 
 ## Requirements
 
