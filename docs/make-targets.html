@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 174 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 175 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -161,6 +161,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make download-add</td><td class=a>FILE</td><td>append a source only the GM can fetch at the end of the canonical download list, under the next number taken under a host-wide lock (feature 313)</td></tr>
 <tr><td class=n>make downloads-ingest</td><td class=a>DROP KEEP MARK</td><td>on the GM&#x27;s word &quot;ingest&quot;: the marks in the GM&#x27;s copy of the download list recorded in research/to-download.md, then the inbox archived (feature 313)   [KEEP=&quot;&lt;ids&gt;&quot;] [DROP=&quot;&lt;ids&gt;&quot;] [MARK=&quot;&lt;id&gt;=&lt;downloaded|partial|paywalled|not-found&gt; ...&quot;]</td></tr>
 <tr><td class=n>make downloads-sync</td><td class=a>&ndash;</td><td>on the GM&#x27;s word &quot;sync&quot;: the GM&#x27;s copy of the download list replaced from research/to-download.md - refused while it holds anything not ingested (feature 313)</td></tr>
+<tr><td class=n>make downloads-tag</td><td class=a>&ndash;</td><td>tag every download-list entry [money] or [diagram] after its number, derived from the questions its Rests-on line points at (the GM, 2026-10-20); download-add tags a new entry itself</td></tr>
 <tr><td class=n>make engine-key</td><td class=a><div class=ad><span class=an>REF=&lt;commit&gt;</span><span class=aw>which commit to key (default: HEAD)</span></div></td><td>the content hash the gate and the push key on</td></tr>
 <tr><td class=n>make feature-report</td><td class=a><div class=ad><span class=an>F=&lt;NNN&gt;</span><span class=aw>the feature</span></div><div class=ad><span class=an>SINCE</span></div><div class=ad><span class=an>TRANSCRIPT</span></div><div class=ad><span class=an>UNTIL</span></div><div class=ad><span class=an>WRITE</span></div></td><td>where a feature&#x27;s time and dispatches went, as a table, from the event log, the run log and git</td></tr>
 <tr><td class=n>make figures</td><td class=a>SPEC</td><td>re-run every recorded measurement and report what moved   [SPEC=specs/NNN-slug; default every spec with a measurements.json]</td></tr>
