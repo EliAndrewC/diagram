@@ -55,3 +55,11 @@ Every open task of feature 385 that was not process work, moved verbatim to `tas
   unchanged code filed here, each ranking row marked with its wave, and the GM's review box.
 - **SC-002** (FR-004): the first round's one claim landed, and its time and breakdown reported to the GM before a second task
   starts.
+
+## Review history
+
+- **spec-fidelity round 1 (2026-10-20): CHANGES REQUIRED, 3 items.** Today's scope (one claim, then the numbers) carried by
+  no requirement - FR-004 and SC-002 added, the 2026-10-20 words quoted; "ten claims" -> seven; 385's found.jsonl rows never
+  filed - T28 maps all 63. The aside (a `**Lands open**:` line) taken.
+- **spec-fidelity round 2 (2026-10-20, verify): FAITHFUL.** All three resolved; the report is to say how the round went, not
+  only its numbers (aside, taken).

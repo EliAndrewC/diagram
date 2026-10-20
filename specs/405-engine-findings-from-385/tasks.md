@@ -1,6 +1,6 @@
 # Tasks - feature 405: the engine and record findings moved from 385
 
-Spec: [`spec.md`](spec.md). Each task keeps its 385 id in its title; the boxes moved verbatim on 2026-10-19 (385 amendment 11).
+Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes moved on 2026-10-19, 385 amendment 11); T28 on are found work filed here (FR-002).
 
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row
       research: rendering
