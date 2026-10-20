@@ -109,3 +109,11 @@ def test_a_requirement_written_as_a_heading_is_cited_whole() -> None:
     got = pb.requirements(spec)
     assert got["FR-006"] == "### FR-006 - the reason outside the file\n\nThe body.\n\n- (c) a clause\n"
     assert got["SC-008"] == "- **SC-008** (FR-006): done.\n" and set(got) == {"FR-006", "FR-007", "SC-008"}
+
+
+def test_a_list_of_this_features_ids_is_not_read_as_another_features() -> None:
+    """Feature 407's plan reviews got an empty spec-cited.md: in "(FR-001, FR-002)" the qualified-id pattern read "001" inside
+    FR-001 as a feature number and dropped ", FR-002" as that feature's id, which broke FR-001 too."""
+    body = "## D1 - the rule (FR-001, FR-002)\n\nfeature 383 FR-043 is another feature's.\n"
+    kept = pb._QUALIFIED.sub(lambda q: "" if q.group(1) != "407" else q.group(2), body)
+    assert [m.group(1) for m in pb._IDS.finditer(kept)] == ["D1", "FR-001", "FR-002"]
