@@ -325,7 +325,7 @@ def test_the_long_runs_run_only_where_their_record_does_not_cover(tmp_path: path
     monkeypatch.setattr(lb, "make", make)
     monkeypatch.setattr(lb, "engine_delta", lambda root: state["engine"])
     monkeypatch.setattr(lb, "commit_regenerated", lambda root, why: None)
-    monkeypatch.setattr(lb, "run", lambda root, cmd, env=None, quiet=True: (state["stamp"] if "gate-stamp.py" in str(cmd) else state["cohort"], ""))
+    monkeypatch.setattr(lb, "run", lambda root, cmd, env=None, quiet=True: (state["stamp"], state.get("says", "")) if "gate-stamp.py" in str(cmd) else (state["cohort"], ""))
     assert lb.long_runs(tmp_path) == 0 and made == ["done", "cohort-landing"]
     made.clear(), state.update(stamp=0, cohort=0)
     assert lb.long_runs(tmp_path) == 0 and made == [], "both records cover the content: nothing runs"
@@ -334,4 +334,6 @@ def test_the_long_runs_run_only_where_their_record_does_not_cover(tmp_path: path
     made.clear(), state.update(stamp=1, red="done")
     assert lb.long_runs(tmp_path) == 1 and made == ["done"], "a red gate stops the landing"
     made.clear(), state.update(stamp=1, red="", sticky=True)
-    assert lb.long_runs(tmp_path) == 1 and made == ["done"], "green, but the stamp still refuses (another area owed): stop"
+    assert lb.long_runs(tmp_path) == 1 and made == ["done"], "green, but the stamp still refuses: stop"
+    made.clear(), state.update(stamp=1, sticky=False, engine=False, says="  hooks: the last green gate ran against DIFFERENT code (make hooks-test again)\n")
+    assert lb.long_runs(tmp_path) == 1 and made == ["hooks-test"], "the stamp names hooks-test: that gate runs, not make done"

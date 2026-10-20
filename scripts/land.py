@@ -103,17 +103,26 @@ def push(root: Path, tasks: list[str]) -> int:
     return subprocess.run([str(HERE / "sync-with-main.sh"), "done"], cwd=root, env={**os.environ, "L7R_LAND_TICKS": " ".join(tasks)}).returncode
 
 
+#: the gate the green-gate stamp names for each stale area: "(make done again)", "(make hooks-test again)", "(make page-check again)"
+NAMED_GATE = re.compile(r"\(make ([\w-]+) again\)")
+
+
 def long_runs(root: Path) -> int:
-    """Pass 2's runs, each only where its record does not cover this content; 0 when the push may go."""
-    if run(root, [sys.executable, str(HERE / "gates" / "gate-stamp.py"), "--check", "origin/main"])[0]:
-        print("land: the green-gate stamp does not cover this content - make done", flush=True)
-        if make(root, "done"):
-            print("land: make done is red - nothing landed; fix it and run make land again", file=sys.stderr)
-            return 1
-        commit_regenerated(root, "gate")
-        rc, out = run(root, [sys.executable, str(HERE / "gates" / "gate-stamp.py"), "--check", "origin/main"])
-        if rc:  # another area's gate (hooks-test, page-check) is owed too: the stamp names it
-            print("land: make done is green, but the green-gate stamp still refuses - nothing landed:\n" + out, file=sys.stderr)
+    """Pass 2's runs, each only where its record does not cover this content; 0 when the push may go. The green-gate stamp names
+    the gate each stale area owes (make done, make hooks-test, make page-check) and each named one runs - T30-T35's own landing
+    owed hooks-test alone, which a `make done` would not have stamped."""
+    stamp = [sys.executable, str(HERE / "gates" / "gate-stamp.py"), "--check", "origin/main"]
+    rc, out = run(root, stamp)
+    if rc:
+        for target in dict.fromkeys(NAMED_GATE.findall(out)) or ["done"]:
+            print(f"land: the green-gate stamp does not cover this content - make {target}", flush=True)
+            if make(root, target):
+                print(f"land: make {target} is red - nothing landed; fix it and run make land again", file=sys.stderr)
+                return 1
+            commit_regenerated(root, "gate")
+        rc, out = run(root, stamp)
+        if rc:
+            print("land: the gates it named are green, but the green-gate stamp still refuses - nothing landed:\n" + out, file=sys.stderr)
             return 1
     if engine_delta(root) and run(root, [sys.executable, str(HERE / "gates" / "cohort_gate.py"), "check"])[0]:
         print("land: no landing cohort on this engine - make cohort-landing", flush=True)
