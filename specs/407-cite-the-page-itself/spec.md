@@ -1,4 +1,4 @@
-# Feature 405: a note links to the page its passage is read on
+# Feature 407: a note links to the page its passage is read on
 
 **Feature Branch**: none (main, in a session clone)
 
