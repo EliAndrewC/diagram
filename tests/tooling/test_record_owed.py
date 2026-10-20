@@ -98,6 +98,18 @@ def test_a_changed_note_owes_the_source_reader_and_quote_check_on_it_and_record_
     assert _units(_q(), now) == ["quote-check:0094#kyakhta", "record-format:0094", "source-reader:0094#kyakhta"]
 
 
+def test_a_note_whose_link_alone_moved_owes_quote_check_with_the_link_in_its_fingerprint() -> None:
+    """Feature 407: a note re-pointed to its exact page owed nothing (its words drop markup), though READABLE is judged on
+    the page it opens. The unit's fingerprint carries the link, so an answer against the old page does not answer it."""
+    old = '<li data-note="kyakhta"><a href="https://a.example/book"><code>kyakhta</code></a> - "The Russians quickly built"</li>\n'
+    new = old.replace("https://a.example/book", "https://a.example/book/1/94")
+    assert _units(_q(notes=old), _q(notes=new)) == ["quote-check:0094#kyakhta"]
+    base, now = ru.Record.of(_q(notes=old), {}), ru.Record.of(_q(notes=new), {})
+    (u,) = ru.owed(now, base)
+    assert u.fingerprint != ru.fingerprint(now, u.slug) and u.reading == ""
+    assert _units(_q(notes=old), _q(notes=old)) == [], "nothing moved, nothing owed"
+
+
 def test_a_reworded_absence_note_owes_no_source_reader() -> None:
     """Feature 385 T42 (the round arbiter on round:source-reader|q:0081@5): a "no publicly readable source" note names no page, so
     a change to its words owes its quote-check and the page's record-format, never a source-reader round on nothing."""
