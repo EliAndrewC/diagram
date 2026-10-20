@@ -34,6 +34,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import pathlib
 import re
@@ -81,6 +82,19 @@ def too_big(path: pathlib.Path) -> list[str]:
     archive and its push refused, which wedged every later archive push until the commit was undone by hand."""
     files = [path] if path.is_file() else [f for f in path.rglob("*") if f.is_file()]
     return [f"{f.name} ({f.stat().st_size // (1024 * 1024)} MB)" for f in files if f.stat().st_size > GITHUB_FILE_LIMIT]
+
+
+def refused_line(name: str, big: list[str], path: pathlib.Path) -> str:
+    """The refusal for an inbox entry over GitHub's limit, with the split that fits: parts of at most 90% of the limit, so
+    `--split-pages` is the PDF's pages divided by that many parts. Its first form named a fixed `--split-pages=200`, which
+    on the 433 MB Morisada scan (333 pages) gives parts of about 270 MB, still refused (the money session, 2026-10-19)."""
+    size = path.stat().st_size if path.is_file() else 0
+    parts = max(2, math.ceil(size / (0.9 * GITHUB_FILE_LIMIT)))
+    return (
+        f"  REFUSED {name}: over GitHub's 100 MB file limit ({', '.join(big)}), so it is not archived - split the PDF into at least"
+        f" {parts} parts (`qpdf --show-npages {name}` gives N; `qpdf --split-pages=<N / {parts}, rounded up> {name} <stem>-part.pdf`),"
+        f" check each part is under 90 MB, archive the parts with MATCH='<part>=<key> ...', then delete the original; it stays in the inbox"
+    )
 
 
 def process_inbox(
@@ -482,9 +496,7 @@ def main(
         print(f"  {name} -> {dest}")
     for name in waiting:
         if big := too_big(ar.GM_DIR / name):
-            print(
-                f"  REFUSED {name}: over GitHub's 100 MB file limit ({', '.join(big)}), so it is not archived - split the PDF (e.g. `qpdf --split-pages=200`) and archive the parts, or put it to the GM as a Git LFS decision; it stays in the inbox"
-            )
+            print(refused_line(name, big, ar.GM_DIR / name))
             continue
         print(
             f"  WAITING {name}: a new download - read its first page, find the source it copies, then `make archive-inbox MATCH='{name}=<key>'` - or MATCH='{name}=#<id>' for the download-list entry it answers (feature 313), or NONE='{name}' if it copies no cited source"

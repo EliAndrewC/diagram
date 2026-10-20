@@ -101,6 +101,17 @@ def test_a_file_over_githubs_limit_is_refused_before_any_commit(tmp_path: pathli
     assert not (tmp_path / "home").exists() or not ops.on_github(store, "gm-copies/a.pdf"), "nothing committed or pushed"
 
 
+def test_the_refusal_names_a_split_that_fits(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The refusal's first form named `--split-pages=200`, which left the 433 MB, 333-page Morisada scan in 270 MB parts;
+    it now names the number of parts that fit (at most 90% of the limit each) and the arithmetic for --split-pages."""
+    monkeypatch.setattr(ops, "GITHUB_FILE_LIMIT", 100)
+    f = tmp_path / "scan.pdf"
+    f.write_bytes(b"x" * 433)
+    line = ops.refused_line("scan.pdf", ["scan.pdf (0 MB)"], f)
+    assert "at least 5 parts" in line and "N / 5" in line and "--split-pages=200" not in line
+    assert "at least 2 parts" in ops.refused_line("gone.pdf", [], tmp_path / "gone.pdf")
+
+
 def test_a_page_read_again_is_not_captured_again(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
     root, _store, _inbox = _world(tmp_path, monkeypatch)
     ar.write_row(root, "https://a.org/p", {"url": "https://a.org/p", "outcome": "archived"})
