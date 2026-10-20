@@ -82,3 +82,15 @@ of the 22 carries a recorded judgment - doing something, doing nothing, or too n
   tests red without it; every hook and check the inventory finds recording nothing either records or names its record.
 - **SC-003** (FR-005): each of the 22 fixes carries a judgment citing its tools' numbers since it was made, in a file the GM's
   review reads.
+
+## Review history
+
+- **spec-fidelity round 1 (2026-10-19): CHANGES REQUIRED, 6 items.** The structure followed the approved four-item proposal,
+  but six points did not do what it said; all six applied.
+- **spec-fidelity round 2 (2026-10-19, verify): CHANGES REQUIRED, 1 item.** Round 1's six fixed; the rewrite set FR-002 against
+  FR-004. Applied.
+- **spec-fidelity round 3 (2026-10-19, verify): FAITHFUL.** Round 2's item fixed, no contradiction introduced.
+- **Plan review (MODE 4), rounds 1-3 (2026-10-20): BLOCKED.** D161 (counting runs and matching outcomes), D163/D164's reach and
+  the target-body exemption, and D165/D166 (the fix's tools; the judgment order), each answered in the plan. The round arbiter
+  ruled `continue` at round 3 and `accept` for round 4 (round:spec-fidelity|plan:406-every-tool-measured#T01@4): the rounds
+  converged, and a fourth would re-read its own prescriptions.
