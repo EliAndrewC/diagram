@@ -10,7 +10,7 @@ One report over the records the project keeps - the guard log (`~/.claude/guard-
 event log (`<git dir>/l7r-events/*.jsonl`, every tool call with its make target), the review ledger (`dev/review-ledger.md`,
 every check pass and whether it was acted on) - plus one new record, `<git common dir>/tool-usage.jsonl`, for the tools that
 leave none. The tool list comes from the code: `.claude/settings.json`'s wired hooks, the Makefile's targets, the refusing
-checks under `scripts/gates/` and `scripts/`, `.claude/agents/`, and the registry `scripts/tool-registry.json`.
+checks under `scripts/gates/`, `.claude/agents/`, and the registry `scripts/tool-registry.json`.
 
 ## Measured before planning (2026-10-19)
 
@@ -58,13 +58,13 @@ Tooling only (no engine path): lands by `make land-tooling`, its tests under `te
 6. **The exits.** (c) - record the failure event; inferring a failure from a PreToolUse with no PostToolUse was weighed and refused as the only reading (a call still running looks the same), kept as the fallback for lines before this lands.
 7. **The search smell.** None.
 8. **The budget.** 45 min.
-9. **Done, measured.** One goal: a failed Bash call's event line reads `ev: PostToolUseFailure` with its make target; `make idle-tests` writes a helper line with its outcome; `tests/tooling/` red without it.
+9. **Done, measured.** One goal: a failed Bash call's event line reads `ev: PostToolUseFailure` with its make target; `make idle-tests` writes a helper line with its outcome; `make tool-yield` names, beside each target, the recipes and scripts that run it unseen (`$(MAKE) <target>` in the Makefile, `make <target>` in a script); `tests/tooling/` red without it.
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
 ### T02 Decisions
 
-**D161 - the failure recorded.** `event-log-hooks.sh` is wired on `PostToolUseFailure`; `event_log.line` keeps the event name, so a failed call's line carries `ev: PostToolUseFailure`, its tool, id and make target. `make idle-tests` (the timer's target) records `idle-tests` through the helper with `passed` or `failed`, registered as a target that records.
+**D161 - the failure recorded.** `event-log-hooks.sh` is wired on `PostToolUseFailure`; `event_log.line` keeps the event name, so a failed call's line carries `ev: PostToolUseFailure`, its tool, id and make target. `make idle-tests` (the timer's target) records `idle-tests` through the helper with `passed` or `failed`, registered as a target that records. A target run from another target's recipe or from a script is not a tool call, so the event log cannot see it: rather than undercount it silently, `tool_yield` lists for each target the recipes and scripts that run it, so its count reads "session runs; also run unseen by <callers>".
 
 ## T03 - the silent tools record
 
@@ -84,7 +84,7 @@ Tooling only (no engine path): lands by `make land-tooling`, its tests under `te
 
 ### T03 Decisions
 
-**D162 - each silent tool records.** Each refusing check script with a command line returns through `usage_log.exited(<its name>, code)`; `hm_checks` records each refusal it makes (`checks-hooks`, outcome `refused`); `idle-tests-hooks.sh` records each run it starts; the automatic steps record at their action with outcome `changed` or `unchanged` - `tick-archive`, `land-tooling-docs`, `land-tooling-merge`, `ledger-owed-write`, `clone-sync-merge`, `planhold-restore`. Every name is in `scripts/tool-registry.json`.
+**D162 - each silent tool records.** Each refusing check script with a command line returns through `usage_log.exited(<its name>, code)`; `hm_checks` records each refusal it makes (`checks-hooks`, outcome `refused`); `idle-tests-hooks.sh` records each run it starts; the automatic steps record at their action with outcome `changed` or `unchanged` - `tick-archive`, `land-tooling-docs`, `land-tooling-merge`, `ledger-owed-write`, `clone-sync-merge`, `planhold-restore`. Every name is in `scripts/tool-registry.json`. The six steps are the inventory's; an automatic step written later that calls neither the helper nor `guard_log` is one FR-004's check cannot see (it has no file of its own to read), a limit `tool-yield`'s footer states.
 
 ## T04 - `make tool-yield`
 
@@ -104,7 +104,7 @@ Tooling only (no engine path): lands by `make land-tooling`, its tests under `te
 
 ### T04 Decisions
 
-**D163 - one report.** `scripts/measure/tool_yield.py` lists tools from `.claude/settings.json` (hook scripts and the guard names their firings carry), the Makefile, `scripts/tool-registry.json` and `.claude/agents/`; reads the guard log (interventions: blocked, refused, rewrote, reminded, warned; misfires: escaped), every clone's event logs (a target's runs; failures its `PostToolUseFailure` lines, or before T02 a PreToolUse with no PostToolUse; misfires a failed run followed by the same target with an `*_OK=` escape), the review ledger (acted-on passes; misfires declined and `MISSED-BY-REVIEWER`) and the usage log (interventions `refused`, `changed`, `failed`). `make tool-yield [KIND=] [SINCE=]`.
+**D163 - one report.** `scripts/measure/tool_yield.py` lists tools from `.claude/settings.json` (hook scripts and the guard names their firings carry), every refusing check under `scripts/gates/` read from the directory itself (a `.py` with a `__main__` or a `.sh`, an exempt one included, read through the record its `# TOOL_RECORD:` names or as "no outcome record"), the Makefile, `scripts/tool-registry.json` and `.claude/agents/`; reads the guard log (interventions: blocked, refused, rewrote, reminded, warned; misfires: escaped), every clone's event logs (a target's runs; failures its `PostToolUseFailure` lines, or before T02 a PreToolUse with no PostToolUse; misfires a failed run followed by the same target with an `*_OK=` escape), the review ledger (acted-on passes; misfires declined and `MISSED-BY-REVIEWER`) and the usage log (interventions `refused`, `changed`, `failed`). `make tool-yield [KIND=] [SINCE=]`.
 
 ## T05 - the rule
 
@@ -124,7 +124,7 @@ Tooling only (no engine path): lands by `make land-tooling`, its tests under `te
 
 ### T05 Decisions
 
-**D164 - no tool without its record.** `check-tool-signals.py` reads the wired hooks and the refusing check scripts (a script under `scripts/gates/` or `scripts/` with a `__main__` that can exit non-zero); each must call `guard_log` or the helper, or carry `# TOOL_RECORD: <where its runs are seen>`; every helper call's tool name must be in the registry, and every registry entry called somewhere. Its suite `tests/hooks/test-tool-signals.sh` (a guard's companion) runs in `make hooks-test`.
+**D164 - no tool without its record.** `check-tool-signals.py` reads the wired hooks and the refusing check scripts (every `.py` with a `__main__` and every `.sh` under `scripts/gates/`, the two languages the checks are written in); each must call `guard_log` or the helper, or carry `# TOOL_RECORD: <where its runs are seen>`; every helper call's tool name must be in the registry, and every registry entry called somewhere. Its suite `tests/hooks/test-tool-signals.sh` (a guard's companion) runs in `make hooks-test`.
 
 ## T06 - `make fix-yield` on the new numbers
 
@@ -138,13 +138,13 @@ Tooling only (no engine path): lands by `make land-tooling`, its tests under `te
 6. **The exits.** (c) - the fix's own tools; keeping the command rate beside it was weighed and refused (the spec replaces it).
 7. **The search smell.** None.
 8. **The budget.** 45 min.
-9. **Done, measured.** One goal: `make fix-yield F=<n>` prints each fix with its tools and their uses and interventions since it was made; the step-back's `fix-yield.md` the same; `tests/tooling/` red without it.
+9. **Done, measured.** One goal: `make fix-yield F=<n>` prints each fix with its tools and their first seen, uses, interventions, likely misfires (or "no outcome record") since it was made; the step-back's `fix-yield.md` the same; `tests/tooling/` red without it.
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
 ### T06 Decisions
 
-**D165 - a fix by its tools.** A fix's tools are the guards, checks, targets and registered steps in the files of the commit that settled it (`make arbiter-fix-done`'s land-tooling run, or the clone commit naming its trigger), mapped by `tool_yield`'s inventory; `fix_yield.verdict` reports, per fix, each tool's uses and interventions since the settling, and `too new` under 7 days. `fix-measures.json` and the command-rate reading are retired.
+**D165 - a fix by its tools.** A fix's tools are the guards, checks, targets and registered steps in the files of the commit that settled it (`make arbiter-fix-done`'s land-tooling run, or the clone commit naming its trigger), mapped by `tool_yield`'s inventory; `fix_yield.verdict` reports, per fix, each tool's first seen, uses, interventions and likely misfires since the settling, FR-001's "no outcome record" where its record cannot show one, and `too new` under 7 days. `fix-measures.json` and the command-rate reading are retired.
 
 ## T07 - the 22 fixes judged
 
@@ -164,7 +164,7 @@ Tooling only (no engine path): lands by `make land-tooling`, its tests under `te
 
 ### T07 Decisions
 
-**D166 - the 22 judged.** Doing something: a tool of the fix intervened since it was made. Doing nothing: none did, in 7 days or more of record since. Too new to say: under 7 days since. Each line cites the numbers; the file is written by hand from T06's output and reviewed with the feature.
+**D166 - the 22 judged.** Doing something: a tool of the fix has interventions net of its likely misfires since it was made. Doing nothing: its tools have outcome records, 7 days or more of them since, and no intervention net of misfires. Too new to say: under 7 days since. No outcome record: a tool whose record cannot show an outcome is never judged doing nothing - the line says the record is missing. Each line cites the numbers; the file is written by hand from T06's output and reviewed with the feature.
 
 ## T08 - the close
 
