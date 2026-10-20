@@ -60,6 +60,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
+  },
+  "### T02 Approach": {
+   "sha256": "7ba019feb6003616b0ef37a297d9f1618453d3012afa443d6dc0b9345bbbedf8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach": {
+   "sha256": "6518a1830a155f337652b26b2f48f19f0ecbb16b8e6504b4daf59543c2666d46",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -182,6 +194,52 @@
      "summary": "Rule text and test first, then re-point the notes, then their checks. Done when the new test and the record tests are green with the notes re-pointed.",
      "class": "within",
      "why": "The order is sequencing only. The done condition carries FR-002, FR-003 and FR-004 and adds no scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-20",
+   "blocks": [
+    "### T02 Approach",
+    "### T03 Approach"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T02-1 re-point the notes",
+     "summary": "Each Morisada, Gamble and Bochum footnote links the page (NDL koma / Gamble page image) or spreadsheet its passage is printed on.",
+     "class": "within",
+     "why": "Exactly the request: a public spreadsheet cell is a readable page, and Morisada and Gamble notes may link straight to their page; FR-003."
+    },
+    {
+     "id": "T02-3 koma a passage begins on",
+     "summary": "Where a passage runs over two koma, the note links the koma it begins on.",
+     "class": "within",
+     "why": "The request permits linking 'their page'; for a passage spanning a page break the page it begins on is that page in ordinary citation, and the next koma is one step away in the same viewer. It settles a case the request is silent on without withdrawing any note from re-pointing. The check in item 9 must still confirm the passage VERBATIM across the begin koma and its continuation."
+    },
+    {
+     "id": "T02-4 split by page/file",
+     "summary": "A note whose passages sit on different pages of different files (0275's Bochum note) is split so each link carries its own passage.",
+     "class": "within",
+     "why": "A footnote carries one link; splitting is the only way every passage gets the page it is read on, which is the request's purpose (FR-003, SC-002). It adds no notes or sources beyond the ones named."
+    },
+    {
+     "id": "T02-5 check on page images and row dumps",
+     "summary": "Re-point first, then quote-check against page images and row dumps of the same koma/rows (agents cannot run the NDL viewer or decode .xls), then fix.",
+     "class": "within",
+     "why": "A method for FR-004's checks on the same content the link opens; it narrows neither which notes change nor what they must pass."
+    },
+    {
+     "id": "T02-6..9 exits, budget, done",
+     "summary": "Conform with a split as the only deviation; an hour, two check rounds; done when every re-pointed note is READABLE, VERBATIM, SUPPORTS on its page and make record-owed shows 0 unanswered.",
+     "class": "within",
+     "why": "Process and a done test that enforces FR-003/FR-004; nothing is excluded."
+    },
+    {
+     "id": "T03 land",
+     "summary": "Report, tick, review gate, ledger, page-check and hooks-test, push to main, then the note on #9.",
+     "class": "within",
+     "why": "The project's standing stop-work procedure; no scope decision."
     }
    ]
   }
