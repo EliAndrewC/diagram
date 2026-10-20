@@ -48,16 +48,17 @@ def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str) -> list[str
     """Pass 1: every refusal the landing would meet that costs seconds to ask, all of them."""
     tt = _tick_task()
     text = (d / "tasks.md").read_text(encoding="utf-8")
-    stops = []
+    by_why: dict[str, list[str]] = {}  # one refusal shared by several tasks (an hour's step-back) is printed once, naming them all
     for task in tasks:
         try:
             tt.tick(text, task, note)
         except ValueError as e:
-            stops.append(f"{task}: {e}")
+            by_why.setdefault(str(e), []).append(task)
             continue
         why, _msg = tt.refusal(root, d, task, note, landed=False)
         if why:
-            stops.append(f"{task}: {why}")
+            by_why.setdefault(why, []).append(task)
+    stops = [f"{', '.join(ts)}: {why}" for why, ts in by_why.items()]
     # the plan reviews' ledger rows are the push's to write (385 T72): written and committed first, as the push does, so they are
     # not named as owed
     run(root, [sys.executable, str(HERE / "reviews" / "ledger_owed.py"), "--write-plan-reviews", "--ledger", str(root / "dev" / "review-ledger.md")])

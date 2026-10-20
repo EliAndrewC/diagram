@@ -280,6 +280,7 @@ def test_one_task_or_several_every_tick_asked_first_landed_once_and_ticked(tmp_p
     monkeypatch.setattr(tt, "refusal", lambda *a, **k: ("tick: refused - the hour", ""))
     monkeypatch.setenv("LAND_NOTE", "x")
     assert lb.main(["188", "T04"]) == 2 and "T04: tick: refused - the hour" in capsys.readouterr().err
+    assert lb.main(["188", "T04 T05"]) == 2 and capsys.readouterr().err.count("tick: refused - the hour") == 1, "one shared refusal, printed once"
 
 
 def test_every_cheap_refusal_is_named_together_before_anything_runs(tmp_path: pathlib.Path, monkeypatch, capsys) -> None:  # noqa: ANN001
