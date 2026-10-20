@@ -1,0 +1,31 @@
+{
+ "feature": "405-engine-findings-from-385",
+ "tasks": {
+  "T12": {
+   "section_sha256": "79b4d43a39b5ecc0cd3be7de56657feb5da768fa95862cfa7bd13ce59212421b",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "_trim_to_service loses its two vertex-popping loops; the existing two-pass 4 ft walk is the one pull-back for every end, popping a vertex only once the end is within 4 ft of it; the comment above the walk is rewritten to say so; the claim line stands unchanged.",
+     "class": "within",
+     "why": "This is 385 T126, an open non-process task moved into 405 by the GM's routing ('everything else moves into a new feature') and worked as 385 worked its tasks (FR-001). It brings the code into line with its own unchanged claim and the 0246 research ('pulled back to the last house it serves'), which the impl-drift round recorded DRIFTED. Nothing the request or the spec asks for is narrowed: no end, lane or case is excluded, and the claim is not weakened."
+    },
+    {
+     "id": "A6-exits",
+     "summary": "Exit (e) conform the code to the claim rather than amend the claim; a coarser walk step was weighed and refused, keeping the existing 4 ft grain.",
+     "class": "within",
+     "why": "Conforming to the stated claim and research keeps existing documented behavior the request does not touch; refusing a coarser step changes nothing and carves out no case."
+    },
+    {
+     "id": "A5/A9-verification",
+     "summary": "A unit test red at HEAD on a run whose long last segment passes a house within 60 ft partway; claims round on the changed unit; gate and landing cohort.",
+     "class": "within",
+     "why": "Verification that only fails when the fixed behavior is absent - enforcement of the task, plus the standing 385 per-task checks FR-001 carries; no new behavior, map or tier is added."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ }
+}
