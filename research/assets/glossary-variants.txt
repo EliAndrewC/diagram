@@ -905,6 +905,10 @@ earth floors	doma
 earth god	tudi miao
 earth-god	tudi miao
 earth-god shrine	tudi miao
+earth-rammer	earth-rammer
+earth-rammer's	earth-rammer
+earth-rammers	earth-rammer
+earthramming	earth-rammer
 eastern capital	Dongjing
 eastern han	Han dynasty
 eastern wei	Eastern Wei

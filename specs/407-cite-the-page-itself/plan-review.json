@@ -54,6 +54,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-19",
    "declared": "spec-fidelity"
+  },
+  "### T01 Approach": {
+   "sha256": "55c74b154a95bed097aa868a707866f0126d1a01dc2940b1fec9324161b3e2bd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -137,6 +143,45 @@
      "summary": "No performance bookends (no generator change); constitution check; order rule+test, notes+checks, land",
      "class": "within",
      "why": "Procedural; consistent with FR-005 (no engine or map change) and decides nothing the request constrains."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-19",
+   "blocks": [
+    "### T01 Approach"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01.1 goal",
+     "summary": "A click on a Morisada, Gamble or spreadsheet footnote lands on the page or file the passage is on.",
+     "class": "within",
+     "why": "Restates the GM's two answers (Morisada and Gamble notes may link their page; a public spreadsheet cell is a readable page) and request.md's statement of what they answer."
+    },
+    {
+     "id": "T01.3 scope: notes only, citation line only",
+     "summary": "The permission applies to notes files only, and to the note's citation link.",
+     "class": "within",
+     "why": "The GM's words are 'Morisata and Gamble Notes may link straight to their page', so notes-only is the GM's own scope. The link the question was about (request.md, features 402/403) is the one test_sources forces to the first URL: the note's citation link. This applies the permission to the link the GM was asked about. It does not cut anything out of it."
+    },
+    {
+     "id": "T01.4 first-URL rule kept for works sections and rosters",
+     "summary": "Outside notes, the first-URL rule (feature 190) stays as it is.",
+     "class": "within",
+     "why": "The GM relaxed the rule for Notes and said nothing about works sections or rosters. Keeping the rule there does not narrow any part of the request. Widening it there would have been unrequested."
+    },
+    {
+     "id": "T01.6 exit (b): exception for the named keys and for spreadsheets, 'and nothing else'",
+     "summary": "A principled exception to the first-URL rule covering the Morisada and Gamble keys' page links and spreadsheet links. Conforming (e) is rejected because the GM ruled.",
+     "class": "within",
+     "why": "The exception is exactly the two permissions the GM granted on 2026-10-19. 'Nothing else' limits it to what the GM granted and does not take anything away from it. Spreadsheets are not limited to particular keys, which matches the GM's general wording ('a cell in a public spreadsheet counts as a readable page')."
+    },
+    {
+     "id": "T01.5/9 order and done",
+     "summary": "Rule text and test first, then re-point the notes, then their checks. Done when the new test and the record tests are green with the notes re-pointed.",
+     "class": "within",
+     "why": "The order is sequencing only. The done condition carries FR-002, FR-003 and FR-004 and adds no scope."
     }
    ]
   }
