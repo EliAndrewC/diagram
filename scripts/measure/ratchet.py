@@ -241,6 +241,7 @@ if __name__ == "__main__":
     _n = int(sys.argv[6]) if len(sys.argv) > 6 and sys.argv[6].isdigit() else None
     _ok, _msg = verdict(_t, _s, _m, _c, _sc, _n)
     sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parents[1] / "hooks" / "lib"))
+    sys.dont_write_bytecode = True  # a record leaves no __pycache__ in the worktree (feature 406)
     import usage_log  # feature 406 (D163): the gate's time ratchet records its run
 
     usage_log.exited("ratchet", 0 if _ok else 1)

@@ -275,6 +275,7 @@ def main(argv: list[str]) -> int:
         try:
             moved = _plan_gate.archive(d)
             sys.path.insert(0, str(Path(__file__).resolve().parent / "hooks" / "lib"))
+            sys.dont_write_bytecode = True  # a record leaves no __pycache__ in the worktree (feature 406)
             import usage_log  # noqa: PLC0415 - feature 406 T03 (D162): the archive is an automatic step
 
             usage_log.record(root, "tick-archive", "step", "changed" if moved else "unchanged")

@@ -17,12 +17,12 @@ refuses that tool before it lands:
 from __future__ import annotations
 
 import argparse
-import json
 import re
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "measure"))
+sys.dont_write_bytecode = True  # leaves no __pycache__ in the worktree
 import tool_yield  # noqa: E402
 
 RECORDS = ("guard_log", "usage_log", "# TOOL_RECORD:")
@@ -98,6 +98,7 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "hooks" / "lib"))
+    sys.dont_write_bytecode = True  # a record leaves no __pycache__ in the worktree (feature 406)
     import usage_log  # noqa: E402 - feature 406 T05 (D162): every refusing check records its run
 
     sys.exit(usage_log.exited("check-tool-signals", main(sys.argv[1:])))

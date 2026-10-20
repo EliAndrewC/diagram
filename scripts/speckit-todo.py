@@ -447,6 +447,7 @@ def main(argv: list[str]) -> int:
 
 if __name__ == "__main__":
     sys.path.insert(0, str(Path(__file__).resolve().parent / "hooks" / "lib"))
+    sys.dont_write_bytecode = True  # a record leaves no __pycache__ in the worktree (feature 406)
     import usage_log  # noqa: E402 - feature 406 (D162): the landing's holding check records its run
 
     sys.exit(usage_log.exited("speckit-todo", main(sys.argv[1:])))

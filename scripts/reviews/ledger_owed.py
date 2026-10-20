@@ -309,6 +309,7 @@ def belongs(p: dict[str, str], num: str, questions: set[str], repo: Path, transc
 def _usage(outcome: str) -> None:
     """The ledger write recorded as an automatic step (feature 406 T03, D162): landings and `make ledger-owed` write rows unasked."""
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "hooks" / "lib"))
+    sys.dont_write_bytecode = True  # a record leaves no __pycache__ in the worktree (feature 406)
     import usage_log  # noqa: PLC0415
 
     usage_log.record(Path(__file__).resolve().parents[2], "ledger-owed-write", "step", outcome)
