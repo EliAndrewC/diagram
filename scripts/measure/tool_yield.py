@@ -132,17 +132,24 @@ def reached(make: str) -> set[str]:
     return seen
 
 
-def checks(root: Path) -> set[str]:
-    """Every refusing check: the commands under `scripts/gates/`, and every `scripts/` script the entry points name."""
-    out = {p.stem for p in (root / "scripts" / "gates").glob("*.py") if '__name__ == "__main__"' in p.read_text(encoding="utf-8")}
-    out |= {p.stem for p in (root / "scripts" / "gates").glob("*.sh")}
+def check_paths(root: Path) -> set[Path]:
+    """Every refusing check's file: the commands under `scripts/gates/`, and every `scripts/` script the entry points name
+    (`check-tool-signals.py` holds each to its record, D164)."""
+    gates = root / "scripts" / "gates"
+    out = {p for p in gates.glob("*.py") if '__name__ == "__main__"' in p.read_text(encoding="utf-8")}
+    out |= set(gates.glob("*.sh"))
     make = (root / "Makefile").read_text(encoding="utf-8")
     texts = [recipe(make, t) for t in reached(make)] + [(root / s).read_text(encoding="utf-8") for s in ENTRY_SCRIPTS if (root / s).is_file()]
     for text in texts:
         for path in re.findall(r"scripts/[\w./-]+\.(?:py|sh)", text):
             if "/hooks/" not in path and (root / path).is_file():
-                out.add(Path(path).stem)
+                out.add(root / path)
     return out
+
+
+def checks(root: Path) -> set[str]:
+    """Every refusing check's name."""
+    return {p.stem for p in check_paths(root)}
 
 
 def reviews(root: Path) -> set[str]:

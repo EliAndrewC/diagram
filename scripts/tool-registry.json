@@ -112,6 +112,10 @@
     "ratchet": {
       "kind": "check",
       "what": "scripts/measure/ratchet.py - refuses a gate timing past its ratcheted ceiling; each run recorded passed or refused"
+    },
+    "check-tool-signals": {
+      "kind": "check",
+      "what": "scripts/gates/check-tool-signals.py - make hooks-test refuses a tool that records none of its runs, and a registry out of step with the calls; each run recorded passed or refused"
     }
   }
 }
