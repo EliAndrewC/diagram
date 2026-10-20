@@ -2,7 +2,14 @@
  "captured": "2026-10-19T20:19:09+00:00",
  "final_url": "https://dl.ndl.go.jp/pid/991467/1/229",
  "first": "d7/d7e7430d4272/20261019T201905Z",
- "gm_copies": [],
+ "gm_copies": [
+  "gm-copies/ruiju-kinsei-fuzokushi-ge-ndl991467-part-001-060.pdf",
+  "gm-copies/ruiju-kinsei-fuzokushi-ge-ndl991467-part-061-120.pdf",
+  "gm-copies/ruiju-kinsei-fuzokushi-ge-ndl991467-part-121-180.pdf",
+  "gm-copies/ruiju-kinsei-fuzokushi-ge-ndl991467-part-181-240.pdf",
+  "gm-copies/ruiju-kinsei-fuzokushi-ge-ndl991467-part-241-300.pdf",
+  "gm-copies/ruiju-kinsei-fuzokushi-ge-ndl991467-part-301-333.pdf"
+ ],
  "keys": [
   "ruiju-kinsei-fuzokushi-ge"
  ],
