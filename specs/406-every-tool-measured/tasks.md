@@ -23,7 +23,8 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md).
 - [x] T07 The 22 fixes judged: each a recorded judgment citing its numbers, for the GM's review (FR-005, SC-003) [lands-open]
       research: rendering
       verify: DONE. specs/406-every-tool-measured/fix-judgments.md: the 22 of the hour-37 table, each with its tools and numbers since it was made; all too new to say (made 10-17..19, readable 10-24..26)
-- [ ] T08 The close: the feature report and its retro rows [lands-open]
+- [x] T08 The close: the feature report and its retro rows [lands-open]
       research: rendering
+      verify: DONE. make feature-report F=406 WRITE=1 written (report.md); retro.md holds a row for each of T01-T08; both committed (c-406 T08 commit) just before this task-start, which the wording-only tick needed
 
 - [ ] GM review (make gm-reviewed F=406) [lands-open]
