@@ -34,6 +34,114 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-20",
    "declared": "spec-fidelity"
+  },
+  "## T30 - a plan bundle for a feature with no request.md is refused, naming the file (found working T12)": {
+   "sha256": "a58ec621a032551e3872b21cce67f012f54b80540784dd4aa10958414a4efcc9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T30 Approach (checklist part A)": {
+   "sha256": "961cc530b7ae23f9ab4dfba26967082a1590ce34f2075729c80de2ebbfd95494",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T30 Decisions": {
+   "sha256": "8a40755efbc59a4bc702818687020301f1e13d7a379c04409e5a29c857c05a6d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "## T31 - task-add numbers a task from the boxes' own ids (found working T12)": {
+   "sha256": "b28c3b68f7b874248f88319c7fe6a616690a1788b4da7c71978f33f0ce8cec02",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T31 Approach (checklist part A)": {
+   "sha256": "d7b64e0f1f15ee2ff0bb661ad618b34b7d155ab1b183426f8483e103c2987d4c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T31 Decisions": {
+   "sha256": "a5dc731837c2e923bee0f790a4a77322763e09c12498b92c584e7cc46edb8b2a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "## T32 - only the task being worked holds a landing (the GM, 2026-10-20)": {
+   "sha256": "f847c9c621d02b5b3f9063b3376b90cb3b92afd43dedf1674c3794aa18274fd6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T32 Approach (checklist part A)": {
+   "sha256": "1c62a04b3f50cd962c4e6ddb263a287e37665b8bae7d5e48f4940b2c1b478b58",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T32 Decisions": {
+   "sha256": "fb46e62140e34accd452ce23d5799ffc64ef1b1f98ee8e0d49a56d520d4fca3f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "## T33 - `make land`: one command, every cheap refusal first (landing-analysis.md)": {
+   "sha256": "549884c5e0678c83e9a311a5adf2521c9d1e95840b498582c1e398bdeadf7265",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T33 Approach (checklist part A)": {
+   "sha256": "d9e9ad166c77f581588e7ac9a7873f30ddd5739486f3502c7742fbde376fbedd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T33 Decisions": {
+   "sha256": "c03defff8a9e7f007b1b1caafe9454d16badf7d965ceff1d4541e1217a24b099",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "## T34 - the push asks its cheap questions first (landing-analysis.md)": {
+   "sha256": "13649672b25642cea70a059efdcf77d15174e40ca8d44ffeb19f848571b2ff6d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T34 Approach (checklist part A)": {
+   "sha256": "731d973bb644cacb3fe993b3c442a1bfcc44461c2af289265e97ef09d5ff4c96",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T34 Decisions": {
+   "sha256": "f87974c799ced9e747c3cfffe36744eff64f4a4b6e51748b4770a3e35535d3af",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "## T35 - render-sync after a landing runs in the background (landing-analysis.md)": {
+   "sha256": "4a09857fa1e16222af93f2ce02304b21061b786d01923d0707d79972afe5adee",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T35 Approach (checklist part A)": {
+   "sha256": "1e9428b5fde413db4c5eae105992c0dc62faf168c7fef78b3001c7d2ea5b8831",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T35 Decisions": {
+   "sha256": "baedb27158239bd35b507f56253a9384436380b336fdcaccd8775c548659f8cb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -55,6 +163,92 @@
      "summary": "Lands open: T01-T31 - the feature may reach main with any of its 31 tasks still open.",
      "class": "within",
      "why": "The GM's 2026-10-20 start asks for one claim fixed and then the numbers reviewed before deciding what next (FR-004, SC-002: a report before a second task), so landing with the remaining tasks open is what was asked. Declaring a task may land open does not drop it: SC-001 still requires every task ticked, and no task is removed or exempted from FR-001/FR-002."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-20",
+   "blocks": [
+    "## T30 - a plan bundle for a feature with no request.md is refused, naming the file (found working T12)",
+    "## T31 - task-add numbers a task from the boxes' own ids (found working T12)",
+    "## T32 - only the task being worked holds a landing (the GM, 2026-10-20)",
+    "## T33 - `make land`: one command, every cheap refusal first (landing-analysis.md)",
+    "## T34 - the push asks its cheap questions first (landing-analysis.md)",
+    "## T35 - render-sync after a landing runs in the background (landing-analysis.md)",
+    "### T30 Approach (checklist part A)",
+    "### T30 Decisions",
+    "### T31 Approach (checklist part A)",
+    "### T31 Decisions",
+    "### T32 Approach (checklist part A)",
+    "### T32 Decisions",
+    "### T33 Approach (checklist part A)",
+    "### T33 Decisions",
+    "### T34 Approach (checklist part A)",
+    "### T34 Decisions",
+    "### T35 Approach (checklist part A)",
+    "### T35 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T30 D2",
+     "summary": "plan_bundle.build refuses (SystemExit, naming specs/<name>/request.md and what goes in it) before writing a bundle when request.md is missing",
+     "class": "within",
+     "why": "A finding on code T12 did not change, filed as a task of this feature as FR-002 and the GM's 2026-10-19 words ('keep findings on code a task didn't change as new tasks') require; it makes a plan review read the GM's words verbatim, which is the review's own contract."
+    },
+    {
+     "id": "T30 exit (c)",
+     "summary": "building request.md from the spec's quote was weighed and refused",
+     "class": "within",
+     "why": "Keeps the review on the GM's verbatim words rather than a possibly trimmed quote; narrows nothing asked."
+    },
+    {
+     "id": "T31 D3",
+     "summary": "task-add next_id takes the largest id of tasks.md boxes and plan.md/plan-done.md '## T<n>' headings, plus one, ignoring ids quoted in titles",
+     "class": "within",
+     "why": "FR-002 found work; conforms task-add to 385 T64 D83's 'next free id' instead of reading quoted ids such as '(385 T147)'."
+    },
+    {
+     "id": "T32 D4",
+     "summary": "only the clone's active task (plan_gate.active_task) of this feature, open and not in L7R_LAND_TICKS, holds a push; GM-review box, carried and unstarted tasks never hold; the push's refusal names the active task and 'make land F= T='",
+     "class": "within",
+     "why": "Directly answers the GM's 2026-10-20 'I do not want each landing to owe a lands open line ... that's going to slow things down', while keeping 330's protection of mid-task work. 375 D12's effect (the GM-review box does not hold a landing) is preserved. Residual, not a ruling: the hold reaches mid-task work only when 'make task-start' was run in the clone, so the mechanism's reach depends on task-start being required before work."
+    },
+    {
+     "id": "T32 retirements",
+     "summary": "the **Lands open**: line is no longer read; task-add stops writing it and the [lands-open] mark; the tick's 'mark the tooling did not put here' refusal is removed and any mark is inert text",
+     "class": "within",
+     "why": "The consequence of the GM's 'no lands open line': with only the active task holding, the line, the mark and the refusal that policed the mark have nothing left to do. The tick's refusal guarded self-exemption through a mark that no longer exempts anything."
+    },
+    {
+     "id": "T32 exit (c)",
+     "summary": "keeping the line without its review was weighed and refused",
+     "class": "within",
+     "why": "The GM asked for no line at all; keeping it would be the thing he declined."
+    },
+    {
+     "id": "T33 D5",
+     "summary": "scripts/land.py / make land: pass 1 prints every cheap refusal (tick refusals but the landed one, uncommitted work, owed ledger rows, claims gate, review gate, holding rule) together and exits 2; pass 2 runs gate-stamp check, 'make done' when the stamp does not cover the content, 'make cohort-landing' when the cohort gate refuses, commits gate regenerations under pool/, pushes with L7R_LAND_TICKS, ticks each task; land-batch.py a shim",
+     "class": "within",
+     "why": "Answers the GM's 'the landing being the biggest cost is something that we need to do something about' and his ask to make and work the tooling changes. Every gate still runs and still refuses; only the order and the hand steps between them change. Auto-running make done / cohort-landing and committing their pool/ output does what the session did by hand after each refusal; no gate is skipped."
+    },
+    {
+     "id": "T33 exit (c)",
+     "summary": "running the gate and the cohort in parallel deferred to a measurement of its own (memory cap, feature 315)",
+     "class": "within",
+     "why": "A deferral of one option, not a narrowing of anything the GM asked; nothing requested is removed."
+    },
+    {
+     "id": "T34 D6",
+     "summary": "in push_cmd the fetch, the delta, the holding rule and review-gate.sh run before push_checks.py and claims-gate.sh; checks and messages otherwise unchanged",
+     "class": "within",
+     "why": "Reorder only, serving the GM's landing-cost ask; the holding rule is still judged against the fetched main. D6 moves claims-gate.sh behind as well, which approach item 5 does not name but item 4's current-order note implies; no check is dropped."
+    },
+    {
+     "id": "T35 D7",
+     "summary": "sync-with-main.sh done runs push_cmd then render_sync_background (lock and log as the prompt hook's), printing where the log is; render-sync stays foreground for a hand run",
+     "class": "within",
+     "why": "Render-sync still runs after every landing, so the GM's 2026-08-12 reason (renders in main kept fresh) is kept; only the landing stops waiting on it, which is the GM's 2026-10-20 landing-cost ask. Residual: a session must not tell the GM to look at a render until the background log shows it finished, or the 2026-08-12 round trip recurs."
     }
    ]
   }

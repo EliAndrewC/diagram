@@ -43,8 +43,13 @@ def test_missing_directory(tmp_path: Path) -> None:
     assert not fs.exists and "no specs/999-nope/" in fs.why and "SPECIFY_FEATURE=<NNN-slug> scripts/sync-with-main.sh done" in fs.why
 
 
-def test_open_tasks_and_no_verdict_are_both_named(tmp_path: Path) -> None:
+def test_open_tasks_and_no_verdict_are_both_named(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The boxes the push's rule says hold the merge are named, at most three and a count (feature 405 T32: the rule is the
+    active task's - stubbed here with four held boxes to reach the count)."""
+    import l7r.diagram.ci.features as features
+
     _feature(tmp_path, "900-a", "- [x] T001 done\n- [ ] T002 not yet\n- [ ] T003 nor this\n- [ ] T004 four\n- [ ] T005 five\n", spec="no verdict here\n")
+    monkeypatch.setattr(features, "holding", lambda d: ["T002 not yet", "T003 nor this", "T004 four", "T005 five"])
     fs = feature_status(tmp_path, "900-a")
     assert not fs.complete
     assert len(fs.open_tasks) == 4 and fs.open_tasks[0].startswith("T002")
@@ -66,20 +71,18 @@ def test_status_dataclass_defaults() -> None:
     assert FeatureStatus(name=None).open_tasks == ()
 
 
-def test_a_lands_open_box_the_reviewed_plan_names_does_not_hold_the_merge(tmp_path: Path) -> None:
-    """Feature 375 plan D18: the gated merge asks the push's own rule. A `[lands-open]` box a CLEAR plan names is no open task;
-    a hand-typed one is (batch 2 of 375 was refused here while the push let the same box through)."""
-    import hashlib
+def test_only_the_active_task_holds_the_merge(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 405 T32 (D4): the gated merge asks the push's own rule - a feature in progress is held only by the clone's
+    active task while it is open; a task nobody started holds nothing (the GM 2026-10-20: no Lands open line)."""
+    import subprocess
 
-    _feature(tmp_path, "375-x", "- [x] T01 done\n- [ ] T99 later batches [lands-open]\n")
-    d = tmp_path / "specs" / "375-x"
-    plan = "# plan\n\n**Lands open**: T99\n"
-    (d / "plan.md").write_text(plan, encoding="utf-8")
-    (d / "plan-review.json").write_text(json.dumps({"plan_sha256": hashlib.sha256(plan.encode()).hexdigest(), "plan_text": plan, "decisions": [], "verdict": "CLEAR"}), encoding="utf-8")
-    assert feature_status(tmp_path, "375-x").complete
-    (d / "tasks.md").write_text("- [x] T01 done\n- [ ] T98 typed by hand [lands-open]\n", encoding="utf-8")
-    fs = feature_status(tmp_path, "375-x")
-    assert not fs.complete and fs.open_tasks == ("T98 typed by hand [lands-open]",)
+    monkeypatch.delenv("L7R_LAND_TICKS", raising=False)
+    subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
+    _feature(tmp_path, "405-x", "- [x] T12 done\n- [ ] T01 later\n- [ ] T02 the one being worked\n")
+    assert feature_status(tmp_path, "405-x").complete
+    (tmp_path / ".git" / "active-task").write_text(json.dumps({"feature": "405-x", "task": "T02"}), encoding="utf-8")
+    fs = feature_status(tmp_path, "405-x")
+    assert not fs.complete and fs.open_tasks == ("T02 the one being worked",)
 
 
 def test_a_spec_the_round_arbiter_accepted_at_its_cap_is_faithful(tmp_path: Path) -> None:

@@ -5,6 +5,7 @@ only ever with the id this dispatcher was given."""
 from __future__ import annotations
 
 import json
+import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -122,6 +123,12 @@ def test_full_scope_without_the_committed_answer_is_refused(repo: Path) -> None:
 def test_merge_with_open_tasks_is_refused(repo: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     engine_delta_with_green(repo, True, monkeypatch)
     (repo / "specs" / "130-x" / "tasks.md").write_text("- [ ] T009 still open\n", encoding="utf-8")
+    import json  # noqa: PLC0415
+
+    monkeypatch.delenv("L7R_LAND_TICKS", raising=False)
+    # the task being worked holds the merge (feature 405 T32, D4); a task nobody started would not
+    common = subprocess.run(["git", "-C", str(repo), "rev-parse", "--path-format=absolute", "--git-common-dir"], capture_output=True, text=True, check=True).stdout.strip()
+    (Path(common) / "active-task").write_text(json.dumps({"feature": "130-x", "task": "T009"}), encoding="utf-8")
     c, lines = ctx(repo, mode=MERGE)
     assert dispatch.run(c).verdict == "REFUSE(feature-complete)" and "start_build" not in c.client.names()  # type: ignore[union-attr]
     assert any("T009 still open" in ln for ln in lines)

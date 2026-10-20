@@ -117,7 +117,7 @@ _WAITS = re.compile(r"^\*\*Waits on\*\*:\s*(\d+)", re.M)
 
 def waits_or_marks(root: Path, d: Path) -> str:
     """Why `make tick` may not tick in `d`, or '' (feature 375, plan D18): its spec waits on a feature still open
-    (`**Waits on**: NNN`), or its tasks carry a `[lands-open]` mark the tooling did not put there."""
+    (`**Waits on**: NNN`). A `[lands-open]` mark is text since feature 405 T32 (D4) and is no longer refused here."""
     todo = _todo()
     spec = d / "spec.md"
     m = _WAITS.search(spec.read_text(encoding="utf-8")) if spec.is_file() else None
@@ -126,8 +126,7 @@ def waits_or_marks(root: Path, d: Path) -> str:
         if other is not None and todo.feature(other).state != "closed":
             return (f"{d.name} waits on feature {m.group(1)} ({other.name}), which is still open - its spec says "
                     f"`**Waits on**: {m.group(1)}`; take its tasks once that one has closed")
-    marks = [ln for ln in todo.holding(d) if "[lands-open] honored only" in ln]
-    return ("a [lands-open] mark the tooling did not put here: " + "; ".join(marks)) if marks else ""
+    return ""
 
 
 def _todo():  # noqa: ANN202 - `speckit-todo.py` by path (its name has a hyphen)
@@ -187,7 +186,7 @@ def landed_refusal(root: Path, feature: str, task: str, note: str) -> str:
         off = sorted({f for f in ahead if not f.startswith(("specs/", "dev/"))
                       and subprocess.run(["git", "-C", str(root), "diff", "--quiet", "origin/main", "--", f], capture_output=True).returncode})
         return (f"the NOTE says landed, but {off[0]} is committed here and not on origin/main - land it (scripts/sync-with-main.sh done,"
-                " or, with the next small fix, make land-batch F= T=\"T1 T2\" NOTE=), then tick" if off else "")
+                " or make land F= T=<task> NOTE=, which lands and ticks it), then tick" if off else "")
     last = every[mine[-1]]
     # a later run of the same files lands them, whichever task was active when it ran (T79's own reland was booked to T81)
     later = [r for r in every[mine[-1] + 1 :] if set(r.get("files") or []) >= set(last.get("files") or [])]
@@ -204,7 +203,7 @@ def landed_refusal(root: Path, feature: str, task: str, note: str) -> str:
 
 def refusal(root: Path, d: Path, task: str, note: str, landed: bool = True) -> tuple[str, str]:
     """(refusal, message) - every reason `make tick` refuses `task`, asked before anything is written; `landed=False` leaves out
-    the landed check, which `make land-batch` asks of each task before it lands them (feature 385 T117, D135)."""
+    the landed check, which `make land` asks of each task before it lands them (feature 385 T117, D135; feature 405 T33)."""
     sys.path.insert(0, str(Path(__file__).resolve().parent / "gates"))
     import plan_gate as _plan_gate  # noqa: PLC0415
 

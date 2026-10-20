@@ -279,6 +279,75 @@ push_cmd() {
   if git -C "$ROOT" rev-parse -q --verify HEAD >/dev/null && [ -n "$(git -C "$ROOT" status --porcelain -- dev/review-ledger.md 2>/dev/null)" ]; then  # T72: a fresh repo has no HEAD to diff
     git -C "$ROOT" commit -q -m "the plan reviews' ledger rows, written at landing (feature 385 T72)" -- dev/review-ledger.md || die "the plan reviews' ledger rows could not be committed"
   fi
+  # THE CHEAP QUESTIONS FIRST (feature 405 T34, D6; landing-analysis.md): what holds the landing and the review gate's
+  # occasions answer in under a second, and T12's landing met them only after push_checks.py and the claims gate had run.
+  # So the fetch, the delta, the holding rule, the review gate and the plan gate come first; nothing else moved.
+  # files OUR unpushed commits touch, captured BEFORE the pull so the overlap test is honest.
+  # INCOMING files = what the pull moves HEAD across - NOT a diff against post-push origin/main,
+  # which contains our own commits and false-flags every push (the script's own first dogfood run
+  # caught exactly that bug: a no-op pull reported our just-pushed files as overlap).
+  local base before ours theirs overlap
+  git fetch -q origin || die "cannot fetch GitHub main from $GITHUB_URL"   # the delta and the route are judged against the LATEST main
+  base=$(git rev-parse origin/main)
+  before=$(git rev-parse HEAD)
+  ours=$(git diff --name-only "$base"...HEAD | sort -u)
+  # A FEATURE IN PROGRESS LANDS NOTHING - ON EITHER ROUTE (feature 133, GM 2026-08-25: *"even though
+  # we are literally working on a feature and that feature is not yet done, you still pushed back to
+  # main anyway. And that is the kind of thing that I am trying to prevent with this tooling."*).
+  # The active feature is DERIVED, not declared, so it cannot be evaded by not setting the pointer:
+  # any specs/NNN-*/tasks.md with an open box that (a) our delta touches, or (b) .specify/feature.json
+  # names, is a feature in progress. While one exists the push is refused - DIRECT or GATED, no flag -
+  # with ONE mechanical exception the GM kept: a delta consisting solely of that feature's own
+  # specs/NNN-*/ directory (the spec-number claim for concurrent sessions). Nothing else rides along.
+  local active="" pointer="" f
+  # GUARD_EDIT_OK: feature 383 FR-006 - the Python calls from here on stay out of push_checks.py, each for one reason: it runs
+  # after the fetch (the checks above precede it) and its answer is a VALUE the shell's own branches read - the feature
+  # pointer, which features are in progress, the performance flag, the remote merge's route -
+  # not a pass or refusal of its own. The escape reads (`hm_escape.py reason-ok`) run only when an escape is set.
+  pointer=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("feature_directory","").rstrip("/"))' "$ROOT/.specify/feature.json" 2>/dev/null || true)
+  for f in $(printf '%s\n' "$ours" | grep -oE '^specs/[^/]+' | sort -u) "$pointer"; do
+    # feature 330 (FR-002, GUARD_EDIT_OK; plan review round 4): ANY open box still makes a feature in progress - indented,
+    # unread or otherwise, as before - unless its spec's status line CLOSES it (Done, Superseded by, Withdrawn: the
+    # words `speckit-todo.py` states once). The exemption fails closed: an error or no answer counts as not closed.
+    # GUARD_EDIT_OK: feature 405 T32 (D4; the GM 2026-10-20: "I do not want each landing to owe a lands open line") - only the
+    # task being worked holds a landing: `speckit-todo.py --holding` names the clone's active task (`make task-start`) while it
+    # is open and `L7R_LAND_TICKS` (set by `make land`) does not name it; a task nobody has started holds nothing.
+    if [ -n "$f" ] && [ -f "$ROOT/$f/tasks.md" ] && [ -n "$(python3 "$ROOT/scripts/speckit-todo.py" --holding "$ROOT/$f" 2>/dev/null || echo fail-closed)" ]; then
+      [ "$(python3 "$ROOT/scripts/speckit-todo.py" --closed-by-status "$ROOT/$f" 2>/dev/null)" = yes ] || active="$active $f"
+    fi
+  done
+  active=$(printf '%s\n' $active | sort -u | tr '\n' ' ' | sed 's/ *$//')
+  # (the closing check - a touched feature that reads closed carries its report - runs in push_checks.py, above; feature 383)
+  if [ -n "$active" ]; then
+    local outside
+    outside=$(printf '%s\n' "$ours" | grep -vE "^(${active// /|})/" || true)
+    if [ -n "$outside" ] || [ "$(printf '%s\n' $active | wc -l)" -gt 1 ]; then
+      printf '\n\033[1mREFUSED: feature %s has a task IN PROGRESS - its work lands with the task.\033[0m\n' "$active" >&2
+      for f in $active; do python3 "$ROOT/scripts/speckit-todo.py" --holding "$ROOT/$f" 2>/dev/null | sed "s|^|  $f holds: |" >&2; done  # GUARD_EDIT_OK: feature 375 D18 - name the boxes that hold it
+      printf 'Neither route lands a feature in progress, and there is no flag. The one exception is a push of\n' >&2
+      printf 'that feature'"'"'s own specs/ directory ALONE (the spec-number claim); this delta also touches:\n' >&2
+      printf '%s\n' "$outside" | sed 's/^/  /' >&2
+      printf 'Land the task with `make land F=<n> T=<id>` (it checks the task'"'"'s tick, runs what the landing owes, pushes\nand ticks it), or move the unrelated change to another clone. The work stays here - mid-task work is sacred.\n\n' >&2
+      exit 1
+    fi
+    echo "sync-with-main: feature $active is in progress - this push is its specs/ directory alone (the claim), allowed"
+  fi
+  # pull+push as ONE locked unit: no other session can slip a push into the gap (CLAUDE.md step 2).
+  # HEAD:main, NOT main (GM 2026-07-27): `git push origin main` pushes the local REF NAMED main and
+  # ignores what is checked out, so a session on any other branch silently pushed a stale ref and
+  # got "! [rejected] main -> main (non-fast-forward)" while `git rev-list --count origin/main..HEAD`
+  # reported it 4 ahead and 0 behind - every diagnostic says fast-forward and the error names a ref
+  # you never touched. `HEAD:main` pushes what you actually committed.
+  # THE MANDATED REVIEWS ARE CHECKED BEFORE THE PUSH, not after (feature 127 audit, 2026-08-24).
+  # A spec ships with a fidelity verdict; a re-rolled Mode B map ships with its review logged. Both
+  # were constitutional and unenforced, and both had already been skipped in practice. Checked here
+  # because this is the moment work becomes everyone else's problem.
+  "$(dirname "$0")/gates/review-gate.sh" || exit 1
+  # GUARD_EDIT_OK: feature 243 - AND A PLAN'S DECISIONS ARE REVIEWED BEFORE ITS TASKS ARE TICKED. review-gate
+  # holds the spec; a plan is written after that verdict and nothing read it, so a narrowing reached ticked
+  # tasks and main unchecked (specs/243-*/research.md R1). `make tick` asks the same question, but a box can
+  # be ticked by hand, so the push is where it holds.
+  "$(dirname "$0")/gates/plan-gate.sh" || exit 1
   # GUARD_EDIT_OK: feature 383 FR-006 (the GM 2026-10-12: "Although I agree that the combining all the different checks into
   # one is lower impact, it does still seem worth doing") - THE PUSH'S PYTHON CHECKS RUN IN ONE PROCESS, in the order this
   # block ran them, each as it runs alone and each refusing with the line it refused with here: scripts/gates/push_checks.py
@@ -321,72 +390,6 @@ push_cmd() {
   # the record gate and the claims gate are shell scripts with their own refusals, not Python checks (features 311, 316)
   "$ROOT/scripts/gates/entry-gate.sh" || exit 1
   "$ROOT/scripts/gates/claims-gate.sh" || exit 1
-  # files OUR unpushed commits touch, captured BEFORE the pull so the overlap test is honest.
-  # INCOMING files = what the pull moves HEAD across - NOT a diff against post-push origin/main,
-  # which contains our own commits and false-flags every push (the script's own first dogfood run
-  # caught exactly that bug: a no-op pull reported our just-pushed files as overlap).
-  local base before ours theirs overlap
-  git fetch -q origin || die "cannot fetch GitHub main from $GITHUB_URL"   # the delta and the route are judged against the LATEST main
-  base=$(git rev-parse origin/main)
-  before=$(git rev-parse HEAD)
-  ours=$(git diff --name-only "$base"...HEAD | sort -u)
-  # A FEATURE IN PROGRESS LANDS NOTHING - ON EITHER ROUTE (feature 133, GM 2026-08-25: *"even though
-  # we are literally working on a feature and that feature is not yet done, you still pushed back to
-  # main anyway. And that is the kind of thing that I am trying to prevent with this tooling."*).
-  # The active feature is DERIVED, not declared, so it cannot be evaded by not setting the pointer:
-  # any specs/NNN-*/tasks.md with an open box that (a) our delta touches, or (b) .specify/feature.json
-  # names, is a feature in progress. While one exists the push is refused - DIRECT or GATED, no flag -
-  # with ONE mechanical exception the GM kept: a delta consisting solely of that feature's own
-  # specs/NNN-*/ directory (the spec-number claim for concurrent sessions). Nothing else rides along.
-  local active="" pointer="" f
-  # GUARD_EDIT_OK: feature 383 FR-006 - the Python calls from here on stay out of push_checks.py, each for one reason: it runs
-  # after the fetch (the checks above precede it) and its answer is a VALUE the shell's own branches read - the feature
-  # pointer, which features are in progress, the performance flag, the remote merge's route -
-  # not a pass or refusal of its own. The escape reads (`hm_escape.py reason-ok`) run only when an escape is set.
-  pointer=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("feature_directory","").rstrip("/"))' "$ROOT/.specify/feature.json" 2>/dev/null || true)
-  for f in $(printf '%s\n' "$ours" | grep -oE '^specs/[^/]+' | sort -u) "$pointer"; do
-    # feature 330 (FR-002, GUARD_EDIT_OK; plan review round 4): ANY open box still makes a feature in progress - indented,
-    # unread or otherwise, as before - unless its spec's status line CLOSES it (Done, Superseded by, Withdrawn: the
-    # words `speckit-todo.py` states once). The exemption fails closed: an error or no answer counts as not closed.
-    # GUARD_EDIT_OK: feature 375 plan D18 - an open box marked `[lands-open]` does not hold the landing, but only where the
-    # tooling or a reviewed plan put the mark (the GM-review box; a task the CLEAR plan's `**Lands open**:` line names):
-    # `speckit-todo.py --holding` lists every box that holds it, a hand-typed mark included, and names why.
-    if [ -n "$f" ] && [ -f "$ROOT/$f/tasks.md" ] && [ -n "$(python3 "$ROOT/scripts/speckit-todo.py" --holding "$ROOT/$f" 2>/dev/null || echo fail-closed)" ]; then
-      [ "$(python3 "$ROOT/scripts/speckit-todo.py" --closed-by-status "$ROOT/$f" 2>/dev/null)" = yes ] || active="$active $f"
-    fi
-  done
-  active=$(printf '%s\n' $active | sort -u | tr '\n' ' ' | sed 's/ *$//')
-  # (the closing check - a touched feature that reads closed carries its report - runs in push_checks.py, above; feature 383)
-  if [ -n "$active" ]; then
-    local outside
-    outside=$(printf '%s\n' "$ours" | grep -vE "^(${active// /|})/" || true)
-    if [ -n "$outside" ] || [ "$(printf '%s\n' $active | wc -l)" -gt 1 ]; then
-      printf '\n\033[1mREFUSED: feature %s is IN PROGRESS (open tasks) - nothing lands on main until it is complete.\033[0m\n' "$active" >&2
-      for f in $active; do python3 "$ROOT/scripts/speckit-todo.py" --holding "$ROOT/$f" 2>/dev/null | sed "s|^|  $f holds: |" >&2; done  # GUARD_EDIT_OK: feature 375 D18 - name the boxes that hold it
-      printf 'Neither route lands a feature in progress, and there is no flag. The one exception is a push of\n' >&2
-      printf 'that feature'"'"'s own specs/ directory ALONE (the spec-number claim); this delta also touches:\n' >&2
-      printf '%s\n' "$outside" | sed 's/^/  /' >&2
-      printf 'Finish the feature (every task ticked, including the GM'"'"'s acceptance where the spec has one), or move the\nunrelated change to another clone. The work stays here - mid-task work is sacred.\n\n' >&2
-      exit 1
-    fi
-    echo "sync-with-main: feature $active is in progress - this push is its specs/ directory alone (the claim), allowed"
-  fi
-  # pull+push as ONE locked unit: no other session can slip a push into the gap (CLAUDE.md step 2).
-  # HEAD:main, NOT main (GM 2026-07-27): `git push origin main` pushes the local REF NAMED main and
-  # ignores what is checked out, so a session on any other branch silently pushed a stale ref and
-  # got "! [rejected] main -> main (non-fast-forward)" while `git rev-list --count origin/main..HEAD`
-  # reported it 4 ahead and 0 behind - every diagnostic says fast-forward and the error names a ref
-  # you never touched. `HEAD:main` pushes what you actually committed.
-  # THE MANDATED REVIEWS ARE CHECKED BEFORE THE PUSH, not after (feature 127 audit, 2026-08-24).
-  # A spec ships with a fidelity verdict; a re-rolled Mode B map ships with its review logged. Both
-  # were constitutional and unenforced, and both had already been skipped in practice. Checked here
-  # because this is the moment work becomes everyone else's problem.
-  "$(dirname "$0")/gates/review-gate.sh" || exit 1
-  # GUARD_EDIT_OK: feature 243 - AND A PLAN'S DECISIONS ARE REVIEWED BEFORE ITS TASKS ARE TICKED. review-gate
-  # holds the spec; a plan is written after that verdict and nothing read it, so a narrowing reached ticked
-  # tasks and main unchecked (specs/243-*/research.md R1). `make tick` asks the same question, but a box can
-  # be ticked by hand, so the push is where it holds.
-  "$(dirname "$0")/gates/plan-gate.sh" || exit 1
   # THE PERFORMANCE BANDS ARE PRINTED HERE, NEVER ENFORCED (feature 375 amendment 5, the GM 2026-10-11: "it doesn't
   # need to be a gate anymore" - GUARD_EDIT_OK: a guard loosened at the GM's word). `make perf-review` prints each pair's
   # band and, over the band-1 line, a FLAG with the machine's state at both ends, which the session mentions when it
@@ -605,6 +608,8 @@ case "${1:-}" in
   push)        trap 'backup_on_exit $?' EXIT; push_cmd ;;
   render-sync) render_sync ;;
   render-sync-runner) render_sync_runner ;;
-  done)        trap 'backup_on_exit $?' EXIT; push_cmd; render_sync ;;
+  # GUARD_EDIT_OK: feature 405 T35 (D7) - the landing returns once its work is on main; main's renders refresh behind it
+  # (render_sync_background: the prompt hook's lock and log). A hand `render-sync` stays in the foreground.
+  done)        trap 'backup_on_exit $?' EXIT; push_cmd; render_sync_background ;;
   *)           die "usage: sync-with-main.sh sync-in [--mirror-only] [--background-render] | push | render-sync | done" ;;
 esac

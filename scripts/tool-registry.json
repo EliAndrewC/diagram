@@ -116,6 +116,10 @@
     "check-tool-signals": {
       "kind": "check",
       "what": "scripts/gates/check-tool-signals.py - make hooks-test refuses a tool that records none of its runs, and a registry out of step with the calls; each run recorded passed or refused"
+    },
+    "land": {
+      "kind": "check",
+      "what": "scripts/land.py - make land / make land-batch: refuses a landing with every cheap refusal named together, else runs what it owes, pushes and ticks; each run recorded passed or refused"
     }
   }
 }

@@ -117,3 +117,18 @@ def test_a_list_of_this_features_ids_is_not_read_as_another_features() -> None:
     body = "## D1 - the rule (FR-001, FR-002)\n\nfeature 383 FR-043 is another feature's.\n"
     kept = pb._QUALIFIED.sub(lambda q: "" if q.group(1) != "407" else q.group(2), body)
     assert [m.group(1) for m in pb._IDS.finditer(kept)] == ["D1", "FR-001", "FR-002"]
+
+
+def test_a_feature_with_no_request_md_gets_no_bundle(tmp_path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 405 T30 (D2): 405's first plan review ran on a bundle naming request.md where the feature had none, and returned
+    no verdict. The build refuses before writing anything, naming the file to write."""
+    import pytest  # noqa: PLC0415
+
+    d = tmp_path / "specs" / "905-x"
+    d.mkdir(parents=True)
+    (d / "spec.md").write_text("# Feature 905\n", encoding="utf-8")
+    monkeypatch.setattr(pb, "OUT", tmp_path / "out")
+    with pytest.raises(SystemExit) as e:
+        pb.build(d, "T01", [("T01", "## T01 - x\n")], {}, "task")
+    assert "specs/905-x/request.md is missing" in str(e.value) and "verbatim" in str(e.value)
+    assert not (tmp_path / "out").exists(), "nothing is written for a bundle that cannot be reviewed"

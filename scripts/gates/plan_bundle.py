@@ -134,6 +134,13 @@ def foreign(spec_dir: pathlib.Path, others: list[tuple[str, str]]) -> list[str]:
 def build(spec_dir: pathlib.Path, name: str, under: list[tuple[str, str]], earlier: dict[str, tuple[str, str]], how: str) -> pathlib.Path:
     """Write the bundle for the blocks `under` ([(key, text)]) and return its MANIFEST; `earlier` is {key: (its text when last
     judged, the verdict it got)}."""
+    # NO REQUEST, NO BUNDLE (feature 405 T30, D2): 405's first plan review ran on a bundle naming a request.md the feature did
+    # not have, and returned no verdict - a review against the spec alone tests the plan for self-consistency only.
+    if not (spec_dir / "request.md").is_file():
+        raise SystemExit(
+            f"plan bundle: specs/{spec_dir.name}/request.md is missing - write the GM's words there verbatim (the request and every "
+            "amendment, as the spec's 'The request' quotes them), commit it, and build again"
+        )
     out = OUT / f"plan-{spec_dir.name}-{name}"
     if out.exists():
         shutil.rmtree(out)

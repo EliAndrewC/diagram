@@ -47,10 +47,13 @@ stamp_hooks() { ( cd "$1/main/.clones/c" && python3 scripts/gates/gate-stamp.py 
 yes_() { PASS=$((PASS+1)); }
 no_() { echo "FAIL  $1"; FAIL=$((FAIL+1)); }
 rref() { git -C "$1/github.git" rev-parse -q --verify "refs/heads/$2"; }
-in_progress() { # $1 = topology dir: a feature with an open task plus an unrelated file, so a stop is refused
+# feature 405 T32 (D4): only the task being worked holds a landing - the clone's active task (`make task-start`)
+start() { printf '{"feature": "140-x", "task": "%s"}\n' "${2:-T01}" > "$1/main/.clones/c/.git/active-task"; }
+in_progress() { # $1 = topology dir: a feature with an open task being worked plus an unrelated file, so a stop is refused
   ( cd "$1/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [ ] T01 open\n' > specs/140-x/tasks.md \
     && printf -- '**Status**: APPROVED by `spec-fidelity` - round 1 verdict FAITHFUL\n' > specs/140-x/spec.md \
     && echo "${2:-docs}" > note.md && git add -A && git commit -qm "feature plus docs ${2:-}" )
+  start "$1"
 }
 
 case_01() {  # 1 s measured 2026-10-11
@@ -134,7 +137,7 @@ OUT=$(CI_ROUTE=GATED CI_MERGE="$BUILD" syncmain "$D" push); check "gated route d
 case_08() {  # 6 s measured 2026-10-11
 echo "7. GATED route, SKIP-VERIFIED: the clone pushes directly (a build already verified this tree)"
 D=$(topology g)
-( cd "$D/main/.clones/c" && echo 'def a(): return 4' > pool/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
+( cd "$D/main/.clones/c" && echo 'def a(): return 4' > pool/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"; start "$D" T02
 OUT=$(CI_ROUTE=GATED CI_MERGE="echo SKIP-VERIFIED > $D/main/.clones/c/.git/ci-verdict" syncmain "$D" push); check "skip-verified pushes directly" 0 $?
 [ "$(git -C "$D/github.git" rev-parse main)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  skip-verified did not land"; FAIL=$((FAIL+1)); }
 }
@@ -142,7 +145,7 @@ OUT=$(CI_ROUTE=GATED CI_MERGE="echo SKIP-VERIFIED > $D/main/.clones/c/.git/ci-ve
 case_09() {  # 11 s measured 2026-10-11
 echo "7b. GATED-LOCAL route (remote off, feature 132): SKIP-VERIFIED pushes directly; a refusal keeps the work in the clone"
 D=$(topology gl)
-( cd "$D/main/.clones/c" && echo 'def a(): return 5' > pool/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
+( cd "$D/main/.clones/c" && echo 'def a(): return 5' > pool/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"; start "$D" T02
 OUT=$(CI_ROUTE=GATED-LOCAL CI_MERGE="false" syncmain "$D" push); check "gated-local refused by ci-merge -> push fails" 1 $?
 expect_out "route GATED (local - remote off)"
 [ "$(git -C "$D/github.git" rev-parse main)" != "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  a refused gated-local push landed"; FAIL=$((FAIL+1)); }
@@ -163,12 +166,14 @@ case_11() {  # 11 s measured 2026-10-17 (66 s on 2026-10-11 before the split)
 echo "7d. A FEATURE IN PROGRESS LANDS NOTHING (feature 133): open tasks refuse both routes; the spec directory alone is the one exception"
 D=$(topology fp)
 ( cd "$D/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [ ] T01 open\n' > specs/140-x/tasks.md && printf -- '**Status**: APPROVED by `spec-fidelity` - round 1 verdict FAITHFUL\n' > specs/140-x/spec.md && echo docs > note.md && git add -A && git commit -qm "feature plus docs" )
-OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: open tasks + an unrelated file -> refused on the DIRECT route" 1 $?
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: open tasks nobody has started hold nothing (405 T32) -> lands" 0 $?
+( cd "$D/main/.clones/c" && echo docs-b > note.md && printf -- '- [ ] T01 open\n- [ ] T02 filed\n' > specs/140-x/tasks.md && git add -A && git commit -qm "the task's work" ); start "$D"
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: the task being worked + an unrelated file -> refused on the DIRECT route" 1 $?
 expect_out "IN PROGRESS"
 expect_out "note.md"
 [ "$(git -C "$D/github.git" rev-parse main)" != "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  a feature in progress landed"; FAIL=$((FAIL+1)); }
 D=$(topology fq)
-( cd "$D/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [ ] T01 open\n' > specs/140-x/tasks.md && printf -- '**Status**: APPROVED by `spec-fidelity` - round 1 verdict FAITHFUL\n' > specs/140-x/spec.md && git add -A && git commit -qm "the claim" )
+( cd "$D/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [ ] T01 open\n' > specs/140-x/tasks.md && printf -- '**Status**: APPROVED by `spec-fidelity` - round 1 verdict FAITHFUL\n' > specs/140-x/spec.md && git add -A && git commit -qm "the claim" ); start "$D"
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "the spec directory ALONE (the number claim) is allowed" 0 $?
 expect_out "the claim), allowed"
 ( cd "$D/main/.clones/c" && echo docs > note.md && git add -A && git commit -qm docs )
@@ -184,7 +189,7 @@ expect_out "PLAN GATE"
   && printf '{"plan_sha256": "%s", "decisions": [], "verdict": "CLEAR"}\n' "$(sha256sum specs/140-x/plan.md | cut -d' ' -f1)" > specs/140-x/plan-review.json \
   && git add -A && git commit -qm "the plan, reviewed" )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: every task ticked and the plan reviewed -> the docs land" 0 $?
-( cd "$D/main/.clones/c" && echo 'def a(): return 9' > pool/x/a.py && printf -- '- [x] T01 done\n- [ ] T02 the GM accepts\n' > specs/140-x/tasks.md && printf '# report\n' > specs/140-x/report.md && git add -A && git commit -qm engine ); stamp_hooks "$D"
+( cd "$D/main/.clones/c" && echo 'def a(): return 9' > pool/x/a.py && printf -- '- [x] T01 done\n- [ ] T02 the GM accepts\n' > specs/140-x/tasks.md && printf '# report\n' > specs/140-x/report.md && git add -A && git commit -qm engine ); stamp_hooks "$D"; start "$D" T02
 OUT=$(CI_ROUTE=GATED CI_MERGE="echo SKIP-VERIFIED > $D/main/.clones/c/.git/ci-verdict" syncmain "$D" push); check "IT FIRES on the GATED route too, before ci-merge is even consulted" 1 $?
 expect_out "IN PROGRESS"
 }
@@ -197,14 +202,14 @@ D=$(topology fr)
   && printf -- '# Feature Specification: x\n\n**Status**: Done (2026-10-08): landed in abc1234; only the report was left unticked\n\n## Review history\n- spec-fidelity round 1: FAITHFUL\n' > specs/140-x/spec.md \
   && printf '# plan\n' > specs/140-x/plan.md \
   && printf '{"plan_sha256": "%s", "decisions": [], "verdict": "CLEAR"}\n' "$(sha256sum specs/140-x/plan.md | cut -d' ' -f1)" > specs/140-x/plan-review.json \
-  && echo docs > note.md && git add -A && git commit -qm "closed by its status line" )
+  && echo docs > note.md && git add -A && git commit -qm "closed by its status line" ); start "$D" T02
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: an open box under a closing status line (Done) -> lands" 0 $?
 ( cd "$D/main/.clones/c" && printf -- '# Feature Specification: x\n\n**Status**: Implemented, mostly\n' > specs/140-x/spec.md && echo more > note.md && git add -A && git commit -qm "not closed" )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: the same open box under a status that closes nothing -> refused" 1 $?
 expect_out "IN PROGRESS"
 # plan review round 4: the closing-status exemption must not change how boxes are READ - an indented open task, or a
 # ticked task whose indented research box is open, is still in progress under a status that closes nothing
-( cd "$D/main/.clones/c" && printf -- '## Phase 1\n  - [ ] T01 indented and open\n  - [ ] T02 indented and open\n' > specs/140-x/tasks.md && echo m3 > note.md && git add -A && git commit -qm indented )
+( cd "$D/main/.clones/c" && printf -- '## Phase 1\n  - [ ] T01 indented and open\n  - [ ] T02 indented and open\n' > specs/140-x/tasks.md && echo m3 > note.md && git add -A && git commit -qm indented ); start "$D" T01
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: indented open tasks -> refused" 1 $?
 ( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n      - [ ] research pass\n' > specs/140-x/tasks.md && printf '# report\n' > specs/140-x/report.md && echo m4 > note.md && git add -A && git commit -qm research-box )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: a ticked task with an open indented research box -> refused" 1 $?
@@ -212,25 +217,24 @@ OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: a t
 
 case_11c() {  # split from case_11 (plan D27); its first commit writes every file the checks read, so a fresh topology serves
 D=$(topology ft)
-# feature 375 plan D18: a `[lands-open]` box does not hold the landing; an ordinary open box beside it still does
-( cd "$D/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [x] T01 done\n- [ ] T99 later batches [lands-open]\n' > specs/140-x/tasks.md && printf '# report\n' > specs/140-x/report.md \
+# feature 405 T32 (D4; the GM 2026-10-20, no Lands open line): only the task being worked holds a landing - a box nobody has
+# started holds nothing, marked or not; the active task holds, a [lands-open] mark on it changing nothing; the GM-review box never
+( cd "$D/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [x] T01 done\n- [ ] T99 later batches [lands-open]\n- [ ] T98 not started\n' > specs/140-x/tasks.md && printf '# report\n' > specs/140-x/report.md \
   && printf -- '# Feature Specification: x\n\n**Status**: In progress - batch 2 next\n\n**Owed at**: now\n\n## Review history\n- spec-fidelity round 1: FAITHFUL\n' > specs/140-x/spec.md \
-  && printf '# plan\n\n**Lands open**: T99\n' > specs/140-x/plan.md \
+  && printf '# plan\n' > specs/140-x/plan.md \
   && printf '{"plan_sha256": "%s", "decisions": [], "verdict": "CLEAR"}\n' "$(sha256sum specs/140-x/plan.md | cut -d' ' -f1)" > specs/140-x/plan-review.json \
-  && echo m5 > note.md && git add -A && git commit -qm lands-open )
-OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: only a [lands-open] box open -> lands" 0 $?
-( cd "$D/main/.clones/c" && printf -- '- [ ] T01 open\n- [ ] T99 later batches [lands-open]\n' > specs/140-x/tasks.md && echo m6 > note.md && git add -A && git commit -qm "one ordinary box" )
-OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: an ordinary open box beside a [lands-open] one -> refused" 1 $?
+  && echo m5 > note.md && git add -A && git commit -qm unstarted )
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: only boxes nobody has started open -> lands" 0 $?
+( cd "$D/main/.clones/c" && printf -- '- [ ] T01 open\n- [ ] T99 later batches [lands-open]\n' > specs/140-x/tasks.md && echo m6 > note.md && git add -A && git commit -qm "the task being worked" ); start "$D" T01
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: the active task open -> refused" 1 $?
 expect_out "holds: T01 open"
-# ...and the mark is honored only where the tooling or a reviewed plan put it (plan review round 2): a hand-typed mark on a
-# task the plan does not name holds the landing like any open box; the GM-review box in its fixed form does not
-( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n- [ ] T02 a task someone marked [lands-open]\n' > specs/140-x/tasks.md && printf '# report\n' > specs/140-x/report.md && echo m7 > note.md && git add -A && git commit -qm "hand-typed mark" )
-OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: a [lands-open] mark the plan does not name -> refused" 1 $?
-expect_out "honored only on the GM-review box"
-( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n- [ ] GM review (make gm-reviewed F=140) [lands-open]\n' > specs/140-x/tasks.md && printf '# report\n' > specs/140-x/report.md && echo m8 > note.md && git add -A && git commit -qm "the GM's box, nothing for the GM" )
-OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: the GM-review box on a feature with no row for the GM -> refused" 1 $?
-( cd "$D/main/.clones/c" && printf '{"kind": "arbiter", "row": "r1"}\n' > specs/140-x/gm-review.jsonl && echo m9 > note.md && git add -A && git commit -qm "a row for the GM" )
-OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: the GM-review box in its fixed form, a row open -> lands" 0 $?
+expect_out "make land F=140 T=T01"
+case "$OUT" in *"conflict-markers:"*) no_ "the holding rule ran after push_checks.py (405 T34: cheap questions first)" ;; *) yes_ ;; esac
+OUT=$(L7R_LAND_TICKS="T01" CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: make land names the task it ticks -> lands" 0 $?
+( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n- [ ] T02 being worked [lands-open]\n' > specs/140-x/tasks.md && echo m7 > note.md && git add -A && git commit -qm "a mark on the active task" ); start "$D" T02
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: a [lands-open] mark is text - the active task still holds" 1 $?
+( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n- [x] T02 done\n- [ ] GM review (make gm-reviewed F=140) [lands-open]\n' > specs/140-x/tasks.md && echo m8 > note.md && git add -A && git commit -qm "the GM's box" )
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: the GM-review box never holds -> lands" 0 $?
 }
 
 case_12() {  # 1 s measured 2026-10-11
@@ -432,6 +436,16 @@ printf '#!/bin/sh\nwhile read o n r; do case "$r" in refs/heads/backup/*) echo "
 OUT=$(CI_ROUTE=DIRECT syncmain "$D" done); check "a landing whose backup delete is rejected still lands" 0 $?
 expect_out "backup/c NOT deleted"
 [ "$(rref "$D" main)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && yes_ || no_ "the work did not land"
+# feature 405 T35 (D7): a landing returns once its work is on main; main's renders refresh behind it (T12's push waited 2.5 min)
+D=$(topology bw)
+printf 'render-sync:\n\t@sleep 6; git -C %s rev-parse --short HEAD >> %s\n' "$D/main" "$D/rendered" > "$D/main/Makefile"
+( cd "$D/main/.clones/c" && echo docs > note.md && git add -A && git commit -qm docs )
+start_s=$(date +%s)
+OUT=$(CI_ROUTE=DIRECT syncmain "$D" done); check "done with main's render in the background" 0 $?
+[ $(( $(date +%s) - start_s )) -lt 5 ] && [ ! -f "$D/rendered" ] && yes_ || no_ "done waited for the render"
+expect_out "render-sync started in the background"
+[ "$(rref "$D" main)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && yes_ || no_ "the work did not land"
+for _ in $(seq 1 30); do grep -q '^ok' "$D/main/.clones/.render-sync.status" 2>/dev/null && break; sleep 0.5; done
 }
 
 case_22() {  # 11 s measured 2026-10-11

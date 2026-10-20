@@ -34,21 +34,15 @@ def _tick():  # noqa: ANN202 - tick-task.py's feature resolution, the one copy
 
 
 def next_id(d: Path) -> str:
-    """One more than the highest task id the feature names, zero-padded as its ids are."""
+    """One more than the highest id of the feature's own tasks - its boxes and its plan's `## T<n>` sections - zero-padded as its
+    ids are. Never an id a title or a section merely QUOTES (feature 405 T31, D3): 405's moved titles name "(385 T147)", and
+    reading every `T<n>` gave its new tasks T148 on."""
     text = "".join((d / n).read_text(encoding="utf-8") for n in ("tasks.md", "plan.md", "plan-done.md") if (d / n).is_file())
-    return f"T{max((int(n) for n in re.findall(r'\bT(\d+)[a-z]?\b', text)), default=0) + 1:02d}"
+    ids = re.findall(r"^(?:\s*- \[[ xX]\]|##) T(\d+)[a-z]?\b", text, re.M)
+    return f"T{max((int(n) for n in ids), default=0) + 1:02d}"
 
 
-LANDS_OPEN = re.compile(r"^(\*\*Lands open\*\*:.*?)[ \t]*$", re.M)
-
-
-def lands_open(plan: str, tid: str) -> str:
-    """The plan with `tid` on its `**Lands open**:` line (T69, plan D88), or unchanged where it has none."""
-    return LANDS_OPEN.sub(lambda m: f"{m.group(1)}, {tid}", plan, count=1)
-
-
-def add_box(tasks: str, tid: str, title: str, physical: bool, open_mark: bool = False) -> str:
-    title = f"{title} [lands-open]" if open_mark else title
+def add_box(tasks: str, tid: str, title: str, physical: bool) -> str:
     box = f"- [ ] {tid} {title}\n      research: {'physical' if physical else 'rendering'}\n" + (PHYSICAL if physical else "")
     gm = re.search(r"^- \[[ x]\] GM review\b", tasks, re.M)
     if gm:
@@ -85,16 +79,12 @@ def main(argv: list[str]) -> int:
         print(f"task-add: SECTION={section} is not a file", file=sys.stderr)
         return 2
     tid = next_id(d)
-    # A TASK FILED MID-FEATURE LANDS OPEN (T69, plan D88): T10's push was refused for T66 and T67, open boxes the plan's
-    # `**Lands open**:` line did not name. Where the line exists, the new id joins it and the box carries the mark.
-    plan = (d / "plan.md").read_text(encoding="utf-8") if (d / "plan.md").is_file() else ""
-    marked = bool(LANDS_OPEN.search(plan))
-    (d / "tasks.md").write_text(add_box((d / "tasks.md").read_text(encoding="utf-8"), tid, title, physical, marked), encoding="utf-8")
-    plan = lands_open(plan, tid)
+    # NO LANDS-OPEN MARK OR LINE (feature 405 T32, D4; the GM 2026-10-20): a task nobody has started holds no landing, so a task
+    # filed mid-feature needs neither - the mark and the `**Lands open**:` line that T69 (plan D88) wrote here are retired.
+    (d / "tasks.md").write_text(add_box((d / "tasks.md").read_text(encoding="utf-8"), tid, title, physical), encoding="utf-8")
     if section:
-        plan = add_section(plan, tid, Path(section).read_text(encoding="utf-8"))
-    if section or marked:
-        (d / "plan.md").write_text(plan, encoding="utf-8")
+        plan = (d / "plan.md").read_text(encoding="utf-8") if (d / "plan.md").is_file() else ""
+        (d / "plan.md").write_text(add_section(plan, tid, Path(section).read_text(encoding="utf-8")), encoding="utf-8")
     print(f"task-add: {tid} filed in {(d / 'tasks.md').relative_to(root)}" + (f", its section in {(d / 'plan.md').relative_to(root)}" if section else ""))
     return 0
 

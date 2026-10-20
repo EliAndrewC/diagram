@@ -32,11 +32,13 @@ open feature with no tag or an unknown one, and one owed at a tier not yet scrip
                                                  push's in-progress refusal keeps its own open-box test and asks only this
     speckit-todo.py --holding <dir>              the open boxes that hold the landing, one a line (none: it may land)
 
-THE BOX THAT LANDS OPEN (feature 375, plan D18). An open box marked `[lands-open]` does not hold the landing and still keeps
-the feature open here - but only where the tooling or a reviewed plan put the mark: the GM-review box in its one fixed form
-(`GM review (make gm-reviewed F=<its number>)`, D12) while the feature has an open row for the GM (`gm-review.jsonl`), or a task a `**Lands open**: <ids>` line of `plan.md` names while
-`plan-review.json` is CLEAR and current for that plan. A mark on any other box is no exemption: the box holds the landing
-and `--holding` says why, so the mark cannot become an escape nobody logged.
+WHAT HOLDS A LANDING (feature 405 T32, D4; it replaced feature 375 plan D18's box that lands open). The GM, 2026-10-20, after a
+reviewed `**Lands open**:` line cost 405's first claim four minutes: "I do not want each landing to owe a lands open line ...
+because that's going to slow things down." A feature in progress holds a landing only through the task being worked - the
+clone's active task (`make task-start`, `.git/active-task`) - while that task is open and the landing does not tick it
+(`L7R_LAND_TICKS`, the ids `make land` sets once their tick checks pass). A task nobody has started holds nothing, nor does the
+GM-review box (a review after the landing); a `[lands-open]` mark is text, neither an exemption nor a refusal. Mid-task work
+still stays in the clone (feature 330).
 """
 
 from __future__ import annotations
@@ -44,7 +46,9 @@ from __future__ import annotations
 import argparse
 import dataclasses
 import json
+import os
 import re
+import subprocess
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -162,59 +166,48 @@ def closed_by_status(d: Path) -> bool:
 
 
 _OPEN_BOX = re.compile(r"^\s*- \[ \] (.*)$", re.M)
-_LANDS_OPEN = "[lands-open]"
-_LANDS_OPEN_LINE = re.compile(r"^\*\*Lands open\*\*:\s*(.+)$", re.M)
-
-
-def lands_open_ids(d: Path) -> set[str]:
-    """The task ids `plan.md`'s `**Lands open**:` line names, while its plan review is CLEAR and current - else none."""
-    plan = d / "plan.md"
-    m = _LANDS_OPEN_LINE.search(plan.read_text(errors="replace")) if plan.is_file() else None
-    if m is None:
-        return set()
-    sys.path.insert(0, str(Path(__file__).resolve().parent / "gates"))
-    import plan_gate  # noqa: PLC0415 - the plan gate decides "CLEAR and current", one rule
-
-    return set(re.findall(r"T\d+\w*", m.group(1))) if plan_gate.owed(d) is None else set()
-
-
-def carried_ids(d: Path) -> set[str]:
-    """The task ids the claims gate filed a carried finding into (`claims-carried.jsonl`, feature 385 FR-013 D28): boxes the
-    tooling put there, which hold no landing."""
-    f = d / "claims-carried.jsonl"
-    lines = f.read_text(errors="replace").splitlines() if f.is_file() else []
-    return {str(json.loads(ln).get("task")) for ln in lines if ln.strip()}
+def active_task(d: Path) -> str:
+    """The clone's active task (`make task-start`) when it is this feature's, else ''."""
+    out = subprocess.run(["git", "-C", str(d), "rev-parse", "--path-format=absolute", "--git-common-dir"], capture_output=True, text=True)
+    mark = Path(out.stdout.strip()) / "active-task" if out.returncode == 0 and out.stdout.strip() else None
+    try:
+        got = json.loads(mark.read_text(encoding="utf-8")) if mark is not None and mark.is_file() else {}
+    except ValueError:
+        return ""
+    return str(got.get("task") or "") if got.get("feature") == d.name else ""
 
 
 def gm_rows(d: Path) -> int:
-    """The GM's open review rows for the feature (`gm-review.jsonl`, plan D12): its GM-review box is honored only while there
-    is one - a feature with nothing for the GM has no such box (FR-012). A row the GM has reviewed carries `reviewed`."""
+    """The GM's open review rows for the feature (`gm-review.jsonl`, plan D12): its GM-review box is shown while there is one.
+    A row the GM has reviewed carries `reviewed`."""
     f = d / "gm-review.jsonl"
     lines = f.read_text(errors="replace").splitlines() if f.is_file() else []
     return sum(1 for ln in lines if ln.strip() and '"reviewed"' not in ln)
 
 
 def holding(d: Path) -> list[str]:
-    """The open boxes of `d/tasks.md` that hold the landing: every open box but an honored `[lands-open]` one (module doc)."""
+    """The open box that holds the landing: the clone's active task of this feature, open and not ticked by the landing
+    (`L7R_LAND_TICKS`) - every other open box holds nothing (module doc, D4)."""
     tasks = d / "tasks.md"
-    if not tasks.is_file():
+    task = active_task(d) if tasks.is_file() else ""
+    if not task or task in os.environ.get("L7R_LAND_TICKS", "").split():
         return []
-    gm = f"GM review (make gm-reviewed F={int(d.name.split('-', 1)[0])}) {_LANDS_OPEN}" if d.name[:1].isdigit() else ""
-    ids: set[str] | None = None
-    out = []
-    for body in _OPEN_BOX.findall(tasks.read_text(errors="replace")):
-        if body.rstrip().endswith(_LANDS_OPEN):  # the TAG closing the line; a mention inside a task's words is no mark
-            if body.strip() == gm and gm_rows(d):
-                continue
-            ids = (lands_open_ids(d) | carried_ids(d)) if ids is None else ids
-            if body.split(" ", 1)[0] in ids:
-                continue
-            out.append(
-                f"{body.strip()}  <- {_LANDS_OPEN} honored only on the GM-review box of a feature with rows for the GM, or a task the reviewed plan's **Lands open**: line or the claims gate's carry record names"
-            )
-        else:
-            out.append(body.strip())
-    return out
+    number = d.name.split("-", 1)[0]
+    how = f"land it with make land F={int(number) if number.isdigit() else d.name} T={task}"
+    lines = tasks.read_text(errors="replace").splitlines()
+    for i, line in enumerate(lines):
+        m = re.match(r"^(\s*)- \[([ xX])\] (\S+)", line)
+        if not m or m.group(3) != task:
+            continue
+        if m.group(2) == " ":
+            return [f"{line.split('] ', 1)[1].strip()}  <- the active task (make task-start), open: {how}"]
+        # ...or a box nested under its line still open (a research pass): the task is not done (feature 330's indented rule)
+        for below in lines[i + 1 :]:
+            if not below.startswith((m.group(1) + " ", m.group(1) + "\t")) or not below.strip():
+                break
+            if (n := re.match(r"^\s*- \[ \] (.*)$", below)) is not None:
+                return [f"{n.group(1).strip()}  <- open under the active task {task}: {how}"]
+    return []
 
 
 def features(specs: Path) -> list[Feature]:

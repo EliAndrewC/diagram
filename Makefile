@@ -604,10 +604,15 @@ arbiter-fix-declined:  ## [project] the round arbiter's tooling fix OVERHAULS a 
 	@if [ -z "$(ID)" ] || [ -z "$(REASON)" ]; then printf 'make arbiter-fix-declined: ID= and REASON= are required\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py fix declined "$(ID)" "$(REASON)"
 
+land: export LAND_NOTE = $(NOTE)
+land:           ## [project] land one task or several and tick them: every cheap refusal first and together, then make done and make cohort-landing where needed, the push, the ticks (feature 405 T33)   F=405 T="T12 [T13]" NOTE="what was verified"
+	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make land: F=<feature> and T="<task ids>" are required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/land.py" "$(F)" "$(T)"
+
 land-batch: export LAND_NOTE = $(NOTE)
-land-batch:     ## [project] land two or three small engine fixes under ONE gate and landing cohort, then tick each (feature 385 T117)   F=385 T="T106 T108" NOTE="what was verified"
+land-batch:     ## [project] the same command as make land (feature 385 T117's name, kept)   F=385 T="T106 T108" NOTE="what was verified"
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make land-batch: F=<feature> and T="<task ids>" are required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/land-batch.py" "$(F)" "$(T)"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/land.py" "$(F)" "$(T)"
 
 task-start:     ## [project] name the task you are starting, so its checks wait for its decisions' verdict (feature 375)   F=375 T=T13
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make task-start: F=<feature> and T=<task id> are required\n' >&2; exit 2; fi

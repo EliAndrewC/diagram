@@ -1,18 +1,21 @@
-"""The box that lands open and the feature that waits (feature 375, plan D18).
+"""What holds a landing, and the feature that waits (feature 375 plan D18; rewritten by feature 405 T32, D4).
 
-375 lands batch by batch and must stay open between them, so one standing task carries `[lands-open]`. The plan review
-(rounds 2 and 3) bounded the mark: it is honored only on the GM-review box of a feature with a row for the GM, or on a task
-the CLEAR plan's `**Lands open**:` line names - a hand-typed mark is no exemption, at the push or at `make tick`. And a
-spec that must wait for another declares `**Waits on**: NNN`, which `make tick` holds.
+The GM, 2026-10-20, after 405's first claim spent four minutes on a reviewed `**Lands open**:` line: "I do not want each
+landing to owe a lands open line ... because that's going to slow things down." So a feature in progress holds a landing only
+through the task being worked: the clone's active task (`make task-start`), while it is open and the landing does not tick it
+(`L7R_LAND_TICKS`, which `make land` sets once that task's tick checks pass). A task nobody has started holds nothing, and a
+`[lands-open]` mark is plain text. A spec that must wait for another still declares `**Waits on**: NNN`, which `make tick` holds.
 """
 
 from __future__ import annotations
 
-import hashlib
 import importlib.util
 import json
 import pathlib
+import subprocess
 import sys
+
+import pytest
 
 from tests._scripts import script
 
@@ -29,54 +32,66 @@ def _load(name: str, as_: str):  # noqa: ANN202
 todo = _load("speckit-todo.py", "speckit_todo_t")
 tt = _load("tick-task.py", "tick_task_t")
 
-PLAN = "# plan\n\n**Lands open**: T99\n"
+
+def _repo(root: pathlib.Path) -> pathlib.Path:
+    if not (root / ".git").exists():
+        subprocess.run(["git", "init", "-q", str(root)], check=True)
+    return root
 
 
-def _feature(root: pathlib.Path, name: str, tasks: str, plan: str | None = PLAN, clear: bool = True, spec: str = "") -> pathlib.Path:
-    d = root / "specs" / name
+def _feature(root: pathlib.Path, name: str, tasks: str, spec: str = "") -> pathlib.Path:
+    d = _repo(root) / "specs" / name
     d.mkdir(parents=True, exist_ok=True)
     (d / "tasks.md").write_text(tasks)
     (d / "spec.md").write_text(spec or "# Feature: x\n\n**Status**: In progress\n")
-    if plan is not None:
-        (d / "plan.md").write_text(plan)
-        sha = hashlib.sha256(plan.encode()).hexdigest()
-        (d / "plan-review.json").write_text(json.dumps({"plan_sha256": sha, "plan_text": plan, "decisions": [], "verdict": "CLEAR" if clear else "BLOCKED"}))
     return d
 
 
-def test_only_the_plan_named_and_the_gm_boxes_land_open(tmp_path: pathlib.Path) -> None:
-    d = _feature(tmp_path, "375-x", "- [x] T01 a\n- [ ] T99 later [lands-open]\n")
-    assert todo.holding(d) == [] and todo.feature(d).state == "in progress", "open to every reader, holding nothing"
-    d = _feature(tmp_path, "376-x", "- [ ] T99 later [lands-open]\n", clear=False)
-    assert "honored only" in todo.holding(d)[0], "a BLOCKED plan names nothing"
-    d = _feature(tmp_path, "377-x", "- [ ] T98 later [lands-open]\n")
-    assert "honored only" in todo.holding(d)[0], "a task the plan does not name"
-    d = _feature(tmp_path, "378-x", "- [ ] T01 a\n  - [ ] research pass\n", plan=None)
-    assert todo.holding(d) == ["T01 a", "research pass"]
-    gm = "- [x] T01 a\n- [ ] GM review (make gm-reviewed F=379) [lands-open]\n"
-    d = _feature(tmp_path, "379-x", gm, plan=None)
-    assert "honored only" in todo.holding(d)[0], "no row for the GM: no such box"
-    (d / "gm-review.jsonl").write_text('{"row": 1, "reviewed": "2026-10-11"}\n')
-    assert todo.holding(d) != [], "a reviewed row is not open"
-    (d / "gm-review.jsonl").write_text('{"row": 1, "reviewed": "2026-10-11"}\n{"row": 2}\n\n')
-    assert todo.holding(d) == []
+def _start(root: pathlib.Path, feature: str, task: str) -> None:
+    (root / ".git" / "active-task").write_text(json.dumps({"feature": feature, "task": task}) + "\n")
+
+
+def test_a_task_nobody_has_started_holds_nothing(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("L7R_LAND_TICKS", raising=False)
+    d = _feature(tmp_path, "405-x", "- [x] T12 a\n- [ ] T01 later\n- [ ] T02 later [lands-open]\n  - [ ] research pass\n")
+    assert todo.holding(d) == [] and todo.feature(d).state == "in progress", "open to every reader, holding no landing"
     assert todo.holding(tmp_path / "specs" / "no-such") == []
-    d = _feature(tmp_path, "381-x", "- [ ] T07 build the `[lands-open]` mark and test it\n")
-    assert todo.holding(d) == ["T07 build the `[lands-open]` mark and test it"], "a mention is an ordinary open box, never a mark"
-    assert todo.lands_open_ids(_feature(tmp_path, "380-x", "", plan="# plan\n")) == set()
 
 
-def test_make_tick_holds_a_waiting_feature_and_a_hand_typed_mark(tmp_path: pathlib.Path) -> None:
+def test_the_active_task_holds_until_the_landing_ticks_it(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("L7R_LAND_TICKS", raising=False)
+    d = _feature(tmp_path, "405-x", "- [ ] T12 the claim\n- [ ] T01 later\n")
+    _start(tmp_path, "405-x", "T12")
+    assert todo.holding(d) == ["T12 the claim  <- the active task (make task-start), open: land it with make land F=405 T=T12"]
+    monkeypatch.setenv("L7R_LAND_TICKS", "T30 T12")
+    assert todo.holding(d) == [], "make land ticks it once the push succeeds"
+    monkeypatch.delenv("L7R_LAND_TICKS")
+    (d / "tasks.md").write_text("- [x] T12 the claim\n- [ ] T01 later\n")
+    assert todo.holding(d) == [], "ticked: nothing is mid-task"
+    (d / "tasks.md").write_text("- [x] T12 the claim\n      - [ ] research pass\n- [ ] T01 later\n")
+    assert todo.holding(d)[0].startswith("research pass  <- open under the active task T12"), "a box nested under it: not done"
+    _start(tmp_path, "406-y", "T01")
+    (d / "tasks.md").write_text("- [ ] T12 the claim\n- [ ] T01 later\n")
+    assert todo.holding(d) == [], "another feature's active task holds this one nothing"
+
+
+def test_the_gm_review_box_never_holds(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("L7R_LAND_TICKS", raising=False)
+    d = _feature(tmp_path, "379-x", "- [x] T01 a\n- [ ] GM review (make gm-reviewed F=379) [lands-open]\n")
+    assert todo.holding(d) == []
+
+
+def test_make_tick_holds_a_waiting_feature_and_no_mark(tmp_path: pathlib.Path) -> None:
     _feature(tmp_path, "375-x", "- [x] T01 a\n- [ ] T99 later [lands-open]\n")
-    waiting = _feature(tmp_path, "374-y", "- [ ] T01 a\n", plan=None, spec="# Feature\n\n**Waits on**: 375 (its D18)\n")
+    waiting = _feature(tmp_path, "374-y", "- [ ] T01 a\n", spec="# Feature\n\n**Waits on**: 375 (its D18)\n")
     why = tt.waits_or_marks(tmp_path, waiting)
     assert "waits on feature 375 (375-x), which is still open" in why
     (tmp_path / "specs" / "375-x" / "tasks.md").write_text("- [x] T01 a\n- [x] T99 later [lands-open]\n")
     assert tt.waits_or_marks(tmp_path, waiting) == "", "375 closed: 374 may tick"
-    gone = _feature(tmp_path, "373-z", "- [ ] T01 a\n", plan=None, spec="**Waits on**: 999\n")
+    gone = _feature(tmp_path, "373-z", "- [ ] T01 a\n", spec="**Waits on**: 999\n")
     assert tt.waits_or_marks(tmp_path, gone) == "", "a feature that does not exist holds nothing"
-    marked = _feature(tmp_path, "372-w", "- [ ] T01 a [lands-open]\n", plan=None)
-    assert tt.waits_or_marks(tmp_path, marked).startswith("a [lands-open] mark the tooling did not put here: T01 a")
+    marked = _feature(tmp_path, "372-w", "- [ ] T01 a [lands-open]\n")
+    assert tt.waits_or_marks(tmp_path, marked) == "", "a mark is text; it neither exempts nor refuses"
 
 
 def test_tick_loads_the_todo_module_as_the_command_does() -> None:
@@ -86,26 +101,9 @@ def test_tick_loads_the_todo_module_as_the_command_does() -> None:
     assert tt._todo().CLOSING == ("done", "superseded by", "withdrawn")
 
 
-def test_the_holding_command_line(tmp_path: pathlib.Path, capsys) -> None:  # noqa: ANN001
-    d = _feature(tmp_path, "377-x", "- [ ] T01 a\n- [ ] T99 later [lands-open]\n")
+def test_the_holding_command_line(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str], monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("L7R_LAND_TICKS", raising=False)
+    d = _feature(tmp_path, "377-x", "- [ ] T01 a\n- [ ] T99 later\n")
+    _start(tmp_path, "377-x", "T01")
     assert todo.main(["--holding", str(d)]) == 0
-    assert capsys.readouterr().out == "T01 a\n"
-
-
-def test_a_box_the_claims_gate_filed_a_carry_into_lands_open(tmp_path: pathlib.Path) -> None:
-    """Feature 385 FR-013 (D28): a `[lands-open]` box the claims gate's carry record names is the tooling's, and holds nothing;
-    the same box with no record is a hand-typed mark."""
-    d = _feature(tmp_path, "385-x", "- [x] T01 a\n- [ ] T14 Carried by the claims gate (FR-013): k [lands-open]\n")
-    assert "honored only" in todo.holding(d)[0] and "carry record" in todo.holding(d)[0]
-    (d / "claims-carried.jsonl").write_text('{"task": "T14", "keys": ["k"], "utc": "2026-10-17T00:00:00Z"}\n\n')
-    assert todo.holding(d) == [] and todo.carried_ids(d) == {"T14"}
-
-
-def test_a_hand_typed_box_citing_a_recorded_ruling_still_holds(tmp_path: pathlib.Path) -> None:
-    """Feature 385 T45 (D59, round 1's finding): only the carry record's row honors a box - a box that merely names a trigger
-    the arbiter's record holds is still a hand-typed mark."""
-    d = _feature(tmp_path, "385-x", "- [x] T01 a\n- [ ] T43 Carried by the round arbiter (ask:t07-x) [lands-open]\n")
-    (d / "arbiter.jsonl").write_text('{"trigger": "ask:t07-x", "ruling": "continue"}\n')
-    assert "honored only" in todo.holding(d)[0]
-    (d / "claims-carried.jsonl").write_text('{"task": "T43", "keys": ["k"], "ruling": "ask:t07-x", "utc": "2026-10-18T00:00:00Z"}\n')
-    assert todo.holding(d) == []
+    assert capsys.readouterr().out.startswith("T01 a  <- the active task")

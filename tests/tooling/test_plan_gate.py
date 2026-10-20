@@ -59,6 +59,7 @@ def feature(root: pathlib.Path, plan: bytes | None = PLAN, review: dict | None =
     d = root / "specs" / name
     d.mkdir(parents=True, exist_ok=True)
     (d / "tasks.md").write_text(TASKS, encoding="utf-8")
+    (d / "request.md").write_text("# the request\n\n> the GM's words\n", encoding="utf-8")  # a bundle needs it (405 T30, D2)
     if plan is not None:
         (d / "plan.md").write_bytes(plan)
     if review is not None:
@@ -394,17 +395,14 @@ def test_ids_appended_to_the_lands_open_line_owe_no_review_and_a_reorder_does(tm
     """Feature 385 T74 (plan D93): two reviews in hour 24 of ids `make task-add` had added. Run on task-add's own output."""
     body = "## Landing\n\n**Lands open**: T02, T03\n\nEach task lands when it closes.\n"
     review = {"blocks": {"preamble": {"sha256": gate.block_digest("# Plan\n\n"), "verdict": "CLEAR"}, "## Landing": {"sha256": gate.block_digest(body), "verdict": "CLEAR", "text": body}}}
-    spec = importlib.util.spec_from_file_location("task_add_t74", REPO / "scripts/task-add.py")
-    assert spec and spec.loader
-    ta = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(ta)
-    added = "# Plan\n\n" + ta.lands_open(body, "T09")  # what task-add writes
+    appended = body.replace("T02, T03", "T02, T03, T09")  # what task-add wrote until feature 405 T32 retired the line
+    added = "# Plan\n\n" + appended
     assert gate.block_status(review, added, set())[0] == []
     reordered = "# Plan\n\n" + body.replace("T02, T03", "T03, T02")
     assert gate.block_status(review, reordered, set())[0] == ["## Landing"]
     dropped = "# Plan\n\n" + body.replace("T02, T03", "T02, T09")
     assert gate.block_status(review, dropped, set())[0] == ["## Landing"]
-    more = "# Plan\n\n" + ta.lands_open(body, "T09").replace("lands when it closes", "lands at once")
+    more = "# Plan\n\n" + appended.replace("lands when it closes", "lands at once")
     assert gate.block_status(review, more, set())[0] == ["## Landing"], "anything else changed is owed as now"
 
 

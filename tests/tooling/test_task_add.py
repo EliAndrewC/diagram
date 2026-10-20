@@ -65,12 +65,21 @@ def test_with_no_gm_box_or_close_both_go_at_the_end_and_bad_calls_refuse(tmp_pat
     assert "is not a file" in capsys.readouterr().err
 
 
-def test_where_the_plan_lands_tasks_open_the_new_one_joins_its_line(tmp_path, monkeypatch) -> None:  # noqa: ANN001
-    """T69 (plan D88): T10's push was refused for two filed tasks the Lands open line did not name."""
+def test_an_id_quoted_in_a_title_is_not_a_task_s_id(tmp_path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 405 T31 (D3): 405's titles quote "(385 T147)", and next_id gave T148-T154 where T28-T35 were next."""
+    d = tmp_path / "specs" / "405-x"
+    d.mkdir(parents=True)
+    (d / "tasks.md").write_text("- [x] T08 (385 T111) moved\n- [ ] T09 (385 T147) moved, see T147\n", encoding="utf-8")
+    (d / "plan.md").write_text("## T09 - its plan, citing 385 T126\n", encoding="utf-8")
+    assert ta.next_id(d) == "T10"
+
+
+def test_a_task_filed_mid_feature_carries_no_lands_open_mark(tmp_path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 405 T32 (D4, the GM 2026-10-20: no Lands open line): only the task being worked holds a landing, so a new
+    task needs no mark and no line - an old line is left as it is, unread."""
     d = _feature(tmp_path, monkeypatch)
     (d / "plan.md").write_text("# Plan\n\n**Lands open**: T09, T12\n\n## T11 - the close\n", encoding="utf-8")
     monkeypatch.setenv("TASK_TITLE", "a fix")
     assert ta.main(["385"]) == 0
-    assert "**Lands open**: T09, T12, T15\n" in (d / "plan.md").read_text(encoding="utf-8")
-    assert "- [ ] T15 a fix [lands-open]\n" in (d / "tasks.md").read_text(encoding="utf-8")
-    assert ta.lands_open("# Plan\n", "T02") == "# Plan\n", "a plan with no such line is left alone"
+    assert "**Lands open**: T09, T12\n" in (d / "plan.md").read_text(encoding="utf-8")
+    assert "- [ ] T15 a fix\n" in (d / "tasks.md").read_text(encoding="utf-8")

@@ -236,9 +236,9 @@ def test_a_note_saying_landed_is_refused_while_the_landing_is_not_on_main(tmp_pa
     assert "ended 'failed: the checks failed'" in tt.landed_refusal(tmp_path, "385-x", "T137", "landed"), "off main: refused as before"
 
 
-def test_a_batch_is_asked_every_tick_first_lands_once_and_ticks_each(tmp_path: pathlib.Path, monkeypatch, capsys) -> None:  # noqa: ANN001
-    """Feature 385 T117 (D135; amendment 10): a gated landing cost ~15 min, paid once per small engine fix; a batch pays it once."""
-    _lb = importlib.util.spec_from_file_location("land_batch", script("land-batch.py"))
+def _land(tmp_path: pathlib.Path, monkeypatch):  # noqa: ANN001, ANN202
+    """`scripts/land.py` loaded with its commands stubbed: every cheap check passes unless a test says otherwise."""
+    _lb = importlib.util.spec_from_file_location("land", script("land.py"))
     assert _lb and _lb.loader
     lb = importlib.util.module_from_spec(_lb)
     _lb.loader.exec_module(lb)
@@ -251,22 +251,70 @@ def test_a_batch_is_asked_every_tick_first_lands_once_and_ticks_each(tmp_path: p
     monkeypatch.setattr(tt, "repo_root", lambda start=None: tmp_path)
     monkeypatch.setattr(tt, "landed_refusal", lambda *a: "")
     monkeypatch.setattr(lb, "_tick_task", lambda: tt)
-    landings: list[pathlib.Path] = []
+    monkeypatch.setattr(lb, "run", lambda root, cmd, env=None, quiet=True: (0, ""))
+    return lb, d
+
+
+def test_one_task_or_several_every_tick_asked_first_landed_once_and_ticked(tmp_path: pathlib.Path, monkeypatch, capsys) -> None:  # noqa: ANN001
+    """Feature 385 T117 (D135): a batch pays the gated landing once. Feature 405 T33 (D5): one task lands the same way - T12's
+    `make land-batch T=T12` was refused for being one task, the first of its landing's six refusals."""
+    lb, d = _land(tmp_path, monkeypatch)
+    landings: list[list[str]] = []
     rc = [0]
-    monkeypatch.setattr(lb, "land", lambda root: landings.append(root) or rc[0])
+    monkeypatch.setattr(lb, "long_runs", lambda root: 0)
+    monkeypatch.setattr(lb, "push", lambda root, tasks: landings.append(tasks) or rc[0])
     monkeypatch.setenv("LAND_NOTE", "both fixes green")
-    assert lb.main(["188", "T02"]) == 2, "one task lands by the plain route"
     assert lb.main(["188", "T01 T02"]) == 2 and landings == [], "T01 already ticked: refused before anything lands"
     assert "T01: " in capsys.readouterr().err
     rc[0] = 1
     assert lb.main(["188", "T02 T03"]) == 1 and len(landings) == 1
     assert "- [ ] T02" in (d / "tasks.md").read_text(encoding="utf-8"), "a failed landing ticks none"
     rc[0] = 0
-    assert lb.main(["188", "T02 T03"]) == 0 and len(landings) == 2, "one landing for the batch"
+    assert lb.main(["188", "T02 T03"]) == 0 and landings[-1] == ["T02", "T03"], "one landing for the batch"
     text = (d / "tasks.md").read_text(encoding="utf-8")
     assert "verify: DONE. landed in batch T02+T03: both fixes green" in text and "- [x] T03" in text
+    assert lb.main(["188", "T02a"]) == 0 and landings[-1] == ["T02a"], "one task lands alone"
+    assert "verify: DONE. landed: both fixes green" in (d / "tasks.md").read_text(encoding="utf-8")
     monkeypatch.setenv("LAND_NOTE", "")
-    assert lb.main(["188", "T02a T04"]) == 2, "an empty note"
+    assert lb.main(["188", "T04"]) == 2, "an empty note"
     monkeypatch.setattr(tt, "refusal", lambda *a, **k: ("tick: refused - the hour", ""))
     monkeypatch.setenv("LAND_NOTE", "x")
-    assert lb.main(["188", "T02a T04"]) == 2 and len(landings) == 2 and "T02a: tick: refused - the hour" in capsys.readouterr().err
+    assert lb.main(["188", "T04"]) == 2 and "T04: tick: refused - the hour" in capsys.readouterr().err
+
+
+def test_every_cheap_refusal_is_named_together_before_anything_runs(tmp_path: pathlib.Path, monkeypatch, capsys) -> None:  # noqa: ANN001
+    """Feature 405 T33 (D5): T12's landing met its refusals one at a time, each a round trip, though each took seconds to ask."""
+    lb, _d = _land(tmp_path, monkeypatch)
+    answers = {
+        "status": (0, " M a.py\n"),
+        "ledger_owed.py": (0, "| 2026-10-20 | impl-drift | x | ? | ? |\n"),
+        "--holding": (0, "T09 x  <- the active task\n"),
+        "claims-gate.sh": (1, "claims-gate: OWED x\n"),
+        "review-gate.sh": (1, "REVIEW GATE: the delta does not declare its occasions.\n"),
+    }
+    monkeypatch.setattr(lb, "run", lambda root, cmd, env=None, quiet=True: next((v for k, v in answers.items() if any(k in str(c) for c in cmd)), (0, "")))
+    ran: list[str] = []
+    monkeypatch.setattr(lb, "long_runs", lambda root: ran.append("long") or 0)
+    monkeypatch.setenv("LAND_NOTE", "x")
+    assert lb.main(["188", "T02"]) == 2 and ran == []
+    err = capsys.readouterr().err
+    for want in ("uncommitted changes", "no ledger row", "held by T09 x", "claims-gate.sh: claims-gate: OWED x", "review-gate.sh: REVIEW GATE"):
+        assert want in err, want
+
+
+def test_the_long_runs_run_only_where_their_record_does_not_cover(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 405 T33 (D5): T12's make done and make cohort-landing each waited for a refusal to name it."""
+    lb, _d = _land(tmp_path, monkeypatch)
+    made: list[str] = []
+    state = {"stamp": 1, "cohort": 1, "engine": True, "red": ""}
+    monkeypatch.setattr(lb, "make", lambda root, target: made.append(target) or (1 if target == state["red"] else 0))
+    monkeypatch.setattr(lb, "engine_delta", lambda root: state["engine"])
+    monkeypatch.setattr(lb, "commit_regenerated", lambda root, why: None)
+    monkeypatch.setattr(lb, "run", lambda root, cmd, env=None, quiet=True: (state["stamp"] if "gate-stamp.py" in str(cmd) else state["cohort"], ""))
+    assert lb.long_runs(tmp_path) == 0 and made == ["done", "cohort-landing"]
+    made.clear(), state.update(stamp=0, cohort=0)
+    assert lb.long_runs(tmp_path) == 0 and made == [], "both records cover the content: nothing runs"
+    state.update(stamp=0, cohort=1, engine=False)
+    assert lb.long_runs(tmp_path) == 0 and made == [], "no engine code: no cohort"
+    state.update(stamp=1, red="done")
+    assert lb.long_runs(tmp_path) == 1 and made == ["done"], "a red gate stops the landing"
