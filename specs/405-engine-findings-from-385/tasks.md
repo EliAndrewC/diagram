@@ -2,6 +2,18 @@
 
 Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes moved on 2026-10-19, 385 amendment 11); T28 on are found work filed here (FR-002).
 
+- [ ] T30 make decide / plan-delta build a bundle whose MANIFEST names request.md when the feature has none; the plan review stops without a verdict - refuse at build time, naming the file to write (found working 405 T12, 2026-10-20) [lands-open]
+      research: rendering
+- [ ] T31 task-add's next_id counts every T<n> in the files, so a moved task's '(385 T147)' gave 405 the ids T148-T150 - count the boxes' and sections' own ids only (found working 405 T12, 2026-10-20) [lands-open]
+      research: rendering
+- [ ] T32 Only the task being worked holds a landing: a feature in progress holds a landing through its active task (make task-start) while it is open and the landing does not tick it; the Lands open line and the [lands-open] marks retired (the GM, 2026-10-20; landing-analysis.md) [lands-open]
+      research: rendering
+- [ ] T33 make land F= T="...": one command for one task or several - every cheap refusal first and together, then make done and make cohort-landing where their records do not cover the content, the gate's regenerated files committed, the push, the ticks; land-batch the same command (landing-analysis.md) [lands-open]
+      research: rendering
+- [ ] T34 The push asks its cheap questions first: the holding rule and the review gate's occasions run before push_checks.py and the claims gate (landing-analysis.md) [lands-open]
+      research: rendering
+- [ ] T35 render-sync after a landing runs in the background: sync-with-main.sh done returns once the work is on main (landing-analysis.md) [lands-open]
+      research: rendering
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
 - [ ] T02 (385 T36) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
@@ -57,15 +69,11 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T27 (385 T147) taxonomy._OVERLAP_EXEMPT['farm_fixtures'] says each fixture is 'seated against its own farmhouse' (the shed is 9.5 ft off, shrine and grave 14 ft, the privy up to 48 ft); its claim cites 0039 for the bed beside the house, which only 0038 backs; fixture_seats' CANOPY_PAD and SHADE_MARGIN_FT carry no claim; _seats' privy front step and stable seat unclaimed (impl-drift, T34's round 2) [lands-open]
       research: rendering
-
 - [ ] T28 385's found.jsonl: its 63 rows all read open - map each to the 405 task that carries it, or file it here as a task, and mark the row (the spec review of 405, 2026-10-20) [lands-open]
       research: rendering
 - [ ] T29 found.jsonl rows never close: a finding filed as a task (make task-add) or settled keeps status open, so the log cannot say what is unfiled - record the task id or settlement on the row (found working 405 T12, 2026-10-20) [lands-open]
       research: rendering
-- [ ] T30 make decide / plan-delta build a bundle whose MANIFEST names request.md when the feature has none; the plan review stops without a verdict - refuse at build time, naming the file to write (found working 405 T12, 2026-10-20) [lands-open]
-      research: rendering
-- [ ] T31 task-add's next_id counts every T<n> in the files, so a moved task's '(385 T147)' gave 405 the ids T148-T150 - count the boxes' and sections' own ids only (found working 405 T12, 2026-10-20) [lands-open]
-      research: rendering
+
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
