@@ -65,3 +65,4 @@
 - **spec-fidelity round 1 (2026-10-19): CHANGES REQUIRED, 2 items.** The exact-page permission narrowed to the keys the
   GM ruled on (Morisada, Gamble) plus spreadsheet files for any key; the relaxation applies in notes files only, with a
   test that a second URL outside one fails. A record-wide rule is put to the GM as a question, not built.
+- **spec-fidelity round 2 (2026-10-19, verify): FAITHFUL.** Both items resolved.
