@@ -37,7 +37,7 @@ _IDS = re.compile(r"\b((?:FR|SC)-\d{3}[a-z]?|D\d+[a-z]?)\b")
 #: FR-044", "feature 375, FR-044". T65's review was handed 385's own FR-005 for a block citing 375's - a different requirement.
 #: ...and a decision (T71, plan D91): "375 plan D18", "feature 375's D18", "375 D18" - read from that feature's plans
 #: ...and through its amendment (T123, plan D145): "Feature 375 amendment 11 (D64)" was read as 385's own D64
-_QUALIFIED = re.compile(r"\b(?:[Ff]eature\s+)?(\d{3})(?:'s|,)?\s+(?:amendment\s+\d+,?\s+)?\(?(?:plan\s+)?((?:FR|SC)-\d{3}[a-z]?|D\d+[a-z]?)\b")
+_QUALIFIED = re.compile(r"(?<![-\w])(?:[Ff]eature\s+)?(\d{3})(?:'s|,)?\s+(?:amendment\s+\d+,?\s+)?\(?(?:plan\s+)?((?:FR|SC)-\d{3}[a-z]?|D\d+[a-z]?)\b")
 _ITEM = re.compile(r"^- \*\*((?:FR|SC)-\d{3}[a-z]?)\b", re.M)
 _DECISION = re.compile(r"^\*\*(D\d+[a-z]?) - ", re.M)
 #: the older specs' form, a requirement as its own heading (`### FR-001 - ...`, 12 specs among them 170): to the next heading

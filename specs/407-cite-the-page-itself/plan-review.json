@@ -1,0 +1,247 @@
+{
+ "feature": "407-cite-the-page-itself",
+ "blocks": {
+  "preamble": {
+   "sha256": "8e497279ab12b1ec964a8098621ec1a4f8e0354495b2ab85296ff057b702c7c2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "5ab8c266948ea1d1948fc69ca7c79492bdc8f20776733393991fd28174a2e3c1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "2507393159be217dd63a248e6bd102520e3866920b6e141689afafcf69f9bc04",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "0f450c79c5914ebc7950237a13ad9ee3f36bd40be49ca934bf0f97038b2a6c8b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - the rule (FR-001, FR-002)": {
+   "sha256": "6930c4d97593e652356ff34bd6cca57a9173112ac5a4b277c7cdef228682fe53",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - the notes (FR-003, FR-004)": {
+   "sha256": "85431d29af93747b0e7d55d8ccf0ff6bef5e7f1badcd93d7d8c24578f0b9a691",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - the note to the asker": {
+   "sha256": "43ebb90f9f739c9d93d4fec98a2eccecd5a4dd76c2040a6ca0b78181b1a378f3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## T - the order": {
+   "sha256": "3d73cda68ef87dbd67c9d631ceb964942e86898281e4883a13402d0c70eda481",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach": {
+   "sha256": "55c74b154a95bed097aa868a707866f0126d1a01dc2940b1fec9324161b3e2bd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach": {
+   "sha256": "7ba019feb6003616b0ef37a297d9f1618453d3012afa443d6dc0b9345bbbedf8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach": {
+   "sha256": "6518a1830a155f337652b26b2f48f19f0ecbb16b8e6504b4daf59543c2666d46",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-19",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the rule (FR-001, FR-002)",
+    "## D2 - the notes (FR-003, FR-004)",
+    "## D3 - the note to the asker",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary/D1-citation-line",
+     "summary": "A page or spreadsheet link is accepted only where that URL is on the key's citation line",
+     "class": "within",
+     "why": "A registry-discipline mechanism, not a limit on what may be linked: any page URL can be added to the citation line, and the Technical Context lists every needed koma, page image and chapter as already there. Nothing the GM permitted is refused; FR-002's own first line ('link to any ...') carries the same shape."
+    },
+    {
+     "id": "TC/D1-notes-only",
+     "summary": "The relaxed link rule applies in notes files only; works sections and l7r link_target keep the first URL",
+     "class": "within",
+     "why": "Both rulings answer questions about footnotes (features 400, 402, 403 asked about notes' links). The works sections cite no passage, so there is no 'their page' to link. Spec FR-002 says 'in a notes file only' and FR-005 forbids engine code."
+    },
+    {
+     "id": "TC/D1-spreadsheet-any-key",
+     "summary": "Any key's footnote quoting a public spreadsheet cell may link the spreadsheet file",
+     "class": "within",
+     "why": "The GM's first ruling is general: 'a cell in a public spreadsheet counts as a readable page'. Applying it to any key is the plain reading, not an extension."
+    },
+    {
+     "id": "D1-others-stay-first-URL",
+     "summary": "Every other link keeps the first-URL rule",
+     "class": "within",
+     "why": "The GM ruled only on Morisada, Gamble and spreadsheet cells; keeping the existing rule elsewhere preserves behavior the GM did not ask to change and does not touch anything he did."
+    },
+    {
+     "id": "D1-rule-text",
+     "summary": "Rule text added to research/CLAUDE.md's citation section and docs/research-record-rules.md",
+     "class": "within",
+     "why": "FR-001; records the GM's rulings where the citation rule lives."
+    },
+    {
+     "id": "TC-test",
+     "summary": "line_urls / PAGE_KEYS / may_link in test_sources.py plus a test pinning passing and failing cases",
+     "class": "within",
+     "why": "Enforces exactly the two rulings (FR-002, SC-001); a test that fails only when the permitted links are refused or unpermitted ones accepted is enforcement of the request."
+    },
+    {
+     "id": "D2-koma-begins",
+     "summary": "Each Morisada note links the koma its passage begins on; each Gamble note the page image of its page",
+     "class": "within",
+     "why": "'May link straight to their page'; the starting koma is the page the passage is read on. FR-003."
+    },
+    {
+     "id": "D2-bochum",
+     "summary": "Bochum notes quoting a chapter's rows link that chapter's spreadsheet; one quoting the landing page keeps it",
+     "class": "within",
+     "why": "Implements the spreadsheet ruling on the 0260/0275 rows the request names; a passage actually on the landing page is already read where it links."
+    },
+    {
+     "id": "D2-checks",
+     "summary": "make record-owed, quote-check on changed notes from bundles, check-wave for four or more",
+     "class": "within",
+     "why": "FR-004: the changed notes pass the record's checks on what changed; the wave is how, not what."
+    },
+    {
+     "id": "D3-asker",
+     "summary": "No note to the asker owed; a one-line mention on issue #9",
+     "class": "within",
+     "why": "No verdict changes, only links; process bookkeeping that narrows nothing."
+    },
+    {
+     "id": "Perf/Constitution/Order",
+     "summary": "No performance bookends (no generator change); constitution check; order rule+test, notes+checks, land",
+     "class": "within",
+     "why": "Procedural; consistent with FR-005 (no engine or map change) and decides nothing the request constrains."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-19",
+   "blocks": [
+    "### T01 Approach"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01.1 goal",
+     "summary": "A click on a Morisada, Gamble or spreadsheet footnote lands on the page or file the passage is on.",
+     "class": "within",
+     "why": "Restates the GM's two answers (Morisada and Gamble notes may link their page; a public spreadsheet cell is a readable page) and request.md's statement of what they answer."
+    },
+    {
+     "id": "T01.3 scope: notes only, citation line only",
+     "summary": "The permission applies to notes files only, and to the note's citation link.",
+     "class": "within",
+     "why": "The GM's words are 'Morisata and Gamble Notes may link straight to their page', so notes-only is the GM's own scope. The link the question was about (request.md, features 402/403) is the one test_sources forces to the first URL: the note's citation link. This applies the permission to the link the GM was asked about. It does not cut anything out of it."
+    },
+    {
+     "id": "T01.4 first-URL rule kept for works sections and rosters",
+     "summary": "Outside notes, the first-URL rule (feature 190) stays as it is.",
+     "class": "within",
+     "why": "The GM relaxed the rule for Notes and said nothing about works sections or rosters. Keeping the rule there does not narrow any part of the request. Widening it there would have been unrequested."
+    },
+    {
+     "id": "T01.6 exit (b): exception for the named keys and for spreadsheets, 'and nothing else'",
+     "summary": "A principled exception to the first-URL rule covering the Morisada and Gamble keys' page links and spreadsheet links. Conforming (e) is rejected because the GM ruled.",
+     "class": "within",
+     "why": "The exception is exactly the two permissions the GM granted on 2026-10-19. 'Nothing else' limits it to what the GM granted and does not take anything away from it. Spreadsheets are not limited to particular keys, which matches the GM's general wording ('a cell in a public spreadsheet counts as a readable page')."
+    },
+    {
+     "id": "T01.5/9 order and done",
+     "summary": "Rule text and test first, then re-point the notes, then their checks. Done when the new test and the record tests are green with the notes re-pointed.",
+     "class": "within",
+     "why": "The order is sequencing only. The done condition carries FR-002, FR-003 and FR-004 and adds no scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-20",
+   "blocks": [
+    "### T02 Approach",
+    "### T03 Approach"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T02-1 re-point the notes",
+     "summary": "Each Morisada, Gamble and Bochum footnote links the page (NDL koma / Gamble page image) or spreadsheet its passage is printed on.",
+     "class": "within",
+     "why": "Exactly the request: a public spreadsheet cell is a readable page, and Morisada and Gamble notes may link straight to their page; FR-003."
+    },
+    {
+     "id": "T02-3 koma a passage begins on",
+     "summary": "Where a passage runs over two koma, the note links the koma it begins on.",
+     "class": "within",
+     "why": "The request permits linking 'their page'; for a passage spanning a page break the page it begins on is that page in ordinary citation, and the next koma is one step away in the same viewer. It settles a case the request is silent on without withdrawing any note from re-pointing. The check in item 9 must still confirm the passage VERBATIM across the begin koma and its continuation."
+    },
+    {
+     "id": "T02-4 split by page/file",
+     "summary": "A note whose passages sit on different pages of different files (0275's Bochum note) is split so each link carries its own passage.",
+     "class": "within",
+     "why": "A footnote carries one link; splitting is the only way every passage gets the page it is read on, which is the request's purpose (FR-003, SC-002). It adds no notes or sources beyond the ones named."
+    },
+    {
+     "id": "T02-5 check on page images and row dumps",
+     "summary": "Re-point first, then quote-check against page images and row dumps of the same koma/rows (agents cannot run the NDL viewer or decode .xls), then fix.",
+     "class": "within",
+     "why": "A method for FR-004's checks on the same content the link opens; it narrows neither which notes change nor what they must pass."
+    },
+    {
+     "id": "T02-6..9 exits, budget, done",
+     "summary": "Conform with a split as the only deviation; an hour, two check rounds; done when every re-pointed note is READABLE, VERBATIM, SUPPORTS on its page and make record-owed shows 0 unanswered.",
+     "class": "within",
+     "why": "Process and a done test that enforces FR-003/FR-004; nothing is excluded."
+    },
+    {
+     "id": "T03 land",
+     "summary": "Report, tick, review gate, ledger, page-check and hooks-test, push to main, then the note on #9.",
+     "class": "within",
+     "why": "The project's standing stop-work procedure; no scope decision."
+    }
+   ]
+  }
+ ]
+}

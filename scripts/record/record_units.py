@@ -146,6 +146,8 @@ class Record:
     cites: dict[str, dict[str, tuple[str, ...]]] = field(default_factory=dict)
     #: stem -> note -> its `reading` (what source-reader reads of it)
     readings: dict[str, dict[str, str]] = field(default_factory=dict)
+    #: stem -> note -> the URLs it links: a note whose words stand but whose link moved owes quote-check (READABLE on the new page)
+    links: dict[str, dict[str, tuple[str, ...]]] = field(default_factory=dict)
 
     @classmethod
     def of(cls, files: Mapping[str, str], sources: Mapping[str, str], cache: Cache | None = None) -> Record:
@@ -158,6 +160,7 @@ class Record:
         slugs: dict[str, str] = {}
         cites: dict[str, dict[str, tuple[str, ...]]] = {}
         readings: dict[str, dict[str, str]] = {}
+        links: dict[str, dict[str, tuple[str, ...]]] = {}
         for name, text in files.items():
             if name.endswith(".notes.html"):
                 page = name[: -len(".notes.html")] + ".html"
@@ -165,12 +168,13 @@ class Record:
                 if m:
                     originals = files.get(name[: -len(".notes.html")] + ".originals.html", "")
                     notes[_subject(m)], cites[_subject(m)], readings[_subject(m)] = get(_key("notes", text, originals), lambda t=text, o=originals: _notes_parse(t, o))
+                    links[_subject(m)] = {k: tuple(_HREF.findall(body)) for k, body in _NOTE.findall(text)}
                 continue
             m = _STEM.match(name)
             if m:
                 pages[_subject(m)] = _page_of(get(_key("page", text), lambda t=text: _page_data(read_page(t))))
                 slugs[_subject(m)] = m.group(2)
-        return cls(pages, notes, slugs, {k: get(_key("source", v), lambda t=v: words(t)) for k, v in sources.items()}, cites, readings)
+        return cls(pages, notes, slugs, {k: get(_key("source", v), lambda t=v: words(t)) for k, v in sources.items()}, cites, readings, links)
 
     def index(self) -> Index:
         ix = Index()
@@ -247,6 +251,7 @@ def owed(now: Record, base: Record) -> list[Unit]:
     """THE DECISION (spec FR-004): every unit `now` owes against `base`, each with its occasion and fingerprint."""
     ix = base.index()
     out: dict[str, str] = {}
+    moved: set[str] = set()
 
     def owe(slug: str, why: str) -> None:
         out.setdefault(slug, why)
@@ -274,6 +279,12 @@ def owed(now: Record, base: Record) -> list[Unit]:
                     owe(f"source-reader:{stem}#{k}", "the note is new or changed")
                 owe(f"quote-check:{stem}#{k}", "the note is new or changed")
                 owe(f"record-format:{q}", "visible words new or changed")
+            elif k in base.notes.get(stem, {}) and now.links.get(stem, {}).get(k) != base.links.get(stem, {}).get(k):
+                # ...OR ITS LINK MOVED (feature 407: 27 notes re-pointed to their exact pages owed nothing, because a note's
+                # words drop its markup). READABLE is judged on the page a note opens, so the new page owes quote-check; its
+                # fingerprint carries the link, so an answer recorded against the old page does not answer it.
+                owe(f"quote-check:{stem}#{k}", "the note's link changed (READABLE on the page it now opens)")
+                moved.add(f"quote-check:{stem}#{k}")
     # an intro removed: its words are gone, and the question it stood on is still here under its slug
     held = {now.slugs[s]: s for s in now.pages if not s.endswith(".drawing")}
     for stem, page in base.pages.items():
@@ -283,7 +294,13 @@ def owed(now: Record, base: Record) -> list[Unit]:
     for key, w in now.sources.items():
         if base.sources.get(key) != w:
             owe(f"source-applicability:{key}", "the write-up is new or its visible words changed")
-    return [Unit(slug, why, fingerprint(now, slug), reading_of(now, slug)) for slug, why in sorted(out.items())]
+    def unit(slug: str, why: str) -> Unit:
+        if slug in moved and why.startswith("the note's link changed"):
+            stem, _, note = slug.split(":", 1)[1].partition("#")
+            return Unit(slug, why, digest([fingerprint(now, slug), "\x1e", *now.links.get(stem, {}).get(note, ())]), "")
+        return Unit(slug, why, fingerprint(now, slug), reading_of(now, slug))
+
+    return [unit(slug, why) for slug, why in sorted(out.items())]
 
 
 #: a sentence ends at . ! ? or 。, any closing quote or bracket, and the note marks right after it, where the next sentence opens
