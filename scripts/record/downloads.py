@@ -659,5 +659,6 @@ def report_ingest(out: IngestResult, root: pathlib.Path) -> int:
     return 0 if out.clean() else 1
 
 
+# TOOL_RECORD: the download list's commands, refusing nothing at the push - its make targets' runs (downloads-*) are where it is seen (feature 406, D163)
 if __name__ == "__main__":
     sys.exit(main())

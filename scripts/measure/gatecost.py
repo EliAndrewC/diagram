@@ -95,6 +95,7 @@ def class_count(target: str, scope: str | None = None, cwd: str | None = None, c
     return len(sorted(seen.values(), key=lambda r: r.get("utc", ""))[-RECENT:])
 
 
+# TOOL_RECORD: a measurement the gate prints, refusing nothing - make done's run in the usage and event logs is where it is seen (feature 406, D163)
 if __name__ == "__main__":
     # `gatecost.py <target> [scope] [cache]` - the third positional is feature 196's class.
     got = median_seconds(*sys.argv[1:4]) if len(sys.argv) > 1 else None

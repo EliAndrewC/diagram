@@ -104,6 +104,14 @@
     "tick-archive": {
       "kind": "step",
       "what": "make tick - the plan's finished sections archived to plan-done.md at a tick"
+    },
+    "speckit-todo": {
+      "kind": "check",
+      "what": "scripts/speckit-todo.py - CHECK=1 refuses a push whose features lack an **Affects**: line; each run recorded passed or refused"
+    },
+    "ratchet": {
+      "kind": "check",
+      "what": "scripts/measure/ratchet.py - refuses a gate timing past its ratcheted ceiling; each run recorded passed or refused"
     }
   }
 }

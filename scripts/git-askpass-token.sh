@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# TOOL_RECORD: git's credential helper, refusing nothing - the push it serves is recorded by sync-with-main (feature 406, D163)
 # GIT_ASKPASS helper: answer git's HTTPS credential prompts from $GITHUB_TOKEN (feature 130).
 #
 # The container has no SSH key and no ssh-agent, so GitHub is reached over HTTPS with the

@@ -56,15 +56,17 @@ FINDING = re.compile(
 )
 ENTRY_SCRIPTS = ("scripts/sync-with-main.sh", "scripts/gates/push_checks.py", "scripts/gates/preflight.py")
 ENTRY_TARGETS = ("done", "quick", "tick")
-UNSEEN = ("the outcome of a target run no session made (a recipe, a script, the timer) - its run is counted, its outcome is not",
-          "an automatic step written later that calls neither the helper nor guard_log - FR-004's check reads files, not steps")
+UNSEEN = (
+    "the outcome of a target run no session made (a recipe, a script, the timer) - its run is counted, its outcome is not",
+    "an automatic step written later that calls neither the helper nor guard_log - FR-004's check reads files, not steps",
+)
 
 
 def utc(text: str) -> float:
     """Seconds since the epoch of an ISO time (`...Z` or with an offset); 0.0 when unreadable."""
     try:
         return dt.datetime.fromisoformat(text.replace("Z", "+00:00")).timestamp()
-    except (ValueError, AttributeError):
+    except ValueError, AttributeError:
         return 0.0
 
 
@@ -112,12 +114,30 @@ def recipe(text: str, target: str) -> str:
     return m.group(0) if m else ""
 
 
+def reached(make: str) -> set[str]:
+    """The entry targets and every target their recipes reach - each prerequisite and each `$(MAKE) <target>` followed to its
+    own recipe (measured 2026-10-19: done, quick and tick reach 6 targets)."""
+    seen: set[str] = set()
+    todo = list(ENTRY_TARGETS)
+    while todo:
+        name = todo.pop()
+        if name in seen:
+            continue
+        seen.add(name)
+        text = recipe(make, name)
+        head = re.match(rf"^{re.escape(name)}\s*:(?!=)([^\n#]*)", text)
+        deps = head.group(1).split() if head else []
+        subs = re.findall(r"\$\(MAKE\)[^\n;&|]*?\s([a-z][\w-]+)(?=\s|$|;)", text)
+        todo += [d for d in deps + subs if re.fullmatch(r"[a-z][\w-]+", d)]
+    return seen
+
+
 def checks(root: Path) -> set[str]:
     """Every refusing check: the commands under `scripts/gates/`, and every `scripts/` script the entry points name."""
     out = {p.stem for p in (root / "scripts" / "gates").glob("*.py") if '__name__ == "__main__"' in p.read_text(encoding="utf-8")}
     out |= {p.stem for p in (root / "scripts" / "gates").glob("*.sh")}
     make = (root / "Makefile").read_text(encoding="utf-8")
-    texts = [recipe(make, t) for t in ENTRY_TARGETS] + [(root / s).read_text(encoding="utf-8") for s in ENTRY_SCRIPTS if (root / s).is_file()]
+    texts = [recipe(make, t) for t in reached(make)] + [(root / s).read_text(encoding="utf-8") for s in ENTRY_SCRIPTS if (root / s).is_file()]
     for text in texts:
         for path in re.findall(r"scripts/[\w./-]+\.(?:py|sh)", text):
             if "/hooks/" not in path and (root / path).is_file():
@@ -162,7 +182,7 @@ def guard_rows(guard_log: Path) -> Iterable[dict]:
     for path in guard_log.glob("*.json"):
         try:
             row = json.loads(path.read_text(encoding="utf-8", errors="replace"))
-        except (OSError, ValueError):
+        except OSError, ValueError:
             continue
         if isinstance(row, dict):
             yield row
@@ -274,7 +294,7 @@ def tally_bypass(t: dict[tuple[str, str], Tally], root: Path) -> None:
         try:
             row = json.loads(path.read_text(encoding="utf-8"))
             name = str(row.get("target") or "").split()[0]
-        except (OSError, ValueError, IndexError):
+        except OSError, ValueError, IndexError:
             continue
         tool = t.get(("target", name))
         if tool is not None and tool.first and utc(str(row.get("utc") or "")) >= tool.first:
@@ -348,4 +368,3 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-
