@@ -43,27 +43,41 @@ was made, and the GM's review gets the list.
 
 ## Requirements
 
-- **FR-001 (the report)**: `make tool-yield` reports every tool of four kinds - a guard (a `*-hooks.sh` or gate logging through
-  `guardlog.sh`), a make target, a review check (a `.claude/agents/` type), an automatic step (a usage-log step) - each with: first
-  seen, uses in the last 7 days and in all, interventions, likely misfires, and "too new" where it has under 7 days of record or
-  under 5 uses. Interventions and misfires by kind: a guard's blocks, refusals and rewrites, and its escapes (a likely misfire);
-  a make target's runs that failed or refused, and their share; a review check's passes with a finding acted on (the review
-  ledger's `acted on`) against its clean passes; an automatic step's runs that changed something.
+- **FR-001 (the report)**: `make tool-yield` reports every tool, listed from the code, not from what has fired - every hook wired
+  in `.claude/settings.json`; every gate or check script that can refuse work (what `make done`, `make quick`, the push and `make
+  tick` run, `scripts/gates/` and the `scripts/` checks among them); every make target in the Makefile; every review check (a
+  `.claude/agents/` type); every logged automatic step. For each: first seen, uses in the last 7 days and in all, interventions,
+  likely misfires, and "too new" only where it was first seen under 7 days ago (an older tool reports its numbers, however
+  small). A tool that has never fired reads 0 uses; a tool whose record cannot show an outcome reads "no outcome record", never 0.
+  By kind:
+  - a guard or check: interventions are its blocks, refusals, rewrites, reminders and warnings; likely misfires its escapes;
+  - a make target: interventions are its runs that failed or refused; likely misfires its runs refused and then escaped (an
+    escape token on the next run of the same target);
+  - a review check: interventions are its passes with a finding acted on (the review ledger's `acted on`); likely misfires its
+    findings declined and its `MISSED-BY-REVIEWER` rows; a check with no ledger rows reads its dispatches and "no outcome record";
+  - an automatic step: interventions are its runs that changed something; likely misfires its runs undone afterward where the
+    step records that, else "no outcome record".
 - **FR-002 (no trace, no tool)**: every automatic step that changes an outcome without a guard's firing or a target's run of its
-  own records each run through one shared usage-log helper (`<git common dir>/tool-usage.jsonl`: utc, step, changed), and the
-  steps are listed in one registry with what each does.
-- **FR-003 (the rule)**: a check, run by `make hooks-test`, refuses a hook script under `scripts/hooks/` that logs no firing
-  (exempting, with its reason, a hook that refuses nothing), a usage-log call naming a step the registry lacks, and a registry
-  step no code calls. Make targets and review checks are measured from records every run already leaves.
-- **FR-004 (the fixes)**: `make fix-yield` reports each tooling fix the round arbiter named by the tools its change touched (the
-  guards, targets and steps of its landed files) and their FR-001 numbers since the fix was made, replacing the command-rate
-  measure; the step-back bundle reads the same.
+  own, and every refusing check that logs no firing, records each run through one shared usage-log helper
+  (`<git common dir>/tool-usage.jsonl`: utc, tool, kind, outcome), and the steps are listed in one registry with what each does.
+- **FR-003 (target outcomes)**: a make target's run records its outcome: the event log records a failed tool call (the hook
+  event a failure fires) beside a succeeded one, so every target run in a session reads succeeded or failed; runs the event log
+  cannot see - a target run by a timer outside any session (`make idle-tests`) or from inside another script - record through
+  FR-002's helper, and the report names any it still cannot see.
+- **FR-004 (the rule)**: a check run by `make hooks-test` refuses a wired hook, or a refusing gate or check script, that records
+  nothing (no `guard_log` and no usage-log call) unless its exemption names the record where its runs and outcomes can be seen
+  (the event-log hook is its own record); a usage-log call naming a tool the registry lacks; and a registry entry no code calls.
+- **FR-005 (the fixes, judged)**: `make fix-yield` reports each tooling fix the round arbiter named by the tools its change
+  touched and their FR-001 numbers since the fix was made, replacing the command-rate measure, and the step-back bundle reads
+  the same. As the report's first use, each of the 22 fixes that read "saves nothing" gets a recorded judgment - doing something,
+  doing nothing, or too new to say - citing its numbers, delivered to the GM.
 
 ## Success Criteria
 
-- **SC-001** (FR-001): `make tool-yield` lists every one of the 46 guards in the guard log and every target in the Makefile, with
-  numbers or "too new", and a test red without each kind's reading.
-- **SC-002** (FR-002, FR-003): the rule's check fails on a hook that logs nothing and on an unregistered step, with tests red
-  without it; the hooks the inventory finds logging nothing either log or carry their reason.
-- **SC-003** (FR-004): the 22 fixes read "saves nothing" are reported by their tools' interventions since each was made, and
-  the list goes to the GM's review.
+- **SC-001** (FR-001, FR-003): `make tool-yield` lists every wired hook, refusing check, make target, review check and logged
+  step, with numbers, "too new" or "no outcome record", and a test red without each kind's reading; a target's failed run reads
+  failed.
+- **SC-002** (FR-002, FR-004): the rule's check fails on a hook or check that records nothing and on an unregistered step, with
+  tests red without it; every hook and check the inventory finds recording nothing either records or names its record.
+- **SC-003** (FR-005): each of the 22 fixes carries a judgment citing its tools' numbers since it was made, in a file the GM's
+  review reads.
