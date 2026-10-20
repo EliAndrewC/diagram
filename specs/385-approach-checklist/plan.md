@@ -841,6 +841,20 @@ The checklist to `docs/`, the refusals extended to every feature's tasks (FR-001
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
+### T11 part B (2026-10-19T23:38Z)
+
+Owed by the round arbiter's ruling on hour:385-approach-checklist@38 (continue), taken while T11 was the active task.
+
+1. **What is refusing?** Nothing: D157-D159 built and landed.
+2. **A3 again.** Unchanged.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither in this part B: the changes are D157-D159's, decided and reviewed.
+6. **The one-sentence test.** "Every feature's tasks are asked the checklist" - true by `tests/tooling/test_approach_gate.py`, red without the default.
+7. **The next step is a measurement.** Done: the gate tests, hooks-test, and the report.
+8. **Every route measured before offering one?** No route is offered.
+9. **After a ruling: the step it names?** Yes - 385's GM review is its last box.
+
 ### T11 Decisions
 
 **D157 - every feature's checklist.** `specs/385-approach-checklist/checklist.md` moves (`git mv`) to `docs/approach-checklist.md`; `approach_gate.checklist` returns it for every plan, wherever it exists, and the `**Approach checklist**:` opt-in line is retired (`OPT_IN` removed; 385's line removed) - one checklist, no override.
