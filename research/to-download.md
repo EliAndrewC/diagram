@@ -4033,3 +4033,35 @@ New items go here, newest at the bottom, so you can always resume from wherever 
 - Fallback: [Google: 守貞謾稿 酒 引札 新諸白 古酒 壱升ニ付](https://www.google.com/search?q=%E5%AE%88%E8%B2%9E%E8%AC%BE%E7%A8%BF+%E9%85%92+%E6%96%B0%E8%AB%B8%E7%99%BD+%E5%8F%A4%E9%85%92+%E5%A3%B1%E5%8D%87%E3%83%8B%E4%BB%98)
 - **Rests on it:** research/questions/0262-what-did-sake-cost-by-the-shop-and-by-the-cup.html (diagram feature 403; asked for by gm-assistant on EliAndrewC/diagram#3) - the grades and prices of sake a sho on one Osaka shop's handbill, which the 1908 facsimile prints only in cursive.
 - Blocked by: a print edition under copyright; the facsimile in the public 1908 and 1934 editions is cursive, not read with confidence.
+
+### 317. Moll-Murata, Song and Vogel (eds.), *Chinese Handicraft Regulations of the Qing Dynasty: Theory and Application* (München: iudicium, 2005), any chapter quoting the Zhili 物料價值則例 transport rows
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- **[Google Books: Chinese Handicraft Regulations of the Qing Dynasty](https://books.google.com/books?q=%22Chinese+Handicraft+Regulations+of+the+Qing+Dynasty%22)**
+- A page (preview or scan) quoting the Zhili edition's porter (夫運), pack-animal (騾驢馱運), cart (車運) or boat (船運) rows of chapter 13 (Tianjin prefecture), with the unit printed: 每里 (per li) or 每百里 (per 100 li). Photograph or save those pages.
+- Fallback: [HathiTrust full-text search: 物料價值則例](https://babel.hathitrust.org/cgi/ls?q1=%E7%89%A9%E6%96%99%E5%83%B9%E5%80%BC%E5%89%87%E4%BE%8B;anyall1=phrase;lmt=ft)
+- **Rests on it:** research/questions/0260-what-did-hiring-a-horse-or-a-porter-cost.html (diagram feature 404; asked for by gm-assistant on EliAndrewC/diagram#3) - the Zhili porter, pack-animal and boat rates, left out because the Bochum transcription labels the same figures per li and per 100 li.
+- Blocked by: from the container, Google Books answers with a bot check and its API with a shared-quota 429, and HathiTrust times out (2026-10-19 and 2026-10-20).
+
+### 318. 田井中洋介 「近江の石工たち」 (『紀要』 15, 滋賀県立安土城考古博物館, 2007, pp. 43-50)
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- **[全国遺跡報告総覧 (nabunken), the volume](https://sitereports.nabunken.go.jp/116102)**
+- The PDF of the article: any day wage of a mason (石工), the cost of stonework, or porterage of stone in the Edo period.
+- Fallback: [the article's record](https://sitereports.nabunken.go.jp/en/article/59331)
+- **Rests on it:** research/questions/0269-what-did-a-shrines-stonework-cost.html (diagram feature 403; asked for by gm-assistant on EliAndrewC/diagram#6) - a mason's day wage, which no public source found gives (also 0257, 0268).
+- Blocked by: from the container the site answers HTTP 429 (twelve tries over four hours on 2026-10-19 and 2026-10-20).
