@@ -306,8 +306,17 @@ def test_the_long_runs_run_only_where_their_record_does_not_cover(tmp_path: path
     """Feature 405 T33 (D5): T12's make done and make cohort-landing each waited for a refusal to name it."""
     lb, _d = _land(tmp_path, monkeypatch)
     made: list[str] = []
-    state = {"stamp": 1, "cohort": 1, "engine": True, "red": ""}
-    monkeypatch.setattr(lb, "make", lambda root, target: made.append(target) or (1 if target == state["red"] else 0))
+    state = {"stamp": 1, "cohort": 1, "engine": True, "red": "", "sticky": False}
+
+    def make(root: pathlib.Path, target: str) -> int:
+        made.append(target)
+        if target == state["red"]:
+            return 1
+        if target == "done" and not state["sticky"]:
+            state["stamp"] = 0  # a green gate stamps this content
+        return 0
+
+    monkeypatch.setattr(lb, "make", make)
     monkeypatch.setattr(lb, "engine_delta", lambda root: state["engine"])
     monkeypatch.setattr(lb, "commit_regenerated", lambda root, why: None)
     monkeypatch.setattr(lb, "run", lambda root, cmd, env=None, quiet=True: (state["stamp"] if "gate-stamp.py" in str(cmd) else state["cohort"], ""))
@@ -316,5 +325,7 @@ def test_the_long_runs_run_only_where_their_record_does_not_cover(tmp_path: path
     assert lb.long_runs(tmp_path) == 0 and made == [], "both records cover the content: nothing runs"
     state.update(stamp=0, cohort=1, engine=False)
     assert lb.long_runs(tmp_path) == 0 and made == [], "no engine code: no cohort"
-    state.update(stamp=1, red="done")
+    made.clear(), state.update(stamp=1, red="done")
     assert lb.long_runs(tmp_path) == 1 and made == ["done"], "a red gate stops the landing"
+    made.clear(), state.update(stamp=1, red="", sticky=True)
+    assert lb.long_runs(tmp_path) == 1 and made == ["done"], "green, but the stamp still refuses (another area owed): stop"

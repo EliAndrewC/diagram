@@ -105,6 +105,10 @@ def long_runs(root: Path) -> int:
             print("land: make done is red - nothing landed; fix it and run make land again", file=sys.stderr)
             return 1
         commit_regenerated(root, "gate")
+        rc, out = run(root, [sys.executable, str(HERE / "gates" / "gate-stamp.py"), "--check", "origin/main"])
+        if rc:  # another area's gate (hooks-test, page-check) is owed too: the stamp names it
+            print("land: make done is green, but the green-gate stamp still refuses - nothing landed:\n" + out, file=sys.stderr)
+            return 1
     if engine_delta(root) and run(root, [sys.executable, str(HERE / "gates" / "cohort_gate.py"), "check"])[0]:
         print("land: no landing cohort on this engine - make cohort-landing", flush=True)
         if make(root, "cohort-landing"):
