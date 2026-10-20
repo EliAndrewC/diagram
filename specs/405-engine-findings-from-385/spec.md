@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-19
 
-**Status**: Filed, not started - it starts after 385 closes and is on main (the GM, 2026-10-19)
+**Status**: In progress - started 2026-10-20 on the GM's word ("test the current state of things by starting feature 405 and fixing 1 claim")
 
 **Approved**: the GM, 2026-10-19, "Let's keep the current round of process tasks such that all open process tasks stay in 385 and everything else moves into a new feature.  Then we can finish and land our process tasks and then start the new feature after that ends up in main."
 
