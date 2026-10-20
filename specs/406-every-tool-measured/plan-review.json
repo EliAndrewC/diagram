@@ -1,0 +1,259 @@
+{
+ "feature": "406-every-tool-measured",
+ "blocks": {
+  "preamble": {
+   "sha256": "3d141030521444cb11f77f9968fb4199b1f4791c1ebced36be3bfc1da1e41f12",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "00cf93e6d29226664f975a2142c1c4a350fbbba8815c9389ae7ae7f5db7e7c7a",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "## Measured before planning (2026-10-19)": {
+   "sha256": "a118d78a2420ee889a73654380c27be9fe8e9f6b5636e1157a2e5d217b3613a8",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "1425184db6ba22867a1ecfd9237f7782c94a5e53b1c000c3f625528be20fbbc9",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "## T01 - the usage-log helper and the tool registry": {
+   "sha256": "a2ff570b4b84b4071a0fa675c0dc175e10e7049271a9ba46f90ec3ca1ec4d158",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "15d12fdadcf7ab4cb8d634d1d765c12fd4c31781db4015c1a8f296b876528aea",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Decisions": {
+   "sha256": "74dad573b5e251590c474abc2923b4817a72326a92a383ce3120f332f8417259",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "## T02 - a make target's outcome recorded": {
+   "sha256": "0dbe14018f13d8f206fbfe5d5e24fba177523035b18cdf5be89684f55b2b57eb",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "748e609d303b2a637f2362a1f2279d95c35735672339e99a4b948f0ee15a50bf",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Decisions": {
+   "sha256": "7d79bb81e3de6fb6034de22ca47a0384f57231c7003e7e4609c24be717ea788e",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "## T03 - the silent tools record": {
+   "sha256": "fa4b6107a7a1570a9a87a622ca51cf07ae3ff3dad0f45aa850c66c9866384718",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "42428a966cb168207db1daa7e13c36d362ebbb2b6063fbe154da41316f39ee13",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Decisions": {
+   "sha256": "3e5e29951464bdebf36e8fc7b80edfbcc09467c01f36935aa580e6abb084e97e",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "## T04 - `make tool-yield`": {
+   "sha256": "1fe2f80ba863e3b614b519f3dd57ca47024416dff96503abf715fe9e392edc63",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Approach (checklist part A)": {
+   "sha256": "9b3c24c4d38b6ad3acbc13ae6aca34ccdbcdf224ec597d59358261bdcd63a79f",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Decisions": {
+   "sha256": "3607d64922299d7bc0624aefd5ad71c89fe6ff0f80dc3b799315c658e51d01ab",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "## T05 - the rule": {
+   "sha256": "0fb65971dc8842d8c91f51c6baad767608c0f51f873052b4ae1ed4ed4c76d16b",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Approach (checklist part A)": {
+   "sha256": "b73908c89b6ca569d1934d54e6eaf11f4278672b8e573eec73915529b79c281e",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Decisions": {
+   "sha256": "0477be4470c6c1c4a1fbd204f44397d28a9c3c63e8aa7c583586117740e8b5c3",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "## T06 - `make fix-yield` on the new numbers": {
+   "sha256": "91d40d21db6cff34385093c4b8656e211ef6b02253e9c28c315915521e3f1da8",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T06 Approach (checklist part A)": {
+   "sha256": "e9d202e7a14fd7023c84aa7776a3de1b1e653762783806d66109375ffcc86822",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T06 Decisions": {
+   "sha256": "b193d21e08a1acd33a801a9fcad5662bc085dbd3046f3e01063290b10f5bcf8d",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "## T07 - the 22 fixes judged": {
+   "sha256": "02537d766da27c214103ebb2352c58b756ce11031ab63d6401630fdeb54790f2",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T07 Approach (checklist part A)": {
+   "sha256": "19da52b35eb84bc6807a67fd7eeffcf0b89f838184d2e8d474caba709407eadd",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  },
+  "### T07 Decisions": {
+   "sha256": "46f5102eb7d7768d3aab9483c4a6a8b8642c64c0b269aa60fc341a80cf3b7ad4",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-20",
+   "blocks": [
+    "## Constitution Check",
+    "## Measured before planning (2026-10-19)",
+    "## Summary",
+    "## T01 - the usage-log helper and the tool registry",
+    "## T02 - a make target's outcome recorded",
+    "## T03 - the silent tools record",
+    "## T04 - `make tool-yield`",
+    "## T05 - the rule",
+    "## T06 - `make fix-yield` on the new numbers",
+    "## T07 - the 22 fixes judged",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions",
+    "### T02 Approach (checklist part A)",
+    "### T02 Decisions",
+    "### T03 Approach (checklist part A)",
+    "### T03 Decisions",
+    "### T04 Approach (checklist part A)",
+    "### T04 Decisions",
+    "### T05 Approach (checklist part A)",
+    "### T05 Decisions",
+    "### T06 Approach (checklist part A)",
+    "### T06 Decisions",
+    "### T07 Approach (checklist part A)",
+    "### T07 Decisions",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary/Measured - records read",
+     "summary": "The report reads the guard log, the event logs, the review ledger and the new usage log; the 17 GB of transcripts are not read.",
+     "class": "within",
+     "why": "FR-001 names those records; nothing in the request or spec asks for the transcripts."
+    },
+    {
+     "id": "Constitution Check",
+     "summary": "Tooling only, lands by make land-tooling, tests under tests/tooling and tests/hooks.",
+     "class": "within",
+     "why": "A process feature, as the GM asked ('do this as a process feature')."
+    },
+    {
+     "id": "D160",
+     "summary": "One helper usage_log.record appending {utc, tool, kind, outcome, session} under a lock and swallowing errors; exited(tool, code) records passed/refused; registry scripts/tool-registry.json maps tool to {kind, what}.",
+     "class": "within",
+     "why": "FR-002 verbatim (one helper, that path, those fields, one registry with what each does). The extra session field and the never-raise rule serve the record and narrow nothing."
+    },
+    {
+     "id": "D161",
+     "summary": "PostToolUseFailure wired so a failed call's event line carries its make target; of the runs the event log cannot see, only make idle-tests records through the helper. Runs of a target from inside another script are neither recorded nor named, and no block plans the report naming the runs it still cannot see.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-003 has three clauses: failures recorded beside successes (carried), runs outside a session OR from inside another script recorded through the helper (only the timer case carried; T03's six automatic steps cover some sub-runs but not the general case of a target run by another target's recipe or a script), and 'the report names any it still cannot see' (restated in T02's constraints but carried by no decision, order step or Done line in T02 or T04). Nothing makes this impossible, the GM's words do not imply it, and it defeats the request's purpose - 'it is notionally possible for us to see how often a tool is used' - because the report would silently undercount sub-run targets with no sign that it does. Fix: D161 (or D163) records target runs from inside scripts through the helper where they can be, and tool-yield prints a named list of the run paths it cannot see; T02/T04 Done carry both."
+    },
+    {
+     "id": "D162",
+     "summary": "Each refusing check script with a command line returns through usage_log.exited; hm_checks records each refusal; idle-tests-hooks records each run it starts; six named automatic steps record changed/unchanged; every name registered.",
+     "class": "within",
+     "why": "FR-002 and FR-004 as written. Caveats, not findings: the six automatic steps are the plan's measured inventory and their completeness cannot be checked from this bundle (FR-004's check does not catch an unlisted automatic step, so the list must be complete by FR-002's words); hm_checks recording refusals rather than every run matches how the guard log already treats guards."
+    },
+    {
+     "id": "D163",
+     "summary": "scripts/measure/tool_yield.py lists tools from settings.json (plus guard names in firings), the Makefile, the registry and .claude/agents; reads guard log, every clone's event logs (PostToolUseFailure, else Pre-without-Post before T02; misfire = failed run followed by the same target with an *_OK= escape), review ledger and usage log; make tool-yield [KIND=] [SINCE=].",
+     "class": "within",
+     "why": "FR-001's sources and per-kind readings; KIND/SINCE filters serve the report. Caveat: refusing checks reach the inventory only through the registry, so a check taking D164's TOOL_RECORD exemption instead of the helper would be missing from the list although FR-001 and T04's Done require every refusing check - list them from scripts/gates and scripts/ directly. The automatic-step misfire reading ('undone afterward where recorded, else no outcome record') and the review check with no ledger rows ('its dispatches and no outcome record') are FR-001 text not repeated in D163 and must be implemented as written. The missing 'names what it cannot see' is ruled under D161."
+    },
+    {
+     "id": "D164",
+     "summary": "check-tool-signals.py, in make hooks-test, refuses a wired hook or refusing check script (one under scripts/gates or scripts with a __main__ that can exit non-zero) that calls neither guard_log nor the helper and carries no '# TOOL_RECORD: <where>'; refuses an unregistered helper tool name and an uncalled registry entry.",
+     "class": "within",
+     "why": "FR-004 case for case, enforced by tooling as the approved proposal item 3 says. Caveat: '__main__ that can exit non-zero' is a Python-only detection heuristic while FR-004 says 'a refusing gate or check script' in any language; if a shell refusing check exists it must be in the rule's reach. Not verifiable from the bundle, so not ruled a narrowing."
+    },
+    {
+     "id": "D165",
+     "summary": "A fix's tools are those in the files of its settling commit, mapped by tool_yield's inventory; fix_yield.verdict reports per fix each tool's uses and interventions since the settling, too new under 7 days; fix-measures.json and the command rate retired.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-005 says each fix is reported by 'their FR-001 numbers since the fix was made'; FR-001's numbers include likely misfires (and first seen), and the GM's approved proposal (request.md item 1) names 'likely misfires' explicitly. D165 and T06's Done report uses and interventions only. Including misfires is not impossible or costly, the request does not imply dropping them, and dropping them defeats the purpose ('how often it makes a difference'): an intervention that was escaped as a misfire is not the tool doing something for us. Retiring the command rate is within (FR-005 says 'replacing'). Fix: report misfires (and the no-outcome-record reading) per tool alongside uses and interventions."
+    },
+    {
+     "id": "D166",
+     "summary": "Doing something = a tool of the fix intervened since it was made; doing nothing = none did in 7 days or more of record; too new = under 7 days; the file written by hand from T06's output.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Adjudicated apart from D165. The three judgments are the spec's (FR-005), but the criteria narrow FR-001's measure in two ways: (1) misfires are ignored, so a fix whose tools' every intervention was escaped reads 'doing something'; (2) 'none did' counts a tool whose record reads 'no outcome record' as having done nothing, collapsing the 'no outcome record, never 0' distinction FR-001 requires - a judgment of 'doing nothing' is then not measured, which is the weak assertion the GM's first message complained of. Fix: interventions net of likely misfires decide 'doing something', and a fix whose tools have no outcome record is not judged 'doing nothing' on that record (state the record's absence; 'too new to say' or a named 'no outcome record' note within the line). Writing the file by hand and not retiring any fix (T07 exit) are within."
+    },
+    {
+     "id": "T05 exit",
+     "summary": "A check in make hooks-test rather than a CLAUDE.md reminder.",
+     "class": "within",
+     "why": "The approved proposal item 3: 'a rule enforced by tooling'."
+    },
+    {
+     "id": "T07 exit",
+     "summary": "No fix is retired here; the judgment informs and the GM decides.",
+     "class": "within",
+     "why": "FR-005 asks for a judgment delivered to the GM, not for retirement."
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,4 @@
+{
+  "_doc": "Every tool that records through scripts/hooks/lib/usage_log.py, with its kind and what it does (feature 406 FR-002). scripts/gates/check-tool-signals.py refuses a helper call naming a tool not listed here, and an entry no code calls.",
+  "tools": {}
+}

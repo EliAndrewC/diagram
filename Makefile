@@ -1048,7 +1048,9 @@ _reference:
 IDLE_CTX = $(eval IDLE_CTX := $(shell $(SWITCH) idle 2>/dev/null || echo unreadable))$(IDLE_CTX)
 DONE_NAME = $(if $(filter 0,$(IDLE_CTX)),done,idle-done)
 idle-tests:     ## [tests] {inactive: arming is disabled - the GM turned it off 2026-09-06; the target still runs by hand} what an idle session runs unattended (feature 136): the whole gate, never FULL, recorded as `idle-done`
-	@PAIR_OK="idle run: no session attached to dispatch a review" $(MAKE) --no-print-directory done INCREMENTAL=0
+	@PAIR_OK="idle run: no session attached to dispatch a review" $(MAKE) --no-print-directory done INCREMENTAL=0; rc=$$?; \
+	  python3 "$$(git rev-parse --show-toplevel)/scripts/hooks/lib/usage_log.py" record --tool idle-tests --kind target --outcome "$$( [ $$rc -eq 0 ] && echo passed || echo failed )"; \
+	  exit $$rc
 
 maps:            ## [maps] regenerate and check the pool, picking its own scope from how the last run went   SCOPE=reference|all
 ##  SCOPE=reference|all  override the scope; by default it picks its own - the reference hamlet alone after a failed run, the whole tier after a clean one

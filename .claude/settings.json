@@ -422,6 +422,17 @@
         ]
       }
     ],
+    "PostToolUseFailure": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/event-log-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/event-log-hooks.sh\"; exec \"$h\"  # GUARD_EDIT_OK: feature 406 T02 (D161) - a failed call recorded beside a succeeded one",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Agent|TaskStop",
