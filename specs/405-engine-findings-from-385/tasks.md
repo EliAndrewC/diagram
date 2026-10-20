@@ -65,3 +65,6 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T31 task-add's next_id counts every T<n> in the files, so a moved task's '(385 T147)' gave 405 the ids T148-T150 - count the boxes' and sections' own ids only (found working 405 T12, 2026-10-20) [lands-open]
       research: rendering
+- [ ] GM review (make gm-reviewed F=405) [lands-open]
+      research: rendering
+      verify: the GM reviewed every row (make gm-review lists them)

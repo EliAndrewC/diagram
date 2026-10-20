@@ -27,5 +27,36 @@
    ],
    "verdict": "CLEAR"
   }
- }
+ },
+ "blocks": {
+  "preamble": {
+   "sha256": "bc381b9c74526acf71714ffcef0a32bdb0dabb8bc4939bcf477b80305f527235",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-20",
+   "blocks": [
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "preamble-structure",
+     "summary": "The plan is written one section per task, each at that task's start, against docs/approach-checklist.md.",
+     "class": "within",
+     "why": "A drafting convention for the plan document; it narrows nothing the request or FR-001 (each task worked as 385 worked its tasks, checklist part A answered) asks for."
+    },
+    {
+     "id": "preamble-lands-open",
+     "summary": "Lands open: T01-T31 - the feature may reach main with any of its 31 tasks still open.",
+     "class": "within",
+     "why": "The GM's 2026-10-20 start asks for one claim fixed and then the numbers reviewed before deciding what next (FR-004, SC-002: a report before a second task), so landing with the remaining tasks open is what was asked. Declaring a task may land open does not drop it: SC-001 still requires every task ticked, and no task is removed or exempted from FR-001/FR-002."
+    }
+   ]
+  }
+ ]
 }
