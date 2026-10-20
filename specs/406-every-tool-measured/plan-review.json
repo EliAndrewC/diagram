@@ -8,7 +8,7 @@
    "declared": "spec-fidelity"
   },
   "## Summary": {
-   "sha256": "7fc8934076e918ab97e31090f71538e5699896ec81bb2bf6af0be13fc2413beb",
+   "sha256": "881de009bfcd20f944703414acc148c559ef84eb07f6b3cd70c5ab583bb7111d",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-20",
    "declared": "spec-fidelity"
@@ -50,13 +50,13 @@
    "declared": "spec-fidelity"
   },
   "### T02 Approach (checklist part A)": {
-   "sha256": "b7bfb43ca06b3fa9d0336369707d3b3c2a8dc9f956942bfd114a377ec34a1dce",
+   "sha256": "30bcbed05a36f21c705f11d6be3b9f86ed2c05b748951cc6f6ee39b8a2cf4535",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-20",
    "declared": "spec-fidelity"
   },
   "### T02 Decisions": {
-   "sha256": "8876e6fdf053411a6203b49d9266bdc036e936195770ff825daf612ca65d3871",
+   "sha256": "151e7091ed48a5c06e9e055a4246e911ad3c3bfda0f0a19b8fcccb72723dec64",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-20",
    "declared": "spec-fidelity"
@@ -92,7 +92,7 @@
    "declared": "spec-fidelity"
   },
   "### T04 Decisions": {
-   "sha256": "34b4364e1b4afeb0d86e5349139cb43b7fc5b1f10ff18168115bf7aa6d29d4ec",
+   "sha256": "602c348d4b1a44c7674731dbbc3c5f709cf387e86a77e938c12e76832310f047",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-20",
    "declared": "spec-fidelity"
@@ -110,7 +110,7 @@
    "declared": "spec-fidelity"
   },
   "### T05 Decisions": {
-   "sha256": "9e02d9546f719ab56fbcb50deca69e0b3ece3518cf3f1014988c2644ca29af75",
+   "sha256": "b20db7b32d31484f5749ec3a7d151ecf7ea8bbd39fc533ddf4aae2a8a52ac91e",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-20",
    "declared": "spec-fidelity"
@@ -146,7 +146,7 @@
    "declared": "spec-fidelity"
   },
   "### T07 Decisions": {
-   "sha256": "900660e4e57e22ce8ddda6e09b75217217c30e4a79dd9989a6eb9d1f7a36e283",
+   "sha256": "f02b359086725ede10f87020058b4d699ba388909d7cc14dfd011932c2d4fdb2",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-20",
    "declared": "spec-fidelity"
@@ -331,6 +331,122 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "The 'record missing' line is a fourth state beyond FR-005's three. It is legitimate: the GM called the 'saves nothing' reading 'a weak assertion at best' and accepted 'too new to have gathered measurements'; judging 'doing nothing' on no record is exactly the weak assertion the request exists to replace, so the literal three-way reading would defeat the purpose. Gap to close in implementation (not the ground of a ruling): 'too new' keys on the fix's age while 'doing nothing' needs 7 days of records, so a fix older than 7 days whose tools' records began at this landing fits no category - it should read too new (or record missing), never fall through."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-20",
+   "blocks": [
+    "## Constitution Check",
+    "## Measured before planning (2026-10-19)",
+    "## Summary",
+    "## T01 - the usage-log helper and the tool registry",
+    "## T02 - a make target's outcome recorded",
+    "## T03 - the silent tools record",
+    "## T04 - `make tool-yield`",
+    "## T05 - the rule",
+    "## T06 - `make fix-yield` on the new numbers",
+    "## T07 - the 22 fixes judged",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions",
+    "### T02 Approach (checklist part A)",
+    "### T02 Decisions",
+    "### T03 Approach (checklist part A)",
+    "### T03 Decisions",
+    "### T04 Approach (checklist part A)",
+    "### T04 Decisions",
+    "### T05 Approach (checklist part A)",
+    "### T05 Decisions",
+    "### T06 Approach (checklist part A)",
+    "### T06 Decisions",
+    "### T07 Approach (checklist part A)",
+    "### T07 Decisions",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary",
+     "summary": "The tool list's refusing checks are what make done, make quick, the push and make tick run - scripts/gates/ and the scripts/ checks those entry points name.",
+     "class": "within",
+     "why": "Restates FR-001's own definition of a refusing check."
+    },
+    {
+     "id": "D160",
+     "summary": "One usage-log helper (utc, tool, kind, outcome, session) under a lock, never raising; exited() records passed/refused; scripts/tool-registry.json maps tool to kind and what.",
+     "class": "within",
+     "why": "FR-002 as written; unchanged this round."
+    },
+    {
+     "id": "D161-failure",
+     "summary": "event-log-hooks wired on PostToolUseFailure so a failed call's line carries ev: PostToolUseFailure with its make target; make idle-tests records passed/failed through the helper.",
+     "class": "within",
+     "why": "FR-003's first two clauses."
+    },
+    {
+     "id": "D161-ran-count",
+     "summary": "Every make invocation writes a parse-time ran line (MAKECMDGOALS or the default goal; skipped for -n/-q); tool_yield counts every target's runs from the usage log ALONE, never adding the event log's runs.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The ran line itself (and the -n/-q skip, the default goal named) serves FR-003 and is sound. But 'from the usage log alone' discards every run before landing: the plan's own measurement counts 6,442 event-log make lines, and under this rule every make target's first seen becomes the landing day, so each reads 'too new' for a week and its 'uses in all' omits its whole history. FR-001 says 'too new' only where first seen under 7 days ago, an older tool reporting its numbers however small; the approved proposal says 'Most of this reads logs that exist today'. D163 in the same bundle still reads a target's runs and a pre-T02 failure fallback from the event log, which this rule leaves with no run to attach to. Counting once does not require discarding history (not impossible, not implied by the GM): count the event log's runs before the clone's first ran line and the usage log's from it on. Must say that."
+    },
+    {
+     "id": "D161-outcome-match",
+     "summary": "A run's outcome is read from 'the event log's line for the same target in the same minute'; the outcome of a run no session made is named as unseen beside each target.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The ran line is written as the Makefile is read, at the run's start; the outcome lines (PostToolUse / PostToolUseFailure) are written at its end. Matched to the outcome line within the same minute, every session run over a minute long - make done, make quick, make test, the targets that matter most - reads 'no outcome record', against FR-003's 'every target run in a session reads succeeded or failed'. Must say: match the ran line to the PreToolUse line of the same target in the same minute, then follow that call's tool id to its PostToolUse or PostToolUseFailure line. Naming non-session runs' outcomes as unseen is FR-003's last clause and is fine."
+    },
+    {
+     "id": "D162",
+     "summary": "Each refusing check returns through usage_log.exited; hm_checks and idle-tests-hooks record; six automatic steps record changed/unchanged; the footer states the limit on future steps.",
+     "class": "within",
+     "why": "FR-002; unchanged this round."
+    },
+    {
+     "id": "D163-inventory",
+     "summary": "Refusing checks are each .py with __main__ and each .sh under scripts/gates/, plus every scripts/... path named in the text of the done, quick and tick recipes and of sync-with-main.sh, push_checks.py and preflight.py, read at run time, never a hand-kept list.",
+     "class": "within",
+     "why": "Reading the entry points at run time implements FR-001's 'what make done, make quick, the push and make tick run'. The decision must also say that it follows what those entry points run through other targets - their prerequisites and each $(MAKE) <target> in their recipes, and the scripts/ paths in those recipes - because a check run by make done through a sub-target is run by make done. If the clone measures that no entry point delegates this way, the plan may cite that measurement instead. This is required wording, not a ruling: the bundle cannot show whether the recipes delegate."
+    },
+    {
+     "id": "D163-target-body-exemption / D164-target-body-exemption",
+     "summary": "A refusing check script that is a make target's own body is listed and measured as that target (runs from the usage log's ran lines, outcomes from the event log), and check-tool-signals names that record in its pass line instead of requiring guard_log, the helper or # TOOL_RECORD:.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "A script joins this set because an entry point names its PATH, so it runs directly from that recipe or script and not as make <target>. Measured as the target, the record counts the make <target> invocations and misses the runs that put the script on the list; a refusal it makes inside make done is a failure of done, not of its own target. FR-004 lets an exemption stand only where it 'names the record where its runs and outcomes can be seen'. This record does not show them. Must say: the exemption holds only where every entry-point invocation reaches the script through its target ($(MAKE) <target> or a prerequisite); a script that any entry point names by path records itself (guard_log or the helper) or carries # TOOL_RECORD: naming a record that does show those runs."
+    },
+    {
+     "id": "D163-readers",
+     "summary": "Readers: guard log (interventions blocked/refused/rewrote/reminded/warned; misfires escaped); event logs (runs, PostToolUseFailure failures, escape misfires); review ledger (acted on; declined, MISSED-BY-REVIEWER; a check with no ledger rows reads its dispatches from the event logs' SubagentStart lines and 'no outcome record'); usage log (runs; refused/changed/failed; a step's misfires 'no outcome record').",
+     "class": "within",
+     "why": "Each kind's reading is FR-001's. One unmeasured premise must be closed before tasks are ticked: nothing in the plan's measurements says the event log carries SubagentStart lines today, or that T02 wires event-log-hooks.sh on SubagentStart. ('every tool call with its make target' is the plan's own description of the log.) If it does not, every review check with no ledger rows reads 0 dispatches, a false 0 that FR-001 forbids. Must either cite a measurement that SubagentStart lines (with the agent type) are in the event log, or add wiring event-log-hooks.sh on SubagentStart to T02. The wiring is enforcement of FR-001 and within scope."
+    },
+    {
+     "id": "D164-rule",
+     "summary": "check-tool-signals.py reads the same set tool_yield lists; each must call guard_log or the helper or carry # TOOL_RECORD:; helper tool names in the registry; every registry entry called; suite in make hooks-test.",
+     "class": "within",
+     "why": "FR-004 as written. The shared set is right, and inherits D163's transitive-reading requirement."
+    },
+    {
+     "id": "D165",
+     "summary": "A fix's tools are those in the files of its settling commit, mapped by tool_yield's inventory; fix_yield.verdict reports their numbers since the settling; fix-measures.json and the command rate retired.",
+     "class": "within",
+     "why": "FR-005; unchanged this round."
+    },
+    {
+     "id": "D166-categories",
+     "summary": "Besides FR-005's doing something / doing nothing / too new to say, a fix may read 'no outcome record' or 'record too new' (a fix older than 7 days whose tools began recording under 7 days ago).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Both are implied by the request and spec. The GM: 'in cases where a tool is too new to have gathered measurements, then that's fine', which covers a record too new. FR-001 forbids reading a tool with no outcome record as 0, so judging it 'doing nothing' would contradict the spec. Neither category softens a fix the numbers show to be doing nothing."
+    },
+    {
+     "id": "D166-order",
+     "summary": "Each fix takes the first judgment that holds: too new to say; no outcome record; record too new; doing something; doing nothing - 'so none falls through'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Read 'no outcome record' and 'record too new' with either condition. If the condition is 'any tool of the fix': a fix with one intervening tool and one tool without an outcome record (an automatic step, whose misfires are always 'no outcome record' under D163; a review check with no ledger rows), or with one tool on a fresh record, reads 'no outcome record' or 'record too new'. The evidence that it is doing something exists and is hidden, so the GM's question goes unanswered where the numbers answer it. If the condition is 'all tools': a mixed fix satisfies none of the five, because doing nothing needs all tools recorded 7+ days, and the fix falls through, contrary to the block's own claim. Combined with D161's 'usage log alone', every fix that touched a Makefile target would read 'record too new'. The exhaustive order that hides nothing: too new to say (the fix under 7 days old); doing something (any tool with interventions net of its likely misfires); no outcome record (any remaining tool without one); record too new (any remaining tool's record under 7 days); doing nothing (all tools recorded 7+ days, no net intervention). Must state that order and the any/all condition of each."
     }
    ]
   }

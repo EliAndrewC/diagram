@@ -40,3 +40,12 @@ def test_a_wrapped_check_records_its_exit(tmp_path: pathlib.Path) -> None:
     assert rows[-1]["outcome"] == ("passed" if run.returncode == 0 else "refused")
     registry = json.loads((REPO / "scripts" / "tool-registry.json").read_text())["tools"]
     assert {"check-stale-dirs", "one-gate", "idle-tests", "tick-archive", "planhold-restore", "clone-sync-merge"} <= set(registry)
+
+
+def test_every_make_goal_records_its_run(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 406 T02 (D161): the Makefile's parse-time line records each goal `ran`, whoever ran make."""
+    subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
+    monkeypatch.chdir(tmp_path)
+    assert ul.main(["goals", "quick", "tick"]) == 0
+    rows = [json.loads(x) for x in (tmp_path / ".git" / ul.USAGE).read_text().splitlines()]
+    assert [(r["tool"], r["kind"], r["outcome"]) for r in rows] == [("quick", "target", "ran"), ("tick", "target", "ran")]

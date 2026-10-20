@@ -9,6 +9,7 @@ ran or whether it changed anything.
     record(root, tool, kind, outcome)       one line in <git common dir>/tool-usage.jsonl
     exited(tool, code, root=None) -> code   a check's exit recorded as `passed` (0) or `refused`, the code handed back
     usage_log.py record --tool <name> --kind <step|check|hook|target> --outcome <word> [--root <dir>]   (for shell callers)
+    usage_log.py goals <goal>...            each make goal recorded `ran` (the Makefile's parse-time line, feature 406 D161)
 
 A record never fails its tool: every error is swallowed. Every tool that records here is listed in `scripts/tool-registry.json`
 with its kind and what it does; `scripts/gates/check-tool-signals.py` holds the two in step.
@@ -65,6 +66,10 @@ def exited(tool: str, code: int | None, root: Path | str | None = None) -> int |
 def main(argv: list[str]) -> int:
     import argparse  # noqa: PLC0415
 
+    if argv[:1] == ["goals"]:  # every make invocation, from a session, a recipe, a script or a timer (D161)
+        for goal in argv[1:]:
+            record(None, goal, "target", "ran")
+        return 0
     ap = argparse.ArgumentParser(description="record one run of a tool (feature 406)")
     ap.add_argument("verb", choices=("record",))
     ap.add_argument("--tool", required=True)

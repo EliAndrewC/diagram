@@ -1188,3 +1188,12 @@ ROLL_CENSUS = $(shell git rev-parse --absolute-git-dir 2>/dev/null)/roll-census.
 TOOLING_GATE_ARGS = $(if $(COV_FLOORS),$(if $(INCR_FORCE),,-p tests.tooling._test_deps),)
 INCR_ARGS = $(if $(COV_FLOORS),--cov-context=test -p l7r.diagram.ci.gate_plugin -p l7r.diagram.ci.rollcensus $(TOOLING_GATE_ARGS),)
 INCR_ENV = $(if $(COV_FLOORS),L7R_GATE_SELECT="$(shell python3 -m l7r.diagram.ci incremental where 2>/dev/null)" L7R_ROLL_CENSUS="$(ROLL_CENSUS)" $(if $(TOOLING_GATE_ARGS),L7R_TEST_DEPS=gate,),)
+
+# EVERY MAKE INVOCATION RECORDS ITS RUN (feature 406 T02, D161; the GM 2026-10-19: "it is notionally possible for us to see how
+# often a tool is used"). The event log sees a target only when a session's Bash call runs it; one run from another target's
+# recipe, from a script or from the idle timer left no trace. Each parse records its goals `ran` in <git dir>/tool-usage.jsonl
+# (the default goal's name when none is given); `make -n` and `make -q` run nothing and record nothing. `make tool-yield` counts
+# a target's runs from these lines alone and reads their outcomes from the event log.
+ifeq (,$(findstring n,$(filter-out --%,$(firstword $(MAKEFLAGS))))$(findstring q,$(filter-out --%,$(firstword $(MAKEFLAGS)))))
+_TOOL_YIELD_RAN := $(shell python3 "$(dir $(abspath $(firstword $(MAKEFILE_LIST))))scripts/hooks/lib/usage_log.py" goals $(or $(MAKECMDGOALS),$(.DEFAULT_GOAL)) >/dev/null 2>&1)
+endif
