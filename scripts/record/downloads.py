@@ -468,6 +468,45 @@ def drafts(text: str, record: pathlib.Path) -> list[tuple[str, list[str]]]:
     return out
 
 
+#: the project an entry serves, shown first in its heading: `### 316. [money] ...` (the GM, 2026-10-20: the money downloads
+#: "marked differently than the diagram downloads"). DERIVED from the questions its Rests-on line points at, never kept by hand.
+PROJECT_TAG = re.compile(r"^\[(money|diagram)\] ")
+_SUBJECTS = re.compile(r"<!-- tags: subject=([^;>]*)")
+MONEY_SUBJECTS = frozenset({"money", "comparative"})
+MONEY_SECTIONS = frozenset({"money", "comparative-money"})
+
+
+def project_of(body: str, record: pathlib.Path) -> str:
+    """`money` when any question or section the entry's body points at is a money one, else `diagram`."""
+    for p in POINTER.findall(body):
+        if p.startswith("research/contents.json#"):
+            if p.split("#", 1)[1] in MONEY_SECTIONS:
+                return "money"
+            continue
+        f = record / p.removeprefix("research/")
+        m = _SUBJECTS.search(f.read_text(encoding="utf-8")) if f.is_file() else None
+        if m and MONEY_SUBJECTS & {s.strip() for s in m.group(1).split(",")}:
+            return "money"
+    return "diagram"
+
+
+def tagged(heading: str, project: str) -> str:
+    """The heading with its project tag after the number, replacing any tag it had."""
+    m = HEAD.match(heading)
+    if not m:
+        return heading
+    title = PROJECT_TAG.sub("", heading[m.end() :])
+    return f"{heading[: m.end()]}[{project}] {title}"
+
+
+def tag_all(text: str, record: pathlib.Path) -> str:
+    """Every entry's heading tagged by `project_of` its body - the one pass over the list, and idempotent."""
+    blocks = parse(text)
+    for e in entries(blocks):
+        e.heading = tagged(e.heading, project_of(e.body_text(), record))
+    return render(blocks)
+
+
 def numbers_in(text: str) -> list[int]:
     return [int(e.id) for e in entries(parse(text)) if not e.id.startswith("H")]
 
@@ -503,7 +542,7 @@ def add(root: pathlib.Path, draft: str, timeout: float = 30.0) -> list[str]:
         with ledger.open("a", encoding="utf-8") as fh:
             for title, body in items:
                 n += 1
-                new.append(Entry(str(n), f"### {n}. {title}", Marks(), None, body))
+                new.append(Entry(str(n), tagged(f"### {n}. {title}", project_of("\n".join(body), root / "research")), Marks(), None, body))
                 fh.write(json.dumps({"n": n, "clone": str(root), "utc": datetime.datetime.now(datetime.UTC).isoformat()}) + "\n")
         path = root / CANON
         path.write_text(append(path.read_text(encoding="utf-8"), new), encoding="utf-8")
@@ -579,6 +618,7 @@ def main(argv: list[str] | None = None) -> int:
     ch = sub.add_parser("check")
     ch.add_argument("--base", default="origin/main")
     sub.add_parser("selftest")
+    sub.add_parser("tag")
     a = ap.parse_args(argv)
     root = pathlib.Path(git(pathlib.Path.cwd(), "rev-parse", "--show-toplevel").stdout.strip() or ".")
     try:
@@ -591,6 +631,12 @@ def main(argv: list[str] | None = None) -> int:
 def _run(a: argparse.Namespace, root: pathlib.Path) -> int:
     if a.cmd == "selftest":
         selftest()
+        return 0
+    if a.cmd == "tag":
+        path = root / CANON
+        path.write_text(tag_all(path.read_text(encoding="utf-8"), root / "research"), encoding="utf-8")
+        heads = [e.heading for e in entries(parse(path.read_text(encoding="utf-8")))]
+        print(f"downloads: tagged {len(heads)} entries - {sum('] ' in h and '[money]' in h for h in heads)} money, {sum('[diagram]' in h for h in heads)} diagram")
         return 0
     if a.cmd == "import":
         gm_text = pathlib.Path(a.gm).read_text(encoding="utf-8")

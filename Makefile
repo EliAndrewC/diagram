@@ -875,6 +875,9 @@ downloads-ingest: ## [project] on the GM's word "ingest": the marks in the GM's 
 downloads-sync: ## [project] on the GM's word "sync": the GM's copy of the download list replaced from research/to-download.md - refused while it holds anything not ingested (feature 313)
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/downloads.py" sync
 
+downloads-tag: ## [project] tag every download-list entry [money] or [diagram] after its number, derived from the questions its Rests-on line points at (the GM, 2026-10-20); download-add tags a new entry itself
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/downloads.py" tag
+
 download-add: ## [project] append a source only the GM can fetch at the end of the canonical download list, under the next number taken under a host-wide lock (feature 313)   FILE=<draft.md, entries headed "### NEW. <the work>">
 	@if [ -z "$(FILE)" ]; then printf 'make download-add: FILE=<draft.md> is required - entries headed "### NEW. <the work>", each with a link line, "- Fallback:", "- **Rests on it:**" naming research/questions/<file>, and "- Blocked by:"\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/downloads.py" add "$(FILE)"

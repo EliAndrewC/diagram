@@ -368,3 +368,22 @@ def test_ingest_reports_the_access_tag_of_each_source_it_changed(tmp_path: pathl
         "download:2: paywalled (2026-10-04) - the GM's mark on entry 2, recorded 2026-10-04",
     ]
     assert dl.changed_tags(root, []) == []
+
+
+def test_an_entry_is_tagged_money_or_diagram_by_the_questions_it_rests_on(tmp_path: pathlib.Path) -> None:
+    """The GM, 2026-10-20: the money downloads "marked differently than the diagram downloads". The tag is derived from the
+    subject tags of the questions an entry's Rests-on line points at, never kept by hand, and tagging twice changes nothing."""
+    rec = tmp_path / "research"
+    (rec / "questions").mkdir(parents=True)
+    (rec / "questions" / "0262-sake.html").write_text('<h2 id="sake">S</h2>\n<!-- tags: subject=money; setting=city -->\n')
+    (rec / "questions" / "0014-lanes.html").write_text('<h2 id="lanes">L</h2>\n<!-- tags: subject=ways; setting=village -->\n')
+    marks = "\n".join(dl.Marks().lines())
+    text = (
+        f"# T\n\n### 1. A book\n\n{marks}\n\n- **Rests on it:** research/questions/0262-sake.html - x\n\n"
+        f"### 2. [money] Another\n\n{marks}\n\n- **Rests on it:** research/questions/0014-lanes.html - y\n"
+    )
+    out = dl.tag_all(text, rec)
+    heads = [e.heading for e in dl.entries(dl.parse(out))]
+    assert heads == ["### 1. [money] A book", "### 2. [diagram] Another"], "derived, and a wrong tag replaced"
+    assert dl.tag_all(out, rec) == out, "idempotent"
+    assert dl.problems(text, out) == [], "the push check takes a re-tagged list"
