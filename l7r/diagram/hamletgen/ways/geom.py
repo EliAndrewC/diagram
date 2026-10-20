@@ -544,15 +544,12 @@ def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[
         return end_serves(q, segs if other is None else [sg for sg in segs if seg_dist(other[0], other[1], sg[0], sg[1]) > _TOUCH_GAP], houses, ground, steadings)
 
     out = list(run)
-    while len(out) > 2 and not serves(out[-1], out[0]):
-        out.pop()
-    while len(out) > 2 and not serves(out[0], out[-1]):
-        out.pop(0)
-    # A TWO-POINT ARM HAS NO VERTEX TO POP, and the skeleton's arms are straight lines: popping stops at two
-    # points, so both of Inashiro's arms kept ends 81-97 ft from the nearest house however hard this trimmed.
-    # Walk the end IN along its own last segment instead, four feet at a time, to the first point that serves.
-    # An arm no point of which serves reaches nothing at all and is handed back too short to draw, for the
-    # caller to drop - which is the honest answer for a way with nothing at either end.
+    # EVERY END IS WALKED IN, NEVER POPPED A SEGMENT AT A TIME (feature 405 T12, D1): pulled back to the last house it serves,
+    # 4 ft at a time, as 0246's drawing page and the claim above say. Two loops used to pop whole vertices first, so a long last
+    # segment whose inner part still served was dropped whole and the end landed on the vertex before it, past the last point
+    # that served (DRIFTED in 385's impl-drift round). The walk takes each end in along its own last segment to the first point
+    # that serves, dropping a vertex only once the end is within 4 ft of it. An arm no point of which serves reaches nothing at
+    # all and is handed back too short to draw, for the caller to drop - the honest answer for a way with nothing at either end.
     #
     # UNCONDITIONAL SINCE FEATURE 227. This was guarded by `if end_reach is not None`, which is to say it ran
     # for every caller that asked the gate's bar and not for the private default - and once all four callers

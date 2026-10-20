@@ -40,6 +40,17 @@ def test_trim_to_service_pulls_an_end_back_to_what_it_serves() -> None:
     assert out[0] == (0.0, 0.0), "the end that meets a way is kept"
 
 
+def test_trim_to_service_walks_a_long_last_segment_in_and_never_drops_it_whole() -> None:
+    """Pulled back to the last house it serves (0246's drawing page, "Lane ends"), 4 ft at a time - never a whole segment at
+    once (feature 405 T12, D1). The house stands beside the long last segment: popping that segment left the end at (450, 0),
+    50 ft short of the house; the walk stops where the segment still reaches it and the cut takes it to the house's foot."""
+    run = [(0.0, 0.0), (450.0, 0.0), (1000.0, 0.0)]
+    segs = [((0.0, -20.0), (0.0, 20.0))]
+    out = _trim_to_service(run, segs, [(500.0, 30.0)])
+    assert out[0] == (0.0, 0.0), "the end that meets a way is kept"
+    assert out[-1] == pytest.approx((500.0, 0.0), abs=4.0), "the end stops beside the house it serves, not a segment short"
+
+
 def test_a_run_that_serves_NOTHING_comes_back_too_short_to_draw() -> None:
     """The honest answer for a way with nothing at either end: it is handed back under two points, for the
     caller to drop, rather than rounded off to a two-point stub in the middle of a field.
