@@ -83,9 +83,26 @@ class Tally:
     unseen: int = 0  # target runs with no outcome record
     outcome_record: bool = True
 
+    hit_at: list[float] = field(default_factory=list)  # when each intervention happened (a fix is read since it was made, D165)
+    miss_at: list[float] = field(default_factory=list)
+
     def use(self, t: float) -> None:
         self.uses.append(t)
         self.first = min(self.first, t) if self.first else t
+
+    def hit(self, t: float, yes: bool = True) -> None:
+        if yes:
+            self.hits += 1
+            self.hit_at.append(t)
+
+    def miss(self, t: float, yes: bool = True) -> None:
+        if yes:
+            self.misses += 1
+            self.miss_at.append(t)
+
+    def since(self, t: float) -> tuple[int, int, int]:
+        """(uses, interventions, likely misfires) at or after `t`."""
+        return sum(u >= t for u in self.uses), sum(h >= t for h in self.hit_at), sum(m >= t for m in self.miss_at)
 
 
 # ---- the inventory, from the code -------------------------------------------------------------------------------------------------
@@ -161,6 +178,38 @@ def registry(root: Path) -> dict[str, dict]:
     return json.loads(path.read_text(encoding="utf-8")).get("tools", {}) if path.is_file() else {}
 
 
+def tools_of(root: Path, files: Iterable[str], make_diff: str = "") -> set[tuple[str, str]]:
+    """The tools a change's files belong to (feature 406 D165: a fix is read by its tools): a hook and the guards whose hook
+    names a changed helper of `scripts/hooks/lib/`, a refusing check, a review's agent file, a registered step by its file, a
+    target whose recipe names a changed script, and each Makefile target a hunk of `make_diff` (`git show -U0 -- Makefile`)
+    changed."""
+    out: set[tuple[str, str]] = set()
+    guards = hook_guards(root)
+    hook_text = {g: (root / "scripts" / "hooks" / f"{g}-hooks.sh").read_text(encoding="utf-8", errors="replace") for g in guards if (root / "scripts" / "hooks" / f"{g}-hooks.sh").is_file()}
+    check_rel = {str(p.relative_to(root)): p.stem for p in check_paths(root)}
+    make = (root / "Makefile").read_text(encoding="utf-8") if (root / "Makefile").is_file() else ""
+    named = {t: recipe(make, t) for t in targets(root)}
+    steps = {name: str(e.get("what", "")).split(" ", 1)[0] for name, e in registry(root).items()}
+    for f in files:
+        if m := re.fullmatch(r"scripts/hooks/([\w-]+)-hooks\.sh", f):
+            out.add(("guard", m.group(1)))
+        elif f.startswith("scripts/hooks/lib/"):
+            stem = Path(f).stem
+            out |= {("guard", g) for g, text in hook_text.items() if re.search(rf"\b{re.escape(stem)}\b", text)}
+        if f in check_rel:
+            out.add(("check", check_rel[f]))
+        if m := re.fullmatch(r"\.claude/agents/([\w-]+)\.md", f):
+            out.add(("review", m.group(1)))
+        out |= {(str(registry(root)[n].get("kind", "step")), n) for n, path in steps.items() if path == f}
+        if f.startswith("scripts/"):
+            out |= {("target", t) for t, text in named.items() if f in text}
+    for line in make_diff.splitlines():
+        m = re.match(r"@@[^@]*@@\s*([a-z][\w-]*)\s*:(?!=)", line) or re.match(r"[+-]([a-z][\w-]*)\s*:(?!=)", line)
+        if m and m.group(1) in named:
+            out.add(("target", m.group(1)))
+    return {({"hook": "guard"}.get(k, k), n) for k, n in out}
+
+
 # ---- the records -------------------------------------------------------------------------------------------------------------------
 
 
@@ -213,10 +262,11 @@ def tally_guards(t: dict[tuple[str, str], Tally], rows: Iterable[dict]) -> None:
     for row in rows:
         g = str(row.get("guard") or "?")
         tool = t.setdefault(("guard", g), Tally("guard", g))
-        tool.use(utc(str(row.get("utc") or "")))
+        when = utc(str(row.get("utc") or ""))
+        tool.use(when)
         event = str(row.get("event") or "")
-        tool.hits += event in GUARD_HIT
-        tool.misses += event in GUARD_MISS
+        tool.hit(when, event in GUARD_HIT)
+        tool.miss(when, event in GUARD_MISS)
 
 
 def tally_usage(t: dict[tuple[str, str], Tally], rows: Iterable[dict]) -> float:
@@ -229,7 +279,7 @@ def tally_usage(t: dict[tuple[str, str], Tally], rows: Iterable[dict]) -> float:
         kind = {"hook": "guard"}.get(kind, kind)
         tool = t.setdefault((kind, str(row.get("tool"))), Tally(kind, str(row.get("tool"))))
         tool.use(when)
-        tool.hits += row.get("outcome") in ("refused", "changed", "failed")
+        tool.hit(when, row.get("outcome") in ("refused", "changed", "failed"))
     return began
 
 
@@ -255,7 +305,7 @@ def tally_events(t: dict[tuple[str, str], Tally], rows: Iterable[dict], usage_be
         if not usage_began or when < usage_began:
             tool.use(when)
         if tid in failed or (tid not in post and tid not in failed):
-            tool.hits += 1
+            tool.hit(when)
     if usage_began:  # a run the usage log counts that no session's event matches has no outcome record
         seen = collections.Counter(name for name, when in pre.values() if when >= usage_began)
         for (kind, name), tool in t.items():
@@ -274,8 +324,8 @@ def tally_ledger(t: dict[tuple[str, str], Tally], rows: Iterable[tuple[str, str,
             continue  # before its dispatches are recorded: findings and uses cover the same span
         if not tool.uses:
             tool.first = min(tool.first, when) if tool.first else when
-        tool.hits += bool(FINDING.search(verdict))
-        tool.misses += "declined" in acted.lower() or "MISSED-BY-REVIEWER" in missed
+        tool.hit(when, bool(FINDING.search(verdict)))
+        tool.miss(when, "declined" in acted.lower() or "MISSED-BY-REVIEWER" in missed)
     return held
 
 
@@ -290,7 +340,7 @@ def tally_arbiter(t: dict[tuple[str, str], Tally], root: Path) -> bool:
                 read = True
                 if tool.uses and utc(str(row.get("utc") or "")) < tool.first - 86400:
                     continue
-                tool.hits += row.get("ruling") in ("change-route", "process-fault") or bool(row.get("tooling_fix"))
+                tool.hit(utc(str(row.get("utc") or "")), row.get("ruling") in ("change-route", "process-fault") or bool(row.get("tooling_fix")))
     return read
 
 
@@ -305,7 +355,7 @@ def tally_bypass(t: dict[tuple[str, str], Tally], root: Path) -> None:
             continue
         tool = t.get(("target", name))
         if tool is not None and tool.first and utc(str(row.get("utc") or "")) >= tool.first:
-            tool.misses += 1
+            tool.miss(utc(str(row.get("utc") or "")))
 
 
 def collect(root: Path = ROOT, guard_log: Path | None = None) -> dict[tuple[str, str], Tally]:

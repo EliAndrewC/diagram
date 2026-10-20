@@ -99,9 +99,8 @@ BATCH=1 FILE=<that file> AS=round-arbiter`. A batch `tooling_fix` is one fix for
 
 Any tooling change you recommend - under any ruling, whether or not it caused the loop you judged, and only past question 3's
 bar - goes in `tooling_fix`: one sentence naming the tool, the change and the cost it measured (a guard that let a known hazard through, a command that misled, a bundle that hid
-what it needed). Beside it, `fix_measure` - a regex over the session's Bash commands whose time the fix should cut, or
-`agent:<kind>` for a check's dispatches - and `fix_minutes`, the cost you measured; the record refuses a fix without them, and
-`make fix-yield` later reads whether the fix saved it (feature 385 T119). Never leave one only in `why` or `what`: a fix written there was lost (feature 379). The session MAKES it,
+what it needed). Beside it, `fix_minutes`, the cost you measured; the record refuses a fix without it, and `make fix-yield`
+later reads what the fix's tools did since it was made (feature 385 T119, feature 406). Never leave one only in `why` or `what`: a fix written there was lost (feature 379). The session MAKES it,
 with its test, before its next tick; one that would overhaul a process goes to the GM's review instead. Nobody files it.
 
 ## An hour trigger: step back over the hour (feature 383)
@@ -133,13 +132,13 @@ with its test before the next tick, or declined as an overhaul - the section bel
 the GM's review. An hour ruled `continue` with no `tooling_fix` and no `for_gm` is the expected ruling for an hour that went
 well - never invent a finding, and never name a fix under the bar in question 3, to fill an hour.
 
-    {"ruling": "continue|change-route", "why": "<two or three sentences>", "what": "<the route to take, for change-route>", "tooling_fix": "<or omit>", "fix_measure": "<with a fix>", "fix_minutes": <with a fix>, "for_gm": "<or omit>"}
+    {"ruling": "continue|change-route", "why": "<two or three sentences>", "what": "<the route to take, for change-route>", "tooling_fix": "<or omit>", "fix_minutes": <with a fix>, "for_gm": "<or omit>"}
 
 ## Reply and record
 
 Reply with ONE JSON object and nothing after it:
 
-    {"ruling": "continue|accept|process-fault", "why": "<two or three sentences>", "what": "<what the next round looks at, or what is left>", "tooling_fix": "<one sentence, or omit>", "fix_measure": "<with a fix>", "fix_minutes": <with a fix>}
+    {"ruling": "continue|accept|process-fault", "why": "<two or three sentences>", "what": "<what the next round looks at, or what is left>", "tooling_fix": "<one sentence, or omit>", "fix_minutes": <with a fix>}
 
 Then record it yourself, from the clone root the MANIFEST names: write the JSON to a file and run
 `make arbiter-ruled TRIGGER="<the trigger id>" FILE=<that file> AS=round-arbiter`. Only you pass `AS=round-arbiter`. A
