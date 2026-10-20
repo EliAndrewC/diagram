@@ -1,0 +1,144 @@
+{
+ "feature": "407-cite-the-page-itself",
+ "blocks": {
+  "preamble": {
+   "sha256": "8e497279ab12b1ec964a8098621ec1a4f8e0354495b2ab85296ff057b702c7c2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "5ab8c266948ea1d1948fc69ca7c79492bdc8f20776733393991fd28174a2e3c1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "2507393159be217dd63a248e6bd102520e3866920b6e141689afafcf69f9bc04",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "0f450c79c5914ebc7950237a13ad9ee3f36bd40be49ca934bf0f97038b2a6c8b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - the rule (FR-001, FR-002)": {
+   "sha256": "6930c4d97593e652356ff34bd6cca57a9173112ac5a4b277c7cdef228682fe53",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - the notes (FR-003, FR-004)": {
+   "sha256": "85431d29af93747b0e7d55d8ccf0ff6bef5e7f1badcd93d7d8c24578f0b9a691",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - the note to the asker": {
+   "sha256": "43ebb90f9f739c9d93d4fec98a2eccecd5a4dd76c2040a6ca0b78181b1a378f3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  },
+  "## T - the order": {
+   "sha256": "3d73cda68ef87dbd67c9d631ceb964942e86898281e4883a13402d0c70eda481",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-19",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-19",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the rule (FR-001, FR-002)",
+    "## D2 - the notes (FR-003, FR-004)",
+    "## D3 - the note to the asker",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary/D1-citation-line",
+     "summary": "A page or spreadsheet link is accepted only where that URL is on the key's citation line",
+     "class": "within",
+     "why": "A registry-discipline mechanism, not a limit on what may be linked: any page URL can be added to the citation line, and the Technical Context lists every needed koma, page image and chapter as already there. Nothing the GM permitted is refused; FR-002's own first line ('link to any ...') carries the same shape."
+    },
+    {
+     "id": "TC/D1-notes-only",
+     "summary": "The relaxed link rule applies in notes files only; works sections and l7r link_target keep the first URL",
+     "class": "within",
+     "why": "Both rulings answer questions about footnotes (features 400, 402, 403 asked about notes' links). The works sections cite no passage, so there is no 'their page' to link. Spec FR-002 says 'in a notes file only' and FR-005 forbids engine code."
+    },
+    {
+     "id": "TC/D1-spreadsheet-any-key",
+     "summary": "Any key's footnote quoting a public spreadsheet cell may link the spreadsheet file",
+     "class": "within",
+     "why": "The GM's first ruling is general: 'a cell in a public spreadsheet counts as a readable page'. Applying it to any key is the plain reading, not an extension."
+    },
+    {
+     "id": "D1-others-stay-first-URL",
+     "summary": "Every other link keeps the first-URL rule",
+     "class": "within",
+     "why": "The GM ruled only on Morisada, Gamble and spreadsheet cells; keeping the existing rule elsewhere preserves behavior the GM did not ask to change and does not touch anything he did."
+    },
+    {
+     "id": "D1-rule-text",
+     "summary": "Rule text added to research/CLAUDE.md's citation section and docs/research-record-rules.md",
+     "class": "within",
+     "why": "FR-001; records the GM's rulings where the citation rule lives."
+    },
+    {
+     "id": "TC-test",
+     "summary": "line_urls / PAGE_KEYS / may_link in test_sources.py plus a test pinning passing and failing cases",
+     "class": "within",
+     "why": "Enforces exactly the two rulings (FR-002, SC-001); a test that fails only when the permitted links are refused or unpermitted ones accepted is enforcement of the request."
+    },
+    {
+     "id": "D2-koma-begins",
+     "summary": "Each Morisada note links the koma its passage begins on; each Gamble note the page image of its page",
+     "class": "within",
+     "why": "'May link straight to their page'; the starting koma is the page the passage is read on. FR-003."
+    },
+    {
+     "id": "D2-bochum",
+     "summary": "Bochum notes quoting a chapter's rows link that chapter's spreadsheet; one quoting the landing page keeps it",
+     "class": "within",
+     "why": "Implements the spreadsheet ruling on the 0260/0275 rows the request names; a passage actually on the landing page is already read where it links."
+    },
+    {
+     "id": "D2-checks",
+     "summary": "make record-owed, quote-check on changed notes from bundles, check-wave for four or more",
+     "class": "within",
+     "why": "FR-004: the changed notes pass the record's checks on what changed; the wave is how, not what."
+    },
+    {
+     "id": "D3-asker",
+     "summary": "No note to the asker owed; a one-line mention on issue #9",
+     "class": "within",
+     "why": "No verdict changes, only links; process bookkeeping that narrows nothing."
+    },
+    {
+     "id": "Perf/Constitution/Order",
+     "summary": "No performance bookends (no generator change); constitution check; order rule+test, notes+checks, land",
+     "class": "within",
+     "why": "Procedural; consistent with FR-005 (no engine or map change) and decides nothing the request constrains."
+    }
+   ]
+  }
+ ]
+}

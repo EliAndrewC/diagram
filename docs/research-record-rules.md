@@ -330,6 +330,15 @@ changed research entry before the feature lands, and record its verdicts in the 
 task's `source-reader confirmed` box is `quote-check confirmed` from here). The page renders the footnotes with
 the ACOUP hover (`html/`, below): hover a reference and the note appears beside it.
 
+
+**A spreadsheet's cell, and a page of Morisada or Gamble (GM 2026-10-19, feature 407).** Asked whether a cell of a public
+.xls download counts as a readable page (the Bochum Zhili wage and freight rows of 0260 and 0275), and whether Morisada and
+Gamble notes may link their exact page rather than the volume (the registry's first URL), the GM: *"Yes, a cell in a public
+spreadsheet counts as a readable page. And yes, Morisata [Morisada] and Gamble Notes may link straight to their page."*
+The permission is for those two works and for spreadsheet files of any work; a general "link the page the passage is on"
+for every source was not asked and is not built. `tests/interactive/test_sources.py` (`may_link`) holds it: in a notes
+file only, and only to a URL on the key's citation line.
+
 ## Written for the reader: tooltips, comments, no history (GM 2026-09-07, feature 209)
 
 The GM read the first entry of `homesteads.html` as a reader would and ruled three things, each *"not only a

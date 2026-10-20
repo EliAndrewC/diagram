@@ -90,6 +90,49 @@ def research_pages() -> list[tuple[str, str]]:
     return out
 
 
+def line_urls(cite: str) -> set[str]:
+    """Every URL on a citation line outside its comments, as a sentence leaves it. A note may link any of them: the exact
+    page or file its passage is read on - an NDL viewer page, a page image, a chapter's spreadsheet - once that URL is on
+    the line (the GM, 2026-10-19: "a cell in a public spreadsheet counts as a readable page ... Morisata and Gamble Notes
+    may link straight to their page"; feature 407). The FIRST stays the work's own link (`link_target`)."""
+    bare = re.sub(r"<!--.*?-->", " ", cite, flags=re.S)
+    out = set()
+    for m in re.finditer(r"https?://[^\s<>\"]+", bare):
+        u = m.group(0).rstrip(".,;:")
+        while u.endswith(")") and u.count(")") > u.count("("):
+            u = u[:-1].rstrip(".,;:")
+        out.add(html.unescape(u))
+    return out
+
+
+#: The keys whose footnotes may link the exact page of their passage (the GM, 2026-10-19, on Morisada and Gamble only).
+PAGE_KEYS = frozenset({"ruiju-kinsei-fuzokushi-jo", "ruiju-kinsei-fuzokushi-ge", "gamble-burgess-1921-peking-survey"})
+_SHEET = re.compile(r"\.(?:xls|xlsx|csv)(?:[?#].*)?$", re.I)
+
+
+def may_link(key: str, target: str, cite: str, where: str) -> bool:
+    """A footnote (a notes file) may link a URL of its key's citation line other than the first: any of them for a
+    PAGE_KEYS key, a public spreadsheet file for any key. Nowhere else (feature 407)."""
+    if not where.endswith(".notes.html") or target not in line_urls(cite):
+        return False
+    return key in PAGE_KEYS or bool(_SHEET.search(target))
+
+
+def test_a_note_may_link_its_page_or_spreadsheet_and_nothing_else() -> None:
+    """Feature 407: a Morisada or Gamble footnote's second URL passes, any key's spreadsheet file passes, in a notes file;
+    another key's second URL, a URL on no line or only in a comment, and any second URL outside a notes file fail."""
+    cite = '<p>Work. https://example.org/book and https://example.org/book/1/94 https://example.org/ch13.xls <!-- READ; https://hidden.example/x --></p>'
+    urls = line_urls(cite)
+    assert {"https://example.org/book", "https://example.org/book/1/94", "https://example.org/ch13.xls"} <= urls
+    assert "https://hidden.example/x" not in urls
+    page = "https://example.org/book/1/94"
+    assert may_link("ruiju-kinsei-fuzokushi-jo", page, cite, "0262-x.notes.html")
+    assert may_link("bochum-zhili-wuliao-jiazhi", "https://example.org/ch13.xls", cite, "0260-x.notes.html")
+    assert not may_link("bochum-zhili-wuliao-jiazhi", page, cite, "0260-x.notes.html"), "another key's page"
+    assert not may_link("ruiju-kinsei-fuzokushi-jo", page, cite, "0262-x.html"), "outside a notes file"
+    assert not may_link("ruiju-kinsei-fuzokushi-jo", "https://hidden.example/x", cite, "0262-x.notes.html")
+
+
 def test_the_registry_has_one_entry_per_key() -> None:
     """D6: two keys had two headings each, which gives one anchor two bodies and a citation two citation lines
     to choose from. Merged by feature 190; this keeps it so."""
@@ -117,8 +160,8 @@ def test_every_registry_key_cited_in_a_research_page_is_a_link_to_the_right_targ
             if key in cites:
                 checked += 1
                 want = link_target(key, cites[key], "../")
-                if target != want:
-                    wrong.append(f"{name}: {key} -> {target} (want {want})")
+                if target != want and not (want.startswith("http") and may_link(key, target, cites[key], name)):
+                    wrong.append(f"{name}: {key} -> {target} (want {want}, or another URL on its citation line)")
     assert checked > 1000, "the record's citations were found - the rosters, the notes and the works sections (non-vacuity)"
     assert not bare, "bare keys (write them as <a href=...><code>key</code></a>):\n" + "\n".join(bare)
     assert not wrong, "mis-targeted keys:\n" + "\n".join(wrong)
