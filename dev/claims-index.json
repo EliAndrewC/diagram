@@ -23401,13 +23401,13 @@
   "triaged": "2026-10-18",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/geom.py::_trim_to_service#an outlying house keeps its way": {
-  "body": "95babd5c0f2223f7",
-  "claim": "an outlying house keeps its way - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: an end serving a house no other way reaches is kept within 60 ft of it (`WAY_END_REACH_FT`), or 12 ft of its built ground (`end_serves`)",
-  "code": "0f91d0ef23424086",
-  "core": "4198775a54883134",
-  "date": "2026-10-19",
-  "note": "60 ft to the house or 12 ft to its built ground, both recorded as a GUESS",
+ "l7r/diagram/hamletgen/ways/geom.py::_trim_to_service#a short way beside its houses kept whole": {
+  "body": "19fdc82a50f6c81f",
+  "claim": "a short way beside its houses kept whole - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: a way whose two ends are served only by the same houses is not cut toward them at either end (\"a tread comes from somewhere else\"), so an end may stand up to 60 ft past its house; the page pulls an end back to the last house it serves and is silent on a way with the same houses at both ends",
+  "code": "c7d3a30f5ed70289",
+  "core": "88f6828356518c69",
+  "date": "2026-10-20",
+  "note": "the page's reach rule counts an end within 60 ft of a farmhouse as reaching it, which matches the code. The page says nothing about a way whose two ends serve the same houses, and it already records the 60 ft reach as a GUESS. The code keeps the way whole when the far end's houses are a subset of the near end's (`far ⊆ near`), which fits \"the same houses\".",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
@@ -23417,13 +23417,13 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/geom.py::_trim_to_service#pulled back to the last house served": {
+ "l7r/diagram/hamletgen/ways/geom.py::_trim_to_service#an outlying house keeps its way": {
   "body": "95babd5c0f2223f7",
-  "claim": "pulled back to the last house served - how-our-maps-lay-a-clustered-settlements-lanes.drawing: ends trimmed to what serves, 4 ft at a time",
-  "code": "8ab721cf63ff0a40",
-  "core": "4198775a54883134",
+  "claim": "an outlying house keeps its way - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: an end serving a house no other way reaches is kept within 60 ft of it (`WAY_END_REACH_FT`), or 12 ft of its built ground (`end_serves`)",
+  "code": "a2b2158cfd10fd30",
+  "core": "88f6828356518c69",
   "date": "2026-10-19",
-  "note": "the loops `while len(out) > 2 and not serves(out[-1], out[0]): out.pop()` (and the matching `out.pop(0)` loop) run before the 4 ft walk and throw away a whole last segment even where part of it is still within 60 ft of a house or 12 ft of a steading. That pulls the end back past the last house it serves, against §6's \"pulled back to the last house it serves\" and against the claim's own \"4 ft at a time\". The 4 ft walk should run on every segment, or the pop should apply only to a segment no point of which serves",
+  "note": "60 ft to the house or 12 ft to its built ground, both recorded as a GUESS",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
@@ -23431,7 +23431,25 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
-  "verdict": "DRIFTED"
+  "triaged": "2026-10-20",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/geom.py::_trim_to_service#pulled back to the last house served": {
+  "body": "19fdc82a50f6c81f",
+  "claim": "pulled back to the last house served - how-our-maps-lay-a-clustered-settlements-lanes.drawing: ends trimmed to what serves, 4 ft at a time",
+  "code": "57366249a0630963",
+  "core": "88f6828356518c69",
+  "date": "2026-10-20",
+  "note": "each end is walked in to the first point that serves (a way or house within 60 ft, the steading's built ground within 12 ft), then a house-only end is cut at its closest approach to that house, which is the page's \"pulled back to the last house it serves\"; the 4 ft step is how finely the end is walked in, not a fact a reader sees on the map",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
+  },
+  "research": "92410dbfeea7511e",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c90fc4f6fee86c66"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/geom.py::_turn_deg#geometry": {
   "code": "2910aa023bf7e901",
