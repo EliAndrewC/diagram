@@ -399,3 +399,59 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 ### T45 Decisions
 
 **D38 - the offer removed.** `_reference`'s served line reads "served from the roll cache: nothing the roll executes changed" without "GATE_NO_CACHE=1 rolls it".
+
+## T62, T63, T69 - the run-on to the paddy, the arm trims against what they reach, the cut lines' houses (the T17 batch's round 2; T28)
+
+### T62 Approach (checklist part A)
+
+1. **The goal, in the world.** An inner lane that runs on to the field ends at the paddy's bund, not on a dry plot's edge.
+2. **The constraints.** 0081's drawing page ("the settlement's own inner lanes may end in the cluster or at the paddy"; only the spur to the fields stops at the hem's edge); 0014 (the path joins the paddy's outer bund); `bund.run_lanes_on_to_the_bund` and `paddy_ground`.
+3. **Where each comes from.** R (0081, 0014).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (impl-drift, the T17 batch's round 2): the run-on carries an inner lane's end to `ground.nearest`, the worked ground's, a dry plot's edge included.
+5. **The order.** The run-on target read on the paddy (`paddy_ground`), the pull out of the worked ground unchanged; its claim; the unit tests; the gate and the cohort.
+6. **The exits.** (e) conform - the research names the paddy.
+7. **The search smell.** None.
+8. **The budget.** 30 min for the batch with its landing.
+9. **Done, measured.** One goal: a run-on aims at the paddy, never a dry plot (test); the cohort refuses no seed against main.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T62 Decisions
+
+**D39 - the paddy, not the hem.** `run_lanes_on_to_the_bund` aims `run_on_target` at `paddy_ground(s)` (built once a pass); an end standing in the worked ground is still pulled out of it; the claim "the dry hem's edge too" becomes "to the paddy" (0081).
+
+### T63 Approach (checklist part A)
+
+1. **The goal, in the world.** A skeleton arm's end that reaches the bund or a way already laid stays where it reaches.
+2. **The constraints.** 0246 §6 (only "a lane end that reaches nothing is pulled back"; an end runs on to a field path, a bund or another way); `_trim_to_service`, which takes ways and the worked ground; `served_arm`.
+3. **Where each comes from.** R (0246).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (impl-drift, the T17 batch's round 2): `served_arm` passes no ways and no ground, so an arm's end on the connector, the spur or the bund is trimmed back to its last house.
+5. **The order.** `served_arm` passes the ways drawn so far (`_net_segs`) and the worked ground (where the map has a field); its claims; the unit tests; the gate and the cohort.
+6. **The exits.** (e) conform.
+7. **The search smell.** None.
+8. **The budget.** With T62.
+9. **Done, measured.** One goal: an arm ending on a way or the bund is not trimmed (test); the cohort refuses no seed against main.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T63 Decisions
+
+**D40 - judged against what it reaches.** `served_arm(s, arm)` calls `_trim_to_service(arm, _net_segs(s), houses, ground=<the worked ground where the map has a field>, steadings=...)`; its claim and `_lay_skeleton`'s name the ways and the bund.
+
+### T69 Approach (checklist part A)
+
+1. **The goal, in the world.** A web lane's span counts only the houses owed a lane.
+2. **The constraints.** 0246 (a household reached across a neighbor's yard is owed no lane); `stage_web`, which builds the cut lines' arcs and stands.
+3. **Where each comes from.** R (0246).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (a read of `web/stage.py`): `stage_web` already leaves out every house `reached_across` before it computes the arcs and stands it passes to `_web_cut_lines`, so the finding does not hold in the code; the claim does not say so.
+5. **The order.** The claim says where the exclusion is made.
+6. **The exits.** (a) claim.
+7. **The search smell.** None.
+8. **The budget.** With T62.
+9. **Done, measured.** The claims round reads it IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T69 Decisions
+
+**D41 - said where it is done.** `_web_cut_lines`' claim "a web lane's span" adds that its arcs and stands are every house but one reached across a yard (`stage_web` leaves those out).
