@@ -41,6 +41,10 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [x] T42 The gen cache replays a served map's coverage by LINE NUMBER after an edit elsewhere in a file it measured (a function the map never runs) shifted its lines: T11's gate failed web.py 888-889 (the row-village branch, lines Kashikawa and Mizuguchi reach) though no line it reached changed. Record each measured file's bytes with the stored coverage and regenerate a map whose measured files changed; GATE_NO_CACHE=1 no longer recovers (the roll census refuses its re-rolls) (found landing 405 T11, 2026-10-21)
       research: rendering
       verify: DONE. landed in batch T11+T42: T11: the invariant test over 200 rows, claims IN-STEP in one round; T42: a measured file's change is a miss (test red at HEAD); gate and landing cohort green
+- [ ] T43 Suspend the hourly step-back, not remove it: a committed switch (`dev/step-back.json`, `make step-back-off REASON=` / `make step-back-on REASON=`, the reason and who and when recorded) under which the hour comes due for nothing - no step-back, no hold on `make tick`, no refusal of a dispatch or a gate - and `make step-back` says it is suspended and how to resume; the tripwire rulings stay (amendment 4, the GM 2026-10-21)
+      research: rendering
+- [ ] T44 The second-red-gate tripwire fires but holds nothing past `make land`: T11's 05:02 red gate (the second in a row) wrote `red-gate@2026-10-21T05:02:38Z`, still owed, yet the 05:09 `make land` ran the gate and landed, since only a typed `make done` is asked about. Ask in the gate itself (the `done` recipe's first step) and among `make land`'s cheap refusals on an engine landing, ARBITER_OK the escape (amendment 4, the GM 2026-10-21)
+      research: rendering
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
 - [ ] T02 (385 T36) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]

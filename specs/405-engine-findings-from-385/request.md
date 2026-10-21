@@ -31,3 +31,9 @@ The GM, after T14's numbers (`landing-analysis-2.md`, proposals A-G):
 The GM, while T36-T41 were being built:
 
 > When you've landed these performance / process improvements, please work 1 more claims task and then measure the results.  I'm going to bed and will check in when I wake up to see how it went and whether our fixes now take the amount of time they "should" take.
+
+## Amendment 4 (2026-10-21) - the hourly step-back suspended, the red-gate hold fixed, a fourth claim
+
+The GM, after T11's numbers (`landing-analysis-3.md`):
+
+> Sounds good, let's suspend but not remove the hourly step-back arbitur for now.  Then let's fix the "second red gate" tripwire so that it fires properly when it should fire.  Then you can do 1 more claims task and measure how long it takes.

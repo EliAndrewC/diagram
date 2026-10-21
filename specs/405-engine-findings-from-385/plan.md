@@ -176,3 +176,43 @@ Owed by the round arbiter's ruling on hour:405-engine-findings-from-385@4 (conti
 **D16 - no fallback, the invariant named.** `ways/web.py::_web_cut_lines._extent` reads the houses within `WEB_REACH_FT` of the cut and nothing else (the `or along` fallback removed); the comment above it says why none can be missing (`web_cuts` places every cut within reach of the house that called for it). No map changes, since the fallback never ran.
 
 <!-- plan-archive: T42 to T11 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+
+## T43 - the hourly step-back suspended (amendment 4)
+
+### T43 Approach (checklist part A)
+
+1. **The goal, in the world.** A claim task runs start to landed with no hourly step-back, and the step-back comes back with one command, its machinery intact.
+2. **The constraints.** The GM's words (amendment 4: "suspend but not remove"); feature 383's checkpoint (`scripts/reviews/checkpoint.py`, FR-011's hold on `make tick`, the `due` refusal of a gate or a dispatch); the tripwire rulings of feature 375 (round, reversal, cascade, red gate), which the GM kept; `dev/switches.json`, read by engine code (`l7r/diagram/switches.py`) that names only `remote`.
+3. **Where each comes from.** O (features 375, 383) and the GM (amendment 4).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (`landing-analysis-3.md`): in 405 four hourly firings changed no route and made no fix, and the last 11 rulings across features were all `continue` with nothing.
+5. **The order.** The switch file and its reader in `checkpoint.py`; `state()` reports the hour never due while suspended (which quiets `hold`, `due` and `open`); `make step-back` prints the suspension; the two make targets; tests.
+6. **The exits.** (c) - a switch beside the checkpoint, so nothing is removed; an axis in `dev/switches.json` was weighed and refused (its writer and `make switches` are engine code naming only `remote`, and an engine change is never a tweak).
+7. **The search smell.** None.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: with the switch off, `checkpoint.state` is not due past the hour, `hold` and `due` say nothing and `open` refuses naming the suspension; with it on, the existing checkpoint tests hold unchanged; a red-gate trigger still blocks the gate either way (tests).
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T43 Decisions
+
+**D17 - a switch beside the checkpoint.** `dev/step-back.json` (`{"state": "off"|"on", "why", "who", "utc"}`; absent means on) is read by `checkpoint.suspended(root)`; while off, `state()` returns `due: False` with `suspended` set, so the step-back, the hold on `make tick` and the hour's refusal of a gate or a dispatch all stand down. The review units the hour used to call due still come due at the landing (`review-gate.sh`), as they do for a feature under an hour. `make step-back-off REASON=` and `make step-back-on REASON=` write it (a reason required, who and when recorded) and commit it; `make step-back` and `checkpoint.py status` name the suspension and how to resume. A checkpoint already open when the switch goes off stays owed its ruling.
+
+## T44 - the red-gate hold reaches every gate (amendment 4)
+
+### T44 Approach (checklist part A)
+
+1. **The goal, in the world.** After a second red gate in a row, no gate runs - typed, inside `make land` or from any other wrapper - until the round arbiter has ruled on it.
+2. **The constraints.** Feature 375 FR-010/FR-011 (the red-gate tripwire, its ruling before the next gate); `ci/state.py::second_red_gate`, which writes the trigger (engine code, unchanged here); `hm_arbiter.blocking(gate=True)`; the hook's hold on a typed `make done` (`hm_checks.py`); `make land` (405 T33), whose gate is a subprocess no hook sees; the `ARBITER_OK` escape.
+3. **Where each comes from.** O (features 375, 405).
+4. **Do they describe the world here?** Yes - measured 2026-10-21: the 04:51 and 05:02 gates were red in a row; `arbiter-owed.json` holds `red-gate@2026-10-21T05:02:38Z`, never ruled; the 05:09 `make land` ran the gate green and landed past it.
+5. **The order.** A `gate-held` verb in `hm_arbiter.py` (the hook's own question and refusal text); the `done` recipe asks it first, before the gate lock; `land.py` names it among its cheap refusals when the landing carries engine code; tests; the guard table's row.
+6. **The exits.** (c) - the gate's own first step is the one place every route passes; adding `land` to the hook's pattern alone was weighed and refused (a landing with no engine code runs no gate and must not be held).
+7. **The search smell.** None.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: with a red-gate trigger owed, `make done` refuses in its first step naming the trigger and the arbiter's commands, `land.py`'s cheap refusals name it on an engine landing and not on a tooling one, and `ARBITER_OK` passes; live, this task's own landing meets the 05:02 trigger and is held until it is ruled (tests and the live refusal).
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T44 Decisions
+
+**D18 - the gate asks.** `hm_arbiter.py gate-held` exits 1 printing `refusal(blocking(root, gate=True))` while a red-gate trigger of the active feature is owed. The `done` recipe runs it as its first step (an `ARBITER_OK=<reason>` passes and is logged as an escape), so `make land`, `idle-tests` and a typed `make done` all meet it; `land.py`'s cheap refusals ask it when the landing carries engine code, so the refusal comes with the others before anything runs. The trigger's writer (`ci/state.py`) is unchanged.
