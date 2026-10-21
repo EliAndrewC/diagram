@@ -14705,7 +14705,11 @@
    "Sado-no-kami",
    "Sagami-no-kami",
    "Iwami-no-kami",
-   "Echizen-no-kami"
+   "Echizen-no-kami",
+   "Iyo-no-kami",
+   "Kawachi-no-kami",
+   "Izumi-no-kami",
+   "Iki-no-kami"
   ]
  },
  "diluvial upland": {
@@ -17242,6 +17246,93 @@
    "earth-rammer's",
    "earth-rammers",
    "earthramming"
+  ]
+ },
+ "rock seat": {
+  "def": "A rock, or a ring of rocks, set apart at a shrine as the place a kami descends to and dwells.",
+  "variants": [
+   "rock seat",
+   "rock seats",
+   "iwakura"
+  ]
+ },
+ "frog-leg strut": {
+  "def": "A block set between two horizontal beams to carry the upper one, its outline spreading like a frog's legs.",
+  "variants": [
+   "frog-leg strut",
+   "frog-leg struts",
+   "kaerumata"
+  ]
+ },
+ "elephant-nose": {
+  "def": "A beam end that projects past a bracket, carved as an elephant's head with its trunk.",
+  "variants": [
+   "elephant-nose",
+   "elephant-nose bracket end",
+   "elephant-nose bracket ends"
+  ]
+ },
+ "baku": {
+  "def": "A beast of Chinese and Japanese legend, carved with lions and elephants on the beam ends of temple and shrine halls.",
+  "variants": [
+   "baku",
+   "baku's",
+   "baku-nose"
+  ]
+ },
+ "paper wand": {
+  "def": "A wooden staff hung with folded paper streamers, set before a god in a shrine.",
+  "variants": [
+   "paper wand",
+   "paper wands",
+   "gohei"
+  ]
+ },
+ "hidden image": {
+  "def": "A Buddhist image a temple keeps behind closed doors and shows to worshippers only at an unveiling.",
+  "variants": [
+   "hidden image",
+   "hidden images"
+  ]
+ },
+ "unveiling": {
+  "def": "A showing of a temple's hidden image, held at the temple itself or carried to a city such as Edo, for which visitors paid a fee or gave offerings.",
+  "variants": [
+   "unveiling",
+   "unveilings",
+   "kaicho"
+  ]
+ },
+ "fanzi": {
+  "def": "A word in a quoted Qing regulation for the non-Han inhabitants of a frontier district, left untranslated.",
+  "variants": [
+   "fanzi"
+  ]
+ },
+ "beka cart": {
+  "def": "An Osaka cart that carried goods about the town; from the Bunsei era (1818-1830) its use was licensed for a fee paid to the post-horse office.",
+  "variants": [
+   "beka cart",
+   "beka carts",
+   "bekaguruma"
+  ]
+ },
+ "Board of Works": {
+  "def": "The Qing government's ministry of public works, whose regulations the record quotes for official prices and rates.",
+  "variants": [
+   "Board of Works"
+  ]
+ },
+ "Nyorai": {
+  "def": "A title of a Buddha, used for a Buddha's image: the Amida Nyorai is the Buddha Amida, and the Zenkoji Nyorai is the hidden image of the Zenkoji temple.",
+  "variants": [
+   "Nyorai"
+  ]
+ },
+ "li of silver": {
+  "def": "A thousandth of a tael of silver (釐), written with the same romanized word as the li of distance.",
+  "variants": [
+   "li of silver"
   ]
  }
 }

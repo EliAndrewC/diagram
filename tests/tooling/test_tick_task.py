@@ -280,6 +280,7 @@ def test_one_task_or_several_every_tick_asked_first_landed_once_and_ticked(tmp_p
     assert lb.main(["188", "T02 T03"]) == 1 and len(landings) == 1
     assert "- [x] T02" in landings[0][1] and "- [x] T03" in landings[0][1], "the push carries the ticks"
     assert ["git", "revert", "--no-edit", "abc123"] in ran, "a failed push reverts its ticks, nothing rewritten"
+    assert ["git", "add", "--", "specs/188-alpha", "dev/bypass-log"] in ran, "the ticks' escape records ride in their commit (408)"
     (d / "tasks.md").write_text(before, encoding="utf-8")  # what the revert commit does in a real tree
     rc[0] = 0
     assert lb.main(["188", "T02 T03"]) == 0 and len(landings) == 2 and landings[-1][0] == ["T02", "T03"], "ONE push for the batch"
@@ -497,6 +498,22 @@ def test_the_landing_s_own_escape_records_are_committed_not_refused(tmp_path: pa
     assert ["git", "add", "--", "dev/bypass-log"] in seen
     seen.clear()
     assert lb.cheap_refusals(tmp_path, d, ["T02"], "x") == [] and not any(c[:2] == ["git", "add"] for c in seen), "clean: no commit"
+
+
+def test_the_claims_wait_commits_an_escape_record_a_gate_wrote_after_the_first_pass(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 408: plan-gate.sh, run after the first pass's tree check, wrote a PLAN_REVIEW_OK record, and the claims wait sat
+    on "uncommitted changes" for its whole bound."""
+    lb, _d = _land(tmp_path, monkeypatch)
+    logged = {"on": True}
+
+    def run(root: pathlib.Path, cmd: list[str], env: dict | None = None, quiet: bool = True) -> tuple[int, str]:
+        if cmd[:2] == ["git", "commit"] and cmd[-1] == "dev/bypass-log":
+            logged["on"] = False
+        return (0, "?? dev/bypass-log/x.json\n") if logged["on"] and cmd[:2] == ["git", "status"] else (0, "")
+
+    monkeypatch.setattr(lb, "run", run)
+    monkeypatch.setattr(lb, "CLAIMS_WAIT_S", 0.0)
+    assert lb.wait_for_claims(tmp_path, ["T02"]) == "", "the record committed, the wait over at once"
 
 
 def test_the_cohort_beside_the_gate_is_sized_and_stopped(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001

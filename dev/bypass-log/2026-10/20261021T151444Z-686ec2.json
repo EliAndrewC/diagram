@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-21T15:14:44Z",
+  "target": "plan-gate tick 408-shrine-small-lines",
+  "commit": "7d90fe587",
+  "why": "round arbiter ruled ACCEPT on ask:408-plan-round3 after round 2; the gate honors only round: rulings, a known tooling gap"
+}

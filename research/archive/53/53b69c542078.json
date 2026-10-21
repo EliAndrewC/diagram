@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-21T13:57:30+00:00",
+ "final_url": "https://rekihaku.repo.nii.ac.jp/record/493/files/kenkyuhokoku_033_07.pdf",
+ "first": "53/53b69c542078/20261021T135728Z",
+ "gm_copies": [],
+ "keys": [
+  "yuasa-1991-edo-kaicho"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "53/53b69c542078/20261021T135728Z",
+ "reason": "HTTP 406",
+ "revision": "",
+ "sha256": "f3f3a2b772fc88392c6efc02d9c01c222d22aea9c87dbcf32ee591d8beaa2ae9",
+ "url": "https://rekihaku.repo.nii.ac.jp/record/493/files/kenkyuhokoku_033_07.pdf"
+}

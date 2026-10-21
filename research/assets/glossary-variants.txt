@@ -147,6 +147,9 @@ bailey	bailey
 baileys	bailey
 bailiff	bailiff
 bailiffs	bailiff
+baku	baku
+baku's	baku
+baku-nose	baku
 bakufu	bakufu
 bakuhan	bakuhan
 bakumatsu	bakumatsu
@@ -215,6 +218,9 @@ bedload	bedload
 before modern times	modern times
 beishan mianshui	beishan mianshui
 beitang	beitang
+beka cart	beka cart
+beka carts	beka cart
+bekaguruma	beka cart
 bell-and-drum tower	gulou
 benjo	kawaya
 benten	Benten
@@ -250,6 +256,7 @@ blyxa	Blyxa
 bo	bo
 board feet	board foot
 board foot	board foot
+board of works	Board of Works
 board wages	board wages
 board-clapper	clapper-board
 board-wages	board wages
@@ -943,6 +950,9 @@ eitaijima	Eitaijima
 ekika	ekika
 elder house	karo
 elder houses	karo
+elephant-nose	elephant-nose
+elephant-nose bracket end	elephant-nose
+elephant-nose bracket ends	elephant-nose
 embankment	embankment
 embankments	embankment
 ember-spotting	spotting
@@ -1021,6 +1031,7 @@ fan-foot	fan foot
 fan-palm	fan palm
 fan-palm-dike	fan palm
 fang	fang
+fanzi	fanzi
 fao	FAO
 farmers' stage	farmers' stage
 farmers' stages	farmers' stage
@@ -1184,6 +1195,8 @@ frass	frass
 free stall	free stall
 free stalls	free stall
 freeboard	freeboard
+frog-leg strut	frog-leg strut
+frog-leg struts	frog-leg strut
 front range	main range
 frontage	frontage
 frost heave	frost heave
@@ -1337,6 +1350,7 @@ goemonburo	goemon-buro
 gofuku-machi	Gofukumachi
 gofukumachi	Gofukumachi
 gogura	gogura
+gohei	paper wand
 gokaido	Five Highways
 gokenin	gokenin
 gokumon	gokumon
@@ -1552,6 +1566,8 @@ hereditary temple	hereditary temple
 hereditary temples	hereditary temple
 hexi	Hexi Corridor
 hexi corridor	Hexi Corridor
+hidden image	hidden image
+hidden images	hidden image
 hidenin	hidenin
 hidetada	Hidetada
 hideyoshi	Hideyoshi
@@ -1757,6 +1773,7 @@ ifc	IFC
 igeta	igeta
 igune	igune
 ihai	ihai
+iki-no-kami	no-kami
 ikko	Ikko sect
 ikko sect	Ikko sect
 ikko sect's	Ikko sect
@@ -1864,10 +1881,13 @@ ita-bune	ita-bune
 itabashi	itabashi
 itami	Itami
 itami sake	Itami
+iwakura	rock seat
 iwami-no-kami	no-kami
 iyo	Iyo
+iyo-no-kami	no-kami
 izumi	Izumi
 izumi province	Izumi
+izumi-no-kami	no-kami
 izumo	Izumo
 j-stage	J-STAGE
 ja	JA
@@ -1989,12 +2009,14 @@ kabukimon	kabuki gate
 kachi	doshin
 kadoya	kadoya
 kaei	Kaei
+kaerumata	frog-leg strut
 kaga	Kaga
 kaga province	Kaga
 kagawa	Kagawa
 kai	Kai
 kai province	Kai
 kaibori	kaibori
+kaicho	unveiling
 kaie-ji	Kaie-ji
 kaie-ji's	Kaie-ji
 kaifeng	Kaifeng
@@ -2093,6 +2115,7 @@ katsura rikyu	Katsura
 katteguchi	katteguchi
 kawachi	Kawachi
 kawachi province	Kawachi
+kawachi-no-kami	no-kami
 kawado	kawado
 kawara	kawara
 kawaramono	kawaramono
@@ -2350,6 +2373,7 @@ levy storehouse	levy storehouse
 levy storehouses	levy storehouse
 levy stores	levy storehouse
 li	li
+li of silver	li of silver
 li river	Li River
 liang	liang
 liao	Liao dynasty
@@ -2870,6 +2894,7 @@ nuriya	nuriya
 nuriya-zukuri	nuriya
 nursery pond	nursery pond
 nursery ponds	nursery pond
+nyorai	Nyorai
 o-aza	ō-aza
 o-zashiki	o-zashiki
 oaza	ō-aza
@@ -3007,6 +3032,8 @@ pantile	pantile
 pantiles	pantile
 paper ingot	paper ingot
 paper ingots	paper ingot
+paper wand	paper wand
+paper wands	paper wand
 parapet	parapet
 parish	parish
 parish ground	parish
@@ -3356,6 +3383,8 @@ road magistrate	road magistrate
 road magistrates	road magistrate
 road village	roson
 road villages	roson
+rock seat	rock seat
+rock seats	rock seat
 roji	roji
 roju	Roju
 rokudo crossroads	Rokudō crossroads
@@ -4402,6 +4431,8 @@ unjo-gura	levy storehouse
 unno	Unno
 unno-juku	Unno
 unthinned stand	forest stand
+unveiling	unveiling
+unveilings	unveiling
 uogashi	uogashi
 uoichiba	uoichiba
 upland field	hatake
