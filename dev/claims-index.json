@@ -25075,6 +25075,7 @@
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
   ],
+  "triage": "touched",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/law.py::FIELD_REACH_FT#the reach": {
@@ -28487,16 +28488,9 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
+  "triage": "touched",
   "triaged": "2026-10-19",
   "verdict": "DRIFTED"
- },
- "l7r/diagram/hamletgen/ways/settle/shapes.py::theirs#the dooryards it arrives among": {
-  "code": "22f99ac504493e12",
-  "core": "4405a46a6aa4b956",
-  "date": "2026-10-03",
-  "note": "the page gives no reach within which the dooryards a lane arrives among are exempt from the fence clearance; the 80 ft is unresearched",
-  "research": "",
-  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/stage.py::STEPS#settle plumbing": {
   "body": "210a53bd49276a59",
@@ -31737,11 +31731,12 @@
   "rests": [
    "0081-village-lanes.drawing.html:06a57ca34e5b7af2"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::spur_cut_at_the_fold#spur fold cut": {
-  "code": "cc37e95c8d55fa3b",
-  "core": "bd05d9259d32773f",
+  "code": "a12923497a61eee7",
+  "core": "cfb7054fcd47dfc4",
   "date": "2026-10-17",
   "note": "the cut at the fold is the page's own rule (\"A folded field spur is cut at the fold\"), not a recorded departure; should be a plain 0081 claim, not DEVIATION",
   "pages": {
@@ -31751,7 +31746,7 @@
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3"
   ],
-  "triaged": "2026-10-18",
+  "triaged": "2026-10-21",
   "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_seat#brook crossed only at crossing places": {
