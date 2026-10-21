@@ -918,6 +918,48 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
+  },
+  "## T55, T65, T73 - a lane end at the house it serves, join links at the page's 7 ft, the sweeps' notes (the T17 round; T28; batch 4's round)": {
+   "sha256": "64aeb64992d30f6085523dc3b126cfa07f35c9838c557ee5dd418b5279edaa72",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T55 Approach (checklist part A)": {
+   "sha256": "078de8f270f1f7782493b362fb8e5a2cc3fa779faf53c980a671edf210a3e592",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T55 Decisions": {
+   "sha256": "ca9355b12d722e5c7263220b97a1d845c24109ca06baa9a8ba75d03cf8cd6df6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T65 Approach (checklist part A)": {
+   "sha256": "6788525b5edcc7c929cc9694b359d4bf74a81fc36e3ee84ce9b6c1675b369f0e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T65 Decisions": {
+   "sha256": "2d86b0d40be879e273c7b0c7a6f7e2dcaec0b5bc84d687069126192088066aa9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T73 Approach (checklist part A)": {
+   "sha256": "2fb9ac2d1d1e33f9c624221871b23eb724e72632f1cfdd6aacadcfca1da6d6ef",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T73 Decisions": {
+   "sha256": "2956d57369208d2d9bcfa8ec0f461558d5b1d1f2ddc82fffde1c989a4515b2e2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2081,6 +2123,39 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "It keeps a code rule that differs from the research page, against Amendment 7's 'follow the research ... that is generally what we should do', so it is ruled. Legitimate on two grounds from the bundle, not on design merit: (1) the GM's own words leave this room - 'generally', 'use your best judgment when the time comes', and claim-feed tasks named as the kind the session should settle without a ruling; (2) the page's object and the code's differ - 0014's quoted guess is about 'the path' (one field path from the hamlet), while the code carries each lane end separately (run_lanes_on_to_the_bund, T56 item 6), so the page reaches this case only by analogy, and the DEVIATION label discloses the departure openly with its reason. That disclosure is what separates it from the earlier, BLOCKED version, which read the page to say what the code does. The argument that the page's point would carry an end past nearer bund is a design argument and is given no weight here. This ruling rests on the quoted line being the whole of what 0014 says about the join; the reviewer could not read 0014 beyond it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T55, T65, T73 - a lane end at the house it serves, join links at the page's 7 ft, the sweeps' notes (the T17 round; T28; batch 4's round)",
+    "### T55 Approach (checklist part A)",
+    "### T55 Decisions",
+    "### T65 Approach (checklist part A)",
+    "### T65 Decisions",
+    "### T73 Approach (checklist part A)",
+    "### T73 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D49",
+     "summary": "T55: _pull_back(near=) keeps the reaching end nearest the served thing; trim_lane_stubs passes a house's footprint distance, 0 for a way or a field (which keep the old shortest end); the claim is reworded to say so (GUESS 0246).",
+     "class": "within",
+     "why": "Amendment 7 asks every open task worked to completion under FR-001; T55's finding is that an end pulled back to a HOUSE stops up to 60 ft short, against 0246 section 6's 'a lane a house needs ends at its dooryard'. The fix conforms the house case to the page. A way or a field is not a house: no dooryard rule reaches it, so leaving its end where it was does not carve anything out of the finding, and the measured reason (a first cut measuring ways collapsed a through lane onto a bar) concerns behavior the finding never asked to change. The claim keeps the GUESS label the page's own wording gives."
+    },
+    {
+     "id": "D50",
+     "summary": "T65: _detour_links' first try, _join_piece's bar and _unjog's default move from the 4 ft _TOUCH_GAP to WEB_FABRIC_GAP (0246's 7 ft); each claims it; the comments that defended 4 ft record the change and its measurement.",
+     "class": "within",
+     "why": "Removes an exception rather than adding one: every lane's middle is held 7 ft off a garden fence as 0246 section 16 says, after measuring (2026-10-21, seeds 1-48, pinned rows 54/54, the measured block unchanged) that the old exception's reason no longer occurs. Conforming to the research is what FR-001's checklist and Amendment 7's 'follow the research' direction ask."
+    },
+    {
+     "id": "D51",
+     "summary": "T73: wording only - the two 'a house served' claims cite section 10's 100 ft; _walk_in's 4 ft step named as the code's; the grove-fallback band claim names its 13.5 ft; the bands' comment says why a village copse (common ground) is not a farm's own wood; the connector's inner end stays _pull_back_to_service's and the sweep's existing exemption stands; no code token changes.",
+     "class": "within",
+     "why": "T73 was filed (FR-002) to make the sweeps' claims say what the page records, and that is all D51 does. Keeping village_groves out of the section 78 bands follows the page's own words ('a farm's own wood'), not an exception to them. Leaving the sweep's existing exemption standing changes no behavior and narrows nothing the GM or the task asked for: the task's scope is the notes, and the exit is (e) conform."
     }
    ]
   }
