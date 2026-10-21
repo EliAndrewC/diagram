@@ -1,0 +1,3 @@
+- 0257: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'sweep|sakaki|himorogi|tsubo|monme|tael|day wage' l7r pool (only a code comment's 'sweep' and glossary entries; no price or wage)
+- 0260: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'porter|oxcart|dachin|pack.?horse|monme|tael' l7r pool (glossary entries only; no fare or rate)
+- 0278: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'porter|oxcart|carrying stone|cart rate|monme|tael' l7r pool (glossary entries only; no rate)
