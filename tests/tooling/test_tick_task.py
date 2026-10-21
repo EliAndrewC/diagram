@@ -47,6 +47,13 @@ Spec: [`spec.md`](spec.md).
 """
 
 
+#: TASKS as a session leaves it to be ticked: the physical task's boxes verified (405 batch 8 - `make tick` refuses one open)
+VERIFIED = TASKS.replace(
+    "- [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited",
+    "- [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited",
+)
+
+
 def test_ticks_the_task_and_replaces_the_whole_verify_text() -> None:
     new, line = tt.tick(TASKS, "T02", "the shrine reads 6 x 6 ft")
     assert line == "- [x] T02 the second thing"
@@ -114,7 +121,7 @@ def test_refusals_write_nothing(task: str, note: str, why: str) -> None:
 def test_main_resolves_a_feature_by_number_or_name_and_refuses_ambiguity(tmp_path: pathlib.Path, monkeypatch, capsys) -> None:
     root = tmp_path
     (root / "specs" / "188-alpha").mkdir(parents=True)
-    (root / "specs" / "188-alpha" / "tasks.md").write_text(TASKS, encoding="utf-8")
+    (root / "specs" / "188-alpha" / "tasks.md").write_text(VERIFIED, encoding="utf-8")
     # feature 243: a tick needs the plan reviewed - this test is about resolution, so the review is current
     plan = b"# plan\n"
     (root / "specs" / "188-alpha" / "plan.md").write_bytes(plan)
@@ -164,7 +171,7 @@ def test_a_tick_archives_the_plan_s_finished_sections_and_an_archive_error_never
     """Feature 385 T63 (the GM 2026-10-18): 385's plan.md reached 168 KB because `make plan-archive` was a step to remember."""
     d = tmp_path / "specs" / "188-alpha"
     d.mkdir(parents=True)
-    (d / "tasks.md").write_text(TASKS, encoding="utf-8")
+    (d / "tasks.md").write_text(VERIFIED, encoding="utf-8")
     plan = b"# plan\n"
     (d / "plan.md").write_bytes(plan)
     (d / "plan-review.json").write_text(json.dumps({"plan_sha256": hashlib.sha256(plan).hexdigest(), "decisions": [], "verdict": "CLEAR"}), encoding="utf-8")
@@ -244,7 +251,7 @@ def _land(tmp_path: pathlib.Path, monkeypatch):  # noqa: ANN001, ANN202
     _lb.loader.exec_module(lb)
     d = tmp_path / "specs" / "188-alpha"
     d.mkdir(parents=True)
-    (d / "tasks.md").write_text(TASKS, encoding="utf-8")
+    (d / "tasks.md").write_text(VERIFIED, encoding="utf-8")
     plan = b"# plan\n"
     (d / "plan.md").write_bytes(plan)
     (d / "plan-review.json").write_text(json.dumps({"plan_sha256": hashlib.sha256(plan).hexdigest(), "decisions": [], "verdict": "CLEAR"}), encoding="utf-8")
@@ -328,7 +335,7 @@ def test_the_claims_round_runs_beside_the_gate_and_the_push_waits_for_it(tmp_pat
     out = capsys.readouterr().out
     assert "the claims round is owed" in out and "waiting for the claims round" in out and "uncommitted changes" in out
     state.update(claims=1, asked=-100)
-    (d / "tasks.md").write_text(TASKS, encoding="utf-8")
+    (d / "tasks.md").write_text(VERIFIED, encoding="utf-8")
     monkeypatch.setattr(lb, "CLAIMS_WAIT_S", 0.0)
     order.clear()
     assert lb.main(["188", "T02"]) == 2 and order == ["gate"], "past the bound: nothing lands"
@@ -624,3 +631,14 @@ def test_a_landing_is_found_by_its_python_process_not_the_shell_above_it(tmp_pat
     monkeypatch.setattr(lb.os, "getpid", lambda: 12)
     assert lb.landing_pids(root, proc) == [], "the stopping command's own python is no landing"
     assert lb.landing_pids(root, tmp_path / "none") == []
+
+
+def test_a_physical_task_with_a_box_unticked_is_refused_before_it_is_ticked() -> None:
+    """405 batch 8: 408's T01/T02 were ticked with four of five research boxes open, and only the gate's box test saw it -
+    after the push, failing the next session's landing. The tick refuses it, unless the tick ticks them (BOXES=1)."""
+    text = "- [ ] T01 a page\n      research: physical\n      - [x] research pass\n      - [ ] source-reader confirmed\n- [ ] T02 next\n      research: rendering\n"
+    assert "BOXES=1" in tt.boxes_refusal(text, "T01")
+    assert tt.boxes_refusal(text, "T01", boxes=True) == ""
+    assert tt.boxes_refusal(text, "T02") == "", "a rendering task owes no boxes"
+    assert tt.boxes_refusal(text.replace("- [ ] source", "- [x] source"), "T01") == ""
+    assert tt.boxes_refusal(text, "T09") == ""

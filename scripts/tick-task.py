@@ -201,7 +201,22 @@ def landed_refusal(root: Path, feature: str, task: str, note: str) -> str:
     return f"the NOTE says landed, but {off[0]} differs from origin/main - land it (make land-tooling FILES=...), then tick" if off else ""
 
 
-def refusal(root: Path, d: Path, task: str, note: str, landed: bool = True) -> tuple[str, str]:
+def boxes_refusal(text: str, task: str, boxes: bool = False) -> str:
+    """Why `task` may not be ticked: a `research: physical` task with a research box unticked, unless this tick ticks them
+    (`--boxes`). 408 T01/T02 were ticked so and only the gate's `tests/test_task_research_boxes.py` saw it - after the push,
+    on the next session's landing (405 batch 8)."""
+    lines = text.splitlines()
+    at = next((i for i, ln in enumerate(lines) if re.match(rf"- \[[ xX]\] {re.escape(task)}\b", ln)), None)
+    if at is None or boxes:
+        return ""
+    block = [lines[at]] + [ln for ln in lines[at + 1 :][: next((k for k, ln in enumerate(lines[at + 1 :]) if ln.startswith(("- [", "#"))), len(lines))]]
+    physical = any(re.match(r"\s+research:\s*physical\b", ln) for ln in block)
+    if physical and any(_is_boxes_line(ln) and "- [ ]" in ln for ln in block[1:]):
+        return f"{task} is a `research: physical` task with a research box unticked - verify each, then tick with BOXES=1 (make tick F=<n> T={task} BOXES=1 NOTE=...)"
+    return ""
+
+
+def refusal(root: Path, d: Path, task: str, note: str, landed: bool = True, boxes: bool = False) -> tuple[str, str]:
     """(refusal, message) - every reason `make tick` refuses `task`, asked before anything is written; `landed=False` leaves out
     the landed check, which `make land` asks of each task before it lands them (feature 385 T117, D135; feature 405 T33)."""
     sys.path.insert(0, str(Path(__file__).resolve().parent / "gates"))
@@ -217,7 +232,8 @@ def refusal(root: Path, d: Path, task: str, note: str, landed: bool = True) -> t
 
     plan = d / "plan.md"
     section = _plan_gate.task_sections(plan.read_text(encoding="utf-8")).get(task) if plan.is_file() else None
-    why = (waits_or_marks(root, d) or _arbiter().fix_hold(d) or checkpoint_hold(root)  # 379: an open tooling fix; 383: the hour
+    why = (boxes_refusal((d / "tasks.md").read_text(encoding="utf-8") if (d / "tasks.md").is_file() else "", task, boxes)
+           or waits_or_marks(root, d) or _arbiter().fix_hold(d) or checkpoint_hold(root)  # 379: an open tooling fix; 383: the hour
            or approach_gate.refusal(d, root, task) or wording.refusal(root, d, task, section))
     if not why and landed:
         why = landed_refusal(root, d.name, task, note)
@@ -249,7 +265,7 @@ def main(argv: list[str]) -> int:
     if landing and task not in os.environ.get("L7R_LAND_TICKS", "").split():  # the plan review of D24: `make land`'s alone
         print(f"tick: refused - --landing is `make land`'s, for a task it names in L7R_LAND_TICKS; {task} is not one - make land F={feature} T={task}", file=sys.stderr)
         return 2
-    why, message = refusal(root, d, task, note, landed=not landing)
+    why, message = refusal(root, d, task, note, landed=not landing, boxes=boxes)
     if message:
         print(message)
     if why:

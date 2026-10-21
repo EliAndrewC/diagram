@@ -227,7 +227,19 @@ def test_the_pointer_check_answers_the_same_and_resolves_a_new_question_each_run
 @pytest.mark.parametrize("argv", [["scripts/gates/check-research-pointers.py", "."], ["scripts/hooks/lib/hm_conflict.py", "--tracked", "."]], ids=["pointers", "conflicts"])
 def test_the_whole_repository_s_pointers_and_conflicts_are_the_same_with_the_cache(argv: list[str]) -> None:
     """SC-002 over this repository itself, for the two checks that read every tracked file - one test each, so they run side by
-    side (feature 383 amendment 4, plan D29): it was 9.4 s, the longest test a landing ran."""
+    side (feature 383 amendment 4, plan D29): it was 9.4 s, the longest test a landing ran.
+
+    ...ON A TREE THAT HELD STILL (405 batch 8): the claims round and the landing cohort's record commit beside the gate (405 T48,
+    T50), and a file tracked between the three runs read as the cache changing the answer (23,143 files, then 23,144). A run
+    the tree moved under is asked again, at most twice; a real difference repeats on a still tree."""
+    for _ in range(3):
+        head = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "HEAD"], capture_output=True, text=True, check=False).stdout
+        try:
+            _same_on_and_off(argv, ROOT)
+            return
+        except AssertionError:
+            if subprocess.run(["git", "-C", str(ROOT), "rev-parse", "HEAD"], capture_output=True, text=True, check=False).stdout == head:
+                raise
     _same_on_and_off(argv, ROOT)
 
 
