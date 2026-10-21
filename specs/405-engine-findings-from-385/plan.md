@@ -279,22 +279,4 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 <!-- plan-archive: T51 to T51 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 <!-- plan-archive: T47 to T47 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 
-## T49 - a street's dangling end may stop where it crosses a way (found in T13's round)
-
-### T49 Approach (checklist part A)
-
-1. **The goal, in the world.** A street that crosses another way and runs on past it to nothing ends at that crossing, on the way, not back at an earlier joint.
-2. **The constraints.** 0246's drawing page (§6: a lane runs on to the last house it serves or to another way; an end reaching nothing is pulled back); `settle_street_ends` and its joints (405 T13, D22: other lanes' ends and the served farms' points); `law.crossing_points`, the one crossing test.
-3. **Where each comes from.** R (0246) and O (features 291, 293, 405).
-4. **Do they describe the world here?** Yes - measured 2026-10-21 (a read of `settle.py` and `street.joints_along`): the joints are lane END points and the farms' points only, so a way crossing the street mid-run is no joint, and a dangling end past it is cut back further than 0246 asks (impl-drift's note outside the change, T13's round).
-5. **The order.** Each point where the street crosses another way joins its joints, in place (the file stands at the 1,000-line bar); a unit test of a street crossing a way and dangling past it; `make land` started at once, the claims round beside its gate.
-6. **The exits.** (e) conform - the research lets a street end on a way.
-7. **The search smell.** None.
-8. **The budget.** 20 min with the landing.
-9. **Done, measured.** One goal: a dangling street end past a crossing is cut to the crossing (test); the claims round reads `settle_street_ends` IN-STEP; the gate green and the landing cohort refusing no seed against main.
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
-### T49 Decisions
-
-**D26 - a crossing is a joint.** `settle.settle_street_ends` adds every point where the street's run crosses another way (`law.crossing_points`) to the joints it passes `street.end_to_its_joint`, beside the other lanes' ends and the served farms' points; the docstring and its claim name it.
+<!-- plan-archive: T49 to T13 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
