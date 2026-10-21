@@ -499,10 +499,8 @@ def _web_cut_lines(plan: SitePlan, frame: _margin_frame, arcs: list[float], stan
     # houses at that cut - a tread that serves nobody, which is exactly what `lanes_reach_something`
     # exists to catch, and it was 13 of 24 cohort seeds. So each lane's extent is read off the
     # houses within reach of ITS OWN cut, not off the cluster as a whole.
-    # NO WHOLE-CLUSTER FALLBACK (feature 405 T11, D16): `web_cuts` places every cut within `reach` of the house that called for
-    # it - at a gap's midpoint no more than `reach` past it, or `reach * 0.5` past it - and both callers below pass it these same
-    # coordinates and `WEB_REACH_FT`, so some house is always within reach of its cut. The `or along` that stood here (every
-    # house in the cluster) never ran, and said a lane could run the whole cluster serving none (DRIFTED, 385 T106's round).
+    # NO WHOLE-CLUSTER FALLBACK (405 T11, D16): `web_cuts`, given these coordinates and this reach, puts every cut within reach
+    # of the house that called for it; the `or along` (every house) never ran, and read as a lane serving none (DRIFTED, 385 T106).
     local = WEB_REACH_FT
 
     def _extent(cuts_at: float, along: list[float], across: list[float]) -> tuple[float, float]:
