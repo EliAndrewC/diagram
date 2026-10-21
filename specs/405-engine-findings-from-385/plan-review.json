@@ -702,6 +702,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
+  },
+  "## T60 - another feature's requirement, named by its feature (found landing the T17 batch)": {
+   "sha256": "bd4bf245ca34b2cfbcb00b73acc3397f42c0ade2e193e165d822b8e617bd5f02",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T60 Approach (checklist part A)": {
+   "sha256": "3e579f1da6676f2f61d6ff6aa41be491397697edf20990a8cd51b9ad8142c726",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T60 Decisions": {
+   "sha256": "b96059ad92813f3b89261e179ba90f81e58628aaca8cca8f3e33708526c79fa1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1520,6 +1538,35 @@
      "summary": "Exit (e) conform - words and labels only, no constant moved, nothing fitted; done when the claims round reads every changed claim IN-STEP",
      "class": "within",
      "why": "The claims tasks' ordinary scope under FR-001; no part of the request is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T60 - another feature's requirement, named by its feature (found landing the T17 batch)",
+    "### T60 Approach (checklist part A)",
+    "### T60 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T60 filed",
+     "summary": "The spec-lint refusal of T59 (a carried claims finding filed with 385's bare FR-013) is filed and worked as a task of 405.",
+     "class": "within",
+     "why": "Found work raised while landing this feature's tasks stays in 405 (request 2026-10-19 'keep findings ... as new tasks'; FR-002), and amendment 7 asks for the feature to be taken to completion, which a carry whose filed task fails 405's own spec-lint would block."
+    },
+    {
+     "id": "D34 (carry text)",
+     "summary": "claims_carry's three texts cite '385 FR-013' rather than a bare 'FR-013'; T59's line is rewritten to read '385 FR-013'.",
+     "class": "within",
+     "why": "The carried finding is governed by 385 FR-013; naming its feature makes the filed task say what 385 FR-013 already requires it to be (an open task of the landing feature). No behavior of the carry changes - only the id's attribution - and nothing the GM asked is dropped."
+    },
+    {
+     "id": "D34 (spec-lint)",
+     "summary": "spec-lint check_stale_tasks skips an id preceded by a feature number ('NNN ' or 'NNN's '); a bare id the spec lacks still fails, held by a test.",
+     "class": "within",
+     "why": "Needed so a carried finding filed under FR-013 can be filed into any feature at all, which is what 385 FR-013 and the GM's 'findings ... as new tasks' rule require. The check keeps its whole reach over bare ids (Done item 9's test); it stops misreading another feature's requirement as this spec's stale one rather than relaxing anything the GM asked to have enforced. Nothing in request.md or 405's spec names check 4's coverage, so this narrows no part of the request."
     }
    ]
   }
