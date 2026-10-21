@@ -446,7 +446,7 @@ Owed by the cohort (cohort@20261021T172647Z: seeds 12, 21, 22, 24, 38 and 901 ne
 
 ### T97 Decisions
 
-**D76 - 0081's rule claimed; its 20 degrees owned by T101.** The four claims cite 0081 (an end running back along another way under 20 degrees is cut where it comes alongside), each naming the known gap: the code asks at `_DOUBLED_DEG` 15. Measured 2026-10-21: at 20, cohort seeds 10 and 40 were refused (a household's way, a tree lane no settle may cut, read as doubled; a shallow crossing left). The move from 15 to 20 is filed as T101, which owns it with those two refusals as its done-check, once the side-by-side family (T07) leaves the tree no doubled household way.
+**D76 - 0081's rule claimed; its 20 degrees owned by T101.** The four claims cite 0081 (an end running back along another way under 20 degrees is cut where it comes alongside), each naming the known gap: the code asks at `_DOUBLED_DEG` 15. Measured 2026-10-21: at 20, cohort seeds 10 and 40 were refused (a household's way, a tree lane no settle may cut, read as doubled; a shallow crossing left). The move from 15 to 20 is filed as T101, which owns it - done when seeds 1-48 and the pinned rows pass at 20, those two refusals among them - once the side-by-side family (T07) leaves the tree no doubled household way.
 
 ### T100 Approach (checklist part A)
 
@@ -488,8 +488,8 @@ Owed by the cohort (cohort@20261021T180921Z: seeds 10 and 40 newly failing), tak
 2. **A3 again.** Unchanged for T100.
 3. **A4 again.** Unchanged.
 4. **Moving something earlier for something later?** No.
-5. **Tuning or changing?** T97's figure is left at 15 and carried to T07 (D76); T100 unchanged.
+5. **Tuning or changing?** T97's figure is left at 15; the move to 20 is filed as T101 (D76); T100 unchanged.
 6. **The one-sentence test.** "A task id names one task" - true by the test.
 7. **The next step is a measurement.** Seeds 1-48 at 15: 54/54 (measured).
-8. **Every route measured before offering one?** The one route (20) was measured and set down.
+8. **Every route measured before offering one?** The one route (20) was measured and filed as T101.
 9. **After a ruling: the step it names?** No ruling.

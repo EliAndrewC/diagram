@@ -1304,7 +1304,7 @@
    "declared": "spec-fidelity"
   },
   "### T97 Decisions": {
-   "sha256": "61e4840c63a0163e1206a3fea658cb6aaec098f811f26dec2426d030c4d2033e",
+   "sha256": "e74825488d33fb7f8cc8b00869b364af2845d9446876568148189c76a2310206",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
@@ -1322,7 +1322,7 @@
    "declared": "spec-fidelity"
   },
   "### T97 Approach (re-answered 2026-10-21T18:13Z)": {
-   "sha256": "3b8d63d88ed0172e3c096bfc6e19d49fd03349af6e1839081d707ec03bb64836",
+   "sha256": "b19d483daebef1860decafe700726ed1aa106eba32711f514b5800e4c09cdd75",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
@@ -3190,6 +3190,43 @@
      "summary": "The cohort's seeds 10 and 40 newly failing are attributed to T97's _DOUBLED_DEG 20, not to T100 (a spec-lint check); T100 unchanged; T97's figure left at 15 per D76.",
      "class": "within",
      "why": "A resistance record that changes nothing of T100's; its only substantive content is D76(b), ruled there."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "### T100 part B (2026-10-21T18:13Z)",
+    "### T97 Approach (re-answered 2026-10-21T18:13Z)",
+    "### T97 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D76",
+     "summary": "T97 claims 0081's doubled-tail rule (20 degrees) but leaves _DOUBLED_DEG at 15; the move to 20 is filed as T101, which owns it with a done-check (seeds 1-48 and the pinned rows pass at 20)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Leaving the code short of the research is a narrowing of amendment 7 ('follow the research'), but the move is not dropped: (a) at 20 it was measured (2026-10-21) to refuse cohort seeds 10 and 40 - a household's way read as a doubled tail, a shallow crossing left - so applying it now misreads the very ways the rule is meant to leave alone; (b) FR-002 is the GM's own route for found work: a new task of this feature; (c) amendment 7 has every open task worked, so T101 is owned work with a done-check, not a parking place. Unlike the earlier 'carried to T07', it names an owner and a done-check. Premise not verifiable from the bundle (reviewer told to read nothing in the repository): that T101 is actually filed in 405's tasks.md with that done-check. Minor: D76 states the done-check as 'those two refusals', the Approach as 'seeds 1-48 and the pinned rows pass at 20' - a superset, reconcile the wording."
+    },
+    {
+     "id": "T97-order",
+     "summary": "T101 ordered after T07 (the side-by-side family), so the tree carries no doubled household way when 20 is tried",
+     "class": "within",
+     "why": "Sequencing inside the feature, not scope; T101's done-check measures the premise when it runs."
+    },
+    {
+     "id": "T97-claims",
+     "summary": "The four claims cite 0081 section 25, each naming the known gap (code asks at 15)",
+     "class": "within",
+     "why": "That is the claims task itself; naming the gap is honest record, not a carve-out."
+    },
+    {
+     "id": "T100-B-5",
+     "summary": "T100 part B item 5: 'T97's figure is left at 15 and carried to T07 (D76)'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The block is byte-identical to its earlier BLOCKED text and still records the decision the plan has retracted: D76 now files the move as T101, not T07. 'Carried to T07' names no owner and no done-check - the shape ruled against last round - and two blocks of one plan now disagree about where the 20-degree move lives; a reader of T100 part B goes to T07 and finds nothing. Fix: item 5 should read 'T97's figure is left at 15; the move to 20 is filed as T101 (D76)' (and item 8's 'set down' likewise point at T101)."
     }
    ]
   }
