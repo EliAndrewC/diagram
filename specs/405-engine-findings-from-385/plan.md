@@ -669,3 +669,17 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 ### T90 Decisions
 
 **D68 - stop the landing by its python.** `landing_pids(root)` reads `/proc`: a process whose argv[0] is a python, whose first argument ends `scripts/land.py`, whose cwd is the tree, and which is not the caller; `make land-stop` SIGTERMs each.
+
+### T90 part B (2026-10-21T16:46Z)
+
+Owed by the round arbiter's ruling on red-gate@2026-10-21T16:40:44Z (continue), taken while T90 was the active task.
+
+1. **What is refusing?** Not the batch's engine change (seeds 1-48 and the pinned rows 54/54): the gate went red on feature 408's ticked physical tasks with boxes open (from main), on a whole-repo cache test whose tree a commit beside the gate moved, and on the session's own PLAN_REVIEW_OK reaching the hook suites. Each fixed with its test.
+2. **A3 again.** Unchanged: T90's constraint is T79's handler (O).
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: D68 as reviewed; the three gate fixes are tooling of their own.
+6. **The one-sentence test.** "A landing stopped by hand stops its gate and cohort" - true by the test and by `make land-stop` with none running.
+7. **The next step is a measurement.** `make land` once more: its gate shows the three tests green.
+8. **Every route measured before offering one?** No route is offered.
+9. **After a ruling: the step it names?** Yes - one more `make done`, through `make land`.
