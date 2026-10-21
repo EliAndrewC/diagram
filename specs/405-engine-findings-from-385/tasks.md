@@ -311,6 +311,9 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [ ] T110 0084's drawing page says how a way's deck is drawn but not whether a way prefers going round a ditch to crossing it, while 0035 prices a brook crossing at 150 ft of walk: research when a way crosses a farm ditch rather than going round, and record it; the track out's last resort crosses one only where nothing else is dry (T10, UNRESEARCHED); and 0035 draws a way's brook crossing as the board bridge a farm ditch takes (about 4 ft) where 0084 gives a way a timber deck as wide as the way - reconcile the two pages (impl-drift outside the change, 2026-10-21) [lands-open]
       research: rendering
       research: rendering
+- [ ] T111 0081 has the track out leave downslope past the end of the wet ground, on the flank the cluster already sits on, while the dry exit's fill takes the shortest way off any frame edge: prefer the cluster's own flank downslope where it is dry (T67's round); and the fill's water lines are plan.sink_brook's while its crossing places stand on plan.brook - check whether the sink brook is ever the brook's own lower course, which would then have no crossing places (2026-10-21) [lands-open]
+      research: rendering
+      research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
