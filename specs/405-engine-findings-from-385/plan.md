@@ -235,3 +235,17 @@ Owed by the round arbiter's ruling on hour:405-engine-findings-from-385@3 (conti
 ### T41 Decisions
 
 **D15 - a move the gate does not see.** `preflight.unseen(root, path, old, new)`: a `.py` file outside the `page`/`browser` areas whose `gate-stamp.semantic_bytes` are equal, or a path in the claims round's records (`dev/claims-index.json`, `dev/claims-pages.json`, `dev/review-ledger.md`, and the ACTIVE feature's `found.jsonl`, `arbiter.jsonl`, `claims-carried.jsonl` and `tasks.md` - the last the claims carry's box (385 FR-013); no feature's `plan.md`, which the gate's spec-lint reads). The tree snapshot keeps every differing file's blob; the check compares the before and after trees across a HEAD move and calls the run moved only when a path that differs is not unseen. The gate-write guard lets `make claims-checked`, `claims-triaged` and `append` through, and a `git add`/`git commit`, Edit or Write when every resulting change is unseen (an Edit's result is computed from its old and new strings).
+
+### T36 part B (2026-10-21T04:41Z)
+
+Owed by the round arbiter's ruling on hour:405-engine-findings-from-385@4 (continue), taken while T36 was the active task.
+
+1. **What is refusing?** Nothing in the code: tests/tooling (2085) and hooks-test green. `make land` refused once, on the hour's step-back.
+2. **A3 again.** Unchanged: the found-work rule (G), FR-010 and FR-013 (O).
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: D10-D15 as reviewed.
+6. **The one-sentence test.** "A finding outside the change is filed, not refused" - true by the tests.
+7. **The next step is a measurement.** `make land` on T36-T41, then T11 measured against T14.
+8. **Every route measured before offering one?** No route is offered.
+9. **After a ruling: the step it names?** Yes - land T36-T41, then T11; WEB_REACH_FT's source asked first.
