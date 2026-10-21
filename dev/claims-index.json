@@ -29826,13 +29826,14 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#dooryard carry reach": {
-  "code": "3cb76e59b8c581c6",
+  "body": "a8a5cedcc11a8306",
+  "claim": "dooryard carry reach - UNRESEARCHED: up to 120 ft (2 x `_REACH_FT`); the page gives a lane end's reach (60 ft), not a carry's",
+  "code": "5845d7f5729b0975",
   "core": "adc48b77040c5a6b",
-  "date": "2026-10-03",
-  "note": "the cited material is silent on how far an end is carried",
+  "date": "2026-10-21",
+  "note": "the carry reaches up to 120 ft (`2.0 * _REACH_FT`). The page gives only the 60 ft an end needs to reach a house or a way, and says nothing on how far an end may be carried on to a dooryard.",
   "pages": {},
   "research": "",
-  "triaged": "2026-10-20",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#end carried to the dooryard": {
