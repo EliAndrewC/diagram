@@ -741,43 +741,43 @@
   },
   "## T29, T28, T45 - the findings log closes, 385's rows mapped, the reference message (found and filed work)": {
    "sha256": "f2cee049af39084f436347cb16b279c588b233b6c5f313a9e0d2417296743ce5",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T29 Approach (checklist part A)": {
-   "sha256": "e6b52a79a5bf6a4b22c03dc171f36dff04bc348b3d9aad2577d3715d0f8283e3",
-   "verdict": "BLOCKED",
+   "sha256": "3489664820fb8909c5d935be25fd3e3af6f362be1d9968f0c750b8b496e7457d",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T29 Decisions": {
-   "sha256": "3e82d4e03f6d2e73ddf2e127d37d077c3b51998b745f14ce4bee419d1cf3765a",
-   "verdict": "BLOCKED",
+   "sha256": "585928a5c528eeb5e324ea83599229b21327c47e0fa1a76f5a9ef049812e82c9",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T28 Approach (checklist part A)": {
-   "sha256": "d6fa6585520184ce417c73a5a277ab59b666504ebcbcde7788522319c7764310",
-   "verdict": "BLOCKED",
+   "sha256": "26d1324538ce4dac7f883b7be8cbc9659a5ac58d1f2e62bf51e30bc6d38400ca",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T28 Decisions": {
    "sha256": "569d4fdb53f310d7d6373d9ccf6a88f35702a14eca88face26ec43d2eb0a3687",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T45 Approach (checklist part A)": {
    "sha256": "4dd42879ec4bd202dd7657810eaae6700cce3fd8b809ab9fcfaa315524fd09d6",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T45 Decisions": {
    "sha256": "796ef53ab21ef8e71abf94828515b271e498f6525aa025c7c6ec9163d7b77b6f",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   }
@@ -1723,6 +1723,59 @@
      "summary": "T45: _reference's message stops offering GATE_NO_CACHE=1; the census is left refusing no-cache re-rolls",
      "class": "within",
      "why": "Found work under Amendment 7's 'working all of the remaining open tasks'. Removing a recovery the gate refuses is a fix to the message; choosing not to change the census is design, and the request says nothing of GATE_NO_CACHE or the reference message."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T29, T28, T45 - the findings log closes, 385's rows mapped, the reference message (found and filed work)",
+    "### T28 Approach (checklist part A)",
+    "### T28 Decisions",
+    "### T29 Approach (checklist part A)",
+    "### T29 Decisions",
+    "### T45 Approach (checklist part A)",
+    "### T45 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D36a",
+     "summary": "found.py close/list: a row's outcome (status, task or why, closed_utc) written on the row; a closed row cannot be closed again; list numbers the open rows",
+     "class": "within",
+     "why": "Tooling that records whether each finding was filed as a task; it serves FR-002 (found work filed as tasks) by making an unfiled finding visible, and changes no rule."
+    },
+    {
+     "id": "D36b",
+     "summary": "a row is filed only against a task of 405 or 385 (T61, 385 T12, 405 T17), never another feature",
+     "class": "within",
+     "why": "The GM's routing (2026-10-19) puts open process work in 385 and everything else in 405, and the found-work rule keeps findings in the feature; refusing any other feature enforces that and narrows nothing. The earlier 'or another's' wording, which would have let a finding leave both features, is gone."
+    },
+    {
+     "id": "D36c",
+     "summary": "a row whose finding is already carried by an existing 405 or 385 task is closed as filed against that task rather than given a duplicate new task (T28: 22 rows to 405 tasks, 9 to 385 tasks)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-002's words are 'filed as a new task of this feature'. The rule exists so that found work stays tracked as a task in the feature and is not dropped or sent elsewhere. A finding already carried by an open task in the feature the GM's routing names is tracked there, so a duplicate task adds nothing the rule is for, and the outcome records the carrying task id, which can be checked. It does not gut the purpose: no finding ends up without a task."
+    },
+    {
+     "id": "D36d",
+     "summary": "settled (not filed) only where the finding no longer holds: measured against the current file, the reason begins 'no longer holds' and records what stands there now; a finding that still holds is filed (T28: 11 rows)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-002 is about findings on code. A finding whose cited text is gone or already corrected is no longer work; a task to fix it would have nothing to fix, so it cannot be done as asked. This is the impossibility case, not a convenience. It is limited to the measured case, and the reason has to record the measurement, so it cannot be used to drop a finding that still holds. The earlier free 'settled (three words or more)' outlet, which allowed exactly that, is replaced."
+    },
+    {
+     "id": "D37",
+     "summary": "the 34 unfiled rows grouped into six new tasks T65-T70 by unit and complaint, worked in this feature; a row in 385's log names its 405 task with the feature ('405 T17')",
+     "class": "within",
+     "why": "Filing new tasks in the feature is what FR-002 asks for. Grouping rows by unit and complaint is a choice of granularity, and every row still maps to a task. Engine findings from 385's log going to 405 tasks follows the GM's routing, under which non-process work moves to 405. 'Filed, not fixed here' is how FR-002 works: each new task is worked in this feature, as amendment 7 requires."
+    },
+    {
+     "id": "D38",
+     "summary": "the reference map's served line no longer offers 'GATE_NO_CACHE=1 rolls it', because the roll census refuses that run; making the census accept a declared no-cache run was considered and refused",
+     "class": "within",
+     "why": "The task removes a recovery the message offers that the gate refuses. That removal is the whole fix, and the reason the line is served stays. The refused alternative would have widened the scope rather than narrowed it, so declining it narrows nothing that was asked."
     }
    ]
   }
