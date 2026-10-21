@@ -37,3 +37,9 @@ The GM, while T36-T41 were being built:
 The GM, after T11's numbers (`landing-analysis-3.md`):
 
 > Sounds good, let's suspend but not remove the hourly step-back arbitur for now.  Then let's fix the "second red gate" tripwire so that it fires properly when it should fire.  Then you can do 1 more claims task and measure how long it takes.
+
+## Amendment 5 (2026-10-21) - the gate and the landing cohort in parallel, a fifth claim
+
+The GM, after T19's numbers (`landing-analysis-4.md`) and what `make done` and the landing cohort each run:
+
+> Add the "worth a look" thing to our task list, but not as a high priority.  Then make the make done and the make landing run in parallel.  Then do 1 more claims task and measure how long it takes.

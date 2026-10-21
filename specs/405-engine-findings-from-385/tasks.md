@@ -50,6 +50,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [x] T46 `make land` met the push's stale-page check only after its hooks-test (T43's landing): a stale `docs/make-targets.html` is regenerated and committed in its first pass, as the ledger rows are (found landing 405 T43, 2026-10-21)
       research: rendering
       verify: DONE. landed in batch T43+T44+T46: tooling suites green (checkpoint, hm_arbiter, tick_task); gate-held refused live on red-gate@05:02:38Z until the round arbiter ruled it (accept); the step-back switched off by make step-back-off; T46's first pass regenerated the make-targets page; plan reviews CLEAR
+- [ ] T48 `make land` runs the landing cohort beside `make done`, not after it: they share no work (the gate rolls the five pool maps, the cohort 102 seeds and rows) and T19's landing spent 4.4 of its 7 minutes on the cohort after a green gate. The cohort's record, committed while the gate runs, must not void the gate's tree check; its workers sized so the two fit the container's memory (amendment 5, the GM 2026-10-21)
+      research: rendering
 - [ ] T45 The reference-settlement message (`_reference` in the Makefile) still offers `GATE_NO_CACHE=1 rolls it`, but the roll census refuses that run's re-rolls (T11's 05:02 gate): let the census accept a declared no-cache run, or stop offering it (the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z) [lands-open]
       research: rendering
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
@@ -115,6 +117,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [ ] T29 found.jsonl rows never close: a finding filed as a task (make task-add) or settled keeps status open, so the log cannot say what is unfiled - record the task id or settlement on the row (found working 405 T12, 2026-10-20) [lands-open]
       research: rendering
 
+- [ ] T47 (low priority - the GM, amendment 5) The preflight's coverage step (98 s of T19's 5-minute gate) checks the changed lines' coverage with the quick tests before the gate's own full run, which measures coverage again; the quick tests run twice too (13 s). It earns its time when it refuses a gap in seconds, not when the gate runs anyway - measure how often it refuses, and whether a landing whose code is final should skip it or the gate reuse its pass [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
