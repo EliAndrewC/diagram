@@ -427,3 +427,23 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 ### T60 Decisions
 
 **D34 - named by its feature.** `claims_carry`'s three texts cite "385 FR-013"; `spec-lint.check_stale_tasks` skips an id preceded by a feature number (`NNN ` or `NNN's `); T59's line reads "385 FR-013".
+
+## T61 - the gate-write suite waits for its own fixture's gate (found landing the T17 batch)
+
+### T61 Approach (checklist part A)
+
+1. **The goal, in the world.** hooks-test reads the same whether or not another gate runs on the machine.
+2. **The constraints.** The gate-write guard (385 FR-010, 405 T41), which asks `lib/own-make.sh` whether THIS tree's `make done` runs; its suite; the landing's gate beside its cohort (405 T48).
+3. **Where each comes from.** O (features 385, 405).
+4. **Do they describe the world here?** Yes - measured 2026-10-21: the T17 batch's gate ran hooks-test while it itself ran; the suite's `pgrep -f "make done"` found that gate at once, so its first three cases ran before the fixture's gate started and read "let through" (19 passed, 3 failed).
+5. **The order.** Both waits ask `own-make.sh done` from the fixture's directory; the suite run.
+6. **The exits.** (c) - the test asks what the guard asks.
+7. **The search smell.** None.
+8. **The budget.** 10 min.
+9. **Done, measured.** The suite passes 22 of 22, run while another gate runs.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T61 Decisions
+
+**D35 - the fixture's own gate.** `tests/hooks/test-gate-write-hooks.sh` waits until `scripts/hooks/lib/own-make.sh done`, run from the fixture tree, says the fixture's gate runs - the question the guard itself asks - in both sections.

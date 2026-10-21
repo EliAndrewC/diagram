@@ -80,6 +80,14 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T60 `claims_carry` filed its carried tasks citing 385's carry requirement by its bare id, so spec-lint refused the gate in a feature whose spec does not define it (405's T59, the T17 batch's landing): the carry names it as 385's, and spec-lint reads an id named by its feature as that feature's (found landing the T17 batch, 2026-10-21) [lands-open]
       research: rendering
+- [ ] T61 The gate-write guard's suite waited for `pgrep -f "make done"`, which a real gate elsewhere on the machine also matched: with the landing's gate running beside its cohort (T48), the wait ended before the fixture's gate started and three cases read "let through", failing hooks-test inside the T17 batch's gate. Wait on `lib/own-make.sh` from the fixture, the guard's own test (found landing the T17 batch, 2026-10-21) [lands-open]
+      research: rendering
+- [ ] T62 `bund.run_lanes_on_to_the_bund` carries an inner lane's end onto the worked ground's nearest edge, a dry plot's included, but 0081's drawing page has the inner lanes "end in the cluster or at the paddy" and only the field spur stop at the hem's edge: carry an inner lane's end to the paddy (`paddy_ground`), and claim it (impl-drift DRIFTED, the T17 batch's round 2) [lands-open]
+      research: rendering
+- [ ] T63 `web.served_arm` (and `_lay_skeleton`'s trim through it) calls `_trim_to_service` with no ways and no worked ground, so a skeleton arm's end that reached the bund or a way already laid (the spur, the connector) is pulled back as if it reached nothing; 0246 pulls back only an end that "reaches nothing": judge the trim against the ways and the ground too (impl-drift DRIFTED x2, the T17 batch's round 2) [lands-open]
+      research: rendering
+- [ ] T64 The 7 ft fence-to-middle rule is labeled DEVIATION 0246 at `route._route` and `clearance._clear_link` but cited plainly at `_lay_skeleton`'s clip (0246 §16 states it as a map drawing convention): one label for one rule; and `_lay_skeleton`'s span-floor claim names a 30 ft least piece where every `clip_to_clear` call drops a run under 70 ft first (impl-drift outside the change, the T17 batch's round 2) [lands-open]
+      research: rendering
 - [ ] T45 The reference-settlement message (`_reference` in the Makefile) still offers `GATE_NO_CACHE=1 rolls it`, but the roll census refuses that run's re-rolls (T11's 05:02 gate): let the census accept a declared no-cache run, or stop offering it (the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z) [lands-open]
       research: rendering
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
