@@ -291,9 +291,10 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [ ] T104 Every pool farm draws its kura on the north wall (Inashiro, Kashikawa, Kuwabata, Mizuguchi, Sawada: shed_side N), while 0040 puts a scattered farmstead's kura on the west; and a grove farm's fixtures are laid with no kura wall (bundle._lay_fixtures passes shed False for the dispersed layout): draw the kura on the side 0040 gives each form, and lay the fixtures against it; and 0043's drawing page names the guess that keeps a wood shed a ken off the kura too (batch 11's round) (split from T26, 2026-10-21) [lands-open]
       research: rendering
       research: rendering
-- [ ] T105 Two notes from batch 10's round: 0081's drawing page does not record moving a joint back one vertex when the pull cannot clear a Z across it, which joints._one_joint and _joint_moved_back cite 0081 for (say it on the page, or claim the move as UNRESEARCHED); settle_ends reads a lane with no width as 3 ft (the footpath, 0081 section 1) unclaimed - claim it (impl-drift outside the change, 2026-10-21) [lands-open]
+- [x] T105 Two notes from batch 10's round: 0081's drawing page does not record moving a joint back one vertex when the pull cannot clear a Z across it, which joints._one_joint and _joint_moved_back cite 0081 for (say it on the page, or claim the move as UNRESEARCHED); settle_ends reads a lane with no width as 3 ft (the footpath, 0081 section 1) unclaimed - claim it (impl-drift outside the change, 2026-10-21) [lands-open]
       research: rendering
       research: rendering
+      verify: DONE. landed: batch 12: the joint's mend claimed UNRESEARCHED beside 0081's zigzag rule; settle_ends' unwidthed lane claimed as 0081's footpath (T105)
 - [ ] T106 Turn a wood shed's four recorded seats by the household's roll, as the coop's are (T26's fourth note): tried in batch 11, it moved Sawada's farms so two households' ways ended 22.9 ft apart unjoined - the knot's gather refused for passing 2.7 ft from a neighbor's yard (0246's 7 ft gap) or splitting the web; land it once the knots step has a gather that keeps the gap, or the farms the room (measured 2026-10-21) [lands-open]
       research: rendering
       research: rendering

@@ -1715,3 +1715,38 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T16:40:44Z (continue), 
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
+<!-- plan-archive: archived 2026-10-21 -->
+### T100 part B (2026-10-21T18:13Z)
+
+Owed by the cohort (cohort@20261021T180921Z: seeds 10 and 40 newly failing), taken while T100 was the last task started - the work that resisted was T97's 20 degrees.
+
+1. **What is refusing?** The cohort, on `_DOUBLED_DEG` 20 (T97): seed 10's household way read as a doubled tail, a tree lane no settle may cut; seed 40 a shallow crossing left. Nothing of T100's - a spec-lint check.
+2. **A3 again.** Unchanged for T100.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** T97's figure is left at 15; the move to 20 is filed as T101 (D76); T100 unchanged.
+6. **The one-sentence test.** "A task id names one task" - true by the test.
+7. **The next step is a measurement.** Seeds 1-48 at 15: 54/54 (measured).
+8. **Every route measured before offering one?** The one route (20) was measured and filed as T101.
+9. **After a ruling: the step it names?** No ruling.
+
+<!-- plan-archive: T96 to T96 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+
+### T103 Decisions
+
+**D79 - the nub claimed.** No code change: `tee`'s stop within `_TOUCH_GAP` of the foot claimed CONVENTION (a leg shorter than the ink's touch reads as no leg).
+
+### T105 Approach (checklist part A)
+
+1. **The goal, in the world.** The joint's mend and an unwidthed lane's judging width are claimed as the record reads them.
+2. **The constraints.** 0081: no two turns of more than 50 degrees within 40 ft; a footpath 3 ft; the page names no mend for a Z across a joint.
+3. **Where each comes from.** R (0081) and O.
+4. **Do they describe the world here?** Yes - batch 10's round: `_one_joint` and `_joint_moved_back` cite 0081 for moving the joint back, which the page does not record; `settle_ends` reads `w or 3.0` unclaimed.
+5. **The order.** The mend claimed UNRESEARCHED apart from 0081's zigzag rule (two claims split); `settle_ends`' 3 ft claimed on 0081; no code change.
+6. **The exits.** (a) claim.
+7. **The search smell.** None.
+8. **The budget.** 30 min with its landing.
+9. **Done, measured.** The claims round reads them.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+

@@ -307,22 +307,7 @@ Owed by the cohort (cohort@20261021T172647Z: seeds 12, 21, 22, 24, 38 and 901 ne
 <!-- plan-archive: T96 to T97 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 <!-- plan-archive: T97 to T100 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 <!-- plan-archive: T100 to T97 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-### T100 part B (2026-10-21T18:13Z)
-
-Owed by the cohort (cohort@20261021T180921Z: seeds 10 and 40 newly failing), taken while T100 was the last task started - the work that resisted was T97's 20 degrees.
-
-1. **What is refusing?** The cohort, on `_DOUBLED_DEG` 20 (T97): seed 10's household way read as a doubled tail, a tree lane no settle may cut; seed 40 a shallow crossing left. Nothing of T100's - a spec-lint check.
-2. **A3 again.** Unchanged for T100.
-3. **A4 again.** Unchanged.
-4. **Moving something earlier for something later?** No.
-5. **Tuning or changing?** T97's figure is left at 15; the move to 20 is filed as T101 (D76); T100 unchanged.
-6. **The one-sentence test.** "A task id names one task" - true by the test.
-7. **The next step is a measurement.** Seeds 1-48 at 15: 54/54 (measured).
-8. **Every route measured before offering one?** The one route (20) was measured and filed as T101.
-9. **After a ruling: the step it names?** No ruling.
-
-<!-- plan-archive: T96 to T96 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-
+<!-- plan-archive: T100 to T100 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 ### T26 Approach (checklist part A)
 
 1. **The goal, in the world.** A farm's wood shed stands a ken off a wall of its steading - the house's or the kura's - never forward into the dooryard, its first seat turned per household as the coop's is.
@@ -342,10 +327,7 @@ Owed by the cohort (cohort@20261021T180921Z: seeds 10 and 40 newly failing), tak
 **D78 - a ken off every wall, never forward.** `shed_off_a_wall(seat, walls, g, px)`: `clears(seat, walls, g + ken)` (every wall, the kura's too), `against_a_wall(seat, walls[:1], g + ken, tol=0.0)` (exactly a ken off the HOUSE - 0043's "a short step off the house"; the claims round: a shed a ken off the kura alone had passed - and the wall places offered off the house's walls only), and `not forward_of_front(seat, hh)` (no part past the front wall, `seat_y + d/2 > hh`). The seats are not turned by the household's roll here: tried, it moved Sawada's farms into a knot the gap keeps from gathering (measured 2026-10-21), so the roll is filed as T106. The kura's side stays as drawn (north) - T104 owns 0040's west for a scattered farm.
 
 <!-- plan-archive: T103 to T103 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-### T103 Decisions
-
-**D79 - the nub claimed.** No code change: `tee`'s stop within `_TOUCH_GAP` of the foot claimed CONVENTION (a leg shorter than the ink's touch reads as no leg).
-
+<!-- plan-archive: T103 to T103 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 ### T26 Approach (re-answered 2026-10-21T19:13Z)
 
 1. **The goal, in the world.** A farm's wood shed stands a short step off a wall of its house, clear of its kura by as much, never forward into the dooryard, its first seat turned per household as the coop's is.
@@ -388,20 +370,7 @@ Owed by the cohort (cohort@20261021T192759Z: seeds 10, 24, 36 and 47 newly faili
 8. **Every route measured before offering one?** Two T26 routes measured (with and without the roll); both expose the conflict, so neither is offered.
 9. **After a ruling: the step it names?** No ruling.
 
-### T105 Approach (checklist part A)
-
-1. **The goal, in the world.** The joint's mend and an unwidthed lane's judging width are claimed as the record reads them.
-2. **The constraints.** 0081: no two turns of more than 50 degrees within 40 ft; a footpath 3 ft; the page names no mend for a Z across a joint.
-3. **Where each comes from.** R (0081) and O.
-4. **Do they describe the world here?** Yes - batch 10's round: `_one_joint` and `_joint_moved_back` cite 0081 for moving the joint back, which the page does not record; `settle_ends` reads `w or 3.0` unclaimed.
-5. **The order.** The mend claimed UNRESEARCHED apart from 0081's zigzag rule (two claims split); `settle_ends`' 3 ft claimed on 0081; no code change.
-6. **The exits.** (a) claim.
-7. **The search smell.** None.
-8. **The budget.** 30 min with its landing.
-9. **Done, measured.** The claims round reads them.
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
+<!-- plan-archive: T105 to T105 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 ### T105 Decisions
 
 **D80 - the mend and the footpath claimed.** No code change: the joint moved back a vertex claimed UNRESEARCHED, beside 0081's zigzag rule it serves; `settle_ends`' unwidthed lane claimed as 0081's 3 ft footpath.
