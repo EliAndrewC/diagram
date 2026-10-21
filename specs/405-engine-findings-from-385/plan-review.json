@@ -1202,7 +1202,7 @@
    "declared": "spec-fidelity"
   },
   "### T18 Decisions": {
-   "sha256": "33085072c2c4279cb9045aef958cea5be0356399cf408e8bf7042bf19872b858",
+   "sha256": "67e53fde5c7646975712c324b0b0bf01f9ec7ac7c8f71fdacc525705e4c0e7d5",
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
@@ -1257,6 +1257,18 @@
   },
   "### T18 Approach (re-answered 2026-10-21T17:14Z)": {
    "sha256": "476f256b119d3bb9ef16a8463f1f5d595c06f1c00ea083116e602ccd8a90c784",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T18 part B (2026-10-21T17:38Z)": {
+   "sha256": "d4a7470fbe38921b62cabdfc5de9257ea2c2474a620a789c52093d77ee8960b1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T18 Approach (re-answered 2026-10-21T17:42Z)": {
+   "sha256": "c91340b464699a2a9b7e84745b2f255e0ca29a86b5d381d00f5709908fe8473e",
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
@@ -3007,6 +3019,41 @@
      "summary": "Part A re-answered for D69: goal (a lane keeps 7 ft off every garden but its own household's, one household per lane), constraints and source R 0246, order (theirs exempts only the nearest reached farmhouse; claim GUESS 0246; tests with a neighbor at the junction and a farm past the reach; seeds 1-48), exit (e) conform, done measured by those tests and seeds 1-48 and the pinned rows; no constant moved, nothing fitted.",
      "class": "within",
      "why": "Restates D69 and plans its verification; the tests and seed sweep only fail when the requested (research-following) behavior is absent, so they enforce the task rather than add scope. Nothing in the request or spec index is narrowed or dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "### T18 Approach (re-answered 2026-10-21T17:42Z)",
+    "### T18 Decisions",
+    "### T18 part B (2026-10-21T17:38Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D69",
+     "summary": "A lane's household is the one its record names (of / serves, geom.lane_owner); only such a lane exempts its own household's yards and gardens from the fence gap; back lanes, cross lanes and the track out name none and keep the gap off every garden. Replaces the earlier geometric owner (the farmhouse an end reaches).",
+     "class": "within",
+     "why": "The request (Amendments 3-7, FR-001) is to work claims tasks to completion by the project's guidelines, following the research rather than asking for rulings on it. Which lane counts as 'a household's own way' under 0246 is a research reading inside that task, not a narrowing of anything the GM asked; the switch from the geometric owner to the record owner removes an exemption the earlier reading gave and the page (as cited) does not, and no request clause or spec requirement is cut."
+    },
+    {
+     "id": "T18-owner-propagation",
+     "summary": "The owner reaches every place a household's way is judged: Lawful.owner set on a copy by tree.admits and lay_door_paths; a skip run inherits the replaced lane's owner; settle_ends' re-aim and last_resort pass their lane's owner.",
+     "class": "within",
+     "why": "Mechanism that makes D69 hold at every judgment site (part B: seeds 12, 21, 22, 24, 38, 901 failed without it). It enforces the decision; it narrows nothing asked."
+    },
+    {
+     "id": "T18-B9-arbiter",
+     "summary": "The claims round's third round on theirs goes to the round arbiter before the next check; no GM ruling sought.",
+     "class": "within",
+     "why": "Consistent with Amendment 7 (figure research questions out by project guidelines; ask only on genuinely hard questions) and the standing round-arbiter process. No scope change."
+    },
+    {
+     "id": "T18-approach-exit-and-measure",
+     "summary": "Exit (e) conform; done is measured by tests (own way exempts own garden, a back lane none) and seeds 1-48 plus pinned rows, 54/54 measured 2026-10-21; no constant moves, nothing fitted into room.",
+     "class": "within",
+     "why": "Completion criterion and verification of the task's own claim; FR-001's per-task working. Enforces the claim rather than adding unrequested verification."
     }
    ]
   }
