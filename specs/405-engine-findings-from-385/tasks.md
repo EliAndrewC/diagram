@@ -137,6 +137,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T80 Batch 6's round notes on `touch._join_piece`: a lane with no width read as 5 ft by `_bar` and 3 ft by the link drawn three lines later; the link's width truncated (`int(...)`) where the claim says the piece's width; the bar's half-width-plus-2 ft term unclaimed beside 0246's 7 ft (impl-drift outside the change, batch 6's round) [lands-open]
       research: rendering
+- [ ] T81 The decide guard and `make plan-delta` read one plan block two ways: after T79's blocks were added below T77's, plan-delta owed no block a review while `plan_gate.decision_refusal`'s `_section_clear` read T77 Decisions' digest as changed, refusing T74's claims check (escaped with DECIDE_OK, logged). One block digest for both (found landing batch 6, 2026-10-21) [lands-open]
+      research: rendering
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
 - [ ] T02 (385 T36) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
