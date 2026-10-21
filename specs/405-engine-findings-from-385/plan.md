@@ -496,20 +496,7 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 **D55 - carries filed in the wait.** `land.file_carries(root, d)`; `wait_for_claims(root, tasks, d)` runs it when the gate's refusal holds carries and no owed or introduced finding, then asks again.
 
 <!-- plan-archive: T79 to T79 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-### T79 Approach (re-answered 2026-10-21T14:52Z)
-
-1. **The goal, in the world.** As before: a landing stopped by hand leaves no gate or cohort running.
-2. **The constraints.** As before, and where each run lives: the gate (`make done`) in the landing's own process group, the cohort in its own session.
-3. **Where each comes from.** O (feature 405) and Python.
-4. **Do they describe the world here?** Yes - the plan review's aside, 2026-10-21: the first handler raised SystemExit alone, which stops the cohort through the `finally` but not the gate.
-5. **The order.** The handler ignores SIGTERM, sends it to its own group and raises SystemExit(143); the test holds the group stopped.
-6. **The exits.** (c) - a landing is stopped whole; a `make land` run in the foreground shares the group with its caller, which is stopped with it, as the person stopping the landing asked.
-7. **The search smell.** None.
-8. **The budget.** With the batch.
-9. **Done, measured.** The handler stops the landing's group and raises SystemExit(143) (test).
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
+<!-- plan-archive: T79 to T79 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 ### T79 Decisions
 
 **D56 - SIGTERM runs the cleanup.** `land.main` installs a SIGTERM handler first: it ignores SIGTERM, sends it to its own process group (the gate, `make done`, runs there) and raises SystemExit(143), so `long_runs`' `finally` stops the cohort's own process group too.
@@ -534,88 +521,15 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 
 **D57 - one reading of a block.** `_section_clear(review, section, history)`: a CLEAR block passes at its digest or at a typo-scale change from its recorded or historical text (`typo_only`); `decision_refusal` passes `History(plan)`.
 
-### T80 Approach (checklist part A)
-
-1. **The goal, in the world.** `_join_piece` reads a lane with no width one way, and draws the link at the piece's width.
-2. **The constraints.** 0081's 3 ft footpath; 0246 §16's 7 ft fence to the middle.
-3. **Where each comes from.** R (0081, 0246).
-4. **Do they describe the world here?** Yes - measured 2026-10-21 (batch 6's round: `_bar` read a missing width as 5 ft and the link as 3; the link's width truncated by `int`; the bar's half-width-plus-2 term unclaimed).
-5. **The order.** Both read 3 ft; the width rounded; the bar's wide-lane term claimed. The bar is `max(7, w/2 + 2)`, 7 ft at any width up to 10 ft, so no drawn lane moves.
-6. **The exits.** (e) conform.
-7. **The search smell.** None.
-8. **The budget.** 40 min for the batch with its landing.
-9. **Done, measured.** The ways tests pass; the claims round reads `_join_piece` IN-STEP.
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
-### T80 Decisions
-
-**D59 - one width.** `_bar` and the two link draws read `lanes[i].get("w") or 3.0`; the link drawn at `round(...)`; the claim names the bar's half-width-plus-2 term for a lane over 10 ft (UNRESEARCHED, none drawn here).
-
-### T82 Approach (checklist part A)
-
-1. **The goal, in the world.** A short link off a way walks on to the house it serves; only another way holds it.
-2. **The constraints.** `_reaches` and "not the way it left" (an end does not count as reaching the way its far end stands on); 405 T74's walk-on.
-3. **Where each comes from.** O (features 261, 405).
-4. **Do they describe the world here?** Yes - measured 2026-10-21 (batch 6's round 3: `_near` held the walk within 60 ft of ANY way, the one the lane left included, so a link off a way stopped up to 60 ft past its house).
-5. **The order.** `_near(q, far)` filters out the way the far end stands on (by `_TOUCH_GAP`), as `_reaches` does; `_walk_in` passes the lane's other end; the claim; "not the way it left" labeled GUESS 0246 (the page read and silent); a test; seeds 1-48.
-6. **The exits.** (e) conform.
-7. **The search smell.** None.
-8. **The budget.** 40 min for the batch with its landing.
-9. **Done, measured.** A link off a way reaches its closest approach to the house, not the way's 60 ft edge (test); seeds 1-48 and the pinned rows pass.
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
-### T82 Decisions
-
-**D58 - the way it left is no other way.** `_walk_in`'s `near` takes the lane's other end; `_sweep_dangling_ends._near` skips segments within `_TOUCH_GAP` of it.
-
-### T20 Approach (checklist part A)
-
-1. **The goal, in the world.** The touch a street's joints are judged at, and what counts as a joint, are claimed.
-2. **The constraints.** 0246 §6 (an end runs on to a field path, a bund or another way).
-3. **Where each comes from.** R (0246) and O.
-4. **Do they describe the world here?** Yes - measured 2026-10-21 (385 T138's finding: `to_its_joints`' touch arrives from its callers unclaimed; whether field-path and bund ends count).
-5. **The order.** Claims at `trim_streets` and `settle_street_ends`: the 4 ft touch (CONVENTION, the ink's), the anchors at 1 ft; a field path's end a joint (a field path is a lane); a street end at the bund no dangling end (`end_serves`), so never cut.
-6. **The exits.** (a) claim.
-7. **The search smell.** None.
-8. **The budget.** 40 min for the batch with its landing.
-9. **Done, measured.** The claims round reads them IN-STEP.
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
-### T20 Approach (re-answered 2026-10-21T15:19Z)
-
-1. **The goal, in the world.** As before.
-2. **The constraints.** As before.
-3. **Where each comes from.** As before.
-4. **Do they describe the world here?** Yes - the claims round, 2026-10-21: `trim_streets` never asks `end_serves`, so the bund clause was untrue; its touch claim named a 1 ft anchor it does not read.
-5. **The order.** As D60 now reads.
-6. **The exits.** (a) claim - words only.
-7. **The search smell.** None.
-8. **The budget.** With the batch.
-9. **Done, measured.** The claims round reads the claims IN-STEP.
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
+<!-- plan-archive: T80 to T80 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+<!-- plan-archive: T80 to T82 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+<!-- plan-archive: T82 to T20 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+<!-- plan-archive: T20 to T20 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 ### T20 Decisions
 
 **D60 - the touch and the joints claimed.** `trim_streets` claims its joints' touch (the caller's `_TOUCH_GAP`, 4 ft, the ink's - CONVENTION; a front door's nearest point within `reach` a joint too) and a field path's end a joint (0246); `settle_street_ends` its 4 ft touch. The bund clause first written was dropped: `trim_streets` cuts to its joints and never asks `end_serves` (the claims round). No code token changes.
 
-### T08 Approach (checklist part A)
-
-1. **The goal, in the world.** Whose farm gets a door path is claimed as the pages give it.
-2. **The constraints.** 0033 (a door path for a near-row farm whose grove stands between it and its street); 0246 (every farmhouse reached by a way).
-3. **Where each comes from.** R (0033, 0246).
-4. **Do they describe the world here?** Yes - measured 2026-10-21 (385 T111's finding: the code lays one for every grove farm no way arrives at).
-5. **The order.** The claim: a door path wherever no way arrives (GUESS 0033), every farmhouse being reached by a way (0246), 0033's near-row case among them.
-6. **The exits.** (a) claim - the wider rule is 0246's every-farmhouse rule applied; narrowing it to 0033's case would leave farms with no way.
-7. **The search smell.** None.
-8. **The budget.** 40 min for the batch with its landing.
-9. **Done, measured.** The claims round reads it IN-STEP.
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
+<!-- plan-archive: T08 to T08 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 ### T08 Approach (re-answered 2026-10-21T15:19Z)
 
 1. **The goal, in the world.** As before.
