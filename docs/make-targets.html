@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 176 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 178 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -213,6 +213,8 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make speckit-todo</td><td class=a><div class=ad><span class=an>ALL=1</span><span class=aw>also list the closed features and the reason each is closed</span></div><div class=ad><span class=an>BY=affects</span><span class=aw>group the open features by their `**Affects**:` tags (.specify/affects.json) instead of by stage</span></div><div class=ad><span class=an>AFFECTS=tooling</span><span class=aw>only the features carrying that tag, same layout (several: AFFECTS=&quot;tooling, magistracy&quot;)</span></div><div class=ad><span class=an>CHECK</span></div></td><td>list the spec-kit features not yet closed - filed, planned, in progress - by the stage each is owed at   [ALL=1: also the closed; BY=affects: by tag; CHECK=1: refuse missing or unknown tags]</td></tr>
 <tr><td class=n>make stale-terms</td><td class=a><div class=ad><span class=an>F=&lt;feature&gt;</span><span class=aw>the feature number or directory name under specs/</span></div><div class=ad><span class=an>AGAINST=&lt;ref&gt;</span><span class=aw>compare with the feature directory at this git ref (default: what the previous review round saw)</span></div></td><td>after a value changed in a feature&#x27;s spec, where does the OLD value still stand - look BEFORE a later review round</td></tr>
 <tr><td class=n>make step-back</td><td class=a>SINCE TRANSCRIPT TRIGGER UNTIL</td><td>the feature&#x27;s hourly checkpoint: open it and build the round arbiter&#x27;s step-back bundle (feature 383)   [TRIGGER=hour:&lt;f&gt;@&lt;n&gt; TRANSCRIPT=&lt;jsonl&gt; SINCE=&lt;ISO&gt; UNTIL=&lt;ISO&gt;: replay an hour]</td></tr>
+<tr><td class=n>make step-back-off</td><td class=a>REASON</td><td>suspend the hourly step-back, not remove it: the hour comes due for nothing until step-back-on; the tripwire rulings stay (feature 405 T43)</td></tr>
+<tr><td class=n>make step-back-on</td><td class=a>REASON</td><td>resume the hourly step-back (feature 405 T43)</td></tr>
 <tr><td class=n>make style-prepass</td><td class=a><div class=ad><span class=an>Q=&lt;NNNN&gt;</span><span class=aw>the question, by number (both pages) or a page&#x27;s file name</span></div></td><td>the style guide&#x27;s mechanical half for one question - metric figures with no feet, and every lead line to rule on - run BEFORE record-style</td></tr>
 <tr><td class=n>make subagent-cache</td><td class=a>SINCE</td><td>what subagents write to the prompt cache fresh, per agent type, and the repeated text in their bundles (feature 383 amendment 6)   [SINCE=YYYY-MM-DD]</td></tr>
 <tr><td class=n>make switches</td><td class=a>&ndash;</td><td>the iteration switch: remote on|off, with reason, who and when (feature 132)</td></tr>
