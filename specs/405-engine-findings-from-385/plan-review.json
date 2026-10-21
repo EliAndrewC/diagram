@@ -570,6 +570,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
+  },
+  "### T105 Approach (checklist part A)": {
+   "sha256": "b498aab047d466ed7dfd37d5de9e5646773389f71d28b2e72da6b1785f85ba55",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T105 Decisions": {
+   "sha256": "82d20b8d0a77da7276c120b5999ab3855d7dde86869f87c7c7fe9b94be0a55bf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2712,6 +2724,34 @@
      "summary": "Neither measured T26 route (with or without the household's seat roll) is offered, as both expose the same conflict.",
      "class": "within",
      "why": "Declines to ship a route that fails the cohort; D78 already keeps the roll out (filed as T106), and nothing of D78's requirement is relaxed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "### T105 Approach (checklist part A)",
+    "### T105 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D80a",
+     "summary": "The joint moved back a vertex (_one_joint, _joint_moved_back) is claimed UNRESEARCHED, kept beside 0081's zigzag rule (no two turns >50 deg within 40 ft) that it serves, as two split claims rather than one citing 0081 for a mend the page does not record",
+     "class": "within",
+     "why": "Claiming a mend as the record reads it is the claims work FR-001 carries over from 385 and Amendment 7 asks to be worked to completion; marking the unrecorded part UNRESEARCHED rather than over-citing 0081 follows the research instead of departing from it, and nothing the GM asked for is dropped."
+    },
+    {
+     "id": "D80b",
+     "summary": "settle_ends' unwidthed-lane default (w or 3.0) is claimed on 0081's 3 ft footpath",
+     "class": "within",
+     "why": "Attaches a source to an unclaimed constant, which is the claims task itself; no behavior or scope the GM asked for is narrowed."
+    },
+    {
+     "id": "D80c",
+     "summary": "No code change in T105; exit (a) claim only, 30 min budget",
+     "class": "within",
+     "why": "The GM asked for claims tasks worked through to completion with the project's process, not for any engine change here; a claims-only task does not narrow the request, and any code finding would still go to a new task per FR-002."
     }
    ]
   }
