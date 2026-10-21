@@ -5,7 +5,7 @@ Research: lane sweep plumbing - NONE"""
 from __future__ import annotations
 
 import math
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 
 from l7r.diagram.settlement import Settlement, edge_dist, point_in_poly, seg_closest, seg_dist, segments_cross
 
@@ -653,12 +653,13 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
     to reach a piece another pass then drops, or a tail left by a trim, is an end in open ground - and
     `lanes_reach_something` is the rule it breaks, on the gate, one map at a time (settlement-review, feature 230 passes 10
     and 11: the same 5 ft link on the reference hamlet came back whenever the map moved, ending 73 ft from any way and 76
-    from any house). The rule's own figure is 60 ft to a way, a house or the field, so that is what is asked here; the
-    lane gives up its last vertex until an end passes, and a lane whittled under `_WEB_MIN_FT` is emptied for
-    `_sweep_debris`'s rule to finish. A connector is exempt: it leaves the map by design.
+    from any house). The rule's own figure is 60 ft to a way, a house or the field, so that is what is asked here; each
+    end is walked in along its own last segment 4 ft at a time until it passes (`_walk_in`), and a lane whittled under
+    `_WEB_MIN_FT` is emptied for `_sweep_debris`'s rule to finish. A connector is exempt: it leaves the map by design.
 
     Research:
-        lane end reaches something - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back until it serves a way, the field or a house - never one reached across a neighbor's land, owed none (`geom.lane_houses`)
+        lane end reaches something - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back until it serves a way, the field or a house, 4 ft at a time - never one reached across a neighbor's land, owed none (`geom.lane_houses`)
+        not the way it left - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end does not count as reaching a way the lane's other end stands on (within `_TOUCH_GAP`), so a link off a way with nothing at its far end is pulled back to nothing; the page is silent on a lane's own start
         end carried to the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane a house needs ends at its dooryard - never a household reached across a neighbor's land, owed none (`geom.lane_houses`)
         dooryard carry reach - GUESS: up to 120 ft (2 x _REACH_FT)
         a whittled lane emptied - UNRESEARCHED: a lane pulled back under `_WEB_MIN_FT` (30 ft) is emptied, for the debris sweep to finish
@@ -689,8 +690,10 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
             for sg in zip([(float(x), float(y)) for x, y in o["pts"]], [(float(x), float(y)) for x, y in o["pts"]][1:], strict=False)
         ]
 
-        def _reaches(q: Pt, _o: Sequence[tuple[Pt, Pt]] = others) -> bool:  # ...a house it SERVES: never one reached across a yard
-            return end_serves(q, _o, owed, ground, steadings)
+        def _reaches(q: Pt, far: Pt, _o: Sequence[tuple[Pt, Pt]] = others) -> bool:  # ...a house it SERVES: never one reached across a yard
+            # ...NOR THE WAY IT LEFT (feature 405 T14, D9, as `_trim_to_service` since feature 261): an end is not served by a
+            # way the lane's OTHER end (`far`) stands on, or the walk below keeps a link off a way as a stub reaching only that way
+            return end_serves(q, [sg for sg in _o if seg_dist(far[0], far[1], sg[0], sg[1]) > _TOUCH_GAP], owed, ground, steadings)
 
         _mine = [(float(x), float(y)) for x, y in pts]
         # ...BUT NEVER PAST ANOTHER LANE'S END THAT RESTS ON THIS ONE (269 E4). Pulling an unserving end back takes the
@@ -699,18 +702,10 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
         # hem and its re-roll put a straggler's end 27 ft from the web it had met. The pull-back stops at that junction.
         _tails = [(float(o["pts"][e][0]), float(o["pts"][e][1])) for j, o in enumerate(lanes) if j != i and len(o.get("pts") or []) >= 2 for e in (0, -1)]
         # (and a lane left short by the hold is still the link that lane ends on, so it is not emptied as debris below)
-        while len(pts) >= 2 and not _reaches(pts[-1]):
-            _hold = held_at(pts[-2], pts[-1], _tails)
-            if _hold is not None:
-                pts[-1] = _hold
-                break
-            pts.pop()
-        while len(pts) >= 2 and not _reaches(pts[0]):
-            _hold = held_at(pts[1], pts[0], _tails)
-            if _hold is not None:
-                pts[0] = _hold
-                break
-            pts.pop(0)
+        _walk_in(pts, _reaches, _tails)
+        pts.reverse()
+        _walk_in(pts, _reaches, _tails)
+        pts.reverse()
         if pts == _mine:
             continue
         _held = any(held_at(a, b, _tails) is not None for a, b in zip(pts, pts[1:], strict=False))
@@ -735,7 +730,7 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
             # arrive somewhere.
             pts = [(float(x), float(y)) for x, y in _mine]
             for _e in (-1, 0):
-                if _reaches(pts[_e]):
+                if _reaches(pts[_e], pts[0] if _e == -1 else pts[-1]):
                     continue
                 _q = carry_to_dooryard(pts[_e], owed, steadings, 2.0 * _REACH_FT, groves=_bands)
                 if _q is not None:
@@ -752,6 +747,28 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
         fixed += 1
     s.drop_lanes(emptied)  # record and ink together - see `drop_lanes`
     return fixed
+
+
+def _walk_in(pts: list[Pt], reaches: Callable[[Pt, Pt], bool], tails: Sequence[Pt]) -> None:
+    """Walk the LAST end of `pts` in, in place, until it `reaches` something: along its own last segment 4 ft at a time, a
+    vertex dropped only once the end is within 4 ft of it, so the end stops within 4 ft of the last point that serves.
+    `reaches` is asked of the end and the lane's other end (the way it left does not count, D9).
+
+    NEVER A WHOLE SEGMENT AT A TIME (feature 405 T14, D8): the sweep used to pop a vertex while the end did not serve, so an
+    end whose last segment passed a house partway landed on the vertex before it, past the last point that served (DRIFTED
+    in 385's impl-drift round, T106) - the same fault T12 took out of `_trim_to_service`. The 269 E4 hold is asked before
+    each step: where another lane's end rests on the segment, the end stops there (`held_at`)."""
+    while len(pts) >= 2 and not reaches(pts[-1], pts[0]):
+        a, b = pts[-2], pts[-1]
+        hold = held_at(a, b, tails)
+        d = math.dist(a, b)
+        if hold is not None and math.dist(b, hold) <= 4.0:
+            pts[-1] = hold
+            return
+        if d <= 4.0:
+            pts.pop()
+            continue
+        pts[-1] = (a[0] + (b[0] - a[0]) * (d - 4.0) / d, a[1] + (b[1] - a[1]) * (d - 4.0) / d)
 
 
 def held_at(a: Pt, b: Pt, tails: Sequence[Pt]) -> Pt | None:

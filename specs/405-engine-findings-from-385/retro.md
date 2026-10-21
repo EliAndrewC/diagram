@@ -46,3 +46,9 @@ About 10 min. The push fetches, takes its delta and asks the holding rule, the r
 
 About 10 min. `sync-with-main.sh done` starts main's render-sync in the background (the prompt hook's lock and log) and returns
 once the work is on main; T12's push spent 2.5 min there on other sessions' maps.
+
+## T14 - the retro row
+
+The second one-claim experiment (the GM, 2026-10-20), the first landed with `make land`. The plan's `make decide` refused an
+unlabeled figure again, as on T12; the walk alone would have kept stubs off a way, so D9 brought `_trim_to_service`'s
+feature-261 rule into the sweep. The step-back met the claims round. Timings: `landing-analysis-2.md`.

@@ -405,14 +405,15 @@ def test_a_swept_field_spur_says_so_on_the_map() -> None:
 def test_a_lane_end_in_open_ground_is_pulled_back_to_something_or_dropped() -> None:
     """`_sweep_dangling_ends`, settlement-review feature 230 passes 10 and 11. Every pass above it rewrites ends, so a link
     laid to reach a piece another pass then drops is left stopping in open ground - which is what `lanes_reach_something`
-    fails on, one map at a time. The lane gives up its last vertex until an end reaches a way, a house or the field."""
+    fails on, one map at a time. The end is walked in, 4 ft at a time, until it reaches a way, a house or the field (feature
+    405 T14, D8) - never a whole segment at a time, which landed it on the vertex before, past the last point that served."""
     from l7r.diagram.hamletgen.ways import sweeps
 
     s = _StubSettlement(
         lanes=[
             [(0.0, 0.0), (400.0, 0.0)],  # the connector, and what the others must reach
-            [(100.0, 10.0), (100.0, 50.0), (100.0, 400.0)],  # its far end is 400 ft from anything: pulled back to the vertex that still reaches
-            [(300.0, 10.0), (900.0, 900.0)],  # nothing of it reaches anything once the far end goes: emptied and dropped
+            [(100.0, 10.0), (100.0, 50.0), (100.0, 400.0)],  # its far end is 400 ft from anything: walked in to the last point that reaches
+            [(300.0, 2.0), (900.0, 900.0)],  # it stands on the connector and reaches nothing else: emptied and dropped (D9)
         ],
         houses=[(60.0, 40.0)],
     )
@@ -421,13 +422,17 @@ def test_a_lane_end_in_open_ground_is_pulled_back_to_something_or_dropped() -> N
     assert sweeps._sweep_dangling_ends(s) == 2
     kept = [ln["pts"] for ln in s.M["lanes"]]
     assert kept[0] == [[0.0, 0.0], [400.0, 0.0]], "the connector is exempt - it leaves the map by design"
-    assert kept[1] == [[100.0, 10.0], [100.0, 50.0]], "the end in open ground is given up, the one that reaches is kept"
+    # the far end's last serving point is 60 ft from the house at (60, 40): y = 40 + sqrt(60^2 - 40^2) = 84.7, reached 4 ft at a
+    # time from 400 - so y 84.0; the pop landed it on (100, 50), 34 ft short (red at HEAD)
+    assert kept[1] == [[100.0, 10.0], [100.0, 50.0], [100.0, 84.0]], "the end walks in to where it last serves, not a segment short"
     assert len(s.M["lanes"]) == 2, "and a lane that cannot be saved is dropped whole"
 
 
 def test_a_pull_back_stops_where_another_lanes_end_rests_on_it() -> None:
     """269 E4: an unserving end is pulled back no further than the outermost junction another lane's end rests on, at
-    either end of the lane - taking that stretch away left Sawada's straggler 27 ft from the web it had met."""
+    either end of the lane - taking that stretch away left Sawada's straggler 27 ft from the web it had met. Walked in 4 ft
+    at a time (feature 405 T14), an end comes within reach of the straggler's own way before it gets to the junction, so it
+    stops short of it; the hold itself bites where that way does not count - it also stands on the lane's other end (D9)."""
     from l7r.diagram.hamletgen.ways import sweeps
 
     s = _StubSettlement(
@@ -443,19 +448,25 @@ def test_a_pull_back_stops_where_another_lanes_end_rests_on_it() -> None:
     s.M["fields"] = []
     s.M.setdefault("meta", {})
     sweeps._sweep_dangling_ends(s)
-    assert s.M["lanes"][1]["pts"] == [[100.0, 10.0], [100.0, 300.0]], "pulled back to the junction, not past it"
-    assert s.M["lanes"][3]["pts"][0] == [900.0, 800.0], "the head is held at the junction too"
+    assert s.M["lanes"][1]["pts"] == [[100.0, 10.0], [100.0, 360.0]], "walked in to the straggler's reach, never past its junction"
+    assert s.M["lanes"][3]["pts"][0] == [900.0, 860.0], "the head too"
+    # ...and where the straggler also stands on the lane's start, its way does not serve the end (D9): the hold stops it
+    u = _StubSettlement(lanes=[[(0.0, 0.0), (400.0, 0.0)], [(100.0, 2.0), (100.0, 700.0)], [(102.0, 3.0), (100.0, 300.0)]], houses=[])
+    u.M["fields"] = []
+    u.M.setdefault("meta", {})
+    sweeps._sweep_dangling_ends(u)
+    assert u.M["lanes"][1]["pts"] == [[100.0, 2.0], [100.0, 300.0]], "held at the junction, not past it"
     assert sweeps.held_at((0.0, 0.0), (10.0, 0.0), [(50.0, 0.0), (5.0, 30.0)]) is None, "nothing rests on the segment"
     # ...and a lane the hold leaves under the web minimum is still the link another lane ends on: kept, not emptied as
     # debris (Sawada's 28 ft link, which took its straggler with it when it was dropped)
     t = _StubSettlement(
-        lanes=[[(0.0, 0.0), (400.0, 0.0)], [(200.0, 5.0), (200.0, 600.0)], [(200.0, 25.0), (700.0, 25.0)]],
-        houses=[(740.0, 25.0)],
+        lanes=[[(0.0, 0.0), (400.0, 0.0)], [(200.0, 2.0), (200.0, 600.0)], [(202.0, 3.0), (200.0, 22.0)]],
+        houses=[],
     )
     t.M["fields"] = []
     t.M.setdefault("meta", {})
     sweeps._sweep_dangling_ends(t)
-    assert [ln["pts"] for ln in t.M["lanes"]][1] == [[200.0, 5.0], [200.0, 25.0]], "a 20 ft link, kept"
+    assert [ln["pts"] for ln in t.M["lanes"]][1] == [[200.0, 2.0], [200.0, 22.0]], "a 20 ft link, kept"
     assert sweeps.held_at((0.0, 0.0), (0.0, 0.0), [(0.0, 0.0)]) is None, "a segment of no length holds nothing"
 
 
@@ -497,7 +508,9 @@ def test_a_lane_that_dangles_at_its_HEAD_is_pulled_back_from_that_end() -> None:
     s.M["fields"] = []
     s.M.setdefault("meta", {})
     assert sweeps._sweep_dangling_ends(s) == 1
-    assert s.M["lanes"][1]["pts"] == [[100.0, -200.0], [100.0, -10.0]], "the head in open ground is given up; the tail reaches the connector"
+    # the head stops at the last point within 60 ft of the house at y -150: walked from -400 in 4 ft steps, -208.0 (the pop
+    # landed it on the vertex at -200)
+    assert s.M["lanes"][1]["pts"] == [[100.0, -208.0], [100.0, -200.0], [100.0, -10.0]], "the head walks in to the house's reach"
 
 
 def test_a_lane_a_farmhouse_needs_keeps_an_end_that_nothing_lies_near() -> None:
@@ -510,9 +523,9 @@ def test_a_lane_a_farmhouse_needs_keeps_an_end_that_nothing_lies_near() -> None:
     s = _StubSettlement(
         lanes=[
             [(0.0, 0.0), (400.0, 0.0)],  # the connector, 400 ft from the house below
-            [(100.0, -390.0), (100.0, -800.0)],  # the only way that serves it, running off into open ground
+            [(180.0, -200.0), (180.0, -600.0)],  # the only way that serves it (80 ft off, inside `_SERVE_FT`), no point within 60
         ],
-        houses=[(110.0, -400.0)],
+        houses=[(100.0, -400.0)],  # ...and both its ends 215 ft off, past the dooryard carry's 120
     )
     s.M["fields"] = []
     s.M.setdefault("meta", {})
@@ -536,9 +549,10 @@ def test_an_end_that_reaches_nothing_is_carried_on_to_the_dooryard_of_the_house_
 
     from ._builders import _StubSettlement
 
-    # lane 0 is the connector (exempt, and far away); lane 1 runs past the one house it serves, both of its
-    # ends 90 ft off - past the 60 ft reach, inside twice it - so each end is carried on to the house's dooryard.
-    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 100.0)], [(500.0, 590.0), (500.0, 410.0)]], houses=[(500.0, 500.0)])
+    # lane 0 is the connector (exempt, and far away); lane 1 runs past the one house it serves 70 ft off, no point of it
+    # within the 60 ft reach (so the walk-in leaves nothing), both of its ends 99 ft off - inside twice the reach - so each
+    # end is carried on to the house's dooryard.
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 100.0)], [(570.0, 570.0), (570.0, 430.0)]], houses=[(500.0, 500.0)])
     assert _sw._sweep_dangling_ends(s) == 1, "the lane was fixed rather than dropped"
     pts = s.M["lanes"][1]["pts"]
     assert len(pts) == 4, "a vertex was added at each end"

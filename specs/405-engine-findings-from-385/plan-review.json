@@ -26,6 +26,26 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T14": {
+   "section_sha256": "85a81b738b77334534a1c487affa24c87e63c21c1d331135b24cb56026795820",
+   "reviewed": "2026-10-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D8",
+     "summary": "_sweep_dangling_ends loses its two vertex-popping loops; each end walks in along its last segment 4 ft at a time, dropping a vertex only once within 4 ft of it, with the 269 E4 hold asked before each step; docstring and claim updated to name the walk and its grain.",
+     "class": "within",
+     "why": "This is the moved 385 task T128 itself (worked per FR-001 under the GM's 2026-10-19 routing of everything not process into 405). The walk is the mechanism the task names: it brings the code into line with the 0246 rule (pull back to the last house served) and covers every end. Keeping the existing E4 hold carves no case out of the task's goal. The 4 ft grain matches the existing _trim_to_service step, and D8 removes nothing the GM asked for."
+    },
+    {
+     "id": "D9",
+     "summary": "An end's reach is asked of the other lanes' segments minus those within _TOUCH_GAP of the lane's OTHER end (as _trim_to_service's serves does, feature 261), so a link off a way with nothing at its far end walks back to nothing and is emptied, as the pop did; claimed as GUESS on 0246.",
+     "class": "within",
+     "why": "This defines what serves an end. It is not an exception to the task. Every end is still walked in, and nothing is popped. Reaching only the way the lane springs from serves nothing, so the 0246 rule that an end reaching nothing is pulled back covers this case. D9 keeps the current outcome for a stub (emptied) and stops the new walk from leaving tails the pop never left, so it carries out the task's goal rather than narrowing it. The research page is silent on this point, and the plan says so openly: it labels D9 O (feature 261) and claims it as GUESS on 0246. Neither the GM's request nor the spec index says anything that D9 departs from."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  },
  "blocks": {
