@@ -314,7 +314,7 @@ def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: l
     Research:
         junction link margin - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft (`WEB_FABRIC_GAP`) off the fabric, or the caller's
         a join link never on the crop - research/questions/0081-village-lanes.drawing.html: a lane never crosses row crops
-        a join link off the crop at the gap - UNRESEARCHED: the link keeps the fabric's 7 ft (`gap`) off the crop; no page gives a distance
+        a join link off the crop at the gap - DEVIATION research/questions/0081-village-lanes.drawing.html: the page lets a lane run on the bund and touch a plot's boundary; the link keeps the fabric's 7 ft (`gap`) off the crop - the departure the page is yet to record (405 T98)
         a join link off the wet ground at the gap - UNRESEARCHED: the link keeps the fabric's 7 ft off the toe and the marsh, where a lane's link keeps 8 ft (`_clear_link`); no page gives either
         a join link off the water - UNRESEARCHED: 14 ft off the water lines (`clear_runs`' `line_margin`), as `_clear_link`
         a join link off every garden - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the gap is kept from another household's garden and a household's own way may run beside its own; a link joins a way to the network and belongs to no one household, so no garden is its own"""
@@ -509,7 +509,8 @@ def clear_runs(
     A stub below the floor is not a lane, whichever way it was measured.
 
     Research:
-        off the crop and wet ground - UNRESEARCHED: the full margin; 0081 keeps a lane off the crop and the wet ground and gives no distance
+        off the crop - DEVIATION research/questions/0081-village-lanes.drawing.html: the page lets a lane run on the bund and touch a plot's boundary; the run keeps the full `margin` off the crop - the departure the page is yet to record (405 T98)
+        off the wet ground - UNRESEARCHED: the full margin; 0081 keeps a track off wet ground and gives no distance
         threads between steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off the fabric by default
         lane off a water line - UNRESEARCHED: 14 ft by default (`line_margin`)
         shortest lane - UNRESEARCHED: a run under 70 ft by default is not a lane"""
