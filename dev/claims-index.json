@@ -31846,14 +31846,20 @@
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#the track's flank": {
   "body": "78231be076742dce",
-  "claim": "the track's flank - UNRESEARCHED: the fill takes the shortest way off any frame edge past the wet ground; 0081's downslope exit on the cluster's own flank is not yet asked of it (405 T111)",
-  "code": "53712f8ca1262dbe",
+  "claim": "the track's flank - village-lanes.drawing: it leaves downslope past the end of the wet ground, on the flank the cluster already sits on - the fill takes the shortest way off any frame edge instead, a known gap carried to 405 T111",
+  "code": "b1fbf7318cfd4be5",
   "core": "244a34e5859ee3b4",
   "date": "2026-10-21",
-  "note": "0081 answers this decision: \"It leaves downslope past the end of the wet ground, on the flank the cluster already sits on\", turning along the contour only where the fan reaches the map's edge. The code's shortest way off any frame edge (`dry_exit(start, walls, lines, W, H)` with no flank or downslope bias) departs from that, and 0081 records no deviation. The claim should cite research/questions/0081-village-lanes.drawing.html, where it would be DRIFTED, or name a DEVIATION that 0081's drawing page records",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "0081 says the track \"leaves downslope past the end of the wet ground, on the flank the cluster already sits on\" and runs along the contour only where the fan reaches the map's edge. The code picks neither a flank nor a downslope direction: `dry_exit(start, walls, lines, ...)` takes the shortest way off any frame edge, as the claim itself admits. A claim that says outright the code does not do what it cites is not IN-STEP. It cannot be a DEVIATION either, because §12 records no departure. Either the fill should prefer the cluster's flank and downslope (405 T111), or the claim should be relabeled DEVIATION once the drawing page records the shortest-way fill as this project's choice",
+  "pages": {
+   "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
+  },
+  "research": "324b10775c9108ef",
+  "rests": [
+   "0081-village-lanes.drawing.html:16df95fc169329f7",
+   "0081-village-lanes.drawing.html:43b635b1ca75125b"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#track start out of the grove bands": {
   "body": "78231be076742dce",
