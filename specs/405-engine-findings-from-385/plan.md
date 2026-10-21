@@ -584,7 +584,7 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
-### T20 Approach (re-answered 2026-10-21T15:40Z)
+### T20 Approach (re-answered 2026-10-21T15:19Z)
 
 1. **The goal, in the world.** As before.
 2. **The constraints.** As before.
@@ -616,7 +616,7 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
-### T08 Approach (re-answered 2026-10-21T15:40Z)
+### T08 Approach (re-answered 2026-10-21T15:19Z)
 
 1. **The goal, in the world.** As before.
 2. **The constraints.** As before.
