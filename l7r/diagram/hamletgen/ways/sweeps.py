@@ -648,9 +648,9 @@ def _keep_the_route_wide(s: Settlement, hard: list[Poly], walls: Sequence[Poly],
 
 
 def farm_bands(M: Mapping[str, Any]) -> list[Poly]:
-    """A farm's own wood, which no carried end crosses: each grove band of the manifest (`groves`, those with a width) as its
-    rotated rectangle (`rot_rect` at its `rot`), and each clump of the dooryard copse (`village_groves`, role `copse` - a
-    household's share, seated beside its house) as an octagon of the copse's clump radius `r`."""
+    """A farm's own wood, which no carried end crosses: its grove bands (`groves`) as rotated rectangles, and the dooryard copse's
+    clumps (`village_groves` role `copse`, each a household's share) as octagons of the clump radius `r` - not the shelter belt.
+    Research: a farm's own wood - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: its grove and its share of the copse, one wood"""
     bands = [rot_rect(float(g["x"]), float(g["y"]), float(g["w"]), float(g["h"]), float(g.get("rot") or 0.0)) for g in M.get("groves") or [] if g.get("w")]
     for g in M.get("village_groves") or []:
         r = float(g.get("r") or 0.0)
@@ -841,7 +841,7 @@ def carry_to_dooryard(q: Pt, houses: Sequence[Pt], steadings: Sequence[Sequence[
 
     Research:
         end carried to the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: stopping short of the wall
-        grove band not crossed - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: no lane runs through a farm's own wood"""
+        grove band not crossed - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: no lane runs through a farm's own wood"""
     near = [h for h in houses if 0.0 < math.dist(q, h) <= reach]
     if not near:
         return None
