@@ -39,6 +39,8 @@ def close(rows: list[dict], numbers: list[int], task: str = "", why: str = "", n
     """Close the numbered rows (1-based, file order): filed as `task`, or settled with `why`. Refuses a row already closed."""
     if bool(task) == bool(why):
         raise ValueError("one of --task (filed) or --why (settled)")
+    if not numbers:
+        raise ValueError("no rows named - make found-close F=<n> ROWS=3,7 (the numbers make found-list prints)")
     if task and not re.fullmatch(r"(?:(?:385|405) )?T\d+", task):
         raise ValueError(f"--task names a task id - T61, or 385 T12 / 405 T17 (the GM's routing names those two features only) - not {task!r}")
     # SETTLED ONLY WHERE IT NO LONGER HOLDS (the plan review of 405 D36): a finding that still holds is FILED as a task (FR-002), so a

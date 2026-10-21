@@ -38,3 +38,8 @@ def test_a_row_is_filed_or_settled_and_the_rest_stay_open(tmp_path: pathlib.Path
     assert json.loads(path.read_text().splitlines()[3])["why"] == "no longer holds: the cited text is gone"
     with pytest.raises(ValueError, match="no row 9"):
         found.close(rows, [9], task="T1")
+
+
+def test_a_close_naming_no_rows_is_refused_with_the_rows_argument() -> None:
+    with pytest.raises(ValueError, match=r"ROWS=3,7"):
+        found.close([{"status": "open"}], [], task="T61")

@@ -148,6 +148,10 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T84 `touch._join_piece` clears the piece by its vertices only, so a link whose span crosses a homestead between two clear vertices passes; clear the piece's segments as `_clear_link` does (impl-drift outside the change, batch 7's round, 2026-10-21) [lands-open]
       research: rendering
+- [ ] T85 `touch._touch_junctions` reads a lane with no width as 5 ft (`or 5.0`, which feeds `may_write`'s `stroke_hits` too) where `_one_network` and `_join_piece` read 3 ft, 0246 §43's footpath; read 3 ft in all three (impl-drift outside the change, batch 7's round 3, 2026-10-21) [lands-open]
+      research: rendering
+- [ ] T86 0246 §41 holds the 7 ft gap from ANOTHER household's garden, and the page records drawing a lane past its own household's garden as a DEVIATION, but `_clear_touch` / `_clear_within` keep the join links 7 ft from all fabric, own garden and yard included: carry the own-garden case into the join links, or record the stricter join on 0246 (impl-drift outside the change, batch 7's round 3, 2026-10-21) [lands-open]
+      research: rendering
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
 - [ ] T02 (385 T36) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
