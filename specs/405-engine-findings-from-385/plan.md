@@ -306,24 +306,7 @@ Owed by the cohort (cohort@20261021T172647Z: seeds 12, 21, 22, 24, 38 and 901 ne
 <!-- plan-archive: T95 to T96 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 <!-- plan-archive: T96 to T97 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 <!-- plan-archive: T97 to T100 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-### T100 Decisions
-
-**D77 - one id, one task.** `spec-lint` `check_duplicate_tasks(tasks)`: every `- [ ] Tnn` / `- [x] Tnn` id seen twice is a finding with both line numbers and the tip `make task-add F=<n> TITLE=...`.
-
-### T97 Approach (re-answered 2026-10-21T18:13Z)
-
-1. **The goal, in the world.** The doubled-tail rule is claimed on the page that gives it, and the figure the code asks at is named against it.
-2. **The constraints.** 0081 §25: an end running back along another way under 20 degrees is cut where it comes alongside.
-3. **Where each comes from.** R (0081).
-4. **Do they describe the world here?** Yes - batch 9's round 3: four claims called it UNRESEARCHED; and measured 2026-10-21, at 20 degrees cohort seeds 10 and 40 were refused (a household's way read as doubled, a shallow crossing).
-5. **The order.** The four claims cite 0081 with the known gap (asked at 15); the move to 20 filed as T101, which owns it (done: seeds 1-48 and the pinned rows pass at 20), after the side-by-side family (T07); `_DOUBLED_DEG` stays 15 here.
-6. **The exits.** (a) claim, the move filed (T101).
-7. **The search smell.** None - one measured roll at 20, then the move filed with its done-check.
-8. **The budget.** With batch 10.
-9. **Done, measured.** The claims round reads the four; seeds 1-48 and the pinned rows 54/54 at 15 (measured 2026-10-21).
-10. **Before moving a constant.** Measured at 20 (two seeds refused); not moved.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
+<!-- plan-archive: T100 to T97 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 ### T100 part B (2026-10-21T18:13Z)
 
 Owed by the cohort (cohort@20261021T180921Z: seeds 10 and 40 newly failing), taken while T100 was the last task started - the work that resisted was T97's 20 degrees.
@@ -358,20 +341,7 @@ Owed by the cohort (cohort@20261021T180921Z: seeds 10 and 40 newly failing), tak
 
 **D78 - a ken off every wall, never forward.** `shed_off_a_wall(seat, walls, g, px)`: `clears(seat, walls, g + ken)` (every wall, the kura's too), `against_a_wall(seat, walls[:1], g + ken, tol=0.0)` (exactly a ken off the HOUSE - 0043's "a short step off the house"; the claims round: a shed a ken off the kura alone had passed - and the wall places offered off the house's walls only), and `not forward_of_front(seat, hh)` (no part past the front wall, `seat_y + d/2 > hh`). The seats are not turned by the household's roll here: tried, it moved Sawada's farms into a knot the gap keeps from gathering (measured 2026-10-21), so the roll is filed as T106. The kura's side stays as drawn (north) - T104 owns 0040's west for a scattered farm.
 
-### T103 Approach (checklist part A)
-
-1. **The goal, in the world.** A join's nub cut is claimed.
-2. **The constraints.** The ink's touch (`_TOUCH_GAP`, 4 ft, CONVENTION).
-3. **Where each comes from.** O.
-4. **Do they describe the world here?** Yes - batch 10's round (carried): `tee` stops a lane at the vertex before the joint when that vertex stands within 4 ft of its foot, unclaimed.
-5. **The order.** A claim at `tee`: a vertex within the ink's touch of its foot ends the lane there - CONVENTION, no last leg shorter than a touch.
-6. **The exits.** (a) claim.
-7. **The search smell.** None.
-8. **The budget.** 60 min for the batch with its landing.
-9. **Done, measured.** The claims round reads it IN-STEP.
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
+<!-- plan-archive: T103 to T103 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 ### T103 Decisions
 
 **D79 - the nub claimed.** No code change: `tee`'s stop within `_TOUCH_GAP` of the foot claimed CONVENTION (a leg shorter than the ink's touch reads as no leg).

@@ -1682,3 +1682,36 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T16:40:44Z (continue), 
 9. **Done, measured.** A turn of exactly 140 is no hairpin (test); seeds 1-48 and the pinned rows 54/54 (measured 2026-10-21).
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+<!-- plan-archive: archived 2026-10-21 -->
+### T100 Decisions
+
+**D77 - one id, one task.** `spec-lint` `check_duplicate_tasks(tasks)`: every `- [ ] Tnn` / `- [x] Tnn` id seen twice is a finding with both line numbers and the tip `make task-add F=<n> TITLE=...`.
+
+### T97 Approach (re-answered 2026-10-21T18:13Z)
+
+1. **The goal, in the world.** The doubled-tail rule is claimed on the page that gives it, and the figure the code asks at is named against it.
+2. **The constraints.** 0081 §25: an end running back along another way under 20 degrees is cut where it comes alongside.
+3. **Where each comes from.** R (0081).
+4. **Do they describe the world here?** Yes - batch 9's round 3: four claims called it UNRESEARCHED; and measured 2026-10-21, at 20 degrees cohort seeds 10 and 40 were refused (a household's way read as doubled, a shallow crossing).
+5. **The order.** The four claims cite 0081 with the known gap (asked at 15); the move to 20 filed as T101, which owns it (done: seeds 1-48 and the pinned rows pass at 20), after the side-by-side family (T07); `_DOUBLED_DEG` stays 15 here.
+6. **The exits.** (a) claim, the move filed (T101).
+7. **The search smell.** None - one measured roll at 20, then the move filed with its done-check.
+8. **The budget.** With batch 10.
+9. **Done, measured.** The claims round reads the four; seeds 1-48 and the pinned rows 54/54 at 15 (measured 2026-10-21).
+10. **Before moving a constant.** Measured at 20 (two seeds refused); not moved.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T103 Approach (checklist part A)
+
+1. **The goal, in the world.** A join's nub cut is claimed.
+2. **The constraints.** The ink's touch (`_TOUCH_GAP`, 4 ft, CONVENTION).
+3. **Where each comes from.** O.
+4. **Do they describe the world here?** Yes - batch 10's round (carried): `tee` stops a lane at the vertex before the joint when that vertex stands within 4 ft of its foot, unclaimed.
+5. **The order.** A claim at `tee`: a vertex within the ink's touch of its foot ends the lane there - CONVENTION, no last leg shorter than a touch.
+6. **The exits.** (a) claim.
+7. **The search smell.** None.
+8. **The budget.** 60 min for the batch with its landing.
+9. **Done, measured.** The claims round reads it IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
