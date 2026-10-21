@@ -235,11 +235,12 @@ def run_lanes_on_to_the_bund(s: Settlement, ground: WorkedGround, blocks: RunOnB
         connector left alone - research/questions/0081-village-lanes.drawing.html: the track out runs off the map
         a row street not carried onto the field - research/questions/0033-row-villages-resson.drawing.html: the street runs on off the map as the road into it
         run-on reach - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end within `RUN_ON_REACH_FT` (60 ft) of the field, the reach the page gives to a house or a way, reused; no page gives one to the field
-        the dry hem's edge too - GUESS research/questions/0081-village-lanes.drawing.html: lanes run along the hem of dry fields and the spur stops at the hem's edge; an inner lane's end is carried onto the worked ground's nearest edge, a dry plot's as well as the paddy's"""
+        to the paddy - research/questions/0081-village-lanes.drawing.html: the settlement's own inner lanes end in the cluster or at the paddy; an end is carried to the paddy's nearest edge (`paddy_ground`), never a dry plot's - only the spur stops at the hem"""
     lanes = s.M.get("lanes") or []
     steadings = steading_footprints(s.M)
     houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []]
     blocks = blocks or RunOnBlocks(s)
+    paddy = paddy_ground(s)  # 405 T62 (D39): the run-on aims at the paddy (0081: inner lanes end in the cluster or at the paddy)
     moved = 0
     for i, ln in enumerate(lanes):
         pts = [(float(x), float(y)) for x, y in ln.get("pts") or []]
@@ -254,7 +255,7 @@ def run_lanes_on_to_the_bund(s: Settlement, ground: WorkedGround, blocks: RunOnB
                 if len(out) >= 2:
                     pts, changed = out, True
             elif not end_serves(pts[-1], segs, houses, ground, steadings):
-                tgt = run_on_target(pts[-1], ground, half)
+                tgt = run_on_target(pts[-1], paddy, half)
                 if tgt is not None and not turns_back(pts[-2], pts[-1], tgt) and blocks.clear(pts[-1], tgt, 2.0 * half):
                     pts, changed = [*pts, tgt], True
             pts.reverse()

@@ -363,3 +363,17 @@ def test_every_web_cut_has_a_house_within_reach_and_its_lane_spans_only_those() 
         for cut, line in zip(web_cuts(arcs, WEB_REACH_FT, MIN_WEB_GAP), web._web_cut_lines(SimpleNamespace(lane_web="alleys"), frame, arcs, stands), strict=False):
             near = [d for a, d in zip(arcs, stands, strict=True) if abs(a - cut) <= WEB_REACH_FT]
             assert min(p[1] for p in line) >= min(near) - 30.0 - 1e-6 and max(p[1] for p in line) <= max(near) + 30.0 + 1e-6
+
+
+def test_a_skeleton_arm_ending_on_a_way_already_laid_is_not_trimmed() -> None:
+    """405 T63 (D40, 0246: only an end that reaches nothing is pulled back): an arm whose far end stands on the connector keeps
+    it; without the way it is trimmed back toward its house as before."""
+    from l7r.diagram.hamletgen.ways import web
+
+    plan = a_plan()
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    s.M["houses"] = [{"x": 100.0, "y": 100.0, "w": 40.0, "h": 28.0, "rot": 0.0}]
+    arm = [(100.0, 100.0), (300.0, 100.0), (500.0, 100.0)]
+    assert web.served_arm(s, arm)[-1][0] < 500.0, "reaching nothing: trimmed"
+    s.M["lanes"] = [{"pts": [[500.0, 0.0], [500.0, 300.0]], "w": 5, "connector": True}]
+    assert web.served_arm(s, arm)[-1] == (500.0, 100.0), "ending on the connector: kept"

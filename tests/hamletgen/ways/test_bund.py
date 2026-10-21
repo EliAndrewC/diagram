@@ -283,3 +283,16 @@ def test_a_carried_step_the_matrix_refuses_is_not_drawn(monkeypatch) -> None:  #
     monkeypatch.setattr(s, "admits_lane", lambda pts, w: False)
     n = len(s.M["lanes"])
     assert carry_on(s, 1, 0, (150.0, 100.0), (150.0, 60.0)) is False and len(s.M["lanes"]) == n
+
+
+def test_a_run_on_aims_at_the_paddy_never_a_dry_plot() -> None:
+    """405 T62 (D39, 0081: the settlement's own inner lanes end in the cluster or at the paddy): an end 40 ft from a dry plot and
+    140 ft from the paddy is not carried onto the plot's edge; an end within the reach of the paddy still is."""
+    s = _stub(dry_plots=[{"poly": [[300.0, 160.0], [380.0, 160.0], [380.0, 260.0], [300.0, 260.0]]}])
+    s.M["lanes"] += [{"pts": [[100.0, 300.0], [260.0, 300.0]], "w": 3}]
+    g = WorkedGround([_FIELD, [(300.0, 160.0), (380.0, 160.0), (380.0, 260.0), (300.0, 260.0)]])
+    before = [list(p) for p in s.M["lanes"][1]["pts"]]
+    B.run_lanes_on_to_the_bund(s, g)
+    assert s.M["lanes"][1]["pts"] == before, "not carried onto the dry plot"
+    s.M["lanes"] += [{"pts": [[200.0, 100.0], [360.0, 100.0]], "w": 3}]
+    assert B.run_lanes_on_to_the_bund(s, g) == 1 and s.M["lanes"][2]["pts"][-1][0] > 390.0, "carried to the paddy's bund"

@@ -780,6 +780,48 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
+  },
+  "## T62, T63, T69 - the run-on to the paddy, the arm trims against what they reach, the cut lines' houses (the T17 batch's round 2; T28)": {
+   "sha256": "fe4e45ffb7a603631952175b05306dc6656a36ef9e33890c593bb4b3f3441217",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T62 Approach (checklist part A)": {
+   "sha256": "6052b94ce3707a03e6c97ce4ecd97ab62311b7424ef642de44cca203a79de55c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T62 Decisions": {
+   "sha256": "ddb75f6eb4343e14647c0eaebcc3b161a92c183d124f29519b7f89b7d7f7b696",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T63 Approach (checklist part A)": {
+   "sha256": "486c9005da817809100f11b85d06a618ef9d25265be0b2a34e0fb386d4ab6da0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T63 Decisions": {
+   "sha256": "449d5e2ef28ee16d600477e19387dd90893636657564bcb7e57d4514a4082881",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T69 Approach (checklist part A)": {
+   "sha256": "5b30c48c083468de624035cd52723a522a7a8a309f352de15ab31432168056c6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T69 Decisions": {
+   "sha256": "7a69b753f66d1c018403ce2cdf9f9e4eda9ed84c8ecc337b99e7224861898062",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1776,6 +1818,39 @@
      "summary": "the reference map's served line no longer offers 'GATE_NO_CACHE=1 rolls it', because the roll census refuses that run; making the census accept a declared no-cache run was considered and refused",
      "class": "within",
      "why": "The task removes a recovery the message offers that the gate refuses. That removal is the whole fix, and the reason the line is served stays. The refused alternative would have widened the scope rather than narrowed it, so declining it narrows nothing that was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T62, T63, T69 - the run-on to the paddy, the arm trims against what they reach, the cut lines' houses (the T17 batch's round 2; T28)",
+    "### T62 Approach (checklist part A)",
+    "### T62 Decisions",
+    "### T63 Approach (checklist part A)",
+    "### T63 Decisions",
+    "### T69 Approach (checklist part A)",
+    "### T69 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D39",
+     "summary": "run_lanes_on_to_the_bund aims run_on_target at paddy_ground (built once a pass) instead of the whole worked ground; an end inside the worked ground is still pulled out of it; the claim reads 'to the paddy'.",
+     "class": "within",
+     "why": "Conforms the code to 0081's drawing page (inner lanes may end in the cluster or at the paddy; only the field spur stops at the hem) and 0014 (the path joins the paddy's outer bund). The pull-out kept unchanged is existing behavior the task does not touch; nothing in the GM's request (FR-001: each task worked as 385 worked its tasks) is narrowed - the change is exit (e) conform, which the GM's Amendment 7 says is the default ('generally what we should do'). Noted, not ruled against: the block keeps 'an end standing in the worked ground is still pulled out of it' unchanged; if the worked ground includes dry plots (item 4 says it does), a retargeted end that still stands in a dry plot would be pulled to that plot's edge, the place 0081 reserves for the field spur. The bundle cannot show whether that case is reachable; item 9's test (a run-on aims at the paddy, never a dry plot) is the check that fails if it is."
+    },
+    {
+     "id": "D40",
+     "summary": "served_arm calls _trim_to_service with the ways drawn so far (_net_segs) and the worked ground where the map has a field, so an arm end on a way, the spur or the bund is not trimmed back; its claim and _lay_skeleton's name the ways and the bund.",
+     "class": "within",
+     "why": "Conforms to 0246 s6 (only a lane end that reaches nothing is pulled back). The 'where the map has a field' qualifier is not a carve-out: with no field there is no worked ground or bund to reach, so passing none is the physical case, not an exception to the rule."
+    },
+    {
+     "id": "D41",
+     "summary": "T69's finding (cut lines counting houses reached across a yard) does not hold in code - stage_web already drops every reached_across house before computing the arcs and stands - so the task is closed by exit (a): _web_cut_lines' claim says where the exclusion is made.",
+     "class": "within",
+     "why": "Settling a finding as a claim edit because the code already does what the research asks is not narrowing the task: the world-goal (a web lane's span counts only houses owed a lane) is met either way, and the claim edit makes the code's statement match it. The premise is stated as measured (a read of web/stage.py, 2026-10-21); this bundle-only review did not re-read the file, so that premise rests on the task's own checks and the claims round reading it IN-STEP."
     }
    ]
   }

@@ -27,8 +27,8 @@ from ...consts import (
 from ...plan import SitePlan, _roll
 from ..checks import ford_crossing
 from ..clearance import clip_to_clear
-from ..fabric import _WEB_MIN_FT, _homestead_polys, _margin_frame
-from ..geom import _trim_to_service, polyline_len, steading_footprints
+from ..fabric import _WEB_MIN_FT, _homestead_polys, _margin_frame, _net_segs
+from ..geom import _trim_to_service, memo_ground, polyline_len, steading_footprints, worked_ground
 from ..law_water import _brooks
 from ..route import _route
 
@@ -276,10 +276,14 @@ def served_arm(s: Settlement, arm: Poly) -> Poly:
     `_lay_skeleton` (feature 308): the re-grown pool no longer leaves an arm that short, so it is tested on plain inputs.
 
     Research:
-        skeleton arm trimmed to service - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its ends pulled back to the houses it serves
+        skeleton arm trimmed to service - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end reaching nothing pulled back to the houses it serves; one reaching a way drawn so far or the bund stays
         shortest arm - UNRESEARCHED: an arm under 30 ft (`_WEB_MIN_FT`) is not drawn"""
     if len(arm) >= 2:
-        arm = _trim_to_service(arm, [], [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])], steadings=steading_footprints(s.M))
+        # ...JUDGED AGAINST WHAT IT REACHES (405 T63, D40): the ways drawn so far and the bund too, not the houses alone - 0246 pulls
+        # back only an end that reaches nothing, and an arm ending on the connector, the spur or the bund was cut back to its last house
+        ground = memo_ground(s, "worked", worked_ground) if s.M.get("fields") or s.M.get("dry_plots") else None
+        houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
+        arm = _trim_to_service(arm, _net_segs(s), houses, ground=ground, steadings=steading_footprints(s.M))
     return [] if len(arm) >= 2 and polyline_len(arm) < _WEB_MIN_FT else arm
 
 
@@ -294,7 +298,7 @@ def _web_cut_lines(plan: SitePlan, frame: _margin_frame, arcs: list[float], stan
         back lane tie spacing - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: cross lanes about one to every 300 ft - `web_cuts` at a reach of 1.5 x BUNDLE_PITCH (150 ft), so the ties stand up to about 300 ft apart
         web cut spacing - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every house within WEB_REACH_FT (100 ft) of a cut, so the cuts stand up to about twice that apart
         a cut's room - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: MIN_WEB_GAP, 7 ft clear of a garden fence on each side and a 4 ft tread, within the page's 3 ft footpath to 5 ft spine
-        a web lane's span - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane runs only along the houses it serves - those within WEB_REACH_FT (100 ft) of its cut
+        a web lane's span - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane runs only along the houses it serves - those within WEB_REACH_FT (100 ft) of its cut, of every house but one reached across a neighbor's yard (owed no lane; `stage_web` leaves those out of the arcs and stands)
         a tie's run past the back lanes - GUESS: a cross lane runs the back lanes' own 30 ft pad (`pad`) past the outermost of them; no page gives a distance
     """
     pad = 30.0  # a lane runs a little past the last steading it serves, not up to its wall; a tie runs as far past the outermost back lane
