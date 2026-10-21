@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-21T15:08:58Z",
+  "target": "record-checked",
+  "commit": "fbb0fa119",
+  "why": "record-format on record-format:0271: round:record-format|q:0271@3 ruled accept (specs/408-shrine-small-lines/arbiter.jsonl); the only visible change since is translation-check's own LOOSE fix inside a quoted translation, \u56fd\u5e9c\u306e\u5f25\u9640 as 'the Amida Nyorai named for the provincial capital [of Ise]', whose words are a glossary variant (provincial capital) and a bracketed gloss"
+}
