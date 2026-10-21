@@ -300,6 +300,9 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [ ] T107 The knots step cannot gather two households' ways whose join would pass within 0246's 7 ft of a neighbor's garden (T18 keeps that gap off every garden but a way's own): any reshuffle of the farms exposes it - T26's wood-shed rule, measured 2026-10-21, left knots on cohort seeds 10, 24, 36 (and 47 refused) without the seat roll, and on Sawada with it. Find a gather that keeps the gap (a meeting point clear of the gardens, a tee onto the side away from them), or give the farms the room (room before packing); T26 and T106 wait on it [lands-open]
       research: rendering
       research: rendering
+- [ ] T108 Two notes from T105's round: joints._one_joint reads a lane with no width as 5 ft (the spine's) where settle_ends, touch and the knots read 3 ft (0081's footpath) - one default; and 0081 asks a Z at a joint pulled straight and names no mend when the pull fails - research the joint moved back a vertex, or record it as the page's GUESS (impl-drift outside the change, 2026-10-21) [lands-open]
+      research: rendering
+      research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
