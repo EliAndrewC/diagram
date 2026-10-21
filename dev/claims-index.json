@@ -30002,16 +30002,16 @@
   "code": "13c0226d6704e3e8",
   "core": "ea19df2d9ccd7317",
   "date": "2026-10-21",
-  "note": "The claim says the end is \"never [walked] while within 60 ft of any way\", but `_near` tests only the candidate step `nxt`. It does not test the current end `b`. When `b` is within 60 ft of a way, `near(b)` is inf, so any `nxt` just past 60 ft scores lower (`near(nxt) >= near(b)` is false) and the walk carries on toward a house. That happens exactly where the first loop stops an end it pulled back to reach a way: about 56-60 ft from it. Such an end gets walked off the way it reached and onto a house, which breaks the claim's \"a junction end stays at its junction\". Ending at the dooryard is allowed by §6 (\"ends at the dooryard or runs on to something a reader can see\"; \"the rule is a GUESS\"). The fault is the code against its own claim: either `_walk_in` should stop when `near(b)` is inf, or the claim should say the end is held only while its next step is within 60 ft.",
+  "note": "`_near` returns infinity within `_REACH_FT` of any other lane's segment, the way it left included, and otherwise the distance to the nearest owed house within 2 x `_REACH_FT`; `_walk_in` walks on while the end still reaches and comes nearer. That is the claim as written, a GUESS within the page's \"ends at the dooryard\" and its GUESS of how close counts as serving",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_debris#a house served": {
   "body": "ce55e9fcf31567df",
@@ -30130,51 +30130,53 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_walk_in#held at a junction": {
-  "body": "4d15e866c60a1f1f",
+  "body": "26e86d55afa32816",
   "claim": "held at a junction - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the lanes are one network, joined where their treads meet - a pull-back stops where another lane's end rests on it",
-  "code": "dfa67166676c3e19",
-  "core": "27b3c0e12ccf62f8",
+  "code": "6ee1e177ec284b7b",
+  "core": "27a27b2024575638",
   "date": "2026-10-21",
-  "note": "both loops stop where another lane's end rests on the segment, so the lanes stay \"one network, joined where their treads meet\"",
+  "note": "both loops stop where another lane's end rests on the segment (`held_at`); the first sets the end to the hold point and the new walk-on returns there, keeping the one joined network the page describes",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_walk_in#held nearest the house it serves": {
-  "body": "4d15e866c60a1f1f",
-  "claim": "held nearest the house it serves - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane ends at the dooryard - walked on while it still reaches and nears the house it serves (`near`)",
-  "code": "785734daaf194ed9",
-  "core": "27b3c0e12ccf62f8",
+  "body": "26e86d55afa32816",
+  "claim": "held nearest the house it serves - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane ends at the dooryard - walked on while it still reaches and nears the house it serves (`near`), never from where `near` is infinite (a junction end stays at its junction)",
+  "code": "8a969a3093a825ea",
+  "core": "27a27b2024575638",
   "date": "2026-10-21",
-  "note": "the drawing page records where a lane ends past its last house, and how near counts as serving, as a GUESS; walking on while the end still reaches and nears the house falls within that guess",
+  "note": "the drawing page records a lane ending at the dooryard as a GUESS (\"No page we read says how far a lane ran past its last house, so the rule is a GUESS\"). The second loop walks the end on only while it still reaches the house and comes nearer to it. It stops at a junction hold and never moves an end whose `near` is infinite, which keeps the lanes one joined network",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_walk_in#pulled back to the last point that serves": {
-  "body": "4d15e866c60a1f1f",
+  "body": "26e86d55afa32816",
   "claim": "pulled back to the last point that serves - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane end that reaches nothing is pulled back to the last house it serves, 4 ft at a time",
-  "code": "0643c58d9c386920",
-  "core": "27b3c0e12ccf62f8",
+  "code": "a4496036f4c1d466",
+  "core": "27a27b2024575638",
   "date": "2026-10-21",
-  "note": "the first loop pulls the end back 4 ft at a time until it reaches; the new second loop carries it on toward the house, which matches \"pulled back to the last house it serves\"; the page records this rule as a GUESS",
+  "note": "the first loop walks an end that reaches nothing back 4 ft at a time to the first point that reaches; the page records this rule and the serving figures as a GUESS",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c90fc4f6fee86c66"
   ],
   "verdict": "IN-STEP"
  },
