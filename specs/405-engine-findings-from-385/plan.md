@@ -356,7 +356,7 @@ Owed by the cohort (cohort@20261021T180921Z: seeds 10 and 40 newly failing), tak
 
 ### T26 Decisions
 
-**D78 - a ken off every wall, never forward.** `shed_off_a_wall(seat, walls, g, px)`: `clears(seat, walls, g + ken)` (every wall, the kura's too), `against_a_wall(seat, walls, g + ken, tol=0.0)` (exactly a ken out - the recorded seats and the wall places stand there), and `not forward_of_front(seat, hh)` (no part past the front wall, `seat_y + d/2 > hh`); `_wood_shed(..., u)` turns its four recorded seats by `int(u * 4)`, as the coop's are turned. The kura's side stays as drawn (north) - T104 owns 0040's west for a scattered farm.
+**D78 - a ken off every wall, never forward.** `shed_off_a_wall(seat, walls, g, px)`: `clears(seat, walls, g + ken)` (every wall, the kura's too), `against_a_wall(seat, walls[:1], g + ken, tol=0.0)` (exactly a ken off the HOUSE - 0043's "a short step off the house"; the claims round: a shed a ken off the kura alone had passed - and the wall places offered off the house's walls only), and `not forward_of_front(seat, hh)` (no part past the front wall, `seat_y + d/2 > hh`); `_wood_shed(..., u)` turns its four recorded seats by `int(u * 4)`, as the coop's are turned. The kura's side stays as drawn (north) - T104 owns 0040's west for a scattered farm.
 
 ### T103 Approach (checklist part A)
 
@@ -376,3 +376,16 @@ Owed by the cohort (cohort@20261021T180921Z: seeds 10 and 40 newly failing), tak
 
 **D79 - the nub claimed.** No code change: `tee`'s stop within `_TOUCH_GAP` of the foot claimed CONVENTION (a leg shorter than the ink's touch reads as no leg).
 
+### T26 Approach (re-answered 2026-10-21T19:13Z)
+
+1. **The goal, in the world.** A farm's wood shed stands a short step off a wall of its house, clear of its kura by as much, never forward into the dooryard, its first seat turned per household as the coop's is.
+2. **The constraints.** 0043 (GUESS there): the shed behind or beside the house, never the front yard, a ken off a house wall (about 9.5 ft with the wall gap - the ken the page's GUESS, the gap its DEVIATION).
+3. **Where each comes from.** R (0043) and O (the coop's roll).
+4. **Do they describe the world here?** Yes - T34's rounds, and batch 11's round: a ken off the kura alone had passed, where the page says off the house.
+5. **The order.** `shed_off_a_wall`: against a HOUSE wall at exactly the gap and a ken, clear of every steading wall by as much, no part forward of the front wall; wall places offered off the house's walls only; the seats turned by the household's roll; claims; tests; seeds 1-48.
+6. **The exits.** (e) conform.
+7. **The search smell.** None.
+8. **The budget.** With batch 11.
+9. **Done, measured.** A seat 3.5 ft off the kura, a ken off the kura alone, one half forward of the front wall and one 1.4 ft past the ken are refused (tests); seeds 1-48 and the pinned rows pass.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.

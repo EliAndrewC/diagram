@@ -118,6 +118,9 @@ def test_the_wood_shed_stands_a_ken_off_a_wall_of_its_house_or_is_refused() -> N
     out_further = (0.0, -(HH / 2 + 3.5 + 6.0 + 6.0 + 1.4), 24.0, 12.0)
     assert not fs.shed_off_a_wall(out_further, walls[:1], fs.WALL_GAP_FT, _px), "1.4 ft past the ken: the old tolerance let it stand"
     assert fs.forward_of_front((0.0, HH / 2, 12.0, 24.0), HH / 2) and not fs.forward_of_front((0.0, 0.0, 12.0, 24.0), HH / 2)
+    off_kura_alone = (kura[0], kura[1] - kura[3] / 2 - 3.5 - 6.0 - 6.0, 24.0, 12.0)
+    assert not fs.shed_off_a_wall(off_kura_alone, walls, fs.WALL_GAP_FT, _px), "a ken off the kura alone, away from the house (0043: off the house)"
+    assert walls[0][:2] == (0.0, 0.0), "walls[0] is the house, centered on the frame's origin - the front wall `forward_of_front` reads"
 
 
 def test_the_wood_shed_s_first_seat_is_turned_by_the_household_s_roll() -> None:

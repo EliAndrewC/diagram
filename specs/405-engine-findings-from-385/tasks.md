@@ -290,6 +290,9 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [ ] T104 Every pool farm draws its kura on the north wall (Inashiro, Kashikawa, Kuwabata, Mizuguchi, Sawada: shed_side N), while 0040 puts a scattered farmstead's kura on the west; and a grove farm's fixtures are laid with no kura wall (bundle._lay_fixtures passes shed False for the dispersed layout): draw the kura on the side 0040 gives each form, and lay the fixtures against it (split from T26, 2026-10-21) [lands-open]
       research: rendering
       research: rendering
+- [ ] T105 Two notes from batch 10's round: 0081's drawing page does not record moving a joint back one vertex when the pull cannot clear a Z across it, which joints._one_joint and _joint_moved_back cite 0081 for (say it on the page, or claim the move as UNRESEARCHED); settle_ends reads a lane with no width as 3 ft (the footpath, 0081 section 1) unclaimed - claim it (impl-drift outside the change, 2026-10-21) [lands-open]
+      research: rendering
+      research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
