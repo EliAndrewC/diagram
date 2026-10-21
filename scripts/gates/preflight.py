@@ -394,6 +394,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--would-write", default="", help="with --tree-check: exit 0 when writing PATH (to --content's bytes) is unseen by the gate")
     ap.add_argument("--content", default="", help="the file holding the bytes --would-write would write")
     ap.add_argument("--quiet", action="store_true")
+    ap.add_argument("--no-coverage", action="store_true", help="end after the quick tier: the gate's own floor judges the changed lines (405 T47, D25)")
     a = ap.parse_args(argv)
     root = Path(a.root).resolve()
     if a.would_write and a.tree_check:  # the gate-write guard's question for an Edit or a Write (405 T41, D15)
@@ -453,8 +454,11 @@ def main(argv: list[str] | None = None) -> int:
         print("preflight: `make quick` failed - the gate stops here (feature 375 FR-004)")
         return 1
     mark("quick")
-    off, on = coverage_step(root, changed_lines(root), a.workers)
-    mark("coverage of the changed lines")
+    # THE COVERAGE STEP IS make preflight's, NOT THE GATE'S (405 T47, D25): 98-107 s of every gate, and in the whole transcript
+    # record it refused about twice, once wrongly - the gate's own 100% floor judges the same lines a few minutes later
+    off, on = ({}, {}) if a.no_coverage else coverage_step(root, changed_lines(root), a.workers)
+    if not a.no_coverage:
+        mark("coverage of the changed lines")
     prev = t0
     steps = []
     for step, t in marks:

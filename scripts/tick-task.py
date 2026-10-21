@@ -227,7 +227,10 @@ def refusal(root: Path, d: Path, task: str, note: str, landed: bool = True) -> t
 def main(argv: list[str]) -> int:
     boxes = "--boxes" in argv
     from_env = "--note-from-env" in argv
-    args = [a for a in argv if a not in ("--boxes", "--note-from-env")]
+    # `make land`'s tick, written before the push that carries it (405 T51, D24): the landed check is the one refusal left out,
+    # since `make land` asked every task's refusals before it landed them and the push is what lands them
+    landing = "--landing" in argv
+    args = [a for a in argv if a not in ("--boxes", "--note-from-env", "--landing")]
     if from_env and len(args) == 2:
         args.append(os.environ.get("TICK_NOTE", ""))
     if len(args) != 3:
@@ -243,7 +246,10 @@ def main(argv: list[str]) -> int:
     if not path.is_file():
         print(f"tick: {path} does not exist", file=sys.stderr)
         return 2
-    why, message = refusal(root, d, task, note)
+    if landing and task not in os.environ.get("L7R_LAND_TICKS", "").split():  # the plan review of D24: `make land`'s alone
+        print(f"tick: refused - --landing is `make land`'s, for a task it names in L7R_LAND_TICKS; {task} is not one - make land F={feature} T={task}", file=sys.stderr)
+        return 2
+    why, message = refusal(root, d, task, note, landed=not landing)
     if message:
         print(message)
     if why:

@@ -452,6 +452,60 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
+  },
+  "## T50 - the claims round beside the landing (amendment 6)": {
+   "sha256": "ffda6bce9ed8ee93470e293b0eb493e52df2f8ebc4ade32ea0d55b4327dba4fd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T50 Approach (checklist part A)": {
+   "sha256": "9658717a84dc1b93b3ad212badebd2e7e7cc57b3f663705868303681e98112ac",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T50 Decisions": {
+   "sha256": "c887afd6050b241c3001c2d6195f2844f990d23aea1823df3abc7df9845b107c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "## T51 - one push (amendment 6)": {
+   "sha256": "50f04fecd50e5ae1f3b4aa9ceffaea38cfae05b92aea23332d3e884ff48d489d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T51 Approach (checklist part A)": {
+   "sha256": "be992d92c520827294363085b11d5ff8949c3faf1926d006f9a6466570b8dc3b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T51 Decisions": {
+   "sha256": "dc648b8275174af91c938fe6f6274392a6cac9c27842010a5c197ff252ed94c7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "## T47 - the preflight's coverage step leaves the gate (amendment 6)": {
+   "sha256": "c9a3000e1a7b2de7a669ae9a84e702f7b4c11e6b3589fe0836d41ac715ddcacb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T47 Approach (checklist part A)": {
+   "sha256": "43709f3439db7f82dc64702e4eb593609f520c286bf0288f10155ca9a700f5f0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T47 Decisions": {
+   "sha256": "33923f6a53cea5d8198aff7dbd7604ecc314db218a94f4f80be86e3f2e25d1f3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -984,6 +1038,79 @@
      "summary": "Done measured by tests (start before make done, wait, kill on red, none on tooling; cohort record beside the gate reads unmoved) and live by the fifth claim's landing reporting gate and cohort wall times, JOBS and MemAvailable against T19's 5 + 4.4 min.",
      "class": "within",
      "why": "Tests only enforce the requested parallel run; the live report is amendment 5's 'do 1 more claims task and measure how long it takes'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T47 - the preflight's coverage step leaves the gate (amendment 6)",
+    "## T50 - the claims round beside the landing (amendment 6)",
+    "## T51 - one push (amendment 6)",
+    "### T47 Approach (checklist part A)",
+    "### T47 Decisions",
+    "### T50 Approach (checklist part A)",
+    "### T50 Decisions",
+    "### T51 Approach (checklist part A)",
+    "### T51 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D23-a (T50)",
+     "summary": "land.cheap_refusals returns a claims-gate refusal apart from the others; the others still stop the landing in the first pass",
+     "class": "within",
+     "why": "Amendment 6's first 'remaining time issue' is the claims round run in series before make land because make land refuses while a claim is owed; setting that one refusal aside so the round runs beside the gate and cohort is the request itself. No other refusal is relaxed."
+    },
+    {
+     "id": "D23-b (T50)",
+     "summary": "wait_for_claims after the long runs: claims gate passing and git status clean, polled every CLAIMS_POLL_S (15 s) up to CLAIMS_WAIT_S (20 min); past the bound nothing lands and the gate's words are printed",
+     "class": "within",
+     "why": "The claims gate is still asked before every push (feature 316) and still refuses with its own words; what was an immediate refusal becomes a bounded wait. Nothing that previously landed is excluded; the clean-tree condition restates what the push already refuses. New constants, not moved ones (item 10 is right)."
+    },
+    {
+     "id": "D23-c (T50)",
+     "summary": "a claims-round edit the gate does see (code) leaves the green-gate stamp stale and the push refuses as today",
+     "class": "within",
+     "why": "Keeps the gate's validity; the round's records and docstring edits are unseen by D15, so the overlap the GM asked for is achieved for the ordinary round. Not a carve-out from the request."
+    },
+    {
+     "id": "T50-exit",
+     "summary": "a second command for the session to remember was weighed and refused; the landing waits on the claims gate it already asks",
+     "class": "within",
+     "why": "A design choice among ways of doing what was asked; no scope removed."
+    },
+    {
+     "id": "D24-a (T51)",
+     "summary": "tick-task.py --landing asks every refusal but the landed one (385 T79/T113), used by land.main to tick before the single push",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the landed-check safeguard. Inside make land the tick must precede the push for a landing to be one push carrying its ticks (amendment 6's second issue), so the work cannot yet be on main and the landed check is physically unsatisfiable there; the revert on a failed push keeps 'a failed landing ticks nothing' (405 T33). This ruling covers ONLY the skip as invoked by land.main. The mechanism is a CLI flag and the block does not say what confines it to land.py; a hand-run --landing that bypasses the landed check outside make land would be a further narrowing this ruling does not approve. Item 5's clause 'which make land asks of each task before it lands them' is ambiguous about what replaces the landed check; the implementation should make that explicit."
+    },
+    {
+     "id": "D24-b (T51)",
+     "summary": "land.main ticks each task, commits the feature directory, pushes once with L7R_LAND_TICKS set; a failed push runs git revert --no-edit on the tick commit",
+     "class": "within",
+     "why": "One push per landing is the request; the revert is a new commit, so the standing no-rewrite rule holds."
+    },
+    {
+     "id": "T51-exit",
+     "summary": "a lighter second push was weighed and refused",
+     "class": "within",
+     "why": "The GM asked for the two-push cost to go; keeping one push is the direct reading."
+    },
+    {
+     "id": "D25 (T47)",
+     "summary": "preflight.py --no-coverage ends after the quick tier; the done recipe passes it, make preflight does not; the gate's own 100% floor judges every changed line",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "375 FR-004 (in full in the bundle) enumerates 'run the quick tests with coverage on the engine files the delta changed' as part of make done's preflight; D25 removes that enumerated step from make done, which the block's constraint line under-describes as only 'the cheap-refusal-first order'. Legitimate because the GM's own later words, 'we might as well do T47', direct exactly this task, and the step remains on demand via make preflight. This ruling rests on the dispatcher's identification of T47 as the preflight coverage-step task filed under amendment 5; the bundle carries no T47 text. 375 FR-004's wording is now stale and should be amended to match."
+    },
+    {
+     "id": "T47-exit",
+     "summary": "reusing the step's pass inside the gate was weighed and refused",
+     "class": "within",
+     "why": "Design choice; removes nothing that was asked."
     }
    ]
   }

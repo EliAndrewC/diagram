@@ -13,8 +13,9 @@ Pass 1 runs nothing long and prints EVERY refusal together: each task's tick ref
 owed ledger rows, the claims gate, what holds the landing (with the tasks named, `L7R_LAND_TICKS`), the review gate and the plan
 gate. Pass 2: `make done` when the green-gate stamp does not cover this content; `make cohort-landing` when the delta carries
 engine code and the cohort gate would refuse - BESIDE the gate when both are owed (405 T48, D21); what those runs regenerate
-under `pool/` is committed; then
-`scripts/sync-with-main.sh done` with `L7R_LAND_TICKS` set; then each tick. A failed landing ticks nothing.
+under `pool/` is committed; then the
+claims gate, waited on - its round runs beside the gate (405 T50); then each tick, committed, and ONE `scripts/sync-with-main.sh
+done` with `L7R_LAND_TICKS` set carries work and ticks (405 T51). A failed landing ticks nothing (a failed push reverts its ticks).
 """
 
 from __future__ import annotations
@@ -45,8 +46,9 @@ def run(root: Path, cmd: list[str], env: dict[str, str] | None = None, quiet: bo
     return out.returncode, (out.stdout or "") + (out.stderr or "") if quiet else ""
 
 
-def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str) -> list[str]:
-    """Pass 1: every refusal the landing would meet that costs seconds to ask, all of them."""
+def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str, deferred: list[str] | None = None) -> list[str]:
+    """Pass 1: every refusal the landing would meet that costs seconds to ask, all of them - but the claims gate's, which goes to
+    `deferred` when given (405 T50, D23: the claims round runs beside the gate, and the landing waits for it before the push)."""
     tt = _tick_task()
     text = (d / "tasks.md").read_text(encoding="utf-8")
     by_why: dict[str, list[str]] = {}  # one refusal shared by several tasks (an hour's step-back) is printed once, naming them all
@@ -99,8 +101,35 @@ def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str) -> list[str
     for gate in ("claims-gate.sh", "review-gate.sh", "plan-gate.sh"):
         rc, out = run(root, [str(HERE / "gates" / gate)], env)
         if rc:
-            stops.append(f"{gate}: " + " | ".join(ln.strip() for ln in out.splitlines() if ln.strip() and "pre-existing" not in ln)[-600:])
+            said = f"{gate}: " + " | ".join(ln.strip() for ln in out.splitlines() if ln.strip() and "pre-existing" not in ln)[-600:]
+            (deferred if deferred is not None and gate == "claims-gate.sh" else stops).append(said)
     return stops
+
+
+#: how long the landing waits for the claims round after its gate, asking every CLAIMS_POLL_S (405 T50, D23)
+CLAIMS_WAIT_S = 1200.0
+CLAIMS_POLL_S = 15.0
+
+
+def wait_for_claims(root: Path, tasks: list[str]) -> str:
+    """The claims gate passing and the tree clean - the claims round recorded and committed beside the gate - or, past
+    `CLAIMS_WAIT_S`, the refusal that still stands (405 T50, D23)."""
+    import time  # noqa: PLC0415
+
+    env = {"L7R_LAND_TICKS": " ".join(tasks)}
+    end, said = time.monotonic() + CLAIMS_WAIT_S, ""
+    while True:
+        rc, out = run(root, [str(HERE / "gates" / "claims-gate.sh")], env)
+        dirty = run(root, ["git", "status", "--porcelain"])[1].strip()
+        if not rc and not dirty:
+            return ""
+        why = ("claims-gate.sh: " + " | ".join(ln.strip() for ln in out.splitlines() if ln.strip() and "pre-existing" not in ln)[-600:]) if rc else f"uncommitted changes: {dirty.splitlines()[0]}"
+        if time.monotonic() >= end:
+            return why
+        if why != said:
+            print(f"land: waiting for the claims round before the push - {why}", flush=True)
+            said = why
+        time.sleep(CLAIMS_POLL_S)
 
 
 def engine_delta(root: Path) -> bool:
@@ -234,28 +263,34 @@ def main(argv: list[str]) -> int:
     if d is None or not (d / "tasks.md").is_file():
         print(f"land: no single specs/{argv[0]}* directory with a tasks.md under {root}", file=sys.stderr)
         return 2
-    stops = cheap_refusals(root, d, tasks, note)
+    claims: list[str] = []
+    stops = cheap_refusals(root, d, tasks, note, claims)
     if stops:
-        print("land: refused before anything ran - nothing landed, nothing ticked. Every refusal:\n  " + "\n  ".join(stops), file=sys.stderr)
+        print("land: refused before anything ran - nothing landed, nothing ticked. Every refusal:\n  " + "\n  ".join(stops + claims), file=sys.stderr)
         return 2
+    if claims:
+        print(f"land: the claims round is owed ({claims[0][:160]}) - the gate runs beside it; the push waits for it", flush=True)
     if rc := long_runs(root):
         return rc
-    if rc := push(root, tasks):
-        print(f"land: the push failed (exit {rc}) - no task ticked; fix it and run make land again", file=sys.stderr)
-        return rc
-    how = f"landed in batch {'+'.join(tasks)}" if len(tasks) > 1 else "landed"
-    failed = [task for task in tasks if tt.main([argv[0], task, f"{how}: {note}"])]
-    if failed:
-        print(f"land: landed, but {', '.join(failed)} refused its tick (above) - answer it, then make tick", file=sys.stderr)
+    if why := wait_for_claims(root, tasks):
+        print(f"land: the gates are green, but the claims round did not finish in {CLAIMS_WAIT_S / 60:.0f} min - nothing landed: {why}", file=sys.stderr)
         return 2
-    # THE TICKS LAND TOO: written after the push, they would wait in the clone for the next landing - committed and pushed here,
-    # the feature's own records alone, so the direct route takes them
-    if run(root, ["git", "status", "--porcelain", "--", str(d.relative_to(root))])[1].strip():
-        run(root, ["git", "add", "--", str(d.relative_to(root))])
-        run(root, ["git", "commit", "-q", "-m", f"{d.name}: {' '.join(tasks)} ticked (make land)"])
-        if rc := push(root, tasks):
-            print(f"land: landed and ticked, but the ticks' own push failed (exit {rc}) - run scripts/sync-with-main.sh done", file=sys.stderr)
-            return rc
+    # ONE PUSH, THE TICKS IN IT (405 T51, D24): T13's landing pushed its work, then its ticks - two runs of every push check
+    rel = str(d.relative_to(root))
+    how = f"landed in batch {'+'.join(tasks)}" if len(tasks) > 1 else "landed"
+    os.environ["L7R_LAND_TICKS"] = " ".join(tasks)  # the tasks the landing ticks: `--landing` is honored for these alone
+    failed = [task for task in tasks if tt.main([argv[0], task, f"{how}: {note}", "--landing"])]
+    if failed:
+        run(root, ["git", "checkout", "--", rel])  # the ticks already written put back: a landing that does not push ticks nothing
+        print(f"land: {', '.join(failed)} refused its tick (above) - nothing landed, nothing ticked", file=sys.stderr)
+        return 2
+    run(root, ["git", "add", "--", rel])
+    run(root, ["git", "commit", "-q", "-m", f"{d.name}: {' '.join(tasks)} ticked (make land)"])
+    tick_sha = run(root, ["git", "rev-parse", "HEAD"])[1].strip()
+    if rc := push(root, tasks):
+        run(root, ["git", "revert", "--no-edit", tick_sha])  # a new commit, nothing rewritten: the tasks read open again
+        print(f"land: the push failed (exit {rc}) - its ticks reverted, nothing landed; fix it and run make land again", file=sys.stderr)
+        return rc
     print(f"land: {' '.join(tasks)} landed and ticked")
     return 0
 

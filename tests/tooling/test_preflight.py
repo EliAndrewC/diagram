@@ -206,3 +206,19 @@ def test_a_change_the_gate_does_not_see_does_not_move_the_tree(tmp_path: Path) -
     assert not pf.unseen(root, reg, old, old.replace(b"a - NONE", b"b - NONE")), "the registry's docstrings are the page's text"
     (root / ".specify" / "feature.json").write_text("not json")
     assert pf.active_records(root) == set()
+
+
+def test_the_gate_s_preflight_leaves_the_coverage_step_to_make_preflight(tmp_path: Path, monkeypatch, capsys) -> None:  # type: ignore[no-untyped-def]
+    """Feature 405 T47 (D25): the step cost 98-107 s of each gate and refused about twice in the whole record, once wrongly;
+    `--no-coverage` (the `done` recipe's) ends after the quick tier, `make preflight` still runs it."""
+    asked: list[str] = []
+    monkeypatch.setattr(pf, "run", lambda cmd, root, quiet=True: 0)
+    monkeypatch.setattr(pf, "git", lambda root, *a: "")
+    monkeypatch.setattr(pf, "changed_lines", lambda root: {})
+    monkeypatch.setattr(pf, "coverage_step", lambda root, changed, workers: asked.append("coverage") or ({}, {}))
+    assert pf.main(["--root", str(tmp_path), "--no-coverage"]) == 0 and asked == []
+    assert "coverage of the changed lines" not in capsys.readouterr().out
+    assert pf.main(["--root", str(tmp_path)]) == 0 and asked == ["coverage"]
+    assert "coverage of the changed lines" in capsys.readouterr().out
+    done = Path(__file__).resolve().parents[2].joinpath("Makefile").read_text(encoding="utf-8").split("\ndone:", 1)[1].split("\n\n", 1)[0]
+    assert "--no-coverage" in done, "the gate passes it"

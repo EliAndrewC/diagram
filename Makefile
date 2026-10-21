@@ -54,7 +54,7 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	$(if $(ARBITER_OK),$(LOGESCAPE) ARBITER_OK "$(ARBITER_OK)",@h="$$(git rev-parse --show-toplevel)/scripts/hooks/lib/hm_arbiter.py"; [ ! -f "$$h" ] || python3 "$$h" gate-held || exit 1)
 	@l="$$(git rev-parse --show-toplevel)/scripts/gates/gate_lock.py"; [ ! -f "$$l" ] || python3 "$$l" acquire "$$(git rev-parse --absolute-git-dir)" "$$PPID"
 	$(if $(PREFLIGHT_OK),$(LOGESCAPE) PREFLIGHT_OK "$(PREFLIGHT_OK)",@:)
-	@$(if $(PREFLIGHT_OK),:,p="$$(git rev-parse --show-toplevel)/scripts/gates/preflight.py"; [ ! -f "$$p" ] || python3 "$$p" --root "$$(git rev-parse --show-toplevel)" --workers "$(XDIST_WORKERS)" || { touch "$$(git rev-parse --absolute-git-dir)/gate-preflight-red"; printf '\n\033[1mGATE FAILED: preflight\033[0m (fix it and re-run; nothing expensive has run)\n'; exit 1; })
+	@$(if $(PREFLIGHT_OK),:,p="$$(git rev-parse --show-toplevel)/scripts/gates/preflight.py"; [ ! -f "$$p" ] || python3 "$$p" --root "$$(git rev-parse --show-toplevel)" --workers "$(XDIST_WORKERS)" --no-coverage || { touch "$$(git rev-parse --absolute-git-dir)/gate-preflight-red"; printf '\n\033[1mGATE FAILED: preflight\033[0m (fix it and re-run; nothing expensive has run)\n'; exit 1; })
 	@p="$$(git rev-parse --show-toplevel)/scripts/gates/preflight.py"; [ ! -f "$$p" ] || python3 "$$p" --root "$$(git rev-parse --show-toplevel)" --tree-snap "$$(git rev-parse --absolute-git-dir)/gate-tree.json"
 	@if [ -z "$(FULL)" ] && python3 -m l7r.diagram.ci verified-done; then \
 	  root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -n "$$root" ] && python3 "$$root/scripts/gates/gate-stamp.py" --write diagram || true; \
@@ -666,7 +666,7 @@ replay-owing:   ## [project] replay recorded commits through the old owing and t
 	@if [ -z "$(REVS)" ]; then printf 'make replay-owing: REVS="<commit> ..." is required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/replay_owing.py" $(REVS) $(if $(OUT),--out "$(OUT)",) $(if $(TRIAGE),--triage,)
 
-preflight:      ## [tests] the gate's first phase, in seconds: the derived files regenerated, the record and its pointers, make quick, and the changed engine lines a quick test runs (feature 375)
+preflight:      ## [tests] the gate's first phase, in seconds: the derived files regenerated, the record and its pointers, make quick - and, here only (not in the gate, 405 T47), the changed engine lines a quick test runs (feature 375)
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/preflight.py" --root "$$(git rev-parse --show-toplevel)" --workers "$(XDIST_WORKERS)"
 
 gm-review:      ## [project] what waits on the GM: HELD rows (work cannot go on) and, per feature, the TO REVIEW rows counted (landed; he may overturn) - feature 375   [F=<NNN> that feature's rows] [EXPLAIN=1 what needs the GM, or with F= each row in full] [ROW=<n>]

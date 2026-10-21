@@ -257,28 +257,35 @@ def _land(tmp_path: pathlib.Path, monkeypatch):  # noqa: ANN001, ANN202
 
 def test_one_task_or_several_every_tick_asked_first_landed_once_and_ticked(tmp_path: pathlib.Path, monkeypatch, capsys) -> None:  # noqa: ANN001
     """Feature 385 T117 (D135): a batch pays the gated landing once. Feature 405 T33 (D5): one task lands the same way - T12's
-    `make land-batch T=T12` was refused for being one task, the first of its landing's six refusals."""
+    `make land-batch T=T12` was refused for being one task, the first of its landing's six refusals. Feature 405 T51 (D24): ONE
+    push carries the work and its ticks, written first; a failed push reverts them (a new commit)."""
     lb, d = _land(tmp_path, monkeypatch)
-    landings: list[list[str]] = []
+    landings: list[tuple[list[str], str]] = []
     rc = [0]
+    ran: list[list[str]] = []
     monkeypatch.setattr(lb, "long_runs", lambda root: 0)
-    monkeypatch.setattr(lb, "push", lambda root, tasks: landings.append(tasks) or rc[0])
+    monkeypatch.setattr(lb, "wait_for_claims", lambda root, tasks: "")
+    monkeypatch.setattr(lb, "push", lambda root, tasks: landings.append((tasks, (d / "tasks.md").read_text(encoding="utf-8"))) or rc[0])
+
+    def run(root: pathlib.Path, cmd: list[str], env: dict | None = None, quiet: bool = True) -> tuple[int, str]:
+        ran.append([str(c) for c in cmd])
+        return (0, "abc123\n") if cmd[-1] == "HEAD" else (0, "")
+
+    monkeypatch.setattr(lb, "run", run)
     monkeypatch.setenv("LAND_NOTE", "both fixes green")
     assert lb.main(["188", "T01 T02"]) == 2 and landings == [], "T01 already ticked: refused before anything lands"
     assert "T01: " in capsys.readouterr().err
+    before = (d / "tasks.md").read_text(encoding="utf-8")
     rc[0] = 1
     assert lb.main(["188", "T02 T03"]) == 1 and len(landings) == 1
-    assert "- [ ] T02" in (d / "tasks.md").read_text(encoding="utf-8"), "a failed landing ticks none"
+    assert "- [x] T02" in landings[0][1] and "- [x] T03" in landings[0][1], "the push carries the ticks"
+    assert ["git", "revert", "--no-edit", "abc123"] in ran, "a failed push reverts its ticks, nothing rewritten"
+    (d / "tasks.md").write_text(before, encoding="utf-8")  # what the revert commit does in a real tree
     rc[0] = 0
-    dirty = {"on": True}
-    monkeypatch.setattr(lb, "run", lambda root, cmd, env=None, quiet=True: (0, " M specs/188-alpha/tasks.md\n" if dirty["on"] and "--porcelain" in cmd and "specs/188-alpha" in cmd else ""))
-    before = len(landings)
-    assert lb.main(["188", "T02 T03"]) == 0 and landings[-1] == ["T02", "T03"], "one landing for the batch"
-    assert len(landings) == before + 2, "...and one more push for its ticks (feature 405 T33)"
-    dirty["on"] = False
+    assert lb.main(["188", "T02 T03"]) == 0 and len(landings) == 2 and landings[-1][0] == ["T02", "T03"], "ONE push for the batch"
     text = (d / "tasks.md").read_text(encoding="utf-8")
     assert "verify: DONE. landed in batch T02+T03: both fixes green" in text and "- [x] T03" in text
-    assert lb.main(["188", "T02a"]) == 0 and landings[-1] == ["T02a"], "one task lands alone"
+    assert lb.main(["188", "T02a"]) == 0 and landings[-1][0] == ["T02a"], "one task lands alone"
     assert "verify: DONE. landed: both fixes green" in (d / "tasks.md").read_text(encoding="utf-8")
     monkeypatch.setenv("LAND_NOTE", "")
     assert lb.main(["188", "T04"]) == 2, "an empty note"
@@ -286,6 +293,41 @@ def test_one_task_or_several_every_tick_asked_first_landed_once_and_ticked(tmp_p
     monkeypatch.setenv("LAND_NOTE", "x")
     assert lb.main(["188", "T04"]) == 2 and "T04: tick: refused - the hour" in capsys.readouterr().err
     assert lb.main(["188", "T04 T05"]) == 2 and capsys.readouterr().err.count("tick: refused - the hour") == 1, "one shared refusal, printed once"
+
+
+def test_the_claims_round_runs_beside_the_gate_and_the_push_waits_for_it(tmp_path: pathlib.Path, monkeypatch, capsys) -> None:  # noqa: ANN001
+    """Feature 405 T50 (D23): T13's claims round ran 1.5 min in series before `make land` could start. A claims-gate refusal
+    is set aside, the long runs start, and the push waits for the gate to pass and the tree to be clean - up to a bound."""
+    lb, d = _land(tmp_path, monkeypatch)
+    state = {"claims": 1, "dirty": "", "asked": 0}
+    order: list[str] = []
+
+    def run(root: pathlib.Path, cmd: list[str], env: dict | None = None, quiet: bool = True) -> tuple[int, str]:
+        if "claims-gate.sh" in str(cmd[0]):
+            state["asked"] += 1
+            if state["asked"] == 3:
+                state.update(claims=0, dirty=" M dev/claims-index.json\n")  # recorded, not yet committed
+            elif state["asked"] == 4:
+                state["dirty"] = ""
+            return state["claims"], "claims-gate: OWED settle.py::x\n" if state["claims"] else ""
+        if "--porcelain" in cmd and len(cmd) == 3:
+            return 0, state["dirty"] if state["asked"] > 1 else ""
+        return (0, "abc\n") if cmd[-1] == "HEAD" else (0, "")
+
+    monkeypatch.setattr(lb, "run", run)
+    monkeypatch.setattr(lb, "long_runs", lambda root: order.append("gate") or 0)
+    monkeypatch.setattr(lb, "push", lambda root, tasks: order.append("push") or 0)
+    monkeypatch.setattr(lb, "CLAIMS_POLL_S", 0.0)
+    monkeypatch.setenv("LAND_NOTE", "x")
+    assert lb.main(["188", "T02"]) == 0 and order == ["gate", "push"], "the gate ran while the claim was owed; the push after"
+    out = capsys.readouterr().out
+    assert "the claims round is owed" in out and "waiting for the claims round" in out and "uncommitted changes" in out
+    state.update(claims=1, asked=-100)
+    (d / "tasks.md").write_text(TASKS, encoding="utf-8")
+    monkeypatch.setattr(lb, "CLAIMS_WAIT_S", 0.0)
+    order.clear()
+    assert lb.main(["188", "T02"]) == 2 and order == ["gate"], "past the bound: nothing lands"
+    assert "did not finish" in capsys.readouterr().err
 
 
 def test_every_cheap_refusal_is_named_together_before_anything_runs(tmp_path: pathlib.Path, monkeypatch, capsys) -> None:  # noqa: ANN001
@@ -304,7 +346,13 @@ def test_every_cheap_refusal_is_named_together_before_anything_runs(tmp_path: pa
     monkeypatch.setenv("LAND_NOTE", "x")
     assert lb.main(["188", "T02"]) == 2 and ran == []
     err = capsys.readouterr().err
-    for want in ("uncommitted changes", "no ledger row", "held by T09 x", "claims-gate.sh: claims-gate: OWED x", "review-gate.sh: REVIEW GATE"):
+    for want in (
+        "uncommitted changes",
+        "no ledger row",
+        "held by T09 x",
+        "claims-gate.sh: claims-gate: OWED x",
+        "review-gate.sh: REVIEW GATE",
+    ):  # a claims refusal is named with the others when they stop the landing
         assert want in err, want
 
 
@@ -439,3 +487,14 @@ def test_the_cohort_beside_the_gate_is_sized_and_stopped(tmp_path: pathlib.Path,
     lb.stop_cohort(proc)
     assert proc.returncode is not None, "stopped"
     lb.stop_cohort(proc), lb.stop_cohort(None)
+
+
+def test_the_landing_tick_is_make_land_s_alone(tmp_path: pathlib.Path, monkeypatch, capsys) -> None:  # noqa: ANN001
+    """Feature 405 T51 (D24, its plan review): `--landing` leaves out the landed check, so it is honored only for a task
+    `make land` names in L7R_LAND_TICKS - a hand tick with it is refused."""
+    _lb, d = _land(tmp_path, monkeypatch)
+    monkeypatch.setattr(tt, "spec_dir", lambda root, f: d)
+    monkeypatch.delenv("L7R_LAND_TICKS", raising=False)
+    assert tt.main(["188", "T02", "landed: x", "--landing"]) == 2 and "--landing is" in capsys.readouterr().err
+    monkeypatch.setenv("L7R_LAND_TICKS", "T02")
+    assert tt.main(["188", "T02", "landed: x", "--landing"]) == 0 and "- [x] T02" in (d / "tasks.md").read_text(encoding="utf-8")
