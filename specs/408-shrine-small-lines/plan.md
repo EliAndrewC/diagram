@@ -59,3 +59,73 @@ each line's own verdict, never in place of it.
 2. The implementation check.
 3. The reply.
 4. Report and land, by the direct route.
+
+### T01 Approach
+
+1. Goal: issue #10's groups 1 and 4 written into 0257 and 0260 (0278 split from 0260 at the size cap), each line with its verdict and file.
+2. Constraints: FR-005 (a nearest figure is not an answer); each figure beside its place's craftsman and laborer day wage or a named nearest; the 20,000-byte cap; the record checks.
+3. Sources: the request G (#10, the GM 2026-10-21); the passes' leads O, each read on its page before citing; the record rules G (constitution XII).
+4. Holds: 0260 passed the cap, so the cart and porter material became 0278, tagged as 0260 is.
+5. Order: write session (brief s1), then the check session (s3).
+6. Exits: (e) conform, with (b) the split.
+7. No search loop: the passes ran once; leads not followed are named in the handoff.
+8. Budget: one write session and one check session.
+9. Done: handoff written; make record-owed 0 unanswered after s3.
+10. n/a.
+11. n/a.
+
+### T02 Approach
+
+1. Goal: issue #10's groups 2 and 3 written into 0258, 0268 and 0271, each line with its verdict and file.
+2. Constraints: as T01.
+3. Sources: as T01.
+4. Holds as written.
+5. Order: write session (brief s2), then the check session (s3).
+6. Exits: (e) conform.
+7. No search loop.
+8. Budget: one write session and one check session.
+9. Done: handoff written; make record-owed 0 unanswered after s3.
+10. n/a.
+11. n/a.
+
+### T03 Approach
+
+1. Goal: every changed money question closed with its no-code line.
+2. Constraints: make impl-check F=408.
+3. Sources: G (CLAUDE.md, features 389 and 285).
+4. Holds as written.
+5. Order: after the check session.
+6. Exits: (e) conform.
+7. No search loop.
+8. Budget: 5 minutes.
+9. Done: impl-check reports nothing missing.
+10. n/a.
+11. n/a.
+
+### T04 Approach
+
+1. Goal: the reply on #10, per line the file, the verdict and what is open, the (S) lines first, combined figures named with what they cover.
+2. Constraints: FR-001, FR-004, FR-005; gm-assistant's two asks on the thread.
+3. Sources: the handoff and s3-checks.md O; gm-assistant's asks G.
+4. Holds: the 400 kg scaling is the project's arithmetic, labeled in the reply.
+5. Order: after the checks and impl-check.
+6. Exits: (e) conform.
+7. No search loop.
+8. Budget: 20 minutes.
+9. Done: the reply posted (issuecomment-6319436505).
+10. n/a.
+11. n/a.
+
+### T05 Approach
+
+1. Goal: the feature lands on main with its report.
+2. Constraints: the review gate, the ledger, the record tests before the push.
+3. Sources: all G (CLAUDE.md's stop-work procedure).
+4. Holds as written.
+5. Order: report, land, then watch #10 until gm-assistant closes it.
+6. Exits: (e) conform.
+7. No search loop.
+8. Budget: 15 minutes.
+9. Done: the push lands; origin/main carries 408.
+10. n/a.
+11. n/a.
