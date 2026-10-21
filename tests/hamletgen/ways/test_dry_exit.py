@@ -110,3 +110,29 @@ def test_the_last_resort_crosses_its_brook_only_where_0035_would(monkeypatch) ->
     far[1] = (400.0, 1250.0)  # own bank about 750 ft, the crossing about 700: under 150 ft saved
     assert track.connector_dry_exit(plan, (400.0, 500.0), [], [], [], []) == far, "it keeps to its own bank"
     assert len(calls[1]) > len(calls[0]), "the second fill is the one open at the crossing places"
+
+
+def test_the_last_resort_crosses_a_drawn_channel_on_a_deck_only_where_nothing_else_is_dry(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """405 T10: 0084 draws a timber deck where a way crosses a ditch, so where neither the own-bank fill nor the one open at the
+    brook's crossing places finds a way out, the fill is run once more with the drawn channels opened - the brook still only at
+    its crossing places; a gateway with a dry way out never crosses a channel."""
+    import types
+
+    from l7r.diagram.hamletgen.ways import track
+
+    brook = [(500.0, -100.0), (500.0, 1100.0)]
+    plan = types.SimpleNamespace(W=1000.0, H=1000.0, sink_pond=None, sink_brook=brook, brook=brook, envelope=[], grove_bands=[])
+    ditch = [((300.0, 0.0), (300.0, 1000.0))]
+    out = [(400.0, 500.0), (200.0, 500.0), (-100.0, 500.0)]
+    calls: list[list] = []
+
+    def fill(start, walls, lines, W, H, cell=10.0):  # type: ignore[no-untyped-def]
+        calls.append(list(lines))
+        return list(out) if not any(seg in lines for seg in ditch) else None
+
+    monkeypatch.setattr(track, "dry_exit", fill)
+    assert track.connector_dry_exit(plan, (400.0, 500.0), [], [], ditch, []) == out
+    assert all(seg not in calls[-1] for seg in ditch) and len(calls) == 3, "the third fill, the channel opened"
+    calls.clear()
+    monkeypatch.setattr(track, "dry_exit", lambda *a, **k: calls.append(1) or list(out))
+    assert track.connector_dry_exit(plan, (400.0, 500.0), [], [], ditch, []) == out and len(calls) == 2, "a dry way: no third fill"
