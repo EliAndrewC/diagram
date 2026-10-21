@@ -83,8 +83,9 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [x] T12 (385 T126) geom._trim_to_service pops a whole last segment before its 4 ft walk, pulling an end back past the last house it serves (0246 §6) - DRIFTED (impl-drift, T106's round) [lands-open]
       research: rendering
       verify: DONE. landed on main 12:35Z: _trim_to_service walks every end in (D1); test red at HEAD, ways 574 green, cohort 16/16, make done green 263 s, landing cohort 54/54; both claims IN-STEP
-- [ ] T13 (385 T127) settle.settle_street_ends cuts a street end to other lanes' ends only, never street_anchors, so a farm the street serves without a door path is cut off it (0246 §6) - DRIFTED (impl-drift, T106's round) [lands-open]
+- [x] T13 (385 T127) settle.settle_street_ends cuts a street end to other lanes' ends only, never street_anchors, so a farm the street serves without a door path is cut off it (0246 §6) - DRIFTED (impl-drift, T106's round) [lands-open]
       research: rendering
+      verify: DONE. landed: settle_street_ends keeps a street to the last farm it serves (street_anchors as joints, as trim_streets reads them); unit test; claims IN-STEP in one round; gate green with the landing cohort beside it (405 T48's first live run)
 - [x] T14 (385 T128) sweeps._sweep_dangling_ends pulls an end back by whole vertices with no walk along the segment, past the last house it serves (0246 §6) - DRIFTED (impl-drift, T106's round) [lands-open]
       research: rendering
       verify: DONE. landed: the walk-in unit tests red at HEAD and green; ways suite 574; cohort 16/16; claims IN-STEP over three impl-drift rounds
