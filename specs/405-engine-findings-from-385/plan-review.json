@@ -720,6 +720,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
+  },
+  "## T61 - the gate-write suite waits for its own fixture's gate (found landing the T17 batch)": {
+   "sha256": "ff2769c843a5025d9fae5ffcd61a9ec8286984ff4edbfb9709838d293cf39b9d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T61 Approach (checklist part A)": {
+   "sha256": "2e8bf684e402bb06da55b2121311391cf479e771536623a3ba91371c749ad518",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T61 Decisions": {
+   "sha256": "1d60941ed9a91eab135b51ac0653ec7a365bca530305da58e261fdb16bb35563",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1567,6 +1585,35 @@
      "summary": "spec-lint check_stale_tasks skips an id preceded by a feature number ('NNN ' or 'NNN's '); a bare id the spec lacks still fails, held by a test.",
      "class": "within",
      "why": "Needed so a carried finding filed under FR-013 can be filed into any feature at all, which is what 385 FR-013 and the GM's 'findings ... as new tasks' rule require. The check keeps its whole reach over bare ids (Done item 9's test); it stops misreading another feature's requirement as this spec's stale one rather than relaxing anything the GM asked to have enforced. Nothing in request.md or 405's spec names check 4's coverage, so this narrows no part of the request."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T61 - the gate-write suite waits for its own fixture's gate (found landing the T17 batch)",
+    "### T61 Approach (checklist part A)",
+    "### T61 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T61 (filing)",
+     "summary": "A hooks-test failure found while landing the T17 batch (the gate-write suite's pgrep -f 'make done' matched another gate on the machine, so three cases ran before the fixture's gate started) is filed and worked as a task of 405.",
+     "class": "within",
+     "why": "FR-002 keeps found work in this feature, and Amendment 7 asks for every remaining open task to be worked to completion; a suite that misreads 385 FR-010's guard when another gate runs is work the feature's own landings raised."
+    },
+    {
+     "id": "D35",
+     "summary": "tests/hooks/test-gate-write-hooks.sh waits, in both sections, until scripts/hooks/lib/own-make.sh done run from the fixture tree reports the fixture's gate running - the question the guard itself asks - instead of pgrep -f 'make done'.",
+     "class": "within",
+     "why": "It changes only how the test synchronises with its own fixture; FR-010's guard and its refusal are untouched, and the test still fails if the guard lets a write through while the session's own gate runs. Nothing the request or spec asks for is dropped."
+    },
+    {
+     "id": "T61 done-measure",
+     "summary": "Done is the suite passing 22 of 22 while another gate runs on the machine.",
+     "class": "within",
+     "why": "Verifies the fix on the exact case measured as failing (19 passed, 3 failed on 2026-10-21); no new scope, no narrowing of what the suite checks."
     }
    ]
   }
