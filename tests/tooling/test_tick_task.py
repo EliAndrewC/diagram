@@ -478,6 +478,27 @@ def test_a_stale_make_targets_page_is_regenerated_and_committed_in_the_first_pas
     assert lb.cheap_refusals(tmp_path, d, ["T02"], "x") == [] and not any("--write" in c for c in seen if any("make-docs.py" in x for x in c)), "fresh: untouched"
 
 
+def test_the_landing_s_own_escape_records_are_committed_not_refused(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 408: a PLAN_REVIEW_OK the ticks honored wrote its dev/bypass-log record in the first pass, and the tree check
+    after it refused every rerun as "uncommitted changes" on records the landing itself had just written."""
+    lb, d = _land(tmp_path, monkeypatch)
+    seen: list[list[str]] = []
+    logged = {"on": True}
+
+    def run(root: pathlib.Path, cmd: list[str], env: dict | None = None, quiet: bool = True) -> tuple[int, str]:
+        seen.append([str(c) for c in cmd])
+        if cmd[:2] == ["git", "commit"] and cmd[-1] == "dev/bypass-log":
+            logged["on"] = False
+        dirty = logged["on"] and cmd[:2] == ["git", "status"] and (cmd[-1] == "dev/bypass-log" or cmd[-1] == "--porcelain")
+        return (0, "?? dev/bypass-log/x.json\n") if dirty else (0, "")
+
+    monkeypatch.setattr(lb, "run", run)
+    assert lb.cheap_refusals(tmp_path, d, ["T02"], "x") == [], "its own escape records committed, nothing refused"
+    assert ["git", "add", "--", "dev/bypass-log"] in seen
+    seen.clear()
+    assert lb.cheap_refusals(tmp_path, d, ["T02"], "x") == [] and not any(c[:2] == ["git", "add"] for c in seen), "clean: no commit"
+
+
 def test_the_cohort_beside_the_gate_is_sized_and_stopped(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
     """Feature 405 T48 (D21): the cohort's workers fit beside the gate's memory and cpus, and its whole process group stops."""
     import subprocess as sp
