@@ -30,7 +30,7 @@ from ..sweeps import _DOUBLED_DEG, along_tail, cut_at_tail
 from ..tree import left_to_the_tree, set_corridor, tree_faults
 from ..weld import weld_corner
 from .lawful import Lawful
-from .shapes import _as_end, _back, _ordinary, apply_pieces, fouled_segment, reaimed
+from .shapes import _as_end, _back, _ordinary, apply_pieces, fouled_segment, lane_owner, reaimed
 
 
 def settle_ends(s: Any) -> int:
@@ -70,7 +70,7 @@ def settle_ends(s: Any) -> int:
         if foot and is_tree(lanes[i]):
             if not judge:
                 judge.append(Lawful(s))
-            foot = judge[0].on_lawful_ground(pieces[0], float(lanes[i].get("w") or 3.0))
+            foot = judge[0].on_lawful_ground(pieces[0], float(lanes[i].get("w") or 3.0), lane_owner(lanes[i]))
         if not involved & touched and (not is_tree(lanes[i]) or foot):
             edits[i] = pieces
             touched.update(involved)
@@ -416,7 +416,7 @@ def settle_widths(s: Any) -> int:
         widths = [float(lanes[k].get("w") or 3.0) for k in chain]
         ranks = [w for k, w in zip(chain, widths, strict=True) if k not in free]
         wide = max(ranks or widths)
-        target = wide if all(fouled_segment(_pts(lanes[k]), wide, houses, yards, solid, fixtures, s.M) is None for k in free) else min(widths)
+        target = wide if all(fouled_segment(_pts(lanes[k]), wide, houses, yards, solid, fixtures, s.M, lane_owner(lanes[k])) is None for k in free) else min(widths)
         for k in free:
             if float(lanes[k].get("w") or 3.0) != target:
                 rewidth(s, k, target)

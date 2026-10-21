@@ -43,7 +43,7 @@ from .bund import BRANCH_WIDTH
 from .checks import unreached_houses
 from .corridors import ACCESS_ROLE, ACCESS_WIDTH, ON_TREE_PX, is_tree
 from .forced import lazy_ground
-from .geom import memo_ground, polyline_len, worked_ground
+from .geom import lane_owner, memo_ground, polyline_len, worked_ground
 
 CARRY_FT = 20.0
 """How far off its host a tree run's end may stand and be set on its foot there rather than carried on by a leg of its own
@@ -228,6 +228,7 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
     for lanes in (whole, [*(tb.lanes[i] for i in reversed(chain[1:])), new_lane]):
         new = lanes[-1]
         law_.M = _trial(view, lanes=[*lanes[:-1], *stub])
+        law_.owner = lane_owner(new)  # ...a household's own way, beside its own garden (405 T18)
         if not law_(new["pts"], float(new["w"])):
             return False
         if lanes is whole:

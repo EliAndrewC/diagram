@@ -134,6 +134,7 @@ from .shapes import _unkinked as _unkinked
 from .shapes import apply_pieces as apply_pieces
 from .shapes import fouled_segment as fouled_segment
 from .shapes import joined_way as joined_way
+from .shapes import lane_owner as lane_owner
 from .shapes import meets_clean as meets_clean
 from .shapes import reaimed as reaimed
 from .shapes import settle_shapes as settle_shapes

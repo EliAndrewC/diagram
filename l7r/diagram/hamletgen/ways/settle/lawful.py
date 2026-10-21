@@ -25,7 +25,7 @@ from ..corridors import (
     through_a_building,
 )
 from ..fabric import lane_fabric as _fabric
-from ..geom import memo_ground, worked_ground
+from ..geom import lane_owner, memo_ground, worked_ground
 from ..squaring import (
     _pts,
     square_run,
@@ -60,6 +60,9 @@ class Lawful:
         self.buildings = building_quads(s.M)
         self.ground = memo_ground(s, "worked", worked_ground)
         self._index: GroundIndex | None = None
+        # ...AND WHOSE OWN WAY A RUN IS (405 T18): a caller drawing a household's own way sets it on a copy (`copy.copy`), and that
+        # household's yards and gardens are exempt from the fence gap (`theirs`); None - every other run - exempts none
+        self.owner: Pt | None = None
 
     @property
     def index(self) -> GroundIndex:
@@ -96,11 +99,11 @@ class Lawful:
         changes nothing (no crossing to square, no vertex within a water's half-width to drop)."""
         return square_run(self.M, run) if self.index.water_near(run, self._square_pad) else list(run)
 
-    def on_lawful_ground(self, run: Poly, width: float) -> bool:
+    def on_lawful_ground(self, run: Poly, width: float, owner: Pt | None = None) -> bool:
         """`ground_fault` found none: the run is on lawful ground."""
-        return self.ground_fault(run, width) is None
+        return self.ground_fault(run, width, owner) is None
 
-    def ground_fault(self, run: Poly, width: float) -> str | None:
+    def ground_fault(self, run: Poly, width: float, owner: Pt | None = None) -> str | None:
         """The first rule of the ground half a run breaks, by name, or None (feature 385 T03, plan D16: a refusal says which
         rule turned each run down, so the ground is looked at where it refused). THE GROUND HALF - what a run keeps whatever lanes the web draws beside it: no kink or hook, no crossing fault (a
         brook crossed off a ford or twice, a crossing off square, one no deck seats), no foul of a farmhouse, another
@@ -121,7 +124,9 @@ class Lawful:
         # and each foul a part within its own reach of the run - so the parts beyond it are left out, not the verdict
         ix = self.index
         houses = ix.near("houses", run, max(width / 2.0 + 2.0, law.DOORSTEP_FT) + 1.0)  # ...the doorstep's reach: `theirs` reads it
-        fouled = fouled_segment(run, width, houses, ix.near("yards", run, WEB_FABRIC_GAP + 1.0), ix.near("solid", run, 1.0), ix.near("fixtures", run, width / 2.0 + law.FIXTURE_PAD_FT + 1.0), self.M)
+        fouled = fouled_segment(
+            run, width, houses, ix.near("yards", run, WEB_FABRIC_GAP + 1.0), ix.near("solid", run, 1.0), ix.near("fixtures", run, width / 2.0 + law.FIXTURE_PAD_FT + 1.0), self.M, owner or self.owner
+        )
         if fouled is not None:
             return "fabric"
         if not ix.open_ground(run):
@@ -147,7 +152,9 @@ class Lawful:
             no doubled tail - research/questions/0081-village-lanes.drawing.html: an end running back along another way under 20 degrees, either way round; asked here at 15 (`_DOUBLED_DEG`) - a known gap, carried to feature 385 T12 (the side-by-side family)
             no way out over and back - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: tree lanes"""
         M = self.M
-        if why := self.ground_fault(run, width):
+        # ...a run that replaces a lane (`skip`) is that lane's: its household's own way where the lane is one (405 T18)
+        owner = self.owner or (lane_owner((M.get("lanes") or [])[skip]) if skip is not None and skip < len(M.get("lanes") or []) else None)
+        if why := self.ground_fault(run, width, owner):
             return why
         lanes = [ln for k, ln in enumerate(M.get("lanes") or []) if k != skip]
         x0, y0, x1, y1 = _box(run, MEET_REACH_FT)

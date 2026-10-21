@@ -9,6 +9,7 @@ Research: plumbing - NONE"""
 
 from __future__ import annotations
 
+import copy
 import math
 from collections.abc import Mapping, Sequence
 from typing import Any
@@ -503,7 +504,9 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
         for k, d in enumerate(doors):
             if d is None or (k > 0 and not front_to_flank_open(door, d, h)):
                 continue
-            path = door_path(s, d, segs, hard, walls, water, quads, lawful, bands)  # type: ignore[arg-type]
+            own_law = copy.copy(lawful)
+            own_law.owner = (float(h["x"]), float(h["y"]))  # ...its household's own way, beside its own garden (405 T18)
+            path = door_path(s, d, segs, hard, walls, water, quads, own_law, bands)  # type: ignore[arg-type]
             if path is not None and _draw_web(s, path, 3, houses=[(float(h["x"]), float(h["y"]))], joins=True):
                 s.M["lanes"][-1]["serves"] = [float(h["x"]), float(h["y"])]
                 if k > 0:

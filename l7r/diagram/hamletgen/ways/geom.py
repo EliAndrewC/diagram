@@ -310,6 +310,13 @@ def _seg_cross(a: Pt, b: Pt, c: Pt, d: Pt, ab_eps: float = 0.02) -> Pt | None:
     return None
 
 
+def lane_owner(ln: Mapping[str, Any]) -> Pt | None:
+    """The household a lane is the own way of, as its record names it: a household's way drawn by the tree (`of`, the house it
+    serves) or a grove farm's door path (`serves`); None for every other lane - a back lane, a cross lane, the track out."""
+    at = ln.get("of") or ln.get("serves")
+    return (float(at[0]), float(at[1])) if at else None
+
+
 def lane_houses(M: Mapping[str, Any]) -> list[Pt]:
     """The farmhouses a lane is owed to SERVE: every one but a household reached across a neighbor's yard (feature 317,
     `settlement/rolling/passage.py`), which has no way of its own - its neighbor's way is its way in. Asked where a pass

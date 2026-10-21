@@ -474,3 +474,17 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T16:40:44Z (continue), 
 9. **Done, measured.** A neighbor beside the junction end keeps the gap, a farm 75 ft off is no household's own (tests); seeds 1-48 and the pinned rows pass.
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T18 part B (2026-10-21T17:38Z)
+
+Owed by the cohort (cohort@20261021T172647Z, then cohort@20261021T173654Z: seeds newly failing), taken while T18 was the active task.
+
+1. **What is refusing?** The cohort: with a lane's household read from its record (`of`, `serves`) and no exemption for a lane without one, seeds 12, 21, 22, 24, 38 and 901 failed - `Lawful` judged a household's way before it was a lane record (no owner), so its own garden kept the gap and the tree could not draw it (seed 12: 13 farmhouses unreached). With the owner set by the tree's `admits` and the door paths, three remained (21, 24, 38: `lane_knots`) - the knots' and the ends' repairs judged an existing household way without its owner.
+2. **A3 again.** Unchanged: 0246 gives the own-garden exemption to "a household's own way"; a back or cross lane belongs to no household (the claims round).
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Changing: the owner reaches every place a household's way is judged - `Lawful.owner` set on a copy by `tree.admits` and `lay_door_paths`, a run replacing a lane (`skip`) is that lane's, the ends' re-aim passes its lane's owner.
+6. **The one-sentence test.** "Only a household's own way runs beside its own garden" - true by the tests.
+7. **The next step is a measurement.** Seeds 1-48 and the pinned rows.
+8. **Every route measured before offering one?** The geometric owner (the farmhouse an end reaches) was measured 54/54 and judged DRIFTED; the record owner is the page's.
+9. **After a ruling: the step it names?** No ruling yet; the claims round's third round on `theirs` goes to the round arbiter before the next check.

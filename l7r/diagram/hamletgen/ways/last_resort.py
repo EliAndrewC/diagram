@@ -32,6 +32,7 @@ from .settle import (
     _ordinary,
     _pts,
     fouled_segment,
+    lane_owner,
     settle_fragments,
     settle_husks,
     settle_joins,
@@ -85,17 +86,18 @@ def lane_breaches(s: Any, every: bool = False) -> dict[int, list[str]]:
             continue
         p = _pts(ln)
         w = float(ln.get("w") or 3.0)
+        owner = lane_owner(ln)  # the household whose own way this is, if any (405 T18)
         own = (
             ("hooks", lambda p=p, w=w: bool(law.hook_faults(p, w, blocked))),
             ("bends", lambda p=p, w=w: bool(law.kink_faults(p, w, blocked))),
             ("crossing", lambda p=p, i=i: _crossing_fault(M, i, p, wet) is not None),
-            ("fabric", lambda p=p, w=w: fouled_segment(p, w, houses, yards, solid, fixtures, M) is not None),
+            ("fabric", lambda p=p, w=w, o=owner: fouled_segment(p, w, houses, yards, solid, fixtures, M, o) is not None),
         )
         for rule, broken in own:
             # ...each asked only until one holds the lane, unless the rules are wanted by name (a refusal): the fabric probe
             # is the costly one, and the last resort's rounds need only to know the lane is held
             if (every or i not in bad) and broken():
-                add(f"fabric: {foul_part(p, w, houses, yards, solid, fixtures, M)}" if every and rule == "fabric" else rule, [i])
+                add(f"fabric: {foul_part(p, w, houses, yards, solid, fixtures, M, owner)}" if every and rule == "fabric" else rule, [i])
     ground = memo_ground(s, "worked", worked_ground)
     add("connector_hairpins", (i for _c, i, _e in law.connector_hairpin_ends(lanes, blocked)))
     add("needle_joins", (i for i, _e, _k, _u, _v in law.needle_ends(lanes, blocked)))
@@ -110,11 +112,11 @@ def lane_breaches(s: Any, every: bool = False) -> dict[int, list[str]]:
     return {i: rules for i, rules in bad.items() if not lanes[i].get("connector")}
 
 
-def foul_part(p: Any, w: float, houses: Any, yards: Any, solid: Any, fixtures: Any, M: Any) -> str:
+def foul_part(p: Any, w: float, houses: Any, yards: Any, solid: Any, fixtures: Any, M: Any, owner: Any = None) -> str:
     """Which part of `fouled_segment` a fouling lane breaks, for a refusal (feature 385 T03, plan D16): seed 21's five lanes
     were refused for `fabric` while none came within 2.9 ft of anything in the manifest - the fence gap, a farmhouse, a
     building, a fixture or the overlap matrix (with the standing keys it names) each says where to look."""
-    if fouled_segment(p, w, houses, yards, solid) is not None:
+    if fouled_segment(p, w, houses, yards, solid, owner=owner) is not None:
         if any(house_hit([a, b], w, houses) for a, b in zip(p, p[1:], strict=False)):
             return "on a farmhouse"
         if any(law.breaks_through([a, b], solid) for a, b in zip(p, p[1:], strict=False)):

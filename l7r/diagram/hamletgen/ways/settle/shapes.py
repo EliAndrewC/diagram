@@ -24,7 +24,7 @@ from ..corridors import (
 from ..fabric import _crosses_fabric, house_hit
 from ..fabric import lane_fabric as _fabric
 from ..forced import lazy_ground
-from ..geom import _TOUCH_GAP, polyline_len
+from ..geom import _TOUCH_GAP, lane_owner, polyline_len
 from ..squaring import (
     SQUARE_MARGIN_FT,
     _pts,
@@ -83,28 +83,27 @@ def _ordinary(M: Mapping[str, Any]) -> list[int]:
 Yards = list[tuple[Poly, Pt | None]]
 
 
-def theirs(p: Poly, yards: Yards, houses: Sequence[Mapping[str, Any]], M: Mapping[str, Any] | None = None) -> list[Poly]:
-    """The yards and gardens a lane along `p` may not come near: all but its OWN household's - ONE farmhouse, at its dooryard
-    end: of the farmhouses an end reaches as 0246 measures it (`law.reach_to_steading`: 60 ft of the house or 12 ft of its
-    built ground; with no manifest, 60 ft of the house), the one nearest its end (405 T18: every steading within
-    `DOORSTEP_FT`, 80 ft, of either end was exempt, and then the farmhouse each end reached, so a door path's junction end
-    exempted the neighbor beside it - 0246 keeps the gap off another household's garden).
+def theirs(yards: Yards, owner: Pt | None = None) -> list[Poly]:
+    """The yards and gardens a lane may not come near: all but its OWN household's, where it is a household's own way
+    (`owner`, `lane_owner`) - every one where it is not (405 T18: every steading within `DOORSTEP_FT`, 80 ft, of either end
+    was exempt, so a neighbor's garden beside a junction lost the gap; 0246 gives the exemption to a household's own way, and
+    a back lane or cross lane belongs to no household).
 
     Research:
         a lane arrives at its own dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its way leaves its dooryard round its own beds and fixtures
-        its own household the one its end reaches - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a household's way leaves its own dooryard and joins a way at a T, so a lane has one household - the farmhouse nearest an end among those its ends reach (the page's own reach)"""
-    reached = [
-        (math.dist(end, (float(h["x"]), float(h["y"]))), (float(h["x"]), float(h["y"])))
-        for end in (p[0], p[-1])
-        for h in houses
-        if (law.reach_to_steading(end, h, M) if M is not None else math.dist(end, (float(h["x"]), float(h["y"]))) <= law.HOUSE_REACH_FT)
-    ]
-    own = [min(reached)[1]] if reached else []
-    return [poly for poly, owner in yards if owner is None or all(math.dist(owner, c) > 1.0 for c in own)]
+        its own household the one it serves - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the gap is kept from another household's garden, and a household's own way may run beside its own - the lane's record names its household (`of`, `serves`); a lane with none is no household's own"""
+    return [poly for poly, own in yards if own is None or owner is None or math.dist(own, owner) > 1.0]
 
 
 def fouled_segment(
-    p: Poly, width: float, houses: Sequence[Mapping[str, Any]], yards: Yards, solid: Sequence[tuple[float, float, float, float]], fixtures: Sequence[Poly] = (), M: Any = None
+    p: Poly,
+    width: float,
+    houses: Sequence[Mapping[str, Any]],
+    yards: Yards,
+    solid: Sequence[tuple[float, float, float, float]],
+    fixtures: Sequence[Poly] = (),
+    M: Any = None,
+    owner: Pt | None = None,
 ) -> int | None:
     """The first segment of `p` that fouls the fabric: ink on a farmhouse (`house_hit`), within `WEB_FABRIC_GAP` of another
     household's yard or garden (`theirs`), a long leg through a building's box (`law.breaks_through`),
@@ -119,7 +118,7 @@ def fouled_segment(
         no long leg through a building - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `law.breaks_through`
         off the fixtures - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its own household's too
         what the overlap matrix forbids - NONE: each pair is claimed in the matrix"""
-    near = theirs(p, yards, houses, M)
+    near = theirs(yards, owner)
     over = law.over_a_fixture(p, width, fixtures) if fixtures else None
     matrix = forbidden_segment(M, "lanes", p, width) if M is not None else None
     for k, (a, b) in enumerate(zip(p, p[1:], strict=False)):
@@ -237,7 +236,7 @@ def settle_shapes(s: Any) -> int:
         if pieces is not None:
             edits[i] = pieces
             continue
-        k = fouled_segment(p, float(ln.get("w") or 3.0), houses, yards, solid, fixtures, M)
+        k = fouled_segment(p, float(ln.get("w") or 3.0), houses, yards, solid, fixtures, M, lane_owner(ln))
         if k is not None:
             edits[i] = [q for q in (p[: k + 1], p[k + 1 :]) if len(q) >= 2]  # the fouling segment goes; a lane of one goes whole
     return apply_pieces(s, edits)
