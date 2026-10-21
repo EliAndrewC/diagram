@@ -62,6 +62,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [x] T51 `make land` pushes once: the ticks are written and committed before the push, which carries them, and a failed push is undone by a revert commit - T13's landing pushed twice, the tick's own push about a minute (amendment 6, the GM 2026-10-21)
       research: rendering
       verify: DONE. landed in batch T50+T51+T47: tick_task + preflight suites green (35): a claims refusal set aside, the gate run, the push waiting for the claims gate and a clean tree, refused past the bound; one push carrying the ticks, a failed push reverting them; --landing make land's alone; the gate's preflight without the coverage step, make preflight with it; plan review CLEAR (D23-D25)
+- [ ] T52 `make land` writes the feature's ledger rows only in its first pass, so a claims round run beside the gate (T50) leaves its impl-drift pass without a row and the push refuses - T49's row was written by hand mid-landing: write them again after the claims wait (found landing 405 T49, 2026-10-21)
+      research: rendering
 - [ ] T45 The reference-settlement message (`_reference` in the Makefile) still offers `GATE_NO_CACHE=1 rolls it`, but the roll census refuses that run's re-rolls (T11's 05:02 gate): let the census accept a declared no-cache run, or stop offering it (the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z) [lands-open]
       research: rendering
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]

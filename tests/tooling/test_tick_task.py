@@ -319,7 +319,11 @@ def test_the_claims_round_runs_beside_the_gate_and_the_push_waits_for_it(tmp_pat
     monkeypatch.setattr(lb, "push", lambda root, tasks: order.append("push") or 0)
     monkeypatch.setattr(lb, "CLAIMS_POLL_S", 0.0)
     monkeypatch.setenv("LAND_NOTE", "x")
+    writes: list[str] = []
+    real_write = lb.write_ledger
+    monkeypatch.setattr(lb, "write_ledger", lambda root, d: writes.append(order[-1] if order else "first") or real_write(root, d))
     assert lb.main(["188", "T02"]) == 0 and order == ["gate", "push"], "the gate ran while the claim was owed; the push after"
+    assert writes == ["first", "gate"], "the ledger rows written again after the claims wait (405 T52): its round's passes"
     out = capsys.readouterr().out
     assert "the claims round is owed" in out and "waiting for the claims round" in out and "uncommitted changes" in out
     state.update(claims=1, asked=-100)

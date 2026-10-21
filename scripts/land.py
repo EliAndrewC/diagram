@@ -46,6 +46,17 @@ def run(root: Path, cmd: list[str], env: dict[str, str] | None = None, quiet: bo
     return out.returncode, (out.stdout or "") + (out.stderr or "") if quiet else ""
 
 
+def write_ledger(root: Path, d: Path) -> None:
+    """The ledger rows the push would name as owed, written and committed: the plan reviews' (385 T72) and every other pass
+    traced to this feature - its claims round's above all (405 T39, D13). Asked in the first pass, and again after the claims
+    wait (405 T52, D27: T49's claims round ran beside the gate, after the first pass, and its row was written by hand)."""
+    ledger = str(root / "dev" / "review-ledger.md")
+    run(root, [sys.executable, str(HERE / "reviews" / "ledger_owed.py"), "--write-plan-reviews", "--ledger", ledger])
+    run(root, [sys.executable, str(HERE / "reviews" / "ledger_owed.py"), "--write", f"specs/{d.name}/ (the records its checks wrote; make land)", "--ledger", ledger])
+    if run(root, ["git", "status", "--porcelain", "--", "dev/review-ledger.md"])[1].strip():
+        run(root, ["git", "commit", "-q", "-m", "the review passes' ledger rows, written at landing (make land)", "--", "dev/review-ledger.md"])
+
+
 def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str, deferred: list[str] | None = None) -> list[str]:
     """Pass 1: every refusal the landing would meet that costs seconds to ask, all of them - but the claims gate's, which goes to
     `deferred` when given (405 T50, D23: the claims round runs beside the gate, and the landing waits for it before the push)."""
@@ -62,19 +73,12 @@ def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str, deferred: l
         if why:
             by_why.setdefault(why, []).append(task)
     stops = [f"{', '.join(ts)}: {why}" for why, ts in by_why.items()]
-    # the plan reviews' ledger rows are the push's to write (385 T72): written and committed first, as the push does, so they are
-    # not named as owed
-    run(root, [sys.executable, str(HERE / "reviews" / "ledger_owed.py"), "--write-plan-reviews", "--ledger", str(root / "dev" / "review-ledger.md")])
-    # ...and every other pass traced to this feature - its claims round's above all (feature 405 T39, D13: T14's and T11's landings
-    # each refused once on impl-drift passes the session then wrote by hand), acted on in the feature's own records
-    run(root, [sys.executable, str(HERE / "reviews" / "ledger_owed.py"), "--write", f"specs/{d.name}/ (the records its checks wrote; make land)", "--ledger", str(root / "dev" / "review-ledger.md")])
+    write_ledger(root, d)
     # ...and the make-targets page, regenerated where the Makefile moved (feature 405 T46, D19): the push's `make-docs` check
     # refused T43's landing after its hooks-test, for a page `make docs` writes in a second
     if run(root, [sys.executable, str(HERE / "make-docs.py"), str(root), "--check"])[0]:
         run(root, [sys.executable, str(HERE / "make-docs.py"), str(root), "--write"])
         run(root, ["git", "commit", "-q", "-m", "docs/make-targets.html regenerated at landing (make land, 405 T46)", "--", "docs/make-targets.html"])
-    if run(root, ["git", "status", "--porcelain", "--", "dev/review-ledger.md"])[1].strip():
-        run(root, ["git", "commit", "-q", "-m", "the plan reviews' ledger rows, written at landing (feature 385 T72)", "--", "dev/review-ledger.md"])
     # A FINDING OUTSIDE THE CHANGE IS FILED, NOT REFUSED (feature 405 T36, D10): the carry files every carried claims finding as an
     # open task of this feature - what `make claims-carry` does by hand - and the box lands with the work
     num = d.name.split("-", 1)[0]
@@ -275,6 +279,7 @@ def main(argv: list[str]) -> int:
     if why := wait_for_claims(root, tasks):
         print(f"land: the gates are green, but the claims round did not finish in {CLAIMS_WAIT_S / 60:.0f} min - nothing landed: {why}", file=sys.stderr)
         return 2
+    write_ledger(root, d)  # the passes the claims round made beside the gate (405 T52, D27)
     # ONE PUSH, THE TICKS IN IT (405 T51, D24): T13's landing pushed its work, then its ticks - two runs of every push check
     rel = str(d.relative_to(root))
     how = f"landed in batch {'+'.join(tasks)}" if len(tasks) > 1 else "landed"
