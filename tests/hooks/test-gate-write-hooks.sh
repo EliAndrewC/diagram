@@ -29,7 +29,9 @@ check "a commit with no gate running" 0 "$(run "$R" "$COMMIT")"
 
 echo "--- 2. this tree's make done running ---"
 ( cd "$R" && setsid nohup make done </dev/null >/dev/null 2>&1 & )
-for _ in $(seq 1 50); do pgrep -f "[m]ake done" >/dev/null && break; sleep 0.1; done
+# THE FIXTURE'S OWN GATE, AS THE GUARD SEES IT (405 T61): `pgrep -f "make done"` also matched a real gate running elsewhere on the
+# machine - the landing's, beside its cohort - so the wait ended before this fixture's started and three cases read "let through"
+for _ in $(seq 1 50); do ( cd "$R" && "$HERE/../../scripts/hooks/lib/own-make.sh" done ) && break; sleep 0.1; done
 check "an Edit inside the tree: refused" 2 "$(run "$R" "$EDIT")"
 check "...naming make verify-wait" yes "$(grep -q 'make verify-wait' "$R/err" && echo yes || echo no)"
 check "a git commit: refused" 2 "$(run "$R" "$COMMIT")"
@@ -56,7 +58,7 @@ printf 'done:\n\t@sleep 30\n' > "$S/Makefile"
 git -C "$S" add -A; git -C "$S" -c user.email=t@t -c user.name=t commit -qm base
 python3 "$S/scripts/gates/preflight.py" --root "$S" --tree-snap "$S/.git/gate-tree.json"
 ( cd "$S" && setsid nohup make done </dev/null >/dev/null 2>&1 & )
-for _ in $(seq 1 50); do pgrep -f "[m]ake done" >/dev/null && break; sleep 0.1; done
+for _ in $(seq 1 50); do ( cd "$S" && "$HERE/../../scripts/hooks/lib/own-make.sh" done ) && break; sleep 0.1; done
 DOC=$(printf '{"tool_name":"Edit","tool_input":{"file_path":"%s/l7r/diagram/m.py","old_string":"a claim - NONE","new_string":"a claim reworded - NONE"}}' "$S")
 CODE=$(printf '{"tool_name":"Edit","tool_input":{"file_path":"%s/l7r/diagram/m.py","old_string":"x + 1","new_string":"x + 2"}}' "$S")
 check "an Edit of a claim docstring: let through" 0 "$(run "$S" "$DOC")"

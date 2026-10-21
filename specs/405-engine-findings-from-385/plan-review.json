@@ -182,6 +182,56 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T17": {
+   "section_sha256": "ea5494a11a2889ef82156e019a43748bc0fd6bcc9918bc8e3ab825559fa95c3f",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D29",
+     "summary": "Lane-end words conformed to the code: _pull_back's comment, WAY_END_REACH_FT's docstring (field's reach is law.FIELD_REACH_FT), _lay_skeleton's span floor (half a pitch each way); eight pull-back claims labeled GUESS as 0246 labels the rule; _SERVE_FT cites 0246 plainly.",
+     "class": "within",
+     "why": "A claims task (moved from 385 under FR-001): words brought to what the code does and labels to what the page says, no behavior changed. Amendment 7 asks the remaining tasks worked following the research; labeling a rule GUESS where 0246 calls it a GUESS is exactly that."
+    },
+    {
+     "id": "drift-rule",
+     "summary": "Re-answered item 4 (T17, T16): where a claim's page disagrees with the CODE the drift becomes a task of its own; where it disagrees with the label, the label follows the page.",
+     "class": "within",
+     "why": "FR-002 (GM 2026-10-19: findings on code a task did not change are kept as new tasks) is the rule this applies; the blocks should have named FR-002 and do not - a drafting gap, not a narrowing."
+    },
+    {
+     "id": "D29-street",
+     "summary": "Three row-street claims (0033: a street runs on off the map as the road into it) left as they were; the code's drift carried to a new task.",
+     "class": "within",
+     "why": "Adjudicated separately from the _pull_back case. The claims already match the page; rewording them to the drifting code would bless the drift against the research amendment 7 says to follow. The fix stays in this feature (T54/T55), which amendment 7 asks taken to completion, so nothing asked is dropped. FR-002 filing."
+    },
+    {
+     "id": "D29-pull-back",
+     "summary": "Two _pull_back claims (0246: an end at the dooryard) left as they were; the code's drift carried to a new task.",
+     "class": "within",
+     "why": "Same ruling on its own grounds: 0246 is the page, the claims state it, the code departs; the code change is a separate task in this feature under FR-002, not a carve-out from the request."
+    },
+    {
+     "id": "D30",
+     "summary": "Run-on claimed: row-street skip cited to 0033; RUN_ON_REACH_FT as GUESS (0246's 60 ft reused for the field); dry hem's edge GUESS citing 0081; run_on_target's reach GUESS and its stop CONVENTION; dangling_lane_ends' connector exemption cited to 0081.",
+     "class": "within",
+     "why": "Claims added for unclaimed behavior, labeled as the pages give them; the move from UNRESEARCHED to GUESS-citing-0081 follows the page the round read. No behavior change."
+    },
+    {
+     "id": "D31",
+     "summary": "Farm-fixture exemption text reworded to where fixtures stand; its claim cites 0038 for the bed and drops 0039; CANOPY_PAD and SHADE_MARGIN_FT claimed CONVENTION; _seats claims the front privy's 8 ft (GUESS, 0047) and the stable seat (0047).",
+     "class": "within",
+     "why": "Words conformed to the code and citations corrected to the pages; CONVENTION labels on values no page states are labeling inside the claims task, not a narrowing of anything asked."
+    },
+    {
+     "id": "budget",
+     "summary": "T17, T16 and T27 worked as one batch with one landing, about 30 min.",
+     "class": "within",
+     "why": "Nothing in the request or the indexed requirements forbids batching claims tasks into one landing; amendment 7 asks all remaining tasks worked, and the batch works all three."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  },
  "blocks": {
@@ -565,6 +615,210 @@
   },
   "### T53 Decisions": {
    "sha256": "434b0fd30e67eb1c8821ee26117358d6bac1618dc781fa601e37be49a505fed8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "## T17, T16, T27 - the lane-end, run-on and farm-fixture claims brought to the research (385 T133, T131, T147)": {
+   "sha256": "fc0fbd6f1120fcee8798b2bc70d326686560c933fa1c1c6b3e955597a622e506",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T17 Approach (checklist part A)": {
+   "sha256": "81507c6a8e4c4d3de8813bc286fd88d97b0ec62008bfb6d701ce130487ecdd3e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T17 Decisions": {
+   "sha256": "6bb7163d3cef508de946ee72d4b775297fe4f55a0a4e689a674cd1b486924f73",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T16 Approach (checklist part A)": {
+   "sha256": "f33d20bd292fb07d48c360a77aa0a8d09865390c4a646c70fe6e114acc15ddbd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T16 Decisions": {
+   "sha256": "c632d46d347d50ca7bcf669f3f47cbc3af3072ae3eebb4573941e6b6cdd3d08d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T27 Approach (checklist part A)": {
+   "sha256": "9d7fb576563ed633709bc74083ac9a674569d1ea76ccc790b8d4106ebe3a418f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T27 Decisions": {
+   "sha256": "1f6096703492a43bb844c34190d378e9a5335762c7cfb54ba9d74d095ee1d55c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "## T57, T58 - `web.py` split at the bar, and the claim rows carried with it (T53's rule)": {
+   "sha256": "70c7634c3e9d1f06eaecb243abbdcd29abdc1b05fbcf491de9bf2af822056bcf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T57 Approach (checklist part A)": {
+   "sha256": "83b58b5e55c294c891d20fe1735d1001646eb71bddbd923a49dab31d5306a2c3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T57 Decisions": {
+   "sha256": "4be2d682f8aee46ab4a52f8a83d6896bb7e247bb9dda12a42b77da83faf00296",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T58 Approach (checklist part A)": {
+   "sha256": "a02a85b3e5120cd8380fa1a0f5f06768a961393fc721a16b79c31a921a24003c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T58 Decisions": {
+   "sha256": "0b69a5206440ce9231868f23fae68fb38ee8fb26e6c0bfb706da195e99357906",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T17 Approach (re-answered 2026-10-21T12:56Z)": {
+   "sha256": "da3f66e55e368cc95aeee857014187a971cf96f70a04d39920b44715a52be5e6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T16 Approach (re-answered 2026-10-21T12:56Z)": {
+   "sha256": "5c0c2524337c2da1e2365c3e73863497e153541b5016785bf0bee1c026e99d6c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "## T60 - another feature's requirement, named by its feature (found landing the T17 batch)": {
+   "sha256": "bd4bf245ca34b2cfbcb00b73acc3397f42c0ade2e193e165d822b8e617bd5f02",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T60 Approach (checklist part A)": {
+   "sha256": "3e579f1da6676f2f61d6ff6aa41be491397697edf20990a8cd51b9ad8142c726",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T60 Decisions": {
+   "sha256": "b96059ad92813f3b89261e179ba90f81e58628aaca8cca8f3e33708526c79fa1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "## T61 - the gate-write suite waits for its own fixture's gate (found landing the T17 batch)": {
+   "sha256": "ff2769c843a5025d9fae5ffcd61a9ec8286984ff4edbfb9709838d293cf39b9d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T61 Approach (checklist part A)": {
+   "sha256": "2e8bf684e402bb06da55b2121311391cf479e771536623a3ba91371c749ad518",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T61 Decisions": {
+   "sha256": "1d60941ed9a91eab135b51ac0653ec7a365bca530305da58e261fdb16bb35563",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "## T29, T28, T45 - the findings log closes, 385's rows mapped, the reference message (found and filed work)": {
+   "sha256": "f2cee049af39084f436347cb16b279c588b233b6c5f313a9e0d2417296743ce5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T29 Approach (checklist part A)": {
+   "sha256": "3489664820fb8909c5d935be25fd3e3af6f362be1d9968f0c750b8b496e7457d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T29 Decisions": {
+   "sha256": "585928a5c528eeb5e324ea83599229b21327c47e0fa1a76f5a9ef049812e82c9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T28 Approach (checklist part A)": {
+   "sha256": "26d1324538ce4dac7f883b7be8cbc9659a5ac58d1f2e62bf51e30bc6d38400ca",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T28 Decisions": {
+   "sha256": "569d4fdb53f310d7d6373d9ccf6a88f35702a14eca88face26ec43d2eb0a3687",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T45 Approach (checklist part A)": {
+   "sha256": "4dd42879ec4bd202dd7657810eaae6700cce3fd8b809ab9fcfaa315524fd09d6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T45 Decisions": {
+   "sha256": "796ef53ab21ef8e71abf94828515b271e498f6525aa025c7c6ec9163d7b77b6f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "## T62, T63, T69 - the run-on to the paddy, the arm trims against what they reach, the cut lines' houses (the T17 batch's round 2; T28)": {
+   "sha256": "fe4e45ffb7a603631952175b05306dc6656a36ef9e33890c593bb4b3f3441217",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T62 Approach (checklist part A)": {
+   "sha256": "6052b94ce3707a03e6c97ce4ecd97ab62311b7424ef642de44cca203a79de55c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T62 Decisions": {
+   "sha256": "ddb75f6eb4343e14647c0eaebcc3b161a92c183d124f29519b7f89b7d7f7b696",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T63 Approach (checklist part A)": {
+   "sha256": "486c9005da817809100f11b85d06a618ef9d25265be0b2a34e0fb386d4ab6da0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T63 Decisions": {
+   "sha256": "449d5e2ef28ee16d600477e19387dd90893636657564bcb7e57d4514a4082881",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T69 Approach (checklist part A)": {
+   "sha256": "5b30c48c083468de624035cd52723a522a7a8a309f352de15ab31432168056c6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T69 Decisions": {
+   "sha256": "7a69b753f66d1c018403ce2cdf9f9e4eda9ed84c8ecc337b99e7224861898062",
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
@@ -1255,6 +1509,348 @@
      "summary": "the task changes the check's message and the guideline only; web.py and settle.py, which stand at exactly 1,000 after earlier trims, are not split by this task",
      "class": "within",
      "why": "The GM's mechanism is the failing check instructing a split when a file exceeds the bar ('When we hit it ... we should take that as a sign'); files at 1,000 do not fail, and the next edit that pushes them over meets the new instruction. The GM asked for the check to instruct, not for a retroactive split sweep."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T17, T16, T27 - the lane-end, run-on and farm-fixture claims brought to the research (385 T133, T131, T147)",
+    "### T16 Approach (checklist part A)",
+    "### T16 Decisions",
+    "### T17 Approach (checklist part A)",
+    "### T17 Decisions",
+    "### T27 Approach (checklist part A)",
+    "### T27 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T17/T16/T27 bundle",
+     "summary": "Three moved claims tasks worked together on one 30-minute budget and one landing.",
+     "class": "within",
+     "why": "Amendment 7 asks for every remaining open task to be worked; grouping three claim-wording tasks into one landing is process inside FR-001 and drops none of them."
+    },
+    {
+     "id": "T17 exit (e)",
+     "summary": "T17 conforms the words to the code and the labels to 0246, with no behavior change.",
+     "class": "within",
+     "why": "The task is to make the lane-end claims say what the code does and label it as 0246 does. 0246 itself calls the pull-back rule a GUESS, so labeling it GUESS follows the research rather than departing from it."
+    },
+    {
+     "id": "D29",
+     "summary": "Lane-end comments and docstrings corrected (_pull_back, WAY_END_REACH_FT, _lay_skeleton's 50 ft half-pitch floor, _SERVE_FT cites 0246's 100 ft as GUESS); thirteen pull-back claims labeled GUESS.",
+     "class": "within",
+     "why": "This conforms claims to measured code and to the page's own label. It changes no behavior and drops none of the claims the task names."
+    },
+    {
+     "id": "T16 exit (a) / D30",
+     "summary": "Run-on behavior claimed as it stands: row street left to the street rules (UNRESEARCHED), the reach GUESS (0246's 60 ft reused), the dry hem's edge UNRESEARCHED (0014 silent on a dry plot), run_on_target's stop CONVENTION, connector exemption cited to 0081.",
+     "class": "within",
+     "why": "T16's goal is that every rule of the run-on and dangling-end test is claimed, and each one gets a claim. Where the pages are silent the claim says so, which is the honest label under FR-001's claims procedure. Nothing the task covers is excepted."
+    },
+    {
+     "id": "T27 exit (e) / D31",
+     "summary": "The farm_fixtures exemption text reworded to where the fixtures actually stand; the claim cites 0038, not 0039, for the bed; CANOPY_PAD and SHADE_MARGIN_FT claimed CONVENTION; the privy's 8 ft front seat claimed GUESS (0047) and the stable seat cited to 0047.",
+     "class": "within",
+     "why": "This conforms words and citations to the code and the pages and adds the four missing claims. It is the whole of the task's goal, with nothing narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T57, T58 - `web.py` split at the bar, and the claim rows carried with it (T53's rule)",
+    "### T16 Decisions",
+    "### T17 Decisions",
+    "### T57 Approach (checklist part A)",
+    "### T57 Decisions",
+    "### T58 Approach (checklist part A)",
+    "### T58 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D29",
+     "summary": "T17's lane-end claims: the GUESS list re-cut (the 7 ft arm clip split off as stated by 0246, _SERVE_FT's 100 ft cited plainly); three street claims and two _pull_back claims whose CODE drifts from its page (0033, 0246) keep their claims and the code drift is carried to T54 and T55",
+     "class": "within",
+     "why": "Labeling each claim by what its page says is the claim task itself (FR-001). Carrying a finding on code the task did not change to new tasks of this feature is the GM's own rule (2026-10-19, 'keep findings on code a task didn't change as new tasks'; FR-002), and amendment 7 has every open task of the feature worked, so the drift is fixed here, not dropped. No part of the request is narrowed."
+    },
+    {
+     "id": "D30",
+     "summary": "T16's run-on claims: the row street not carried onto the field cites 0033; the dry hem's edge becomes GUESS citing 0081 (was UNRESEARCHED); reach, stop and connector claims unchanged",
+     "class": "within",
+     "why": "Choosing each claim's label and source is the substance of a moved claims task (FR-001); nothing the GM asked for is excluded or deferred."
+    },
+    {
+     "id": "D32",
+     "summary": "web.py (1,001 lines, past the bar) split into ways/web/ skeleton, tidy, stage, each kept under ~650 lines, __init__.py re-exporting every name and the submodules",
+     "class": "within",
+     "why": "This is amendment 7's rule applied literally: past 1,000 lines, split into submodules of about 650 rather than trimming to just under, with __init__.py exposing everything so importers do not change."
+    },
+    {
+     "id": "T57-monkeypatch",
+     "summary": "the seven test_web.py monkeypatches retargeted at the submodules where the moved functions look the names up",
+     "class": "within",
+     "why": "The GM's promise is that imports do not change; a monkeypatch patches where a name is looked up, which moves with the code by Python's own rules. Imports stay unchanged, so the request is honored, not narrowed."
+    },
+    {
+     "id": "D33",
+     "summary": "claims_owed.moved: a unit whose unit#claim suffix matches, whose old key is gone and whose code fingerprint is equal (one candidate only) owes no claims round; rekey moves its row; make claims-rekey; land.py's first pass runs it and commits the index",
+     "class": "within",
+     "why": "Serves amendment 7's stated purpose that a split at the bar be 'relatively painless'; a split owing a full claims round on 61 unchanged rows would defeat it. It re-judges nothing whose code changed (equal fingerprint, single candidate, a changed unit is still owed by test), and matches the claims gate's existing cross-key 'introduced' reading, so no GM-requested check is weakened."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "### T16 Approach (re-answered 2026-10-21T12:56Z)",
+    "### T17 Approach (re-answered 2026-10-21T12:56Z)",
+    "### T17 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D29-words",
+     "summary": "T17: _pull_back's comment ends the lane at the last homestead it serves; WAY_END_REACH_FT names a farmhouse and another way (field reach is law.FIELD_REACH_FT); _lay_skeleton's span floor reads half a pitch each way, a pitch across",
+     "class": "within",
+     "why": "Words corrected to say what the code does - the task's own goal under FR-001; nothing the request asked for is dropped."
+    },
+    {
+     "id": "D29-labels",
+     "summary": "T17: the pull-back claims (_trim_to_service, settle_dangling, _sweep_dangling_ends, _walk_in, served_arm, tidy_lane_ends, _pull_back's trim floor, _lay_skeleton's arm trim split from its 7 ft clip) labeled GUESS as 0246 labels the rule; the 7 ft clip and _SERVE_FT's 100 ft cited plainly as 0246 states them",
+     "class": "within",
+     "why": "Labels follow the page, as the task's goal states. The changed text removes the earlier block's self-contradiction (_SERVE_FT was both 'the GUESS it is' and 'cited plainly'); it now says one thing."
+    },
+    {
+     "id": "D29-drift",
+     "summary": "T17/T16: three street claims and two _pull_back claims whose pages disagree with the CODE stay as written; the code's drift is filed as T54 and T55 in this feature",
+     "class": "within",
+     "why": "The disagreement is in code these word-and-label tasks do not change; the GM's 2026-10-19 rule ('keep findings on code a task didn't change as new tasks', FR-002) routes it to new tasks, and Amendment 7 asks that all remaining tasks be worked, so nothing is dropped. Rewriting the claims to describe the drifted code would put words against their research pages."
+    },
+    {
+     "id": "T16-order",
+     "summary": "T16: the street skip cited to 0033; the dry hem cited to 0081 as a GUESS",
+     "class": "within",
+     "why": "Citations and labels follow the pages the round read; the task's stated goal."
+    },
+    {
+     "id": "T16-T17-exit",
+     "summary": "Exit (e) conform - words and labels only, no constant moved, nothing fitted; done when the claims round reads every changed claim IN-STEP",
+     "class": "within",
+     "why": "The claims tasks' ordinary scope under FR-001; no part of the request is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T60 - another feature's requirement, named by its feature (found landing the T17 batch)",
+    "### T60 Approach (checklist part A)",
+    "### T60 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T60 filed",
+     "summary": "The spec-lint refusal of T59 (a carried claims finding filed with 385's bare FR-013) is filed and worked as a task of 405.",
+     "class": "within",
+     "why": "Found work raised while landing this feature's tasks stays in 405 (request 2026-10-19 'keep findings ... as new tasks'; FR-002), and amendment 7 asks for the feature to be taken to completion, which a carry whose filed task fails 405's own spec-lint would block."
+    },
+    {
+     "id": "D34 (carry text)",
+     "summary": "claims_carry's three texts cite '385 FR-013' rather than a bare 'FR-013'; T59's line is rewritten to read '385 FR-013'.",
+     "class": "within",
+     "why": "The carried finding is governed by 385 FR-013; naming its feature makes the filed task say what 385 FR-013 already requires it to be (an open task of the landing feature). No behavior of the carry changes - only the id's attribution - and nothing the GM asked is dropped."
+    },
+    {
+     "id": "D34 (spec-lint)",
+     "summary": "spec-lint check_stale_tasks skips an id preceded by a feature number ('NNN ' or 'NNN's '); a bare id the spec lacks still fails, held by a test.",
+     "class": "within",
+     "why": "Needed so a carried finding filed under FR-013 can be filed into any feature at all, which is what 385 FR-013 and the GM's 'findings ... as new tasks' rule require. The check keeps its whole reach over bare ids (Done item 9's test); it stops misreading another feature's requirement as this spec's stale one rather than relaxing anything the GM asked to have enforced. Nothing in request.md or 405's spec names check 4's coverage, so this narrows no part of the request."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T61 - the gate-write suite waits for its own fixture's gate (found landing the T17 batch)",
+    "### T61 Approach (checklist part A)",
+    "### T61 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T61 (filing)",
+     "summary": "A hooks-test failure found while landing the T17 batch (the gate-write suite's pgrep -f 'make done' matched another gate on the machine, so three cases ran before the fixture's gate started) is filed and worked as a task of 405.",
+     "class": "within",
+     "why": "FR-002 keeps found work in this feature, and Amendment 7 asks for every remaining open task to be worked to completion; a suite that misreads 385 FR-010's guard when another gate runs is work the feature's own landings raised."
+    },
+    {
+     "id": "D35",
+     "summary": "tests/hooks/test-gate-write-hooks.sh waits, in both sections, until scripts/hooks/lib/own-make.sh done run from the fixture tree reports the fixture's gate running - the question the guard itself asks - instead of pgrep -f 'make done'.",
+     "class": "within",
+     "why": "It changes only how the test synchronises with its own fixture; FR-010's guard and its refusal are untouched, and the test still fails if the guard lets a write through while the session's own gate runs. Nothing the request or spec asks for is dropped."
+    },
+    {
+     "id": "T61 done-measure",
+     "summary": "Done is the suite passing 22 of 22 while another gate runs on the machine.",
+     "class": "within",
+     "why": "Verifies the fix on the exact case measured as failing (19 passed, 3 failed on 2026-10-21); no new scope, no narrowing of what the suite checks."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T29, T28, T45 - the findings log closes, 385's rows mapped, the reference message (found and filed work)",
+    "### T28 Approach (checklist part A)",
+    "### T28 Decisions",
+    "### T29 Approach (checklist part A)",
+    "### T29 Decisions",
+    "### T45 Approach (checklist part A)",
+    "### T45 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D36-shape",
+     "summary": "found.py list/close, make found-list/found-close: a row's outcome recorded on the row with closed_utc, a closed row refuses a second close, list numbers open rows",
+     "class": "within",
+     "why": "Recording each finding's outcome serves FR-002: it is the instrument that shows no finding sits open without its task. Shape and refusal are design, not scope."
+    },
+    {
+     "id": "D36-settled",
+     "summary": "a row may close as 'settled' with a free-text why of three words or more and no task",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-002 and the GM's words ('keep findings on code a task didn't change as new tasks') give a finding one outcome: a task. D36 adds a second, bounded only by the why's length, so it admits a finding that still holds and that the session decided against - the carve-out FR-002 exists to stop. Not impossible (a task can be filed and ticked on verification), not implied by the GM's words, does not defeat the request's purpose. T28 item 4's 'each settled row checked against the file it names' is T28's practice, not a constraint in D36 or T29 item 9. A different decision would be needed for a different ruling: 'settled' bounded to a finding measured against the current file and found no longer to hold, the why carrying that measurement - that version is not written here and is not pre-ruled."
+    },
+    {
+     "id": "D36-filed-existing-405",
+     "summary": "a row may close as filed against an existing task of this feature rather than a new one",
+     "class": "within",
+     "why": "The work stays in this feature's task list and is worked; a duplicate new task adds nothing. Holds only where the named task's scope actually covers the row, which T28's mapping claims to have checked."
+    },
+    {
+     "id": "D36-filed-385-405",
+     "summary": "a 385 row filed to a 385 or 405 task, a 405 row filed to a 385 task ('385 T12', '405 T17')",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the GM's own words: 'all open process tasks stay in 385 and everything else moves into a new feature', and the rule for 385 itself ('new tasks in 385'). Routing between exactly these two features follows the GM's split."
+    },
+    {
+     "id": "D36-filed-other-feature",
+     "summary": "T29 item 9 / D36 accept 'a task id, this feature's or another's' with no bound on which feature: a row may be closed against a task of any third feature",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-002 is 'found work stays here'. The GM's routing names 385 and a new feature (405) only; a row parked on a third feature's task is found work leaving the feature, with no GM words behind it. Fix: name 385 and 405 explicitly as the only features a row may be filed against."
+    },
+    {
+     "id": "T28-mapping",
+     "summary": "all 76 rows of 385's and 405's logs closed: 22 to 405 tasks, 9 to 385 tasks, 11 settled, 34 filed as new tasks; done = 0 open",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The 31 rows to existing 385/405 tasks and the 34 to new tasks are within FR-002. The 11 'settled' rows close findings with no task, riding on D36-settled; item 1's own goal ('no finding sits open with no task') is met by closing 11 without one. Falls with D36-settled; would stand if each of the 11 is either filed as a task or settled under a bounded rule recording that the finding was measured no longer to hold in the current file."
+    },
+    {
+     "id": "D37",
+     "summary": "34 unfiled rows grouped into six new 405 tasks T65-T70 by unit and complaint; 385-log rows name their 405 task with the feature",
+     "class": "within",
+     "why": "Filing found work as new tasks of this feature is FR-002 itself; grouping by unit and complaint is design. 385's non-process rows landing in 405 follows the GM's routing."
+    },
+    {
+     "id": "D38",
+     "summary": "T45: _reference's message stops offering GATE_NO_CACHE=1; the census is left refusing no-cache re-rolls",
+     "class": "within",
+     "why": "Found work under Amendment 7's 'working all of the remaining open tasks'. Removing a recovery the gate refuses is a fix to the message; choosing not to change the census is design, and the request says nothing of GATE_NO_CACHE or the reference message."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T29, T28, T45 - the findings log closes, 385's rows mapped, the reference message (found and filed work)",
+    "### T28 Approach (checklist part A)",
+    "### T28 Decisions",
+    "### T29 Approach (checklist part A)",
+    "### T29 Decisions",
+    "### T45 Approach (checklist part A)",
+    "### T45 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D36a",
+     "summary": "found.py close/list: a row's outcome (status, task or why, closed_utc) written on the row; a closed row cannot be closed again; list numbers the open rows",
+     "class": "within",
+     "why": "Tooling that records whether each finding was filed as a task; it serves FR-002 (found work filed as tasks) by making an unfiled finding visible, and changes no rule."
+    },
+    {
+     "id": "D36b",
+     "summary": "a row is filed only against a task of 405 or 385 (T61, 385 T12, 405 T17), never another feature",
+     "class": "within",
+     "why": "The GM's routing (2026-10-19) puts open process work in 385 and everything else in 405, and the found-work rule keeps findings in the feature; refusing any other feature enforces that and narrows nothing. The earlier 'or another's' wording, which would have let a finding leave both features, is gone."
+    },
+    {
+     "id": "D36c",
+     "summary": "a row whose finding is already carried by an existing 405 or 385 task is closed as filed against that task rather than given a duplicate new task (T28: 22 rows to 405 tasks, 9 to 385 tasks)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-002's words are 'filed as a new task of this feature'. The rule exists so that found work stays tracked as a task in the feature and is not dropped or sent elsewhere. A finding already carried by an open task in the feature the GM's routing names is tracked there, so a duplicate task adds nothing the rule is for, and the outcome records the carrying task id, which can be checked. It does not gut the purpose: no finding ends up without a task."
+    },
+    {
+     "id": "D36d",
+     "summary": "settled (not filed) only where the finding no longer holds: measured against the current file, the reason begins 'no longer holds' and records what stands there now; a finding that still holds is filed (T28: 11 rows)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-002 is about findings on code. A finding whose cited text is gone or already corrected is no longer work; a task to fix it would have nothing to fix, so it cannot be done as asked. This is the impossibility case, not a convenience. It is limited to the measured case, and the reason has to record the measurement, so it cannot be used to drop a finding that still holds. The earlier free 'settled (three words or more)' outlet, which allowed exactly that, is replaced."
+    },
+    {
+     "id": "D37",
+     "summary": "the 34 unfiled rows grouped into six new tasks T65-T70 by unit and complaint, worked in this feature; a row in 385's log names its 405 task with the feature ('405 T17')",
+     "class": "within",
+     "why": "Filing new tasks in the feature is what FR-002 asks for. Grouping rows by unit and complaint is a choice of granularity, and every row still maps to a task. Engine findings from 385's log going to 405 tasks follows the GM's routing, under which non-process work moves to 405. 'Filed, not fixed here' is how FR-002 works: each new task is worked in this feature, as amendment 7 requires."
+    },
+    {
+     "id": "D38",
+     "summary": "the reference map's served line no longer offers 'GATE_NO_CACHE=1 rolls it', because the roll census refuses that run; making the census accept a declared no-cache run was considered and refused",
+     "class": "within",
+     "why": "The task removes a recovery the message offers that the gate refuses. That removal is the whole fix, and the reason the line is served stays. The refused alternative would have widened the scope rather than narrowed it, so declining it narrows nothing that was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T62, T63, T69 - the run-on to the paddy, the arm trims against what they reach, the cut lines' houses (the T17 batch's round 2; T28)",
+    "### T62 Approach (checklist part A)",
+    "### T62 Decisions",
+    "### T63 Approach (checklist part A)",
+    "### T63 Decisions",
+    "### T69 Approach (checklist part A)",
+    "### T69 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D39",
+     "summary": "run_lanes_on_to_the_bund aims run_on_target at paddy_ground (built once a pass) instead of the whole worked ground; an end inside the worked ground is still pulled out of it; the claim reads 'to the paddy'.",
+     "class": "within",
+     "why": "Conforms the code to 0081's drawing page (inner lanes may end in the cluster or at the paddy; only the field spur stops at the hem) and 0014 (the path joins the paddy's outer bund). The pull-out kept unchanged is existing behavior the task does not touch; nothing in the GM's request (FR-001: each task worked as 385 worked its tasks) is narrowed - the change is exit (e) conform, which the GM's Amendment 7 says is the default ('generally what we should do'). Noted, not ruled against: the block keeps 'an end standing in the worked ground is still pulled out of it' unchanged; if the worked ground includes dry plots (item 4 says it does), a retargeted end that still stands in a dry plot would be pulled to that plot's edge, the place 0081 reserves for the field spur. The bundle cannot show whether that case is reachable; item 9's test (a run-on aims at the paddy, never a dry plot) is the check that fails if it is."
+    },
+    {
+     "id": "D40",
+     "summary": "served_arm calls _trim_to_service with the ways drawn so far (_net_segs) and the worked ground where the map has a field, so an arm end on a way, the spur or the bund is not trimmed back; its claim and _lay_skeleton's name the ways and the bund.",
+     "class": "within",
+     "why": "Conforms to 0246 s6 (only a lane end that reaches nothing is pulled back). The 'where the map has a field' qualifier is not a carve-out: with no field there is no worked ground or bund to reach, so passing none is the physical case, not an exception to the rule."
+    },
+    {
+     "id": "D41",
+     "summary": "T69's finding (cut lines counting houses reached across a yard) does not hold in code - stage_web already drops every reached_across house before computing the arcs and stands - so the task is closed by exit (a): _web_cut_lines' claim says where the exclusion is made.",
+     "class": "within",
+     "why": "Settling a finding as a claim edit because the code already does what the research asks is not narrowing the task: the world-goal (a web lane's span counts only houses owed a lane) is met either way, and the claim edit makes the code's statement match it. The premise is stated as measured (a read of web/stage.py, 2026-10-21); this bundle-only review did not re-read the file, so that premise rests on the task's own checks and the claims round reading it IN-STEP."
     }
    ]
   }

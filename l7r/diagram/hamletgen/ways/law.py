@@ -701,7 +701,8 @@ def dangling_lane_ends(M: Mapping[str, Any], ground: WorkedGround | None = None)
     near edge) is something worth walking to, as a farmhouse is (homes H36: a path runs to the graves).
     Research:
         an end reaches something seen - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: walked toward it
-        a burial ground's edge a lane end's destination - UNRESEARCHED: a way target counts as a farmhouse does"""
+        a burial ground's edge a lane end's destination - UNRESEARCHED: a way target counts as a farmhouse does
+        the connector exempt - research/questions/0081-village-lanes.drawing.html: the track out runs off the map, so its ends are not asked"""
     ways = _ways(M)
     centers = [(float(h["x"]), float(h["y"])) for h in M.get("houses") or []] + way_targets(M)
     steadings = steading_footprints(M)

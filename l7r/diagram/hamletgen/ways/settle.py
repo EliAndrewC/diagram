@@ -471,7 +471,7 @@ def settle_dangling(s: Any) -> int:
     `_trim_to_service` stops it at its closest approach). No exemption for a house the lane alone reaches - that house is
     the corridor's. A lane the law still calls dangling after its trim goes whole.
 
-    Research: an end reaches something seen - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: trimmed to service, else dropped"""
+    Research: an end reaches something seen - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: trimmed to service, else dropped"""
     M = s.M
     lanes = M.get("lanes") or []
     ground, steadings = memo_ground(s, "worked", worked_ground), steading_footprints(M)

@@ -421,3 +421,12 @@ def test_figures_never_runs_a_command_that_names_a_placeholder(tmp_path: pathlib
     _failures, _reports, skipped = figures_cli.rerun(d)
     assert not marker.exists(), "the command was run"
     assert any("names a <placeholder>" in s for s in skipped)
+
+
+def test_check_4_another_feature_s_requirement_is_not_this_spec_s(tmp_path: pathlib.Path) -> None:
+    """405 T60: a task naming another feature's requirement by its feature ("385 FR-013") is not judged against this spec;
+    a bare id this spec lacks still is."""
+    (tmp_path / "spec.md").write_text("## Functional requirements\n\n**FR-001** A thing.\n\n## Success criteria\n\n**SC-001** (FR-001) It holds.\n")
+    (tmp_path / "tasks.md").write_text("- [ ] T01 carried by the claims gate (385 FR-013) and feature 385's FR-014 (FR-001)\n- [ ] T02 bare (FR-013)\n")
+    got = lint.check_stale_tasks(tmp_path / "spec.md", tmp_path / "tasks.md")
+    assert len(got) == 1 and ":2: cites FR-013" in got[0]

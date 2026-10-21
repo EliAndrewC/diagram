@@ -518,7 +518,7 @@ def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[
     arm and would delete the door paths this feature exists to draw.
 
     Research:
-        pulled back to the last house served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: ends trimmed to what
+        pulled back to the last house served - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: ends trimmed to what
             serves, 4 ft at a time
         an outlying house keeps its way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end serving a house no other way reaches is kept within 60 ft of it (`WAY_END_REACH_FT`), or 12 ft of its built ground (`end_serves`)
         a short way beside its houses kept whole - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a way whose two ends are served only by the same houses is not cut toward them at either end ("a tread comes from somewhere else"), so an end may stand up to 60 ft past its house; the page pulls an end back to the last house it serves and is silent on a way with the same houses at both ends"""

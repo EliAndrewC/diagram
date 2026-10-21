@@ -229,7 +229,9 @@ from claims_owed import (  # noqa: E402,F401 - the owed half, split out at the b
     body_of,
     judged,
     live_rows,
+    moved,
     owed,
+    rekey,
     relabel_answered,
     relabeled_only,
     research_why,
@@ -779,6 +781,7 @@ def _parser() -> argparse.ArgumentParser:
     td.add_argument("--reply", required=True)
     sub.add_parser("backfill")
     sub.add_parser("backfill-sections")
+    sub.add_parser("rekey")
     sub.add_parser("report")
     sub.add_parser("gate")
     cc = sub.add_parser("carry")
@@ -792,6 +795,30 @@ def _parser() -> argparse.ArgumentParser:
     return ap
 
 
+def _carry_cmd(root: Path, args: argparse.Namespace) -> int:
+    """`make claims-carry`: file the carried findings as an open task of the feature (folded out of `main` at the cap, 405 T58)."""
+    try:
+        if bool(args.keys) != bool(args.ruling):
+            raise ValueError("KEYS= and RULING= go together: the findings a round-arbiter ruling carried, and that ruling's trigger")
+        keys = (
+            [k.strip() for k in args.keys.split(";") if k.strip()] if args.keys else [k for k, _ln in claims_carry.classified(sys.modules[__name__], root)[3] if k not in claims_carry.filed(root)]
+        )
+        print(claims_carry.carry(root, args.feature, args.task, keys, ruling=args.ruling))
+    except ValueError as e:
+        print(f"claims-carry: {e}", file=sys.stderr)
+        return 2
+    return 0
+
+
+def _rekey_cmd(root: Path, cur: dict[str, Row], index: dict[str, dict[str, Any]]) -> int:
+    """`make claims-rekey` (405 T58): each moved claim's row carried to its new key."""
+    n = rekey(cur, index)
+    if n:
+        save_index(root / INDEX, index)
+    print(f"claims-rekey: {n} claim row(s) carried to the file their unit moved to")
+    return 0
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     args = _parser().parse_args(argv)
     root = Path((_git(Path(args.root), "rev-parse", "--show-toplevel") or args.root).strip())
@@ -803,17 +830,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(f"claims-gate: REFUSED {x}")
         return 1 if refuse else 0
     if args.cmd == "carry":
-        try:
-            if bool(args.keys) != bool(args.ruling):
-                raise ValueError("KEYS= and RULING= go together: the findings a round-arbiter ruling carried, and that ruling's trigger")
-            keys = (
-                [k.strip() for k in args.keys.split(";") if k.strip()] if args.keys else [k for k, _ln in claims_carry.classified(sys.modules[__name__], root)[3] if k not in claims_carry.filed(root)]
-            )
-            print(claims_carry.carry(root, args.feature, args.task, keys, ruling=args.ruling))
-        except ValueError as e:
-            print(f"claims-carry: {e}", file=sys.stderr)
-            return 2
-        return 0
+        return _carry_cmd(root, args)
     if args.cmd == "coverage":
         cl = engine(root)
         qs = {p.name for p in (root / QUESTIONS).glob("*.html")}
@@ -825,6 +842,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     cur = current(root)
     index = load_index(root / INDEX)
     qdir, store = root / QUESTIONS, load_store(root / STORE)
+    if args.cmd == "rekey":  # 405 T58: a file split at the bar keeps its claims' rows
+        return _rekey_cmd(root, cur, index)
     if args.cmd == "owed":
         # THE GATE'S FORM CHECK, HERE TOO (feature 374 batch 4): a claim whose form is wrong (a GUESS naming the findings page,
         # not its drawing page) failed `test_claims_coverage` at the gate, a tooling test `make quick` never runs - a whole gate

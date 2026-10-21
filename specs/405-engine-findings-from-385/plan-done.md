@@ -391,3 +391,240 @@
 ### T53 Decisions
 
 **D28 - the refusal says split, to about 650.** `check-file-scale.GUIDANCE` adds: split now, never fold or cut lines to land just under the bar; aim each submodule at about 650 lines (2/3 of the bar - a guideline, not a check); the package's `__init__.py` re-exports every name importers used, so no importer changes. The root CLAUDE.md's file-bar line says the same in one sentence. The bar stays 1,000 and the carve-outs stay.
+<!-- plan-archive: archived 2026-10-21 -->
+### T16 Approach (checklist part A)
+
+1. **The goal, in the world.** Every rule of the field run-on and the dangling-end test is claimed.
+2. **The constraints.** 0246 (an end runs on to a field path, a bund or another way); 0014 (the path joins the paddy's bund, never ends short of it); 0081 (the track out runs off the map).
+3. **Where each comes from.** R (0246, 0014, 0081).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (a read of `bund.py` and `law.py`): `run_lanes_on_to_the_bund` skips a row street and carries an end within `RUN_ON_REACH_FT` onto the worked ground's edge, the dry hem's as well as the paddy's, unclaimed; `run_on_target`'s reach and its stop outside the ground are unclaimed; `dangling_lane_ends` exempts the connector unclaimed.
+5. **The order.** A claim for each, labeled as the pages give it.
+6. **The exits.** (a) claim - the behavior stands; the dry hem is claimed UNRESEARCHED (0014 speaks of the paddy and is silent on a dry plot; T22 carries the field's reach).
+7. **The search smell.** None.
+8. **The budget.** With T17.
+9. **Done, measured.** The claims round reads the new claims IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+<!-- plan-archive: archived 2026-10-21 -->
+### T16 Approach (re-answered 2026-10-21T12:56Z)
+
+1. **The goal, in the world.** As before: every claim says what the code does, labeled as its page labels it.
+2. **The constraints.** As before, and 0033's drawing page (a row street "runs on off the map as the road into it") and 0081's (lanes along the hem of dry fields; the spur stops at the hem's edge), which the round read.
+3. **Where each comes from.** R (0246, 0033, 0014, 0081).
+4. **Do they describe the world here?** Yes - the round, 2026-10-21 (impl-drift, 27 claims): where a claim's page disagrees with the CODE, the code's drift is a task of its own; where it disagrees with the label, the label follows the page.
+5. **The order.** The street skip cited to 0033, the dry hem to 0081 as a GUESS; the claims round.
+6. **The exits.** (e) conform - words and labels; the code's drift carried (T54, T55).
+7. **The search smell.** None.
+8. **The budget.** With the batch.
+9. **Done, measured.** The claims round reads the new claims IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T27 Approach (checklist part A)
+
+1. **The goal, in the world.** The farm-fixture claims say where the fixtures stand and cite the page that says so.
+2. **The constraints.** 0038 (the bed's sides), 0039 (the kitchen garden), 0043 (the wood shed a ken beyond the wall strip, about 9.5 ft off), 0047 (the privy's places and the front seat's 8 ft GUESS), 0219 (the shrine's corner).
+3. **Where each comes from.** R.
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (a read of `taxonomy.py` and `fixture_seats.py`): the exemption's text seats every fixture "against its own farmhouse" (the shed 9.5 ft off, the shrine and grave a plot corner, the privy out to 48 ft); its claim cites 0039 for the bed beside the house, which 0038 gives; `CANOPY_PAD` and `SHADE_MARGIN_FT` carry no claim; `_seats`' privy front step and stable seat are unclaimed.
+5. **The order.** The text and the claim reworded, the citations put right, the four claims added.
+6. **The exits.** (e) conform - words to the code and the pages.
+7. **The search smell.** None.
+8. **The budget.** With T17.
+9. **Done, measured.** The claims round reads them IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+<!-- plan-archive: archived 2026-10-21 -->
+### T16 Decisions
+
+**D30 - the run-on claimed.** `run_lanes_on_to_the_bund` claims: a row street not carried onto the field (0033: the street runs on off the map as the road); the reach (GUESS: `RUN_ON_REACH_FT`, 0246's 60 ft reused for the field); the dry hem's edge (GUESS, 0081: lanes run along the hem of dry fields and the spur stops at its edge). `run_on_target` claims its reach (GUESS, the same) and its stop (CONVENTION: the half-tread and `TIP_MARGIN_FT` outside the ground). `dangling_lane_ends` claims the connector exempt (0081: the track out runs off the map).
+
+<!-- plan-archive: T27 to T27 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-10-21 -->
+### T58 Approach (checklist part A)
+
+1. **The goal, in the world.** A split at the bar costs no claims round for the code it only moved.
+2. **The constraints.** The claims index and `claims_owed.owed` (features 316, 385 T116); the claims gate's "introduced" reading, already asked across keys (a unit moved with its code intact matches its base unit).
+3. **Where each comes from.** O (features 316, 385).
+4. **Do they describe the world here?** Yes - measured 2026-10-21: splitting `web.py` owed its claims in full as "new", every one at its new key.
+5. **The order.** `claims_owed.moved` (the same unit and claim, the old key gone, the same code fingerprint, one candidate), read by `owed`; `rekey` copies each row to its new key and drops the old; `make claims-rekey`; `make land` runs it first; a test.
+6. **The exits.** (c) - the index learns a move; nothing it judged is re-judged.
+7. **The search smell.** None.
+8. **The budget.** With T57.
+9. **Done, measured.** One goal: a unit moved with its code intact owes nothing and its row moves; one whose code changed is still owed (test); live, 61 of `web.py`'s rows carried.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+<!-- plan-archive: archived 2026-10-21 -->
+## T61 - the gate-write suite waits for its own fixture's gate (found landing the T17 batch)
+
+### T61 Approach (checklist part A)
+
+1. **The goal, in the world.** hooks-test reads the same whether or not another gate runs on the machine.
+2. **The constraints.** The gate-write guard (385 FR-010, 405 T41), which asks `lib/own-make.sh` whether THIS tree's `make done` runs; its suite; the landing's gate beside its cohort (405 T48).
+3. **Where each comes from.** O (features 385, 405).
+4. **Do they describe the world here?** Yes - measured 2026-10-21: the T17 batch's gate ran hooks-test while it itself ran; the suite's `pgrep -f "make done"` found that gate at once, so its first three cases ran before the fixture's gate started and read "let through" (19 passed, 3 failed).
+5. **The order.** Both waits ask `own-make.sh done` from the fixture's directory; the suite run.
+6. **The exits.** (c) - the test asks what the guard asks.
+7. **The search smell.** None.
+8. **The budget.** 10 min.
+9. **Done, measured.** The suite passes 22 of 22, run while another gate runs.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T61 Decisions
+
+**D35 - the fixture's own gate.** `tests/hooks/test-gate-write-hooks.sh` waits until `scripts/hooks/lib/own-make.sh done`, run from the fixture tree, says the fixture's gate runs - the question the guard itself asks - in both sections.
+<!-- plan-archive: archived 2026-10-21 -->
+### T28 Approach (checklist part A)
+
+1. **The goal, in the world.** No finding of 385 or 405 sits open with no task.
+2. **The constraints.** FR-002 (found work stays in the feature); T29's tool.
+3. **Where each comes from.** The GM (FR-002) and the spec review of 405 (2026-10-20).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (a read-only mapping of all 76 rows against both task lists and the current code and record): 22 carried by 405 tasks, 9 by 385 tasks, 11 no longer holding - each measured against the file it names, the cited text gone or corrected (its reason records what stands there now) - and 34 unfiled.
+5. **The order.** The 34 unfiled rows grouped into six tasks by unit and complaint (T65-T70); every row closed with its outcome.
+6. **The exits.** (c) - filed, not fixed here; each new task is worked in this feature.
+7. **The search smell.** None.
+8. **The budget.** 30 min.
+9. **Done, measured.** `make found-list` shows 0 open in 385's and 405's logs.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+<!-- plan-archive: archived 2026-10-21 -->
+### T28 Decisions
+
+**D37 - six tasks for 34 rows.** T65 (the 4 ft touch gap against 0246 §16's 7 ft), T66 (stale words in `track.py` and `route.py`), T67 (the dry exit's claims and crossings), T68 (`_trim_to_service` and the sweeps' claims against 0246 §6), T69 (the web cut counting a household reached across a yard), T70 (three record wordings). A row filed in 385's log names its 405 task with the feature (`405 T17`).
+
+### T45 Approach (checklist part A)
+
+1. **The goal, in the world.** The reference map's message offers no recovery the gate refuses.
+2. **The constraints.** The roll census (feature 213), which refuses a `GATE_NO_CACHE=1` gate's re-rolls (405 T11's 05:02 gate); `_reference`'s message.
+3. **Where each comes from.** O (features 213, 405).
+4. **Do they describe the world here?** Yes - measured 2026-10-21: the 05:02 gate under `GATE_NO_CACHE=1` was refused by the census; the message still offers it.
+5. **The order.** The message's offer removed; the reason it is served stays.
+6. **The exits.** (c) - the message stops offering it; making the census accept a declared no-cache run was weighed and refused (T42 made the cache right, so the bypass has no work left).
+7. **The search smell.** None.
+8. **The budget.** 5 min.
+9. **Done, measured.** The message names no `GATE_NO_CACHE`.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+## T29, T28, T45 - the findings log closes, 385's rows mapped, the reference message (found and filed work)
+
+### T29 Approach (checklist part A)
+
+1. **The goal, in the world.** A feature's `found.jsonl` says, for every finding, whether it is filed (and as what) or settled (and why).
+2. **The constraints.** `found.jsonl`, written by `record_owed` and the checks (open rows, never edited, 385); the found-work rule (the GM 2026-10-19, FR-002).
+3. **Where each comes from.** O (feature 385) and the GM (FR-002).
+4. **Do they describe the world here?** Yes - measured 2026-10-21: 385's 63 rows and 405's 13 all read `open`, filed or not; nothing wrote a row's outcome.
+5. **The order.** `scripts/record/found.py` (`list`, `close --task | --why`), `make found-list` and `make found-close`; a test.
+6. **The exits.** (c) - a row gains its outcome; nothing is deleted.
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** A row closes as filed (a task of 405, or of 385 - the two features the GM's routing names) or settled only where it no longer holds (the reason records the measurement), once; `list` counts what is open (test).
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T29 Decisions
+
+**D36 - a row's outcome on the row.** `found.py close` sets `status` to `filed` with `task` (`T61`, `385 T12` or `405 T17` - no other feature, the GM's routing), or `settled` with `why`, and `closed_utc`; it refuses a row already closed. SETTLED ONLY WHERE THE FINDING NO LONGER HOLDS (the plan review of D36, FR-002): the reason starts "no longer holds" and records what was measured against the current file; a finding that still holds is filed as a task. `found.py list` numbers the open rows in file order.
+
+<!-- plan-archive: T28 to T28 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+### T28 Decisions
+
+**D37 - six tasks for 34 rows.** T65 (the 4 ft touch gap against 0246 §16's 7 ft), T66 (stale words in `track.py` and `route.py`), T67 (the dry exit's claims and crossings), T68 (`_trim_to_service` and the sweeps' claims against 0246 §6), T69 (the web cut counting a household reached across a yard), T70 (three record wordings). A row filed in 385's log names its 405 task with the feature (`405 T17`).
+
+### T45 Approach (checklist part A)
+
+1. **The goal, in the world.** The reference map's message offers no recovery the gate refuses.
+2. **The constraints.** The roll census (feature 213), which refuses a `GATE_NO_CACHE=1` gate's re-rolls (405 T11's 05:02 gate); `_reference`'s message.
+3. **Where each comes from.** O (features 213, 405).
+4. **Do they describe the world here?** Yes - measured 2026-10-21: the 05:02 gate under `GATE_NO_CACHE=1` was refused by the census; the message still offers it.
+5. **The order.** The message's offer removed; the reason it is served stays.
+6. **The exits.** (c) - the message stops offering it; making the census accept a declared no-cache run was weighed and refused (T42 made the cache right, so the bypass has no work left).
+7. **The search smell.** None.
+8. **The budget.** 5 min.
+9. **Done, measured.** The message names no `GATE_NO_CACHE`.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T45 Decisions
+
+**D38 - the offer removed.** `_reference`'s served line reads "served from the roll cache: nothing the roll executes changed" without "GATE_NO_CACHE=1 rolls it".
+<!-- plan-archive: archived 2026-10-21 -->
+### T63 Approach (checklist part A)
+
+1. **The goal, in the world.** A skeleton arm's end that reaches the bund or a way already laid stays where it reaches.
+2. **The constraints.** 0246 §6 (only "a lane end that reaches nothing is pulled back"; an end runs on to a field path, a bund or another way); `_trim_to_service`, which takes ways and the worked ground; `served_arm`.
+3. **Where each comes from.** R (0246).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (impl-drift, the T17 batch's round 2): `served_arm` passes no ways and no ground, so an arm's end on the connector, the spur or the bund is trimmed back to its last house.
+5. **The order.** `served_arm` passes the ways drawn so far (`_net_segs`) and the worked ground (where the map has a field); its claims; the unit tests; the gate and the cohort.
+6. **The exits.** (e) conform.
+7. **The search smell.** None.
+8. **The budget.** With T62.
+9. **Done, measured.** One goal: an arm ending on a way or the bund is not trimmed (test); the cohort refuses no seed against main.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+<!-- plan-archive: archived 2026-10-21 -->
+### T63 Decisions
+
+**D40 - judged against what it reaches.** `served_arm(s, arm)` calls `_trim_to_service(arm, _net_segs(s), houses, ground=<the worked ground where the map has a field>, steadings=...)`; its claim and `_lay_skeleton`'s name the ways and the bund.
+
+### T69 Approach (checklist part A)
+
+1. **The goal, in the world.** A web lane's span counts only the houses owed a lane.
+2. **The constraints.** 0246 (a household reached across a neighbor's yard is owed no lane); `stage_web`, which builds the cut lines' arcs and stands.
+3. **Where each comes from.** R (0246).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (a read of `web/stage.py`): `stage_web` already leaves out every house `reached_across` before it computes the arcs and stands it passes to `_web_cut_lines`, so the finding does not hold in the code; the claim does not say so.
+5. **The order.** The claim says where the exclusion is made.
+6. **The exits.** (a) claim.
+7. **The search smell.** None.
+8. **The budget.** With T62.
+9. **Done, measured.** The claims round reads it IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+## T62, T63, T69 - the run-on to the paddy, the arm trims against what they reach, the cut lines' houses (the T17 batch's round 2; T28)
+
+### T62 Approach (checklist part A)
+
+1. **The goal, in the world.** An inner lane that runs on to the field ends at the paddy's bund, not on a dry plot's edge.
+2. **The constraints.** 0081's drawing page ("the settlement's own inner lanes may end in the cluster or at the paddy"; only the spur to the fields stops at the hem's edge); 0014 (the path joins the paddy's outer bund); `bund.run_lanes_on_to_the_bund` and `paddy_ground`.
+3. **Where each comes from.** R (0081, 0014).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (impl-drift, the T17 batch's round 2): the run-on carries an inner lane's end to `ground.nearest`, the worked ground's, a dry plot's edge included.
+5. **The order.** The run-on target read on the paddy (`paddy_ground`), the pull out of the worked ground unchanged; its claim; the unit tests; the gate and the cohort.
+6. **The exits.** (e) conform - the research names the paddy.
+7. **The search smell.** None.
+8. **The budget.** 30 min for the batch with its landing.
+9. **Done, measured.** One goal: a run-on aims at the paddy, never a dry plot (test); the cohort refuses no seed against main.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T62 Decisions
+
+**D39 - the paddy, not the hem.** `run_lanes_on_to_the_bund` aims `run_on_target` at `paddy_ground(s)` (built once a pass); an end standing in the worked ground is still pulled out of it; the claim "the dry hem's edge too" becomes "to the paddy" (0081).
+
+<!-- plan-archive: T63 to T63 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+### T63 Decisions
+
+**D40 - judged against what it reaches.** `served_arm(s, arm)` calls `_trim_to_service(arm, _net_segs(s), houses, ground=<the worked ground where the map has a field>, steadings=...)`; its claim and `_lay_skeleton`'s name the ways and the bund.
+
+### T69 Approach (checklist part A)
+
+1. **The goal, in the world.** A web lane's span counts only the houses owed a lane.
+2. **The constraints.** 0246 (a household reached across a neighbor's yard is owed no lane); `stage_web`, which builds the cut lines' arcs and stands.
+3. **Where each comes from.** R (0246).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (a read of `web/stage.py`): `stage_web` already leaves out every house `reached_across` before it computes the arcs and stands it passes to `_web_cut_lines`, so the finding does not hold in the code; the claim does not say so.
+5. **The order.** The claim says where the exclusion is made.
+6. **The exits.** (a) claim.
+7. **The search smell.** None.
+8. **The budget.** With T62.
+9. **Done, measured.** The claims round reads it IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T69 Decisions
+
+**D41 - said where it is done.** `_web_cut_lines`' claim "a web lane's span" adds that its arcs and stands are every house but one reached across a yard (`stage_web` leaves those out).

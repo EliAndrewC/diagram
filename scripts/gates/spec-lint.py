@@ -258,6 +258,10 @@ def check_stale_tasks(spec: pathlib.Path, tasks: pathlib.Path) -> list[str]:
     have = {_def_id(m) for m in _DEF.finditer(spec.read_text())}
     body, bad = tasks.read_text(), []
     for m in _ID.finditer(body):
+        # ANOTHER FEATURE'S REQUIREMENT, NAMED BY ITS FEATURE ("385 FR-013", "feature 385's FR-013"), is not this spec's to define
+        # (405 T60: the claims carry cites 385's FR-013 in every feature's tasks.md, and the gate refused T17's batch on it)
+        if re.search(r"\b\d{3}(?:'s)?\s+$", body[max(0, m.start() - 16) : m.start()]):
+            continue
         if m.group(0) not in have:
             bad.append(f"{tasks}:{body[:m.start()].count(chr(10)) + 1}: cites {m.group(0)}, which "
                        f"{spec.name} does not define")

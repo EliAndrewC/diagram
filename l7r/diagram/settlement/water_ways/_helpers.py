@@ -98,7 +98,7 @@ def _pull_back(pts: list[Pt], reaches: Any, step: float = 8.0, min_len: float = 
 
     Research:
         end pulled back to what it serves - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: to the shortest end that still reaches something
-        no trim floor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back as far as the last house it serves, held only at a junction; a lane reaching nothing at all is left whole (no house to pull it back to)
+        no trim floor - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back as far as the last house it serves, held only at a junction; a lane reaching nothing at all is left whole (no house to pull it back to)
     """
     # `min_len` is the one floor, the one a junction sets - see `_junction_floor`: a lane may not be trimmed past a way that
     # ties into it, whatever fraction of its length that leaves
@@ -124,7 +124,7 @@ def _pull_back(pts: list[Pt], reaches: Any, step: float = 8.0, min_len: float = 
         # reaches anything leaves the tread ending on the 90 ft radius of a farmhouse center - i.e.
         # ~60 ft clear of that homestead's own footprint, petering out in grass (both the Kashikawa
         # and Sawada reviews raised it independently). Walking on while it STILL reaches, and keeping
-        # the shortest such point, ends the lane at the homestead instead - and where the end also
+        # the shortest such point, ends the lane at the last homestead it serves instead - and where the end also
         # ran alongside a sibling arm, it shortens that parallel run by the same amount.
         got = reaches(cand)
         if got and (served is None or got == served):

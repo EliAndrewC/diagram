@@ -156,7 +156,7 @@ def test_an_arm_that_crosses_a_kept_arm_by_accident_is_dropped(monkeypatch: pyte
     s = fresh()
     assert hg.ways._lay_skeleton(s, plan, frame, [0.0, 200.0], [0.0, 10.0]), "control: the frame yields an arm"  # type: ignore[arg-type]
     assert s.M.get("lanes"), "control: the arm is inked"
-    monkeypatch.setattr(_web, "_arm_crossing_accidental", lambda arm, raw, kept: True)
+    monkeypatch.setattr(_web.skeleton, "_arm_crossing_accidental", lambda arm, raw, kept: True)
     s = fresh()
     assert hg.ways._lay_skeleton(s, plan, frame, [0.0, 200.0], [0.0, 10.0]) == []  # type: ignore[arg-type]
     assert not s.M.get("lanes"), "an accidental crossing is not inked"
@@ -230,7 +230,7 @@ def test_lay_reachable_runs_draws_each_run_the_network_reaches(monkeypatch: pyte
     s = Settlement(1000, 1000, seed=1)
     s.lane([(0.0, 500.0), (400.0, 500.0)], width=5, clearance=11, worn=True)
     laid: list[object] = []
-    monkeypatch.setattr(web, "_lay_web_lane", lambda s, run, *a, **k: laid.append(run) or True)
+    monkeypatch.setattr(web.stage, "_lay_web_lane", lambda s, run, *a, **k: laid.append(run) or True)
     touching = [(400.0, 500.0), (400.0, 700.0)]
     island = [(900.0, 900.0), (950.0, 900.0)]
     assert web.lay_reachable_runs(s, [touching, island], [], [], [], [], []) == 1
@@ -244,7 +244,7 @@ def test_a_skeleton_arm_trimmed_under_the_web_floor_is_no_arm(monkeypatch: pytes
     plan = a_plan()
     s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
     s.M["houses"] = [{"x": 0.0, "y": 0.0}]
-    monkeypatch.setattr(web, "_trim_to_service", lambda arm, *a, **k: arm[:2])
+    monkeypatch.setattr(web.skeleton, "_trim_to_service", lambda arm, *a, **k: arm[:2])
     assert web.served_arm(s, [(0.0, 0.0), (5.0, 0.0), (500.0, 0.0)]) == [], "trimmed to 5 ft: under the floor"
     assert web.served_arm(s, [(0.0, 0.0), (400.0, 0.0), (500.0, 0.0)]) == [(0.0, 0.0), (400.0, 0.0)]
     assert web.served_arm(s, [(0.0, 0.0)]) == [(0.0, 0.0)], "a point is passed through untrimmed"
@@ -259,11 +259,11 @@ def test_a_joint_the_settle_left_straightened_is_settled_again_and_its_record_re
 
     s = SimpleNamespace(M={"meta": {"web_settle": {"rounds": 1}}})
     settled: list[int] = []
-    monkeypatch.setattr(W, "settle_the_web", lambda s_: settled.append(1) or {"rounds": 2, "seconds": 0.4})
-    monkeypatch.setattr(W, "straighten_joints", lambda *a: 0)
+    monkeypatch.setattr(W.stage, "settle_the_web", lambda s_: settled.append(1) or {"rounds": 2, "seconds": 0.4})
+    monkeypatch.setattr(W.stage, "straighten_joints", lambda *a: 0)
     W.resettle_straightened(s, [], [], [])  # type: ignore[arg-type]
     assert not settled and s.M["meta"]["web_settle"] == {"rounds": 1}, "no joint rewritten: nothing settled"
-    monkeypatch.setattr(W, "straighten_joints", lambda *a: 1)
+    monkeypatch.setattr(W.stage, "straighten_joints", lambda *a: 1)
     W.resettle_straightened(s, [], [], [])  # type: ignore[arg-type]
     assert settled == [1] and s.M["meta"]["web_settle"] == {"rounds": 2}, "settled again, the seconds kept out"
 
@@ -274,13 +274,13 @@ def test_a_skeleton_arm_may_touch_a_plots_boundary_and_keeps_off_the_wet(monkeyp
     from l7r.diagram.hamletgen.ways import web as _web
 
     asked: list[tuple[int, float]] = []
-    real = _web.clip_to_clear
+    real = _web.skeleton.clip_to_clear
 
     def spy(pts, polys, margin, **kw):  # type: ignore[no-untyped-def]
         asked.append((len(polys), margin))
         return real(pts, polys, margin, **kw)
 
-    monkeypatch.setattr(_web, "clip_to_clear", spy)
+    monkeypatch.setattr(_web.skeleton, "clip_to_clear", spy)
     plan = a_plan(lane_skeleton="spine")
     s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
     s.M["houses"] = [{"x": 250.0, "y": 230.0, "w": 20.0, "h": 14.0}, {"x": 350.0, "y": 230.0, "w": 20.0, "h": 14.0}]
@@ -296,8 +296,8 @@ def test_a_skeleton_arm_crosses_the_brook_at_a_ford(monkeypatch: pytest.MonkeyPa
     from l7r.diagram.hamletgen.ways import web as _web
 
     seen: list[list] = []
-    real = _web.clip_to_clear
-    monkeypatch.setattr(_web, "clip_to_clear", lambda pts, polys, margin, **kw: (seen.append(list(pts)), real(pts, polys, margin, **kw))[1])
+    real = _web.skeleton.clip_to_clear
+    monkeypatch.setattr(_web.skeleton, "clip_to_clear", lambda pts, polys, margin, **kw: (seen.append(list(pts)), real(pts, polys, margin, **kw))[1])
     plan = a_plan(lane_skeleton="spine")
     plan.brook = [(100.0, 200.0), (500.0, 200.0)]  # across the arm's run (x = 300, y 145 to 245)
     s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
@@ -363,3 +363,17 @@ def test_every_web_cut_has_a_house_within_reach_and_its_lane_spans_only_those() 
         for cut, line in zip(web_cuts(arcs, WEB_REACH_FT, MIN_WEB_GAP), web._web_cut_lines(SimpleNamespace(lane_web="alleys"), frame, arcs, stands), strict=False):
             near = [d for a, d in zip(arcs, stands, strict=True) if abs(a - cut) <= WEB_REACH_FT]
             assert min(p[1] for p in line) >= min(near) - 30.0 - 1e-6 and max(p[1] for p in line) <= max(near) + 30.0 + 1e-6
+
+
+def test_a_skeleton_arm_ending_on_a_way_already_laid_is_not_trimmed() -> None:
+    """405 T63 (D40, 0246: only an end that reaches nothing is pulled back): an arm whose far end stands on the connector keeps
+    it; without the way it is trimmed back toward its house as before."""
+    from l7r.diagram.hamletgen.ways import web
+
+    plan = a_plan()
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    s.M["houses"] = [{"x": 100.0, "y": 100.0, "w": 40.0, "h": 28.0, "rot": 0.0}]
+    arm = [(100.0, 100.0), (300.0, 100.0), (500.0, 100.0)]
+    assert web.served_arm(s, arm)[-1][0] < 500.0, "reaching nothing: trimmed"
+    s.M["lanes"] = [{"pts": [[500.0, 0.0], [500.0, 300.0]], "w": 5, "connector": True}]
+    assert web.served_arm(s, arm)[-1] == (500.0, 100.0), "ending on the connector: kept"

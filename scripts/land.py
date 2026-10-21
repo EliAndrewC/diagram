@@ -79,6 +79,10 @@ def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str, deferred: l
     if run(root, [sys.executable, str(HERE / "make-docs.py"), str(root), "--check"])[0]:
         run(root, [sys.executable, str(HERE / "make-docs.py"), str(root), "--write"])
         run(root, ["git", "commit", "-q", "-m", "docs/make-targets.html regenerated at landing (make land, 405 T46)", "--", "docs/make-targets.html"])
+    # A MOVED UNIT KEEPS ITS CLAIMS' ROWS (405 T58): a file split into a package at the 1,000-line bar re-keys them, owing nothing
+    run(root, [sys.executable, str(HERE / "record" / "claims.py"), "--root", str(root), "rekey"])
+    if run(root, ["git", "status", "--porcelain", "--", "dev/claims-index.json"])[1].strip():
+        run(root, ["git", "commit", "-q", "-m", "claim rows carried to the files their units moved to (make land, 405 T58)", "--", "dev/claims-index.json"])
     # A FINDING OUTSIDE THE CHANGE IS FILED, NOT REFUSED (feature 405 T36, D10): the carry files every carried claims finding as an
     # open task of this feature - what `make claims-carry` does by hand - and the box lands with the work
     num = d.name.split("-", 1)[0]
