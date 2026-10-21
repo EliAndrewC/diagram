@@ -502,3 +502,17 @@ Owed by the cohort (cohort@20261021T172647Z, then cohort@20261021T173654Z: seeds
 9. **Done, measured.** A household's own way exempts its own garden, a back lane none (tests); seeds 1-48 and the pinned rows 54/54 (measured 2026-10-21).
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T23 part B (2026-10-21T17:46Z)
+
+Owed by the cohort (cohort@20261021T172647Z: seeds 12, 21, 22, 24, 38 and 901 newly failing), taken while T23 was the last task started - the work that resisted was T18's, whose part B answers it.
+
+1. **What is refusing?** The cohort, on T18's record owner before the owner reached `Lawful` (T18 part B); nothing of T23's - its claim names a fallback and changes no code.
+2. **A3 again.** Unchanged: 0014 and 0246.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither for T23.
+6. **The one-sentence test.** "A spur's tip that cannot be carried on is pulled back and the field reached another way" - as claimed, read IN-STEP.
+7. **The next step is a measurement.** The landing: seeds 1-48 and the pinned rows passed 54/54 on T18's fix.
+8. **Every route measured before offering one?** No route is offered.
+9. **After a ruling: the step it names?** No ruling.

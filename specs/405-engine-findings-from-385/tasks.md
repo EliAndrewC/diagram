@@ -177,6 +177,10 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T94 0246's drawing page gives the own-garden exemption to "a household's own way" and does not say that a back lane, a cross lane or the track out belongs to no household - say so on the page, as the code reads it since T18 (impl-drift outside the change, batch 9's round, 2026-10-21) [lands-open]
       research: rendering
+- [ ] T96 `track.spur_cut_at_the_fold` cuts a fold at exactly 140 degrees (`_turn_deg(...) >= _HAIRPIN_DEG`) where 0081 §37 calls a hairpin a turn of "more than 140 degrees" (impl-drift outside the change, batch 9's round 3, 2026-10-21) [lands-open]
+      research: rendering
+- [ ] T97 `settle_ends`' claim "no doubled tail - UNRESEARCHED", where 0081 §25 answers it (an end running back along another way under 20 degrees is cut where it comes alongside) - and the code cuts at `_DOUBLED_DEG` 15 degrees: claim it on 0081 and bring the figure to 20, or record the 15 (the side-by-side family carried from 385 T12) (impl-drift outside the change, batch 9's round 3, 2026-10-21) [lands-open]
+      research: rendering
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
 - [ ] T02 (385 T36) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
