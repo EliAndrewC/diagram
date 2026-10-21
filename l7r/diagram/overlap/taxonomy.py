@@ -175,7 +175,7 @@ _OVERLAP_EXEMPT = {
     "persimmons": "the yard persimmon: a crown record (x, y, r) whose ink is also in tree_crowns, which structures_clear_of_trees tests; the placer keeps the trunk off every footprint (feature 133 T57)",
     "threshing_yards": "a farmstead's threshing/drying yard drawn as an annex abutting its own farmhouse",
     "gardens": "a farmstead's dooryard kitchen garden drawn as a plot abutting its own farmhouse",
-    "groves": "a farmstead's windbreak grove (yashikirin) drawn along its plot's edge on the sides its settlement rolls - two, three or all four (0028) - abutting its own farmhouse",
+    "groves": "a farmstead's windbreak grove (yashikirin) drawn along its plot's edge on the sides its settlement rolls - two, three or all four (0028) - its windward stand about 24 ft off the house, only the thinner bands beside it (0036)",
     "merchant_estates": "a walled court AROUND an inner building that is itself an overlap-checked struct",
     "wells": "a small well-head dropped into the open gaps between dwellings (its nominal footprint may kiss a dense-city building)",
     "wall_towers": "guard towers stand ON the city wall - an intentional overlap - and clear of the interior",

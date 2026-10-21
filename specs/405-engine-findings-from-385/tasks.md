@@ -68,6 +68,16 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [x] T53 Past the 1,000-line bar, split - never trim to just under it: `check-file-scale`'s refusal tells the session to make the file a package of submodules of about 650 lines each (2/3 of the bar, a guideline), its `__init__.py` re-exporting every name importers used so none of them changes, and never to fold or cut lines to land at 1,000 (T11 and T49 each did, a minute or two apiece, and the next edit pays again); the root CLAUDE.md line says so (amendment 7, the GM 2026-10-21)
       research: rendering
       verify: DONE. landed: test_file_scale green (18): the refusal says split to about 666 lines a submodule with a re-exporting __init__, never trim; the root CLAUDE.md says the same; plan review CLEAR (D28)
+- [ ] T54 A row village's street is cut back to its outermost joints (`street.to_its_joints`, `end_to_its_joint`, `settle.settle_street_ends`, `tidy_lane_ends(streets=True)` - Kashikawa's street 2,800 ft to 1,400), but 0033's drawing page: "The street runs on off the map as the road into it": run the street on off the map, or record the cut on 0033 as a DEVIATION with its reason (impl-drift, the T17/T16/T27 round, 2026-10-21) [lands-open]
+      research: rendering
+- [ ] T55 `water_ways._pull_back` (and `trim_lane_stubs`, which calls it) keeps the SHORTEST end still within reach of the last thing served, so a lane can end up to 60 ft short of the house it serves; 0246 ends it "at the dooryard", pulled back "to the last house it serves": stop at the first point that serves, or the closest approach as `_stop_at_closest_approach` does (impl-drift DRIFTED, the T17 round, 2026-10-21) [lands-open]
+      research: rendering
+- [ ] T56 `bund.run_on_target` carries an end to the worked ground's point nearest the END, where 0014's drawing page guesses the path joins the bund "at its point nearest the hamlet": settle which, and claim it (impl-drift outside the change, the T16 round, 2026-10-21) [lands-open]
+      research: rendering
+- [ ] T57 `ways/web.py` past the 1,000-line bar (1,001, a claim split in T17): split into the package `ways/web/` (`skeleton` 351, `tidy` 202, `stage` 496), `__init__.py` re-exporting every name, the tests' monkeypatches pointed at the submodule that looks each name up (T53's rule, the GM 2026-10-21) [lands-open]
+      research: rendering
+- [ ] T58 A file split into a package moves its units with their code intact, but the claims index is keyed by file, so every moved claim was owed a full impl-drift check: `make claims-rekey` (and `make land`'s first pass) carries each row to the key its unit moved to - the same unit and claim, the same code fingerprint, one old row (found splitting web.py, T57, 2026-10-21) [lands-open]
+      research: rendering
 - [ ] T45 The reference-settlement message (`_reference` in the Makefile) still offers `GATE_NO_CACHE=1 rolls it`, but the roll census refuses that run's re-rolls (T11's 05:02 gate): let the census accept a declared no-cache run, or stop offering it (the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z) [lands-open]
       research: rendering
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]

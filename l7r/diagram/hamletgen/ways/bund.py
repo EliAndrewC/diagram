@@ -233,9 +233,9 @@ def run_lanes_on_to_the_bund(s: Settlement, ground: WorkedGround, blocks: RunOnB
         lane end runs on to the bund - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html,
             research/questions/0014-bunds-between-the-paddies-aze.drawing.html: an end reaching nothing carried onto the field
         connector left alone - research/questions/0081-village-lanes.drawing.html: the track out runs off the map
-        a row street left to the street rules - UNRESEARCHED: its end is cut to its last joint (`settle_street_ends`), never carried on
+        a row street not carried onto the field - research/questions/0033-row-villages-resson.drawing.html: the street runs on off the map as the road into it
         run-on reach - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end within `RUN_ON_REACH_FT` (60 ft) of the field, the reach the page gives to a house or a way, reused; no page gives one to the field
-        the dry hem's edge too - UNRESEARCHED: an end is carried onto the worked ground's nearest edge, a dry plot's as well as the paddy's; 0014 speaks only of the paddy's bund"""
+        the dry hem's edge too - GUESS research/questions/0081-village-lanes.drawing.html: lanes run along the hem of dry fields and the spur stops at the hem's edge; an inner lane's end is carried onto the worked ground's nearest edge, a dry plot's as well as the paddy's"""
     lanes = s.M.get("lanes") or []
     steadings = steading_footprints(s.M)
     houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []]

@@ -405,7 +405,7 @@ def to_its_joints(street: Sequence[Pt], ends: Sequence[Pt], touch: float) -> lis
     it. Past its last farm's path a street serves nothing the lane law counts (`end_serves`: a farmhouse stands most of a
     frame off its street), and the settle refuses a tree lane with a dangling end (feature 291 on 287, Mizuguchi).
 
-    Research: street cut to its outermost joints - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end reaching nothing is pulled back - a street with one joint is left whole here, and its dangling end cut back to that joint by `settle.settle_street_ends` once the lane law calls it dangling"""
+    Research: street cut to its outermost joints - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end reaching nothing is pulled back - a street with one joint is left whole here, and its dangling end cut back to that joint by `settle.settle_street_ends` once the lane law calls it dangling"""
     arc, at = joints_along(street, ends, touch)
     if len(at) < 2:  # ...ONE JOINT IS NO STRETCH (feature 385 T132, D147): cut at it, the street became a point the matrix admits
         return list(street)
@@ -440,7 +440,7 @@ def end_to_its_joint(street: Sequence[Pt], ends: Sequence[Pt], touch: float, end
     joint on that side), the other end left as it is; the street as it is where no joint stands on it. The settle asks it of
     a street end the lane law calls dangling (`settle_dangling`).
 
-    Research: street end cut to its joint - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end reaching nothing is pulled back"""
+    Research: street end cut to its joint - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end reaching nothing is pulled back"""
     arc, at = joints_along(street, ends, touch)
     if not at:
         return list(street)

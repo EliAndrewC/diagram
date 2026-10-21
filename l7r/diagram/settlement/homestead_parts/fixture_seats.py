@@ -668,7 +668,7 @@ def _seats(
             draws none (the open found row `_seats#privy seats - the barn 0047 names`)
         privy sun-side radii - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: tried from 18 ft (`PRIVY_SUN_MIN_FT`) out to the reach
         privy sun-side step - UNRESEARCHED: the radii tried 4 ft apart
-        privy in the front yard - GUESS research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: its edge 8 ft out from the front wall (`PRIVY_FRONT_STEP_FT`), the page's own guess
+        privy in the front yard - GUESS research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: its edge 8 ft out from the front wall - the wall gap `g` (`WALL_GAP_FT`) and `PRIVY_FRONT_STEP_FT` past it - the page's own guess
         privy by the stable - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: by the stable, at the house's stable end against the front wall's clear strip
         privy in the yard off the back wall - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: held at a ken plus the wall gap (`PRIVY_YARD_STEP_FT`), past the page's ken, behind the found row at the constant
         shrine off its corner - UNRESEARCHED: 14 ft (`SHRINE_CORNER_FT`) out from the house's corner on both axes

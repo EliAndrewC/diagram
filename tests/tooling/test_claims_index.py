@@ -678,3 +678,19 @@ def test_the_gate_refuses_a_claim_the_grammar_cannot_read_in_a_changed_file(tmp_
     probs = cx.delta_form_problems(root)
     assert len(probs) == 1 and probs[0].startswith("l7r/diagram/hamletgen/rows.py") and "the claims grammar:" in probs[0]
     assert any(r == probs[0] for r in cx.gate(root)[0]), "refused at the push"
+
+
+def test_a_unit_moved_to_another_file_keeps_its_rows(tmp_path: pathlib.Path) -> None:
+    """Feature 405 T58: a file split into a package at the 1,000-line bar (T53) moves its units with their code intact; keyed by
+    file, the index owed every moved claim a full check. The moved rows carry over, and a moved unit whose code changed is owed."""
+    skill = _tree(tmp_path)
+    cur = cx.current(skill)
+    index = {k.replace("hamletgen/rows.py", "hamletgen/old_rows.py"): v for k, v in _all_in_step(tmp_path).items()}
+    rows = {k for k in cur if "hamletgen/rows.py" in k}
+    assert rows and set(cx.moved(cur, index)) == rows, "every claim of the moved unit matched"
+    assert cx.owed(cur, index) == [], "a pure move owes nothing"
+    assert cx.rekey(cur, index) == len(rows) and set(index) >= set(cur) and not any("old_rows" in k for k in index)
+    moved_then_changed = {k.replace("hamletgen/rows.py", "hamletgen/old_rows.py"): v for k, v in _all_in_step(tmp_path).items()}
+    _tree(tmp_path, MOD.replace("x * SHARE", "x * SHARE * 2"))
+    cur = cx.current(skill)
+    assert "l7r/diagram/hamletgen/rows.py::far_row#dry share" not in cx.moved(cur, moved_then_changed), "its code changed: not a pure move"

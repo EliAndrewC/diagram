@@ -303,7 +303,7 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 
 ### T17 Decisions
 
-**D29 - the lane-end words.** `_pull_back`'s comment ends the lane "at the last homestead it serves"; `WAY_END_REACH_FT` names a farmhouse and another way (the field's reach is `law.FIELD_REACH_FT`); `_lay_skeleton`'s span floor reads half a pitch (50 ft) each way, a pitch across; `_SERVE_FT` cites 0246's 100 ft as the GUESS it is; the pull-back claims of `_trim_to_service`, `settle_dangling`, `settle_street_ends`, `end_to_its_joint`, `to_its_joints`, `_sweep_dangling_ends`, `_walk_in`, `served_arm`, `tidy_lane_ends`, `_pull_back` (two), `trim_lane_stubs` and `_lay_skeleton`'s arm trim are labeled GUESS, as 0246 labels the rule.
+**D29 - the lane-end words.** `_pull_back`'s comment ends the lane "at the last homestead it serves"; `WAY_END_REACH_FT` names a farmhouse and another way (the field's reach is `law.FIELD_REACH_FT`); `_lay_skeleton`'s span floor reads half a pitch (50 ft) each way, a pitch across; `_SERVE_FT` cites 0246's 100 ft as the GUESS it is; the pull-back claims of `_trim_to_service`, `settle_dangling`, `_sweep_dangling_ends`, `_walk_in`, `served_arm`, `tidy_lane_ends`, `_pull_back`'s trim floor and `_lay_skeleton`'s arm trim (split from its 7 ft clip, which 0246 states plainly) are labeled GUESS, as 0246 labels the rule; `_SERVE_FT`'s 100 ft cites 0246 plainly (the page states it). The round found three street claims and two `_pull_back` claims drifting from their pages in the CODE (0033: a street runs on off the map; 0246: an end at the dooryard): those claims stay as they were and the code's drift is carried to T54 and T55.
 
 ### T16 Approach (checklist part A)
 
@@ -321,7 +321,7 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 
 ### T16 Decisions
 
-**D30 - the run-on claimed.** `run_lanes_on_to_the_bund` claims: a row street left to the street rules (UNRESEARCHED: its end is cut to its last joint, never carried on); the reach (GUESS: `RUN_ON_REACH_FT`, 0246's 60 ft reused for the field); the dry hem's edge (UNRESEARCHED: 0014 speaks of the paddy's bund). `run_on_target` claims its reach (GUESS, the same) and its stop (CONVENTION: the half-tread and `TIP_MARGIN_FT` outside the ground). `dangling_lane_ends` claims the connector exempt (0081: the track out runs off the map).
+**D30 - the run-on claimed.** `run_lanes_on_to_the_bund` claims: a row street not carried onto the field (0033: the street runs on off the map as the road); the reach (GUESS: `RUN_ON_REACH_FT`, 0246's 60 ft reused for the field); the dry hem's edge (GUESS, 0081: lanes run along the hem of dry fields and the spur stops at its edge). `run_on_target` claims its reach (GUESS, the same) and its stop (CONVENTION: the half-tread and `TIP_MARGIN_FT` outside the ground). `dangling_lane_ends` claims the connector exempt (0081: the track out runs off the map).
 
 ### T27 Approach (checklist part A)
 
@@ -340,3 +340,42 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 ### T27 Decisions
 
 **D31 - the fixtures where they stand.** `_OVERLAP_EXEMPT['farm_fixtures']` reads "each seated on its own farmstead near its farmhouse - against a wall or a set step off it"; the exemptions' claim "yard, garden and fixtures beside the house" cites 0038 for the bed's sides and drops 0039 from it; `CANOPY_PAD` and `SHADE_MARGIN_FT` are claimed CONVENTION; `_seats` claims the front privy's 8 ft (GUESS, 0047) and the stable seat (0047: by the stable).
+
+
+## T57, T58 - `web.py` split at the bar, and the claim rows carried with it (T53's rule)
+
+### T57 Approach (checklist part A)
+
+1. **The goal, in the world.** `ways/web.py`, past the bar, is a package with room to grow, and nothing that imports it changes.
+2. **The constraints.** The 1,000-line bar and T53's rule (split into ~650-line submodules, `__init__.py` re-exporting); the claims index, keyed by file; the tests' monkeypatches, which patch a name where it is looked up.
+3. **Where each comes from.** O (features 173, 405 T53) and the GM (amendment 7).
+4. **Do they describe the world here?** Yes - measured 2026-10-21: `web.py` stood at 1,001 lines after T17's claim split; 65 index rows were keyed to it; seven monkeypatches in `test_web.py` patched names the moved functions look up.
+5. **The order.** `skeleton.py` (the skeleton and the cut lines), `tidy.py` (the end trims, `kept_connector` with them - `tidy` calls it), `stage.py` (`stage_web` and its runs), each with the import block it uses; `__init__.py` re-exporting every name; the monkeypatches pointed at the submodules; the package's CLAUDE.md and the `ways/` index row; `make claims-rekey`.
+6. **The exits.** (c) - a split along the module's own three concerns.
+7. **The search smell.** None.
+8. **The budget.** 45 min with T58.
+9. **Done, measured.** One goal: the `ways/` tests green (576), every submodule under 650 lines, the claim rows carried (61), the gate green.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T57 Decisions
+
+**D32 - three submodules, one surface.** `ways/web/` = `skeleton` (`SKELETON_ARM_WIDTH`, `water_along_side`, `lane_skeleton_for`, `oriented_skeleton`, `_lay_skeleton`, `served_arm`, `_web_cut_lines`), `tidy` (`_drop_collapsed`, `cut_the_overruns`, `tidy_lane_ends`, `unsplitting_drops`, `kept_connector`), `stage` (`stage_web`, `seat_wall_reach`, `lay_reachable_runs`, `_reachable_runs`, `resettle_straightened`); `__init__.py` re-exports each name and the submodules themselves; each submodule keeps the module's `web plumbing - NONE`.
+
+### T58 Approach (checklist part A)
+
+1. **The goal, in the world.** A split at the bar costs no claims round for the code it only moved.
+2. **The constraints.** The claims index and `claims_owed.owed` (features 316, 385 T116); the claims gate's "introduced" reading, already asked across keys (a unit moved with its code intact matches its base unit).
+3. **Where each comes from.** O (features 316, 385).
+4. **Do they describe the world here?** Yes - measured 2026-10-21: splitting `web.py` owed its claims in full as "new", every one at its new key.
+5. **The order.** `claims_owed.moved` (the same unit and claim, the old key gone, the same code fingerprint, one candidate), read by `owed`; `rekey` copies each row to its new key and drops the old; `make claims-rekey`; `make land` runs it first; a test.
+6. **The exits.** (c) - the index learns a move; nothing it judged is re-judged.
+7. **The search smell.** None.
+8. **The budget.** With T57.
+9. **Done, measured.** One goal: a unit moved with its code intact owes nothing and its row moves; one whose code changed is still owed (test); live, 61 of `web.py`'s rows carried.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T58 Decisions
+
+**D33 - a move is not new.** `claims_owed.moved(cur, index)`: {new key: old key} where the `unit#claim` suffix matches, the old key is gone from the tree, the code fingerprints are equal and there is one such row; `owed` reads the old row for a moved key; `rekey` copies each row to its new key and drops the old ones; `make claims-rekey`, and `land.py`'s first pass runs it and commits the index.

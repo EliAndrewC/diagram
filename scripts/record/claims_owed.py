@@ -56,8 +56,9 @@ def owed(
     (FR-016: `rests changed` / `research changed` owe `impl-drift`; `triage` owes only the triage of the changed blocks)."""
     out: list[tuple[str, str]] = []
     memo: dict[str, Any] = {}
+    moves = moved(cur, index)
     for key, row in sorted(cur.items()):
-        was = index.get(key)
+        was = index.get(key) or index.get(moves.get(key, ""))  # a unit moved to another file with its code intact (405 T58)
         if was is None:
             out.append((key, "new"))
         elif was.get("code") != row.code and not (qdir is not None and relabeled_only(was, row, qdir.parent.parent)):
@@ -79,6 +80,34 @@ def owed(
                 )
             )
     return out
+
+
+def moved(cur: Mapping[str, Row], index: Mapping[str, Mapping[str, Any]]) -> dict[str, str]:
+    """{new key: old key} for every claim of a unit MOVED to another file with its code intact - a file split into a package
+    at the 1,000-line bar (405 T53, T58): the same unit and claim name, the old key gone from the tree, the same code
+    fingerprint, and one such row only. Keyed by file, the index otherwise owed every moved claim a full check."""
+    gone: dict[str, list[str]] = {}
+    for k in index:
+        if k not in cur and "::" in k:
+            gone.setdefault(k.split("::", 1)[1], []).append(k)
+    out: dict[str, str] = {}
+    for key, row in cur.items():
+        if key in index or "::" not in key:
+            continue
+        olds = [k for k in gone.get(key.split("::", 1)[1], []) if index[k].get("code") == row.code]
+        if len(olds) == 1:
+            out[key] = olds[0]
+    return out
+
+
+def rekey(cur: Mapping[str, Row], index: dict[str, dict[str, Any]]) -> int:
+    """Carry each moved claim's row to its new key and drop the old one (`moved`); returns how many moved."""
+    moves = moved(cur, index)
+    for new, old in moves.items():  # copied, then the old keys dropped: a module's NONE shared by the package's every submodule
+        index[new] = dict(index[old])
+    for old in set(moves.values()):
+        index.pop(old, None)
+    return len(moves)
 
 
 def judged(due: Sequence[tuple[str, str]]) -> list[str]:
