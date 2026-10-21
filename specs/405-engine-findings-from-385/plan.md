@@ -394,38 +394,8 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 
 **D36 - a row's outcome on the row.** `found.py close` sets `status` to `filed` with `task` (`T61`, `385 T12` or `405 T17` - no other feature, the GM's routing), or `settled` with `why`, and `closed_utc`; it refuses a row already closed. SETTLED ONLY WHERE THE FINDING NO LONGER HOLDS (the plan review of D36, FR-002): the reason starts "no longer holds" and records what was measured against the current file; a finding that still holds is filed as a task. `found.py list` numbers the open rows in file order.
 
-### T28 Approach (checklist part A)
-
-1. **The goal, in the world.** No finding of 385 or 405 sits open with no task.
-2. **The constraints.** FR-002 (found work stays in the feature); T29's tool.
-3. **Where each comes from.** The GM (FR-002) and the spec review of 405 (2026-10-20).
-4. **Do they describe the world here?** Yes - measured 2026-10-21 (a read-only mapping of all 76 rows against both task lists and the current code and record): 22 carried by 405 tasks, 9 by 385 tasks, 11 no longer holding - each measured against the file it names, the cited text gone or corrected (its reason records what stands there now) - and 34 unfiled.
-5. **The order.** The 34 unfiled rows grouped into six tasks by unit and complaint (T65-T70); every row closed with its outcome.
-6. **The exits.** (c) - filed, not fixed here; each new task is worked in this feature.
-7. **The search smell.** None.
-8. **The budget.** 30 min.
-9. **Done, measured.** `make found-list` shows 0 open in 385's and 405's logs.
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
-### T28 Decisions
-
-**D37 - six tasks for 34 rows.** T65 (the 4 ft touch gap against 0246 §16's 7 ft), T66 (stale words in `track.py` and `route.py`), T67 (the dry exit's claims and crossings), T68 (`_trim_to_service` and the sweeps' claims against 0246 §6), T69 (the web cut counting a household reached across a yard), T70 (three record wordings). A row filed in 385's log names its 405 task with the feature (`405 T17`).
-
-### T45 Approach (checklist part A)
-
-1. **The goal, in the world.** The reference map's message offers no recovery the gate refuses.
-2. **The constraints.** The roll census (feature 213), which refuses a `GATE_NO_CACHE=1` gate's re-rolls (405 T11's 05:02 gate); `_reference`'s message.
-3. **Where each comes from.** O (features 213, 405).
-4. **Do they describe the world here?** Yes - measured 2026-10-21: the 05:02 gate under `GATE_NO_CACHE=1` was refused by the census; the message still offers it.
-5. **The order.** The message's offer removed; the reason it is served stays.
-6. **The exits.** (c) - the message stops offering it; making the census accept a declared no-cache run was weighed and refused (T42 made the cache right, so the bypass has no work left).
-7. **The search smell.** None.
-8. **The budget.** 5 min.
-9. **Done, measured.** The message names no `GATE_NO_CACHE`.
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
+<!-- plan-archive: T28 to T28 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+<!-- plan-archive: T28 to T45 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 ### T45 Decisions
 
 **D38 - the offer removed.** `_reference`'s served line reads "served from the roll cache: nothing the roll executes changed" without "GATE_NO_CACHE=1 rolls it".

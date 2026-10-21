@@ -104,8 +104,9 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T70 Three record fixes: 0081's drawing paragraph "none of them sharp, and never doubling back" unqualified beside the bullet "A turn the ground forces"; 0196's drawing notes' absence note still says the kabu-ido paper "describes the system's documents and their dates", a claim from a work it did not read; the glossary variant mapping "isotherm" to isohyet, and 0196's notes saying "temperature isotherm" (385 found rows 1, 5, 8; 405 T28) [lands-open]
       research: rendering
-- [ ] T45 The reference-settlement message (`_reference` in the Makefile) still offers `GATE_NO_CACHE=1 rolls it`, but the roll census refuses that run's re-rolls (T11's 05:02 gate): let the census accept a declared no-cache run, or stop offering it (the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z) [lands-open]
+- [x] T45 The reference-settlement message (`_reference` in the Makefile) still offers `GATE_NO_CACHE=1 rolls it`, but the roll census refuses that run's re-rolls (T11's 05:02 gate): let the census accept a declared no-cache run, or stop offering it (the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z) [lands-open]
       research: rendering
+      verify: DONE. landed in batch T29+T28+T45: found.py closes a row filed (405 or 385 only) or settled only where it no longer holds (test); all 76 rows of 385 and 405 closed: 31 to existing tasks, 11 measured no longer holding, 34 filed as T65-T70; the reference message offers no GATE_NO_CACHE; plan review CLEAR round 2 (D36-D38)
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
 - [ ] T02 (385 T36) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
@@ -168,10 +169,12 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [x] T27 (385 T147) taxonomy._OVERLAP_EXEMPT['farm_fixtures'] says each fixture is 'seated against its own farmhouse' (the shed is 9.5 ft off, shrine and grave 14 ft, the privy up to 48 ft); its claim cites 0039 for the bed beside the house, which only 0038 backs; fixture_seats' CANOPY_PAD and SHADE_MARGIN_FT carry no claim; _seats' privy front step and stable seat unclaimed (impl-drift, T34's round 2) [lands-open]
       research: rendering
       verify: DONE. landed in batch T17+T16+T27+T57+T58+T60+T61: T17/T16/T27 wording and claims as the pages label them (claims round: 25 IN-STEP; the streets', _pull_back's, the dry hem's and the arm trim's drift in the code carried to T54, T55, T62, T63); web.py split into ways/web/ at the bar (576 ways tests), 61 claim rows carried by make claims-rekey (test); the carry names 385's FR and spec-lint reads it so (test); the gate-write suite waits for its fixture's gate (22/22 beside a running gate); plan reviews CLEAR (D29-D35)
-- [ ] T28 385's found.jsonl: its 63 rows all read open - map each to the 405 task that carries it, or file it here as a task, and mark the row (the spec review of 405, 2026-10-20) [lands-open]
+- [x] T28 385's found.jsonl: its 63 rows all read open - map each to the 405 task that carries it, or file it here as a task, and mark the row (the spec review of 405, 2026-10-20) [lands-open]
       research: rendering
-- [ ] T29 found.jsonl rows never close: a finding filed as a task (make task-add) or settled keeps status open, so the log cannot say what is unfiled - record the task id or settlement on the row (found working 405 T12, 2026-10-20) [lands-open]
+      verify: DONE. landed in batch T29+T28+T45: found.py closes a row filed (405 or 385 only) or settled only where it no longer holds (test); all 76 rows of 385 and 405 closed: 31 to existing tasks, 11 measured no longer holding, 34 filed as T65-T70; the reference message offers no GATE_NO_CACHE; plan review CLEAR round 2 (D36-D38)
+- [x] T29 found.jsonl rows never close: a finding filed as a task (make task-add) or settled keeps status open, so the log cannot say what is unfiled - record the task id or settlement on the row (found working 405 T12, 2026-10-20) [lands-open]
       research: rendering
+      verify: DONE. landed in batch T29+T28+T45: found.py closes a row filed (405 or 385 only) or settled only where it no longer holds (test); all 76 rows of 385 and 405 closed: 31 to existing tasks, 11 measured no longer holding, 34 filed as T65-T70; the reference message offers no GATE_NO_CACHE; plan review CLEAR round 2 (D36-D38)
 
 - [x] T47 (low priority - the GM, amendment 5; taken up in amendment 6) The preflight's coverage step (98 s of T19's 5-minute gate) checks the changed lines' coverage with the quick tests before the gate's own full run, which measures coverage again; the quick tests run twice too (13 s). It earns its time when it refuses a gap in seconds, not when the gate runs anyway - measure how often it refuses, and whether a landing whose code is final should skip it or the gate reuse its pass [lands-open]
       research: rendering
