@@ -449,38 +449,8 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 
 **D49 - nearest the house.** `_pull_back(..., near=None)`: with `near`, the kept end is the reaching one nearest the served thing; `trim_lane_stubs._nearness` gives a house's footprint distance (`dooryard_dist`), 0 for a way or a field; the claim reads "to the end nearest the last house it serves, else the shortest end still reaching a way or the field" (GUESS 0246).
 
-### T65 Approach (checklist part A)
-
-1. **The goal, in the world.** A join link and the route's straightening keep a lane's middle 7 ft off a garden fence, as every lane does.
-2. **The constraints.** 0246 §16 (a lane's middle at least 7 ft from a garden fence); `touch._detour_links`, `touch._join_piece`, `route._unjog`; the 4 ft junction margin they kept (feature 137 T03: seed 37 and 26 of 48 then needed it).
-3. **Where each comes from.** R (0246) and O (feature 137).
-4. **Do they describe the world here?** Yes - measured 2026-10-21 (385 found rows 9-11, 16, 17: the three sites at `_TOUCH_GAP`, unclaimed; with all three at 7 ft, seeds 1-48 and the pinned rows 54/54 and the measured block unchanged, so the exception no longer earns its place).
-5. **The order.** The three at `WEB_FABRIC_GAP`; their claims; the two comments that defended 4 ft rewritten with the measurement; the cohort.
-6. **The exits.** (e) conform - measured first: the exception's reason (stubs that could not join) no longer occurs.
-7. **The search smell.** None.
-8. **The budget.** 45 min for the batch with its landing.
-9. **Done, measured.** One goal: no join routes or straightens at 4 ft; the cohort as above.
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
-### T65 Decisions
-
-**D50 - one margin for every lane.** `_detour_links`' first try, `_join_piece`'s bar and `_unjog`'s default at `WEB_FABRIC_GAP`; each claims 0246's 7 ft; the comments in `fabric.py` and `touch.py` record the change and its measurement.
-
-### T73 Approach (checklist part A)
-
-1. **The goal, in the world.** The sweeps' claims say what the page records.
-2. **The constraints.** 0246 §10 (back lanes bring every farmhouse within 100 ft of one), §6, §78 (no lane through a farm's own wood), 0036.
-3. **Where each comes from.** R (0246, 0036).
-4. **Do they describe the world here?** Yes - measured 2026-10-21 (impl-drift outside the change, batch 4's rounds: "a house served" said "where the page says 60 ft" though its 100 ft is §10's; `_walk_in`'s line credited the 4 ft step to 0246; the grove fallback's line held about 13.5 ft; the bands built from `groves` only - a village copse is `village_groves`, common ground, not a farm's own wood).
-5. **The order.** The two "a house served" claims cite §10; `_walk_in` names its step as the code's; the band claim names the 13.5 ft; the bands' comment says why a copse is not among them.
-6. **The exits.** (e) conform - words; the connector's inner end is `_pull_back_to_service`'s, the sweep's exemption standing.
-7. **The search smell.** None.
-8. **The budget.** 45 min for the batch with its landing.
-9. **Done, measured.** The claims round reads them IN-STEP.
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
+<!-- plan-archive: T65 to T65 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+<!-- plan-archive: T65 to T73 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 ### T73 Decisions
 
 **D51 - the sweeps' words.** As the order says; no code token changes.
