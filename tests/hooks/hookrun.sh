@@ -19,6 +19,10 @@ WORK=${1:?work dir}; GITDIR=${2:?gitdir}; GUARD=${3:?guard}; SUITE=${4:?suite}; 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 t0=${EPOCHREALTIME/,/.}
+# GUARD_EDIT_OK: 405 batch 8 - A SUITE RUNS WITH NO SESSION'S ESCAPE SET: `PLAN_REVIEW_OK=... make land` carried the escape through
+# `make done` into every suite, and sync-with-main's "it fires" cases came back escaped (rc 0 where 1 was asserted). Each
+# `*_OK` variable the session set is cleared here; a case that tests an escape sets its own.
+while IFS="=" read -r name _; do case "$name" in *_OK) unset "$name" 2>/dev/null ;; esac; done < <(env)
 # GUARD_EDIT_OK: feature 383 amendment 4 - beside other suites a split suite runs in at most PARTS_MAX parts (make hooks-test sets it from the cores and the suites running; two when run without it): eight
 # suites of eight parts each hit the containers' shared 10 GB memory cap (2026-10-17). A suite run alone keeps its own count.
 export PARTS_MAX=${PARTS_MAX:-2}
