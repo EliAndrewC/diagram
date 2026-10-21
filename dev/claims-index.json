@@ -20808,6 +20808,22 @@
   "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/bund.py::run_lanes_on_to_the_bund#a lane with no width": {
+  "body": "a70deae8c57cb1fc",
+  "claim": "a lane with no width - village-lanes.drawing: read as the page's 3 ft footpath",
+  "code": "69b4b5ec7f4a6b3d",
+  "core": "863d872c60c266c7",
+  "date": "2026-10-21",
+  "note": "`ln.get(\"w\") or 3` is the page's 3 ft footpath",
+  "pages": {
+   "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
+  },
+  "research": "324b10775c9108ef",
+  "rests": [
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/bund.py::run_lanes_on_to_the_bund#a row street not carried onto the field": {
   "body": "1c7500963f702c3d",
   "claim": "a row street not carried onto the field - row-villages-resson.drawing: the street runs on off the map as the road into it",
@@ -21501,19 +21517,19 @@
  },
  "l7r/diagram/hamletgen/ways/clearance.py::_clear_link#link clear of the fabric": {
   "body": "cc260fd93ce435d1",
-  "claim": "link clear of the fabric - DEVIATION how-our-maps-lay-a-clustered-settlements-lanes.drawing: the link's line 7 ft off a garden fence, its edge 5.5 ft",
-  "code": "3a2c06b001a3cfa0",
+  "claim": "link clear of the fabric - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the link's line 7 ft off a garden fence (the page's fence to the middle of the lane), its edge 5.5 ft",
+  "code": "36a1daba66850386",
   "core": "2aa24e454372abbd",
-  "date": "2026-10-19",
-  "note": "7 ft from the line, the edge DEVIATION the page records",
+  "date": "2026-10-21",
+  "note": "gap WEB_FABRIC_GAP 7 ft to the line, as the page measures fence to middle",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::_clear_link#link clear of the wet ground and the water": {
@@ -23418,19 +23434,14 @@
  },
  "l7r/diagram/hamletgen/ways/geom.py::_stop_at_closest_approach#no road to nowhere": {
   "body": "5414077a4de9f374",
-  "claim": "no road to nowhere - how-our-maps-lay-a-clustered-settlements-lanes.drawing: cut at the house's closest approach",
-  "code": "dbecd48d7d4aed01",
+  "claim": "no road to nowhere - UNRESEARCHED: cut at the house's closest approach - the page pulls an end back to the last house it serves and records no point of the cut",
+  "code": "734f5a165bf68a4e",
   "core": "48f71ee4e3da104f",
-  "date": "2026-10-19",
-  "note": "the end is cut where the lane comes nearest the last house it serves",
-  "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
-  },
-  "research": "92410dbfeea7511e",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
-  ],
-  "verdict": "IN-STEP"
+  "date": "2026-10-21",
+  "note": "how far a lane runs past its last house is the decision §6 names and records as a GUESS (\"No page we read says how far a lane ran past its last house, so the rule is a GUESS\"); the cut at closest approach is a calibration inside §6's 60 ft reach, so the label should be `GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html`, not UNRESEARCHED",
+  "pages": {},
+  "research": "",
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/geom.py::_stop_at_network#no stub past a junction": {
   "code": "acc37ec1a938041f",
@@ -23463,15 +23474,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/geom.py::_trim_to_service#an end does not count as reaching the way the run's other end stands on (within `_TOUCH_GAP`)": {
-  "code": "88f6828356518c69",
-  "core": "88f6828356518c69",
-  "date": "2026-10-21",
-  "note": "an end does not count as reaching the way the run's other end stands on (within `_TOUCH_GAP`)",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/hamletgen/ways/geom.py::_trim_to_service#an outlying house keeps its way": {
   "body": "95babd5c0f2223f7",
   "claim": "an outlying house keeps its way - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: an end serving a house no other way reaches is kept within 60 ft of it (`WAY_END_REACH_FT`), or 12 ft of its built ground (`end_serves`)",
@@ -23489,20 +23491,44 @@
   "triaged": "2026-10-20",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/geom.py::_trim_to_service#pulled back to the last house served": {
-  "body": "19fdc82a50f6c81f",
-  "claim": "pulled back to the last house served - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: ends trimmed to what serves, 4 ft at a time",
-  "code": "85b16893a7b38941",
+ "l7r/diagram/hamletgen/ways/geom.py::_trim_to_service#not the way it left": {
+  "body": "364734afa4470c8f",
+  "claim": "not the way it left - UNRESEARCHED: an end does not count as reaching a way the run's other end stands on (within `_TOUCH_GAP`) - it walked away from it (the settlement-review of Mizuguchi, feature 261); the page records no such case",
+  "code": "d2488a65ae46a0d5",
   "core": "88f6828356518c69",
   "date": "2026-10-21",
-  "note": "walk-in to the first serving point in 4 ft steps, then cut at the closest approach",
+  "note": "the page's \"another way\" does not say whether the way a lane left counts",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/geom.py::_trim_to_service#pulled back to the last house served": {
+  "body": "364734afa4470c8f",
+  "claim": "pulled back to the last house served - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: ends trimmed to what serves",
+  "code": "5599fc91a5665756",
+  "core": "88f6828356518c69",
+  "date": "2026-10-21",
+  "note": "ends walked in to the first point that serves",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c90fc4f6fee86c66"
   ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/geom.py::_trim_to_service#the trim's step": {
+  "body": "364734afa4470c8f",
+  "claim": "the trim's step - UNRESEARCHED: walked in 4 ft at a time; the page gives no step",
+  "code": "a47cde976c71cc28",
+  "core": "88f6828356518c69",
+  "date": "2026-10-21",
+  "note": "4 ft walk; no page gives a step",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/geom.py::_turn_deg#geometry": {
@@ -26598,20 +26624,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/route.py::_route#clear of the fabric": {
-  "body": "84ea184eb8c3f487",
-  "claim": "clear of the fabric - DEVIATION how-our-maps-lay-a-clustered-settlements-lanes.drawing: the line 7 ft off by default, a tread's edge 5.5 ft",
-  "code": "950ef82ea9ebbcc0",
+  "body": "ae5d1728fd87066b",
+  "claim": "clear of the fabric - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the line 7 ft off by default (the page's fence to the middle of the lane), a tread's edge 5.5 ft",
+  "code": "01f84cfc3eb07341",
   "core": "27338db6085f1637",
-  "date": "2026-10-19",
-  "note": "7 ft from the line by default, the edge DEVIATION the page records",
+  "date": "2026-10-21",
+  "note": "walls at `gap` 7 ft (planned at gap + 0.71 cell); fabric passed as hard is held at 8, which still meets \"at least 7 ft\"",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/route.py::_route#clear of the toe and marsh": {
@@ -29856,21 +29882,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#grove band not crossed": {
-  "body": "150d813526ad3ba8",
-  "claim": "grove band not crossed - row-villages-resson.drawing: a farm's grove is walked round, so an end is not carried across one",
-  "code": "2d62c693be16172c",
+  "body": "a8a5cedcc11a8306",
+  "claim": "grove band not crossed - GUESS row-villages-resson.drawing: a farm's grove is walked round, so an end is not carried across one - the page gives it for a row village's near-row farms; held here for every settlement's carries",
+  "code": "3c9e18dbd2f3fb95",
   "core": "adc48b77040c5a6b",
-  "date": "2026-10-20",
-  "note": "`carry_to_dooryard(..., groves=_bands)` gives up rather than enter a grove band, which fits \"reaches the street by a path round the grove\"",
+  "date": "2026-10-21",
+  "note": "0036 drawing §107 gives the rule for every farm's wood (\"no lane runs through a farm's own wood ... the way runs outside the grove or through a gap in it\"), while 0033 §94 gives it only for a near-row farm; the pointer should be research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html (its own GUESS), with 0033 cited beside it if wanted",
   "pages": {
    "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
   "research": "37ada2a33aa587d2",
   "rests": [
-   "0033-row-villages-resson.drawing.html:005c73edae057da1",
    "0033-row-villages-resson.drawing.html:dbb4842be0eda9a1"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#kept whole for a house": {
   "body": "150d813526ad3ba8",
@@ -29907,39 +29932,26 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#not the way it left": {
-  "body": "150d813526ad3ba8",
-  "claim": "not the way it left - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: an end does not count as reaching a way the lane's other end stands on (within `_TOUCH_GAP`), so a link off a way with nothing at its far end is pulled back to nothing - our reading of \"a stretch that joins nothing of the network is not drawn\" against \"reaching another way within 60 ft of it\", which does not say whether the way a lane leaves is another way",
-  "code": "110f693a0d4cd05e",
+  "body": "a8a5cedcc11a8306",
+  "claim": "not the way it left - UNRESEARCHED: an end does not count as reaching a way the lane's other end stands on (within `_TOUCH_GAP`), so a link off a way with nothing at its far end is pulled back to nothing - our reading of \"a stretch that joins nothing of the network is not drawn\" against \"reaching another way within 60 ft of it\", which does not say whether the way a lane leaves is another way",
+  "code": "bceb0b8d93be23ad",
   "core": "adc48b77040c5a6b",
-  "date": "2026-10-20",
-  "note": "the page's reach rule is itself a GUESS and does not say whether the way a lane leaves counts as \"another way\"; the code's reading is a guess the record does not answer",
-  "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
-  },
-  "research": "92410dbfeea7511e",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b"
-  ],
+  "date": "2026-10-21",
+  "note": "this project's reading of §13 against §6, as the claim says",
+  "pages": {},
+  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#the track out and streets exempt": {
-  "body": "150d813526ad3ba8",
-  "claim": "the track out and streets exempt - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: the track out runs from the cluster's edge off the map, so its far end is no lane end; a row village's street keeps its own end rules (`ways/street.py`)",
-  "code": "ec64ed49c29fad55",
+  "body": "a8a5cedcc11a8306",
+  "claim": "the track out and streets exempt - UNRESEARCHED: the page records no exemption; the track out runs from the cluster's edge off the map, so its far end is no lane end; a row village's street keeps its own end rules (`ways/street.py`)",
+  "code": "d633dc581649839e",
   "core": "adc48b77040c5a6b",
-  "date": "2026-10-20",
-  "note": "the page is silent on the ends of the track out and of a row village's street; the guess is unanswered",
-  "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
-  },
-  "research": "92410dbfeea7511e",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
-  ],
-  "verdict": "IN-STEP"
+  "date": "2026-10-21",
+  "note": "the bundle answers the exemption: the track out \"runs off the edge of the map\" and is one through-route with the spur (0081 drawing), and the street \"runs on off the map as the road into it\" (0033 drawing). `run_lanes_on_to_the_bund` already cites both pages for the same exemption. Should cite research/questions/0081-village-lanes.drawing.html and research/questions/0033-row-villages-resson.drawing.html, not UNRESEARCHED",
+  "pages": {},
+  "research": "",
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_debris#a house served": {
   "code": "cdf6531ed4f8b314",
@@ -30910,22 +30922,6 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#a grove-fallback route is taken only if it crosses no more water than the run it replaces": {
-  "code": "c0e3c862710141e3",
-  "core": "c0e3c862710141e3",
-  "date": "2026-10-19",
-  "note": "a grove-fallback route is taken only if it crosses no more water than the run it replaces",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#a track end standing in the fabric is walked clear along its own first or last leg": {
-  "code": "c0e3c862710141e3",
-  "core": "c0e3c862710141e3",
-  "date": "2026-10-19",
-  "note": "a track end standing in the fabric is walked clear along its own first or last leg",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#detour swing": {
   "body": "3ed00cc43aa37818",
   "claim": "detour swing - UNRESEARCHED: the midpoint swung 40, 80, 140 then 220 px out from the cluster",
@@ -30939,38 +30935,37 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#gap off a grove band": {
-  "body": "3ed00cc43aa37818",
-  "claim": "gap off a grove band - groves-of-trees-around-farmhouses-yashikirin.drawing: the grove fallback's route and clip keep `CONNECTOR_BAND_GAP_FT` (0036's working room past the half-width, 12.5 ft) off the trees",
-  "code": "3006bfff534a86ee",
+  "body": "d5e4f4c37b205405",
+  "claim": "gap off a grove band - groves-of-trees-around-farmhouses-yashikirin.drawing: the grove fallback's route and clip keep `CONNECTOR_BAND_GAP_FT` (0036's working room past the connector's half-width, 12.5 ft) off the trees - the spur's too, half a foot more than its own 2.5 ft half-tread would need",
+  "code": "c2605d071cd8989a",
   "core": "c0e3c862710141e3",
-  "date": "2026-10-19",
-  "note": "12.5 ft is the working room a 22 ft opening gives a footpath lane past its half-width, carried to the 6 ft track",
+  "date": "2026-10-21",
+  "note": "22 ft opening = 3 ft footpath + 2 x 9.5 ft working room; 9.5 + the connector's 3 ft half-width = 12.5, and the spur's 2.5 + 9.5 = 12",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
   "research": "45be621f47448e34",
   "rests": [
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:06616d493b616366",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#gap off the steadings": {
-  "body": "3ed00cc43aa37818",
-  "claim": "gap off the steadings - how-our-maps-lay-a-clustered-settlements-lanes.drawing: `TRACK_FABRIC_GAP`, a lane's 7 ft from a garden fence, off every footprint",
-  "code": "bafffe07820592d6",
+  "body": "d5e4f4c37b205405",
+  "claim": "gap off the steadings - how-our-maps-lay-a-clustered-settlements-lanes.drawing: `gap` (`TRACK_FABRIC_GAP`, a lane's 7 ft from a garden fence) - the clip and the fabric test; the router walls the steadings as obstacles",
+  "code": "71cdff91cfa0a7e3",
   "core": "c0e3c862710141e3",
-  "date": "2026-10-19",
-  "note": "the clip and the crossing test keep 7 ft (TRACK_FABRIC_GAP), the route 8 ft, both at least the page's 7 ft",
+  "date": "2026-10-21",
+  "note": "clip and fabric test at TRACK_FABRIC_GAP 7 ft; the router holds the steadings as hard obstacles at 8 ft, which meets \"at least 7 ft\"",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#never across a grove": {
@@ -30989,14 +30984,6 @@
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
   ],
   "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#the order of the three grove-fallback routes (bands and crop, bands alone, bands with no water), each one looser": {
-  "code": "c0e3c862710141e3",
-  "core": "c0e3c862710141e3",
-  "date": "2026-10-19",
-  "note": "the order of the three grove-fallback routes (bands and crop, bands alone, bands with no water), each one looser",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#the track kept off drawn water": {
   "body": "3ed00cc43aa37818",
@@ -32930,13 +32917,14 @@
  },
  "l7r/diagram/hamletgen/ways/web/skeleton.py::_lay_skeleton#skeleton span floor": {
   "body": "91973512d5c688ba",
-  "claim": "skeleton span floor - UNRESEARCHED: each half-extent floored at half a bundle pitch (50 ft), a pitch across; a piece under 30 ft not laid",
-  "code": "f1344e7fd13fb5ff",
+  "claim": "skeleton span floor - UNRESEARCHED: each half-extent floored at half a bundle pitch (50 ft), a pitch across; a run under 70 ft dropped by `clip_to_clear`, an arm under 30 ft (`_WEB_MIN_FT`) not laid",
+  "code": "4ed173087bd04448",
   "core": "64c275f80ee2c620",
   "date": "2026-10-21",
-  "note": "the record gives no span floor or least piece; UNRESEARCHED is right",
+  "note": "50 ft half-extent floor, 70 ft clip floor, 30 ft laying floor; no page gives them",
   "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/skeleton.py::_lay_skeleton#skeleton width": {
@@ -33096,6 +33084,23 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c90fc4f6fee86c66"
   ],
   "triaged": "2026-10-21",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/web/skeleton.py::_web_cut_lines#the side lanes' reach": {
+  "body": "17e174cad0b4f1eb",
+  "claim": "the side lanes' reach - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: the page gives WEB_REACH_FT (100 ft) for back lanes; the side-lane form reuses it, the page silent there",
+  "code": "3bf2e41538dc020d",
+  "core": "caf4168f4b2af238",
+  "date": "2026-10-21",
+  "note": "100 ft is given for back lanes only; the side-lane form gives no reach",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
+  },
+  "research": "92410dbfeea7511e",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:82d03d7e6a2180e2",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c4049193a04d9dd0"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/skeleton.py::_web_cut_lines#web cut spacing": {

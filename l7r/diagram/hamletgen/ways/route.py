@@ -216,7 +216,7 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
     # THE LATTICE TESTS CELL CENTERS, SO IT MUST CLEAR HALF A CELL MORE THAN THE PATH NEEDS.
     #
     # A cell whose CENTER is `gap` from a wall is marked free, and the drawn line through that cell
-    # can pass half a cell nearer than its center does - at a 14 ft cell, seven feet nearer. Measured:
+    # can pass half a cell nearer than its center does - at a 10 ft cell (`ROUTE_CELL`), five feet nearer (measured at the old 14 ft cell, seven). Measured:
     # three web lanes on cohort seed 11 came within 4.0 ft of a farmhouse corner having been planned
     # at 7, and a farmhouse ended up standing on the lane. Inflating the planning clearance by half
     # the cell's diagonal makes "this cell is free" mean "every point in this cell is clear", which is

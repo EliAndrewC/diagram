@@ -523,8 +523,8 @@ def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[
         the trim's step - UNRESEARCHED: walked in 4 ft at a time; the page gives no step
         not the way it left - UNRESEARCHED: an end does not count as reaching a way the run's other end stands on (within
             `_TOUCH_GAP`) - it walked away from it (the settlement-review of Mizuguchi, feature 261); the page records no such case
-        an outlying house keeps its way - UNRESEARCHED: the page records no keep exception; an end serving a house no other way reaches is kept within 60 ft of it (`WAY_END_REACH_FT`), or 12 ft of its built ground (`end_serves`)
-        a short way beside its houses kept whole - UNRESEARCHED: the page records no keep-whole case; a way whose two ends are served only by the same houses is not cut toward them at either end ("a tread comes from somewhere else"), so an end may stand up to 60 ft past its house; the page pulls an end back to the last house it serves and is silent on a way with the same houses at both ends"""
+        an outlying house keeps its way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end serving a house no other way reaches is kept within 60 ft of it (`WAY_END_REACH_FT`), or 12 ft of its built ground (`end_serves`)
+        a short way beside its houses kept whole - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a way whose two ends are served only by the same houses is not cut toward them at either end ("a tread comes from somewhere else"), so an end may stand up to 60 ft past its house; the page pulls an end back to the last house it serves and is silent on a way with the same houses at both ends"""
 
     # ARRIVING AT THE FIELD IS SERVICE. A field spur exists to reach the crop, and it is the one way on
     # the map whose whole purpose is served by something that is neither a house nor another lane. Without
@@ -549,7 +549,7 @@ def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[
 
     out = list(run)
     # EVERY END IS WALKED IN, NEVER POPPED A SEGMENT AT A TIME (feature 405 T12, D1): pulled back to the last house it serves,
-    # 4 ft at a time, as 0246's drawing page and the claim above say. Two loops used to pop whole vertices first, so a long last
+    # 4 ft at a time - the step is this code's, no page gives one (the claim above). Two loops used to pop whole vertices first, so a long last
     # segment whose inner part still served was dropped whole and the end landed on the vertex before it, past the last point
     # that served (DRIFTED in 385's impl-drift round). The walk takes each end in along its own last segment to the first point
     # that serves, dropping a vertex only once the end is within 4 ft of it. An arm no point of which serves reaches nothing at
@@ -601,7 +601,7 @@ def _stop_at_closest_approach(run: Poly, near: Sequence[Pt]) -> Poly:
     An end that meets a way, the field or a steading's built ground is the caller's to leave alone - it has
     arrived somewhere. Cuts under 4 ft are left, the same grain as the walk in `_trim_to_service`.
 
-    Research: no road to nowhere - UNRESEARCHED: cut at the house's closest approach - the page pulls an end back to the last house it serves and records no point of the cut"""
+    Research: no road to nowhere - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: cut at the house's closest approach, a calibration within the page's GUESS reach (60 ft)"""
     out = list(run)
     while near and len(out) >= 2:
         a, b = out[-2], out[-1]
