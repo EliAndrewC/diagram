@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-21T16:57:17Z",
+  "target": "plan-gate push",
+  "commit": "85c6f49cd",
+  "why": "this range touches specs/408 only to tick its two physical tasks' research boxes on its own verify lines; its stale plan blocks were on main before this range and are 408's"
+}

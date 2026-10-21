@@ -370,3 +370,94 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T16:40:44Z (continue), 
 7. **The next step is a measurement.** `make land` once more: its gate shows the three tests green.
 8. **Every route measured before offering one?** No route is offered.
 9. **After a ruling: the step it names?** Yes - one more `make done`, through `make land`.
+
+### T18 Approach (checklist part A)
+
+1. **The goal, in the world.** A lane keeps 7 ft off every garden but its own household's.
+2. **The constraints.** 0246: the gap is kept from another household's garden; a household's own way may run beside its own fence, kept only off the beds (a DEVIATION the page records).
+3. **Where each comes from.** R (0246).
+4. **Do they describe the world here?** Yes - T108's round: `settle.theirs` exempts every steading within `DOORSTEP_FT` (80 ft) of either end, a neighbor's garden at a junction too.
+5. **The order.** `theirs` exempts at each end only the NEAREST steading within `DOORSTEP_FT` - the household whose dooryard the end arrives at; the claim GUESS 0246 (the lane's own household read as the one nearest its end); a test with a neighbor beside the junction; seeds 1-48.
+6. **The exits.** (e) conform.
+7. **The search smell.** None.
+8. **The budget.** 60 min for the batch with its landing.
+9. **Done, measured.** A neighbor's garden within 80 ft of an end is no longer exempt (test); seeds 1-48 and the pinned rows pass.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T18 Decisions
+
+**D69 - its own household only.** `theirs(p, yards, houses)`: each end exempts the one steading nearest it within `law.DOORSTEP_FT`, not every one; the claim "a lane arrives at its own dooryard" GUESS 0246 (the page keeps the gap off another household's garden; which household a lane is "its own" the page does not say - the one its end arrives at).
+
+### T86 Approach (checklist part A)
+
+1. **The goal, in the world.** The join links' 7 ft keep is claimed as what it is.
+2. **The constraints.** 0246 §41: the gap is kept from another household's garden; a household's own way may run beside its own fence (a DEVIATION the page records).
+3. **Where each comes from.** R (0246).
+4. **Do they describe the world here?** Yes - batch 7's round 3: `_clear_touch` / `_clear_within` keep a join link 7 ft from all fabric, own garden included.
+5. **The order.** A claim at `_clear_touch` and `_join_piece`: a join link keeps the gap from every garden - GUESS 0246: a link joins a way to the network and belongs to no one household, so no garden is its own.
+6. **The exits.** (a) claim.
+7. **The search smell.** None.
+8. **The budget.** 60 min for the batch with its landing.
+9. **Done, measured.** The claims round reads it IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T86 Decisions
+
+**D70 - a join link has no household.** No code change: a join link closes a gap between two ways and belongs to no one household, so the own-garden exemption (0246's DEVIATION for a household's own way) does not reach it; claimed GUESS 0246 at `_clear_touch` and `_join_piece`.
+
+### T89 Approach (checklist part A)
+
+1. **The goal, in the world.** Every tolerance a join reads is claimed.
+2. **The constraints.** The ink's touch (`_TOUCH_GAP`, 4 ft, CONVENTION).
+3. **Where each comes from.** O.
+4. **Do they describe the world here?** Yes - batch 8's round: `_touch_junctions` leaves an end within 2 ft of a way as it is, unclaimed.
+5. **The order.** A claim: an end within 2 ft of a way already stands on it - CONVENTION, half the ink's touch: moving it would draw a link shorter than the tread.
+6. **The exits.** (a) claim.
+7. **The search smell.** None.
+8. **The budget.** 60 min for the batch with its landing.
+9. **Done, measured.** The claims round reads it IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T89 Decisions
+
+**D71 - an end already on a way.** No code change: `_touch_junctions`' 2 ft claimed CONVENTION (an end that near a way already reads as on it at the map's scale; a link under 2 ft is shorter than any tread).
+
+### T22 Approach (checklist part A)
+
+1. **The goal, in the world.** A way reaches the field only where it joins the paddy's bund, as 0014 draws it.
+2. **The constraints.** 0014: the field path runs from the hamlet to the paddy's outer bund and joins it; a lane end within 6 ft of the paddy's edge is drawn as joining it (a GUESS); where no path is left to draw, the hamlet's nearest lane runs on to the bund.
+3. **Where each comes from.** R (0014).
+4. **Do they describe the world here?** Yes - T33's rounds: `law.FIELD_REACH_FT` (60 ft) counts a way that far off as reaching the field, five claims DRIFTED on it; `track.SPUR_REACH_FT` the same 60 ft for a folded spur.
+5. **The order.** `FIELD_REACH_FT` 60 -> 6 ft (0014's join, a GUESS); `SPUR_REACH_FT` reads it; the claims at `FIELD_REACH_FT`, `field_unreached`, `refuse_unreached`, `settle_field`, `settle_reach` and the spur; a dry plot's edge still counts (the field's dry hem, worked ground the path may end on - 0014 is silent on dry plots: GUESS); tests; seeds 1-48.
+6. **The exits.** (e) conform.
+7. **The search smell.** None.
+8. **The budget.** 60 min for the batch with its landing.
+9. **Done, measured.** A way 10 ft off the paddy no longer reaches it (test); seeds 1-48 and the pinned rows pass - the settle draws the field way where none joins.
+10. **Before moving a constant.** Measured: the reach is read by `field_unreached`, `settle_field`, `refuse_unreached`, the tree's pruning and the folded spur; seeds 1-48 and the pinned rows say what the move costs.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T22 Decisions
+
+**D72 - the field reached at 6 ft.** `law.FIELD_REACH_FT = 6.0` (0014: a lane end within 6 ft of the paddy's edge is drawn as joining it, a GUESS); `track.SPUR_REACH_FT = law.FIELD_REACH_FT`, one distance for the law and the placer. A dry plot's edge counts as the field's (GUESS: the dry hem is the field's worked ground; 0014 speaks of the paddy and says nothing of the dry plots). Where no way joins, the settle's field way (`settle_field`, 0014's "the hamlet's nearest lane runs on to the bund") draws one; a map it cannot draw is refused, as now.
+
+### T23 Approach (checklist part A)
+
+1. **The goal, in the world.** A spur's tip never stands short of the bund in open ground.
+2. **The constraints.** 0014: the path never ends in open ground short of the bund; where no path is left to draw, the hamlet's nearest lane runs on to it; 0246: an end reaching nothing is pulled back (a GUESS).
+3. **Where each comes from.** R (0014, 0246).
+4. **Do they describe the world here?** Yes - T33's round: `tip_onto_the_bund` returns a tip it cannot carry on (past the run-on's reach, turning back, or blocked) as it came.
+5. **The order.** The fallback named in the claim: a tip the run-on cannot carry is left for the settle - the law calls a short end dangling and 0246's pull-back takes it, and the field is reached by `a_way_onto_the_bund` (0014's nearest lane run on); no code change.
+6. **The exits.** (a) claim, the fallback named.
+7. **The search smell.** None.
+8. **The budget.** 60 min for the batch with its landing.
+9. **Done, measured.** The claims round reads it IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T23 Decisions
+
+**D73 - the fallback named.** No code change: `tip_onto_the_bund`'s claim names its fallback - a tip it cannot carry on is left as it came for the settle, whose lane law calls the short end dangling (pulled back, GUESS 0246), and the field is reached by `a_way_onto_the_bund` (0014: the hamlet's nearest lane runs on to the bund).
+
