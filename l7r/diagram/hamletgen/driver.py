@@ -196,7 +196,7 @@ class Report:
     # instead of `generate`, which silently measured a different code path than the one that ships.
     fail_lines: list[str] = field(default_factory=list)
     # ONE ROLL (feature 287, FR-002): the re-roll loop that could ship attempt four with a different connector and web is
-    # gone - the reach it bought is guaranteed where the web settles (`ways/settle.py`, the reserved corridors drawn) - so
+    # gone - the reach it bought is guaranteed where the web settles (`ways/settle/`, the reserved corridors drawn) - so
     # the `attempt` / `rerolled_after` fields and the manifest's `roll_attempt` / `roll_after` that attributed a map to
     # its attempt went with it (feature 133 T33 added them).
     # THE MANIFEST THE REPORT WAS JUDGED ON (feature 213): one roll now serves the cohort test (the
@@ -261,7 +261,7 @@ def roll_scope(spec: HamletSpec | None = None) -> Iterator[None]:
 
 def build(plan: SitePlan) -> Settlement:
     """Run every stage, in order, against a fresh `Settlement` - once: a map is never rolled again with ground forbidden
-    (feature 287, FR-002; the reach that re-roll bought is the web's to draw, `ways/settle.py`)."""
+    (feature 287, FR-002; the reach that re-roll bought is the web's to draw, `ways/settle/`)."""
     s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
     # EVERY FOOTPRINT HELD TO THE OVERLAP MATRIX AT RECORD TIME (feature 287 M8): every hamlet placer asks the registry of what
     # stands before it chooses (`Settlement.admits`), so a record it forbids is an engine defect, raised by name
@@ -380,7 +380,7 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
     The roll no longer reports on itself (feature 166 left it one verdict: whether its ways reach every
     house it seated). Since feature 287 that too is guaranteed where it is decided - the seating reserves
     a corridor from every door to the exit strip, the web draws it where its lanes do not reach the house
-    (`ways/settle.py`), and a settle that leaves one unreached is refused (`ways/last_resort.py`) - so a
+    (`ways/settle/`), and a settle that leaves one unreached is refused (`ways/last_resort.py`) - so a
     produced map has no failure to report, and a map is built ONCE (FR-002): the re-roll that
     rebuilt a stranding map with its ground forbidden (feature 133 T33), its snapshot and resume
     (feature 284) and its choice between attempts (features 226, 278) are gone."""

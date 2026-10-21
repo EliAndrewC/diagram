@@ -25,7 +25,7 @@ the ones for its own subject. It runs in the quick tier (the top-level tree deci
 | `test_matrix_287.py` | every lane the web lays, re-lays or carries on is admitted by the overlap matrix before it is written |
 | `test_route.py` | the router: `_route` going round hard ground, `_unjog`, and the pad multiplier that lets a link take the long way |
 | `test_serve.py` | `_lay_web_lane` - one web lane joins the network or is refused - and the web's late passes (`tidy_lane_ends`, `cut_the_overruns`) |
-| `test_settle.py` | `settle_the_web` (`ways/settle.py`): each rule of the lane law provoked on constructed lanes and repaired |
+| `test_settle.py` | `settle_the_web` (`ways/settle/`): each rule of the lane law provoked on constructed lanes and repaired |
 | `test_smooth.py` | the smoothing pass (`ways/smooth.py`): the collapse guard for a lane whose every vertex falls inside a knot |
 | `test_street.py` | a row village's streets (`ways/street.py`) and the road its street runs out on |
 | `test_sweeps.py` | the passes that REMOVE or REPAIR - doubled remnants, steading fouls, end nubs, collinear breaks, orphaned pieces |

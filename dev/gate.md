@@ -45,7 +45,7 @@ needed afterwards retired. What changed in what the gate tests:
 
 - **No re-roll.** `generate` builds a map once. The re-roll on a stranded farmhouse (a check of the finished map and a
   retry, which is not a guarantee) is gone with its tests; the reach is guaranteed by the access corridors the seating
-  reserves and the web's settle draws (`ways/settle.py`). `meta.roll_failures`, the roll's report on itself, is deleted
+  reserves and the web's settle draws (`ways/settle/`). `meta.roll_failures`, the roll's report on itself, is deleted
   with its writer: the settle's last resort drops only ordinary lanes and refuses by name (`ways/last_resort.py:WebRefused`)
   a web only the tree could mend or one that leaves a farmhouse or the reserved field unreached (research R9, R12).
 - **One predicate per rule, in the engine.** A rule's test body was lifted into an engine predicate that its placer

@@ -5,9 +5,10 @@ Research: lane sweep plumbing - NONE"""
 from __future__ import annotations
 
 import math
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
+from typing import Any
 
-from l7r.diagram.settlement import Settlement, edge_dist, point_in_poly, seg_closest, seg_dist, segments_cross
+from l7r.diagram.settlement import Settlement, edge_dist, point_in_poly, rot_rect, seg_closest, seg_dist, segments_cross
 
 from ..consts import (
     STEADING_ARRIVAL_FT,
@@ -646,6 +647,11 @@ def _keep_the_route_wide(s: Settlement, hard: list[Poly], walls: Sequence[Poly],
     return closed
 
 
+def farm_bands(M: Mapping[str, Any]) -> list[Poly]:
+    """Each farm grove band of the manifest (`groves`, those with a width) as its rotated rectangle (`rot_rect` at its `rot`)."""
+    return [rot_rect(float(g["x"]), float(g["y"]), float(g["w"]), float(g["h"]), float(g.get("rot") or 0.0)) for g in M.get("groves") or [] if g.get("w")]
+
+
 def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
     """Pull back any lane end that reaches NOTHING, and empty what is left if pulling back cannot save it.
 
@@ -675,13 +681,10 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
     # with it the 60 ft to the field the bund rule retired. `fields` stands in only where the manifest records no ground.
     ground = memo_ground(s, "worked", worked_ground) if worked_ground_rings(s.M) else WorkedGround([list(f) for f in fields])
     steadings = steading_footprints(s.M)
-    # the farm grove bands an end may not be carried across (feature 291; their boxes are unrotated) - a farm's own wood; a
-    # village copse (`village_groves`) is common ground, not a farm's wood (405 T73)
-    _bands = [
-        [(g["x"] - g["w"] / 2, g["y"] - g["h"] / 2), (g["x"] + g["w"] / 2, g["y"] - g["h"] / 2), (g["x"] + g["w"] / 2, g["y"] + g["h"] / 2), (g["x"] - g["w"] / 2, g["y"] + g["h"] / 2)]
-        for g in s.M.get("groves") or []
-        if g.get("w")
-    ]
+    # the farm grove bands an end may not be carried across (feature 291) - a farm's own wood; a village copse (`village_groves`)
+    # is common ground, not a farm's wood (405 T73). Each band ROTATED as recorded, as `lay_door_paths` reads it (405 T83: the
+    # sweep read the unrotated box, so the two disagreed on where a turned farm's wood stood)
+    _bands = farm_bands(s.M)
     fixed, emptied = 0, []
     for i, ln in enumerate(lanes):
         if ln.get("connector") or ln.get("street"):

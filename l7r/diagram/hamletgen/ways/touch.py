@@ -162,7 +162,7 @@ def _touch_junctions(
         _old = [(float(x), float(y)) for x, y in (lane_list[idx].get("pts") or [])]
         # ...and the overlap matrix admits the lane as it would become (feature 287 M8, `reshape_lane`'s question)
         _new = [[round(float(x), 1), round(float(y), 1)] for x, y in new_pts]
-        return may_write(_old, new_pts, float(lane_list[idx].get("w") or 5.0), _fab) and s.admits("lanes", {**lane_list[idx], "pts": _new}, ignore=lane_list[idx])
+        return may_write(_old, new_pts, float(lane_list[idx].get("w") or 3.0), _fab) and s.admits("lanes", {**lane_list[idx], "pts": _new}, ignore=lane_list[idx])
         # (the two paragraphs that used to stand here are on `may_write`)
 
     closed = 0
@@ -231,7 +231,7 @@ def _touch_junctions(
                 _oe = 0 if math.dist(foot, _op[0]) <= 4.0 else (-1 if math.dist(foot, _op[-1]) <= 4.0 else None)
                 if _oe is not None and len(_op) >= 2 and not (lanes[k].get("connector") or lanes[k].get("street")):
                     _nb = _op[1] if _oe == 0 else _op[-2]
-                    if _clear_touch(_nb, q, hard, walls, water, max(WEB_FABRIC_GAP, float(lanes[k].get("w") or 5.0) / 2.0 + 2.0)) and math.dist(_nb, q) <= 2.0 * math.dist(_nb, _op[_oe]) + 4.0:
+                    if _clear_touch(_nb, q, hard, walls, water, max(WEB_FABRIC_GAP, float(lanes[k].get("w") or 3.0) / 2.0 + 2.0)) and math.dist(_nb, q) <= 2.0 * math.dist(_nb, _op[_oe]) + 4.0:
                         _np = list(_op)
                         _np[_oe] = q
                         if not _may_write(k, _np, lanes):
@@ -247,7 +247,7 @@ def _touch_junctions(
                 # a farmhouse corner and the check reads a house standing in the lane (cohort seed 6).
                 link = (
                     [q, foot]
-                    if _clear_touch(q, foot, hard, walls, water, max(WEB_FABRIC_GAP, float(ln.get("w") or 5.0) / 2.0 + 2.0))
+                    if _clear_touch(q, foot, hard, walls, water, max(WEB_FABRIC_GAP, float(ln.get("w") or 3.0) / 2.0 + 2.0))
                     else _route(q, foot, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=None)
                 )
                 if not link and d <= _LANE_JOIN_FT:
@@ -492,13 +492,13 @@ def _join_piece(
     _bar = max(WEB_FABRIC_GAP, float(lanes[i].get("w") or 3.0) / 2.0 + 2.0)
     # ASKED OF AN INDEX, CAPPED AT THE BAR (feature 306): the clearance was every fabric vertex against every segment of
     # the run - 111,700 distances in one call on the pool. Both of its uses read it only through `min(_was, _bar)`, so the
-    # value above `_bar` is never needed, and a vertex farther than `_bar` from the run cannot be the answer: the vertices
-    # are filed once and each segment asks only those within `_bar` of it (`_clear_within`). Exact - the pool's manifests
-    # regenerate byte-identical, and `tests/hamletgen/ways/test_touch.py` holds it to the old scan.
-    _verts = _fabric_vertices(_fab)
+    # value above `_bar` is never needed, and an edge farther than `_bar` from the run cannot be the answer: the edges are
+    # filed once and each segment asks only those within `_bar` of it (`_clear_within`). Exact - `tests/hamletgen/ways/
+    # test_touch.py` holds it to the full scan. EDGES, NOT VERTICES (405 T84): a run past a long fence's middle read clear.
+    _edges = _fabric_edges(_fab)
 
     def _clear_of_fabric(run: Poly) -> float:
-        return _clear_within(run, _verts, _bar)
+        return _clear_within(run, _edges, _bar)
 
     _was = _clear_of_fabric(pts)
 
@@ -530,35 +530,43 @@ def _join_piece(
         _draw_web(s, link, round(float(lanes[i].get("w") or 3.0)), joins=True)
 
 
-_VERTEX_CELL = 16.0  # px: the fabric-vertex grid's cell - a few times the bar (4-5 ft), so a query reads a handful of cells
+_VERTEX_CELL = 16.0  # px: the fabric-edge grid's cell - about twice the bar (7 ft), so a query reads a handful of cells
 
 
-def _fabric_vertices(fab: Sequence[Poly]) -> PointGrid:
-    """Every vertex of `fab`, filed once as `(vertex, x, y, x, y)` for `_clear_within` (feature 306)."""
+def _fabric_edges(fab: Sequence[Poly]) -> PointGrid:
+    """Every edge of `fab` (each ring closed), filed once as `(a, b, x0, y0, x1, y1)` for `_clear_within` (feature 306; edges,
+    not vertices, since 405 T84: a run past a long fence's middle read clear between its two far corners)."""
     grid = PointGrid(_VERTEX_CELL)
-    grid.extend((q, q[0], q[1], q[0], q[1]) for poly in fab for q in poly)
+    grid.extend((a, b, min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])) for poly in fab for a, b in zip(poly, [*poly[1:], poly[0]], strict=True))
     return grid
 
 
-def _clear_within(run: Poly, verts: PointGrid, cap: float) -> float:
-    """The least distance from a filed fabric vertex to the polyline `run`, or `cap` where none is nearer - the old scan's
-    `min(seg_dist(vertex, segment))` over every vertex and segment, clamped at `cap` (feature 306).
+def _seg_gap(a: Pt, b: Pt, c: Pt, d: Pt) -> float:
+    """The least distance between the segments `ab` and `cd`: 0 where they cross, else the least of the four end-to-segment
+    distances."""
+    if segments_cross(a, b, c, d):
+        return 0.0
+    return min(seg_dist(c[0], c[1], a, b), seg_dist(d[0], d[1], a, b), seg_dist(a[0], a[1], c, d), seg_dist(b[0], b[1], c, d))
 
-    Exact below `cap`: a vertex within `cap` of a segment is within `cap` of its nearest point on it, which lies within half
-    a sample step (at most half a cell) of a sample taken every `<= cell` along the segment - so the query padded by
-    `cap + cell / 2` (and a pixel for rounding) at each sample cannot omit it, and the same `seg_dist` on the same floats
-    decides. A vertex returned twice only repeats a distance."""
+
+def _clear_within(run: Poly, edges: PointGrid, cap: float) -> float:
+    """The least distance from a filed fabric edge to the polyline `run`, or `cap` where none is nearer - the full scan's
+    `min(_seg_gap(edge, segment))` over every edge and segment, clamped at `cap` (feature 306; edges since 405 T84).
+
+    Exact below `cap`: an edge within `cap` of a segment has a point within `cap` of the segment's nearest point to it, which
+    lies within half a sample step (at most half a cell) of a sample taken every `<= cell` along the segment - so the edge's box
+    comes within `cap + cell / 2` of that sample, and the query padded by that (and a pixel for rounding) cannot omit it; the same
+    `_seg_gap` on the same floats decides. An edge returned twice only repeats a distance."""
     best = cap
-    pad = cap + verts.cell / 2.0 + 1.0
+    pad = cap + edges.cell / 2.0 + 1.0
     for a, b in zip(run, run[1:], strict=False):
-        n = max(1, math.ceil(math.dist(a, b) / verts.cell))
+        n = max(1, math.ceil(math.dist(a, b) / edges.cell))
         seen: set[int] = set()
         for k in range(n + 1):
-            for item in verts.near(a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n, pad):
+            for item in edges.near(a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n, pad):
                 if id(item) not in seen:
                     seen.add(id(item))
-                    q = item[0]
-                    best = min(best, seg_dist(q[0], q[1], a, b))
+                    best = min(best, _seg_gap(a, b, item[0], item[1]))
     return best
 
 

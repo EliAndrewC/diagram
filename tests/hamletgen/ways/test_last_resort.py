@@ -172,7 +172,7 @@ def test_a_web_gone_still_with_a_rule_only_the_tree_breaks_is_refused_by_name_ne
     assert [ln.get("role") for ln in s.M["lanes"]] == [None, co.TARGET_ROLE], "no tree lane dropped"
     # ...and without the exit's question the still round shipped it: the hole this closes
     shipped = _strip_doubled_on_the_connector()
-    monkeypatch.setattr(settle, "unsettled", lambda M, ground=None: {})
+    monkeypatch.setattr(settle.stage, "unsettled", lambda M, ground=None: {})
     got = settle.settle_the_web(shipped)
     assert got["rounds"] == 1 and got["changed"] == 0 and law.doubled_tails(shipped.M) == [1]
 
@@ -183,7 +183,7 @@ def test_a_web_gone_still_with_an_ordinary_lane_breaking_a_rule_against_the_tree
     needle = [(-50.0, 150.0), (-120.0, 10.0), (-153.6, 0.4)]
     s = _S([CONN, needle])
     assert law.needle_joins(s.M["lanes"]), "the violating case"
-    monkeypatch.setattr(settle, "STEPS", (settle.settle_husks,))
+    monkeypatch.setattr(settle.stage, "STEPS", (settle.settle_husks,))
     got = settle.settle_the_web(s)
     assert got["rounds"] == 1 and got["changed"] == 0 and got["dropped"] == 1
     assert settle.unsettled(s.M) == {} and len(s.M["lanes"]) == 1 and s.M["lanes"][0]["connector"]

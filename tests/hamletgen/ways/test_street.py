@@ -129,10 +129,11 @@ def test_a_street_is_cut_to_its_outermost_joints() -> None:
     s = Settlement(400, 200, seed=1)
     s.meta(name="V", scale="hamlet", ftpx=1)
     for pts, w, extra in (
-        (street, 6, {"street": True, "street_index": 0}),
+        (street, 6, {"street": True, "street_index": 1}),
         ([(50.0, 2.0), (50.0, 60.0)], 3, {"serves": [50.0, 90.0]}),
         ([(250.0, -3.0), (250.0, -60.0)], 3, {"serves": [250.0, -90.0]}),
         ([(0.0, 150.0), (300.0, 150.0)], 3, {}),
+        ([(0.0, 190.0), (300.0, 190.0)], 6, {"street": True, "street_index": 0}),  # the row's first street, passed by
     ):
         s.lane(list(pts), width=w)
         s.M["lanes"][-1].update(extra)
@@ -346,3 +347,18 @@ def test_new_needles_names_only_the_slivers_the_run_closes() -> None:
     got = new_needles(base, [(0.0, 0.0), (50.0, 3.0), (100.0, 0.0)])
     assert len(got) == 1 and abs(got[0][0] - 50.0) < 5.0
     assert new_needles([*base, {"pts": [(0.0, 0.0), (50.0, 3.0), (100.0, 0.0)]}], [(300.0, 0.0), (300.0, 200.0)]) == []
+
+
+def test_the_row_s_first_street_is_never_cut_by_the_trim() -> None:
+    """405 T54 (D63): the first street (the lowest `street_index` drawn, the one that met the road) runs on off the map as the
+    road into it (0033), so `trim_streets` passes it by, joints or none; a map with no street has no first."""
+    from l7r.diagram.hamletgen.ways.street import first_street, trim_streets
+
+    street = [(0.0, 0.0), (100.0, 0.0), (200.0, 0.0), (300.0, 0.0)]
+    s = Settlement(400, 200, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1)
+    for pts, w, extra in ((street, 6, {"street": True, "street_index": 0}), ([(50.0, 2.0), (50.0, 60.0)], 3, {}), ([(250.0, -3.0), (250.0, -60.0)], 3, {})):
+        s.lane(list(pts), width=w)
+        s.M["lanes"][-1].update(extra)
+    assert first_street(s.M["lanes"]) == 0 and first_street([]) is None
+    assert trim_streets(s, 4.0) == 0 and s.M["lanes"][0]["pts"][-1][0] == 300.0, "two joints on it, and still whole"

@@ -813,3 +813,16 @@ def test_a_link_off_a_way_walks_on_to_its_house() -> None:
     sweeps._sweep_dangling_ends(s)
     end = s.M["lanes"][1]["pts"][-1]
     assert end[1] <= 44.0, "walked on to its closest approach to the house (y 40), not held at the 60 ft edge of the way it left"
+
+
+def test_the_sweep_reads_a_farm_band_rotated_as_the_door_path_does() -> None:
+    """405 T83: the sweep built each band's box unrotated while `lay_door_paths` reads it at its `rot`, so the two disagreed on
+    where a turned farm's wood stood. A band 40 by 10 turned 90 degrees stands 10 wide and 40 deep; a copse with no width is
+    no farm's band."""
+    import pytest
+
+    from l7r.diagram.hamletgen.ways import sweeps as _sw
+
+    (band,) = _sw.farm_bands({"groves": [{"x": 100.0, "y": 100.0, "w": 40.0, "h": 10.0, "rot": 90.0}, {"x": 0.0, "y": 0.0}]})
+    xs, ys = [p[0] for p in band], [p[1] for p in band]
+    assert max(xs) - min(xs) == pytest.approx(10.0) and max(ys) - min(ys) == pytest.approx(40.0)

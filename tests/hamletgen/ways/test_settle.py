@@ -292,8 +292,9 @@ def test_a_street_s_dangling_end_is_cut_back_to_its_last_joint() -> None:
     """`settle_street_ends` (feature 293 on 291, cohort seed 903): a row's street, a tree lane, has the end the law calls
     dangling cut back to its last joint - the door path's; a map with no street, or a street no end dangles on, is left."""
     street = ([(0.0, 0.0), (0.0, 200.0), (0.0, 600.0)], {"w": 6})
-    s = _S([CONN, street, [(0.0, 200.0), (80.0, 200.0)], [(-300.0, 0.0), (-300.0, 200.0)]], houses=[(100.0, 200.0)])
-    s.M["lanes"][1].update({"street": True, "street_index": 0})
+    s = _S([CONN, street, [(0.0, 200.0), (80.0, 200.0)], [(-300.0, 0.0), (-300.0, 200.0)], ([(-500.0, -500.0), (-500.0, -400.0)], {"w": 6})], houses=[(100.0, 200.0)])
+    s.M["lanes"][1].update({"street": True, "street_index": 1})
+    s.M["lanes"][-1].update({"street": True, "street_index": 0})  # the row's first street, which the settle passes by
     assert {(1, -1), (3, -1)} <= set(law.dangling_lane_ends(s.M)), "the street's end, and an ordinary lane's"
     assert settle.settle_street_ends(s) == 1
     assert _pts(s, 3)[-1] == (-300.0, 200.0), "an ordinary lane is the other repairs' to trim"
@@ -309,9 +310,10 @@ def test_a_street_s_dangling_end_keeps_the_last_farm_it_serves(monkeypatch: pyte
     """385 T127 (405 T13, D22): a farm the street serves without a door path stands past its last lane joint - the end is cut
     back to that farm's point (`street_anchors`, as the web's trim reads it), not to the joint before it."""
     street = ([(0.0, 0.0), (0.0, 200.0), (0.0, 600.0)], {"w": 6})
-    s = _S([CONN, street, [(0.0, 200.0), (80.0, 200.0)]], houses=[(100.0, 200.0)])
-    s.M["lanes"][1].update({"street": True, "street_index": 0})
-    monkeypatch.setattr(settle, "street_anchors", lambda s: [(0.0, 400.0)])
+    s = _S([CONN, street, [(0.0, 200.0), (80.0, 200.0)], ([(-500.0, -500.0), (-500.0, -400.0)], {"w": 6})], houses=[(100.0, 200.0)])
+    s.M["lanes"][1].update({"street": True, "street_index": 1})
+    s.M["lanes"][-1].update({"street": True, "street_index": 0})  # the row's first street, which the settle passes by
+    monkeypatch.setattr(settle.ends, "street_anchors", lambda s: [(0.0, 400.0)])
     assert settle.settle_street_ends(s) == 1
     assert _pts(s, 1)[-1] == pytest.approx((0.0, 400.0)), "kept to the farm it serves"
 
@@ -320,9 +322,10 @@ def test_a_street_s_dangling_end_stops_where_it_crosses_a_way(monkeypatch: pytes
     """405 T49 (D26, T13's round): a street crossing a way mid-run and dangling past it ends at the crossing, on the way
     (0246 section 6), not back at the joint before it."""
     street = ([(0.0, 0.0), (0.0, 200.0), (0.0, 600.0)], {"w": 6})
-    s = _S([CONN, street, [(0.0, 200.0), (80.0, 200.0)], [(-100.0, 450.0), (100.0, 450.0)]], houses=[(100.0, 200.0)])
-    s.M["lanes"][1].update({"street": True, "street_index": 0})
-    monkeypatch.setattr(settle, "street_anchors", lambda s: [])
+    s = _S([CONN, street, [(0.0, 200.0), (80.0, 200.0)], [(-100.0, 450.0), (100.0, 450.0)], ([(-500.0, -500.0), (-500.0, -400.0)], {"w": 6})], houses=[(100.0, 200.0)])
+    s.M["lanes"][1].update({"street": True, "street_index": 1})
+    s.M["lanes"][-1].update({"street": True, "street_index": 0})  # the row's first street, which the settle passes by
+    monkeypatch.setattr(settle.ends, "street_anchors", lambda s: [])
     monkeypatch.setattr(settle.law, "dangling_lane_ends", lambda M, ground: [(1, -1)])
     assert settle.settle_street_ends(s) == 1
     assert _pts(s, 1)[-1] == pytest.approx((0.0, 450.0)), "ended on the way it crosses"
@@ -811,7 +814,7 @@ def test_an_ordinary_join_that_would_break_a_rule_against_the_tree_is_taken_back
     END = 200.0 - (law.JOIN_REACH_FT - 5.0)  # an end 5 ft inside the join reach of the way at y = 200
     s = _S([CONN, [(-100.0, 0.0), (-100.0, END)], [(-200.0, 200.0), (0.0, 200.0)]])
     assert [i for i, _e, _f in law.near_misses(s.M)] == [1]
-    monkeypatch.setattr(settle, "tree_faults", lambda M: [(1, (-100.0, 200.0))] if len(M["lanes"][1]["pts"]) > 2 else [])
+    monkeypatch.setattr(settle.ends, "tree_faults", lambda M: [(1, (-100.0, 200.0))] if len(M["lanes"][1]["pts"]) > 2 else [])
     assert settle.settle_joins(s) == 1
     got = _pts(s, 1)
     assert got[0] == (-100.0, 0.0) and got[-1][1] == pytest.approx(END - law.JOIN_REACH_FT - settle.JOIN_BACK_PAD_FT), "taken back"
@@ -860,7 +863,7 @@ def test_a_dangling_lane_its_trim_cannot_mend_goes_whole(monkeypatch: pytest.Mon
     """Feature 297 (research R11): Inashiro's two-point skeleton lane dangled through every round - its trim gave it back
     unchanged - until the last resort dropped it. The docstring's promise, kept: it goes at the step."""
     s = _S([CONN, [(-50.0, 0.0), (-50.0, 300.0)]], houses=[(-50.0, 120.0)])
-    monkeypatch.setattr(settle, "_trim_to_service", lambda way, *a, **k: way)
+    monkeypatch.setattr(settle.ends, "_trim_to_service", lambda way, *a, **k: way)
     monkeypatch.setattr(settle.law, "dangling_lane_ends", lambda M, ground=None: [(1, -1)])
     assert settle.settle_dangling(s) == 1
     assert len(s.M["lanes"]) == 1 and s.M["lanes"][0].get("connector")
@@ -964,3 +967,13 @@ def test_a_bare_point_is_no_field_run_and_a_fold_is_named(monkeypatch: pytest.Mo
     monkeypatch.setattr(settle.law, "needle_ends", lambda tl, blocked: [])
     monkeypatch.setattr(settle.law, "folded_joint_pairs", lambda tl, blocked: [(len(tl) - 1, 0, 0, 0)])
     assert settle.Lawful(_S([CONN])).fault([(-240.0, 0.0), (-250.0, 290.0)], 3.0) == "folded_joints"
+
+
+def test_the_first_street_is_never_pulled_back() -> None:
+    """405 T54 (D63): 0033 runs the row's first street on off the map as the road into it, so the settle never cuts its end,
+    dangling or not - a further street's dangling end is 0246's pull-back (a GUESS)."""
+    street = ([(0.0, 0.0), (0.0, 200.0), (0.0, 600.0)], {"w": 6})
+    s = _S([CONN, street, [(0.0, 200.0), (80.0, 200.0)]], houses=[(100.0, 200.0)])
+    s.M["lanes"][1].update({"street": True, "street_index": 0})
+    assert (1, -1) in law.dangling_lane_ends(s.M), "the first street's end dangles"
+    assert settle.settle_street_ends(s) == 0 and _pts(s, 1)[-1] == (0.0, 600.0), "and is left to run on"

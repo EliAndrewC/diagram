@@ -116,7 +116,7 @@ def test_a_door_path_the_law_refuses_taut_is_routed_at_the_law_s_own_gap(monkeyp
     monkeypatch.setattr(serve, "pulled", lambda p, ok: list(p))
     monkeypatch.setattr(serve, "door_unhooked", lambda p, ok: list(p))
     monkeypatch.setattr(serve, "to_first_arrival", lambda p, segs, gap, ok: list(p))
-    monkeypatch.setattr(settle, "square_run", lambda M, p: list(p))
+    monkeypatch.setattr(settle.lawful, "square_run", lambda M, p: list(p))
     asked: list[list] = []
 
     class _Law:
@@ -168,7 +168,7 @@ def test_a_door_path_keeps_the_room_off_a_grove_however_it_was_found(monkeypatch
     monkeypatch.setattr(serve, "pulled", lambda p, ok: list(p))
     monkeypatch.setattr(serve, "door_unhooked", lambda p, ok: list(p))
     monkeypatch.setattr(serve, "to_first_arrival", lambda p, segs, gap, ok: list(p))
-    monkeypatch.setattr(settle, "square_run", lambda M, p: list(p))
+    monkeypatch.setattr(settle.lawful, "square_run", lambda M, p: list(p))
 
     class _Law:
         def __call__(self, path, width):

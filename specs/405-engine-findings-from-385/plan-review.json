@@ -1118,62 +1118,62 @@
    "declared": "spec-fidelity"
   },
   "### T54 Approach (checklist part A)": {
-   "sha256": "822ca95b354b03f58566800a89bc3f7cbe748fffc7a5e0bb5d7d63e38a5a48b2",
-   "verdict": "BLOCKED",
+   "sha256": "c6e41d90d120cc3235e353ba6b6d777b11e78c13f803569cafcb68be44793573",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T54 Decisions": {
-   "sha256": "502599dffaeb5c9b52bfabe376c600b5b27a12c625011d4c959eddcc4a50c868",
-   "verdict": "BLOCKED",
+   "sha256": "b54db55b4355177e6a54fff3786f133015a595d58e73c097585c52742f4f076d",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T83 Approach (checklist part A)": {
    "sha256": "e072eac947d0512468ed212ffc2ec8dc15b01559944c9e812069d44d31f9cce4",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T83 Decisions": {
    "sha256": "e2a4472f2a9170c688f407176d0a8f13162184b49af071334932eb630a3baa86",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T84 Approach (checklist part A)": {
    "sha256": "28eb0620e4f2455eb996a4472aa88814f26b5d550d646d6aa4b5dfc813f7e49d",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T84 Decisions": {
    "sha256": "01b9c94f7721b9c5ae782e2e6b28a79b23e17ddb912e6e9f39173bb56627cce2",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T85 Approach (checklist part A)": {
    "sha256": "4c55101375ad2f069a1b03278e1ef9b730b0a5df41ac41a8eae083fd15937533",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T85 Decisions": {
    "sha256": "9e9980e34e37327340a49bee304c59a74e23b07a70adbb1410527c107ba47f85",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T87 Approach (checklist part A)": {
    "sha256": "72bcc5699a27313cfbabbea1490d7990a81e5e51e743e7a426b91ce9dfb010ba",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T87 Decisions": {
    "sha256": "ee8b2482264f7a403e4210a2aea9574dc6256a75cbff3f63b74505922001b48c",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   }
@@ -2702,6 +2702,60 @@
      "summary": "archivable uses _section_clear with the plan's history in place of the exact digest",
      "class": "within",
      "why": "This is work found on 405's own T81 and stays here under FR-002. It makes the archive read a block the same way the decide guard does, and it narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "### T54 Approach (checklist part A)",
+    "### T54 Decisions",
+    "### T83 Approach (checklist part A)",
+    "### T83 Decisions",
+    "### T84 Approach (checklist part A)",
+    "### T84 Decisions",
+    "### T85 Approach (checklist part A)",
+    "### T85 Decisions",
+    "### T87 Approach (checklist part A)",
+    "### T87 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D63",
+     "summary": "trim_streets AND settle_street_ends both pass by the row's first street (lowest drawn street_index, the one that took the road); a further street is still cut to its joints / last joint under 0246 GUESS; claims labeled accordingly.",
+     "class": "within",
+     "why": "Follows 0033 ('the street runs on off the map as the road into it') with no exception. The earlier text's carve-out (settle_street_ends still cutting a first street's dangling end under 0246) is gone; 0246's pull-back is applied only to further streets, whose ends 0033 does not speak to, so it fills a gap rather than overriding the research. Amendment 7 asks that research be followed; a seed that needed the old cut becoming a cohort failure is the consequence of following it, not a narrowing."
+    },
+    {
+     "id": "T54 Approach 5/9",
+     "summary": "Order and done-check extended to cover the settle as well as the trim (tests that the first street is never cut by either).",
+     "class": "within",
+     "why": "Enforces D63; verification of the task's own subject."
+    },
+    {
+     "id": "D64",
+     "summary": "_sweep_dangling_ends builds grove bands as rot_rect with the recorded rot, ungrown; stale 'unrotated' comment removed; test with a rotated band.",
+     "class": "within",
+     "why": "Corrects the sweep to the band's true footprint so it agrees with lay_door_paths, per 0036/0033 (no lane through a farm's own wood). Ungrown is the sweep's own question (does a carry cross the wood), not a reduction of anything asked."
+    },
+    {
+     "id": "D65",
+     "summary": "_clear_within measures run segments against fabric EDGES (segment-to-segment, 0 where crossing) via a PointGrid of edge boxes, exact below the cap; oracle test becomes segment-to-segment; maps may change.",
+     "class": "within",
+     "why": "Closes the gap where a run past a long fence's middle read clear, making the splice honor 0246 section 41 and _join_piece's rule along edges, not only corners. Stricter, not narrower."
+    },
+    {
+     "id": "D66",
+     "summary": "_touch_junctions reads an unwidthed lane as 3 ft (three places), matching _one_network and _join_piece and 0246 section 43.",
+     "class": "within",
+     "why": "Aligns with the research's 3 ft footpath; bars unchanged below 10 ft, stroke narrows to the drawn tread. No case excepted."
+    },
+    {
+     "id": "D67",
+     "summary": "archivable uses _section_clear with the plan's history instead of an exact per-block digest, so the archive reads a block as the decide guard does; test red before.",
+     "class": "within",
+     "why": "Tooling consistency fix in a feature whose amendments directed process/tooling work and completion of all open tasks; it widens nothing beyond the guard's existing T81 tolerance and excepts no case."
     }
    ]
   }
