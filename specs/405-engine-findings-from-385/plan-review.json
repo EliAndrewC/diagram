@@ -1076,7 +1076,7 @@
    "declared": "spec-fidelity"
   },
   "### T20 Decisions": {
-   "sha256": "c507c98c8590b7cc2df0459a9dfbd337fbab277c115aef06e6cde2121975ae20",
+   "sha256": "11e0062136a04a80de66df1983dc04ab2bf77bb96563e07d9a00b7539bafe61a",
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
@@ -1088,7 +1088,7 @@
    "declared": "spec-fidelity"
   },
   "### T08 Decisions": {
-   "sha256": "618ad21add141e9c14b5688d1bf5064d623a94df82c08cb3b5174cef7e07941d",
+   "sha256": "17f2194334aa22dc9814f7a52a9f7bb0fee8d1ce50bce40d00f90f98bf87d9e5",
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
@@ -1100,7 +1100,19 @@
    "declared": "spec-fidelity"
   },
   "### T10 Decisions": {
-   "sha256": "d2d8f5f2af4a113864dcac3afcc6b0a4eed63f9845e2d1bc11868248b31e04e8",
+   "sha256": "f765ac984f2bcfd10a042187f2ef9cf56b596c60edb5cc68c515a51e9a69b902",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T20 Approach (re-answered 2026-10-21T15:19Z)": {
+   "sha256": "5e2245812e60942e78c3ec22968356edb92430f5d6aeb5244b9dbace28bb90eb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T08 Approach (re-answered 2026-10-21T15:19Z)": {
+   "sha256": "7d4a49a34c4d5bede3bad65fb1361c90aa620d43ccb63064d9afdf506e2f0202",
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
@@ -2526,6 +2538,49 @@
      "summary": "T10: connector_dry_exit claims 'no drawn channel crossed' as a DEVIATION from 0084 - the fill lays no plank, keeps to ground between channels, and refuses a gateway with no such way (NoDryExit, re-seated per 287 W23).",
      "class": "within",
      "why": "0084 permits a plank and does not require one, so the code's choice does not contradict the research; it is labeled DEVIATION conservatively and the reason (re-seating already handles the refused gateway) is stated. A claim exit (a) on 385 T120's finding; it settles the task rather than excepting any part of the GM's request, and asks the GM no research ruling, as Amendment 7 hoped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "### T08 Approach (re-answered 2026-10-21T15:19Z)",
+    "### T08 Decisions",
+    "### T10 Decisions",
+    "### T20 Approach (re-answered 2026-10-21T15:19Z)",
+    "### T20 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D60",
+     "summary": "T20's claim is corrected to what trim_streets does: the joints' touch (caller's 4 ft _TOUCH_GAP, CONVENTION; a door's nearest point within reach a joint) and a field path's end a joint (0246); settle_street_ends its 4 ft touch; the untrue bund clause (end_serves never asked) dropped; no code token changes.",
+     "class": "within",
+     "why": "A claims task worked under Amendment 7 ('working all of the remaining open tasks'); dropping a clause the code does not do makes the claim true rather than narrowing any requested behavior. Words only, as the earlier CLEAR D60 already was."
+    },
+    {
+     "id": "T20-approach",
+     "summary": "T20's re-answered approach: the constraints checked against the code (bund clause untrue, 1 ft anchor not read), exit (a) claim words only, done when the claims round reads IN-STEP.",
+     "class": "within",
+     "why": "Restates D60's basis; settles nothing the request or spec leaves open beyond it."
+    },
+    {
+     "id": "D61",
+     "summary": "T08 adds no claim: lay_door_paths' existing claim 'every grove farm reached at its door' (0246, 0081) already covers whose farm gets a door path; the earlier 'door path wherever no way arrives' (GUESS 0033 with 0246) is withdrawn as a duplicate, and 0033's near-row case is read as one of 0246's.",
+     "class": "within",
+     "why": "The task is worked to completion: the behavior carries an accurate, research-sourced claim, the existing one. Replacing a GUESS with the research's own answer is what Amendment 7 asks ('follow the research ... generally what we should do'). No requested behavior or claim coverage is lost."
+    },
+    {
+     "id": "T08-approach",
+     "summary": "T08's re-answered approach: the new claim duplicated the unit's own and 0246 answers it; exit (a) claim words only.",
+     "class": "within",
+     "why": "Restates D61's basis."
+    },
+    {
+     "id": "D62",
+     "summary": "The earlier DEVIATION claim ('no drawn channel crossed', DEVIATION 0084) is withdrawn because 0084 section 116 draws a deck where a way crosses a ditch, so the research expects the crossing the fill refuses; T10 stays open, re-scoped to the deck crossing as a code task, not landed with this batch.",
+     "class": "within",
+     "why": "Nothing is dropped: T10 stays open within the feature Amendment 7 asks to be taken to completion, and is re-scoped toward following the research rather than recording a departure the source does not record - the direction Amendment 7 states. Landing it after this batch is ordering, not a narrowing of what is done."
     }
    ]
   }
