@@ -28314,12 +28314,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::settle_street_ends#an end reaches something seen": {
-  "body": "fc789b6ffe07a18f",
-  "claim": "an end reaches something seen - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a street's dangling end cut to its last joint, a lane's end or the last farm it serves",
-  "code": "8005b4aa8f67004a",
-  "core": "43b71773138564c1",
+  "body": "b94f3175c952c128",
+  "claim": "an end reaches something seen - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a street's dangling end cut to its last joint, a lane's end, a way it crosses or the last farm it serves",
+  "code": "343a419ab764a759",
+  "core": "816833b9e24dbed5",
   "date": "2026-10-21",
-  "note": "the code cuts a dangling street end back to its last joint (another lane's end or a served farm's point), which matches \"a lane end that reaches nothing is pulled back to the last house it serves\" or ends at \"another way\"; the 4 ft _TOUCH_GAP is only a snapping tolerance",
+  "note": "a dangling street end is cut back to its last joint (another lane's end, a crossing with a way, or a served farm's point). That matches \"runs on to ... another way\" and \"pulled back to the last house it serves\". _TOUCH_GAP is a snapping tolerance, not a reach figure.",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
