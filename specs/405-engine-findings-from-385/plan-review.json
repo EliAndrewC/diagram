@@ -564,6 +564,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
+  },
+  "### T103 part B (2026-10-21T19:30Z)": {
+   "sha256": "42f0a0770ea33b0f508ce3eecb7f92687de6e27a160f3d6aef3ebc2daae8bda0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2673,6 +2679,39 @@
      "summary": "order: shed_off_a_wall, house-only wall places, roll filed as T106, claims, tests, seeds 1-48 and the pool; done = refusal tests plus Sawada pool tests passing without the roll",
      "class": "within",
      "why": "Implements D78a-d and the FR-001 checklist; no new scope and no narrowing beyond D78c."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "### T103 part B (2026-10-21T19:30Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T103-B.5a",
+     "summary": "T26's engine change (D78's wood-shed seat code and the pool) is set down, restored to main's, while the knots-versus-gap conflict it exposed is resolved; T26 and T106 stay open and wait on the new task.",
+     "class": "within",
+     "why": "A deferral, not a drop: T26 stays an open task of this feature, so Amendment 7's 'take this feature to completion' is still owed in full and D78 is unchanged as a requirement. Reordering work inside the feature is sequencing the request leaves to the session."
+    },
+    {
+     "id": "T103-B.5b",
+     "summary": "T107 filed in this feature for the conflict between the knots step's gathers (0246's 7 ft garden clearance, T18) and the gap, which T26's moved farms exposed.",
+     "class": "within",
+     "why": "FR-002 and the GM's 2026-10-19 words ('keep findings on code a task didn't change as new tasks'): the conflict sits in the knots step, which T26 did not change, so filing it as a new task here is what the request prescribes."
+    },
+    {
+     "id": "T103-B.5c",
+     "summary": "T103 lands alone, without T26, its next step being make land on main's engine.",
+     "class": "within",
+     "why": "Each task is landed as worked (FR-001); landing the one task that passes while the blocked one waits does not narrow any task's scope."
+    },
+    {
+     "id": "T103-B.8",
+     "summary": "Neither measured T26 route (with or without the household's seat roll) is offered, as both expose the same conflict.",
+     "class": "within",
+     "why": "Declines to ship a route that fails the cohort; D78 already keeps the roll out (filed as T106), and nothing of D78's requirement is relaxed."
     }
    ]
   }
