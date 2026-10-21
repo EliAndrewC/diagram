@@ -594,6 +594,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
+  },
+  "### T67 Approach (checklist part A)": {
+   "sha256": "a81b08bec00279bd9f56c0f3b1e803b5ffa05b95ab63177c35d3aff4cce9b791",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T67 Decisions": {
+   "sha256": "2236da65c1c0a5929c77b755daa77ee94b1933cee378830e67e7c0db03f511b7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2792,6 +2804,52 @@
      "summary": "Done is a test that the third fill runs only where the other two find no way (channels opened, brook not), plus seeds 1-48 and the pinned rows passing",
      "class": "within",
      "why": "Verification of the change the task makes, as FR-001 has each task worked by 385's checklist; it enforces the decision rather than adding scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "### T67 Approach (checklist part A)",
+    "### T67 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D82",
+     "summary": "on_course (both ends within 1 ft of the brook's course) sorts the fill's lines; gap_segments opens only the brook's lines at its crossing places; the drawn channels and drain stay whole until T10's last fill drops them",
+     "class": "within",
+     "why": "Corrects 385's found row (every line within FORD_HALF of a crossing place gapped, channels and drain too) to what 0035 records - crossing places on the brook. That follows the research, as Amendment 7 asks; it settles nothing the request left open and narrows nothing."
+    },
+    {
+     "id": "T67-A5-0081",
+     "summary": "the track past the wet ground's end claimed on 0081, its flank labeled a GUESS",
+     "class": "within",
+     "why": "Claims an unclaimed rule from the record and labels the unrecorded part honestly; FR-001's checklist work, no carve-out."
+    },
+    {
+     "id": "T67-A5-start",
+     "summary": "the start walked clear of the bands labeled UNRESEARCHED",
+     "class": "within",
+     "why": "Found row: no claim for the moved start. An honest UNRESEARCHED label answers it without dropping the behavior or the finding."
+    },
+    {
+     "id": "T67-A5-0036",
+     "summary": "clear_of_bands claimed on 0036 rather than UNRESEARCHED",
+     "class": "within",
+     "why": "Found row: 0036 bears on it but it was unclaimed. Claiming it on the record is following the research."
+    },
+    {
+     "id": "T67-A5-FORD_HALF",
+     "summary": "FORD_HALF stays 30 ft, its citation to 0035 replaced by UNRESEARCHED",
+     "class": "within",
+     "why": "0035 records no length, so there is no research figure to follow; correcting a false citation to an honest label fixes the finding and keeps the constant (Approach item 10: no constant moves). Not an exception to anything asked."
+    },
+    {
+     "id": "T67-A5-test",
+     "summary": "a test that a channel beside a crossing place stays whole while the fill opens at the crossing places; seeds 1-48 and the pinned rows",
+     "class": "within",
+     "why": "Verification that only fails when D82's fix is absent - enforcement of the task, not added scope."
     }
    ]
   }
