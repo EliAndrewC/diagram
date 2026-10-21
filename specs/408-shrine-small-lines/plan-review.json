@@ -1,0 +1,224 @@
+{
+ "feature": "408-shrine-small-lines",
+ "blocks": {
+  "preamble": {
+   "sha256": "49a8098d086e660f914d0d372f512fa86c120c89cb81a5fe54eae4be2e877b1a",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "5b347e9974f3ead3477a31b75e621d75ccec2c5511d67cca4db3baadae6ca918",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "47ff16a77a458b8d308f5846f362b2a531985e90c341c1ea637b796c49b273de",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "99fbdeccbfbd66edf40fe2ec6f1c5aadb8e5ec75d91b966d48c7b6412a810289",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - the questions, by write session (FR-001, FR-002, FR-005)": {
+   "sha256": "7daf11c88f1533df5cd25ba02008333287f6f1ef2fa6d297f589f4f7f4685315",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - the implementation check (FR-003)": {
+   "sha256": "35f5a159f5d674ee8ac9edfea7d9d2a56ea7ece53b289a44f645f4b289100523",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - the reply (FR-001, FR-004, FR-005)": {
+   "sha256": "fd1eb5000a1a4b95a6eea5cd72f9cd0f6f3cc236f4780c99859409bb0655138e",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "## T - the order": {
+   "sha256": "46d7a10fa3369aca49a138def049f4c124dd8d8de931ba4bb72a5c5399653bef",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the questions, by write session (FR-001, FR-002, FR-005)",
+    "## D2 - the implementation check (FR-003)",
+    "## D3 - the reply (FR-001, FR-004, FR-005)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary-a",
+     "summary": "Answer in five existing questions (0257, 0258, 0260, 0268, 0271) rather than new ones; absences recorded as notes naming the searches that found nothing",
+     "class": "within",
+     "why": "The request asks per question for the fragment FILE, verdict and what is still open, and asks that items 0255-0258/0268-0271 already answer be named, not repeated; writing into those pages, and recording a search that found nothing as open, serves that. No line of the issue is dropped."
+    },
+    {
+     "id": "Summary-b",
+     "summary": "Two write page sessions plus one check-and-apply session (four-question cap); no code, map or canon change",
+     "class": "within",
+     "why": "Process split for a research-only request; the issue asks for no code, map or canon work."
+    },
+    {
+     "id": "TC-sources",
+     "summary": "Sources and instruments: Morisada (pid 991466) read on viewer screenshots, Bochum Yunnan/Gansu spreadsheet cells, PDFs the reader cannot open read via pdftotext or page images; passes are leads, each passage read on its page before citing",
+     "class": "within",
+     "why": "How the figures are found and verified; a Bochum spreadsheet cell as a readable source is the GM's own answer to #5 quoted in the request."
+    },
+    {
+     "id": "TC-wages",
+     "summary": "Each new figure beside the craftsman's and laborer's day wage of the same place and period where a source gives them; otherwise SILENT, with the nearest wage named by class, place, unit and gap",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The request's rule is 'each figure beside the craftsman's and laborer's day wage of the same place and period'. Where no source gives that wage the rule is physically impossible to meet; the fallback does not drop the wage column but marks it SILENT and names the nearest with its gap, which is exactly the 'what is still open' the request asks to be reported back. It does not let a session skip a wage a source does give."
+    },
+    {
+     "id": "D1-groups1-4",
+     "summary": "Group 1 (grounds) into 0257 and group 4 (porterage) into 0260; Japan answered in part by 0257's 1620 hill stone and 0260's porter fares, Edo cart hire and trailless porters SILENT; 0257's 'carrying stone a ri' points to 0260",
+     "class": "within",
+     "why": "Every group-1 and group-4 line is assigned a page; Japan is sought first with China (Qing norms, Yunnan/Gansu 1769) as comparison, as asked; what Japan lacks is reported SILENT rather than replaced by China. Naming existing 0257/0260 figures is the request's 'say so rather than repeating it' (0260 is in the accepted spec's FR-005 list; it widens the pages consulted, not what is answered)."
+    },
+    {
+     "id": "D1-groups2-3",
+     "summary": "Group 2 (carvers', sawyers' rates, Morisada signboards, 1902 Yunnan stele) into 0258, sawing into 0268; group 3 (Sannohe head mounds, ground rite, unveilings, Doolittle coffin money) into 0271, ground rite into 0258",
+     "class": "within",
+     "why": "Placement of each group's lines on a page; no group-2 or group-3 line is dropped, and SILENT lines are recorded as open."
+    },
+    {
+     "id": "D1-halls",
+     "summary": "Mortuary hall and water pavilion treated as already answered by their nearest figures (0268's worship hall and roofs, 0255's Mitake covering house), with 0271's 1803 hall added as a further nearest",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The request says 'where 0255-0258 or 0268-0271 already ANSWER an item, say so rather than repeating it'. A worship hall's figure (0268) and a covering house's (0255) do not answer a small mortuary hall or a small roofed water pavilion; the issue names those two buildings in its header and they carry the largest koku in it (7.05 + 1.3, 1.8 + 0.43). The block closes both lines as 'already answered by their nearest' and 'not rewritten', which substitutes a different building for the item. None of the MODE 1 grounds holds on the block's text: it does not record that the passes sought a direct small-hall or water-pavilion figure and found none (an unmeasured premise deciding scope), 'answer' in the GM's words does not imply 'nearest', and reporting the line as open-with-nearest would repeat nothing, so the literal rule does not defeat the request's purpose. The accepted spec's FR-005 carries 'or holds its nearest figure', which is why this passes against the spec and fails against the request. Remedy, one sentence of D1: state that the passes sought a direct figure for the mortuary hall and the water pavilion and what they found (or that they found none), and that the reply reports each of those two lines as open (SILENT for a direct figure) with 0268's worship hall and roofs, 0255's Mitake covering house and 0271's 1803 hall named as nearest, not as answering it. So written, the decision is within."
+    },
+    {
+     "id": "D1-FR005",
+     "summary": "Items an earlier fragment answers or holds the nearest for are not rewritten; the reply names the fragment and the estimate it answers",
+     "class": "within",
+     "why": "Restates the request's 'say so rather than repeating it' (FR-005)."
+    },
+    {
+     "id": "D2",
+     "summary": "implementation-check.md holds one line per changed question",
+     "class": "within",
+     "why": "Carries FR-003's closing check; no scope change."
+    },
+    {
+     "id": "D3",
+     "summary": "One comment on #10: per line of the issue, (S) lines first in each group, fragment FILE, verdict, what is still open; combined figures stated with what they cover",
+     "class": "within",
+     "why": "The request asks per question for the FILE, the verdict per figure and what is still open, and makes the (S) lines the priority; ordering (S) first serves that. 'Line' is the issue's own unit (gm-assistant's catalog lines, each an estimate figure), so per-line verdicts are per-figure verdicts. 'Combined figures with what they cover' is within only as disclosure: a source figure covering several issue lines (e.g. hall plus roof) is stated with what it covers, and each of those lines still gets its own verdict; it is not a license to give one verdict for several figures. Verifying and closing are left to gm-assistant as the issue says."
+    },
+    {
+     "id": "T",
+     "summary": "Order: page sessions, implementation check, reply, report and land by the direct route",
+     "class": "within",
+     "why": "Sequencing only."
+    },
+    {
+     "id": "CC-PB",
+     "summary": "Constitution check (XII physical research tasks, XIII record checks green, XVI built as FRs) and performance bookends N/A",
+     "class": "within",
+     "why": "Process and gate statements; no change to what is delivered."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the questions, by write session (FR-001, FR-002, FR-005)",
+    "## D2 - the implementation check (FR-003)",
+    "## D3 - the reply (FR-001, FR-004, FR-005)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary/D1 sessions",
+     "summary": "Five existing questions (0257, 0258, 0260, 0268, 0271) carry the work in two write sessions plus one check session, then the reply on #10.",
+     "class": "within",
+     "why": "Housekeeping of how the asked research is written; every group of the issue is assigned a question and nothing is dropped."
+    },
+    {
+     "id": "Technical Context - wages",
+     "summary": "Each new figure sits beside the craftsman's and laborer's day wage of the same place and period where a source gives them; otherwise the wage is SILENT and the nearest wage is named with its class, place, unit and gap.",
+     "class": "within",
+     "why": "The issue asks for each figure beside the same-place, same-period wages; where none exists, reporting SILENT and labeling the nearest as a nearest with its gap is the same nearest-is-not-an-answer rule FR-005 sets, not a narrowing."
+    },
+    {
+     "id": "D1 s2 - mortuary hall and water pavilion",
+     "summary": "Both reported OPEN, the search (霊屋, 御霊屋, 位牌堂, 手水舎, 水屋) named, 0268's worship hall and roofs, 0255's Mitake covering house and 0271's 1803 hall named as nearest figures, not answers; 0268's absence note names the search.",
+     "class": "within",
+     "why": "This is exactly FR-005 as amended and resolves round 1's NOT LEGITIMATE finding."
+    },
+    {
+     "id": "D1 s1 - group 4 Japan 'already answered in part'",
+     "summary": "Group 4's Japan side is called 'already answered in part (0257's 1620 hill stone, 0260's porter fares per stage)', with only an Edo cart hire and trailless porters SILENT.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Group 4 asks two things - hired cart near a cart road, porters into trailless forest - and the row itself marks both SILENT, so 'answered in part' names no estimate that is answered: a 1620 hill-stone price is not a cart-hire rate, and post-stage porter fares on a road are not trailless-forest porterage. These are nearest figures carried under the word 'answered', the round-1 pattern on a different line (the row is unchanged since round 1). FR-005 and the issue's 'where ... already answer an item, say so' permit 'answered' only for a figure that answers the estimate. Fix: either name the exact estimate each figure DIRECTLY answers (e.g. the 0.17 foot-trail figure, if and only if 0260's stage fare is that porterage) or report the line OPEN with 0257's 1620 stone and 0260's stage fares named as nearest, not as a partial answer, and the search in 0260's absence note."
+    },
+    {
+     "id": "D1 closing paragraph - 'Already answered' list",
+     "summary": "Answered items are not rewritten; nearest-only lines are reported OPEN with the nearest named; 'the spec's Already answered line in each group lists them, and the reply names the fragment and the estimate it answers.'",
+     "class": "within",
+     "why": "Within on the reading that 'them' is the ANSWERED items only, which FR-005 requires; the sentence is ambiguous because it follows the nearest-only clause, and should say the Already answered lines list answered items only and that nearest-only lines go to the reply as OPEN. Not ruled a narrowing on its own; noted for the s1 fix."
+    },
+    {
+     "id": "D3 - (S) lines first",
+     "summary": "The reply puts the (S) lines first in each group.",
+     "class": "within",
+     "why": "The issue's stated priority: the (S) lines are in the design the players chose."
+    },
+    {
+     "id": "D3 - combined figures with what they cover",
+     "summary": "Where a source gives a combined figure, the reply states what it covers.",
+     "class": "within",
+     "why": "Read as an addition to, not a replacement of, the per-line, per-figure verdict D3 already promises ('per line of the issue ... the verdict'); a combined figure that replaced the separate estimates' verdicts (e.g. head mound 0.25 + marker 0.37 + rite 0.2) would narrow 'the verdict per figure'."
+    },
+    {
+     "id": "D2 - implementation check",
+     "summary": "implementation-check.md holds one line per changed question.",
+     "class": "within",
+     "why": "Carries FR-003."
+    },
+    {
+     "id": "T - order",
+     "summary": "Page sessions, implementation check, reply, land by the direct route.",
+     "class": "within",
+     "why": "Sequencing only; decides nothing the request or spec left open."
+    }
+   ]
+  }
+ ]
+}
