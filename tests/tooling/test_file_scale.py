@@ -197,3 +197,10 @@ def test_both_logs_write_into_a_month_folder(tmp_path: pathlib.Path) -> None:
     files = runlog.log_files(skill, runlog.RUN_LOG)
     assert [pathlib.Path(f).name for f in files][0] == "20200101T000000000000-1.json", "sorted by stamp across layouts"
     assert len(runlog.would_have_entries(skill)) == 2
+
+
+def test_the_refusal_says_split_to_about_two_thirds_and_never_trim() -> None:
+    """Feature 405 T53 (D28, the GM 2026-10-21): T11 and T49 each trimmed a file to exactly 1,000 lines, leaving it at the bar
+    for the next edit; the refusal steers a split into submodules of about 650 lines, importers unchanged."""
+    assert "NEVER TRIM IT TO JUST UNDER THE BAR" in cfs.GUIDANCE
+    assert "about 666 lines each" in cfs.GUIDANCE and "re-exporting every name importers used" in cfs.GUIDANCE

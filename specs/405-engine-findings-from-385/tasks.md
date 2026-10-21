@@ -65,6 +65,9 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [x] T52 `make land` writes the feature's ledger rows only in its first pass, so a claims round run beside the gate (T50) leaves its impl-drift pass without a row and the push refuses - T49's row was written by hand mid-landing: write them again after the claims wait (found landing 405 T49, 2026-10-21)
       research: rendering
       verify: DONE. landed: tick_task suite green (23): the ledger rows written in the first pass and again after the claims wait, before the ticks; plan review CLEAR (D27)
+- [x] T53 Past the 1,000-line bar, split - never trim to just under it: `check-file-scale`'s refusal tells the session to make the file a package of submodules of about 650 lines each (2/3 of the bar, a guideline), its `__init__.py` re-exporting every name importers used so none of them changes, and never to fold or cut lines to land at 1,000 (T11 and T49 each did, a minute or two apiece, and the next edit pays again); the root CLAUDE.md line says so (amendment 7, the GM 2026-10-21)
+      research: rendering
+      verify: DONE. landed: test_file_scale green (18): the refusal says split to about 666 lines a submodule with a re-exporting __init__, never trim; the root CLAUDE.md says the same; plan review CLEAR (D28)
 - [ ] T45 The reference-settlement message (`_reference` in the Makefile) still offers `GATE_NO_CACHE=1 rolls it`, but the roll census refuses that run's re-rolls (T11's 05:02 gate): let the census accept a declared no-cache run, or stop offering it (the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z) [lands-open]
       research: rendering
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]

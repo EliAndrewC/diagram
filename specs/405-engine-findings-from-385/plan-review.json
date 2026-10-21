@@ -550,6 +550,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
+  },
+  "## T53 - split at the file bar, never trim to it (amendment 7)": {
+   "sha256": "ae28bb9dea9cc6af6ac3007c35a02af8d21819484e2f4d03817cd0252404add3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T53 Approach (checklist part A)": {
+   "sha256": "3404ff23a8ae98da7c45e7244a4a2436b7a3219c6c2493b7e514a939346c8e4f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T53 Decisions": {
+   "sha256": "434b0fd30e67eb1c8821ee26117358d6bac1618dc781fa601e37be49a505fed8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1184,6 +1202,59 @@
      "summary": "The landing writes what it can write; one test that rows are written again after the claims wait, before ticks and push",
      "class": "within",
      "why": "Enforces the task's own goal; the ledger refusal still stands for any row the landing cannot write, so no requirement is relaxed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T53 - split at the file bar, never trim to it (amendment 7)",
+    "### T53 Approach (checklist part A)",
+    "### T53 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D28a",
+     "summary": "check-file-scale's refusal (GUIDANCE) tells the session to split the file now into submodules and never fold or cut lines to land just under the bar",
+     "class": "within",
+     "why": "Amendment 7 verbatim: 'we should have the automated check that fails instruct us to split the file into multiple submodules' and 'we should not attempt to bring ourselves to just below that limit'."
+    },
+    {
+     "id": "D28b",
+     "summary": "about 650 lines a submodule (2/3 of the bar) stated as a guideline in the message, not enforced by a check (exit (c))",
+     "class": "within",
+     "why": "GM: 'about 2/3 the size of the limit. So, you know, around 650 lines or so. Now that second thing doesn't need to be a hard limit'."
+    },
+    {
+     "id": "D28c",
+     "summary": "the package's __init__.py re-exports every name importers used, so no importer changes",
+     "class": "within",
+     "why": "GM's landing.py -> landing/ example: '__init__.py exposes everything which had previously been imported directly from the single file then nothing which uses that module needs to change'."
+    },
+    {
+     "id": "D28d",
+     "summary": "a test pins the refusal's words (the ~650 submodules, the re-exporting __init__.py, the rule against trimming)",
+     "class": "within",
+     "why": "Enforcement of the requested instruction only: delete the requested message and the test has nothing to check."
+    },
+    {
+     "id": "D28e",
+     "summary": "the root CLAUDE.md's file-bar line says the same in one sentence",
+     "class": "within",
+     "why": "The GM framed this as 'a general guideline'; stating the same guideline where sessions read the bar adds no behavior beyond the request and narrows nothing."
+    },
+    {
+     "id": "D28f",
+     "summary": "the bar stays 1,000 lines and Principle X clause 13's two carve-outs (ordered data, a derived roster) stay",
+     "class": "within",
+     "why": "GM: 'even though the limit is 1,000 lines'; the instruction is triggered 'anytime we exceed 1,000 lines in a file, because that fails' - carved-out files do not fail, so the request does not reach them, and keeping them changes nothing the GM asked to change."
+    },
+    {
+     "id": "Approach-scope",
+     "summary": "the task changes the check's message and the guideline only; web.py and settle.py, which stand at exactly 1,000 after earlier trims, are not split by this task",
+     "class": "within",
+     "why": "The GM's mechanism is the failing check instructing a split when a file exceeds the bar ('When we hit it ... we should take that as a sign'); files at 1,000 do not fail, and the next edit that pushes them over meets the new instruction. The GM asked for the check to instruct, not for a retroactive split sweep."
     }
    ]
   }

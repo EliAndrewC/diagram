@@ -78,9 +78,14 @@ GUIDANCE = f"""
   doing this work splits it before the work can merge - that is the rule the GM gated on
   2026-08-31, and it is not deferrable to a later pass.
 
+  SPLIT IT - NEVER TRIM IT TO JUST UNDER THE BAR (the GM, 2026-10-21, feature 405 T53): folding or
+  cutting lines to land at 1,000 leaves the file at the bar, and the next edit pays again.
+
   THE PRESCRIBED SHAPE: the file becomes a DIRECTORY-MODULE - `hamletgen/ways.py` becomes
-  `hamletgen/ways/` with sub-modules - carrying a CLAUDE.md that indexes them with a
-  "look here when" line each, so a future session loads only the part it needs.
+  `hamletgen/ways/` with sub-modules of about {MAX_LINES * 2 // 3} lines each (2/3 of the bar, a guideline,
+  not a check), its `__init__.py` re-exporting every name importers used, so no importer changes -
+  carrying a CLAUDE.md that indexes them with a "look here when" line each, so a future session
+  loads only the part it needs.
 
   Read, in this order:
     - .specify/memory/constitution.md, Principle X clause 13 (the rule and both carve-outs)
