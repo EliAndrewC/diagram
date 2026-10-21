@@ -283,22 +283,4 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 
 <!-- plan-archive: T52 to T49 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 
-## T53 - split at the file bar, never trim to it (amendment 7)
-
-### T53 Approach (checklist part A)
-
-1. **The goal, in the world.** A file that passes the 1,000-line bar is split once into a package with room to grow, so the next edits do not meet the bar again.
-2. **The constraints.** Constitution Principle X clause 13 (the bar, gated since feature 173) and its two carve-outs (ordered data, a derived roster); `check-file-scale.py`'s refusal, which already prescribes a directory-module; the house rule that a guard's message carries the concrete fix, pinned by a test; the GM's words (amendment 7).
-3. **Where each comes from.** O (features 173, 329) and the GM (amendment 7).
-4. **Do they describe the world here?** Yes - measured 2026-10-21: T11's comment put `web.py` at 1,002 and was trimmed to 1,000; T49's edit put `settle.py` at 1,009 and was folded to 1,000 - each a refusal and a minute or two, and both files stand at the bar for the next edit.
-5. **The order.** The refusal's text: the target of about 650 lines a submodule, the `__init__.py` re-exporting every name so no importer changes, and "never trim to just under the bar"; the test pinning those words; the root CLAUDE.md line.
-6. **The exits.** (c) - the check's own message steers the split; a hard 650-line rule was not asked for (the GM: "doesn't need to be a hard limit").
-7. **The search smell.** None.
-8. **The budget.** 15 min.
-9. **Done, measured.** One goal: the refusal names the ~650-line submodules, the re-exporting `__init__.py` and the rule against trimming (test); the root CLAUDE.md says the same.
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
-### T53 Decisions
-
-**D28 - the refusal says split, to about 650.** `check-file-scale.GUIDANCE` adds: split now, never fold or cut lines to land just under the bar; aim each submodule at about 650 lines (2/3 of the bar - a guideline, not a check); the package's `__init__.py` re-exports every name importers used, so no importer changes. The root CLAUDE.md's file-bar line says the same in one sentence. The bar stays 1,000 and the carve-outs stay.
+<!-- plan-archive: T53 to T53 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
