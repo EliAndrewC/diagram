@@ -387,7 +387,7 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T16:40:44Z (continue), 
 
 ### T18 Decisions
 
-**D69 - its own household only.** `theirs(p, yards, houses, M)`: a lane has ONE household - of the farmhouses either end reaches as 0246 measures a reach (`law.reach_to_steading`: 60 ft of the house or 12 ft of its built ground, the page's own GUESS; 60 ft of the house where no manifest is passed), the one nearest its end, its dooryard end - and only that household's yards and gardens are exempt; not every steading within `law.DOORSTEP_FT` (80 ft, a figure the page does not give), nor a farmhouse at each end (the claims round: 0246's household way leaves its own dooryard and joins a way at a T, so its junction end exempted the neighbor beside it). The claim GUESS 0246.
+**D69 - its own household only.** A lane's household is the one its RECORD names - `of` (a household's way the tree draws) or `serves` (a grove farm's door path), `geom.lane_owner` - and only a lane that names one exempts that household's yards and gardens from the fence gap (`theirs(yards, owner)`); a back lane, a cross lane, the track out name none and keep the gap off every garden (0246: the gap is kept from another household's garden, and "a household's own way" may run beside its own - the claims round: an owner read from an end's reach gave back and cross lanes one). The owner reaches every place a household's way is judged: `Lawful.owner` set on a copy by `tree.admits` and `lay_door_paths`, a run replacing a lane (`skip`) is that lane's, `settle_ends`' re-aim and `last_resort` pass their lane's. Measured on seeds 1-48 and the pinned rows (54/54, 2026-10-21); the claim cites 0246.
 
 ### T86 Approach (checklist part A)
 
@@ -488,3 +488,17 @@ Owed by the cohort (cohort@20261021T172647Z, then cohort@20261021T173654Z: seeds
 7. **The next step is a measurement.** Seeds 1-48 and the pinned rows.
 8. **Every route measured before offering one?** The geometric owner (the farmhouse an end reaches) was measured 54/54 and judged DRIFTED; the record owner is the page's.
 9. **After a ruling: the step it names?** No ruling yet; the claims round's third round on `theirs` goes to the round arbiter before the next check.
+
+### T18 Approach (re-answered 2026-10-21T17:42Z)
+
+1. **The goal, in the world.** Only a household's own way runs beside its own garden; every other lane keeps 7 ft off every garden.
+2. **The constraints.** 0246: the gap is kept from another household's garden; "a household's own way" may run beside its own fence; a back lane or cross lane is laid after the household ways and belongs to no household.
+3. **Where each comes from.** R (0246) and O (the lane's record: `of`, `serves`).
+4. **Do they describe the world here?** Yes - the claims rounds (three): every steading within 80 ft, then the farmhouse an end reaches, each gave lanes owners the page does not; the record owner is the page's.
+5. **The order.** `geom.lane_owner` from the record; `theirs(yards, owner)`; `fouled_segment(..., owner)`; `Lawful.owner` and the `skip` lane's owner; the tree's `admits`, the door paths, the ends' re-aim and the last resort pass theirs; tests; seeds 1-48.
+6. **The exits.** (e) conform.
+7. **The search smell.** The first record-owner roll failed six seeds - measured (part B), not searched: the owner was missing where a household's way is judged before it is a record.
+8. **The budget.** With batch 9.
+9. **Done, measured.** A household's own way exempts its own garden, a back lane none (tests); seeds 1-48 and the pinned rows 54/54 (measured 2026-10-21).
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.

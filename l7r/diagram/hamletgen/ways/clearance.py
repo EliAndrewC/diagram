@@ -294,7 +294,7 @@ def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: l
     """`_clear_link` at footprint margins - for the short link that closes a junction.
 
     THE DEFAULT IS THE LANE PAGE'S 7 ft SINCE FEATURE 328 (research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:
-    a lane's middle at least 7 ft from a garden fence) - the history of the 4 ft brush it replaced, kept (405 T65 then put the join links at 7 ft and seeds 1-48 held): three wider margins were measured and each broke the reference hamlet
+    a lane's middle at least 7 ft from a garden fence). HISTORY, before it (kept so no one re-measures it): the 4 ft brush once stood here, and three wider margins were measured against it and each broke the reference hamlet
     (feature 137 T03, 2026-08-28): 7 ft (the fabric margin) put the T32 zigzag back beside the notice
     board and took the 24-cohort to 1/24; 6 ft for everything cost Inashiro three checks; 6 ft for
     gardens/yards/sheds with 4 for houses still cost it `lanes_bend_like_paths`. The margin was a
@@ -313,7 +313,9 @@ def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: l
 
     Research:
         junction link margin - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft (`WEB_FABRIC_GAP`) off the fabric, or the caller's
-        a join link off the crop and the wet ground at the gap - UNRESEARCHED: the short link keeps the fabric's 7 ft (`gap`) off the crop and the wet ground alike, not the full margins the lanes keep (0081's `WEB_CROP_GAP`, the wet ground's 8 ft)
+        a join link off the crop at the gap - research/questions/0081-village-lanes.drawing.html: the lanes keep half the widest tread off the crop (`WEB_CROP_GAP`, 3 ft); the short link keeps the fabric's 7 ft (`gap`), more than that
+        a join link off the wet ground at the gap - UNRESEARCHED: the link keeps the fabric's 7 ft off the toe and the marsh, where a lane's link keeps 8 ft (`_clear_link`); no page gives either
+        a join link off the water - UNRESEARCHED: 14 ft off the water lines (`clear_runs`' `line_margin`), as `_clear_link`
         a join link off every garden - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the gap is kept from another household's garden and a household's own way may run beside its own; a link joins a way to the network and belongs to no one household, so no garden is its own"""
     span = math.dist(a, b)
     if span < 1.0:
