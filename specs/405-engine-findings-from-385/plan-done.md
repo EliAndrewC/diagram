@@ -391,3 +391,88 @@
 ### T53 Decisions
 
 **D28 - the refusal says split, to about 650.** `check-file-scale.GUIDANCE` adds: split now, never fold or cut lines to land just under the bar; aim each submodule at about 650 lines (2/3 of the bar - a guideline, not a check); the package's `__init__.py` re-exports every name importers used, so no importer changes. The root CLAUDE.md's file-bar line says the same in one sentence. The bar stays 1,000 and the carve-outs stay.
+<!-- plan-archive: archived 2026-10-21 -->
+### T16 Approach (checklist part A)
+
+1. **The goal, in the world.** Every rule of the field run-on and the dangling-end test is claimed.
+2. **The constraints.** 0246 (an end runs on to a field path, a bund or another way); 0014 (the path joins the paddy's bund, never ends short of it); 0081 (the track out runs off the map).
+3. **Where each comes from.** R (0246, 0014, 0081).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (a read of `bund.py` and `law.py`): `run_lanes_on_to_the_bund` skips a row street and carries an end within `RUN_ON_REACH_FT` onto the worked ground's edge, the dry hem's as well as the paddy's, unclaimed; `run_on_target`'s reach and its stop outside the ground are unclaimed; `dangling_lane_ends` exempts the connector unclaimed.
+5. **The order.** A claim for each, labeled as the pages give it.
+6. **The exits.** (a) claim - the behavior stands; the dry hem is claimed UNRESEARCHED (0014 speaks of the paddy and is silent on a dry plot; T22 carries the field's reach).
+7. **The search smell.** None.
+8. **The budget.** With T17.
+9. **Done, measured.** The claims round reads the new claims IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+<!-- plan-archive: archived 2026-10-21 -->
+### T16 Approach (re-answered 2026-10-21T12:56Z)
+
+1. **The goal, in the world.** As before: every claim says what the code does, labeled as its page labels it.
+2. **The constraints.** As before, and 0033's drawing page (a row street "runs on off the map as the road into it") and 0081's (lanes along the hem of dry fields; the spur stops at the hem's edge), which the round read.
+3. **Where each comes from.** R (0246, 0033, 0014, 0081).
+4. **Do they describe the world here?** Yes - the round, 2026-10-21 (impl-drift, 27 claims): where a claim's page disagrees with the CODE, the code's drift is a task of its own; where it disagrees with the label, the label follows the page.
+5. **The order.** The street skip cited to 0033, the dry hem to 0081 as a GUESS; the claims round.
+6. **The exits.** (e) conform - words and labels; the code's drift carried (T54, T55).
+7. **The search smell.** None.
+8. **The budget.** With the batch.
+9. **Done, measured.** The claims round reads the new claims IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T27 Approach (checklist part A)
+
+1. **The goal, in the world.** The farm-fixture claims say where the fixtures stand and cite the page that says so.
+2. **The constraints.** 0038 (the bed's sides), 0039 (the kitchen garden), 0043 (the wood shed a ken beyond the wall strip, about 9.5 ft off), 0047 (the privy's places and the front seat's 8 ft GUESS), 0219 (the shrine's corner).
+3. **Where each comes from.** R.
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (a read of `taxonomy.py` and `fixture_seats.py`): the exemption's text seats every fixture "against its own farmhouse" (the shed 9.5 ft off, the shrine and grave a plot corner, the privy out to 48 ft); its claim cites 0039 for the bed beside the house, which 0038 gives; `CANOPY_PAD` and `SHADE_MARGIN_FT` carry no claim; `_seats`' privy front step and stable seat are unclaimed.
+5. **The order.** The text and the claim reworded, the citations put right, the four claims added.
+6. **The exits.** (e) conform - words to the code and the pages.
+7. **The search smell.** None.
+8. **The budget.** With T17.
+9. **Done, measured.** The claims round reads them IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+<!-- plan-archive: archived 2026-10-21 -->
+### T16 Decisions
+
+**D30 - the run-on claimed.** `run_lanes_on_to_the_bund` claims: a row street not carried onto the field (0033: the street runs on off the map as the road); the reach (GUESS: `RUN_ON_REACH_FT`, 0246's 60 ft reused for the field); the dry hem's edge (GUESS, 0081: lanes run along the hem of dry fields and the spur stops at its edge). `run_on_target` claims its reach (GUESS, the same) and its stop (CONVENTION: the half-tread and `TIP_MARGIN_FT` outside the ground). `dangling_lane_ends` claims the connector exempt (0081: the track out runs off the map).
+
+<!-- plan-archive: T27 to T27 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-10-21 -->
+### T58 Approach (checklist part A)
+
+1. **The goal, in the world.** A split at the bar costs no claims round for the code it only moved.
+2. **The constraints.** The claims index and `claims_owed.owed` (features 316, 385 T116); the claims gate's "introduced" reading, already asked across keys (a unit moved with its code intact matches its base unit).
+3. **Where each comes from.** O (features 316, 385).
+4. **Do they describe the world here?** Yes - measured 2026-10-21: splitting `web.py` owed its claims in full as "new", every one at its new key.
+5. **The order.** `claims_owed.moved` (the same unit and claim, the old key gone, the same code fingerprint, one candidate), read by `owed`; `rekey` copies each row to its new key and drops the old; `make claims-rekey`; `make land` runs it first; a test.
+6. **The exits.** (c) - the index learns a move; nothing it judged is re-judged.
+7. **The search smell.** None.
+8. **The budget.** With T57.
+9. **Done, measured.** One goal: a unit moved with its code intact owes nothing and its row moves; one whose code changed is still owed (test); live, 61 of `web.py`'s rows carried.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+<!-- plan-archive: archived 2026-10-21 -->
+## T61 - the gate-write suite waits for its own fixture's gate (found landing the T17 batch)
+
+### T61 Approach (checklist part A)
+
+1. **The goal, in the world.** hooks-test reads the same whether or not another gate runs on the machine.
+2. **The constraints.** The gate-write guard (385 FR-010, 405 T41), which asks `lib/own-make.sh` whether THIS tree's `make done` runs; its suite; the landing's gate beside its cohort (405 T48).
+3. **Where each comes from.** O (features 385, 405).
+4. **Do they describe the world here?** Yes - measured 2026-10-21: the T17 batch's gate ran hooks-test while it itself ran; the suite's `pgrep -f "make done"` found that gate at once, so its first three cases ran before the fixture's gate started and read "let through" (19 passed, 3 failed).
+5. **The order.** Both waits ask `own-make.sh done` from the fixture's directory; the suite run.
+6. **The exits.** (c) - the test asks what the guard asks.
+7. **The search smell.** None.
+8. **The budget.** 10 min.
+9. **Done, measured.** The suite passes 22 of 22, run while another gate runs.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T61 Decisions
+
+**D35 - the fixture's own gate.** `tests/hooks/test-gate-write-hooks.sh` waits until `scripts/hooks/lib/own-make.sh done`, run from the fixture tree, says the fixture's gate runs - the question the guard itself asks - in both sections.
