@@ -41859,6 +41859,7 @@
    "0040-farm-storehouses-kura.drawing.html:d1a4c048a3cb6d63"
   ],
   "section": "282e648807242d25",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#bookkeeping records": {
@@ -42196,7 +42197,8 @@
    "0044-baths-on-the-farm-furo.drawing.html:78f622a8252b9b53",
    "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:b533db817cf2560b"
   ],
-  "section": "282e648807242d25",
+  "section": "dd8aeb32511d1b19",
+  "triaged": "2026-10-21",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_LINEAR#ground kept clear": {

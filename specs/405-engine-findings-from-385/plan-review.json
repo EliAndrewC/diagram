@@ -582,7 +582,7 @@
    "declared": "spec-fidelity"
   },
   "### T17 Decisions": {
-   "sha256": "3381bbf07c14549e6cf5c9cc550badeaadf51c890b2a90578ff2731e4808b46f",
+   "sha256": "6bb7163d3cef508de946ee72d4b775297fe4f55a0a4e689a674cd1b486924f73",
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
@@ -637,6 +637,18 @@
   },
   "### T58 Decisions": {
    "sha256": "0b69a5206440ce9231868f23fae68fb38ee8fb26e6c0bfb706da195e99357906",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T17 Approach (re-answered 2026-10-21T12:56Z)": {
+   "sha256": "da3f66e55e368cc95aeee857014187a971cf96f70a04d39920b44715a52be5e6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T16 Approach (re-answered 2026-10-21T12:56Z)": {
+   "sha256": "5c0c2524337c2da1e2365c3e73863497e153541b5016785bf0bee1c026e99d6c",
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
@@ -1417,6 +1429,47 @@
      "summary": "claims_owed.moved: a unit whose unit#claim suffix matches, whose old key is gone and whose code fingerprint is equal (one candidate only) owes no claims round; rekey moves its row; make claims-rekey; land.py's first pass runs it and commits the index",
      "class": "within",
      "why": "Serves amendment 7's stated purpose that a split at the bar be 'relatively painless'; a split owing a full claims round on 61 unchanged rows would defeat it. It re-judges nothing whose code changed (equal fingerprint, single candidate, a changed unit is still owed by test), and matches the claims gate's existing cross-key 'introduced' reading, so no GM-requested check is weakened."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "### T16 Approach (re-answered 2026-10-21T12:56Z)",
+    "### T17 Approach (re-answered 2026-10-21T12:56Z)",
+    "### T17 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D29-words",
+     "summary": "T17: _pull_back's comment ends the lane at the last homestead it serves; WAY_END_REACH_FT names a farmhouse and another way (field reach is law.FIELD_REACH_FT); _lay_skeleton's span floor reads half a pitch each way, a pitch across",
+     "class": "within",
+     "why": "Words corrected to say what the code does - the task's own goal under FR-001; nothing the request asked for is dropped."
+    },
+    {
+     "id": "D29-labels",
+     "summary": "T17: the pull-back claims (_trim_to_service, settle_dangling, _sweep_dangling_ends, _walk_in, served_arm, tidy_lane_ends, _pull_back's trim floor, _lay_skeleton's arm trim split from its 7 ft clip) labeled GUESS as 0246 labels the rule; the 7 ft clip and _SERVE_FT's 100 ft cited plainly as 0246 states them",
+     "class": "within",
+     "why": "Labels follow the page, as the task's goal states. The changed text removes the earlier block's self-contradiction (_SERVE_FT was both 'the GUESS it is' and 'cited plainly'); it now says one thing."
+    },
+    {
+     "id": "D29-drift",
+     "summary": "T17/T16: three street claims and two _pull_back claims whose pages disagree with the CODE stay as written; the code's drift is filed as T54 and T55 in this feature",
+     "class": "within",
+     "why": "The disagreement is in code these word-and-label tasks do not change; the GM's 2026-10-19 rule ('keep findings on code a task didn't change as new tasks', FR-002) routes it to new tasks, and Amendment 7 asks that all remaining tasks be worked, so nothing is dropped. Rewriting the claims to describe the drifted code would put words against their research pages."
+    },
+    {
+     "id": "T16-order",
+     "summary": "T16: the street skip cited to 0033; the dry hem cited to 0081 as a GUESS",
+     "class": "within",
+     "why": "Citations and labels follow the pages the round read; the task's stated goal."
+    },
+    {
+     "id": "T16-T17-exit",
+     "summary": "Exit (e) conform - words and labels only, no constant moved, nothing fitted; done when the claims round reads every changed claim IN-STEP",
+     "class": "within",
+     "why": "The claims tasks' ordinary scope under FR-001; no part of the request is narrowed."
     }
    ]
   }
