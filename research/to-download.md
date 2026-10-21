@@ -4065,3 +4065,15 @@ New items go here, newest at the bottom, so you can always resume from wherever 
 - Fallback: [the article's record](https://sitereports.nabunken.go.jp/en/article/59331)
 - **Rests on it:** research/questions/0269-what-did-a-shrines-stonework-cost.html (diagram feature 403; asked for by gm-assistant on EliAndrewC/diagram#6) - a mason's day wage, which no public source found gives (also 0257, 0268).
 - Blocked by: from the container the site answers HTTP 429 (twelve tries over four hours on 2026-10-19 and 2026-10-20).
+
+### 319. [money] 東京都 (Tokyo Metropolitan Government), 『江戸の牛』 (都史紀要 32), table 16 (享保十一年, 1726) and table 17 (寛保二年, 1742), the Edo oxcart freight tables (牛車運賃表), p. 101
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- **[the National Diet Library's search for the volume](https://ndlsearch.ndl.go.jp/search?cs=bib&keyword=%E6%B1%9F%E6%88%B8%E3%81%AE%E7%89%9B%20%E9%83%BD%E5%8F%B2%E7%B4%80%E8%A6%81)**
+- The pages of tables 16 and 17 (p. 101), and the text around them: what an Edo oxcart charged to carry a load, by the load and the distance, in 1726 and 1742; and figure 14 (御影石を運ぶ牛車, oxcarts carrying granite) with any caption giving a load or a price.
+- Fallback: [a Google search for the volume](https://www.google.com/search?q=%E9%83%BD%E5%8F%B2%E7%B4%80%E8%A6%81+32+%E6%B1%9F%E6%88%B8%E3%81%AE%E7%89%9B)
+- **Rests on it:** research/questions/0278-what-did-carrying-stone-cost-by-cart-and-by-porter.html (diagram feature 408; asked for by gm-assistant on EliAndrewC/diagram#10) - an Edo-period rate for stone, or any load, by a hired cart, which no public source found gives (also 0260, 0257).
+- Blocked by: in print only; the Tokyo Metropolitan Archives' page for the series lists the contents but no text, and no public scan was found (2026-10-21).
