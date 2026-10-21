@@ -139,6 +139,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T81 The decide guard and `make plan-delta` read one plan block two ways: after T79's blocks were added below T77's, plan-delta owed no block a review while `plan_gate.decision_refusal`'s `_section_clear` read T77 Decisions' digest as changed, refusing T74's claims check (escaped with DECIDE_OK, logged). One block digest for both (found landing batch 6, 2026-10-21) [lands-open]
       research: rendering
+- [ ] T82 `_sweep_dangling_ends._near` stops the walk-on within 60 ft of ANY way, the one the lane's far end stands on included - the way `_reaches` and "not the way it left" exclude - so a short link off a way can stay up to 60 ft past the house it serves; filter that way out as `_reaches` does (by `seg_dist(far, ...) > _TOUCH_GAP`); and the round's notes: "not the way it left" GUESS 0246 rather than UNRESEARCHED; `lane_houses`' docstring against `_reaches`' use of it (impl-drift DRIFTED, batch 6's round 3) [lands-open]
+      research: rendering
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
 - [ ] T02 (385 T36) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]

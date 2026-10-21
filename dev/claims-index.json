@@ -29839,8 +29839,8 @@
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#a house served": {
   "body": "61bc4f802dfe944e",
   "claim": "a house served - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: a house within `_SERVE_FT` (100 ft) of a lane counts as served, so the lane is kept, where the page says 60 ft",
-  "code": "53c3c0f73928b421",
-  "core": "17733c973421159c",
+  "code": "d71a8aaf9f10c9ff",
+  "core": "ea19df2d9ccd7317",
   "date": "2026-10-21",
   "note": "the page does give this figure: \"every farmhouse within 100 ft of one\" is its distance from a house to a lane. The 60 ft the claim says the code departs from is how far a lane END reaches a farmhouse, not how near a lane must pass to serve one. The `_SERVE_FT` (100 ft) house-to-lane test agrees with the page, so the claim should cite 0246 for the 100 ft and drop \"GUESS ... where the page says 60 ft\".",
   "pages": {
@@ -29858,8 +29858,8 @@
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#a link another lane ends on kept": {
   "body": "150d813526ad3ba8",
   "claim": "a link another lane ends on kept - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the lanes are one network, joined where their treads meet - a short lane another lane ends on is that join, not debris",
-  "code": "b6fda029117eec36",
-  "core": "17733c973421159c",
+  "code": "538388a5e2fab2eb",
+  "core": "ea19df2d9ccd7317",
   "date": "2026-10-20",
   "note": "`_held` keeps a short lane another lane ends on, as the one-network join",
   "pages": {
@@ -29876,8 +29876,8 @@
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#a whittled lane emptied": {
   "body": "150d813526ad3ba8",
   "claim": "a whittled lane emptied - UNRESEARCHED: a lane pulled back under `_WEB_MIN_FT` (30 ft) is emptied, for the debris sweep to finish",
-  "code": "6838151a3dc15e78",
-  "core": "17733c973421159c",
+  "code": "ec03cebecc87ea32",
+  "core": "ea19df2d9ccd7317",
   "date": "2026-10-20",
   "note": "the page gives no least lane length; the 30 ft cut is unresearched",
   "pages": {},
@@ -29886,24 +29886,23 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#dooryard carry reach": {
-  "body": "a8a5cedcc11a8306",
+  "body": "869c2ec3e7564ad8",
   "claim": "dooryard carry reach - UNRESEARCHED: up to 120 ft (2 x `_REACH_FT`); the page gives a lane end's reach (60 ft), not a carry's",
-  "code": "c16043e7841e374c",
-  "core": "17733c973421159c",
+  "code": "021264217e9d2e01",
+  "core": "ea19df2d9ccd7317",
   "date": "2026-10-21",
-  "note": "the carry reaches up to 120 ft (`2.0 * _REACH_FT`). The page gives only the 60 ft an end needs to reach a house or a way, and says nothing on how far an end may be carried on to a dooryard.",
+  "note": "the page gives no reach for a carry, only the 60 ft at which an end reaches something; 120 ft is the code's own figure",
   "pages": {},
   "research": "",
-  "triaged": "2026-10-21",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#end carried to the dooryard": {
-  "body": "150d813526ad3ba8",
+  "body": "869c2ec3e7564ad8",
   "claim": "end carried to the dooryard - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane a house needs ends at its dooryard - carried to the owed house nearest the end, never a household reached across a neighbor's land, owed none (`geom.lane_houses`)",
-  "code": "86064ebd36c04205",
-  "core": "17733c973421159c",
-  "date": "2026-10-20",
-  "note": "the end goes to the dooryard of the nearest owed house (`lane_houses` leaves out households reached across a neighbor) and stops short of the wall, as the page says a lane ends at the dooryard",
+  "code": "6bc6d3947a43cfef",
+  "core": "ea19df2d9ccd7317",
+  "date": "2026-10-21",
+  "note": "carried to the nearest owed house and stopped inside the steading's built ground, matching \"a lane ends at the dooryard\"; houses reached across a neighbor's land are left out",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
@@ -29911,17 +29910,15 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
   ],
-  "triaged": "2026-10-21",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#grove band not crossed": {
   "body": "a8a5cedcc11a8306",
   "claim": "grove band not crossed - GUESS groves-of-trees-around-farmhouses-yashikirin.drawing, row-villages-resson.drawing: no lane runs through a farm's own wood - the way runs outside the grove or through a gap in it - so an end is not carried across one",
-  "code": "88bbe9e19fec91cd",
-  "core": "17733c973421159c",
+  "code": "468cf4abc560d942",
+  "core": "ea19df2d9ccd7317",
   "date": "2026-10-21",
   "note": "carry_to_dooryard returns None when the carry would enter a grove band; \"no lane runs through a farm's own wood\" is recorded as a GUESS, and a row farm is reached by a path round its grove",
   "pages": {
@@ -29937,12 +29934,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#kept whole for a house": {
-  "body": "150d813526ad3ba8",
+  "body": "869c2ec3e7564ad8",
   "claim": "kept whole for a house - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane whose pull-back would leave a farmhouse with no way is restored whole, its unserving end carried to a dooryard where an owed house stands within the carry's reach and no grove band is in the way, and otherwise left where it was drawn - the page pulls back an end that reaches nothing and does not say what gives when that would strand a house",
-  "code": "5db9a045571071f1",
-  "core": "17733c973421159c",
-  "date": "2026-10-20",
-  "note": "the page pulls back an end that reaches nothing and also gives every farmhouse its own lane, but says nothing on which gives when the two conflict; the code restores the lane whole, carries the end on where it can, and otherwise leaves the lane as drawn, as the claim says",
+  "code": "229a27e1639b6e05",
+  "core": "ea19df2d9ccd7317",
+  "date": "2026-10-21",
+  "note": "the page pulls an end back to the last house it serves but does not say what gives when that would strand a house",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
@@ -29951,51 +29948,40 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "triaged": "2026-10-21",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#lane end reaches something": {
-  "body": "c9f59c28e4de1461",
+  "body": "869c2ec3e7564ad8",
   "claim": "lane end reaches something - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: pulled back until it serves a way, the field or a house, 4 ft at a time - never one reached across a neighbor's land, owed none (`geom.lane_houses`)",
-  "code": "cef1a3d8368cac94",
-  "core": "17733c973421159c",
+  "code": "a6dc416b8816db7a",
+  "core": "ea19df2d9ccd7317",
   "date": "2026-10-21",
-  "note": "the pull-back runs until the end serves a way, the field or an owed house; a household reached across a neighbor's land gets no lane of its own; the page records the rule as a GUESS",
+  "note": "pulled back 4 ft at a time until it reaches a way, the bund or a house, as the page's GUESS rule says",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#lane end walked on toward the nearest owed house while it still reaches (`_near`), never walked on when it is within 60 ft (`_REACH_FT`) of another lane": {
-  "code": "17733c973421159c",
-  "core": "17733c973421159c",
-  "date": "2026-10-21",
-  "note": "lane end walked on toward the nearest owed house while it still reaches (`_near`), never walked on when it is within 60 ft (`_REACH_FT`) of another lane",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#not the way it left": {
-  "body": "a8a5cedcc11a8306",
+  "body": "869c2ec3e7564ad8",
   "claim": "not the way it left - UNRESEARCHED: an end does not count as reaching a way the lane's other end stands on (within `_TOUCH_GAP`), so a link off a way with nothing at its far end is pulled back to nothing - our reading of \"a stretch that joins nothing of the network is not drawn\" against \"reaching another way within 60 ft of it\", which does not say whether the way a lane leaves is another way",
-  "code": "29fde86371f31584",
-  "core": "17733c973421159c",
+  "code": "944bec40e3981574",
+  "core": "ea19df2d9ccd7317",
   "date": "2026-10-21",
-  "note": "this project's reading of §13 against §6, as the claim says",
+  "note": "the page is silent on whether the way a lane leaves counts as \"another way\"; the reading is the code's own",
   "pages": {},
   "research": "",
-  "triaged": "2026-10-21",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#the track out and streets exempt": {
   "body": "a8a5cedcc11a8306",
   "claim": "the track out and streets exempt - village-lanes.drawing, row-villages-resson.drawing: the track out runs off the edge of the map and a row's street runs on off the map as the road into it; the track out runs from the cluster's edge off the map, so its far end is no lane end; a row village's street keeps its own end rules (`ways/street.py`)",
-  "code": "3a0810d6727f37bf",
-  "core": "17733c973421159c",
+  "code": "139c1ecb2fab8f21",
+  "core": "ea19df2d9ccd7317",
   "date": "2026-10-21",
   "note": "connector and street lanes are skipped; the track out \"runs off the edge of the map\", starts on the cluster's edge, and the street \"runs on off the map as the road into it\"",
   "pages": {
@@ -30009,6 +29995,22 @@
   ],
   "triaged": "2026-10-21",
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#walked on to the house it serves": {
+  "body": "869c2ec3e7564ad8",
+  "claim": "walked on to the house it serves - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane ends at the dooryard - an end that reaches walks on toward the nearest owed house within 120 ft (2 x `_REACH_FT`) while it still reaches, never when within 60 ft (`_REACH_FT`) of another way",
+  "code": "bf86b2f5c4e065db",
+  "core": "ea19df2d9ccd7317",
+  "date": "2026-10-21",
+  "note": "`_near` returns inf when `seg_dist(q, a, b) <= _REACH_FT` for any of `_o` (= `others` unfiltered), so the way the lane's far end stands on also blocks the walk. That is the way `_reaches` excludes and this unit's own \"not the way it left\" says is no other way. A short link off a way therefore stays up to 60 ft past the house it serves, in open ground: it is not at the dooryard and does not reach another way, where the page has \"a lane ends at the dooryard or runs on to something a reader can see\". Either filter `_o` in `_near` by `seg_dist(far, ...) > _TOUCH_GAP` as `_reaches` does, or reword the claim to say any way within 60 ft, the one it left included",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
+  },
+  "research": "92410dbfeea7511e",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_debris#a house served": {
   "body": "ce55e9fcf31567df",
