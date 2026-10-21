@@ -287,6 +287,9 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T103 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: l7r/diagram/hamletgen/ways/joints.py::tee#a lane whose vertex before the joint stands within `_TOUCH_GAP` (4 ft) of its foot on the other lane stops at that vertex, with no last leg to the foot (the nub cut; the hook rule at §27 is the nearest the page comes) [lands-open]
       research: rendering
+- [ ] T104 Every pool farm draws its kura on the north wall (Inashiro, Kashikawa, Kuwabata, Mizuguchi, Sawada: shed_side N), while 0040 puts a scattered farmstead's kura on the west; and a grove farm's fixtures are laid with no kura wall (bundle._lay_fixtures passes shed False for the dispersed layout): draw the kura on the side 0040 gives each form, and lay the fixtures against it (split from T26, 2026-10-21) [lands-open]
+      research: rendering
+      research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

@@ -339,3 +339,40 @@ Owed by the cohort (cohort@20261021T180921Z: seeds 10 and 40 newly failing), tak
 9. **After a ruling: the step it names?** No ruling.
 
 <!-- plan-archive: T96 to T96 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+
+### T26 Approach (checklist part A)
+
+1. **The goal, in the world.** A farm's wood shed stands a ken off a wall of its steading - the house's or the kura's - never forward into the dooryard, its first seat turned per household as the coop's is.
+2. **The constraints.** 0043 (GUESS there): the shed behind or beside the house, never the front yard, a ken off the wall (about 9.5 ft with the wall gap); the coop's seats turned by the household's roll (feature 328).
+3. **Where each comes from.** R (0043) and O (the coop's roll).
+4. **Do they describe the world here?** Yes - T34's rounds: `shed_off_a_wall` clears only the house by the ken while `against_a_wall` accepts the kura (a seat 3.5 ft off the kura); `in_front` refuses only a shed wholly past the front wall; the first seat unrolled; `against_a_wall`'s 1.5 ft tolerance lets a shed stand ~11 ft out, unclaimed. The kura's side (0040) is split to T104.
+5. **The order.** `shed_off_a_wall`: clear of EVERY wall of the steading by the gap and the ken; no part forward of the front wall (`forward_of_front`); against a wall at no tolerance (the seats stand exactly a ken out); `_wood_shed` turns its seat list by the household's roll (`u`, as the coop's); claims; tests; seeds 1-48.
+6. **The exits.** (e) conform.
+7. **The search smell.** None.
+8. **The budget.** 60 min for the batch with its landing.
+9. **Done, measured.** A seat 3.5 ft off the kura, one half forward of the front wall and one 11 ft out are refused (tests); seeds 1-48 and the pinned rows pass.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T26 Decisions
+
+**D78 - a ken off every wall, never forward.** `shed_off_a_wall(seat, walls, g, px)`: `clears(seat, walls, g + ken)` (every wall, the kura's too), `against_a_wall(seat, walls, g + ken, tol=0.0)` (exactly a ken out - the recorded seats and the wall places stand there), and `not forward_of_front(seat, hh)` (no part past the front wall, `seat_y + d/2 > hh`); `_wood_shed(..., u)` turns its four recorded seats by `int(u * 4)`, as the coop's are turned. The kura's side stays as drawn (north) - T104 owns 0040's west for a scattered farm.
+
+### T103 Approach (checklist part A)
+
+1. **The goal, in the world.** A join's nub cut is claimed.
+2. **The constraints.** The ink's touch (`_TOUCH_GAP`, 4 ft, CONVENTION).
+3. **Where each comes from.** O.
+4. **Do they describe the world here?** Yes - batch 10's round (carried): `tee` stops a lane at the vertex before the joint when that vertex stands within 4 ft of its foot, unclaimed.
+5. **The order.** A claim at `tee`: a vertex within the ink's touch of its foot ends the lane there - CONVENTION, no last leg shorter than a touch.
+6. **The exits.** (a) claim.
+7. **The search smell.** None.
+8. **The budget.** 60 min for the batch with its landing.
+9. **Done, measured.** The claims round reads it IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T103 Decisions
+
+**D79 - the nub claimed.** No code change: `tee`'s stop within `_TOUCH_GAP` of the foot claimed CONVENTION (a leg shorter than the ink's touch reads as no leg).
+
