@@ -160,7 +160,8 @@ def tee(x: Poly, y: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[t
 
     Research:
         a fold at a joint becomes a T - research/questions/0081-village-lanes.drawing.html: met at the other's side
-        no hairpin at the re-laid T - research/questions/0081-village-lanes.drawing.html: its new last turn refused past 140 degrees (`_HAIRPIN_DEG`), a hairpin"""
+        no hairpin at the re-laid T - research/questions/0081-village-lanes.drawing.html: its new last turn refused past 140 degrees (`_HAIRPIN_DEG`), a hairpin
+        a nub not drawn - CONVENTION: a vertex within the ink's touch (`_TOUCH_GAP`, 4 ft) of its foot ends the lane there; a last leg shorter than a touch reads as no leg"""
     p, n = x[-2], x[-1]
     f = seg_closest(p[0], p[1], n, y[1])
     if math.dist(f, n) <= _JOINT_FT:

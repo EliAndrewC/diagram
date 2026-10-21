@@ -528,6 +528,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
+  },
+  "### T26 Approach (checklist part A)": {
+   "sha256": "3cae3a3187c501a04327d61c88d109ff63f19e0ac225ba3aead73a2a5bbab6a5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T26 Decisions": {
+   "sha256": "1bc1197a760e60e93ba7cc417b6632740306c8e0966b424b0da2936a6c5687b2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T103 Approach (checklist part A)": {
+   "sha256": "a1b32f6ad87605ab093b656b13274b70649d72d294d9c471cacc1b26b7f50cf3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T103 Decisions": {
+   "sha256": "ba8e32d45089b1049d7d9813f118b7919f7dcda400489d70891b1c9c7b077175",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2521,6 +2545,36 @@
      "summary": "A test at exactly 140 degrees (no hairpin); seeds 1-48 and the pinned rows re-run (54/54, measured 2026-10-21).",
      "class": "within",
      "why": "Enforcement of the conformed rule and regression measurement; no unrequested verification target. No test at exactly 50 for the zigzag is a coverage choice, not a narrowing of the request or spec."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "### T103 Approach (checklist part A)",
+    "### T103 Decisions",
+    "### T26 Approach (checklist part A)",
+    "### T26 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D78",
+     "summary": "Wood shed: clear of every wall of the steading (kura included) by gap+ken, exactly a ken out (tol 0), never forward of the front wall; _wood_shed rolls its four recorded seats by int(u*4) as the coop does.",
+     "class": "within",
+     "why": "Works a moved 385 task by FR-001 against its research (0043) and the coop's existing roll convention; the GM's amendment 7 asks that research be followed. Tightens the shed to what 0043 says; removes no requested behavior."
+    },
+    {
+     "id": "T26-split-T104",
+     "summary": "The kura's side (0040's west for a scattered farm) is not done in T26; it is left as drawn (north) and owned by T104.",
+     "class": "within",
+     "why": "The work is not dropped or excepted: it stays a task of this feature (FR-002 keeps found work in the feature), and amendment 7 takes the whole feature to completion, so T104 is worked here. A task-boundary choice, not a narrowing of what the GM asked."
+    },
+    {
+     "id": "D79",
+     "summary": "T103: no code change; tee's stop at a vertex within _TOUCH_GAP (4 ft) of the foot is claimed CONVENTION (a leg shorter than the ink's touch reads as no leg).",
+     "class": "within",
+     "why": "The block's own goal is that the nub cut be claimed, and claim is one of the checklist's exits under which FR-001 works each task; the GM's request contains nothing requiring this behavior to change."
     }
    ]
   }
