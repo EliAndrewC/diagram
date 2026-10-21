@@ -142,6 +142,7 @@ VECTOR_PAGE = ".vector.html"
 GATE_BYPASS = "GATE_NO_CACHE"  # =1 forces the gate to regenerate everything (feature 026)
 COVERAGE_NAME = "coverage.data"  # per-entry generation coverage, stored by the gate's miss path
 COVERAGE_KEY_NAME = "coverage.key"  # the entry key that coverage was recorded UNDER (feature 149)
+COVERAGE_FILES_NAME = "coverage.files.json"  # the sha256 of each file that coverage measured, when it was recorded (405 T42)
 
 
 def engine_files() -> list[str]:
@@ -622,8 +623,12 @@ def store(gen: str, deps: dict[str, Any], *, gen_cpu_s: float | None = None, cov
         # stamp does not match, is not replayed - it regenerates, which is the cache's standing rule for
         # doubt of any kind.
         place(key.encode(), os.path.join(entry, COVERAGE_KEY_NAME))
+        # ...AND WITH THE BYTES OF EVERY FILE IT MEASURED (feature 405 T42, D17): the key moves only with a function the map
+        # executed, so an edit to another function of the same file left the key and shifted the lines under the stored
+        # coverage - T11's gate read `web.py` 888-889 (the row-village branch Kashikawa and Mizuguchi run) as unrun
+        place(json.dumps(_measured_shas(coverage_data)).encode(), os.path.join(entry, COVERAGE_FILES_NAME))
     else:
-        for gone in (COVERAGE_NAME, COVERAGE_KEY_NAME):
+        for gone in (COVERAGE_NAME, COVERAGE_KEY_NAME, COVERAGE_FILES_NAME):
             stale_cov = os.path.join(entry, gone)
             if os.path.isfile(stale_cov):
                 os.remove(stale_cov)
@@ -651,6 +656,37 @@ def _coverage_stamp_matches(gen: str) -> bool:
     except OSError, ValueError:
         return False
     return bool(stamped) and stamped == meta.get("key")
+
+
+def _sha_of(path: str) -> str:
+    try:
+        return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+    except OSError:
+        return ""
+
+
+def _measured_shas(coverage_data: str) -> dict[str, str]:
+    """{each file a coverage data file measures: the sha256 of its bytes now}; {} when the data cannot be read."""
+    try:
+        from coverage import CoverageData  # noqa: PLC0415 - keep `coverage` off the import path of every generator run
+
+        data = CoverageData(basename=coverage_data)
+        data.read()
+        return {f: _sha_of(f) for f in sorted(data.measured_files())}
+    except Exception:  # noqa: BLE001 - unreadable coverage records nothing, and an empty record is doubt at the next hit
+        return {}
+
+
+def _coverage_files_unchanged(gen: str) -> bool:
+    """Does every file the entry's coverage measured still hold the bytes it held when that coverage was recorded (405 T42,
+    D17)? Coverage is a set of LINE NUMBERS (feature 149): replayed over a file whose lines moved, it marks the wrong ones,
+    and the key cannot see an edit to a function the map never ran. An entry with no record, or an empty one, is doubt - it
+    regenerates once and records its own."""
+    try:
+        shas = json.loads(Path(os.path.join(_entry_dir(gen), COVERAGE_FILES_NAME)).read_text(encoding="utf-8"))
+    except OSError, ValueError:
+        return False
+    return bool(shas) and all(_sha_of(f) == sha for f, sha in shas.items())
 
 
 def _coverage_is_current(cov_src: str) -> bool:
@@ -726,7 +762,15 @@ def gate_obtain(gen: str) -> tuple[str, str, float | None]:
     manifest = gen[: -len(".gen.py")] + ".json"
     stem = os.path.basename(gen)[: -len(".gen.py")]
     cov_src = os.path.join(_entry_dir(gen), COVERAGE_NAME)
-    if os.environ.get(GATE_BYPASS) != "1" and os.path.isfile(cov_src) and os.path.getsize(cov_src) > 0 and _coverage_stamp_matches(gen) and _coverage_is_current(cov_src) and load(gen):
+    if (
+        os.environ.get(GATE_BYPASS) != "1"
+        and os.path.isfile(cov_src)
+        and os.path.getsize(cov_src) > 0
+        and _coverage_stamp_matches(gen)
+        and _coverage_is_current(cov_src)
+        and _coverage_files_unchanged(gen)
+        and load(gen)
+    ):
         shutil.copyfile(cov_src, os.path.join(HERE, f".coverage.gatehit-{stem}-{os.getpid()}"))
         return manifest, "HIT", None
     # The child's scratch files (driver, record, raw coverage data) live OUTSIDE the engine tree:

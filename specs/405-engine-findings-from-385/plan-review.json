@@ -72,6 +72,44 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T42": {
+   "section_sha256": "83b23d4f68f1cd856853aef2c33f6173a2a30de55277131cb9df8dafb79b4b4a",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T42 (filing)",
+     "summary": "The gen cache replaying stored line coverage onto a moved file, found landing T11 (a claim task that changed only a comment in web.py), is filed and worked as a new task of 405.",
+     "class": "within",
+     "why": "The GM 2026-10-19: 'keep findings on code a task didn't change as new tasks' (FR-002); the defect is in the gen cache, which T11 did not change, and it blocks T11's landing without GATE_NO_CACHE, which the roll census refuses."
+    },
+    {
+     "id": "D17",
+     "summary": "gencache.store writes coverage.files.json (sha256 of each file the stored coverage measures) beside coverage_data and removes it with the coverage; gate_obtain serves a hit only when every recorded file hashes the same.",
+     "class": "within",
+     "why": "A fix of the found defect and nothing more: it makes the existing rule (a served map's coverage is valid for the source it measured) true; no behavior beyond the cache's hit test changes."
+    },
+    {
+     "id": "D17 (missing record)",
+     "summary": "An entry stored before the record exists is treated as doubt and regenerates once.",
+     "class": "within",
+     "why": "The conservative reading of the same fix; it widens regeneration, never narrows what the gate checks."
+    },
+    {
+     "id": "Exit (c): regenerate, remap deferred",
+     "summary": "A moved file regenerates the map; remapping stored lines through a difflib diff was weighed and deferred.",
+     "class": "within",
+     "why": "Choice of mechanism for the finding; the request asks for found defects to be fixed as tasks, not for a particular repair, and the chosen exit drops no coverage the floor checks."
+    },
+    {
+     "id": "Done measure",
+     "summary": "A test red at HEAD (changed measured file is a miss, not a replay) and T11's gate green on the 100% floor without GATE_NO_CACHE; landed in T11's cohort.",
+     "class": "within",
+     "why": "Enforcement and verification of the fix itself (FR-001's checklist, FR-002's finding), with no new map, tier or property measured."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  },
  "blocks": {

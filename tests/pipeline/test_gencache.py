@@ -424,6 +424,36 @@ def test_an_entry_never_keeps_coverage_it_did_not_just_record(tmp_path, monkeypa
     assert not gencache._coverage_stamp_matches(str(gen)), "an unstamped entry is regenerated, never replayed"
 
 
+def test_a_hit_replays_coverage_only_over_the_bytes_it_measured(tmp_path, monkeypatch):
+    """Feature 405 T42 (D17): the key moves only with a function the map executed, so an edit to ANOTHER function of a file
+    it measured kept the key and shifted the lines under its stored coverage - T11's gate read `web.py` 888-889, the row
+    villages' branch, as unrun. The entry records each measured file's bytes; a change to any is a miss."""
+    from coverage import CoverageData
+
+    eng, gen, _out = _fixture(tmp_path)
+    _with_engine(monkeypatch, tmp_path, eng)
+    deps = gencache.run_and_record(str(gen))
+    measured = tmp_path / "measured.py"
+    measured.write_text("def f():\n    return 1\n")
+    cov = CoverageData(basename=str(tmp_path / "real.coverage"))
+    cov.add_lines({str(measured): [1, 2]})
+    cov.write()
+    gencache.store(str(gen), deps, coverage_data=str(tmp_path / "real.coverage"))
+    record = Path(gencache.CACHE_DIR, "toy", gencache.COVERAGE_FILES_NAME)
+    assert list(json.loads(record.read_text())) == [str(measured)]
+    assert gencache._coverage_files_unchanged(str(gen)), "nothing it measured moved: replayable"
+    measured.write_text("# a comment above\ndef f():\n    return 1\n")
+    assert not gencache._coverage_files_unchanged(str(gen)), "its lines moved under the stored coverage: regenerate"
+    record.write_text("{}")
+    assert not gencache._coverage_files_unchanged(str(gen)), "an empty record is doubt"
+    record.unlink()
+    assert not gencache._coverage_files_unchanged(str(gen)), "an entry recorded before this: regenerated once"
+    gencache.store(str(gen), deps, coverage_data=str(tmp_path / "real.coverage"))
+    gencache.store(str(gen), deps)
+    assert not record.exists(), "the record goes with the coverage"
+    assert gencache._measured_shas(str(tmp_path / "none.coverage")) == {} and gencache._sha_of(str(tmp_path / "gone.py")) == ""
+
+
 _REAL_ENGINE_RELS = [gencache._rel(p) for p in gencache.engine_files()]
 
 

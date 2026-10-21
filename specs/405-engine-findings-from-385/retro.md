@@ -86,3 +86,8 @@ the guard's single-quoted Python broke every case of its suite until removed.
 The third one-claim experiment (the GM, 2026-10-21), the first after T36-T41. The fallback the claim called DRIFTED never ran
 (`web_cuts` puts every cut within reach of a house), so the fix is its removal and a test of the invariant. Timings:
 `landing-analysis-3.md`.
+
+## T42 - the retro row
+
+About 25 min, found landing T11: the gen cache served the row villages and replayed their coverage over lines T11's
+comment had shifted. `GATE_NO_CACHE=1`, the old recovery, is refused by the roll census now. Measured in `landing-analysis-3.md`.

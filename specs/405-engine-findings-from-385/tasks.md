@@ -38,6 +38,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [x] T41 The gate runs beside the claims round: its tree check and the gate-write guard pass a docstring-only engine edit and the claims round's records (landing-analysis-2.md, E)
       research: rendering
       verify: DONE. landed in batch T36+T37+T38+T39+T40+T41: tests/tooling 2085 green, hooks-test green (gate-write suite 22); each new test red without its change; plan review CLEAR (round 2, D10-D15)
+- [ ] T42 The gen cache replays a served map's coverage by LINE NUMBER after an edit elsewhere in a file it measured (a function the map never runs) shifted its lines: T11's gate failed web.py 888-889 (the row-village branch, lines Kashikawa and Mizuguchi reach) though no line it reached changed. Record each measured file's bytes with the stored coverage and regenerate a map whose measured files changed; GATE_NO_CACHE=1 no longer recovers (the roll census refuses its re-rolls) (found landing 405 T11, 2026-10-21)
+      research: rendering
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
 - [ ] T02 (385 T36) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
@@ -108,3 +110,4 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - none: T12 - a lane end now stops on its last segment where it last serves, not on the vertex before it; the rule it keeps (0246's drawing page, "Lane ends": pulled back to the last house it serves) is unchanged and no glyph is redrawn, so no glyph or settlement review is owed (one pool map, Kuwabata, moved by the gate)
 - none: T14 - the finishing sweep's lane ends now stop where they last serve, and a link off a way with nothing at its far end is still emptied; the rule it keeps (0246's drawing page, "Lane ends") is unchanged and no glyph is redrawn, so no glyph or settlement review is owed
 - none: T11 - a dead fallback removed from the web's cut lines; no map changes and no glyph is redrawn, so no glyph or settlement review is owed
+- none: T42 - the gate's generation cache regenerates a map whose measured files changed; no map's content changes and nothing is drawn, so no glyph or settlement review is owed
