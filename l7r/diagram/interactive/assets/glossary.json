@@ -17322,5 +17322,17 @@
   "variants": [
    "Board of Works"
   ]
+ },
+ "Nyorai": {
+  "def": "A title of a Buddha, used for a Buddha's image: the Amida Nyorai is the Buddha Amida, and the Zenkoji Nyorai is the hidden image of the Zenkoji temple.",
+  "variants": [
+   "Nyorai"
+  ]
+ },
+ "li of silver": {
+  "def": "A thousandth of a tael of silver (釐), written with the same romanized word as the li of distance.",
+  "variants": [
+   "li of silver"
+  ]
  }
 }
