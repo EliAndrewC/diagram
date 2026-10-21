@@ -20,6 +20,18 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [x] T35 render-sync after a landing runs in the background: sync-with-main.sh done returns once the work is on main (landing-analysis.md) [lands-open]
       research: rendering
       verify: DONE. landed in batch T30+T31+T32+T33+T34+T35: tests/tooling 2076 green; test-sync-with-main and the approval suite green; hooks-test green; each red without its change (plan review CLEAR, D2-D7)
+- [ ] T36 The claims gate refuses only what the change made: the impl-drift bundle marks the lines the delta changed, a finding resting on none of them (and not on a claim the delta added or reworded) is tagged [outside the change], and the gate carries it as a task of the feature instead of refusing; make land files the carry itself (landing-analysis-2.md, A)
+      research: rendering
+- [ ] T37 make claims-owed and claims-bundle name a new unit whose only claim is the module's inherited NONE, before any agent runs (landing-analysis-2.md, B)
+      research: rendering
+- [ ] T38 The step-back clock: a background agent finishing after the turn ended no longer ends the wait on the GM (checkpoint.gm_waits, idle) (landing-analysis-2.md, C)
+      research: rendering
+- [ ] T39 A pass dispatched on a claims bundle is traced to the active task's feature for its ledger row (ledger_owed.belongs) (landing-analysis-2.md, D)
+      research: rendering
+- [ ] T40 The preflight's coverage step judges every line of a changed function, and refuses an uncovered one the last green gate reached only by unit tests (landing-analysis-2.md, F)
+      research: rendering
+- [ ] T41 The gate runs beside the claims round: its tree check and the gate-write guard pass a docstring-only engine edit and the claims round's records (landing-analysis-2.md, E)
+      research: rendering
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
 - [ ] T02 (385 T36) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]

@@ -33,7 +33,9 @@ for _ in $(seq 1 50); do pgrep -f "[m]ake done" >/dev/null && break; sleep 0.1; 
 check "an Edit inside the tree: refused" 2 "$(run "$R" "$EDIT")"
 check "...naming make verify-wait" yes "$(grep -q 'make verify-wait' "$R/err" && echo yes || echo no)"
 check "a git commit: refused" 2 "$(run "$R" "$COMMIT")"
-check "make append (the ledger): refused" 2 "$(run "$R" "$APPEND")"
+check "make append (the ledger, a claims-round record): let through (405 T41)" 0 "$(run "$R" "$APPEND")"
+check "make claims-checked: let through (405 T41)" 0 "$(run "$R" '{"tool_name":"Bash","tool_input":{"command":"make claims-checked BUNDLE=/tmp/b REPLY=/tmp/r"}}')"
+check "make tick: refused" 2 "$(run "$R" '{"tool_name":"Bash","tool_input":{"command":"make tick F=405 T=T01 NOTE=x"}}')"
 check "git add: refused (a staged new file is in what the gate compares)" 2 "$(run "$R" "$ADD")"
 check "make record-checked: refused (a REPLY files rows in a tracked found.jsonl)" 2 "$(run "$R" "$RECORD")"
 check "make modal-triaged (writes under .git only): let through" 0 "$(run "$R" '{"tool_name":"Bash","tool_input":{"command":"make modal-triaged BUNDLE=/tmp/b REPLY=/tmp/r"}}')"
@@ -42,6 +44,33 @@ check "the escape: let through" 0 "$(run "$R" '{"tool_name":"Bash","tool_input":
 check "another tree's command, its own gate not running: let through" 0 "$(run "$OTHER" "$COMMIT")"
 check "an Edit outside this tree: let through" 0 "$(run "$R" "$(printf '{"tool_name":"Edit","tool_input":{"file_path":"%s/b.txt"}}' "$OTHER")")"
 pkill -f "sleep 30" 2>/dev/null
+
+echo "--- 3. a change the gate does not see (feature 405 T41, D15) ---"
+# a tree with the gate's own tools: a docstring or comment in an engine file, or a claims-round record, passes; code does not
+S=$(mktemp -d); git -C "$S" init -q
+mkdir -p "$S/scripts/gates" "$S/l7r/diagram" "$S/dev"
+cp "$HERE/../../scripts/gates/preflight.py" "$HERE/../../scripts/gates/gate-stamp.py" "$S/scripts/gates/"; mkdir -p "$S/scripts/hooks/lib"; cp "$HERE/../../scripts/hooks/lib/usage_log.py" "$S/scripts/hooks/lib/"
+printf 'def f(x):\n    """Research: a claim - NONE"""\n    return x + 1\n' > "$S/l7r/diagram/m.py"
+printf '{}\n' > "$S/dev/claims-index.json"
+printf 'done:\n\t@sleep 30\n' > "$S/Makefile"
+git -C "$S" add -A; git -C "$S" -c user.email=t@t -c user.name=t commit -qm base
+python3 "$S/scripts/gates/preflight.py" --root "$S" --tree-snap "$S/.git/gate-tree.json"
+( cd "$S" && setsid nohup make done </dev/null >/dev/null 2>&1 & )
+for _ in $(seq 1 50); do pgrep -f "[m]ake done" >/dev/null && break; sleep 0.1; done
+DOC=$(printf '{"tool_name":"Edit","tool_input":{"file_path":"%s/l7r/diagram/m.py","old_string":"a claim - NONE","new_string":"a claim reworded - NONE"}}' "$S")
+CODE=$(printf '{"tool_name":"Edit","tool_input":{"file_path":"%s/l7r/diagram/m.py","old_string":"x + 1","new_string":"x + 2"}}' "$S")
+check "an Edit of a claim docstring: let through" 0 "$(run "$S" "$DOC")"
+check "an Edit of a code token: refused" 2 "$(run "$S" "$CODE")"
+check "a Write of a claims-round record: let through" 0 "$(run "$S" "$(printf '{"tool_name":"Write","tool_input":{"file_path":"%s/dev/claims-index.json","content":"{\\"k\\": 1}\\n"}}' "$S")")"
+sed -i 's/a claim - NONE/a claim reworded - NONE/' "$S/l7r/diagram/m.py"; printf '{"k": 1}\n' > "$S/dev/claims-index.json"
+check "a commit of only those: let through" 0 "$(run "$S" "$COMMIT")"
+git -C "$S" -c user.email=t@t -c user.name=t commit -qam claims
+check "...and the gate's tree check reads the run as unmoved" 0 "$(python3 "$S/scripts/gates/preflight.py" --root "$S" --tree-check "$S/.git/gate-tree.json" >/dev/null; echo $?)"
+sed -i 's/x + 1/x + 2/' "$S/l7r/diagram/m.py"
+check "a commit holding code: refused" 2 "$(run "$S" "$COMMIT")"
+check "...and the tree check names it" 1 "$(python3 "$S/scripts/gates/preflight.py" --root "$S" --tree-check "$S/.git/gate-tree.json" >/dev/null; echo $?)"
+pkill -f "sleep 30" 2>/dev/null
+rm -rf "$S"
 
 echo "-----"
 printf 'test-gate-write-hooks: passed %s, failed %s\n' "$PASS" "$FAIL"

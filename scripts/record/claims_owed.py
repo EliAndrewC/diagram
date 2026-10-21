@@ -129,6 +129,11 @@ def relabel_answered(was: Mapping[str, Any], row: Row, root: Path) -> bool:
 
 def _source(root: Path, unit: Any) -> str:  # noqa: ANN401
     """A unit's lines, with the comment block directly above it (a constant's why lives there)."""
+    return source_span(root, unit)[1]
+
+
+def source_span(root: Path, unit: Any) -> tuple[int, str]:  # noqa: ANN401
+    """(the 1-based line `_source`'s text starts at, the text) - so a bundle can mark the lines a delta changed (405 T36)."""
     lines = (root / unit.path).read_text(encoding="utf-8").split("\n")
     start = unit.lineno - 1
     while start > 0 and lines[start - 1].lstrip().startswith(("#", "@")):
@@ -144,4 +149,4 @@ def _source(root: Path, unit: Any) -> str:  # noqa: ANN401
     if unit.kind == "constant" and end < len(lines) and lines[end].lstrip().startswith(('"""', "'''", '"', "'")):
         while end < len(lines) and lines[end].strip():  # the claim literal after it
             end += 1
-    return "\n".join(lines[start:end])
+    return start + 1, "\n".join(lines[start:end])

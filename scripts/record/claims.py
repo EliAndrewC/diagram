@@ -233,6 +233,7 @@ from claims_owed import (  # noqa: E402,F401 - the owed half, split out at the b
     relabel_answered,
     relabeled_only,
     research_why,
+    source_span,
     standing,
 )
 
@@ -292,7 +293,12 @@ def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path, cont
         "END EVERY VERDICT NOTE with the blocks of the cited questions it rests on, as numbered in the question files: "
         "`[§3, §12]`, or `[§]` when the questions are silent on the claim. A later edit to a page re-checks a claim only "
         "when a block it rests on changes (feature 318), so name every block your verdict reads.\n",
+        "LINES MARKED `+` ARE THE CHANGE being landed (against main). A DRIFTED, NEEDS-RESEARCH, MISLABELED or CANNOT-TELL verdict, "
+        "or an UNCLAIMED decision, that rests on NO marked line - code the change did not touch, under a claim it did not add or "
+        "reword - begins its note `[outside the change]`: it is filed as a task, not held against the change (feature 405 "
+        "T36). Anything the change made or could have made untrue carries no tag. A unit with no marked line has no tag to give.\n",
     ]
+    marked = changed_lines(root)
     for uid, rows in by_uid.items():
         unit = rows[0].unit
         lang = "markdown" if unit.kind == "section" else "python"
@@ -301,8 +307,8 @@ def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path, cont
             parts.append(f"- KEY `{r.key}`: `{r.claim.line}`" + (" (inherited from the module docstring)" if unit.inherited else ""))
         if unit.names:
             parts.append("- constants it reads: " + "; ".join(f"`{n}`" for n in unit.names))
-        src = _source(root, unit)
-        parts.append(f"\n```{lang}\n{src}\n```\n")
+        first, src = source_span(root, unit)
+        parts.append(f"\n```{lang}\n{mark_changed(src, first, marked.get(unit.path, set()))}\n```\n")
         if unit.kind != "section":  # ...the module's own functions it calls, and what a CANNOT-TELL asked for (385 T25, D47)
             asked = [n for r in rows for n in re.findall(r"`([A-Za-z_]\w*)", (index.get(r.key) or {}).get("note", "")) if (index.get(r.key) or {}).get("verdict") == "CANNOT-TELL"]
             far = claims_context.direct(root, unit, src, context_source) if any(claims_context.DISTANCE.search(r.claim.label) for r in rows) else []
@@ -368,6 +374,39 @@ def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path, cont
         encoding="utf-8",
     )
     return out / "MANIFEST.md"
+
+
+def changed_lines(root: Path, base: str = "origin/main") -> dict[str, set[int]]:
+    """path -> the lines the delta added or changed, against the merge base with `base`, the working tree included (405 T36)."""
+    mb = (_git(root, "merge-base", "HEAD", base) or "").strip()
+    out: dict[str, set[int]] = {}
+    path = ""
+    for line in (_git(root, "diff", "-U0", mb) or "").splitlines() if mb else []:
+        if line.startswith("+++ "):
+            path = line[6:] if line.startswith("+++ b/") else ""
+        elif path and (m := _HUNK.match(line)):
+            start, n = int(m.group(1)), int(m.group(2) or 1)
+            out.setdefault(path, set()).update(range(start, start + n))
+    return out
+
+
+_HUNK = re.compile(r"^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@")
+OUTSIDE = "[outside the change]"
+
+
+def mark_changed(src: str, first: int, changed: set[int]) -> str:
+    """`src` (starting at line `first`) with each line the delta changed marked `+ `, the rest indented to match - or as it is
+    when the delta changed none of it."""
+    lines = src.split("\n")
+    if not any(first + i in changed for i in range(len(lines))):
+        return src
+    return "\n".join(("+ " if first + i in changed else "  ") + ln for i, ln in enumerate(lines))
+
+
+def outside_tag(note: str) -> tuple[bool, str]:
+    """(did the check tag it outside the change, the note without the tag)."""
+    s = note.strip()
+    return (True, s[len(OUTSIDE) :].strip()) if s.startswith(OUTSIDE) else (False, note)
 
 
 # ---- recording a verdict -------------------------------------------------------------------------------------------
@@ -443,6 +482,7 @@ def record(
             msgs.append(f"no verdict for `{key}` - it stays owed")
             continue
         verdict, note = verdicts[key]
+        outside, note = outside_tag(note)
         note, rests = rests_of(note, numbered or {})
         # ...ONLY ON ITS OWN PAGES (feature 328 wave 95): an agent re-sent a fresh bundle cited the section numbers of the bundle it
         # first read, and claims came to rest on blocks of pages they do not cite, so an edit to their own pages no longer
@@ -469,12 +509,15 @@ def record(
             row["section"] = fp["section"]
         if rests is not None:
             row["rests"] = rests
+        if outside and verdict in FINDINGS:
+            row["outside"] = True
         out[key] = row
     cores = {u["uid"]: u["core"] for u in units.values()}
-    for uid, decision in unclaimed:
+    for uid, said in unclaimed:
         if uid not in cores:
             msgs.append(f"refused: UNCLAIMED `{uid}` is not a unit of this bundle")
             continue
+        outside, decision = outside_tag(said)
         out[f"{uid}#{decision}"] = {
             "verdict": "UNCLAIMED",
             "code": cores[uid],
@@ -482,6 +525,7 @@ def record(
             "research": "",
             "date": today,
             "note": decision,
+            **({"outside": True} if outside else {}),
         }
         msgs.append(f"UNCLAIMED {uid} - {decision}: write a claim for it, then check it")
     return out, msgs
@@ -637,6 +681,11 @@ def classify(
         if was is not None and was.get("verdict") in FINDINGS:
             pre.append(line)
             continue
+        # ...OUTSIDE THE CHANGE (feature 405 T36, D10): a finding the check tagged as resting on no line the delta changed is
+        # carried as a task of the feature - an UNCLAIMED decision, or one under a claim the delta left as the base had it
+        if v.get("outside") and (v["verdict"] == "UNCLAIMED" or (was is not None and was.get("claim") and was.get("claim") == v.get("claim"))):
+            carried.append((key, line))
+            continue
         uid, core = key.rsplit("#", 1)[0], v.get("core", "")
         row = cur.get(key)
         if was is not None:
@@ -652,6 +701,23 @@ def classify(
             code_changed = not (cores.get(uid) == core or core in gone_cores)
             (intro if code_changed or research_changed else pre).append(line)
     return intro, pre, carried
+
+
+def _say(lines: Sequence[str]) -> None:
+    for x in lines:
+        print(x)
+
+
+def inherited_none(cur: Mapping[str, Row], due: Sequence[tuple[str, str]]) -> list[str]:
+    """A notice for each NEW unit whose only claim is its module's inherited `NONE` (feature 405 T37, D11): T14's new helper
+    `_walk_in` inherited `lane sweep plumbing - NONE`, and its first impl-drift round spent itself saying it decides where a lane
+    end stops. A notice, not a refusal: a new helper may truly be plumbing."""
+    return [
+        f"claims-owed: {cur[k].uid} is new and carries only its module's NONE - if it decides anything about the place, "
+        "give it its own `Research:` line before the check"
+        for k, why in due
+        if why == "new" and k in cur and cur[k].unit.inherited and cur[k].claim is not None and cur[k].claim.backing == "NONE"
+    ]
 
 
 def split_keys(text: str, known: Mapping[str, Any]) -> list[str]:
@@ -773,8 +839,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             return 0
         full = judged(due)
         mods = Counter(cur[k].unit.path for k in full)
-        for key, why in due:
-            print(f"{why:<16} {key}")
+        _say([f"{why:<16} {key}" for key, why in due] + inherited_none(cur, due))
         if full:
             print(f"claims-owed: {len(full)} claim(s) in {len(mods)} file(s) owe impl-drift; bundle per file with `make claims-bundle MODULE=<path>`, or OWED=1 for all")
         if len(due) > len(full):
@@ -870,6 +935,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 file=sys.stderr,
             )
             return 3
+        _say(inherited_none(cur, [(k, due.get(k, "")) for k in keys]))
         print(bundle(root, cur, keys, out, [c for c in args.context.split(",") if c], [p for p in args.pages.split(",") if p]))
         if not_owed:
             print(f"claims-bundle: re-check of {len(not_owed)} claim(s) not owed, because: {args.reason}")

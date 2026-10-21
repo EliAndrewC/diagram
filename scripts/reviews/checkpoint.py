@@ -78,7 +78,10 @@ def gm_waits(root: Path, feature: str, since: float, now: float) -> float:
             if e.get("gm") is True:
                 waited += max(0.0, min(t, now) - max(stop, since))
             stop = None
-        elif e.get("ev") in ("PreToolUse", "SubagentStop"):
+        elif e.get("ev") == "PreToolUse":
+            # ...AND ONLY THE SESSION'S OWN ACT ENDS IT (feature 405 T38, D12): a background agent finishing after the turn ended
+            # (`SubagentStop`) is no act of the session's - 405's step-back came due after ~17 minutes of work because two such
+            # stops (14:14Z, 15:05Z) ended the wait and the 12 hours to the GM's prompt counted as idle gaps instead
             stop = None
     return waited
 
@@ -108,7 +111,8 @@ def idle(root: Path, feature: str, since: float, now: float) -> float:
         if last is not None and not stopped:
             lo, hi = max(last, since), min(t, now)
             gone += max(0.0, hi - lo - IDLE_S) if hi - lo > IDLE_S else 0.0
-        last, stopped = t, e.get("ev") == "Stop" or (stopped and e.get("ev") not in ("UserPromptSubmit", "PreToolUse", "SubagentStop"))
+        # a gap after a Stop stays the wait's through a `SubagentStop` (D12), so `gm_waits` and this never count one span twice
+        last, stopped = t, e.get("ev") == "Stop" or (stopped and e.get("ev") not in ("UserPromptSubmit", "PreToolUse"))
     return gone
 
 

@@ -293,6 +293,16 @@ def _lines_of(path: Path | None) -> list[dict]:
     return out
 
 
+def _active_feature(repo: Path) -> str:
+    """The number of the feature `.specify/feature.json` names (the clone's active feature), or ''."""
+    try:
+        fd = json.loads((repo / ".specify" / "feature.json").read_text(encoding="utf-8")).get("feature_directory", "")
+    except (OSError, ValueError):
+        return ""
+    m = FEATURE_DIR.search(str(fd) + "-")
+    return m.group(1) if m else ""
+
+
 def belongs(p: dict[str, str], num: str, questions: set[str], repo: Path, transcripts: Path = review_cost.DEFAULT_ROOT) -> bool:
     subject = p.get("subject", "")
     if subject.startswith("[Workflow harness"):
@@ -300,6 +310,10 @@ def belongs(p: dict[str, str], num: str, questions: set[str], repo: Path, transc
     if re.search(rf"(?:feature |specs/|\b){num}-|feature {num}\b", subject):
         return True
     if questions & set(re.findall(r"(?<![\d.])(\d{4})(?!\d)", subject)):
+        return True
+    # A CLAIMS ROUND'S PASS IS THE ACTIVE FEATURE'S (feature 405 T39, D13): its bundle is the clone's own (`make claims-bundle`,
+    # `make claims-triage`) and its prompt names no feature - T14's landing refused once on three impl-drift passes for that
+    if re.search(r"l7r-check/claims-(?:owed|triage)\b", subject) and _active_feature(repo) == num:
         return True
     key = re.search(r"/key-([\w-]+?)(?:-whole)?/", subject)
     return bool(key) and any(key.group(1) in f.read_text(encoding="utf-8") for q in questions for f in repo.glob(f"research/questions/{q}-*.html"))

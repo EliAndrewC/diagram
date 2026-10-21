@@ -264,3 +264,13 @@ def test_a_write_naming_a_feature_writes_only_the_passes_traced_to_it(tmp_path: 
     (sub / "agent-w1.jsonl").write_text(json.dumps(first) + "\n")
     wave = {**_pass(subject="[Workflow harness — computed task] The task text below was computed at runtime"), "agent": "w1"}
     assert lo.belongs(wave, "395", {"0255"}, repo, tmp_path / "proj") and not lo.belongs(wave, "396", {"0259"}, repo, tmp_path / "proj")
+    # a claims round's pass names only its bundle: it is the active feature's (feature 405 T39, D13)
+    drift = _pass(subject="Judge the claims in the bundle at /tmp/l7r-check/claims-owed/MANIFEST.md (read it and the files beside it).")
+    assert not lo.belongs(drift, "395", set(), repo, tmp_path / "proj"), "no active feature: untraced"
+    (repo / ".specify").mkdir()
+    (repo / ".specify/feature.json").write_text(json.dumps({"feature_directory": "specs/395-shrine"}))
+    triage = _pass(subject="Triage the claims in the bundle at /tmp/l7r-check/claims-triage/MANIFEST.md")
+    assert lo.belongs(drift, "395", set(), repo, tmp_path / "proj") and lo.belongs(triage, "395", set(), repo, tmp_path / "proj")
+    assert not lo.belongs(drift, "396", set(), repo, tmp_path / "proj"), "never another feature's"
+    (repo / ".specify/feature.json").write_text("not json")
+    assert not lo.belongs(drift, "395", set(), repo, tmp_path / "proj")

@@ -64,6 +64,15 @@ def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str) -> list[str
     run(root, [sys.executable, str(HERE / "reviews" / "ledger_owed.py"), "--write-plan-reviews", "--ledger", str(root / "dev" / "review-ledger.md")])
     if run(root, ["git", "status", "--porcelain", "--", "dev/review-ledger.md"])[1].strip():
         run(root, ["git", "commit", "-q", "-m", "the plan reviews' ledger rows, written at landing (feature 385 T72)", "--", "dev/review-ledger.md"])
+    # A FINDING OUTSIDE THE CHANGE IS FILED, NOT REFUSED (feature 405 T36, D10): the carry files every carried claims finding as an
+    # open task of this feature - what `make claims-carry` does by hand - and the box lands with the work
+    num = d.name.split("-", 1)[0]
+    rc, said = run(root, [sys.executable, str(HERE / "record" / "claims.py"), "--root", str(root), "carry", "--feature", num])
+    if rc == 0 and "filed into" in said:
+        print(f"land: {said.strip()}", flush=True)
+        rel = str(d.relative_to(root))
+        run(root, ["git", "add", "--", f"{rel}/tasks.md", f"{rel}/claims-carried.jsonl"])
+        run(root, ["git", "commit", "-q", "-m", f"{d.name}: claims findings outside the change filed as a task (make land, 405 T36)"])
     if run(root, ["git", "status", "--porcelain"])[1].strip():
         stops.append("uncommitted changes - commit them first")
     _rc, owed = run(root, [sys.executable, str(HERE / "reviews" / "ledger_owed.py"), "--ledger", str(root / "dev" / "review-ledger.md")])

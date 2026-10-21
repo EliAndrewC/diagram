@@ -97,7 +97,7 @@ def _file_into(text: str, task: str, keys: list[str], by: str = "the claims gate
 def _new_box(text: str, keys: list[str], ruling: str = "") -> tuple[str, str]:
     """(`text` with a new open box for `keys`, the box's id): numbered after the highest task, before the GM-review box."""
     task = f"T{max((int(m.group(2)[1:]) for m in _BOX.finditer(text)), default=0) + 1:02d}"
-    by = f"the round arbiter's ruling {ruling}: findings it carried" if ruling else "the claims gate (FR-013): findings a page edit surfaced on code left unchanged"
+    by = f"the round arbiter's ruling {ruling}: findings it carried" if ruling else "the claims gate (FR-013): findings on code the change left unchanged"
     box = f"- [ ] {task} Carried by {by} - fix the code or the claim and re-check each: {', '.join(keys)}{_LANDS_OPEN}\n      research: rendering\n"
     gm = re.search(r"^- \[[ x]\] GM review\b", text, re.M)
     if gm:
@@ -142,7 +142,7 @@ def gate(cx: Any, root: Path) -> tuple[list[str], list[str]]:  # noqa: ANN401 - 
     done = filed(root)
     d = active_feature(root)
     how = f"`make claims-carry F={d.name.split('-', 1)[0]}`" if d is not None else "`make task-start F=<n> T=<Txx>`, then `make claims-carry F=<n>`"
-    unfiled = [f"carry: {line} - a page edit's finding on unchanged code: file it with {how}" for k, line in carried if k not in done]
+    unfiled = [f"carry: {line} - a finding on code the change left unchanged: file it with {how} (make land files it itself)" for k, line in carried if k not in done]
     warn = [f"carried ({d.name if d else ''} {done[k]}): {line}" for k, line in carried if k in done]
     return refuse + [f"introduced: {x}" for x in intro] + unfiled, [f"pre-existing: {x}" for x in pre] + warn
 

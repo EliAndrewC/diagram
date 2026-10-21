@@ -308,6 +308,26 @@ def test_every_cheap_refusal_is_named_together_before_anything_runs(tmp_path: pa
         assert want in err, want
 
 
+def test_the_first_pass_files_the_findings_outside_the_change_and_commits_them(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 405 T36 (D10): a claims finding the check tagged outside the change is carried, and `make land` files the carry as
+    a task of the feature itself, committing the box, before it asks the claims gate."""
+    lb, _d = _land(tmp_path, monkeypatch)
+    seen: list[list[str]] = []
+    said = {"carry": (0, "claims-carry: 2 finding(s) filed into 188-alpha T09; commit tasks.md and claims-carried.jsonl with the landing\n")}
+
+    def run(root: pathlib.Path, cmd: list[str], env: dict | None = None, quiet: bool = True) -> tuple[int, str]:
+        seen.append([str(c) for c in cmd])
+        return said["carry"] if "carry" in cmd else (0, "")
+
+    monkeypatch.setattr(lb, "run", run)
+    assert lb.cheap_refusals(tmp_path, _d, ["T02"], "x") == []
+    carry = next(i for i, c in enumerate(seen) if "carry" in c)
+    assert seen[carry][-2:] == ["--feature", "188"]
+    assert seen[carry + 2][:2] == ["git", "commit"] and any("claims-gate.sh" in c[0] for c in seen[carry:]), "committed, then the gate"
+    seen.clear(), said.update(carry=(0, "claims-carry: no carried finding is unfiled\n"))
+    assert lb.cheap_refusals(tmp_path, _d, ["T02"], "x") == [] and not any(c[:2] == ["git", "commit"] for c in seen), "nothing filed"
+
+
 def test_the_long_runs_run_only_where_their_record_does_not_cover(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
     """Feature 405 T33 (D5): T12's make done and make cohort-landing each waited for a refusal to name it."""
     lb, _d = _land(tmp_path, monkeypatch)

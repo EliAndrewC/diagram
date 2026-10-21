@@ -19,3 +19,9 @@ The GM, 2026-10-20, starting it:
 The GM, after T12's numbers:
 
 > No, I do not want each landing to owe a lands open line at the top of the spec, because that's going to slow things down. As you say, that took 3 minutes. It sounds like the landing being the biggest cost is something that we need to do something about. I'm not especially concerned with the spec review portion, because as you say, that's, you know, something that we do at the beginning of a feature, and that won't be the case for other tasks, but 5 minutes is an acceptable amount of time for actually implementing the task. So that's a really good sign, I think. So it sounds like you already have some idea what to do here, but why don't you do an in-depth analysis of what you think would have been a good process that would have done what we wanted in kind of a reasonable amount of time, and what else is needed to make that happen, then create tasks for those changes that will be the very next tasks that we do here in this feature, and then go ahead and work those tooling and process changes. Let me know when you're done so that we can decide whether or not to repeat this experiment by performing another claims task. Thanks.
+
+## Amendment 2 (2026-10-21) - the second claim's fixes
+
+The GM, after T14's numbers (`landing-analysis-2.md`, proposals A-G):
+
+> Let's implement A, B, C, D, F, and E.  Go ahead and implement all of those.  when you're done we'll decide whether to proceed with impementing 1 more claims task.

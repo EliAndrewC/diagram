@@ -52,3 +52,31 @@ once the work is on main; T12's push spent 2.5 min there on other sessions' maps
 The second one-claim experiment (the GM, 2026-10-20), the first landed with `make land`. The plan's `make decide` refused an
 unlabeled figure again, as on T12; the walk alone would have kept stubs off a way, so D9 brought `_trim_to_service`'s
 feature-261 rule into the sweep. The step-back met the claims round. Timings: `landing-analysis-2.md`.
+
+## T36 - the retro row
+
+About 35 min with B. The bundle marks the change's lines; the check tags what rests on none of them; the gate carries it and
+`make land` files the carry. Measured on the next claim task.
+
+## T37 - the retro row
+
+About 5 min. A notice in `claims-owed` and `claims-bundle`; `claims.py main` sat at the 100-statement cap and needed one fold.
+
+## T38 - the retro row
+
+About 10 min. A `SubagentStop` no longer ends a wait on the GM; the test replays 405's own overnight events.
+
+## T39 - the retro row
+
+About 5 min. A claims-bundle pass is the active feature's.
+
+## T40 - the retro row
+
+About 25 min. A changed function is judged whole; an unchanged line of it is refused only on the gate baseline's evidence that
+quick-tier tests alone reached it (`sweeps.py:738` was exactly that).
+
+## T41 - the retro row
+
+About 35 min. One predicate (`preflight.unseen`) for the tree check and the gate-write guard. The first plan review blocked
+`plan.md` and every feature's `tasks.md` as unseen; narrowed to the active feature's records. An apostrophe in a comment inside
+the guard's single-quoted Python broke every case of its suite until removed.

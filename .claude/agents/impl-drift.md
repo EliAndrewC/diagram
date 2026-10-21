@@ -104,6 +104,11 @@ each on its own line, with no backticks needed:
 - END EVERY VERDICT NOTE with the blocks of the cited questions it rests on, as the question files number them: `[§3, §12]`,
   or `[§]` when the questions are silent on the claim. A later page edit re-checks a claim only when a block it rests on
   changes (feature 318), so name every block your verdict reads - a block you leave out is a change you will not be shown.
+- LINES MARKED `+` in a unit's code are the change being landed. A finding (any verdict but IN-STEP, or an UNCLAIMED line) that
+  rests on NO marked line - code the change did not touch, under a claim it did not add or reword - begins its note
+  `[outside the change]`, e.g. `VERDICT <key> DRIFTED - [outside the change] <note> [§4]`. It is filed as a task of the feature
+  rather than held against the landing (feature 405 T36). Anything the change made, or could have made, untrue takes no tag; a
+  unit with no marked line takes none.
 - One VERDICT line for EVERY key in the bundle - a key with no line stays owed. An IN-STEP note is a few words; a finding's note
   says what is wrong and what the claim or the code should be, in one line.
 - Anything you notice OUTSIDE the owed keys - another claim's wording, a page's own gap, code the bundle shows beside the claim -

@@ -330,6 +330,26 @@ def test_an_hour_spent_waiting_on_the_gm_opens_no_step_back(clone: Path) -> None
     assert cp.gm_waits(clone, "999-test", T0, T0 + 63 * 60) == 0.0 and cp.state(clone, T0 + 63 * 60)["due"]
 
 
+def test_a_background_agent_finishing_after_the_turn_does_not_end_the_wait_on_the_gm(clone: Path) -> None:
+    """Feature 405 T38 (D12): 405's step-back came due after ~17 minutes of work - after the Stop two background agents finished
+    (`SubagentStop`), which ended the GM wait, and the 12 hours to the GM's prompt counted as idle gaps, each charged its first
+    20 minutes. Only the session's own act ends a wait."""
+    ev = clone / ".git" / "l7r-events" / "999-test.jsonl"
+    rows = [
+        {"t": _iso(T0), "ev": "PreToolUse", "sid": "s1"},
+        {"t": _iso(T0 + 600), "ev": "Stop", "sid": "s1"},
+        {"t": _iso(T0 + 780), "ev": "SubagentStop", "sid": "s1"},
+        {"t": _iso(T0 + 3900), "ev": "SubagentStop", "sid": "s1"},
+        {"t": _iso(T0 + 12 * 3600), "ev": "UserPromptSubmit", "sid": "s1", "gm": True},
+        {"t": _iso(T0 + 12 * 3600 + 5), "ev": "PreToolUse", "sid": "s1"},
+    ]
+    ev.write_text("".join(json.dumps(r) + "\n" for r in rows))
+    now = T0 + 12 * 3600 + 17 * 60
+    assert cp.gm_waits(clone, "999-test", T0, now) == 12 * 3600 - 600, "the whole span from the Stop to the GM's prompt"
+    assert cp.idle(clone, "999-test", T0, now) == 0.0, "and none of it counted again as idle"
+    assert not cp.state(clone, now)["due"], "about 27 minutes of the session's own time"
+
+
 def test_a_feature_claimed_and_left_idle_is_not_due_on_its_first_touch(clone: Path) -> None:
     """The round arbiter's tooling fix on hour:397@1: a feature claimed overnight came due on its first touch, its hour counted
     from the claim. A gap of its own log past IDLE_S with no Stop before it is time it was not worked."""

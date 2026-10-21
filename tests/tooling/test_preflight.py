@@ -55,7 +55,8 @@ def test_a_tree_that_moves_while_the_gate_runs_is_named(tmp_path: Path, capsys) 
     assert "l7r/diagram/a.py" in capsys.readouterr().out
     subprocess.run(["git", "-C", str(root), "commit", "-qam", "mid-gate"], check=True, env=ENV)
     assert pf.main(["--root", str(root), "--tree-check", str(snap)]) == 1
-    assert "HEAD (a commit or a checkout)" in capsys.readouterr().out
+    assert "l7r/diagram/a.py" in capsys.readouterr().out, "a commit is read for what it changed (405 T41)"
+    assert pf.seen_moves(root, {"HEAD": "0" * 40}, {"HEAD": "1" * 40}) == ["HEAD"], "a HEAD move that cannot be read"
     assert pf.tree_moved({"HEAD": "a", "x": "1"}, {"HEAD": "a", "x": "2", "y": "3"}) == ["x", "y"]
     assert pf.main(["--root", str(root), "--tree-check", str(tmp_path / "missing.json")]) == 0, "no snapshot: nothing to judge"
 
@@ -117,3 +118,80 @@ def test_a_pool_map_the_gate_rolled_itself_is_no_tree_move_and_another_map_s_sti
     (root / "pool/hamlets/other/other.json").write_text('{"hand": 1}\n')  # a map the gate did not roll
     assert pf.main(["--root", str(root), "--tree-check", str(snap), "--census", str(census)]) == 1
     assert "pool/hamlets/other/other.json" in capsys.readouterr().out
+
+
+def test_a_changed_function_is_judged_whole() -> None:
+    """Feature 405 T40 (D14): T14 reworked the one unit test that reached `sweeps.py:738`, a line it did not change, in a
+    function it did; the preflight asked only the changed lines and the gate's floor failed 5.7 minutes in."""
+    text = "x = 1\n\n\ndef f(a):\n    if a:\n        return 1\n    return 2\n\n\nclass C:\n    def m(self):\n        return 3\n"
+    assert pf.function_spans(text) == [(4, 7), (11, 12)]
+    assert pf.function_spans("def (") == []
+    assert pf.base_line("a\nb\nc\nd", "a\nB\nc\nd\ne", 3) == 3 and pf.base_line("a\nb\nc\nd", "a\nB\nc\nd\ne", 2) is None
+    assert pf.base_line("a\nb", "z\na\nb", 3) == 2, "a line moved down by an insertion maps to its old place"
+    assert pf.test_key("tests/a/test_b.py::test_c[1]@grp|run") == "tests.a.test_b::test_c[1]"
+    assert pf.test_key("tests/a/test_b.py::K::test_c|setup") == "tests.a.test_b.K::test_c"
+    assert pf.test_key("fixture:tests/a/test_b.py::built") is None and pf.test_key("") is None
+
+
+def test_the_widened_lines_and_the_quick_run_s_tests(tmp_path: Path) -> None:
+    root = _repo(tmp_path)
+    (root / "l7r" / "diagram" / "a.py").write_text("x = 1\n\n\ndef f(a):\n    if a:\n        return 1\n    return 2\n")
+    subprocess.run(["git", "-C", str(root), "commit", "-qam", "f"], check=True, env=ENV)
+    subprocess.run(["git", "-C", str(root), "update-ref", "refs/remotes/origin/main", "HEAD"], check=True)
+    (root / "l7r" / "diagram" / "a.py").write_text("x = 1\n\n\ndef f(a):\n    if a:\n        return 10\n    return 2\n")
+    assert pf.changed_lines(root) == {"l7r/diagram/a.py": {4, 5, 6, 7}}
+    assert pf.changed_lines(root, widen=False) == {"l7r/diagram/a.py": {6}}
+    junit = tmp_path / "q.xml"
+    junit.write_text('<testsuites><testsuite><testcase classname="tests.a.test_b" name="test_c"/></testsuite></testsuites>')
+    assert pf.quick_ids(junit) == {"tests.a.test_b::test_c"} and pf.quick_ids(tmp_path / "none.xml") == set()
+
+
+def test_a_line_only_unit_tests_reached_at_the_last_green_gate_stops_the_preflight(tmp_path: Path) -> None:
+    """Feature 405 T40 (D14): the gate baseline's `coverage.db` says what reached each line; a line the quick run now leaves unrun
+    and only quick-tier tests reached there is reached by no roll either."""
+    from coverage import CoverageData
+
+    root = _repo(tmp_path)
+    base_text = "def f(a):\n    if a:\n        return 1\n    return 2\n"
+    f = "l7r/diagram/a.py"
+    (root / f).write_text(base_text)
+    subprocess.run(["git", "-C", str(root), "commit", "-qam", "f"], check=True, env=ENV)
+    subprocess.run(["git", "-C", str(root), "update-ref", "refs/remotes/origin/main", "HEAD"], check=True)
+    blob = subprocess.run(["git", "-C", str(root), "rev-parse", f"HEAD:{f}"], capture_output=True, text=True, check=True).stdout.strip()
+    (root / f).write_text("def f(a):\n    if a:\n        return 1\n    return 20\n")  # line 4 changed; line 3 not
+    assert pf.unit_only(root, {f: [3]}, set()) == {}, "no baseline: the gate judges, as before"
+    base = root / ".git" / "gate-baseline"
+    base.mkdir()
+    (base / "manifest.json").write_text(json.dumps({"engine": {f: blob}}))
+    cov = CoverageData(basename=str(base / "coverage.db"))
+    cov.set_context("tests/x/test_a.py::test_unit|run")
+    cov.add_lines({str(root / f): [1, 2, 3, 4]})
+    cov.set_context("tests/gate/test_roll.py::test_roll|run")
+    cov.add_lines({str(root / f): [1, 2, 4]})
+    cov.write()
+    quick = {"tests.x.test_a::test_unit"}
+    assert pf.unit_only(root, {f: [3, 4]}, quick) == {f: [3]}, "3: unit tests only; 4: changed, the gate's to judge"
+    assert pf.split_gaps(root, {f: [3, 4]}, {f}, quick) == ({f: [3]}, {f: [4]}), "on the hamlet path: 3 stops, 4 goes to the gate"
+    assert pf.split_gaps(root, {f: [4]}, set(), quick) == ({f: [4]}, {}), "a changed line off the path stops, as before"
+    assert pf.unit_only(root, {f: [3]}, set()) == {}, "the unit test is not the quick run's: it may be a roll's"
+    assert pf.unit_only(root, {"l7r/diagram/b.py": [1]}, quick) == {}, "a file the baseline does not hold"
+
+
+def test_a_change_the_gate_does_not_see_does_not_move_the_tree(tmp_path: Path) -> None:
+    """Feature 405 T41 (D15): T14's claims round - claim docstrings and its records - voided a running gate. The gate's own key
+    strips docstrings; the claims round's records are read by no phase of it. Code, a byte-hashed area, a deleted file still move it."""
+    root = _repo(tmp_path)
+    (root / ".specify").mkdir()
+    (root / ".specify" / "feature.json").write_text(json.dumps({"feature_directory": "specs/405-x"}))
+    f = "l7r/diagram/a.py"
+    old = b'def f(x):\n    """Research: a - NONE"""\n    return x\n'
+    assert pf.unseen(root, f, old, old.replace(b"a - NONE", b"a reworded - NONE"))
+    assert pf.unseen(root, f, old, old.replace(b"return x", b"return x  # why"))
+    assert not pf.unseen(root, f, old, old.replace(b"return x", b"return x + 1"))
+    assert not pf.unseen(root, f, old, None) and not pf.unseen(root, "notes.md", b"a", b"b")
+    assert pf.unseen(root, "dev/claims-index.json", b"{}", b"{1}") and pf.unseen(root, "specs/405-x/found.jsonl", None, b"r")
+    assert not pf.unseen(root, "specs/405-x/plan.md", b"a", b"b") and not pf.unseen(root, "specs/406-y/tasks.md", b"a", b"b")
+    reg = "l7r/diagram/interactive/classes/k.py"
+    assert not pf.unseen(root, reg, old, old.replace(b"a - NONE", b"b - NONE")), "the registry's docstrings are the page's text"
+    (root / ".specify" / "feature.json").write_text("not json")
+    assert pf.active_records(root) == set()

@@ -121,6 +121,18 @@ def test_owed_says_new_code_changed_and_research_changed_and_nothing_for_prose_o
     assert [(k.rsplit("::", 1)[1], w) for k, w in cx.owed(cx.current(skill), index)] == [("SHARE#dry share", "research changed"), ("far_row#dry share", "research changed")]
 
 
+def test_a_new_unit_with_only_the_inherited_none_is_named_before_the_check(tmp_path: pathlib.Path) -> None:
+    """Feature 405 T37 (D11): T14's new `_walk_in` inherited its module's NONE and its first impl-drift round spent itself saying
+    so. `claims-owed` names such a unit while it is new; an own claim, or a unit already checked, is not named."""
+    skill = _tree(tmp_path)
+    cur = cx.current(skill)
+    notes = cx.inherited_none(cur, cx.owed(cur, {}))
+    assert notes == [
+        "claims-owed: l7r/diagram/hamletgen/rows.py::helper is new and carries only its module's NONE - if it decides anything about the place, give it its own `Research:` line before the check"
+    ]
+    assert cx.inherited_none(cur, cx.owed(cur, _all_in_step(tmp_path))) == [], "checked: no longer new"
+
+
 def test_a_missing_question_fingerprints_as_missing(tmp_path: pathlib.Path) -> None:
     assert cx.research_fp([Q], tmp_path) == cx.research_fp([Q], tmp_path, {}) != ""
     assert cx.research_fp([], tmp_path) == ""
@@ -241,6 +253,55 @@ def test_classify_introduced_and_pre_existing(tmp_path: pathlib.Path) -> None:
     assert cx.classify(base, {k: _row(base, k, "IN-STEP")}, {}, cores, bq) == ([], [], [])
 
 
+def test_a_finding_the_check_tags_outside_the_change_is_carried_not_refused(tmp_path: pathlib.Path) -> None:
+    """Feature 405 T36 (D10): T14's claims round refused three findings on code T14 never changed, because the unit's code
+    changed. The check tags such a finding `[outside the change]`; the gate carries it as a task when it is an UNCLAIMED decision
+    or its claim is as the base had it - never one under a claim the change added or reworded, nor an untagged one."""
+    base_skill = _tree(tmp_path / "base")
+    base = cx.current(base_skill)
+    cores, bq = cx.base_cores(base_skill), base_skill / "research" / "questions"
+    head = cx.current(_tree(tmp_path / "head", MOD.replace("x * SHARE", "x * SHARE + 1")))
+    k = "l7r/diagram/hamletgen/rows.py::far_row#dry share"
+    claim = head[k].claim.normalized()
+    line = f"DRIFTED        {k} - n"
+    was = {k: _row(base, k, "IN-STEP", claim=claim)}
+    assert cx.classify(head, {k: _row(head, k, "DRIFTED", claim=claim)}, was, cores, bq)[0] == [line], "untagged: introduced"
+    assert cx.classify(head, {k: {**_row(head, k, "DRIFTED", claim=claim), "outside": True}}, was, cores, bq) == ([], [], [(k, line)])
+    assert cx.classify(head, {k: {**_row(head, k, "DRIFTED", claim="reworded"), "outside": True}}, was, cores, bq)[0] == [line]
+    assert cx.classify(head, {k: {**_row(head, k, "DRIFTED", claim=claim), "outside": True}}, {}, cores, bq)[0] == [line], "a new claim"
+    ku = "l7r/diagram/hamletgen/rows.py::far_row#the row laid twice"
+    row = {"verdict": "UNCLAIMED", "code": head[k].code, "core": head[k].unit.core, "research": "", "note": "the row laid twice"}
+    assert cx.classify(head, {ku: {**row, "outside": True}}, {}, cores, bq)[2] == [(ku, f"UNCLAIMED      {ku} - the row laid twice")]
+    assert cx.classify(head, {ku: row}, {}, cores, bq)[0], "an untagged decision in changed code: introduced"
+
+
+def test_the_bundle_marks_the_change_and_the_record_keeps_the_tag(tmp_path: pathlib.Path) -> None:
+    """Feature 405 T36 (D10): the check sees which lines the change made, and what it tags outside them is kept on the row."""
+    assert cx.mark_changed("a\nb\nc", 10, {11}) == "  a\n+ b\n  c"
+    assert cx.mark_changed("a\nb", 10, {40}) == "a\nb", "a unit the change did not touch is shown as it is"
+    assert cx.outside_tag("[outside the change] the grove band [§3]") == (True, "the grove band [§3]")
+    assert cx.outside_tag("the grove band") == (False, "the grove band")
+    k = "p.py::f#c"
+    units = {k: {"code": "c1", "core": "k1", "research": "", "uid": "p.py::f"}}
+    reply = f"VERDICT {k} DRIFTED - [outside the change] the fallback keeps the end [§]\nUNCLAIMED p.py::f - [outside the change] the band\n"
+    out, _msgs = cx.record({}, units, reply, "2026-10-21")
+    assert out[k]["outside"] is True and out[k]["note"] == "the fallback keeps the end"
+    assert out["p.py::f#the band"]["outside"] is True
+    out, _msgs = cx.record({}, units, f"VERDICT {k} IN-STEP - [outside the change] fine [§]\n", "2026-10-21")
+    assert "outside" not in out[k], "only a finding carries the tag"
+    # the lines the delta changed, against the merge base with origin/main, the working tree included
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    g = ["git", "-C", str(repo), "-c", "user.email=t@t", "-c", "user.name=t"]
+    (repo / "m.py").write_text("a = 1\nb = 2\nc = 3\n")
+    subprocess.run([*g, "init", "-q"], check=True)
+    subprocess.run([*g, "add", "-A"], check=True)
+    subprocess.run([*g, "commit", "-qm", "base"], check=True)
+    subprocess.run([*g, "update-ref", "refs/remotes/origin/main", "HEAD"], check=True)
+    (repo / "m.py").write_text("a = 1\nb = 20\nc = 3\nd = 4\n")
+    assert cx.changed_lines(repo) == {"m.py": {2, 4}}
+
+
 def test_a_base_with_no_claims_at_all_makes_every_first_finding_on_untouched_code_pre_existing(tmp_path: pathlib.Path) -> None:
     # this feature's own landing: main holds the code but no claims - its units still have cores (the push once read
     # "no claim at the base" as "no unit at the base" and called every audit finding introduced)
@@ -264,7 +325,11 @@ def test_the_gate_refuses_owed_and_introduced_and_warns_pre_existing(tmp_path: p
     idx[k]["verdict"] = "DRIFTED"
     cx.save_index(root / cx.INDEX, idx)
     refuse, warn = cx.gate(root)  # HEAD is the merge base (no origin/main): IN-STEP there, DRIFTED now on the same code
-    assert refuse == [f"carry: DRIFTED        {k} -  - a page edit's finding on unchanged code: file it with `make task-start F=<n> T=<Txx>`, then `make claims-carry F=<n>`"] and warn == []
+    assert (
+        refuse
+        == [f"carry: DRIFTED        {k} -  - a finding on code the change left unchanged: file it with `make task-start F=<n> T=<Txx>`, then `make claims-carry F=<n>` (make land files it itself)"]
+        and warn == []
+    )
     (root / "l7r" / "diagram" / "hamletgen" / "rows.py").write_text(MOD.replace("x * SHARE", "x * SHARE + 1"))
     cur = cx.current(root)
     idx[k] |= {"code": cur[k].code, "core": cur[k].unit.core}
@@ -319,7 +384,7 @@ def test_the_gate_refuses_an_unfiled_carry_naming_the_command_and_lets_a_filed_o
     idx[k]["verdict"] = "DRIFTED"
     cx.save_index(root / cx.INDEX, idx)
     refuse, _warn = cx.gate(root)
-    assert refuse == [f"carry: DRIFTED        {k} -  - a page edit's finding on unchanged code: file it with `make claims-carry F=900`"]
+    assert refuse == [f"carry: DRIFTED        {k} -  - a finding on code the change left unchanged: file it with `make claims-carry F=900` (make land files it itself)"]
     # filing into another feature is refused; into the active one, a new box before the GM-review box
     other = root / "specs" / "901-y"
     other.mkdir()
@@ -328,7 +393,7 @@ def test_the_gate_refuses_an_unfiled_carry_naming_the_command_and_lets_a_filed_o
     assert cx.main(["--root", str(root), "carry", "--feature", "900"]) == 0
     text = (d / "tasks.md").read_text()
     assert (
-        f"- [ ] T02 Carried by the claims gate (FR-013): findings a page edit surfaced on code left unchanged - fix the code or the claim and re-check each: {k} [lands-open]\n      research: rendering\n- [ ] GM review"
+        f"- [ ] T02 Carried by the claims gate (FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: {k} [lands-open]\n      research: rendering\n- [ ] GM review"
         in text
     )
     refuse, warn = cx.gate(root)

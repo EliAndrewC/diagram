@@ -162,6 +162,114 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-20",
    "declared": "spec-fidelity"
+  },
+  "## T36 - the claims gate refuses only what the change made (A)": {
+   "sha256": "ffa620fda29a093030357c0d237f0edeb3c3d2a703b972572da5cf9285e02c06",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T36 Approach (checklist part A)": {
+   "sha256": "540d9f218831fee33c782187f9ff7aca8dd338f4b6c4357945d513e48f4271b2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T36 Decisions": {
+   "sha256": "500de2870fe2db458b1397bf3159959970571a4b5b6f8afe846a02ede15d515e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "## T37 - a new unit with only the inherited NONE is named first (B)": {
+   "sha256": "9afa36e07cd6a14276ea2f0e471fa9181e5b911618ead7c7b6360bc3de078f82",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T37 Approach (checklist part A)": {
+   "sha256": "4cbbc222f24f4b55abbb0ebb1d1e290109951349041c6b308dfc3cab44b6a4d8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T37 Decisions": {
+   "sha256": "593f268061b2f2fd1194d9cdc2f56f58eb38a53f401634750726a0e839ea58b0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "## T38 - the step-back clock keeps the wait on the GM (C)": {
+   "sha256": "68fc4da23da1731a5011d3025096048d8dfaa2559afedebe5a010baac64db58b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T38 Approach (checklist part A)": {
+   "sha256": "eaf60cd465faaa75c8591aecf3258a41a663bf4fb937195132779660318174c5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T38 Decisions": {
+   "sha256": "4f479b9c11327afff08ff3a9240e7efc545215acdb6e70743d133dc301ed8cfd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "## T39 - a claims-bundle pass is traced to the active task's feature (D)": {
+   "sha256": "32a3a1f0026229a8ee9d2b87aee9ac23c2dbbde8da3d13d4a41d254eba735293",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T39 Approach (checklist part A)": {
+   "sha256": "e29af09cbfd682d1bd5bf603b32938f620f961253adbf7c6f7f89ccd7f229da7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T39 Decisions": {
+   "sha256": "415b04ab1cb5954a9b419c15b822be81ef55672a1d650f97661dec85a59b3424",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "## T40 - the preflight judges a changed function's every line (F)": {
+   "sha256": "b4cef784d64ef0a004056d4c8fad9b3a8205921733c0a9c72892fa698885e248",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T40 Approach (checklist part A)": {
+   "sha256": "2e0d2a7cd8559bc739b93ef1994a20104752bb836b5537560893b5287c5345fb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T40 Decisions": {
+   "sha256": "0ff9291857f9058c7e1fed87bdd7bbc5abe98015ececfab7a8a4a450b44035de",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "## T41 - the gate runs beside the claims round (E)": {
+   "sha256": "a2a9871fd3da7d133d80fed1a07d6e238843ddc194f7c72a1e668fd5338583c5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T41 Approach (checklist part A)": {
+   "sha256": "1cf9b6ff3f2ca735433f69ecf9fade2dee99c554b9cd4f780fc3eed3c2c0d88f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T41 Decisions": {
+   "sha256": "83c8c0f7d55efea956eba3fdb3628c1ec910806e09f248fa9341d726091ad014",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -269,6 +377,187 @@
      "summary": "sync-with-main.sh done runs push_cmd then render_sync_background (lock and log as the prompt hook's), printing where the log is; render-sync stays foreground for a hand run",
      "class": "within",
      "why": "Render-sync still runs after every landing, so the GM's 2026-08-12 reason (renders in main kept fresh) is kept; only the landing stops waiting on it, which is the GM's 2026-10-20 landing-cost ask. Residual: a session must not tell the GM to look at a render until the background log shows it finished, or the 2026-08-12 round trip recurs."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T36 - the claims gate refuses only what the change made (A)",
+    "## T37 - a new unit with only the inherited NONE is named first (B)",
+    "## T38 - the step-back clock keeps the wait on the GM (C)",
+    "## T39 - a claims-bundle pass is traced to the active task's feature (D)",
+    "## T40 - the preflight judges a changed function's every line (F)",
+    "## T41 - the gate runs beside the claims round (E)",
+    "### T36 Approach (checklist part A)",
+    "### T36 Decisions",
+    "### T37 Approach (checklist part A)",
+    "### T37 Decisions",
+    "### T38 Approach (checklist part A)",
+    "### T38 Decisions",
+    "### T39 Approach (checklist part A)",
+    "### T39 Decisions",
+    "### T40 Approach (checklist part A)",
+    "### T40 Decisions",
+    "### T41 Approach (checklist part A)",
+    "### T41 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D10",
+     "summary": "T36: the bundle marks changed lines; the agent tags a finding resting on no changed line and no added/reworded claim '[outside the change]'; classify carries it when UNCLAIMED or its claim matches the base; make land runs the carry first.",
+     "class": "within",
+     "why": "Proposal A, approved by the GM 2026-10-21, and the plainer reading of the GM's 2026-10-19 rule ('findings on code a task didn't change as new tasks'): the finding is filed as a task instead of refusing. It changes the operative sentence of 385 FR-013 ('a finding on changed code ... still introduced') at line rather than unit granularity; that is what A asks, not a carve-out from it."
+    },
+    {
+     "id": "D11",
+     "summary": "T37: claims owed prints a notice naming a new unit whose only claim is the inherited NONE; a notice, not a refusal.",
+     "class": "within",
+     "why": "Proposal B ('named first'); naming is what the title promises and nothing in the request or spec asks for a refusal."
+    },
+    {
+     "id": "D12",
+     "summary": "T38: a SubagentStop no longer clears an open Stop in gm_waits, and idle keeps the gap the wait's.",
+     "class": "within",
+     "why": "Proposal C; it conforms the clock to the existing rule (385) that a wait on the GM is not the session's time."
+    },
+    {
+     "id": "D13",
+     "summary": "T39: ledger_owed.belongs traces a subject naming l7r-check/claims-owed or claims-triage to the active task's feature.",
+     "class": "within",
+     "why": "Proposal D; it makes 371/395's existing tracing reach the claims bundles and narrows nothing."
+    },
+    {
+     "id": "D14-function-spans",
+     "summary": "T40: changed_lines widened to every line of each enclosing function; an on-path gap mapped to a baseline line reached only by quick-tier tests (or none) is refused.",
+     "class": "within",
+     "why": "Proposal F's own subject ('judges a changed function's every line'); it widens what the preflight checks."
+    },
+    {
+     "id": "D14-no-baseline",
+     "summary": "T40: with no baseline, today's rule (on-path gaps deferred to the gate).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible otherwise: without a baseline coverage.db there is no evidence of what the rolls reach, and the only alternative, running the rolls, breaks FR-004's 'takes seconds'. The gate's 100% floor still judges the line, so nothing escapes; T14's case (an unchanged line in a changed function with a baseline) is fully caught."
+    },
+    {
+     "id": "D14-changed-line",
+     "summary": "T40: a line the delta changed has no baseline line and keeps today's rule (the gate judges it on the hamlet path).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same ground: a changed line has no baseline counterpart, so no evidence exists for the preflight to read in seconds; the gate still judges it. The purpose (catch the T14 class, an unchanged line in a changed function) is untouched."
+    },
+    {
+     "id": "D15-semantic",
+     "summary": "T41: a .py change outside page/browser whose gate-stamp semantic_bytes are equal is a move the gate does not see; it passes the guard and the tree check.",
+     "class": "within",
+     "why": "Proposal E, and it reuses the stamp's own accepted ruling (385 T57) that a docstring/comment edit is not a change the gate exercised, so tree check and stamp cannot disagree. Not a new exception."
+    },
+    {
+     "id": "D15-records",
+     "summary": "T41: the claims round's records (dev/claims-index.json, dev/claims-pages.json, dev/review-ledger.md, specs/*/ found.jsonl, arbiter.jsonl, claims-carried.jsonl) and make claims-checked / claims-triaged / append pass the gate-write guard (385 FR-010) and the tree check.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the GM's own words: E is 'the gate runs beside the claims round', which cannot happen while FR-010 refuses the claims round's own writes. Each path is a claims-round record the gate does not exercise."
+    },
+    {
+     "id": "D15-plan-tasks",
+     "summary": "T41: specs/*/plan.md and specs/*/tasks.md of ANY feature are also 'unseen', so any git add/commit, Edit or Write of them passes the gate-write guard and leaves the running gate's tree check unmoved.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "A separate case bundled under the claims-round argument. The claims round's only named writer of these is the carry (385 FR-013: claims-carry 'writes the task box'), which touches the landing feature's tasks.md (and plan.md only if the carry writes a block - D15 does not say). As written the slice lets a hand Edit of any feature's plan or tasks through the FR-010 guard mid-gate, which is not the claims round and is not what E asked. It also fails D15's own definition 'a move the gate does not see': 375 FR-004 runs spec-lint inside the gate, and plan.md is what the plan-stage gate digests. Fix: scope it to the writes the carry makes (the active feature's tasks.md, plus its plan.md if and only if the carry writes a block there, said in D15), not every writer on every spec."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T36 - the claims gate refuses only what the change made (A)",
+    "## T37 - a new unit with only the inherited NONE is named first (B)",
+    "## T38 - the step-back clock keeps the wait on the GM (C)",
+    "## T39 - a claims-bundle pass is traced to the active task's feature (D)",
+    "## T40 - the preflight judges a changed function's every line (F)",
+    "## T41 - the gate runs beside the claims round (E)",
+    "### T36 Approach (checklist part A)",
+    "### T36 Decisions",
+    "### T37 Approach (checklist part A)",
+    "### T37 Decisions",
+    "### T38 Approach (checklist part A)",
+    "### T38 Decisions",
+    "### T39 Approach (checklist part A)",
+    "### T39 Decisions",
+    "### T40 Approach (checklist part A)",
+    "### T40 Decisions",
+    "### T41 Approach (checklist part A)",
+    "### T41 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D10",
+     "summary": "T36: the bundle marks changed lines; the agent tags a finding resting on no changed line and no added/reworded claim '[outside the change]'; classify carries it when UNCLAIMED or its claim matches the base; make land runs the carry first.",
+     "class": "within",
+     "why": "Proposal A (approved 2026-10-21) and the GM's 2026-10-19 found-work rule (405 FR-002): a finding on code the task did not change is filed as a task instead of refusing. It moves 385 FR-013's 'changed code' test from unit to line granularity, which is what A's title asks ('refuses only what the change made'), not a carve-out from it. The revised Approach (item 9) keeps an untagged finding, or one on a reworded claim, introduced."
+    },
+    {
+     "id": "D11",
+     "summary": "T37: claims owed prints a notice naming a new unit whose only claim is the inherited NONE; a notice, not a refusal.",
+     "class": "within",
+     "why": "Proposal B ('named first'); nothing in the request asks for a refusal. Block unchanged since round 1."
+    },
+    {
+     "id": "D12",
+     "summary": "T38: a SubagentStop no longer clears an open Stop in gm_waits, and idle keeps the gap the wait's.",
+     "class": "within",
+     "why": "Proposal C; conforms the clock to 385's existing rule that a wait on the GM is not the session's time. Block unchanged since round 1."
+    },
+    {
+     "id": "D13",
+     "summary": "T39: ledger_owed.belongs traces a subject naming l7r-check/claims-owed or claims-triage to the active task's feature.",
+     "class": "within",
+     "why": "Proposal D; extends 371/395's tracing to the claims bundles and narrows nothing. Block unchanged since round 1."
+    },
+    {
+     "id": "D14-function-spans",
+     "summary": "T40: changed_lines widened to every line of each enclosing function; an on-path gap mapped to a baseline line reached only by quick-tier tests (or none) is refused.",
+     "class": "within",
+     "why": "Proposal F's own subject ('judges a changed function's every line'); it widens what the preflight checks. Block unchanged since round 1."
+    },
+    {
+     "id": "D14-no-baseline",
+     "summary": "T40: with no baseline, today's rule (on-path gaps deferred to the gate).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible otherwise: with no baseline coverage.db there is no evidence of what the rolls reach, and running the rolls breaks 375 FR-004's 'takes seconds'. The gate's 100% floor still judges the line. Unchanged since round 1."
+    },
+    {
+     "id": "D14-changed-line",
+     "summary": "T40: a line the delta changed has no baseline line and keeps today's rule (the gate judges it on the hamlet path).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same ground: a changed line has no baseline counterpart, so no evidence exists for the preflight to read in seconds; the gate still judges it, and F's purpose (the T14 class, an unchanged line in a changed function) is untouched. Unchanged since round 1."
+    },
+    {
+     "id": "D15-semantic",
+     "summary": "T41: a .py change outside page/browser whose gate-stamp semantic_bytes are equal is a move the gate does not see; it passes the guard and the tree check.",
+     "class": "narrowing",
+     "why": "An exception to 385 FR-010 ('a write ... while the session's own gate runs is refused'): a docstring-only engine Edit now passes mid-gate. Implied by the GM's own words: E is 'the gate runs beside the claims round', and the claims round's edits are docstring claims (T41 item 4, measured 2026-10-21 on T14). It reuses the stamp's accepted ruling (385 T57) that such an edit is not a change the gate exercised, so tree check and stamp cannot disagree; page/browser byte-hashed areas stay refused. Round 1 classed this within; reclassed narrowing here, same outcome.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "D15-records",
+     "summary": "T41: the claims round's records (dev/claims-index.json, dev/claims-pages.json, dev/review-ledger.md, and the ACTIVE feature's found.jsonl, arbiter.jsonl, claims-carried.jsonl) and make claims-checked / claims-triaged / append pass the gate-write guard (385 FR-010) and the tree check.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the GM's own words: E is 'the gate runs beside the claims round', which cannot happen while FR-010 refuses the claims round's own writes. Each path is a claims-round record the gate does not exercise; round 2 narrows the per-feature records from specs/*/ to the active feature's, tighter than round 1 accepted."
+    },
+    {
+     "id": "D15-tasks",
+     "summary": "T41: the ACTIVE feature's tasks.md (the claims carry's box, 385 FR-013) is unseen; no feature's plan.md is.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Round 1's item fixed exactly as that verdict prescribed: the slice is scoped to the one file the carry writes (385 FR-013: claims-carry 'writes the task box'), in the active feature only, and no feature's plan.md is unseen. Without it the carry, which D10 runs inside make land and which E's parallel claims round needs, would void the gate it runs beside. The predicate is path-level, so a hand Edit of that one tasks.md also passes mid-gate; that is the scope round 1 prescribed (one file of the feature being landed, not every spec). Whether spec-lint reads tasks.md was not verifiable from the bundle and is not asserted here."
     }
    ]
   }

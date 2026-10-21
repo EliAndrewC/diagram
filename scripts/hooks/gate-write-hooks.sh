@@ -16,6 +16,12 @@
 # plan review measured both refusals above (a staged file, a REPLY's append) - and a guard that fires on correct work
 # teaches a session to bypass every guard.
 #
+# WHAT IT LETS THROUGH (GUARD_EDIT_OK: feature 405 T41, plan D15 - the GM, 2026-10-21, proposal E: the gate runs beside the
+# claims round): a change the gate does not see - a claim docstring or comment in an engine file (the AST the gate's own key
+# hashes is unchanged), or the claims round's records (`preflight.unseen`). So `make claims-checked`, `make claims-triaged` and
+# `make append` pass; a `git add`/`git commit` passes when the tree, against the gate's snapshot, holds only such changes; an
+# Edit or Write passes when its result would be one. T14's claims round voided a running gate and was refused its records.
+#
 # ESCAPE: GATE_WRITE_OK="<reason>" in the command (or the edit), recorded like every escape.
 #
 # Wired from .claude/settings.json for Bash and for Edit|Write. Tested by tests/hooks/test-gate-write-hooks.sh.
@@ -33,23 +39,49 @@ GW_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . "$GW_HERE/lib/guardlog.sh"
 if escape_or_refuse gate-write GATE_WRITE_OK gate-write-ok "$GW_HERE"; then exit 0; fi
 
-WHAT=$(printf '%s' "$INPUT" | GW_TOP="$(git rev-parse --show-toplevel 2>/dev/null || pwd -P)" python3 -c '
+WHAT=$(printf '%s' "$INPUT" | GW_TOP="$(git rev-parse --show-toplevel 2>/dev/null || pwd -P)" GW_SNAP="$(git rev-parse --absolute-git-dir 2>/dev/null)/gate-tree.json" python3 -c '
 import json, os, re, sys
 try:
     p = json.load(sys.stdin)
 except Exception:
     sys.exit(0)
 tool, ti, top = p.get("tool_name", ""), p.get("tool_input") or {}, os.environ["GW_TOP"]
+import subprocess, tempfile
+pre = [sys.executable, os.path.join(top, "scripts", "gates", "preflight.py"), "--root", top, "--tree-check", os.environ["GW_SNAP"]]
+def unseen(cmd):  # the question the gate itself asks (405 T41, D15): exit 0 when the change is one it does not see
+    try:
+        return subprocess.run(pre + cmd, capture_output=True, timeout=20).returncode == 0
+    except Exception:
+        return False
 if tool in ("Edit", "Write", "NotebookEdit"):
     f = os.path.realpath(str(ti.get("file_path") or ti.get("notebook_path") or ""))
     if f.startswith(os.path.realpath(top) + os.sep):
-        print(f"an {tool} of {os.path.relpath(f, top)}")
+        rel = os.path.relpath(f, top)
+        new = None
+        if tool == "Write":
+            new = str(ti.get("content") or "")
+        elif tool == "Edit":
+            try:
+                cur = open(f, encoding="utf-8").read()
+                o, n = str(ti.get("old_string") or ""), str(ti.get("new_string") or "")
+                new = cur.replace(o, n) if ti.get("replace_all") else cur.replace(o, n, 1)
+            except OSError:
+                new = None
+        ok = False
+        if new is not None:
+            with tempfile.NamedTemporaryFile("w", delete=False, encoding="utf-8") as tf:
+                tf.write(new)
+            ok = unseen(["--would-write", rel, "--content", tf.name])
+            os.unlink(tf.name)
+        if not ok:
+            print(f"an {tool} of {rel}")
 elif tool == "Bash":
     cmd = str(ti.get("command") or "")
     if re.search(r"\bgit\b[^;&|]*\b(commit|add)\b", cmd):
-        print("a git commit or add (it moves HEAD, or what the gate compares against it)")
+        if not unseen(["--quiet"]):
+            print("a git commit or add of a change the gate sees (it moves HEAD, or what the gate compares against it)")
     else:
-        m = re.search(r"\bmake\b[^;&|]*?\b(append|claims-checked|claims-triaged|record-checked|tick|accept)\b", cmd)
+        m = re.search(r"\bmake\b[^;&|]*?\b(record-checked|tick|accept)\b", cmd)
         if m:
             print(f"make {m.group(1)} (it writes a tracked record)")
 ' 2>/dev/null)
