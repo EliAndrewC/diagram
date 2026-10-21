@@ -359,7 +359,7 @@ def _one_network(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: 
                     break
                 link = (
                     [v, q]
-                    if _clear_touch(v, q, hard, walls, water, max(WEB_FABRIC_GAP, float(lanes[i].get("w") or 5.0) / 2.0 + 2.0))
+                    if _clear_touch(v, q, hard, walls, water, max(WEB_FABRIC_GAP, float(lanes[i].get("w") or 3.0) / 2.0 + 2.0))
                     else _route(v, q, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=None)
                 )
                 if link and polyline_len(link) <= _LINK_DIRECTNESS * max(d, 1.0):
@@ -473,8 +473,8 @@ def _join_piece(
     seed 14 - 13 ft out, 7 ft up, 13 ft back), and the piece's own vertex is the right start.
 
     Research:
-        a link the splice refuses - UNRESEARCHED: drawn as its own lane at the piece's width (3 ft where it has none)
-        no nearer the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the joined run no nearer a garden fence than it already stood or than 7 ft (`WEB_FABRIC_GAP`, the page's fence to the middle), whichever is more generous (405 T65)"""
+        a link the splice refuses - UNRESEARCHED: drawn as its own lane at the piece's width, rounded (3 ft where it has none)
+        no nearer the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the joined run no nearer a garden fence than it already stood or than 7 ft (`WEB_FABRIC_GAP`, the page's fence to the middle), whichever is more generous (405 T65); a lane wider than 10 ft held at half its width plus 2 ft, its tread's edge then 2 ft off - UNRESEARCHED, no lane drawn here is that wide"""
     pts = [(float(x), float(y)) for x, y in way]
     link = _stop_at_network(link, net)
 
@@ -487,7 +487,7 @@ def _join_piece(
     # same forgiveness: no nearer than it already was, or than its own keep-out asks, whichever is more
     # generous, so a lane already tight is never made worse and is not required to fix itself.
     _fab = [poly for poly in walls if len(poly) >= 3]
-    _bar = max(WEB_FABRIC_GAP, float(lanes[i].get("w") or 5.0) / 2.0 + 2.0)
+    _bar = max(WEB_FABRIC_GAP, float(lanes[i].get("w") or 3.0) / 2.0 + 2.0)
     # ASKED OF AN INDEX, CAPPED AT THE BAR (feature 306): the clearance was every fabric vertex against every segment of
     # the run - 111,700 distances in one call on the pool. Both of its uses read it only through `min(_was, _bar)`, so the
     # value above `_bar` is never needed, and a vertex farther than `_bar` from the run cannot be the answer: the vertices
@@ -520,12 +520,12 @@ def _join_piece(
     # the worse map.
     if pts and math.dist(v, pts[-1]) < 0.5:
         if not _spliced(_unjog(_unretrace(pts + list(link[1:])), hard, walls, water)):
-            _draw_web(s, link, int(float(lanes[i].get("w", 3))), joins=True)
+            _draw_web(s, link, round(float(lanes[i].get("w") or 3.0)), joins=True)
     elif pts and math.dist(v, pts[0]) < 0.5:
         if not _spliced(_unjog(_unretrace(list(reversed(link[1:])) + pts), hard, walls, water)):
-            _draw_web(s, link, int(float(lanes[i].get("w", 3))), joins=True)
+            _draw_web(s, link, round(float(lanes[i].get("w") or 3.0)), joins=True)
     else:
-        _draw_web(s, link, int(float(lanes[i].get("w", 3))), joins=True)
+        _draw_web(s, link, round(float(lanes[i].get("w") or 3.0)), joins=True)
 
 
 _VERTEX_CELL = 16.0  # px: the fabric-vertex grid's cell - a few times the bar (4-5 ft), so a query reads a handful of cells

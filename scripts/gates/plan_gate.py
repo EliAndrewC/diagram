@@ -511,11 +511,23 @@ def active_task(root: pathlib.Path) -> tuple[pathlib.Path | None, str]:
     return d, (m.group(1) if m else "")
 
 
-def _section_clear(review: dict, section: str) -> bool:
-    """Every block of the section carries a CLEAR verdict at its digest (amendment 11: the plan reviewed whole, or its blocks)."""
+def _section_clear(review: dict, section: str, history: History | None = None) -> bool:
+    """Every block of the section carries a CLEAR verdict at its digest, or at a text it differs from by a typo only (amendment
+    11: the plan reviewed whole, or its blocks) - the same reading `block_status` (`make plan-delta`) gives a block: the two read
+    one block two ways when a blank line moved, and the decide guard refused a check plan-delta owed nothing (405 T81, D57)."""
     have = reviewed_blocks(review)
-    return all((have.get(k) or {}).get("verdict") == "CLEAR" and (have.get(k) or {}).get("sha256") == block_digest(b)
-               for k, b, _a in blocks(section) if k != "preamble")
+    for k, b, _a in blocks(section):
+        if k == "preamble":
+            continue
+        entry = have.get(k) or {}
+        if entry.get("verdict") != "CLEAR":
+            return False
+        if entry.get("sha256") == block_digest(b):
+            continue
+        earlier = entry.get("text") or (history.block(k, str(entry.get("sha256"))) if history and entry.get("sha256") else None)
+        if earlier is None or not typo_only(ARCHIVE_LINE.sub("", earlier), ARCHIVE_LINE.sub("", b)):
+            return False
+    return True
 
 
 def decision_refusal(root: pathlib.Path) -> str:
@@ -535,7 +547,7 @@ def decision_refusal(root: pathlib.Path) -> str:
             return ""
         # a plan reviewed CLEAR as a whole, still current, covers its task sections too: the reviewer read them; only a section
         # added or changed since needs its own preflight (the advisor's note before batch 3 landed)
-        if task_current(review, text, task, History(plan)) or (owed(d) is None and _section_clear(review, task_sections(text)[task])):
+        if task_current(review, text, task, History(plan)) or (owed(d) is None and _section_clear(review, task_sections(text)[task], History(plan))):
             return ""
         return (f"{d.name} {task}: its plan section carries no current CLEAR decision verdict - decide first, then check "
                 f"(feature 375 FR-003a): `make decide F={d.name.split('-')[0]} T={task}` names the review to dispatch")

@@ -785,7 +785,7 @@ def test_an_end_walked_in_is_held_nearest_the_house_it_serves() -> None:
     _walk_in(edge, reaches, [])
     assert 550.0 <= edge[-1][0] <= 560.0, "without `near`: the zone's far edge"
     held = [(0.0, 0.0), (1000.0, 0.0)]
-    _walk_in(held, reaches, [], lambda q: math.dist(q, house))
+    _walk_in(held, reaches, [], lambda q, far: math.dist(q, house))
     assert 496.0 <= held[-1][0] <= 504.0, "with it: beside the house"
 
 
@@ -796,7 +796,20 @@ def test_an_end_at_a_junction_is_not_walked_off_it() -> None:
 
     way_y, house = 0.0, (100.0, 300.0)
     reaches = lambda q, far: True  # noqa: E731 - it reaches (the way) wherever it stands
-    near = lambda q: float("inf") if abs(q[1] - way_y) <= 60.0 else math.dist(q, house)  # noqa: E731
+    near = lambda q, far: float("inf") if abs(q[1] - way_y) <= 60.0 else math.dist(q, house)  # noqa: E731
     pts = [(100.0, 400.0), (100.0, 58.0)]
     _walk_in(pts, reaches, [], near)
     assert pts[-1] == (100.0, 58.0), "held at its junction"
+
+
+def test_a_link_off_a_way_walks_on_to_its_house() -> None:
+    """405 T82 (D58): the way a lane's far end stands on is no other way (as `_reaches`), so `_near` does not hold a short link
+    off a way 60 ft past the house it serves; a way it did not leave still holds it."""
+    from l7r.diagram.hamletgen.ways import sweeps
+
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (400.0, 0.0)], [(100.0, 0.0), (100.0, 150.0)]], houses=[(130.0, 40.0)])
+    s.M["fields"] = []
+    s.M.setdefault("meta", {})
+    sweeps._sweep_dangling_ends(s)
+    end = s.M["lanes"][1]["pts"][-1]
+    assert end[1] <= 44.0, "walked on to its closest approach to the house (y 40), not held at the 60 ft edge of the way it left"

@@ -517,3 +517,14 @@ def test_a_wording_only_tick_is_refused_when_a_commit_changed_what_runs(tmp_path
     (tmp_path / "m.py").write_text('X = 2\n"""Research: x - GUESS"""  # a comment\n')
     git("commit", "-qam", "a number")
     assert "m.py changed in what runs" in w.refusal(tmp_path, d, "T05", sec)
+
+
+def test_the_decide_guard_reads_a_block_as_plan_delta_does() -> None:
+    """405 T81 (D57): a blank line moved under a CLEAR block (another task's blocks appended below it) left plan-delta owing
+    nothing but the decide guard's exact digest refusing the active task's checks. A typo-scale change from the reviewed
+    text passes both; a real change passes neither."""
+    reviewed = "### T77 Decisions\n\n**D55 - carries filed.** As written.\n"
+    review = {"blocks": {"### T77 Decisions": {"verdict": "CLEAR", "sha256": gate.block_digest(reviewed), "text": reviewed}}}
+    assert gate._section_clear(review, reviewed)
+    assert gate._section_clear(review, reviewed + "\n"), "a blank line moved: a typo"
+    assert not gate._section_clear(review, reviewed.replace("As written.", "A different decision entirely, three new words.")), "a real change"

@@ -513,3 +513,113 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 ### T79 Decisions
 
 **D56 - SIGTERM runs the cleanup.** `land.main` installs a SIGTERM handler first: it ignores SIGTERM, sends it to its own process group (the gate, `make done`, runs there) and raises SystemExit(143), so `long_runs`' `finally` stops the cohort's own process group too.
+
+## T81, T80, T82, T20, T08, T10 - one block reading, the join's width, the walk off a way, three claims (batch 6's rounds; 385's)
+
+### T81 Approach (checklist part A)
+
+1. **The goal, in the world.** The decide guard and `make plan-delta` read a plan block the same way.
+2. **The constraints.** `plan_gate.block_status` (plan-delta), which forgives a typo-scale change from a block's reviewed text (375 FR-005(b)); `_section_clear`, the decide guard's reading of the active task's section.
+3. **Where each comes from.** O (features 375, 405).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (batch 6: with T79's blocks appended under T77's, plan-delta owed nothing while `_section_clear` read T77 Decisions' digest as changed and refused T74's claims check, escaped with DECIDE_OK).
+5. **The order.** `_section_clear` takes the plan's history and forgives a typo-scale change from the reviewed text as `block_status` does; a test.
+6. **The exits.** (c) - one reading.
+7. **The search smell.** None.
+8. **The budget.** 40 min for the batch with its landing.
+9. **Done, measured.** A moved blank line passes both, a real change neither (test).
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T81 Decisions
+
+**D57 - one reading of a block.** `_section_clear(review, section, history)`: a CLEAR block passes at its digest or at a typo-scale change from its recorded or historical text (`typo_only`); `decision_refusal` passes `History(plan)`.
+
+### T80 Approach (checklist part A)
+
+1. **The goal, in the world.** `_join_piece` reads a lane with no width one way, and draws the link at the piece's width.
+2. **The constraints.** 0081's 3 ft footpath; 0246 §16's 7 ft fence to the middle.
+3. **Where each comes from.** R (0081, 0246).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (batch 6's round: `_bar` read a missing width as 5 ft and the link as 3; the link's width truncated by `int`; the bar's half-width-plus-2 term unclaimed).
+5. **The order.** Both read 3 ft; the width rounded; the bar's wide-lane term claimed. The bar is `max(7, w/2 + 2)`, 7 ft at any width up to 10 ft, so no drawn lane moves.
+6. **The exits.** (e) conform.
+7. **The search smell.** None.
+8. **The budget.** 40 min for the batch with its landing.
+9. **Done, measured.** The ways tests pass; the claims round reads `_join_piece` IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T80 Decisions
+
+**D59 - one width.** `_bar` and the two link draws read `lanes[i].get("w") or 3.0`; the link drawn at `round(...)`; the claim names the bar's half-width-plus-2 term for a lane over 10 ft (UNRESEARCHED, none drawn here).
+
+### T82 Approach (checklist part A)
+
+1. **The goal, in the world.** A short link off a way walks on to the house it serves; only another way holds it.
+2. **The constraints.** `_reaches` and "not the way it left" (an end does not count as reaching the way its far end stands on); 405 T74's walk-on.
+3. **Where each comes from.** O (features 261, 405).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (batch 6's round 3: `_near` held the walk within 60 ft of ANY way, the one the lane left included, so a link off a way stopped up to 60 ft past its house).
+5. **The order.** `_near(q, far)` filters out the way the far end stands on (by `_TOUCH_GAP`), as `_reaches` does; `_walk_in` passes the lane's other end; the claim; "not the way it left" labeled GUESS 0246 (the page read and silent); a test; seeds 1-48.
+6. **The exits.** (e) conform.
+7. **The search smell.** None.
+8. **The budget.** 40 min for the batch with its landing.
+9. **Done, measured.** A link off a way reaches its closest approach to the house, not the way's 60 ft edge (test); seeds 1-48 and the pinned rows pass.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T82 Decisions
+
+**D58 - the way it left is no other way.** `_walk_in`'s `near` takes the lane's other end; `_sweep_dangling_ends._near` skips segments within `_TOUCH_GAP` of it.
+
+### T20 Approach (checklist part A)
+
+1. **The goal, in the world.** The touch a street's joints are judged at, and what counts as a joint, are claimed.
+2. **The constraints.** 0246 §6 (an end runs on to a field path, a bund or another way).
+3. **Where each comes from.** R (0246) and O.
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (385 T138's finding: `to_its_joints`' touch arrives from its callers unclaimed; whether field-path and bund ends count).
+5. **The order.** Claims at `trim_streets` and `settle_street_ends`: the 4 ft touch (CONVENTION, the ink's), the anchors at 1 ft; a field path's end a joint (a field path is a lane); a street end at the bund no dangling end (`end_serves`), so never cut.
+6. **The exits.** (a) claim.
+7. **The search smell.** None.
+8. **The budget.** 40 min for the batch with its landing.
+9. **Done, measured.** The claims round reads them IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T20 Decisions
+
+**D60 - the touch and the joints claimed.** As the order says; no code token changes.
+
+### T08 Approach (checklist part A)
+
+1. **The goal, in the world.** Whose farm gets a door path is claimed as the pages give it.
+2. **The constraints.** 0033 (a door path for a near-row farm whose grove stands between it and its street); 0246 (every farmhouse reached by a way).
+3. **Where each comes from.** R (0033, 0246).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (385 T111's finding: the code lays one for every grove farm no way arrives at).
+5. **The order.** The claim: a door path wherever no way arrives (GUESS 0033), every farmhouse being reached by a way (0246), 0033's near-row case among them.
+6. **The exits.** (a) claim - the wider rule is 0246's every-farmhouse rule applied; narrowing it to 0033's case would leave farms with no way.
+7. **The search smell.** None.
+8. **The budget.** 40 min for the batch with its landing.
+9. **Done, measured.** The claims round reads it IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T08 Decisions
+
+**D61 - wherever no way arrives.** `lay_door_paths` claims "a door path wherever no way arrives" (GUESS 0033 with 0246).
+
+### T10 Approach (checklist part A)
+
+1. **The goal, in the world.** The track out's last resort and drawn channels are claimed as they stand against 0084.
+2. **The constraints.** 0084 (a path may cross a farm ditch on a plank).
+3. **Where each comes from.** R (0084).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (385 T120's finding: `connector_dry_exit` never crosses a drawn channel, unclaimed).
+5. **The order.** The claim: a DEVIATION from 0084 - the fill lays no plank, so it keeps to the ground between the channels, and a gateway with no such way is refused (`NoDryExit`).
+6. **The exits.** (a) claim as a DEVIATION - 0084 permits a plank and does not require one; laying planks from the fill was weighed and refused here (the last resort runs where no bearing is dry; a refused gateway is re-seated, feature 287 W23).
+7. **The search smell.** None.
+8. **The budget.** 40 min for the batch with its landing.
+9. **Done, measured.** The claims round reads it IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T10 Decisions
+
+**D62 - no plank from the fill, named.** `connector_dry_exit` claims "no drawn channel crossed" (DEVIATION 0084).
