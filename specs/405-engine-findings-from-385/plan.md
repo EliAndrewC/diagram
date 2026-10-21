@@ -454,3 +454,77 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 ### T73 Decisions
 
 **D51 - the sweeps' words.** As the order says; no code token changes.
+
+## T74, T75, T76, T77 - the sweeps' end at the house, one serving bar, the carried claims, carries filed in the wait (batch 5's rounds)
+
+### T74 Approach (checklist part A)
+
+1. **The goal, in the world.** A lane end the sweeps walk in stops beside the house it serves, as T55 made the trims do.
+2. **The constraints.** 0246 §6 (a lane ends at the dooryard; the pull-back a GUESS); `sweeps._walk_in`; the 269 E4 hold at a junction.
+3. **Where each comes from.** R (0246) and O (features 269, 405 T14).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (impl-drift DRIFTED, batch 5's round: `_walk_in` stops at the first point that reaches, the far edge of the house's 60 ft zone; unit tests show the end at 552 for a house at 500 and T14's tests pinned 84.0 and -208.0).
+5. **The order.** `_walk_in` takes `near`; after the end first reaches it walks on while it still reaches and comes nearer a house it serves, held at a junction; `_near` is infinite within reach of another way, so a junction end stays; T14's two tests updated to the house (64.0 short of the connector's reach, -152.0); a unit test; seeds 1-48.
+6. **The exits.** (e) conform.
+7. **The search smell.** None.
+8. **The budget.** 40 min for the batch with its landing.
+9. **Done, measured.** One goal: the end held beside the house (unit test); a junction end not moved (the existing tests); seeds 1-48 and the pinned rows pass.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T74 Decisions
+
+**D52 - on to the house.** `_walk_in(pts, reaches, tails, near=None)` walks on, 4 ft at a time, while `reaches` holds and `near` falls; `_sweep_dangling_ends` passes `_near` (the nearest owed house, infinite within `_REACH_FT` of another way); the claim "held nearest the house it serves" (GUESS 0246).
+
+### T75 Approach (checklist part A)
+
+1. **The goal, in the world.** The sweeps' served-house guard holds every farmhouse to the same bar the gate does.
+2. **The constraints.** `farmhouses_reach_a_way` and `WEB_REACH_FT` (100 ft, claimed GUESS on 0246); 0246 §6 and §10.
+3. **Where each comes from.** R (0246) and O.
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (impl-drift, batch 5's rounds 3 and 4: the guard's claim read DRIFTED (use §6's 60 ft) then MISLABELED (the 100 ft is the page's) - the guard exists so a dropped fragment never strands a house under `farmhouses_reach_a_way`, whose bar is `WEB_REACH_FT`).
+5. **The order.** `_SERVE_FT = WEB_REACH_FT`; both claims name that bar and the page's GUESS; what the page does not state (whether its 100 ft is the serving test) filed for the record as T78.
+6. **The exits.** (c) - one number with the rule it protects; moving the guard to 60 ft was weighed and refused (it would drop a fragment that is a house's only way within the gate's 100 ft and strand the house the gate then refuses).
+7. **The search smell.** None.
+8. **The budget.** 40 min for the batch with its landing.
+9. **Done, measured.** The claims round reads both IN-STEP; no value moves.
+10. **Before moving a constant.** `_SERVE_FT` becomes `WEB_REACH_FT`, the same 100 ft: no value moves, two names become one.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T75 Decisions
+
+**D53 - one bar.** `_SERVE_FT` is `WEB_REACH_FT`; the two "a house served" claims: GUESS 0246, the bar `farmhouses_reach_a_way` holds every farmhouse to.
+
+### T76 Approach (checklist part A)
+
+1. **The goal, in the world.** The findings the claims gate carried from batch 5 are claimed or relabeled.
+2. **The constraints.** 0246 §34 (the pull-back a GUESS); the code's own figures.
+3. **Where each comes from.** R (0246) and O.
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (the claims gate's carries, batch 5: `trim_lane_stubs`' pull-back claim not labeled GUESS; `_detour_links`' 150 ft reach and `_join_piece`'s refused-splice lane unclaimed; the served-house claims, which T75 settles).
+5. **The order.** The label and two claims.
+6. **The exits.** (a) claim.
+7. **The search smell.** None.
+8. **The budget.** 40 min for the batch with its landing.
+9. **Done, measured.** The claims round reads them IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T76 Decisions
+
+**D54 - the carries claimed.** `trim_lane_stubs`' claim GUESS 0246; `_detour_links` claims `_ORPHAN_REACH` (UNRESEARCHED); `_join_piece` claims the refused splice drawn as its own lane (UNRESEARCHED).
+
+### T77 Approach (checklist part A)
+
+1. **The goal, in the world.** A landing whose claims round ends in carries alone pushes without a hand step.
+2. **The constraints.** `make land`'s first pass files carries (405 T36); the claims wait (405 T50).
+3. **Where each comes from.** O (feature 405).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (batch 5's landing: the wait asked on until `make claims-carry` was run by hand).
+5. **The order.** `file_carries` lifted out of the first pass and asked in the wait when the gate refuses only carries; a test.
+6. **The exits.** (c) - the landing does what it can.
+7. **The search smell.** None.
+8. **The budget.** 40 min for the batch with its landing.
+9. **Done, measured.** A carry-only refusal is filed and committed in the wait; an owed claim is still waited on (test).
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T77 Decisions
+
+**D55 - carries filed in the wait.** `land.file_carries(root, d)`; `wait_for_claims(root, tasks, d)` runs it when the gate's refusal holds carries and no owed or introduced finding, then asks again.

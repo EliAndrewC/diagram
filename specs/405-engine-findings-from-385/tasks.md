@@ -129,6 +129,10 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T75 The sweeps' "a house served" guard (`_sweep_dangling_ends`, `_sweep_debris`) counts a house served within `_SERVE_FT` (100 ft) - 0246 §10's back-lane count, and only for the back-lane form - where §6 gives the serving test: within 60 ft of the house or 12 ft of the steading's built ground (a GUESS). Give the guard §6's test (`end_serves`' own), and claim it; three rounds read the claim three ways because the code departs from the page (impl-drift DRIFTED x2, batch 5's round 3) [lands-open]
       research: rendering
+- [ ] T77 `make land`'s claims wait asked the claims gate on while it refused only CARRIES (findings on code the change left unchanged), which the first pass files itself: batch 5's landing waited until `make claims-carry` was run by hand. File a carry in the wait and ask again (found landing batch 5, 2026-10-21) [lands-open]
+      research: rendering
+- [ ] T78 0246's drawing page gives 100 ft only as the back-lane laying rule (§10) and does not say whether it is the general test of a house being served, so the sweeps' served-house guard, `WEB_REACH_FT` and `farmhouses_reach_a_way` rest on a reading the page does not state; three impl-drift rounds read the guard's claim three ways. Record on 0246 whether the 100 ft is the serving test, labeled (a record task: the page's own checks) (impl-drift outside the change, batch 5's round 4) [lands-open]
+      research: rendering
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
 - [ ] T02 (385 T36) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]

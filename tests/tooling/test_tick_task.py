@@ -264,7 +264,7 @@ def test_one_task_or_several_every_tick_asked_first_landed_once_and_ticked(tmp_p
     rc = [0]
     ran: list[list[str]] = []
     monkeypatch.setattr(lb, "long_runs", lambda root: 0)
-    monkeypatch.setattr(lb, "wait_for_claims", lambda root, tasks: "")
+    monkeypatch.setattr(lb, "wait_for_claims", lambda root, tasks, d=None: "")
     monkeypatch.setattr(lb, "push", lambda root, tasks: landings.append((tasks, (d / "tasks.md").read_text(encoding="utf-8"))) or rc[0])
 
     def run(root: pathlib.Path, cmd: list[str], env: dict | None = None, quiet: bool = True) -> tuple[int, str]:
@@ -519,3 +519,30 @@ def test_the_cohort_s_workers_fit_the_container_s_memory_limit(tmp_path: pathlib
     (cg / "memory.max").write_text("max\n")
     assert lb.memory_free_mb(cg) > 0, "no cgroup limit: the host's figure"
     assert lb.memory_free_mb(tmp_path / "none") > 0, "no cgroup at all"
+
+
+def test_the_claims_wait_files_a_carry_it_meets(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 405 T77: batch 5's claims round beside the gate ended in carries alone, and the wait asked on until
+    `make claims-carry` was run by hand; a carry is filed and committed in the wait, then the gate asked again."""
+    lb, d = _land(tmp_path, monkeypatch)
+    state = {"filed": False}
+    seen: list[list[str]] = []
+
+    def run(root: pathlib.Path, cmd: list[str], env: dict | None = None, quiet: bool = True) -> tuple[int, str]:
+        seen.append([str(c) for c in cmd])
+        if "claims-gate.sh" in str(cmd[0]):
+            return (0, "") if state["filed"] else (1, "  carry: MISLABELED x.py::f#c - a finding on code the change left unchanged\n")
+        if "carry" in cmd:
+            state["filed"] = True
+            return 0, "claims-carry: 1 finding(s) filed into 188-alpha T09; commit tasks.md\n"
+        return 0, ""
+
+    monkeypatch.setattr(lb, "run", run)
+    monkeypatch.setattr(lb, "CLAIMS_POLL_S", 0.0)
+    assert lb.wait_for_claims(tmp_path, ["T02"], d) == ""
+    assert any("carry" in c for c in seen) and any(c[:2] == ["git", "commit"] for c in seen), "filed and committed"
+    state["filed"] = False
+    monkeypatch.setattr(lb, "CLAIMS_WAIT_S", 0.0)
+    owed = lambda root, cmd, env=None, quiet=True: (1, "  owed (new): x.py::f#c\n  carry: y\n") if "claims-gate.sh" in str(cmd[0]) else (0, "")  # noqa: E731
+    monkeypatch.setattr(lb, "run", owed)
+    assert "owed (new)" in lb.wait_for_claims(tmp_path, ["T02"], d), "an owed claim is waited on, not carried"

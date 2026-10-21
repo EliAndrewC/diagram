@@ -42,6 +42,7 @@ def _detour_links(cands: Sequence[tuple[float, Pt, Pt]], hard: Any, walls: Any, 
     Research:
         detour link directness - UNRESEARCHED: up to 8 times the straight gap
         shortest route wins - research/questions/0081-village-lanes.html: of three routable targets, the shortest walk is drawn
+        orphan join reach - UNRESEARCHED: no link is sought to a target more than 150 ft away by air (`_ORPHAN_REACH`)
         routed clear of the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: both tries 7 ft (`WEB_FABRIC_GAP`) from a garden fence to the link's middle (405 T65)
     """
     found: list[tuple[float, Pt, Poly]] = []
@@ -471,7 +472,9 @@ def _join_piece(
     `_unjog`: a link leaving a piece's END may double back along the piece before it turns (cohort
     seed 14 - 13 ft out, 7 ft up, 13 ft back), and the piece's own vertex is the right start.
 
-    Research: no nearer the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the joined run no nearer a garden fence than it already stood or than 7 ft (`WEB_FABRIC_GAP`, the page's fence to the middle), whichever is more generous (405 T65)"""
+    Research:
+        a link the splice refuses - UNRESEARCHED: drawn as its own lane at the piece's width (3 ft where it has none)
+        no nearer the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the joined run no nearer a garden fence than it already stood or than 7 ft (`WEB_FABRIC_GAP`, the page's fence to the middle), whichever is more generous (405 T65)"""
     pts = [(float(x), float(y)) for x, y in way]
     link = _stop_at_network(link, net)
 

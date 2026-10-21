@@ -57,6 +57,18 @@ def write_ledger(root: Path, d: Path) -> None:
         run(root, ["git", "commit", "-q", "-m", "the review passes' ledger rows, written at landing (make land)", "--", "dev/review-ledger.md"])
 
 
+def file_carries(root: Path, d: Path) -> None:
+    """Every carried claims finding filed as an open task of the feature and committed (405 T36, D10) - asked in the first pass
+    and again in the claims wait, where a round beside the gate meets new carries (405 T77)."""
+    num = d.name.split("-", 1)[0]
+    rc, said = run(root, [sys.executable, str(HERE / "record" / "claims.py"), "--root", str(root), "carry", "--feature", num])
+    if rc == 0 and "filed into" in said:
+        print(f"land: {said.strip()}", flush=True)
+        rel = str(d.relative_to(root))
+        run(root, ["git", "add", "--", f"{rel}/tasks.md", f"{rel}/claims-carried.jsonl"])
+        run(root, ["git", "commit", "-q", "-m", f"{d.name}: claims findings outside the change filed as a task (make land, 405 T36)"])
+
+
 def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str, deferred: list[str] | None = None) -> list[str]:
     """Pass 1: every refusal the landing would meet that costs seconds to ask, all of them - but the claims gate's, which goes to
     `deferred` when given (405 T50, D23: the claims round runs beside the gate, and the landing waits for it before the push)."""
@@ -85,13 +97,7 @@ def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str, deferred: l
         run(root, ["git", "commit", "-q", "-m", "claim rows carried to the files their units moved to (make land, 405 T58)", "--", "dev/claims-index.json"])
     # A FINDING OUTSIDE THE CHANGE IS FILED, NOT REFUSED (feature 405 T36, D10): the carry files every carried claims finding as an
     # open task of this feature - what `make claims-carry` does by hand - and the box lands with the work
-    num = d.name.split("-", 1)[0]
-    rc, said = run(root, [sys.executable, str(HERE / "record" / "claims.py"), "--root", str(root), "carry", "--feature", num])
-    if rc == 0 and "filed into" in said:
-        print(f"land: {said.strip()}", flush=True)
-        rel = str(d.relative_to(root))
-        run(root, ["git", "add", "--", f"{rel}/tasks.md", f"{rel}/claims-carried.jsonl"])
-        run(root, ["git", "commit", "-q", "-m", f"{d.name}: claims findings outside the change filed as a task (make land, 405 T36)"])
+    file_carries(root, d)
     if run(root, ["git", "status", "--porcelain"])[1].strip():
         stops.append("uncommitted changes - commit them first")
     _rc, owed = run(root, [sys.executable, str(HERE / "reviews" / "ledger_owed.py"), "--ledger", str(root / "dev" / "review-ledger.md")])
@@ -119,7 +125,7 @@ CLAIMS_WAIT_S = 1200.0
 CLAIMS_POLL_S = 15.0
 
 
-def wait_for_claims(root: Path, tasks: list[str]) -> str:
+def wait_for_claims(root: Path, tasks: list[str], d: Path | None = None) -> str:
     """The claims gate passing and the tree clean - the claims round recorded and committed beside the gate - or, past
     `CLAIMS_WAIT_S`, the refusal that still stands (405 T50, D23)."""
     import time  # noqa: PLC0415
@@ -128,6 +134,9 @@ def wait_for_claims(root: Path, tasks: list[str]) -> str:
     end, said = time.monotonic() + CLAIMS_WAIT_S, ""
     while True:
         rc, out = run(root, [str(HERE / "gates" / "claims-gate.sh")], env)
+        if rc and d is not None and "carry:" in out and not any(w in out for w in ("owed (", "introduced:")):
+            file_carries(root, d)  # a carry is filed, not waited on (405 T77: batch 5's wait needed `make claims-carry` by hand)
+            rc, out = run(root, [str(HERE / "gates" / "claims-gate.sh")], env)
         dirty = run(root, ["git", "status", "--porcelain"])[1].strip()
         if not rc and not dirty:
             return ""
@@ -296,7 +305,7 @@ def main(argv: list[str]) -> int:
         print(f"land: the claims round is owed ({claims[0][:160]}) - the gate runs beside it; the push waits for it", flush=True)
     if rc := long_runs(root):
         return rc
-    if why := wait_for_claims(root, tasks):
+    if why := wait_for_claims(root, tasks, d):
         print(f"land: the gates are green, but the claims round did not finish in {CLAIMS_WAIT_S / 60:.0f} min - nothing landed: {why}", file=sys.stderr)
         return 2
     write_ledger(root, d)  # the passes the claims round made beside the gate (405 T52, D27)
