@@ -665,6 +665,7 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
         end carried to the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane a house needs ends at its dooryard - carried to the owed house nearest the end, never a household reached across a neighbor's land, owed none (`geom.lane_houses`)
         kept whole for a house - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane whose pull-back would leave a farmhouse with no way is restored whole, its unserving end carried to a dooryard where an owed house stands within the carry's reach and no grove band is in the way, and otherwise left where it was drawn - the page pulls back an end that reaches nothing and does not say what gives when that would strand a house
         grove band not crossed - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0033-row-villages-resson.drawing.html: no lane runs through a farm's own wood - the way runs outside the grove or through a gap in it - so an end is not carried across one
+        walked on to the house it serves - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane ends at the dooryard - an end that reaches walks on toward the nearest owed house within 120 ft (2 x `_REACH_FT`) while it still reaches, never when within 60 ft (`_REACH_FT`) of another way
         dooryard carry reach - UNRESEARCHED: up to 120 ft (2 x `_REACH_FT`); the page gives a lane end's reach (60 ft), not a carry's
         a whittled lane emptied - UNRESEARCHED: a lane pulled back under `_WEB_MIN_FT` (30 ft) is emptied, for the debris sweep to finish
         a house served - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a house within `_SERVE_FT` (100 ft) of a lane counts as served, so the lane is kept, where the page says 60 ft"""
@@ -712,7 +713,9 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
             # ...never walked on from a way it reaches: a junction end stays at its junction
             if any(seg_dist(q[0], q[1], a, b) <= _REACH_FT for a, b in _o):
                 return float("inf")
-            return min((math.dist(q, h) for h in owed), default=float("inf"))
+            # ...and only toward a house within the dooryard carry's reach (2 x `_REACH_FT`), never a far one: an end reaching
+            # only the field is not walked off it toward a house it does not serve (batch 6's round)
+            return min((d for h in owed if (d := math.dist(q, h)) <= 2.0 * _REACH_FT), default=float("inf"))
 
         _walk_in(pts, _reaches, _tails, _near)
         pts.reverse()

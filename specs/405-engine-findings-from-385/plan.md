@@ -473,7 +473,7 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 
 ### T74 Decisions
 
-**D52 - on to the house.** `_walk_in(pts, reaches, tails, near=None)` walks on, 4 ft at a time, while `reaches` holds and `near` falls; `_sweep_dangling_ends` passes `_near` (the nearest owed house, infinite within `_REACH_FT` of another way); the claim "held nearest the house it serves" (GUESS 0246).
+**D52 - on to the house.** `_walk_in(pts, reaches, tails, near=None)` walks on, 4 ft at a time, while `reaches` holds and `near` falls; `_sweep_dangling_ends` passes `_near` (the nearest owed house within the dooryard carry's 120 ft, infinite within `_REACH_FT` of another way - an end reaching only the field is never walked toward a house it does not serve, batch 6's round); the claims "held nearest the house it serves" (GUESS 0246) and "walked on to the house it serves".
 
 ### T76 Approach (checklist part A)
 
@@ -510,3 +510,21 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 ### T77 Decisions
 
 **D55 - carries filed in the wait.** `land.file_carries(root, d)`; `wait_for_claims(root, tasks, d)` runs it when the gate's refusal holds carries and no owed or introduced finding, then asks again.
+
+### T79 Approach (checklist part A)
+
+1. **The goal, in the world.** A landing stopped by hand leaves no gate or cohort running.
+2. **The constraints.** `land.py`'s cleanup (`stop_cohort` in a `finally`, 405 T48); Python's default SIGTERM, which ends the process without running `finally`.
+3. **Where each comes from.** O (feature 405) and Python.
+4. **Do they describe the world here?** Yes - measured 2026-10-21: batch 6's landing, stopped with SIGTERM to fix a flaw its round found, left its gate (pytest) and its cohort running in this clone; they were ended by hand.
+5. **The order.** `land.main` installs a SIGTERM handler raising SystemExit(143); a test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 10 min.
+9. **Done, measured.** The handler is installed and raises SystemExit(143) (test).
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T79 Decisions
+
+**D56 - SIGTERM runs the cleanup.** `land.main` sets `signal.signal(SIGTERM, lambda *_: sys.exit(143))` first, so `long_runs`' `finally` stops the cohort's process group.

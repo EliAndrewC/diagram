@@ -286,6 +286,11 @@ def main(argv: list[str]) -> int:
     if len(argv) != 2 or not (tasks := argv[1].split()):
         print('usage: land.py <feature> "<T1 [T2 ...]>"   (make land F=405 T=T12 NOTE="what was verified")', file=sys.stderr)
         return 2
+    # A STOPPED LANDING STOPS ITS RUNS (405 T79): Python's default SIGTERM exits without `finally`, so a landing stopped by hand
+    # left its gate and the cohort beside it running as orphans (batch 6); raised as SystemExit, the cleanup runs
+    import signal  # noqa: PLC0415
+
+    signal.signal(signal.SIGTERM, lambda *_a: sys.exit(143))
     note = os.environ.get("LAND_NOTE", "").strip()
     if not note:
         print("land: refused - NOTE= is empty; say what was verified, as make tick asks", file=sys.stderr)

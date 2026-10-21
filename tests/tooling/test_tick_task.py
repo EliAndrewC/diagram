@@ -546,3 +546,18 @@ def test_the_claims_wait_files_a_carry_it_meets(tmp_path: pathlib.Path, monkeypa
     owed = lambda root, cmd, env=None, quiet=True: (1, "  owed (new): x.py::f#c\n  carry: y\n") if "claims-gate.sh" in str(cmd[0]) else (0, "")  # noqa: E731
     monkeypatch.setattr(lb, "run", owed)
     assert "owed (new)" in lb.wait_for_claims(tmp_path, ["T02"], d), "an owed claim is waited on, not carried"
+
+
+def test_a_stopped_landing_runs_its_cleanup(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 405 T79: stopped with SIGTERM, a landing exited without its `finally`, leaving its gate and the cohort beside it
+    running; it raises SystemExit on SIGTERM so the cleanup (`stop_cohort`) runs."""
+    import signal
+
+    lb, _d = _land(tmp_path, monkeypatch)
+    got: dict = {}
+    monkeypatch.setattr(signal, "signal", lambda sig, fn: got.update({sig: fn}))
+    monkeypatch.setenv("LAND_NOTE", "")
+    assert lb.main(["188", "T02"]) == 2
+    with pytest.raises(SystemExit) as stop:
+        got[signal.SIGTERM]()
+    assert stop.value.code == 143
