@@ -91,8 +91,9 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T18 (385 T134) settle.theirs drops the 7 ft gap for every steading within DOORSTEP_FT of a lane end, neighbors' gardens at a junction too - 0246 §16 keeps it off another household's garden: record a DEVIATION or narrow the exemption to the lane's own household (impl-drift, T108's round) [lands-open]
       research: rendering
-- [ ] T19 (385 T135) law.fouls_fabric with own set drops its own garden from the check; 0246 §16 keeps an own way off the beds - confirm every caller with own also holds the beds, as fouled_segment does (impl-drift, T108's round) [lands-open]
+- [x] T19 (385 T135) law.fouls_fabric with own set drops its own garden from the check; 0246 §16 keeps an own way off the beds - confirm every caller with own also holds the beds, as fouled_segment does (impl-drift, T108's round) [lands-open]
       research: rendering
+      verify: DONE. landed: law.fouls_fabric removed (no caller in l7r/pool/scripts; its only reader was its own test); docstrings name the live rule (settle.fouled_segment, theirs); no claim owed; claims gate clean; gate green 174 s; plan review CLEAR
 - [ ] T20 (385 T138) street.to_its_joints' touch (how close an end must come to count as a joint) arrives from its callers unclaimed - check each call site's value against 0246's reach to another way and claim it; and whether the callers pass field-path and bund ends as joints (0246 §6 lets a lane run on to them) (impl-drift, the T132 batch's round) [lands-open]
       research: rendering
 - [ ] T21 (385 T140) 0014's drawing page says 'a sector's first and last rows' (valley fan) with no gloss or glossary term for sector - add the glossary entry or an inline gloss from the valley-fan page (record-format, T33's round) [lands-open]
