@@ -59,7 +59,7 @@ defects** - one mine, three in the tooling, two of those introduced by T36-T41 t
 | B - a new unit's inherited NONE named | not exercised: no new unit |
 | C - the step-back clock | not exercised: the run began a minute after the 04:41 ruling and ended 38 minutes later, inside the hour; its test replays 405's overnight events |
 | D - claims passes traced | **worked after its gap was fixed**: the last landing wrote its ledger rows unasked |
-| E - the gate beside the claims round | **worked**: `claims-triaged`, `claims-checked` and a commit of their records all passed the guard while the gate ran, and the gate's tree check read the run as unmoved |
+| E - the gate beside the claims round | **worked**: `claims-triaged`, `claims-checked` and a commit of their records all passed the guard while the gate ran (its guard half, live). Its tree-check half is shown only by its tests: that gate went red on coverage before its tree check runs, and the clean landing had no claims writes beside it |
 | F - the preflight judges changed functions | **worked after its gap was fixed**: refused `gencache.py:765` wrongly, then left it to the gate, which covered it |
 | `make land` | one command per attempt; every refusal was named in seconds, and the clean run went start to ticked unattended |
 
