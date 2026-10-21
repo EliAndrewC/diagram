@@ -48,6 +48,7 @@ def settle_ends(s: Any) -> int:
         a household's way moved at its foot - research/questions/0081-village-lanes.drawing.html: "cut at its far end, never at its door"
         a foot re-aimed only onto lawful ground - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the walker goes round a garden or yard, a way runs along the middle of the gaps
         which of a folded pair is re-aimed - UNRESEARCHED: the shorter record as the T; two bare legs lose the shorter
+        a lane with no width judged as a footpath - research/questions/0081-village-lanes.drawing.html: a lane with no recorded width is judged at the footpath's 3 ft
         no fan of stubs at a door - UNRESEARCHED: past two ends at one house, the farther cut back past the doorstep
         a lane ends at the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end within 60 ft of the house or
             12 ft of its built ground reaches it on any side; one that reaches nothing is trimmed to service (`settle_dangling`)"""

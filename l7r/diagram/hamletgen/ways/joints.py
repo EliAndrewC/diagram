@@ -302,7 +302,8 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
 
     Research:
         no pull moves an arriving end off its farm - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: two kinds of way split back at a joint only where the end that arrived still arrives (`arrives_off`)
-        a fold at a joint becomes a T - research/questions/0081-village-lanes.drawing.html: a fold at the meeting point made a T; a Z across it pulled straight like any jog, the joint moved back a vertex where the pull cannot clear it
+        a fold at a joint becomes a T - research/questions/0081-village-lanes.drawing.html: a fold at the meeting point made a T; a Z across it pulled straight like any jog
+        the joint moved back a vertex - UNRESEARCHED: where the pull cannot clear a Z across the joint; 0081's no-zigzag rule asks a mend and names none
         the shorter link the T's stem - GUESS: of the two arriving lanes, the one whose clear link to the other's side is shorter becomes the stem; searched research/questions/0081-village-lanes.drawing.html (a fold at a joint becomes a T, a worn path takes the shortest or easiest way, but not which lane is the stem) and research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html (ways joined at a T, no stem rule)
         no new kink from a pull - research/questions/0081-village-lanes.drawing.html: a lane does not zigzag (two turns over 50 degrees within 40 ft) or double back, so a pull at a joint that leaves more kink_spans than the two lanes had is refused
         a pulled lane's clearance - research/questions/0081-village-lanes.drawing.html: where a straightened lane touches a building its tread keeps the 3 ft a lane's tread keeps off a farmhouse wall - max(_TOUCH_GAP 4 ft, half the wider of the two lanes' widths + `TREAD_WALL_FT`), a 5 ft width assumed when none is set; the page lets it come right up to the buildings within 6 ft of the old line
@@ -436,7 +437,9 @@ def _joint_moved_back(
     leg is clear, the walk then bends like a path and the web keeps every house it served. Both records are rewritten;
     the first is put back if the second is refused.
 
-    Research: no zigzag at a joint - research/questions/0081-village-lanes.drawing.html: the joint moved back a vertex"""
+    Research:
+        no zigzag at a joint - research/questions/0081-village-lanes.drawing.html: no two turns of more than 50 degrees within 40 ft
+        the mend a vertex back - UNRESEARCHED: the joint moved one vertex back; the page asks the mend and names none"""
     i, ei, j, ej = joint
     old = [*x, *y[1:]]
     for nx, ny in moved_back(x, y):

@@ -387,3 +387,21 @@ Owed by the cohort (cohort@20261021T192759Z: seeds 10, 24, 36 and 47 newly faili
 7. **The next step is a measurement.** `make land` for T103: its gate on main's engine.
 8. **Every route measured before offering one?** Two T26 routes measured (with and without the roll); both expose the conflict, so neither is offered.
 9. **After a ruling: the step it names?** No ruling.
+
+### T105 Approach (checklist part A)
+
+1. **The goal, in the world.** The joint's mend and an unwidthed lane's judging width are claimed as the record reads them.
+2. **The constraints.** 0081: no two turns of more than 50 degrees within 40 ft; a footpath 3 ft; the page names no mend for a Z across a joint.
+3. **Where each comes from.** R (0081) and O.
+4. **Do they describe the world here?** Yes - batch 10's round: `_one_joint` and `_joint_moved_back` cite 0081 for moving the joint back, which the page does not record; `settle_ends` reads `w or 3.0` unclaimed.
+5. **The order.** The mend claimed UNRESEARCHED apart from 0081's zigzag rule (two claims split); `settle_ends`' 3 ft claimed on 0081; no code change.
+6. **The exits.** (a) claim.
+7. **The search smell.** None.
+8. **The budget.** 30 min with its landing.
+9. **Done, measured.** The claims round reads them.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T105 Decisions
+
+**D80 - the mend and the footpath claimed.** No code change: the joint moved back a vertex claimed UNRESEARCHED, beside 0081's zigzag rule it serves; `settle_ends`' unwidthed lane claimed as 0081's 3 ft footpath.
