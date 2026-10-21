@@ -534,7 +534,6 @@ def settle_street_ends(s: Any) -> int:
     was refused).
 
     Its joints: other lanes' ends, its crossings of a way, and each served farm's point (`serve.street_anchors`).
-
     Research: an end reaches something seen - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a street's dangling end cut to its last joint, a lane's end, a way it crosses or the last farm it serves"""
     from .street import end_to_its_joint  # street.py imports this module's `Lawful`; imported where it is used
 
@@ -549,16 +548,8 @@ def settle_street_ends(s: Any) -> int:
         if lanes[i].get("street_index") is None:
             continue
         run = edits[i][0] if i in edits else ways[i]
-        cut = end_to_its_joint(
-            run,
-            [
-                *(o[k] for j, o in enumerate(ways) if j != i and len(o) >= 2 for k in (0, -1)),
-                *(q for j, o in enumerate(ways) if j != i and len(o) >= 2 for _k, q in law.crossing_points(run, o)),
-                *anchors,
-            ],
-            _TOUCH_GAP,
-            e,
-        )
+        crossings = [q for j, o in enumerate(ways) if j != i and len(o) >= 2 for _k, q in law.crossing_points(run, o)]
+        cut = end_to_its_joint(run, [*(o[k] for j, o in enumerate(ways) if j != i and len(o) >= 2 for k in (0, -1)), *crossings, *anchors], _TOUCH_GAP, e)
         if len(cut) >= 2 and cut != run:
             edits[i] = [cut]
     return apply_pieces(s, edits) if edits else 0
