@@ -1004,13 +1004,19 @@
    "declared": "spec-fidelity"
   },
   "### T79 Approach (checklist part A)": {
-   "sha256": "6a6bde5d8f31610a6c7ba387a04194c0fdb39f39f99f197b2b54ef532893dfd0",
+   "sha256": "ae89283c75aaef379c94a11f34d89f6b02b36b50e7dcae53f507c2bb7350ab77",
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T79 Decisions": {
-   "sha256": "120f4b9fd2a366ad9fb2be4d898a722113ecda6636f74228232f6e3160e8f3e7",
+   "sha256": "588aad9a1d601b77e8e3ded954eda04ff96d40a87f95679d544c317dc8ac7e9a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T74 Approach (re-answered 2026-10-21T14:50Z)": {
+   "sha256": "669d713cb7219b4287f2e6ed54b00edd699888f6cbb70a4fc94d1700ef5d65b1",
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
@@ -2323,6 +2329,35 @@
      "summary": "land.main sets signal.signal(SIGTERM, lambda *_: sys.exit(143)) first, so long_runs' finally stops the cohort's process group.",
      "class": "within",
      "why": "The mechanism for T79's goal; it removes no requested behavior and carves out no case."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "### T74 Approach (re-answered 2026-10-21T14:50Z)",
+    "### T79 Approach (checklist part A)",
+    "### T79 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T74-bound",
+     "summary": "_near is bounded to owed houses within the dooryard carry's reach (2 x _REACH_FT, 120 ft), so a swept lane end walks only toward a house it can serve",
+     "class": "within",
+     "why": "Fixes a finding from the batch-6 round on the task's own goal (an end stops beside the house it serves). That is FR-001/FR-002 work under Amendment 7 ('working all of the remaining open tasks'). It narrows nothing the GM asked: the bound keeps the walk from reaching houses the end does not serve, and the carry's reach is an existing constraint, not a new one."
+    },
+    {
+     "id": "T74-claim",
+     "summary": "the walk-on is claimed and read IN-STEP by the claims round; seeds 1-48 and the pinned rows rerun",
+     "class": "within",
+     "why": "Brings unclaimed behavior under the project's claims checks. It enforces the task and widens nothing."
+    },
+    {
+     "id": "D56",
+     "summary": "land.main installs a SIGTERM handler first: it ignores SIGTERM, sends it to its own process group (the gate, make done) and raises SystemExit(143), so long_runs' finally also stops the cohort's process group",
+     "class": "within",
+     "why": "Found-work fix to the landing tooling the GM asked to speed up and parallelise (Amendments 1, 5, 6), filed and worked under Amendment 7. The change from the earlier CLEAR text only widens the cleanup to stop the gate too, which serves the block's stated goal that no gate or cohort is left running. It excepts no case and narrows nothing."
     }
    ]
   }

@@ -539,6 +539,20 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
+### T79 Approach (re-answered 2026-10-21T14:52Z)
+
+1. **The goal, in the world.** As before: a landing stopped by hand leaves no gate or cohort running.
+2. **The constraints.** As before, and where each run lives: the gate (`make done`) in the landing's own process group, the cohort in its own session.
+3. **Where each comes from.** O (feature 405) and Python.
+4. **Do they describe the world here?** Yes - the plan review's aside, 2026-10-21: the first handler raised SystemExit alone, which stops the cohort through the `finally` but not the gate.
+5. **The order.** The handler ignores SIGTERM, sends it to its own group and raises SystemExit(143); the test holds the group stopped.
+6. **The exits.** (c) - a landing is stopped whole; a `make land` run in the foreground shares the group with its caller, which is stopped with it, as the person stopping the landing asked.
+7. **The search smell.** None.
+8. **The budget.** With the batch.
+9. **Done, measured.** The handler stops the landing's group and raises SystemExit(143) (test).
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
 ### T79 Decisions
 
 **D56 - SIGTERM runs the cleanup.** `land.main` installs a SIGTERM handler first: it ignores SIGTERM, sends it to its own process group (the gate, `make done`, runs there) and raises SystemExit(143), so `long_runs`' `finally` stops the cohort's own process group too.
