@@ -124,6 +124,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T74 `sweeps._walk_in` stops at the FIRST point walking in that reaches, the outer edge of the last house's 60 ft zone, so an end can stand up to 60 ft past the house in open ground; 0246 ends a lane "at the dooryard" - hold the end nearest the house served, as `_pull_back` now does (405 T55); and the round's notes: `_join_piece`'s clearance measured from fabric vertices, not fence edges; `_unjog`'s docstring history against `_clear_touch`'s (impl-drift DRIFTED and outside the change, batch 5's round) [lands-open]
       research: rendering
+- [ ] T75 The sweeps' "a house served" guard (`_sweep_dangling_ends`, `_sweep_debris`) counts a house served within `_SERVE_FT` (100 ft) - 0246 §10's back-lane count, and only for the back-lane form - where §6 gives the serving test: within 60 ft of the house or 12 ft of the steading's built ground (a GUESS). Give the guard §6's test (`end_serves`' own), and claim it; three rounds read the claim three ways because the code departs from the page (impl-drift DRIFTED x2, batch 5's round 3) [lands-open]
+      research: rendering
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
 - [ ] T02 (385 T36) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
