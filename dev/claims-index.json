@@ -29837,21 +29837,22 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#a house served": {
-  "code": "6baab54cb4864cf1",
+  "body": "61bc4f802dfe944e",
+  "claim": "a house served - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a house within `_SERVE_FT` (100 ft) of a lane counts as served, so the lane is kept - the page's back lanes bring every farmhouse within 100 ft of one",
+  "code": "9329cbaaf264e1fe",
   "core": "adc48b77040c5a6b",
-  "date": "2026-10-05",
-  "note": "100 ft from a lane is the page's own house-to-lane figure (\"every farmhouse within 100 ft\"); the 60 ft the claim compares it to is the end-reach figure",
+  "date": "2026-10-21",
+  "note": "the 100 ft (`_SERVE_FT`, lines 90/98) comes from §10, which only sets how many back lanes to lay (\"as few back lanes are laid as bring every farmhouse within 100 ft of one\"), and only in the back-lane form of the §8 roll. The code applies it to every lane in both forms. The page's own figure for \"how close counts as serving a house\" is §6: \"within 60 ft of the house, or within 12 ft of the steading's built ground\", a GUESS. Either the code moves to §6's 60/12 or the drawing page records 100 ft as the serving figure for this guard",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:82d03d7e6a2180e2",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c4049193a04d9dd0"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-20",
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#a link another lane ends on kept": {
   "body": "150d813526ad3ba8",
@@ -29993,21 +29994,22 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_debris#a house served": {
-  "code": "cdf6531ed4f8b314",
+  "body": "ce55e9fcf31567df",
+  "claim": "a house served - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a house within `_SERVE_FT` (100 ft) of a lone fragment keeps it - the page's back lanes bring every farmhouse within 100 ft of one",
+  "code": "ac7ad827c97084c2",
   "core": "b2888d1c0eb05b8f",
-  "date": "2026-10-05",
-  "note": "100 ft is the page's house-to-lane figure, not a departure from the 60 ft end reach",
+  "date": "2026-10-21",
+  "note": "same mismatch: `_near(h, mine) <= _SERVE_FT < _near(h, others)` (line 182) uses §10's 100 ft back-lane count figure as the serving test, for lanes in both forms. The page's serving figure is §6's \"within 60 ft of the house, or within 12 ft of the steading's built ground\" (GUESS). Either the code takes 60/12 or the page records 100 ft for this guard",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:82d03d7e6a2180e2",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c4049193a04d9dd0"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_debris#debris length": {
   "code": "01e198e7567214b7",
@@ -30125,11 +30127,11 @@
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_walk_in#pulled back to the last point that serves": {
   "body": "e4ebb243e7802aa1",
-  "claim": "pulled back to the last point that serves - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane end that reaches nothing is pulled back to the last house it serves - the 4 ft step is this code's, no page gives one",
-  "code": "8208924f2f298b7d",
+  "claim": "pulled back to the last point that serves - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane end that reaches nothing is pulled back to the last house it serves, 4 ft at a time",
+  "code": "c387f8ca02e0cb60",
   "core": "a55a49d5709df2b4",
   "date": "2026-10-21",
-  "note": "the walk stops at the FIRST point walking in where `reaches` holds. Under 0246's 60 ft reach that is the outer edge of the last house's zone, so the end can stand up to 60 ft past the house in open ground. The page says a lane \"ends at the dooryard\", and `_pull_back` (405 T55) now holds the end nearest the house for this reason. Either stop at the point nearest the house served, or say in the claim that the end stops at the edge of the reach zone",
+  "note": "§6 records the pull-back as a GUESS; the 4 ft step is granularity only",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
@@ -30137,7 +30139,7 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::brook_crossings#lane sweep plumbing": {
   "code": "946c149c841bb011",

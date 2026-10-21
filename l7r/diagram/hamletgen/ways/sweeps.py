@@ -667,7 +667,7 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
         grove band not crossed - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0033-row-villages-resson.drawing.html: no lane runs through a farm's own wood - the way runs outside the grove or through a gap in it - so an end is not carried across one
         dooryard carry reach - UNRESEARCHED: up to 120 ft (2 x `_REACH_FT`); the page gives a lane end's reach (60 ft), not a carry's
         a whittled lane emptied - UNRESEARCHED: a lane pulled back under `_WEB_MIN_FT` (30 ft) is emptied, for the debris sweep to finish
-        a house served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a house within `_SERVE_FT` (100 ft) of a lane counts as served, so the lane is kept - the page's back lanes bring every farmhouse within 100 ft of one"""
+        a house served - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a house within `_SERVE_FT` (100 ft) of a lane counts as served, so the lane is kept, where the page says 60 ft"""
     lanes = s.M.get("lanes") or []
     owed = lane_houses(s.M)  # the houses an end serves, is kept for or carried to: a household reached across a yard is owed none (feature 317)
     # THE ONE END RULE (269 B04/B17): `end_serves`, the body the trims and the gate read - this sweep kept its own copy, and
@@ -837,7 +837,7 @@ def _sweep_debris(s: Settlement) -> int:
         isolated fragment dropped - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network
         no house stranded - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every farmhouse is served but the few reached across a neighbor's land, owed none (`geom.lane_houses`)
         debris length - UNRESEARCHED: a lone fragment dropped only under `_WEB_MIN_FT` (30 ft)
-        a house served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a house within `_SERVE_FT` (100 ft) of a lone fragment keeps it - the page's back lanes bring every farmhouse within 100 ft of one"""
+        a house served - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a house within `_SERVE_FT` (100 ft) of a lone fragment keeps it, where the page says 60 ft"""
     lanes = s.M.get("lanes") or []
     ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
     live = [i for i in range(len(lanes)) if len(ways[i]) >= 2]
