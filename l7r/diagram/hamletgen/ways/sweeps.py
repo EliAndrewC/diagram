@@ -659,8 +659,12 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
 
     Research:
         lane end reaches something - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back until it serves a way, the field or a house, 4 ft at a time - never one reached across a neighbor's land, owed none (`geom.lane_houses`)
-        not the way it left - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end does not count as reaching a way the lane's other end stands on (within `_TOUCH_GAP`), so a link off a way with nothing at its far end is pulled back to nothing; the page is silent on a lane's own start
-        end carried to the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane a house needs ends at its dooryard - never a household reached across a neighbor's land, owed none (`geom.lane_houses`)
+        not the way it left - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end does not count as reaching a way the lane's other end stands on (within `_TOUCH_GAP`), so a link off a way with nothing at its far end is pulled back to nothing - our reading of "a stretch that joins nothing of the network is not drawn" against "reaching another way within 60 ft of it", which does not say whether the way a lane leaves is another way
+        the track out and streets exempt - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the track out runs from the cluster's edge off the map, so its far end is no lane end; a row village's street keeps its own end rules (`ways/street.py`)
+        a link another lane ends on kept - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the lanes are one network, joined where their treads meet - a short lane another lane ends on is that join, not debris
+        end carried to the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane a house needs ends at its dooryard - carried to the owed house nearest the end, never a household reached across a neighbor's land, owed none (`geom.lane_houses`)
+        kept whole for a house - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane whose pull-back would leave a farmhouse with no way is restored whole, its unserving end carried to a dooryard where an owed house stands within the carry's reach and no grove band is in the way, and otherwise left where it was drawn - the page pulls back an end that reaches nothing and does not say what gives when that would strand a house
+        grove band not crossed - research/questions/0033-row-villages-resson.drawing.html: a farm's grove is walked round, so an end is not carried across one
         dooryard carry reach - GUESS: up to 120 ft (2 x _REACH_FT)
         a whittled lane emptied - UNRESEARCHED: a lane pulled back under `_WEB_MIN_FT` (30 ft) is emptied, for the debris sweep to finish
         a house served - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a house within `_SERVE_FT` (100 ft) of a lane counts as served, so the lane is kept, where the page says 60 ft"""
@@ -757,7 +761,11 @@ def _walk_in(pts: list[Pt], reaches: Callable[[Pt, Pt], bool], tails: Sequence[P
     NEVER A WHOLE SEGMENT AT A TIME (feature 405 T14, D8): the sweep used to pop a vertex while the end did not serve, so an
     end whose last segment passed a house partway landed on the vertex before it, past the last point that served (DRIFTED
     in 385's impl-drift round, T106) - the same fault T12 took out of `_trim_to_service`. The 269 E4 hold is asked before
-    each step: where another lane's end rests on the segment, the end stops there (`held_at`)."""
+    each step: where another lane's end rests on the segment, the end stops there (`held_at`).
+
+    Research:
+        pulled back to the last point that serves - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane end that reaches nothing is pulled back to the last house it serves, 4 ft at a time
+        held at a junction - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the lanes are one network, joined where their treads meet - a pull-back stops where another lane's end rests on it"""
     while len(pts) >= 2 and not reaches(pts[-1], pts[0]):
         a, b = pts[-2], pts[-1]
         hold = held_at(a, b, tails)

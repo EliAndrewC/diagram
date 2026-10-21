@@ -101,3 +101,17 @@ Owed by the round arbiter's ruling on hour:405-engine-findings-from-385@2 (conti
 **D8 - the sweep walks its ends in.** `ways/sweeps.py::_sweep_dangling_ends` loses its two vertex-popping loops; each end is walked in along its own last segment 4 ft at a time, a vertex dropped only once the end is within 4 ft of it, and the 269 E4 hold still asked before each step (an end whose segment carries another lane's end stops there, as now). The docstring's "gives up its last vertex" becomes the walk, and the claim "lane end reaches something" names the 4 ft grain.
 
 **D9 - the other end's way does not count.** The end's reach is asked of the other lanes' segments less those within `_TOUCH_GAP` of the lane's OTHER end, as `_trim_to_service`'s `serves` does (feature 261), so a link off a way with nothing at its far end is pulled back to nothing and emptied, as the pop did. Claimed on the unit (`GUESS` on 0246, which is silent on a way's own start).
+
+### T14 part B (2026-10-21T03:29Z)
+
+Owed by the round arbiter's ruling on hour:405-engine-findings-from-385@3 (continue), taken while T14 was the active task.
+
+1. **What is refusing?** Nothing in the code: the ways suite (574) and the cohort (16/16) green. The claims round found the unit's rules claimed short (two MISLABELED, three UNCLAIMED); claims added, re-checked.
+2. **A3 again.** Unchanged: 0246's pull-back (R), the 4 ft step (O), the hold (R, 0246's one network), the way left not counted (a GUESS reading of 0246, feature 261).
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: D8 and D9 as reviewed; claims only.
+6. **The one-sentence test.** "A swept lane end stops where it last serves, not a segment short" - true by the tests.
+7. **The next step is a measurement.** The claims round, then `make land`.
+8. **Every route measured before offering one?** No route is offered.
+9. **After a ruling: the step it names?** Yes - the claims round, then `make land`, then T14's breakdown for the GM.
