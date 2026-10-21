@@ -532,6 +532,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
+  },
+  "## T52 - the ledger rows written again after the claims wait (found landing T49)": {
+   "sha256": "f8af0bd480630e09c83c93321e111d3096620331db8702df078869aed0b5f58d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T52 Approach (checklist part A)": {
+   "sha256": "7d778ab0baf2fb2fcdf954404ad31c07a22056cbe2f0b8a65138e51858b86755",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T52 Decisions": {
+   "sha256": "3d821e7e239316e12255a3efdd52d23db64df4cd7b9fdd338997347df277952a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1137,6 +1155,35 @@
      "summary": "reusing the step's pass inside the gate was weighed and refused",
      "class": "within",
      "why": "Design choice; removes nothing that was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T52 - the ledger rows written again after the claims wait (found landing T49)",
+    "### T52 Approach (checklist part A)",
+    "### T52 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T52 (filing)",
+     "summary": "A finding from landing T49 - the claims round's ledger row owed at the push after make land's first ledger write - filed as a new task of 405",
+     "class": "within",
+     "why": "FR-002 / the GM 2026-10-19: findings stay as new tasks in this feature; it also serves Amendment 6 (the claims round beside the landing) and Amendment 1 (cut the landing's cost) by removing a hand-written row the new ordering created."
+    },
+    {
+     "id": "D27",
+     "summary": "land.write_ledger(root, d) writes the plan reviews' rows and the traced passes and commits the ledger; cheap_refusals calls it first, main calls it again after wait_for_claims, before the ticks and the push",
+     "class": "within",
+     "why": "Adds a second write after D23's claims wait so rows the claims round produces are written by the landing; it removes no case, keeps the push's ledger check (385 FR-019) and the first write (D13) intact, and narrows nothing the request or spec asked for."
+    },
+    {
+     "id": "T52 Approach exit (c)",
+     "summary": "The landing writes what it can write; one test that rows are written again after the claims wait, before ticks and push",
+     "class": "within",
+     "why": "Enforces the task's own goal; the ledger refusal still stands for any row the landing cannot write, so no requirement is relaxed."
     }
    ]
   }
