@@ -67,7 +67,7 @@ and refusals).
 
 | change | saves | kind |
 |---|---|---|
-| A. The claims gate refuses only findings on the LINES the delta changed; a finding elsewhere in a changed unit is filed as a task of the feature (`make claims-carry`, which exists for page edits) and the push goes ahead | rounds 2+ of the claims round: ~6 min on T14 | tooling (claims gate + impl-drift's bundle carries the hunks) |
+| A. The claims gate refuses only findings on the LINES the delta changed; a finding elsewhere in a changed unit is filed as a task of the feature (`make claims-carry`, which exists for page edits) and the push goes ahead | round 3 of the claims round: ~3 min on T14 (round 2 was owed regardless - round 1's findings on my own new lines had to be re-checked) | tooling (claims gate + impl-drift's bundle carries the hunks) |
 | B. `make claims-owed` names a new function whose claim is the inherited module `NONE` before any agent runs | one round on T14 | tooling (a lint) |
 | C. The step-back's GM-wait survives a background agent finishing after the turn ended | ~3 min, once per resumed session | tooling bug fix (`checkpoint.gm_waits`) |
 | D. A pass dispatched on a claims bundle is traced to the active task's feature for its ledger row | ~1 min, every claims round | tooling (`ledger_owed.belongs`) |
@@ -75,9 +75,13 @@ and refusals).
 | G. The gate-write guard matches the command, not words inside a heredoc's text | a refusal now and then | guard bug |
 | E. The gate's tree check and the gate-write guard ignore what the gate does not read (docstring-only engine edits by the stamp's token rule; `dev/claims-index.json`, `specs/`) | lets the gate run beside the claims round: 5-8 min of wall | tooling (riskier: the gate's own correctness) |
 
-With A-D and F the T14 run would have been about 6 plan + 5 fix + ~4 claims + 1 land action, then the unattended landing
-(an incremental gate, the cohort, the push, ~9 min): **~16 min of session time and ~25 min to landed**, against 39.5. With E
-as well the gate overlaps the claims round, ~20 min.
+With A-D and F the T14 run would have been about 6.5 plan + 5 fix (overlapped) + ~7 claims (two rounds) + 1 land action, then
+the unattended landing (an incremental gate, the cohort, the push, ~9-11 min): **~15 min of session time and ~25-28 min to
+landed**, against 39.5. With E as well the gate overlaps the claims round, ~20-23 min.
+
+A measured dead end: starting `make done` by hand to overlap the claims round (03:29) cost 5 min of machine time and saved no
+wall time - the claims edits moved the engine under it and its record writes were refused while it ran. That is the evidence for
+E, and against doing it by hand again.
 
 Not proposed: the plan section (6.5 min) and the fix are the work itself; the cohort (1.5 min) overlapped the step-back; the
 two pushes (2.2 min) are each the push's own checks.
