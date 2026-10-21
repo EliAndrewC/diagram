@@ -989,3 +989,23 @@
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
+<!-- plan-archive: archived 2026-10-21 -->
+### T20 Decisions
+
+**D60 - the touch and the joints claimed.** `trim_streets` claims its joints' touch (the caller's `_TOUCH_GAP`, 4 ft, the ink's - CONVENTION; a front door's nearest point within `reach` a joint too) and a field path's end a joint (0246); `settle_street_ends` its 4 ft touch. The bund clause first written was dropped: `trim_streets` cuts to its joints and never asks `end_serves` (the claims round). No code token changes.
+
+<!-- plan-archive: T08 to T08 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+### T08 Approach (re-answered 2026-10-21T15:19Z)
+
+1. **The goal, in the world.** As before.
+2. **The constraints.** As before.
+3. **Where each comes from.** As before.
+4. **Do they describe the world here?** Yes - the claims round, 2026-10-21: the new claim duplicated the unit's own, and 0246 answers it (every other farmhouse has a lane of its own from its dooryard).
+5. **The order.** As D61 now reads.
+6. **The exits.** (a) claim - words only.
+7. **The search smell.** None.
+8. **The budget.** With the batch.
+9. **Done, measured.** The claims round reads the claims IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+

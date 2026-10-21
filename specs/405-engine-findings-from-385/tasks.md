@@ -155,6 +155,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T86 0246 §41 holds the 7 ft gap from ANOTHER household's garden, and the page records drawing a lane past its own household's garden as a DEVIATION, but `_clear_touch` / `_clear_within` keep the join links 7 ft from all fabric, own garden and yard included: carry the own-garden case into the join links, or record the stricter join on 0246 (impl-drift outside the change, batch 7's round 3, 2026-10-21) [lands-open]
       research: rendering
+- [ ] T87 `plan_gate.archivable` reads a block by its exact digest while the decide guard forgives a typo-scale change (T81), so T81's own ticked sections, a blank line from their reviewed text, stayed in plan.md after batch 7's landing; one reading for both (found landing batch 7, 2026-10-21) [lands-open]
+      research: rendering
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
 - [ ] T02 (385 T36) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]

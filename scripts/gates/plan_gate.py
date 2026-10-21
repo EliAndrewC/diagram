@@ -729,7 +729,7 @@ def archivable(spec_dir: pathlib.Path) -> list[str]:
         review = json.loads((spec_dir / RECORD).read_text(encoding="utf-8"))
     except (OSError, ValueError):
         review = {}
-    have = reviewed_blocks(review)
+    history = History(plan)
     out: list[str] = []
     taken: list[tuple[int, int]] = []
     for sec in dict.fromkeys(task_sections(text).values()):
@@ -739,8 +739,7 @@ def archivable(spec_dir: pathlib.Path) -> list[str]:
         if not ids or any(i not in done for i in ids) or any(lo <= at < hi for lo, hi in taken):
             continue
         own = any(task_current(review, text, i) for i in ids)
-        clear = all((have.get(k) or {}).get("verdict") == "CLEAR" and (have.get(k) or {}).get("sha256") == block_digest(b)
-                    for k, b, _a in blocks(sec) if k != "preamble")
+        clear = _section_clear(review, sec, history)  # the decide guard's reading, typo-scale changes forgiven (405 T87)
         if own or clear:
             out.append(sec)
             taken.append((at, at + len(sec)))

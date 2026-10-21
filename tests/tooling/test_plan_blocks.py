@@ -131,6 +131,16 @@ def test_the_archive_moves_only_finished_clear_sections_and_owes_nothing(tmp_pat
     assert gate.archive(d) == ["T02"] and "Wave 2" not in (d / "plan.md").read_text() and gate.owed(d) is None
 
 
+def test_a_finished_section_a_typo_from_its_reviewed_text_is_archived(tmp_path: pathlib.Path) -> None:
+    """405 T87: the archive read a block by its exact digest while the decide guard forgives a typo (T81), so T81's own ticked
+    section, a blank line from its reviewed text, stayed in plan.md. One reading for both."""
+    d = feature(tmp_path)
+    sec = gate.task_sections(PLAN)["T01"]
+    (d / "plan.md").write_text(PLAN.replace(sec, sec.rstrip("\n") + "\n\n\n"))
+    _git(d.parent.parent, "commit", "-qam", "a blank line")
+    assert gate.archive(d, today="2026-10-21") == ["T01"]
+
+
 def test_the_bundle_is_lean_and_whole_where_it_must_be(tmp_path: pathlib.Path) -> None:
     import os
 

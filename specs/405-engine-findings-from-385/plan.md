@@ -525,25 +525,7 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 <!-- plan-archive: T80 to T82 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 <!-- plan-archive: T82 to T20 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 <!-- plan-archive: T20 to T20 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-### T20 Decisions
-
-**D60 - the touch and the joints claimed.** `trim_streets` claims its joints' touch (the caller's `_TOUCH_GAP`, 4 ft, the ink's - CONVENTION; a front door's nearest point within `reach` a joint too) and a field path's end a joint (0246); `settle_street_ends` its 4 ft touch. The bund clause first written was dropped: `trim_streets` cuts to its joints and never asks `end_serves` (the claims round). No code token changes.
-
-<!-- plan-archive: T08 to T08 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-### T08 Approach (re-answered 2026-10-21T15:19Z)
-
-1. **The goal, in the world.** As before.
-2. **The constraints.** As before.
-3. **Where each comes from.** As before.
-4. **Do they describe the world here?** Yes - the claims round, 2026-10-21: the new claim duplicated the unit's own, and 0246 answers it (every other farmhouse has a lane of its own from its dooryard).
-5. **The order.** As D61 now reads.
-6. **The exits.** (a) claim - words only.
-7. **The search smell.** None.
-8. **The budget.** With the batch.
-9. **Done, measured.** The claims round reads the claims IN-STEP.
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
+<!-- plan-archive: T20 to T08 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 ### T08 Decisions
 
 **D61 - the existing claim holds.** `lay_door_paths`' own claim "every grove farm reached at its door" (0246, 0081) already says whose farm gets a door path - 0246 gives every other farmhouse a lane of its own from its dooryard, so the claims round read the new claim as a duplicate of it and as 0246's, not a GUESS: no claim is added; 0033's near-row case is one of 0246's.
@@ -565,3 +547,94 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 ### T10 Decisions
 
 **D62 - withdrawn; T10 stays open.** 0084 §116 draws a timber deck as wide as the way where a way crosses a ditch, so the research expects the track out to cross a drawn channel on a deck, which the fill refuses; no claim may call that a departure the page does not record (the claims round). T10 is re-scoped to the deck crossing - a code task - and is not landed with this batch.
+
+### T54 Approach (checklist part A)
+
+1. **The goal, in the world.** A row village's first street runs on off the map as the road into it; a further street is pulled back to the last way or farm it serves.
+2. **The constraints.** 0033's drawing page: "The street runs on off the map as the road into it", further streets run parallel to the first and the page says nothing of their ends; 0246: an end reaching nothing is pulled back to the last house it serves (a GUESS).
+3. **Where each comes from.** R (0033, 0246).
+4. **Do they describe the world here?** Yes - measured 2026-10-21: Kashikawa's first street is 2,928 ft and uncut (the task's "2,800 to 1,400" read a layout before the road's two runs, feature 328 wave 5); it escapes `trim_streets` only because the road runs' ends stand on its ends (batch 7's round).
+5. **The order.** `trim_streets` passes by the row's first street by name (the lowest `street_index` drawn - only it takes the road, `lay_row_streets`); `to_its_joints` / `end_to_its_joint` / `settle_street_ends` claims labeled GUESS 0246 for a further street's cut; a test; seeds 1-48.
+6. **The exits.** (e) conform, with the claims.
+7. **The search smell.** None.
+8. **The budget.** 60 min for the batch with its landing.
+9. **Done, measured.** The first street is never cut by the trim, joints or none (test); seeds 1-48 and the pinned rows pass; the pool's first streets unchanged.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T54 Decisions
+
+**D63 - the first street passed by.** `trim_streets` skips the street with the lowest drawn `street_index` (the one that met the road); a further street is cut to its joints as before. `settle_street_ends` still cuts any street end the law calls dangling - a first street's end dangles only where its road run was lost, and then 0246's pull-back is all the record gives. The claims: `to_its_joints` and `end_to_its_joint` GUESS 0246 (a further street), `trim_streets`' "the first street runs on" now true by the code.
+
+### T83 Approach (checklist part A)
+
+1. **The goal, in the world.** The sweep and the door path agree on where a grove farm's wood stands.
+2. **The constraints.** 0036 / 0033: no lane runs through a farm's own wood; the grove band is recorded with its rotation (`rot`).
+3. **Where each comes from.** R (0036, 0033) and O (the manifest's band).
+4. **Do they describe the world here?** Yes - batch 7's round: `_sweep_dangling_ends` builds axis-aligned boxes from `x, y, w, h`, `lay_door_paths` `rot_rect(..., rot)`.
+5. **The order.** The sweep's bands as `rot_rect(x, y, w, h, rot)`; the stale "their boxes are unrotated" comment goes; a test with a rotated band.
+6. **The exits.** (e) conform.
+7. **The search smell.** None.
+8. **The budget.** 60 min for the batch with its landing.
+9. **Done, measured.** A carry across a rotated band's true footprint is refused, one across the unrotated box's phantom corner is not (test); seeds 1-48 pass.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T83 Decisions
+
+**D64 - one band.** `_sweep_dangling_ends`' `_bands` = `rot_rect(g["x"], g["y"], g["w"], g["h"], g.get("rot") or 0.0)`, ungrown (the sweep asks only whether a carry crosses the wood; the door path's grow is its own tread's clearance).
+
+### T84 Approach (checklist part A)
+
+1. **The goal, in the world.** The splice keeps a lane as far off the fabric as before, measured along the fabric's edges, not only at its corners.
+2. **The constraints.** 0246 §41: a lane's middle 7 ft from a garden fence; `_join_piece`'s rule - the splice no nearer the fabric than the piece was, or than its bar.
+3. **Where each comes from.** R (0246) and O (feature 134 T50).
+4. **Do they describe the world here?** Yes - batch 7's round: `_clear_within` measures fabric VERTICES to the run, so a run passing a long fence between two far corners reads clear.
+5. **The order.** `_clear_within` measures the run's segments against the fabric's EDGES, filed boxed once (`_fabric_edges`), segment to segment (0 where they cross), capped at the bar as before; the oracle test's old scan becomes segment to segment; seeds 1-48.
+6. **The exits.** (e) conform.
+7. **The search smell.** None.
+8. **The budget.** 60 min for the batch with its landing.
+9. **Done, measured.** A run past a long edge's middle reads its true clearance (test); the index equals the full segment scan below the cap (test); seeds 1-48 pass.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T84 Decisions
+
+**D65 - edges, not corners.** `_fabric_edges(fab)` files each polygon edge as `(a, b, box)` in a `PointGrid`; `_clear_within(run, edges, cap)` takes the least segment-to-segment distance (0 where `segments_cross`), queried at samples every `cell` along each run segment, padded `cap + cell/2 + 1` - exact below the cap (the nearest pair's point on the run lies within half a cell of a sample, its partner within `cap` of that point, so inside the edge's box padded by the query). Maps may change (the splice is stricter).
+
+### T85 Approach (checklist part A)
+
+1. **The goal, in the world.** An unwidthed lane is judged as the 3 ft footpath it is drawn as, wherever a join reads its width.
+2. **The constraints.** 0246 §43: a footpath 3 ft; `_one_network` and `_join_piece` read `or 3.0`.
+3. **Where each comes from.** R (0246).
+4. **Do they describe the world here?** Yes - batch 7's round 3: `_touch_junctions` reads `or 5.0` in its two bars and in `may_write`'s stroke.
+5. **The order.** `or 5.0` -> `or 3.0` at the three places in `_touch_junctions`; the claim; seeds 1-48.
+6. **The exits.** (e) conform.
+7. **The search smell.** None.
+8. **The budget.** 60 min for the batch with its landing.
+9. **Done, measured.** The three reads agree (grep); seeds 1-48 pass.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T85 Decisions
+
+**D66 - a footpath is 3 ft.** `_touch_junctions` reads an unwidthed lane as 3 ft (its bars are unchanged: max(7, w/2 + 2) is 7 below 10 ft; `may_write`'s stroke narrows to the drawn tread).
+
+### T87 Approach (checklist part A)
+
+1. **The goal, in the world.** The archive and the decide guard read a plan block the same way.
+2. **The constraints.** `_section_clear` (T81), which forgives a typo-scale change from the reviewed text; `archivable`, which read the exact digest.
+3. **Where each comes from.** O (features 375, 405).
+4. **Do they describe the world here?** Yes - measured 2026-10-21: after batch 7's landing T81's ticked sections stayed in plan.md.
+5. **The order.** `archivable` asks `_section_clear(review, sec, History(plan))`; a test, red on the unfixed archive.
+6. **The exits.** (c) - one reading.
+7. **The search smell.** None.
+8. **The budget.** 60 min for the batch with its landing.
+9. **Done, measured.** A ticked section a blank line from its reviewed text is archived (test, red before).
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T87 Decisions
+
+**D67 - the archive reads as the guard does.** `archivable`'s per-block exact-digest test replaced by `_section_clear` with the plan's history.
+
