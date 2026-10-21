@@ -393,3 +393,76 @@ Owed by the cohort (cohort@20261021T172647Z: seeds 12, 21, 22, 24, 38 and 901 ne
 7. **The next step is a measurement.** The landing: seeds 1-48 and the pinned rows passed 54/54 on T18's fix.
 8. **Every route measured before offering one?** No route is offered.
 9. **After a ruling: the step it names?** No ruling.
+
+### T95 Approach (checklist part A)
+
+1. **The goal, in the world.** A join link's margin off the water is claimed.
+2. **The constraints.** No page gives a lane's margin off a water line; 0081 keeps a lane off wet ground.
+3. **Where each comes from.** O.
+4. **Do they describe the world here?** Yes - batch 9's round: `_clear_touch` keeps `clear_runs`' default 14 ft off water lines, unclaimed.
+5. **The order.** The claim (written in batch 9: "a join link off the water - UNRESEARCHED: 14 ft"), read IN-STEP; nothing more.
+6. **The exits.** (a) claim.
+7. **The search smell.** None.
+8. **The budget.** 60 min for the batch with its landing.
+9. **Done, measured.** The claims round read it IN-STEP (batch 9, 2026-10-21).
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T95 Decisions
+
+**D74 - the water margin claimed.** No code change: `_clear_touch`'s 14 ft off water lines claimed UNRESEARCHED in batch 9, read IN-STEP.
+
+### T96 Approach (checklist part A)
+
+1. **The goal, in the world.** A hairpin is a turn of more than 140 degrees, as 0081 says, wherever a turn is judged.
+2. **The constraints.** 0081 §37: a hairpin is a turn of "more than 140 degrees".
+3. **Where each comes from.** R (0081).
+4. **Do they describe the world here?** Yes - batch 9's round 3: the spur's fold, `kink_spans`, and the joints' two hook tests cut at exactly 140 as well (`>=`).
+5. **The order.** `>=` -> `>` at the four places that compare a turn with `_HAIRPIN_DEG` (`clearance.kink_spans`, `joints` x2, `track.spur_cut_at_the_fold`); their docstrings say "more than"; a test at exactly 140; seeds 1-48.
+6. **The exits.** (e) conform.
+7. **The search smell.** None.
+8. **The budget.** 60 min for the batch with its landing.
+9. **Done, measured.** A turn of exactly 140 degrees is no hairpin (test); seeds 1-48 and the pinned rows pass.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T96 Decisions
+
+**D75 - more than 140.** The four comparisons read `> _HAIRPIN_DEG`; `law.DOUBLE_BACK_DEG` (the same constant) is read by `kink_spans`, so the law and the placers keep one boundary.
+
+### T97 Approach (checklist part A)
+
+1. **The goal, in the world.** A lane end running back along another way under 20 degrees is a doubled tail and is cut where it comes alongside, as 0081 draws it.
+2. **The constraints.** 0081 §25: "A lane whose end runs back along another way at less than 20 degrees ... cut it where it comes alongside".
+3. **Where each comes from.** R (0081).
+4. **Do they describe the world here?** Yes - batch 9's round 3: `tails._DOUBLED_DEG` is 15 and four claims call the rule UNRESEARCHED.
+5. **The order.** `_DOUBLED_DEG` 15 -> 20 (0081); the four claims (`tails._DOUBLED_DEG`, `tails`' and `law`'s doubled-tail predicates, `settle_ends`) cite 0081; seeds 1-48.
+6. **The exits.** (e) conform.
+7. **The search smell.** None.
+8. **The budget.** 60 min for the batch with its landing.
+9. **Done, measured.** Seeds 1-48 and the pinned rows pass; the claims round reads the four IN-STEP.
+10. **Before moving a constant.** Measured: `_DOUBLED_DEG` is read by the law's refusal, the settle's cut, the tree's deferral and `Lawful`'s tail rule; seeds 1-48 and the pinned rows say what the move costs.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T97 Decisions
+
+**D76 - 20 degrees, 0081's.** `tails._DOUBLED_DEG = 20.0`, claimed on 0081; between it and `_ALONG_DEG` (25) the sweep still cuts to the crossing it overran, as before.
+
+### T100 Approach (checklist part A)
+
+1. **The goal, in the world.** A task id names one task in its tasks.md.
+2. **The constraints.** Feature 375's task ids; `make task-add` takes the next free id.
+3. **Where each comes from.** O.
+4. **Do they describe the world here?** Yes - measured 2026-10-21: a hand-filed T93 beside the landing's carried T93, and no check refused it.
+5. **The order.** `spec-lint` check: a task id on two task lines of one tasks.md is refused, naming both lines and `make task-add`; a test.
+6. **The exits.** (c) - a check, not a habit.
+7. **The search smell.** None.
+8. **The budget.** 60 min for the batch with its landing.
+9. **Done, measured.** Two T93 lines refused, one passes (test).
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T100 Decisions
+
+**D77 - one id, one task.** `spec-lint` `check_duplicate_tasks(tasks)`: every `- [ ] Tnn` / `- [x] Tnn` id seen twice is a finding with both line numbers and the tip `make task-add F=<n> TITLE=...`.
+

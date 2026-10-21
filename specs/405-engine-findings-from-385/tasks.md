@@ -272,6 +272,9 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T95 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: l7r/diagram/hamletgen/ways/clearance.py::_clear_touch#the join link keeps `clear_runs`' default 14 ft (`line_margin`) off water lines, not `gap`; no claim of this unit names it [lands-open]
       research: rendering
+- [ ] T100 Two tasks in one tasks.md took the id T93 (a hand-filed task beside the landing's carry) and no check refused it: spec-lint refuses a task id that appears twice in a tasks.md (found batch 9, 2026-10-21) [lands-open]
+      research: rendering
+      research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
