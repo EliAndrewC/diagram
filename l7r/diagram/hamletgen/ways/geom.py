@@ -519,9 +519,12 @@ def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[
 
     Research:
         pulled back to the last house served - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: ends trimmed to what
-            serves, 4 ft at a time
-        an outlying house keeps its way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end serving a house no other way reaches is kept within 60 ft of it (`WAY_END_REACH_FT`), or 12 ft of its built ground (`end_serves`)
-        a short way beside its houses kept whole - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a way whose two ends are served only by the same houses is not cut toward them at either end ("a tread comes from somewhere else"), so an end may stand up to 60 ft past its house; the page pulls an end back to the last house it serves and is silent on a way with the same houses at both ends"""
+            serves
+        the trim's step - UNRESEARCHED: walked in 4 ft at a time; the page gives no step
+        not the way it left - UNRESEARCHED: an end does not count as reaching a way the run's other end stands on (within
+            `_TOUCH_GAP`) - it walked away from it (the settlement-review of Mizuguchi, feature 261); the page records no such case
+        an outlying house keeps its way - UNRESEARCHED: the page records no keep exception; an end serving a house no other way reaches is kept within 60 ft of it (`WAY_END_REACH_FT`), or 12 ft of its built ground (`end_serves`)
+        a short way beside its houses kept whole - UNRESEARCHED: the page records no keep-whole case; a way whose two ends are served only by the same houses is not cut toward them at either end ("a tread comes from somewhere else"), so an end may stand up to 60 ft past its house; the page pulls an end back to the last house it serves and is silent on a way with the same houses at both ends"""
 
     # ARRIVING AT THE FIELD IS SERVICE. A field spur exists to reach the crop, and it is the one way on
     # the map whose whole purpose is served by something that is neither a house nor another lane. Without
@@ -533,8 +536,8 @@ def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[
     def serves(q: Pt, other: Pt | None = None) -> bool:
         # A HOUSE THIS RUN ALONE REACHES IS NOT TRADED FOR A TIDY END (feature 227 D11). `keep` carries the
         # dwellings no other way comes within `WEB_REACH_FT` of, and a point that still reaches one of them - within
-        # `WAY_END_REACH_FT` (60 ft), the lane page's reach for a way reaching a farmhouse (`WEB_REACH_FT`, 100, until
-        # feature 328) - counts as serving however far it is from anything else: a dangling end is a blemish on the drawing, an unreached
+        # `WAY_END_REACH_FT` (60 ft), the lane page's reach for a way reaching a farmhouse (it was `WEB_REACH_FT`'s 100
+        # until feature 328) - counts as serving however far it is from anything else: a dangling end is a blemish on the drawing, an unreached
         # farmhouse breaks the map's own rule, and tightening both at once stranded cohort seed 39. It is measured
         # to the house's CENTER because that is what `farmhouses_reach_a_way` - the rule being protected here -
         # measures; arrival at a steading is the fourth clause of `end_serves`, at its own much tighter distance.
@@ -598,7 +601,7 @@ def _stop_at_closest_approach(run: Poly, near: Sequence[Pt]) -> Poly:
     An end that meets a way, the field or a steading's built ground is the caller's to leave alone - it has
     arrived somewhere. Cuts under 4 ft are left, the same grain as the walk in `_trim_to_service`.
 
-    Research: no road to nowhere - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: cut at the house's closest approach"""
+    Research: no road to nowhere - UNRESEARCHED: cut at the house's closest approach - the page pulls an end back to the last house it serves and records no point of the cut"""
     out = list(run)
     while near and len(out) >= 2:
         a, b = out[-2], out[-1]

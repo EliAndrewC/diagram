@@ -171,7 +171,7 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
 
     Dijkstra on a coarse lattice, then string-pulled. The lattice is the INDEX - it decides nothing,
     because every shortcut is re-tested against the real geometry by `_clear_link` before it is
-    taken, so the drawn path is exactly as legal as one drawn by hand. 12 ft cells because the gaps
+    taken, so the drawn path is exactly as legal as one drawn by hand. 10 ft cells (`ROUTE_CELL`) because the gaps
     these paths thread are `MIN_WEB_GAP` (18 ft) at their narrowest, and a lattice coarser than the
     gap cannot see the gap.
 
@@ -182,7 +182,7 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
     Research:
         a worn path takes the shortest way - research/questions/0081-village-lanes.drawing.html: least cost through the
             steadings, then pulled taut like a string
-        clear of the fabric - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the line 7 ft off by default, a tread's edge 5.5 ft
+        clear of the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the line 7 ft off by default (the page's fence to the middle of the lane), a tread's edge 5.5 ft
         clear of the crop - research/questions/0081-village-lanes.drawing.html: half the widest tread off the crop (`WEB_CROP_GAP`, carried by the crop polygons) at each cell's center, unpadded so a way can come up to the bund (padded half a cell as the walls are, cohort Audit-10's field way could not); every link the pull takes is tested at that gap, and a lattice step it keeps as it is is asked of the crop's outline (`crosses_the_crop`) - a route that would cut a crop corner is no route
         clear of the toe and marsh - UNRESEARCHED: 8 ft (`WEB_HARD_GAP`)
         lattice off the water - UNRESEARCHED: 14 ft off the water lines

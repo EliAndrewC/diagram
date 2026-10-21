@@ -659,13 +659,13 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
 
     Research:
         lane end reaches something - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back until it serves a way, the field or a house, 4 ft at a time - never one reached across a neighbor's land, owed none (`geom.lane_houses`)
-        not the way it left - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end does not count as reaching a way the lane's other end stands on (within `_TOUCH_GAP`), so a link off a way with nothing at its far end is pulled back to nothing - our reading of "a stretch that joins nothing of the network is not drawn" against "reaching another way within 60 ft of it", which does not say whether the way a lane leaves is another way
-        the track out and streets exempt - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the track out runs from the cluster's edge off the map, so its far end is no lane end; a row village's street keeps its own end rules (`ways/street.py`)
+        not the way it left - UNRESEARCHED: an end does not count as reaching a way the lane's other end stands on (within `_TOUCH_GAP`), so a link off a way with nothing at its far end is pulled back to nothing - our reading of "a stretch that joins nothing of the network is not drawn" against "reaching another way within 60 ft of it", which does not say whether the way a lane leaves is another way
+        the track out and streets exempt - UNRESEARCHED: the page records no exemption; the track out runs from the cluster's edge off the map, so its far end is no lane end; a row village's street keeps its own end rules (`ways/street.py`)
         a link another lane ends on kept - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the lanes are one network, joined where their treads meet - a short lane another lane ends on is that join, not debris
         end carried to the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane a house needs ends at its dooryard - carried to the owed house nearest the end, never a household reached across a neighbor's land, owed none (`geom.lane_houses`)
         kept whole for a house - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane whose pull-back would leave a farmhouse with no way is restored whole, its unserving end carried to a dooryard where an owed house stands within the carry's reach and no grove band is in the way, and otherwise left where it was drawn - the page pulls back an end that reaches nothing and does not say what gives when that would strand a house
-        grove band not crossed - research/questions/0033-row-villages-resson.drawing.html: a farm's grove is walked round, so an end is not carried across one
-        dooryard carry reach - GUESS: up to 120 ft (2 x _REACH_FT)
+        grove band not crossed - GUESS research/questions/0033-row-villages-resson.drawing.html: a farm's grove is walked round, so an end is not carried across one - the page gives it for a row village's near-row farms; held here for every settlement's carries
+        dooryard carry reach - UNRESEARCHED: up to 120 ft (2 x `_REACH_FT`); the page gives a lane end's reach (60 ft), not a carry's
         a whittled lane emptied - UNRESEARCHED: a lane pulled back under `_WEB_MIN_FT` (30 ft) is emptied, for the debris sweep to finish
         a house served - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a house within `_SERVE_FT` (100 ft) of a lane counts as served, so the lane is kept, where the page says 60 ft"""
     lanes = s.M.get("lanes") or []
@@ -728,7 +728,7 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
         _rest += list(zip(pts, pts[1:], strict=False))
         if any(min((seg_dist(h[0], h[1], a, b) for a, b in _rest), default=float("inf")) > _SERVE_FT for h in _served):
             # A FARMHOUSE WOULD LOSE ITS WAY, so the lane stays - and then its end must EARN its ink rather than stop in
-            # grass. The end is carried on to the dooryard of the house it serves (269 B17: a lane that serves a farmhouse
+            # grass. The end is carried on to the dooryard of an owed house near it (269 B17: a lane that serves a farmhouse
             # ends at its dooryard). Dropping it instead is what `generate` answers with a whole re-roll (the reference
             # hamlet went to attempt 3 and its seed +20.5%), and a re-roll is a heavy price for a tread that only needed to
             # arrive somewhere.
