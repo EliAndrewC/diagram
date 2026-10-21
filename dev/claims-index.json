@@ -30327,18 +30327,18 @@
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::carry_to_dooryard#grove band not crossed": {
   "body": "86d99e3671b33ca4",
-  "claim": "grove band not crossed - groves-of-trees-around-farmhouses-yashikirin.drawing: no lane runs through a farm's own wood",
-  "code": "2c55926ba3be2d7a",
+  "claim": "grove band not crossed - GUESS groves-of-trees-around-farmhouses-yashikirin.drawing: no lane runs through a farm's own wood",
+  "code": "bd785523960451ea",
   "core": "6545b6d0c93b3158",
   "date": "2026-10-21",
-  "note": "the walk returns None at the first step inside a band, so no carried end enters a farm's wood (\"free of lanes\"). A ring's break lies outside its bands",
+  "note": "an end whose straight walk enters any farm's grove band or copse clump returns None; the drawing page records \"no lane runs through a farm's own wood\" as a GUESS",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
   "research": "45be621f47448e34",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab",
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:6562af7543614f36"
   ],
   "verdict": "IN-STEP"
  },
@@ -30358,24 +30358,24 @@
   "triaged": "2026-10-18",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/sweeps.py::farm_bands#a farm's own wood: its grove bands and its copse clumps, not the shelter belt": {
-  "code": "6b346c3fa4ba0e19",
+ "l7r/diagram/hamletgen/ways/sweeps.py::farm_bands#a farm's own wood": {
+  "body": "84a1c3541ad3f7b9",
+  "claim": "a farm's own wood - groves-of-trees-around-farmhouses-yashikirin.drawing: its grove and its share of the copse, one wood",
+  "code": "6cee243841108314",
   "core": "6b346c3fa4ba0e19",
   "date": "2026-10-21",
-  "note": "a farm's own wood: its grove bands and its copse clumps, not the shelter belt",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/hamletgen/ways/sweeps.py::farm_bands#lane sweep plumbing": {
-  "body": "dd4ebfe4917e5bd3",
-  "claim": "lane sweep plumbing - NONE",
-  "code": "6ae01642318e2687",
-  "core": "6b346c3fa4ba0e19",
-  "date": "2026-10-21",
-  "note": "this new function decides which woods count as a farm's own wood, the wood no lane crosses: grove bands plus the dooryard copse's clumps, and not the shelter belt. That rule is in 0036 (\"count each farm's windward grove and its share of the copse together, as one wood\"; \"Not the village's shelter belt\"). The claim should cite research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, not NONE",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "the grove bands plus each household's copse clumps count as one wood, and the shelter belt is left out as a different planting",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
+  },
+  "research": "45be621f47448e34",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:25f4f196d0bea56e",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:6562af7543614f36",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:ed317f68606a6b57"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::held_at#lane sweep plumbing": {
   "code": "11da53f07466d97b",
