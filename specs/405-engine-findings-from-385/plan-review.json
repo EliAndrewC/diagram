@@ -156,6 +156,32 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T49": {
+   "section_sha256": "fb27949265d125951f6e3744b95f0f74476ab64c2f6a55b8d6b08c9c46cd5455",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T49 (filing)",
+     "summary": "A finding raised in T13's round on code T13 did not change (settle_street_ends' joints omit crossings) is filed as a new task of this feature.",
+     "class": "within",
+     "why": "The GM's 2026-10-19 rule this feature carries (FR-002): findings on code a task did not change are kept as new tasks here. Filing it narrows nothing asked."
+    },
+    {
+     "id": "D26",
+     "summary": "settle.settle_street_ends adds every point where the street's run crosses another way (law.crossing_points) to the joints passed to street.end_to_its_joint, beside the other lanes' ends and the served farms' points; docstring and claim name it.",
+     "class": "within",
+     "why": "Adds to D22's joint set rather than removing any: D22 promises a dangling end is cut back no further than the last served farm, and a crossing joint can only stop the cut earlier, so D22 still holds. It implements the cited research (0246 s6: a lane runs on to its last house or to another way) and narrows nothing the GM asked or the spec settles."
+    },
+    {
+     "id": "T49 A5 (in place, test, landing)",
+     "summary": "The change is made in place in settle.py (at the 1,000-line bar), with a unit test of a street crossing a way and dangling past it, and make land started at once with the claims round beside its gate.",
+     "class": "within",
+     "why": "Order and verification of the task itself; the test only fails if the requested behavior is absent, and the claims round beside the landing is what amendment 6 asked for. No narrowing."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  },
  "blocks": {
