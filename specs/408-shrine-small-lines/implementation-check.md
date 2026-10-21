@@ -1,3 +1,6 @@
 - 0257: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'sweep|sakaki|himorogi|tsubo|monme|tael|day wage' l7r pool (only a code comment's 'sweep' and glossary entries; no price or wage)
 - 0260: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'porter|oxcart|dachin|pack.?horse|monme|tael' l7r pool (glossary entries only; no fare or rate)
 - 0278: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'porter|oxcart|carrying stone|cart rate|monme|tael' l7r pool (glossary entries only; no rate)
+- 0258: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'komainu|signboard|plaque|jichinsai|ground rite|carver|monme' l7r pool (glossary entries and the guardian-figures sheet modal's description only; no price or wage)
+- 0268: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'sawyer|worship hall|beam end|mortuary|water pavilion|monme' l7r pool (glossary entries only; no price or wage)
+- 0271: no code implements it - consumed by gm-assistant's money skill; searched: grep -rniE 'unveil|kaicho|senninzuka|shroud|coffin|zenkoji' l7r pool (no hit outside the glossary; no price or wage)
