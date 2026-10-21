@@ -446,7 +446,6 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
     Research:
         every grove farm reached at its door - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0081-village-lanes.drawing.html:
             a 3 ft footpath where no way stands within 60 ft of the house or 12 ft of its built ground (`street_arrives`)
-        a door path wherever no way arrives - GUESS research/questions/0033-row-villages-resson.drawing.html: the page gives a door path to a near-row farm whose grove stands between it and its street; every farmhouse being reached by a way (0246), any grove farm no way arrives at gets one, the page's case among them
         round the grove to the street - research/questions/0033-row-villages-resson.drawing.html: a path round the grove,
             a GUESS there
         off the fixtures and grove bands - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: walls to the path

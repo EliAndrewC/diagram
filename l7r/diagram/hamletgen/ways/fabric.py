@@ -373,7 +373,7 @@ def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (
     # `WEB_FABRIC_GAP` (7) - "a lane and a plot fence share a line in a real village" - until 405 T65 put it at 0246's 7 ft
     # (seeds 1-48 and the pinned rows all passed at 7 ft, 2026-10-21).
     # That reasoning is about FENCES. A farmhouse is not a fence: `houses_clear_of_lanes` allows a lane
-    # no overlap with a steading at all, so a 4 px routing margin plus the tread's own half-width plus
+    # no overlap with a steading at all, so a 4 px routing margin (7 ft since 405 T65) plus the tread's own half-width plus
     # the straightening `_unjog` does afterwards can and did put a link's ink on a house corner -
     # sawada shipped an 8.6 px stub 2 px into one (1826, 2438) and kashikawa a 45 px link 3 px into
     # another (2136, 2762), both from the 2026-08-29 pool sweep, both gating red on main.

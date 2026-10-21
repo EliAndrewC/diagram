@@ -141,7 +141,8 @@ def _touch_junctions(
         join reach - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined; the code extends a free end within 25 ft (`_LANE_JOIN_FT`, and `_STUB_REACH_FT` on the final pass) of another way to it
         a foot beside its own lane's other end left - UNRESEARCHED: a foot within 6 ft of the lane's other end is not joined
         a roundabout link refused - UNRESEARCHED: a junction link longer than `_LINK_DIRECTNESS` (4) times the gap it closes
-        a straight link off the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off a garden fence, more for a lane wider than 10 ft (w/2 + 2 ft), as `_smooth_web`'s chord keeps (feature 328 wave 94: it kept 4 ft)
+        a straight link off the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off a garden fence
+        a wide lane's bar - UNRESEARCHED: a lane wider than 10 ft held at half its width plus 2 ft; the page says nothing of wide lanes
         routed junction link off the fabric - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0081-village-lanes.drawing.html: routed at `WEB_FABRIC_GAP` (7 ft to the middle; `pad_mult` 2.0 sizes only its search box), with a retry on a 5 ft lattice for ends within 0081's 25 ft join reach
         a moved end's last stretch kept short - UNRESEARCHED: an end moved onto another's grows its last leg to at most twice its old length and 4 ft"""
     # A TOUCH MAY NOT PUSH A LANE INTO THE FABRIC IT WAS DRAWN CLEAR OF (feature 134 T50, 2026-08-29).
@@ -321,7 +322,8 @@ def _one_network(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: 
         streets never dropped - research/questions/0033-row-villages-resson.drawing.html: a row's street is laid as one way along its row, so it is never dropped as an orphan piece
         orphan reach - UNRESEARCHED: a stranded piece linked back to the network from up to `_ORPHAN_REACH` (150 ft)
         a roundabout link refused - UNRESEARCHED: a junction link longer than `_LINK_DIRECTNESS` (4) times the gap it closes
-        a straight link off the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off a garden fence, more for a lane wider than 10 ft (w/2 + 2 ft), as `_smooth_web`'s chord keeps (feature 328 wave 94: it kept 4 ft)
+        a straight link off the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off a garden fence
+        a wide lane's bar - UNRESEARCHED: a lane wider than 10 ft held at half its width plus 2 ft; the page says nothing of wide lanes
         routed orphan link off the fabric - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: routed at `WEB_FABRIC_GAP` (7 ft to the middle, the page's gap; `pad_mult` 2.0 sizes only its search box)
         a house served - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 60 ft of the house, or within 12 ft of the steading's built ground (`serves`)"""
     # ONE NETWORK OR NOTHING. Whatever still stands apart after the touches is joined to the main
@@ -473,7 +475,7 @@ def _join_piece(
     seed 14 - 13 ft out, 7 ft up, 13 ft back), and the piece's own vertex is the right start.
 
     Research:
-        a link the splice refuses - UNRESEARCHED: drawn as its own lane at the piece's width, rounded (3 ft where it has none)
+        a link the splice refuses - research/questions/0081-village-lanes.drawing.html: a footpath is drawn 3 ft wide and two lanes meeting end to end are read as one - so the link is drawn at the piece's width, rounded (3 ft where it has none)
         no nearer the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the joined run no nearer a garden fence than it already stood or than 7 ft (`WEB_FABRIC_GAP`, the page's fence to the middle), whichever is more generous (405 T65); a lane wider than 10 ft held at half its width plus 2 ft, its tread's edge then 2 ft off - UNRESEARCHED, no lane drawn here is that wide"""
     pts = [(float(x), float(y)) for x, y in way]
     link = _stop_at_network(link, net)

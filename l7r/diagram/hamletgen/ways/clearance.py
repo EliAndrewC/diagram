@@ -294,7 +294,7 @@ def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: l
     """`_clear_link` at footprint margins - for the short link that closes a junction.
 
     THE DEFAULT IS THE LANE PAGE'S 7 ft SINCE FEATURE 328 (research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:
-    a lane's middle at least 7 ft from a garden fence) - the history of the 4 ft brush it replaced, kept: three wider margins were measured and each broke the reference hamlet
+    a lane's middle at least 7 ft from a garden fence) - the history of the 4 ft brush it replaced, kept (405 T65 then put the join links at 7 ft and seeds 1-48 held): three wider margins were measured and each broke the reference hamlet
     (feature 137 T03, 2026-08-28): 7 ft (the fabric margin) put the T32 zigzag back beside the notice
     board and took the 24-cohort to 1/24; 6 ft for everything cost Inashiro three checks; 6 ft for
     gardens/yards/sheds with 4 for houses still cost it `lanes_bend_like_paths`. The margin was a
