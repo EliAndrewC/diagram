@@ -143,6 +143,7 @@ def _touch_junctions(
         a roundabout link refused - UNRESEARCHED: a junction link longer than `_LINK_DIRECTNESS` (4) times the gap it closes
         a straight link off the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off a garden fence
         a wide lane's bar - UNRESEARCHED: a lane wider than 10 ft held at half its width plus 2 ft; the page says nothing of wide lanes
+        an unwidthed lane a footpath - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane with no recorded width read as the 3 ft footpath, in its bars and in `may_write`'s stroke
         routed junction link off the fabric - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0081-village-lanes.drawing.html: routed at `WEB_FABRIC_GAP` (7 ft to the middle; `pad_mult` 2.0 sizes only its search box), with a retry on a 5 ft lattice for ends within 0081's 25 ft join reach
         a moved end's last stretch kept short - UNRESEARCHED: an end moved onto another's grows its last leg to at most twice its old length and 4 ft"""
     # A TOUCH MAY NOT PUSH A LANE INTO THE FABRIC IT WAS DRAWN CLEAR OF (feature 134 T50, 2026-08-29).
