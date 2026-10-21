@@ -29418,11 +29418,11 @@
  },
  "l7r/diagram/hamletgen/ways/street.py::trim_streets#a field path's end a joint": {
   "body": "f2c4acf2bbadeac0",
-  "claim": "a field path's end a joint - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane runs on to a field path, a bund or another way - a field path is a lane, its end a joint; a street end at the bund is no dangling end (`end_serves`), so it is not cut",
-  "code": "05d67ea9c0225cce",
+  "claim": "a field path's end a joint - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane runs on to a field path or another way - a field path is a lane, its end a joint",
+  "code": "152eff094888785b",
   "core": "2e25d7ac8bde745b",
   "date": "2026-10-21",
-  "note": "trim_streets never asks `end_serves`. `cut = to_its_joints(pts, ends, touch)` cuts every street to its outermost lane-end or door joints, so a street end that \"runs on to ... a bund\" past its last joint is cut. Either the code should keep an end that `end_serves` counts, or the claim should drop the bund clause",
+  "note": "any other lane's end within touch, field paths included, is a joint; matches \"runs on to ... a field path, a bund or another way\"",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
@@ -29430,7 +29430,7 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/street.py::trim_streets#a further street cut to its joints": {
   "body": "f2c4acf2bbadeac0",
@@ -29450,15 +29450,14 @@
  },
  "l7r/diagram/hamletgen/ways/street.py::trim_streets#a joint's touch": {
   "body": "f2c4acf2bbadeac0",
-  "claim": "a joint's touch - CONVENTION: an end within `touch` of the street stands on it - the caller's `_TOUCH_GAP` (4 ft), the ink's own touch; a served farm's point (`street_anchors`) at 1 ft, since it lies on its street",
-  "code": "5bc5b887e1f4df1b",
+  "claim": "a joint's touch - CONVENTION: an end within `touch` of the street stands on it - the caller's `_TOUCH_GAP` (4 ft), the ink's own touch; a front door's nearest point on the street within `reach` is a joint too",
+  "code": "944fed0675df7236",
   "core": "2e25d7ac8bde745b",
   "date": "2026-10-21",
-  "note": "the claim names a served farm's point (`street_anchors`) at 1 ft, but this code never reads `street_anchors`. Its other joints are door projections within `reach` (`nearest_on(pts, d)` ... `<= reach`), tested at `touch`. The claim should describe the door joints, not a 1 ft anchor",
+  "note": "the 4 ft `touch` is ink tolerance, but \"a front door's nearest point on the street within `reach` is a joint too\" decides where a street ends: the street runs on to serve a farm whose door is within `reach`. That is a placement rule, not a convention. Split the claim: keep `touch` as CONVENTION, and label the door joint GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html (\"pulled back to the last house it serves\", \"how close counts as serving a house\"), with the caller's `reach` checked against §31's 60 ft / 12 ft",
   "pages": {},
   "research": "",
-  "rests": [],
-  "verdict": "DRIFTED"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/street.py::trim_streets#the first street runs on": {
   "code": "aa4f6e7bffdf5f71",
@@ -30584,14 +30583,20 @@
  },
  "l7r/diagram/hamletgen/ways/touch.py::_join_piece#a link the splice refuses": {
   "body": "ad7295a9591bf751",
-  "claim": "a link the splice refuses - UNRESEARCHED: drawn as its own lane at the piece's width, rounded (3 ft where it has none)",
-  "code": "28aaaf88f23a4389",
+  "claim": "a link the splice refuses - village-lanes.drawing: a footpath is drawn 3 ft wide and two lanes meeting end to end are read as one - so the link is drawn at the piece's width, rounded (3 ft where it has none)",
+  "code": "c231c03edbab450d",
   "core": "16ac95d54a4ca5e0",
   "date": "2026-10-21",
-  "note": "0081's drawing page answers the width, so it is not UNRESEARCHED: \"a footpath is drawn 3 ft wide\" (§18), and two lanes meeting end to end \"are read as one\" (§41), which is why the link takes the piece's width. The claim should cite research/questions/0081-village-lanes.drawing.html",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "link drawn at the piece's width (3 ft footpath default), so the two read as one way",
+  "pages": {
+   "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
+  },
+  "research": "324b10775c9108ef",
+  "rests": [
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/touch.py::_join_piece#no nearer the fabric": {
   "body": "ad7295a9591bf751",
@@ -30647,11 +30652,11 @@
  },
  "l7r/diagram/hamletgen/ways/touch.py::_one_network#a straight link off the fabric": {
   "body": "334cfdccb07719d2",
-  "claim": "a straight link off the fabric - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off a garden fence, more for a lane wider than 10 ft (w/2 + 2 ft), as `_smooth_web`'s chord keeps (feature 328 wave 94: it kept 4 ft)",
-  "code": "1d5b9f20796265e2",
+  "claim": "a straight link off the fabric - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off a garden fence",
+  "code": "9d6e59d8a120639b",
   "core": "c50a845102e361fe",
   "date": "2026-10-21",
-  "note": "the 7 ft floor matches \"A lane's middle keeps at least 7 ft clear of a garden fence\". The code's `max(WEB_FABRIC_GAP, w/2 + 2.0)` (line 118) also holds a lane wider than 10 ft at half its width plus 2 ft. The page says nothing about wide lanes, and `_join_piece` labels this same rule UNRESEARCHED. The claim should split: 7 ft cited to §16, and the w/2 + 2 ft part marked UNRESEARCHED.",
+  "note": "`max(WEB_FABRIC_GAP, w/2+2)` is 7 ft to the middle for every lane the page draws (3/5/6 ft)",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
@@ -30660,7 +30665,18 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/touch.py::_one_network#a wide lane's bar": {
+  "body": "334cfdccb07719d2",
+  "claim": "a wide lane's bar - UNRESEARCHED: a lane wider than 10 ft held at half its width plus 2 ft; the page says nothing of wide lanes",
+  "code": "46afb37bfca20b9a",
+  "core": "c50a845102e361fe",
+  "date": "2026-10-21",
+  "note": "the w/2+2 term binds only above 10 ft; the page draws no lane over 6 ft and says nothing of a wider lane's gap",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/touch.py::_one_network#connector never dropped": {
   "code": "3d18da873ad6b0cd",
@@ -30772,28 +30788,31 @@
  },
  "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#a straight link off the fabric": {
   "body": "c5d652cc160c71a2",
-  "claim": "a straight link off the fabric - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off a garden fence, more for a lane wider than 10 ft (w/2 + 2 ft), as `_smooth_web`'s chord keeps (feature 328 wave 94: it kept 4 ft)",
-  "code": "79c3bc4eff4d5d03",
+  "claim": "a straight link off the fabric - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off a garden fence",
+  "code": "644c90d4308d1e10",
   "core": "e79b9a70ee57bb0e",
-  "date": "2026-10-19",
-  "note": "max(7, w/2 + 2)",
+  "date": "2026-10-21",
+  "note": "both straight tests (the moved end at line 410, the link at line 426) use 7 ft to the middle for lanes up to 10 ft",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#an end already within `_TOUCH_GAP` (4 ft) of any way counts as a junction and is not extended": {
-  "code": "e79b9a70ee57bb0e",
+ "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#a wide lane's bar": {
+  "body": "c5d652cc160c71a2",
+  "claim": "a wide lane's bar - UNRESEARCHED: a lane wider than 10 ft held at half its width plus 2 ft; the page says nothing of wide lanes",
+  "code": "29c60a34a3c640b1",
   "core": "e79b9a70ee57bb0e",
-  "date": "2026-10-19",
-  "note": "an end already within `_TOUCH_GAP` (4 ft) of any way counts as a junction and is not extended",
+  "date": "2026-10-21",
+  "note": "same as `_one_network`: the term binds only above 10 ft, and the page is silent there",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#end meets end": {
   "code": "dfe2d7991c345fac",

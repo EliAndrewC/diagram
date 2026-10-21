@@ -472,7 +472,8 @@ def trim_streets(s: Settlement, touch: float, doors: Sequence[Pt] = (), reach: f
     Research:
         the first street runs on - research/questions/0033-row-villages-resson.drawing.html: the street runs on off the map as the road into it
         a further street cut to its joints - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back to the last way or door it serves
-        a joint's touch - CONVENTION: an end within `touch` of the street stands on it - the caller's `_TOUCH_GAP` (4 ft), the ink's own touch; a front door's nearest point on the street within `reach` is a joint too
+        a joint's touch - CONVENTION: an end within `touch` of the street stands on it - the caller's `_TOUCH_GAP` (4 ft), the ink's own touch
+        a door on the street a joint - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back to the last house it serves - a front door's nearest point on the street within `reach` (the caller's 1 ft: a door standing on the street) is a house it serves
         a field path's end a joint - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane runs on to a field path or another way - a field path is a lane, its end a joint"""
     lanes = s.M.get("lanes") or []
     n = 0

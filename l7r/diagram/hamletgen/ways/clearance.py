@@ -300,7 +300,7 @@ def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: l
     gardens/yards/sheds with 4 for houses still cost it `lanes_bend_like_paths`. The margin was a
     ghost: on the current tree `houses_clear_of_lanes` is 0 of 48 and `features_do_not_overlap` 2 of
     48 - the T32-era brush failures were cured by later work (the set-back re-pack, the guard, the
-    ladder). Do not widen this again without a failing seed that names it.
+    ladder). 405 T65 widened the join links to the page's 7 ft on that footing, and seeds 1-48 held.
 
     `gap` IS THE CALLER'S TO RAISE, and that is not the flat widening warned off above (feature 134
     T50, 2026-08-28). All three reverted attempts moved the DEFAULT, which is charged to every junction
