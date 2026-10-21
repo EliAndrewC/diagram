@@ -98,11 +98,7 @@ def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str, deferred: l
     # A FINDING OUTSIDE THE CHANGE IS FILED, NOT REFUSED (feature 405 T36, D10): the carry files every carried claims finding as an
     # open task of this feature - what `make claims-carry` does by hand - and the box lands with the work
     file_carries(root, d)
-    # THE LANDING'S OWN ESCAPES ARE COMMITTED, NOT REFUSED (feature 408): an escape the ticks above honored (PLAN_REVIEW_OK)
-    # writes its dev/bypass-log record in this very pass, so the tree check below refused every rerun on records of its own
-    if run(root, ["git", "status", "--porcelain", "--", "dev/bypass-log"])[1].strip():
-        run(root, ["git", "add", "--", "dev/bypass-log"])
-        run(root, ["git", "commit", "-q", "-m", "the landing's escape records (make land, 408)", "--", "dev/bypass-log"])
+    commit_escape_records(root)
     if run(root, ["git", "status", "--porcelain"])[1].strip():
         stops.append("uncommitted changes - commit them first")
     _rc, owed = run(root, [sys.executable, str(HERE / "reviews" / "ledger_owed.py"), "--ledger", str(root / "dev" / "review-ledger.md")])
@@ -130,6 +126,15 @@ CLAIMS_WAIT_S = 1200.0
 CLAIMS_POLL_S = 15.0
 
 
+def commit_escape_records(root: Path) -> None:
+    """THE LANDING'S OWN ESCAPES ARE COMMITTED, NOT REFUSED (feature 408): an escape a tick or a gate honored (PLAN_REVIEW_OK)
+    writes its dev/bypass-log record during the landing, and the tree checks refused every rerun - and held the claims wait
+    to its bound - on records of the landing's own."""
+    if run(root, ["git", "status", "--porcelain", "--", "dev/bypass-log"])[1].strip():
+        run(root, ["git", "add", "--", "dev/bypass-log"])
+        run(root, ["git", "commit", "-q", "-m", "the landing's escape records (make land, 408)", "--", "dev/bypass-log"])
+
+
 def wait_for_claims(root: Path, tasks: list[str], d: Path | None = None) -> str:
     """The claims gate passing and the tree clean - the claims round recorded and committed beside the gate - or, past
     `CLAIMS_WAIT_S`, the refusal that still stands (405 T50, D23)."""
@@ -142,6 +147,7 @@ def wait_for_claims(root: Path, tasks: list[str], d: Path | None = None) -> str:
         if rc and d is not None and "carry:" in out and not any(w in out for w in ("owed (", "introduced:")):
             file_carries(root, d)  # a carry is filed, not waited on (405 T77: batch 5's wait needed `make claims-carry` by hand)
             rc, out = run(root, [str(HERE / "gates" / "claims-gate.sh")], env)
+        commit_escape_records(root)
         dirty = run(root, ["git", "status", "--porcelain"])[1].strip()
         if not rc and not dirty:
             return ""
@@ -334,7 +340,7 @@ def main(argv: list[str]) -> int:
         run(root, ["git", "checkout", "--", rel])  # the ticks already written put back: a landing that does not push ticks nothing
         print(f"land: {', '.join(failed)} refused its tick (above) - nothing landed, nothing ticked", file=sys.stderr)
         return 2
-    run(root, ["git", "add", "--", rel])
+    run(root, ["git", "add", "--", rel, "dev/bypass-log"])  # a tick's honored escape writes its record too (feature 408)
     run(root, ["git", "commit", "-q", "-m", f"{d.name}: {' '.join(tasks)} ticked (make land)"])
     tick_sha = run(root, ["git", "rev-parse", "HEAD"])[1].strip()
     if rc := push(root, tasks):
