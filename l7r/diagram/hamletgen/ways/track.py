@@ -140,7 +140,8 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
             and the fabric test; the router walls the steadings as obstacles
         gap off a grove band - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the grove fallback's route and clip keep
             `CONNECTOR_BAND_GAP_FT` (0036's working room past the connector's half-width, 12.5 ft) off the trees - the
-            spur's too, half a foot more than its own 2.5 ft half-tread would need
+            spur's too, half a foot more than its own 2.5 ft half-tread would need; the router's hard index holds the
+            line about 13.5 ft off (`WEB_HARD_GAP` on the grown band), more room than the page's "about", never less
         detour swing - UNRESEARCHED: the midpoint swung 40, 80, 140 then 220 px out from the cluster
         never across a grove - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: routed round
             the bands, else only the part clear of them kept

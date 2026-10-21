@@ -19,7 +19,7 @@ from ..consts import (
     Pt,
 )
 from .clearance import _clear_link, _clear_touch, link_index
-from .geom import _TOUCH_GAP, _turn_deg
+from .geom import _turn_deg
 
 # THE BROOK'S BAND AND WHAT ENTERING IT COSTS, for the roll being drawn (feature 261). `_route` has a dozen callers and
 # none holds the settlement, so the ways stage sets this once where it lays the fords (`set_crossing`) - every map
@@ -296,20 +296,21 @@ def crosses_the_crop(a: Pt, b: Pt, hard: Sequence[Poly]) -> bool:
 
 
 def _unjog(path: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], gap: float | None = None) -> Poly:
-    """Take the lattice's jogs out of a routed path where the chord clears at the JUNCTION margin.
+    """Take the lattice's jogs out of a routed path where the chord clears the fabric at 0246's 7 ft.
 
     The string-pull above tests every shortcut at the margin the route was planned with, so a route
     that hugs a garden's corner at the fabric margin keeps a 7 ft step and a 13 ft step back where
     the lattice turned the corner - `lanes_bend_like_paths` reads two turns past 50 degrees within
     40 ft as a zigzag (cohort seed 14, feature 137 T03), and a turn past 140 as a hairpin. Both are
-    the lattice showing through, not the ground; a path that may brush a fence at a junction may
-    brush it at a corner, so each such jog is replaced by its chord when `_clear_touch` allows it.
+    the lattice showing through, not the ground, so each such jog is replaced by its chord when `_clear_touch` allows it
+    at the fabric margin (the 4 ft junction margin until 405 T65).
     The thresholds are the check's own, so this undoes exactly what the check would refuse.
 
     Research:
         no hairpin - research/questions/0081-village-lanes.drawing.html: a turn of 140 degrees chorded or eased
-        no zigzag - research/questions/0081-village-lanes.drawing.html: two 50 degree turns within 40 ft chorded"""
-    gap = _TOUCH_GAP if gap is None else gap  # the module constant is defined below this function
+        no zigzag - research/questions/0081-village-lanes.drawing.html: two 50 degree turns within 40 ft chorded
+        chord clear of the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the chord's line 7 ft (`WEB_FABRIC_GAP`) off a garden fence, the page's fence to the middle of the lane"""
+    gap = WEB_FABRIC_GAP if gap is None else gap  # 0246's 7 ft fence to the middle (405 T65)
     out = list(path)
     k = 1
     while k < len(out) - 1:
