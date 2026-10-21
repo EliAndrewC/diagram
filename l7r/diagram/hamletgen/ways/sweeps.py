@@ -648,8 +648,15 @@ def _keep_the_route_wide(s: Settlement, hard: list[Poly], walls: Sequence[Poly],
 
 
 def farm_bands(M: Mapping[str, Any]) -> list[Poly]:
-    """Each farm grove band of the manifest (`groves`, those with a width) as its rotated rectangle (`rot_rect` at its `rot`)."""
-    return [rot_rect(float(g["x"]), float(g["y"]), float(g["w"]), float(g["h"]), float(g.get("rot") or 0.0)) for g in M.get("groves") or [] if g.get("w")]
+    """A farm's own wood, which no carried end crosses: each grove band of the manifest (`groves`, those with a width) as its
+    rotated rectangle (`rot_rect` at its `rot`), and each clump of the dooryard copse (`village_groves`, role `copse` - a
+    household's share, seated beside its house) as an octagon of the copse's clump radius `r`."""
+    bands = [rot_rect(float(g["x"]), float(g["y"]), float(g["w"]), float(g["h"]), float(g.get("rot") or 0.0)) for g in M.get("groves") or [] if g.get("w")]
+    for g in M.get("village_groves") or []:
+        r = float(g.get("r") or 0.0)
+        if g.get("role") == "copse" and r > 0.0:
+            bands += [[(float(c[0]) + r * math.cos(k * math.pi / 4), float(c[1]) + r * math.sin(k * math.pi / 4)) for k in range(8)] for c in g.get("clumps") or []]
+    return bands
 
 
 def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
@@ -670,7 +677,7 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
         a link another lane ends on kept - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the lanes are one network, joined where their treads meet - a short lane another lane ends on is that join, not debris
         end carried to the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane a house needs ends at its dooryard - carried to the owed house nearest the end, never a household reached across a neighbor's land, owed none (`geom.lane_houses`)
         kept whole for a house - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane whose pull-back would leave a farmhouse with no way is restored whole, its unserving end carried to a dooryard where an owed house stands within the carry's reach and no grove band is in the way, and otherwise left where it was drawn - the page pulls back an end that reaches nothing and does not say what gives when that would strand a house
-        grove band not crossed - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0033-row-villages-resson.drawing.html: no lane runs through a farm's own wood - the way runs outside the grove or through a gap in it - so an end is not carried across one
+        grove band not crossed - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0033-row-villages-resson.drawing.html: no lane runs through a farm's own wood - its grove and its share of the dooryard copse, one wood (0036) - the way runs outside the grove or through a gap in it - so an end is not carried across one
         walked on to the house it serves - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane ends at the dooryard - an end that reaches walks back along its own lane, while it still reaches, to its closest approach to the nearest owed house within 120 ft (2 x `_REACH_FT`); never while within 60 ft (`_REACH_FT`) of another way - not the one its far end stands on (405 T82)
         dooryard carry reach - UNRESEARCHED: up to 120 ft (2 x `_REACH_FT`); the page gives a lane end's reach (60 ft), not a carry's
         a whittled lane emptied - UNRESEARCHED: a lane pulled back under `_WEB_MIN_FT` (30 ft) is emptied, for the debris sweep to finish
@@ -681,9 +688,10 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
     # with it the 60 ft to the field the bund rule retired. `fields` stands in only where the manifest records no ground.
     ground = memo_ground(s, "worked", worked_ground) if worked_ground_rings(s.M) else WorkedGround([list(f) for f in fields])
     steadings = steading_footprints(s.M)
-    # the farm grove bands an end may not be carried across (feature 291) - a farm's own wood; a village copse (`village_groves`)
-    # is common ground, not a farm's wood (405 T73). Each band ROTATED as recorded, as `lay_door_paths` reads it (405 T83: the
-    # sweep read the unrotated box, so the two disagreed on where a turned farm's wood stood)
+    # a farm's own wood, which an end is not carried across (feature 291): its grove bands, each ROTATED as recorded, as
+    # `lay_door_paths` reads it (405 T83: the sweep read the unrotated box, so the two disagreed on where a turned farm's wood
+    # stood), and its share of the dooryard copse - 0036 counts a farm's grove and its share of the copse as one wood, its clumps
+    # kept beside its house and free of lanes (405 T83's round: the copse had been left out as common ground)
     _bands = farm_bands(s.M)
     fixed, emptied = 0, []
     for i, ln in enumerate(lanes):
@@ -833,7 +841,7 @@ def carry_to_dooryard(q: Pt, houses: Sequence[Pt], steadings: Sequence[Sequence[
 
     Research:
         end carried to the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: stopping short of the wall
-        grove band not crossed - research/questions/0033-row-villages-resson.drawing.html: a farm's grove is walked round"""
+        grove band not crossed - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: no lane runs through a farm's own wood"""
     near = [h for h in houses if 0.0 < math.dist(q, h) <= reach]
     if not near:
         return None

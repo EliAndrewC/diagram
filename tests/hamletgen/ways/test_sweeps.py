@@ -826,3 +826,7 @@ def test_the_sweep_reads_a_farm_band_rotated_as_the_door_path_does() -> None:
     (band,) = _sw.farm_bands({"groves": [{"x": 100.0, "y": 100.0, "w": 40.0, "h": 10.0, "rot": 90.0}, {"x": 0.0, "y": 0.0}]})
     xs, ys = [p[0] for p in band], [p[1] for p in band]
     assert max(xs) - min(xs) == pytest.approx(10.0) and max(ys) - min(ys) == pytest.approx(40.0)
+    # ...and a farm's share of the dooryard copse is its wood too (0036: one wood), a windbreak's clumps are not
+    M = {"village_groves": [{"role": "copse", "r": 10.0, "clumps": [[50.0, 50.0]]}, {"role": "windbreak", "r": 10.0, "clumps": [[0.0, 0.0]]}]}
+    (clump,) = _sw.farm_bands(M)
+    assert max(math.dist(p, (50.0, 50.0)) for p in clump) == pytest.approx(10.0)

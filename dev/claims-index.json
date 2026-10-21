@@ -29541,19 +29541,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/street.py::trim_streets#the first street runs on": {
-  "code": "aa4f6e7bffdf5f71",
-  "core": "2e25d7ac8bde745b",
-  "date": "2026-10-07",
-  "note": "the road's runs end at the first street's ends, so those ends are joints and it is not cut",
+  "body": "7942a98286356e0b",
+  "claim": "the first street runs on - row-villages-resson.drawing: the street runs on off the map as the road into it",
+  "code": "30990c5c4858e117",
+  "core": "89e4ba800aa38e2f",
+  "date": "2026-10-21",
+  "note": "the first street is never cut, so it runs on off the map as the road; further streets are still cut",
   "pages": {
    "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
   "research": "37ada2a33aa587d2",
   "rests": [
+   "0033-row-villages-resson.drawing.html:03adf3d96fcebcdf",
    "0033-row-villages-resson.drawing.html:8c303daeddea6496"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/street.py::unhooked_both#lane end loses its hook": {
@@ -30026,12 +30027,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#grove band not crossed": {
-  "body": "a8a5cedcc11a8306",
+  "body": "9b179e0fb983675e",
   "claim": "grove band not crossed - GUESS groves-of-trees-around-farmhouses-yashikirin.drawing, row-villages-resson.drawing: no lane runs through a farm's own wood - the way runs outside the grove or through a gap in it - so an end is not carried across one",
-  "code": "346fae312b522df9",
-  "core": "35bd2d4bc639a74a",
+  "code": "622fccae8ec8fb0b",
+  "core": "ee86f44ed88d9789",
   "date": "2026-10-21",
-  "note": "carry_to_dooryard returns None when the carry would enter a grove band; \"no lane runs through a farm's own wood\" is recorded as a GUESS, and a row farm is reached by a path round its grove",
+  "note": "the change's comment says \"a village copse (`village_groves`) is common ground, not a farm's wood\" and leaves it out of `_bands`. 0036 says the opposite: \"count a farm's grove and its share of the dooryard copse as one wood\", and its clumps are \"kept beside its house and free of lanes\". So a carried end may cross a farm's own copse clump. Either put each household's copse clumps in the bands the carry may not cross, or record leaving out the copse as a DEVIATION on 0036's drawing page",
   "pages": {
    "0033-row-villages-resson.drawing.html": "7f062305b79e2200",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
@@ -30039,19 +30040,18 @@
   "research": "48a45b65a9d31631",
   "rests": [
    "0033-row-villages-resson.drawing.html:dbb4842be0eda9a1",
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:6562af7543614f36"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-21",
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#kept whole for a house": {
-  "body": "869c2ec3e7564ad8",
+  "body": "9b179e0fb983675e",
   "claim": "kept whole for a house - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane whose pull-back would leave a farmhouse with no way is restored whole, its unserving end carried to a dooryard where an owed house stands within the carry's reach and no grove band is in the way, and otherwise left where it was drawn - the page pulls back an end that reaches nothing and does not say what gives when that would strand a house",
-  "code": "20fdd47261f56717",
-  "core": "35bd2d4bc639a74a",
+  "code": "23d09aaa960e6843",
+  "core": "ee86f44ed88d9789",
   "date": "2026-10-21",
-  "note": "the page pulls an end back to the last house it serves but does not say what gives when that would strand a house",
+  "note": "the page pulls back an end that reaches nothing and gives every farmhouse a way, but does not say which rule gives way when the two clash; the restore-or-carry is a fair GUESS",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
@@ -30060,8 +30060,6 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-21",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#lane end reaches something": {
@@ -30704,12 +30702,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/touch.py::_join_piece#no nearer the fabric": {
-  "body": "ad7295a9591bf751",
+  "body": "124fec443b38b2bb",
   "claim": "no nearer the fabric - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the joined run no nearer a garden fence than it already stood or than 7 ft (`WEB_FABRIC_GAP`, the page's fence to the middle), whichever is more generous (405 T65); a lane wider than 10 ft held at half its width plus 2 ft, its tread's edge then 2 ft off - UNRESEARCHED, no lane drawn here is that wide",
-  "code": "b70f845a6b726241",
-  "core": "16ac95d54a4ca5e0",
+  "code": "24955b2176dc734e",
+  "core": "251510e4af9c039f",
   "date": "2026-10-21",
-  "note": "`_bar = max(7, w/2+2)`, and the run is held to `min(_was, _bar)`, the more generous of the two. That keeps the page's 7 ft from fence to middle",
+  "note": "the bar is max(7 ft, w/2+2) to the lane's middle, now measured against the fences' edges and not only their corners; \"no nearer than it stood\" is the repair's tolerance, and the claim names it",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
@@ -30718,7 +30716,6 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/touch.py::_one_network#a farmhouse's only way kept": {
@@ -30908,12 +30905,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#a straight link off the fabric": {
-  "body": "c5d652cc160c71a2",
+  "body": "f02806adde7c588d",
   "claim": "a straight link off the fabric - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off a garden fence",
-  "code": "644c90d4308d1e10",
-  "core": "e79b9a70ee57bb0e",
+  "code": "f6e65831b401f25c",
+  "core": "1ae82b74a968ff01",
   "date": "2026-10-21",
-  "note": "both straight tests (the moved end at line 410, the link at line 426) use 7 ft to the middle for lanes up to 10 ft",
+  "note": "both the straight link and the end-meets-end move are tested by `_clear_touch` at max(7 ft, w/2+2) from the line to the fabric",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
@@ -30922,7 +30919,6 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#a wide lane's bar": {

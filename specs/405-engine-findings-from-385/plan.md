@@ -569,10 +569,10 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 ### T83 Approach (checklist part A)
 
 1. **The goal, in the world.** The sweep and the door path agree on where a grove farm's wood stands.
-2. **The constraints.** 0036 / 0033: no lane runs through a farm's own wood; the grove band is recorded with its rotation (`rot`).
+2. **The constraints.** 0036 / 0033: no lane runs through a farm's own wood, its grove and its share of the dooryard copse counted as one wood (0036); the grove band is recorded with its rotation (`rot`).
 3. **Where each comes from.** R (0036, 0033) and O (the manifest's band).
 4. **Do they describe the world here?** Yes - batch 7's round: `_sweep_dangling_ends` builds axis-aligned boxes from `x, y, w, h`, `lay_door_paths` `rot_rect(..., rot)`.
-5. **The order.** The sweep's bands as `rot_rect(x, y, w, h, rot)`; the stale "their boxes are unrotated" comment goes; a test with a rotated band.
+5. **The order.** The sweep's bands as `rot_rect(x, y, w, h, rot)`, and the farm's share of the dooryard copse with them (0036: one wood); the stale "their boxes are unrotated" comment goes; the claims cite 0036; a test with a rotated band and a copse clump.
 6. **The exits.** (e) conform.
 7. **The search smell.** None.
 8. **The budget.** 60 min for the batch with its landing.
@@ -582,7 +582,7 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 
 ### T83 Decisions
 
-**D64 - one band.** `_sweep_dangling_ends`' `_bands` = `rot_rect(g["x"], g["y"], g["w"], g["h"], g.get("rot") or 0.0)`, ungrown (the sweep asks only whether a carry crosses the wood; the door path's grow is its own tread's clearance).
+**D64 - one band, and the farm's whole wood.** `_sweep_dangling_ends`' `_bands` = `farm_bands(M)`: each grove band `rot_rect(g["x"], g["y"], g["w"], g["h"], g.get("rot") or 0.0)`, ungrown (the sweep asks only whether a carry crosses the wood; the door path's grow is its own tread's clearance), and each clump of the dooryard copse (`village_groves` role `copse`) as an octagon of its radius - 0036 counts a farm's grove and its share of the copse as one wood, its clumps kept beside its house and free of lanes (the claims round: 405 T73 had left the copse out as common ground, which 0036 does not say). The "grove band not crossed" claims cite 0036.
 
 ### T84 Approach (checklist part A)
 
