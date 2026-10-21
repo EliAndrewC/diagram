@@ -259,6 +259,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       verify: DONE. landed in batch T74+T76+T77+T79: a swept lane end held at the house it serves within the carry's reach, never walked off a junction (unit tests; T14's tests moved to the house); the carried claims labeled or claimed (the served-house claims go with T75, waiting on T78); the claims wait files carries (test); a stopped landing stops its gate and cohort (test; it stopped batch 6's first landing cleanly); seeds 1-48 and the pinned rows 54/54 on the final code; claims rounds IN-STEP; plan reviews CLEAR (D52, D54-D56)
 - [ ] T93 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: l7r/diagram/hamletgen/ways/bund.py::tip_onto_the_bund#a run-on leg must clear `blocks` by twice the half-tread (`2.0 * half_tread`), l7r/diagram/hamletgen/ways/clearance.py::_clear_touch#a junction link keeps only the fabric gap (7 ft) off crop and wet ground (`hard` at `gap`), not the full margin 0081's lanes keep [lands-open]
       research: rendering
+- [ ] T95 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: l7r/diagram/hamletgen/ways/clearance.py::_clear_touch#the join link keeps `clear_runs`' default 14 ft (`line_margin`) off water lines, not `gap`; no claim of this unit names it [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
