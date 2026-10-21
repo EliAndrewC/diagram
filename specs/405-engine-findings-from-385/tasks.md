@@ -162,7 +162,7 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T09 (385 T112) The track's fallbacks walled as its first route is: _thread_the_fabric's grove fallback, unrouted clip and swing wall only the fabric or the bands, so a track may cross row crops, the paddy or wet ground (DRIFTED) or a brook off its crossing places (CANNOT-TELL); and its five unclaimed decisions - the largest piece kept, a near end counted a junction, an end walked clear along its own leg, the water-crossing limit, the order of the three fallback routes (found working T109, 2026-10-19) [lands-open]
       research: rendering
-- [ ] T10 (385 T120) The track out's last resort never crosses a drawn channel (connector_dry_exit, UNCLAIMED, T102's round): claim it, or let it cross a ditch on a plank as 0084 gives (found working T102, 2026-10-19) [lands-open]
+- [ ] T10 (385 T120) The track out's last resort never crosses a drawn channel (connector_dry_exit, UNCLAIMED, T102's round): 0084's drawing page (§116) draws a timber deck as wide as the way where a way crosses a ditch, so let the fill cross a drawn channel on a deck and claim it (re-scoped by batch 7's claims round, 2026-10-21) (found working T102, 2026-10-19) [lands-open]
       research: rendering
 - [x] T11 (385 T124) web._web_cut_lines' _extent falls back to every house in the cluster when no house stands within WEB_REACH_FT of a cut, so such a lane runs the whole cluster serving none, against 0246 (along the houses it serves; a stretch joining nothing is not drawn) (impl-drift, T106's round) [lands-open]
       research: rendering

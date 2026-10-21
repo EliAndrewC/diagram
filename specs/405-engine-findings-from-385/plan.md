@@ -584,9 +584,23 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
+### T20 Approach (re-answered 2026-10-21T15:40Z)
+
+1. **The goal, in the world.** As before.
+2. **The constraints.** As before.
+3. **Where each comes from.** As before.
+4. **Do they describe the world here?** Yes - the claims round, 2026-10-21: `trim_streets` never asks `end_serves`, so the bund clause was untrue; its touch claim named a 1 ft anchor it does not read.
+5. **The order.** As D60 now reads.
+6. **The exits.** (a) claim - words only.
+7. **The search smell.** None.
+8. **The budget.** With the batch.
+9. **Done, measured.** The claims round reads the claims IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
 ### T20 Decisions
 
-**D60 - the touch and the joints claimed.** As the order says; no code token changes.
+**D60 - the touch and the joints claimed.** `trim_streets` claims its joints' touch (the caller's `_TOUCH_GAP`, 4 ft, the ink's - CONVENTION; a front door's nearest point within `reach` a joint too) and a field path's end a joint (0246); `settle_street_ends` its 4 ft touch. The bund clause first written was dropped: `trim_streets` cuts to its joints and never asks `end_serves` (the claims round). No code token changes.
 
 ### T08 Approach (checklist part A)
 
@@ -602,9 +616,23 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
+### T08 Approach (re-answered 2026-10-21T15:40Z)
+
+1. **The goal, in the world.** As before.
+2. **The constraints.** As before.
+3. **Where each comes from.** As before.
+4. **Do they describe the world here?** Yes - the claims round, 2026-10-21: the new claim duplicated the unit's own, and 0246 answers it (every other farmhouse has a lane of its own from its dooryard).
+5. **The order.** As D61 now reads.
+6. **The exits.** (a) claim - words only.
+7. **The search smell.** None.
+8. **The budget.** With the batch.
+9. **Done, measured.** The claims round reads the claims IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
 ### T08 Decisions
 
-**D61 - wherever no way arrives.** `lay_door_paths` claims "a door path wherever no way arrives" (GUESS 0033 with 0246).
+**D61 - the existing claim holds.** `lay_door_paths`' own claim "every grove farm reached at its door" (0246, 0081) already says whose farm gets a door path - 0246 gives every other farmhouse a lane of its own from its dooryard, so the claims round read the new claim as a duplicate of it and as 0246's, not a GUESS: no claim is added; 0033's near-row case is one of 0246's.
 
 ### T10 Approach (checklist part A)
 
@@ -622,4 +650,4 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 
 ### T10 Decisions
 
-**D62 - no plank from the fill, named.** `connector_dry_exit` claims "no drawn channel crossed" (DEVIATION 0084).
+**D62 - withdrawn; T10 stays open.** 0084 §116 draws a timber deck as wide as the way where a way crosses a ditch, so the research expects the track out to cross a drawn channel on a deck, which the fill refuses; no claim may call that a departure the page does not record (the claims round). T10 is re-scoped to the deck crossing - a code task - and is not landed with this batch.
