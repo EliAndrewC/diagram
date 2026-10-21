@@ -253,22 +253,4 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 
 **D20 - the dead copy retired.** `ways/law.py::fouls_fabric` and `test_a_lane_fouls_a_house_or_a_neighbors_plot_but_not_its_own` are deleted; its three claims leave the index with it (the same rules are claimed at `settle.fouled_segment` and `settle.theirs`). The `LAW` docstring names `deck_seats` alone as asked of one candidate way; `fouled_segment`'s docstring names `theirs` for the yard and garden test; `house_hit`'s names `fouled_segment` as the web's reader. No map changes.
 
-## T48 - the landing cohort beside the gate (amendment 5)
-
-### T48 Approach (checklist part A)
-
-1. **The goal, in the world.** An engine landing waits for the longer of the gate and the landing cohort, not for both in turn.
-2. **The constraints.** The gate's tree check (375 FR-004, 405 D15) - a commit while the gate runs voids it unless the gate does not see it; the roll census (feature 213), set by the gate for its own children; the cohort gate (feature 386) - a record rolled on exactly the engine that lands, whose key includes the pool's manifests; the container's 10 GB memory cap, shared; the dev loop's "never run a test beside a running gate" (two writers on the same pool maps).
-3. **Where each comes from.** O (features 213, 375, 386, 405) and the GM (amendment 5).
-4. **Do they describe the world here?** Yes - measured 2026-10-21: T19's landing ran the cohort (4.4 min) after a green gate (about 5 min); the gate rolls only the five pool maps and the cohort only `Audit-<n>` seeds and the pinned rows, through the roll cache (atomic, locked writes), and writes no pool map; the cohort commits one new record under `dev/cohort-log/`, which no test reads (the tests use temporary trees); the gate peaked at 3.1 GB on six workers (measured 2026-10-04) and a roll is 115-180 MB; `MemAvailable` was about 9 GB.
-5. **The order.** `preflight.unseen` reads a new record under `dev/cohort-log/` as unseen; `_reference` leaves `roll-cache-class` alone when the cohort's own run says so; `land.long_runs` starts `make cohort-landing` in its own process group before the gate when the landing carries engine code and has no cohort on this engine, runs the gates, waits for the cohort, kills it on a red gate or any exit; the existing check after re-runs the cohort only when the gate's regenerated pool maps moved the engine key; tests; the dev loop's rule given its exception.
-6. **The exits.** (c) - two background runs, as the claims round already runs beside the gate; folding the cohort into the gate was weighed and refused (the gate is every session's, the landing cohort only a landing's).
-7. **The search smell.** None.
-8. **The budget.** 45 min.
-9. **Done, measured.** One goal: `land.py` starts the cohort before `make done` and waits for both, kills it on a red gate, starts none on a tooling landing (tests); a gate with a cohort record committed beside it reads unmoved (test); live, the fifth claim's landing reports the gate's and the cohort's wall times, `JOBS` and `MemAvailable`, against T19's 5 + 4.4 minutes in turn.
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
-### T48 Decisions
-
-**D21 - the cohort beside the gate.** `land.long_runs`: when the green-gate stamp names `make done`, the landing carries engine code and `cohort_gate.py check` refuses, `make cohort-landing JOBS=<n>` starts first (`start_new_session`, its output to `<git dir>/land-cohort.log`, `L7R_ROLL_CENSUS` removed from its environment, `L7R_REF_NO_CLASS=1` so its reference check does not overwrite the gate's `roll-cache-class`); `n` is the lesser of the cpus less two and the gate's six workers, and (`MemAvailable` less 3.5 GB for the gate) over 0.5 GB a roll, at least 2, printed. The gates run in the foreground; a red gate, or any exit, kills the cohort's process group; after a green gate `land.py` waits for the cohort and prints its rate line, and refuses on its failure. The existing check then re-runs the cohort only where the gate committed regenerated pool maps (the key moved; its seeds come from the roll cache). `preflight.unseen` reads a path under `dev/cohort-log/` that did not exist before (a new `.json` record) as unseen; a change to an existing one is seen.
+<!-- plan-archive: T48 to T48 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
