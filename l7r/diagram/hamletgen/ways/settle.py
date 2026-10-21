@@ -152,7 +152,7 @@ def fouled_segment(
     p: Poly, width: float, houses: Sequence[Mapping[str, Any]], yards: Yards, solid: Sequence[tuple[float, float, float, float]], fixtures: Sequence[Poly] = (), M: Any = None
 ) -> int | None:
     """The first segment of `p` that fouls the fabric: ink on a farmhouse (`house_hit`), within `WEB_FABRIC_GAP` of another
-    household's yard or garden (`law.fouls_fabric`, `theirs`), a long leg through a building's box (`law.breaks_mid_run`),
+    household's yard or garden (`theirs`), a long leg through a building's box (`law.breaks_through`),
     a tread over a farmstead fixture, the lane's own household's too (`law.over_a_fixture`), or a tread the overlap matrix
     forbids on what stands on `M` (`registry.forbidden_segment`, feature 287 M8: a yard, a garden, a well, a burial
     ground - its own household's too, since a path arrives at its dooryard and does not cross it).

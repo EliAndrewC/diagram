@@ -880,19 +880,6 @@ def breaks_mid_run(M: Mapping[str, Any]) -> list[tuple[int, int]]:
     return [(round(mid[0]), round(mid[1])) for solid in (solid_boxes(M),) for p in _ways(M) for _k, mid in breaks_through(p, solid)]
 
 
-def fouls_fabric(pts: Poly, width: float, houses: Sequence[Mapping[str, Any]], fabric: Sequence[tuple[Poly, Pt | None, str]], own: Pt | None = None) -> bool:
-    """Does a lane of this width along `pts` put ink on a farmhouse (`house_hit`), or pass within `WEB_FABRIC_GAP` of another household's
-    threshing yard or garden (`_crosses_fabric`)? `fabric`: `_homestead_polys`'; a door path is exempt from its OWN (`own`).
-    Research:
-        nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no tread on another household's yard or bed
-        foul margin - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the line within 7 ft of another household's garden
-        foul margin off a yard - UNRESEARCHED: the garden fence's 7 ft (`WEB_FABRIC_GAP`) held off another household's threshing yard too; no page sets a gap from a yard"""
-    if house_hit(pts, width, houses):
-        return True
-    theirs = [poly for poly, owner, kind in fabric if kind in ("threshing_yards", "gardens") and (own is None or owner != own)]
-    return _crosses_fabric(pts, theirs, WEB_FABRIC_GAP)
-
-
 # ---- water ---------------------------------------------------------------------------------------------------------
 
 
@@ -983,8 +970,8 @@ LAW: dict[str, Callable[[Mapping[str, Any]], Any]] = {
     "unreached_targets": unreached_targets,
 }
 """Every lane rule a finished map is asked, by name - the acceptance sweep's (M9) reading of this module. A rule's value is
-falsy when the map keeps it. `fouls_fabric` and `deck_seats` are asked of one candidate way, not of a manifest, and are
-reached here through `breaks_mid_run` and `undeckable_crossings`."""
+falsy when the map keeps it. `deck_seats` is asked of one candidate way, not of a manifest, and is reached here through
+`undeckable_crossings`."""
 
 
 def violations(M: Mapping[str, Any]) -> dict[str, Any]:

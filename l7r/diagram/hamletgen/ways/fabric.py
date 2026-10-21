@@ -328,7 +328,7 @@ def _hits_a_steading(s: Settlement, pts: Poly, width: int) -> bool:
 
 
 def house_hit(pts: Poly, width: float, houses: Sequence[Mapping[str, Any]]) -> bool:
-    """`_hits_a_steading`'s body on plain records (feature 287, M1): the lane law (`law.fouls_fabric`) asks it of a
+    """`_hits_a_steading`'s body on plain records (feature 287, M1): the web's foul test (`settle.fouled_segment`) asks it of a
     manifest's houses, the web pass of the settlement's - one predicate, read by both.
 
     Research: no house on a tread - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no corner (nor the center) within half the tread's width - no corner of a house on the tread; the 2 ft pad past it, on no page, went with feature 328"""

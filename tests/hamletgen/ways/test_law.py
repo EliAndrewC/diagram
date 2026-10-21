@@ -171,19 +171,6 @@ def test_a_lane_segment_through_a_building_breaks_the_run() -> None:
     assert law.breaks_mid_run(M) == []
 
 
-def test_a_lane_fouls_a_house_or_a_neighbors_plot_but_not_its_own() -> None:
-    garden = [(0.0, 50.0), (40.0, 50.0), (40.0, 90.0), (0.0, 90.0)]
-    fabric = [(garden, (20.0, 150.0), "gardens"), ([(0.0, 60.0), (100.0, 60.0), (100.0, 80.0)], None, "groves")]
-    run = [(-50.0, 70.0), (100.0, 70.0)]
-    assert law.fouls_fabric([(0.0, 0.0), (200.0, 0.0)], 3.0, [_house(100.0, 0.0)], []), "ink on a farmhouse"
-    assert law.fouls_fabric(run, 3.0, [], fabric), "through a neighbor's garden"
-    assert not law.fouls_fabric(run, 3.0, [], fabric, own=(20.0, 150.0)), "a door path leaves its own steading"
-    assert not law.fouls_fabric([(-50.0, 200.0), (100.0, 200.0)], 3.0, [_house(100.0, 0.0)], fabric), "a grove is not fabric here"
-
-
-# ---- water ---------------------------------------------------------------------------------------------------------
-
-
 def test_a_lane_crossing_the_brook_out_and_back() -> None:
     M = {"streams": [BROOK], "lanes": [_lane((0.0, 0.0), (200.0, 0.0), (200.0, 50.0), (0.0, 50.0)), _lane((0.0, 300.0), (200.0, 300.0))]}
     assert law.over_and_back(M) == [(0, 2)]

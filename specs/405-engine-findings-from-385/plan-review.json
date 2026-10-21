@@ -110,6 +110,26 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T19": {
+   "section_sha256": "5d90991e2e6a4988ac143adda0ea19808695bcb4602bc7708a692c6634eb84e3",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D20",
+     "summary": "ways/law.py::fouls_fabric and its unit test deleted (no caller, measured by grep 2026-10-21); its three claims leave the index, the same rules already claimed at settle.fouled_segment and settle.theirs; the LAW, fouled_segment and fabric.house_hit docstrings brought to what runs; no map changes.",
+     "class": "within",
+     "why": "This is a moved 385 claims task worked under FR-001, and the GM's amendments 3 and 4 ask for one more claims task to be worked and measured. The finding is that fouls_fabric drops a household's own garden, which breaks 0246 section 16. The plan resolves it by removing code no map runs, not by changing what the live web does. The rule the finding defends (an own way keeps off its own beds, another household's yard and garden kept clear) is still held by the live test fouled_segment through the overlap matrix. So nothing the request or the research asks for is dropped. The docstring edits only bring the text in line with what runs."
+    },
+    {
+     "id": "Approach-exit",
+     "summary": "Exit (e) conform: the research is held by the code that runs, and the dead copy is removed rather than mended; done means fouls_fabric is gone, nothing names it as live, make done is green, the claims round reads IN-STEP, and no map changes.",
+     "class": "within",
+     "why": "This is how the task closes under FR-001's checklist. It narrows nothing the GM asked for: the claim is closed against live code, and the no-map-change result follows from the code being dead, which the plan measured rather than assumed."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  },
  "blocks": {
