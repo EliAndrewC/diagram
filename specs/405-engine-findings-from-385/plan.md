@@ -482,7 +482,7 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 
 ### T66 Decisions
 
-**D44 - the track's words.** `_thread_the_fabric`'s gap paragraph says the gap is the web's and the route is what differs; its steadings claim names `gap` for the clip and the fabric test, the router walling the steadings; the band claim says the spur keeps the connector's 12.5 ft; `_route` reads 10 ft cells; `wet_grown_by_the_lane` reads 8 ft, `WEB_HARD_GAP`'s bar.
+**D44 - the track's words.** `_thread_the_fabric`'s gap paragraph says the gap is the web's and the route is what differs; its steadings claim names `gap` for the clip and the fabric test, the router walling the steadings; the band claim says the spur keeps the connector's 12.5 ft; `_route` reads 10 ft cells; `wet_grown_by_the_lane` reads 8 px, 8 ft on a hamlet's sheet (1 ft a px), `WEB_HARD_GAP`'s bar.
 
 ### T59 Approach (checklist part A)
 
@@ -544,8 +544,8 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 2. **The constraints.** 0014 ("the path joins the bund at its point nearest the hamlet", a GUESS).
 3. **Where each comes from.** R (0014).
 4. **Do they describe the world here?** Yes - measured 2026-10-21 (impl-drift outside the change, the T16 round and batch 3's: the code joins at the point nearest the lane's END).
-5. **The order.** The claim reads the page's point nearest the hamlet as the point nearest the end, which stands at the hamlet's edge.
-6. **The exits.** (a) claim - the end is the hamlet's edge here; a different point would need a hamlet center no rule defines.
+5. **The order.** The claim labels the code's rule a DEVIATION from 0014's guess, with its reason.
+6. **The exits.** (a) claim as a DEVIATION - the page's guess is about the one field path from the hamlet; the run-on carries each lane end on its own, joining where that end reaches the bund soonest. Changing the code to the hamlet's nearest point was weighed: it would carry an end past nearer bund to another point. (The plan review of D48: no reading that makes the page say what the code does.)
 7. **The search smell.** None.
 8. **The budget.** With the batch (claims and words only, one landing).
 9. **Done, measured.** the claims round reads every changed claim IN-STEP; no code token changes.
@@ -554,4 +554,4 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 
 ### T56 Decisions
 
-**D48 - nearest the end, at the hamlet's edge.** `run_on_target`'s "joins at the nearest point" says the page's point nearest the hamlet is read as the point nearest the lane's end.
+**D48 - a DEVIATION, named.** `run_on_target`'s "joins at the nearest point" is labeled DEVIATION from 0014: the page guesses the field path joins at the bund's point nearest the hamlet; each run-on end joins at the point nearest itself.

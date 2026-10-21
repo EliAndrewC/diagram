@@ -56,9 +56,9 @@ def run_on_target(q: Pt, ground: WorkedGround, half_tread: float, reach: float =
     `reach` from it. The open segment to a set's nearest point meets nothing of the set, so the run-on cannot cross a plot.
 
     Research:
-        joins at the nearest point - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the path joins
-            the bund at its point nearest the hamlet - read as nearest the lane's end, which stands at the hamlet's edge; straight
-            to that edge point, stopped on the bund
+        joins at the nearest point - DEVIATION research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the page
+            guesses the field path joins the bund at its point nearest the hamlet; each lane end carried on here joins at the
+            point nearest that END, where it reaches the bund soonest - one end at a time, not the field path the page describes
         run-on reach - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within `reach` (`RUN_ON_REACH_FT`, 60 ft), the page's reach to a house or a way, reused for the field
         stopped outside the ground - CONVENTION: the tip held its half-tread and `TIP_MARGIN_FT` (1 ft) outside the worked ground, its cap on the bund line"""
     if ground.inside(q):

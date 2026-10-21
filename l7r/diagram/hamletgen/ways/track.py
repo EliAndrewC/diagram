@@ -824,8 +824,8 @@ def past_the_frame(start: Pt, theta: float, w: float, h: float) -> float:
 
 
 def wet_grown_by_the_lane(w: Poly) -> Poly:
-    """A wet polygon grown 8 ft along its own outward normals (`ring_offset`) - the web's own bar off wet ground
-    (`WEB_HARD_GAP`, 8 ft), so the sweep scores the tread the gate measures (see `connector_track`)."""
+    """A wet polygon grown 8 px along its own outward normals (`ring_offset`) - 8 ft on a hamlet's sheet (1 ft a px),
+    the web's own bar off wet ground (`WEB_HARD_GAP`), so the sweep scores the tread the gate measures (`connector_track`)."""
     return list(ring_offset(w, 8.0, 0.0)[: len(w)])
 
 
