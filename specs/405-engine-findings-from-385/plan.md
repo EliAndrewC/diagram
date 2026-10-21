@@ -403,3 +403,17 @@ Owed by the cohort (cohort@20261021T180921Z: seeds 10 and 40 newly failing), tak
 9. **Done, measured.** A seat 3.5 ft off the kura, a ken off the kura alone, one half forward of the front wall and one 1.4 ft past the ken are refused (tests); Sawada's pool tests pass without the roll (measured); seeds 1-48 and the pinned rows pass.
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T103 part B (2026-10-21T19:30Z)
+
+Owed by the cohort (cohort@20261021T192759Z: seeds 10, 24, 36 and 47 newly failing), taken while T103 was the last task started - the work that resisted was T26's.
+
+1. **What is refusing?** The cohort, on T26's wood-shed rule (D78): the new seats moved farms so two households' ways ended within 25 ft of one another, and the knots step's every gather was refused - passing within 0246's 7 ft of a neighbor's garden (T18) or splitting the web; with the seat roll the cohort passed and Sawada failed the same way. Nothing of T103's - a claim.
+2. **A3 again.** Unchanged for T103.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** T26's engine change is set down (the shed code and the pool restored to main's) and T107 filed for the knots-versus-gap conflict, which T26 and T106 wait on; T103 lands alone.
+6. **The one-sentence test.** "A nub shorter than the ink's touch is not drawn" - claimed, read IN-STEP.
+7. **The next step is a measurement.** `make land` for T103: its gate on main's engine.
+8. **Every route measured before offering one?** Two T26 routes measured (with and without the roll); both expose the conflict, so neither is offered.
+9. **After a ruling: the step it names?** No ruling.

@@ -109,26 +109,13 @@ def test_the_wood_shed_stands_a_ken_off_a_wall_of_its_house_or_is_refused() -> N
     assert not fs.shed_off_a_wall(pace, walls[:1], fs.WALL_GAP_FT, _px), "a pace past the ken"
     assert not fs.shed_off_a_wall((0.0, HH / 2 + 3.5 + 6.0 + 6.0, 24.0, 12.0), walls[:1], fs.WALL_GAP_FT, _px), "the front yard"
     assert not fs.shed_off_a_wall((0.0, -(HH / 2 + 3.5 + 6.0), 24.0, 12.0), walls[:1], fs.WALL_GAP_FT, _px), "under a ken off"
-    # 405 T26: a ken off EVERY wall of the steading, the kura's too; no part forward of the front wall; exactly a ken out
-    kura = walls[1]
-    beside_kura = (kura[0], kura[1] - kura[3] / 2 - 3.5 - 6.0 - 6.0 + 2.5, 24.0, 12.0)
-    assert not fs.shed_off_a_wall(beside_kura, walls, fs.WALL_GAP_FT, _px), "under a ken off the kura"
-    half_forward = (HW / 2 + 3.5 + 6.0 + 6.0, HH / 2, 12.0, 24.0)
-    assert not fs.shed_off_a_wall(half_forward, walls[:1], fs.WALL_GAP_FT, _px), "a flank shed half in the dooryard"
-    out_further = (0.0, -(HH / 2 + 3.5 + 6.0 + 6.0 + 1.4), 24.0, 12.0)
-    assert not fs.shed_off_a_wall(out_further, walls[:1], fs.WALL_GAP_FT, _px), "1.4 ft past the ken: the old tolerance let it stand"
-    assert fs.forward_of_front((0.0, HH / 2, 12.0, 24.0), HH / 2) and not fs.forward_of_front((0.0, 0.0, 12.0, 24.0), HH / 2)
-    off_kura_alone = (kura[0], kura[1] - kura[3] / 2 - 3.5 - 6.0 - 6.0, 24.0, 12.0)
-    assert not fs.shed_off_a_wall(off_kura_alone, walls, fs.WALL_GAP_FT, _px), "a ken off the kura alone, away from the house (0043: off the house)"
-    assert walls[0][:2] == (0.0, 0.0), "walls[0] is the house, centered on the frame's origin - the front wall `forward_of_front` reads"
 
 
 def test_the_woodshed_stands_a_ken_off_and_the_shrine_in_its_rolled_corner() -> None:
     laid = _lay(("woodpile", "shrine"), roll=0.1)
     shed = laid["woodpile"]
     assert sorted(shed[2:]) == [12.0, 24.0] and not fs.against_a_wall(shed, fs.steading_rects(HW, HH, "N", 1.0), fs.WALL_GAP_FT)
-    # ...the shed clear of the kura by a ken (405 T26) took the west flank here, so the shrine's rolled corner is read alone
-    shrine = _lay(("shrine",), roll=0.1)["shrine"]
+    shrine = laid["shrine"]
     assert shrine[0] < -HW / 2 and shrine[1] < -HH / 2, "NW, the likeliest corner, rolled first"
 
 

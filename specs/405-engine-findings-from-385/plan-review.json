@@ -536,7 +536,7 @@
    "declared": "spec-fidelity"
   },
   "### T26 Decisions": {
-   "sha256": "b2f2b86ce10130a373e48e7b923fc72a4d4f3fe1323bf512f89b20b76ce0be9e",
+   "sha256": "eedd6c08bb56d8abebed9df35ba36c062e06ed8ca5c1f65d78b1d8d73da3e554",
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
@@ -555,6 +555,12 @@
   },
   "### T26 Approach (re-answered 2026-10-21T19:13Z)": {
    "sha256": "b924275b2f2ae06207e3896b246b8f7ff8d014f4d6b4e085d4152fbb809d362c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T26 Approach (re-answered 2026-10-21T19:24Z)": {
+   "sha256": "57e57470911630849f62c015a59a665df69d2a5d45909621b38002869b31f461",
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
@@ -2627,6 +2633,46 @@
      "summary": "re-answered approach: house-wall seat, wall places off the house only, refusal tests (3.5 ft off the kura, a ken off the kura alone, half forward, 1.4 ft past the ken), seeds 1-48; exit (e) conform; no constant moved, nothing fitted",
      "class": "within",
      "why": "Restates D78 as an order of work and its tests; the test distances are test inputs, not measured claims. Nothing beyond the claim's conformance is added and nothing asked is left out."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "### T26 Approach (re-answered 2026-10-21T19:24Z)",
+    "### T26 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D78a",
+     "summary": "shed_off_a_wall: clears every steading wall (kura included) by gap+ken, sits exactly gap+ken off a HOUSE wall (tol 0.0), no part forward of the front wall",
+     "class": "within",
+     "why": "Carries claim 0043 as the block states it (behind or beside the house, never the front yard, a ken off a house wall); unchanged since its CLEAR verdict."
+    },
+    {
+     "id": "D78b",
+     "summary": "wall places offered off the house's walls only",
+     "class": "within",
+     "why": "Same 0043 clause - a ken off a house wall; follows from the claims round's finding that a shed a ken off the kura alone passed."
+    },
+    {
+     "id": "D78c",
+     "summary": "the earlier _wood_shed seat roll by int(u*4) removed from T26 and filed as T106",
+     "class": "within",
+     "why": "Neither request.md nor the accepted spec (spec-cited empty, FR index silent) asks for the shed seats to be turned; the earlier block justified the roll by code consistency with the coop, not by the request or 0043. Removing it narrows nothing asked. The reason is a dated measurement (Sawada, 2026-10-21: a knot the ways cannot gather), not cost. This rests on the block's statement that the roll is filed as T106 in this feature, which Amendment 7 ('working all of the remaining open tasks in the feature') then requires to be worked; not verifiable from the bundle."
+    },
+    {
+     "id": "D78d",
+     "summary": "kura's side stays as drawn (north); 0040's west for a scattered farm owned by T104",
+     "class": "within",
+     "why": "Deferral to another task of this feature, unchanged since its CLEAR verdict."
+    },
+    {
+     "id": "Approach-5",
+     "summary": "order: shed_off_a_wall, house-only wall places, roll filed as T106, claims, tests, seeds 1-48 and the pool; done = refusal tests plus Sawada pool tests passing without the roll",
+     "class": "within",
+     "why": "Implements D78a-d and the FR-001 checklist; no new scope and no narrowing beyond D78c."
     }
    ]
   }

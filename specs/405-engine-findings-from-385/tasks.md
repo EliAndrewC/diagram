@@ -249,7 +249,7 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T25 (385 T145) 0043's drawing page, 'How many farmsteads have a wood shed?': 'the share chosen at random for each hamlet from its seed' - seed is the generator's word; reword for a reader (the glossary lists a `seed` variant: check its sense first) (record-format, T34's round) [lands-open]
       research: rendering
-- [ ] T26 (385 T146) fixture_seats' wood shed: shed_off_a_wall tests the 9.5 ft only against the house (walls[:1]) while against_a_wall accepts the kura, so a seat can stand 3.5 ft off the kura; in_front lets a flank shed stand partly forward of the front wall; _wood_shed rolls its first seat with zero, unlike the coop and privy; the kura passed as 'N' though a scattered farmstead's kura stands west (0040); against_a_wall's 1.5 ft tolerance lets the shed stand up to ~11 ft out, unclaimed (impl-drift, T34's rounds) [lands-open]
+- [ ] T26 (385 T146) fixture_seats' wood shed: shed_off_a_wall tests the 9.5 ft only against the house (walls[:1]) while against_a_wall accepts the kura, so a seat can stand 3.5 ft off the kura; in_front lets a flank shed stand partly forward of the front wall; _wood_shed rolls its first seat with zero, unlike the coop and privy; the kura passed as 'N' though a scattered farmstead's kura stands west (0040); against_a_wall's 1.5 ft tolerance lets the shed stand up to ~11 ft out, unclaimed (impl-drift, T34's rounds) - batch 11 built and measured it (D78) and set it down: the shed's new seats left knots the gap keeps from gathering (seeds 10, 24, 36, 47; Sawada with the seat roll); it waits on T107 [lands-open]
       research: rendering
 - [x] T27 (385 T147) taxonomy._OVERLAP_EXEMPT['farm_fixtures'] says each fixture is 'seated against its own farmhouse' (the shed is 9.5 ft off, shrine and grave 14 ft, the privy up to 48 ft); its claim cites 0039 for the bed beside the house, which only 0038 backs; fixture_seats' CANOPY_PAD and SHADE_MARGIN_FT carry no claim; _seats' privy front step and stable seat unclaimed (impl-drift, T34's round 2) [lands-open]
       research: rendering
@@ -294,6 +294,9 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
       research: rendering
 - [ ] T106 Turn a wood shed's four recorded seats by the household's roll, as the coop's are (T26's fourth note): tried in batch 11, it moved Sawada's farms so two households' ways ended 22.9 ft apart unjoined - the knot's gather refused for passing 2.7 ft from a neighbor's yard (0246's 7 ft gap) or splitting the web; land it once the knots step has a gather that keeps the gap, or the farms the room (measured 2026-10-21) [lands-open]
+      research: rendering
+      research: rendering
+- [ ] T107 The knots step cannot gather two households' ways whose join would pass within 0246's 7 ft of a neighbor's garden (T18 keeps that gap off every garden but a way's own): any reshuffle of the farms exposes it - T26's wood-shed rule, measured 2026-10-21, left knots on cohort seeds 10, 24, 36 (and 47 refused) without the seat roll, and on Sawada with it. Find a gather that keeps the gap (a meeting point clear of the gardens, a tee onto the side away from them), or give the farms the room (room before packing); T26 and T106 wait on it [lands-open]
       research: rendering
       research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]

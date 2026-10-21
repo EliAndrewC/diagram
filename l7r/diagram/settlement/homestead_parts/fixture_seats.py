@@ -461,28 +461,24 @@ def against_a_part(built: Sequence[Rect], w: float, d: float, g: float, taken: S
 
 
 def shed_off_a_wall(seat: Rect, walls: Sequence[Rect], g: float, px: Callable[[float], float]) -> bool:
-    """THE WOOD SHED'S RULE (feature 280 M21; history: the settlement-reviews of Inashiro and Kuwabata found sheds 25-37 ft out,
+    """THE WOOD SHED'S RULE (feature 280 M21; settlement-reviews of Inashiro and Kuwabata, where sheds stood 25-37 ft out,
     between farmsteads): a building of its own a ken off its house - clear of the house by the wall gap and `WOODSHED_STEP_FT`
-    - and never walked out across the dooryard: exactly the gap and a ken off a wall of its HOUSE (`against_a_wall` at no
-    tolerance, `walls[0]` the house centered on the frame's origin; feature 328 dropped the extra outward pace), overlapping
-    that wall along it, clear of EVERY wall of the steading by the gap and the ken (405 T26: the kura's too - a seat stood
-    3.5 ft off it), and no part of it forward of the front wall (`forward_of_front`; 405 T26: a flank shed stood half in the
-    dooryard). The one predicate the placer and its test read.
+    - and never walked out across the dooryard: within the gap and a ken of a wall of its house (`against_a_wall`; feature
+    328 dropped the extra outward pace), overlapping that wall along it, and never past the front wall. The one predicate
+    the placer and its test read.
 
     Research:
         wood shed a ken off a wall - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: never out across
             the dooryard
-        a ken off the house, clear of the kura - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: a short step off a house wall, and the kura's wall kept as far, a building of its own
-        no part forward of the front wall - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: never the front yard
-        the ken past the wall gap - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: a ken (`WOODSHED_STEP_FT`) past the wall gap, about 9.5 ft out, the ken the page's GUESS and the added gap its DEVIATION - exactly, at no tolerance"""
-    return clears(seat, walls, g + px(WOODSHED_STEP_FT) - 1e-6) and against_a_wall(seat, walls[:1], g + px(WOODSHED_STEP_FT) + 1e-6, tol=0.0) and not forward_of_front(seat, walls[0][3] / 2)
+        the ken past the wall gap - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: held at the gap plus `WOODSHED_STEP_FT`, about 9.5 ft as the page records it, behind the found row refuse_unreached#every household reached (the reason at the constant)"""
+    return clears(seat, walls[:1], g + px(WOODSHED_STEP_FT) - 1e-6) and against_a_wall(seat, walls, g + px(WOODSHED_STEP_FT) + 1e-6) and not in_front(seat, walls[0][3] / 2)
 
 
-def forward_of_front(seat: Rect, hh: float) -> bool:
-    """Does any part of `seat` (in the house's frame, the front wall at +`hh`) stand past the front wall, into the dooryard?
+def in_front(seat: Rect, hh: float) -> bool:
+    """Does `seat` (in the house's frame, the front wall at +`hh`, the half-depth) stand wholly past the front wall - in the dooryard?
 
     Research: the front yard - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: never the front yard"""
-    return seat[1] + seat[3] / 2 > hh + 1e-6
+    return seat[1] - seat[3] / 2 >= hh - 1e-6
 
 
 def joined_to_house(seat: Rect, hw: float, hh: float, tol: float = 1e-6) -> bool:
@@ -503,9 +499,9 @@ def _wood_shed(hw: float, hh: float, w: float, d: float, g: float, walls: Sequen
     Research:
         wood shed seats - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: behind or beside the house,
             never the front yard
-        wall places a ken out - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: offered a ken (`WOODSHED_STEP_FT`, the page's GUESS) beyond the wall gap (the page's DEVIATION)"""
+        wall places a ken out - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: offered a ken beyond the wall gap, the gap the page's DEVIATION (`WOODSHED_STEP_FT`)"""
     seats = _seats("woodpile", hw, hh, w, d, g, None, None, lambda _salt: 0.0, 0.0, FixtureForms(), px)
-    offered = chain(seats, (q for q in wall_places(walls[:1], w, d, g + px(WOODSHED_STEP_FT), px(WALL_SLIDE_FT)) if not forward_of_front(q, hh / 2)))  # the house's walls (0043)
+    offered = chain(seats, (q for q in wall_places(walls, w, d, g + px(WOODSHED_STEP_FT), px(WALL_SLIDE_FT)) if not in_front(q, hh / 2)))
     found = _first((q for q in offered if shed_off_a_wall(q, walls, g, px)), taken, g)
     if found is None:
         raise FixtureUnlaid("a wood shed found no place a ken off any wall of its steading")
