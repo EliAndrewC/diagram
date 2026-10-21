@@ -12,7 +12,8 @@ seconds (`specs/405-engine-findings-from-385/landing-analysis.md`).
 Pass 1 runs nothing long and prints EVERY refusal together: each task's tick refusals but "not landed yet", uncommitted work,
 owed ledger rows, the claims gate, what holds the landing (with the tasks named, `L7R_LAND_TICKS`), the review gate and the plan
 gate. Pass 2: `make done` when the green-gate stamp does not cover this content; `make cohort-landing` when the delta carries
-engine code and the cohort gate would refuse; what those runs regenerate under `pool/` is committed; then
+engine code and the cohort gate would refuse - BESIDE the gate when both are owed (405 T48, D21); what those runs regenerate
+under `pool/` is committed; then
 `scripts/sync-with-main.sh done` with `L7R_LAND_TICKS` set; then each tick. A failed landing ticks nothing.
 """
 
@@ -129,6 +130,53 @@ def push(root: Path, tasks: list[str]) -> int:
 NAMED_GATE = re.compile(r"\(make ([\w-]+) again\)")
 
 
+#: what the gate holds at its peak, kept free for it when the cohort's workers are sized (3.1 GB on six workers, measured
+#: 2026-10-04, rounded up), and the Makefile's own per-roll allowance for a cohort worker (`make cohort` JOBS=)
+GATE_RESERVE_MB = 3500
+ROLL_MB = 500
+GATE_WORKERS = 6
+
+
+def cohort_jobs() -> tuple[int, int]:
+    """The cohort's workers beside a running gate - the cpus the gate leaves and the memory it leaves, at least 2 - and the
+    MemAvailable (MB) they were sized from."""
+    try:
+        avail = next(int(ln.split()[1]) // 1024 for ln in Path("/proc/meminfo").read_text().splitlines() if ln.startswith("MemAvailable:"))
+    except OSError, StopIteration, ValueError:
+        avail = GATE_RESERVE_MB + 4 * ROLL_MB
+    return max(2, min((os.cpu_count() or 4) - 2 - GATE_WORKERS, (avail - GATE_RESERVE_MB) // ROLL_MB)), avail
+
+
+def start_cohort(root: Path) -> tuple[subprocess.Popen, Path]:
+    """`make cohort-landing` in its own process group, beside the gate (405 T48, D21): its rolls are no gate's (the census
+    variable removed), its reference check leaves the gate's `roll-cache-class` alone, its output to a log under the git dir."""
+    jobs, avail = cohort_jobs()
+    log = Path(run(root, ["git", "rev-parse", "--absolute-git-dir"])[1].strip() or root / ".git") / "land-cohort.log"
+    env = {k: v for k, v in os.environ.items() if not k.startswith("L7R_ROLL_CENSUS")} | {"L7R_REF_NO_CLASS": "1"}
+    print(f"land: make cohort-landing JOBS={jobs} beside the gate (MemAvailable {avail} MB; its log {log})", flush=True)
+    with log.open("w") as fh:
+        proc = subprocess.Popen(["make", "--no-print-directory", "cohort-landing", f"JOBS={jobs}"], cwd=root, env=env, stdout=fh, stderr=subprocess.STDOUT, start_new_session=True)
+    return proc, log
+
+
+def stop_cohort(proc: subprocess.Popen | None) -> None:
+    """The cohort's whole process group ended - a red gate voids what it would record, and no exit leaves it running."""
+    if proc is not None and proc.poll() is None:
+        import contextlib  # noqa: PLC0415
+        import signal  # noqa: PLC0415
+
+        with contextlib.suppress(ProcessLookupError):
+            os.killpg(proc.pid, signal.SIGTERM)
+        proc.wait()
+
+
+def commit_records(root: Path) -> None:
+    """A run record the gate or the cohort could not commit - two commits at once, one lost the index lock - committed here."""
+    if run(root, ["git", "status", "--porcelain", "--", "dev/cohort-log", "dev/run-log"])[1].strip():
+        run(root, ["git", "add", "--", "dev/cohort-log", "dev/run-log"])
+        run(root, ["git", "commit", "-q", "-m", "the run records (make land)", "--", "dev/cohort-log", "dev/run-log"])
+
+
 def long_runs(root: Path) -> int:
     """Pass 2's runs, each only where its record does not cover this content; 0 when the push may go. The green-gate stamp names
     the gate each stale area owes (make done, make hooks-test, make page-check) and each named one runs - T30-T35's own landing
@@ -136,12 +184,29 @@ def long_runs(root: Path) -> int:
     stamp = [sys.executable, str(HERE / "gates" / "gate-stamp.py"), "--check", "origin/main"]
     rc, out = run(root, stamp)
     if rc:
-        for target in dict.fromkeys(NAMED_GATE.findall(out)) or ["done"]:
-            print(f"land: the green-gate stamp does not cover this content - make {target}", flush=True)
-            if make(root, target):
-                print(f"land: make {target} is red - nothing landed; fix it and run make land again", file=sys.stderr)
-                return 1
-            commit_regenerated(root, "gate")
+        targets = list(dict.fromkeys(NAMED_GATE.findall(out)) or ["done"])
+        # THE COHORT BESIDE THE GATE (405 T48, D21): they share no work - the gate rolls the five pool maps, the cohort its seeds
+        # and rows - and T19's landing spent 4.4 of its 7 minutes on the cohort after a green gate
+        cohort, log = None, Path()
+        if "done" in targets and engine_delta(root) and run(root, [sys.executable, str(HERE / "gates" / "cohort_gate.py"), "check"])[0]:
+            cohort, log = start_cohort(root)
+        try:
+            for target in targets:
+                print(f"land: the green-gate stamp does not cover this content - make {target}", flush=True)
+                if make(root, target):
+                    print(f"land: make {target} is red - nothing landed; fix it and run make land again", file=sys.stderr)
+                    return 1
+            if cohort is not None:
+                print("land: the gate is green - waiting for the landing cohort beside it", flush=True)
+                said = log.read_text(errors="replace").splitlines() if cohort.wait() is not None else []
+                print("\n".join(ln for ln in said if "passed the whole gate" in ln or "fresh block" in ln or "REGRESS" in ln.upper()), flush=True)
+                if cohort.returncode:
+                    print(f"land: the landing cohort refused - nothing landed ({log})", file=sys.stderr)
+                    return 1
+        finally:
+            stop_cohort(cohort)
+        commit_records(root)
+        commit_regenerated(root, "gate")
         rc, out = run(root, stamp)
         if rc:
             print("land: the gates it named are green, but the green-gate stamp still refuses - nothing landed:\n" + out, file=sys.stderr)

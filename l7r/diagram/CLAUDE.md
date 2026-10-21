@@ -88,7 +88,9 @@ diagnosed and the tooling improved.
   fresh block is a rate (`make cohort-seeds` keeps its trend), never a refusal.
 - `make quick` fails over its own 60 s budget; a test that rolls a map carries `@pytest.mark.rolls_map`
   (`tests/test_markers.py`).
-- Never run a test BESIDE a running gate - two writers on the same pool maps is a source of false RED.
+- Never run a test BESIDE a running gate - two writers on the same pool maps is a source of false RED. The one exception is
+  `make land`'s landing cohort (feature 405 T48): it writes no pool map, its rolls are no gate's, and its new record is unseen by
+  the gate's tree check.
 - Update the predictably-affected unit tests in the SAME edit as the engine change. **Cycle discipline**
   (constitution v2.4.0): re-read the WHOLE diff for convention misses before the first test run, fix everything a
   failing run lists before re-running, and never write a number into a record that was not measured on the artifact.

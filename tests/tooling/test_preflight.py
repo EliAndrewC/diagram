@@ -198,6 +198,9 @@ def test_a_change_the_gate_does_not_see_does_not_move_the_tree(tmp_path: Path) -
     assert not pf.unseen(root, f, old, old.replace(b"return x", b"return x + 1"))
     assert not pf.unseen(root, f, old, None) and not pf.unseen(root, "notes.md", b"a", b"b")
     assert pf.unseen(root, "dev/claims-index.json", b"{}", b"{1}") and pf.unseen(root, "specs/405-x/found.jsonl", None, b"r")
+    assert pf.unseen(root, "dev/cohort-log/20261021T1046Z-x.json", None, b"{}"), "a new cohort record, committed beside the gate (405 T48)"
+    assert not pf.unseen(root, "dev/cohort-log/20261021T1046Z-x.json", b"{}", b"{1}"), "...an existing one changed is seen"
+    assert not pf.unseen(root, "dev/cohort-log/CLAUDE.md", None, b"x")
     assert not pf.unseen(root, "specs/405-x/plan.md", b"a", b"b") and not pf.unseen(root, "specs/406-y/tasks.md", b"a", b"b")
     reg = "l7r/diagram/interactive/classes/k.py"
     assert not pf.unseen(root, reg, old, old.replace(b"a - NONE", b"b - NONE")), "the registry's docstrings are the page's text"

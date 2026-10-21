@@ -280,6 +280,9 @@ def tree(root: Path) -> dict[str, str]:
 #: the records the claims round writes, which no phase of the gate reads (405 T41, D15) - beside the active feature's own
 RECORDS = frozenset({"dev/claims-index.json", "dev/claims-pages.json", "dev/review-ledger.md"})
 FEATURE_RECORDS = ("found.jsonl", "arbiter.jsonl", "claims-carried.jsonl", "tasks.md")
+#: the landing cohort's records: a NEW one is a run beside the gate committing its result (405 T48, D21) - no test reads the real
+#: directory (each uses a temporary tree); an existing one changed is seen
+COHORT_LOG = "dev/cohort-log/"
 
 
 def _stamp() -> object:
@@ -307,6 +310,8 @@ def unseen(root: Path, path: str, old: bytes | None, new: bytes | None) -> bool:
     the claims round's records; or a `.py` file outside the byte-hashed areas (`page`, `browser`) whose semantic id - the AST
     with docstrings stripped, the gate's own key - is unchanged: a claim docstring, a comment."""
     if old == new or path in RECORDS or path in active_records(root):
+        return True
+    if old is None and path.startswith(COHORT_LOG) and path.endswith(".json"):  # 405 T48 (D21): the landing cohort's new record
         return True
     if not path.endswith(".py") or old is None or new is None:
         return False

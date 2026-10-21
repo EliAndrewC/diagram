@@ -408,6 +408,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
+  },
+  "## T48 - the landing cohort beside the gate (amendment 5)": {
+   "sha256": "d429c0eb6ff6ff2c83c2365b23725e9c69cc13e97710888a184152518201ad4d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T48 Approach (checklist part A)": {
+   "sha256": "d497b8baa21be1e59dcb733c4f485bc613c70ef4ca8891d2ffc4fd3c59a3a2db",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T48 Decisions": {
+   "sha256": "3a4c6bdb5d2a36d8ed49e857333d5f4afceec16351d19f71ee4063f0f92a327d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -868,6 +886,78 @@
      "summary": "The check-and-write sits in the first pass beside the ledger rows (405 T33's cheap-refusals pass), with a test that a stale page is regenerated and committed and a fresh one is untouched.",
      "class": "within",
      "why": "Placement and a test that only fails when the requested behavior is absent; enforcement, not new scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T48 - the landing cohort beside the gate (amendment 5)",
+    "### T48 Approach (checklist part A)",
+    "### T48 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D21-start",
+     "summary": "The cohort starts beside the gate only when the green-gate stamp names make done, the landing carries engine code, and cohort_gate.py check refuses (no cohort record on this engine).",
+     "class": "within",
+     "why": "Amendment 5 asks that make done and the landing cohort run in parallel; a landing that would run no cohort at all (tooling, or a cohort already on this engine) has nothing to run in parallel. A point on the mechanism, not a ruling: the trigger reads 'the green-gate stamp names make done' yet the cohort must start BEFORE the gate; if that stamp exists only after a green gate the condition is never true when read and nothing runs in parallel. Item 9's test ('land.py starts the cohort before make done') must exercise exactly this path."
+    },
+    {
+     "id": "D21-order",
+     "summary": "Cohort started first in its own process group, gates in the foreground, land.py waits for the cohort after a green gate, prints its rate line, refuses on its failure.",
+     "class": "within",
+     "why": "This is the request's 'run in parallel' itself: the landing waits for the longer of the two, not both in turn."
+    },
+    {
+     "id": "D21-kill",
+     "summary": "A red gate, or any exit, kills the cohort's process group.",
+     "class": "within",
+     "why": "A red gate refuses the landing anyway, so the cohort's result has no use; killing it removes a stray background run. Does not narrow the parallel run on any landing that can land."
+    },
+    {
+     "id": "D21-jobs",
+     "summary": "JOBS = min(cpus-2, 6) and (MemAvailable - 3.5 GB) / 0.5 GB per roll, at least 2, printed.",
+     "class": "within",
+     "why": "Sizing the parallel cohort so the two runs fit the shared 10 GB container together; an implementation detail of running them in parallel. The 3.5 GB and 0.5 GB are chosen constants (headroom over the dated 3.1 GB gate peak and 115-180 MB roll in item 4), not measured claims."
+    },
+    {
+     "id": "D21-env",
+     "summary": "L7R_ROLL_CENSUS removed from the cohort's environment; L7R_REF_NO_CLASS=1 so its reference check does not overwrite the gate's roll-cache-class.",
+     "class": "within",
+     "why": "Keeps the gate's own census and class record correct while a second run shares the machine; needed for the requested parallel run not to corrupt the gate."
+    },
+    {
+     "id": "D21-rerun",
+     "summary": "After a green gate, the existing check re-runs the cohort (serially, after the gate) where the gate committed regenerated pool maps and so moved the engine key; seeds come from the roll cache.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "In this case the landing is gate-then-cohort again, the shape amendment 5 asked to end. Ground: physical impossibility. The cohort gate (feature 386) requires a record rolled on exactly the engine that lands, and its key includes the pool manifests; the gate's regenerated pool maps do not exist until the gate finishes, so no cohort started beside it can be on that engine. Relaxing the cohort gate was not asked. Caveat for the reader: how often a gate's regeneration moves the key is NOT measured anywhere in the bundle, and it decides how much of the parallel win survives; the ruling holds at any frequency, and item 9's live report of both wall times on the fifth claim is where it gets measured."
+    },
+    {
+     "id": "D21-unseen",
+     "summary": "preflight.unseen (D15) reads a new path under dev/cohort-log/ (a new .json record) as unseen; a change to an existing record stays seen.",
+     "class": "within",
+     "why": "Without it the cohort's own commit beside the gate voids the gate (375 FR-004's tree check), and the requested parallel run could never land green. Extends D15 by the minimum: only new records, the conservative direction; item 4 says no test reads dev/cohort-log/."
+    },
+    {
+     "id": "approach-5-devloop-exception",
+     "summary": "The dev loop's 'never run a test beside a running gate' is given an exception for the landing cohort.",
+     "class": "within",
+     "why": "An except-when on a standing rule, tested as MODE 1 would: the rule exists because two writers on the same pool maps collide; item 4 says the cohort writes no pool map, rolls only Audit seeds and pinned rows through the roll cache's atomic locked writes, and commits only a new dev/cohort-log record no test reads. The exception is implied by the GM's own words (he asked for exactly this run beside the gate) and does not touch the rule's purpose."
+    },
+    {
+     "id": "approach-6-no-fold",
+     "summary": "Folding the cohort into the gate was weighed and refused; two background runs instead.",
+     "class": "within",
+     "why": "The request says run them in parallel, not merge them; keeping the gate every session's and the cohort a landing's alone changes no one else's gate."
+    },
+    {
+     "id": "approach-9-measure",
+     "summary": "Done measured by tests (start before make done, wait, kill on red, none on tooling; cohort record beside the gate reads unmoved) and live by the fifth claim's landing reporting gate and cohort wall times, JOBS and MemAvailable against T19's 5 + 4.4 min.",
+     "class": "within",
+     "why": "Tests only enforce the requested parallel run; the live report is amendment 5's 'do 1 more claims task and measure how long it takes'."
     }
    ]
   }

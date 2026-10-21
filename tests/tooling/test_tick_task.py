@@ -348,7 +348,33 @@ def test_the_long_runs_run_only_where_their_record_does_not_cover(tmp_path: path
     monkeypatch.setattr(lb, "engine_delta", lambda root: state["engine"])
     monkeypatch.setattr(lb, "commit_regenerated", lambda root, why: None)
     monkeypatch.setattr(lb, "run", lambda root, cmd, env=None, quiet=True: (state["stamp"], state.get("says", "")) if "gate-stamp.py" in str(cmd) else (state["cohort"], ""))
-    assert lb.long_runs(tmp_path) == 0 and made == ["done", "cohort-landing"]
+    beside: list[str] = []
+    stopped: list[object] = []
+
+    class Cohort:  # the landing cohort started beside the gate (405 T48, D21): its record stands once it finishes
+        returncode = 0
+
+        def wait(self) -> int:
+            state["cohort"] = state.get("cohort_after", 0)
+            return self.returncode
+
+        def poll(self) -> int | None:
+            return None
+
+    log = tmp_path / "land-cohort.log"
+    log.write_text("54/54 passed the whole gate\nfresh block from seed 9: 1 of 48 failed (2%)\nnoise\n")
+    monkeypatch.setattr(lb, "start_cohort", lambda root: (beside.append("cohort") or Cohort(), log))
+    monkeypatch.setattr(lb, "stop_cohort", lambda proc: stopped.append(proc))
+    assert lb.long_runs(tmp_path) == 0 and made == ["done"] and beside == ["cohort"], "the cohort beside the gate, not after it"
+    assert len(stopped) == 1, "...and nothing left running"
+    made.clear(), beside.clear(), state.update(stamp=1, cohort=1, cohort_after=1)
+    assert lb.long_runs(tmp_path) == 0 and made == ["done", "cohort-landing"], "the gate moved the engine key: rolled again after"
+    made.clear(), beside.clear(), state.update(stamp=1, cohort=1, cohort_after=0, red="done")
+    assert lb.long_runs(tmp_path) == 1 and beside == ["cohort"] and isinstance(stopped[-1], Cohort), "a red gate: the cohort stopped"
+    Cohort.returncode, state["red"] = 2, ""
+    made.clear(), beside.clear(), state.update(stamp=1, cohort=1)
+    assert lb.long_runs(tmp_path) == 1, "the cohort refused beside a green gate: nothing lands"
+    Cohort.returncode = 0
     made.clear(), state.update(stamp=0, cohort=0)
     assert lb.long_runs(tmp_path) == 0 and made == [], "both records cover the content: nothing runs"
     state.update(stamp=0, cohort=1, engine=False)
@@ -398,3 +424,18 @@ def test_a_stale_make_targets_page_is_regenerated_and_committed_in_the_first_pas
     assert "--write" in seen[check + 1] and seen[check + 2][:2] == ["git", "commit"] and seen[check + 2][-1] == "docs/make-targets.html"
     seen.clear(), stale.update(on=False)
     assert lb.cheap_refusals(tmp_path, d, ["T02"], "x") == [] and not any("--write" in c for c in seen if any("make-docs.py" in x for x in c)), "fresh: untouched"
+
+
+def test_the_cohort_beside_the_gate_is_sized_and_stopped(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 405 T48 (D21): the cohort's workers fit beside the gate's memory and cpus, and its whole process group stops."""
+    import subprocess as sp
+    import time
+
+    lb, _d = _land(tmp_path, monkeypatch)
+    jobs, avail = lb.cohort_jobs()
+    assert jobs >= 2 and avail > 0
+    proc = sp.Popen(["sh", "-c", "sleep 30 & sleep 30"], start_new_session=True)
+    time.sleep(0.2)
+    lb.stop_cohort(proc)
+    assert proc.returncode is not None, "stopped"
+    lb.stop_cohort(proc), lb.stop_cohort(None)
