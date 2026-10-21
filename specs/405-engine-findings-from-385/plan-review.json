@@ -825,97 +825,97 @@
   },
   "## T72 - the cohort's workers sized to the container's memory (found landing batch 3)": {
    "sha256": "16b0da862e2727dea30e468fae9c51b149550d85ee0a64001f6e594d6e6e5bdb",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T72 Approach (checklist part A)": {
    "sha256": "9c12ff622c2d01a509466bd3c3af1d16057645c3e66021b397d564b4e4fbe448",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T72 Decisions": {
    "sha256": "4a9a1687af6578df43317c68f937291cbd4d2d61d50ed71557be855b99733390",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "## T64, T66, T59, T68, T71, T56 - claims and words brought to the pages (the T17 batch's and batch 3's rounds; T28)": {
    "sha256": "f29b79b2a33543ee313e84d40dbf17bf3c840a2f780046ff10a10a52b7869383",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T64 Approach (checklist part A)": {
    "sha256": "1aa10dd758224eee4e9af2252ef2552ce81a1a8e7139ae6a7943bceeb5069525",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T64 Decisions": {
    "sha256": "8ce3a00b019a7683804ffc3015c969c7b75b38de4b60975c82aaae4bf44edca8",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T66 Approach (checklist part A)": {
    "sha256": "3582c437b6ef5ff3ded30af2f9d886a2c80463213a8eb9a7d3fa58e2b6da2759",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T66 Decisions": {
-   "sha256": "41c1c0c116cd977669834636fff2754cb6ada9d9e5a2be2186ed5ec4cf4fb71e",
-   "verdict": "BLOCKED",
+   "sha256": "bf4406f10e13a4b9bd641ae9ef483d4086724c577161dc7c477b8dfbf5bf19b5",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T59 Approach (checklist part A)": {
    "sha256": "8e4d7323281c9904a41d821614e5fe04ea5ac0148a6bef6ca83d4be68ac953d5",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T59 Decisions": {
    "sha256": "8f7befd67326e0d17d7f12549b4fca217f9c06ee213d2f5a544ff2f6204d686c",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T68 Approach (checklist part A)": {
    "sha256": "aaf0e4fa01967d6e819669cea0a91f3dd621ff79cd56b5717a448925762036ae",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T68 Decisions": {
    "sha256": "e2687ee8c2d4531f90121586037fd3051db1bb6cc9f7cff3346f1fceaec469d0",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T71 Approach (checklist part A)": {
    "sha256": "3b48ec03c7152e4730d6a15ebcaf6f6af7a3308e355d2361cec334d9d7cd7651",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T71 Decisions": {
    "sha256": "6c5c00e2ffdad9bf23e2ba2764265ad91190632f398fe4cf7da26894aac1f2d8",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T56 Approach (checklist part A)": {
-   "sha256": "4b76bb70c58fca4727301d2db70efb87c51e943c2a93e364e9c1280207cdea92",
-   "verdict": "BLOCKED",
+   "sha256": "0aa284c580cd053441b18a5e6e606fb4ea779d0eb2fb6ad5716afb5b56b3d0c4",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T56 Decisions": {
-   "sha256": "981a17d5475e0f4a865408e190603cc6d2489a6c436ffd21dfe748fd1d13d03b",
-   "verdict": "BLOCKED",
+   "sha256": "7fda890c2530be730d98a1d2400bb131b5b5b2b23e59702dd99346b5db3ca086",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   }
@@ -2014,6 +2014,73 @@
      "class": "narrowing",
      "ruling": "NOT LEGITIMATE",
      "why": "The block's own measurement (item 4) says the code joins at the point nearest the lane's END while 0014 puts the join nearest the HAMLET - two different rules. Rather than conform (exit e) or claim the code's rule honestly as a departure, the plan writes a claim that makes the page say what the code does: a carve-out from following the research, which amendment 7 says is generally what is to be done. Its premises do not hold: 'the end stands at the hamlet's edge' is asserted in items 5-6, not measured in item 4; and 'a different point would need a hamlet center no rule defines' is false - nearest the hamlet is a distance to the hamlet's footprint, which needs no center, and the bund's point nearest a lane end coincides with its point nearest the hamlet only when that end is the hamlet's closest point to the bund. Not physically impossible, not implied by the GM's words, not needed to save the request's purpose. Instead: either conform the code to 0014's nearest-to-the-hamlet point (exit e), or claim the code's nearest-to-the-end rule as what it is - a DEVIATION from 0014 or the engine's own GUESS, with its origin - without attributing that reading to the page."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T64, T66, T59, T68, T71, T56 - claims and words brought to the pages (the T17 batch's and batch 3's rounds; T28)",
+    "## T72 - the cohort's workers sized to the container's memory (found landing batch 3)",
+    "### T56 Approach (checklist part A)",
+    "### T56 Decisions",
+    "### T59 Approach (checklist part A)",
+    "### T59 Decisions",
+    "### T64 Approach (checklist part A)",
+    "### T64 Decisions",
+    "### T66 Approach (checklist part A)",
+    "### T66 Decisions",
+    "### T68 Approach (checklist part A)",
+    "### T68 Decisions",
+    "### T71 Approach (checklist part A)",
+    "### T71 Decisions",
+    "### T72 Approach (checklist part A)",
+    "### T72 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D42",
+     "summary": "T72: the landing cohort's worker count sized from min(MemAvailable, cgroup memory.max - memory.current + inactive_file); the landing prints the figure; a test.",
+     "class": "within",
+     "why": "A finding raised while landing batch 3 on code the batch did not change, filed as a task here per FR-002 ('keep findings on code a task didn't change as new tasks'), and worked under Amendment 7's 'working all of the remaining open tasks in the feature'. It makes the parallel landing the GM asked for in Amendment 5 run without hitting the memory cap; it narrows nothing asked."
+    },
+    {
+     "id": "D43",
+     "summary": "T64: _route and _clear_link cite 0246 section 16's 7 ft plainly instead of as a DEVIATION; _lay_skeleton's span floor names clip_to_clear's 70 ft drop and _WEB_MIN_FT's 30 ft.",
+     "class": "within",
+     "why": "Labels and words only, no code token changes (FR-001's claims exit). The page line as quoted ('a lane's middle at least 7 ft from a garden fence') is literally the fence-to-middle reading, so a plain cite departs from no page and reinterprets nothing."
+    },
+    {
+     "id": "D44",
+     "summary": "T66: _thread_the_fabric's gap, steadings and band wording, _route's 10 ft cells and wet_grown_by_the_lane's 8 px (8 ft on a hamlet's sheet at 1 ft a px, WEB_HARD_GAP's bar) worded as the code does.",
+     "class": "within",
+     "why": "Words only, put right where they stand; each found row (385 rows 12-15, 27, 28) was carried here as FR-002 work. The changed phrase now states the code's unit (8 px) and its reading in feet rests on the stated hamlet-sheet scale of 1 ft a px, which is a stated convention, not a measured count. No behavior or scope change."
+    },
+    {
+     "id": "D45",
+     "summary": "T59: _trim_to_service claims 'not the way it left' as UNRESEARCHED, naming its origin (feature 261's settlement-review of Mizuguchi), since 0246 section 6 records no such case.",
+     "class": "within",
+     "why": "A claim for an unclaimed rule; the label is the honest one where the page records nothing. No behavior changes, nothing asked is narrowed."
+    },
+    {
+     "id": "D46",
+     "summary": "T68: the trim/sweep rules the page records none of labeled UNRESEARCHED, the grove band labeled GUESS where held beyond 0033's row villages, two comments reworded; no behavior changes, a page record left to its own work.",
+     "class": "within",
+     "why": "The task's goal is that each claim cites a page only for what that page records; relabeling to UNRESEARCHED/GUESS is exactly that, and departs from no page (the block says the pages record none of these cases). Deferring the research of each rule is not a narrowing of anything the GM asked: no request clause asks for these rules to be researched in this task."
+    },
+    {
+     "id": "D47",
+     "summary": "T71: _web_cut_lines claims the side lanes' reach as GUESS (0246's back-lane 100 ft reused); run_lanes_on_to_the_bund claims a widthless lane as 0081's 3 ft footpath.",
+     "class": "within",
+     "why": "Two claims for rules batch 3's round found unclaimed (FR-002 work); the reuse is labeled GUESS, so the claim discloses rather than overstates. No behavior change."
+    },
+    {
+     "id": "D48",
+     "summary": "T56: run_on_target's 'joins at the nearest point' labeled a DEVIATION from 0014, which guesses the field path joins the bund at its point nearest the hamlet; each run-on end joins at the point nearest itself. Code unchanged.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It keeps a code rule that differs from the research page, against Amendment 7's 'follow the research ... that is generally what we should do', so it is ruled. Legitimate on two grounds from the bundle, not on design merit: (1) the GM's own words leave this room - 'generally', 'use your best judgment when the time comes', and claim-feed tasks named as the kind the session should settle without a ruling; (2) the page's object and the code's differ - 0014's quoted guess is about 'the path' (one field path from the hamlet), while the code carries each lane end separately (run_lanes_on_to_the_bund, T56 item 6), so the page reaches this case only by analogy, and the DEVIATION label discloses the departure openly with its reason. That disclosure is what separates it from the earlier, BLOCKED version, which read the page to say what the code does. The argument that the page's point would carry an end past nearer bund is a design argument and is given no weight here. This ruling rests on the quoted line being the whole of what 0014 says about the join; the reviewer could not read 0014 beyond it."
     }
    ]
   }
