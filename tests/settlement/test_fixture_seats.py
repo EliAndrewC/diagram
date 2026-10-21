@@ -123,13 +123,6 @@ def test_the_wood_shed_stands_a_ken_off_a_wall_of_its_house_or_is_refused() -> N
     assert walls[0][:2] == (0.0, 0.0), "walls[0] is the house, centered on the frame's origin - the front wall `forward_of_front` reads"
 
 
-def test_the_wood_shed_s_first_seat_is_turned_by_the_household_s_roll() -> None:
-    """405 T26: the four recorded seats were tried in one order on every farm; the coop's are turned by the household's roll."""
-    walls = fs.steading_rects(HW, HH, None, 1.0)
-    seats = {fs._wood_shed(HW, HH, 24.0, 12.0, fs.WALL_GAP_FT, walls, [HOUSE], _px, u)[:2] for u in (0.0, 0.3, 0.6, 0.9)}
-    assert len(seats) > 1, "different households, different first seats"
-
-
 def test_the_woodshed_stands_a_ken_off_and_the_shrine_in_its_rolled_corner() -> None:
     laid = _lay(("woodpile", "shrine"), roll=0.1)
     shed = laid["woodpile"]

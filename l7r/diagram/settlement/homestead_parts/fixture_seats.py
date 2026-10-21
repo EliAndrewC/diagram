@@ -409,7 +409,7 @@ def lay_fixtures(
                 continue
         elif kind == "woodpile":
             walls = steading_rects(hw, hh, "N" if kura else None, px(1.0))  # the house's own walls (0043), never the byre's or the retirement house's
-            seat = _wood_shed(hw, hh, w, d, g, walls, taken, px, u)
+            seat = _wood_shed(hw, hh, w, d, g, walls, taken, px)
         elif kind == "bath":
             # EACH HOUSE'S OWN WALL (feature 328): the registers count the wall house by house, most beyond the stable wing
             wall = bath_wall(roll(SALT[kind] + 0.25), forms)
@@ -461,7 +461,7 @@ def against_a_part(built: Sequence[Rect], w: float, d: float, g: float, taken: S
 
 
 def shed_off_a_wall(seat: Rect, walls: Sequence[Rect], g: float, px: Callable[[float], float]) -> bool:
-    """THE WOOD SHED'S RULE (feature 280 M21; settlement-reviews of Inashiro and Kuwabata, where sheds stood 25-37 ft out,
+    """THE WOOD SHED'S RULE (feature 280 M21; history: the settlement-reviews of Inashiro and Kuwabata found sheds 25-37 ft out,
     between farmsteads): a building of its own a ken off its house - clear of the house by the wall gap and `WOODSHED_STEP_FT`
     - and never walked out across the dooryard: exactly the gap and a ken off a wall of its HOUSE (`against_a_wall` at no
     tolerance, `walls[0]` the house centered on the frame's origin; feature 328 dropped the extra outward pace), overlapping
@@ -495,7 +495,7 @@ def joined_to_house(seat: Rect, hw: float, hh: float, tol: float = 1e-6) -> bool
     return (abs(gx) <= tol and gy < 0.0) or (abs(gy) <= tol and gx < 0.0)
 
 
-def _wood_shed(hw: float, hh: float, w: float, d: float, g: float, walls: Sequence[Rect], taken: Sequence[Rect], px: Callable[[float], float], u: float = 0.0) -> Rect:
+def _wood_shed(hw: float, hh: float, w: float, d: float, g: float, walls: Sequence[Rect], taken: Sequence[Rect], px: Callable[[float], float]) -> Rect:
     """The wood shed (feature 280 M21): the recorded seats - off the back wall and the flanks, a ken out - then every place a
     ken off each wall of the house but its front (feature 328: the front wall's places stood in the dooryard); the first that
     clears the parts laid and keeps `shed_off_a_wall`.
@@ -503,11 +503,8 @@ def _wood_shed(hw: float, hh: float, w: float, d: float, g: float, walls: Sequen
     Research:
         wood shed seats - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: behind or beside the house,
             never the front yard
-        wall places a ken out - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: offered a ken (`WOODSHED_STEP_FT`, the page's GUESS) beyond the wall gap (the page's DEVIATION)
-        the first seat rolled - UNRESEARCHED: the four recorded seats turned by the household's roll, as the coop's are"""
+        wall places a ken out - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: offered a ken (`WOODSHED_STEP_FT`, the page's GUESS) beyond the wall gap (the page's DEVIATION)"""
     seats = _seats("woodpile", hw, hh, w, d, g, None, None, lambda _salt: 0.0, 0.0, FixtureForms(), px)
-    k = int(u * len(seats)) % len(seats)  # ...THE FIRST SEAT TURNED BY THE HOUSEHOLD'S ROLL, as the coop's (405 T26)
-    seats = seats[k:] + seats[:k]
     offered = chain(seats, (q for q in wall_places(walls[:1], w, d, g + px(WOODSHED_STEP_FT), px(WALL_SLIDE_FT)) if not forward_of_front(q, hh / 2)))  # the house's walls (0043)
     found = _first((q for q in offered if shed_off_a_wall(q, walls, g, px)), taken, g)
     if found is None:

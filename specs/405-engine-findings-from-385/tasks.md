@@ -287,10 +287,13 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T103 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: l7r/diagram/hamletgen/ways/joints.py::tee#a lane whose vertex before the joint stands within `_TOUCH_GAP` (4 ft) of its foot on the other lane stops at that vertex, with no last leg to the foot (the nub cut; the hook rule at §27 is the nearest the page comes) [lands-open]
       research: rendering
-- [ ] T104 Every pool farm draws its kura on the north wall (Inashiro, Kashikawa, Kuwabata, Mizuguchi, Sawada: shed_side N), while 0040 puts a scattered farmstead's kura on the west; and a grove farm's fixtures are laid with no kura wall (bundle._lay_fixtures passes shed False for the dispersed layout): draw the kura on the side 0040 gives each form, and lay the fixtures against it (split from T26, 2026-10-21) [lands-open]
+- [ ] T104 Every pool farm draws its kura on the north wall (Inashiro, Kashikawa, Kuwabata, Mizuguchi, Sawada: shed_side N), while 0040 puts a scattered farmstead's kura on the west; and a grove farm's fixtures are laid with no kura wall (bundle._lay_fixtures passes shed False for the dispersed layout): draw the kura on the side 0040 gives each form, and lay the fixtures against it; and 0043's drawing page names the guess that keeps a wood shed a ken off the kura too (batch 11's round) (split from T26, 2026-10-21) [lands-open]
       research: rendering
       research: rendering
 - [ ] T105 Two notes from batch 10's round: 0081's drawing page does not record moving a joint back one vertex when the pull cannot clear a Z across it, which joints._one_joint and _joint_moved_back cite 0081 for (say it on the page, or claim the move as UNRESEARCHED); settle_ends reads a lane with no width as 3 ft (the footpath, 0081 section 1) unclaimed - claim it (impl-drift outside the change, 2026-10-21) [lands-open]
+      research: rendering
+      research: rendering
+- [ ] T106 Turn a wood shed's four recorded seats by the household's roll, as the coop's are (T26's fourth note): tried in batch 11, it moved Sawada's farms so two households' ways ended 22.9 ft apart unjoined - the knot's gather refused for passing 2.7 ft from a neighbor's yard (0246's 7 ft gap) or splitting the web; land it once the knots step has a gather that keeps the gap, or the farms the room (measured 2026-10-21) [lands-open]
       research: rendering
       research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
