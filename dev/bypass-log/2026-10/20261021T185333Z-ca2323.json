@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-21T18:53:33Z",
+  "target": "claims-gate",
+  "commit": "31cd31db7",
+  "why": "CLAIMS_OK: the three doubled-tail DRIFTED findings are the 15-versus-20 degree gap the round arbiter accepted (round:spec-fidelity|plan:405-engine-findings-from-385#T100@3), measured and owned by 405 T101 with its done-check"
+}
