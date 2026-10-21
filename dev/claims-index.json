@@ -29998,16 +29998,17 @@
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#walked on to the house it serves": {
   "body": "869c2ec3e7564ad8",
-  "claim": "walked on to the house it serves - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane ends at the dooryard - an end that reaches walks on toward the nearest owed house within 120 ft (2 x `_REACH_FT`) while it still reaches, never when within 60 ft (`_REACH_FT`) of another way",
-  "code": "bf86b2f5c4e065db",
+  "claim": "walked on to the house it serves - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane ends at the dooryard - an end that reaches walks back along its own lane, while it still reaches, to its closest approach to the nearest owed house within 120 ft (2 x `_REACH_FT`); never while within 60 ft (`_REACH_FT`) of any way, the one it left included (that way filtered out is 405 T82)",
+  "code": "13c0226d6704e3e8",
   "core": "ea19df2d9ccd7317",
   "date": "2026-10-21",
-  "note": "`_near` returns inf when `seg_dist(q, a, b) <= _REACH_FT` for any of `_o` (= `others` unfiltered), so the way the lane's far end stands on also blocks the walk. That is the way `_reaches` excludes and this unit's own \"not the way it left\" says is no other way. A short link off a way therefore stays up to 60 ft past the house it serves, in open ground: it is not at the dooryard and does not reach another way, where the page has \"a lane ends at the dooryard or runs on to something a reader can see\". Either filter `_o` in `_near` by `seg_dist(far, ...) > _TOUCH_GAP` as `_reaches` does, or reword the claim to say any way within 60 ft, the one it left included",
+  "note": "The claim says the end is \"never [walked] while within 60 ft of any way\", but `_near` tests only the candidate step `nxt`. It does not test the current end `b`. When `b` is within 60 ft of a way, `near(b)` is inf, so any `nxt` just past 60 ft scores lower (`near(nxt) >= near(b)` is false) and the walk carries on toward a house. That happens exactly where the first loop stops an end it pulled back to reach a way: about 56-60 ft from it. Such an end gets walked off the way it reached and onto a house, which breaks the claim's \"a junction end stays at its junction\". Ending at the dooryard is allowed by §6 (\"ends at the dooryard or runs on to something a reader can see\"; \"the rule is a GUESS\"). The fault is the code against its own claim: either `_walk_in` should stop when `near(b)` is inf, or the claim should say the end is held only while its next step is within 60 ft.",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
   "verdict": "DRIFTED"
