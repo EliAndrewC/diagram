@@ -281,22 +281,4 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 
 <!-- plan-archive: T49 to T13 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 
-## T52 - the ledger rows written again after the claims wait (found landing T49)
-
-### T52 Approach (checklist part A)
-
-1. **The goal, in the world.** A claims round run beside the landing's gate needs no ledger row written by hand.
-2. **The constraints.** The push's ledger check (features 371, 385 FR-019); `make land`'s writing of the feature's traced passes (405 T39, D13); the claims wait (405 T50, D23).
-3. **Where each comes from.** O (features 371, 385, 405).
-4. **Do they describe the world here?** Yes - measured 2026-10-21 (T49's landing): the impl-drift pass came after `make land`'s first pass, so its row was owed at the push; I wrote it with `make ledger-owed` at 12:03:17.
-5. **The order.** The two writes and their commit lifted into `write_ledger`, asked in the first pass and again after the claims wait; a test.
-6. **The exits.** (c) - the landing writes what it can write.
-7. **The search smell.** None.
-8. **The budget.** 10 min.
-9. **Done, measured.** One goal: after the claims wait the rows are written again, before the ticks and the push (test).
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
-### T52 Decisions
-
-**D27 - written twice.** `land.write_ledger(root, d)` writes the plan reviews' rows and the feature's traced passes and commits the ledger; `cheap_refusals` asks it first, and `main` again after `wait_for_claims`, before the ticks.
+<!-- plan-archive: T52 to T49 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
