@@ -1750,3 +1750,37 @@ Owed by the cohort (cohort@20261021T180921Z: seeds 10 and 40 newly failing), tak
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
+<!-- plan-archive: archived 2026-10-21 -->
+### T10 Approach (checklist part A)
+
+1. **The goal, in the world.** The track out's last resort and drawn channels are claimed as they stand against 0084.
+2. **The constraints.** 0084 (a path may cross a farm ditch on a plank).
+3. **Where each comes from.** R (0084).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (385 T120's finding: `connector_dry_exit` never crosses a drawn channel, unclaimed).
+5. **The order.** The claim: a DEVIATION from 0084 - the fill lays no plank, so it keeps to the ground between the channels, and a gateway with no such way is refused (`NoDryExit`).
+6. **The exits.** (a) claim as a DEVIATION - 0084 permits a plank and does not require one; laying planks from the fill was weighed and refused here (the last resort runs where no bearing is dry; a refused gateway is re-seated, feature 287 W23).
+7. **The search smell.** None.
+8. **The budget.** 40 min for the batch with its landing.
+9. **Done, measured.** The claims round reads it IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T103 part B (2026-10-21T19:30Z)
+
+Owed by the cohort (cohort@20261021T192759Z: seeds 10, 24, 36 and 47 newly failing), taken while T103 was the last task started - the work that resisted was T26's.
+
+1. **What is refusing?** The cohort, on T26's wood-shed rule (D78): the new seats moved farms so two households' ways ended within 25 ft of one another, and the knots step's every gather was refused - passing within 0246's 7 ft of a neighbor's garden (T18) or splitting the web; with the seat roll the cohort passed and Sawada failed the same way. Nothing of T103's - a claim.
+2. **A3 again.** Unchanged for T103.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** T26's engine change is set down (the shed code and the pool restored to main's) and T107 filed for the knots-versus-gap conflict, which T26 and T106 wait on; T103 lands alone.
+6. **The one-sentence test.** "A nub shorter than the ink's touch is not drawn" - claimed, read IN-STEP.
+7. **The next step is a measurement.** `make land` for T103: its gate on main's engine.
+8. **Every route measured before offering one?** Two T26 routes measured (with and without the roll); both expose the conflict, so neither is offered.
+9. **After a ruling: the step it names?** No ruling.
+
+<!-- plan-archive: T105 to T105 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+### T105 Decisions
+
+**D80 - the mend and the footpath claimed.** No code change: the joint moved back a vertex claimed UNRESEARCHED, beside 0081's zigzag rule it serves; `settle_ends`' unwidthed lane claimed as 0081's 3 ft footpath.
+
