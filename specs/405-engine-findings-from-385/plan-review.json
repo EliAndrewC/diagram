@@ -1304,8 +1304,8 @@
    "declared": "spec-fidelity"
   },
   "### T97 Decisions": {
-   "sha256": "fa1b0dee31d8e9e137130b20175db78df757955489416206c7d1df19c66645fd",
-   "verdict": "CLEAR",
+   "sha256": "61e4840c63a0163e1206a3fea658cb6aaec098f811f26dec2426d030c4d2033e",
+   "verdict": "BLOCKED",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
@@ -1318,6 +1318,18 @@
   "### T100 Decisions": {
    "sha256": "d483f6acb90cda63c7cd3c5b8365e00cff62b25ee91825bab72b351058058c90",
    "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T97 Approach (re-answered 2026-10-21T18:13Z)": {
+   "sha256": "3b8d63d88ed0172e3c096bfc6e19d49fd03349af6e1839081d707ec03bb64836",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T100 part B (2026-10-21T18:13Z)": {
+   "sha256": "e096760311a0c8f72bf91fa20aa2ca55f6050e94d26c65d93b9662ca19814c8c",
+   "verdict": "BLOCKED",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   }
@@ -3142,6 +3154,42 @@
      "summary": "T100: a spec-lint check refuses a task id appearing on two task lines of one tasks.md, naming both lines and make task-add; with a test",
      "class": "within",
      "why": "Found work filed as a task of this feature (FR-002) and worked under Amendment 7. The guard's reach is exactly the measured defect (a duplicate T93 that no check refused); no other behavior rides in with it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "### T100 part B (2026-10-21T18:13Z)",
+    "### T97 Approach (re-answered 2026-10-21T18:13Z)",
+    "### T97 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D76(a)",
+     "summary": "The four claims cite 0081 (an end running back along another way under 20 degrees is cut where it comes alongside) and each names the known gap: the code asks at _DOUBLED_DEG 15.",
+     "class": "within",
+     "why": "A claim that states its own deviation from the page is honest and is what a claims task delivers; it narrows nothing the GM asked."
+    },
+    {
+     "id": "D76(b)",
+     "summary": "_DOUBLED_DEG stays 15 (reversing the D76 that was ruled CLEAR, which set 20.0 on 0081); the 15-to-20 move is said to 'move with T07's work'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Amendment 7: follow the research, which is 'generally what we should do', and take the feature to completion. The Approach block itself answers that 0081's constraint describes the world here (item 4) and then leaves the constant unmoved (item 5). Two cohort seeds refusing at 20 is a measured reason to SEQUENCE the move after the side-by-side family's work, not to drop it - it is not impossibility, and 'harder now' is not an exception. Deferral inside the feature is acceptable only if a task owns the move, and none does in this plan: T07's block is not among the blocks changed since their CLEAR verdicts, so its text is as last judged, when T97 itself owned the 20; nothing now carries the 15-to-20 move or the seeds 10/40 failure modes. As written, 0081's figure is left unimplemented with no owner. Fix: amend T07's block (or file a task) to record that it owns moving _DOUBLED_DEG 15 -> 20 per 0081 once the side-by-side family is fixed, with the measured seed 10 (household way / tree lane read as doubled) and seed 40 (shallow crossing left) refusals as its done-check; then re-bundle. With that recorded, this deferral would be LEGITIMATE."
+    },
+    {
+     "id": "T97 Approach items 6-11",
+     "summary": "Exit (a) claim with the gap carried; budget with batch 10; done = claims round reads the four, seeds 1-48 and pinned rows 54/54 at 15; constant measured at 20 and not moved; nothing fitted.",
+     "class": "within",
+     "why": "Bookkeeping and done-checks around D76; they add no scope and narrow nothing beyond what D76(b) already decides."
+    },
+    {
+     "id": "T100 part B",
+     "summary": "The cohort's seeds 10 and 40 newly failing are attributed to T97's _DOUBLED_DEG 20, not to T100 (a spec-lint check); T100 unchanged; T97's figure left at 15 per D76.",
+     "class": "within",
+     "why": "A resistance record that changes nothing of T100's; its only substantive content is D76(b), ruled there."
     }
    ]
   }

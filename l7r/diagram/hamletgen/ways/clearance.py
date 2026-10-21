@@ -363,7 +363,7 @@ def kink_spans(pts: Sequence[Pt]) -> list[tuple[str, int, int]]:
     that asks `_bends_badly` now read this one body.
 
     Research:
-        no hairpin - research/questions/0081-village-lanes.drawing.html: 140 degrees or more
+        no hairpin - research/questions/0081-village-lanes.drawing.html: a turn of more than 140 degrees
         no zigzag - research/questions/0081-village-lanes.drawing.html: two 50 degree turns within 40 ft of path"""
     p = list(pts)
     bad: list[tuple[str, int, int]] = []

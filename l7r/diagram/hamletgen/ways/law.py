@@ -439,7 +439,7 @@ def doubled_tails(M: Mapping[str, Any]) -> list[int]:
     asked of the lane and of it reversed), whatever the two ways' widths. `along_tail` walks in from a lane's last point, and
     asked only that way it never saw a first end doubled: Mizuguchi's field spur left its street and ran 10-12 ft beside it
     for 210 ft before it turned for the field (feature 293 on 291, the pool's side-by-side test).
-    Research: no doubled tail - research/questions/0081-village-lanes.drawing.html: an end running back along another way under 20 degrees is refused, cut where it comes alongside - asked at `_DOUBLED_DEG`, 15, a known gap carried to 405 T07"""
+    Research: no doubled tail - research/questions/0081-village-lanes.drawing.html: an end running back along another way under 20 degrees is refused, cut where it comes alongside - asked at `_DOUBLED_DEG`, 15, a known gap carried to 405 T101"""
     ways = _ways(M)
     lanes = M.get("lanes") or []
     return [i for i, p in enumerate(ways) if not lanes[i].get("connector") and len(p) >= 2 and any(j != i and tail_doubled(p, o) for j, o in enumerate(ways))]

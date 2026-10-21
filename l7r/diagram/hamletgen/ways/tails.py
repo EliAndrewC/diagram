@@ -23,7 +23,7 @@ _ALONG_MIN_FT = 30.0  # ft: shorter than this, running beside a way is just the 
 _ALONG_DEG = 25.0  # deg: nearer to parallel than this, the lane is running WITH the way, not meeting it
 """Research: running with the way - UNRESEARCHED: within 25 degrees of parallel"""
 _DOUBLED_DEG = 15.0  # deg: a finished tail this near parallel is one tread doubled (Kuwabata's ran at ~3, Sawada's at 9.5); between
-"""Research: doubled tail angle - research/questions/0081-village-lanes.drawing.html: an end running back along another way at less than 20 degrees - asked here at 15, a known gap: at 20 cohort seeds 10 and 40 were refused (a household's way read as doubled, a shallow crossing left), the side-by-side family carried to 405 T07 (measured 2026-10-21)"""
+"""Research: doubled tail angle - research/questions/0081-village-lanes.drawing.html: an end running back along another way at less than 20 degrees - asked here at 15, a known gap: at 20 cohort seeds 10 and 40 were refused (a household's way read as doubled, a shallow crossing left), the side-by-side family carried to 405 T101 (measured 2026-10-21)"""
 # this and `_ALONG_DEG` the sweep still cuts it, to the crossing it overran, which then stands as a shallow Y - a junction, not a
 # doubling (Inashiro's straggler meets its join lane at 21.6 degrees)
 _CROSS_BACK_FT = 40.0  # ft: a crossing this close before the cut is the junction the doubled tail overran (Sawada's was 24)
@@ -72,7 +72,7 @@ def tail_doubled(p: Sequence[Pt], o: Sequence[Pt]) -> bool:
     """Does an end of way `p` - EITHER end - run on beside way `o` at `_DOUBLED_DEG` (`along_tail`, asked of `p` and of it
     reversed)? The pair test of `law.doubled_tails`, asked pair by pair by a caller that keeps the answers (`knots.WebMemo`).
 
-    Research: no doubled tail - research/questions/0081-village-lanes.drawing.html: an end running back along another way under 20 degrees is refused, cut where it comes alongside - asked at `_DOUBLED_DEG`, 15, a known gap carried to 405 T07"""
+    Research: no doubled tail - research/questions/0081-village-lanes.drawing.html: an end running back along another way under 20 degrees is refused, cut where it comes alongside - asked at `_DOUBLED_DEG`, 15, a known gap carried to 405 T101"""
     return len(o) >= 2 and any(along_tail(q, o, deg=_DOUBLED_DEG) is not None for q in (p, p[::-1]))
 
 

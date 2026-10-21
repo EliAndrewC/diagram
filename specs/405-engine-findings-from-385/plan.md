@@ -446,7 +446,7 @@ Owed by the cohort (cohort@20261021T172647Z: seeds 12, 21, 22, 24, 38 and 901 ne
 
 ### T97 Decisions
 
-**D76 - 0081's rule claimed; its 20 degrees carried to T07.** The four claims cite 0081 (an end running back along another way under 20 degrees is cut where it comes alongside), each naming the known gap: the code asks at `_DOUBLED_DEG` 15. Measured 2026-10-21: at 20, cohort seeds 10 and 40 were refused (a household's way, a tree lane no settle may cut, read as doubled; a shallow crossing left) - the band from 15 to 20 is the side-by-side family 405 T07 carries from 385 T12, so the figure moves with T07's work, not here.
+**D76 - 0081's rule claimed; its 20 degrees owned by T101.** The four claims cite 0081 (an end running back along another way under 20 degrees is cut where it comes alongside), each naming the known gap: the code asks at `_DOUBLED_DEG` 15. Measured 2026-10-21: at 20, cohort seeds 10 and 40 were refused (a household's way, a tree lane no settle may cut, read as doubled; a shallow crossing left). The move from 15 to 20 is filed as T101, which owns it with those two refusals as its done-check, once the side-by-side family (T07) leaves the tree no doubled household way.
 
 ### T100 Approach (checklist part A)
 
@@ -472,9 +472,9 @@ Owed by the cohort (cohort@20261021T172647Z: seeds 12, 21, 22, 24, 38 and 901 ne
 2. **The constraints.** 0081 §25: an end running back along another way under 20 degrees is cut where it comes alongside.
 3. **Where each comes from.** R (0081).
 4. **Do they describe the world here?** Yes - batch 9's round 3: four claims called it UNRESEARCHED; and measured 2026-10-21, at 20 degrees cohort seeds 10 and 40 were refused (a household's way read as doubled, a shallow crossing).
-5. **The order.** The four claims cite 0081 with the known gap (asked at 15), carried to T07, the side-by-side family's own task; `_DOUBLED_DEG` stays 15.
-6. **The exits.** (a) claim, the gap carried.
-7. **The search smell.** None - one measured roll at 20, then the figure left to T07.
+5. **The order.** The four claims cite 0081 with the known gap (asked at 15); the move to 20 filed as T101, which owns it (done: seeds 1-48 and the pinned rows pass at 20), after the side-by-side family (T07); `_DOUBLED_DEG` stays 15 here.
+6. **The exits.** (a) claim, the move filed (T101).
+7. **The search smell.** None - one measured roll at 20, then the move filed with its done-check.
 8. **The budget.** With batch 10.
 9. **Done, measured.** The claims round reads the four; seeds 1-48 and the pinned rows 54/54 at 15 (measured 2026-10-21).
 10. **Before moving a constant.** Measured at 20 (two seeds refused); not moved.
