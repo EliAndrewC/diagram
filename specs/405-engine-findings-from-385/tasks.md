@@ -307,7 +307,7 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [ ] T109 The house-style hook rewrote a checker's own words inside replies recorded verbatim (「labelled」 -> labeled, 「centre」 -> center) in the heredocs that wrote batch 8's round 2 (b8b), batch 9's (b9), batch 11's (b11c) and batch 12's (b12) REPLY files; a REPLY file is a quotation, which the house style exempts - exempt the claims and record REPLY files (make claims-checked / record-checked input) from the rewrite, with a test (found 2026-10-21) [lands-open]
       research: rendering
       research: rendering
-- [ ] T110 0084's drawing page says how a way's deck is drawn but not whether a way prefers going round a ditch to crossing it, while 0035 prices a brook crossing at 150 ft of walk: research when a way crosses a farm ditch rather than going round, and record it; the track out's last resort crosses one only where nothing else is dry (T10, UNRESEARCHED) (impl-drift outside the change, 2026-10-21) [lands-open]
+- [ ] T110 0084's drawing page says how a way's deck is drawn but not whether a way prefers going round a ditch to crossing it, while 0035 prices a brook crossing at 150 ft of walk: research when a way crosses a farm ditch rather than going round, and record it; the track out's last resort crosses one only where nothing else is dry (T10, UNRESEARCHED); and 0035 draws a way's brook crossing as the board bridge a farm ditch takes (about 4 ft) where 0084 gives a way a timber deck as wide as the way - reconcile the two pages (impl-drift outside the change, 2026-10-21) [lands-open]
       research: rendering
       research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]

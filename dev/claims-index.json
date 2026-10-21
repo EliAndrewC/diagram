@@ -31699,13 +31699,24 @@
   "triaged": "2026-10-18",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#a drawn channel crossed on a deck, last": {
+ "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#a channel crossed last": {
   "body": "6ed8d082cab3aa05",
-  "claim": "a drawn channel crossed on a deck, last - plank-bridges-over-farm-ditches-itabashi.drawing: where a way crosses a stream or ditch the map draws a timber deck as wide as the way; the fill crosses a channel only where no way out keeps to the ground between them",
-  "code": "0d629789556b7f4a",
+  "claim": "a channel crossed last - UNRESEARCHED: the fill crosses a drawn channel only where no way out keeps to the ground between them; 0084 does not say when a way crosses a ditch rather than going round",
+  "code": "abc8e3ee1e6600dd",
   "core": "c4d8ba0051ab2254",
   "date": "2026-10-21",
-  "note": "§91 covers the deck: one planked deck as wide as the way, wherever \"a way crosses a stream or a ditch\" (the settle draws it, not this code). This code decides something else: the fill crosses a drawn channel only when no way out stays on the ground. 0084 says nothing on when a way should cross a ditch rather than go round. Cite §91 for the deck and mark the last-resort order UNRESEARCHED (or GUESS)",
+  "note": "no cited page says when a way crosses a drawn ditch rather than going round; 0035's 150 ft rule covers only the brook, and 0081's \"keeps off wet ground\" covers marsh, not channels",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#a drawn channel crossed on a deck": {
+  "body": "6ed8d082cab3aa05",
+  "claim": "a drawn channel crossed on a deck - plank-bridges-over-farm-ditches-itabashi.drawing: where a way crosses a stream or ditch the map draws a timber deck as wide as the way (the settle seats it)",
+  "code": "a40edacb4715eef8",
+  "core": "c4d8ba0051ab2254",
+  "date": "2026-10-21",
+  "note": "opens the drawn channels to the way and leaves the deck to the settle, as 0084 has it: \"one timber deck as wide as the way\"",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
   },
@@ -31713,7 +31724,7 @@
   "rests": [
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:09bdc345075811e2"
   ],
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#brook crossed at its crossing places": {
   "body": "6ed8d082cab3aa05",
@@ -31769,14 +31780,6 @@
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
   ],
   "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#in the fallback a drawn channel can be crossed at any point along it. Unlike the brook it has no crossing places and no straight-reach rule, so nothing claims where on the channel the deck stands or that it crosses square": {
-  "code": "c4d8ba0051ab2254",
-  "core": "c4d8ba0051ab2254",
-  "date": "2026-10-21",
-  "note": "in the fallback a drawn channel can be crossed at any point along it. Unlike the brook it has no crossing places and no straight-reach rule, so nothing claims where on the channel the deck stands or that it crosses square",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#pond berth": {
   "body": "6ed8d082cab3aa05",
@@ -31836,6 +31839,17 @@
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
   ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#where on a channel it crosses": {
+  "body": "6ed8d082cab3aa05",
+  "claim": "where on a channel it crosses - UNRESEARCHED: anywhere the fill finds; the settle squares the crossing (`squaring.square_every_crossing`)",
+  "code": "273d005b582e9cda",
+  "core": "c4d8ba0051ab2254",
+  "date": "2026-10-21",
+  "note": "0084's placement rules (near the middle of a long ditch, where a bund meets it) are for foot crossings, not ways; for a way crossing a ditch the pages say nothing on where; squaring is left to the settle",
+  "pages": {},
+  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_keeps_the_law#bends like a path": {
