@@ -45,6 +45,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T44 The second-red-gate tripwire fires but holds nothing past `make land`: T11's 05:02 red gate (the second in a row) wrote `red-gate@2026-10-21T05:02:38Z`, still owed, yet the 05:09 `make land` ran the gate and landed, since only a typed `make done` is asked about. Ask in the gate itself (the `done` recipe's first step) and among `make land`'s cheap refusals on an engine landing, ARBITER_OK the escape (amendment 4, the GM 2026-10-21)
       research: rendering
+- [ ] T45 The reference-settlement message (`_reference` in the Makefile) still offers `GATE_NO_CACHE=1 rolls it`, but the roll census refuses that run's re-rolls (T11's 05:02 gate): let the census accept a declared no-cache run, or stop offering it (the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z) [lands-open]
+      research: rendering
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
 - [ ] T02 (385 T36) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
