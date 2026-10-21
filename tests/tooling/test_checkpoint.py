@@ -397,3 +397,28 @@ def test_the_step_back_refuses_while_feature_json_names_another_feature(clone: P
         cp.open_checkpoint(clone)
     monkeypatch.setenv("SPECIFY_FEATURE", "998-other")
     assert cp.misaligned(clone) == ""
+
+
+def test_a_suspended_step_back_comes_due_for_nothing_and_the_red_gate_still_holds(clone: Path) -> None:
+    """Feature 405 T43 (D17) - the GM 2026-10-21: "let's suspend but not remove the hourly step-back arbiter for now"."""
+    assert cp.main(["switch", "off", "--root", str(clone), "--why", "x"]) == 2, "a reason of two words or more"
+    cp.throw(clone, "off", "the GM suspended it, 2026-10-21", T0)
+    assert cp.suspended(clone)["why"] == "the GM suspended it, 2026-10-21"
+    cp.throw(clone, "on", "open one first", T0)
+    trigger = cp.open_checkpoint(clone, T0 + 3601)
+    cp.throw(clone, "off", "the GM suspended it, 2026-10-21", T0)
+    assert cp.hold(clone, T0 + 3700) == "" and cp.state(clone, T0 + 3700)["open"] == "", "an open checkpoint stands down too"
+    cp.throw(clone, "on", "back on to see it", T0)
+    assert trigger in cp.hold(clone, T0 + 3700), "its record kept: owed again on resuming"
+    _rule(clone, trigger, {"ruling": "continue", "why": "a quiet hour of steady progress"})
+    cp.throw(clone, "off", "the GM suspended it, 2026-10-21", T0)
+    st = cp.state(clone, T0 + 3601 + 3 * 3600)
+    assert st["suspended"] and not st["due"], "past the hour, nothing is due"
+    assert cp.hold(clone, T0 + 9 * 3600) == "" and cp.due(clone, "Bash", now=T0 + 9 * 3600) == ""
+    assert cp.due(clone, "Agent", "glyph-check", now=T0 + 9 * 3600) == ""
+    with pytest.raises(ValueError, match="suspended .*make step-back-on"):
+        cp.open_checkpoint(clone, T0 + 9 * 3600)
+    arb.trip(clone, "red-gate@x", "red-gate", "", "a second red make done in a row", T0)
+    assert arb.blocking(clone, gate=True) == ["red-gate@x"], "the tripwire rulings stay"
+    assert cp.main(["switch", "on", "--root", str(clone), "--why", "the GM resumed it"]) == 0
+    assert "make step-back" in cp.hold(clone, T0 + 9 * 3600), "resumed: the hour comes due again"

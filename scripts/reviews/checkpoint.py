@@ -16,6 +16,13 @@ HELD, NOT OPTIONAL (FR-011): while the checkpoint is due, `make tick` refuses (`
 every unit it owed has been dispatched since it opened. There is no escape: the session in a loop is the one the step-back is
 for, and the 379 tooling-fix hold beside it has none either. A feature under an hour, or with no event log, owes nothing.
 
+SUSPENDED, NOT REMOVED (feature 405 T43, D17 - the GM 2026-10-21: *"let's suspend but not remove the hourly step-back
+arbiter for now"*; in 405 four hourly firings changed no route and made no fix). `dev/step-back.json` (`make step-back-off
+REASON=` / `make step-back-on REASON=`) set `off` makes the hour never due: no step-back, no hold on `make tick`, no refusal of
+a gate or a dispatch. The review units the hour called due still come due at the landing (`review-gate.sh`), and the tripwire
+rulings (`hm_arbiter`: round, reversal, cascade, red gate) are untouched. A checkpoint already open stands down too, its record
+kept: it is owed again when the step-back resumes (the plan review of D17).
+
 The clock is the glyph clock's file (`<git dir>/glyph-clock.json`), under the feature: `checkpoint_at` (when the last
 checkpoint's ruling closed it), `checkpoints` (how many), `checkpoint_open_at` and `checkpoint_trigger` (one opened by
 `make step-back`, not yet ruled), `checkpoint_units` and `units_since` (what it owed, dispatched since when).
@@ -24,6 +31,7 @@ checkpoint's ruling closed it), `checkpoints` (how many), `checkpoint_open_at` a
     checkpoint.py hold [--root <clone>]       exit 1 printing the refusal while the checkpoint holds `make tick`
     checkpoint.py status [--root <clone>]     where the clock stands
     checkpoint.py due --tool <T> [--agent <A>] [--root <clone>]   exit 1 printing the refusal a make done or a dispatch gets past the hour
+    checkpoint.py switch on|off --why <reason> [--root <clone>]   suspend or resume the step-back (make step-back-off / -on)
 """
 
 from __future__ import annotations
@@ -47,6 +55,30 @@ CHECKPOINT_S = ro.GLYPH_HOUR_S
 def _clock(root: Path) -> tuple[Path | None, dict]:
     g = ro._gitdir(root)  # noqa: SLF001 - the glyph clock's own reader
     return (g / ro.CLOCK if g is not None else None), (ro._read_json(g / ro.CLOCK) if g is not None else {})  # noqa: SLF001
+
+
+#: the switch (feature 405 T43): absent, or any state but "off", means the step-back runs
+SWITCH = Path("dev") / "step-back.json"
+
+
+def suspended(root: Path) -> dict:
+    """The switch's record while the step-back is suspended ({state, why, who, utc}), or {}."""
+    try:
+        sw = json.loads((root / SWITCH).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    return sw if isinstance(sw, dict) and sw.get("state") == "off" else {}
+
+
+def throw(root: Path, state: str, why: str, now: float | None = None) -> dict:
+    """Set the switch: `off` suspends the step-back, `on` resumes it; a reason of two words or more, who and when kept."""
+    if state not in ("on", "off") or len(why.split()) < 2:
+        raise ValueError("make step-back-off|step-back-on REASON=\"<why, two words or more>\"")
+    who = ro._git(root, "config", "user.name") or "unknown"  # noqa: SLF001
+    sw = {"state": state, "why": why.strip(), "who": who, "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(now))}
+    (root / SWITCH).parent.mkdir(parents=True, exist_ok=True)
+    (root / SWITCH).write_text(json.dumps(sw, indent=1) + "\n", encoding="utf-8")
+    return sw
 
 
 def _write(path: Path | None, clock: dict) -> None:
@@ -125,8 +157,9 @@ def state(root: Path, now: float | None = None) -> dict:
         return {"feature": feature, "due": False}
     mine = _clock(root)[1].get(feature) or {}
     since = max(start, float(mine.get("checkpoint_at") or 0))
-    return {"feature": feature, "due": now - since - gm_waits(root, feature, since, now) - idle(root, feature, since, now) >= CHECKPOINT_S, "since": since, "hour": int(mine.get("checkpoints") or 0) + 1,
-            "open": str(mine.get("checkpoint_trigger") or ""), "units": list(mine.get("checkpoint_units") or []),
+    off = bool(suspended(root))
+    return {"feature": feature, "suspended": off, "due": not off and now - since - gm_waits(root, feature, since, now) - idle(root, feature, since, now) >= CHECKPOINT_S, "since": since, "hour": int(mine.get("checkpoints") or 0) + 1,
+            "open": "" if off else str(mine.get("checkpoint_trigger") or ""), "units": list(mine.get("checkpoint_units") or []),
             "units_since": float(mine.get("units_since") or 0)}
 
 
@@ -154,6 +187,10 @@ def open_checkpoint(root: Path, now: float | None = None) -> str:
     st = state(root, now)
     if st.get("open"):
         return st["open"]
+    if st.get("suspended") and not st.get("due"):
+        sw = suspended(root)
+        raise ValueError(f"the hourly step-back is suspended ({sw.get('who')}, {sw.get('utc')}: {sw.get('why')}) - "
+                         "make step-back-on REASON=\"<why>\" resumes it (feature 405 T43)")
     if not st.get("due"):
         # the minutes alone read as "now" for the minute before it: say how long is left too
         when = (time.strftime("%H:%M:%S", time.localtime(st["since"] + CHECKPOINT_S)) + f", in {int(st['since'] + CHECKPOINT_S - now)} s"
@@ -216,7 +253,7 @@ def _undispatched(root: Path, units: list[str], since: float) -> list[str]:
 def hold(root: Path, now: float | None = None) -> str:
     """The refusal `make tick` prints while the checkpoint holds it, or ""."""
     st = state(root, now)
-    if not st.get("feature") or "since" not in st:
+    if not st.get("feature") or "since" not in st or st.get("suspended"):
         return ""
     if st["open"]:
         return (f"the feature's hourly checkpoint is open ({st['open']}) and owes the round arbiter's ruling: dispatch "
@@ -266,12 +303,22 @@ def due(root: Path, tool: str, atype: str = "", now: float | None = None) -> str
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
-    ap.add_argument("verb", choices=("open", "hold", "status", "due"))
+    ap.add_argument("verb", choices=("open", "hold", "status", "due", "switch"))
+    ap.add_argument("state", nargs="?", choices=("on", "off"))
+    ap.add_argument("--why", default="")
     ap.add_argument("--root", default=".")
     ap.add_argument("--tool", default="")
     ap.add_argument("--agent", default="")
     args = ap.parse_args(argv)
     root = Path(ro._git(Path(args.root), "rev-parse", "--show-toplevel") or args.root)  # noqa: SLF001
+    if args.verb == "switch":
+        try:
+            sw = throw(root, args.state or "", args.why)
+        except ValueError as e:
+            print(f"step-back: {e}", file=sys.stderr)
+            return 2
+        print(f"step-back: {'suspended' if sw['state'] == 'off' else 'resumed'} - {sw['why']}")
+        return 0
     if args.verb == "open":
         try:
             print(open_checkpoint(root))

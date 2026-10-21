@@ -756,3 +756,18 @@ def test_the_exported_feature_outranks_the_pointer(tmp_path: pathlib.Path, monke
     assert ha.feature_dir(root) == root / "specs" / "391-b", "a name with no directory falls back to the pointer"
     monkeypatch.setenv("L7R_FEATURE_DIRECTORY", "specs/368-x")
     assert ha.feature_dir(root) == root / "specs" / "368-x", "a page session's own directory outranks both"
+
+
+def test_the_gate_asks_whether_a_red_gate_is_owed(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 405 T44 (D18): T11's 05:09 `make land` ran its gate past `red-gate@2026-10-21T05:02:38Z`, owed and never ruled -
+    the hook asks only of a typed `make done`; the `done` recipe and `make land` now ask `gate-held` themselves."""
+    root = _clone(tmp_path)
+    monkeypatch.chdir(root)
+    assert ha.main(["gate-held"]) == 0, "nothing owed: the gate runs"
+    ha.trip(root, "round:quote-check|q:1@3", "round", "quote-check|q:1", "d", 1)
+    assert ha.main(["gate-held"]) == 0, "a round trigger holds its unit, not the gate"
+    ha.trip(root, "red-gate@2026-10-21T05:02:38Z", "red-gate", "", "a second red make done in a row", 2)
+    assert ha.main(["gate-held"]) == 1
+    assert 'make arbiter-bundle TRIGGER="red-gate@2026-10-21T05:02:38Z"' in capsys.readouterr().err
+    done = pathlib.Path(__file__).resolve().parents[2].joinpath("Makefile").read_text(encoding="utf-8").split("\ndone:", 1)[1]
+    assert "hm_arbiter.py\"; [ ! -f \"$$h\" ] || python3 \"$$h\" gate-held" in done.splitlines()[1], "the gate's first step"

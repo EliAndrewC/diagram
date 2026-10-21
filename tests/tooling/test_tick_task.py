@@ -359,3 +359,24 @@ def test_the_long_runs_run_only_where_their_record_does_not_cover(tmp_path: path
     assert lb.long_runs(tmp_path) == 1 and made == ["done"], "green, but the stamp still refuses: stop"
     made.clear(), state.update(stamp=1, sticky=False, engine=False, says="  hooks: the last green gate ran against DIFFERENT code (make hooks-test again)\n")
     assert lb.long_runs(tmp_path) == 1 and made == ["hooks-test"], "the stamp names hooks-test: that gate runs, not make done"
+
+
+def test_an_owed_red_gate_is_a_cheap_refusal_of_an_engine_landing(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 405 T44 (D18): a second red gate in a row holds the landing's gate until the round arbiter rules - named with the
+    other refusals before anything runs, and only on a landing that runs a gate."""
+    lb, d = _land(tmp_path, monkeypatch)
+    held = "make done: refused - a tripwire is owed its ruling first (red-gate@x; feature 375 FR-010/FR-011)"
+    engine = {"names": "l7r/diagram/hamletgen/ways/web.py\n"}
+
+    def run(root: pathlib.Path, cmd: list[str], env: dict | None = None, quiet: bool = True) -> tuple[int, str]:
+        if "gate-held" in cmd:
+            return 1, held + "\n"
+        return (0, engine["names"]) if "--name-only" in cmd else (0, "")
+
+    monkeypatch.setattr(lb, "run", run)
+    assert lb.cheap_refusals(tmp_path, d, ["T02"], "x") == ["a tripwire is owed its ruling first (red-gate@x; feature 375 FR-010/FR-011)"]
+    monkeypatch.setenv("ARBITER_OK", "the arbiter ruled out of band")
+    assert lb.cheap_refusals(tmp_path, d, ["T02"], "x") == [], "the escape"
+    monkeypatch.delenv("ARBITER_OK")
+    engine["names"] = "scripts/land.py\n"
+    assert lb.cheap_refusals(tmp_path, d, ["T02"], "x") == [], "a tooling landing runs no gate: not held"

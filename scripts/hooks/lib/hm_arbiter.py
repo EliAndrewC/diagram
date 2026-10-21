@@ -674,6 +674,14 @@ def main(argv: list[str]) -> int:
                 print(owed)
         print(f"arbiter-ruled: the batch's {len(rows)} triggers recorded (binding; each in arbiter.jsonl and for the GM's review)")
         return 0
+    if argv[:1] == ["gate-held"] and len(argv) == 1:  # the `done` recipe's first step and `make land` (feature 405 T44, D18)
+        # THE GATE ASKS, NOT ONLY THE HOOK: the hook sees a typed `make done`, but T11's 05:09 `make land` ran its gate as a
+        # subprocess past `red-gate@2026-10-21T05:02:38Z`, owed and never ruled. GUARD_EDIT_OK: feature 405 T44 - nothing loosened
+        why = refusal(blocking(Path(".").resolve(), gate=True))
+        if why:
+            print(f"make done: refused - {why}", file=sys.stderr)
+            return 1
+        return 0
     if argv[:1] == ["spec-ruled"] and len(argv) == 2:  # review-gate.sh: does a ruling stand for this spec's verdict?
         return 0 if spec_ruled(Path(argv[1])) else 1
     if argv[:1] == ["unit-ruled"] and len(argv) == 3:  # review-gate.sh: does a ruling stand for this review unit's verdict?

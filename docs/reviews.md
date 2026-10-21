@@ -59,7 +59,9 @@ and the round arbiter has ruled on its step-back bundle (a loop, packing against
 misfiring guard, something for the GM - `.claude/agents/round-arbiter.md`, "An hour trigger"), and every review unit owed at
 that moment has been dispatched (`make verify` writes one prompt per unit). No escape. A review is never asked at a gate's
 start or held at a turn's end: since feature 383 it comes due at the checkpoint or at the landing (`review-gate.sh`), the
-one place the delta against main is the thing about to land.
+one place the delta against main is the thing about to land. **Suspended, not removed** (feature 405 T43, the GM 2026-10-21:
+*"let's suspend but not remove the hourly step-back"*): while `dev/step-back.json` reads `off` the hour comes due for nothing
+and its units come due at the landing; `make step-back-on REASON=` resumes it. The tripwire rulings are unaffected.
 
 **The ledger measures it.** Every pass is a row of the ledger's measured table - the check, each finding's class, whether the
 author had missed it, and the run's cost from `make review-cost AGENT=<id>`; `make review-census` totals them per check, so a

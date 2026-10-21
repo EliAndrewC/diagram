@@ -51,6 +51,7 @@ STATE = python3 -m l7r.diagram.ci state
 # A run too fast to have worked is not stamped green (check-run-plausible.py): make runs $(MAKE)
 # sub-invocations even under -n, so a dry run once wrote a green record the push honored.
 done:            ## [tests] tier 3, the whole gate: lint, the static checks, the reference map, every test and the 100% floors; run once at the end, backgrounded   FULL=1 INCREMENTAL=0
+	$(if $(ARBITER_OK),$(LOGESCAPE) ARBITER_OK "$(ARBITER_OK)",@h="$$(git rev-parse --show-toplevel)/scripts/hooks/lib/hm_arbiter.py"; [ ! -f "$$h" ] || python3 "$$h" gate-held || exit 1)
 	@l="$$(git rev-parse --show-toplevel)/scripts/gates/gate_lock.py"; [ ! -f "$$l" ] || python3 "$$l" acquire "$$(git rev-parse --absolute-git-dir)" "$$PPID"
 	$(if $(PREFLIGHT_OK),$(LOGESCAPE) PREFLIGHT_OK "$(PREFLIGHT_OK)",@:)
 	@$(if $(PREFLIGHT_OK),:,p="$$(git rev-parse --show-toplevel)/scripts/gates/preflight.py"; [ ! -f "$$p" ] || python3 "$$p" --root "$$(git rev-parse --show-toplevel)" --workers "$(XDIST_WORKERS)" || { touch "$$(git rev-parse --absolute-git-dir)/gate-preflight-red"; printf '\n\033[1mGATE FAILED: preflight\033[0m (fix it and re-run; nothing expensive has run)\n'; exit 1; })
@@ -604,6 +605,10 @@ arbiter-fix-declined:  ## [project] the round arbiter's tooling fix OVERHAULS a 
 	@if [ -z "$(ID)" ] || [ -z "$(REASON)" ]; then printf 'make arbiter-fix-declined: ID= and REASON= are required\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py fix declined "$(ID)" "$(REASON)"
 
+step-back-off:  ## [project] suspend the hourly step-back, not remove it: the hour comes due for nothing until step-back-on; the tripwire rulings stay (feature 405 T43)   REASON="..."
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/reviews/checkpoint.py switch off --why "$(REASON)" && git add dev/step-back.json && git commit -q -m "chore: the hourly step-back suspended - $(REASON)" -- dev/step-back.json && echo "committed dev/step-back.json"
+step-back-on:   ## [project] resume the hourly step-back (feature 405 T43)   REASON="..."
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/reviews/checkpoint.py switch on --why "$(REASON)" && git add dev/step-back.json && git commit -q -m "chore: the hourly step-back resumed - $(REASON)" -- dev/step-back.json && echo "committed dev/step-back.json"
 land: export LAND_NOTE = $(NOTE)
 land:           ## [project] land one task or several and tick them: every cheap refusal first and together, then make done and make cohort-landing where needed, the push, the ticks (feature 405 T33)   F=405 T="T12 [T13]" NOTE="what was verified"
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make land: F=<feature> and T="<task ids>" are required\n' >&2; exit 2; fi
