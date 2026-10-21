@@ -114,6 +114,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T71 Two claims the batch-3 round found missing: `_web_cut_lines`' 100 ft reach (0246 gives it for back lanes) reused for the side-lane form, where the page is silent; and `run_lanes_on_to_the_bund`'s 3 ft tread for a lane with no width (0081's footpath) (impl-drift outside the change, batch 3's round) [lands-open]
       research: rendering
+- [ ] T73 Batch 4's round notes, outside the change: `_sweep_dangling_ends`' "a house served" counts 100 ft (`_SERVE_FT`) where 0246 §6 gives a farmhouse's reach as 60 ft (its 100 ft is back-lane coverage) - a DEVIATION to record or a reach to bring to 60; its grove bands built only from `groves` with a `w` - whether a dooryard copse is among them (0246 §78); the connector exempted at both ends where only its far end runs off the map; `_walk_in`'s research line crediting 0246 with the 4 ft step; the grove fallback's route held about 13.5 ft off the trees, not 12.5 (impl-drift, batch 4's rounds) [lands-open]
+      research: rendering
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
 - [ ] T02 (385 T36) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
