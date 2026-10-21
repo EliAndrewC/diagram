@@ -209,3 +209,23 @@
 
 **D14 - a changed function, and the baseline's word on the rest.** `preflight.changed_lines` returns, for each changed engine file, the changed lines plus every line of each function or method enclosing one (by `ast` spans). In `coverage_step`, an on-path gap whose line maps (`difflib`, equal blocks) to a line of the baseline's copy of the file is refused when the baseline's `coverage.db` holds no context for that line from a test outside the quick run (a test id under `tests/gate`, `tests/full`, `tests/tier_*`, `tests/tooling`, a test the quick run did not run, or a fixture context); with no baseline, today's rule.
 
+<!-- plan-archive: archived 2026-10-21 -->
+## T42 - a served map's coverage is replayed only onto the lines it measured (found landing T11)
+
+### T42 Approach (checklist part A)
+
+1. **The goal, in the world.** The gate's 100% floor reads the lines each pool map actually ran, so a change in a function a map never runs neither fails the floor on that map's lines nor costs a re-roll of maps the change did not reach in any other way.
+2. **The constraints.** The gen cache (features 026, 149, 167): a map is served while no function it executed changed, and its stored coverage is replayed into the gate; feature 149: coverage is a set of LINE NUMBERS, so a replay after the source moved marks the wrong lines; the roll census (one roll of a spec per gate, feature 213), which refuses `GATE_NO_CACHE=1`'s re-rolls.
+3. **Where each comes from.** O (features 026, 149, 167, 213).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (T11's gate log): Kashikawa and Mizuguchi were served from the gen cache, T11's two-line comment above `stage_web`'s row-village branch shifted it, and the floor named `web.py` 888-889 unrun; with every map rolled (`GATE_NO_CACHE=1`) the floor was 100% and the roll census refused the run (Inashiro rolled 20 times).
+5. **The order.** `store` writes, beside the coverage it stores, the sha256 of each file that coverage measures; `gate_obtain` serves a hit only when every one is unchanged (an entry without the record regenerates once); tests; the gate and the landing cohort with T11.
+6. **The exits.** (c) - regenerate on a moved file; remapping the stored lines through a diff (`difflib`, as the preflight's T40 does) was weighed and deferred: sound for the lines a map ran (they lie in functions whose source did not change), but arcs and contexts make it a larger change than the defect.
+7. **The search smell.** None.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: an entry whose measured file changed since its coverage was recorded is a miss, not a replay (a test red at HEAD); T11's gate green on the floor without `GATE_NO_CACHE`.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T42 Decisions
+
+**D17 - a hit only on the bytes it measured.** `gencache.store`, when it stores `coverage_data`, also writes `coverage.files.json` - each measured file's sha256 - and removes it with the coverage; `gate_obtain` adds `_coverage_files_unchanged(gen)` to its hit test: every recorded file still hashes the same (a missing record is doubt, and doubt regenerates).

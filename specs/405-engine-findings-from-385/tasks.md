@@ -38,8 +38,9 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [x] T41 The gate runs beside the claims round: its tree check and the gate-write guard pass a docstring-only engine edit and the claims round's records (landing-analysis-2.md, E)
       research: rendering
       verify: DONE. landed in batch T36+T37+T38+T39+T40+T41: tests/tooling 2085 green, hooks-test green (gate-write suite 22); each new test red without its change; plan review CLEAR (round 2, D10-D15)
-- [ ] T42 The gen cache replays a served map's coverage by LINE NUMBER after an edit elsewhere in a file it measured (a function the map never runs) shifted its lines: T11's gate failed web.py 888-889 (the row-village branch, lines Kashikawa and Mizuguchi reach) though no line it reached changed. Record each measured file's bytes with the stored coverage and regenerate a map whose measured files changed; GATE_NO_CACHE=1 no longer recovers (the roll census refuses its re-rolls) (found landing 405 T11, 2026-10-21)
+- [x] T42 The gen cache replays a served map's coverage by LINE NUMBER after an edit elsewhere in a file it measured (a function the map never runs) shifted its lines: T11's gate failed web.py 888-889 (the row-village branch, lines Kashikawa and Mizuguchi reach) though no line it reached changed. Record each measured file's bytes with the stored coverage and regenerate a map whose measured files changed; GATE_NO_CACHE=1 no longer recovers (the roll census refuses its re-rolls) (found landing 405 T11, 2026-10-21)
       research: rendering
+      verify: DONE. landed in batch T11+T42: T11: the invariant test over 200 rows, claims IN-STEP in one round; T42: a measured file's change is a miss (test red at HEAD); gate and landing cohort green
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
 - [ ] T02 (385 T36) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
@@ -60,8 +61,9 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T10 (385 T120) The track out's last resort never crosses a drawn channel (connector_dry_exit, UNCLAIMED, T102's round): claim it, or let it cross a ditch on a plank as 0084 gives (found working T102, 2026-10-19) [lands-open]
       research: rendering
-- [ ] T11 (385 T124) web._web_cut_lines' _extent falls back to every house in the cluster when no house stands within WEB_REACH_FT of a cut, so such a lane runs the whole cluster serving none, against 0246 (along the houses it serves; a stretch joining nothing is not drawn) (impl-drift, T106's round) [lands-open]
+- [x] T11 (385 T124) web._web_cut_lines' _extent falls back to every house in the cluster when no house stands within WEB_REACH_FT of a cut, so such a lane runs the whole cluster serving none, against 0246 (along the houses it serves; a stretch joining nothing is not drawn) (impl-drift, T106's round) [lands-open]
       research: rendering
+      verify: DONE. landed in batch T11+T42: T11: the invariant test over 200 rows, claims IN-STEP in one round; T42: a measured file's change is a miss (test red at HEAD); gate and landing cohort green
 - [x] T12 (385 T126) geom._trim_to_service pops a whole last segment before its 4 ft walk, pulling an end back past the last house it serves (0246 §6) - DRIFTED (impl-drift, T106's round) [lands-open]
       research: rendering
       verify: DONE. landed on main 12:35Z: _trim_to_service walks every end in (D1); test red at HEAD, ways 574 green, cohort 16/16, make done green 263 s, landing cohort 54/54; both claims IN-STEP
