@@ -281,6 +281,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [ ] T102 The decide guard (plan_gate.decision_refusal) reads a section's last plan verdict and not the round arbiter's accept that settled it: T100's plan round 3, ruled accept, still refused its claims check (escaped with DECIDE_OK, logged); an accepted round clears the section as the review does (found landing batch 10, 2026-10-21) [lands-open]
       research: rendering
       research: rendering
+- [ ] T103 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: l7r/diagram/hamletgen/ways/joints.py::tee#a lane whose vertex before the joint stands within `_TOUCH_GAP` (4 ft) of its foot on the other lane stops at that vertex, with no last leg to the foot (the nub cut; the hook rule at §27 is the nearest the page comes) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
