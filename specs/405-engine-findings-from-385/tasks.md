@@ -110,6 +110,10 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [x] T45 The reference-settlement message (`_reference` in the Makefile) still offers `GATE_NO_CACHE=1 rolls it`, but the roll census refuses that run's re-rolls (T11's 05:02 gate): let the census accept a declared no-cache run, or stop offering it (the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z) [lands-open]
       research: rendering
       verify: DONE. landed in batch T29+T28+T45: found.py closes a row filed (405 or 385 only) or settled only where it no longer holds (test); all 76 rows of 385 and 405 closed: 31 to existing tasks, 11 measured no longer holding, 34 filed as T65-T70; the reference message offers no GATE_NO_CACHE; plan review CLEAR round 2 (D36-D38)
+- [ ] T72 `make land` sized the landing cohort's workers from the host's MemAvailable (9.5 GB of 15), not the containers' shared 10 GB cgroup limit: the batch-3 landing's 12 workers beside the gate took the cap to 9.0 GB (the laptop's memwatch warning, 13:37). Read the cgroup v2 limit, less what the cgroup holds, its reclaimable cache given back (found landing batch 3, 2026-10-21) [lands-open]
+      research: rendering
+- [ ] T71 Two claims the batch-3 round found missing: `_web_cut_lines`' 100 ft reach (0246 gives it for back lanes) reused for the side-lane form, where the page is silent; and `run_lanes_on_to_the_bund`'s 3 ft tread for a lane with no width (0081's footpath) (impl-drift outside the change, batch 3's round) [lands-open]
+      research: rendering
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
 - [ ] T02 (385 T36) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]

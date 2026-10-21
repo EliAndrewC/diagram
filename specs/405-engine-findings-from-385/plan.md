@@ -425,3 +425,23 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 ### T69 Decisions
 
 **D41 - said where it is done.** `_web_cut_lines`' claim "a web lane's span" adds that its arcs and stands are every house but one reached across a yard (`stage_web` leaves those out).
+
+## T72 - the cohort's workers sized to the container's memory (found landing batch 3)
+
+### T72 Approach (checklist part A)
+
+1. **The goal, in the world.** The landing cohort beside the gate never takes the containers to their memory cap.
+2. **The constraints.** The containers' shared 10 GB cgroup limit (the host has 15 GB); the gate's peak (3.1 GB on six workers, measured 2026-10-04); a roll's allowance (the Makefile's 0.5 GB); 405 T48's sizing.
+3. **Where each comes from.** O (feature 405, the test RAM profile of 2026-10-04) and the host.
+4. **Do they describe the world here?** Yes - measured 2026-10-21: the batch-3 landing sized 12 workers from MemAvailable 9,500 MB; the memwatch hook reported the containers at 9.0 of 10.0 GB; `/sys/fs/cgroup/memory.max` reads 10 GiB.
+5. **The order.** `land.memory_free_mb` (the host's MemAvailable, bounded by the cgroup's limit less what it holds plus its inactive file cache); `cohort_jobs` reads it; a test.
+6. **The exits.** (c) - the sizing reads the limit that kills.
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** A 10 GiB limit holding 8 with 1 of cache counts 3 GiB free and sizes 2 workers (test); with no limit, the host's figure.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T72 Decisions
+
+**D42 - the limit that kills.** `memory_free_mb(cgroup)` = min(MemAvailable, memory.max - memory.current + inactive_file) where `memory.max` is a number; `cohort_jobs` sizes from it; the landing prints the figure.
