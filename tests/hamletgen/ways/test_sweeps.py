@@ -560,6 +560,12 @@ def test_an_end_that_reaches_nothing_is_carried_on_to_the_dooryard_of_the_house_
     for q in (pts[0], pts[-1]):
         assert not point_in_poly(q[0], q[1], wall), "the end stops short of the wall"
         assert edge_dist(q[0], q[1], wall) <= STEADING_ARRIVAL_FT, f"an end stands {edge_dist(q[0], q[1], wall):.1f} ft off the house, not at its dooryard"
+    # ...and only the end that reaches nothing is carried: a lane off the connector whose walk-in empties it (the connector its
+    # own head stands on does not serve its tail, D9) is restored for the house 80 ft off it, its head left on the connector
+    u = _StubSettlement(lanes=[[(0.0, 0.0), (400.0, 0.0)], [(100.0, 2.0), (100.0, 400.0)]], houses=[(180.0, 330.0)])
+    assert _sw._sweep_dangling_ends(u) == 1
+    kept = u.M["lanes"][1]["pts"]
+    assert kept[:2] == [[100.0, 2.0], [100.0, 400.0]] and len(kept) == 3, "the head stays; the tail is carried on to the dooryard"
     assert _sw.carry_to_dooryard((0.0, 0.0), [(500.0, 500.0)], [wall], 120.0) is None, "no house within the reach: nothing to carry to"
     assert _sw.carry_to_dooryard((500.0, 590.0), [(500.0, 500.0)], [], 120.0) is None, "a house with no built ground to arrive at"
     band = [(480.0, 540.0), (520.0, 540.0), (520.0, 560.0), (480.0, 560.0)]
