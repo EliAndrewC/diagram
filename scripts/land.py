@@ -290,7 +290,13 @@ def main(argv: list[str]) -> int:
     # left its gate and the cohort beside it running as orphans (batch 6); raised as SystemExit, the cleanup runs
     import signal  # noqa: PLC0415
 
-    signal.signal(signal.SIGTERM, lambda *_a: sys.exit(143))
+    def _stopped(*_a: object) -> None:
+        # ...the gate too: `make done` runs in this process's group (the cohort in its own session, stopped by the `finally`)
+        signal.signal(signal.SIGTERM, signal.SIG_IGN)
+        os.killpg(os.getpgrp(), signal.SIGTERM)
+        sys.exit(143)
+
+    signal.signal(signal.SIGTERM, _stopped)
     note = os.environ.get("LAND_NOTE", "").strip()
     if not note:
         print("land: refused - NOTE= is empty; say what was verified, as make tick asks", file=sys.stderr)

@@ -29955,12 +29955,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#lane end reaches something": {
-  "body": "150d813526ad3ba8",
+  "body": "c9f59c28e4de1461",
   "claim": "lane end reaches something - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: pulled back until it serves a way, the field or a house, 4 ft at a time - never one reached across a neighbor's land, owed none (`geom.lane_houses`)",
-  "code": "d5f7b0826f10e93e",
-  "core": "adc48b77040c5a6b",
+  "code": "cef1a3d8368cac94",
+  "core": "17733c973421159c",
   "date": "2026-10-21",
-  "note": "walk-in to a way, the bund or an owed house; a house reached across a neighbor's land is owed no way",
+  "note": "the pull-back runs until the end serves a way, the field or an owed house; a household reached across a neighbor's land gets no lane of its own; the page records the rule as a GUESS",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
@@ -29969,8 +29969,15 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#lane end walked on toward the nearest owed house while it still reaches (`_near`), never walked on when it is within 60 ft (`_REACH_FT`) of another lane": {
+  "code": "17733c973421159c",
+  "core": "17733c973421159c",
+  "date": "2026-10-21",
+  "note": "lane end walked on toward the nearest owed house while it still reaches (`_near`), never walked on when it is within 60 ft (`_REACH_FT`) of another lane",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#not the way it left": {
   "body": "a8a5cedcc11a8306",
@@ -30120,20 +30127,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_walk_in#held at a junction": {
-  "body": "e4ebb243e7802aa1",
+  "body": "4d15e866c60a1f1f",
   "claim": "held at a junction - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the lanes are one network, joined where their treads meet - a pull-back stops where another lane's end rests on it",
-  "code": "0cb9d49b28f1f717",
-  "core": "a55a49d5709df2b4",
-  "date": "2026-10-20",
-  "note": "the pull-back stops at the point where another lane's end rests on the segment (`held_at`); one network joined where treads meet",
+  "code": "dfa67166676c3e19",
+  "core": "27b3c0e12ccf62f8",
+  "date": "2026-10-21",
+  "note": "both loops stop where another lane's end rests on the segment, so the lanes stay \"one network, joined where their treads meet\"",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_walk_in#held nearest the house it serves": {
@@ -30153,12 +30160,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_walk_in#pulled back to the last point that serves": {
-  "body": "e4ebb243e7802aa1",
+  "body": "4d15e866c60a1f1f",
   "claim": "pulled back to the last point that serves - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane end that reaches nothing is pulled back to the last house it serves, 4 ft at a time",
-  "code": "c387f8ca02e0cb60",
-  "core": "a55a49d5709df2b4",
+  "code": "0643c58d9c386920",
+  "core": "27b3c0e12ccf62f8",
   "date": "2026-10-21",
-  "note": "§6 records the pull-back as a GUESS; the 4 ft step is granularity only",
+  "note": "the first loop pulls the end back 4 ft at a time until it reaches; the new second loop carries it on toward the house, which matches \"pulled back to the last house it serves\"; the page records this rule as a GUESS",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
@@ -30166,7 +30173,6 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::brook_crossings#lane sweep plumbing": {

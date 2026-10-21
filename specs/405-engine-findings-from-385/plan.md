@@ -471,6 +471,20 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
+### T74 Approach (re-answered 2026-10-21T14:50Z)
+
+1. **The goal, in the world.** As before: a swept lane end stops beside the house it serves.
+2. **The constraints.** As before, and the dooryard carry's reach (2 x `_REACH_FT`, 120 ft), which bounds the houses an end may walk toward.
+3. **Where each comes from.** R (0246) and O (features 269, 405 T14).
+4. **Do they describe the world here?** Yes - batch 6's round, 2026-10-21: `_near` measured to the nearest owed house at any distance, so an end reaching only the field could be walked toward a house it does not serve; and the walk-on itself was unclaimed.
+5. **The order.** `_near` bounded to houses within the carry's reach; the walk-on claimed; seeds 1-48 again.
+6. **The exits.** (e) conform.
+7. **The search smell.** None.
+8. **The budget.** With the batch.
+9. **Done, measured.** Seeds 1-48 and the pinned rows 54/54 on the bounded walk (2026-10-21); the claims round reads the walk-on IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
 ### T74 Decisions
 
 **D52 - on to the house.** `_walk_in(pts, reaches, tails, near=None)` walks on, 4 ft at a time, while `reaches` holds and `near` falls; `_sweep_dangling_ends` passes `_near` (the nearest owed house within the dooryard carry's 120 ft, infinite within `_REACH_FT` of another way - an end reaching only the field is never walked toward a house it does not serve, batch 6's round); the claims "held nearest the house it serves" (GUESS 0246) and "walked on to the house it serves".
@@ -521,10 +535,10 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 6. **The exits.** (c).
 7. **The search smell.** None.
 8. **The budget.** 10 min.
-9. **Done, measured.** The handler is installed and raises SystemExit(143) (test).
+9. **Done, measured.** The handler is installed, stops the landing's own process group (the gate) and raises SystemExit(143) (test).
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
 ### T79 Decisions
 
-**D56 - SIGTERM runs the cleanup.** `land.main` sets `signal.signal(SIGTERM, lambda *_: sys.exit(143))` first, so `long_runs`' `finally` stops the cohort's process group.
+**D56 - SIGTERM runs the cleanup.** `land.main` installs a SIGTERM handler first: it ignores SIGTERM, sends it to its own process group (the gate, `make done`, runs there) and raises SystemExit(143), so `long_runs`' `finally` stops the cohort's own process group too.

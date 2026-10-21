@@ -968,7 +968,7 @@
    "declared": "spec-fidelity"
   },
   "### T74 Decisions": {
-   "sha256": "9a4204167d57bd7eda1af114051bdaf72fc25871052857f0284138e1d152c9e9",
+   "sha256": "cd404bb5485f002fb32593f1875bbc3fe0c43939ff3cdc3026928bffada4329b",
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
@@ -999,6 +999,18 @@
   },
   "## T74, T76, T77 - the sweeps' end at the house, the carried claims, carries filed in the wait (batch 5's rounds)": {
    "sha256": "832ff56a239bc8cc8497518f777c10f2b05fadbc9f0d5dc78a17e8f5c2993f95",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T79 Approach (checklist part A)": {
+   "sha256": "6a6bde5d8f31610a6c7ba387a04194c0fdb39f39f99f197b2b54ef532893dfd0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T79 Decisions": {
+   "sha256": "120f4b9fd2a366ad9fb2be4d898a722113ecda6636f74228232f6e3160e8f3e7",
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
@@ -2282,6 +2294,35 @@
      "summary": "T75 (D53, _SERVE_FT = WEB_REACH_FT at 100 ft against 0246 section 6's 60 ft) removed from this batch; T75 stays an open task filed to 0246 section 6's test, waiting on T78 (the page does not state its serving test).",
      "class": "within",
      "why": "D53 was the decision whose earlier ruling was NOT LEGITIMATE (keeping the code's 100 ft for consistency is no reason to set section 6 aside). Removing it from the batch withdraws that narrowing rather than introducing one; the task is deferred behind T78, not dropped, and no claim it covers is relabeled or waived in these blocks. Sequencing an open task is not a narrowing of the request."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "### T74 Decisions",
+    "### T79 Approach (checklist part A)",
+    "### T79 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D52",
+     "summary": "_walk_in walks a dangling end on toward the nearest owed house only within the dooryard carry's 120 ft (infinite within _REACH_FT of another way); an end reaching only the field is never walked toward a house it does not serve; claims 'held nearest the house it serves' (GUESS 0246) and 'walked on to the house it serves'.",
+     "class": "within",
+     "why": "Engine mechanics inside a moved 385 task worked under FR-001; nothing in the GM's request or the spec settles sweep mechanics. The 120 ft cap keeps the walk to the house the end serves, which is the claim's own term, so it narrows nothing the GM asked for."
+    },
+    {
+     "id": "T79-A5",
+     "summary": "Order: land.main installs a SIGTERM handler raising SystemExit(143), with a test.",
+     "class": "within",
+     "why": "Found landing-tooling work filed under FR-002 in a feature whose amendments 1-6 are landing/process work; it adds cleanup on stop and excludes nothing asked."
+    },
+    {
+     "id": "D56",
+     "summary": "land.main sets signal.signal(SIGTERM, lambda *_: sys.exit(143)) first, so long_runs' finally stops the cohort's process group.",
+     "class": "within",
+     "why": "The mechanism for T79's goal; it removes no requested behavior and carves out no case."
     }
    ]
   }

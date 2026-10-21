@@ -555,9 +555,11 @@ def test_a_stopped_landing_runs_its_cleanup(tmp_path: pathlib.Path, monkeypatch)
 
     lb, _d = _land(tmp_path, monkeypatch)
     got: dict = {}
-    monkeypatch.setattr(signal, "signal", lambda sig, fn: got.update({sig: fn}))
+    groups: list[int] = []
+    monkeypatch.setattr(signal, "signal", lambda sig, fn: got.setdefault(sig, fn))
+    monkeypatch.setattr(lb.os, "killpg", lambda pg, sig: groups.append(pg))
     monkeypatch.setenv("LAND_NOTE", "")
     assert lb.main(["188", "T02"]) == 2
     with pytest.raises(SystemExit) as stop:
         got[signal.SIGTERM]()
-    assert stop.value.code == 143
+    assert stop.value.code == 143 and groups == [lb.os.getpgrp()], "the landing's group - its gate - stopped too"
