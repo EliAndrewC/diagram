@@ -157,6 +157,10 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T87 `plan_gate.archivable` reads a block by its exact digest while the decide guard forgives a typo-scale change (T81), so T81's own ticked sections, a blank line from their reviewed text, stayed in plan.md after batch 7's landing; one reading for both (found landing batch 7, 2026-10-21) [lands-open]
       research: rendering
+- [ ] T88 0246's drawing page sizes a lane's room on "a 4 ft tread between" the fences (§32) while its gap paragraph (§45) and the code's unwidthed default read a 3 ft footpath: say on the page which the drawn footpath is, 3 ft or 4 ft, and where the other figure applies (impl-drift outside the change, batch 8's round, 2026-10-21) [lands-open]
+      research: rendering
+- [ ] T89 `touch._touch_junctions` leaves an end within 2 ft of a way as it is (`if d <= 2.0 ... continue`) with no claim of its own, a tolerance apart from `_TOUCH_GAP` (4 ft): claim it, or read the one touch (impl-drift outside the change, batch 8's round, 2026-10-21) [lands-open]
+      research: rendering
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
 - [ ] T02 (385 T36) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
