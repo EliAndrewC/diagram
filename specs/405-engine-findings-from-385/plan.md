@@ -638,3 +638,34 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 
 **D67 - the archive reads as the guard does.** `archivable`'s per-block exact-digest test replaced by `_section_clear` with the plan's history.
 
+### T83 Approach (re-answered 2026-10-21T16:24Z)
+
+1. **The goal, in the world.** The sweep and the door path agree on where a grove farm's wood stands, and that wood is the farm's grove and its share of the dooryard copse.
+2. **The constraints.** 0036: a farm's grove and its share of the dooryard copse are one wood, its clumps kept beside its house and free of lanes; 0033: a near-row farm's path walks round its grove; the band is recorded with its rotation.
+3. **Where each comes from.** R (0036, 0033) and O (the manifest's band and copse clumps).
+4. **Do they describe the world here?** Yes - batch 8's claims round: the sweep read unrotated boxes and left the copse out as common ground, which 0036 does not say.
+5. **The order.** `farm_bands(M)`: each band rotated, and each farm's share of the copse - every copse clump, each seated beside its own house - as an octagon of the clump radius; the claims cite 0036; a test.
+6. **The exits.** (e) conform.
+7. **The search smell.** None.
+8. **The budget.** With batch 8.
+9. **Done, measured.** A rotated band and a copse clump read as the wood (test); seeds 1-48 and the pinned rows 54/54 (measured 2026-10-21).
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T90 Approach (checklist part A)
+
+1. **The goal, in the world.** A landing stopped by hand stops its gate and cohort.
+2. **The constraints.** T79's SIGTERM handler, which runs only in the python `land.py`.
+3. **Where each comes from.** O (feature 405).
+4. **Do they describe the world here?** Yes - measured 2026-10-21: stopping batch 8's landing, the SIGTERM went to the recipe's `sh -c` (the first process match), the handler never ran and the gate ran on.
+5. **The order.** `land.py --stop` (`make land-stop`) SIGTERMs this tree's python running `scripts/land.py`, never its own; a test on a fake `/proc`.
+6. **The exits.** (c) - a command, not a habit.
+7. **The search smell.** None.
+8. **The budget.** With batch 8.
+9. **Done, measured.** Only the python in this tree is found (test); `make land-stop` with none running says so.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T90 Decisions
+
+**D68 - stop the landing by its python.** `landing_pids(root)` reads `/proc`: a process whose argv[0] is a python, whose first argument ends `scripts/land.py`, whose cwd is the tree, and which is not the caller; `make land-stop` SIGTERMs each.

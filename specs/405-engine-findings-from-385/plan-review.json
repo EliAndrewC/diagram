@@ -1130,13 +1130,13 @@
    "declared": "spec-fidelity"
   },
   "### T83 Approach (checklist part A)": {
-   "sha256": "e072eac947d0512468ed212ffc2ec8dc15b01559944c9e812069d44d31f9cce4",
+   "sha256": "24a616a6b597b5b1d9b4e4ab9f19d6b0ab97c4e8c5fbbe3e585d86db3d46a6ef",
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T83 Decisions": {
-   "sha256": "e2a4472f2a9170c688f407176d0a8f13162184b49af071334932eb630a3baa86",
+   "sha256": "63570ac1b509189d5541bb3ded2b77ba0b3faf48f4c4f02e4b62916142077b2f",
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
@@ -2756,6 +2756,46 @@
      "summary": "archivable uses _section_clear with the plan's history instead of an exact per-block digest, so the archive reads a block as the decide guard does; test red before.",
      "class": "within",
      "why": "Tooling consistency fix in a feature whose amendments directed process/tooling work and completion of all open tasks; it widens nothing beyond the guard's existing T81 tolerance and excepts no case."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "### T83 Approach (checklist part A)",
+    "### T83 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D64-rotated",
+     "summary": "The sweep's grove bands built as rot_rect(x, y, w, h, rot), so the sweep and the door path agree on where the wood stands (unchanged from the CLEAR text).",
+     "class": "within",
+     "why": "It is the task itself, worked under FR-001 as part of taking the feature to completion (Amendment 7). Nothing the request or spec asks for is dropped."
+    },
+    {
+     "id": "D64-ungrown",
+     "summary": "The sweep's bands stay ungrown, because the door path's grow is its own tread's clearance (unchanged from the CLEAR text).",
+     "class": "within",
+     "why": "It decides how to build the band without leaving any requested case out. The sweep still refuses every carry across the wood's true footprint."
+    },
+    {
+     "id": "D64-copse",
+     "summary": "The sweep's wood now also counts each clump of the dooryard copse (village_groves role copse) as an octagon of its radius, because 0036 counts a farm's grove and its share of the copse as one wood. Approach step 2/5 says the same, and the test gains a copse clump.",
+     "class": "within",
+     "why": "This widens what the sweep refuses and narrows nothing that was asked. It follows the cited research (0036), which Amendment 7 says is generally what to do without asking the GM. It changes the same _bands code that T83 already changes, so FR-002 (findings on code a task did not change become new tasks) is not engaged. The note that T73 left the copse out is the reason for the change, not a carve-out."
+    },
+    {
+     "id": "D64-cite",
+     "summary": "The 'grove band not crossed' claims cite 0036.",
+     "class": "within",
+     "why": "A citation that carries the research the task implements. It removes nothing."
+    },
+    {
+     "id": "T83-done",
+     "summary": "Done when the test shows a carry across a rotated band's true footprint is refused and one across the unrotated box's phantom corner is not, and seeds 1-48 pass; 60 min budget.",
+     "class": "within",
+     "why": "Same as the CLEAR text. It verifies the requested behavior and does not reduce it."
     }
    ]
   }

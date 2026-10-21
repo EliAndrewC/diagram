@@ -293,7 +293,38 @@ def long_runs(root: Path) -> int:
     return 0
 
 
+def landing_pids(root: Path, proc: Path = Path("/proc")) -> list[int]:
+    """This tree's running landings: the python processes running `scripts/land.py` whose working directory is `root` - never
+    the `sh -c` recipe shell or `make` above it, whose command lines name the script too (405 T90: a SIGTERM aimed at the first
+    process match hit the recipe shell, so the landing's cleanup never ran and its gate ran on)."""
+    out = []
+    for d in proc.iterdir() if proc.is_dir() else ():
+        if not d.name.isdigit() or int(d.name) == os.getpid():  # ...never `make land-stop`'s own python
+            continue
+        try:
+            args = (d / "cmdline").read_bytes().split(b"\0")
+            cwd = os.path.realpath(d / "cwd")
+        except OSError:
+            continue
+        if "python" in Path(args[0].decode(errors="replace")).name and any(a.endswith(b"scripts/land.py") for a in args[1:2]) and cwd == os.path.realpath(root):
+            out.append(int(d.name))
+    return sorted(out)
+
+
+def stop(root: Path) -> int:
+    """`make land-stop`: SIGTERM this tree's landing, whose handler stops its gate and cohort and runs the cleanup (405 T79)."""
+    import signal  # noqa: PLC0415
+
+    pids = landing_pids(root)
+    for pid in pids:
+        os.kill(pid, signal.SIGTERM)
+    print(f"land-stop: {'stopped ' + ', '.join(map(str, pids)) if pids else 'no landing running in ' + str(root)}")
+    return 0
+
+
 def main(argv: list[str]) -> int:
+    if argv == ["--stop"]:
+        return stop(Path(_tick_task().repo_root()))
     if len(argv) != 2 or not (tasks := argv[1].split()):
         print('usage: land.py <feature> "<T1 [T2 ...]>"   (make land F=405 T=T12 NOTE="what was verified")', file=sys.stderr)
         return 2

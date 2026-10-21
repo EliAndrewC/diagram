@@ -161,6 +161,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T89 `touch._touch_junctions` leaves an end within 2 ft of a way as it is (`if d <= 2.0 ... continue`) with no claim of its own, a tolerance apart from `_TOUCH_GAP` (4 ft): claim it, or read the one touch (impl-drift outside the change, batch 8's round, 2026-10-21) [lands-open]
       research: rendering
+- [ ] T90 A SIGTERM aimed at the first process matching the landing hit the recipe's `sh -c`, not `land.py`, so the landing's cleanup (T79) never ran and its gate ran on: `make land-stop` finds this tree's landing by its python process (found stopping batch 8's landing, 2026-10-21) [lands-open]
+      research: rendering
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
 - [ ] T02 (385 T36) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]

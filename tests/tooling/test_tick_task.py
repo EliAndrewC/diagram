@@ -601,3 +601,26 @@ def test_a_stopped_landing_runs_its_cleanup(tmp_path: pathlib.Path, monkeypatch)
     with pytest.raises(SystemExit) as stop:
         got[signal.SIGTERM]()
     assert stop.value.code == 143 and groups == [lb.os.getpgrp()], "the landing's group - its gate - stopped too"
+
+
+def test_a_landing_is_found_by_its_python_process_not_the_shell_above_it(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """405 T90: the first process match was the recipe's `sh -c`, not the python, so the SIGTERM skipped the landing's cleanup
+    and its gate ran on. Only a python running `scripts/land.py` in this tree is a landing."""
+    lb, _d = _land(tmp_path, monkeypatch)
+    root, other, proc = tmp_path / "tree", tmp_path / "other", tmp_path / "proc"
+    root.mkdir()
+    other.mkdir()
+    for pid, args, cwd in (
+        ("11", [b"/bin/sh", b"-c", b"python3 /t/scripts/land.py 405 T1"], root),
+        ("12", [b"/usr/bin/python3", b"/t/scripts/land.py", b"405", b"T1"], root),
+        ("13", [b"/usr/bin/python3", b"/t/scripts/land.py", b"405", b"T1"], other),
+        ("14", [b"make", b"land"], root),
+        ("self", [b"x"], root),
+    ):
+        (proc / pid).mkdir(parents=True)
+        (proc / pid / "cmdline").write_bytes(b"\0".join(args) + b"\0")
+        (proc / pid / "cwd").symlink_to(cwd)
+    assert lb.landing_pids(root, proc) == [12]
+    monkeypatch.setattr(lb.os, "getpid", lambda: 12)
+    assert lb.landing_pids(root, proc) == [], "the stopping command's own python is no landing"
+    assert lb.landing_pids(root, tmp_path / "none") == []
