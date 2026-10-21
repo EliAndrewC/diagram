@@ -29416,23 +29416,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/street.py::trim_streets#a door on the street a joint": {
-  "body": "f2c4acf2bbadeac0",
-  "claim": "a door on the street a joint - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: pulled back to the last house it serves - a front door's nearest point on the street within `reach` (the caller's 1 ft: a door standing on the street) is a house it serves",
-  "code": "6fdb5ad0ecfa8e9c",
-  "core": "2e25d7ac8bde745b",
-  "date": "2026-10-21",
-  "note": "the claim says a door within `reach` (the caller's 1 ft) \"is a house it serves\", but the cited page records a different GUESS figure for how close counts as serving a house: \"within 60 ft of the house, or within 12 ft of the steading's built ground\". The code tests `math.dist(q, d) &lt;= reach`, which is 1 ft, not 60 or 12. Fix one of two ways: use the page's recorded 60/12 ft figures, or reword the claim so the 1 ft \"door standing on the street\" is a CONVENTION contact tolerance (like `_TOUCH_GAP`) and keep the GUESS for the pullback to the last house served alone",
-  "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
-  },
-  "research": "92410dbfeea7511e",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c90fc4f6fee86c66"
-  ],
-  "verdict": "DRIFTED"
- },
  "l7r/diagram/hamletgen/ways/street.py::trim_streets#a field path's end a joint": {
   "body": "f2c4acf2bbadeac0",
   "claim": "a field path's end a joint - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane runs on to a field path or another way - a field path is a lane, its end a joint",
@@ -29466,15 +29449,26 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/street.py::trim_streets#a joint's touch": {
-  "body": "f2c4acf2bbadeac0",
-  "claim": "a joint's touch - CONVENTION: an end within `touch` of the street stands on it - the caller's `_TOUCH_GAP` (4 ft), the ink's own touch; a front door's nearest point on the street within `reach` is a joint too",
-  "code": "944fed0675df7236",
+  "body": "8e6de22a859f904f",
+  "claim": "a joint's touch - CONVENTION: an end within `touch` of the street stands on it - the caller's `_TOUCH_GAP` (4 ft), the ink's own touch",
+  "code": "81bc7f4a2cf37a10",
   "core": "2e25d7ac8bde745b",
   "date": "2026-10-21",
-  "note": "the 4 ft `touch` is ink tolerance, but \"a front door's nearest point on the street within `reach` is a joint too\" decides where a street ends: the street runs on to serve a farm whose door is within `reach`. That is a placement rule, not a convention. Split the claim: keep `touch` as CONVENTION, and label the door joint GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html (\"pulled back to the last house it serves\", \"how close counts as serving a house\"), with the caller's `reach` checked against §31's 60 ft / 12 ft",
+  "note": "the 4 ft `touch` only decides whether another way's end stands on the street, where §28 says ways are \"joined at a T\"; it is a contact tolerance with nothing to read off the map, and it is a different decision from the 60 ft reach test in §31, which judges whether a lane's own end is dangling",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/street.py::trim_streets#a served farm's point a joint": {
+  "body": "8e6de22a859f904f",
+  "claim": "a served farm's point a joint - CONVENTION: a point of `doors` within `reach` of the street is a joint - the caller passes each served farm's point on its own street (`serve.street_anchors`, which carries 0246's serving test and its GUESS) at 1 ft, a contact tolerance like the touch",
+  "code": "a1c0ccb9727262c3",
+  "core": "2e25d7ac8bde745b",
+  "date": "2026-10-21",
+  "note": "the 1 ft `reach` is a contact tolerance on a point that `serve.street_anchors` has already placed on the street; the serving judgment (60 ft / 12 ft, a GUESS) belongs to that caller, as the claim says; with these joints the street ends at \"the last house it serves\"",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/street.py::trim_streets#the first street runs on": {
   "code": "aa4f6e7bffdf5f71",
