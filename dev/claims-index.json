@@ -20838,12 +20838,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::run_lanes_on_to_the_bund#lane end runs on to the bund": {
-  "body": "1c7500963f702c3d",
+  "body": "a70deae8c57cb1fc",
   "claim": "lane end runs on to the bund - how-our-maps-lay-a-clustered-settlements-lanes.drawing, bunds-between-the-paddies-aze.drawing: an end reaching nothing carried onto the field",
-  "code": "28c7f074fdb7635c",
-  "core": "93ad02fc31023339",
-  "date": "2026-10-19",
-  "note": "an end that reaches nothing is carried on to the ground's edge, and an end inside the ground is pulled back out",
+  "code": "ed7ffcdb1c3323e1",
+  "core": "863d872c60c266c7",
+  "date": "2026-10-21",
+  "note": "an unserved end is carried on to the paddy's bund, as \"runs on to something a reader can see ... a bund\" and \"the hamlet's nearest lane runs on to the bund\" say; aiming at the paddy rather than a dry plot fits \"joins the paddy's outer bund\"",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
@@ -20853,16 +20853,15 @@
    "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::run_lanes_on_to_the_bund#run-on reach": {
-  "body": "1c7500963f702c3d",
+  "body": "a70deae8c57cb1fc",
   "claim": "run-on reach - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: an end within `RUN_ON_REACH_FT` (60 ft) of the field, the reach the page gives to a house or a way, reused; no page gives one to the field",
-  "code": "62f103936c8c2914",
-  "core": "93ad02fc31023339",
+  "code": "962269e3c273902d",
+  "core": "863d872c60c266c7",
   "date": "2026-10-21",
-  "note": "60 ft reused from §6's way/house reach; §38 gives no cap for the field",
+  "note": "60 ft is the page's GUESS for reaching a house or a way, reused here; no cited page gives a reach to the field, and the claim says so",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
@@ -20870,7 +20869,6 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::run_lanes_on_to_the_bund#to the paddy": {
