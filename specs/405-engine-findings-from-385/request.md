@@ -43,3 +43,10 @@ The GM, after T11's numbers (`landing-analysis-3.md`):
 The GM, after T19's numbers (`landing-analysis-4.md`) and what `make done` and the landing cohort each run:
 
 > Add the "worth a look" thing to our task list, but not as a high priority.  Then make the make done and the make landing run in parallel.  Then do 1 more claims task and measure how long it takes.
+
+## Amendment 6 (2026-10-21) - the claims round beside the landing, one push, and T47
+
+The GM, after T13's numbers (`landing-analysis-5.md`: the claims round in series before `make land`, 1.5 min; the landing's two
+pushes, ~1 min):
+
+> Yeah, let's do both of those remaining time issues, and then we might as well do T47 while we're at it.

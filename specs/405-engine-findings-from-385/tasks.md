@@ -55,6 +55,10 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       verify: DONE. landed: tick_task + preflight suites green (32): cohort started before make done and waited, stopped on a red gate, re-rolled when the gate moves the key, refused on its own failure; a new cohort record unseen by the tree check; a real process group stopped; plan review CLEAR. A tooling landing - the parallel path's first live run is the next claim
 - [ ] T49 settle.settle_street_ends counts as joints only other lanes' END points, never a crossing partway along another lane: a street that crosses a way mid-run and dangles past it is cut back to an earlier joint, where 0246 §6 lets it end on the way - check whether it occurs, and count a crossing as a joint if so (impl-drift outside the change, 405 T13's round) [lands-open]
       research: rendering
+- [ ] T50 `make land` starts the gate and the landing cohort while the claims round is still owed: the claims gate is asked again after them, and the landing waits (up to a bound) for it to pass and the tree to be clean before the push - T13's claims round ran 1.5 min in series before `make land` could start (amendment 6, the GM 2026-10-21)
+      research: rendering
+- [ ] T51 `make land` pushes once: the ticks are written and committed before the push, which carries them, and a failed push is undone by a revert commit - T13's landing pushed twice, the tick's own push about a minute (amendment 6, the GM 2026-10-21)
+      research: rendering
 - [ ] T45 The reference-settlement message (`_reference` in the Makefile) still offers `GATE_NO_CACHE=1 rolls it`, but the roll census refuses that run's re-rolls (T11's 05:02 gate): let the census accept a declared no-cache run, or stop offering it (the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z) [lands-open]
       research: rendering
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
@@ -121,7 +125,7 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [ ] T29 found.jsonl rows never close: a finding filed as a task (make task-add) or settled keeps status open, so the log cannot say what is unfiled - record the task id or settlement on the row (found working 405 T12, 2026-10-20) [lands-open]
       research: rendering
 
-- [ ] T47 (low priority - the GM, amendment 5) The preflight's coverage step (98 s of T19's 5-minute gate) checks the changed lines' coverage with the quick tests before the gate's own full run, which measures coverage again; the quick tests run twice too (13 s). It earns its time when it refuses a gap in seconds, not when the gate runs anyway - measure how often it refuses, and whether a landing whose code is final should skip it or the gate reuse its pass [lands-open]
+- [ ] T47 (low priority - the GM, amendment 5; taken up in amendment 6) The preflight's coverage step (98 s of T19's 5-minute gate) checks the changed lines' coverage with the quick tests before the gate's own full run, which measures coverage again; the quick tests run twice too (13 s). It earns its time when it refuses a gap in seconds, not when the gate runs anyway - measure how often it refuses, and whether a landing whose code is final should skip it or the gate reuse its pass [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering

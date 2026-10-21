@@ -274,3 +274,63 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 ### T13 Decisions
 
 **D22 - the settle anchors as the trim does.** `settle.settle_street_ends` passes `serve.street_anchors(s)` with the other lanes' ends to `street.end_to_its_joint` (each anchor stands on its own street, within the touch), so a dangling end is cut back no further than the last farm the street serves; its claim names the anchors.
+
+## T50 - the claims round beside the landing (amendment 6)
+
+### T50 Approach (checklist part A)
+
+1. **The goal, in the world.** The session commits the code and starts `make land`; the claims round runs while the gate and the landing cohort do, and the landing pushes as soon as all three are done.
+2. **The constraints.** The claims gate (feature 316), asked before every push; `make land`'s first pass, every cheap refusal together (405 T33); the gate beside the claims round (405 T41, D15: the round's records and claim docstrings are unseen by the gate); the push refuses uncommitted work.
+3. **Where each comes from.** O (features 316, 405).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (T13): the round took 1.5 min (11:31:00-11:32:29) in series, because `make land` refuses while a claim is owed.
+5. **The order.** `cheap_refusals` sets a claims-gate refusal aside instead of stopping on it; `long_runs` runs; then `land.py` asks the claims gate again, and while it refuses or the tree is not clean, waits and asks again, up to a bound, before the push; tests; the dev loop's line on the order.
+6. **The exits.** (c) - the landing waits on the claims gate it already asks; a second command for the session to remember was refused.
+7. **The search smell.** None.
+8. **The budget.** 40 min.
+9. **Done, measured.** One goal: with a claims-gate refusal at the start, `make land` runs the gate and the cohort, then pushes once the gate passes and the tree is clean, and refuses with the gate's words past the bound (tests); live, the next claim's round overlaps its gate.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T50 Decisions
+
+**D23 - the claims gate asked last, waited on.** `land.cheap_refusals` returns a claims-gate refusal apart from the others (they still stop the landing); `land.main` runs the long runs, then `wait_for_claims`: the claims gate passing and `git status --porcelain` empty, asked every `CLAIMS_POLL_S` (15 s) for up to `CLAIMS_WAIT_S` (20 min), printing once what it waits for; past the bound nothing lands and the gate's words are printed. A claims-round edit that the gate does see (code) leaves the green-gate stamp stale, which the push refuses as today.
+
+## T51 - one push (amendment 6)
+
+### T51 Approach (checklist part A)
+
+1. **The goal, in the world.** A landing is one push, carrying its work and its ticks.
+2. **The constraints.** The tick's landed check (`tick-task.landed_refusal`, 385 T79/T113: a note saying "landed" over work not on main is refused); history is never rewritten (no amend, reset or force push); "a failed landing ticks nothing" (405 T33).
+3. **Where each comes from.** O (features 385, 405) and the GM's standing rule on history.
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (T13): 11:37:45-11:40:03, two `sync-with-main.sh done` runs, the second only for the tick.
+5. **The order.** `tick-task.py --landing` skips the landed check, which `make land` asks of each task before it lands them; `land.main` ticks, commits the feature's records, pushes once; on a failed push it reverts the tick commit with a new commit; tests.
+6. **The exits.** (c) - the tick goes into the push; a lighter second push was weighed and refused (it still re-asks every push check).
+7. **The search smell.** None.
+8. **The budget.** 30 min.
+9. **Done, measured.** One goal: one push per landing, the ticks in it; a failed push leaves the tasks open by a revert commit (tests); live, the next claim's landing has one push.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T51 Decisions
+
+**D24 - tick, then push.** `tick-task.py <f> <task> <note> --landing` asks every refusal but the landed one (`refusal(..., landed=False)`); `land.main`, after the long runs and the claims wait, ticks each task with it, commits the feature directory, and pushes once with `L7R_LAND_TICKS` set. A failed push runs `git revert --no-edit` on the tick commit (a new commit; nothing rewritten), so the tasks read open again.
+
+## T47 - the preflight's coverage step leaves the gate (amendment 6)
+
+### T47 Approach (checklist part A)
+
+1. **The goal, in the world.** The gate spends its first minutes only on checks that refuse often enough to pay for themselves; the coverage step stays available on demand.
+2. **The constraints.** The gate's 100% floor (feature 174), which judges every changed line minutes later; the preflight's cheap-refusal-first order (375 FR-004); `make preflight`, its standalone target.
+3. **Where each comes from.** O (features 174, 375, 405).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (the clones' `tool-usage.jsonl` and the session transcripts): the step cost 98 s (T19) and 107 s (T13) of each gate; since 2026-10-20 the preflight ran 46 times and refused 8, of which the coverage step refused about 2 in the transcripts' whole record - one of them wrong (`gencache.py:765`, fixed by F's follow-up); its other lines are informational ("the gate's floor judges"). A catch saves the gate's run, about 3 min.
+5. **The order.** `preflight.py --no-coverage` skips the step; the `done` recipe passes it; `make preflight` keeps the step; tests; the target's line.
+6. **The exits.** (c) - the step leaves the gate, kept on demand; reusing its pass in the gate was weighed and refused (the gate measures coverage over the full suite, a different run).
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** One goal: the gate's preflight no longer runs the coverage step, `make preflight` still does (tests); live, the next claim's preflight is about 100 s shorter.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T47 Decisions
+
+**D25 - on demand, not in the gate.** `preflight.py` takes `--no-coverage`, which ends it after the quick tier; the `done` recipe passes it, `make preflight` does not. The gate's own floor judges every changed line, as it did before the step existed.
