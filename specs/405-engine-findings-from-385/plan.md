@@ -263,18 +263,7 @@ Owed by the round arbiter's ruling on hour:405-engine-findings-from-385@3 (conti
 <!-- plan-archive: T20 to T08 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 <!-- plan-archive: T44 to T44 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 <!-- plan-archive: T10 to T10 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-### T10 Decisions
-
-**D62 - withdrawn; T10 stays open.** 0084 §116 draws a timber deck as wide as the way where a way crosses a ditch, so the research expects the track out to cross a drawn channel on a deck, which the fill refuses; no claim may call that a departure the page does not record (the claims round). T10 is re-scoped to the deck crossing - a code task - and is not landed with this batch.
-
-<!-- plan-archive: T60 to T17 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-<!-- plan-archive: T54 to T83 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-<!-- plan-archive: T83 to T84 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-<!-- plan-archive: T84 to T85 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-<!-- plan-archive: T85 to T87 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-<!-- plan-archive: T87 to T90 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-<!-- plan-archive: T90 to T90 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-<!-- plan-archive: T90 to T23 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+<!-- plan-archive: T10 to T10 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 ### T23 part B (2026-10-21T17:46Z)
 
 Owed by the cohort (cohort@20261021T172647Z: seeds 12, 21, 22, 24, 38 and 901 newly failing), taken while T23 was the last task started - the work that resisted was T18's, whose part B answers it.
@@ -362,20 +351,7 @@ Owed by the cohort (cohort@20261021T172647Z: seeds 12, 21, 22, 24, 38 and 901 ne
 
 **D81 - a ditch crossed on a deck, last.** `connector_dry_exit` runs `dry_exit` a third time with the drawn channels left out of its lines (the brook's segments still gapped only at its crossing places, `gap_segments`) when the own-bank and crossing-place fills both return None; the track it finds crosses a channel, and the settle seats the deck there (`law` decks, `crossing_deck`) or refuses the map as for any undeckable crossing. Claimed on 0084.
 
-### T67 Approach (checklist part A)
-
-1. **The goal, in the world.** The track out's last resort crosses only the brook at its crossing places, and every rule it keeps is claimed as the record reads it.
-2. **The constraints.** 0035: crossing places on the brook every 160 ft or so (a GUESS there), the length of each not given; 0081: a track keeps off wet ground and leaves downslope past its end, on the flank the cluster sits on; 0036: a way keeps a footpath's clearance and working room off a farm's trees; 0084: a way crosses a ditch on a deck (T10).
-3. **Where each comes from.** R (0035, 0081, 0036, 0084).
-4. **Do they describe the world here?** Yes - 385's found rows 19-26 and 29 (405 T28): the fill gapped every line within `FORD_HALF` of a brook crossing place, drawn channels and the drain too; the downslope rule unclaimed; `clear_of_bands` UNRESEARCHED though 0036 bears on it; no claim for the moved start; `FORD_HALF`'s 60 ft cited to 0035, which records no length.
-5. **The order.** `connector_dry_exit` gaps only the lines on the brook's course (`on_course`) at its crossing places, the channels kept whole until T10's last fill; claims: the track past the wet ground's end (0081, its flank a GUESS), the start walked clear of the bands (UNRESEARCHED), `clear_of_bands` on 0036, `FORD_HALF` UNRESEARCHED; a test; seeds 1-48.
-6. **The exits.** (e) conform, with the claims.
-7. **The search smell.** None.
-8. **The budget.** 40 min with its landing.
-9. **Done, measured.** A channel beside a crossing place stays whole in the fill open at the crossing places (test); seeds 1-48 and the pinned rows pass.
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
+<!-- plan-archive: T67 to T67 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 ### T67 Decisions
 
 **D82 - the brook alone gapped.** `on_course(seg, plan.brook)` (both ends within 1 ft of the course) sorts the fill's lines into the brook's and the channels'; `gap_segments` opens only the brook's at its crossing places; the channels stay lines until T10's last fill, which drops them. The claims as Approach item 5 lists them; `FORD_HALF` stays 30 ft, now labeled UNRESEARCHED.
