@@ -284,3 +284,59 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 <!-- plan-archive: T52 to T49 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 
 <!-- plan-archive: T53 to T53 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+
+## T17, T16, T27 - the lane-end, run-on and farm-fixture claims brought to the research (385 T133, T131, T147)
+
+### T17 Approach (checklist part A)
+
+1. **The goal, in the world.** Every claim on the lane-end rules says what the code does and labels it as 0246 does.
+2. **The constraints.** 0246's drawing page, read 2026-10-21: "a lane end that reaches nothing is pulled back to the last house it serves. No page we read says how far a lane ran past its last house, so the rule is a GUESS"; an end reaches a farmhouse within 60 ft (or 12 ft of its built ground) and another way within 60 ft; back lanes bring every farmhouse within 100 ft of one. 0014 sets the field's join.
+3. **Where each comes from.** R (0246, 0014).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (a read of each site): `_pull_back`'s comment says the walk "ends the lane at the homestead"; `WAY_END_REACH_FT`'s docstring names the field among its 60 ft reaches (the field's is `law.FIELD_REACH_FT`, T22's); `_lay_skeleton`'s claim floors the span "at one bundle pitch (100 ft) each way" where the code floors each half-extent at half a pitch (50 ft); `sweeps._SERVE_FT`'s 100 ft claims no page though 0246 gives it; thirteen claims state the pull-back plainly where the page calls it a GUESS.
+5. **The order.** Each wording put right where it stands; the thirteen pull-back claims labeled GUESS; the claims round on every changed claim.
+6. **The exits.** (e) conform - the words to the code and the labels to the page; no behavior changes.
+7. **The search smell.** None.
+8. **The budget.** 30 min for the three tasks with one landing.
+9. **Done, measured.** One goal: the claims round reads every changed claim IN-STEP; no code token changes (the gate's semantic key unchanged).
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T17 Decisions
+
+**D29 - the lane-end words.** `_pull_back`'s comment ends the lane "at the last homestead it serves"; `WAY_END_REACH_FT` names a farmhouse and another way (the field's reach is `law.FIELD_REACH_FT`); `_lay_skeleton`'s span floor reads half a pitch (50 ft) each way, a pitch across; `_SERVE_FT` cites 0246's 100 ft as the GUESS it is; the pull-back claims of `_trim_to_service`, `settle_dangling`, `settle_street_ends`, `end_to_its_joint`, `to_its_joints`, `_sweep_dangling_ends`, `_walk_in`, `served_arm`, `tidy_lane_ends`, `_pull_back` (two), `trim_lane_stubs` and `_lay_skeleton`'s arm trim are labeled GUESS, as 0246 labels the rule.
+
+### T16 Approach (checklist part A)
+
+1. **The goal, in the world.** Every rule of the field run-on and the dangling-end test is claimed.
+2. **The constraints.** 0246 (an end runs on to a field path, a bund or another way); 0014 (the path joins the paddy's bund, never ends short of it); 0081 (the track out runs off the map).
+3. **Where each comes from.** R (0246, 0014, 0081).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (a read of `bund.py` and `law.py`): `run_lanes_on_to_the_bund` skips a row street and carries an end within `RUN_ON_REACH_FT` onto the worked ground's edge, the dry hem's as well as the paddy's, unclaimed; `run_on_target`'s reach and its stop outside the ground are unclaimed; `dangling_lane_ends` exempts the connector unclaimed.
+5. **The order.** A claim for each, labeled as the pages give it.
+6. **The exits.** (a) claim - the behavior stands; the dry hem is claimed UNRESEARCHED (0014 speaks of the paddy and is silent on a dry plot; T22 carries the field's reach).
+7. **The search smell.** None.
+8. **The budget.** With T17.
+9. **Done, measured.** The claims round reads the new claims IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T16 Decisions
+
+**D30 - the run-on claimed.** `run_lanes_on_to_the_bund` claims: a row street left to the street rules (UNRESEARCHED: its end is cut to its last joint, never carried on); the reach (GUESS: `RUN_ON_REACH_FT`, 0246's 60 ft reused for the field); the dry hem's edge (UNRESEARCHED: 0014 speaks of the paddy's bund). `run_on_target` claims its reach (GUESS, the same) and its stop (CONVENTION: the half-tread and `TIP_MARGIN_FT` outside the ground). `dangling_lane_ends` claims the connector exempt (0081: the track out runs off the map).
+
+### T27 Approach (checklist part A)
+
+1. **The goal, in the world.** The farm-fixture claims say where the fixtures stand and cite the page that says so.
+2. **The constraints.** 0038 (the bed's sides), 0039 (the kitchen garden), 0043 (the wood shed a ken beyond the wall strip, about 9.5 ft off), 0047 (the privy's places and the front seat's 8 ft GUESS), 0219 (the shrine's corner).
+3. **Where each comes from.** R.
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (a read of `taxonomy.py` and `fixture_seats.py`): the exemption's text seats every fixture "against its own farmhouse" (the shed 9.5 ft off, the shrine and grave a plot corner, the privy out to 48 ft); its claim cites 0039 for the bed beside the house, which 0038 gives; `CANOPY_PAD` and `SHADE_MARGIN_FT` carry no claim; `_seats`' privy front step and stable seat are unclaimed.
+5. **The order.** The text and the claim reworded, the citations put right, the four claims added.
+6. **The exits.** (e) conform - words to the code and the pages.
+7. **The search smell.** None.
+8. **The budget.** With T17.
+9. **Done, measured.** The claims round reads them IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T27 Decisions
+
+**D31 - the fixtures where they stand.** `_OVERLAP_EXEMPT['farm_fixtures']` reads "each seated on its own farmstead near its farmhouse - against a wall or a set step off it"; the exemptions' claim "yard, garden and fixtures beside the house" cites 0038 for the bed's sides and drops 0039 from it; `CANOPY_PAD` and `SHADE_MARGIN_FT` are claimed CONVENTION; `_seats` claims the front privy's 8 ft (GUESS, 0047) and the stable seat (0047: by the stable).
