@@ -1,0 +1,37 @@
+{
+  "utc": "2026-10-21T15:24:42Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 160,
+  "result": "failed: test-full",
+  "commit": "5947a2d34",
+  "first_failure_s": 153.4,
+  "last_failure_s": 159.3,
+  "failed_names": [
+    "uncovered l7r/diagram/hamletgen/ways/street.py:490"
+  ],
+  "host": {
+    "load": [
+      3.58,
+      4.9
+    ],
+    "mem_avail_mb": [
+      9670,
+      9811
+    ],
+    "cpu_temp_c": [
+      61.0,
+      62.0
+    ],
+    "stall_s": {
+      "cpu": 1.2,
+      "io": 0.1,
+      "io_full": 0.1,
+      "memory": 0.1
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  }
+}
