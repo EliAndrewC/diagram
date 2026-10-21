@@ -84,20 +84,22 @@ Yards = list[tuple[Poly, Pt | None]]
 
 
 def theirs(p: Poly, yards: Yards, houses: Sequence[Mapping[str, Any]], M: Mapping[str, Any] | None = None) -> list[Poly]:
-    """The yards and gardens a lane along `p` may not come near: all but its OWN household's - at each end, the farmhouse that
-    end reaches as 0246 measures it (`law.reach_to_steading`: 60 ft of the house or 12 ft of its built ground; with no
-    manifest, 60 ft of the house), the nearest where two do (405 T18: every steading within `DOORSTEP_FT`, 80 ft, was exempt,
-    so a neighbor's garden beside a junction lost the gap 0246 keeps off another household's garden).
+    """The yards and gardens a lane along `p` may not come near: all but its OWN household's - ONE farmhouse, at its dooryard
+    end: of the farmhouses an end reaches as 0246 measures it (`law.reach_to_steading`: 60 ft of the house or 12 ft of its
+    built ground; with no manifest, 60 ft of the house), the one nearest its end (405 T18: every steading within
+    `DOORSTEP_FT`, 80 ft, of either end was exempt, and then the farmhouse each end reached, so a door path's junction end
+    exempted the neighbor beside it - 0246 keeps the gap off another household's garden).
 
     Research:
         a lane arrives at its own dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its way leaves its dooryard round its own beds and fixtures
-        its own household the one its end reaches - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the gap is kept from another household's garden; a lane's own household is the farmhouse its end reaches (the page's own reach, a GUESS there), the nearest where two do"""
-    own = []
-    for end in (p[0], p[-1]):
-        reached = [h for h in houses if (law.reach_to_steading(end, h, M) if M is not None else math.dist(end, (float(h["x"]), float(h["y"]))) <= law.HOUSE_REACH_FT)]
-        if reached:
-            h = min(reached, key=lambda q: math.dist(end, (float(q["x"]), float(q["y"]))))
-            own.append((float(h["x"]), float(h["y"])))
+        its own household the one its end reaches - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a household's way leaves its own dooryard and joins a way at a T, so a lane has one household - the farmhouse nearest an end among those its ends reach (the page's own reach)"""
+    reached = [
+        (math.dist(end, (float(h["x"]), float(h["y"]))), (float(h["x"]), float(h["y"])))
+        for end in (p[0], p[-1])
+        for h in houses
+        if (law.reach_to_steading(end, h, M) if M is not None else math.dist(end, (float(h["x"]), float(h["y"]))) <= law.HOUSE_REACH_FT)
+    ]
+    own = [min(reached)[1]] if reached else []
     return [poly for poly, owner in yards if owner is None or all(math.dist(owner, c) > 1.0 for c in own)]
 
 

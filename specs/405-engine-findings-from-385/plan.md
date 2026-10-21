@@ -387,7 +387,7 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T16:40:44Z (continue), 
 
 ### T18 Decisions
 
-**D69 - its own household only.** `theirs(p, yards, houses, M)`: each end exempts the farmhouse it reaches as 0246 measures a reach (`law.reach_to_steading`: 60 ft of the house or 12 ft of its built ground, the page's own GUESS; 60 ft of the house where no manifest is passed), the nearest where two do - not every steading within `law.DOORSTEP_FT` (80 ft, a figure the page does not give: the claims round). The claim GUESS 0246 (the page keeps the gap off another household's garden; a lane's own household is the farmhouse its end reaches).
+**D69 - its own household only.** `theirs(p, yards, houses, M)`: a lane has ONE household - of the farmhouses either end reaches as 0246 measures a reach (`law.reach_to_steading`: 60 ft of the house or 12 ft of its built ground, the page's own GUESS; 60 ft of the house where no manifest is passed), the one nearest its end, its dooryard end - and only that household's yards and gardens are exempt; not every steading within `law.DOORSTEP_FT` (80 ft, a figure the page does not give), nor a farmhouse at each end (the claims round: 0246's household way leaves its own dooryard and joins a way at a T, so its junction end exempted the neighbor beside it). The claim GUESS 0246.
 
 ### T86 Approach (checklist part A)
 
@@ -461,3 +461,16 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T16:40:44Z (continue), 
 
 **D73 - the fallback named.** No code change: `tip_onto_the_bund`'s claim names its fallback - a tip it cannot carry on is left as it came for the settle, whose lane law calls the short end dangling (pulled back, GUESS 0246), and the field is reached by `a_way_onto_the_bund` (0014: the hamlet's nearest lane runs on to the bund).
 
+### T18 Approach (re-answered 2026-10-21T17:14Z)
+
+1. **The goal, in the world.** A lane keeps 7 ft off every garden but its own household's, and a lane has one household.
+2. **The constraints.** 0246: the gap is kept from another household's garden; a household's own way leaves its own dooryard round its beds and joins a way at a T; an end reaches a farmhouse within 60 ft of the house or 12 ft of its built ground (the page's GUESS).
+3. **Where each comes from.** R (0246).
+4. **Do they describe the world here?** Yes - the claims rounds: every steading within 80 ft of either end was exempt, then a farmhouse at each end, so a door path's junction end exempted the neighbor beside it.
+5. **The order.** `theirs` exempts only the farmhouse nearest an end among those its ends reach (`law.reach_to_steading`); the claim GUESS 0246; tests with a neighbor beside the junction and a farm past the reach; seeds 1-48.
+6. **The exits.** (e) conform.
+7. **The search smell.** None.
+8. **The budget.** With batch 9.
+9. **Done, measured.** A neighbor beside the junction end keeps the gap, a farm 75 ft off is no household's own (tests); seeds 1-48 and the pinned rows pass.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.

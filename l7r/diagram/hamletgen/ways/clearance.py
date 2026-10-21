@@ -313,6 +313,7 @@ def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: l
 
     Research:
         junction link margin - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft (`WEB_FABRIC_GAP`) off the fabric, or the caller's
+        a join link off the crop and the wet ground at the gap - UNRESEARCHED: the short link keeps the fabric's 7 ft (`gap`) off the crop and the wet ground alike, not the full margins the lanes keep (0081's `WEB_CROP_GAP`, the wet ground's 8 ft)
         a join link off every garden - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the gap is kept from another household's garden and a household's own way may run beside its own; a link joins a way to the network and belongs to no one household, so no garden is its own"""
     span = math.dist(a, b)
     if span < 1.0:

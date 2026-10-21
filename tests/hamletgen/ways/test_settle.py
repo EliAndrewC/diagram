@@ -991,6 +991,9 @@ def test_a_lane_keeps_the_gap_off_a_neighbor_s_garden_at_its_end() -> None:
     assert [(50.0, 0.0)] in near and [(0.0, 0.0)] not in near, "its own dooryard exempt, the neighbor's not"
     assert [(10.0, 375.0)] in near, "75 ft off the far end: past 0246's 60 ft reach, so no household's own (80 ft once exempted it)"
     assert [(9.0, 9.0)] in near, "an unowned yard is never exempt"
+    # ...and ONE household a lane: a door path whose junction end stands beside a neighbor exempts only its own dooryard's
+    junction = shapes.theirs([(1.0, 0.0), (40.0, 0.0)], yards, [own, neighbor])
+    assert [(0.0, 0.0)] not in junction and [(50.0, 0.0)] in junction, "the neighbor 10 ft off the junction end keeps the gap"
     assert shapes.theirs([(10.0, 0.0), (10.0, 300.0)], yards, []) == [y for y, _o in yards]
     M = {"houses": [own, neighbor, far]}
     assert shapes.theirs([(10.0, 0.0), (10.0, 300.0)], yards, [own, neighbor, far], M) == near, "the manifest's reach, as the law measures it"

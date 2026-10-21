@@ -169,6 +169,10 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [x] T90 A SIGTERM aimed at the first process matching the landing hit the recipe's `sh -c`, not `land.py`, so the landing's cleanup (T79) never ran and its gate ran on: `make land-stop` finds this tree's landing by its python process (found stopping batch 8's landing, 2026-10-21) [lands-open]
       research: rendering
       verify: DONE. landed in batch T54+T83+T84+T85+T87+T90: batch 8: the row's first street passed by, trim and settle (T54, 0033); a farm's wood is its rotated grove bands and its share of the dooryard copse (T83, 0036); the splice measured to fabric edges, not corners (T84); an unwidthed lane a 3 ft footpath (T85); the archive reads a block as the decide guard does (T87); make land-stop (T90); settle.py split into ways/settle/ at the bar (T53's rule); make tick refuses unticked research boxes; hook suites run with no session escape; seeds 1-48 and pinned rows 54/54; the arbiter's continue on the second red gate
+- [ ] T91 `law.DOORSTEP_FT` (80 ft from the house's center) still decides where a lane end stands at a dooryard for the settle (`settle_ends`' fan cut and the doorstep ends), where 0246 §35 counts an end as reaching a farmhouse within 60 ft of the house or 12 ft of its built ground (`law.reach_to_steading`): check DOORSTEP_FT's claim against §35 and read the page's reach, or claim the 80 ft as its own (impl-drift outside the change, batch 9's round, 2026-10-21) [lands-open]
+      research: rendering
+- [ ] T92 0014's drawing page states its 6 ft "drawn as joining" for the paddy's edge only; say whether it holds for the dry hem's edge (0081 §56), which the code reads the same way (impl-drift outside the change, batch 9's round, 2026-10-21) [lands-open]
+      research: rendering
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
 - [ ] T02 (385 T36) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]

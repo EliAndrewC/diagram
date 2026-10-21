@@ -195,7 +195,7 @@ is this distance (a test holds them equal; that layer cannot import the law).
 Research:
     a way reaches the field - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a way runs from the hamlet to the field's outer bund
     the reach - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a lane end that stops within 6 ft of the paddy's edge is drawn as joining it
-    a dry plot's edge arrived at - research/questions/0081-village-lanes.drawing.html: a lane runs along the edge of the hem of dry fields, and the spur stops at the hem's edge"""
+    a dry plot's edge arrived at - research/questions/0081-village-lanes.drawing.html, GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a lane runs along the edge of the hem of dry fields and the spur stops at the hem's edge (0081); the 6 ft read as joining applied to it is 0014's GUESS"""
 
 
 CONNECTOR_START_FT = 1.5

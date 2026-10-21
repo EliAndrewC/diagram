@@ -20959,6 +20959,33 @@
   "research": "43cf74757fcb48f3",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/bund.py::tip_onto_the_bund#a run-on leg must clear `blocks` by twice the half-tread (`2.0 * half_tread`)": {
+  "code": "db2524b52d5fdc65",
+  "core": "db2524b52d5fdc65",
+  "date": "2026-10-21",
+  "note": "a run-on leg must clear `blocks` by twice the half-tread (`2.0 * half_tread`)",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/ways/bund.py::tip_onto_the_bund#a tip that cannot be carried on": {
+  "body": "6075f3a988125a48",
+  "claim": "a tip that cannot be carried on - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing, bunds-between-the-paddies-aze.drawing: past the run-on's reach, turning back or blocked, it is left as it came for the settle - the lane law calls the short end dangling and 0246's pull-back takes it - and the field is reached by `a_way_onto_the_bund` (0014: the hamlet's nearest lane runs on to the bund)",
+  "code": "2aa3963af584e60a",
+  "core": "db2524b52d5fdc65",
+  "date": "2026-10-21",
+  "note": "the record does cover this: the claim relies on 0246's rule that a lane end reaching nothing is pulled back, and on 0014's rule that the nearest lane runs on to the bund. Neither page records \"left as it came\" as a guess, so this should be a question claim on 0246 and 0014, not a GUESS",
+  "pages": {
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
+  },
+  "research": "3bfeed340077cefd",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
+  ],
+  "verdict": "MISLABELED"
+ },
  "l7r/diagram/hamletgen/ways/bund.py::tip_onto_the_bund#spur tip on the bund": {
   "body": "6075f3a988125a48",
   "claim": "spur tip on the bund - bunds-between-the-paddies-aze.drawing: never short of it, never in it",
@@ -21540,6 +21567,32 @@
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/clearance.py::_clear_touch#a join link off every garden": {
+  "body": "6c50155a07aae070",
+  "claim": "a join link off every garden - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: the gap is kept from another household's garden and a household's own way may run beside its own; a link joins a way to the network and belongs to no one household, so no garden is its own",
+  "code": "93b5a499f5c757ff",
+  "core": "91c5a875ceedf229",
+  "date": "2026-10-21",
+  "note": "every fabric polygon is kept at the gap, with no owner exempted; the page does not say who owns a link",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
+  },
+  "research": "92410dbfeea7511e",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/clearance.py::_clear_touch#a junction link keeps only the fabric gap (7 ft) off crop and wet ground (`hard` at `gap`), not the full margin 0081's lanes keep": {
+  "code": "91c5a875ceedf229",
+  "core": "91c5a875ceedf229",
+  "date": "2026-10-21",
+  "note": "a junction link keeps only the fabric gap (7 ft) off crop and wet ground (`hard` at `gap`), not the full margin 0081's lanes keep",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::_clear_touch#junction link margin": {
   "body": "9614468c50b2c453",
@@ -25061,6 +25114,22 @@
   "triaged": "2026-10-18",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/law.py::FIELD_REACH_FT#a dry plot's edge arrived at": {
+  "body": "3f984f9db471948a",
+  "claim": "a dry plot's edge arrived at - GUESS bunds-between-the-paddies-aze.drawing: the page speaks of the paddy; a dry plot is the field's dry hem, worked ground a path may end on",
+  "code": "a9fd08d29ceb94f5",
+  "core": "5efeb905b7d48b3f",
+  "date": "2026-10-21",
+  "note": "the record does cover this: 0014 hands dry fields to 0081, where a lane runs \"along the edge of the hem of dry fields\" and the spur \"stops at the hem's edge\". Cite 0081 for the dry hem as an arrival; only the 6 ft applied to it stays 0014's GUESS",
+  "pages": {
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
+  },
+  "research": "cb222e5372134180",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
+  ],
+  "verdict": "MISLABELED"
+ },
  "l7r/diagram/hamletgen/ways/law.py::FIELD_REACH_FT#a way reaches the field": {
   "body": "3f984f9db471948a",
   "claim": "a way reaches the field - bunds-between-the-paddies-aze.drawing: a way runs from the hamlet to the field's outer bund",
@@ -25078,12 +25147,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::FIELD_REACH_FT#the reach": {
-  "body": "e0c94f3897f9cdb4",
-  "claim": "the reach - bunds-between-the-paddies-aze.drawing: the path joins the bund and never ends short of it; this law accepts a way within 60 ft of the field - a known gap (no 0014 page states 60 ft, searched 2026-10-17), carried to feature 385 T12 with the field refusals it bears on",
-  "code": "abfeba57b1febb88",
-  "core": "c0101826cceee8b7",
-  "date": "2026-10-19",
-  "note": "the claim itself admits 60 ft is on no page, and no 0014 block records it as a deviation; the figure should be BUND_REACH_FT's 6 ft, or the page should record the 60 ft as a DEVIATION",
+  "body": "3f984f9db471948a",
+  "claim": "the reach - GUESS bunds-between-the-paddies-aze.drawing: a lane end that stops within 6 ft of the paddy's edge is drawn as joining it",
+  "code": "68f6ae6cf7685d78",
+  "core": "5efeb905b7d48b3f",
+  "date": "2026-10-21",
+  "note": "6.0 is 0014's \"within 6 ft of the paddy's edge\", which the page records as a GUESS",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
@@ -25091,7 +25160,7 @@
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::FIXTURE_PAD_FT#fixture pad": {
   "code": "8d63d64eb770260a",
@@ -30683,6 +30752,23 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/touch.py::_join_piece#a join link off every garden": {
+  "body": "124fec443b38b2bb",
+  "claim": "a join link off every garden - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: the page keeps the gap off another household's garden; a link belongs to no one household, so every garden is another's",
+  "code": "6756d2180b9429d1",
+  "core": "251510e4af9c039f",
+  "date": "2026-10-21",
+  "note": "`_bar` is measured against every fabric polygon, with no owner exempted",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
+  },
+  "research": "92410dbfeea7511e",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/touch.py::_join_piece#a link the splice refuses": {
   "body": "ad7295a9591bf751",
   "claim": "a link the splice refuses - village-lanes.drawing: a footpath is drawn 3 ft wide and two lanes meeting end to end are read as one - so the link is drawn at the piece's width, rounded (3 ft where it has none)",
@@ -30933,6 +31019,18 @@
   "triaged": "2026-10-21",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#an end already on a way": {
+  "body": "f02806adde7c588d",
+  "claim": "an end already on a way - CONVENTION: an end within 2 ft of a way already stands on it at the map's scale, half the ink's 4 ft touch - a link that short is shorter than any tread, so none is drawn",
+  "code": "64ed2e157d74cc05",
+  "core": "1ae82b74a968ff01",
+  "date": "2026-10-21",
+  "note": "`d &lt;= 2.0` is only about legibility: two 3 ft treads 2 ft apart already overlap in ink",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#an unwidthed lane a footpath": {
   "body": "f02806adde7c588d",
   "claim": "an unwidthed lane a footpath - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane with no recorded width read as the 3 ft footpath, in its bars and in `may_write`'s stroke",
@@ -31135,12 +31233,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::SPUR_REACH_FT#spur reaches the field": {
-  "body": "1ea30c782ac0b4c3",
-  "claim": "spur reaches the field - bunds-between-the-paddies-aze.drawing: within 60 ft of its edge",
-  "code": "4c8c6194c20bd500",
-  "core": "c0101826cceee8b7",
-  "date": "2026-10-19",
-  "note": "`SPUR_REACH_FT = 60.0` counts a spur ending 60 ft from the field as arrived, but the page's arrival distance is 6 ft and the path \"never ends in open ground short of the bund\"",
+  "body": "4fb2fedb9bcd5304",
+  "claim": "spur reaches the field - GUESS bunds-between-the-paddies-aze.drawing: a lane end within 6 ft of the paddy's edge is drawn as joining it",
+  "code": "765de408a17e4868",
+  "core": "5efeb905b7d48b3f",
+  "date": "2026-10-21",
+  "note": "6.0 is 0014's 6 ft GUESS",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
@@ -31148,7 +31246,7 @@
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::SPUR_WIDTH#field spur width": {
   "code": "94bf773c1ce296a8",

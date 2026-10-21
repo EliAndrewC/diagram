@@ -1196,13 +1196,13 @@
    "declared": "spec-fidelity"
   },
   "### T18 Approach (checklist part A)": {
-   "sha256": "67fdf817c2d814ccf6f03ba86ced97d0adfab69b8a49afa3547d2b2c261df6de",
+   "sha256": "7ae0e36edf736aa162217f89e6e863a11d0dd2f6a7bf6ae646ec1e0fe2ceafd0",
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T18 Decisions": {
-   "sha256": "e82911c37a7b0aeb38e40f8dbc382c765b5714a95420e62da37fd07c29129e4f",
+   "sha256": "d127edc6c0c174c85be004b257e0c5516a2b26f6a44ea7d2349d520e31f0d5ac",
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
@@ -2957,6 +2957,28 @@
      "summary": "T23: no code change; tip_onto_the_bund's claim names its fallback (a tip it cannot carry is left for the settle: the short end called dangling and pulled back, GUESS 0246, the field reached by a_way_onto_the_bund per 0014); exit (a) claim",
      "class": "within",
      "why": "Naming the fallback in the claim is a checklist exit under FR-001; it relies on the 0014 and 0246 rules the approach cites and narrows nothing in the request."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "### T18 Approach (checklist part A)",
+    "### T18 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D69",
+     "summary": "theirs() exempts at each lane end only the farmhouse that end reaches as page 0246 measures a reach (law.reach_to_steading: 60 ft of the house or 12 ft of its built ground, the page's GUESS; 60 ft of the house when no manifest is passed), the nearest where two do, instead of the nearest steading within DOORSTEP_FT (80 ft, a figure the page does not give); claim GUESS 0246",
+     "class": "within",
+     "why": "A design choice inside a claims task worked under FR-001 and Amendment 7 (take the feature to completion, follow the research without asking the GM). It replaces an 80 ft radius the source does not give with the source's own reach measure. It narrows which steading gets exempted, which is a code decision. It does not narrow anything the GM asked for: the request says nothing about which garden a lane may run beside. The fallback when no manifest is passed is a default of the claim's mechanism, not a carve-out from the request."
+    },
+    {
+     "id": "T18-A5-test",
+     "summary": "Part A item 5: the regression test gains a farm past the reach next to the neighbor beside the junction; seeds 1-48",
+     "class": "within",
+     "why": "Verification that only checks the claimed behavior (FR-001's checklist). It enforces the task and adds no scope."
     }
    ]
   }
