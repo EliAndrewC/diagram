@@ -25,3 +25,9 @@ The GM, after T12's numbers:
 The GM, after T14's numbers (`landing-analysis-2.md`, proposals A-G):
 
 > Let's implement A, B, C, D, F, and E.  Go ahead and implement all of those.  when you're done we'll decide whether to proceed with impementing 1 more claims task.
+
+## Amendment 3 (2026-10-21) - the third claim
+
+The GM, while T36-T41 were being built:
+
+> When you've landed these performance / process improvements, please work 1 more claims task and then measure the results.  I'm going to bed and will check in when I wake up to see how it went and whether our fixes now take the amount of time they "should" take.

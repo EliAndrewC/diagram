@@ -340,3 +340,26 @@ def test_the_lane_along_the_water_is_laid_on_the_flank_the_water_runs() -> None:
     east = web.oriented_skeleton("waterside", 1, 100.0, 150.0)["lanes"]
     assert all(x < 0 for lane in west for x, _y in lane) and all(x > 0 for lane in east for x, _y in lane)
     assert web.oriented_skeleton("T", 1, 100.0, 150.0)["lanes"] == web.oriented_skeleton("T", None, 100.0, 150.0)["lanes"]
+
+
+def test_every_web_cut_has_a_house_within_reach_and_its_lane_spans_only_those() -> None:
+    """Feature 405 T11 (D16): `_web_cut_lines._extent` fell back to every house in the cluster when none stood within reach of a
+    cut - a lane the whole cluster long serving none, against 0246. `web_cuts` places every cut within reach of the house that
+    called for it, so the fallback never ran and is gone; this holds that invariant on many rows, both lane forms."""
+    import random
+    from types import SimpleNamespace
+
+    from l7r.diagram.hamletgen.consts import MIN_WEB_GAP, WEB_REACH_FT
+    from l7r.diagram.hamletgen.ways import web
+    from l7r.diagram.settlement import web_cuts
+
+    rng = random.Random(405)
+    for _ in range(200):
+        arcs = [rng.uniform(0.0, 900.0) for _ in range(rng.randint(1, 30))]
+        stands = [rng.uniform(0.0, 400.0) for _ in arcs]
+        for cut in web_cuts(arcs, WEB_REACH_FT, MIN_WEB_GAP):
+            assert any(abs(a - cut) <= WEB_REACH_FT for a in arcs), "a cut with no house within reach"
+        frame = lambda a, d: (a, d)  # noqa: E731 - the outline frame as identity: (along the margin, across it)
+        for cut, line in zip(web_cuts(arcs, WEB_REACH_FT, MIN_WEB_GAP), web._web_cut_lines(SimpleNamespace(lane_web="alleys"), frame, arcs, stands), strict=False):
+            near = [d for a, d in zip(arcs, stands, strict=True) if abs(a - cut) <= WEB_REACH_FT]
+            assert min(p[1] for p in line) >= min(near) - 30.0 - 1e-6 and max(p[1] for p in line) <= max(near) + 30.0 + 1e-6

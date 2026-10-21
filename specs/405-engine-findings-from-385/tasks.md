@@ -107,3 +107,4 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 
 - none: T12 - a lane end now stops on its last segment where it last serves, not on the vertex before it; the rule it keeps (0246's drawing page, "Lane ends": pulled back to the last house it serves) is unchanged and no glyph is redrawn, so no glyph or settlement review is owed (one pool map, Kuwabata, moved by the gate)
 - none: T14 - the finishing sweep's lane ends now stop where they last serve, and a link off a way with nothing at its far end is still emptied; the rule it keeps (0246's drawing page, "Lane ends") is unchanged and no glyph is redrawn, so no glyph or settlement review is owed
+- none: T11 - a dead fallback removed from the web's cut lines; no map changes and no glyph is redrawn, so no glyph or settlement review is owed

@@ -80,3 +80,9 @@ quick-tier tests alone reached it (`sweeps.py:738` was exactly that).
 About 35 min. One predicate (`preflight.unseen`) for the tree check and the gate-write guard. The first plan review blocked
 `plan.md` and every feature's `tasks.md` as unseen; narrowed to the active feature's records. An apostrophe in a comment inside
 the guard's single-quoted Python broke every case of its suite until removed.
+
+## T11 - the retro row
+
+The third one-claim experiment (the GM, 2026-10-21), the first after T36-T41. The fallback the claim called DRIFTED never ran
+(`web_cuts` puts every cut within reach of a house), so the fix is its removal and a test of the invariant. Timings:
+`landing-analysis-3.md`.

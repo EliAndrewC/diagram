@@ -46,6 +46,32 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T11": {
+   "section_sha256": "3965159f15c2dcf28a5beab70ece41ac4a449abe24916c09e89bc2ca65cd1e73",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D16",
+     "summary": "_web_cut_lines._extent reads only the houses within WEB_REACH_FT of the cut; the 'or along' whole-cluster fallback is removed and the invariant (web_cuts places every cut within reach of the house that called for it) is stated in a comment; no map changes because the fallback never ran.",
+     "class": "within",
+     "why": "The task moved here under the GM's 2026-10-19 routing (everything not a process task moves into 405) and is worked per FR-001; its own title is 'a web lane's span has no whole-cluster fallback'. Removing the fallback is that task, conforming the code to 0246's rule that a lane runs along the houses it serves. Nothing the request or the moved task asks for is narrowed; the 'no map changes' premise is stated as measured (a read of the code on 2026-10-21), not assumed."
+    },
+    {
+     "id": "A5/A9 (the test)",
+     "summary": "A unit test over many coordinate sets that every cut web_cuts makes has a house within its reach and every cut line spans only those houses plus the 30 ft pad.",
+     "class": "within",
+     "why": "Enforcement of the task's own rule (no lane laid along houses it does not serve); delete the requested behavior and the test has nothing left to check. Verification, not new behavior."
+    },
+    {
+     "id": "A6 (exit e, conform)",
+     "summary": "The DRIFTED claim is settled by making the code conform to the research rather than amending the claim.",
+     "class": "within",
+     "why": "The task title asks for the code to hold no whole-cluster fallback; conforming the code is the reading the task names, and no part of the request is excepted."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  },
  "blocks": {
