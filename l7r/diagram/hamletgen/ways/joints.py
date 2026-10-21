@@ -170,7 +170,7 @@ def tee(x: Poly, y: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[t
     if not _clear_touch(p, f, hard, walls, water):
         return None
     new = [*x[:-1], f]
-    if len(new) >= 3 and _turn_deg(new[-3], new[-2], new[-1]) >= _HAIRPIN_DEG:
+    if len(new) >= 3 and _turn_deg(new[-3], new[-2], new[-1]) > _HAIRPIN_DEG:
         return None
     return new
 
@@ -317,7 +317,7 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
         # (0081: "a jog across the meeting point is pulled straight like any other"; feature 328 - it was made a T), and where
         # the pull cannot clear it the joint is moved back a vertex (`_joint_moved_back`)
         z = not _bends_badly(x) and not _bends_badly(y) and _bends_badly(old)
-        if _turn_deg(x[-2], x[-1], y[1]) >= _HAIRPIN_DEG:
+        if _turn_deg(x[-2], x[-1], y[1]) > _HAIRPIN_DEG:
             # the arriving lane that makes the SHORTER clear link becomes the T's stem
             tees = [(m, t) for m, t in ((i, tee(x, y, hard, walls, water)), (j, tee(y[::-1], x[::-1], hard, walls, water))) if t is not None]
             for m, t in sorted(tees, key=lambda mt: math.dist(mt[1][-2], mt[1][-1])):

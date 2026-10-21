@@ -268,6 +268,22 @@ def check_stale_tasks(spec: pathlib.Path, tasks: pathlib.Path) -> list[str]:
     return bad
 
 
+def check_duplicate_tasks(tasks: pathlib.Path) -> list[str]:
+    """Check 7 (405 T100) - a task id on two task lines of one tasks.md: a hand-filed T93 sat beside the landing's carried T93
+    and nothing refused it. `make task-add` takes the next free id."""
+    seen: dict[str, int] = {}
+    bad = []
+    for n, line in enumerate(tasks.read_text().splitlines(), 1):
+        m = re.match(r"- \[[ xX]\] (T\d+[a-z]?)\b", line)
+        if not m:
+            continue
+        if m.group(1) in seen:
+            bad.append(f"{tasks}:{n}: task id {m.group(1)} is taken (line {seen[m.group(1)]}) - file a task with `make task-add F=<n> TITLE=...`, which takes the next free id")
+        else:
+            seen[m.group(1)] = n
+    return bad
+
+
 def lint(spec_dir: pathlib.Path, specs_root: pathlib.Path | None = None,
          tree_root: pathlib.Path | None = None) -> list[str]:
     """Every complaint about one `specs/NNN-*/` directory.
@@ -283,7 +299,7 @@ def lint(spec_dir: pathlib.Path, specs_root: pathlib.Path | None = None,
     tasks = spec_dir / "tasks.md"
     bad = check_withdrawn(spec_dir, specs_root, tree_root)   # check 2 needs no tasks.md
     if tasks.is_file():
-        bad += check_figures(spec) + check_orphans(spec) + check_stale_tasks(spec, tasks)
+        bad += check_figures(spec) + check_orphans(spec) + check_stale_tasks(spec, tasks) + check_duplicate_tasks(tasks)
     # CHECK 5 (feature 239): a measured figure is derived, not typed. Its own module, beside this one;
     # it reads every touched spec (the feature-239 cutoff was ruled NOT LEGITIMATE) once a tasks.md exists.
     bad += check_measured_figures(spec_dir)

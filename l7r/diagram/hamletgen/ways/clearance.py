@@ -353,7 +353,7 @@ _ARM_FT = 40.0
 
 @kept
 def kink_spans(pts: Sequence[Pt]) -> list[tuple[str, int, int]]:
-    """Where a run fails to bend like a path, as (kind, first vertex, last vertex): a turn of `_HAIRPIN_DEG` or more
+    """Where a run fails to bend like a path, as (kind, first vertex, last vertex): a turn of more than `_HAIRPIN_DEG`
     ("doubles back", one vertex), or two turns of `_ZIGZAG_DEG` or more whose SUMMED path between them is `_ZIGZAG_RUN_FT`
     or less ("kinks") - the whole run between the two turns, not one segment.
 
@@ -374,7 +374,7 @@ def kink_spans(pts: Sequence[Pt]) -> list[tuple[str, int, int]]:
         if math.dist(p[k - 1], p[k]) < 1e-6 or math.dist(p[k], p[k + 1]) < 1e-6:
             continue
         deg = _turn_deg(p[k - 1], p[k], p[k + 1])
-        if deg >= _HAIRPIN_DEG:
+        if deg > _HAIRPIN_DEG:
             bad.append(("doubles back", k, k))
         elif deg >= _ZIGZAG_DEG:
             turns.append(k)

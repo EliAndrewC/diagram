@@ -552,3 +552,17 @@ def test_a_run_over_a_ford_is_threaded_leg_by_leg_and_keeps_its_deck(monkeypatch
     s.brook_fords = [(50.0, 0.0)]
     monkeypatch.setattr(track, "_thread_the_fabric", lambda s, plan, run: calls.append(list(run)) or ([run[0], (30.0, 0.0)] if len(run) == 2 and run[-1] == via[0] else list(run)))
     assert track.thread_over_the_ford(s, None, start, via, end) == [start, *via, end], "a leg clipped short of its landing: threaded whole"
+
+
+def test_a_turn_of_exactly_140_degrees_is_no_hairpin() -> None:
+    """405 T96: 0081 calls a hairpin a turn of "more than 140 degrees"; the fold, the kinks and the joints cut at exactly 140 too."""
+    import math
+
+    from l7r.diagram.hamletgen.ways.clearance import _HAIRPIN_DEG, kink_spans
+    from l7r.diagram.hamletgen.ways.geom import _turn_deg
+
+    c = math.cos(math.radians(40.0))
+    s = math.sin(math.radians(40.0))
+    pts = [(0.0, 0.0), (100.0, 0.0), (100.0 - 100.0 * c, 100.0 * s)]
+    assert math.isclose(_turn_deg(*pts), _HAIRPIN_DEG)
+    assert not any(kind == "hairpin" for kind, *_r in kink_spans(pts))

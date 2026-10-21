@@ -430,3 +430,13 @@ def test_check_4_another_feature_s_requirement_is_not_this_spec_s(tmp_path: path
     (tmp_path / "tasks.md").write_text("- [ ] T01 carried by the claims gate (385 FR-013) and feature 385's FR-014 (FR-001)\n- [ ] T02 bare (FR-013)\n")
     got = lint.check_stale_tasks(tmp_path / "spec.md", tmp_path / "tasks.md")
     assert len(got) == 1 and ":2: cites FR-013" in got[0]
+
+
+def test_check_7_a_task_id_taken_twice(tmp_path: pathlib.Path) -> None:
+    """405 T100: a hand-filed task took an id the landing's carry had taken, and nothing refused it."""
+    tasks = tmp_path / "tasks.md"
+    tasks.write_text("- [ ] T93 a figure\n      research: rendering\n- [x] T94 a page\n- [ ] T93 a carry\n")
+    (bad,) = lint.check_duplicate_tasks(tasks)
+    assert ":4: task id T93 is taken (line 1)" in bad and "make task-add" in bad
+    tasks.write_text("- [ ] T93 a figure\n- [ ] T93a its half\n")
+    assert lint.check_duplicate_tasks(tasks) == []

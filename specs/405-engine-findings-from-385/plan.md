@@ -446,7 +446,7 @@ Owed by the cohort (cohort@20261021T172647Z: seeds 12, 21, 22, 24, 38 and 901 ne
 
 ### T97 Decisions
 
-**D76 - 20 degrees, 0081's.** `tails._DOUBLED_DEG = 20.0`, claimed on 0081; between it and `_ALONG_DEG` (25) the sweep still cuts to the crossing it overran, as before.
+**D76 - 0081's rule claimed; its 20 degrees carried to T07.** The four claims cite 0081 (an end running back along another way under 20 degrees is cut where it comes alongside), each naming the known gap: the code asks at `_DOUBLED_DEG` 15. Measured 2026-10-21: at 20, cohort seeds 10 and 40 were refused (a household's way, a tree lane no settle may cut, read as doubled; a shallow crossing left) - the band from 15 to 20 is the side-by-side family 405 T07 carries from 385 T12, so the figure moves with T07's work, not here.
 
 ### T100 Approach (checklist part A)
 
@@ -466,3 +466,30 @@ Owed by the cohort (cohort@20261021T172647Z: seeds 12, 21, 22, 24, 38 and 901 ne
 
 **D77 - one id, one task.** `spec-lint` `check_duplicate_tasks(tasks)`: every `- [ ] Tnn` / `- [x] Tnn` id seen twice is a finding with both line numbers and the tip `make task-add F=<n> TITLE=...`.
 
+### T97 Approach (re-answered 2026-10-21T18:13Z)
+
+1. **The goal, in the world.** The doubled-tail rule is claimed on the page that gives it, and the figure the code asks at is named against it.
+2. **The constraints.** 0081 §25: an end running back along another way under 20 degrees is cut where it comes alongside.
+3. **Where each comes from.** R (0081).
+4. **Do they describe the world here?** Yes - batch 9's round 3: four claims called it UNRESEARCHED; and measured 2026-10-21, at 20 degrees cohort seeds 10 and 40 were refused (a household's way read as doubled, a shallow crossing).
+5. **The order.** The four claims cite 0081 with the known gap (asked at 15), carried to T07, the side-by-side family's own task; `_DOUBLED_DEG` stays 15.
+6. **The exits.** (a) claim, the gap carried.
+7. **The search smell.** None - one measured roll at 20, then the figure left to T07.
+8. **The budget.** With batch 10.
+9. **Done, measured.** The claims round reads the four; seeds 1-48 and the pinned rows 54/54 at 15 (measured 2026-10-21).
+10. **Before moving a constant.** Measured at 20 (two seeds refused); not moved.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T100 part B (2026-10-21T18:13Z)
+
+Owed by the cohort (cohort@20261021T180921Z: seeds 10 and 40 newly failing), taken while T100 was the last task started - the work that resisted was T97's 20 degrees.
+
+1. **What is refusing?** The cohort, on `_DOUBLED_DEG` 20 (T97): seed 10's household way read as a doubled tail, a tree lane no settle may cut; seed 40 a shallow crossing left. Nothing of T100's - a spec-lint check.
+2. **A3 again.** Unchanged for T100.
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** T97's figure is left at 15 and carried to T07 (D76); T100 unchanged.
+6. **The one-sentence test.** "A task id names one task" - true by the test.
+7. **The next step is a measurement.** Seeds 1-48 at 15: 54/54 (measured).
+8. **Every route measured before offering one?** The one route (20) was measured and set down.
+9. **After a ruling: the step it names?** No ruling.

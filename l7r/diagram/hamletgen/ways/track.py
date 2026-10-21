@@ -70,7 +70,7 @@ def spur_cut_at_the_fold(pts: Poly, envelope: Poly) -> tuple[Poly, str | None]:
     Research:
         spur fold cut - DEVIATION research/questions/0081-village-lanes.drawing.html: a folded field spur is cut at the fold whatever the returning leg's length, and drawn only while the arm reaches the field
         a folded spur's reach - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the arm counts as reaching the field when it ends within `SPUR_REACH_FT` (6 ft, 0014's join) of it"""
-    fold = next((k for k in range(1, len(pts) - 1) if _turn_deg(pts[k - 1], pts[k], pts[k + 1]) >= _HAIRPIN_DEG), None)
+    fold = next((k for k in range(1, len(pts) - 1) if _turn_deg(pts[k - 1], pts[k], pts[k + 1]) > _HAIRPIN_DEG), None)
     if fold is None:
         return pts, None
     cut = pts[: fold + 1]

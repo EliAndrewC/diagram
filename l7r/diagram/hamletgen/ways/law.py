@@ -233,7 +233,7 @@ Research: making for a way - CONVENTION: within 60 degrees of the end's heading"
 
 
 def kinks(pts: Sequence[Pt]) -> list[tuple[str, int, int]]:
-    """Where a lane fails to bend like a path: a turn of `DOUBLE_BACK_DEG` or more ("doubles back"), or two turns of
+    """Where a lane fails to bend like a path: a turn of more than `DOUBLE_BACK_DEG` ("doubles back"), or two turns of
     `KINK_DEG` or more whose summed path between them is `BEND_RUN_FT` or less ("kinks") - the whole run between the two
     turns, not one segment. The body is `clearance.kink_spans`, which every web pass asks too (ways W18, FR-003).
     Research: bends like a path - research/questions/0081-village-lanes.drawing.html: no hairpin, no zigzag"""
@@ -306,7 +306,7 @@ def husks(M: Mapping[str, Any]) -> list[int]:
 
 def folded_joint_pairs(lanes: Lanes, blocked: Blocked | None = None) -> list[tuple[int, int, int, int]]:
     """The joints (`joints`: `(i, end_i, j, end_j)`) where two lanes meeting end to end - one way to the walker - turn
-    `DOUBLE_BACK_DEG` or more.
+    more than `DOUBLE_BACK_DEG`.
     Research:
         lanes met end to end are one - research/questions/0081-village-lanes.drawing.html: no hairpin at the joint
         a forced turn is lawful - research/questions/0081-village-lanes.drawing.html: "A turn the ground forces is drawn as walked" - a fold whose chord the ground blocks is excused"""
@@ -439,7 +439,7 @@ def doubled_tails(M: Mapping[str, Any]) -> list[int]:
     asked of the lane and of it reversed), whatever the two ways' widths. `along_tail` walks in from a lane's last point, and
     asked only that way it never saw a first end doubled: Mizuguchi's field spur left its street and ran 10-12 ft beside it
     for 210 ft before it turned for the field (feature 293 on 291, the pool's side-by-side test).
-    Research: no doubled tail - UNRESEARCHED: an end running on beside another way within _DOUBLED_DEG, 15 deg, is refused; no page we read covers a way drawn twice"""
+    Research: no doubled tail - research/questions/0081-village-lanes.drawing.html: an end running back along another way under 20 degrees is refused, cut where it comes alongside - asked at `_DOUBLED_DEG`, 15, a known gap carried to 405 T07"""
     ways = _ways(M)
     lanes = M.get("lanes") or []
     return [i for i, p in enumerate(ways) if not lanes[i].get("connector") and len(p) >= 2 and any(j != i and tail_doubled(p, o) for j, o in enumerate(ways))]

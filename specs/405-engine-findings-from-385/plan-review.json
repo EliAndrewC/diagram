@@ -1272,6 +1272,54 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
+  },
+  "### T95 Approach (checklist part A)": {
+   "sha256": "76c71358c7140eac9e68fef17a793da71554336024185672e15eb1f16f022eb7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T95 Decisions": {
+   "sha256": "7a3a8103b901e0711c1a9643086fa77faf1bdfc93f658b0f501de5e2c8ddca2e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T96 Approach (checklist part A)": {
+   "sha256": "d7350c4f8bf5990e20b58cdec2a5591b1d4a6a58a696ba620212c6c8e4e962e0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T96 Decisions": {
+   "sha256": "976925a39f4b39d16d638b10a99a684f14e50800411afd0c7ff7897c50364688",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T97 Approach (checklist part A)": {
+   "sha256": "cfccb9085affadee8fa2e1380f3cd7e5b401e1ab292486ec928a2f979d2e34a1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T97 Decisions": {
+   "sha256": "fa1b0dee31d8e9e137130b20175db78df757955489416206c7d1df19c66645fd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T100 Approach (checklist part A)": {
+   "sha256": "2e2edcd9d3a803cc998a255c5655fc956aa60aa0287b023c02e205a637398ceb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T100 Decisions": {
+   "sha256": "d483f6acb90cda63c7cd3c5b8365e00cff62b25ee91825bab72b351058058c90",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3054,6 +3102,46 @@
      "summary": "Exit (e) conform; done is measured by tests (own way exempts own garden, a back lane none) and seeds 1-48 plus pinned rows, 54/54 measured 2026-10-21; no constant moves, nothing fitted into room.",
      "class": "within",
      "why": "Completion criterion and verification of the task's own claim; FR-001's per-task working. Enforces the claim rather than adding unrequested verification."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "### T100 Approach (checklist part A)",
+    "### T100 Decisions",
+    "### T95 Approach (checklist part A)",
+    "### T95 Decisions",
+    "### T96 Approach (checklist part A)",
+    "### T96 Decisions",
+    "### T97 Approach (checklist part A)",
+    "### T97 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D74",
+     "summary": "T95: no code change; _clear_touch's 14 ft margin off water lines stays and is claimed UNRESEARCHED (no page gives it), read IN-STEP by the claims round",
+     "class": "within",
+     "why": "A claims task worked per FR-001 under Amendment 7 (take the feature to completion). Recording an honest UNRESEARCHED claim where no source exists changes no behavior and carves nothing out of the request."
+    },
+    {
+     "id": "D75",
+     "summary": "T96: the four hairpin comparisons go from >= to > _HAIRPIN_DEG so a turn of exactly 140 deg is no hairpin, per 0081's 'more than 140 degrees'; kink_spans keeps reading the law's same constant",
+     "class": "within",
+     "why": "Conforms the code to the research (exit e), which is what Amendment 7 says is generally the right course; one shared boundary for law and placers, nothing excepted."
+    },
+    {
+     "id": "D76",
+     "summary": "T97: tails._DOUBLED_DEG 15 -> 20 per 0081 section 25, the four claims cite 0081; between 20 and _ALONG_DEG (25) the sweep's existing cut-to-the-overrun-crossing is unchanged",
+     "class": "within",
+     "why": "Conforms to 0081 (exit e). The 20-25 deg band is outside 0081's under-20 rule, so leaving its existing handling alone does not narrow the research or the request; it is not an exception to anything asked."
+    },
+    {
+     "id": "D77",
+     "summary": "T100: a spec-lint check refuses a task id appearing on two task lines of one tasks.md, naming both lines and make task-add; with a test",
+     "class": "within",
+     "why": "Found work filed as a task of this feature (FR-002) and worked under Amendment 7. The guard's reach is exactly the measured defect (a duplicate T93 that no check refused); no other behavior rides in with it."
     }
    ]
   }
