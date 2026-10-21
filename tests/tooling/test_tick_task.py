@@ -502,3 +502,20 @@ def test_the_landing_tick_is_make_land_s_alone(tmp_path: pathlib.Path, monkeypat
     assert tt.main(["188", "T02", "landed: x", "--landing"]) == 2 and "--landing is" in capsys.readouterr().err
     monkeypatch.setenv("L7R_LAND_TICKS", "T02")
     assert tt.main(["188", "T02", "landed: x", "--landing"]) == 0 and "- [x] T02" in (d / "tasks.md").read_text(encoding="utf-8")
+
+
+def test_the_cohort_s_workers_fit_the_container_s_memory_limit(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 405 T72: sized from the host's MemAvailable (9.5 GB), the batch-3 landing's 12 workers took the containers'
+    shared 10 GB cap to 9.0 GB. A cgroup v2 limit bounds the memory counted free: its limit less what it holds, cache given back."""
+    lb, _d = _land(tmp_path, monkeypatch)
+    cg = tmp_path / "cg"
+    cg.mkdir()
+    gib = 1024**3
+    (cg / "memory.max").write_text(f"{10 * gib}\n")
+    (cg / "memory.current").write_text(f"{8 * gib}\n")
+    (cg / "memory.stat").write_text(f"anon 1\ninactive_file {gib}\n")
+    assert lb.memory_free_mb(cg) == 3 * 1024, "10 GiB less the 8 held, the 1 of cache given back"
+    assert lb.cohort_jobs(cg)[0] == 2, "3 GB free beside the gate's 3.5: the floor of 2"
+    (cg / "memory.max").write_text("max\n")
+    assert lb.memory_free_mb(cg) > 0, "no cgroup limit: the host's figure"
+    assert lb.memory_free_mb(tmp_path / "none") > 0, "no cgroup at all"

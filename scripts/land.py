@@ -174,13 +174,29 @@ ROLL_MB = 500
 GATE_WORKERS = 6
 
 
-def cohort_jobs() -> tuple[int, int]:
-    """The cohort's workers beside a running gate - the cpus the gate leaves and the memory it leaves, at least 2 - and the
-    MemAvailable (MB) they were sized from."""
+def memory_free_mb(cgroup: Path = Path("/sys/fs/cgroup")) -> int:
+    """The memory free to this container, MB: the host's MemAvailable, and - where the container has a cgroup v2 limit - no more
+    than that limit less what the cgroup holds, its reclaimable file cache given back (405 T72: sized from the host's 9.5 GB
+    alone, the batch-3 landing's 12 workers took the containers' shared 10 GB cap to 9.0 GB)."""
     try:
         avail = next(int(ln.split()[1]) // 1024 for ln in Path("/proc/meminfo").read_text().splitlines() if ln.startswith("MemAvailable:"))
     except OSError, StopIteration, ValueError:
         avail = GATE_RESERVE_MB + 4 * ROLL_MB
+    try:
+        cap = (cgroup / "memory.max").read_text().strip()
+        if cap != "max":
+            held = int((cgroup / "memory.current").read_text())
+            cache = next((int(ln.split()[1]) for ln in (cgroup / "memory.stat").read_text().splitlines() if ln.startswith("inactive_file ")), 0)
+            avail = min(avail, (int(cap) - held + cache) // (1024 * 1024))
+    except OSError, ValueError:
+        pass
+    return avail
+
+
+def cohort_jobs(cgroup: Path = Path("/sys/fs/cgroup")) -> tuple[int, int]:
+    """The cohort's workers beside a running gate - the cpus the gate leaves and the memory it leaves, at least 2 - and the
+    memory (MB) they were sized from (`memory_free_mb`)."""
+    avail = memory_free_mb(cgroup)
     return max(2, min((os.cpu_count() or 4) - 2 - GATE_WORKERS, (avail - GATE_RESERVE_MB) // ROLL_MB)), avail
 
 
@@ -190,7 +206,7 @@ def start_cohort(root: Path) -> tuple[subprocess.Popen, Path]:
     jobs, avail = cohort_jobs()
     log = Path(run(root, ["git", "rev-parse", "--absolute-git-dir"])[1].strip() or root / ".git") / "land-cohort.log"
     env = {k: v for k, v in os.environ.items() if not k.startswith("L7R_ROLL_CENSUS")} | {"L7R_REF_NO_CLASS": "1"}
-    print(f"land: make cohort-landing JOBS={jobs} beside the gate (MemAvailable {avail} MB; its log {log})", flush=True)
+    print(f"land: make cohort-landing JOBS={jobs} beside the gate ({avail} MB free to the container; its log {log})", flush=True)
     with log.open("w") as fh:
         proc = subprocess.Popen(["make", "--no-print-directory", "cohort-landing", f"JOBS={jobs}"], cwd=root, env=env, stdout=fh, stderr=subprocess.STDOUT, start_new_session=True)
     return proc, log
