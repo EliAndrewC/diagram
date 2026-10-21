@@ -32966,8 +32966,8 @@
  "l7r/diagram/hamletgen/ways/web.py::_web_cut_lines#a cut's room": {
   "body": "f4a7163f49d41d1c",
   "claim": "a cut's room - village-lanes.drawing, how-our-maps-lay-a-clustered-settlements-lanes.drawing: MIN_WEB_GAP, 7 ft clear of a garden fence on each side and a 4 ft tread, within the page's 3 ft footpath to 5 ft spine",
-  "code": "4cd52867698b4c7c",
-  "core": "60a01d72af988a64",
+  "code": "0efd610c042eb7a7",
+  "core": "caf4168f4b2af238",
   "date": "2026-10-19",
   "note": "cuts spaced by MIN_WEB_GAP, 18 ft",
   "pages": {
@@ -32980,27 +32980,28 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636"
   ],
-  "triaged": "2026-10-19",
+  "triaged": "2026-10-21",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_web_cut_lines#a tie's run past the back lanes": {
   "body": "9682a2380cf490c4",
   "claim": "a tie's run past the back lanes - GUESS: a cross lane runs the back lanes' own 30 ft pad (`pad`) past the outermost of them; no page gives a distance",
-  "code": "8b336bb90e429fe1",
-  "core": "60a01d72af988a64",
+  "code": "aa9c9cdb64432c5c",
+  "core": "caf4168f4b2af238",
   "date": "2026-10-19",
   "note": "no page gives how far a cross lane's candidate line runs past the outermost back lane. The page's 30 ft is for a back lane past its last house, and the rule that a joining lane's tail is cut covers the drawn lane, not this candidate line",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-21",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_web_cut_lines#a web lane's span": {
-  "body": "f4a7163f49d41d1c",
+  "body": "17e174cad0b4f1eb",
   "claim": "a web lane's span - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane runs only along the houses it serves - those within WEB_REACH_FT (100 ft) of its cut",
-  "code": "f4f03cab55270ae2",
-  "core": "60a01d72af988a64",
-  "date": "2026-10-19",
-  "note": "`_extent` measures each lane off only the houses within WEB_REACH_FT (100 ft) of its own cut, matching \"laid along the houses it serves\" and the 100 ft reach; the page says the two forms differ only in which way they cut",
+  "code": "ba909cebe7bf548a",
+  "core": "caf4168f4b2af238",
+  "date": "2026-10-21",
+  "note": "`_extent` takes each lane's extent from only the houses within WEB_REACH_FT (100 ft) of its own cut, plus the 30 ft pad, which matches \"within 100 ft of one\" and \"laid along the houses it serves and about 30 ft past the last of them\". The alleys form uses the same rule, which agrees with lanes following the houses.",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
@@ -33008,13 +33009,14 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:82d03d7e6a2180e2",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c4049193a04d9dd0",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c90fc4f6fee86c66"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c90fc4f6fee86c66",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_web_cut_lines#back lane tie spacing": {
-  "code": "2e6426d4365dbf04",
-  "core": "60a01d72af988a64",
+  "code": "b0cd624333d69f5b",
+  "core": "caf4168f4b2af238",
   "date": "2026-10-10",
   "note": "a reach of 150 ft each way gives ties up to about 300 ft apart, cut through the house gaps at MIN_WEB_GAP",
   "pages": {
@@ -33024,12 +33026,12 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:0462100d871c3cb0"
   ],
-  "triaged": "2026-10-19",
+  "triaged": "2026-10-21",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_web_cut_lines#back lane ties": {
-  "code": "d3768ff6630ce365",
-  "core": "60a01d72af988a64",
+  "code": "88ede34ebaff06ff",
+  "core": "caf4168f4b2af238",
   "date": "2026-10-10",
   "note": "the back lanes plus the ties make the rectangular framework the finding describes",
   "pages": {
@@ -33039,11 +33041,12 @@
   "rests": [
    "0081-village-lanes.html:7a53482e165741aa"
   ],
+  "triaged": "2026-10-21",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_web_cut_lines#lane form knob": {
-  "code": "9ec517b795faff3d",
-  "core": "60a01d72af988a64",
+  "code": "211f61c3f348e588",
+  "core": "caf4168f4b2af238",
   "date": "2026-10-10",
   "note": "the code branches on the rolled plan.lane_web: alleys cut across the depth, back lanes run along the length",
   "pages": {
@@ -33054,14 +33057,14 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:81f9a92fe1d97af1",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:82d03d7e6a2180e2"
   ],
-  "triaged": "2026-10-19",
+  "triaged": "2026-10-21",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_web_cut_lines#lane runs past its last steading": {
   "body": "f4a7163f49d41d1c",
   "claim": "lane runs past its last steading - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: about 30 ft",
-  "code": "232cc58bc3fe2cf1",
-  "core": "60a01d72af988a64",
+  "code": "173088ed4cc59ee2",
+  "core": "caf4168f4b2af238",
   "date": "2026-10-19",
   "note": "`pad = 30.0` is the page's \"about 30 ft past the last of them\", and the page calls how far a lane runs past its last house a GUESS",
   "pages": {
@@ -33072,11 +33075,12 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c90fc4f6fee86c66"
   ],
+  "triaged": "2026-10-21",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_web_cut_lines#web cut spacing": {
-  "code": "47af97d8a545e492",
-  "core": "60a01d72af988a64",
+  "code": "cd79f7ef2f1ee744",
+  "core": "caf4168f4b2af238",
   "date": "2026-10-10",
   "note": "web_cuts at WEB_REACH_FT 100 brings every house within 100 ft of a cut",
   "pages": {
@@ -33086,7 +33090,7 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c4049193a04d9dd0"
   ],
-  "triaged": "2026-10-19",
+  "triaged": "2026-10-21",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::cut_the_overruns#overrun cut": {
