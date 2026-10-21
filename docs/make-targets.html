@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 179 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 181 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -167,6 +167,8 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make feature-report</td><td class=a><div class=ad><span class=an>F=&lt;NNN&gt;</span><span class=aw>the feature</span></div><div class=ad><span class=an>SINCE</span></div><div class=ad><span class=an>TRANSCRIPT</span></div><div class=ad><span class=an>UNTIL</span></div><div class=ad><span class=an>WRITE</span></div></td><td>where a feature&#x27;s time and dispatches went, as a table, from the event log, the run log and git</td></tr>
 <tr><td class=n>make figures</td><td class=a>SPEC</td><td>re-run every recorded measurement and report what moved   [SPEC=specs/NNN-slug; default every spec with a measurements.json]</td></tr>
 <tr><td class=n>make fix-yield</td><td class=a>F</td><td>did each tooling fix save what it was meant to: its measure&#x27;s rate before its ruling and since it was made (feature 385 T119)</td></tr>
+<tr><td class=n>make found-close</td><td class=a>F ROWS TASK WHY</td><td>close found.jsonl rows: FILED as a task, or SETTLED with a reason (405 T29)</td></tr>
+<tr><td class=n>make found-list</td><td class=a>F</td><td>a feature&#x27;s open findings (found.jsonl), numbered - what is not yet filed as a task or settled (405 T29)</td></tr>
 <tr><td class=n>make gm-review</td><td class=a>EXPLAIN F ROW</td><td>what waits on the GM: HELD rows (work cannot go on) and, per feature, the TO REVIEW rows counted (landed; he may overturn) - feature 375   [F=&lt;NNN&gt; that feature&#x27;s rows] [EXPLAIN=1 what needs the GM, or with F= each row in full] [ROW=&lt;n&gt;]</td></tr>
 <tr><td class=n>make gm-reviewed</td><td class=a>F OVERTURN ROW TO WORDS</td><td>the GM has reviewed a feature&#x27;s rows; OVERTURN=&lt;row&gt; TO=&lt;feature&gt; turns one into an open row there (feature 375); ROW=&lt;n&gt; marks that one row alone; WORDS= his words when a session marks a row he discussed</td></tr>
 <tr><td class=n>make guard-edit</td><td class=a>FILE WHY</td><td>permit edits to one guard file for an hour, the reason recorded in the guard log - the root Makefile takes no marker comment (feature 170 amendment 1)</td></tr>
