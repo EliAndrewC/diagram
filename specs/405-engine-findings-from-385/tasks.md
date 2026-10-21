@@ -175,7 +175,7 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T93 Two figures T22 and T23's rounds left: a run-on leg keeps only its tread off what blocks it (`bund.tip_onto_the_bund`, `RunOnBlocks.clear(..., 2 * half_tread)`), short of 0246's 7 ft off a garden fence where the block is a garden - keep the page's 7 ft off the fabric, or record the tread; and the drawing pages that still state the field reach's old 60 ft (`make claims-owed`'s stale figures: 0006, 0009, 0029, 0057, 0081, 0246) read against 0014's 6 ft join (batch 9's rounds, 2026-10-21) [lands-open]
       research: rendering
-- [ ] T94 0246's drawing page gives the own-garden exemption to "a household's own way" and does not say that a back lane, a cross lane or the track out belongs to no household - say so on the page, as the code reads it since T18 (impl-drift outside the change, batch 9's round, 2026-10-21) [lands-open]
+- [ ] T94 0246's drawing page gives the own-garden exemption to "a household's own way" and does not say that a back lane, a cross lane or the track out belongs to no household - say so on the page, as the code reads it since T18; and record as the page's GUESS that a join link belongs to no household (the GUESS `_clear_touch` and `_join_piece` cite - batch 9's crop round) (impl-drift outside the change, batch 9's round, 2026-10-21) [lands-open]
       research: rendering
 - [ ] T96 `track.spur_cut_at_the_fold` cuts a fold at exactly 140 degrees (`_turn_deg(...) >= _HAIRPIN_DEG`) where 0081 §37 calls a hairpin a turn of "more than 140 degrees" (impl-drift outside the change, batch 9's round 3, 2026-10-21) [lands-open]
       research: rendering

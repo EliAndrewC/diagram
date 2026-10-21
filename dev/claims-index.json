@@ -21606,14 +21606,20 @@
  },
  "l7r/diagram/hamletgen/ways/clearance.py::_clear_touch#a join link off the crop at the gap": {
   "body": "8a563e3036a11a38",
-  "claim": "a join link off the crop at the gap - UNRESEARCHED: the link keeps the fabric's 7 ft (`gap`) off the crop; no page gives a distance",
-  "code": "6d2d6cda19bd4fc9",
+  "claim": "a join link off the crop at the gap - DEVIATION village-lanes.drawing: the page lets a lane run on the bund and touch a plot's boundary; the link keeps the fabric's 7 ft (`gap`) off the crop - the departure the page is yet to record (405 T98)",
+  "code": "d51c12709580165b",
   "core": "91c5a875ceedf229",
   "date": "2026-10-21",
-  "note": "0081 does say how close a lane may come to the crop, so \"no page gives a distance\" is wrong. It says a lane \"runs on the bund between plots ... and may touch a plot's boundary\", which allows 0 ft. The 7 ft `gap` the code keeps off the crop (`clear_runs([a, b], hard, gap, ...)`) is stricter than that and stops a link from running on a bund. The claim should cite 0081 and call the 7 ft a DEVIATION. The drawing page must then record it, or the code should let the link reach the crop's edge",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "a DEVIATION the drawing page does not record: the page lets a lane touch the field. It runs \"on the bund between plots ... and may touch a plot's boundary\". But `clear_runs([a, b], hard, gap, ...)` keeps the link 7 ft off the crop, and 0081 has no block recording that departure (the claim itself says \"yet to record\", 405 T98). Either 0081's drawing page records the 7 ft crop margin as this project's deviation, or the claim says UNRESEARCHED/GUESS until it does",
+  "pages": {
+   "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
+  },
+  "research": "324b10775c9108ef",
+  "rests": [
+   "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
+   "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::_clear_touch#a join link off the water": {
   "body": "8a563e3036a11a38",
@@ -21680,16 +21686,32 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/clearance.py::clear_runs#off the crop and wet ground": {
+ "l7r/diagram/hamletgen/ways/clearance.py::clear_runs#off the crop": {
   "body": "626edf2d49007234",
-  "claim": "off the crop and wet ground - UNRESEARCHED: the full margin; 0081 keeps a lane off the crop and the wet ground and gives no distance",
-  "code": "0a439404052a8375",
+  "claim": "off the crop - DEVIATION village-lanes.drawing: the page lets a lane run on the bund and touch a plot's boundary; the run keeps the full `margin` off the crop - the departure the page is yet to record (405 T98)",
+  "code": "0278022ed5639672",
   "core": "6f81a1160265d943",
   "date": "2026-10-21",
-  "note": "the claim joins two backings into one. For wet ground, UNRESEARCHED is right: 0081 says a track \"keeps off wet ground\" and gives no distance. For the crop, 0081 does give an answer: a lane \"may touch a plot's boundary\" and runs on the bund. So keeping the full `margin` off the crop is a departure from what the page finds, not an unresearched gap. Split the claim: crop -&gt; DEVIATION research/questions/0081-village-lanes.drawing.html, recorded on that page (or a crop margin of 0); wet ground -&gt; UNRESEARCHED",
+  "note": "a DEVIATION the drawing page does not record: the page says a lane \"may touch a plot's boundary\". But `obstacles` (crop) keep the full `margin` through `fabric_index(obstacles, margin, ...)`, and 0081 records no such departure (the claim says \"yet to record\", 405 T98). Either 0081's drawing page records it, or the claim drops the DEVIATION label until it does",
+  "pages": {
+   "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
+  },
+  "research": "324b10775c9108ef",
+  "rests": [
+   "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
+  ],
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/hamletgen/ways/clearance.py::clear_runs#off the wet ground": {
+  "body": "626edf2d49007234",
+  "claim": "off the wet ground - UNRESEARCHED: the full margin; 0081 keeps a track off wet ground and gives no distance",
+  "code": "face68b36ab75a24",
+  "core": "6f81a1160265d943",
+  "date": "2026-10-21",
+  "note": "the page says to keep off wet ground but gives no distance; the margin is unresearched",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::clear_runs#shortest lane": {
   "code": "bea6f50644df90d3",
