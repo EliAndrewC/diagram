@@ -94,7 +94,7 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	n=$$(python3 -c "import sys; sys.path.insert(0,'$$root/scripts/measure'); import gatecost as _gatecost; print(_gatecost.class_count('$(DONE_NAME)', '$$scp', None, '$$cls' or None))" 2>/dev/null || echo 0); \
 	if [ "$$mode" = incremental ]; then printf 'ratchet: incremental run (%s tests) - not judged; the median is over full runs\n' "$$sel"; else python3 "$$root/scripts/measure/ratchet.py" $(DONE_NAME) "$$(( $$(date +%s) - $$T0 ))" "$${med:-}" "$${cls:-}" "$$scp" "$$n" || exit 1; fi; \
 	$(STATE) green-local $(DONE_NAME); \
-	$(if $(FULL),printf '\n\033[1mgate green (FULL - plus the perf bookends)\033[0m\n',printf '\n\033[1mgate green\033[0m (the whole suite: every pool map, seeds 41-44; `FULL=1` adds only the perf bookends)\n')
+	$(if $(FULL),printf '\n\033[1mgate green (FULL - plus the perf bookends)\033[0m\n',printf '\n\033[1mgate green\033[0m (the whole suite and every pool map; `FULL=1` adds only the perf bookends)\n')
 
 COHORT_FRESH = 4
 REF_FIRST = @$(if $(REF_OK),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)",$(MAKE) --no-print-directory _reference)
@@ -1038,7 +1038,7 @@ bypass-audit:    ## [project] every escape token taken, with the reason its user
 	if [ -z "$$why" ]; then \
 	  printf '\n\033[1mAbout to run the FULL test set.\033[0m\n\n'; \
 	  printf 'The reference settlement rebuilds in ~60 s. The full set additionally rolls every\n'; \
-	  printf 'live pool map, re-gates each, and rolls seeds 41-44 - minutes, not seconds.\n\n'; \
+	  printf 'live pool map and re-gates each - minutes, not seconds.\n\n'; \
 	  printf '\033[1mMost of the time the right answer here is to back out.\033[0m Press Enter to CANCEL\n'; \
 	  printf 'and run the reference-scope gate instead - that is the default and it is usually right.\n\n'; \
 	  printf 'Legitimate reasons to continue: the reference map is itself under surgery and expected\n'; \
