@@ -278,6 +278,9 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [ ] T101 Move tails._DOUBLED_DEG from 15 to 0081's 20 degrees (an end running back along another way under 20 degrees is cut where it comes alongside) once the side-by-side family (T07) leaves the tree no doubled household way: at 20, cohort seed 10's household way, a tree lane no settle may cut, read as doubled and seed 40 left a shallow crossing (measured 2026-10-21, T97) - done when seeds 1-48 and the pinned rows pass at 20 [lands-open]
       research: rendering
       research: rendering
+- [ ] T102 The decide guard (plan_gate.decision_refusal) reads a section's last plan verdict and not the round arbiter's accept that settled it: T100's plan round 3, ruled accept, still refused its claims check (escaped with DECIDE_OK, logged); an accepted round clears the section as the review does (found landing batch 10, 2026-10-21) [lands-open]
+      research: rendering
+      research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
