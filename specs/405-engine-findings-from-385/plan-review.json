@@ -130,6 +130,32 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T13": {
+   "section_sha256": "0136b99d410a0c44ffb6cd7b2305b038caa15672a87d40b111b428d8cba367a1",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D22",
+     "summary": "settle.settle_street_ends passes serve.street_anchors(s) beside the other lanes' ends to street.end_to_its_joint, so a dangling street end is cut back no further than the last farm the street serves, as the trim already does; its claim names the anchors",
+     "class": "within",
+     "why": "T13 is the one claims task Amendment 5 asks for ('Then do 1 more claims task'), a 385 claim (T127) moved here under the 2026-10-19 routing. The fix brings the settle repair into line with the trim and 0246's pull-back to the last house served; it narrows nothing the GM asked and adds no scope beyond the claim."
+    },
+    {
+     "id": "T13-A6 exit (e) conform",
+     "summary": "the task conforms the code to the research (pull back to the last house served) rather than amending the research or the claim",
+     "class": "within",
+     "why": "Conforming the drifted settle code to its stated design is the ordinary resolution of a claims task; no carve-out of the request."
+    },
+    {
+     "id": "T13-A5/A9 order and done-measure",
+     "summary": "one unit test of a street whose last served farm stands past its last lane joint, the gate with the landing cohort beside it, the claims round reading settle_street_ends IN-STEP, make land; budget 25 min",
+     "class": "within",
+     "why": "The test enforces the claim being fixed, the gate/cohort-in-parallel is Amendment 5's own instruction, and the measured landing serves 'measure how long it takes'. No step is skipped or narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  },
  "blocks": {

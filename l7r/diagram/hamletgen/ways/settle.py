@@ -71,7 +71,7 @@ from .joints import joints, rank_width
 from .keeper import NOT_THE_SETTLES, unsettled  # noqa: F401 - re-exported: `settle.unsettled` is the exit question callers name
 from .knots import settle_knots
 from .reach import _draw_tree_lane, settle_field, settle_targets  # noqa: F401 - re-exported: callers and tests name these as `settle.<name>`
-from .serve import shadowed_by
+from .serve import shadowed_by, street_anchors
 from .squaring import (  # noqa: F401 - re-exported: callers and tests name these as `settle.<name>`
     SQUARE_MARGIN_FT,
     SQUARE_PASSES,
@@ -533,7 +533,9 @@ def settle_street_ends(s: Any) -> int:
     the law stopped counting a way an end walked away from; the knot dropped, the street's end served nothing and the web
     was refused).
 
-    Research: an end reaches something seen - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a street's dangling end cut to its last joint"""
+    Its joints: the other lanes' ends and each served farm's point (`serve.street_anchors`, as `trim_streets` reads them).
+
+    Research: an end reaches something seen - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a street's dangling end cut to its last joint, a lane's end or the last farm it serves"""
     from .street import end_to_its_joint  # street.py imports this module's `Lawful`; imported where it is used
 
     M = s.M
@@ -541,12 +543,13 @@ def settle_street_ends(s: Any) -> int:
     if not any(ln.get("street_index") is not None for ln in lanes):
         return 0
     ways = [_pts(ln) for ln in lanes]
+    anchors = street_anchors(s)
     edits: dict[int, list[Poly]] = {}
     for i, e in law.dangling_lane_ends(M, memo_ground(s, "worked", worked_ground)):
         if lanes[i].get("street_index") is None:
             continue
         run = edits[i][0] if i in edits else ways[i]
-        cut = end_to_its_joint(run, [o[k] for j, o in enumerate(ways) if j != i and len(o) >= 2 for k in (0, -1)], _TOUCH_GAP, e)
+        cut = end_to_its_joint(run, [*(o[k] for j, o in enumerate(ways) if j != i and len(o) >= 2 for k in (0, -1)), *anchors], _TOUCH_GAP, e)
         if len(cut) >= 2 and cut != run:
             edits[i] = [cut]
     return apply_pieces(s, edits) if edits else 0
