@@ -168,7 +168,7 @@ Research:
 #   FORD_BEND_DEG: a site where the brook turns more than this across the gap is skipped - a deck across a bend
 #     is not square to both reaches.
 FORD_HALF = 30.0
-"""Research: crossing place's length - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: 60 ft gap, crossed near square"""
+"""Research: crossing place's length - UNRESEARCHED: a 60 ft gap (30 ft either side of a crossing place), crossed near square; 0035 sets the places and their spacing, not their length"""
 FORD_SPACING = 160.0
 """Research: crossing places along the brook - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: every 160 ft"""
 FORD_BEND_DEG = 20.0

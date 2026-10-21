@@ -10,7 +10,7 @@ from collections.abc import Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.overlap.registry import forbidden_segment
-from l7r.diagram.settlement import Settlement, edge_dist, point_in_poly, segments_cross, skeleton_layout
+from l7r.diagram.settlement import Settlement, edge_dist, point_in_poly, seg_dist, segments_cross, skeleton_layout
 from l7r.diagram.settlement._geom import ring_offset
 from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.sitegen.geom import centroid, crop_polys, pull_clear, unit
@@ -917,6 +917,13 @@ class NoDryExit(ValueError):
     rather than drawn as a track through the wet (feature 287, ways W23)."""
 
 
+def on_course(seg: tuple[Pt, Pt], course: Sequence[Pt], tol: float = 1.0) -> bool:
+    """Does the segment lie on the polyline `course` - both ends within `tol` of it?"""
+    if len(course) < 2:
+        return False
+    return all(min(seg_dist(q[0], q[1], a, b) for a, b in zip(course, course[1:], strict=False)) <= tol for q in seg)
+
+
 def connector_dry_exit(plan: SitePlan, start: Pt, avoid: Sequence[Poly], wet: Sequence[Poly], waters: Sequence[tuple[Pt, Pt]], fabric: Sequence[Poly]) -> Poly:
     """The connector by the flood fill (`dry_exit`): walled by the wet ground (grown by the lane's width), every steading at
     `TRACK_FABRIC_GAP`, the field and the pond; the brook and the drawn water are lines it may not cross - the brook but at its
@@ -932,6 +939,9 @@ def connector_dry_exit(plan: SitePlan, start: Pt, avoid: Sequence[Poly], wet: Se
         a drawn channel crossed on a deck - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: where a way crosses a stream or ditch the map draws a timber deck as wide as the way (the settle seats it)
         a channel crossed last - UNRESEARCHED: the fill crosses a drawn channel only where no way out keeps to the ground between them; 0084 does not say when a way crosses a ditch rather than going round
         where on a channel it crosses - UNRESEARCHED: anywhere the fill finds; the settle squares the crossing (`squaring.square_every_crossing`)
+        the track past the wet ground's end - research/questions/0081-village-lanes.drawing.html: a track keeps off wet ground and leaves downslope past its end; the fill, walled by the wet ground, can leave no other way - on whichever flank it reaches first (the cluster's own flank, as the page has it, where the cluster sits nearest that end: GUESS research/questions/0081-village-lanes.drawing.html)
+        the track starts clear of the bands - UNRESEARCHED: the track out starts where its start was walked clear of the grove bands; the gateway point is not drawn, and the web's ways meet the track where they reach it
+        only the brook gapped at its crossing places - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the crossing places stand on the brook; a drawn channel or the drain is crossed only as the last resort (on a deck, 0084)
         brook crossed at its crossing places - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the fill keeps to its own bank unless crossing at a crossing place (`brook_fords`, gapped by `FORD_HALF`) finds a way it otherwise has not, or saves more than `BROOK_CROSSING_COST_FT` (150 ft) of walk; the crossing is then squared to the brook by the settle (`squaring.square_every_crossing`, the connector's too)"""
     # ...A FARM'S GROVE BAND AT A FOOTPATH'S GAP, over a grid fine enough to pass between two (feature 291 on 287): dispersed
     # farms stand a lane's room (32 ft) apart, and at the track's gap on the 20 ft grid every way between them was walled -
@@ -949,7 +959,12 @@ def connector_dry_exit(plan: SitePlan, start: Pt, avoid: Sequence[Poly], wet: Se
     lines = [(plan.sink_brook[i], plan.sink_brook[i + 1]) for i in range(len(plan.sink_brook) - 1)] + list(waters)
     # ...AND OVER THE BROOK AT ITS CROSSING PLACES (feature 385 T102, D131): a settlement whose every bearing out is wet is where a
     # way crosses its brook, and 0035 sets a crossing place every 160 ft or so - the fill passes the water within `FORD_HALF` of one
-    opened = gap_segments(lines, brook_fords(getattr(plan, "brook", None) or [], FORD_SPACING, FORD_BEND_DEG), FORD_HALF)
+    # ...THE BROOK'S OWN SEGMENTS ONLY (405 T67): the crossing places stand on the brook's course (`plan.brook`), so only a line
+    # lying on that course is gapped there - a drawn channel or the drain that passed near one was opened with it
+    course = list(getattr(plan, "brook", None) or [])
+    brook_lines = [ab for ab in lines if on_course(ab, course)]
+    channels = [ab for ab in lines if not on_course(ab, course)]
+    opened = gap_segments(brook_lines, brook_fords(course, FORD_SPACING, FORD_BEND_DEG), FORD_HALF) + channels
     # ...FROM OUTSIDE ANY GROVE BAND: a dispersed seat's gateway can fall inside a farm's deep band, and the fill's start cell
     # alone is walkable there - every cell round it was band (cohort seed 5); a track may not start in a grove in any case
     if bands:
@@ -964,9 +979,8 @@ def connector_dry_exit(plan: SitePlan, start: Pt, avoid: Sequence[Poly], wet: Se
     # ...AND, LAST, OVER A DRAWN CHANNEL ON A DECK (405 T10): 0084 draws a timber deck as wide as the way where a way crosses a
     # stream or ditch, so where neither fill finds a way out the channels are opened (the brook still only at its crossing
     # places) and the settle seats the deck as at any crossing (`law` decks); it only turns a refused gateway into a way out
-    if path is None and waters:
-        brook_lines = lines[: max(0, len(plan.sink_brook) - 1)]
-        path = dry_exit(start, walls, gap_segments(brook_lines, brook_fords(getattr(plan, "brook", None) or [], FORD_SPACING, FORD_BEND_DEG), FORD_HALF), float(plan.W), float(plan.H), cell=cell)
+    if path is None and channels:
+        path = dry_exit(start, walls, opened[: len(opened) - len(channels)], float(plan.W), float(plan.H), cell=cell)
     if path is None:
         raise NoDryExit(f"no dry way out of the frame from the gateway at ({start[0]:.0f}, {start[1]:.0f})")
     return path

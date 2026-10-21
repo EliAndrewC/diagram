@@ -136,3 +136,26 @@ def test_the_last_resort_crosses_a_drawn_channel_on_a_deck_only_where_nothing_el
     calls.clear()
     monkeypatch.setattr(track, "dry_exit", lambda *a, **k: calls.append(1) or list(out))
     assert track.connector_dry_exit(plan, (400.0, 500.0), [], [], ditch, []) == out and len(calls) == 2, "a dry way: no third fill"
+
+
+def test_only_the_brook_is_gapped_at_its_crossing_places(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """405 T67: the crossing places stand on the brook's course, so a drawn channel passing beside one keeps its whole line in
+    the fill open at the crossing places - it was gapped with the brook."""
+    import types
+
+    from l7r.diagram.hamletgen.ways import track
+
+    brook = [(500.0, -100.0), (500.0, 1100.0)]
+    plan = types.SimpleNamespace(W=1000.0, H=1000.0, sink_pond=None, sink_brook=brook, brook=brook, envelope=[], grove_bands=[])
+    beside = ((510.0, -100.0), (510.0, 1100.0))  # a channel 10 ft off the brook, through every crossing place's reach
+    calls: list[list] = []
+
+    def fill(start, walls, lines, W, H, cell=10.0):  # type: ignore[no-untyped-def]
+        calls.append(list(lines))
+        return [(400.0, 500.0), (400.0, 2000.0)]
+
+    monkeypatch.setattr(track, "dry_exit", fill)
+    track.connector_dry_exit(plan, (400.0, 500.0), [], [], [beside], [])
+    assert beside in calls[1], "the channel whole in the fill open at the crossing places"
+    assert len([s for s in calls[1] if track.on_course(s, brook)]) > 1, "the brook gapped"
+    assert not track.on_course(beside, brook) and not track.on_course(beside, brook[:1])
