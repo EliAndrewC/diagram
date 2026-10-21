@@ -84,12 +84,15 @@ Yards = list[tuple[Poly, Pt | None]]
 
 
 def theirs(p: Poly, yards: Yards, houses: Sequence[Mapping[str, Any]]) -> list[Poly]:
-    """The yards and gardens a lane along `p` may not come near: all but those within `law.DOORSTEP_FT` of one of its ENDS.
+    """The yards and gardens a lane along `p` may not come near: all but its OWN household's - at each end, the one steading
+    nearest it within `law.DOORSTEP_FT`, the dooryard that end arrives at (405 T18: every steading that near was exempt, so a
+    neighbor's garden beside a junction lost the gap 0246 keeps off another household's garden).
 
     Research:
         a lane arrives at its own dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its way leaves its dooryard round its own beds and fixtures
-        the dooryards it arrives among - UNRESEARCHED: every steading within `DOORSTEP_FT` of either end exempt from the fence clearance, the dooryards it arrives among"""
-    own = [(float(h["x"]), float(h["y"])) for h in houses if min(math.dist(p[0], (float(h["x"]), float(h["y"]))), math.dist(p[-1], (float(h["x"]), float(h["y"])))) <= law.DOORSTEP_FT]
+        its own household the one its end arrives at - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the gap is kept from another household's garden; which household a lane is its own's the page does not say - the steading nearest an end within `DOORSTEP_FT`"""
+    centers = [(float(h["x"]), float(h["y"])) for h in houses]
+    own = [c for end in (p[0], p[-1]) if (c := min(centers, key=lambda q: math.dist(end, q), default=None)) is not None and math.dist(end, c) <= law.DOORSTEP_FT]
     return [poly for poly, owner in yards if owner is None or all(math.dist(owner, c) > 1.0 for c in own)]
 
 

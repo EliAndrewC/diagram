@@ -25,7 +25,7 @@ def test_a_field_spur_that_folds_back_on_itself_is_cut_at_the_fold() -> None:
     cut here, and what is left is drawn only while it still reaches the field."""
     from l7r.diagram.hamletgen.ways.track import spur_cut_at_the_fold
 
-    near = [(120.0, -50.0), (220.0, -50.0), (220.0, 50.0), (120.0, 50.0)]
+    near = [(104.0, -50.0), (220.0, -50.0), (220.0, 50.0), (104.0, 50.0)]  # 4 ft past the arm's end: within 0014's 6 ft join (405 T22)
     straight = [(0.0, 0.0), (50.0, 0.0), (100.0, 0.0)]
     assert spur_cut_at_the_fold(straight, near) == (straight, None), "a spur that does not fold is drawn as threaded"
 

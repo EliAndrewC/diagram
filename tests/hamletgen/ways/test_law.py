@@ -151,10 +151,15 @@ def test_a_farmhouse_discharges_two_lane_ends_not_three() -> None:
 
 def test_a_way_reaches_the_field_on_a_brook_map() -> None:
     field = {"outline": [[200.0, 0.0], [400.0, 0.0], [400.0, 200.0], [200.0, 200.0]]}
-    near = {"streams": [BROOK], "fields": [field], "dry_plots": [{"poly": [[0.0, 0.0], [1.0, 0.0], [1.0, 1.0]]}], "lanes": [_lane((150.0, 50.0), (170.0, 50.0))]}
-    far = {**near, "dry_plots": [], "lanes": [_lane((0.0, 500.0), (10.0, 500.0)), _lane((150.0, 50.0), (170.0, 50.0), connector=True)]}
-    assert math.isclose(law.field_reach_ft(near), 30.0)
+    near = {"streams": [BROOK], "fields": [field], "dry_plots": [{"poly": [[0.0, 0.0], [1.0, 0.0], [1.0, 1.0]]}], "lanes": [_lane((150.0, 50.0), (196.0, 50.0))]}
+    far = {**near, "dry_plots": [], "lanes": [_lane((0.0, 500.0), (10.0, 500.0)), _lane((150.0, 50.0), (196.0, 50.0), connector=True)]}
+    assert math.isclose(law.field_reach_ft(near), 4.0)
     assert not law.field_unreached(near)
+    # 405 T22: 0014 draws the path JOINING the bund, an end within 6 ft of the paddy read as joining it - 10 ft off is short
+    assert law.field_unreached({**near, "dry_plots": [], "lanes": [_lane((150.0, 50.0), (190.0, 50.0))]}), "an end 10 ft short of the paddy"
+    from l7r.diagram.hamletgen.ways import track
+
+    assert track.SPUR_REACH_FT == law.FIELD_REACH_FT == 6.0, "one distance for the law and the placer"
     assert law.field_unreached(far), "the connector is not the hamlet's own way"
     assert not law.field_unreached({**far, "streams": []}), "without a brook the rule does not apply"
     assert law.field_reach_ft({"lanes": []}) == math.inf

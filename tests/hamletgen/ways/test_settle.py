@@ -737,7 +737,8 @@ def test_seed_8_a_corridor_over_the_brook_at_its_ford_is_squared_and_drawn() -> 
     assert settle.corridor_on_lawful_ground(s.M, [(300.0, 80.0), (0.0, 0.0)]), "squared, the seating's own question admits it"
     settle.settle_the_web(s)
     assert law.unreached_houses(s.M) == [] and law.oblique_crossings(s.M) == [] and law.off_ford_crossings(s.M) == []
-    assert [ln["role"] for ln in s.M["lanes"] if ln.get("role")] == ["access"]
+    # ...and the field way, since 405 T22: no lane here comes within 0014's 6 ft join of the field, so the settle draws one
+    assert [ln["role"] for ln in s.M["lanes"] if ln.get("role")] == ["access", "field way"]
     assert settle.unsettled(s.M) == {}
 
 
@@ -977,3 +978,16 @@ def test_the_first_street_is_never_pulled_back() -> None:
     s.M["lanes"][1].update({"street": True, "street_index": 0})
     assert (1, -1) in law.dangling_lane_ends(s.M), "the first street's end dangles"
     assert settle.settle_street_ends(s) == 0 and _pts(s, 1)[-1] == (0.0, 600.0), "and is left to run on"
+
+
+def test_a_lane_keeps_the_gap_off_a_neighbor_s_garden_at_its_end() -> None:
+    """405 T18 (D69): `theirs` exempts at each end only the steading nearest it within `DOORSTEP_FT` - the household it
+    arrives at - so a neighbor's garden beside a junction keeps the gap 0246 keeps off another household's garden."""
+    from l7r.diagram.hamletgen.ways.settle import shapes
+
+    own, neighbor = {"x": 0.0, "y": 0.0}, {"x": 50.0, "y": 0.0}
+    yards = [([(0.0, 0.0)], (0.0, 0.0)), ([(50.0, 0.0)], (50.0, 0.0)), ([(9.0, 9.0)], None)]
+    near = shapes.theirs([(10.0, 0.0), (10.0, 300.0)], yards, [own, neighbor])
+    assert [(50.0, 0.0)] in near and [(0.0, 0.0)] not in near, "its own dooryard exempt, the neighbor's not"
+    assert [(9.0, 9.0)] in near, "an unowned yard is never exempt"
+    assert shapes.theirs([(10.0, 0.0), (10.0, 300.0)], yards, []) == [y for y, _o in yards]

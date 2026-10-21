@@ -116,7 +116,9 @@ def tip_onto_the_bund(pts: Sequence[Pt], ground: WorkedGround, half_tread: float
     """A path's LAST point set on the bund: pulled back out of the worked ground where it ends inside it, carried on to it
     where it stops short and the way is clear, straight on (`run_on_target`, `turns_back`). Otherwise as it came.
 
-    Research: spur tip on the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: never short of it, never in it"""
+    Research:
+        spur tip on the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: never short of it, never in it
+        a tip that cannot be carried on - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: past the run-on's reach, turning back or blocked, it is left as it came for the settle - the lane law calls the short end dangling and 0246's pull-back takes it - and the field is reached by `a_way_onto_the_bund` (0014: the hamlet's nearest lane runs on to the bund)"""
     out = [(float(p[0]), float(p[1])) for p in pts]
     if len(out) < 2:
         return out

@@ -41,9 +41,10 @@ from .fabric import _crosses_fabric, _homestead_polys, fabric_hits_boxed, poly_b
 from .geom import _turn_deg, memo_ground, polyline_len, push_clear_of_fabric, push_out_of, worked_ground
 from .route import _route, set_crossing
 
-# how near the field a spur's end must stand to have reached it - `lanes_reach_something`'s own 60 ft for a lane end
-SPUR_REACH_FT = 60.0
-"""Research: spur reaches the field - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: within 60 ft of its edge"""
+# how near the field a spur's end must stand to have reached it - `law.FIELD_REACH_FT`, which this layer cannot import (a test
+# holds the two equal, 405 T22: one distance for the law and the placer)
+SPUR_REACH_FT = 6.0
+"""Research: spur reaches the field - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a lane end within 6 ft of the paddy's edge is drawn as joining it"""
 SPUR_WIDTH = 5  # the field spur's tread, a worn path: the web's ways are 3, the connector 6
 """Research: field spur width - research/questions/0081-village-lanes.drawing.html: 5 ft"""
 
@@ -68,7 +69,7 @@ def spur_cut_at_the_fold(pts: Poly, envelope: Poly) -> tuple[Poly, str | None]:
 
     Research:
         spur fold cut - DEVIATION research/questions/0081-village-lanes.drawing.html: a folded field spur is cut at the fold whatever the returning leg's length, and drawn only while the arm reaches the field
-        a folded spur's reach - UNRESEARCHED: the arm counts as reaching the field when it ends within `SPUR_REACH_FT` (60 ft) of it"""
+        a folded spur's reach - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the arm counts as reaching the field when it ends within `SPUR_REACH_FT` (6 ft, 0014's join) of it"""
     fold = next((k for k in range(1, len(pts) - 1) if _turn_deg(pts[k - 1], pts[k], pts[k + 1]) >= _HAIRPIN_DEG), None)
     if fold is None:
         return pts, None

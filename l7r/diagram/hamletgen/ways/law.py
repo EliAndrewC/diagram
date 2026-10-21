@@ -187,12 +187,15 @@ BREAK_SPAN_FT = 60.0
 (`lanes_do_not_break_mid_run`): the tread was drawn across the solid, or it vanished there and resumed beyond.
 Research: no tread through a building - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a segment over 60 ft"""
 
-FIELD_REACH_FT = 60.0
+FIELD_REACH_FT = 6.0
 """On a brook map one of the hamlet's own ways (not the track out) comes this near the field - its paddy or its dry hem -
-the reach `lanes_reach_something` asks of the field (feature 261, FR-012).
+the reach `lanes_reach_something` asks of the field (feature 261, FR-012). 60 ft until 405 T22: no 0014 page states it, and
+0014 draws the path JOINING the bund, a lane end within 6 ft of the paddy's edge read as joining it. `track.SPUR_REACH_FT`
+is this distance (a test holds them equal; that layer cannot import the law).
 Research:
     a way reaches the field - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a way runs from the hamlet to the field's outer bund
-    the reach - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the path joins the bund and never ends short of it; this law accepts a way within 60 ft of the field - a known gap (no 0014 page states 60 ft, searched 2026-10-17), carried to feature 385 T12 with the field refusals it bears on"""
+    the reach - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a lane end that stops within 6 ft of the paddy's edge is drawn as joining it
+    a dry plot's edge arrived at - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the page speaks of the paddy; a dry plot is the field's dry hem, worked ground a path may end on"""
 
 
 CONNECTOR_START_FT = 1.5

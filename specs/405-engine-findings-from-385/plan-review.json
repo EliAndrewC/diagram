@@ -1194,6 +1194,66 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
+  },
+  "### T18 Approach (checklist part A)": {
+   "sha256": "67fdf817c2d814ccf6f03ba86ced97d0adfab69b8a49afa3547d2b2c261df6de",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T18 Decisions": {
+   "sha256": "e82911c37a7b0aeb38e40f8dbc382c765b5714a95420e62da37fd07c29129e4f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T86 Approach (checklist part A)": {
+   "sha256": "60731bce931ebb1932fe6df710708cc19ead58f4cbff02315615d7b491b87543",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T86 Decisions": {
+   "sha256": "6c848db182b0c9e56b1cfe6e252742bce0b1f026dc24ee01642b512af4386cd1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T89 Approach (checklist part A)": {
+   "sha256": "6be59ecd30072d2fb3a307016b51bea091ebea8e719e1a8e0b333fd411d9cc76",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T89 Decisions": {
+   "sha256": "5f24ad4f61215e74540f7fd1e6b8c72d5e77b0efd1905b462647baaa6ddf01c0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T22 Approach (checklist part A)": {
+   "sha256": "2e9bd04d2629bf7a4e384f01367f167fc88dedf10bd0b8c7d7f110133cfafbff",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T22 Decisions": {
+   "sha256": "8c39be97cb8a9b7d7aeacb1b0fab272245853f3b76cee4cf0abeb592490f4c1b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T23 Approach (checklist part A)": {
+   "sha256": "6504dd4399dbccc32aab135174af5778a83a1be3d53419136fa0f9f3c2557f39",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T23 Decisions": {
+   "sha256": "64c2b0fb100380da7386606e1e51520d164bda81ed6ced66b9ce736d703cb832",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2849,6 +2909,54 @@
      "summary": "landing_pids(root) matches a process whose argv[0] is a python, whose first argument ends scripts/land.py, whose cwd is the tree, and which is not the caller; make land-stop SIGTERMs each",
      "class": "within",
      "why": "Mechanism of T90's stop. Restricting to this tree and excluding the caller keeps the stop from reaching other clones' landings or itself; no requested behavior is excluded."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "### T18 Approach (checklist part A)",
+    "### T18 Decisions",
+    "### T22 Approach (checklist part A)",
+    "### T22 Decisions",
+    "### T23 Approach (checklist part A)",
+    "### T23 Decisions",
+    "### T86 Approach (checklist part A)",
+    "### T86 Decisions",
+    "### T89 Approach (checklist part A)",
+    "### T89 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D69",
+     "summary": "T18: settle.theirs exempts at each lane end only the nearest steading within DOORSTEP_FT, not every one; the lane's own household read as the one its end arrives at (GUESS 0246); exit (e) conform",
+     "class": "within",
+     "why": "FR-001 has each moved task worked by 385's checklist; Amendment 7 asks the session to work the remaining tasks and settle research questions itself. Conforming the code to 0246 (gap kept from another household's garden) narrows nothing the GM asked; the GUESS fills a point the page is silent on and is labeled as such."
+    },
+    {
+     "id": "D70",
+     "summary": "T86: no code change; the join links' 7 ft keep from every garden claimed GUESS 0246 (a join link belongs to no household, so the own-garden DEVIATION does not reach it); exit (a) claim",
+     "class": "within",
+     "why": "Claiming existing behavior against the research is one of the checklist's exits under FR-001; it does not carve anything out of the request, which says nothing about join links."
+    },
+    {
+     "id": "D71",
+     "summary": "T89: no code change; _touch_junctions' 2 ft claimed CONVENTION (half the ink's 4 ft touch; a shorter link would be under any tread); exit (a) claim",
+     "class": "within",
+     "why": "The task's goal is that every tolerance a join reads is claimed; the decision claims it. Nothing in the GM's words is narrowed."
+    },
+    {
+     "id": "D72",
+     "summary": "T22: law.FIELD_REACH_FT 60 -> 6 ft per 0014 (GUESS); track.SPUR_REACH_FT reads it; a dry plot's edge still counts as the field's (GUESS, 0014 silent); settle_field draws the field way where none joins, an undrawable map refused as now; exit (e) conform",
+     "class": "within",
+     "why": "Conforms the code to the research the task names, under FR-001. The dry-plot GUESS fills a silence in 0014 rather than excepting a case from anything the GM asked; Amendment 7 explicitly expects the session to make such research calls itself. Step 10 measures the constant's readers before moving it."
+    },
+    {
+     "id": "D73",
+     "summary": "T23: no code change; tip_onto_the_bund's claim names its fallback (a tip it cannot carry is left for the settle: the short end called dangling and pulled back, GUESS 0246, the field reached by a_way_onto_the_bund per 0014); exit (a) claim",
+     "class": "within",
+     "why": "Naming the fallback in the claim is a checklist exit under FR-001; it relies on the 0014 and 0246 rules the approach cites and narrows nothing in the request."
     }
    ]
   }

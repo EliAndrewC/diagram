@@ -140,6 +140,7 @@ def _touch_junctions(
         final overrun cut - research/questions/0081-village-lanes.drawing.html: on the final pass a tail of under 40 ft past the way it meets is cut (a 6 ft floor, on no page, dropped - feature 328 wave 95)
         join reach - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined; the code extends a free end within 25 ft (`_LANE_JOIN_FT`, and `_STUB_REACH_FT` on the final pass) of another way to it
         a foot beside its own lane's other end left - UNRESEARCHED: a foot within 6 ft of the lane's other end is not joined
+        an end already on a way - CONVENTION: an end within 2 ft of a way already stands on it at the map's scale, half the ink's 4 ft touch - a link that short is shorter than any tread, so none is drawn
         a roundabout link refused - UNRESEARCHED: a junction link longer than `_LINK_DIRECTNESS` (4) times the gap it closes
         a straight link off the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off a garden fence
         a wide lane's bar - UNRESEARCHED: a lane wider than 10 ft held at half its width plus 2 ft; the page says nothing of wide lanes
@@ -477,6 +478,7 @@ def _join_piece(
 
     Research:
         a link the splice refuses - research/questions/0081-village-lanes.drawing.html: a footpath is drawn 3 ft wide and two lanes meeting end to end are read as one - so the link is drawn at the piece's width, rounded (3 ft where it has none)
+        a join link off every garden - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the page keeps the gap off another household's garden; a link belongs to no one household, so every garden is another's
         no nearer the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the joined run no nearer a garden fence than it already stood or than 7 ft (`WEB_FABRIC_GAP`, the page's fence to the middle), whichever is more generous (405 T65); a lane wider than 10 ft held at half its width plus 2 ft, its tread's edge then 2 ft off - UNRESEARCHED, no lane drawn here is that wide"""
     pts = [(float(x), float(y)) for x, y in way]
     link = _stop_at_network(link, net)

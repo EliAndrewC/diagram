@@ -311,7 +311,9 @@ def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: l
     put there by a string-pull that tested its own chord and passed. Deriving it leaves the common 3 ft
     lane untouched (3.5 is below the default) and tightens only the wide ways.
 
-    Research: junction link margin - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft (`WEB_FABRIC_GAP`) off the fabric, or the caller's"""
+    Research:
+        junction link margin - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft (`WEB_FABRIC_GAP`) off the fabric, or the caller's
+        a join link off every garden - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the gap is kept from another household's garden and a household's own way may run beside its own; a link joins a way to the network and belongs to no one household, so no garden is its own"""
     span = math.dist(a, b)
     if span < 1.0:
         return True
