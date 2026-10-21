@@ -174,3 +174,5 @@ the line (FR-005): the reply points there and the record does not repeat it.
   is OPEN with its nearest named) swept over every line of spec, plan and briefs.
 - **Round arbiter, ask:408-plan-round3: accept.** The plan stands without a third round, after two leftover spec
   sentences (US1 scenario 4, the findings preamble) were reworded to the same rule.
+- **spec-fidelity-verify, round 3 (2026-10-21): FAITHFUL.** Round 2's three items resolved; the nearest-is-not-an-answer
+  rule applies the request's own word "answer"; no line dropped, no scope added.
