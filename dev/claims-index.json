@@ -7541,11 +7541,11 @@
  },
  "l7r/diagram/hamletgen/consts_water.py::FORD_HALF#crossing place's length": {
   "body": "f7bf5eb6cc16cec4",
-  "claim": "crossing place's length - UNRESEARCHED: a 60 ft gap (30 ft either side of a crossing place), crossed near square; 0035 sets the places and their spacing, not their length",
-  "code": "8f9109b9148180fc",
+  "claim": "crossing place's length - CONVENTION: a 60 ft gap (30 ft either side of a crossing place), so a deck crossing near square lands on both banks; 0035 sets the places and their spacing, not their length",
+  "code": "84eaf38b616bef27",
   "core": "f9869fee1052b437",
   "date": "2026-10-21",
-  "note": "0035 places the crossings and their spacing; neither page gives the length of the gap",
+  "note": "routing tolerance on the gap; 0035 sets the places, the spacing and the squareness, not the gap's length",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -31844,32 +31844,16 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#the track past the wet ground's end": {
+ "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#the track's flank": {
   "body": "78231be076742dce",
-  "claim": "the track past the wet ground's end - village-lanes.drawing: a track keeps off wet ground and leaves downslope past its end; the fill, walled by the wet ground, can leave no other way - on whichever flank it reaches first (the cluster's own flank, as the page has it, where the cluster sits nearest that end: GUESS village-lanes.drawing)",
-  "code": "070556c283cfa3db",
+  "claim": "the track's flank - UNRESEARCHED: the fill takes the shortest way off any frame edge past the wet ground; 0081's downslope exit on the cluster's own flank is not yet asked of it (405 T111)",
+  "code": "53712f8ca1262dbe",
   "core": "244a34e5859ee3b4",
   "date": "2026-10-21",
-  "note": "0081 says the track \"leaves downslope past the end of the wet ground, on the flank the cluster already sits on\", but `dry_exit` takes the nearest way off any frame edge, with no rule for slope or flank. The claim's \"GUESS research/questions/0081...\" points at a guess the page does not record; either the code prefers the cluster's own flank going downslope, or 0081 records nearest-exit as a GUESS or DEVIATION",
-  "pages": {
-   "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
-  },
-  "research": "324b10775c9108ef",
-  "rests": [
-   "0081-village-lanes.drawing.html:43b635b1ca75125b"
-  ],
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#the track starts clear of the bands": {
-  "body": "78231be076742dce",
-  "claim": "the track starts clear of the bands - UNRESEARCHED: the track out starts where its start was walked clear of the grove bands; the gateway point is not drawn, and the web's ways meet the track where they reach it",
-  "code": "5116c62803f5485a",
-  "core": "244a34e5859ee3b4",
-  "date": "2026-10-21",
-  "note": "the pages are silent on moving the start; ways joining the track where they reach it agrees with 0246's T-joins",
+  "note": "0081 answers this decision: \"It leaves downslope past the end of the wet ground, on the flank the cluster already sits on\", turning along the contour only where the fan reaches the map's edge. The code's shortest way off any frame edge (`dry_exit(start, walls, lines, W, H)` with no flank or downslope bias) departs from that, and 0081 records no deviation. The claim should cite research/questions/0081-village-lanes.drawing.html, where it would be DRIFTED, or name a DEVIATION that 0081's drawing page records",
   "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#track start out of the grove bands": {
   "body": "78231be076742dce",
