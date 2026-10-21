@@ -337,37 +337,37 @@
   },
   "## T43 - the hourly step-back suspended (amendment 4)": {
    "sha256": "dd118650e6b77e22b17d3de56f58dcbdcd9233b54db9089393bb08474e6885b9",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T43 Approach (checklist part A)": {
    "sha256": "10d56dde5ac2fcfc6ca998e0aca1acf3a2a4390a8cb80e386fc290f09c65a636",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T43 Decisions": {
-   "sha256": "78dd17be1c6058f96937dd0b9e7763426a1d81b3704177e72e9680a6d9cab0c2",
-   "verdict": "BLOCKED",
+   "sha256": "3f5cdcdee7defabcb752b8984ef4e3846552233956a82651cb088c529bccd269",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "## T44 - the red-gate hold reaches every gate (amendment 4)": {
    "sha256": "db6e836fc9c3833d2d0e8f88f755474270ea06be6e25ad0dd1b78996a5b50ef6",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T44 Approach (checklist part A)": {
    "sha256": "d7e1627629f85a4e1025c6756c290e8b09fa60d4034672e441b651e471c898c2",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T44 Decisions": {
    "sha256": "193446df44b21a91ba94ecb7e21336701e9b3bfdfd3ac681c0db511fa7649664",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   }
@@ -721,6 +721,80 @@
      "summary": "T44: the trigger's writer (ci/state.py second_red_gate) is unchanged",
      "class": "within",
      "why": "The trigger was written correctly (arbiter-owed.json holds red-gate@05:02:38Z); the fault was the hold, so leaving the writer alone is the fix's scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T43 - the hourly step-back suspended (amendment 4)",
+    "## T44 - the red-gate hold reaches every gate (amendment 4)",
+    "### T43 Approach (checklist part A)",
+    "### T43 Decisions",
+    "### T44 Approach (checklist part A)",
+    "### T44 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D17-switch",
+     "summary": "The step-back is suspended by a switch file dev/step-back.json (absent means on) read by checkpoint.suspended(); make step-back-off/-on REASON= write and commit it; nothing of the checkpoint is deleted.",
+     "class": "within",
+     "why": "Amendment 4: 'suspend but not remove the hourly step-back arbitur'. A reversible switch with the machinery intact and one command to resume is the literal shape of suspend-not-remove; the recorded reason/who/when serves resumption and adds no behavior beyond the request."
+    },
+    {
+     "id": "D17-stand-down",
+     "summary": "While off, state() reports never due, so the step-back, its hold on make tick and the hour's refusal of a gate or a dispatch all stand down; make step-back and checkpoint.py status name the suspension and how to resume.",
+     "class": "within",
+     "why": "Suspending the hourly step-back means every effect of the hour stops; nothing of it is carved out to keep firing."
+    },
+    {
+     "id": "D17-open-checkpoint",
+     "summary": "A checkpoint already open when the switch goes off stands down with the rest; its record (clock, owed hour: trigger) is kept and owed again only on make step-back-on.",
+     "class": "within",
+     "why": "This is the change since the BLOCKED round: the earlier text kept an open checkpoint owed its ruling while suspended, i.e. kept the hourly arbiter firing. Now the suspension reaches it, and keeping the record so it resumes is the 'not remove' half of the GM's words."
+    },
+    {
+     "id": "D17-review-units-at-landing",
+     "summary": "Review units the hour used to call due still come due at the landing via review-gate.sh, as for a feature under an hour.",
+     "class": "within",
+     "why": "The landing's review gate is the pre-existing route for any feature that never reaches an hour; it is not the step-back arbiter, which is what the GM suspended. Leaving it as it is suspends nothing and preserves nothing the request asked to change."
+    },
+    {
+     "id": "T43-tripwires-kept",
+     "summary": "The feature-375 tripwires (round, reversal, cascade, red gate) are not touched by the suspension; a red-gate trigger still blocks the gate either way.",
+     "class": "within",
+     "why": "Amendment 4 suspends only the hourly step-back and in the next sentence asks for the red-gate tripwire to fire properly, so the tripwires are plainly meant to stay live."
+    },
+    {
+     "id": "T43-exit-switches-json",
+     "summary": "An axis in dev/switches.json was weighed and refused because its reader and make switches are engine code naming only remote.",
+     "class": "within",
+     "why": "Choice of where the switch lives; design, not fidelity. Either location suspends without removing."
+    },
+    {
+     "id": "D18-gate-held",
+     "summary": "A gate-held verb in hm_arbiter.py, run as the done recipe's first step before the gate lock, refuses while a red-gate trigger of the active feature is owed, so make land, idle-tests and a typed make done all meet it.",
+     "class": "within",
+     "why": "Amendment 4: fix the second-red-gate tripwire 'so that it fires properly when it should fire'. The measured miss (05:09 make land ran the gate past an unruled 05:02 trigger) was a gate route the hook did not see; putting the hold in the gate's own first step makes it fire on every route, which is the request."
+    },
+    {
+     "id": "D18-land-engine-only",
+     "summary": "land.py's cheap refusals ask gate-held only when the landing carries engine code; a tooling landing, which runs no gate, is not held.",
+     "class": "within",
+     "why": "Not an exception to the tripwire: FR-010/FR-011's hold is on the next gate, and a landing that runs no gate has no gate to hold. Any landing that does run the gate still meets the hold in the done recipe's first step, so the cheap-refusal placement only moves the refusal earlier; nothing that should be held escapes."
+    },
+    {
+     "id": "D18-arbiter-ok",
+     "summary": "ARBITER_OK=<reason> passes the new gate-held step and is logged as an escape.",
+     "class": "within",
+     "why": "The plan lists ARBITER_OK as the existing escape the hook's hold on a typed make done already honors; the fix extends the same hold, with the same escape, to the routes that missed it. It adds no new carve-out to when the tripwire fires."
+    },
+    {
+     "id": "D18-writer-unchanged",
+     "summary": "The trigger's writer ci/state.py::second_red_gate is unchanged.",
+     "class": "within",
+     "why": "Measured: the trigger red-gate@2026-10-21T05:02:38Z was written; what failed was the hold, so fixing the hold is fixing the tripwire 'so that it fires properly'."
     }
    ]
   }
