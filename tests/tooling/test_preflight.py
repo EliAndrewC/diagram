@@ -172,9 +172,17 @@ def test_a_line_only_unit_tests_reached_at_the_last_green_gate_stops_the_preflig
     quick = {"tests.x.test_a::test_unit"}
     assert pf.unit_only(root, {f: [3, 4]}, quick) == {f: [3]}, "3: unit tests only; 4: changed, the gate's to judge"
     assert pf.split_gaps(root, {f: [3, 4]}, {f}, quick) == ({f: [3]}, {f: [4]}), "on the hamlet path: 3 stops, 4 goes to the gate"
-    assert pf.split_gaps(root, {f: [4]}, set(), quick) == ({f: [4]}, {}), "a changed line off the path stops, as before"
+    every = quick | {"tests.gate.test_roll::test_roll"}
+    assert pf.split_gaps(root, {f: [4]}, set(), every) == ({f: [4]}, {}), "a changed line off the path, its function reached by no gate test, stops"
     assert pf.unit_only(root, {f: [3]}, set()) == {}, "the unit test is not the quick run's: it may be a roll's"
     assert pf.unit_only(root, {"l7r/diagram/b.py": [1]}, quick) == {}, "a file the baseline does not hold"
+    # a CHANGED line off the hamlet path, in a function a gate-tier test reached at the baseline: the gate judges it (T42's
+    # landing: `gencache.gate_obtain`, which the pool sweep runs)
+    assert pf.gate_reached(root, {f: [4]}, quick) == {f: [4]}
+    assert pf.split_gaps(root, {f: [4]}, set(), quick) == ({}, {f: [4]})
+    assert pf.gate_reached(root, {f: [4]}, quick | {"tests.gate.test_roll::test_roll"}) == {}, "reached by quick tests alone"
+    (root / f).write_text("x = 1\n")
+    assert pf.gate_reached(root, {f: [1]}, quick) == {}, "a line in no function"
 
 
 def test_a_change_the_gate_does_not_see_does_not_move_the_tree(tmp_path: Path) -> None:

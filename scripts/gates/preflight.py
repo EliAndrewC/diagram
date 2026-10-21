@@ -41,6 +41,7 @@ import subprocess
 import sys
 import tempfile
 import time
+from collections.abc import Callable
 from pathlib import Path
 
 sys.dont_write_bytecode = True
@@ -128,10 +129,10 @@ def base_line(base_text: str, text: str, line: int) -> int | None:
     return None
 
 
-def unit_only(root: Path, gaps: dict[str, list[int]], quick: set[str]) -> dict[str, list[int]]:
-    """Of `gaps` (on-path lines the quick run left unrun), those the last green gate reached by NO test but the quick tier's:
-    the baseline's copy of the file maps each line, its `coverage.db` names what reached it. A file or line the baseline cannot
-    speak for is left out (the gate judges it, as before)."""
+def _by_baseline(root: Path, gaps: dict[str, list[int]], judge: Callable[[int, str, str, list[tuple[str, set[int]]]], bool]) -> dict[str, list[int]]:
+    """The lines of `gaps` that `judge(line, base_text, text, hits)` picks, read against the last green gate's baseline
+    (`<git dir>/gate-baseline/`: each file's blob in `manifest.json`, what reached each line in `coverage.db`). A file the
+    baseline cannot speak for is left out."""
     g = git(root, "rev-parse", "--absolute-git-dir").strip()
     base = Path(g) / "gate-baseline" if g else None
     if base is None or not (base / "coverage.db").is_file() or not (base / "manifest.json").is_file():
@@ -150,14 +151,34 @@ def unit_only(root: Path, gaps: dict[str, list[int]], quick: set[str]) -> dict[s
                 continue
             text = (root / f).read_text(encoding="utf-8")
             hits = [(ctx[c], set(numbits_to_nums(nb))) for c, nb in db.execute("SELECT context_id, numbits FROM line_bits WHERE file_id = ?", (fid,))]
-            for line in lines:
-                bl = base_line(base_text, text, line)
-                if bl is None:
-                    continue
-                by = [test_key(c) for c, ns in hits if bl in ns]
-                if all(k is not None and k in quick for k in by):
-                    out.setdefault(f, []).append(line)
+            out.update({f: picked} if (picked := [n for n in lines if judge(n, base_text, text, hits)]) else {})
     return out
+
+
+def unit_only(root: Path, gaps: dict[str, list[int]], quick: set[str]) -> dict[str, list[int]]:
+    """Of `gaps` (lines the quick run left unrun), those that map to a baseline line the last green gate reached by NO test but
+    the quick tier's (405 T40, D14). A line the delta changed has no baseline line and is left out (the gate judges it)."""
+
+    def judge(line: int, base_text: str, text: str, hits: list[tuple[str, set[int]]]) -> bool:
+        bl = base_line(base_text, text, line)
+        return bl is not None and all((k := test_key(c)) is not None and k in quick for c, ns in hits if bl in ns)
+
+    return _by_baseline(root, gaps, judge)
+
+
+def gate_reached(root: Path, gaps: dict[str, list[int]], quick: set[str]) -> dict[str, list[int]]:
+    """Of `gaps`, the lines whose FUNCTION the last green gate reached through a test outside the quick tier - a pool sweep,
+    a gate or full test - so the gate runs it again and its floor judges the line (T42's landing: `gencache.gate_obtain`, run
+    by the pool sweep, was refused for a changed line no quick test runs)."""
+
+    def judge(line: int, base_text: str, text: str, hits: list[tuple[str, set[int]]]) -> bool:
+        span = next(((lo, hi) for lo, hi in sorted(function_spans(text), key=lambda s: s[1] - s[0]) if lo <= line <= hi), None)
+        if span is None:
+            return False
+        mapped = {b for n in range(span[0], span[1] + 1) if (b := base_line(base_text, text, n)) is not None}
+        return any((k := test_key(c)) is None or k not in quick for c, ns in hits if ns & mapped)
+
+    return _by_baseline(root, gaps, judge)
 
 
 def uncovered(cov: dict, changed: dict[str, set[int]]) -> dict[str, list[int]]:
@@ -221,13 +242,18 @@ def coverage_step(root: Path, changed: dict[str, set[int]], workers: str) -> tup
 def split_gaps(root: Path, gaps: dict[str, list[int]], path: set[str], quick: set[str]) -> tuple[dict[str, list[int]], dict[str, list[int]]]:
     """(the lines that stop the preflight, the lines left to the gate) of `gaps`, the lines the quick run left unrun.
 
-    A CHANGED line keeps the old rule: off the hamlet path it stops the preflight, on it the gate judges. An UNCHANGED line of
+    A CHANGED line keeps the old rule - off the hamlet path it stops the preflight, on it the gate judges - unless its function
+    is one the last green gate reached through a test outside the quick tier (`gate_reached`): the gate judges that one too. An UNCHANGED line of
     a changed function is judged by the last green gate's evidence alone, wherever it is (405 T40, D14): reached there by
     quick-tier tests only, no roll reaches it now either and the floor will refuse it; otherwise it is not this step's to name."""
     strict = changed_lines(root, widen=False)
     mine = {f: [n for n in v if n in strict.get(f, set())] for f, v in gaps.items()}
     off = {f: v for f, v in mine.items() if v and f not in path}
     on = {f: v for f, v in mine.items() if v and f in path}
+    for f, ls in gate_reached(root, off, quick).items():  # ...off the path, but in a function the gate's own tests run
+        off[f] = [n for n in off[f] if n not in ls]
+        on[f] = sorted(set(on.get(f, [])) | set(ls))
+    off = {f: v for f, v in off.items() if v}
     ask = {f: [n for n in v if f in path or n not in strict.get(f, set())] for f, v in gaps.items()}
     for f, ls in unit_only(root, {f: v for f, v in ask.items() if v}, quick).items():
         off[f] = sorted(set(off.get(f, [])) | set(ls))
