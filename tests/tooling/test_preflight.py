@@ -196,6 +196,8 @@ def test_a_change_the_gate_does_not_see_does_not_move_the_tree(tmp_path: Path) -
     assert pf.unseen(root, f, old, old.replace(b"a - NONE", b"a reworded - NONE"))
     assert pf.unseen(root, f, old, old.replace(b"return x", b"return x  # why"))
     assert not pf.unseen(root, f, old, old.replace(b"return x", b"return x + 1"))
+    assert not pf.unseen(root, f, old, old.replace(b"a - NONE", b"a\n    reworded - NONE")), "a docstring a line longer moves the code below it: coverage reads lines"
+    assert pf.stmt_lines(b"def (") is None
     assert not pf.unseen(root, f, old, None) and not pf.unseen(root, "notes.md", b"a", b"b")
     assert pf.unseen(root, "dev/claims-index.json", b"{}", b"{1}") and pf.unseen(root, "specs/405-x/found.jsonl", None, b"r")
     assert pf.unseen(root, "dev/cohort-log/20261021T1046Z-x.json", None, b"{}"), "a new cohort record, committed beside the gate (405 T48)"

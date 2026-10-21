@@ -29416,6 +29416,23 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/street.py::trim_streets#a door on the street a joint": {
+  "body": "f2c4acf2bbadeac0",
+  "claim": "a door on the street a joint - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: pulled back to the last house it serves - a front door's nearest point on the street within `reach` (the caller's 1 ft: a door standing on the street) is a house it serves",
+  "code": "6fdb5ad0ecfa8e9c",
+  "core": "2e25d7ac8bde745b",
+  "date": "2026-10-21",
+  "note": "the claim says a door within `reach` (the caller's 1 ft) \"is a house it serves\", but the cited page records a different GUESS figure for how close counts as serving a house: \"within 60 ft of the house, or within 12 ft of the steading's built ground\". The code tests `math.dist(q, d) &lt;= reach`, which is 1 ft, not 60 or 12. Fix one of two ways: use the page's recorded 60/12 ft figures, or reword the claim so the 1 ft \"door standing on the street\" is a CONVENTION contact tolerance (like `_TOUCH_GAP`) and keep the GUESS for the pullback to the last house served alone",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
+  },
+  "research": "92410dbfeea7511e",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c90fc4f6fee86c66"
+  ],
+  "verdict": "DRIFTED"
+ },
  "l7r/diagram/hamletgen/ways/street.py::trim_streets#a field path's end a joint": {
   "body": "f2c4acf2bbadeac0",
   "claim": "a field path's end a joint - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane runs on to a field path or another way - a field path is a lane, its end a joint",

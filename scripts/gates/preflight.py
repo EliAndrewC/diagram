@@ -318,7 +318,18 @@ def unseen(root: Path, path: str, old: bytes | None, new: bytes | None) -> bool:
     gs = _stamp()
     if any(gs._matches(path, *gs.AREAS[a]) for a in gs.RAW_AREAS if a in gs.AREAS):  # type: ignore[attr-defined]  # noqa: SLF001
         return False
-    return gs.semantic_bytes(old, path) == gs.semantic_bytes(new, path)  # type: ignore[attr-defined]
+    # ...AND NO STATEMENT MOVED A LINE (405 batch 7): coverage records lines, so a docstring one line longer above code the gate
+    # ran voided its report - street.py's `return n` read as missed one line below where it ran (a false red)
+    return gs.semantic_bytes(old, path) == gs.semantic_bytes(new, path) and stmt_lines(old) == stmt_lines(new)  # type: ignore[attr-defined]
+
+
+def stmt_lines(data: bytes) -> list[int] | None:
+    """The line every statement of a Python source starts on - what a coverage record is keyed by; None where it does not parse."""
+    try:
+        tree = ast.parse(data)
+    except (SyntaxError, ValueError):
+        return None
+    return [n.lineno for n in ast.walk(tree) if isinstance(n, ast.stmt)]
 
 
 def blob(root: Path, spec: str) -> bytes | None:

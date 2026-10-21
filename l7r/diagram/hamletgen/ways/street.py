@@ -461,10 +461,10 @@ def cut_between(pts: Sequence[Pt], arc: Sequence[float], lo: float, hi: float) -
 
 
 def trim_streets(s: Settlement, touch: float, doors: Sequence[Pt] = (), reach: float = 0.0) -> int:
-    """Every planned street of a row (`street_index` set) cut to its joints (`to_its_joints`) - and to the nearest point of
-    each front door in `doors` within `reach` of it, a farm the street serves without a path of its own (`lay_door_paths`
-    lays none within that reach): cut to its paths' joints alone, Mizuguchi's street stopped a frame short of its end farm,
-    whose door stood 12 ft off it, and the farm was left off every way (2026-10-01). Returns the streets cut.
+    """Every planned street of a row (`street_index` set) cut to its joints (`to_its_joints`) - and to each point of `doors`
+    within `reach` of it: the caller's are its served farms' points (`serve.street_anchors`), a farm the street serves without a
+    path of its own. Cut to its paths' joints alone, Mizuguchi's street stopped a frame short of its end farm, whose door stood
+    12 ft off it, and the farm was left off every way (2026-10-01). Returns the streets cut.
 
     The row's first street runs on off the map at both ends (`street_runs_out`, the road's two runs), so its ends are joints
     and it is not cut; a further street, which joins the first, is cut back to its last way or door.
@@ -473,7 +473,7 @@ def trim_streets(s: Settlement, touch: float, doors: Sequence[Pt] = (), reach: f
         the first street runs on - research/questions/0033-row-villages-resson.drawing.html: the street runs on off the map as the road into it
         a further street cut to its joints - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back to the last way or door it serves
         a joint's touch - CONVENTION: an end within `touch` of the street stands on it - the caller's `_TOUCH_GAP` (4 ft), the ink's own touch
-        a door on the street a joint - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back to the last house it serves - a front door's nearest point on the street within `reach` (the caller's 1 ft: a door standing on the street) is a house it serves
+        a served farm's point a joint - CONVENTION: a point of `doors` within `reach` of the street is a joint - the caller passes each served farm's point on its own street (`serve.street_anchors`, which carries 0246's serving test and its GUESS) at 1 ft, a contact tolerance like the touch
         a field path's end a joint - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane runs on to a field path or another way - a field path is a lane, its end a joint"""
     lanes = s.M.get("lanes") or []
     n = 0
