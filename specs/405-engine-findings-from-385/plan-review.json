@@ -370,6 +370,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
+  },
+  "## T46 - `make land` writes the make-targets page (found landing T43)": {
+   "sha256": "b8306ea54aa793da55dcf6ceadfd5f3d74273854a1a3e1a1edf6a411b032a4d8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T46 Approach (checklist part A)": {
+   "sha256": "2dc2f41a66f0659840fee72d2445a5fd0c4c85c5a32fa748f356123601f9467f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T46 Decisions": {
+   "sha256": "a36fcbf06507e9d1bdb50fa67b065a84470970602d32c0f8e4f1b02f4a2a8104",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -795,6 +813,41 @@
      "summary": "The trigger's writer ci/state.py::second_red_gate is unchanged.",
      "class": "within",
      "why": "Measured: the trigger red-gate@2026-10-21T05:02:38Z was written; what failed was the hold, so fixing the hold is fixing the tripwire 'so that it fires properly'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T46 - `make land` writes the make-targets page (found landing T43)",
+    "### T46 Approach (checklist part A)",
+    "### T46 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T46 (filing)",
+     "summary": "A finding raised while landing T43 (the push refused on a stale docs/make-targets.html) is filed as a new task of 405.",
+     "class": "within",
+     "why": "FR-002 and the GM's 2026-10-19 rule: findings a task's checks raise on code it did not change are kept as new tasks here; the landing cost is also what Amendment 1 asked to have fixed."
+    },
+    {
+     "id": "D19",
+     "summary": "land.cheap_refusals runs make-docs.py --check; when stale it runs make-docs.py --write and commits docs/make-targets.html alone, before the gates and the push.",
+     "class": "within",
+     "why": "Serves Amendment 1 (the landing is the biggest cost and the GM asked for tooling changes to cut it). It does not weaken 385 FR-017: the push still runs make-docs.py --check, and the page is current on every route - the landing makes it so instead of refusing after a ~4 min hooks-test. No route, check or file is excepted."
+    },
+    {
+     "id": "T46 exit (c)",
+     "summary": "The landing writes the page rather than refusing with a message naming make docs.",
+     "class": "within",
+     "why": "A choice between two mechanisms that both keep FR-017's property (the pushed page is current); nothing the GM asked for is narrowed by choosing the one that produces the compliant result."
+    },
+    {
+     "id": "T46 order",
+     "summary": "The check-and-write sits in the first pass beside the ledger rows (405 T33's cheap-refusals pass), with a test that a stale page is regenerated and committed and a fresh one is untouched.",
+     "class": "within",
+     "why": "Placement and a test that only fails when the requested behavior is absent; enforcement, not new scope."
     }
    ]
   }
