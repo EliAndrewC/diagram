@@ -582,6 +582,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
+  },
+  "### T10 Approach (re-answered 2026-10-21T20:00Z)": {
+   "sha256": "568dad261219e05e52695ab8b6b144c6caed674391cebe089560837d9ce6f87d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T10 Decisions (re-decided 2026-10-21T20:00Z)": {
+   "sha256": "2b529dc403f1fd900b51c4744a70267c6803f711e8bd38a7a6b6730bd65dcabd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2752,6 +2764,34 @@
      "summary": "No code change in T105; exit (a) claim only, 30 min budget",
      "class": "within",
      "why": "The GM asked for claims tasks worked through to completion with the project's process, not for any engine change here; a claims-only task does not narrow the request, and any code finding would still go to a new task per FR-002."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "### T10 Approach (re-answered 2026-10-21T20:00Z)",
+    "### T10 Decisions (re-decided 2026-10-21T20:00Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D81",
+     "summary": "connector_dry_exit runs dry_exit a third time, with the drawn farm channels left out of its blocking lines, only when the own-bank fill and the brook-crossing-place fill both return None; the track found crosses the channel on a deck seated by the law (crossing_deck) or the map is refused as for any undeckable crossing; claimed on 0084",
+     "class": "within",
+     "why": "Working an open claims task is what Amendment 7 asks ('working all of the remaining open tasks in the feature', deciding research questions by following the research). The rule follows 0084 s116 (a way over a ditch is drawn on a deck as wide as the way) and narrows nothing: 0084 says how a crossing is drawn, not that ways must seek ditch crossings, so trying the ditch-crossing fill last only changes outcomes where there was no way out at all (the stated goal: 'where a settlement's only way out crosses a farm ditch'). The refusal on an undeckable crossing is the existing law's behavior, not a new carve-out."
+    },
+    {
+     "id": "D81-brook",
+     "summary": "In the third fill the brook stays gapped only at its crossing places (gap_segments); only the drawn ditches are opened",
+     "class": "within",
+     "why": "Keeps 0035's rule that the brook is crossed at its crossing places; the change reaches only the ditches 0084 names, so no requirement or research rule is relaxed."
+    },
+    {
+     "id": "T10-verify",
+     "summary": "Done is a test that the third fill runs only where the other two find no way (channels opened, brook not), plus seeds 1-48 and the pinned rows passing",
+     "class": "within",
+     "why": "Verification of the change the task makes, as FR-001 has each task worked by 385's checklist; it enforces the decision rather than adding scope."
     }
    ]
   }
