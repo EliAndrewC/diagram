@@ -1202,7 +1202,7 @@
    "declared": "spec-fidelity"
   },
   "### T18 Decisions": {
-   "sha256": "d127edc6c0c174c85be004b257e0c5516a2b26f6a44ea7d2349d520e31f0d5ac",
+   "sha256": "33085072c2c4279cb9045aef958cea5be0356399cf408e8bf7042bf19872b858",
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
@@ -1251,6 +1251,12 @@
   },
   "### T23 Decisions": {
    "sha256": "64c2b0fb100380da7386606e1e51520d164bda81ed6ced66b9ce736d703cb832",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T18 Approach (re-answered 2026-10-21T17:14Z)": {
+   "sha256": "476f256b119d3bb9ef16a8463f1f5d595c06f1c00ea083116e602ccd8a90c784",
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
@@ -2979,6 +2985,28 @@
      "summary": "Part A item 5: the regression test gains a farm past the reach next to the neighbor beside the junction; seeds 1-48",
      "class": "within",
      "why": "Verification that only checks the claimed behavior (FR-001's checklist). It enforces the task and adds no scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "### T18 Approach (re-answered 2026-10-21T17:14Z)",
+    "### T18 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D69",
+     "summary": "A lane has one household: of the farmhouses either end reaches by 0246's reach (law.reach_to_steading, 60 ft of the house or 12 ft of built ground, the page's GUESS), the one nearest its dooryard end; only that household's yards and gardens are exempt from the 7 ft gap. Replaces the earlier per-end exemption, which let a door path's junction end exempt the neighbor beside it.",
+     "class": "within",
+     "why": "An engine design decision inside a claims task, taken from the research page (0246: the gap is kept off another household's garden; a household's own way leaves its own dooryard and joins a way at a T). The GM's 2026-10-21 Amendment 7 asks for the feature's remaining tasks worked to completion following the research without asking for rulings; FR-001 has each task worked as 385 worked its tasks. Narrowing the exemption to one household applies the page's rule more widely, not less; it removes no case the GM or the spec asked to have covered, and it corrects a departure from the page that the claims round found."
+    },
+    {
+     "id": "T18-approach",
+     "summary": "Part A re-answered for D69: goal (a lane keeps 7 ft off every garden but its own household's, one household per lane), constraints and source R 0246, order (theirs exempts only the nearest reached farmhouse; claim GUESS 0246; tests with a neighbor at the junction and a farm past the reach; seeds 1-48), exit (e) conform, done measured by those tests and seeds 1-48 and the pinned rows; no constant moved, nothing fitted.",
+     "class": "within",
+     "why": "Restates D69 and plans its verification; the tests and seed sweep only fail when the requested (research-following) behavior is absent, so they enforce the task rather than add scope. Nothing in the request or spec index is narrowed or dropped."
     }
    ]
   }
