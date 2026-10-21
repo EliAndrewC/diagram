@@ -316,6 +316,18 @@ def test_a_street_s_dangling_end_keeps_the_last_farm_it_serves(monkeypatch: pyte
     assert _pts(s, 1)[-1] == pytest.approx((0.0, 400.0)), "kept to the farm it serves"
 
 
+def test_a_street_s_dangling_end_stops_where_it_crosses_a_way(monkeypatch: pytest.MonkeyPatch) -> None:
+    """405 T49 (D26, T13's round): a street crossing a way mid-run and dangling past it ends at the crossing, on the way
+    (0246 section 6), not back at the joint before it."""
+    street = ([(0.0, 0.0), (0.0, 200.0), (0.0, 600.0)], {"w": 6})
+    s = _S([CONN, street, [(0.0, 200.0), (80.0, 200.0)], [(-100.0, 450.0), (100.0, 450.0)]], houses=[(100.0, 200.0)])
+    s.M["lanes"][1].update({"street": True, "street_index": 0})
+    monkeypatch.setattr(settle, "street_anchors", lambda s: [])
+    monkeypatch.setattr(settle.law, "dangling_lane_ends", lambda M, ground: [(1, -1)])
+    assert settle.settle_street_ends(s) == 1
+    assert _pts(s, 1)[-1] == pytest.approx((0.0, 450.0)), "ended on the way it crosses"
+
+
 def test_an_ordinary_lane_beside_another_way_past_a_pitch_goes_where_the_web_keeps() -> None:
     """`settle_shadows` (feature 293 on 291, Kashikawa): of a pair side by side past a pitch, the shorter ordinary lane goes
     where the network keeps without it - a tree lane beside it is asked too, and never goes; where every drop would strand a
