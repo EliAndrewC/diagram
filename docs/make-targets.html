@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 178 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 179 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -151,6 +151,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make claims-checked</td><td class=a>BUNDLE REPLY</td><td>record an impl-drift reply into the claims index, at the fingerprints its bundle read</td></tr>
 <tr><td class=n>make claims-coverage</td><td class=a>IN</td><td>every unit with no research claim, a malformed claim or a pointer to no question - the gate&#x27;s coverage test, narrowed   [IN=&lt;part of a file path&gt;]</td></tr>
 <tr><td class=n>make claims-owed</td><td class=a>&ndash;</td><td>every research claim of the engine or the Mode A procedures owed an impl-drift check (no index row, or its code or cited research moved since), and why</td></tr>
+<tr><td class=n>make claims-rekey</td><td class=a>&ndash;</td><td>carry each claim&#x27;s index row to the file its unit moved to with its code intact - a file split at the 1,000-line bar (405 T58); make land runs it</td></tr>
 <tr><td class=n>make claims-report</td><td class=a>&ndash;</td><td>the claims index: counts by verdict, every finding (drifted, needs research, mislabeled, unclaimed, undecided) and every UNRESEARCHED claim</td></tr>
 <tr><td class=n>make claims-triage</td><td class=a>OUT</td><td>the claims owed only a TRIAGE (a page they cite moved, the blocks they rest on stand): one bundle of the new or changed blocks for one agent   [OUT=&lt;dir&gt;]</td></tr>
 <tr><td class=n>make claims-triaged</td><td class=a>BUNDLE REPLY</td><td>record a triage reply: a claim it names (TOUCHES) is owed impl-drift, every other claim of the bundle is cleared</td></tr>
