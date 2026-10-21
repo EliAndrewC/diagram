@@ -92,6 +92,11 @@ def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str, deferred: l
         rel = str(d.relative_to(root))
         run(root, ["git", "add", "--", f"{rel}/tasks.md", f"{rel}/claims-carried.jsonl"])
         run(root, ["git", "commit", "-q", "-m", f"{d.name}: claims findings outside the change filed as a task (make land, 405 T36)"])
+    # THE LANDING'S OWN ESCAPES ARE COMMITTED, NOT REFUSED (feature 408): an escape the ticks above honored (PLAN_REVIEW_OK)
+    # writes its dev/bypass-log record in this very pass, so the tree check below refused every rerun on records of its own
+    if run(root, ["git", "status", "--porcelain", "--", "dev/bypass-log"])[1].strip():
+        run(root, ["git", "add", "--", "dev/bypass-log"])
+        run(root, ["git", "commit", "-q", "-m", "the landing's escape records (make land, 408)", "--", "dev/bypass-log"])
     if run(root, ["git", "status", "--porcelain"])[1].strip():
         stops.append("uncommitted changes - commit them first")
     _rc, owed = run(root, [sys.executable, str(HERE / "reviews" / "ledger_owed.py"), "--ledger", str(root / "dev" / "review-ledger.md")])
