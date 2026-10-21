@@ -304,6 +304,9 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [ ] T108 Two notes from T105's round: joints._one_joint reads a lane with no width as 5 ft (the spine's) where settle_ends, touch and the knots read 3 ft (0081's footpath) - one default; and 0081 asks a Z at a joint pulled straight and names no mend when the pull fails - research the joint moved back a vertex, or record it as the page's GUESS (impl-drift outside the change, 2026-10-21) [lands-open]
       research: rendering
       research: rendering
+- [ ] T109 The house-style hook rewrote a checker's own words inside replies recorded verbatim (labelled -> labeled, centre -> center) in the heredocs that wrote batch 8's round 2 (b8b), batch 9's (b9), batch 11's (b11c) and batch 12's (b12) REPLY files; a REPLY file is a quotation, which the house style exempts - exempt the claims and record REPLY files (make claims-checked / record-checked input) from the rewrite, with a test (found 2026-10-21) [lands-open]
+      research: rendering
+      research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
