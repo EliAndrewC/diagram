@@ -24016,19 +24016,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_joint_moved_back#no zigzag at a joint": {
-  "code": "8300da165b61dab0",
+  "body": "2d519f753bb5cdf8",
+  "claim": "no zigzag at a joint - village-lanes.drawing: no two turns of more than 50 degrees within 40 ft",
+  "code": "0e7100ff7165eac9",
   "core": "f766badc28942cbe",
-  "date": "2026-10-17",
-  "note": "mends a zigzag across a joint",
+  "date": "2026-10-21",
+  "note": "mends the Z across a joint by removing the joint's own vertex (the page's \"pulled straight\") and refuses any candidate `_bends_badly` flags. The 50-degree / 40 ft figures are inside `_bends_badly`, which the bundle does not show, so this verdict confirms only that the unit hands the test to that function.",
   "pages": {
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
   },
   "research": "324b10775c9108ef",
   "rests": [
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
+   "0081-village-lanes.drawing.html:65ad16eace199d92",
    "0081-village-lanes.drawing.html:d30e15716180fbf5"
   ],
-  "triaged": "2026-10-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_joint_moved_back#the mend a vertex back": {
