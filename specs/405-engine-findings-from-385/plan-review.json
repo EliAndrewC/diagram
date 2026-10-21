@@ -582,7 +582,7 @@
    "declared": "spec-fidelity"
   },
   "### T17 Decisions": {
-   "sha256": "8a587d9e0e5a402b4844430ee548cef9a421f4a02855aa969715689e4a1d6766",
+   "sha256": "3381bbf07c14549e6cf5c9cc550badeaadf51c890b2a90578ff2731e4808b46f",
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
@@ -594,7 +594,7 @@
    "declared": "spec-fidelity"
   },
   "### T16 Decisions": {
-   "sha256": "6115ce70bae1b3ac8943e92056183bce71c41f8e66f3dda9686e1b19b98044fa",
+   "sha256": "c632d46d347d50ca7bcf669f3f47cbc3af3072ae3eebb4573941e6b6cdd3d08d",
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
@@ -607,6 +607,36 @@
   },
   "### T27 Decisions": {
    "sha256": "1f6096703492a43bb844c34190d378e9a5335762c7cfb54ba9d74d095ee1d55c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "## T57, T58 - `web.py` split at the bar, and the claim rows carried with it (T53's rule)": {
+   "sha256": "70c7634c3e9d1f06eaecb243abbdcd29abdc1b05fbcf491de9bf2af822056bcf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T57 Approach (checklist part A)": {
+   "sha256": "83b58b5e55c294c891d20fe1735d1001646eb71bddbd923a49dab31d5306a2c3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T57 Decisions": {
+   "sha256": "4be2d682f8aee46ab4a52f8a83d6896bb7e247bb9dda12a42b77da83faf00296",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T58 Approach (checklist part A)": {
+   "sha256": "a02a85b3e5120cd8380fa1a0f5f06768a961393fc721a16b79c31a921a24003c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T58 Decisions": {
+   "sha256": "0b69a5206440ce9231868f23fae68fb38ee8fb26e6c0bfb706da195e99357906",
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
@@ -1342,6 +1372,51 @@
      "summary": "The farm_fixtures exemption text reworded to where the fixtures actually stand; the claim cites 0038, not 0039, for the bed; CANOPY_PAD and SHADE_MARGIN_FT claimed CONVENTION; the privy's 8 ft front seat claimed GUESS (0047) and the stable seat cited to 0047.",
      "class": "within",
      "why": "This conforms words and citations to the code and the pages and adds the four missing claims. It is the whole of the task's goal, with nothing narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T57, T58 - `web.py` split at the bar, and the claim rows carried with it (T53's rule)",
+    "### T16 Decisions",
+    "### T17 Decisions",
+    "### T57 Approach (checklist part A)",
+    "### T57 Decisions",
+    "### T58 Approach (checklist part A)",
+    "### T58 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D29",
+     "summary": "T17's lane-end claims: the GUESS list re-cut (the 7 ft arm clip split off as stated by 0246, _SERVE_FT's 100 ft cited plainly); three street claims and two _pull_back claims whose CODE drifts from its page (0033, 0246) keep their claims and the code drift is carried to T54 and T55",
+     "class": "within",
+     "why": "Labeling each claim by what its page says is the claim task itself (FR-001). Carrying a finding on code the task did not change to new tasks of this feature is the GM's own rule (2026-10-19, 'keep findings on code a task didn't change as new tasks'; FR-002), and amendment 7 has every open task of the feature worked, so the drift is fixed here, not dropped. No part of the request is narrowed."
+    },
+    {
+     "id": "D30",
+     "summary": "T16's run-on claims: the row street not carried onto the field cites 0033; the dry hem's edge becomes GUESS citing 0081 (was UNRESEARCHED); reach, stop and connector claims unchanged",
+     "class": "within",
+     "why": "Choosing each claim's label and source is the substance of a moved claims task (FR-001); nothing the GM asked for is excluded or deferred."
+    },
+    {
+     "id": "D32",
+     "summary": "web.py (1,001 lines, past the bar) split into ways/web/ skeleton, tidy, stage, each kept under ~650 lines, __init__.py re-exporting every name and the submodules",
+     "class": "within",
+     "why": "This is amendment 7's rule applied literally: past 1,000 lines, split into submodules of about 650 rather than trimming to just under, with __init__.py exposing everything so importers do not change."
+    },
+    {
+     "id": "T57-monkeypatch",
+     "summary": "the seven test_web.py monkeypatches retargeted at the submodules where the moved functions look the names up",
+     "class": "within",
+     "why": "The GM's promise is that imports do not change; a monkeypatch patches where a name is looked up, which moves with the code by Python's own rules. Imports stay unchanged, so the request is honored, not narrowed."
+    },
+    {
+     "id": "D33",
+     "summary": "claims_owed.moved: a unit whose unit#claim suffix matches, whose old key is gone and whose code fingerprint is equal (one candidate only) owes no claims round; rekey moves its row; make claims-rekey; land.py's first pass runs it and commits the index",
+     "class": "within",
+     "why": "Serves amendment 7's stated purpose that a split at the bar be 'relatively painless'; a split owing a full claims round on 61 unchanged rows would defeat it. It re-judges nothing whose code changed (equal fingerprint, single candidate, a changed unit is still owed by test), and matches the claims gate's existing cross-key 'introduced' reading, so no GM-requested check is weakened."
     }
    ]
   }
