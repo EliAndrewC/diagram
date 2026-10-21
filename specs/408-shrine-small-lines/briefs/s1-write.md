@@ -17,10 +17,11 @@ only by a rate the source gives or 0277's, labeled. Research only: edit no code,
 sections the new figures or searches touch, and keep each question under the 20,000-byte cap (a question that would pass
 it splits its new material into a new money question, tagged as its parent is).
 
-**Already answered.** Lines a page already answers, or holds the nearest figure for, are NOT rewritten and get no new
-absence note; your handoff names the file and what it holds (gm-assistant on #10: "just name the file and say which
+**Already answered.** Lines a page already ANSWERS are NOT rewritten and get no new absence note; your handoff names the file and what it holds (gm-assistant on #10: "just name the file and say which
 estimate it answers"). SILENT means no NEW source was found, and an absence note goes only where the record is silent on
-the line. The already-answered lines are listed under your items.
+the line. A line whose page holds only a NEAREST figure (another object or building) is OPEN: name the nearest as a
+nearest, never as an answer, and put the search in the absence note. The already-answered lines are listed under your
+items.
 
 **Reading what the reader cannot.** A PDF `make source-pages` cannot read: download it with curl into its own empty
 directory and read it with pdftotext, or render its pages (pdftoppm) and pass the images to source-reader with `IMAGES=`.
@@ -36,9 +37,9 @@ Morisada 上 (NDL pid 991466): `specs/402-money-open-leads/measure/shot.py` take
     ATTESTED ONLY FOR sweeping for a visit, not building a path. The paper gives no craftsman's wage: name the nearest.
   - Clearing and leveling (the great tree, the rock seat): the same paper p. 30, 5.98 monme of laborers' wages a tsubo of
     earth (5 for the Honda section); the tsubo there is earth dug or embanked. ATTESTED ONLY FOR river works.
-  - Already answered in 0257, not repeated (the new figures sit beside them): the Osaka 1620s earthwork (clearing,
-    leveling); the 1620 hill stone at 1.3-1.5 monme a man and the 150 kg block on one man's back (standing stone); the
-    burial mound (SILENT).
+  - Nearest figures already in 0257, not repeated and named as nearest (the lines stay OPEN, searches in the absence
+    note): the Osaka 1620s earthwork (clearing, leveling); the 1620 hill stone at 1.3-1.5 monme a man and the 150 kg block
+    on one man's back (standing stone).
   - Sakaki hedge: Japan SILENT. Sakaki hedge and standing stone, Qing comparison: 揚州畫舫錄 卷十七 (1795): one strong laborer per 4 zhang of palisade
     or bamboo hedge; two per zhang lifting stone into place for a stone bridge. No wage in the book: name the nearest Qing
     wage in the record.
@@ -60,9 +61,10 @@ Morisada 上 (NDL pid 991466): `specs/402-money-open-leads/measure/shot.py` take
     per 100 jin per li, the 挑運/抬運 pair at 順寧); Gansu 秦州 (0.04 tael a porter-day, the laborer's wage; 50 jin for
     60 li) and 歸德 (rugged mountain timber, 0.009 by the old rule, 0.003 by the register, per 60 jin per li); and Gansu's
     repeated rule that stone takes no separate porter rate.
-  - Already answered in part, Japan, not repeated: 0257's 1620 hill stone and 150 kg back-load, 0260's porter fares per
-    stage (a 5-kan load). Qing already in 0260: Hunan and Zhili.
-  - Japan, an Edo cart hire by the day or the load, and porters into forest with no trail: SILENT, the pass's searches named; Morisada's Osaka cart fee (下 p. 469) is a
+  - Japan, both lines OPEN (an Edo cart hire near a road; porters into forest with no trail): no direct figure; put the
+    pass's searches in 0260's absence note and name 0257's 1620 hill stone and 150 kg back-load and 0260's own stage
+    fares (a 5-kan load on a highway) as nearest figures, not answers. Qing already in 0260: Hunan and Zhili.
+  - The pass's Japanese searches: Morisada's Osaka cart fee (下 p. 469) is a
     license fee, not a hire - name it as such only if you read it on the page. The Edo oxcart freight tables of 1726 and
     1742 (都史紀要32 『江戸の牛』, print only) are a lead not publicly readable: `make download-add` it.
   - No rate is scaled to 400 kg in the record; the reply does that, labeled.

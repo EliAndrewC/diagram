@@ -17,10 +17,11 @@ only by a rate the source gives or 0277's, labeled. Research only: edit no code,
 sections the new figures or searches touch, and keep each question under the 20,000-byte cap (a question that would pass
 it splits its new material into a new money question, tagged as its parent is).
 
-**Already answered.** Lines a page already answers, or holds the nearest figure for, are NOT rewritten and get no new
-absence note; your handoff names the file and what it holds (gm-assistant on #10: "just name the file and say which
+**Already answered.** Lines a page already ANSWERS are NOT rewritten and get no new absence note; your handoff names the file and what it holds (gm-assistant on #10: "just name the file and say which
 estimate it answers"). SILENT means no NEW source was found, and an absence note goes only where the record is silent on
-the line. The already-answered lines are listed under your items.
+the line. A line whose page holds only a NEAREST figure (another object or building) is OPEN: name the nearest as a
+nearest, never as an answer, and put the search in the absence note. The already-answered lines are listed under your
+items.
 
 **Reading what the reader cannot.** A PDF `make source-pages` cannot read: download it with curl into its own empty
 directory and read it with pdftotext, or render its pages (pdftoppm) and pass the images to source-reader with `IMAGES=`.
@@ -37,8 +38,8 @@ Morisada 上 (NDL pid 991466): `specs/402-money-open-leads/measure/shot.py` take
     Miyazu's 1777 ruling of 1.8 for carpenters, roofers and sawyers, note 20); the Kyoto carver's per-piece prices (note 16,
     32-225 monme, year not given). The page has no plaque price; a plaque at carver-days x the rate is the project's
     arithmetic, labeled, or left out.
-  - (S) an origin-story board under a little roof: the nearest is already in 0255 (Kumehara's 1830 notice board, 50
-    carpenter-days at 2 monme printed): name it, do not repeat it. New beside it, ATTESTED ONLY FOR Edo's carved standing shop signboards, Morisada 上
+  - (S) an origin-story board under a little roof: OPEN. The nearest is already in 0255 (Kumehara's 1830 notice board, 50
+    carpenter-days at 2 monme printed): name it as a nearest, do not repeat it. New beside it, ATTESTED ONLY FOR Edo's carved standing shop signboards, Morisada 上
     koma 82 (read on the screenshot), 70-80 ryo small and 140-150 large with posts and the official fees: an upper bound.
     Its painting SILENT.
   - A pair of carved wooden guardians: the same paper p. 63, komainu at 3 monme a carver-day (1814-15); days not given; the
@@ -48,9 +49,11 @@ Morisada 上 (NDL pid 991466): `specs/402-money-open-leads/measure/shot.py` take
   - Qing comparison: 至聖殿重修碑記 (Midu, Yunnan, 1902, zh.wikisource): the lines for the incense burner, stele core and
     carving (8,650 wen), the tablets, niche and lattices (280,000), the painting (105,000), the gilding (6,400), the plinths
     (27,000), and the stele's 48 taels = 62,400 wen; no wage given.
-  - Answered elsewhere, not rewritten: the offering chest and lock (0270), the wooden torii (0257), the roofs (0256, 0268),
-    the lattice door's nearest (0268, Shibasaki's twelve doors and screens), the plaque's writing (0271, Zheng Banqiao),
-    the name-stone's nearest (0269, stele SILENT).
+  - Answered elsewhere, not rewritten: the offering chest and lock (0270), the wooden torii (0257), the worship pavilion's
+    roof (0268), the plaque's writing (0271, Zheng Banqiao), the offering table (0258).
+  - OPEN, nearest already in the record, named as a nearest (the search goes in 0258's absence note): the lattice door
+    (0268, Shibasaki's twelve doors and screens), a cover-shed's roof (0256's 1749 Kasuga re-roofing, 0255's Mitake
+    covering house), the name-stone (0269, stele SILENT).
   - The ground rite (0258's "rite to purify the ground"): kotobank 地鎮祭 (Sekai Daihyakka): the four green bamboo with a
     rope is the present form, the rite important only from late Edo - NOT ATTESTED for the period; the Koyasan 1544 fee of
     2 kan 500 mon (Nihon Kokugo Daijiten's citation) ATTESTED ONLY FOR 1544, pre-Edo, at second hand.
@@ -58,9 +61,9 @@ Morisada 上 (NDL pid 991466): `specs/402-money-open-leads/measure/shot.py` take
 - **0268 "What did a shrine's other sanctuaries, halls and finishes cost?"** - sawing the shrine's own timber: the sawyer's
   day wage (Miyazu 1777, 1.8 monme with carpenters and roofers; Fukuchiyama, 1.5 monme and 1 sho 4 go of rice, undated)
   from the same paper, beside 0268's Shibasaki woodcutters (already there, not repeated); sawing by the amount SILENT. A
-  small mortuary hall and a small water pavilion: no new source (`passes/g3-rites.md`); the nearest are already in 0268
-  (the small worship hall, its thatch and roof boards): name them, and add only the 1803 temporary unveiling hall in 0271
-  as a further nearest.
+  small mortuary hall and a small water pavilion, carpentry and roof: OPEN - no direct figure (`passes/g3-rites.md`
+  searched 霊屋, 御霊屋, 位牌堂, 手水舎, 水屋); add to 0268's absence note that search, with 0268's worship hall and
+  roofs, 0255's Mitake covering house and 0271's 1803 temporary hall named as nearest figures, not answers.
 - **0271 "What did rites for the dead and a shrine's dedication cost?"** - issue group 3 (`passes/g3-rites.md`):
   - (S) a head mound with its marker and rite: Aomori prefecture's page on the 斗内千人塚 (Sannohe, 1784-85): heads bought at
     24 mon, 60 kanmon given at the rite, four earth mounds and a stone memorial built from the offerings, three winters of

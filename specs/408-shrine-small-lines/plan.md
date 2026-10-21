@@ -36,11 +36,12 @@ N/A: no generator change.
 
 | session | questions | what changes |
 |---|---|---|
-| s1 | 0257, 0260 | group 1 (grounds: sweeping and earthwork, Kawachi 1704; Qing hedge and bridge norms; SILENTs named) into 0257; group 4 (Qing stone by cart and porters, Yunnan and Gansu 1769, the 會典則例 卷130 cart rate) into 0260; Japan already answered in part (0257's 1620 hill stone, 0260's porter fares per stage), only an Edo cart hire and trailless porters SILENT; 0257's "carrying stone a ri" points to 0260 |
-| s2 | 0258, 0268, 0271 | group 2 (carvers' and sawyers' day rates, Tanba and Tango; Morisada's signboards; the 1902 Yunnan stele; SILENTs) into 0258, sawing into 0268; group 3 (the Sannohe head mounds, the ground rite, unveilings, Doolittle's coffin money; SILENTs) into 0271, the ground rite into 0258; the mortuary hall and water pavilion already answered by their nearest (0268's worship hall and roofs, 0255's Mitake covering house), 0271's 1803 hall added as a further nearest |
+| s1 | 0257, 0260 | group 1 (grounds: sweeping and earthwork, Kawachi 1704; Qing hedge and bridge norms; SILENTs named) into 0257; group 4 (Qing stone by cart and porters, Yunnan and Gansu 1769, the 會典則例 卷130 cart rate) into 0260; Japan's two lines (a cart hire near a road; porters into trailless forest) reported OPEN, the search in 0260's absence note, with 0257's 1620 hill stone and 0260's stage fares named as nearest figures, not answers; 0257's "carrying stone a ri" points to 0260 |
+| s2 | 0258, 0268, 0271 | group 2 (carvers' and sawyers' day rates, Tanba and Tango; Morisada's signboards; the 1902 Yunnan stele; SILENTs) into 0258, sawing into 0268; group 3 (the Sannohe head mounds, the ground rite, unveilings, Doolittle's coffin money; SILENTs) into 0271, the ground rite into 0258; the mortuary hall and water pavilion reported OPEN - the pass searched 霊屋, 御霊屋, 位牌堂, 手水舎 and 水屋 and found no direct figure - with 0268's worship hall and roofs, 0255's Mitake covering house and 0271's 1803 hall named as nearest figures, not answers; 0268's absence note names that search |
 
-Items an earlier fragment already answers, or holds the nearest figure for, are not rewritten (FR-005): the spec's
-"Already answered" line in each group lists them, and the reply names the fragment and the estimate it answers.
+Items an earlier fragment already ANSWERS are not rewritten (FR-005); a line whose page holds only a nearest figure is
+reported OPEN with the nearest named, and its search goes into the question's absence note: the spec's "Already
+answered" line in each group lists answered items only, and the reply names the fragment and the estimate it answers.
 
 ## D2 - the implementation check (FR-003)
 
@@ -49,7 +50,8 @@ Items an earlier fragment already answers, or holds the nearest figure for, are 
 ## D3 - the reply (FR-001, FR-004, FR-005)
 
 A comment on #10: per line of the issue, (S) lines first in each group, the fragment FILE, the verdict, and what is still
-open; combined figures with what they cover.
+open; where a source prices several lines together, that combined figure and what it covers are given IN ADDITION to
+each line's own verdict, never in place of it.
 
 ## T - the order
 
