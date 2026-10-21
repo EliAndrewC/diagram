@@ -20811,8 +20811,8 @@
  "l7r/diagram/hamletgen/ways/bund.py::run_lanes_on_to_the_bund#a row street not carried onto the field": {
   "body": "1c7500963f702c3d",
   "claim": "a row street not carried onto the field - row-villages-resson.drawing: the street runs on off the map as the road into it",
-  "code": "bc970177e727fbc0",
-  "core": "93ad02fc31023339",
+  "code": "6a360fd18b2b3269",
+  "core": "863d872c60c266c7",
   "date": "2026-10-21",
   "note": "a street is skipped at the top of the loop (`ln.get(\"street\")`), so it runs on off the map",
   "pages": {
@@ -20822,18 +20822,19 @@
   "rests": [
    "0033-row-villages-resson.drawing.html:8c303daeddea6496"
   ],
+  "triaged": "2026-10-21",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::run_lanes_on_to_the_bund#connector left alone": {
-  "code": "d5ec1f5f5e1e7181",
-  "core": "93ad02fc31023339",
+  "code": "b0afff8aaeea001f",
+  "core": "863d872c60c266c7",
   "date": "2026-10-03",
   "note": "track out runs off the map",
   "pages": {
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
   },
   "research": "324b10775c9108ef",
-  "triaged": "2026-10-18",
+  "triaged": "2026-10-21",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::run_lanes_on_to_the_bund#lane end runs on to the bund": {
@@ -20852,6 +20853,7 @@
    "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::run_lanes_on_to_the_bund#run-on reach": {
@@ -20868,25 +20870,26 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/bund.py::run_lanes_on_to_the_bund#the dry hem's edge too": {
-  "body": "1c7500963f702c3d",
-  "claim": "the dry hem's edge too - GUESS village-lanes.drawing: lanes run along the hem of dry fields and the spur stops at the hem's edge; an inner lane's end is carried onto the worked ground's nearest edge, a dry plot's as well as the paddy's",
-  "code": "cfe16ba336371e2d",
-  "core": "93ad02fc31023339",
+ "l7r/diagram/hamletgen/ways/bund.py::run_lanes_on_to_the_bund#to the paddy": {
+  "body": "a70deae8c57cb1fc",
+  "claim": "to the paddy - village-lanes.drawing: the settlement's own inner lanes end in the cluster or at the paddy; an end is carried to the paddy's nearest edge (`paddy_ground`), never a dry plot's - only the spur stops at the hem",
+  "code": "6396959c3692091d",
+  "core": "863d872c60c266c7",
   "date": "2026-10-21",
-  "note": "`run_on_target(pts[-1], ground, half)` carries an inner lane's end to `ground.nearest`, a dry plot's edge included. The cited page records no such guess. It is also not silent: it stops only \"the spur to the fields\" at the hem's edge, and says \"the settlement's own inner lanes may end in the cluster or at the paddy\". Either keep the run-on to the paddy, or record the dry-hem run-on as a guess on 0081 (or 0246 §6) first",
+  "note": "an inner lane's end is carried to `paddy_ground`'s nearest edge, never a dry plot's; an end already at the hem counts as served through `end_serves` against the worked ground and stays, as the page has the spur stop there",
   "pages": {
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
   },
   "research": "324b10775c9108ef",
   "rests": [
+   "0081-village-lanes.drawing.html:bd66b84c6bda826f",
    "0081-village-lanes.drawing.html:df440690bbce9cb6",
-   "0081-village-lanes.drawing.html:f2368e271306e3c2",
-   "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
+   "0081-village-lanes.drawing.html:f2368e271306e3c2"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::run_on_target#joins at the nearest point": {
   "body": "2426e633bd6205a8",
@@ -33015,20 +33018,20 @@
  },
  "l7r/diagram/hamletgen/ways/web/skeleton.py::_web_cut_lines#a web lane's span": {
   "body": "17e174cad0b4f1eb",
-  "claim": "a web lane's span - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane runs only along the houses it serves - those within WEB_REACH_FT (100 ft) of its cut",
-  "code": "ba909cebe7bf548a",
+  "claim": "a web lane's span - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane runs only along the houses it serves - those within WEB_REACH_FT (100 ft) of its cut, of every house but one reached across a neighbor's yard (owed no lane; `stage_web` leaves those out of the arcs and stands)",
+  "code": "8fc009a3b893b76f",
   "core": "caf4168f4b2af238",
   "date": "2026-10-21",
-  "note": "`_extent` takes each lane's extent from only the houses within WEB_REACH_FT (100 ft) of its own cut, plus the 30 ft pad, which matches \"within 100 ft of one\" and \"laid along the houses it serves and about 30 ft past the last of them\". The alleys form uses the same rule, which agrees with lanes following the houses.",
+  "note": "`_extent` spans only the houses within WEB_REACH_FT (100 ft) of the lane's own cut, plus the 30 ft pad; the households reached across a neighbor's yard are left out upstream, as the page has it",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:82d03d7e6a2180e2",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c4049193a04d9dd0",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c90fc4f6fee86c66",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c90fc4f6fee86c66"
   ],
   "verdict": "IN-STEP"
  },
@@ -33142,30 +33145,32 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/skeleton.py::served_arm#shortest arm": {
-  "code": "7bd4efe3e2bf2b5d",
-  "core": "f5fd49445db04662",
+  "code": "7e0f6a21cbb56044",
+  "core": "36bfe96250835569",
   "date": "2026-10-05",
   "note": "nothing cited sets the 30 ft floor",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-21",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/skeleton.py::served_arm#skeleton arm trimmed to service": {
-  "body": "9d5206b9adced3af",
-  "claim": "skeleton arm trimmed to service - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: its ends pulled back to the houses it serves",
-  "code": "17caa6f786488329",
-  "core": "f5fd49445db04662",
+  "body": "3c0fcf569e138e96",
+  "claim": "skeleton arm trimmed to service - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: an end reaching nothing pulled back to the houses it serves; one reaching a way drawn so far or the bund stays",
+  "code": "fcc4e1700f46d84f",
+  "core": "36bfe96250835569",
   "date": "2026-10-21",
-  "note": "`_trim_to_service(arm, [], houses, steadings=...)` judges an end against the houses alone, so an end that reached the bund or a way already laid (the spur, the connector) is pulled back. The page pulls back only \"a lane end that reaches nothing\". Pass the ground and the existing ways, or reword the claim",
+  "note": "`_trim_to_service` is now judged against the ways drawn so far and the worked ground as well as the houses; the page records this rule as a GUESS",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c90fc4f6fee86c66"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/skeleton.py::water_along_side#water along the cluster": {
   "code": "fabd292917de2e5d",
