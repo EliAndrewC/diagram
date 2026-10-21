@@ -17257,7 +17257,7 @@
   ]
  },
  "frog-leg strut": {
-  "def": "A block set between two horizontal beams to carry the upper one, its outline spreading like a frog's legs, often carved through as ornament on temple and shrine halls.",
+  "def": "A block set between two horizontal beams to carry the upper one, its outline spreading like a frog's legs.",
   "variants": [
    "frog-leg strut",
    "frog-leg struts",
@@ -17265,7 +17265,7 @@
   ]
  },
  "elephant-nose": {
-  "def": "A beam-end nose carved as an elephant's head with its trunk, a common ornament at the eaves and porch of a temple or shrine hall.",
+  "def": "A beam end that projects past a bracket, carved as an elephant's head with its trunk.",
   "variants": [
    "elephant-nose",
    "elephant-nose bracket end",
@@ -17281,7 +17281,7 @@
   ]
  },
  "paper wand": {
-  "def": "A wooden staff hung with zigzag-folded paper streamers, set before a god in a shrine and waved by a priest in purification.",
+  "def": "A wooden staff hung with folded paper streamers, set before a god in a shrine.",
   "variants": [
    "paper wand",
    "paper wands",
@@ -17304,7 +17304,7 @@
   ]
  },
  "fanzi": {
-  "def": "The Qing regulations' word for the non-Han peoples of a frontier district, left untranslated where it appears in a quoted regulation.",
+  "def": "A word in a quoted Qing regulation for the non-Han inhabitants of a frontier district, left untranslated.",
   "variants": [
    "fanzi"
   ]
@@ -17318,7 +17318,7 @@
   ]
  },
  "Board of Works": {
-  "def": "The Qing government's ministry of public works, which set the official prices of building materials and carriage, and the wages, for building in and around the capital.",
+  "def": "The Qing government's ministry of public works, whose regulations the record quotes for official prices and rates.",
   "variants": [
    "Board of Works"
   ]
