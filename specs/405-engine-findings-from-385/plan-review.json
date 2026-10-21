@@ -738,6 +738,48 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
+  },
+  "## T29, T28, T45 - the findings log closes, 385's rows mapped, the reference message (found and filed work)": {
+   "sha256": "f2cee049af39084f436347cb16b279c588b233b6c5f313a9e0d2417296743ce5",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T29 Approach (checklist part A)": {
+   "sha256": "e6b52a79a5bf6a4b22c03dc171f36dff04bc348b3d9aad2577d3715d0f8283e3",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T29 Decisions": {
+   "sha256": "3e82d4e03f6d2e73ddf2e127d37d077c3b51998b745f14ce4bee419d1cf3765a",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T28 Approach (checklist part A)": {
+   "sha256": "d6fa6585520184ce417c73a5a277ab59b666504ebcbcde7788522319c7764310",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T28 Decisions": {
+   "sha256": "569d4fdb53f310d7d6373d9ccf6a88f35702a14eca88face26ec43d2eb0a3687",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T45 Approach (checklist part A)": {
+   "sha256": "4dd42879ec4bd202dd7657810eaae6700cce3fd8b809ab9fcfaa315524fd09d6",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T45 Decisions": {
+   "sha256": "796ef53ab21ef8e71abf94828515b271e498f6525aa025c7c6ec9163d7b77b6f",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1614,6 +1656,73 @@
      "summary": "Done is the suite passing 22 of 22 while another gate runs on the machine.",
      "class": "within",
      "why": "Verifies the fix on the exact case measured as failing (19 passed, 3 failed on 2026-10-21); no new scope, no narrowing of what the suite checks."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T29, T28, T45 - the findings log closes, 385's rows mapped, the reference message (found and filed work)",
+    "### T28 Approach (checklist part A)",
+    "### T28 Decisions",
+    "### T29 Approach (checklist part A)",
+    "### T29 Decisions",
+    "### T45 Approach (checklist part A)",
+    "### T45 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D36-shape",
+     "summary": "found.py list/close, make found-list/found-close: a row's outcome recorded on the row with closed_utc, a closed row refuses a second close, list numbers open rows",
+     "class": "within",
+     "why": "Recording each finding's outcome serves FR-002: it is the instrument that shows no finding sits open without its task. Shape and refusal are design, not scope."
+    },
+    {
+     "id": "D36-settled",
+     "summary": "a row may close as 'settled' with a free-text why of three words or more and no task",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-002 and the GM's words ('keep findings on code a task didn't change as new tasks') give a finding one outcome: a task. D36 adds a second, bounded only by the why's length, so it admits a finding that still holds and that the session decided against - the carve-out FR-002 exists to stop. Not impossible (a task can be filed and ticked on verification), not implied by the GM's words, does not defeat the request's purpose. T28 item 4's 'each settled row checked against the file it names' is T28's practice, not a constraint in D36 or T29 item 9. A different decision would be needed for a different ruling: 'settled' bounded to a finding measured against the current file and found no longer to hold, the why carrying that measurement - that version is not written here and is not pre-ruled."
+    },
+    {
+     "id": "D36-filed-existing-405",
+     "summary": "a row may close as filed against an existing task of this feature rather than a new one",
+     "class": "within",
+     "why": "The work stays in this feature's task list and is worked; a duplicate new task adds nothing. Holds only where the named task's scope actually covers the row, which T28's mapping claims to have checked."
+    },
+    {
+     "id": "D36-filed-385-405",
+     "summary": "a 385 row filed to a 385 or 405 task, a 405 row filed to a 385 task ('385 T12', '405 T17')",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the GM's own words: 'all open process tasks stay in 385 and everything else moves into a new feature', and the rule for 385 itself ('new tasks in 385'). Routing between exactly these two features follows the GM's split."
+    },
+    {
+     "id": "D36-filed-other-feature",
+     "summary": "T29 item 9 / D36 accept 'a task id, this feature's or another's' with no bound on which feature: a row may be closed against a task of any third feature",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-002 is 'found work stays here'. The GM's routing names 385 and a new feature (405) only; a row parked on a third feature's task is found work leaving the feature, with no GM words behind it. Fix: name 385 and 405 explicitly as the only features a row may be filed against."
+    },
+    {
+     "id": "T28-mapping",
+     "summary": "all 76 rows of 385's and 405's logs closed: 22 to 405 tasks, 9 to 385 tasks, 11 settled, 34 filed as new tasks; done = 0 open",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The 31 rows to existing 385/405 tasks and the 34 to new tasks are within FR-002. The 11 'settled' rows close findings with no task, riding on D36-settled; item 1's own goal ('no finding sits open with no task') is met by closing 11 without one. Falls with D36-settled; would stand if each of the 11 is either filed as a task or settled under a bounded rule recording that the finding was measured no longer to hold in the current file."
+    },
+    {
+     "id": "D37",
+     "summary": "34 unfiled rows grouped into six new 405 tasks T65-T70 by unit and complaint; 385-log rows name their 405 task with the feature",
+     "class": "within",
+     "why": "Filing found work as new tasks of this feature is FR-002 itself; grouping by unit and complaint is design. 385's non-process rows landing in 405 follows the GM's routing."
+    },
+    {
+     "id": "D38",
+     "summary": "T45: _reference's message stops offering GATE_NO_CACHE=1; the census is left refusing no-cache re-rolls",
+     "class": "within",
+     "why": "Found work under Amendment 7's 'working all of the remaining open tasks'. Removing a recovery the gate refuses is a fix to the message; choosing not to change the census is design, and the request says nothing of GATE_NO_CACHE or the reference message."
     }
    ]
   }

@@ -5,7 +5,7 @@ was unfiled - 385's 63 rows all read open).
 
     found.py list  --feature <dir>                         every open row, numbered from 1 in file order
     found.py close --feature <dir> --rows 3,7 --task T61   the rows FILED as that task
-    found.py close --feature <dir> --rows 4 --why "<reason>"  the rows SETTLED, with the reason
+    found.py close --feature <dir> --rows 4 --why "no longer holds: <what was measured>"  the rows SETTLED
 
 A closed row keeps every field it had and gains `status` (`filed` or `settled`), `task` or `why`, and `closed_utc`.
 """
@@ -39,10 +39,12 @@ def close(rows: list[dict], numbers: list[int], task: str = "", why: str = "", n
     """Close the numbered rows (1-based, file order): filed as `task`, or settled with `why`. Refuses a row already closed."""
     if bool(task) == bool(why):
         raise ValueError("one of --task (filed) or --why (settled)")
-    if task and not re.fullmatch(r"(?:\d{3} )?T\d+", task):
-        raise ValueError(f"--task names a task id (T61, or 385 T12 for another feature's), not {task!r}")
-    if why and len(why.split()) < 3:
-        raise ValueError("--why says why the row is settled, three words or more")
+    if task and not re.fullmatch(r"(?:(?:385|405) )?T\d+", task):
+        raise ValueError(f"--task names a task id - T61, or 385 T12 / 405 T17 (the GM's routing names those two features only) - not {task!r}")
+    # SETTLED ONLY WHERE IT NO LONGER HOLDS (the plan review of 405 D36): a finding that still holds is FILED as a task (FR-002), so a
+    # reason must record the measurement that it no longer holds - never a choice not to file it
+    if why and not (why.lower().startswith("no longer holds") and len(why.split()) >= 6):
+        raise ValueError('--why starts "no longer holds" and records what was measured against the current file (a finding that still holds is filed as a task)')
     when = now or time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     for n in numbers:
         if not 1 <= n <= len(rows):

@@ -26,14 +26,15 @@ def test_a_row_is_filed_or_settled_and_the_rest_stay_open(tmp_path: pathlib.Path
     path = _rows(tmp_path, 4)
     assert found.main(["close", "--feature", str(tmp_path), "--rows", "1,3", "--task", "T61"]) == 0
     assert found.main(["close", "--feature", str(tmp_path), "--rows", "2", "--task", "385 T12"]) == 0, "another feature's task"
-    assert found.main(["close", "--feature", str(tmp_path), "--rows", "1", "--why", "already settled here"]) == 2, "closed once"
-    assert found.main(["close", "--feature", str(tmp_path), "--rows", "4", "--why", "fixed"]) == 2, "a reason of three words"
+    assert found.main(["close", "--feature", str(tmp_path), "--rows", "1", "--why", "no longer holds: the cited text is gone"]) == 2, "closed once"
+    assert found.main(["close", "--feature", str(tmp_path), "--rows", "4", "--why", "decided not to file this one"]) == 2, "settled only where it no longer holds"
     assert found.main(["close", "--feature", str(tmp_path), "--rows", "4", "--task", "x"]) == 2
+    assert found.main(["close", "--feature", str(tmp_path), "--rows", "4", "--task", "374 T5"]) == 2, "385 and 405 only"
     rows = [json.loads(x) for x in path.read_text().splitlines()]
     assert [r["status"] for r in rows] == ["filed", "filed", "filed", "open"] and rows[1]["task"] == "385 T12"
     capsys.readouterr()
     assert found.main(["list", "--feature", str(tmp_path)]) == 0 and "1 open of 4" in capsys.readouterr().out
-    assert found.main(["close", "--feature", str(tmp_path), "--rows", "4", "--why", "the cited text is gone"]) == 0
-    assert json.loads(path.read_text().splitlines()[3])["why"] == "the cited text is gone"
+    assert found.main(["close", "--feature", str(tmp_path), "--rows", "4", "--why", "no longer holds: the cited text is gone"]) == 0
+    assert json.loads(path.read_text().splitlines()[3])["why"] == "no longer holds: the cited text is gone"
     with pytest.raises(ValueError, match="no row 9"):
         found.close(rows, [9], task="T1")

@@ -386,20 +386,20 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 6. **The exits.** (c) - a row gains its outcome; nothing is deleted.
 7. **The search smell.** None.
 8. **The budget.** 20 min.
-9. **Done, measured.** A row closes as filed (a task id, this feature's or another's) or settled (three words or more), once; `list` counts what is open (test).
+9. **Done, measured.** A row closes as filed (a task of 405, or of 385 - the two features the GM's routing names) or settled only where it no longer holds (the reason records the measurement), once; `list` counts what is open (test).
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
 ### T29 Decisions
 
-**D36 - a row's outcome on the row.** `found.py close` sets `status` to `filed` with `task` (`T61`, or `385 T12`), or `settled` with `why`, and `closed_utc`; it refuses a row already closed. `found.py list` numbers the open rows in file order.
+**D36 - a row's outcome on the row.** `found.py close` sets `status` to `filed` with `task` (`T61`, `385 T12` or `405 T17` - no other feature, the GM's routing), or `settled` with `why`, and `closed_utc`; it refuses a row already closed. SETTLED ONLY WHERE THE FINDING NO LONGER HOLDS (the plan review of D36, FR-002): the reason starts "no longer holds" and records what was measured against the current file; a finding that still holds is filed as a task. `found.py list` numbers the open rows in file order.
 
 ### T28 Approach (checklist part A)
 
 1. **The goal, in the world.** No finding of 385 or 405 sits open with no task.
 2. **The constraints.** FR-002 (found work stays in the feature); T29's tool.
 3. **Where each comes from.** The GM (FR-002) and the spec review of 405 (2026-10-20).
-4. **Do they describe the world here?** Yes - measured 2026-10-21 (a read-only mapping of all 76 rows against both task lists and the current code and record, each settled row checked against the file it names): 22 carried by 405 tasks, 9 by 385 tasks, 11 settled, 34 unfiled.
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (a read-only mapping of all 76 rows against both task lists and the current code and record): 22 carried by 405 tasks, 9 by 385 tasks, 11 no longer holding - each measured against the file it names, the cited text gone or corrected (its reason records what stands there now) - and 34 unfiled.
 5. **The order.** The 34 unfiled rows grouped into six tasks by unit and complaint (T65-T70); every row closed with its outcome.
 6. **The exits.** (c) - filed, not fixed here; each new task is worked in this feature.
 7. **The search smell.** None.
