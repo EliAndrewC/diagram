@@ -775,7 +775,7 @@ def _walk_in(pts: list[Pt], reaches: Callable[[Pt, Pt], bool], tails: Sequence[P
     each step: where another lane's end rests on the segment, the end stops there (`held_at`).
 
     Research:
-        held nearest the house it serves - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane ends at the dooryard - walked on while it still reaches and nears the house it serves (`near`)
+        held nearest the house it serves - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane ends at the dooryard - walked on while it still reaches and nears the house it serves (`near`), never from where `near` is infinite (a junction end stays at its junction)
         pulled back to the last point that serves - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane end that reaches nothing is pulled back to the last house it serves, 4 ft at a time
         held at a junction - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the lanes are one network, joined where their treads meet - a pull-back stops where another lane's end rests on it"""
     while len(pts) >= 2 and not reaches(pts[-1], pts[0]):
@@ -799,7 +799,10 @@ def _walk_in(pts: list[Pt], reaches: Callable[[Pt, Pt], bool], tails: Sequence[P
             return
         d = math.dist(a, b)
         nxt = a if d <= 4.0 else (a[0] + (b[0] - a[0]) * (d - 4.0) / d, a[1] + (b[1] - a[1]) * (d - 4.0) / d)
-        if not reaches(nxt, pts[0]) or near(nxt) >= near(b):
+        here = near(b)
+        # ...never from where `near` says to stay (infinite: an end at a junction) - a step just past it would score nearer
+        # and walk the end off its junction toward a house (batch 6's round 4)
+        if here == float("inf") or not reaches(nxt, pts[0]) or near(nxt) >= here:
             return
         if d <= 4.0:
             pts.pop()

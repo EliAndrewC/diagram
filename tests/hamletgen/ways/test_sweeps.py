@@ -787,3 +787,16 @@ def test_an_end_walked_in_is_held_nearest_the_house_it_serves() -> None:
     held = [(0.0, 0.0), (1000.0, 0.0)]
     _walk_in(held, reaches, [], lambda q: math.dist(q, house))
     assert 496.0 <= held[-1][0] <= 504.0, "with it: beside the house"
+
+
+def test_an_end_at_a_junction_is_not_walked_off_it() -> None:
+    """Batch 6's round 4 (405 T74): an end within reach of a way scores `near` infinite; a step just past that reach scored
+    lower and the walk carried the end off its junction toward a house. It stays."""
+    from l7r.diagram.hamletgen.ways.sweeps import _walk_in
+
+    way_y, house = 0.0, (100.0, 300.0)
+    reaches = lambda q, far: True  # noqa: E731 - it reaches (the way) wherever it stands
+    near = lambda q: float("inf") if abs(q[1] - way_y) <= 60.0 else math.dist(q, house)  # noqa: E731
+    pts = [(100.0, 400.0), (100.0, 58.0)]
+    _walk_in(pts, reaches, [], near)
+    assert pts[-1] == (100.0, 58.0), "held at its junction"
