@@ -1026,6 +1026,84 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
+  },
+  "## T81, T80, T82, T20, T08, T10 - one block reading, the join's width, the walk off a way, three claims (batch 6's rounds; 385's)": {
+   "sha256": "45fd801b943b87243391989b59ca1b7477f278622143c6131ac54220eb75cbf3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T81 Approach (checklist part A)": {
+   "sha256": "f7a63138ef3a7f7bfd7bf57f4bb42ea61979c25e44594fd586ca15eb49868b0f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T81 Decisions": {
+   "sha256": "c40eb62edc9370b01c7b4f24683dc958f6a1947a07d8c31e8706d53a9d21c363",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T80 Approach (checklist part A)": {
+   "sha256": "94dbcc41c1deec1d4fb7f00101a86621f7605a35d9d18f20c4a6897cc4daa886",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T80 Decisions": {
+   "sha256": "61ff7c3b6807b31783eb18a609614311b84c530291da68c03c7a1d888d02fa86",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T82 Approach (checklist part A)": {
+   "sha256": "207fac9108d576a8bfdbef8e7db1cc2e1d201820bc0c61b8c7e0d7248aa198c2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T82 Decisions": {
+   "sha256": "8f85da61b1f695ceae05f5a9d9c361da93d55877b776687f33855410c0b0e214",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T20 Approach (checklist part A)": {
+   "sha256": "c54896bc00dae7796e12fc946023da94b44586ee2afc6f43b285318086480e01",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T20 Decisions": {
+   "sha256": "c507c98c8590b7cc2df0459a9dfbd337fbab277c115aef06e6cde2121975ae20",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T08 Approach (checklist part A)": {
+   "sha256": "3c24be3a553b84a8cf4f69becf9c0269c8cac87abef18db5d7bb0c90f9227e0f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T08 Decisions": {
+   "sha256": "618ad21add141e9c14b5688d1bf5064d623a94df82c08cb3b5174cef7e07941d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T10 Approach (checklist part A)": {
+   "sha256": "f10502014a4fb41dcb9884dc95d4dd6f27d733e45f0bd569e3ab7471d78868db",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T10 Decisions": {
+   "sha256": "d2d8f5f2af4a113864dcac3afcc6b0a4eed63f9845e2d1bc11868248b31e04e8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2391,6 +2469,63 @@
      "summary": "Done is measured by a test that the handler stops the landing's group and raises SystemExit(143)",
      "class": "within",
      "why": "A test whose only effect is to enforce the task's stated goal; enforcement, not unrequested scope"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T81, T80, T82, T20, T08, T10 - one block reading, the join's width, the walk off a way, three claims (batch 6's rounds; 385's)",
+    "### T08 Approach (checklist part A)",
+    "### T08 Decisions",
+    "### T10 Approach (checklist part A)",
+    "### T10 Decisions",
+    "### T20 Approach (checklist part A)",
+    "### T20 Decisions",
+    "### T80 Approach (checklist part A)",
+    "### T80 Decisions",
+    "### T81 Approach (checklist part A)",
+    "### T81 Decisions",
+    "### T82 Approach (checklist part A)",
+    "### T82 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D57",
+     "summary": "T81: the decide guard's _section_clear takes the plan's history and passes a CLEAR block at its digest or at a typo-scale change (typo_only) from its recorded or historical text, as plan-delta's block_status does.",
+     "class": "within",
+     "why": "Makes the two readings of a block agree with 375 FR-005(b) (a verdict survives an edit that changes no decision; a decision change voids it). It forgives no more than plan-delta already does and the test pins that a real change passes neither. Serves Amendment 7's 'work all of the remaining open tasks' and FR-002 (a finding filed here and worked)."
+    },
+    {
+     "id": "D59",
+     "summary": "T80: _bar and both link draws read a missing lane width as 3 ft (0081), the link drawn at round() not int(), and the bar's w/2+2 term for lanes over 10 ft claimed UNRESEARCHED (none drawn here).",
+     "class": "within",
+     "why": "Conforms the code to its cited research (exit (e)) and labels the one unsourced term honestly rather than inventing a source; no drawn lane moves. That is the task done as FR-001 works tasks; nothing the GM asked is narrowed."
+    },
+    {
+     "id": "D58",
+     "summary": "T82: _walk_in's near takes the lane's other end, and _sweep_dangling_ends._near skips segments within _TOUCH_GAP of it, so a link off a way walks on to its house rather than stopping within 60 ft of the way it left.",
+     "class": "within",
+     "why": "A conform (exit (e)) fixing a measured defect against the stated rule 'only another way holds it'; the 'not the way it left' reading is labeled GUESS 0246 with the page read and silent rather than presented as sourced. Inside the task as moved and Amendment 7's completion instruction."
+    },
+    {
+     "id": "D60",
+     "summary": "T20: claims at trim_streets and settle_street_ends - the 4 ft touch (CONVENTION), anchors at 1 ft, a field path's end counts as a joint, a street end at the bund is not a dangling end; no code token changes.",
+     "class": "within",
+     "why": "Claim-only exit (a) answering 385 T138's finding; no behavior changes and nothing the request asked for is excluded."
+    },
+    {
+     "id": "D61",
+     "summary": "T08: lay_door_paths claims 'a door path wherever no way arrives' (GUESS 0033 with 0246), wider than 0033's near-row case.",
+     "class": "within",
+     "why": "Claims the code as it stands, with its label stating the wider rule is 0246's every-farmhouse-reached rule applied and 0033's case among it; narrowing the code to 0033's case alone would leave farms unreached, contrary to 0246. This is the GM's 'generally follow the research' (Amendment 7), not a departure from it, and no part of the request is carved out."
+    },
+    {
+     "id": "D62",
+     "summary": "T10: connector_dry_exit claims 'no drawn channel crossed' as a DEVIATION from 0084 - the fill lays no plank, keeps to ground between channels, and refuses a gateway with no such way (NoDryExit, re-seated per 287 W23).",
+     "class": "within",
+     "why": "0084 permits a plank and does not require one, so the code's choice does not contradict the research; it is labeled DEVIATION conservatively and the reason (re-seating already handles the refused gateway) is stated. A claim exit (a) on 385 T120's finding; it settles the task rather than excepting any part of the GM's request, and asks the GM no research ruling, as Amendment 7 hoped."
     }
    ]
   }
