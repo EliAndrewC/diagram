@@ -960,6 +960,60 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
+  },
+  "## T74, T75, T76, T77 - the sweeps' end at the house, one serving bar, the carried claims, carries filed in the wait (batch 5's rounds)": {
+   "sha256": "86dcb5c9ec708da8075d59ec5bd5bfd32485ec053db7df86a616795b86c7bfa6",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T74 Approach (checklist part A)": {
+   "sha256": "5a3af1f204aca32aafd4c7cdf6363d7ac62c34ba9569a216bfed761d76a08303",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T74 Decisions": {
+   "sha256": "9a4204167d57bd7eda1af114051bdaf72fc25871052857f0284138e1d152c9e9",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T75 Approach (checklist part A)": {
+   "sha256": "67a06af2008595e0cf7650308b83caebb662fbd83a69753ddbc1c2f85416ef4a",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T75 Decisions": {
+   "sha256": "8f05f7b79cf8bfc512466c092a3564205b7dfaee97af7469286a088a90733717",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T76 Approach (checklist part A)": {
+   "sha256": "a8e1d748d2f48c5c95e3a0a9e204e94123bec184e4a6c22ab1ae8769c23c2275",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T76 Decisions": {
+   "sha256": "5213d63192133b3bf6a80a1eda7711eb0104052ea40c5e14da0b79a9a7cd5608",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T77 Approach (checklist part A)": {
+   "sha256": "6464e11e69ecbd2164807655e551b150b9b6927610cabf8149eabd195881a2ab",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T77 Decisions": {
+   "sha256": "affcff315e6accc230df881721bc27090579df8cf1c1adea5809be4125e5f2cd",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2156,6 +2210,48 @@
      "summary": "T73: wording only - the two 'a house served' claims cite section 10's 100 ft; _walk_in's 4 ft step named as the code's; the grove-fallback band claim names its 13.5 ft; the bands' comment says why a village copse (common ground) is not a farm's own wood; the connector's inner end stays _pull_back_to_service's and the sweep's existing exemption stands; no code token changes.",
      "class": "within",
      "why": "T73 was filed (FR-002) to make the sweeps' claims say what the page records, and that is all D51 does. Keeping village_groves out of the section 78 bands follows the page's own words ('a farm's own wood'), not an exception to them. Leaving the sweep's existing exemption standing changes no behavior and narrows nothing the GM or the task asked for: the task's scope is the notes, and the exit is (e) conform."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T74, T75, T76, T77 - the sweeps' end at the house, one serving bar, the carried claims, carries filed in the wait (batch 5's rounds)",
+    "### T74 Approach (checklist part A)",
+    "### T74 Decisions",
+    "### T75 Approach (checklist part A)",
+    "### T75 Decisions",
+    "### T76 Approach (checklist part A)",
+    "### T76 Decisions",
+    "### T77 Approach (checklist part A)",
+    "### T77 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D52",
+     "summary": "T74: _walk_in walks on (4 ft steps) while it still reaches and nears the owed house, held at a junction; T14's two pinned tests moved to the house; claim GUESS 0246.",
+     "class": "within",
+     "why": "Works a filed finding (FR-002) through the checklist (FR-001) toward 0246 §6's 'a lane ends at the dooryard' - follows the research as amendment 7 asks. The junction hold is an existing constraint (269 E4), not a carve-out from anything the GM asked."
+    },
+    {
+     "id": "D53",
+     "summary": "T75: _SERVE_FT made WEB_REACH_FT (100 ft); moving the guard to 0246 §6's serving test (60 ft) 'weighed and refused'; whether the page's 100 ft is the serving test filed as T78 for the record.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The block names 0246 §6 as the serving test (step 2), rests on round 4's reading that 'the 100 ft is the page's' (step 4), then concedes the page does not state whether its 100 ft is the serving test (step 5) - so the plan resolves a question the research left open in favor of the existing code's bar and labels the result GUESS 0246. Step 6's reason for refusing §6 is code consistency (the guard at 60 ft would strand a house the gate holds at 100 ft): preserving existing behavior, which does not legitimize an exception; the remedy that argument points to is applying §6 to guard and gate together, and cost is not a fidelity finding. Amendment 7: following the research 'is generally what we should do'. T78 is a record task on the page with no path back to the guard, so the filing defers nothing - the plan's own word is 'refused'. Nothing is physically impossible, nothing in the GM's words implies keeping 100 ft, and §6 does not defeat the request's purpose. To clear: apply §6's test (to the gate too if consistency requires it), or cite where the page gives 100 ft as the serving test."
+    },
+    {
+     "id": "D54",
+     "summary": "T76: the claims gate's carries claimed - trim_lane_stubs' pull-back labeled GUESS 0246; _detour_links' _ORPHAN_REACH and _join_piece's refused-splice lane claimed UNRESEARCHED.",
+     "class": "within",
+     "why": "Works the claims gate's carried findings (FR-002) with exit (a); labeling matches the research's own status (0246 §34 calls the pull-back a GUESS). The served-house carries are left to T75, whose ruling is above."
+    },
+    {
+     "id": "D55",
+     "summary": "T77: land.file_carries lifted out of make land's first pass and run in the claims wait when the gate's refusal holds only carries, then the gate asked again; an owed or introduced finding is still waited on.",
+     "class": "within",
+     "why": "Found landing work filed and worked in 405 (FR-002), of the landing-time kind amendments 1-6 approved; it files what the first pass already files (T36) and leaves the wait on owed or introduced findings intact, so no guard is weakened."
     }
    ]
   }
