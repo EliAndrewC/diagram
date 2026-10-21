@@ -25062,12 +25062,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::FIELD_REACH_FT#a way reaches the field": {
-  "body": "e0c94f3897f9cdb4",
+  "body": "3f984f9db471948a",
   "claim": "a way reaches the field - bunds-between-the-paddies-aze.drawing: a way runs from the hamlet to the field's outer bund",
-  "code": "24b238fd36fa8bf9",
-  "core": "c0101826cceee8b7",
-  "date": "2026-10-19",
-  "note": "60 ft counts as reaching the field, but the page has the path join the outer bund and \"never ends in open ground short of the bund\", reading a join as within 6 ft (a GUESS)",
+  "code": "b130eb2776c688ba",
+  "core": "5efeb905b7d48b3f",
+  "date": "2026-10-21",
+  "note": "the constant is how near a hamlet way must come to count as reaching the field, which is the page's path running from the hamlet to the outer bund and joining it",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
   },
@@ -25075,8 +25075,7 @@
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
   ],
-  "triage": "touched",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::FIELD_REACH_FT#the reach": {
   "body": "e0c94f3897f9cdb4",
@@ -28474,12 +28473,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::theirs#a lane arrives at its own dooryard": {
-  "body": "688a0d9a410dbb6f",
+  "body": "e557b27754221d11",
   "claim": "a lane arrives at its own dooryard - how-our-maps-lay-a-clustered-settlements-lanes.drawing: its way leaves its dooryard round its own beds and fixtures",
-  "code": "b98b4fbc61d2e92b",
-  "core": "4405a46a6aa4b956",
-  "date": "2026-10-19",
-  "note": "every steading within DOORSTEP_FT (80 ft) of either end loses the fence gap, so a neighbor's garden is exempt too; the page says \"The gap is kept from another household's garden\", and only the lane's own household is exempt",
+  "code": "fc1ca49b760071c3",
+  "core": "ce524fc18381683b",
+  "date": "2026-10-21",
+  "note": "the yards of the household whose dooryard an end reaches are exempt, and every other household's are not, which matches the page's own-garden rule and its other-garden gap",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
@@ -28488,9 +28487,7 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-19",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/stage.py::STEPS#settle plumbing": {
   "body": "210a53bd49276a59",
@@ -31722,16 +31719,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::spur_cut_at_the_fold#a folded spur's reach": {
-  "code": "0b747352fe39f374",
-  "core": "bd05d9259d32773f",
-  "date": "2026-10-03",
-  "note": "the page is silent on the 60 ft reach",
-  "pages": {},
-  "research": "",
+  "body": "28205ee2f40739c6",
+  "claim": "a folded spur's reach - GUESS bunds-between-the-paddies-aze.drawing: the arm counts as reaching the field when it ends within `SPUR_REACH_FT` (6 ft, 0014's join) of it",
+  "code": "4f97d2e077750aa8",
+  "core": "cfb7054fcd47dfc4",
+  "date": "2026-10-21",
+  "note": "`edge_dist(...) &lt;= SPUR_REACH_FT` (6.0) is the 6 ft join, and the drawing page records that figure as a GUESS",
+  "pages": {
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
+  },
+  "research": "cb222e5372134180",
   "rests": [
-   "0081-village-lanes.drawing.html:06a57ca34e5b7af2"
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::spur_cut_at_the_fold#spur fold cut": {

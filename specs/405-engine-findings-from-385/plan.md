@@ -377,7 +377,7 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T16:40:44Z (continue), 
 2. **The constraints.** 0246: the gap is kept from another household's garden; a household's own way may run beside its own fence, kept only off the beds (a DEVIATION the page records).
 3. **Where each comes from.** R (0246).
 4. **Do they describe the world here?** Yes - T108's round: `settle.theirs` exempts every steading within `DOORSTEP_FT` (80 ft) of either end, a neighbor's garden at a junction too.
-5. **The order.** `theirs` exempts at each end only the NEAREST steading within `DOORSTEP_FT` - the household whose dooryard the end arrives at; the claim GUESS 0246 (the lane's own household read as the one nearest its end); a test with a neighbor beside the junction; seeds 1-48.
+5. **The order.** `theirs` exempts at each end only the farmhouse that end reaches as 0246 measures it (`law.reach_to_steading`), the nearest where two do; the claim GUESS 0246; a test with a neighbor beside the junction and a farm past the reach; seeds 1-48.
 6. **The exits.** (e) conform.
 7. **The search smell.** None.
 8. **The budget.** 60 min for the batch with its landing.
@@ -387,7 +387,7 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T16:40:44Z (continue), 
 
 ### T18 Decisions
 
-**D69 - its own household only.** `theirs(p, yards, houses)`: each end exempts the one steading nearest it within `law.DOORSTEP_FT`, not every one; the claim "a lane arrives at its own dooryard" GUESS 0246 (the page keeps the gap off another household's garden; which household a lane is "its own" the page does not say - the one its end arrives at).
+**D69 - its own household only.** `theirs(p, yards, houses, M)`: each end exempts the farmhouse it reaches as 0246 measures a reach (`law.reach_to_steading`: 60 ft of the house or 12 ft of its built ground, the page's own GUESS; 60 ft of the house where no manifest is passed), the nearest where two do - not every steading within `law.DOORSTEP_FT` (80 ft, a figure the page does not give: the claims round). The claim GUESS 0246 (the page keeps the gap off another household's garden; a lane's own household is the farmhouse its end reaches).
 
 ### T86 Approach (checklist part A)
 

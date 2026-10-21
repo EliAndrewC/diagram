@@ -83,16 +83,21 @@ def _ordinary(M: Mapping[str, Any]) -> list[int]:
 Yards = list[tuple[Poly, Pt | None]]
 
 
-def theirs(p: Poly, yards: Yards, houses: Sequence[Mapping[str, Any]]) -> list[Poly]:
-    """The yards and gardens a lane along `p` may not come near: all but its OWN household's - at each end, the one steading
-    nearest it within `law.DOORSTEP_FT`, the dooryard that end arrives at (405 T18: every steading that near was exempt, so a
-    neighbor's garden beside a junction lost the gap 0246 keeps off another household's garden).
+def theirs(p: Poly, yards: Yards, houses: Sequence[Mapping[str, Any]], M: Mapping[str, Any] | None = None) -> list[Poly]:
+    """The yards and gardens a lane along `p` may not come near: all but its OWN household's - at each end, the farmhouse that
+    end reaches as 0246 measures it (`law.reach_to_steading`: 60 ft of the house or 12 ft of its built ground; with no
+    manifest, 60 ft of the house), the nearest where two do (405 T18: every steading within `DOORSTEP_FT`, 80 ft, was exempt,
+    so a neighbor's garden beside a junction lost the gap 0246 keeps off another household's garden).
 
     Research:
         a lane arrives at its own dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its way leaves its dooryard round its own beds and fixtures
-        its own household the one its end arrives at - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the gap is kept from another household's garden; which household a lane is its own's the page does not say - the steading nearest an end within `DOORSTEP_FT`"""
-    centers = [(float(h["x"]), float(h["y"])) for h in houses]
-    own = [c for end in (p[0], p[-1]) if (c := min(centers, key=lambda q: math.dist(end, q), default=None)) is not None and math.dist(end, c) <= law.DOORSTEP_FT]
+        its own household the one its end reaches - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the gap is kept from another household's garden; a lane's own household is the farmhouse its end reaches (the page's own reach, a GUESS there), the nearest where two do"""
+    own = []
+    for end in (p[0], p[-1]):
+        reached = [h for h in houses if (law.reach_to_steading(end, h, M) if M is not None else math.dist(end, (float(h["x"]), float(h["y"]))) <= law.HOUSE_REACH_FT)]
+        if reached:
+            h = min(reached, key=lambda q: math.dist(end, (float(q["x"]), float(q["y"]))))
+            own.append((float(h["x"]), float(h["y"])))
     return [poly for poly, owner in yards if owner is None or all(math.dist(owner, c) > 1.0 for c in own)]
 
 
@@ -112,7 +117,7 @@ def fouled_segment(
         no long leg through a building - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `law.breaks_through`
         off the fixtures - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its own household's too
         what the overlap matrix forbids - NONE: each pair is claimed in the matrix"""
-    near = theirs(p, yards, houses)
+    near = theirs(p, yards, houses, M)
     over = law.over_a_fixture(p, width, fixtures) if fixtures else None
     matrix = forbidden_segment(M, "lanes", p, width) if M is not None else None
     for k, (a, b) in enumerate(zip(p, p[1:], strict=False)):

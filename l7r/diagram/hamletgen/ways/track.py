@@ -76,7 +76,7 @@ def spur_cut_at_the_fold(pts: Poly, envelope: Poly) -> tuple[Poly, str | None]:
     cut = pts[: fold + 1]
     if edge_dist(cut[-1][0], cut[-1][1], envelope) <= SPUR_REACH_FT:
         return cut, None
-    return cut, "folded back short of the field - the ground between is marsh a path may not cross"
+    return cut, "folded back short of the field - the outward arm stops more than the join's reach from it"  # 405: the cause is not measured here
 
 
 def _out_of_bands(p: Pt, bands: Sequence[Poly], toward: Pt) -> Pt:
