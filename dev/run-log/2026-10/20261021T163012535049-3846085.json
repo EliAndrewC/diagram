@@ -1,0 +1,39 @@
+{
+  "utc": "2026-10-21T16:30:12Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 217,
+  "result": "failed: test-full",
+  "commit": "7ce86e181",
+  "first_failure_s": 148.9,
+  "last_failure_s": 176.6,
+  "failed_tests": 2,
+  "failed_names": [
+    "tests/test_task_research_boxes.py::test_every_ticked_physical_task_has_its_three_research_boxes_ticked",
+    "tests/tooling/test_content_cache.py::test_the_whole_repository_s_pointers_and_conflicts_are_the_same_with_the_cache[conflicts]"
+  ],
+  "host": {
+    "load": [
+      3.81,
+      6.49
+    ],
+    "mem_avail_mb": [
+      9863,
+      10126
+    ],
+    "cpu_temp_c": [
+      74.0,
+      60.0
+    ],
+    "stall_s": {
+      "cpu": 2.9,
+      "io": 0.4,
+      "io_full": 0.4,
+      "memory": 0.1
+    },
+    "throttle_ms": {
+      "core": 6,
+      "package": 0
+    }
+  }
+}
