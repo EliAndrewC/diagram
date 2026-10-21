@@ -116,7 +116,7 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
         skeleton drawn worn - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: narrow, packed earth, no centerline (`worn=True`)
         no skeleton under two houses - UNRESEARCHED: a cluster of fewer than two houses lays no skeleton lanes (`len(arcs) < 2`), there being no two houses to join
         skeleton arm's corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle 7 ft clear of a garden fence; each arm registers `LANE_CLEARANCE`, 7 ft from its middle, a footprint held to it at its corners
-        skeleton span floor - UNRESEARCHED: each half-extent floored at half a bundle pitch (50 ft), a pitch across; a piece under 30 ft not laid
+        skeleton span floor - UNRESEARCHED: each half-extent floored at half a bundle pitch (50 ft), a pitch across; a run under 70 ft dropped by `clip_to_clear`, an arm under 30 ft (`_WEB_MIN_FT`) not laid
         skeleton arm trimmed back to the last point serving a house - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end reaching nothing pulled back to the last house it serves
         skeleton arm clipped WEB_FABRIC_GAP (7 ft) off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle keeps at least 7 ft clear of a garden fence"""
     if len(arcs) < 2:
@@ -299,6 +299,7 @@ def _web_cut_lines(plan: SitePlan, frame: _margin_frame, arcs: list[float], stan
         web cut spacing - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every house within WEB_REACH_FT (100 ft) of a cut, so the cuts stand up to about twice that apart
         a cut's room - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: MIN_WEB_GAP, 7 ft clear of a garden fence on each side and a 4 ft tread, within the page's 3 ft footpath to 5 ft spine
         a web lane's span - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane runs only along the houses it serves - those within WEB_REACH_FT (100 ft) of its cut, of every house but one reached across a neighbor's yard (owed no lane; `stage_web` leaves those out of the arcs and stands)
+        the side lanes' reach - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the page gives WEB_REACH_FT (100 ft) for back lanes; the side-lane form reuses it, the page silent there
         a tie's run past the back lanes - GUESS: a cross lane runs the back lanes' own 30 ft pad (`pad`) past the outermost of them; no page gives a distance
     """
     pad = 30.0  # a lane runs a little past the last steading it serves, not up to its wall; a tie runs as far past the outermost back lane

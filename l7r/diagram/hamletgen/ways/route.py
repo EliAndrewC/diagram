@@ -19,7 +19,7 @@ from ..consts import (
     Pt,
 )
 from .clearance import _clear_link, _clear_touch, link_index
-from .geom import _TOUCH_GAP, _turn_deg
+from .geom import _turn_deg
 
 # THE BROOK'S BAND AND WHAT ENTERING IT COSTS, for the roll being drawn (feature 261). `_route` has a dozen callers and
 # none holds the settlement, so the ways stage sets this once where it lays the fords (`set_crossing`) - every map
@@ -171,7 +171,7 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
 
     Dijkstra on a coarse lattice, then string-pulled. The lattice is the INDEX - it decides nothing,
     because every shortcut is re-tested against the real geometry by `_clear_link` before it is
-    taken, so the drawn path is exactly as legal as one drawn by hand. 12 ft cells because the gaps
+    taken, so the drawn path is exactly as legal as one drawn by hand. 10 ft cells (`ROUTE_CELL`) because the gaps
     these paths thread are `MIN_WEB_GAP` (18 ft) at their narrowest, and a lattice coarser than the
     gap cannot see the gap.
 
@@ -182,7 +182,7 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
     Research:
         a worn path takes the shortest way - research/questions/0081-village-lanes.drawing.html: least cost through the
             steadings, then pulled taut like a string
-        clear of the fabric - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the line 7 ft off by default, a tread's edge 5.5 ft
+        clear of the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the line 7 ft off by default (the page's fence to the middle of the lane), a tread's edge 5.5 ft
         clear of the crop - research/questions/0081-village-lanes.drawing.html: half the widest tread off the crop (`WEB_CROP_GAP`, carried by the crop polygons) at each cell's center, unpadded so a way can come up to the bund (padded half a cell as the walls are, cohort Audit-10's field way could not); every link the pull takes is tested at that gap, and a lattice step it keeps as it is is asked of the crop's outline (`crosses_the_crop`) - a route that would cut a crop corner is no route
         clear of the toe and marsh - UNRESEARCHED: 8 ft (`WEB_HARD_GAP`)
         lattice off the water - UNRESEARCHED: 14 ft off the water lines
@@ -216,7 +216,7 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
     # THE LATTICE TESTS CELL CENTERS, SO IT MUST CLEAR HALF A CELL MORE THAN THE PATH NEEDS.
     #
     # A cell whose CENTER is `gap` from a wall is marked free, and the drawn line through that cell
-    # can pass half a cell nearer than its center does - at a 14 ft cell, seven feet nearer. Measured:
+    # can pass half a cell nearer than its center does - at a 10 ft cell (`ROUTE_CELL`), five feet nearer (measured at the old 14 ft cell, seven). Measured:
     # three web lanes on cohort seed 11 came within 4.0 ft of a farmhouse corner having been planned
     # at 7, and a farmhouse ended up standing on the lane. Inflating the planning clearance by half
     # the cell's diagonal makes "this cell is free" mean "every point in this cell is clear", which is
@@ -296,20 +296,21 @@ def crosses_the_crop(a: Pt, b: Pt, hard: Sequence[Poly]) -> bool:
 
 
 def _unjog(path: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], gap: float | None = None) -> Poly:
-    """Take the lattice's jogs out of a routed path where the chord clears at the JUNCTION margin.
+    """Take the lattice's jogs out of a routed path where the chord clears the fabric at 0246's 7 ft.
 
     The string-pull above tests every shortcut at the margin the route was planned with, so a route
     that hugs a garden's corner at the fabric margin keeps a 7 ft step and a 13 ft step back where
     the lattice turned the corner - `lanes_bend_like_paths` reads two turns past 50 degrees within
     40 ft as a zigzag (cohort seed 14, feature 137 T03), and a turn past 140 as a hairpin. Both are
-    the lattice showing through, not the ground; a path that may brush a fence at a junction may
-    brush it at a corner, so each such jog is replaced by its chord when `_clear_touch` allows it.
+    the lattice showing through, not the ground, so each such jog is replaced by its chord when `_clear_touch` allows it
+    at the fabric margin (the 4 ft junction margin until 405 T65).
     The thresholds are the check's own, so this undoes exactly what the check would refuse.
 
     Research:
         no hairpin - research/questions/0081-village-lanes.drawing.html: a turn of 140 degrees chorded or eased
-        no zigzag - research/questions/0081-village-lanes.drawing.html: two 50 degree turns within 40 ft chorded"""
-    gap = _TOUCH_GAP if gap is None else gap  # the module constant is defined below this function
+        no zigzag - research/questions/0081-village-lanes.drawing.html: two 50 degree turns within 40 ft chorded
+        chord clear of the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the chord's line 7 ft (`WEB_FABRIC_GAP`) off a garden fence, the page's fence to the middle of the lane"""
+    gap = WEB_FABRIC_GAP if gap is None else gap  # 0246's 7 ft fence to the middle (405 T65)
     out = list(path)
     k = 1
     while k < len(out) - 1:

@@ -42,12 +42,14 @@ def _detour_links(cands: Sequence[tuple[float, Pt, Pt]], hard: Any, walls: Any, 
     Research:
         detour link directness - UNRESEARCHED: up to 8 times the straight gap
         shortest route wins - research/questions/0081-village-lanes.html: of three routable targets, the shortest walk is drawn
+        orphan join reach - UNRESEARCHED: no link is sought to a target more than 150 ft away by air (`_ORPHAN_REACH`)
+        routed clear of the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: both tries 7 ft (`WEB_FABRIC_GAP`) from a garden fence to the link's middle (405 T65)
     """
     found: list[tuple[float, Pt, Poly]] = []
     for d, v, q in cands:
         if d > _ORPHAN_REACH:
             break  # sorted by air distance: nothing further out is worth a route
-        link = _route(v, q, hard, walls, water, gap=_TOUCH_GAP, pad_mult=2.0, cell=6.0)
+        link = _route(v, q, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=6.0)
         if not link:  # the DETOUR: around the yard or the house that walls the slot - a wider box, a longer leash
             link = _route(v, q, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=5.0, cell=None)
         if link and polyline_len(link) <= _DETOUR_DIRECTNESS * max(d, 1.0):
@@ -370,9 +372,9 @@ def _one_network(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: 
             # THE LADDER'S LAST TWO RUNGS (feature 137 T03, 2026-08-28). Tripwire seed 37 and 26 of 48
             # cohort seeds carried a piece the two rungs above could not link: a stub whose only way to
             # the spine is a slot between a house and a yard that the 7 ft fabric pad closes on both
-            # sides. (1) Route again at the JUNCTION standard - `_TOUCH_GAP`, the margin a link into a
-            # junction is already allowed to brush a fence at (see the note under `_ORPHAN_REACH`): a
-            # lane and a plot fence share a line in a real village. (2) Failing that, DROP the piece -
+            # sides. (1) Route again at the JUNCTION standard - `_TOUCH_GAP` until 405 T65, now 0246's 7 ft
+            # (`WEB_FABRIC_GAP`): seeds 1-48 and the pinned rows all passed at 7 ft (2026-10-21), so the
+            # 4 ft exception no longer earned its place. (2) Failing that, DROP the piece -
             # but only when no farmhouse would be stranded by it: every house the piece serves (within
             # `WAY_END_REACH_FT`, 60 ft, of its tread) must still stand within 60 ft of some other way. A fragment
             # that serves no house nobody else reaches is a drawing, not a lane, and the network check
@@ -468,7 +470,11 @@ def _join_piece(
     link's - and `lane_ends_front_different_houses` counted them (cohort seed 16, feature 137 T03).
     One way that reaches the network is one lane. The splice is passed through `_unretrace` and
     `_unjog`: a link leaving a piece's END may double back along the piece before it turns (cohort
-    seed 14 - 13 ft out, 7 ft up, 13 ft back), and the piece's own vertex is the right start."""
+    seed 14 - 13 ft out, 7 ft up, 13 ft back), and the piece's own vertex is the right start.
+
+    Research:
+        a link the splice refuses - UNRESEARCHED: drawn as its own lane at the piece's width (3 ft where it has none)
+        no nearer the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the joined run no nearer a garden fence than it already stood or than 7 ft (`WEB_FABRIC_GAP`, the page's fence to the middle), whichever is more generous (405 T65)"""
     pts = [(float(x), float(y)) for x, y in way]
     link = _stop_at_network(link, net)
 
@@ -481,7 +487,7 @@ def _join_piece(
     # same forgiveness: no nearer than it already was, or than its own keep-out asks, whichever is more
     # generous, so a lane already tight is never made worse and is not required to fix itself.
     _fab = [poly for poly in walls if len(poly) >= 3]
-    _bar = max(_TOUCH_GAP, float(lanes[i].get("w") or 5.0) / 2.0 + 2.0)
+    _bar = max(WEB_FABRIC_GAP, float(lanes[i].get("w") or 5.0) / 2.0 + 2.0)
     # ASKED OF AN INDEX, CAPPED AT THE BAR (feature 306): the clearance was every fabric vertex against every segment of
     # the run - 111,700 distances in one call on the pool. Both of its uses read it only through `min(_was, _bar)`, so the
     # value above `_bar` is never needed, and a vertex farther than `_bar` from the run cannot be the answer: the vertices

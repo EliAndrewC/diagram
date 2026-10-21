@@ -369,8 +369,9 @@ def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (
     # under the floor the link was simply discarded and the piece stayed orphaned, which is how cohort
     # seed 18 traded an overlap for `lanes_form_one_network`.
     # A JOIN LINK IS ALLOWED TO BRUSH A FENCE. IT IS NOT ALLOWED THROUGH A HOUSE (feature 155).
-    # The exemption above lets a short link be drawn, and the link is routed at `_TOUCH_GAP` (4 px)
-    # rather than `WEB_FABRIC_GAP` (7) because "a lane and a plot fence share a line in a real village".
+    # The exemption above lets a short link be drawn. The link was routed at `_TOUCH_GAP` (4 px) rather than
+    # `WEB_FABRIC_GAP` (7) - "a lane and a plot fence share a line in a real village" - until 405 T65 put it at 0246's 7 ft
+    # (seeds 1-48 and the pinned rows all passed at 7 ft, 2026-10-21).
     # That reasoning is about FENCES. A farmhouse is not a fence: `houses_clear_of_lanes` allows a lane
     # no overlap with a steading at all, so a 4 px routing margin plus the tread's own half-width plus
     # the straightening `_unjog` does afterwards can and did put a link's ink on a house corner -

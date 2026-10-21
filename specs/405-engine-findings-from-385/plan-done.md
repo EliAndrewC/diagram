@@ -628,3 +628,267 @@
 ### T69 Decisions
 
 **D41 - said where it is done.** `_web_cut_lines`' claim "a web lane's span" adds that its arcs and stands are every house but one reached across a yard (`stage_web` leaves those out).
+<!-- plan-archive: archived 2026-10-21 -->
+## T72 - the cohort's workers sized to the container's memory (found landing batch 3)
+
+### T72 Approach (checklist part A)
+
+1. **The goal, in the world.** The landing cohort beside the gate never takes the containers to their memory cap.
+2. **The constraints.** The containers' shared 10 GB cgroup limit (the host has 15 GB); the gate's peak (3.1 GB on six workers, measured 2026-10-04); a roll's allowance (the Makefile's 0.5 GB); 405 T48's sizing.
+3. **Where each comes from.** O (feature 405, the test RAM profile of 2026-10-04) and the host.
+4. **Do they describe the world here?** Yes - measured 2026-10-21: the batch-3 landing sized 12 workers from MemAvailable 9,500 MB; the memwatch hook reported the containers at 9.0 of 10.0 GB; `/sys/fs/cgroup/memory.max` reads 10 GiB.
+5. **The order.** `land.memory_free_mb` (the host's MemAvailable, bounded by the cgroup's limit less what it holds plus its inactive file cache); `cohort_jobs` reads it; a test.
+6. **The exits.** (c) - the sizing reads the limit that kills.
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** A 10 GiB limit holding 8 with 1 of cache counts 3 GiB free and sizes 2 workers (test); with no limit, the host's figure.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T72 Decisions
+
+**D42 - the limit that kills.** `memory_free_mb(cgroup)` = min(MemAvailable, memory.max - memory.current + inactive_file) where `memory.max` is a number; `cohort_jobs` sizes from it; the landing prints the figure.
+
+<!-- plan-archive: archived 2026-10-21 -->
+### T66 Approach (checklist part A)
+
+1. **The goal, in the world.** The track's words say what its code does.
+2. **The constraints.** `TRACK_FABRIC_GAP = WEB_FABRIC_GAP` (0246's 7 ft); `ROUTE_CELL` 10 ft; `CONNECTOR_BAND_GAP_FT` (0036's 9.5 ft working room past the connector's half-width); `WEB_HARD_GAP` 8 ft off wet ground.
+3. **Where each comes from.** R (0246, 0036) and O.
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (385 found rows 12-15, 27, 28, each re-read in the code: the docstring calling the track's gap not the web's; the steadings claim; the band gap held for the spur; `_route`'s 12 ft cells; `wet_grown_by_the_lane`'s 8 px).
+5. **The order.** Each wording put right where it stands.
+6. **The exits.** (e) conform - words only.
+7. **The search smell.** None.
+8. **The budget.** With the batch (claims and words only, one landing).
+9. **Done, measured.** the claims round reads every changed claim IN-STEP; no code token changes.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+<!-- plan-archive: archived 2026-10-21 -->
+### T66 Decisions
+
+**D44 - the track's words.** `_thread_the_fabric`'s gap paragraph says the gap is the web's and the route is what differs; its steadings claim names `gap` for the clip and the fabric test, the router walling the steadings; the band claim says the spur keeps the connector's 12.5 ft; `_route` reads 10 ft cells; `wet_grown_by_the_lane` reads 8 px, 8 ft on a hamlet's sheet (1 ft a px), `WEB_HARD_GAP`'s bar.
+
+### T59 Approach (checklist part A)
+
+1. **The goal, in the world.** `_trim_to_service`'s rule that an end does not count as reaching the way it left is claimed.
+2. **The constraints.** 0246 §6, which records no such case (the T28 mapping's 405 row 9).
+3. **Where each comes from.** O (feature 261's settlement-review of Mizuguchi).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (the claims gate carried it from the T17 batch's round 1: UNCLAIMED).
+5. **The order.** The claim, UNRESEARCHED with its origin.
+6. **The exits.** (a) claim.
+7. **The search smell.** None.
+8. **The budget.** With the batch (claims and words only, one landing).
+9. **Done, measured.** the claims round reads every changed claim IN-STEP; no code token changes.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+<!-- plan-archive: archived 2026-10-21 -->
+### T59 Decisions
+
+**D45 - claimed where it is decided.** `_trim_to_service` claims "not the way it left", UNRESEARCHED: the page records no such case; the rule came from the settlement-review of Mizuguchi (feature 261).
+
+### T68 Approach (checklist part A)
+
+1. **The goal, in the world.** Every claim on the trims and the sweeps cites a page only for what that page records.
+2. **The constraints.** 0246 §6 (an end that reaches nothing pulled back to the last house it serves - a GUESS; reaches of 60 ft and 12 ft).
+3. **Where each comes from.** R (0246, 0033).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (the T28 mapping's 405 rows 1-6, 8, 9, 11, 12, each re-read in the code).
+5. **The order.** The step, the keep and keep-whole exceptions, the closest-approach cut, the departure way, the track-out and street exemption and the carry's reach labeled UNRESEARCHED where the page records none; the carry comment and the 60/100 ft comment put right; the grove-band rule labeled GUESS where it is held beyond 0033's row villages.
+6. **The exits.** (e) conform - labels and words; no behavior changes (a page record for any of them is the record's own work, not this task's).
+7. **The search smell.** None.
+8. **The budget.** With the batch (claims and words only, one landing).
+9. **Done, measured.** the claims round reads every changed claim IN-STEP; no code token changes.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+<!-- plan-archive: archived 2026-10-21 -->
+### T68 Decisions
+
+**D46 - cited for what the page records.** `_trim_to_service`: the 4 ft step, "an outlying house keeps its way" and "a short way kept whole" UNRESEARCHED; `_stop_at_closest_approach` UNRESEARCHED; `_sweep_dangling_ends`: "not the way it left", the track-out and street exemption and the 120 ft carry UNRESEARCHED, the grove band GUESS 0033 held for every settlement; the two comments reworded. The house's center as the 60 ft's point stands in `_trim_to_service`'s own comment.
+
+### T71 Approach (checklist part A)
+
+1. **The goal, in the world.** The two rules batch 3's round found unclaimed are claimed.
+2. **The constraints.** 0246 (WEB_REACH_FT for back lanes), 0081 (the 3 ft footpath).
+3. **Where each comes from.** R (0246, 0081).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (impl-drift outside the change, batch 3's round).
+5. **The order.** Two claims.
+6. **The exits.** (a) claim.
+7. **The search smell.** None.
+8. **The budget.** With the batch (claims and words only, one landing).
+9. **Done, measured.** the claims round reads every changed claim IN-STEP; no code token changes.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+<!-- plan-archive: archived 2026-10-21 -->
+## T64, T66, T59, T68, T71, T56 - claims and words brought to the pages (the T17 batch's and batch 3's rounds; T28)
+
+### T64 Approach (checklist part A)
+
+1. **The goal, in the world.** One rule carries one label, and the span floor's claim names both drops.
+2. **The constraints.** 0246 §16 (a lane's middle at least 7 ft from a garden fence, a map drawing convention it states).
+3. **Where each comes from.** R (0246).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (impl-drift, the T17 batch's round 2): `route._route` and `clearance._clear_link` label the 7 ft DEVIATION, `_lay_skeleton`'s clip cites it plainly (IN-STEP); the span floor's claim names a 30 ft piece where `clip_to_clear` first drops a run under 70 ft).
+5. **The order.** Both DEVIATION labels cited plainly, the fence-to-middle reading named; the span floor names the 70 ft drop.
+6. **The exits.** (e) conform.
+7. **The search smell.** None.
+8. **The budget.** With the batch (claims and words only, one landing).
+9. **Done, measured.** the claims round reads every changed claim IN-STEP; no code token changes.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T64 Decisions
+
+**D43 - one label.** `_route` and `_clear_link` cite 0246 plainly for the 7 ft; `_lay_skeleton`'s span floor names `clip_to_clear`'s 70 ft drop and `_WEB_MIN_FT`'s 30 ft.
+
+<!-- plan-archive: T66 to T66 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+<!-- plan-archive: T66 to T59 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+<!-- plan-archive: T59 to T68 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+<!-- plan-archive: T68 to T71 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+### T71 Decisions
+
+**D47 - two claims.** `_web_cut_lines` claims the side lanes' reach (GUESS: 0246's back-lane 100 ft reused); `run_lanes_on_to_the_bund` claims a lane with no width read as 0081's 3 ft footpath.
+
+### T56 Approach (checklist part A)
+
+1. **The goal, in the world.** The run-on's join point is claimed as the page guesses it.
+2. **The constraints.** 0014 ("the path joins the bund at its point nearest the hamlet", a GUESS).
+3. **Where each comes from.** R (0014).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (impl-drift outside the change, the T16 round and batch 3's: the code joins at the point nearest the lane's END).
+5. **The order.** The claim labels the code's rule a DEVIATION from 0014's guess, with its reason.
+6. **The exits.** (a) claim as a DEVIATION - the page's guess is about the one field path from the hamlet; the run-on carries each lane end on its own, joining where that end reaches the bund soonest. Changing the code to the hamlet's nearest point was weighed: it would carry an end past nearer bund to another point. (The plan review of D48: no reading that makes the page say what the code does.)
+7. **The search smell.** None.
+8. **The budget.** With the batch (claims and words only, one landing).
+9. **Done, measured.** the claims round reads every changed claim IN-STEP; no code token changes.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T56 Decisions
+
+**D48 - a DEVIATION, named.** `run_on_target`'s "joins at the nearest point" is labeled DEVIATION from 0014: the page guesses the field path joins at the bund's point nearest the hamlet; each run-on end joins at the point nearest itself.
+<!-- plan-archive: archived 2026-10-21 -->
+### T65 Approach (checklist part A)
+
+1. **The goal, in the world.** A join link and the route's straightening keep a lane's middle 7 ft off a garden fence, as every lane does.
+2. **The constraints.** 0246 §16 (a lane's middle at least 7 ft from a garden fence); `touch._detour_links`, `touch._join_piece`, `route._unjog`; the 4 ft junction margin they kept (feature 137 T03: seed 37 and 26 of 48 then needed it).
+3. **Where each comes from.** R (0246) and O (feature 137).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (385 found rows 9-11, 16, 17: the three sites at `_TOUCH_GAP`, unclaimed; with all three at 7 ft, seeds 1-48 and the pinned rows 54/54 and the measured block unchanged, so the exception no longer earns its place).
+5. **The order.** The three at `WEB_FABRIC_GAP`; their claims; the two comments that defended 4 ft rewritten with the measurement; the cohort.
+6. **The exits.** (e) conform - measured first: the exception's reason (stubs that could not join) no longer occurs.
+7. **The search smell.** None.
+8. **The budget.** 45 min for the batch with its landing.
+9. **Done, measured.** One goal: no join routes or straightens at 4 ft; the cohort as above.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+<!-- plan-archive: archived 2026-10-21 -->
+### T65 Decisions
+
+**D50 - one margin for every lane.** `_detour_links`' first try, `_join_piece`'s bar and `_unjog`'s default at `WEB_FABRIC_GAP`; each claims 0246's 7 ft; the comments in `fabric.py` and `touch.py` record the change and its measurement.
+
+### T73 Approach (checklist part A)
+
+1. **The goal, in the world.** The sweeps' claims say what the page records.
+2. **The constraints.** 0246 §10 (back lanes bring every farmhouse within 100 ft of one), §6, §78 (no lane through a farm's own wood), 0036.
+3. **Where each comes from.** R (0246, 0036).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (impl-drift outside the change, batch 4's rounds: "a house served" said "where the page says 60 ft" though its 100 ft is §10's; `_walk_in`'s line credited the 4 ft step to 0246; the grove fallback's line held about 13.5 ft; the bands built from `groves` only - a village copse is `village_groves`, common ground, not a farm's own wood).
+5. **The order.** The two "a house served" claims cite §10; `_walk_in` names its step as the code's; the band claim names the 13.5 ft; the bands' comment says why a copse is not among them.
+6. **The exits.** (e) conform - words; the connector's inner end is `_pull_back_to_service`'s, the sweep's exemption standing.
+7. **The search smell.** None.
+8. **The budget.** 45 min for the batch with its landing.
+9. **Done, measured.** The claims round reads them IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+## T55, T65, T73 - a lane end at the house it serves, join links at the page's 7 ft, the sweeps' notes (the T17 round; T28; batch 4's round)
+
+### T55 Approach (checklist part A)
+
+1. **The goal, in the world.** A lane end pulled back to the last house it serves stops beside that house, not up to 60 ft short of it.
+2. **The constraints.** 0246 §6 (an end that reaches nothing is pulled back to the last house it serves, a GUESS; a lane a house needs ends at its dooryard); `water_ways._pull_back` and `trim_lane_stubs`.
+3. **Where each comes from.** R (0246).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (impl-drift DRIFTED x2, the T17 round: `_pull_back` keeps the SHORTEST end still in reach, on the far edge of the house's 60 ft zone; a unit test shows the end at 440 where the house stands at 500).
+5. **The order.** `_pull_back` takes `near`; among the ends that still reach the last thing served it keeps the one nearest it; `trim_lane_stubs` passes the distance to a served house's footprint (a way or a field keeps the old shortest end, already its junction or bund - a first cut measuring ways too collapsed a through lane onto a bar and failed three unit tests); the claim; the cohort.
+6. **The exits.** (e) conform.
+7. **The search smell.** None.
+8. **The budget.** 45 min for the batch with its landing.
+9. **Done, measured.** One goal: the end held at the house (unit test); the quick cohort's fixed seeds and pinned rows 16/16; seeds 1-48 and the pinned rows 54/54; the measured block 645695-645742 the same 10 failures as before (D49's measure).
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T55 Decisions
+
+**D49 - nearest the house.** `_pull_back(..., near=None)`: with `near`, the kept end is the reaching one nearest the served thing; `trim_lane_stubs._nearness` gives a house's footprint distance (`dooryard_dist`), 0 for a way or a field; the claim reads "to the end nearest the last house it serves, else the shortest end still reaching a way or the field" (GUESS 0246).
+
+<!-- plan-archive: T65 to T65 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+### T65 Decisions
+
+**D50 - one margin for every lane.** `_detour_links`' first try, `_join_piece`'s bar and `_unjog`'s default at `WEB_FABRIC_GAP`; each claims 0246's 7 ft; the comments in `fabric.py` and `touch.py` record the change and its measurement.
+
+### T73 Approach (checklist part A)
+
+1. **The goal, in the world.** The sweeps' claims say what the page records.
+2. **The constraints.** 0246 §10 (back lanes bring every farmhouse within 100 ft of one), §6, §78 (no lane through a farm's own wood), 0036.
+3. **Where each comes from.** R (0246, 0036).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (impl-drift outside the change, batch 4's rounds: "a house served" said "where the page says 60 ft" though its 100 ft is §10's; `_walk_in`'s line credited the 4 ft step to 0246; the grove fallback's line held about 13.5 ft; the bands built from `groves` only - a village copse is `village_groves`, common ground, not a farm's own wood).
+5. **The order.** The two "a house served" claims cite §10; `_walk_in` names its step as the code's; the band claim names the 13.5 ft; the bands' comment says why a copse is not among them.
+6. **The exits.** (e) conform - words; the connector's inner end is `_pull_back_to_service`'s, the sweep's exemption standing.
+7. **The search smell.** None.
+8. **The budget.** 45 min for the batch with its landing.
+9. **Done, measured.** The claims round reads them IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T73 Decisions
+
+**D51 - the sweeps' words.** As the order says; no code token changes.
+<!-- plan-archive: archived 2026-10-21 -->
+### T76 Approach (checklist part A)
+
+1. **The goal, in the world.** The findings the claims gate carried from batch 5 are claimed or relabeled.
+2. **The constraints.** 0246 §34 (the pull-back a GUESS); the code's own figures.
+3. **Where each comes from.** R (0246) and O.
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (the claims gate's carries, batch 5: `trim_lane_stubs`' pull-back claim not labeled GUESS; `_detour_links`' 150 ft reach and `_join_piece`'s refused-splice lane unclaimed; the two served-house claims are T75's, which waits on T78: the page does not state its serving test, and the plan review of D53 ruled that keeping the code's 100 ft for consistency is no reason to set §6 aside).
+5. **The order.** The label and two claims.
+6. **The exits.** (a) claim.
+7. **The search smell.** None.
+8. **The budget.** 40 min for the batch with its landing.
+9. **Done, measured.** The claims round reads them IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+<!-- plan-archive: archived 2026-10-21 -->
+### T76 Decisions
+
+**D54 - the carries claimed.** `trim_lane_stubs`' claim GUESS 0246; `_detour_links` claims `_ORPHAN_REACH` (UNRESEARCHED); `_join_piece` claims the refused splice drawn as its own lane (UNRESEARCHED).
+
+### T77 Approach (checklist part A)
+
+1. **The goal, in the world.** A landing whose claims round ends in carries alone pushes without a hand step.
+2. **The constraints.** `make land`'s first pass files carries (405 T36); the claims wait (405 T50).
+3. **Where each comes from.** O (feature 405).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (batch 5's landing: the wait asked on until `make claims-carry` was run by hand).
+5. **The order.** `file_carries` lifted out of the first pass and asked in the wait when the gate refuses only carries; a test.
+6. **The exits.** (c) - the landing does what it can.
+7. **The search smell.** None.
+8. **The budget.** 40 min for the batch with its landing.
+9. **Done, measured.** A carry-only refusal is filed and committed in the wait; an owed claim is still waited on (test).
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+<!-- plan-archive: archived 2026-10-21 -->
+### T79 Approach (checklist part A)
+
+1. **The goal, in the world.** A landing stopped by hand leaves no gate or cohort running.
+2. **The constraints.** `land.py`'s cleanup (`stop_cohort` in a `finally`, 405 T48); Python's default SIGTERM, which ends the process without running `finally`.
+3. **Where each comes from.** O (feature 405) and Python.
+4. **Do they describe the world here?** Yes - measured 2026-10-21: batch 6's landing, stopped with SIGTERM to fix a flaw its round found, left its gate (pytest) and its cohort running in this clone; they were ended by hand.
+5. **The order.** `land.main` installs a SIGTERM handler raising SystemExit(143); a test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 10 min.
+9. **Done, measured.** The handler is installed, stops the landing's own process group (the gate) and raises SystemExit(143) (test).
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+

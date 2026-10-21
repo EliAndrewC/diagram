@@ -659,13 +659,14 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
 
     Research:
         lane end reaches something - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back until it serves a way, the field or a house, 4 ft at a time - never one reached across a neighbor's land, owed none (`geom.lane_houses`)
-        not the way it left - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end does not count as reaching a way the lane's other end stands on (within `_TOUCH_GAP`), so a link off a way with nothing at its far end is pulled back to nothing - our reading of "a stretch that joins nothing of the network is not drawn" against "reaching another way within 60 ft of it", which does not say whether the way a lane leaves is another way
-        the track out and streets exempt - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the track out runs from the cluster's edge off the map, so its far end is no lane end; a row village's street keeps its own end rules (`ways/street.py`)
+        not the way it left - UNRESEARCHED: an end does not count as reaching a way the lane's other end stands on (within `_TOUCH_GAP`), so a link off a way with nothing at its far end is pulled back to nothing - our reading of "a stretch that joins nothing of the network is not drawn" against "reaching another way within 60 ft of it", which does not say whether the way a lane leaves is another way
+        the track out and streets exempt - research/questions/0081-village-lanes.drawing.html, research/questions/0033-row-villages-resson.drawing.html: the track out runs off the edge of the map and a row's street runs on off the map as the road into it; the track out runs from the cluster's edge off the map, so its far end is no lane end; a row village's street keeps its own end rules (`ways/street.py`)
         a link another lane ends on kept - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the lanes are one network, joined where their treads meet - a short lane another lane ends on is that join, not debris
         end carried to the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane a house needs ends at its dooryard - carried to the owed house nearest the end, never a household reached across a neighbor's land, owed none (`geom.lane_houses`)
         kept whole for a house - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane whose pull-back would leave a farmhouse with no way is restored whole, its unserving end carried to a dooryard where an owed house stands within the carry's reach and no grove band is in the way, and otherwise left where it was drawn - the page pulls back an end that reaches nothing and does not say what gives when that would strand a house
-        grove band not crossed - research/questions/0033-row-villages-resson.drawing.html: a farm's grove is walked round, so an end is not carried across one
-        dooryard carry reach - GUESS: up to 120 ft (2 x _REACH_FT)
+        grove band not crossed - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0033-row-villages-resson.drawing.html: no lane runs through a farm's own wood - the way runs outside the grove or through a gap in it - so an end is not carried across one
+        walked on to the house it serves - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane ends at the dooryard - an end that reaches walks back along its own lane, while it still reaches, to its closest approach to the nearest owed house within 120 ft (2 x `_REACH_FT`); never while within 60 ft (`_REACH_FT`) of any way, the one it left included (that way filtered out is 405 T82)
+        dooryard carry reach - UNRESEARCHED: up to 120 ft (2 x `_REACH_FT`); the page gives a lane end's reach (60 ft), not a carry's
         a whittled lane emptied - UNRESEARCHED: a lane pulled back under `_WEB_MIN_FT` (30 ft) is emptied, for the debris sweep to finish
         a house served - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a house within `_SERVE_FT` (100 ft) of a lane counts as served, so the lane is kept, where the page says 60 ft"""
     lanes = s.M.get("lanes") or []
@@ -674,7 +675,8 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
     # with it the 60 ft to the field the bund rule retired. `fields` stands in only where the manifest records no ground.
     ground = memo_ground(s, "worked", worked_ground) if worked_ground_rings(s.M) else WorkedGround([list(f) for f in fields])
     steadings = steading_footprints(s.M)
-    # the farm grove bands an end may not be carried across (feature 291; their boxes are unrotated)
+    # the farm grove bands an end may not be carried across (feature 291; their boxes are unrotated) - a farm's own wood; a
+    # village copse (`village_groves`) is common ground, not a farm's wood (405 T73)
     _bands = [
         [(g["x"] - g["w"] / 2, g["y"] - g["h"] / 2), (g["x"] + g["w"] / 2, g["y"] - g["h"] / 2), (g["x"] + g["w"] / 2, g["y"] + g["h"] / 2), (g["x"] - g["w"] / 2, g["y"] + g["h"] / 2)]
         for g in s.M.get("groves") or []
@@ -705,10 +707,19 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
         # lane is left in open ground, the network in two pieces at the ink tolerance. Found when 269 B06 re-laid Sawada's
         # hem and its re-roll put a straggler's end 27 ft from the web it had met. The pull-back stops at that junction.
         _tails = [(float(o["pts"][e][0]), float(o["pts"][e][1])) for j, o in enumerate(lanes) if j != i and len(o.get("pts") or []) >= 2 for e in (0, -1)]
+
         # (and a lane left short by the hold is still the link that lane ends on, so it is not emptied as debris below)
-        _walk_in(pts, _reaches, _tails)
+        def _near(q: Pt, _o: Sequence[tuple[Pt, Pt]] = others) -> float:  # how near the nearest house it serves (405 T74)
+            # ...never walked on from a way it reaches: a junction end stays at its junction
+            if any(seg_dist(q[0], q[1], a, b) <= _REACH_FT for a, b in _o):
+                return float("inf")
+            # ...and only toward a house within the dooryard carry's reach (2 x `_REACH_FT`), never a far one: an end reaching
+            # only the field is not walked off it toward a house it does not serve (batch 6's round)
+            return min((d for h in owed if (d := math.dist(q, h)) <= 2.0 * _REACH_FT), default=float("inf"))
+
+        _walk_in(pts, _reaches, _tails, _near)
         pts.reverse()
-        _walk_in(pts, _reaches, _tails)
+        _walk_in(pts, _reaches, _tails, _near)
         pts.reverse()
         if pts == _mine:
             continue
@@ -728,7 +739,7 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
         _rest += list(zip(pts, pts[1:], strict=False))
         if any(min((seg_dist(h[0], h[1], a, b) for a, b in _rest), default=float("inf")) > _SERVE_FT for h in _served):
             # A FARMHOUSE WOULD LOSE ITS WAY, so the lane stays - and then its end must EARN its ink rather than stop in
-            # grass. The end is carried on to the dooryard of the house it serves (269 B17: a lane that serves a farmhouse
+            # grass. The end is carried on to the dooryard of an owed house near it (269 B17: a lane that serves a farmhouse
             # ends at its dooryard). Dropping it instead is what `generate` answers with a whole re-roll (the reference
             # hamlet went to attempt 3 and its seed +20.5%), and a re-roll is a heavy price for a tread that only needed to
             # arrive somewhere.
@@ -753,7 +764,7 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
     return fixed
 
 
-def _walk_in(pts: list[Pt], reaches: Callable[[Pt, Pt], bool], tails: Sequence[Pt]) -> None:
+def _walk_in(pts: list[Pt], reaches: Callable[[Pt, Pt], bool], tails: Sequence[Pt], near: Callable[[Pt], float] | None = None) -> None:
     """Walk the LAST end of `pts` in, in place, until it `reaches` something: along its own last segment 4 ft at a time, a
     vertex dropped only once the end is within 4 ft of it, so the end stops within 4 ft of the last point that serves.
     `reaches` is asked of the end and the lane's other end (the way it left does not count, D9).
@@ -764,6 +775,7 @@ def _walk_in(pts: list[Pt], reaches: Callable[[Pt, Pt], bool], tails: Sequence[P
     each step: where another lane's end rests on the segment, the end stops there (`held_at`).
 
     Research:
+        held nearest the house it serves - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane ends at the dooryard - walked on while it still reaches and nears the house it serves (`near`), never from where `near` is infinite (a junction end stays at its junction)
         pulled back to the last point that serves - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane end that reaches nothing is pulled back to the last house it serves, 4 ft at a time
         held at a junction - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the lanes are one network, joined where their treads meet - a pull-back stops where another lane's end rests on it"""
     while len(pts) >= 2 and not reaches(pts[-1], pts[0]):
@@ -777,6 +789,25 @@ def _walk_in(pts: list[Pt], reaches: Callable[[Pt, Pt], bool], tails: Sequence[P
             pts.pop()
             continue
         pts[-1] = (a[0] + (b[0] - a[0]) * (d - 4.0) / d, a[1] + (b[1] - a[1]) * (d - 4.0) / d)
+    # ...AND ON, TO THE HOUSE IT SERVES (405 T74, D52): the first point walking in that reaches stands on the far edge of the last
+    # house's 60 ft zone, up to 60 ft past the house in open ground, where 0246 ends a lane at the dooryard - so while the end
+    # still reaches and comes nearer a house it serves (`near`), it walks on, held at a junction as above
+    while near is not None and len(pts) >= 2:
+        a, b = pts[-2], pts[-1]
+        hold = held_at(a, b, tails)
+        if hold is not None and math.dist(b, hold) <= 4.0:
+            return
+        d = math.dist(a, b)
+        nxt = a if d <= 4.0 else (a[0] + (b[0] - a[0]) * (d - 4.0) / d, a[1] + (b[1] - a[1]) * (d - 4.0) / d)
+        here = near(b)
+        # ...never from where `near` says to stay (infinite: an end at a junction) - a step just past it would score nearer
+        # and walk the end off its junction toward a house (batch 6's round 4)
+        if here == float("inf") or not reaches(nxt, pts[0]) or near(nxt) >= here:
+            return
+        if d <= 4.0:
+            pts.pop()
+        else:
+            pts[-1] = nxt
 
 
 def held_at(a: Pt, b: Pt, tails: Sequence[Pt]) -> Pt | None:

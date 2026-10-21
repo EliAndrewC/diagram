@@ -425,3 +425,91 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 ### T69 Decisions
 
 **D41 - said where it is done.** `_web_cut_lines`' claim "a web lane's span" adds that its arcs and stands are every house but one reached across a yard (`stage_web` leaves those out).
+
+<!-- plan-archive: T72 to T72 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+<!-- plan-archive: T64 to T28 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+
+## T55, T65, T73 - a lane end at the house it serves, join links at the page's 7 ft, the sweeps' notes (the T17 round; T28; batch 4's round)
+
+### T55 Approach (checklist part A)
+
+1. **The goal, in the world.** A lane end pulled back to the last house it serves stops beside that house, not up to 60 ft short of it.
+2. **The constraints.** 0246 §6 (an end that reaches nothing is pulled back to the last house it serves, a GUESS; a lane a house needs ends at its dooryard); `water_ways._pull_back` and `trim_lane_stubs`.
+3. **Where each comes from.** R (0246).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (impl-drift DRIFTED x2, the T17 round: `_pull_back` keeps the SHORTEST end still in reach, on the far edge of the house's 60 ft zone; a unit test shows the end at 440 where the house stands at 500).
+5. **The order.** `_pull_back` takes `near`; among the ends that still reach the last thing served it keeps the one nearest it; `trim_lane_stubs` passes the distance to a served house's footprint (a way or a field keeps the old shortest end, already its junction or bund - a first cut measuring ways too collapsed a through lane onto a bar and failed three unit tests); the claim; the cohort.
+6. **The exits.** (e) conform.
+7. **The search smell.** None.
+8. **The budget.** 45 min for the batch with its landing.
+9. **Done, measured.** One goal: the end held at the house (unit test); the quick cohort's fixed seeds and pinned rows 16/16; seeds 1-48 and the pinned rows 54/54; the measured block 645695-645742 the same 10 failures as before (D49's measure).
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T55 Decisions
+
+**D49 - nearest the house.** `_pull_back(..., near=None)`: with `near`, the kept end is the reaching one nearest the served thing; `trim_lane_stubs._nearness` gives a house's footprint distance (`dooryard_dist`), 0 for a way or a field; the claim reads "to the end nearest the last house it serves, else the shortest end still reaching a way or the field" (GUESS 0246).
+
+<!-- plan-archive: T65 to T65 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+<!-- plan-archive: T65 to T73 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+### T73 Decisions
+
+**D51 - the sweeps' words.** As the order says; no code token changes.
+
+## T74, T76, T77 - the sweeps' end at the house, the carried claims, carries filed in the wait (batch 5's rounds)
+
+### T74 Approach (checklist part A)
+
+1. **The goal, in the world.** A lane end the sweeps walk in stops beside the house it serves, as T55 made the trims do.
+2. **The constraints.** 0246 §6 (a lane ends at the dooryard; the pull-back a GUESS); `sweeps._walk_in`; the 269 E4 hold at a junction.
+3. **Where each comes from.** R (0246) and O (features 269, 405 T14).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (impl-drift DRIFTED, batch 5's round: `_walk_in` stops at the first point that reaches, the far edge of the house's 60 ft zone; unit tests show the end at 552 for a house at 500 and T14's tests pinned 84.0 and -208.0).
+5. **The order.** `_walk_in` takes `near`; after the end first reaches it walks on while it still reaches and comes nearer a house it serves, held at a junction; `_near` is infinite within reach of another way, so a junction end stays; T14's two tests updated to the house (64.0 short of the connector's reach, -152.0); a unit test; seeds 1-48.
+6. **The exits.** (e) conform.
+7. **The search smell.** None.
+8. **The budget.** 40 min for the batch with its landing.
+9. **Done, measured.** One goal: the end held beside the house (unit test); a junction end not moved (the existing tests); seeds 1-48 and the pinned rows pass.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T74 Approach (re-answered 2026-10-21T14:50Z)
+
+1. **The goal, in the world.** As before: a swept lane end stops beside the house it serves.
+2. **The constraints.** As before, and the dooryard carry's reach (2 x `_REACH_FT`, 120 ft), which bounds the houses an end may walk toward.
+3. **Where each comes from.** R (0246) and O (features 269, 405 T14).
+4. **Do they describe the world here?** Yes - batch 6's round, 2026-10-21: `_near` measured to the nearest owed house at any distance, so an end reaching only the field could be walked toward a house it does not serve; and the walk-on itself was unclaimed.
+5. **The order.** `_near` bounded to houses within the carry's reach; the walk-on claimed; seeds 1-48 again.
+6. **The exits.** (e) conform.
+7. **The search smell.** None.
+8. **The budget.** With the batch.
+9. **Done, measured.** Seeds 1-48 and the pinned rows 54/54 on the bounded walk (2026-10-21); the claims round reads the walk-on IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T74 Decisions
+
+**D52 - on to the house.** `_walk_in(pts, reaches, tails, near=None)` walks on, 4 ft at a time, while `reaches` holds and `near` falls; `_sweep_dangling_ends` passes `_near` (the nearest owed house within the dooryard carry's 120 ft, infinite within `_REACH_FT` of another way - an end reaching only the field is never walked toward a house it does not serve, batch 6's round); the claims "held nearest the house it serves" (GUESS 0246) and "walked on to the house it serves".
+
+<!-- plan-archive: T76 to T76 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+<!-- plan-archive: T76 to T77 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+### T77 Decisions
+
+**D55 - carries filed in the wait.** `land.file_carries(root, d)`; `wait_for_claims(root, tasks, d)` runs it when the gate's refusal holds carries and no owed or introduced finding, then asks again.
+
+<!-- plan-archive: T79 to T79 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+### T79 Approach (re-answered 2026-10-21T14:52Z)
+
+1. **The goal, in the world.** As before: a landing stopped by hand leaves no gate or cohort running.
+2. **The constraints.** As before, and where each run lives: the gate (`make done`) in the landing's own process group, the cohort in its own session.
+3. **Where each comes from.** O (feature 405) and Python.
+4. **Do they describe the world here?** Yes - the plan review's aside, 2026-10-21: the first handler raised SystemExit alone, which stops the cohort through the `finally` but not the gate.
+5. **The order.** The handler ignores SIGTERM, sends it to its own group and raises SystemExit(143); the test holds the group stopped.
+6. **The exits.** (c) - a landing is stopped whole; a `make land` run in the foreground shares the group with its caller, which is stopped with it, as the person stopping the landing asked.
+7. **The search smell.** None.
+8. **The budget.** With the batch.
+9. **Done, measured.** The handler stops the landing's group and raises SystemExit(143) (test).
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T79 Decisions
+
+**D56 - SIGTERM runs the cleanup.** `land.main` installs a SIGTERM handler first: it ignores SIGTERM, sends it to its own process group (the gate, `make done`, runs there) and raises SystemExit(143), so `long_runs`' `finally` stops the cohort's own process group too.

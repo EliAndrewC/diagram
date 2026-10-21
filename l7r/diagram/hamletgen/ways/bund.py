@@ -56,8 +56,9 @@ def run_on_target(q: Pt, ground: WorkedGround, half_tread: float, reach: float =
     `reach` from it. The open segment to a set's nearest point meets nothing of the set, so the run-on cannot cross a plot.
 
     Research:
-        joins at the nearest point - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: straight to
-            the worked ground's nearest edge point, stopped on the bund
+        joins at the nearest point - DEVIATION research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the page
+            guesses the field path joins the bund at its point nearest the hamlet; each lane end carried on here joins at the
+            point nearest that END, where it reaches the bund soonest - one end at a time, not the field path the page describes
         run-on reach - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within `reach` (`RUN_ON_REACH_FT`, 60 ft), the page's reach to a house or a way, reused for the field
         stopped outside the ground - CONVENTION: the tip held its half-tread and `TIP_MARGIN_FT` (1 ft) outside the worked ground, its cap on the bund line"""
     if ground.inside(q):
@@ -234,6 +235,7 @@ def run_lanes_on_to_the_bund(s: Settlement, ground: WorkedGround, blocks: RunOnB
             research/questions/0014-bunds-between-the-paddies-aze.drawing.html: an end reaching nothing carried onto the field
         connector left alone - research/questions/0081-village-lanes.drawing.html: the track out runs off the map
         a row street not carried onto the field - research/questions/0033-row-villages-resson.drawing.html: the street runs on off the map as the road into it
+        a lane with no width - research/questions/0081-village-lanes.drawing.html: read as the page's 3 ft footpath
         run-on reach - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end within `RUN_ON_REACH_FT` (60 ft) of the field, the reach the page gives to a house or a way, reused; no page gives one to the field
         to the paddy - research/questions/0081-village-lanes.drawing.html: the settlement's own inner lanes end in the cluster or at the paddy; an end is carried to the paddy's nearest edge (`paddy_ground`), never a dry plot's - only the spur stops at the hem"""
     lanes = s.M.get("lanes") or []

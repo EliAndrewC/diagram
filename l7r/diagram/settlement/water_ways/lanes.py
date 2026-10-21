@@ -235,7 +235,7 @@ class LanesMixin:
         requires it to reach the frame; a path stopping mid-landscape is the defect, not the cure.
 
         Research:
-            an end reaching nothing is pulled back - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: to the last house, way or bund it serves
+            an end reaching nothing is pulled back - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: to the last house, way or bund it serves
             served at the dooryard - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 12 ft of the steading's built ground or 60 ft of the house's drawn footprint, on any side, at the map's scale
             arrival at the bund - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: within 6 ft of a field's or dry plot's edge, at the map's scale - the page records the 6 ft as a GUESS
             meeting another way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 60 ft of it, at 20 degrees or more
@@ -254,6 +254,16 @@ class LanesMixin:
         fields += [[(float(a), float(b)) for a, b in d["poly"]] for d in self.M.get("dry_plots") or [] if len(d.get("poly") or []) >= 3]
         trimmed = 0
         _drop: set[int] = set()
+
+        _by_id = {id(h): h for h in houses}
+
+        def _nearness(tag: tuple[Any, ...], q: Pt) -> float:
+            """How near `q` stands to the HOUSE an end served (`_reaches`' tag), its footprint; 0 for a way or a field, whose
+            shortest reaching end is already the junction or the bund (405 T55: only a house's 60 ft zone left an end short)."""
+            if tag[0] != "house":
+                return 0.0
+            h = _by_id[tag[1]]
+            return dooryard_dist({"x": h["x"], "y": h["y"], "w": h["w"], "h": h["h"], "rot": h.get("rot")}, q)
 
         def _fan_rival(q: Pt, bearing: float, house: Pt, mine: float, me: int) -> bool:
             return fan_rival(lanes, q, bearing, house, mine, me, self.px(fan_spread), fan_bearing)  # the 60 ft at the map's scale (feature 328 wave 67)
@@ -321,7 +331,7 @@ class LanesMixin:
 
             for _ in range(2):  # each end in turn; a 2-point lane can lose at most one
                 if len(pts) >= 2 and not _reaches(pts[-1], run=(pts[-2], pts[-1])):
-                    pts = _pull_back(pts, lambda q, _p=pts: _reaches(q, run=(_p[-2], _p[-1])), min_len=_junction_floor(pts))
+                    pts = _pull_back(pts, lambda q, _p=pts: _reaches(q, run=(_p[-2], _p[-1])), min_len=_junction_floor(pts), near=_nearness)
                     trimmed += 1
                 pts.reverse()
             # ...and a lane too SHORT to front anybody is not a lane at all, it is clipping debris.

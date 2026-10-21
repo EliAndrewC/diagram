@@ -57,6 +57,18 @@ def write_ledger(root: Path, d: Path) -> None:
         run(root, ["git", "commit", "-q", "-m", "the review passes' ledger rows, written at landing (make land)", "--", "dev/review-ledger.md"])
 
 
+def file_carries(root: Path, d: Path) -> None:
+    """Every carried claims finding filed as an open task of the feature and committed (405 T36, D10) - asked in the first pass
+    and again in the claims wait, where a round beside the gate meets new carries (405 T77)."""
+    num = d.name.split("-", 1)[0]
+    rc, said = run(root, [sys.executable, str(HERE / "record" / "claims.py"), "--root", str(root), "carry", "--feature", num])
+    if rc == 0 and "filed into" in said:
+        print(f"land: {said.strip()}", flush=True)
+        rel = str(d.relative_to(root))
+        run(root, ["git", "add", "--", f"{rel}/tasks.md", f"{rel}/claims-carried.jsonl"])
+        run(root, ["git", "commit", "-q", "-m", f"{d.name}: claims findings outside the change filed as a task (make land, 405 T36)"])
+
+
 def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str, deferred: list[str] | None = None) -> list[str]:
     """Pass 1: every refusal the landing would meet that costs seconds to ask, all of them - but the claims gate's, which goes to
     `deferred` when given (405 T50, D23: the claims round runs beside the gate, and the landing waits for it before the push)."""
@@ -85,13 +97,7 @@ def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str, deferred: l
         run(root, ["git", "commit", "-q", "-m", "claim rows carried to the files their units moved to (make land, 405 T58)", "--", "dev/claims-index.json"])
     # A FINDING OUTSIDE THE CHANGE IS FILED, NOT REFUSED (feature 405 T36, D10): the carry files every carried claims finding as an
     # open task of this feature - what `make claims-carry` does by hand - and the box lands with the work
-    num = d.name.split("-", 1)[0]
-    rc, said = run(root, [sys.executable, str(HERE / "record" / "claims.py"), "--root", str(root), "carry", "--feature", num])
-    if rc == 0 and "filed into" in said:
-        print(f"land: {said.strip()}", flush=True)
-        rel = str(d.relative_to(root))
-        run(root, ["git", "add", "--", f"{rel}/tasks.md", f"{rel}/claims-carried.jsonl"])
-        run(root, ["git", "commit", "-q", "-m", f"{d.name}: claims findings outside the change filed as a task (make land, 405 T36)"])
+    file_carries(root, d)
     # THE LANDING'S OWN ESCAPES ARE COMMITTED, NOT REFUSED (feature 408): an escape the ticks above honored (PLAN_REVIEW_OK)
     # writes its dev/bypass-log record in this very pass, so the tree check below refused every rerun on records of its own
     if run(root, ["git", "status", "--porcelain", "--", "dev/bypass-log"])[1].strip():
@@ -124,7 +130,7 @@ CLAIMS_WAIT_S = 1200.0
 CLAIMS_POLL_S = 15.0
 
 
-def wait_for_claims(root: Path, tasks: list[str]) -> str:
+def wait_for_claims(root: Path, tasks: list[str], d: Path | None = None) -> str:
     """The claims gate passing and the tree clean - the claims round recorded and committed beside the gate - or, past
     `CLAIMS_WAIT_S`, the refusal that still stands (405 T50, D23)."""
     import time  # noqa: PLC0415
@@ -133,6 +139,9 @@ def wait_for_claims(root: Path, tasks: list[str]) -> str:
     end, said = time.monotonic() + CLAIMS_WAIT_S, ""
     while True:
         rc, out = run(root, [str(HERE / "gates" / "claims-gate.sh")], env)
+        if rc and d is not None and "carry:" in out and not any(w in out for w in ("owed (", "introduced:")):
+            file_carries(root, d)  # a carry is filed, not waited on (405 T77: batch 5's wait needed `make claims-carry` by hand)
+            rc, out = run(root, [str(HERE / "gates" / "claims-gate.sh")], env)
         dirty = run(root, ["git", "status", "--porcelain"])[1].strip()
         if not rc and not dirty:
             return ""
@@ -179,13 +188,29 @@ ROLL_MB = 500
 GATE_WORKERS = 6
 
 
-def cohort_jobs() -> tuple[int, int]:
-    """The cohort's workers beside a running gate - the cpus the gate leaves and the memory it leaves, at least 2 - and the
-    MemAvailable (MB) they were sized from."""
+def memory_free_mb(cgroup: Path = Path("/sys/fs/cgroup")) -> int:
+    """The memory free to this container, MB: the host's MemAvailable, and - where the container has a cgroup v2 limit - no more
+    than that limit less what the cgroup holds, its reclaimable file cache given back (405 T72: sized from the host's 9.5 GB
+    alone, the batch-3 landing's 12 workers took the containers' shared 10 GB cap to 9.0 GB)."""
     try:
         avail = next(int(ln.split()[1]) // 1024 for ln in Path("/proc/meminfo").read_text().splitlines() if ln.startswith("MemAvailable:"))
     except OSError, StopIteration, ValueError:
         avail = GATE_RESERVE_MB + 4 * ROLL_MB
+    try:
+        cap = (cgroup / "memory.max").read_text().strip()
+        if cap != "max":
+            held = int((cgroup / "memory.current").read_text())
+            cache = next((int(ln.split()[1]) for ln in (cgroup / "memory.stat").read_text().splitlines() if ln.startswith("inactive_file ")), 0)
+            avail = min(avail, (int(cap) - held + cache) // (1024 * 1024))
+    except OSError, ValueError:
+        pass
+    return avail
+
+
+def cohort_jobs(cgroup: Path = Path("/sys/fs/cgroup")) -> tuple[int, int]:
+    """The cohort's workers beside a running gate - the cpus the gate leaves and the memory it leaves, at least 2 - and the
+    memory (MB) they were sized from (`memory_free_mb`)."""
+    avail = memory_free_mb(cgroup)
     return max(2, min((os.cpu_count() or 4) - 2 - GATE_WORKERS, (avail - GATE_RESERVE_MB) // ROLL_MB)), avail
 
 
@@ -195,7 +220,7 @@ def start_cohort(root: Path) -> tuple[subprocess.Popen, Path]:
     jobs, avail = cohort_jobs()
     log = Path(run(root, ["git", "rev-parse", "--absolute-git-dir"])[1].strip() or root / ".git") / "land-cohort.log"
     env = {k: v for k, v in os.environ.items() if not k.startswith("L7R_ROLL_CENSUS")} | {"L7R_REF_NO_CLASS": "1"}
-    print(f"land: make cohort-landing JOBS={jobs} beside the gate (MemAvailable {avail} MB; its log {log})", flush=True)
+    print(f"land: make cohort-landing JOBS={jobs} beside the gate ({avail} MB free to the container; its log {log})", flush=True)
     with log.open("w") as fh:
         proc = subprocess.Popen(["make", "--no-print-directory", "cohort-landing", f"JOBS={jobs}"], cwd=root, env=env, stdout=fh, stderr=subprocess.STDOUT, start_new_session=True)
     return proc, log
@@ -266,6 +291,17 @@ def main(argv: list[str]) -> int:
     if len(argv) != 2 or not (tasks := argv[1].split()):
         print('usage: land.py <feature> "<T1 [T2 ...]>"   (make land F=405 T=T12 NOTE="what was verified")', file=sys.stderr)
         return 2
+    # A STOPPED LANDING STOPS ITS RUNS (405 T79): Python's default SIGTERM exits without `finally`, so a landing stopped by hand
+    # left its gate and the cohort beside it running as orphans (batch 6); raised as SystemExit, the cleanup runs
+    import signal  # noqa: PLC0415
+
+    def _stopped(*_a: object) -> None:
+        # ...the gate too: `make done` runs in this process's group (the cohort in its own session, stopped by the `finally`)
+        signal.signal(signal.SIGTERM, signal.SIG_IGN)
+        os.killpg(os.getpgrp(), signal.SIGTERM)
+        sys.exit(143)
+
+    signal.signal(signal.SIGTERM, _stopped)
     note = os.environ.get("LAND_NOTE", "").strip()
     if not note:
         print("land: refused - NOTE= is empty; say what was verified, as make tick asks", file=sys.stderr)
@@ -285,7 +321,7 @@ def main(argv: list[str]) -> int:
         print(f"land: the claims round is owed ({claims[0][:160]}) - the gate runs beside it; the push waits for it", flush=True)
     if rc := long_runs(root):
         return rc
-    if why := wait_for_claims(root, tasks):
+    if why := wait_for_claims(root, tasks, d):
         print(f"land: the gates are green, but the claims round did not finish in {CLAIMS_WAIT_S / 60:.0f} min - nothing landed: {why}", file=sys.stderr)
         return 2
     write_ledger(root, d)  # the passes the claims round made beside the gate (405 T52, D27)

@@ -264,7 +264,7 @@ def test_one_task_or_several_every_tick_asked_first_landed_once_and_ticked(tmp_p
     rc = [0]
     ran: list[list[str]] = []
     monkeypatch.setattr(lb, "long_runs", lambda root: 0)
-    monkeypatch.setattr(lb, "wait_for_claims", lambda root, tasks: "")
+    monkeypatch.setattr(lb, "wait_for_claims", lambda root, tasks, d=None: "")
     monkeypatch.setattr(lb, "push", lambda root, tasks: landings.append((tasks, (d / "tasks.md").read_text(encoding="utf-8"))) or rc[0])
 
     def run(root: pathlib.Path, cmd: list[str], env: dict | None = None, quiet: bool = True) -> tuple[int, str]:
@@ -523,3 +523,64 @@ def test_the_landing_tick_is_make_land_s_alone(tmp_path: pathlib.Path, monkeypat
     assert tt.main(["188", "T02", "landed: x", "--landing"]) == 2 and "--landing is" in capsys.readouterr().err
     monkeypatch.setenv("L7R_LAND_TICKS", "T02")
     assert tt.main(["188", "T02", "landed: x", "--landing"]) == 0 and "- [x] T02" in (d / "tasks.md").read_text(encoding="utf-8")
+
+
+def test_the_cohort_s_workers_fit_the_container_s_memory_limit(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 405 T72: sized from the host's MemAvailable (9.5 GB), the batch-3 landing's 12 workers took the containers'
+    shared 10 GB cap to 9.0 GB. A cgroup v2 limit bounds the memory counted free: its limit less what it holds, cache given back."""
+    lb, _d = _land(tmp_path, monkeypatch)
+    cg = tmp_path / "cg"
+    cg.mkdir()
+    gib = 1024**3
+    (cg / "memory.max").write_text(f"{10 * gib}\n")
+    (cg / "memory.current").write_text(f"{8 * gib}\n")
+    (cg / "memory.stat").write_text(f"anon 1\ninactive_file {gib}\n")
+    assert lb.memory_free_mb(cg) == 3 * 1024, "10 GiB less the 8 held, the 1 of cache given back"
+    assert lb.cohort_jobs(cg)[0] == 2, "3 GB free beside the gate's 3.5: the floor of 2"
+    (cg / "memory.max").write_text("max\n")
+    assert lb.memory_free_mb(cg) > 0, "no cgroup limit: the host's figure"
+    assert lb.memory_free_mb(tmp_path / "none") > 0, "no cgroup at all"
+
+
+def test_the_claims_wait_files_a_carry_it_meets(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 405 T77: batch 5's claims round beside the gate ended in carries alone, and the wait asked on until
+    `make claims-carry` was run by hand; a carry is filed and committed in the wait, then the gate asked again."""
+    lb, d = _land(tmp_path, monkeypatch)
+    state = {"filed": False}
+    seen: list[list[str]] = []
+
+    def run(root: pathlib.Path, cmd: list[str], env: dict | None = None, quiet: bool = True) -> tuple[int, str]:
+        seen.append([str(c) for c in cmd])
+        if "claims-gate.sh" in str(cmd[0]):
+            return (0, "") if state["filed"] else (1, "  carry: MISLABELED x.py::f#c - a finding on code the change left unchanged\n")
+        if "carry" in cmd:
+            state["filed"] = True
+            return 0, "claims-carry: 1 finding(s) filed into 188-alpha T09; commit tasks.md\n"
+        return 0, ""
+
+    monkeypatch.setattr(lb, "run", run)
+    monkeypatch.setattr(lb, "CLAIMS_POLL_S", 0.0)
+    assert lb.wait_for_claims(tmp_path, ["T02"], d) == ""
+    assert any("carry" in c for c in seen) and any(c[:2] == ["git", "commit"] for c in seen), "filed and committed"
+    state["filed"] = False
+    monkeypatch.setattr(lb, "CLAIMS_WAIT_S", 0.0)
+    owed = lambda root, cmd, env=None, quiet=True: (1, "  owed (new): x.py::f#c\n  carry: y\n") if "claims-gate.sh" in str(cmd[0]) else (0, "")  # noqa: E731
+    monkeypatch.setattr(lb, "run", owed)
+    assert "owed (new)" in lb.wait_for_claims(tmp_path, ["T02"], d), "an owed claim is waited on, not carried"
+
+
+def test_a_stopped_landing_runs_its_cleanup(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 405 T79: stopped with SIGTERM, a landing exited without its `finally`, leaving its gate and the cohort beside it
+    running; it raises SystemExit on SIGTERM so the cleanup (`stop_cohort`) runs."""
+    import signal
+
+    lb, _d = _land(tmp_path, monkeypatch)
+    got: dict = {}
+    groups: list[int] = []
+    monkeypatch.setattr(signal, "signal", lambda sig, fn: got.setdefault(sig, fn))
+    monkeypatch.setattr(lb.os, "killpg", lambda pg, sig: groups.append(pg))
+    monkeypatch.setenv("LAND_NOTE", "")
+    assert lb.main(["188", "T02"]) == 2
+    with pytest.raises(SystemExit) as stop:
+        got[signal.SIGTERM]()
+    assert stop.value.code == 143 and groups == [lb.os.getpgrp()], "the landing's group - its gate - stopped too"

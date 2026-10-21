@@ -122,12 +122,11 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
     generalizes: reordering the stages is not enough on its own, because every rule that pointed one
     way across that boundary has to be turned around to match.
 
-    THE GAP IS NOT THE WEB'S GAP, and the difference is measured rather than chosen. The web threads
-    BETWEEN plots and is barely more than the space between two walls, so `WEB_FABRIC_GAP` is 7 px.
-    A track clipped at 7 px from a footprint still leaves the house CENTER inside 14 px of it (the retired
-    `houses_off_corridors` check counted a hit at `seg_dist(center, lane) < 14`), and it did: 3 of 15 houses on the
-    reference hamlet. A connector or a spur also has no business hugging a wall - it
-    runs past the settlement, not through its gaps.
+    THE GAP IS THE WEB'S GAP (`TRACK_FABRIC_GAP` is `WEB_FABRIC_GAP`, 0246's 7 ft from a garden fence to a lane's
+    middle). It was once wider, measured against a retired check (`houses_off_corridors`, a house center within 14 ft of
+    the line); 0246 sets one gap for every lane. What still differs is the route: a connector or a spur runs PAST the
+    settlement, routed round its steadings, not through the gaps between them as the web threads.
+    A track that cannot be routed round is clipped, never drawn through a wall.
 
     ROUTE, then CLIP, and both are needed. `_route` threads the gap - a trodden way goes ROUND a wall
     rather than stopping at it - and the clip is the fallback for where no route exists, because the
@@ -137,10 +136,12 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
 
     Research:
         track round the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: routed round, else clipped, else none
-        gap off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `TRACK_FABRIC_GAP`, a lane's 7 ft from a garden fence,
-            off every footprint
+        gap off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `gap` (`TRACK_FABRIC_GAP`, a lane's 7 ft from a garden fence) - the clip
+            and the fabric test; the router walls the steadings as obstacles
         gap off a grove band - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the grove fallback's route and clip keep
-            `CONNECTOR_BAND_GAP_FT` (0036's working room past the half-width, 12.5 ft) off the trees
+            `CONNECTOR_BAND_GAP_FT` (0036's working room past the connector's half-width, 12.5 ft) off the trees - the
+            spur's too, half a foot more than its own 2.5 ft half-tread would need; the router's hard index holds the
+            line about 13.5 ft off (`WEB_HARD_GAP` on the grown band), more room than the page's "about", never less
         detour swing - UNRESEARCHED: the midpoint swung 40, 80, 140 then 220 px out from the cluster
         never across a grove - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: routed round
             the bands, else only the part clear of them kept
@@ -824,8 +825,8 @@ def past_the_frame(start: Pt, theta: float, w: float, h: float) -> float:
 
 
 def wet_grown_by_the_lane(w: Poly) -> Poly:
-    """A wet polygon grown 8 px along its own outward normals (`ring_offset`) - the lane's half-width and the gate's pad,
-    so the sweep scores the tread the gate measures (see `connector_track`)."""
+    """A wet polygon grown 8 px along its own outward normals (`ring_offset`) - 8 ft on a hamlet's sheet (1 ft a px),
+    the web's own bar off wet ground (`WEB_HARD_GAP`), so the sweep scores the tread the gate measures (`connector_track`)."""
     return list(ring_offset(w, 8.0, 0.0)[: len(w)])
 
 

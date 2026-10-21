@@ -85,27 +85,28 @@ def _lane_len(pts: list[Pt]) -> float:
     return sum(math.hypot(b[0] - a[0], b[1] - a[1]) for a, b in zip(pts, pts[1:], strict=False))
 
 
-def _pull_back(pts: list[Pt], reaches: Any, step: float = 8.0, min_len: float = 0.0) -> list[Pt]:
+def _pull_back(pts: list[Pt], reaches: Any, step: float = 8.0, min_len: float = 0.0, near: Any = None) -> list[Pt]:
     """Shorten a polyline from its LAST vertex until that end reaches something, or the guard stops it.
 
     Walks the final segment inward in `step` px, dropping a whole vertex when one is consumed and
     more than two remain, as far as the end still reaches something - back to the last thing the lane
-    serves (0246), however far that is - never past a junction (`min_len`) and never below two points.
+    serves (0246), however far that is, held where it stands nearest a house it serves (`near`, 405 T55) - never past a junction (`min_len`) and never below two points.
     A lane whose whole run serves nothing is left whole: a siting problem, not something to delete -
     the map still needs the way it drew, and silently removing one would trade a visible stub for an
     invisible missing lane. (A 40% floor held the trim until feature 328 wave 66: it stopped a lane
     short of the last house it serves, where 0246 pulls it back to that house.)
 
     Research:
-        end pulled back to what it serves - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: to the shortest end that still reaches something
+        end pulled back to what it serves - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: to the end nearest the last house it serves (its dooryard, `near`), else the shortest end still reaching a way or the field
         no trim floor - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back as far as the last house it serves, held only at a junction; a lane reaching nothing at all is left whole (no house to pull it back to)
     """
     # `min_len` is the one floor, the one a junction sets - see `_junction_floor`: a lane may not be trimmed past a way that
     # ties into it, whatever fraction of its length that leaves
     floor = min_len
     out = list(pts)
-    best: list[Pt] | None = None  # the SHORTEST end seen that still reaches the last thing served
+    best: list[Pt] | None = None  # the end kept: the one NEAREST the last thing served (`near`), else the shortest that reaches it
     served: Any = None  # what the end reached first, walking back - the last thing the lane serves
+    best_d = float("inf")
     while len(out) >= 2:
         a, b = out[-2], out[-1]
         seg = math.hypot(b[0] - a[0], b[1] - a[1])
@@ -128,7 +129,12 @@ def _pull_back(pts: list[Pt], reaches: Any, step: float = 8.0, min_len: float = 
         # ran alongside a sibling arm, it shortens that parallel run by the same amount.
         got = reaches(cand)
         if got and (served is None or got == served):
-            best, served = list(trial), (got if served is None else served)
+            served = got if served is None else served
+            # ...AT ITS NEAREST, NOT ITS SHORTEST (405 T55, D49): the shortest end still in reach stood on the far edge of the
+            # house's 60 ft zone - up to 60 ft short of the house it serves, where 0246 ends a lane at the dooryard
+            d = near(served, cand) if near is not None else 0.0
+            if near is None or d <= best_d:
+                best, best_d = list(trial), d
         elif best is not None:
             # PAST THE LAST THING SERVED, walking back: the end stops there (0246) - not at whatever lies nearer the start,
             # and not at the next house along where reach zones chain (a predicate that NAMES what it reached is held to the

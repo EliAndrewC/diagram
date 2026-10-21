@@ -705,3 +705,20 @@ def test_a_level_watercourse_records_no_bearing() -> None:
     assert rec["flow"] == "level" and rec["flow_deg"] is None
     with pytest.raises(ValueError, match="flow must be"):
         s.stream([(100, 400), (700, 400)], flow="sideways")
+
+
+def test_pull_back_stops_at_the_house_it_serves_not_the_edge_of_its_reach() -> None:
+    """405 T55 (D49, 0246: a lane ends at the dooryard of the last house it serves): walking back, the shortest end still in
+    the house's 60 ft reach stood on the zone's far edge - up to 60 ft short of the house. Given how near each end stands
+    (`near`), the end is held at the house."""
+    from l7r.diagram.settlement.water_ways._helpers import _pull_back
+
+    run = [(0.0, 0.0), (1000.0, 0.0)]
+
+    def reaches(q: tuple[float, float]) -> tuple[str, int] | None:
+        return ("house", 1) if abs(q[0] - 500.0) <= 60.0 else None
+
+    shortest = _pull_back(run, reaches)
+    assert 435.0 <= shortest[-1][0] <= 445.0, "without `near`: the shortest end still in reach, 60 ft short"
+    held = _pull_back(run, reaches, near=lambda tag, q: abs(q[0] - 500.0))
+    assert 495.0 <= held[-1][0] <= 505.0, "with it: at the house"

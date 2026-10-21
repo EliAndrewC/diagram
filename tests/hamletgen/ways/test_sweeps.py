@@ -423,8 +423,9 @@ def test_a_lane_end_in_open_ground_is_pulled_back_to_something_or_dropped() -> N
     kept = [ln["pts"] for ln in s.M["lanes"]]
     assert kept[0] == [[0.0, 0.0], [400.0, 0.0]], "the connector is exempt - it leaves the map by design"
     # the far end's last serving point is 60 ft from the house at (60, 40): y = 40 + sqrt(60^2 - 40^2) = 84.7, reached 4 ft at a
-    # time from 400 - so y 84.0; the pop landed it on (100, 50), 34 ft short (red at HEAD)
-    assert kept[1] == [[100.0, 10.0], [100.0, 50.0], [100.0, 84.0]], "the end walks in to where it last serves, not a segment short"
+    # time from 400 - so y 84.0; the pop landed it on (100, 50), 34 ft short (red at HEAD). Then on toward the house it serves
+    # (405 T74), held at y 64 - one step on it would come within 60 ft of the connector, a way, and a junction end stays put
+    assert kept[1] == [[100.0, 10.0], [100.0, 50.0], [100.0, 64.0]], "the end walks in to the house it serves, not a segment short"
     assert len(s.M["lanes"]) == 2, "and a lane that cannot be saved is dropped whole"
 
 
@@ -508,9 +509,9 @@ def test_a_lane_that_dangles_at_its_HEAD_is_pulled_back_from_that_end() -> None:
     s.M["fields"] = []
     s.M.setdefault("meta", {})
     assert sweeps._sweep_dangling_ends(s) == 1
-    # the head stops at the last point within 60 ft of the house at y -150: walked from -400 in 4 ft steps, -208.0 (the pop
-    # landed it on the vertex at -200)
-    assert s.M["lanes"][1]["pts"] == [[100.0, -208.0], [100.0, -200.0], [100.0, -10.0]], "the head walks in to the house's reach"
+    # the head first reaches at the last point within 60 ft of the house at y -150, -208.0 walked from -400 in 4 ft steps (the
+    # pop landed it on the vertex at -200), then walks on to the house it serves (405 T74): -152, the step nearest -150
+    assert s.M["lanes"][1]["pts"] == [[100.0, -152.0], [100.0, -10.0]], "the head walks in to the house it serves"
 
 
 def test_a_lane_a_farmhouse_needs_keeps_an_end_that_nothing_lies_near() -> None:
@@ -771,3 +772,31 @@ def test_a_nub_the_overlap_matrix_refuses_is_kept() -> None:
     s.reshape_lane = lambda ln, pts: False  # type: ignore[method-assign]
     _drop_end_nubs(s, [])
     assert [tuple(p) for p in s.M["lanes"][0]["pts"]] == lane
+
+
+def test_an_end_walked_in_is_held_nearest_the_house_it_serves() -> None:
+    """405 T74 (D52, 0246: a lane ends at the dooryard): the first point walking in that reaches stood on the far edge of the
+    house's 60 ft reach; given `near`, the end walks on to the point nearest the house while it still reaches."""
+    from l7r.diagram.hamletgen.ways.sweeps import _walk_in
+
+    house = (500.0, 20.0)
+    reaches = lambda q, far: math.dist(q, house) <= 60.0  # noqa: E731
+    edge = [(0.0, 0.0), (1000.0, 0.0)]
+    _walk_in(edge, reaches, [])
+    assert 550.0 <= edge[-1][0] <= 560.0, "without `near`: the zone's far edge"
+    held = [(0.0, 0.0), (1000.0, 0.0)]
+    _walk_in(held, reaches, [], lambda q: math.dist(q, house))
+    assert 496.0 <= held[-1][0] <= 504.0, "with it: beside the house"
+
+
+def test_an_end_at_a_junction_is_not_walked_off_it() -> None:
+    """Batch 6's round 4 (405 T74): an end within reach of a way scores `near` infinite; a step just past that reach scored
+    lower and the walk carried the end off its junction toward a house. It stays."""
+    from l7r.diagram.hamletgen.ways.sweeps import _walk_in
+
+    way_y, house = 0.0, (100.0, 300.0)
+    reaches = lambda q, far: True  # noqa: E731 - it reaches (the way) wherever it stands
+    near = lambda q: float("inf") if abs(q[1] - way_y) <= 60.0 else math.dist(q, house)  # noqa: E731
+    pts = [(100.0, 400.0), (100.0, 58.0)]
+    _walk_in(pts, reaches, [], near)
+    assert pts[-1] == (100.0, 58.0), "held at its junction"
