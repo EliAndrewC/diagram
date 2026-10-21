@@ -536,6 +536,11 @@ set-down:       ## [project] set a feature's work down, so a turn may end with t
 	@if [ -z "$(F)" ]; then printf 'make set-down: F=<feature> is required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/set-down.py" "$(F)"
 
+found-list:     ## [project] a feature's open findings (found.jsonl), numbered - what is not yet filed as a task or settled (405 T29)   F=405
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/found.py" list --feature "$$(ls -d specs/$(F)-* | head -1)"
+found-close:    ## [project] close found.jsonl rows: FILED as a task, or SETTLED with a reason (405 T29)   F=405 ROWS=3,7 TASK=T61 | WHY="..."
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/found.py" close --feature "$$(ls -d specs/$(F)-* | head -1)" --rows "$(ROWS)" $(if $(TASK),--task "$(TASK)",) $(if $(WHY),--why "$(WHY)",)
+
 task-add: export TASK_TITLE = $(TITLE)
 task-add:       ## [project] file a task box (and its plan section) with the next free id: F=385 TITLE="..." [SECTION=<file with {T} for the id>] [RESEARCH=physical]
 	@if [ -z "$(F)" ]; then printf 'make task-add: F=<feature> is required\n' >&2; exit 2; fi
@@ -1062,7 +1067,7 @@ bypass-audit:    ## [project] every escape token taken, with the reason its user
 	printf '\nlogged to dev/bypass-log/ - proceeding\n\n'
 
 _reference:
-	@python3 -c "import sys; sys.path.insert(0, '.'); 	from l7r.diagram import hamletgen as hg; 	from l7r.diagram.pipeline import rollcache; 	r, how = rollcache.report(hg.HamletSpec(name='Inashiro', seed=4, households=15, down_deg=90, water_sink='pond', settlement_form='nucleated')); 	print('\033[1mreference settlement (Inashiro, seed 4): ' + ('CLEAN\033[0m' if r.ok else 'FAILING\033[0m -> ' + ', '.join(r.failures)) + ' [' + how + (' - served from the roll cache: nothing the roll executes changed; GATE_NO_CACHE=1 rolls it' if how == 'HIT' else '') + ']'); 	__import__('os').environ.get('L7R_REF_NO_CLASS') or open(__import__('os').path.join(__import__('subprocess').run(['git','rev-parse','--absolute-git-dir'],capture_output=True,text=True).stdout.strip() or '.git','roll-cache-class'),'w').write('warm' if how.startswith('HIT') or how.startswith('BYPASS-SHARED') else 'cold'); 	sys.exit(0 if r.ok else 1)" || { 	  printf '\n\033[1mSTOPPING HERE.\033[0m The reference settlement is red, so nothing more expensive runs.\n'; 	  printf 'Fix Inashiro first - it rebuilds in about a minute. Everything else is 4x to 25x that,\n'; 	  printf 'and none of it can tell you anything useful while the one map you iterate on is broken.\n'; 	  printf 'To REGENERATE it and read every failure in full: \033[1mmake maps\033[0m.\n'; \
+	@python3 -c "import sys; sys.path.insert(0, '.'); 	from l7r.diagram import hamletgen as hg; 	from l7r.diagram.pipeline import rollcache; 	r, how = rollcache.report(hg.HamletSpec(name='Inashiro', seed=4, households=15, down_deg=90, water_sink='pond', settlement_form='nucleated')); 	print('\033[1mreference settlement (Inashiro, seed 4): ' + ('CLEAN\033[0m' if r.ok else 'FAILING\033[0m -> ' + ', '.join(r.failures)) + ' [' + how + (' - served from the roll cache: nothing the roll executes changed' if how == 'HIT' else '') + ']'); 	__import__('os').environ.get('L7R_REF_NO_CLASS') or open(__import__('os').path.join(__import__('subprocess').run(['git','rev-parse','--absolute-git-dir'],capture_output=True,text=True).stdout.strip() or '.git','roll-cache-class'),'w').write('warm' if how.startswith('HIT') or how.startswith('BYPASS-SHARED') else 'cold'); 	sys.exit(0 if r.ok else 1)" || { 	  printf '\n\033[1mSTOPPING HERE.\033[0m The reference settlement is red, so nothing more expensive runs.\n'; 	  printf 'Fix Inashiro first - it rebuilds in about a minute. Everything else is 4x to 25x that,\n'; 	  printf 'and none of it can tell you anything useful while the one map you iterate on is broken.\n'; 	  printf 'To REGENERATE it and read every failure in full: \033[1mmake maps\033[0m.\n'; \
 	  printf 'Do not reach for REF_OK=1 - it prompts, and a prompt with no terminal is refused.\n\n'; exit 1; }
 
 IDLE_CTX = $(eval IDLE_CTX := $(shell $(SWITCH) idle 2>/dev/null || echo unreadable))$(IDLE_CTX)
