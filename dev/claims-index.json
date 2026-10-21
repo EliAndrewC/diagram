@@ -29838,21 +29838,21 @@
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#a house served": {
   "body": "61bc4f802dfe944e",
-  "claim": "a house served - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a house within `_SERVE_FT` (100 ft) of a lane counts as served, so the lane is kept - the page's back lanes bring every farmhouse within 100 ft of one",
-  "code": "9329cbaaf264e1fe",
+  "claim": "a house served - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: a house within `_SERVE_FT` (100 ft) of a lane counts as served, so the lane is kept, where the page says 60 ft",
+  "code": "6baab54cb4864cf1",
   "core": "adc48b77040c5a6b",
   "date": "2026-10-21",
-  "note": "the 100 ft (`_SERVE_FT`, lines 90/98) comes from §10, which only sets how many back lanes to lay (\"as few back lanes are laid as bring every farmhouse within 100 ft of one\"), and only in the back-lane form of the §8 roll. The code applies it to every lane in both forms. The page's own figure for \"how close counts as serving a house\" is §6: \"within 60 ft of the house, or within 12 ft of the steading's built ground\", a GUESS. Either the code moves to §6's 60/12 or the drawing page records 100 ft as the serving figure for this guard",
+  "note": "the page does give this figure: \"every farmhouse within 100 ft of one\" is its distance from a house to a lane. The 60 ft the claim says the code departs from is how far a lane END reaches a farmhouse, not how near a lane must pass to serve one. The `_SERVE_FT` (100 ft) house-to-lane test agrees with the page, so the claim should cite 0246 for the 100 ft and drop \"GUESS ... where the page says 60 ft\".",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:82d03d7e6a2180e2",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c4049193a04d9dd0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c4049193a04d9dd0",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#a link another lane ends on kept": {
   "body": "150d813526ad3ba8",
@@ -29995,21 +29995,21 @@
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_debris#a house served": {
   "body": "ce55e9fcf31567df",
-  "claim": "a house served - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a house within `_SERVE_FT` (100 ft) of a lone fragment keeps it - the page's back lanes bring every farmhouse within 100 ft of one",
-  "code": "ac7ad827c97084c2",
+  "claim": "a house served - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: a house within `_SERVE_FT` (100 ft) of a lone fragment keeps it, where the page says 60 ft",
+  "code": "cdf6531ed4f8b314",
   "core": "b2888d1c0eb05b8f",
   "date": "2026-10-21",
-  "note": "same mismatch: `_near(h, mine) <= _SERVE_FT < _near(h, others)` (line 182) uses §10's 100 ft back-lane count figure as the serving test, for lanes in both forms. The page's serving figure is §6's \"within 60 ft of the house, or within 12 ft of the steading's built ground\" (GUESS). Either the code takes 60/12 or the page records 100 ft for this guard",
+  "note": "same as above: a house within `_SERVE_FT` (100 ft) of a lane is the page's own figure (\"every farmhouse within 100 ft of one\"), not a guess departing from 60 ft. The 60 ft is a lane end's reach. Relabel the claim to cite 0246 for the 100 ft figure.",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:82d03d7e6a2180e2",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c4049193a04d9dd0"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c4049193a04d9dd0",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_debris#debris length": {
   "code": "01e198e7567214b7",

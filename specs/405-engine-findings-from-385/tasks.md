@@ -201,6 +201,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [x] T59 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: l7r/diagram/hamletgen/ways/geom.py::_trim_to_service#an end does not count as reaching the way the run's other end stands on (within `_TOUCH_GAP`) [lands-open]
       research: rendering
       verify: DONE. landed in batch T72+T64+T66+T59+T68+T71+T56: T72: the cohort's workers sized to the container's cgroup limit (test); T64/T66/T59/T68/T71/T56: claims and words to what the pages record - one label for the 7 ft, the track's words, UNRESEARCHED where 0246 records nothing, the run-on's join a named DEVIATION from 0014 (no code token changed); claims round beside the landing; plan review CLEAR round 2 (D42-D48)
+- [ ] T76 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#a house served, l7r/diagram/hamletgen/ways/sweeps.py::_sweep_debris#a house served, l7r/diagram/hamletgen/ways/touch.py::_detour_links#orphan join reach: no link is sought to a target more than 150 ft away by air (`_ORPHAN_REACH`), l7r/diagram/hamletgen/ways/touch.py::_join_piece#a link the splice refuses is drawn as its own lane at the piece's width (default 3 ft), l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#an end reaching nothing is pulled back [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
