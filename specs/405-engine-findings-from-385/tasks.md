@@ -78,6 +78,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T58 A file split into a package moves its units with their code intact, but the claims index is keyed by file, so every moved claim was owed a full impl-drift check: `make claims-rekey` (and `make land`'s first pass) carries each row to the key its unit moved to - the same unit and claim, the same code fingerprint, one old row (found splitting web.py, T57, 2026-10-21) [lands-open]
       research: rendering
+- [ ] T60 `claims_carry` filed its carried tasks citing 385's carry requirement by its bare id, so spec-lint refused the gate in a feature whose spec does not define it (405's T59, the T17 batch's landing): the carry names it as 385's, and spec-lint reads an id named by its feature as that feature's (found landing the T17 batch, 2026-10-21) [lands-open]
+      research: rendering
 - [ ] T45 The reference-settlement message (`_reference` in the Makefile) still offers `GATE_NO_CACHE=1 rolls it`, but the roll census refuses that run's re-rolls (T11's 05:02 gate): let the census accept a declared no-cache run, or stop offering it (the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z) [lands-open]
       research: rendering
 - [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
@@ -147,7 +149,7 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [x] T47 (low priority - the GM, amendment 5; taken up in amendment 6) The preflight's coverage step (98 s of T19's 5-minute gate) checks the changed lines' coverage with the quick tests before the gate's own full run, which measures coverage again; the quick tests run twice too (13 s). It earns its time when it refuses a gap in seconds, not when the gate runs anyway - measure how often it refuses, and whether a landing whose code is final should skip it or the gate reuse its pass [lands-open]
       research: rendering
       verify: DONE. landed in batch T50+T51+T47: tick_task + preflight suites green (35): a claims refusal set aside, the gate run, the push waiting for the claims gate and a clean tree, refused past the bound; one push carrying the ticks, a failed push reverting them; --landing make land's alone; the gate's preflight without the coverage step, make preflight with it; plan review CLEAR (D23-D25)
-- [ ] T59 Carried by the claims gate (FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: l7r/diagram/hamletgen/ways/geom.py::_trim_to_service#an end does not count as reaching the way the run's other end stands on (within `_TOUCH_GAP`) [lands-open]
+- [ ] T59 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: l7r/diagram/hamletgen/ways/geom.py::_trim_to_service#an end does not count as reaching the way the run's other end stands on (within `_TOUCH_GAP`) [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering

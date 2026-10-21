@@ -407,3 +407,23 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 ### T58 Decisions
 
 **D33 - a move is not new.** `claims_owed.moved(cur, index)`: {new key: old key} where the `unit#claim` suffix matches, the old key is gone from the tree, the code fingerprints are equal and there is one such row; `owed` reads the old row for a moved key; `rekey` copies each row to its new key and drops the old ones; `make claims-rekey`, and `land.py`'s first pass runs it and commits the index.
+
+## T60 - another feature's requirement, named by its feature (found landing the T17 batch)
+
+### T60 Approach (checklist part A)
+
+1. **The goal, in the world.** A carried claims finding filed into any feature's task list passes that feature's spec-lint.
+2. **The constraints.** spec-lint's check 4 (a task citing an id its spec lacks, feature 236); the claims carry (385 amendment 3, 405 T36), which names 385's requirement in the task it files.
+3. **Where each comes from.** O (features 236, 385, 405).
+4. **Do they describe the world here?** Yes - measured 2026-10-21: `make land` for the T17 batch ran the gate, and its preflight's spec-lint refused 405's T59, filed by the carry with 385's bare id.
+5. **The order.** The carry names the id with its feature; spec-lint skips an id named by its feature (three digits, or "NNN's", just before it); tests.
+6. **The exits.** (c) - both: the carry's words and the lint's reading.
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** One goal: "385 FR-013" in a task passes 405's spec-lint, a bare unknown id still fails (test); the carry's text and its tests name 385.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T60 Decisions
+
+**D34 - named by its feature.** `claims_carry`'s three texts cite "385 FR-013"; `spec-lint.check_stale_tasks` skips an id preceded by a feature number (`NNN ` or `NNN's `); T59's line reads "385 FR-013".

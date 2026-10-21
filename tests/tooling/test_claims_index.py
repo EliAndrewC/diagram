@@ -393,7 +393,7 @@ def test_the_gate_refuses_an_unfiled_carry_naming_the_command_and_lets_a_filed_o
     assert cx.main(["--root", str(root), "carry", "--feature", "900"]) == 0
     text = (d / "tasks.md").read_text()
     assert (
-        f"- [ ] T02 Carried by the claims gate (FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: {k} [lands-open]\n      research: rendering\n- [ ] GM review"
+        f"- [ ] T02 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: {k} [lands-open]\n      research: rendering\n- [ ] GM review"
         in text
     )
     refuse, warn = cx.gate(root)
@@ -406,7 +406,7 @@ def test_the_gate_refuses_an_unfiled_carry_naming_the_command_and_lets_a_filed_o
     # with T=, into an existing open box's words
     (d / "tasks.md").write_text(text.replace("- [ ] T02", "- [x] T02"))
     assert cx.main(["--root", str(root), "carry", "--feature", "900", "--task", "T01"]) == 0
-    assert f"- [ ] T01 the work; carried by the claims gate (FR-013): {k} [lands-open]" in (d / "tasks.md").read_text()
+    assert f"- [ ] T01 the work; carried by the claims gate (385 FR-013): {k} [lands-open]" in (d / "tasks.md").read_text()
     assert cx.gate(root)[0] == []
     assert cx.main(["--root", str(root), "carry", "--feature", "900", "--task", "T02"]) == 0  # nothing unfiled
 

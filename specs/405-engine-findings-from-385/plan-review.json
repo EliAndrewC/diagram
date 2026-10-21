@@ -182,6 +182,56 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T17": {
+   "section_sha256": "ea5494a11a2889ef82156e019a43748bc0fd6bcc9918bc8e3ab825559fa95c3f",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D29",
+     "summary": "Lane-end words conformed to the code: _pull_back's comment, WAY_END_REACH_FT's docstring (field's reach is law.FIELD_REACH_FT), _lay_skeleton's span floor (half a pitch each way); eight pull-back claims labeled GUESS as 0246 labels the rule; _SERVE_FT cites 0246 plainly.",
+     "class": "within",
+     "why": "A claims task (moved from 385 under FR-001): words brought to what the code does and labels to what the page says, no behavior changed. Amendment 7 asks the remaining tasks worked following the research; labeling a rule GUESS where 0246 calls it a GUESS is exactly that."
+    },
+    {
+     "id": "drift-rule",
+     "summary": "Re-answered item 4 (T17, T16): where a claim's page disagrees with the CODE the drift becomes a task of its own; where it disagrees with the label, the label follows the page.",
+     "class": "within",
+     "why": "FR-002 (GM 2026-10-19: findings on code a task did not change are kept as new tasks) is the rule this applies; the blocks should have named FR-002 and do not - a drafting gap, not a narrowing."
+    },
+    {
+     "id": "D29-street",
+     "summary": "Three row-street claims (0033: a street runs on off the map as the road into it) left as they were; the code's drift carried to a new task.",
+     "class": "within",
+     "why": "Adjudicated separately from the _pull_back case. The claims already match the page; rewording them to the drifting code would bless the drift against the research amendment 7 says to follow. The fix stays in this feature (T54/T55), which amendment 7 asks taken to completion, so nothing asked is dropped. FR-002 filing."
+    },
+    {
+     "id": "D29-pull-back",
+     "summary": "Two _pull_back claims (0246: an end at the dooryard) left as they were; the code's drift carried to a new task.",
+     "class": "within",
+     "why": "Same ruling on its own grounds: 0246 is the page, the claims state it, the code departs; the code change is a separate task in this feature under FR-002, not a carve-out from the request."
+    },
+    {
+     "id": "D30",
+     "summary": "Run-on claimed: row-street skip cited to 0033; RUN_ON_REACH_FT as GUESS (0246's 60 ft reused for the field); dry hem's edge GUESS citing 0081; run_on_target's reach GUESS and its stop CONVENTION; dangling_lane_ends' connector exemption cited to 0081.",
+     "class": "within",
+     "why": "Claims added for unclaimed behavior, labeled as the pages give them; the move from UNRESEARCHED to GUESS-citing-0081 follows the page the round read. No behavior change."
+    },
+    {
+     "id": "D31",
+     "summary": "Farm-fixture exemption text reworded to where fixtures stand; its claim cites 0038 for the bed and drops 0039; CANOPY_PAD and SHADE_MARGIN_FT claimed CONVENTION; _seats claims the front privy's 8 ft (GUESS, 0047) and the stable seat (0047).",
+     "class": "within",
+     "why": "Words conformed to the code and citations corrected to the pages; CONVENTION labels on values no page states are labeling inside the claims task, not a narrowing of anything asked."
+    },
+    {
+     "id": "budget",
+     "summary": "T17, T16 and T27 worked as one batch with one landing, about 30 min.",
+     "class": "within",
+     "why": "Nothing in the request or the indexed requirements forbids batching claims tasks into one landing; amendment 7 asks all remaining tasks worked, and the batch works all three."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  },
  "blocks": {

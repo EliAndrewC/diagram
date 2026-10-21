@@ -80,7 +80,7 @@ def _ruled(d: Path, ruling: str) -> bool:
     return False
 
 
-def _file_into(text: str, task: str, keys: list[str], by: str = "the claims gate (FR-013)") -> str:
+def _file_into(text: str, task: str, keys: list[str], by: str = "the claims gate (385 FR-013)") -> str:
     """`text` (a tasks.md) with `keys` appended to open box `task`'s line, before its closing `[lands-open]`."""
     for m in _BOX.finditer(text):
         if m.group(2) != task:
@@ -97,7 +97,7 @@ def _file_into(text: str, task: str, keys: list[str], by: str = "the claims gate
 def _new_box(text: str, keys: list[str], ruling: str = "") -> tuple[str, str]:
     """(`text` with a new open box for `keys`, the box's id): numbered after the highest task, before the GM-review box."""
     task = f"T{max((int(m.group(2)[1:]) for m in _BOX.finditer(text)), default=0) + 1:02d}"
-    by = f"the round arbiter's ruling {ruling}: findings it carried" if ruling else "the claims gate (FR-013): findings on code the change left unchanged"
+    by = f"the round arbiter's ruling {ruling}: findings it carried" if ruling else "the claims gate (385 FR-013): findings on code the change left unchanged"
     box = f"- [ ] {task} Carried by {by} - fix the code or the claim and re-check each: {', '.join(keys)}{_LANDS_OPEN}\n      research: rendering\n"
     gm = re.search(r"^- \[[ x]\] GM review\b", text, re.M)
     if gm:
@@ -121,7 +121,7 @@ def carry(root: Path, feature: str, task: str, keys: list[str], now: str | None 
         return "claims-carry: no carried finding is unfiled"
     tasks = d / "tasks.md"
     text = tasks.read_text(encoding="utf-8")
-    by = f"the round arbiter's ruling {ruling}" if ruling else "the claims gate (FR-013)"
+    by = f"the round arbiter's ruling {ruling}" if ruling else "the claims gate (385 FR-013)"
     if task:
         text = _file_into(text, task, keys, by)
     else:
