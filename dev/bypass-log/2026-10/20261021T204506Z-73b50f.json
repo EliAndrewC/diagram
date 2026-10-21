@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-21T20:45:06Z",
+  "target": "claims-gate",
+  "commit": "24316b92b",
+  "why": "CLAIMS_OK: the track's flank DRIFTED is 0081's downslope same-flank exit, unimplemented before and after T67 and owned by 405 T111; the brook-gap claim was read as matching 0035 and 0084 in round 3's notes"
+}
