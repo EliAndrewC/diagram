@@ -843,3 +843,52 @@
 ### T73 Decisions
 
 **D51 - the sweeps' words.** As the order says; no code token changes.
+<!-- plan-archive: archived 2026-10-21 -->
+### T76 Approach (checklist part A)
+
+1. **The goal, in the world.** The findings the claims gate carried from batch 5 are claimed or relabeled.
+2. **The constraints.** 0246 §34 (the pull-back a GUESS); the code's own figures.
+3. **Where each comes from.** R (0246) and O.
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (the claims gate's carries, batch 5: `trim_lane_stubs`' pull-back claim not labeled GUESS; `_detour_links`' 150 ft reach and `_join_piece`'s refused-splice lane unclaimed; the two served-house claims are T75's, which waits on T78: the page does not state its serving test, and the plan review of D53 ruled that keeping the code's 100 ft for consistency is no reason to set §6 aside).
+5. **The order.** The label and two claims.
+6. **The exits.** (a) claim.
+7. **The search smell.** None.
+8. **The budget.** 40 min for the batch with its landing.
+9. **Done, measured.** The claims round reads them IN-STEP.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+<!-- plan-archive: archived 2026-10-21 -->
+### T76 Decisions
+
+**D54 - the carries claimed.** `trim_lane_stubs`' claim GUESS 0246; `_detour_links` claims `_ORPHAN_REACH` (UNRESEARCHED); `_join_piece` claims the refused splice drawn as its own lane (UNRESEARCHED).
+
+### T77 Approach (checklist part A)
+
+1. **The goal, in the world.** A landing whose claims round ends in carries alone pushes without a hand step.
+2. **The constraints.** `make land`'s first pass files carries (405 T36); the claims wait (405 T50).
+3. **Where each comes from.** O (feature 405).
+4. **Do they describe the world here?** Yes - measured 2026-10-21 (batch 5's landing: the wait asked on until `make claims-carry` was run by hand).
+5. **The order.** `file_carries` lifted out of the first pass and asked in the wait when the gate refuses only carries; a test.
+6. **The exits.** (c) - the landing does what it can.
+7. **The search smell.** None.
+8. **The budget.** 40 min for the batch with its landing.
+9. **Done, measured.** A carry-only refusal is filed and committed in the wait; an owed claim is still waited on (test).
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+<!-- plan-archive: archived 2026-10-21 -->
+### T79 Approach (checklist part A)
+
+1. **The goal, in the world.** A landing stopped by hand leaves no gate or cohort running.
+2. **The constraints.** `land.py`'s cleanup (`stop_cohort` in a `finally`, 405 T48); Python's default SIGTERM, which ends the process without running `finally`.
+3. **Where each comes from.** O (feature 405) and Python.
+4. **Do they describe the world here?** Yes - measured 2026-10-21: batch 6's landing, stopped with SIGTERM to fix a flaw its round found, left its gate (pytest) and its cohort running in this clone; they were ended by hand.
+5. **The order.** `land.main` installs a SIGTERM handler raising SystemExit(143); a test.
+6. **The exits.** (c).
+7. **The search smell.** None.
+8. **The budget.** 10 min.
+9. **Done, measured.** The handler is installed, stops the landing's own process group (the gate) and raises SystemExit(143) (test).
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
