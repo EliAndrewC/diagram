@@ -374,7 +374,7 @@
    "declared": "spec-fidelity"
   },
   "### T96 Decisions": {
-   "sha256": "976925a39f4b39d16d638b10a99a684f14e50800411afd0c7ff7897c50364688",
+   "sha256": "3160ee3ed53f477bc87a80d1cbd6d7571e0f8b9693a62a89cf222d0b618bc5a5",
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
@@ -2455,6 +2455,33 @@
      "id": "round:spec-fidelity|plan:405-engine-findings-from-385#T100@3",
      "class": "within",
      "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "### T96 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D75 (hairpin)",
+     "summary": "The four placer comparisons read > _HAIRPIN_DEG; law.DOUBLE_BACK_DEG is the same constant read by kink_spans, so the law and the placers share one boundary.",
+     "class": "within",
+     "why": "Unchanged from the text last judged CLEAR; it fixes a claim's boundary inside a moved task, as FR-001 and Amendment 7 ('working all of the remaining open tasks') direct."
+    },
+    {
+     "id": "D75 (zigzag)",
+     "summary": "kink_spans' zigzag turn changes from >= _ZIGZAG_DEG to > _ZIGZAG_DEG, matching 0081's 'two turns of more than 50 degrees'; found by the claims round beside the hairpin's.",
+     "class": "within",
+     "why": "Makes the code say what the claim text says - the same boundary correction as the hairpin's, on the same function, in a claims task the GM asked to have worked to completion. It narrows nothing the GM asked; a finding on code T96 is already changing belongs in T96 (FR-002 only routes findings on unchanged code to new tasks)."
+    },
+    {
+     "id": "D75 (tee claim)",
+     "summary": "tee's hairpin refusal is claimed on 0081.",
+     "class": "within",
+     "why": "Annotates existing behavior to the claim it implements; part of working the claims task, no scope change."
     }
    ]
   }

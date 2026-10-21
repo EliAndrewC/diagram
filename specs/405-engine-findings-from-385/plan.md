@@ -493,3 +493,17 @@ Owed by the cohort (cohort@20261021T180921Z: seeds 10 and 40 newly failing), tak
 7. **The next step is a measurement.** Seeds 1-48 at 15: 54/54 (measured).
 8. **Every route measured before offering one?** The one route (20) was measured and filed as T101.
 9. **After a ruling: the step it names?** No ruling.
+
+### T96 Approach (re-answered 2026-10-21T18:39Z)
+
+1. **The goal, in the world.** A hairpin is a turn of more than 140 degrees and a zigzag two turns of more than 50, as 0081 says, wherever a turn is judged.
+2. **The constraints.** 0081 §20, §21, §37: a hairpin is a turn of "more than 140 degrees"; a zigzag is "two turns of more than 50 degrees" within 40 ft.
+3. **Where each comes from.** R (0081).
+4. **Do they describe the world here?** Yes - batch 9's round 3 (the fold, the kinks and the joints cut at exactly 140) and batch 10's round (the zigzag at exactly 50).
+5. **The order.** `>=` -> `>` at the four hairpin comparisons and `kink_spans`' zigzag turn; docstrings say "more than"; `tee`'s hairpin refusal claimed on 0081; a test at exactly 140; seeds 1-48.
+6. **The exits.** (e) conform.
+7. **The search smell.** None.
+8. **The budget.** With batch 10.
+9. **Done, measured.** A turn of exactly 140 is no hairpin (test); seeds 1-48 and the pinned rows 54/54 (measured 2026-10-21).
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
