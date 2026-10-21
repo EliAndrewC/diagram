@@ -147,6 +147,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [x] T47 (low priority - the GM, amendment 5; taken up in amendment 6) The preflight's coverage step (98 s of T19's 5-minute gate) checks the changed lines' coverage with the quick tests before the gate's own full run, which measures coverage again; the quick tests run twice too (13 s). It earns its time when it refuses a gap in seconds, not when the gate runs anyway - measure how often it refuses, and whether a landing whose code is final should skip it or the gate reuse its pass [lands-open]
       research: rendering
       verify: DONE. landed in batch T50+T51+T47: tick_task + preflight suites green (35): a claims refusal set aside, the gate run, the push waiting for the claims gate and a clean tree, refused past the bound; one push carrying the ticks, a failed push reverting them; --landing make land's alone; the gate's preflight without the coverage step, make preflight with it; plan review CLEAR (D23-D25)
+- [ ] T59 Carried by the claims gate (FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: l7r/diagram/hamletgen/ways/geom.py::_trim_to_service#an end does not count as reaching the way the run's other end stands on (within `_TOUCH_GAP`) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
