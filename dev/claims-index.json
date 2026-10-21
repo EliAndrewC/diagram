@@ -29769,14 +29769,6 @@
   "triaged": "2026-10-20",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#a lane a house would lose its way by is restored whole (`pts = _mine`), not pulled back only as far as keeps that house served": {
-  "code": "adc48b77040c5a6b",
-  "core": "adc48b77040c5a6b",
-  "date": "2026-10-20",
-  "note": "a lane a house would lose its way by is restored whole (`pts = _mine`), not pulled back only as far as keeps that house served",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#a link another lane ends on kept": {
   "body": "150d813526ad3ba8",
   "claim": "a link another lane ends on kept - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the lanes are one network, joined where their treads meet - a short lane another lane ends on is that join, not debris",
@@ -29805,14 +29797,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#an end is not carried across a farm's grove band (`groves=_bands` passed to the carry)": {
-  "code": "adc48b77040c5a6b",
-  "core": "adc48b77040c5a6b",
-  "date": "2026-10-20",
-  "note": "an end is not carried across a farm's grove band (`groves=_bands` passed to the carry)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#dooryard carry reach": {
   "code": "3cb76e59b8c581c6",
   "core": "adc48b77040c5a6b",
@@ -29825,11 +29809,11 @@
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#end carried to the dooryard": {
   "body": "150d813526ad3ba8",
-  "claim": "end carried to the dooryard - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane a house needs ends at its dooryard - never a household reached across a neighbor's land, owed none (`geom.lane_houses`)",
-  "code": "01f14ce3b40f52a9",
+  "claim": "end carried to the dooryard - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane a house needs ends at its dooryard - carried to the owed house nearest the end, never a household reached across a neighbor's land, owed none (`geom.lane_houses`)",
+  "code": "4e1648943f6d3163",
   "core": "adc48b77040c5a6b",
   "date": "2026-10-20",
-  "note": "the carry works only when an owed house stands within 120 ft and no grove band is in the way. Otherwise `pts = _mine` is kept whole and the end stays in open ground, so \"a lane a house needs ends at its dooryard\" is not always true, against \"a lane end that reaches nothing is pulled back\". Also the carry goes to the house nearest the end, which need not be the house losing its way. The claim should name the fallback, or the code should not keep an end that reaches nothing",
+  "note": "the end goes to the dooryard of the nearest owed house (`lane_houses` leaves out households reached across a neighbor) and stops short of the wall, as the page says a lane ends at the dooryard",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
@@ -29837,9 +29821,44 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#grove band not crossed": {
+  "body": "150d813526ad3ba8",
+  "claim": "grove band not crossed - row-villages-resson.drawing: a farm's grove is walked round, so an end is not carried across one",
+  "code": "2d62c693be16172c",
+  "core": "adc48b77040c5a6b",
+  "date": "2026-10-20",
+  "note": "`carry_to_dooryard(..., groves=_bands)` gives up rather than enter a grove band, which fits \"reaches the street by a path round the grove\"",
+  "pages": {
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
+  },
+  "research": "37ada2a33aa587d2",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:005c73edae057da1",
+   "0033-row-villages-resson.drawing.html:dbb4842be0eda9a1"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#kept whole for a house": {
+  "body": "150d813526ad3ba8",
+  "claim": "kept whole for a house - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane whose pull-back would leave a farmhouse with no way is restored whole, its unserving end carried to a dooryard where an owed house stands within the carry's reach and no grove band is in the way, and otherwise left where it was drawn - the page pulls back an end that reaches nothing and does not say what gives when that would strand a house",
+  "code": "ba69855c79fe645b",
+  "core": "adc48b77040c5a6b",
+  "date": "2026-10-20",
+  "note": "the page pulls back an end that reaches nothing and also gives every farmhouse its own lane, but says nothing on which gives when the two conflict; the code restores the lane whole, carries the end on where it can, and otherwise leaves the lane as drawn, as the claim says",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
+  },
+  "research": "92410dbfeea7511e",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#lane end reaches something": {
   "body": "150d813526ad3ba8",
