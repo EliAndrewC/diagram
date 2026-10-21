@@ -121,40 +121,7 @@ Owed by the round arbiter's ruling on hour:405-engine-findings-from-385@3 (conti
 <!-- plan-archive: T38 to T38 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 <!-- plan-archive: T39 to T39 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 <!-- plan-archive: T40 to T40 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-## T41 - the gate runs beside the claims round (E)
-
-### T41 Approach (checklist part A)
-
-1. **The goal, in the world.** The gate and the landing cohort can start as soon as the code is final and run while the claims round settles the claims, so the landing waits for whichever is longer, not for both.
-2. **The constraints.** The gate's tree check (375 FR-004: a run that saw half of one change vouches for neither); the gate-write guard (385 FR-010); the stamp's semantic id (features 133, 385 T57: a docstring or comment edit is not a change the gate exercised; the `page` and `browser` areas hash bytes).
-3. **Where each comes from.** O (features 133, 375, 385).
-4. **Do they describe the world here?** Yes - measured 2026-10-21 (T14): the claims round's edits were docstring claims and records, none of which the gate exercises, yet the guard refused the records and the docstring edits voided a running gate (5 min of machine time, killed).
-5. **The order.** One predicate, "a move the gate does not see": a `.py` change whose semantic id is unchanged and that is in no byte-hashed area, or a path among the claims round's records; the tree check passes such moves (HEAD may move by commits holding only them); the gate-write guard passes the claims round's targets and a commit, add, Edit or Write whose changes are all such moves; tests.
-6. **The exits.** (c) - the stamp's own semantic id decides, so the gate's tree check and its stamp cannot disagree; widening to any file was weighed and refused.
-7. **The search smell.** None.
-8. **The budget.** 60 min.
-9. **Done, measured.** One goal: with a gate of this tree running, `make claims-checked`, a commit of a docstring-only engine edit with the claims index, and an Edit of a claim docstring pass the guard, and the tree check reads that run as unmoved; a code-token edit, or a record outside the list, still refuses and still voids it (tests).
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
-### T41 Decisions
-
-**D15 - a move the gate does not see.** `preflight.unseen(root, path, old, new)`: a `.py` file outside the `page`/`browser` areas whose `gate-stamp.semantic_bytes` are equal, or a path in the claims round's records (`dev/claims-index.json`, `dev/claims-pages.json`, `dev/review-ledger.md`, and the ACTIVE feature's `found.jsonl`, `arbiter.jsonl`, `claims-carried.jsonl` and `tasks.md` - the last the claims carry's box (385 FR-013); no feature's `plan.md`, which the gate's spec-lint reads). The tree snapshot keeps every differing file's blob; the check compares the before and after trees across a HEAD move and calls the run moved only when a path that differs is not unseen. The gate-write guard lets `make claims-checked`, `claims-triaged` and `append` through, and a `git add`/`git commit`, Edit or Write when every resulting change is unseen (an Edit's result is computed from its old and new strings).
-
-### T36 part B (2026-10-21T04:41Z)
-
-Owed by the round arbiter's ruling on hour:405-engine-findings-from-385@4 (continue), taken while T36 was the active task.
-
-1. **What is refusing?** Nothing in the code: tests/tooling (2085) and hooks-test green. `make land` refused once, on the hour's step-back.
-2. **A3 again.** Unchanged: the found-work rule (G), FR-010 and FR-013 (O).
-3. **A4 again.** Unchanged.
-4. **Moving something earlier for something later?** No.
-5. **Tuning or changing?** Neither: D10-D15 as reviewed.
-6. **The one-sentence test.** "A finding outside the change is filed, not refused" - true by the tests.
-7. **The next step is a measurement.** `make land` on T36-T41, then T11 measured against T14.
-8. **Every route measured before offering one?** No route is offered.
-9. **After a ruling: the step it names?** Yes - land T36-T41, then T11; WEB_REACH_FT's source asked first.
-
+<!-- plan-archive: T41 to T41 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 ## T11 - a web lane's span has no whole-cluster fallback (385 T124)
 
 ### T11 Approach (checklist part A)
@@ -177,41 +144,7 @@ Owed by the round arbiter's ruling on hour:405-engine-findings-from-385@4 (conti
 
 <!-- plan-archive: T42 to T11 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 
-## T43 - the hourly step-back suspended (amendment 4)
-
-### T43 Approach (checklist part A)
-
-1. **The goal, in the world.** A claim task runs start to landed with no hourly step-back, and the step-back comes back with one command, its machinery intact.
-2. **The constraints.** The GM's words (amendment 4: "suspend but not remove"); feature 383's checkpoint (`scripts/reviews/checkpoint.py`, FR-011's hold on `make tick`, the `due` refusal of a gate or a dispatch); the tripwire rulings of feature 375 (round, reversal, cascade, red gate), which the GM kept; `dev/switches.json`, read by engine code (`l7r/diagram/switches.py`) that names only `remote`.
-3. **Where each comes from.** O (features 375, 383) and the GM (amendment 4).
-4. **Do they describe the world here?** Yes - measured 2026-10-21 (`landing-analysis-3.md`): in 405 four hourly firings changed no route and made no fix, and the last 11 rulings across features were all `continue` with nothing.
-5. **The order.** The switch file and its reader in `checkpoint.py`; `state()` reports the hour never due while suspended (which quiets `hold`, `due` and `open`); `make step-back` prints the suspension; the two make targets; tests.
-6. **The exits.** (c) - a switch beside the checkpoint, so nothing is removed; an axis in `dev/switches.json` was weighed and refused (its writer and `make switches` are engine code naming only `remote`, and an engine change is never a tweak).
-7. **The search smell.** None.
-8. **The budget.** 30 min.
-9. **Done, measured.** One goal: with the switch off, `checkpoint.state` is not due past the hour, `hold` and `due` say nothing and `open` refuses naming the suspension; with it on, the existing checkpoint tests hold unchanged; a red-gate trigger still blocks the gate either way (tests).
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
-### T43 Decisions
-
-**D17 - a switch beside the checkpoint.** `dev/step-back.json` (`{"state": "off"|"on", "why", "who", "utc"}`; absent means on) is read by `checkpoint.suspended(root)`; while off, `state()` returns `due: False` with `suspended` set, so the step-back, the hold on `make tick` and the hour's refusal of a gate or a dispatch all stand down. The review units the hour used to call due still come due at the landing (`review-gate.sh`), as they do for a feature under an hour. `make step-back-off REASON=` and `make step-back-on REASON=` write it (a reason required, who and when recorded) and commit it; `make step-back` and `checkpoint.py status` name the suspension and how to resume. A checkpoint already open when the switch goes off stands down with the rest: its record is kept (the clock and the owed `hour:` trigger), and it is owed again only when `make step-back-on` resumes the step-back (the plan review of D17, round 1).
-
-### T43 part B (2026-10-21T10:26Z)
-
-Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), taken while T43 was the active task.
-
-1. **What is refusing?** Nothing in the code: the three tooling suites green (73); `hm_arbiter.py gate-held` refused live on that trigger until it was ruled.
-2. **A3 again.** Unchanged: features 375 and 383 (O), the GM's amendment 4.
-3. **A4 again.** Unchanged.
-4. **Moving something earlier for something later?** No.
-5. **Tuning or changing?** Neither: D17 and D18 as reviewed.
-6. **The one-sentence test.** "Suspended, the hour comes due for nothing; a red gate holds every gate" - true by the tests and the live refusal.
-7. **The next step is a measurement.** `make land` on T43 and T44, then the fourth claim measured.
-8. **Every route measured before offering one?** No route is offered.
-9. **After a ruling: the step it names?** Yes - T44 lands, and the ruling's `GATE_NO_CACHE=1` row is filed (T45).
-
-<!-- plan-archive: T27 to T27 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+<!-- plan-archive: T43 to T43 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 ## T19 - `law.fouls_fabric` retired: no caller, the live rule is `fouled_segment` (385 T135)
 
 ### T19 Approach (checklist part A)
@@ -354,32 +287,7 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 <!-- plan-archive: T85 to T87 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 <!-- plan-archive: T87 to T90 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 <!-- plan-archive: T90 to T90 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-### T90 part B (2026-10-21T16:46Z)
-
-Owed by the round arbiter's ruling on red-gate@2026-10-21T16:40:44Z (continue), taken while T90 was the active task.
-
-1. **What is refusing?** Not the batch's engine change (seeds 1-48 and the pinned rows 54/54): the gate went red on feature 408's ticked physical tasks with boxes open (from main), on a whole-repo cache test whose tree a commit beside the gate moved, and on the session's own PLAN_REVIEW_OK reaching the hook suites. Each fixed with its test.
-2. **A3 again.** Unchanged: T90's constraint is T79's handler (O).
-3. **A4 again.** Unchanged.
-4. **Moving something earlier for something later?** No.
-5. **Tuning or changing?** Neither: D68 as reviewed; the three gate fixes are tooling of their own.
-6. **The one-sentence test.** "A landing stopped by hand stops its gate and cohort" - true by the test and by `make land-stop` with none running.
-7. **The next step is a measurement.** `make land` once more: its gate shows the three tests green.
-8. **Every route measured before offering one?** No route is offered.
-9. **After a ruling: the step it names?** Yes - one more `make done`, through `make land`.
-
-<!-- plan-archive: T18 to T18 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-<!-- plan-archive: T18 to T86 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-<!-- plan-archive: T86 to T89 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-<!-- plan-archive: T89 to T22 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-<!-- plan-archive: T22 to T23 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-### T23 Decisions
-
-**D73 - the fallback named.** No code change: `tip_onto_the_bund`'s claim names its fallback - a tip it cannot carry on is left as it came for the settle, whose lane law calls the short end dangling (pulled back, GUESS 0246), and the field is reached by `a_way_onto_the_bund` (0014: the hamlet's nearest lane runs on to the bund).
-
-<!-- plan-archive: T18 to T18 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-<!-- plan-archive: T18 to T18 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-<!-- plan-archive: T18 to T18 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+<!-- plan-archive: T90 to T23 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 ### T23 part B (2026-10-21T17:46Z)
 
 Owed by the cohort (cohort@20261021T172647Z: seeds 12, 21, 22, 24, 38 and 901 newly failing), taken while T23 was the last task started - the work that resisted was T18's, whose part B answers it.
@@ -394,74 +302,10 @@ Owed by the cohort (cohort@20261021T172647Z: seeds 12, 21, 22, 24, 38 and 901 ne
 8. **Every route measured before offering one?** No route is offered.
 9. **After a ruling: the step it names?** No ruling.
 
-### T95 Approach (checklist part A)
-
-1. **The goal, in the world.** A join link's margin off the water is claimed.
-2. **The constraints.** No page gives a lane's margin off a water line; 0081 keeps a lane off wet ground.
-3. **Where each comes from.** O.
-4. **Do they describe the world here?** Yes - batch 9's round: `_clear_touch` keeps `clear_runs`' default 14 ft off water lines, unclaimed.
-5. **The order.** The claim (written in batch 9: "a join link off the water - UNRESEARCHED: 14 ft"), read IN-STEP; nothing more.
-6. **The exits.** (a) claim.
-7. **The search smell.** None.
-8. **The budget.** 60 min for the batch with its landing.
-9. **Done, measured.** The claims round read it IN-STEP (batch 9, 2026-10-21).
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
-### T95 Decisions
-
-**D74 - the water margin claimed.** No code change: `_clear_touch`'s 14 ft off water lines claimed UNRESEARCHED in batch 9, read IN-STEP.
-
-### T96 Approach (checklist part A)
-
-1. **The goal, in the world.** A hairpin is a turn of more than 140 degrees, as 0081 says, wherever a turn is judged.
-2. **The constraints.** 0081 §37: a hairpin is a turn of "more than 140 degrees".
-3. **Where each comes from.** R (0081).
-4. **Do they describe the world here?** Yes - batch 9's round 3: the spur's fold, `kink_spans`, and the joints' two hook tests cut at exactly 140 as well (`>=`).
-5. **The order.** `>=` -> `>` at the four places that compare a turn with `_HAIRPIN_DEG` (`clearance.kink_spans`, `joints` x2, `track.spur_cut_at_the_fold`); their docstrings say "more than"; a test at exactly 140; seeds 1-48.
-6. **The exits.** (e) conform.
-7. **The search smell.** None.
-8. **The budget.** 60 min for the batch with its landing.
-9. **Done, measured.** A turn of exactly 140 degrees is no hairpin (test); seeds 1-48 and the pinned rows pass.
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
-### T96 Decisions
-
-**D75 - more than 140, and more than 50.** The four comparisons read `> _HAIRPIN_DEG`; `law.DOUBLE_BACK_DEG` (the same constant) is read by `kink_spans`, so the law and the placers keep one boundary. And `kink_spans`' zigzag turn reads `> _ZIGZAG_DEG` (0081: "two turns of more than 50 degrees"; the claims round found its `>=` beside the hairpin's); `tee`'s hairpin refusal claimed on 0081.
-
-### T97 Approach (checklist part A)
-
-1. **The goal, in the world.** A lane end running back along another way under 20 degrees is a doubled tail and is cut where it comes alongside, as 0081 draws it.
-2. **The constraints.** 0081 §25: "A lane whose end runs back along another way at less than 20 degrees ... cut it where it comes alongside".
-3. **Where each comes from.** R (0081).
-4. **Do they describe the world here?** Yes - batch 9's round 3: `tails._DOUBLED_DEG` is 15 and four claims call the rule UNRESEARCHED.
-5. **The order.** `_DOUBLED_DEG` 15 -> 20 (0081); the four claims (`tails._DOUBLED_DEG`, `tails`' and `law`'s doubled-tail predicates, `settle_ends`) cite 0081; seeds 1-48.
-6. **The exits.** (e) conform.
-7. **The search smell.** None.
-8. **The budget.** 60 min for the batch with its landing.
-9. **Done, measured.** Seeds 1-48 and the pinned rows pass; the claims round reads the four IN-STEP.
-10. **Before moving a constant.** Measured: `_DOUBLED_DEG` is read by the law's refusal, the settle's cut, the tree's deferral and `Lawful`'s tail rule; seeds 1-48 and the pinned rows say what the move costs.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
-### T97 Decisions
-
-**D76 - 0081's rule claimed; its 20 degrees owned by T101.** The four claims cite 0081 (an end running back along another way under 20 degrees is cut where it comes alongside), each naming the known gap: the code asks at `_DOUBLED_DEG` 15. Measured 2026-10-21: at 20, cohort seeds 10 and 40 were refused (a household's way, a tree lane no settle may cut, read as doubled; a shallow crossing left). The move from 15 to 20 is filed as T101, which owns it - done when seeds 1-48 and the pinned rows pass at 20, those two refusals among them - once the side-by-side family (T07) leaves the tree no doubled household way.
-
-### T100 Approach (checklist part A)
-
-1. **The goal, in the world.** A task id names one task in its tasks.md.
-2. **The constraints.** Feature 375's task ids; `make task-add` takes the next free id.
-3. **Where each comes from.** O.
-4. **Do they describe the world here?** Yes - measured 2026-10-21: a hand-filed T93 beside the landing's carried T93, and no check refused it.
-5. **The order.** `spec-lint` check: a task id on two task lines of one tasks.md is refused, naming both lines and `make task-add`; a test.
-6. **The exits.** (c) - a check, not a habit.
-7. **The search smell.** None.
-8. **The budget.** 60 min for the batch with its landing.
-9. **Done, measured.** Two T93 lines refused, one passes (test).
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
+<!-- plan-archive: T95 to T95 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+<!-- plan-archive: T95 to T96 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+<!-- plan-archive: T96 to T97 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+<!-- plan-archive: T97 to T100 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 ### T100 Decisions
 
 **D77 - one id, one task.** `spec-lint` `check_duplicate_tasks(tasks)`: every `- [ ] Tnn` / `- [x] Tnn` id seen twice is a finding with both line numbers and the tip `make task-add F=<n> TITLE=...`.
@@ -494,16 +338,4 @@ Owed by the cohort (cohort@20261021T180921Z: seeds 10 and 40 newly failing), tak
 8. **Every route measured before offering one?** The one route (20) was measured and filed as T101.
 9. **After a ruling: the step it names?** No ruling.
 
-### T96 Approach (re-answered 2026-10-21T18:39Z)
-
-1. **The goal, in the world.** A hairpin is a turn of more than 140 degrees and a zigzag two turns of more than 50, as 0081 says, wherever a turn is judged.
-2. **The constraints.** 0081 §20, §21, §37: a hairpin is a turn of "more than 140 degrees"; a zigzag is "two turns of more than 50 degrees" within 40 ft.
-3. **Where each comes from.** R (0081).
-4. **Do they describe the world here?** Yes - batch 9's round 3 (the fold, the kinks and the joints cut at exactly 140) and batch 10's round (the zigzag at exactly 50).
-5. **The order.** `>=` -> `>` at the four hairpin comparisons and `kink_spans`' zigzag turn; docstrings say "more than"; `tee`'s hairpin refusal claimed on 0081; a test at exactly 140; seeds 1-48.
-6. **The exits.** (e) conform.
-7. **The search smell.** None.
-8. **The budget.** With batch 10.
-9. **Done, measured.** A turn of exactly 140 is no hairpin (test); seeds 1-48 and the pinned rows 54/54 (measured 2026-10-21).
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+<!-- plan-archive: T96 to T96 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
