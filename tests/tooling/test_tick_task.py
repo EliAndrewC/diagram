@@ -321,6 +321,8 @@ def test_the_first_pass_files_the_findings_outside_the_change_and_commits_them(t
 
     monkeypatch.setattr(lb, "run", run)
     assert lb.cheap_refusals(tmp_path, _d, ["T02"], "x") == []
+    writes = [c for c in seen if any("ledger_owed.py" in x for x in c) and "--write" in c]
+    assert writes and writes[0][writes[0].index("--write") + 1].startswith("specs/188-alpha/"), "the feature's traced passes written (405 T39)"
     carry = next(i for i, c in enumerate(seen) if "carry" in c)
     assert seen[carry][-2:] == ["--feature", "188"]
     assert seen[carry + 2][:2] == ["git", "commit"] and any("claims-gate.sh" in c[0] for c in seen[carry:]), "committed, then the gate"

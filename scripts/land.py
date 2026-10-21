@@ -62,6 +62,9 @@ def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str) -> list[str
     # the plan reviews' ledger rows are the push's to write (385 T72): written and committed first, as the push does, so they are
     # not named as owed
     run(root, [sys.executable, str(HERE / "reviews" / "ledger_owed.py"), "--write-plan-reviews", "--ledger", str(root / "dev" / "review-ledger.md")])
+    # ...and every other pass traced to this feature - its claims round's above all (feature 405 T39, D13: T14's and T11's landings
+    # each refused once on impl-drift passes the session then wrote by hand), acted on in the feature's own records
+    run(root, [sys.executable, str(HERE / "reviews" / "ledger_owed.py"), "--write", f"specs/{d.name}/ (the records its checks wrote; make land)", "--ledger", str(root / "dev" / "review-ledger.md")])
     if run(root, ["git", "status", "--porcelain", "--", "dev/review-ledger.md"])[1].strip():
         run(root, ["git", "commit", "-q", "-m", "the plan reviews' ledger rows, written at landing (feature 385 T72)", "--", "dev/review-ledger.md"])
     # A FINDING OUTSIDE THE CHANGE IS FILED, NOT REFUSED (feature 405 T36, D10): the carry files every carried claims finding as an
