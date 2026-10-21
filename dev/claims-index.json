@@ -21797,30 +21797,30 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::kink_spans#no hairpin": {
-  "body": "e05e8b4c230e1bc8",
+  "body": "05b232512d62d755",
   "claim": "no hairpin - village-lanes.drawing: a turn of more than 140 degrees",
-  "code": "7fe96b9bc6012689",
-  "core": "c3f4366ac657624f",
+  "code": "46c0e172ac404485",
+  "core": "5c06ff677305e748",
   "date": "2026-10-21",
-  "note": "`deg &gt; _HAIRPIN_DEG` (140) matches \"a turn of more than 140 degrees is a hairpin\"",
+  "note": "`deg &gt; _HAIRPIN_DEG` (140) matches \"a turn of more than 140 degrees is a hairpin\"; the page counts these limits as drawing conventions",
   "pages": {
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
   },
   "research": "324b10775c9108ef",
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3",
-   "0081-village-lanes.drawing.html:65ad16eace199d92"
+   "0081-village-lanes.drawing.html:65ad16eace199d92",
+   "0081-village-lanes.drawing.html:be608a70af4cfcc5"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::kink_spans#no zigzag": {
-  "body": "e05e8b4c230e1bc8",
+  "body": "05b232512d62d755",
   "claim": "no zigzag - village-lanes.drawing: two 50 degree turns within 40 ft of path",
-  "code": "e86947fd413a14c1",
-  "core": "c3f4366ac657624f",
+  "code": "ba1df27456031dc8",
+  "core": "5c06ff677305e748",
   "date": "2026-10-21",
-  "note": "`elif deg &gt;= _ZIGZAG_DEG` counts a turn of exactly 50 degrees, but the page says \"two turns of more than 50 degrees\"; the code should use `deg &gt; _ZIGZAG_DEG` (the summed run &lt;= 40 ft is in step)",
-  "outside": true,
+  "note": "turns `&gt; 50` whose summed path is `&lt;= 40` ft match \"two turns of more than 50 degrees within 40 ft of path\"",
   "pages": {
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
   },
@@ -21829,7 +21829,7 @@
    "0081-village-lanes.drawing.html:65ad16eace199d92",
    "0081-village-lanes.drawing.html:d30e15716180fbf5"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::link_index#plumbing": {
   "code": "e9d25565ddeb9d8b",
@@ -24514,13 +24514,32 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/joints.py::tee#no hairpin at the re-laid T's new last turn (refused above `_HAIRPIN_DEG`, 140; 0081 §20)": {
+ "l7r/diagram/hamletgen/ways/joints.py::tee#a lane whose vertex before the joint stands within `_TOUCH_GAP` (4 ft) of its foot on the other lane stops at that vertex, with no last leg to the foot (the nub cut; the hook rule at §27 is the nearest the page comes)": {
   "code": "b8a0204956058c12",
   "core": "b8a0204956058c12",
   "date": "2026-10-21",
-  "note": "no hairpin at the re-laid T's new last turn (refused above `_HAIRPIN_DEG`, 140; 0081 §20)",
+  "note": "a lane whose vertex before the joint stands within `_TOUCH_GAP` (4 ft) of its foot on the other lane stops at that vertex, with no last leg to the foot (the nub cut; the hook rule at §27 is the nearest the page comes)",
+  "outside": true,
   "research": "",
   "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/ways/joints.py::tee#no hairpin at the re-laid T": {
+  "body": "d4cb172064290fcc",
+  "claim": "no hairpin at the re-laid T - village-lanes.drawing: its new last turn refused past 140 degrees (`_HAIRPIN_DEG`), a hairpin",
+  "code": "e54b65659c684b11",
+  "core": "b8a0204956058c12",
+  "date": "2026-10-21",
+  "note": "the T's new last turn is refused when it is `&gt; _HAIRPIN_DEG` (140), the page's hairpin limit applied to the T that end-to-end lanes become",
+  "pages": {
+   "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
+  },
+  "research": "324b10775c9108ef",
+  "rests": [
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
+   "0081-village-lanes.drawing.html:3b9a5312c92335d3",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::unhooked#a lane's end loses its hook": {
   "code": "8925237f83bb2265",

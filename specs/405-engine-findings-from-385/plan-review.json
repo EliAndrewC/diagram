@@ -522,6 +522,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "round-arbiter"
+  },
+  "### T96 Approach (re-answered 2026-10-21T18:39Z)": {
+   "sha256": "0f26a760838e4bfbbd4f4a2a5ef87819a6dd73f64aa366086839c4fda673e986",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2482,6 +2488,39 @@
      "summary": "tee's hairpin refusal is claimed on 0081.",
      "class": "within",
      "why": "Annotates existing behavior to the claim it implements; part of working the claims task, no scope change."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "### T96 Approach (re-answered 2026-10-21T18:39Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T96-1 strict thresholds",
+     "summary": "`>=` becomes `>` at the four hairpin comparisons and at kink_spans' zigzag turn, so a hairpin is a turn of MORE than 140 degrees and a zigzag two turns of MORE than 50, as 0081 sections 20, 21 and 37 state.",
+     "class": "within",
+     "why": "Conforms the code to the research's own words (exit e, conform). Amendment 7 asks the feature be taken to completion and says the research is generally to be followed; FR-001/FR-002 carry the task. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T96-2 docstrings",
+     "summary": "Docstrings changed to say 'more than'.",
+     "class": "within",
+     "why": "Documents the conformed rule; no scope change."
+    },
+    {
+     "id": "T96-3 tee claim",
+     "summary": "tee's hairpin refusal claimed on 0081.",
+     "class": "within",
+     "why": "Attaches the existing refusal to its research source, the claims work this feature exists to do; no behavior beyond the conformed threshold."
+    },
+    {
+     "id": "T96-4 verification",
+     "summary": "A test at exactly 140 degrees (no hairpin); seeds 1-48 and the pinned rows re-run (54/54, measured 2026-10-21).",
+     "class": "within",
+     "why": "Enforcement of the conformed rule and regression measurement; no unrequested verification target. No test at exactly 50 for the zigzag is a coverage choice, not a narrowing of the request or spec."
     }
    ]
   }
