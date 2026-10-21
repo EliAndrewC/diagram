@@ -554,17 +554,17 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 2. **The constraints.** 0033's drawing page: "The street runs on off the map as the road into it", further streets run parallel to the first and the page says nothing of their ends; 0246: an end reaching nothing is pulled back to the last house it serves (a GUESS).
 3. **Where each comes from.** R (0033, 0246).
 4. **Do they describe the world here?** Yes - measured 2026-10-21: Kashikawa's first street is 2,928 ft and uncut (the task's "2,800 to 1,400" read a layout before the road's two runs, feature 328 wave 5); it escapes `trim_streets` only because the road runs' ends stand on its ends (batch 7's round).
-5. **The order.** `trim_streets` passes by the row's first street by name (the lowest `street_index` drawn - only it takes the road, `lay_row_streets`); `to_its_joints` / `end_to_its_joint` / `settle_street_ends` claims labeled GUESS 0246 for a further street's cut; a test; seeds 1-48.
+5. **The order.** `trim_streets` and `settle_street_ends` pass by the row's first street by name (`first_street`: the lowest `street_index` drawn - only it takes the road, `lay_row_streets`); `to_its_joints` / `end_to_its_joint` / `settle_street_ends` claims labeled GUESS 0246 for a further street's cut; tests; seeds 1-48.
 6. **The exits.** (e) conform, with the claims.
 7. **The search smell.** None.
 8. **The budget.** 60 min for the batch with its landing.
-9. **Done, measured.** The first street is never cut by the trim, joints or none (test); seeds 1-48 and the pinned rows pass; the pool's first streets unchanged.
+9. **Done, measured.** The first street is never cut by the trim or the settle, joints or none (tests); seeds 1-48 and the pinned rows pass; the pool's first streets unchanged.
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
 ### T54 Decisions
 
-**D63 - the first street passed by.** `trim_streets` skips the street with the lowest drawn `street_index` (the one that met the road); a further street is cut to its joints as before. `settle_street_ends` still cuts any street end the law calls dangling - a first street's end dangles only where its road run was lost, and then 0246's pull-back is all the record gives. The claims: `to_its_joints` and `end_to_its_joint` GUESS 0246 (a further street), `trim_streets`' "the first street runs on" now true by the code.
+**D63 - the first street passed by.** `trim_streets` and `settle_street_ends` both skip the street with the lowest drawn `street_index` (the one that met the road, `first_street`): 0033 runs it on off the map as the road into it, and no 0246 pull-back is put in its place. A further street is cut to its joints, and its dangling end to its last joint, as before. Measured on seeds 1-48 and the pinned rows: a first street whose end the settle would have cut would now be left to the law, so a seed that needed that cut fails the cohort. The claims: `to_its_joints`, `end_to_its_joint` and `settle_street_ends` GUESS 0246 (a further street); `trim_streets`' "the first street runs on" true by the code.
 
 ### T83 Approach (checklist part A)
 

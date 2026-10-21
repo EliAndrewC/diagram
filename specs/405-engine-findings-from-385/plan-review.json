@@ -1116,6 +1116,66 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
+  },
+  "### T54 Approach (checklist part A)": {
+   "sha256": "822ca95b354b03f58566800a89bc3f7cbe748fffc7a5e0bb5d7d63e38a5a48b2",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T54 Decisions": {
+   "sha256": "502599dffaeb5c9b52bfabe376c600b5b27a12c625011d4c959eddcc4a50c868",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T83 Approach (checklist part A)": {
+   "sha256": "e072eac947d0512468ed212ffc2ec8dc15b01559944c9e812069d44d31f9cce4",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T83 Decisions": {
+   "sha256": "e2a4472f2a9170c688f407176d0a8f13162184b49af071334932eb630a3baa86",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T84 Approach (checklist part A)": {
+   "sha256": "28eb0620e4f2455eb996a4472aa88814f26b5d550d646d6aa4b5dfc813f7e49d",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T84 Decisions": {
+   "sha256": "01b9c94f7721b9c5ae782e2e6b28a79b23e17ddb912e6e9f39173bb56627cce2",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T85 Approach (checklist part A)": {
+   "sha256": "4c55101375ad2f069a1b03278e1ef9b730b0a5df41ac41a8eae083fd15937533",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T85 Decisions": {
+   "sha256": "9e9980e34e37327340a49bee304c59a74e23b07a70adbb1410527c107ba47f85",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T87 Approach (checklist part A)": {
+   "sha256": "72bcc5699a27313cfbabbea1490d7990a81e5e51e743e7a426b91ce9dfb010ba",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T87 Decisions": {
+   "sha256": "ee8b2482264f7a403e4210a2aea9574dc6256a75cbff3f63b74505922001b48c",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2581,6 +2641,67 @@
      "summary": "The earlier DEVIATION claim ('no drawn channel crossed', DEVIATION 0084) is withdrawn because 0084 section 116 draws a deck where a way crosses a ditch, so the research expects the crossing the fill refuses; T10 stays open, re-scoped to the deck crossing as a code task, not landed with this batch.",
      "class": "within",
      "why": "Nothing is dropped: T10 stays open within the feature Amendment 7 asks to be taken to completion, and is re-scoped toward following the research rather than recording a departure the source does not record - the direction Amendment 7 states. Landing it after this batch is ordering, not a narrowing of what is done."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "### T54 Approach (checklist part A)",
+    "### T54 Decisions",
+    "### T83 Approach (checklist part A)",
+    "### T83 Decisions",
+    "### T84 Approach (checklist part A)",
+    "### T84 Decisions",
+    "### T85 Approach (checklist part A)",
+    "### T85 Decisions",
+    "### T87 Approach (checklist part A)",
+    "### T87 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D63a",
+     "summary": "trim_streets passes by the row's first street (lowest drawn street_index, the one lay_row_streets gives the road)",
+     "class": "within",
+     "why": "Carries 0033 (R): the first street runs on off the map as the road into it. That is the task's own goal (item 1)."
+    },
+    {
+     "id": "D63b",
+     "summary": "settle_street_ends still cuts a first street's dangling end (where its road run was lost) by 0246's pull-back",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is a carve-out from the block's own goal (item 1: the first street runs on off the map as the road into it). It replaces a researched finding (0033, R) with a GUESS (0246) for the first street. It meets none of the three tests. (1) Nothing shows that running the street off the map is impossible: 'dangles' describes today's drawing, not a constraint. (2) The GM's words do not imply it; Amendment 7 asks that the research be followed. (3) Applying 0033 literally serves the stated purpose rather than defeating it. The case it rests on ('a first street's end dangles ONLY where its road run was lost') is asserted, not measured: item 4 measures trim_streets on Kashikawa, not settle_street_ends on any first street. 'Still cuts' keeps existing behavior that was never asked for. 'No road, so it is not the road into it' is an argument from the wording, not from the purpose. To fix it, either have settle_street_ends also pass by the first street, or measure the lost-road case across the seeds, show it never arises, and drop the clause."
+    },
+    {
+     "id": "D63c",
+     "summary": "a further street is cut to its joints, its claims labeled GUESS 0246",
+     "class": "within",
+     "why": "0033 is silent on a further street's ends, so 0246's labeled GUESS fills a gap and overrides nothing."
+    },
+    {
+     "id": "D64",
+     "summary": "the sweep's grove bands become rot_rect(x, y, w, h, rot), ungrown; the stale comment is removed",
+     "class": "within",
+     "why": "The goal is that the sweep and the door path agree on where the wood stands. The door path's grow is clearance for its tread, not part of the wood, so leaving the sweep's band ungrown keeps to that goal."
+    },
+    {
+     "id": "D65",
+     "summary": "_clear_within measures segment-to-edge distance over a PointGrid index of fabric edges, exact below the cap; maps may change",
+     "class": "within",
+     "why": "Measuring along the fabric's edges as well as its corners is the stated goal. A stricter splice is the expected result, not a narrowing."
+    },
+    {
+     "id": "D66",
+     "summary": "_touch_junctions reads an unwidthed lane as 3 ft at its three places",
+     "class": "within",
+     "why": "0246 says a footpath is 3 ft, and the other joins already read or 3.0. The bars do not change, and may_write's stroke narrows to the tread as drawn."
+    },
+    {
+     "id": "D67",
+     "summary": "archivable uses _section_clear with the plan's history in place of the exact digest",
+     "class": "within",
+     "why": "This is work found on 405's own T81 and stays here under FR-002. It makes the archive read a block the same way the decide guard does, and it narrows nothing."
     }
    ]
   }
