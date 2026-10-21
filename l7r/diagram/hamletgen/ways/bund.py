@@ -57,7 +57,9 @@ def run_on_target(q: Pt, ground: WorkedGround, half_tread: float, reach: float =
 
     Research:
         joins at the nearest point - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: straight to
-            the worked ground's nearest edge point, stopped on the bund"""
+            the worked ground's nearest edge point, stopped on the bund
+        run-on reach - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within `reach` (`RUN_ON_REACH_FT`, 60 ft), the page's reach to a house or a way, reused for the field
+        stopped outside the ground - CONVENTION: the tip held its half-tread and `TIP_MARGIN_FT` (1 ft) outside the worked ground, its cap on the bund line"""
     if ground.inside(q):
         return None
     p = ground.nearest(q)
@@ -230,7 +232,10 @@ def run_lanes_on_to_the_bund(s: Settlement, ground: WorkedGround, blocks: RunOnB
     Research:
         lane end runs on to the bund - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html,
             research/questions/0014-bunds-between-the-paddies-aze.drawing.html: an end reaching nothing carried onto the field
-        connector left alone - research/questions/0081-village-lanes.drawing.html: the track out runs off the map"""
+        connector left alone - research/questions/0081-village-lanes.drawing.html: the track out runs off the map
+        a row street left to the street rules - UNRESEARCHED: its end is cut to its last joint (`settle_street_ends`), never carried on
+        run-on reach - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end within `RUN_ON_REACH_FT` (60 ft) of the field, the reach the page gives to a house or a way, reused; no page gives one to the field
+        the dry hem's edge too - UNRESEARCHED: an end is carried onto the worked ground's nearest edge, a dry plot's as well as the paddy's; 0014 speaks only of the paddy's bund"""
     lanes = s.M.get("lanes") or []
     steadings = steading_footprints(s.M)
     houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []]

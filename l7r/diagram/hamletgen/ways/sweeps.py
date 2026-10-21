@@ -658,7 +658,7 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
     `_WEB_MIN_FT` is emptied for `_sweep_debris`'s rule to finish. A connector is exempt: it leaves the map by design.
 
     Research:
-        lane end reaches something - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back until it serves a way, the field or a house, 4 ft at a time - never one reached across a neighbor's land, owed none (`geom.lane_houses`)
+        lane end reaches something - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back until it serves a way, the field or a house, 4 ft at a time - never one reached across a neighbor's land, owed none (`geom.lane_houses`)
         not the way it left - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end does not count as reaching a way the lane's other end stands on (within `_TOUCH_GAP`), so a link off a way with nothing at its far end is pulled back to nothing - our reading of "a stretch that joins nothing of the network is not drawn" against "reaching another way within 60 ft of it", which does not say whether the way a lane leaves is another way
         the track out and streets exempt - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the track out runs from the cluster's edge off the map, so its far end is no lane end; a row village's street keeps its own end rules (`ways/street.py`)
         a link another lane ends on kept - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the lanes are one network, joined where their treads meet - a short lane another lane ends on is that join, not debris
@@ -764,7 +764,7 @@ def _walk_in(pts: list[Pt], reaches: Callable[[Pt, Pt], bool], tails: Sequence[P
     each step: where another lane's end rests on the segment, the end stops there (`held_at`).
 
     Research:
-        pulled back to the last point that serves - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane end that reaches nothing is pulled back to the last house it serves, 4 ft at a time
+        pulled back to the last point that serves - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane end that reaches nothing is pulled back to the last house it serves, 4 ft at a time
         held at a junction - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the lanes are one network, joined where their treads meet - a pull-back stops where another lane's end rests on it"""
     while len(pts) >= 2 and not reaches(pts[-1], pts[0]):
         a, b = pts[-2], pts[-1]
@@ -898,7 +898,7 @@ _DOUBLED_SHARE = 0.5  # ...and a lane running that close for half its own length
 _REACH_FT = 60.0  # ft: `WAY_END_REACH_FT`, the reach to another way; here the reach a home-bank drop and a dooryard carry look within
 """Research: end reach to a way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 60 ft"""
 _SERVE_FT = 100.0  # ft: a way serves a house within this - `farmhouses_reach_a_way`'s own figure, so a dropped fragment never strands one
-"""Research: a way serves a house - GUESS: within 100 ft"""
+"""Research: a way serves a house - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 100 ft, as back lanes bring every farmhouse within 100 ft of one"""
 
 
 from .tails import (  # noqa: E402, F401 - split out at the 1,000-line bar (feature 280); re-exported for the web and the tests

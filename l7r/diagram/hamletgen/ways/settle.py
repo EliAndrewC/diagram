@@ -471,7 +471,7 @@ def settle_dangling(s: Any) -> int:
     `_trim_to_service` stops it at its closest approach). No exemption for a house the lane alone reaches - that house is
     the corridor's. A lane the law still calls dangling after its trim goes whole.
 
-    Research: an end reaches something seen - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: trimmed to service, else dropped"""
+    Research: an end reaches something seen - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: trimmed to service, else dropped"""
     M = s.M
     lanes = M.get("lanes") or []
     ground, steadings = memo_ground(s, "worked", worked_ground), steading_footprints(M)
@@ -534,7 +534,7 @@ def settle_street_ends(s: Any) -> int:
     was refused).
 
     Its joints: other lanes' ends, its crossings of a way, and each served farm's point (`serve.street_anchors`).
-    Research: an end reaches something seen - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a street's dangling end cut to its last joint, a lane's end, a way it crosses or the last farm it serves"""
+    Research: an end reaches something seen - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a street's dangling end cut to its last joint, a lane's end, a way it crosses or the last farm it serves"""
     from .street import end_to_its_joint  # street.py imports this module's `Lawful`; imported where it is used
 
     M = s.M

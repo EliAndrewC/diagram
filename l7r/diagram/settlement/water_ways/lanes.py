@@ -235,7 +235,7 @@ class LanesMixin:
         requires it to reach the frame; a path stopping mid-landscape is the defect, not the cure.
 
         Research:
-            an end reaching nothing is pulled back - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: to the last house, way or bund it serves
+            an end reaching nothing is pulled back - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: to the last house, way or bund it serves
             served at the dooryard - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 12 ft of the steading's built ground or 60 ft of the house's drawn footprint, on any side, at the map's scale
             arrival at the bund - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: within 6 ft of a field's or dry plot's edge, at the map's scale - the page records the 6 ft as a GUESS
             meeting another way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 60 ft of it, at 20 degrees or more

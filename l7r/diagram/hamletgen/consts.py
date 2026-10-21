@@ -277,7 +277,8 @@ WEB_REACH_FT = 100.0  # 0246's "within 100 ft"; the gate's copy is asserted equa
 """Research: every farmhouse reached by a way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 100 ft, how close counts as serving a house; but the few reached across a neighbor's land"""
 
 WAY_END_REACH_FT = 60.0
-"""How near a lane's END must come to another way, a farmhouse or the field before the path is one somebody wore.
+"""How near a lane's END must come to another way or a farmhouse before the path is one somebody wore (the field's reach
+is `ways.law.FIELD_REACH_FT`, 0014's).
 
 ONE NUMBER FOR THE PLACER AND THE CHECK, which is the whole reason it is a constant (feature 227). `_trim_to_service`
 pulled a run's ends back to the last point that reached a way within 40 ft or a HOUSE within 90, while

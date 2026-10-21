@@ -568,6 +568,48 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
+  },
+  "## T17, T16, T27 - the lane-end, run-on and farm-fixture claims brought to the research (385 T133, T131, T147)": {
+   "sha256": "fc0fbd6f1120fcee8798b2bc70d326686560c933fa1c1c6b3e955597a622e506",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T17 Approach (checklist part A)": {
+   "sha256": "81507c6a8e4c4d3de8813bc286fd88d97b0ec62008bfb6d701ce130487ecdd3e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T17 Decisions": {
+   "sha256": "8a587d9e0e5a402b4844430ee548cef9a421f4a02855aa969715689e4a1d6766",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T16 Approach (checklist part A)": {
+   "sha256": "f33d20bd292fb07d48c360a77aa0a8d09865390c4a646c70fe6e114acc15ddbd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T16 Decisions": {
+   "sha256": "6115ce70bae1b3ac8943e92056183bce71c41f8e66f3dda9686e1b19b98044fa",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T27 Approach (checklist part A)": {
+   "sha256": "9d7fb576563ed633709bc74083ac9a674569d1ea76ccc790b8d4106ebe3a418f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T27 Decisions": {
+   "sha256": "1f6096703492a43bb844c34190d378e9a5335762c7cfb54ba9d74d095ee1d55c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1255,6 +1297,51 @@
      "summary": "the task changes the check's message and the guideline only; web.py and settle.py, which stand at exactly 1,000 after earlier trims, are not split by this task",
      "class": "within",
      "why": "The GM's mechanism is the failing check instructing a split when a file exceeds the bar ('When we hit it ... we should take that as a sign'); files at 1,000 do not fail, and the next edit that pushes them over meets the new instruction. The GM asked for the check to instruct, not for a retroactive split sweep."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T17, T16, T27 - the lane-end, run-on and farm-fixture claims brought to the research (385 T133, T131, T147)",
+    "### T16 Approach (checklist part A)",
+    "### T16 Decisions",
+    "### T17 Approach (checklist part A)",
+    "### T17 Decisions",
+    "### T27 Approach (checklist part A)",
+    "### T27 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T17/T16/T27 bundle",
+     "summary": "Three moved claims tasks worked together on one 30-minute budget and one landing.",
+     "class": "within",
+     "why": "Amendment 7 asks for every remaining open task to be worked; grouping three claim-wording tasks into one landing is process inside FR-001 and drops none of them."
+    },
+    {
+     "id": "T17 exit (e)",
+     "summary": "T17 conforms the words to the code and the labels to 0246, with no behavior change.",
+     "class": "within",
+     "why": "The task is to make the lane-end claims say what the code does and label it as 0246 does. 0246 itself calls the pull-back rule a GUESS, so labeling it GUESS follows the research rather than departing from it."
+    },
+    {
+     "id": "D29",
+     "summary": "Lane-end comments and docstrings corrected (_pull_back, WAY_END_REACH_FT, _lay_skeleton's 50 ft half-pitch floor, _SERVE_FT cites 0246's 100 ft as GUESS); thirteen pull-back claims labeled GUESS.",
+     "class": "within",
+     "why": "This conforms claims to measured code and to the page's own label. It changes no behavior and drops none of the claims the task names."
+    },
+    {
+     "id": "T16 exit (a) / D30",
+     "summary": "Run-on behavior claimed as it stands: row street left to the street rules (UNRESEARCHED), the reach GUESS (0246's 60 ft reused), the dry hem's edge UNRESEARCHED (0014 silent on a dry plot), run_on_target's stop CONVENTION, connector exemption cited to 0081.",
+     "class": "within",
+     "why": "T16's goal is that every rule of the run-on and dangling-end test is claimed, and each one gets a claim. Where the pages are silent the claim says so, which is the honest label under FR-001's claims procedure. Nothing the task covers is excepted."
+    },
+    {
+     "id": "T27 exit (e) / D31",
+     "summary": "The farm_fixtures exemption text reworded to where the fixtures actually stand; the claim cites 0038, not 0039, for the bed; CANOPY_PAD and SHADE_MARGIN_FT claimed CONVENTION; the privy's 8 ft front seat claimed GUESS (0047) and the stable seat cited to 0047.",
+     "class": "within",
+     "why": "This conforms words and citations to the code and the pages and adds the four missing claims. It is the whole of the task's goal, with nothing narrowed."
     }
    ]
   }

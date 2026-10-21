@@ -142,8 +142,8 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
         skeleton drawn worn - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: narrow, packed earth, no centerline (`worn=True`)
         no skeleton under two houses - UNRESEARCHED: a cluster of fewer than two houses lays no skeleton lanes (`len(arcs) < 2`), there being no two houses to join
         skeleton arm's corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle 7 ft clear of a garden fence; each arm registers `LANE_CLEARANCE`, 7 ft from its middle, a footprint held to it at its corners
-        skeleton span floor - UNRESEARCHED: the span floored at one bundle pitch (100 ft) each way; a piece under 30 ft not laid
-        skeleton arm clipped WEB_FABRIC_GAP (7 ft) off the steadings and trimmed back to the last point serving a house - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle keeps at least 7 ft clear of a garden fence, and a lane end that reaches nothing is pulled back to the last house it serves"""
+        skeleton span floor - UNRESEARCHED: each half-extent floored at half a bundle pitch (50 ft), a pitch across; a piece under 30 ft not laid
+        skeleton arm clipped WEB_FABRIC_GAP (7 ft) off the steadings and trimmed back to the last point serving a house - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle keeps at least 7 ft clear of a garden fence, and a lane end that reaches nothing is pulled back to the last house it serves"""
     if len(arcs) < 2:
         return []
     arc0 = (min(arcs) + max(arcs)) / 2.0
@@ -357,7 +357,7 @@ def tidy_lane_ends(s: Settlement, envelope: Poly, streets: bool = False) -> None
     those two and nothing else.
 
     Research:
-        lane end reaches something - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back to a way, a house or the bund
+        lane end reaches something - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back to a way, a house or the bund
         end carried on to the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html
         lane serving nothing dropped - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: unless it is the only link in the web
         a tail kept as a house's only way - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: never for a household reached across a neighbor's land, owed none (`geom.lane_houses`)
@@ -471,7 +471,7 @@ def served_arm(s: Settlement, arm: Poly) -> Poly:
     `_lay_skeleton` (feature 308): the re-grown pool no longer leaves an arm that short, so it is tested on plain inputs.
 
     Research:
-        skeleton arm trimmed to service - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its ends pulled back to the houses it serves
+        skeleton arm trimmed to service - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its ends pulled back to the houses it serves
         shortest arm - UNRESEARCHED: an arm under 30 ft (`_WEB_MIN_FT`) is not drawn"""
     if len(arm) >= 2:
         arm = _trim_to_service(arm, [], [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])], steadings=steading_footprints(s.M))

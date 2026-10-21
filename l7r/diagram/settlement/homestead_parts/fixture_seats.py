@@ -102,6 +102,7 @@ SHRINE_CORNER_FT = 14.0  # the household shrine a plot corner off the house's co
 TRUNK_FT = 4.0  # the persimmon's trunk box
 """Research: persimmon trunk box - UNRESEARCHED: 4 ft"""
 CANOPY_PAD = 0.6  # the crown's placement clearance off a roof (`Settlement.CANOPY_PAD`)
+"""Research: crown clearance off a roof - CONVENTION: 0.6, the map's own placement clearance, so a kept crown survives the record's rounding"""
 PERSIMMON_STEPS_FT = (10.0, 20.0)  # the persimmon's ring a step out, and two
 """Research: persimmon stepped out - UNRESEARCHED: 10 and 20 ft past its first ring"""
 #: THE DOORYARD'S REACH (feature 315; research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:
@@ -111,6 +112,7 @@ PERSIMMON_STEPS_FT = (10.0, 20.0)  # the persimmon's ring a step out, and two
 PERSIMMON_DOORYARD_FT = 30.0
 """Research: persimmon near the house - GUESS research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: the crown's edge within 30 ft of the walls"""
 SHADE_MARGIN_FT = 2.0  # the seat stricter than the map's check by a hair, as the sun corridor's placer is (`fit._sun_corridor_ok`)
+"""Research: shade margin - CONVENTION: the seat 2 ft stricter than the map's sun check, so a seat the placer takes the check passes"""
 
 SHRINE_CORNERS = (("NW", 0.45), ("NE", 0.35), ("SW", 0.20))
 """Research: shrine corner weights - research/questions/0219-household-shrines-yashikigami.drawing.html: NW 45, NE 35, SW 20"""
@@ -666,6 +668,8 @@ def _seats(
             draws none (the open found row `_seats#privy seats - the barn 0047 names`)
         privy sun-side radii - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: tried from 18 ft (`PRIVY_SUN_MIN_FT`) out to the reach
         privy sun-side step - UNRESEARCHED: the radii tried 4 ft apart
+        privy in the front yard - GUESS research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: its edge 8 ft out from the front wall (`PRIVY_FRONT_STEP_FT`), the page's own guess
+        privy by the stable - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: by the stable, at the house's stable end against the front wall's clear strip
         privy in the yard off the back wall - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: held at a ken plus the wall gap (`PRIVY_YARD_STEP_FT`), past the page's ken, behind the found row at the constant
         shrine off its corner - UNRESEARCHED: 14 ft (`SHRINE_CORNER_FT`) out from the house's corner on both axes
         manure beyond the privy - research/questions/0042-manure-heaps-and-compost-kyuhi.drawing.html: on the side of the privy away from the house, along the line from its center; jittered a few feet;
