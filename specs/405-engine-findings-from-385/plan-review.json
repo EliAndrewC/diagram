@@ -1020,6 +1020,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
+  },
+  "### T79 Approach (re-answered 2026-10-21T14:52Z)": {
+   "sha256": "260512d05bbedc2ce6b125e3a672ee5418784732fa3e02c3d93a38c0df712222",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2358,6 +2364,33 @@
      "summary": "land.main installs a SIGTERM handler first: it ignores SIGTERM, sends it to its own process group (the gate, make done) and raises SystemExit(143), so long_runs' finally also stops the cohort's process group",
      "class": "within",
      "why": "Found-work fix to the landing tooling the GM asked to speed up and parallelise (Amendments 1, 5, 6), filed and worked under Amendment 7. The change from the earlier CLEAR text only widens the cleanup to stop the gate too, which serves the block's stated goal that no gate or cohort is left running. It excepts no case and narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "### T79 Approach (re-answered 2026-10-21T14:52Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T79-1",
+     "summary": "On SIGTERM the landing's handler ignores further SIGTERM, sends SIGTERM to its own process group (stopping the gate, which runs in that group), then raises SystemExit(143) so the cohort, in its own session, is stopped through the finally",
+     "class": "within",
+     "why": "Mechanism for a task worked under Amendment 7 ('working all of the remaining open tasks') and FR-001/FR-002; it makes a hand-stopped landing leave nothing running and narrows no clause of the request or spec"
+    },
+    {
+     "id": "T79-2",
+     "summary": "Exit (c): a make land run in the foreground shares its process group with its caller, which is stopped with it",
+     "class": "within",
+     "why": "An accepted consequence of the chosen mechanism, not a case carved out of the task's goal or of any GM clause; whether stopping the caller is desirable is a design question, not fidelity"
+    },
+    {
+     "id": "T79-3",
+     "summary": "Done is measured by a test that the handler stops the landing's group and raises SystemExit(143)",
+     "class": "within",
+     "why": "A test whose only effect is to enforce the task's stated goal; enforcement, not unrequested scope"
     }
    ]
   }
