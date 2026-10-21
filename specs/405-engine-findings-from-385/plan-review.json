@@ -1176,6 +1176,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
+  },
+  "### T83 Approach (re-answered 2026-10-21T16:24Z)": {
+   "sha256": "9c8568c2deee89f0a2e653c178a178c87e6f7486df431abe6bd5204b2c52717c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T90 Approach (checklist part A)": {
+   "sha256": "f83630276bc7492dd1687f7b9070f53e85f7e9fd36c82a52138d0567f8e7648f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T90 Decisions": {
+   "sha256": "0a60ae80c9bf882d51975c864cf3f887e9d5bbbd2bb76add2b8d13a6804dd2fc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2796,6 +2814,41 @@
      "summary": "Done when the test shows a carry across a rotated band's true footprint is refused and one across the unrotated box's phantom corner is not, and seeds 1-48 pass; 60 min budget.",
      "class": "within",
      "why": "Same as the CLEAR text. It verifies the requested behavior and does not reduce it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "### T83 Approach (re-answered 2026-10-21T16:24Z)",
+    "### T90 Approach (checklist part A)",
+    "### T90 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T83-order",
+     "summary": "farm_bands(M) reads each band rotated, and adds each farm's share of the dooryard copse (every copse clump, seated beside its own house) as an octagon of the clump radius; the claims cite 0036; a test",
+     "class": "within",
+     "why": "A claims task moved from 385 and worked to completion under Amendment 7 ('working all of the remaining open tasks'). It makes the sweep and the door path agree on the wood that 0036 says is one wood; it drops no case and keeps nothing the request asked to change. The octagon is a representation of the clump, not a carve-out."
+    },
+    {
+     "id": "T83-done",
+     "summary": "done measured by a test on a rotated band and a copse clump, plus seeds 1-48 and the pinned rows (54/54, measured 2026-10-21)",
+     "class": "within",
+     "why": "Verification of the task's own claim; nothing the request asked for is left unchecked or excepted."
+    },
+    {
+     "id": "T90-order",
+     "summary": "land.py --stop (make land-stop) SIGTERMs this tree's python running scripts/land.py, never its own process; a test on a fake /proc",
+     "class": "within",
+     "why": "Repairs 405's own T79 landing tooling (the landing work Amendment 1 asked for and Amendments 5-6 extended) after a measured failure: the SIGTERM reached the recipe's sh -c and the handler never ran. It is work toward completing the feature (Amendment 7) and narrows nothing; a stop command that reaches the handler only makes T79's stop do what it was built to do."
+    },
+    {
+     "id": "D68",
+     "summary": "landing_pids(root) matches a process whose argv[0] is a python, whose first argument ends scripts/land.py, whose cwd is the tree, and which is not the caller; make land-stop SIGTERMs each",
+     "class": "within",
+     "why": "Mechanism of T90's stop. Restricting to this tree and excluding the caller keeps the stop from reaching other clones' landings or itself; no requested behavior is excluded."
     }
    ]
   }
