@@ -961,57 +961,45 @@
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
-  "## T74, T75, T76, T77 - the sweeps' end at the house, one serving bar, the carried claims, carries filed in the wait (batch 5's rounds)": {
-   "sha256": "86dcb5c9ec708da8075d59ec5bd5bfd32485ec053db7df86a616795b86c7bfa6",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-10-21",
-   "declared": "spec-fidelity"
-  },
   "### T74 Approach (checklist part A)": {
    "sha256": "5a3af1f204aca32aafd4c7cdf6363d7ac62c34ba9569a216bfed761d76a08303",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T74 Decisions": {
    "sha256": "9a4204167d57bd7eda1af114051bdaf72fc25871052857f0284138e1d152c9e9",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-10-21",
-   "declared": "spec-fidelity"
-  },
-  "### T75 Approach (checklist part A)": {
-   "sha256": "67a06af2008595e0cf7650308b83caebb662fbd83a69753ddbc1c2f85416ef4a",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-10-21",
-   "declared": "spec-fidelity"
-  },
-  "### T75 Decisions": {
-   "sha256": "8f05f7b79cf8bfc512466c092a3564205b7dfaee97af7469286a088a90733717",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T76 Approach (checklist part A)": {
-   "sha256": "a8e1d748d2f48c5c95e3a0a9e204e94123bec184e4a6c22ab1ae8769c23c2275",
-   "verdict": "BLOCKED",
+   "sha256": "7627ee60ef3ca6f93ef9ab2d13bca5f846333960c5025536d147e118978e118f",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T76 Decisions": {
    "sha256": "5213d63192133b3bf6a80a1eda7711eb0104052ea40c5e14da0b79a9a7cd5608",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T77 Approach (checklist part A)": {
    "sha256": "6464e11e69ecbd2164807655e551b150b9b6927610cabf8149eabd195881a2ab",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   },
   "### T77 Decisions": {
    "sha256": "affcff315e6accc230df881721bc27090579df8cf1c1adea5809be4125e5f2cd",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "## T74, T76, T77 - the sweeps' end at the house, the carried claims, carries filed in the wait (batch 5's rounds)": {
+   "sha256": "832ff56a239bc8cc8497518f777c10f2b05fadbc9f0d5dc78a17e8f5c2993f95",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
   }
@@ -2252,6 +2240,48 @@
      "summary": "T77: land.file_carries lifted out of make land's first pass and run in the claims wait when the gate's refusal holds only carries, then the gate asked again; an owed or introduced finding is still waited on.",
      "class": "within",
      "why": "Found landing work filed and worked in 405 (FR-002), of the landing-time kind amendments 1-6 approved; it files what the first pass already files (T36) and leaves the wait on owed or introduced findings intact, so no guard is weakened."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## T74, T76, T77 - the sweeps' end at the house, the carried claims, carries filed in the wait (batch 5's rounds)",
+    "### T74 Approach (checklist part A)",
+    "### T74 Decisions",
+    "### T76 Approach (checklist part A)",
+    "### T76 Decisions",
+    "### T77 Approach (checklist part A)",
+    "### T77 Decisions",
+    "(removed) ## T74, T75, T76, T77 - the sweeps' end at the house, one serving bar, the carried claims, carries filed in the wait (batch 5's rounds)",
+    "(removed) ### T75 Approach (checklist part A)",
+    "(removed) ### T75 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D52",
+     "summary": "T74: _walk_in walks a swept lane end on toward the house it serves while it still reaches, held at a junction (_near infinite within reach of another way); T14's two pinned rows moved to the house; claim labeled GUESS 0246.",
+     "class": "within",
+     "why": "Conforms the code to 0246 section 6 (a lane ends at the dooryard) as T55 did for the trims - exit (e), following the research, which Amendment 7 names as the default. The junction hold keeps feature 269 E4 intact; the pinned-row changes are the measured consequence of the conformance, not a carve-out. Labeling the pull-back GUESS states the page's own status. Nothing the request or FR-001/FR-002 asks for is narrowed."
+    },
+    {
+     "id": "D54",
+     "summary": "T76: the claims gate's batch-5 carries - trim_lane_stubs' pull-back claim labeled GUESS 0246; _detour_links claims _ORPHAN_REACH UNRESEARCHED; _join_piece claims the refused splice drawn as its own lane UNRESEARCHED. The two served-house claims are left to T75 (waiting on T78).",
+     "class": "within",
+     "why": "Found work on code the task did not change is answered here as FR-002 / the GM's 2026-10-19 rule require. Labeling an unsourced figure UNRESEARCHED states its status honestly rather than exempting it from anything. The served-house claims are not dropped: they stay with open task T75, and the earlier text's 'which T75 settles' leaned on D53, which this revision withdraws."
+    },
+    {
+     "id": "D55",
+     "summary": "T77: land.file_carries lifted out of the first pass; wait_for_claims runs it when the gate's refusal holds carries and no owed or introduced finding, then asks again; test shows an owed claim is still waited on.",
+     "class": "within",
+     "why": "Removes a hand step from the landing (Amendment 1's landing cost, Amendments 2-6's line of landing fixes, Amendment 7's 'work all the remaining open tasks'). It files carries rather than suppressing them, and only when nothing is owed or introduced, so no claim the gate requires is waived."
+    },
+    {
+     "id": "removed: T75 / D53 and the four-task heading",
+     "summary": "T75 (D53, _SERVE_FT = WEB_REACH_FT at 100 ft against 0246 section 6's 60 ft) removed from this batch; T75 stays an open task filed to 0246 section 6's test, waiting on T78 (the page does not state its serving test).",
+     "class": "within",
+     "why": "D53 was the decision whose earlier ruling was NOT LEGITIMATE (keeping the code's 100 ft for consistency is no reason to set section 6 aside). Removing it from the batch withdraws that narrowing rather than introducing one; the task is deferred behind T78, not dropped, and no claim it covers is relabeled or waived in these blocks. Sequencing an open task is not a narrowing of the request."
     }
    ]
   }
