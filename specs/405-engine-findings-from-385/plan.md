@@ -428,7 +428,7 @@ Owed by the cohort (cohort@20261021T172647Z: seeds 12, 21, 22, 24, 38 and 901 ne
 
 ### T96 Decisions
 
-**D75 - more than 140.** The four comparisons read `> _HAIRPIN_DEG`; `law.DOUBLE_BACK_DEG` (the same constant) is read by `kink_spans`, so the law and the placers keep one boundary.
+**D75 - more than 140, and more than 50.** The four comparisons read `> _HAIRPIN_DEG`; `law.DOUBLE_BACK_DEG` (the same constant) is read by `kink_spans`, so the law and the placers keep one boundary. And `kink_spans`' zigzag turn reads `> _ZIGZAG_DEG` (0081: "two turns of more than 50 degrees"; the claims round found its `>=` beside the hairpin's); `tee`'s hairpin refusal claimed on 0081.
 
 ### T97 Approach (checklist part A)
 

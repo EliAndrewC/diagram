@@ -354,7 +354,7 @@ _ARM_FT = 40.0
 @kept
 def kink_spans(pts: Sequence[Pt]) -> list[tuple[str, int, int]]:
     """Where a run fails to bend like a path, as (kind, first vertex, last vertex): a turn of more than `_HAIRPIN_DEG`
-    ("doubles back", one vertex), or two turns of `_ZIGZAG_DEG` or more whose SUMMED path between them is `_ZIGZAG_RUN_FT`
+    ("doubles back", one vertex), or two turns of more than `_ZIGZAG_DEG` whose SUMMED path between them is `_ZIGZAG_RUN_FT`
     or less ("kinks") - the whole run between the two turns, not one segment.
 
     ONE BEND PREDICATE (feature 287, ways W18, FR-003). The web's passes asked a one-segment reading here - two big turns
@@ -376,7 +376,7 @@ def kink_spans(pts: Sequence[Pt]) -> list[tuple[str, int, int]]:
         deg = _turn_deg(p[k - 1], p[k], p[k + 1])
         if deg > _HAIRPIN_DEG:
             bad.append(("doubles back", k, k))
-        elif deg >= _ZIGZAG_DEG:
+        elif deg > _ZIGZAG_DEG:  # ...more than 50, as 0081 counts a zigzag's turns (405 T96)
             turns.append(k)
     for ka, kb in zip(turns, turns[1:], strict=False):
         if sum(math.dist(p[j], p[j + 1]) for j in range(ka, kb)) <= _ZIGZAG_RUN_FT:

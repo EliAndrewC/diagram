@@ -234,7 +234,7 @@ Research: making for a way - CONVENTION: within 60 degrees of the end's heading"
 
 def kinks(pts: Sequence[Pt]) -> list[tuple[str, int, int]]:
     """Where a lane fails to bend like a path: a turn of more than `DOUBLE_BACK_DEG` ("doubles back"), or two turns of
-    `KINK_DEG` or more whose summed path between them is `BEND_RUN_FT` or less ("kinks") - the whole run between the two
+    more than `KINK_DEG` whose summed path between them is `BEND_RUN_FT` or less ("kinks") - the whole run between the two
     turns, not one segment. The body is `clearance.kink_spans`, which every web pass asks too (ways W18, FR-003).
     Research: bends like a path - research/questions/0081-village-lanes.drawing.html: no hairpin, no zigzag"""
     p = list(pts)

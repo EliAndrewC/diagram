@@ -158,7 +158,9 @@ def tee(x: Poly, y: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[t
     vertex's foot on the leg, when the link is clear at footprint margins and the new last turn is no hairpin.
     `None` when there is nothing to gain (the foot IS the joint) or the link is not walkable.
 
-    Research: a fold at a joint becomes a T - research/questions/0081-village-lanes.drawing.html: met at the other's side"""
+    Research:
+        a fold at a joint becomes a T - research/questions/0081-village-lanes.drawing.html: met at the other's side
+        no hairpin at the re-laid T - research/questions/0081-village-lanes.drawing.html: its new last turn refused past 140 degrees (`_HAIRPIN_DEG`), a hairpin"""
     p, n = x[-2], x[-1]
     f = seg_closest(p[0], p[1], n, y[1])
     if math.dist(f, n) <= _JOINT_FT:
