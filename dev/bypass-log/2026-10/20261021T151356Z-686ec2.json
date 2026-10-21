@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-21T15:13:56Z",
+  "target": "plan-gate push",
+  "commit": "cd50edad5",
+  "why": "round arbiter ruled ACCEPT on ask:408-plan-round3 after round 2; the gate honors only round: rulings, a known tooling gap"
+}
