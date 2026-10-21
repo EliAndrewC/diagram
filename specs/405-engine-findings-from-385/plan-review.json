@@ -536,7 +536,7 @@
    "declared": "spec-fidelity"
   },
   "### T26 Decisions": {
-   "sha256": "1bc1197a760e60e93ba7cc417b6632740306c8e0966b424b0da2936a6c5687b2",
+   "sha256": "b2f2b86ce10130a373e48e7b923fc72a4d4f3fe1323bf512f89b20b76ce0be9e",
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
@@ -549,6 +549,12 @@
   },
   "### T103 Decisions": {
    "sha256": "ba8e32d45089b1049d7d9813f118b7919f7dcda400489d70891b1c9c7b077175",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-21",
+   "declared": "spec-fidelity"
+  },
+  "### T26 Approach (re-answered 2026-10-21T19:13Z)": {
+   "sha256": "b924275b2f2ae06207e3896b246b8f7ff8d014f4d6b4e085d4152fbb809d362c",
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
@@ -2575,6 +2581,52 @@
      "summary": "T103: no code change; tee's stop at a vertex within _TOUCH_GAP (4 ft) of the foot is claimed CONVENTION (a leg shorter than the ink's touch reads as no leg).",
      "class": "within",
      "why": "The block's own goal is that the nub cut be claimed, and claim is one of the checklist's exits under which FR-001 works each task; the GM's request contains nothing requiring this behavior to change."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "### T26 Approach (re-answered 2026-10-21T19:13Z)",
+    "### T26 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D78a",
+     "summary": "the shed stands exactly a ken (plus the wall gap) off a HOUSE wall - against_a_wall now takes walls[:1], not every steading wall",
+     "class": "within",
+     "why": "Brings the claim into line with research page 0043 ('a short step off the house') after the claims round showed a shed a ken off the kura alone had passed. Working a claims task to conform with its research is FR-001's ordinary work under the GM's Amendment 7 ('take this feature to completion... generally [follow the research]'); it narrows nothing the GM asked for."
+    },
+    {
+     "id": "D78b",
+     "summary": "the wall places offered for the shed come off the house's walls only",
+     "class": "within",
+     "why": "The same correction as D78a applied to the candidate seats; follows 0043, narrows nothing in the request."
+    },
+    {
+     "id": "D78c",
+     "summary": "clear of every wall (the kura's too) by the gap and a ken; no part forward of the front wall",
+     "class": "within",
+     "why": "Unchanged from the block's earlier CLEAR text; 0043's 'never the front yard' and a ken's clearance."
+    },
+    {
+     "id": "D78d",
+     "summary": "_wood_shed turns its four recorded seats by int(u*4), as the coop's are",
+     "class": "within",
+     "why": "Unchanged from the earlier CLEAR text; per-household variation with an existing roll, no new scope."
+    },
+    {
+     "id": "D78e",
+     "summary": "the kura's side stays as drawn (north); 0040's west for a scattered farm is left to T104",
+     "class": "within",
+     "why": "Unchanged from the earlier CLEAR text; the work is not dropped but carried by another open task of this same feature, which Amendment 7 directs be worked to completion."
+    },
+    {
+     "id": "T26-approach",
+     "summary": "re-answered approach: house-wall seat, wall places off the house only, refusal tests (3.5 ft off the kura, a ken off the kura alone, half forward, 1.4 ft past the ken), seeds 1-48; exit (e) conform; no constant moved, nothing fitted",
+     "class": "within",
+     "why": "Restates D78 as an order of work and its tests; the test distances are test inputs, not measured claims. Nothing beyond the claim's conformance is added and nothing asked is left out."
     }
    ]
   }
