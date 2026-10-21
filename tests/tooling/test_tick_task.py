@@ -380,3 +380,21 @@ def test_an_owed_red_gate_is_a_cheap_refusal_of_an_engine_landing(tmp_path: path
     monkeypatch.delenv("ARBITER_OK")
     engine["names"] = "scripts/land.py\n"
     assert lb.cheap_refusals(tmp_path, d, ["T02"], "x") == [], "a tooling landing runs no gate: not held"
+
+
+def test_a_stale_make_targets_page_is_regenerated_and_committed_in_the_first_pass(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 405 T46 (D19): T43's landing ran hooks-test, then the push refused on a stale docs/make-targets.html."""
+    lb, d = _land(tmp_path, monkeypatch)
+    seen: list[list[str]] = []
+    stale = {"on": True}
+
+    def run(root: pathlib.Path, cmd: list[str], env: dict | None = None, quiet: bool = True) -> tuple[int, str]:
+        seen.append([str(c) for c in cmd])
+        return (1, "") if stale["on"] and "--check" in cmd and any("make-docs.py" in c for c in cmd) else (0, "")
+
+    monkeypatch.setattr(lb, "run", run)
+    assert lb.cheap_refusals(tmp_path, d, ["T02"], "x") == []
+    check = next(i for i, c in enumerate(seen) if "--check" in c and any("make-docs.py" in x for x in c))
+    assert "--write" in seen[check + 1] and seen[check + 2][:2] == ["git", "commit"] and seen[check + 2][-1] == "docs/make-targets.html"
+    seen.clear(), stale.update(on=False)
+    assert lb.cheap_refusals(tmp_path, d, ["T02"], "x") == [] and not any("--write" in c for c in seen if any("make-docs.py" in x for x in c)), "fresh: untouched"

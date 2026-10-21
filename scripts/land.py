@@ -65,6 +65,11 @@ def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str) -> list[str
     # ...and every other pass traced to this feature - its claims round's above all (feature 405 T39, D13: T14's and T11's landings
     # each refused once on impl-drift passes the session then wrote by hand), acted on in the feature's own records
     run(root, [sys.executable, str(HERE / "reviews" / "ledger_owed.py"), "--write", f"specs/{d.name}/ (the records its checks wrote; make land)", "--ledger", str(root / "dev" / "review-ledger.md")])
+    # ...and the make-targets page, regenerated where the Makefile moved (feature 405 T46, D19): the push's `make-docs` check
+    # refused T43's landing after its hooks-test, for a page `make docs` writes in a second
+    if run(root, [sys.executable, str(HERE / "make-docs.py"), str(root), "--check"])[0]:
+        run(root, [sys.executable, str(HERE / "make-docs.py"), str(root), "--write"])
+        run(root, ["git", "commit", "-q", "-m", "docs/make-targets.html regenerated at landing (make land, 405 T46)", "--", "docs/make-targets.html"])
     if run(root, ["git", "status", "--porcelain", "--", "dev/review-ledger.md"])[1].strip():
         run(root, ["git", "commit", "-q", "-m", "the plan reviews' ledger rows, written at landing (feature 385 T72)", "--", "dev/review-ledger.md"])
     # A FINDING OUTSIDE THE CHANGE IS FILED, NOT REFUSED (feature 405 T36, D10): the carry files every carried claims finding as an

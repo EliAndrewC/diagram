@@ -230,3 +230,23 @@ Owed by the round arbiter's ruling on red-gate@2026-10-21T05:02:38Z (accept), ta
 ### T44 Decisions
 
 **D18 - the gate asks.** `hm_arbiter.py gate-held` exits 1 printing `refusal(blocking(root, gate=True))` while a red-gate trigger of the active feature is owed. The `done` recipe runs it as its first step (an `ARBITER_OK=<reason>` passes and is logged as an escape), so `make land`, `idle-tests` and a typed `make done` all meet it; `land.py`'s cheap refusals ask it when the landing carries engine code, so the refusal comes with the others before anything runs. The trigger's writer (`ci/state.py`) is unchanged.
+
+## T46 - `make land` writes the make-targets page (found landing T43)
+
+### T46 Approach (checklist part A)
+
+1. **The goal, in the world.** A landing that changed the Makefile is not refused at its push for a page a command writes in a second.
+2. **The constraints.** The push's `make-docs` check (385 FR-017); `make land`'s first pass, every cheap refusal before anything runs (405 T33).
+3. **Where each comes from.** O (features 385, 405).
+4. **Do they describe the world here?** Yes - measured 2026-10-21: T43's `make land` ran hooks-test (about 4 min), then the push refused on `docs/make-targets.html`, stale since T43 added two targets.
+5. **The order.** The check and the write in `cheap_refusals`, beside the ledger rows; a test.
+6. **The exits.** (c) - the landing writes what it can write, as it writes the ledger rows; a refusal naming `make docs` was weighed and refused (a guard that can produce the compliant result produces it).
+7. **The search smell.** None.
+8. **The budget.** 10 min.
+9. **Done, measured.** One goal: with the page stale, the first pass regenerates and commits it; fresh, it touches nothing (test); T43's landing then passes the push.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T46 Decisions
+
+**D19 - the landing writes the page.** `land.cheap_refusals` asks `make-docs.py --check`; when the page is stale it runs `make-docs.py --write` and commits `docs/make-targets.html` alone, before the gates and the push are asked.
