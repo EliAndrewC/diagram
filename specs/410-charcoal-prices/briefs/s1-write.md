@@ -23,7 +23,9 @@ question, tagged the same, if it would pass it).
 FOR, NOT ATTESTED, SILENT). A figure for which only a nearest exists (another century, another fuel) is SILENT: name the
 nearest as a nearest under what is still open, never as an answer, and put the search in the absence note.
 
-## The figures (from the passes)
+## Your items
+
+- **0279 "What did charcoal cost?"** (new) - the figures, from the passes:
 
 - By the bale: Ōishi 1966 table (12), Edo 1842, 上中下炭 500/448/364 -> 466/422/342 mon a bale,
   佐倉炭 144/132/120 -> 135/124/112 (read on page images pp. 86-87; key oishi-1966-tenpo13-bukka-kakiage, live host 406 -
