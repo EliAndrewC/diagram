@@ -33,6 +33,6 @@ The question groups are `research: physical` with their five boxes; the rest are
 - [x] T05 Close: report and land
       research: rendering
       verify: DONE. landed in batch T01+T02+T03+T04+T05: sessions 1-3 committed, record-owed 0, impl-check nothing missing, reply posted issuecomment-6319436505
-- [ ] GM review (make gm-reviewed F=408) [lands-open]
+- [x] GM review (make gm-reviewed F=408) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
