@@ -183,7 +183,8 @@ def _homestead_polys(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
         a path leaves its own yard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the owner's dooryard is not a wall to its own path; its beds and fixtures are, the way leaving round them
         its own garden a wall - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the page lets a household's own way run beside its own fence, kept only off the beds; here a garden is an obstacle to its own farm's path as to any other, at the fabric's 7 ft (405 T116, recorded on the page by T114)
         village groves and commons as fabric - DEVIATION research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html, research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: a lane gets through the belt and the commons leave the lanes bare, but the web's lanes keep off both as fabric - the track and the field way cross them (`corridors.field_router`)
-        the farms' bamboo strips as fabric - research/questions/0075-bamboo-groves-chikurin.drawing.html: the lanes keep off the strip; the ground between it and its house is `seat_strips`' own claim"""
+        the farms' bamboo strips as fabric - research/questions/0075-bamboo-groves-chikurin.drawing.html: the lanes keep off the strip; the ground between it and its house is `seat_strips`' own claim
+        a house its own owner - GUESS: each house is entered with itself as owner, so a reader may free it for a route starting beside it (`field_router`'s release); `_hits_a_steading` keeps every house corner off a tread apart - the 3 ft a tread keeps off a farmhouse wall (0081) is not kept there, carried to 405 T119"""
     out: list[tuple[Poly, Pt | None, str]] = []
     for h in s.M.get("houses", []):
         c = (float(h["x"]), float(h["y"]))
@@ -310,7 +311,7 @@ def _pass(name: str) -> None:
     _PASS = name
 
 
-def _hits_a_steading(s: Settlement, pts: Poly, width: int) -> bool:
+def _hits_a_steading(s: Settlement, pts: Poly, width: float) -> bool:
     """Would a lane of this width, drawn along `pts`, put ink on a farmhouse footprint?
 
     The measure `houses_clear_of_lanes` uses: the house's DRAWN rectangle (rotation included) against the

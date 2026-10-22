@@ -423,3 +423,5 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 <!-- plan-archive: T116 to T115 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
 
 <!-- plan-archive: T117 to T115 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+
+<!-- plan-archive: T118 to T116 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
