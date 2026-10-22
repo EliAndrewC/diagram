@@ -48328,45 +48328,53 @@
   "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/fields/comb.py::CombMixin.bund_junctions#each fillet bulges 0.15-0.45 of its chord into the basin (how broad a corner's rounding is)": {
-  "code": "8c20492a58394fd2",
-  "core": "8c20492a58394fd2",
+ "l7r/diagram/settlement/fields/comb.py::CombMixin.bund_junctions#fillet bulge of 0.15-0.45 of the chord: how far the pile swells into the basin": {
+  "code": "af187e3458709bd8",
+  "core": "af187e3458709bd8",
   "date": "2026-10-22",
-  "note": "each fillet bulges 0.15-0.45 of its chord into the basin (how broad a corner's rounding is)",
+  "note": "fillet bulge of 0.15-0.45 of the chord: how far the pile swells into the basin",
   "outside": true,
   "research": "",
   "verdict": "UNCLAIMED"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin.bund_junctions#junction pile size": {
-  "body": "92475755b840d64d",
-  "claim": "junction pile size - how-our-maps-draw-a-bunds-bends-and-corners.drawing: about 5 ft of earth, floored at the drawn aze",
-  "code": "fe7efc17837109d8",
-  "core": "8c20492a58394fd2",
+  "body": "afe25e3ea78f8345",
+  "claim": "junction pile size - how-our-maps-draw-a-bunds-bends-and-corners.drawing: four to six feet across - each fillet leg 2-3 ft from the vertex (0.8-1.2 of 2.5 ft), floored at the drawn aze (405 T126)",
+  "code": "6fcaa46b8ec33608",
+  "core": "af187e3458709bd8",
   "date": "2026-10-22",
-  "note": "`base` is 2.5 ft per fillet leg and each leg rolls `base * rng.uniform(0.5, 2.0)` (1.25-5 ft from the vertex), so opposite fillets make a node about 2.5-10 ft across, against \"four to six feet across ... never inflated past the node itself\". Either the leg roll should keep the node within 4-6 ft, or the claim should state the range the code draws",
+  "note": "legs of 0.8-1.2 x 2.5 ft give 2-3 ft from the vertex, so 4-6 ft across the node; the floor at aze_w*1.1 matches \"never thinner than the map's line\"; the page records the size as a GUESS",
   "pages": {
    "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html": "f3b637668ad295e9"
   },
   "research": "1f4c266f0d09aace",
   "rests": [
    "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html:697f57dbd0267782",
-   "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html:f72006abbfc82e48"
+   "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html:c798dc2f1f2c3075"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/comb.py::CombMixin.bund_junctions#only nodes where 3 or more plot corners meet are piled; T-stubs and field-edge corners are left bare": {
+  "code": "af187e3458709bd8",
+  "core": "af187e3458709bd8",
+  "date": "2026-10-22",
+  "note": "only nodes where 3 or more plot corners meet are piled; T-stubs and field-edge corners are left bare",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin.bund_junctions#pile by quadrant": {
-  "body": "92475755b840d64d",
-  "claim": "pile by quadrant - how-our-maps-draw-a-bunds-bends-and-corners.drawing: a fillet per corner, legs 0.5-2x, a quarter of corners left bare",
-  "code": "e11b07736c209371",
-  "core": "8c20492a58394fd2",
+  "body": "afe25e3ea78f8345",
+  "claim": "pile by quadrant - how-our-maps-draw-a-bunds-bends-and-corners.drawing: a fillet per corner, each leg drawn on its own, a quarter of corners left bare",
+  "code": "c5dc4d890357b67a",
+  "core": "af187e3458709bd8",
   "date": "2026-10-22",
-  "note": "one fillet per corner, each with its own legs, and `rng.random() < 0.25` leaves about a quarter bare",
+  "note": "one fillet per corner, each leg drawn on its own, and rng < 0.25 left bare match \"roughly a quarter are left bare\"",
   "pages": {
    "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html": "f3b637668ad295e9"
   },
   "research": "1f4c266f0d09aace",
   "rests": [
-   "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html:c798dc2f1f2c3075",
    "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html:f72006abbfc82e48"
   ],
   "verdict": "IN-STEP"
