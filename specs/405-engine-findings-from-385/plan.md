@@ -419,3 +419,23 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 <!-- plan-archive: T93 to T93 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
 
 <!-- plan-archive: T115 to T91 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+
+## T116 - a way's own garden walled where the page lets it pass (T93's and T115's rounds)
+
+### T116 Approach (checklist part A)
+
+1. **The goal, in the world.** A way keeps 7 ft off a neighbor's garden fence; where the generator also keeps it off its own household's garden, its claims say that is our stricter choice, not the page's.
+2. **The constraints.** 0246 §45/§122: the 7 ft is kept from another household's garden, and a household's own way may run beside its own fence, kept only off the beds; the lanes' fouls take that permission (`owned_gardens`, 385 T03, a DEVIATION recorded beside it).
+3. **Where each comes from.** The 7 ft: O (the page's convention). The own-garden permission: O (the page's).
+4. **Do they describe the world here?** Two readers wall every garden at 7 ft, the way's own too: `RunOnBlocks.clear` (the run-on to the bund), which is read once per pass with no lane, so cannot tell whose garden is whose; and `_homestead_polys` (the router's and run-on's fabric), which frees only the dooryard. Neither is a passing the page forbids - a way kept farther off its own garden than the page requires - but both claims cite the page as if it asked it.
+5. **The order.** Nothing moves.
+6. **The exits.** (a) the claims say the own garden is walled too, a GUESS with its reason - taken; (b) give both readers the lane's owner - not taken here: the router and the run-on are asked before a lane has its record in several callers, a reach and cohort change for no map defect the page names; (c) record on 0246 - not needed: the page's permission is a permission, not a requirement; (d) more room - n/a; (e) conform - n/a.
+7. **The search smell.** None.
+8. **The budget.** 15 min with its landing.
+9. **Done, measured.** The two claims re-checked IN-STEP; a docstring only.
+10. **Before moving a constant.** No constant moves.
+11. **Before fitting things into room.** n/a.
+
+### T116 Decisions
+
+**D87 - a way's own garden walled, claimed as ours.** `RunOnBlocks.clear`'s "off the steadings" and `_homestead_polys`' "a path leaves its own yard" say they keep 0246's 7 ft off every garden, the way's own included, and that keeping off its own garden is a GUESS stricter than the page, which lets a household's own way run beside its own fence: the run-on's blocks are read without the lane they judge, and the fabric frees only the dooryard (a garden is an obstacle to its own farm's path, feature 328). No code changes.
