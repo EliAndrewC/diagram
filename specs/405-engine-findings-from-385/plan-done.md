@@ -2005,3 +2005,23 @@ Owed by the cohort (cohort@20261021T192759Z: seeds 10, 24, 36 and 47 newly faili
 ### T108 Decisions
 
 **D90 - a lane with no width is the footpath at a joint too.** `joints._one_joint` reads a lane with no `w` as 3 ft (0081's footpath), as `settle_ends`, `touch` and the knots do; its claim "a pulled lane's clearance" says so. The joint moved back a vertex (UNRESEARCHED) is recorded on 0081 as the page's GUESS by T70's page session; T70's text says so.
+<!-- plan-archive: archived 2026-10-22 -->
+## T120 - the claim-label lint (the GM, 2026-10-22)
+
+### T120 Approach (checklist part A)
+
+1. **The goal, in the world.** A claim's label is right the first time: a session writing `GUESS`, `GUESS <page>` or `DEVIATION <page>` is told at `make claims-owed`, before any impl-drift round, when the words of the claim contradict its label - so a claims task takes one round, not four (T115 took four, T116 and T118 a re-decided plan each, on labels alone).
+2. **The constraints.** The GM's approval of the fix (2026-10-22); the claim grammar (`l7r/diagram/tools/claims.py`, `parse_claim`); a flag, never a refusal - a guard that fires on correct work teaches bypass (root CLAUDE.md); tips live in the error output; `scripts/record/claims.py` is at 988 lines, so the rules go in their own module.
+3. **Where each comes from.** The three forms: today's MISLABELED verdicts (T115 round 1, T116 rounds 1-2, T118, T108's round 2, the replies in the session's scratchpad) - R for the process. The word lists: G, read off those verdicts and kept short.
+4. **Do they describe the world here?** Yes: every MISLABELED of 2026-10-22 was one of the three, and each would have been flagged at the edit.
+5. **The order.** Beside `claims_stale` in `claims.py owed`, on the owed claims only (what is about to go to impl-drift), after the form check.
+6. **The exits.** (a) refuse the bundle - not taken: the word match is heuristic and a refusal on a right label teaches bypass; (b) flag on every claim in the engine - not taken: 5,500 claims, mostly checked IN-STEP, would bury the owed ones; (c) teach the agent file - not taken: the agent already rules MISLABELED; the cost is the round, so the fix sits before it.
+7. **The search smell.** None.
+8. **The budget.** 30 min with its landing.
+9. **Done, measured.** One test per flag, each red with its rule deleted; a cited claim, a bare GUESS naming no page, a `GUESS <page>` whose page states its figure and a `DEVIATION` raise nothing.
+10. **Before moving a constant.** No constant moves.
+11. **Before fitting things into room.** n/a.
+
+### T120 Decisions
+
+- **D91** The lint reads each owed claim's backing and account (`Claim.backing`, `Claim.account`) and flags: (1) a GUESS, bare or named, whose account says the code departs from a page (`stricter than`, `looser than`, `short of`, `departs`, `than the page`, `than 0NNN`) - "a departure from a page is `DEVIATION <page>`, recorded on the page"; (2) a bare GUESS whose account names a question number (`0NNN`) - "cite the page if it states this, `GUESS <its .drawing.html>` if it records it as a guess, `DEVIATION <page>` if the code departs"; (3) a `GUESS <page>` whose account states a figure in feet that none of the named pages states - "a page that records a guess states its figure; if it does not, the guess is bare". Printed as `claims-label: <key> - <fix>` lines; the exit code is unchanged. Rendering: n/a (tooling).
