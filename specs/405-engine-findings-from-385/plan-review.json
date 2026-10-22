@@ -483,49 +483,55 @@
   },
   "## T110 T122 - the record, written in page session 6": {
    "sha256": "3b73720bd46e154fae647f8dda98747235117fa5bbe5da8c8de8c18c9d988c46",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   },
   "### T110 Approach (checklist part A)": {
    "sha256": "d8885d869cc5f8265b6fb557897aff73a8f1320d582a375c7d9e7a1f36827abc",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   },
   "### T110 Decisions": {
    "sha256": "129581db0bd5c2a97a891e0d4ebb08c3648360171f1cc26647dbd1ea19dbba6a",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   },
   "### T122 Approach (checklist part A)": {
    "sha256": "08eadb22eeb80f517fa7df1075757a33aac4112e8b9e1e8663cc920dd52d0905",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   },
   "### T122 Decisions": {
-   "sha256": "941e85ae41ec90d0915021553f2889e6b5930578b4ed84ddfa8795de13bb8f58",
-   "verdict": "BLOCKED",
+   "sha256": "d5c7589334cd81134cd1c765f478b84fb1bd973e8abd9fab7ec6ce341c57e690",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   },
   "## T112 - the homesteads against the attested lot sizes": {
    "sha256": "747d44830fd245b8560a3651322ae2bf646ec64644b6dea0318199e811f4f212",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   },
   "### T112 Approach (checklist part A)": {
-   "sha256": "b7ef241abad17ac749f33bcb2e9f21a46d04d95f41382f860d3571efc883b8fd",
-   "verdict": "BLOCKED",
+   "sha256": "7cb367bc9af9a2cec684a8fc183ca1ca6d0a5d4a37b8ddfd949c78e459934c37",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   },
   "### T112 Decisions": {
-   "sha256": "5ee2a0fe882c1f07a1ace63bfdc751463950abed4003d197ae3c0bb45a2e5303",
-   "verdict": "BLOCKED",
+   "sha256": "01763e13e22b45a39c3e564f7a6f866f1c30ca52d3acfd6e128777f511d15b61",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T112 Approach (re-answered 2026-10-22T15:59Z)": {
+   "sha256": "ce38053db115bb15721afd035b6673f61e4c2e6c41ad8a86ef225eb82c0ae180",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   }
@@ -4058,6 +4064,54 @@
      "summary": "T112: SEATING_GROUND_FT (162 ft) keeps its size, labeled a map drawing convention on 0285.",
      "class": "within",
      "why": "Item 4 states the seating ground counts the household's wood floor, which a house lot need not hold, so the attested lot figure does not measure it and no research figure is departed from; labeling it a drawing convention on 0285 is the honest record (exit b). Adjudicated apart from the homestead ground because the argument covers this class and not that one."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## T110 T122 - the record, written in page session 6",
+    "## T112 - the homesteads against the attested lot sizes",
+    "### T110 Approach (checklist part A)",
+    "### T110 Decisions",
+    "### T112 Approach (checklist part A)",
+    "### T112 Approach (re-answered 2026-10-22T15:59Z)",
+    "### T112 Decisions",
+    "### T122 Approach (checklist part A)",
+    "### T122 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D114",
+     "summary": "T110: 0084 records that a way crosses a farm ditch only where it cannot go round (ATTESTED ONLY for a by-way footbridge, King 1909; the track out's last resort its GUESS); 0035's brook crossing and 0084's deck reconciled (deck as wide as the way). No code change.",
+     "class": "within",
+     "why": "FR-001: the moved task worked by the checklist, exit (b) record it on a page that was silent on what the code does; a search pass preceded the GUESS, as Amendment 7 asks (figure it out from the research). Nothing the request asked is dropped. Unchanged since last judged."
+    },
+    {
+     "id": "D115-records",
+     "summary": "T122: 0035 records that a track crosses water only at a crossing place and the fallback's crossing count as a GUESS; 0246 records a track outside the cluster keeping 7 ft off every homestead part, a map drawing convention.",
+     "class": "within",
+     "why": "FR-001 exit (b): pages silent on what the code does now say it, labeled. No code change, nothing asked dropped."
+    },
+    {
+     "id": "D115-deferral",
+     "summary": "T122: the two 0081 sentences (the T-foot of a gathered end; T121's 'defense belt walled') that T122's goal names but page session 6 did not write are carried by T129 for the next page session.",
+     "class": "within",
+     "why": "FR-002 and the GM's 2026-10-19 words keep found work in the feature as a task. The earlier text ('written in the next page session') named no carrier; the block now names T129, which answers that. This classification rests on the block's statement that T129 is a 405 task, which the bundle cannot check. Nothing is dropped: the work stays owed in this feature."
+    },
+    {
+     "id": "D116-homestead",
+     "summary": "T112: the homestead ground stays at 104 ft (about 300 tsubo), above the attested lot (1698 Hyakken register median 157 tsubo, upper quartile about 230), labeled a map drawing convention on 0285 with its cost, because the cohort fails at the attested sizes (75 ft: 49/54; 90 ft: 51/54; 104 ft: 54/54).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A departure from the research against Amendment 7 ('follow the research') and Amendment 8 ('in line with our research'), so presumed wrong. The previous round's gap (the room rule's name, not a measured reason) is closed: the cohort was run at the median and the upper quartile and the fit breaks on seating, brook and knot refusals, so conforming would mean the hard packing work Amendment 8's words tell the session not to reach for ('Don't throw up your hands ... we couldn't possibly just increase space'). Ruled on Amendment 8's words; the 'room before packing (the GM, 2026-10-12)' the block cites is not in request.md. The departure is labeled with its cost on the page, which is T112's stated goal (part A item 1: labeled honestly). Where the ruling leans: the block does not state the attested MAXIMUM lot; if 0285 holds a top below about 300 tsubo, 104 ft is beyond the research ceiling the GM set in Amendment 8, and the GM should see that on 0285. The cohort figures carry a one-shot label (2026-10-22, make cohort N=48, detached worktree, seeds named) but were not re-run here; the bundle rule forbids it."
+    },
+    {
+     "id": "D116-seating",
+     "summary": "T112: the seating ground (162 ft) keeps its size, labeled a map drawing convention on 0285, because it counts the household's wood floor, which a lot need not hold.",
+     "class": "within",
+     "why": "The reason is that the two do not compare, not fit: on that premise the seating ground does not depart from the lot-size record, and labeling it a convention is the record-it exit. The classification rests on that premise, a code fact the bundle cannot check. Adjudicated apart from the homestead ground because D116 covers both under one justification."
     }
    ]
   }
