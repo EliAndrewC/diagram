@@ -1136,7 +1136,13 @@
    "declared": "spec-fidelity"
   },
   "### T119 Decisions": {
-   "sha256": "78635e789cda66abdc8c9442dbe24b7fe6d8800dd31ba6dd13767d0f3e418e27",
+   "sha256": "3f4275a250fca6679502c7dd3cc6d15316310613c642bd39529d1a054e1d4100",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T119 Approach (re-answered 2026-10-22T14:35Z)": {
+   "sha256": "5046832962ad3b21351b8508a180f8cdbc709cc39594045fbc0e8e929b946afc",
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
@@ -4391,6 +4397,34 @@
      "summary": "no constant changes; TREAD_WALL_FT is read in places that did not read it before",
      "class": "within",
      "why": "The plan leaves the research figure alone and only uses it in more places."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "### T119 Approach (re-answered 2026-10-22T14:35Z)",
+    "### T119 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D96 (walls)",
+     "summary": "fabric.house_hit measures a tread to a house's walls (segment crosses a wall, starts inside, or passes within half-width + TREAD_WALL_FT 3 ft of a wall) instead of to its four corners and center",
+     "class": "within",
+     "why": "Widens the test to the rule the page (0081) states - no tread within 3 ft of a house wall, none across a house - and closes the gap the claims round found (a tread across a long house's middle passed). It does not narrow the request (Amendment 7: take the feature to completion following the research); exit (a), '3 ft off each corner', would have restated the claim to fit the code and is rejected."
+    },
+    {
+     "id": "D96 (span width)",
+     "summary": "law.span_walkable passes 2 * TREAD_HALF_FT so its line keeps the 4.5 ft its claim states",
+     "class": "within",
+     "why": "Unchanged from the text judged CLEAR earlier: it makes the code do what its claim states and narrows nothing."
+    },
+    {
+     "id": "D96 (claims and rendering labels)",
+     "summary": "the claims are amended to say walls; houses historically accurate (0081), other buildings labeled GUESS",
+     "class": "within",
+     "why": "Brings the claim text into line with the corrected measure. The GUESS label for non-house buildings is carried unchanged from the earlier CLEAR text and states an evidence level rather than excepting anything from what was asked."
     }
    ]
   }
