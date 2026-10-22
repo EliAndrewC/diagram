@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-22T09:50:57Z",
+  "target": "claims-gate",
+  "commit": "7eb856945",
+  "why": "CLAIMS_OK: the two own-garden claims are DRIFTED only until 0246 records the departure, carried to 405 T114 (as T107's knot exception)"
+}

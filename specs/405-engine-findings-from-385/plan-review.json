@@ -732,6 +732,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
+  },
+  "## T117 - the door release's words (T115's round 4)": {
+   "sha256": "4f7ea31c0a40fe62ae143c64b9bd7709c59ae2ea199884c26541fa18037beada",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T117 Approach (checklist part A)": {
+   "sha256": "d8a6af6b5076a694bbeb9f41a62c14c6888f900e13bf838618e4a1c5dd4911c6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T117 Decisions": {
+   "sha256": "bc06b05ca2f56e0d1e1770431228a26b5342c516b24db0eac505d9d2290fd2dc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3369,6 +3387,29 @@
      "summary": "Budget 15 min with landing; no constant moves; no room fitting.",
      "class": "within",
      "why": "Consistent with the decisions above; nothing the spec leaves open is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## T117 - the door release's words (T115's round 4)",
+    "### T117 Approach (checklist part A)",
+    "### T117 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D88",
+     "summary": "field_router's claim 'its own house at its door' is reworded to say a route starting within 13 ft of ANY wall of a house is not walled by it (mine()'s edge_dist), labeled a bare GUESS, with 0246's no-house-corner-on-the-tread law kept; docstring only, no code change.",
+     "class": "within",
+     "why": "Working a claim through the 385 checklist and bringing its words in step with what the code does is the claims work the GM started (2026-10-20) and told the session to finish (Amendment 7, FR-001). Nothing the GM asked for is dropped or narrowed: no behavior changes, the tread law stays, and the release is still labeled a GUESS rather than presented as research."
+    },
+    {
+     "id": "T117 exit (b) not taken",
+     "summary": "The approach does not change the code to test only the front (door) wall, which would make the code match the old claim's words.",
+     "class": "within",
+     "why": "Picking which way to bring claim and code back into step is a choice inside the checklist's own exits. The GM never asked for releases only at the door, so leaving existing behavior alone and rewording the claim takes nothing out of the request. Whether 'any wall' is the better world model is a design and research question, not a fidelity one."
     }
    ]
   }
