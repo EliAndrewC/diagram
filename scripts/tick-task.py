@@ -212,7 +212,7 @@ def boxes_refusal(text: str, task: str, boxes: bool = False) -> str:
     block = [lines[at]] + [ln for ln in lines[at + 1 :][: next((k for k, ln in enumerate(lines[at + 1 :]) if ln.startswith(("- [", "#"))), len(lines))]]
     physical = any(re.match(r"\s+research:\s*physical\b", ln) for ln in block)
     if physical and any(_is_boxes_line(ln) and "- [ ]" in ln for ln in block[1:]):
-        return f"{task} is a `research: physical` task with a research box unticked - verify each, then tick with BOXES=1 (make tick F=<n> T={task} BOXES=1 NOTE=...)"
+        return f"{task} is a `research: physical` task with a research box unticked - verify each, then tick with BOXES=1 (make tick F=<n> T={task} BOXES=1 NOTE=..., or make land ... BOXES=1)"
     return ""
 
 

@@ -648,3 +648,19 @@ def test_a_physical_task_with_a_box_unticked_is_refused_before_it_is_ticked() ->
     assert tt.boxes_refusal(text, "T02") == "", "a rendering task owes no boxes"
     assert tt.boxes_refusal(text.replace("- [ ] source", "- [x] source"), "T01") == ""
     assert tt.boxes_refusal(text, "T09") == ""
+
+
+def test_land_passes_BOXES_on_to_the_tick(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 410 T01: `make land` refused a physical task with its research boxes open and pointed at BOXES=1, which it did
+    not pass on - only a hand edit of tasks.md got it through."""
+    lb, d = _land(tmp_path, monkeypatch)
+    (d / "tasks.md").write_text(TASKS, encoding="utf-8")
+    monkeypatch.delenv("LAND_BOXES", raising=False)
+    refused = lb.cheap_refusals(tmp_path, d, ["T02"], "x")
+    assert refused and "make land ... BOXES=1" in refused[0], "the refusal names the landing's own escape"
+    assert lb._box_flag(tt, d, "T02") == []
+    monkeypatch.setenv("LAND_BOXES", "1")
+    assert lb.cheap_refusals(tmp_path, d, ["T02"], "x") == []
+    assert lb._box_flag(tt, d, "T02") == ["--boxes"]
+    (d / "tasks.md").write_text(VERIFIED, encoding="utf-8")
+    assert lb._box_flag(tt, d, "T02") == [], "no open box: no --boxes, which would refuse"
