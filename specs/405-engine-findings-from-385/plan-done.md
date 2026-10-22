@@ -2086,3 +2086,65 @@ Owed by the cohort (cohort@20261021T192759Z: seeds 10, 24, 36 and 47 newly faili
 ### T99 Decisions
 
 - **D94** T99 is settled with no change: both its figures no longer hold, as measured in item 9. Rendering: n/a.
+<!-- plan-archive: archived 2026-10-22 -->
+## T09 - the track's fallbacks walled as its first route is
+
+### T09 Approach (checklist part A)
+
+1. **The goal, in the world.** A track out or field spur never crosses row crops or wet ground, however hard it was to route: what the first route walls, every fallback walls too, or the track is dropped (the spur recorded dropped, the connector taking the dry exit).
+2. **The constraints.** 0081: lanes never across row crops or the flooded paddy, and off wet ground - and a way may come up to the bund; 0035: a way crosses water only at a crossing; 0036's room off a grove band (T109, D128); the docstring's own rule: never the offending run.
+3. **Where each comes from.** R: 0081, 0035, 0036. G: the order of the three routes and the end walked along its own leg (claimed as GUESSes).
+4. **Do they describe the world here?** Yes: the spur's field end stands on the bund, inside the crop's gap - which is why the later routes left the crop out of their walls.
+5. **The order.** The first route is unchanged. The swing, the grove fallback's three routes and its far clip each wall the toe band and wet ground, and each is taken only where it crosses no crop plot at 0 ft (a way may touch the bund).
+6. **The exits.** (a) wall the crop in all three routes - not taken: the spur's end inside the crop's gap leaves no route at all; (b) test the crop after the route, at 0 ft - taken; (c) more room - n/a, no fit failure; (d) conform - this is conforming.
+7. **The search smell.** None.
+8. **The budget.** 45 min with a gated landing.
+9. **Done, measured.** A route round a band across a crop plot is refused (a test, red without it); `make cohort` 16/16 with the change (2026-10-22).
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T09 Approach (re-answered 2026-10-22T13:07Z)
+
+1. **The goal, in the world.** Unchanged: no fallback of the track crosses row crops, the flooded paddy or wet ground, or adds a water crossing.
+2. **The constraints.** As before, and the 1,000-line bar (405 T53: split, never trim).
+3. **Where each comes from.** The claims round 1 (impl-drift, 2026-10-22): the fallbacks did not wall the field, and the swing had no water test. R: 0081, 0035.
+4. **Do they describe the world here?** Yes: the spur's field end stands on the bund, so the field is tested with each end drawn in 3 ft.
+5. **The order.** Unchanged, with the field and toe tested on every fallback and the water on the swing.
+6. **The exits.** (a) narrow the claim to crops and wet ground - not taken: 0081 stops a lane at the flooded paddy; (b) test the field with the ends drawn in - taken; (c) a package split - not taken: about 40 test patches on `track` would move for no change in behavior; a sibling module re-exported, the engine's own precedent (`cluster_edge.py`, `reach.py`, `law_water.py`) - taken.
+7. **The search smell.** None.
+8. **The budget.** 30 min more.
+9. **Done, measured.** A route across the field is refused and one ending on its edge taken (a test); `make test-file FILE=tests/hamletgen/ways/` 595 passed; `make cohort` 16/16 (2026-10-22).
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T09 Approach (re-answered 2026-10-22T13:16Z)
+
+1. **The goal, in the world.** Unchanged: no fallback of the track crosses row crops, the flooded paddy, wet ground or reeds, or crosses water anywhere but at a crossing place.
+2. **The constraints.** As before; 0081 (no causeway drawn, so no track crosses the reeds); 0035 (a crossing place every 160 ft or so, on a straight reach).
+3. **Where each comes from.** The claims round 2 (impl-drift, 2026-10-22): the defense belt was left out of the walls, and the third route and the swing crossed water anywhere. R: 0081, 0035.
+4. **Do they describe the world here?** Yes; a scripted hamlet draws no defense belt, so walling it moves no live map.
+5. **The order.** As before, less the third route; the swing refused over water.
+6. **The exits.** (a) DEVIATIONs of 0081 and 0035 recorded on the pages - not taken: the code can keep both; (b) wall the belt, drop the third route, keep the swing off water - taken, measured.
+7. **The search smell.** None.
+8. **The budget.** 20 min more.
+9. **Done, measured.** `make test-file FILE=tests/hamletgen/ways/` 595 passed; `make cohort` 16/16 and seed 11 (the third route's own case) 7/7 (2026-10-22).
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T09 Approach (re-answered 2026-10-22T13:25Z)
+
+1. **The goal, in the world.** Unchanged, and now for the unrouted clip too (T09's own text names it): no piece of the track crosses the paddy, crops, wet ground or water off a crossing place.
+2. **The constraints.** As before.
+3. **Where each comes from.** The claims round 3 (impl-drift, 2026-10-22): the unrouted clip was tested for the steadings alone, and the far clip of a raw run never for water. R: 0081, 0035.
+4. **Do they describe the world here?** Yes; and testing the field's whole frame refused spurs that end on its bund (four unit tests), so the paddy is read as the fields' outlines, the lane law's own reading.
+5. **The order.** As before, with the unrouted clip and the far clip of a raw run held to `_unrouted_clear`.
+6. **The exits.** (a) say the run is trusted to cross at crossing places - not taken: nothing guarantees it; (b) test the pieces no route found - taken, measured.
+7. **The search smell.** None.
+8. **The budget.** 15 min more.
+9. **Done, measured.** `_unrouted_clear` refuses a plot and a brook and takes a piece ending on a plot's edge (a test); `make test-file FILE=tests/hamletgen/ways/` 596 passed; `make cohort` 16/16 (2026-10-22).
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T09 Decisions
+
+- **D95** (amended after the claims rounds 1-3, 2026-10-22) In `_thread_the_fabric` (now `ways/thread.py`): every fallback - the unrouted clip (the run as it came, clipped where the router found nothing), the swing's detour, the grove fallback's two routes and its far clip - is taken only where it crosses no paddy (each field's outline, as `law.span_walkable` reads the flooded paddy - not the field's whole frame, on whose bund a spur ends), no crop plot, no toe band and no wet ground (a defense belt's reeds included: no map draws a causeway, 0081), tested at 0 ft with each end drawn in 3 ft (`_inner`); a piece no route found (the unrouted clip, the far clip of a raw run) and the swing are taken only where they cross no water (`_unrouted_clear`), the two routes - searched with the water lines, crossing at the fords - only where they add no crossing the run did not make (0035); the third route (water left out of its search) is dropped. The first route walls the defense belt too. `track.py` passed the 1,000-line bar with the claims, so the thread half is lifted out to a sibling `ways/thread.py`, which `track` re-exports - as `cluster_edge.py` was lifted out of the same file (feature 316). Rendering: historically accurate (0081, 0035), the route order a GUESS.
