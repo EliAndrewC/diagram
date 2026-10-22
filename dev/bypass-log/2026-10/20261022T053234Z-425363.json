@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-22T05:32:34Z",
+  "target": "record-checked",
+  "commit": "c8b56b354",
+  "why": "record-format on record-format:0279: round 3 capped by the round arbiter (ask:410-0279-round3, no fourth round); the only new visible words are quote-check's own EDITs: a footnote, the diary's title, Ming cut from a heading"
+}
