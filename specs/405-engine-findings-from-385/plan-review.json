@@ -1200,6 +1200,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
+  },
+  "## T124 - the track out never stops in open country": {
+   "sha256": "9c0374147b499f4410caf580973df7964090b48bfc93c8879caab2989257969e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T124 Approach (checklist part A)": {
+   "sha256": "ef6c75ddcf4aa284e1f0f1c161f6131d83dc9916df974bc4ac5a45597d499f42",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T124 Decisions": {
+   "sha256": "b507060b84b257d203ee63dd8af9a125df61f011cbfe0a10a6d312c9f19a7b71",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4552,6 +4570,29 @@
      "summary": "Done when a span across a defense belt is refused by a test red without the fix, make quick clean, make cohort 16/16.",
      "class": "within",
      "why": "Verification that enforces the fix itself; also measures the step-4 premise that no live map moves."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## T124 - the track out never stops in open country",
+    "### T124 Approach (checklist part A)",
+    "### T124 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D112",
+     "summary": "track._connector_through keeps a threaded run only where its end is still the track's far end (within 1 ft, past the frame); a run the unrouted clip stopped short takes the existing dry exit (feature 287, W24/W25); claim cites 0081.",
+     "class": "within",
+     "why": "A finding raised by T09's round 5 on code that task did not change, filed and worked as a task of this feature (FR-002), under Amendment 7/9's instruction to take the feature to completion. The decision enforces the research page's rule (0081: the track out never stops in open country) by routing to an existing fallback rather than recording the short track as an exception; it narrows nothing the GM asked for. The 1 ft tolerance is a geometric test of 'ends at the far end', not a scope change."
+    },
+    {
+     "id": "T124 exit choice (approach item 6)",
+     "summary": "Of the two exits, record the short track against 0081 (not taken) or send it to the dry exit (taken).",
+     "class": "within",
+     "why": "The taken exit follows the research page; the rejected exit would have been the carve-out. Choosing the page over the exception is inside the request (Amendment 7: follow the research)."
     }
    ]
   }
