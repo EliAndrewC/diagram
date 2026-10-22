@@ -430,7 +430,30 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 <!-- plan-archive: T119 to T119 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
 
 <!-- plan-archive: T128 to T128 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
-<!-- plan-archive: T122 to T122 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+## T123 - a wrapped one-line claim read whole; 0035 says a way crosses only at a crossing place
+
+### T123 Approach (checklist part A)
+
+1. **The goal, in the world.** Every claim is read as written, so a check judges the whole of it; and 0035 states the rule several claims cite.
+2. **The constraints.** The claim grammar (`l7r/diagram/tools/claims.py`); 0035's plank bridges and crossing places.
+3. **Where each comes from.** Measured: T09's `_unrouted_clear` claim read as account "a" (impl-drift, T09's round 4); the parser fix re-read two more truncated claims (`thread._inner`, `knots.teed_onto`). R: 0035.
+4. **Do they describe the world here?** Yes: `ast.get_docstring` cleans a docstring, so a wrapped header claim's continuation stands at column 0, where the section ended.
+5. **The order.** `_section_span` carries a header claim over lines with no ` - `; `section_lines` joins such a line to the claim above. The 0035 sentence is written in page session 6.
+6. **The exits.** (a) refuse the form at `claims-owed` - not taken: the reading is unambiguous, so it is read; (b) read it whole - taken.
+7. **The search smell.** None.
+8. **The budget.** 20 min with the page item.
+9. **Done, measured.** A test: a wrapped header claim parses whole (red without the fix); `make claims-coverage` clean; the two re-read claims checked.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T123 Decisions
+
+- **D110** A line under a header-line claim that cannot be a claim (no ` - `) continues it, at any indentation; 0035's drawing page states that a way crosses water only at a crossing place (page session 6). Rendering: as labeled on the page.
+
+<!-- plan-archive: T121 to T121 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+
+<!-- plan-archive: T11 to T124 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+
 ## T127 - the carried claims findings
 
 ### T127 Approach (checklist part A)
@@ -472,5 +495,54 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 
 - **D114** 0084 says a way crosses a farm ditch only where it cannot go round (ATTESTED ONLY for a by-way's footbridge, King 1909), the track out's last resort its GUESS; 0035's brook crossing and 0084's deck are reconciled (a way's deck as wide as the way). Rendering: as labeled on the pages.
 
-<!-- plan-archive: T122 to T122 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
-<!-- plan-archive: T123 to T123 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+### T122 Approach (checklist part A)
+
+1. **The goal, in the world.** 0035 says what a track running past the settlement does where no crossing place lies on its line, and that a way crosses water only at a crossing place; 0246 says a track outside the cluster keeps the 7 ft off every homestead part; 0081 names the T-foot a gathered end may take.
+2. **The constraints.** The research record's rules.
+3. **Where each comes from.** T09's rounds 3-5, T121's and T123's (impl-drift outside the change); R: 0035, 0246, 0081.
+4. **Do they describe the world here?** Yes: each item was a page silent on what the code does.
+5. **The order.** Page session 6 wrote 0035 and 0246; the 0081 T-foot sentence and the "defense belt walled" sentence (T121's note) were not in its brief and go to the next page session.
+6. **The exits.** (a) change the code - not taken; (b) record it - taken.
+7. **The search smell.** None.
+8. **The budget.** Its share of two page sessions.
+9. **Done, measured.** 0035's new bullet (no crossing place on a track's line; a fallback's crossing count the page's GUESS) and 0246's 7 ft bullet; session 7's checks applied and answered.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T122 Decisions
+
+- **D115** 0035 records where a track crosses no water off a crossing place (map drawing conventions) and the fallback's crossing count as its GUESS; 0246 records a track outside the cluster keeping 7 ft off every homestead part (a map drawing convention). The two 0081 sentences T122 gathered later are carried by T129, for the next page session. Rendering: as labeled.
+
+## T112 - the homesteads against the attested lot sizes
+
+### T112 Approach (checklist part A)
+
+1. **The goal, in the world.** The record holds how big a clustered village's house lot was, and the maps' homestead ground is labeled honestly against it.
+2. **The constraints.** The spacing pass of 2026-10-22 (`spacing-research.md`); room before packing (the GM, 2026-10-12); T107's measurements (wider spacing failed more seeds; smaller grounds pack).
+3. **Where each comes from.** R: 0285 (the 1698 Hyakken register, median 157 tsubo; Buck; Ushijima); G: the 104 ft and 162 ft grounds, a map drawing convention.
+4. **Do they describe the world here?** Yes: the seating ground counts the household's wood floor, which a lot need not hold, so the two do not compare directly.
+5. **The order.** Page session 6 wrote 0285 with its drawing side; session 7 checked it; the engine's two claims cite it.
+6. **The exits.** (a) bring the homesteads toward the 157 tsubo median - measured in a detached worktree (2026-10-22, `make cohort N=48`, seeds 1-48 and the pinned rows): at 75 ft (the median, about 157 tsubo) 49/54 pass - seed 9's brook finds no lawful course, seeds 25 and 39 knot, seed 40 stands a farmstead part across the brook, seed 43 seats 11 of 14 households; at 90 ft (about 230 tsubo, the attested upper quartile) 51/54 - seeds 4 and 43 seat 14 of 16 and 12 of 14, seed 31 records a byre on a lane; at 104 ft 54/54 on every landing today. Conforming breaks the fit, so the room rule applies: not taken; (b) keep them, labeled a convention with their cost on 0285 - taken.
+7. **The search smell.** None.
+8. **The budget.** Its share of two page sessions.
+9. **Done, measured.** 0285 written and checked (session 7); the cohort at 75, 90 and 104 ft (item 6); the claims of `HOMESTEAD_GROUND_FT` and `SEATING_GROUND_FT` cite 0285 as a convention.
+10. **Before moving a constant.** No constant moves: weighed and kept (exit b).
+11. **Before fitting things into room.** This is that question: room kept, nothing packed.
+
+### T112 Approach (re-answered 2026-10-22T15:59Z)
+
+1. **The goal, in the world.** Unchanged.
+2. **The constraints.** As before.
+3. **Where each comes from.** The plan review of 2026-10-22: the homestead ground's departure needed a measured reason, not the room rule's name.
+4. **Do they describe the world here?** Yes, as measured (item 6 of part A).
+5. **The order.** As before.
+6. **The exits.** As part A's item 6, now measured.
+7. **The search smell.** None.
+8. **The budget.** As before.
+9. **Done, measured.** The cohort at 75, 90 and 104 ft (part A's item 6).
+10. **Before moving a constant.** Measured; it stays.
+11. **Before fitting things into room.** Room kept: the attested sizes do not fit.
+
+### T112 Decisions
+
+- **D116** (amended after the plan review, 2026-10-22) The homestead and seating grounds keep their sizes, labeled a map drawing convention on 0285 with their cost (above the typical attested lot). The seating ground counts the household's wood floor, which a lot need not hold; the homestead ground was measured at the attested sizes and the fit breaks there (75 ft: 49/54; 90 ft: 51/54; 104 ft: 54/54 - seating, brook and knot refusals), so the room-before-packing rule keeps it until the fit no longer needs it. Rendering: a map drawing convention.
