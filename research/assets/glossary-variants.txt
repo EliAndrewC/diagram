@@ -1879,10 +1879,6 @@ ishikawa method	Ishikawa method
 ishikawa-method	Ishikawa method
 island field	island field
 island fields	island field
-isohyet	isohyet
-isohyets	isohyet
-isotherm	isohyet
-isotherms	isohyet
 ita-bune	ita-bune
 itabashi	itabashi
 itami	Itami
