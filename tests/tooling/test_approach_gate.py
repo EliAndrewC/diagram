@@ -194,6 +194,33 @@ def test_a_cohort_with_a_newly_failing_seed_owes_part_b(tmp_path: pathlib.Path) 
     assert ag.cohort(root) is None, "a seed failing at the baseline too, rolled as diagnosis, fires nothing"
 
 
+def test_a_fit_failure_owes_part_b_with_the_room_table_and_another_failure_without_it(tmp_path: pathlib.Path) -> None:
+    """405 T113 (the GM's third process fix, 2026-10-21; the round arbiter's tooling_fix on ask:set-down-T26): two room probes
+    widened grow_gap in a seating band that did not grow, measured packing and were read as "room fails". A newly failing seed
+    whose failure is a FIT failure (a knot, a refusal) prints the room table - each knob's ceiling and whether the band grows
+    with it - beside the part B it owes; a seed failing a row or water rule does not."""
+    root, _d = feature(tmp_path, git=True)
+    _git(root, "add", "-A")
+    _git(root, "commit", "-qm", "base")
+    _git(root, "branch", "-M", "main")
+    head = _git(root, "rev-parse", "HEAD").strip()
+    logs = root / "dev" / "cohort-log"
+    logs.mkdir(parents=True)
+    (logs / "20261017T1000Z-a.json").write_text(json.dumps(_rec("20261017T1000Z", head, {7: "pass", 8: "pass"})))
+    now = _rec("20261017T2000Z", "feedface", {7: "fail", 8: "pass"})
+    now["seeds"][0]["failures"] = ["row_rules"]
+    (logs / "20261017T2000Z-a.json").write_text(json.dumps(now))
+    msg = str(ag.cohort(root, now="2026-10-17T20:01:00Z"))
+    assert "part B" in msg and "room table" not in msg, "a row rule is no fit failure"
+    now = _rec("20261017T2100Z", "feedface", {7: "pass", 8: "refused"})
+    now["seeds"][1]["failures"] = ["refused:WebRefused"]
+    (logs / "20261017T2100Z-a.json").write_text(json.dumps(now))
+    msg = str(ag.cohort(root, now="2026-10-17T21:01:00Z"))
+    assert "seed(s) 8 newly failing" in msg and "## The room table" in msg
+    assert "`grow_gap`" in msg and "DOES NOT GROW - widen SEATING_GROUND_FT with it, or the probe measures packing" in msg
+    assert "| `HOMESTEAD_GROUND_FT`" in msg and "300-480 rare" in msg, "each knob with its research ceiling"
+
+
 def test_a_decisions_block_re_reviewed_after_a_clear_owes_the_approach_again(tmp_path: pathlib.Path) -> None:
     root, d = feature(tmp_path, git=True)
     _git(root, "add", "-A")

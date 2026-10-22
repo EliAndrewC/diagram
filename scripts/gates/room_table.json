@@ -1,0 +1,24 @@
+{
+ "why": "405 T113 (the GM's third process fix of 2026-10-21; the round arbiter's tooling_fix on ask:set-down-T26): a room probe that widens a gap while the band the seats are dealt over stays the same measures packing, not room. Ceilings from specs/405-engine-findings-from-385/spacing-research.md.",
+ "rows": [
+  {"knob": "HOMESTEAD_GROUND_FT", "where": "l7r/diagram/hamletgen/consts.py", "value": "104 ft square (about 305 tsubo)",
+   "label": "UNRESEARCHED (cohort-measured)", "measures": "the ground one homestead takes - house, yard and row; the cluster band's area (households x its square) and the canvas's room",
+   "ceiling": "attested house lot 90-180 tsubo typical, 300-480 rare (1698 Hyakken register, max 480 tsubo = about 130 ft square); already above the typical lot",
+   "band": "GROWS - it is the band's and the canvas's size"},
+  {"knob": "SEATING_GROUND_FT", "where": "l7r/diagram/hamletgen/consts.py", "value": "162 ft square (about 735 tsubo with the wood floor)",
+   "label": "GUESS", "measures": "the band the seating spreads its offers over - the mean envelope plus the least wood floor",
+   "ceiling": "unresearched as a whole (a house lot holds no wood floor); above every lot found - research question owed",
+   "band": "GROWS - the seating band (lattice and seat bound) only; the canvas and the margin keep HOMESTEAD_GROUND_FT's"},
+  {"knob": "grow_gap", "where": "l7r/diagram/hamletgen/homesteads/growth.py", "value": "MIN_WEB_GAP + TIGHT_GAP_PX (18 + 2 ft)",
+   "label": "0246 (the lane's room) + GUESS (the 2 ft parting)", "measures": "the room left between two neighbors' footprints in the grown cluster",
+   "ceiling": "unresearched - no source measures the distance between neighbors in a clustered village (spacing-research.md: SILENT) - research question owed",
+   "band": "DOES NOT GROW - widen SEATING_GROUND_FT with it, or the probe measures packing"},
+  {"knob": "MIN_WEB_GAP", "where": "l7r/diagram/hamletgen/consts.py", "value": "18 ft (2 x WEB_FABRIC_GAP + 4 ft tread)",
+   "label": "derived from 0246's fence gap and 0081's tread", "measures": "the least gap a lane threads between two steadings",
+   "ceiling": "follows WEB_FABRIC_GAP", "band": "DOES NOT GROW - widen SEATING_GROUND_FT with it, or the probe measures packing"},
+  {"knob": "WEB_FABRIC_GAP", "where": "l7r/diagram/hamletgen/consts.py", "value": "7 ft (a lane's line to another household's garden fence)",
+   "label": "map drawing convention (0246: not a measured figure)", "measures": "how near a lane runs to a garden fence; a knot's gather may take 3 ft (WEB_CROP_GAP, D83)",
+   "ceiling": "a convention, not a measurement: refine it where it collides with an R rule (A6(a)) rather than buying room for it",
+   "band": "DOES NOT GROW"}
+ ]
+}

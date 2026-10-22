@@ -32,6 +32,9 @@ import subprocess
 import sys
 import time
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import room_table  # noqa: E402
+
 #: EVERY FEATURE'S CHECKLIST (feature 385 T11, D157): FR-001's refusals extended to every feature's tasks. A plan opted in by a
 #: `**Approach checklist**: <path>` line until 385 closed; the line is retired, so no plan can forget it or name a thinner file
 DEFAULT = "docs/approach-checklist.md"
@@ -260,7 +263,12 @@ def cohort(root: pathlib.Path, now: str | None = None) -> str | None:
     if not seeds or d is None or not task or not _opted_in(root, d):
         return None
     trigger = f"cohort@{records[-1].get('utc')}: seed(s) {', '.join(map(str, seeds))} newly failing"
-    return "\n".join(owe(root, d.name, t, trigger, "B", now) for t in in_flight(root, d, task))
+    owed = "\n".join(owe(root, d.name, t, trigger, "B", now) for t in in_flight(root, d, task))
+    # ...a FIT failure prints the room table beside the part it owes, so B6's "more room" is weighed knob by knob (405 T113)
+    fails = {r.get("seed"): r.get("failures") or [] for r in records[-1].get("seeds") or []}
+    if any(room_table.is_fit(fails.get(n, [])) for n in seeds):
+        owed += "\n" + room_table.render()
+    return owed
 
 
 def main(argv: list[str]) -> int:
