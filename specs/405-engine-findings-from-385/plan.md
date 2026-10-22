@@ -432,3 +432,23 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 
 <!-- plan-archive: T102 to T102 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
 <!-- plan-archive: T109 to T109 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+
+## T99 - both figures settled by later work
+
+### T99 Approach (checklist part A)
+
+1. **The goal, in the world.** A run-on leg keeps 0246's 7 ft off a garden fence, and no drawing page states a field reach the code no longer uses.
+2. **The constraints.** 0246's 7 ft gap; 0014's 6 ft join (T22).
+3. **Where each comes from.** R: 0246, 0014.
+4. **Do they describe the world here?** Yes.
+5. **The order.** Measured before any edit.
+6. **The exits.** (a) change the code or the pages - not needed: measured, neither half holds; (b) settle the task with the measurement - taken.
+7. **The search smell.** None.
+8. **The budget.** 10 min.
+9. **Done, measured.** (1) `RunOnBlocks.clear` (bund.py) tests the stretch against the fabric at `FOOTPATH_FABRIC_GAP` (7 ft) since T118, `width` reaching only the house test - so a run-on leg keeps the page's 7 ft off a garden fence, whatever its tread. (2) None of 0006, 0009, 0029, 0057, 0081 or 0246's drawing pages states the field reach's 60 ft: the only "60 ft" left are 0006's plot size and 0246's serving test (§6), neither the field reach; `FIELD_REACH_FT` is 6 ft (law.py).
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T99 Decisions
+
+- **D94** T99 is settled with no change: both its figures no longer hold, as measured in item 9. Rendering: n/a.
