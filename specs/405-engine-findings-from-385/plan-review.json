@@ -537,19 +537,19 @@
   },
   "## T130 - consts.py split at the bar": {
    "sha256": "705bfe5b056ce0951870ccaba1e2f3e4e31ae0d3c6a28d8d77d80351bac7a159",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   },
   "### T130 Approach (checklist part A)": {
-   "sha256": "fcd218b97744d2ec7bbfb1275c77ebb823565c69c29a5e1cb6a6ce182141e426",
-   "verdict": "BLOCKED",
+   "sha256": "02af230d8b5b82282824c0392739d9a7b8ff2bbb47b5f7489b3cd22285b7bf31",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   },
   "### T130 Decisions": {
-   "sha256": "dd0475962f0c4943c2891722314cf91bc34a7055e895e5eca7cfe762bdefb1bd",
-   "verdict": "BLOCKED",
+   "sha256": "183e9a9c0e704e5a8eb26d0db0adf75ba028b125237946f6d38b6b9a9828403d",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   }
@@ -4166,6 +4166,35 @@
      "class": "narrowing",
      "ruling": "NOT LEGITIMATE",
      "why": "Amendment 7: split 'into multiple submodules where no submodule should ideally be longer than about 2/3 the size of the limit. So, you know, around 650 lines or so. Now that second thing doesn't need to be a hard limit because it's still well under our 1,000 line limit, but the idea is that if we do a refactor that brings us to just barely under 1,000 lines, then what we're really doing is setting ourselves up for having to constantly go back and do iterative tweaks'. 846 is 85% of the bar and about 200 lines over the ~650 target; the GM's softness is licensed 'because it's still well under' 1,000, and the plan neither names the target nor argues that 846 is well under or that the headroom purpose is served, when the file reached 1,003 by exactly the claims-row growth that will continue. Not physically impossible (more names, or a second sibling, can move; cost is not a fidelity argument), not implied by the GM's words, and applying the target does not defeat the request's purpose. Amendment 9's 'raise our soft cap to 80%' cannot be confirmed from the bundle to refer to this cap, but 846 also exceeds 80% (800 lines), so the ruling is the same under either reading. To clear: split so each piece is near ~650 (or at most within whatever soft cap the GM's 80% sets), or state in the plan a reason grounded in the GM's words."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## T130 - consts.py split at the bar",
+    "### T130 Approach (checklist part A)",
+    "### T130 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D117",
+     "summary": "Split consts.py at the bar: the field block (20 names) verbatim to consts_fields.py and the ways block (19 names) verbatim to consts_ways.py, each re-exported by name from consts.py as consts_water.py is; nothing else changes.",
+     "class": "within",
+     "why": "Amendment 7: on exceeding 1,000 lines, split into submodules of about 650 lines, never trim to just under the bar, with importers unchanged. Measured result 603 / 270 / 187 lines, all under ~650, and every moved name still resolves through consts. Sibling modules re-exported by name rather than a consts/ package: the GM's landing/__init__.py was offered as an example ('You know, like if...') of the purpose, imports that do not change, which the re-export meets; it is not a narrowing of the rule. The earlier BLOCKED version left consts.py at 846, near the bar, which is what the second block now fixes."
+    },
+    {
+     "id": "T130-exits",
+     "summary": "Exit (a) trim to under the bar not taken; (b) a package not taken in favour of the consts_water.py sibling shape; (c) sibling re-exported taken.",
+     "class": "within",
+     "why": "Not trimming is the GM's rule (amendment 7). Package vs sibling is the shape choice covered under D117; both keep importers unchanged and both are submodule splits."
+    },
+    {
+     "id": "T130-no-values",
+     "summary": "No constant's value moves; bodies verbatim; claims rows carried by make claims-rekey; package index names both new modules.",
+     "class": "within",
+     "why": "A pure structural split is what amendment 7 asks; carrying the claims rows and index entries is bookkeeping that keeps the split from changing anything else."
     }
    ]
   }
