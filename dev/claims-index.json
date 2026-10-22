@@ -24751,29 +24751,31 @@
  },
  "l7r/diagram/hamletgen/ways/joints.py::tread_gap#a pulled line's tread off a building": {
   "body": "14cdbbaea9854c04",
-  "claim": "a pulled line's tread off a building - village-lanes.drawing: the wider lane's tread 3 ft off a farmhouse wall (half its width + `TREAD_WALL_FT`), never under `_TOUCH_GAP` (4 ft) to the line's middle; kept off every building a pull touches, the page sizing the farmhouse's alone",
-  "code": "f344171666f93228",
+  "claim": "a pulled line's tread off a building - village-lanes.drawing: the wider lane's tread 3 ft off a farmhouse wall (half its width + `TREAD_WALL_FT`), never under `_TOUCH_GAP` (4 ft) to the line's middle",
+  "code": "4ceb21e711af5903",
   "core": "857515d2a9cb8eea",
   "date": "2026-10-22",
-  "note": "The code keeps the wider lane's tread 3 ft off the wall (half its width + 3 ft). A lane with no recorded width counts as the 3 ft footpath. The 4 ft floor never binds at the drawn widths of 3, 5 and 6 ft.",
+  "note": "the code keeps the line's middle half the wider lane's width plus 3 ft off the wall, which gives the 3 ft tread clearance §19 asks for, using the drawn widths of 3, 5 and 6 ft from §1. The 4 ft floor only matters for a lane under 2 ft wide, and no lane is drawn that narrow.",
   "pages": {
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
   },
   "research": "324b10775c9108ef",
   "rests": [
-   "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
    "0081-village-lanes.drawing.html:417841cd16f112d9",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/joints.py::tread_gap#the farmhouse's 3 ft tread clearance is applied to every building a pull touches (shrine, storehouse and so on). The page sizes the clearance for a farmhouse only, and §18 gives no figure for other buildings (\"its usual clearance from fences and buildings\"), so this needs its own GUESS or UNRESEARCHED claim line rather than riding on the 0081 citation.": {
-  "code": "857515d2a9cb8eea",
+ "l7r/diagram/hamletgen/ways/joints.py::tread_gap#the same tread gap off the other buildings": {
+  "body": "14cdbbaea9854c04",
+  "claim": "the same tread gap off the other buildings - GUESS: the farmhouse's 3 ft kept off every other building a pull touches (sheds, byres, retirement houses), which no page sizes",
+  "code": "d30f8da28c3255b7",
   "core": "857515d2a9cb8eea",
   "date": "2026-10-22",
-  "note": "the farmhouse's 3 ft tread clearance is applied to every building a pull touches (shrine, storehouse and so on). The page sizes the clearance for a farmhouse only, and §18 gives no figure for other buildings (\"its usual clearance from fences and buildings\"), so this needs its own GUESS or UNRESEARCHED claim line rather than riding on the 0081 citation.",
+  "note": "§19 sizes the clearance only for a farmhouse wall, and §18 says only \"usual clearance from fences and buildings\" without a figure, so nothing sizes the gap off sheds, byres or retirement houses. GUESS is the right label.",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::unhooked#a lane's end loses its hook": {
   "code": "8925237f83bb2265",
