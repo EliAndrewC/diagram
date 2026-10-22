@@ -639,8 +639,8 @@ Research:
         (75 ft: 49/54, 90 ft: 51/54 of the cohort, 405 T112)
 """
 
-# THE GROUND THE SEATING SPREADS ITS HOUSEHOLDS OVER, as the side of a square (feature 306, FR-010; a GUESS with its reasoning -
-# the record gives no figure for it): `HOMESTEAD_GROUND_FT` counts the house, its yard and the row, and NOT the household's
+# THE GROUND THE SEATING SPREADS ITS HOUSEHOLDS OVER, as the side of a square (feature 306, FR-010; a map drawing
+# convention, recorded on 0285's drawing page by 405 T112 - no lot holds the wood floor it counts): `HOMESTEAD_GROUND_FT` counts the house, its yard and the row, and NOT the household's
 # wood floor, which 269 B26 added after it (`HOMESTEAD_WOOD_FT2`, 6,000 sq ft at least, within the copse's reach of the house).
 # Seated over a band of that size a village sat at the edge of its capacity and whether a margin filled was near chance - seed
 # 47 at 40 households seated sixteen margins before one held everyone (specs/306-seat-by-packing/research.md R2, R6). The band's

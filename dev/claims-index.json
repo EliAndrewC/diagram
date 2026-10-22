@@ -6650,14 +6650,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::HOMESTEAD_GROUND_FT#ground per homestead": {
-  "body": "997f6765ea20c9b9",
-  "claim": "ground per homestead - UNRESEARCHED: 104 ft square, the 100 ft along-row span plus 3.8 ft of yard, cohort-measured",
-  "code": "89e259c52c9edc44",
+  "body": "1a4afe79e79ad963",
+  "claim": "ground per homestead - how-big-was-a-farmhouses-lot-in-a-clustered-village.drawing: 104 ft square (about 305 tsubo), a map drawing convention sized by what the seating needs, above the typical attested lot (157 tsubo, the 1698 register's median); the attested sizes do not fit (75 ft: 49/54, 90 ft: 51/54 of the cohort, 405 T112)",
+  "code": "3dc856b786bfd02c",
   "core": "eb28050c0cba0a13",
-  "date": "2026-10-18",
-  "note": "the square's side is measured on the cohort, which no research answers. Its 3.8 ft of yard uses the 25 tsubo median, which matches 0037.",
-  "pages": {},
-  "research": "",
+  "date": "2026-10-22",
+  "note": "104 ft square, 305 tsubo, a convention above the typical lot, as recorded",
+  "pages": {
+   "0285-how-big-was-a-farmhouses-lot-in-a-clustered-village.drawing.html": "3b1690ae23a895f7"
+  },
+  "research": "9f29d8163350d018",
+  "rests": [
+   "0285-how-big-was-a-farmhouses-lot-in-a-clustered-village.drawing.html:4be8279feed1f163",
+   "0285-how-big-was-a-farmhouses-lot-in-a-clustered-village.drawing.html:b60d67a3b614a0c3"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::HOMESTEAD_GROUND_FT#the yard within it": {
@@ -7113,11 +7119,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::SEATING_GROUND_FT#seating ground per homestead": {
-  "code": "00e67877774bc78b",
+  "body": "d3cbc591731e3091",
+  "claim": "seating ground per homestead - how-big-was-a-farmhouses-lot-in-a-clustered-village.drawing: 162 ft square, the mean envelope plus the least wood floor - a map drawing convention, holding the wood floor a lot need not (405 T112)",
+  "code": "b520d9479fd742a8",
   "core": "d75aeaea64f696a0",
-  "date": "2026-10-03",
-  "note": "GUESS; 0032 confirms no plot size is recorded",
-  "research": "",
+  "date": "2026-10-22",
+  "note": "162 ft a side holding the wood (at least 6,000 sq ft), which the drawing page records as a map drawing convention larger than any register lot",
+  "pages": {
+   "0285-how-big-was-a-farmhouses-lot-in-a-clustered-village.drawing.html": "3b1690ae23a895f7"
+  },
+  "research": "9f29d8163350d018",
+  "rests": [
+   "0285-how-big-was-a-farmhouses-lot-in-a-clustered-village.drawing.html:4281fb830188ec73",
+   "0285-how-big-was-a-farmhouses-lot-in-a-clustered-village.drawing.html:4be8279feed1f163"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::SETTLEMENT_FORMS#settlement form": {
@@ -8115,15 +8130,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/frame.py::stage_crossings#every crossing decked": {
+  "body": "8bb42fc5f8ff10d8",
+  "claim": "every crossing decked - plank-bridges-over-farm-ditches-itabashi.drawing: a way over water gets a deck, square",
   "code": "e4b1ec35b61b33cc",
   "core": "c4b7d4c65e249d63",
-  "date": "2026-10-03",
-  "note": "0084: a way over water takes one planked deck, square",
+  "date": "2026-10-22",
+  "note": "bridges() decks every way over water, one planked deck",
   "pages": {
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
-  "research": "43cf74757fcb48f3",
-  "triage": "touched",
+  "research": "1dd5fd71121f4a06",
+  "rests": [
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/frame.py::stage_crossings#polder crossing caps": {
@@ -12974,19 +12993,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/household_ways.py::seated_parts#nothing built on a lane": {
+  "body": "41d3183a15f7a850",
+  "claim": "nothing built on a lane - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the track out keeps off every homestead's house, yard, beds, well, sheds and fixtures as they will be drawn",
   "code": "e5b5b12287bb8e0e",
   "core": "e2eafd2fee3c4ec0",
-  "date": "2026-10-05",
-  "note": "the track keeps off every seated part",
+  "date": "2026-10-22",
+  "note": "house, yard, beds, well, sheds and fixtures all held off the way",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "73544dbd2b202b85"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
-  "research": "c063a73e4f62bfa9",
+  "research": "4473caa26c642d2b",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b2fae7ceda96f718",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/household_ways.py::seated_parts#the track off the wood seats": {
@@ -21559,28 +21580,40 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/checks.py::stream_segs#ditches cross freely": {
+  "body": "760b42c33347ba4c",
+  "claim": "ditches cross freely - plank-bridges-over-farm-ditches-itabashi.drawing: a ditch is planked, not held to the deck rule",
   "code": "f26560fafbe4fdfa",
   "core": "594a6e4519295d3d",
-  "date": "2026-10-03",
-  "note": "0084 planks over ditches",
+  "date": "2026-10-22",
+  "note": "the claim says \"a ditch is planked, not held to the deck rule\", but 0084 says a way over a ditch takes \"one timber deck as wide as the way\", and the 4 ft board \"belongs to a path along a bund alone\". The code (ditches not vetoed) matches §29, \"the lanes among the houses cross a ditch where their line takes them\". Reword the claim to cite §29 and the deck of §28",
+  "outside": true,
   "pages": {
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
-  "research": "43cf74757fcb48f3",
-  "triage": "touched",
-  "verdict": "IN-STEP"
+  "research": "1dd5fd71121f4a06",
+  "rests": [
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200",
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:e3d3d47298cee739"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/checks.py::stream_segs#the brook crossed only at a ford": {
+  "body": "760b42c33347ba4c",
+  "claim": "the brook crossed only at a ford - villages-beside-their-stream-one-bank-or-both.drawing: the stream's segments gapped at each crossing place, 30 ft either side",
   "code": "5df26200fd47c1a6",
   "core": "594a6e4519295d3d",
-  "date": "2026-10-03",
-  "note": "0035 crossing places",
+  "date": "2026-10-22",
+  "note": "\"only at a crossing place\" is §111, but no block gives a crossing place's width. Split the 30 ft either side (`FORD_HALF`) out as UNRESEARCHED",
+  "outside": true,
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
   },
-  "research": "d47738a05844fe19",
-  "triage": "touched",
-  "verdict": "IN-STEP"
+  "research": "9354777ef34af3d3",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
+  ],
+  "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/ways/checks.py::unreached_houses#dispersed hamlet exempt": {
   "code": "c111149a2f7057ac",
@@ -22130,16 +22163,23 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/cluster_edge.py::_cluster_edge_toward#origin on the houses' bank": {
+  "body": "8c1e4d725b52a167",
+  "claim": "origin on the houses' bank - villages-beside-their-stream-one-bank-or-both.drawing: stopped 14 px plus half the brook short of it (the router's figure, not the page's), the brook crossed squarely on a plank bridge at a crossing place",
   "code": "258e3bc578194d86",
   "core": "10d0e09755cff95b",
-  "date": "2026-10-09",
-  "note": "the origin stops on the houses' own bank and the spur crosses at a crossing place; the 14 px is labeled as the router's figure, not the page's",
+  "date": "2026-10-22",
+  "note": "`float(f.get(\"w\", 8.0))` assumes an 8 ft brook where §105 gives \"A brook 7 ft wide\" (`channel_footbridges` uses px(7.0)). The account's \"plank bridge\" also confuses §108's deck as wide as the way with the bund path's 4 ft board",
+  "outside": true,
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
   },
-  "research": "d47738a05844fe19",
-  "triage": "touched",
-  "verdict": "IN-STEP"
+  "research": "9354777ef34af3d3",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:54ccb64ee5924653",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/cluster_edge.py::_cluster_edge_toward#spur origin clear of the houses": {
   "code": "cc31833688c0d63b",
@@ -23648,19 +23688,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/gateway.py::clear_of_what_stands#nothing built on a lane": {
+  "body": "334ab745e1b07215",
+  "claim": "nothing built on a lane - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the gateway stepped half the connector's tread off every forbidden footprint",
   "code": "9533d3c9c2a1bba3",
   "core": "835a1af6eff5f02b",
-  "date": "2026-10-05",
-  "note": "gateway stepped half the connector's tread off forbidden footprints",
+  "date": "2026-10-22",
+  "note": "gateway stepped off every forbidden footprint",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "73544dbd2b202b85"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
-  "research": "c063a73e4f62bfa9",
+  "research": "4473caa26c642d2b",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/gateway.py::gateway_track#a walled-in gateway": {
@@ -24148,19 +24188,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/geom.py::push_clear_of_fabric#track gateway off the fabric": {
+  "body": "332e4d0c046c968e",
+  "claim": "track gateway off the fabric - how-our-maps-lay-a-clustered-settlements-lanes.drawing: nothing built on a lane, walked out until clear",
   "code": "64da89e9e862adda",
   "core": "6c0d33e828bd7578",
-  "date": "2026-10-07",
-  "note": "walked out until clear",
+  "date": "2026-10-22",
+  "note": "walked out until it clears every steading by the 7 ft gap",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "73544dbd2b202b85"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
-  "research": "c063a73e4f62bfa9",
+  "research": "4473caa26c642d2b",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b2fae7ceda96f718"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/geom.py::push_out_of#geometry": {
@@ -25884,16 +25925,22 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::adds_a_way_out_crossing#no way out over and back": {
+  "body": "7982ace1b7e959e2",
+  "claim": "no way out over and back - villages-beside-their-stream-one-bank-or-both.drawing",
   "code": "1290da8229ea2665",
   "core": "03a4b7c724644df1",
-  "date": "2026-10-03",
-  "note": "matches the claim",
+  "date": "2026-10-22",
+  "note": "no block of 0035 forbids a second crossing of one brook. §110 only charges a crossing about 150 ft of walk, and §112 only limits a replacement way's crossings. Label the hard never-twice rule GUESS/UNRESEARCHED, or record it on the page",
+  "outside": true,
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
   },
-  "research": "d47738a05844fe19",
-  "triage": "touched",
-  "verdict": "IN-STEP"
+  "research": "9354777ef34af3d3",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
+  ],
+  "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/ways/law.py::bends_badly#plumbing and wrappers": {
   "code": "7dbf1be6afcfefae",
@@ -26703,16 +26750,22 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::way_outs_crossing#no way out over and back": {
+  "body": "9700b1e89cbe5dba",
+  "claim": "no way out over and back - villages-beside-their-stream-one-bank-or-both.drawing",
   "code": "22443da1f5ebc654",
   "core": "f6237ee95baa7cea",
-  "date": "2026-10-03",
-  "note": "matches the claim",
+  "date": "2026-10-22",
+  "note": "the hard limit of one crossing per brook on a way out is on no block. §110 charges a crossing about 150 ft of walk and does not forbid it. Label GUESS/UNRESEARCHED or record the rule",
+  "outside": true,
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
   },
-  "research": "d47738a05844fe19",
-  "triage": "touched",
-  "verdict": "IN-STEP"
+  "research": "9354777ef34af3d3",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
+  ],
+  "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/ways/law.py::way_targets#plumbing and wrappers": {
   "code": "52789a5a01448d25",
@@ -28731,23 +28784,22 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/settle/lawful.py::Lawful.fault#no way out over and back": {
-  "body": "2afe922110b28e2a",
+  "body": "a9fa917056256fca",
   "claim": "no way out over and back - villages-beside-their-stream-one-bank-or-both.drawing: tree lanes",
   "code": "d7273c4a86d6320e",
   "core": "798de6488989d440",
-  "date": "2026-10-17",
-  "note": "a way out that crosses the brook and comes back is refused for a tree lane",
+  "date": "2026-10-22",
+  "note": "tree lanes are refused for an over-and-back way out, a rule 0035 does not state; §110 charges a crossing about 150 ft and does not forbid it. Label GUESS/UNRESEARCHED or record the rule",
+  "outside": true,
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
   },
-  "research": "d47738a05844fe19",
+  "research": "9354777ef34af3d3",
   "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:52835a76bb3e8115",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-21",
-  "verdict": "IN-STEP"
+  "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/ways/settle/lawful.py::Lawful.ground_fault#bends like a path": {
   "body": "26e1ea21fe8a80a4",
@@ -28933,15 +28985,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::_crossing_fault#crossed off a ford": {
+  "body": "bd33cfc7b695077b",
+  "claim": "crossed off a ford - villages-beside-their-stream-one-bank-or-both.drawing: the crossing goes",
   "code": "cd3acb9bc74657f4",
   "core": "2dc75f7457cfffd5",
-  "date": "2026-10-03",
-  "note": "matches the claim",
+  "date": "2026-10-22",
+  "note": "a crossing away from any crossing place is cut",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
   },
-  "research": "d47738a05844fe19",
-  "triage": "touched",
+  "research": "9354777ef34af3d3",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::_crossing_fault#crossed off square": {
@@ -29275,16 +29332,22 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::settle_way_outs#no way out over and back": {
+  "body": "fc2f837e6223cef6",
+  "claim": "no way out over and back - villages-beside-their-stream-one-bank-or-both.drawing",
   "code": "c22407a377b7dc8a",
   "core": "fb4cf6349114906c",
-  "date": "2026-10-03",
-  "note": "matches the claim",
+  "date": "2026-10-22",
+  "note": "crossings are cut until no way out crosses a brook twice, a rule 0035 does not state; §110 charges a crossing about 150 ft and does not forbid it. Label GUESS/UNRESEARCHED or record the rule",
+  "outside": true,
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
   },
-  "research": "d47738a05844fe19",
-  "triage": "touched",
-  "verdict": "IN-STEP"
+  "research": "9354777ef34af3d3",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
+  ],
+  "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::theirs#a lane arrives at its own dooryard": {
   "body": "592f8334267512b3",
@@ -30732,19 +30795,22 @@
   "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#no out-and-back over the brook": {
+  "body": "4d08660856e1939e",
+  "claim": "no out-and-back over the brook - villages-beside-their-stream-one-bank-or-both.drawing: a link crossing the brook twice is refused",
   "code": "89669c7c889b391c",
   "core": "d7c070adeb041267",
-  "date": "2026-10-07",
-  "note": "a way keeps to its own bank",
+  "date": "2026-10-22",
+  "note": "no block refuses a link that crosses the brook twice; §110 charges a crossing about 150 ft and does not forbid it. Label GUESS/UNRESEARCHED or record the rule",
+  "outside": true,
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
   },
-  "research": "d47738a05844fe19",
+  "research": "9354777ef34af3d3",
   "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
-  "triage": "touched",
-  "verdict": "IN-STEP"
+  "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#orphan joined to the network": {
   "body": "4d08660856e1939e",
@@ -32361,21 +32427,19 @@
   "code": "fce55ea6b5b5a089",
   "core": "2c3cd5892bbf56f1",
   "date": "2026-10-22",
-  "note": "matches the pages: the track out is bent off the field and threaded through the steadings, otherwise it takes the dry exit. The new step sends a threaded run that no longer reaches its far end to the dry exit, which keeps the track running off the map rather than stopping in open country. Its 1 ft end check is a tolerance, not a fact about the place.",
+  "note": "bent round the crop and wet ground, threaded off the steadings, else the dry exit",
   "pages": {
    "0081-village-lanes.drawing.html": "f0a488aba85003e2",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "73544dbd2b202b85"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
-  "research": "8a016db0365d2c0c",
+  "research": "57c1e932a373ce38",
   "rests": [
    "0081-village-lanes.drawing.html:16df95fc169329f7",
+   "0081-village-lanes.drawing.html:43b635b1ca75125b",
    "0081-village-lanes.drawing.html:bd66b84c6bda826f",
-   "0081-village-lanes.drawing.html:df440690bbce9cb6",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::_connector_through#connector's berth off the field": {
@@ -32655,19 +32719,19 @@
   "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_keeps_the_law#no building on the connector": {
+  "body": "c585090c734c50d3",
+  "claim": "no building on the connector - how-our-maps-lay-a-clustered-settlements-lanes.drawing: no leg through a building's box",
   "code": "39100ea266c6f64f",
   "core": "7aaa82541f142c42",
-  "date": "2026-10-08",
-  "note": "no leg through a solid box",
+  "date": "2026-10-22",
+  "note": "no leg through a building's box",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "73544dbd2b202b85"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
-  "research": "c063a73e4f62bfa9",
+  "research": "4473caa26c642d2b",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_keeps_the_law#nothing the matrix forbids": {
@@ -32676,17 +32740,17 @@
   "code": "f4c48de9e0d0c4c7",
   "core": "7aaa82541f142c42",
   "date": "2026-10-22",
-  "note": "no leg over row crops or built ground",
+  "note": "no dry plot or steading part under the connector",
   "pages": {
    "0081-village-lanes.drawing.html": "f0a488aba85003e2",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "73544dbd2b202b85"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
-  "research": "8a016db0365d2c0c",
+  "research": "57c1e932a373ce38",
   "rests": [
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_through#track plumbing": {
@@ -32799,20 +32863,19 @@
   "claim": "wet, then steadings, then crop - village-lanes.drawing, how-our-maps-lay-a-clustered-settlements-lanes.drawing: wet ground and crop refused (0081), no tread on a steading (0246)",
   "code": "38a11341fee79066",
   "core": "8c18acae0e41368f",
-  "date": "2026-10-18",
-  "note": "wet and steaded bearings are refused, and a crop clip is left for route_around to bend",
+  "date": "2026-10-22",
+  "note": "wet ground and steadings refused, a crop clip bent round",
   "pages": {
    "0081-village-lanes.drawing.html": "f0a488aba85003e2",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "73544dbd2b202b85"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
-  "research": "8a016db0365d2c0c",
+  "research": "57c1e932a373ce38",
   "rests": [
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b2fae7ceda96f718"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::on_course#track plumbing": {
@@ -33024,15 +33087,22 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#row road over the brook at a ford": {
+  "body": "7387cedc8d9d7edc",
+  "claim": "row road over the brook at a ford - villages-beside-their-stream-one-bank-or-both.drawing: the ford that makes the walk shortest, each leg threaded to its landing (`thread_over_the_ford`)",
   "code": "e801c19d38cc2ca7",
   "core": "84c8b5e51e347be7",
-  "date": "2026-10-09",
-  "note": "ford_crossing picks the crossing place that makes the walk shortest, and thread_over_the_ford keeps the square deck between the landings",
+  "date": "2026-10-22",
+  "note": "crosses square at a crossing place, the one that makes the walk shortest",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
   },
-  "research": "d47738a05844fe19",
-  "triage": "touched",
+  "research": "9354777ef34af3d3",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#row road width": {
@@ -33096,15 +33166,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#spur over the brook at a ford": {
+  "body": "7387cedc8d9d7edc",
+  "claim": "spur over the brook at a ford - villages-beside-their-stream-one-bank-or-both.drawing",
   "code": "fb4ed29922cb8c83",
   "core": "84c8b5e51e347be7",
-  "date": "2026-10-09",
-  "note": "ford_crossing picks the ford that makes the walk shortest; a 4-point spur goes through thread_over_the_ford, which keeps the deck",
+  "date": "2026-10-22",
+  "note": "spur crosses at a crossing place via ford_crossing",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
   },
-  "research": "d47738a05844fe19",
-  "triage": "touched",
+  "research": "9354777ef34af3d3",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#spur tip set back": {
@@ -33823,16 +33899,22 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::way_out_once#way out crosses each brook once": {
+  "body": "532f7b1f43db1654",
+  "claim": "way out crosses each brook once - villages-beside-their-stream-one-bank-or-both.drawing",
   "code": "6076345628d07450",
   "core": "b41a6425ae5615f3",
-  "date": "2026-10-03",
-  "note": "0035",
+  "date": "2026-10-22",
+  "note": "the at-most-once rule is on no block; §110 charges a crossing about 150 ft and does not forbid it. Label GUESS/UNRESEARCHED or record the rule",
+  "outside": true,
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
   },
-  "research": "d47738a05844fe19",
-  "triage": "touched",
-  "verdict": "IN-STEP"
+  "research": "9354777ef34af3d3",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
+  ],
+  "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/ways/tree_base.py::Ends#plumbing": {
   "body": "3a69b10f1b924e8e",
@@ -46366,17 +46448,24 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.bridge#carried deck always planked": {
+  "body": "b6f2f50dec413bd1",
+  "claim": "carried deck always planked - plank-bridges-over-farm-ditches-itabashi.drawing, road-bridges-over-rivers-and-canals-hashi.drawing",
   "code": "1a7f52e0ba3d7654",
   "core": "21dad52d07f216da",
-  "date": "2026-10-03",
-  "note": "carried decks always planked, but 0087 drawing: \"A town's road bridges take one of two forms, a knob chosen at random for each settlement\" (earth-decked timber or stone arch); 0084 drawing's \"always planked\" convention contradicts it; roll the 0087 knob or record the fixed plank as a DEVIATION on 0087",
+  "date": "2026-10-22",
+  "note": "drop the 0087 pointer: §144 rolls a town's road bridges between an earth-decked timber bridge and a stone arch, so it backs no \"always planked\". 0084 §28 alone backs it for hamlets. Whether town callers roll 0087's form is not in the bundle",
+  "outside": true,
   "pages": {
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc",
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2",
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
   },
-  "research": "c12bf45af257aa38",
-  "triage": "touched",
-  "verdict": "DRIFTED"
+  "research": "32c3d0dd84aa1448",
+  "rests": [
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200",
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:2bea76047e1862a0",
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:4cf713416d6978b3"
+  ],
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.bridge#deck drawn over the water": {
   "code": "dbd14529d86ed455",
@@ -46480,18 +46569,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed brook width": {
+  "body": "fd0263253db64fbe",
+  "claim": "assumed brook width - villages-beside-their-stream-one-bank-or-both.drawing: a brook 7 ft wide where a record has none (`DEFAULT_W`)",
   "code": "b5cb3dd3808261df",
   "core": "905067e4a1548e29",
-  "date": "2026-10-08",
-  "note": "`px(7.0)`, \"A brook 7 ft wide\"",
+  "date": "2026-10-22",
+  "note": "px(7.0), a brook 7 ft wide",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
   },
-  "research": "d47738a05844fe19",
+  "research": "9354777ef34af3d3",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:54ccb64ee5924653"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed channel width": {
@@ -46545,18 +46635,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#no path leads to a plank": {
+  "body": "fd0263253db64fbe",
+  "claim": "no path leads to a plank - plank-bridges-over-farm-ditches-itabashi.drawing",
   "code": "9594eb1961de91de",
   "core": "905067e4a1548e29",
-  "date": "2026-10-08",
-  "note": "no lane is laid to a plank",
+  "date": "2026-10-22",
+  "note": "planks laid free-standing, reached along the bunds",
   "pages": {
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
-  "research": "43cf74757fcb48f3",
+  "research": "1dd5fd71121f4a06",
   "rests": [
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:63e1ecf1ce361c85"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#not on another deck": {
@@ -46664,18 +46755,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#plank width": {
+  "body": "fd0263253db64fbe",
+  "claim": "plank width - plank-bridges-over-farm-ditches-itabashi.drawing: about 4 ft (`px(4)`), a single-file crossing",
   "code": "a3c7959fd85fdad8",
   "core": "905067e4a1548e29",
-  "date": "2026-10-08",
-  "note": "`px(4)`",
+  "date": "2026-10-22",
+  "note": "px(4), about 4 ft single-file",
   "pages": {
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
-  "research": "43cf74757fcb48f3",
+  "research": "1dd5fd71121f4a06",
   "rests": [
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:72ffa8c3abe4e4b2"
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:72ffa8c3abe4e4b2",
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b74aa6e62d8b654b"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#polder crossings by side": {
@@ -66304,21 +66397,19 @@
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#meeting another way": {
   "body": "11f839b16e08f012",
-  "claim": "meeting another way - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: within 60 ft of it, at 20 degrees or more",
-  "code": "33ad265bd2638ded",
+  "claim": "meeting another way - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: within 60 ft of it",
+  "code": "be0e8cc22bcd3ceb",
   "core": "39341fa0bc666a8c",
   "date": "2026-10-22",
-  "note": "the 60 ft is 0246's GUESS, but the 20-degree fray (_FRAY_DEG) is answered by 0081's \"less than 20 degrees ... walked into one path\", which 0246 does not give; the claim should cite research/questions/0081-village-lanes.drawing.html for the angle",
-  "outside": true,
+  "note": "px(60), within 60 ft of another way, recorded as part of the GUESS",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "73544dbd2b202b85"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
-  "research": "c063a73e4f62bfa9",
+  "research": "4473caa26c642d2b",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b7092db240b5c453"
   ],
-  "triage": "touched",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#not fraying into it": {
   "body": "11f839b16e08f012",
@@ -66415,21 +66506,19 @@
  },
  "l7r/diagram/settlement/water_ways/lanes.py::reaches_dooryard#a lane reaches the steading": {
   "body": "c664aaf77c3f1e3e",
-  "claim": "a lane reaches the steading - how-our-maps-lay-a-clustered-settlements-lanes.drawing: within 12 ft of its house, byre, shed, threshing yard or garden, on any side",
-  "code": "ad7f1274e5771369",
+  "claim": "a lane reaches the steading - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: within 12 ft of its house, byre, shed, threshing yard or garden, on any side",
+  "code": "b516bf56bb029ca7",
   "core": "e4520a3bab5e62c8",
   "date": "2026-10-22",
-  "note": "0246 records the 12 ft reach as \"part of the GUESS\"; the claim should read GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, as trim_lane_stubs labels the same figure",
-  "outside": true,
+  "note": "within 12 ft of the steading's built ground on any side, recorded as a GUESS",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "73544dbd2b202b85"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
-  "research": "c063a73e4f62bfa9",
+  "research": "4473caa26c642d2b",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b7092db240b5c453"
   ],
-  "triage": "touched",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/water.py::DIKE_POND_ARCHETYPE#watercourse records": {
   "code": "fdc5b94daa9a9459",
