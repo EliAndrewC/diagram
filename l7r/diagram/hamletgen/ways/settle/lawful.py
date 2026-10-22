@@ -56,7 +56,7 @@ class Lawful:
 
         Research:
             settle plumbing - NONE
-            the fence gap - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft from a lane's middle to another household's garden fence, a map drawing convention; only the knots step's second pass lowers it (405 T107, a DEVIATION the page records, T114)"""
+            the fence gap - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft from a lane's middle to another household's garden fence, a map drawing convention; only the knots step's second pass lowers it, to 3 ft - one of the two departures the page records, its reason (lots that abut closely) the page's GUESS (405 T107, T114)"""
         self.M = s.M
         self.tree = tree
         self.wet = flooded_ground(s.M)

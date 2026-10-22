@@ -637,3 +637,43 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 
 - **D106** The sweeps' served-house guard (`_SERVE_FT`, 100 ft) cites 0246's recorded GUESS - every farmhouse has a way within 100 ft - which is what the guard protects; §6's 60 ft / 12 ft test is a lane END's, as 0246 now says (T78). Rendering: as each line is labeled on its page.
 
+
+## T125 - the cohort gate names the pool maps the gate regenerated
+
+### T125 Approach (checklist part A)
+
+1. **The goal, in the world.** A landing refused because the gate regenerated a pool map says so, and what to do, instead of "no landing cohort was rolled" beside a 54/54 pass.
+2. **The constraints.** Tips live in error output (the GM's rule); a tooling fix lands with a test red without it.
+3. **Where each comes from.** Measured: T09's landing (2026-10-22) - the gate regenerated Mizuguchi, the engine key moved under the cohort's record, and the refusal said nothing of the map. R for the process.
+4. **Do they describe the world here?** Yes.
+5. **The order.** When no landing cohort matches, `cohort_gate.check` lists the uncommitted pool maps (`git status`, untracked included) in the same refusal.
+6. **The exits.** (a) commit the map automatically - not taken: a moved map is read before it is committed; (b) name it in the refusal - taken.
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** A test: no map, no mention; an uncommitted pool map, named (red without the fix).
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T125 Decisions
+
+- **D107** `cohort_gate.check`, finding no landing cohort on the engine, appends the uncommitted pool maps and "read each diff, commit it, then land again". Rendering: n/a (tooling).
+
+## T126 - a bund junction piled within 0284's four to six feet
+
+### T126 Approach (checklist part A)
+
+1. **The goal, in the world.** A comb field's bund crossing is piled four to six feet across, never inflated past the node, as 0284 says.
+2. **The constraints.** 0284 (moved from 0014): "four to six feet across ... never inflated past the node itself"; each fillet leg drawn on its own; a quarter of corners bare.
+3. **Where each comes from.** R: 0284. Measured: legs 0.5-2x of 2.5 ft made a node 2.5-10 ft across (the record batch's impl-drift, DRIFTED).
+4. **Do they describe the world here?** Yes: `bund_junctions` is live (hamlet comb fields).
+5. **The order.** Each leg rolled 0.8-1.2 of the 2.5 ft base: 2-3 ft from the vertex, two opposite fillets 4-6 ft.
+6. **The exits.** (a) relabel the claim to the range drawn - not taken: it departs from the page; (b) bring the legs within it - taken.
+7. **The search smell.** None.
+8. **The budget.** 20 min, landing with the record batch.
+9. **Done, measured.** Every fillet spans at most 3 ft at 1 ft a px (the test, red without the fix); the fillets still differ (over 1.2x).
+10. **Before moving a constant.** No named constant moves; the leg roll's range narrows to what the page states.
+11. **Before fitting things into room.** n/a.
+
+### T126 Decisions
+
+- **D108** `CombMixin.bund_junctions` rolls each fillet leg at 0.8-1.2 of its base (2.5 ft, floored at the drawn aze), so a node is 4-6 ft across (0284); its claims say so. Rendering: historically accurate (0284).

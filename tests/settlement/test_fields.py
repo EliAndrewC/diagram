@@ -144,10 +144,10 @@ def test_bund_junctions_pile_earth_only_where_bunds_actually_cross():
         # every mark is a fillet AT one of the four interior crossings (140/180 x 140/180)
         assert any(max(abs(v[0] - jx) for v in vs) < 9 and max(abs(v[1] - jy) for v in vs) < 9 for jx in (140.0, 180.0) for jy in (140.0, 180.0)), pts
         span = max(max(v[i] for v in vs) - min(v[i] for v in vs) for i in (0, 1))
-        assert 0.5 <= span <= 9.0, span  # a few feet of piled earth, jittered - not a legibility blob
+        assert 0.5 <= span <= 3.0, span  # 405 T126: each leg 2-3 ft, so two opposite fillets make 0284's 4-6 ft node
     # the quadrants really do differ: the marks are not all the same size (that was the stamped look)
     areas = sorted(max(max(float(v.split(",")[i]) for v in pts.split(" ")) - min(float(v.split(",")[i]) for v in pts.split(" ")) for i in (0, 1)) for pts in marks)
-    assert areas[-1] > areas[0] * 1.5, areas
+    assert areas[-1] > areas[0] * 1.2, areas  # 405 T126: legs 0.8-1.2x keep the node at 4-6 ft, so the spread is narrower than 1.5x
     # deterministic: the same field redraws identically (a salted str hash() would break this)
     s2 = Settlement(400, 400)
     s2.meta(name="j", scale="hamlet", ftpx=1)

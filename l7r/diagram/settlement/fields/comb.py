@@ -200,8 +200,10 @@ class CombMixin:
         side and untouched on the other, and no two crossings on a map carry the same mark.
 
         Research:
-            junction pile size - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: about 5 ft of earth, floored at the drawn aze
-            pile by quadrant - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: a fillet per corner, legs 0.5-2x, a quarter of corners left bare"""
+            junction pile size - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: four to six feet across - each
+                fillet leg 2-3 ft from the vertex (0.8-1.2 of 2.5 ft), floored at the drawn aze (405 T126)
+            pile by quadrant - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: a fillet per corner, each leg drawn on its
+                own, a quarter of corners left bare"""
         from l7r.diagram.waterfields import AZE, aze_w
 
         cells: dict[tuple[int, int], list[list[tuple[float, float] | list[tuple[int, int]]]]] = {}
@@ -237,8 +239,8 @@ class CombMixin:
                     poly = plots[pi]["poly"]
                     n = len(poly)
                     v = poly[vi]
-                    a = _toward(v, poly[(vi - 1) % n], base * rng.uniform(0.5, 2.0))  # each leg of the fillet
-                    b = _toward(v, poly[(vi + 1) % n], base * rng.uniform(0.5, 2.0))  # is piled on its own
+                    a = _toward(v, poly[(vi - 1) % n], base * rng.uniform(0.8, 1.2))  # each leg of the fillet
+                    b = _toward(v, poly[(vi + 1) % n], base * rng.uniform(0.8, 1.2))  # is piled on its own (405 T126: 0284's 4-6 ft node)
                     mx, my = (a[0] + b[0]) / 2, (a[1] + b[1]) / 2
                     bulge = rng.uniform(0.15, 0.45)  # how far the pile swells past the chord into the basin
                     cx_, cy_ = mx + (mx - v[0]) * bulge, my + (my - v[1]) * bulge
