@@ -423,3 +423,19 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 ### T91 Decisions
 
 **D84 - a route's own dooryard by 0246's reach.** `corridors.field_router`'s `route` takes as its own the nearest farmhouse whose reach (`law.reach_to_steading`, 60 ft of the house or 12 ft of its built ground, 0246's GUESS) holds the route's start, in place of the nearest house center within `law.DOORSTEP_FT`; its claim cites 0246's reach. `DOORSTEP_FT` stays 80 ft, UNRESEARCHED, for `settle_ends`' fan cut and `Lawful.fault`'s house look-up; its docstring drops the yards exemption it lost at T18, and the look-up's comment says it is a search radius for `house_hit`.
+
+## T113 - the room table (the GM's third process fix, 2026-10-21; the arbiter's tooling_fix on ask:set-down-T26)
+
+### T113 Approach (checklist part A)
+
+1. **The goal, in the world.** When a map fails to fit, the session weighing more room sees each spacing knob's research ceiling and whether widening it grows the band the seats are dealt over, so a room probe measures room and not packing, and farms stay within the attested lot sizes rather than "a mile apart".
+2. **The constraints.** The GM's three fixes of 2026-10-21 (amendment 8); the arbiter's tooling_fix (each row says whether the band grows with its knob); the ceilings of `spacing-research.md`; a tooling fix lands with its test (feature 379).
+3. **Where each comes from.** The GM's words (amendment 8) and the arbiter's ruling: R for the process. The ceilings: R where attested (the 1698 register, Buck, Ushijima), and "unresearched - research question owed" where the pass was SILENT (neighbor spacing).
+4. **Do they describe the world here?** Yes: the +5/+10 ft probes of 2026-10-22 widened `grow_gap` in a fixed seating band, which is exactly what the band column names.
+5. **The order.** Printed where the session meets the question: part B's prompt from a cohort fit failure (`approach_gate.cohort`), and an arbiter ask naming a knot, a refusal or room (`arbiter_bundle.bundle`).
+6. **The exits.** (a) a table in a doc the checklist points to - not taken: remembering to read it is the failure; (b) printed only on fit failures - taken; (c) printed on every part B - not taken: noise on a row or water rule; (d) more room - n/a; (e) conform - n/a.
+7. **The search smell.** None.
+8. **The budget.** 30 min with its landing.
+9. **Done, measured.** A fit failure's part B prints the table, a row-rule failure's does not; an ask naming a knot carries it, one about wording does not (two tests, each red without the wiring).
+10. **Before moving a constant.** No constant moves: the table only states the knobs.
+11. **Before fitting things into room.** n/a - this is the tool that asks it.

@@ -22320,8 +22320,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#a defense marsh is no wall": {
-  "code": "ae21da527994c6ae",
-  "core": "49fc625267d822da",
+  "code": "3e3d07328b591692",
+  "core": "6f8cce7f9df46841",
   "date": "2026-10-12",
   "note": "the code drops `role == \"defense\"` marshes from `hard`, but 0081 says \"lanes keep to the bunds and dry ground\" and \"a track does not cross the reeds\", with no exemption for a defense marsh; cite the page that records the exemption as a DEVIATION, or wall the marsh",
   "pages": {
@@ -22332,12 +22332,12 @@
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "triaged": "2026-10-18",
+  "triaged": "2026-10-22",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#across the commons": {
-  "code": "5d0687bd34f4da90",
-  "core": "49fc625267d822da",
+  "code": "faf81c35c82ba873",
+  "core": "6f8cce7f9df46841",
   "date": "2026-10-12",
   "note": "the commons is excluded from the walls; its fill leaves the lanes bare",
   "pages": {
@@ -22347,11 +22347,12 @@
   "rests": [
    "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:6b58d2945bf79d57"
   ],
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#across the groves": {
-  "code": "0e96c4bb0a3681a6",
-  "core": "49fc625267d822da",
+  "code": "26166ba954a8104e",
+  "core": "6f8cce7f9df46841",
   "date": "2026-10-12",
   "note": "a lane crosses the belt and the planting resumes on both sides",
   "pages": {
@@ -22362,13 +22363,14 @@
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:19b6b8f457366d55",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:79d09be286e4e66b"
   ],
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#field way off the steadings": {
   "body": "349425af41737a46",
   "claim": "field way off the steadings - how-our-maps-lay-a-clustered-settlements-lanes.drawing: 7 ft (FIELD_ROUTE_GAP_FT = WEB_FABRIC_GAP) off their built ground, the page's lane-to-fence 7 ft",
-  "code": "7600f11b28cbcdfa",
-  "core": "49fc625267d822da",
+  "code": "deb851d65594b932",
+  "core": "6f8cce7f9df46841",
   "date": "2026-10-19",
   "note": "routed at 7 ft",
   "pages": {
@@ -22378,33 +22380,33 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triaged": "2026-10-19",
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#its own dooryard": {
-  "body": "349425af41737a46",
-  "claim": "its own dooryard - how-our-maps-lay-a-clustered-settlements-lanes.drawing: its way leaves its dooryard, the threshing yard of the house within `law.DOORSTEP_FT` of where the route starts no wall to it",
-  "code": "66ee4d8e25f76495",
-  "core": "49fc625267d822da",
-  "date": "2026-10-17",
-  "note": "only its own threshing yard (and its house at the start) are not walls; its beds and fixtures still are",
+  "body": "0099614c0c3039b1",
+  "claim": "its own dooryard - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: its way leaves its dooryard, the threshing yard of the house the route's start reaches no wall to it - within 60 ft of the house or 12 ft of its built ground (`law.reach_to_steading`, the page's own guess)",
+  "code": "05103336afe250e5",
+  "core": "6f8cce7f9df46841",
+  "date": "2026-10-22",
+  "note": "the start's own house is now the nearest house that `law.reach_to_steading` reaches (within 60 ft of the house or 12 ft of its built ground), and the page records those figures as its own GUESS. The route's own threshing yard is no wall, as the page says its way leaves its dooryard. Its own beds, sheds and fixtures stay walls, as the page has the way go round them",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#nothing built on a lane": {
-  "body": "349425af41737a46",
+  "body": "0099614c0c3039b1",
   "claim": "nothing built on a lane - how-our-maps-lay-a-clustered-settlements-lanes.drawing: every steading part a wall but the path's own dooryard",
-  "code": "529fd485a4f683a9",
-  "core": "49fc625267d822da",
-  "date": "2026-10-17",
-  "note": "every steading part and every matrix-forbidden extent is a wall",
+  "code": "6085505755402471",
+  "core": "6f8cce7f9df46841",
+  "date": "2026-10-22",
+  "note": "every steading part and every part the matrix forbids is a wall, except the route's own dooryard and the start-side face of its own house. The law still refuses a tread on a house, as \"no corner of a house stands on its tread\" requires",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
@@ -22413,12 +22415,11 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#off the crop and marsh": {
-  "code": "d2234ba34dfd562e",
-  "core": "49fc625267d822da",
+  "code": "fcfea341aa191bb9",
+  "core": "6f8cce7f9df46841",
   "date": "2026-10-12",
   "note": "field, dry hem and marsh hard",
   "pages": {
@@ -22430,12 +22431,12 @@
    "0081-village-lanes.drawing.html:bd66b84c6bda826f",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
-  "triaged": "2026-10-18",
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#off the farm groves": {
-  "code": "a0afc23867e9edaa",
-  "core": "49fc625267d822da",
+  "code": "578457a2e05ec1aa",
+  "core": "6f8cce7f9df46841",
   "date": "2026-10-12",
   "note": "grove bands are walls, the way kept off them",
   "pages": {
@@ -22446,21 +22447,23 @@
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
   ],
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#out of its own house": {
-  "code": "10fd7e240b37c7dd",
-  "core": "49fc625267d822da",
-  "date": "2026-10-12",
-  "note": "an exemption for where the route starts",
+  "body": "0099614c0c3039b1",
+  "claim": "out of its own house - NONE: a route starting within `GABLE_MARGIN_FT` + `FIELD_ROUTE_GAP_FT` (13 ft) of its own house is not walled by it, so it can leave the door",
+  "code": "86ba72231afebcf5",
+  "core": "6f8cce7f9df46841",
+  "date": "2026-10-22",
+  "note": "the 13 ft (`GABLE_MARGIN_FT` + `FIELD_ROUTE_GAP_FT`) is how close to its own house a route may start and still be let out. A reader cannot see it on the map, and `house_hit` still keeps the tread off the house",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#the brook at its fords": {
-  "code": "17220d3490f1d54d",
-  "core": "49fc625267d822da",
+  "code": "51666ad0fb367a6b",
+  "core": "6f8cce7f9df46841",
   "date": "2026-10-12",
   "note": "crossings only at the fords",
   "pages": {
@@ -22472,6 +22475,7 @@
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_runs#dry hem after the paddy": {
