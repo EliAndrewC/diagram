@@ -237,6 +237,9 @@ bidens tripartita	Bidens tripartita
 big door	ōdo
 bill of lading	bill of lading
 bills of lading	bill of lading
+bincho	bincho
+bincho charcoal	bincho
+binchotan	bincho
 bingo	Bingo
 bishamon	Bishamon
 bishamonten	Bishamon
@@ -1658,6 +1661,8 @@ honen	Honen
 honen's	Honen
 hongawara	hongawara
 hongawara tile	hongawara
+hongluo	Hongluo charcoal
+hongluo charcoal	Hongluo charcoal
 hongo	hongo
 hongwu	Hongwu
 hongzhi	Hongzhi
@@ -1804,6 +1809,7 @@ in-field pocket pond	pocket pond
 inari	Inari
 inashiro	Inashiro
 inbatsuchi	inbatsuchi
+independent department	zhilizhou
 inekake	hazakake
 initiate	initiate
 initiates	initiate
@@ -3446,6 +3452,8 @@ sakaki	sakaki
 sakimono-gashira	sakimono-gashira
 sakoda	sakoda
 sakuba-michi	sakuba-michi
+sakura	Sakura charcoal
+sakura charcoal	Sakura charcoal
 sakutoku	sakutoku
 sakutoku landlord	sakutoku
 sakutoku landlords	sakutoku
@@ -4205,7 +4213,6 @@ tiangeng	bund
 tiangong kaiwu	Tiangong kaiwu
 ticket salt	ticket salt
 ticket-salt	ticket salt
-tickets	ticket salt
 tie-rail	tie-rail
 tie-rails	tie-rail
 tier	tier
@@ -4636,6 +4643,7 @@ worship halls	haiden
 wrought iron	wrought iron
 wu ding	Wu Ding
 wubei zhi	Wubei Zhi
+wubian	Wubian
 wudu	wudu
 wujing zongyao	Wujing Zongyao
 wuliao jiazhi zeli	Wuliao jiazhi zeli
@@ -4780,6 +4788,7 @@ zhengtong	Zhengtong
 zhengyi	Zhengyi
 zhengzhou	Zhengzhou
 zhili	Zhili
+zhilizhou	zhilizhou
 zhizhai shulu jieti	Zhizhai Shulu jieti
 zhonggulou	gulou
 zhonglou	gulou

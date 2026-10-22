@@ -16984,8 +16984,7 @@
   "def": "Tao Shu's reform of the Huaibei salt trade from about 1831: any trader who paid the tax could buy a ticket for a fixed lot of salt and ship it, instead of the trade being held by licensed merchants.",
   "variants": [
    "ticket salt",
-   "ticket-salt",
-   "tickets"
+   "ticket-salt"
   ]
  },
  "salt censor": {
@@ -17333,6 +17332,42 @@
   "def": "A thousandth of a tael of silver (釐), written with the same romanized word as the li of distance.",
   "variants": [
    "li of silver"
+  ]
+ },
+ "bincho": {
+  "def": "The name a local historian gives the fine Kumano charcoal of Kii province (Kishu), shipped to Edo by boat; in 1716 it sold in Edo at about two and a half times the price of the white charcoal of the Tama hills.",
+  "variants": [
+   "bincho",
+   "binchotan",
+   "bincho charcoal"
+  ]
+ },
+ "Sakura charcoal": {
+  "def": "Charcoal named for Sakura, a castle town of Shimosa province east of Edo (the name is the place, not cherry wood); Edo's 1842 return priced it in three grades, at under a third of the top charcoal.",
+  "variants": [
+   "Sakura charcoal",
+   "Sakura"
+  ]
+ },
+ "Wubian": {
+  "def": "A Ming military compendium (the title means \"military compilation\"), whose chapters cost weapons, their materials and their smiths' wages.",
+  "variants": [
+   "Wubian"
+  ]
+ },
+ "zhilizhou": {
+  "def": "An independent department of Qing China: a department that answered directly to its province rather than to a prefecture, as Dingzhou did in Zhili.",
+  "variants": [
+   "zhilizhou",
+   "Zhilizhou",
+   "independent department"
+  ]
+ },
+ "Hongluo charcoal": {
+  "def": "A named grade of charcoal on Beijing's official price list of 1736, priced at 1.06 tael the 100 jin, beside white charcoal at 1.1.",
+  "variants": [
+   "Hongluo charcoal",
+   "Hongluo"
   ]
  }
 }
