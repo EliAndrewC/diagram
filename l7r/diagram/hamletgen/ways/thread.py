@@ -148,12 +148,14 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
         the track's route walled - research/questions/0081-village-lanes.drawing.html: never across row crops or the flooded paddy, and off wet ground (the field, crop, toe band and wet ground walled - a defense belt's reeds too, since no map draws a causeway: 405 T09)
         the track kept off drawn water - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way crosses water only at a crossing
         every fallback walled too - research/questions/0081-village-lanes.drawing.html: never across row crops or the flooded paddy, and off wet
-            ground - the swing, the grove fallback's two routes and its far clip are each taken only where they cross no crop plot, no wet ground
-            (a defense belt's reeds included), no toe band and not the field (at 0 ft, 3 ft in from each end: a way may come up to the bund, and a
+            ground - the swing, the unrouted clip, the grove fallback's two routes and its far clip are each taken only where they cross no
+            crop plot, no wet ground
+            (a defense belt's reeds included), no toe band and no paddy (each field's outline, at 0 ft, 3 ft in from each end: a way may come up to the bund, and a
             spur ends on it), and the two routes wall the toe band and the wet ground (405 T09)
         an end walked clear along its own leg - GUESS: an end standing within the gap of the fabric is pushed out along the run's own first or
             last leg, so the track still leaves from where it was aimed
-        the grove fallback's two routes in order - GUESS: round the grown bands and the crop, then the bands alone (the spur's field end
+        the grove fallback's two routes in order - GUESS: each with the toe band and the wet ground walled, round the grown bands and the
+            crop, then the bands alone (the spur's field end
             stands inside the crop's gap, so the crop is tested after the route, not walled in it); the first that crosses no band, no crop
             and no more water than the run it replaces is taken. A third, with the water left out of its search, was dropped (405 T09): it
             crossed wherever it met the water, not at a crossing place
@@ -173,7 +175,10 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
     wet_now = marsh_ground(s.M)  # 405 T09: a defense belt's reeds too - no map draws a causeway (0081)
     drawn_water = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for rec in s.M.get("drawn_channels", []) for a, b in zip(rec["pts"], rec["pts"][1:], strict=False)]
     obstacles = [list(plan.envelope), *crops, *fabric, *([toe_now] if toe_now else []), *wet_now]
-    held = [list(plan.envelope), *crops, *([toe_now] if toe_now else []), *wet_now]  # 405 T09: what no fallback crosses
+    # 405 T09: what no fallback crosses - the flooded paddy as the lane law reads it (each field's outline, `law.span_walkable`),
+    # not the field's whole frame: a spur's end stands on its bund
+    paddy = [[(float(a), float(b)) for a, b in f["outline"]] for f in s.M.get("fields") or [] if f.get("outline")]
+    held = [*paddy, *crops, *([toe_now] if toe_now else []), *wet_now]
     lines = list(plan.watercourses) + drawn_water
     # AN END STANDING IN THE FABRIC IS WALKED CLEAR ALONG THE RUN FIRST (feature 291). A farm's grove band is fabric now,
     # and the connector's gateway or the spur's start can land within the gap of one: the clip below then kept nothing,
@@ -188,7 +193,9 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
             run[i] = push_clear_of_fabric(run[i], (ux / n, uy / n), 0.0, fabric, gap)
     routed = _route(run[0], run[-1], obstacles, [], lines)
     out = clip_to_clear(routed if len(routed) >= 2 else run, fabric, gap)
-    if len(out) >= 2 and not _crosses_fabric(out, fabric, gap):
+    # ...AND THE UNROUTED CLIP WALLED AS THE ROUTE IS (405 T09, round 3): where the router found nothing, the run as it came is
+    # clipped for the steadings alone, so it is taken only where it crosses nothing `held` and no water
+    if len(out) >= 2 and not _crosses_fabric(out, fabric, gap) and (len(routed) >= 2 or _unrouted_clear(out, held, lines)):
         return out
 
     # THE FALLBACK MUST NOT BE THE OFFENDING RUN, which is what the first version did: when routing
@@ -259,13 +266,24 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
         # map's edge back to where it would first enter a band, and the web joins the near end (seed 1's spur, which began
         # inside its own farm's north band)
         far = clip_to_clear(kept[::-1], roomy, FOOTPATH_FABRIC_GAP)[::-1]
-        if len(far) >= 2 and not _crosses_fabric(far, fabric, FOOTPATH_FABRIC_GAP) and not _crosses_fabric(_inner(far), held, 0.0):
+        if len(far) >= 2 and not _crosses_fabric(far, fabric, FOOTPATH_FABRIC_GAP) and _unrouted_clear(far, held, [] if kept is out and len(routed) >= 2 else lines):
             return far
     # AND NEVER THE OFFENDING RUN AT ALL (feature 287, ways W25, FR-005): this terminal handed back the clipped run whether or
     # not it still crossed the steadings, or the original when the clip left nothing - the fallback this docstring's own
     # rule forbids. It hands back nothing: the spur is then recorded as dropped, and the connector takes the dry exit
     # (`connector_through`).
     return []
+
+
+def _unrouted_clear(run: Poly, held: Sequence[Poly], lines: Sequence[tuple[Pt, Pt]]) -> bool:
+    """May a piece no route found be drawn (405 T09, round 3): it crosses nothing `held` (field, crop, toe band, wet ground) and,
+    of `lines`, no water - each tested with its ends drawn in (`_inner`), so a piece ending on the bund or at a ford is not read
+    as crossing it.
+
+    Research: an unrouted piece over no water - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a
+    way crosses water only at a crossing place, and a piece no route found was never brought to one"""
+    inner = _inner(run)
+    return not _crosses_fabric(inner, held, 0.0) and not _water_crossings(inner, lines)
 
 
 def _inner(run: Poly, d: float = 3.0) -> Poly:

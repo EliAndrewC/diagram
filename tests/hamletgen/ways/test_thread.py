@@ -146,8 +146,8 @@ def test_where_no_route_rounds_the_band_the_track_keeps_its_far_part(monkeypatch
 
 def test_the_grove_fallback_s_route_across_the_field_is_not_taken_but_one_ending_on_its_edge_is(monkeypatch) -> None:  # type: ignore[no-untyped-def]
     """Feature 405 T09 (round 1): the first route walls the field and the fallbacks did not, so a route round a band could cross
-    the flooded paddy (0081: a lane stops at it). A route across the field is refused; one that only ends on its edge, as a spur
-    ends on the bund, is taken (`_inner` draws each end in 3 ft before the test)."""
+    the flooded paddy (0081: a lane stops at it). A route across a paddy (a field's outline) is refused; one that only ends on its
+    edge, as a spur ends on the bund, is taken (`_inner` draws each end in 3 ft before the test)."""
     from l7r.diagram.hamletgen.ways import thread, track
 
     plan = a_plan()
@@ -164,8 +164,20 @@ def test_the_grove_fallback_s_route_across_the_field_is_not_taken_but_one_ending
         return [] if len(calls) == 1 else list(round_it)
 
     monkeypatch.setattr(thread, "_route", route)
-    plan.envelope = [(500.0, 600.0), (600.0, 600.0), (600.0, 640.0), (500.0, 640.0)]  # astride the middle leg
+    s.M["fields"] = [{"outline": [[500.0, 600.0], [600.0, 600.0], [600.0, 640.0], [500.0, 640.0]]}]  # a paddy astride the middle leg
     assert track._thread_the_fabric(s, plan, [(700.0, 700.0), (450.0, 620.0)]) != round_it
     calls.clear()
-    plan.envelope = [(300.0, 600.0), (450.0, 600.0), (450.0, 640.0), (300.0, 640.0)]  # the route ends on its edge
+    s.M["fields"] = [{"outline": [[300.0, 600.0], [450.0, 600.0], [450.0, 640.0], [300.0, 640.0]]}]  # the route ends on its edge
     assert track._thread_the_fabric(s, plan, [(700.0, 700.0), (450.0, 620.0)]) == round_it
+
+
+def test_a_piece_no_route_found_is_drawn_only_over_no_paddy_crop_or_water() -> None:
+    """Feature 405 T09 (round 3): where the router found nothing, the run as it came was clipped for the steadings alone and
+    could cross the paddy or a brook. `_unrouted_clear` takes it only over nothing held and no water, its ends drawn in 3 ft."""
+    from l7r.diagram.hamletgen.ways.thread import _unrouted_clear
+
+    plot = [(40.0, -10.0), (60.0, -10.0), (60.0, 10.0), (40.0, 10.0)]
+    brook = [((80.0, -20.0), (80.0, 20.0))]
+    assert not _unrouted_clear([(0.0, 0.0), (100.0, 0.0)], [plot], []), "across a plot"
+    assert not _unrouted_clear([(0.0, 30.0), (100.0, 30.0), (100.0, 0.0), (0.0, 0.0)], [], brook), "over the brook"
+    assert _unrouted_clear([(0.0, 0.0), (40.0, 0.0)], [plot], brook), "ending on the plot's edge, short of the brook"
