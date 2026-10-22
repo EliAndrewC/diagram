@@ -100,3 +100,4 @@ All go into a new money question, 0279 "What did charcoal cost?" (Japan first, t
 - spec-fidelity round 1 (2026-10-22): CHANGES REQUIRED - 0197's bale weight misstated (Iburi, by grade, undated; with 0199);
   retail by small measure missing; OPEN is no verdict (the four of money-requests.md, nearest under "still open"); the
   1842 table filed as black retail without the source saying so. All four applied, and in plan D1 and the write brief.
+- spec-fidelity round 2 (2026-10-22): FAITHFUL - all four round-1 items fixed in the spec, plan D1 and the write brief.

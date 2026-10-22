@@ -32,7 +32,7 @@
    "declared": "spec-fidelity"
   },
   "## D1 - the question (FR-001, FR-002, FR-005)": {
-   "sha256": "8aa75a6bdca25eda4a0bd1091ebe3d7b7514fdf9d5a2d983319cc2308d4a29d8",
+   "sha256": "d4cdd30f2d2492c00a9eb85e8ad35253bbe81f4f7a9cd4c692e682801817375a",
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
@@ -126,6 +126,57 @@
      "summary": "Order: page sessions, implementation check, reply, report and land; Performance bookends N/A (no generator change); Constitution check notes XII research: physical task, XIII record checks green, XVI built as the FRs.",
      "class": "within",
      "why": "Sequencing and process statements that decide nothing the spec left open about what is answered."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## D1 - the question (FR-001, FR-002, FR-005)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1a",
+     "summary": "The answer is money question 0279, tagged as the money section's price questions are",
+     "class": "within",
+     "why": "FR-002: new figures go in a new money question tagged as the money section's are."
+    },
+    {
+     "id": "D1b",
+     "summary": "Order: Japan first, then the Ming/Qing comparison (Beijing 1615/1736, Zhili 1769, Wu bian)",
+     "class": "within",
+     "why": "Request: 'Region order: Japan first', 'A Ming/Qing charcoal price (Beijing's official lists, Qing price reports) as comparison'. 1615 and the Wu bian are Ming sources under a 'Qing' label; the request asks for Ming/Qing, so the label is loose, not a cut."
+    },
+    {
+     "id": "D1c",
+     "summary": "The 1842 ordered price is given by grade, with retail/wholesale and black/white left open unless the page says so",
+     "class": "within",
+     "why": "FR-005 applied: a distinction the source does not state is not inferred and goes under what is still open. The ordered list by grade is also the same-place, same-period carrier of the white-to-black ratio the request asks for, alongside the Kumano/Hachioji contrast."
+    },
+    {
+     "id": "D1d",
+     "summary": "Bale weight: name 0197 and 0199's Iburi weights as nearest; the record holds no Edo-period weight",
+     "class": "within",
+     "why": "Request asks 'how many kan to a bale'. Naming a nearest under what is still open, with the figure SILENT and the search in the absence note, is FR-005 as written."
+    },
+    {
+     "id": "D1e",
+     "summary": "The figure list: bale price, bale weight, retail by small measure, white and the Kumano/Hachioji contrast, wholesale, carriage, kiln output, burner-days and yield",
+     "class": "within",
+     "why": "Walks the issue's question and 'Figure needed' clause by clause. Against the earlier CLEAR text this adds retail by small measure, burner-days and yield, and drops the pre-judged 'wholesale and carriage OPEN or SILENT', so it moves toward the request. The issue's 'each price beside the same place and period's day wages' is not listed. That was weighed: the issue's own deliverable is 'Per figure: the fragment FILE, the verdict, and what is still open', and its 'Figure needed' line names no wage, so the wage pairing frames the skill's own question and is not a figure this feature owes. No FR carries it either. This is noted, not a narrowing."
+    },
+    {
+     "id": "D1f",
+     "summary": "Each verdict is one of the four of money-requests.md; a nearest-only figure is SILENT, the nearest under what is still open and the search in the absence note",
+     "class": "within",
+     "why": "FR-005 verbatim. The earlier CLEAR text said OPEN; the change brings it to FR-005's own word."
+    },
+    {
+     "id": "D1g",
+     "summary": "Under the 20,000-byte cap; a question that would exceed it splits",
+     "class": "within",
+     "why": "Mechanism. FR-002 allows 'a new money question (or questions)'."
     }
    ]
   }
