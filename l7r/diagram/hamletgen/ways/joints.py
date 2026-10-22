@@ -302,7 +302,9 @@ def tread_gap(a: Mapping[str, Any], b: Mapping[str, Any]) -> float:
     (`TREAD_WALL_FT`, 0081; 385 T07 - the pulled line carries both lanes), never under `_TOUCH_GAP`. A lane recording no
     width is the 3 ft footpath, as `settle_ends`, `touch` and the knots read it (405 T108: it was the 5 ft spine's here).
 
-    Research: a lane with no width - research/questions/0081-village-lanes.drawing.html: the 3 ft footpath"""
+    Research:
+        a lane with no width - research/questions/0081-village-lanes.drawing.html: the 3 ft footpath
+        a pulled line's tread off a building - research/questions/0081-village-lanes.drawing.html: the wider lane's tread 3 ft off a farmhouse wall (half its width + `TREAD_WALL_FT`), never under `_TOUCH_GAP` (4 ft) to the line's middle; kept off every building a pull touches, the page sizing the farmhouse's alone"""
     return max(_TOUCH_GAP, max(float(a.get("w") or 3.0), float(b.get("w") or 3.0)) / 2.0 + TREAD_WALL_FT)
 
 

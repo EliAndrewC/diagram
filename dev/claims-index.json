@@ -24239,8 +24239,8 @@
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#a fold at a joint becomes a T": {
   "body": "3566f1d16b98aa0f",
   "claim": "a fold at a joint becomes a T - village-lanes.drawing: a fold at the meeting point made a T; a Z across it pulled straight like any jog",
-  "code": "67bd4542be45b2c6",
-  "core": "da6596da0d04d8b0",
+  "code": "e2350e04f4c28a22",
+  "core": "d85d48f8b57dcbf9",
   "date": "2026-10-21",
   "note": "a turn over _HAIRPIN_DEG 140 at the joint becomes a T, and any other joint goes to the string-pull, as the page says",
   "pages": {
@@ -24251,15 +24251,16 @@
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
    "0081-village-lanes.drawing.html:3b9a5312c92335d3"
   ],
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#a jog across a joint pulled straight": {
-  "body": "cc5913ed81aa1d71",
+  "body": "a38253dd1e4d46eb",
   "claim": "a jog across a joint pulled straight - village-lanes.drawing: string-pulled wherever the chord keeps the usual clearance; where it touches a building, every dropped vertex within 6 ft of the new line",
-  "code": "965256f4a9acae53",
-  "core": "da6596da0d04d8b0",
-  "date": "2026-10-18",
-  "note": "the line is string-pulled wherever _clear_link holds; at a building, every dropped vertex must lie within _JOG_FT 6 ft of the chord, matching \"stays within 6 ft of the old one\"",
+  "code": "fd638d282a3d8b0f",
+  "core": "d85d48f8b57dcbf9",
+  "date": "2026-10-22",
+  "note": "`pulled` string-pulls the line wherever `_clear_link` keeps the usual clearance; a building touch is allowed only when every dropped vertex is within `_JOG_FT` (6 ft) of the new chord, as the page says (\"within 6 ft of the old one\")",
   "pages": {
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
   },
@@ -24268,16 +24269,15 @@
    "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b"
   ],
-  "triaged": "2026-10-21",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#a pulled lane's clearance": {
-  "body": "cc5913ed81aa1d71",
-  "claim": "a pulled lane's clearance - village-lanes.drawing: where a straightened lane touches a building its tread keeps the 3 ft a lane's tread keeps off a farmhouse wall - max(_TOUCH_GAP 4 ft, half the wider of the two lanes' widths + `TREAD_WALL_FT`), a 5 ft width assumed when none is set; the page lets it come right up to the buildings within 6 ft of the old line",
-  "code": "0ff66e568d5dec5e",
-  "core": "da6596da0d04d8b0",
-  "date": "2026-10-18",
-  "note": "gap = max(4, the wider lane's w/2 + 3), so the tread keeps the attested 3 ft off the wall; the 5 ft default is the spine's drawn width and the 4 ft floor never binds for w of 2 ft or more",
+  "body": "a38253dd1e4d46eb",
+  "claim": "a pulled lane's clearance - village-lanes.drawing: where a straightened lane touches a building its tread keeps the 3 ft a lane's tread keeps off a farmhouse wall - max(_TOUCH_GAP 4 ft, half the wider of the two lanes' widths + `TREAD_WALL_FT`) (`tread_gap`), a lane with no width read as the 3 ft footpath; the page lets it come right up to the buildings within 6 ft of the old line",
+  "code": "5298c0f843eb661b",
+  "core": "d85d48f8b57dcbf9",
+  "date": "2026-10-22",
+  "note": "`tread_gap` sets the line's distance from a building at half the wider lane's width + 3 ft, so the tread's edge stays 3 ft off the wall; the 4 ft floor never binds for widths of 3 ft or more; keeping 3 ft from every building, not just farmhouses, is a choice inside \"may come right up to the buildings\"",
   "pages": {
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
   },
@@ -24287,14 +24287,13 @@
    "0081-village-lanes.drawing.html:417841cd16f112d9",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "triaged": "2026-10-21",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#all but the buildings keep the usual clearance": {
   "body": "cc5913ed81aa1d71",
   "claim": "all but the buildings keep the usual clearance - village-lanes.drawing: the touch is the buildings' (houses, farm sheds, byres, retirement houses); a fence, a grove, a well, a fixture and the crop keep `_clear_link`'s margins, as an unpulled lane does",
-  "code": "545eec22067637c1",
-  "core": "da6596da0d04d8b0",
+  "code": "203cefc1e0a06ed5",
+  "core": "d85d48f8b57dcbf9",
   "date": "2026-10-18",
   "note": "the buildings' keys are dropped from hard and walls only for the touch test, so everything else keeps _clear_link's margins: \"right up to the buildings\"",
   "pages": {
@@ -24304,14 +24303,14 @@
   "rests": [
    "0081-village-lanes.drawing.html:18dffe2b3b52b18c"
   ],
-  "triaged": "2026-10-21",
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#no new kink from a pull": {
   "body": "cc5913ed81aa1d71",
   "claim": "no new kink from a pull - village-lanes.drawing: a lane does not zigzag (two turns over 50 degrees within 40 ft) or double back, so a pull at a joint that leaves more kink_spans than the two lanes had is refused",
-  "code": "d3cd21885852d0b7",
-  "core": "da6596da0d04d8b0",
+  "code": "41222e6136baf515",
+  "core": "d85d48f8b57dcbf9",
   "date": "2026-10-18",
   "note": "a pull that leaves more kink_spans than the old walk had is refused",
   "pages": {
@@ -24323,14 +24322,14 @@
    "0081-village-lanes.drawing.html:be608a70af4cfcc5",
    "0081-village-lanes.drawing.html:d30e15716180fbf5"
   ],
-  "triaged": "2026-10-21",
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#no pull moves an arriving end off its farm": {
   "body": "cc5913ed81aa1d71",
   "claim": "no pull moves an arriving end off its farm - how-our-maps-lay-a-clustered-settlements-lanes.drawing: two kinds of way split back at a joint only where the end that arrived still arrives (`arrives_off`)",
-  "code": "6d6e2e7fef8143c1",
-  "core": "da6596da0d04d8b0",
+  "code": "6c61573f1bd7d63a",
+  "core": "d85d48f8b57dcbf9",
   "date": "2026-10-18",
   "note": "the split is refused when arrives_off fails, which keeps the end reaching its farm",
   "pages": {
@@ -24341,37 +24340,38 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "triaged": "2026-10-21",
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#the joint moved back a vertex": {
   "body": "3566f1d16b98aa0f",
   "claim": "the joint moved back a vertex - UNRESEARCHED: where the pull cannot clear a Z across the joint; 0081's no-zigzag rule asks a mend and names none",
-  "code": "64f2f26e6320974a",
-  "core": "da6596da0d04d8b0",
+  "code": "016e83b06cf88714",
+  "core": "d85d48f8b57dcbf9",
   "date": "2026-10-21",
   "note": "the page names no mend for a Z the pull cannot clear; the moved-back leg must itself be clear, so §26's forced turn does not apply",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#the shorter link the T's stem": {
   "body": "cc5913ed81aa1d71",
   "claim": "the shorter link the T's stem - GUESS: of the two arriving lanes, the one whose clear link to the other's side is shorter becomes the stem; searched village-lanes.drawing (a fold at a joint becomes a T, a worn path takes the shortest or easiest way, but not which lane is the stem) and how-our-maps-lay-a-clustered-settlements-lanes.drawing (ways joined at a T, no stem rule)",
-  "code": "d5a7454317961f48",
-  "core": "da6596da0d04d8b0",
+  "code": "49ae219b8b8a1c11",
+  "core": "d85d48f8b57dcbf9",
   "date": "2026-10-18",
   "note": "the code tries the T with the shorter last link first; neither page says which lane is the stem",
   "pages": {},
   "research": "",
-  "triaged": "2026-10-21",
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#ways of two kinds stay two": {
   "body": "cc5913ed81aa1d71",
   "claim": "ways of two kinds stay two - village-lanes.drawing: a jog across a joint pulled straight like any other; a cart route and a footpath, or a web and a non-web lane, met end to end, split back into their two records after the pull (`_split_committed`), each keeping its own width",
-  "code": "ad3b4265ddd1c583",
-  "core": "da6596da0d04d8b0",
+  "code": "e8b7b7a6bd4dc5bb",
+  "core": "d85d48f8b57dcbf9",
   "date": "2026-10-18",
   "note": "lanes that differ in width or web status are pulled like any joint, then split back by _split_committed, each keeping its own width",
   "pages": {
@@ -24382,7 +24382,7 @@
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "triaged": "2026-10-21",
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_pts#plumbing": {
@@ -24732,6 +24732,30 @@
    "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/joints.py::tread_gap#a lane with no width": {
+  "body": "14cdbbaea9854c04",
+  "claim": "a lane with no width - village-lanes.drawing: the 3 ft footpath",
+  "code": "bfcf4443f87e035e",
+  "core": "857515d2a9cb8eea",
+  "date": "2026-10-22",
+  "note": "a missing width read as 3.0 ft, the page's footpath width",
+  "pages": {
+   "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
+  },
+  "research": "324b10775c9108ef",
+  "rests": [
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/joints.py::tread_gap#a pulled line keeps the wider lane's tread 3 ft off a building (half width + `TREAD_WALL_FT`), never closer than `_TOUCH_GAP` 4 ft to its middle; only `_one_joint` carries this claim, `tread_gap` itself does not": {
+  "code": "857515d2a9cb8eea",
+  "core": "857515d2a9cb8eea",
+  "date": "2026-10-22",
+  "note": "a pulled line keeps the wider lane's tread 3 ft off a building (half width + `TREAD_WALL_FT`), never closer than `_TOUCH_GAP` 4 ft to its middle; only `_one_joint` carries this claim, `tread_gap` itself does not",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/joints.py::unhooked#a lane's end loses its hook": {
   "code": "8925237f83bb2265",
