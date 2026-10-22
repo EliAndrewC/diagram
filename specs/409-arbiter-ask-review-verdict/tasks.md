@@ -6,9 +6,9 @@
 
 ## Tasks
 
-- [ ] T01 The ask names its review; the ruling carries it; spec_ruled and arbiter_accept honor it; the tests (D1-D3; FR-001 to FR-005)
+- [x] T01 The ask names its review; the ruling carries it; spec_ruled and arbiter_accept honor it; the tests (D1-D3; FR-001 to FR-005)
       research: rendering
-      verify: the two test files and make hooks-test green; each new test red with its change removed
-- [ ] T02 Close: report and land
+      verify: DONE. landed in batch T01+T02: REVIEW=spec|plan honored by spec_ruled and arbiter_accept; 42 tests green, the four new red without the change
+- [x] T02 Close: report and land
       research: rendering
-      verify: the push lands; origin/main carries 409
+      verify: DONE. landed in batch T01+T02: REVIEW=spec|plan honored by spec_ruled and arbiter_accept; 42 tests green, the four new red without the change
