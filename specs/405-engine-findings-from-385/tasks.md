@@ -347,6 +347,9 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
       verify: DONE. landed: the claim-label lint at make claims-owed (D91)
 
+- [ ] T121 `marsh_ground`'s docstring says the ways leave out the `defense` belt "whose approach is a causeway", while 0081 says no map draws a causeway, so a track does not cross the reeds: every way reading `marsh_ground(..., but=("defense",))` (the lane law's walkable span, the router, the web) - wall the belt as T09 does in `_thread_the_fabric`, or record the exclusion on 0081 as a DEVIATION (impl-drift outside the change, T09's round 2, 2026-10-22) [lands-open]
+      research: rendering
+
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

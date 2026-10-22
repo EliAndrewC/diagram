@@ -878,13 +878,19 @@
    "declared": "spec-fidelity"
   },
   "### T09 Decisions": {
-   "sha256": "d54c25219d4fc02e8235c690d40d4db68f27a9d58acf3bc99eda2db09c40abee",
+   "sha256": "a7dd184a5ce16875395a475aa66281ed9b55d297c14c941e61e2337663278c57",
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   },
   "### T09 Approach (re-answered 2026-10-22T13:07Z)": {
    "sha256": "3848cd9b3d05d53f3385ea47f15f99114e69982fd2c14c32dc7dc3750777baf6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T09 Approach (re-answered 2026-10-22T13:16Z)": {
+   "sha256": "b7bc6e0537d6e2873063b8ef40cb9d998f08a6439d74fc1f41ffdf6259d9a268",
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
@@ -3831,6 +3837,58 @@
      "summary": "track.py crossed the 1,000-line bar, so the thread half is lifted out into a sibling ways/thread.py, which track re-exports, rather than turning track into a package.",
      "class": "within",
      "why": "Amendment 7 asks that a file over 1,000 lines be split into submodules rather than trimmed, with importers unchanged. A sibling module re-exported by track does both: it is a split, not a trim, and imports of track do not change. The GM's landing/ package was given as an example ('You know, like if...') and is not the only allowed form; the ~650-line figure is expressly not a hard limit. The engine's own precedent (cluster_edge.py, feature 316) is the same form."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "### T09 Approach (re-answered 2026-10-22T13:16Z)",
+    "### T09 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D95-belt",
+     "summary": "Every fallback, and now the first route too, walls the defense belt's reeds as wet ground, since no map draws a causeway (0081).",
+     "class": "within",
+     "why": "This applies the researched rule (0081) to a case the earlier text missed. It is the claim being fixed, not a departure from it, and taking the research is what the GM asked for in amendment 7."
+    },
+    {
+     "id": "D95-third-route",
+     "summary": "The grove fallback's third route, which was searched with the water left out, is dropped because it crossed water anywhere rather than at a crossing place (0035).",
+     "class": "within",
+     "why": "Removing a fallback that broke the researched crossing rule carries out the claim fix. It takes nothing out of what the GM asked for (finish 405's tasks, following the research), and its own case (seed 11) is measured, 7/7 on 2026-10-22."
+    },
+    {
+     "id": "D95-swing",
+     "summary": "The swing's detour is taken only where it crosses no water at all. Before, it could add no crossing the run did not already make.",
+     "class": "within",
+     "why": "This is stricter code behavior that serves 0035 (cross only at a crossing place). The request has no clause it narrows. The fallback is simply refused more often."
+    },
+    {
+     "id": "D95-routes-fords",
+     "summary": "The two remaining routes wall the toe band and the wet ground and are searched with the water lines, so they cross only at the fords and add no crossing the run did not make (0035).",
+     "class": "within",
+     "why": "This applies the research rule. It does not narrow the request or the spec."
+    },
+    {
+     "id": "D95-split",
+     "summary": "track.py passed the 1,000-line bar, so the thread half moves into a sibling ways/thread.py that track re-exports, the same way cluster_edge.py was lifted out (feature 316).",
+     "class": "within",
+     "why": "This is the split the GM asked for in amendment 7, done so that callers' imports do not change. The landing/ package was the GM's example ('like if'), not a required shape, and a re-exporting sibling keeps imports intact just the same. It was unchanged from the CLEAR earlier text apart from dropping the stated reason."
+    },
+    {
+     "id": "Approach-6-exits",
+     "summary": "Exit (a), recording DEVIATIONs of 0081 and 0035, is not taken. Exit (b), meeting both in code, is taken.",
+     "class": "within",
+     "why": "Following the research rather than deviating from it is the default the GM stated in amendment 7."
+    },
+    {
+     "id": "D95-order-guess",
+     "summary": "The route order is recorded as a GUESS. Rendering is historically accurate under 0081 and 0035.",
+     "class": "within",
+     "why": "This labels a design choice the research does not settle. It narrows nothing."
     }
    ]
   }
