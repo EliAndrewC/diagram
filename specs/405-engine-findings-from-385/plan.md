@@ -537,6 +537,21 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 
 - **D101** 0081's worn-path paragraph agrees with 'A turn the ground forces'; 0196's absence note says only what was read; the isotherm/isohyet glossary error is gone; 0081 records the joint mend (the meeting point moved back one bend) as its GUESS, which `joints._joint_moved_back` cites. Rendering: as each line is labeled on its page.
 
+
+### T70 part B (2026-10-22T14:17Z)
+
+Owed by the cohort record of 2026-10-22T03:45Z (seeds 10, 24, 36, 47 newly failing), rolled while T70 was in flight - T26's wood-shed change under test, never landed (set down, its knots carried to T107).
+
+1. **What is refusing?** Nothing of T70's: its work is record text (0081, 0196, the glossary) and one claim's label (`joints._joint_moved_back`); the four seeds failed on T26's uncommitted engine diff, measured then (dev/cohort-log/20261022T034510Z-*), and every landing since passed its cohort (T09, the record batch: 54/54).
+2. **A3 again.** Unchanged: 0081, 0196, the glossary (R).
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: D101 as reviewed.
+6. **The one-sentence test.** "0081's paragraph agrees with its forced-turn bullet, 0196 says only what was read, isotherm is not isohyet, and the joint mend is the page's GUESS" - true on the pages (session 3's checks clean).
+7. **The next step is a measurement.** `make land` on T70.
+8. **Every route measured before offering one?** No route is offered.
+9. **After a ruling: the step it names?** No ruling owed.
+
 ## T92 - the record, written in a page session
 
 ### T92 Approach (checklist part A)
