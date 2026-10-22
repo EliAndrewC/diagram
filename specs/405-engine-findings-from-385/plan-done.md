@@ -2721,3 +2721,65 @@ Owed by the cohort record of 2026-10-22T03:45Z (seeds 10, 24, 36, 47 newly faili
 ### T130 Decisions
 
 - **D117** The field block moves verbatim to `hamletgen/consts_fields.py` and the ways block to `hamletgen/consts_ways.py`, each re-exported by name from `consts.py` as `consts_water.py` is, leaving `consts.py` at about 600 lines; nothing else changes. Rendering: n/a (structure).
+<!-- plan-archive: archived 2026-10-22 -->
+## T129 - two 0081 sentences, written in page session 8
+
+### T129 Approach (checklist part A)
+
+1. **The goal, in the world.** 0081 says a gathered lane end may meet the other lane's side as a T, and that every way keeps off every marsh's reeds, a defense belt's included - so the claims citing it rest on what it states.
+2. **The constraints.** The research record's rules; page sessions write, then a fresh session checks.
+3. **Where each comes from.** T123's and T121's impl-drift rounds (outside the change); R: 0081.
+4. **Do they describe the world here?** Yes: `knots.teed_onto` and T121's walls do it.
+5. **The order.** Page session 8 wrote both; session 9 checked them (record-format, quote-check, modal-depiction, a round arbiter's continue on a depiction cascade); merged. The `record-checked` crash session 9 met and fixed is its own task, T132.
+6. **The exits.** (a) change the code - not taken; (b) record it - taken.
+7. **The search smell.** None.
+8. **The budget.** Its share of two page sessions.
+9. **Done, measured.** Session 9's checks applied and answered; `make record-owed` 0 unanswered (2026-10-22).
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T129 Decisions
+
+- **D118** 0081 records the T-foot join for a gathered end and the reeds walled to every way (labeled as the page labels each bullet). Rendering: as labeled.
+
+<!-- plan-archive: archived 2026-10-22 -->
+## T132 - record-checked's FIXED_BY on an unfootnoted unit
+
+### T132 Approach (checklist part A)
+
+1. **The goal, in the world.** `make record-checked FIXED_BY=` on a quote-check's unfootnoted unit refuses with a message that says what to do, instead of crashing.
+2. **The constraints.** Tips live in error output (the GM's rule); a tooling fix lands with a test red without it; found work on unchanged code is its own task (FR-002).
+3. **Where each comes from.** Measured: page session 9 (2026-10-22) hit a KeyError there and fixed it (commit 0889dcdc1). R for the process.
+4. **Do they describe the world here?** Yes.
+5. **The order.** Already done in session 9's commit: the form is refused with its message, and a test pins it; merged with T129's work.
+6. **The exits.** (a) leave it folded into T129 - not taken (FR-002); (b) its own task - taken.
+7. **The search smell.** None.
+8. **The budget.** Done.
+9. **Done, measured.** The test in session 9's commit, red without the fix; `make test-file` on it at the landing.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T132 Decisions
+
+- **D119** `record-checked` refuses FIXED_BY on an unfootnoted unit with its message rather than crashing (session 9's fix, with its test). Rendering: n/a (tooling).
+
+<!-- plan-archive: archived 2026-10-22 -->
+## T131 - check-wave stamps each reply with its unit's label
+
+### T131 Approach (checklist part A)
+
+1. **The goal, in the world.** Every reply a check-wave returns is matched to its own bundle by its label, whatever the agent wrote as its label.
+2. **The constraints.** Feature 383 amendment 7's check-wave (`.claude/workflows/check-wave.js`); a tooling fix lands with a test.
+3. **Where each comes from.** Measured: the wave of 2026-10-22 returned 'impl-drift dw3' for unit dw3, so its reply was not recorded until looked up by hand. R for the process.
+4. **Do they describe the world here?** Yes.
+5. **The order.** The workflow's return overwrites each reply's label with its unit's.
+6. **The exits.** (a) tell the agents to echo it - not taken (an instruction to remember); (b) stamp it in the workflow - taken.
+7. **The search smell.** None.
+8. **The budget.** 10 min.
+9. **Done, measured.** `tests/test_agent_models.py` pins the stamp (red without it).
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T131 Decisions
+
+- **D120** `check-wave.js` returns `{ ...reply, label: unit.label }` for each unit. Rendering: n/a (tooling).
