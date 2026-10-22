@@ -23351,12 +23351,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/fabric.py::house_hit#a tread 3 ft off the wall": {
-  "body": "f98cc7fee10fc363",
-  "claim": "a tread 3 ft off the wall - village-lanes.drawing: a lane's tread kept 3 ft clear of a farmhouse wall (`TREAD_WALL_FT`), the 3 ft winning over the 6 ft a straightened lane may come up to the buildings (405 T119)",
-  "code": "c21c09d513699c9b",
-  "core": "d6766123c57224aa",
+  "body": "ebf3eb313c51d5b7",
+  "claim": "a tread 3 ft off the wall - village-lanes.drawing: a lane's tread kept 3 ft clear of a farmhouse wall (`TREAD_WALL_FT`), measured from the tread's middle to every wall (half the tread plus 3 ft), the 3 ft winning over the 6 ft a straightened lane may come up to the buildings (405 T119)",
+  "code": "9bec617db14a5a15",
+  "core": "baed7c5f0ae51271",
   "date": "2026-10-22",
-  "note": "`half = width / 2.0 + TREAD_WALL_FT` is right, but it is measured only from the house's four corners and its center (`probes = [*quad, (x, y)]`), never from the walls between them. A lane can stop at a bend next to the middle of a long wall, or pass close along it between two corners, and still be under 3 ft from it, so the code does not do what the page says: \"A lane's tread keeps 3 ft clear of a farmhouse wall\". The code should measure the 3 ft from the wall segments, or the claim should say \"3 ft off each corner\". The test also covers only the `houses` records. Whether the GUESS 3 ft off \"its sheds, byre and retirement house\" is applied anywhere else cannot be seen in this bundle.",
+  "note": "the code tests from the tread's middle to every wall against half the width plus `TREAD_WALL_FT`=3, and has no 6 ft allowance that could override it; this matches the 3 ft wall clearance that wins over the 6 ft",
   "pages": {
    "0081-village-lanes.drawing.html": "f0a488aba85003e2"
   },
@@ -23365,24 +23365,23 @@
    "0081-village-lanes.drawing.html:426f2feb39477167",
    "0081-village-lanes.drawing.html:8d27a46007b683f3"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/fabric.py::house_hit#no house on a tread": {
-  "body": "f98cc7fee10fc363",
-  "claim": "no house on a tread - how-our-maps-lay-a-clustered-settlements-lanes.drawing: no corner (nor the center) within half the tread's width - no corner of a house on the tread",
-  "code": "e378af2b1a069376",
-  "core": "d6766123c57224aa",
+  "body": "ebf3eb313c51d5b7",
+  "claim": "no house on a tread - how-our-maps-lay-a-clustered-settlements-lanes.drawing: nothing built on a lane - no part of a house (its walls or what they enclose) on the tread",
+  "code": "3018bf42ad6ee560",
+  "core": "baed7c5f0ae51271",
   "date": "2026-10-22",
-  "note": "two problems. (1) The claim's description is out of date: the marked line `half = width / 2.0 + TREAD_WALL_FT` tests half the tread's width plus 3 ft, but the claim still says \"within half the tread's width\". It should say \"plus `TREAD_WALL_FT`\", and that 3 ft comes from 0081 §37, not from 0246. (2) The probes are only the four corners and the center, measured with `seg_dist(px, py, pts[i], pts[i+1]) < half`, never the walls. A tread crossing a 30x20 ft house end to end at x=7.5 is 7.5 ft from the nearest corner and from the center, which is more than `half` for a footpath (4.5) or the spine (5.5), so the test returns False. That breaks \"Nothing is built on a lane\". The test should measure tread to the house quad (its edges and interior), not to sample points. This is the same root cause as span_walkable's key",
+  "note": "a crossing, or an endpoint inside the house's quad, counts as a hit, so no part of a house stands on the tread",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "73544dbd2b202b85"
   },
   "research": "c063a73e4f62bfa9",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:e1df41a4a71cb26a"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/fabric.py::lane_fabric#plumbing and geometry": {
   "body": "f4f76a82499a0d87",
@@ -26493,22 +26492,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::span_walkable#a span off a farmhouse": {
-  "body": "eaf0ec4694a2e142",
+  "body": "1c917863828f83e1",
   "claim": "a span off a farmhouse - village-lanes.drawing: its line a footpath's half-tread (`TREAD_HALF_FT`) and the 3 ft a lane's tread keeps off a farmhouse wall (`TREAD_WALL_FT`) off a house",
   "code": "336f4f79aaa6c148",
   "core": "9340804570eace48",
   "date": "2026-10-22",
-  "note": "the figure is right: `house_hit([p, q], 2 * TREAD_HALF_FT, ...)` gives 1.5 + 3 = 4.5 ft, which is the §19 footpath and the §37 3 ft. But the 4.5 ft is measured only to the house corners and center (the `house_hit` probes), not to the wall that §37 names. So a short span lying across the middle of a long wall, or inside the house, passes. Nothing else in the function catches it: the `segments_cross(p, q, r[k], ...)` rings test covers fields, dry plots and marshes, never house quads. The marked comment's \"keeps it 3 ft off the wall\" is untrue until `house_hit` measures to the quad. Same root cause as house_hit's key; one fix covers both",
+  "note": "it passes a 3 ft footpath width (2*`TREAD_HALF_FT`), and `house_hit` keeps the line 1.5+3 ft off every wall",
   "pages": {
    "0081-village-lanes.drawing.html": "f0a488aba85003e2"
   },
   "research": "f4963066b67090ee",
   "rests": [
    "0081-village-lanes.drawing.html:426f2feb39477167",
-   "0081-village-lanes.drawing.html:8d27a46007b683f3",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::span_walkable#a span off a threshing yard": {
   "body": "4f339c934389acec",
