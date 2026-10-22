@@ -269,7 +269,10 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
 
 def _inner(run: Poly, d: float = 3.0) -> Poly:
     """`run` with each end drawn in `d` along its own leg (405 T09): a fallback's ends stand on the bund or at the field's edge,
-    which a crossing test at 0 ft would read as crossing the field; a leg shorter than twice `d` is kept whole."""
+    which a crossing test at 0 ft would read as crossing the field; a leg shorter than twice `d` is kept whole.
+
+    Research: the ends drawn in - GUESS: 3 ft at each end, so a fallback whose end stands on the bund or at the field's edge is
+    not read as crossing it; a crossing nearer an end than that goes untested"""
     out = list(run)
     for i, j in ((0, 1), (-1, -2)):
         n = math.dist(out[i], out[j])
