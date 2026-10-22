@@ -297,6 +297,18 @@ def _one_hook(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt], 
     return False
 
 
+def tread_gap(a: Mapping[str, Any], b: Mapping[str, Any]) -> float:
+    """How far a pulled line across a joint keeps off a building: the WIDER of the two lanes' treads 3 ft off a wall
+    (`TREAD_WALL_FT`, 0081; 385 T07 - the pulled line carries both lanes), never under `_TOUCH_GAP`. A lane recording no
+    width is the 3 ft footpath, as `settle_ends`, `touch` and the knots read it (405 T108: it was the 5 ft spine's here).
+
+    Research:
+        a lane with no width - research/questions/0081-village-lanes.drawing.html: the 3 ft footpath
+        a pulled line's tread off a building - research/questions/0081-village-lanes.drawing.html: the wider lane's tread 3 ft off a farmhouse wall (half its width + `TREAD_WALL_FT`), never under `_TOUCH_GAP` (4 ft) to the line's middle
+        the same tread gap off the other buildings - GUESS: the farmhouse's 3 ft kept off every other building a pull touches (sheds, byres, retirement houses), which no page sizes"""
+    return max(_TOUCH_GAP, max(float(a.get("w") or 3.0), float(b.get("w") or 3.0)) / 2.0 + TREAD_WALL_FT)
+
+
 def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt], hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], buildings: Sequence[Poly] = ()) -> bool:
     """Rewrite the first joint that can be improved; False when none can.
 
@@ -306,7 +318,7 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
         the joint moved back a vertex - UNRESEARCHED: where the pull cannot clear a Z across the joint; 0081's no-zigzag rule asks a mend and names none
         the shorter link the T's stem - GUESS: of the two arriving lanes, the one whose clear link to the other's side is shorter becomes the stem; searched research/questions/0081-village-lanes.drawing.html (a fold at a joint becomes a T, a worn path takes the shortest or easiest way, but not which lane is the stem) and research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html (ways joined at a T, no stem rule)
         no new kink from a pull - research/questions/0081-village-lanes.drawing.html: a lane does not zigzag (two turns over 50 degrees within 40 ft) or double back, so a pull at a joint that leaves more kink_spans than the two lanes had is refused
-        a pulled lane's clearance - research/questions/0081-village-lanes.drawing.html: where a straightened lane touches a building its tread keeps the 3 ft a lane's tread keeps off a farmhouse wall - max(_TOUCH_GAP 4 ft, half the wider of the two lanes' widths + `TREAD_WALL_FT`), a 5 ft width assumed when none is set; the page lets it come right up to the buildings within 6 ft of the old line
+        a pulled lane's clearance - research/questions/0081-village-lanes.drawing.html: where a straightened lane touches a building its tread keeps the 3 ft a lane's tread keeps off a farmhouse wall - max(_TOUCH_GAP 4 ft, half the wider of the two lanes' widths + `TREAD_WALL_FT`) (`tread_gap`), a lane with no width read as the 3 ft footpath; the page lets it come right up to the buildings within 6 ft of the old line
         all but the buildings keep the usual clearance - research/questions/0081-village-lanes.drawing.html: the touch is the buildings' (houses, farm sheds, byres, retirement houses); a fence, a grove, a well, a fixture and the crop keep `_clear_link`'s margins, as an unpulled lane does
         a jog across a joint pulled straight - research/questions/0081-village-lanes.drawing.html: string-pulled wherever the
             chord keeps the usual clearance; where it touches a building, every dropped vertex within 6 ft of the new line
@@ -332,7 +344,7 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
         built = {_key(q) for q in buildings}
         two = lanes[i].get("w") != lanes[j].get("w") or bool(lanes[i].get("web")) != bool(lanes[j].get("web"))
         # the WIDER tread 3 ft off a wall (0081; 385 T07): the pulled line carries lane j too, which may be the wider
-        gap = max(_TOUCH_GAP, max(float(lanes[i].get("w") or 5.0), float(lanes[j].get("w") or 5.0)) / 2.0 + TREAD_WALL_FT)
+        gap = tread_gap(lanes[i], lanes[j])
 
         def ok(a: int, b: int, p: Poly = old, g: float = gap, bt: set[tuple[tuple[float, float], ...]] = built) -> bool:
             if _clear_link(p[a], p[b], hard, walls, water):
