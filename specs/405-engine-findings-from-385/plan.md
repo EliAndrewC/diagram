@@ -416,22 +416,4 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 10. **Before moving a constant.** No constant moves: the table only states the knobs.
 11. **Before fitting things into room.** n/a - this is the tool that asks it.
 
-## T93 - two claims the claims gate carried (385 FR-013)
-
-### T93 Approach (checklist part A)
-
-1. **The goal, in the world.** A way carried on to the bund keeps the 7 ft off a garden fence any lane keeps, and its claims say so truly; a join link's margin off the crop is said as the research has it.
-2. **The constraints.** 0246's 7 ft from a lane's middle to a garden fence (`FOOTPATH_FABRIC_GAP`); 0246's no house on a tread; 0081's lane on the bund that may touch a plot's boundary; the claims gate.
-3. **Where each comes from.** 0246's 7 ft: O (a map drawing convention, the page says). No house on a tread: R. 0081's bund: R.
-4. **Do they describe the world here?** Item 1: `tip_onto_the_bund` passes `2.0 * half_tread` to `RunOnBlocks.clear` as the run-on's WIDTH - the drawn tread the fixture, crop and house tests read - while `clear` keeps the run-on's middle `FOOTPATH_FABRIC_GAP` (7 ft) off the steadings' fabric, gardens included. The code keeps the page's 7 ft; the claim ("short of 0246's 7 ft") misreads the width as a clearance - MISLABELED, as the round said, but the fault is the claim's words, not the code. Item 2: `_clear_touch`'s 7 ft off the crop, where 0081 lets a lane touch a plot's boundary - the same finding as T98 (which names `_clear_touch`'s 7 ft join link off the crop and asks for the crop margin to reach the edge or be recorded on 0081).
-5. **The order.** Nothing moves.
-6. **The exits.** (a) item 1's claim rewritten to what the code does, citing 0246 - taken; (b) item 1's code changed - not taken: it already keeps the page's gap; (c) item 2 worked here - not taken: T98 owns it whole (every `clear_runs` crop margin, not one caller), and splitting it would decide the crop margin twice; (d) more room - n/a; (e) conform - n/a.
-7. **The search smell.** None.
-8. **The budget.** 20 min with its landing.
-9. **Done, measured.** Item 1's claim re-checked IN-STEP by impl-drift; item 2 named in T98's text as carried from T93; no engine logic changes (a docstring only).
-10. **Before moving a constant.** No constant moves.
-11. **Before fitting things into room.** n/a.
-
-### T93 Decisions
-
-**D85 - the run-on's width is its tread; its clearance is the fabric's 7 ft.** `tip_onto_the_bund`'s claim "a run-on leg clear by its tread" is rewritten: the leg is judged at its drawn width (`2.0 * half_tread`, the tread the fixture, crop and house tests read - 0246's no house on a tread), and kept 7 ft off the steadings' fabric, gardens included, by `RunOnBlocks.clear` (`FOOTPATH_FABRIC_GAP`, 0246). No code changes. `_clear_touch`'s crop margin (T93's second item) is carried to T98, which already names it; T98's text says so.
+<!-- plan-archive: T93 to T93 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
