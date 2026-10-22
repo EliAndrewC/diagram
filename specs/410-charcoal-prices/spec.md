@@ -43,6 +43,30 @@ file, the verdict and what is still open.
   weight, labeled.
 - No price is converted to koku; between coins only by a rate the source gives or 0277's, labeled.
 
+## The findings, figure by figure (the passes, 2026-10-22; leads until read on the page)
+
+All go into a new money question, 0279 "What did charcoal cost?" (Japan first, then the Qing comparison).
+
+- **Black charcoal by the bale, retail (Japan)**: ATTESTED ONLY FOR Edo 1842 - Ōishi 1966's table of the price-cut order,
+  per bale: 上炭 500 -> 466 mon, 中炭 448 -> 422, 下炭 364 -> 342, 佐倉炭 144 -> 135 (its 中/下 132/120 -> 124/112); the
+  grade names are not black or white, and no bale weight is printed. Beside it, the nearest wages in 0275 (Edo 1830s-50s,
+  carpenter 5-5.5 monme, tobi 300 mon), named as the nearest.
+- **The bale's weight**: 0197 already says about 4 kan; the Itsukaichi bulletin gives Tama bales of 4, 5 or 6.5 kan,
+  undated - 0279 states the variation and names 0197.
+- **White charcoal, and white against black**: ATTESTED ONLY FOR white against white - 1716, through Mitamura Engyo
+  (Itsukaichi bulletin): Kumano (binchotan) 400-500 mon a bale, 8-9 bales a ryo, against Hachiōji (Tama, all white) about
+  20 bales a ryo. Japan's black-against-white ratio SILENT. Qing comparison: Beijing 1736's official list, 白炭 1.1 against
+  黑炭 0.5/0.6 tael per 100 jin (about 2:1, arithmetic), with the same list's craftsman 154 and laborer 75 cash a day.
+- **Wholesale at the kiln, by boat or cartload**: OPEN - no price found; the brokers' levy of 8 (later 12) mon per
+  8-bale horse-load is a tax, not a price; 809,710 bales came to Edo by ship in 1726 (second hand).
+- **Labor per bale, yield**: SILENT on burner-days and wood-to-charcoal yield; an undated modern statement gives 20-30
+  bales an earth kiln of black in 3-4 days against 2-3 bales a stone kiln of white - ATTESTED ONLY FOR that general
+  statement.
+- **Carriage to the city**: SILENT on the fee; carriers and horse-loads (6-8 bales) described, no amount.
+- **Ming/Qing comparison**: ATTESTED ONLY FOR official assessed prices - Beijing 1615 and 1736 (Gao 2022), Zhili 1769 by
+  district (Bochum, 木炭 0.0018-0.008 tael a jin beside each district's 匠 and 夫 wages), 武編's Ming smithing costs.
+- **Nearest only**: Akita 1600, 181 kanmon for 120 bales of smith's charcoal (pre-Edo) - named, not an answer.
+
 ## Requirements
 
 - **FR-001**: Every figure of the issue gets, in the reply on #11, its fragment file, its verdict and what is still open.
