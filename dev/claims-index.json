@@ -20413,11 +20413,11 @@
  },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off a house": {
   "body": "94a5d55beb8ffaa7",
-  "claim": "off a house - village-lanes.drawing: a lane's tread keeps 3 ft clear of a farmhouse wall - the fabric's 7 ft to the middle keeps a tread of up to 8 ft inside it",
-  "code": "badb90d040794b36",
+  "claim": "off a house - village-lanes.drawing: a lane's tread keeps 3 ft clear of a farmhouse wall - the fabric's 7 ft to the middle, judged from 2 ft along (about 6.7 ft level with the stretch's start), keeps a tread of up to 7.4 ft inside it - the hamlet's treads are 3 to 6 ft",
+  "code": "13b24493fbb6c58b",
   "core": "a5113f26869d1b3f",
   "date": "2026-10-22",
-  "note": "The claim says the fabric's 7 ft to the middle keeps a tread of up to 8 ft at least 3 ft off a wall. The changed return line judges the fabric from `start` (2 ft along), not from `a`. So a wall level with `a` is held only sqrt(7² - 2²) ≈ 6.7 ft from the middle, which leaves 3 ft of clearance for a tread up to about 7.4 ft, not 8 ft (\"A lane's tread keeps 3 ft clear of a farmhouse wall\"). The hamlet's 3, 5 and 6 ft treads stay inside it. Either the claim should say \"up to 7.4 ft\", or houses should be judged from `a`",
+  "note": "the 7 ft to the middle (FOOTPATH_FABRIC_GAP), measured from 2 ft along the stretch, leaves at least 3 ft of clear ground beside every tread of 3 to 6 ft, as the page asks; the arithmetic for the stretch's start checks out (sqrt(7^2-2^2) ≈ 6.7, less 3 = 3.7 half-width, a 7.4 ft tread)",
   "pages": {
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
   },
@@ -20426,7 +20426,7 @@
    "0081-village-lanes.drawing.html:417841cd16f112d9",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off its own garden": {
   "body": "b8286366aa68ebb2",
