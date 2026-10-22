@@ -22447,13 +22447,13 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/corridors.py::field_router#its own house at its door": {
+ "l7r/diagram/hamletgen/ways/corridors.py::field_router#its own house beside its start": {
   "body": "0099614c0c3039b1",
-  "claim": "its own house at its door - GUESS: a route starting within `GABLE_MARGIN_FT` + `FIELD_ROUTE_GAP_FT` (13 ft) of a house, at its door, is not walled by that house - the 13 ft is ours, as is the margin off a house no page sizes; the law keeps no house corner on the tread (`house_hit`, its own claim on 0246) (405 T115)",
-  "code": "92e2bafa17be77bd",
+  "claim": "its own house beside its start - GUESS: a route starting within `GABLE_MARGIN_FT` + `FIELD_ROUTE_GAP_FT` (13 ft) of any wall of a house (`edge_dist`, whichever side) is not walled by that house - the 13 ft is ours, as is the margin off a house no page sizes; the law keeps no house corner on the tread (`house_hit`, its own claim on 0246) (405 T115)",
+  "code": "4abfaf8a99d27046",
   "core": "6f8cce7f9df46841",
   "date": "2026-10-22",
-  "note": "no page says how close a route's start must be for its own house not to wall it; §111 covers only the garden beds and fixtures a way leaves round, §112's 60 ft / 12 ft only decides which house is its own, and §113's rule against house corners on the tread is enforced by house_hit, not by walling; so GUESS is right, and `GABLE_MARGIN_FT + FIELD_ROUTE_GAP_FT` (6 + 7 = 13 ft) is what the claim says",
+  "note": "GUESS correct and true of the code: line 62 lets the start's own house through when `edge_dist &lt;= GABLE_MARGIN_FT + FIELD_ROUTE_GAP_FT` (6 + 7 = 13 ft), and 0246 does not size a way's clearance off a house. It only keeps house corners off the tread and routes the way round its own beds and fixtures",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
