@@ -159,9 +159,11 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
             stands inside the crop's gap, so the crop is tested after the route, not walled in it); the first that crosses no band, nothing
             held (paddy, crop, toe band, wet ground), no steading at a footpath's gap and no more water than the run it replaces is taken. A third, with the water left out of its search, was dropped (405 T09): it
             crossed wherever it met the water, not at a crossing place
-        no more water than the run it replaces - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way
-            crosses water only at a crossing place, so a grove fallback route - searched with the water lines, crossing at the fords - may add
-            no crossing the run did not make, and the swing, whose legs would meet the water anywhere, is taken only where it crosses none
+        water crossed only at a crossing place - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a
+            grove fallback route is searched with the water lines, so it crosses at the fords; the swing, whose legs would meet the water
+            anywhere, is taken only where it crosses none
+        no more crossings than the run it replaces - GUESS: a grove fallback route is taken only where it crosses no more water than the
+            run it replaces; 0035 sets no limit on how many crossings a way makes (a crossing pays where it saves about 150 ft of walk)
     """
     if len(run) < 2:
         return run

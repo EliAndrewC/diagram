@@ -31247,12 +31247,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/thread.py::_thread_the_fabric#never across a grove": {
-  "body": "baeb2864a61c09dd",
+  "body": "a6181ba244b18e6a",
   "claim": "never across a grove - groves-of-trees-around-farmhouses-yashikirin.drawing: routed round the bands, else only the part clear of them kept",
-  "code": "58b073583dfbd763",
-  "core": "f71357b1140d6692",
+  "code": "bbb36ccccdd0dacb",
+  "core": "96eb304c7a6aa25e",
   "date": "2026-10-22",
-  "note": "Bands are walled in the first route, then the two grove-fallback routes are tried, then only the far part clear of the bands is kept, else nothing. The way stays outside the grove or goes through its gap.",
+  "note": "bands grown into the fabric, then the two grove fallback routes, then the far clip, else nothing; the way runs outside the grove",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
@@ -31261,45 +31261,45 @@
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/thread.py::_thread_the_fabric#no more water than the run it replaces": {
-  "body": "baeb2864a61c09dd",
+  "body": "a6181ba244b18e6a",
   "claim": "no more water than the run it replaces - villages-beside-their-stream-one-bank-or-both.drawing: a way crosses water only at a crossing place, so a grove fallback route - searched with the water lines, crossing at the fords - may add no crossing the run did not make, and the swing, whose legs would meet the water anywhere, is taken only where it crosses none",
-  "code": "6f3b7cbe31a438c6",
-  "core": "f71357b1140d6692",
+  "code": "3c39289cd7436e99",
+  "core": "96eb304c7a6aa25e",
   "date": "2026-10-22",
-  "note": "the grove routes are searched with the water lines and kept only at `<= _water_crossings(kept)`; the swing is rejected on any crossing; the far clip is a sub-run of `kept` and so adds none",
+  "note": "the swing's \"crosses none\" and the routes searched with the water lines follow 0035 (crossings at plank-bridge crossing places). The cap `_water_crossings(around, lines) <= _water_crossings(kept, lines)` does not: 0035 sets no limit on how many crossings a way makes. Its only rule is that a crossing pays when it saves about 150 ft. The cap is the project's own choice, so mark that part GUESS or UNRESEARCHED",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
   "research": "d47738a05844fe19",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
-  "triage": "touched",
-  "verdict": "IN-STEP"
+  "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/ways/thread.py::_thread_the_fabric#the grove fallback's two routes in order": {
   "body": "a6181ba244b18e6a",
-  "claim": "the grove fallback's two routes in order - GUESS: each with the toe band and the wet ground walled, round the grown bands and the crop, then the bands alone (the spur's field end stands inside the crop's gap, so the crop is tested after the route, not walled in it); the first that crosses no band, no crop and no more water than the run it replaces is taken. A third, with the water left out of its search, was dropped (405 T09): it crossed wherever it met the water, not at a crossing place",
-  "code": "64b16b086178f2e5",
+  "claim": "the grove fallback's two routes in order - GUESS: each with the toe band and the wet ground walled, round the grown bands and the crop, then the bands alone (the spur's field end stands inside the crop's gap, so the crop is tested after the route, not walled in it); the first that crosses no band, nothing held (paddy, crop, toe band, wet ground), no steading at a footpath's gap and no more water than the run it replaces is taken. A third, with the water left out of its search, was dropped (405 T09): it crossed wherever it met the water, not at a crossing place",
+  "code": "6e7e804cb70b4230",
   "core": "96eb304c7a6aa25e",
   "date": "2026-10-22",
-  "note": "the loop runs two routes in the claimed order, (roomy+crops+wet) then (roomy+wet). The first route that crosses no band, no `held` and no more water than `kept` is taken, and no third route remains. The pages do not set the order; 0081 only says a walker goes round a grove, a field or water",
+  "note": "the code tries the two routes in the stated order with the stated tests; nothing cited answers the order",
   "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/thread.py::_thread_the_fabric#the track kept off drawn water": {
-  "body": "baeb2864a61c09dd",
+  "body": "a6181ba244b18e6a",
   "claim": "the track kept off drawn water - villages-beside-their-stream-one-bank-or-both.drawing: a way crosses water only at a crossing",
-  "code": "8d7024d578352623",
-  "core": "f71357b1140d6692",
+  "code": "386b5b328677a5a1",
+  "core": "96eb304c7a6aa25e",
   "date": "2026-10-22",
-  "note": "The swing is refused on any water crossing, and the grove fallback may add no crossing the run did not already make. Two return paths never test water: `clip_to_clear(routed if len(routed) >= 2 else run, ...)` when the router finds nothing, and the `far` clip of `kept` when `kept` is the raw `run`. Those paths keep 0035's \"cross the brook squarely, on a plank bridge\" only if the incoming `run` already crosses at crossing places. To decide, I need to know where `run` comes from (connector and spur templates) and how `_route` treats `lines`. If `run` is not guaranteed to cross only at crossing places, this is DRIFTED and both paths need the `_water_crossings` test.",
+  "note": "drawn channels go into the route's water lines (it crosses at fords); the swing, the unrouted clip and the far clip are each refused where they cross water",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
@@ -31308,16 +31308,15 @@
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5"
   ],
-  "triage": "touched",
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/thread.py::_thread_the_fabric#the track's route walled": {
-  "body": "baeb2864a61c09dd",
+  "body": "a6181ba244b18e6a",
   "claim": "the track's route walled - village-lanes.drawing: never across row crops or the flooded paddy, and off wet ground (the field, crop, toe band and wet ground walled - a defense belt's reeds too, since no map draws a causeway: 405 T09)",
-  "code": "cd08f843f8ba6594",
-  "core": "f71357b1140d6692",
+  "code": "c78f4e99f0e66123",
+  "core": "96eb304c7a6aa25e",
   "date": "2026-10-22",
-  "note": "`obstacles` walls the field, crops, toe band and wet ground as claimed, but `out = clip_to_clear(routed if len(routed) >= 2 else run, fabric, gap)` returns the raw run if `_route` finds no path, and it is then tested only against `fabric`, not `held`. So it could cross crops, paddy or reeds, against \"A lane never crosses row crops\" and \"A track keeps off wet ground\". To decide, I need `_route`'s return when no path exists (fewer than 2 points, or the straight run?)",
+  "note": "the route's obstacles are the field envelope, crops, toe band and marsh_ground (defense reeds included), as the page has it",
   "pages": {
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
   },
@@ -31327,35 +31326,32 @@
    "0081-village-lanes.drawing.html:bd66b84c6bda826f",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
-  "triage": "touched",
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/thread.py::_thread_the_fabric#track round the steadings": {
-  "body": "baeb2864a61c09dd",
+  "body": "a6181ba244b18e6a",
   "claim": "track round the steadings - how-our-maps-lay-a-clustered-settlements-lanes.drawing: routed round, else clipped, else none",
-  "code": "f6da9a256b62783d",
-  "core": "f71357b1140d6692",
+  "code": "78f1de79ebfc3b69",
+  "core": "96eb304c7a6aa25e",
   "date": "2026-10-22",
-  "note": "The track is laid after the houses and routed round them. Where no route exists it is clipped, and where nothing clears it returns `[]`. It is never drawn through a steading.",
+  "note": "routed round the steadings, else clipped, else [] (nothing on the tread)",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/thread.py::_unrouted_clear#an unrouted piece over no water": {
   "body": "df9a1bbd23d208d7",
-  "claim": "an unrouted piece over no water - villages-beside-their-stream-one-bank-or-both.drawing: a",
-  "code": "a0230125a6383373",
+  "claim": "an unrouted piece over no water - villages-beside-their-stream-one-bank-or-both.drawing: a way crosses water only at a crossing place, and a piece no route found was never brought to one",
+  "code": "9cbd7671f4d009da",
   "core": "432abcd8afd836a6",
   "date": "2026-10-22",
-  "note": "it accepts a piece only when the drawn-in piece crosses no water line at all. This is consistent with ways crossing only at the plank-bridge crossing places, which the maps set every 160 ft or so",
+  "note": "a piece no route found is refused if it crosses any water line",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
