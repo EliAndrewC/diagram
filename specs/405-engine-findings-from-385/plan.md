@@ -511,7 +511,7 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 
 ### T122 Decisions
 
-- **D115** 0035 records where a track crosses no water off a crossing place (map drawing conventions) and the fallback's crossing count as its GUESS; 0246 records a track outside the cluster keeping 7 ft off every homestead part (a map drawing convention). The two 0081 sentences T122 gathered later are written in the next page session. Rendering: as labeled.
+- **D115** 0035 records where a track crosses no water off a crossing place (map drawing conventions) and the fallback's crossing count as its GUESS; 0246 records a track outside the cluster keeping 7 ft off every homestead part (a map drawing convention). The two 0081 sentences T122 gathered later are carried by T129, for the next page session. Rendering: as labeled.
 
 ## T112 - the homesteads against the attested lot sizes
 
@@ -522,13 +522,27 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 3. **Where each comes from.** R: 0285 (the 1698 Hyakken register, median 157 tsubo; Buck; Ushijima); G: the 104 ft and 162 ft grounds, a map drawing convention.
 4. **Do they describe the world here?** Yes: the seating ground counts the household's wood floor, which a lot need not hold, so the two do not compare directly.
 5. **The order.** Page session 6 wrote 0285 with its drawing side; session 7 checked it; the engine's two claims cite it.
-6. **The exits.** (a) bring the homesteads toward the 157 tsubo median - not taken: it is packing, which the GM's rule puts after room, and T107 measured that the fit fails on packing, not on room; (b) keep them, labeled a convention with their cost on 0285 - taken.
+6. **The exits.** (a) bring the homesteads toward the 157 tsubo median - measured in a detached worktree (2026-10-22, `make cohort N=48`, seeds 1-48 and the pinned rows): at 75 ft (the median, about 157 tsubo) 49/54 pass - seed 9's brook finds no lawful course, seeds 25 and 39 knot, seed 40 stands a farmstead part across the brook, seed 43 seats 11 of 14 households; at 90 ft (about 230 tsubo, the attested upper quartile) 51/54 - seeds 4 and 43 seat 14 of 16 and 12 of 14, seed 31 records a byre on a lane; at 104 ft 54/54 on every landing today. Conforming breaks the fit, so the room rule applies: not taken; (b) keep them, labeled a convention with their cost on 0285 - taken.
 7. **The search smell.** None.
 8. **The budget.** Its share of two page sessions.
-9. **Done, measured.** 0285 written and checked (session 7); the claims of `HOMESTEAD_GROUND_FT` and `SEATING_GROUND_FT` cite 0285 as a convention.
+9. **Done, measured.** 0285 written and checked (session 7); the cohort at 75, 90 and 104 ft (item 6); the claims of `HOMESTEAD_GROUND_FT` and `SEATING_GROUND_FT` cite 0285 as a convention.
 10. **Before moving a constant.** No constant moves: weighed and kept (exit b).
 11. **Before fitting things into room.** This is that question: room kept, nothing packed.
 
+### T112 Approach (re-answered 2026-10-22T15:59Z)
+
+1. **The goal, in the world.** Unchanged.
+2. **The constraints.** As before.
+3. **Where each comes from.** The plan review of 2026-10-22: the homestead ground's departure needed a measured reason, not the room rule's name.
+4. **Do they describe the world here?** Yes, as measured (item 6 of part A).
+5. **The order.** As before.
+6. **The exits.** As part A's item 6, now measured.
+7. **The search smell.** None.
+8. **The budget.** As before.
+9. **Done, measured.** The cohort at 75, 90 and 104 ft (part A's item 6).
+10. **Before moving a constant.** Measured; it stays.
+11. **Before fitting things into room.** Room kept: the attested sizes do not fit.
+
 ### T112 Decisions
 
-- **D116** The homestead and seating grounds keep their sizes, labeled a map drawing convention on 0285 with their cost (above the typical attested lot); bringing them toward the median would pack the farms, against the room-first rule and T107's measurement. Rendering: a map drawing convention.
+- **D116** (amended after the plan review, 2026-10-22) The homestead and seating grounds keep their sizes, labeled a map drawing convention on 0285 with their cost (above the typical attested lot). The seating ground counts the household's wood floor, which a lot need not hold; the homestead ground was measured at the attested sizes and the fit breaks there (75 ft: 49/54; 90 ft: 51/54; 104 ft: 54/54 - seating, brook and knot refusals), so the room-before-packing rule keeps it until the fit no longer needs it. Rendering: a map drawing convention.
