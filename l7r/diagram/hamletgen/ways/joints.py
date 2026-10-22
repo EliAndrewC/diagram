@@ -304,7 +304,8 @@ def tread_gap(a: Mapping[str, Any], b: Mapping[str, Any]) -> float:
 
     Research:
         a lane with no width - research/questions/0081-village-lanes.drawing.html: the 3 ft footpath
-        a pulled line's tread off a building - research/questions/0081-village-lanes.drawing.html: the wider lane's tread 3 ft off a farmhouse wall (half its width + `TREAD_WALL_FT`), never under `_TOUCH_GAP` (4 ft) to the line's middle; kept off every building a pull touches, the page sizing the farmhouse's alone"""
+        a pulled line's tread off a building - research/questions/0081-village-lanes.drawing.html: the wider lane's tread 3 ft off a farmhouse wall (half its width + `TREAD_WALL_FT`), never under `_TOUCH_GAP` (4 ft) to the line's middle
+        the same tread gap off the other buildings - GUESS: the farmhouse's 3 ft kept off every other building a pull touches (sheds, byres, retirement houses), which no page sizes"""
     return max(_TOUCH_GAP, max(float(a.get("w") or 3.0), float(b.get("w") or 3.0)) / 2.0 + TREAD_WALL_FT)
 
 
