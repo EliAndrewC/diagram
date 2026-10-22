@@ -552,6 +552,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
+  },
+  "## T129 - two 0081 sentences, written in page session 8": {
+   "sha256": "2bfe7fb5e72e2a7259a9283685e3155cb7b922afb394d5cccb41fda61548f939",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T129 Approach (checklist part A)": {
+   "sha256": "ffc6d1a527b67a83dcf2dec33e2c77ce93d9d4f3ced6b3fe45adeab7555ab373",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T129 Decisions": {
+   "sha256": "162b4b3a8a89803193431fad0b7f79e973fd8d11a8e5eb4694a2a013949198e5",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4195,6 +4213,36 @@
      "summary": "No constant's value moves; bodies verbatim; claims rows carried by make claims-rekey; package index names both new modules.",
      "class": "within",
      "why": "A pure structural split is what amendment 7 asks; carrying the claims rows and index entries is bookkeeping that keeps the split from changing anything else."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## T129 - two 0081 sentences, written in page session 8",
+    "### T129 Approach (checklist part A)",
+    "### T129 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D118",
+     "summary": "0081 records the T-foot join for a gathered lane end and the reeds walled to every way, a defense belt's included; each sentence labeled as the page labels its bullets",
+     "class": "within",
+     "why": "Neither the request nor the spec settles what 0081 says or how its sentences are labeled; making the page state what the claims citing it rest on is found work kept in this feature (FR-002) and taken to completion (Amendments 7 and 9). Whether the sentences are historically right is the research ladder's question, not a fidelity one."
+    },
+    {
+     "id": "T129-exit",
+     "summary": "Approach step 6: exit (b), record it, taken; exit (a), change the code, not taken",
+     "class": "within",
+     "why": "FR-001 asks that part A be answered, and it is; the choice between the exits is left open by the request and the spec. Step 4 states the code already does both things, so recording does not set aside any behavior the GM asked for."
+    },
+    {
+     "id": "T129-crash-fix",
+     "summary": "Approach step 5: session 9 fixed a crash in record-checked (with a test) inside T129 and merged it, instead of filing it as a new task",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Ruled on FR-002's first line in spec-index.md ('a finding a task's checks raise on code it did not change is filed as a new task of this ...') and the GM's own words in request.md ('keep findings on code a task didn't change as new tasks'). The blocks cite no requirement, so the bundle holds no fuller FR-002 text and no carve-out. On the literal reading all three parts of FR-002 apply: a crash is a defect found, it came up while running session 9's checks, and record-checked is tooling that T129 (a research-page task) did not change. Filing the fix as its own task was slower but possible, so the impossibility ground does not apply. Amendments 7 and 9 ask for the feature to be finished, and a task filed in this feature is still worked, so they do not imply this exception. The rule's purpose is that found work on unchanged code is tracked and scoped as a separate unit instead of riding inside the task that ran into it, and this inline fix is exactly what the rule is for. The fix: record the record-checked crash fix as its own task in this feature (filed after the fact, with its own decision), or cite a written carve-out in FR-002 if one exists. This is a drafting fix and says nothing against 0081's two sentences."
     }
    ]
   }

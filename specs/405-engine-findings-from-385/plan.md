@@ -462,7 +462,7 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 2. **The constraints.** The research record's rules; page sessions write, then a fresh session checks.
 3. **Where each comes from.** T123's and T121's impl-drift rounds (outside the change); R: 0081.
 4. **Do they describe the world here?** Yes: `knots.teed_onto` and T121's walls do it.
-5. **The order.** Page session 8 wrote both; session 9 checked them (record-format, quote-check, modal-depiction, a round arbiter's continue on a depiction cascade) and fixed a `record-checked` crash with a test; merged.
+5. **The order.** Page session 8 wrote both; session 9 checked them (record-format, quote-check, modal-depiction, a round arbiter's continue on a depiction cascade); merged. The `record-checked` crash session 9 met and fixed is its own task, T132.
 6. **The exits.** (a) change the code - not taken; (b) record it - taken.
 7. **The search smell.** None.
 8. **The budget.** Its share of two page sessions.
@@ -473,3 +473,23 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 ### T129 Decisions
 
 - **D118** 0081 records the T-foot join for a gathered end and the reeds walled to every way (labeled as the page labels each bullet). Rendering: as labeled.
+
+## T132 - record-checked's FIXED_BY on an unfootnoted unit
+
+### T132 Approach (checklist part A)
+
+1. **The goal, in the world.** `make record-checked FIXED_BY=` on a quote-check's unfootnoted unit refuses with a message that says what to do, instead of crashing.
+2. **The constraints.** Tips live in error output (the GM's rule); a tooling fix lands with a test red without it; found work on unchanged code is its own task (FR-002).
+3. **Where each comes from.** Measured: page session 9 (2026-10-22) hit a KeyError there and fixed it (commit 0889dcdc1). R for the process.
+4. **Do they describe the world here?** Yes.
+5. **The order.** Already done in session 9's commit: the form is refused with its message, and a test pins it; merged with T129's work.
+6. **The exits.** (a) leave it folded into T129 - not taken (FR-002); (b) its own task - taken.
+7. **The search smell.** None.
+8. **The budget.** Done.
+9. **Done, measured.** The test in session 9's commit, red without the fix; `make test-file` on it at the landing.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T132 Decisions
+
+- **D119** `record-checked` refuses FIXED_BY on an unfootnoted unit with its message rather than crashing (session 9's fix, with its test). Rendering: n/a (tooling).
