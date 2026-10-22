@@ -29,13 +29,13 @@ China village surveys, the Tonami 小島 sanson PDFs.
 ## What it means for the generator
 
 - A typical clustered-village lot is about 300-600 sq m (90-180 tsubo); a large one 1,000-1,600 sq m (300-480 tsubo), rare.
-- `HOMESTEAD_GROUND_FT` (104 ft square, about 1,000 sq m, about 305 tsubo) already sits at the attested range's upper end:
-  three of the 1698 register's 34 lots exceed it.
+- `HOMESTEAD_GROUND_FT` (104 ft square, about 1,000 sq m, about 305 tsubo) sits above the typical range, at the rare band's
+  floor: three of the 1698 register's 34 lots exceed it.
 - `SEATING_GROUND_FT` (162 ft square, about 735 tsubo) counts the household's wood floor too (6,000 sq ft, `HOMESTEAD_WOOD_FT2`),
   which a 屋敷 lot need not hold, so it does not compare directly - but it is above every lot found.
-- So there is **no headroom within the research to widen the spacing between a clustered hamlet's farms**. The finding is
-  "no headroom", not "must shrink": whether the homesteads should come down toward the median is its own question (filed
-  as its own task, not worked inside T107).
+- So the homesteads already stand **above the typical attested lot and inside the rare band**: some widening stays within the
+  research, but it moves the maps further from the typical lot. Whether the homesteads should come down toward the median
+  is its own question (T112), not worked inside T107.
 
 ## Measured on the cohort (T26's wood-shed change in the tree, seeds 1-48 and the pinned rows)
 

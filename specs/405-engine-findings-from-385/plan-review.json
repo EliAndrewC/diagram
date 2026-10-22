@@ -606,6 +606,36 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-21",
    "declared": "spec-fidelity"
+  },
+  "## T107, T26 - a knot's gather where the fence gap would leave it (the GM, 2026-10-21: room first, within the research)": {
+   "sha256": "9de99c3d549cadf7a7f4752ce5d819f6f3ec864b6e6c80ae88996e6030aef23d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T107 Approach (checklist part A)": {
+   "sha256": "c2ac0a516292d6fd201e34fea746c56ea2e565f9b0e47539c74d83ae480c681f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T107 part B (2026-10-22T04:13Z)": {
+   "sha256": "6b19a724838535435dc12044a508e853bf23b408f7642643bdc3256c23b29074",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T26 part B (2026-10-22T04:13Z)": {
+   "sha256": "a682c50a37fd8e215ce1db855d92de0bd84eeec93e43fbcb11320fbbd59a1c4a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T107 Decisions": {
+   "sha256": "41733987becba5db26c2e3642ff869d03b91a121aee5421313d92b40f1520359",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2850,6 +2880,56 @@
      "summary": "a test that a channel beside a crossing place stays whole while the fill opens at the crossing places; seeds 1-48 and the pinned rows",
      "class": "within",
      "why": "Verification that only fails when D82's fix is absent - enforcement of the task, not added scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## T107, T26 - a knot's gather where the fence gap would leave it (the GM, 2026-10-21: room first, within the research)",
+    "### T107 Approach (checklist part A)",
+    "### T107 Decisions",
+    "### T107 part B (2026-10-22T04:13Z)",
+    "### T26 part B (2026-10-22T04:13Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "A6(d)/B5/D83 - no widening; refine the 7 ft convention instead",
+     "summary": "The GM asked for T107 to be done by widening the homestead spacing within the research's bound; the plan does not widen and instead takes exit (a), gathering left-over knots at 0081's 3 ft crop clearance in place of 0246's 7 ft drawing convention.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's literal method was carried out and failed: grow_gap +5 ft and +10 ft were both measured (cohort@20261022T034941Z) and both left the map worse, with seeds 8, 18, 20, 36, 41 and 47 newly failing. Those widths stay inside the research's rare band (about 335 and 365 tsubo against 300-480), so widening within the bound was tried, and it defeats the task's own purpose, a lawful map. The GM's rules order room before packing and treat an unresearched number as the knob to move. Room was tried first, and the number moved is one 0246 itself calls 'a map drawing convention, not a measured figure'. The ruling rests on that measurement ONLY. The plan's other ground, that 'the research puts the homesteads at their ceiling', is false on its own figures: 305 tsubo is above the typical range (90-180) but at the FLOOR of the rare band (300-480), not its ceiling. A3, A6(d), A11, B2, B4, B6, T26 B8 and D83 MUST be reworded to say: above the typical range, inside the rare band; two widths within that band measured worse."
+    },
+    {
+     "id": "D83 two passes",
+     "summary": "The 3 ft clearance applies only in a second pass, to knots the 7 ft pass leaves; every other Lawful keeps 7 ft.",
+     "class": "within",
+     "why": "This is how the accepted refinement is carried out, kept narrow by a measurement (the 3 ft clearance on every gather knotted seed 7). It takes nothing away from what was asked."
+    },
+    {
+     "id": "A10 WEB_FABRIC_GAP not moved",
+     "summary": "The constant stays at 7 ft for every other reader (MIN_WEB_GAP, grow_gap, the seating, other steps).",
+     "class": "within",
+     "why": "It keeps the convention everywhere the knot rule does not collide with it. This is implementation scope, not a narrowing."
+    },
+    {
+     "id": "A6(b), A6(c)",
+     "summary": "No knot is excused for a lane between its tees, and no new gather form is built.",
+     "class": "within",
+     "why": "(b) is refused because it would contradict 0081's 25 ft knot, and (c) is not needed for seed 24. Neither narrows the request."
+    },
+    {
+     "id": "T26 B5 - remaining conflicts filed as their own task",
+     "summary": "T26 stays set aside. Its three remaining conflicts (connector hairpin/bend/needle loop on seed 10, needle loop/split web on seed 36, the field way turned down on seed 47) are none of them the fence gap, and they are filed as a new task.",
+     "class": "within",
+     "why": "This is within ONLY if that task is filed in feature 405 and worked there. FR-002 keeps found work in this feature, and amendment 7 asks for the feature to be taken to completion. Filing it elsewhere or deferring it would be a narrowing."
+    },
+    {
+     "id": "B8 - no question to the GM",
+     "summary": "No ruling is sought; the research and the measurements decide.",
+     "class": "within",
+     "why": "Amendment 7 asks for exactly this when the guidelines settle the question. The departure from the GM's literal 'by widening' should still be stated in the report back to him."
     }
    ]
   }
